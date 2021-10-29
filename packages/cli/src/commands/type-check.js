@@ -27,9 +27,14 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate the Prisma client',
     })
+    .option('generate', {
+      type: 'boolean',
+      default: true,
+      description: 'Regenerate types within the project',
+    })
     .option('verbose', {
       alias: 'v',
-      default: true,
+      default: false,
       description: 'Print more',
       type: 'boolean',
     })
@@ -41,15 +46,16 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ sides, verbose, prisma }) => {
-  const listrTasks = [
+export const handler = async ({ sides, verbose, prisma, generate }) => {
+  const generateTasks = [
     {
       title: 'Generating redwood types...',
+      enabled: () => generate,
       task: () => {
-        return execa('yarn rw-gen', [], {
-          stdio: verbose ? 'inherit' : 'pipe',
+        return execa('yarn rw g types', [], {
+          stdio: verbose ? 'inherit' : 'ignore',
           shell: true,
-          cwd: getPaths().web.base,
+          cwd: getPaths().base,
         })
       },
     },
@@ -61,7 +67,7 @@ export const handler = async ({ sides, verbose, prisma }) => {
           schema: getPaths().api.dbSchema,
         })
       },
-      enabled: () => prisma,
+      enabled: () => prisma && generate,
       skip: () => {
         if (!sides.includes('api')) {
           return 'Skipping, as no api side present'
@@ -70,23 +76,50 @@ export const handler = async ({ sides, verbose, prisma }) => {
     },
   ]
 
-  sides.forEach((sideName) => {
-    const cwd = path.join(getPaths().base, sideName)
-    listrTasks.push({
-      title: `Typechecking "${sideName}"...`,
+  /**
+   * Check typings for the project directory : [web, api]
+   */
+
+  const typeChecks = sides.map((side) => {
+    const cwd = path.join(getPaths().base, side)
+    return {
+      title: `Checking "${side}"...`,
       task: () => {
         return execa('yarn tsc', ['--noEmit', '--skipLibCheck'], {
-          stdio: verbose ? 'inherit' : 'pipe',
+          stdio: 'inherit',
           shell: true,
           cwd,
         })
       },
-    })
+    }
   })
 
-  const tasks = new Listr(listrTasks, {
-    renderer: verbose && VerboseRenderer,
-  })
+  // Approach here is used to run typechecking of web and api in parallel
+  const tasks = new Listr(
+    [
+      {
+        title: 'Generating types...',
+        task: () => {
+          return new Listr(generateTasks, {
+            renderer: VerboseRenderer,
+            concurrent: true,
+          })
+        },
+      },
+      {
+        title: 'Running type checks...',
+        task: () => {
+          return new Listr(typeChecks, {
+            renderer: VerboseRenderer,
+            concurrent: true,
+          })
+        },
+      },
+    ],
+    {
+      renderer: verbose && VerboseRenderer,
+    }
+  )
 
   try {
     await tasks.run()

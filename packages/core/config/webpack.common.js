@@ -125,7 +125,6 @@ const getStyleLoaders = (isEnvProduction) => {
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
-
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
@@ -146,10 +145,15 @@ const getSharedPlugins = (isEnvProduction) => {
       mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
-    // time.
+    // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
-      __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
-      __REDWOOD__APP_TITLE: JSON.stringify(
+      ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
+        redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
+      ),
+      ['process.env.RWJS_API_DBAUTH_URL']: JSON.stringify(
+        redwoodConfig.web.apiDbAuthUrl ?? `${redwoodConfig.web.apiUrl}/auth`
+      ),
+      ['process.env.__REDWOOD__APP_TITLE']: JSON.stringify(
         redwoodConfig.web.title || path.basename(redwoodPaths.base)
       ),
       ...getEnvVars(),
@@ -168,8 +172,6 @@ module.exports = (webpackEnv) => {
 
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
-
-  const shouldUseEsbuild = process.env.ESBUILD === '1'
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -274,12 +276,6 @@ module.exports = (webpackEnv) => {
                     ].filter(Boolean),
                   },
                 },
-                shouldUseEsbuild && {
-                  loader: 'esbuild-loader',
-                  options: {
-                    loader: 'jsx',
-                  },
-                },
               ].filter(Boolean),
             },
             // (2)
@@ -295,12 +291,6 @@ module.exports = (webpackEnv) => {
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
                     ].filter(Boolean),
-                  },
-                },
-                shouldUseEsbuild && {
-                  loader: 'esbuild-loader',
-                  options: {
-                    loader: 'tsx',
                   },
                 },
               ].filter(Boolean),

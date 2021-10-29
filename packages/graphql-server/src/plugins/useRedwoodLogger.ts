@@ -1,8 +1,9 @@
 import { Plugin } from '@envelop/core'
 import { handleStreamOrSingleExecutionResult } from '@envelop/types'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
-import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
+
+import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
 import { RedwoodGraphQLContext } from '../functions/types'
@@ -18,6 +19,8 @@ import { RedwoodGraphQLContext } from '../functions/types'
  * @param query - Include the query. This is the query or mutation (with fields) made in the request.
  * @param tracing - Include the tracing and timing information.
  * @param userAgent - Include the browser (or client's) user agent.
+ * @param excludeOperations - Exclude the specified operations from being logged.
+ *
  */
 type GraphQLLoggerOptions = {
   /**
@@ -88,6 +91,14 @@ type GraphQLLoggerOptions = {
    * This can be helpful to know what type of client made the request to resolve issues when encountering errors or unexpected behavior.
    */
   userAgent?: boolean
+
+  /**
+   * @description Exclude operation from the log output.
+   *
+   * This is useful when you want to filter out certain operations from the log output.
+   * For example `IntrospectionQuery` from GraphQL playground.
+   */
+  excludeOperations?: string[]
 }
 
 /**
@@ -97,7 +108,7 @@ type GraphQLLoggerOptions = {
  * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
 export type LoggerConfig = {
-  logger: BaseLogger
+  logger: Logger
   options?: GraphQLLoggerOptions
 }
 
@@ -107,11 +118,7 @@ export type LoggerConfig = {
  * when the execution of the operation is done.
  */
 const logResult =
-  (
-    loggerConfig: LoggerConfig,
-    envelopLogger: BaseLogger,
-    operationName: string
-  ) =>
+  (loggerConfig: LoggerConfig, envelopLogger: Logger, operationName: string) =>
   ({ result }: { result: ExecutionResult }) => {
     const includeTracing = loggerConfig?.options?.tracing
     const includeData = loggerConfig?.options?.data
@@ -192,6 +199,7 @@ export const useRedwoodLogger = (
   const includeRequestId = loggerConfig?.options?.requestId
   const includeUserAgent = loggerConfig?.options?.userAgent
   const includeQuery = loggerConfig?.options?.query
+  const excludeOperations = loggerConfig.options?.excludeOperations
 
   return {
     onPluginInit(context) {
@@ -209,6 +217,10 @@ export const useRedwoodLogger = (
 
       const operationName =
         args.operationName || rootOperation.name?.value || 'Anonymous Operation'
+
+      if (excludeOperations?.includes(operationName)) {
+        return
+      }
 
       if (includeOperationName) {
         options['operationName'] = operationName

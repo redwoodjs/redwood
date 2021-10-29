@@ -1,7 +1,6 @@
 import {
   createGraphQLHandler,
   makeMergedSchema,
-  makeServices,
 } from '@redwoodjs/api'
 
 import schemas from 'src/graphql/**/*.{js,ts}'
@@ -13,7 +12,7 @@ export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
   schema: makeMergedSchema({
     schemas,
-    services: makeServices({ services }),
+    services,
   }),
   onException: () => {
     // Disconnect from your database with an unhandled exception.

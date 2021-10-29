@@ -91,7 +91,35 @@ const copyFrameworkPackages = () => {
     process.exit(1)
   }
 }
-
+const checkYarnVersion = () => {
+  try {
+    const { stdout } = execa.sync('yarn --version', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+    })
+    console.log('Yarn version is', stdout)
+    if (!stdout.startsWith('1')) {
+      setYarnClassic()
+    }
+  } catch (e) {
+    console.error(e)
+    console.error('Error: We could not find yarn')
+    process.exit(1)
+  }
+}
+const setYarnClassic = () => {
+  try {
+    execa.sync('yarn set version classic', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error(e)
+    console.error('Error: We could not set yarn classic')
+    process.exit(1)
+  }
+}
 const runYarnInstall = () => {
   try {
     execa.sync('yarn install', {
@@ -135,7 +163,8 @@ const runDevServerInBackground = () => {
 const runCypress = () => {
   console.log('Starting Cypress...')
   execa.sync(
-    'yarn cypress',
+    // do not use Yarn to run Cypress; this avoids missing binary errors
+    './node_modules/.bin/cypress',
     ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
@@ -203,6 +232,7 @@ const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
   copyFramework && addFrameworkDepsToProject,
+  copyFramework && checkYarnVersion,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,

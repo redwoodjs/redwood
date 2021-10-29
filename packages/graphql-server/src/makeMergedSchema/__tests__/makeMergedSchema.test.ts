@@ -6,7 +6,6 @@ import {
   createTransformerDirective,
   createValidatorDirective,
 } from '../../directives/makeDirectives'
-import { makeServices } from '../../makeServices'
 import {
   GraphQLTypeWithFields,
   ServicesGlobImports,
@@ -91,7 +90,7 @@ describe('makeMergedSchema', () => {
 
   const schema = makeMergedSchema({
     sdls,
-    services: makeServices({ services }),
+    services,
     directives: makeDirectivesForPlugin(directiveFiles),
   })
 

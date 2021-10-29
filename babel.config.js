@@ -51,8 +51,10 @@ module.exports = {
      * https://github.com/tc39/proposal-decorators
      **/
     ['@babel/plugin-proposal-decorators', { legacy: true }],
+    // The "loose" option must be the same for all three of these plugins.
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
   ],
   overrides: [
     // ** WEB PACKAGES **
