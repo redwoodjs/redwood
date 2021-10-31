@@ -7,6 +7,7 @@ import * as auth0Decoder from '../auth0'
 import * as clerkDecoder from '../clerk'
 import * as firebaseDecoder from '../firebase'
 import { decodeToken } from '../index'
+import * as magicLinkDecoder from '../magicLink'
 import * as netlifyDecoder from '../netlify'
 import * as supabaseDecoder from '../supabase'
 
@@ -26,6 +27,22 @@ jest.mock('../clerk', () => {
   }
 })
 
+jest.mock('../firebase', () => {
+  return {
+    firebase: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'firebase', fakeDecodedToken: true }
+    }),
+  }
+})
+
+jest.mock('../magicLink', () => {
+  return {
+    magicLink: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'magicLink', fakeDecodedToken: true }
+    }),
+  }
+})
+
 jest.mock('../netlify', () => {
   return {
     netlify: jest.fn().mockImplementation(async () => {
@@ -38,14 +55,6 @@ jest.mock('../supabase', () => {
   return {
     supabase: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'supabase', fakeDecodedToken: true }
-    }),
-  }
-})
-
-jest.mock('../firebase', () => {
-  return {
-    firebase: jest.fn().mockImplementation(async () => {
-      return { decodedWith: 'firebase', fakeDecodedToken: true }
     }),
   }
 })
@@ -117,26 +126,23 @@ describe('Uses correct Auth decoder', () => {
     })
   })
 
-  it('returns token as decoded token for magicLink with expected envar', async () => {
-    process.env.MAGICLINK_PUBLIC = 'your_magic_secret'
-
+  it('decodes magiclink with magiclink decoder', async () => {
+    // process.env.MAGIC_SECRET_API_KEY = 'your_magic_secret'
     const output = await decodeToken('magicLink', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })
 
-    delete process.env['MAGICLINK_PUBLIC']
+    expect(magicLinkDecoder.magicLink).toHaveBeenCalledWith(
+      MOCKED_JWT,
+      expect.anything()
+    )
 
-    expect(output).toEqual(MOCKED_JWT)
-  })
-  it('throws error when decoding magicLink if expected envar not set', async () => {
-    await expect(
-      async () =>
-        await decodeToken('magicLink', MOCKED_JWT, {
-          event: mockedAPIGatewayProxyEvent,
-          context: {} as LambdaContext,
-        })
-    ).rejects.toThrowError('Magic Auth configuration error.')
+    expect(output).toEqual({
+      decodedWith: 'magicLink',
+      fakeDecodedToken: true,
+    })
+    // delete process.env['MAGIC_SECRET_API_KEY']
   })
 
   it('decodes firebase with firebase decoder', async () => {

@@ -1,7 +1,8 @@
-import path from 'path'
-
 import { generate } from '@graphql-codegen/cli'
 import chalk from 'chalk'
+import { print } from 'graphql'
+
+import { rootSchema } from '@redwoodjs/graphql-server'
 
 import { getPaths } from '../paths'
 
@@ -13,8 +14,7 @@ export const generateGraphQLSchema = async () => {
       {
         cwd: rwjsPaths.api.src,
         schema: [
-          path.join(__dirname, '../rootGqlSchema.js'), // support loading from either compiled JS
-          path.join(__dirname, '../rootGqlSchema.ts'), // or TS (for jest tests)
+          print(rootSchema.schema), // generator cli needs a string or a filePath
           'graphql/**/*.sdl.{js,ts}',
           'directives/**/*.{js,ts}',
         ],

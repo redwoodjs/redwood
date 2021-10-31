@@ -1,4 +1,4 @@
 global.matchTransformSnapshot =
-  require('./testUtils/matchTransformSnapshot').matchTransformSnapshot
+  require('./testUtils/index').matchTransformSnapshot
 global.matchInlineTransformSnapshot =
-  require('./testUtils/matchTransformSnapshot').matchInlineTransformSnapshot
+  require('./testUtils/index').matchInlineTransformSnapshot

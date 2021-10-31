@@ -5,7 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  binaryTargets = "native"
 }
 
 // Define your own models here and run yarn db:save to create
@@ -19,6 +19,8 @@ model Post {
   body     String
   image    String?
   postedAt DateTime?
+  postsId  Int
+  posts    Posts     @relation(fields: [postsId], references: [id])
 }
 
 model User {
@@ -34,4 +36,15 @@ model UserProfile {
   username String @unique
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
+}
+
+model CustomData {
+  id   Int    @id @default(autoincrement())
+  data String
+}
+
+model Posts {
+  id             Int    @id @default(autoincrement())
+  collectionName String
+  posts          Post[]
 }

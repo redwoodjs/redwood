@@ -31,3 +31,17 @@ declare module 'jscodeshift/dist/testUtils' {
     testOptions?: TestOptions
   ): string
 }
+
+import {
+  matchInlineTransformSnapshot,
+  matchTransformSnapshot,
+} from './testUtils/index'
+
+type MatchFunction = typeof matchTransformSnapshot
+type MatchInlineFunction = typeof matchInlineTransformSnapshot
+
+// This file gets loaded in jest setup, so becomes available globally in tests
+declare global {
+  const matchTransformSnapshot: MatchFunction
+  const matchInlineTransformSnapshot: MatchInlineFunction
+}

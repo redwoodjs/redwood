@@ -1,14 +1,11 @@
 import { parse, GraphQLResolveInfo } from 'graphql'
 import gql from 'graphql-tag'
 
-import { DIRECTIVE_REQUIRED_ERROR_MESSAGE } from '@redwoodjs/internal'
-
 import {
   makeDirectivesForPlugin,
   createTransformerDirective,
   createValidatorDirective,
 } from '../../directives/makeDirectives'
-import { makeServices } from '../../makeServices'
 import {
   GraphQLTypeWithFields,
   ServicesGlobImports,
@@ -93,7 +90,7 @@ describe('makeMergedSchema', () => {
 
   const schema = makeMergedSchema({
     sdls,
-    services: makeServices({ services }),
+    services,
     directives: makeDirectivesForPlugin(directiveFiles),
   })
 
@@ -177,175 +174,6 @@ describe('makeMergedSchema', () => {
           )
       ).toEqual("MyOwnType: I'm defined in the services.")
     })
-  })
-
-  it('throws when directives not added to queries', () => {
-    const sdlsWithoutDirectives = {
-      withoutDirective: {
-        schema: parse(`
-          scalar JSON
-
-          type Redwood {
-            version: String
-            currentUser: JSON
-            prismaVersion: String
-          }
-
-          type Query {
-            redwood: Redwood
-            bazinga: String
-          }
-        `),
-        resolvers: {},
-      },
-    }
-
-    expect(() =>
-      makeMergedSchema({
-        sdls: sdlsWithoutDirectives,
-        services: makeServices({ services }),
-        directives: makeDirectivesForPlugin(directiveFiles),
-      })
-    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
-  })
-
-  it('throws when directives not added to mutations', () => {
-    const sdlsWithoutDirectives = {
-      withoutDirective: {
-        schema: parse(`
-          scalar JSON
-
-          type Redwood {
-            version: String
-            currentUser: JSON
-            prismaVersion: String
-          }
-
-          type Query {
-            redwood: Redwood
-          }
-
-          type Mutation {
-            bazinga(id: Int): String
-          }
-
-        `),
-        resolvers: {},
-      },
-    }
-
-    expect(() =>
-      makeMergedSchema({
-        sdls: sdlsWithoutDirectives,
-        services: makeServices({ services }),
-        directives: makeDirectivesForPlugin(directiveFiles),
-      })
-    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
-  })
-
-  it('throws when directives not added to queries and mutations', () => {
-    const sdlsWithoutDirectives = {
-      withoutDirective: {
-        schema: parse(`
-          scalar JSON
-
-          type Redwood {
-            version: String
-            currentUser: JSON
-            prismaVersion: String
-          }
-
-          type Query {
-            redwood: Redwood
-            myQuery: String!
-          }
-
-          type Mutation {
-            bazinga(id: Int): String!
-          }
-
-        `),
-        resolvers: {},
-      },
-    }
-
-    expect(() =>
-      makeMergedSchema({
-        sdls: sdlsWithoutDirectives,
-        services: makeServices({ services }),
-        directives: makeDirectivesForPlugin(directiveFiles),
-      })
-    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
-  })
-
-  it('throws when directives not added to queries but is on a mutation', () => {
-    const sdlsWithoutDirectives = {
-      withoutDirective: {
-        schema: parse(`
-          scalar JSON
-
-          type Redwood {
-            version: String
-            currentUser: JSON
-            prismaVersion: String
-          }
-
-          type Query {
-            redwood: Redwood
-            myQuery: String!
-          }
-
-          type Mutation {
-            bazinga(id: Int): String! @foo
-          }
-
-        `),
-        resolvers: {},
-      },
-    }
-
-    expect(() =>
-      makeMergedSchema({
-        sdls: sdlsWithoutDirectives,
-        services: makeServices({ services }),
-        directives: makeDirectivesForPlugin(directiveFiles),
-      })
-    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
-  })
-
-  it('throws when directives not added to mutations but is on a query', () => {
-    const sdlsWithoutDirectives = {
-      withoutDirective: {
-        schema: parse(`
-          scalar JSON
-
-          type Redwood {
-            version: String
-            currentUser: JSON
-            prismaVersion: String
-          }
-
-          type Query {
-            redwood: Redwood
-            myQuery: String! @foo
-          }
-
-          type Mutation {
-            bazinga(id: Int): String!
-          }
-
-        `),
-        resolvers: {},
-      },
-    }
-
-    expect(() =>
-      makeMergedSchema({
-        sdls: sdlsWithoutDirectives,
-        services: makeServices({ services }),
-        directives: makeDirectivesForPlugin(directiveFiles),
-      })
-    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
   })
 
   describe('Directives', () => {

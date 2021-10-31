@@ -1,3 +1,5 @@
+import type { ComponentProps, JSXElementConstructor } from 'react'
+
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
@@ -12,6 +14,19 @@ const Query = ({ children, query, ...rest }: QueryProps) => {
   const result = useQuery(query, rest)
   return result ? children(result) : null
 }
+
+/** Cell component props which is the combination of Query variables and Success props */
+export type CellProps<
+  CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
+  GQLResult,
+  GQLVariables
+> = A.Compute<
+  Omit<
+    ComponentProps<CellSuccess>,
+    keyof QueryOperationResult | keyof GQLResult | 'updating'
+  > &
+    (GQLVariables extends { [key: string]: never } ? unknown : GQLVariables)
+>
 
 export type DataObject = { [key: string]: unknown }
 

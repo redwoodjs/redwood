@@ -9,10 +9,8 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
-import { validateSchemaForDirectives } from '@redwoodjs/internal'
-import { rootGqlSchema } from '@redwoodjs/internal'
-
 import type { RedwoodDirective } from '../plugins/useRedwoodDirective'
+import * as rootGqlSchema from '../rootSchema'
 import {
   Services,
   ServicesGlobImports,
@@ -152,7 +150,7 @@ const mergeResolvers = (schemas: {
  *
  * const schema = makeMergedSchema({
  *  schema,
- *  services: makeServices({ services }),
+ *  services,
  * })
  * ```
  */
@@ -210,14 +208,6 @@ export const makeMergedSchema = ({
     ],
     { all: true }
   )
-
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'test'
-  ) {
-    const mergedSDLs = mergeTypeDefs(sdlSchemas)
-    validateSchemaForDirectives(mergedSDLs)
-  }
 
   const schema = makeExecutableSchema({
     typeDefs,

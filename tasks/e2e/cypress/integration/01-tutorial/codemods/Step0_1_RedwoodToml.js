@@ -13,6 +13,4 @@ export default `
   port = 8911
 [browser]
   open = true
-[experimental]
-  esbuild = false
 `

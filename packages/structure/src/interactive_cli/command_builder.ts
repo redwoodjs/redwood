@@ -151,7 +151,7 @@ class PromptHelper {
     )
   }
   /**
-   * Pick a model name from prisma.schema
+   * Pick a model name from schema.prisma
    * @param msg
    */
   async model(msg: string) {

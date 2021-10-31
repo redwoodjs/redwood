@@ -13,8 +13,8 @@ import { dbAuth } from './dbAuth'
 import type { DbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
-import { firebase, FirebaseUser } from './firebase'
-import type { FirebaseAuth } from './firebase'
+import { firebase } from './firebase'
+import type { FirebaseClient, FirebaseUser } from './firebase'
 import { goTrue } from './goTrue'
 import type { GoTrue, GoTrueUser } from './goTrue'
 import { magicLink } from './magicLink'
@@ -49,7 +49,7 @@ export type SupportedAuthClients =
   | GoTrue
   | NetlifyIdentity
   | MagicLink
-  | FirebaseAuth
+  | FirebaseClient
   | Supabase
   | Clerk
   | Ethereum
@@ -84,7 +84,10 @@ export interface AuthClient {
   login(options?: any): Promise<any>
   logout(options?: any): void | Promise<any>
   signup(options?: any): void | Promise<any>
-  getToken(): Promise<null | string>
+  getToken(options?: any): Promise<null | string>
+  forgotPassword?(username: string): void | Promise<any>
+  resetPassword?(options?: any): void | Promise<any>
+  validateResetToken?(token: string | null): void | Promise<any>
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
   client: SupportedAuthClients

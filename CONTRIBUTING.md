@@ -6,6 +6,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
+- [Contributing](#contributing)
   - [Code Organization](#code-organization)
   - [Local Setup](#local-setup)
     - [Redwood Framework](#redwood-framework)
@@ -15,7 +16,14 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Browser-based Setup](#browser-based-setup)
   - [Integration Tests](#integration-tests)
   - [Releases](#releases)
-    - [Troubleshooting](#troubleshooting)
+  - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
+    - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
+    - [New Yarn Commands and Utilities](#new-yarn-commands-and-utilities)
+    - [Added to CI: dedupe and constraints](#added-to-ci-dedupe-and-constraints)
+    - [About Yarn v3](#about-yarn-v3)
+      - [Benefits](#benefits)
+      - [New Files](#new-files)
+      - [Advanced Cases](#advanced-cases)
 
 ## Code Organization
 
@@ -158,7 +166,7 @@ This generates a functional test project and links it with the Redwood Framework
 We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
-./tasks/run-e2e
+yarn e2e
 ```
 
 This creates a new project using `yarn create redwood-app` in a temporary directory. Once created, it upgrades the project to the most-recent `canary` release, which means it'll use the code that's in the `main` branch. Once upgraded, it starts Cypress.
@@ -166,7 +174,7 @@ This creates a new project using `yarn create redwood-app` in a temporary direct
 If you want to run any of the integration tests against an existing project instead of creating a new one, just provide the path to the project:
 
 ```terminal
-./tasks/run-e2e <project directory>
+yarn e2e <project directory>
 ```
 
 In this case, the command will _not_ upgrade the project to the most-recent `canary` release.
@@ -196,6 +204,95 @@ This...
   3) Commits, Tags, and Pushes to GH
   4) and finally publishes all packages to NPM.
 
-### Troubleshooting
-
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
+
+## Yarn v3: Tips and Troubleshooting
+
+### Migrating from yarn v1 to yarn v3
+As of `v0.37`, the Redwood Framework has moved from yarn `v1` to yarn `v3`.
+
+If you already have a local copy of the Redwood Framework, or if you're switching between branches that are using different versions, **you'll have to run**:
+```
+git clean -fxd -e .env
+yarn install
+```
+...and then you'll be good to go.
+
+> Note: Yarn v3 is installed in the directory, while Yarn v1 is installed globally. This allows us to switch as needed per branch and/or project.
+### New Yarn Commands and Utilities
+**`yarn add --interactive`**
+Reuse the specified package from other workspaces in the project. Example:
+```
+yarn workspace create-redwood-app add -i rimraf
+```
+
+> Note: Interactivity is enabled by default
+
+For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another workspace (say `packages/api-server`), yarn will ask us if we want to use the same version:
+
+```
+redwood/packages/codemods$ yarn add yargs
+? Which range do you want to use? …
+❯ Reuse yargs@16.2.0 (originally used by @redwoodjs/api-server@0.37.2 and 2 others)
+  Use yargs@^17.2.1 (resolved from latest)
+```
+
+**`yarn workspaces foreach ...`**
+This is a command from the workspaces plugin. Runs the command across all workspaces. Example:
+```
+yarn workspaces foreach -i  -v some-package
+```
+-v: outputs the package name the command is currently running against
+
+### Added to CI: dedupe and constraints
+**`yarn dedupe --check`**
+> Duplicates are defined as descriptors with overlapping ranges being resolved and
+locked to different locators. They are a natural consequence of Yarn's
+deterministic installs, but they can sometimes pile up and unnecessarily
+increase the size of your project.
+> This command dedupes dependencies in the current project using different
+strategies (only one is implemented at the moment):
+
+**`yarn constraints`**
+See new file `constraints.pro` for repo config
+- https://yarnpkg.com/features/constraints
+- Reference from Babel project: https://github.com/babel/babel/blob/main/constraints.pro
+
+### About Yarn v3
+Aside from a few plugins, we aren't using most of it's advanced features (like [PnP](https://yarnpkg.com/features/pnp)) yet.
+
+So besides the output in your terminal looking different, not much else is.
+
+> We may explore things like PnP in the future.
+> We just have to take things one step at a time since we're trying to release `v1`.
+#### Benefits
+
+Some of the benefit yarn `v3` brings us as we prepare for `v1` are:
+
+- faster CI (up to 50% faster)
+  - most importantly, no more Windows timeouts!
+- faster yarn installs
+- better dependency guarantees
+
+One of the most significant changes in yarn `v3` is it's stance on [hoisting](https://yarnpkg.com/advanced/lexicon/#hoisting).
+
+#### New Files
+
+Yarn `v3` keeps more of itself in the repo than before.
+For example, yarn `v3` isn't installed globally, but on a per-project basis.
+
+Here's a quick overview of some of the new yarn-related files in this repo:
+
+| File             | Description                                                          |
+|:-----------------|:---------------------------------------------------------------------|
+| `.yarnrc.yml`    | Yarn's configuration file                                            |
+| `.yarn/plugins`  | Where installed [plugins](https://yarnpkg.com/features/plugins) live |
+| `.yarn/releases` | The `yarn v3` binaries themselves                                    |
+
+#### Advanced Cases
+If needed, there's more information in [this PR #3154 comment](https://github.com/redwoodjs/redwood/pull/3154#issue-957115489) about special cases:
+- "Binary hoisting" is no longer allowed
+- Specifying Yarn v1 binary (when necessary)
+- `yarn dlx`
+- Set `YARN_IGNORE_PATH=1` to ignore local yarn version settings.
+- how "postinstall" script works
