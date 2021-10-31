@@ -142,7 +142,6 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
 
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
@@ -1296,7 +1295,6 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
