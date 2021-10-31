@@ -344,7 +344,7 @@ const componentFiles = async (
     Boolean: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
-      validation: false,
+      validation: () => false,
       listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
