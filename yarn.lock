@@ -4104,7 +4104,6 @@ __metadata:
     youch: 2.2.2
     youch-terminal: 1.1.1
   bin:
-    api-server: ./dist/index.js
     rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
   languageName: unknown
