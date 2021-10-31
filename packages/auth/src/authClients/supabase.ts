@@ -33,6 +33,7 @@ export interface AuthClientSupabase extends AuthClient {
     provider?: Provider
     url?: string | null
     error: Error | null
+    data: Session | null // Deprecated
   }>
   logout(): Promise<{ error: Error | null }>
   /**
@@ -53,6 +54,7 @@ export interface AuthClientSupabase extends AuthClient {
     user: User | null
     session: Session | null
     error: Error | null
+    data: Session | User | null // Deprecated
   }>
   /**
    * Restore Redwood authentication state when an OAuth or magiclink
