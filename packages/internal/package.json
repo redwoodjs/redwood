@@ -21,7 +21,7 @@
     "@graphql-codegen/core": "2.2.0",
     "@graphql-codegen/schema-ast": "2.2.0",
     "@graphql-codegen/typescript": "2.2.4",
-    "@graphql-codegen/typescript-operations": "2.1.8",
+    "@graphql-codegen/typescript-operations": "2.2.0",
     "@graphql-codegen/typescript-react-apollo": "3.1.6",
     "@graphql-codegen/typescript-resolvers": "2.3.2",
     "@redwoodjs/graphql-server": "0.38.0",
