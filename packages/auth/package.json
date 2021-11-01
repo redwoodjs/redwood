@@ -14,7 +14,7 @@
     "@clerk/clerk-js": "1.33.0",
     "@clerk/clerk-sdk-node": "0.5.2",
     "@clerk/types": "1.13.0",
-    "@supabase/supabase-js": "1.25.0",
+    "@supabase/supabase-js": "1.25.2",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.31",
     "firebase": "9.1.3",
