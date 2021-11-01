@@ -1,7 +1,7 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [`import { UserAgentApplication } from 'msal'`],
-  init: `const azureActiveDirectoryClient = new UserAgentApplication({
+  imports: [`import { PublicClientApplication } from '@azure/msal-browser'`],
+  init: `const azureActiveDirectoryClient = new PublicClientApplication({
     auth: {
       clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
       authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
@@ -16,7 +16,7 @@ export const config = {
 }
 
 // required packages to install
-export const webPackages = ['msal']
+export const webPackages = ['@azure/msal-browser']
 export const apiPackages = []
 
 // any notes to print out when the job is done

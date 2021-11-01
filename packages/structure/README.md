@@ -100,7 +100,7 @@ Anatomy of an id:
 
 ## Abstracting File System Access
 
-To allow use cases like dealing with unsaved files in IDEs, some filesystem methods can be overriden via the Host interface.
+To allow use cases like dealing with unsaved files in IDEs, some filesystem methods can be overridden via the Host interface.
 
 ```ts
 import { Host, getProject } from '@redwoodjs/structure'

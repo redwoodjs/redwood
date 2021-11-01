@@ -21,7 +21,7 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --check-files
+        run: yarn install --immutable --check-files
 
       - name: Build
         run: yarn build

@@ -1,30 +1,30 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.37.1",
+  "version": "0.38.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
-    "rw": "./dist/index.js",
     "redwood-tools": "./dist/redwood-tools.js",
-    "rwt": "./dist/redwood-tools.js",
-    "rwfw": "./dist/rwfw.js"
+    "rw": "./dist/index.js",
+    "rwfw": "./dist/rwfw.js",
+    "rwt": "./dist/redwood-tools.js"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.30.3",
-    "@redwoodjs/api-server": "v0.37.1",
-    "@redwoodjs/internal": "v0.37.1",
-    "@redwoodjs/prerender": "v0.37.1",
-    "@redwoodjs/structure": "v0.37.1",
+    "@prisma/sdk": "3.3.0",
+    "@redwoodjs/api-server": "0.38.0",
+    "@redwoodjs/internal": "0.38.0",
+    "@redwoodjs/prerender": "0.38.0",
+    "@redwoodjs/structure": "0.38.0",
     "boxen": "5.1.2",
     "camelcase": "6.2.0",
     "chalk": "4.1.2",
-    "concurrently": "6.2.1",
+    "concurrently": "6.3.0",
     "configstore": "3.1.5",
-    "core-js": "3.17.3",
+    "core-js": "3.18.3",
     "cross-env": "7.0.3",
     "decamelize": "5.0.0",
     "dotenv-defaults": "3.0.0",
@@ -40,16 +40,19 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.4.1",
-    "prisma": "2.30.3",
-    "prompts": "2.4.1",
+    "prisma": "3.3.0",
+    "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
     "yargs": "16.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "7.15.7",
     "@types/listr": "0.14.4",
-    "@types/node-fetch": "2.5.12"
+    "@types/node-fetch": "2.5.12",
+    "jest": "27.3.1",
+    "typescript": "4.4.4"
   },
   "scripts": {
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
@@ -59,7 +62,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js dist/rwfw.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"

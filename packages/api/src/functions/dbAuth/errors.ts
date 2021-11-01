@@ -1,37 +1,51 @@
-export class NoSessionSecret extends Error {
+export class NoSessionSecretError extends Error {
   constructor() {
     super(
       'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
     )
-    this.name = 'NoSessionSecret'
+    this.name = 'NoSessionSecretError'
   }
 }
 
-export class NoSessionExpiration extends Error {
+export class NoSessionExpirationError extends Error {
   constructor() {
     super('dbAuth requires login expiration time, in seconds')
-    this.name = 'NoSessionExpiration'
+    this.name = 'NoSessionExpirationError'
   }
 }
 
-export class NoLoginHandler extends Error {
+export class NoLoginHandlerError extends Error {
   constructor() {
     super('dbAuth requires a login handler in order to log in a user')
-    this.name = 'NoLoginHandler'
+    this.name = 'NoLoginHandlerError'
   }
 }
 
-export class NoSignupHandler extends Error {
+export class NoSignupHandlerError extends Error {
   constructor() {
     super('dbAuth requires a signup handler in order to create new users')
-    this.name = 'NoSignupHandler'
+    this.name = 'NoSignupHandlerError'
   }
 }
 
-export class UnknownAuthMethod extends Error {
+export class NoForgotPasswordHandlerError extends Error {
+  constructor() {
+    super('dbAuth requires a forgot password handler in order to notify user')
+    this.name = 'NoForgotPasswordHandlerError'
+  }
+}
+
+export class NoResetPasswordHandlerError extends Error {
+  constructor() {
+    super('dbAuth requires a reset password handler in order to notify user')
+    this.name = 'NoResetPasswordHandlerError'
+  }
+}
+
+export class UnknownAuthMethodError extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)
-    this.name = 'UnknownAuthMethod'
+    this.name = 'UnknownAuthMethodError'
   }
 }
 
@@ -123,5 +137,54 @@ export class SessionDecryptionError extends Error {
   constructor() {
     super('Session has potentially be tampered with')
     this.name = 'SessionDecryptionError'
+  }
+}
+
+export class UsernameRequiredError extends Error {
+  constructor(message = 'Username is required') {
+    super(message)
+    this.name = 'UsernameRequiredError'
+  }
+}
+
+export class PasswordRequiredError extends Error {
+  constructor(message = 'Password is required') {
+    super(message)
+    this.name = 'PasswordRequiredError'
+  }
+}
+
+export class UsernameNotFoundError extends Error {
+  constructor(message = 'Username not found') {
+    super(message)
+    this.name = 'UsernameNotFoundError'
+  }
+}
+
+export class ResetTokenExpiredError extends Error {
+  constructor(message = 'resetToken is expired') {
+    super(message)
+    this.name = 'ResetTokenExpiredError'
+  }
+}
+
+export class ResetTokenInvalidError extends Error {
+  constructor(message = 'resetToken is invalid') {
+    super(message)
+    this.name = 'ResetTokenInvalidError'
+  }
+}
+
+export class ResetTokenRequiredError extends Error {
+  constructor(message = 'resetToken is required') {
+    super(message)
+    this.name = 'ResetTokenRequiredError'
+  }
+}
+
+export class ReusedPasswordError extends Error {
+  constructor(message = 'Must choose a new password') {
+    super(message)
+    this.name = 'ReusedPasswordError'
   }
 }
