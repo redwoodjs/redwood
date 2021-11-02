@@ -573,6 +573,14 @@ And there you have it.
     <td align="center"><a href="https://github.com/Dozacode"><img src="https://avatars.githubusercontent.com/u/35405844?v=4" width="100px;" alt=""/><br /><sub><b>John</b></sub></a></td>
     <td align="center"><a href="http://powerboard.co.nz/"><img src="https://avatars.githubusercontent.com/u/1866452?v=4" width="100px;" alt=""/><br /><sub><b>Shannon Smith</b></sub></a></td>
     <td align="center"><a href="https://github.com/0x1a4f7d58"><img src="https://avatars.githubusercontent.com/u/10007010?v=4" width="100px;" alt=""/><br /><sub><b>Bob</b></sub></a></td>
+    <td align="center"><a href="https://github.com/facinick"><img src="https://avatars.githubusercontent.com/u/12322728?v=4" width="100px;" alt=""/><br /><sub><b>facinick</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/virtuoushub"><img src="https://avatars.githubusercontent.com/u/4303638?v=4" width="100px;" alt=""/><br /><sub><b>Peter Colapietro</b></sub></a></td>
+    <td align="center"><a href="https://greener.bio/"><img src="https://avatars.githubusercontent.com/u/41754896?v=4" width="100px;" alt=""/><br /><sub><b>Teodoro Villaneuva</b></sub></a></td>
+    <td align="center"><a href="https://github.com/SarveshLimaye"><img src="https://avatars.githubusercontent.com/u/74766567?v=4" width="100px;" alt=""/><br /><sub><b>Sarvesh Limaye</b></sub></a></td>
+    <td align="center"><a href="https://github.com/7shantanu7"><img src="https://avatars.githubusercontent.com/u/51382138?v=4" width="100px;" alt=""/><br /><sub><b>Shantanu Zadbuke</b></sub></a></td>
+    <td align="center"><a href="https://github.com/DukeManh"><img src="https://avatars.githubusercontent.com/u/51073515?v=4" width="100px;" alt=""/><br /><sub><b>Duke Manh</b></sub></a></td>
   </tr>
 </table>
 
