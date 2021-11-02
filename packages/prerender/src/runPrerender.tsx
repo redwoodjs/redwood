@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import React from 'react'
 
@@ -96,11 +97,15 @@ export const writePrerenderedHtmlFile = (
   outputHtmlPath: string,
   content: string
 ) => {
+  const outputHtmlAbsPath = path.join(getPaths().base, outputHtmlPath)
   // Copy default index.html to 200.html first
   // This is to prevent recursively rendering the home page
   if (outputHtmlPath === 'web/dist/index.html') {
-    fs.copyFileSync(outputHtmlPath, 'web/dist/200.html')
+    fs.copyFileSync(
+      outputHtmlAbsPath,
+      path.join(getPaths().base, 'web/dist/200.html')
+    )
   }
 
-  writeToDist(outputHtmlPath, content)
+  writeToDist(outputHtmlAbsPath, content)
 }
