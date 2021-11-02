@@ -1,11 +1,11 @@
-import 'fastify-url-data'
-import 'fastify-raw-body'
-import type { FastifyRequest, FastifyReply } from 'fastify'
 import type {
   APIGatewayProxyResult,
   APIGatewayProxyEvent,
   Handler,
 } from 'aws-lambda'
+import 'fastify-url-data'
+import 'fastify-raw-body'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import qs from 'qs'
 
 import { handleError } from '../error'
