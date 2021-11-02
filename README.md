@@ -66,13 +66,14 @@ use:
 - Scaffold generator for CRUD operations around a specific DB table.
 - Forms with easy client- and/or server-side validation and error handling.
 - Fast Refresh (hot reloading) for faster development.
-- Database migrations (via Prisma 2).
+- Database migrations (via Prisma).
 - [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
 - Simple but powerful GraphQL Directives to validate access or transform resolved data
 - Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
 - Signature verification and payload signing for handling incoming and outgoing Webhooks
 - Integrated testing utilities using Jest for every piece of your stack - components, services, serverless functions, webhooks
-- Page prerendering
+- Page prerendering at build time
+- Built in support for generating boilerplate storybook components, tests, graphql/api mocks and scenarios
 - First class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
 
 ## Roadmap
