@@ -66,7 +66,7 @@ use:
 - Scaffold generator for CRUD operations around a specific DB table.
 - Forms with easy client- and/or server-side validation and error handling.
 - Fast Refresh (hot reloading) for faster development.
-- Database migrations (via Prisma).
+- Database migrations (via Prisma) & Data migrations
 - [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
 - Simple but powerful GraphQL Directives to validate access or transform resolved data
 - Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
