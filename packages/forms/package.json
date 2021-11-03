@@ -13,6 +13,11 @@
     "pascalcase": "1.0.0",
     "react-hook-form": "7.17.5"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory":"packages/forms"
+  },
   "scripts": {
     "build": "yarn build:js",
     "prepublishOnly": "NODE_ENV=production yarn build",

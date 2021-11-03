@@ -21,6 +21,11 @@
     "tmp": "0.2.1",
     "yargs": "16.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory":"packages/create-redwood-app"
+  },
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist",
