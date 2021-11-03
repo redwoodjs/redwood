@@ -4094,23 +4094,17 @@ __metadata:
     "@types/aws-lambda": 8.10.84
     "@types/express": 4.17.13
     "@types/lodash.escape": 4.0.6
-    "@types/morgan": 1.9.3
     "@types/qs": 6.9.7
-    "@types/stack-trace": 0.0.29
     ansi-colors: 4.1.1
-    body-parser: 1.19.0
+    aws-lambda: 1.0.6
     chokidar: 3.5.2
-    dotenv-defaults: 3.0.0
-    express: 4.17.1
     fast-glob: 3.2.7
     fastify: 3.22.1
     fastify-raw-body: 3.1.0
     fastify-static: 4.5.0
     fastify-url-data: 3.0.3
-    http-proxy-middleware: 2.0.1
     jest: 27.3.1
     lodash.escape: 4.0.1
-    morgan: 1.10.0
     qs: 6.10.1
     typescript: 4.4.4
     yargs: 16.2.0
@@ -6263,15 +6257,6 @@ __metadata:
   version: 3.0.5
   resolution: "@types/minimatch@npm:3.0.5"
   checksum: a1a19ba342d6f39b569510f621ae4bbe972dc9378d15e9a5e47904c440ee60744f5b09225bc73be1c6490e3a9c938eee69eb53debf55ce1f15761201aa965f97
-  languageName: node
-  linkType: hard
-
-"@types/morgan@npm:1.9.3":
-  version: 1.9.3
-  resolution: "@types/morgan@npm:1.9.3"
-  dependencies:
-    "@types/node": "*"
-  checksum: 14d1b6eef3a48d7e3d2e451e94ed28dc93e702476a751021f2abeb58f14e3bb766874896992785fd8a3805800a363b9546ba487053dce0cc0dd5fa5f92871614
   languageName: node
   linkType: hard
 
@@ -8532,15 +8517,6 @@ __metadata:
     mixin-deep: ^1.2.0
     pascalcase: ^0.1.1
   checksum: 30a2c0675eb52136b05ef496feb41574d9f0bb2d6d677761da579c00a841523fccf07f1dbabec2337b5f5750f428683b8ca60d89e56a1052c4ae1c0cd05de64d
-  languageName: node
-  linkType: hard
-
-"basic-auth@npm:~2.0.1":
-  version: 2.0.1
-  resolution: "basic-auth@npm:2.0.1"
-  dependencies:
-    safe-buffer: 5.1.2
-  checksum: 05f56db3a0fc31c89c86b605231e32ee143fb6ae38dc60616bc0970ae6a0f034172def99e69d3aed0e2c9e7cac84e2d63bc51a0b5ff6ab5fc8808cc8b29923c1
   languageName: node
   linkType: hard
 
@@ -12792,7 +12768,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:4.17.1, express@npm:^4.17.1":
+"express@npm:^4.17.1":
   version: 4.17.1
   resolution: "express@npm:4.17.1"
   dependencies:
@@ -14980,7 +14956,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"http-proxy-middleware@npm:2.0.1, http-proxy-middleware@npm:^2.0.0":
+"http-proxy-middleware@npm:^2.0.0":
   version: 2.0.1
   resolution: "http-proxy-middleware@npm:2.0.1"
   dependencies:
@@ -18608,19 +18584,6 @@ fsevents@^1.2.7:
   version: 1.0.1
   resolution: "module-not-found-error@npm:1.0.1"
   checksum: e57250016b320ef9d0e0037fdb63fb279ca93100a0cee3ef6e90139cbec734215be4a70857dfc0d62ee353d9f8126d2882aa0a80dba49b69292901263a21ea69
-  languageName: node
-  linkType: hard
-
-"morgan@npm:1.10.0":
-  version: 1.10.0
-  resolution: "morgan@npm:1.10.0"
-  dependencies:
-    basic-auth: ~2.0.1
-    debug: 2.6.9
-    depd: ~2.0.0
-    on-finished: ~2.3.0
-    on-headers: ~1.0.2
-  checksum: 684db061daca28f8d8e3bfd50bd0d21734401b46f74ea76f6df7785d45698fcd98f6d3b81a6bad59f8288c429183afba728c428e8f66d2e8c30fd277af3b5b3a
   languageName: node
   linkType: hard
 

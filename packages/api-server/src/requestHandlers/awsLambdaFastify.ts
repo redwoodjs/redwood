@@ -3,8 +3,6 @@ import type {
   APIGatewayProxyEvent,
   Handler,
 } from 'aws-lambda'
-import 'fastify-url-data'
-import 'fastify-raw-body'
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import qs from 'qs'
 

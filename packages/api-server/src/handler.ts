@@ -2,12 +2,11 @@ import c from 'ansi-colors'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import createApp, { createFastifyInstance } from './app'
-import { startServer as startFastifyServer } from './fastifyServer'
+import createApp from './app'
 // import withApiProxy from './middleware/withApiProxy'
 import withFunctions from './middleware/withFunctions'
 import withWebServer from './middleware/withWebServer'
-import { startServer } from './server'
+import { startServer as startFastifyServer } from './server'
 import type { HttpServerParams } from './server'
 
 /*
@@ -53,21 +52,21 @@ export const apiServerHandler = async ({
 }: ApiServerArgs) => {
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...')))
-  const app = createApp()
-  const http = startServer({
+  let app = createApp()
+  // Import Server Functions.
+  app = await withFunctions(app, apiRootPath)
+
+  const http = startFastifyServer({
     port,
     socket,
     app,
-  }).on('listening', () => {
+  }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsApiServer) + ' ms')))
 
     const on = socket
       ? socket
       : c.magenta(`http://localhost:${port}${apiRootPath}`)
     console.log(`Listening on ${on}`)
-
-    // Import Server Functions.
-    withFunctions(app, apiRootPath)
   })
   process.on('exit', () => {
     http?.close()
@@ -84,14 +83,13 @@ export const bothServerHandler = async ({
 
   // Attach middleware
   app = await withFunctions(app, apiRootPath)
-  // @TODO comment out for now
-  // app = withWebServer(app)
+  app = withWebServer(app)
 
-  startServer({
+  startFastifyServer({
     port,
     socket,
     app,
-  }).on('listening', () => {
+  }).ready(() => {
     if (socket) {
       console.log(`Listening on ${socket}`)
     }
@@ -115,7 +113,7 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  const fastifyInstance = createFastifyInstance()
+  const fastifyInstance = createApp()
 
   if (apiHost) {
     // @TODO
@@ -123,14 +121,13 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     // We need to proxy api requests to prevent CORS issues
   }
 
-  // @TODO attach static middleware
-
-  const webServer = withWebServer(fastifyInstance)
+  // serve static files from "web/dist"
+  const app = withWebServer(fastifyInstance)
 
   startFastifyServer({
     port: port,
     socket,
-    fastifyInstance: webServer,
+    app,
   }).ready(() => {
     if (socket) {
       console.log(`Listening on ${socket}`)
