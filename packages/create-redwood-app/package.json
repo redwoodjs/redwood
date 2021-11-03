@@ -24,7 +24,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory":"packages/create-redwood-app"
+    "directory": "packages/create-redwood-app"
   },
   "scripts": {
     "build": "yarn build:js",
