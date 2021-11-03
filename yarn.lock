@@ -4105,6 +4105,7 @@ __metadata:
     fast-glob: 3.2.7
     fastify: 3.22.1
     fastify-raw-body: 3.1.0
+    fastify-static: 4.5.0
     fastify-url-data: 3.0.3
     http-proxy-middleware: 2.0.1
     jest: 27.3.1
@@ -10090,7 +10091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"content-disposition@npm:0.5.3":
+"content-disposition@npm:0.5.3, content-disposition@npm:^0.5.3":
   version: 0.5.3
   resolution: "content-disposition@npm:0.5.3"
   dependencies:
@@ -11722,6 +11723,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"encoding-negotiator@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "encoding-negotiator@npm:2.0.1"
+  checksum: 9d0ee6e4de90e529fe41e4d701c8dd8fdf053704b3a7e4aec1825c395eb51c7cdee48d780cb8ee4d46558bf50268a2b1a81df39501297b90d6f828190ca19cde
+  languageName: node
+  linkType: hard
+
 "encoding@npm:^0.1.12":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
@@ -13030,6 +13038,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-plugin@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "fastify-plugin@npm:3.0.0"
+  checksum: 7a3d0efbaba6240523aed45570049e8c973b2684a0445b2b25b6d0b9a738ca4f0b2060989e9bf747a6516b98872fb12a100f332cc34599be0d30787dba8f0abb
+  languageName: node
+  linkType: hard
+
 "fastify-raw-body@npm:3.1.0":
   version: 3.1.0
   resolution: "fastify-raw-body@npm:3.1.0"
@@ -13038,6 +13053,21 @@ __metadata:
     raw-body: ^2.4.1
     secure-json-parse: ^2.1.0
   checksum: 69dcd2c209b8e834688b74b4038b760a333a875e4e97888814796598823c5012f9511ef48c8e0640a8843f9879beceb84f242c47707e292fb2146205819d7e55
+  languageName: node
+  linkType: hard
+
+"fastify-static@npm:4.5.0":
+  version: 4.5.0
+  resolution: "fastify-static@npm:4.5.0"
+  dependencies:
+    content-disposition: ^0.5.3
+    encoding-negotiator: ^2.0.1
+    fastify-plugin: ^3.0.0
+    glob: ^7.1.4
+    p-limit: ^3.1.0
+    readable-stream: ^3.4.0
+    send: ^0.17.1
+  checksum: 86ec395d52ed558eb51ee3813dc29a43c1d75cbf2a2c1411e350351bc7c9f7a5871832d1bf3ac81325fc1c9394b3d5117c67b63618bb43872abc205502409064
   languageName: node
   linkType: hard
 
@@ -22557,7 +22587,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"send@npm:0.17.1":
+"send@npm:0.17.1, send@npm:^0.17.1":
   version: 0.17.1
   resolution: "send@npm:0.17.1"
   dependencies:

@@ -2,8 +2,9 @@ import c from 'ansi-colors'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import createApp from './app'
-import withApiProxy from './middleware/withApiProxy'
+import createApp, { createFastifyInstance } from './app'
+import { startServer as startFastifyServer } from './fastifyServer'
+// import withApiProxy from './middleware/withApiProxy'
 import withFunctions from './middleware/withFunctions'
 import withWebServer from './middleware/withWebServer'
 import { startServer } from './server'
@@ -83,7 +84,8 @@ export const bothServerHandler = async ({
 
   // Attach middleware
   app = await withFunctions(app, apiRootPath)
-  app = withWebServer(app)
+  // @TODO comment out for now
+  // app = withWebServer(app)
 
   startServer({
     port,
@@ -110,33 +112,32 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
   const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${getConfig().web.apiUrl}graphql`
+    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  let app = createApp()
+  const fastifyInstance = createFastifyInstance()
 
-  // Attach middleware
-  // We need to proxy api requests to prevent CORS issues
   if (apiHost) {
-    app = withApiProxy(app, {
-      apiHost,
-      apiUrl,
-    })
+    // @TODO
+    // Attach middleware
+    // We need to proxy api requests to prevent CORS issues
   }
 
-  app = withWebServer(app)
+  // @TODO attach static middleware
 
-  startServer({
+  const webServer = withWebServer(fastifyInstance)
+
+  startFastifyServer({
     port: port,
     socket,
-    app,
-  }).on('listening', () => {
+    fastifyInstance: webServer,
+  }).ready(() => {
     if (socket) {
       console.log(`Listening on ${socket}`)
     }
 
     console.log(`Web server started on port ${port} `)
-    console.log(`GraphQL endpoint is ${apiUrl}${graphqlEndpoint}`)
+    console.log(`GraphQL endpoint is ${graphqlEndpoint}`)
   })
 }
 

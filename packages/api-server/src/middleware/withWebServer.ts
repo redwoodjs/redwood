@@ -1,63 +1,47 @@
 import fs from 'fs'
 import path from 'path'
 
-import express from 'express'
-import type { Application } from 'express'
+import { FastifyInstance, FastifyReply } from 'fastify'
+import fastifyStatic from 'fastify-static'
 
-import { getPaths, findPrerenderedHtml } from '@redwoodjs/internal'
+import { findPrerenderedHtml, getPaths } from '@redwoodjs/internal'
 
-type HtmlContents = {
-  [path: string]: string
-}
-
-const getFallbackIndexContent = () => {
-  const defaultIndexPath = path.join(getPaths().web.dist, '/index.html')
+export const getFallbackIndexPath = () => {
   const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
 
   // If 200 exists: project has been prerendered
   // If 200 doesn't exist: fallback to default index.html
   if (fs.existsSync(prerenderIndexPath)) {
-    return fs.readFileSync(prerenderIndexPath)
+    return '200.html'
   } else {
-    return fs.readFileSync(defaultIndexPath)
+    return 'index.html'
   }
 }
 
-const withWebServer = (app: Application) => {
-  const files = findPrerenderedHtml()
-  const indexContent = getFallbackIndexContent()
+const withWebServer = (app: FastifyInstance) => {
+  const prerenderedFiles = findPrerenderedHtml()
+  const indexPath = getFallbackIndexPath()
 
-  const htmlContentsByPath: HtmlContents = files.reduce(
-    (acc, fileName) => ({
-      ...acc,
-      // TODO find something better in fs
-      [fileName.split('.')[0]]: fs.readFileSync(
-        path.join(getPaths().web.dist, `${fileName}`),
-        'utf-8'
-      ),
-    }),
-    {}
-  )
-
-  // For SPA routing on unmatched routes
-  Object.keys(htmlContentsByPath).forEach((pathName) => {
-    app.get(`/${pathName}`, function (_, response) {
-      response.set('Content-Type', 'text/html; charset=UTF-8')
-      response.send(htmlContentsByPath[pathName])
+  // Serve prerendered HTML directly, instead of the index
+  prerenderedFiles.forEach((filePath) => {
+    const pathName = path.basename(filePath, '.html')
+    app.get(`/${pathName}`, (_, reply: FastifyReply) => {
+      reply.header('Content-Type', 'text/html; charset=UTF-8')
+      reply.sendFile(filePath)
     })
   })
 
-  app.use(
-    express.static(getPaths().web.dist, {
-      redirect: false,
-    })
-  )
+  // Serve other non-html assets
+  app.register(fastifyStatic, {
+    root: getPaths().web.dist,
+    logLevel: 'debug',
+  })
 
   // For SPA routing fallback on unmatched routes
   // And let JS routing take over
-  app.get('*', function (_, response) {
-    response.set('Content-Type', 'text/html; charset=UTF-8')
-    response.send(indexContent)
+  app.setNotFoundHandler({}, function (_, reply: FastifyReply) {
+    reply.header('Content-Type', 'text/html; charset=UTF-8')
+    reply.sendFile(indexPath)
   })
 
   return app

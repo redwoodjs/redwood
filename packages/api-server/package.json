@@ -22,6 +22,7 @@
     "fast-glob": "3.2.7",
     "fastify": "3.22.1",
     "fastify-raw-body": "3.1.0",
+    "fastify-static": "4.5.0",
     "fastify-url-data": "3.0.3",
     "http-proxy-middleware": "2.0.1",
     "lodash.escape": "4.0.1",
