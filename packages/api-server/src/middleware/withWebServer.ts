@@ -23,18 +23,19 @@ const withWebServer = (app: FastifyInstance) => {
   const indexPath = getFallbackIndexPath()
 
   // Serve prerendered HTML directly, instead of the index
-  prerenderedFiles.forEach((filePath) => {
-    const pathName = path.basename(filePath, '.html')
-    app.get(`/${pathName}`, (_, reply: FastifyReply) => {
-      reply.header('Content-Type', 'text/html; charset=UTF-8')
-      reply.sendFile(filePath)
+  prerenderedFiles
+    .filter((filePath) => filePath !== 'index.html') // remove index.html
+    .forEach((filePath) => {
+      const pathName = filePath.split('.html')[0]
+      app.get(`/${pathName}`, (_, reply: FastifyReply) => {
+        reply.header('Content-Type', 'text/html; charset=UTF-8')
+        reply.sendFile(filePath)
+      })
     })
-  })
 
   // Serve other non-html assets
   app.register(fastifyStatic, {
     root: getPaths().web.dist,
-    logLevel: 'debug',
   })
 
   // For SPA routing fallback on unmatched routes
