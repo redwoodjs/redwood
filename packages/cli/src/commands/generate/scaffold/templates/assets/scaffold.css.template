@@ -61,8 +61,6 @@
   padding-bottom: 1rem;
 }
 .rw-segment {
-  background-color: #fff;
-  border-width: 1px;
   border-radius: 0.5rem;
   overflow: hidden;
   width: 100%;

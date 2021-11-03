@@ -8,6 +8,11 @@
     "rw-gen": "./dist/generate/generate.js",
     "rw-gen-watch": "./dist/generate/watch.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/internal"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
