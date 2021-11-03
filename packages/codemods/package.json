@@ -25,6 +25,11 @@
     "vscode-ripgrep": "1.12.1",
     "yargs": "16.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory":"packages/codemods"
+  },
   "scripts": {
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
