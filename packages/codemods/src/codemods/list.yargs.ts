@@ -2,6 +2,8 @@ import fs from 'fs'
 import path from 'path'
 
 import yargs from 'yargs'
+// @ts-expect-error is actually exported, just not in types
+import { decamelize } from 'yargs-parser'
 
 export const command = 'list <rwVersion>'
 export const description = 'List available codemods for a specific version'
@@ -26,6 +28,8 @@ export const handler = ({ rwVersion }: { rwVersion: string }) => {
   const modsForVersion = fs.readdirSync(path.join(__dirname, rwVersion))
 
   modsForVersion.forEach((codemod) => {
-    console.log(`- npx @redwoodjs/codemods ${codemod}`)
+    // Use decamelize to match the usual yargs names,
+    // instead of having to load the .yargs files
+    console.log(`- npx @redwoodjs/codemods ${decamelize(codemod)}`)
   })
 }
