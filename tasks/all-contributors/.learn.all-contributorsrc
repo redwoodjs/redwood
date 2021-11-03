@@ -226,6 +226,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "guledali",
+      "name": "guledali",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20647282?v=4",
+      "profile": "https://github.com/guledali",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "orta",
+      "name": "Orta Therox",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49038?v=4",
+      "profile": "https://orta.io/",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5
