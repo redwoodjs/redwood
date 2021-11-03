@@ -40,7 +40,7 @@ export const builder = (yargs) => {
       default: false,
     })
     .option('dedupe', {
-      description: 'Run npx yarn-deduplicate',
+      description: 'Skip dedupe check with --no-dedupe',
       type: 'boolean',
       default: true,
     })
