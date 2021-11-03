@@ -106,7 +106,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         skip: () => dryRun,
       },
       {
-        title: 'Checking and cleaning duplicate deps',
+        title: 'De-duplicating dependencies',
         skip: () => dryRun || !dedupe,
         task: (_ctx, task) => dedupeDeps(task, { verbose }),
       },
