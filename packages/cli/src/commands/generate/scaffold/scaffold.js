@@ -359,13 +359,15 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      transformValue: 'Json',
+      validation: (isRequired) =>
+        `{{ valueAsJSON: true${isRequired ? ', required: true' : ''} }}`,
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      transformValue: 'Float',
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },
     default: {
       componentName: 'TextField',
@@ -374,36 +376,45 @@ const componentFiles = async (
       validation: '{{ required: true }}',
       displayFunction: undefined,
       listDisplayFunction: 'truncate',
-      transformValue: undefined,
     },
   }
+
   const columns = model.fields
     .filter((field) => field.kind !== 'object')
-    .map((column) => ({
-      ...column,
-      label: humanize(column.name),
-      component:
-        componentMetadata[column.type]?.componentName ||
-        componentMetadata.default.componentName,
-      defaultProp:
-        componentMetadata[column.type]?.defaultProp ||
-        componentMetadata.default.defaultProp,
-      deserilizeFunction:
-        componentMetadata[column.type]?.deserilizeFunction ||
-        componentMetadata.default.deserilizeFunction,
-      validation:
-        componentMetadata[column.type]?.validation ??
-        componentMetadata.default.validation,
-      listDisplayFunction:
-        componentMetadata[column.type]?.listDisplayFunction ||
-        componentMetadata.default.listDisplayFunction,
-      displayFunction:
-        componentMetadata[column.type]?.displayFunction ||
-        componentMetadata.default.displayFunction,
-      transformValue:
-        componentMetadata[column.type]?.transformValue ||
-        componentMetadata.default.transformValue,
-    }))
+    .map((column) => {
+      let validation
+
+      if (componentMetadata[column.type]?.validation) {
+        validation = componentMetadata[column.type]?.validation(
+          column?.isRequired
+        )
+      } else {
+        validation = column?.isRequired
+          ? componentMetadata.default.validation
+          : null
+      }
+
+      return {
+        ...column,
+        label: humanize(column.name),
+        component:
+          componentMetadata[column.type]?.componentName ||
+          componentMetadata.default.componentName,
+        defaultProp:
+          componentMetadata[column.type]?.defaultProp ||
+          componentMetadata.default.defaultProp,
+        deserilizeFunction:
+          componentMetadata[column.type]?.deserilizeFunction ||
+          componentMetadata.default.deserilizeFunction,
+        validation,
+        listDisplayFunction:
+          componentMetadata[column.type]?.listDisplayFunction ||
+          componentMetadata.default.listDisplayFunction,
+        displayFunction:
+          componentMetadata[column.type]?.displayFunction ||
+          componentMetadata.default.displayFunction,
+      }
+    })
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
   })
@@ -524,13 +535,17 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
 
-  const newRoutesContent = routesContent.replace(
-    /['"]@redwoodjs\/router['"](\s*)/,
-    `'@redwoodjs/router'\n${importLayout}$1`
-  )
-  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+  if (!routesContent.match(importLayout)) {
+    const newRoutesContent = routesContent.replace(
+      /['"]@redwoodjs\/router['"](\s*)/,
+      `'@redwoodjs/router'\n${importLayout}$1`
+    )
+    writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Added layout import to Routes.{js,tsx}'
+    return 'Added layout import to Routes.{js,tsx}'
+  } else {
+    return 'Layout import already exists in Routes.{js,tsx}'
+  }
 }
 
 const addSetImport = (task) => {

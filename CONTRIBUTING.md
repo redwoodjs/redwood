@@ -166,7 +166,7 @@ This generates a functional test project and links it with the Redwood Framework
 We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
-./tasks/run-e2e
+yarn e2e
 ```
 
 This creates a new project using `yarn create redwood-app` in a temporary directory. Once created, it upgrades the project to the most-recent `canary` release, which means it'll use the code that's in the `main` branch. Once upgraded, it starts Cypress.
@@ -174,7 +174,7 @@ This creates a new project using `yarn create redwood-app` in a temporary direct
 If you want to run any of the integration tests against an existing project instead of creating a new one, just provide the path to the project:
 
 ```terminal
-./tasks/run-e2e <project directory>
+yarn e2e <project directory>
 ```
 
 In this case, the command will _not_ upgrade the project to the most-recent `canary` release.
@@ -228,7 +228,7 @@ yarn workspace create-redwood-app add -i rimraf
 
 > Note: Interactivity is enabled by default
 
-For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another worksapce (say `packages/api-server`), yarn will ask us if we want to use the same version:
+For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another workspace (say `packages/api-server`), yarn will ask us if we want to use the same version:
 
 ```
 redwood/packages/codemods$ yarn add yargs
@@ -279,7 +279,7 @@ One of the most significant changes in yarn `v3` is it's stance on [hoisting](ht
 #### New Files
 
 Yarn `v3` keeps more of itself in the repo than before.
-For exmaple, yarn `v3` isn't installed globally, but on a per-project basis.
+For example, yarn `v3` isn't installed globally, but on a per-project basis.
 
 Here's a quick overview of some of the new yarn-related files in this repo:
 

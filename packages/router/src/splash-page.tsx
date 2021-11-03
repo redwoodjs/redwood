@@ -326,24 +326,27 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       <div className="pages">
                         <p className="pages-title">List of Pages by path:</p>
                         <ul className="pages-list">
-                          {routes.map((route) => {
-                            if (!route.props.notfound) {
-                              return (
-                                <li key={route.key} className="pages-item">
-                                  <code>
-                                    {`${route.props.name} -> `}
-                                    <a
-                                      href={route.props.path}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      {route.props.path}
-                                    </a>
-                                  </code>
-                                </li>
-                              )
+                          {routes.map((route, index) => {
+                            if (
+                              route.type.name !== 'Route' ||
+                              route.props.notfound
+                            ) {
+                              return
                             }
-                            return <div key={route.key}></div>
+                            return (
+                              <li key={index} className="pages-item">
+                                <code>
+                                  {`${route.props.name} -> `}
+                                  <a
+                                    href={route.props.path}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    {route.props.path}
+                                  </a>
+                                </code>
+                              </li>
+                            )
                           })}
                         </ul>
                       </div>
@@ -560,18 +563,15 @@ const useVersion = () => {
   useEffect(() => {
     async function fetchVersion() {
       try {
-        const response = await global.fetch(
-          `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
-          {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-              query: 'query RedwoodVersion { redwood { version } }',
-            }),
-          }
-        )
+        const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: 'query RedwoodVersion { redwood { version } }',
+          }),
+        })
 
         const versionData = await response.json()
         setVersion(versionData?.data?.redwood?.version || null)

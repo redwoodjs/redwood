@@ -172,7 +172,7 @@ See [Positional Arguments](https://github.com/yargs/yargs/blob/master/docs/advan
 export const description = 'Build for production'
 ```
 
-Runnning `yarn rw build help` displays:
+Running `yarn rw build help` displays:
 
 ```terminal
 rw build [side..]
@@ -548,7 +548,7 @@ Destroyers rollback the changes made by generators. They're one-to-one, in that,
 
 Just like generators, destroyers have helpers that minimize the amount of boilerplate you have to write so you can get straight to the custom, creative logic. They're similarly named too: `createYargsForComponentDestroy` is one that, like for generators, you should use if permitting. And you probably will for `builder` at least, since, so far, destroyers don't have any options.
 
-And just like generators, destoyers have tests. Right now, the way we test destroyers is by comparing the files that the generator produces with the files the destroyer attempts to delete. But because we don't actually want to write files to disk, we mock the api required to run the generator's `files` function, which is what you'll see going in the top-level [`__mocks__`](https://github.com/redwoodjs/redwood/blob/main/packages/cli/__mocks__/fs.js) directory. To do this, we use Jest's [manual mocking](https://jestjs.io/docs/en/manual-mocks.html) to mock NodeJS's `fs` module.
+And just like generators, destroyers have tests. Right now, the way we test destroyers is by comparing the files that the generator produces with the files the destroyer attempts to delete. But because we don't actually want to write files to disk, we mock the api required to run the generator's `files` function, which is what you'll see going in the top-level [`__mocks__`](https://github.com/redwoodjs/redwood/blob/main/packages/cli/__mocks__/fs.js) directory. To do this, we use Jest's [manual mocking](https://jestjs.io/docs/en/manual-mocks.html) to mock NodeJS's `fs` module.
 
 ### Adding a Provider to the Auth Generator
 
@@ -717,7 +717,7 @@ You're not the only one. See the discussion [here](https://github.com/redwoodjs/
 
 ### Can I customize the generators?
 
-Not yet, but we're talking about it! See the ongoing dicussions in these issues:
+Not yet, but we're talking about it! See the ongoing discussions in these issues:
 
 - Investigate integrating or replacing generators with Plop [#653](https://github.com/redwoodjs/redwood/issues/653)
 - BYO Components to Scaffold Generator [#473](https://github.com/redwoodjs/redwood/issues/473)

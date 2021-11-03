@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.37.4",
+  "version": "0.38.0",
   "files": [
     "dist"
   ],
@@ -9,18 +9,18 @@
   "license": "MIT",
   "dependencies": {
     "@reach/skip-nav": "0.16.0",
-    "@redwoodjs/auth": "0.37.4",
-    "core-js": "3.17.3",
+    "@redwoodjs/auth": "0.38.0",
+    "core-js": "3.18.3",
     "lodash.isequal": "4.5.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.15.4",
+    "@babel/cli": "7.15.7",
     "@types/lodash.isequal": "4.5.5",
-    "jest": "27.2.0",
+    "jest": "27.3.1",
     "prop-types": "15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "typescript": "4.4.3"
+    "typescript": "4.4.4"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -28,7 +28,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"

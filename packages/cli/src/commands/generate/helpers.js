@@ -60,8 +60,7 @@ export const templateForComponentFile = ({
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
-  const outputComponentName =
-    componentName || pascalcase(paramCase(name)) + suffix
+  const outputComponentName = componentName || pascalcase(name) + suffix
   const componentOutputPath =
     outputPath ||
     path.join(basePath, outputComponentName, outputComponentName + extension)
