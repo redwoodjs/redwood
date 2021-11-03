@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory":"packages/router"
+    "directory": "packages/router"
   },
   "devDependencies": {
     "@babel/cli": "7.15.7",

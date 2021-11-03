@@ -63,7 +63,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory":"packages/core"
+    "directory": "packages/core"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
