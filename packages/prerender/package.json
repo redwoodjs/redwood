@@ -23,6 +23,11 @@
     "cheerio": "1.0.0-rc.10",
     "node-fetch": "2.6.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory":"packages/prerender"
+  },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",

@@ -60,5 +60,10 @@
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "2.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory":"packages/core"
+  },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
