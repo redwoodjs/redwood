@@ -2,8 +2,6 @@ import path from 'path'
 
 import { FastifyInstance } from 'fastify'
 
-import { findPrerenderedHtml } from '@redwoodjs/internal'
-
 import withWebServer from '../middleware/withWebServer'
 
 const FIXTURE_PATH = path.resolve(
