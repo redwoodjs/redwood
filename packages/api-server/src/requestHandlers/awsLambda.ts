@@ -87,12 +87,16 @@ const expressResponseForLambdaError = (
   expressResFn.status(500).send()
 }
 
+// To take express event, convert to lambda event
+// Then call the serverless function with the lambda event
 export const requestHandler = async (
   req: Request,
   res: Response,
   handler: Handler
 ) => {
   // We take the express request object and convert it into a lambda function event.
+
+  // @TODO this needs to be configurable in the future
   const event = lambdaEventForExpressRequest(req)
 
   const handlerCallback =

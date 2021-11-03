@@ -66,6 +66,9 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
   })
 }
 
+// This will take a express request
+// Then convert it to a lambdaEvent, and pass it to the the approrpiate hanlder for the routeName
+// The LAMBDA_FUNCTIONS lookup has been populated already by this point
 const lambdaRequestHandler = async (req: Request, res: Response) => {
   const { routeName } = req.params
   if (!LAMBDA_FUNCTIONS[routeName]) {
