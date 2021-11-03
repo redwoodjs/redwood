@@ -166,7 +166,7 @@ But sometimes you'll just have to use one of the more generic methods: `replaceW
 
 Although JSCodeshift has a built-in way of doing testing, we have a slightly different way of testing.
 
-There's two key test utils you need to be aware of (located in [packages/codemods/testUtils/index.ts](/testUtils/index.ts)).
+There's two key test utils you need to be aware of (located in [packages/codemods/testUtils/index.ts](https://github.com/redwoodjs/redwood/blob/main/packages/codemods/testUtils/index.ts)).
 
 1. `matchTransformSnapshot`—this lets you give it a transformName (i.e. the transform you're writing), and a fixtureName. The fixtures should be located in `__testfixtures__`, and have a `{fixtureName}.input.{js,ts}` and a `{fixtureName}.output.{js,ts}.
 
