@@ -28,11 +28,12 @@ export const registerWebSideBabelHook = ({
   // Even though we specify the config file, babel will still search for .babelrc
   // and merge them because we have specified the filename property, unless babelrc = false
   registerBabel({
+    root: getPaths().base,
     configFile: getWebSideBabelConfigPath(), // incase user has a custom babel.config.js in api
     babelrc: false,
     extensions: ['.js', '.ts', '.tsx', '.jsx'],
     plugins: [...plugins],
-    ignore: ['node_modules'],
+    ignore: [/node_modules/],
     cache: false,
     overrides,
   })
