@@ -39,6 +39,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('dedupe', {
+      description: 'Run npx yarn-deduplicate',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -55,7 +60,7 @@ export const builder = (yargs) => {
     )
 }
 
-// Used in yargs builder to coerce tag
+// Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
 const validateTag = (tag) => {
@@ -77,7 +82,7 @@ const validateTag = (tag) => {
   return tag
 }
 
-export const handler = async ({ dryRun, tag, verbose }) => {
+export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
@@ -99,6 +104,11 @@ export const handler = async ({ dryRun, tag, verbose }) => {
         title: 'Refreshing the Prisma client',
         task: (_ctx, task) => refreshPrismaClient(task, { verbose }),
         skip: () => dryRun,
+      },
+      {
+        title: 'Checking and cleaning duplicate deps',
+        skip: () => dryRun || !dedupe,
+        task: (_ctx, task) => dedupeDeps(task, { verbose }),
       },
       {
         title: 'One more thing..',
@@ -237,5 +247,36 @@ async function refreshPrismaClient(task, { verbose }) {
       'You may need to update your prisma client manually: $ yarn rw prisma generate'
     )
     console.log(c.error(e.message))
+  }
+}
+
+const dedupeDeps = async (task, { verbose }) => {
+  try {
+    // Get current yarn version
+    const { stdout } = await execa('yarn', ['--version'], {
+      cwd: getPaths().base,
+    })
+    if (!SEMVER_REGEX.test(stdout)) {
+      throw new Error('Unable to verify yarn version.')
+    }
+
+    // Run dedupe if yarn is version <=1.x
+    const version = stdout.match(SEMVER_REGEX)[0]
+    const majorVersion = parseInt(version.split('.')[0])
+    if (majorVersion > 1) {
+      task.skip('Deduplication is only required for yarn 1.x')
+      return
+    }
+
+    await execa('npx', ['yarn-deduplicate'], {
+      shell: true,
+      stdio: verbose ? 'inherit' : 'pipe',
+      cwd: getPaths().base,
+    })
+  } catch (e) {
+    console.log(c.error(e))
+    throw new Error(
+      'Could not finish deduplication. If the project is using yarn 1.x, please run `npx yarn-deduplicate`, before continuing'
+    )
   }
 }
