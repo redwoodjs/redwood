@@ -31,9 +31,21 @@ export const builder = (yargs) => {
       type: 'string',
       default: 'public/storybook',
     })
+    .option('no-manager-cache', {
+      describe:
+        'Do not cache the manager UI. Useful when you have made changes to `storybook.manager.js`.',
+      type: 'boolean',
+      default: false,
+    })
 }
 
-export const handler = ({ open, port, build, buildDirectory }) => {
+export const handler = ({
+  open,
+  port,
+  build,
+  buildDirectory,
+  noManagerCache,
+}) => {
   const cwd = getPaths().web.base
 
   const staticAssetsFolder = path.join(getPaths().web.base, 'public')
@@ -56,6 +68,7 @@ export const handler = ({ open, port, build, buildDirectory }) => {
       !build && `--port ${port}`,
       !build && '--no-version-updates',
       !build && `--static-dir "${staticAssetsFolder}"`,
+      noManagerCache && '--no-manager-cache',
       build &&
         `--output-dir "${path.join(getPaths().web.base, buildDirectory)}"`,
       !open && '--ci',
