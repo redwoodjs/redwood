@@ -138,6 +138,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             .intro-logo {
               max-width: 23rem;
               margin: var(--space-4);
+              display: inline;
             }
 
             .intro-instructions-container {
