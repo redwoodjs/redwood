@@ -3,12 +3,17 @@ import type {
   APIGatewayProxyEvent,
   Handler,
 } from 'aws-lambda'
-import type { Response, Request } from 'express'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import qs from 'qs'
 
 import { handleError } from '../error'
 
-export const parseBody = (rawBody: string | Buffer) => {
+type ParseBodyResult = {
+  body: string
+  isBase64Encoded: boolean
+}
+
+export const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
   if (typeof rawBody === 'string') {
     return { body: rawBody, isBase64Encoded: false }
   }
@@ -18,25 +23,25 @@ export const parseBody = (rawBody: string | Buffer) => {
   return { body: '', isBase64Encoded: false }
 }
 
-const lambdaEventForExpressRequest = (
-  request: Request
+const lambdaEventForFastifyRequest = (
+  request: FastifyRequest
 ): APIGatewayProxyEvent => {
   return {
     httpMethod: request.method,
     headers: request.headers,
-    path: request.path,
+    path: request.urlData('path'),
     queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
     requestContext: {
       identity: {
         sourceIp: request.ip,
       },
     },
-    ...parseBody(request.body), // adds `body` and `isBase64Encoded`
+    ...parseBody(request.rawBody || ''), // adds `body` and `isBase64Encoded`
   } as APIGatewayProxyEvent
 }
 
-const expressResponseForLambdaResult = (
-  expressResFn: Response,
+const fastifyResponseForLambdaResult = (
+  fastifyResFn: FastifyReply,
   lambdaResult: APIGatewayProxyResult
 ) => {
   const { statusCode = 200, headers, body = '' } = lambdaResult
@@ -44,10 +49,10 @@ const expressResponseForLambdaResult = (
   if (headers) {
     Object.keys(headers).forEach((headerName) => {
       const headerValue: any = headers[headerName]
-      expressResFn.setHeader(headerName, headerValue)
+      fastifyResFn.header(headerName, headerValue)
     })
   }
-  expressResFn.status(statusCode)
+  fastifyResFn.status(statusCode)
 
   // We're using this to log GraphQL errors, this isn't the right place.
   // I can't seem to get the express middleware to play nicely.
@@ -68,42 +73,37 @@ const expressResponseForLambdaResult = (
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
     // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
-    expressResFn.send(Buffer.from(body, 'base64'))
-  } else if (typeof body === 'string') {
-    // The AWS lambda docs specify that the response object must be
-    // compatible with `JSON.stringify`, but the type definition specifies that
-    // it must be a string.
-    expressResFn.send(body)
+    fastifyResFn.send(Buffer.from(body, 'base64'))
   } else {
-    expressResFn.json(body)
+    fastifyResFn.send(body)
   }
 }
 
-const expressResponseForLambdaError = (
-  expressResFn: Response,
+const fastifyResponseForLambdaError = (
+  fastifyResFn: FastifyReply,
   error: Error
 ) => {
   handleError(error).then(console.log)
-  expressResFn.status(500).send()
+  fastifyResFn.status(500).send()
 }
 
 export const requestHandler = async (
-  req: Request,
-  res: Response,
+  req: FastifyRequest,
+  res: FastifyReply,
   handler: Handler
 ) => {
-  // We take the express request object and convert it into a lambda function event.
-  const event = lambdaEventForExpressRequest(req)
+  // We take the fastify request object and convert it into a lambda function event.
+  const event = lambdaEventForFastifyRequest(req)
 
   const handlerCallback =
-    (expressResFn: Response) =>
+    (fastifyResFn: FastifyReply) =>
     (error: Error, lambdaResult: APIGatewayProxyResult) => {
       if (error) {
-        expressResponseForLambdaError(expressResFn, error)
+        fastifyResponseForLambdaError(fastifyResFn, error)
         return
       }
 
-      expressResponseForLambdaResult(expressResFn, lambdaResult)
+      fastifyResponseForLambdaResult(fastifyResFn, lambdaResult)
     }
 
   // Execute the lambda function.
@@ -119,9 +119,9 @@ export const requestHandler = async (
   if (handlerPromise && typeof handlerPromise.then === 'function') {
     try {
       const lambaResponse = await handlerPromise
-      return expressResponseForLambdaResult(res, lambaResponse)
+      return fastifyResponseForLambdaResult(res, lambaResponse)
     } catch (error: any) {
-      return expressResponseForLambdaError(res, error)
+      return fastifyResponseForLambdaError(res, error)
     }
   }
 }

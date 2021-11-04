@@ -1,30 +1,32 @@
-import type { Application } from 'express'
-import { createProxyMiddleware } from 'http-proxy-middleware'
+// @TODO!! Move to fastify
 
-interface ApiProxyOptions {
-  apiUrl: string
-  apiHost?: string
-}
+// import type { Application } from 'express'
+// import { createProxyMiddleware } from 'http-proxy-middleware'
 
-const withApiProxy = (
-  app: Application,
-  { apiUrl, apiHost }: ApiProxyOptions
-) => {
-  // If apiHost is supplied, it means the functions are running elsewhere
-  // So we should just proxy requests
-  if (apiHost) {
-    app.use(
-      createProxyMiddleware(apiUrl, {
-        changeOrigin: true,
-        pathRewrite: {
-          [`^${apiUrl}`]: '/', // remove base path
-        },
-        target: apiHost,
-      })
-    )
-  }
+// interface ApiProxyOptions {
+//   apiUrl: string
+//   apiHost?: string
+// }
 
-  return app
-}
+// const withApiProxy = (
+//   app: Application,
+//   { apiUrl, apiHost }: ApiProxyOptions
+// ) => {
+//   // If apiHost is supplied, it means the functions are running elsewhere
+//   // So we should just proxy requests
+//   if (apiHost) {
+//     app.use(
+//       createProxyMiddleware(apiUrl, {
+//         changeOrigin: true,
+//         pathRewrite: {
+//           [`^${apiUrl}`]: '/', // remove base path
+//         },
+//         target: apiHost,
+//       })
+//     )
+//   }
 
-export default withApiProxy
+//   return app
+// }
+
+// export default withApiProxy
