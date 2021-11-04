@@ -133,7 +133,7 @@ describe('createCell', () => {
       Empty: () => <>No one knows</>,
     })
 
-    const myUseQueryHook = () => ({ loading: true, data: { answers: [] } })
+    const myUseQueryHook = () => ({ loading: true, data: { answer: null } })
 
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
