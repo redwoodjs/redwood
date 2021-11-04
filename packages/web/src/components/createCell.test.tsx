@@ -179,4 +179,151 @@ describe('createCell', () => {
     screen.getByText(/^Look at my beautiful$/)
     screen.getByText(/^🦆$/)
   })
+
+  test('Cell props are passed to the query as variables', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: `query Greet($name: String!) {
+        greet(name: $name) {
+          greeting
+        }
+      }`,
+      Success: ({ greeting }) => <p>{greeting}</p>,
+    })
+
+    const myUseQueryHook = (_query: any, options: any) => {
+      return { data: { greeting: `Hello ${options.variables.name}!` } }
+    }
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell name="Bob" />
+      </GraphQLHooksProvider>
+    )
+
+    screen.getByText(/^Hello Bob!$/)
+  })
+
+  test('Allows QUERY to be a function', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: ({ variables }) => {
+        if ((variables as any).character === 'BEAST') {
+          return 'query BeastQuery { name }'
+        }
+
+        return 'query HeroQuery { name }'
+      },
+      Success: ({ name }) => <p>Call me {name}</p>,
+    })
+
+    const myUseQueryHook = (query: any) => {
+      if (query.includes('BeastQuery')) {
+        return { data: { name: 'Boogeyman' } }
+      } else if (query.includes('HeroQuery')) {
+        return { data: { name: 'Lara Croft' } }
+      }
+
+      return { data: { name: 'John Doe' } }
+    }
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell character="BEAST" />
+        <TestCell character="HERO" />
+      </GraphQLHooksProvider>
+    )
+
+    screen.getByText(/^Call me Boogeyman$/)
+    screen.getByText(/^Call me Lara Croft$/)
+  })
+
+  test('Renders Failure when there is an error', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Failure: () => <>Sad face :(</>,
+      Success: () => <>Great success!</>,
+      Loading: () => <>Fetching answer...</>,
+    })
+
+    const myUseQueryHook = () => ({ error: true })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+    screen.getByText(/^Sad face :\($/)
+  })
+
+  test('Passes error to Failure component', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Failure: ({ error }) => <>{JSON.stringify(error)}</>,
+      Success: () => <>Great success!</>,
+      Loading: () => <>Fetching answer...</>,
+    })
+
+    const myUseQueryHook = () => ({ error: { msg: 'System malfunction' } })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+    screen.getByText(/^{"msg":"System malfunction"}$/)
+  })
+
+  test('Passes children to Failure', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Failure: ({ children }) => <>I&apos;m a failure {children}</>,
+    })
+
+    const myUseQueryHook = () => ({ error: {} })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell>
+          <div>Child</div>
+        </TestCell>
+      </GraphQLHooksProvider>
+    )
+    screen.getByText(/^I'm a failure$/)
+    screen.getByText(/^Child$/)
+  })
+
+  test('Throws an error when there is an error if no Failure component exists', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Success: () => <>Great success!</>,
+      Loading: () => <>Fetching answer...</>,
+    })
+
+    const myUseQueryHook = () => ({ error: { message: '200 GraphQL' } })
+
+    // Prevent writing to stderr during this render.
+    const err = console.error
+    console.error = jest.fn()
+
+    let error
+    try {
+      render(
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      )
+    } catch (e) {
+      error = e
+    }
+
+    expect(error.message).toEqual('200 GraphQL')
+
+    // Restore writing to stderr.
+    console.error = err
+  })
 })
