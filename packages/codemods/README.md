@@ -16,10 +16,10 @@ This package contains codemods that automate upgrading a Redwood project.
 
 ## Usage
 
-Applying a suite of codemods:
+Listing available codemods:
 
 ```
-npx @redwood/codemods --from=v0.35.0 --to=v0.37.0
+npx @redwood/codemods list v0.38.x
 ```
 
 Applying a single one:
@@ -28,7 +28,11 @@ Applying a single one:
 npx @redwood/codemods add-directives
 ```
 
+---
+
 ## Contributing
+
+> **Note** that this is a CLI—that is, it's meant to be executed with `npx`. This means the normal contribution flow (using `rwfw`) doesn't apply.
 
 You should be familiar with [jscodeshift](https://github.com/facebook/jscodeshift).
 It's API isn't documented too well so we'll try to explain some of it here.
@@ -37,6 +41,36 @@ Like Babel and ESLint, jscodeshift is all about ASTs.
 The difference is that it's overwriting files.
 That means things that Babel doesn't care about, like spaces, styling (single quotes or double quotes, etc.), all of a sudden matter a lot.
 The parser jscodeshift uses, [recast](https://github.com/benjamn/recast), knows how to preserve these details as much as possible.
+
+### Structure of this package
+
+The root of the CLI is run from `src/codemods.ts`, which loads all the available codemods from the `src/codemods/*` folder.
+
+Codemods are organised by version. For example, for upgrading from v0.37.x -> v0.38.x, the codemods are in the `src/codemods/v0.38.x` folder.
+
+Each codemod has the following files:
+
+- README.md—to explain what this codemod does
+- {codemodName}.ts—this is the actual implementation of the codemod. You can export whatever you like here, and use it in the yargs handler
+- {codemodName}.yargs.ts—this is the yargs (CLI) handler that actually invokes your codemod. Each of the yargs handlers should export: `command`, `description` and `handler` at least. More info on how this is handled with yargs `commandDir` here: [Yargs advanced docs](https://github.com/yargs/yargs/blob/main/docs/advanced.md#commanddirdirectory-opts)
+- {codemodName}.test.ts—all jscodeshift codemods should implement a test. They're fairly simple to write. Have a look at the testing section for more details
+
+### Different types of codemods
+
+Codemods are sometimes really simple, e.g. just normal string replace or updating a package.json. But other times we use jscodeshift to change code on a redwood project
+
+Here are a few different examples to help you get familiarised:
+
+- [Rename config in Redwood.toml](packages/codemods/src/codemods/v0.38.x/renameApiProxyPath)—
+Simple string replace on the user's `redwood.toml`. No ASTs, no complications!
+
+- [Add Directives](packages/codemods/src/codemods/v0.37.x/addDirectives)—
+Download files from the RedwoodJS template because we've added new files that are needed in a user's project. No ASTs involved
+
+- [Update GraphQL Function](packages/codemods/src/codemods/v0.37.x/updateGraphQLFunction)—
+A more complex example, which uses `jscodeshift` and ASTs to update code in a user's project
+
+The rest of the docs will focus on the more complex cases (the third example).
 
 ### A Typical Transform
 
@@ -47,7 +81,7 @@ A typical transform looks something like this:
 
 import type { FileInfo, API } from 'jscodeshift'
 
-module.exports = function (file: FileInfo, api: API) {
+export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const root = j(file.source)
@@ -66,6 +100,11 @@ yarn run jscodeshift -t fooToBar.js foo.js
 ```
 
 In this way, jscodeshift is similar to Jest in that it's a runner.
+
+> 💡 **Tip**
+>
+> An extremely useful tool to write the actual transform is [ASTExplorer](https://astexplorer.net/).
+> This lets you see how your codemods change input source, in real time!
 
 #### The API
 
@@ -87,7 +126,7 @@ When beginning to write a transform, your best bet is to start by pasting the co
 ```typescript
 import type { FileInfo, API } from 'jscodeshift'
 
-module.exports = function (file: FileInfo, api: API) {
+export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const root = j(file.source)
@@ -125,15 +164,67 @@ But sometimes you'll just have to use one of the more generic methods: `replaceW
 
 ## Testing
 
-We're taking advantage of jscodeshift's integration with Jest to take most of the setup out of unit tests: https://github.com/facebook/jscodeshift#unit-testing.
+Although JSCodeshift has a built-in way of doing testing, we have a slightly different way of testing.
 
-### Testing TS fixtures...
+There's two key test utils you need to be aware of (located in [packages/codemods/testUtils/index.ts](https://github.com/redwoodjs/redwood/blob/main/packages/codemods/testUtils/index.ts)).
 
-To test TS files:
-https://github.com/facebook/jscodeshift/blob/main/src/testUtils.js#L87
+1. `matchTransformSnapshot`—this lets you give it a transformName (i.e. the transform you're writing), and a fixtureName. The fixtures should be located in `__testfixtures__`, and have a `{fixtureName}.input.{js,ts}` and a `{fixtureName}.output.{js,ts}.
 
-```javascript
-defineTest(__dirname, 'addPrismaCreateToScenarios', null, 'realExample', {
-  parser: 'ts',
+Note that the fixtureName can be anything you want, and you can have multiple fixtures.
+
+```js
+describe('Update API Imports', () => {
+  it('Updates @redwoodjs/api imports', () => {
+    matchTransformSnapshot('updateApiImports', 'apiImports')
+  })
 })
 ```
+
+2. `matchInlineTransformSnapshot`—very similar to above, but use this in case you want to just provide your fixtures inline
+
+```js
+  it('Modifies imports (inline)', () => {
+    matchInlineTransformSnapshot(
+      'updateGraphQLFunction',  // <--- transform name, so we know which transform to apply
+      `import {
+        createGraphQLHandler,   // <-- input source
+        makeMergedSchema,
+      } from '@redwoodjs/api'`,
+      `import { createGraphQLHandler } from '@redwoodjs/graphql-server'` // <-- expected output
+    )
+  })
+```
+
+## How to run your changes on a test redwood project
+
+1. Clean all your other packages, and rebuild once:
+
+```shell
+# root of framework
+yarn build:clean
+yarn build
+```
+
+2. Build the codemods package
+
+```shell
+cd packages/codemods
+yarn build
+```
+
+3. Running the updated CLI
+
+The CLI is meant to be run on a redwood project (i.e. it expects you to be cd'd into a redwood project), but you can provide it as an environment variable too!
+
+```shell
+RWJS_CWD=/path/to/rw-project node "./packages/codemods/dist/codemods.js" {your-codemod-name}
+# ☝️ this is the path to your rw project (not the framework!)
+```
+
+> **💡 Tip**
+>
+> If you're making changes, and want to watch your source and build on changes, you can use the [watch cli](https://www.npmjs.com/package/watch)
+> ```shell
+> # Assuming in packages/codemods/
+> watch -p "./src/**/*" -c "yarn build"
+> ```

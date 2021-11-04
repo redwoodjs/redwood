@@ -13,6 +13,11 @@
     "core-js": "3.18.3",
     "lodash.isequal": "4.5.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/router"
+  },
   "devDependencies": {
     "@babel/cli": "7.15.7",
     "@types/lodash.isequal": "4.5.5",
