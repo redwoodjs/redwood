@@ -279,4 +279,5 @@ const dedupeDeps = async (task, { verbose }) => {
       'Could not finish deduplication. If the project is using yarn 1.x, please run `npx yarn-deduplicate`, before continuing'
     )
   }
+  await yarnInstall({ verbose })
 }
