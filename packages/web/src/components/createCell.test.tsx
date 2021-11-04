@@ -128,12 +128,12 @@ describe('createCell', () => {
   test('Renders Empty if available, and data field is an empty array', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
-      QUERY: 'query TestQuery { answer }',
+      QUERY: 'query TestQuery { answers }',
       Success: () => <>Great success!</>,
       Empty: () => <>No one knows</>,
     })
 
-    const myUseQueryHook = () => ({ loading: true, data: { answer: null } })
+    const myUseQueryHook = () => ({ loading: true, data: { answers: [] } })
 
     render(
       <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
@@ -143,12 +143,28 @@ describe('createCell', () => {
     screen.getByText(/^No one knows$/)
   })
 
+  test('Renders Success even if data is empty when no Empty is available', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Success: () => <>Empty success</>,
+    })
+
+    const myUseQueryHook = () => ({ loading: true, data: { answer: null } })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+    screen.getByText(/^Empty success$/)
+  })
+
   test('Allows passing children to Success', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
       Success: ({ children }) => <>Look at my beautiful {children}</>,
-      Empty: () => <>No one knows</>,
     })
 
     const myUseQueryHook = () => ({ data: {} })
