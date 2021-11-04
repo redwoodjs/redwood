@@ -97,9 +97,7 @@ const lambdaRequestHandler = async (
         error: errorMessage,
         availableFunctions: Object.keys(LAMBDA_FUNCTIONS),
       }
-      reply
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send(devError)
+      reply.send(devError)
     } else {
       reply.send(escape(errorMessage))
     }

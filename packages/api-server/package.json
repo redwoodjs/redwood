@@ -10,7 +10,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/handler",
+  "main": "dist/cliHandlers",
   "license": "MIT",
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.15.8",

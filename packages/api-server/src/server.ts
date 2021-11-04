@@ -7,7 +7,7 @@ export interface HttpServerParams {
 }
 
 export const startServer = ({ port = 8911, socket, app }: HttpServerParams) => {
-  app.listen(socket || port, '0.0.0.0')
+  app.listen(socket || port, '::')
 
   return app
 }
