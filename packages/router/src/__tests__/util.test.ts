@@ -126,7 +126,7 @@ describe('matchPath', () => {
     ).toEqual({
       match: true,
       params: {
-        'globbyMcGlob...': 'path/to/file',
+        globbyMcGlob: 'path/to/file',
       },
     })
   })
@@ -139,7 +139,7 @@ describe('matchPath', () => {
       )
     ).toEqual({
       match: true,
-      params: { id: 44, version: 1.8, edit: false, 'path...': 'path/to/file' },
+      params: { id: 44, version: 1.8, edit: false, path: 'path/to/file' },
     })
   })
 })

@@ -27,6 +27,22 @@ const paramsForRoute = (route: string) => {
     })
 }
 
+/**
+ * Similar to the logic in the definition of paramsForRoute...
+ * we need a ternary to properyl grab params of type Glob
+ * Glob types can be of form glob="/path/to/file" with any number of "/" characters
+ */
+const parseGlobOrOtherCoreType = (
+  type: SupportedRouterParamTypes,
+  name: string
+) => {
+  if (type) {
+    return type === 'Glob' ? `{${name}}` : `{${name}:${type}}`
+  } else {
+    return `{${name}}`
+  }
+}
+
 export type TrailingSlashesTypes = 'never' | 'always' | 'preserve'
 
 export interface ParamType {
@@ -74,23 +90,6 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  */
-
-/**
- * Similar to the logic in the definition of paramsForRoute...
- * we need a ternary to properyl grab params of type Glob
- * Glob types can be of form glob="/path/to/file" with any number of "/" characters
- */
-const parseGlobOrOtherCoreType = (
-  type: SupportedRouterParamTypes,
-  name: string
-) => {
-  if (type) {
-    return type === 'Glob' ? `{${name}}` : `{${name}:${type}}`
-  } else {
-    return `{${name}}`
-  }
-}
-
 const matchPath = (
   route: string,
   pathname: string,
@@ -137,9 +136,12 @@ const matchPath = (
         transformedValue = typeInfo.transform(value)
       }
 
+      // Remove "..." from Glob params
+      const normalizedName = name.slice(-3) === '...' ? name.slice(0, -3) : name
+
       return {
         ...acc,
-        [name]: transformedValue,
+        [normalizedName]: transformedValue,
       }
     },
     {}
