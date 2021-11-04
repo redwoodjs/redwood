@@ -142,4 +142,25 @@ describe('createCell', () => {
     )
     screen.getByText(/^No one knows$/)
   })
+
+  test('Allows passing children to Success', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Success: ({ children }) => <>Look at my beautiful {children}</>,
+      Empty: () => <>No one knows</>,
+    })
+
+    const myUseQueryHook = () => ({ data: {} })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell>
+          <div>🦆</div>
+        </TestCell>
+      </GraphQLHooksProvider>
+    )
+    screen.getByText(/^Look at my beautiful$/)
+    screen.getByText(/^🦆$/)
+  })
 })
