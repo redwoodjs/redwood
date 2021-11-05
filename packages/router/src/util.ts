@@ -8,7 +8,7 @@ const createNamedContext = <T>(name: string, defaultValue?: T) => {
 }
 
 /**
- * Get param name, type, and slug for a route.
+ * Get param name, type, and match for a route.
  *
  *  '/blog/{year}/{month}/{day:Int}/{filePath...}'
  *   => [
@@ -106,8 +106,8 @@ const matchPath = (
   let typeConstrainedRoute = route
 
   // Map all params from the route to their type constraint regex to create a
-  // "type-constrained route" regexp
-  for (const [_name, type, slug] of routeParams) {
+  // "type-constrained route" regex
+  for (const [_name, type, match] of routeParams) {
     // `undefined` constraint if `type` is not supported
     const constraint =
       allParamTypes[type as SupportedRouterParamTypes]?.constraint
@@ -115,7 +115,7 @@ const matchPath = (
     // Get the regex as a string, or default regex if no constraint
     const typeRegex = constraint?.source || '[^/]+'
 
-    typeConstrainedRoute = typeConstrainedRoute.replace(slug, `(${typeRegex})`)
+    typeConstrainedRoute = typeConstrainedRoute.replace(match, `(${typeRegex})`)
   }
 
   // Does the `pathname` match the route?

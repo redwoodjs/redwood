@@ -158,6 +158,15 @@ describe('matchPath', () => {
       },
     })
 
+    // adjacent with a slash
+    expect(matchPath('/a/{a...}/{b...}/c', '/a/1/2/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2/3',
+        b: '4',
+      },
+    })
+
     // prefixed
     expect(matchPath('/a-{a...}', '/a-1/2')).toEqual({
       match: true,
