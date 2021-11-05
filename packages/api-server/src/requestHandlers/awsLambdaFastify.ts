@@ -101,8 +101,8 @@ export const requestHandler = async (
   // In this case the handlerCallback should not be called.
   if (handlerPromise && typeof handlerPromise.then === 'function') {
     try {
-      const lambaResponse = await handlerPromise
-      return fastifyResponseForLambdaResult(reply, lambaResponse)
+      const lambdaResponse = await handlerPromise
+      return fastifyResponseForLambdaResult(reply, lambdaResponse)
     } catch (error: any) {
       return fastifyResponseForLambdaError(req, reply, error)
     }
