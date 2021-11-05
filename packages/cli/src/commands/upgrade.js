@@ -250,31 +250,40 @@ async function refreshPrismaClient(task, { verbose }) {
   }
 }
 
+const getCmdMajorVersion = async (command) => {
+  // Get current version
+  const { stdout } = await execa(command, ['--version'], {
+    cwd: getPaths().base,
+  })
+  if (!SEMVER_REGEX.test(stdout)) {
+    throw new Error(`Unable to verify ${command} version.`)
+  }
+
+  // Get major version number
+  const version = stdout.match(SEMVER_REGEX)[0]
+  return parseInt(version.split('.')[0])
+}
+
 const dedupeDeps = async (task, { verbose }) => {
   try {
-    // Get current yarn version
-    const { stdout } = await execa('yarn', ['--version'], {
-      cwd: getPaths().base,
-    })
-    if (!SEMVER_REGEX.test(stdout)) {
-      throw new Error('Unable to verify yarn version.')
-    }
-
-    // Run dedupe if yarn is version <=1.x
-    const version = stdout.match(SEMVER_REGEX)[0]
-    const majorVersion = parseInt(version.split('.')[0])
-    if (majorVersion > 1) {
-      task.skip('Deduplication is only required for yarn 1.x')
+    const yarnVersion = await getCmdMajorVersion('yarn')
+    const npxVersion = await getCmdMajorVersion('npx')
+    if (yarnVersion > 1) {
+      task.skip('Deduplication is only required for <=1.x')
       return
     }
+    let npxArgs = []
+    if (npxVersion > 6) {
+      npxArgs = ['--yes']
+    }
 
-    await execa('npx', ['yarn-deduplicate'], {
+    await execa('npx', [...npxArgs, 'yarn-deduplicate'], {
       shell: true,
       stdio: verbose ? 'inherit' : 'pipe',
       cwd: getPaths().base,
     })
   } catch (e) {
-    console.log(c.error(e))
+    console.log(c.error(e.message))
     throw new Error(
       'Could not finish deduplication. If the project is using yarn 1.x, please run `npx yarn-deduplicate`, before continuing'
     )
