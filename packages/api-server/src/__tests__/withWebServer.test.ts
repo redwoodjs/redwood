@@ -2,7 +2,7 @@ import path from 'path'
 
 import { FastifyInstance } from 'fastify'
 
-import withWebServer from '../middleware/withWebServer'
+import withWebServer from '../plugins/withWebServer'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

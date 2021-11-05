@@ -4100,6 +4100,7 @@ __metadata:
     chokidar: 3.5.2
     fast-glob: 3.2.7
     fastify: 3.22.1
+    fastify-http-proxy: ^6.2.1
     fastify-raw-body: 3.1.0
     fastify-static: 4.5.0
     fastify-url-data: 3.0.3
@@ -11715,7 +11716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"end-of-stream@npm:^1.0.0, end-of-stream@npm:^1.1.0, end-of-stream@npm:^1.4.1":
+"end-of-stream@npm:^1.0.0, end-of-stream@npm:^1.1.0, end-of-stream@npm:^1.4.1, end-of-stream@npm:^1.4.4":
   version: 1.4.4
   resolution: "end-of-stream@npm:1.4.4"
   dependencies:
@@ -13005,6 +13006,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-http-proxy@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "fastify-http-proxy@npm:6.2.1"
+  dependencies:
+    fastify-reply-from: ^6.0.0
+    ws: ^8.0.0
+  checksum: 18c54d7271f194116af32e9db05d431494cb69d4213f830c03de2d13648d8641d1300407db4dcbd3b07cc43af802e87e77bc67ceb037577dab447806892deadc
+  languageName: node
+  linkType: hard
+
 "fastify-plugin@npm:^2.0.0":
   version: 2.3.4
   resolution: "fastify-plugin@npm:2.3.4"
@@ -13029,6 +13040,21 @@ __metadata:
     raw-body: ^2.4.1
     secure-json-parse: ^2.1.0
   checksum: 69dcd2c209b8e834688b74b4038b760a333a875e4e97888814796598823c5012f9511ef48c8e0640a8843f9879beceb84f242c47707e292fb2146205819d7e55
+  languageName: node
+  linkType: hard
+
+"fastify-reply-from@npm:^6.0.0":
+  version: 6.4.1
+  resolution: "fastify-reply-from@npm:6.4.1"
+  dependencies:
+    end-of-stream: ^1.4.4
+    fastify-plugin: ^3.0.0
+    http-errors: ^1.8.0
+    pump: ^3.0.0
+    semver: ^7.3.5
+    tiny-lru: ^7.0.6
+    undici: ^4.0.0
+  checksum: 305e50f3849a6895a12120883a37c68a4aa9db8aeee2c458a5ab04eb50dba0be9072301452ea8b281b44085a5e1222575ca75ecdbe55e7a78cc940a26f04c0e2
   languageName: node
   linkType: hard
 
@@ -14905,6 +14931,19 @@ fsevents@^1.2.7:
     statuses: ">= 1.5.0 < 2"
     toidentifier: 1.0.0
   checksum: 5c3443c340d35b2f18ce908266c4ae93305b7d900bef765ac8dc56fa90125b9fe18a1ed9ebf6af23dc3ba7763731921a2682bf968e199eccf383eb8f508be6c2
+  languageName: node
+  linkType: hard
+
+"http-errors@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "http-errors@npm:1.8.0"
+  dependencies:
+    depd: ~1.1.2
+    inherits: 2.0.4
+    setprototypeof: 1.2.0
+    statuses: ">= 1.5.0 < 2"
+    toidentifier: 1.0.0
+  checksum: 2deb37be07a858370a5c9f150de0e8a14e10410a46aeed2614e9e96ecc5f88e6d79b2b278b6a968635ff0d01142e84131db2afb07504adb73a3e9340acdbd70c
   languageName: node
   linkType: hard
 
@@ -22703,6 +22742,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"setprototypeof@npm:1.2.0":
+  version: 1.2.0
+  resolution: "setprototypeof@npm:1.2.0"
+  checksum: 68733173026766fa0d9ecaeb07f0483f4c2dc70ca376b3b7c40b7cda909f94b0918f6c5ad5ce27a9160bdfb475efaa9d5e705a11d8eaae18f9835d20976028bc
+  languageName: node
+  linkType: hard
+
 "sha.js@npm:^2.4.0, sha.js@npm:^2.4.8":
   version: 2.4.11
   resolution: "sha.js@npm:2.4.11"
@@ -24155,7 +24201,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:7.0.6, tiny-lru@npm:^7.0.0":
+"tiny-lru@npm:7.0.6, tiny-lru@npm:^7.0.0, tiny-lru@npm:^7.0.6":
   version: 7.0.6
   resolution: "tiny-lru@npm:7.0.6"
   checksum: bf155e9f8eb85b32f5bdbaad6040e152ace4611267d000fda17af3c831f950b5a77065b185da57469e45c5d8c7a7c4f54b597d2c03c9f31be6e4fa7ea574153c
@@ -24722,6 +24768,13 @@ resolve@^2.0.0-next.3:
   version: 3.3.6
   resolution: "undici@npm:3.3.6"
   checksum: 8bb1b5d603b6d40c5c660c20571e25b1627994272dcc293d661e760c52b0ed8c334295cfc0823550585d1e4930c9dd563bf7a1d9f6fa006e85dda38fdda3cf5b
+  languageName: node
+  linkType: hard
+
+"undici@npm:^4.0.0":
+  version: 4.9.5
+  resolution: "undici@npm:4.9.5"
+  checksum: fb358a3989c8cc1e73d3cb7a517fbd6451beabee209e16b839b9f9f5c02d57b74409b9accfd87b059bacfeb45d0cfb007dd3f729516d9f9d3ffe8a1a3390a85d
   languageName: node
   linkType: hard
 
@@ -26223,7 +26276,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ws@npm:>=7.4.6, ws@npm:^8.1.0":
+"ws@npm:>=7.4.6, ws@npm:^8.0.0, ws@npm:^8.1.0":
   version: 8.2.3
   resolution: "ws@npm:8.2.3"
   peerDependencies:

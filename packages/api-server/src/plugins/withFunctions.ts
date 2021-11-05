@@ -2,7 +2,6 @@ import path from 'path'
 
 import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'
-import fg from 'fast-glob'
 import {
   FastifyInstance,
   FastifyReply,
@@ -13,7 +12,7 @@ import fastifyRawBody from 'fastify-raw-body'
 import fastifyUrlData from 'fastify-url-data'
 import escape from 'lodash.escape'
 
-import { getPaths } from '@redwoodjs/internal'
+import { findApiDistFunctions } from '@redwoodjs/internal'
 
 import { requestHandler } from '../requestHandlers/awsLambdaFastify'
 
@@ -22,11 +21,7 @@ const LAMBDA_FUNCTIONS: Lambdas = {}
 
 // TODO: Use v8 caching to load these crazy fast.
 const loadFunctionsFromDist = async () => {
-  const rwjsPaths = getPaths()
-  const serverFunctions = fg.sync('dist/functions/*.{ts,js}', {
-    cwd: rwjsPaths.api.base,
-    absolute: true,
-  })
+  const serverFunctions = findApiDistFunctions()
   // Place `GraphQL` serverless function at the start.
   const i = serverFunctions.findIndex((x) => x.indexOf('graphql') !== -1)
   if (i >= 0) {

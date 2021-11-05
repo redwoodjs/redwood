@@ -3,9 +3,9 @@ import c from 'ansi-colors'
 import { getConfig } from '@redwoodjs/internal'
 
 import createApp from './app'
-// import withApiProxy from './middleware/withApiProxy'
-import withFunctions from './middleware/withFunctions'
-import withWebServer from './middleware/withWebServer'
+import withApiProxy from './plugins/withApiProxy'
+import withFunctions from './plugins/withFunctions'
+import withWebServer from './plugins/withWebServer'
 import { startServer as startFastifyServer } from './server'
 import type { HttpServerParams } from './server'
 
@@ -81,7 +81,7 @@ export const bothServerHandler = async ({
 
   let app = createApp()
 
-  // Attach middleware
+  // Attach plugins
   app = await withFunctions(app, apiRootPath)
   app = withWebServer(app)
 
@@ -115,14 +115,15 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
 
   const fastifyInstance = createApp()
 
-  if (apiHost) {
-    // @TODO
-    // Attach middleware
-    // We need to proxy api requests to prevent CORS issues
-  }
-
   // serve static files from "web/dist"
-  const app = withWebServer(fastifyInstance)
+  let app = withWebServer(fastifyInstance)
+
+  // If apiHost is supplied, it means the functions are running elsewhere
+  // So we should just proxy requests
+  if (apiHost) {
+    // Attach plugin for proxying
+    app = withApiProxy(app, { apiHost, apiUrl })
+  }
 
   startFastifyServer({
     port: port,

@@ -18,6 +18,7 @@
     "chokidar": "3.5.2",
     "fast-glob": "3.2.7",
     "fastify": "3.22.1",
+    "fastify-http-proxy": "^6.2.1",
     "fastify-raw-body": "3.1.0",
     "fastify-static": "4.5.0",
     "fastify-url-data": "3.0.3",
