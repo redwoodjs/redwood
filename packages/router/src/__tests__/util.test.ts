@@ -220,6 +220,10 @@ describe('flattenSearchParams', () => {
 })
 
 describe('replaceParams', () => {
+  it('throws an error with missing params', () => {
+    expect(() => replaceParams('/tags/{tag}', {})).toThrowError('Required parameter "tag" not set for route "/tags/{tag}"')
+  })
+
   it('replaces named parameter with value from the args object', () => {
     expect(replaceParams('/tags/{tag}', { tag: 'code' })).toEqual('/tags/code')
   })
@@ -250,8 +254,14 @@ describe('replaceParams', () => {
       '/boolean/false'
     )
 
-    expect(replaceParams('/undef/{undef}', { undef: undefined })).toEqual(
-      '/undef/undefined'
+    expect(() => replaceParams('/undef/{undef}', { undef: undefined })).toThrowError(
+      'Required parameter "undef" not set for route "/undef/{undef}"'
+    )
+  })
+
+  it('handles globs', () => {
+    expect(replaceParams('/path/{path...}', { path: 'foo/bar' })).toEqual(
+      '/path/foo/bar'
     )
   })
 })
