@@ -56,10 +56,21 @@ const FormError = ({
     !!error.networkError && Object.keys(error.networkError).length > 0
 
   if (hasGraphQLError) {
-    const errors = error.graphQLErrors[0].extensions?.exception?.messages
     rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong.'
-    for (const e in errors) {
-      errors[e].forEach((fieldError: any) => {
+    const exceptionMessages =
+      error.graphQLErrors[0].extensions?.exception?.messages
+
+    for (const e in exceptionMessages) {
+      exceptionMessages[e].forEach((fieldError: any) => {
+        messages.push(`${e} ${fieldError}`)
+      })
+    }
+
+    const propertyMessages =
+      error.graphQLErrors[0].extensions?.properties?.messages
+
+    for (const e in propertyMessages) {
+      propertyMessages[e].forEach((fieldError: any) => {
         messages.push(`${e} ${fieldError}`)
       })
     }
