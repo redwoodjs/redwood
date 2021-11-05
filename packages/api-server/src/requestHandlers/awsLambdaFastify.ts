@@ -6,8 +6,6 @@ import type {
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import qs from 'qs'
 
-import { handleError } from '../error'
-
 type ParseBodyResult = {
   body: string
   isBase64Encoded: boolean
@@ -41,7 +39,8 @@ const lambdaEventForFastifyRequest = (
 }
 
 const fastifyResponseForLambdaResult = (
-  fastifyResFn: FastifyReply,
+  req: FastifyRequest,
+  reply: FastifyReply,
   lambdaResult: APIGatewayProxyResult
 ) => {
   const { statusCode = 200, headers, body = '' } = lambdaResult
@@ -49,10 +48,10 @@ const fastifyResponseForLambdaResult = (
   if (headers) {
     Object.keys(headers).forEach((headerName) => {
       const headerValue: any = headers[headerName]
-      fastifyResFn.header(headerName, headerValue)
+      reply.header(headerName, headerValue)
     })
   }
-  fastifyResFn.status(statusCode)
+  reply.status(statusCode)
 
   // We're using this to log GraphQL errors, this isn't the right place.
   // I can't seem to get the express middleware to play nicely.
@@ -63,7 +62,7 @@ const fastifyResponseForLambdaResult = (
         const { message } = b.errors[0]
         const e = new Error(message)
         e.stack = ''
-        handleError(e).then(console.error)
+        req.log.error(e)
       }
     } catch (e) {
       // do nothing
@@ -73,37 +72,40 @@ const fastifyResponseForLambdaResult = (
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
     // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
-    fastifyResFn.send(Buffer.from(body, 'base64'))
+    reply.send(Buffer.from(body, 'base64'))
   } else {
-    fastifyResFn.send(body)
+    reply.send(body)
   }
 }
 
 const fastifyResponseForLambdaError = (
-  fastifyResFn: FastifyReply,
+  req: FastifyRequest,
+  reply: FastifyReply,
   error: Error
 ) => {
-  handleError(error).then(console.log)
-  fastifyResFn.status(500).send()
+  // handleError(error).then(console.log)
+
+  req.log.error(error)
+  reply.status(500).send()
 }
 
 export const requestHandler = async (
   req: FastifyRequest,
-  res: FastifyReply,
+  reply: FastifyReply,
   handler: Handler
 ) => {
   // We take the fastify request object and convert it into a lambda function event.
   const event = lambdaEventForFastifyRequest(req)
 
   const handlerCallback =
-    (fastifyResFn: FastifyReply) =>
+    (reply: FastifyReply) =>
     (error: Error, lambdaResult: APIGatewayProxyResult) => {
       if (error) {
-        fastifyResponseForLambdaError(fastifyResFn, error)
+        fastifyResponseForLambdaError(req, reply, error)
         return
       }
 
-      fastifyResponseForLambdaResult(fastifyResFn, lambdaResult)
+      fastifyResponseForLambdaResult(req, reply, lambdaResult)
     }
 
   // Execute the lambda function.
@@ -112,16 +114,16 @@ export const requestHandler = async (
     event,
     // @ts-expect-error - Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
     {},
-    handlerCallback(res)
+    handlerCallback(reply)
   )
 
   // In this case the handlerCallback should not be called.
   if (handlerPromise && typeof handlerPromise.then === 'function') {
     try {
       const lambaResponse = await handlerPromise
-      return fastifyResponseForLambdaResult(res, lambaResponse)
+      return fastifyResponseForLambdaResult(req, reply, lambaResponse)
     } catch (error: any) {
-      return fastifyResponseForLambdaError(res, error)
+      return fastifyResponseForLambdaError(req, reply, error)
     }
   }
 }

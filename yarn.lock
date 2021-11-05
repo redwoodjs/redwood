@@ -4109,8 +4109,6 @@ __metadata:
     qs: 6.10.1
     typescript: 4.4.4
     yargs: 16.2.0
-    youch: 2.2.2
-    youch-terminal: 1.1.1
   bin:
     api-server: ./dist/index.js
     rw-api-server: ./dist/index.js
@@ -6495,13 +6493,6 @@ __metadata:
   version: 0.1.2
   resolution: "@types/source-list-map@npm:0.1.2"
   checksum: 0538ce317294febf40ed3fc3a2e483fa4aee8ba85584a66e5ed9c0af9ea48a348960bc467076643cb56aeafdd7d2252e90c75e68ef664c0477ec87ea0554ffdc
-  languageName: node
-  linkType: hard
-
-"@types/stack-trace@npm:0.0.29":
-  version: 0.0.29
-  resolution: "@types/stack-trace@npm:0.0.29"
-  checksum: 401a1f80039706dd9f058336c797702ef3837bf34a663e4213c3b58be255b0649d699f65f8652976fb517146926c2ed5ebc8b6897e7460b99e16b84adc7fc985
   languageName: node
   linkType: hard
 
@@ -17340,13 +17331,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"kleur@npm:^4.1.4":
-  version: 4.1.4
-  resolution: "kleur@npm:4.1.4"
-  checksum: c70aaa99a6797b0a73a6f8a84c3912dbf49c95acf78cb661e30677999914843d0f5deedb0910458259c43c5fd98ea3195777988a8291c058874e29344dd1ea0c
-  languageName: node
-  linkType: hard
-
 "klona@npm:^2.0.4":
   version: 2.0.4
   resolution: "klona@npm:2.0.4"
@@ -18734,15 +18718,6 @@ fsevents@^1.2.7:
     arrify: ^2.0.1
     minimatch: ^3.0.4
   checksum: 08e6b71ea2eee2feba17bb4159d247b78d26f9a9b556abddc136c05baa5eba9d80717986e494972284947e9c0e26a19eba3fe20851463fa3dbb770e289f7a0b8
-  languageName: node
-  linkType: hard
-
-"mustache@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "mustache@npm:4.2.0"
-  bin:
-    mustache: bin/mustache
-  checksum: 1f8197e8a19e63645a786581d58c41df7853da26702dbc005193e2437c98ca49b255345c173d50c08fe4b4dbb363e53cb655ecc570791f8deb09887248dd34a2
   languageName: node
   linkType: hard
 
@@ -23262,13 +23237,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"stack-trace@npm:0.0.10":
-  version: 0.0.10
-  resolution: "stack-trace@npm:0.0.10"
-  checksum: 9ff3dabfad4049b635a85456f927a075c9d0c210e3ea336412d18220b2a86cbb9b13ec46d6c37b70a302a4ea4d49e30e5d4944dd60ae784073f1cde778ac8f4b
-  languageName: node
-  linkType: hard
-
 "stack-utils@npm:^2.0.3":
   version: 2.0.5
   resolution: "stack-utils@npm:2.0.5"
@@ -26593,27 +26561,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     "@types/yoga-layout": 1.9.2
   checksum: e83b6b7078faf4d0472461b53e92bf9cae655de3d896aee5f79b5ba5a960e507bbf8e671b261db13137bf18711686969f19fd1d9c4669beb1d70754b83c5879d
-  languageName: node
-  linkType: hard
-
-"youch-terminal@npm:1.1.1":
-  version: 1.1.1
-  resolution: "youch-terminal@npm:1.1.1"
-  dependencies:
-    kleur: ^4.1.4
-  checksum: 6ff8336704622c8c324d5eed197d06aa00e022b77f63203abdc08831d0de6d05dee0aad3f4d0c04562f990990cf7c17b7b93847700bf424d633d336858edd5f8
-  languageName: node
-  linkType: hard
-
-"youch@npm:2.2.2":
-  version: 2.2.2
-  resolution: "youch@npm:2.2.2"
-  dependencies:
-    "@types/stack-trace": 0.0.29
-    cookie: ^0.4.1
-    mustache: ^4.2.0
-    stack-trace: 0.0.10
-  checksum: 6e21211e6177a464b993480a79dbcf29bbdc747605e1cff240f473d2f5ef7e43c58dc98aa202292063f96c175d317843dfd65ad3d0d810ca4650015822f9f6af
   languageName: node
   linkType: hard
 
