@@ -7,7 +7,9 @@ export interface HttpServerParams {
 }
 
 export const startServer = ({ port = 8911, socket, app }: HttpServerParams) => {
-  app.listen(socket || port, '::')
+  const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+
+  app.listen(socket || port, host)
 
   return app
 }
