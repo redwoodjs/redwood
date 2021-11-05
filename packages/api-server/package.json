@@ -3,7 +3,6 @@
   "description": "Redwood's HTTP server for Serverless Functions",
   "version": "0.38.0",
   "bin": {
-    "api-server": "./dist/index.js",
     "rw-api-server": "./dist/index.js",
     "rw-api-server-watch": "./dist/watch.js"
   },
@@ -34,7 +33,6 @@
   "devDependencies": {
     "@babel/cli": "7.15.7",
     "@types/aws-lambda": "8.10.84",
-    "@types/express": "4.17.13",
     "@types/lodash.escape": "4.0.6",
     "@types/qs": "6.9.7",
     "aws-lambda": "1.0.6",

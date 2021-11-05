@@ -73,7 +73,7 @@ interface LambdaHandlerRequest extends RequestGenericInterface {
   }
 }
 
-// This will take a express request
+// This will take a fastify request
 // Then convert it to a lambdaEvent, and pass it to the the approrpiate hanlder for the routeName
 // The LAMBDA_FUNCTIONS lookup has been populated already by this point
 const lambdaRequestHandler = async (
@@ -84,7 +84,7 @@ const lambdaRequestHandler = async (
 
   if (!LAMBDA_FUNCTIONS[routeName]) {
     const errorMessage = `Function "${routeName}" was not found.`
-    console.error(errorMessage)
+    req.log.error(errorMessage)
     reply.status(404)
 
     if (process.env.NODE_ENV === 'development') {

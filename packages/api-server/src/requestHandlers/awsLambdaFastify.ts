@@ -39,7 +39,6 @@ const lambdaEventForFastifyRequest = (
 }
 
 const fastifyResponseForLambdaResult = (
-  req: FastifyRequest,
   reply: FastifyReply,
   lambdaResult: APIGatewayProxyResult
 ) => {
@@ -52,22 +51,6 @@ const fastifyResponseForLambdaResult = (
     })
   }
   reply.status(statusCode)
-
-  // We're using this to log GraphQL errors, this isn't the right place.
-  // I can't seem to get the express middleware to play nicely.
-  if (statusCode === 400) {
-    try {
-      const b = JSON.parse(body)
-      if (b?.errors?.[0]) {
-        const { message } = b.errors[0]
-        const e = new Error(message)
-        e.stack = ''
-        req.log.error(e)
-      }
-    } catch (e) {
-      // do nothing
-    }
-  }
 
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
@@ -83,8 +66,6 @@ const fastifyResponseForLambdaError = (
   reply: FastifyReply,
   error: Error
 ) => {
-  // handleError(error).then(console.log)
-
   req.log.error(error)
   reply.status(500).send()
 }
@@ -105,7 +86,7 @@ export const requestHandler = async (
         return
       }
 
-      fastifyResponseForLambdaResult(req, reply, lambdaResult)
+      fastifyResponseForLambdaResult(reply, lambdaResult)
     }
 
   // Execute the lambda function.
@@ -121,7 +102,7 @@ export const requestHandler = async (
   if (handlerPromise && typeof handlerPromise.then === 'function') {
     try {
       const lambaResponse = await handlerPromise
-      return fastifyResponseForLambdaResult(req, reply, lambaResponse)
+      return fastifyResponseForLambdaResult(reply, lambaResponse)
     } catch (error: any) {
       return fastifyResponseForLambdaError(req, reply, error)
     }
