@@ -4097,7 +4097,6 @@ __metadata:
     ansi-colors: 4.1.1
     aws-lambda: 1.0.6
     chokidar: 3.5.2
-    fast-glob: 3.2.7
     fastify: 3.23.0
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.1.0
