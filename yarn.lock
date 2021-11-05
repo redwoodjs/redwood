@@ -4100,7 +4100,7 @@ __metadata:
     chokidar: 3.5.2
     fast-glob: 3.2.7
     fastify: 3.22.1
-    fastify-http-proxy: ^6.2.1
+    fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.1.0
     fastify-static: 4.5.0
     fastify-url-data: 3.0.3
@@ -4226,9 +4226,9 @@ __metadata:
     "@babel/cli": 7.15.7
     "@babel/core": 7.15.8
     "@babel/plugin-transform-typescript": 7.15.8
-    "@types/babel__core": ^7
+    "@types/babel__core": 7
     "@types/jscodeshift": 0.11.2
-    "@types/prettier": ^2
+    "@types/prettier": 2
     core-js: 3.18.3
     deepmerge: 4.2.2
     execa: 5.1.1
@@ -5690,7 +5690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.1.16, @types/babel__core@npm:^7, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:*, @types/babel__core@npm:7, @types/babel__core@npm:7.1.16, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
   version: 7.1.16
   resolution: "@types/babel__core@npm:7.1.16"
   dependencies:
@@ -6357,7 +6357,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:^2, @types/prettier@npm:^2.1.5":
+"@types/prettier@npm:*, @types/prettier@npm:2, @types/prettier@npm:^2.1.5":
   version: 2.4.1
   resolution: "@types/prettier@npm:2.4.1"
   checksum: 083103aa2fc29e8916760d87789bf2bfc0a61832fdb60a3be82325088f4dfeb45d944737dc817bc322575787a7221bb5677169ef0a712883b13803343106d966
@@ -13006,7 +13006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-http-proxy@npm:^6.2.1":
+"fastify-http-proxy@npm:6.2.1":
   version: 6.2.1
   resolution: "fastify-http-proxy@npm:6.2.1"
   dependencies:
