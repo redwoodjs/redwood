@@ -4092,7 +4092,6 @@ __metadata:
     "@babel/cli": 7.15.7
     "@babel/plugin-transform-runtime": 7.15.8
     "@types/aws-lambda": 8.10.84
-    "@types/express": 4.17.13
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     ansi-colors: 4.1.1
@@ -4110,7 +4109,6 @@ __metadata:
     typescript: 4.4.4
     yargs: 16.2.0
   bin:
-    api-server: ./dist/index.js
     rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
   languageName: unknown
@@ -5911,7 +5909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:4.17.13":
+"@types/express@npm:*":
   version: 4.17.13
   resolution: "@types/express@npm:4.17.13"
   dependencies:
