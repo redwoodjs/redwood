@@ -57,14 +57,6 @@ const FormError = ({
 
   if (hasGraphQLError) {
     rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong.'
-    const exceptionMessages =
-      error.graphQLErrors[0].extensions?.exception?.messages
-
-    for (const e in exceptionMessages) {
-      exceptionMessages[e].forEach((fieldError: any) => {
-        messages.push(`${e} ${fieldError}`)
-      })
-    }
 
     const propertyMessages =
       error.graphQLErrors[0].extensions?.properties?.messages
