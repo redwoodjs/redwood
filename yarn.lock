@@ -4438,10 +4438,12 @@ __metadata:
     "@redwoodjs/router": 0.38.0
     "@redwoodjs/structure": 0.38.0
     "@redwoodjs/web": 0.38.0
+    "@types/mime-types": 2
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
     jest: 27.3.1
+    mime-types: 2.1.33
     node-fetch: 2.6.1
     typescript: 4.4.4
   peerDependencies:
@@ -6239,6 +6241,13 @@ __metadata:
   dependencies:
     "@types/braces": "*"
   checksum: e557324460e658283778c77d0f8995ee95e371c4fd54474b3186e947486427cc4af66b841393304b65c09a7bb36710158260db7a7cf761384e1a9a728e82e6f4
+  languageName: node
+  linkType: hard
+
+"@types/mime-types@npm:2":
+  version: 2.1.1
+  resolution: "@types/mime-types@npm:2.1.1"
+  checksum: 131b33bfd89481f6a791996db9198c6c5ffccbb310e990d1dd9fab7a2287b5a0fd642bdd959a19281397c86f721498e09956e3892e5db17f93f38e726ca05008
   languageName: node
   linkType: hard
 
@@ -18363,7 +18372,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.0.8, mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.30, mime-types@npm:^2.1.31, mime-types@npm:~2.1.17, mime-types@npm:~2.1.24":
+"mime-types@npm:2.1.33, mime-types@npm:^2.0.8, mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.30, mime-types@npm:^2.1.31, mime-types@npm:~2.1.17, mime-types@npm:~2.1.24":
   version: 2.1.33
   resolution: "mime-types@npm:2.1.33"
   dependencies:
