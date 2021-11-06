@@ -68,7 +68,7 @@ const rebuildApiServer = () => {
   }
 }
 
-// We want to delay exection when multiple files are modified on the filesystem,
+// We want to delay exception when multiple files are modified on the filesystem,
 // this usually happens when running RedwoodJS generator commands.
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
