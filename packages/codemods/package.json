@@ -39,9 +39,9 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@types/babel__core": "^7",
+    "@types/babel__core": "7",
     "@types/jscodeshift": "0.11.2",
-    "@types/prettier": "^2",
+    "@types/prettier": "2",
     "tempy": "1.0.1"
   }
 }

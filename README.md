@@ -53,6 +53,7 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
+- [Fastify] (https://www.fastify.io)
 - [Pino](https://getpino.io)
 
 ## Features
@@ -69,6 +70,7 @@ use:
 - Database migrations (via Prisma 2).
 - [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
 - Simple but powerful GraphQL Directives to validate access or transform resolved data
+- API Server using [Fastify] (https://www.fastify.io)
 - Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
 - Signature verification and payload signing for handling incoming and outgoing Webhooks
 - Page prerendering
