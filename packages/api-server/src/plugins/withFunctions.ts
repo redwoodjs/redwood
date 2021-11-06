@@ -2,25 +2,26 @@ import path from 'path'
 
 import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'
-import bodyParser from 'body-parser'
-import type { Application, Request, Response } from 'express'
-import fg from 'fast-glob'
+import {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+  RequestGenericInterface,
+} from 'fastify'
+import fastifyRawBody from 'fastify-raw-body'
+import fastifyUrlData from 'fastify-url-data'
 import escape from 'lodash.escape'
 
-import { getPaths } from '@redwoodjs/internal'
+import { findApiDistFunctions } from '@redwoodjs/internal'
 
-import { requestHandler } from '../requestHandlers/awsLambda'
+import { requestHandler } from '../requestHandlers/awsLambdaFastify'
 
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
 
 // TODO: Use v8 caching to load these crazy fast.
 const loadFunctionsFromDist = async () => {
-  const rwjsPaths = getPaths()
-  const serverFunctions = fg.sync('dist/functions/*.{ts,js}', {
-    cwd: rwjsPaths.api.base,
-    absolute: true,
-  })
+  const serverFunctions = findApiDistFunctions()
   // Place `GraphQL` serverless function at the start.
   const i = serverFunctions.findIndex((x) => x.indexOf('graphql') !== -1)
   if (i >= 0) {
@@ -66,42 +67,45 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
   })
 }
 
-const lambdaRequestHandler = async (req: Request, res: Response) => {
+interface LambdaHandlerRequest extends RequestGenericInterface {
+  Params: {
+    routeName: string
+  }
+}
+
+// This will take a fastify request
+// Then convert it to a lambdaEvent, and pass it to the the appropriate handler for the routeName
+// The LAMBDA_FUNCTIONS lookup has been populated already by this point
+const lambdaRequestHandler = async (
+  req: FastifyRequest<LambdaHandlerRequest>,
+  reply: FastifyReply
+) => {
   const { routeName } = req.params
+
   if (!LAMBDA_FUNCTIONS[routeName]) {
     const errorMessage = `Function "${routeName}" was not found.`
-    console.error(errorMessage)
-    res.status(404)
+    req.log.error(errorMessage)
+    reply.status(404)
 
     if (process.env.NODE_ENV === 'development') {
       const devError = {
         error: errorMessage,
         availableFunctions: Object.keys(LAMBDA_FUNCTIONS),
       }
-      res.json(devError)
+      reply.send(devError)
     } else {
-      res.send(escape(errorMessage))
+      reply.send(escape(errorMessage))
     }
 
     return
   }
-  return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
+  return requestHandler(req, reply, LAMBDA_FUNCTIONS[routeName])
 }
 
-const withFunctions = async (app: Application, apiRootPath: string) => {
-  // TODO: Fix these deprecations.
-  app.use(
-    bodyParser.text({
-      type: ['text/*', 'application/json', 'multipart/form-data'],
-      limit: process.env.BODY_PARSER_LIMIT,
-    })
-  )
-  app.use(
-    bodyParser.raw({
-      type: '*/*',
-      limit: process.env.BODY_PARSER_LIMIT,
-    })
-  )
+const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
+  // Add extra fastify plugins
+  app.register(fastifyUrlData)
+  app.register(fastifyRawBody)
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
