@@ -19,7 +19,7 @@
     "fs-extra": "10.0.0",
     "listr": "0.14.3",
     "tmp": "0.2.1",
-    "yargs": "16.2.0"
+    "yargs": "17.2.1"
   },
   "repository": {
     "type": "git",
