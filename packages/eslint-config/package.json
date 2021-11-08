@@ -21,6 +21,11 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "prettier": "2.4.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/eslint-config"
+  },
   "scripts": {
     "build": "echo 'Nothing to build..'"
   },

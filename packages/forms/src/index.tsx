@@ -354,7 +354,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
       >
         <ServerErrorsContext.Provider
           value={
-            errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
+            errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
           }
         >
           <FormProvider {...formMethods}>{children}</FormProvider>
