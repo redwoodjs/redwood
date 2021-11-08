@@ -1,10 +1,21 @@
 import {
+  paramsForRoute,
   matchPath,
   parseSearch,
   validatePath,
   flattenSearchParams,
   replaceParams,
 } from '../util'
+
+describe('paramsForRoute', () => {
+  it.each([
+    ['/post/{slug}', [['slug', 'String', '{slug}']]],
+    ['/post/{slug...}', [['slug', 'Glob', '{slug...}']]],
+    ['/id/{id:Int}', [['id', 'Int', '{id:Int}']]],
+  ])('extracts name and type info', (route, info) => {
+    expect(paramsForRoute(route)).toEqual(info)
+  })
+})
 
 describe('matchPath', () => {
   it.each([
@@ -121,12 +132,54 @@ describe('matchPath', () => {
   })
 
   it('transforms a param for Globs', () => {
-    expect(
-      matchPath('/version/{globbyMcGlob...}', '/version/path/to/file')
-    ).toEqual({
+    //single
+    expect(matchPath('/version/{path...}', '/version/path/to/file')).toEqual({
       match: true,
       params: {
-        'globbyMcGlob...': 'path/to/file',
+        path: 'path/to/file',
+      },
+    })
+
+    //  multiple
+    expect(matchPath('/a/{a...}/b/{b...}/c', '/a/1/2/b/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2',
+        b: '3/4',
+      },
+    })
+
+    // adjacent
+    expect(matchPath('/a/{a...}{b...}/c', '/a/1/2/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2/3/4',
+        b: '',
+      },
+    })
+
+    // adjacent with a slash
+    expect(matchPath('/a/{a...}/{b...}/c', '/a/1/2/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2/3',
+        b: '4',
+      },
+    })
+
+    // prefixed
+    expect(matchPath('/a-{a...}', '/a-1/2')).toEqual({
+      match: true,
+      params: {
+        a: '1/2',
+      },
+    })
+
+    // suffixed
+    expect(matchPath('/{a...}-a', '/1/2-a')).toEqual({
+      match: true,
+      params: {
+        a: '1/2',
       },
     })
   })
@@ -139,7 +192,7 @@ describe('matchPath', () => {
       )
     ).toEqual({
       match: true,
-      params: { id: 44, version: 1.8, edit: false, 'path...': 'path/to/file' },
+      params: { id: 44, version: 1.8, edit: false, path: 'path/to/file' },
     })
   })
 })
