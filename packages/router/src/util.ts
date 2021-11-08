@@ -220,6 +220,7 @@ const validatePath = (path: string) => {
  */
 const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
   const params = paramsForRoute(route)
+  console.log(params)
   let path = route
 
   // Replace all params in the route with their values

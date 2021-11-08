@@ -259,6 +259,12 @@ describe('replaceParams', () => {
     )
   })
 
+  it('handles typed params', () => {
+    expect(replaceParams('/post/{id:Int}', { id: 7 })).toEqual(
+      '/post/7'
+    )
+  })
+
   it('handles globs', () => {
     expect(replaceParams('/path/{path...}', { path: 'foo/bar' })).toEqual(
       '/path/foo/bar'
