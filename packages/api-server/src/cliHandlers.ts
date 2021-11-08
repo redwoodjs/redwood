@@ -3,10 +3,10 @@ import c from 'ansi-colors'
 import { getConfig } from '@redwoodjs/internal'
 
 import createApp from './app'
-import withApiProxy from './middleware/withApiProxy'
-import withFunctions from './middleware/withFunctions'
-import withWebServer from './middleware/withWebServer'
-import { startServer } from './server'
+import withApiProxy from './plugins/withApiProxy'
+import withFunctions from './plugins/withFunctions'
+import withWebServer from './plugins/withWebServer'
+import { startServer as startFastifyServer } from './server'
 import type { HttpServerParams } from './server'
 
 /*
@@ -52,21 +52,21 @@ export const apiServerHandler = async ({
 }: ApiServerArgs) => {
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...')))
-  const app = createApp()
-  const http = startServer({
+  let app = createApp()
+  // Import Server Functions.
+  app = await withFunctions(app, apiRootPath)
+
+  const http = startFastifyServer({
     port,
     socket,
     app,
-  }).on('listening', () => {
+  }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsApiServer) + ' ms')))
 
     const on = socket
       ? socket
       : c.magenta(`http://localhost:${port}${apiRootPath}`)
     console.log(`Listening on ${on}`)
-
-    // Import Server Functions.
-    withFunctions(app, apiRootPath)
   })
   process.on('exit', () => {
     http?.close()
@@ -81,15 +81,15 @@ export const bothServerHandler = async ({
 
   let app = createApp()
 
-  // Attach middleware
+  // Attach plugins
   app = await withFunctions(app, apiRootPath)
   app = withWebServer(app)
 
-  startServer({
+  startFastifyServer({
     port,
     socket,
     app,
-  }).on('listening', () => {
+  }).ready(() => {
     if (socket) {
       console.log(`Listening on ${socket}`)
     }
@@ -110,33 +110,32 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
   const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${getConfig().web.apiUrl}graphql`
+    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  let app = createApp()
+  const fastifyInstance = createApp()
 
-  // Attach middleware
-  // We need to proxy api requests to prevent CORS issues
+  // serve static files from "web/dist"
+  let app = withWebServer(fastifyInstance)
+
+  // If apiHost is supplied, it means the functions are running elsewhere
+  // So we should just proxy requests
   if (apiHost) {
-    app = withApiProxy(app, {
-      apiHost,
-      apiUrl,
-    })
+    // Attach plugin for proxying
+    app = withApiProxy(app, { apiHost, apiUrl })
   }
 
-  app = withWebServer(app)
-
-  startServer({
+  startFastifyServer({
     port: port,
     socket,
     app,
-  }).on('listening', () => {
+  }).ready(() => {
     if (socket) {
       console.log(`Listening on ${socket}`)
     }
 
     console.log(`Web server started on port ${port} `)
-    console.log(`GraphQL endpoint is ${apiUrl}${graphqlEndpoint}`)
+    console.log(`GraphQL endpoint is ${graphqlEndpoint}`)
   })
 }
 

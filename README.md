@@ -53,6 +53,7 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
+- [Fastify] (https://www.fastify.io)
 - [Pino](https://getpino.io)
 
 ## Features
@@ -74,6 +75,7 @@ use:
 - Jest testing utilities integrated across your codebase: mocks, test DB, generated boilerplate tests, scenarios, Web (components), and API (services, serverless functions, and webhooks)
 - Page prerendering at build time
 - Built-in Storybook integration: generated boilerplate component stories, tests, graphql/api mocks (Cells), and scenarios
+- API Server using [Fastify](https://www.fastify.io) for Serverful deploys
 - First-class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
 
 ## Roadmap

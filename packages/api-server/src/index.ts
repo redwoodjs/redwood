@@ -1,14 +1,6 @@
 #!/usr/bin/env node
 import yargs from 'yargs'
 
-import { apiCliOptions, apiServerHandler } from './handler'
-
-if (process.argv0 === 'api-server') {
-  console.log()
-  console.warn(
-    '"api-server" is deprecated, please use "rw-api-server" instead.'
-  )
-  console.log()
-}
+import { apiCliOptions, apiServerHandler } from './cliHandlers'
 
 apiServerHandler(yargs.options(apiCliOptions).argv)
