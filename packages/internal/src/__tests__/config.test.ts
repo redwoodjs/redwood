@@ -53,7 +53,7 @@ describe('getConfig', () => {
     )
 
     // Fallsback to the defualt if env var not supplied
-    expect(config.web.port).toBe('8910') // remember env vars have to be stirngs
+    expect(config.web.port).toBe('8910') // remember env vars have to be strings
 
     // Uses the env var if supplied
     expect(config.web.apiUrl).toBe('/bazinga')
