@@ -222,7 +222,6 @@ const validatePath = (path: string) => {
  */
 const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
   const params = paramsForRoute(route)
-  console.log(params)
   let path = route
 
   // Replace all params in the route with their values
@@ -231,8 +230,6 @@ const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
     const value = args[name]
     if (value !== undefined) {
       path = path.replace(match, value as string)
-    } else {
-      throw new Error(`Required parameter "${name}" not set for route "${route}"`)
     }
   })
 

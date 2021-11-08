@@ -273,8 +273,8 @@ describe('flattenSearchParams', () => {
 })
 
 describe('replaceParams', () => {
-  it('throws an error with missing params', () => {
-    expect(() => replaceParams('/tags/{tag}', {})).toThrowError('Required parameter "tag" not set for route "/tags/{tag}"')
+  it('ignores missing params', () => {
+    expect(replaceParams('/tags/{tag}', {})).toEqual('/tags/{tag}')
   })
 
   it('replaces named parameter with value from the args object', () => {
@@ -307,20 +307,28 @@ describe('replaceParams', () => {
       '/boolean/false'
     )
 
-    expect(() => replaceParams('/undef/{undef}', { undef: undefined })).toThrowError(
-      'Required parameter "undef" not set for route "/undef/{undef}"'
+    expect(replaceParams('/undef/{undef}', { undef: undefined })).toEqual(
+      '/undef/{undef}'
     )
   })
 
   it('handles typed params', () => {
-    expect(replaceParams('/post/{id:Int}', { id: 7 })).toEqual(
-      '/post/7'
+    expect(replaceParams('/post/{id:Int}', { id: 7 })).toEqual('/post/7')
+    expect(replaceParams('/post/{id:Float}', { id: 7 })).toEqual('/post/7')
+    expect(replaceParams('/post/{id:Bool}', { id: true })).toEqual('/post/true')
+    expect(replaceParams('/post/{id:Bool}', { id: false })).toEqual(
+      '/post/false'
     )
+    expect(replaceParams('/post/{id:String}', { id: 7 })).toEqual('/post/7')
   })
 
   it('handles globs', () => {
     expect(replaceParams('/path/{path...}', { path: 'foo/bar' })).toEqual(
       '/path/foo/bar'
+    )
+
+    expect(replaceParams('/a/{b...}/c/{d...}/e', { b: 1, d: 2 })).toEqual(
+      '/a/1/c/2/e'
     )
   })
 })
