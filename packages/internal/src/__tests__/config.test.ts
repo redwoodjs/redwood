@@ -43,4 +43,20 @@ describe('getConfig', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
   })
+
+  it('interpolates environment variables correctly', () => {
+    process.env.API_URL = '/bazinga'
+
+    const config = getConfig(
+      path.join(__dirname, './fixtures/redwood.withEnv.toml')
+    )
+
+    // Fallsback to the defualt if env var not supplied
+    expect(config.web.port).toBe('8910') // remember env vars have to be stirngs
+
+    // Uses the env var if supplied
+    expect(config.web.apiUrl).toBe('/bazinga')
+
+    delete process.env['API_URL']
+  })
 })
