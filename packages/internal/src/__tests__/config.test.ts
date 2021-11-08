@@ -46,6 +46,7 @@ describe('getConfig', () => {
 
   it('interpolates environment variables correctly', () => {
     process.env.API_URL = '/bazinga'
+    process.env.APP_ENV = 'staging'
 
     const config = getConfig(
       path.join(__dirname, './fixtures/redwood.withEnv.toml')
@@ -56,7 +57,9 @@ describe('getConfig', () => {
 
     // Uses the env var if supplied
     expect(config.web.apiUrl).toBe('/bazinga')
+    expect(config.web.title).toBe('App running on staging')
 
     delete process.env['API_URL']
+    delete process.env['APP_ENV']
   })
 })
