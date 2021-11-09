@@ -230,6 +230,8 @@ const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
     const value = args[name]
     if (value !== undefined) {
       path = path.replace(match, value as string)
+    } else {
+      throw new Error(`Missing parameter '${name}' for route '${route}'.`)
     }
   })
 
