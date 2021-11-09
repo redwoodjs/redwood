@@ -4420,6 +4420,7 @@ __metadata:
     kill-port: 1.6.1
     prettier: 2.4.1
     rimraf: 3.0.2
+    string-env-interpolation: 1.0.1
     toml: 3.0.0
     typescript: 4.4.4
   bin:
