@@ -1,5 +1,7 @@
 /* eslint-env jest */
+const fs = require('fs')
 const path = require('path')
+const { exit } = require('process')
 
 const {
   getSchemaDefinitions,
@@ -10,6 +12,31 @@ const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
 const DEFAULT_SCENARIO = 'standard'
+const TEARDOWN_CACHE_PATH = path.join(
+  getPaths().generated.base,
+  'scenarioTeardown.json'
+)
+let teardownOrder = []
+let originalTeardownOrder = []
+
+const configureTeardown = async () => {
+  const schemaModels = (await getSchemaDefinitions()).datamodel.models.map(
+    (m) => m.dbName || m.name
+  )
+
+  // check if pre-defined delete order already exists and if so, use it to start
+  if (fs.existsSync(TEARDOWN_CACHE_PATH)) {
+    teardownOrder = JSON.parse(fs.readFileSync(TEARDOWN_CACHE_PATH).toString())
+  }
+
+  // check the number of models in case we've added/removed since cache was built
+  if (teardownOrder.length !== schemaModels.length) {
+    teardownOrder = schemaModels
+  }
+
+  // keep a copy of the original order to compare against
+  originalTeardownOrder = JSON.parse(JSON.stringify(teardownOrder))
+}
 
 const seedScenario = async (scenario) => {
   if (scenario) {
@@ -31,12 +58,27 @@ const seedScenario = async (scenario) => {
 }
 
 const teardown = async () => {
-  const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(
-    (m) => m.dbName || m.name
-  )
+  for (const modelName of teardownOrder) {
+    try {
+      await db.$executeRawUnsafe(`DELETE from "${modelName}"`)
+    } catch (e) {
+      if (e.message.match(/FOREIGN KEY constraint failed/)) {
+        const index = teardownOrder.indexOf(modelName)
+        teardownOrder[index] = null
+        teardownOrder.push(modelName)
+      } else {
+        throw e
+      }
+    }
+  }
 
-  for (const model of prismaModelNames) {
-    await db.$executeRawUnsafe(`DELETE from "${model}"`)
+  // remove nulls
+  teardownOrder = teardownOrder.filter((val) => val)
+
+  // if the order of delete changed, write out the cached file again
+  if (JSON.stringify(teardownOrder) !== JSON.stringify(originalTeardownOrder)) {
+    originalTeardownOrder = JSON.parse(JSON.stringify(teardownOrder))
+    fs.writeFileSync(TEARDOWN_CACHE_PATH, JSON.stringify(teardownOrder))
   }
 }
 
@@ -99,8 +141,9 @@ global.mockCurrentUser = (currentUser) => {
 }
 
 // Disable perRequestContext for tests
-beforeAll(() => {
+beforeAll(async () => {
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
+  await configureTeardown()
 })
 
 afterAll(async () => {
