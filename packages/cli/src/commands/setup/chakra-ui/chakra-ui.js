@@ -40,11 +40,13 @@ export async function handler({ force, install }) {
           {
             title: `Install ${packages.join(', ')}`,
             task: async () => {
-              await execa(
-                'yarn',
-                ['workspace', 'web', 'add', '-D', ...packages],
-                { cwd: '/Users/timkolberger/Entwicklung/temp/redwook' }
-              )
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                '-D',
+                ...packages,
+              ])
             },
           },
         ])
@@ -53,16 +55,10 @@ export async function handler({ force, install }) {
     {
       title: 'Setting up Chakra UI',
       task: () => {
-        if (checkSetupStatus() === 'done') {
+        if (!force && checkSetupStatus() === 'done') {
           return
         }
         wrapWithChakraProvider()
-      },
-    },
-    {
-      title: 'Integrate with storybook',
-      task: () => {
-        // add custom webpack aliases for emotion here: getPaths().web.storybookConfig
       },
     },
   ])
