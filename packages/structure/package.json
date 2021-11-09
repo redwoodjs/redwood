@@ -31,6 +31,11 @@
     "vscode-languageserver-types": "3.16.0",
     "yargs-parser": "20.2.9"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/structure"
+  },
   "devDependencies": {
     "@babel/cli": "7.15.7",
     "@types/fs-extra": "9.0.13",
