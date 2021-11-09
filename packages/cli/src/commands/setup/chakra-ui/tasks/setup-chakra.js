@@ -51,7 +51,7 @@ function wrapRootComponent(content, provider, providerProps) {
 
   const renderContent =
     indent +
-    `<${provider} ${props.join(' ')}>` +
+    `<${provider}${props.length ? ' ' : ''}${props.join(' ')}>` +
     indent +
     redwoodApolloProviderLines.join('\n') +
     indent +
@@ -83,19 +83,13 @@ export function checkSetupStatus() {
 /**
  * @param [props] {ChakraProviderProps}
  */
-export function wrapWithChakraProvider(props) {
+export function wrapWithChakraProvider(props = {}) {
   const webAppPath = getPaths().web.app
   let content = fs.readFileSync(webAppPath).toString()
-  const imports = [
-    "import { ChakraProvider } from '@chakra-ui/react'",
-    "import { theme } from './theme'", // FIXME get correct path
-  ]
+  const imports = ["import {ChakraProvider} from '@chakra-ui/react'"]
 
   content = addImports(content, imports)
-  content = wrapRootComponent(content, 'ChakraProvider', {
-    ...props,
-    theme: 'theme',
-  })
+  content = wrapRootComponent(content, 'ChakraProvider', props)
 
   fs.writeFileSync(webAppPath, content)
 }
