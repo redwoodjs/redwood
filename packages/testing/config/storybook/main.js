@@ -14,6 +14,28 @@ const config = getConfig()
 
 const rwjsPaths = getPaths()
 
+function isPackageInstalled(alias) {
+  try {
+    return Boolean(require(alias))
+  } catch (e) {
+    return false
+  }
+}
+
+function withEmotionVersionFallback(config) {
+  const alias = Object.entries({
+    '@emotion/core': '@emotion/react',
+    'emotion-theming': '@emotion/react',
+  }).reduce((acc, [packageName, alias]) => {
+    if (isPackageInstalled(alias)) {
+      acc[packageName] = require.resolve(alias)
+    }
+    return acc
+  }, {})
+
+  return merge(config, { resolve: { alias } })
+}
+
 const baseConfig = {
   core: {
     builder: 'webpack5',
@@ -90,6 +112,8 @@ const baseConfig = {
     }
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
+
+    sbConfig = withEmotionVersionFallback(sbConfig)
 
     return sbConfig
   },
