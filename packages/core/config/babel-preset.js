@@ -58,66 +58,6 @@ module.exports = () => {
       ],
     ],
     overrides: [
-      // ** API (also applies to Jest API config) **
-      // ** SCRIPTS **
-      {
-        test: ['./api/', './scripts/'],
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              targets: {
-                node: TARGETS_NODE,
-              },
-              useBuiltIns: 'usage',
-              corejs: {
-                version: CORE_JS_VERSION,
-                // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
-                proposals: true,
-              },
-              exclude: [
-                // Remove class-properties from preset-env, and include separately with loose
-                // https://github.com/webpack/webpack/issues/9708
-                '@babel/plugin-proposal-class-properties',
-                '@babel/plugin-proposal-private-methods',
-              ],
-            },
-          ],
-        ],
-        plugins: [
-          [
-            'babel-plugin-module-resolver',
-            {
-              alias: {
-                src:
-                  // Jest monorepo and multi project runner is not correctly determining
-                  // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.api.src,
-              },
-            },
-          ],
-          [
-            'babel-plugin-auto-import',
-            {
-              declarations: [
-                {
-                  // import { context } from '@redwoodjs/graphql-server'
-                  members: ['context'],
-                  path: '@redwoodjs/graphql-server',
-                },
-                {
-                  default: 'gql',
-                  path: 'graphql-tag',
-                },
-              ],
-            },
-          ],
-          ['babel-plugin-graphql-tag'],
-          [
-            require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-import-dir'),
-          ],
-        ],
-      },
       // ** WEB **
       {
         test: './web',

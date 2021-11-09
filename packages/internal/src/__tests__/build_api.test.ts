@@ -126,23 +126,32 @@ test('api prebuild finds babel.config.js', () => {
 
 test('api prebuild uses babel config', () => {
   const p = prebuiltFiles.filter((p) => p.endsWith('dog.js')).pop()
+  const code = fs.readFileSync(p, 'utf-8') //?
+  expect(code).toContain(`import dog from "dog-bless";`)
+})
+
+test('api prebuild transforms gql with `babel-plugin-graphql-tag`', () => {
+  // babel-plugin-graphql-tag should transpile the "gql" parts of our files,
+  // achieving the following:
+  // 1. removing the `graphql-tag` import
+  // 2. convert the gql syntax into graphql's ast.
+  //
+  // https://www.npmjs.com/package/babel-plugin-graphql-tag
+  const builtFiles = prebuildApiFiles(findApiFiles())
+  const p = builtFiles
+    .filter((x) => typeof x !== 'undefined')
+    .filter((p) => p.endsWith('todos.sdl.js'))
+    .pop()
+
   const code = fs.readFileSync(p, 'utf-8')
-  const firstLine = stripInlineSourceMap(code).split('\n')[0]
-  expect(firstLine).toMatchInlineSnapshot(`"import dog from \\"dog-bless\\";"`)
+  expect(code.includes('import gql from "graphql-tag";')).toEqual(false)
+  expect(code.includes('gql`')).toEqual(false)
 })
 
 test('Pretranspile polyfills unsupported functionality', () => {
   const p = prebuiltFiles.filter((p) => p.endsWith('polyfill.js')).pop()
   const code = fs.readFileSync(p, 'utf-8')
-  const firstLine = stripInlineSourceMap(code).split('\n')[0]
-  expect(firstLine).toMatchInlineSnapshot(
-    `"import \\"core-js/modules/esnext.string.replace-all.js\\";"`
+  expect(code).toContain(
+    'import "core-js/modules/esnext.string.replace-all.js"'
   )
 })
-
-function stripInlineSourceMap(src: string): string {
-  return src
-    .split('\n')
-    .filter((line) => !line.startsWith('//# sourceMappingURL='))
-    .join('\n')
-}

@@ -11,6 +11,49 @@ import { getPaths } from '../../paths'
 
 import { registerBabel, RegisterHookOptions } from './common'
 
+// const TARGETS_NODE = '12.16'
+// Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
+// because we want to include the features added in the minor version.
+// https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
+
+const CORE_JS_VERSION = pkgJson.dependencies['core-js']
+  .split('.')
+  .slice(0, 2)
+  .join('.') // Produces: 3.12, instead of 3.12.1
+
+if (!CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js version.'
+  )
+}
+
+export const getApiSideBabelPresets = (): TransformOptions['presets'] => {
+  return [
+    '@babel/preset-react',
+    '@babel/preset-typescript',
+    // [
+    //   '@babel/preset-env',
+    //   {
+    //     targets: {
+    //       node: TARGETS_NODE,
+    //     },
+    //     useBuiltIns: 'usage',
+    //     corejs: {
+    //       version: CORE_JS_VERSION,
+    //       // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
+    //       proposals: true,
+    //     },
+    //     exclude: [
+    //       // Remove class-properties from preset-env, and include separately with loose
+    //       // https://github.com/webpack/webpack/issues/9708
+    //       '@babel/plugin-proposal-class-properties',
+    //       '@babel/plugin-proposal-private-methods',
+    //     ],
+    //   },
+    // ],
+  ]
+}
+
 export const getApiSideBabelPlugins = () => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
@@ -34,6 +77,12 @@ export const getApiSideBabelPlugins = () => {
       },
       'rwjs-babel-polyfill',
     ],
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    // Note: The private method loose mode configuration setting must be the
+    // same as @babel/plugin-proposal class-properties.
+    // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
@@ -92,6 +141,7 @@ export const registerApiSideBabelHook = ({
   ...rest
 }: RegisterHookOptions = {}) => {
   registerBabel({
+    presets: getApiSideBabelPresets(),
     configFile: getApiSideBabelConfigPath(), // incase user has a custom babel.config.js in api
     babelrc: false, // Disables `.babelrc` config
     extensions: ['.js', '.ts'],
@@ -112,6 +162,7 @@ export const prebuildFile = (
   const code = fs.readFileSync(srcPath, 'utf-8')
 
   const result = babel.transform(code, {
+    presets: getApiSideBabelPresets(),
     cwd: getPaths().api.base,
     babelrc: false, // Disables `.babelrc` config
     configFile: getApiSideBabelConfigPath(),
