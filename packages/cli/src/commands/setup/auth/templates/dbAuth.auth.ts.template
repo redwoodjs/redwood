@@ -1,16 +1,17 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
-// The session object sent in as the first argument to getCurrentUser() will
-// have a single key `id` containing the unique ID of the logged in user
-// (whatever field you set as `authFields.id` in your auth function config).
-// You'll need to update the call to `db` below if you use a different model
-// name or unique field name:
-//
-//   return await db.profile.findUnique({ where: { email: session.id } })
-//                   ───┬───                       ──┬──
-//      model accessor ─┘      unique id field name ─┘
-
+/**
+* The session object sent in as the first argument to getCurrentUser() will
+* have a single key `id` containing the unique ID of the logged in user
+* (whatever field you set as `authFields.id` in your auth function config).
+* You'll need to update the call to `db` below if you use a different model
+* name or unique field name:
+*
+*   return await db.profile.findUnique({ where: { email: session.id } })
+*                   ───┬───                       ──┬──
+*      model accessor ─┘      unique id field name ─┘
+*/
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({ where: { id: session.id } })
 }
@@ -43,13 +44,14 @@ export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
     return false
   }
 
+  // If your User model includes roles, uncomment the role checks on currentUser
   if (roles) {
     if (Array.isArray(roles)) {
-      return context.currentUser.roles?.some((r) => roles.includes(r))
+      // return context.currentUser.roles?.some((r) => roles.includes(r))
     }
 
     if (typeof roles === 'string') {
-      return context.currentUser.roles?.includes(roles)
+      // return context.currentUser.roles?.includes(roles)
     }
 
     // roles not found
