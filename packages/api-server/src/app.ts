@@ -1,13 +1,18 @@
-import express from 'express'
-import type { Response, Request, Application } from 'express'
-import morgan from 'morgan'
+import Fastify, { FastifyInstance } from 'fastify'
 
-// Base express app, with common config
-const createApp = (): Application => {
-  const app = express()
-
-  // Add common middleware
-  app.use(morgan<Request, Response>('dev'))
+export const createApp = (): FastifyInstance => {
+  const app = Fastify({
+    logger: {
+      // These settings are identical to the default Redwood logger
+      prettyPrint: process.env.NODE_ENV === 'development' && {
+        colorize: true,
+        ignore: 'hostname,pid',
+        levelFirst: true,
+        messageFormat: false,
+        translateTime: true,
+      },
+    },
+  })
 
   return app
 }

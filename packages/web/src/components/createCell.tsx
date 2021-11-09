@@ -136,10 +136,8 @@ export function createCell<CellProps = any>({
   }
 
   return (props) => {
-    const {
-      children, // eslint-disable-line @typescript-eslint/no-unused-vars
-      ...variables
-    } = props
+    // destructuring to not pass children to beforeQuery
+    const { children: _children, ...variables } = props
 
     return (
       <Query
