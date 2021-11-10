@@ -1,6 +1,15 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/internal')
+const {
+  getPaths,
+  getWebSideOverrides,
+  getWebSideBabelPlugins,
+  getWebSideBabelPresets,
+} = require('@redwoodjs/internal')
+console.log(
+  `🗯 \n ~ file: index.js ~ line 9 ~ getWebSideOverrides`,
+  getWebSideOverrides()
+)
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -48,5 +57,15 @@ module.exports = {
      */
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
       '@redwoodjs/testing/dist/web/fileMock.js',
+  },
+  transform: {
+    '\\.[jt]sx?$': [
+      'babel-jest',
+      {
+        plugins: getWebSideBabelPlugins(),
+        presets: getWebSideBabelPresets(),
+        overrides: getWebSideOverrides(),
+      },
+    ],
   },
 }

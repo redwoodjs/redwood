@@ -12,7 +12,13 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const {
+  getConfig,
+  getPaths,
+  getWebSideBabelPresets,
+  getWebSideBabelPlugins,
+  getWebSideOverrides,
+} = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -263,46 +269,34 @@ module.exports = (webpackEnv) => {
             },
             // (1)
             {
-              test: /\.(js|mjs|jsx)$/,
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: [
                 {
                   loader: 'babel-loader',
                   options: {
                     cwd: redwoodPaths.base,
+                    babelrc: false, // Disables `.babelrc` config
+                    presets: getWebSideBabelPresets(),
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
+                      ...getWebSideBabelPlugins(),
                     ].filter(Boolean),
+                    overrides: getWebSideOverrides(),
                   },
                 },
               ].filter(Boolean),
             },
             // (2)
-            {
-              test: /\.(ts|tsx)$/,
-              exclude: /(node_modules)/,
-              use: [
-                {
-                  loader: 'babel-loader',
-                  options: {
-                    cwd: redwoodPaths.base,
-                    plugins: [
-                      shouldIncludeFastRefresh &&
-                        require.resolve('react-refresh/babel'),
-                    ].filter(Boolean),
-                  },
-                },
-              ].filter(Boolean),
-            },
-            // .module.css (3), .css (4), .module.scss (5), .scss (6)
+            // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
-            // (7)
+            // (6)
             isEnvProduction && {
               test: require.resolve('@redwoodjs/router/dist/splash-page'),
               use: 'null-loader',
             },
-            // (8)
+            // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               type: 'asset/resource',

@@ -1,5 +1,7 @@
 import type { TransformOptions, PluginItem } from '@babel/core'
 
+import pkgJson from '../../../package.json'
+
 export interface RegisterHookOptions {
   /**
    *  Be careful: plugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]].
@@ -29,4 +31,48 @@ interface BabelRegisterOptions extends TransformOptions {
 **/
 export const registerBabel = (options: BabelRegisterOptions) => {
   require('@babel/register')(options)
+}
+
+export const CORE_JS_VERSION = pkgJson.dependencies['core-js']
+  .split('.')
+  .slice(0, 2)
+  .join('.') // Produces: 3.12, instead of 3.12.1
+
+if (!CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js version.'
+  )
+}
+
+const RUNTIME_CORE_JS_VERSION = pkgJson.dependencies['@babel/runtime-corejs3']
+if (!RUNTIME_CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js runtime version'
+  )
+}
+
+export const getCommonPlugins = () => {
+  return [
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    // Note: The private method loose mode configuration setting must be the
+    // same as @babel/plugin-proposal class-properties.
+    // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+
+    // Not sure about this one:
+    // Do we need this?
+    // [
+    //   '@babel/plugin-transform-runtime',
+    //   {
+    //     // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
+    //     // Setting the version here also requires `@babel/runtime-corejs3`
+    //     corejs: { version: 3, proposals: true },
+    //     // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
+    //     // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
+    //     // Specifying the version can result in a smaller bundle size.
+    //     version: RUNTIME_CORE_JS_VERSION,
+    //   },
+    // ],
+  ]
 }

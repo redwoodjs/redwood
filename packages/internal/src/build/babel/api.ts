@@ -9,30 +9,22 @@ import * as babel from '@babel/core'
 import pkgJson from '../../../package.json'
 import { getPaths } from '../../paths'
 
-import { registerBabel, RegisterHookOptions } from './common'
+import {
+  registerBabel,
+  RegisterHookOptions,
+  CORE_JS_VERSION,
+  getCommonPlugins,
+} from './common'
 
 const TARGETS_NODE = '12.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 
-const CORE_JS_VERSION = pkgJson.dependencies['core-js']
-  .split('.')
-  .slice(0, 2)
-  .join('.') // Produces: 3.12, instead of 3.12.1
-
-if (!CORE_JS_VERSION) {
-  throw new Error(
-    'RedwoodJS Project Babel: Could not determine core-js version.'
-  )
-}
-
 export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }
 ) => {
   return [
-    '@babel/preset-react',
-    '@babel/preset-typescript',
     // Preset-env is required for jest
     presetEnv && [
       '@babel/preset-env',
@@ -69,6 +61,7 @@ export const getApiSideBabelPlugins = () => {
     .join('.') // Gives '3.16' instead of '3.16.12'
 
   const plugins: TransformOptions['plugins'] = [
+    ...getCommonPlugins(),
     ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
     [
       'babel-plugin-polyfill-corejs3',
@@ -80,12 +73,6 @@ export const getApiSideBabelPlugins = () => {
       },
       'rwjs-babel-polyfill',
     ],
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-    // Note: The private method loose mode configuration setting must be the
-    // same as @babel/plugin-proposal class-properties.
-    // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
@@ -149,7 +136,7 @@ export const registerApiSideBabelHook = ({
     babelrc: false, // Disables `.babelrc` config
     extensions: ['.js', '.ts'],
     plugins: [...getApiSideBabelPlugins(), ...plugins],
-    ignore: ['node_modules'],
+    ignore: [/node_modules/],
     cache: false,
     ...rest,
   })
