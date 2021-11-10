@@ -11,7 +11,7 @@ import { getPaths } from '../../paths'
 
 import { registerBabel, RegisterHookOptions } from './common'
 
-// const TARGETS_NODE = '12.16'
+const TARGETS_NODE = '12.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -27,31 +27,34 @@ if (!CORE_JS_VERSION) {
   )
 }
 
-export const getApiSideBabelPresets = (): TransformOptions['presets'] => {
+export const getApiSideBabelPresets = (
+  { presetEnv } = { presetEnv: false }
+) => {
   return [
     '@babel/preset-react',
     '@babel/preset-typescript',
-    // [
-    //   '@babel/preset-env',
-    //   {
-    //     targets: {
-    //       node: TARGETS_NODE,
-    //     },
-    //     useBuiltIns: 'usage',
-    //     corejs: {
-    //       version: CORE_JS_VERSION,
-    //       // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
-    //       proposals: true,
-    //     },
-    //     exclude: [
-    //       // Remove class-properties from preset-env, and include separately with loose
-    //       // https://github.com/webpack/webpack/issues/9708
-    //       '@babel/plugin-proposal-class-properties',
-    //       '@babel/plugin-proposal-private-methods',
-    //     ],
-    //   },
-    // ],
-  ]
+    // Preset-env is required for jest
+    presetEnv && [
+      '@babel/preset-env',
+      {
+        targets: {
+          node: TARGETS_NODE,
+        },
+        useBuiltIns: 'usage',
+        corejs: {
+          version: CORE_JS_VERSION,
+          // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
+          proposals: true,
+        },
+        exclude: [
+          // Remove class-properties from preset-env, and include separately with loose
+          // https://github.com/webpack/webpack/issues/9708
+          '@babel/plugin-proposal-class-properties',
+          '@babel/plugin-proposal-private-methods',
+        ],
+      },
+    ],
+  ].filter(Boolean) as TransformOptions['presets']
 }
 
 export const getApiSideBabelPlugins = () => {

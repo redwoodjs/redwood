@@ -29,7 +29,9 @@ module.exports = {
     '\\.[jt]sx?$': [
       'babel-jest',
       {
-        presets: getApiSideBabelPresets(),
+        presets: getApiSideBabelPresets({
+          presetEnv: true,
+        }),
         plugins: getApiSideBabelPlugins(),
       },
     ],
