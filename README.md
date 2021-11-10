@@ -53,7 +53,7 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
-- [Fastify] (https://www.fastify.io)
+- [Fastify](https://www.fastify.io)
 - [Pino](https://getpino.io)
 
 ## Features
