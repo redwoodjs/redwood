@@ -25,6 +25,7 @@ export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }
 ) => {
   return [
+    '@babel/preset-typescript',
     // Preset-env is required for jest
     presetEnv && [
       '@babel/preset-env',
@@ -131,7 +132,9 @@ export const registerApiSideBabelHook = ({
   ...rest
 }: RegisterHookOptions = {}) => {
   registerBabel({
-    presets: getApiSideBabelPresets(),
+    presets: getApiSideBabelPresets({
+      presetEnv: true,
+    }),
     configFile: getApiSideBabelConfigPath(), // incase user has a custom babel.config.js in api
     babelrc: false, // Disables `.babelrc` config
     extensions: ['.js', '.ts'],
