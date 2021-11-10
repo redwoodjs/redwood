@@ -85,7 +85,11 @@ export const getWebSideBabelPlugins = () => {
   return plugins
 }
 
-export const getWebSideOverrides = () => {
+export const getWebSideOverrides = (
+  { staticImports } = {
+    staticImports: false,
+  }
+) => {
   return [
     {
       test: /.+Cell.(js|tsx)$/,
@@ -100,7 +104,7 @@ export const getWebSideOverrides = () => {
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')
             .default,
           {
-            useStaticImports: process.env.__REDWOOD__PRERENDERING === '1',
+            useStaticImports: staticImports,
           },
         ],
       ],
@@ -176,6 +180,10 @@ export const registerWebSideBabelHook = ({
     plugins: [...getWebSideBabelPlugins(), ...plugins],
     ignore: [/node_modules/],
     cache: false,
-    overrides: [...getWebSideOverrides(), ...overrides],
+    // @DONOTMERGE Find a better way of passing this
+    // @DONOTMERGE Find a better way of passing this
+    // @DONOTMERGE Find a better way of passing this
+    // @DONOTMERGE Find a better way of passing this
+    overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
 }
