@@ -18,6 +18,14 @@ const TEARDOWN_CACHE_PATH = path.join(
 let teardownOrder = []
 let originalTeardownOrder = []
 
+const deepCopy = (obj) => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const isIdenticalArray = (a, b) => {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
 const configureTeardown = async () => {
   const schemaModels = (await getSchemaDefinitions()).datamodel.models.map(
     (m) => m.dbName || m.name
@@ -34,7 +42,7 @@ const configureTeardown = async () => {
   }
 
   // keep a copy of the original order to compare against
-  originalTeardownOrder = JSON.parse(JSON.stringify(teardownOrder))
+  originalTeardownOrder = deepCopy(teardownOrder)
 }
 
 const seedScenario = async (scenario) => {
@@ -75,8 +83,8 @@ const teardown = async () => {
   teardownOrder = teardownOrder.filter((val) => val)
 
   // if the order of delete changed, write out the cached file again
-  if (JSON.stringify(teardownOrder) !== JSON.stringify(originalTeardownOrder)) {
-    originalTeardownOrder = JSON.parse(JSON.stringify(teardownOrder))
+  if (!isIdenticalArray(teardownOrder, originalTeardownOrder)) {
+    originalTeardownOrder = deepCopy(teardownOrder)
     fs.writeFileSync(TEARDOWN_CACHE_PATH, JSON.stringify(teardownOrder))
   }
 }
