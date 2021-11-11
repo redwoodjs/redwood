@@ -8,6 +8,7 @@ const mockDistDir = path.resolve(__dirname, './__fixtures__/distDir')
 
 jest.mock('@redwoodjs/internal', () => {
   return {
+    // @ts-expect-error Definitely can be spread..
     ...jest.requireActual('@redwoodjs/internal'),
     getPaths: () => {
       return {
@@ -15,6 +16,14 @@ jest.mock('@redwoodjs/internal', () => {
           dist: mockDistDir,
         },
       }
+    },
+  }
+})
+
+jest.mock('../utils', () => {
+  return {
+    convertToDataUrl: (assetPath) => {
+      return `data:image/jpg;base64,xxx-mock-b64-${assetPath}`
     },
   }
 })
@@ -77,7 +86,7 @@ describe('Should replace small img sources with blank data url', () => {
       {
         title: 'Url loaded image',
         code: `import img1 from './small.jpg'`,
-        output: `const img1 = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";`,
+        output: `const img1 = "data:image/jpg;base64,xxx-mock-b64-small.jpg";`,
       },
     ],
   })
