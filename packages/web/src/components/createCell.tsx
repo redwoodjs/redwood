@@ -169,6 +169,9 @@ export function createCell<CellProps = any>({
           } else if (loading) {
             return <Loading {...queryRest} {...props} />
           } else {
+            console.warn(
+              'Check for debug log from Apollo, which might help explain the following error.'
+            )
             throw new Error(
               'Cannot render cell: GraphQL success but `data` is null'
             )
