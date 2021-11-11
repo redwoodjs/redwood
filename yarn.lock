@@ -4439,7 +4439,7 @@ __metadata:
     "@redwoodjs/router": 0.38.0
     "@redwoodjs/structure": 0.38.0
     "@redwoodjs/web": 0.38.0
-    "@types/mime-types": 2
+    "@types/mime-types": 2.1.1
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
@@ -6245,7 +6245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mime-types@npm:2":
+"@types/mime-types@npm:2.1.1":
   version: 2.1.1
   resolution: "@types/mime-types@npm:2.1.1"
   checksum: 131b33bfd89481f6a791996db9198c6c5ffccbb310e990d1dd9fab7a2287b5a0fd642bdd959a19281397c86f721498e09956e3892e5db17f93f38e726ca05008
