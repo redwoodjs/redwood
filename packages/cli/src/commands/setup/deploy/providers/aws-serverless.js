@@ -82,7 +82,10 @@ export const preRequisites = [
   },
 ]
 
-export const apiDevPackages = ['@vercel/nft', 'serverless-dotenv-plugin']
+export const apiDevPackages = [
+  '@netlify/zip-it-and-ship-it',
+  'serverless-dotenv-plugin',
+]
 
 export const files = [
   {

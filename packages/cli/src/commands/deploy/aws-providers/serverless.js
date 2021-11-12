@@ -8,10 +8,10 @@ export const preRequisites = [
     ],
   },
   {
-    title: 'Checking if @vercel/nft is installed...',
-    command: ['yarn', ['nft', '--version']],
+    title: 'Checking if @netlify/zip-it-and-ship-it is installed...',
+    command: ['yarn', ['zip-it-and-ship-it', '--version']],
     errorMessage: [
-      'Looks like @vercel/nft is not installed.',
+      'Looks like @netlify/zip-it-and-ship-it is not installed.',
       'Either run `yarn rw setup aws-serverless` or add it separately as a dev dependency in the api workspace.',
     ],
   },
@@ -19,15 +19,13 @@ export const preRequisites = [
 
 export const buildCommands = [
   { title: 'Building API...', command: ['yarn', ['rw', 'build', 'api']] },
-  // TODO figure out how to package individual functions
-  // {
-  //   title: 'Packaging API...',
-  //   command: ['yarn', ['nft', 'build', 'api/dist/functions/*.js']],
-  // },
-  // {
-  //   title: 'Zipping API...',
-  //   command: ['zip', '-r', 'api/dist/zipball/fixme.zip', 'dist'],
-  // },
+  {
+    title: 'Packaging API...',
+    command: [
+      'yarn',
+      ['zip-it-and-ship-it', 'api/dist/functions/', 'api/dist/zipball'],
+    ],
+  },
 ]
 
 export const deployCommand = {
