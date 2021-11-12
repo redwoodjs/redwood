@@ -130,7 +130,7 @@ export const getApiSideDefaultBabelConfig = () => {
   return {
     presets: getApiSideBabelPresets(),
     plugins: getApiSideBabelPlugins(),
-    config: getApiSideBabelConfigPath(),
+    configFile: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
   }
