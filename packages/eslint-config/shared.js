@@ -14,7 +14,12 @@
 // [^2] https://www.npmjs.com/package/eslint-plugin-react#list-of-supported-rules
 
 const findUp = require('findup-sync')
-const { getCommonPlugins, getWebSideDefaultBabelConfig, getApiSideDefaultBabelConfig} = require('@redwoodjs/internal')
+
+const {
+  getCommonPlugins,
+  getWebSideDefaultBabelConfig,
+  getApiSideDefaultBabelConfig,
+} = require('@redwoodjs/internal')
 
 const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
   const configPath = findUp('babel.config.js', { cwd })
@@ -24,27 +29,35 @@ const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
   return configPath
 }
 
-const isRedwoodProject = () => findUp('redwood.toml', { cwd: process.env.RWJS_CWD ?? process.cwd() })
+const isRedwoodProject = () =>
+  findUp('redwood.toml', { cwd: process.env.RWJS_CWD ?? process.cwd() })
 
 const getBabelOptions = () => {
+  // We cant nest the web overrides inside the overrides block
+  // So we just take it out and put it as a separate item
+  const {overrides: webOverrides, ...otherWebConfig } = getWebSideDefaultBabelConfig()
+
+  // @TODO ignore web overrides for now
+  // THis is for ROutes, Cells handling, I dont think it has any impact on eslint
+
   if (isRedwoodProject()) {
     return {
       plugins: getCommonPlugins(),
       overrides: [
         {
           test: ['./api/', './scripts/'],
-          ...getApiSideDefaultBabelConfig()
+          ...getApiSideDefaultBabelConfig(),
         },
         {
           test: ['./web/'],
-          ...getWebSideDefaultBabelConfig(),
-        }
-      ]
+          ...otherWebConfig,
+        },
+      ],
     }
   } else {
     // For framework
     return {
-      configFile: babelConfigPath()
+      configFile: babelConfigPath(),
     }
   }
 }

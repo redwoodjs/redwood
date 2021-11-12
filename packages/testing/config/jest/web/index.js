@@ -2,14 +2,8 @@ const path = require('path')
 
 const {
   getPaths,
-  getWebSideOverrides,
-  getWebSideBabelPlugins,
-  getWebSideBabelPresets,
+  getWebSideDefaultBabelConfig
 } = require('@redwoodjs/internal')
-console.log(
-  `🗯 \n ~ file: index.js ~ line 9 ~ getWebSideOverrides`,
-  getWebSideOverrides()
-)
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -61,11 +55,7 @@ module.exports = {
   transform: {
     '\\.[jt]sx?$': [
       'babel-jest',
-      {
-        plugins: getWebSideBabelPlugins(),
-        presets: getWebSideBabelPresets(),
-        overrides: getWebSideOverrides(),
-      },
+      getWebSideDefaultBabelConfig()
     ],
   },
 }
