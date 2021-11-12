@@ -126,6 +126,17 @@ export const getApiSideBabelConfigPath = () => {
   }
 }
 
+export const getApiSideDefaultBabelConfig = () => {
+  return {
+    presets: getApiSideBabelPresets(),
+    plugins: getApiSideBabelPlugins(),
+    config: getApiSideBabelConfigPath(),
+    babelrc: false,
+    ignore: [/node_modules/],
+  }
+}
+
+
 // Used in cli commands that need to use es6, lib and services
 export const registerApiSideBabelHook = ({
   plugins = [],

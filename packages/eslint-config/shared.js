@@ -14,6 +14,7 @@
 // [^2] https://www.npmjs.com/package/eslint-plugin-react#list-of-supported-rules
 
 const findUp = require('findup-sync')
+const { getCommonPlugins, getWebSideDefaultBabelConfig, getApiSideDefaultBabelConfig} = require('@redwoodjs/internal')
 
 const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
   const configPath = findUp('babel.config.js', { cwd })
@@ -21,6 +22,31 @@ const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
     throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
   }
   return configPath
+}
+
+const isRedwoodProject = findUp('redwood.toml', { cwd })
+
+const getBabelOptions = () => {
+  if (isRedwoodProject()) {
+    return {
+      plugins: getCommonPlugins(),
+      overrides: [
+        {
+          test: ['./api/', './scripts/'],
+          ...getApiSideDefaultBabelConfig()
+        },
+        {
+          test: ['./web/'],
+          ...getWebSideDefaultBabelConfig(),
+        }
+      ]
+    }
+  } else {
+    // For framework
+    return {
+      configFile: babelConfigPath()
+    }
+  }
 }
 
 module.exports = {
@@ -32,9 +58,8 @@ module.exports = {
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
-    babelOptions: {
-      configFile: babelConfigPath(),
-    },
+    requireConfigFile: false,
+    babelOptions: getBabelOptions(),
   },
   plugins: [
     'prettier',
