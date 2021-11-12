@@ -24,7 +24,7 @@ const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
   return configPath
 }
 
-const isRedwoodProject = findUp('redwood.toml', { cwd })
+const isRedwoodProject = () => findUp('redwood.toml', { cwd: process.env.RWJS_CWD ?? process.cwd() })
 
 const getBabelOptions = () => {
   if (isRedwoodProject()) {
