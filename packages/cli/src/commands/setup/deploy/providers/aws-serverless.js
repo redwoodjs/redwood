@@ -44,7 +44,7 @@ ${
   ${fs
     .readdirSync(path.resolve(getPaths().api.functions))
     .map((file) => {
-      const basename = path.basename(file, '.js')
+      const basename = path.parse(file).name
       return `${basename}:
     description: ${basename} function deployed on AWS Lambda
     package:
