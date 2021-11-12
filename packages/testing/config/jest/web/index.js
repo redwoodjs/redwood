@@ -2,7 +2,7 @@ const path = require('path')
 
 const {
   getPaths,
-  getWebSideDefaultBabelConfig
+  getWebSideDefaultBabelConfig,
 } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
@@ -53,9 +53,6 @@ module.exports = {
       '@redwoodjs/testing/dist/web/fileMock.js',
   },
   transform: {
-    '\\.[jt]sx?$': [
-      'babel-jest',
-      getWebSideDefaultBabelConfig()
-    ],
+    '\\.[jt]sx?$': ['babel-jest', getWebSideDefaultBabelConfig()],
   },
 }

@@ -29,13 +29,28 @@ const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
   return configPath
 }
 
-const isRedwoodProject = () =>
-  findUp('redwood.toml', { cwd: process.env.RWJS_CWD ?? process.cwd() })
+const isRedwoodProject = () => {
+  const tomlPath = findUp('redwood.toml', {
+    cwd: process.env.RWJS_CWD ?? process.cwd(),
+  })
+
+  // @TODO DONOTMERGE WITHOUT FIXING
+  // @TODO DONOTMERGE WITHOUT FIXING
+  // @TODO DONOTMERGE WITHOUT FIXING
+  // @TODO DONOTMERGE WITHOUT FIXING
+
+  if (tomlPath.includes('create-redwood-app/template/redwood.toml')) {
+    return false
+  }
+
+  return !!tomlPath
+}
 
 const getBabelOptions = () => {
   // We cant nest the web overrides inside the overrides block
   // So we just take it out and put it as a separate item
-  const {overrides: webOverrides, ...otherWebConfig } = getWebSideDefaultBabelConfig()
+  const { overrides: _overrides, ...otherWebConfig } =
+    getWebSideDefaultBabelConfig()
 
   // @TODO ignore web overrides for now
   // THis is for ROutes, Cells handling, I dont think it has any impact on eslint

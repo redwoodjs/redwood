@@ -136,7 +136,6 @@ export const getApiSideDefaultBabelConfig = () => {
   }
 }
 
-
 // Used in cli commands that need to use es6, lib and services
 export const registerApiSideBabelHook = ({
   plugins = [],
