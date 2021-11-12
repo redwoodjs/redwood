@@ -310,8 +310,10 @@ describe('flattenSearchParams', () => {
 })
 
 describe('replaceParams', () => {
-  it('ignores missing params', () => {
-    expect(replaceParams('/tags/{tag}', {})).toEqual('/tags/{tag}')
+  it('throws an error on missing params', () => {
+    expect(() => replaceParams('/tags/{tag}', {})).toThrowError(
+      "Missing parameter 'tag' for route '/tags/{tag}'."
+    )
   })
 
   it('replaces named parameter with value from the args object', () => {
@@ -344,9 +346,9 @@ describe('replaceParams', () => {
       '/boolean/false'
     )
 
-    expect(replaceParams('/undef/{undef}', { undef: undefined })).toEqual(
-      '/undef/{undef}'
-    )
+    expect(() =>
+      replaceParams('/undef/{undef}', { undef: undefined })
+    ).toThrowError("Missing parameter 'undef' for route '/undef/{undef}'.")
   })
 
   it('handles typed params', () => {
