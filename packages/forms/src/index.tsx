@@ -89,6 +89,7 @@ interface FieldProps<
     | HTMLInputElement = HTMLInputElement
 > {
   name: string
+  id?: string
   errorClassName?: string
   errorStyle?: React.CSSProperties
   className?: string
