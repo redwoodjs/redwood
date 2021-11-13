@@ -4312,7 +4312,7 @@ __metadata:
     "@babel/eslint-plugin": 7.14.5
     "@typescript-eslint/eslint-plugin": 5.1.0
     "@typescript-eslint/parser": 5.1.0
-    eslint: ^8.2.0
+    eslint: 8.2.0
     eslint-config-prettier: 8.3.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -12442,7 +12442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.2.0, eslint@npm:^8.2.0":
+"eslint@npm:8.2.0":
   version: 8.2.0
   resolution: "eslint@npm:8.2.0"
   dependencies:
