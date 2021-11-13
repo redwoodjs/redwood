@@ -4,6 +4,8 @@ import type { PluginObj, types, NodePath } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/internal'
 
+import { convertToDataUrl } from './utils'
+
 const defaultOptions = {
   // This list of extensions matches config for file-loader in
   // packages/core/config/webpack.common.js
@@ -33,10 +35,6 @@ function getVariableName(p: NodePath<types.ImportDeclaration>) {
   return null
 }
 
-// Blank single pixel for url-loaded images
-const BLANK_IMG_DATA_SRC =
-  'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   const manifestPath = join(getPaths().web.dist, 'build-manifest.json')
   const webpackManifest = require(manifestPath)
@@ -45,7 +43,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
     name: 'babel-plugin-redwood-prerender-media-imports',
     visitor: {
       ImportDeclaration(p, state) {
-        const ext = extname(p.node.source.value)
+        const importPath = p.node.source.value
+        const ext = extname(importPath)
         const options = {
           ...defaultOptions,
           ...state.opts,
@@ -57,14 +56,22 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             p.node.source.value
           )}`
 
-          const processedFilePath = webpackManifest[webpackManifestKey]
+          const copiedAssetPath = webpackManifest[webpackManifestKey]
+
+          // If webpack has copied it over, use the path from the asset manifest
+          // Otherwise convert it to a base64 encoded data uri
+          const assetSrc =
+            copiedAssetPath ??
+            convertToDataUrl(
+              join(state.file.opts.sourceRoot || './', importPath)
+            )
 
           if (importConstName) {
             p.replaceWith(
               t.variableDeclaration('const', [
                 t.variableDeclarator(
                   t.identifier(importConstName),
-                  t.stringLiteral(processedFilePath || BLANK_IMG_DATA_SRC)
+                  t.stringLiteral(assetSrc)
                 ),
               ])
             )
