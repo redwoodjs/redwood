@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 import merge from 'deepmerge'
+import { env as envInterpolation } from 'string-env-interpolation'
 import toml from 'toml'
 
 import { getConfigPath } from './paths'
@@ -104,7 +105,7 @@ const DEFAULT_CONFIG: Config = {
  */
 export const getConfig = (configPath = getConfigPath()): Config => {
   try {
-    const rawConfig = fs.readFileSync(configPath, 'utf8')
+    const rawConfig = envInterpolation(fs.readFileSync(configPath, 'utf8'))
     return merge(DEFAULT_CONFIG, toml.parse(rawConfig))
   } catch (e) {
     throw new Error(`Could not parse "${configPath}": ${e}`)

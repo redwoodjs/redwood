@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.38.0",
+  "version": "0.38.1",
   "files": [
     "dist"
   ],
@@ -29,7 +29,7 @@
     "@graphql-codegen/typescript-operations": "2.1.8",
     "@graphql-codegen/typescript-react-apollo": "3.1.6",
     "@graphql-codegen/typescript-resolvers": "2.3.2",
-    "@redwoodjs/graphql-server": "0.38.0",
+    "@redwoodjs/graphql-server": "0.38.1",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.2.5",
     "chalk": "4.1.2",
@@ -44,6 +44,7 @@
     "kill-port": "1.6.1",
     "prettier": "2.4.1",
     "rimraf": "3.0.2",
+    "string-env-interpolation": "1.0.1",
     "toml": "3.0.0"
   },
   "devDependencies": {
