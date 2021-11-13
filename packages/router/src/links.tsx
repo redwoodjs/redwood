@@ -1,5 +1,7 @@
 import { forwardRef, useEffect } from 'react'
 
+import { PropTypes } from 'prop-types'
+
 import { navigate } from './history'
 import { useLocation } from './location'
 import { flattenSearchParams, matchPath } from './util'
@@ -56,6 +58,7 @@ const useMatch = (pathname: string, options?: UseMatchOptions) => {
 
 interface LinkProps {
   to: string
+  onClick: PropTypes.func
 }
 
 const Link = forwardRef<
@@ -95,6 +98,7 @@ interface NavLinkProps {
   to: string
   activeClassName: string
   activeMatchParams?: FlattenSearchParams
+  onClick: PropTypes.func
 }
 
 const NavLink = forwardRef<
