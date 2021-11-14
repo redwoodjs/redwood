@@ -9,7 +9,7 @@ import {
 } from './tasks/configure-storybook'
 import { checkSetupStatus, wrapWithChakraProvider } from './tasks/setup-chakra'
 
-export const command = 'chakra-ui'
+export const command = 'design chakra-ui'
 export const description = 'Setup Chakra UI'
 
 export function builder(yargs) {
