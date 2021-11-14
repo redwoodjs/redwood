@@ -32,11 +32,15 @@ function objectToComponentProps(obj, options = { exclude: [], raw: false }) {
  * Wrap the redwood root component with a component
  *
  * @param content {string} the content of App.{js,tsx}
- * @param provider {string} the name of the provider component
- * @param providerProps {Record<string, any>}
+ * @param options {{
+ *   component: string,
+ *   props?: Record<string, any>,
+ *   before?: string,
+ *   after?: string
+ * }}
  * @returns {string} the content of App.{js,tsx} with <XProvider> added
  */
-function wrapRootComponent(content, provider, providerProps) {
+function wrapRootComponent(content, { component, props, before, after }) {
   const [, indent, redwoodApolloProvider] = content.match(
     /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
   )
@@ -45,17 +49,19 @@ function wrapRootComponent(content, provider, providerProps) {
     .split('\n')
     .map((line) => '  ' + line)
 
-  const props = objectToComponentProps(providerProps, {
+  const propsAsArray = objectToComponentProps(props, {
     raw: true,
   })
 
   const renderContent =
     indent +
-    `<${provider}${props.length ? ' ' : ''}${props.join(' ')}>` +
+    (before ? before + indent : '') +
+    `<${component}${props.length ? ' ' : ''}${propsAsArray.join(' ')}>` +
     indent +
     redwoodApolloProviderLines.join('\n') +
     indent +
-    `</${provider}>`
+    (after ? after + indent : '') +
+    `</${component}>`
 
   return content.replace(
     /\s+<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>/s,
@@ -86,10 +92,16 @@ export function checkSetupStatus() {
 export function wrapWithChakraProvider(props = {}) {
   const webAppPath = getPaths().web.app
   let content = fs.readFileSync(webAppPath).toString()
-  const imports = ["import {ChakraProvider} from '@chakra-ui/react'"]
+  const imports = [
+    "import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'",
+  ]
 
   content = addImports(content, imports)
-  content = wrapRootComponent(content, 'ChakraProvider', props)
+  content = wrapRootComponent(content, {
+    component: 'ChakraProvider',
+    props,
+    before: '<ColorModeScript />',
+  })
 
   fs.writeFileSync(webAppPath, content)
 }
