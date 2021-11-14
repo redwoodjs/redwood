@@ -24,7 +24,8 @@ function isPackageInstalled(alias) {
 
 function withEmotionVersionFallback(config) {
   const alias = Object.entries({
-    '@emotion/core': '@emotion/react',
+    '@emotion/core': '@emotion/core',
+    '@emotion/styled': '@emotion/styled',
     'emotion-theming': '@emotion/react',
   }).reduce((acc, [packageName, alias]) => {
     if (isPackageInstalled(alias)) {
