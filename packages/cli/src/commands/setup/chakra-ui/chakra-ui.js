@@ -44,11 +44,13 @@ export async function handler({ force, install }) {
           {
             title: `Install ${packages.join(', ')}`,
             task: async () => {
-              await execa(
-                'yarn',
-                ['workspace', 'web', 'add', '-D', ...packages],
-                { cwd: '/Users/timkolberger/Entwicklung/temp/redwook' }
-              )
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                '-D',
+                ...packages,
+              ])
             },
           },
         ])
