@@ -1,12 +1,12 @@
-import fs from 'fs'
-import path from 'path'
-
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths } from '../../../lib'
 import c from '../../../lib/colors'
 
+import {
+  checkStorybookStatus,
+  configureStorybook,
+} from './tasks/configure-storybook'
 import { checkSetupStatus, wrapWithChakraProvider } from './tasks/setup-chakra'
 
 export const command = 'chakra-ui'
@@ -44,13 +44,11 @@ export async function handler({ force, install }) {
           {
             title: `Install ${packages.join(', ')}`,
             task: async () => {
-              await execa('yarn', [
-                'workspace',
-                'web',
-                'add',
-                '-D',
-                ...packages,
-              ])
+              await execa(
+                'yarn',
+                ['workspace', 'web', 'add', '-D', ...packages],
+                { cwd: '/Users/timkolberger/Entwicklung/temp/redwook' }
+              )
             },
           },
         ])
@@ -58,36 +56,13 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Setting up Chakra UI...',
-      task: () => {
-        if (checkSetupStatus() === 'done') {
-          return
-        }
-        wrapWithChakraProvider()
-      },
+      skip: () => checkSetupStatus() === 'done',
+      task: () => wrapWithChakraProvider(),
     },
     {
       title: 'Configure Storybook...',
-      task: async () => {
-        const { storybookPreviewConfig } = getPaths().web
-
-        if (fs.existsSync(storybookPreviewConfig)) {
-          if (force) {
-            fs.unlinkSync(storybookPreviewConfig)
-          } else {
-            throw new Error(
-              `Storybook preview config already exists at ${storybookPreviewConfig}\nUse --force to override existing config.`
-            )
-          }
-        }
-
-        const storybookPreview = fs.readFileSync(
-          path.join(__dirname, 'templates', 'storybook.preview.js.template'),
-          'utf-8'
-        )
-        fs.writeFileSync(storybookPreviewConfig, storybookPreview)
-
-        await execa('yarn', ['eslint', '--fix', storybookPreviewConfig])
-      },
+      skip: () => checkStorybookStatus({ force }) === 'done',
+      task: async () => configureStorybook(),
     },
   ])
 
