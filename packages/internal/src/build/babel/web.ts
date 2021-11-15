@@ -12,10 +12,6 @@ import {
   RegisterHookOptions,
 } from './common'
 
-// @TODO make sure you remove dependencies that are no longer required
-// @TODO make sure you remove dependencies that are no longer required
-// @TODO make sure you remove dependencies that are no longer required
-// @TODO make sure you remove dependencies that are no longer required
 export const getWebSideBabelPlugins = () => {
   const rwjsPaths = getPaths()
 
