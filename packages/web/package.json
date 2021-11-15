@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.38.0",
+  "version": "0.38.1",
   "files": [
     "dist",
     "apollo",
@@ -12,12 +12,17 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "3.4.16",
-    "@redwoodjs/auth": "0.38.0",
+    "@redwoodjs/auth": "0.38.1",
     "core-js": "3.18.3",
     "graphql": "15.6.1",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.1.2",
     "react-hot-toast": "2.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/web"
   },
   "peerDependencies": {
     "react": "17.0.2"

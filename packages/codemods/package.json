@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/codemods",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
-  "version": "0.38.0",
+  "version": "0.38.1",
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
@@ -25,6 +25,11 @@
     "vscode-ripgrep": "1.12.1",
     "yargs": "16.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/codemods"
+  },
   "scripts": {
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
@@ -34,9 +39,9 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@types/babel__core": "^7",
+    "@types/babel__core": "7",
     "@types/jscodeshift": "0.11.2",
-    "@types/prettier": "^2",
+    "@types/prettier": "2",
     "tempy": "1.0.1"
   }
 }

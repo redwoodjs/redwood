@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/core",
   "description": "Foundational packages and config required to build RedwoodJS.",
-  "version": "0.38.0",
+  "version": "0.38.1",
   "license": "MIT",
   "files": [
     "config"
@@ -21,10 +21,10 @@
     "@babel/preset-typescript": "7.15.0",
     "@babel/runtime-corejs3": "7.15.4",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.6",
-    "@redwoodjs/cli": "0.38.0",
-    "@redwoodjs/eslint-config": "0.38.0",
-    "@redwoodjs/internal": "0.38.0",
-    "@redwoodjs/testing": "0.38.0",
+    "@redwoodjs/cli": "0.38.1",
+    "@redwoodjs/eslint-config": "0.38.1",
+    "@redwoodjs/internal": "0.38.1",
+    "@redwoodjs/testing": "0.38.1",
     "babel-loader": "8.2.3",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -59,6 +59,11 @@
     "webpack-manifest-plugin": "4.0.2",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "2.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/core"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
