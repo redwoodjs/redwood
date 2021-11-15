@@ -15,9 +15,7 @@ const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 const {
   getConfig,
   getPaths,
-  getWebSideBabelPresets,
-  getWebSideBabelPlugins,
-  getWebSideOverrides,
+  getWebSideDefaultBabelConfig,
 } = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
@@ -131,6 +129,15 @@ const getStyleLoaders = (isEnvProduction) => {
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
+
+  const devTimeAutoImports = isEnvProduction
+    ? {}
+    : {
+        mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
+        mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
+        mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
+      }
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
@@ -145,10 +152,7 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
-      // Possibly used by storybook?
-      mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
-      mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
-      mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
+      ...devTimeAutoImports,
     }),
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
@@ -178,6 +182,8 @@ module.exports = (webpackEnv) => {
 
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
+  const webBabelOptions = getWebSideDefaultBabelConfig()
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -275,15 +281,13 @@ module.exports = (webpackEnv) => {
                 {
                   loader: 'babel-loader',
                   options: {
+                    ...webBabelOptions,
                     cwd: redwoodPaths.base,
-                    babelrc: false, // Disables `.babelrc` config
-                    presets: getWebSideBabelPresets(),
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
-                      ...getWebSideBabelPlugins(),
+                      ...webBabelOptions.plugins,
                     ].filter(Boolean),
-                    overrides: getWebSideOverrides(),
                   },
                 },
               ].filter(Boolean),

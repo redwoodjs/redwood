@@ -132,7 +132,7 @@ export const getApiSideDefaultBabelConfig = () => {
     plugins: getApiSideBabelPlugins(),
     configFile: getApiSideBabelConfigPath(),
     babelrc: false,
-    ignore: ['node_modules'],
+    ignore: [/node_modules/],
   }
 }
 
@@ -141,15 +141,15 @@ export const registerApiSideBabelHook = ({
   plugins = [],
   ...rest
 }: RegisterHookOptions = {}) => {
+  const defaultOptions = getApiSideDefaultBabelConfig()
+
   registerBabel({
+    ...defaultOptions,
     presets: getApiSideBabelPresets({
       presetEnv: true,
     }),
-    configFile: getApiSideBabelConfigPath(), // incase user has a custom babel.config.js in api
-    babelrc: false, // Disables `.babelrc` config
     extensions: ['.js', '.ts'],
-    plugins: [...getApiSideBabelPlugins(), ...plugins],
-    ignore: [/node_modules/],
+    plugins: [...defaultOptions.plugins, ...plugins],
     cache: false,
     ...rest,
   })
@@ -163,12 +163,11 @@ export const prebuildFile = (
   plugins: TransformOptions['plugins']
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
+  const defaultOptions = getApiSideDefaultBabelConfig()
 
   const result = babel.transform(code, {
-    presets: getApiSideBabelPresets(),
+    ...defaultOptions,
     cwd: getPaths().api.base,
-    babelrc: false, // Disables `.babelrc` config
-    configFile: getApiSideBabelConfigPath(),
     filename: srcPath,
     // we set the sourceFile (for the sourcemap) as a correct, relative path
     // this is why this function (prebuildFile) must know about the dstPath

@@ -90,7 +90,7 @@ export const getWebSideOverrides = (
     staticImports: false,
   }
 ) => {
-  return [
+  const overrides = [
     {
       test: /.+Cell.(js|tsx)$/,
       plugins: [require('../babelPlugins/babel-plugin-redwood-cell').default],
@@ -111,14 +111,16 @@ export const getWebSideOverrides = (
     },
     // ** Files ending in `Cell.mock.[js,ts]` **
     // Automatically determine keys for saving and retrieving mock data.
-    // @TODO only enable this for storybook, 😨
-    {
+    // Only required for storybook and jest
+    process.env.NODE_ENV !== 'production' && {
       test: /.+Cell.mock.(js|ts)$/,
       plugins: [
         require('../babelPlugins/babel-plugin-redwood-mock-cell-data').default,
       ],
     },
-  ]
+  ].filter(Boolean)
+
+  return overrides as TransformOptions[]
 }
 
 export const getWebSideBabelPresets = () => {
@@ -155,13 +157,17 @@ export const getWebSideBabelConfigPath = () => {
 }
 
 export const getWebSideDefaultBabelConfig = () => {
+  // NOTE:
+  // Even though we specify the config file, babel will still search for .babelrc
+  // and merge them because we have specified the filename property, unless babelrc = false
+
   return {
     presets: getWebSideBabelPresets(),
     plugins: getWebSideBabelPlugins(),
     overrides: getWebSideOverrides(),
     configFile: getWebSideBabelConfigPath(),
     babelrc: false,
-    ignore: ['node_modules'],
+    ignore: [/node_modules/],
   }
 }
 
@@ -170,22 +176,15 @@ export const registerWebSideBabelHook = ({
   plugins = [],
   overrides = [],
 }: RegisterHookOptions = {}) => {
-  // NOTE:
-  // Even though we specify the config file, babel will still search for .babelrc
-  // and merge them because we have specified the filename property, unless babelrc = false
+  const defaultOptions = getWebSideDefaultBabelConfig()
   registerBabel({
+    ...defaultOptions,
     root: getPaths().base,
-    presets: getWebSideBabelPresets(),
-    configFile: getWebSideBabelConfigPath(), // incase user has a custom babel.config.js in web
-    babelrc: false,
     extensions: ['.js', '.ts', '.tsx', '.jsx'],
-    plugins: [...getWebSideBabelPlugins(), ...plugins],
-    ignore: [/node_modules/],
+    plugins: [...defaultOptions.plugins, ...plugins],
     cache: false,
-    // @DONOTMERGE Find a better way of passing this
-    // @DONOTMERGE Find a better way of passing this
-    // @DONOTMERGE Find a better way of passing this
-    // @DONOTMERGE Find a better way of passing this
+    // We only register for prerender currently
+    // Static importing pages makes sense
     overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
 }
