@@ -163,7 +163,7 @@ export const getWebSideDefaultBabelConfig = () => {
     overrides: getWebSideOverrides(),
     configFile: getWebSideBabelConfigPath(),
     babelrc: false,
-    ignore: [/node_modules/],
+    ignore: ['node_modules'],
   }
 }
 
