@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  extends: path.join(__dirname, 'packages/eslint-config/shared.js'),
+  extends: path.join(__dirname, 'packages/eslint-config/framework.js'),
   ignorePatterns: [
     'dist',
     'fixtures',

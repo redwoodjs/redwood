@@ -13,70 +13,6 @@
 // [^1] https://eslint.org/docs/rules/
 // [^2] https://www.npmjs.com/package/eslint-plugin-react#list-of-supported-rules
 
-const findUp = require('findup-sync')
-
-const {
-  getCommonPlugins,
-  getWebSideDefaultBabelConfig,
-  getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
-
-const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
-  const configPath = findUp('babel.config.js', { cwd })
-  if (!configPath) {
-    throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
-  }
-  return configPath
-}
-
-const isRedwoodProject = () => {
-  const tomlPath = findUp('redwood.toml', {
-    cwd: process.env.RWJS_CWD ?? process.cwd(),
-  })
-
-  // @TODO DONOTMERGE WITHOUT FIXING
-  // @TODO DONOTMERGE WITHOUT FIXING
-  // @TODO DONOTMERGE WITHOUT FIXING
-  // @TODO DONOTMERGE WITHOUT FIXING
-
-  if (tomlPath.includes('create-redwood-app/template/redwood.toml')) {
-    return false
-  }
-
-  return !!tomlPath
-}
-
-const getBabelOptions = () => {
-  // We cant nest the web overrides inside the overrides block
-  // So we just take it out and put it as a separate item
-  const { overrides: _overrides, ...otherWebConfig } =
-    getWebSideDefaultBabelConfig()
-
-  // @TODO ignore web overrides for now
-  // THis is for ROutes, Cells handling, I dont think it has any impact on eslint
-
-  if (isRedwoodProject()) {
-    return {
-      plugins: getCommonPlugins(),
-      overrides: [
-        {
-          test: ['./api/', './scripts/'],
-          ...getApiSideDefaultBabelConfig(),
-        },
-        {
-          test: ['./web/'],
-          ...otherWebConfig,
-        },
-      ],
-    }
-  } else {
-    // For framework
-    return {
-      configFile: babelConfigPath(),
-    }
-  }
-}
-
 module.exports = {
   extends: [
     'eslint:recommended',
@@ -84,11 +20,8 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:jest-dom/recommended',
   ],
+  // @NOTE parserOptions defined separately for project and framework
   parser: '@babel/eslint-parser',
-  parserOptions: {
-    requireConfigFile: false,
-    babelOptions: getBabelOptions(),
-  },
   plugins: [
     'prettier',
     '@babel',
