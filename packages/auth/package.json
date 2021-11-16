@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.38.1",
+  "version": "0.38.2",
   "files": [
     "dist"
   ],
