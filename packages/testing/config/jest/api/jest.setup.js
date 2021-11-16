@@ -10,6 +10,9 @@ const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
+// Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
+// fails on DELETE
+const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
 const DEFAULT_SCENARIO = 'standard'
 const TEARDOWN_CACHE_PATH = path.join(
   getPaths().generated.base,
@@ -67,9 +70,10 @@ const seedScenario = async (scenario) => {
 const teardown = async () => {
   for (const modelName of teardownOrder) {
     try {
-      await db.$executeRawUnsafe(`DELETE from "${modelName}"`)
+      await db.$executeRawUnsafe(`DELETE FROM ${modelName}`)
     } catch (e) {
-      if (e.message.match(/FOREIGN KEY constraint failed/)) {
+      const match = e.message.match(/Code: `(\d+)`/)
+      if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
         const index = teardownOrder.indexOf(modelName)
         teardownOrder[index] = null
         teardownOrder.push(modelName)
