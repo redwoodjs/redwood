@@ -122,7 +122,7 @@ export const getApiSideBabelConfigPath = () => {
   if (fs.existsSync(p)) {
     return p
   } else {
-    return undefined
+    return false
   }
 }
 

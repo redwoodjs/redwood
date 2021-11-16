@@ -124,10 +124,13 @@ test('api prebuild finds babel.config.js', () => {
   expect(p).toEqual('api/babel.config.js')
 })
 
-test('api prebuild uses babel config', () => {
+test('api prebuild uses babel config only from the api side root', () => {
   const p = prebuiltFiles.filter((p) => p.endsWith('dog.js')).pop()
-  const code = fs.readFileSync(p, 'utf-8') //?
+  const code = fs.readFileSync(p, 'utf-8')
   expect(code).toContain(`import dog from "dog-bless";`)
+
+  // Should ignore root babel config
+  expect(code).not.toContain(`import kitty from "kitty-purr"`)
 })
 
 // Still a bit of a mystery why this plugin isn't transforming gql tags
