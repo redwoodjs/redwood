@@ -46,7 +46,7 @@ type ParsedParams<PartialRoute> =
       ? { [ParamName in Param2]: string } &
           ${"ParsedParams<`${Rest2}:${Match}}`>"}
       : { [Entry in Param]: ParamType<Match> }
-    : // no type, but has stuff later e.g. {c}/{d}
+    : // no type, but has stuff after it, e.g. {c}/{d}
     ${"PartialRoute extends `{${infer Param}}/${infer Rest}`"}
     ${"? { [ParamName in Param]: string } & ParsedParams<`${Rest}`>"}
     : // last one with no type e.g. {d}
