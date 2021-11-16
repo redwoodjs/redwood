@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { shouldIgnoreFileForBuild } from '@redwoodjs/api-server/src/watch'
+
 import {
   prebuildApiFiles,
   cleanApiBuild,
@@ -138,6 +140,11 @@ test('Pretranspile polyfills unsupported functionality', () => {
   expect(firstLine).toMatchInlineSnapshot(
     `"import \\"core-js/modules/esnext.string.replace-all.js\\";"`
   )
+})
+
+test('should Ignore File For Build', () => {
+  console.log(shouldIgnoreFileForBuild(relativePaths))
+  expect(null).toMatchSnapshot()
 })
 
 function stripInlineSourceMap(src: string): string {
