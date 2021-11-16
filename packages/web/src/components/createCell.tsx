@@ -148,7 +148,7 @@ export function createCell<CellProps = any>({
               return (
                 <Failure
                   error={error}
-                  errorCode={error.graphQLErrors[0]?.extensions?.code}
+                  errorCode={error.graphQLErrors?.[0]?.extensions?.code}
                   {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
