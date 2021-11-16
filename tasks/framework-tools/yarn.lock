@@ -2863,9 +2863,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/eslint-config@npm:0.38.1":
-  version: 0.38.1
-  resolution: "@redwoodjs/eslint-config@npm:0.38.1"
+"@redwoodjs/eslint-config@npm:0.38.2":
+  version: 0.38.2
+  resolution: "@redwoodjs/eslint-config@npm:0.38.2"
   dependencies:
     "@babel/core": 7.15.8
     "@babel/eslint-parser": 7.15.8
@@ -2883,7 +2883,7 @@ __metadata:
     eslint-plugin-react: 7.26.1
     eslint-plugin-react-hooks: 4.2.0
     prettier: 2.4.1
-  checksum: 3f86af3296fb814c73035a9023bd42f9e0449a8e42ba5b2cc6fbcd6e1d2320a0355d6172409a4d2bd23192ac9b662b6dc0225f8fc4b85f05213f424e02750375
+  checksum: 627424d567fdc5e8ea11c350ad5fcb531986e4bfa07530df6c78f240d023592eac8843de0c6cb3307278b7f4a2b56bbc75a1c00f25e631ec0b3f3604761c3cf5
   languageName: node
   linkType: hard
 
@@ -5880,7 +5880,7 @@ __metadata:
     "@babel/preset-react": 7.14.5
     "@babel/preset-typescript": 7.15.0
     "@babel/runtime-corejs3": 7.15.4
-    "@redwoodjs/eslint-config": 0.38.1
+    "@redwoodjs/eslint-config": 0.38.2
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
