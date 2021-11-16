@@ -88,28 +88,30 @@ const IGNORED_API_PATHS = [
   rwjsPaths.api.db,
 ].map((path) => ensurePosixPath(path))
 
+export const shouldIgnoreFileForBuild = (file: string) => {
+  const x =
+    file.includes('node_modules') ||
+    IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
+    [
+      '.DS_Store',
+      '.db',
+      '.sqlite',
+      '-journal',
+      '.test.js',
+      '.test.ts',
+      '.scenarios.ts',
+      '.scenarios.js',
+      '.d.ts',
+      '.log',
+    ].some((ext) => file.endsWith(ext))
+  return x
+}
+
 chokidar
   .watch(rwjsPaths.api.base, {
     persistent: true,
     ignoreInitial: true,
-    ignored: (file: string) => {
-      const x =
-        file.includes('node_modules') ||
-        IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
-        [
-          '.DS_Store',
-          '.db',
-          '.sqlite',
-          '-journal',
-          '.test.js',
-          '.test.ts',
-          '.scenarios.ts',
-          '.scenarios.js',
-          '.d.ts',
-          '.log',
-        ].some((ext) => file.endsWith(ext))
-      return x
-    },
+    ignored: (file: string) => shouldIgnoreFileForBuild(file),
   })
   .on('ready', async () => {
     rebuildApiServer()
