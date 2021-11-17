@@ -41,8 +41,8 @@ These tables don't have any foreign keys (`productId` or `cateogryId`), how do t
 ┌───────────┐      ┌───────────────────┐       ┌────────────┐
 │  Product  │      │  ProductCategory  │       │  Category  │
 ├───────────┤      ├───────────────────┤       ├────────────┤
-│ id        │•────<│ productId         │>──┐   │ id         │
-│ name      │      │ categoryId        │   └──•│ name       │
+│ id        │•────<│ productId         │   ┌──•│ id         │
+│ name      │      │ categoryId        │>──┘   │ name       │
 │ upc       │      └───────────────────┘       │ shelf      │
 └───────────┘                                  └────────────┘
 ```
