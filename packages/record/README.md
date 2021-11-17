@@ -47,7 +47,20 @@ These tables don't have any foreign keys (`productId` or `cateogryId`), how do t
 └───────────┘                                  └────────────┘
 ```
 
-Now we're back to one-to-many relationships. In Prisma this join table is created and maintained for you. It will be named `_CategoryToPost` and the foreign keys will simply be named `A` and `B` and point to the two separate tables.
+Now we're back to one-to-many relationships. In Prisma this join table is created and maintained for you. It will be named `_CategoryToPost` and the foreign keys will simply be named `A` and `B` and point to the two separate tables. Prisma refers to this as an [implicit many-to-many](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#implicit-many-to-many-relations) relationship.
+
+If you want to create the join table yourself and potentially store additional data there (like a timestamp of when the product was categorized) then this is simply a one-to-many relationship on both sides: a Product has many ProductCategories and a Category has many ProductCategories. Prisma refers to this as an [explicity many-to-many](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#explicit-many-to-many-relations) relationship.
+
+> TODO: We'll be adding logic soon that will let you get to the categories from a product record (and vice versa) without having to manually go through ProductCategory. From this:
+>
+>     const product = Product.find(1)
+>     const productCategoryes = product.productCategories.all()
+>     const categories = productCategories.map(pc => pc.categories.all())
+>
+> To this:
+>
+>     const product = Product.find(1)
+>     const categories = product.categories.all()
 
 The only other terminology to keep in mind are the terms *model* and *record*. A model is the name for the class that represents one database table. The example above has three models: User, Post and Comment. Prisma also calls each database table declaration in their `schema.prisma` declaration file a "model", but when we refer to a "model" in this doc it will mean the class that extends `RedwoodRecord`. A record is a single instance of our model that now represents a single row of data in the database.
 
@@ -63,7 +76,17 @@ First you'll need to create a model to represent the database table you want to 
 export default class User extends RedwoodRecord { }
 ```
 
+Now we need to parse the Prisma schema, store as a cached JSON file, and create an `index.js` file with a couple of config settings:
+
+```
+yarn rw record init
+```
+
+You'll see that this created `.redwood/datamodel.json` and `api/src/models/index.js`.
+
 Believe it or not, that's enough to get started! Let's try using the Redwood console to make some quick queries without worrying about starting up any servers:
+
+> TODO: Models don't quite work correctly in the console. My guess is something Babel-related. The require and fetching of records below will work, but actually trying to read any properties returns `undefined`.
 
 ```
 yarn rw c
@@ -95,11 +118,26 @@ newUser.destroy()
 
 ### Finding Records
 
+* where()
+* all()
+* find()
+* findBy()
+* Passing more options like orderBy
+
 ### Creating Records
+
+* User.create()
+* User.build(), instance.save()
 
 ### Updating Records
 
+User.update()
+instance.save()
+
 ### Deleting Records
+
+User.destroy()
+instance.destroy()
 
 ### Relationships
 
@@ -109,3 +147,6 @@ newUser.destroy()
 
 #### Many-to-many
 
+### Validations
+
+### Lifecycle
