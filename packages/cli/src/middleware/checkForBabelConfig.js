@@ -1,11 +1,7 @@
 import boxen from 'boxen'
 import fg from 'fast-glob'
 
-import {
-  getApiSideBabelConfigPath,
-  getWebSideBabelConfigPath,
-  getPaths,
-} from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal'
 
 import c from '../lib/colors'
 
@@ -17,29 +13,16 @@ const isUsingBabelRc = () => {
     }).length > 0
   )
 }
-const AVOID_PLUGINS_MESSAGE =
-  'We encourage users to avoid custom babel plugins, as this maybe removed in future versions.'
+const BABEL_SETTINGS_LINK = c.warning('https://redwoodjs.com/docs/builds')
 
 const checkForBabelConfig = () => {
-  const apiCustomBabelConfig = getApiSideBabelConfigPath()
-  const webCustomBabelConfig = getWebSideBabelConfigPath()
-
-  if (apiCustomBabelConfig || webCustomBabelConfig) {
-    console.warn(
-      c.warning('Headsup! \n') +
-        'It looks like you have a babel.config.js in one of your sides. \n' +
-        AVOID_PLUGINS_MESSAGE +
-        '\n'
-    )
-  }
-
   if (isUsingBabelRc()) {
     const messages = [
-      'Looks like youre trying to configure one of your sides with a .babelrc file.',
-      'These are no longer supported within Redwood',
+      "Looks like you're trying to configure one of your sides with a .babelrc file.",
+      'These settings will be ignored, unless you use a babel.config.js file',
       '',
-      'You can use a babel.config.js file for each side, but...',
-      AVOID_PLUGINS_MESSAGE,
+      'Your plugins and settings will be automatically merged with',
+      `the Redwood built-in config, more details here: ${BABEL_SETTINGS_LINK}`,
     ]
 
     const errTitle = 'Incorrect project configuration'
