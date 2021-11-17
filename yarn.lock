@@ -4453,6 +4453,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/record@workspace:packages/record":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/record@workspace:packages/record"
+  dependencies:
+    "@prisma/client": 3.3.0
+    "@prisma/sdk": 3.3.0
+    core-js: 3.18.3
+    jest: 27.3.1
+    typescript: 4.4.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/router@0.38.2, @redwoodjs/router@workspace:packages/router":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
