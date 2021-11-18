@@ -10194,7 +10194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.18.3, core-js@npm:^3.0.4, core-js@npm:^3.16.0, core-js@npm:^3.18.2, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.18.3":
   version: 3.18.3
   resolution: "core-js@npm:3.18.3"
   checksum: 22e9b24bc7518bc4514fe5daef4e7f277d4e4b4949f1c228dd3e1dcf087b5e2b562fd075c2506494922d0e99f0392e2f3b759a872b7cd5508b70aafa3d0914fa
@@ -10208,7 +10208,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.18.3":
+"core-js@npm:^3.0.4, core-js@npm:^3.16.0, core-js@npm:^3.18.2, core-js@npm:^3.18.3, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.19.0
   resolution: "core-js@npm:3.19.0"
   checksum: 440e07d780b9dd5f6fc85b0901e6729e30d493fee30622df49e544ae0c3de54fe7af12d22ca729f6563d9048d7d4964c8d549dbdf6ebbac0031d48521c1867d1
