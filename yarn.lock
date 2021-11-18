@@ -4187,6 +4187,7 @@ __metadata:
     dotenv-defaults: 3.0.0
     envinfo: 7.8.1
     execa: 5.1.1
+    fast-glob: 3.2.7
     fs-extra: 10.0.0
     humanize-string: 2.1.0
     jest: 27.3.1
