@@ -8,7 +8,7 @@
 - [FAQ](#FAQ)
 
 ## Purpose and Vision
-Summarise the project's values, purpose, and aspirational vision.
+Summarize the project's values, purpose, and aspirational vision.
 
 ## Package Lead
 Identify the decision maker and/or go-to for questions.

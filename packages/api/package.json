@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.38.0",
+  "version": "0.38.3",
   "files": [
     "dist",
     "logger",
@@ -21,9 +21,14 @@
     "pino-pretty": "7.1.0",
     "uuid": "8.3.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/api"
+  },
   "devDependencies": {
     "@babel/cli": "7.15.7",
-    "@redwoodjs/auth": "0.38.0",
+    "@redwoodjs/auth": "0.38.3",
     "@types/crypto-js": "4.0.2",
     "@types/jsonwebtoken": "8.5.5",
     "@types/md5": "2.3.1",

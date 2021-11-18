@@ -1,19 +1,15 @@
-import fs from 'fs'
-
-import type { Application } from 'express'
+import { FastifyInstance } from 'fastify'
 
 export interface HttpServerParams {
   port: number
   socket?: string
-  app: Application
+  app: FastifyInstance
 }
 
 export const startServer = ({ port = 8911, socket, app }: HttpServerParams) => {
-  const server = app.listen(socket || port).on('close', () => {
-    if (socket) {
-      fs.rmSync(socket)
-    }
-  })
+  const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
 
-  return server
+  app.listen(socket || port, host)
+
+  return app
 }

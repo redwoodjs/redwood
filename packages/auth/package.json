@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.38.0",
+  "version": "0.38.3",
   "files": [
     "dist"
   ],
@@ -26,6 +26,11 @@
     "nhost-js-sdk": "3.1.0",
     "react": "17.0.2",
     "typescript": "4.4.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/auth"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

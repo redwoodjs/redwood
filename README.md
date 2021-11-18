@@ -53,26 +53,30 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
+- [Fastify](https://www.fastify.io)
 - [Pino](https://getpino.io)
 
 ## Features
 
-- Opinionated defaults for formatting, file organization, webpack, Babel, and more.
-- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, constraints, and named route functions (to generate correct URLs).
-- Automatic page-based code-splitting.
-- Boilerplate-less GraphQL API construction.
-- Cells: a declarative way to fetch data from the backend API.
+- Opinionated defaults for formatting, file organization, Webpack, Babel, and more
+- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, custom types, and named route functions (to generate correct URLs)
+- Automatic page-based code-splitting
+- Boilerplate-less GraphQL API construction
+- Cells: a declarative way to fetch data from the backend API
 - Generators for pages, layouts, cells, SDL, services, etc.
-- Scaffold generator for CRUD operations around a specific DB table.
-- Forms with easy client- and/or server-side validation and error handling.
-- [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
-- Database migrations (via Prisma 2).
+- Scaffold generator for CRUD operations specific to a DB table
+- Forms with easy client- and/or server-side validation and error handling
+- Fast Refresh (hot reloading) for faster development
+- Database and Data migrations
 - [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
 - Simple but powerful GraphQL Directives to validate access or transform resolved data
-- Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
-- Signature verification and payload signing for handling incoming and outgoing Webhooks
-- Page prerendering
-- First class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
+- Logging using [Pino](https://getpino.io) including [transports](https://getpino.io/#/docs/transports)
+- Webhooks: signature verification and payload signing for handling both incoming and outgoing
+- Jest testing utilities integrated across your codebase: mocks, test DB, generated boilerplate tests, scenarios, Web (components), and API (services, serverless functions, and webhooks)
+- Page prerendering at build time
+- Built-in Storybook integration: generated boilerplate component stories, tests, graphql/api mocks (Cells), and scenarios
+- API Server using [Fastify](https://www.fastify.io) for Serverful deploys
+- First-class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
 
 ## Roadmap
 
@@ -571,6 +575,14 @@ And there you have it.
     <td align="center"><a href="https://github.com/Dozacode"><img src="https://avatars.githubusercontent.com/u/35405844?v=4" width="100px;" alt=""/><br /><sub><b>John</b></sub></a></td>
     <td align="center"><a href="http://powerboard.co.nz/"><img src="https://avatars.githubusercontent.com/u/1866452?v=4" width="100px;" alt=""/><br /><sub><b>Shannon Smith</b></sub></a></td>
     <td align="center"><a href="https://github.com/0x1a4f7d58"><img src="https://avatars.githubusercontent.com/u/10007010?v=4" width="100px;" alt=""/><br /><sub><b>Bob</b></sub></a></td>
+    <td align="center"><a href="https://github.com/facinick"><img src="https://avatars.githubusercontent.com/u/12322728?v=4" width="100px;" alt=""/><br /><sub><b>facinick</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/virtuoushub"><img src="https://avatars.githubusercontent.com/u/4303638?v=4" width="100px;" alt=""/><br /><sub><b>Peter Colapietro</b></sub></a></td>
+    <td align="center"><a href="https://greener.bio/"><img src="https://avatars.githubusercontent.com/u/41754896?v=4" width="100px;" alt=""/><br /><sub><b>Teodoro Villaneuva</b></sub></a></td>
+    <td align="center"><a href="https://github.com/SarveshLimaye"><img src="https://avatars.githubusercontent.com/u/74766567?v=4" width="100px;" alt=""/><br /><sub><b>Sarvesh Limaye</b></sub></a></td>
+    <td align="center"><a href="https://github.com/7shantanu7"><img src="https://avatars.githubusercontent.com/u/51382138?v=4" width="100px;" alt=""/><br /><sub><b>Shantanu Zadbuke</b></sub></a></td>
+    <td align="center"><a href="https://github.com/DukeManh"><img src="https://avatars.githubusercontent.com/u/51073515?v=4" width="100px;" alt=""/><br /><sub><b>Duke Manh</b></sub></a></td>
   </tr>
 </table>
 

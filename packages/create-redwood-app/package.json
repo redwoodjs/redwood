@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "0.38.0",
+  "version": "0.38.3",
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/node": "7.15.8",
     "@babel/runtime-corejs3": "7.15.4",
-    "@redwoodjs/internal": "0.38.0",
+    "@redwoodjs/internal": "0.38.3",
     "axios": "0.23.0",
     "chalk": "4.1.2",
     "check-node-version": "4.1.0",
@@ -20,6 +20,11 @@
     "listr": "0.14.3",
     "tmp": "0.2.1",
     "yargs": "16.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/create-redwood-app"
   },
   "scripts": {
     "build": "yarn build:js",
