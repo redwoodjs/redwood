@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.38.1",
+  "version": "0.38.3",
   "files": [
     "dist",
     "logger",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.15.7",
-    "@redwoodjs/auth": "0.38.1",
+    "@redwoodjs/auth": "0.38.3",
     "@types/crypto-js": "4.0.2",
     "@types/jsonwebtoken": "8.5.5",
     "@types/md5": "2.3.1",
