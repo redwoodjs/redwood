@@ -1,4 +1,5 @@
 const path = require('path')
+const { TextDecoder } = require('util')
 
 const {
   getPaths,
@@ -10,7 +11,7 @@ const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 module.exports = {
   roots: ['<rootDir>/src/'],
-  testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
+  testEnvironment: 'jest-environment-jsdom',
   displayName: {
     color: 'blueBright',
     name: 'web',
@@ -19,6 +20,7 @@ module.exports = {
     __REDWOOD_API_URL: '',
     __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
+    TextDecoder,
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   moduleNameMapper: {
