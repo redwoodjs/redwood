@@ -1,6 +1,7 @@
-import type { ApolloClientOptions } from '@apollo/client'
+import type { ApolloClientOptions, setLogVerbosity } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import type { F } from 'ts-toolbelt'
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
 const {
   ApolloProvider,
@@ -10,6 +11,7 @@ const {
   InMemoryCache,
   useQuery,
   useMutation,
+  setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
@@ -36,7 +38,16 @@ export type UseAuthProp = () => AuthContextInterface
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: GraphQLClientConfigProp
   useAuth: UseAuthProp
-}> = ({ config = {}, children, useAuth }) => {
+  logLevel: F.Return<typeof setLogVerbosity>
+}> = ({ config = {}, children, useAuth, logLevel }) => {
+  /**
+   * Should they run into it,
+   * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
+   *
+   * @see {@link https://github.com/redwoodjs/redwood/issues/2473}
+   */
+  apolloSetLogVerbosity(logLevel)
+
   const { uri, headers } = useFetchConfig()
   const { getToken, type: authProviderType, isAuthenticated } = useAuth()
 
@@ -88,12 +99,19 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
   useAuth?: UseAuthProp
-}> = ({ graphQLClientConfig, useAuth = useRWAuth, children }) => {
+  logLevel?: F.Return<typeof setLogVerbosity>
+}> = ({
+  graphQLClientConfig,
+  useAuth = useRWAuth,
+  logLevel = 'debug',
+  children,
+}) => {
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
         config={graphQLClientConfig}
         useAuth={useAuth}
+        logLevel={logLevel}
       >
         <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
           {children}

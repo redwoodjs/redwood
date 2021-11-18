@@ -181,8 +181,11 @@ export function createCell<CellProps = any>({
           } else if (loading) {
             return <Loading {...queryRest} {...props} />
           } else {
+            console.warn(
+              `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`
+            )
             throw new Error(
-              'Cannot render cell: GraphQL success but `data` is null'
+              'Cannot render Cell: reached an unexpected state where the query succeeded but `data` is `null`. If this happened in Storybook, your query could be missing fields; otherwise this is most likely a GraphQL caching bug. Note that adding an `id` field to all the fields on your query may fix the issue.'
             )
           }
         }}
