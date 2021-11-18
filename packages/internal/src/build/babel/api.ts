@@ -21,6 +21,8 @@ const TARGETS_NODE = '12.16'
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 
+// Use preset env in all cases other than actual build
+// e.g. jest, console and exec - because they rely on having transpiled code
 export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }
 ) => {
