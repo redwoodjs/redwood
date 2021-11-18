@@ -2863,9 +2863,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/eslint-config@npm:0.38.0":
-  version: 0.38.0
-  resolution: "@redwoodjs/eslint-config@npm:0.38.0"
+"@redwoodjs/eslint-config@npm:0.38.3":
+  version: 0.38.3
+  resolution: "@redwoodjs/eslint-config@npm:0.38.3"
   dependencies:
     "@babel/core": 7.15.8
     "@babel/eslint-parser": 7.15.8
@@ -2883,7 +2883,7 @@ __metadata:
     eslint-plugin-react: 7.26.1
     eslint-plugin-react-hooks: 4.2.0
     prettier: 2.4.1
-  checksum: 27afdf378eb4a2362189ec65cb1bb0954e9947bcdea249cfe556d0262b7f7a9cd64cc090f60af7ea4d3651706d86aaa4841d9d3a30a16f007e774aab9ca1d1c6
+  checksum: 2ef0782a035161fed7890a8a1b264fa4e426a7a9d1057d0f5d20b3c332027981372f86686596d42a9260d53bcb03ac43b67a902d959334768bd82c5b980950e4
   languageName: node
   linkType: hard
 
@@ -5473,9 +5473,9 @@ __metadata:
   linkType: hard
 
 "eslint-visitor-keys@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "eslint-visitor-keys@npm:3.0.0"
-  checksum: 3e336d0aa7167e47fc3f66b378c8677842fec39f044b3db3be5f1f96fbad2927580973c9d11f79e9beebadb3f823383bf0041df5052ee378d72649492b13eb61
+  version: 3.1.0
+  resolution: "eslint-visitor-keys@npm:3.1.0"
+  checksum: ba23efd2a273cb5a0794ea76669cbe95892bed5d2e165e7744db6a81ede74f4239cf73d142016421d8297b72000486e4b41bba3078eccb9ef82ae0b7e06e9282
   languageName: node
   linkType: hard
 
@@ -5880,7 +5880,7 @@ __metadata:
     "@babel/preset-react": 7.14.5
     "@babel/preset-typescript": 7.15.0
     "@babel/runtime-corejs3": 7.15.4
-    "@redwoodjs/eslint-config": 0.38.0
+    "@redwoodjs/eslint-config": 0.38.3
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
@@ -6535,10 +6535,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore@npm:^5.1.4, ignore@npm:^5.1.8":
+"ignore@npm:^5.1.4":
   version: 5.1.8
   resolution: "ignore@npm:5.1.8"
   checksum: 3d09e733049c7bad1c0982be8fe3e767bd7b756dd0bfeceff11acda0b7b57634b5516acc3554d2d536e64b2701b3d08d0e5fa4dbf46389847dd3f8fa49d437bb
+  languageName: node
+  linkType: hard
+
+"ignore@npm:^5.1.8":
+  version: 5.1.9
+  resolution: "ignore@npm:5.1.9"
+  checksum: eef6b5ab690eafc56e79c9cf209c3c8ff816e6c3b9859bf598843dcb95df7a15de8bc17c037099bcbd91a65863df61413dac8c672f67eaaaa84a0ecf35899f33
   languageName: node
   linkType: hard
 

@@ -48,29 +48,29 @@ export const paramsForRoute = (route: string) => {
 export type TrailingSlashesTypes = 'never' | 'always' | 'preserve'
 
 export interface ParamType {
-  constraint?: RegExp
-  transform?: (value: any) => unknown
+  match?: RegExp
+  parse?: (value: any) => unknown
 }
 
 /** Definitions of the core param types. */
 const coreParamTypes: Record<string, ParamType> = {
   String: {
-    constraint: /[^/]+/,
+    match: /[^/]+/,
   },
   Int: {
-    constraint: /\d+/,
-    transform: Number,
+    match: /\d+/,
+    parse: Number,
   },
   Float: {
-    constraint: /[-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?/,
-    transform: Number,
+    match: /[-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?/,
+    parse: Number,
   },
   Boolean: {
-    constraint: /true|false/,
-    transform: (boolAsString: string) => boolAsString === 'true',
+    match: /true|false/,
+    parse: (boolAsString: string) => boolAsString === 'true',
   },
   Glob: {
-    constraint: /.*/,
+    match: /.*/,
   },
 }
 
@@ -103,24 +103,23 @@ const matchPath = (
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }
-  let typeConstrainedRoute = route
+  let typeMatchingRoute = route
 
-  // Map all params from the route to their type constraint regex to create a
-  // "type-constrained route" regex
+  // Map all params from the route to their type `match` regexp to create a
+  // "type-matching route" regexp
   for (const [_name, type, match] of routeParams) {
-    // `undefined` constraint if `type` is not supported
-    const constraint =
-      allParamTypes[type as SupportedRouterParamTypes]?.constraint
+    // `undefined` matcher if `type` is not supported
+    const matcher = allParamTypes[type as SupportedRouterParamTypes]?.match
 
-    // Get the regex as a string, or default regex if no constraint
-    const typeRegex = constraint?.source || '[^/]+'
+    // Get the regex as a string, or default regexp if `match` is not specified
+    const typeRegexp = matcher?.source || '[^/]+'
 
-    typeConstrainedRoute = typeConstrainedRoute.replace(match, `(${typeRegex})`)
+    typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
   }
 
   // Does the `pathname` match the route?
   const matches = [
-    ...pathname.matchAll(new RegExp(`^${typeConstrainedRoute}$`, 'g')),
+    ...pathname.matchAll(new RegExp(`^${typeMatchingRoute}$`, 'g')),
   ]
 
   if (matches.length === 0) {
@@ -135,8 +134,8 @@ const matchPath = (
       const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
 
       let transformedValue: string | unknown = value
-      if (typeof typeInfo?.transform === 'function') {
-        transformedValue = typeInfo.transform(value)
+      if (typeof typeInfo?.parse === 'function') {
+        transformedValue = typeInfo.parse(value)
       }
 
       return {
@@ -220,43 +219,36 @@ const validatePath = (path: string) => {
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
  *   => '/tags/code?extra=foo
  */
-const replaceParams = (path: string, args: Record<string, unknown> = {}) => {
-  // Split the path apart and replace named parameters with those sent in,
-  // then join it back together.
-  const parts = path.split('/')
-  let newPath = parts
-    .map((part) => {
-      if (part[0] === '{' && part[part.length - 1] === '}') {
-        const paramSpec = part.substr(1, part.length - 2)
-        const paramName = paramSpec.split(':')[0]
-        const arg = args[paramName]
+const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
+  const params = paramsForRoute(route)
+  let path = route
 
-        // The use of hasOwnProperty here is to check if the args object has
-        // the property at all, no matter what value it has (even `undefined`).
-        if (Object.prototype.hasOwnProperty.call(args, paramName)) {
-          delete args[paramName]
+  // Replace all params in the route with their values
+  params.forEach((param) => {
+    const [name, _type, match] = param
+    const value = args[name]
+    if (value !== undefined) {
+      path = path.replace(match, value as string)
+    } else {
+      throw new Error(`Missing parameter '${name}' for route '${route}'.`)
+    }
+  })
 
-          // Return arg as a string (needed to handle `undefined`)
-          return '' + arg
-        }
-      }
-
-      return part
-    })
-    .join('/')
+  const paramNames = params.map((param) => param[0])
+  const extraArgKeys = Object.keys(args).filter((x) => !paramNames.includes(x))
 
   // Prepare any unnamed params to be be appended as search params.
   const queryParams: string[] = []
-  Object.keys(args).forEach((key) => {
+  extraArgKeys.forEach((key) => {
     queryParams.push(`${key}=${args[key]}`)
   })
 
   // Append any unnamed params as search params.
   if (queryParams.length) {
-    newPath += `?${queryParams.join('&')}`
+    path += `?${queryParams.join('&')}`
   }
 
-  return newPath
+  return path
 }
 
 function isReactElement(node: ReactNode): node is ReactElement {
