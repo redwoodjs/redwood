@@ -53,7 +53,9 @@ export interface CreateCellProps<CellProps> {
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   isEmpty?: (
     response: DataObject,
-    isResponseEmpty: (data: DataObject) => boolean
+    options: {
+      isDataEmpty: (data: DataObject) => boolean
+    }
   ) => boolean
   afterQuery?: (data: DataObject) => DataObject
   Loading?: React.FC<CellLoadingProps & Partial<CellProps>>
@@ -111,7 +113,7 @@ const dataField = (data: DataObject) => {
   return data[Object.keys(data)[0]]
 }
 
-const isResponseEmpty = (data: DataObject) => {
+const isDataEmpty = (data: DataObject) => {
   return isDataNull(data) || isDataEmptyArray(data)
 }
 
@@ -122,7 +124,7 @@ export function createCell<CellProps = any>({
     notifyOnNetworkStatusChange: true,
   }),
   QUERY,
-  isEmpty = isResponseEmpty,
+  isEmpty = isDataEmpty,
   afterQuery = (data) => ({ ...data }),
   Loading = () => <>Loading...</>,
   Failure,
@@ -161,10 +163,12 @@ export function createCell<CellProps = any>({
           } else if (data) {
             if (
               typeof Empty !== 'undefined' &&
-              isEmpty(data, isResponseEmpty)
+              isEmpty(data, { isDataEmpty })
             ) {
               return (
-                <Empty {...{ updating: loading, ...queryRest, ...props }} />
+                <Empty
+                  {...{ ...data, updating: loading, ...queryRest, ...props }}
+                />
               )
             } else {
               return (
