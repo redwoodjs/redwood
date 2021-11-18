@@ -9,6 +9,7 @@ jest.mock('@redwoodjs/internal', () => {
         base: BASE_PATH,
         api: {
           db: BASE_PATH, // this folder
+          dbSchema: path.join(BASE_PATH, 'schema.prisma'),
         },
       }
     },
