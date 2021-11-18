@@ -4,15 +4,13 @@ import path from 'path'
 import type { TransformOptions } from '@babel/core'
 import * as babel from '@babel/core'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore Not inside tsconfig rootdir
-import pkgJson from '../../../package.json'
 import { getPaths } from '../../paths'
 
 import {
   registerBabel,
   RegisterHookOptions,
   CORE_JS_VERSION,
+  RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
 } from './common'
 
@@ -28,7 +26,7 @@ export const getApiSideBabelPresets = (
 ) => {
   return [
     '@babel/preset-typescript',
-    // Preset-env is required for jest
+    // Preset-env is required when we are not doing the transpilation with esbuild
     presetEnv && [
       '@babel/preset-env',
       {
@@ -58,23 +56,49 @@ export const getApiSideBabelPlugins = () => {
   // a custom "name" is supplied so that user's do not accidently overwrite
   // Redwood's own plugins when they specify their own.
 
-  const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
-    .split('.')
-    .splice(0, 2)
-    .join('.') // Gives '3.16' instead of '3.16.12'
+  // const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
+  //   .split('.')
+  //   .splice(0, 2)
+  //   .join('.') // Gives '3.16' instead of '3.16.12'
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
     ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
+    // [
+    //   'babel-plugin-polyfill-corejs3',
+    //   {
+    //     method: 'usage-global',
+    //     corejs: corejsMajorMinorVersion,
+    //     proposals: true, // Bug: https://github.com/zloirock/core-js/issues/978#issuecomment-904839852
+    //     targets: { node: TARGETS_NODE }, // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
+    //   },
+    //   'rwjs-babel-polyfill',
+    // ],
+
+    /**
+     *  Uses modular polyfills from @babel/runtime-corejs3 but means
+     *  @babel/runtime-corejs3 MUST be included as a dependency (esp on the api side)
+     *
+     *  Before: import "core-js/modules/esnext.string.replace-all.js"
+     *  which pollutes the global scope
+     *  After: import _replaceAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/replace-all"
+     *  See packages/internal/src/__tests__/build_api.test.ts for examples
+     *
+     *  its important that we have @babel/runtime-corejs3 as a RUNTIME dependency on rwjs/api
+     *  See table on https://babeljs.io/docs/en/babel-plugin-transform-runtime#corejs
+     *
+     */
     [
-      'babel-plugin-polyfill-corejs3',
+      '@babel/plugin-transform-runtime',
       {
-        method: 'usage-global',
-        corejs: corejsMajorMinorVersion,
-        proposals: true, // Bug: https://github.com/zloirock/core-js/issues/978#issuecomment-904839852
-        targets: { node: 12 }, // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
+        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
+        // Setting the version here also requires `@babel/runtime-corejs3`
+        corejs: { version: 3, proposals: true },
+        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
+        // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
+        // Specifying the version can result in a smaller bundle size.
+        version: RUNTIME_CORE_JS_VERSION,
       },
-      'rwjs-babel-polyfill',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,

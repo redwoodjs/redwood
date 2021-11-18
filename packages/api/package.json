@@ -10,8 +10,8 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@babel/runtime-corejs3": "7.15.4",
     "@prisma/client": "3.3.0",
-    "core-js": "3.18.3",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
