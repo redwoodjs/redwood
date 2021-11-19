@@ -44,6 +44,14 @@ export type GraphQLClientConfigProp = Omit<
   /**
    * Configuration for the terminating `HttpLink`.
    * See https://www.apollographql.com/docs/react/api/link/apollo-link-http/#httplink-constructor-options.
+   *
+   * For example, you can use this prop to set the credentials policy so that cookies can be sent to other domains:
+   *
+   * ```js
+   * <RedwoodApolloProvider graphQLClientConfig={{
+   *   httpLinkConfig: { credentials: 'include' }
+   * }}>
+   * ```
    */
   httpLinkConfig?: apolloClient.HttpOptions
   /**
