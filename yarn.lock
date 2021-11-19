@@ -4071,13 +4071,13 @@ __metadata:
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
     "@babel/cli": 7.15.7
+    "@babel/runtime-corejs3": 7.15.4
     "@prisma/client": 3.3.0
     "@redwoodjs/auth": 0.38.3
     "@types/crypto-js": 4.0.2
     "@types/jsonwebtoken": 8.5.5
     "@types/md5": 2.3.1
     aws-lambda: 1.0.6
-    core-js: 3.18.3
     crypto-js: 4.1.1
     jest: 27.3.1
     jsonwebtoken: 8.5.1
@@ -4140,6 +4140,7 @@ __metadata:
     dotenv-defaults: 3.0.0
     envinfo: 7.8.1
     execa: 5.1.1
+    fast-glob: 3.2.7
     fs-extra: 10.0.0
     humanize-string: 2.1.0
     jest: 27.3.1
@@ -4263,6 +4264,7 @@ __metadata:
     "@babel/core": 7.15.8
     "@babel/eslint-parser": 7.15.8
     "@babel/eslint-plugin": 7.14.5
+    "@redwoodjs/internal": 0.38.3
     "@typescript-eslint/eslint-plugin": 5.1.0
     "@typescript-eslint/parser": 5.1.0
     eslint: 7.32.0

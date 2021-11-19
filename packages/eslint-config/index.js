@@ -1,13 +1,47 @@
 // This is the ESLint configuation used by Redwood projects.
-const { getConfig } = require('@redwoodjs/internal')
+// Shared eslint config (projects and framework) is located in ./shared.js
+// Framework main config is in monorepo root ./.eslintrc.js
+
+const {
+  getConfig,
+  getCommonPlugins,
+  getWebSideDefaultBabelConfig,
+  getApiSideDefaultBabelConfig,
+} = require('@redwoodjs/internal')
 
 const config = getConfig()
+
+const getProjectBabelOptions = () => {
+  // We cant nest the web overrides inside the overrides block
+  // So we just take it out and put it as a separate item
+  // Ignoring ovverrides, as I don't think it has any impact on linting
+  const { overrides: _overrides, ...otherWebConfig } =
+    getWebSideDefaultBabelConfig()
+
+  return {
+    plugins: getCommonPlugins(),
+    overrides: [
+      {
+        test: ['./api/', './scripts/'],
+        ...getApiSideDefaultBabelConfig(),
+      },
+      {
+        test: ['./web/'],
+        ...otherWebConfig,
+      },
+    ],
+  }
+}
 
 module.exports = {
   extends: [
     './shared.js',
     config.web.a11y && 'plugin:jsx-a11y/recommended',
   ].filter(Boolean),
+  parserOptions: {
+    requireConfigFile: false,
+    babelOptions: getProjectBabelOptions(),
+  },
   overrides: [
     {
       files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
