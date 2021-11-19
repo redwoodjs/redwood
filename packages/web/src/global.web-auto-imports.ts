@@ -12,6 +12,7 @@ declare global {
   const gql: typeof _gql
 
   interface Window {
+    /** URL or absolute path to the DbAuth serverless function */
     RWJS_API_DBAUTH_URL: string
     /** URL or absolute path to the GraphQL serverless function */
     RWJS_API_GRAPHQL_URL: string
