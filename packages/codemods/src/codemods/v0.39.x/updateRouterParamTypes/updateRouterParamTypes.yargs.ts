@@ -3,9 +3,8 @@ import path from 'path'
 
 import task from 'tasuku'
 
-import isTSProject from 'src/lib/isTSProject'
-
 import getRWPaths from '../../../lib/getRWPaths'
+import isTSProject from '../../../lib/isTSProject'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-router-paramTypes'
