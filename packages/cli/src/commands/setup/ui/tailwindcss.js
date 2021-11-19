@@ -40,7 +40,7 @@ const tailwindImportsExist = (indexCSS) =>
 
 const tailwindImportsAndNotes = [
   '/**',
-  ' * START --- TAILWINDCSS SETUP EDIT',
+  ' * START --- SETUP TAILWINDCSS EDIT',
   ' *',
   ' * `yarn rw setup ui tailwindcss` placed these imports here',
   " * to inject Tailwind's styles into your CSS.",
@@ -48,7 +48,7 @@ const tailwindImportsAndNotes = [
   ' */',
   ...tailwindImports,
   '/**',
-  ' * END --- TAILWINDCSS SETUP EDIT',
+  ' * END --- SETUP TAILWINDCSS EDIT',
   ' */\n',
 ]
 
