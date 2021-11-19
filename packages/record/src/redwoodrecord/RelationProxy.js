@@ -16,9 +16,9 @@ export default class RelationProxy {
     for (const [name, options] of Object.entries(hasMany)) {
       // Property already defined from a previous usage, don't try to define again
       // eslint-disable-next-line
-      // if (record.hasOwnProperty(name)) {
-      //   continue
-      // }
+      if (record.hasOwnProperty(name)) {
+        continue
+      }
 
       const model = record.constructor.requiredModels.find((requiredModel) => {
         return requiredModel.name === options.modelName
