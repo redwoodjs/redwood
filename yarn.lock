@@ -4207,10 +4207,8 @@ __metadata:
     yargs: 16.2.0
   bin:
     redwood: ./dist/index.js
-    redwood-tools: ./dist/redwood-tools.js
     rw: ./dist/index.js
     rwfw: ./dist/rwfw.js
-    rwt: ./dist/redwood-tools.js
   languageName: unknown
   linkType: soft
 
