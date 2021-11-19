@@ -10,7 +10,7 @@ import {
 import { checkSetupStatus, wrapWithChakraProvider } from './tasks/setup-chakra'
 
 export const command = 'chakra-ui'
-export const description = 'Setup Chakra UI'
+export const description = 'Set up Chakra UI'
 
 export function builder(yargs) {
   yargs.option('force', {
@@ -63,7 +63,7 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Configure Storybook...',
-      skip: () => checkStorybookStatus({ force }) === 'done',
+      // skip: () => checkStorybookStatus({ force }) === 'done',
       task: async () => configureStorybook(),
     },
   ])

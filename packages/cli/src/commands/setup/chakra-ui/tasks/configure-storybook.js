@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 import { getPaths } from '../../../../lib'
 
@@ -8,7 +9,7 @@ import { getPaths } from '../../../../lib'
  * @returns {"todo" | "done"}
  */
 export function checkStorybookStatus({ force }) {
-  const { storybookPreviewConfig } = getPaths().web
+  const { storybookPreviewConfig } = getPaths().web // 'web/config/storybook.config.js'
 
   if (fs.existsSync(storybookPreviewConfig)) {
     if (force) {
@@ -35,5 +36,5 @@ export function configureStorybook() {
     'utf-8'
   )
 
-  fs.writeFileSync(storybookPreviewConfig, storybookPreview)
+  fs.outputFileSync(storybookPreviewConfig, storybookPreview)
 }
