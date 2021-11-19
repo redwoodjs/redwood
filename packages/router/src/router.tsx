@@ -192,7 +192,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     }
   })
 
-  if (shouldShowSplash) {
+  if (shouldShowSplash && typeof SplashPage !== 'undefined') {
     return (
       <SplashPage
         hasGeneratedRoutes={hasGeneratedRoutes}
