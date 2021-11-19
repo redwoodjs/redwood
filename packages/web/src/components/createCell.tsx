@@ -3,6 +3,8 @@ import type { ComponentProps, JSXElementConstructor } from 'react'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
+import { useAuth } from '@redwoodjs/auth'
+
 import { useQuery } from './GraphQLHooksProvider'
 
 interface QueryProps {
@@ -134,8 +136,15 @@ export function createCell<CellProps = any>({
   }
 
   return (props) => {
+    const { loading: authLoading, type } = useAuth()
     // destructuring to not pass children to beforeQuery
     const { children: _children, ...variables } = props
+
+    // If auth is defined, don't query for anything until auth is resolved. Otherwise
+    // we would trigger a double render because state updates.
+    if (authLoading && type) {
+      return <Loading {...props} />
+    }
 
     return (
       <Query

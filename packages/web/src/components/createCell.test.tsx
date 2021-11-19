@@ -5,8 +5,31 @@
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
+import { AuthContext } from '@redwoodjs/auth/dist/AuthProvider'
+import { SupportedAuthClients } from '@redwoodjs/auth/src/authClients'
+
 import { createCell } from './createCell'
 import { GraphQLHooksProvider } from './GraphQLHooksProvider'
+
+const mockAuth = {
+  loading: false,
+  isAuthenticated: false,
+  userMetadata: null,
+  currentUser: null,
+  client: () => {},
+  type: 'dbAuth' as SupportedAuthClients,
+  hasError: false,
+  logIn: async () => {},
+  logOut: async () => {},
+  signUp: async () => {},
+  getToken: async () => '',
+  getCurrentUser: () => null,
+  hasRole: () => true,
+  reauthenticate: async () => {},
+  forgotPassword: async () => {},
+  resetPassword: async () => {},
+  validateResetToken: async () => {},
+}
 
 describe('createCell', () => {
   test('Renders a static Success component', async () => {
@@ -19,9 +42,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ data: {} })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Great success!$/)
   })
@@ -45,13 +70,34 @@ describe('createCell', () => {
     }
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
 
     screen.getByText(/^What's the meaning of life\?$/)
     screen.getByText(/^42$/)
+  })
+
+  test('Renders Loading if the auth is loading', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Success: () => <>Great success!</>,
+    })
+
+    const myUseQueryHook = () => ({ loading: true })
+
+    render(
+      <AuthContext.Provider value={{ loading: true, ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
+    )
+    screen.getByText(/^Loading...$/)
   })
 
   test('Renders default Loading when there is no data', async () => {
@@ -64,9 +110,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ loading: true })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Loading...$/)
   })
@@ -82,9 +130,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ loading: true })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Fetching answer...$/)
   })
@@ -100,9 +150,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ loading: true, data: {} })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Great success!$/)
   })
@@ -118,9 +170,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ loading: true, data: { answer: null } })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^No one knows$/)
   })
@@ -136,9 +190,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ loading: true, data: { answers: [] } })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^No one knows$/)
   })
@@ -153,9 +209,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ loading: true, data: { answer: null } })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Empty success$/)
   })
@@ -170,11 +228,13 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ data: {} })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell>
-          <div>🦆</div>
-        </TestCell>
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell>
+            <div>🦆</div>
+          </TestCell>
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Look at my beautiful$/)
     screen.getByText(/^🦆$/)
@@ -196,9 +256,11 @@ describe('createCell', () => {
     }
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell name="Bob" />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell name="Bob" />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
 
     screen.getByText(/^Hello Bob!$/)
@@ -228,10 +290,12 @@ describe('createCell', () => {
     }
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell character="BEAST" />
-        <TestCell character="HERO" />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell character="BEAST" />
+          <TestCell character="HERO" />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
 
     screen.getByText(/^Call me Boogeyman$/)
@@ -250,9 +314,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ error: true })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^Sad face :\($/)
   })
@@ -269,9 +335,11 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ error: { msg: 'System malfunction' } })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell />
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell />
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^{"msg":"System malfunction"}$/)
   })
@@ -286,11 +354,13 @@ describe('createCell', () => {
     const myUseQueryHook = () => ({ error: {} })
 
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-        <TestCell>
-          <div>Child</div>
-        </TestCell>
-      </GraphQLHooksProvider>
+      <AuthContext.Provider value={{ ...mockAuth }}>
+        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+          <TestCell>
+            <div>Child</div>
+          </TestCell>
+        </GraphQLHooksProvider>
+      </AuthContext.Provider>
     )
     screen.getByText(/^I'm a failure$/)
     screen.getByText(/^Child$/)
@@ -313,9 +383,11 @@ describe('createCell', () => {
     let error
     try {
       render(
-        <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
-          <TestCell />
-        </GraphQLHooksProvider>
+        <AuthContext.Provider value={{ ...mockAuth }}>
+          <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+            <TestCell />
+          </GraphQLHooksProvider>
+        </AuthContext.Provider>
       )
     } catch (e) {
       error = e
