@@ -43,7 +43,7 @@ export default function transform(file: FileInfo, api: API) {
           paramTypeValue?.type // paramTypeValue could be directly embedded as object or referenced as a variable
         ) {
           case 'Identifier': {
-            // Search the Routes file for vairable declaration
+            // Search the Routes file for variable declaration
             const variableDefinitions = ast.find(j.VariableDeclarator, {
               id: { name: paramTypeValue.name },
             })
