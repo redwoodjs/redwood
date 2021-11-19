@@ -291,7 +291,7 @@ describe('createCell', () => {
 
     const myUseQueryHook = () => ({
       error: { msg: 'System malfunction' },
-      errorCode: 'INTERNAL_SERVER_ERROR',
+      errorCode: 'SIMON_SAYS_NO',
     })
 
     render(
@@ -299,9 +299,7 @@ describe('createCell', () => {
         <TestCell />
       </GraphQLHooksProvider>
     )
-    screen.getByText(
-      /^{"msg":"System malfunction"},code:INTERNAL_SERVER_ERROR$/
-    )
+    screen.getByText(/^{"msg":"System malfunction"},code:SIMON_SAYS_NO$/)
   })
 
   test('Passes children to Failure', async () => {
