@@ -63,7 +63,7 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Configure Storybook...',
-      // skip: () => checkStorybookStatus({ force }) === 'done',
+      skip: () => checkStorybookStatus({ force }) === 'done',
       task: async () => configureStorybook(),
     },
   ])
