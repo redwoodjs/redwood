@@ -21,8 +21,13 @@
 import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'
 
+import datamodel from './datamodel.json'
+
 class User extends RedwoodRecord {}
 class Post extends RedwoodRecord {}
+User.schema = datamodel
+Post.schema = datamodel
+
 // Reflection doesn't require defining related model records
 // User.requiredModels = [Post]
 // Post.requiredModels = [User]
