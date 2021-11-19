@@ -145,15 +145,20 @@ export default class Core {
 
   // Saves the attributes to the database
   async save(options = {}) {
-    const { id, ...saveAttributes } = this.attributes
+    const saveAttributes = JSON.parse(JSON.stringify(this.attributes))
 
     try {
       let newAttributes
 
-      if (id) {
+      if (this.attributes[this.constructor.primaryKey]) {
         // update existing record
+        delete saveAttributes[this.constructor.primaryKey]
+
         newAttributes = await this.constructor.accessor.update({
-          where: { [this.constructor.primaryKey]: id },
+          where: {
+            [this.constructor.primaryKey]:
+              this.attributes[this.constructor.primaryKey],
+          },
           data: saveAttributes,
         })
       } else {
@@ -239,7 +244,7 @@ export default class Core {
       }
     } else {
       if (shouldThrow) {
-        throw error
+        throw new Errors.RedwoodRecordUncaughtError(error.message)
       }
     }
   }

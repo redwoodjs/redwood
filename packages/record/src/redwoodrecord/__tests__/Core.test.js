@@ -22,6 +22,7 @@ User.requiredModels = [Post]
 
 afterEach(() => {
   db.user.mockClear()
+  User.primaryKey = 'id'
 })
 
 describe('static methods', () => {
@@ -257,7 +258,7 @@ describe('User subclass', () => {
         expect(await user.destroy()).toEqual(false)
       })
 
-      it('throws an error if given the option', async () => {
+      it('throws an error if record not found', async () => {
         db.user.delete = jest.fn(() => {
           throw new Error('Record to delete does not exist')
         })
@@ -364,6 +365,24 @@ describe('User subclass', () => {
             data: attributes,
           })
           expect(result.email).toEqual('updated@redwoodjs.com')
+        })
+
+        it('allows different primary key', async () => {
+          User.primaryKey = 'userId'
+          const attributes = {
+            email: 'updated@redwoodjs.com',
+            name: 'Peter Pistorius',
+            hashedPassword: 'abc',
+            salt: 'abc',
+          }
+          db.user.update = jest.fn(() => attributes)
+          const user = await User.build({ userId: 1, ...attributes })
+          await user.save()
+
+          expect(db.user.update).toHaveBeenCalledWith({
+            where: { userId: 1 },
+            data: attributes,
+          })
         })
 
         it('returns false if update fails', async () => {
