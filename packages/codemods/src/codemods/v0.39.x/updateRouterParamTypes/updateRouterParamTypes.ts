@@ -4,7 +4,37 @@ import type {
   JSXExpressionContainer,
   ObjectExpression,
   Collection,
+  Identifier,
 } from 'jscodeshift'
+
+// Here's an example of a Routes file with router param type that needs to be updated:
+
+/*
+const slug = {
+  constraint: /\w+-\w+/,
+  transform: (param) => param.split('-'),
+}
+
+const constraint = /\w+-\w+/
+const transform = (param) => param.split('.')
+
+const Routes = () => {
+  return (
+    <Router
+      pageLoadingDelay={350}
+      paramTypes={{
+        slug,
+        embeddedProperties: { constraint: constraint, transform },
+        embedded: {
+          constraint: /\w+.\w+/,
+          transform: (param) => param.split('.'),
+        },
+      }}
+    >
+    </Router>
+  )
+}
+*/
 
 export default function transform(file: FileInfo, api: API) {
   const newPropertyName = {
@@ -12,18 +42,97 @@ export default function transform(file: FileInfo, api: API) {
     transform: 'parse',
   }
 
-  const mapToNewSyntax = (
-    allParamTypeProperties: Collection<ObjectExpression>
-  ) => {
-    allParamTypeProperties.forEach((paramTypeProperty) =>
-      paramTypeProperty.value.properties.forEach((property: any) => {
-        property.key.name =
-          newPropertyName[property.key.name as 'constraint' | 'transform']
-      })
-    )
-  }
   const j = api.jscodeshift
   const ast = j(file.source)
+
+  const renameParamTypeKey = (paramTypeKey: any) => {
+    // paramTypeKey here could be any one of following marked as 👉
+    /*
+    const slug = {
+      👉 constraint: /\w+-\w+/,
+      👉 transform: (param) => param.split('-'),
+    }
+
+    const constraint = /\w+-\w+/
+    const transform = (param) => param.split('.')
+
+    const Routes = () => {
+      return (
+        <Router
+          pageLoadingDelay={350}
+          paramTypes={{
+            slug,
+            embeddedProperties: { 👉 constraint: constraint, 👉 transform },
+            embedded: {
+              👉 constraint: /\w+.\w+/,
+              👉 transform: (param) => param.split('.'),
+            },
+          }}
+        >
+        </Router>
+      )
+    }
+    */
+
+    if (paramTypeKey.value.type === 'Identifier') {
+      // To force the value to be explicit. {{ transform }} -> {{ parse: transform }}
+      paramTypeKey.value = j.identifier.from(paramTypeKey.value)
+    }
+
+    paramTypeKey.key.name =
+      newPropertyName[paramTypeKey.key.name as keyof typeof newPropertyName]
+  }
+
+  const mapToNewSyntax = (
+    allParamTypeProperties: Collection<ObjectExpression | Identifier>
+  ) => {
+    // allParamTypeProperties here is array of following marked as 👉
+    /*
+        <Router
+          pageLoadingDelay={350}
+          paramTypes={{
+            👉 slug,
+            👉 embeddedProperties: { constraint: constraint, transform },
+            👉 embedded: {
+                constraint: /\w+.\w+/,
+                transform: (param) => param.split('.'),
+            },
+          }}
+        >
+    */
+
+    allParamTypeProperties.forEach((paramTypeProperty) => {
+      // paramTypeProperty.value could be either ObjectExpression or Identifier
+      switch (paramTypeProperty.value.type) {
+        // Identifier could be for {{ slug }} in examples above. Or something like {{slug: slug}}
+        case 'Identifier': {
+          // Even though we have the object but the key is referred as variable
+          const paramTypeValueVar = paramTypeProperty.value.name
+          const paramTypeValueDef = ast.find(j.VariableDeclarator, {
+            id: { name: paramTypeValueVar },
+          })
+
+          paramTypeValueDef.forEach((valueDefNode) => {
+            if (valueDefNode?.value?.init?.type !== 'ObjectExpression') {
+              // Value must be object but doesn't seem to be case here.
+              return
+            }
+            const valueDefInit = valueDefNode.value.init
+            valueDefInit.properties.forEach((valueDefInitProperty: any) => {
+              renameParamTypeKey(valueDefInitProperty)
+            })
+          })
+          break
+        }
+        case 'ObjectExpression':
+          // Value is an object
+          paramTypeProperty.value.properties.forEach((property: any) => {
+            renameParamTypeKey(property)
+          })
+          break
+      }
+    })
+  }
 
   ast
     .find(j.JSXElement, { openingElement: { name: { name: 'Router' } } })
@@ -39,9 +148,22 @@ export default function transform(file: FileInfo, api: API) {
           prop?.value?.value as JSXExpressionContainer
         )?.expression
 
-        switch (
-          paramTypeValue?.type // paramTypeValue could be directly embedded as object or referenced as a variable
-        ) {
+        // paramTypeValue is marked as 👉 . It could be even referenced as variable.
+        /*
+        <Router
+          pageLoadingDelay={350}
+          paramTypes={👉 {
+            slug,
+            embeddedProperties: { constraint: constraint, transform },
+            embedded: {
+              constraint: /\w+.\w+/,
+              transform: (param) => param.split('.'),
+            },
+          }}
+        >
+        */
+
+        switch (paramTypeValue?.type) {
           case 'Identifier': {
             // Search the Routes file for variable declaration
             const variableDefinitions = ast.find(j.VariableDeclarator, {

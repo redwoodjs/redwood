@@ -6,4 +6,8 @@ describe('Update Router paramTypes', () => {
   test('Transforms embedded object paramTypes', () => {
     matchTransformSnapshot('updateRouterParamTypes', 'embedded')
   })
+
+  test('Transforms embedded object paramTypes', () => {
+    matchTransformSnapshot('updateRouterParamTypes', 'partialEmbeds')
+  })
 })
