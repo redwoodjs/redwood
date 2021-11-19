@@ -1,6 +1,6 @@
 // This is the ESLint configuation used by Redwood projects.
-// Shared eslint config is located in ./shared, and the framework
-// is configured using framework.js at the
+// Shared eslint config (projects and framework) is located in ./shared.js
+// Framework main config is in monorepo root ./.eslintrc.js
 
 const {
   getConfig,
