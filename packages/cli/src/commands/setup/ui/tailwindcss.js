@@ -42,7 +42,7 @@ const tailwindImportsAndNotes = [
   '/**',
   ' * START --- TAILWIND GENERATOR EDIT',
   ' *',
-  ' * `yarn rw setup tailwind` placed these imports here',
+  ' * `yarn rw setup ui tailwindcss` placed these imports here',
   " * to inject Tailwind's styles into your CSS.",
   ' * For more information, see: https://tailwindcss.com/docs/installation#add-tailwind-to-your-css',
   ' */',
