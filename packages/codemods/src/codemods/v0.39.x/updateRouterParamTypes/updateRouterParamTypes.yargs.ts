@@ -9,7 +9,7 @@ import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-router-paramTypes'
-export const description = '(v0.38->v0.39) Updates @redwoodjs/router props'
+export const description = '(v0.38->v0.39) Updates @redwoodjs/router paramTypes'
 
 export const handler = () => {
   task(
