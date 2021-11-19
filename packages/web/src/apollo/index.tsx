@@ -93,7 +93,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
         notifyOnNetworkStatusChange: true,
       },
     },
-    ...forwardConfig,
     link: ApolloLink.from([withToken, authMiddleware.concat(httpLink)]),
   })
 
