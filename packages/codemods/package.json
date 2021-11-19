@@ -13,7 +13,6 @@
     "@babel/plugin-transform-typescript": "7.15.8",
     "core-js": "3.18.3",
     "deepmerge": "4.2.2",
-    "execa": "5.1.1",
     "fast-glob": "3.2.7",
     "findup-sync": "4.0.0",
     "jest": "27.3.1",
@@ -40,7 +39,7 @@
   },
   "devDependencies": {
     "@types/babel__core": "7",
-    "@types/jscodeshift": "0.11.2",
+    "@types/jscodeshift": "0.11.3",
     "@types/prettier": "2",
     "tempy": "1.0.1"
   }

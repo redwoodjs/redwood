@@ -4222,11 +4222,10 @@ __metadata:
     "@babel/core": 7.15.8
     "@babel/plugin-transform-typescript": 7.15.8
     "@types/babel__core": 7
-    "@types/jscodeshift": 0.11.2
+    "@types/jscodeshift": 0.11.3
     "@types/prettier": 2
     core-js: 3.18.3
     deepmerge: 4.2.2
-    execa: 5.1.1
     fast-glob: 3.2.7
     findup-sync: 4.0.0
     jest: 27.3.1
@@ -6072,13 +6071,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:0.11.2":
-  version: 0.11.2
-  resolution: "@types/jscodeshift@npm:0.11.2"
+"@types/jscodeshift@npm:0.11.3":
+  version: 0.11.3
+  resolution: "@types/jscodeshift@npm:0.11.3"
   dependencies:
     ast-types: ^0.14.1
     recast: ^0.20.3
-  checksum: b821b3437711f42789f24a01e0f8ec05a3b57380620147a32de781d849642438a7186b87a5de5b82902b526348c6910847fa972606f281de7f54d6a577133a68
+  checksum: 52ef08bc6145932ea74f1a3781fc25f9c2f0897515b8198a1907547409e50e1373e95f86300d97bf356a99bc4148a9aaa818e5a591407d290a4d91817405fead
   languageName: node
   linkType: hard
 
