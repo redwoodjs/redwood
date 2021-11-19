@@ -124,25 +124,66 @@ test('api prebuild finds babel.config.js', () => {
   expect(p).toEqual('api/babel.config.js')
 })
 
-test('api prebuild uses babel config', () => {
+test('api prebuild uses babel config only from the api side root', () => {
   const p = prebuiltFiles.filter((p) => p.endsWith('dog.js')).pop()
   const code = fs.readFileSync(p, 'utf-8')
-  const firstLine = stripInlineSourceMap(code).split('\n')[0]
-  expect(firstLine).toMatchInlineSnapshot(`"import dog from \\"dog-bless\\";"`)
+  expect(code).toContain(`import dog from "dog-bless";`)
+
+  // Should ignore root babel config
+  expect(code).not.toContain(`import kitty from "kitty-purr"`)
+})
+
+// Still a bit of a mystery why this plugin isn't transforming gql tags
+test.skip('api prebuild transforms gql with `babel-plugin-graphql-tag`', () => {
+  // babel-plugin-graphql-tag should transpile the "gql" parts of our files,
+  // achieving the following:
+  // 1. removing the `graphql-tag` import
+  // 2. convert the gql syntax into graphql's ast.
+  //
+  // https://www.npmjs.com/package/babel-plugin-graphql-tag
+  const builtFiles = prebuildApiFiles(findApiFiles())
+  const p = builtFiles
+    .filter((x) => typeof x !== 'undefined')
+    .filter((p) => p.endsWith('todos.sdl.js'))
+    .pop()
+
+  const code = fs.readFileSync(p, 'utf-8')
+  expect(code.includes('import gql from "graphql-tag";')).toEqual(false)
+  expect(code.includes('gql`')).toEqual(false)
 })
 
 test('Pretranspile polyfills unsupported functionality', () => {
   const p = prebuiltFiles.filter((p) => p.endsWith('polyfill.js')).pop()
   const code = fs.readFileSync(p, 'utf-8')
-  const firstLine = stripInlineSourceMap(code).split('\n')[0]
-  expect(firstLine).toMatchInlineSnapshot(
-    `"import \\"core-js/modules/esnext.string.replace-all.js\\";"`
+  expect(code).toContain(
+    'import _replaceAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/replace-all"'
   )
 })
 
-function stripInlineSourceMap(src: string): string {
-  return src
-    .split('\n')
-    .filter((line) => !line.startsWith('//# sourceMappingURL='))
-    .join('\n')
-}
+test('Pretranspile uses corejs3 aliasing', () => {
+  // See https://babeljs.io/docs/en/babel-plugin-transform-runtime#core-js-aliasing
+  // This is because we configure the transform runtime plugin corejs
+
+  const p = prebuiltFiles.filter((p) => p.endsWith('transform.js')).pop()
+  const code = fs.readFileSync(p, 'utf-8')
+
+  // Polyfill for Symbol
+  expect(code).toContain(
+    `import _Symbol from "@babel/runtime-corejs3/core-js/symbol"`
+  )
+
+  // Polyfill for Promise
+  expect(code).toContain(
+    `import _Promise from "@babel/runtime-corejs3/core-js/promise"`
+  )
+
+  // Polyfill for .includes
+  expect(code).toContain(
+    'import _includesInstanceProperty from "@babel/runtime-corejs3/core-js/instance/includes"'
+  )
+
+  // Polyfill for .iterator
+  expect(code).toContain(
+    `import _getIterator from "@babel/runtime-corejs3/core-js/get-iterator"`
+  )
+})
