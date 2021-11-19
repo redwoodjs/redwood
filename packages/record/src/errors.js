@@ -7,6 +7,13 @@ export class RedwoodRecordError extends RedwoodError {
   }
 }
 
+export class RedwoodRecordUncaughtError extends RedwoodError {
+  constructor(message) {
+    super(message)
+    this.name = 'RedwoodRecordUncaughtError'
+  }
+}
+
 export class RedwoodRecordNotFoundError extends RedwoodError {
   constructor(name) {
     super(`${name} record not found`)

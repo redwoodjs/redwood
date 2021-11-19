@@ -267,6 +267,11 @@ export default class Core {
       if (shouldThrow) {
         throw new Errors.RedwoodRecordMissingAttributeError(name)
       }
+    } else {
+      this._onSaveError('base', error.message)
+      if (shouldThrow) {
+        throw new Errors.RedwoodRecordUncaughtError(error.message)
+      }
     }
   }
 }

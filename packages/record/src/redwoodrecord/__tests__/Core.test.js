@@ -88,7 +88,7 @@ describe('instance methods', () => {
 
 // Subclass behavior, needs to be backed by an actual model to work
 
-describe.only('User subclass', () => {
+describe('User subclass', () => {
   describe('static methods', () => {
     describe('accessor', () => {
       it('returns table representation on prisma client', () => {
@@ -171,79 +171,96 @@ describe.only('User subclass', () => {
       })
     })
 
-    xdescribe('findBy', () => {
-      it('returns the first record if no arguments', async (scenario) => {
+    describe('findBy', () => {
+      it('returns the first record if no arguments', async () => {
+        const id = 1
+        db.user.findFirst = jest.fn(() => ({
+          id,
+          email: 'rob@redwoodjs.com',
+        }))
+
         const user = await User.findBy()
 
-        expect(user.id).toEqual(scenario.user.rob.id)
+        expect(db.user.findFirst).toHaveBeenCalledWith({})
+        expect(user.id).toEqual(id)
       })
 
-      it('returns the first record that matches the given attributes', async (scenario) => {
+      it('returns the first record that matches the given attributes', async () => {
+        const id = 1
+        db.user.findFirst = jest.fn(() => ({
+          id,
+          email: 'tom@redwoodjs.com',
+        }))
+
         const user = await User.findBy({ email: 'tom@redwoodjs.com' })
 
-        expect(user.id).toEqual(scenario.user.tom.id)
+        expect(db.user.findFirst).toHaveBeenCalledWith({
+          where: { email: 'tom@redwoodjs.com' },
+        })
+        expect(user.id).toEqual(id)
       })
 
       it('returns null if no records', async () => {
-        await db.$executeRawUnsafe(`DELETE from Post`)
-        await db.$executeRawUnsafe(`DELETE from User`)
+        db.user.findFirst = jest.fn(() => null)
 
         expect(await User.findBy()).toEqual(null)
       })
     })
 
-    xdescribe('first', () => {
-      it('is an alias for findBy', async (scenario) => {
-        expect(await User.first({ email: scenario.user.rob.email })).toEqual(
-          await User.findBy({ email: scenario.user.rob.email })
-        )
+    describe('first', () => {
+      it('is an alias for findBy', async () => {
+        const id = 1
+        db.user.findFirst = jest.fn(() => ({
+          id,
+          email: 'tom@redwoodjs.com',
+        }))
+
+        const userFirst = await User.first()
+        const userFindBy = await User.findBy()
+
+        expect(db.user.findFirst).toHaveBeenCalledTimes(2)
+        expect(db.user.findFirst).toHaveBeenCalledWith({})
+        expect(userFirst).toEqual(userFindBy)
       })
     })
   })
 
-  xdescribe('instance methods', () => {
-    describe('create', () => {
-      it('can create a record', async () => {
-        const user = await User.create({
-          email: `${Math.random()}@redwoodjs.com`,
-          hashedPassword: 'abc',
-          salt: 'abc',
-        })
-
-        expect(user.id).not.toEqual(undefined)
-      })
-    })
-
+  describe('instance methods', () => {
     describe('destroy', () => {
-      it('deletes a record', async (scenario) => {
-        // delete posts ahead of time to avoid foreign key error
-        await db.$executeRawUnsafe(`DELETE from Post`)
+      it('deletes a record', async () => {
+        const data = { id: 1, email: 'tom@redwoodjs.com' }
+        db.user.delete = jest.fn(() => data)
+        const user = User.build(data)
 
-        const user = User.build(scenario.user.tom)
         await user.destroy()
 
-        await expect(User.find(user.id)).rejects.toThrow(
-          Errors.RedwoodRecordNotFoundError
-        )
+        expect(db.user.delete).toHaveBeenCalledWith({
+          where: { id: data.id },
+        })
       })
 
-      it('returns the record that was deleted', async (scenario) => {
-        // delete posts ahead of time to avoid foreign key error
-        await db.$executeRawUnsafe(`DELETE from Post`)
-
-        const user = User.build(scenario.user.tom)
+      it('returns the record that was deleted', async () => {
+        const data = { id: 1, email: 'tom@redwoodjs.com' }
+        db.user.delete = jest.fn(() => data)
+        const user = User.build(data)
         const result = await user.destroy()
 
         expect(result).toEqual(user)
       })
 
       it('returns false if record not found', async () => {
+        db.user.delete = jest.fn(() => {
+          throw new Error('Record to delete does not exist')
+        })
         const user = User.build({ id: 99999999 })
 
         expect(await user.destroy()).toEqual(false)
       })
 
       it('throws an error if given the option', async () => {
+        db.user.delete = jest.fn(() => {
+          throw new Error('Record to delete does not exist')
+        })
         const user = User.build({ id: 99999999 })
 
         await expect(user.destroy({ throw: true })).rejects.toThrow(
@@ -253,29 +270,42 @@ describe.only('User subclass', () => {
     })
 
     describe('save', () => {
-      describe('create', () => {
+      describe('create new', () => {
         it('returns true if create is successful', async () => {
-          const email = `${Math.random()}@email.com`
-          const user = await User.build({
-            email,
+          const attributes = {
+            email: 'peter@redwoodjs.com',
+            name: 'Peter Pistorius',
             hashedPassword: 'abc',
             salt: 'abc',
-          })
+          }
+          db.user.create = jest.fn(() => ({ id: 1, ...attributes }))
+          const user = await User.build(attributes)
+
           const result = await user.save()
 
-          expect(result.id).not.toEqual(undefined)
-          expect(result.email).toEqual(email)
+          expect(db.user.create).toHaveBeenCalledWith({ data: attributes })
+          expect(result.id).toEqual(1)
         })
 
         it('returns false if create fails', async () => {
-          const user = await User.build()
+          db.user.create = jest.fn(() => {
+            throw new Error()
+          })
+          const user = await User.build({ email: 'foo@bar.com' })
           const result = await user.save()
 
+          expect(db.user.create).toHaveBeenCalledWith({
+            data: { email: 'foo@bar.com' },
+          })
           expect(result).toEqual(false)
         })
 
-        it('throws error if given the option', async () => {
-          const user = await User.build()
+        it('throws error for missing attribute', async () => {
+          db.user.create = jest.fn(() => {
+            throw new Error('Argument email is missing')
+          })
+          const user = await User.build({})
+
           try {
             await user.save({ throw: true })
           } catch (e) {
@@ -285,28 +315,72 @@ describe.only('User subclass', () => {
           }
           expect.assertions(1)
         })
+
+        it('throws error for null attribute', async () => {
+          db.user.create = jest.fn(() => {
+            throw new Error('Argument email must not be null')
+          })
+          const user = await User.build({ email: null })
+
+          try {
+            await user.save({ throw: true })
+          } catch (e) {
+            expect(e instanceof Errors.RedwoodRecordNullAttributeError).toEqual(
+              true
+            )
+          }
+          expect.assertions(1)
+        })
+
+        it('throws for otherwise uncaught error', async () => {
+          db.user.create = jest.fn(() => {
+            throw new Error('Something bad happened')
+          })
+          const user = await User.build({ email: null })
+
+          try {
+            await user.save({ throw: true })
+          } catch (e) {
+            expect(e instanceof Errors.RedwoodRecordUncaughtError).toEqual(true)
+          }
+          expect.assertions(1)
+        })
       })
 
-      describe('update', () => {
-        it('returns true if update is successful', async (scenario) => {
-          const user = await User.build(scenario.user.rob)
-          user.email = 'updated@redwoodjs.com'
+      describe('update existing', () => {
+        it('returns true if update is successful', async () => {
+          const attributes = {
+            email: 'updated@redwoodjs.com',
+            name: 'Peter Pistorius',
+            hashedPassword: 'abc',
+            salt: 'abc',
+          }
+          db.user.update = jest.fn(() => attributes)
+          const user = await User.build({ id: 1, ...attributes })
           const result = await user.save()
 
+          expect(db.user.update).toHaveBeenCalledWith({
+            where: { id: 1 },
+            data: attributes,
+          })
           expect(result.email).toEqual('updated@redwoodjs.com')
         })
 
-        it('returns false if update fails', async (scenario) => {
-          const user = await User.build(scenario.user.rob)
-          user.id = 999999999
+        it('returns false if update fails', async () => {
+          db.user.update = jest.fn(() => {
+            throw new Error('Record to update not found')
+          })
+          const user = await User.build({ id: 99999999 })
           const result = await user.save()
 
           expect(result).toEqual(false)
         })
 
-        it('throws on failed save if given the option', async (scenario) => {
-          const user = await User.build(scenario.user.rob)
-          user.id = 999999999
+        it('throws if record not found', async () => {
+          db.user.update = jest.fn(() => {
+            throw new Error('Record to update not found')
+          })
+          const user = await User.build({ id: 99999999 })
 
           try {
             await user.save({ throw: true })
@@ -317,9 +391,12 @@ describe.only('User subclass', () => {
           expect.assertions(1)
         })
 
-        it('throws on null required field if given the option', async (scenario) => {
-          const user = await User.build(scenario.user.rob)
-          user.email = null // email is required in schema
+        it('throws on null required field if given the option', async () => {
+          db.user.update = jest.fn(() => {
+            throw new Error('Argument email must not be null')
+          })
+          const user = await User.build({ id: 99999999 })
+          user.email = null
 
           try {
             await user.save({ throw: true })
@@ -334,12 +411,22 @@ describe.only('User subclass', () => {
       })
     })
 
-    xdescribe('update', () => {
-      it('updates an existing record with new data', async (scenario) => {
-        const user = await User.build(scenario.user.rob)
+    describe('update', () => {
+      it('updates an existing record with new data', async () => {
+        const attributes = {
+          email: 'updated@redwoodjs.com',
+          name: 'Robert Cameron',
+          hashedPassword: 'abc',
+          salt: 'abc',
+        }
+        db.user.update = jest.fn(() => attributes)
+        const user = await User.build({ id: 1, ...attributes })
         const result = await user.update({ name: 'Robert Cameron' })
 
-        expect(result instanceof User).toEqual(true)
+        expect(db.user.update).toHaveBeenCalledWith({
+          where: { id: 1 },
+          data: attributes,
+        })
         expect(user.name).toEqual('Robert Cameron')
       })
     })
