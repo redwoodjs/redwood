@@ -8,6 +8,7 @@ import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
+import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -34,6 +35,7 @@ export const builder = (yargs) => {
       type: 'boolean',
       description: 'Reload on changes to node_modules',
     })
+    .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',

@@ -174,7 +174,7 @@ async function webTasks(outputPath, { link, verbose }) {
         title: 'Adding Tailwind',
         task: () => {
           return execa(
-            'yarn rw setup tailwind',
+            'yarn rw setup ui tailwindcss',
             ['--force', link && '--no-install'].filter(Boolean),
             execaOptions
           )
