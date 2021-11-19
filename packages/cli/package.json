@@ -5,10 +5,8 @@
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
-    "redwood-tools": "./dist/redwood-tools.js",
     "rw": "./dist/index.js",
-    "rwfw": "./dist/rwfw.js",
-    "rwt": "./dist/redwood-tools.js"
+    "rwfw": "./dist/rwfw.js"
   },
   "repository": {
     "type": "git",
@@ -66,7 +64,7 @@
     "prepublishOnly": "yarn build",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
-    "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js dist/rwfw.js",
+    "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "test": "jest src",
     "test:watch": "yarn test --watch"

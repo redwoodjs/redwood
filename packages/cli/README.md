@@ -22,7 +22,6 @@
       - [Adding a Destroyer](#adding-a-destroyer)
     - [Adding a Provider to the Auth Generator](#adding-a-provider-to-the-auth-generator)
     - [dbCommands](#dbcommands)
-    - [redwood-tools](#redwood-tools)
     - [Converting to TypeScript](#converting-to-typescript)
       - [Generators](#generators)
     - [What about...](#what-about)
@@ -96,8 +95,6 @@ export const handler = (argv) => {
   console.log(argv.url)
 }
 ```
-
-To get a good sense of the difference, compare [redwood-tools.js](https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/cli/src/redwood-tools.js#L79-L167) to [dev.js](https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/cli/src/commands/dev.js#L10-L77), or any other command.
 
 ### Overview
 
@@ -600,31 +597,6 @@ Adding or modifying a command here's no different&mdash;there's still a `command
 
 This is because most `dbCommands` are really just running prisma commands, so they really just have to output something like `yarn prisma ...`.
 
-### redwood-tools
-
-[redwood-tools](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/redwood-tools.js) is Redwood's companion CLI development tool.
-You can find a list of its commands in the top-level [contributing](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md) guide. If you're contributing to `redwood-tools`, you're contributing in a way that helps people contribute, which is pretty meta.
-
-As mentioned, redwood-tools uses the "regular" yargs api, which is defined by method-chaining.
-Adding a command here just entails adding another `command` method before the calls to `demandCommand` and `strict` at the end:
-
-```javascript
-// ./src/commands/redwood-tools.js
-
-...
-
-.command(
-  ['hello', 'h'],
-  'Say hi',
-  {},
-  () => console.log('hi!')
-)
-.demandCommand()
-.strict().argv
-```
-
-Contrived example aside, any command you add here should help people contribute to Redwood.
-
 #### Generators
 
 If you're converting a generator, read the _Goals_ section of tracking issue [#523](https://github.com/redwoodjs/redwood/issues/523); it details some specs you should comply with.
@@ -651,8 +623,7 @@ redwood/packages/cli
     ├── commands
     ├── index.d.ts
     ├── index.js
-    ├── lib
-    └── redwood-tools.js
+    └── lib
 ```
 
 #### index.js
