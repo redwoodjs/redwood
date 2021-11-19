@@ -23,14 +23,8 @@ export default function transform(file: FileInfo, api: API) {
       👉 constraint: /\w+-\w+/,
       👉 transform: (param) => param.split('-'),
     }
-
-    const constraint = /\w+-\w+/
-    const transform = (param) => param.split('.')
-
-    const Routes = () => {
-      return (
+    ...
         <Router
-          pageLoadingDelay={350}
           paramTypes={{
             slug,
             embeddedProperties: { 👉 constraint: constraint, 👉 transform },
@@ -41,8 +35,7 @@ export default function transform(file: FileInfo, api: API) {
           }}
         >
         </Router>
-      )
-    }
+    ...
     */
 
     if (paramTypeKey.value.type === 'Identifier') {
@@ -60,7 +53,6 @@ export default function transform(file: FileInfo, api: API) {
     // allParamTypeProperties here is array of following marked as 👉
     /*
         <Router
-          pageLoadingDelay={350}
           paramTypes={{
             👉 slug,
             👉 embeddedProperties: { constraint: constraint, transform },
@@ -122,7 +114,6 @@ export default function transform(file: FileInfo, api: API) {
         // paramTypeValue is marked as 👉 . It could be even referenced as variable.
         /*
         <Router
-          pageLoadingDelay={350}
           paramTypes={👉 {
             slug,
             embeddedProperties: { constraint: constraint, transform },
