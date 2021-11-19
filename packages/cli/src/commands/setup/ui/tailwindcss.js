@@ -8,8 +8,9 @@ import Listr from 'listr'
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
-export const command = 'tailwind'
-export const description = 'Setup tailwindcss and PostCSS'
+export const command = 'tailwindcss'
+export const aliases = ['tailwind', 'tw']
+export const description = 'Set up tailwindcss and PostCSS'
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
@@ -41,7 +42,7 @@ const tailwindImportsAndNotes = [
   '/**',
   ' * START --- TAILWIND GENERATOR EDIT',
   ' *',
-  ' * `yarn rw setup tailwind` placed these imports here',
+  ' * `yarn rw setup ui tailwindcss` placed these imports here',
   " * to inject Tailwind's styles into your CSS.",
   ' * For more information, see: https://tailwindcss.com/docs/installation#add-tailwind-to-your-css',
   ' */',
