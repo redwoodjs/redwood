@@ -23,7 +23,7 @@ const Routes = () => {
       pageLoadingDelay={350}
       paramTypes={{
         slug,
-        embeddedProperties: { constraint: constraint, transform: transform },
+        embeddedProperties: { constraint: constraint, transform },
         embedded: {
           constraint: /\w+.\w+/,
           transform: (param) => param.split('.'),

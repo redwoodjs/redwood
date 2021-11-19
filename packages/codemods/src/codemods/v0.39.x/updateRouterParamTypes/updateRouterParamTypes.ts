@@ -38,9 +38,10 @@ export default function transform(file: FileInfo, api: API) {
     ...
     */
 
-    if (paramTypeKey.value.type === 'Identifier') {
-      // To force the value to be explicit. {{ transform }} -> {{ parse: transform }}
-      paramTypeKey.value = j.identifier.from(paramTypeKey.value)
+    // To force the value to be explicit. {{ transform }} -> {{ parse: transform }}
+    // paramTypeKey.value = j.identifier.from(paramTypeKey.value)
+    if (paramTypeKey.shorthand) {
+      paramTypeKey.shorthand = false
     }
 
     paramTypeKey.key.name =
