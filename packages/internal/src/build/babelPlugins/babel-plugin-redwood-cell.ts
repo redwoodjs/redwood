@@ -6,13 +6,14 @@ import type { PluginObj, types } from '@babel/core'
 // ```js
 // import { createCell } from '@redwoodjs/web'
 // <YOUR CODE>
-// export default createCell({ QUERY, Loading, Success, Failure, Empty, beforeQuery, afterQuery })
+// export default createCell({ QUERY, Loading, Success, Failure, isEmpty, Empty, beforeQuery, afterQuery })
 // ```
 
 // A cell can export the declarations below.
 const EXPECTED_EXPORTS_FROM_CELL = [
   'beforeQuery',
   'QUERY',
+  'isEmpty',
   'afterQuery',
   'Loading',
   'Success',
@@ -79,7 +80,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           )
 
           // Insert at the bottom of the file:
-          // + export default createCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, afterQuery? })
+          // + export default createCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, isEmpty, afterQuery? })
           path.node.body.push(
             t.exportDefaultDeclaration(
               t.callExpression(t.identifier('createCell'), [
