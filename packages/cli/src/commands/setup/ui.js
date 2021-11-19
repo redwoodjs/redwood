@@ -1,7 +1,7 @@
-exports.command = 'ui <library>'
-exports.desc = 'Set up a UI design or style library'
 import terminalLink from 'terminal-link'
 
+export const command = 'ui <library>'
+export const description = 'Set up a UI design or style library'
 export const builder = (yargs) =>
   yargs
     .commandDir('./ui')
