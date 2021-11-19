@@ -17,10 +17,10 @@ export const handler = () => {
     async ({ setWarning }: { setWarning: any }) => {
       const rwPaths = getRWPaths()
 
-      const extns = isTSProject ? 'tsx' : 'jsx'
+      const extns = isTSProject ? 'tsx' : 'js'
       const routesFilePath = path.join(rwPaths.web.src, `Routes.${extns}`)
       if (!fs.existsSync(routesFilePath)) {
-        setWarning('Routes.{tsx|jsx} not found')
+        setWarning('Routes.{tsx|js} not found')
       } else {
         runTransform({
           transformPath: path.join(__dirname, 'updateRouterParamTypes.js'),
