@@ -12,7 +12,7 @@ import c from '../../../lib/colors'
 
 export const command = 'tsconfig'
 
-export const description = 'Setup tsconfig for web and api sides'
+export const description = 'Set up tsconfig for web and api sides'
 
 export const builder = (yargs) => {
   yargs.option('force', {
