@@ -12,7 +12,7 @@ export const preRequisites = [
     command: ['yarn', ['zip-it-and-ship-it', '--version']],
     errorMessage: [
       'Looks like @netlify/zip-it-and-ship-it is not installed.',
-      'Either run `yarn rw setup aws-serverless` or add it seperately as a dev dependency in the api workspace.',
+      'Either run `yarn rw setup aws-serverless` or add it separately as a dev dependency in the api workspace.',
     ],
   },
 ]
