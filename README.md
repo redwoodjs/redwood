@@ -53,13 +53,13 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
-- [Fastify] (https://www.fastify.io)
+- [Fastify](https://www.fastify.io)
 - [Pino](https://getpino.io)
 
 ## Features
 
 - Opinionated defaults for formatting, file organization, Webpack, Babel, and more
-- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, constraints, and named route functions (to generate correct URLs)
+- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, custom types, and named route functions (to generate correct URLs)
 - Automatic page-based code-splitting
 - Boilerplate-less GraphQL API construction
 - Cells: a declarative way to fetch data from the backend API

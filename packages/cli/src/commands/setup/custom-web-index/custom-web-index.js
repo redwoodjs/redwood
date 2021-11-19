@@ -10,7 +10,7 @@ import c from '../../../lib/colors'
 export const command = 'custom-web-index'
 
 export const description =
-  'Setup a custom index.js file, so you can customise how Redwood web is mounted in your browser'
+  'Set up a custom index.js file, so you can customise how Redwood web is mounted in your browser'
 
 export const builder = (yargs) => {
   yargs.option('force', {

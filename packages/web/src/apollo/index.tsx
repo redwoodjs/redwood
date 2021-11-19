@@ -1,6 +1,7 @@
-import type { ApolloClientOptions } from '@apollo/client'
+import type { ApolloClientOptions, setLogVerbosity } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import type { F } from 'ts-toolbelt'
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
 const {
   ApolloProvider,
@@ -10,6 +11,7 @@ const {
   InMemoryCache,
   useQuery,
   useMutation,
+  setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
@@ -24,19 +26,21 @@ import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
-export type GraphQLClientConfigProp = Omit<
-  ApolloClientOptions<unknown>,
-  'cache'
-> & {
-  cacheConfig?: ApolloClientCacheConfig
-}
-
 export type UseAuthProp = () => AuthContextInterface
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
-  config?: GraphQLClientConfigProp
+  config: ApolloClientOptions<unknown>
   useAuth: UseAuthProp
-}> = ({ config = {}, children, useAuth }) => {
+  logLevel: F.Return<typeof setLogVerbosity>
+}> = ({ config, children, useAuth, logLevel }) => {
+  /**
+   * Should they run into it,
+   * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
+   *
+   * @see {@link https://github.com/redwoodjs/redwood/issues/2473}
+   */
+  apolloSetLogVerbosity(logLevel)
+
   const { uri, headers } = useFetchConfig()
   const { getToken, type: authProviderType, isAuthenticated } = useAuth()
 
@@ -74,26 +78,59 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   const httpLink = createHttpLink({ uri })
 
-  const { cacheConfig, ...forwardConfig } = config ?? {}
-
   const client = new ApolloClient({
-    cache: new InMemoryCache(cacheConfig),
-    ...forwardConfig,
+    ...config,
+    /**
+     * Default options for every Cell.
+     * Better to specify them here than in `beforeQuery`
+     * where it's too easy to overwrite them.
+     *
+     * @see {@link https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object}
+     */
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+        notifyOnNetworkStatusChange: true,
+      },
+    },
     link: ApolloLink.from([withToken, authMiddleware.concat(httpLink)]),
   })
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>
 }
 
+export type GraphQLClientConfigProp = ApolloClientOptions<unknown> & {
+  cacheConfig?: ApolloClientCacheConfig
+}
+
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
   useAuth?: UseAuthProp
-}> = ({ graphQLClientConfig, useAuth = useRWAuth, children }) => {
+  logLevel?: F.Return<typeof setLogVerbosity>
+}> = ({
+  graphQLClientConfig,
+  useAuth = useRWAuth,
+  logLevel = 'debug',
+  children,
+}) => {
+  /**
+   * Since Apollo Client gets re-instantiated on auth changes,
+   * we have to instantiate `InMemoryCache` here,
+   * so that it doesn't get wiped.
+   */
+  const { cacheConfig, ...config } = graphQLClientConfig ?? {}
+
+  const cache = new InMemoryCache(cacheConfig)
+
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        config={graphQLClientConfig}
+        /**
+         * This order so that the user can still completely ovwrite the cache.
+         */
+        config={{ cache, ...config }}
         useAuth={useAuth}
+        logLevel={logLevel}
       >
         <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
           {children}
