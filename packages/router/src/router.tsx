@@ -175,8 +175,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   )
 
   const shouldShowSplash =
-    ((!hasHomeRoute && pathname === '/') || !hasGeneratedRoutes) &&
-    process.env.NODE_ENV !== 'production'
+    (!hasHomeRoute && pathname === '/') || !hasGeneratedRoutes
 
   flatChildArray.forEach((child) => {
     if (isRoute(child)) {
@@ -193,7 +192,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     }
   })
 
-  if (shouldShowSplash) {
+  if (shouldShowSplash && typeof SplashPage !== 'undefined') {
     return (
       <SplashPage
         hasGeneratedRoutes={hasGeneratedRoutes}
