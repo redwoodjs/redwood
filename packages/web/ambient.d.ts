@@ -8,16 +8,13 @@ declare global {
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetData }
   var __REDWOOD__APP_TITLE: string
   var __REDWOOD__USE_AUTH: () => AuthContextInterface
-  /**
-   * FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
-   * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
-   */
-  var RWJS_API_GRAPHQL_URL: string
-  /**
-   * FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
-   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
-   **/
+
+  /** URL or absolute path to the DbAuth serverless function */
   var RWJS_API_DBAUTH_URL: string
+  /** URL or absolute path to the GraphQL serverless function */
+  var RWJS_API_GRAPHQL_URL: string
+  /** URL or absolute path to serverless functions */
+  var RWJS_API_URL: string
 
   namespace NodeJS {
     interface Global {
@@ -29,10 +26,12 @@ declare global {
       __REDWOOD__APP_TITLE: string
       __REDWOOD__USE_AUTH: () => AuthContextInterface
 
-      /** FQDN or absolute path to the GraphQL serverless function */
+      /** URL or absolute path to the GraphQL serverless function */
       RWJS_API_GRAPHQL_URL: string
-      /** FQDN or absolute path to the DbAuth serverless function */
+      /** URL or absolute path to the DbAuth serverless function */
       RWJS_API_DBAUTH_URL: string
+      /** URL or absolute path to serverless functions */
+      RWJS_API_URL: string
     }
   }
 }
