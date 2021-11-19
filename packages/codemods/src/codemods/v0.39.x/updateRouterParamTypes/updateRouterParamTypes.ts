@@ -7,35 +7,6 @@ import type {
   Identifier,
 } from 'jscodeshift'
 
-// Here's an example of a Routes file with router param type that needs to be updated:
-
-/*
-const slug = {
-  constraint: /\w+-\w+/,
-  transform: (param) => param.split('-'),
-}
-
-const constraint = /\w+-\w+/
-const transform = (param) => param.split('.')
-
-const Routes = () => {
-  return (
-    <Router
-      pageLoadingDelay={350}
-      paramTypes={{
-        slug,
-        embeddedProperties: { constraint: constraint, transform },
-        embedded: {
-          constraint: /\w+.\w+/,
-          transform: (param) => param.split('.'),
-        },
-      }}
-    >
-    </Router>
-  )
-}
-*/
-
 export default function transform(file: FileInfo, api: API) {
   const newPropertyName = {
     constraint: 'match',
