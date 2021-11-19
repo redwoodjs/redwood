@@ -12,7 +12,7 @@ export const description = '(v0.38->v0.39) Updates @redwoodjs/router paramTypes'
 
 export const handler = () => {
   task(
-    'Updating Routes.{tsx|jsx}',
+    'Updating Routes.{tsx|js}',
     async ({ setWarning }: { setWarning: any }) => {
       const rwPaths = getRWPaths()
 
