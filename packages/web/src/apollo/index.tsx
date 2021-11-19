@@ -89,6 +89,19 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   const client = new ApolloClient({
     cache: new InMemoryCache(cacheConfig),
+    /**
+     * Default options for every Cell.
+     * Better to specify them here than in `beforeQuery`
+     * where it's too easy to overwrite them.
+     *
+     * @see {@link https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object}
+     */
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+        notifyOnNetworkStatusChange: true,
+      },
+    },
     ...forwardConfig,
     link: ApolloLink.from([withToken, authMiddleware.concat(httpLink)]),
   })

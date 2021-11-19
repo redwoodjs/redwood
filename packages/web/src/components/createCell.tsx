@@ -118,11 +118,7 @@ const isDataEmpty = (data: DataObject) => {
 }
 
 export function createCell<CellProps = any>({
-  beforeQuery = (props) => ({
-    variables: props,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  }),
+  beforeQuery = (props) => ({ variables: props }),
   QUERY,
   isEmpty = isDataEmpty,
   afterQuery = (data) => ({ ...data }),
