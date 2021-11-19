@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link'
 
 export const builder = (yargs) =>
   yargs
-    .commandDir('./setup', { recurse: true })
+    .commandDir('./setup', { recurse: true, exclude: /ui\/.*\.js/g })
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
