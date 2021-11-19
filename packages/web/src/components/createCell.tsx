@@ -35,6 +35,7 @@ export type DataObject = { [key: string]: unknown }
 export type CellFailureProps = Partial<
   Omit<QueryOperationResult, 'data' | 'error' | 'loading'> & {
     error: QueryOperationResult['error'] | Error // for tests and storybook
+    errorCode: string
     updating: boolean
   }
 >
@@ -159,6 +160,14 @@ export function createCell<CellProps = any>({
               return (
                 <Failure
                   error={error}
+                  /**
+                   * error code
+                   * @optional
+                   * @type {string}
+                   * @see https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes
+                   * The error code came from `error.graphQLErrors[0].extensions.code`
+                   */
+                  errorCode={error.graphQLErrors?.[0]?.extensions?.code}
                   {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
