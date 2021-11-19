@@ -9,7 +9,7 @@ import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
 export const command = 'tailwindcss'
-export const alias = ['tailwind', 'tw']
+export const aliases = ['tailwind', 'tw']
 export const description = 'Set up tailwindcss and PostCSS'
 export const builder = (yargs) => {
   yargs.option('force', {
