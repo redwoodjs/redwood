@@ -11,6 +11,7 @@
     "@babel/cli": "7.16.0",
     "@babel/core": "7.16.0",
     "@babel/plugin-transform-typescript": "7.16.1",
+    "@babel/runtime-corejs3": "7.16.3",
     "core-js": "3.19.1",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.7",
