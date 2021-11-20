@@ -1734,28 +1734,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:1.33.0":
-  version: 1.33.0
-  resolution: "@clerk/clerk-js@npm:1.33.0"
+"@clerk/clerk-js@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@clerk/clerk-js@npm:2.3.0"
   dependencies:
-    "@clerk/types": 1.13.0
+    "@clerk/types": 1.16.0
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.2.6
-    core-js: 3.8.1
+    core-js: ^3.18.3
+    deepmerge: ^4.2.2
     js-cookie: ^2.2.1
     qs: ^6.9.4
     react: 16.13.1
     react-dom: 16.13.1
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: ca188cc8aa320670e0155ff806dcfe121dc9aaa68b612508bf256191d6691c727c075add1cfd22d29e8e4e4b32613f7bbfa7fcf0ced6cd4f93082e40fe7a0a57
+  checksum: 3c8cb69d2770c1b4da2c8e685c72fb769c830be0a2dc35df66e6f19b895e4d66987bb655f13e85686b2c1068989e154c677494a06f39634749c7e82d9b4eaa8b
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:0.5.2":
-  version: 0.5.2
-  resolution: "@clerk/clerk-sdk-node@npm:0.5.2"
+"@clerk/clerk-sdk-node@npm:2.1.2":
+  version: 2.1.2
+  resolution: "@clerk/clerk-sdk-node@npm:2.1.2"
   dependencies:
     "@types/cookies": ^0.7.6
     "@types/jsonwebtoken": ^8.5.4
@@ -1766,14 +1767,14 @@ __metadata:
     jwks-rsa: ^2.0.4
     lodash: ^4.17.21
     snakecase-keys: ^3.2.1
-  checksum: 81f27f0e617440f8138afdef0006a7cea4309856fad850e69176136e49c4ac44891a9a1337e62f4c201c4813e91e4d1264d924d7c9b72b40f7238bdf1202c4d9
+  checksum: 6d7c389a931a3451020c43d4113dfc91c4e28819526e2c31993f847d74ad8df4d4656afab55ba1921081b6d9294a133711f1f53f404358e8b61f27862c78df17
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@clerk/types@npm:1.13.0"
-  checksum: f7c164a4080fd0b83fb3e91a50c3d89d32c6bbc2e4e392115eb4058d845bc9f49decff596998f208413f751e685f2b958cf2633b404a2a459a0ab3e3f3f3d29d
+"@clerk/types@npm:1.16.0":
+  version: 1.16.0
+  resolution: "@clerk/types@npm:1.16.0"
+  checksum: 40704217091a6e4f606381677b80c4e6cd1797d7bac737ab32efa45eedca5d749161b7e2460bb905484b697ea37a3e200e6b55858a00603bd285a103f34bb122
   languageName: node
   linkType: hard
 
@@ -4135,9 +4136,9 @@ __metadata:
     "@auth0/auth0-spa-js": 1.19.2
     "@azure/msal-browser": 2.19.0
     "@babel/cli": 7.16.0
-    "@clerk/clerk-js": 1.33.0
-    "@clerk/clerk-sdk-node": 0.5.2
-    "@clerk/types": 1.13.0
+    "@clerk/clerk-js": 2.3.0
+    "@clerk/clerk-sdk-node": 2.1.2
+    "@clerk/types": 1.16.0
     "@supabase/supabase-js": 1.25.0
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.35
@@ -10213,7 +10214,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.19.1, core-js@npm:^3.0.4, core-js@npm:^3.18.2, core-js@npm:^3.19.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.19.1, core-js@npm:^3.0.4, core-js@npm:^3.18.2, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.19.1
   resolution: "core-js@npm:3.19.1"
   checksum: 9f24df1cecb2f605d445e858a2bd67ccb433c001b0d50511e4e092d762a6df215094da928c424e4a63656a53fa8c50eba36eeff1df1e29d91a2ec2e9d9feb75a
@@ -10224,13 +10225,6 @@ __metadata:
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
   checksum: ab5f869adda3d4dfa8e8753f5b6e6990196f585e701c5fdb2bfd780bdc57235ceefdcd156f557faf9c2d3ed6010383870d3082318f8eda3218b1908413477a04
-  languageName: node
-  linkType: hard
-
-"core-js@npm:3.8.1":
-  version: 3.8.1
-  resolution: "core-js@npm:3.8.1"
-  checksum: 1fb5e026973749cf6fb34158c3e800353ae67bc61d3beaa220584fe756b2f7ff8b10659667a71c313da4299897880e1c5dd2b3b24c147204e4a997ee8d5d0558
   languageName: node
   linkType: hard
 
