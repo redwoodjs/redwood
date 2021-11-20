@@ -33,7 +33,7 @@ export const builder = (yargs) => {
     })
     .option('manager-cache', {
       describe:
-        'Cache the manager UI. Disable this when you're making changes to `storybook.manager.js`.',
+        "Cache the manager UI. Disable this when you're making changes to `storybook.manager.js`.",
       type: 'boolean',
       default: true,
     })
