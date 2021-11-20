@@ -5,4 +5,4 @@ export { default as RelationProxy } from './redwoodrecord/RelationProxy'
 export { default as ValidationMixin } from './redwoodrecord/ValidationMixin'
 export { default as RedwoodRecord } from './redwoodrecord/RedwoodRecord'
 
-export { parseDatamodel } from './scripts/parse'
+export * from './tasks/parse'
