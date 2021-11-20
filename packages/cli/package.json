@@ -23,11 +23,11 @@
     "@redwoodjs/prerender": "0.38.3",
     "@redwoodjs/structure": "0.38.3",
     "boxen": "5.1.2",
-    "camelcase": "6.2.0",
+    "camelcase": "6.2.1",
     "chalk": "4.1.2",
-    "concurrently": "6.3.0",
+    "concurrently": "6.4.0",
     "configstore": "3.1.5",
-    "core-js": "3.18.3",
+    "core-js": "3.19.1",
     "cross-env": "7.0.3",
     "decamelize": "5.0.0",
     "dotenv-defaults": "3.0.0",
@@ -52,7 +52,7 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.15.7",
+    "@babel/cli": "7.16.0",
     "@types/listr": "0.14.4",
     "@types/node-fetch": "2.5.12",
     "jest": "27.3.1",
