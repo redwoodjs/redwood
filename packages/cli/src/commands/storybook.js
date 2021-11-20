@@ -31,11 +31,11 @@ export const builder = (yargs) => {
       type: 'string',
       default: 'public/storybook',
     })
-    .option('no-manager-cache', {
+    .option('manager-cache', {
       describe:
-        'Do not cache the manager UI. Useful when you have made changes to `storybook.manager.js`.',
+        'Cache the manager UI. Disable this when you're making changes to `storybook.manager.js`.',
       type: 'boolean',
-      default: false,
+      default: true,
     })
 }
 
