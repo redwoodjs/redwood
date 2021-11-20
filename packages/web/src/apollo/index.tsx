@@ -1,13 +1,18 @@
-import type { ApolloClientOptions, setLogVerbosity } from '@apollo/client'
+import type {
+  ApolloClientOptions,
+  setLogVerbosity,
+  ApolloCache,
+} from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import type { F } from 'ts-toolbelt'
+
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
 const {
   ApolloProvider,
   ApolloClient,
   ApolloLink,
-  createHttpLink,
+  HttpLink,
   InMemoryCache,
   useQuery,
   useMutation,
@@ -28,22 +33,86 @@ export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
-  'cache'
+  'cache' | 'link'
 > & {
+  cache?: ApolloCache<unknown>
+  /**
+   * Configuration for Apollo Client's `InMemoryCache`.
+   * See https://www.apollographql.com/docs/react/caching/cache-configuration/.
+   */
   cacheConfig?: ApolloClientCacheConfig
+  /**
+   * Configuration for the terminating `HttpLink`.
+   * See https://www.apollographql.com/docs/react/api/link/apollo-link-http/#httplink-constructor-options.
+   *
+   * For example, you can use this prop to set the credentials policy so that cookies can be sent to other domains:
+   *
+   * ```js
+   * <RedwoodApolloProvider graphQLClientConfig={{
+   *   httpLinkConfig: { credentials: 'include' }
+   * }}>
+   * ```
+   */
+  httpLinkConfig?: apolloClient.HttpOptions
+  /**
+   * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
+   *
+   * To overwrite Redwood's Apollo Link, just provide your own `ApolloLink`.
+   *
+   * To extend Redwood's Apollo Link, provide a function—it'll get passed an array of Redwood's Apollo Links:
+   *
+   * ```js
+   * const link = (rwLinks) => {
+   *   const consoleLink = new ApolloLink((operation, forward) => {
+   *     console.log(operation.operationName)
+   *     return forward(operation)
+   *   })
+   *
+   *   return ApolloLink.from([consoleLink, ...rwLinks])
+   * }
+   * ```
+   *
+   * If you do this, there's several things you should keep in mind:
+   * - your function should return a single link (e.g., using `ApolloLink.from`; see https://www.apollographql.com/docs/react/api/link/introduction/#additive-composition)
+   * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
+   */
+  link?:
+    | apolloClient.ApolloLink
+    | ((
+        rwLinks: [
+          apolloClient.ApolloLink,
+          apolloClient.ApolloLink,
+          apolloClient.HttpLink
+        ]
+      ) => apolloClient.ApolloLink)
 }
 
 export type UseAuthProp = () => AuthContextInterface
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
-  config?: GraphQLClientConfigProp
+  config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
+    cache: ApolloCache<unknown>
+  }
   useAuth: UseAuthProp
   logLevel: F.Return<typeof setLogVerbosity>
-}> = ({ config = {}, children, useAuth, logLevel }) => {
+}> = ({ config, children, useAuth, logLevel }) => {
+  /**
+   * Should they run into it,
+   * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
+   *
+   * @see {@link https://github.com/redwoodjs/redwood/issues/2473}
+   */
   apolloSetLogVerbosity(logLevel)
 
-  const { uri, headers } = useFetchConfig()
-  const { getToken, type: authProviderType, isAuthenticated } = useAuth()
+  /**
+   * Here we're using Apollo Link to customize Apollo Client's data flow.
+   *
+   * Although we're sending conventional HTTP-based requests and could just pass `uri` instead of `link`,
+   * we need to fetch a new token on every request, making middleware a good fit for this.
+   *
+   * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/}
+   */
+  const { isAuthenticated, getToken, type: authProviderType } = useAuth()
 
   const withToken = setContext(async () => {
     if (isAuthenticated && getToken) {
@@ -54,6 +123,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
     return { token: null }
   })
+
+  const { headers, uri } = useFetchConfig()
 
   const authMiddleware = new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
@@ -77,14 +148,55 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     return forward(operation)
   })
 
-  const httpLink = createHttpLink({ uri })
+  /**
+   * A terminating link.
+   * Apollo Client uses this to send GraphQL operations to a server over HTTP.
+   *
+   * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link}
+   */
+  const { httpLinkConfig, link: userLink, ...rest } = config ?? {}
 
-  const { cacheConfig, ...forwardConfig } = config ?? {}
+  const httpLink = new HttpLink({ uri, ...httpLinkConfig })
+
+  /**
+   * The order here's important.
+   */
+  const rwLinks = [withToken, authMiddleware, httpLink] as [
+    apolloClient.ApolloLink,
+    apolloClient.ApolloLink,
+    apolloClient.HttpLink
+  ]
+
+  /**
+   * If the user provides a link that's a function,
+   * we want to call it with our link.
+   *
+   * If it's not, we just want to use it.
+   *
+   * And if they don't provide it, we just want to use ours.
+   */
+  let link = ApolloLink.from(rwLinks)
+
+  if (userLink) {
+    link = typeof userLink === 'function' ? userLink(rwLinks) : userLink
+  }
 
   const client = new ApolloClient({
-    cache: new InMemoryCache(cacheConfig),
-    ...forwardConfig,
-    link: ApolloLink.from([withToken, authMiddleware.concat(httpLink)]),
+    /**
+     * Default options for every Cell.
+     * Better to specify them here than in `beforeQuery`
+     * where it's too easy to overwrite them.
+     *
+     * @see {@link https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object}
+     */
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+        notifyOnNetworkStatusChange: true,
+      },
+    },
+    link,
+    ...rest,
   })
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>
@@ -100,10 +212,22 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   logLevel = 'debug',
   children,
 }) => {
+  /**
+   * Since Apollo Client gets re-instantiated on auth changes,
+   * we have to instantiate `InMemoryCache` here,
+   * so that it doesn't get wiped.
+   */
+  const { cacheConfig, ...config } = graphQLClientConfig ?? {}
+
+  const cache = new InMemoryCache(cacheConfig)
+
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        config={graphQLClientConfig}
+        /**
+         * This order so that the user can still completely ovwrite the cache.
+         */
+        config={{ cache, ...config }}
         useAuth={useAuth}
         logLevel={logLevel}
       >

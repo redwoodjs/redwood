@@ -56,6 +56,7 @@ const useMatch = (pathname: string, options?: UseMatchOptions) => {
 
 interface LinkProps {
   to: string
+  onClick: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 const Link = forwardRef<
@@ -95,6 +96,7 @@ interface NavLinkProps {
   to: string
   activeClassName: string
   activeMatchParams?: FlattenSearchParams
+  onClick: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 const NavLink = forwardRef<
