@@ -15,7 +15,7 @@ const defaultJscodeshiftOpts = {
   print: false,
   babel: true,
   extensions: 'js',
-  ignorePattern: '',
+  ignorePattern: '**/node_modules/**',
   ignoreConfig: [],
   runInBand: false,
   silent: false,
@@ -52,7 +52,6 @@ export const runTransform = async ({
       ...defaultJscodeshiftOpts,
       parser,
       babel: process.env.NODE_ENV === 'test',
-      ignorePattern: '**/node_modules/**',
       ...options, // Putting options here lets them override all the defaults.
     })
   } catch (e: any) {
