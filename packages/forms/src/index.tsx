@@ -488,8 +488,16 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
 }
 
 export interface TextAreaFieldProps
-  extends FieldProps<HTMLTextAreaElement>,
-    Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
+  extends Omit<FieldProps<HTMLTextAreaElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {
+  name: string
+  id?: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+  validation?: RedwoodRegisterOptions
+  onBlur?: React.FocusEventHandler<Element>
+  onChange?: React.ChangeEventHandler<Element>
+}
 
 /**
  * Renders a `<textarea>` field.
@@ -537,8 +545,16 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
 )
 
 export interface SelectFieldProps
-  extends FieldProps<HTMLSelectElement>,
-    Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
+  extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'select'>, 'name'> {
+  name: string
+  id?: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+  validation?: RedwoodRegisterOptions
+  onBlur?: React.FocusEventHandler<Element>
+  onChange?: React.ChangeEventHandler<Element>
+}
 
 /**
  * Renders a `<select>` field.
@@ -586,8 +602,16 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 )
 
 export interface CheckboxFieldProps
-  extends FieldProps<HTMLInputElement>,
-    Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
+  name: string
+  id?: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+  validation?: RedwoodRegisterOptions
+  onBlur?: React.FocusEventHandler<Element>
+  onChange?: React.ChangeEventHandler<Element>
+}
 
 /**
  * Renders an `<input type="checkbox">` field.
@@ -693,7 +717,7 @@ const INPUT_TYPES = [
 type InputType = typeof INPUT_TYPES[number]
 
 export interface InputFieldProps
-  extends FieldProps<HTMLInputElement>,
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
   /**
    * @privateRemarks
@@ -704,6 +728,13 @@ export interface InputFieldProps
    * Even though we provide a separate `<CheckboxField>`, maybe we should reconsider the typing here?
    */
   type?: InputType
+  name: string
+  id?: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+  validation?: RedwoodRegisterOptions
+  onBlur?: React.FocusEventHandler<Element>
+  onChange?: React.ChangeEventHandler<Element>
 }
 
 /**
