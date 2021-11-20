@@ -326,4 +326,51 @@ describe('createCell', () => {
     // Restore writing to stderr.
     console.error = err
   })
+
+  test('Allows overriding of default isDataEmpty', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Success: () => <>Great success!</>,
+      Empty: () => <>Got nothing</>,
+      isEmpty: () => true,
+    })
+
+    const myUseQueryHook = () => ({
+      data: {},
+      loading: false,
+    })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+
+    screen.getByText(/^Got nothing$/)
+  })
+
+  test('Allows mixing isDataEmpty with custom logic', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { answer }',
+      Success: () => <>Great success!</>,
+      Empty: () => <>Got nothing</>,
+      isEmpty: (data, { isDataEmpty }) =>
+        isDataEmpty(data) || data.answer === '0',
+    })
+
+    const myUseQueryHook = () => ({
+      data: { answer: '0' },
+      loading: false,
+    })
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+
+    screen.getByText(/^Got nothing$/)
+  })
 })
