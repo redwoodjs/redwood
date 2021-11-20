@@ -80,6 +80,11 @@ export const builder = (yargs) => {
         )
         process.exit(1)
       }
+
+      // Set NODE_ENV to production, if not set
+      if (!process.env.NODE_ENV) {
+        process.env.NODE_ENV = 'production'
+      }
     })
     .epilogue(
       `Also see the ${terminalLink(

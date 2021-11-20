@@ -73,6 +73,13 @@ export const findApiServerFunctions = (
   return files.filter((f) => isApiFunction(f, cwd))
 }
 
+export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
+  return fg.sync('dist/functions/*.{ts,js}', {
+    cwd,
+    absolute: true,
+  })
+}
+
 export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
   fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
 

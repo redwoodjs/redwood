@@ -1,12 +1,17 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.38.0",
+  "version": "0.38.3",
   "files": [
     "dist"
   ],
   "bin": {
     "rw-gen": "./dist/generate/generate.js",
     "rw-gen-watch": "./dist/generate/watch.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/internal"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,14 +22,14 @@
     "@babel/register": "7.15.3",
     "@babel/runtime-corejs3": "7.15.4",
     "@babel/traverse": "7.15.4",
-    "@graphql-codegen/cli": "2.2.1",
-    "@graphql-codegen/core": "2.2.0",
-    "@graphql-codegen/schema-ast": "2.2.0",
-    "@graphql-codegen/typescript": "2.2.4",
-    "@graphql-codegen/typescript-operations": "2.1.8",
-    "@graphql-codegen/typescript-react-apollo": "3.1.6",
-    "@graphql-codegen/typescript-resolvers": "2.3.2",
-    "@redwoodjs/graphql-server": "0.38.0",
+    "@graphql-codegen/cli": "2.3.0",
+    "@graphql-codegen/core": "2.3.0",
+    "@graphql-codegen/schema-ast": "2.4.0",
+    "@graphql-codegen/typescript": "2.4.0",
+    "@graphql-codegen/typescript-operations": "2.2.0",
+    "@graphql-codegen/typescript-react-apollo": "3.2.1",
+    "@graphql-codegen/typescript-resolvers": "2.4.1",
+    "@redwoodjs/graphql-server": "0.38.3",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.2.5",
     "chalk": "4.1.2",
@@ -39,6 +44,7 @@
     "kill-port": "1.6.1",
     "prettier": "2.4.1",
     "rimraf": "3.0.2",
+    "string-env-interpolation": "1.0.1",
     "toml": "3.0.0"
   },
   "devDependencies": {

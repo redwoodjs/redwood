@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.38.0",
+  "version": "0.38.3",
   "files": [
     "dist"
   ],
@@ -12,6 +12,11 @@
     "core-js": "3.18.3",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.17.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/forms"
   },
   "scripts": {
     "build": "yarn build:js",

@@ -1,10 +1,21 @@
 import {
+  paramsForRoute,
   matchPath,
   parseSearch,
   validatePath,
   flattenSearchParams,
   replaceParams,
 } from '../util'
+
+describe('paramsForRoute', () => {
+  it.each([
+    ['/post/{slug}', [['slug', 'String', '{slug}']]],
+    ['/post/{slug...}', [['slug', 'Glob', '{slug...}']]],
+    ['/id/{id:Int}', [['id', 'Int', '{id:Int}']]],
+  ])('extracts name and type info', (route, info) => {
+    expect(paramsForRoute(route)).toEqual(info)
+  })
+})
 
 describe('matchPath', () => {
   it.each([
@@ -23,11 +34,6 @@ describe('matchPath', () => {
   })
 
   it('matches valid paths and extracts params correctly', () => {
-    expect(matchPath('/post/{id:Int}', '/post/7')).toEqual({
-      match: true,
-      params: { id: 7 },
-    })
-
     expect(matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')).toEqual(
       { match: true, params: { day: '07', month: '12', year: '2019' } }
     )
@@ -43,6 +49,21 @@ describe('matchPath', () => {
       match: true,
       params: { id: 1337 },
     })
+
+    expect(matchPath('/post/id-{id:Int}', '/post/id-37')).toEqual({
+      match: true,
+      params: { id: 37 },
+    })
+
+    expect(matchPath('/post/{id:Int}-id', '/post/78-id')).toEqual({
+      match: true,
+      params: { id: 78 },
+    })
+
+    expect(matchPath('/post/id-{id:Int}-id', '/post/id-789-id')).toEqual({
+      match: true,
+      params: { id: 789 },
+    })
   })
 
   it('transforms a param for Boolean', () => {
@@ -54,6 +75,33 @@ describe('matchPath', () => {
     })
 
     expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/false')).toEqual({
+      match: true,
+      params: {
+        status: false,
+      },
+    })
+
+    expect(
+      matchPath('/signedUp/x-{status:Boolean}', '/signedUp/x-false')
+    ).toEqual({
+      match: true,
+      params: {
+        status: false,
+      },
+    })
+
+    expect(
+      matchPath('/signedUp/{status:Boolean}y', '/signedUp/falsey')
+    ).toEqual({
+      match: true,
+      params: {
+        status: false,
+      },
+    })
+
+    expect(
+      matchPath('/signedUp/e{status:Boolean}y', '/signedUp/efalsey')
+    ).toEqual({
       match: true,
       params: {
         status: false,
@@ -121,12 +169,54 @@ describe('matchPath', () => {
   })
 
   it('transforms a param for Globs', () => {
-    expect(
-      matchPath('/version/{globbyMcGlob...}', '/version/path/to/file')
-    ).toEqual({
+    //single
+    expect(matchPath('/version/{path...}', '/version/path/to/file')).toEqual({
       match: true,
       params: {
-        'globbyMcGlob...': 'path/to/file',
+        path: 'path/to/file',
+      },
+    })
+
+    //  multiple
+    expect(matchPath('/a/{a...}/b/{b...}/c', '/a/1/2/b/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2',
+        b: '3/4',
+      },
+    })
+
+    // adjacent
+    expect(matchPath('/a/{a...}{b...}/c', '/a/1/2/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2/3/4',
+        b: '',
+      },
+    })
+
+    // adjacent with a slash
+    expect(matchPath('/a/{a...}/{b...}/c', '/a/1/2/3/4/c')).toEqual({
+      match: true,
+      params: {
+        a: '1/2/3',
+        b: '4',
+      },
+    })
+
+    // prefixed
+    expect(matchPath('/a-{a...}', '/a-1/2')).toEqual({
+      match: true,
+      params: {
+        a: '1/2',
+      },
+    })
+
+    // suffixed
+    expect(matchPath('/{a...}-a', '/1/2-a')).toEqual({
+      match: true,
+      params: {
+        a: '1/2',
       },
     })
   })
@@ -139,7 +229,7 @@ describe('matchPath', () => {
       )
     ).toEqual({
       match: true,
-      params: { id: 44, version: 1.8, edit: false, 'path...': 'path/to/file' },
+      params: { id: 44, version: 1.8, edit: false, path: 'path/to/file' },
     })
   })
 })
@@ -220,6 +310,12 @@ describe('flattenSearchParams', () => {
 })
 
 describe('replaceParams', () => {
+  it('throws an error on missing params', () => {
+    expect(() => replaceParams('/tags/{tag}', {})).toThrowError(
+      "Missing parameter 'tag' for route '/tags/{tag}'."
+    )
+  })
+
   it('replaces named parameter with value from the args object', () => {
     expect(replaceParams('/tags/{tag}', { tag: 'code' })).toEqual('/tags/code')
   })
@@ -250,8 +346,28 @@ describe('replaceParams', () => {
       '/boolean/false'
     )
 
-    expect(replaceParams('/undef/{undef}', { undef: undefined })).toEqual(
-      '/undef/undefined'
+    expect(() =>
+      replaceParams('/undef/{undef}', { undef: undefined })
+    ).toThrowError("Missing parameter 'undef' for route '/undef/{undef}'.")
+  })
+
+  it('handles typed params', () => {
+    expect(replaceParams('/post/{id:Int}', { id: 7 })).toEqual('/post/7')
+    expect(replaceParams('/post/{id:Float}', { id: 7 })).toEqual('/post/7')
+    expect(replaceParams('/post/{id:Bool}', { id: true })).toEqual('/post/true')
+    expect(replaceParams('/post/{id:Bool}', { id: false })).toEqual(
+      '/post/false'
+    )
+    expect(replaceParams('/post/{id:String}', { id: 7 })).toEqual('/post/7')
+  })
+
+  it('handles globs', () => {
+    expect(replaceParams('/path/{path...}', { path: 'foo/bar' })).toEqual(
+      '/path/foo/bar'
+    )
+
+    expect(replaceParams('/a/{b...}/c/{d...}/e', { b: 1, d: 2 })).toEqual(
+      '/a/1/c/2/e'
     )
   })
 })

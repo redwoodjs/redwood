@@ -1,25 +1,31 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.38.0",
+  "version": "0.38.3",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "7.15.8",
-    "@babel/eslint-parser": "7.15.8",
+    "@babel/eslint-parser": "7.16.3",
     "@babel/eslint-plugin": "7.14.5",
-    "@typescript-eslint/eslint-plugin": "5.1.0",
-    "@typescript-eslint/parser": "5.1.0",
-    "eslint": "7.32.0",
+    "@redwoodjs/internal": "0.38.3",
+    "@typescript-eslint/eslint-plugin": "5.4.0",
+    "@typescript-eslint/parser": "5.4.0",
+    "eslint": "8.2.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-babel-module": "5.3.1",
     "eslint-plugin-babel": "5.3.1",
-    "eslint-plugin-import": "2.25.2",
+    "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest-dom": "3.9.2",
-    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-prettier": "4.0.0",
-    "eslint-plugin-react": "7.26.1",
-    "eslint-plugin-react-hooks": "4.2.0",
+    "eslint-plugin-react": "7.27.1",
+    "eslint-plugin-react-hooks": "4.3.0",
     "prettier": "2.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/eslint-config"
   },
   "scripts": {
     "build": "echo 'Nothing to build..'"
