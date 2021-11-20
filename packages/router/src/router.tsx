@@ -242,7 +242,9 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
             delay={pageLoadingDelay}
           />
         ) : (
-          activeRoute && activeChildren
+          activeRoute && (
+            <Route {...(activeChildren?.[0] as React.ReactElement)?.props} />
+          )
         )}
       </ParamsProvider>
     </RouterContextProvider>
