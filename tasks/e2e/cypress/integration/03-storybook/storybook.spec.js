@@ -81,18 +81,18 @@ describe(
     it('4. Pages: AboutPage, ContactPage, and HomePage', () => {
       // About
       cy.visit(
-        `/storybook/iframe.html?id=pages-aboutpage--generated&viewMode=story`
+        '/storybook/iframe.html?id=pages-aboutpage--generated&args=&viewMode=story'
       )
       cy.get('p').should('contain.text', 'This site was created')
       // Contact
       cy.visit(
-        `/storybook/iframe.html?id=pages-contactpage--generated&viewMode=story`
+        `/storybook/iframe.html?id=pages-contactpage--generated&args=&viewMode=story`
       )
       cy.get('label').eq(0).should('contain.text', 'Name')
       cy.get('button').should('contain.text', 'Save')
       // Home
       cy.visit(
-        `/storybook/iframe.html?id=pages-homepage--generated&viewMode=story`
+        `/storybook/iframe.html?id=pages-homepage--generated&args=&viewMode=story`
       )
       cy.get('article div').eq(0).should('contain.text', 'Hello world!')
       cy.get('header h2').eq(1).should('contain.text', 'Third post')
