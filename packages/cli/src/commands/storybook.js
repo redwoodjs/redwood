@@ -68,7 +68,7 @@ export const handler = ({
       !build && `--port ${port}`,
       !build && '--no-version-updates',
       !build && `--static-dir "${staticAssetsFolder}"`,
-      noManagerCache && '--no-manager-cache',
+      !managerCache && '--no-manager-cache',
       build &&
         `--output-dir "${path.join(getPaths().web.base, buildDirectory)}"`,
       !open && '--ci',
