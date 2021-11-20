@@ -24,7 +24,7 @@ export const description =
  */
 export const handler = () => {
   task('Updating Scenarios', async () => {
-    runTransform({
+    await runTransform({
       transformPath: path.join(__dirname, 'updateScenarios.js'),
       targetPaths: fg.sync('api/src/services/**/*.scenarios.{js,ts}'),
     })
