@@ -47,34 +47,18 @@ export const runTransform = async ({
   parser = 'tsx',
   options = {},
 }: RunTransform) => {
-  if (process.env.NODE_ENV === 'test') {
-    try {
-      await jscodeshift.run(transformPath, targetPaths, {
-        ...defaultJscodeshiftOpts,
-        parser,
-        babel: process.env.NODE_ENV === 'test',
-        ignorePattern: '**/node_modules/**',
-        ...options, // Putting options here lets them override all the defaults.
-      })
-    } catch (e: any) {
-      console.error('Transform Error', e.message)
+  try {
+    await jscodeshift.run(transformPath, targetPaths, {
+      ...defaultJscodeshiftOpts,
+      parser,
+      babel: process.env.NODE_ENV === 'test',
+      ignorePattern: '**/node_modules/**',
+      ...options, // Putting options here lets them override all the defaults.
+    })
+  } catch (e: any) {
+    console.error('Transform Error', e.message)
 
-      throw new Error('Failed to invoke transform')
-    }
-  } else {
-    try {
-      await jscodeshift.run(transformPath, targetPaths, {
-        ...defaultJscodeshiftOpts,
-        parser,
-        babel: process.env.NODE_ENV === 'test',
-        ignorePattern: '**/node_modules/**',
-        ...options, // Putting options here lets them override all the defaults.
-      })
-    } catch (e: any) {
-      console.error('Transform Error', e.message)
-
-      throw new Error('Failed to invoke transform')
-    }
+    throw new Error('Failed to invoke transform')
   }
 }
 
