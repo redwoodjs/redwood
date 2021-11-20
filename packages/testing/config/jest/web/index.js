@@ -1,13 +1,17 @@
 const path = require('path')
 const { TextDecoder } = require('util')
 
-const { getPaths } = require('@redwoodjs/internal')
+const {
+  getPaths,
+  getWebSideDefaultBabelConfig,
+} = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 module.exports = {
   roots: ['<rootDir>/src/'],
+  testEnvironment: 'jest-environment-jsdom',
   displayName: {
     color: 'blueBright',
     name: 'web',
@@ -50,5 +54,7 @@ module.exports = {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
       '@redwoodjs/testing/dist/web/fileMock.js',
   },
-  testEnvironment: 'jest-environment-jsdom',
+  transform: {
+    '\\.[jt]sx?$': ['babel-jest', getWebSideDefaultBabelConfig()],
+  },
 }

@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@cypress/request@npm:^2.88.6":
-  version: 2.88.6
-  resolution: "@cypress/request@npm:2.88.6"
+"@cypress/request@npm:^2.88.7":
+  version: 2.88.7
+  resolution: "@cypress/request@npm:2.88.7"
   dependencies:
     aws-sign2: ~0.7.0
     aws4: ^1.8.0
@@ -28,7 +28,7 @@ __metadata:
     tough-cookie: ~2.5.0
     tunnel-agent: ^0.6.0
     uuid: ^8.3.2
-  checksum: f0d19dc36a223739f23fd454c210116f691251f84d2fecce76e83ec61618b921749c5c1f4a91c8edc493fa9cd33678015625104ca7b1c083322b9f846cccc462
+  checksum: 8c5144a0816117053f1e0ea3fc08ecaecd01b6f9f4b005d2362c3560444fc6af0b3aeb30464bb852be8c72d13d315346e35ca70693d350c7d391a9c4df933b04
   languageName: node
   linkType: hard
 
@@ -39,13 +39,6 @@ __metadata:
     debug: ^3.1.0
     lodash.once: ^4.1.1
   checksum: 1bf6224b244f6093033d77f04f6bef719280542656de063cf8ac3f38957b62aa633e6918af0b9673a8bf0123b42a850db51d9729a3ae3da885ac179bc7fc1d26
-  languageName: node
-  linkType: hard
-
-"@types/color-name@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@types/color-name@npm:1.1.1"
-  checksum: 2abeac8d8d833e0622c66f21487cc8b522792abb2eff2e40df0e3e53261728cb65bab590edf24953eb8d8653ec88044dc801d9a4e58c489a0f10c025de522868
   languageName: node
   linkType: hard
 
@@ -131,22 +124,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-styles@npm:^4.0.0":
+"ansi-styles@npm:^4.0.0, ansi-styles@npm:^4.1.0":
   version: 4.3.0
   resolution: "ansi-styles@npm:4.3.0"
   dependencies:
     color-convert: ^2.0.1
   checksum: 895a23929da416f2bd3de7e9cb4eabd340949328ab85ddd6e484a637d8f6820d485f53933446f5291c3b760cbc488beb8e88573dd0f9c7daf83dccc8fe81b041
-  languageName: node
-  linkType: hard
-
-"ansi-styles@npm:^4.1.0":
-  version: 4.2.1
-  resolution: "ansi-styles@npm:4.2.1"
-  dependencies:
-    "@types/color-name": ^1.1.1
-    color-convert: ^2.0.1
-  checksum: 12d0ebf418666965807ab03e030c1dee52f9e219dde64ce5044a6ca658b8ceb2224d283a8300f3c05568b3428c5707f9cf882c8ddd4dce219ed0528423731d61
   languageName: node
   linkType: hard
 
@@ -418,18 +401,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-wait-until@npm:1.7.1":
-  version: 1.7.1
-  resolution: "cypress-wait-until@npm:1.7.1"
-  checksum: 19948f2c7033d8cd9fecfbd536059969d9cd4ab7f6cbf1269f068e7870e255fc592d88b0722075e7f66a91fea91d377c689b24fa0e4e3658b1c95f7df65bd95d
+"cypress-wait-until@npm:1.7.2":
+  version: 1.7.2
+  resolution: "cypress-wait-until@npm:1.7.2"
+  checksum: 268c1327006d5b249aba80ceaf6813aed7ce149bbd5849602fe6af188acd96e0bec73dc1933c7b8c3ff67b8e35ac59b44d2632b0f1d6495e1ad21887fa9ec3a5
   languageName: node
   linkType: hard
 
-"cypress@npm:8.6.0":
-  version: 8.6.0
-  resolution: "cypress@npm:8.6.0"
+"cypress@npm:9.0.0":
+  version: 9.0.0
+  resolution: "cypress@npm:9.0.0"
   dependencies:
-    "@cypress/request": ^2.88.6
+    "@cypress/request": ^2.88.7
     "@cypress/xvfb": ^1.2.4
     "@types/node": ^14.14.31
     "@types/sinonjs__fake-timers": ^6.0.2
@@ -464,7 +447,6 @@ __metadata:
     ospath: ^1.2.2
     pretty-bytes: ^5.6.0
     proxy-from-env: 1.0.0
-    ramda: ~0.27.1
     request-progress: ^3.0.0
     supports-color: ^8.1.1
     tmp: ~0.2.1
@@ -473,7 +455,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 6d29723e3544861994fb30c8c0c0d1d23e2a9457c7ecbbba38363af695175ffabbcad6431667b18ae4b61b7142f05b0d0b77fd9bb61c84a34cb818938fc6c38e
+  checksum: 51c2d3a76f29aa334814b1d9238d7465920a3df261b350edda7896cd994f4a8493687b598065526a3b3d707e1786d36330560e7bd5b207ef96a5c4bcdd77010f
   languageName: node
   linkType: hard
 
@@ -502,16 +484,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "debug@npm:4.1.1"
-  dependencies:
-    ms: ^2.1.1
-  checksum: 399e98c779ba4e71537497f10caf6390646b69330ff8a455427acce04f1ce8d8cd018e1804fdcca772177666fdcd888dd3672bb8f9986c1d785a6c2b9805f370
-  languageName: node
-  linkType: hard
-
-"debug@npm:^4.3.2":
+"debug@npm:^4.1.1, debug@npm:^4.3.2":
   version: 4.3.2
   resolution: "debug@npm:4.3.2"
   dependencies:
@@ -534,8 +507,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "e2e@workspace:."
   dependencies:
-    cypress: 8.6.0
-    cypress-wait-until: 1.7.1
+    cypress: 9.0.0
+    cypress-wait-until: 1.7.2
   languageName: unknown
   linkType: soft
 
@@ -1223,13 +1196,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ramda@npm:~0.27.1":
-  version: 0.27.1
-  resolution: "ramda@npm:0.27.1"
-  checksum: 84f717f285f2f9d850ff15850084bccb55fbf4b1985846d39b8d276fa146d9e23416c47583cf25b710d93257fd5a3240447fddc41a1fffcfed48bd5e10d5c97d
-  languageName: node
-  linkType: hard
-
 "request-progress@npm:^3.0.0":
   version: 3.0.0
   resolution: "request-progress@npm:3.0.0"
@@ -1349,7 +1315,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^4.1.0":
+"string-width@npm:^4.1.0, string-width@npm:^4.2.0":
   version: 4.2.2
   resolution: "string-width@npm:4.2.2"
   dependencies:
@@ -1357,17 +1323,6 @@ __metadata:
     is-fullwidth-code-point: ^3.0.0
     strip-ansi: ^6.0.0
   checksum: 3874075d5b9c29f4260a338bf3d8152f266a8e6cf27538fd5c89f9dee0a5148d602df5c07c1308707b8a20029aac7842aebb6f861a84e24e79b3d97531894c23
-  languageName: node
-  linkType: hard
-
-"string-width@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "string-width@npm:4.2.0"
-  dependencies:
-    emoji-regex: ^8.0.0
-    is-fullwidth-code-point: ^3.0.0
-    strip-ansi: ^6.0.0
-  checksum: 54d6451abfdca5f147f930fe4eb1bbdf409ba115042146bb93dae309342124afcfeb776149075f60a6f8d6b2d3b68f48702fc96144b37789dd7a4752284b9648
   languageName: node
   linkType: hard
 
