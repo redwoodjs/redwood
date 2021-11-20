@@ -44,7 +44,7 @@ export const handler = ({
   port,
   build,
   buildDirectory,
-  noManagerCache,
+  managerCache,
 }) => {
   const cwd = getPaths().web.base
 
