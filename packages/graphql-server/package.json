@@ -45,7 +45,7 @@
     "@types/uuid": "8.3.3",
     "aws-lambda": "1.0.7",
     "jest": "27.3.1",
-    "typescript": "4.4.4"
+    "typescript": "4.5.2"
   },
   "jest": {
     "testPathIgnorePatterns": [

@@ -6252,7 +6252,7 @@ __metadata:
     ora: 5.4.1
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.4.4
+    typescript: 4.5.2
     typescript-transform-paths: 3.3.1
     whatwg-fetch: 3.6.2
   languageName: unknown
@@ -11765,23 +11765,23 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-typescript@4.4.4:
-  version: 4.4.4
-  resolution: "typescript@npm:4.4.4"
+typescript@4.5.2:
+  version: 4.5.2
+  resolution: "typescript@npm:4.5.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 7cd160bbfdf99404238c296db0d56352c7e1d57e367f02640ca36f254f3fa47f74bfc76615e0010c2688a443d9e7403e2d26c79d98ab450d924b17c950732486
+  checksum: 8fc40b886018889ad2099cb1b477c4f0373528c9fca83860ad33e898fe19ada22568477aca91741fbeabf0402e203f0e2d6d14ed6973ad826893cc13b2dfd459
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.4.4#~builtin<compat/typescript>":
-  version: 4.4.4
-  resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=32657b"
+"typescript@patch:typescript@4.5.2#~builtin<compat/typescript>":
+  version: 4.5.2
+  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: d0125d91e03306a8e40092b036c6cebd3ff3b730f1c01f1c76c44d4a263fe18d5ef5b1c2e98afe0f6704c2c4ca6416c60f7108eff9f53c4b75cbf9b07588fed7
+  checksum: b8334138fd39de72b3a235bec4bf1ab4bc5d62de0cbcbfbbd5ff22b6e77ec5430213c0bcf7251246f007bb00d752b8b48f736a5de85f7c49d7038cca59387e25
   languageName: node
   linkType: hard
 
