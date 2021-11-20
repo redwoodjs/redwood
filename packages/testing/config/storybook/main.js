@@ -45,6 +45,16 @@ const baseConfig = {
     `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
   ],
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
+  // Storybook's UI uses a seperate Webpack configuration
+  managerWebpack: (sbConfig) => {
+    const userManagerPath = fs.existsSync(rwjsPaths.web.storybookManagerConfig)
+      ? rwjsPaths.web.storybookManagerConfig
+      : './manager.example.js'
+    sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_MANAGER_CONFIG'] =
+      userManagerPath
+
+    return sbConfig
+  },
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction =
