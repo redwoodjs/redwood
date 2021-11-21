@@ -1,8 +1,14 @@
 import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
+import { unstable_batchedUpdates } from 'react-dom'
 
 import { Spec } from './router'
+import {
+  RouterState,
+  useRouterState,
+  useRouterStateSetter,
+} from './router-context'
 import {
   createNamedContext,
   getAnnouncement,
@@ -31,22 +37,24 @@ export const usePageLoadingContext = () => {
 
 type synchonousLoaderSpec = () => { default: React.ComponentType }
 interface State {
-  Page?: React.ComponentType
   pageName?: string
   slowModuleImport: boolean
   params?: Record<string, string>
 }
 
-interface Props {
+interface PageLoaderProps {
   spec: Spec
   delay?: number
   params?: Record<string, string>
   whileLoadingPage?: () => React.ReactElement | null
 }
+interface Props extends PageLoaderProps {
+  Page?: React.ComponentType | null
+  routerSetState: React.Dispatch<Partial<RouterState>>
+}
 
-export class PageLoader extends React.Component<Props> {
+class PageLoaderWithRouterContext extends React.Component<Props> {
   state: State = {
-    Page: undefined,
     pageName: undefined,
     slowModuleImport: false,
   }
@@ -137,16 +145,23 @@ export class PageLoader extends React.Component<Props> {
     // Remove the timeout because the page has loaded.
     this.clearLoadingTimeout()
 
-    this.setState({
-      pageName: name,
-      Page: module.default,
-      slowModuleImport: false,
-      params: props.params,
+    // Update downloaded page in the Router Context to avoid
+    // blank page (page: undefined) when Route unmounts (and therefore PageLoader)
+
+    // Batched update is to avoid unnecessary re-rendering
+    unstable_batchedUpdates(() => {
+      this.props.routerSetState({ currentPage: module.default })
+
+      this.setState({
+        pageName: name,
+        slowModuleImport: false,
+        params: props.params,
+      })
     })
   }
 
   render() {
-    const { Page } = this.state
+    const { Page } = this.props
 
     if (global.__REDWOOD__PRERENDERING) {
       // babel autoloader plugin uses withStaticImport in prerender mode
@@ -194,4 +209,16 @@ export class PageLoader extends React.Component<Props> {
         : null
     }
   }
+}
+
+export const PageLoader = (props: PageLoaderProps) => {
+  const { currentPage } = useRouterState()
+  const setRouterState = useRouterStateSetter()
+  return (
+    <PageLoaderWithRouterContext
+      {...props}
+      Page={currentPage}
+      routerSetState={setRouterState}
+    />
+  )
 }
