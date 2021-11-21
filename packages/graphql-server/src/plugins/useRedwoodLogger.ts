@@ -1,5 +1,5 @@
 import { Plugin } from '@envelop/core'
-import { handleStreamOrSingleExecutionResult } from '@envelop/types'
+import { handleStreamOrSingleExecutionResult } from '@envelop/core'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
 import { v4 as uuidv4 } from 'uuid'
 

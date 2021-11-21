@@ -14,6 +14,29 @@ const config = getConfig()
 
 const rwjsPaths = getPaths()
 
+function isPackageInstalled(alias) {
+  try {
+    return Boolean(require(alias))
+  } catch (e) {
+    return false
+  }
+}
+
+function withEmotionVersionFallback(config) {
+  const alias = Object.entries({
+    '@emotion/core': '@emotion/core',
+    '@emotion/styled': '@emotion/styled',
+    'emotion-theming': '@emotion/react',
+  }).reduce((acc, [packageName, alias]) => {
+    if (isPackageInstalled(alias)) {
+      acc[packageName] = require.resolve(alias)
+    }
+    return acc
+  }, {})
+
+  return merge(config, { resolve: { alias } })
+}
+
 const baseConfig = {
   core: {
     builder: 'webpack5',
@@ -22,6 +45,16 @@ const baseConfig = {
     `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
   ],
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
+  // Storybook's UI uses a seperate Webpack configuration
+  managerWebpack: (sbConfig) => {
+    const userManagerPath = fs.existsSync(rwjsPaths.web.storybookManagerConfig)
+      ? rwjsPaths.web.storybookManagerConfig
+      : './manager.example.js'
+    sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_MANAGER_CONFIG'] =
+      userManagerPath
+
+    return sbConfig
+  },
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction =
@@ -90,6 +123,8 @@ const baseConfig = {
     }
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
+
+    sbConfig = withEmotionVersionFallback(sbConfig)
 
     return sbConfig
   },
