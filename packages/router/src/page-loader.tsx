@@ -37,9 +37,7 @@ export const usePageLoadingContext = () => {
 
 type synchonousLoaderSpec = () => { default: React.ComponentType }
 interface State {
-  pageName?: string
   slowModuleImport: boolean
-  params?: Record<string, string>
 }
 
 interface PageLoaderProps {
@@ -49,13 +47,16 @@ interface PageLoaderProps {
   whileLoadingPage?: () => React.ReactElement | null
 }
 interface Props extends PageLoaderProps {
-  Page?: React.ComponentType | null
-  routerSetState: React.Dispatch<Partial<RouterState>>
+  currentRoute?: {
+    pageName: string
+    Page?: React.ComponentType | null
+    params?: Record<string, string>
+  }
+  setRouterState: React.Dispatch<Partial<RouterState>>
 }
 
 class PageLoaderWithRouterContext extends React.Component<Props> {
   state: State = {
-    pageName: undefined,
     slowModuleImport: false,
   }
 
@@ -68,12 +69,11 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
     return !isEqual(p1.params, p2.params)
   }
 
-  stateChanged = (s1: State, s2: State) => {
-    if (s1.pageName !== s2.pageName) {
-      return true
-    }
-    return !isEqual(s1.params, s2.params)
-  }
+  stateChanged = (s1: State, s2: State) =>
+    s1.slowModuleImport !== s2.slowModuleImport
+
+  pageNameChanged = (p1: Props, p2: Props) =>
+    p1.currentRoute?.pageName !== p2.currentRoute?.pageName
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     if (this.propsChanged(this.props, nextProps)) {
@@ -82,7 +82,10 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
       return false
     }
 
-    if (this.stateChanged(this.state, nextState)) {
+    if (
+      this.pageNameChanged(this.props, nextProps) ||
+      this.stateChanged(this.state, nextState)
+    ) {
       return true
     }
 
@@ -102,7 +105,10 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
       this.startPageLoadTransition(this.props)
     }
 
-    if (this.stateChanged(prevState, this.state)) {
+    if (
+      this.pageNameChanged(prevProps, this.props) ||
+      this.stateChanged(prevState, this.state)
+    ) {
       global?.scrollTo(0, 0)
       if (this.announcementRef.current) {
         this.announcementRef.current.innerText = getAnnouncement()
@@ -150,75 +156,86 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
 
     // Batched update is to avoid unnecessary re-rendering
     unstable_batchedUpdates(() => {
-      this.props.routerSetState({ currentPage: module.default })
+      this.props.setRouterState({
+        activeRoute: {
+          pageName: name,
+          Page: module.default,
+          params: props.params,
+        },
+      })
 
       this.setState({
-        pageName: name,
         slowModuleImport: false,
-        params: props.params,
       })
     })
   }
 
   render() {
-    const { Page } = this.props
-
     if (global.__REDWOOD__PRERENDERING) {
       // babel autoloader plugin uses withStaticImport in prerender mode
       // override the types for this condition
+      const { params: newParams } = this.props
       const syncPageLoader = this.props.spec
         .loader as unknown as synchonousLoaderSpec
       const PageFromLoader = syncPageLoader().default
 
       return (
         <PageLoadingContext.Provider value={{ loading: false }}>
-          <PageFromLoader {...this.state.params} />
+          <PageFromLoader {...newParams} />
         </PageLoadingContext.Provider>
       )
     }
 
-    if (Page) {
-      return (
-        <PageLoadingContext.Provider
-          value={{ loading: this.state.slowModuleImport }}
-        >
-          <Page {...this.state.params} />
-          <div
-            id="redwood-announcer"
-            style={{
-              position: 'absolute',
-              top: 0,
-              width: 1,
-              height: 1,
-              padding: 0,
-              overflow: 'hidden',
-              clip: 'rect(0, 0, 0, 0)',
-              whiteSpace: 'nowrap',
-              border: 0,
-            }}
-            role="alert"
-            aria-live="assertive"
-            aria-atomic="true"
-            ref={this.announcementRef}
-          ></div>
-        </PageLoadingContext.Provider>
-      )
-    } else {
-      return this.state.slowModuleImport
-        ? this.props.whileLoadingPage?.() || null
-        : null
+    // Page will always be there, either old one or the latest (except first load / hard refresh)
+    // So we have to check if we want to show loading state before rendering the Page
+    const { slowModuleImport } = this.state
+    const { whileLoadingPage } = this.props
+    if (slowModuleImport && whileLoadingPage) {
+      return this.props.whileLoadingPage?.() || null
     }
+
+    // currentRoute holds the last page until new page chunk is loaded
+    const { Page, params } = this.props.currentRoute || {}
+    if (!Page) {
+      return null
+    }
+
+    return (
+      <PageLoadingContext.Provider
+        value={{ loading: this.state.slowModuleImport }}
+      >
+        <Page {...params} />
+        <div
+          id="redwood-announcer"
+          style={{
+            position: 'absolute',
+            top: 0,
+            width: 1,
+            height: 1,
+            padding: 0,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          ref={this.announcementRef}
+        ></div>
+      </PageLoadingContext.Provider>
+    )
   }
 }
 
 export const PageLoader = (props: PageLoaderProps) => {
-  const { currentPage } = useRouterState()
+  const { activeRoute } = useRouterState()
   const setRouterState = useRouterStateSetter()
   return (
     <PageLoaderWithRouterContext
+      currentRoute={activeRoute}
+      setRouterState={setRouterState}
       {...props}
-      Page={currentPage}
-      routerSetState={setRouterState}
     />
   )
 }

@@ -10,7 +10,11 @@ export interface RouterState {
   paramTypes?: Record<string, ParamType>
   pageLoadingDelay?: number
   useAuth: typeof useAuth
-  currentPage?: React.ComponentType
+  activeRoute?: {
+    pageName: string
+    Page?: React.ComponentType
+    params?: Record<string, string>
+  }
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
