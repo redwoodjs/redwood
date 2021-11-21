@@ -72,8 +72,13 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
   stateChanged = (s1: State, s2: State) =>
     s1.slowModuleImport !== s2.slowModuleImport
 
-  pageNameChanged = (p1: Props, p2: Props) =>
-    p1.currentRoute?.pageName !== p2.currentRoute?.pageName
+  currentRouteChanged = (p1: Props, p2: Props) => {
+    if (p1.currentRoute?.pageName !== p2.currentRoute?.pageName) {
+      return true
+    }
+
+    return !isEqual(p1.currentRoute?.params, p2.currentRoute?.params)
+  }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     if (this.propsChanged(this.props, nextProps)) {
@@ -83,7 +88,7 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
     }
 
     if (
-      this.pageNameChanged(this.props, nextProps) ||
+      this.currentRouteChanged(this.props, nextProps) ||
       this.stateChanged(this.state, nextState)
     ) {
       return true
@@ -106,7 +111,7 @@ class PageLoaderWithRouterContext extends React.Component<Props> {
     }
 
     if (
-      this.pageNameChanged(prevProps, this.props) ||
+      this.currentRouteChanged(prevProps, this.props) ||
       this.stateChanged(prevState, this.state)
     ) {
       global?.scrollTo(0, 0)
