@@ -198,7 +198,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     )
   }
 
-  const { activeRouteTree, activeRoute, NotFoundPage } = analyzeRouteTree(
+  const { activeRoute, activePath, NotFoundPage } = analyzeRouterTree(
     children,
     pathname,
     paramTypes
@@ -210,15 +210,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       paramTypes={paramTypes}
       pageLoadingDelay={pageLoadingDelay}
     >
-      <ParamsProvider path={activeRoute?.props?.path}>
-        {!activeRoute && NotFoundPage ? (
+      <ParamsProvider path={activePath}>
+        {!activeRoute && NotFoundPage && (
           <PageLoader
             spec={normalizePage(NotFoundPage)}
             delay={pageLoadingDelay}
           />
-        ) : (
-          activeRoute && activeRouteTree
         )}
+        {activeRoute}
       </ParamsProvider>
     </RouterContextProvider>
   )
@@ -227,56 +226,51 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 /**
  * This function analyzes the routes and returns info pertaining to what to
  * render.
- *  - The tree to render, i.e. the active route and any <Set>s wrapping it
- *  - The active (i.e. first matching) route
+ *  - The element to render, i.e. the active route or the <Set>(s) wrapping it
+ *  - The path for the active route
  *  - The NotFoundPage, if we find any. Even if there is a NotFoundPage
  *    specified we might not find it, but only if we first find the active
  *    route, and in that case we don't need the NotFoundPage, so it doesn't
  *    matter.
  */
-function analyzeRouteTree(
+function analyzeRouterTree(
   children: React.ReactNode,
   pathname: string,
   paramTypes?: Record<string, ParamType>
 ) {
-  let activeRoute: React.ReactElement<InternalRouteProps> | undefined =
-    undefined
   let NotFoundPage: PageType | undefined = undefined
+  let activePath: string | undefined = undefined
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
     if (route.props.path) {
       const { match } = matchPath(route.props.path, pathname, paramTypes)
 
       if (match) {
-        // No need to loop further. As soon as we have a matching route we have
-        // all the info we need
         return true
       }
-    }
-
-    if (route.props.notfound && route.props.page) {
-      NotFoundPage = route.props.page
     }
 
     return false
   }
 
-  function analyzeRouteTreeInternal(children: React.ReactNode) {
-    let active = false
-
-    const activeRouteTree = React.Children.toArray(children).reduce<
-      React.ReactNode[]
-    >((acc, child) => {
-      if (active) {
-        return acc
+  function analyzeRouterTreeInternal(
+    children: React.ReactNode
+  ): React.ReactElement | undefined {
+    return React.Children.toArray(children).reduce<
+      React.ReactElement | undefined
+    >((previousValue, child) => {
+      if (previousValue) {
+        return previousValue
       }
 
       if (isRoute(child)) {
+        if (child.props.notfound && child.props.page) {
+          NotFoundPage = child.props.page
+        }
+
         // We have a <Route ...> element, let's check if it's the one we should
         // render (i.e. the active route)
-        active = isActiveRoute(child)
-
-        if (active) {
+        if (isActiveRoute(child)) {
           // All <Route>s have a key that React has generated for them.
           // Something like '.1', '.2', etc
           // But we know we'll only ever render one <Route>, so we can give
@@ -289,38 +283,28 @@ function analyzeRouteTree(
             key: '.rw-route',
           })
 
-          // Keep this child. It's the last one we'll keep since `active` is `true`
-          // now
-          acc.push(childWithKey)
+          activePath = child.props.path
 
-          activeRoute = childWithKey
+          return childWithKey
         }
       } else if (isReactElement(child) && child.props.children) {
         // We have a child element that's not a <Route ...>, and that has
         // children. It's probably a <Set>. Recurse down one level
-        const nestedChildren = analyzeRouteTreeInternal(child.props.children)
+        const nestedActive = analyzeRouterTreeInternal(child.props.children)
 
-        if (nestedChildren.activeRouteTree.length > 0) {
-          // We found something we wanted to keep. So let's push it to our
-          // "active route tree"
-          acc.push(
-            React.cloneElement(
-              child,
-              child.props,
-              nestedChildren.activeRouteTree
-            )
-          )
-          active = true
+        if (nestedActive) {
+          // We found something we wanted to keep. So let's return it
+          return React.cloneElement(child, child.props, nestedActive)
         }
       }
 
-      return acc
-    }, [])
-
-    return { activeRouteTree, activeRoute, NotFoundPage }
+      return previousValue
+    }, undefined)
   }
 
-  return analyzeRouteTreeInternal(children)
+  const activeRoute = analyzeRouterTreeInternal(children)
+
+  return { activeRoute, activePath, NotFoundPage }
 }
 
 function isSpec(specOrPage: Spec | React.ComponentType): specOrPage is Spec {
