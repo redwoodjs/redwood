@@ -166,7 +166,9 @@ export function createCell<CellProps = any>({
                    * @see https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes
                    * The error code came from `error.graphQLErrors[0].extensions.code`
                    */
-                  errorCode={error.graphQLErrors?.[0]?.extensions?.code}
+                  errorCode={
+                    error.graphQLErrors?.[0]?.extensions?.['code'] as string
+                  }
                   {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
