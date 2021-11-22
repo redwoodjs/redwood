@@ -89,6 +89,7 @@ interface FieldProps<
     | HTMLInputElement = HTMLInputElement
 > {
   name: string
+  id?: string
   errorClassName?: string
   errorStyle?: React.CSSProperties
   className?: string
@@ -467,7 +468,7 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
 }
 
 interface TextAreaFieldProps
-  extends Omit<FieldProps<HTMLTextAreaElement>, 'type'>,
+  extends FieldProps<HTMLTextAreaElement>,
     Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
 /**
@@ -516,7 +517,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
 )
 
 interface SelectFieldProps
-  extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
+  extends FieldProps<HTMLSelectElement>,
     Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
 /**
@@ -565,7 +566,7 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 )
 
 interface CheckboxFieldProps
-  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
+  extends FieldProps<HTMLInputElement>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
 /**
@@ -672,7 +673,7 @@ const INPUT_TYPES = [
 type InputType = typeof INPUT_TYPES[number]
 
 interface InputFieldProps
-  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
+  extends FieldProps<HTMLInputElement>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
   /**
    * @privateRemarks

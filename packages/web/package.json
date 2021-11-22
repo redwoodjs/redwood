@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.38.1",
+  "version": "0.38.3",
   "files": [
     "dist",
     "apollo",
@@ -11,10 +11,10 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "3.4.16",
-    "@redwoodjs/auth": "0.38.1",
-    "core-js": "3.18.3",
-    "graphql": "15.6.1",
+    "@apollo/client": "3.4.17",
+    "@redwoodjs/auth": "0.38.3",
+    "core-js": "3.19.1",
+    "graphql": "15.7.0",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.1.2",
     "react-hot-toast": "2.1.1"
@@ -28,10 +28,10 @@
     "react": "17.0.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.15.7",
-    "@types/react": "17.0.31",
+    "@babel/cli": "7.16.0",
+    "@types/react": "17.0.35",
     "jest": "27.3.1",
-    "typescript": "4.4.4"
+    "typescript": "4.5.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

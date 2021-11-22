@@ -33,6 +33,7 @@ export type DataObject = { [key: string]: unknown }
 export type CellFailureProps = Partial<
   Omit<QueryOperationResult, 'data' | 'error' | 'loading'> & {
     error: QueryOperationResult['error'] | Error // for tests and storybook
+    errorCode: string
     updating: boolean
   }
 >
@@ -51,6 +52,12 @@ export type CellSuccessProps<TData = any> = Partial<
 export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
+  isEmpty?: (
+    response: DataObject,
+    options: {
+      isDataEmpty: (data: DataObject) => boolean
+    }
+  ) => boolean
   afterQuery?: (data: DataObject) => DataObject
   Loading?: React.FC<CellLoadingProps & Partial<CellProps>>
   Failure?: React.FC<CellFailureProps & Partial<CellProps>>
@@ -107,17 +114,14 @@ const dataField = (data: DataObject) => {
   return data[Object.keys(data)[0]]
 }
 
-const isEmpty = (data: DataObject) => {
+const isDataEmpty = (data: DataObject) => {
   return isDataNull(data) || isDataEmptyArray(data)
 }
 
 export function createCell<CellProps = any>({
-  beforeQuery = (props) => ({
-    variables: props,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  }),
+  beforeQuery = (props) => ({ variables: props }),
   QUERY,
+  isEmpty = isDataEmpty,
   afterQuery = (data) => ({ ...data }),
   Loading = () => <>Loading...</>,
   Failure,
@@ -147,6 +151,14 @@ export function createCell<CellProps = any>({
               return (
                 <Failure
                   error={error}
+                  /**
+                   * error code
+                   * @optional
+                   * @type {string}
+                   * @see https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes
+                   * The error code came from `error.graphQLErrors[0].extensions.code`
+                   */
+                  errorCode={error.graphQLErrors?.[0]?.extensions?.code}
                   {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
@@ -154,9 +166,14 @@ export function createCell<CellProps = any>({
               throw error
             }
           } else if (data) {
-            if (typeof Empty !== 'undefined' && isEmpty(data)) {
+            if (
+              typeof Empty !== 'undefined' &&
+              isEmpty(data, { isDataEmpty })
+            ) {
               return (
-                <Empty {...{ updating: loading, ...queryRest, ...props }} />
+                <Empty
+                  {...{ ...data, updating: loading, ...queryRest, ...props }}
+                />
               )
             } else {
               return (
@@ -169,8 +186,11 @@ export function createCell<CellProps = any>({
           } else if (loading) {
             return <Loading {...queryRest} {...props} />
           } else {
+            console.warn(
+              `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`
+            )
             throw new Error(
-              'Cannot render cell: GraphQL success but `data` is null'
+              'Cannot render Cell: reached an unexpected state where the query succeeded but `data` is `null`. If this happened in Storybook, your query could be missing fields; otherwise this is most likely a GraphQL caching bug. Note that adding an `id` field to all the fields on your query may fix the issue.'
             )
           }
         }}

@@ -2,12 +2,12 @@
  * ts and js are equivalent in this case
  */
 describe('Update GraphQL Function', () => {
-  it('Modifies imports and createGraphQLHandler', () => {
-    matchTransformSnapshot('updateGraphQLFunction', 'graphql')
+  it('Modifies imports and createGraphQLHandler', async () => {
+    await matchTransformSnapshot('updateGraphQLFunction', 'graphql')
   })
 
-  it('Modifies imports (inline)', () => {
-    matchInlineTransformSnapshot(
+  it('Modifies imports (inline)', async () => {
+    await matchInlineTransformSnapshot(
       'updateGraphQLFunction',
       `import {
         createGraphQLHandler,
