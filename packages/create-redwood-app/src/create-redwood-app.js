@@ -107,6 +107,7 @@ const createProjectTasks = ({ newAppDir, overwrite }) => {
         return new Promise((resolve, reject) => {
           const { engines } = require(path.join(templateDir, 'package.json'))
 
+          // this checks all engine requirements, including Node.js and Yarn
           checkNodeVersion(engines, (_error, result) => {
             if (result.isSatisfied) {
               return resolve()

@@ -56,7 +56,7 @@ const useMatch = (pathname: string, options?: UseMatchOptions) => {
 
 interface LinkProps {
   to: string
-  onClick: React.MouseEventHandler<HTMLAnchorElement>
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 const Link = forwardRef<

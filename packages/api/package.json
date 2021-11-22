@@ -37,11 +37,6 @@
     "split2": "4.1.0",
     "typescript": "4.5.2"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/dist/"
-    ]
-  },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "NODE_ENV=production yarn build",
