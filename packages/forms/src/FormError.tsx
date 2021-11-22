@@ -18,6 +18,8 @@ interface RWGqlError {
   networkError: Error | ServerParseError | ServerError | null
 }
 
+type RWGqlErrorProperties = Record<string, Record<string, string[]>>
+
 interface FormErrorProps {
   error?: RWGqlError
   wrapperClassName?: string
@@ -58,8 +60,11 @@ const FormError = ({
   if (hasGraphQLError) {
     rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong.'
 
-    const propertyMessages =
-      error.graphQLErrors[0].extensions?.properties?.messages
+    const properties = error.graphQLErrors[0].extensions[
+      'properties'
+    ] as RWGqlErrorProperties
+
+    const propertyMessages = properties && properties['messages']
 
     for (const e in propertyMessages) {
       propertyMessages[e].forEach((fieldError: any) => {
