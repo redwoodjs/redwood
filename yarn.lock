@@ -5,7 +5,7 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@apollo/client@npm:^3.5.4":
+"@apollo/client@npm:3.5.4":
   version: 3.5.4
   resolution: "@apollo/client@npm:3.5.4"
   dependencies:
@@ -4535,7 +4535,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": ^3.5.4
+    "@apollo/client": 3.5.4
     "@babel/cli": 7.16.0
     "@redwoodjs/auth": 0.38.3
     "@types/react": 17.0.35
