@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@apollo/client@npm:3.4.17":
-  version: 3.4.17
-  resolution: "@apollo/client@npm:3.4.17"
+"@apollo/client@npm:3.5.4":
+  version: 3.5.4
+  resolution: "@apollo/client@npm:3.5.4"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -20,9 +20,9 @@ __metadata:
     symbol-observable: ^4.0.0
     ts-invariant: ^0.9.0
     tslib: ^2.3.0
-    zen-observable-ts: ~1.1.0
+    zen-observable-ts: ^1.2.0
   peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0
     subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 4cff402e5bd8ec04eddc6edfb35697a648f52520d65d74ffcd1837863f189e258c911af58b679858638cfd9a24480f431f69e4361493f4a439269a8f60877e3f
+  checksum: 46c9910108daf5c2006513eb83f79e59b02b71b329fc9b905527d0e18a7c516b73465979f3d8d6258e5aff171fada5cf97b0bee997b2051b68a2489ceb4e2687
   languageName: node
   linkType: hard
 
@@ -4535,7 +4535,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.4.17
+    "@apollo/client": 3.5.4
     "@babel/cli": 7.16.0
     "@redwoodjs/auth": 0.38.3
     "@types/react": 17.0.35
@@ -6645,13 +6645,6 @@ __metadata:
   version: 1.9.2
   resolution: "@types/yoga-layout@npm:1.9.2"
   checksum: 9f2a8618afe3e2e18e76eeaa4ec7d09a85f01f071231f8ff21388d851f940dd7ae5867a5f9aef29eafe44c47453a328d3c718fff1451ab62266450b415e43150
-  languageName: node
-  linkType: hard
-
-"@types/zen-observable@npm:0.8.3":
-  version: 0.8.3
-  resolution: "@types/zen-observable@npm:0.8.3"
-  checksum: c0605d109e58a32c9b47ab9becb4ee4bcd8ed54f452ccdcfbb025a60eb8abb1341f00fb045caaa6f1a72f1299f2cdf7b7918023aef34bd9bfdfdbae0e21e66eb
   languageName: node
   linkType: hard
 
@@ -26600,13 +26593,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"zen-observable-ts@npm:~1.1.0":
-  version: 1.1.0
-  resolution: "zen-observable-ts@npm:1.1.0"
+"zen-observable-ts@npm:^1.2.0":
+  version: 1.2.3
+  resolution: "zen-observable-ts@npm:1.2.3"
   dependencies:
-    "@types/zen-observable": 0.8.3
     zen-observable: 0.8.15
-  checksum: 608dc1b82b1f8c66d1068b24017fd855e2355acaec3f5c41f7e3f780d58aa3b1ce3e175c82a65095f1b0f6ec18295b1f1d9aafa81b2f4556d55ae4e4bb6d4ec8
+  checksum: fa4c1ebbbbc3e7d41dca6d9dc74cb96440ee4767c50d8f9a3b3f84f823d9832d148f76187cd65c30d9ab4008f88c7248fe8774f7cedf98fbfc2e0a6429ce08f5
   languageName: node
   linkType: hard
 
