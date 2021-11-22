@@ -29,7 +29,7 @@ export const usePageLoadingContext = () => {
   return pageLoadingContext
 }
 
-type synchonousLoaderSpec = () => { default: React.ComponentType }
+type synchronousLoaderSpec = () => { default: React.ComponentType }
 interface State {
   Page?: React.ComponentType
   pageName?: string
@@ -149,10 +149,10 @@ export class PageLoader extends React.Component<Props> {
     const { Page } = this.state
 
     if (global.__REDWOOD__PRERENDERING) {
-      // babel autoloader plugin uses withStaticImport in prerender mode
+      // babel auto-loader plugin uses withStaticImport in prerender mode
       // override the types for this condition
       const syncPageLoader = this.props.spec
-        .loader as unknown as synchonousLoaderSpec
+        .loader as unknown as synchronousLoaderSpec
       const PageFromLoader = syncPageLoader().default
 
       return (
