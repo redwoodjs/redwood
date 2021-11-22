@@ -277,11 +277,23 @@ function analyzeRouteTree(
         active = isActiveRoute(child)
 
         if (active) {
+          // All <Route>s have a key that React has generated for them.
+          // Something like '.1', '.2', etc
+          // But we know we'll only ever render one <Route>, so we can give
+          // all of them the same key. This will make React re-use the element
+          // between renders, which helps get rid of "white flashes" when
+          // navigating between pages. (The other half of that equation is in
+          // PageLoader)
+          const childWithKey = React.cloneElement(child, {
+            ...child.props,
+            key: '.rw-route',
+          })
+
           // Keep this child. It's the last one we'll keep since `active` is `true`
           // now
-          acc.push(child)
+          acc.push(childWithKey)
 
-          activeRoute = child
+          activeRoute = childWithKey
         }
       } else if (isReactElement(child) && child.props.children) {
         // We have a child element that's not a <Route ...>, and that has

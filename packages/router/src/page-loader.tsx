@@ -67,15 +67,11 @@ export class PageLoader extends React.Component<Props> {
     return !isEqual(s1.params, s2.params)
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
+  shouldComponentUpdate(nextProps: Props) {
     if (this.propsChanged(this.props, nextProps)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition(nextProps)
       return false
-    }
-
-    if (this.stateChanged(this.state, nextState)) {
-      return true
     }
 
     return true
@@ -146,8 +142,6 @@ export class PageLoader extends React.Component<Props> {
   }
 
   render() {
-    const { Page } = this.state
-
     if (global.__REDWOOD__PRERENDERING) {
       // babel auto-loader plugin uses withStaticImport in prerender mode
       // override the types for this condition
@@ -162,7 +156,13 @@ export class PageLoader extends React.Component<Props> {
       )
     }
 
-    if (Page) {
+    if (this.state.slowModuleImport && this.props.whileLoadingPage) {
+      return this.props.whileLoadingPage()
+    }
+
+    if (this.state.Page) {
+      const { Page } = this.state
+
       return (
         <PageLoadingContext.Provider
           value={{ loading: this.state.slowModuleImport }}
@@ -188,10 +188,8 @@ export class PageLoader extends React.Component<Props> {
           ></div>
         </PageLoadingContext.Provider>
       )
-    } else {
-      return this.state.slowModuleImport
-        ? this.props.whileLoadingPage?.() || null
-        : null
     }
+
+    return null
   }
 }
