@@ -60,16 +60,18 @@ const FormError = ({
   if (hasGraphQLError) {
     rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong.'
 
-    const properties = error.graphQLErrors[0].extensions[
+    const properties = error.graphQLErrors[0].extensions?.[
       'properties'
     ] as RWGqlErrorProperties
 
     const propertyMessages = properties && properties['messages']
 
-    for (const e in propertyMessages) {
-      propertyMessages[e].forEach((fieldError: any) => {
-        messages.push(`${e} ${fieldError}`)
-      })
+    if (propertyMessages) {
+      for (const e in propertyMessages) {
+        propertyMessages[e].forEach((fieldError: any) => {
+          messages.push(`${e} ${fieldError}`)
+        })
+      }
     }
   } else if (hasNetworkError) {
     rootMessage = rootMessage ?? 'An error has occurred'

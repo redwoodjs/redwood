@@ -181,9 +181,7 @@ export const createGraphQLHandler = ({
   // Only allow execution of specific operation types
   plugins.push(
     useFilterAllowedOperations(
-      allowedOperations || [
-        OperationTypeNode.QUERY || OperationTypeNode.MUTATION,
-      ]
+      allowedOperations || [OperationTypeNode.QUERY, OperationTypeNode.MUTATION]
     )
   )
 
