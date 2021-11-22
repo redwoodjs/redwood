@@ -32,16 +32,22 @@ declare module 'jscodeshift/dist/testUtils' {
   ): string
 }
 
-import {
-  matchInlineTransformSnapshot,
-  matchTransformSnapshot,
-} from './testUtils/index'
+import { matchFolderTransform } from './testUtils/matchFolderTransform'
+import { matchInlineTransformSnapshot } from './testUtils/matchInlineTransformSnapshot'
+import { matchTransformSnapshot } from './testUtils/matchTransformSnapshot'
 
 type MatchFunction = typeof matchTransformSnapshot
 type MatchInlineFunction = typeof matchInlineTransformSnapshot
+type MatchFolder = typeof matchFolderTransform
 
 // This file gets loaded in jest setup, so becomes available globally in tests
 declare global {
   const matchTransformSnapshot: MatchFunction
   const matchInlineTransformSnapshot: MatchInlineFunction
+  const matchFolderTransform: MatchFolder
+  namespace jest {
+    interface Matchers<R> {
+      toMatchFixture(a: unknown, b: string): R
+    }
+  }
 }
