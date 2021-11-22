@@ -11,7 +11,7 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "3.4.17",
+    "@apollo/client": "3.5.4",
     "@redwoodjs/auth": "0.38.3",
     "core-js": "3.19.1",
     "graphql": "16.0.1",
