@@ -4268,7 +4268,7 @@ __metadata:
     esbuild-loader: 2.16.0
     fast-glob: 3.2.7
     file-loader: 6.2.0
-    graphql: 15.7.0
+    graphql: 16.0.1
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
@@ -14440,17 +14440,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql@npm:15.7.0, graphql@npm:^15.5.1":
-  version: 15.7.0
-  resolution: "graphql@npm:15.7.0"
-  checksum: 1418095b0ab7d10627935442b3a08edd5ac786e6edcafe60e432dfdc929b860015054300d858a2872dcd503523ba6fd97bf71af86ab4be230175bb625114e4a7
-  languageName: node
-  linkType: hard
-
 "graphql@npm:16.0.1":
   version: 16.0.1
   resolution: "graphql@npm:16.0.1"
   checksum: b8599a98c78ac5fe3371540d58f415df460420d69998fe8c94a6c29365b518847df76acb64a241033eea97a3163a0a848d5795209caffbeef7156bc91c2c76c4
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^15.5.1":
+  version: 15.7.0
+  resolution: "graphql@npm:15.7.0"
+  checksum: 1418095b0ab7d10627935442b3a08edd5ac786e6edcafe60e432dfdc929b860015054300d858a2872dcd503523ba6fd97bf71af86ab4be230175bb625114e4a7
   languageName: node
   linkType: hard
 
