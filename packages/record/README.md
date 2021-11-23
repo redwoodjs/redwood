@@ -116,37 +116,290 @@ User.findBy({ email: 'rob@redwoodjs.com' })
 newUser.destroy()
 ```
 
+### Initializing New Records
+
+To create a new record in memory only (not yet saved to the database) use `build()`:
+
+```javascript
+const user = User.build({ firstName: 'David', lastName: 'Price' })
+```
+See [create/save](#save) below for saving this record to the database.
+
+### Errors
+
+When a record cannot be saved to the database, either because of database errors or [validation](#validation) errors, the `errors` property will be populated with the error message(s).
+
+```javascript
+const User.build({ name: 'Rob Cameron' })
+await user.save() // => false
+user.hasError()   // => true
+user.errors       // => { base: [], email: ['must not be null'] }
+user.errors.email // => ['must not be null']
+```
+
+You can pre-emptively check for errors before attempting to save, but only for errors that would be caught with [validation](#validation), by using `isValid()`:
+
+```javascript
+const User.build({ name: 'Rob Cameron' })
+user.isValid()    // => false
+user.errors.email // => ['must be formatted like an email address']
+```
+
+### Validation
+
+Records can be checked for valid data before saving to the database by using the same [validation types](/docs/services#absence) available to [Service Validations](/docs/services/service-validations):
+
+```javascript
+export default class User extends RedwoodRecord {
+  static validates = {
+    email: { presence: true, email: true },
+    username: { length: { min: 2, max: 50 } }
+  }
+}
+
+const user = User.build({ username: 'r' })
+await user.save() // => false
+user.errors.email = ['must be present']
+user.errors.username = ['must be at least 2 charaters']
+user.email = 'rob@redwoodjs.com'
+user.username = 'rob'
+await user.save()
+```
+
 ### Finding Records
 
-* where()
-* all()
-* find()
-* findBy()
-* Passing more options like orderBy
+There are a few different ways to find records for a model. Sometimes you want to find multiple records (all that match certain criteria) and sometimes only one (the one record with a certain email address).
+
+#### where()
+
+`where()` is for finding multiple records. It returns an array of model records. The first argument is the properties that you would normally set as the `where` value in to Prisma's [`findMany()` function](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany). The second argument (optional) is any additional properties (like ordering or limiting) that you want to perform on the resulting records:
+
+```javascript
+User.where() // would return all records
+User.where({ emailPreference: 'weekly' })
+User.where({ theme: 'dark' }, { orderBy: { createdAt: 'desc' } })
+```
+
+#### all()
+
+`all()` is simply a synonym for `where()` but makes it clearer that your intention is truly to select all records (and optionally sort/order them). The first (and only) argument is now the additional properties (like `sort` and `orderBy`):
+
+```javascript
+User.all()
+User.all({ orderBy: { lastName: 'asc' } })
+```
+
+#### find()
+
+Finds a single record by that record's primary key. By default that is `id` but you can change the primary key of a model by defining it in the class definition:
+
+```javascript
+export default class User extends RecordRecord {
+  static primaryKey = 'ident'
+}
+```
+
+This call will throw an error if the record is not found: if you are trying to select a user by ID, presumably you expect that user to exist. So, it not existing is an exceptional condition. Behind the scenes this uses Prisma's [`findFirst()` function](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findfirst).
+
+```javascript
+User.find(123)
+```
+
+#### findBy()
+
+Finds a single record by certain criteria. Similar to `where()`, but will only return the first record that matches. The first argument is the properties that you would normally set as the `where` value to Prisma's [`findFirst()` function](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany). The second argument (optional) is any additional properties (like ordering or limiting) that you want to perform on the resulting records before selecting one:
+
+```javascript
+User.findBy({ email: 'rob@redwoodjs.com' })
+User.findBy({ email: { endsWith: { 'redwoodjs.com' } } }, { orderBy: { lastName: 'asc' }, take: 10 })
+```
+
+#### first()
+
+Alias for `findBy()`. This function can be used in your code to show your intention to only use the first of potentially multiple records that could match with `findBy()`.
+
+```javascript
+const randomCoreMember = await User.first({ email: { endsWith: { 'redwoodjs.com' } } })
+```
 
 ### Creating Records
+
+You can create new records with your RedwoodRecord model in two ways:
+
+#### create()
+
+Initializes a new record and saves it. If the save fails, `create` will return `false` instead of the instance of your record. If you need your new model instance (even on a failed save) use the `build()` version next.
+
+The first argument is the data that would be given to Prisma's `create()` function. The (optional) second argument are any additional properties that are passed on to Prisma:
+
+```javascript
+User.create({ name: 'Tom Preston-Werner' })
+User.create({ firstName: 'Rob', email: 'rob@redwoodjs.com' }, { select: ['email'] })
+```
+
+#### save()
+
+When calling `save()` on a record that hasn't been saved to the database, a new record will be created. If the record cannot be saved this call will return `false`. You can have it throw an error instead by including `{ throw: true }` in the first argument.
+
+If the record cannot be saved you can inspect it for errors.
+
+```javascript
+const user = User.build({ firstName: 'Peter', lastName: 'Pistorius' })
+user.save()
+// or
+user.save({ throw: true })
+// check for errors
+user.hasErrors // => true
+user.errors.email // => ['can't be null']
+```
 
 * User.create()
 * User.build(), instance.save()
 
 ### Updating Records
 
-User.update()
-instance.save()
+There are two ways to update a record. By either listing all of the attributes to change in a call to `update()`, or setting the attributes manually and then calling `save()`.
+
+#### update()
+
+Call `update()` on a record, including the attributes to change as the first argument. The second (optional) argument are additional properties forwarded to Prisma on updating. Returns `false` if the record did not save, otherwise returns itself with the newly saves attributes.
+
+```javascript
+const user = User.find(123)
+await user.update({ email: 'rob.cameron@redwoodjs.com' })
+// or
+await user.update({ email: 'rob.cameron@redwoodjs.com' }, { throw: true })
+```
+
+#### save()
+
+Save changes made to a record. The first (optional) argument includes any properties to be forwarded to Prisma, as well as the option to throw an error on a failed save:
+
+```javascript
+const user = User.find(123)
+user.email = 'rob.cameron@redwoodjs.com'
+await user.save()
+// or
+await user.save({ throw: true })
+```
 
 ### Deleting Records
 
-User.destroy()
-instance.destroy()
+Records can be deleted easily enough. Coming soon will be class functions for deleting one or multiple records, without having to instantiate an instance of the model first.
+
+#### destroy()
+
+Call on a record to delete it in the database. The first (optional) argument are any properties to forward to Prisma when deleting, as well as the option to throw an error if the delete fails. This function returns `false` if the record could not be deleted, otherwise returns the record itself.
+
+```javascript
+const user = User.find(123)
+await user.destroy()
+// or
+await user.destroy({ throw: true })
+```
 
 ### Relationships
 
+As shown in [Background and Terminology](background-and-terminology) above, RedwoodRecord provides a way to get data from one related models. For example, to get the posts belonging to a user via what we call a *relation proxy*:
+
+```javascript
+const user = await User.find(123)
+const posts = user.posts.all()
+```
+
+In this example `posts` is the proxy. All of the normal finder methods available on a model (`where()`, `all()`, `find()` and `findBy()`) are all available to be called on the relation proxy. But not only that, you can create records as well and they will automatcally be associated to the parent record:
+
+```javascript
+const user = await User.find(123)
+const post = await user.posts.create({ title: 'Related post!' })
+post.userId // => 123
+```
+
 #### One-to-many
 
-#### Belongs To
+The *many* records are accessible through the relation proxy:
+
+```javascript
+const user = await User.find(123)
+const post = await user.posts.first()
+const comments = await post.comments.all()
+```
+
+You can also create a record:
+
+
+```javascript
+const user = await User.find(123)
+const post = await user.posts.create({ title: 'Related post!' })
+```
+
+#### Belongs-to
+
+A belongs-to relationship implies that you have the child record and want the parent. In a belongs-to relationship there is only ever a single parent, so there is no need for a relationship proxy property: there is only one record that will ever be returned.
+
+```javascript
+const post = await Post.first()
+const user = await post.user
+```
+
+> You cannot currently create a belongs-to record through the parent, but we're working on syntax to let enable this!
 
 #### Many-to-many
 
-### Validations
+If you have an implict many-to-many relationship then you will access the records similar to the one-to-many type:
 
-### Lifecycle
+```javascript
+const product = await Product.find(123)
+const categories = product.categories.all()
+```
+
+If you have an explict many-to-many relationship then you need to treat it as a two-step request. First, get the one-to-many relationships for the join table, then a belongs-to relationship for the data you actually want.
+
+```
+Product -> one-to-many -> ProductCategories -> belongs-to -> Category
+-------                   -----------------                  --------
+```
+
+```javascript
+const product = await Product.find(123)
+const productCategories = product.productCategories.all()
+const categories = Promise.all(productCategories.map(async (pc) => await pc.category))
+```
+
+If you wanted to create a new record this way, you would need to create the join table record after having already created/retrived the records on either site of the relation:
+
+```javascript
+const product = await Product.find(123)
+const category = await Category.find(234)
+await ProductCategory.create({ productId: product.id, categoryId: category.id })
+```
+
+> We're working on improving this syntax to make interacting with these records as simple as the implict version. Stay tuned!
+
+## Coming Soon
+
+The following features are in development but are not available in this experimental release.
+
+### Lifecycle Callbacks
+
+Coming soon will be the ability create functions around the lifecycle of a record. For example, to set a newly created user's default preferences you may want an `afterCreate` callback that invokes a function (syntax not final):
+
+```javascript
+export default class User extends RedwoodRecord {
+  static afterCreate = async (user) => {
+    await user.preferences.create({ email: 'weekly' })
+  }
+}
+```
+
+Or make sure that a user has transferred ownership of some data before closing their account:
+
+```javascript
+export default class User extends RedwoodRecord {
+  static beforeDestroy = async (user) => {
+    if (await user.teams.count() !== 0) {
+      throw new Error('Please transfer ownership of your teams first')
+    }
+  }
+}
+```
