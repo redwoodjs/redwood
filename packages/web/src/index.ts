@@ -1,6 +1,6 @@
 import './global.web-auto-imports'
 import './config'
-import './svg'
+import './assetImports'
 
 export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
 export {
