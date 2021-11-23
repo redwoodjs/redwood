@@ -112,6 +112,11 @@ export interface GraphQLHandlerOptions {
    *
    * By default, only allow query and mutation (ie, do not allow subscriptions).
    *
+   * An array of GraphQL's OperationTypeNode enums:
+   * - OperationTypeNode.SUBSCRIPTION
+   * - OperationTypeNode.QUERY
+   * - OperationTypeNode.MUTATION
+   *
    * @see https://github.com/dotansimha/envelop/tree/main/packages/plugins/filter-operation-type
    */
   allowedOperations?: AllowedOperations

@@ -363,7 +363,7 @@ const componentFiles = async (
     Boolean: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
-      validation: false,
+      validation: () => false,
       listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
@@ -689,13 +689,6 @@ export const handler = async ({
   typescript,
   tailwind,
 }) => {
-  /** @deprecated Used to be able to create dbAuth pages with `yarn rw g scaffold dbAuth` */
-  if (modelArg.toLowerCase() === 'dbauth') {
-    console.info(c.green('\nGenerate dbAuth pages with:\n'))
-    console.info('  yarn rw generate dbAuth\n')
-    process.exit(0)
-  }
-
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }

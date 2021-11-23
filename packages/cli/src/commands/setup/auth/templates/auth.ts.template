@@ -2,6 +2,12 @@ import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 /**
+ * Represents the user attributes returned by the decoding the
+ * Authentication provider's JWT together with an optional list of roles.
+ */
+type RedwoodUser = Record<string, unknown> & { roles?: string[] }
+
+/**
  * getCurrentUser returns the user information together with
  * an optional collection of roles used by requireAuth() to check
  * if the user is authenticated or has role-based access
@@ -18,23 +24,25 @@ import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
  * if someone were to open the Web Inspector in their browser.
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
+ *
+ * @returns RedwoodUser
  */
 export const getCurrentUser = async (
   decoded,
   { _token, _type },
   { _event, _context }
-) => {
+): Promise<RedwoodUser> => {
   if (!decoded) {
     return null
+
+    const { roles } = parseJWT({ decoded })
+
+    if (roles) {
+      return { ...decoded, roles }
+    }
+
+    return { ...decoded }
   }
-
-  const { roles } = parseJWT({ decoded })
-
-  if (roles) {
-    return { ...decoded, roles }
-  }
-
-  return { ...decoded }
 }
 
 /**
