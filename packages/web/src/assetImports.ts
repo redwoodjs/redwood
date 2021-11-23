@@ -2,7 +2,7 @@
 // For svgs we use a babel-plugin
 // see: redwood/packages/internal/src/build/babel/web.ts
 
-// For other assets, we're using webpack asset loader 
+// For other assets, we're using webpack asset loader
 // see: redwood/packages/core/config/webpack.common.js
 // These declarations are the most common types
 
