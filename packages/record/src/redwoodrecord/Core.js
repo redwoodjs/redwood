@@ -39,9 +39,9 @@ export default class Core {
     return this.db[this.accessorName || camelCase(this.name)]
   }
 
-  // Alias for where()
-  static all(...args) {
-    return this.where(...args)
+  // Alias for where({})
+  static all(args) {
+    return this.where({}, args)
   }
 
   static build(attributes) {

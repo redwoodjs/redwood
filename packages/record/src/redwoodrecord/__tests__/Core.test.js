@@ -114,6 +114,15 @@ describe('User subclass', () => {
     })
 
     describe('all', () => {
+      it('calls where with an empty first argument', async () => {
+        db.user.findMany = jest.fn(() => [])
+        await User.all()
+
+        expect(db.user.findMany).toHaveBeenCalledWith({
+          where: {},
+        })
+      })
+
       it('is an alias for where', async () => {
         db.user.findMany = jest.fn(() => [
           {
