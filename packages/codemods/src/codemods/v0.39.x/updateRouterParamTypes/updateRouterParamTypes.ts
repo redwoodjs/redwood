@@ -1,10 +1,6 @@
 import type {
-  FileInfo,
-  API,
-  JSXExpressionContainer,
+  API, FileInfo, JSXExpressionContainer,
   ObjectExpression,
-  Collection,
-  Identifier,
 } from 'jscodeshift'
 
 export default function transform(file: FileInfo, api: API) {
@@ -48,8 +44,9 @@ export default function transform(file: FileInfo, api: API) {
       newPropertyName[paramTypeKey.key.name as keyof typeof newPropertyName]
   }
 
+
   const mapToNewSyntax = (
-    allParamTypeProperties: Collection<ObjectExpression | Identifier>
+    allParamTypeProperties: ObjectExpression['properties']
   ) => {
     // allParamTypeProperties here is array of following marked as 👉
     /*
@@ -66,7 +63,15 @@ export default function transform(file: FileInfo, api: API) {
     */
 
     allParamTypeProperties.forEach((paramTypeProperty) => {
-      // paramTypeProperty.value could be either ObjectExpression or Identifier
+      // paramTypeProperty.value could be either ObjectExpression, Identifier
+      if (paramTypeProperty.type === 'SpreadProperty' || paramTypeProperty.type === 'SpreadElement' || paramTypeProperty.type === 'ObjectMethod') {
+        // We don't handle these other types.
+        // As they're quite edgecase-ey
+        // like paramTypes={{...myParams}} (spreadelement)
+        console.warn('Unable to update your custom Route parameters. Please follow manual instructions')
+        return
+      }
+
       switch (paramTypeProperty.value.type) {
         // Identifier could be for {{ slug }} in examples above. Or something like {{slug: slug}}
         case 'Identifier': {
@@ -82,7 +87,7 @@ export default function transform(file: FileInfo, api: API) {
               return
             }
             const valueDefInit = valueDefNode.value.init
-            valueDefInit.properties.forEach((valueDefInitProperty: any) => {
+            valueDefInit.properties.forEach((valueDefInitProperty) => {
               renameParamTypeKey(valueDefInitProperty)
             })
           })
@@ -90,7 +95,7 @@ export default function transform(file: FileInfo, api: API) {
         }
         case 'ObjectExpression':
           // Value is an object
-          paramTypeProperty.value.properties.forEach((property: any) => {
+          paramTypeProperty.value.properties.forEach((property) => {
             renameParamTypeKey(property)
           })
           break
@@ -108,38 +113,28 @@ export default function transform(file: FileInfo, api: API) {
         }
       )
       paramTypeProp.forEach((prop) => {
-        const paramTypeValue: any = (
+        const paramTypeValue = (
           prop?.value?.value as JSXExpressionContainer
-        )?.expression
+        )?.expression // get the value inside the jsx expression
 
         // paramTypeValue is marked as 👉 . It could be even referenced as variable.
-        /*
-        <Router
-          paramTypes={👉 {
-            slug,
-            embeddedProperties: { constraint: constraint, transform },
-            embedded: {
-              constraint: /\w+.\w+/,
-              transform: (param) => param.split('.'),
-            },
-          }}
-        >
-        */
+        // <Router paramTypes={👉 {}} 
 
         switch (paramTypeValue?.type) {
-          case 'Identifier': {
+          case 'Identifier': { // <R paramsTypes={myParamTypes}
             // Search the Routes file for variable declaration
             const variableDefinitions = ast.find(j.VariableDeclarator, {
               id: { name: paramTypeValue.name },
             })
             variableDefinitions.forEach((varDef) => {
-              const allParamTypeProperties: any = (varDef?.value?.init as any)
+              const allParamTypeProperties = (varDef?.value?.init as ObjectExpression) // safe to assume that this variable is an object declaration
                 ?.properties
               mapToNewSyntax(allParamTypeProperties)
             })
             break
           }
-          case 'ObjectExpression': // Object is embedded
+
+          case 'ObjectExpression': // <R paramTypes={{constraint: '', ..}} or paramTypes={{...myParamTypes}}
             mapToNewSyntax(paramTypeValue.properties)
             break
         }
