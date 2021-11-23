@@ -119,7 +119,15 @@ const isDataEmpty = (data: DataObject) => {
 }
 
 export function createCell<CellProps = any>({
-  beforeQuery = (props) => ({ variables: props }),
+  beforeQuery = (props) => ({
+    variables: props,
+    /**
+     * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
+     * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
+     */
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
+  }),
   QUERY,
   isEmpty = isDataEmpty,
   afterQuery = (data) => ({ ...data }),
@@ -158,7 +166,9 @@ export function createCell<CellProps = any>({
                    * @see https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes
                    * The error code came from `error.graphQLErrors[0].extensions.code`
                    */
-                  errorCode={error.graphQLErrors?.[0]?.extensions?.code}
+                  errorCode={
+                    error.graphQLErrors?.[0]?.extensions?.['code'] as string
+                  }
                   {...{ updating: loading, ...queryRest, ...props }}
                 />
               )

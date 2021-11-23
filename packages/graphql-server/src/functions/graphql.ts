@@ -19,7 +19,7 @@ import type {
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema } from 'graphql'
+import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
 import {
   getGraphQLParameters,
   processRequest,
@@ -180,7 +180,9 @@ export const createGraphQLHandler = ({
   )
   // Only allow execution of specific operation types
   plugins.push(
-    useFilterAllowedOperations(allowedOperations || ['mutation', 'query'])
+    useFilterAllowedOperations(
+      allowedOperations || [OperationTypeNode.QUERY, OperationTypeNode.MUTATION]
+    )
   )
 
   // App-defined plugins
