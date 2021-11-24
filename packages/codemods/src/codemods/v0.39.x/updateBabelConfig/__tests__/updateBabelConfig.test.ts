@@ -1,4 +1,4 @@
-import transform from '../removeBabelConfig'
+import transform from '../updateBabelConfig'
 test('Should remove/rename configs correctly for the default setup', async () => {
   await matchFolderTransform(transform, 'defaultConfig')
 })

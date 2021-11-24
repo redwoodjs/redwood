@@ -51,9 +51,9 @@ export const matchFolderTransform = async (
   })
 
   // Step 2: Run transform against temp dir
-  // await transformFunction()
+  await transformFunction()
 
-  const transformedPaths = fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir }) //?
+  const transformedPaths = fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir })
 
   const expectedPaths = fg.sync('**/*', {
     ...GLOB_CONFIG,
