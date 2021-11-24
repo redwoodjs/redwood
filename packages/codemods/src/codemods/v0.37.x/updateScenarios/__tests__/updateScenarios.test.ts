@@ -1,9 +1,9 @@
 describe('Update Scenarios', () => {
-  it('Modifies simple Scenarios', () => {
-    matchTransformSnapshot('updateScenarios', 'simple')
+  it('Modifies simple Scenarios', async () => {
+    await matchTransformSnapshot('updateScenarios', 'simple')
   })
 
-  it('Modifies more complex Scenarios', () => {
-    matchTransformSnapshot('updateScenarios', 'realExample')
+  it('Modifies more complex Scenarios', async () => {
+    await matchTransformSnapshot('updateScenarios', 'realExample')
   })
 })

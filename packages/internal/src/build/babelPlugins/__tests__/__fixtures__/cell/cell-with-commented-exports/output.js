@@ -28,4 +28,5 @@ export default createCell({
   Loading,
   Failure,
   Success,
+  displayName: 'code',
 })

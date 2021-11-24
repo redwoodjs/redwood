@@ -174,8 +174,8 @@ Note that the fixtureName can be anything you want, and you can have multiple fi
 
 ```js
 describe('Update API Imports', () => {
-  it('Updates @redwoodjs/api imports', () => {
-    matchTransformSnapshot('updateApiImports', 'apiImports')
+  it('Updates @redwoodjs/api imports', async () => {
+    await matchTransformSnapshot('updateApiImports', 'apiImports')
   })
 })
 ```
@@ -183,8 +183,8 @@ describe('Update API Imports', () => {
 2. `matchInlineTransformSnapshot`—very similar to above, but use this in case you want to just provide your fixtures inline
 
 ```js
-  it('Modifies imports (inline)', () => {
-    matchInlineTransformSnapshot(
+  it('Modifies imports (inline)', async () => {
+    await matchInlineTransformSnapshot(
       'updateGraphQLFunction',  // <--- transform name, so we know which transform to apply
       `import {
         createGraphQLHandler,   // <-- input source
