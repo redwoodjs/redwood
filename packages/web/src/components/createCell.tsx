@@ -9,7 +9,7 @@ import type { A } from 'ts-toolbelt'
 import { useQuery } from './GraphQLHooksProvider'
 
 /**
- * Cell component props which is the combination of Query variables and Success props.
+ * Cell component props which is the combination of query variables and Success props.
  */
 export type CellProps<
   CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
@@ -71,18 +71,6 @@ export interface CreateCellProps<CellProps> {
   /**
    * The GraphQL syntax tree to execute or function to call that returns it.
    * If `QUERY` is a function, it's called with the result of `beforeQuery`.
-   *
-   * @example
-   *
-   * ```js
-   * export const QUERY = gql`
-   *   posts {
-   *     id
-   *     title
-   *     body
-   *   }
-   * `
-   * ```
    */
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   /**
@@ -95,7 +83,7 @@ export interface CreateCellProps<CellProps> {
   afterQuery?: (data: DataObject) => DataObject
   /**
    * How to decide if the result of a query should render the `Empty` component.
-   * The default implementation checks that the first field isn't null or an empty array.
+   * The default implementation checks that the first field isn't `null` or an empty array.
    *
    * @example
    *
@@ -141,8 +129,7 @@ export interface CreateCellProps<CellProps> {
 }
 
 /**
- * The default `isEmpty` implementation.
- * Checks if the first field is `null` or an empty array.
+ * The default `isEmpty` implementation. Checks if the first field is `null` or an empty array.
  *
  * @remarks
  *
@@ -162,7 +149,7 @@ export interface CreateCellProps<CellProps> {
  * `
  * ```
  *
- * If either are empty, they return:
+ * If either are "empty", they return:
  *
  * ```js
  * {
@@ -178,7 +165,7 @@ export interface CreateCellProps<CellProps> {
  * }
  * ```
  *
- * Note that the latter can return null as well depending on the SDL (`posts: [Post!]`).
+ * Note that the latter can return `null` as well depending on the SDL (`posts: [Post!]`).
  *
  * @remarks
  *
@@ -291,6 +278,8 @@ export function createCell<CellProps = any>({
       /**
        * There really shouldn't be an `else` here, but like any piece of software, GraphQL clients have bugs.
        * If there's no `error` and there's no `data` and we're not `loading`, something's wrong. Most likely with the cache.
+       *
+       * @see {@link https://github.com/redwoodjs/redwood/issues/2473#issuecomment-971864604}
        */
       console.warn(
         `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`
