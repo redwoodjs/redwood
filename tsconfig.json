@@ -12,6 +12,7 @@
     { "path": "packages/graphql-server" },
     { "path": "packages/forms" },
     { "path": "packages/codemods" },
+    { "path": "packages/record" },
   ],
   "files": []
 }
