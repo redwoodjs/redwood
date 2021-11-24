@@ -1,2 +1,7 @@
-/** @type {import('@babel/core').TransformOptions} */
-module.exports = { extends: "../babel.config.js" }
+module.exports = {
+  presets: [
+    '@redwoodjs/core/config/babel-preset',
+    '@emotion/babel-preset-css-prop',
+  ],
+  plugins: ['babel-plugin-macros'],
+}

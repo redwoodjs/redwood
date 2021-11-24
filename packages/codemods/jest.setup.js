@@ -1,11 +1,11 @@
 const fs = require('fs')
 
 global.matchTransformSnapshot =
-  require('./testUtils/matchTransformSnapshot').matchTransformSnapshot
+  require('./src/testUtils/matchTransformSnapshot').matchTransformSnapshot
 global.matchInlineTransformSnapshot =
-  require('./testUtils/matchInlineTransformSnapshot').matchInlineTransformSnapshot
+  require('./src/testUtils/matchInlineTransformSnapshot').matchInlineTransformSnapshot
 global.matchFolderTransform =
-  require('./testUtils/matchFolderTransform').matchFolderTransform
+  require('./src/testUtils/matchFolderTransform').matchFolderTransform
 
 // Custom matcher for checking fixtures using paths
 // e.g. expect(transformedPath).toMatchFixture(expectedPath)
@@ -15,11 +15,7 @@ expect.extend({
     let pass = true
     let message = ''
     try {
-      // use the method from Jest that you want to extend
-      // in a try block
-
       const actualOutput = fs.readFileSync(received, 'utf-8')
-
       const expectedOutput = fs.readFileSync(expected, 'utf-8')
 
       expect(actualOutput).toEqual(expectedOutput)

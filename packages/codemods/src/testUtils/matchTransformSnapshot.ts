@@ -3,14 +3,13 @@ import path from 'path'
 
 import tempy from 'tempy'
 
-import runTransform from '../src/lib/runTransform'
+import runTransform from '../lib/runTransform'
 
 import { formatCode } from './index'
 
-export const matchInlineTransformSnapshot = async (
+export const matchTransformSnapshot = async (
   transformName: string,
-  fixtureCode: string,
-  expectedCode: string,
+  fixtureName: string = transformName,
   parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => {
   const tempFilePath = tempy.file()
@@ -22,12 +21,17 @@ export const matchInlineTransformSnapshot = async (
     throw new Error('Could not find test path')
   }
 
+  // Use require.resolve, so we can pass in ts/js/tsx without specifying
+  const fixturePath = require.resolve(
+    path.join(testPath, '../../__testfixtures__', `${fixtureName}.input`)
+  )
+
   const transformPath = require.resolve(
     path.join(testPath, '../../', transformName)
   )
 
-  // Step 1: Write passed in code to a temp file
-  fs.writeFileSync(tempFilePath, fixtureCode)
+  // Step 1: Copy fixture to temp file
+  fs.copyFileSync(fixturePath, tempFilePath, fs.constants.COPYFILE_FICLONE)
 
   // Step 2: Run transform against temp file
   await runTransform({
@@ -39,5 +43,10 @@ export const matchInlineTransformSnapshot = async (
   // Step 3: Read modified file and snapshot
   const transformedContent = fs.readFileSync(tempFilePath, 'utf-8')
 
-  expect(formatCode(transformedContent)).toEqual(formatCode(expectedCode))
+  const expectedOutput = fs.readFileSync(
+    fixturePath.replace('.input.', '.output.'),
+    'utf-8'
+  )
+
+  expect(formatCode(transformedContent)).toEqual(formatCode(expectedOutput))
 }

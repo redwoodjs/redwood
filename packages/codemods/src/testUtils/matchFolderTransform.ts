@@ -29,12 +29,6 @@ export const matchFolderTransform = async (
     throw new Error('Could not find test path')
   }
 
-  const GLOB_CONFIG = {
-    absolute: false,
-    dot: true,
-    ignore: ['redwood.toml', '**/*.DS_Store'], // ignore the fake redwood.toml added for getRWPaths
-  }
-
   // Use require.resolve, so we can pass in ts/js/tsx without specifying
   const fixtureFolder = path.join(
     testPath,
@@ -53,6 +47,11 @@ export const matchFolderTransform = async (
   // Step 2: Run transform against temp dir
   await transformFunction()
 
+  const GLOB_CONFIG = {
+    absolute: false,
+    dot: true,
+    ignore: ['redwood.toml', '**/*.DS_Store'], // ignore the fake redwood.toml added for getRWPaths
+  }
   const transformedPaths = fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir })
 
   const expectedPaths = fg.sync('**/*', {
