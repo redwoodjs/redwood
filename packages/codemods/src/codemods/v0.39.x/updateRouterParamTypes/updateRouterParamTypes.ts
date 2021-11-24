@@ -1,5 +1,7 @@
 import type {
-  API, FileInfo, JSXExpressionContainer,
+  API,
+  FileInfo,
+  JSXExpressionContainer,
   ObjectExpression,
 } from 'jscodeshift'
 
@@ -44,7 +46,6 @@ export default function transform(file: FileInfo, api: API) {
       newPropertyName[paramTypeKey.key.name as keyof typeof newPropertyName]
   }
 
-
   const mapToNewSyntax = (
     allParamTypeProperties: ObjectExpression['properties']
   ) => {
@@ -64,11 +65,17 @@ export default function transform(file: FileInfo, api: API) {
 
     allParamTypeProperties.forEach((paramTypeProperty) => {
       // paramTypeProperty.value could be either ObjectExpression, Identifier
-      if (paramTypeProperty.type === 'SpreadProperty' || paramTypeProperty.type === 'SpreadElement' || paramTypeProperty.type === 'ObjectMethod') {
+      if (
+        paramTypeProperty.type === 'SpreadProperty' ||
+        paramTypeProperty.type === 'SpreadElement' ||
+        paramTypeProperty.type === 'ObjectMethod'
+      ) {
         // We don't handle these other types.
         // As they're quite edgecase-ey
         // like paramTypes={{...myParams}} (spreadelement)
-        console.warn('Unable to update your custom Route parameters. Please follow manual instructions')
+        console.warn(
+          'Unable to update your custom Route parameters. Please follow manual instructions'
+        )
         return
       }
 
@@ -113,22 +120,23 @@ export default function transform(file: FileInfo, api: API) {
         }
       )
       paramTypeProp.forEach((prop) => {
-        const paramTypeValue = (
-          prop?.value?.value as JSXExpressionContainer
-        )?.expression // get the value inside the jsx expression
+        const paramTypeValue = (prop?.value?.value as JSXExpressionContainer)
+          ?.expression // get the value inside the jsx expression
 
         // paramTypeValue is marked as 👉 . It could be even referenced as variable.
-        // <Router paramTypes={👉 {}} 
+        // <Router paramTypes={👉 {}}
 
         switch (paramTypeValue?.type) {
-          case 'Identifier': { // <R paramsTypes={myParamTypes}
+          case 'Identifier': {
+            // <R paramsTypes={myParamTypes}
             // Search the Routes file for variable declaration
             const variableDefinitions = ast.find(j.VariableDeclarator, {
               id: { name: paramTypeValue.name },
             })
             variableDefinitions.forEach((varDef) => {
-              const allParamTypeProperties = (varDef?.value?.init as ObjectExpression) // safe to assume that this variable is an object declaration
-                ?.properties
+              const allParamTypeProperties = (
+                varDef?.value?.init as ObjectExpression
+              )?.properties // safe to assume that this variable is an object declaration
               mapToNewSyntax(allParamTypeProperties)
             })
             break
