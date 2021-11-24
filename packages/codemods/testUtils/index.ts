@@ -10,7 +10,7 @@ const formatCode = (code: string) => {
   return format(code, { parser: 'babel-ts' })
 }
 
-export const matchTransformSnapshot = (
+export const matchTransformSnapshot = async (
   transformName: string,
   fixtureName: string = transformName,
   parser: 'ts' | 'tsx' | 'babel' = 'tsx'
@@ -37,7 +37,7 @@ export const matchTransformSnapshot = (
   fs.copyFileSync(fixturePath, tempFilePath, fs.constants.COPYFILE_FICLONE)
 
   // Step 2: Run transform against temp file
-  runTransform({
+  await runTransform({
     transformPath,
     targetPaths: [tempFilePath],
     parser,
@@ -54,7 +54,7 @@ export const matchTransformSnapshot = (
   expect(formatCode(transformedContent)).toEqual(formatCode(expectedOutput))
 }
 
-export const matchInlineTransformSnapshot = (
+export const matchInlineTransformSnapshot = async (
   transformName: string,
   fixtureCode: string,
   expectedCode: string,
@@ -77,7 +77,7 @@ export const matchInlineTransformSnapshot = (
   fs.writeFileSync(tempFilePath, fixtureCode)
 
   // Step 2: Run transform against temp file
-  runTransform({
+  await runTransform({
     transformPath,
     targetPaths: [tempFilePath],
     parser,

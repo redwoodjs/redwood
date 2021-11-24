@@ -142,7 +142,6 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
 
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
@@ -569,8 +568,6 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   padding-bottom: 1rem;
 }
 .rw-segment {
-  background-color: #fff;
-  border-width: 1px;
   border-radius: 0.5rem;
   overflow: hidden;
   width: 100%;
@@ -1253,7 +1250,6 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
@@ -1680,8 +1676,6 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   padding-bottom: 1rem;
 }
 .rw-segment {
-  background-color: #fff;
-  border-width: 1px;
   border-radius: 0.5rem;
   overflow: hidden;
   width: 100%;

@@ -12,6 +12,7 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
+import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
 import { getTasks as getPrerenderTasks } from './prerender'
 
@@ -71,6 +72,7 @@ export const builder = (yargs) => {
       default: false,
       description: 'Measure build performance',
     })
+    .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',

@@ -30,4 +30,5 @@ export default createCell({
   Empty,
   Failure,
   Success,
+  displayName: 'code',
 })

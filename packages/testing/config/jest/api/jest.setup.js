@@ -1,15 +1,64 @@
 /* eslint-env jest */
+const fs = require('fs')
 const path = require('path')
 
 const {
   getSchemaDefinitions,
+  getSchemaConfig,
 } = require('@redwoodjs/cli/dist/lib/schemaHelpers')
 const { setContext } = require('@redwoodjs/graphql-server')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
+// Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
+// fails on DELETE
+const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
 const DEFAULT_SCENARIO = 'standard'
+const TEARDOWN_CACHE_PATH = path.join(
+  getPaths().generated.base,
+  'scenarioTeardown.json'
+)
+let teardownOrder = []
+let originalTeardownOrder = []
+
+const deepCopy = (obj) => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const isIdenticalArray = (a, b) => {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+// determine what kind of quotes are needed around table names in raw SQL
+const getQuoteStyle = () => {
+  const config = getSchemaConfig()
+
+  switch (config.datasources?.[0]?.provider) {
+    case 'mysql':
+      return '`'
+    default:
+      return '"'
+  }
+}
+
+const configureTeardown = async () => {
+  const schema = await getSchemaDefinitions()
+  const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
+
+  // check if pre-defined delete order already exists and if so, use it to start
+  if (fs.existsSync(TEARDOWN_CACHE_PATH)) {
+    teardownOrder = JSON.parse(fs.readFileSync(TEARDOWN_CACHE_PATH).toString())
+  }
+
+  // check the number of models in case we've added/removed since cache was built
+  if (teardownOrder.length !== schemaModels.length) {
+    teardownOrder = schemaModels
+  }
+
+  // keep a copy of the original order to compare against
+  originalTeardownOrder = deepCopy(teardownOrder)
+}
 
 const seedScenario = async (scenario) => {
   if (scenario) {
@@ -31,12 +80,32 @@ const seedScenario = async (scenario) => {
 }
 
 const teardown = async () => {
-  const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(
-    (m) => m.dbName || m.name
-  )
+  const quoteStyle = getQuoteStyle()
 
-  for (const model of prismaModelNames) {
-    await db.$executeRawUnsafe(`DELETE from "${model}"`)
+  for (const modelName of teardownOrder) {
+    try {
+      await db.$executeRawUnsafe(
+        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
+      )
+    } catch (e) {
+      const match = e.message.match(/Code: `(\d+)`/)
+      if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
+        const index = teardownOrder.indexOf(modelName)
+        teardownOrder[index] = null
+        teardownOrder.push(modelName)
+      } else {
+        throw e
+      }
+    }
+  }
+
+  // remove nulls
+  teardownOrder = teardownOrder.filter((val) => val)
+
+  // if the order of delete changed, write out the cached file again
+  if (!isIdenticalArray(teardownOrder, originalTeardownOrder)) {
+    originalTeardownOrder = deepCopy(teardownOrder)
+    fs.writeFileSync(TEARDOWN_CACHE_PATH, JSON.stringify(teardownOrder))
   }
 }
 
@@ -99,8 +168,9 @@ global.mockCurrentUser = (currentUser) => {
 }
 
 // Disable perRequestContext for tests
-beforeAll(() => {
+beforeAll(async () => {
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
+  await configureTeardown()
 })
 
 afterAll(async () => {

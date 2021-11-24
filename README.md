@@ -53,26 +53,30 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
+- [Fastify](https://www.fastify.io)
 - [Pino](https://getpino.io)
 
 ## Features
 
-- Opinionated defaults for formatting, file organization, webpack, Babel, and more.
-- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, constraints, and named route functions (to generate correct URLs).
-- Automatic page-based code-splitting.
-- Boilerplate-less GraphQL API construction.
-- Cells: a declarative way to fetch data from the backend API.
+- Opinionated defaults for formatting, file organization, Webpack, Babel, and more
+- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, custom types, and named route functions (to generate correct URLs)
+- Automatic page-based code-splitting
+- Boilerplate-less GraphQL API construction
+- Cells: a declarative way to fetch data from the backend API
 - Generators for pages, layouts, cells, SDL, services, etc.
-- Scaffold generator for CRUD operations around a specific DB table.
-- Forms with easy client- and/or server-side validation and error handling.
-- [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
-- Database migrations (via Prisma 2).
+- Scaffold generator for CRUD operations specific to a DB table
+- Forms with easy client- and/or server-side validation and error handling
+- Fast Refresh (hot reloading) for faster development
+- Database and Data migrations
 - [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
 - Simple but powerful GraphQL Directives to validate access or transform resolved data
-- Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
-- Signature verification and payload signing for handling incoming and outgoing Webhooks
-- Page prerendering
-- First class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
+- Logging using [Pino](https://getpino.io) including [transports](https://getpino.io/#/docs/transports)
+- Webhooks: signature verification and payload signing for handling both incoming and outgoing
+- Jest testing utilities integrated across your codebase: mocks, test DB, generated boilerplate tests, scenarios, Web (components), and API (services, serverless functions, and webhooks)
+- Page prerendering at build time
+- Built-in Storybook integration: generated boilerplate component stories, tests, graphql/api mocks (Cells), and scenarios
+- API Server using [Fastify](https://www.fastify.io) for Serverful deploys
+- First-class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
 
 ## Roadmap
 

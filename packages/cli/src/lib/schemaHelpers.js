@@ -1,6 +1,6 @@
-import path from 'path'
+import fs from 'fs'
 
-import { getDMMF } from '@prisma/sdk'
+import { getConfig, getDMMF } from '@prisma/sdk'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
@@ -113,9 +113,16 @@ export const getEnum = async (name) => {
  * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
 export const getSchemaDefinitions = () => {
-  const datamodelPath = path.join(getPaths().api.db, 'schema.prisma')
+  return getDMMF({ datamodelPath: getPaths().api.dbSchema })
+}
 
-  return getDMMF({ datamodelPath })
+/*
+ * Returns the config info defined in `schema.prisma` (provider, datasource, etc.)
+ */
+export const getSchemaConfig = () => {
+  return getConfig({
+    datamodel: fs.readFileSync(getPaths().api.dbSchema).toString(),
+  })
 }
 
 export async function verifyModelName(options) {
