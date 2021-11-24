@@ -9,7 +9,7 @@ import type { A } from 'ts-toolbelt'
 import { useQuery } from './GraphQLHooksProvider'
 
 /**
- * Cell component props which is the combination of Query variables and Success props
+ * Cell component props which is the combination of Query variables and Success props.
  */
 export type CellProps<
   CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
@@ -38,9 +38,12 @@ export type CellFailureProps = Partial<
   }
 >
 
-// @MARK not sure about this partial, but we need to do this for tests and storybook
-// `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
-// this prop lets users render something like a spinner to show that a request is in-flight
+/**
+ * @MARK not sure about this partial, but we need to do this for tests and storybook.
+ *
+ * `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
+ * this prop lets users render something like a spinner to show that a request is in-flight.
+ */
 export type CellSuccessProps<TData = any> = Partial<
   Omit<QueryOperationResult<TData>, 'loading' | 'error' | 'data'> & {
     updating: boolean
@@ -49,7 +52,7 @@ export type CellSuccessProps<TData = any> = Partial<
   A.Compute<TData> // pre-computing makes the types more readable on hover
 
 /**
- * A coarse type for the `data` prop returned from `useQuery`.
+ * A coarse type for the `data` prop returned by `useQuery`.
  *
  * ```js
  * {
@@ -83,11 +86,8 @@ export interface CreateCellProps<CellProps> {
    */
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   /**
-   * Parse `props` into query variables.
-   *
-   * Most of the time `props` are appropriate variables as is,
-   * but if they're not, here's your chance.
-   * */
+   * Parse `props` into query variables. Most of the time `props` are appropriate variables as is.
+   */
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
   /**
    * Sanitize the data returned from the query.
@@ -289,11 +289,8 @@ export function createCell<CellProps = any>({
       return <Loading {...{ ...queryRest, ...props }} />
     } else {
       /**
-       * There really shouldn't be an `else` here, but like any piece of software,
-       * GraphQL clients have bugs.
-       *
-       * If there's no `error` and there's no `data` and we're not `loading`,
-       * something's wrong. Most likely with the cache.
+       * There really shouldn't be an `else` here, but like any piece of software, GraphQL clients have bugs.
+       * If there's no `error` and there's no `data` and we're not `loading`, something's wrong. Most likely with the cache.
        */
       console.warn(
         `If you're using Apollo Client, check for its debug logs here in the console, which may help explain the error.`
