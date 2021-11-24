@@ -63,6 +63,7 @@ export interface CreateCellProps<CellProps> {
   Failure?: React.FC<CellFailureProps & Partial<CellProps>>
   Empty?: React.FC<CellLoadingProps & Partial<CellProps>>
   Success: React.FC<CellSuccessProps & Partial<CellProps>>
+  displayName?: string
 }
 
 /**
@@ -119,7 +120,15 @@ const isDataEmpty = (data: DataObject) => {
 }
 
 export function createCell<CellProps = any>({
-  beforeQuery = (props) => ({ variables: props }),
+  beforeQuery = (props) => ({
+    variables: props,
+    /**
+     * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
+     * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
+     */
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
+  }),
   QUERY,
   isEmpty = isDataEmpty,
   afterQuery = (data) => ({ ...data }),
@@ -127,6 +136,7 @@ export function createCell<CellProps = any>({
   Failure,
   Empty,
   Success,
+  displayName = 'Cell',
 }: CreateCellProps<CellProps>): React.FC<CellProps> {
   if (global.__REDWOOD__PRERENDERING) {
     // If its prerendering, render the Cell's Loading component
@@ -134,7 +144,7 @@ export function createCell<CellProps = any>({
     return (props) => <Loading {...(props as any)} />
   }
 
-  return (props) => {
+  const NamedCell = (props: React.PropsWithChildren<CellProps>) => {
     // destructuring to not pass children to beforeQuery
     const { children: _children, ...variables } = props
 
@@ -158,7 +168,9 @@ export function createCell<CellProps = any>({
                    * @see https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes
                    * The error code came from `error.graphQLErrors[0].extensions.code`
                    */
-                  errorCode={error.graphQLErrors?.[0]?.extensions?.code}
+                  errorCode={
+                    error.graphQLErrors?.[0]?.extensions?.['code'] as string
+                  }
                   {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
@@ -197,4 +209,8 @@ export function createCell<CellProps = any>({
       </Query>
     )
   }
+
+  NamedCell.displayName = displayName
+
+  return NamedCell
 }
