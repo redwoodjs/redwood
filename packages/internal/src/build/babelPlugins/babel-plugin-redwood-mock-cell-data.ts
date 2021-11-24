@@ -52,13 +52,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const d = p.node.declaration
         const filename = state.file.opts.filename
 
-        if (
-          d?.type !== 'VariableDeclaration' &&
-          d?.type !== 'FunctionDeclaration'
-        ) {
-          return
-        }
-
         let mockFunction
 
         // Only auto-mock the standard export
