@@ -239,10 +239,18 @@ export default class Core {
 
   _deleteErrorHandler(error, shouldThrow) {
     if (error.message.match(/Record to delete does not exist/)) {
+      this._onSaveError(
+        'base',
+        `${this.constructor.name} record to destroy not found`
+      )
       if (shouldThrow) {
         throw new Errors.RedwoodRecordNotFoundError()
       }
     } else {
+      this._onSaveError(
+        'base',
+        `${this.constructor.name} record threw uncaught error: ${error.message}`
+      )
       if (shouldThrow) {
         throw new Errors.RedwoodRecordUncaughtError(error.message)
       }
