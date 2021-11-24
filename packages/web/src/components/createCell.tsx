@@ -4,8 +4,7 @@ import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
 /**
- * This is part of how we let users swap out their GraphQL client,
- * while staying compatible with Cells.
+ * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
 import { useQuery } from './GraphQLHooksProvider'
 
@@ -86,9 +85,9 @@ export interface CreateCellProps<CellProps> {
    */
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   /**
-   * Parse props into query variables.
+   * Parse `props` into query variables.
    *
-   * Most of the time the props passed to a Cell are appropriate variables as is,
+   * Most of the time `props` are appropriate variables as is,
    * but if they're not, here's your chance.
    * */
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
@@ -102,7 +101,7 @@ export interface CreateCellProps<CellProps> {
    *
    * @example
    *
-   * In the example below, only users is checked:
+   * In the example below, only `users` is checked:
    *
    * ```js
    * export const QUERY = gql`
@@ -181,8 +180,7 @@ export interface CreateCellProps<CellProps> {
  * }
  * ```
  *
- * Note that the latter can return null as well depending on the SDL.
- * (I.e. `posts: [Post!]`)
+ * Note that the latter can return null as well depending on the SDL (`posts: [Post!]`).
  *
  * @remarks
  *
@@ -217,7 +215,7 @@ const isDataEmpty = (data: DataObject) => {
 }
 
 /**
- * createCell—creates a Cell out of a GraphQL query and components that track to its lifecycle.
+ * Creates a Cell out of a GraphQL query and components that track to its lifecycle.
  */
 export function createCell<CellProps = any>({
   QUERY,

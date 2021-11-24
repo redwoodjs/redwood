@@ -198,17 +198,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
          * > The query automatically updates if the result of the server-side query modifies cached fields.
          *
          * @see {@link https://www.apollographql.com/docs/react/data/queries/#cache-and-network}
-         *
-         * @remarks
-         *
-         * Apollo's default `fetchPolicy` is `'cache-first'`.
-         * @see {@link https://www.apollographql.com/docs/react/data/queries/#setting-a-fetch-policy}
          */
         fetchPolicy: 'cache-and-network',
         /**
-         * So that Cells rerender when refetching.
-         *
-         * @see {@link https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states}
+         * So that Cells rerender when refetching: {@link https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states}
          */
         notifyOnNetworkStatusChange: true,
       },
