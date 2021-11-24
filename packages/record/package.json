@@ -8,9 +8,9 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.3.0",
-    "@prisma/sdk": "3.3.0",
-    "core-js": "3.18.3"
+    "@prisma/client": "3.5.0",
+    "@prisma/sdk": "3.5.0",
+    "core-js": "3.19.1"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "jest": "27.3.1",
-    "typescript": "4.4.4"
+    "typescript": "4.5.2"
   },
   "jest": {
     "testPathIgnorePatterns": [
