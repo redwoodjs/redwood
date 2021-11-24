@@ -1,5 +1,4 @@
 import * as ValidationErrors from '@redwoodjs/api'
-import { schema } from '@redwoodjs/graphql-server/dist/rootSchema'
 
 import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'

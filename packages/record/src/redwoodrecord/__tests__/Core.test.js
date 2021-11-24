@@ -449,7 +449,7 @@ describe('User subclass', () => {
         }
         db.user.update = jest.fn(() => attributes)
         const user = await User.build({ id: 1, ...attributes })
-        const result = await user.update({ name: 'Robert Cameron' })
+        const _result = await user.update({ name: 'Robert Cameron' })
 
         expect(db.user.update).toHaveBeenCalledWith({
           where: { id: 1 },
