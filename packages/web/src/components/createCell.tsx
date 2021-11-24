@@ -250,21 +250,6 @@ export function createCell<CellProps = any>({
     return (props) => <Loading {...(props as any)} />
   }
 
-  /**
-   * A Cell declaratively renders components based on the lifecycle of a GraphQL query.
-   *
-   * If the return's confusing, conider that a Cell's usually used in a Page like so:
-   *
-   * ```js
-   * import PostCell from 'src/components/PostCell'
-   *
-   * const PostsPage = ({ id }) => {
-   *   return <PostCell id={id} />
-   * }
-   * ```
-   *
-   * `PostCell` is actually this component.
-   */
   function NamedCell(props: React.PropsWithChildren<CellProps>) {
     /**
      * Right now, Cells don't render `children`.
