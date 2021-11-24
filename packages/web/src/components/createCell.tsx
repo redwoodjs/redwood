@@ -63,6 +63,7 @@ export interface CreateCellProps<CellProps> {
   Failure?: React.FC<CellFailureProps & Partial<CellProps>>
   Empty?: React.FC<CellLoadingProps & Partial<CellProps>>
   Success: React.FC<CellSuccessProps & Partial<CellProps>>
+  displayName?: string
 }
 
 /**
@@ -135,6 +136,7 @@ export function createCell<CellProps = any>({
   Failure,
   Empty,
   Success,
+  displayName = 'Cell',
 }: CreateCellProps<CellProps>): React.FC<CellProps> {
   if (global.__REDWOOD__PRERENDERING) {
     // If its prerendering, render the Cell's Loading component
@@ -142,7 +144,7 @@ export function createCell<CellProps = any>({
     return (props) => <Loading {...(props as any)} />
   }
 
-  return (props) => {
+  const NamedCell = (props: React.PropsWithChildren<CellProps>) => {
     // destructuring to not pass children to beforeQuery
     const { children: _children, ...variables } = props
 
@@ -207,4 +209,8 @@ export function createCell<CellProps = any>({
       </Query>
     )
   }
+
+  NamedCell.displayName = displayName
+
+  return NamedCell
 }
