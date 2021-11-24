@@ -67,6 +67,8 @@ export const matchFolderTransform = async (
     const actualPath = path.join(tempDir, transformedFile)
     const expectedPath = path.join(fixtureOutputDir, transformedFile)
 
-    expect(actualPath).toMatchFixture(expectedPath, transformedFile)
+    expect(actualPath).toMatchFileContents(expectedPath)
   })
+
+  delete process.env['RWJS_CWD']
 }

@@ -47,7 +47,7 @@ declare global {
   const matchFolderTransform: MatchFolder
   namespace jest {
     interface Matchers<R> {
-      toMatchFixture(a: unknown, b: string): R
+      toMatchFileContents(fixturePath: string): R
     }
   }
 }
