@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import { Spec } from './router'
+import { Spec } from './util'
 import {
   createNamedContext,
   getAnnouncement,

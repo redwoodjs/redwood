@@ -149,7 +149,7 @@ const NavLink = forwardRef<
 )
 
 interface RedirectProps {
-  /** The name of the route to redirect to */
+  /** The path to redirect to */
   to: string
 }
 
@@ -157,7 +157,7 @@ interface RedirectProps {
  * A declarative way to redirect to a route name
  */
 const Redirect = ({ to }: RedirectProps) => {
-  useEffect(() => navigate(to), [to])
+  useEffect(() => void setTimeout(() => navigate(to)), [to])
   return null
 }
 

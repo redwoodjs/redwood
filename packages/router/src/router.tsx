@@ -1,7 +1,6 @@
-// The guts of the router implementation.
-
 import React from 'react'
 
+import { ActiveRouteLoader, useActivePageContext } from './active-route-loader'
 import { Redirect } from './links'
 import { useLocation, LocationProvider } from './location'
 import { PageLoader } from './page-loader'
@@ -21,6 +20,8 @@ import {
   validatePath,
   TrailingSlashesTypes,
   ParamType,
+  Spec,
+  normalizePage,
 } from './util'
 
 import type { AvailableRoutes } from './index'
@@ -70,10 +71,10 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   name,
   redirect,
   notfound,
-  whileLoadingPage,
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
+  const activePageContext = useActivePageContext()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -103,18 +104,15 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 
   if (!page || !name) {
     throw new Error(
-      "A route that's not a redirect or notfound route needs to specify both a `page` and a `name`"
+      "A route that's not a redirect or notfound route needs to specify " +
+        'both a `page` and a `name`'
     )
   }
 
-  return (
-    <PageLoader
-      spec={normalizePage(page)}
-      delay={routerState.pageLoadingDelay}
-      params={allParams}
-      whileLoadingPage={whileLoadingPage}
-    />
-  )
+  const Page = activePageContext.loadingState[path].page
+
+  // Level 3 (InternalRoute)
+  return <Page {...allParams} />
 }
 
 function isRoute(
@@ -125,6 +123,7 @@ function isRoute(
 
 interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
+  pageLoadingDelay?: number
 }
 
 const Router: React.FC<RouterProps> = ({
@@ -134,6 +133,7 @@ const Router: React.FC<RouterProps> = ({
   trailingSlashes = 'never',
   children,
 }) => (
+  // Level 1 (outer-most)
   <LocationProvider trailingSlashes={trailingSlashes}>
     <LocationAwareRouter
       useAuth={useAuth}
@@ -151,7 +151,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   pageLoadingDelay,
   children,
 }) => {
-  const { pathname } = useLocation()
+  const location = useLocation()
   const flatChildArray = flattenAll(children)
 
   const hasHomeRoute = flatChildArray.some((child) => {
@@ -172,7 +172,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   )
 
   const shouldShowSplash =
-    (!hasHomeRoute && pathname === '/') || !hasGeneratedRoutes
+    (!hasHomeRoute && location.pathname === '/') || !hasGeneratedRoutes
 
   flatChildArray.forEach((child) => {
     if (isRoute(child)) {
@@ -198,27 +198,58 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     )
   }
 
-  const { activeRoute, activePath, NotFoundPage } = analyzeRouterTree(
+  const { root, activeRoute, NotFoundPage } = analyzeRouterTree(
     children,
-    pathname,
+    location.pathname,
     paramTypes
   )
 
+  if (!activeRoute) {
+    if (NotFoundPage) {
+      return (
+        <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
+          <ParamsProvider>
+            <PageLoader
+              spec={normalizePage(NotFoundPage)}
+              delay={pageLoadingDelay}
+            />
+          </ParamsProvider>
+        </RouterContextProvider>
+      )
+    }
+
+    return null
+  }
+
+  const { path, page, name, redirect, whileLoadingPage } = activeRoute.props
+
+  if (!path) {
+    throw new Error(`Route "${name}" needs to specify a path`)
+  }
+
+  // Check for issues with the path.
+  validatePath(path)
+
+  const { params: pathParams } = matchPath(path, location.pathname, paramTypes)
+
+  const searchParams = parseSearch(location.search)
+  const allParams = { ...searchParams, ...pathParams }
+
+  // Level 2 (LocationAwareRouter)
   return (
-    <RouterContextProvider
-      useAuth={useAuth}
-      paramTypes={paramTypes}
-      pageLoadingDelay={pageLoadingDelay}
-    >
-      <ParamsProvider path={activePath}>
-        {!activeRoute && NotFoundPage && (
-          <PageLoader
-            spec={normalizePage(NotFoundPage)}
-            delay={pageLoadingDelay}
-          />
-        )}
-        {activeRoute}
-      </ParamsProvider>
+    <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
+      {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
+      {!redirect && (
+        <ActiveRouteLoader
+          path={path}
+          spec={normalizePage(page)}
+          delay={pageLoadingDelay}
+          params={allParams}
+          whileLoadingPage={whileLoadingPage}
+        >
+          {root}
+        </ActiveRouteLoader>
+      )}
     </RouterContextProvider>
   )
 }
@@ -237,9 +268,13 @@ function analyzeRouterTree(
   children: React.ReactNode,
   pathname: string,
   paramTypes?: Record<string, ParamType>
-) {
+): {
+  root: React.ReactElement | undefined
+  activeRoute: React.ReactElement | undefined
+  NotFoundPage: PageType | undefined
+} {
   let NotFoundPage: PageType | undefined = undefined
-  let activePath: string | undefined = undefined
+  let activeRoute: React.ReactElement | undefined = undefined
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
     if (route.props.path) {
@@ -283,7 +318,7 @@ function analyzeRouterTree(
             key: '.rw-route',
           })
 
-          activePath = child.props.path
+          activeRoute = childWithKey
 
           return childWithKey
         }
@@ -302,48 +337,9 @@ function analyzeRouterTree(
     }, undefined)
   }
 
-  const activeRoute = analyzeRouterTreeInternal(children)
+  const root = analyzeRouterTreeInternal(children)
 
-  return { activeRoute, activePath, NotFoundPage }
-}
-
-function isSpec(specOrPage: Spec | React.ComponentType): specOrPage is Spec {
-  return (specOrPage as Spec).loader !== undefined
-}
-
-export interface Spec {
-  name: string
-  loader: () => Promise<{ default: React.ComponentType }>
-}
-
-/**
- * Pages can be imported automatically or manually. Automatic imports are actually
- * objects and take the following form (which we call a 'spec'):
- *
- *   const WhateverPage = {
- *     name: 'WhateverPage',
- *     loader: () => import('src/pages/WhateverPage')
- *   }
- *
- * Manual imports simply load the page:
- *
- *   import WhateverPage from 'src/pages/WhateverPage'
- *
- * Before passing a "page" to the PageLoader, we will normalize the manually
- * imported version into a spec.
- */
-const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
-  if (isSpec(specOrPage)) {
-    // Already a spec, just return it.
-    return specOrPage
-  }
-
-  // Wrap the Page in a fresh spec, and put it in a promise to emulate
-  // an async module import.
-  return {
-    name: specOrPage.name,
-    loader: async () => ({ default: specOrPage }),
-  }
+  return { root, activeRoute, NotFoundPage }
 }
 
 export { Router, Route, namedRoutes as routes, isRoute, PageType }
