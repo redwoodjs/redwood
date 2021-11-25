@@ -191,7 +191,18 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
      */
     defaultOptions: {
       watchQuery: {
+        /**
+         * The `fetchPolicy` we expect:
+         *
+         * > Apollo Client executes the full query against both the cache and your GraphQL server.
+         * > The query automatically updates if the result of the server-side query modifies cached fields.
+         *
+         * @see {@link https://www.apollographql.com/docs/react/data/queries/#cache-and-network}
+         */
         fetchPolicy: 'cache-and-network',
+        /**
+         * So that Cells rerender when refetching: {@link https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states}
+         */
         notifyOnNetworkStatusChange: true,
       },
     },
