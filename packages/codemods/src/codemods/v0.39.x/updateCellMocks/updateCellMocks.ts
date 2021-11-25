@@ -51,5 +51,5 @@ export default function transform(file: FileInfo, api: API) {
     })
   })
 
-  return ast.toSource()
+  return ast.toSource({ trailingComma: true, quote: 'single' })
 }
