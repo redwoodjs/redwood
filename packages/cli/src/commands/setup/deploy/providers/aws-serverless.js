@@ -29,11 +29,13 @@ provider:
   httpApi: # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
     cors: true
     payload: '1.0'
+    useProviderTags: true # https://www.serverless.com/framework/docs/deprecations/#AWS_HTTP_API_USE_PROVIDER_TAGS
   stackTags: # Add CloudFormation stack tags here
     source: serverless
     name: Redwood Lambda API with HTTP API Gateway
   tags: # Add service wide tags here
     name: Redwood Lambda API with HTTP API Gateway
+  lambdaHashingVersion: 20201221 # https://www.serverless.com/framework/docs/deprecations/#LAMBDA_HASHING_VERSION_V2
 
 package:
   individually: true
