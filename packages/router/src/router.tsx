@@ -257,12 +257,13 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 /**
  * This function analyzes the routes and returns info pertaining to what to
  * render.
- *  - The element to render, i.e. the active route or the <Set>(s) wrapping it
- *  - The path for the active route
- *  - The NotFoundPage, if we find any. Even if there is a NotFoundPage
- *    specified we might not find it, but only if we first find the active
- *    route, and in that case we don't need the NotFoundPage, so it doesn't
- *    matter.
+ *  - root: The element to render, i.e. the active route or the <Set>(s)
+ *    wrapping it
+ *  - activeRoute: The route we should render (same as root for flat routes)
+ *  - NotFoundPage: The NotFoundPage, if we find any. Even if there is a
+ *    NotFoundPage specified we might not find it, but only if we first find
+ *    the active route, and in that case we don't need the NotFoundPage, so it
+ *    doesn't matter.
  */
 function analyzeRouterTree(
   children: React.ReactNode,
