@@ -157,7 +157,7 @@ interface RedirectProps {
  * A declarative way to redirect to a route name
  */
 const Redirect = ({ to }: RedirectProps) => {
-  useEffect(() => void setTimeout(() => navigate(to)), [to])
+  useEffect(() => navigate(to), [to])
   return null
 }
 
