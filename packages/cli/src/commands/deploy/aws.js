@@ -3,10 +3,13 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
+
+import { pack } from './aws-providers/packing'
 
 export const command = 'aws [provider]'
 export const description = 'Deploy to AWS using the selected provider'
@@ -29,6 +32,17 @@ export const builder = (yargs) => {
       default: 'api',
       type: 'array',
     })
+    .option('verbose', {
+      describe: 'verbosity of logs',
+      default: true,
+      type: 'boolean',
+    })
+    .option('stage', {
+      describe:
+        'serverless stage pass through param: https://www.serverless.com/blog/stages-and-environments',
+      default: 'dev',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -37,7 +51,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider }) => {
+export const handler = async ({ provider, verbose, stage }) => {
   const BASE_DIR = getPaths().base
   const providerData = await import(`./aws-providers/${provider}`)
 
@@ -68,28 +82,34 @@ export const handler = async ({ provider }) => {
         title: 'Building and Packaging...',
         task: () =>
           new Listr(
-            providerData.buildCommands.map((commandDetail) => {
-              return {
-                title: commandDetail.title,
+            [
+              {
+                title: providerData.buildCommands[0].title,
                 task: async () => {
-                  await execa(...commandDetail.command, {
+                  await execa(...providerData.buildCommands[0].command, {
                     cwd: BASE_DIR,
                   })
                 },
-              }
-            }),
+              },
+              {
+                title: 'packing',
+                task: pack,
+              },
+            ],
             { collapse: false }
           ),
       },
     ].filter(Boolean),
-    { collapse: false }
+    { collapse: false, renderer: verbose && VerboseRenderer }
   )
 
   try {
     await tasks.run()
 
     console.log(c.green(providerData.deployCommand.title))
-    const deploy = execa(...providerData.deployCommand.command, {
+    const deployCommand = [...providerData.deployCommand.command]
+    deployCommand[1] = [...deployCommand[1], '--stage', stage]
+    const deploy = execa(...deployCommand, {
       cwd: BASE_DIR,
     })
     deploy.stdout.pipe(process.stdout)
