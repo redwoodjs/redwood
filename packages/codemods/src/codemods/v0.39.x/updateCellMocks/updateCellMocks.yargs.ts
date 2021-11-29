@@ -21,7 +21,7 @@ export const handler = () => {
   task(
     'Updating Cell mocks',
     async ({ setWarning, setOutput }: task.TaskInnerApi) => {
-      if (cellMocks.length <= 1) {
+      if (cellMocks.length < 1) {
         setWarning('No cell mocks found')
       } else {
         await runTransform({
