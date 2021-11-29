@@ -107,7 +107,7 @@ const getCurrentUser = async (decoded, { token }): Promise<RedwoodUser> => {
     return { token }
   }
 
-  const { roles } = parseJWT({ decoded }) // ?
+  const { roles } = parseJWT({ decoded })
 
   if (roles) {
     return { ...decoded, roles }
@@ -153,8 +153,8 @@ describe.only('useRequireAuth', () => {
       {}
     )
 
-    const resBody = JSON.parse(output.body)
-    expect(resBody.token).toEqual('myToken')
+    const response = JSON.parse(output.body)
+    expect(response.token).toEqual('myToken')
   })
 
   it('Updates context with output of current user with roles', async () => {
@@ -188,9 +188,9 @@ describe.only('useRequireAuth', () => {
       {}
     ) // ?
 
-    const resBody = JSON.parse(output.body)
-    expect(resBody.name).toEqual('John Editor')
-    expect(resBody.roles).toContain('editor')
+    const response = JSON.parse(output.body)
+    expect(response.name).toEqual('John Editor')
+    expect(response.roles).toContain('editor')
   })
   it('is 401 Unauthenticated status if an error occurs when getting current user info', async () => {
     const { useRequireAuth } = require('../useRequireAuth')
@@ -231,7 +231,7 @@ describe.only('useRequireAuth', () => {
     expect(response.statusCode).toEqual(401)
   })
 
-  it('is 401 Unauthenticated status if the auth provider is unsupported', async () => {
+  it('is 200 status with token if the auth provider is unsupported', async () => {
     const { useRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
@@ -241,6 +241,7 @@ describe.only('useRequireAuth', () => {
 
     const unsupportedProviderHeaders = {
       'auth-provider': 'this-auth-provider-is-unsupported',
+      authorization: 'Basic myToken',
     }
 
     const response = await handlerEnrichedWithAuthentication(
@@ -248,7 +249,10 @@ describe.only('useRequireAuth', () => {
       {}
     )
 
-    expect(response.statusCode).toEqual(401)
+    const body = JSON.parse(response.body)
+
+    expect(response.statusCode).toEqual(200)
+    expect(body.token).toEqual('myToken')
   })
 
   it('returns 200 if decoding JWT succeeds for netlify', async () => {

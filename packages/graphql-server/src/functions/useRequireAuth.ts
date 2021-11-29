@@ -30,7 +30,6 @@ export const useRequireAuth = ({
       try {
         let authContext = undefined
 
-        // This is the part where headers are verified
         authContext = await getAuthenticationContext({
           event: event,
           context: context,
@@ -45,7 +44,7 @@ export const useRequireAuth = ({
               )
             : null
 
-          globalContext.currentUser = currentUser //?
+          globalContext.currentUser = currentUser
           setContext(globalContext)
         }
       } catch (e) {
