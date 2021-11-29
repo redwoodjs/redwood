@@ -1,3 +1,5 @@
 export const standard = () => {
-  return { todosCount: 42 }
+  return  {
+    bazinga: true
+  }
 }
