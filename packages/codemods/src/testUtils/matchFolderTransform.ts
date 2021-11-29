@@ -7,7 +7,7 @@ import tempy from 'tempy'
 
 export const createProjectMock = () => {
   const tempDir = tempy.directory()
-  // // and add fake redwood.toml
+  // add fake redwood.toml
   fs.closeSync(fs.openSync(path.join(tempDir, 'redwood.toml'), 'w'))
 
   return tempDir
