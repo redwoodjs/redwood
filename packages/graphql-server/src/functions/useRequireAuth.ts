@@ -1,4 +1,4 @@
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import type { APIGatewayEvent, Context as LambdaContext } from 'aws-lambda'
 
 import { getAuthenticationContext } from '@redwoodjs/api'
 
@@ -14,27 +14,26 @@ export const useRequireAuth = ({
   handlerFn,
   getCurrentUser,
 }: {
-  handlerFn: any
+  handlerFn: (
+    event: APIGatewayEvent,
+    context: LambdaContext,
+    ...others: any
+  ) => any
   getCurrentUser: GetCurrentUser
 }) => {
-  return (
-    event: APIGatewayProxyEvent,
+  return async (
+    event: APIGatewayEvent,
     context: LambdaContext,
     ...rest: any
   ): Promise<any> => {
-    const execFn = async ({
-      handlerFn,
-      getCurrentUser,
-    }: {
-      handlerFn: any
-      getCurrentUser: GetCurrentUser
-    }) => {
+    const authEnrichedFunction = async () => {
       try {
         let authContext = undefined
 
+        // This is the part where headers are verified
         authContext = await getAuthenticationContext({
-          event: handlerFn.event,
-          context: handlerFn.context,
+          event: event,
+          context: context,
         })
 
         if (authContext) {
@@ -46,29 +45,25 @@ export const useRequireAuth = ({
               )
             : null
 
-          globalContext.currentUser = currentUser
-
+          globalContext.currentUser = currentUser //?
           setContext(globalContext)
         }
-
-        return await handlerFn(event, context, ...rest)
       } catch (e) {
-        console.error(e)
-
-        throw e
+        return {
+          statusCode: 401,
+        }
       }
+
+      return await handlerFn(event, context, ...rest)
     }
 
     if (getAsyncStoreInstance()) {
       // This must be used when you're self-hosting RedwoodJS.
-      return getAsyncStoreInstance().run(new Map(), execFn, {
-        handlerFn,
-        getCurrentUser,
-      })
+      return getAsyncStoreInstance().run(new Map(), authEnrichedFunction)
     } else {
       // This is OK for AWS (Netlify/Vercel) because each Lambda request
       // is handled individually.
-      return execFn({ handlerFn, getCurrentUser })
+      return await authEnrichedFunction()
     }
   }
 }
