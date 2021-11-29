@@ -251,7 +251,7 @@ describe.only('useRequireAuth', () => {
     expect(response.statusCode).toEqual(401)
   })
 
-  it('is 401 Unauthenticated status if decoding JWT succeeds for netlify', async () => {
+  it('returns 200 if decoding JWT succeeds for netlify', async () => {
     const { useRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
