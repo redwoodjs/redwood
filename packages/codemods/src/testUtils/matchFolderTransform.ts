@@ -7,9 +7,6 @@ import tempy from 'tempy'
 
 export const createProjectMock = () => {
   const tempDir = tempy.directory()
-
-  // // Override paths,
-  process.env.RWJS_CWD = tempDir
   // // and add fake redwood.toml
   fs.closeSync(fs.openSync(path.join(tempDir, 'redwood.toml'), 'w'))
 
@@ -22,6 +19,9 @@ export const matchFolderTransform = async (
 ) => {
   const tempDir = createProjectMock()
 
+  // Override paths used in getPaths() utility func
+  process.env.RWJS_CWD = tempDir
+
   // Looks up the path of the caller
   const testPath = expect.getState().testPath
 
@@ -29,7 +29,6 @@ export const matchFolderTransform = async (
     throw new Error('Could not find test path')
   }
 
-  // Use require.resolve, so we can pass in ts/js/tsx without specifying
   const fixtureFolder = path.join(
     testPath,
     '../../__testfixtures__',
