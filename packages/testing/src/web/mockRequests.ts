@@ -92,7 +92,7 @@ type ResponseEnhancer = keyof ResponseEnhancers
 const mockGraphQL = (
   type: 'query' | 'mutation',
   operation: string,
-  data: DataFunction | Record<string, any>,
+  data: DataFunction,
   responseEnhancer?: ResponseEnhancer
 ) => {
   const resolver = (
@@ -100,37 +100,35 @@ const mockGraphQL = (
     res: ResponseComposition<any>,
     ctx: GraphQLContext<Record<string, any>>
   ) => {
-    let d = data
+    let d: DataFunction | Record<string, unknown> = data
     let responseTransforms: any[] = []
 
-    if (typeof data === 'function') {
-      // We wrap the original context return values and store them `ctxForResponse`,
-      // so that we can provide them to the final `res()` call at the end of this
-      // function.
-      const captureTransform = <T extends Array<any>, U>(
-        fn: (...args: T) => U
-      ) => {
-        return (...args: T): U => {
-          const resTransform = fn(...args)
-          responseTransforms = [...responseTransforms, resTransform]
-          return resTransform
-        }
+    // We wrap the original context return values and store them `ctxForResponse`,
+    // so that we can provide them to the final `res()` call at the end of this
+    // function.
+    const captureTransform = <T extends Array<any>, U>(
+      fn: (...args: T) => U
+    ) => {
+      return (...args: T): U => {
+        const resTransform = fn(...args)
+        responseTransforms = [...responseTransforms, resTransform]
+        return resTransform
       }
-      const newCtx: GraphQLContext<Record<string, any>> = {
-        status: captureTransform(ctx.status),
-        delay: captureTransform(ctx.delay),
-        errors: captureTransform(ctx.errors),
-        set: captureTransform(ctx.set as any),
-        fetch: captureTransform(ctx.fetch),
-        data: captureTransform(ctx.data),
-        cookie: captureTransform(ctx.cookie),
-      }
-
-      d = data(req.variables, {
-        req,
-        ctx: newCtx,
-      })
     }
+    const newCtx: GraphQLContext<Record<string, any>> = {
+      status: captureTransform(ctx.status),
+      delay: captureTransform(ctx.delay),
+      errors: captureTransform(ctx.errors),
+      set: captureTransform(ctx.set as any),
+      fetch: captureTransform(ctx.fetch),
+      data: captureTransform(ctx.data),
+      cookie: captureTransform(ctx.cookie),
+    }
+
+    d = data(req.variables, {
+      req,
+      ctx: newCtx,
+    })
 
     return (responseEnhancer ? res[responseEnhancer] : res)(
       ctx.data(d) as any,
@@ -145,7 +143,7 @@ const mockGraphQL = (
 
 export const mockGraphQLQuery = (
   operation: string,
-  data: DataFunction | Record<string, unknown>,
+  data: DataFunction,
   responseEnhancer?: ResponseEnhancer
 ) => {
   return mockGraphQL('query', operation, data, responseEnhancer)
@@ -153,7 +151,7 @@ export const mockGraphQLQuery = (
 
 export const mockGraphQLMutation = (
   operation: string,
-  data: DataFunction | Record<string, unknown>,
+  data: DataFunction,
   responseEnhancer?: ResponseEnhancer
 ) => {
   return mockGraphQL('mutation', operation, data, responseEnhancer)
