@@ -1,17 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
-import tempy from 'tempy'
 
-export const createProjectMock = () => {
-  const tempDir = tempy.directory()
-  // add fake redwood.toml
-  fs.closeSync(fs.openSync(path.join(tempDir, 'redwood.toml'), 'w'))
-
-  return tempDir
-}
+import { createProjectMock } from './index'
 
 export const matchFolderTransform = async (
   transformFunction: () => any,
