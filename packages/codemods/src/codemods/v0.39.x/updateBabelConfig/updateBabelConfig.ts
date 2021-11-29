@@ -16,7 +16,7 @@ export const removeBabelConfig = async () => {
     // If the rootConfig is the default, we can remove it
     if (
       Object.keys(rootConfig).length === 1 &&
-      rootConfig.presets[0] === '@redwoodjs/core/config/babel-preset'
+      rootConfig.presets?.[0] === '@redwoodjs/core/config/babel-preset'
     ) {
       console.log('Removing root babel.config.js')
       fs.rmSync(rootBabelConfigPath)
