@@ -166,7 +166,7 @@ But sometimes you'll just have to use one of the more generic methods: `replaceW
 
 Although JSCodeshift has a built-in way of doing testing, we have a slightly different way of testing.
 
-There's two key test utils you need to be aware of (located in [packages/codemods/testUtils/index.ts](https://github.com/redwoodjs/redwood/blob/main/packages/codemods/testUtils/index.ts)).
+There's 3 key test utils you need to be aware of (located in [packages/codemods/testUtils/index.ts](https://github.com/redwoodjs/redwood/blob/main/packages/codemods/testUtils/index.ts)).
 
 1. `matchTransformSnapshot`—this lets you give it a transformName (i.e. the transform you're writing), and a fixtureName. The fixtures should be located in `__testfixtures__`, and have a `{fixtureName}.input.{js,ts}` and a `{fixtureName}.output.{js,ts}.
 
@@ -194,6 +194,24 @@ describe('Update API Imports', () => {
     )
   })
 ```
+
+3. `matchFolderTransform` - use this, when you're modifying contents of multiple files, and adding/deleting files from the user's project during the codemod.
+
+```js
+  test('Removes babel config for default setup', async () => {
+    import transform from '../updateBabelConfig'
+
+    // pass in your transform here 👇
+    await matchFolderTransform(transform, 'my-default-fixture')
+    // and tell it which folder to use as fixture here ☝️
+  })
+```
+
+In the above example, it will run the transform from `updateBabelConfig` against a fixture located in the `__testfixtures__/my-default-fixture/input` folder and compare with the `__testfixtures__/my-default-fixture/output` folder.
+
+The `matchFolderTransform` helper will check
+a) If the files in the output fixture folder are present after transform
+b) If their contents match
 
 ## How to run your changes on a test redwood project
 
@@ -223,7 +241,7 @@ RWJS_CWD=/path/to/rw-project node "./packages/codemods/dist/codemods.js" {your-c
 
 > **💡 Tip**
 >
-> If you're making changes, and want to watch your source and build on changes, you can use the [watch cli](https://www.npmjs.com/package/watch)
+> If you're making changes, and want to watch your source and build on changes, you can use the [watch cli](https://www.npmjs.com/package/watch-cli)
 > ```shell
 > # Assuming in packages/codemods/
 > watch -p "./src/**/*" -c "yarn build"
