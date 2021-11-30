@@ -190,6 +190,9 @@ export const ActiveRouteLoader = ({
     }
   }, [spec, delay, children, whileLoadingPage, path, location, isMounted])
 
+  // It might feel tempting to move this code further up in the file for an
+  // "early return", but React doesn't allow that because pretty much all code
+  // above is hooks, and they always need to come before any `return`
   if (global.__REDWOOD__PRERENDERING) {
     // babel auto-loader plugin uses withStaticImport in prerender mode
     // override the types for this condition
