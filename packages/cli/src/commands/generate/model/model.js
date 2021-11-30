@@ -3,8 +3,6 @@ import path from 'path'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { parseDatamodel } from '@redwoodjs/record'
-
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
 import { verifyModelName } from '../../../lib/schemaHelpers'
@@ -53,6 +51,7 @@ export const handler = async ({ force, ...args }) => {
       {
         title: 'Parsing datamodel, generating api/src/models/index.js...',
         task: async () => {
+          const { parseDatamodel } = await import('@redwoodjs/record')
           await parseDatamodel()
         },
       },
