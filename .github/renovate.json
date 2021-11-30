@@ -1,5 +1,7 @@
 {
   "extends": [
     "config:base"
-  ]
+  ],
+  "dependencyDashboard": true,
+  "reviewers": ["@jtoar"]
 }
