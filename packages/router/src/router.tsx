@@ -109,7 +109,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     )
   }
 
-  const Page = activePageContext.loadingState[path].page
+  const Page = activePageContext.loadingState[path]?.page || (() => null)
 
   // Level 3 (InternalRoute)
   return <Page {...allParams} />

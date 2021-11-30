@@ -36,10 +36,11 @@ export const usePageLoadingContext = () => {
 export type LoadingState = 'PRE_SHOW' | 'SHOW_LOADING' | 'DONE'
 type LoadingStateRecord = Record<
   string,
-  {
-    state: LoadingState
-    page: React.ComponentType<unknown>
-  }
+  | {
+      state: LoadingState
+      page: React.ComponentType<unknown>
+    }
+  | undefined
 >
 
 interface ActivePageState {
@@ -98,8 +99,6 @@ export const ActiveRouteLoader = ({
   >(children)
   const [renderedPath, setRenderedPath] = useState(path)
   const [renderedLocation, setRenderedLocation] = useState({ ...location })
-
-  loadingState[path] = loadingState[path] || 'PRE_SHOW'
 
   const clearLoadingTimeout = () => {
     if (loadingTimeout.current) {
@@ -228,10 +227,10 @@ export const ActiveRouteLoader = ({
     <ParamsProvider path={renderedPath} location={renderedLocation}>
       <ActivePageContext.Provider value={{ loadingState }}>
         <PageLoadingContext.Provider
-          value={{ loading: loadingState[path].state === 'SHOW_LOADING' }}
+          value={{ loading: loadingState[path]?.state === 'SHOW_LOADING' }}
         >
           {renderedChildren}
-          {loadingState[path].state === 'DONE' && (
+          {loadingState[path]?.state === 'DONE' && (
             <div
               id="redwood-announcer"
               style={{
