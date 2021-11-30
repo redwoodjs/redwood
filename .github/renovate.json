@@ -2,6 +2,18 @@
   "extends": [
     "config:base"
   ],
-  "dependencyDashboard": true,
-  "reviewers": ["@jtoar"]
+  "reviewers": [
+    "@jtoar"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    }
+  ]
 }
