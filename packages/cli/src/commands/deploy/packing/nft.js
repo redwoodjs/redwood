@@ -21,7 +21,7 @@ function zipDirectory(source, out) {
   })
 }
 
-const packageSingleFunction = async (functionFile) => {
+async function packageSingleFunction(functionFile) {
   const { name: functionName } = path.parse(functionFile)
   const { fileList: functionDependencyFileList } = await nodeFileTrace([
     functionFile,
@@ -50,14 +50,11 @@ const packageSingleFunction = async (functionFile) => {
   return
 }
 
-export const pack = async () => {
-  console.log('starting pack')
-  const startTime = new Date().valueOf()
+async function ntfPack() {
   const filesToBePacked = (await fse.readdir('./api/dist/functions'))
     .filter((path) => path.endsWith('.js'))
     .map((path) => `./api/dist/functions/${path}`)
-  await Promise.all(filesToBePacked.map(packageSingleFunction))
-  console.log(
-    `Packed in ${Math.round((new Date().valueOf() - startTime) / 1000)}s`
-  )
+  return Promise.all(filesToBePacked.map(packageSingleFunction))
 }
+
+export default ntfPack

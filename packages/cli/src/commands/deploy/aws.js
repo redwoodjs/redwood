@@ -9,8 +9,6 @@ import terminalLink from 'terminal-link'
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
-import { pack } from './aws-providers/packing'
-
 export const command = 'aws [provider]'
 export const description = 'Deploy to AWS using the selected provider'
 export const builder = (yargs) => {
@@ -51,9 +49,32 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, verbose, stage }) => {
+export const handler = async (yargs) => {
+  const { provider, verbose } = yargs
   const BASE_DIR = getPaths().base
   const providerData = await import(`./aws-providers/${provider}`)
+
+  const mapCommandsToListr = ({ title, command, task, errorMessage }) => {
+    return {
+      title: title,
+      task: task
+        ? task
+        : async () => {
+            try {
+              const executingCommand = execa(...command, {
+                cwd: BASE_DIR,
+              })
+              executingCommand.stdout.pipe(process.stdout)
+              await executingCommand
+            } catch (error) {
+              if (errorMessage) {
+                error.message = error.message + '\n' + errorMessage.join(' ')
+              }
+              throw error
+            }
+          },
+    }
+  }
 
   const tasks = new Listr(
     [
@@ -62,42 +83,20 @@ export const handler = async ({ provider, verbose, stage }) => {
           title: 'Checking pre-requisites',
           task: () =>
             new Listr(
-              providerData.preRequisites.map((preReq) => {
-                return {
-                  title: preReq.title,
-                  task: async () => {
-                    try {
-                      await execa(...preReq.command)
-                    } catch (error) {
-                      error.message =
-                        error.message + '\n' + preReq.errorMessage.join(' ')
-                      throw error
-                    }
-                  },
-                }
-              })
+              providerData.preRequisites(yargs).map(mapCommandsToListr)
             ),
         },
       {
         title: 'Building and Packaging...',
         task: () =>
-          new Listr(
-            [
-              {
-                title: providerData.buildCommands[0].title,
-                task: async () => {
-                  await execa(...providerData.buildCommands[0].command, {
-                    cwd: BASE_DIR,
-                  })
-                },
-              },
-              {
-                title: 'packing',
-                task: pack,
-              },
-            ],
-            { collapse: false }
-          ),
+          new Listr(providerData.buildCommands(yargs).map(mapCommandsToListr), {
+            collapse: false,
+          }),
+      },
+      {
+        title: 'Deploying to AWS',
+        task: () =>
+          new Listr(providerData.deployCommands(yargs).map(mapCommandsToListr)),
       },
     ].filter(Boolean),
     { collapse: false, renderer: verbose && VerboseRenderer }
@@ -105,15 +104,6 @@ export const handler = async ({ provider, verbose, stage }) => {
 
   try {
     await tasks.run()
-
-    console.log(c.green(providerData.deployCommand.title))
-    const deployCommand = [...providerData.deployCommand.command]
-    deployCommand[1] = [...deployCommand[1], '--stage', stage]
-    const deploy = execa(...deployCommand, {
-      cwd: BASE_DIR,
-    })
-    deploy.stdout.pipe(process.stdout)
-    await deploy
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(1)

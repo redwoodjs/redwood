@@ -1,4 +1,6 @@
-export const preRequisites = [
+import ntfPack from '../packing/nft'
+
+export const preRequisites = () => [
   {
     title: 'Checking if Serverless framework is installed...',
     command: ['serverless', ['--version']],
@@ -9,11 +11,23 @@ export const preRequisites = [
   },
 ]
 
-export const buildCommands = [
-  { title: 'Building API...', command: ['yarn', ['rw', 'build', 'api']] },
+export const buildCommands = () => [
+  {
+    title: 'Building API...',
+    command: ['yarn', ['rw', 'build', 'api']],
+  },
+  {
+    title: 'Packing Functions...',
+    task: ntfPack,
+  },
 ]
 
-export const deployCommand = {
-  title: 'Deploying...',
-  command: ['serverless', ['deploy']],
+export const deployCommands = (yargs) => {
+  const stage = yargs.stage ? ['--stage', yargs.stage] : []
+  return [
+    {
+      title: 'Deploying...',
+      command: ['serverless', ['deploy', ...stage]],
+    },
+  ]
 }
