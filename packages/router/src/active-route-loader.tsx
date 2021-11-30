@@ -163,7 +163,7 @@ export const ActiveRouteLoader = ({
 
       // Only update all state if we're still interested (i.e. we're still
       // waiting for the page that just finished loading)
-      if (isMounted && name === waitingFor.current) {
+      if (isMounted() && name === waitingFor.current) {
         unstable_batchedUpdates(() => {
           setLoadingState((loadingState) => ({
             ...loadingState,
