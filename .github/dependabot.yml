@@ -1,9 +1,0 @@
-version: 2
-updates:
-  - package-ecosystem: npm
-    versioning-strategy: "increase"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-      day: "wednesday"
-    open-pull-requests-limit: 20
