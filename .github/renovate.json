@@ -2,18 +2,6 @@
   "extends": [
     "config:base"
   ],
-  "reviewers": [
-    "@jtoar"
-  ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true
-    }
-  ],
   "ignoreDeps": [
     "boxen",
     "configstore",
@@ -24,5 +12,20 @@
     "ora",
     "tempy",
     "terminal-link"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    }
+  ],
+  "reviewers": [
+    "@jtoar"
   ]
 }
