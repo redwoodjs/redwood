@@ -6,18 +6,15 @@ import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
-  templateRoot,
   readFile,
   writeFile,
   asyncForEach,
-  getSchema,
   getDefaultArgs,
   getPaths,
   writeFilesTask,
@@ -26,12 +23,13 @@ import {
   transformTSToJS,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize, singularize } from '../../../lib/rwPluralize'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
-import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
+  customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
-  ensureUniquePlural,
   mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
@@ -55,7 +53,7 @@ const getImportComponentNames = (
   nestScaffoldByModel = true
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let componentPath
   let layoutPath
   if (scaffoldPath === '') {
@@ -86,7 +84,7 @@ const getImportComponentNames = (
 // Includes imports from getImportComponentNames()
 const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   const pluralPascalName = pascalcase(pluralize(name))
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
 
   const pluralCamelName = camelcase(pluralPascalName)
   const singularCamelName = camelcase(singularPascalName)
@@ -116,14 +114,25 @@ const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   }
 }
 
+// Checks whether Tailwind is installed, and if the `flag` argument is not
+// already set, returns true. Otherwise just returns `flag`
+export const shouldUseTailwindCSS = (flag) => {
+  if (flag === undefined) {
+    return fs.existsSync(path.join(getPaths().web.config, 'tailwind.config.js'))
+  } else {
+    return flag
+  }
+}
+
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
   tests = true,
   typescript = false,
+  tailwind = false,
   nestScaffoldByModel,
 }) => {
-  const model = await getSchema(pascalcase(pluralize.singular(name)))
+  const model = await getSchema(name)
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
   }
@@ -160,7 +169,7 @@ export const files = async ({
       tests,
       typescript,
     })),
-    ...assetFiles(name),
+    ...assetFiles(name, tailwind),
     ...layoutFiles(
       name,
       pascalScaffoldPath,
@@ -179,28 +188,44 @@ export const files = async ({
   }
 }
 
-const assetFiles = (name) => {
+const assetFiles = (name, tailwind) => {
   let fileList = {}
   const assets = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'assets')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'assets',
+    })
   )
 
   assets.forEach((asset) => {
-    const outputAssetName = asset.replace(/\.template/, '')
-    const outputPath = path.join(getPaths().web.src, outputAssetName)
-
-    // skip assets that already exist on disk, never worry about overwriting
+    // check if the asset name matches the Tailwind preference
     if (
-      !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
-      !fs.existsSync(outputPath)
+      (tailwind && asset.match(/tailwind/)) ||
+      (!tailwind && !asset.match(/tailwind/))
     ) {
-      const template = generateTemplate(
-        path.join('scaffold', 'templates', 'assets', asset),
-        {
-          name,
-        }
-      )
-      fileList[outputPath] = template
+      const outputAssetName = asset
+        .replace(/\.template/, '')
+        .replace(/\.tailwind/, '')
+      const outputPath = path.join(getPaths().web.src, outputAssetName)
+
+      // skip assets that already exist on disk, never worry about overwriting
+      if (
+        !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
+        !fs.existsSync(outputPath)
+      ) {
+        const template = generateTemplate(
+          customOrDefaultTemplatePath({
+            side: 'web',
+            generator: 'scaffold',
+            templatePath: path.join('assets', asset),
+          }),
+          {
+            name,
+          }
+        )
+        fileList[outputPath] = template
+      }
     }
   })
 
@@ -214,11 +239,15 @@ const layoutFiles = (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let fileList = {}
 
   const layouts = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'layouts')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'layouts',
+    })
   )
 
   layouts.forEach((layout) => {
@@ -234,7 +263,11 @@ const layoutFiles = (
       outputLayoutName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'layouts', layout),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('layouts', layout),
+      }),
       {
         name,
         pascalScaffoldPath,
@@ -258,7 +291,7 @@ const pageFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const idTsType = mapPrismaScalarToPagePropTsType(idType)
@@ -266,7 +299,11 @@ const pageFiles = async (
   let fileList = {}
 
   const pages = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'pages')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'pages',
+    })
   )
 
   pages.forEach((page) => {
@@ -287,7 +324,11 @@ const pageFiles = async (
       outputPageName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'pages', page),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('pages', page),
+      }),
       {
         idType,
         idTsType,
@@ -313,7 +354,7 @@ const componentFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const intForeignKeys = intForeignKeysForModel(model)
@@ -322,7 +363,7 @@ const componentFiles = async (
     Boolean: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
-      validation: false,
+      validation: () => false,
       listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
@@ -337,13 +378,15 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      transformValue: 'Json',
+      validation: (isRequired) =>
+        `{{ valueAsJSON: true${isRequired ? ', required: true' : ''} }}`,
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      transformValue: 'Float',
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },
     default: {
       componentName: 'TextField',
@@ -352,36 +395,45 @@ const componentFiles = async (
       validation: '{{ required: true }}',
       displayFunction: undefined,
       listDisplayFunction: 'truncate',
-      transformValue: undefined,
     },
   }
+
   const columns = model.fields
     .filter((field) => field.kind !== 'object')
-    .map((column) => ({
-      ...column,
-      label: humanize(column.name),
-      component:
-        componentMetadata[column.type]?.componentName ||
-        componentMetadata.default.componentName,
-      defaultProp:
-        componentMetadata[column.type]?.defaultProp ||
-        componentMetadata.default.defaultProp,
-      deserilizeFunction:
-        componentMetadata[column.type]?.deserilizeFunction ||
-        componentMetadata.default.deserilizeFunction,
-      validation:
-        componentMetadata[column.type]?.validation ??
-        componentMetadata.default.validation,
-      listDisplayFunction:
-        componentMetadata[column.type]?.listDisplayFunction ||
-        componentMetadata.default.listDisplayFunction,
-      displayFunction:
-        componentMetadata[column.type]?.displayFunction ||
-        componentMetadata.default.displayFunction,
-      transformValue:
-        componentMetadata[column.type]?.transformValue ||
-        componentMetadata.default.transformValue,
-    }))
+    .map((column) => {
+      let validation
+
+      if (componentMetadata[column.type]?.validation) {
+        validation = componentMetadata[column.type]?.validation(
+          column?.isRequired
+        )
+      } else {
+        validation = column?.isRequired
+          ? componentMetadata.default.validation
+          : null
+      }
+
+      return {
+        ...column,
+        label: humanize(column.name),
+        component:
+          componentMetadata[column.type]?.componentName ||
+          componentMetadata.default.componentName,
+        defaultProp:
+          componentMetadata[column.type]?.defaultProp ||
+          componentMetadata.default.defaultProp,
+        deserilizeFunction:
+          componentMetadata[column.type]?.deserilizeFunction ||
+          componentMetadata.default.deserilizeFunction,
+        validation,
+        listDisplayFunction:
+          componentMetadata[column.type]?.listDisplayFunction ||
+          componentMetadata.default.listDisplayFunction,
+        displayFunction:
+          componentMetadata[column.type]?.displayFunction ||
+          componentMetadata.default.displayFunction,
+      }
+    })
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
   })
@@ -397,7 +449,11 @@ const componentFiles = async (
   }
 
   const components = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'components')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'components',
+    })
   )
 
   await asyncForEach(components, (component) => {
@@ -418,7 +474,11 @@ const componentFiles = async (
     )
 
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'components', component),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('components', component),
+      }),
       {
         name,
         columns,
@@ -450,7 +510,7 @@ export const routes = async ({
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const pluralParamName = paramCase(pluralPascalName)
   const model = await getSchema(singularPascalName)
@@ -494,13 +554,17 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
 
-  const newRoutesContent = routesContent.replace(
-    /['"]@redwoodjs\/router['"](\s*)/,
-    `'@redwoodjs/router'\n${importLayout}$1`
-  )
-  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+  if (!routesContent.match(importLayout)) {
+    const newRoutesContent = routesContent.replace(
+      /['"]@redwoodjs\/router['"](\s*)/,
+      `'@redwoodjs/router'\n${importLayout}$1`
+    )
+    writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Added layout import to Routes.{js,tsx}'
+    return 'Added layout import to Routes.{js,tsx}'
+  } else {
+    return 'Layout import already exists in Routes.{js,tsx}'
+  }
 }
 
 const addSetImport = (task) => {
@@ -551,6 +615,11 @@ export const builder = (yargs) => {
       description: 'Generate test files',
       type: 'boolean',
     })
+    .option('tailwind', {
+      description:
+        'Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -563,7 +632,15 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force, tests, typescript, javascript }) => {
+export const tasks = ({
+  model,
+  path,
+  force,
+  tests,
+  typescript,
+  javascript,
+  tailwind,
+}) => {
   return new Listr(
     [
       {
@@ -575,6 +652,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
             tests,
             typescript,
             javascript,
+            tailwind,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
@@ -597,9 +675,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       },
       {
         title: `Generating types ...`,
-        task: async () => {
-          return generateTypes()
-        },
+        task: () => generateTypes,
       },
     ],
     { collapse: false, exitOnError: true }
@@ -611,20 +687,25 @@ export const handler = async ({
   force,
   tests,
   typescript,
+  tailwind,
 }) => {
-  if (modelArg.toLowerCase() === 'dbauth') {
-    // proxy to dbAuth generator
-    return await dbAuthHandler({ force, tests, typescript })
-  }
-
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  await ensureUniquePlural({ model })
 
-  const t = tasks({ model, path, force, tests, typescript })
+  tailwind = shouldUseTailwindCSS(tailwind)
+
   try {
+    const { name } = await verifyModelName({ name: model })
+    const t = tasks({
+      model: name,
+      path,
+      force,
+      tests,
+      typescript,
+      tailwind,
+    })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

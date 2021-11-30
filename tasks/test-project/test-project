@@ -4,6 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 
+const chalk = require('chalk')
 const execa = require('execa')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
@@ -19,7 +20,6 @@ const { getExecaOptions } = require('./util')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
-  .option('name', { default: 'blog-test-project', type: 'string', alias: 'n' })
   .option('typescript', {
     alias: 'ts',
     default: false,
@@ -48,19 +48,43 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .demandCommand(
+    1,
+    1,
+    chalk.red.bold(
+      '  Specify a project directory outside the framework directory\n\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
+    ),
+    chalk.red.bold(
+      '  Only specify *one* project directory outside the framework directory (no spaces allowed)\n\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
+    )
+  )
   .help()
   .strict().argv
 
-const { name, typescript, canary, link, verbose, clean } = args
+const { typescript, canary, link, verbose, clean } = args
 
-const choosenPath = args._
+const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
 
-const OUTPUT_PROJECT_PATH = path.resolve(
-  choosenPath.length >= 1
-    ? String(choosenPath).replace(/,/g, '-')
-    : path.join(__dirname, '../../', name)
-)
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+
+// Project Directory path check: must not be a subdirectory or Yarn will error
+const relativePathCheck = path.relative(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH)
+if (
+  relativePathCheck &&
+  !relativePathCheck.startsWith('..') &&
+  !path.isAbsolute(relativePathCheck)
+) {
+  console.log()
+  console.log(
+    chalk.red.bold(
+      `  Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'\n`
+    )
+  )
+  console.log(
+    '  Specify a project directory outside the framework directory\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
+  )
+  process.exit(1)
+}
 
 const createProject = async () => {
   if (clean) {
@@ -119,6 +143,16 @@ const globalTasks = () =>
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
         enabled: () => link,
+      },
+      {
+        title: 'Set yarn v1 version in test-project directory',
+        task: async () => {
+          return execa(
+            'yarn set version classic',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
       },
       {
         title: 'Installing node_modules',

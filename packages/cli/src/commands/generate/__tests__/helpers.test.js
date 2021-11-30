@@ -1,7 +1,5 @@
+import fs from 'fs'
 import path from 'path'
-
-import pluralize from 'pluralize'
-import prompts from 'prompts'
 
 // Setup test mocks
 global.__dirname = __dirname
@@ -37,8 +35,54 @@ const FooBarPage = () => {
 export default FooBarPage
 `
 
+test('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
+  const output = helpers.customOrDefaultTemplatePath({
+    side: 'web',
+    generator: 'page',
+    templatePath: 'page.tsx.template',
+  })
+
+  expect(output).toMatch(
+    path.normalize(
+      'redwood/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+    )
+  )
+})
+
+test('customOrDefaultTemplatePath returns the app path if a custom template exists', () => {
+  // pretend the custom template exists
+  jest.spyOn(fs, 'existsSync').mockImplementationOnce(() => true)
+
+  const output = helpers.customOrDefaultTemplatePath({
+    side: 'web',
+    generator: 'page',
+    templatePath: 'page.tsx.template',
+  })
+
+  expect(output).toEqual(
+    path.normalize('/path/to/project/web/generators/page/page.tsx.template')
+  )
+})
+
+test('customOrDefaultTemplatePath returns the app path with proper side, generator and path', () => {
+  // pretend the custom template exists
+  jest.spyOn(fs, 'existsSync').mockImplementationOnce(() => true)
+
+  const output = helpers.customOrDefaultTemplatePath({
+    side: 'api',
+    generator: 'cell',
+    templatePath: 'component.tsx.template',
+  })
+
+  expect(output).toEqual(
+    path.normalize(
+      '/path/to/project/api/generators/cell/component.tsx.template'
+    )
+  )
+})
+
 test('templateForComponentFile creates a proper output path for files', () => {
-  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar', 'FOO_BAR']
+  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar']
 
   names.forEach((name) => {
     const output = helpers.templateForComponentFile({
@@ -52,6 +96,63 @@ test('templateForComponentFile creates a proper output path for files', () => {
 
     expect(output[0]).toEqual(
       path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files with all caps in component name', () => {
+  const names = ['FOO_BAR', 'FOO-BAR', 'FOOBAR']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files for starting with uppercase and ending with lowercase', () => {
+  const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files with uppercase after special characters in component name', () => {
+  const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js')
     )
   })
 })
@@ -390,48 +491,6 @@ test('intForeignKeysForModel does not include foreign keys of other datatypes', 
   }
 
   expect(helpers.intForeignKeysForModel(model)).toEqual([])
-})
-
-test('validatePlural returns true if plural is single word and unique from singular', () => {
-  const result = helpers.validatePlural('plural', 'singular')
-  expect(result).toBe(true)
-})
-
-test('validatePlural returns error message if plural is more than one word', () => {
-  const result = helpers.validatePlural('plural word', 'singular')
-  expect(result).toBe('Only one word please!')
-})
-
-test('validatePlural returns error message if plural is same as singular', () => {
-  const result = helpers.validatePlural('same', 'same')
-  expect(result).toBe('Plural can not be same as singular.')
-})
-
-test('validatePlural returns error message if plural is empty - unicode ETB', () => {
-  const result = helpers.validatePlural('\u0017', 'singular')
-  expect(result).toBe('Plural can not be empty.')
-})
-
-test('ensureUniquePlural sets irregular rule from user input if singular is same as plural', async () => {
-  const uncountableModel = 'pokemon'
-  const userPluralInput = 'pikapika'
-  prompts.inject(userPluralInput)
-
-  await helpers.ensureUniquePlural({ model: uncountableModel })
-
-  expect(pluralize.singular(uncountableModel)).toBe(uncountableModel)
-  expect(pluralize.plural(uncountableModel)).toBe(userPluralInput)
-})
-
-test('ensureUniquePlural skips any rule if singular and plural are already different', async () => {
-  const singular = 'post'
-  const plural = 'posts'
-  prompts.inject('pikapika')
-
-  await helpers.ensureUniquePlural({ model: singular })
-
-  expect(pluralize.singular(singular)).toBe(singular)
-  expect(pluralize.plural(singular)).toBe(plural)
 })
 
 describe('mapRouteParamTypeToTsType', () => {

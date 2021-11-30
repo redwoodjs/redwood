@@ -1,5 +1,5 @@
 const body = `
-<Toaster />
+<Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
 <Form onSubmit={onSubmit} validation={{ mode: 'onBlur' }} error={error}>
   <Label
     name="name"
@@ -63,6 +63,9 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
   onCompleted: () => {
     toast.success('Thank you for your submission!')
     formMethods.reset()
+  },
+  onError: (error) => {
+    toast.error(error.message)
   },
 })
 

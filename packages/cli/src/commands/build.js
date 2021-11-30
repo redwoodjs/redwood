@@ -6,12 +6,18 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
-import { buildApi, timedTelemetry, errorTelemetry } from '@redwoodjs/internal'
+import {
+  buildApi,
+  timedTelemetry,
+  errorTelemetry,
+  loadAndValidateSdls,
+} from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
+import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
 import { getTasks as getPrerenderTasks } from './prerender'
 
@@ -71,6 +77,7 @@ export const builder = (yargs) => {
       default: false,
       description: 'Measure build performance',
     })
+    .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -126,6 +133,10 @@ export const handler = async ({
           })
         },
       },
+    side.includes('api') && {
+      title: 'Verifying graphql schema...',
+      task: loadAndValidateSdls,
+    },
     side.includes('api') && {
       title: 'Building API...',
       task: () => {

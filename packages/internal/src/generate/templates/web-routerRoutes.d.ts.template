@@ -20,33 +20,33 @@ ${routes.map(
   }
 }
 
-type ParamType<constraint> = constraint extends 'Int'
+type ParamType<match> = match extends 'Int'
   ? number
-  : constraint extends 'Boolean'
+  : match extends 'Boolean'
   ? boolean
-  : constraint extends 'Float'
+  : match extends 'Float'
   ? number
   : string
 
 // Path string parser for Redwood Routes
 type ParsedParams<PartialRoute> =
   // {a:Int}/[...moar]
-  ${"PartialRoute extends `{${infer Param}:${infer Constraint}}/${infer Rest}`"}
+  ${"PartialRoute extends `{${infer Param}:${infer Match}}/${infer Rest}`"}
     ? // check for greedy match e.g. {b}/{c:Int}
-      // Param = b}/{c, Rest2 = {c, Constrait = Int so we reconstruct the old one {c + : + Int + }
+      // Param = b}/{c, Rest2 = {c, Match = Int so we reconstruct the old one {c + : + Int + }
       ${"Param extends `${infer Param2}}/${infer Rest2}`"}
       ? { [ParamName in Param2]: string } &
-          ${"ParsedParams<`${Rest2}:${Constraint}}`> &"}
+          ${"ParsedParams<`${Rest2}:${Match}}`> &"}
           ${"ParsedParams<`${Rest}`>"}
-      ${": { [Entry in Param]: ParamType<Constraint> } & ParsedParams<`${Rest}`>"}
-    : // has type, but at the end e.g.{d:Int}
-    ${"PartialRoute extends `{${infer Param}:${infer Constraint}}`"}
+      ${": { [Entry in Param]: ParamType<Match> } & ParsedParams<`${Rest}`>"}
+    : // has type, but at the end e.g. {d:Int}
+    ${"PartialRoute extends `{${infer Param}:${infer Match}}`"}
     ? // Greedy match order 2
       ${"Param extends `${infer Param2}}/${infer Rest2}`"}
       ? { [ParamName in Param2]: string } &
-          ${"ParsedParams<`${Rest2}:${Constraint}}`>"}
-      : { [Entry in Param]: ParamType<Constraint> }
-    : // no type, but has stuff ater it {c}/{d}
+          ${"ParsedParams<`${Rest2}:${Match}}`>"}
+      : { [Entry in Param]: ParamType<Match> }
+    : // no type, but has stuff after it, e.g. {c}/{d}
     ${"PartialRoute extends `{${infer Param}}/${infer Rest}`"}
     ${"? { [ParamName in Param]: string } & ParsedParams<`${Rest}`>"}
     : // last one with no type e.g. {d}

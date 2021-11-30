@@ -1,9 +1,5 @@
-/* eslint-disable no-undef */
-// The value is read from `redwood.toml`
-// @ts-expect-error This is replaced at build time by Webpack Define Plugin.
-if (typeof __REDWOOD__API_PROXY_PATH !== 'undefined') {
-  // @ts-expect-error-next-line
-  global.__REDWOOD__API_PROXY_PATH = __REDWOOD__API_PROXY_PATH
-}
-// @ts-expect-error-next-line
-global.__REDWOOD__APP_TITLE = __REDWOOD__APP_TITLE
+// The `process.env.*` values are replaced by webpack at build time.
+global.RWJS_API_GRAPHQL_URL = process.env.RWJS_API_GRAPHQL_URL as string
+global.RWJS_API_DBAUTH_URL = process.env.RWJS_API_DBAUTH_URL as string
+global.RWJS_API_URL = process.env.RWJS_API_URL as string
+global.__REDWOOD__APP_TITLE = process.env.__REDWOOD__APP_TITLE as string

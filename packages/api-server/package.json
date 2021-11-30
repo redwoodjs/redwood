@@ -1,43 +1,46 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.36.2",
+  "version": "0.39.0",
   "bin": {
-    "api-server": "./dist/index.js",
     "rw-api-server": "./dist/index.js",
     "rw-api-server-watch": "./dist/watch.js"
   },
   "files": [
     "dist"
   ],
-  "main": "dist/handler",
+  "main": "dist/cliHandlers",
   "license": "MIT",
   "dependencies": {
+    "@babel/plugin-transform-runtime": "7.16.4",
     "ansi-colors": "4.1.1",
-    "body-parser": "1.19.0",
     "chokidar": "3.5.2",
-    "dotenv-defaults": "2.0.2",
-    "express": "4.17.1",
-    "fast-glob": "3.2.5",
-    "http-proxy-middleware": "2.0.1",
+    "fastify": "3.24.0",
+    "fastify-http-proxy": "6.2.1",
+    "fastify-raw-body": "3.2.0",
+    "fastify-static": "4.5.0",
+    "fastify-url-data": "3.0.3",
     "lodash.escape": "4.0.1",
-    "morgan": "1.10.0",
-    "qs": "6.9.3",
-    "yargs": "16.2.0",
-    "youch": "2.2.2",
-    "youch-terminal": "1.1.1"
+    "qs": "6.10.1",
+    "yargs": "16.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/api-server"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.81",
-    "@types/express": "4.17.13",
+    "@babel/cli": "7.16.0",
+    "@types/aws-lambda": "8.10.85",
     "@types/lodash.escape": "4.0.6",
-    "@types/morgan": "1.9.3",
     "@types/qs": "6.9.7",
-    "@types/stack-trace": "0.0.29"
+    "aws-lambda": "1.0.7",
+    "jest": "27.3.1",
+    "typescript": "4.5.2"
   },
   "scripts": {
     "build": "yarn build:js",
-    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js"

@@ -9,22 +9,26 @@ import { getConfig } from './config'
 export interface NodeTargetPaths {
   base: string
   dataMigrations: string
+  directives: string
   db: string
   dbSchema: string
   src: string
   functions: string
   graphql: string
   lib: string
+  generators: string
   services: string
   config: string
   dist: string
   types: string
+  models: string
 }
 
 export interface BrowserTargetPaths {
   base: string
   src: string
   app: string
+  generators: string
   index: string | null
   routes: string
   pages: string
@@ -35,6 +39,7 @@ export interface BrowserTargetPaths {
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string
+  storybookManagerConfig: string
   dist: string
   types: string
 }
@@ -75,8 +80,11 @@ const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
+const PATH_API_DIR_MODELS = 'api/src/models'
 const PATH_API_DIR_LIB = 'api/src/lib'
+const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
+const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
@@ -85,11 +93,13 @@ const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
+const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
 
@@ -168,11 +178,14 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
+      generators: path.join(BASE_DIR, PATH_API_DIR_GENERATORS),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
+      directives: path.join(BASE_DIR, PATH_API_DIR_DIRECTIVES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
+      models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
     },
 
     web: {
@@ -182,6 +195,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
@@ -194,6 +208,10 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       storybookPreviewConfig: path.join(
         BASE_DIR,
         PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      ),
+      storybookManagerConfig: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       types: path.join(BASE_DIR, 'web/types'),

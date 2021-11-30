@@ -14,7 +14,7 @@ import type { DbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
 import { firebase } from './firebase'
-import type { Firebase } from './firebase'
+import type { FirebaseClient, FirebaseUser } from './firebase'
 import { goTrue } from './goTrue'
 import type { GoTrue, GoTrueUser } from './goTrue'
 import { magicLink } from './magicLink'
@@ -49,7 +49,7 @@ export type SupportedAuthClients =
   | GoTrue
   | NetlifyIdentity
   | MagicLink
-  | Firebase
+  | FirebaseClient
   | Supabase
   | Clerk
   | Ethereum
@@ -62,6 +62,7 @@ export type { Auth0User }
 export type { AzureActiveDirectoryUser }
 export type { DbAuth }
 export type { ClerkUser }
+export type { FirebaseUser }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
@@ -71,6 +72,7 @@ export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
   | ClerkUser
+  | FirebaseUser
   | GoTrueUser
   | MagicUser
   | SupabaseUser
@@ -82,7 +84,10 @@ export interface AuthClient {
   login(options?: any): Promise<any>
   logout(options?: any): void | Promise<any>
   signup(options?: any): void | Promise<any>
-  getToken(): Promise<null | string>
+  getToken(options?: any): Promise<null | string>
+  forgotPassword?(username: string): void | Promise<any>
+  resetPassword?(options?: any): void | Promise<any>
+  validateResetToken?(token: string | null): void | Promise<any>
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
   client: SupportedAuthClients

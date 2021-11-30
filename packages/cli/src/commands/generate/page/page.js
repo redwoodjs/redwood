@@ -226,9 +226,7 @@ export const handler = async ({
       },
       {
         title: `Generating types ...`,
-        task: async () => {
-          return generateTypes()
-        },
+        task: () => generateTypes,
       },
     ].filter(Boolean),
     { collapse: false }

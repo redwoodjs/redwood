@@ -17,6 +17,9 @@ const New${singularPascalName} = () => {
       toast.success('${singularPascalName} created')
       navigate(routes.${pluralRouteName}())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input) => {<% if (intForeignKeys.length) { %>

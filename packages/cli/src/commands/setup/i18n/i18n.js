@@ -11,7 +11,7 @@ import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
 export const command = 'i18n'
-export const description = 'Setup i18n'
+export const description = 'Set up i18n'
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',

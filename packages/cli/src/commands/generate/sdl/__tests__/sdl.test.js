@@ -1,8 +1,38 @@
 global.__dirname = __dirname
+
+global.mockFs = false
+
+jest.mock('fs', () => {
+  const actual = jest.requireActual('fs')
+
+  return {
+    ...actual,
+    mkdirSync: (...args) => {
+      if (global.mockFs) {
+        return
+      }
+
+      return actual.mkdirSync.apply(null, args)
+    },
+    writeFileSync: (target, contents) => {
+      if (global.mockFs) {
+        return
+      }
+
+      return actual.writeFileSync.call(null, target, contents)
+    },
+  }
+})
+
+import fs from 'fs'
 import path from 'path'
+
+import prompts from 'prompts'
 
 // Load mocks
 import '../../../../lib/test'
+
+import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
@@ -168,4 +198,46 @@ describe('in typescript mode', () => {
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
   itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
   itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+})
+
+describe('handler', () => {
+  const canBeCalledWithGivenModelName = (letterCase, model) => {
+    test(`can be called with ${letterCase} model name`, async () => {
+      const spy = jest.spyOn(fs, 'writeFileSync')
+
+      global.mockFs = true
+
+      await sdl.handler({
+        model,
+        crud: true,
+        force: false,
+        tests: true,
+        typescript: false,
+      })
+
+      expect(spy).toHaveBeenCalled()
+
+      spy.mock.calls.forEach((calls) => {
+        const testOutput = {
+          // Because windows paths are different, we need to normalize before
+          // snapshotting
+          filePath: ensurePosixPath(calls[0]),
+          fileContent: calls[1],
+        }
+
+        expect(testOutput).toMatchSnapshot()
+      })
+
+      global.mockFs = false
+      spy.mockRestore()
+    })
+  }
+
+  canBeCalledWithGivenModelName('camelCase', 'user')
+  canBeCalledWithGivenModelName('PascalCase', 'User')
+
+  prompts.inject('CustomDatums')
+  canBeCalledWithGivenModelName('camelCase', 'customData')
+  prompts.inject('CustomDatums')
+  canBeCalledWithGivenModelName('PascalCase', 'CustomData')
 })

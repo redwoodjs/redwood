@@ -1,9 +1,13 @@
 import type { Context as LambdaContext } from 'aws-lambda'
 
+import type { SupportedAuthTypes } from '@redwoodjs/auth'
+
 import mockedAPIGatewayProxyEvent from '../../../functions/fixtures/apiGatewayProxyEvent.fixture'
 import * as auth0Decoder from '../auth0'
 import * as clerkDecoder from '../clerk'
+import * as firebaseDecoder from '../firebase'
 import { decodeToken } from '../index'
+import * as magicLinkDecoder from '../magicLink'
 import * as netlifyDecoder from '../netlify'
 import * as supabaseDecoder from '../supabase'
 
@@ -19,6 +23,22 @@ jest.mock('../clerk', () => {
   return {
     clerk: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'clerk', fakeDecodedToken: true }
+    }),
+  }
+})
+
+jest.mock('../firebase', () => {
+  return {
+    firebase: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'firebase', fakeDecodedToken: true }
+    }),
+  }
+})
+
+jest.mock('../magicLink', () => {
+  return {
+    magicLink: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'magicLink', fakeDecodedToken: true }
     }),
   }
 })
@@ -106,31 +126,38 @@ describe('Uses correct Auth decoder', () => {
     })
   })
 
-  it('returns undecoded token for custom', async () => {
-    const output = await decodeToken('custom', MOCKED_JWT, {
-      event: mockedAPIGatewayProxyEvent,
-      context: {} as LambdaContext,
-    })
-
-    expect(output).toEqual(MOCKED_JWT)
-  })
-
-  it('returns undecoded token for magicLink', async () => {
+  it('decodes magiclink with magiclink decoder', async () => {
+    // process.env.MAGIC_SECRET_API_KEY = 'your_magic_secret'
     const output = await decodeToken('magicLink', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })
 
-    expect(output).toEqual(MOCKED_JWT)
+    expect(magicLinkDecoder.magicLink).toHaveBeenCalledWith(
+      MOCKED_JWT,
+      expect.anything()
+    )
+
+    expect(output).toEqual({
+      decodedWith: 'magicLink',
+      fakeDecodedToken: true,
+    })
+    // delete process.env['MAGIC_SECRET_API_KEY']
   })
 
-  it('returns undecoded token for firebase', async () => {
+  it('decodes firebase with firebase decoder', async () => {
     const output = await decodeToken('firebase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })
-
-    expect(output).toEqual(MOCKED_JWT)
+    expect(firebaseDecoder.firebase).toHaveBeenCalledWith(
+      MOCKED_JWT,
+      expect.anything()
+    )
+    expect(output).toEqual({
+      decodedWith: 'firebase',
+      fakeDecodedToken: true,
+    })
   })
 
   it('decodes supabase with supabase decoder', async () => {
@@ -149,12 +176,21 @@ describe('Uses correct Auth decoder', () => {
     })
   })
 
-  it('returns undecoded token for unknown custom decoder', async () => {
+  it('returns null as the decoded token for custom decoder', async () => {
     const output = await decodeToken('custom', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })
 
-    expect(output).toEqual(MOCKED_JWT)
+    expect(output).toBeNull()
+  })
+
+  it('returns null as the decoded token for an unknown decoder', async () => {
+    const output = await decodeToken('cli' as SupportedAuthTypes, MOCKED_JWT, {
+      event: mockedAPIGatewayProxyEvent,
+      context: {} as LambdaContext,
+    })
+
+    expect(output).toBeNull()
   })
 })

@@ -7,5 +7,6 @@ import type {
 declare global {
   const mockGraphQLQuery: typeof _mockGraphQLQuery
   const mockGraphQLMutation: typeof _mockGraphQLMutation
-  const mockCurrentUser: typeof _mockCurrentUser
+  // @NOTE: not exposing mockCurrentUser here, because api side also has this functionality
+  // We do this in the type generator
 }

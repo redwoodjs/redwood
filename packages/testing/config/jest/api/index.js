@@ -1,11 +1,16 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/internal')
+const {
+  getPaths,
+  getApiSideDefaultBabelConfig,
+  getApiSideBabelPresets,
+} = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 module.exports = {
+  roots: ['<rootDir>/src/'],
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   displayName: {
     color: 'redBright',
@@ -19,5 +24,16 @@ module.exports = {
       NODE_MODULES_PATH,
       '@redwoodjs/testing/api'
     ),
+  },
+  transform: {
+    '\\.[jt]sx?$': [
+      'babel-jest',
+      {
+        ...getApiSideDefaultBabelConfig(),
+        presets: getApiSideBabelPresets({
+          presetEnv: true, // jest needs code transpiled
+        }),
+      },
+    ],
   },
 }

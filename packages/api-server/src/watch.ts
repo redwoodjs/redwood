@@ -14,6 +14,7 @@ import {
   buildApi,
   getConfig,
   ensurePosixPath,
+  loadAndValidateSdls,
 } from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
@@ -27,11 +28,30 @@ dotenv.config({
 
 let httpServerProcess: ChildProcess
 
+const killApiServer = () => {
+  httpServerProcess?.emit('exit')
+  httpServerProcess?.kill()
+}
+
+const validate = async () => {
+  try {
+    await loadAndValidateSdls()
+    return true
+  } catch (e: any) {
+    killApiServer()
+    console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
+    console.error(c.red(e?.message))
+    console.log(c.redBright('-'.repeat(40)))
+
+    delayRestartServer.cancel()
+    return false
+  }
+}
+
 const rebuildApiServer = () => {
   try {
     // Shutdown API server
-    httpServerProcess?.emit('exit')
-    httpServerProcess?.kill()
+    killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
@@ -48,7 +68,7 @@ const rebuildApiServer = () => {
   }
 }
 
-// We want to delay exection when multiple files are modified on the filesystem,
+// We want to delay exception when multiple files are modified on the filesystem,
 // this usually happens when running RedwoodJS generator commands.
 // Local writes are very fast, but writes in e2e environments are not,
 // so allow the default to be adjust with a env-var.
@@ -93,8 +113,20 @@ chokidar
   })
   .on('ready', async () => {
     rebuildApiServer()
+    await validate()
   })
-  .on('all', (eventName, filePath) => {
+  .on('all', async (eventName, filePath) => {
+    // We validate here, so that developers will see the error
+    // As they're running the dev server
+    if (filePath.includes('.sdl')) {
+      const isValid = await validate()
+
+      // Exit early if not valid
+      if (!isValid) {
+        return
+      }
+    }
+
     console.log(
       c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
     )

@@ -1,24 +1,17 @@
 <% if (crud || relations.length > 0) { %>import type { Prisma } from '@prisma/client'<% } %>
-import type { <% if (relations.length) { %>ResolverArgs, <% } %>BeforeResolverSpecType } from '@redwoodjs/graphql-server'
+<% if (relations.length) { %>import type { ResolverArgs } from '@redwoodjs/graphql-server'<% } %>
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
 
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
-}<% if (crud) { %>
+}<% if (crud || relations.length) { %>
 
 export const ${singularCamelName} = ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
   return db.${singularCamelName}.findUnique({
     where: { id },
   })
-}
+}<% } %><% if (crud) { %>
 
 interface Create${singularPascalName}Args {
   input: Prisma.${singularPascalName}CreateInput

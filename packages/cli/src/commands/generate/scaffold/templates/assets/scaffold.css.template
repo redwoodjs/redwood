@@ -44,7 +44,7 @@
   Style
 */
 
-.rw-scaffold {
+.rw-scaffold, .rw-toast {
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
@@ -61,8 +61,6 @@
   padding-bottom: 1rem;
 }
 .rw-segment {
-  background-color: #fff;
-  border-width: 1px;
   border-radius: 0.5rem;
   overflow: hidden;
   width: 100%;
@@ -82,6 +80,16 @@
 }
 .rw-link:hover {
   color: #2b6cb0;
+}
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
 }
 .rw-heading {
   font-weight: 600;
@@ -109,7 +117,8 @@
   font-size: 0.875rem;
   margin-top: -1rem;
 }
-.rw-cell-error, .rw-form-error-wrapper {
+.rw-cell-error,
+.rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
   color: #c53030;
@@ -226,6 +235,13 @@
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus{
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;

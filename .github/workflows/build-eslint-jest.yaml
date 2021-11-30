@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node-version: ['14']
+        node-version: ['14', '16']
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
@@ -21,14 +21,28 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: Cache "node_modules"
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: '**/node_modules'
-      #     key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Cache yarn
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
+
+      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
+        run: yarn constraints
+
+      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn dedupe --check
 
       - name: Build
         run: yarn build

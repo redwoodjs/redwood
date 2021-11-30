@@ -13,6 +13,7 @@ import {
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
+import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -35,6 +36,11 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate artifacts',
     })
+    .option('watchNodeModules', {
+      type: 'boolean',
+      description: 'Reload on changes to node_modules',
+    })
+    .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -47,6 +53,7 @@ export const handler = async ({
   side = ['api', 'web'],
   forward = '',
   generate = true,
+  watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
 }) => {
   const rwjsPaths = getPaths()
 
@@ -102,7 +109,11 @@ export const handler = async ({
     },
     web: {
       name: 'web',
-      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config "${webpackDevConfig}" ${forward}`,
+      command: `cd "${
+        rwjsPaths.web.base
+      }" && yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+        watchNodeModules ? '1' : ''
+      } webpack serve --config "${webpackDevConfig}" ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },

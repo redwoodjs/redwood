@@ -20,7 +20,7 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
+  test('returns exactly 17 files', async () => {
     expect(Object.keys(files).length).toEqual(17)
   })
   // SDL
@@ -678,6 +678,34 @@ describe('in typescript mode', () => {
           '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
         )
       ]
+    ).toMatchSnapshot()
+  })
+})
+
+describe.only('tailwind flag', () => {
+  test('set to `false` generates a scaffold.css with raw CSS', async () => {
+    const files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Post',
+      tailwind: false,
+      nestScaffoldByModel: true,
+    })
+
+    expect(
+      files[path.normalize('/path/to/project/web/src/scaffold.css')]
+    ).toMatchSnapshot()
+  })
+
+  test('set to `true` generates a scaffold.css with Tailwind components', async () => {
+    const files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Post',
+      tailwind: true,
+      nestScaffoldByModel: true,
+    })
+
+    expect(
+      files[path.normalize('/path/to/project/web/src/scaffold.css')]
     ).toMatchSnapshot()
   })
 })

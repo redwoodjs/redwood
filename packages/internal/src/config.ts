@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 import merge from 'deepmerge'
+import { env as envInterpolation } from 'string-env-interpolation'
 import toml from 'toml'
 
 import { getConfigPath } from './paths'
@@ -29,9 +30,27 @@ interface BrowserTargetConfig {
   port: number
   path: string
   target: TargetEnum.BROWSER
-  // TODO: apiProxyHost: string
-  apiProxyPort: number
-  apiProxyPath: string
+  /**
+   * Specify the URL to your api-server.
+   * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
+   * or a fully qualified URL (`https://api.example.org:8911/functions`).
+   *
+   * Note: This should not include the path to the GraphQL Server.
+   **/
+  apiUrl: string
+  /**
+   * Optional: FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the graphql function
+   * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
+   */
+  apiGraphQLUrl?: string
+  /**
+   * Optional: FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the dbAuth function
+   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
+   **/
+  apiDbAuthUrl?: string
+
   fastRefresh: boolean
   a11y: boolean
 }
@@ -47,9 +66,6 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
-  experimental: {
-    esbuild: boolean
-  }
   telemetry: {
     url: string
   }
@@ -64,8 +80,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    apiProxyPath: '/.netlify/functions',
-    apiProxyPort: 8911,
+    apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
   },
@@ -85,9 +100,6 @@ const DEFAULT_CONFIG: Config = {
     stories: true,
     nestScaffoldByModel: true,
   },
-  experimental: {
-    esbuild: false,
-  },
   telemetry: {
     url: 'https://telemetry.redwoodjs.com/.netlify/functions/telemetry',
   },
@@ -99,7 +111,7 @@ const DEFAULT_CONFIG: Config = {
  */
 export const getConfig = (configPath = getConfigPath()): Config => {
   try {
-    const rawConfig = fs.readFileSync(configPath, 'utf8')
+    const rawConfig = envInterpolation(fs.readFileSync(configPath, 'utf8'))
     return merge(DEFAULT_CONFIG, toml.parse(rawConfig))
   } catch (e) {
     throw new Error(`Could not parse "${configPath}": ${e}`)

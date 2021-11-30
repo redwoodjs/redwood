@@ -34,6 +34,9 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
     client: null,
     type: 'custom',
     hasError: false,
+    forgotPassword: () => null,
+    resetPassword: () => null,
+    validateResetToken: () => null,
   }
 
   return { ...authContextValues, ...partial }
@@ -250,6 +253,40 @@ describe('test params escaping', () => {
     const screen = getScreen()
     act(() => navigate('/redirect2/example!com?q=example!com'))
     await waitFor(() => screen.getByText(/param example!comexample!com/i))
+  })
+})
+
+describe('query params should not override path params', () => {
+  const ParamPage = ({ id, contactId }: { id: number; contactId: number }) => {
+    const params = useParams()
+
+    return (
+      <div>
+        <p>param {`${id},${contactId}`}</p>
+        <p>hookparams {`${params.id},${params.contactId}`}</p>
+      </div>
+    )
+  }
+
+  const TestRouter = () => (
+    <Router>
+      <Route
+        path="/user/{id:Int}/contact/{contactId:Int}"
+        page={ParamPage}
+        name="contact"
+      />
+    </Router>
+  )
+
+  const getScreen = () => render(<TestRouter />)
+
+  test('query params of same key as path params should not override path params', async () => {
+    const screen = getScreen()
+    act(() => navigate('/user/1/contact/2?contactId=two'))
+    await waitFor(() => {
+      expect(screen.queryByText('param 1,2')).toBeInTheDocument()
+      expect(screen.queryByText('hookparams 1,2')).toBeInTheDocument()
+    })
   })
 })
 
@@ -857,4 +894,73 @@ test('jump to new route, then go back', async () => {
   await waitFor(() => screen.getByText('Help Page'))
   act(() => back())
   await waitFor(() => screen.getByText('Home Page'))
+})
+
+describe('trailing slashes', () => {
+  const TSNeverRouter = () => (
+    <Router trailingSlashes={'never'}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+  const getTSNeverScreen = () => render(<TSNeverRouter />)
+
+  test('starts on home page', async () => {
+    const screen = getTSNeverScreen()
+    await waitFor(() => screen.getByText(/Home Page/i))
+  })
+
+  test('strips trailing slash on navigating to about page', async () => {
+    const screen = getTSNeverScreen()
+    act(() => navigate('/about/'))
+    await waitFor(() => screen.getByText(/About Page/i))
+  })
+
+  const TSAlwaysRouter = () => (
+    <Router trailingSlashes={'always'}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about/" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+  const getTSAlwaysScreen = () => render(<TSAlwaysRouter />)
+
+  test('starts on home page', async () => {
+    const screen = getTSAlwaysScreen()
+    await waitFor(() => screen.getByText(/Home Page/i))
+  })
+
+  test('adds trailing slash on navigating to about page', async () => {
+    const screen = getTSAlwaysScreen()
+    act(() => navigate('/about'))
+    await waitFor(() => screen.getByText(/About Page/i))
+  })
+
+  const TSPreserveRouter = () => (
+    <Router trailingSlashes={'preserve'}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/contact/" page={() => <h1>Contact Page</h1>} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+  const getTSPreserveScreen = () => render(<TSPreserveRouter />)
+
+  test('starts on home page', async () => {
+    const screen = getTSPreserveScreen()
+    await waitFor(() => screen.getByText(/Home Page/i))
+  })
+
+  test('navigates to about page as is', async () => {
+    const screen = getTSPreserveScreen()
+    act(() => navigate('/about'))
+    await waitFor(() => screen.getByText(/About Page/i))
+  })
+
+  test('navigates to contact page as is', async () => {
+    const screen = getTSPreserveScreen()
+    act(() => navigate('/contact/'))
+    await waitFor(() => screen.getByText(/Contact Page/i))
+  })
 })

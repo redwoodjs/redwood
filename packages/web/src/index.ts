@@ -1,5 +1,6 @@
 import './global.web-auto-imports'
 import './config'
+import './assetImports'
 
 export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
 export {
@@ -14,6 +15,7 @@ export {
 
 export {
   createCell,
+  CellProps,
   CellFailureProps,
   CellLoadingProps,
   CellSuccessProps,

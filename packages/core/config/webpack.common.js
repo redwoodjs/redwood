@@ -12,7 +12,11 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const {
+  getConfig,
+  getPaths,
+  getWebSideDefaultBabelConfig,
+} = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -126,6 +130,14 @@ const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
+  const devTimeAutoImports = isEnvProduction
+    ? {}
+    : {
+        mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
+        mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
+        mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
+      }
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
@@ -140,15 +152,19 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
-      mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
-      mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
-      mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
+      ...devTimeAutoImports,
     }),
     // The define plugin will replace these keys with their values during build
-    // time.
+    // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
-      __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
-      __REDWOOD__APP_TITLE: JSON.stringify(
+      ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
+        redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
+      ),
+      ['process.env.RWJS_API_DBAUTH_URL']: JSON.stringify(
+        redwoodConfig.web.apiDbAuthUrl ?? `${redwoodConfig.web.apiUrl}/auth`
+      ),
+      ['process.env.RWJS_API_URL']: JSON.stringify(redwoodConfig.web.apiUrl),
+      ['process.env.__REDWOOD__APP_TITLE']: JSON.stringify(
         redwoodConfig.web.title || path.basename(redwoodPaths.base)
       ),
       ...getEnvVars(),
@@ -168,7 +184,7 @@ module.exports = (webpackEnv) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
 
-  const shouldUseEsbuild = process.env.ESBUILD === '1'
+  const webBabelOptions = getWebSideDefaultBabelConfig()
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -248,75 +264,49 @@ module.exports = (webpackEnv) => {
             // (0)
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-              use: [
-                {
-                  loader: 'url-loader',
-                  options: {
-                    limit: '10000',
-                    name: 'static/media/[name].[contenthash:8].[ext]',
-                  },
+              type: 'asset',
+              parser: {
+                dataUrlCondition: {
+                  maxSize: 10_000,
                 },
-              ],
+              },
+              generator: {
+                filename: 'static/media/[name].[contenthash:8].[ext]',
+              },
             },
             // (1)
             {
-              test: /\.(js|mjs|jsx)$/,
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: [
                 {
                   loader: 'babel-loader',
                   options: {
+                    ...webBabelOptions,
                     cwd: redwoodPaths.base,
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
+                      ...webBabelOptions.plugins,
                     ].filter(Boolean),
-                  },
-                },
-                shouldUseEsbuild && {
-                  loader: 'esbuild-loader',
-                  options: {
-                    loader: 'jsx',
                   },
                 },
               ].filter(Boolean),
             },
             // (2)
-            {
-              test: /\.(ts|tsx)$/,
-              exclude: /(node_modules)/,
-              use: [
-                {
-                  loader: 'babel-loader',
-                  options: {
-                    cwd: redwoodPaths.base,
-                    plugins: [
-                      shouldIncludeFastRefresh &&
-                        require.resolve('react-refresh/babel'),
-                    ].filter(Boolean),
-                  },
-                },
-                shouldUseEsbuild && {
-                  loader: 'esbuild-loader',
-                  options: {
-                    loader: 'tsx',
-                  },
-                },
-              ].filter(Boolean),
-            },
-            // .module.css (3), .css (4), .module.scss (5), .scss (6)
+            // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
-            // (7)
+            // (6)
             isEnvProduction && {
               test: require.resolve('@redwoodjs/router/dist/splash-page'),
               use: 'null-loader',
             },
-            // (8)
+            // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
-              loader: 'file-loader',
-              options: {
-                name: 'static/media/[name].[contenthash:8].[ext]',
+              type: 'asset/resource',
+              generator: {
+                filename: 'static/media/[name].[contenthash:8].[ext]',
               },
             },
           ].filter(Boolean),

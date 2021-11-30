@@ -48,8 +48,8 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches Firebase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import { initializeApp, getApp, getApps } from 'firebase/app'
+import * as firebaseAuth from '@firebase/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -58,21 +58,30 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const firebaseClientConfig = {
+const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+
+  /** Optional config, may be needed, depending on how you use firebase
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
+  **/
 }
 
-const firebaseClient = ((config) => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config)
+const firebaseApp = ((config) => {
+  const apps = getApps()
+  if (!apps.length) {
+    initializeApp(config)
   }
-  return firebase
-})(firebaseClientConfig)
+  return getApp()
+})(firebaseConfig)
+
+export const firebaseClient = {
+  firebaseAuth,
+  firebaseApp, // optional
+}
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
@@ -92,7 +101,7 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches azureActiveDirectory Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import { UserAgentApplication } from 'msal'
+import { PublicClientApplication } from '@azure/msal-browser'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -101,7 +110,7 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const azureActiveDirectoryClient = new UserAgentApplication({
+const azureActiveDirectoryClient = new PublicClientApplication({
     auth: {
       clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
       authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,

@@ -40,6 +40,9 @@ export interface AuthContextInterface {
    * Redetermine authentication state and update the state.
    */
   reauthenticate(): Promise<void>
+  forgotPassword(username: string): Promise<any>
+  resetPassword(options?: unknown): Promise<any>
+  validateResetToken(resetToken: string | null): Promise<any>
   /**
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
@@ -109,7 +112,7 @@ export class AuthProvider extends React.Component<
   constructor(props: AuthProviderProps) {
     super(props)
     this.rwClient = createAuthClient(
-      props.client || (() => null),
+      props.client as SupportedAuthClients,
       props.type as SupportedAuthTypes
     )
   }
@@ -119,24 +122,25 @@ export class AuthProvider extends React.Component<
     return this.reauthenticate()
   }
 
+  getApiGraphQLUrl = () => {
+    return global.RWJS_API_GRAPHQL_URL
+  }
+
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
     // Always get a fresh token, rather than use the one in state
     const token = await this.getToken()
-    const response = await global.fetch(
-      `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
-      {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'auth-provider': this.rwClient.type,
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query:
-            'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }',
-        }),
-      }
-    )
+    const response = await global.fetch(this.getApiGraphQLUrl(), {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'auth-provider': this.rwClient.type,
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        query:
+          'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }',
+      }),
+    })
 
     if (response.ok) {
       const { data } = await response.json()
@@ -211,11 +215,11 @@ export class AuthProvider extends React.Component<
           loading: false,
         })
       }
-    } catch (e) {
+    } catch (e: any) {
       this.setState({
         ...notAuthenticatedState,
         hasError: true,
-        error: e,
+        error: e as Error,
       })
     }
   }
@@ -245,6 +249,36 @@ export class AuthProvider extends React.Component<
     return signupOutput
   }
 
+  forgotPassword = async (username: string) => {
+    if (this.rwClient.forgotPassword) {
+      return await this.rwClient.forgotPassword(username)
+    } else {
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
+    }
+  }
+
+  resetPassword = async (options?: any) => {
+    if (this.rwClient.resetPassword) {
+      return await this.rwClient.resetPassword(options)
+    } else {
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
+    }
+  }
+
+  validateResetToken = async (resetToken: string | null) => {
+    if (this.rwClient.validateResetToken) {
+      return await this.rwClient.validateResetToken(resetToken)
+    } else {
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
+    }
+  }
+
   render() {
     const { client, type, children } = this.props
 
@@ -259,6 +293,9 @@ export class AuthProvider extends React.Component<
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
+          forgotPassword: this.forgotPassword,
+          resetPassword: this.resetPassword,
+          validateResetToken: this.validateResetToken,
           client,
           type: type as SupportedAuthTypes,
         }}

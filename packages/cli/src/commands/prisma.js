@@ -57,7 +57,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       options.schema = `"${rwjsPaths.api.dbSchema}"`
 
       if (commands[1] === 'seed') {
-        options['preview-feature'] = true
+        delete options.schema
       }
     }
   }

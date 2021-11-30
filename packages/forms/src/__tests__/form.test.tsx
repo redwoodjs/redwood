@@ -34,12 +34,11 @@ describe('Form', () => {
         <TextField
           name="floatText"
           defaultValue="3.14"
-          transformValue="Float"
+          validation={{ valueAsNumber: true }}
         />
         <CheckboxField name="checkbox" defaultChecked={true} />
         <TextAreaField
           name="json"
-          transformValue="Json"
           defaultValue={`
             {
               "key_one": "value1",
@@ -47,6 +46,7 @@ describe('Form', () => {
               "false": false
             }
           `}
+          validation={{ valueAsJSON: true }}
         />
         <DatetimeLocalField
           name="datetimeLocal"
@@ -58,7 +58,11 @@ describe('Form', () => {
           <option>Option 2</option>
           <option>Option 3</option>
         </SelectField>
-        <SelectField name="select2" data-testid="select2" transformValue="Int">
+        <SelectField
+          name="select2"
+          data-testid="select2"
+          validation={{ valueAsNumber: true }}
+        >
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
@@ -91,7 +95,7 @@ describe('Form', () => {
           <TextField
             name="wrapped-ff"
             defaultValue="3.14"
-            transformValue="Float"
+            validation={{ valueAsNumber: true }}
           />
         </div>
         <NumberFieldsWrapper />
@@ -160,8 +164,8 @@ describe('Form', () => {
           key_two: 2,
           false: false,
         },
-        datetimeLocal: new Date('2021-04-16T12:34').toISOString(),
-        date: new Date('2021-04-16').toISOString(),
+        datetimeLocal: new Date('2021-04-16T12:34'),
+        date: new Date('2021-04-16'),
       },
       expect.anything() // event that triggered the onSubmit call
     )
@@ -201,12 +205,12 @@ describe('Form', () => {
         <TextField
           name="tf"
           defaultValue="123_456"
-          transformValue={coercionFunctionNumber}
+          validation={{ setValueAs: coercionFunctionNumber }}
         />
         <SelectField
           name="select"
           defaultValue="Option_2"
-          transformValue={coercionFunctionText}
+          validation={{ setValueAs: coercionFunctionText }}
         >
           <option>Option_1</option>
           <option>Option_2</option>
@@ -224,71 +228,30 @@ describe('Form', () => {
     )
   })
 
-  it('handles int and float blank values gracefully with console warnings', async () => {
-    const spy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+  it('handles int and float blank values gracefully', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <NumberField name="int" defaultValue="" transformValue="Int" />
-        <TextField name="float" defaultValue="" transformValue="Float" />
+        <NumberField name="int" defaultValue="" />
+        <TextField
+          name="float"
+          defaultValue=""
+          validation={{ valueAsNumber: true }}
+        />
         <Submit>Save</Submit>
       </Form>
     )
     fireEvent.click(screen.getByText('Save'))
 
-    await waitFor(() => expect(console.warn).toHaveBeenCalledTimes(2))
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       {
-        int: undefined,
-        float: undefined,
+        int: NaN,
+        float: NaN,
       },
       expect.anything() // event that triggered the onSubmit call
     )
-    spy.mockRestore()
-  })
-
-  it('handles datetime blank values gracefully with console warnings', async () => {
-    const spy = jest.spyOn(console, 'warn').mockImplementation(() => {})
-    const mockFn = jest.fn()
-
-    render(
-      <Form onSubmit={mockFn}>
-        <DateField name="date" defaultValue="" />
-        <DatetimeLocalField name="datetime" defaultValue="" />
-        <Submit>Save</Submit>
-      </Form>
-    )
-    fireEvent.click(screen.getByText('Save'))
-
-    await waitFor(() => expect(console.warn).toHaveBeenCalledTimes(2))
-    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
-    expect(mockFn).toBeCalledWith(
-      {
-        date: undefined,
-        datetime: undefined,
-      },
-      expect.anything() // event that triggered the onSubmit call
-    )
-    spy.mockRestore()
-  })
-
-  it('input fields issue a console.warn if an invalid transformValue is set', async () => {
-    const spy = jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
-
-    render(
-      <Form>
-        {/*@ts-expect-error transformValue only accepts specific arguments*/}
-        <TextAreaField name="taf" defaultValue="" transformValue="BAD" />
-      </Form>
-    )
-
-    await waitFor(() => expect(console.warn).toHaveBeenCalledTimes(1))
-    expect(console.warn).toBeCalledWith(
-      'Form input taf does not have a valid transformValue'
-    )
-    spy.mockRestore()
   })
 
   // Note the good JSON case is tested in an earlier test
@@ -301,7 +264,7 @@ describe('Form', () => {
           name="jsonField"
           defaultValue="{bad-json}"
           data-testid="jsonField"
-          transformValue="Json"
+          validation={{ valueAsJSON: true }}
         />
         <Submit>Save</Submit>
       </Form>
@@ -316,39 +279,6 @@ describe('Form', () => {
       )
       expect(mockFn).not.toHaveBeenCalled()
     })
-  })
-
-  it('for a TextAreaField with transformValue set to "Json", and a validation function custom set, it warns the developer upon a bad JSON submission', async () => {
-    const spy = jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
-    const mockFn = jest.fn()
-
-    render(
-      <Form onSubmit={mockFn}>
-        <TextAreaField
-          name="jsonField"
-          defaultValue="{bad-json}"
-          data-testid="jsonField"
-          transformValue="Json"
-          validation={{ validate: (value: string) => value && null }}
-        />
-        <Submit>Save</Submit>
-      </Form>
-    )
-    fireEvent.click(screen.getByText('Save'))
-
-    await waitFor(() => expect(console.warn).toHaveBeenCalledTimes(1))
-    expect(console.warn).toBeCalledWith(
-      "Invalid Json. Form field validation not set.  Returning 'undefined' instead of '{bad-json}'"
-    )
-    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
-    expect(mockFn).toBeCalledWith(
-      {
-        jsonField: undefined,
-      },
-      expect.anything() // event that triggered the onSubmit call
-    )
-
-    spy.mockRestore()
   })
 
   it('for a FieldError with name set to path', async () => {
