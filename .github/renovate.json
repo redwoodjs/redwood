@@ -13,5 +13,16 @@
       ],
       "automerge": true
     }
+  ],
+  "ignoreDeps": [
+    "boxen",
+    "configstore",
+    "decamelize",
+    "execa",
+    "humanize-string",
+    "latest-version",
+    "ora",
+    "tempy",
+    "terminal-link"
   ]
 }
