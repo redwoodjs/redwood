@@ -120,9 +120,30 @@ export const getWebSideOverrides = (
 }
 
 export const getWebSideBabelPresets = () => {
+  let reactPresetConfig = undefined
+
+  // This is a special case, where @babel/preset-react needs config
+  // And using extends doesn't work
+  if (getWebSideBabelConfigPath()) {
+    const userProjectConfig = require(getWebSideBabelConfigPath() as string)
+
+    userProjectConfig.presets?.forEach(
+      (preset: TransformOptions['presets']) => {
+        // If it isn't a preset with special config ignore it
+        if (!Array.isArray(preset)) {
+          return
+        }
+
+        const [presetName, presetConfig] = preset
+        if (presetName === '@babel/preset-react') {
+          reactPresetConfig = presetConfig
+        }
+      }
+    )
+  }
   return [
-    '@babel/preset-react',
-    '@babel/preset-typescript',
+    ['@babel/preset-react', reactPresetConfig],
+    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
     [
       '@babel/preset-env',
       {
@@ -139,6 +160,7 @@ export const getWebSideBabelPresets = () => {
           '@babel/plugin-proposal-private-methods',
         ],
       },
+      'rwjs-babel-preset-env',
     ],
   ]
 }
