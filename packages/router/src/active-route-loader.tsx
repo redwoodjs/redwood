@@ -2,6 +2,7 @@ import React, { useRef, useState, useContext, useEffect } from 'react'
 
 import { unstable_batchedUpdates } from 'react-dom'
 
+import { useIsMounted } from './useIsMounted'
 import { Spec } from './util'
 import {
   createNamedContext,
@@ -89,7 +90,6 @@ export const ActiveRouteLoader = ({
   const [pageName, setPageName] = useState('')
   const loadingTimeout = useRef<NodeJS.Timeout>()
   const announcementRef = useRef<HTMLDivElement>(null)
-  const mounted = useRef(true)
   const waitingFor = useRef<string>('')
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: { page: ArlNullPage, state: 'PRE_SHOW' },
@@ -99,20 +99,13 @@ export const ActiveRouteLoader = ({
   >(children)
   const [renderedPath, setRenderedPath] = useState(path)
   const [renderedLocation, setRenderedLocation] = useState({ ...location })
+  const isMounted = useIsMounted()
 
   const clearLoadingTimeout = () => {
     if (loadingTimeout.current) {
       clearTimeout(loadingTimeout.current)
     }
   }
-
-  useEffect(() => {
-    mounted.current = true
-
-    return () => {
-      mounted.current = false
-    }
-  }, [])
 
   useEffect(() => {
     global?.scrollTo(0, 0)
@@ -170,7 +163,7 @@ export const ActiveRouteLoader = ({
 
       // Only update all state if we're still interested (i.e. we're still
       // waiting for the page that just finished loading)
-      if (mounted.current && name === waitingFor.current) {
+      if (isMounted && name === waitingFor.current) {
         unstable_batchedUpdates(() => {
           setLoadingState((loadingState) => ({
             ...loadingState,
@@ -195,7 +188,7 @@ export const ActiveRouteLoader = ({
     return () => {
       clearLoadingTimeout()
     }
-  }, [spec, delay, children, whileLoadingPage, path, location])
+  }, [spec, delay, children, whileLoadingPage, path, location, isMounted])
 
   if (global.__REDWOOD__PRERENDERING) {
     // babel auto-loader plugin uses withStaticImport in prerender mode
