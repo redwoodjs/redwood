@@ -4449,11 +4449,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/record@workspace:packages/record"
   dependencies:
+    "@babel/cli": 7.16.0
     "@prisma/client": 3.5.0
     "@prisma/sdk": 3.5.0
     core-js: 3.19.1
     jest: 27.3.1
-    typescript: 4.5.2
   languageName: unknown
   linkType: soft
 
