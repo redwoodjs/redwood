@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "files": [
     "dist"
   ],
@@ -29,7 +29,7 @@
     "@graphql-codegen/typescript-operations": "2.2.1",
     "@graphql-codegen/typescript-react-apollo": "3.2.2",
     "@graphql-codegen/typescript-resolvers": "2.4.2",
-    "@redwoodjs/graphql-server": "1.0.0-rc.1",
+    "@redwoodjs/graphql-server": "1.0.0-rc.2",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.4.0",
     "chalk": "4.1.2",
