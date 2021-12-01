@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@apollo/client@npm:3.5.4":
-  version: 3.5.4
-  resolution: "@apollo/client@npm:3.5.4"
+"@apollo/client@npm:3.5.5":
+  version: 3.5.5
+  resolution: "@apollo/client@npm:3.5.5"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 46c9910108daf5c2006513eb83f79e59b02b71b329fc9b905527d0e18a7c516b73465979f3d8d6258e5aff171fada5cf97b0bee997b2051b68a2489ceb4e2687
+  checksum: 7e14e2c3092e71a315e8a3de7be315f20744e0d8230cdcfa646ffde656262f0b7c1d163ed78c5a2aa56ba189707da0c7ebc1adaaf59ecd4c8131f80e5da12e26
   languageName: node
   linkType: hard
 
@@ -4549,7 +4549,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.5.4
+    "@apollo/client": 3.5.5
     "@babel/cli": 7.16.0
     "@redwoodjs/auth": 0.39.1
     "@types/react": 17.0.35
