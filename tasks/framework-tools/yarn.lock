@@ -3494,9 +3494,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/api@npm:0.39.1":
-  version: 0.39.1
-  resolution: "@redwoodjs/api@npm:0.39.1"
+"@redwoodjs/api@npm:1.0.0-rc.1":
+  version: 1.0.0-rc.1
+  resolution: "@redwoodjs/api@npm:1.0.0-rc.1"
   dependencies:
     "@babel/runtime-corejs3": 7.16.3
     "@prisma/client": 3.5.0
@@ -3508,18 +3508,18 @@ __metadata:
     pino: 7.3.0
     pino-pretty: 7.2.0
     uuid: 8.3.2
-  checksum: 5c5dd62d396a25680dee7ad58c749aa7528a4e76f576b061b466a06a4291f759e729f28e7989ac68af6bad0ec340302ddfd973a0d035a30c8c90cc2d58265331
+  checksum: c601a15e27022ae590242367929ca9b6c3de18437881e4d37f6a47966ed25c82ed8644b654c8e8c96ba5fae5f236b5d8841562611971f8bf64a4fd0eae7abf32
   languageName: node
   linkType: hard
 
-"@redwoodjs/eslint-config@npm:0.39.1":
-  version: 0.39.1
-  resolution: "@redwoodjs/eslint-config@npm:0.39.1"
+"@redwoodjs/eslint-config@npm:1.0.0-rc.1":
+  version: 1.0.0-rc.1
+  resolution: "@redwoodjs/eslint-config@npm:1.0.0-rc.1"
   dependencies:
     "@babel/core": 7.16.0
     "@babel/eslint-parser": 7.16.3
     "@babel/eslint-plugin": 7.14.5
-    "@redwoodjs/internal": 0.39.1
+    "@redwoodjs/internal": 1.0.0-rc.1
     "@typescript-eslint/eslint-plugin": 5.4.0
     "@typescript-eslint/parser": 5.4.0
     eslint: 8.2.0
@@ -3533,13 +3533,13 @@ __metadata:
     eslint-plugin-react: 7.27.1
     eslint-plugin-react-hooks: 4.3.0
     prettier: 2.4.1
-  checksum: e243bf3be0cb798f5e5aefe9e3a00456558a75350b81399c07fc947af841fff5c09c018824ff0f9e56774a1baf6e3e897e974a44ffc6318555144b1bd3e32288
+  checksum: 42b918a958a179ce6cb7e1e659fa6e8f95cd2138b7e788d380913bb823e20830b6055f0dbcd49af06c690e0dc94a8d36e4bfc4196762c4391181fde5ac4be84a
   languageName: node
   linkType: hard
 
-"@redwoodjs/graphql-server@npm:0.39.1":
-  version: 0.39.1
-  resolution: "@redwoodjs/graphql-server@npm:0.39.1"
+"@redwoodjs/graphql-server@npm:1.0.0-rc.1":
+  version: 1.0.0-rc.1
+  resolution: "@redwoodjs/graphql-server@npm:1.0.0-rc.1"
   dependencies:
     "@envelop/core": 1.6.2
     "@envelop/depth-limit": 1.2.1
@@ -3551,7 +3551,7 @@ __metadata:
     "@graphql-tools/schema": 8.3.1
     "@graphql-tools/utils": 8.5.3
     "@prisma/client": 3.5.0
-    "@redwoodjs/api": 0.39.1
+    "@redwoodjs/api": 1.0.0-rc.1
     core-js: 3.19.1
     graphql: 16.0.1
     graphql-helix: 1.10.2
@@ -3562,13 +3562,13 @@ __metadata:
     lodash.omitby: 4.6.0
     node-fetch: 2.6.1
     uuid: 8.3.2
-  checksum: 5a493c0d46cf59aea033e0b08d26adfa6c36524b548af1d1f472e4a54c8ad3b7e3a23ef2fbc82cb85b8ea2b98e8b2b170ad3a6bb93d63d1bed3adb311594cc8e
+  checksum: cd397e1068e2eec2954f6b71cc8d752e07a70ecc9bb7ed30fa716b86995056e28df42ec87074337fbd018d5093a42e3d8c850783f3eb1ee656515e2ab75c841d
   languageName: node
   linkType: hard
 
-"@redwoodjs/internal@npm:0.39.1":
-  version: 0.39.1
-  resolution: "@redwoodjs/internal@npm:0.39.1"
+"@redwoodjs/internal@npm:1.0.0-rc.1":
+  version: 1.0.0-rc.1
+  resolution: "@redwoodjs/internal@npm:1.0.0-rc.1"
   dependencies:
     "@babel/parser": 7.16.4
     "@babel/plugin-transform-typescript": 7.16.1
@@ -3582,7 +3582,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": 2.2.1
     "@graphql-codegen/typescript-react-apollo": 3.2.2
     "@graphql-codegen/typescript-resolvers": 2.4.2
-    "@redwoodjs/graphql-server": 0.39.1
+    "@redwoodjs/graphql-server": 1.0.0-rc.1
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.4.0
     chalk: 4.1.2
@@ -3602,7 +3602,7 @@ __metadata:
   bin:
     rw-gen: dist/generate/generate.js
     rw-gen-watch: dist/generate/watch.js
-  checksum: 998160d0226b7400b0131442c3e69aca9a594cee40d2915ea153dc1e592e4383906c8587fd83da04587aa348fa58a026af4028fc847c685b91b079203abb58b4
+  checksum: 952e9c859ea2e430ba900da2022355655af1697863da0377e4289fb64aded34c4869640573c8bafc8432d1e07d7851598aacb51f196f9145f048402f496c227e
   languageName: node
   linkType: hard
 
@@ -7521,7 +7521,7 @@ __metadata:
     "@babel/preset-react": 7.16.0
     "@babel/preset-typescript": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
-    "@redwoodjs/eslint-config": 0.39.1
+    "@redwoodjs/eslint-config": 1.0.0-rc.1
     "@testing-library/jest-dom": 5.15.0
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
