@@ -3686,9 +3686,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.15.0":
-  version: 5.15.0
-  resolution: "@testing-library/jest-dom@npm:5.15.0"
+"@testing-library/jest-dom@npm:5.15.1":
+  version: 5.15.1
+  resolution: "@testing-library/jest-dom@npm:5.15.1"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -3699,7 +3699,7 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: c812eb4a24bf9de3b718b324af08d56d023621852473e1f30698a434141b8fbd838619c5a20b38c13eb595d138c7836e645039eff4850b5c161b0e790eefdc48
+  checksum: 39b8ddcbb98d0e22418b879c75ee6b2ec89a302e720c0007cf630c6f345985010b8ca2f8f2f1326c84fac7800d5364961c5412da9ac5058e78538918f856badb
   languageName: node
   linkType: hard
 
@@ -7522,7 +7522,7 @@ __metadata:
     "@babel/preset-typescript": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
     "@redwoodjs/eslint-config": 0.39.1
-    "@testing-library/jest-dom": 5.15.0
+    "@testing-library/jest-dom": 5.15.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
