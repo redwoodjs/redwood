@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "../../packages/*"
+  ],
   "devDependencies": {
     "@babel/cli": "7.16.0",
     "@babel/core": "7.16.0",
