@@ -20,6 +20,17 @@ export const getWebSideBabelPlugins = () => {
 
     // === Import path handling
     [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          src:
+            // Jest monorepo and multi project runner is not correctly determining
+            // the `cwd`: https://github.com/facebook/jest/issues/7359
+            process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.web.src,
+        },
+      },
+    ],
+    [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
         srcAbsPath: rwjsPaths.web.src,
