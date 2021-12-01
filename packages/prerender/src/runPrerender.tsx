@@ -16,8 +16,6 @@ interface PrerenderParams {
   routerPath: string // e.g. /about, /dashboard/me
 }
 
-const rwWebPaths = getPaths().web
-
 export const runPrerender = async ({
   routerPath,
 }: PrerenderParams): Promise<string | void> => {
@@ -28,20 +26,6 @@ export const runPrerender = async ({
       {
         plugins: [
           ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-          [
-            'babel-plugin-module-resolver',
-            {
-              alias: {
-                src: rwWebPaths.src,
-              },
-              root: [getPaths().web.base],
-              // needed for respecting users' custom aliases in web/.babelrc
-              // See https://github.com/tleunen/babel-plugin-module-resolver/blob/master/DOCS.md#cwd
-              cwd: 'babelrc',
-              loglevel: 'silent', // to silence the unnecessary warnings
-            },
-            'prerender-module-resolver', // add this name, so it doesn't overwrite custom module resolvers in users' web/.babelrc
-          ],
           [mediaImportsPlugin],
         ],
       },
