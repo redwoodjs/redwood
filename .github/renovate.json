@@ -11,7 +11,8 @@
     "latest-version",
     "ora",
     "tempy",
-    "terminal-link"
+    "terminal-link",
+    "@types/node-fetch"
   ],
   "lockFileMaintenance": {
     "enabled": true
