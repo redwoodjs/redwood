@@ -17,7 +17,6 @@ export const getWebSideBabelPlugins = () => {
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
-
     // === Import path handling
     [
       'babel-plugin-module-resolver',
@@ -28,7 +27,11 @@ export const getWebSideBabelPlugins = () => {
             // the `cwd`: https://github.com/facebook/jest/issues/7359
             process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.web.src,
         },
+        root: [rwjsPaths.web.base],
+        cwd: 'packagejson',
+        loglevel: 'silent', // to silence the unnecessary warnings
       },
+      'rwjs-module-resolver',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
