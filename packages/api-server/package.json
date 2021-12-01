@@ -15,7 +15,7 @@
     "@babel/plugin-transform-runtime": "7.16.4",
     "ansi-colors": "4.1.1",
     "chokidar": "3.5.2",
-    "fastify": "3.24.0",
+    "fastify": "3.24.1",
     "fastify-http-proxy": "6.2.1",
     "fastify-raw-body": "3.2.0",
     "fastify-static": "4.5.0",
