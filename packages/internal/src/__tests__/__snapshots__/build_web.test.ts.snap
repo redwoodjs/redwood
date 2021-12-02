@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check routes are imported with "import" when staticImports flag is NOT passed 1`] = `
+"\\"use strict\\";
+
+require(\\"core-js/modules/es.object.define-property.js\\");
+
+Object.defineProperty(exports, \\"__esModule\\", {
+  value: true
+});
+exports[\\"default\\"] = void 0;
+
+require(\\"core-js/modules/es.array.iterator.js\\");
+
+require(\\"core-js/modules/es.object.to-string.js\\");
+
+require(\\"core-js/modules/es.set.js\\");
+
+require(\\"core-js/modules/es.string.iterator.js\\");
+
+require(\\"core-js/modules/esnext.set.add-all.js\\");
+
+require(\\"core-js/modules/esnext.set.delete-all.js\\");
+
+require(\\"core-js/modules/esnext.set.difference.js\\");
+
+require(\\"core-js/modules/esnext.set.every.js\\");
+
+require(\\"core-js/modules/esnext.set.filter.js\\");
+
+require(\\"core-js/modules/esnext.set.find.js\\");
+
+require(\\"core-js/modules/esnext.set.intersection.js\\");
+
+require(\\"core-js/modules/esnext.set.is-disjoint-from.js\\");
+
+require(\\"core-js/modules/esnext.set.is-subset-of.js\\");
+
+require(\\"core-js/modules/esnext.set.is-superset-of.js\\");
+
+require(\\"core-js/modules/esnext.set.join.js\\");
+
+require(\\"core-js/modules/esnext.set.map.js\\");
+
+require(\\"core-js/modules/esnext.set.reduce.js\\");
+
+require(\\"core-js/modules/esnext.set.some.js\\");
+
+require(\\"core-js/modules/esnext.set.symmetric-difference.js\\");
+
+require(\\"core-js/modules/esnext.set.union.js\\");
+
+require(\\"core-js/modules/web.dom-collections.iterator.js\\");
+
+var _react = _interopRequireDefault(require(\\"react\\"));
+
+var _router = require(\\"@redwoodjs/router\\");
+
+var _SetLayout = _interopRequireDefault(require(\\"./layouts/SetLayout/SetLayout\\"));
+
+var _FooPage = _interopRequireDefault(require(\\"./pages/FooPage/FooPage\\"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \\"default\\": obj }; }
+
+const BarPage = {
+  name: \\"BarPage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/BarPage/BarPage\\")
+};
+const FatalErrorPage = {
+  name: \\"FatalErrorPage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/FatalErrorPage/FatalErrorPage\\")
+};
+const HomePage = {
+  name: \\"HomePage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/HomePage/HomePage\\")
+};
+const NotFoundPage = {
+  name: \\"NotFoundPage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/NotFoundPage/NotFoundPage\\")
+};
+const PrivatePage = {
+  name: \\"PrivatePage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/PrivatePage/PrivatePage\\")
+};
+const TypeScriptPage = {
+  name: \\"TypeScriptPage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/TypeScriptPage/TypeScriptPage\\")
+};
+const adminEditUserPage = {
+  name: \\"adminEditUserPage\\",
+  loader: () => import(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/admin/EditUserPage/EditUserPage\\")
+};
+
+var Routes = function Routes() {
+  return /*#__PURE__*/_react[\\"default\\"].createElement(_router.Router, null, /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/\\",
+    page: HomePage,
+    name: \\"home\\",
+    prerender: true
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/typescript\\",
+    page: TypeScriptPage,
+    name: \\"typescriptPage\\",
+    prerender: true
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/somewhereElse\\",
+    page: EditUserPage,
+    name: \\"someOtherPage\\",
+    prerender: true
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(Set, {
+    wrap: _SetLayout[\\"default\\"],
+    prerender: true
+  }, /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/foo\\",
+    page: _FooPage[\\"default\\"],
+    name: \\"fooPage\\"
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/bar\\",
+    page: BarPage,
+    name: \\"barPage\\"
+  })), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Private, {
+    prerender: true,
+    unauthenticated: \\"home\\"
+  }, /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/private-page\\",
+    page: PrivatePage,
+    name: \\"privatePage\\"
+  })), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    notfound: true,
+    page: NotFoundPage
+  }));
+};
+
+var _default = Routes;
+exports[\\"default\\"] = _default;"
+`;
+
+exports[`Check routes are imported with require when staticImports flag is enabled 1`] = `
+"\\"use strict\\";
+
+require(\\"core-js/modules/es.object.define-property.js\\");
+
+Object.defineProperty(exports, \\"__esModule\\", {
+  value: true
+});
+exports[\\"default\\"] = void 0;
+
+require(\\"core-js/modules/es.array.iterator.js\\");
+
+require(\\"core-js/modules/es.object.to-string.js\\");
+
+require(\\"core-js/modules/es.set.js\\");
+
+require(\\"core-js/modules/es.string.iterator.js\\");
+
+require(\\"core-js/modules/esnext.set.add-all.js\\");
+
+require(\\"core-js/modules/esnext.set.delete-all.js\\");
+
+require(\\"core-js/modules/esnext.set.difference.js\\");
+
+require(\\"core-js/modules/esnext.set.every.js\\");
+
+require(\\"core-js/modules/esnext.set.filter.js\\");
+
+require(\\"core-js/modules/esnext.set.find.js\\");
+
+require(\\"core-js/modules/esnext.set.intersection.js\\");
+
+require(\\"core-js/modules/esnext.set.is-disjoint-from.js\\");
+
+require(\\"core-js/modules/esnext.set.is-subset-of.js\\");
+
+require(\\"core-js/modules/esnext.set.is-superset-of.js\\");
+
+require(\\"core-js/modules/esnext.set.join.js\\");
+
+require(\\"core-js/modules/esnext.set.map.js\\");
+
+require(\\"core-js/modules/esnext.set.reduce.js\\");
+
+require(\\"core-js/modules/esnext.set.some.js\\");
+
+require(\\"core-js/modules/esnext.set.symmetric-difference.js\\");
+
+require(\\"core-js/modules/esnext.set.union.js\\");
+
+require(\\"core-js/modules/web.dom-collections.iterator.js\\");
+
+var _react = _interopRequireDefault(require(\\"react\\"));
+
+var _router = require(\\"@redwoodjs/router\\");
+
+var _SetLayout = _interopRequireDefault(require(\\"./layouts/SetLayout/SetLayout\\"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \\"default\\": obj }; }
+
+const BarPage = {
+  name: \\"BarPage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/BarPage/BarPage\\")
+};
+const FatalErrorPage = {
+  name: \\"FatalErrorPage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/FatalErrorPage/FatalErrorPage\\")
+};
+const FooPage = {
+  name: \\"FooPage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/FooPage/FooPage\\")
+};
+const HomePage = {
+  name: \\"HomePage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/HomePage/HomePage\\")
+};
+const NotFoundPage = {
+  name: \\"NotFoundPage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/NotFoundPage/NotFoundPage\\")
+};
+const PrivatePage = {
+  name: \\"PrivatePage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/PrivatePage/PrivatePage\\")
+};
+const TypeScriptPage = {
+  name: \\"TypeScriptPage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/TypeScriptPage/TypeScriptPage\\")
+};
+const adminEditUserPage = {
+  name: \\"adminEditUserPage\\",
+  loader: () => require(\\"/Users/dac09/Code/redwood/__fixtures__/example-todo-main/web/src/pages/admin/EditUserPage/EditUserPage\\")
+};
+
+var Routes = function Routes() {
+  return /*#__PURE__*/_react[\\"default\\"].createElement(_router.Router, null, /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/\\",
+    page: HomePage,
+    name: \\"home\\",
+    prerender: true
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/typescript\\",
+    page: TypeScriptPage,
+    name: \\"typescriptPage\\",
+    prerender: true
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/somewhereElse\\",
+    page: EditUserPage,
+    name: \\"someOtherPage\\",
+    prerender: true
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(Set, {
+    wrap: _SetLayout[\\"default\\"],
+    prerender: true
+  }, /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/foo\\",
+    page: FooPage,
+    name: \\"fooPage\\"
+  }), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/bar\\",
+    page: BarPage,
+    name: \\"barPage\\"
+  })), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Private, {
+    prerender: true,
+    unauthenticated: \\"home\\"
+  }, /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    path: \\"/private-page\\",
+    page: PrivatePage,
+    name: \\"privatePage\\"
+  })), /*#__PURE__*/_react[\\"default\\"].createElement(_router.Route, {
+    notfound: true,
+    page: NotFoundPage
+  }));
+};
+
+var _default = Routes;
+exports[\\"default\\"] = _default;"
+`;

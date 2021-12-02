@@ -13,7 +13,9 @@ import {
   RegisterHookOptions,
 } from './common'
 
-export const getWebSideBabelPlugins = () => {
+export const getWebSideBabelPlugins = (
+  { forJest }: Flags = { forJest: false }
+) => {
   const rwjsPaths = getPaths()
 
   const plugins: TransformOptions['plugins'] = [
@@ -26,7 +28,7 @@ export const getWebSideBabelPlugins = () => {
           src:
             // Jest monorepo and multi project runner is not correctly determining
             // the `cwd`: https://github.com/facebook/jest/issues/7359
-            process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.web.src,
+            forJest ? rwjsPaths.web.src : './src',
         },
         root: [rwjsPaths.web.base],
         cwd: 'packagejson',
@@ -97,7 +99,7 @@ export const getWebSideBabelPlugins = () => {
 }
 
 export const getWebSideOverrides = (
-  { staticImports } = {
+  { staticImports }: Flags = {
     staticImports: false,
   }
 ) => {
@@ -189,15 +191,21 @@ export const getWebSideBabelConfigPath = () => {
   }
 }
 
-export const getWebSideDefaultBabelConfig = () => {
+// These flags toggle on/off certain features
+export interface Flags {
+  forJest?: boolean // will change the alias for module-resolver plugin
+  staticImports?: boolean // will use require instead of import for routes-auto-loader plugin
+}
+
+export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
   // NOTE:
   // Even though we specify the config file, babel will still search for .babelrc
   // and merge them because we have specified the filename property, unless babelrc = false
 
   return {
     presets: getWebSideBabelPresets(),
-    plugins: getWebSideBabelPlugins(),
-    overrides: getWebSideOverrides(),
+    plugins: getWebSideBabelPlugins(options),
+    overrides: getWebSideOverrides(options),
     extends: getWebSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
@@ -224,18 +232,14 @@ export const registerWebSideBabelHook = ({
 
 // @MARK
 // Currently only used in testing
-export const prebuildWebFile = (
-  srcPath: string,
-  overrides: TransformOptions['overrides'] = []
-) => {
+export const prebuildWebFile = (srcPath: string, flags: Flags = {}) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
-  const defaultOptions = getWebSideDefaultBabelConfig()
+  const defaultOptions = getWebSideDefaultBabelConfig(flags)
 
   const result = babel.transform(code, {
     ...defaultOptions,
     cwd: getPaths().web.base,
     filename: srcPath,
-    overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
   return result
 }

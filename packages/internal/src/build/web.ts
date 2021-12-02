@@ -5,7 +5,7 @@ import { removeSync } from 'fs-extra'
 
 import { getPaths } from '../paths'
 
-import { prebuildWebFile } from './babel/web'
+import { prebuildWebFile, Flags } from './babel/web'
 
 // @MARK
 // This whole file is currently only used in testing
@@ -20,7 +20,7 @@ export const cleanWebBuild = () => {
 /**
  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
  */
-export const prebuildWebFiles = (srcFiles: string[]) => {
+export const prebuildWebFiles = (srcFiles: string[], flags?: Flags) => {
   const rwjsPaths = getPaths()
 
   return srcFiles.map((srcPath) => {
@@ -29,7 +29,7 @@ export const prebuildWebFiles = (srcFiles: string[]) => {
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    const result = prebuildWebFile(srcPath)
+    const result = prebuildWebFile(srcPath, flags)
     if (!result?.code) {
       console.warn('Error:', srcPath, 'could not prebuilt.')
       return undefined

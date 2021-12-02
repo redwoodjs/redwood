@@ -1,8 +1,9 @@
 import path from 'path'
 
+import { prebuildWebFile } from '../build/babel/web'
 import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
-import { ensurePosixPath } from '../paths'
+import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -13,30 +14,21 @@ const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
 }
 
-const fullPath = (p) => {
-  return path.join(FIXTURE_PATH, p)
-}
-
-// Fixtures, filled in beforeAll
-let prebuiltFiles
-let relativePaths
-
-beforeAll(() => {
+beforeEach(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
   cleanWebBuild()
-
-  const webFiles = findWebFiles()
-  prebuiltFiles = prebuildWebFiles(webFiles)
-
-  relativePaths = prebuiltFiles
-    .filter((x) => typeof x !== 'undefined')
-    .map(cleanPaths)
 })
 afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-test('api files are prebuilt', async () => {
+test('web files are prebuilt (no prerender)', async () => {
+  const webFiles = findWebFiles()
+  const prebuiltFiles = prebuildWebFiles(webFiles)
+
+  const relativePaths = prebuiltFiles
+    .filter((x) => typeof x !== 'undefined')
+    .map(cleanPaths)
   // Builds non-nested functions
   expect(relativePaths).toMatchInlineSnapshot(`
     Array [
@@ -61,4 +53,48 @@ test('api files are prebuilt', async () => {
       ".redwood/prebuild/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
     ]
   `)
+})
+
+test('Check routes are imported with require when staticImports flag is enabled', () => {
+  const routesFile = getPaths().web.routes
+
+  const withStaticImports = prebuildWebFile(routesFile, {
+    staticImports: true,
+  }).code
+
+  /* Check that imports have the form
+   `const HomePage = {
+     name: "HomePage",
+     loader: () => require("` 👈 Uses a require statement
+
+
+    👇 Foo page is an explicitly imported page
+    const FooPage = {
+      name: "FooPage",
+      loader: () => require(
+    */
+
+  expect(withStaticImports).toMatchSnapshot()
+})
+
+test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
+  const routesFile = getPaths().web.routes
+
+  const withoutStaticImports = prebuildWebFile(routesFile).code //?
+
+  /* Check that imports have the form
+   `const HomePage = {
+     name: "HomePage",
+     loader: () => import("` 👈 Uses an (async) import statement
+
+
+    👇 Foo page is an explicitly imported page, so it should
+    var _FooPage = _interopRequireDefault(require(\\"./pages/FooPage/FooPage\\"))
+    .
+    .
+    .
+    page: _FooPage[\\"default\\"],
+    */
+
+  expect(withoutStaticImports).toMatchSnapshot()
 })

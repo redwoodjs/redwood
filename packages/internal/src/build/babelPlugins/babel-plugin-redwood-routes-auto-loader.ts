@@ -33,16 +33,18 @@ export default function (
           // Match import paths, const name could be different
           const userImportPath = importStatementPath(p.node.source?.value)
 
-          // When running from the CLI: Babel-plugin-module-resolver will convert 'src/pages/ExamplePage' -> './pages/ExamplePage'
-          // @TODO: Why is this inconsistent?
-          const relativeImports = rwPageImportPaths.map((impPath) => {
+          // When running from the CLI: Babel-plugin-module-resolver will convert
+          // For dev/build/prerender: 'src/pages/ExamplePage' -> './pages/ExamplePage'
+          // For test: 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+
+          const pagePathsRelativeToRoutes = rwPageImportPaths.map((impPath) => {
             return `./${path.relative(getPaths().web.src, impPath)}`
           })
 
-          // Check both relative and absolute path styles
-          // Because running from prerender produces a completely different path
+          // Check both relative (build/prerender) and absolute path (jest) styles
+          // This is just to be safe. We will likely have to change this behaviour once we remove the module-resolver plugin
           if (
-            relativeImports.includes(userImportPath) ||
+            pagePathsRelativeToRoutes.includes(userImportPath) ||
             rwPageImportPaths.includes(userImportPath)
           ) {
             p.remove()
