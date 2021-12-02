@@ -109,7 +109,7 @@ export const getWebSideOverrides = (
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
+      test: /Routes.(js|tsx)$/,
       plugins: [
         [
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')
@@ -224,12 +224,8 @@ export const registerWebSideBabelHook = ({
 
 // @MARK
 // Currently only used in testing
-export const prebuildFile = (
+export const prebuildWebFile = (
   srcPath: string,
-  // we need to know dstPath as well
-  // so we can generate an inline, relative sourcemap
-  dstPath: string,
-  plugins: TransformOptions['plugins'] = [],
   overrides: TransformOptions['overrides'] = []
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
@@ -239,15 +235,6 @@ export const prebuildFile = (
     ...defaultOptions,
     cwd: getPaths().web.base,
     filename: srcPath,
-    // we set the sourceFile (for the sourcemap) as a correct, relative path
-    // this is why this function (prebuildFile) must know about the dstPath
-    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
-    // we need inline sourcemaps at this level
-    // because this file will eventually be fed to esbuild
-    // when esbuild finds an inline sourcemap, it tries to "combine" it
-    // so the final sourcemap (the one that esbuild generates) combines both mappings
-    sourceMaps: 'inline',
-    plugins,
     overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
   return result

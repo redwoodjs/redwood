@@ -36,7 +36,29 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-test('api files are prebuilt', () => {
+test('api files are prebuilt', async () => {
   // Builds non-nested functions
-  relativePaths //?
+  expect(relativePaths).toMatchInlineSnapshot(`
+    Array [
+      ".redwood/prebuild/web/src/App.js",
+      ".redwood/prebuild/web/src/Routes.js",
+      ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",
+      ".redwood/prebuild/web/src/components/AddTodoControl/AddTodoControl.js",
+      ".redwood/prebuild/web/src/components/Check/Check.js",
+      ".redwood/prebuild/web/src/components/NumTodosCell/NumTodosCell.js",
+      ".redwood/prebuild/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
+      ".redwood/prebuild/web/src/components/TableCell/TableCell.js",
+      ".redwood/prebuild/web/src/components/TodoItem/TodoItem.js",
+      ".redwood/prebuild/web/src/components/TodoListCell/TodoListCell.tsx",
+      ".redwood/prebuild/web/src/layouts/SetLayout/SetLayout.js",
+      ".redwood/prebuild/web/src/pages/BarPage/BarPage.tsx",
+      ".redwood/prebuild/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+      ".redwood/prebuild/web/src/pages/FooPage/FooPage.tsx",
+      ".redwood/prebuild/web/src/pages/HomePage/HomePage.tsx",
+      ".redwood/prebuild/web/src/pages/NotFoundPage/NotFoundPage.js",
+      ".redwood/prebuild/web/src/pages/PrivatePage/PrivatePage.tsx",
+      ".redwood/prebuild/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+      ".redwood/prebuild/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
+    ]
+  `)
 })

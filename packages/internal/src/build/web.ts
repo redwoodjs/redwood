@@ -5,7 +5,7 @@ import { removeSync } from 'fs-extra'
 
 import { getPaths } from '../paths'
 
-import { prebuildFile } from './babel/web'
+import { prebuildWebFile } from './babel/web'
 
 // @MARK
 // This whole file is currently only used in testing
@@ -29,7 +29,7 @@ export const prebuildWebFiles = (srcFiles: string[]) => {
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    const result = prebuildFile(srcPath, dstPath, [])
+    const result = prebuildWebFile(srcPath)
     if (!result?.code) {
       console.warn('Error:', srcPath, 'could not prebuilt.')
       return undefined
