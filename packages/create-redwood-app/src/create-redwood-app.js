@@ -13,7 +13,7 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
-import yargs from 'yargs'
+import yargs, { boolean } from 'yargs'
 
 import { name, version } from '../package'
 
@@ -48,6 +48,7 @@ const {
   'yarn-install': yarnInstall,
   typescript,
   overwrite,
+  telemetry: telemetry,
 } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
@@ -68,6 +69,12 @@ const {
     default: false,
     type: 'boolean',
     describe: 'Create even if target directory is empty',
+  })
+  .option('telemetry', {
+    default: true,
+    type: 'boolean',
+    describe:
+      'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
   })
   .version(version)
   .strict().argv
@@ -178,6 +185,8 @@ const installNodeModulesTasks = ({ newAppDir }) => {
   ]
 }
 
+const startTime = Date.now()
+
 new Listr(
   [
     {
@@ -213,6 +222,21 @@ new Listr(
 )
   .run()
   .then(() => {
+    // send 'create' telemetry event, or disable for new app
+    if (telemetry) {
+      execa(
+        `node node_modules/@redwoodjs/internal/dist/telemetry/sendTelemetry.js --type create --duration ${
+          Date.now() - startTime
+        }`,
+        { shell: true, cwd: newAppDir }
+      )
+    } else {
+      fs.appendFileSync(
+        path.join(newAppDir, '.env'),
+        'REDWOOD_DISABLE_TELEMETRY=1\n'
+      )
+    }
+
     // zOMG the semicolon below is a real Prettier thing. What??
     // https://prettier.io/docs/en/rationale.html#semicolons
     ;[
