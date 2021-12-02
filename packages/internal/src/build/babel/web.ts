@@ -215,7 +215,8 @@ export const prebuildFile = (
   // we need to know dstPath as well
   // so we can generate an inline, relative sourcemap
   dstPath: string,
-  plugins: TransformOptions['plugins']
+  plugins: TransformOptions['plugins'] = [],
+  overrides: TransformOptions['overrides'] = []
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
   const defaultOptions = getWebSideDefaultBabelConfig()
@@ -233,6 +234,7 @@ export const prebuildFile = (
     // so the final sourcemap (the one that esbuild generates) combines both mappings
     sourceMaps: 'inline',
     plugins,
+    overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
   return result
 }
