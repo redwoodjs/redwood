@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
 import { getPaths } from '../../paths'
@@ -205,4 +206,33 @@ export const registerWebSideBabelHook = ({
     // Static importing pages makes sense
     overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
+}
+
+// @MARK
+// Currently only used in testing
+export const prebuildFile = (
+  srcPath: string,
+  // we need to know dstPath as well
+  // so we can generate an inline, relative sourcemap
+  dstPath: string,
+  plugins: TransformOptions['plugins']
+) => {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+  const defaultOptions = getWebSideDefaultBabelConfig()
+
+  const result = babel.transform(code, {
+    ...defaultOptions,
+    cwd: getPaths().web.base,
+    filename: srcPath,
+    // we set the sourceFile (for the sourcemap) as a correct, relative path
+    // this is why this function (prebuildFile) must know about the dstPath
+    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
+    // we need inline sourcemaps at this level
+    // because this file will eventually be fed to esbuild
+    // when esbuild finds an inline sourcemap, it tries to "combine" it
+    // so the final sourcemap (the one that esbuild generates) combines both mappings
+    sourceMaps: 'inline',
+    plugins,
+  })
+  return result
 }
