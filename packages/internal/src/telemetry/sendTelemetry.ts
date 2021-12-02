@@ -1,10 +1,19 @@
+import fs from 'fs'
+import path from 'path'
+
 import ci from 'ci-info'
 import envinfo from 'envinfo'
 import fetch from 'node-fetch'
 import system from 'systeminformation'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getConfig } from '../config'
 import { getPaths } from '../paths'
+
+const TELEMETRY_CACHE_PATH = path.join(
+  getPaths().generated.base,
+  'telemetry.txt'
+)
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
@@ -117,6 +126,7 @@ export const buildPayload = async () => {
   return {
     type,
     command: sanitizeArgv(JSON.parse(argv.argv)),
+    uid: uniqueId(),
     ci: ci.isCI,
     duration: argv.duration ? parseInt(argv.duration) : null,
     error: error,
@@ -127,6 +137,25 @@ export const buildPayload = async () => {
     sides: project.sides.join(','),
     ...(await getInfo()),
   }
+}
+
+// returns the UUID for this device. caches the UUID for 24 hours
+export const uniqueId = () => {
+  const now = Date.now()
+  const expires = now - 24 * 60 * 60 * 1000 // one day
+  let uuid
+
+  if (
+    !fs.existsSync(TELEMETRY_CACHE_PATH) ||
+    fs.statSync(TELEMETRY_CACHE_PATH).mtimeMs < expires
+  ) {
+    uuid = uuidv4()
+    fs.writeFileSync(TELEMETRY_CACHE_PATH, uuid)
+  } else {
+    uuid = fs.readFileSync(TELEMETRY_CACHE_PATH).toString()
+  }
+
+  return uuid
 }
 
 // actual telemetry send process
