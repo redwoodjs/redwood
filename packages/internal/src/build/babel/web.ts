@@ -18,8 +18,22 @@ export const getWebSideBabelPlugins = () => {
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
-
     // === Import path handling
+    [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          src:
+            // Jest monorepo and multi project runner is not correctly determining
+            // the `cwd`: https://github.com/facebook/jest/issues/7359
+            process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.web.src,
+        },
+        root: [rwjsPaths.web.base],
+        cwd: 'packagejson',
+        loglevel: 'silent', // to silence the unnecessary warnings
+      },
+      'rwjs-module-resolver',
+    ],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
@@ -95,7 +109,7 @@ export const getWebSideOverrides = (
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: /web\/src\/Routes.(js|tsx)$/,
+      test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
       plugins: [
         [
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')

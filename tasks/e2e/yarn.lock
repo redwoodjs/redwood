@@ -221,7 +221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:^3.7.2":
+"bluebird@npm:3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 680de03adc54ff925eaa6c7bb9a47a0690e8b5de60f4792604aae8ed618c65e6b63a7893b57ca924beaf53eee69c5af4f8314148c08124c550fe1df1add897d2
@@ -408,9 +408,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.0.0":
-  version: 9.0.0
-  resolution: "cypress@npm:9.0.0"
+"cypress@npm:9.1.0":
+  version: 9.1.0
+  resolution: "cypress@npm:9.1.0"
   dependencies:
     "@cypress/request": ^2.88.7
     "@cypress/xvfb": ^1.2.4
@@ -419,7 +419,7 @@ __metadata:
     "@types/sizzle": ^2.3.2
     arch: ^2.2.0
     blob-util: ^2.0.2
-    bluebird: ^3.7.2
+    bluebird: 3.7.2
     cachedir: ^2.3.0
     chalk: ^4.1.0
     check-more-types: ^2.24.0
@@ -455,7 +455,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 51c2d3a76f29aa334814b1d9238d7465920a3df261b350edda7896cd994f4a8493687b598065526a3b3d707e1786d36330560e7bd5b207ef96a5c4bcdd77010f
+  checksum: a3f2ed950bb5df817aaef9e85f8a1535a2baec6fe3391234d73aef38f7fd8cae9bf8db461a42d90d5619154b3d7de9b0398063b9c1527cec23225e5ca0486c6b
   languageName: node
   linkType: hard
 
@@ -507,7 +507,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "e2e@workspace:."
   dependencies:
-    cypress: 9.0.0
+    cypress: 9.1.0
     cypress-wait-until: 1.7.2
   languageName: unknown
   linkType: soft
