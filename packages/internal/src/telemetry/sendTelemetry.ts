@@ -125,7 +125,7 @@ export const buildPayload = async () => {
 
   return {
     type,
-    command: sanitizeArgv(JSON.parse(argv.argv)),
+    command: argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : '',
     uid: uniqueId(),
     ci: ci.isCI,
     duration: argv.duration ? parseInt(argv.duration) : null,
