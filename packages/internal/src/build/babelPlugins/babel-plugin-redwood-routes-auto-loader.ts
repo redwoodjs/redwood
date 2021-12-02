@@ -1,6 +1,8 @@
+import path from 'path'
+
 import type { PluginObj, types } from '@babel/core'
 
-import { importStatementPath, processPagesDir } from '../../paths'
+import { importStatementPath, processPagesDir, getPaths } from '../../paths'
 
 interface PluginOptions {
   useStaticImports?: boolean
@@ -29,11 +31,20 @@ export default function (
         // and not asynchronous ones.
         if (useStaticImports) {
           // Match import paths, const name could be different
-          // NOTE: the userImportPath we receive at this point is the absolute path
-          // because of babel-plugin-module-resolver that runs before
           const userImportPath = importStatementPath(p.node.source?.value)
 
-          if (rwPageImportPaths.includes(userImportPath)) {
+          // When running from the CLI: Babel-plugin-module-resolver will convert 'src/pages/ExamplePage' -> './pages/ExamplePage'
+          // @TODO: Why is this inconsistent?
+          const relativeImports = rwPageImportPaths.map((impPath) => {
+            return `./${path.relative(getPaths().web.src, impPath)}`
+          })
+
+          // Check both relative and absolute path styles
+          // Because running from prerender produces a completely different path
+          if (
+            relativeImports.includes(userImportPath) ||
+            rwPageImportPaths.includes(userImportPath)
+          ) {
             p.remove()
           }
 
