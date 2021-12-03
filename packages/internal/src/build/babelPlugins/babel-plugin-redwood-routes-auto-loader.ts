@@ -7,6 +7,7 @@ import {
   processPagesDir,
   getPaths,
   PagesDependency,
+  ensurePosixPath,
 } from '../../paths'
 
 interface PluginOptions {
@@ -20,7 +21,7 @@ const getPathRelativeToSource = (absolutePath: string) => {
 const withRelativeImports = (page: PagesDependency) => {
   return {
     ...page,
-    realtiveImport: getPathRelativeToSource(page.importPath),
+    realtiveImport: ensurePosixPath(getPathRelativeToSource(page.importPath)),
   }
 }
 
