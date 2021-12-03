@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/codemods",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
-  "version": "0.39.2",
+  "version": "0.39.3",
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
