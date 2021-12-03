@@ -14,14 +14,14 @@ interface PluginOptions {
   useStaticImports?: boolean
 }
 
-const getPathRelativeToSource = (absolutePath: string) => {
+const getPathRelativeToSrc = (absolutePath: string) => {
   return `./${path.relative(getPaths().web.src, absolutePath)}`
 }
 
 const withRelativeImports = (page: PagesDependency) => {
   return {
     ...page,
-    realtiveImport: ensurePosixPath(getPathRelativeToSource(page.importPath)),
+    relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
   }
 }
 
@@ -49,7 +49,7 @@ export default function (
           // Match import paths, const name could be different
           const userImportPath = importStatementPath(p.node.source?.value)
           const relativePageImportPaths = pages.map((page) => {
-            return page.realtiveImport
+            return page.relativeImport
           })
 
           // When running from the CLI: Babel-plugin-module-resolver will convert
@@ -80,7 +80,7 @@ export default function (
           }
           const nodes = []
           // Prepend all imports to the top of the file
-          for (const { importName, realtiveImport } of pages) {
+          for (const { importName, relativeImport } of pages) {
             // + const <importName> = { name: <importName>, loader: () => import(<relativeImportPath>) }
 
             nodes.push(
@@ -102,7 +102,7 @@ export default function (
                           useStaticImports
                             ? t.identifier('require')
                             : t.identifier('import'),
-                          [t.stringLiteral(realtiveImport)]
+                          [t.stringLiteral(relativeImport)]
                         )
                       )
                     ),
