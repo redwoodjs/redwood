@@ -1,14 +1,20 @@
 import fs from 'fs'
 import path from 'path'
 
+import * as babel from '@babel/core'
+
 import {
   prebuildApiFiles,
   cleanApiBuild,
   generateProxyFilesForNestedFunction,
 } from '../build/api'
-import { getApiSideBabelConfigPath } from '../build/babel/api'
+import {
+  getApiSideBabelConfigPath,
+  getApiSideBabelPlugins,
+  getApiSideDefaultBabelConfig,
+} from '../build/babel/api'
 import { findApiFiles } from '../files'
-import { ensurePosixPath } from '../paths'
+import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -186,4 +192,26 @@ test('Pretranspile uses corejs3 aliasing', () => {
   expect(code).toContain(
     `import _getIterator from "@babel/runtime-corejs3/core-js/get-iterator"`
   )
+})
+
+test('jest mock statements also handle', () => {
+  const pathToTest = path.join(getPaths().api.services, 'todos/todos.test.js')
+
+  const code = fs.readFileSync(pathToTest, 'utf-8')
+
+  const defaultOptions = getApiSideDefaultBabelConfig()
+
+  // Step 1: prebuild service/todos.test.js
+  const outputForJest = babel.transform(code, {
+    ...defaultOptions,
+    filename: pathToTest,
+    cwd: getPaths().api.base,
+    // We override the plugins, to match packages/testing/config/jest/api/index.js
+    plugins: getApiSideBabelPlugins({ forJest: true }),
+  }).code
+
+  // Step 2: check that output has correct import statement path
+  expect(outputForJest).toContain('import dog from "../../lib/dog"')
+  // Step 3: check that output has correct jest.mock path
+  expect(outputForJest).toContain('jest.mock("../../lib/dog"')
 })
