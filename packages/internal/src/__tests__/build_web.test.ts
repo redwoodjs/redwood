@@ -66,15 +66,20 @@ test('Check routes are imported with require when staticImports flag is enabled'
    `const HomePage = {
      name: "HomePage",
      loader: () => require("` 👈 Uses a require statement
+     */
+  expect(withStaticImports).toContain(`const HomePage = {`)
+  expect(withStaticImports).toContain(`const BarPage = {`)
 
-
+  /*
     👇 Foo page is an explicitly imported page in the source
     const FooPage = {
       name: "FooPage",
       loader: () => require(
     */
-
-  expect(withStaticImports).toMatchSnapshot()
+  expect(withStaticImports).toContain(`const FooPage = {`)
+  expect(withStaticImports).not.toContain(
+    `var _FooPage = _interopRequireDefault(require(`
+  )
 })
 
 test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
@@ -86,15 +91,22 @@ test('Check routes are imported with "import" when staticImports flag is NOT pas
    `const HomePage = {
      name: "HomePage",
      loader: () => import("` 👈 Uses an (async) import statement
+     */
 
+  expect(withoutStaticImports).toContain(`const HomePage = {`)
+  expect(withoutStaticImports).toContain(`const BarPage = {`)
 
+  /*
     👇 Foo page is an explicitly imported page, so it should
     var _FooPage = _interopRequireDefault(require(\\"./pages/FooPage/FooPage\\"))
+    (inverse of the static imports one)
     .
     .
     .
     page: _FooPage[\\"default\\"],
-    */
-
-  expect(withoutStaticImports).toMatchSnapshot()
+  */
+  expect(withoutStaticImports).not.toContain(`const FooPage = {`)
+  expect(withoutStaticImports).toContain(
+    `var _FooPage = _interopRequireDefault(require(`
+  )
 })
