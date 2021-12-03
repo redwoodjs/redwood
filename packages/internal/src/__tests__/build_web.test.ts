@@ -68,7 +68,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
      loader: () => require("` 👈 Uses a require statement
 
 
-    👇 Foo page is an explicitly imported page
+    👇 Foo page is an explicitly imported page in the source
     const FooPage = {
       name: "FooPage",
       loader: () => require(
@@ -80,7 +80,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
 test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
   const routesFile = getPaths().web.routes
 
-  const withoutStaticImports = prebuildWebFile(routesFile).code //?
+  const withoutStaticImports = prebuildWebFile(routesFile).code
 
   /* Check that imports have the form
    `const HomePage = {

@@ -2,18 +2,33 @@ import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
-import { importStatementPath, processPagesDir, getPaths } from '../../paths'
+import {
+  importStatementPath,
+  processPagesDir,
+  getPaths,
+  PagesDependency,
+} from '../../paths'
 
 interface PluginOptions {
   useStaticImports?: boolean
+}
+
+const getPathRelativeToSource = (absolutePath: string) => {
+  return `./${path.relative(getPaths().web.src, absolutePath)}`
+}
+
+const withRelativeImports = (page: PagesDependency) => {
+  return {
+    ...page,
+    realtiveImport: getPathRelativeToSource(page.importPath),
+  }
 }
 
 export default function (
   { types: t }: { types: typeof types },
   { useStaticImports = false }: PluginOptions
 ): PluginObj {
-  let pages = processPagesDir()
-  const rwPageImportPaths = pages.map((page) => page.importPath)
+  let pages = processPagesDir().map(withRelativeImports)
 
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
@@ -32,21 +47,16 @@ export default function (
         if (useStaticImports) {
           // Match import paths, const name could be different
           const userImportPath = importStatementPath(p.node.source?.value)
+          const relativePageImportPaths = pages.map((page) => {
+            return page.realtiveImport
+          })
 
           // When running from the CLI: Babel-plugin-module-resolver will convert
           // For dev/build/prerender: 'src/pages/ExamplePage' -> './pages/ExamplePage'
           // For test: 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
 
-          const pagePathsRelativeToRoutes = rwPageImportPaths.map((impPath) => {
-            return `./${path.relative(getPaths().web.src, impPath)}`
-          })
-
-          // Check both relative (build/prerender) and absolute path (jest) styles
-          // This is just to be safe. We will likely have to change this behaviour once we remove the module-resolver plugin
-          if (
-            pagePathsRelativeToRoutes.includes(userImportPath) ||
-            rwPageImportPaths.includes(userImportPath)
-          ) {
+          // Check only relative (dev/build/prerender)  - jest doesn't enter this block
+          if (relativePageImportPaths.includes(userImportPath)) {
             p.remove()
           }
 
@@ -61,7 +71,7 @@ export default function (
       },
       Program: {
         enter() {
-          pages = processPagesDir()
+          pages = processPagesDir().map(withRelativeImports)
         },
         exit(p) {
           if (pages.length === 0) {
@@ -69,8 +79,9 @@ export default function (
           }
           const nodes = []
           // Prepend all imports to the top of the file
-          for (const { importName, importPath } of pages) {
-            // + const <importName> = { name: <importName>, loader: () => import(<importPath>) }
+          for (const { importName, realtiveImport } of pages) {
+            // + const <importName> = { name: <importName>, loader: () => import(<relativeImportPath>) }
+
             nodes.push(
               t.variableDeclaration('const', [
                 t.variableDeclarator(
@@ -90,7 +101,7 @@ export default function (
                           useStaticImports
                             ? t.identifier('require')
                             : t.identifier('import'),
-                          [t.stringLiteral(importPath)]
+                          [t.stringLiteral(realtiveImport)]
                         )
                       )
                     ),
