@@ -60,6 +60,20 @@ export const findApiFiles = (cwd: string = getPaths().api.src) => {
   return files
 }
 
+export const findWebFiles = (cwd: string = getPaths().web.src) => {
+  const files = fg.sync('**/*.{js,ts,jsx,tsx}', {
+    cwd,
+    absolute: true,
+    ignore: [
+      '**/*.test.{js,ts,tsx,jsx}',
+      '**/*.fixtures.{js,ts,tsx,jsx}',
+      '**/*.mock.{js,ts,tsx,jsx}',
+      '**/*.d.ts',
+    ],
+  })
+  return files
+}
+
 export const findApiServerFunctions = (
   cwd: string = getPaths().api.functions
 ) => {
