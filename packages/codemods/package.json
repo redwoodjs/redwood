@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/codemods",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
-  "version": "0.38.3",
+  "version": "0.39.2",
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
@@ -40,8 +40,10 @@
   },
   "devDependencies": {
     "@types/babel__core": "7.1.16",
+    "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.2",
     "@types/prettier": "2.4.2",
+    "fs-extra": "10.0.0",
     "tempy": "1.0.1"
   }
 }

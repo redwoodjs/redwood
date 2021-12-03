@@ -83,7 +83,7 @@ export class InclusionValidationError extends ServiceValidationError {
 export class MinLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = '${name} must have more than ${min} characters',
+    message = '${name} must have at least ${min} characters',
     substitutions: { min?: number } = {}
   ) {
     super(message, Object.assign(substitutions, { name }))
@@ -94,7 +94,7 @@ export class MinLengthValidationError extends ServiceValidationError {
 export class MaxLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = '${name} must have less than ${max} characters',
+    message = '${name} must have no more than ${max} characters',
     substitutions: { max?: number } = {}
   ) {
     super(message, Object.assign(substitutions, { name }))

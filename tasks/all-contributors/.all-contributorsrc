@@ -1709,7 +1709,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/15746?v=4",
       "profile": "https://github.com/zakmandhro",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1875,7 +1876,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/328257?v=4",
       "profile": "https://github.com/viperfx",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2199,6 +2201,106 @@
       "profile": "https://github.com/DukeManh",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "memarino92",
+      "name": "Michael Marino",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62777339?v=4",
+      "profile": "https://github.com/memarino92",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "kibertoad",
+      "name": "Igor Savin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1847934?v=4",
+      "profile": "https://github.com/kibertoad",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jacobarriola",
+      "name": "Jacob Arriola",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1371573?v=4",
+      "profile": "https://jacobarriola.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "v-gjy",
+      "name": "Jingying Gu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/90813519?v=4",
+      "profile": "https://github.com/microsoft/Secure-Supply-Chain/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "TimKolberger",
+      "name": "Tim Kolberger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16899513?v=4",
+      "profile": "https://kolberger.eu/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nzdjb",
+      "name": "nzdjb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/825061?v=4",
+      "profile": "https://github.com/nzdjb",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vivshaw",
+      "name": "Hannah Vivian Shaw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23173985?v=4",
+      "profile": "https://github.com/vivshaw",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "usman-coe",
+      "name": "usman kareemee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2543952?v=4",
+      "profile": "https://github.com/usman-coe",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "watway",
+      "name": "watway",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2321110?v=4",
+      "profile": "https://github.com/watway",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "edapm",
+      "name": "Edward Mason",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67737851?v=4",
+      "profile": "https://github.com/edapm",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "system32uwu",
+      "name": "Mateo Carriquí",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29718978?v=4",
+      "profile": "https://tryhackme.com/p/zast99",
+      "contributions": [
+        "tutorial"
       ]
     }
   ]

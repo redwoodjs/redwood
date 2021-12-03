@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "ignoreDeps": [
+    "boxen",
+    "configstore",
+    "decamelize",
+    "execa",
+    "humanize-string",
+    "latest-version",
+    "ora",
+    "tempy",
+    "terminal-link",
+    "@types/node-fetch"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    }
+  ],
+  "reviewers": [
+    "@jtoar"
+  ]
+}
