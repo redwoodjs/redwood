@@ -17,7 +17,7 @@
     "@supabase/supabase-js": "1.28.5",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.37",
-    "firebase": "9.5.0",
+    "firebase": "9.6.0",
     "firebase-admin": "10.0.0",
     "gotrue-js": "0.9.29",
     "jest": "27.3.1",
