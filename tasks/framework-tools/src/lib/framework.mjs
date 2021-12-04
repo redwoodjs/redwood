@@ -9,7 +9,6 @@ import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
 import packlist from 'npm-packlist'
-import rimraf from 'rimraf'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const REDWOOD_PACKAGES_PATH = path.resolve(
