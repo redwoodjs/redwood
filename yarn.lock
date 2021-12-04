@@ -34,18 +34,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.19.2":
-  version: 1.19.2
-  resolution: "@auth0/auth0-spa-js@npm:1.19.2"
+"@auth0/auth0-spa-js@npm:1.19.3":
+  version: 1.19.3
+  resolution: "@auth0/auth0-spa-js@npm:1.19.3"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.18.2
+    core-js: ^3.19.0
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
-    promise-polyfill: ^8.2.0
+    promise-polyfill: ^8.2.1
     unfetch: ^4.2.0
-  checksum: a01847c753d88ba72897351f735679ea2e87bdc53c36663b7e3b15ce0fac364f2db0ec518f6fda5723420dde5eb4bd094ebbdde27fd496001e3e069c3e07bfcd
+  checksum: 2bd1e2354544cca375f406a8da9f1e664a59ab62a14eac00a3c7bace72ee7a61a0608d0970f11db51b162078da1c3cbebf3f7c5ec45abf59dd8bc94d327f315d
   languageName: node
   linkType: hard
 
@@ -5130,7 +5130,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.19.2
+    "@auth0/auth0-spa-js": 1.19.3
     "@azure/msal-browser": 2.19.0
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.3.0
@@ -11492,7 +11492,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.19.1, core-js@npm:^3.0.4, core-js@npm:^3.18.2, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.19.1, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.19.1
   resolution: "core-js@npm:3.19.1"
   checksum: 9f24df1cecb2f605d445e858a2bd67ccb433c001b0d50511e4e092d762a6df215094da928c424e4a63656a53fa8c50eba36eeff1df1e29d91a2ec2e9d9feb75a
@@ -23093,10 +23093,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"promise-polyfill@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "promise-polyfill@npm:8.2.0"
-  checksum: 9c57f475c74d159c6cb93413f2461f509cf6aa422ba3e498574453b85765118d5fa55c5d7a22920694afebdf0e34e22acd5992b00af09f8adcd18496da20bb21
+"promise-polyfill@npm:^8.2.1":
+  version: 8.2.1
+  resolution: "promise-polyfill@npm:8.2.1"
+  checksum: 59cae0d74a76f28b55014ec43377a155d768fbbde711aa631f5d99ca39c4c5223aa85a5ad335ea3fe1507be30496d39fff3b442a2669dc0d267c76fdb7e34948
   languageName: node
   linkType: hard
 
