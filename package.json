@@ -2,7 +2,6 @@
   "private": true,
   "license": "MIT",
   "npmClient": "yarn",
-  "useWorkspaces": true,
   "workspaces": [
     "packages/*"
   ],
