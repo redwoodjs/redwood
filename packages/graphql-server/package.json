@@ -21,7 +21,7 @@
     "@redwoodjs/api": "0.39.3",
     "core-js": "3.19.1",
     "graphql": "16.0.1",
-    "graphql-helix": "1.10.2",
+    "graphql-helix": "1.10.3",
     "graphql-playground-html": "1.6.30",
     "graphql-scalars": "1.13.6",
     "graphql-tag": "2.12.6",
