@@ -4139,7 +4139,7 @@ __metadata:
     "@clerk/clerk-js": 2.3.0
     "@clerk/clerk-sdk-node": 2.1.2
     "@clerk/types": 1.16.0
-    "@supabase/supabase-js": 1.28.2
+    "@supabase/supabase-js": 1.28.5
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.35
     firebase: 9.5.0
@@ -5426,7 +5426,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/gotrue-js@npm:^1.21.0":
+"@supabase/gotrue-js@npm:^1.21.7":
   version: 1.21.7
   resolution: "@supabase/gotrue-js@npm:1.21.7"
   dependencies:
@@ -5444,13 +5444,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^1.2.1":
-  version: 1.3.0
-  resolution: "@supabase/realtime-js@npm:1.3.0"
+"@supabase/realtime-js@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "@supabase/realtime-js@npm:1.3.3"
   dependencies:
     "@types/websocket": ^1.0.3
     websocket: ^1.0.34
-  checksum: da03502789b63112f2ee5aca4fbcf5be0db1abe2347926eefe2338adb304acd5db3e6ac06d4d24081c9ef9480fd67bcac653fddfaf7316d0c8075d6d65fd2501
+  checksum: e3155ef3fc18e8a67990ad5f17b4de90655597e8da7760020530704f8a058e4a50c4140e6048c5ef1d01d02e233678ebcf6a222e7e1cbe0965f4ce7431f44df4
   languageName: node
   linkType: hard
 
@@ -5463,15 +5463,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.28.2":
-  version: 1.28.2
-  resolution: "@supabase/supabase-js@npm:1.28.2"
+"@supabase/supabase-js@npm:1.28.5":
+  version: 1.28.5
+  resolution: "@supabase/supabase-js@npm:1.28.5"
   dependencies:
-    "@supabase/gotrue-js": ^1.21.0
+    "@supabase/gotrue-js": ^1.21.7
     "@supabase/postgrest-js": ^0.35.0
-    "@supabase/realtime-js": ^1.2.1
+    "@supabase/realtime-js": ^1.3.3
     "@supabase/storage-js": ^1.5.0
-  checksum: f284bdcc53b385ca94e7c98a5617fa984746ba21dfa0b6fdcf2e89fc0431de594224132416a01dd9d18753c594d5afe6da2b22e49bebd0a05a08def8d52b5677
+  checksum: 028f26fbf2b02bd50e19b146136d9535208e41355279d3f22475f4fe8d3459307785ab9a9836268fc8ca6642b5a961cd2a1266086f771feab7fa74209c68a535
   languageName: node
   linkType: hard
 
