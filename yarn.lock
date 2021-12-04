@@ -5502,7 +5502,7 @@ __metadata:
     ts-morph: 12.2.0
     typescript: 4.5.2
     vscode-languageserver: 6.1.1
-    vscode-languageserver-textdocument: 1.0.2
+    vscode-languageserver-textdocument: 1.0.3
     vscode-languageserver-types: 3.16.0
     yargs-parser: 20.2.9
   languageName: unknown
@@ -28055,10 +28055,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"vscode-languageserver-textdocument@npm:1.0.2":
-  version: 1.0.2
-  resolution: "vscode-languageserver-textdocument@npm:1.0.2"
-  checksum: 6b8957d6ebce72f437aa05c49a23e229c1de557e171d6dc583a58b0effd925ae57fe2d59b542195af5bf689cd1a72f323519d248eb64c54c533c75002bcf3f87
+"vscode-languageserver-textdocument@npm:1.0.3":
+  version: 1.0.3
+  resolution: "vscode-languageserver-textdocument@npm:1.0.3"
+  checksum: afc9afb3375f688724ea2401b1a56c11559e3fea163b3e9422a76066efac72c4a30dca1d04d4a82f0f57721e33add7550a48efc87653e4252895649771f4ff32
   languageName: node
   linkType: hard
 
