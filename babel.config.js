@@ -1,9 +1,6 @@
 const path = require('path')
 
-const packageJSON = require(path.join(
-  __dirname,
-  'tasks/framework-tools/package.json'
-))
+const packageJSON = require(path.join(__dirname, 'package.json'))
 
 // RedwoodJS targets Node.js 12.x because this is the default version
 // for Netlify's functions.
