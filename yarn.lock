@@ -5220,7 +5220,7 @@ __metadata:
     fs-extra: 10.0.0
     jest: 27.3.1
     jscodeshift: 0.13.0
-    node-fetch: 2.6.1
+    node-fetch: 2.6.6
     prettier: 2.4.1
     tasuku: 1.0.2
     tempy: 1.0.1
@@ -5364,7 +5364,7 @@ __metadata:
     jest: 27.3.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    node-fetch: 2.6.1
+    node-fetch: 2.6.6
     typescript: 4.5.2
     uuid: 8.3.2
   languageName: unknown
@@ -5435,7 +5435,7 @@ __metadata:
     cheerio: 1.0.0-rc.10
     jest: 27.3.1
     mime-types: 2.1.34
-    node-fetch: 2.6.1
+    node-fetch: 2.6.6
     typescript: 4.5.2
   peerDependencies:
     react: 17.0.2
