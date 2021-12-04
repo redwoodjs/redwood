@@ -27,7 +27,7 @@
     "graphql-tag": "2.12.6",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.6",
     "uuid": "8.3.2"
   },
   "repository": {
