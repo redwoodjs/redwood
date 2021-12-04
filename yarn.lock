@@ -5523,7 +5523,7 @@ __metadata:
     "@storybook/builder-webpack5": 6.3.12
     "@storybook/manager-webpack5": 6.3.12
     "@storybook/react": 6.3.12
-    "@testing-library/jest-dom": 5.15.1
+    "@testing-library/jest-dom": 5.16.0
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/babel-core": 6.25.7
@@ -6523,20 +6523,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.15.1":
-  version: 5.15.1
-  resolution: "@testing-library/jest-dom@npm:5.15.1"
+"@testing-library/jest-dom@npm:5.16.0":
+  version: 5.16.0
+  resolution: "@testing-library/jest-dom@npm:5.16.0"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
-    aria-query: ^4.2.2
+    aria-query: ^5.0.0
     chalk: ^3.0.0
     css: ^3.0.0
     css.escape: ^1.5.1
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: 39b8ddcbb98d0e22418b879c75ee6b2ec89a302e720c0007cf630c6f345985010b8ca2f8f2f1326c84fac7800d5364961c5412da9ac5058e78538918f856badb
+  checksum: a5729652acd007eeeb0c6d142bee4a7448bcf3b1260514969542da9ead87830a44939c2dd7e19d03652b7e1faf8dc68156939ddc24e0ce0798faf89c635e25dd
   languageName: node
   linkType: hard
 
@@ -8746,6 +8746,13 @@ __metadata:
     "@babel/runtime": ^7.10.2
     "@babel/runtime-corejs3": ^7.10.2
   checksum: 7e224fbbb4de8210c5d8cbaf0e1a22caa78f2068bf231f4c75302bd77eeba1c3e3b97912080535140be60174720d2ac817e5d6fec18592951b4b6488d4da7cdc
+  languageName: node
+  linkType: hard
+
+"aria-query@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "aria-query@npm:5.0.0"
+  checksum: d8508a793e70bc8ef793c6df0adae1b337b60cd978974931e1a405e30b1356c822355950c9ad58271ea0353608a47d3b3a317667850d9c0ce227b0e88a8b2371
   languageName: node
   linkType: hard
 
@@ -24640,7 +24647,7 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": 7.16.0
     "@babel/preset-typescript": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
-    "@testing-library/jest-dom": 5.15.1
+    "@testing-library/jest-dom": 5.16.0
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
