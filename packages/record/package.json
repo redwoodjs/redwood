@@ -35,5 +35,9 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "yarn.build": {
+    "input": "src",
+    "output": "dist"
+  },
   "gitHead": "d583dfdf18f9433038098a64e71f6a421c6d1c04"
 }

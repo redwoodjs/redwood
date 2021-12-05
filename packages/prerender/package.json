@@ -38,6 +38,10 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "yarn.build": {
+    "input": "src",
+    "output": "dist"
+  },
   "externals": {
     "react": "react",
     "react-dom": "react-dom"

@@ -38,6 +38,10 @@
     "test": "NODE_ENV=test jest",
     "test:watch": "yarn test --watch"
   },
+  "yarn.build": {
+    "input": "src",
+    "output": "dist"
+  },
   "devDependencies": {
     "@types/babel__core": "7.1.16",
     "@types/fs-extra": "9.0.13",
