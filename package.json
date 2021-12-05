@@ -47,6 +47,7 @@
   "scripts": {
     "framework": "yarn ./tasks/framework-tools",
     "build:clean": "rimraf packages/**/dist",
+    "build:watch": "nodemon --watch packages --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "e2e": "node ./tasks/run-e2e",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "lint": "RWJS_CWD=packages/create-redwood-app/template eslint --config .eslintrc.js packages",
