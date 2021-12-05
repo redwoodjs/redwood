@@ -1779,6 +1779,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/types@npm:1.18.0":
+  version: 1.18.0
+  resolution: "@clerk/types@npm:1.18.0"
+  checksum: 9692926a1bd1ad7b24b0f2c61d7019826ab5021514e40c9fd7a12c3ab6d22cb13e6a617ab951fe7c347daea470734b0a222182f4bb4006b5f9a8a5b9845908f0
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.5.0, @discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.5
   resolution: "@discoveryjs/json-ext@npm:0.5.5"
@@ -5136,7 +5143,7 @@ __metadata:
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.4.4
     "@clerk/clerk-sdk-node": 2.2.1
-    "@clerk/types": 1.17.3
+    "@clerk/types": 1.18.0
     "@supabase/supabase-js": 1.28.5
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.37
