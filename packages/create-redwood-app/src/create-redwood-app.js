@@ -188,14 +188,11 @@ const installNodeModulesTasks = ({ newAppDir }) => {
 const sendTelemetry = () => {
   // send 'create' telemetry event, or disable for new app
   if (telemetry) {
-    const command = `node packages/internal/dist/telemetry/sendTelemetry.js --root ${newAppDir} --type create --duration ${
+    const command = `node packages/telemetry/dist/scripts/sendTelemetry.js --root ${newAppDir} --type create --duration ${
       Date.now() - startTime
     }`
-    console.info('cwd', process.cwd())
-    console.info('Running script with command', command)
     execa(command, { shell: true })
   } else {
-    console.info('No telemetry, disabling')
     fs.appendFileSync(
       path.join(newAppDir, '.env'),
       'REDWOOD_DISABLE_TELEMETRY=1\n'
