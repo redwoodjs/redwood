@@ -7,8 +7,6 @@ import fetch from 'node-fetch'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-console.info('in sendTelemetry.js')
-
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
 const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
