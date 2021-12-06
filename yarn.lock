@@ -1734,11 +1734,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.4.4":
-  version: 2.4.4
-  resolution: "@clerk/clerk-js@npm:2.4.4"
+"@clerk/clerk-js@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@clerk/clerk-js@npm:2.5.1"
   dependencies:
-    "@clerk/types": 1.17.3
+    "@clerk/types": 1.18.0
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.2.6
@@ -1750,7 +1750,7 @@ __metadata:
     react-dom: 16.13.1
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 14f511df2ecbad231016d843ad8d170f27383c52aa5d2db1705995f68e52fe29e69f225fe2aaff3abcc2202dd7234517f70897b1b8a49ff91b34c93a36b6906e
+  checksum: 503aa7dd44207b6f62cff278951fd059cd70c42c030095835391924655d6c6a037507bb384818baf7d2ab2e4ae5eb20a76f16e54e1e83484521c45bc580594a2
   languageName: node
   linkType: hard
 
@@ -1769,13 +1769,6 @@ __metadata:
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
   checksum: 11f4034d21099b4709902f044a1618c81be65decd551e5ecde3a0b1c241cd192b17592245de6f2e722d715e41ff5456fa35b6625819435c7d08c2433680f3773
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:1.17.3":
-  version: 1.17.3
-  resolution: "@clerk/types@npm:1.17.3"
-  checksum: 17c9e5fc7583d5951a6cfa93ab9cbfd5726bd780db9fd09c0fb37d3e53011a84438ad0c8c63def9173d4bb95403475f744d0631a180fa631028ddde0607ef06a
   languageName: node
   linkType: hard
 
@@ -5086,7 +5079,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.0
     "@babel/plugin-transform-runtime": 7.16.4
-    "@types/aws-lambda": 8.10.85
+    "@types/aws-lambda": 8.10.86
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     ansi-colors: 4.1.1
@@ -5141,7 +5134,7 @@ __metadata:
     "@auth0/auth0-spa-js": 1.19.3
     "@azure/msal-browser": 2.19.0
     "@babel/cli": 7.16.0
-    "@clerk/clerk-js": 2.4.4
+    "@clerk/clerk-js": 2.5.1
     "@clerk/clerk-sdk-node": 2.2.1
     "@clerk/types": 1.18.0
     "@supabase/supabase-js": 1.28.5
@@ -5307,8 +5300,8 @@ __metadata:
     "@babel/eslint-parser": 7.16.3
     "@babel/eslint-plugin": 7.14.5
     "@redwoodjs/internal": 0.39.3
-    "@typescript-eslint/eslint-plugin": 5.5.0
-    "@typescript-eslint/parser": 5.5.0
+    "@typescript-eslint/eslint-plugin": 5.6.0
+    "@typescript-eslint/parser": 5.6.0
     eslint: 8.2.0
     eslint-config-prettier: 8.3.0
     eslint-import-resolver-babel-module: 5.3.1
@@ -5530,7 +5523,7 @@ __metadata:
     "@storybook/builder-webpack5": 6.3.12
     "@storybook/manager-webpack5": 6.3.12
     "@storybook/react": 6.3.12
-    "@testing-library/jest-dom": 5.16.0
+    "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/babel-core": 6.25.7
@@ -6530,9 +6523,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.16.0":
-  version: 5.16.0
-  resolution: "@testing-library/jest-dom@npm:5.16.0"
+"@testing-library/jest-dom@npm:5.16.1":
+  version: 5.16.1
+  resolution: "@testing-library/jest-dom@npm:5.16.1"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -6543,7 +6536,7 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: a5729652acd007eeeb0c6d142bee4a7448bcf3b1260514969542da9ead87830a44939c2dd7e19d03652b7e1faf8dc68156939ddc24e0ce0798faf89c635e25dd
+  checksum: a510110bb3f37597a315bd2625162c1833432e8e86f15187294137059da443bb6cdf9bff320490ff482319da845f09ef8a5395040d1d1308c240fc6edd588b27
   languageName: node
   linkType: hard
 
@@ -6632,10 +6625,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.85":
-  version: 8.10.85
-  resolution: "@types/aws-lambda@npm:8.10.85"
-  checksum: 76979193719bc1c35bcb6a1a219b49b7640e665c9592cb646bb6e0fb52280e839c940cac9039030348b5e86053b3027eb307de839300aa8aa5b9f80abc2cfe4c
+"@types/aws-lambda@npm:8.10.86":
+  version: 8.10.86
+  resolution: "@types/aws-lambda@npm:8.10.86"
+  checksum: 4c05178aeb5a936d08e140f686f43f01471bd5925bfb96d0a10d1ef0da2759c6cbea2e64806f171f4dc4351c85529af22d22a557f678de5d9ec56b3f17e2fef9
   languageName: node
   linkType: hard
 
@@ -7683,12 +7676,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:5.5.0"
+"@typescript-eslint/eslint-plugin@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:5.6.0"
   dependencies:
-    "@typescript-eslint/experimental-utils": 5.5.0
-    "@typescript-eslint/scope-manager": 5.5.0
+    "@typescript-eslint/experimental-utils": 5.6.0
+    "@typescript-eslint/scope-manager": 5.6.0
     debug: ^4.3.2
     functional-red-black-tree: ^1.0.1
     ignore: ^5.1.8
@@ -7701,66 +7694,66 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 1705404113e640feed5959429ae11e381e5679c4a45d8805fb2a2e7a4277abbcf5ad83c3532b170aba54a7b0c98395d3f0a4c202e7b02500be5c1156206ffc57
+  checksum: 2910184ec8e3f39227bf9bf4ebbb70f530d55a1f662783aa7e3fd21054a0b9704b82a2b3ab801627b216290f4c23ec02eca02e773cdd584781582f1a7d99931e
   languageName: node
   linkType: hard
 
-"@typescript-eslint/experimental-utils@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/experimental-utils@npm:5.5.0"
+"@typescript-eslint/experimental-utils@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/experimental-utils@npm:5.6.0"
   dependencies:
     "@types/json-schema": ^7.0.9
-    "@typescript-eslint/scope-manager": 5.5.0
-    "@typescript-eslint/types": 5.5.0
-    "@typescript-eslint/typescript-estree": 5.5.0
+    "@typescript-eslint/scope-manager": 5.6.0
+    "@typescript-eslint/types": 5.6.0
+    "@typescript-eslint/typescript-estree": 5.6.0
     eslint-scope: ^5.1.1
     eslint-utils: ^3.0.0
   peerDependencies:
     eslint: "*"
-  checksum: 54c2bfc48d52d4da79490dcd5a9e34ca6cc8457e086374f924c4b52c88881feb60e2d4c7a50752014fa28dd7b8ad80215365f5f4e0717fcffe34313826469600
+  checksum: 30f45c0cadefa2fd733c66a093d15351637889003434f4955a092ea06398752df69858f2eae6fc16b40875c6f003c22786671cc5ec6e340d8f6b34714b35f5d2
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/parser@npm:5.5.0"
+"@typescript-eslint/parser@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/parser@npm:5.6.0"
   dependencies:
-    "@typescript-eslint/scope-manager": 5.5.0
-    "@typescript-eslint/types": 5.5.0
-    "@typescript-eslint/typescript-estree": 5.5.0
+    "@typescript-eslint/scope-manager": 5.6.0
+    "@typescript-eslint/types": 5.6.0
+    "@typescript-eslint/typescript-estree": 5.6.0
     debug: ^4.3.2
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: e2f31a356974f969dbea7159a02ac4eb586108c8f44fd11b3599d765b06093e2fbd31acc18044ba646a0f5c875036326ee1cd0d4f472c8963fbf735034eecb95
+  checksum: a66b9142a94b33f9bec623d6885961397ea210fed60ebda1674fb9234ab9d0649b1b774d969c33bc79b0c16eb81a09f7e5bab0f50d9dd4c56c192c7534bac8bb
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/scope-manager@npm:5.5.0"
+"@typescript-eslint/scope-manager@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/scope-manager@npm:5.6.0"
   dependencies:
-    "@typescript-eslint/types": 5.5.0
-    "@typescript-eslint/visitor-keys": 5.5.0
-  checksum: 5efef175f8a8e644c597f8d0b7478a93fce0b3aa8db4e82508fce462055e468761f2836ff7f9b39986e9e7c4f15c08827093183a796c6ec7dcdfbe16c59d3ba4
+    "@typescript-eslint/types": 5.6.0
+    "@typescript-eslint/visitor-keys": 5.6.0
+  checksum: 2206b769911ad11c78cb0dff8689de584e19a142136aa8a9c594e70960aa264fad226ae63a70a83ff079682d26c3c175ccbd27767ac291035571c0db09d6888b
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/types@npm:5.5.0"
-  checksum: a7b1122cfdee7f1d0ff5791eabb4bb5d9cf768a8e1c9e02ec6723ad451864f7a471ee4ec8bdf89d0cce500ab08d6dec606566e9157405d9590d505102db4005e
+"@typescript-eslint/types@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/types@npm:5.6.0"
+  checksum: 66c5b37f9a3458583d16cf4361edffeaa908e90255ff08e041ce024e074c4c5297bf93d94fbbb32ebf95a11dbf752066cc88092f0d40ece24f81625713280b0c
   languageName: node
   linkType: hard
 
-"@typescript-eslint/typescript-estree@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/typescript-estree@npm:5.5.0"
+"@typescript-eslint/typescript-estree@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/typescript-estree@npm:5.6.0"
   dependencies:
-    "@typescript-eslint/types": 5.5.0
-    "@typescript-eslint/visitor-keys": 5.5.0
+    "@typescript-eslint/types": 5.6.0
+    "@typescript-eslint/visitor-keys": 5.6.0
     debug: ^4.3.2
     globby: ^11.0.4
     is-glob: ^4.0.3
@@ -7769,17 +7762,17 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 38d565e16607c9b7aa0df5d23522380d53f77cbb5804f36b8eff1f719fecaba13f04863e46273b5f56380955112da42bca6b9554ab673fd619be0e788be01302
+  checksum: 7cd8dea1ad09b4db684c0cbb63c27af46977916ac1f4b4e240e175234c10686558a333573b7726f9bda30c4441607762416af844621eb02f2019a6857a4a343a
   languageName: node
   linkType: hard
 
-"@typescript-eslint/visitor-keys@npm:5.5.0":
-  version: 5.5.0
-  resolution: "@typescript-eslint/visitor-keys@npm:5.5.0"
+"@typescript-eslint/visitor-keys@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@typescript-eslint/visitor-keys@npm:5.6.0"
   dependencies:
-    "@typescript-eslint/types": 5.5.0
+    "@typescript-eslint/types": 5.6.0
     eslint-visitor-keys: ^3.0.0
-  checksum: a30a79ab24a965acb416b8e021c83787c277456e54ecce09fcbaed77abe8b1d25866e3528ec0bfb9861fab561505c116d7312b9c1d9df1ec6c44d1b141636c73
+  checksum: 0ed41ac6fe1d5789c1243dbcb579d1b1062f3ec1c06cc08868b5d2cb8bac183889a60b09699a3d239abf0b6213de52fef5086de497c6a0b9c1cbd6fa008e8d16
   languageName: node
   linkType: hard
 
@@ -24845,7 +24838,7 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": 7.16.0
     "@babel/preset-typescript": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
-    "@testing-library/jest-dom": 5.16.0
+    "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3

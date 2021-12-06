@@ -147,12 +147,12 @@ export function cleanPackages(packages = frameworkPkgJsonFiles()) {
   const packageNames = packages.map(packageJsonName)
 
   execa.sync(
-    'yarn lerna run build:clean',
+    'yarn build:clean',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
       stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../'),
+      cwd: path.resolve(__dirname, '../../../../'),
     }
   )
 }
@@ -165,12 +165,12 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
 
   // Build JavaScript.
   execa.sync(
-    'yarn lerna run build:js',
+    'yarn build:js',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
       stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../'),
+      cwd: path.resolve(__dirname, '../../../../'),
     }
   )
 
@@ -178,7 +178,7 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
   execa.sync('yarn build:types', undefined, {
     shell: true,
     stdio: 'inherit',
-    cwd: path.resolve(__dirname, '../../'),
+    cwd: path.resolve(__dirname, '../../../../'),
   })
 }
 
