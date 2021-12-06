@@ -4,7 +4,8 @@ import path from 'path'
 import boxen from 'boxen'
 import execa from 'execa'
 
-import { getPaths, errorTelemetry } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 

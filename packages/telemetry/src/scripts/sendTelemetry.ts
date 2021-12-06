@@ -7,18 +7,12 @@ import fetch from 'node-fetch'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getConfig } from '../config'
-import { getPaths } from '../paths'
-
-const TELEMETRY_CACHE_PATH = path.join(
-  getPaths().generated.base,
-  'telemetry.txt'
-)
+console.info('in sendTelemetry.js')
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
-const { DefaultHost } = require('../../../structure/dist/hosts')
-const { RWProject } = require('../../../structure/dist/model/RWProject')
+const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
+const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 
 interface SensitiveArgPositions {
   exec: {
@@ -84,7 +78,7 @@ export const getInfo = async () => {
     yarnVersion: info.Binaries.Node.version,
     npmVersion: info.Binaries.Node.version,
     vsCodeVersion: info.IDEs.VSCode.version,
-    redwoodVersion: info.npmPackages['@redwoodjs/core'].installed,
+    // redwoodVersion: info.npmPackages['@redwoodjs/core'].installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
   }
 }
@@ -109,58 +103,77 @@ export const sanitizeArgv = (argv: Array<string>) => {
 }
 
 export const buildPayload = async () => {
-  const argv = require('yargs/yargs')(process.argv.slice(2)).argv
-  let type = argv.type || 'command'
-  let error = argv.error
+  let payload: Record<string, unknown> = {}
+  let project
 
-  if (argv.error) {
-    type = 'error'
-    error = error.split('\n')[0].replace(/(\/[@\-\.\w]+)/g, '[path]')
+  const argv = require('yargs/yargs')(process.argv.slice(2)).argv
+  const rootDir = argv.root
+  payload = {
+    type: argv.type || 'command',
+    command: argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : '',
+    duration: argv.duration ? parseInt(argv.duration) : null,
+    uid: uniqueId(rootDir),
+    ci: ci.isCI,
+    NODE_ENV: process.env.NODE_ENV || null,
+    ...(await getInfo()),
   }
 
-  const project = new RWProject({
-    projectRoot: getPaths().base,
-    host: new DefaultHost(),
-  })
+  if (argv.error) {
+    payload.type = 'error'
+    payload.error = argv.error
+      .split('\n')[0]
+      .replace(/(\/[@\-\.\w]+)/g, '[path]')
+  }
 
-  return {
-    type,
-    command: argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : '',
-    uid: uniqueId(),
-    ci: ci.isCI,
-    duration: argv.duration ? parseInt(argv.duration) : null,
-    error: error,
-    NODE_ENV: process.env.NODE_ENV || null,
+  // if a root directory was specified, use that to look up framework stats
+  // with the `structure` package
+  if (rootDir) {
+    project = new RWProject({
+      projectRoot: rootDir,
+      host: new DefaultHost(),
+    })
+  }
+
+  // add in app stats
+  payload = {
+    ...payload,
     complexity: `${project.getRouter().routes.length}.${
       project.services.length
     }.${project.cells.length}.${project.pages.length}`,
     sides: project.sides.join(','),
-    ...(await getInfo()),
   }
+
+  return payload
 }
 
 // returns the UUID for this device. caches the UUID for 24 hours
-export const uniqueId = () => {
+export const uniqueId = (rootDir: string | null) => {
+  const telemetryCachePath = path.join(
+    rootDir || '/tmp',
+    '.redwood',
+    'telemetry.txt'
+  )
   const now = Date.now()
   const expires = now - 24 * 60 * 60 * 1000 // one day
   let uuid
 
   if (
-    !fs.existsSync(TELEMETRY_CACHE_PATH) ||
-    fs.statSync(TELEMETRY_CACHE_PATH).mtimeMs < expires
+    !fs.existsSync(telemetryCachePath) ||
+    fs.statSync(telemetryCachePath).mtimeMs < expires
   ) {
     uuid = uuidv4()
-    fs.writeFileSync(TELEMETRY_CACHE_PATH, uuid)
+    fs.writeFileSync(telemetryCachePath, uuid)
   } else {
-    uuid = fs.readFileSync(TELEMETRY_CACHE_PATH).toString()
+    uuid = fs.readFileSync(telemetryCachePath).toString()
   }
 
   return uuid
 }
 
-// actual telemetry send process
-;(async function () {
-  const telemetryConfig = getConfig().telemetry
+// actually call the API with telemetry data
+export const sendTelemetry = async () => {
+  const telemetryUrl =
+    'https://telemetry.redwoodjs.com/.netlify/functions/telemetry'
 
   try {
     const payload = await buildPayload()
@@ -169,7 +182,7 @@ export const uniqueId = () => {
       console.info('Redwood Telemetry Payload', payload)
     }
 
-    await fetch(telemetryConfig.url, {
+    const response = await fetch(telemetryUrl, {
       method: 'post',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },
@@ -177,16 +190,20 @@ export const uniqueId = () => {
 
     // Normally we would report on any non-error response here (like a 500)
     // but since the process is spawned and stdout/stderr is ignored, it can
-    // never be seen by the user, so ignore. Otherwise we would do:
-    //
-    // if (response.status !== 201) {
-    //   console.error('Error from telemetry insert:', await response.text())
-    // }
+    // never be seen by the user, so ignore.
+    if (process.env.REDWOOD_VERBOSE_TELEMETRY && response.status !== 200) {
+      console.error('Error from telemetry insert:', await response.text())
+    }
   } catch (e) {
     // service interruption: network down or telemetry API not responding
-    // don't let telemetry errors bubble up to user, just do nothing
-    // Again, message will never be shown to user, but otherwise:
-    //
-    // console.error('Uncaught error in telemetry:', e)
+    // don't let telemetry errors bubble up to user, just do nothing.
+    if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
+      console.error('Uncaught error in telemetry:', e)
+    }
   }
+}
+
+// if this script is run directly by node then telemetry will be sent in immediately
+;(async function () {
+  await sendTelemetry()
 })()

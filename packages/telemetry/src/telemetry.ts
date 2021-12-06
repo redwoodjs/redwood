@@ -1,11 +1,24 @@
 import { spawn } from 'child_process'
 import path from 'path'
 
+import { getPaths } from '@redwoodjs/internal'
+
+const APP_ROOT = getPaths().base
+
 const spawnProcess = (...args: Array<string>) => {
-  spawn(process.execPath, [path.join(__dirname, 'sendTelemetry.js'), ...args], {
-    detached: true,
-    stdio: 'ignore',
-  }).unref()
+  spawn(
+    process.execPath,
+    [
+      path.join(__dirname, 'scripts', 'sendTelemetry.js'),
+      ...args,
+      '--root',
+      APP_ROOT,
+    ],
+    {
+      detached: true,
+      stdio: 'ignore',
+    }
+  ).unref()
 }
 
 // wrap a function in this call to get a telemetry hit including how long it took

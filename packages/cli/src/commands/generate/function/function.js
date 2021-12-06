@@ -4,7 +4,7 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { errorTelemetry } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'

@@ -4,9 +4,10 @@ import path from 'path'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
-import { errorTelemetry, getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 

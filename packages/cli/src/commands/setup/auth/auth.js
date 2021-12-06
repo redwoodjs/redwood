@@ -6,8 +6,9 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { resolveFile, errorTelemetry } from '@redwoodjs/internal'
+import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'

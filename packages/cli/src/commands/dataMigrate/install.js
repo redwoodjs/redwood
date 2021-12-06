@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { errorTelemetry } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'

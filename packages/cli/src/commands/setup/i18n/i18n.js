@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { errorTelemetry } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'

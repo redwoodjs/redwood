@@ -5,7 +5,7 @@ import execa from 'execa'
 import { outputFileSync } from 'fs-extra'
 import Listr from 'listr'
 
-import { errorTelemetry } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../lib'
 import c from '../../../lib/colors'

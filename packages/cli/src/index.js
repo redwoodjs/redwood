@@ -5,11 +5,8 @@ import path from 'path'
 import { config } from 'dotenv-defaults'
 import yargs from 'yargs'
 
-import {
-  getPaths,
-  getConfigPath,
-  telemetryMiddleware,
-} from '@redwoodjs/internal'
+import { getPaths, getConfigPath } from '@redwoodjs/internal'
+import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 /**
  * The current working directory can be set via:

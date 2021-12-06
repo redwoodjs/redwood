@@ -13,7 +13,7 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
-import yargs, { boolean } from 'yargs'
+import yargs from 'yargs'
 
 import { name, version } from '../package'
 
@@ -185,6 +185,24 @@ const installNodeModulesTasks = ({ newAppDir }) => {
   ]
 }
 
+const sendTelemetry = () => {
+  // send 'create' telemetry event, or disable for new app
+  if (telemetry) {
+    const command = `node packages/internal/dist/telemetry/sendTelemetry.js --root ${newAppDir} --type create --duration ${
+      Date.now() - startTime
+    }`
+    console.info('cwd', process.cwd())
+    console.info('Running script with command', command)
+    execa(command, { shell: true })
+  } else {
+    console.info('No telemetry, disabling')
+    fs.appendFileSync(
+      path.join(newAppDir, '.env'),
+      'REDWOOD_DISABLE_TELEMETRY=1\n'
+    )
+  }
+}
+
 const startTime = Date.now()
 
 new Listr(
@@ -222,20 +240,7 @@ new Listr(
 )
   .run()
   .then(() => {
-    // send 'create' telemetry event, or disable for new app
-    if (telemetry) {
-      execa(
-        `node node_modules/@redwoodjs/internal/dist/telemetry/sendTelemetry.js --type create --duration ${
-          Date.now() - startTime
-        }`,
-        { shell: true, cwd: newAppDir }
-      )
-    } else {
-      fs.appendFileSync(
-        path.join(newAppDir, '.env'),
-        'REDWOOD_DISABLE_TELEMETRY=1\n'
-      )
-    }
+    sendTelemetry()
 
     // zOMG the semicolon below is a real Prettier thing. What??
     // https://prettier.io/docs/en/rationale.html#semicolons
