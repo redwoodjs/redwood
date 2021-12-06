@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 4
+  version: 5
   cacheKey: 8c0
 
 "@nodelib/fs.scandir@npm:2.1.5":
