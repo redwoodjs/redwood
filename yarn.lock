@@ -5530,7 +5530,7 @@ __metadata:
     "@storybook/builder-webpack5": 6.3.12
     "@storybook/manager-webpack5": 6.3.12
     "@storybook/react": 6.3.12
-    "@testing-library/jest-dom": 5.16.0
+    "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/babel-core": 6.25.7
@@ -6530,9 +6530,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.16.0":
-  version: 5.16.0
-  resolution: "@testing-library/jest-dom@npm:5.16.0"
+"@testing-library/jest-dom@npm:5.16.1":
+  version: 5.16.1
+  resolution: "@testing-library/jest-dom@npm:5.16.1"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -6543,7 +6543,7 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: a5729652acd007eeeb0c6d142bee4a7448bcf3b1260514969542da9ead87830a44939c2dd7e19d03652b7e1faf8dc68156939ddc24e0ce0798faf89c635e25dd
+  checksum: a510110bb3f37597a315bd2625162c1833432e8e86f15187294137059da443bb6cdf9bff320490ff482319da845f09ef8a5395040d1d1308c240fc6edd588b27
   languageName: node
   linkType: hard
 
@@ -24845,7 +24845,7 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": 7.16.0
     "@babel/preset-typescript": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
-    "@testing-library/jest-dom": 5.16.0
+    "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
