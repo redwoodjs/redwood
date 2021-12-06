@@ -6,6 +6,7 @@
 // Usage:
 // `$ yarn create redwood-app ./path/to/new-project`
 
+import { spawn } from 'child_process'
 import path from 'path'
 
 import chalk from 'chalk'
@@ -185,13 +186,43 @@ const installNodeModulesTasks = ({ newAppDir }) => {
   ]
 }
 
-const sendTelemetry = () => {
+const sendTelemetry = ({ error } = {}) => {
   // send 'create' telemetry event, or disable for new app
   if (telemetry) {
-    const command = `node packages/telemetry/dist/scripts/sendTelemetry.js --root ${newAppDir} --type create --duration ${
-      Date.now() - startTime
-    }`
-    execa(command, { shell: true })
+    const command = process.argv
+    // make command show 'create redwood-app [path] --flags'
+    command.splice(2, 0, 'create', 'redwood-app')
+    command[4] = '[path]'
+
+    let args = [
+      '--root',
+      newAppDir,
+      '--argv',
+      JSON.stringify(command),
+      '--duration',
+      Date.now() - startTime,
+    ]
+    if (error) {
+      args = [...args, '--type', 'error', '--error', `"${error}"`]
+    }
+
+    spawn(
+      process.execPath,
+      [
+        path.join(
+          'packages',
+          'telemetry',
+          'dist',
+          'scripts',
+          'sendTelemetry.js'
+        ),
+        ...args,
+      ],
+      {
+        detached: true,
+        stdio: 'ignore',
+      }
+    ).unref()
   } else {
     fs.appendFileSync(
       path.join(newAppDir, '.env'),
@@ -291,6 +322,8 @@ new Listr(
   .catch((e) => {
     console.log()
     console.log(e)
+    sendTelemetry({ error: e.message })
+
     if (fs.existsSync(newAppDir)) {
       console.log(
         style.warning(`\nWarning: Directory `) +
