@@ -23,7 +23,7 @@
     "graphql": "16.0.1",
     "graphql-helix": "1.10.3",
     "graphql-playground-html": "1.6.30",
-    "graphql-scalars": "1.13.6",
+    "graphql-scalars": "1.14.1",
     "graphql-tag": "2.12.6",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
