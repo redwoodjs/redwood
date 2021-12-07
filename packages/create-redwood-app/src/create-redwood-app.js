@@ -203,26 +203,13 @@ const sendTelemetry = ({ error } = {}) => {
       Date.now() - startTime,
     ]
     if (error) {
-      args = [...args, '--type', 'error', '--error', `"${error}"`]
+      args = [...args, '--error', `"${error}"`]
     }
 
-    spawn(
-      process.execPath,
-      [
-        path.join(
-          'packages',
-          'telemetry',
-          'dist',
-          'scripts',
-          'sendTelemetry.js'
-        ),
-        ...args,
-      ],
-      {
-        detached: true,
-        stdio: 'ignore',
-      }
-    ).unref()
+    spawn(process.execPath, [path.join(__dirname, 'telemetry.js'), ...args], {
+      detached: true,
+      stdio: 'ignore',
+    }).unref()
   } else {
     fs.appendFileSync(
       path.join(newAppDir, '.env'),
@@ -238,6 +225,9 @@ new Listr(
     {
       title: 'Creating Redwood app',
       task: () => new Listr(createProjectTasks({ newAppDir, overwrite })),
+      // task: () => {
+      //   throw new Error('Boom')
+      // },
     },
     {
       title: 'Installing packages',

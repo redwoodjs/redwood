@@ -45,7 +45,7 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
 }
 
 // gets diagnostic info and sanitizes by removing references to paths
-export const getInfo = async () => {
+const getInfo = async () => {
   const info = JSON.parse(
     await envinfo.run(
       {
@@ -82,7 +82,7 @@ export const getInfo = async () => {
 }
 
 // removes potentially sensative information from an array of argv strings
-export const sanitizeArgv = (argv: Array<string>) => {
+const sanitizeArgv = (argv: Array<string>) => {
   const args = argv.slice(2)
   const name = args[0]
   const sensativeCommand =
@@ -100,7 +100,7 @@ export const sanitizeArgv = (argv: Array<string>) => {
   return args.join(' ')
 }
 
-export const buildPayload = async () => {
+const buildPayload = async () => {
   let payload: Record<string, unknown> = {}
   let project
 
@@ -145,7 +145,7 @@ export const buildPayload = async () => {
 }
 
 // returns the UUID for this device. caches the UUID for 24 hours
-export const uniqueId = (rootDir: string | null) => {
+const uniqueId = (rootDir: string | null) => {
   const telemetryCachePath = path.join(
     rootDir || '/tmp',
     '.redwood',
@@ -200,8 +200,3 @@ export const sendTelemetry = async () => {
     }
   }
 }
-
-// if this script is run directly by node then telemetry will be sent in immediately
-;(async function () {
-  await sendTelemetry()
-})()

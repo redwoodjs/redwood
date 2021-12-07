@@ -8,8 +8,8 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/internal": "0.39.0",
-    "core-js": "3.19.1"
+    "@babel/runtime-corejs3": "7.16.3",
+    "@redwoodjs/internal": "0.39.0"
   },
   "repository": {
     "type": "git",

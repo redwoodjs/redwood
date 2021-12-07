@@ -8,12 +8,7 @@ const APP_ROOT = getPaths().base
 const spawnProcess = (...args: Array<string>) => {
   spawn(
     process.execPath,
-    [
-      path.join(__dirname, 'scripts', 'sendTelemetry.js'),
-      ...args,
-      '--root',
-      APP_ROOT,
-    ],
+    [path.join(__dirname, 'scripts', 'invoke.js'), ...args, '--root', APP_ROOT],
     {
       detached: true,
       stdio: 'ignore',

@@ -4164,6 +4164,7 @@ __metadata:
     "@redwoodjs/internal": 0.39.0
     "@redwoodjs/prerender": 0.39.0
     "@redwoodjs/structure": 0.39.0
+    "@redwoodjs/telemetry": 0.39.0
     "@types/listr": 0.14.4
     "@types/node-fetch": 2.5.12
     boxen: 5.1.2
@@ -4514,13 +4515,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/telemetry@workspace:packages/telemetry":
+"@redwoodjs/telemetry@0.39.0, @redwoodjs/telemetry@workspace:packages/telemetry":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": 7.16.0
+    "@babel/runtime-corejs3": 7.16.3
     "@redwoodjs/internal": 0.39.0
-    core-js: 3.19.1
     jest: 27.3.1
   languageName: unknown
   linkType: soft
@@ -10416,6 +10417,7 @@ __metadata:
     "@babel/node": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
     "@redwoodjs/internal": 0.39.0
+    "@redwoodjs/telemetry": 0.39.0
     axios: 0.24.0
     chalk: 4.1.2
     check-node-version: 4.2.1
