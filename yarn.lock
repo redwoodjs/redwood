@@ -5119,7 +5119,7 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 7.3.0
+    pino: 7.5.1
     pino-pretty: 7.2.0
     split2: 4.1.0
     typescript: 4.5.2
@@ -22489,9 +22489,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino@npm:7.3.0":
-  version: 7.3.0
-  resolution: "pino@npm:7.3.0"
+"pino@npm:7.5.1":
+  version: 7.5.1
+  resolution: "pino@npm:7.5.1"
   dependencies:
     fast-redact: ^3.0.0
     fastify-warning: ^0.2.0
@@ -22506,7 +22506,7 @@ fsevents@^1.2.7:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: bc720396d2ff781ca713fbd7f589c2e6761b9f207953166970f98718aaefb6313e69e2e0c91564e3db11295f8b81fec7c16e30207cb6ad7b45b4c705a879e84d
+  checksum: f32bb9e432c491d55895ed728128f8485482d603bdcb998d7847b5f5fce6714a29e6a5ee42a04793d6011ae73edace429977a76d49c2d6fe42947a2c65710bc9
   languageName: node
   linkType: hard
 
