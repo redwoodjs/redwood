@@ -5518,8 +5518,8 @@ __metadata:
     "@babel/cli": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
     "@redwoodjs/internal": 0.39.3
-    "@types/envinfo": ^7.8.1
-    envinfo: ^7.8.1
+    "@types/envinfo": 7.8.1
+    envinfo: 7.8.1
     jest: 27.3.1
   languageName: unknown
   linkType: soft
@@ -6880,7 +6880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/envinfo@npm:^7.8.1":
+"@types/envinfo@npm:7.8.1":
   version: 7.8.1
   resolution: "@types/envinfo@npm:7.8.1"
   checksum: 2f343301bf5f0bcfdba0d39423f895c51337b68b1d76ea5f51557afcd5198e2eb685b0cc7d377e812357d7a9650360b2727ef37eb53d71532d3eb4dac1232037
@@ -13213,7 +13213,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"envinfo@npm:7.8.1, envinfo@npm:^7.7.3, envinfo@npm:^7.7.4, envinfo@npm:^7.8.1":
+"envinfo@npm:7.8.1, envinfo@npm:^7.7.3, envinfo@npm:^7.7.4":
   version: 7.8.1
   resolution: "envinfo@npm:7.8.1"
   bin:
