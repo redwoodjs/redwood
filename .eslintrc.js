@@ -127,7 +127,7 @@ module.exports = {
         'packages/api-server/src/**',
         'packages/cli/src/**',
         'packages/core/config/**',
-        'packages/create-redwood-app/src/create-redwood-app.js',
+        'packages/create-redwood-app/src/*.js',
         'packages/internal/src/**',
         'packages/prerender/src/**',
         'packages/structure/src/**',
