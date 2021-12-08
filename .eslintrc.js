@@ -134,6 +134,7 @@ module.exports = {
         'packages/testing/src/**',
         'packages/testing/config/**',
         'packages/eslint-config/*.js',
+        'packages/record/src/**',
       ],
       env: {
         es6: true,

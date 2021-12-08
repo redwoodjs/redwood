@@ -48,6 +48,7 @@ _note: this file is also used for all aggregated contributors_
 ### Step 1: Check for new contributors and add to `*rc` files
 
 `cd tasks/all-contributors`
+
 `yarn install`
 
 > **NOTE:**

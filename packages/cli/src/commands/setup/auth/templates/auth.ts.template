@@ -29,20 +29,20 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
  */
 export const getCurrentUser = async (
   decoded,
-  { _token, _type },
-  { _event, _context }
+  { token, type },
+  { event, context }
 ): Promise<RedwoodUser> => {
   if (!decoded) {
     return null
-
-    const { roles } = parseJWT({ decoded })
-
-    if (roles) {
-      return { ...decoded, roles }
-    }
-
-    return { ...decoded }
   }
+
+  const { roles } = parseJWT({ decoded })
+
+  if (roles) {
+    return { ...decoded, roles }
+  }
+
+  return { ...decoded }
 }
 
 /**

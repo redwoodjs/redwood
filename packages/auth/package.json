@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.38.3",
+  "version": "0.39.3",
   "files": [
     "dist"
   ],
@@ -8,16 +8,16 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "devDependencies": {
-    "@auth0/auth0-spa-js": "1.19.2",
-    "@azure/msal-browser": "2.19.0",
+    "@auth0/auth0-spa-js": "1.19.3",
+    "@azure/msal-browser": "2.20.0",
     "@babel/cli": "7.16.0",
-    "@clerk/clerk-js": "2.3.0",
-    "@clerk/clerk-sdk-node": "2.1.2",
-    "@clerk/types": "1.16.0",
-    "@supabase/supabase-js": "1.28.1",
+    "@clerk/clerk-js": "2.6.0",
+    "@clerk/clerk-sdk-node": "2.2.1",
+    "@clerk/types": "1.19.0",
+    "@supabase/supabase-js": "1.28.5",
     "@types/netlify-identity-widget": "1.9.2",
-    "@types/react": "17.0.35",
-    "firebase": "9.5.0",
+    "@types/react": "17.0.37",
+    "firebase": "9.6.0",
     "firebase-admin": "10.0.0",
     "gotrue-js": "0.9.29",
     "jest": "27.3.1",

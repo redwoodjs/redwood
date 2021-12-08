@@ -1,3 +1,3 @@
-export const standard = {
-  todosCount: 42,
+export const standard = () => {
+  return { todosCount: 42 }
 }
