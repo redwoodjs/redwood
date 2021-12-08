@@ -9,7 +9,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.3",
-    "@redwoodjs/internal": "0.39.0"
+    "@redwoodjs/internal": "0.39.0",
+    "@types/envinfo": "^7.8.1",
+    "envinfo": "^7.8.1"
   },
   "repository": {
     "type": "git",
