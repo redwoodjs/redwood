@@ -19,9 +19,23 @@ describe('sanitizeArgv', () => {
     expect(output).toEqual('g page [name] [path]')
   })
 
-  it('does not replace --flag args in sensitive position', () => {
+  it('does not replace --flag args in numbered position', () => {
     const output = sanitizeArgv(['yarn', 'rw', 'g', 'page', 'Foo', '--force'])
 
     expect(output).toEqual('g page [name] --force')
+  })
+
+  it('replaces named --flag args', () => {
+    const output = sanitizeArgv([
+      'yarn',
+      'rw',
+      'prisma',
+      'migrate',
+      'dev',
+      '--name',
+      'create-user',
+    ])
+
+    expect(output).toEqual('prisma migrate dev --name [name]')
   })
 })

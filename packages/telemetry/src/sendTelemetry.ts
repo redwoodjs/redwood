@@ -91,7 +91,7 @@ const getInfo = async (presets = {}) => {
 }
 
 // removes potentially sensative information from an array of argv strings
-const sanitizeArgv = (argv: Array<string>) => {
+export const sanitizeArgv = (argv: Array<string>) => {
   const args = argv.slice(2)
   const name = args[0]
   const sensativeCommand =
