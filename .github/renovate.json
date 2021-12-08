@@ -12,7 +12,8 @@
     "ora",
     "tempy",
     "terminal-link",
-    "@types/node-fetch"
+    "@types/node-fetch",
+    "chalk"
   ],
   "packageRules": [
     {
