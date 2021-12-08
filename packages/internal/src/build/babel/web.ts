@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
 import { getPaths } from '../../paths'
@@ -12,13 +13,29 @@ import {
   RegisterHookOptions,
 } from './common'
 
-export const getWebSideBabelPlugins = () => {
+export const getWebSideBabelPlugins = (
+  { forJest }: Flags = { forJest: false }
+) => {
   const rwjsPaths = getPaths()
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
-
     // === Import path handling
+    [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          src:
+            // Jest monorepo and multi project runner is not correctly determining
+            // the `cwd`: https://github.com/facebook/jest/issues/7359
+            forJest ? rwjsPaths.web.src : './src',
+        },
+        root: [rwjsPaths.web.base],
+        cwd: 'packagejson',
+        loglevel: 'silent', // to silence the unnecessary warnings
+      },
+      'rwjs-module-resolver',
+    ],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
@@ -82,7 +99,7 @@ export const getWebSideBabelPlugins = () => {
 }
 
 export const getWebSideOverrides = (
-  { staticImports } = {
+  { staticImports }: Flags = {
     staticImports: false,
   }
 ) => {
@@ -94,7 +111,7 @@ export const getWebSideOverrides = (
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: /web\/src\/Routes.(js|tsx)$/,
+      test: /Routes.(js|tsx)$/,
       plugins: [
         [
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')
@@ -174,15 +191,21 @@ export const getWebSideBabelConfigPath = () => {
   }
 }
 
-export const getWebSideDefaultBabelConfig = () => {
+// These flags toggle on/off certain features
+export interface Flags {
+  forJest?: boolean // will change the alias for module-resolver plugin
+  staticImports?: boolean // will use require instead of import for routes-auto-loader plugin
+}
+
+export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
   // NOTE:
   // Even though we specify the config file, babel will still search for .babelrc
   // and merge them because we have specified the filename property, unless babelrc = false
 
   return {
     presets: getWebSideBabelPresets(),
-    plugins: getWebSideBabelPlugins(),
-    overrides: getWebSideOverrides(),
+    plugins: getWebSideBabelPlugins(options),
+    overrides: getWebSideOverrides(options),
     extends: getWebSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
@@ -205,4 +228,18 @@ export const registerWebSideBabelHook = ({
     // Static importing pages makes sense
     overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
   })
+}
+
+// @MARK
+// Currently only used in testing
+export const prebuildWebFile = (srcPath: string, flags: Flags = {}) => {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+  const defaultOptions = getWebSideDefaultBabelConfig(flags)
+
+  const result = babel.transform(code, {
+    ...defaultOptions,
+    cwd: getPaths().web.base,
+    filename: srcPath,
+  })
+  return result
 }

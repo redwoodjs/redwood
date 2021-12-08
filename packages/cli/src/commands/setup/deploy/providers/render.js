@@ -22,7 +22,7 @@ services:
   staticPublishPath: ./web/dist
   envVars:
   - key: NODE_VERSION
-    value: 14
+    value: 16
   routes:
   - type: rewrite
     source: /.redwood/functions/*
@@ -44,7 +44,7 @@ services:
   startCommand: yarn rw deploy render api
   envVars:
   - key: NODE_VERSION
-    value: 14
+    value: 16
 ${database}
 `
 }
@@ -113,7 +113,7 @@ export const prismaDataSourceCheck = async (database) => {
     yarn rw prisma migrate dev
     yarn rw setup deploy render --database ${database}
 
-    Option 2: Rerun setup deloy command with current schema.prisma provider:
+    Option 2: Rerun setup deploy command with current schema.prisma provider:
     yarn rw setup deploy render --database ${detectedDatabase}`)
   }
 }
