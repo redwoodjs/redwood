@@ -2,8 +2,17 @@
   "extends": [
     "config:base"
   ],
-  "reviewers": [
-    "@jtoar"
+  "ignoreDeps": [
+    "boxen",
+    "configstore",
+    "decamelize",
+    "execa",
+    "humanize-string",
+    "latest-version",
+    "ora",
+    "tempy",
+    "terminal-link",
+    "@types/node-fetch"
   ],
   "packageRules": [
     {
@@ -14,15 +23,7 @@
       "automerge": true
     }
   ],
-  "ignoreDeps": [
-    "boxen",
-    "configstore",
-    "decamelize",
-    "execa",
-    "humanize-string",
-    "latest-version",
-    "ora",
-    "tempy",
-    "terminal-link"
+  "assignees": [
+    "@jtoar"
   ]
 }

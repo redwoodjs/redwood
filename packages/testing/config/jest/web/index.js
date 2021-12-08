@@ -55,6 +55,9 @@ module.exports = {
       '@redwoodjs/testing/dist/web/fileMock.js',
   },
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', getWebSideDefaultBabelConfig()],
+    '\\.[jt]sx?$': [
+      'babel-jest',
+      getWebSideDefaultBabelConfig({ forJest: true }),
+    ],
   },
 }

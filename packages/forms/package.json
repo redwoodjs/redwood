@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.39.0",
+  "version": "0.39.3",
   "files": [
     "dist"
   ],
@@ -11,7 +11,7 @@
     "@types/pascalcase": "1.0.1",
     "core-js": "3.19.1",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.19.5"
+    "react-hook-form": "7.21.0"
   },
   "repository": {
     "type": "git",

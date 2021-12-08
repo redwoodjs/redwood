@@ -571,9 +571,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:1.7.0":
-  version: 1.7.0
-  resolution: "octokit@npm:1.7.0"
+"octokit@npm:1.7.1":
+  version: 1.7.1
+  resolution: "octokit@npm:1.7.1"
   dependencies:
     "@octokit/app": ^12.0.4
     "@octokit/core": ^3.5.1
@@ -583,7 +583,7 @@ __metadata:
     "@octokit/plugin-retry": ^3.0.9
     "@octokit/plugin-throttling": ^3.5.1
     "@octokit/types": ^6.26.0
-  checksum: 57a4770594b9ffda4832ab7080c45884d8906937e216b83e0a789168c423fb3cb2d23ea201fee0f885c749ad4d66b5f3f45d6106779d77e793a7ebf9082a16f7
+  checksum: e1ce2d583a0795cf10999d2452f15fb02b5efce31044a7827d5efc34419c2909dd56c6c8f79347907f827e5646e35e63ec65d4327db4f999b278269eced33e2b
   languageName: node
   linkType: hard
 
@@ -600,7 +600,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "release-notes@workspace:."
   dependencies:
-    octokit: 1.7.0
+    octokit: 1.7.1
   languageName: unknown
   linkType: soft
 
