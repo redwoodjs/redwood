@@ -6,13 +6,9 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
-import {
-  buildApi,
-  timedTelemetry,
-  errorTelemetry,
-  loadAndValidateSdls,
-} from '@redwoodjs/internal'
+import { buildApi, loadAndValidateSdls } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
