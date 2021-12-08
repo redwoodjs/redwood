@@ -6,7 +6,7 @@ export const preRequisites = () => [
     command: ['serverless', ['--version']],
     errorMessage: [
       'Looks like Serverless is not installed.',
-      'Please follow the steps at https://www.serverless.com/framework/docs/providers/aws/guide/installation/ to install Serverless.',
+      'Please follow the steps at https://www.serverless.com/framework/docs/getting-started to install Serverless.',
     ],
   },
 ]
