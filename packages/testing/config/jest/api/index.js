@@ -4,6 +4,7 @@ const {
   getPaths,
   getApiSideDefaultBabelConfig,
   getApiSideBabelPresets,
+  getApiSideBabelPlugins,
 } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
@@ -30,6 +31,7 @@ module.exports = {
       'babel-jest',
       {
         ...getApiSideDefaultBabelConfig(),
+        plugins: getApiSideBabelPlugins({ forJest: true }),
         presets: getApiSideBabelPresets({
           presetEnv: true, // jest needs code transpiled
         }),

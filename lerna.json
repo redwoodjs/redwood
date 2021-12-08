@@ -1,9 +1,7 @@
 {
-  "version": "0.39.2",
+  "version": "0.39.3",
   "npmClient": "yarn",
-  "packages": [
-    "../../packages/*"
-  ],
+  "useWorkspaces": true,
   "command": {
     "publish": {
       "verifyAccess": false

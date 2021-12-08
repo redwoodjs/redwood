@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/record",
-  "version": "0.39.2",
+  "version": "0.39.3",
   "files": [
     "dist"
   ],
@@ -8,8 +8,8 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.5.0",
-    "@prisma/sdk": "3.5.0",
+    "@prisma/client": "3.6.0",
+    "@prisma/sdk": "3.6.0",
     "core-js": "3.19.1"
   },
   "repository": {
