@@ -147,7 +147,7 @@ export function cleanPackages(packages = frameworkPkgJsonFiles()) {
   const packageNames = packages.map(packageJsonName)
 
   execa.sync(
-    'yarn build:clean',
+    'yarn lerna run build:clean',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
@@ -165,7 +165,7 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
 
   // Build JavaScript.
   execa.sync(
-    'yarn build:js',
+    'yarn lerna run build:js',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
