@@ -201,6 +201,8 @@ const sendTelemetry = ({ error } = {}) => {
       JSON.stringify(command),
       '--duration',
       Date.now() - startTime,
+      '--rwVersion',
+      version,
     ]
     if (error) {
       args = [...args, '--error', `"${error}"`]

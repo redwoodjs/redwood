@@ -45,7 +45,7 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
 }
 
 // gets diagnostic info and sanitizes by removing references to paths
-const getInfo = async () => {
+const getInfo = async (presets = {}) => {
   const info = JSON.parse(
     await envinfo.run(
       {
@@ -76,7 +76,8 @@ const getInfo = async () => {
     yarnVersion: info.Binaries.Node.version,
     npmVersion: info.Binaries.Node.version,
     vsCodeVersion: info.IDEs.VSCode.version,
-    // redwoodVersion: info.npmPackages['@redwoodjs/core'].installed,
+    redwoodVersion:
+      presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
   }
 }
@@ -113,7 +114,7 @@ const buildPayload = async () => {
     uid: uniqueId(rootDir),
     ci: ci.isCI,
     NODE_ENV: process.env.NODE_ENV || null,
-    ...(await getInfo()),
+    ...(await getInfo({ redwoodVersion: argv.rwVersion })),
   }
 
   if (argv.error) {
