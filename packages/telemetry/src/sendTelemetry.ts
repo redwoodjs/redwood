@@ -25,6 +25,10 @@ interface SensitiveArgPositions {
     positions: Array<number>
     redactWith: Array<string>
   }
+  prisma: {
+    options: Array<string>
+    redactWith: Array<string>
+  }
 }
 
 // Tracks any commands that could contain sensative info and their position in
@@ -41,6 +45,10 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   generate: {
     positions: [2, 3],
     redactWith: ['[name]', '[path]'],
+  },
+  prisma: {
+    options: ['--name'],
+    redactWith: ['[name]'],
   },
 }
 
@@ -90,12 +98,25 @@ const sanitizeArgv = (argv: Array<string>) => {
     SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
   if (sensativeCommand) {
-    sensativeCommand.positions.forEach((pos: number, index: number) => {
-      // only redact if the text in the given position is not a --flag
-      if (args[pos] && !args[pos].match(/--/)) {
-        args[pos] = sensativeCommand.redactWith[index]
-      }
-    })
+    // redact positional arguments
+    if (sensativeCommand.positions) {
+      sensativeCommand.positions.forEach((pos: number, index: number) => {
+        // only redact if the text in the given position is not a --flag
+        if (args[pos] && !args[pos].match(/--/)) {
+          args[pos] = sensativeCommand.redactWith[index]
+        }
+      })
+    }
+
+    // redact --option arguments
+    if (sensativeCommand.options) {
+      sensativeCommand.options.forEach((option: string, index: number) => {
+        const argIndex = args.indexOf(option)
+        if (argIndex !== -1) {
+          args[argIndex + 1] = sensativeCommand.redactWith[index]
+        }
+      })
+    }
   }
 
   return args.join(' ')
