@@ -32,7 +32,7 @@
     "@redwoodjs/graphql-server": "0.39.3",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.4.0",
-    "chalk": "4.1.2",
+    "chalk": "5.0.0",
     "core-js": "3.19.1",
     "deepmerge": "4.2.2",
     "esbuild": "0.14.2",
