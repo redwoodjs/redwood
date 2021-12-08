@@ -66,9 +66,6 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
-  telemetry: {
-    url: string
-  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -99,9 +96,6 @@ const DEFAULT_CONFIG: Config = {
     tests: true,
     stories: true,
     nestScaffoldByModel: true,
-  },
-  telemetry: {
-    url: 'https://telemetry.redwoodjs.com/.netlify/functions/telemetry',
   },
 }
 
