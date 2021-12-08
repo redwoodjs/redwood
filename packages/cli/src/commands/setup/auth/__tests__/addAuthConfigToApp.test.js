@@ -1,3 +1,5 @@
+global.__dirname = __dirname
+
 import fs from 'fs'
 
 import { addConfigToApp } from '../auth'
@@ -7,6 +9,7 @@ jest.mock('../../../../lib', () => {
   const __dirname = path.resolve()
   return {
     getPaths: () => ({
+      base: '/path/to/project',
       api: { functions: '', src: '', lib: '' },
       web: {
         src: path.join(__dirname, '../create-redwood-app/template/web/src'),
