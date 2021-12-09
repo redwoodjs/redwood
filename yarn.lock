@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@apollo/client@npm:3.5.5":
-  version: 3.5.5
-  resolution: "@apollo/client@npm:3.5.5"
+"@apollo/client@npm:3.5.6":
+  version: 3.5.6
+  resolution: "@apollo/client@npm:3.5.6"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -18,7 +18,7 @@ __metadata:
     optimism: ^0.16.1
     prop-types: ^15.7.2
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.9.0
+    ts-invariant: ^0.9.4
     tslib: ^2.3.0
     zen-observable-ts: ^1.2.0
   peerDependencies:
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 7e14e2c3092e71a315e8a3de7be315f20744e0d8230cdcfa646ffde656262f0b7c1d163ed78c5a2aa56ba189707da0c7ebc1adaaf59ecd4c8131f80e5da12e26
+  checksum: 5e680f6e9e24e76b61d83d299058b321185d77d034059559206b8fac96fecddb4455f95b4851555285268b3536364fccdb78df1bd5e2c25d91ce307708a5b671
   languageName: node
   linkType: hard
 
@@ -1734,9 +1734,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.6.0":
-  version: 2.6.0
-  resolution: "@clerk/clerk-js@npm:2.6.0"
+"@clerk/clerk-js@npm:2.6.1":
+  version: 2.6.1
+  resolution: "@clerk/clerk-js@npm:2.6.1"
   dependencies:
     "@clerk/types": 1.19.0
     "@popperjs/core": ^2.4.4
@@ -1750,7 +1750,7 @@ __metadata:
     react-dom: 16.13.1
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 8450f5a5dac2728a1a103ba6cfd960478a540c99a61cdc9da60fff1af3cd256a1d324a81b59a99abf9006a90427c73473f2090dbad66b12932f2d89a68175d0e
+  checksum: abf4f38a032b847d534925e4595133ec1de1b483d79acf60c209044c4b7974854aee138271974fffd4ca0efc4a00c2ddfa76c5359bd0c51c5142e3b91d95c60e
   languageName: node
   linkType: hard
 
@@ -1769,13 +1769,6 @@ __metadata:
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
   checksum: 11f4034d21099b4709902f044a1618c81be65decd551e5ecde3a0b1c241cd192b17592245de6f2e722d715e41ff5456fa35b6625819435c7d08c2433680f3773
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:1.18.0":
-  version: 1.18.0
-  resolution: "@clerk/types@npm:1.18.0"
-  checksum: 9692926a1bd1ad7b24b0f2c61d7019826ab5021514e40c9fd7a12c3ab6d22cb13e6a617ab951fe7c347daea470734b0a222182f4bb4006b5f9a8a5b9845908f0
   languageName: node
   linkType: hard
 
@@ -5141,9 +5134,9 @@ __metadata:
     "@auth0/auth0-spa-js": 1.19.3
     "@azure/msal-browser": 2.20.0
     "@babel/cli": 7.16.0
-    "@clerk/clerk-js": 2.6.0
+    "@clerk/clerk-js": 2.6.1
     "@clerk/clerk-sdk-node": 2.2.1
-    "@clerk/types": 1.18.0
+    "@clerk/types": 1.19.0
     "@supabase/supabase-js": 1.28.5
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.37
@@ -5276,7 +5269,7 @@ __metadata:
     esbuild-loader: 2.16.0
     fast-glob: 3.2.7
     file-loader: 6.2.0
-    graphql: 16.0.1
+    graphql: 16.1.0
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
@@ -5363,7 +5356,7 @@ __metadata:
     "@types/uuid": 8.3.3
     aws-lambda: 1.0.7
     core-js: 3.19.1
-    graphql: 16.0.1
+    graphql: 16.1.0
     graphql-helix: 1.10.3
     graphql-playground-html: 1.6.30
     graphql-scalars: 1.14.1
@@ -5411,7 +5404,7 @@ __metadata:
     findup-sync: 5.0.0
     fs-extra: 10.0.0
     glob: 7.2.0
-    graphql: 16.0.1
+    graphql: 16.1.0
     graphql-tag: 2.12.6
     jest: 27.3.1
     kill-port: 1.6.1
@@ -5498,7 +5491,7 @@ __metadata:
     dotenv-defaults: 3.0.0
     enquirer: 2.3.6
     findup-sync: 5.0.0
-    graphql: 16.0.1
+    graphql: 16.1.0
     jest: 27.3.1
     lazy-get-decorator: 2.2.0
     line-column: 1.0.2
@@ -5554,12 +5547,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.5.5
+    "@apollo/client": 3.5.6
     "@babel/cli": 7.16.0
     "@redwoodjs/auth": 0.39.3
     "@types/react": 17.0.37
     core-js: 3.19.1
-    graphql: 16.0.1
+    graphql: 16.1.0
     jest: 27.3.1
     proptypes: 1.1.0
     react-helmet-async: 1.1.2
@@ -16144,10 +16137,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.0.1":
-  version: 16.0.1
-  resolution: "graphql@npm:16.0.1"
-  checksum: b8599a98c78ac5fe3371540d58f415df460420d69998fe8c94a6c29365b518847df76acb64a241033eea97a3163a0a848d5795209caffbeef7156bc91c2c76c4
+"graphql@npm:16.1.0":
+  version: 16.1.0
+  resolution: "graphql@npm:16.1.0"
+  checksum: 957e80bcabe5cff9c18a09ed314b39055fba25a4b307a084165001b8a41b49ec4d9fd86f9462abb6f78627a1e4ccce599a88412a4187295d65ed7b0e5e2b547b
   languageName: node
   linkType: hard
 
@@ -27195,12 +27188,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.9.0":
-  version: 0.9.3
-  resolution: "ts-invariant@npm:0.9.3"
+"ts-invariant@npm:^0.9.4":
+  version: 0.9.4
+  resolution: "ts-invariant@npm:0.9.4"
   dependencies:
     tslib: ^2.1.0
-  checksum: ac0712a08ffecdf5c7fbc28ef59b1f882ceb95e2558529485f33532882e05357a7f41ccfd52f60643f9d1d6e6d2428c41e52c2d01df66d1b2d49487e6e718243
+  checksum: 67cb364f535f40312e72d317bdc24c34fc09a43b63ecb1eab7285d6dc909f1f9b2dd73906104e510031cf3b1493636c7f0120f211c8f92783ada3be4c57f0f58
   languageName: node
   linkType: hard
 
