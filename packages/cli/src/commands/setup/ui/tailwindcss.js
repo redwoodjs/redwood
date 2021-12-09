@@ -58,7 +58,7 @@ export const handler = async ({ force, install }) => {
   const packages = [
     'postcss',
     'postcss-loader',
-    'tailwindcss@next',
+    'tailwindcss',
     'autoprefixer',
   ]
 
