@@ -71,7 +71,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force, database }) => {
+export const handler = async ({ provider, force, database, rwVersion }) => {
   const providerData = await import(`./providers/${provider}`)
   const apiDependencies = JSON.parse(
     fs.readFileSync('api/package.json').toString()
@@ -80,7 +80,12 @@ export const handler = async ({ provider, force, database }) => {
   const missingApiPackages = providerData?.apiPackages?.reduce(
     (missingPackages, apiPackage) => {
       if (!(apiPackage in apiDependencies)) {
-        missingPackages.push(apiPackage)
+        if (apiPackage.includes('@redwoodjs')) {
+          // Push the same version of the redwood package
+          missingPackages.push(`${apiPackage}@${rwVersion}`)
+        } else {
+          missingPackages.push(apiPackage)
+        }
       }
       return missingPackages
     },
