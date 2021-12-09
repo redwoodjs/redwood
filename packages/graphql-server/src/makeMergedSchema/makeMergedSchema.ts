@@ -186,7 +186,7 @@ const mergeTypes = (
 export const makeMergedSchema = ({
   sdls,
   services,
-  schemaOptions,
+  schemaOptions = {},
   directives,
 }: {
   sdls: SdlGlobImports
@@ -209,9 +209,11 @@ export const makeMergedSchema = ({
     { all: true }
   )
 
+  const { typeDefs: schemaOptionsTypeDefs = [], ...otherSchemaOptions } =
+    schemaOptions
   const schema = makeExecutableSchema({
-    typeDefs,
-    ...schemaOptions,
+    typeDefs: [...typeDefs, ...schemaOptionsTypeDefs],
+    ...otherSchemaOptions,
   })
 
   const resolvers: IResolvers = mergeResolversWithServices({
