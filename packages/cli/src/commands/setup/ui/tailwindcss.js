@@ -55,12 +55,7 @@ const tailwindImportsAndNotes = [
 export const handler = async ({ force, install }) => {
   const rwPaths = getPaths()
 
-  const packages = [
-    'postcss',
-    'postcss-loader',
-    'tailwindcss@next',
-    'autoprefixer',
-  ]
+  const packages = ['postcss', 'postcss-loader', 'tailwindcss', 'autoprefixer']
 
   const tasks = new Listr([
     {
