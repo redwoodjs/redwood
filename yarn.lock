@@ -5092,7 +5092,7 @@ __metadata:
     fastify-url-data: 3.0.3
     jest: 27.3.1
     lodash.escape: 4.0.1
-    pino-pretty: ^7.2.0
+    pino-pretty: 7.2.0
     qs: 6.10.1
     typescript: 4.5.2
     yargs: 16.2.0
@@ -22454,7 +22454,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:7.2.0, pino-pretty@npm:^7.2.0":
+"pino-pretty@npm:7.2.0":
   version: 7.2.0
   resolution: "pino-pretty@npm:7.2.0"
   dependencies:
