@@ -27,7 +27,18 @@ provider:
   runtime: nodejs14.x
   region: us-east-2 # This is the AWS region where the service will be deployed.
   httpApi: # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
-    cors: true
+    cors:
+      allowOrigins:
+        - '*' # This is the default value. You can remove this line if you want to restrict the CORS to a specific origin.
+      allowCredentials: true
+      allowedHeaders:
+        - authorization
+        - auth-provider
+        - content-Type
+        - X-Amz-Date
+        - X-Api-Key
+        - X-Amz-Security-Token
+        - X-Amz-User-Agent
     payload: '1.0'
     useProviderTags: true # https://www.serverless.com/framework/docs/deprecations/#AWS_HTTP_API_USE_PROVIDER_TAGS
   stackTags: # Add CloudFormation stack tags here
