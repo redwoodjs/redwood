@@ -1,9 +1,10 @@
 global.__dirname = __dirname
 
+import '../../../../lib/mockTelemetry'
+
 jest.mock('fs')
 jest.mock('../../../../lib', () => ({
   getPaths: () => ({
-    base: '/path/to/project',
     api: { functions: '', src: '', lib: '' },
     web: { src: '' },
   }),

@@ -11,6 +11,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import './mockTelemetry'
+
 jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {
@@ -73,14 +75,6 @@ jest.mock('path', () => {
       }
       return path.join(...paths)
     },
-  }
-})
-
-// mock Telemetry for CLI commands so they don't try to spawn a process
-jest.mock('@redwoodjs/telemetry', () => {
-  return {
-    errorTelemetry: () => jest.fn(),
-    timedTelemetry: () => jest.fn(),
   }
 })
 

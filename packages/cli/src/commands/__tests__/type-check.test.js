@@ -8,6 +8,8 @@ jest.mock('execa', () =>
   })
 )
 
+import '../../lib/mockTelemetry'
+
 let mockedRedwoodConfig = {
   api: {},
   web: {},
