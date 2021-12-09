@@ -19,7 +19,7 @@ export default async () => {
       // { name: 'bob', email: 'bob@example.com' },
     ]
     console.log(
-      "\nUsing the default './scripts/seed.ts' template\nEdit the file to add seed data\n"
+      "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
     )
 
     // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
