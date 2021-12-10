@@ -221,8 +221,20 @@ export const handler = async ({
         },
       },
       {
-        title: `Generating types ...`,
+        title: `Generating types...`,
         task: () => generateTypes,
+      },
+      {
+        title: 'One more thing...',
+        task: (ctx, task) => {
+          task.title =
+            `One more thing...\n\n` +
+            `   ${c.warning('Page created! A note about <MetaTags>:')}\n\n` +
+            `   At the top of your newly created page is a <MetaTags> component,\n` +
+            `   which contains the title and description for your page, essential\n` +
+            `   to good SEO. Check out this page for best practices: \n\n` +
+            `   https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets\n`
+        },
       },
     ].filter(Boolean),
     { collapse: false }
