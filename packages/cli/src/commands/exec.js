@@ -69,6 +69,8 @@ export const handler = async (args) => {
           alias: {
             $api: getPaths().api.base,
             $web: getPaths().web.base,
+            api: getPaths().api.base,
+            web: getPaths().web.base,
           },
           loglevel: 'silent', // to silence the unnecessary warnings
         },
