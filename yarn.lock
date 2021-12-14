@@ -1653,16 +1653,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2, @babel/runtime@npm:^7.9.6":
-  version: 7.16.3
-  resolution: "@babel/runtime@npm:7.16.3"
-  dependencies:
-    regenerator-runtime: ^0.13.4
-  checksum: 37a7f334e8ad1383a78d39224ba9f95b94556189a0f1e93bc1b5729dc18d9eb5eb0ba3742073629cd4024fc101315fe8945931f80ba32518f651a4f0438ec4dc
-  languageName: node
-  linkType: hard
-
-"@babel/runtime@npm:^7.14.6":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2, @babel/runtime@npm:^7.9.6":
   version: 7.16.5
   resolution: "@babel/runtime@npm:7.16.5"
   dependencies:
@@ -9043,17 +9034,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^3.0.1":
+"async@npm:^3.0.1, async@npm:^3.2.0":
   version: 3.2.2
   resolution: "async@npm:3.2.2"
   checksum: 0702c7d70d26f8aa2afdcefca2a1aab45dd36d95e4b652ee3d1c784001b5fcb0132737e068200eb5f38feee01b748b1839c4c94ce11f37fd86b8fb3d6b5addaa
-  languageName: node
-  linkType: hard
-
-"async@npm:^3.2.0":
-  version: 3.2.1
-  resolution: "async@npm:3.2.1"
-  checksum: bb0274ef7960f12116296eb01ed6da7dfebe45787e0782970d908c8585a0aeabf873742c368bf32d988254010070b9b93526e91f44c5f780eb1ae46eb5e7b9a9
   languageName: node
   linkType: hard
 
@@ -24906,8 +24890,8 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
-    all-contributors-cli: 6.20.0
     "@types/jscodeshift": 0.11.2
+    all-contributors-cli: 6.20.0
     babel-jest: 27.3.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
