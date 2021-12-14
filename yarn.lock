@@ -5163,7 +5163,7 @@ __metadata:
     "@redwoodjs/internal": 0.39.4
     "@redwoodjs/prerender": 0.39.4
     "@redwoodjs/structure": 0.39.4
-    "@redwoodjs/telemetry": "0.39.4"
+    "@redwoodjs/telemetry": 0.39.4
     "@types/listr": 0.14.4
     "@types/node-fetch": 2.5.12
     boxen: 5.1.2
@@ -11713,7 +11713,7 @@ __metadata:
     "@babel/node": 7.16.0
     "@babel/runtime-corejs3": 7.16.3
     "@redwoodjs/internal": 0.39.4
-    "@redwoodjs/telemetry": "0.39.4"
+    "@redwoodjs/telemetry": 0.39.4
     axios: 0.24.0
     chalk: 4.1.2
     check-node-version: 4.2.1
