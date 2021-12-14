@@ -49,7 +49,7 @@
     "build": "yarn build:js && yarn build:types",
     "build:js": "lerna run build:js",
     "build:types": "tsc --build --verbose",
-    "build:clean": "rimraf packages/**/dist",
+    "build:clean": "yarn clean:prisma && rimraf packages/**/dist",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "e2e": "node ./tasks/run-e2e",
