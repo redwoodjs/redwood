@@ -5085,7 +5085,7 @@ __metadata:
     ansi-colors: 4.1.1
     aws-lambda: 1.0.7
     chokidar: 3.5.2
-    fastify: 3.24.1
+    fastify: 3.25.0
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -14682,9 +14682,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.24.1":
-  version: 3.24.1
-  resolution: "fastify@npm:3.24.1"
+"fastify@npm:3.25.0":
+  version: 3.25.0
+  resolution: "fastify@npm:3.25.0"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
@@ -14701,7 +14701,7 @@ __metadata:
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
     tiny-lru: ^7.0.0
-  checksum: 033227139594cb442298d0481eef27f13e1b57d410a3482984d78e2b9aa550ab9a6b629857dcf950204c68609e7b5db74ce7326281770d71a17fcd73a5c7aaa8
+  checksum: 8cf3c20c541f57c83d6980e6b97b42f277c26ec8215a3a1e5af714068c565a90f860c3a0db88b26f0560ba771814c79585ddd920a923d00322aa4517779fcf68
   languageName: node
   linkType: hard
 
