@@ -1662,6 +1662,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.14.6":
+  version: 7.16.5
+  resolution: "@babel/runtime@npm:7.16.5"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 73bad69270f88e8ec27a3884f941c5e5391696904c7c62f5e28e5d2516831f65652b7c95c7690f1911bf1834e62680fbde2c2e895946a1421452422cd8db4ba0
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.12.7, @babel/template@npm:^7.16.0, @babel/template@npm:^7.3.3":
   version: 7.16.0
   resolution: "@babel/template@npm:7.16.0"
@@ -8460,6 +8469,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"all-contributors-cli@npm:6.20.0":
+  version: 6.20.0
+  resolution: "all-contributors-cli@npm:6.20.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+    async: ^3.0.1
+    chalk: ^4.0.0
+    didyoumean: ^1.2.1
+    inquirer: ^7.0.4
+    json-fixer: ^1.5.1
+    lodash: ^4.11.2
+    node-fetch: ^2.6.0
+    pify: ^5.0.0
+    yargs: ^15.0.1
+  bin:
+    all-contributors: dist/cli.js
+  checksum: 804b371f74ef34137e8d9099f325f9cd4a15b4bb5833bd90d86b65284f54543338952304fa94e07bb6171a0a9d6a6dd49ba6ba5ebd80deaf881dd2b09726eca4
+  languageName: node
+  linkType: hard
+
 "alphanum-sort@npm:^1.0.2":
   version: 1.0.2
   resolution: "alphanum-sort@npm:1.0.2"
@@ -9010,6 +9039,13 @@ __metadata:
   dependencies:
     lodash: ^4.17.14
   checksum: 06c917c74a55f9036ff79dedfc51dfc9c52c2dee2f80866b600495d2fd3037251dbcfde6592f23fc47398c44d844174004e0ee532f94c32a888bb89fd1cf0f25
+  languageName: node
+  linkType: hard
+
+"async@npm:^3.0.1":
+  version: 3.2.2
+  resolution: "async@npm:3.2.2"
+  checksum: 0702c7d70d26f8aa2afdcefca2a1aab45dd36d95e4b652ee3d1c784001b5fcb0132737e068200eb5f38feee01b748b1839c4c94ce11f37fd86b8fb3d6b5addaa
   languageName: node
   linkType: hard
 
@@ -10439,7 +10475,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1":
+"chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -12642,6 +12678,13 @@ __metadata:
   dependencies:
     streamsearch: 0.1.2
   checksum: 4486f0448233145216cfadd5f6bbb4c26c3a28824da5344322b06051632e99d6af2b44f893fa8b30f1749ad175b4e565d301c760d0437226d9e41ccdb6546f35
+  languageName: node
+  linkType: hard
+
+"didyoumean@npm:^1.2.1":
+  version: 1.2.2
+  resolution: "didyoumean@npm:1.2.2"
+  checksum: 95d0b53d23b851aacff56dfadb7ecfedce49da4232233baecfeecb7710248c4aa03f0aa8995062f0acafaf925adf8536bd7044a2e68316fd7d411477599bc27b
   languageName: node
   linkType: hard
 
@@ -17132,7 +17175,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"inquirer@npm:^7.3.3":
+"inquirer@npm:^7.0.4, inquirer@npm:^7.3.3":
   version: 7.3.3
   resolution: "inquirer@npm:7.3.3"
   dependencies:
@@ -18836,6 +18879,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"json-fixer@npm:^1.5.1":
+  version: 1.6.13
+  resolution: "json-fixer@npm:1.6.13"
+  dependencies:
+    "@babel/runtime": ^7.14.6
+    chalk: ^4.1.2
+    pegjs: ^0.10.0
+  checksum: 7ef290720f1333a25a6531395256bda867c5da6d188c5282709bc9dd48e025002d05dc60a8e365a0895e927040c9799911989039265dd0fb33449a84d8c0953c
+  languageName: node
+  linkType: hard
+
 "json-parse-better-errors@npm:^1.0.1, json-parse-better-errors@npm:^1.0.2":
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
@@ -19802,7 +19856,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:>=4.17.21, lodash@npm:^4.0.0, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0, lodash@npm:~4.17.0":
+"lodash@npm:4.17.21, lodash@npm:>=4.17.21, lodash@npm:^4.0.0, lodash@npm:^4.11.2, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0, lodash@npm:~4.17.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -22364,6 +22418,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"pegjs@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "pegjs@npm:0.10.0"
+  bin:
+    pegjs: bin/pegjs
+  checksum: 51f2aee312cd506c37c21a88fee2d921ccae81697c7aa3e61f0ad8e370d8c37e2a86680993fce405f53337a56ad471f9e7f4377b2eb3c780d5cf6ae8a16ce0a5
+  languageName: node
+  linkType: hard
+
 "pend@npm:~1.2.0":
   version: 1.2.0
   resolution: "pend@npm:1.2.0"
@@ -24842,6 +24905,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
+    all-contributors-cli: 6.20.0
     babel-jest: 27.3.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
@@ -29383,7 +29447,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.3.1":
+"yargs@npm:^15.0.1, yargs@npm:^15.3.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:
