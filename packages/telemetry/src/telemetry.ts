@@ -23,7 +23,7 @@ export const timedTelemetry = async (
   func: (...args: any[]) => any
 ) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
-    return
+    return func.call(this)
   }
 
   const start = new Date()
