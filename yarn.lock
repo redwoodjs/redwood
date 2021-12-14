@@ -25073,6 +25073,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
     "@types/jscodeshift": 0.11.2
+    "@types/lodash.template": 4
     babel-jest: 27.3.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
