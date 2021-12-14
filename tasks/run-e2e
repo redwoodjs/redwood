@@ -40,7 +40,12 @@ const createRedwoodJSApp = () => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
-      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--typescript'],
+      [
+        REDWOOD_PROJECT_DIRECTORY,
+        '--no-yarn-install',
+        '--typescript',
+        '--no-telemetry',
+      ],
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         shell: true,
