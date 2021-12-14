@@ -14,6 +14,8 @@ jobs:
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
+    env:
+      REDWOOD_DISABLE_TELEMETRY: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
