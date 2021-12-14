@@ -7382,7 +7382,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.template@npm:^4":
+"@types/lodash.template@npm:4":
   version: 4.5.0
   resolution: "@types/lodash.template@npm:4.5.0"
   dependencies:
@@ -19982,7 +19982,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash.template@npm:^4.5.0":
+"lodash.template@npm:4.5.0, lodash.template@npm:^4.5.0":
   version: 4.5.0
   resolution: "lodash.template@npm:4.5.0"
   dependencies:
@@ -25071,7 +25071,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.0.3
-    "@types/lodash.template": ^4
+    "@types/lodash.template": 4
     babel-jest: 27.3.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
@@ -25079,7 +25079,7 @@ resolve@^2.0.0-next.3:
     eslint: 8.2.0
     jest: 27.3.1
     lerna: 4.0.0
-    lodash.template: ^4.5.0
+    lodash.template: 4.5.0
     nodemon: 2.0.15
     npm-packlist: 3.0.0
     octokit: 1.7.1
