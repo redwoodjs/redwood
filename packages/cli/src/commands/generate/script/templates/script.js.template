@@ -1,5 +1,5 @@
 // To access your database
-// Append api/* to import from api, web/* to import from web side
+// Append api/* to import from api and web/* to import from web
 import { db } from 'api/src/lib/db'
 
 
