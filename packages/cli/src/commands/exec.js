@@ -4,7 +4,11 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { findScripts, registerApiSideBabelHook } from '@redwoodjs/internal'
+import {
+  findScripts,
+  getWebSideDefaultBabelConfig,
+  registerApiSideBabelHook,
+} from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -50,6 +54,12 @@ export const handler = async (args) => {
   const { name, prisma, ...scriptArgs } = args
   const scriptPath = path.join(getPaths().scripts, name)
 
+  const {
+    overrides: _overrides,
+    plugins: webPlugins,
+    ...otherWebConfig
+  } = getWebSideDefaultBabelConfig()
+
   // Import babel config for running script
   registerApiSideBabelHook({
     plugins: [
@@ -60,6 +70,7 @@ export const handler = async (args) => {
             $api: getPaths().api.base,
             $web: getPaths().web.base,
           },
+          loglevel: 'silent', // to silence the unnecessary warnings
         },
         'exec-$side-module-resolver',
       ],
@@ -74,6 +85,7 @@ export const handler = async (args) => {
               alias: {
                 src: getPaths().api.src,
               },
+              loglevel: 'silent',
             },
             'exec-api-src-module-resolver',
           ],
@@ -82,16 +94,19 @@ export const handler = async (args) => {
       {
         test: ['./web/'],
         plugins: [
+          ...webPlugins,
           [
             'babel-plugin-module-resolver',
             {
               alias: {
                 src: getPaths().web.src,
               },
+              loglevel: 'silent',
             },
             'exec-web-src-module-resolver',
           ],
         ],
+        ...otherWebConfig,
       },
     ],
   })
