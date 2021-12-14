@@ -3,12 +3,12 @@ import Fastify, { FastifyInstance } from 'fastify'
 export const createApp = (): FastifyInstance => {
   const app = Fastify({
     logger: {
-      // These settings are identical to the default Redwood logger
       prettyPrint: process.env.NODE_ENV === 'development' && {
         colorize: true,
-        ignore: 'hostname,pid',
+        ignore: 'hostname,pid,responseTime,reqId,req,res',
         levelFirst: true,
-        messageFormat: false,
+        messageFormat:
+          '{reqId} {msg} {res.statusCode} {req.method} {responseTime}',
         translateTime: true,
       },
     },
