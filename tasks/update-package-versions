@@ -47,7 +47,7 @@ const updatePackageVersion = (pkgPath, version) => {
 
 const cwd = path.join(__dirname, '../')
 const cmd = [
-  'yarn framework lerna version',
+  'yarn lerna version',
   version,
   '--force-publish',
   '--no-push',
