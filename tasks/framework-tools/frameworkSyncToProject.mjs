@@ -63,7 +63,7 @@ chokidar
       ['.DS_Store'].some((ext) => file.endsWith(ext)),
   })
   .on('ready', async () => {
-    logStatus('Building Framework...')
+    logStatus('Cleaning Framework...')
     cleanPackages()
 
     logStatus('Building Framework...')

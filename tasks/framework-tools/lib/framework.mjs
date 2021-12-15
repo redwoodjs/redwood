@@ -151,7 +151,7 @@ export function cleanPackages(packages = frameworkPkgJsonFiles()) {
     {
       shell: true,
       stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../../../'),
+      cwd: path.resolve(__dirname, '../../../'),
     }
   )
 }
@@ -169,7 +169,7 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
     {
       shell: true,
       stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../../../'),
+      cwd: path.resolve(__dirname, '../../../'),
     }
   )
 
@@ -177,7 +177,7 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
   execa.sync('yarn build:types', undefined, {
     shell: true,
     stdio: 'inherit',
-    cwd: path.resolve(__dirname, '../../../../'),
+    cwd: path.resolve(__dirname, '../../../'),
   })
 }
 
