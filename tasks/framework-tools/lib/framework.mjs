@@ -13,7 +13,7 @@ import packlist from 'npm-packlist'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const REDWOOD_PACKAGES_PATH = path.resolve(
   __dirname,
-  '../../../../packages'
+  '../../../packages'
 )
 
 /**
