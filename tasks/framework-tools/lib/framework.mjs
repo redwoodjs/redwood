@@ -34,7 +34,7 @@ export function frameworkPkgJsonFiles() {
 }
 
 /**
- * The dependencenies used by `@redwoodjs` packages.
+ * The dependencies used by `@redwoodjs` packages.
  */
 export function frameworkDependencies(packages = frameworkPkgJsonFiles()) {
   const dependencies = {}
