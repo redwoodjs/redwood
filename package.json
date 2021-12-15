@@ -72,7 +72,6 @@
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
     "project:copy": "node ./tasks/framework-tools/frameworkFilesToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs"
-
   },
   "packageManager": "yarn@3.0.2"
 }

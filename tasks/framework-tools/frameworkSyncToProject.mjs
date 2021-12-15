@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 /* eslint-env node */
 
-import fs from 'fs'
-import path from 'path'
-
 import c from 'ansi-colors'
 import chokidar from 'chokidar'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import {
   REDWOOD_PACKAGES_PATH,
@@ -21,6 +20,7 @@ import {
 } from './lib/project.mjs'
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
+
 if (!projectPath) {
   console.log('Error: Please specify the path to your Redwood Project')
   console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/project`)
@@ -29,6 +29,7 @@ if (!projectPath) {
 
 // Cache the original package.json and restore it when this process exits.
 const projectPackageJsonPath = path.join(projectPath, 'package.json')
+
 const projectPackageJson = fs.readFileSync(projectPackageJsonPath, 'utf-8')
 process.on('SIGINT', () => {
   console.log()
