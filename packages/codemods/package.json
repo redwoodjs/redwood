@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/codemods",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
-  "version": "0.39.2",
+  "version": "0.40.0",
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
@@ -18,7 +18,7 @@
     "findup-sync": "5.0.0",
     "jest": "27.3.1",
     "jscodeshift": "0.13.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.6",
     "prettier": "2.4.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",

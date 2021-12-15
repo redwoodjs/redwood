@@ -14,12 +14,8 @@ import { MetaTags } from '@redwoodjs/web'
 const FooBarPage = () => {
   return (
     <>
-      <MetaTags
-        title="FooBar"
-        // description="FooBar description"
-        /* you should un-comment description and add a unique description, 155 characters or less
-        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title="FooBar" description="FooBar page" />
+
       <h1>FooBarPage</h1>
       <p>
         Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>

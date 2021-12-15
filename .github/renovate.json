@@ -12,11 +12,9 @@
     "ora",
     "tempy",
     "terminal-link",
-    "@types/node-fetch"
+    "@types/node-fetch",
+    "chalk"
   ],
-  "lockFileMaintenance": {
-    "enabled": true
-  },
   "packageRules": [
     {
       "matchUpdateTypes": [
@@ -26,7 +24,7 @@
       "automerge": true
     }
   ],
-  "reviewers": [
+  "assignees": [
     "@jtoar"
   ]
 }

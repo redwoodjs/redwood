@@ -50,7 +50,7 @@ export const getApiSideBabelPresets = (
   ].filter(Boolean) as TransformOptions['presets']
 }
 
-export const getApiSideBabelPlugins = () => {
+export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
   // a custom "name" is supplied so that user's do not accidently overwrite
@@ -100,6 +100,19 @@ export const getApiSideBabelPlugins = () => {
         version: RUNTIME_CORE_JS_VERSION,
       },
     ],
+    // // still needed for jest.mock
+    forJest && [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          src: './src',
+        },
+        root: [rwjsPaths.api.base],
+        cwd: 'packagejson',
+        loglevel: 'silent', // to silence the unnecessary warnings
+      },
+      'rwjs-api-module-resolver',
+    ],
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
@@ -138,7 +151,7 @@ export const getApiSideBabelPlugins = () => {
       undefined,
       'rwjs-babel-glob-import-dir',
     ],
-  ].filter(Boolean)
+  ].filter(Boolean) as babel.PluginItem[]
 
   return plugins
 }
@@ -174,14 +187,14 @@ export const registerApiSideBabelHook = ({
     presets: getApiSideBabelPresets({
       presetEnv: true,
     }),
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx'],
     plugins: [...defaultOptions.plugins, ...plugins],
     cache: false,
     ...rest,
   })
 }
 
-export const prebuildFile = (
+export const prebuildApiFile = (
   srcPath: string,
   // we need to know dstPath as well
   // so we can generate an inline, relative sourcemap
