@@ -16,7 +16,7 @@
     "core-js": "3.20.0",
     "graphql": "16.1.0",
     "proptypes": "1.1.0",
-    "react-helmet-async": "1.1.2",
+    "react-helmet-async": "1.2.2",
     "react-hot-toast": "2.1.1"
   },
   "repository": {
