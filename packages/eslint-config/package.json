@@ -20,7 +20,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.27.1",
     "eslint-plugin-react-hooks": "4.3.0",
-    "prettier": "2.4.1"
+    "prettier": "2.5.1"
   },
   "repository": {
     "type": "git",
