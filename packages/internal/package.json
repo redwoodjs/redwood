@@ -33,7 +33,7 @@
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.4.0",
     "chalk": "4.1.2",
-    "core-js": "3.19.1",
+    "core-js": "3.20.0",
     "deepmerge": "4.2.2",
     "esbuild": "0.14.2",
     "fast-glob": "3.2.7",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.0",
     "@types/babel-plugin-tester": "9.0.4",
-    "@types/babel__core": "7.1.16",
+    "@types/babel__core": "7.1.17",
     "@types/findup-sync": "4.0.1",
     "@types/fs-extra": "9.0.13",
     "@types/rimraf": "3.0.2",
