@@ -25139,6 +25139,7 @@ resolve@^2.0.0-next.3:
     babel-plugin-remove-code: 0.0.6
     core-js: 3.20.0
     eslint: 8.4.1
+    fast-glob: 3.2.7
     jest: 27.3.1
     jscodeshift: 0.13.0
     lerna: 4.0.0
