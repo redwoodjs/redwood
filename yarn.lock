@@ -5390,7 +5390,7 @@ __metadata:
     "@babel/core": 7.16.0
     "@babel/plugin-transform-typescript": 7.16.1
     "@babel/runtime-corejs3": 7.16.3
-    "@types/babel__core": 7.1.16
+    "@types/babel__core": 7.1.17
     "@types/fs-extra": 9.0.13
     "@types/jscodeshift": 0.11.2
     "@types/prettier": 2.4.2
@@ -5570,7 +5570,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 2.4.2
     "@redwoodjs/graphql-server": 0.40.0
     "@types/babel-plugin-tester": 9.0.4
-    "@types/babel__core": 7.1.16
+    "@types/babel__core": 7.1.17
     "@types/findup-sync": 4.0.1
     "@types/fs-extra": 9.0.13
     "@types/rimraf": 3.0.2
@@ -6878,16 +6878,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.1.16, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
-  version: 7.1.16
-  resolution: "@types/babel__core@npm:7.1.16"
+"@types/babel__core@npm:*, @types/babel__core@npm:7.1.17, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
+  version: 7.1.17
+  resolution: "@types/babel__core@npm:7.1.17"
   dependencies:
     "@babel/parser": ^7.1.0
     "@babel/types": ^7.0.0
     "@types/babel__generator": "*"
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
-  checksum: de44ce9b785a299856a31c6119d26a82f02b480a9d4d2cc29a849183b410389d6ff8ce16e9dfc4dcf8862d488ec60d9b10e1004fe315d14972e50ca5b23e9b99
+  checksum: d4f97c8c5ea9086700849c6b557cf8c073ccf278a8dd3bef4af0b0529f592756d2b6603c1ed76879b1cd65290354681f99b4a0b4947e31e5fd5f84c3ece514cd
   languageName: node
   linkType: hard
 

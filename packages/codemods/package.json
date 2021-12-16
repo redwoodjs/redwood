@@ -39,7 +39,7 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@types/babel__core": "7.1.16",
+    "@types/babel__core": "7.1.17",
     "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.2",
     "@types/prettier": "2.4.2",
