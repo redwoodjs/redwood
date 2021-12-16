@@ -19,7 +19,7 @@
     "@graphql-tools/utils": "8.5.5",
     "@prisma/client": "3.6.0",
     "@redwoodjs/api": "0.40.0",
-    "core-js": "3.19.1",
+    "core-js": "3.20.0",
     "graphql": "16.1.0",
     "graphql-helix": "1.10.3",
     "graphql-playground-html": "1.6.30",
