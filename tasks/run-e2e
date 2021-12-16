@@ -56,7 +56,7 @@ const createRedwoodJSApp = () => {
 
 const addFrameworkDepsToProject = () => {
   try {
-    execa.sync('yarn framework project:deps', {
+    execa.sync('yarn project:deps', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -76,7 +76,7 @@ const addFrameworkDepsToProject = () => {
 
 const copyFrameworkPackages = () => {
   try {
-    execa.sync('yarn framework project:copy', {
+    execa.sync('yarn project:copy', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',

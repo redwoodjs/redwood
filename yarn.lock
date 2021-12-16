@@ -22024,7 +22024,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"ora@npm:^5.4.1":
+"ora@npm:5.4.1, ora@npm:^5.4.1":
   version: 5.4.1
   resolution: "ora@npm:5.4.1"
   dependencies:
@@ -25133,11 +25133,13 @@ resolve@^2.0.0-next.3:
     "@types/jscodeshift": 0.11.2
     "@types/lodash.template": 4
     all-contributors-cli: 6.20.0
+    ansi-colors: 4.1.1
     babel-jest: 27.3.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     core-js: 3.20.0
     eslint: 8.4.1
+    fast-glob: 3.2.7
     jest: 27.3.1
     jscodeshift: 0.13.0
     lerna: 4.0.0
@@ -25145,7 +25147,9 @@ resolve@^2.0.0-next.3:
     nodemon: 2.0.15
     npm-packlist: 3.0.0
     octokit: 1.7.1
+    ora: 5.4.1
     rimraf: 3.0.2
+    terminal-link: 2.1.1
     typescript: 4.5.2
     typescript-transform-paths: 3.3.1
   languageName: unknown

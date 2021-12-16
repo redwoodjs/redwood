@@ -4,15 +4,6 @@ const path = require('path')
 
 const execa = require('execa')
 
-// Similar to codemods package, but subtly different in where the binary is resolved
-const getCommand = () => {
-  if (process.platform === 'win32') {
-    return 'yarn jscodeshift'
-  } else {
-    return 'node node_modules/.bin/jscodeshift'
-  }
-}
-
 async function applyCodemod(codemod, target) {
   const args = [
     '--fail-on-error',
@@ -24,7 +15,11 @@ async function applyCodemod(codemod, target) {
 
   args.push()
 
-  await execa(getCommand(), args, getExecaOptions(path.resolve(__dirname)))
+  await execa(
+    'yarn jscodeshift',
+    args,
+    getExecaOptions(path.resolve(__dirname))
+  )
 }
 
 /** @type {(string) => import('execa').Options} */
