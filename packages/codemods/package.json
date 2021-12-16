@@ -19,7 +19,7 @@
     "jest": "27.3.1",
     "jscodeshift": "0.13.0",
     "node-fetch": "2.6.6",
-    "prettier": "2.4.1",
+    "prettier": "2.5.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
     "vscode-ripgrep": "1.12.1",
