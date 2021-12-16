@@ -21,7 +21,7 @@
     "fastify-static": "4.5.0",
     "fastify-url-data": "3.0.3",
     "lodash.escape": "4.0.1",
-    "qs": "6.10.1",
+    "qs": "6.10.2",
     "yargs": "16.2.0"
   },
   "repository": {
