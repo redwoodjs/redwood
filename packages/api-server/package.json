@@ -12,7 +12,7 @@
   "main": "dist/cliHandlers",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-transform-runtime": "7.16.4",
+    "@babel/plugin-transform-runtime": "7.16.5",
     "ansi-colors": "4.1.1",
     "chokidar": "3.5.2",
     "fastify": "3.25.0",
