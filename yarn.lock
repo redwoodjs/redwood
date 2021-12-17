@@ -1655,16 +1655,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.16.3":
-  version: 7.16.3
-  resolution: "@babel/runtime-corejs3@npm:7.16.3"
-  dependencies:
-    core-js-pure: ^3.19.0
-    regenerator-runtime: ^0.13.4
-  checksum: 3f29d67138fca0062fc4ca77f896c032445ca0934ba53fc5d53151d6f662ca03d7b9da4753ca9c29c24fbdd12dd3b9bb93bb6ac94e4d302f3e8cf440fc1f8ed5
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:7.16.5, @babel/runtime-corejs3@npm:^7.10.2":
   version: 7.16.5
   resolution: "@babel/runtime-corejs3@npm:7.16.5"
@@ -3414,7 +3404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/core@npm:^27.3.1, @jest/core@npm:^27.4.5":
+"@jest/core@npm:^27.4.5":
   version: 27.4.5
   resolution: "@jest/core@npm:27.4.5"
   dependencies:
@@ -5656,7 +5646,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: ^5.8.7
+    systeminformation: 5.8.7
     toml: 3.0.0
     typescript: 4.5.4
   bin:
@@ -5760,11 +5750,11 @@ __metadata:
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": 7.16.0
-    "@babel/runtime-corejs3": 7.16.3
+    "@babel/runtime-corejs3": 7.16.5
     "@redwoodjs/internal": 0.40.0
     "@types/envinfo": 7.8.1
     envinfo: 7.8.1
-    jest: 27.3.1
+    jest: 27.4.5
   languageName: unknown
   linkType: soft
 
@@ -18477,7 +18467,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-cli@npm:^27.3.1, jest-cli@npm:^27.4.5":
+"jest-cli@npm:^27.4.5":
   version: 27.4.5
   resolution: "jest-cli@npm:27.4.5"
   dependencies:
@@ -18941,24 +18931,6 @@ fsevents@^1.2.7:
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
   checksum: 571129d8dae614c2bafb7edd7b959de4a66717b09840dc72e50d031e7232767cbd7b1f08548cef1c1cf9e91a9169749016e556b8f848b797a3dad767a7a545dd
-  languageName: node
-  linkType: hard
-
-"jest@npm:27.3.1":
-  version: 27.3.1
-  resolution: "jest@npm:27.3.1"
-  dependencies:
-    "@jest/core": ^27.3.1
-    import-local: ^3.0.2
-    jest-cli: ^27.3.1
-  peerDependencies:
-    node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
-  peerDependenciesMeta:
-    node-notifier:
-      optional: true
-  bin:
-    jest: bin/jest.js
-  checksum: 408fbe3e1bc523d6e5fe6cf337c3a738b6a30cd4e02012292f34b49dde4cfe3c5715aa4b73116387784a6b40b4b54b16df2d1b3b42588cc57ffaff8ec58f697b
   languageName: node
   linkType: hard
 
@@ -27039,12 +27011,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:^5.8.7":
-  version: 5.9.15
-  resolution: "systeminformation@npm:5.9.15"
+"systeminformation@npm:5.8.7":
+  version: 5.8.7
+  resolution: "systeminformation@npm:5.8.7"
   bin:
     systeminformation: lib/cli.js
-  checksum: 3cf4077ddcc9ecc040e0f3fa3e0bb01fbf352ae2d256a08ce9832e4a664373e1447bd82877a26add655ad7006706a64ccf8ad253270ba81ee3d6b38b631fe0ad
+  checksum: be522dd493bfb24e5f204bcc308ed70a7f26bb2dd40f80c4c09c7e9494b4df6e4de4d7753d561d9f84a6395dbfe12de945b8c8d4c83f57711b4e57124045cd6f
   languageName: node
   linkType: hard
 
