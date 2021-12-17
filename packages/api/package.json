@@ -35,7 +35,7 @@
     "aws-lambda": "1.0.7",
     "jest": "27.4.5",
     "split2": "4.1.0",
-    "typescript": "4.5.2"
+    "typescript": "4.5.4"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

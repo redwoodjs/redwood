@@ -31,7 +31,7 @@
     "@babel/cli": "7.16.0",
     "@types/react": "17.0.37",
     "jest": "27.4.5",
-    "typescript": "4.5.2"
+    "typescript": "4.5.4"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
