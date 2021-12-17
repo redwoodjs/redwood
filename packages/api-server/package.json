@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.0",
-    "@types/aws-lambda": "8.10.86",
+    "@types/aws-lambda": "8.10.88",
     "@types/lodash.escape": "4.0.6",
     "@types/qs": "6.9.7",
     "aws-lambda": "1.0.7",
