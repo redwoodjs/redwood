@@ -1789,6 +1789,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/types@npm:1.19.1":
+  version: 1.19.1
+  resolution: "@clerk/types@npm:1.19.1"
+  checksum: ead552cc1b05672054804967db8efaa4e7e9bbed48f89dd83adc6baccd6522170ff7c91e012e8afeb0bcb750079663398b3ff81884eb1eabac04243e78bc00a7
+  languageName: node
+  linkType: hard
+
 "@cypress/request@npm:^2.88.10":
   version: 2.88.10
   resolution: "@cypress/request@npm:2.88.10"
@@ -5363,7 +5370,7 @@ __metadata:
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.6.1
     "@clerk/clerk-sdk-node": 2.3.0
-    "@clerk/types": 1.19.0
+    "@clerk/types": 1.19.1
     "@supabase/supabase-js": 1.28.5
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.37
