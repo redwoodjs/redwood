@@ -227,9 +227,6 @@ new Listr(
     {
       title: 'Creating Redwood app',
       task: () => new Listr(createProjectTasks({ newAppDir, overwrite })),
-      // task: () => {
-      //   throw new Error('Boom')
-      // },
     },
     {
       title: 'Installing packages',
