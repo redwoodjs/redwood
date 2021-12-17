@@ -24,6 +24,7 @@
       "automerge": true
     }
   ],
+  "postUpdateOptions": ["yarnDedupeHighest"],
   "assignees": [
     "@jtoar"
   ]

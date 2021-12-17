@@ -1,9 +1,8 @@
 /* eslint-env node */
 
-import fs from 'fs'
-import path from 'path'
-
 import execa from 'execa'
+import fs from 'node:fs'
+import path from 'node:path'
 import ora from 'ora'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
@@ -41,7 +40,7 @@ export function fixProjectBinaries(projectPath) {
  */
 export function addDependenciesToPackageJson(
   packageJsonPath,
-  dependencenies = frameworkDependencies()
+  dependencies = frameworkDependencies()
 ) {
   if (!fs.existsSync(packageJsonPath)) {
     console.log(
@@ -55,7 +54,7 @@ export function addDependenciesToPackageJson(
     'file://' + packageJsonPath
   )
 
-  const numOfDeps = Object.keys(dependencenies).length
+  const numOfDeps = Object.keys(dependencies).length
 
   const spinner = ora(
     `Adding ${numOfDeps} framework dependencies to ${packageJsonLink}...`
@@ -64,7 +63,7 @@ export function addDependenciesToPackageJson(
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
   packageJson.dependencies = {
     ...(packageJson.dependencies || {}),
-    ...dependencenies,
+    ...dependencies,
   }
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2))
   spinner.succeed(
