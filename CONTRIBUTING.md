@@ -72,17 +72,20 @@ But how do you actually test your changes in the Redwood Framework in your Redwo
 
 > Besides `<project directory>`, `build:test-project` takes a few other options as well:
 >
-> | Arguments & Options   | Description                                                        |
-> |-----------------------|--------------------------------------------------------------------|
-> | `<project directory>` | Directory to build test project [default: "./blog-test-project"]   |
-> | `--typescript, --ts`  | Generate a TypeScript project [default: JavaScript]                |
-> | `--canary`            | Upgrade project to latest canary version [default: true]           |
-> | `--help `             | Show help                                                          |
+> | Arguments & Options   | Description                                                                           |
+> |-----------------------|---------------------------------------------------------------------------------------|
+> | `<project directory>` | Directory to build test project [default: "./blog-test-project"] |
+> | `--typescript, --ts`  | Generate a TypeScript project [default: javascript] |
+> | `--link`              | Copy Framework dependencies and packages into Test-project [default: false]  |
+> | `--verbose`           | Verbose output [default: false]                                                       |
+> | `--clean`             | Delete existing directory and recreate Test-project [default: false] |
+> | `--canary`            | Upgrade project to latest canary version; NOT compatible with --link [default: true]  |
+> | `--help `             | Show help                                                                             |
 >
 > **Example:**
 > ```terminal
 > cd redwood/
-> yarn run build:test-project ~/my-repos/redwood-project --typescript --canary
+> yarn run build:test-project ~/my-repos/redwood-project --typescript --link
 > ```
 
 ### Testing the Framework in Your Project
