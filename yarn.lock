@@ -5308,7 +5308,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.0
     "@babel/plugin-transform-runtime": 7.16.5
-    "@types/aws-lambda": 8.10.86
+    "@types/aws-lambda": 8.10.88
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     ansi-colors: 4.1.1
@@ -6855,17 +6855,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.86":
-  version: 8.10.86
-  resolution: "@types/aws-lambda@npm:8.10.86"
-  checksum: 4c05178aeb5a936d08e140f686f43f01471bd5925bfb96d0a10d1ef0da2759c6cbea2e64806f171f4dc4351c85529af22d22a557f678de5d9ec56b3f17e2fef9
-  languageName: node
-  linkType: hard
-
-"@types/aws-lambda@npm:^8.10.83":
-  version: 8.10.87
-  resolution: "@types/aws-lambda@npm:8.10.87"
-  checksum: c486c92273ddda06596db80c455b0812bc1c87c5274e553f86bc8f0ef1f0afa8294619303bf28419948391480d7b5cdf261fa46324d411c485f19f0c0baa83f0
+"@types/aws-lambda@npm:8.10.88, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.88
+  resolution: "@types/aws-lambda@npm:8.10.88"
+  checksum: f84b51f9f75a49e9abcc0311efdb66889ff379b109e31b00c7cebdd29b0e14571c26a0c4e8ea6772dd71f9befd7ce54603b2a83708ba541c3ef698e2522ce20d
   languageName: node
   linkType: hard
 
