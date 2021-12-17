@@ -3,12 +3,8 @@ import fs from 'fs'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import {
-  errorTelemetry,
-  getConfig,
-  getConfigPath,
-  shutdownPort,
-} from '@redwoodjs/internal'
+import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'

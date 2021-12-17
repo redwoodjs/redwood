@@ -4,11 +4,8 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
-import {
-  errorTelemetry,
-  getConfig,
-  generate as generateTypes,
-} from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
   addRoutesToRouterTask,

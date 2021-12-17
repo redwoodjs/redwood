@@ -3,7 +3,7 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
-import { errorTelemetry } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
   getInstalledRedwoodVersion,
