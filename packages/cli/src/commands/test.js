@@ -1,8 +1,9 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath, errorTelemetry } from '@redwoodjs/internal'
+import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 
