@@ -5584,7 +5584,7 @@ __metadata:
     aws-lambda: 1.0.7
     core-js: 3.20.0
     graphql: 16.1.0
-    graphql-helix: 1.10.3
+    graphql-helix: 1.11.0
     graphql-playground-html: 1.6.30
     graphql-scalars: 1.14.1
     graphql-tag: 2.12.6
@@ -16340,12 +16340,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-helix@npm:1.10.3":
-  version: 1.10.3
-  resolution: "graphql-helix@npm:1.10.3"
+"graphql-helix@npm:1.11.0":
+  version: 1.11.0
+  resolution: "graphql-helix@npm:1.11.0"
   peerDependencies:
     graphql: ^15.3.0 || ^16.0.0
-  checksum: 5b5e9a77031dfa76f310031f99f12c80c3bd61d8327b8021cef2f3be422cd64b22b8af6c91aa06cbb8e7eaafc22b6161e02d7f5acf2e1d86e67f72031277f29f
+  checksum: 23015d60d65181dc07643be7f465861bd645bf53d27cf845d67030252914ecc53ce02d452509952d928091024594884f09002ae7a015a5936e5efbacc6312294
   languageName: node
   linkType: hard
 
