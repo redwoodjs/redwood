@@ -5584,7 +5584,7 @@ __metadata:
     "@redwoodjs/graphql-server": 0.40.0
     "@types/babel-plugin-tester": 9.0.4
     "@types/babel__core": 7.1.17
-    "@types/findup-sync": 4.0.1
+    "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
     "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
@@ -7135,12 +7135,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/findup-sync@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@types/findup-sync@npm:4.0.1"
+"@types/findup-sync@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@types/findup-sync@npm:4.0.2"
   dependencies:
     "@types/micromatch": "*"
-  checksum: 3c3181e817cc93c4f2d6ad679593dca4709c7c7e8f9de0814649b21003cf4dc278415b60ad7597852a92957c94bc71ffbc58d246a55adf7e7faea6675aa68c98
+  checksum: f7c169a5fa48aa0f5e4aba25cdff412aa1817f7b60c62a9c915325b852177431f1ecffcb29537799c438ecc192e87748aabf67b478d677cc2811a6732fbd7849
   languageName: node
   linkType: hard
 

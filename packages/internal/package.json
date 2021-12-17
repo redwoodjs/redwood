@@ -51,7 +51,7 @@
     "@babel/cli": "7.16.0",
     "@types/babel-plugin-tester": "9.0.4",
     "@types/babel__core": "7.1.17",
-    "@types/findup-sync": "4.0.1",
+    "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
