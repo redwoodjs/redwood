@@ -1767,21 +1767,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@clerk/clerk-sdk-node@npm:2.2.1"
+"@clerk/clerk-sdk-node@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@clerk/clerk-sdk-node@npm:2.3.0"
   dependencies:
-    "@types/cookies": ^0.7.6
-    "@types/jsonwebtoken": ^8.5.4
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
     got: ^11.8.2
     jsonwebtoken: ^8.5.1
     jwks-rsa: ^2.0.4
-    lodash: ^4.17.21
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 11f4034d21099b4709902f044a1618c81be65decd551e5ecde3a0b1c241cd192b17592245de6f2e722d715e41ff5456fa35b6625819435c7d08c2433680f3773
+  checksum: b8b893d44bd355821563563aab352861364ac512b9313931046a9c5efd668d3fb84735292ff84d05bb33698f6a1f887ea8b482f587fb9b4d2a60b24c58b97ca7
   languageName: node
   linkType: hard
 
@@ -5365,7 +5362,7 @@ __metadata:
     "@azure/msal-browser": 2.20.0
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.6.1
-    "@clerk/clerk-sdk-node": 2.2.1
+    "@clerk/clerk-sdk-node": 2.3.0
     "@clerk/types": 1.19.0
     "@supabase/supabase-js": 1.28.5
     "@types/netlify-identity-widget": 1.9.2
@@ -7056,18 +7053,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cookies@npm:^0.7.6":
-  version: 0.7.7
-  resolution: "@types/cookies@npm:0.7.7"
-  dependencies:
-    "@types/connect": "*"
-    "@types/express": "*"
-    "@types/keygrip": "*"
-    "@types/node": "*"
-  checksum: 259883abcd884da8ca9c58b91c402aa04e78ea7a0fa6772d4951c44e0868a3722a6fff54c0ac796002affc0e5b18f374213b2d4904b4e5c7f0d78a7368c14242
-  languageName: node
-  linkType: hard
-
 "@types/cross-spawn@npm:6.0.2":
   version: 6.0.2
   resolution: "@types/cross-spawn@npm:6.0.2"
@@ -7351,7 +7336,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.6, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0, @types/jsonwebtoken@npm:^8.5.4":
+"@types/jsonwebtoken@npm:8.5.6, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
   version: 8.5.6
   resolution: "@types/jsonwebtoken@npm:8.5.6"
   dependencies:
@@ -7364,13 +7349,6 @@ __metadata:
   version: 2.2.1
   resolution: "@types/jwt-decode@npm:2.2.1"
   checksum: 69f27443a78f5ee689725c3db7d109c1aa9655f8eeab579ac11b0bf753a7e27ba8d1fdbbf3d4f920000f6e6ec79aaa2f9b27777e73a5a7efbb2dc3bcd91d3391
-  languageName: node
-  linkType: hard
-
-"@types/keygrip@npm:*":
-  version: 1.0.2
-  resolution: "@types/keygrip@npm:1.0.2"
-  checksum: 95c9cc9824754baecb73c42051477c9f9dfb1a4dcaf6f51d025398e379b146adc0da2c476ed0129fe4ea157413910e5e2acb10c6dad308ef5ea8a95080229fd5
   languageName: node
   linkType: hard
 
