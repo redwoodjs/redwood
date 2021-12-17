@@ -1,25 +1,25 @@
 {
   "name": "@redwoodjs/codemods",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
-  "version": "0.38.1",
+  "version": "0.40.0",
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@babel/cli": "7.15.7",
-    "@babel/core": "7.15.8",
-    "@babel/plugin-transform-typescript": "7.15.8",
-    "core-js": "3.18.3",
+    "@babel/cli": "7.16.0",
+    "@babel/core": "7.16.5",
+    "@babel/plugin-transform-typescript": "7.16.1",
+    "@babel/runtime-corejs3": "7.16.5",
+    "core-js": "3.20.0",
     "deepmerge": "4.2.2",
-    "execa": "5.1.1",
     "fast-glob": "3.2.7",
-    "findup-sync": "4.0.0",
-    "jest": "27.3.1",
+    "findup-sync": "5.0.0",
+    "jest": "27.4.5",
     "jscodeshift": "0.13.0",
-    "node-fetch": "2.6.1",
-    "prettier": "2.4.1",
+    "node-fetch": "2.6.6",
+    "prettier": "2.5.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
     "vscode-ripgrep": "1.12.1",
@@ -39,9 +39,11 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@types/babel__core": "7",
+    "@types/babel__core": "7.1.17",
+    "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.2",
-    "@types/prettier": "2",
+    "@types/prettier": "2.4.2",
+    "fs-extra": "10.0.0",
     "tempy": "1.0.1"
   }
 }

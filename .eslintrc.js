@@ -1,7 +1,24 @@
 const path = require('path')
 
+const findUp = require('findup-sync')
+
+// Framework Babel config is monorepo root ./babel.config.js
+// `yarn lint` runs for each workspace, which needs findup for path to root
+const findBabelConfig = (cwd = process.cwd()) => {
+  const configPath = findUp('babel.config.js', { cwd })
+  if (!configPath) {
+    throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
+  }
+  return configPath
+}
+
 module.exports = {
   extends: path.join(__dirname, 'packages/eslint-config/shared.js'),
+  parserOptions: {
+    babelOptions: {
+      configFile: findBabelConfig(),
+    },
+  },
   ignorePatterns: [
     'dist',
     'fixtures',
@@ -117,6 +134,7 @@ module.exports = {
         'packages/testing/src/**',
         'packages/testing/config/**',
         'packages/eslint-config/*.js',
+        'packages/record/src/**',
       ],
       env: {
         es6: true,

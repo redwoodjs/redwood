@@ -1,17 +1,35 @@
+import path from 'path'
+
 import type { PluginObj, types } from '@babel/core'
 
-import { importStatementPath, processPagesDir } from '../../paths'
+import {
+  importStatementPath,
+  processPagesDir,
+  getPaths,
+  PagesDependency,
+  ensurePosixPath,
+} from '../../paths'
 
 interface PluginOptions {
   useStaticImports?: boolean
+}
+
+const getPathRelativeToSrc = (absolutePath: string) => {
+  return `./${path.relative(getPaths().web.src, absolutePath)}`
+}
+
+const withRelativeImports = (page: PagesDependency) => {
+  return {
+    ...page,
+    relativeImport: ensurePosixPath(getPathRelativeToSrc(page.importPath)),
+  }
 }
 
 export default function (
   { types: t }: { types: typeof types },
   { useStaticImports = false }: PluginOptions
 ): PluginObj {
-  let pages = processPagesDir()
-  const rwPageImportPaths = pages.map((page) => page.importPath)
+  let pages = processPagesDir().map(withRelativeImports)
 
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
@@ -29,11 +47,17 @@ export default function (
         // and not asynchronous ones.
         if (useStaticImports) {
           // Match import paths, const name could be different
-          // NOTE: the userImportPath we receive at this point is the absolute path
-          // because of babel-plugin-module-resolver that runs before
           const userImportPath = importStatementPath(p.node.source?.value)
+          const relativePageImportPaths = pages.map((page) => {
+            return page.relativeImport
+          })
 
-          if (rwPageImportPaths.includes(userImportPath)) {
+          // When running from the CLI: Babel-plugin-module-resolver will convert
+          // For dev/build/prerender: 'src/pages/ExamplePage' -> './pages/ExamplePage'
+          // For test: 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+
+          // Check only relative (dev/build/prerender)  - jest doesn't enter this block
+          if (relativePageImportPaths.includes(userImportPath)) {
             p.remove()
           }
 
@@ -48,7 +72,7 @@ export default function (
       },
       Program: {
         enter() {
-          pages = processPagesDir()
+          pages = processPagesDir().map(withRelativeImports)
         },
         exit(p) {
           if (pages.length === 0) {
@@ -56,8 +80,9 @@ export default function (
           }
           const nodes = []
           // Prepend all imports to the top of the file
-          for (const { importName, importPath } of pages) {
-            // + const <importName> = { name: <importName>, loader: () => import(<importPath>) }
+          for (const { importName, relativeImport } of pages) {
+            // + const <importName> = { name: <importName>, loader: () => import(<relativeImportPath>) }
+
             nodes.push(
               t.variableDeclaration('const', [
                 t.variableDeclarator(
@@ -77,7 +102,7 @@ export default function (
                           useStaticImports
                             ? t.identifier('require')
                             : t.identifier('import'),
-                          [t.stringLiteral(importPath)]
+                          [t.stringLiteral(relativeImport)]
                         )
                       )
                     ),

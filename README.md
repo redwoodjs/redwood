@@ -59,7 +59,7 @@ use:
 ## Features
 
 - Opinionated defaults for formatting, file organization, Webpack, Babel, and more
-- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, constraints, and named route functions (to generate correct URLs)
+- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, custom types, and named route functions (to generate correct URLs)
 - Automatic page-based code-splitting
 - Boilerplate-less GraphQL API construction
 - Cells: a declarative way to fetch data from the backend API
@@ -583,6 +583,23 @@ And there you have it.
     <td align="center"><a href="https://github.com/SarveshLimaye"><img src="https://avatars.githubusercontent.com/u/74766567?v=4" width="100px;" alt=""/><br /><sub><b>Sarvesh Limaye</b></sub></a></td>
     <td align="center"><a href="https://github.com/7shantanu7"><img src="https://avatars.githubusercontent.com/u/51382138?v=4" width="100px;" alt=""/><br /><sub><b>Shantanu Zadbuke</b></sub></a></td>
     <td align="center"><a href="https://github.com/DukeManh"><img src="https://avatars.githubusercontent.com/u/51073515?v=4" width="100px;" alt=""/><br /><sub><b>Duke Manh</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/memarino92"><img src="https://avatars.githubusercontent.com/u/62777339?v=4" width="100px;" alt=""/><br /><sub><b>Michael Marino</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kibertoad"><img src="https://avatars.githubusercontent.com/u/1847934?v=4" width="100px;" alt=""/><br /><sub><b>Igor Savin</b></sub></a></td>
+    <td align="center"><a href="https://jacobarriola.com/"><img src="https://avatars.githubusercontent.com/u/1371573?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Arriola</b></sub></a></td>
+    <td align="center"><a href="https://github.com/microsoft/Secure-Supply-Chain/"><img src="https://avatars.githubusercontent.com/u/90813519?v=4" width="100px;" alt=""/><br /><sub><b>Jingying Gu</b></sub></a></td>
+    <td align="center"><a href="https://kolberger.eu/"><img src="https://avatars.githubusercontent.com/u/16899513?v=4" width="100px;" alt=""/><br /><sub><b>Tim Kolberger</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/nzdjb"><img src="https://avatars.githubusercontent.com/u/825061?v=4" width="100px;" alt=""/><br /><sub><b>nzdjb</b></sub></a></td>
+    <td align="center"><a href="https://github.com/vivshaw"><img src="https://avatars.githubusercontent.com/u/23173985?v=4" width="100px;" alt=""/><br /><sub><b>Hannah Vivian Shaw</b></sub></a></td>
+    <td align="center"><a href="https://github.com/usman-coe"><img src="https://avatars.githubusercontent.com/u/2543952?v=4" width="100px;" alt=""/><br /><sub><b>usman kareemee</b></sub></a></td>
+    <td align="center"><a href="https://github.com/watway"><img src="https://avatars.githubusercontent.com/u/2321110?v=4" width="100px;" alt=""/><br /><sub><b>watway</b></sub></a></td>
+    <td align="center"><a href="https://github.com/edapm"><img src="https://avatars.githubusercontent.com/u/67737851?v=4" width="100px;" alt=""/><br /><sub><b>Edward Mason</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://tryhackme.com/p/zast99"><img src="https://avatars.githubusercontent.com/u/29718978?v=4" width="100px;" alt=""/><br /><sub><b>Mateo Carriquí</b></sub></a></td>
   </tr>
 </table>
 

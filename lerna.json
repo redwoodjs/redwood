@@ -1,0 +1,10 @@
+{
+  "version": "0.40.0",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "verifyAccess": false
+    }
+  }
+}

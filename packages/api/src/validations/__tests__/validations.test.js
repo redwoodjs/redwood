@@ -269,7 +269,7 @@ describe('validate length', () => {
     try {
       validate('a', 'username', { length: { min: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have more than 2 characters')
+      expect(e.message).toEqual('username must have at least 2 characters')
     }
 
     // custom error
@@ -297,7 +297,7 @@ describe('validate length', () => {
     try {
       validate('jeff', 'Username', { length: { max: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('Username must have less than 2 characters')
+      expect(e.message).toEqual('Username must have no more than 2 characters')
     }
 
     // custom error

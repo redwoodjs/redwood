@@ -1,0 +1,31 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "ignoreDeps": [
+    "boxen",
+    "configstore",
+    "decamelize",
+    "execa",
+    "humanize-string",
+    "latest-version",
+    "ora",
+    "tempy",
+    "terminal-link",
+    "@types/node-fetch",
+    "chalk"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    }
+  ],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "assignees": [
+    "@jtoar"
+  ]
+}

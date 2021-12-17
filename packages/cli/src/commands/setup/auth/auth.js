@@ -297,7 +297,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force }) => {
+export const handler = async ({ provider, force, rwVersion }) => {
   const providerData = await import(`./providers/${provider}`)
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
@@ -361,7 +361,7 @@ export const handler = async ({ provider, force }) => {
             'web',
             'add',
             ...providerData.webPackages,
-            '@redwoodjs/auth',
+            `@redwoodjs/auth@${rwVersion}`,
           ])
         },
       },

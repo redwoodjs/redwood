@@ -12,7 +12,11 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const {
+  getConfig,
+  getPaths,
+  getWebSideDefaultBabelConfig,
+} = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -38,7 +42,7 @@ const getEnvVars = () => {
 const getStyleLoaders = (isEnvProduction) => {
   const styleOrExtractLoader = isEnvProduction
     ? MiniCssExtractPlugin.loader
-    : 'style-loader'
+    : require.resolve('style-loader')
 
   const cssLoader = (withModules, importLoaders) => {
     // Obscured classnames in production, more expressive classnames in development.
@@ -47,7 +51,7 @@ const getStyleLoaders = (isEnvProduction) => {
       : '[path][name]__[local]--[contenthash:base64:5]'
 
     const loaderConfig = {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options: {
         sourceMap: !isEnvProduction,
         importLoaders,
@@ -69,7 +73,7 @@ const getStyleLoaders = (isEnvProduction) => {
   // at web/config/postcss.config.js
   const postCssLoader = hasPostCssConfig
     ? {
-        loader: 'postcss-loader',
+        loader: require.resolve('postcss-loader'),
         options: {
           postcssOptions: {
             config: paths.web.postcss,
@@ -125,6 +129,15 @@ const getStyleLoaders = (isEnvProduction) => {
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
+
+  const devTimeAutoImports = isEnvProduction
+    ? {}
+    : {
+        mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
+        mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
+        mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
+      }
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
@@ -139,10 +152,7 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
-      // Possibly used by storybook?
-      mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
-      mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
-      mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
+      ...devTimeAutoImports,
     }),
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
@@ -153,6 +163,7 @@ const getSharedPlugins = (isEnvProduction) => {
       ['process.env.RWJS_API_DBAUTH_URL']: JSON.stringify(
         redwoodConfig.web.apiDbAuthUrl ?? `${redwoodConfig.web.apiUrl}/auth`
       ),
+      ['process.env.RWJS_API_URL']: JSON.stringify(redwoodConfig.web.apiUrl),
       ['process.env.__REDWOOD__APP_TITLE']: JSON.stringify(
         redwoodConfig.web.title || path.basename(redwoodPaths.base)
       ),
@@ -172,6 +183,8 @@ module.exports = (webpackEnv) => {
 
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
+  const webBabelOptions = getWebSideDefaultBabelConfig()
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -263,46 +276,32 @@ module.exports = (webpackEnv) => {
             },
             // (1)
             {
-              test: /\.(js|mjs|jsx)$/,
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: [
                 {
-                  loader: 'babel-loader',
+                  loader: require.resolve('babel-loader'),
                   options: {
+                    ...webBabelOptions,
                     cwd: redwoodPaths.base,
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
+                      ...webBabelOptions.plugins,
                     ].filter(Boolean),
                   },
                 },
               ].filter(Boolean),
             },
             // (2)
-            {
-              test: /\.(ts|tsx)$/,
-              exclude: /(node_modules)/,
-              use: [
-                {
-                  loader: 'babel-loader',
-                  options: {
-                    cwd: redwoodPaths.base,
-                    plugins: [
-                      shouldIncludeFastRefresh &&
-                        require.resolve('react-refresh/babel'),
-                    ].filter(Boolean),
-                  },
-                },
-              ].filter(Boolean),
-            },
-            // .module.css (3), .css (4), .module.scss (5), .scss (6)
+            // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
-            // (7)
+            // (6)
             isEnvProduction && {
               test: require.resolve('@redwoodjs/router/dist/splash-page'),
-              use: 'null-loader',
+              use: require.resolve('null-loader'),
             },
-            // (8)
+            // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               type: 'asset/resource',

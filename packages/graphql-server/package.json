@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.38.1",
+  "version": "0.40.0",
   "files": [
     "dist"
   ],
@@ -8,26 +8,26 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/core": "1.3.0",
-    "@envelop/depth-limit": "1.0.0",
-    "@envelop/disable-introspection": "1.0.0",
-    "@envelop/filter-operation-type": "1.0.0",
-    "@envelop/parser-cache": "2.0.0",
-    "@envelop/validation-cache": "2.0.0",
-    "@graphql-tools/merge": "8.2.0",
-    "@graphql-tools/schema": "8.3.0",
-    "@graphql-tools/utils": "8.5.0",
-    "@prisma/client": "3.3.0",
-    "@redwoodjs/api": "0.38.1",
-    "core-js": "3.18.3",
-    "graphql": "15.6.1",
-    "graphql-helix": "1.8.3",
-    "graphql-playground-html": "1.6.29",
-    "graphql-scalars": "1.12.0",
-    "graphql-tag": "2.12.5",
+    "@envelop/core": "1.6.5",
+    "@envelop/depth-limit": "1.2.1",
+    "@envelop/disable-introspection": "1.2.1",
+    "@envelop/filter-operation-type": "1.2.1",
+    "@envelop/parser-cache": "2.2.1",
+    "@envelop/validation-cache": "2.2.1",
+    "@graphql-tools/merge": "8.2.1",
+    "@graphql-tools/schema": "8.3.1",
+    "@graphql-tools/utils": "8.5.5",
+    "@prisma/client": "3.6.0",
+    "@redwoodjs/api": "0.40.0",
+    "core-js": "3.20.0",
+    "graphql": "16.2.0",
+    "graphql-helix": "1.11.0",
+    "graphql-playground-html": "1.6.30",
+    "graphql-scalars": "1.14.1",
+    "graphql-tag": "2.12.6",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.6",
     "uuid": "8.3.2"
   },
   "repository": {
@@ -36,21 +36,16 @@
     "directory": "packages/graphql-server"
   },
   "devDependencies": {
-    "@babel/cli": "7.15.7",
-    "@envelop/testing": "2.0.0",
-    "@envelop/types": "1.2.0",
-    "@redwoodjs/auth": "0.38.1",
+    "@babel/cli": "7.16.0",
+    "@envelop/testing": "2.1.1",
+    "@envelop/types": "1.5.1",
+    "@redwoodjs/auth": "0.40.0",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
-    "@types/uuid": "8.3.1",
-    "aws-lambda": "1.0.6",
-    "jest": "27.3.1",
-    "typescript": "4.4.4"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/dist/"
-    ]
+    "@types/uuid": "8.3.3",
+    "aws-lambda": "1.0.7",
+    "jest": "27.4.5",
+    "typescript": "4.5.4"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

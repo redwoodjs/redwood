@@ -4,12 +4,16 @@ const path = require('path')
 
 const {
   getSchemaDefinitions,
+  getSchemaConfig,
 } = require('@redwoodjs/cli/dist/lib/schemaHelpers')
 const { setContext } = require('@redwoodjs/graphql-server')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
+// Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
+// fails on DELETE
+const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
 const DEFAULT_SCENARIO = 'standard'
 const TEARDOWN_CACHE_PATH = path.join(
   getPaths().generated.base,
@@ -26,10 +30,21 @@ const isIdenticalArray = (a, b) => {
   return JSON.stringify(a) === JSON.stringify(b)
 }
 
+// determine what kind of quotes are needed around table names in raw SQL
+const getQuoteStyle = () => {
+  const config = getSchemaConfig()
+
+  switch (config.datasources?.[0]?.provider) {
+    case 'mysql':
+      return '`'
+    default:
+      return '"'
+  }
+}
+
 const configureTeardown = async () => {
-  const schemaModels = (await getSchemaDefinitions()).datamodel.models.map(
-    (m) => m.dbName || m.name
-  )
+  const schema = await getSchemaDefinitions()
+  const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
 
   // check if pre-defined delete order already exists and if so, use it to start
   if (fs.existsSync(TEARDOWN_CACHE_PATH)) {
@@ -65,11 +80,16 @@ const seedScenario = async (scenario) => {
 }
 
 const teardown = async () => {
+  const quoteStyle = getQuoteStyle()
+
   for (const modelName of teardownOrder) {
     try {
-      await db.$executeRawUnsafe(`DELETE from "${modelName}"`)
+      await db.$executeRawUnsafe(
+        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
+      )
     } catch (e) {
-      if (e.message.match(/FOREIGN KEY constraint failed/)) {
+      const match = e.message.match(/Code: `(\d+)`/)
+      if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
         const index = teardownOrder.indexOf(modelName)
         teardownOrder[index] = null
         teardownOrder.push(modelName)

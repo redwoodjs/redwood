@@ -1,0 +1,39 @@
+{
+  "name": "@redwoodjs/record",
+  "version": "0.40.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "3.6.0",
+    "@prisma/sdk": "3.6.0",
+    "core-js": "3.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/record"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.16.0",
+    "jest": "27.4.5"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/dist/"
+    ]
+  },
+  "scripts": {
+    "datamodel:parse": "node src/scripts/parse.js",
+    "build": "yarn build:js",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "gitHead": "d583dfdf18f9433038098a64e71f6a421c6d1c04"
+}
