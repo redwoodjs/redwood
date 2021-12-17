@@ -74,12 +74,12 @@ But how do you actually test your changes in the Redwood Framework in your Redwo
 >
 > | Arguments & Options   | Description                                                                           |
 > |-----------------------|---------------------------------------------------------------------------------------|
-> | `<project directory>` | Directory to build test project [default: "./blog-test-project"]                      |
-> | `--typescript, --ts`  | Generate a TypeScript project, JavaScript by default [default: JavaScript]            |
-> | `--link`              | Link the current checked out branch of the framework in the project [default: false]  |
+> | `<project directory>` | Directory to build test project [default: "./blog-test-project"] |
+> | `--typescript, --ts`  | Generate a TypeScript project [default: javascript] |
+> | `--link`              | Copy Framework dependencies and packages into Test-project [default: false]  |
 > | `--verbose`           | Verbose output [default: false]                                                       |
-> | `--clean`             | Delete existing directory and recreate project [default: false]                       |
-> | `--canary`            | Upgrade project to latest canary version, NOT compatible with --link [default: true]  |
+> | `--clean`             | Delete existing directory and recreate Test-project [default: false] |
+> | `--canary`            | Upgrade project to latest canary version; NOT compatible with --link [default: true]  |
 > | `--help `             | Show help                                                                             |
 >
 > **Example:**
