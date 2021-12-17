@@ -5394,7 +5394,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.2.1
     chalk: 4.1.2
-    concurrently: 6.4.0
+    concurrently: 6.5.0
     configstore: 3.1.5
     core-js: 3.20.0
     cross-env: 7.0.3
@@ -11504,9 +11504,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:6.4.0":
-  version: 6.4.0
-  resolution: "concurrently@npm:6.4.0"
+"concurrently@npm:6.5.0":
+  version: 6.5.0
+  resolution: "concurrently@npm:6.5.0"
   dependencies:
     chalk: ^4.1.0
     date-fns: ^2.16.1
@@ -11518,7 +11518,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     concurrently: bin/concurrently.js
-  checksum: 43e742977f2a29eb562d78e321bc7a5b468c2d0e2f74e9a9a78234b05be5484723ec741c8354f84fb807b815f4cec07237c48a4149b6526b1eca9742e88b8c35
+  checksum: c4a09c0a6044ec8cbfd44ca551d3241894ee871ca705c522a2520c23d032ae7605060487cd7401ed51c243e805f0244bb940d83ffb5c26d9b12aec6e8f5d29c3
   languageName: node
   linkType: hard
 
