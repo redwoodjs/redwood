@@ -5335,7 +5335,7 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.37
     firebase: 9.6.1
-    firebase-admin: 10.0.0
+    firebase-admin: 10.0.1
     gotrue-js: 0.9.29
     jest: 27.4.5
     magic-sdk: 6.2.1
@@ -15280,9 +15280,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:10.0.0":
-  version: 10.0.0
-  resolution: "firebase-admin@npm:10.0.0"
+"firebase-admin@npm:10.0.1":
+  version: 10.0.1
+  resolution: "firebase-admin@npm:10.0.1"
   dependencies:
     "@firebase/database-compat": ^0.1.1
     "@firebase/database-types": ^0.7.2
@@ -15298,7 +15298,7 @@ __metadata:
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: ff86cddfc920637745712d4c12e7fc1c59a9fded9d467413e502f8bd987e441253c40ab0b3755cb6d65a94ade23f061e0d5457ff8d08db391fa638446f619e48
+  checksum: 7dca3a7b05b07b9b10d01f28cd8ce340b607dadf2c1924ae78fb097893e544bf6e27259038ffe941760a648486a387e719421f57a0b06e6e104d0ccab25b0169
   languageName: node
   linkType: hard
 
