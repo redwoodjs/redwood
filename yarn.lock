@@ -5318,7 +5318,7 @@ __metadata:
     fastify-url-data: 3.0.3
     jest: 27.4.5
     lodash.escape: 4.0.1
-    pino-pretty: 7.2.0
+    pino-pretty: 7.3.0
     qs: 6.10.2
     typescript: 4.5.4
     yargs: 16.2.0
@@ -5347,7 +5347,7 @@ __metadata:
     md5: 2.3.0
     pascalcase: 1.0.0
     pino: 7.3.0
-    pino-pretty: 7.2.0
+    pino-pretty: 7.3.0
     split2: 4.1.0
     typescript: 4.5.4
     uuid: 8.3.2
@@ -18938,10 +18938,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"joycon@npm:^3.0.0, joycon@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "joycon@npm:3.0.1"
-  checksum: 636b55c8cfad54510d694badd1c5b83df7aef3bd90525c3c57ad708e385e44ea7d20c685f247f679c08be39afaf53dcc1f48c0f2c52276720ba21b44045219f5
+"joycon@npm:^3.0.1, joycon@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "joycon@npm:3.1.1"
+  checksum: 131fb1e98c9065d067fd49b6e685487ac4ad4d254191d7aa2c9e3b90f4e9ca70430c43cad001602bdbdabcf58717d3b5c5b7461c1bd8e39478c8de706b3fe6ae
   languageName: node
   linkType: hard
 
@@ -22841,15 +22841,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:7.2.0":
-  version: 7.2.0
-  resolution: "pino-pretty@npm:7.2.0"
+"pino-pretty@npm:7.3.0":
+  version: 7.3.0
+  resolution: "pino-pretty@npm:7.3.0"
   dependencies:
     args: ^5.0.1
     colorette: ^2.0.7
     dateformat: ^4.6.3
     fast-safe-stringify: ^2.0.7
-    joycon: ^3.0.0
+    joycon: ^3.1.1
     pino-abstract-transport: ^0.5.0
     pump: ^3.0.0
     readable-stream: ^3.6.0
@@ -22859,7 +22859,7 @@ fsevents@^1.2.7:
     strip-json-comments: ^3.1.1
   bin:
     pino-pretty: bin.js
-  checksum: 1c307ac41f3918a08d7a2dd1c78f51d14873db27a3b6047bb341c5d3af4d0bce38f313ba39ea758c1b3d005cd5958ec3e65cbdac26ced5ad3a137cc3d452e867
+  checksum: 53e767baa55d0d4bedd605a53a1ff9acd3d1822ae397d07f80c35cc4392fb1882c69e867eaba98d6881772f24c812d283a368db5b0f674ed4a6104f8ef716f8f
   languageName: node
   linkType: hard
 
