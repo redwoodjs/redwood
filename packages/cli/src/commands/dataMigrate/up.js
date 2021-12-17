@@ -165,6 +165,9 @@ export const handler = async () => {
     await tasks.run()
     await db.$disconnect()
     report(counters)
+    if (counters.error) {
+      process.exit(1)
+    }
   } catch (e) {
     await db.$disconnect()
     report(counters)
