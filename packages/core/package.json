@@ -58,7 +58,7 @@
     "webpack-dev-server": "4.6.0",
     "webpack-manifest-plugin": "4.0.2",
     "webpack-merge": "5.8.0",
-    "webpack-retry-chunk-load-plugin": "2.2.0"
+    "webpack-retry-chunk-load-plugin": "3.0.0"
   },
   "repository": {
     "type": "git",

@@ -5514,7 +5514,7 @@ __metadata:
     webpack-dev-server: 4.6.0
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
-    webpack-retry-chunk-load-plugin: 2.2.0
+    webpack-retry-chunk-load-plugin: 3.0.0
   languageName: unknown
   linkType: soft
 
@@ -29155,14 +29155,14 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-retry-chunk-load-plugin@npm:2.2.0":
-  version: 2.2.0
-  resolution: "webpack-retry-chunk-load-plugin@npm:2.2.0"
+"webpack-retry-chunk-load-plugin@npm:3.0.0":
+  version: 3.0.0
+  resolution: "webpack-retry-chunk-load-plugin@npm:3.0.0"
   dependencies:
     prettier: ^2.2.1
   peerDependencies:
     webpack: ">=5.0.0"
-  checksum: 4e3e5d8a406ea328600ac0432919280f0c78e21372fb9e88f9f3b99fed01deacf7fe7d7cab4b5032c78aa6b920555dd4fbf60d028b6fe4ecff1fc706886c82af
+  checksum: fa07410029323722b8c2c7938cfd959fe68f3d1cf2c03bd833ed01115429a7fa43bd0ed2bd6f6f82d11879589fa01d5e4127a1d5dfece60a59ec7115ad65efba
   languageName: node
   linkType: hard
 
