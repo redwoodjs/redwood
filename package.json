@@ -30,7 +30,7 @@
     "core-js": "3.20.0",
     "cypress": "9.1.1",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.4.1",
+    "eslint": "8.5.0",
     "fast-glob": "3.2.7",
     "jest": "27.4.5",
     "jscodeshift": "0.13.0",
