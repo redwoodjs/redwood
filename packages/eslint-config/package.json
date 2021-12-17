@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.16.0",
-    "@babel/eslint-parser": "7.16.3",
-    "@babel/eslint-plugin": "7.14.5",
+    "@babel/core": "7.16.5",
+    "@babel/eslint-parser": "7.16.5",
+    "@babel/eslint-plugin": "7.16.5",
     "@redwoodjs/internal": "0.40.0",
     "@typescript-eslint/eslint-plugin": "5.6.0",
     "@typescript-eslint/parser": "5.6.0",
