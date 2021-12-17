@@ -187,7 +187,7 @@ export const registerApiSideBabelHook = ({
     presets: getApiSideBabelPresets({
       presetEnv: true,
     }),
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx'],
     plugins: [...defaultOptions.plugins, ...plugins],
     cache: false,
     ...rest,

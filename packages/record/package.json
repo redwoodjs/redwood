@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/record",
-  "version": "0.39.4",
+  "version": "0.40.0",
   "files": [
     "dist"
   ],
@@ -10,7 +10,7 @@
   "dependencies": {
     "@prisma/client": "3.6.0",
     "@prisma/sdk": "3.6.0",
-    "core-js": "3.19.1"
+    "core-js": "3.20.0"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.0",
-    "jest": "27.3.1"
+    "jest": "27.4.5"
   },
   "jest": {
     "testPathIgnorePatterns": [
