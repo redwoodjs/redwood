@@ -35,7 +35,7 @@
     "chalk": "4.1.2",
     "core-js": "3.20.0",
     "deepmerge": "4.2.2",
-    "esbuild": "0.14.2",
+    "esbuild": "0.14.5",
     "fast-glob": "3.2.7",
     "findup-sync": "5.0.0",
     "fs-extra": "10.0.0",
@@ -57,7 +57,7 @@
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
     "jest": "27.4.5",
-    "typescript": "4.5.2"
+    "typescript": "4.5.4"
   },
   "jest": {
     "testPathIgnorePatterns": [

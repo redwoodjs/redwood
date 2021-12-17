@@ -18,14 +18,14 @@
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.37",
     "firebase": "9.6.1",
-    "firebase-admin": "10.0.0",
+    "firebase-admin": "10.0.1",
     "gotrue-js": "0.9.29",
     "jest": "27.4.5",
     "magic-sdk": "6.2.1",
     "netlify-identity-widget": "1.9.2",
     "nhost-js-sdk": "3.1.0",
     "react": "17.0.2",
-    "typescript": "4.5.2"
+    "typescript": "4.5.4"
   },
   "repository": {
     "type": "git",
