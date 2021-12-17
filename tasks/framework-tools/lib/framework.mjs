@@ -1,19 +1,18 @@
 /* eslint-env node */
 
-import fs from 'fs'
-import path from 'path'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-
 import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
+import fs from 'node:fs'
+import path from 'node:path'
+import url from 'node:url'
 import packlist from 'npm-packlist'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+
 export const REDWOOD_PACKAGES_PATH = path.resolve(
   __dirname,
-  '../../../../packages'
+  '../../../packages'
 )
 
 /**
@@ -34,7 +33,7 @@ export function frameworkPkgJsonFiles() {
 }
 
 /**
- * The dependencenies used by `@redwoodjs` packages.
+ * The dependencies used by `@redwoodjs` packages.
  */
 export function frameworkDependencies(packages = frameworkPkgJsonFiles()) {
   const dependencies = {}
@@ -152,7 +151,7 @@ export function cleanPackages(packages = frameworkPkgJsonFiles()) {
     {
       shell: true,
       stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../../../'),
+      cwd: path.resolve(__dirname, '../../../'),
     }
   )
 }
@@ -170,7 +169,7 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
     {
       shell: true,
       stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../../../'),
+      cwd: path.resolve(__dirname, '../../../'),
     }
   )
 
@@ -178,7 +177,7 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
   execa.sync('yarn build:types', undefined, {
     shell: true,
     stdio: 'inherit',
-    cwd: path.resolve(__dirname, '../../../../'),
+    cwd: path.resolve(__dirname, '../../../'),
   })
 }
 
