@@ -31,6 +31,7 @@ import {
   navigate,
   back,
 } from '../'
+import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
 import { Spec } from '../util'
@@ -95,13 +96,24 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe('slow imports', () => {
+describe.only('slow imports', () => {
   const HomePagePlaceholder = () => <>HomePagePlaceholder</>
   const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
   const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
   const RedirectPagePlaceholder = () => <>RedirectPagePlaceholder</>
   const PrivatePagePlaceholder = () => <>PrivatePagePlaceholder</>
   const LoginPagePlaceholder = () => <>LoginPagePlaceholder</>
+
+  const LocationPage = () => {
+    const location = useLocation()
+
+    return (
+      <>
+        <h1>Location Page</h1>
+        <p>{location.pathname}</p>
+      </>
+    )
+  }
 
   const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
     <Router
@@ -147,6 +159,7 @@ describe('slow imports', () => {
         name="params"
         whileLoadingPage={ParamPagePlaceholder}
       />
+      <Route path="/location" page={LocationPage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
   )
@@ -231,6 +244,32 @@ describe('slow imports', () => {
     await waitFor(() => {
       expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
     })
+  })
+
+  test.only('useLocation', async () => {
+    act(() => navigate('/location'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('Location Page'))
+    await waitFor(() => screen.getByText('/location'))
+
+    act(() => navigate('/about'))
+    // After navigating we will keep rendering the previous page for 100 ms,
+    // (which is our configured delay) before rendering the "whileLoading"
+    // page.
+    await waitFor(() => screen.getByText('Location Page'))
+
+    // Because we're still rendering the LocationPage, the pathname returned
+    // by useLocation should still be /location
+    // But because of a limitation in our implementation, that's currently
+    // not the case.
+    // TODO: Update this test when #3779 is fixed. (It'll start failing)
+    await waitFor(() => screen.getByText('/about'))
+    // await waitFor(() => screen.getByText('/location'))
+
+    // And then we'll render the placeholder...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...followed by the actual page
+    await waitFor(() => screen.getByText('About Page'))
   })
 })
 
