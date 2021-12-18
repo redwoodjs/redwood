@@ -112,7 +112,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 
   const Page = activePageContext.loadingState[path]?.page || (() => null)
 
-  // Level 3 (InternalRoute)
+  // Level 3/3 (InternalRoute)
   return <Page {...allParams} />
 }
 
@@ -134,7 +134,7 @@ const Router: React.FC<RouterProps> = ({
   trailingSlashes = 'never',
   children,
 }) => (
-  // Level 1 (outer-most)
+  // Level 1/3 (outer-most)
   <LocationProvider trailingSlashes={trailingSlashes}>
     <LocationAwareRouter
       useAuth={useAuth}
@@ -236,7 +236,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   const searchParams = parseSearch(location.search)
   const allParams = { ...searchParams, ...pathParams }
 
-  // Level 2 (LocationAwareRouter)
+  // Level 2/3 (LocationAwareRouter)
   return (
     <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
       {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
