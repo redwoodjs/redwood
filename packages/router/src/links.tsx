@@ -96,7 +96,7 @@ interface NavLinkProps {
   to: string
   activeClassName: string
   activeMatchParams?: FlattenSearchParams
-  onClick: React.MouseEventHandler<HTMLAnchorElement>
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 const NavLink = forwardRef<

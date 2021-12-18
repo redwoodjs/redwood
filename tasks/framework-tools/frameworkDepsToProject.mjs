@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 /* eslint-env node */
 
-import { copyFrameworkFilesToProject } from './lib/project.mjs'
+import path from 'node:path'
+
+import { addDependenciesToPackageJson } from './lib/project.mjs'
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
+
 if (!projectPath) {
   console.log('Error: Please specify the path to your Redwood Project')
   console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/proect`)
@@ -11,8 +14,10 @@ if (!projectPath) {
 }
 
 try {
-  copyFrameworkFilesToProject(projectPath)
+  const packageJsonPath = path.join(projectPath, 'package.json')
+  addDependenciesToPackageJson(packageJsonPath)
+  console.log('Done. Now run `yarn install`.')
 } catch (e) {
-  console.error('Error:', e.message)
+  console.log('Error:', e.message)
   process.exit(1)
 }

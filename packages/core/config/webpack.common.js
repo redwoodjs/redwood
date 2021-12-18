@@ -42,7 +42,7 @@ const getEnvVars = () => {
 const getStyleLoaders = (isEnvProduction) => {
   const styleOrExtractLoader = isEnvProduction
     ? MiniCssExtractPlugin.loader
-    : 'style-loader'
+    : require.resolve('style-loader')
 
   const cssLoader = (withModules, importLoaders) => {
     // Obscured classnames in production, more expressive classnames in development.
@@ -51,7 +51,7 @@ const getStyleLoaders = (isEnvProduction) => {
       : '[path][name]__[local]--[contenthash:base64:5]'
 
     const loaderConfig = {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options: {
         sourceMap: !isEnvProduction,
         importLoaders,
@@ -73,7 +73,7 @@ const getStyleLoaders = (isEnvProduction) => {
   // at web/config/postcss.config.js
   const postCssLoader = hasPostCssConfig
     ? {
-        loader: 'postcss-loader',
+        loader: require.resolve('postcss-loader'),
         options: {
           postcssOptions: {
             config: paths.web.postcss,
@@ -280,7 +280,7 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: [
                 {
-                  loader: 'babel-loader',
+                  loader: require.resolve('babel-loader'),
                   options: {
                     ...webBabelOptions,
                     cwd: redwoodPaths.base,
@@ -299,7 +299,7 @@ module.exports = (webpackEnv) => {
             // (6)
             isEnvProduction && {
               test: require.resolve('@redwoodjs/router/dist/splash-page'),
-              use: 'null-loader',
+              use: require.resolve('null-loader'),
             },
             // (7)
             {

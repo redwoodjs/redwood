@@ -56,7 +56,7 @@ const createRedwoodJSApp = () => {
 
 const addFrameworkDepsToProject = () => {
   try {
-    execa.sync('yarn framework project:deps', {
+    execa.sync('yarn project:deps', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -76,7 +76,7 @@ const addFrameworkDepsToProject = () => {
 
 const copyFrameworkPackages = () => {
   try {
-    execa.sync('yarn framework project:copy', {
+    execa.sync('yarn project:copy', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -164,7 +164,7 @@ const runCypress = () => {
   console.log('Starting Cypress...')
   execa.sync(
     // do not use Yarn to run Cypress; this avoids missing binary errors
-    './node_modules/.bin/cypress',
+    '../../node_modules/.bin/cypress',
     ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
@@ -172,15 +172,6 @@ const runCypress = () => {
       stdio: 'inherit',
     }
   )
-}
-
-const installTaskDeps = () => {
-  console.log('Installing dependencies for tasks/e2e')
-  execa.sync('yarn install', {
-    cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
-    shell: true,
-    stdio: 'inherit',
-  })
 }
 
 const initGit = () => {
@@ -237,7 +228,6 @@ const tasks = [
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
-  autoStart && installTaskDeps,
   autoStart && initGit,
   autoStart && runCypress,
 ].filter(Boolean)
