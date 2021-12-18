@@ -1,68 +1,18 @@
-import React, { useRef, useState, useContext, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import { unstable_batchedUpdates } from 'react-dom'
 
-import { useIsMounted } from './useIsMounted'
-import { Spec } from './util'
 import {
-  createNamedContext,
-  getAnnouncement,
-  getFocus,
-  resetFocus,
-} from './util'
+  ActivePageContextProvider,
+  LoadingStateRecord,
+} from './ActivePageContext'
+import { PageLoadingContextProvider } from './PageLoadingContext'
+import { useIsMounted } from './useIsMounted'
+import { Spec, getAnnouncement, getFocus, resetFocus } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
-
-export interface PageLoadingContextInterface {
-  loading: boolean
-}
-
-export const PageLoadingContext =
-  createNamedContext<PageLoadingContextInterface>('PageLoading')
-
-export const usePageLoadingContext = () => {
-  const pageLoadingContext = useContext(PageLoadingContext)
-
-  if (!pageLoadingContext) {
-    throw new Error(
-      'usePageLoadingContext must be used within a PageLoadingContext provider'
-    )
-  }
-
-  return pageLoadingContext
-}
-
-export type LoadingState = 'PRE_SHOW' | 'SHOW_LOADING' | 'DONE'
-type LoadingStateRecord = Record<
-  string,
-  | {
-      state: LoadingState
-      page: React.ComponentType<unknown>
-    }
-  | undefined
->
-
-interface ActivePageState {
-  loadingState: LoadingStateRecord
-}
-
-const ActivePageContext = React.createContext<ActivePageState | undefined>(
-  undefined
-)
-
-export const useActivePageContext = () => {
-  const activePageContext = useContext(ActivePageContext)
-
-  if (!activePageContext) {
-    throw new Error(
-      'useActivePageContext must be used within a ActivePageContext provider'
-    )
-  }
-
-  return activePageContext
-}
 
 type synchronousLoaderSpec = () => { default: React.ComponentType<unknown> }
 
@@ -208,21 +158,21 @@ export const ActiveRouteLoader = ({
 
     return (
       <ParamsProvider path={path} location={location}>
-        <PageLoadingContext.Provider value={{ loading: false }}>
-          <ActivePageContext.Provider
+        <PageLoadingContextProvider value={{ loading: false }}>
+          <ActivePageContextProvider
             value={{ loadingState: prerenderLoadingState }}
           >
             {children}
-          </ActivePageContext.Provider>
-        </PageLoadingContext.Provider>
+          </ActivePageContextProvider>
+        </PageLoadingContextProvider>
       </ParamsProvider>
     )
   }
 
   return (
     <ParamsProvider path={renderedPath} location={renderedLocation}>
-      <ActivePageContext.Provider value={{ loadingState }}>
-        <PageLoadingContext.Provider
+      <ActivePageContextProvider value={{ loadingState }}>
+        <PageLoadingContextProvider
           value={{ loading: loadingState[path]?.state === 'SHOW_LOADING' }}
         >
           {renderedChildren}
@@ -246,10 +196,8 @@ export const ActiveRouteLoader = ({
               ref={announcementRef}
             ></div>
           )}
-        </PageLoadingContext.Provider>
-      </ActivePageContext.Provider>
+        </PageLoadingContextProvider>
+      </ActivePageContextProvider>
     </ParamsProvider>
   )
-
-  return null
 }
