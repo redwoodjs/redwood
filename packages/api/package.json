@@ -1,9 +1,13 @@
 {
   "name": "@redwoodjs/api",
   "version": "0.40.0",
+  "bin": {
+    "rw-log-formatter": "./dist/logFormatter/bin.js"
+  },
   "files": [
     "dist",
     "logger",
+    "logFormatter",
     "webhooks"
   ],
   "main": "./dist/index.js",
@@ -13,12 +17,14 @@
     "@babel/runtime-corejs3": "7.16.5",
     "@prisma/client": "3.6.0",
     "crypto-js": "4.1.1",
+    "fast-json-parse": "^1.0.3",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
     "pino": "7.3.0",
-    "pino-pretty": "7.3.0",
+    "pretty-bytes": "^5.6.0",
+    "pretty-ms": "^7.0.1",
     "uuid": "8.3.2"
   },
   "repository": {
@@ -32,6 +38,8 @@
     "@types/crypto-js": "4.0.2",
     "@types/jsonwebtoken": "8.5.6",
     "@types/md5": "2.3.1",
+    "@types/pretty-bytes": "^5.2.0",
+    "@types/split2": "^3.2.1",
     "aws-lambda": "1.0.7",
     "jest": "27.4.5",
     "split2": "4.1.0",
