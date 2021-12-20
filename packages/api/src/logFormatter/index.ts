@@ -7,7 +7,7 @@ const newline = '\n'
 
 const emojiLog: any = {
   warn: '⚠️',
-  info: '✨',
+  info: '🌲',
   error: '🚨',
   debug: '🐛',
   fatal: '💀',
@@ -183,7 +183,7 @@ export const LogFormatter = () => {
 
   const formatData = (data: any) => {
     if (!isEmptyObject(data)) {
-      return chalk.blue(
+      return chalk.white(
         newline + '📦 Result Data' + newline + JSON.stringify(data, null, 2)
       )
     }
@@ -245,7 +245,7 @@ export const LogFormatter = () => {
   }
 
   const formatRequestId = (requestId: any) => {
-    return requestId && chalk.grey(requestId)
+    return requestId && chalk.cyan(requestId)
   }
 
   const formatNs = (name: any) => {
@@ -267,13 +267,13 @@ export const LogFormatter = () => {
   }
 
   const formatOperationName = (operationName: any) => {
-    return chalk.cyanBright(newline + '🩺 ' + operationName)
+    return chalk.white(newline + '🏷  ' + operationName)
   }
 
   const formatQuery = (query: any) => {
     if (!isEmptyObject(query)) {
-      return chalk.magenta(
-        newline + '👀 Query' + newline + JSON.stringify(query, null, 2)
+      return chalk.white(
+        newline + '🔭 Query' + newline + JSON.stringify(query, null, 2)
       )
     }
 
@@ -292,7 +292,7 @@ export const LogFormatter = () => {
   const formatTracing = (data: any) => {
     console.log(data)
     if (!isEmptyObject(data)) {
-      return chalk.cyanBright(newline + JSON.stringify(data, null, 2))
+      return chalk.white(newline + JSON.stringify(data, null, 2))
     }
 
     return
@@ -303,7 +303,7 @@ export const LogFormatter = () => {
   }
 
   const formatUserAgent = (userAgent: any) => {
-    return chalk.white(newline + '🕵️‍♀️ ' + userAgent)
+    return chalk.grey(newline + '🕵️‍♀️ ' + userAgent)
   }
 
   const noEmpty = (value: any) => {

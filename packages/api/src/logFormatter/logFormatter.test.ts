@@ -13,7 +13,7 @@ describe('LogFormatter', () => {
     })
 
     test('Formats Info level', () => {
-      expect(logFormatter({ level: 30 })).toMatch(/✨/)
+      expect(logFormatter({ level: 30 })).toMatch(/🌲/)
     })
 
     test('Formats Warn level', () => {
