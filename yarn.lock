@@ -5345,19 +5345,19 @@ __metadata:
     "@types/crypto-js": 4.0.2
     "@types/jsonwebtoken": 8.5.6
     "@types/md5": 2.3.1
-    "@types/pretty-bytes": ^5.2.0
-    "@types/split2": ^3.2.1
+    "@types/pretty-bytes": 5.2.0
+    "@types/split2": 3.2.1
     aws-lambda: 1.0.7
     crypto-js: 4.1.1
-    fast-json-parse: ^1.0.3
+    fast-json-parse: 1.0.3
     jest: 27.4.5
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
     pino: 7.3.0
-    pretty-bytes: ^5.6.0
-    pretty-ms: ^7.0.1
+    pretty-bytes: 5.6.0
+    pretty-ms: 7.0.1
     split2: 4.1.0
     typescript: 4.5.4
     uuid: 8.3.2
@@ -7623,7 +7623,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pretty-bytes@npm:^5.2.0":
+"@types/pretty-bytes@npm:5.2.0":
   version: 5.2.0
   resolution: "@types/pretty-bytes@npm:5.2.0"
   dependencies:
@@ -7780,7 +7780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/split2@npm:^3.2.1":
+"@types/split2@npm:3.2.1":
   version: 3.2.1
   resolution: "@types/split2@npm:3.2.1"
   dependencies:
@@ -14784,7 +14784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-json-parse@npm:^1.0.3":
+"fast-json-parse@npm:1.0.3, fast-json-parse@npm:^1.0.3":
   version: 1.0.3
   resolution: "fast-json-parse@npm:1.0.3"
   checksum: 2c58c7a0f7f1725c9da1272839f9bee3ccc13b77672b18ab4ac470c707999bca39828cd7e79b87c73017f21c3ddff37992d03fa2fd2da124d9bd06c1d02c9b7e
@@ -23499,7 +23499,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:*, pretty-bytes@npm:^5.6.0":
+"pretty-bytes@npm:*, pretty-bytes@npm:5.6.0, pretty-bytes@npm:^5.6.0":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
   checksum: f69f494dcc1adda98dbe0e4a36d301e8be8ff99bfde7a637b2ee2820e7cb583b0fc0f3a63b0e3752c01501185a5cf38602c7be60da41bdf84ef5b70e89c370f3
@@ -23557,7 +23557,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pretty-ms@npm:^7.0.1":
+"pretty-ms@npm:7.0.1":
   version: 7.0.1
   resolution: "pretty-ms@npm:7.0.1"
   dependencies:
