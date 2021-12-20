@@ -10,7 +10,6 @@ export type BaseLogger = P.BaseLogger
 export type DestinationStream = P.DestinationStream
 export type LevelWithSilent = P.LevelWithSilent
 export type LoggerOptions = P.LoggerOptions
-export type LoggerExtras = P.LoggerExtras
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
 
 // @TODO use type from Prisma once the issue is solved
@@ -279,7 +278,7 @@ export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
  */
 interface PrismaLoggingConfig {
   db: PrismaClient
-  logger: LoggerExtras
+  logger: Logger
   logLevels: LogLevel[]
   slowQueryThreshold?: number
 }
