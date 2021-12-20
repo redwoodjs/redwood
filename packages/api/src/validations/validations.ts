@@ -5,134 +5,218 @@ import pascalcase from 'pascalcase'
 
 import * as ValidationErrors from './errors'
 
-interface AbsenceValidatorOptions {
+type WithOptionalMessage<T = Record<string, unknown>> = T & {
+  /**
+   * A message to be shown if the validation fails.
+   */
+  message?: string
+}
+type WithRequiredMessage<T = Record<string, unknown>> =
+  Required<WithOptionalMessage> & T
+
+interface AbsenceValidatorOptions extends WithOptionalMessage {
+  /**
+   * Will count an empty string as being absent (that is, null, undefined and "" will pass this validation)
+   */
   allowEmptyString?: boolean
-  message?: string
 }
 
-interface AbsenceValidatorOptionsWithMessage extends AbsenceValidatorOptions {
-  message: string
-}
-
-interface AcceptanceValidatorOptions {
+interface AcceptanceValidatorOptions extends WithOptionalMessage {
+  /**
+   * An array of values that, if any match, will pass the validation.
+   */
   in?: Array<unknown>
-  message?: string
 }
 
-interface AcceptanceValidatorOptionsWithMessage
-  extends AcceptanceValidatorOptions {
-  message: string
-}
+interface EmailValidatorOptions extends WithOptionalMessage {}
 
-interface EmailValidatorOptions {
-  message?: string
-}
-
-interface EmailValidatorOptionsWithMessage extends EmailValidatorOptions {
-  message: string
-}
-
-interface ExclusionValidatorOptions {
+interface ExclusionValidatorOptions extends WithOptionalMessage {
+  /**
+   * The list of values that cannot be used.
+   */
   in?: Array<unknown>
-  message?: string
 }
 
-interface ExclusionValidatorOptionsWithMessage
-  extends ExclusionValidatorOptions {
-  message: string
-}
-
-interface FormatValidatorOptions {
+interface FormatValidatorOptions extends WithOptionalMessage {
+  /**
+   * The regular expression to use.
+   */
   pattern?: RegExp
-  message?: string
 }
 
-interface FormatValidatorOptionsWithMessage extends FormatValidatorOptions {
-  message: string
-}
-
-interface InclusionValidatorOptions {
+interface InclusionValidatorOptions extends WithOptionalMessage {
+  /**
+   * The list of values that can be used.
+   */
   in?: Array<unknown>
-  message?: string
 }
 
-interface InclusionValidatorOptionsWithMessage
-  extends InclusionValidatorOptions {
-  message: string
-}
-
-interface LengthValidatorOptions {
+interface LengthValidatorOptions extends WithOptionalMessage {
+  /**
+   * Must be at least this number of characters long.
+   */
   min?: number
+  /**
+   * Must be no more than this number of characters long.
+   */
   max?: number
+  /**
+   * Must be exactly this number of characters long.
+   */
   equal?: number
+  /**
+   * Convenience syntax for defining min and max as an array
+   *
+   * @example
+   * validate(input.title, 'Title', {
+   *  length: { between: [2, 255] }
+   * })
+   */
   between?: Array<number>
-  message?: string
 }
 
-interface LengthValidatorOptionsWithMessage extends LengthValidatorOptions {
-  message: string
-}
-
-interface NumericalityValidatorOptions {
+interface NumericalityValidatorOptions extends WithOptionalMessage {
+  /**
+   * The number must be an integer.
+   */
   integer?: boolean
+  /**
+   * The number must be less than the given value.
+   */
   lessThan?: number
+  /**
+   * The number must be less than or equal to the given value.
+   */
   lessThanOrEqual?: number
+  /**
+   * The number must be greater than the given value.
+   */
   greaterThan?: number
+  /**
+   * The number must be greater than or equal to the given number.
+   */
   greaterThanOrEqual?: number
+  /**
+   * The number must be equal to the given number.
+   */
   equal?: number
+  /**
+   * The number must not be equal to the given number.
+   */
   otherThan?: number
+  /**
+   * The number must be even.
+   */
   even?: boolean
+  /**
+   * The number must be odd.
+   */
   odd?: boolean
+  /**
+   * The number must be positive.
+   */
   positive?: boolean
+  /**
+   * The number must be negative.
+   */
   negative?: boolean
-  message?: string
 }
 
-interface NumericalityValidatorOptionsWithMessage
-  extends NumericalityValidatorOptions {
-  message: string
-}
-
-interface PresenceValidatorOptions {
+interface PresenceValidatorOptions extends WithOptionalMessage {
+  /**
+   * Whether or not to allow null to be considered present.
+   *
+   * @default false
+   */
   allowNull?: boolean
+  /**
+   * Whether or not to allow undefined to be considered present.
+   *
+   * @default false
+   */
   allowUndefined?: boolean
+  /**
+   * Whether or not to allow an empty string "" to be considered present.
+   *
+   * @default false
+   */
   allowEmptyString?: boolean
-  message?: string
 }
 
-interface PresenceValidatorOptionsWithMessage extends PresenceValidatorOptions {
-  message: string
-}
+interface UniquenessValidatorOptions extends WithRequiredMessage {}
+type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
 
 interface ValidationRecipe {
+  /**
+   * Requires that a field NOT be present, meaning it must be `null` or `undefined`.
+   *
+   * Opposite of the [`presence`](https://redwoodjs.com/docs/services.html#presence) validator.
+   */
   absence?: AbsenceValidatorOptions
+  /**
+   * Requires that the passed value be `true`, or within an array of allowed values that will be considered "true".
+   */
   acceptance?: AcceptanceValidatorOptions
+  /**
+   * Requires that the value be formatted like an email address by comparing against a regular expression.
+   * The regex is extremely lax: `/^[^@\s]+@[^.\s]+\.[^\s]+$/`
+   *
+   * This says that the value:
+   *
+   * * Must start with one or more characters that aren't a whitespace or literal @
+   * * Followed by a @
+   * * Followed by one or more characters that aren't a whitespace or literal .
+   * * Followed by a .
+   * * Ending with one or more characters that aren't whitespace
+   *
+   * Since the official email regex is around 6,300 characters long, we though this one was good enough.
+   * If you have a different, preferred email validation regular expression, use the format validation.
+   */
   email?: EmailValidatorOptions
+  /**
+   * Requires that the given value not equal to any in a list of given values.
+   *
+   * Opposite of the [inclusion](https://redwoodjs.com/docs/services.html#inclusion) validation.
+   */
   exclusion?: ExclusionValidatorOptions
+  /**
+   * Requires that the value match a given regular expression.
+   */
   format?: FormatValidatorOptions
+  /**
+   * Requires that the given value is equal to one in a list of given values.
+   *
+   * Opposite of the [exclusion](https://redwoodjs.com/docs/services.html#exclusion) validation.
+   */
   inclusion?: InclusionValidatorOptions
+  /**
+   * Requires that the value meet one or more of a number of string length validations.
+   */
   length?: LengthValidatorOptions
+  /**
+   * The awesomely-named Numericality Validation requires that the value passed meet one or more criteria that are all number related.
+   */
   numericality?: NumericalityValidatorOptions
+  /**
+   * Requires that a field be present, meaning it must not be null or undefined.
+   *
+   * Opposite of the [absence](https://redwoodjs.com/docs/services.html#absence) validator.
+   */
   presence?: PresenceValidatorOptions
 }
-
-interface ValidationWithMessagesRecipe {
-  absence?: AbsenceValidatorOptionsWithMessage
-  acceptance?: AcceptanceValidatorOptionsWithMessage
-  email?: EmailValidatorOptionsWithMessage
-  exclusion?: ExclusionValidatorOptionsWithMessage
-  format?: FormatValidatorOptionsWithMessage
-  inclusion?: InclusionValidatorOptionsWithMessage
-  length?: LengthValidatorOptionsWithMessage
-  numericality?: NumericalityValidatorOptionsWithMessage
-  presence?: PresenceValidatorOptionsWithMessage
+// We extend ValidationRecipe to get its method's documentation.
+// Adding docs below will completely overwrite ValidationRecipe's.
+interface ValidationWithMessagesRecipe extends ValidationRecipe {
+  absence?: WithRequiredMessage<AbsenceValidatorOptions>
+  acceptance?: WithRequiredMessage<AcceptanceValidatorOptions>
+  email?: WithRequiredMessage<EmailValidatorOptions>
+  exclusion?: WithRequiredMessage<ExclusionValidatorOptions>
+  format?: WithRequiredMessage<FormatValidatorOptions>
+  inclusion?: WithRequiredMessage<InclusionValidatorOptions>
+  length?: WithRequiredMessage<LengthValidatorOptions>
+  numericality?: WithRequiredMessage<NumericalityValidatorOptions>
+  presence?: WithRequiredMessage<PresenceValidatorOptions>
 }
-
-type UniquenessValidatorOptions = {
-  message: string
-}
-
-type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
 
 const VALIDATORS = {
   // Requires that the given value is `null` or `undefined`

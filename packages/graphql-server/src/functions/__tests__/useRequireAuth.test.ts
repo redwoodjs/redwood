@@ -123,7 +123,7 @@ const getCurrentUserWithError = async (
   throw Error('Something went wrong getting the user info')
 }
 
-describe.only('useRequireAuth', () => {
+describe('useRequireAuth', () => {
   beforeAll(() => {
     process.env.DISABLE_CONTEXT_ISOLATION = '1'
   })
