@@ -912,7 +912,7 @@ test('params should never be an empty object', async () => {
   render(<TestRouter />)
 })
 
-test('params should never be an empty object in Set (I)', async () => {
+test('params should never be an empty object in Set', async () => {
   const ParamPage = () => {
     return <div>Param Page</div>
   }
@@ -936,7 +936,7 @@ test('params should never be an empty object in Set (I)', async () => {
   await waitFor(() => screen.getByText('Param Page'))
 })
 
-test('params should never be an empty object in Set with waitFor 1', async () => {
+test('params should never be an empty object in Set with waitFor (I)', async () => {
   const ParamPage = () => {
     const { documentId } = useParams()
     return <>documentId: {documentId}</>
@@ -966,7 +966,7 @@ test('params should never be an empty object in Set with waitFor 1', async () =>
   await waitFor(() => screen.getByText(/documentId: 2/))
 })
 
-test('params should never be an empty object in Set without waitFor 1', async () => {
+test('params should never be an empty object in Set without waitFor (II)', async () => {
   const ParamPage = () => {
     const { documentId } = useParams()
     return <>documentId: {documentId}</>
