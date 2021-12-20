@@ -22,7 +22,7 @@
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "7.3.0",
+    "pino": "7.6.0",
     "pretty-bytes": "5.6.0",
     "pretty-ms": "7.0.1",
     "uuid": "8.3.2"
