@@ -2068,15 +2068,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/validation-cache@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@envelop/validation-cache@npm:2.2.1"
+"@envelop/validation-cache@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@envelop/validation-cache@npm:2.3.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
     "@envelop/core": ^1.6.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 4e62932b14a209cad744c564e28dd4f54a2425ed0884bd7d7808c59a247847d928c518c4c97aa6107ee8c116642f77a362aa1f130a0e7b5506fc71db66d299d7
+  checksum: 92ccc4394afa6a72b186a09cab9faae8a09f77313441c35dc84984d492b7e9251db35b5dae39d448aee1762196432468666a72c22e7ce30236ccf868f4e4e88d
   languageName: node
   linkType: hard
 
@@ -5578,7 +5578,7 @@ __metadata:
     "@envelop/parser-cache": 2.2.1
     "@envelop/testing": 2.1.1
     "@envelop/types": 1.5.1
-    "@envelop/validation-cache": 2.2.1
+    "@envelop/validation-cache": 2.3.0
     "@graphql-tools/merge": 8.2.1
     "@graphql-tools/schema": 8.3.1
     "@graphql-tools/utils": 8.5.5
@@ -5760,6 +5760,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
+    "@types/aws-lambda": 8.10.88
     "@types/babel-core": 6.25.7
     "@types/jest": 27.0.3
     "@types/node": 16.11.14
