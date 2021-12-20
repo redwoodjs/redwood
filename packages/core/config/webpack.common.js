@@ -188,7 +188,14 @@ module.exports = (webpackEnv) => {
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
-    devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
+    ...(isEnvProduction
+      ? {
+          // this is so that users can debug a production build by setting sourceMap = true in redwood.toml
+          devtool: redwoodConfig.web.sourceMap ? 'source-map' : false,
+        }
+      : {
+          devtool: 'cheap-module-source-map',
+        }),
     entry: {
       /**
        * Prerender requires a top-level component.

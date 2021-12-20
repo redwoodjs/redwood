@@ -53,6 +53,7 @@ interface BrowserTargetConfig {
 
   fastRefresh: boolean
   a11y: boolean
+  sourceMap: boolean
 }
 
 export interface Config {
@@ -80,6 +81,7 @@ const DEFAULT_CONFIG: Config = {
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
+    sourceMap: false,
   },
   api: {
     title: 'Redwood App',
