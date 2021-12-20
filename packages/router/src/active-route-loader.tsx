@@ -81,7 +81,7 @@ export const ActiveRouteLoader = ({
         [path]: {
           page: ArlNullPage,
           state: 'PRE_SHOW',
-          location: { ...location },
+          location,
         },
       }))
 
@@ -96,7 +96,7 @@ export const ActiveRouteLoader = ({
             [path]: {
               page: whileLoadingPage || ArlWhileLoadingNullPage,
               state: 'SHOW_LOADING',
-              location: { ...location },
+              location,
             },
           }))
           setRenderedChildren(children)
@@ -120,7 +120,7 @@ export const ActiveRouteLoader = ({
             [path]: {
               page: module.default,
               state: 'DONE',
-              location: { ...location },
+              location,
             },
           }))
           setRenderedChildren(children)
@@ -134,18 +134,11 @@ export const ActiveRouteLoader = ({
       clearLoadingTimeout()
       startPageLoadTransition(spec, delay)
     } else {
-      // Handle navigating to the same page again, but with different path params
+      // Handle navigating to the same page again, but with different path
+      // params (i.e. new `location`)
       setLoadingState((loadingState) => {
         const page = loadingState[path]?.page || ArlNullPage
-
-        return {
-          ...loadingState,
-          [path]: {
-            page,
-            state: 'DONE',
-            location: { ...location },
-          },
-        }
+        return { ...loadingState, [path]: { page, state: 'DONE', location } }
       })
     }
 
@@ -167,7 +160,7 @@ export const ActiveRouteLoader = ({
       [path]: {
         state: 'DONE',
         page: PageFromLoader,
-        location: { ...location },
+        location,
       },
     }
 
