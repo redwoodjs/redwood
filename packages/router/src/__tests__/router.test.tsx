@@ -96,7 +96,7 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe.only('slow imports', () => {
+describe('slow imports', () => {
   const HomePagePlaceholder = () => <>HomePagePlaceholder</>
   const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
   const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
@@ -246,7 +246,7 @@ describe.only('slow imports', () => {
     })
   })
 
-  test.only('useLocation', async () => {
+  test('useLocation', async () => {
     act(() => navigate('/location'))
     const screen = render(<TestRouter />)
     await waitFor(() => screen.getByText('Location Page'))
@@ -267,6 +267,44 @@ describe.only('slow imports', () => {
     // await waitFor(() => screen.getByText('/location'))
 
     // And then we'll render the placeholder...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...followed by the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
+
+  test('path params should never be empty', async () => {
+    const PathParamPage = ({ value }) => {
+      expect(value).not.toBeFalsy()
+      return <p>{value}</p>
+    }
+
+    const TestRouter = () => (
+      <Router pageLoadingDelay={100}>
+        <Route
+          path="/about"
+          page={AboutPage}
+          name="about"
+          whileLoadingPage={AboutPagePlaceholder}
+        />
+        <Route
+          path="/path-param-test/{value}"
+          page={PathParamPage}
+          name="params"
+          whileLoadingPage={ParamPagePlaceholder}
+        />
+      </Router>
+    )
+
+    act(() => navigate('/path-param-test/test_value'))
+    const screen = render(<TestRouter />)
+
+    // First we render the path parameter value "test_value"
+    await waitFor(() => screen.getByText('test_value'))
+
+    act(() => navigate('/about'))
+    // After navigating we should keep displaying the old path value...
+    await waitFor(() => screen.getByText('test_value'))
+    // ...until we switch over to render the about page loading component...
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
     // ...followed by the actual page
     await waitFor(() => screen.getByText('About Page'))

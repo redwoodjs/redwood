@@ -73,7 +73,6 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   redirect,
   notfound,
 }) => {
-  const location = useLocation()
   const routerState = useRouterState()
   const activePageContext = useActivePageContext()
 
@@ -88,6 +87,12 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 
   // Check for issues with the path.
   validatePath(path)
+
+  const location = activePageContext.loadingState[path]?.location
+
+  if (!location) {
+    throw new Error(`No location for route "${name}"`)
+  }
 
   const { params: pathParams } = matchPath(
     path,
@@ -240,7 +245,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   return (
     <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
       {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
-      {!redirect && (
+      {!redirect && page && (
         <ActiveRouteLoader
           path={path}
           spec={normalizePage(page)}
@@ -272,7 +277,7 @@ function analyzeRouterTree(
   paramTypes?: Record<string, ParamType>
 ): {
   root: React.ReactElement | undefined
-  activeRoute: React.ReactElement | undefined
+  activeRoute: React.ReactElement<InternalRouteProps> | undefined
   NotFoundPage: PageType | undefined
 } {
   let NotFoundPage: PageType | undefined = undefined

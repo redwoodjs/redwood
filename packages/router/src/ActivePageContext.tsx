@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 
+import { LocationContextType } from './location'
 import { createNamedContext } from './util'
 
 export type LoadingState = 'PRE_SHOW' | 'SHOW_LOADING' | 'DONE'
@@ -8,6 +9,7 @@ export type LoadingStateRecord = Record<
   | {
       state: LoadingState
       page: React.ComponentType<unknown>
+      location: LocationContextType
     }
   | undefined
 >

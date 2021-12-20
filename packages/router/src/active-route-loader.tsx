@@ -42,13 +42,12 @@ export const ActiveRouteLoader = ({
   const announcementRef = useRef<HTMLDivElement>(null)
   const waitingFor = useRef<string>('')
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
-    [path]: { page: ArlNullPage, state: 'PRE_SHOW' },
+    [path]: { page: ArlNullPage, state: 'PRE_SHOW', location },
   })
   const [renderedChildren, setRenderedChildren] = useState<
     React.ReactNode | undefined
   >(children)
   const [renderedPath, setRenderedPath] = useState(path)
-  const [renderedLocation, setRenderedLocation] = useState({ ...location })
   const isMounted = useIsMounted()
 
   const clearLoadingTimeout = () => {
@@ -82,6 +81,7 @@ export const ActiveRouteLoader = ({
         [path]: {
           page: ArlNullPage,
           state: 'PRE_SHOW',
+          location: { ...location },
         },
       }))
 
@@ -96,11 +96,11 @@ export const ActiveRouteLoader = ({
             [path]: {
               page: whileLoadingPage || ArlWhileLoadingNullPage,
               state: 'SHOW_LOADING',
+              location: { ...location },
             },
           }))
           setRenderedChildren(children)
           setRenderedPath(path)
-          setRenderedLocation({ ...location })
         })
       }, delay)
 
@@ -120,9 +120,9 @@ export const ActiveRouteLoader = ({
             [path]: {
               page: module.default,
               state: 'DONE',
+              location: { ...location },
             },
           }))
-          setRenderedLocation({ ...location })
           setRenderedChildren(children)
           setRenderedPath(path)
           setPageName(name)
@@ -133,6 +133,20 @@ export const ActiveRouteLoader = ({
     if (spec.name !== waitingFor.current) {
       clearLoadingTimeout()
       startPageLoadTransition(spec, delay)
+    } else {
+      // Handle navigating to the same page again, but with different path params
+      setLoadingState((loadingState) => {
+        const page = loadingState[path]?.page || ArlNullPage
+
+        return {
+          ...loadingState,
+          [path]: {
+            page,
+            state: 'DONE',
+            location: { ...location },
+          },
+        }
+      })
     }
 
     return () => {
@@ -153,6 +167,7 @@ export const ActiveRouteLoader = ({
       [path]: {
         state: 'DONE',
         page: PageFromLoader,
+        location: { ...location },
       },
     }
 
@@ -170,10 +185,15 @@ export const ActiveRouteLoader = ({
   }
 
   return (
-    <ParamsProvider path={renderedPath} location={renderedLocation}>
+    <ParamsProvider
+      path={renderedPath}
+      location={loadingState[renderedPath]?.location}
+    >
       <ActivePageContextProvider value={{ loadingState }}>
         <PageLoadingContextProvider
-          value={{ loading: loadingState[path]?.state === 'SHOW_LOADING' }}
+          value={{
+            loading: loadingState[renderedPath]?.state === 'SHOW_LOADING',
+          }}
         >
           {renderedChildren}
           {loadingState[path]?.state === 'DONE' && (
