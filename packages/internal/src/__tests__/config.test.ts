@@ -32,6 +32,7 @@ describe('getConfig', () => {
           "host": "localhost",
           "path": "./web",
           "port": 8910,
+          "sourceMap": false,
           "target": "browser",
           "title": "Redwood App",
         },
