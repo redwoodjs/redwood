@@ -5536,7 +5536,7 @@ __metadata:
     "@redwoodjs/internal": 0.40.0
     "@typescript-eslint/eslint-plugin": 5.7.0
     "@typescript-eslint/parser": 5.7.0
-    eslint: 8.4.1
+    eslint: 8.5.0
     eslint-config-prettier: 8.3.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -5561,7 +5561,7 @@ __metadata:
     core-js: 3.20.0
     jest: 27.4.5
     pascalcase: 1.0.0
-    react-hook-form: 7.22.1
+    react-hook-form: 7.22.2
     typescript: 4.5.4
   languageName: unknown
   linkType: soft
@@ -14237,9 +14237,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.4.1":
-  version: 8.4.1
-  resolution: "eslint@npm:8.4.1"
+"eslint@npm:8.5.0":
+  version: 8.5.0
+  resolution: "eslint@npm:8.5.0"
   dependencies:
     "@eslint/eslintrc": ^1.0.5
     "@humanwhocodes/config-array": ^0.9.2
@@ -14281,7 +14281,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 964a3e10e20c77cc9aef11ef950cffe42ae6825c1106101ec867218b52d9ae1dbf455955799b5e68f6d98650a880646d1951bdbd923c99af8907e910458b648a
+  checksum: 7aa9ba4681b355d0bac813ae0492beddad6f2f223815778318b5264200ad0f8c06aa753a366bc21d741b7b713ec823b836ac15f444a2297fa18d6745a88a27d6
   languageName: node
   linkType: hard
 
@@ -24280,12 +24280,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.22.1":
-  version: 7.22.1
-  resolution: "react-hook-form@npm:7.22.1"
+"react-hook-form@npm:7.22.2":
+  version: 7.22.2
+  resolution: "react-hook-form@npm:7.22.2"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: f9d70a100cd23135986ba8ea2eb5064b75c1e02868ba5f16ef2f9304d83a5cbac20e4898966f1c80c9f00aa2dcdaa553235c133739891a39af957e26b7891bdb
+  checksum: da52aa244c5dfc075ab96840c68b252b5a775712659d3e15a75af661cebeea74d618e68a632eb372af2b1a3d95b94cda1e6e6cc620a84ea9a6118211753d4650
   languageName: node
   linkType: hard
 
@@ -25271,7 +25271,7 @@ resolve@^2.0.0-next.3:
     core-js: 3.20.0
     cypress: 9.1.1
     cypress-wait-until: 1.7.2
-    eslint: 8.4.1
+    eslint: 8.5.0
     fast-glob: 3.2.7
     jest: 27.4.5
     jscodeshift: 0.13.0
