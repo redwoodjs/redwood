@@ -5314,10 +5314,14 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.16.5
     "@types/aws-lambda": 8.10.88
     "@types/lodash.escape": 4.0.6
+    "@types/pretty-bytes": 5.2.0
     "@types/qs": 6.9.7
+    "@types/split2": 3.2.1
     ansi-colors: 4.1.1
     aws-lambda: 1.0.7
+    chalk: 4.1.2
     chokidar: 3.5.2
+    fast-json-parse: 1.0.3
     fastify: 3.25.1
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.2.0
@@ -5325,12 +5329,16 @@ __metadata:
     fastify-url-data: 3.0.3
     jest: 27.4.5
     lodash.escape: 4.0.1
+    pretty-bytes: 5.6.0
+    pretty-ms: 7.0.1
     qs: 6.10.2
+    split2: 4.1.0
     typescript: 4.5.4
     yargs: 16.2.0
   bin:
     rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
+    rw-log-formatter: ./dist/logFormatter/bin.js
   languageName: unknown
   linkType: soft
 
@@ -5345,24 +5353,16 @@ __metadata:
     "@types/crypto-js": 4.0.2
     "@types/jsonwebtoken": 8.5.6
     "@types/md5": 2.3.1
-    "@types/pretty-bytes": 5.2.0
-    "@types/split2": 3.2.1
     aws-lambda: 1.0.7
     crypto-js: 4.1.1
-    fast-json-parse: 1.0.3
     jest: 27.4.5
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
     pino: 7.6.0
-    pretty-bytes: 5.6.0
-    pretty-ms: 7.0.1
-    split2: 4.1.0
     typescript: 4.5.4
     uuid: 8.3.2
-  bin:
-    rw-log-formatter: ./dist/logFormatter/bin.js
   languageName: unknown
   linkType: soft
 
