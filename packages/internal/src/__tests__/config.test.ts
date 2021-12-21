@@ -14,6 +14,7 @@ describe('getConfig', () => {
           "path": "./api",
           "port": 8911,
           "schemaPath": "./api/db/schema.prisma",
+          "serverConfig": "./api/server.config.js",
           "target": "node",
           "title": "Redwood App",
         },
