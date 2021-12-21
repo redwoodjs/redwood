@@ -1,5 +1,5 @@
-import { Clerk } from '@clerk/clerk-js'
-import {
+import type { Clerk } from '@clerk/clerk-js'
+import type {
   UserResource as ClerkUserResource,
   SignInProps,
   SignUpProps,
