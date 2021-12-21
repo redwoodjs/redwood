@@ -1,10 +1,14 @@
-import Fastify, { FastifyInstance } from 'fastify'
+import Fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 
-export const createApp = (): FastifyInstance => {
-  const app = Fastify({
-    logger: true,
-  })
+const DEFAULT_OPTIONS = {
+  logger: {
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+  },
+}
 
+export const createApp = (options?: FastifyServerOptions): FastifyInstance => {
+  const app = Fastify(options || DEFAULT_OPTIONS)
+  
   return app
 }
 
