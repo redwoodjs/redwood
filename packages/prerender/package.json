@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/prerender",
   "description": "RedwoodJS prerender",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "license": "MIT",
   "files": [
     "dist",
@@ -14,11 +14,11 @@
     "react-dom": "17.0.2"
   },
   "dependencies": {
-    "@redwoodjs/auth": "0.40.0",
-    "@redwoodjs/internal": "0.40.0",
-    "@redwoodjs/router": "0.40.0",
-    "@redwoodjs/structure": "0.40.0",
-    "@redwoodjs/web": "0.40.0",
+    "@redwoodjs/auth": "0.41.0",
+    "@redwoodjs/internal": "0.41.0",
+    "@redwoodjs/router": "0.41.0",
+    "@redwoodjs/structure": "0.41.0",
+    "@redwoodjs/web": "0.41.0",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.10",
     "mime-types": "2.1.34",
