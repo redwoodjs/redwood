@@ -37,6 +37,7 @@ export async function printDiagnostics(
     }
   } catch (e: any) {
     console.log('runtime error: ' + e.message)
+    throw e
   }
 }
 
