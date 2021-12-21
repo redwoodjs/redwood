@@ -212,7 +212,7 @@ export const makeMergedSchema = ({
   const { typeDefs: schemaOptionsTypeDefs = [], ...otherSchemaOptions } =
     schemaOptions
   const schema = makeExecutableSchema({
-    typeDefs: [...typeDefs, ...schemaOptionsTypeDefs],
+    typeDefs: [typeDefs, schemaOptionsTypeDefs],
     ...otherSchemaOptions,
   })
 
