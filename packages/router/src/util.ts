@@ -1,4 +1,4 @@
-import React, { Children, ReactElement, ReactNode } from 'react'
+import React, { Children, isValidElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
 const createNamedContext = <T>(name: string, defaultValue?: T) => {
@@ -181,9 +181,9 @@ const parseSearch = (
 }
 
 /**
- * Validate a path to make sure it follows the router's rules. If any problems
- * are found, a descriptive Error will be thrown, as problems with routes are
- * critical enough to be considered fatal.
+ * Validate a path to make sure it follows the router's rules.
+ * If any problems are found, a descriptive Error will be thrown,
+ * as problems with routes are critical enough to be considered fatal.
  */
 const validatePath = (path: string) => {
   // Check that path begins with a slash.
@@ -251,19 +251,11 @@ const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
   return path
 }
 
-function isReactElement(node: ReactNode): node is ReactElement {
-  return (
-    node !== undefined &&
-    node !== null &&
-    (node as ReactElement).type !== undefined
-  )
-}
-
 function flattenAll(children: ReactNode): ReactNode[] {
   const childrenArray = Children.toArray(children)
 
   return childrenArray.flatMap((child) => {
-    if (isReactElement(child) && child.props.children) {
+    if (isValidElement(child) && child.props.children) {
       return [child, ...flattenAll(child.props.children)]
     }
 
@@ -305,7 +297,6 @@ export {
   parseSearch,
   validatePath,
   replaceParams,
-  isReactElement,
   flattenAll,
   flattenSearchParams,
 }

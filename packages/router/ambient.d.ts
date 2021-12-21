@@ -4,33 +4,43 @@ declare global {
   var __REDWOOD__PRERENDERING: boolean
   /**
    * URL or absolute path to the GraphQL serverless function, without the trailing slash.
-   * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
+   *
+   * @example
+   *
+   * `./redwood/functions/graphql`
+   * `https://api.redwoodjs.com/graphql`
    */
   var RWJS_API_GRAPHQL_URL: string
   /**
    * URL or absolute path to the DbAuth serverless function, without the trailing slash.
-   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
+   *
+   * @example
+   *
+   * `./redwood/functions/auth`
+   * `https://api.redwoodjs.com/auth`
    **/
   var RWJS_API_DBAUTH_URL: string
 
   /**
    * URL or absolute path to serverless functions, without the trailing slash.
-   * Example: `./redwood/functions/` or `https://api.redwoodjs.com/`
+   *
+   * @example
+   *
+   * `./redwood/functions/`
+   * `https://api.redwoodjs.com/`
    **/
   var RWJS_API_URL: string
 
   namespace NodeJS {
     interface Global {
-      /**
-       * This global is set to true by the prerendering CLI command.
-       */
+      /** This global is set to true by the prerendering CLI command. */
       __REDWOOD__PRERENDERING: boolean
 
-      /** URL or absolute path to the GraphQL serverless function */
+      /** URL or absolute path to the GraphQL serverless function. */
       RWJS_API_GRAPHQL_URL: string
-      /** URL or absolute path to the DbAuth serverless function */
+      /** URL or absolute path to the DbAuth serverless function. */
       RWJS_API_DBAUTH_URL: string
-      /** URL or absolute path to serverless functions */
+      /** URL or absolute path to the serverless functions. */
       RWJS_API_URL: string
     }
   }
