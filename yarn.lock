@@ -5502,7 +5502,7 @@ __metadata:
     copy-webpack-plugin: 10.2.0
     core-js: 3.20.0
     css-loader: 6.5.1
-    css-minimizer-webpack-plugin: 3.3.0
+    css-minimizer-webpack-plugin: 3.3.1
     dotenv-webpack: 7.0.3
     esbuild: 0.14.6
     esbuild-loader: 2.18.0
@@ -7079,15 +7079,6 @@ __metadata:
   version: 4.0.2
   resolution: "@types/crypto-js@npm:4.0.2"
   checksum: e1ec951d947e8e92be5435fbab2df14d4ce946900c1f0e4ecae2c284c07c594966cff0134f132dba57313adc13217e035a4f3f61c218bb05a4c509863cbd51d0
-  languageName: node
-  linkType: hard
-
-"@types/cssnano@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@types/cssnano@npm:4.0.1"
-  dependencies:
-    postcss: 5 - 7
-  checksum: 4a5f72721caa4c2cb4961ee4ec29af697550b4d28067fd9b753891049767cd54f56554709ea0ccbf460a8934a93b153dde62c64546e6db22e107dcf7be9fc2b2
   languageName: node
   linkType: hard
 
@@ -12213,11 +12204,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:3.3.0":
-  version: 3.3.0
-  resolution: "css-minimizer-webpack-plugin@npm:3.3.0"
+"css-minimizer-webpack-plugin@npm:3.3.1":
+  version: 3.3.1
+  resolution: "css-minimizer-webpack-plugin@npm:3.3.1"
   dependencies:
-    "@types/cssnano": ^4.0.1
     cssnano: ^5.0.6
     jest-worker: ^27.0.2
     postcss: ^8.3.5
@@ -12233,7 +12223,7 @@ __metadata:
       optional: true
     esbuild:
       optional: true
-  checksum: 7a08d1063ca5267e96adf1fdd962fad504c2d132b4f7c69cfff51e2c828ecad6d63b4454013705b6c23ad98f29d675350e030b77054c44136146b03174b4c608
+  checksum: 2c6ae51043caa607ea71c30ef55e51e3882b6e3e9b5d687cceabb7459b9aceeb8e9b824d6e2bdf01584ba4cd4f4b5f2051a1f573bc12b43d6d0393139ea29abb
   languageName: node
   linkType: hard
 
@@ -23430,7 +23420,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"postcss@npm:5 - 7, postcss@npm:^7.0.14, postcss@npm:^7.0.26, postcss@npm:^7.0.32, postcss@npm:^7.0.36, postcss@npm:^7.0.5, postcss@npm:^7.0.6":
+"postcss@npm:^7.0.14, postcss@npm:^7.0.26, postcss@npm:^7.0.32, postcss@npm:^7.0.36, postcss@npm:^7.0.5, postcss@npm:^7.0.6":
   version: 7.0.39
   resolution: "postcss@npm:7.0.39"
   dependencies:
