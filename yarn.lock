@@ -23417,15 +23417,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prettier@npm:~2.2.1":
-  version: 2.2.1
-  resolution: "prettier@npm:2.2.1"
-  bin:
-    prettier: bin-prettier.js
-  checksum: 4041ff87d6cba9134a8e0eb74a9e7f50f7091de6b95f5a6fb1928795c7d0584ae46806e0d75588fbc912b2cda2439d28a14fb84416946384cf71d60f5a0a68a6
-  languageName: node
-  linkType: hard
-
 "pretty-bytes@npm:*, pretty-bytes@npm:5.6.0, pretty-bytes@npm:^5.6.0":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
