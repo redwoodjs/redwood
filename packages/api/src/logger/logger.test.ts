@@ -67,7 +67,7 @@ const setupLogger = (
 } => {
   if (destination) {
     const logger = createLogger({
-      options: { prettyPrint: false, ...loggerOptions },
+      options: { ...loggerOptions },
       destination: destination,
       showConfig,
     })
@@ -78,7 +78,7 @@ const setupLogger = (
     const logSinkData = once(stream, 'data')
 
     const logger = createLogger({
-      options: { ...loggerOptions, prettyPrint: false },
+      options: { ...loggerOptions },
       destination: stream,
       showConfig,
     })
@@ -367,54 +367,6 @@ describe('logger', () => {
 
       expect(logStatement).toHaveProperty('email')
       expect(logStatement['email']).toEqual('[Redacted]')
-    })
-  })
-
-  describe('when configuring pretty printing', () => {
-    test('it pretty prints', async () => {
-      const tmp = join(
-        os.tmpdir(),
-        '_' + Math.random().toString(36).substr(2, 9)
-      )
-
-      const { logger } = setupLogger({ level: 'trace', prettyPrint: true }, tmp)
-
-      const message = 'logged with pretty printing on'
-
-      logger.info(message)
-
-      await watchFileCreated(tmp)
-
-      const logStatement = readFileSync(tmp).toString().trim()
-
-      expect(logStatement).toMatch(/INFO/)
-      expect(logStatement).toContain(message)
-    })
-
-    test('it allows setting translateTime ', async () => {
-      const tmp = join(
-        os.tmpdir(),
-        '_' + Math.random().toString(36).substr(2, 9)
-      )
-
-      const { logger } = setupLogger(
-        {
-          level: 'trace',
-          prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' },
-        },
-        tmp
-      )
-
-      const message = 'logged with pretty printing on'
-
-      logger.info(message)
-
-      await watchFileCreated(tmp)
-
-      const logStatement = readFileSync(tmp).toString().trim()
-      console.log(logStatement)
-      expect(logStatement).toMatch(/INFO/)
-      expect(logStatement).toContain(message)
     })
   })
 

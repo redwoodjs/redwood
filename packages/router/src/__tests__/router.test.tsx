@@ -1,3 +1,19 @@
+let mockDelay = 0
+jest.mock('../util', () => {
+  const actualUtil = jest.requireActual('../util')
+
+  return {
+    ...actualUtil,
+    normalizePage: (specOrPage: Spec | React.ComponentType<unknown>) => ({
+      name: specOrPage.name,
+      loader: () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ default: specOrPage }), mockDelay)
+        ),
+    }),
+  }
+})
+
 import React from 'react'
 
 import { render, waitFor, act, fireEvent } from '@testing-library/react'
@@ -15,8 +31,10 @@ import {
   navigate,
   back,
 } from '../'
+import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
+import { Spec } from '../util'
 
 function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   const authContextValues: AuthContextInterface = {
@@ -62,24 +80,238 @@ const AboutPage = () => <h1>About Page</h1>
 const PrivatePage = () => <h1>Private Page</h1>
 const RedirectPage = () => <Redirect to="/about" />
 const NotFoundPage = () => <h1>404</h1>
+const ParamPage = ({ value, q }: { value: string; q: string }) => {
+  const params = useParams()
+
+  return (
+    <div>
+      <p>param {`${value}${q}`}</p>
+      <p>hookparams {`${params.value}?${params.q}`}</p>
+    </div>
+  )
+}
 
 beforeEach(() => {
   window.history.pushState({}, null, '/')
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe('inits routes and navigates as expected', () => {
-  const ParamPage = ({ value, q }: { value: string; q: string }) => {
-    const params = useParams()
+describe('slow imports', () => {
+  const HomePagePlaceholder = () => <>HomePagePlaceholder</>
+  const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
+  const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
+  const RedirectPagePlaceholder = () => <>RedirectPagePlaceholder</>
+  const PrivatePagePlaceholder = () => <>PrivatePagePlaceholder</>
+  const LoginPagePlaceholder = () => <>LoginPagePlaceholder</>
+
+  const LocationPage = () => {
+    const location = useLocation()
 
     return (
-      <div>
-        <p>param {`${value}${q}`}</p>
-        <p>hookparams {`${params.value}?${params.q}`}</p>
-      </div>
+      <>
+        <h1>Location Page</h1>
+        <p>{location.pathname}</p>
+      </>
     )
   }
 
+  const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
+    <Router
+      useAuth={mockUseAuth({ isAuthenticated: authenticated })}
+      pageLoadingDelay={100}
+    >
+      <Route
+        path="/"
+        page={HomePage}
+        name="home"
+        whileLoadingPage={HomePagePlaceholder}
+      />
+      <Route
+        path="/about"
+        page={AboutPage}
+        name="about"
+        whileLoadingPage={AboutPagePlaceholder}
+      />
+      <Route
+        path="/redirect"
+        page={RedirectPage}
+        name="redirect"
+        whileLoadingPage={RedirectPagePlaceholder}
+      />
+      <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
+      <Route
+        path="/login"
+        page={LoginPage}
+        name="login"
+        whileLoadingPage={LoginPagePlaceholder}
+      />
+      <Private unauthenticated="login">
+        <Route
+          path="/private"
+          page={PrivatePage}
+          name="private"
+          whileLoadingPage={PrivatePagePlaceholder}
+        />
+      </Private>
+      <Route
+        path="/param-test/{value}"
+        page={ParamPage}
+        name="params"
+        whileLoadingPage={ParamPagePlaceholder}
+      />
+      <Route path="/location" page={LocationPage} name="home" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+
+  beforeAll(() => {
+    mockDelay = 200
+  })
+
+  afterAll(() => {
+    mockDelay = 0
+  })
+
+  test('Basic home page', async () => {
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('HomePagePlaceholder'))
+    await waitFor(() => screen.getByText('Home Page'))
+  })
+
+  test('Navigation', async () => {
+    const screen = render(<TestRouter />)
+    // First we should render an empty page while waiting for pageLoadDelay to
+    // pass
+    expect(screen.container).toBeEmptyDOMElement()
+
+    // Then we should render whileLoadingPage
+    await waitFor(() => screen.getByText('HomePagePlaceholder'))
+
+    // Finally we should render the actual page
+    await waitFor(() => screen.getByText('Home Page'))
+
+    act(() => navigate('/about'))
+
+    // Now after navigating we should keep rendering the previous page until
+    // the new page has loaded, or until pageLoadDelay has passed. This
+    // ensures we don't show a "white flash", i.e. render an empty page, while
+    // navigating the page
+    expect(screen.container).not.toBeEmptyDOMElement()
+    await waitFor(() => screen.getByText('Home Page'))
+    expect(screen.container).not.toBeEmptyDOMElement()
+
+    // As for HomePage we first render the placeholder...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...and then the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
+
+  test('Redirect page', async () => {
+    act(() => navigate('/redirect'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('RedirectPagePlaceholder'))
+    await waitFor(() => screen.getByText('About Page'))
+  })
+
+  test('Redirect route', async () => {
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('HomePagePlaceholder'))
+    await waitFor(() => screen.getByText('Home Page'))
+    act(() => navigate('/redirect2/redirected?q=cue'))
+    await waitFor(() => screen.getByText('ParamPagePlaceholder'))
+    await waitFor(() => screen.getByText('param redirectedcue'))
+  })
+
+  test('Private page when not authenticated', async () => {
+    act(() => navigate('/private'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => {
+      expect(
+        screen.queryByText('PrivatePagePlaceholder')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
+      expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
+    })
+    await waitFor(() => screen.getByText('Login Page'))
+  })
+
+  test('Private page when authenticated', async () => {
+    act(() => navigate('/private'))
+    const screen = render(<TestRouter authenticated={true} />)
+
+    await waitFor(() => screen.getByText('PrivatePagePlaceholder'))
+    await waitFor(() => screen.getByText('Private Page'))
+    await waitFor(() => {
+      expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
+    })
+  })
+
+  test('useLocation', async () => {
+    act(() => navigate('/location'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('Location Page'))
+    await waitFor(() => screen.getByText('/location'))
+
+    act(() => navigate('/about'))
+    // After navigating we will keep rendering the previous page for 100 ms,
+    // (which is our configured delay) before rendering the "whileLoading"
+    // page.
+    await waitFor(() => screen.getByText('Location Page'))
+
+    // Because we're still rendering the LocationPage, the pathname returned
+    // by useLocation should still be /location
+    // But because of a limitation in our implementation, that's currently
+    // not the case.
+    // TODO: Update this test when #3779 is fixed. (It'll start failing)
+    await waitFor(() => screen.getByText('/about'))
+    // await waitFor(() => screen.getByText('/location'))
+
+    // And then we'll render the placeholder...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...followed by the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
+
+  test('path params should never be empty', async () => {
+    const PathParamPage = ({ value }) => {
+      expect(value).not.toBeFalsy()
+      return <p>{value}</p>
+    }
+
+    const TestRouter = () => (
+      <Router pageLoadingDelay={100}>
+        <Route
+          path="/about"
+          page={AboutPage}
+          name="about"
+          whileLoadingPage={AboutPagePlaceholder}
+        />
+        <Route
+          path="/path-param-test/{value}"
+          page={PathParamPage}
+          name="params"
+          whileLoadingPage={ParamPagePlaceholder}
+        />
+      </Router>
+    )
+
+    act(() => navigate('/path-param-test/test_value'))
+    const screen = render(<TestRouter />)
+
+    // First we render the path parameter value "test_value"
+    await waitFor(() => screen.getByText('test_value'))
+
+    act(() => navigate('/about'))
+    // After navigating we should keep displaying the old path value...
+    await waitFor(() => screen.getByText('test_value'))
+    // ...until we switch over to render the about page loading component...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...followed by the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
+})
+
+describe('inits routes and navigates as expected', () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
@@ -95,8 +327,6 @@ describe('inits routes and navigates as expected', () => {
   )
 
   const getScreen = () => render(<TestRouter />)
-
-  // Run the actual tests:
 
   test('starts on home page', async () => {
     const screen = getScreen()
@@ -130,6 +360,9 @@ describe('inits routes and navigates as expected', () => {
 
   test('navigate to redirect2 should forward params', async () => {
     const screen = getScreen()
+
+    await waitFor(() => screen.getByText(/Home Page/i))
+
     act(() => navigate('/redirect2/redirected?q=cue'))
     await waitFor(() => screen.getByText(/param redirectedcue/i))
 
@@ -719,7 +952,7 @@ test('params should never be an empty object', async () => {
 
 test('params should never be an empty object in Set', async () => {
   const ParamPage = () => {
-    return null
+    return <div>Param Page</div>
   }
 
   const SetWithUseParams = ({ children }) => {
@@ -737,10 +970,41 @@ test('params should never be an empty object in Set', async () => {
   )
 
   act(() => navigate('/test/1'))
-  render(<TestRouter />)
+  const screen = render(<TestRouter />)
+  await waitFor(() => screen.getByText('Param Page'))
 })
 
-test('params should never be an empty object in Set', async () => {
+test('params should never be an empty object in Set with waitFor (I)', async () => {
+  const ParamPage = () => {
+    const { documentId } = useParams()
+    return <>documentId: {documentId}</>
+  }
+
+  const SetWithUseParams = ({ children }) => {
+    const params = useParams()
+    // 1st run: { documentId: '1' }
+    // 2rd run: { documentId: '2' }
+    expect(params).not.toEqual({})
+    return children
+  }
+
+  const TestRouter = () => (
+    <Router>
+      <Set wrap={SetWithUseParams}>
+        <Route path="/test/{documentId}" page={ParamPage} name="param" />
+      </Set>
+      <Route path="/" page={() => <Redirect to="/test/2" />} name="home" />
+    </Router>
+  )
+
+  act(() => navigate('/test/1'))
+  const screen = render(<TestRouter />)
+  await waitFor(() => screen.getByText(/documentId: 1/))
+  act(() => navigate('/'))
+  await waitFor(() => screen.getByText(/documentId: 2/))
+})
+
+test('params should never be an empty object in Set without waitFor (II)', async () => {
   const ParamPage = () => {
     const { documentId } = useParams()
     return <>documentId: {documentId}</>
@@ -771,13 +1035,13 @@ test('params should never be an empty object in Set', async () => {
 
 test('Set is not rendered for unauthenticated user.', async () => {
   const ParamPage = () => {
-    // This should never be called. We should be redirect to login instead.
+    // This should never be called. We should be redirected to login instead.
     expect(false).toBe(true)
     return null
   }
 
   const SetWithUseParams = ({ children }) => {
-    // This should never be called. We should be redirect to login instead.
+    // This should never be called. We should be redirected to login instead.
     expect(false).toBe(true)
     return children
   }
@@ -787,15 +1051,46 @@ test('Set is not rendered for unauthenticated user.', async () => {
       <Set private wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
-      <Route path="/" page={() => <div>home</div>} name="home" />
+      <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={() => <div>auth thyself</div>} name="login" />
     </Router>
   )
 
+  // Go to home page and start loading
+  // Wait until it has loaded
+  // Go to /test/1 and start loading
+  // Get redirected to /login
   const screen = render(<TestRouter />)
-  act(() => navigate('/'))
+  await waitFor(() => screen.getByText('Home Page'))
   act(() => navigate('/test/1'))
+  await waitFor(() => screen.getByText(/auth thyself/))
+})
 
+test('Set is not rendered for unauthenticated user on direct navigation', async () => {
+  const ParamPage = () => {
+    // This should never be called. We should be redirected to login instead.
+    expect(false).toBe(true)
+    return null
+  }
+
+  const SetWithUseParams = ({ children }) => {
+    // This should never be called. We should be redirected to login instead.
+    expect(false).toBe(true)
+    return children
+  }
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Set private wrap={SetWithUseParams} unauthenticated="login">
+        <Route path="/test/{documentId}" page={ParamPage} name="param" />
+      </Set>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={() => <div>auth thyself</div>} name="login" />
+    </Router>
+  )
+
+  act(() => navigate('/test/1'))
+  const screen = render(<TestRouter />)
   await waitFor(() => screen.getByText(/auth thyself/))
 })
 
@@ -846,9 +1141,9 @@ test('redirect to last page', async () => {
 
   await waitFor(() => {
     expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
+    screen.getByText('Login Page')
     expect(window.location.pathname).toBe('/login')
     expect(window.location.search).toBe('?redirectTo=/private')
-    screen.getByText(/Login Page/i)
   })
 })
 
