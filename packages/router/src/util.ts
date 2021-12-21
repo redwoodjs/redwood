@@ -362,3 +362,46 @@ export const resetFocus = () => {
   global?.document.body.focus()
   global?.document.body.removeAttribute('tabindex')
 }
+
+export interface Spec {
+  name: string
+  loader: () => Promise<{ default: React.ComponentType<unknown> }>
+}
+
+export function isSpec(
+  specOrPage: Spec | React.ComponentType
+): specOrPage is Spec {
+  return (specOrPage as Spec).loader !== undefined
+}
+
+/**
+ * Pages can be imported automatically or manually. Automatic imports are actually
+ * objects and take the following form (which we call a 'spec'):
+ *
+ *   const WhateverPage = {
+ *     name: 'WhateverPage',
+ *     loader: () => import('src/pages/WhateverPage')
+ *   }
+ *
+ * Manual imports simply load the page:
+ *
+ *   import WhateverPage from 'src/pages/WhateverPage'
+ *
+ * Before passing a "page" to the PageLoader, we will normalize the manually
+ * imported version into a spec.
+ */
+export function normalizePage(
+  specOrPage: Spec | React.ComponentType<unknown>
+): Spec {
+  if (isSpec(specOrPage)) {
+    // Already a spec, just return it.
+    return specOrPage
+  }
+
+  // Wrap the Page in a fresh spec, and put it in a promise to emulate
+  // an async module import.
+  return {
+    name: specOrPage.name,
+    loader: async () => ({ default: specOrPage }),
+  }
+}
