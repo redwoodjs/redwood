@@ -1,6 +1,6 @@
 /**
  * This file allows you to configure the Fastify Server settings
- * used by the  RedwoodJS dev server.
+ * used by the RedwoodJS dev server.
  *
  * It also applies when running the api server with `yarn rw serve`.
  *
