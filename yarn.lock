@@ -1767,9 +1767,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.3.1":
-  version: 2.3.1
-  resolution: "@clerk/clerk-sdk-node@npm:2.3.1"
+"@clerk/clerk-sdk-node@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@clerk/clerk-sdk-node@npm:2.4.0"
   dependencies:
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -1778,7 +1778,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: f97e207d4422190e17bfedbdeb905f8d210549974f18991f86a659f50d751b8c665ef471953fa74642ec7b5ac5143ee29a2992f8f304558805aca3787bf99110
+  checksum: 5674d40d8fe51fcc42e86dd008a92a3cc1f2684d8f698dc6f5e9e8b6b55b7aa89432c45164f5893e141c48d49ce81ef72c6329b10e7c358e92c5466ad688573e
   languageName: node
   linkType: hard
 
@@ -5374,9 +5374,9 @@ __metadata:
     "@azure/msal-browser": 2.20.0
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.6.1
-    "@clerk/clerk-sdk-node": 2.3.1
+    "@clerk/clerk-sdk-node": 2.4.0
     "@clerk/types": 1.19.1
-    "@supabase/supabase-js": 1.28.5
+    "@supabase/supabase-js": 1.28.6
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.37
     firebase: 9.6.1
@@ -5505,7 +5505,7 @@ __metadata:
     css-minimizer-webpack-plugin: 3.3.0
     dotenv-webpack: 7.0.3
     esbuild: 0.14.6
-    esbuild-loader: 2.17.0
+    esbuild-loader: 2.18.0
     fast-glob: 3.2.7
     file-loader: 6.2.0
     graphql: 16.2.0
@@ -5723,7 +5723,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.178
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.11.14
+    "@types/node": 16.11.15
     "@types/vscode": 1.63.1
     camelcase: 6.2.1
     deepmerge: 4.2.2
@@ -5768,7 +5768,7 @@ __metadata:
     "@types/aws-lambda": 8.10.88
     "@types/babel-core": 6.25.7
     "@types/jest": 27.0.3
-    "@types/node": 16.11.14
+    "@types/node": 16.11.15
     "@types/react": 17.0.37
     "@types/react-dom": 17.0.11
     "@types/webpack": 5.28.0
@@ -6701,15 +6701,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.28.5":
-  version: 1.28.5
-  resolution: "@supabase/supabase-js@npm:1.28.5"
+"@supabase/supabase-js@npm:1.28.6":
+  version: 1.28.6
+  resolution: "@supabase/supabase-js@npm:1.28.6"
   dependencies:
     "@supabase/gotrue-js": ^1.21.7
     "@supabase/postgrest-js": ^0.35.0
     "@supabase/realtime-js": ^1.3.3
     "@supabase/storage-js": ^1.5.0
-  checksum: 028f26fbf2b02bd50e19b146136d9535208e41355279d3f22475f4fe8d3459307785ab9a9836268fc8ca6642b5a961cd2a1266086f771feab7fa74209c68a535
+  checksum: 9fe5bc2b2c10e92f2bf9d5fb19019f35b73bc9558a1389054c8ca9ba20b0a1fc7233f79b8c93bad24dffb05bcccce48e7c690a3aa605b3e4cddd0909c799b2d2
   languageName: node
   linkType: hard
 
@@ -7545,10 +7545,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:16.11.14, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
-  version: 16.11.14
-  resolution: "@types/node@npm:16.11.14"
-  checksum: 017037da8387c85ea92c4ecb06dfb1f511e398ec14504a9395bc92948d58840755066eba991e308b39cf1117648be20cd3c43d184f1ec1339bb60b836dd5e4e7
+"@types/node@npm:*, @types/node@npm:16.11.15, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
+  version: 16.11.15
+  resolution: "@types/node@npm:16.11.15"
+  checksum: a44fc023f490252f8f9891251e4ccf84e190ca741bbf1473a628f069cd31caca264343cc4b2e1327348eb447c6392f75f0ec9802e9a55f584a9acd0cc8374767
   languageName: node
   linkType: hard
 
@@ -13829,11 +13829,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-loader@npm:2.17.0":
-  version: 2.17.0
-  resolution: "esbuild-loader@npm:2.17.0"
+"esbuild-loader@npm:2.18.0":
+  version: 2.18.0
+  resolution: "esbuild-loader@npm:2.18.0"
   dependencies:
-    esbuild: ^0.14.2
+    esbuild: ^0.14.6
     joycon: ^3.0.1
     json5: ^2.2.0
     loader-utils: ^2.0.0
@@ -13841,7 +13841,7 @@ __metadata:
     webpack-sources: ^2.2.0
   peerDependencies:
     webpack: ^4.40.0 || ^5.0.0
-  checksum: 8c189f04c1c61d7c8b56355202e569b45df6cd2d2e4112d5a250119b80c7a5354042458c41156dcde56b6cdac180dfa54dcc1b28375cd2eae4d3fb8460c679fa
+  checksum: 885eb4e692da66e4d7a6814abace0d10eee4d62b7c7cacfedd1c995f43b0ec7f2bef9eb80ca624f720aca20e80b1540f3994efc319a1b59fb7acf7c6d801d63f
   languageName: node
   linkType: hard
 
@@ -13887,7 +13887,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.14.6, esbuild@npm:^0.14.2":
+"esbuild@npm:0.14.6, esbuild@npm:^0.14.6":
   version: 0.14.6
   resolution: "esbuild@npm:0.14.6"
   dependencies:

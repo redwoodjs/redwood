@@ -149,7 +149,7 @@ const NavLink = forwardRef<
 )
 
 interface RedirectProps {
-  /** The name of the route to redirect to */
+  /** The path to redirect to */
   to: string
 }
 
