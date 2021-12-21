@@ -8,8 +8,7 @@
     "rw-log-formatter": "./dist/logFormatter/bin.js"
   },
   "files": [
-    "dist",
-    "logFormatter"
+    "dist"
   ],
   "main": "dist/cliHandlers",
   "license": "MIT",
