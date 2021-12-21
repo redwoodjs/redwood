@@ -5318,7 +5318,7 @@ __metadata:
     ansi-colors: 4.1.1
     aws-lambda: 1.0.7
     chokidar: 3.5.2
-    fastify: 3.25.0
+    fastify: 3.25.1
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -14947,9 +14947,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.25.0":
-  version: 3.25.0
-  resolution: "fastify@npm:3.25.0"
+"fastify@npm:3.25.1":
+  version: 3.25.1
+  resolution: "fastify@npm:3.25.1"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
@@ -14957,7 +14957,7 @@ __metadata:
     fast-json-stringify: ^2.5.2
     fastify-error: ^0.3.0
     fastify-warning: ^0.2.0
-    find-my-way: ^4.1.0
+    find-my-way: ^4.5.0
     flatstr: ^1.0.12
     light-my-request: ^4.2.0
     pino: ^6.13.0
@@ -14966,7 +14966,7 @@ __metadata:
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
     tiny-lru: ^7.0.0
-  checksum: 8cf3c20c541f57c83d6980e6b97b42f277c26ec8215a3a1e5af714068c565a90f860c3a0db88b26f0560ba771814c79585ddd920a923d00322aa4517779fcf68
+  checksum: aa93ee316429aef4b593c2a41e7c5ceb75e6867e6a6c29a29592b4c4f871f66adbc4610c75aa75f19268c8dc3948bedb552086fef39e42b79ba5be463b90db58
   languageName: node
   linkType: hard
 
@@ -15224,15 +15224,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-my-way@npm:^4.1.0":
-  version: 4.3.3
-  resolution: "find-my-way@npm:4.3.3"
+"find-my-way@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "find-my-way@npm:4.5.0"
   dependencies:
     fast-decode-uri-component: ^1.0.1
     fast-deep-equal: ^3.1.3
     safe-regex2: ^2.0.0
     semver-store: ^0.3.0
-  checksum: 0ea4152006de74dd03de8145f8251c5c047a0c05ff64295a08a100c7de19b0ed5f28f1b02ca8a9b0525150e155e62d48bfcb39d30a3cd7f8e49b76709fae3116
+  checksum: bbc8953bbb5eff77024ad66bd79d417394f11eb74148743608876ea8d2149314c135fd458f7f6e335d8ef56e334c0e7021e1949037ec52eac625cd15635013d7
   languageName: node
   linkType: hard
 
