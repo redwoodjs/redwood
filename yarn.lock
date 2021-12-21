@@ -5500,7 +5500,7 @@ __metadata:
     css-minimizer-webpack-plugin: 3.3.0
     dotenv-webpack: 7.0.3
     esbuild: 0.14.6
-    esbuild-loader: 2.17.0
+    esbuild-loader: 2.18.0
     fast-glob: 3.2.7
     file-loader: 6.2.0
     graphql: 16.2.0
@@ -13832,11 +13832,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-loader@npm:2.17.0":
-  version: 2.17.0
-  resolution: "esbuild-loader@npm:2.17.0"
+"esbuild-loader@npm:2.18.0":
+  version: 2.18.0
+  resolution: "esbuild-loader@npm:2.18.0"
   dependencies:
-    esbuild: ^0.14.2
+    esbuild: ^0.14.6
     joycon: ^3.0.1
     json5: ^2.2.0
     loader-utils: ^2.0.0
@@ -13844,7 +13844,7 @@ __metadata:
     webpack-sources: ^2.2.0
   peerDependencies:
     webpack: ^4.40.0 || ^5.0.0
-  checksum: 8c189f04c1c61d7c8b56355202e569b45df6cd2d2e4112d5a250119b80c7a5354042458c41156dcde56b6cdac180dfa54dcc1b28375cd2eae4d3fb8460c679fa
+  checksum: 885eb4e692da66e4d7a6814abace0d10eee4d62b7c7cacfedd1c995f43b0ec7f2bef9eb80ca624f720aca20e80b1540f3994efc319a1b59fb7acf7c6d801d63f
   languageName: node
   linkType: hard
 
@@ -13890,7 +13890,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.14.6, esbuild@npm:^0.14.2":
+"esbuild@npm:0.14.6, esbuild@npm:^0.14.6":
   version: 0.14.6
   resolution: "esbuild@npm:0.14.6"
   dependencies:
