@@ -11,7 +11,7 @@
     "@auth0/auth0-spa-js": "1.19.3",
     "@azure/msal-browser": "2.20.0",
     "@babel/cli": "7.16.0",
-    "@clerk/clerk-js": "2.6.1",
+    "@clerk/clerk-js": "2.6.2",
     "@clerk/clerk-sdk-node": "2.3.1",
     "@clerk/types": "1.19.1",
     "@supabase/supabase-js": "1.28.5",
