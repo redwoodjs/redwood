@@ -53,7 +53,7 @@ const setupLogger = (
   logger: Logger
 } => {
   const logger = createLogger({
-    options: { prettyPrint: false, ...loggerOptions },
+    options: { ...loggerOptions },
     destination: destination,
   })
 

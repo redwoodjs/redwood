@@ -30,6 +30,7 @@ const lambdaEventForFastifyRequest = (
     path: request.urlData('path'),
     queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
     requestContext: {
+      requestId: request.id,
       identity: {
         sourceIp: request.ip,
       },
