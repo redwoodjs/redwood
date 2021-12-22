@@ -222,7 +222,7 @@ And there you have it.
 <table width="100%">
   <tr>
     <td align="center" valign="top"><a href="http://tom.preston-werner.com/"><div><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100%" alt=""/></div><strong>Tom Preston-Werner</strong></a><div>founder, leadership</div></td>
-    <td align="center" valign="top"><a href="http://peterp.org/"><div><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100%" alt=""/></div><strong>Peter Pistorius</strong></a><div>founder, leadership</div></td>
+    <td align="center" valign="top"><a href="http://peterp.org/"><div><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100%" alt=""/></div><strong>Peter Pistorius</strong></a><div>founder, leadership</div></td>
     <td align="center" valign="top"><a href="http://ridingtheclutch.com/"><div><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100%" alt=""/></div><strong>Rob Cameron</strong></a><div>founder, leadership</div></td>
     <td align="center" valign="top"><a href="http://thedavidprice.com/"><div><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100%" alt=""/></div><strong>David Price</strong></a><div>founder, leadership</div></td>
   </tr>
