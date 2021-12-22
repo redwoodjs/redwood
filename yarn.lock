@@ -1782,6 +1782,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/types@npm:1.19.1":
+  version: 1.19.1
+  resolution: "@clerk/types@npm:1.19.1"
+  checksum: ead552cc1b05672054804967db8efaa4e7e9bbed48f89dd83adc6baccd6522170ff7c91e012e8afeb0bcb750079663398b3ff81884eb1eabac04243e78bc00a7
+  languageName: node
+  linkType: hard
+
 "@clerk/types@npm:1.19.2":
   version: 1.19.2
   resolution: "@clerk/types@npm:1.19.2"
