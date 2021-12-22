@@ -48,14 +48,18 @@ import type { GraphQLHandlerOptions } from './types'
  *
  */
 const parseEventBody = (event: APIGatewayProxyEvent) => {
+  if (!event.body) {
+    return
+  }
+
   if (event.isBase64Encoded) {
-    return JSON.parse(Buffer.from(event.body || '', 'base64').toString('utf-8'))
+    return JSON.parse(Buffer.from(event.body, 'base64').toString('utf-8'))
   } else {
-    return event.body && JSON.parse(event.body)
+    return JSON.parse(event.body)
   }
 }
 
-function normalizeRequest(event: APIGatewayProxyEvent): Request {
+export function normalizeRequest(event: APIGatewayProxyEvent): Request {
   const body = parseEventBody(event)
 
   return {

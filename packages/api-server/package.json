@@ -1,10 +1,11 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "bin": {
     "rw-api-server": "./dist/index.js",
-    "rw-api-server-watch": "./dist/watch.js"
+    "rw-api-server-watch": "./dist/watch.js",
+    "rw-log-formatter": "./dist/logFormatter/bin.js"
   },
   "files": [
     "dist"
@@ -14,14 +15,19 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.16.5",
     "ansi-colors": "4.1.1",
+    "chalk": "4.1.2",
     "chokidar": "3.5.2",
-    "fastify": "3.25.0",
+    "fast-json-parse": "1.0.3",
+    "fastify": "3.25.1",
     "fastify-http-proxy": "6.2.1",
     "fastify-raw-body": "3.2.0",
     "fastify-static": "4.5.0",
     "fastify-url-data": "3.0.3",
     "lodash.escape": "4.0.1",
+    "pretty-bytes": "5.6.0",
+    "pretty-ms": "7.0.1",
     "qs": "6.10.2",
+    "split2": "4.1.0",
     "yargs": "16.2.0"
   },
   "repository": {
@@ -33,10 +39,11 @@
     "@babel/cli": "7.16.0",
     "@types/aws-lambda": "8.10.88",
     "@types/lodash.escape": "4.0.6",
+    "@types/pretty-bytes": "5.2.0",
     "@types/qs": "6.9.7",
+    "@types/split2": "3.2.1",
     "aws-lambda": "1.0.7",
     "jest": "27.4.5",
-    "pino-pretty": "7.2.0",
     "typescript": "4.5.4"
   },
   "scripts": {
