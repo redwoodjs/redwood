@@ -75,14 +75,16 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     return null
   }
 
-  const location = activePageContext.loadingState[path]?.location
+  path as string
+
+  const location = activePageContext.loadingState[path as string]?.location
 
   if (!location) {
     throw new Error(`No location for route "${name}"`)
   }
 
   const { params: pathParams } = matchPath(
-    path,
+    path as string,
     location.pathname,
     routerState.paramTypes
   )
@@ -95,7 +97,8 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     return <Redirect to={newPath} />
   }
 
-  const Page = activePageContext.loadingState[path]?.page || (() => null)
+  const Page =
+    activePageContext.loadingState[path as string]?.page || (() => null)
 
   // Level 3/3 (InternalRoute)
   return <Page {...allParams} />
@@ -180,7 +183,9 @@ const LocationAwareRouter = ({
   flatChildArray
     .filter((child) => isRoute(child) && !child.props.notfound)
     .forEach((child) => {
-      const { path, redirect, page, name } = child.props
+      const { path, redirect, page, name } = (
+        child as React.VFC<Required<InternalRouteProps>>
+      ).props
 
       if (!path) {
         throw new Error(`Route "${name}" needs to specify a path`)
