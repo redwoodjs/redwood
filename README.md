@@ -221,7 +221,7 @@ And there you have it.
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><strong>Tom Preston-Werner</strong></a><div>founder, leadership</div></td>
+    <td align="center"><a href="http://tom.preston-werner.com/"><div><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/></div><strong>Tom Preston-Werner</strong></a><div>founder, leadership</div></td>
     <td align="center"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a><br /><sub>founder, leadership</sub></td>
     <td align="center"><a href="http://ridingtheclutch.com/"><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100px;" alt=""/><br /><sub><b>Rob Cameron</b></sub></a><br /><sub>founder, leadership</sub></td>
     <td align="center"><a href="http://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a><br /><sub>founder, leadership</sub></td>
