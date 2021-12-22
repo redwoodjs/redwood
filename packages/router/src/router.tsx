@@ -170,7 +170,7 @@ const LocationAwareRouter = ({
    * @remarks
    *
    * Routes need to have `path`, `page`, and `name`,
-   * while redirect routes need to have `path` and `redirect`.
+   * while redirect routes need to have `path` and `redirect`:
    *
    * ```js
    * <Route path="/" page={HomePage} name="home" />  // ok
