@@ -219,7 +219,7 @@ And there you have it.
 ### Core Team
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table>
+<table width="100%">
   <tr>
     <td align="center"><a href="http://tom.preston-werner.com/"><div><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/></div><strong>Tom Preston-Werner</strong></a><div>founder, leadership</div></td>
     <td align="center"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a><br /><sub>founder, leadership</sub></td>
