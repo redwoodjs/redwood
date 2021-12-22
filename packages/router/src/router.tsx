@@ -310,7 +310,7 @@ const LocationAwareRouter = ({
  * @remarks
  *
  * This function is just a wrapper around `reduceRouterTree`, which does most of the actual work.
- * It just provides some variables for `reduceRouterTree` to closer over as it goes through the router's children.
+ * It just provides some variables for `reduceRouterTree` to close over as it goes through the router's children.
  */
 function analyzeRouterTree(
   children: React.ReactNode,
