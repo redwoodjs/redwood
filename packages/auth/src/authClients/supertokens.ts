@@ -11,7 +11,6 @@ export type SuperTokens = AuthClient;
 
 export const supertokens = (client: {
   authRecipe: any,
-  sessions: typeof Sessions,
 }): AuthClient => {
   return {
     type: "supertokens",
@@ -20,11 +19,11 @@ export const supertokens = (client: {
 
     signup: async () => client.authRecipe.redirectToAuth('signup'),
 
-    logout: async () => client.sessions.signOut(),
+    logout: async () => Sessions.signOut(),
 
     getToken: async (): Promise<string | null> => {
-      if (await client.sessions.doesSessionExist()) {
-        let accessTokenPayload = await client.sessions.getAccessTokenPayloadSecurely();
+      if (await Sessions.doesSessionExist()) {
+        let accessTokenPayload = await Sessions.getAccessTokenPayloadSecurely();
         let jwtPropertyName = accessTokenPayload["_jwtPName"];
         return accessTokenPayload[jwtPropertyName];
       } else {
@@ -33,10 +32,10 @@ export const supertokens = (client: {
     },
 
     getUserMetadata: async (): Promise<SuperTokensUser | null> => {
-      if (await client.sessions.doesSessionExist()) {
+      if (await Sessions.doesSessionExist()) {
         return {
-          userId: await client.sessions.getUserId(),
-          accessTokenPayload: await client.sessions.getAccessTokenPayloadSecurely(),
+          userId: await Sessions.getUserId(),
+          accessTokenPayload: await Sessions.getAccessTokenPayloadSecurely(),
         }
       } else {
         return null;
