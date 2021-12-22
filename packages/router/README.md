@@ -26,6 +26,6 @@ Features include:
 
 ## Contributing
 
-Want to make RR even better? Contributions are welcome!
+Want to make the router even better? Contributions are welcome!
 
 If you have questions, you can reach out to the package leads or ask for help in the "Contributors" channels on either [Redwood Discord](https://discord.gg/redwoodjs) or [Redwood Forums](https://community.redwoodjs.com/).
