@@ -181,9 +181,12 @@ const parseSearch = (
 }
 
 /**
- * Validate a path to make sure it follows the router's rules.
- * If any problems are found, a descriptive Error will be thrown,
- * as problems with routes are critical enough to be considered fatal.
+ * Validates a path to make sure it follows the router's rules.
+ *
+ * @remarks
+ *
+ * If anything's wrong, we throw a descriptive error
+ * since faulty routes are critical enough to be considered fatal.
  */
 const validatePath = (path: string) => {
   // Check that path begins with a slash.
