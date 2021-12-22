@@ -183,7 +183,9 @@ const LocationAwareRouter = ({
   flatChildArray
     .filter((child) => isRoute(child) && !child.props.notfound)
     .forEach((child) => {
-      const { path, redirect, page, name } = child.props
+      const { path, redirect, page, name } = (
+        child as React.Component<RouteProps & RedirectRouteProps>
+      ).props
 
       if (!path) {
         throw new Error(`Route "${name}" needs to specify a path`)
