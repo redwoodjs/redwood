@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS = {
 
 export const createApp = (options?: FastifyServerOptions): FastifyInstance => {
   const app = Fastify(options || DEFAULT_OPTIONS)
-  
+
   return app
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/core",
   "description": "Foundational packages and config required to build RedwoodJS.",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "license": "MIT",
   "files": [
     "config"
@@ -20,11 +20,11 @@
     "@babel/preset-react": "7.16.5",
     "@babel/preset-typescript": "7.16.5",
     "@babel/runtime-corejs3": "7.16.5",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.3",
-    "@redwoodjs/cli": "0.40.0",
-    "@redwoodjs/eslint-config": "0.40.0",
-    "@redwoodjs/internal": "0.40.0",
-    "@redwoodjs/testing": "0.40.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.4",
+    "@redwoodjs/cli": "0.41.0",
+    "@redwoodjs/eslint-config": "0.41.0",
+    "@redwoodjs/internal": "0.41.0",
+    "@redwoodjs/testing": "0.41.0",
     "babel-loader": "8.2.3",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -36,7 +36,7 @@
     "css-loader": "6.5.1",
     "css-minimizer-webpack-plugin": "3.3.1",
     "dotenv-webpack": "7.0.3",
-    "esbuild": "0.14.6",
+    "esbuild": "0.14.7",
     "esbuild-loader": "2.18.0",
     "fast-glob": "3.2.7",
     "file-loader": "6.2.0",
@@ -55,7 +55,7 @@
     "webpack": "5.65.0",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-cli": "4.9.1",
-    "webpack-dev-server": "4.6.0",
+    "webpack-dev-server": "4.7.1",
     "webpack-manifest-plugin": "4.0.2",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "3.0.0"

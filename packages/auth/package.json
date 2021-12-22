@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "files": [
     "dist"
   ],
@@ -13,8 +13,8 @@
     "@babel/cli": "7.16.0",
     "@clerk/clerk-js": "2.6.2",
     "@clerk/clerk-sdk-node": "2.4.0",
-    "@clerk/types": "1.19.1",
-    "@supabase/supabase-js": "1.28.6",
+    "@clerk/types": "1.19.2",
+    "@supabase/supabase-js": "1.29.0",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.37",
     "firebase": "9.6.1",
