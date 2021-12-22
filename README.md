@@ -221,34 +221,32 @@ And there you have it.
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a><br /><sub>founder, leadership</sub></td>
-    <td align="center"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a><br /><sub>founder, leadership</sub></td>
-    <td align="center"><a href="http://ridingtheclutch.com/"><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100px;" alt=""/><br /><sub><b>Rob Cameron</b></sub></a><br /><sub>founder, leadership</sub></td>
-    <td align="center"><a href="http://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a><br /><sub>founder, leadership</sub></td>
-    <td align="center"><a href="https://github.com/jtoar"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" width="100px;" alt=""/><br /><sub><b>Dominic Saadi</b></sub></a><br /><sub>maintainer, advocate</sub></td>
+    <td style="text-align: center"><a href="http://tom.preston-werner.com/" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/1?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Tom Preston-Werner</a></span><span style="font-size: 75%">founder, leadership</span></td>
+    <td style="text-align: center"><a href="http://peterp.org/" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Peter Pistorius</a></span><span style="font-size: 75%">founder, leadership</span></td>
+    <td style="text-align: center"><a href="http://ridingtheclutch.com/" rel="nofollow"><img src="https://avatars1.githubusercontent.com/u/300?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Rob Cameron</a></span><span style="font-size: 75%">founder, leadership</span></td>
+    <td style="text-align: center"><a href="http://thedavidprice.com/" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" style="width: 100px"><span style="display: block; font-weight: bold">David Price</a></span><span style="font-size: 75%">founder, leadership</span></td>
+    <td style="text-align: center"><a href="https://github.com/jtoar" rel="nofollow"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Dominic Saadi</a></span><span style="font-size: 75%">maintainer, advocate</span></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/RobertBroersma"><img src="https://avatars0.githubusercontent.com/u/4519828?v=4" width="100px;" alt=""/><br /><sub><b>Robert</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://github.com/dthyresson"><img src="https://avatars2.githubusercontent.com/u/1051633?v=4" width="100px;" alt=""/><br /><sub><b>David Thyresson</b></sub></a><br /><sub>maintainer, community</sub></td>
-    <td align="center"><a href="https://edamame.studio/"><img src="https://avatars0.githubusercontent.com/u/1521877?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Choudhury</b></sub></a><br /><sub>maintainer, community</sub></td>
-    <td align="center"><a href="http://tlundberg.com/"><img src="https://avatars1.githubusercontent.com/u/30793?v=4" width="100px;" alt=""/><br /><sub><b>Tobbe Lundberg</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://github.com/aldonline"><img src="https://avatars2.githubusercontent.com/u/154884?v=4" width="100px;" alt=""/><br /><sub><b>Aldo Bucchi</b></sub></a><br /><sub>maintainer</sub></td>
+    <td style="text-align: center"><a href="https://github.com/RobertBroersma" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/4519828?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Robert</a></span><span style="font-size: 75%">maintainer</span></td>
+    <td style="text-align: center"><a href="https://github.com/dthyresson" rel="nofollow"><img src="https://avatars2.githubusercontent.com/u/1051633?v=4" style="width: 100px"><span style="display: block; font-weight: bold">David Thyresson</a></span><span style="font-size: 75%">maintainer, community</span></td>
+    <td style="text-align: center"><a href="https://edamame.studio/" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/1521877?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Daniel Choudhury</a></span><span style="font-size: 75%">maintainer, community</span></td>
+    <td style="text-align: center"><a href="http://tlundberg.com/" rel="nofollow"><img src="https://avatars1.githubusercontent.com/u/30793?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Tobbe Lundberg</a></span><span style="font-size: 75%">maintainer</span></td>
+    <td style="text-align: center"><a href="https://github.com/aldonline" rel="nofollow"><img src="https://avatars2.githubusercontent.com/u/154884?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Aldo Bucchi</a></span><span style="font-size: 75%">maintainer</span></td>
 </tr>
 <tr>
-    <td align="center"><a href="https://github.com/ajcwebdev"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Campolo</b></sub></a><br /><sub>advocate</sub></td>
-    <td align="center"><a href="https://github.com/clairefro"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" width="100px;" alt=""/><br /><sub><b>Claire Froelich</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://github.com/kimadeline"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /><sub>community</sub></td>
-    <td align="center"><a href="https://github.com/forresthayes"><img src="https://avatars0.githubusercontent.com/u/44448047?v=4" width="100px;" alt=""/><br /><sub><b>Forrest Hayes</b></sub></a><br /><sub>community</sub></td>
-    <td align="center"><a href="https://simoncrypta.dev/"><img src="https://avatars.githubusercontent.com/u/18013532?v=4" width="100px;" alt=""/><br /><sub><b>Simon Gagnon</b></sub></a><br /><sub>maintainer</sub></td>
+    <td style="text-align: center"><a href="https://github.com/ajcwebdev" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Anthony Campolo</a></span><span style="font-size: 75%">advocate</span></td>
+    <td style="text-align: center"><a href="https://github.com/clairefro" rel="nofollow"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Claire Froelich</a></span><span style="font-size: 75%">maintainer</span></td>
+    <td style="text-align: center"><a href="https://github.com/kimadeline" rel="nofollow"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Kim-Adeline Miguel</a></span><span style="font-size: 75%">community</span></td>
+    <td style="text-align: center"><a href="https://github.com/forresthayes" rel="nofollow"><img src="https://avatars0.githubusercontent.com/u/44448047?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Forrest Hayes</a></span><span style="font-size: 75%">community</span></td>
+    <td style="text-align: center"><a href="https://simoncrypta.dev/" rel="nofollow"><img src="https://avatars.githubusercontent.com/u/18013532?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Simon Gagnon</a></span><span style="font-size: 75%">maintainer</span></td>
 </tr>
 <tr>
-    <td align="center"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a><br /><sub>community</sub></td>
-    <td align="center"><a href="https://adityaworks.com/"><img src="https://avatars.githubusercontent.com/u/2629902?v=4" width="100px;" alt=""/><br /><sub><b>Aditya Pandey</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
-    <td align="center"><a href="https://github.com/agiannelli"><img src="https://avatars.githubusercontent.com/u/53096355?v=4" width="100px;" alt=""/><br /><sub><b>Amanda Giannelli</b></sub></a><br /><sub>community</sub></td>
+    <td style="text-align: center"><a href="http://kriscoulson.com/" rel="nofollow"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Kris Coulson</a></span><span style="font-size: 75%">community</span></td>
+    <td style="text-align: center"><a href="https://adityaworks.com/" rel="nofollow"><img src="https://avatars.githubusercontent.com/u/2629902?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Aditya Pandey</a></span><span style="font-size: 75%">maintainer</span></td>
+    <td style="text-align: center"><a href="https://github.com/keithtelliott" rel="nofollow"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" style="width: 100px"><span style="display: block; font-weight: bold">Keith T Elliot</a></span><span style="font-size: 75%">community</span></td>
 </tr>
-</table>
-<!-- markdownlint-restore -->
+</table><!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
 ### All Contributors
