@@ -27,7 +27,7 @@
     "@types/aws-lambda": "8.10.88",
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.0.3",
-    "@types/node": "16.11.15",
+    "@types/node": "16.11.17",
     "@types/react": "17.0.37",
     "@types/react-dom": "17.0.11",
     "@types/webpack": "5.28.0",
@@ -35,7 +35,7 @@
     "babel-plugin-inline-react-svg": "2.0.1",
     "jest": "27.4.5",
     "jest-watch-typeahead": "1.0.0",
-    "msw": "0.35.0",
+    "msw": "0.36.3",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
