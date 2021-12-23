@@ -1767,9 +1767,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@clerk/clerk-sdk-node@npm:2.4.0"
+"@clerk/clerk-sdk-node@npm:2.5.0":
+  version: 2.5.0
+  resolution: "@clerk/clerk-sdk-node@npm:2.5.0"
   dependencies:
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -1778,7 +1778,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 5674d40d8fe51fcc42e86dd008a92a3cc1f2684d8f698dc6f5e9e8b6b55b7aa89432c45164f5893e141c48d49ce81ef72c6329b10e7c358e92c5466ad688573e
+  checksum: 442555b08b991a316d84228fb507b0008d6e1d3fcd1293e799014c98bcc0418c8c5a65cd6439d108ed06d0c2a25826530ac802f295f09579e3512413b8e5dc11
   languageName: node
   linkType: hard
 
@@ -5374,7 +5374,7 @@ __metadata:
     "@azure/msal-browser": 2.20.0
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.6.1
-    "@clerk/clerk-sdk-node": 2.4.0
+    "@clerk/clerk-sdk-node": 2.5.0
     "@clerk/types": 1.19.2
     "@supabase/supabase-js": 1.29.1
     "@types/netlify-identity-widget": 1.9.2
