@@ -43,7 +43,12 @@ const fastifyResponseForLambdaResult = (
   reply: FastifyReply,
   lambdaResult: APIGatewayProxyResult
 ) => {
-  const { statusCode = 200, headers, body = '', multiValueHeaders } = lambdaResult
+  const {
+    statusCode = 200,
+    headers,
+    body = '',
+    multiValueHeaders,
+  } = lambdaResult
 
   if (headers) {
     Object.keys(headers).forEach((headerName) => {

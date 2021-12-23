@@ -13,7 +13,7 @@ import { magicLink } from './magicLink'
 import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
-import {supertokens} from './supertokens';
+import { supertokens } from './supertokens'
 
 interface Req {
   event: APIGatewayProxyEvent

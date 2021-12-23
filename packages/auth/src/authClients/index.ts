@@ -25,8 +25,8 @@ import { nhost } from './nhost'
 import type { Nhost, NhostUser } from './nhost'
 import { supabase } from './supabase'
 import type { Supabase, SupabaseUser } from './supabase'
-import {supertokens} from './supertokens';
-import type { SuperTokensUser, SuperTokens} from './supertokens';
+import { supertokens } from './supertokens'
+import type { SuperTokensUser, SuperTokens } from './supertokens'
 
 const typesToClients = {
   netlify,
