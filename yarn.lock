@@ -5322,7 +5322,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.2
     fast-json-parse: 1.0.3
-    fastify: 3.25.1
+    fastify: 3.25.2
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -14991,9 +14991,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.25.1":
-  version: 3.25.1
-  resolution: "fastify@npm:3.25.1"
+"fastify@npm:3.25.2":
+  version: 3.25.2
+  resolution: "fastify@npm:3.25.2"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
@@ -15010,7 +15010,7 @@ __metadata:
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
     tiny-lru: ^7.0.0
-  checksum: aa93ee316429aef4b593c2a41e7c5ceb75e6867e6a6c29a29592b4c4f871f66adbc4610c75aa75f19268c8dc3948bedb552086fef39e42b79ba5be463b90db58
+  checksum: 6f169ec21811ec02d0e731c7a3c1962552108ffa9cdd7d71ea5e11a32a47642fd170c8ca0ebf936c922ba0740793bec9cf3667c2e51feec6fe17fd552c0076e0
   languageName: node
   linkType: hard
 
