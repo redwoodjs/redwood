@@ -105,7 +105,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 }
 
 /**
- * A user-defined type guard.
+ * A user-defined type guard that checks if the given ReactNode is a Route.
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates}
  * */
