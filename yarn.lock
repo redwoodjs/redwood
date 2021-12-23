@@ -5705,7 +5705,7 @@ __metadata:
     core-js: 3.20.0
     jest: 27.4.5
     lodash.isequal: 4.5.0
-    prop-types: 15.7.2
+    prop-types: 15.8.0
     react: 17.0.2
     react-dom: 17.0.2
     typescript: 4.5.4
@@ -23760,14 +23760,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.7.2":
-  version: 15.7.2
-  resolution: "prop-types@npm:15.7.2"
+"prop-types@npm:15.8.0":
+  version: 15.8.0
+  resolution: "prop-types@npm:15.8.0"
   dependencies:
     loose-envify: ^1.4.0
     object-assign: ^4.1.1
-    react-is: ^16.8.1
-  checksum: 4eb527daec962acd789c621ce3234a6f077ce202049291642d8efd13b19805adf07227672c570531cdb56a357640ea27e336527682b7ed4be0c5b392a01662ab
+    react-is: ^16.13.1
+  checksum: 0d10495ef3e68a887b7eec373bb8da14b457868a9bee9483e3c2529a50e3c104560c9d83f1b7240afb38df1bf0be34994f38cb9e985b8194bddab38915bc2432
   languageName: node
   linkType: hard
 
@@ -24314,7 +24314,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.7.0, react-is@npm:^16.8.1":
+"react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
