@@ -167,10 +167,7 @@ const LocationAwareRouter = ({
   const flatChildArray = flattenAll(children)
 
   /**
-   * Of the router's children that are routes but aren't the not-found route
-   * (so routes and redirect routes), validate their props.
-   *
-   * @remarks
+   * Validate the props of the routes in the router.
    *
    * Routes need to have `path`, `page`, and `name`,
    * while redirect routes need to have `path` and `redirect`:
