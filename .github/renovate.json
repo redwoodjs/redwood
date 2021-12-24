@@ -27,5 +27,6 @@
   "postUpdateOptions": ["yarnDedupeHighest"],
   "assignees": [
     "@jtoar"
-  ]
+  ],
+  "labels": ["release:chore"]
 }

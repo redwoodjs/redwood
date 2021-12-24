@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "files": [
     "dist",
     "apollo",
@@ -12,8 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "3.5.6",
-    "@redwoodjs/auth": "0.40.0",
-    "core-js": "3.20.0",
+    "@redwoodjs/auth": "0.41.0",
+    "core-js": "3.20.1",
     "graphql": "16.2.0",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.2.2",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.0",
-    "@types/react": "17.0.37",
+    "@types/react": "17.0.38",
     "jest": "27.4.5",
     "typescript": "4.5.4"
   },
