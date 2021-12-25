@@ -131,7 +131,9 @@ const baseConfig = {
 
     return sbConfig
   },
-  staticDirs: [staticAssetsFolder],
+  ...(process.env.NODE_ENV !== 'production' && {
+    staticDirs: [`${staticAssetsFolder}`],
+  }),
 }
 
 const mergeUserStorybookConfig = (baseConfig) => {
