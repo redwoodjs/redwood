@@ -1665,7 +1665,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2, @babel/runtime@npm:^7.9.6":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.16.5
   resolution: "@babel/runtime@npm:7.16.5"
   dependencies:
@@ -5546,7 +5546,7 @@ __metadata:
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.25.3
-    eslint-plugin-jest-dom: 3.9.2
+    eslint-plugin-jest-dom: 3.9.4
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
     eslint-plugin-react: 7.27.1
@@ -6731,7 +6731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^7.28.1":
+"@testing-library/dom@npm:^7.31.2":
   version: 7.31.2
   resolution: "@testing-library/dom@npm:7.31.2"
   dependencies:
@@ -14136,16 +14136,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest-dom@npm:3.9.2":
-  version: 3.9.2
-  resolution: "eslint-plugin-jest-dom@npm:3.9.2"
+"eslint-plugin-jest-dom@npm:3.9.4":
+  version: 3.9.4
+  resolution: "eslint-plugin-jest-dom@npm:3.9.4"
   dependencies:
-    "@babel/runtime": ^7.9.6
-    "@testing-library/dom": ^7.28.1
+    "@babel/runtime": ^7.16.3
+    "@testing-library/dom": ^7.31.2
     requireindex: ^1.2.0
   peerDependencies:
     eslint: ">=6.8"
-  checksum: 9b3837735cfe5dbe9d7bab191225a1af6f0be76da312c43e2e823a8ce8b97963fb78850dc20599063b2cf518b1600989261133d2f8309babc74ee5ba963976b3
+  checksum: bfc8f9994922d4a1211a5c2b435b1b7390268886fd0767e027e39af2d4c4a85116a9c8ef0b36662a35d5f08ae705cdaa16a6981cd50ded927d865fc0deb55813
   languageName: node
   linkType: hard
 
