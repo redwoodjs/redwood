@@ -1767,9 +1767,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@clerk/clerk-sdk-node@npm:2.4.0"
+"@clerk/clerk-sdk-node@npm:2.5.0":
+  version: 2.5.0
+  resolution: "@clerk/clerk-sdk-node@npm:2.5.0"
   dependencies:
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -1778,7 +1778,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 5674d40d8fe51fcc42e86dd008a92a3cc1f2684d8f698dc6f5e9e8b6b55b7aa89432c45164f5893e141c48d49ce81ef72c6329b10e7c358e92c5466ad688573e
+  checksum: 442555b08b991a316d84228fb507b0008d6e1d3fcd1293e799014c98bcc0418c8c5a65cd6439d108ed06d0c2a25826530ac802f295f09579e3512413b8e5dc11
   languageName: node
   linkType: hard
 
@@ -5322,7 +5322,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.2
     fast-json-parse: 1.0.3
-    fastify: 3.25.1
+    fastify: 3.25.2
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -5360,7 +5360,7 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 7.6.0
+    pino: 7.6.1
     typescript: 4.5.4
     uuid: 8.3.2
   languageName: unknown
@@ -5374,7 +5374,7 @@ __metadata:
     "@azure/msal-browser": 2.20.0
     "@babel/cli": 7.16.0
     "@clerk/clerk-js": 2.6.1
-    "@clerk/clerk-sdk-node": 2.4.0
+    "@clerk/clerk-sdk-node": 2.5.0
     "@clerk/types": 1.19.2
     "@supabase/supabase-js": 1.29.1
     "@types/netlify-identity-widget": 1.9.2
@@ -5566,7 +5566,7 @@ __metadata:
     core-js: 3.20.1
     jest: 27.4.5
     pascalcase: 1.0.0
-    react-hook-form: 7.22.3
+    react-hook-form: 7.22.5
     typescript: 4.5.4
   languageName: unknown
   linkType: soft
@@ -14991,9 +14991,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.25.1":
-  version: 3.25.1
-  resolution: "fastify@npm:3.25.1"
+"fastify@npm:3.25.2":
+  version: 3.25.2
+  resolution: "fastify@npm:3.25.2"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
@@ -15010,7 +15010,7 @@ __metadata:
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
     tiny-lru: ^7.0.0
-  checksum: aa93ee316429aef4b593c2a41e7c5ceb75e6867e6a6c29a29592b4c4f871f66adbc4610c75aa75f19268c8dc3948bedb552086fef39e42b79ba5be463b90db58
+  checksum: 6f169ec21811ec02d0e731c7a3c1962552108ffa9cdd7d71ea5e11a32a47642fd170c8ca0ebf936c922ba0740793bec9cf3667c2e51feec6fe17fd552c0076e0
   languageName: node
   linkType: hard
 
@@ -22900,9 +22900,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino@npm:7.6.0":
-  version: 7.6.0
-  resolution: "pino@npm:7.6.0"
+"pino@npm:7.6.1":
+  version: 7.6.1
+  resolution: "pino@npm:7.6.1"
   dependencies:
     fast-redact: ^3.0.0
     fastify-warning: ^0.2.0
@@ -22916,7 +22916,7 @@ fsevents@^1.2.7:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: f7edcb464ca3104621159cbcc2bdb30fe37cc41a1cf4b50ad90516f4fef57462489609fece5cdcab0041d3a06ee2239075b288a8a8b1a2aa2ef24074b2c100d9
+  checksum: 3bce5ac757bb834c2fbc1c619418f5db656034440a90f72ab22f6a0cda34b236152167a8cfb3621f7b43c6207ac9256a52cd80e0a86840c69ab3d1305deb59e9
   languageName: node
   linkType: hard
 
@@ -24303,12 +24303,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.22.3":
-  version: 7.22.3
-  resolution: "react-hook-form@npm:7.22.3"
+"react-hook-form@npm:7.22.5":
+  version: 7.22.5
+  resolution: "react-hook-form@npm:7.22.5"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: 2bd2a07ed6bd7fb8d060f43738e45f057b978bfda9204e3644956a80d7d32e1008435702ffbe02bcdd61afc79143ee83f3968d9df6ca4cdaeddee05cdb824a6a
+  checksum: ce8d00e37e55d1197b2a61c7ef508145091eaf92d50409293ccce5ed32429ead245632a8a77e9ab8438c44c2f074bfc3a726cb0995468bb1c86821b382b80b90
   languageName: node
   linkType: hard
 
