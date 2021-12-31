@@ -16,6 +16,7 @@ const isUsingBabelRc = () => {
 const BABEL_SETTINGS_LINK = c.warning('https://redwoodjs.com/docs/builds')
 
 const checkForBabelConfig = () => {
+  return
   if (isUsingBabelRc()) {
     const messages = [
       "Looks like you're trying to configure one of your sides with a .babelrc file.",
@@ -24,9 +25,7 @@ const checkForBabelConfig = () => {
       'Your plugins and settings will be automatically merged with',
       `the Redwood built-in config, more details here: ${BABEL_SETTINGS_LINK}`,
     ]
-
     const errTitle = 'Incorrect project configuration'
-
     console.log(
       boxen(messages.join('\n'), {
         title: errTitle,
@@ -35,7 +34,6 @@ const checkForBabelConfig = () => {
         borderColor: 'red',
       })
     )
-
     throw new Error(errTitle)
   }
 }

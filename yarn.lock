@@ -5639,6 +5639,7 @@ __metadata:
     core-js: 3.20.1
     deepmerge: 4.2.2
     esbuild: 0.14.8
+    esbuild-plugin-babel: ^0.2.3
     fast-glob: 3.2.7
     findup-sync: 5.0.0
     fs-extra: 10.0.0
@@ -13900,6 +13901,15 @@ __metadata:
   version: 0.14.8
   resolution: "esbuild-openbsd-64@npm:0.14.8"
   checksum: 2ea09b6a96114d5104556f1441e5c034fcde01fb87eb9c719964ea447e9ccd9dc9ea8fe77211d665cfe92e1282baf762c62217e4f9510d451d48aea88059517b
+  languageName: node
+  linkType: hard
+
+"esbuild-plugin-babel@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "esbuild-plugin-babel@npm:0.2.3"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 3d6c2a74baa51800ee962521deb88a2821efd0d442c08c2cc4924715a4650cca536811ed283a964044fd0d64fb5138428465115ce71d8ed07259d96f9c0aad9b
   languageName: node
   linkType: hard
 

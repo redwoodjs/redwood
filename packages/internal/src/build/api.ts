@@ -2,25 +2,32 @@ import fs from 'fs'
 import path from 'path'
 
 import * as esbuild from 'esbuild'
+import type { Plugin } from 'esbuild'
 import { moveSync, removeSync } from 'fs-extra'
 
-import { findApiFiles } from '../files'
+import { findApiServerFunctions } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
 
 import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
 
-export const buildApi = () => {
+export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
   cleanApiBuild()
 
-  const srcFiles = findApiFiles()
+  // const srcFiles = findApiFiles()
 
-  const prebuiltFiles = prebuildApiFiles(srcFiles)
-    .filter((path): path is string => path !== undefined)
-    .flatMap(generateProxyFilesForNestedFunction)
+  // prebuildApiFiles(srcFiles)
+  //   .filter((path): path is string => path !== undefined)
+  //   .flatMap(generateProxyFilesForNestedFunction)
 
-  return transpileApi(prebuiltFiles)
+  // const functionsPath = path.join(
+  //   getPaths().generated.prebuild,
+  //   'api/src/functions'
+  // )
+  // const preTranspiledApiFunctions = findApiServerFunctions(functionsPath)
+
+  return await transpileApi(findApiServerFunctions())
 }
 
 export const cleanApiBuild = () => {
@@ -128,17 +135,54 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   })
 }
 
+const makeAllPackagesExternalPlugin = {
+  name: 'make-all-packages-external',
+  setup(build: any) {
+    const filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/ // Must not start with "/" or "./" or "../"
+    build.onResolve({ filter }, (args: any) => ({
+      path: args.path,
+      external: true,
+    }))
+  },
+}
+
+const runRwBabelTransformsPlugin = {
+  name: 'rw-babel-transform',
+  setup(build: esbuild.PluginBuild) {
+    build.onLoad({ filter: /.(js|ts)$/ }, async (args) => {
+      const transformedCode = prebuildApiFile(
+        args.path,
+        '',
+        getApiSideBabelPlugins()
+      )
+
+      if (transformedCode?.code) {
+        return {
+          contents: transformedCode.code,
+          loader: 'js',
+        }
+      }
+      // @TODO handle babel error
+      return null
+    })
+  },
+}
+
 export const transpileApi = (files: string[], options = {}) => {
   const rwjsPaths = getPaths()
 
-  return esbuild.buildSync({
+  return esbuild.build({
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
     target: 'node12', // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
     format: 'cjs',
-    bundle: false,
-    outdir: rwjsPaths.api.dist,
+    bundle: true,
+    plugins: [
+      makeAllPackagesExternalPlugin,
+      runRwBabelTransformsPlugin as Plugin,
+    ],
+    outdir: path.join(rwjsPaths.api.dist, 'functions'),
     // setting this to 'true' will generate an external sourcemap x.js.map
     // AND set the sourceMappingURL comment
     // (setting it to 'external' will ONLY generate the file, but won't add the comment)

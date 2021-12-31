@@ -7,6 +7,7 @@ import {
   prebuildApiFiles,
   cleanApiBuild,
   generateProxyFilesForNestedFunction,
+  buildApi,
 } from '../build/api'
 import {
   getApiSideBabelConfigPath,
@@ -214,4 +215,9 @@ test('jest mock statements also handle', () => {
   expect(outputForJest).toContain('import dog from "../../lib/dog"')
   // Step 3: check that output has correct jest.mock path
   expect(outputForJest).toContain('jest.mock("../../lib/dog"')
+})
+
+test('debug build', async () => {
+  cleanApiBuild()
+  await buildApi()
 })
