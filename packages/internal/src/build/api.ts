@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import * as esbuild from 'esbuild'
-import type { Plugin } from 'esbuild'
 import { moveSync, removeSync } from 'fs-extra'
 
 import { findApiServerFunctions } from '../files'
@@ -137,9 +136,9 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
 
 const makeAllPackagesExternalPlugin = {
   name: 'make-all-packages-external',
-  setup(build: any) {
+  setup(build: esbuild.PluginBuild) {
     const filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/ // Must not start with "/" or "./" or "../"
-    build.onResolve({ filter }, (args: any) => ({
+    build.onResolve({ filter }, (args) => ({
       path: args.path,
       external: true,
     }))
@@ -178,10 +177,7 @@ export const transpileApi = (files: string[], options = {}) => {
     target: 'node12', // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
     format: 'cjs',
     bundle: true,
-    plugins: [
-      makeAllPackagesExternalPlugin,
-      runRwBabelTransformsPlugin as Plugin,
-    ],
+    plugins: [makeAllPackagesExternalPlugin, runRwBabelTransformsPlugin],
     outdir: path.join(rwjsPaths.api.dist, 'functions'),
     // setting this to 'true' will generate an external sourcemap x.js.map
     // AND set the sourceMappingURL comment
