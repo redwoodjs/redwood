@@ -11,7 +11,7 @@ const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 module.exports = {
   roots: ['<rootDir>/src/'],
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
   displayName: {
     color: 'blueBright',
     name: 'web',
