@@ -52,6 +52,8 @@ module.exports = {
   transform: {
     '\\.[jt]sx?$': [
       'babel-jest',
+      // When jest runs tests in parallel, it serializes the config before passing down options to babel
+      // that's why these must be serializable. Passing the reference to a config instead.
       {
         configFile: path.resolve(__dirname, './webBabelConfig.js'),
       },
