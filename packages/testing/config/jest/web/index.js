@@ -1,10 +1,7 @@
 const path = require('path')
 const { TextDecoder } = require('util')
 
-const {
-  getPaths,
-  getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+const { getPaths } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -57,7 +54,9 @@ module.exports = {
   transform: {
     '\\.[jt]sx?$': [
       'babel-jest',
-      getWebSideDefaultBabelConfig({ forJest: true }),
+      {
+        configFile: path.resolve(__dirname, './webBabelConfig.js'),
+      },
     ],
   },
 }
