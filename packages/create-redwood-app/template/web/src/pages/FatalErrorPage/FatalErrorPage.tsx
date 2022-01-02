@@ -7,7 +7,13 @@
 // still render a generic error page, but your users will prefer something a bit more
 // thoughtful. =)
 
-export default () => (
+// Ensures that production builds do not include the error page
+let RedwoodDevFatalErrorPage = undefined
+if (process.env.NODE_ENV === 'development') {
+  RedwoodDevFatalErrorPage = require("@redwoodjs/web").DevFatalErrorPage;
+}
+
+export default RedwoodDevFatalErrorPage || (() => (
   <main>
     <style
       dangerouslySetInnerHTML={{
@@ -50,4 +56,4 @@ export default () => (
       </h1>
     </section>
   </main>
-)
+))

@@ -4,6 +4,7 @@ type PropsInfallibleErrorBoundary = Partial<{
 
 type State = {
   hasError: boolean
+  error?: Error
 }
 
 class InfallibleErrorBoundary extends React.Component<
@@ -27,17 +28,17 @@ class InfallibleErrorBoundary extends React.Component<
 
 type PropsFatalErrorBoundary = {
   children?: React.ReactNode
-  page: React.ComponentType
+  page: React.ComponentType<{ error?: Error }>
 }
 
 class FatalErrorBoundary extends React.Component<
   PropsFatalErrorBoundary,
   State
 > {
-  state = { hasError: false }
+  state = { hasError: false, error: undefined }
 
-  static getDerivedStateFromError() {
-    return { hasError: true }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error }
   }
 
   render() {
@@ -45,7 +46,7 @@ class FatalErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         <InfallibleErrorBoundary>
-          <Page />
+          <Page error={this.state.error} />
         </InfallibleErrorBoundary>
       )
     }
