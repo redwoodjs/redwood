@@ -5,7 +5,7 @@
 import StackTracey from 'stacktracey'
 
 // This should be able to be accessible from webpack pretty trivially
-const appRoot = require.resolve('~redwood-src-root')
+const appRoot = process.env.RWJS_SRC_ROOT
 
 export const DevFatalErrorPage = (props: { error?: Error }) => {
   // Safety fallback
@@ -46,6 +46,7 @@ export const DevFatalErrorPage = (props: { error?: Error }) => {
           Get help via <Discord /> or <Discourse />
         </div>
       </nav>
+
       <section className="panic-overlay">
         <div className="error">
           <h3 className="error-title">
@@ -94,7 +95,7 @@ function StackEntry({
   const highlightIndex = (line || 0) - start - 1
   const onLastLine = highlightIndex === lines.length - 1
 
-  const shortestPath = (path: string) => path.replace(appRoot, '')
+  const shortestPath = (path: string) => path.replace(appRoot || '', '')
   const expanded = !shouldHideEntry(entry, i)
 
   const clickable = lines.length
