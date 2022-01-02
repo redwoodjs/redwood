@@ -11,6 +11,7 @@ const { configFile, babelrc } = getApiSideDefaultBabelConfig()
 
 module.exports = {
   roots: ['<rootDir>/src/'],
+  runner: path.join(__dirname, '../jest-serial-runner.js'),
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   displayName: {
     color: 'redBright',
