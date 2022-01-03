@@ -5338,7 +5338,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@prisma/client": 3.7.0
     "@redwoodjs/auth": 0.41.0
-    "@types/crypto-js": 4.0.2
+    "@types/crypto-js": 4.1.0
     "@types/jsonwebtoken": 8.5.6
     "@types/md5": 2.3.1
     aws-lambda: 1.0.7
@@ -7066,10 +7066,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/crypto-js@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@types/crypto-js@npm:4.0.2"
-  checksum: e1ec951d947e8e92be5435fbab2df14d4ce946900c1f0e4ecae2c284c07c594966cff0134f132dba57313adc13217e035a4f3f61c218bb05a4c509863cbd51d0
+"@types/crypto-js@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@types/crypto-js@npm:4.1.0"
+  checksum: 2c646429d01c2166513ee8dd7764e284d9a23dc3f2693f3da0c68edd5845b8446b7390852850abf8706b221ded3be0f86fe0e8627436c128addd472153a48b0f
   languageName: node
   linkType: hard
 
