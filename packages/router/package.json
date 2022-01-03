@@ -10,7 +10,7 @@
   "dependencies": {
     "@reach/skip-nav": "0.16.0",
     "@redwoodjs/auth": "0.41.0",
-    "core-js": "3.20.1",
+    "core-js": "3.20.2",
     "lodash.isequal": "4.5.0"
   },
   "repository": {
