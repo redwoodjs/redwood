@@ -52,7 +52,7 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@types/listr": "0.14.4",
     "@types/node-fetch": "2.5.12",
     "jest": "27.4.5",

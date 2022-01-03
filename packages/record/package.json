@@ -18,7 +18,7 @@
     "directory": "packages/record"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "jest": "27.4.5"
   },
   "jest": {
