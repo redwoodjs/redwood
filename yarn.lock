@@ -5348,7 +5348,7 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 7.6.1
+    pino: 7.6.2
     typescript: 4.5.4
     uuid: 8.3.2
   languageName: unknown
@@ -22892,15 +22892,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino@npm:7.6.1":
-  version: 7.6.1
-  resolution: "pino@npm:7.6.1"
+"pino@npm:7.6.2":
+  version: 7.6.2
+  resolution: "pino@npm:7.6.2"
   dependencies:
     fast-redact: ^3.0.0
-    fastify-warning: ^0.2.0
     on-exit-leak-free: ^0.2.0
     pino-abstract-transport: v0.5.0
     pino-std-serializers: ^4.0.0
+    process-warning: ^1.0.0
     quick-format-unescaped: ^4.0.3
     real-require: ^0.1.0
     safe-stable-stringify: ^2.1.0
@@ -22908,7 +22908,7 @@ fsevents@^1.2.7:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: 3bce5ac757bb834c2fbc1c619418f5db656034440a90f72ab22f6a0cda34b236152167a8cfb3621f7b43c6207ac9256a52cd80e0a86840c69ab3d1305deb59e9
+  checksum: dbb1a7ddf5032e5a62a545f2e1853f0f5fb3507195355f21d5fba5240b55029519474676e9f554daad74d343549b2b8bc5b84c1a3f6440d715cb267839d36c32
   languageName: node
   linkType: hard
 
