@@ -5310,7 +5310,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.2
     fast-json-parse: 1.0.3
-    fastify: 3.25.2
+    fastify: 3.25.3
     fastify-http-proxy: 6.2.1
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -14966,26 +14966,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.25.2":
-  version: 3.25.2
-  resolution: "fastify@npm:3.25.2"
+"fastify@npm:3.25.3":
+  version: 3.25.3
+  resolution: "fastify@npm:3.25.3"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
     avvio: ^7.1.2
     fast-json-stringify: ^2.5.2
     fastify-error: ^0.3.0
-    fastify-warning: ^0.2.0
     find-my-way: ^4.5.0
     flatstr: ^1.0.12
     light-my-request: ^4.2.0
     pino: ^6.13.0
+    process-warning: ^1.0.0
     proxy-addr: ^2.0.7
     rfdc: ^1.1.4
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
     tiny-lru: ^7.0.0
-  checksum: 6f169ec21811ec02d0e731c7a3c1962552108ffa9cdd7d71ea5e11a32a47642fd170c8ca0ebf936c922ba0740793bec9cf3667c2e51feec6fe17fd552c0076e0
+  checksum: 734e259cbb358581d1b07fea02b522161ff88bc90372e9cd9fab3895ce13db49381d6bbd6e96106a080ef0315b96dd042e63f43bdeb1f9ccb7f1e8324b9298c1
   languageName: node
   linkType: hard
 
@@ -23622,6 +23622,13 @@ fsevents@^1.2.7:
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
   checksum: bec089239487833d46b59d80327a1605e1c5287eaad770a291add7f45fda1bb5e28b38e0e061add0a1d0ee0984788ce74fa394d345eed1c420cacf392c554367
+  languageName: node
+  linkType: hard
+
+"process-warning@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "process-warning@npm:1.0.0"
+  checksum: 43ec4229d64eb5c58340c8aacade49eb5f6fd513eae54140abf365929ca20987f0a35c5868125e2b583cad4de8cd257beb5667d9cc539d9190a7a4c3014adf22
   languageName: node
   linkType: hard
 
