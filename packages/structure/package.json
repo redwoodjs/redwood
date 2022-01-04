@@ -37,11 +37,11 @@
     "directory": "packages/structure"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.178",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.11.17",
+    "@types/node": "16.11.18",
     "@types/vscode": "1.63.1",
     "jest": "27.4.5",
     "typescript": "4.5.4"
