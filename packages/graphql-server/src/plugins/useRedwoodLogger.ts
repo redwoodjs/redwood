@@ -213,6 +213,32 @@ export const useRedwoodLogger = (
         }
       })
     },
+    onParse({ params }) {
+      const options = params.options as any
+
+      const envelopLogger = childLogger.child({
+        ...options,
+      })
+
+      return ({ result }) => {
+        if (result instanceof Error) {
+          envelopLogger.error(result)
+        }
+      }
+    },
+    onValidate({ params }) {
+      const options = params.options as any
+
+      const envelopLogger = childLogger.child({
+        ...options,
+      })
+
+      return ({ result }) => {
+        result.forEach((item) => {
+          item.message && envelopLogger.error(item.message)
+        })
+      }
+    },
     onExecute({ args }) {
       const options = {} as any
       const rootOperation = args.document.definitions.find(
