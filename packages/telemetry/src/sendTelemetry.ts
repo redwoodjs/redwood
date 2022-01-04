@@ -134,7 +134,7 @@ const buildPayload = async () => {
     duration: argv.duration ? parseInt(argv.duration) : null,
     uid: uniqueId(rootDir),
     ci: ci.isCI,
-    redwoodCi: process.env.REDWOOD_CI || false,
+    redwoodCi: !!process.env.REDWOOD_CI,
     NODE_ENV: process.env.NODE_ENV || null,
     ...(await getInfo({ redwoodVersion: argv.rwVersion })),
   }
