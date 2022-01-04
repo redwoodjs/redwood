@@ -113,9 +113,10 @@ describe('the scenario generator', () => {
     const field = { type: 'BigInt' }
     const value = service.scenarioFieldValue(field)
 
-    expect(value).toBeGreaterThan(0n)
-    expect(typeof value).toBe('bigint')
+    expect(value).toMatch(/^\d+n$/)
+    expect(typeof value).toBe('string') // pseudo-bigint
   })
+
   test('scenarioFieldValue returns a true for Boolean types', () => {
     const field = { type: 'Boolean' }
     const value = service.scenarioFieldValue(field)

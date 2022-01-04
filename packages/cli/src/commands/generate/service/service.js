@@ -124,12 +124,9 @@ export const buildScenario = async (model) => {
     )
 
     Object.keys(scenarioData).forEach((key) => {
-      console.log(key)
       const value = scenarioData[key]
-      console.log(value)
 
-      if (value.match(/^\d+n$/)) {
-        console.log('match!!')
+      if (value && typeof value === 'string' && value.match(/^\d+n$/)) {
         scenarioData[key] = `${value.substr(0, value.length - 1)}n`
       }
     })
