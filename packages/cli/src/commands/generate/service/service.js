@@ -46,6 +46,9 @@ export const scenarioFieldValue = (field) => {
   const randInt = parseInt(Math.random() * 10000000)
 
   switch (field.type) {
+    case 'BigInt':
+      // eslint-disable-next-line no-undef
+      return `${BigInt(randInt)}n`
     case 'Boolean':
       return true
     case 'DateTime':
@@ -113,11 +116,25 @@ export const buildScenario = async (model) => {
   // turn scalar fields into actual scenario data
   for (const name of DEFAULT_SCENARIO_NAMES) {
     standardScenario[scenarioModelName][name] = {}
-    standardScenario[scenarioModelName][name].data = await fieldsToScenario(
+
+    const scenarioData = await fieldsToScenario(
       scalarFields,
       relations,
       foreignKeys
     )
+
+    Object.keys(scenarioData).forEach((key) => {
+      console.log(key)
+      const value = scenarioData[key]
+      console.log(value)
+
+      if (value.match(/^\d+n$/)) {
+        console.log('match!!')
+        scenarioData[key] = `${value.substr(0, value.length - 1)}n`
+      }
+    })
+
+    standardScenario[scenarioModelName][name].data = scenarioData
   }
 
   return standardScenario
@@ -177,6 +194,10 @@ export const fieldsToUpdate = async (model) => {
 
     // depending on the field type, append/update the value to something different
     switch (field.type) {
+      case 'BigInt':
+        // eslint-disable-next-line no-undef
+        newValue = `${newValue + 1n}`
+        break
       case 'Boolean': {
         newValue = !value
         break

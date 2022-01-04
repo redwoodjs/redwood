@@ -11,17 +11,18 @@ generator client {
 // migrations for them.
 
 model Post {
-  id       Int       @id @default(autoincrement())
-  title    String
-  slug     String    @unique
-  author   String
-  body     String
-  image    String?
-  isPinned Boolean   @default(false)
-  readTime Int
-  rating   Float?
-  postedAt DateTime?
-  metadata Json
+  id        Int       @id @default(autoincrement())
+  title     String
+  slug      String    @unique
+  author    String
+  body      String
+  image     String?
+  isPinned  Boolean   @default(false)
+  readTime  Int
+  rating    Float?
+  postedAt  DateTime?
+  metadata  Json
+  favorites Favorite[]
 }
 
 model User {
@@ -71,4 +72,11 @@ model Feature {
   id          Int     @id @default(autoincrement())
   inventoryId Int
   inventory   Product @relation(fields: [inventoryId], references: [id])
+}
+
+model Favorite {
+  id      Int     @id @default(autoincrement())
+  postId  Int
+  post    Post    @relation(fields: [postId], references: [id])
+  likes   BigInt
 }

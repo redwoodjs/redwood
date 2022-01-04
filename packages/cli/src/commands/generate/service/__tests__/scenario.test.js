@@ -38,6 +38,39 @@ describe('the scenario generator', () => {
     ])
   })
 
+  test('parseSchema returns an object with BigINt scalar fields', async () => {
+    const { scalarFields } = await service.parseSchema('Favorite')
+
+    expect(scalarFields).toEqual([
+      {
+        name: 'postId',
+        kind: 'scalar',
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        isReadOnly: true,
+        type: 'Int',
+        hasDefaultValue: false,
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'likes',
+        kind: 'scalar',
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        isReadOnly: false,
+        type: 'BigInt',
+        hasDefaultValue: false,
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+    ])
+  })
+
   test('parseSchema returns an empty object when no relation fields', async () => {
     const { relations } = await service.parseSchema('User')
 
@@ -76,6 +109,13 @@ describe('the scenario generator', () => {
     expect(typeof value).toBe('string')
   })
 
+  test('scenarioFieldValue returns a true for BigInt types', () => {
+    const field = { type: 'BigInt' }
+    const value = service.scenarioFieldValue(field)
+
+    expect(value).toBeGreaterThan(0n)
+    expect(typeof value).toBe('bigint')
+  })
   test('scenarioFieldValue returns a true for Boolean types', () => {
     const field = { type: 'Boolean' }
     const value = service.scenarioFieldValue(field)
