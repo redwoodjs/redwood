@@ -67,33 +67,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/cli@npm:7.16.0":
-  version: 7.16.0
-  resolution: "@babel/cli@npm:7.16.0"
-  dependencies:
-    "@nicolo-ribaudo/chokidar-2": 2.1.8-no-fsevents.3
-    chokidar: ^3.4.0
-    commander: ^4.0.1
-    convert-source-map: ^1.1.0
-    fs-readdir-recursive: ^1.1.0
-    glob: ^7.0.0
-    make-dir: ^2.1.0
-    slash: ^2.0.0
-    source-map: ^0.5.0
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  dependenciesMeta:
-    "@nicolo-ribaudo/chokidar-2":
-      optional: true
-    chokidar:
-      optional: true
-  bin:
-    babel: ./bin/babel.js
-    babel-external-helpers: ./bin/babel-external-helpers.js
-  checksum: c03ae9a0839d0995a712087d6c17ac4445ee090f70676f2ed0099ef1f2ce2dd55fc065a3326d6f4d553b18711bc919d43e7dfe0ac5fe8a02cb27a0fc52ded50b
-  languageName: node
-  linkType: hard
-
 "@babel/cli@npm:7.16.7":
   version: 7.16.7
   resolution: "@babel/cli@npm:7.16.7"
@@ -1680,16 +1653,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: d49929e572133f3e52db103e10e1dc9b896ca9273551a9af32f0a6b3ca0b67d2c4ef4dc0c7dcd51176a656a89c6f43ee856aa7e7f0903006428692be7a94b330
-  languageName: node
-  linkType: hard
-
-"@babel/runtime-corejs3@npm:7.16.5":
-  version: 7.16.5
-  resolution: "@babel/runtime-corejs3@npm:7.16.5"
-  dependencies:
-    core-js-pure: ^3.19.0
-    regenerator-runtime: ^0.13.4
-  checksum: a54fb417388d077e395f1d5bcc19adef8f6854708310753f65c8f940fd05d02f08e9e96feeead83b3c9d65fbcbc7fca9c37f05b773d2cafc9399383375385c25
   languageName: node
   linkType: hard
 
@@ -5778,8 +5741,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
-    "@babel/cli": 7.16.0
-    "@babel/runtime-corejs3": 7.16.5
+    "@babel/cli": 7.16.7
+    "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/internal": 0.41.0
     "@types/envinfo": 7.8.1
     envinfo: 7.8.1
