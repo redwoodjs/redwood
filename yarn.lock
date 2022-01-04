@@ -5755,7 +5755,7 @@ __metadata:
     "@testing-library/user-event": 13.5.0
     "@types/aws-lambda": 8.10.89
     "@types/babel-core": 6.25.7
-    "@types/jest": 27.0.3
+    "@types/jest": 27.4.0
     "@types/node": 16.11.18
     "@types/react": 17.0.38
     "@types/react-dom": 17.0.11
@@ -7276,13 +7276,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:27.0.3":
-  version: 27.0.3
-  resolution: "@types/jest@npm:27.0.3"
+"@types/jest@npm:*, @types/jest@npm:27.4.0":
+  version: 27.4.0
+  resolution: "@types/jest@npm:27.4.0"
   dependencies:
     jest-diff: ^27.0.0
     pretty-format: ^27.0.0
-  checksum: 14a28483206cf57a6f2880ec8f4be7e37795cfa57c01e725edf52c551506705d970e3dce1787a9f5cf31e9f4a68eecb33cd684dbfcad69be525b2b603dd0bfe7
+  checksum: 1b69fa13fbd63d157aab9813c9fddf2b443b9e371ec9a1156d8a4afa8ae9013045fc0cfbfa34fb6902bf23d9dddb55454c9bfd2df3aff614e5de0ed1e339ed60
   languageName: node
   linkType: hard
 
@@ -25260,7 +25260,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
-    "@types/jest": 27.0.3
+    "@types/jest": 27.4.0
     "@types/jscodeshift": 0.11.2
     "@types/lodash.template": 4.5.0
     all-contributors-cli: 6.20.0
