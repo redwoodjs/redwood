@@ -26,7 +26,7 @@ provider:
     cors:
       allowedOrigins:
         - '*' # This is the default value. You can remove this line if you want to restrict the CORS to a specific origin.
-      allowCredentials: true
+      # allowCredentials: true # allowCrednetials should only be used when allowedOrigins doesn't include '*'
       allowedHeaders:
         - authorization
         - auth-provider
