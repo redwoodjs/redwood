@@ -140,6 +140,20 @@ export const buildScenario = async (model) => {
   return standardScenario
 }
 
+// creates the scenario data based on the data definitions in schema.prisma
+// and transforms data types to strings and other values that are compatible with Prisma
+export const buildStringifiedScenario = async (model) => {
+  const scenario = await buildScenario(model)
+
+  return JSON.stringify(scenario, (key, value) =>
+    typeof value === 'bigint'
+      ? value.toString()
+      : typeof value === 'string' && value.match(/^\d+n$/)
+      ? Number(value.substr(0, value.length - 1))
+      : value
+  )
+}
+
 // outputs fields necessary to create an object in the test file
 export const fieldsToInput = async (model) => {
   const { scalarFields, foreignKeys } = await parseSchema(model)
@@ -285,6 +299,7 @@ export const files = async ({
     templatePath: `scenarios.${extension}.template`,
     templateVars: {
       scenario: await buildScenario(model),
+      stringifiedScenario: await buildStringifiedScenario(model),
       prismaTypeName: `${model}CreateArgs`,
       ...rest,
     },

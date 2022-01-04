@@ -1,8 +1,5 @@
 import type { Prisma } from '@prisma/client'
 
-export const standard = defineScenario<Prisma.${prismaTypeName}>(${JSON.stringify(
-  scenario,
-  (key, value) => (typeof value === 'bigint' ? value.toString() : typeof value === 'string' && value.match(/^\d+n$/) ? Number(value.substr(0, value.length - 1)) : value)
-)})
+export const standard = defineScenario<Prisma.${prismaTypeName}>(${stringifiedScenario})
 
 export type StandardScenario = typeof standard
