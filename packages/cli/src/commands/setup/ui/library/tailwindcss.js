@@ -5,11 +5,10 @@ import execa from 'execa'
 import { outputFileSync } from 'fs-extra'
 import Listr from 'listr'
 
-import { getPaths } from '../../../lib'
-import c from '../../../lib/colors'
+import { getPaths } from '../../../../lib'
+import c from '../../../../lib/colors'
 
 export const command = 'tailwindcss'
-export const aliases = ['tailwind', 'tw']
 export const description = 'Set up tailwindcss and PostCSS'
 export const builder = (yargs) => {
   yargs.option('force', {
