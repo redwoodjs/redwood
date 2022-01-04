@@ -1,11 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getConfig } from '@redwoodjs/internal'
-
 import { getPaths } from '../../../../lib'
-
-const config = getConfig()
 
 const SERVERLESS_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 service: app
@@ -28,7 +24,7 @@ provider:
   region: us-east-2 # This is the AWS region where the service will be deployed.
   httpApi: # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
     cors:
-      allowOrigins:
+      allowedOrigins:
         - '*' # This is the default value. You can remove this line if you want to restrict the CORS to a specific origin.
       allowCredentials: true
       allowedHeaders:
@@ -70,17 +66,17 @@ ${
     memorySize: 1024 # mb
     timeout: 25 # seconds (max: 29)
     tags: # Tags for this specific lambda function
-      endpoint: ${config.web.apiUrl}/${basename}
+      endpoint: /${basename}
     # Uncomment this section to add environment variables either from the Serverless dotenv plugin or using Serverless params
     # environment:
     #   YOUR_FIRST_ENV_VARIABLE: \${env:YOUR_FIRST_ENV_VARIABLE}
     handler: ${basename}.handler
     events:
       - httpApi:
-          path: ${config.web.apiUrl}/${basename}
+          path: /${basename}
           method: GET
       - httpApi:
-          path: ${config.web.apiUrl}/${basename}
+          path: /${basename}
           method: POST
 `
     })
