@@ -27,7 +27,7 @@
     "chalk": "4.1.2",
     "concurrently": "6.5.1",
     "configstore": "3.1.5",
-    "core-js": "3.20.1",
+    "core-js": "3.20.2",
     "cross-env": "7.0.3",
     "decamelize": "5.0.0",
     "dotenv-defaults": "3.0.0",
@@ -52,7 +52,7 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@types/listr": "0.14.4",
     "@types/node-fetch": "2.5.12",
     "jest": "27.4.5",
