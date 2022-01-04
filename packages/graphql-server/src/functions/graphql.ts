@@ -166,7 +166,6 @@ export const createGraphQLHandler = ({
   // Custom Redwood plugins
   plugins.push(useRedwoodAuthContext(getCurrentUser))
   plugins.push(useRedwoodGlobalContextSetter())
-  plugins.push(useRedwoodLogger(loggerConfig))
 
   if (context) {
     plugins.push(useRedwoodPopulateContext(context))
@@ -193,6 +192,9 @@ export const createGraphQLHandler = ({
   if (extraPlugins && extraPlugins.length > 0) {
     plugins.push(...extraPlugins)
   }
+
+  // Must be "last" in plugin chain so can process any data added to results and extensions
+  plugins.push(useRedwoodLogger(loggerConfig))
 
   // Prevent unexpected error messages from leaking to the GraphQL clients.
   plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))

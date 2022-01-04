@@ -39,7 +39,6 @@
     "@babel/cli": "7.16.7",
     "@types/aws-lambda": "8.10.89",
     "@types/lodash.escape": "4.0.6",
-    "@types/pretty-bytes": "5.2.0",
     "@types/qs": "6.9.7",
     "@types/split2": "3.2.1",
     "aws-lambda": "1.0.7",
