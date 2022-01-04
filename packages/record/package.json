@@ -10,7 +10,7 @@
   "dependencies": {
     "@prisma/client": "3.7.0",
     "@prisma/sdk": "3.7.0",
-    "core-js": "3.20.1"
+    "core-js": "3.20.2"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "directory": "packages/record"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "jest": "27.4.5"
   },
   "jest": {
