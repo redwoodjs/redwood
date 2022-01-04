@@ -156,6 +156,10 @@ const logResult =
         options['data'] = result.data
       }
 
+      if (result.extensions?.responseCache) {
+        options['responseCache'] = result.extensions?.responseCache
+      }
+
       if (includeTracing) {
         options['tracing'] = result.extensions?.envelopTracing
       }
@@ -272,6 +276,7 @@ export const useRedwoodLogger = (
       })
 
       envelopLogger.debug(`GraphQL execution started: ${operationName}`)
+
       const handleResult = logResult(loggerConfig, envelopLogger, operationName)
 
       return {
