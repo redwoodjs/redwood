@@ -18,7 +18,7 @@
     "chalk": "4.1.2",
     "chokidar": "3.5.2",
     "fast-json-parse": "1.0.3",
-    "fastify": "3.25.2",
+    "fastify": "3.25.3",
     "fastify-http-proxy": "6.2.1",
     "fastify-raw-body": "3.2.0",
     "fastify-static": "4.5.0",
