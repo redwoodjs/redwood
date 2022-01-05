@@ -17,7 +17,7 @@ export const getRootHtmlPath = () => {
   }
 }
 
-export const registerShims = () => {
+export const registerShims = (routerPath: string) => {
   const rwjsConfig = getConfig()
   global.RWJS_API_GRAPHQL_URL =
     rwjsConfig.web.apiGraphQLUrl ?? `${rwjsConfig.web.apiUrl}graphql`
@@ -36,6 +36,12 @@ export const registerShims = () => {
   // Let routes auto loader plugin know
   process.env.__REDWOOD__PRERENDERING = '1'
 
+  // This makes code like global.location.pathname work also outside of the
+  // router
+  global.location = {
+    ...global.location,
+    pathname: routerPath,
+  }
   // Shim fetch in the node.js context
   // This is to avoid using cross-fetch when configuring apollo-client
   // which would cause the client bundle size to increase
