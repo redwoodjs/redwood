@@ -5783,7 +5783,7 @@ __metadata:
     jest: 27.4.5
     proptypes: 1.1.0
     react-helmet-async: 1.2.2
-    react-hot-toast: 2.1.1
+    react-hot-toast: 2.2.0
     typescript: 4.5.4
   peerDependencies:
     react: 17.0.2
@@ -16227,12 +16227,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"goober@npm:^2.0.35":
-  version: 2.0.41
-  resolution: "goober@npm:2.0.41"
+"goober@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "goober@npm:2.1.1"
   peerDependencies:
     csstype: ^2.6.2
-  checksum: 2a0c99425ea9e6927cab67d63e3d40e2eb03fb5ff8a3a2be111490e5d1691e084a7f11473fe0116d5075d9d28e5859465ef30d5a448fd8da80a04a5dadcda3e6
+  checksum: f1a8bbb22e58333edb0824e6c1718c1a1f69648ec953b83bda493894637105aff1b648348d90fb78711427713a44d65c423aab795c0c6be7349b31c3677554a6
   languageName: node
   linkType: hard
 
@@ -24279,15 +24279,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hot-toast@npm:2.1.1":
-  version: 2.1.1
-  resolution: "react-hot-toast@npm:2.1.1"
+"react-hot-toast@npm:2.2.0":
+  version: 2.2.0
+  resolution: "react-hot-toast@npm:2.2.0"
   dependencies:
-    goober: ^2.0.35
+    goober: ^2.1.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 18b4b7e1ff6af72d09973103f09cce5ad83fe5467c35f30ff410c792f3cec7f445162aa77a20355e28e63d7a7874e56265e7322c2cbcc90cdae6a963d62f32a7
+  checksum: f9afcfead4cfb6bf7b5f98b2bef2b930fba94aaa656d138e014d5eab777a9737c72ed21c5eeab62cc405738aee67fc663500c1373a81a8dd1b45bf0b2dc72505
   languageName: node
   linkType: hard
 
