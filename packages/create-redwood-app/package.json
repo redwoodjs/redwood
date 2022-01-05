@@ -37,7 +37,7 @@
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "devDependencies": {
     "@babel/cli": "7.16.7",
-    "jest": "27.4.5",
+    "jest": "27.4.7",
     "typescript": "4.5.4"
   }
 }
