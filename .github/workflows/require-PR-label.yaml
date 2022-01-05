@@ -11,4 +11,4 @@ jobs:
         with:
           mode: exactly
           count: 1
-          labels: "release:chore, release::fix, release:feature, release:feature-breaking"
+          labels: "release:chore, release:fix, release:feature, release:feature-breaking"
