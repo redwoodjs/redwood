@@ -5346,7 +5346,7 @@ __metadata:
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
-    pascalcase: 1.0.0
+    pascalcase: 2.0.0
     pino: 7.6.2
     typescript: 4.5.4
     uuid: 8.3.2
@@ -5410,7 +5410,7 @@ __metadata:
     listr-verbose-renderer: 0.6.0
     lodash: 4.17.21
     param-case: 3.0.4
-    pascalcase: 1.0.0
+    pascalcase: 2.0.0
     pluralize: 8.0.0
     prettier: 2.5.1
     prisma: 3.7.0
@@ -5552,7 +5552,7 @@ __metadata:
     "@types/pascalcase": 1.0.1
     core-js: 3.20.2
     jest: 27.4.7
-    pascalcase: 1.0.0
+    pascalcase: 2.0.0
     react-hook-form: 7.22.5
     typescript: 4.5.4
   languageName: unknown
@@ -10687,7 +10687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase@npm:6.3.0, camelcase@npm:^6.2.0":
+"camelcase@npm:6.3.0, camelcase@npm:^6.2.0, camelcase@npm:^6.2.1":
   version: 6.3.0
   resolution: "camelcase@npm:6.3.0"
   checksum: 0d701658219bd3116d12da3eab31acddb3f9440790c0792e0d398f0a520a6a4058018e546862b6fba89d7ae990efaeb97da71e1913e9ebf5a8b5621a3d55c710
@@ -22615,10 +22615,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pascalcase@npm:1.0.0":
-  version: 1.0.0
-  resolution: "pascalcase@npm:1.0.0"
-  checksum: 5fac7a6346b23307664f020cdd42d245a3189bf3b9b21cd167ea5e28a17b403e6670c60a3055d9c7d56ec00ffab446f862ff8148add23cd2c5a035c4d07efa26
+"pascalcase@npm:2.0.0":
+  version: 2.0.0
+  resolution: "pascalcase@npm:2.0.0"
+  dependencies:
+    camelcase: ^6.2.1
+  checksum: c43658cd7bea0dc2b4362b0b15c803ee976fb6f981addab8452e1ad67cd768739979b7e687df38452f3743af34fe00f0292234f5aceb73457babb3fbdd585863
   languageName: node
   linkType: hard
 
