@@ -20,7 +20,7 @@
     "firebase": "9.6.1",
     "firebase-admin": "10.0.1",
     "gotrue-js": "0.9.29",
-    "jest": "27.4.6",
+    "jest": "27.4.7",
     "magic-sdk": "7.0.0",
     "netlify-identity-widget": "1.9.2",
     "nhost-js-sdk": "3.1.0",
