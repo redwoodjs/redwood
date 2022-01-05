@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
-    "jest": "27.4.5"
+    "jest": "27.4.6"
   },
   "jest": {
     "testPathIgnorePatterns": [
