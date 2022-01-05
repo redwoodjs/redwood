@@ -17,7 +17,7 @@
     "graphql": "16.2.0",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.2.2",
-    "react-hot-toast": "2.1.1"
+    "react-hot-toast": "2.2.0"
   },
   "repository": {
     "type": "git",
