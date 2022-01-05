@@ -5451,7 +5451,7 @@ __metadata:
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
-    vscode-ripgrep: 1.12.1
+    vscode-ripgrep: 1.13.2
     yargs: 16.2.0
   bin:
     codemods: ./dist/codemods.js
@@ -28707,13 +28707,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"vscode-ripgrep@npm:1.12.1":
-  version: 1.12.1
-  resolution: "vscode-ripgrep@npm:1.12.1"
+"vscode-ripgrep@npm:1.13.2":
+  version: 1.13.2
+  resolution: "vscode-ripgrep@npm:1.13.2"
   dependencies:
     https-proxy-agent: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: bfd048f60e4f36533e68cfa9c0a97624ae8319c742c0ffdbb28e4f4be4503733432d4d2fb1ab74d0be622266c0658b348d1e3cc772b408a6f4e0c5011fb415f9
+  checksum: 7d1b980887d534e22f728b524c2577edae6672bd7761aa6ea30d94c596d09614b7302c6039a43613b07e77dde85e0c460706ac7a5063e37d672b10f5bf38fea7
   languageName: node
   linkType: hard
 
