@@ -4,18 +4,18 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.16.5",
+    "@babel/core": "7.16.7",
     "@babel/eslint-parser": "7.16.5",
     "@babel/eslint-plugin": "7.16.5",
     "@redwoodjs/internal": "0.41.0",
-    "@typescript-eslint/eslint-plugin": "5.8.0",
-    "@typescript-eslint/parser": "5.8.0",
-    "eslint": "8.5.0",
+    "@typescript-eslint/eslint-plugin": "5.9.0",
+    "@typescript-eslint/parser": "5.9.0",
+    "eslint": "8.6.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-babel-module": "5.3.1",
     "eslint-plugin-babel": "5.3.1",
-    "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-jest-dom": "3.9.2",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-jest-dom": "4.0.1",
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.27.1",
@@ -32,8 +32,8 @@
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "devDependencies": {
-    "@babel/cli": "7.16.0",
-    "jest": "27.4.5",
+    "@babel/cli": "7.16.7",
+    "jest": "27.4.6",
     "typescript": "4.5.4"
   }
 }

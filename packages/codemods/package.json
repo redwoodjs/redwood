@@ -8,21 +8,21 @@
     "dist"
   ],
   "dependencies": {
-    "@babel/cli": "7.16.0",
-    "@babel/core": "7.16.5",
-    "@babel/plugin-transform-typescript": "7.16.1",
-    "@babel/runtime-corejs3": "7.16.5",
-    "core-js": "3.20.1",
+    "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
+    "@babel/plugin-transform-typescript": "7.16.7",
+    "@babel/runtime-corejs3": "7.16.7",
+    "core-js": "3.20.2",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.7",
     "findup-sync": "5.0.0",
-    "jest": "27.4.5",
+    "jest": "27.4.6",
     "jscodeshift": "0.13.0",
     "node-fetch": "2.6.6",
     "prettier": "2.5.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
-    "vscode-ripgrep": "1.12.1",
+    "vscode-ripgrep": "1.13.2",
     "yargs": "16.2.0"
   },
   "repository": {
@@ -39,7 +39,7 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@types/babel__core": "7.1.17",
+    "@types/babel__core": "7.1.18",
     "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.2",
     "@types/prettier": "2.4.2",

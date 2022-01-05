@@ -8,7 +8,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/core": "1.6.5",
+    "@envelop/core": "1.6.6",
     "@envelop/depth-limit": "1.2.1",
     "@envelop/disable-introspection": "1.2.1",
     "@envelop/filter-operation-type": "1.2.1",
@@ -19,7 +19,7 @@
     "@graphql-tools/utils": "8.5.5",
     "@prisma/client": "3.7.0",
     "@redwoodjs/api": "0.41.0",
-    "core-js": "3.20.1",
+    "core-js": "3.20.2",
     "graphql": "16.2.0",
     "graphql-helix": "1.11.0",
     "graphql-playground-html": "1.6.30",
@@ -36,7 +36,7 @@
     "directory": "packages/graphql-server"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@envelop/testing": "2.1.1",
     "@envelop/types": "1.5.1",
     "@redwoodjs/auth": "0.41.0",
@@ -44,7 +44,7 @@
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.3",
     "aws-lambda": "1.0.7",
-    "jest": "27.4.5",
+    "jest": "27.4.6",
     "typescript": "4.5.4"
   },
   "scripts": {
