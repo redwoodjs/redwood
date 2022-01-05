@@ -22,7 +22,7 @@ export const timedTelemetry = async (
   options: Record<string, unknown>,
   func: (...args: any[]) => any
 ) => {
-  if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
+  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return func.call(this)
   }
 
@@ -43,7 +43,7 @@ export const timedTelemetry = async (
 }
 
 export const errorTelemetry = async (argv: Array<string>, error: any) => {
-  if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
+  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 
@@ -52,7 +52,7 @@ export const errorTelemetry = async (argv: Array<string>, error: any) => {
 
 // used as yargs middleware when any command is invoked
 export const telemetryMiddleware = async () => {
-  if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
+  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 
