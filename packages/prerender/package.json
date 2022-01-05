@@ -47,7 +47,7 @@
     "@babel/cli": "7.16.7",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "10.1.0",
-    "jest": "27.4.6",
+    "jest": "27.4.7",
     "typescript": "4.5.4"
   }
 }
