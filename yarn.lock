@@ -5391,7 +5391,7 @@ __metadata:
     "@types/listr": 0.14.4
     "@types/node-fetch": 2.5.12
     boxen: 5.1.2
-    camelcase: 6.2.1
+    camelcase: 6.3.0
     chalk: 4.1.2
     concurrently: 6.5.1
     configstore: 3.1.5
@@ -5712,7 +5712,7 @@ __metadata:
     "@types/lru-cache": 5.1.1
     "@types/node": 16.11.19
     "@types/vscode": 1.63.1
-    camelcase: 6.2.1
+    camelcase: 6.3.0
     deepmerge: 4.2.2
     dotenv-defaults: 3.0.0
     enquirer: 2.3.6
@@ -10687,10 +10687,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase@npm:6.2.1, camelcase@npm:^6.2.0":
-  version: 6.2.1
-  resolution: "camelcase@npm:6.2.1"
-  checksum: df7fc7ad9e6b76040e88708336d24bb43890f97745dec3002f11a97138d98dc9ed971cf872d23e48f735d45dbbd9c7863072a3ce0fd7e897a11c31e58d8c6e78
+"camelcase@npm:6.3.0, camelcase@npm:^6.2.0":
+  version: 6.3.0
+  resolution: "camelcase@npm:6.3.0"
+  checksum: 0d701658219bd3116d12da3eab31acddb3f9440790c0792e0d398f0a520a6a4058018e546862b6fba89d7ae990efaeb97da71e1913e9ebf5a8b5621a3d55c710
   languageName: node
   linkType: hard
 
