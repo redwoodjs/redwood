@@ -30,7 +30,6 @@ const getExecaOptions = (cwd) => ({
   cwd,
   env: {
     RW_PATH: path.join(__dirname, '../../'),
-    REDWOOD_CI: '1',
   },
 })
 
