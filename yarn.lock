@@ -3280,14 +3280,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.5.5, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3":
-  version: 8.5.5
-  resolution: "@graphql-tools/utils@npm:8.5.5"
+"@graphql-tools/utils@npm:8.6.0, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3":
+  version: 8.6.0
+  resolution: "@graphql-tools/utils@npm:8.6.0"
   dependencies:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 48b24b722c7fef3140e8d9d3609d1a53278b6c3c3e63013a4011add3719f1fcad32b314ec8c1ce265dbf0020eea83992b629f44d4f5fe71bb02c85d6fa8940e9
+  checksum: 6f219241e90cf71a56066b2888596b7b3b465db3da31a47cb6c2c753fdc2594790b1bf1f4cba46b45a6991ae0262971799a6afd7f15235b229583cb194dde0e4
   languageName: node
   linkType: hard
 
@@ -5573,7 +5573,7 @@ __metadata:
     "@envelop/validation-cache": 2.3.0
     "@graphql-tools/merge": 8.2.1
     "@graphql-tools/schema": 8.3.1
-    "@graphql-tools/utils": 8.5.5
+    "@graphql-tools/utils": 8.6.0
     "@prisma/client": 3.7.0
     "@redwoodjs/api": 0.41.0
     "@redwoodjs/auth": 0.41.0
