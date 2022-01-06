@@ -42,6 +42,8 @@ import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContex
 import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
+import { ValidationError } from '../errors'
+
 import type { GraphQLHandlerOptions } from './types'
 /**
  * Extracts and parses body payload from event with base64 encoding check
@@ -77,6 +79,17 @@ export function normalizeRequest(event: APIGatewayProxyEvent): Request {
  **/
 export const formatError: FormatErrorHandler = (err: any, message: string) => {
   const allowErrors = [EnvelopError, RedwoodError]
+
+  // If using graphql-scalars, when validating input
+  // the original TypeError is wrapped in an GraphQLError object.
+  // We extract out and present the portion of the original error's
+  // validation message that is friendly to send to the end user
+  // @see https://github.com/Urigo/graphql-scalars and their validate method
+  if (err && err instanceof GraphQLError) {
+    if (err.originalError && err.originalError instanceof TypeError) {
+      return new ValidationError(err.originalError.message)
+    }
+  }
 
   if (
     err.originalError &&
