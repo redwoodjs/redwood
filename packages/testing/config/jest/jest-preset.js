@@ -1,4 +1,6 @@
-// used by cli `rw test` command
+// used by cli `rw test` command as --configFile
+// and as `preset` for api and web site jest config
+// Ref: (./api/jest.config.js and ./web/jest.config.js)
 
 const path = require('path')
 

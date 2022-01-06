@@ -11,7 +11,11 @@ const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 module.exports = {
-  roots: ['<rootDir>/src/'],
+  preset: path.join(__dirname, '..'),
+  // To make sure other config option which depends on rootDir use
+  // correct path, for example, coverageDirectory
+  rootDir: rwjsPaths.base,
+  roots: [path.join(rwjsPaths.api.base, 'src')],
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   displayName: {
     color: 'redBright',
