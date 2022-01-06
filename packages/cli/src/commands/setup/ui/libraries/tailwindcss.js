@@ -7,8 +7,8 @@ import Listr from 'listr'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../lib'
-import c from '../../../lib/colors'
+import { getPaths } from '../../../../lib'
+import c from '../../../../lib/colors'
 
 export const command = 'tailwindcss'
 export const aliases = ['tailwind', 'tw']
@@ -95,7 +95,7 @@ export const handler = async ({ force, install }) => {
           )
         } else {
           const postCSSConfig = fs.readFileSync(
-            path.join(__dirname, 'templates', 'postcss.config.js.template'),
+            path.join(__dirname, '../templates/postcss.config.js.template'),
             'utf-8'
           )
 

@@ -4,7 +4,7 @@ export const command = 'ui <library>'
 export const description = 'Set up a UI design or style library'
 export const builder = (yargs) =>
   yargs
-    .commandDir('./ui')
+    .commandDir('./libraries')
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
