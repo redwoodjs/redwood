@@ -3405,7 +3405,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/core@npm:^27.4.7":
+"@jest/core@npm:^27.4.5, @jest/core@npm:^27.4.7":
   version: 27.4.7
   resolution: "@jest/core@npm:27.4.7"
   dependencies:
@@ -18492,7 +18492,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-cli@npm:^27.4.7":
+"jest-cli@npm:^27.4.5, jest-cli@npm:^27.4.7":
   version: 27.4.7
   resolution: "jest-cli@npm:27.4.7"
   dependencies:
@@ -18949,6 +18949,24 @@ fsevents@^1.2.7:
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
   checksum: 2b229856b37dc640e0598ac6d180609be36bb986c5feb494b1ebeaa87d55a39afa14e31b7023820d6a8e8ba7c107b0982c665ab8aa14a0cda2a9f25b078a034a
+  languageName: node
+  linkType: hard
+
+"jest@npm:27.4.5":
+  version: 27.4.5
+  resolution: "jest@npm:27.4.5"
+  dependencies:
+    "@jest/core": ^27.4.5
+    import-local: ^3.0.2
+    jest-cli: ^27.4.5
+  peerDependencies:
+    node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+  peerDependenciesMeta:
+    node-notifier:
+      optional: true
+  bin:
+    jest: bin/jest.js
+  checksum: e4f9c7c1e28a6cd1a9dd798489faf6077af324dc23887462380b91e0b5ff13af675ed84b5f8fc7b2c7d929ad5b5796289206531a707301235c42d479c65b0243
   languageName: node
   linkType: hard
 
