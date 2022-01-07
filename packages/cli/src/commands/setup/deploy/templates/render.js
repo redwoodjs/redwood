@@ -1,6 +1,7 @@
+import path from 'path'
 import { getPaths } from '../../../../lib'
 
-export const PROJECT_NAME = getPaths().base.match(/[^/|\\]+$/)[0]
+export const PROJECT_NAME = path.basename(getPaths().base)
 
 export const RENDER_YAML = (database) => {
   return `#####

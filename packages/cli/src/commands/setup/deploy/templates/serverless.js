@@ -3,8 +3,10 @@ import path from 'path'
 
 import { getPaths } from '../../../../lib'
 
+export const PROJECT_NAME = path.basename(getPaths().base)
+
 export const SERVERLESS_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
-service: app
+service: ${PROJECT_NAME}
 
 # Uncomment org and app if you want to integrate your deployment with the Serverless dashboard. See https://www.serverless.com/framework/docs/dashboard/ for more details.
 # org: your-org
