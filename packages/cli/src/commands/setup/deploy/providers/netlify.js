@@ -1,41 +1,42 @@
+// import terminalLink from 'terminal-link'
 import path from 'path'
 
-import { getPaths, getConfig } from '../../../../lib'
+import Listr from 'listr'
 
-const config = getConfig()
+import { getPaths } from '../../../../lib'
+import c from '../../../../lib/colors'
+import {
+  createAddFilesTask,
+  printSetupNotes,
+  updateApiURLTask,
+} from '../helpers'
+import { NETLIFY_TOML } from '../templates/netlify'
 
-const NETLIFY_TOML = `[build]
-command = "yarn rw deploy netlify"
-publish = "web/dist"
-functions = "api/dist/functions"
+export const command = 'netlify'
+export const description = 'Setup Netlify deploy'
 
-[dev]
-  # To use [Netlify Dev](https://www.netlify.com/products/dev/),
-  # install netlify-cli from https://docs.netlify.com/cli/get-started/#installation
-  # and then use netlify link https://docs.netlify.com/cli/get-started/#link-and-unlink-sites
-  # to connect your local project to a site already on Netlify
-  # then run netlify dev and our app will be accessible on the port specified below
-  framework = "redwoodjs"
-  # Set targetPort to the [web] side port as defined in redwood.toml
-  targetPort = ${config.web.port}
-  # Point your browser to this port to access your RedwoodJS app
-  port = 8888
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-`
-
-// any files to create
-export const files = [
+const files = [
   { path: path.join(getPaths().base, 'netlify.toml'), content: NETLIFY_TOML },
 ]
 
-export const apiUrl = '/.netlify/functions'
-
-// any notes to print out when the job is done
-export const notes = [
+const notes = [
   'You are ready to deploy to Netlify!',
   'See: https://redwoodjs.com/docs/deploy#netlify-deploy',
 ]
+
+export const handler = async ({ force }) => {
+  const tasks = new Listr([
+    updateApiURLTask('./netlify/function'),
+    createAddFilesTask({
+      files,
+      force,
+    }),
+    printSetupNotes(notes),
+  ])
+  try {
+    await tasks.run()
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
+}
