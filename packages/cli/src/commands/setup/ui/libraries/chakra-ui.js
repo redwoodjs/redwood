@@ -1,13 +1,12 @@
 import execa from 'execa'
 import Listr from 'listr'
 
-import c from '../../../lib/colors'
-
+import c from '../../../../lib/colors'
 import {
   checkStorybookStatus,
   configureStorybook,
-} from './tasks/configure-storybook'
-import { checkSetupStatus, wrapWithChakraProvider } from './tasks/setup-chakra'
+} from '../tasks/configure-storybook'
+import { checkSetupStatus, wrapWithChakraProvider } from '../tasks/setup-chakra'
 
 export const command = 'chakra-ui'
 export const description = 'Set up Chakra UI'

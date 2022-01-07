@@ -10,7 +10,7 @@
   "dependencies": {
     "@reach/skip-nav": "0.16.0",
     "@redwoodjs/auth": "0.41.0",
-    "core-js": "3.20.1",
+    "core-js": "3.20.2",
     "lodash.isequal": "4.5.0"
   },
   "repository": {
@@ -19,10 +19,10 @@
     "directory": "packages/router"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@types/lodash.isequal": "4.5.5",
-    "jest": "27.4.5",
-    "prop-types": "15.8.0",
+    "jest": "27.4.7",
+    "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "typescript": "4.5.4"

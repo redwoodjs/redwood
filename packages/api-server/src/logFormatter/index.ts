@@ -6,12 +6,12 @@ import prettyMs from 'pretty-ms'
 const newline = '\n'
 
 const emojiLog: any = {
-  warn: '⚠️',
+  warn: '🚦',
   info: '🌲',
   error: '🚨',
   debug: '🐛',
   fatal: '💀',
-  trace: '🔍',
+  trace: '🧵',
 }
 
 const isObject = (input: any) => {
@@ -26,7 +26,7 @@ const isPinoLog = (log: any) => {
   return log && Object.prototype.hasOwnProperty.call(log, 'level')
 }
 const isWideEmoji = (character: any) => {
-  return character !== '⚠️'
+  return character !== '🚦'
 }
 
 export const LogFormatter = () => {
@@ -104,6 +104,7 @@ export const LogFormatter = () => {
 
     const req = logData.req
     const res = logData.res
+
     const statusCode = res ? res.statusCode : logData.statusCode
     const responseTime = logData.responseTime || logData.elapsed
     const method = req ? req.method : logData.method
@@ -111,6 +112,7 @@ export const LogFormatter = () => {
     const operationName = logData.operationName
     const query = logData.query
     const graphQLData = logData.data
+    const responseCache = logData.responseCache
     const tracing = logData.tracing
     const url = req ? req.url : logData.url
     const userAgent = logData.userAgent
@@ -158,6 +160,10 @@ export const LogFormatter = () => {
 
     if (graphQLData != null) {
       output.push(formatData(graphQLData))
+    }
+
+    if (responseCache != null) {
+      output.push(formatResponseCache(responseCache))
     }
 
     if (tracing != null) {
@@ -280,6 +286,19 @@ export const LogFormatter = () => {
     return
   }
 
+  const formatResponseCache = (responseCache: any) => {
+    if (!isEmptyObject(responseCache)) {
+      return chalk.white(
+        newline +
+          '💾 Response Cache' +
+          newline +
+          JSON.stringify(responseCache, null, 2)
+      )
+    }
+
+    return
+  }
+
   const formatStatusCode = (statusCode: any) => {
     statusCode = statusCode || 'xxx'
     return chalk.white(statusCode)
@@ -290,9 +309,10 @@ export const LogFormatter = () => {
   }
 
   const formatTracing = (data: any) => {
-    console.log(data)
     if (!isEmptyObject(data)) {
-      return chalk.white(newline + JSON.stringify(data, null, 2))
+      return chalk.white(
+        newline + '⏰ Timing' + newline + JSON.stringify(data, null, 2)
+      )
     }
 
     return
