@@ -26929,19 +26929,19 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"synchronous-promise@npm:^2.0.15":
+  version: 2.0.15
+  resolution: "synchronous-promise@npm:2.0.15"
+  checksum: 967778e7570dc496d7630a89db3bada38876574797c9b272ee50f6ecd7afcebf450268b4bb48a84274d213ab9fd4865dbcc6edeb279f9ecaddf189d5446cbe43
+  languageName: node
+  linkType: hard
+
 "systeminformation@npm:5.8.7":
   version: 5.8.7
   resolution: "systeminformation@npm:5.8.7"
   bin:
     systeminformation: lib/cli.js
   checksum: be522dd493bfb24e5f204bcc308ed70a7f26bb2dd40f80c4c09c7e9494b4df6e4de4d7753d561d9f84a6395dbfe12de945b8c8d4c83f57711b4e57124045cd6f
-  languageName: node
-  linkType: hard
-
-"synchronous-promise@npm:^2.0.15":
-  version: 2.0.15
-  resolution: "synchronous-promise@npm:2.0.15"
-  checksum: 967778e7570dc496d7630a89db3bada38876574797c9b272ee50f6ecd7afcebf450268b4bb48a84274d213ab9fd4865dbcc6edeb279f9ecaddf189d5446cbe43
   languageName: node
   linkType: hard
 
