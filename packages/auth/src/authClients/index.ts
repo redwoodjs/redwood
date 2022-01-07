@@ -72,6 +72,7 @@ export type { MagicUser }
 export type { SupabaseUser }
 export type { EthereumUser }
 export type { NhostUser }
+export type { SuperTokensUser }
 export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser

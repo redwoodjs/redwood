@@ -1,5 +1,3 @@
-import Sessions from 'supertokens-auth-react/recipe/session'
-
 import type { AuthClient } from './'
 
 export interface SuperTokensUser {
@@ -9,7 +7,7 @@ export interface SuperTokensUser {
 
 export type SuperTokens = AuthClient
 
-export const supertokens = (client: { authRecipe: any }): AuthClient => {
+export const supertokens = (client: { authRecipe: any, sessionRecipe: any }): AuthClient => {
   return {
     type: 'supertokens',
     client: undefined,
@@ -17,12 +15,12 @@ export const supertokens = (client: { authRecipe: any }): AuthClient => {
 
     signup: async () => client.authRecipe.redirectToAuth('signup'),
 
-    logout: async () => Sessions.signOut(),
+    logout: async () => client.sessionRecipe.signOut(),
 
     getToken: async (): Promise<string | null> => {
-      if (await Sessions.doesSessionExist()) {
+      if (await client.sessionRecipe.doesSessionExist()) {
         const accessTokenPayload =
-          await Sessions.getAccessTokenPayloadSecurely()
+          await client.sessionRecipe.getAccessTokenPayloadSecurely()
         const jwtPropertyName = accessTokenPayload['_jwtPName']
         return accessTokenPayload[jwtPropertyName]
       } else {
@@ -31,10 +29,10 @@ export const supertokens = (client: { authRecipe: any }): AuthClient => {
     },
 
     getUserMetadata: async (): Promise<SuperTokensUser | null> => {
-      if (await Sessions.doesSessionExist()) {
+      if (await client.sessionRecipe.doesSessionExist()) {
         return {
-          userId: await Sessions.getUserId(),
-          accessTokenPayload: await Sessions.getAccessTokenPayloadSecurely(),
+          userId: await client.sessionRecipe.getUserId(),
+          accessTokenPayload: await client.sessionRecipe.getAccessTokenPayloadSecurely(),
         }
       } else {
         return null
