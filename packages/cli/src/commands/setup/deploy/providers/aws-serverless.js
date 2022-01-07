@@ -1,12 +1,17 @@
 // import terminalLink from 'terminal-link'
-import Listr from 'listr'
 import fs from 'fs'
 import path from 'path'
 
-import c from '../../../../lib/colors'
-import { getPaths } from '../../../../lib'
+import Listr from 'listr'
 
-import { addToGitIgnoreTask, createAddFilesTask, createAddPackagesTask, printSetupNotes, updateApiURLTask } from '../helpers'
+import { getPaths } from '../../../../lib'
+import c from '../../../../lib/colors'
+import {
+  addToGitIgnoreTask,
+  createAddFilesTask,
+  createAddPackagesTask,
+  printSetupNotes,
+} from '../helpers'
 import { SERVERLESS_YML } from '../templates/serverless'
 
 export const command = 'aws-serverless'
@@ -47,25 +52,30 @@ const prismaBinaryTargetAdditions = () => {
   }
 }
 
-
-
-export const handler = async ({force}) => {
-  const tasks = new Listr([createAddPackagesTask({
-    packages: projectDevPackages,
-    devDependency: true
-  }),
-  createAddFilesTask({
-    files,
-    force
-  }),
-  addToGitIgnoreTask({
-    paths: ['.serverless']
-  }),
-  {
-    title: 'Adding necessary Prisma binaries...',
-    task: () => prismaBinaryTargetAdditions(),
-  },
-  printSetupNotes(notes)])
+export const handler = async ({ force }) => {
+  const tasks = new Listr(
+    [
+      createAddPackagesTask({
+        packages: projectDevPackages,
+        devDependency: true,
+      }),
+      createAddFilesTask({
+        files,
+        force,
+      }),
+      addToGitIgnoreTask({
+        paths: ['.serverless'],
+      }),
+      {
+        title: 'Adding necessary Prisma binaries...',
+        task: () => prismaBinaryTargetAdditions(),
+      },
+      printSetupNotes(notes),
+    ],
+    {
+      exitOnError: true,
+    }
+  )
   try {
     await tasks.run()
   } catch (e) {

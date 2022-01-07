@@ -149,10 +149,10 @@ export const createAddFilesTask = ({
 }) => {
   return {
     title: `${title}...`,
-    task: async () => {
+    task: () => {
       let fileNameToContentMap = {}
       files.forEach((fileData) => {
-        files[fileData.path] = fileData.content
+        fileNameToContentMap[fileData.path] = fileData.content
       })
 
       return writeFilesTask(fileNameToContentMap, { overwriteExisting: force })
