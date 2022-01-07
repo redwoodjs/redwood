@@ -3,10 +3,10 @@ import ntfPack from '../packing/nft'
 export const preRequisites = () => [
   {
     title: 'Checking if Serverless framework is installed...',
-    command: ['serverless', ['--version']],
+    command: ['yarn serverless', ['--version']],
     errorMessage: [
       'Looks like Serverless is not installed.',
-      'Please follow the steps at https://www.serverless.com/framework/docs/getting-started to install Serverless.',
+      'Please run yarn add -W --dev serverless.',
     ],
   },
 ]
@@ -27,7 +27,7 @@ export const deployCommands = (yargs) => {
   return [
     {
       title: 'Deploying...',
-      command: ['serverless', ['deploy', ...stage]],
+      command: ['yarn', ['serverless', 'deploy', ...stage]],
     },
   ]
 }
