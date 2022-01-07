@@ -38,7 +38,7 @@
     "dotenv-webpack": "7.0.3",
     "esbuild": "0.14.10",
     "esbuild-loader": "2.18.0",
-    "fast-glob": "3.2.7",
+    "fast-glob": "3.2.8",
     "file-loader": "6.2.0",
     "graphql": "16.2.0",
     "graphql-tag": "2.12.6",
