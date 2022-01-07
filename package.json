@@ -31,7 +31,7 @@
     "cypress": "9.2.0",
     "cypress-wait-until": "1.7.2",
     "eslint": "8.6.0",
-    "fast-glob": "3.2.7",
+    "fast-glob": "3.2.8",
     "jest": "27.4.7",
     "jscodeshift": "0.13.0",
     "lerna": "4.0.0",
