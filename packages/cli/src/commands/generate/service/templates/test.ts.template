@@ -4,6 +4,11 @@ const stringifyButNotScenario = (obj) => {
     if (string.match(/scenario\./)) {
       return string.replace(/['"]/g, '')
     }
+
+    if (string.match(/^\"\d+n\"$/)) {
+      return string.substr(1, string.length - 2)
+    }
+
     return string
   })
 } %>
