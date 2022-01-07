@@ -101,6 +101,7 @@ const baseConfig = {
       os: false,
       tty: false,
       crypto: false,
+      stream: false,
       zlib: false,
       path: false,
     }
