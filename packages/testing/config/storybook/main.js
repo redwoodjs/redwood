@@ -14,6 +14,8 @@ const config = getConfig()
 
 const rwjsPaths = getPaths()
 
+const staticAssetsFolder = path.join(getPaths().web.base, 'public')
+
 function isPackageInstalled(alias) {
   try {
     return Boolean(require(alias))
@@ -101,6 +103,7 @@ const baseConfig = {
       crypto: false,
       stream: false,
       zlib: false,
+      path: false,
     }
 
     // ** PLUGINS **
@@ -129,6 +132,9 @@ const baseConfig = {
 
     return sbConfig
   },
+  ...(process.env.NODE_ENV !== 'production' && {
+    staticDirs: [`${staticAssetsFolder}`],
+  }),
 }
 
 const mergeUserStorybookConfig = (baseConfig) => {
