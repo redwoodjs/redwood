@@ -1,5 +1,3 @@
-import path from 'path'
-
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -122,10 +120,7 @@ export const handler = async ({
 
   jestArgs.push(
     '--config',
-    `"${path.resolve(
-      rwjsPaths.base,
-      'node_modules/@redwoodjs/testing/config/jest/jest-preset.js'
-    )}"`
+    `"${require.resolve('@redwoodjs/testing/config/jest/jest-preset.js')}"`
   )
 
   if (sides.length > 0) {
