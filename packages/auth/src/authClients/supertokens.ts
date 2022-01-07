@@ -8,17 +8,20 @@ export interface SuperTokensUser {
 export type SuperTokens = AuthClient
 
 type SessionRecipe = {
-  signOut: () => Promise<void>,
-  doesSessionExist: () => Promise<boolean>,
-  getAccessTokenPayloadSecurely: () => Promise<any>,
-  getUserId: () => Promise<string>,
+  signOut: () => Promise<void>
+  doesSessionExist: () => Promise<boolean>
+  getAccessTokenPayloadSecurely: () => Promise<any>
+  getUserId: () => Promise<string>
 }
 
 type AuthRecipe = {
-  redirectToAuth: (input: ("signin" | "signup")) => void,
+  redirectToAuth: (input: 'signin' | 'signup') => void
 }
 
-export const supertokens = (client: { authRecipe: AuthRecipe, sessionRecipe: SessionRecipe }): AuthClient => {
+export const supertokens = (client: {
+  authRecipe: AuthRecipe
+  sessionRecipe: SessionRecipe
+}): AuthClient => {
   return {
     type: 'supertokens',
     client: undefined,
@@ -43,7 +46,8 @@ export const supertokens = (client: { authRecipe: AuthRecipe, sessionRecipe: Ses
       if (await client.sessionRecipe.doesSessionExist()) {
         return {
           userId: await client.sessionRecipe.getUserId(),
-          accessTokenPayload: await client.sessionRecipe.getAccessTokenPayloadSecurely(),
+          accessTokenPayload:
+            await client.sessionRecipe.getAccessTokenPayloadSecurely(),
         }
       } else {
         return null

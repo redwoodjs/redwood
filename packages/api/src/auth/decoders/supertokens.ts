@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import jwksClient from 'jwks-rsa'
+import jwksClient, { SigningKey } from 'jwks-rsa'
 
 export const supertokens = async (token: string): Promise<any | null> => {
   return new Promise((resolve, reject) => {
@@ -16,10 +16,13 @@ export const supertokens = async (token: string): Promise<any | null> => {
     })
 
     function getKey(header: any, callback: jwt.SigningKeyCallback) {
-      client.getSigningKey(header.kid, function (err: any, key: any) {
-        const signingKey = key.publicKey || key.rsaPublicKey
-        callback(err, signingKey)
-      })
+      client.getSigningKey(
+        header.kid,
+        function (err: Error | null, key: SigningKey) {
+          const signingKey = key.getPublicKey()
+          callback(err, signingKey)
+        }
+      )
     }
 
     jwt.verify(token, getKey, {}, function (err, decoded) {
