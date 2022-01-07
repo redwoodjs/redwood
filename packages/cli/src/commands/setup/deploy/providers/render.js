@@ -8,8 +8,8 @@ import Listr from 'listr'
 import { getPaths, writeFilesTask } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
-  createAddFilesTask,
-  createAddPackagesTask,
+  addFilesTask,
+  addPackagesTask,
   printSetupNotes,
   updateApiURLTask,
 } from '../helpers'
@@ -92,11 +92,6 @@ const additionalFiles = [
 ]
 
 export const handler = async ({ force, database }) => {
-  const gg = createAddPackagesTask({
-    packages: ['@redwoodjs/api-server'],
-    side: 'api',
-  })
-  console.log(`🗯 \n ~ file: render.js ~ line 99 ~ gg`, gg)
   const tasks = new Listr([
     {
       title: 'Adding render.yaml',
@@ -107,13 +102,13 @@ export const handler = async ({ force, database }) => {
         return writeFilesTask(files, { overwriteExisting: force })
       },
     },
-    createAddPackagesTask({
+    addPackagesTask({
       packages: ['@redwoodjs/api-server'],
       side: 'api',
     }),
     updateApiURLTask('/.redwood/functions'),
     // Add health check api function
-    createAddFilesTask({
+    addFilesTask({
       files: additionalFiles,
       force,
     }),

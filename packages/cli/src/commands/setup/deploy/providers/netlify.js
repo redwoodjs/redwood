@@ -5,11 +5,7 @@ import Listr from 'listr'
 
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
-import {
-  createAddFilesTask,
-  printSetupNotes,
-  updateApiURLTask,
-} from '../helpers'
+import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
 import { NETLIFY_TOML } from '../templates/netlify'
 
 export const command = 'netlify'
@@ -27,7 +23,7 @@ const notes = [
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     updateApiURLTask('./netlify/function'),
-    createAddFilesTask({
+    addFilesTask({
       files,
       force,
     }),

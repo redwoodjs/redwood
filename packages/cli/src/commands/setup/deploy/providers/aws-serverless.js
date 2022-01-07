@@ -8,8 +8,8 @@ import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   addToGitIgnoreTask,
-  createAddFilesTask,
-  createAddPackagesTask,
+  addFilesTask,
+  addPackagesTask,
   printSetupNotes,
 } from '../helpers'
 import { SERVERLESS_YML } from '../templates/serverless'
@@ -55,11 +55,11 @@ const prismaBinaryTargetAdditions = () => {
 export const handler = async ({ force }) => {
   const tasks = new Listr(
     [
-      createAddPackagesTask({
+      addPackagesTask({
         packages: projectDevPackages,
         devDependency: true,
       }),
-      createAddFilesTask({
+      addFilesTask({
         files,
         force,
       }),

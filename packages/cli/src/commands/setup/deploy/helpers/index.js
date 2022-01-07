@@ -43,7 +43,7 @@ export const updateApiURLTask = (apiUrl) => {
  * Use this to create checks prior to runnning setup commands
  * with a better error output
  *
- * @example createPreRequisiteCheckTask([
+ * @example preRequisiteCheckTask([
     {
       title: 'Checking if xxx is installed...',
       command: ['xxx', ['--version']],
@@ -54,7 +54,7 @@ export const updateApiURLTask = (apiUrl) => {
     },
   ])
  */
-export const createPreRequisiteCheckTask = (preRequisites) => {
+export const preRequisiteCheckTask = (preRequisites) => {
   return {
     title: 'Checking pre-requisites',
     task: () =>
@@ -81,13 +81,13 @@ export const createPreRequisiteCheckTask = (preRequisites) => {
  *
  * Use this util to install dependencies on a user's Redwood app
  *
- * @example createAddPackagesTask({
+ * @example addPackagesTask({
  * packages: ['fs-extra', 'somePackage@2.1.0'],
  * side: 'api', // <-- leave empty for project root
  * devDependency: true
  * })
  */
-export const createAddPackagesTask = ({
+export const addPackagesTask = ({
   packages,
   side = 'project',
   devDependency = false,
@@ -138,11 +138,11 @@ export const createAddPackagesTask = ({
  * Use this to add files to a users project
  *
  * @example
- * createAddFilesTask(
+ * addFilesTask(
  *  files: [ { path: path.join(getPaths().base, 'netlify.toml'), content: NETLIFY_TOML }],
  * )
  */
-export const createAddFilesTask = ({
+export const addFilesTask = ({
   files,
   force = false,
   title = 'Adding config',
