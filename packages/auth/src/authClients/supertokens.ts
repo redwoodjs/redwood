@@ -7,7 +7,18 @@ export interface SuperTokensUser {
 
 export type SuperTokens = AuthClient
 
-export const supertokens = (client: { authRecipe: any, sessionRecipe: any }): AuthClient => {
+type SessionRecipe = {
+  signOut: () => Promise<void>,
+  doesSessionExist: () => Promise<boolean>,
+  getAccessTokenPayloadSecurely: () => Promise<any>,
+  getUserId: () => Promise<string>,
+}
+
+type AuthRecipe = {
+  redirectToAuth: (input: ("signin" | "signup")) => void,
+}
+
+export const supertokens = (client: { authRecipe: AuthRecipe, sessionRecipe: SessionRecipe }): AuthClient => {
   return {
     type: 'supertokens',
     client: undefined,
