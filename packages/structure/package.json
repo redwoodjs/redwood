@@ -12,7 +12,7 @@
     "@prisma/sdk": "3.7.0",
     "@redwoodjs/internal": "0.41.0",
     "@types/line-column": "1.0.0",
-    "camelcase": "6.2.1",
+    "camelcase": "6.3.0",
     "deepmerge": "4.2.2",
     "dotenv-defaults": "3.0.0",
     "enquirer": "2.3.6",
@@ -37,13 +37,13 @@
     "directory": "packages/structure"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.178",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.11.17",
+    "@types/node": "16.11.19",
     "@types/vscode": "1.63.1",
-    "jest": "27.4.5",
+    "jest": "27.4.7",
     "typescript": "4.5.4"
   },
   "jest": {

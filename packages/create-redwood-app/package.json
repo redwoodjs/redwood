@@ -8,8 +8,8 @@
     "template"
   ],
   "dependencies": {
-    "@babel/node": "7.16.5",
-    "@babel/runtime-corejs3": "7.16.5",
+    "@babel/node": "7.16.7",
+    "@babel/runtime-corejs3": "7.16.7",
     "@redwoodjs/internal": "0.41.0",
     "axios": "0.24.0",
     "chalk": "4.1.2",
@@ -36,8 +36,8 @@
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "devDependencies": {
-    "@babel/cli": "7.16.0",
-    "jest": "27.4.5",
+    "@babel/cli": "7.16.7",
+    "jest": "27.4.7",
     "typescript": "4.5.4"
   }
 }
