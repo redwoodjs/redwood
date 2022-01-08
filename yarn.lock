@@ -5448,7 +5448,7 @@ __metadata:
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
-    mini-css-extract-plugin: 2.4.5
+    mini-css-extract-plugin: 2.4.6
     nodemon: 2.0.15
     null-loader: 4.0.1
     react-refresh: 0.11.0
@@ -20771,14 +20771,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.4.5":
-  version: 2.4.5
-  resolution: "mini-css-extract-plugin@npm:2.4.5"
+"mini-css-extract-plugin@npm:2.4.6":
+  version: 2.4.6
+  resolution: "mini-css-extract-plugin@npm:2.4.6"
   dependencies:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 00a1c4007b566052b6aa1345d9c468d476b9b6950de1d41d4dd824e83648977e95a4804c7b6cc0d2466c652843713922f7eeca0803cd8cb1a419f6b39d3c9880
+  checksum: 1bf667ad7f1fd9da6adff3f909969a67df65ef4411ab09590c349975f8faeebd7ec8594940631f6b8060349b5496472dc1cb364bb446c1e28492db795ca941bb
   languageName: node
   linkType: hard
 
