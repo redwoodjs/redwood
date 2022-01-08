@@ -1992,14 +1992,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:1.6.6, @envelop/core@npm:^1.6.1":
-  version: 1.6.6
-  resolution: "@envelop/core@npm:1.6.6"
+"@envelop/core@npm:1.7.0, @envelop/core@npm:^1.6.1":
+  version: 1.7.0
+  resolution: "@envelop/core@npm:1.7.0"
   dependencies:
     "@envelop/types": 1.5.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: f6fa25b3b25dbb80e98c8ca400d38a7224b47b90ff4521574f2cdeb791d61223962d89fbac3d4ab9e728d1a76fb1ad973731b5a16d1b380fc16ce32ed4854544
+  checksum: 747a791a1106f4bf729d97bd5aaf2f0fc72b4da3d7fdfb5504e2c9198f8ce930e3b7ecf1fe7a17c6db90aab4dd9f5b04066ca65d723db881b230083d5f783502
   languageName: node
   linkType: hard
 
@@ -2035,15 +2035,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@envelop/parser-cache@npm:2.2.1"
+"@envelop/parser-cache@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@envelop/parser-cache@npm:3.0.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
-    "@envelop/core": ^1.6.1
+    "@envelop/core": ^1.7.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: acc67b41e269ea4ffc9e441596444a191eac090db15a64ac0a4c9e4e287077044bd05dfea6a0221092d41f98c1ca68421f7047f51d1b382b12f2c27aa84d6742
+  checksum: 765e6f4a8fdf7184c0b26b1579a43dd5ef9737b1c7baaddb843ebc25544388251cab85405aaa972812f8504c7fb4bc52beb7498fd83e5e7fe2dab01d88744991
   languageName: node
   linkType: hard
 
@@ -5449,7 +5449,7 @@ __metadata:
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
-    mini-css-extract-plugin: 2.4.5
+    mini-css-extract-plugin: 2.4.6
     nodemon: 2.0.15
     null-loader: 4.0.1
     react-refresh: 0.11.0
@@ -5460,7 +5460,7 @@ __metadata:
     webpack: 5.65.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.1
-    webpack-dev-server: 4.7.2
+    webpack-dev-server: 4.7.1
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
@@ -5513,11 +5513,11 @@ __metadata:
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
     "@babel/cli": 7.16.7
-    "@envelop/core": 1.6.6
+    "@envelop/core": 1.7.0
     "@envelop/depth-limit": 1.2.1
     "@envelop/disable-introspection": 1.2.1
     "@envelop/filter-operation-type": 1.2.1
-    "@envelop/parser-cache": 2.2.1
+    "@envelop/parser-cache": 3.0.0
     "@envelop/testing": 2.1.1
     "@envelop/types": 1.5.1
     "@envelop/validation-cache": 2.3.0
@@ -20794,14 +20794,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.4.5":
-  version: 2.4.5
-  resolution: "mini-css-extract-plugin@npm:2.4.5"
+"mini-css-extract-plugin@npm:2.4.6":
+  version: 2.4.6
+  resolution: "mini-css-extract-plugin@npm:2.4.6"
   dependencies:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 00a1c4007b566052b6aa1345d9c468d476b9b6950de1d41d4dd824e83648977e95a4804c7b6cc0d2466c652843713922f7eeca0803cd8cb1a419f6b39d3c9880
+  checksum: 1bf667ad7f1fd9da6adff3f909969a67df65ef4411ab09590c349975f8faeebd7ec8594940631f6b8060349b5496472dc1cb364bb446c1e28492db795ca941bb
   languageName: node
   linkType: hard
 
@@ -29012,9 +29012,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.7.2":
-  version: 4.7.2
-  resolution: "webpack-dev-server@npm:4.7.2"
+"webpack-dev-server@npm:4.7.1":
+  version: 4.7.1
+  resolution: "webpack-dev-server@npm:4.7.1"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -29052,7 +29052,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 862cba6576f5e187e3e6d90a5abb63076f8d2385bde7122d8ee503f5cd0b264d99ab63478cbb4a317880af4d9cb4eda52714ee9bb31cbc3218894c0eca3544fc
+  checksum: d0f2e73cf7f330017464d7a0c491091b29a0542cdd42cbd132ae054581be9dd27934052c7d6d272856a3a94a104fd84f2d57136de09f9e49fd1bf9ff4339749c
   languageName: node
   linkType: hard
 
