@@ -2047,16 +2047,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@envelop/testing@npm:2.1.1"
+"@envelop/testing@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@envelop/testing@npm:3.0.0"
   dependencies:
     "@graphql-tools/utils": ^8.5.3
   peerDependencies:
-    "@envelop/core": ^1.6.1
+    "@envelop/core": ^1.7.0
     "@envelop/types": ^1.5.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 6caec20e435f6f4406d5e1102ac7fc735f77ec5172dadb30edf74c77d17d56e7e1e653825c2f938f85a1efc37561e0f6f78bf93ac7c9f75681942b358faeacd9
+  checksum: e14deace543d9899129d4f20f523d3c9a9ce98dd9e12bf05851481929655dd2fde558511043b81a3c14113ad3139cc7bfca47f6414c9ff7eff6b1883c4c03fc8
   languageName: node
   linkType: hard
 
@@ -5517,7 +5517,7 @@ __metadata:
     "@envelop/disable-introspection": 2.0.0
     "@envelop/filter-operation-type": 2.0.0
     "@envelop/parser-cache": 3.0.0
-    "@envelop/testing": 2.1.1
+    "@envelop/testing": 3.0.0
     "@envelop/types": 1.5.1
     "@envelop/validation-cache": 2.3.0
     "@graphql-tools/merge": 8.2.1
