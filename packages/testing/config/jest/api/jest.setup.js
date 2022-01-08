@@ -31,8 +31,8 @@ const isIdenticalArray = (a, b) => {
 }
 
 // determine what kind of quotes are needed around table names in raw SQL
-const getQuoteStyle = () => {
-  const config = getSchemaConfig()
+const getQuoteStyle = async () => {
+  const config = await getSchemaConfig()
 
   switch (config.datasources?.[0]?.provider) {
     case 'mysql':
@@ -80,7 +80,7 @@ const seedScenario = async (scenario) => {
 }
 
 const teardown = async () => {
-  const quoteStyle = getQuoteStyle()
+  const quoteStyle = await getQuoteStyle()
 
   for (const modelName of teardownOrder) {
     try {
