@@ -51,10 +51,11 @@ test('Should run tsc commands correctly, in order', async () => {
     generate: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw g types')
+  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw-gen')
 
   // Ensure tsc command run correctly for web side
-  expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
+  expect(execa.mock.results[1].value.cmd).toEqual('yarn')
+  expect(execa.mock.results[2].value.params).toContain('tsc')
   expect(execa.mock.results[1].value.params).toContain('--noEmit')
   expect(execa.mock.results[1].value.params).toContain('--skipLibCheck')
   expect(execa.mock.results[1].value.options.cwd).toBe(
@@ -62,7 +63,8 @@ test('Should run tsc commands correctly, in order', async () => {
   )
 
   // Ensure tsc command run correctly for web side
-  expect(execa.mock.results[2].value.cmd).toEqual('yarn tsc')
+  expect(execa.mock.results[2].value.cmd).toEqual('yarn')
+  expect(execa.mock.results[2].value.params).toContain('tsc')
   expect(execa.mock.results[2].value.params).toContain('--noEmit')
   expect(execa.mock.results[2].value.params).toContain('--skipLibCheck')
   expect(execa.mock.results[2].value.options.cwd).toBe(
@@ -77,10 +79,11 @@ test('Should generate prisma client', async () => {
     generate: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw g types')
+  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw-gen')
 
   // Ensure tsc command run correctly for api side
-  expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
+  expect(execa.mock.results[1].value.cmd).toEqual('yarn')
+  expect(execa.mock.results[1].value.params).toContain('tsc')
   expect(runCommandTask.mock.results[0].value[0]).toEqual(
     'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
   )

@@ -2,7 +2,6 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
 import { getProject } from '@redwoodjs/structure'
@@ -47,82 +46,52 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ sides, verbose, prisma, generate }) => {
-  const generateTasks = [
-    {
-      title: 'Generating redwood types...',
-      enabled: () => generate,
-      task: () => {
-        return execa('yarn rw g types', [], {
-          stdio: verbose ? 'inherit' : 'ignore',
-          shell: true,
-          cwd: getPaths().base,
-        })
-      },
-    },
-    {
-      title: 'Generating prisma client...',
-      task: () => {
-        return generatePrismaClient({
-          verbose: true,
-          schema: getPaths().api.dbSchema,
-        })
-      },
-      enabled: () => prisma && generate,
-      skip: () => {
-        if (!sides.includes('api')) {
-          return 'Skipping, as no api side present'
-        }
-      },
-    },
-  ]
-
   /**
-   * Check typings for the project directory : [web, api]
+   * Check types for the project directory : [web, api]
    */
 
-  const typeChecks = sides.map((side) => {
-    const cwd = path.join(getPaths().base, side)
-    return {
-      title: `Checking "${side}"...`,
-      task: () => {
-        return execa('yarn tsc', ['--noEmit', '--skipLibCheck'], {
+  const typeCheck = async () => {
+    let exitCode = 0
+    for (const side of sides) {
+      console.log(c.info(`\nRunning type check for ${side}...\n`))
+      const cwd = path.join(getPaths().base, side)
+      try {
+        // -s flag to suppress error output from yarn. For example yarn doc link on non-zero status.
+        // Since it'll be printed anyways after the whole execution.
+        await execa('yarn', ['-s', 'tsc', '--noEmit', '--skipLibCheck'], {
           stdio: 'inherit',
           shell: true,
           cwd,
         })
-      },
+      } catch (e) {
+        exitCode = e.exitCode ?? 1
+      }
     }
-  })
-
-  // Approach here is used to run typechecking of web and api in parallel
-  const tasks = new Listr(
-    [
-      {
-        title: 'Generating types...',
-        task: () => {
-          return new Listr(generateTasks, {
-            renderer: VerboseRenderer,
-            concurrent: true,
-          })
-        },
-      },
-      {
-        title: 'Running type checks...',
-        task: () => {
-          return new Listr(typeChecks, {
-            renderer: VerboseRenderer,
-            concurrent: true,
-          })
-        },
-      },
-    ],
-    {
-      renderer: verbose && VerboseRenderer,
-    }
-  )
+    return exitCode
+  }
 
   try {
-    await tasks.run()
+    if (generate && prisma) {
+      await generatePrismaClient({
+        verbose: verbose,
+        schema: getPaths().api.dbSchema,
+      })
+    }
+    if (generate) {
+      await new Listr([
+        {
+          title: 'Generating types',
+          task: () =>
+            execa('yarn rw-gen', {
+              shell: true,
+              stdio: verbose ? 'inherit' : 'ignore',
+            }),
+        },
+      ]).run()
+    }
+
+    const exitCode = await typeCheck()
+    exitCode > 0 && process.exit(exitCode)
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
