@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      # For network flakiness. See https://github.com/vercel/next.js/pull/28264
+      - name: tune linux network
+        run: sudo ethtool -K eth0 tx off rx off
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
