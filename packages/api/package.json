@@ -10,14 +10,14 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime-corejs3": "7.16.5",
+    "@babel/runtime-corejs3": "7.16.7",
     "@prisma/client": "3.7.0",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "7.6.0",
+    "pino": "7.6.2",
     "uuid": "8.3.2"
   },
   "repository": {
@@ -26,13 +26,13 @@
     "directory": "packages/api"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
+    "@babel/cli": "7.16.7",
     "@redwoodjs/auth": "0.41.0",
-    "@types/crypto-js": "4.0.2",
+    "@types/crypto-js": "4.1.0",
     "@types/jsonwebtoken": "8.5.6",
     "@types/md5": "2.3.1",
     "aws-lambda": "1.0.7",
-    "jest": "27.4.5",
+    "jest": "27.4.7",
     "typescript": "4.5.4"
   },
   "scripts": {
