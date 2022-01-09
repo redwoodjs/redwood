@@ -2015,35 +2015,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/disable-introspection@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@envelop/disable-introspection@npm:1.2.1"
+"@envelop/disable-introspection@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@envelop/disable-introspection@npm:2.0.0"
   peerDependencies:
-    "@envelop/core": ^1.6.1
+    "@envelop/core": ^1.7.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: b6021c8087e240d957c8b63fda040d53eac9d2754c79b67a3d4edc2528537d4ec2c0b034f8be88f7453d125b0ac60455f9439a03b2a1492c060c4cb02ad55547
+  checksum: e86627594dcfa6d18835c54c6b256aacc480e9acaf69d09ba0a36292623bec730b16fb0cb6eacd698d9acbaa9f04a7c02ac74d4fe00845f2a66269bdc2a0afae
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@envelop/filter-operation-type@npm:1.2.1"
+"@envelop/filter-operation-type@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@envelop/filter-operation-type@npm:2.0.0"
   peerDependencies:
-    "@envelop/core": ^1.6.1
+    "@envelop/core": ^1.7.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 98800860fda9c48d5746c15fb421682e6660692eb7b583906981ae1463a46965522ac47309893cb2681ef1284a0bd8595ef8d48f8e68c4ec926ba015214ea00d
+  checksum: ee20623c1fb528641d7915ac6b2869c5770a10c43facdc376c40ec2d31cbe852a705ee5860bea4bb49645ffeb0f4f5656b9c4fce54eb93bec8d740d076fa3dd6
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@envelop/parser-cache@npm:2.2.1"
+"@envelop/parser-cache@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@envelop/parser-cache@npm:3.0.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
-    "@envelop/core": ^1.6.1
+    "@envelop/core": ^1.7.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: acc67b41e269ea4ffc9e441596444a191eac090db15a64ac0a4c9e4e287077044bd05dfea6a0221092d41f98c1ca68421f7047f51d1b382b12f2c27aa84d6742
+  checksum: 765e6f4a8fdf7184c0b26b1579a43dd5ef9737b1c7baaddb843ebc25544388251cab85405aaa972812f8504c7fb4bc52beb7498fd83e5e7fe2dab01d88744991
   languageName: node
   linkType: hard
 
@@ -2069,15 +2069,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/validation-cache@npm:2.3.0":
-  version: 2.3.0
-  resolution: "@envelop/validation-cache@npm:2.3.0"
+"@envelop/validation-cache@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@envelop/validation-cache@npm:3.0.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
-    "@envelop/core": ^1.6.1
+    "@envelop/core": ^1.7.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 92ccc4394afa6a72b186a09cab9faae8a09f77313441c35dc84984d492b7e9251db35b5dae39d448aee1762196432468666a72c22e7ce30236ccf868f4e4e88d
+  checksum: d897697eb03d5de35d63ca696fd8aa8d1dee5f00bca2cec304f944a2672918ba9484b57112274aaad9c3bc2a6a0ba866b4f7518d1af8e505fcfb449b91418131
   languageName: node
   linkType: hard
 
@@ -5448,7 +5448,7 @@ __metadata:
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
-    mini-css-extract-plugin: 2.4.5
+    mini-css-extract-plugin: 2.4.6
     nodemon: 2.0.15
     null-loader: 4.0.1
     react-refresh: 0.11.0
@@ -5485,7 +5485,7 @@ __metadata:
     eslint-plugin-jest-dom: 4.0.1
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
-    eslint-plugin-react: 7.27.1
+    eslint-plugin-react: 7.28.0
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.4.7
     prettier: 2.5.1
@@ -5514,12 +5514,12 @@ __metadata:
     "@babel/cli": 7.16.7
     "@envelop/core": 1.7.0
     "@envelop/depth-limit": 1.2.1
-    "@envelop/disable-introspection": 1.2.1
-    "@envelop/filter-operation-type": 1.2.1
-    "@envelop/parser-cache": 2.2.1
+    "@envelop/disable-introspection": 2.0.0
+    "@envelop/filter-operation-type": 2.0.0
+    "@envelop/parser-cache": 3.0.0
     "@envelop/testing": 2.1.1
     "@envelop/types": 1.5.1
-    "@envelop/validation-cache": 2.3.0
+    "@envelop/validation-cache": 3.0.0
     "@graphql-tools/merge": 8.2.1
     "@graphql-tools/schema": 8.3.1
     "@graphql-tools/utils": 8.6.0
@@ -14136,9 +14136,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.27.1":
-  version: 7.27.1
-  resolution: "eslint-plugin-react@npm:7.27.1"
+"eslint-plugin-react@npm:7.28.0":
+  version: 7.28.0
+  resolution: "eslint-plugin-react@npm:7.28.0"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flatmap: ^1.2.5
@@ -14156,7 +14156,7 @@ __metadata:
     string.prototype.matchall: ^4.0.6
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: 7ee0cf33034fb5927f169ec45057dbc8b2c528682fe6c33716bf4b790e10fe2a0cc50bb91c4b78e7abf6e04536e44ff2e67c70b3bacc936defdbb05fb74e3a06
+  checksum: b34001378601dac82d13e4a2ecbe2db4dc004981aec90afbaa92d0b712399a8709cf5a288721a7d59e326e80f19e8b1e426349164c598c4467460f09d599c21b
   languageName: node
   linkType: hard
 
@@ -20771,14 +20771,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.4.5":
-  version: 2.4.5
-  resolution: "mini-css-extract-plugin@npm:2.4.5"
+"mini-css-extract-plugin@npm:2.4.6":
+  version: 2.4.6
+  resolution: "mini-css-extract-plugin@npm:2.4.6"
   dependencies:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 00a1c4007b566052b6aa1345d9c468d476b9b6950de1d41d4dd824e83648977e95a4804c7b6cc0d2466c652843713922f7eeca0803cd8cb1a419f6b39d3c9880
+  checksum: 1bf667ad7f1fd9da6adff3f909969a67df65ef4411ab09590c349975f8faeebd7ec8594940631f6b8060349b5496472dc1cb364bb446c1e28492db795ca941bb
   languageName: node
   linkType: hard
 
