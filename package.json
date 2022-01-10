@@ -75,5 +75,5 @@
     "project:copy": "node ./tasks/framework-tools/frameworkFilesToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs"
   },
-  "packageManager": "yarn@3.0.2"
+  "packageManager": "yarn@3.1.1"
 }
