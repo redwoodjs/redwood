@@ -24,8 +24,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       # For network flakiness. See https://github.com/vercel/next.js/pull/28264
-      - name: Tune linux network
-        run: sudo ethtool -K eth0 tx off rx off
+      - name: Tune linux networks
+        run: |
+          sudo ethtool -K eth0 tx off rx off
+          sudo ethtool -K docker0 tx off rx off
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
