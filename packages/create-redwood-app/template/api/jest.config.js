@@ -1,1 +1,3 @@
-module.exports = require('@redwoodjs/testing/config/jest/api')
+module.exports = {
+  preset: '@redwoodjs/testing/config/jest/api',
+}

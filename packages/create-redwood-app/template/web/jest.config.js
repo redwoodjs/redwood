@@ -1,1 +1,3 @@
-module.exports = require('@redwoodjs/testing/config/jest/web')
+module.exports = {
+  preset: '@redwoodjs/testing/config/jest/web',
+}
