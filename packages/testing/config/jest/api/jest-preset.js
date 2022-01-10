@@ -11,17 +11,16 @@ const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 // @TODO
-// @TODO Not sure this logic is super solid, also needs the db push code removed from the cli
+// @TODO Not sure this logic is super solid
 // @TODO
-if (!process.env.DATABASE_URL) {
+if (process.env.SKIP_DB_PUSH !== '1') {
   const process = require('process')
   const path = require('path')
+  // Load dotenvs
+  require('dotenv-defaults/config')
+
   const cacheDirDb = `file:${path.join(__dirname, '.redwood', 'test.db')}`
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
-
-
-  console.log('~~~~~~~~~~~~~ CALLLED ~~~~~~~~~~~~~~~~~~~')
-  console.log(Date.now())
 
   const execa = require('execa')
   execa.sync(
@@ -36,13 +35,16 @@ if (!process.env.DATABASE_URL) {
       },
     }
   )
+
+  // If its been reset once, we don't need to re-run it for every test
+  process.env.SKIP_DB_PUSH = '1'
 }
 
 module.exports = {
   // To make sure other config option which depends on rootDir use
   // correct path, for example, coverageDirectory
   rootDir: rwjsPaths.base,
-  roots: [path.join(rwjsPaths.api.base, 'src')],
+  roots: [path.join(rwjsPaths.api.src)],
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   displayName: {
     color: 'redBright',

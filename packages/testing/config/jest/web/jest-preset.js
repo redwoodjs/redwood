@@ -13,7 +13,7 @@ module.exports = {
   // To make sure other config option which depends on rootDir always
   // use correct path, for example, coverageDirectory
   rootDir: rwjsPaths.base,
-  roots: [path.join(rwjsPaths.web.base, 'src')],
+  roots: [path.join(rwjsPaths.web.src)],
   testEnvironment: 'jest-environment-jsdom',
   displayName: {
     color: 'blueBright',
@@ -30,7 +30,6 @@ module.exports = {
     '!**/node_modules/**',
     '!**/dist/**',
   ],
-  projects: ['<rootDir>/{,!(node_modules)/**/}jest.config.js'],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',

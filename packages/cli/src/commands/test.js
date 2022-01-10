@@ -118,11 +118,6 @@ export const handler = async ({
     getProject().sides.forEach((side) => sides.push(side))
   }
 
-  jestArgs.push(
-    '--config',
-    `"${require.resolve('@redwoodjs/testing/config/jest/jest.config.js')}"`
-  )
-
   if (sides.length > 0) {
     jestArgs.push('--projects', ...sides)
   }
@@ -133,18 +128,10 @@ export const handler = async ({
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-    if (sides.includes('api') && dbPush) {
-      // Sync||create test database
-      await execa(
-        `yarn rw`,
-        ['prisma db push', '--force-reset', '--accept-data-loss'],
-        {
-          cwd: rwjsPaths.api.base,
-          stdio: 'inherit',
-          shell: true,
-          env: { DATABASE_URL },
-        }
-      )
+    if (sides.includes('api') && !dbPush) {
+      // @NOTE
+      // DB push code now lives in packages/testing/config/jest/api/jest-preset.js
+      process.env.SKIP_DB_PUSH = '1'
     }
 
     // **NOTE** There is no official way to run Jest programmatically,
