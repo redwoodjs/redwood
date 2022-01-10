@@ -56,7 +56,7 @@ export function waitForApiSide() {
         .then((r) => {
           return r.status === 200 // The first response should be 504
         }),
-    { interval: 2_000 }
+    { interval: 10_000 }
   )
 }
 
