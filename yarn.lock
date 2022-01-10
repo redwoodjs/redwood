@@ -5459,7 +5459,7 @@ __metadata:
     webpack: 5.65.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.1
-    webpack-dev-server: ^4.7.2
+    webpack-dev-server: 4.7.2
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
@@ -28980,7 +28980,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.7.2":
+"webpack-dev-server@npm:4.7.2":
   version: 4.7.2
   resolution: "webpack-dev-server@npm:4.7.2"
   dependencies:
