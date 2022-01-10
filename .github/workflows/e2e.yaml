@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        node-version: ['14', '16']
+        node-version: ['16']
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
