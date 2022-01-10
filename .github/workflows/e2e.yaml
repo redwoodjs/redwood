@@ -73,6 +73,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
+          start: node ../start-e2e.js ${{ steps.createpath.outputs.project_path }}
           # we've already installed dependencies
           install: false
           env: true
