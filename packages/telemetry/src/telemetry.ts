@@ -10,8 +10,8 @@ const spawnProcess = (...args: Array<string>) => {
     process.execPath,
     [path.join(__dirname, 'scripts', 'invoke.js'), ...args, '--root', APP_ROOT],
     {
-      detached: true,
-      stdio: 'ignore',
+      // detached: true,
+      stdio: 'inherit',
     }
   ).unref()
 }

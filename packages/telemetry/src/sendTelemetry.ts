@@ -208,6 +208,8 @@ export const sendTelemetry = async () => {
       headers: { 'Content-Type': 'application/json' },
     })
 
+    console.info('Redwood Response:', response)
+
     // Normally we would report on any non-error response here (like a 500)
     // but since the process is spawned and stdout/stderr is ignored, it can
     // never be seen by the user, so ignore.

@@ -16,6 +16,7 @@ jobs:
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     env:
       REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
