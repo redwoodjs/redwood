@@ -67,10 +67,8 @@ export const handler = ({
       `--config-dir "${storybookConfig}"`,
       !build && `--port ${port}`,
       !build && '--no-version-updates',
-      !build && `--static-dir "${staticAssetsFolder}"`,
       !managerCache && '--no-manager-cache',
-      build &&
-        `--output-dir "${path.join(getPaths().web.base, buildDirectory)}"`,
+      build && `--output-dir "${buildDirectory}"`,
       !open && '--ci',
     ].filter(Boolean),
     {
