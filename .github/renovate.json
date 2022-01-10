@@ -13,7 +13,8 @@
     "tempy",
     "terminal-link",
     "@types/node-fetch",
-    "chalk"
+    "chalk",
+    "pascalcase"
   ],
   "packageRules": [
     {
