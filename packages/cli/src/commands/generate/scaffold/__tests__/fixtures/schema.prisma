@@ -22,6 +22,7 @@ model Post {
   rating   Float?
   postedAt DateTime?
   metadata Json
+  favorites Favorite[]
 }
 
 model User {
@@ -41,4 +42,11 @@ model UserProfile {
 
 model NoEditableField {
   id Int @id @default(autoincrement())
+}
+
+model Favorite {
+  id      Int     @id @default(autoincrement())
+  postId  Int
+  post    Post    @relation(fields: [postId], references: [id])
+  likes   BigInt
 }
