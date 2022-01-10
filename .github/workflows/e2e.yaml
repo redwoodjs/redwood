@@ -62,10 +62,6 @@ jobs:
           git commit -a --message=init
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Start server in background
-        run: yarn rw dev --no-generate --fwd="--no-open" &
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
