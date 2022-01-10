@@ -1992,14 +1992,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:1.7.0, @envelop/core@npm:^1.6.1":
-  version: 1.7.0
-  resolution: "@envelop/core@npm:1.7.0"
+"@envelop/core@npm:1.7.1, @envelop/core@npm:^1.6.1":
+  version: 1.7.1
+  resolution: "@envelop/core@npm:1.7.1"
   dependencies:
     "@envelop/types": 1.5.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 747a791a1106f4bf729d97bd5aaf2f0fc72b4da3d7fdfb5504e2c9198f8ce930e3b7ecf1fe7a17c6db90aab4dd9f5b04066ca65d723db881b230083d5f783502
+  checksum: cd09ce7a4d9fd99bbcb1fde1cd0edcc8a89d58623f931b0a2e5eacf96d8912f854cded364725c2d98116445de04784b57ba0115b7e9379ff66773cf1e6d6e682
   languageName: node
   linkType: hard
 
@@ -5512,7 +5512,7 @@ __metadata:
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
     "@babel/cli": 7.16.7
-    "@envelop/core": 1.7.0
+    "@envelop/core": 1.7.1
     "@envelop/depth-limit": 1.2.1
     "@envelop/disable-introspection": 2.0.0
     "@envelop/filter-operation-type": 2.0.0
