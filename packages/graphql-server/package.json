@@ -8,7 +8,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/core": "1.7.0",
+    "@envelop/core": "1.7.1",
     "@envelop/depth-limit": "1.2.1",
     "@envelop/disable-introspection": "2.0.0",
     "@envelop/filter-operation-type": "2.0.0",
