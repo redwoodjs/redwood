@@ -102,7 +102,6 @@ export const handler = async ({
     ...forwardJestFlags,
     collectCoverage ? '--collectCoverage' : null,
     '--passWithNoTests',
-    ...jestFilterArgs,
     '--runInBand', // @TODO always run in band, even for web as we get babel errors https://github.com/redwoodjs/redwood/issues/3646
   ].filter((flagOrValue) => flagOrValue !== null) // Filter out nulls, not booleans because user may have passed a --something false flag
 
