@@ -9,11 +9,10 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['ubuntu-latest']
         node-version: ['14', '16']
       fail-fast: true
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
+    runs-on: self-hosted
+    name:  Node ${{ matrix.node-version }} latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
