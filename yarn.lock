@@ -11127,7 +11127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-table3@npm:^0.6.0, cli-table3@npm:^0.6.1, cli-table3@npm:~0.6.0":
+"cli-table3@npm:^0.6.0, cli-table3@npm:^0.6.1, cli-table3@npm:~0.6.1":
   version: 0.6.1
   resolution: "cli-table3@npm:0.6.1"
   dependencies:
@@ -12440,9 +12440,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.2.0":
-  version: 9.2.0
-  resolution: "cypress@npm:9.2.0"
+"cypress@npm:9.2.1":
+  version: 9.2.1
+  resolution: "cypress@npm:9.2.1"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -12456,7 +12456,7 @@ __metadata:
     chalk: ^4.1.0
     check-more-types: ^2.24.0
     cli-cursor: ^3.1.0
-    cli-table3: ~0.6.0
+    cli-table3: ~0.6.1
     commander: ^5.1.0
     common-tags: ^1.8.0
     dayjs: ^1.10.4
@@ -12487,7 +12487,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 8f6ee993d82737b938022b3269fb625b837b7bd94d9c39db6b14eede8d640f13aa6d2379a8b871f282712f81988706ed52da102f6a0d5327a4a3fff77da21507
+  checksum: 8f900f63c94e958896e8c8c7169a6589d39051d94bfc042c85a4ba87933d013236db4b43c4c20358bcce05cb99280486e5816bb834681011dd57e8c4504cf54b
   languageName: node
   linkType: hard
 
@@ -25185,7 +25185,7 @@ resolve@^2.0.0-next.3:
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     core-js: 3.20.2
-    cypress: 9.2.0
+    cypress: 9.2.1
     cypress-wait-until: 1.7.2
     eslint: 8.6.0
     fast-glob: 3.2.10
