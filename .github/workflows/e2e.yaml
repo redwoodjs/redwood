@@ -6,7 +6,6 @@ on:
 
 jobs:
   cypress-run:
-    if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
         os: ['ubuntu-latest']
