@@ -24,6 +24,9 @@ jobs:
       - run: |
           npm install -g yarn
 
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
