@@ -39,23 +39,25 @@ export function waitForApiSide() {
   // Pause because chokidar `ignoreInitial` and debounce add at least 1000ms delay
   // to restarting the api-server in the e2e environment.
   cy.wait(1_000)
-  cy.waitUntil(() =>
-    cy
-      .request({
-        method: 'POST',
-        url: 'http://localhost:8910/.redwood/functions/graphql',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: 'query Q { redwood { version } }',
+  cy.waitUntil(
+    () =>
+      cy
+        .request({
+          method: 'POST',
+          url: 'http://localhost:8910/.redwood/functions/graphql',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: 'query Q { redwood { version } }',
+          }),
+          failOnStatusCode: false,
+        })
+        .then((r) => {
+          cy.task('log', `status is: ${r.status}`)
+          return r.status === 200 // The first response should be 504
         }),
-        failOnStatusCode: false,
-      })
-      .then((r) => {
-        cy.task('log', `status is: ${r.status}`)
-        return r.status === 200 // The first response should be 504
-      })
+    { interval: 5_000 }
   )
 }
 

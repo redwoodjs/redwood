@@ -24,6 +24,9 @@ import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('The Redwood Tutorial - Golden path edition', () => {
+  before(() => {
+    cy.task('log', JSON.stringify(cy.state('runnable')))
+  })
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
   after(() => {
@@ -34,6 +37,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       }
     )
   })
+
   it('0. Starting Development', () => {
     // disable auth
     cy.writeFile(
