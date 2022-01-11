@@ -54,6 +54,7 @@ export function waitForApiSide() {
           failOnStatusCode: false,
         })
         .then((r) => {
+          cy.task('log', `status is: ${r.status}`)
           return r.status === 200 // The first response should be 504
         }),
     { interval: 2_000 }
@@ -115,17 +116,29 @@ export const test_layouts = () =>
 export const test_dynamic = () =>
   it('4. Getting Dynamic', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
+    cy.task('log', 'writing file...')
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
+
+    cy.task('log', 'removing api/db/dev.db...')
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
+
     // need to also handle case where Prisma Client be out of sync
+    cy.task('log', 'rimraf and reset...')
     cy.exec(
       `cd ${BASE_DIR}; yarn rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`
     )
+
+    cy.task('log', 'migrate dev...')
     cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
+
+    cy.task('log', 'scaffold...')
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
     // Wait for API server to be available.
+    cy.task('log', 'waiting for api...')
     waitForApiSide()
+
+    cy.task('log', 'visit...')
     cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
