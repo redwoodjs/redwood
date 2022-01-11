@@ -57,7 +57,10 @@ export function waitForApiSide() {
           cy.task('log', `status is: ${r.status}`)
           return r.status === 200 // The first response should be 504
         }),
-    { interval: 5_000 }
+    {
+      timeout: 10_000,
+      interval: 2_000,
+    }
   )
 }
 
