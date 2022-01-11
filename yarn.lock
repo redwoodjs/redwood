@@ -2047,16 +2047,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@envelop/testing@npm:3.0.0"
+"@envelop/testing@npm:3.0.1":
+  version: 3.0.1
+  resolution: "@envelop/testing@npm:3.0.1"
   dependencies:
-    "@graphql-tools/utils": ^8.5.3
+    "@graphql-tools/utils": ^8.6.1
   peerDependencies:
-    "@envelop/core": ^1.7.0
+    "@envelop/core": ^1.7.1
     "@envelop/types": ^1.5.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: e14deace543d9899129d4f20f523d3c9a9ce98dd9e12bf05851481929655dd2fde558511043b81a3c14113ad3139cc7bfca47f6414c9ff7eff6b1883c4c03fc8
+  checksum: f1f64268dcb59601c56df48d3286a6f1f0c13a2ea6527e8e2933a9ac73b1a9f23c11e4c7720652369300d434b8874268bc5e5d7863ffe2b1e2b22ebc90ad8ebe
   languageName: node
   linkType: hard
 
@@ -3280,7 +3280,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.1, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3":
+"@graphql-tools/utils@npm:8.6.1, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.6.1":
   version: 8.6.1
   resolution: "@graphql-tools/utils@npm:8.6.1"
   dependencies:
@@ -5517,7 +5517,7 @@ __metadata:
     "@envelop/disable-introspection": 2.0.0
     "@envelop/filter-operation-type": 2.0.0
     "@envelop/parser-cache": 3.0.0
-    "@envelop/testing": 3.0.0
+    "@envelop/testing": 3.0.1
     "@envelop/types": 1.5.1
     "@envelop/validation-cache": 3.0.0
     "@graphql-tools/merge": 8.2.1

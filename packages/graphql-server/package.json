@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
-    "@envelop/testing": "3.0.0",
+    "@envelop/testing": "3.0.1",
     "@envelop/types": "1.5.1",
     "@redwoodjs/auth": "0.41.0",
     "@types/lodash.merge": "4.6.6",
