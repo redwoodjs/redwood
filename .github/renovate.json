@@ -14,7 +14,8 @@
     "terminal-link",
     "@types/node-fetch",
     "chalk",
-    "pascalcase"
+    "pascalcase",
+    "node-fetch"
   ],
   "packageRules": [
     {
