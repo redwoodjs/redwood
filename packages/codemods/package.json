@@ -18,7 +18,7 @@
     "findup-sync": "5.0.0",
     "jest": "27.4.7",
     "jscodeshift": "0.13.0",
-    "node-fetch": "2.6.6",
+    "node-fetch": "3.1.0",
     "prettier": "2.5.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
