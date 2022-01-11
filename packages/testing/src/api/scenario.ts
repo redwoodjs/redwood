@@ -57,3 +57,7 @@ export interface Scenario {
     testFunction: TestFunctionWithScenario<any>
   ): void
 }
+
+export interface Scenario {
+  only: Scenario
+}
