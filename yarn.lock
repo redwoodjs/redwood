@@ -5459,7 +5459,7 @@ __metadata:
     webpack: 5.65.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.1
-    webpack-dev-server: 4.7.2
+    webpack-dev-server: 4.7.3
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
@@ -21293,6 +21293,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"node-forge@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "node-forge@npm:1.2.0"
+  checksum: ad9a0a0b6595f2575250c5f4102692dcae2e04686e779ff509691f60abbf8b864367e63e5cdb78b8857bca608f422abede268266d306407d1dbc5c9b04c19ac3
+  languageName: node
+  linkType: hard
+
 "node-gyp-build@npm:^4.2.0":
   version: 4.3.0
   resolution: "node-gyp-build@npm:4.3.0"
@@ -25488,12 +25495,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"selfsigned@npm:^1.10.11":
-  version: 1.10.11
-  resolution: "selfsigned@npm:1.10.11"
+"selfsigned@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "selfsigned@npm:2.0.0"
   dependencies:
-    node-forge: ^0.10.0
-  checksum: 4054e22f9398efe2bde89302bbd668218d87af1042619528eb370072d6496dfa5389e6a2a2266f8b2e302effd397973432290db4cc9e9c18d44a35379d2c1538
+    node-forge: ^1.2.0
+  checksum: 159e3a18e107f587c5f29ec908458dc315b45f6aada702645d7cb0f59865086443f898c96cc96aab6d57f62e948ef0cd0c131971fbde43777ed52fd154121d3d
   languageName: node
   linkType: hard
 
@@ -28979,9 +28986,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.7.2":
-  version: 4.7.2
-  resolution: "webpack-dev-server@npm:4.7.2"
+"webpack-dev-server@npm:4.7.3":
+  version: 4.7.3
+  resolution: "webpack-dev-server@npm:4.7.3"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -29005,7 +29012,7 @@ resolve@^2.0.0-next.3:
     p-retry: ^4.5.0
     portfinder: ^1.0.28
     schema-utils: ^4.0.0
-    selfsigned: ^1.10.11
+    selfsigned: ^2.0.0
     serve-index: ^1.9.1
     sockjs: ^0.3.21
     spdy: ^4.0.2
@@ -29019,7 +29026,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 862cba6576f5e187e3e6d90a5abb63076f8d2385bde7122d8ee503f5cd0b264d99ab63478cbb4a317880af4d9cb4eda52714ee9bb31cbc3218894c0eca3544fc
+  checksum: 3c488f035a733ff4233592d35c8eeaacccb643fe3de907317188c54030ca19e92f95a85e8acdd6fbda998b077a0342cd3b73a3a824b10a25de357d1641ebf5d9
   languageName: node
   linkType: hard
 
