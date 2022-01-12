@@ -1,0 +1,183 @@
+@@layout("application", { "title": "Roadmap : RedwoodJS Docs", "version": "v0.39.0" })
+
+@@contentFor("aside",
+  <aside class="hidden xl:block w-1/4 h-auto overflow-y-visible">
+    <div class="overflow-y-auto sticky top-0 pl-6">
+      <nav class="text-sm font-semibold text-gray-600 pt-8 pb-40 lg:py-12 overflow-y-auto h-screen" data-controller="aside" data-action="scroll->aside#saveScroll">
+        
+          <h4 class="text-xs uppercase text-gray-500">On this page</h4>
+        
+        <ul class="mt-4 pointer-events-auto">
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#accessibility" data-turbolinks="false">
+              <span id="status-4">Accessibility</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#auth" data-turbolinks="false">
+              <span id="status-4">Auth</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#core" data-turbolinks="false">
+              <span id="status-3">Core</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#deployment" data-turbolinks="false">
+              <span id="status-4">Deployment</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#docs" data-turbolinks="false">
+              <span id="status-3">Docs</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#generators" data-turbolinks="false">
+              <span id="status-4">Generators</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#logging" data-turbolinks="false">
+              <span id="status-4">Logging</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#performance" data-turbolinks="false">
+              <span id="status-2">Performance</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#prerender" data-turbolinks="false">
+              <span id="status-4">Prerender</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#router" data-turbolinks="false">
+              <span id="status-4">Router</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#storybook" data-turbolinks="false">
+              <span id="status-4">Storybook</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#structure" data-turbolinks="false">
+              <span id="status-3">Structure</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#testing-app" data-turbolinks="false">
+              <span id="status-4">Testing (App)</span>
+            </a>
+          </li>
+          
+          <li class="my-1 py-1" style="margin-left: 0rem;">
+            <a href="#typescript" data-turbolinks="false">
+              <span id="status-3">TypeScript</span>
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </aside>
+)
+
+<div class="markdown">
+  <h1 id="roadmap"><a class="markdownIt-Anchor" href="#roadmap" data-turbolinks="false">#</a> Roadmap</h1>
+<p><em>Last updated 29 September 2021</em></p>
+<p>RedwoodJS is very close to a stable version 1.0. In the last two years, the project has matured significantly and is already used in production by a number of startups. We intend to have a 1.0 release candidate before the end of 2021 and to release a truly production-ready 1.0 in early 2022. If you want to follow along with development, we are updating the <a href="https://github.com/redwoodjs/redwood/projects">&quot;Current Release Sprint&quot;</a> GitHub project board several times a week. Once the &quot;On Deck&quot; and &quot;In Progress&quot; columns are complete, we'll be publishing the <code>v1.0.0-rc</code>.</p>
+<p>At this stage of development, when it's so important to keep the finish line in mind, a high-level overview is invaluable. Hence, this roadmap, and these color-coded labels:</p>
+<ul>
+<li><span id="status-0" class="font-mono">Didn't start</span></li>
+<li><span id="status-1" class="font-mono">Figuring it out</span></li>
+<li><span id="status-2" class="font-mono">There's a plan</span></li>
+<li><span id="status-3" class="font-mono">Making it happen</span></li>
+<li><span id="status-4" class="font-mono">Polishing</span></li>
+</ul>
+<p>Not everything will be in <code>v1.0</code>. Even things core to the Redwood dream—like more sides and targets—won't be there. But that's by design: we're trying to be careful about our priorities, both because we want <code>v1.0</code> to be something special and because if we aren't careful, we'll never get there.
+One of the hardest things in open source is saying no, but as we get closer to <code>v1.0</code>, it's increasingly what we'll have to do.</p>
+<p>With that said, here's the <code>v1.0</code> roadmap. If you're interested in contributing to one of these categories, just let us know in the <a href="https://community.redwoodjs.com/">RedwoodJS Forum</a> and we'll be happy to get you set up. With so many corners to finish, we need contributors now more than ever, so even the smallest contribution is appreciated!</p>
+<h2 id="accessibility"><a class="markdownIt-Anchor" href="#accessibility" data-turbolinks="false">#</a> Accessibility</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Accessibility is a first-class concern. We want you to be able to build accessible websites without having to jump through hoops. While accessibility is a broad topic that we plan to keep iterating on, <code>v1.0</code> will bring you a solid foundation, addressing key concerns, like route announcements and scroll. And the best part is: it's all baked-in.</p>
+<p>A common theme leading up to <code>v1.0</code> will be that we want to make sure what we have actually works, so if you're savvy with a screen reader, testing the route announcer on multiple screen readers on multiple browsers would be invaluable feedback!</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="auth"><a class="markdownIt-Anchor" href="#auth" data-turbolinks="false">#</a> Auth</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Authentication and authorization are questions Redwood has had answers to since <code>v0.7</code>. Redwood has easy-to-install, sophisticated auth for a variety of providers. There's even role-based access controls (RBACs)! Authentication and authorization are integrated across the whole stack, and when <code>v1.0</code> rolls around, your Services will be secure by default. For more, see <a href="https://redwoodjs.com/docs/security">Security</a>.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="core"><a class="markdownIt-Anchor" href="#core" data-turbolinks="false">#</a> Core</h2>
+<p><span id="status-3" class="font-mono">Making it happen</span></p>
+<p>Redwood depends on a few libraries—namely Prisma—for some of its core functionality. For us to be <code>v1.0</code>, they have to be too. With Prisma recently carrying Migrate and Studio to general availability (GA) to complete the ORM, it's safe to say that they're ready to go. As we transition to Envelop and polish Cells, GraphQL is one of the other core aspects of Redwood that's getting a lot of attention.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="deployment"><a class="markdownIt-Anchor" href="#deployment" data-turbolinks="false">#</a> Deployment</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>We want to be able to deploy everywhere and anywhere: serverless, serverful, to the edge—to the world! Much like auth, we've already got a great lineup: Netlify (done), Vercel (done), Render (done), AWS (done), and Google Cloud Run (in the works). We'll always be looking to add more and to support custom deployment strategies.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="docs"><a class="markdownIt-Anchor" href="#docs" data-turbolinks="false">#</a> Docs</h2>
+<p><span id="status-3" class="font-mono">Making it happen</span></p>
+<p>A major part of Redwood's initial success was it's tutorial. The practice of readable, enjoyable, and comprehensive documentation is something we plan to continue. Getting to <code>v1.0</code> doesn't mean sacrificing the quality of docs; on the contrary, the more the framework can do, the better the docs have to be.</p>
+<p>We welcome any and all contributions, from fixing typos to adding cookbooks!</p>
+<p>One thing we plan on doing before <code>v1.0</code> is moving over to Docusarus to accommodate features like versioning. When we release <code>v1.0</code>, we'll lock the docs in and version from there. The tutorials are over there already, with translations to boot!</p>
+<h2 id="generators"><a class="markdownIt-Anchor" href="#generators" data-turbolinks="false">#</a> Generators</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Generators are part of what makes Redwood a joy. We've made generators more configurable, so you can do things like opt in and out of generating stories and test files, and generate files in TypeScript rather than JavaScript. Look out for another long awaited configuration option: the ability to specify the path—where things get generated.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="logging"><a class="markdownIt-Anchor" href="#logging" data-turbolinks="false">#</a> Logging</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Logging has wiped out almost all of the old-growth Redwoods in California. But that doesn't mean we're not fans of logging here at RedwoodJS. As long as the logging helps you figure out what your app is doing! A production Redwood app will need great logging, so we intend to make it easy to get hooked up.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="performance"><a class="markdownIt-Anchor" href="#performance" data-turbolinks="false">#</a> Performance</h2>
+<p><span id="status-2" class="font-mono">There's a plan</span></p>
+<p>Can you have great developer ergonomics <strong>and</strong> performance? We intend to find out.</p>
+<p>Bundle size will be important here, so a good place to start is by building with the stats flag (<code>yarn rw build --stats</code>). This will make Redwood bundle with the <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer">Webpack Bundle Analyzer</a>.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="prerender"><a class="markdownIt-Anchor" href="#prerender" data-turbolinks="false">#</a> Prerender</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Along with TypeScript, Prerendering was one of our most-requested features. It's been available for some time now; all you have to do is add a single prop to one of your Routes:</p>
+<pre><code class="language-jsx">&lt;Route path=<span class="hljs-string">&quot;/&quot;</span> page={HomePage} name=<span class="hljs-string">&quot;home&quot;</span> prerender /&gt;
+</code></pre>
+<br />
+<p>We're not done by any means; there's a lot more features we'll add to Prerendering post <code>v1.0</code>, but for now we're making sure it works and it works well, and that includes any page flashes.</p>
+<h2 id="router"><a class="markdownIt-Anchor" href="#router" data-turbolinks="false">#</a> Router</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>We've written our own router for Redwood, and we need to make sure it's competitive with existing routers in the React ecosystem (e.g. React Router, Reach Router). We've taken a stance on desiring a flat routing scheme (vs a nested one) and this currently comes with some performance downsides, some of which we've addressed with Sets. There's a lot of little things for us to polish, so if you're looking to work on something with a smaller scope, the router's a great place to get started.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="storybook"><a class="markdownIt-Anchor" href="#storybook" data-turbolinks="false">#</a> Storybook</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Redwood's component-development workflow starts with Storybook. Being able to develop your components in isolation without ever starting the dev server is a real game-changer. Redwood even generates mock data for your Cells so you can iterate on all of your component states!</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="structure"><a class="markdownIt-Anchor" href="#structure" data-turbolinks="false">#</a> Structure</h2>
+<p><span id="status-3" class="font-mono">Making it happen</span></p>
+<p>Using Redwood's Structure package, we can use the same logic to power both an IDE (i.e. Jamstack IDE) and Redwood itself. Redwood Structure's most common use-case is getting the diagnostics of a complete Redwood project, but being able to programmatically talk about a Redwood project like an AST moves many other amazing things we can't anticipate into the adjacent possible.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="testing-app"><a class="markdownIt-Anchor" href="#testing-app" data-turbolinks="false">#</a> Testing (App)</h2>
+<p><span id="status-4" class="font-mono">Polishing</span></p>
+<p>Redwood makes testing a first-class concern, and maybe even makes it fun? We've integrated testing for both sides, and even wrote a <a href="https://redwoodjs.com/docs/testing">tome</a> telling you how to use it, from the ground-up. We've got a template for Functions in the works, which would all but bring our unit tests to a close. One thing we'd really like to add as a stretch goal is a GitHub Action so you can have CI from the get go!</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+<h2 id="typescript"><a class="markdownIt-Anchor" href="#typescript" data-turbolinks="false">#</a> TypeScript</h2>
+<p><span id="status-3" class="font-mono">Making it happen</span></p>
+<p>The <a href="https://github.com/redwoodjs/redwood/issues/234">TypeScript tracking issue</a> easily has the most reactions of any of our issues and PRs. Bit by bit we've made Redwood more and more TypeScript compliant. <a href="https://github.com/corbt">@corbt</a> (Kyle Corbitt) even <a href="https://github.com/redwoodjs/redwood/issues/234#issuecomment-792390125">graphed our progress</a>!</p>
+<p><a href="https://github.com/redwoodjs/redwood/pull/2208">Cells</a> were one of the more-recent additions. And some of the things we've got coming, like <a href="https://github.com/redwoodjs/redwood/pull/2485">GraphQL Codegen</a>, are going to be icing on the cake.</p>
+<p>Although we want Redwood apps to default to TypeScript, you can still just stick to JS! It's totally up to you. All of our utilities, like generators, support both.</p>
+<p><a href="https://github.com/redwoodjs/redwood/projects/20">GitHub Project Board</a></p>
+
+  
+</div>

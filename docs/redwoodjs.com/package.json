@@ -1,0 +1,56 @@
+{
+  "name": "redwoodjs.com",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "node lib/build.js && webpack && postcss --verbose code/stylesheets/application.pcss -o publish/stylesheets/application.css",
+    "clean": "del 'code/html/(cookbook|docs|tutorial|tutorial2)/*.html' 'code/html/_(cookbook|docs|tutorial|tutorial2)_nav.html' 'publish/!(downloads|images|favicon.*)'",
+    "dev": "yarn serve & yarn watch",
+    "netlify": "yarn watch & netlify dev",
+    "rebuild": "yarn clean && yarn build",
+    "serve": "live-server --watch=./publish --mount=/:./publish --entry-file='publish/404.html' --middleware=../../../docs/redwoodjs.com/lib/middleware/use-extension --middleware=../../../docs/redwoodjs.com/lib/middleware/use-headers --middleware=../../../docs/redwoodjs.com/lib/middleware/use-redirects",
+    "watch": "webpack --watch & postcss --verbose code/stylesheets/application.pcss -o publish/stylesheets/application.css --watch"
+  },
+  "private": true,
+  "devDependencies": {
+    "del-cli": "3.0.1",
+    "live-server": "1.2.1",
+    "toml": "3.0.0"
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "2.3.0",
+    "@octokit/rest": "16.43.2",
+    "algoliasearch": "4.11.0",
+    "autoprefixer": "9.8.8",
+    "blueimp-md5": "2.19.0",
+    "cameronjs-html-webpack-plugin": "0.5.1",
+    "clipboard": "2.0.8",
+    "dotenv": "8.6.0",
+    "highlight.js": "10.7.3",
+    "highlightjs-graphql": "1.0.2",
+    "install": "0.13.0",
+    "lodash.clone": "4.5.0",
+    "lodash.escape": "4.0.1",
+    "lodash.template": "4.5.0",
+    "markdown-it": "10.0.0",
+    "markdown-it-collapsible": "1.0.0",
+    "markdown-it-deflist": "2.1.0",
+    "markdown-it-highlight-lines": "1.0.2",
+    "markdown-it-toc-and-anchor": "4.2.0",
+    "marked": "0.8.2",
+    "node-fetch": "2.6.6",
+    "npm": "6.14.6",
+    "param-case": "3.0.4",
+    "postcss-cli": "7.1.2",
+    "postcss-import": "12.0.1",
+    "postcss-nested": "4.2.3",
+    "stimulus": "1.1.1",
+    "tailwindcss": "1.9.6",
+    "title-case": "3.0.3",
+    "turbolinks": "5.2.0",
+    "webpack": "4.46.0",
+    "webpack-cli": "3.3.12"
+  },
+  "peerDependencies": {
+    "cameronjs": "0.5.5"
+  }
+}

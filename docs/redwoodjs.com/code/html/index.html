@@ -1,0 +1,393 @@
+@@layout("application", { "title": "RedwoodJS | The App Framework for Startups", "version": "v0.39.0" })
+@@contentFor("hero",
+<div class="bg-red-100">
+  <div class="lg:flex lg:items-center max-w-screen-xl mx-auto px-8 py-12 md:py-20">
+    <div class="hidden lg:block lg:w-1/3 pl-4">
+      <img src="/images/diecut.svg" alt="Redwood Logo" class="w-2/3 mx-auto" />
+    </div>
+    <div class="w-full lg:w-2/3 lg:pr-4">
+      <h2 class="text-3xl md:text-4xl xl:text-5xl text-center lg:text-left font-semibold tracking-tight leading-10">
+        <span class="text-red-700">The JS App Framework for Startups</span>
+      </h2>
+      <p class="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left md:text-lg xl:text-xl mt-6 xl:leading-8">
+        <span class="text-red-700">Ship today with architecture for tomorrow.</span> Redwood includes deploy support 
+        for Netlify, Vercel, Render.com, AWS and more. Deploy serverless or serverfull and scale from zero servers to a 
+        thousand.  Built on <span class="text-red-700">React</span>, <span class="text-red-700">GraphQL</span>, and <span class="text-red-700">Prisma</span>, 
+        with full <span class="text-red-700">TypeScript</span> support, and Webpack/Babel ready to go with zero config. Redwood gives you the
+        workflow you love, but with simple conventions and helpers to make your experience even better.
+      </p>
+      <ul class="flex flex-wrap mt-8 justify-center lg:justify-start lg:-ml-2">
+        <li class="px-2 whitespace-no-wrap">
+          <a
+            href="https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood"
+            class="block mt-2 bg-red-700 text-white px-4 py-3 font-semibold rounded-lg hover:bg-red-600 transition duration-200"
+            >Start the Tutorial</a
+          >
+        </li>
+        <li class="px-2 whitespace-no-wrap">
+          <a
+            href="/docs"
+            class="block mt-2 bg-white text-red-700 border border-red-300 px-4 py-3 font-semibold rounded-lg hover:bg-red-200 transition duration-200"
+            >Read the Docs</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+)
+
+<div class="xl:-mr-56 mt-4">
+<section class="md:flex items-start max-w-screen-xl mx-auto my-8">
+  <div class="md:w-1/3">
+    <header class="text-center">
+      <h2 class="text-red-700 text-xl font-semibold tracking-tight">Get the Newsletter</h2>
+      <p class="text-sm mt-1">Keep up on what's happening with RedwoodJS!</p>
+    </header>
+    <form
+      class="flex items-center justify-between mt-4 pt-1"
+      action="https://redwoodjs.us19.list-manage.com/subscribe/post?u=0c27354a06a7fdf4d83ce07fc&amp;id=09f634eea4"
+      method="post"
+      name="mc-embedded-subscribe-form"
+      target="_blank"
+      novalidate
+    >
+      <input
+        type="email"
+        value=""
+        name="EMAIL"
+        class="block border border-red-700 rounded-l py-2 px-2 w-full"
+        id="mce-EMAIL"
+        placeholder="me@email.com"
+      />
+      <button
+        type="submit"
+        value="Subscribe"
+        name="subscribe"
+        class="block bg-red-700 hover:bg-red-600 transition duration-200 text-white px-4 py-2 border border-red-700 font-semibold rounded-r"
+      >
+        Subscribe
+      </button>
+    </form>
+  </div>
+
+  <div class="md:w-1/3 md:px-6 mt-8 md:mt-0">
+    <header class="text-center">
+      <a href="https://shop.redwoodjs.com" class="hover:underline text-red-700">
+        <h2 class="text-red-700 text-xl font-semibold tracking-tight">Get Some Swag</h2>
+      </a>
+      <p class="text-sm mt-1">The Redwood logo on shirts, hats,<br />and more!</p>
+    </header>
+    <a href="https://shop.redwoodjs.com" class="mt-5 block w-auto bg-red-700 hover:bg-red-600 transition duration-200 text-white text-center px-4 py-2 border border-red-700 font-semibold rounded">The Redwood Shop &rarr;</a>
+  </div>
+
+  <div class="md:w-1/3 md:pl-8 mt-8 md:mt-0">
+    <header class="text-center">
+      <a href="/stickers.html" class="hover:underline text-red-700">
+        <h2 class="text-red-700 text-xl font-semibold tracking-tight">Get Free Stickers</h2>
+      </a>
+      <p class="text-sm mt-1">Enter your address for a chance to get some, free!</p>
+    </header>
+    <div class="mt-3">
+      <a href="/stickers.html" class="flex flex-between block hover:bg-red-100 rounded">
+        <div class="w-1/2">
+          <img src="/images/stickers.png" alt="Redwood stickers" />
+        </div>
+        <div class="w-1/2">
+          <img src="/images/stickers.png" alt="Redwood stickers" class="" />
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+  <section class="mt-12 pt-12 border-t lg:flex justify-between items-start">
+    <div class="flex flex-col md:flex-row lg:flex-col justify-between lg:w-1/3 text-center px-4 lg:pr-2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-32 lg:w-16 mx-auto">
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path
+          d="M9 15h6.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-.87l-.17-.86C14.29 9.92 13.23 9 12 9c-.96 0-1.84.57-2.26 1.45l-.27.57h-.73C7.74 11.15 7 11.99 7 13c0 1.1.9 2 2 2z"
+          class="fill-current text-red-400"
+        />
+        <path
+          d="M9 17h6.5c1.93 0 3.5-1.57 3.5-3.5 0-1.66-1.16-3.05-2.74-3.41C15.66 8.28 13.95 7 12 7c-1.53 0-2.96.8-3.78 2.08C6.36 9.44 5 11.07 5 13c0 2.21 1.79 4 4 4zm-.26-5.98h.74l.27-.57C10.16 9.57 11.04 9 12 9c1.23 0 2.29.92 2.46 2.14l.17.86h.87c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5H9c-1.1 0-2-.9-2-2 0-1.01.74-1.85 1.74-1.98zM21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z"
+          class="fill-current text-red-800"
+        />
+      </svg>
+      <div class="ml-0 md:ml-8 lg:ml-0 text-center md:text-left lg:text-center w-full">
+        <h2 class="text-lg font-semibold text-red-800 mt-2">Edge-ready</h2>
+        <p class="lg:mt-4 text-sm">
+          Redwood is designed to be deployable completely to the
+          <span class="whitespace-no-wrap">Edge—</span>CDNs and serverless functions distributed everywhere. (Databases
+          coming soon!)
+        </p>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row lg:flex-col justify-between lg:w-1/3 text-center px-4 mt-8 md:mt-4 lg:mt-0">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-32 lg:w-16 mx-auto">
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path
+          d="M10 10h4v4h-4zm0 6h4v4h-4zM4 4h4v4H4zm0 6h4v4H4zm0 6h4v4H4zM16 4h4v4h-4zm0 6h4v4h-4zm0 6h4v4h-4zM10 4h4v4h-4z"
+          class="fill-current text-red-400"
+        />
+        <path
+          d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z"
+          class="fill-current text-red-800"
+        />
+      </svg>
+      <div class="ml-0 md:ml-8 lg:ml-0 text-center md:text-left lg:text-center w-full">
+        <h2 class="text-lg font-semibold text-red-800 mt-2">
+          Code Organization
+        </h2>
+        <p class="lg:mt-4 text-sm">
+          Redwood has a pre-defined place for all your
+          <span class="whitespace-no-wrap">code—</span> front-end and back-end. Components, layouts, pages, GraphQL, and
+          services: they all have a home.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col md:flex-row lg:flex-col justify-between lg:w-1/3 text-center px-4 lg:pr-2 mt-8 md:mt-4 lg:mt-0"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-32 lg:w-16 mx-auto">
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path d="M6 13c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V5H6v8z" class="fill-current text-red-400" />
+        <path
+          d="M4 19h16v2H4zM20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.9 2-2V5c0-1.11-.89-2-2-2zm-4 10c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V5h10v8zm4-5h-2V5h2v3z"
+          class="fill-current text-red-800"
+        />
+      </svg>
+      <div class="ml-0 md:ml-8 lg:ml-0 text-center md:text-left lg:text-center w-full">
+        <h2 class="text-lg font-semibold text-red-800 mt-2">
+          Developer Experience
+        </h2>
+        <p class="lg:mt-4 text-sm">
+          Redwood apps are as declarative as possible; we eliminate most boilerplate; zero-config code
+          splitting...everything
+          <span class="whitespace-no-wrap">Just Works&trade;.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="md:flex mt-12 pt-12 border-t border-red-200">
+    <div class="md:w-2/5 pr-4">
+      <h3 class="text-lg font-semibold">How it's Organized</h3>
+      <p class="my-2 text-sm">
+        Redwood places both the frontend and backend code in a single monorepo.
+      </p>
+      <p class="my-2 text-sm">
+        <code class="text-red-700 bg-red-200 py-half px-1 rounded text-xs">/web</code>
+        contains the frontend and is served as static files through a CDN (and automatically code-split for you).
+      </p>
+      <p class="my-2 text-sm">
+        <code class="text-red-700 bg-red-200 py-half px-1 rounded text-xs">/api</code>
+        contains the backend serverless functions (a GraphQL API by default) that your frontend will call when it needs
+        some dynamic data.
+      </p>
+    </div>
+    <div class="md:w-3/5 md:pl-4 mt-4 md:mt-0">
+      <a href="/images/structure.png"><img src="/images/structure.png" alt="Structure of a Redwood app" /></a>
+    </div>
+  </section>
+
+  <section class="md:flex mt-12 pt-12 border-t border-red-200">
+    <div class="md:w-2/5 pr-4">
+      <h3 class="text-lg font-semibold">Routing</h3>
+      <p class="my-2 text-sm">
+        Redwood features its own router that brings some awesome innovation to this often overlooked (but important)
+        part of your app.
+        <strong>Named routes</strong> let you reference a route by a name you define,
+        <strong>route param types</strong> take care of coercing values based on data type or custom functions, and
+        more.
+      </p>
+    </div>
+    <div class="md:w-3/5 md:pl-4 mt-4 md:mt-0">
+      <pre><code class="javascript" data-target="application.code">// web/src/Routes.js
+import { Router, Route } from '@redwoodjs/router'
+const Routes = () => {
+  return (
+    &lt;Router&gt;
+      &lt;Route path="/" page={HomePage} name="home" /&gt;
+      &lt;Route path="/users/{type}" page={UsersPage} name="users" /&gt;
+    &lt;/Router&gt;
+  )
+}
+
+// web/src/components/Admin/Admin.js
+import { Link, routes } from '@redwoodjs/router'
+const Admin = () => {
+  return (
+    &lt;h1&gt;&lt;Link to={routes.home()}&gt;My CRM&lt;/Link&gt;&lt;/h1&gt;
+    &lt;Link to={routes.users({type: "admin"})}&gt;View Admins&lt;/Link&gt;
+  )
+}</code></pre>
+    </div>
+  </section>
+
+  <section class="md:flex mt-12 pt-12 border-t border-red-200">
+    <div class="md:w-2/5 pr-4">
+      <h3 class="text-lg font-semibold">Cells</h3>
+      <p class="my-2 text-sm">
+        The sequence of retrieving data from an API, showing a loading placeholder, and then displaying the result is so
+        common that Redwood codifies it into a declarative code pattern, resulting in simple and readable code!
+      </p>
+      <p class="my-2 text-sm">
+        We call them <strong>cells</strong> and they contain the GraphQL query, loading, empty, error, and success
+        states, each one rendering itself automatically depending on what state your cell is in.
+      </p>
+    </div>
+    <div class="md:w-3/5 md:pl-4 mt-4 md:mt-0">
+      <pre><code class="javascript" data-target="application.code">// web/src/components/UsersCell/UsersCell.js
+export const QUERY = gql`
+  query USERS {
+    users {
+      id
+      name
+    }
+  }
+`
+export const Loading = () => &lt;div&gt;Loading users...&lt;/div&gt;
+export const Empty = () => &lt;div&gt;No users yet!&lt;/div&gt;
+export const Failure = ({ message }) => &lt;div&gt;Error: {message}&lt;/div&gt;
+export const Success = ({ users }) => {
+  return (
+    &lt;ul&gt;
+      { users.map(user => (
+        &lt;li&gt;{user.id} | {user.name}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  )
+}</code></pre>
+    </div>
+  </section>
+
+  <section class="md:flex mt-12 pt-12 border-t border-red-200">
+    <div class="md:w-2/5 pr-4">
+      <h3 class="text-lg font-semibold">Services</h3>
+      <p class="my-2 text-sm">
+        Redwood puts all your business logic in one place—<strong>Services</strong>. These can be used by your GraphQL
+        API or any other place in your backend code. Redwood does all of the annoying stuff for you.
+      </p>
+      <p></p>
+      <p class="my-2 text-sm">
+        Check out how easy it is to create and consume a GraphQL endpoint (we didn't even omit any other
+        <code class="bg-red-200 text-red-600 font-mono text-sm px-1 py-half rounded">import</code>
+        statements or cheat to get the code smaller, honest!):
+      </p>
+    </div>
+    <div class="md:w-3/5 md:pl-4 mt-4 md:mt-0">
+      <pre><code class="javascript" data-target="application.code">// api/src/graphql/users.sdl.js
+export const schema = gql`
+  type User {
+    id: Int!
+    name: String!
+  }
+  type Query {
+    users: [User]
+  }
+`
+
+// api/src/services/users/users.js
+import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+// web/src/components/UsersCell/UsersCell.js
+export const QUERY = gql`
+  query USERS {
+    users {
+      id
+      name
+    }
+  }
+`
+export const Success = ({ users }) => {
+  return JSON.stringify(users)
+}</code></pre>
+    </div>
+  </section>
+
+  <section class="md:flex mt-12 pt-12 border-t border-red-200">
+    <div class="md:w-2/5 pr-4">
+      <h3 class="text-lg font-semibold">Generators</h3>
+      <p class="my-2 text-sm">
+        Even with a relentless elimination of boilerplate, Redwood files still need a bit of code to get you started,
+        and need to be created in the right directories. No problem, let a computer do that for you!
+      </p>
+      <p class="my-2 text-sm">
+        Redwood contains several <strong>generators</strong> which create the shell of cells, pages, layouts, services,
+        and more. We even have a <strong>scaffold</strong> generator which will create all the pages necessary to run
+        end-to-end CRUD operations on a database table.
+      </p>
+    </div>
+    <div class="md:w-3/5 md:pl-4 mt-4 md:mt-0">
+      <pre><code class="bash" data-target="application.code"># Create a cell for Users
+$ yarn rw generate cell Users
+
+# Create a layout named Admin
+$ yarn rw generate layout Admin
+
+# Create an About page and set the URL to /about
+$ yarn rw generate page About /about
+
+# Read the DB schema and create the SDL file for the User table
+$ yarn rw generate sdl User
+
+# Create api/src/services/email/email.js and include CRUD functions
+$ yarn rw generate service Email --crud
+
+# Create the SDL, service, cells, pages and components to CRUD a User
+$ yarn rw generate scaffold User</code></pre>
+    </div>
+  </section>
+
+  <section class="md:flex mt-12 pt-12 border-t border-red-200">
+    <div class="md:w-2/5 pr-4">
+      <h3 class="text-lg font-semibold">Forms</h3>
+      <p class="my-2 text-sm">
+        Working with forms is notoriously annoying in React apps. Redwood removes the complexity and gives you the
+        freedom to work with regular HTML inputs, but sprinkled with a bit of validation and error handling. Show client
+        and server-side errors automatically and style them like any other React component.
+      </p>
+    </div>
+    <div class="md:w-3/5 md:pl-4 mt-4 md:mt-0">
+      <pre><code class="javascript" data-target="application.code">// web/src/components/Comment/Comment.js
+import { Form, Label, TextAreaField, FieldError, Submit } from "@redwoodjs/web"
+
+export const Comment = () => {
+  const onSubmit = (data) => {
+    console.info(`Submitted: ${data}`)
+  }
+  return (
+    &lt;Form onSubmit={onSubmit}&gt;
+      &lt;Label name="comment" errorStyle={{ color: "red" }} /&gt;
+      &lt;TextAreaField
+        name="comment"
+        errorStyle={{ borderColor: "red" }}
+        validation={{ required: true }}
+      /&gt;
+      &lt;FieldError name="comment" errorStyle={{ color: "red" }} /&gt;
+      &lt;Submit&gt;Send&lt;/Submit&gt;
+    &lt;/Form&gt;
+  )
+}
+      </code></pre>
+    </div>
+  </section>
+
+  <section class="border-t border-red-200 mt-12 py-12 text-center">
+    <p class="text-3xl font-semibold tracking-tight">Ready for Redwood?</p>
+    <div class="flex justify-center">
+      <a href="https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood" class="block mt-8 bg-red-700 text-white px-4 py-3 font-semibold rounded-lg hover:bg-red-600"
+        >Start the Tutorial</a
+      >
+    </div>
+  </section>
+</div>

@@ -1,0 +1,39 @@
+@@layout("application", { "title": "RedwoodJS - Get a sticker!", "version": "v0.39.0" })
+
+<style type="text/css">
+  :root {
+    --rotateStart: -90deg;
+    --rotateEnd: 90deg
+  }
+
+  @keyframes falling {
+    0% {
+           top: -100px;
+           transform: rotate(var(--rotateStart));
+         }
+    80% {
+      opacity: 1
+    }
+    100%   {
+           top: 800px;
+           transform: rotate(var(--rotateEnd));
+           opacity: 0
+          }
+  }
+</style>
+
+<div class="xl:-mr-56" data-target="application.thanks">
+  <section class="max-w-4xl mx-auto text-center">
+    <div class="max-w-lg mx-auto">
+      <img src="/images/stickers.png" alt="Redwood stickers" class="w-full" />
+    </div>
+    <h2 class="mt-4 text-4xl font-semibold tracking-tight">We got your address!</h2>
+    <div class="text-gray-700">
+      <p class="mt-6 text-xl">The day may come when we ask <em>you</em> for a favor...</p>
+      <p class="mt-2">And that day is today: star us on GitHub!</p>
+      <a href="https://github.com/redwoodjs/redwood" class="inline-block mt-8 bg-red-700 text-white font-semibold px-5 py-2 rounded">Star on GitHub</a>
+    </div>
+
+  </section>
+  <img src="/images/diecut.svg" class="hidden absolute z-10" data-target="application.cone">
+</div>

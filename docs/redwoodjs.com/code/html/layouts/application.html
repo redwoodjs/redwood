@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="An opinionated Javascript framework that combines React, GraphQL, Prisma2, SQL, and lots more out of the box.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="RedwoodJS">
+    <meta property="og:title" content="@@title">
+    <meta property="og:image" content="https://redwoodjs.com/images/opengraph-256.png">
+    <meta property="og:description" content="An opinionated Javascript framework that combines React, GraphQL, Prisma2, SQL, and lots more out of the box.">
+    <meta property="og:url" content="https://redwoodjs.com/">
+    <meta name="twitter:site" content="@redwoodjs">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="@@title">
+    <meta name="twitter:description" content="An opinionated Javascript framework that combines React, GraphQL, Prisma2, SQL, and lots more out of the box.">
+    <meta name="twitter:image" content="https://redwoodjs.com/images/opengraph-256.png">
+    <title>@@title</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/images/opengraph-256.png">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/application.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css">
+    <script type="text/javascript" src="/javascripts/application.js"></script>
+    <script type="text/javascript">
+      !function() {
+        "use strict";
+        var o = window.location
+          , a = window.document
+          , t = window.localStorage
+          , r = a.currentScript
+          , l = "https://dpxl0uf0kxlpt.cloudfront.net/api/event"
+          , w = t && t.plausible_ignore;
+        function s(t) {
+          console.warn("Ignoring Event: " + t)
+        }
+        function n(t, n) {
+          if (/^localhost$|^127(\.[0-9]+){0,2}\.[0-9]+$|^\[::1?\]$/.test(o.hostname) || "file:" === o.protocol)
+            return s("localhost");
+          if (!(window._phantom || window.__nightmare || window.navigator.webdriver || window.Cypress)) {
+            if ("true" == w)
+              return s("localStorage flag");
+            var e = {};
+            e.n = t,
+            e.u = o.href,
+            e.d = r.getAttribute("data-domain"),
+            e.r = a.referrer || null,
+            e.w = window.innerWidth,
+            n && n.meta && (e.m = JSON.stringify(n.meta)),
+            n && n.props && (e.p = JSON.stringify(n.props));
+            var i = new XMLHttpRequest;
+            i.open("POST", l, !0),
+            i.setRequestHeader("Content-Type", "text/plain"),
+            i.send(JSON.stringify(e)),
+            i.onreadystatechange = function() {
+                4 == i.readyState && n && n.callback && n.callback()
+            }
+          }
+        }
+        var e = window.plausible && window.plausible.q || [];
+        window.plausible = n;
+        for (var i = 0; i < e.length; i++)
+          n.apply(this, e[i])
+      }();
+
+      document.addEventListener('turbolinks:load', function() {
+        plausible('pageview')
+      })
+    </script>
+  </head>
+
+  <body class="relative bg-white text-gray-900 font-sans antialiased h-full flex flex-col" data-controller="application" data-action="turbolinks:before-cache@document->application#saveScrollPosition turbolinks:before-cache@document->application#closeNav keydown@window->application#focusSearch">
+    <div class="flex-grow flex-shrink-0 flex-auto">
+      <section class="bg-red-100 text-red-900" data-target="application.header">
+        <div class="max-w-screen-xl mx-auto px-4 lg:px-8">
+          <header class="flex items-center justify-between border-b-2 border-white py-6">
+            <a class="flex items-center text-2xl text-black font-bold tracking-tight" href="/">
+              <img src="/images/logo.svg" class="lg:hidden w-10" data-target="application.logo" />
+              <h1 class="ml-2">
+                RedwoodJS
+              </h1>
+            </a>
+            <div class="hidden lg:block flex-1 mx-8">
+              @@include("search")
+            </div>
+            <div class="flex items-center">
+              <div class="text-red-700 font-mono font-semibold mr-8">
+                <a class="hover:underline" href="https://github.com/redwoodjs/redwood/releases" title="Go to Redwood's Releases">
+                  @@version
+                </a>
+              </div>
+              <div class="ml-8 lg:hidden w-10 p-2" data-action="click->application#toggleNav">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current text-gray-700">
+                  <path d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+              </div>
+            </div>
+            <ul class="hidden lg:flex items-center">
+              <li class="mr-1">
+                <a class="block flex" href="https://github.com/redwoodjs/redwood" title="Go to Redwood's GitHub repo">
+                  <span class="text-xs font-semibold bg-red-300 text-red-600 px-2 rounded-l">stars</span>
+                  <span class="text-xs font-bold bg-red-500 text-red-200 pl-2 pr-1" data-target="application.stars"></span>
+                  <span class="border-red-700 arrow-right" data-target="application.stars"></span>
+                </a>
+              </li>
+              <li class="mr-3">
+                <a class="block w-6" href="https://github.com/redwoodjs/redwood" title="Go to Redwood's GitHub repo">
+                  <svg viewBox="0 0 32 32" class="transition duration-200 fill-current text-red-400 hover:text-red-700" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.9995 -8.73473e-07C12.198 -0.00275596 8.5196 1.34817 5.62346 3.81077C2.72731 6.27336 0.802616 9.6867 0.194194 13.4393C-0.414229 17.1919 0.333374 21.0385 2.30307 24.29C4.27276 27.5415 7.33584 29.9855 10.9435 31.184C11.7435 31.344 12.0315 30.832 12.0315 30.416L12.0155 27.696C7.56755 28.656 6.62355 25.552 6.62355 25.552C5.88755 23.696 4.84755 23.2 4.84755 23.2C3.40755 22.208 4.95955 22.24 4.95955 22.24C6.55955 22.352 7.40755 23.888 7.40755 23.888C8.84755 26.32 11.1515 25.616 12.0635 25.216C12.2235 24.176 12.6235 23.472 13.0715 23.072C9.51955 22.672 5.79155 21.296 5.79155 15.168C5.79155 13.408 6.41555 11.984 7.43955 10.864C6.95565 9.4866 7.01283 7.97684 7.59955 6.64C7.59955 6.64 8.94355 6.208 11.9995 8.272C14.6192 7.56384 17.3799 7.56384 19.9995 8.272C23.0555 6.192 24.3995 6.64 24.3995 6.64C25.2795 8.832 24.7195 10.48 24.5595 10.864C25.5835 11.984 26.2075 13.424 26.2075 15.168C26.2075 21.312 22.4635 22.656 18.8955 23.056C19.4715 23.552 19.9835 24.528 19.9835 26.016L19.9675 30.416C19.9675 30.832 20.2555 31.344 21.0715 31.184C24.6806 29.985 27.7445 27.5398 29.7141 24.2866C31.6837 21.0334 32.4302 17.185 31.8197 13.4314C31.2092 9.67772 29.2816 6.26427 26.3825 3.80296C23.4835 1.34165 19.8025 -0.00657403 15.9995 -8.73473e-07Z" />
+                  </svg>
+                </a>
+              </li>
+              <li class="mx-2">
+                <a class="block w-6" href="https://twitter.com/redwoodjs" title="Go to Redwood's Twitter page">
+                  <svg viewBox="0 0 34 34" class="transition duration-200 fill-current text-red-400 hover:text-red-700" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.693 31.025C23.528 31.025 30.532 20.4 30.532 11.186V10.285C31.892 9.282 33.065 8.075 34 6.664C32.725 7.225 31.382 7.599 29.988 7.769C31.4415 6.89552 32.5288 5.52436 33.048 3.91C31.688 4.726 30.192 5.287 28.628 5.61C27.5817 4.47537 26.1884 3.72011 24.6667 3.46265C23.1449 3.20519 21.5807 3.46011 20.2194 4.18742C18.8582 4.91474 17.7768 6.0733 17.1449 7.48142C16.513 8.88954 16.3664 10.4676 16.728 11.968C13.9549 11.8247 11.243 11.0998 8.76823 9.84043C6.29346 8.58108 4.11117 6.8154 2.363 4.658C1.46192 6.19488 1.18356 8.01846 1.58508 9.75418C1.98661 11.4899 3.03753 13.006 4.522 13.991C3.417 13.94 2.329 13.651 1.36 13.09V13.175C1.35653 14.7901 1.91405 16.3562 2.93729 17.6058C3.96053 18.8554 5.38596 19.7109 6.97 20.026C5.93906 20.3076 4.85718 20.3483 3.808 20.145C4.25151 21.5313 5.11789 22.744 6.2856 23.6129C7.4533 24.4818 8.86372 24.9634 10.319 24.99C8.87328 26.1262 7.21777 26.9662 5.44716 27.4621C3.67654 27.958 1.82554 28.1 0 27.88C3.19039 29.927 6.90238 31.0129 10.693 31.008" />
+                  </svg>
+                </a>
+              </li>
+              <li class="mx-2 relative tooltip">
+                <a class="block w-6" href="https://community.redwoodjs.com" title="Go to Redwood's Discourse server">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="transition duration-200 fill-current text-red-400 hover:text-red-700">
+                    <path d="M16.1357143,0 C7.37857143,0 0,7.03571429 0,15.7214286 C0,16 0.00714285714,32 0.00714285714,32 L16.1357143,31.9857143 C24.9,31.9857143 32,24.6785714 32,15.9928571 C32,7.30714286 24.9,0 16.1357143,0 Z M16,25.1428571 C14.6142857,25.1428571 13.2928571,24.8357143 12.1142857,24.2785714 L6.32142857,25.7142857 L7.95714286,20.3571429 C7.25714286,19.0642857 6.85714286,17.5785714 6.85714286,16 C6.85714286,10.95 10.95,6.85714286 16,6.85714286 C21.05,6.85714286 25.1428571,10.95 25.1428571,16 C25.1428571,21.05 21.05,25.1428571 16,25.1428571 Z"/>
+                  </svg>
+                </a>
+                <div class="tooltip-text absolute w-48 mt-2 -mr-1 text-white bg-red-700 text-xs rounded py-2 px-3 right-0">
+                  <strong>Discourse Forums</strong><br>Long-form discussions about Redwood, troubleshooting, show & tell
+                  <svg class="absolute text-red-700 h-2 right-0 mr-3 bottom-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="255,255 127.5,127.5 0,255"/></svg>
+                </div>
+              </li>
+
+              <li class="ml-2 relative tooltip">
+                <a class="block w-6" href="https://discord.gg/jjSYEQd" title="Go to Redwood's Discord server">
+                  <svg viewBox="0 0 36 36" class="transition duration-200 fill-current text-red-400 hover:text-red-700" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M29.9699 7.7544C27.1043 5.44752 22.5705 5.05656 22.3761 5.04288C22.2284 5.03072 22.0806 5.0648 21.9531 5.1404C21.8257 5.216 21.7249 5.32937 21.6647 5.4648C21.5783 5.65936 21.5049 5.85949 21.4451 6.06384C23.3409 6.38424 25.6694 7.02864 27.7761 8.33616C27.8565 8.38604 27.9262 8.45126 27.9814 8.52809C28.0366 8.60493 28.0761 8.69187 28.0976 8.78397C28.1192 8.87607 28.1224 8.97151 28.1071 9.06485C28.0917 9.15819 28.0582 9.24759 28.0083 9.32796C27.9584 9.40833 27.8932 9.47809 27.8164 9.53325C27.7395 9.58842 27.6526 9.62791 27.5605 9.64947C27.4684 9.67103 27.373 9.67424 27.2796 9.65892C27.1863 9.6436 27.0969 9.61004 27.0165 9.56016C23.3949 7.3116 18.8719 7.2 17.9999 7.2C17.1287 7.2 12.6028 7.31232 8.98338 9.55944C8.90301 9.60932 8.81361 9.64288 8.72027 9.6582C8.62693 9.67352 8.53149 9.67031 8.43939 9.64875C8.25339 9.6052 8.09231 9.48955 7.99158 9.32724C7.89085 9.16493 7.85873 8.96925 7.90227 8.78325C7.94582 8.59725 8.06147 8.43617 8.22378 8.33544C10.3305 7.03152 12.659 6.38424 14.5547 6.06672C14.4453 5.7096 14.3459 5.48424 14.3387 5.4648C14.2788 5.32841 14.1776 5.2143 14.0493 5.13859C13.921 5.06288 13.7721 5.0294 13.6238 5.04288C13.4294 5.05728 8.89554 5.44752 5.99034 7.78536C4.47474 9.18792 1.43994 17.3894 1.43994 24.48C1.43994 24.6067 1.47378 24.7277 1.5357 24.8371C3.62802 28.5163 9.3405 29.4775 10.6423 29.52H10.6646C10.7782 29.5203 10.8903 29.4937 10.9916 29.4424C11.093 29.3911 11.1808 29.3165 11.2478 29.2248L12.5632 27.4133C9.01146 26.4967 7.19706 24.9386 7.09338 24.8458C6.95017 24.7194 6.86303 24.5412 6.85115 24.3506C6.83927 24.1599 6.90361 23.9723 7.03002 23.8291C7.15643 23.6859 7.33456 23.5988 7.52522 23.5869C7.71588 23.575 7.90345 23.6394 8.04666 23.7658C8.08842 23.8054 11.4299 26.64 17.9999 26.64C24.5807 26.64 27.9223 23.7938 27.9561 23.7658C28.0998 23.6403 28.2874 23.5769 28.4777 23.5896C28.668 23.6023 28.8456 23.69 28.9713 23.8334C29.0335 23.9042 29.0812 23.9864 29.1117 24.0756C29.1421 24.1647 29.1546 24.259 29.1486 24.353C29.1426 24.447 29.1181 24.5389 29.0766 24.6235C29.035 24.708 28.9772 24.7836 28.9065 24.8458C28.8028 24.9386 26.9884 26.4967 23.4367 27.4133L24.7528 29.2248C24.8198 29.3164 24.9074 29.3909 25.0087 29.4422C25.1099 29.4935 25.2218 29.5202 25.3353 29.52H25.3569C26.6601 29.4775 32.3719 28.5156 34.4649 24.8371C34.5261 24.7277 34.5599 24.6067 34.5599 24.48C34.5599 17.3894 31.5251 9.18864 29.9699 7.7544V7.7544ZM13.3199 21.6C11.9275 21.6 10.7999 20.3112 10.7999 18.72C10.7999 17.1288 11.9275 15.84 13.3199 15.84C14.7124 15.84 15.8399 17.1288 15.8399 18.72C15.8399 20.3112 14.7124 21.6 13.3199 21.6ZM22.6799 21.6C21.2875 21.6 20.1599 20.3112 20.1599 18.72C20.1599 17.1288 21.2875 15.84 22.6799 15.84C24.0724 15.84 25.1999 17.1288 25.1999 18.72C25.1999 20.3112 24.0724 21.6 22.6799 21.6Z" />
+                  </svg>
+                  <div class="tooltip-text absolute w-48 mt-2 -mr-1 text-white bg-red-700 text-xs rounded py-2 px-3 right-0">
+                    <strong>Discord Chat</strong><br>Watercooler, relationship building, quick discussion
+                    <svg class="absolute text-red-700 h-2 right-0 mr-3 bottom-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="255,255 127.5,127.5 0,255"/></svg>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </header>
+        </div>
+      </section>
+
+      @@content("hero")
+
+      <section id="main" class="max-w-screen-xl mx-auto px-8">
+        <div class="flex">
+          <aside id="aside" class="hidden absolute inset-0 mt-22 lg:mt-0 lg:mb-8 w-full lg:w-1/5 lg:static lg:block bg-white overflow-y-visible lg:px-0 z-10" data-target="application.nav" data-turbolinks-permanent>
+            <div class="lg:hidden mt-4 mx-4">
+              @@include("search")
+            </div>
+            <div class="overflow-y-auto lg:sticky top-0 px-8 lg:px-0">
+              <nav class="text-sm font-semibold pt-8 pb-40 lg:py-12 pr-6 overflow-y-auto h-screen" data-action="navigated@document->application#restoreScrollPosition" data-target="application.innerNav">
+                @@include("nav")
+              </nav>
+            </div>
+          </aside>
+
+          <div class="flex w-full lg:w-4/5" data-target="application.body">
+            <main class="w-full max-w-3xl xl:w-3/4 my-8 lg:px-8 lg:mr-auto">
+              @@content
+            </main>
+            @@content("aside")
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="bg-red-100">
+      <div class="flex justify-between items-center max-w-screen-xl mx-auto px-8 py-4">
+        <div class="text-sm">
+          <h4 class="text-red-800">&copy;<span data-target="application.year"></span> <a href="https://tom.preston-werner.com/" class="hover:underline">Tom Preston-Werner</a></h4>
+          <h4 class="text-red-700 font-semibold">Redwood is released under the <a href="https://github.com/redwoodjs/redwood/blob/main/LICENSE" class="hover:underline">MIT License</a></h4>
+          <h4 class="text-red-800">
+            Hosted on <a href="https://netlify.com" class="hover:underline">Netlify</a>
+            and sponsored by Hypothesis, a <a href="https://prestonwernerventures.com" class="hover:underline">Preston-Werner Ventures</a> initiative
+          </h4>
+        </div>
+        <ul class="hidden lg:flex text-sm font-semibold text-red-700 -mr-4">
+          <li class="mx-4">
+            <a class="hover:underline" href="/logos.html" title="Redwood logo download and usage">
+              Logos
+            </a>
+          </li>
+          <li class="mx-4">
+            <a class="hover:underline" href="/security.html" title="RedwoodJS Security Information">
+              Security
+            </a>
+          </li>
+          <li class="mx-4">
+            <a class="hover:underline" href="https://github.com/redwoodjs/redwood" title="Go to Redwood's GitHub repo">
+              GitHub
+            </a>
+          </li>
+          <li class="mx-4">
+            <a class="hover:underline" href="https://twitter.com/redwoodjs" title="Go to Redwood's Twitter page">
+              Twitter
+            </a>
+          </li>
+          <li class="mx-4">
+            <a class="hover:underline" href="https://community.redwoodjs.com" title="Go to Redwood's Discourse server">
+              Discourse
+            </a>
+          </li>
+          <li class="mx-4">
+            <a class="hover:underline" href="https://discord.gg/jjSYEQd" title="Go to Redwood's Discord server">
+              Discord
+            </a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

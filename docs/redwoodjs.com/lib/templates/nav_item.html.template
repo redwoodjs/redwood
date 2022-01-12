@@ -1,0 +1,3 @@
+<li>
+  <a href="${href}" class="block my-1 px-2 py-1 transition duration-100 text-gray-600 hover:text-gray-800 rounded" data-target="nav.link" <% if (first) { %>data-match="/${book}"<% } %>>${title}</a>
+</li>

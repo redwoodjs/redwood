@@ -1,0 +1,16 @@
+<form class="relative" data-controller="search">
+  <input
+    type="text"
+    name="search"
+    autocomplete="off"
+    placeholder='Search the docs (press "/" to focus)'
+    class="transition duration-200 border border-red-200 focus:border-red-400 text-red-800 outline-none rounded w-full px-4 py-2"
+    data-action="keyup->search#search focus->search#search click->search#search"
+    data-target="application.search"
+  />
+  <div
+    class="hidden absolute top-0 left-0 right-0 bg-white z-20 p-4 mt-12 rounded border border-red-200 overflow-x-auto overflow-y-auto"
+    data-target="search.results"
+    style="max-height: 75vh;"
+  ></div>
+</form>

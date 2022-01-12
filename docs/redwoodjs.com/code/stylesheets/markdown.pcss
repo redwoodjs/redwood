@@ -1,0 +1,217 @@
+/* I'm used on the built-in CameronJS welcome page code/html/index.html */
+/* Feel free to delete me once you start changing that page.            */
+
+#code {
+  @apply bg-red-200 text-gray-900 text-sm px-1 py-half rounded;
+	font-family: Fira Code, Fira Mono, Menlo, Monoco, monospace;
+}
+
+#link {
+  @apply text-red-700
+}
+
+.markdown {
+  h1,
+  h2 {
+    @apply text-xl font-semibold;
+  }
+
+  h3 {
+    @apply text-lg font-semibold;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply mt-8 mb-4;
+  }
+
+  h4 {
+    @apply font-semibold;
+  }
+
+  h5 {
+    @apply font-semibold text-sm text-gray-700;
+  }
+
+  /* Move headings over because the anchor link will be hidden */
+  @screen lg {
+    h1, h2, h3, h4, h5, h6 {
+      margin-left: -1.1rem;
+    }
+
+    h4 {
+      margin-left: -0.9rem;
+    }
+  }
+
+  p {
+    @apply my-4;
+  }
+
+  ul,
+  ol {
+    @apply ml-8;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  pre {
+    @apply mt-4 bg-gray-900 p-4 pb-8 text-sm text-white overflow-x-scroll rounded-lg;
+  }
+
+  pre + ul {
+    @apply mt-4;
+  }
+
+  .highlighted-line {
+    @apply block -mx-4 px-4 bg-gray-800 block
+  }
+
+  @screen lg {
+    pre {
+      @apply pb-4;
+    }
+  }
+
+  p code,
+  li code,
+  dl code {
+    @apply bg-red-200 text-gray-900 text-sm px-1 py-half rounded;
+  }
+
+  li pre code {
+    @apply bg-transparent text-white px-0 py-0;
+  }
+
+  blockquote {
+    @apply text-sm border border-red-300 bg-red-100 py-1 px-6 my-8 rounded-lg;
+  }
+
+  blockquote ul:last-child {
+    @apply mb-6;
+  }
+
+  img {
+    @apply my-8;
+  }
+
+  p a,
+  li a,
+  blockquote a {
+    @apply text-red-700;
+  }
+
+  p a:hover,
+  li a:hover,
+  blockquote a:hover {
+    @apply underline;
+  }
+
+  .markdownIt-Anchor {
+    visibility: visible;
+  }
+  h1:hover .markdownIt-Anchor,
+  h2:hover .markdownIt-Anchor,
+  h3:hover .markdownIt-Anchor,
+  h4:hover .markdownIt-Anchor,
+  h5:hover .markdownIt-Anchor,
+  h6:hover .markdownIt-Anchor {
+    visibility: visible;
+  }
+
+  /* Hide anchor links when the screen is big enough (and probably not a touch-only device) */
+  @screen lg {
+    .markdownIt-Anchor {
+      visibility: hidden;
+    }
+  }
+
+  table {
+    @apply w-full text-left bg-red-100 rounded-t-lg;
+  }
+
+  th {
+    @apply p-2 bg-red-200;
+  }
+
+  th:first-child {
+    @apply rounded-tl-lg whitespace-no-wrap;
+  }
+
+  th:last-child {
+    @apply rounded-tr-lg;
+  }
+
+  td {
+    @apply p-2;
+  }
+
+  td code {
+    @apply bg-red-200 text-red-700 text-sm px-1 py-half rounded whitespace-no-wrap;
+  }
+
+  td a {
+    @apply text-red-700;
+  }
+
+  td a:hover {
+    @apply underline;
+  }
+
+  details {
+    @apply mb-2;
+  }
+
+  summary {
+    @apply outline-none cursor-pointer;
+  }
+
+  dl {
+    @apply my-8;
+  }
+
+  dt {
+    @apply mt-4;
+  }
+
+  dd {
+    @apply text-sm text-gray-800 mt-1 ml-4;
+    code {
+      @apply text-xs;
+    }
+  }
+  .code-dl {
+    @apply mt-8;
+    p {
+      @apply mt-1 mb-8;
+    }
+  }
+}
+
+#status-0 {
+  @apply bg-red-200 text-red-700 text-sm px-1 py-half rounded;
+}
+
+#status-1 {
+  @apply bg-orange-200 text-orange-700 text-sm px-1 py-half rounded;
+}
+
+#status-2 {
+  @apply bg-purple-200 text-purple-700 text-sm px-1 py-half rounded;
+}
+
+#status-3 {
+  @apply bg-blue-200 text-blue-700 text-sm px-1 py-half rounded;
+}
+
+#status-4 {
+  @apply bg-green-200 text-green-700 text-sm px-1 py-half rounded;
+}

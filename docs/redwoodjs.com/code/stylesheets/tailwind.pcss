@@ -1,0 +1,58 @@
+/* See https://cameronjs.com/tailwindcss for more about Tailwind CSS */
+
+@tailwind base;
+@tailwind components;
+
+/*
+  Overriding styles or extracted components go here, see:
+
+  https://tailwindcss.com/docs/adding-base-styles
+  https://tailwindcss.com/docs/extracting-components
+*/
+
+@tailwind utilities;
+
+.top-24 {
+  top: 6rem
+}
+
+.searchresult em {
+  @apply font-semibold underline not-italic
+}
+
+.bottom-full {
+  bottom: 100%
+}
+
+.top-full {
+  top: 100%
+}
+
+code.javascript, code.bash {
+  @apply text-xs rounded-lg p-4
+}
+
+.tooltip-text {
+  @apply hidden absolute w-48 mt-2 text-white bg-red-700 text-xs rounded py-2 px-3 right-0
+}
+
+.tooltip:hover .tooltip-text {
+  @apply block
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 0.55rem solid transparent;
+  border-bottom: 0.55rem solid transparent;
+  border-left: 0.55rem solid #E38163;
+}
+
+/*
+  Completely custom CSS goes here, or add a new stylesheet and include it in application.pcss:
+
+    @import "tailwind.pcss";
+    @import "custom.css";
+
+  See https://tailwindcss.com/docs/adding-new-utilities for creating new Tailwind utilities
+*/
