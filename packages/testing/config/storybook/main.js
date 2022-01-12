@@ -136,6 +136,10 @@ const baseConfig = {
   ...(process.env.NODE_ENV !== 'production' && {
     staticDirs: [`${staticAssetsFolder}`],
   }),
+  // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
+  typescript: {
+    check: true,
+  },
 }
 
 const mergeUserStorybookConfig = (baseConfig) => {
