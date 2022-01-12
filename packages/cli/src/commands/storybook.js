@@ -60,6 +60,7 @@ export const handler = ({
   build,
   buildDirectory,
   managerCache,
+  smokeTest,
 }) => {
   const cwd = getPaths().web.base
 
@@ -84,7 +85,8 @@ export const handler = ({
       !build && '--no-version-updates',
       !managerCache && '--no-manager-cache',
       build && `--output-dir "${buildDirectory}"`,
-      !open && '--ci',
+      !open && !smokeTest && `--ci`,
+      smokeTest && `--ci --smoke-test`,
     ].filter(Boolean),
     {
       stdio: 'inherit',
