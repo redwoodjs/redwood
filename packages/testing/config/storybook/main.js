@@ -139,6 +139,8 @@ const baseConfig = {
   // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
   typescript: {
     check: true,
+    // By default, the checker runs asynchronously in dev mode. Force it to run synchronously.
+    checkOptions: { async: false },
   },
 }
 
