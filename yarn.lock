@@ -5369,7 +5369,7 @@ __metadata:
     md5: 2.3.0
     pascalcase: 1.0.0
     pino: 7.6.3
-    supertokens-node: 8.3.0
+    supertokens-node: 8.4.0
     typescript: 4.5.4
     uuid: 8.3.2
   languageName: unknown
@@ -27185,9 +27185,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supertokens-node@npm:8.3.0":
-  version: 8.3.0
-  resolution: "supertokens-node@npm:8.3.0"
+"supertokens-node@npm:8.4.0":
+  version: 8.4.0
+  resolution: "supertokens-node@npm:8.4.0"
   dependencies:
     axios: 0.21.4
     body-parser: 1.19.0
@@ -27199,7 +27199,7 @@ resolve@^2.0.0-next.3:
     psl: 1.8.0
     supertokens-js-override: ^0.0.4
     verify-apple-id-token: ^2.1.0
-  checksum: bf0ed86079c1d570d946746fa5753589a17155016f9f6e904fb7b1c8ae9959e8779dd1e9b85f746bd0baba9fcdba45069c27dd9e7d420fe9533f0b99e74bf145
+  checksum: a5d68bf26cad1953d35d7fc513eb397b5228986fedeaf7ed591af2945b2792ead7c414fb88ce998a63514d817ffe6e140fb042058d1efa5f80574e742f2c4890
   languageName: node
   linkType: hard
 
