@@ -5461,7 +5461,7 @@ __metadata:
     "@types/babel__core": 7.1.18
     "@types/fs-extra": 9.0.13
     "@types/jscodeshift": 0.11.2
-    "@types/prettier": 2.4.2
+    "@types/prettier": 2.4.3
     core-js: 3.20.2
     deepmerge: 4.2.2
     fast-glob: 3.2.10
@@ -7694,10 +7694,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:2.4.2, @types/prettier@npm:^2.1.5":
-  version: 2.4.2
-  resolution: "@types/prettier@npm:2.4.2"
-  checksum: 76cb69d0142e6007b7c1bcb7d4ff413e1bac3a9123abcb3a6fc773beb194e0cfbb1df5e3a3c5920eee6c1ed2382165219a7e1c4606187584b4e86aaaa94940c9
+"@types/prettier@npm:*, @types/prettier@npm:2.4.3, @types/prettier@npm:^2.1.5":
+  version: 2.4.3
+  resolution: "@types/prettier@npm:2.4.3"
+  checksum: 42afc66b3a6f216cac5888f2e91f41e99b0329aa19877bc02ae69c7964990bc92f223cdce965ba6a7594d2c7e61c1ebd41df7be12aaf697a7b6c9c2f83a79beb
   languageName: node
   linkType: hard
 
