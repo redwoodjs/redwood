@@ -28,7 +28,7 @@
     "pretty-ms": "7.0.1",
     "qs": "6.10.3",
     "split2": "4.1.0",
-    "yargs": "16.2.0"
+    "yargs": "17.3.1"
   },
   "repository": {
     "type": "git",
