@@ -43,6 +43,15 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .check((argv) => {
+      if (argv.build && argv.smokeTest) {
+        throw new Error('Can not provide both "--build" and "--smoke-test"')
+      }
+      if (argv.build && argv.open) {
+        throw new Error('Can not provide both "--build" or "--open"')
+      }
+      return true
+    })
 }
 
 export const handler = ({
