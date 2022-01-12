@@ -5359,7 +5359,7 @@ __metadata:
     "@prisma/client": 3.7.0
     "@redwoodjs/auth": 0.41.0
     "@types/crypto-js": 4.1.0
-    "@types/jsonwebtoken": 8.5.6
+    "@types/jsonwebtoken": 8.5.7
     "@types/md5": 2.3.1
     aws-lambda: 1.0.7
     crypto-js: 4.1.1
@@ -7435,12 +7435,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.6, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
-  version: 8.5.6
-  resolution: "@types/jsonwebtoken@npm:8.5.6"
+"@types/jsonwebtoken@npm:8.5.7, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
+  version: 8.5.7
+  resolution: "@types/jsonwebtoken@npm:8.5.7"
   dependencies:
     "@types/node": "*"
-  checksum: 8ae0932c1ec2c6b2566fbaa0116777175c5b97c25b8d0c5adc0fe4c383aa62c77c01dfc55c2f88c7b34978ede9bc5116a4ba1703e038f6555b1e3d1f59fe6bb4
+  checksum: 2ac24605cec5953231524c3b2a69807979300479652b4135eec79971f59af6c97c7d9136248896f1385f0cf8cdefcf147777340c8207e579b732030abb53274c
   languageName: node
   linkType: hard
 
