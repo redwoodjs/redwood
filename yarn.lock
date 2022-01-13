@@ -5462,6 +5462,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jscodeshift": 0.11.2
     "@types/prettier": 2.4.3
+    "@vscode/ripgrep": 1.14.1
     core-js: 3.20.2
     deepmerge: 4.2.2
     fast-glob: 3.2.10
@@ -5474,7 +5475,6 @@ __metadata:
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
-    vscode-ripgrep: 1.13.2
     yargs: 16.2.0
   bin:
     codemods: ./dist/codemods.js
@@ -8136,6 +8136,16 @@ __metadata:
     "@typescript-eslint/types": 5.9.1
     eslint-visitor-keys: ^3.0.0
   checksum: add2f083d1333fc9311776ee70f998b20e6137f00e4c36db619949ea52deb31d7fbe4b2617e7ac5c8dd09db2fba4e9d354419cc4d2e74072fa9fcfa641f63b56
+  languageName: node
+  linkType: hard
+
+"@vscode/ripgrep@npm:1.14.1":
+  version: 1.14.1
+  resolution: "@vscode/ripgrep@npm:1.14.1"
+  dependencies:
+    https-proxy-agent: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 2acc85a96a721e4559e9947db41f35d3bc4122881f7612645cfb4f291b81b6ca68c20943e5518265532d275f9f4de8a637e7463b413dfc6ce2f0d1abf47137ed
   languageName: node
   linkType: hard
 
@@ -29081,16 +29091,6 @@ resolve@^2.0.0-next.3:
   bin:
     installServerIntoExtension: ./bin/installServerIntoExtension
   checksum: 90d7a6a3d3428a381d84a563299ebb59cec3f534ec78b76f6444f79da514380088b7bab2f2c428e15f071afa0b75aaf30a97e644f314e00753231870e8ead204
-  languageName: node
-  linkType: hard
-
-"vscode-ripgrep@npm:1.13.2":
-  version: 1.13.2
-  resolution: "vscode-ripgrep@npm:1.13.2"
-  dependencies:
-    https-proxy-agent: ^4.0.0
-    proxy-from-env: ^1.1.0
-  checksum: 7d1b980887d534e22f728b524c2577edae6672bd7761aa6ea30d94c596d09614b7302c6039a43613b07e77dde85e0c460706ac7a5063e37d672b10f5bf38fea7
   languageName: node
   linkType: hard
 
