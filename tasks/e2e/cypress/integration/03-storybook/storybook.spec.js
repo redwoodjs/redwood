@@ -33,13 +33,11 @@ describe(
       )
 
       // Slow!
-      cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
-        timeout: 300_0000,
-      }).then((result) => {
-        const { code, stderr } = result
-        expect(code).to.eq(0)
-        expect(stderr).to.not.contain('ERR!')
+      cy.exec(`cd ${BASE_DIR} || exit; yarn rw storybook --build`, {
+        timeout: 20000,
       })
+        .its('stderr')
+        .should('not.contain', 'ERR!')
     })
 
     it('1. Component: BlogPost', () => {
