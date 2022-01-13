@@ -12,7 +12,8 @@ describe(
   'Redwood Storybook Integration',
   { baseUrl: 'http://localhost:8910' },
   () => {
-    it('0. Build Storybook Static Files', () => {
+    // 0. Build Storybook Static Files
+    before(() => {
       cy.writeFile(
         path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.stories.js'),
         Step1_1_BlogPostStory
