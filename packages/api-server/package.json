@@ -26,7 +26,7 @@
     "lodash.escape": "4.0.1",
     "pretty-bytes": "5.6.0",
     "pretty-ms": "7.0.1",
-    "qs": "6.10.2",
+    "qs": "6.10.3",
     "split2": "4.1.0",
     "yargs": "17.2.1"
   },

@@ -14,7 +14,7 @@
     "@babel/runtime-corejs3": "7.16.7",
     "core-js": "3.20.2",
     "deepmerge": "4.2.2",
-    "fast-glob": "3.2.8",
+    "fast-glob": "3.2.10",
     "findup-sync": "5.0.0",
     "jest": "27.4.7",
     "jscodeshift": "0.13.0",
@@ -42,7 +42,7 @@
     "@types/babel__core": "7.1.18",
     "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.2",
-    "@types/prettier": "2.4.2",
+    "@types/prettier": "2.4.3",
     "fs-extra": "10.0.0",
     "tempy": "1.0.1"
   }
