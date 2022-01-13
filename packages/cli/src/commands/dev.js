@@ -115,7 +115,9 @@ export const handler = async ({
   }
 
   // TODO: Convert jobs to an array and supply cwd command.
-  concurrently(
+  // Concurrently now returns an object with a "result" promise and array of cmds
+  // https://github.com/open-cli-tools/concurrently/blob/v7.0.0/README.md#concurrentlycommands-options
+  const { commands, result } = concurrently(
     Object.keys(jobs)
       .map((job) => {
         if (side.includes(job) || job === 'gen') {
@@ -127,10 +129,23 @@ export const handler = async ({
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
     }
-  ).catch((e) => {
+  )
+
+  result.catch((e) => {
     if (typeof e?.message !== 'undefined') {
       console.error(c.error(e.message))
       process.exit(1)
     }
   })
+
+  // if (commands.every((command) => command.exited || command.killed)) {
+  //   commands.every((command) => command.kill())
+  // }
+  if (
+    (await commands.web.killed) ||
+    (await commands.gen.killed) ||
+    (await commands.api.killed)
+  ) {
+    commands.web.kill()
+  }
 }
