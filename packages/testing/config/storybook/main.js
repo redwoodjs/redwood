@@ -132,7 +132,6 @@ const baseConfig = {
 
     return sbConfig
   },
-  // only set staticDirs when running Storybook process; will fail if set for SB --build
   ...(process.env.NODE_ENV !== 'production' && {
     staticDirs: [`${staticAssetsFolder}`],
   }),
