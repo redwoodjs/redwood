@@ -3003,9 +3003,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-react-apollo@npm:3.2.3":
-  version: 3.2.3
-  resolution: "@graphql-codegen/typescript-react-apollo@npm:3.2.3"
+"@graphql-codegen/typescript-react-apollo@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@graphql-codegen/typescript-react-apollo@npm:3.2.4"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.3.2
     "@graphql-codegen/visitor-plugin-common": 2.5.2
@@ -3015,7 +3015,7 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-tag: ^2.0.0
-  checksum: 45892c95edfa44ad3ec891f0163bd6d4b319287efbda85e23e0afc63dfca96ecbbcd6b132ee013d0b3e783eba072f2ddc0c477d4fafa95aa8ed3f25af65c9b95
+  checksum: bcdde63bc9e9ffb5b0fb9709891902ca7fc30eedef19cf8c378e96c99ef320c5479bc06c9edc3a354222ecac5169e2ed8add03cd48beee4ec9247edc323b6d5f
   languageName: node
   linkType: hard
 
@@ -5634,7 +5634,7 @@ __metadata:
     "@graphql-codegen/schema-ast": 2.4.1
     "@graphql-codegen/typescript": 2.4.2
     "@graphql-codegen/typescript-operations": 2.2.2
-    "@graphql-codegen/typescript-react-apollo": 3.2.3
+    "@graphql-codegen/typescript-react-apollo": 3.2.4
     "@graphql-codegen/typescript-resolvers": 2.4.3
     "@redwoodjs/graphql-server": 0.41.0
     "@types/babel-plugin-tester": 9.0.4
