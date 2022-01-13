@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/runtime-corejs3": "7.16.8",
     "@prisma/client": "3.7.0",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
@@ -26,7 +26,7 @@
     "directory": "packages/api"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
+    "@babel/cli": "7.16.8",
     "@redwoodjs/auth": "0.41.0",
     "@types/crypto-js": "4.1.0",
     "@types/jsonwebtoken": "8.5.7",
