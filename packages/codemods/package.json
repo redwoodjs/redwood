@@ -8,10 +8,10 @@
     "dist"
   ],
   "dependencies": {
-    "@babel/cli": "7.16.7",
+    "@babel/cli": "7.16.8",
     "@babel/core": "7.16.7",
-    "@babel/plugin-transform-typescript": "7.16.7",
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/plugin-transform-typescript": "7.16.8",
+    "@babel/runtime-corejs3": "7.16.8",
     "@vscode/ripgrep": "1.14.1",
     "core-js": "3.20.2",
     "deepmerge": "4.2.2",
