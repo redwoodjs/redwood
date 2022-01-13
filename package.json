@@ -3,7 +3,8 @@
   "license": "MIT",
   "npmClient": "yarn",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "docs/*"
   ],
   "devDependencies": {
     "@babel/cli": "7.16.7",

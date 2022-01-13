@@ -1,0 +1,223 @@
+/* IMPORTANT: use class substring matching for classes that include "@docusaurus". This prevents styling build failures in production   */
+/* ex: [class^='docTitle'] instead of .docTitle_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocItem-  */
+
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #bf4722;
+  --ifm-color-primary-dark: #682712;
+  --ifm-color-primary-darker: #341309;
+  --ifm-color-primary-darkest: #1f0a04;
+  --ifm-color-primary-light: #e38163;
+  --ifm-color-primary-lighter: #eba48e;
+  --ifm-color-primary-lightest: #f3c7ba;
+  --ifm-code-font-size: 95%;
+  --ifm-menu-color-background-active: #faeae5;
+  --ifm-code-background: #faeae5;
+  --ifm-background-surface-color: #faeae5;
+  --ifm-blockquote-color: #e38163;
+  --ifm-color-emphasis-300: #eba48e;
+  --ifm-code-border-radius: 0.25rem;
+  --ifm-code-font-size: 90%;
+  --ifm-font-family-base: 'Open Sans', system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ifm-font-family-monospace: 'Fira Code', 'Fira Mono', SFMono-Regular, Menlo,
+    Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-footer-background-color: #fdf8f6;
+  --ifm-menu-color-active: #682712;
+  --ifm-navbar-link-hover-color: #682712;
+}
+
+/* Page titles, h1 */
+[class^='docTitle'] {
+  font-size: 2rem !important;
+}
+
+html[data-theme='dark'] {
+  --ifm-background-color: #120502;
+  --ifm-background-surface-color: #341309;
+  --ifm-menu-color-background-active: #1f0a04;
+}
+
+html[data-theme='dark'] a {
+  color: #e38163;
+}
+
+html[data-theme='dark'] .navbar__link--active {
+  color: #e38163;
+}
+
+html[data-theme='dark'] .menu__link--active {
+  color: #e38163;
+}
+
+.react-toggle-track {
+  background-color: #682712 !important;
+}
+
+.DocSearch {
+  --docsearch-searchbox-background: #ffffff;
+}
+
+.DocSearch-Button {
+  color: #bf4722 !important;
+}
+
+html[data-theme='dark'] .DocSearch-Button {
+  color: #e38163 !important;
+}
+
+
+.DocSearch-Button-Placeholder {
+  font-size: 0.9rem !important;
+}
+
+.DocSearch-Button-Key {
+  --docsearch-key-gradient: linear-gradient(-26.5deg, #682712, #341309);
+  --docsearch-muted-color: #faeae5;
+  --docsearch-key-shadow: inset 0 -2px 0 0 #1f0a04, inset 0 0 1px 1px #682712,
+    0 2px 2px 0 rgba(3, 4, 9, 0.3);
+}
+
+html[data-theme='dark'] .DocSearch {
+  --docsearch-searchbox-background: #1f0a04;
+}
+
+html[data-theme='dark'] code {
+  color: #e38163;
+  background-color: #341309;
+}
+
+.navbar__title {
+  letter-spacing: -0.03rem;
+}
+
+.menu__link {
+  font-size: 90%;
+  font-weight: 600;
+}
+
+.markdown a {
+  text-decoration: underline;
+}
+
+blockquote {
+  font-size: 90%;
+  color: #682712;
+  background-color: #faeae5;
+  border-radius: 0.25rem;
+  border-left: none;
+}
+
+blockquote code {
+  background-color: #f3c7ba;
+}
+
+html[data-theme='dark'] blockquote {
+  background-color: #1f0a04;
+  color: #e38163;
+}
+
+code {
+  color: #682712;
+  font-size: 85%;
+}
+
+html[data-theme='dark'] blockquote [class^='codeBlockLines'] {
+  background-color: #120502 !important;
+}
+
+[class^='codeBlockLines'] {
+  background-color: #230b07 !important;
+}
+
+.token.comment {
+  color: #8e8282 !important;
+}
+
+.navbar {
+  box-shadow: none;
+}
+
+.pagination-nav__link {
+	border-color: var(--ifm-color-primary);
+}
+
+.pagination-nav__sublabel {
+	color: var(--ifm-color-primary-light);
+}
+
+.footer {
+  background-color: #fdf8f6;
+  color: var(--ifm-color-primary-dark);
+}
+
+html[data-theme='dark'] .footer {
+  background-color: #1f0a04;
+}
+
+.footer__title {
+	color: var(--ifm-color-primary);
+	margin-bottom: 0.5rem;
+}
+
+html[data-theme='dark'] .footer__title {
+	color: var(--ifm-color-primary-light);
+}
+
+.footer__link-item {
+  color: var(--ifm-color-primary);
+}
+
+html[data-theme='dark'] .footer__link-item {
+	color: var(--ifm-color-primary-light);
+}
+
+.footer__copyright {
+	margin-top: 2rem;
+	color: var(--ifm-color-primary);
+}
+
+html[data-theme='dark'] .footer__copyright {
+	margin-top: 2rem;
+	color: var(--ifm-color-primary-light);
+}
+
+.docusaurus-highlight-code-line {
+  background-color: #3c1913;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+/* Hack to get youtube videos to be responsive */
+.video-container {
+  position: relative;
+  padding-bottom: 60%;
+  margin: 1rem 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* Announcement bar */
+
+[class^='announcementBarContent'] {
+  color: #fff;
+  background-color: var(--ifm-color-primary);
+}
+html[data-theme='dark'] [class^='announcementBarContent'] {
+  color: #fff;
+}
+html[data-theme='dark'] [class^='announcementBarContent'] a {
+  color: #fff;
+}
