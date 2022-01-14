@@ -2,6 +2,7 @@
 import path from 'path'
 
 import Listr from 'listr'
+
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../../lib'

@@ -1,10 +1,10 @@
 // import terminalLink from 'terminal-link'
 import Listr from 'listr'
+
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../../../../lib/colors'
 import { printSetupNotes, updateApiURLTask } from '../helpers'
-
 
 export const command = 'vercel'
 export const description = 'Setup Vercel deploy'

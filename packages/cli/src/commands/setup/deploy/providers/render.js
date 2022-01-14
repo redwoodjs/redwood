@@ -4,6 +4,7 @@ import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/sdk'
 import Listr from 'listr'
+
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../../lib'
