@@ -154,7 +154,6 @@ export const addFilesTask = ({
       files.forEach((fileData) => {
         fileNameToContentMap[fileData.path] = fileData.content
       })
-
       return writeFilesTask(fileNameToContentMap, { overwriteExisting: force })
     },
   }
@@ -185,8 +184,8 @@ export const printSetupNotes = (notes) => {
   return {
     title: 'One more thing...',
     task: (_ctx, task) => {
-      task.title = `One more thing...\n\n ${boxen(notes.join('\n   '), {
-        padding: { top: 0, bottom: 0, right: 0, left: 0 },
+      task.title = `One more thing...\n\n ${boxen(notes.join('\n'), {
+        padding: { top: 1, bottom: 1, right: 1, left: 1 },
         margin: 1,
         borderColour: 'gray',
       })}  \n`
