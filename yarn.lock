@@ -34,18 +34,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.19.3":
-  version: 1.19.3
-  resolution: "@auth0/auth0-spa-js@npm:1.19.3"
+"@auth0/auth0-spa-js@npm:1.19.4":
+  version: 1.19.4
+  resolution: "@auth0/auth0-spa-js@npm:1.19.4"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.19.0
+    core-js: ^3.20.0
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
     promise-polyfill: ^8.2.1
     unfetch: ^4.2.0
-  checksum: 2bd1e2354544cca375f406a8da9f1e664a59ab62a14eac00a3c7bace72ee7a61a0608d0970f11db51b162078da1c3cbebf3f7c5ec45abf59dd8bc94d327f315d
+  checksum: 6dd53f25f7175dd48a599237898f434bdf1f3953ac5b7f33f64be46407cfb46484ea9ccfab7995db1b3012f8f730823e41ef6993aad48994e312f721f33246d8
   languageName: node
   linkType: hard
 
@@ -5384,7 +5384,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.19.3
+    "@auth0/auth0-spa-js": 1.19.4
     "@azure/msal-browser": 2.21.0
     "@babel/cli": 7.16.7
     "@clerk/clerk-js": 2.6.1
@@ -12007,7 +12007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.20.2, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.20.2, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.20.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.20.2
   resolution: "core-js@npm:3.20.2"
   checksum: 3f2fcbf2fe096e79366c11e64c08583b48f428a20cdc96a6fd1630009a07bdfc352d97f956d8b8679b46b08cda80365e3600efca497fc54b52a311c1478d4152
