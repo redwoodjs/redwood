@@ -79,7 +79,17 @@ jobs:
           yarn rw build
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw g sdl <model>` to throw error
+      - name: Run "prisma migrate dev"
+        run: |
+          yarn rw prisma migrate dev --name ci-test
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "g page"
+        run: |
+          yarn rw g page home /
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Throw Error | Run `rw g sdl <model>`
         run: |
           yarn rw g sdl DoesNotExist
         working-directory: ${{ steps.createpath.outputs.project_path }}
