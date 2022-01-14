@@ -60,3 +60,11 @@ test('creates a file with expected contents', async () => {
     loadGeneratorFixture('dataMigration', 'dataMigration.js')
   )
 })
+
+test('can generate a typescript file with expected contents', async () => {
+  const files = await generator.files({ name: 'MoveUser', typescript: true })
+  const filename = Object.keys(files)[0]
+  expect(files[filename]).toEqual(
+    loadGeneratorFixture('dataMigration', 'dataMigration.ts')
+  )
+})
