@@ -8,8 +8,8 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.7.0",
-    "@prisma/sdk": "3.7.0",
+    "@prisma/client": "3.8.1",
+    "@prisma/sdk": "3.8.1",
     "core-js": "3.20.2"
   },
   "repository": {
