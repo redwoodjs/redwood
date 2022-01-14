@@ -5,12 +5,9 @@ const {
 } = require('@redwoodjs/internal')
 
 // Since configFile and babelrc is already passed a level up, cleaning up these keys here.
+// babelrc can not reside inside "extend"ed
 // Ref: packages/testing/config/jest/api/index.js
-const {
-  configFile: _c,
-  babelrc: _b,
-  ...defaultBabelConfig
-} = getApiSideDefaultBabelConfig()
+const { babelrc: _b, ...defaultBabelConfig } = getApiSideDefaultBabelConfig()
 
 module.exports = {
   ...defaultBabelConfig,

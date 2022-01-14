@@ -7,7 +7,7 @@ const {
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
-const { configFile, babelrc } = getApiSideDefaultBabelConfig()
+const { babelrc } = getApiSideDefaultBabelConfig()
 
 module.exports = {
   roots: ['<rootDir>/src/'],
@@ -34,9 +34,8 @@ module.exports = {
       // configFile or "extends" a config. But we need a few other option only at root level, so we'll pass
       //  here and remove those keys inside "extend"ed config.
       {
-        configFile, // configFile must be at root level
         babelrc, // babelrc can not reside inside "extend"ed config, that's why we have it here
-        extends: path.resolve(__dirname, './apiBabelConfig.js'),
+        configFile: path.resolve(__dirname, './apiBabelConfig.js'),
       },
     ],
   },
