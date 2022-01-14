@@ -10,8 +10,8 @@ const spawnProcess = (...args: Array<string>) => {
     process.execPath,
     [path.join(__dirname, 'scripts', 'invoke.js'), ...args, '--root', APP_ROOT],
     {
-      // detached: true,
-      stdio: 'inherit',
+      detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
+      stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
     }
   ).unref()
 }
