@@ -2,12 +2,25 @@
 // is licensed under The Unlicense - https://github.com/xpl/panic-overlay/blob/master/LICENSE
 // making it fine for embedding inside this project.
 
+import { useState } from 'react'
+
 import StackTracey from 'stacktracey'
 
 // This should be able to be accessible from webpack pretty trivially
 const appRoot = process.env.RWJS_SRC_ROOT
 
-export const DevFatalErrorPage = (props: { error?: Error }) => {
+// Allow APIs client to attach response/request
+type ErrorWithRequestMeta = Error & {
+  mostRecentRequest?: {
+    query: string
+    operationName: string
+    operationKind: string
+    variables: any
+  }
+  mostRecentResponse?: any
+}
+
+export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   // Safety fallback
   if (!props.error) {
     return (
@@ -59,6 +72,9 @@ export const DevFatalErrorPage = (props: { error?: Error }) => {
             ))}
           </div>
         </div>
+        {props.error.mostRecentRequest ? (
+          <ResponseRequest error={props.error} />
+        ) : null}
       </section>
     </main>
   )
@@ -174,6 +190,60 @@ function prettyMessage(msg: string) {
   // This could slowly get build out with more cases for improving whitespace/readability
   // over time. There's probably a function like this in react-error-overlay
   return msg.replace('is not a function.', 'is not a function.\n\n')
+}
+
+function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
+  const [openQuery, setOpenQuery] = useState(false)
+  const [openResponse, setOpenResponse] = useState(false)
+
+  return (
+    <div className="request-response">
+      {props.error.mostRecentRequest ? (
+        <div>
+          <h3>Request: {props.error.mostRecentRequest.operationName}</h3>
+          <div>
+            <h5>Variables:</h5>
+            <code>
+              <pre>
+                {JSON.stringify(
+                  props.error.mostRecentRequest.variables,
+                  null,
+                  '  '
+                )}
+              </pre>
+            </code>
+          </div>
+          <div>
+            <h5>Query:</h5>
+            <code>
+              <pre
+                onClick={() => setOpenQuery(!openQuery)}
+                className={openQuery ? 'open' : 'preview'}
+              >
+                {props.error.mostRecentRequest.query}
+              </pre>
+            </code>
+          </div>
+        </div>
+      ) : null}
+      {props.error.mostRecentRequest ? (
+        <div className="response">
+          <h3>Response</h3>
+          <div>
+            <h5>JSON:</h5>
+            <code>
+              <pre
+                onClick={() => setOpenResponse(!openResponse)}
+                className={openResponse ? 'open' : 'preview'}
+              >
+                {JSON.stringify(props.error.mostRecentResponse, null, '  ')}
+              </pre>
+            </code>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
 }
 
 const css = `
