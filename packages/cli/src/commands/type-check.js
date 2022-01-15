@@ -1,5 +1,6 @@
 import path from 'path'
 
+import concurrently from 'concurrently'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
@@ -51,23 +52,33 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
    */
 
   const typeCheck = async () => {
-    let exitCode = 0
-    for (const side of sides) {
-      console.log(c.info(`\nRunning type check for ${side}...\n`))
-      const cwd = path.join(getPaths().base, side)
-      try {
-        // -s flag to suppress error output from yarn. For example yarn doc link on non-zero status.
-        // Since it'll be printed anyways after the whole execution.
-        await execa('yarn', ['-s', 'tsc', '--noEmit', '--skipLibCheck'], {
-          stdio: 'inherit',
-          shell: true,
-          cwd,
-        })
-      } catch (e) {
-        exitCode = e.exitCode ?? 1
+    let conclusiveExitCode = 0
+
+    const tscForAllSides = sides.map((side) => {
+      const projectDir = path.join(getPaths().base, side)
+      // -s flag to suppress error output from yarn. For example yarn doc link on non-zero status.
+      // Since it'll be printed anyways after the whole execution.
+      return {
+        cwd: projectDir,
+        command: `yarn -s tsc --noEmit --skipLibCheck`,
+      }
+    })
+
+    const { result } = concurrently(tscForAllSides, {
+      group: true,
+      raw: true,
+    })
+    try {
+      await result
+    } catch (err) {
+      if (err.length) {
+        // Non-null exit codes
+        const exitCodes = err.map((e) => e?.exitCode).filter(Boolean)
+        conclusiveExitCode = Math.max(...exitCodes)
       }
     }
-    return exitCode
+
+    return conclusiveExitCode
   }
 
   try {
