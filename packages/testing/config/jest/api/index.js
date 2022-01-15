@@ -3,12 +3,11 @@ const path = require('path')
 const {
   getPaths,
   getApiSideDefaultBabelConfig,
-  getApiSideBabelPresets,
-  getApiSideBabelPlugins,
 } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
+const { babelrc } = getApiSideDefaultBabelConfig()
 
 module.exports = {
   preset: path.join(__dirname, '..'),
@@ -16,6 +15,7 @@ module.exports = {
   // correct path, for example, coverageDirectory
   rootDir: rwjsPaths.base,
   roots: [path.join(rwjsPaths.api.base, 'src')],
+  runner: path.join(__dirname, '../jest-serial-runner.js'),
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   displayName: {
     color: 'redBright',
@@ -33,12 +33,13 @@ module.exports = {
   transform: {
     '\\.[jt]sx?$': [
       'babel-jest',
+      // When jest runs tests in parallel, it serializes the config before passing down options to babel
+      // that's why these must be serializable. So ideally, we should just pass reference to a
+      // configFile or "extends" a config. But we need a few other option only at root level, so we'll pass
+      //  here and remove those keys inside "extend"ed config.
       {
-        ...getApiSideDefaultBabelConfig(),
-        plugins: getApiSideBabelPlugins({ forJest: true }),
-        presets: getApiSideBabelPresets({
-          presetEnv: true, // jest needs code transpiled
-        }),
+        babelrc, // babelrc can not reside inside "extend"ed config, that's why we have it here
+        configFile: path.resolve(__dirname, './apiBabelConfig.js'),
       },
     ],
   },

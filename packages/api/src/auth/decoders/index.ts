@@ -13,6 +13,7 @@ import { magicLink } from './magicLink'
 import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
+import { supertokens } from './supertokens'
 
 interface Req {
   event: APIGatewayProxyEvent
@@ -37,6 +38,7 @@ const typesToDecoders: Record<
   supabase: supabase,
   ethereum: ethereum,
   dbAuth: dbAuth,
+  supertokens: supertokens,
   custom: custom,
 }
 

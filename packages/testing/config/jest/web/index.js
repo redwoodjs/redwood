@@ -1,10 +1,6 @@
 const path = require('path')
-const { TextDecoder } = require('util')
 
-const {
-  getPaths,
-  getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+const { getPaths } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -15,7 +11,7 @@ module.exports = {
   // use correct path, for example, coverageDirectory
   rootDir: rwjsPaths.base,
   roots: [path.join(rwjsPaths.web.base, 'src')],
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
   displayName: {
     color: 'blueBright',
     name: 'web',
@@ -24,7 +20,6 @@ module.exports = {
     __REDWOOD_API_URL: '',
     __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
-    TextDecoder,
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   moduleNameMapper: {
@@ -61,7 +56,11 @@ module.exports = {
   transform: {
     '\\.[jt]sx?$': [
       'babel-jest',
-      getWebSideDefaultBabelConfig({ forJest: true }),
+      // When jest runs tests in parallel, it serializes the config before passing down options to babel
+      // that's why these must be serializable. Passing the reference to a config instead.
+      {
+        configFile: path.resolve(__dirname, './webBabelConfig.js'),
+      },
     ],
   },
 }
