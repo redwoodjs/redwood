@@ -388,6 +388,10 @@ const componentFiles = async (
       validation: (isRequired) =>
         `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },
+    Decimal: {
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
+    },
     default: {
       componentName: 'TextField',
       defaultProp: 'defaultValue',
