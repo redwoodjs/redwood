@@ -42,8 +42,6 @@ jest.mock('../../lib', () => {
   }
 })
 
-import path from 'path'
-
 import concurrently from 'concurrently'
 import execa from 'execa'
 
