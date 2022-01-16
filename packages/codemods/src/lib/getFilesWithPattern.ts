@@ -4,8 +4,8 @@
  *
  * @see {@link https://github.com/burntsushi/ripgrep}
  */
+import { rgPath } from '@vscode/ripgrep'
 import execa from 'execa'
-import { rgPath } from 'vscode-ripgrep'
 
 const getFilesWithPattern = ({
   pattern,
