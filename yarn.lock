@@ -1657,7 +1657,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.16.7
   resolution: "@babel/runtime@npm:7.16.7"
   dependencies:
@@ -1844,7 +1844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/cache@npm:^11.7.1":
+"@emotion/cache@npm:^11.4.0, @emotion/cache@npm:^11.7.1":
   version: 11.7.1
   resolution: "@emotion/cache@npm:11.7.1"
   dependencies:
@@ -1914,7 +1914,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.4.1":
+"@emotion/react@npm:^11.1.1, @emotion/react@npm:^11.4.1":
   version: 11.7.1
   resolution: "@emotion/react@npm:11.7.1"
   dependencies:
@@ -5392,7 +5392,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     nhost-js-sdk: 3.1.0
     react: 17.0.2
-    supertokens-auth-react: 0.17.9
+    supertokens-auth-react: 0.18.0
     typescript: 4.5.4
   languageName: unknown
   linkType: soft
@@ -7737,6 +7737,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: f4aa5ae5d1e877946fd7667aa9fa27c1cbba23bbe2b4301933df70d7b5ee9c207c6ecdb19681916b57bf190e4c0f7803fce4e5359fa9a3548f7b100ee4508311
+  languageName: node
+  linkType: hard
+
+"@types/react-transition-group@npm:^4.4.0":
+  version: 4.4.4
+  resolution: "@types/react-transition-group@npm:4.4.4"
+  dependencies:
+    "@types/react": "*"
+  checksum: 0e593863c60550002bb7a5bf60dad719de78580017f87eadf32661d1870345a4ef22e2e37902e05d05955494f2c0cae5ef46510032005e8e969273eee0ae8519
   languageName: node
   linkType: hard
 
@@ -11174,7 +11183,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.6":
+"classnames@npm:^2.2.5, classnames@npm:^2.2.6":
   version: 2.3.1
   resolution: "classnames@npm:2.3.1"
   checksum: e3b832219042802464e648c41c2e8be96c2c64d2522cfa22fbb5ec088418406c61ab351a682c077c07f691c8b00c9f0ee7939b20fabc6c23da69063252a4ab89
@@ -12041,6 +12050,13 @@ __metadata:
     path-type: ^4.0.0
     yaml: ^1.7.2
   checksum: 666ed8732d0bf7d7fe6f8516c8ee6041e0622032e8fa26201577b883d2767ad105d03f38b34b93d1f02f26b22a89e7bab4443b9d2e7f931f48d0e944ffa038b5
+  languageName: node
+  linkType: hard
+
+"country-flag-icons@npm:^1.0.2":
+  version: 1.4.19
+  resolution: "country-flag-icons@npm:1.4.19"
+  checksum: 7da6e1edcd86c1c3a9a506fb8e4ab07a6a6065618a3889609c0d94d13d8f05223a457c65bc19d382f3a8eefc5e0f2e206d47243fae7f78c357dedf5e9d504f93
   languageName: node
   linkType: hard
 
@@ -13273,6 +13289,16 @@ __metadata:
   dependencies:
     utila: ~0.4
   checksum: e96aa63bd8c6ee3cd9ce19c3aecfc2c42e50a460e8087114794d4f5ecf3a4f052b34ea3bf2d73b5d80b4da619073b49905e6d7d788ceb7814ca4c29be5354a11
+  languageName: node
+  linkType: hard
+
+"dom-helpers@npm:^5.0.1":
+  version: 5.2.1
+  resolution: "dom-helpers@npm:5.2.1"
+  dependencies:
+    "@babel/runtime": ^7.8.7
+    csstype: ^3.0.2
+  checksum: f735074d66dd759b36b158fa26e9d00c9388ee0e8c9b16af941c38f014a37fc80782de83afefd621681b19ac0501034b4f1c4a3bff5caa1b8667f0212b5e124c
   languageName: node
   linkType: hard
 
@@ -17558,6 +17584,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"input-format@npm:^0.3.6":
+  version: 0.3.6
+  resolution: "input-format@npm:0.3.6"
+  dependencies:
+    prop-types: ^15.7.2
+  checksum: 896191866d4361132d6ee2f790debef0fbbd74a37de71b00e0a61461f9528b8176cc91f09b645e8752d3a960952e2ec79744fb0b2d0d7b6669c509cf02aa2b0c
+  languageName: node
+  linkType: hard
+
 "inquirer@npm:^7.0.4, inquirer@npm:^7.3.3":
   version: 7.3.3
   resolution: "inquirer@npm:7.3.3"
@@ -19743,6 +19778,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"libphonenumber-js@npm:^1.9.43":
+  version: 1.9.44
+  resolution: "libphonenumber-js@npm:1.9.44"
+  checksum: 613dda2c2f843e5836cc46c9abfb6fa86f60d39a2154c0d3eed434caf0f30b5e373f33553cf5f5be7d4da2546103d60667872d1b6c71ca47dbbd7675fb500361
+  languageName: node
+  linkType: hard
+
 "lie@npm:3.1.1":
   version: 3.1.1
   resolution: "lie@npm:3.1.1"
@@ -20649,6 +20691,13 @@ fsevents@^1.2.7:
   dependencies:
     fs-monkey: 1.0.3
   checksum: b6d5d7c78afa005db0f708150a4b1c18e4db4d1f2f9370ee02400910442680289b0a8b1cf9cc86ac70c01d528d7e72bdca8aa54bd596382ac31dfcec6fa7d4cc
+  languageName: node
+  linkType: hard
+
+"memoize-one@npm:^5.0.0":
+  version: 5.2.1
+  resolution: "memoize-one@npm:5.2.1"
+  checksum: fd22dbe9a978a2b4f30d6a491fc02fb90792432ad0dab840dc96c1734d2bd7c9cdeb6a26130ec60507eb43230559523615873168bcbe8fafab221c30b11d54c1
   languageName: node
   linkType: hard
 
@@ -24330,6 +24379,22 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-phone-number-input@npm:^3.1.41":
+  version: 3.1.44
+  resolution: "react-phone-number-input@npm:3.1.44"
+  dependencies:
+    classnames: ^2.2.5
+    country-flag-icons: ^1.0.2
+    input-format: ^0.3.6
+    libphonenumber-js: ^1.9.43
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: ">=0.16.8"
+    react-dom: ">=0.16.8"
+  checksum: f9f0153bc918c5dd589f864ddb8fc01188ba5b714f150e4a08a1853ce9186a7074970de4354daab6273f1cc0938505a3a7d4b645e8bac61abd5e08eb3b4683f5
+  languageName: node
+  linkType: hard
+
 "react-popper-tooltip@npm:^3.1.1":
   version: 3.1.1
   resolution: "react-popper-tooltip@npm:3.1.1"
@@ -24388,6 +24453,24 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-select@npm:^5.2.1":
+  version: 5.2.2
+  resolution: "react-select@npm:5.2.2"
+  dependencies:
+    "@babel/runtime": ^7.12.0
+    "@emotion/cache": ^11.4.0
+    "@emotion/react": ^11.1.1
+    "@types/react-transition-group": ^4.4.0
+    memoize-one: ^5.0.0
+    prop-types: ^15.6.0
+    react-transition-group: ^4.3.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  checksum: e71411316fbdbdfa8215b83ad05214d3a43909caa7ee4da47307a7bfdf20e2e7571317c586771e8ee947c907a91e4a0ee75eec375b40572e28bc31230624c435
+  languageName: node
+  linkType: hard
+
 "react-shadow@npm:^19.0.2":
   version: 19.0.2
   resolution: "react-shadow@npm:19.0.2"
@@ -24439,6 +24522,21 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
   checksum: d72340a058da1ce6552281abf87bc1869b1635b298bda0e2e8c50e1ed90c3b6b40df45abe8d22ca2a495f24371ea7fe40420cd5ce7ba9fd41e62b959058ca548
+  languageName: node
+  linkType: hard
+
+"react-transition-group@npm:^4.3.0":
+  version: 4.4.2
+  resolution: "react-transition-group@npm:4.4.2"
+  dependencies:
+    "@babel/runtime": ^7.5.5
+    dom-helpers: ^5.0.1
+    loose-envify: ^1.4.0
+    prop-types: ^15.6.2
+  peerDependencies:
+    react: ">=16.6.0"
+    react-dom: ">=16.6.0"
+  checksum: afaf835854526065d246532714a3833a7c5fbcf21303e1479008ff6f1ec1ae44ecd151f74f357c60511a1e49de65cb9b81bf4d7858b9ee19e636b9a62a6daaa4
   languageName: node
   linkType: hard
 
@@ -27003,19 +27101,22 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.17.9":
-  version: 0.17.9
-  resolution: "supertokens-auth-react@npm:0.17.9"
+"supertokens-auth-react@npm:0.18.0":
+  version: 0.18.0
+  resolution: "supertokens-auth-react@npm:0.18.0"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: ^2.1.2
+    libphonenumber-js: ^1.9.43
     prop-types: "*"
+    react-phone-number-input: ^3.1.41
+    react-select: ^5.2.1
     react-shadow: ^19.0.2
     supertokens-js-override: ^0.0.4
     supertokens-website: ^10.0.4
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 01a06f4ee7b0cbabc10e249bd39bb976d8ce4d7dd36d259cb7de0b82d7f5b2bb5266494bcb13f783b93c3256668f1024e17a68c2bde69d1dd40a60a607673722
+  checksum: 3470ee9fe67801183087729905a94bafaba6e1d0c2ec56dfdf5253dbb428799b765201dfc3dc7a6094267cea26413325f7eab5c930473ba428bf3a6577ef028e
   languageName: node
   linkType: hard
 
