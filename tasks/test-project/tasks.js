@@ -120,10 +120,25 @@ async function webTasks(outputPath, { link, verbose }) {
 
     await createCell('blogPost')
 
-    return applyCodemod(
+    applyCodemod(
       'blogPostCell.js',
       fullPath('web/src/components/BlogPostCell/BlogPostCell')
     )
+
+    return updateCellMocks()
+  }
+
+  const updateCellMocks = async () => {
+    applyCodemod(
+      'blogPostCellMock.js',
+      fullPath('web/src/components/BlogPostCell/BlogPostCell.mock')
+    )
+
+    applyCodemod(
+      'blogPostCellMock.js',
+      fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock')
+    )
+    return
   }
 
   return new Listr(

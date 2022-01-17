@@ -1,5 +1,5 @@
 const query = `
-  query BlogPostQuery($id: Int!) {
+  query FindBlogPostQuery($id: Int!) {
     post(id: $id) {
       id
       title

@@ -13,10 +13,10 @@ const body = `
 `
 
 const propsInterface = `
-interface Props {
-  post: { id: string, title: string, body: string, createdAt: string }
-}
+interface Props extends FindBlogPostQuery {}
 `
+
+const typeImport = `import { FindBlogPostQuery } from 'types/graphql'`
 
 export default (file, api) => {
   const j = api.jscodeshift
@@ -34,6 +34,7 @@ export default (file, api) => {
 
   if (file.path.endsWith('.tsx')) {
     root.find(j.VariableDeclaration).insertBefore(propsInterface)
+    root.find(j.ImportDeclaration).insertAfter(typeImport)
 
     // Convert "const BlogPost = () "
     // to "const BlogPost = ({ posts }: Props) "
