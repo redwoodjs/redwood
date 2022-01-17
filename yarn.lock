@@ -5381,7 +5381,7 @@ __metadata:
     "@clerk/clerk-js": 2.6.1
     "@clerk/clerk-sdk-node": 2.6.1
     "@clerk/types": 1.21.0
-    "@supabase/supabase-js": 1.29.1
+    "@supabase/supabase-js": 1.29.2
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.38
     firebase: 9.6.3
@@ -6767,13 +6767,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^1.3.4":
-  version: 1.3.4
-  resolution: "@supabase/realtime-js@npm:1.3.4"
+"@supabase/realtime-js@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@supabase/realtime-js@npm:1.3.5"
   dependencies:
     "@types/websocket": ^1.0.3
     websocket: ^1.0.34
-  checksum: 729c29ded9096ff28e35bf8bd466b340fa44e7ce8a85057902df7aadae2fa28007e056a94b4435e6f03e65c8088f3ffebe21119d90b93edb1d9aaad14dd76196
+  checksum: 0b1374b4699a5848c9dd1c0e2121e946fd4d6b2cb7977c28ec3ad91c7d72ae47bd61d6a690adaec38ddf017b718bdddd86f2c196032331db25b6c9e4ef532514
   languageName: node
   linkType: hard
 
@@ -6786,15 +6786,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.29.1":
-  version: 1.29.1
-  resolution: "@supabase/supabase-js@npm:1.29.1"
+"@supabase/supabase-js@npm:1.29.2":
+  version: 1.29.2
+  resolution: "@supabase/supabase-js@npm:1.29.2"
   dependencies:
     "@supabase/gotrue-js": ^1.21.7
     "@supabase/postgrest-js": ^0.35.0
-    "@supabase/realtime-js": ^1.3.4
+    "@supabase/realtime-js": ^1.3.5
     "@supabase/storage-js": ^1.5.0
-  checksum: 320d6316728b92f3c0bfe08a9625c4f6be113055a077e68f0fa40b36a5b9fdf2387ea0deb2e942d4c72d651876eddb42bded5239d440a4c426b4e0c0ba7487b8
+  checksum: 6c0ede92c5c0a13d178b28e7fe2823d1ebbd6ecfd5048aed28907ff7d194315a8e49fb57d604386f73b32ab0a35d69ab7c9bd141ab24b794ea7841229b0a107a
   languageName: node
   linkType: hard
 
