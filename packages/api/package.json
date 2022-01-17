@@ -29,7 +29,7 @@
     "@babel/cli": "7.16.7",
     "@redwoodjs/auth": "0.41.0",
     "@types/crypto-js": "4.1.0",
-    "@types/jsonwebtoken": "8.5.7",
+    "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.1",
     "aws-lambda": "1.0.7",
     "jest": "27.4.7",
