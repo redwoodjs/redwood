@@ -14,7 +14,7 @@
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
     "deepmerge": "4.2.2",
-    "dotenv-defaults": "3.0.0",
+    "dotenv-defaults": "3.0.2",
     "enquirer": "2.3.6",
     "findup-sync": "5.0.0",
     "graphql": "16.2.0",
