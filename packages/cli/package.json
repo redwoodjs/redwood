@@ -25,7 +25,7 @@
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
-    "concurrently": "6.5.1",
+    "concurrently": "7.0.0",
     "configstore": "3.1.5",
     "core-js": "3.20.3",
     "cross-env": "7.0.3",
