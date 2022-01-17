@@ -47,6 +47,7 @@
 import React, { useContext, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
+import PropTypes from 'prop-types'
 import {
   get,
   useForm,
@@ -365,6 +366,13 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
   }
 )
 
+Form.propTypes = {
+  config: PropTypes.object,
+  error: PropTypes.any,
+  formMethods: PropTypes.any, // TODO: is there a better way to validate the type of the formMethods?
+  onSubmit: PropTypes.func,
+}
+
 export interface LabelProps
   extends Pick<FieldProps, 'errorClassName' | 'errorStyle'>,
     React.ComponentPropsWithoutRef<'label'> {
@@ -517,6 +525,20 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   }
 )
 
+const DEFAULT_FIELD_PROP_TYPES = {
+  name: PropTypes.string.isRequired,
+  id: PropTypes.string,
+  errorClassName: PropTypes.string,
+  errorStyle: PropTypes.object,
+  validation: PropTypes.object,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+}
+
+TextAreaField.propTypes = {
+  ...DEFAULT_FIELD_PROP_TYPES,
+}
+
 export interface SelectFieldProps
   extends FieldProps<HTMLSelectElement>,
     Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
@@ -565,6 +587,10 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
     )
   }
 )
+
+SelectField.propTypes = {
+  ...DEFAULT_FIELD_PROP_TYPES,
+}
 
 export interface CheckboxFieldProps
   extends FieldProps<HTMLInputElement>,
@@ -624,6 +650,10 @@ export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
     )
   }
 )
+
+CheckboxField.propTypes = {
+  ...DEFAULT_FIELD_PROP_TYPES,
+}
 
 /**
  * Renders a `<button type="submit">` field.
@@ -741,6 +771,10 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     )
   }
 )
+
+InputField.propTypes = {
+  ...DEFAULT_FIELD_PROP_TYPES,
+}
 
 /**
  * `React.ForwardRefExoticComponent` is `forwardRef`'s return type.
