@@ -2,7 +2,7 @@ export default (file, api) => {
   const j = api.jscodeshift
   const mockFunction = j(file.source).find(j.ArrowFunctionExpression)
 
-  j(mockFunction)
+  return j(mockFunction)
     .find(j.ObjectExpression)
     .forEach(({ node }) => {
       node.properties.push(
@@ -19,4 +19,5 @@ export default (file, api) => {
         )
       )
     })
+    .toSource()
 }
