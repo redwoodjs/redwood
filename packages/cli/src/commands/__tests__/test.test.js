@@ -28,10 +28,12 @@ test('Creates/resets a test db when side has api, before calling jest', async ()
     filter: ['api'],
   })
 
-  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value).toEqual({
+    cmd: 'yarn rw',
+    params: ['prisma db push', '--force-reset', '--accept-data-loss'],
+  })
 
-  // Api tests need to run sequentially for scenarios
-  expect(execa.mock.results[0].value.params).toContain('--runInBand')
+  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
 })
 
 test('Runs tests for all available sides if no filter passed', async () => {
@@ -48,10 +50,12 @@ test('Syncs or creates test database when the flag --db-push is set to true', as
     dbPush: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value).toEqual({
+    cmd: 'yarn rw',
+    params: ['prisma db push', '--force-reset', '--accept-data-loss'],
+  })
 
-  // Api tests need to run sequentially for scenarios
-  expect(execa.mock.results[0].value.params).toContain('--runInBand')
+  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
 })
 
 test('Skips test database sync/creation when the flag --db-push is set to false', async () => {
