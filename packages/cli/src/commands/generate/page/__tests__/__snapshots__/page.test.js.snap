@@ -329,10 +329,58 @@ export default Routes",
 
 exports[`generates typescript pages 1`] = `undefined`;
 
-exports[`generates typescript pages 2`] = `undefined`;
+exports[`generates typescript pages 2`] = `
+"import TsFilesPage from './TsFilesPage'
 
-exports[`generates typescript pages 3`] = `undefined`;
+export const generated = () => {
+  return <TsFilesPage />
+}
 
-exports[`generates typescript pages 4`] = `undefined`;
+export default { title: 'Pages/TsFilesPage' }
+"
+`;
 
-exports[`generates typescript pages 5`] = `undefined`;
+exports[`generates typescript pages 3`] = `
+"import { render } from '@redwoodjs/testing/web'
+
+import TsFilesPage from './TsFilesPage'
+
+describe('TsFilesPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<TsFilesPage />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`generates typescript pages 4`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+type TsParamFilesPageProps = {
+  id: string
+}
+
+const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
+  return (
+    <>
+      <MetaTags title=\\"TsParamFiles\\" description=\\"TsParamFiles page\\" />
+
+      <h1>TsParamFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamFiles</code>, link to me with \`
+        <Link to={routes.tsParamFiles({ id: '42' })}>TsParamFiles 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TsParamFilesPage
+"
+`;

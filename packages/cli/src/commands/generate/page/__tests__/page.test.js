@@ -112,9 +112,11 @@ beforeAll(() => {
   typescriptParamTypeFiles = page.files({
     name: 'TSParamTypeFiles',
     typescript: true,
-    tests: true,
-    stories: true,
-    ...page.paramVariants(pathName('{id:Int}', 'typescript-param-with-type')),
+    tests: false,
+    stories: false,
+    ...page.paramVariants(
+      pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
+    ),
   })
 })
 
@@ -446,7 +448,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.stories.tsx'
+        '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx'
       )
     ]
   ).toMatchSnapshot()
@@ -454,7 +456,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.test.tsx'
+        '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx'
       )
     ]
   ).toMatchSnapshot()
@@ -462,15 +464,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptParamFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx'
-      )
-    ]
-  ).toMatchSnapshot()
-
-  expect(
-    typescriptParamTypeFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx'
+        '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx'
       )
     ]
   ).toMatchSnapshot()
