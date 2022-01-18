@@ -468,4 +468,12 @@ test('generates typescript pages', () => {
       )
     ]
   ).toMatchSnapshot()
+
+  expect(
+    typescriptParamTypeFiles[
+      path.normalize(
+        '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
 })

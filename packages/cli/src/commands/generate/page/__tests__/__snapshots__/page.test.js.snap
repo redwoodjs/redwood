@@ -384,3 +384,33 @@ const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
 export default TsParamFilesPage
 "
 `;
+
+exports[`generates typescript pages 5`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+type TsParamTypeFilesPageProps = {
+  id: number
+}
+
+const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
+  return (
+    <>
+      <MetaTags title=\\"TsParamTypeFiles\\" description=\\"TsParamTypeFiles page\\" />
+
+      <h1>TsParamTypeFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamTypeFiles</code>, link to me with \`
+        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TsParamTypeFiles 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TsParamTypeFilesPage
+"
+`;
