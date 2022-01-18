@@ -5324,7 +5324,7 @@ __metadata:
     ansi-colors: 4.1.1
     aws-lambda: 1.0.7
     chalk: 4.1.2
-    chokidar: 3.5.2
+    chokidar: 3.5.3
     fast-json-parse: 1.0.3
     fastify: 3.25.3
     fastify-http-proxy: 6.2.1
@@ -11061,9 +11061,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:3.5.2, chokidar@npm:^3.4.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.2":
-  version: 3.5.2
-  resolution: "chokidar@npm:3.5.2"
+"chokidar@npm:3.5.3, chokidar@npm:^3.4.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.2":
+  version: 3.5.3
+  resolution: "chokidar@npm:3.5.3"
   dependencies:
     anymatch: ~3.1.2
     braces: ~3.0.2
@@ -11076,7 +11076,7 @@ __metadata:
   dependenciesMeta:
     fsevents:
       optional: true
-  checksum: e7179a9dc4ce54c1ba660652319039b7ca0817a442dd05a45afcbdefcd4848b4276debfa9cf321798c2c567c6289da14dd48d9a1ee92056a7b526c554cffe129
+  checksum: 1076953093e0707c882a92c66c0f56ba6187831aa51bb4de878c1fec59ae611a3bf02898f190efec8e77a086b8df61c2b2a3ea324642a0558bdf8ee6c5dc9ca1
   languageName: node
   linkType: hard
 
