@@ -30,8 +30,12 @@ async function webTasks(outputPath, { link, verbose }) {
   const execaOptions = getExecaOptions(outputPath)
 
   const createBuilder = (cmd) => {
-    return async function createItem(name) {
-      await execa(`${cmd} ${name}`, [], execaOptions)
+    return async function createItem(positionals) {
+      await execa(
+        cmd,
+        Array.isArray(positionals) ? positionals : [positionals],
+        execaOptions
+      )
     }
   }
 
