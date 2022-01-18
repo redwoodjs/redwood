@@ -26,7 +26,7 @@ const sortMigrations = (migrations) => {
   })
 }
 
-const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.tsx', '.ts']
+const SUPPORTED_EXTENSIONS = ['.js', '.ts']
 
 // Return the list of migrations that haven't run against the database yet
 const getMigrations = async (db) => {
