@@ -4,9 +4,11 @@
 const fs = require('fs')
 const path = require('path')
 
+const chalk = require('chalk')
 const execa = require('execa')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
+const rimraf = require('rimraf')
 const yargs = require('yargs')
 
 const {
@@ -15,9 +17,6 @@ const {
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tasks')
 const { getExecaOptions } = require('./util')
-
-const chalk = require('chalk')
-const rimraf = require('rimraf')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')

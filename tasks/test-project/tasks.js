@@ -113,32 +113,33 @@ async function webTasks(outputPath, { link, verbose }) {
 
     await createCell('blogPosts')
 
-    applyCodemod(
+    await applyCodemod(
       'blogPostsCell.js',
       fullPath('web/src/components/BlogPostsCell/BlogPostsCell')
     )
 
     await createCell('blogPost')
 
-    applyCodemod(
+    return applyCodemod(
       'blogPostCell.js',
       fullPath('web/src/components/BlogPostCell/BlogPostCell')
     )
-
-    return updateCellMocks()
   }
 
   const updateCellMocks = async () => {
-    applyCodemod(
-      'blogPostCellMock.js',
-      fullPath('web/src/components/BlogPostCell/BlogPostCell.mock')
+    await applyCodemod(
+      'updateBlogPostMocks.js',
+      fullPath('web/src/components/BlogPostCell/BlogPostCell.mock.ts', {
+        addExtension: false,
+      })
     )
 
-    applyCodemod(
-      'blogPostCellMock.js',
-      fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock')
+    return applyCodemod(
+      'updateBlogPostMocks.js',
+      fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock.ts', {
+        addExtension: false,
+      })
     )
-    return
   }
 
   return new Listr(
@@ -158,6 +159,10 @@ async function webTasks(outputPath, { link, verbose }) {
       {
         title: 'Creating cells',
         task: () => createCells(),
+      },
+      {
+        title: 'Updating cell mocks',
+        task: () => updateCellMocks(),
       },
       {
         title: 'Changing routes',
