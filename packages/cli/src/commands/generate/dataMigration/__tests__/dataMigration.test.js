@@ -1,5 +1,6 @@
 global.__dirname = __dirname
 import path from 'path'
+import '../../../../lib/test'
 
 import * as generator from '../dataMigration'
 
