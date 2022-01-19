@@ -5417,7 +5417,7 @@ __metadata:
     core-js: 3.20.3
     cross-env: 7.0.3
     decamelize: 5.0.0
-    dotenv-defaults: 3.0.2
+    dotenv-defaults: 5.0.0
     envinfo: 7.8.1
     execa: 5.1.1
     fast-glob: 3.2.11
@@ -5733,7 +5733,7 @@ __metadata:
     "@types/vscode": 1.63.1
     camelcase: 6.3.0
     deepmerge: 4.2.2
-    dotenv-defaults: 3.0.2
+    dotenv-defaults: 5.0.0
     enquirer: 2.3.6
     findup-sync: 5.0.0
     graphql: 16.2.0
@@ -13402,12 +13402,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-defaults@npm:3.0.2":
-  version: 3.0.2
-  resolution: "dotenv-defaults@npm:3.0.2"
+"dotenv-defaults@npm:5.0.0":
+  version: 5.0.0
+  resolution: "dotenv-defaults@npm:5.0.0"
   dependencies:
-    dotenv: ^10.0.0
-  checksum: 68163268a727685748a8762366237b6e4c6ae2f57b122ff5fe3ccc1994176b0d7c5de7c39af186eb5bf5b5a70bb86721d1d7db4a6ab62167727ba1b1dd895c98
+    dotenv: ^14.0.0
+  checksum: 4029be6d1623753b3209040d96a49faf5b750587b658c151545a318e763489e2d3cfade4b5f6c5240f5ea01facae50af01cb5fe721ed470b5e99afe5fc934652
   languageName: node
   linkType: hard
 
@@ -13442,6 +13442,13 @@ __metadata:
   version: 10.0.0
   resolution: "dotenv@npm:10.0.0"
   checksum: 2d8d4ba64bfaff7931402aa5e8cbb8eba0acbc99fe9ae442300199af021079eafa7171ce90e150821a5cb3d74f0057721fbe7ec201a6044b68c8a7615f8c123f
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^14.0.0":
+  version: 14.2.0
+  resolution: "dotenv@npm:14.2.0"
+  checksum: 17ef06618c3ae59152b94cf5b3633e82ae0989d4ce2ccf2b640cbde92c67e63a93ae191840904816f098fef78d81770548a19c221b8464059f35eaadf7f737fd
   languageName: node
   linkType: hard
 
