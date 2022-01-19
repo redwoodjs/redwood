@@ -209,10 +209,8 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  // Prevent unexpected error messages from leaking to the GraphQL clients in prod.
-  if (!isDevEnv) {
-    plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
-  }
+  // Prevent unexpected error messages from leaking to the GraphQL clients.
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
 
   const corsContext = createCorsContext(cors)
 
