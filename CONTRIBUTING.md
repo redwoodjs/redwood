@@ -10,8 +10,8 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Code Organization](#code-organization)
   - [Local Setup](#local-setup)
     - [Redwood Framework](#redwood-framework)
-    - [Redwood Project Options](#redwood-project-options)
-    - [Redwood Functional Test Project](#redwood-functional-test-project)
+    - [Redwood Project: Options](#redwood-project-options)
+      - [Redwood Functional Test Project](#redwood-functional-test-project)
     - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
     - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
   - [Browser-based Setup](#browser-based-setup)
@@ -50,7 +50,7 @@ cd redwood
 yarn install
 ```
 
-### Redwood Project Options
+### Redwood Project: Options
 
 You'll almost always want to test the functionality of your changes to the Redwood Framework in a Redwood Project. When it comes to getting a Redwood Project to test your changes out in, you have several options:
 
@@ -61,7 +61,7 @@ You'll almost always want to test the functionality of your changes to the Redwo
 
 **Using the functional test project might be the fastest and easiest way to test your changes.** 
 
-### Redwood Functional Test Project
+#### Redwood Functional Test Project
 
 You can create a Redwood Project that contains a lot of functionality in just a few minutes. For example, here's a brief overview of all the things `yarn run build:test-project <project directory>` does. It...
 
