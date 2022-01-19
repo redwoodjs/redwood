@@ -122,7 +122,7 @@ export const handler = async ({
   }
 
   // TODO: Convert jobs to an array and supply cwd command.
-  concurrently(
+  const { result } = concurrently(
     Object.keys(jobs)
       .map((job) => {
         if (side.includes(job) || job === 'gen') {
@@ -134,7 +134,8 @@ export const handler = async ({
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
     }
-  ).catch((e) => {
+  )
+  result.catch((e) => {
     if (typeof e?.message !== 'undefined') {
       errorTelemetry(
         process.argv,

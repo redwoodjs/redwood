@@ -27,6 +27,8 @@ const sortMigrations = (migrations) => {
   })
 }
 
+const SUPPORTED_EXTENSIONS = ['.js', '.ts']
+
 // Return the list of migrations that haven't run against the database yet
 const getMigrations = async (db) => {
   const basePath = path.join(getPaths().api.dataMigrations)
@@ -38,7 +40,7 @@ const getMigrations = async (db) => {
   // gets all migrations present in the app
   const files = fs
     .readdirSync(basePath)
-    .filter((m) => path.extname(m) === '.js')
+    .filter((m) => SUPPORTED_EXTENSIONS.includes(path.extname(m)))
     .map((m) => {
       return {
         [m.split('-')[0]]: path.join(basePath, m),

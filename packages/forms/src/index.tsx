@@ -1,4 +1,15 @@
 /**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
+/**
  * @module @redwoodjs/forms
  *
  * Redwood's form library.
