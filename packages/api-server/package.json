@@ -16,7 +16,7 @@
     "@babel/plugin-transform-runtime": "7.16.7",
     "ansi-colors": "4.1.1",
     "chalk": "4.1.2",
-    "chokidar": "3.5.2",
+    "chokidar": "3.5.3",
     "fast-json-parse": "1.0.3",
     "fastify": "3.25.3",
     "fastify-http-proxy": "6.2.1",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
-    "@types/aws-lambda": "8.10.89",
+    "@types/aws-lambda": "8.10.90",
     "@types/lodash.escape": "4.0.6",
     "@types/qs": "6.9.7",
     "@types/split2": "3.2.1",
