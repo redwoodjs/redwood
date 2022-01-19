@@ -5392,7 +5392,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     nhost-js-sdk: 3.1.0
     react: 17.0.2
-    supertokens-auth-react: 0.18.0
+    supertokens-auth-react: 0.18.1
     typescript: 4.5.4
   languageName: unknown
   linkType: soft
@@ -5508,7 +5508,7 @@ __metadata:
     copy-webpack-plugin: 10.2.0
     core-js: 3.20.3
     css-loader: 6.5.1
-    css-minimizer-webpack-plugin: 3.3.1
+    css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.0.3
     esbuild: 0.14.11
     esbuild-loader: 2.18.0
@@ -5572,7 +5572,7 @@ __metadata:
     core-js: 3.20.3
     jest: 27.4.7
     pascalcase: 1.0.0
-    react-hook-form: 7.24.0
+    react-hook-form: 7.24.1
     typescript: 4.5.4
   languageName: unknown
   linkType: soft
@@ -5729,7 +5729,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.178
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.11.20
+    "@types/node": 16.11.21
     "@types/vscode": 1.63.1
     camelcase: 6.3.0
     deepmerge: 4.2.2
@@ -5774,7 +5774,7 @@ __metadata:
     "@types/aws-lambda": 8.10.90
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.0
-    "@types/node": 16.11.20
+    "@types/node": 16.11.21
     "@types/react": 17.0.38
     "@types/react-dom": 17.0.11
     "@types/webpack": 5.28.0
@@ -7615,10 +7615,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:16.11.20, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
-  version: 16.11.20
-  resolution: "@types/node@npm:16.11.20"
-  checksum: aeb6280d7a82851de2830524effbe20998866d8cd29dcc3eae77ae823938cb18793b9301785e0f1a30f2b87ffca2c7432ca58824b52f216e06bc647df3b690b8
+"@types/node@npm:*, @types/node@npm:16.11.21, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0":
+  version: 16.11.21
+  resolution: "@types/node@npm:16.11.21"
+  checksum: e5af56bf8fdfd24a15a427f407f9b0a225fec2e8b91e1fdc365fdd2ab8ca19b9cb4c9e0f37494f97c5dce9983c9589b8e746ecc9592066523ca05949dd9b1fbd
   languageName: node
   linkType: hard
 
@@ -12377,9 +12377,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:3.3.1":
-  version: 3.3.1
-  resolution: "css-minimizer-webpack-plugin@npm:3.3.1"
+"css-minimizer-webpack-plugin@npm:3.4.1":
+  version: 3.4.1
+  resolution: "css-minimizer-webpack-plugin@npm:3.4.1"
   dependencies:
     cssnano: ^5.0.6
     jest-worker: ^27.0.2
@@ -12390,13 +12390,15 @@ __metadata:
   peerDependencies:
     webpack: ^5.0.0
   peerDependenciesMeta:
+    "@parcel/css":
+      optional: true
     clean-css:
       optional: true
     csso:
       optional: true
     esbuild:
       optional: true
-  checksum: 2c6ae51043caa607ea71c30ef55e51e3882b6e3e9b5d687cceabb7459b9aceeb8e9b824d6e2bdf01584ba4cd4f4b5f2051a1f573bc12b43d6d0393139ea29abb
+  checksum: a6b749a136f7a62a173e576a10c8f2ada18013800a2698ede08dfdf6df6761b9ad24cabfce153ef4958ffcf8509e7b6a40c6ddffa6eb06f3624a97c17b825e06
   languageName: node
   linkType: hard
 
@@ -24351,12 +24353,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.24.0":
-  version: 7.24.0
-  resolution: "react-hook-form@npm:7.24.0"
+"react-hook-form@npm:7.24.1":
+  version: 7.24.1
+  resolution: "react-hook-form@npm:7.24.1"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: 560e6bda0f8d96ccec9abe69f2bdb565a5273aa956ec7c1b28f49d999a644eba0ebe480541810cf37d97e8a35cffaa48123e2beac111912d70bd888daa068761
+  checksum: fa7e07d224c1b7bccc33b2c15a6ce7944f61fda50af774e85e0368808d770bd9deb5a68243669a1381ada574945ffc0cc0327354843845dc6088ca7a6b567fda
   languageName: node
   linkType: hard
 
@@ -27108,9 +27110,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.18.0":
-  version: 0.18.0
-  resolution: "supertokens-auth-react@npm:0.18.0"
+"supertokens-auth-react@npm:0.18.1":
+  version: 0.18.1
+  resolution: "supertokens-auth-react@npm:0.18.1"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: ^2.1.2
@@ -27123,7 +27125,7 @@ resolve@^2.0.0-next.3:
     supertokens-website: ^10.0.4
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 3470ee9fe67801183087729905a94bafaba6e1d0c2ec56dfdf5253dbb428799b765201dfc3dc7a6094267cea26413325f7eab5c930473ba428bf3a6577ef028e
+  checksum: ee39a61a7cdace971715d2cc8ed3929d3055f5d818ae7cb02a14a19f8bbf738f95ef75fc0fe72ea07b2298611abcfcc3e5a17d8104a63c8331ff532bac40d808
   languageName: node
   linkType: hard
 
