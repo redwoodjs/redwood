@@ -31,7 +31,8 @@ export const clerk = (client: Clerk): AuthClientClerk => {
     client,
     login: async (options?: SignInProps) =>
       clerkClient(client)?.openSignIn(options || {}),
-    logout: async (options?: SignOutCallback) => clerkClient(client)?.signOut(options),
+    logout: async (options?: SignOutCallback) =>
+      clerkClient(client)?.signOut(options),
     signup: async (options?: SignUpProps) =>
       clerkClient(client)?.openSignUp(options || {}),
     // Clerk uses the session ID PLUS the __session cookie.
