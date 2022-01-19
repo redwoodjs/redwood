@@ -5392,7 +5392,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     nhost-js-sdk: 3.1.0
     react: 17.0.2
-    supertokens-auth-react: 0.18.0
+    supertokens-auth-react: 0.18.1
     typescript: 4.5.4
   languageName: unknown
   linkType: soft
@@ -27101,9 +27101,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.18.0":
-  version: 0.18.0
-  resolution: "supertokens-auth-react@npm:0.18.0"
+"supertokens-auth-react@npm:0.18.1":
+  version: 0.18.1
+  resolution: "supertokens-auth-react@npm:0.18.1"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: ^2.1.2
@@ -27116,7 +27116,7 @@ resolve@^2.0.0-next.3:
     supertokens-website: ^10.0.4
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 3470ee9fe67801183087729905a94bafaba6e1d0c2ec56dfdf5253dbb428799b765201dfc3dc7a6094267cea26413325f7eab5c930473ba428bf3a6577ef028e
+  checksum: ee39a61a7cdace971715d2cc8ed3929d3055f5d818ae7cb02a14a19f8bbf738f95ef75fc0fe72ea07b2298611abcfcc3e5a17d8104a63c8331ff532bac40d808
   languageName: node
   linkType: hard
 
