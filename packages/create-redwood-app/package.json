@@ -11,7 +11,7 @@
     "@babel/node": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@redwoodjs/internal": "0.41.0",
-    "axios": "0.24.0",
+    "axios": "0.25.0",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
     "decompress": "4.2.1",

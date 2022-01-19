@@ -9545,12 +9545,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:0.24.0":
-  version: 0.24.0
-  resolution: "axios@npm:0.24.0"
+"axios@npm:0.25.0":
+  version: 0.25.0
+  resolution: "axios@npm:0.25.0"
   dependencies:
-    follow-redirects: ^1.14.4
-  checksum: d106561e761bf48633633073626eafb80289eb7c7c27f9fae4fb796939b6ecd2c9f63b596e3b3d872f7c0bec6b2fb117c58456d387e4ca2da7fc07c795a979c3
+    follow-redirects: ^1.14.7
+  checksum: 33475dc847e8494341db5ff5d3ce3a830e511d9698eda1e2507618a0a875ca774e7c59b9194c70664e886699b5917416175da2ea5ccb67a2945f7cdc939d7c56
   languageName: node
   linkType: hard
 
@@ -12149,7 +12149,7 @@ __metadata:
     "@babel/node": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/internal": 0.41.0
-    axios: 0.24.0
+    axios: 0.25.0
     chalk: 4.1.2
     check-node-version: 4.2.1
     decompress: 4.2.1
@@ -15522,13 +15522,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.4":
-  version: 1.14.6
-  resolution: "follow-redirects@npm:1.14.6"
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.7":
+  version: 1.14.7
+  resolution: "follow-redirects@npm:1.14.7"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: e2b93b2fa671cad5d7c7755f10072cc719c6e8b6a7994f9e26a31f7544856f3104cd9d3ad4b645f0763698271b7cb086fae553d775192cefd582607c0a50a16c
+  checksum: 62d5de1304905cb6ff6ca6c796ac61c327d85b44d233e75a9e89460e4bed866abe2841bc18a0b239e29a88a06d23194439172041560a0e5638af4e83517832dd
   languageName: node
   linkType: hard
 
