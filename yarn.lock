@@ -5400,6 +5400,7 @@ __metadata:
     "@redwoodjs/internal": 0.41.0
     "@redwoodjs/prerender": 0.41.0
     "@redwoodjs/structure": 0.41.0
+    "@redwoodjs/telemetry": 0.41.0
     "@types/listr": 0.14.4
     "@types/node-fetch": 2.5.12
     boxen: 5.1.2
@@ -5649,6 +5650,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
+    systeminformation: 5.8.7
     toml: 3.0.0
     typescript: 4.5.4
   bin:
@@ -5744,6 +5746,19 @@ __metadata:
     vscode-languageserver-textdocument: 1.0.3
     vscode-languageserver-types: 3.16.0
     yargs-parser: 21.0.0
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/telemetry@0.41.0, @redwoodjs/telemetry@workspace:packages/telemetry":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
+  dependencies:
+    "@babel/cli": 7.16.7
+    "@babel/runtime-corejs3": 7.16.7
+    "@redwoodjs/internal": 0.41.0
+    "@types/envinfo": 7.8.1
+    envinfo: 7.8.1
+    jest: 27.4.7
   languageName: unknown
   linkType: soft
 
@@ -7169,6 +7184,13 @@ __metadata:
   dependencies:
     "@types/ms": "*"
   checksum: 742b752b60e14a752d9bf172e64f28e172f630b9933e763d2b54c7c8c1f33b99b1ef067d7312665a4d0539d8df7ea3eb664a8039f900e4b8234c647a569d123a
+  languageName: node
+  linkType: hard
+
+"@types/envinfo@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@types/envinfo@npm:7.8.1"
+  checksum: 2f343301bf5f0bcfdba0d39423f895c51337b68b1d76ea5f51557afcd5198e2eb685b0cc7d377e812357d7a9650360b2727ef37eb53d71532d3eb4dac1232037
   languageName: node
   linkType: hard
 
@@ -12106,6 +12128,7 @@ __metadata:
     "@babel/node": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/internal": 0.41.0
+    "@redwoodjs/telemetry": 0.41.0
     chalk: 4.1.2
     check-node-version: 4.2.1
     execa: 5.1.1
@@ -27113,6 +27136,15 @@ resolve@^2.0.0-next.3:
   version: 2.0.15
   resolution: "synchronous-promise@npm:2.0.15"
   checksum: 967778e7570dc496d7630a89db3bada38876574797c9b272ee50f6ecd7afcebf450268b4bb48a84274d213ab9fd4865dbcc6edeb279f9ecaddf189d5446cbe43
+  languageName: node
+  linkType: hard
+
+"systeminformation@npm:5.8.7":
+  version: 5.8.7
+  resolution: "systeminformation@npm:5.8.7"
+  bin:
+    systeminformation: lib/cli.js
+  checksum: be522dd493bfb24e5f204bcc308ed70a7f26bb2dd40f80c4c09c7e9494b4df6e4de4d7753d561d9f84a6395dbfe12de945b8c8d4c83f57711b4e57124045cd6f
   languageName: node
   linkType: hard
 

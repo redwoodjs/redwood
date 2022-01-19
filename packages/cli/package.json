@@ -22,6 +22,7 @@
     "@redwoodjs/internal": "0.41.0",
     "@redwoodjs/prerender": "0.41.0",
     "@redwoodjs/structure": "0.41.0",
+    "@redwoodjs/telemetry": "0.41.0",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
