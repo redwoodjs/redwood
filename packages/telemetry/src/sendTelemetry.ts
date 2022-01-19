@@ -132,7 +132,7 @@ const buildPayload = async () => {
     type: argv.type || 'command',
     command: argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : '',
     duration: argv.duration ? parseInt(argv.duration) : null,
-    uid: uniqueId(rootDir),
+    uid: uniqueId(rootDir) || null,
     ci: ci.isCI,
     redwoodCi: !!process.env.REDWOOD_CI,
     NODE_ENV: process.env.NODE_ENV || null,
@@ -183,7 +183,11 @@ const uniqueId = (rootDir: string | null) => {
     fs.statSync(telemetryCachePath).mtimeMs < expires
   ) {
     uuid = uuidv4()
-    fs.writeFileSync(telemetryCachePath, uuid)
+    try {
+      fs.writeFileSync(telemetryCachePath, uuid)
+    } catch (error) {
+      console.error('\nCould not create telemetry.txt file\n')
+    }
   } else {
     uuid = fs.readFileSync(telemetryCachePath).toString()
   }

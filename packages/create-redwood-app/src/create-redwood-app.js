@@ -209,8 +209,8 @@ const sendTelemetry = ({ error } = {}) => {
     }
 
     spawn(process.execPath, [path.join(__dirname, 'telemetry.js'), ...args], {
-      detached: true,
-      stdio: 'ignore',
+      detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
+      stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
     }).unref()
   } else {
     fs.appendFileSync(
