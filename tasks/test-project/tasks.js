@@ -180,7 +180,7 @@ async function webTasks(outputPath, { link, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer@^9.8.8',
+            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer',
             [],
             getExecaOptions(outputPath)
           ),
