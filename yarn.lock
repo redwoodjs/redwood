@@ -7830,10 +7830,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinonjs__fake-timers@npm:^6.0.2":
-  version: 6.0.4
-  resolution: "@types/sinonjs__fake-timers@npm:6.0.4"
-  checksum: ba880e2451a439d9696c9adbea1b163a4077cf3d48eb8282f1ec9b640c9f063d66df9af44ec73d35c64a2bb9cd780cff02de61043c3b0d501dbaa4280ad26d19
+"@types/sinonjs__fake-timers@npm:8.1.1":
+  version: 8.1.1
+  resolution: "@types/sinonjs__fake-timers@npm:8.1.1"
+  checksum: e2e6c425a548177c0930c2f9b82d3951956c9701b9ebf59623d5ad2c3229c523d3c0d598e79fe7392a239657abd3dbe3676be0650ce438bcd1199ee3b617a4d7
   languageName: node
   linkType: hard
 
@@ -10167,7 +10167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:3.7.2, bluebird@npm:^3.3.5, bluebird@npm:^3.5.5":
+"bluebird@npm:^3.3.5, bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 680de03adc54ff925eaa6c7bb9a47a0690e8b5de60f4792604aae8ed618c65e6b63a7893b57ca924beaf53eee69c5af4f8314148c08124c550fe1df1add897d2
@@ -10536,7 +10536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^5.2.1, buffer@npm:^5.5.0, buffer@npm:^5.7.0":
+"buffer@npm:^5.2.1, buffer@npm:^5.5.0, buffer@npm:^5.6.0, buffer@npm:^5.7.0":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
   dependencies:
@@ -12599,18 +12599,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.2.1":
-  version: 9.2.1
-  resolution: "cypress@npm:9.2.1"
+"cypress@npm:9.3.0":
+  version: 9.3.0
+  resolution: "cypress@npm:9.3.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
     "@types/node": ^14.14.31
-    "@types/sinonjs__fake-timers": ^6.0.2
+    "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
     arch: ^2.2.0
     blob-util: ^2.0.2
-    bluebird: 3.7.2
+    bluebird: ^3.7.2
+    buffer: ^5.6.0
     cachedir: ^2.3.0
     chalk: ^4.1.0
     check-more-types: ^2.24.0
@@ -12646,7 +12647,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 8f900f63c94e958896e8c8c7169a6589d39051d94bfc042c85a4ba87933d013236db4b43c4c20358bcce05cb99280486e5816bb834681011dd57e8c4504cf54b
+  checksum: 557e0e66f8d95b789ce57277c6852350e9c67db758675739363c9571adbbb39e8ba484f7c1e465fddf62b9cd3e877a4352af5f22a6ea3f385ed67ffa10c34836
   languageName: node
   linkType: hard
 
@@ -25470,7 +25471,7 @@ resolve@^2.0.0-next.3:
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     core-js: 3.20.3
-    cypress: 9.2.1
+    cypress: 9.3.0
     cypress-wait-until: 1.7.2
     eslint: 8.7.0
     fast-glob: 3.2.11
