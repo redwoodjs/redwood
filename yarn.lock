@@ -5782,7 +5782,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     jest: 27.4.7
     jest-watch-typeahead: 1.0.0
-    msw: 0.36.4
+    msw: 0.36.5
     ts-toolbelt: 9.6.0
     typescript: 4.5.4
     whatwg-fetch: 3.6.2
@@ -21222,9 +21222,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"msw@npm:0.36.4":
-  version: 0.36.4
-  resolution: "msw@npm:0.36.4"
+"msw@npm:0.36.5":
+  version: 0.36.5
+  resolution: "msw@npm:0.36.5"
   dependencies:
     "@mswjs/cookies": ^0.1.6
     "@mswjs/interceptors": ^0.12.7
@@ -21248,7 +21248,7 @@ fsevents@^1.2.7:
     yargs: ^17.3.0
   bin:
     msw: cli/index.js
-  checksum: 926ef2f56992bbe19bc3b0640bc064d15a265ed80f6ce0f912db3ca1e856697bb95a9bca8527b2217e88c1d74b9649af6522ab1c644bf80a9058c3bc683b4dd4
+  checksum: fca1cd53cc40a75f4ad9701e5d9e8c85534ac6267c59106dd18ce9e803193b4debb0049f2bc7133f9f7eb1f9a7434c2bc5ccd876dc525e63a0d8fce62ed0fb1b
   languageName: node
   linkType: hard
 
