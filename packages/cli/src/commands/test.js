@@ -1,5 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
+import fs from 'fs'
+import path from 'path'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
@@ -133,6 +135,12 @@ export const handler = async ({
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
+    if (sides.includes('api')) {
+      if (!fs.existsSync(path.join(rwjsPaths.api.base,'jest.config.js'))) {
+        throw 'DOESNT EXIST'
+      }
+    }
+
     if (sides.includes('api') && dbPush) {
       // Sync||create test database
       await execa(
@@ -158,6 +166,7 @@ export const handler = async ({
     })
   } catch (e) {
     // Errors already shown from execa inherited stderr
+    console.log(e)
     errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
