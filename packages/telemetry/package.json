@@ -1,5 +1,5 @@
 {
-  "name": "@redwoodjs/record",
+  "name": "@redwoodjs/telemetry",
   "version": "0.42.0",
   "files": [
     "dist"
@@ -8,14 +8,15 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.8.1",
-    "@prisma/sdk": "3.8.1",
-    "core-js": "3.20.3"
+    "@babel/runtime-corejs3": "7.16.7",
+    "@redwoodjs/internal": "0.42.0",
+    "@types/envinfo": "7.8.1",
+    "envinfo": "7.8.1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/record"
+    "directory": "packages/telemetry"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
@@ -27,7 +28,6 @@
     ]
   },
   "scripts": {
-    "datamodel:parse": "node src/scripts/parse.js",
     "build": "yarn build:js",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",

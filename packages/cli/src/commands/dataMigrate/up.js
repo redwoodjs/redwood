@@ -6,6 +6,7 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
@@ -173,6 +174,7 @@ export const handler = async () => {
   } catch (e) {
     await db.$disconnect()
     report(counters)
+    errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
 }
