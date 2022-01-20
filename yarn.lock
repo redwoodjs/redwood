@@ -5377,7 +5377,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.10.3
     split2: 4.1.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: 16.2.0
   bin:
     rw-api-server: ./dist/index.js
@@ -5406,7 +5406,7 @@ __metadata:
     pascalcase: 1.0.0
     pino: 7.6.4
     supertokens-node: 8.5.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -5433,7 +5433,7 @@ __metadata:
     nhost-js-sdk: 3.1.0
     react: 17.0.2
     supertokens-auth-react: 0.18.1
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5478,7 +5478,7 @@ __metadata:
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: 16.2.0
   bin:
     redwood: ./dist/index.js
@@ -5565,7 +5565,7 @@ __metadata:
     react-refresh: 0.11.0
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
-    typescript: 4.5.4
+    typescript: 4.5.5
     url-loader: 4.1.1
     webpack: 5.66.0
     webpack-bundle-analyzer: 4.5.0
@@ -5600,7 +5600,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.4.7
     prettier: 2.5.1
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5614,7 +5614,7 @@ __metadata:
     jest: 27.4.7
     pascalcase: 1.0.0
     react-hook-form: 7.24.2
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5651,7 +5651,7 @@ __metadata:
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     node-fetch: 2.6.6
-    typescript: 4.5.4
+    typescript: 4.5.5
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -5699,7 +5699,7 @@ __metadata:
     string-env-interpolation: 1.0.1
     systeminformation: 5.10.5
     toml: 3.0.0
-    typescript: 4.5.4
+    typescript: 4.5.5
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -5723,7 +5723,7 @@ __metadata:
     jest: 27.4.7
     mime-types: 2.1.34
     node-fetch: 2.6.6
-    typescript: 4.5.4
+    typescript: 4.5.5
   peerDependencies:
     react: 17.0.2
     react-dom: 17.0.2
@@ -5756,7 +5756,7 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5788,7 +5788,7 @@ __metadata:
     proxyquire: 2.1.3
     toml: 3.0.0
     ts-morph: 13.0.2
-    typescript: 4.5.4
+    typescript: 4.5.5
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.3
     vscode-languageserver-types: 3.16.0
@@ -5839,7 +5839,7 @@ __metadata:
     jest-watch-typeahead: 1.0.0
     msw: 0.36.5
     ts-toolbelt: 9.6.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -5858,7 +5858,7 @@ __metadata:
     proptypes: 1.1.0
     react-helmet-async: 1.2.2
     react-hot-toast: 2.2.0
-    typescript: 4.5.4
+    typescript: 4.5.5
   peerDependencies:
     react: 17.0.2
   languageName: unknown
@@ -12210,7 +12210,7 @@ __metadata:
     fs-extra: 10.0.0
     jest: 27.4.7
     listr: 0.14.3
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: 16.2.0
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -25441,7 +25441,7 @@ resolve@^2.0.0-next.3:
     ora: 5.4.1
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.5.4
+    typescript: 4.5.5
     typescript-transform-paths: 3.3.1
   languageName: unknown
   linkType: soft
@@ -28185,23 +28185,23 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.5.4":
-  version: 4.5.4
-  resolution: "typescript@npm:4.5.4"
+"typescript@npm:4.5.5":
+  version: 4.5.5
+  resolution: "typescript@npm:4.5.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 4dccd6947e632cc0070653788a3a81051825e9a7acd4c3586124e5a145148bb57b0a401b81d220ac1eb7742a29d5d22fd35af033f839daa60738c3e4fecb5850
+  checksum: ac15b92f3dcd9a4233cab288a913ccbd96729fc488181396fa93c0297ccef3cd3c2f9a7a63340efb0d07bff3d5026028fc81b9c1ef08076029e057081eb5884b
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>":
-  version: 4.5.4
-  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=32657b"
+"typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>":
+  version: 4.5.5
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: b9b36511a3f47d9858ccbb919346ceab0b48ada71ba2ae811233c68b455930f4a676f004120bddff171d588bb47e6110edbf1e2935f47762306253f304fa90e9
+  checksum: dcb18ec2b4064966196d4a8f5ee4e15a22532cb8193fe7e2c14ceb5125835aeff780aa48340a4ab02378cba113875f1b92d50756b39542533ad8871b81edf9f4
   languageName: node
   linkType: hard
 
