@@ -17,6 +17,8 @@ jest.mock('concurrently', () =>
   })
 )
 
+import '../../lib/mockTelemetry'
+
 let mockedRedwoodConfig = {
   api: {},
   web: {},

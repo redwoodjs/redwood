@@ -6,6 +6,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -104,6 +105,7 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
     const exitCode = await typeCheck()
     exitCode > 0 && process.exit(exitCode)
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

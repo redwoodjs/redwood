@@ -1600,7 +1600,7 @@ exports[`in typescript mode creates a show page 1`] = `
 "import PostCell from 'src/components/PostCell'
 
 type PostPageProps = {
-  id: Int
+  id: number
 }
 
 const PostPage = ({ id }: PostPageProps) => {
