@@ -7,7 +7,6 @@ import { handler } from './${name}'
 //           Please refer to the RedwoodJS Testing Docs:
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-
 describe('${name} function', () => {
 
   it('Should respond with 200', async () => {

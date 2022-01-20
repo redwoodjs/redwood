@@ -7,7 +7,6 @@ import ${pascalName}Layout from './${pascalName}Layout'
 //           Please refer to the RedwoodJS Testing Docs:
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-
 describe('${pascalName}Layout', () => {
   it('renders successfully', () => {
     expect(() => {

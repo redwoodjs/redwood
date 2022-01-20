@@ -7,7 +7,6 @@ import ${pascalName}Page from './${pascalName}Page'
 //           Please refer to the RedwoodJS Testing Docs:
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-
 describe('${pascalName}Page', () => {
   it('renders successfully', () => {
     expect(() => {

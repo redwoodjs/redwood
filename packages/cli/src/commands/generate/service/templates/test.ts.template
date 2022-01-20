@@ -20,8 +20,6 @@ import type { StandardScenario } from './${pluralCamelName}.scenarios'
 //           Please refer to the RedwoodJS Testing Docs:
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-
-
 describe('${pluralCamelName}', () => {
   scenario('returns all ${pluralCamelName}', async (scenario: StandardScenario) => {
     const result = await ${pluralCamelName}()
