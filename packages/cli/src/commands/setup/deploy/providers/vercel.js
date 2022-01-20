@@ -1,6 +1,8 @@
 // import terminalLink from 'terminal-link'
 import Listr from 'listr'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import c from '../../../../lib/colors'
 import { printSetupNotes, updateApiURLTask } from '../helpers'
 
@@ -17,6 +19,7 @@ export const handler = async () => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

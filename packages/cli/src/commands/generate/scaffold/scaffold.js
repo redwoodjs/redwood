@@ -330,7 +330,6 @@ const pageFiles = async (
         templatePath: path.join('pages', page),
       }),
       {
-        idType,
         idTsType,
         name,
         pascalScaffoldPath,

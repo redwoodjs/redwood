@@ -40,9 +40,15 @@ const createRedwoodJSApp = () => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
-      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--typescript'],
+      [
+        REDWOOD_PROJECT_DIRECTORY,
+        '--no-yarn-install',
+        '--typescript',
+        '--no-telemetry',
+      ],
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
+        env: { REDWOOD_CI: '1' },
         shell: true,
         stdio: 'inherit',
       }
@@ -139,6 +145,7 @@ const convertProjectToJavaScript = () => {
     execa.sync('yarn rw ts-to-js', {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
+      env: { REDWOOD_CI: '1' },
       stdio: 'inherit',
     })
   } catch (e) {
@@ -156,6 +163,7 @@ const runDevServerInBackground = () => {
     stdio: 'inherit',
     env: {
       RWJS_DELAY_RESTART: '500',
+      REDWOOD_CI: '1',
     },
   })
 }
