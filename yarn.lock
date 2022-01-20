@@ -5650,7 +5650,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.8.7
+    systeminformation: 5.10.5
     toml: 3.0.0
     typescript: 4.5.4
   bin:
@@ -27139,12 +27139,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.8.7":
-  version: 5.8.7
-  resolution: "systeminformation@npm:5.8.7"
+"systeminformation@npm:5.10.5":
+  version: 5.10.5
+  resolution: "systeminformation@npm:5.10.5"
   bin:
     systeminformation: lib/cli.js
-  checksum: be522dd493bfb24e5f204bcc308ed70a7f26bb2dd40f80c4c09c7e9494b4df6e4de4d7753d561d9f84a6395dbfe12de945b8c8d4c83f57711b4e57124045cd6f
+  checksum: 0c40845e513811d458f670eda24d92af6de18746bd40a9176a7dc1c0a8538a517075c06250c64b40d736224c1ddbfd7abd3bbd5f4329bef1d934214da57c85b3
   languageName: node
   linkType: hard
 
