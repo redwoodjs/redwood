@@ -249,17 +249,17 @@ function sortPRs(prs) {
     const labels = pr.labels.nodes.map((label) => label.name)
 
     if (labels.includes('release:feature')) {
-      features.push(`<li>${formatPR(pr)}</li>`)
+      features.push(`- ${formatPR(pr)}`)
       continue
     }
 
     if (labels.includes('release:fix')) {
-      fixed.push(`<li>${formatPR(pr)}</li>`)
+      fixed.push(`- ${formatPR(pr)}`)
       continue
     }
 
     if (labels.includes('release:chore')) {
-      chore.push(`<li>${formatPR(pr)}</li>`)
+      chore.push(`- ${formatPR(pr)}`)
       continue
     }
 
