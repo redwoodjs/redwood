@@ -17,7 +17,7 @@
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "7.6.3",
+    "pino": "7.6.4",
     "uuid": "8.3.2"
   },
   "repository": {
@@ -34,7 +34,7 @@
     "aws-lambda": "1.0.7",
     "jest": "27.4.7",
     "supertokens-node": "8.5.0",
-    "typescript": "4.5.4"
+    "typescript": "4.5.5"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

@@ -1739,6 +1739,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/backend-core@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@clerk/backend-core@npm:0.1.1"
+  dependencies:
+    camelcase-keys: ^7.0.1
+    query-string: ^7.0.1
+    snakecase-keys: ^5.1.2
+  checksum: 147331a756112e1a2561d3558e824e7a94d986d6b473dabea3a3b05997f1b508d8456a2dc9dc1c2de46155c3075f565ce5b67bf8d43c194d501a308b12c6cdcc
+  languageName: node
+  linkType: hard
+
 "@clerk/clerk-js@npm:2.9.0":
   version: 2.9.0
   resolution: "@clerk/clerk-js@npm:2.9.0"
@@ -1759,10 +1770,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.6.3":
-  version: 2.6.3
-  resolution: "@clerk/clerk-sdk-node@npm:2.6.3"
+"@clerk/clerk-sdk-node@npm:2.7.2":
+  version: 2.7.2
+  resolution: "@clerk/clerk-sdk-node@npm:2.7.2"
   dependencies:
+    "@clerk/backend-core": ^0.1.1
+    "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
     deepmerge: ^4.2.2
@@ -1771,7 +1784,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 002de9938a3a33e38fb6a34e50f93be7b8f35329fdc89a644b6559a5b87872e728bc52647a1c246f13ef8b386e5d2c659649623e7059fcc0cf1ada25711e53da
+  checksum: 538b331f82581d26e60619179b52e3932eab5a9189ed9970095aaa8b5bda01259d0183f617f515c241fde5b0ef1e70959905c6a5ed8b3da20c15ff492be6db7e
   languageName: node
   linkType: hard
 
@@ -4990,6 +5003,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@peculiar/asn1-schema@npm:^2.0.44":
+  version: 2.0.44
+  resolution: "@peculiar/asn1-schema@npm:2.0.44"
+  dependencies:
+    "@types/asn1js": ^2.0.2
+    asn1js: ^2.1.1
+    pvtsutils: ^1.2.1
+    tslib: ^2.3.0
+  checksum: e0365e2c405f51aa7816956095a80d28d705157b5c50921737e197e8d4501a75d5caabece6cd4d0e4aef3ebae66b4e51655dbf4c43a146ac9ac8285bd07c43ba
+  languageName: node
+  linkType: hard
+
+"@peculiar/json-schema@npm:^1.1.12":
+  version: 1.1.12
+  resolution: "@peculiar/json-schema@npm:1.1.12"
+  dependencies:
+    tslib: ^2.0.0
+  checksum: 202132c66dcc6b6aca5d0af971c015be2e163da2f7f992910783c5d39c8a7db59b6ec4f4ce419459a1f954b7e1d17b6b253f0e60072c1b3d254079f4eaebc311
+  languageName: node
+  linkType: hard
+
+"@peculiar/webcrypto@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@peculiar/webcrypto@npm:1.2.3"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.0.44
+    "@peculiar/json-schema": ^1.1.12
+    pvtsutils: ^1.2.1
+    tslib: ^2.3.1
+    webcrypto-core: ^1.4.0
+  checksum: ce9871ff96cb065c1b0ef99803c3313ba43a7d993c28c7655eedd1b7acbc022a51d1299ab38c0dee0ff75c7328e2b6aca4927addd74c7ea4d7618ca20871b3e5
+  languageName: node
+  linkType: hard
+
 "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.4, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.1":
   version: 0.5.4
   resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.4"
@@ -5330,7 +5377,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.10.3
     split2: 4.1.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: 16.2.0
   bin:
     rw-api-server: ./dist/index.js
@@ -5357,9 +5404,9 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 7.6.3
+    pino: 7.6.4
     supertokens-node: 8.5.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -5372,7 +5419,7 @@ __metadata:
     "@azure/msal-browser": 2.21.0
     "@babel/cli": 7.16.7
     "@clerk/clerk-js": 2.9.0
-    "@clerk/clerk-sdk-node": 2.6.3
+    "@clerk/clerk-sdk-node": 2.7.2
     "@clerk/types": 1.22.0
     "@supabase/supabase-js": 1.29.2
     "@types/netlify-identity-widget": 1.9.2
@@ -5386,7 +5433,7 @@ __metadata:
     nhost-js-sdk: 3.1.0
     react: 17.0.2
     supertokens-auth-react: 0.18.1
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5431,7 +5478,7 @@ __metadata:
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: 16.2.0
   bin:
     redwood: ./dist/index.js
@@ -5499,7 +5546,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     babel-plugin-module-resolver: 4.1.0
     babel-timing: 0.9.1
-    copy-webpack-plugin: 10.2.0
+    copy-webpack-plugin: 10.2.1
     core-js: 3.20.3
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.4.1
@@ -5518,7 +5565,7 @@ __metadata:
     react-refresh: 0.11.0
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
-    typescript: 4.5.4
+    typescript: 4.5.5
     url-loader: 4.1.1
     webpack: 5.66.0
     webpack-bundle-analyzer: 4.5.0
@@ -5553,7 +5600,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.4.7
     prettier: 2.5.1
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5566,8 +5613,8 @@ __metadata:
     core-js: 3.20.3
     jest: 27.4.7
     pascalcase: 1.0.0
-    react-hook-form: 7.24.1
-    typescript: 4.5.4
+    react-hook-form: 7.24.2
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5604,7 +5651,7 @@ __metadata:
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     node-fetch: 2.6.6
-    typescript: 4.5.4
+    typescript: 4.5.5
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -5652,7 +5699,7 @@ __metadata:
     string-env-interpolation: 1.0.1
     systeminformation: 5.10.5
     toml: 3.0.0
-    typescript: 4.5.4
+    typescript: 4.5.5
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -5676,7 +5723,7 @@ __metadata:
     jest: 27.4.7
     mime-types: 2.1.34
     node-fetch: 2.6.6
-    typescript: 4.5.4
+    typescript: 4.5.5
   peerDependencies:
     react: 17.0.2
     react-dom: 17.0.2
@@ -5709,7 +5756,7 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -5741,7 +5788,7 @@ __metadata:
     proxyquire: 2.1.3
     toml: 3.0.0
     ts-morph: 13.0.2
-    typescript: 4.5.4
+    typescript: 4.5.5
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.3
     vscode-languageserver-types: 3.16.0
@@ -5792,7 +5839,7 @@ __metadata:
     jest-watch-typeahead: 1.0.0
     msw: 0.36.5
     ts-toolbelt: 9.6.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -5811,7 +5858,7 @@ __metadata:
     proptypes: 1.1.0
     react-helmet-async: 1.2.2
     react-hot-toast: 2.2.0
-    typescript: 4.5.4
+    typescript: 4.5.5
   peerDependencies:
     react: 17.0.2
   languageName: unknown
@@ -6939,6 +6986,13 @@ __metadata:
   version: 4.2.2
   resolution: "@types/aria-query@npm:4.2.2"
   checksum: 6dc0d94890c2c7c2e347148ea32215b73bf480e0f0888a9bbfb7b531285a3daf0b95e600db5be1c03d6e5f825d63cf8c2aabc5db93d8d1fd47ce3211f73e8d66
+  languageName: node
+  linkType: hard
+
+"@types/asn1js@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@types/asn1js@npm:2.0.2"
+  checksum: dd7047e7654c6095334ed085ca1da8c2444342091572c89552da81d63081fd4c192f3d083a7f69be197d1c62c87a4d140e6a10f4da05022dae190f735196ef49
   languageName: node
   linkType: hard
 
@@ -9354,6 +9408,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"asn1js@npm:^2.1.1":
+  version: 2.2.0
+  resolution: "asn1js@npm:2.2.0"
+  dependencies:
+    pvutils: latest
+  checksum: 3ef8524b287609b9959b5a05da32a28b7edbf370dca2c66d78b92d3bb33a0b8f727df6d6dd06a8f4e0d9a64cc55da2361e0f4b421091a109c97981f2f2375323
+  languageName: node
+  linkType: hard
+
 "assert-plus@npm:1.0.0, assert-plus@npm:^1.0.0":
   version: 1.0.0
   resolution: "assert-plus@npm:1.0.0"
@@ -10761,6 +10824,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"camelcase-keys@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "camelcase-keys@npm:7.0.1"
+  dependencies:
+    camelcase: ^6.2.0
+    map-obj: ^4.1.0
+    quick-lru: ^5.1.1
+    type-fest: ^1.2.1
+  checksum: a1b283df212e6972e82a23505c2d2b77e9fc501447add1df07fc2d4d9e5a8707c356b796ee26f63fa466acd50bc554d860565c3595411af0ab10ce4c8502de91
+  languageName: node
+  linkType: hard
+
 "camelcase@npm:6.3.0, camelcase@npm:^6.2.0":
   version: 6.3.0
   resolution: "camelcase@npm:6.3.0"
@@ -11929,9 +12004,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:10.2.0":
-  version: 10.2.0
-  resolution: "copy-webpack-plugin@npm:10.2.0"
+"copy-webpack-plugin@npm:10.2.1":
+  version: 10.2.1
+  resolution: "copy-webpack-plugin@npm:10.2.1"
   dependencies:
     fast-glob: ^3.2.7
     glob-parent: ^6.0.1
@@ -11941,7 +12016,7 @@ __metadata:
     serialize-javascript: ^6.0.0
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 0837a2dee70db8025cfe64f00559d0270a64c4494e46dd0119a09f74a4500b98e17407ed8894e82d8889960b3985a3cbef1e3b1c4508b3ac330cc110b3e5116f
+  checksum: 90133a92b579f14401d1db026abd5f643c61edd04457722795eb5ee77f3a446bbf05a54904bb93f4e623b0835dad81dacabc825539907247c68e11ea122d0b8b
   languageName: node
   linkType: hard
 
@@ -12135,7 +12210,7 @@ __metadata:
     fs-extra: 10.0.0
     jest: 27.4.7
     listr: 0.14.3
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: 16.2.0
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -22873,9 +22948,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino@npm:7.6.3":
-  version: 7.6.3
-  resolution: "pino@npm:7.6.3"
+"pino@npm:7.6.4":
+  version: 7.6.4
+  resolution: "pino@npm:7.6.4"
   dependencies:
     fast-redact: ^3.0.0
     on-exit-leak-free: ^0.2.0
@@ -22889,7 +22964,7 @@ fsevents@^1.2.7:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: e597ee2a66e7be406ff1c209f2e14161e31b3c503d4e639634180235859a9965928ac98a367e577d326b537322cd0e641db94fa1e532436895625a259b37f7d6
+  checksum: fa772e925c5da622fda1ddb3828d4b9243ef7dba8288cbec94e91d6c24cd5d6b8490822eedeae37aa0ba415520a3b05dcea4f5f09b0ab54ba7538f4b49d25cb5
   languageName: node
   linkType: hard
 
@@ -23927,6 +24002,22 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"pvtsutils@npm:^1.2.0, pvtsutils@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "pvtsutils@npm:1.2.1"
+  dependencies:
+    tslib: ^2.3.1
+  checksum: 94dd43c7b26c616bb14863c815b98546b146f2a1be06f069e89e5c3f426bb1460b2f449b9679ad6b13e9bf242efb2314580162c52480d29697a17ebafc45d2f7
+  languageName: node
+  linkType: hard
+
+"pvutils@npm:latest":
+  version: 1.0.17
+  resolution: "pvutils@npm:1.0.17"
+  checksum: 08cabce61a8bee953340439189784f18d7c7ab0705e60436100b24351ca21cbfdabab5ddf107544111200e7b885a2a6f45d2f5ad9a2abe658a3e93f83be6eef2
+  languageName: node
+  linkType: hard
+
 "q@npm:^1.5.1":
   version: 1.5.1
   resolution: "q@npm:1.5.1"
@@ -23984,6 +24075,18 @@ fsevents@^1.2.7:
     split-on-first: ^1.0.0
     strict-uri-encode: ^2.0.0
   checksum: 900e0fa788000e9dc5f929b6f4141742dcf281f02d3bab9714bc83bea65fab3de75169ea8d61f19cda996bc0dcec72e156efe3c5614c6bce65dcf234ac955b14
+  languageName: node
+  linkType: hard
+
+"query-string@npm:^7.0.1":
+  version: 7.1.0
+  resolution: "query-string@npm:7.1.0"
+  dependencies:
+    decode-uri-component: ^0.2.0
+    filter-obj: ^1.1.0
+    split-on-first: ^1.0.0
+    strict-uri-encode: ^2.0.0
+  checksum: 2dba7b649845fb99caa0cfa16d9f7cf8d69773458deb8b6b13826c17b198703c48894605b9f6314c71ffd08b9bc697c2637193db08219121a4b40859541ea012
   languageName: node
   linkType: hard
 
@@ -24207,12 +24310,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.24.1":
-  version: 7.24.1
-  resolution: "react-hook-form@npm:7.24.1"
+"react-hook-form@npm:7.24.2":
+  version: 7.24.2
+  resolution: "react-hook-form@npm:7.24.2"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: fa7e07d224c1b7bccc33b2c15a6ce7944f61fda50af774e85e0368808d770bd9deb5a68243669a1381ada574945ffc0cc0327354843845dc6088ca7a6b567fda
+  checksum: 1274f0bfab75895ce0aa6ca9e5bd2c5a8bea6979332ce58416ce856c0273e08328931ad907c51f57acaf6380f9cb6929d86bc5559288d344c12169a6f331b282
   languageName: node
   linkType: hard
 
@@ -25338,7 +25441,7 @@ resolve@^2.0.0-next.3:
     ora: 5.4.1
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.5.4
+    typescript: 4.5.5
     typescript-transform-paths: 3.3.1
   languageName: unknown
   linkType: soft
@@ -26060,6 +26163,17 @@ resolve@^2.0.0-next.3:
     map-obj: ^4.1.0
     to-snake-case: ^1.0.0
   checksum: ead9fda98fe2ff2ec03b2169867a695c4c8cd2d624025fcaa24df68733c92a6de0a1e070e2b6b490b41ced7f2e0ad47256245c6f05e045acba7e76061731198c
+  languageName: node
+  linkType: hard
+
+"snakecase-keys@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "snakecase-keys@npm:5.1.2"
+  dependencies:
+    map-obj: ^4.1.0
+    snake-case: ^3.0.4
+    type-fest: ^2.5.2
+  checksum: 653536802645641a8665320991965143858cf9ad81f2cdfd8a6587c36edac98f62d6fdd03f453c0db3ee78978475e317239f2f8f5fe2d22ca9c9210fc71e9bf3
   languageName: node
   linkType: hard
 
@@ -28006,10 +28120,17 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^1.2.2":
+"type-fest@npm:^1.2.1, type-fest@npm:^1.2.2":
   version: 1.4.0
   resolution: "type-fest@npm:1.4.0"
   checksum: a3c0f4ee28ff6ddf800d769eafafcdeab32efa38763c1a1b8daeae681920f6e345d7920bf277245235561d8117dab765cb5f829c76b713b4c9de0998a5397141
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^2.5.2":
+  version: 2.10.0
+  resolution: "type-fest@npm:2.10.0"
+  checksum: f752a22fe69043d781af6f59c539eac17e3f23f340a5b399e84b736bd4d22a1efb38cfe1fd121a8b4c60390609285d5bd58eb9e19face6d39dfa65ad8add0b3d
   languageName: node
   linkType: hard
 
@@ -28064,23 +28185,23 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.5.4":
-  version: 4.5.4
-  resolution: "typescript@npm:4.5.4"
+"typescript@npm:4.5.5":
+  version: 4.5.5
+  resolution: "typescript@npm:4.5.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 4dccd6947e632cc0070653788a3a81051825e9a7acd4c3586124e5a145148bb57b0a401b81d220ac1eb7742a29d5d22fd35af033f839daa60738c3e4fecb5850
+  checksum: ac15b92f3dcd9a4233cab288a913ccbd96729fc488181396fa93c0297ccef3cd3c2f9a7a63340efb0d07bff3d5026028fc81b9c1ef08076029e057081eb5884b
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>":
-  version: 4.5.4
-  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=32657b"
+"typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>":
+  version: 4.5.5
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: b9b36511a3f47d9858ccbb919346ceab0b48ada71ba2ae811233c68b455930f4a676f004120bddff171d588bb47e6110edbf1e2935f47762306253f304fa90e9
+  checksum: dcb18ec2b4064966196d4a8f5ee4e15a22532cb8193fe7e2c14ceb5125835aeff780aa48340a4ab02378cba113875f1b92d50756b39542533ad8871b81edf9f4
   languageName: node
   linkType: hard
 
@@ -29081,6 +29202,19 @@ resolve@^2.0.0-next.3:
     randombytes: ^2.1.0
     utf8: 3.0.0
   checksum: db4f18054b9bb0d6bd3ff18997bd83dacc2f214532478935ee1ac900910fdbc4305094dc9d78bed504e22fc4960b0d045c75f20531d725e7d405f64ac197d790
+  languageName: node
+  linkType: hard
+
+"webcrypto-core@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "webcrypto-core@npm:1.4.0"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.0.44
+    "@peculiar/json-schema": ^1.1.12
+    asn1js: ^2.1.1
+    pvtsutils: ^1.2.0
+    tslib: ^2.3.1
+  checksum: 7890b1da534f31fc762cd0587fed8471a6c3a6a4d76cdae48f2e9a9a80ac044c274c3858f7261a4d77c3bfd2d27a735cc4f7c2e759a7c8e49e736dee82cbd656
   languageName: node
   linkType: hard
 
