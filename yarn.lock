@@ -5357,7 +5357,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
-    "@types/aws-lambda": 8.10.90
+    "@types/aws-lambda": 8.10.91
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -5826,7 +5826,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
-    "@types/aws-lambda": 8.10.90
+    "@types/aws-lambda": 8.10.91
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.0
     "@types/node": 16.11.21
@@ -6998,10 +6998,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.90, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.90
-  resolution: "@types/aws-lambda@npm:8.10.90"
-  checksum: 4312aa435e2bad9bb6c5f34dce00e34de14a239d56bd6826e931155723f8de3756a2d79c21ce5e5cbae7c75c34885ca6faa0e5d1828fa919c9871b2424d121ce
+"@types/aws-lambda@npm:8.10.91, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.91
+  resolution: "@types/aws-lambda@npm:8.10.91"
+  checksum: 196c90ec8d219a978f182cbf4bfa8c19408789e22a06c527a373ed2e22769bef846434221e0627cc92f2f2151fedafcc95f035380833b7ee61623ffc7dc1ad91
   languageName: node
   linkType: hard
 
