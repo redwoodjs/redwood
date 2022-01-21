@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
     "@types/lodash.isequal": "4.5.5",
     "jest": "27.4.7",
     "prop-types": "15.8.1",

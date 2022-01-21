@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
     "jest": "27.4.7"
   },
   "jest": {
