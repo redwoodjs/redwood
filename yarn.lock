@@ -5819,7 +5819,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/node-fetch": 2.5.12
     "@types/uuid": 8.3.4
-    "@types/yargs": ^16
+    "@types/yargs": 16.0.4
     ci-info: ^3.3.0
     envinfo: 7.8.1
     jest: 27.4.7
@@ -8093,7 +8093,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^16, @types/yargs@npm:^16.0.0":
+"@types/yargs@npm:16.0.4, @types/yargs@npm:^16.0.0":
   version: 16.0.4
   resolution: "@types/yargs@npm:16.0.4"
   dependencies:
