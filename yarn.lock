@@ -5574,7 +5574,7 @@ __metadata:
     svg-react-loader: 0.4.6
     typescript: 4.5.5
     url-loader: 4.1.1
-    webpack: 5.66.0
+    webpack: 5.67.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.1
     webpack-dev-server: 4.7.3
@@ -29474,10 +29474,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-sources@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "webpack-sources@npm:3.2.2"
-  checksum: e81f67534caf5e01b6ed8d8ca03a463eca23ec1fc6ed7d92445b0c8b88283efb05446737505b75da69457b03d83a6ad3788efc4c2a0b37243371df6a9a4b4736
+"webpack-sources@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "webpack-sources@npm:3.2.3"
+  checksum: 2ef63d77c4fad39de4a6db17323d75eb92897b32674e97d76f0a1e87c003882fc038571266ad0ef581ac734cbe20952912aaa26155f1905e96ce251adbb1eb4e
   languageName: node
   linkType: hard
 
@@ -29535,9 +29535,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.66.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.66.0
-  resolution: "webpack@npm:5.66.0"
+"webpack@npm:5.67.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.67.0
+  resolution: "webpack@npm:5.67.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -29562,13 +29562,13 @@ resolve@^2.0.0-next.3:
     tapable: ^2.1.1
     terser-webpack-plugin: ^5.1.3
     watchpack: ^2.3.1
-    webpack-sources: ^3.2.2
+    webpack-sources: ^3.2.3
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: a402de8fa7999f6207de2397eaf2d88cef19dd9edd48d36eec6dc3c4da53d435e48e513ef8b1a55cd8747d0187c62a4b617ebcbb4d1578b6c8f3a67fc2f72714
+  checksum: 0a0d2024de50759e02960a942a4f0e1580a9ddc52c59ac7221b50eff96e51b946ae050cfb9b5f90dff84da4b0e088d6ae8ee2e87bd45eb1b0ecccedd5c4a2794
   languageName: node
   linkType: hard
 
