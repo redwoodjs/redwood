@@ -11,18 +11,19 @@ generator client {
 // migrations for them.
 
 model Post {
-  id       Int       @id @default(autoincrement())
-  title    String
-  slug     String    @unique
-  author   String
-  body     String
-  image    String?
-  isPinned Boolean   @default(false)
-  readTime Int
-  rating   Float?
-  postedAt DateTime?
-  metadata Json
-  favorites Favorite[]
+  id         Int         @id @default(autoincrement())
+  title      String
+  slug       String      @unique
+  author     String
+  body       String
+  image      String?
+  isPinned   Boolean     @default(false)
+  readTime   Int
+  rating     Float?
+  postedAt   DateTime?
+  metadata   Json
+  hugeNumber BigInt      @default(9007199254740992)
+  favorites  Favorite[]
 }
 
 model User {

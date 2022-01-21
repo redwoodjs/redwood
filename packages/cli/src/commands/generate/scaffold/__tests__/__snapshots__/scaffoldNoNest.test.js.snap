@@ -213,6 +213,23 @@ const PostForm = (props) => {
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
+        <Label
+          name=\\"hugeNumber\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Huge number
+        </Label>
+        <TextField
+          name=\\"hugeNumber\\"
+          defaultValue={props.post?.hugeNumber}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
+        />
+
+        <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
+
         <div className=\\"rw-button-group\\">
           <Submit disabled={props.loading} className=\\"rw-button rw-button-blue\\">
             Save
@@ -344,6 +361,7 @@ export const QUERY = gql\`
       rating
       postedAt
       metadata
+      hugeNumber
     }
   }
 \`
@@ -465,6 +483,10 @@ const Post = ({ post }) => {
             <tr>
               <th>Metadata</th>
               <td>{jsonDisplay(post.metadata)}</td>
+            </tr>
+            <tr>
+              <th>Huge number</th>
+              <td>{post.hugeNumber}</td>
             </tr>
           </tbody>
         </table>
@@ -949,6 +971,7 @@ export const QUERY = gql\`
       rating
       postedAt
       metadata
+      hugeNumber
     }
   }
 \`
@@ -1054,6 +1077,7 @@ const PostsList = ({ posts }) => {
             <th>Rating</th>
             <th>Posted at</th>
             <th>Metadata</th>
+            <th>Huge number</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -1071,6 +1095,7 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.rating)}</td>
               <td>{timeTag(post.postedAt)}</td>
               <td>{jsonTruncate(post.metadata)}</td>
+              <td>{truncate(post.hugeNumber)}</td>
               <td>
                 <nav className=\\"rw-table-actions\\">
                   <Link
@@ -1316,6 +1341,22 @@ const PostForm = (props) => {
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
+        <Label
+          name=\\"hugeNumber\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Huge number
+        </Label>
+        <TextField
+          name=\\"hugeNumber\\"
+          defaultValue={props.post?.hugeNumber}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
+        />
+        <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
+
         <div className=\\"rw-button-group\\">
           <Submit
             disabled={props.loading}
@@ -1460,6 +1501,7 @@ export const QUERY = gql\`
       rating
       postedAt
       metadata
+      hugeNumber
     }
   }
 \`
@@ -1569,6 +1611,9 @@ const Post = ({ post }) => {
             </tr><tr>
               <th>Metadata</th>
               <td>{jsonDisplay(post.metadata)}</td>
+            </tr><tr>
+              <th>Huge number</th>
+              <td>{post.hugeNumber}</td>
             </tr>
           </tbody>
         </table>
@@ -1985,6 +2030,7 @@ export const QUERY = gql\`
       rating
       postedAt
       metadata
+      hugeNumber
     }
   }
 \`
@@ -2002,6 +2048,7 @@ const UPDATE_POST_MUTATION = gql\`
       rating
       postedAt
       metadata
+      hugeNumber
     }
   }
 \`
@@ -2128,6 +2175,7 @@ export const QUERY = gql\`
       rating
       postedAt
       metadata
+      hugeNumber
     }
   }
 \`
@@ -2236,6 +2284,7 @@ const PostsList = ({ posts }) => {
             <th>Rating</th>
             <th>Posted at</th>
             <th>Metadata</th>
+            <th>Huge number</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -2253,6 +2302,7 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.rating)}</td>
               <td>{timeTag(post.postedAt)}</td>
               <td>{jsonTruncate(post.metadata)}</td>
+              <td>{truncate(post.hugeNumber)}</td>
               <td>
                 <nav className=\\"rw-table-actions\\">
                   <Link
