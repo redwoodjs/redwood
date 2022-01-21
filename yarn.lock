@@ -5356,6 +5356,7 @@ __metadata:
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
     "@types/aws-lambda": 8.10.91
     "@types/lodash.escape": 4.0.6
@@ -5391,6 +5392,7 @@ __metadata:
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@prisma/client": 3.8.1
     "@redwoodjs/auth": 0.42.0
@@ -5418,6 +5420,7 @@ __metadata:
     "@auth0/auth0-spa-js": 1.19.4
     "@azure/msal-browser": 2.21.0
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.10.0
     "@clerk/clerk-sdk-node": 2.7.2
     "@clerk/types": 1.23.0
@@ -5442,6 +5445,7 @@ __metadata:
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@prisma/sdk": 3.8.1
     "@redwoodjs/api-server": 0.42.0
     "@redwoodjs/internal": 0.42.0
@@ -5609,6 +5613,7 @@ __metadata:
   resolution: "@redwoodjs/forms@workspace:packages/forms"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@types/pascalcase": 1.0.1
     core-js: 3.20.3
     jest: 27.4.7
@@ -5623,6 +5628,7 @@ __metadata:
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@envelop/core": 1.7.1
     "@envelop/depth-limit": 1.2.1
     "@envelop/disable-introspection": 2.0.0
@@ -5661,6 +5667,7 @@ __metadata:
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@babel/parser": 7.16.7
     "@babel/plugin-transform-typescript": 7.16.7
     "@babel/register": 7.16.7
@@ -5711,6 +5718,7 @@ __metadata:
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@redwoodjs/auth": 0.42.0
     "@redwoodjs/internal": 0.42.0
     "@redwoodjs/router": 0.42.0
@@ -5735,6 +5743,7 @@ __metadata:
   resolution: "@redwoodjs/record@workspace:packages/record"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@prisma/client": 3.8.1
     "@prisma/sdk": 3.8.1
     core-js: 3.20.3
@@ -5747,6 +5756,7 @@ __metadata:
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 0.42.0
     "@types/lodash.isequal": 4.5.5
@@ -5765,6 +5775,7 @@ __metadata:
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@prisma/sdk": 3.8.1
     "@redwoodjs/internal": 0.42.0
     "@types/fs-extra": 9.0.13
@@ -5801,11 +5812,21 @@ __metadata:
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/internal": 0.42.0
+    "@redwoodjs/structure": 0.42.0
     "@types/envinfo": 7.8.1
+    "@types/node-fetch": 2.5.12
+    "@types/uuid": 8.3.4
+    "@types/yargs": ^16
+    ci-info: ^3.3.0
     envinfo: 7.8.1
     jest: 27.4.7
+    node-fetch: 2.6.6
+    systeminformation: 5.10.7
+    uuid: 8.3.2
+    yargs: 16.2.0
   languageName: unknown
   linkType: soft
 
@@ -5814,6 +5835,7 @@ __metadata:
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@redwoodjs/auth": 0.42.0
     "@redwoodjs/graphql-server": 0.42.0
     "@redwoodjs/internal": 0.42.0
@@ -5850,6 +5872,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.5.7
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@redwoodjs/auth": 0.42.0
     "@types/react": 17.0.38
     core-js: 3.20.3
@@ -8070,7 +8093,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^16.0.0":
+"@types/yargs@npm:^16, @types/yargs@npm:^16.0.0":
   version: 16.0.4
   resolution: "@types/yargs@npm:16.0.4"
   dependencies:
@@ -11196,7 +11219,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:^3.2.0":
+"ci-info@npm:^3.2.0, ci-info@npm:^3.3.0":
   version: 3.3.0
   resolution: "ci-info@npm:3.3.0"
   checksum: f23ec1b3c4717abb5fb9934fe0ab6db621cf767abd3832f07af2803e4809d21908d8b87321de4b79861dfe8105c08dba1803a9fb6346d5586b0c57db2bfbce3b
@@ -12202,6 +12225,7 @@ __metadata:
   resolution: "create-redwood-app@workspace:packages/create-redwood-app"
   dependencies:
     "@babel/cli": 7.16.7
+    "@babel/core": 7.16.7
     "@babel/node": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/internal": 0.42.0
