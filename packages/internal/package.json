@@ -22,7 +22,7 @@
     "@babel/register": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@babel/traverse": "7.16.7",
-    "@graphql-codegen/cli": "2.3.1",
+    "@graphql-codegen/cli": "2.4.0",
     "@graphql-codegen/core": "2.4.0",
     "@graphql-codegen/schema-ast": "2.4.1",
     "@graphql-codegen/typescript": "2.4.2",
