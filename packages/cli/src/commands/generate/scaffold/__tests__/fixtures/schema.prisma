@@ -23,6 +23,7 @@ model Post {
   rating     Float?
   upvotes    Int         @default(0)
   metadata   Json
+  hugeNumber BigInt      @default(9007199254740992)
   favorites  Favorite[]
 }
 
