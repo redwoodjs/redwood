@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
     "@redwoodjs/auth": "0.42.0",
     "@types/crypto-js": "4.1.0",
     "@types/jsonwebtoken": "8.5.8",

@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
     "@types/babel-plugin-tester": "9.0.4",
     "@types/babel__core": "7.1.18",
     "@types/findup-sync": "4.0.2",
