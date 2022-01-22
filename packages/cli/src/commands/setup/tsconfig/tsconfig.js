@@ -3,6 +3,8 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import {
   getInstalledRedwoodVersion,
   getPaths,
@@ -70,6 +72,7 @@ export const handler = async ({ force }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

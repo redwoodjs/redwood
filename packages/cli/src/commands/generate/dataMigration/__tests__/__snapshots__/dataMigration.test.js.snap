@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can generate a TS file with expected contents 1`] = `
+"import type { PrismaClient } from '@prisma/client'
+
+export default async ({ db }: { db: PrismaClient }) => {
+  // Migration here...
+}
+"
+`;
+
+exports[`creates a JS file with expected contents 1`] = `
+"/**
+ * @typedef { import(\\"@prisma/client\\").PrismaClient } PrismaClient
+ * @param {{db: PrismaClient}} db
+ */
+export default async ({ db }) => {
+  // Migration here...
+}
+"
+`;

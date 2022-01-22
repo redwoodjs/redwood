@@ -1,16 +1,16 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.41.0",
+  "version": "0.42.1",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "7.16.7",
     "@babel/eslint-parser": "7.16.5",
     "@babel/eslint-plugin": "7.16.5",
-    "@redwoodjs/internal": "0.41.0",
-    "@typescript-eslint/eslint-plugin": "5.9.1",
-    "@typescript-eslint/parser": "5.9.1",
-    "eslint": "8.6.0",
+    "@redwoodjs/internal": "0.42.1",
+    "@typescript-eslint/eslint-plugin": "5.10.0",
+    "@typescript-eslint/parser": "5.10.0",
+    "eslint": "8.7.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-babel-module": "5.3.1",
     "eslint-plugin-babel": "5.3.1",
@@ -34,6 +34,6 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "jest": "27.4.7",
-    "typescript": "4.5.4"
+    "typescript": "4.5.5"
   }
 }
