@@ -5602,7 +5602,7 @@ __metadata:
     core-js: 3.20.3
     jest: 27.4.7
     pascalcase: 1.0.0
-    react-hook-form: 7.24.2
+    react-hook-form: 7.25.0
     typescript: 4.5.5
   languageName: unknown
   linkType: soft
@@ -24320,12 +24320,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.24.2":
-  version: 7.24.2
-  resolution: "react-hook-form@npm:7.24.2"
+"react-hook-form@npm:7.25.0":
+  version: 7.25.0
+  resolution: "react-hook-form@npm:7.25.0"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: 1274f0bfab75895ce0aa6ca9e5bd2c5a8bea6979332ce58416ce856c0273e08328931ad907c51f57acaf6380f9cb6929d86bc5559288d344c12169a6f331b282
+  checksum: f24f9cd10c8f9127a21d81ded58e29a9b19815021b8ac41c4b7aa7c5fa88d4844b8fde5857c9a0a5df5a955afc8d8668abe320b8fe54398ae012224c1b7d7a7c
   languageName: node
   linkType: hard
 
