@@ -27279,15 +27279,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.10.7":
-  version: 5.10.7
-  resolution: "systeminformation@npm:5.10.7"
-  bin:
-    systeminformation: lib/cli.js
-  checksum: f8e2c9d9553e9ce8bd6b40137f1ad14055b7a7cc5fca3144c8c9b4b7ef5e5ed9f615e1489acf239fa39cb7d5d85db2e83113fad15efc1f576267d50b01cd4ad9
-  languageName: node
-  linkType: hard
-
 "tapable@npm:^1.0.0, tapable@npm:^1.1.3":
   version: 1.1.3
   resolution: "tapable@npm:1.1.3"
