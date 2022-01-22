@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.41.0",
+  "version": "0.42.1",
   "files": [
     "dist"
   ],
@@ -11,7 +11,7 @@
     "@types/pascalcase": "1.0.1",
     "core-js": "3.20.3",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.24.1"
+    "react-hook-form": "7.24.2"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "devDependencies": {
     "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
     "jest": "27.4.7",
-    "typescript": "4.5.4"
+    "typescript": "4.5.5"
   }
 }

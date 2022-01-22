@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.41.0",
+  "version": "0.42.1",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -18,11 +18,11 @@
   ],
   "dependencies": {
     "@prisma/sdk": "3.8.1",
-    "@redwoodjs/api-server": "0.41.0",
-    "@redwoodjs/internal": "0.41.0",
-    "@redwoodjs/prerender": "0.41.0",
-    "@redwoodjs/structure": "0.41.0",
-    "@redwoodjs/telemetry": "0.41.0",
+    "@redwoodjs/api-server": "0.42.1",
+    "@redwoodjs/internal": "0.42.1",
+    "@redwoodjs/prerender": "0.42.1",
+    "@redwoodjs/structure": "0.42.1",
+    "@redwoodjs/telemetry": "0.42.1",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
@@ -54,10 +54,11 @@
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
     "@types/listr": "0.14.4",
     "@types/node-fetch": "2.5.12",
     "jest": "27.4.7",
-    "typescript": "4.5.4"
+    "typescript": "4.5.5"
   },
   "scripts": {
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
