@@ -2380,13 +2380,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app-types@npm:0.6.3":
-  version: 0.6.3
-  resolution: "@firebase/app-types@npm:0.6.3"
-  checksum: ab92292cec9dab0f45ae27f522be968713fa0ef76e77afa39182c53f90dd9c43727d40725f0a6c8bc33ea32bf9ee7d13b55c5faa11fcbe3afc069b372755679c
-  languageName: node
-  linkType: hard
-
 "@firebase/app-types@npm:0.7.0":
   version: 0.7.0
   resolution: "@firebase/app-types@npm:0.7.0"
@@ -2485,22 +2478,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-types@npm:0.9.4":
+"@firebase/database-types@npm:0.9.4, @firebase/database-types@npm:^0.9.3":
   version: 0.9.4
   resolution: "@firebase/database-types@npm:0.9.4"
   dependencies:
     "@firebase/app-types": 0.7.0
     "@firebase/util": 1.4.3
   checksum: 440f6cfcaef0cc4a115651d5c493395a4edb3ff3762975ae952468dcf7ae5d8886dfce9053ee6899d4400cbee522b7709caf2d04da3d7b83916c2cc81021df3b
-  languageName: node
-  linkType: hard
-
-"@firebase/database-types@npm:^0.7.2":
-  version: 0.7.3
-  resolution: "@firebase/database-types@npm:0.7.3"
-  dependencies:
-    "@firebase/app-types": 0.6.3
-  checksum: f50a1298dda46329dd9832daf9a41b0fb14caeb1386d2b219e1a51a35ba73b0a748a5fa3005a5af697e94cd5eb06da4202635073fc341f665d391c4b18531d65
   languageName: node
   linkType: hard
 
@@ -5428,7 +5412,7 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.38
     firebase: 9.6.4
-    firebase-admin: 10.0.1
+    firebase-admin: 10.0.2
     gotrue-js: 0.9.29
     jest: 27.4.7
     magic-sdk: 7.0.0
@@ -15419,25 +15403,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:10.0.1":
-  version: 10.0.1
-  resolution: "firebase-admin@npm:10.0.1"
+"firebase-admin@npm:10.0.2":
+  version: 10.0.2
+  resolution: "firebase-admin@npm:10.0.2"
   dependencies:
     "@firebase/database-compat": ^0.1.1
-    "@firebase/database-types": ^0.7.2
+    "@firebase/database-types": ^0.9.3
     "@google-cloud/firestore": ^4.5.0
     "@google-cloud/storage": ^5.3.0
     "@types/node": ">=12.12.47"
     dicer: ^0.3.0
     jsonwebtoken: ^8.5.1
     jwks-rsa: ^2.0.2
-    node-forge: ^0.10.0
+    node-forge: ^1.0.0
   dependenciesMeta:
     "@google-cloud/firestore":
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: 7dca3a7b05b07b9b10d01f28cd8ce340b607dadf2c1924ae78fb097893e544bf6e27259038ffe941760a648486a387e719421f57a0b06e6e104d0ccab25b0169
+  checksum: db873323dd2c7d627366040172d6498948968f5ad10115dc754686e852c1d4c0b55de4ceaee9b175ed16d45501ccf4ad7fd3104da15bf9810104c055c9842187
   languageName: node
   linkType: hard
 
@@ -21469,10 +21453,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-forge@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "node-forge@npm:1.2.0"
-  checksum: ad9a0a0b6595f2575250c5f4102692dcae2e04686e779ff509691f60abbf8b864367e63e5cdb78b8857bca608f422abede268266d306407d1dbc5c9b04c19ac3
+"node-forge@npm:^1.0.0, node-forge@npm:^1.2.0":
+  version: 1.2.1
+  resolution: "node-forge@npm:1.2.1"
+  checksum: 0563bef5c6abfd031018ebd9cae41432811faef0b25ca7651489fb5f946250c3f8c433f42e76e9fd98f0d7617c12b700f8cbea134a1d284df84f8104c79127c0
   languageName: node
   linkType: hard
 
