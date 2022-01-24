@@ -27,6 +27,7 @@ module.exports = {
     '!**/node_modules/**',
     '!**/dist/**',
   ],
+  coverageDirectory: path.join(rwjsPaths.base, 'coverage'),
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
