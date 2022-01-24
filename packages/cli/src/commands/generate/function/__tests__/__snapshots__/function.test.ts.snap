@@ -157,6 +157,9 @@ exports[`creates a single word function file: Test snapshot 1`] = `
 
 import { handler } from './foo'
 
+//  Please refer to the RedwoodJS Testing Docs for any issues:
+//    https://redwoodjs.com/docs/testing#testing-functions
+
 describe('foo function', () => {
   it('Should respond with 200', async () => {
     const httpEvent = mockHttpEvent({

@@ -56,6 +56,11 @@ exports[`handler can be called with PascalCase model name 3`] = `
 Object {
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+
 describe('users', () => {
   scenario('returns all users', async (scenario) => {
     const result = await users()
@@ -197,6 +202,11 @@ Object {
   deleteCustomData,
 } from './customDatums'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+
 describe('customDatums', () => {
   scenario('returns all customDatums', async (scenario) => {
     const result = await customDatums()
@@ -332,6 +342,11 @@ Object {
 exports[`handler can be called with camelCase model name 3`] = `
 Object {
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
 
 describe('users', () => {
   scenario('returns all users', async (scenario) => {
@@ -473,6 +488,11 @@ Object {
   updateCustomData,
   deleteCustomData,
 } from './customDatums'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
 
 describe('customDatums', () => {
   scenario('returns all customDatums', async (scenario) => {
