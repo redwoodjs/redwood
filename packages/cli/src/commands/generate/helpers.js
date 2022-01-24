@@ -112,6 +112,17 @@ const appendPositionalsToCmd = (commandString, positionalsObj) => {
   }
 }
 
+/** @type {(name: string, componentName: string) => string } **/
+export function coerceName(name, componentName) {
+  // page -> Page
+  const pascalComponentName = pascalcase(componentName)
+
+  // Replace 'Page' at the end of `name` with ''
+  const coercedName = name.replace(new RegExp(pascalComponentName + '$'), '')
+
+  return coercedName
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a component/page/layout to a
  * location.
@@ -132,6 +143,7 @@ export const createYargsForComponentGeneration = ({
         .positional('name', {
           description: `Name of the ${componentName}`,
           type: 'string',
+          coerce: (name) => coerceName(name, componentName),
         })
         .epilogue(
           `Also see the ${terminalLink(
@@ -231,7 +243,7 @@ export const mapRouteParamTypeToTsType = (paramType) => {
   return routeParamToTsType[paramType] || 'unknown'
 }
 
-/** @type {(paramType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
+/** @type {(scalarType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
 export const mapPrismaScalarToPagePropTsType = (scalarType) => {
   const prismaScalarToTsType = {
     String: 'string',
