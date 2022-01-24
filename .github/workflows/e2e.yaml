@@ -82,12 +82,15 @@ jobs:
           working-directory: ./tasks/e2e
           spec: |
              cypress/integration/01-tutorial/*.spec.js
-             cypress/integration/03-storybook/*.spec.js
              cypress/integration/04-logger/*.spec.js
 
       - name: Prepare for CLI checks by restoring 01-tutorial end state
         run: |
           git restore . && git clean -df
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw storybook`
+        run: yarn rw storybook --smoke-test
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw test api`
