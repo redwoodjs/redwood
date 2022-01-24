@@ -24,7 +24,7 @@ const notes = [
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
-    updateApiURLTask('./netlify/function'),
+    updateApiURLTask('/.netlify/functions'),
     addFilesTask({
       files,
       force,
