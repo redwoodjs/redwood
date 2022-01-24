@@ -18,7 +18,7 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
 }
 
 /**
- * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.
+ * Converts all the TypeScript files in `scripts` to JavaScript.
  *
  * @param {string} cwd - The base path to the project.
  */
@@ -37,6 +37,7 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
   if (files.length === 0) {
     console.log('No TypeScript files found to convert to JS in this project.')
   }
+
   for (const f of files) {
     const code = transformTSToJS(f)
     if (code) {
@@ -48,25 +49,41 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
       fs.unlinkSync(path.join(cwd, f))
     }
   }
+}
 
-  if (fs.existsSync(path.join(cwd, 'api/tsconfig.json'))) {
-    fs.renameSync(
-      path.join(cwd, 'api/tsconfig.json'),
-      path.join(cwd, 'api/jsconfig.json')
-    )
-  }
-  if (fs.existsSync(path.join(cwd, 'web/tsconfig.json'))) {
-    fs.renameSync(
-      path.join(cwd, 'web/tsconfig.json'),
-      path.join(cwd, 'web/jsconfig.json')
-    )
-  }
-  if (fs.existsSync(path.join(cwd, 'scripts/tsconfig.json'))) {
-    fs.renameSync(
-      path.join(cwd, 'scripts/tsconfig.json'),
-      path.join(cwd, 'scripts/jsconfig.json')
-    )
-  }
+/**
+ * @param {string} cwd
+ */
+export function convertTsConfigsToJsConfigs(cwd = getPaths().base) {
+  const tsConfigs = [
+    'api/tsconfig.json',
+    'web/tsconfig.json',
+    'scripts/tsconfig.json',
+  ]
+
+  tsConfigs
+    .filter((tsConfig) => fs.existsSync(path.join(cwd, tsConfig)))
+    .map((tsConfig) => readJSONFileSync(path.join(cwd, tsConfig)))
+    .map(convertTsConfigToJsConfig)
+    .forEach((jsConfig, i) => {
+      writeJSONFileSync(
+        path.join(cwd, tsConfigs[i].replace('tsconfig', 'jsconfig')),
+        jsConfig
+      )
+    })
+}
+
+function convertTsConfigToJsConfig(tsConfig: any) {
+  delete tsConfig.compilerOptions.allowJs
+  return tsConfig
+}
+
+function readJSONFileSync(path: string) {
+  return JSON.parse(fs.readFileSync(path, 'utf8'))
+}
+
+function writeJSONFileSync(path: string, data: any) {
+  return fs.writeFileSync(path, JSON.stringify(data, null, 2), 'utf8')
 }
 
 /**
