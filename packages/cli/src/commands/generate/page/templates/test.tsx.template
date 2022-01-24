@@ -2,10 +2,8 @@ import { render } from '@redwoodjs/testing/web'
 
 import ${pascalName}Page from './${pascalName}Page'
 
-// Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
-//           Please refer to the RedwoodJS Testing Docs:
-// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('${pascalName}Page', () => {
   it('renders successfully', () => {
