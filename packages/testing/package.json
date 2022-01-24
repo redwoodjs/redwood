@@ -35,7 +35,7 @@
     "babel-plugin-inline-react-svg": "2.0.1",
     "jest": "27.4.7",
     "jest-watch-typeahead": "1.0.0",
-    "msw": "0.36.5",
+    "msw": "0.36.7",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },

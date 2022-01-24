@@ -4509,13 +4509,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/cookies@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "@mswjs/cookies@npm:0.1.6"
+"@mswjs/cookies@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@mswjs/cookies@npm:0.1.7"
   dependencies:
     "@types/set-cookie-parser": ^2.4.0
     set-cookie-parser: ^2.4.6
-  checksum: 24679d523ed4a727403087324991bbfe51886e836069aea8ec77d090d468f460a5c93401aa4290d0466669bb8ba0afb1d7bd96ab6de5a9a2051bbb3ec32a645b
+  checksum: 647e97c1cd970be0b49c359faa4798a1eaa9cbf3ad7e88b184bcec5c6ee183e45b720708d3084b3a3ca8c797d86a64cd57e04d553fc10ef28b1f3d3e3929582e
   languageName: node
   linkType: hard
 
@@ -5843,7 +5843,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     jest: 27.4.7
     jest-watch-typeahead: 1.0.0
-    msw: 0.36.5
+    msw: 0.36.7
     ts-toolbelt: 9.6.0
     typescript: 4.5.5
     whatwg-fetch: 3.6.2
@@ -21177,11 +21177,11 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"msw@npm:0.36.5":
-  version: 0.36.5
-  resolution: "msw@npm:0.36.5"
+"msw@npm:0.36.7":
+  version: 0.36.7
+  resolution: "msw@npm:0.36.7"
   dependencies:
-    "@mswjs/cookies": ^0.1.6
+    "@mswjs/cookies": ^0.1.7
     "@mswjs/interceptors": ^0.12.7
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
@@ -21195,7 +21195,7 @@ fsevents@^1.2.7:
     inquirer: ^8.2.0
     is-node-process: ^1.0.1
     js-levenshtein: ^1.1.6
-    node-fetch: ^2.6.1
+    node-fetch: ^2.6.7
     path-to-regexp: ^6.2.0
     statuses: ^2.0.0
     strict-event-emitter: ^0.2.0
@@ -21203,7 +21203,7 @@ fsevents@^1.2.7:
     yargs: ^17.3.0
   bin:
     msw: cli/index.js
-  checksum: fca1cd53cc40a75f4ad9701e5d9e8c85534ac6267c59106dd18ce9e803193b4debb0049f2bc7133f9f7eb1f9a7434c2bc5ccd876dc525e63a0d8fce62ed0fb1b
+  checksum: fa33a48d5feeb4e9e467ba202a04956071f358ed55934880f5ac9ed2a4ced700cb70160e19f0a798254f27ccf8424aa1985bbbe842643845661ded857dfc8de3
   languageName: node
   linkType: hard
 
@@ -21437,12 +21437,26 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.6, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.5":
+"node-fetch@npm:2.6.6":
   version: 2.6.6
   resolution: "node-fetch@npm:2.6.6"
   dependencies:
     whatwg-url: ^5.0.0
   checksum: f9b5c8789c7bcd393a2fb70d752e36d5b5e84eb52bd5bffceb4fb64ac81dce1a1f55ca023a990e51bbf8594fc502ea9bea3004037e6eab65205cd84e8af94fc9
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.5, node-fetch@npm:^2.6.7":
+  version: 2.6.7
+  resolution: "node-fetch@npm:2.6.7"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: fcae80f5ac52fbf5012f5e19df2bd3915e67d3b3ad51cb5942943df2238d32ba15890fecabd0e166876a9f98a581ab50f3f10eb942b09405c49ef8da36b826c7
   languageName: node
   linkType: hard
 
