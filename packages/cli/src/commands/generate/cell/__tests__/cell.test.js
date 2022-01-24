@@ -1,6 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
+import yargs from 'yargs'
+
 // Load mocks
 import '../../../../lib/test'
 import * as cell from '../cell'
@@ -107,6 +109,14 @@ beforeAll(async () => {
 // Single Word Scenario: User
 test('returns exactly 4 files', () => {
   expect(Object.keys(singleWordFiles).length).toEqual(4)
+})
+
+test('trims Cell from end of name', () => {
+  const { name } = yargs
+    .command('cell <name>', false, cell.builder)
+    .parse('cell BazingaCell')
+
+  expect(name).toEqual('Bazinga')
 })
 
 test('creates a cell component with a single word name', () => {

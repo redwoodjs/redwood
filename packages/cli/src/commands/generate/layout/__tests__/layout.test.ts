@@ -1,6 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
+import yargs from 'yargs'
+
 // Load shared mocks
 import '../../../../lib/test'
 
@@ -64,6 +66,38 @@ beforeAll(() => {
 
 test('returns exactly 3 files', () => {
   expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
+})
+
+test('trims Layout from end of name', () => {
+  const { name } = yargs
+    .command('layout <name>', false, layout.builder)
+    .parse('layout BazingaLayout')
+
+  expect(name).toEqual('Bazinga')
+})
+
+test('Does not trim Layout from beginning of name', () => {
+  const { name } = yargs
+    .command('layout <name>', false, layout.builder)
+    .parse('layout LayoutForBazinga')
+
+  expect(name).toEqual('LayoutForBazinga')
+})
+
+test('Does not trim Layout from middle of name', () => {
+  const { name } = yargs
+    .command('layout <name>', false, layout.builder)
+    .parse('layout MyLayoutForBazinga')
+
+  expect(name).toEqual('MyLayoutForBazinga')
+})
+
+test('Only trims Layout once', () => {
+  const { name } = yargs
+    .command('layout <name>', false, layout.builder)
+    .parse('layout BazingaLayoutLayout')
+
+  expect(name).toEqual('BazingaLayout')
 })
 
 test('creates a single word layout component', () => {

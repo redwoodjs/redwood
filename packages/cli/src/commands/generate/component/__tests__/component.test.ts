@@ -1,6 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
+import yargs from 'yargs'
+
 // Shared mocks for paths, etc.
 import '../../../../lib/test'
 
@@ -52,6 +54,14 @@ beforeAll(() => {
 
 test('returns exactly 3 files', () => {
   expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
+})
+
+test('trims Component from end of name', () => {
+  const { name } = yargs
+    .command('component <name>', false, component.builder)
+    .parse('component BazingaComponent')
+
+  expect(name).toEqual('Bazinga')
 })
 
 test('creates a single word component', () => {

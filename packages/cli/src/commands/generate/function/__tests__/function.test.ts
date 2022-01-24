@@ -4,6 +4,8 @@ import '../../../../lib/test'
 
 import path from 'path'
 
+import yargs from 'yargs'
+
 import * as functionGenerator from '../function'
 
 // Should be refactored as it's repeated
@@ -42,6 +44,14 @@ test('returns tests, scenario and function file', () => {
       expect.stringContaining('foo.scenarios.js'),
     ])
   )
+})
+
+test('trims Function from end of name', () => {
+  const { name } = yargs
+    .command('function <name>', false, functionGenerator.builder)
+    .parse('function BazingaFunction')
+
+  expect(name).toEqual('Bazinga')
 })
 
 test('creates a single word function file', () => {
