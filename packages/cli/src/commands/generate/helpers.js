@@ -82,7 +82,7 @@ export const templateForComponentFile = ({
 
 /**
  * Creates a route path, either returning the existing path if passed, or
- * creates one based on the name. If the passed path is just a route parameter
+ * creating one based on the name. If the passed path is just a route parameter
  * a new path based on the name is created, with the parameter appended to it
  */
 export const pathName = (path, name) => {
