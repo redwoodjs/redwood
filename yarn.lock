@@ -5782,7 +5782,7 @@ __metadata:
     lru-cache: 6.0.0
     proxyquire: 2.1.3
     toml: 3.0.0
-    ts-morph: 13.0.2
+    ts-morph: 13.0.3
     typescript: 4.5.5
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.3
@@ -6979,15 +6979,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.12.2":
-  version: 0.12.2
-  resolution: "@ts-morph/common@npm:0.12.2"
+"@ts-morph/common@npm:~0.12.3":
+  version: 0.12.3
+  resolution: "@ts-morph/common@npm:0.12.3"
   dependencies:
     fast-glob: ^3.2.7
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 1e5842f104ead46e2650711e1f0ca363664564638a2d044b398833ea5bccb46b8efc3478c0daa2b590f80bb9e4a28428c25e484de63fddfb9dfc69bc12241366
+  checksum: 2a0b25128eca547cfdf4795d39e7d6e15c81008b74867ccdda9d0d9c1b0eaca534d6d729220572e726a811786efa3c38f3b6a482d3fc970d3bf0acea39a7248f
   languageName: node
   linkType: hard
 
@@ -27934,13 +27934,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:13.0.2":
-  version: 13.0.2
-  resolution: "ts-morph@npm:13.0.2"
+"ts-morph@npm:13.0.3":
+  version: 13.0.3
+  resolution: "ts-morph@npm:13.0.3"
   dependencies:
-    "@ts-morph/common": ~0.12.2
+    "@ts-morph/common": ~0.12.3
     code-block-writer: ^11.0.0
-  checksum: 2f3fa2f2c7b9e80694a7bd706112ce3f7e9dfa3fb448537e6c691b0b7e211c2004de178e2c0ac78900c1115417594375914a2a1329cc6eb5ce8ed4c1563688e3
+  checksum: 9d7fa1a29be3996b209e19d3e0c80eacd088afa76cd7c12b4b3d8a6a08d282d5f17e01cedf8bd841ad549a5df6580b876ea10597b3273e2bb49b85ffa2044d99
   languageName: node
   linkType: hard
 
