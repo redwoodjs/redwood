@@ -35,7 +35,7 @@ describe(
 
       // Slow!
       cy.exec(`cd ${BASE_DIR} || exit; yarn rw storybook --build`, {
-        timeout: 20000,
+        timeout: 300_0000,
       })
         .its('stderr')
         .should('not.contain', 'ERR!')
