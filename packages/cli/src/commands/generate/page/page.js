@@ -27,6 +27,8 @@ const REDWOOD_WEB_PATH_NAME = 'pages'
 const mapRouteParamTypeToDefaultValue = (paramType) => {
   switch (paramType) {
     case 'Int':
+      // "42" is just a value used for demonstrating parameter usage in the
+      // generated page-, test-, and story-files.
       return 42
 
     case 'Float':
@@ -65,11 +67,9 @@ export const paramVariants = (path) => {
   const defaultValueAsProp =
     routeParamType === 'String' ? `'${defaultValue}'` : defaultValue
 
-  // "42" is just a value used for demonstrating parameter usage in the
-  // generated page-, test-, and story-files.
   return {
     propParam: `{ ${paramName} }`,
-    propValueParam: `${paramName}={${defaultValueAsProp}} `, // used it story
+    propValueParam: `${paramName}={${defaultValueAsProp}} `, // used in story
     argumentParam: `{ ${paramName}: ${defaultValueAsProp} }`,
     paramName,
     paramValue: defaultValue,
