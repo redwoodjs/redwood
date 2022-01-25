@@ -8,6 +8,17 @@ jest.mock('execa', () =>
   })
 )
 
+jest.mock('concurrently', () =>
+  jest.fn((commands, options) => {
+    return {
+      commands,
+      options,
+    }
+  })
+)
+
+import '../../lib/mockTelemetry'
+
 let mockedRedwoodConfig = {
   api: {},
   web: {},
@@ -35,6 +46,7 @@ jest.mock('../../lib', () => {
 
 import path from 'path'
 
+import concurrently from 'concurrently'
 import execa from 'execa'
 
 import { runCommandTask } from '../../lib'
@@ -51,23 +63,22 @@ test('Should run tsc commands correctly, in order', async () => {
     generate: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw g types')
+  const concurrentlyArgs = concurrently.mock.results[0].value
+
+  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw-gen')
 
   // Ensure tsc command run correctly for web side
-  expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
-  expect(execa.mock.results[1].value.params).toContain('--noEmit')
-  expect(execa.mock.results[1].value.params).toContain('--skipLibCheck')
-  expect(execa.mock.results[1].value.options.cwd).toBe(
-    path.normalize('myBasePath/web')
-  )
-
+  expect(concurrentlyArgs.commands).toContainEqual({
+    cwd: path.join('myBasePath', 'web'),
+    command: 'yarn -s tsc --noEmit --skipLibCheck',
+  })
   // Ensure tsc command run correctly for web side
-  expect(execa.mock.results[2].value.cmd).toEqual('yarn tsc')
-  expect(execa.mock.results[2].value.params).toContain('--noEmit')
-  expect(execa.mock.results[2].value.params).toContain('--skipLibCheck')
-  expect(execa.mock.results[2].value.options.cwd).toBe(
-    path.normalize('myBasePath/api')
-  )
+  expect(concurrentlyArgs.commands).toContainEqual({
+    cwd: path.join('myBasePath', 'api'),
+    command: 'yarn -s tsc --noEmit --skipLibCheck',
+  })
+  // Ensure we have raw sequential output from tsc
+  expect(concurrentlyArgs.options).toEqual({ group: true, raw: true })
 })
 
 test('Should generate prisma client', async () => {
@@ -77,14 +88,16 @@ test('Should generate prisma client', async () => {
     generate: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw g types')
+  const concurrentlyArgs = concurrently.mock.results[0].value
 
-  // Ensure tsc command run correctly for api side
-  expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
+  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw-gen')
+
+  // Ensure tsc command run correctly for web side
+  expect(concurrentlyArgs.commands).toContainEqual({
+    cwd: path.join('myBasePath', 'api'),
+    command: 'yarn -s tsc --noEmit --skipLibCheck',
+  })
   expect(runCommandTask.mock.results[0].value[0]).toEqual(
     'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
-  )
-  expect(execa.mock.results[1].value.options.cwd).toBe(
-    path.normalize('myBasePath/api')
   )
 })
