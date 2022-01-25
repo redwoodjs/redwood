@@ -46,11 +46,18 @@ jobs:
 
       - name: Create a temporary directory
         id: createpath
-        run: |
-          project_path=$(mktemp -d -t redwood.XXXXXX)
-          echo "::set-output name=project_path::$project_path"
-          framework_path=$(pwd)
-          echo "::set-output name=framework_path::$framework_path"
+        if: matrix.os == 'ubuntu-latest'
+          run: |
+            project_path=$(mktemp -d -t redwood.XXXXXX)
+            echo "::set-output name=project_path::$project_path"
+            framework_path=$(pwd)
+            echo "::set-output name=framework_path::$framework_path"
+        if: matrix.os == 'windows-latest'
+          run: |
+            $project_path = New-TempDirectory -Prefix 'redwood.'
+            echo "::set-output name=project_path::$project_path"
+            $framework_path = Get-Location
+            echo "::set-output name=framework_path::$framework_path"
 
       - name: Create Redwood Project
         run: |
