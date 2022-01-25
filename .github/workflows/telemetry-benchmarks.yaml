@@ -9,7 +9,8 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'windows-latest']
+        # os: ['ubuntu-latest', 'windows-latest']
+        os: ['windows-latest']
         node-version: ['14', '16']
       fail-fast: true
     runs-on: ${{ matrix.os }}
@@ -44,14 +45,14 @@ jobs:
           yarn install --immutable
           yarn build:clean && yarn build:js
 
-      - if: matrix.os == 'ubuntu-latest'
-        name: Create a temporary directory (ubuntu)
-        id: createpath
-        run: |
-          project_path=$(mktemp -d -t redwood.XXXXXX)
-          echo "::set-output name=project_path::$project_path"
-          framework_path=$(pwd)
-          echo "::set-output name=framework_path::$framework_path"
+      # - if: matrix.os == 'ubuntu-latest'
+      #   name: Create a temporary directory (ubuntu)
+      #   id: createpath
+      #   run: |
+      #     project_path=$(mktemp -d -t redwood.XXXXXX)
+      #     echo "::set-output name=project_path::$project_path"
+      #     framework_path=$(pwd)
+      #     echo "::set-output name=framework_path::$framework_path"
 
       - if: matrix.os == 'windows-latest'
         name: Create a temporary directory (windows)
