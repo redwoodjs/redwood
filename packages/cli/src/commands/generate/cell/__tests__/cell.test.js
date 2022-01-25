@@ -119,7 +119,11 @@ test('trims Cell from end of name', async () => {
   console.log('files', files)
 
   const cellCode =
-    files['/path/to/project/web/src/components/BazingaCell/BazingaCell.js']
+    files[
+      path.normalize(
+        '/path/to/project/web/src/components/BazingaCell/BazingaCell.js'
+      )
+    ]
 
   expect(cellCode).not.toBeUndefined()
   expect(

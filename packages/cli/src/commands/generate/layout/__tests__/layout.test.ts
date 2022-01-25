@@ -74,7 +74,11 @@ test('trims Layout from end of name', () => {
   })
 
   const layoutCode =
-    files['/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.js']
+    files[
+      path.normalize(
+        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.js'
+      )
+    ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
@@ -91,7 +95,9 @@ test('Does not trim Layout from beginning of name', () => {
 
   const layoutCode =
     files[
-      '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.js'
+      path.normalize(
+        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.js'
+      )
     ]
 
   expect(layoutCode).not.toBeUndefined()
@@ -109,7 +115,9 @@ test('Does not trim Layout from middle of name', () => {
 
   const layoutCode =
     files[
-      '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.js'
+      path.normalize(
+        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.js'
+      )
     ]
 
   expect(layoutCode).not.toBeUndefined()
@@ -127,7 +135,9 @@ test('Only trims Layout once', () => {
 
   const layoutCode =
     files[
-      '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.js'
+      path.normalize(
+        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.js'
+      )
     ]
 
   expect(layoutCode).not.toBeUndefined()
