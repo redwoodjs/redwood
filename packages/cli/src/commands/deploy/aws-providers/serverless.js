@@ -1,3 +1,7 @@
+import path from 'path'
+
+import { getPaths } from '@redwoodjs/internal'
+
 import ntfPack from '../packing/nft'
 
 export const preRequisites = () => [
@@ -11,23 +15,26 @@ export const preRequisites = () => [
   },
 ]
 
-export const buildCommands = () => [
+export const buildCommands = ({ side: sides }) => [
   {
-    title: 'Building Web And API...',
-    command: ['yarn', ['rw', 'build']],
+    title: `Building ${sides.join(' & ')}...`,
+    command: ['yarn', ['rw', 'build', ...sides]],
   },
   {
     title: 'Packing Functions...',
+    enabled: () => sides.includes('api'),
     task: ntfPack,
   },
 ]
 
-export const deployCommands = (yargs) => {
-  const stage = yargs.stage ? ['--stage', yargs.stage] : []
-  return [
-    {
-      title: 'Deploying...',
-      command: ['yarn', ['serverless', 'deploy', ...stage]],
-    },
-  ]
+export const deployCommands = ({ stage, sides }) => {
+  const slsStage = stage ? ['--stage', stage] : []
+
+  return sides.map((side) => {
+    return {
+      title: `Deploying ${side}....`,
+      command: ['yarn', ['serverless', 'deploy', ...slsStage]],
+      cwd: path.join(getPaths().base, side),
+    }
+  })
 }

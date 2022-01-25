@@ -18,6 +18,8 @@ import { SERVERLESS_WEB_YML } from '../templates/serverless/web'
 export const command = 'serverless'
 export const description = 'Setup deployments via the Serverless Framework'
 
+export const aliases = ['aws-serverless']
+
 export const notes = [
   `${c.green(
     "You're almost ready to deploy using the Serverless framework!"

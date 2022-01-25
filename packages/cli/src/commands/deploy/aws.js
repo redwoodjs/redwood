@@ -24,10 +24,11 @@ export const builder = (yargs) => {
       description: 'AWS Deploy provider to configure',
       type: 'string',
     })
-    .option('side', {
+    .option('sides', {
       describe: 'which Side(s) to deploy',
-      choices: ['api'],
-      default: 'api',
+      choices: ['api', 'web'],
+      default: ['api', 'web'],
+      alias: 'side',
       type: 'array',
     })
     .option('verbose', {
@@ -54,7 +55,15 @@ export const handler = async (yargs) => {
   const BASE_DIR = getPaths().base
   const providerData = await import(`./aws-providers/${provider}`)
 
-  const mapCommandsToListr = ({ title, command, task, errorMessage }) => {
+  const mapCommandsToListr = ({
+    title,
+    command,
+    task,
+    cwd,
+    errorMessage,
+    skip,
+    enabled,
+  }) => {
     return {
       title: title,
       task: task
@@ -62,7 +71,7 @@ export const handler = async (yargs) => {
         : async () => {
             try {
               const executingCommand = execa(...command, {
-                cwd: BASE_DIR,
+                cwd: cwd || BASE_DIR,
               })
               executingCommand.stdout.pipe(process.stdout)
               await executingCommand
@@ -73,6 +82,8 @@ export const handler = async (yargs) => {
               throw error
             }
           },
+      skip,
+      enabled,
     }
   }
 
