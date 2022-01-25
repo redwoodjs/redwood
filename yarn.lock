@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@apollo/client@npm:3.5.7":
-  version: 3.5.7
-  resolution: "@apollo/client@npm:3.5.7"
+"@apollo/client@npm:3.5.8":
+  version: 3.5.8
+  resolution: "@apollo/client@npm:3.5.8"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a865bc9a9e71c8ec42bf4b5f0fd6a32d3630fb38da17eb4e208af65a2d5a76d426ce492cbcfc041348b9802d17eef7f18eb0a1ed318acd259e9b2c6a10fe83ae
+  checksum: c9d2f6a8de0423f961fafa716974b3ea6783f4eed14732a7177cc32f2a5164b7b021b7c0e4955618c470d42bbd6aee4e748b3f0ebef83022b7721a75280c6827
   languageName: node
   linkType: hard
 
@@ -5342,7 +5342,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
-    "@types/aws-lambda": 8.10.91
+    "@types/aws-lambda": 8.10.92
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -5832,7 +5832,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
-    "@types/aws-lambda": 8.10.91
+    "@types/aws-lambda": 8.10.92
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.0
     "@types/node": 16.11.21
@@ -5854,7 +5854,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.5.7
+    "@apollo/client": 3.5.8
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@redwoodjs/auth": 0.42.1
@@ -7005,10 +7005,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.91, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.91
-  resolution: "@types/aws-lambda@npm:8.10.91"
-  checksum: 196c90ec8d219a978f182cbf4bfa8c19408789e22a06c527a373ed2e22769bef846434221e0627cc92f2f2151fedafcc95f035380833b7ee61623ffc7dc1ad91
+"@types/aws-lambda@npm:8.10.92, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.92
+  resolution: "@types/aws-lambda@npm:8.10.92"
+  checksum: f1b0f2a516dcbe9e3da6d532bfeab88a5d5f3c2067e7870c097ec3ba389f4a1ef0e6f022413b555f0217cd5a0904787d588edac6e3da363abfcadde4f9912f7e
   languageName: node
   linkType: hard
 
