@@ -1,6 +1,6 @@
 const query = `
-  query BlogPostQuery($id: Int!) {
-    post(id: $id) {
+  query FindBlogPostQuery($id: Int!) {
+    blogPost: post(id: $id) {
       id
       title
       body
@@ -8,7 +8,7 @@ const query = `
     }
   }
 `
-const successBody = `<BlogPost post={post} />`
+const successBody = `<BlogPost blogPost={blogPost} />`
 
 export default (file, api) => {
   const j = api.jscodeshift
@@ -37,16 +37,16 @@ export default (file, api) => {
       return node
     })
 
-  root
-    .find(j.Identifier, {
-      type: 'Identifier',
-      name: 'blogPost',
-    })
-    .replaceWith((nodePath) => {
-      const { node } = nodePath
-      node.name = 'post'
-      return node
-    })
+  // root
+  //   .find(j.Identifier, {
+  //     type: 'Identifier',
+  //     name: 'blogPost',
+  //   })
+  //   .replaceWith((nodePath) => {
+  //     const { node } = nodePath
+  //     node.name = 'post'
+  //     return node
+  //   })
 
   return root
     .find(j.VariableDeclarator, {

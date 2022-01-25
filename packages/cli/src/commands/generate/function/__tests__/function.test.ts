@@ -1,8 +1,8 @@
 global.__dirname = __dirname
-import path from 'path'
-
 // Load shared mocks
 import '../../../../lib/test'
+
+import path from 'path'
 
 import * as functionGenerator from '../function'
 

@@ -6,10 +6,15 @@ import terminalLink from 'terminal-link'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 
-export const command = 'lint'
+export const command = 'lint [path..]'
 export const description = 'Lint your files'
 export const builder = (yargs) => {
   yargs
+    .positional('path', {
+      description:
+        'Specify file(s) or directory(ies) to lint relative to project root',
+      type: 'array',
+    })
     .option('fix', {
       default: false,
       description: 'Try to fix errors',
@@ -23,14 +28,16 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ fix }) => {
+export const handler = async ({ path, fix }) => {
   try {
+    const pathString = path?.join(' ')
     const result = await execa(
       'yarn eslint',
       [
         fix && '--fix',
-        fs.existsSync(getPaths().web.src) && 'web/src',
-        fs.existsSync(getPaths().api.src) && 'api/src',
+        !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
+        !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
+        pathString,
       ].filter(Boolean),
       {
         cwd: getPaths().base,

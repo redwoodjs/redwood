@@ -7,6 +7,7 @@ import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
@@ -183,6 +184,7 @@ export const createYargsForComponentGeneration = ({
 
         await tasks.run()
       } catch (e) {
+        errorTelemetry(process.argv, e.message)
         console.error(c.error(e.message))
         process.exit(e?.exitCode || 1)
       }
