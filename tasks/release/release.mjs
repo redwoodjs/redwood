@@ -26,9 +26,6 @@ const shouldUpdateNextReleasePRsMilestone = await confirm(
   `Update next-release PRs milestone to ${nextVersion}?`
 )
 
-// - Make a nextVersion milestone
-// - Move all the PRs with the next-release milestone to it
-// - Close the nextVersion milestone
 if (shouldUpdateNextReleasePRsMilestone) {
   try {
     await updateNextReleasePRsMilestone(nextVersion)
