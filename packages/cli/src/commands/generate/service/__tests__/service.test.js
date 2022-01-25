@@ -257,12 +257,12 @@ const itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired = (
   })
 }
 
-test('trims Service from end of name', () => {
+test('keeps Service in name', () => {
   const { name } = yargs
     .command('service <name>', false, service.builder)
     .parse('service BazingaService')
 
-  expect(name).toEqual('Bazinga')
+  expect(name).toEqual('BazingaService')
 })
 
 describe('in javascript mode', () => {

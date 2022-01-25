@@ -46,12 +46,12 @@ test('returns tests, scenario and function file', () => {
   )
 })
 
-test('trims Function from end of name', () => {
+test('Keeps Function in name', () => {
   const { name } = yargs
     .command('function <name>', false, functionGenerator.builder)
     .parse('function BazingaFunction')
 
-  expect(name).toEqual('Bazinga')
+  expect(name).toEqual('BazingaFunction')
 })
 
 test('creates a single word function file', () => {

@@ -6,7 +6,6 @@ import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
 import {
-  coerceName,
   createYargsForComponentGeneration,
   templateForComponentFile,
 } from '../helpers'
@@ -345,7 +344,6 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'Name of the service',
       type: 'string',
-      coerce: (name) => coerceName(name, 'service'),
     })
     .epilogue(
       `Also see the ${terminalLink(

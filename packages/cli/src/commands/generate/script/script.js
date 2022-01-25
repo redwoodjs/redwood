@@ -9,7 +9,6 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
-import { coerceName } from '../helpers'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 const TSCONFIG_TEMPLATE = path.resolve(
@@ -42,7 +41,6 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'A descriptor of what this script does',
       type: 'string',
-      coerce: (name) => coerceName(name, 'script'),
     })
     .epilogue(
       `Also see the ${terminalLink(

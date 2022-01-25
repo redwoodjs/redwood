@@ -50,10 +50,10 @@ test('creates a TypeScript transformer directive', () => {
   expect(output[expectedTestOutputPath]).toMatchSnapshot('ts directive test')
 })
 
-test('trims Directive from end of name', () => {
+test('keeps Directive in name', () => {
   const { name } = yargs
     .command('directive <name>', false, directive.builder)
     .parse('directive BazingaDirective')
 
-  expect(name).toEqual('Bazinga')
+  expect(name).toEqual('BazingaDirective')
 })

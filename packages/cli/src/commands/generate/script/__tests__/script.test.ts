@@ -45,10 +45,10 @@ test('creates a TypeScript function to execute', () => {
   expect(outputFilePaths).toContainEqual(tsconfigPath)
 })
 
-test('trims Script from end of name', () => {
+test('keeps Script in name', () => {
   const { name } = yargs
     .command('script <name>', false, script.builder)
     .parse('script BazingaScript')
 
-  expect(name).toEqual('Bazinga')
+  expect(name).toEqual('BazingaScript')
 })

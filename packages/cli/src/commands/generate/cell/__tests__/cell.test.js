@@ -1,8 +1,6 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import yargs from 'yargs'
-
 // Load mocks
 import '../../../../lib/test'
 import * as cell from '../cell'
@@ -111,12 +109,22 @@ test('returns exactly 4 files', () => {
   expect(Object.keys(singleWordFiles).length).toEqual(4)
 })
 
-test('trims Cell from end of name', () => {
-  const { name } = yargs
-    .command('cell <name>', false, cell.builder)
-    .parse('cell BazingaCell')
+test('trims Cell from end of name', async () => {
+  const files = await cell.files({
+    name: 'BazingaCell',
+    tests: true,
+    stories: true,
+  })
 
-  expect(name).toEqual('Bazinga')
+  console.log('files', files)
+
+  const cellCode =
+    files['/path/to/project/web/src/components/BazingaCell/BazingaCell.js']
+
+  expect(cellCode).not.toBeUndefined()
+  expect(
+    cellCode.split('\n').includes('export const Success = ({ bazinga }) => {')
+  ).toBeTruthy()
 })
 
 test('creates a cell component with a single word name', () => {

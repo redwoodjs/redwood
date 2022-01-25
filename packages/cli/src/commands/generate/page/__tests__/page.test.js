@@ -39,8 +39,6 @@ jest.mock('fs', () => {
 import fs from 'fs'
 import path from 'path'
 
-import yargs from 'yargs'
-
 // Load mocks
 import '../../../../lib/test'
 
@@ -120,14 +118,6 @@ beforeAll(() => {
       pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
     ),
   })
-})
-
-test('trims Page from end of name', () => {
-  const { name } = yargs
-    .command('page <name>', false, page.builder)
-    .parse('page BazingaPage')
-
-  expect(name).toEqual('Bazinga')
 })
 
 test('returns exactly 3 files', () => {
@@ -381,7 +371,7 @@ test('file generation', async () => {
   global.mockFs = true
 
   await page.handler({
-    name: 'home',
+    name: 'HomePage', // 'Page' should be trimmed from name
     path: '',
     force: false,
     tests: true,

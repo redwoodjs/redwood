@@ -18,6 +18,7 @@ import {
   pathName,
   templateForComponentFile,
   mapRouteParamTypeToTsType,
+  removeGeneratorName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
@@ -151,11 +152,7 @@ const positionalsObj = {
 // @NOTE: Not exporting handler from function
 // As pages need a special handler
 export const { command, description, builder } =
-  createYargsForComponentGeneration({
-    componentName: 'page',
-    filesFn: files,
-    positionalsObj,
-  })
+  createYargsForComponentGeneration({ componentName: 'page', positionalsObj })
 
 export const handler = async ({
   name,
@@ -165,6 +162,8 @@ export const handler = async ({
   stories,
   typescript = false,
 }) => {
+  const pageName = removeGeneratorName(name, 'page')
+
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
@@ -203,9 +202,9 @@ export const handler = async ({
       {
         title: 'Generating page files...',
         task: async () => {
-          path = pathName(path, name)
+          path = pathName(path, pageName)
           const f = await files({
-            name,
+            name: pageName,
             path,
             tests,
             stories,
@@ -218,7 +217,9 @@ export const handler = async ({
       {
         title: 'Updating routes file...',
         task: async () => {
-          addRoutesToRouterTask(routes({ name, path: pathName(path, name) }))
+          addRoutesToRouterTask(
+            routes({ name: pageName, path: pathName(path, pageName) })
+          )
         },
       },
       {

@@ -1,8 +1,6 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import yargs from 'yargs'
-
 // Load shared mocks
 import '../../../../lib/test'
 
@@ -69,35 +67,73 @@ test('returns exactly 3 files', () => {
 })
 
 test('trims Layout from end of name', () => {
-  const { name } = yargs
-    .command('layout <name>', false, layout.builder)
-    .parse('layout BazingaLayout')
+  const files = layout.files({
+    name: 'BazingaLayout',
+    tests: true,
+    stories: true,
+  })
 
-  expect(name).toEqual('Bazinga')
+  const layoutCode =
+    files['/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.js']
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default BazingaLayout')
+  ).toBeTruthy()
 })
 
 test('Does not trim Layout from beginning of name', () => {
-  const { name } = yargs
-    .command('layout <name>', false, layout.builder)
-    .parse('layout LayoutForBazinga')
+  const files = layout.files({
+    name: 'LayoutForBazinga',
+    tests: true,
+    stories: true,
+  })
 
-  expect(name).toEqual('LayoutForBazinga')
+  const layoutCode =
+    files[
+      '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.js'
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default LayoutForBazingaLayout')
+  ).toBeTruthy()
 })
 
 test('Does not trim Layout from middle of name', () => {
-  const { name } = yargs
-    .command('layout <name>', false, layout.builder)
-    .parse('layout MyLayoutForBazinga')
+  const files = layout.files({
+    name: 'MyLayoutForBazinga',
+    tests: true,
+    stories: true,
+  })
 
-  expect(name).toEqual('MyLayoutForBazinga')
+  const layoutCode =
+    files[
+      '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.js'
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default MyLayoutForBazingaLayout')
+  ).toBeTruthy()
 })
 
 test('Only trims Layout once', () => {
-  const { name } = yargs
-    .command('layout <name>', false, layout.builder)
-    .parse('layout BazingaLayoutLayout')
+  const files = layout.files({
+    name: 'BazingaLayoutLayout',
+    tests: true,
+    stories: true,
+  })
 
-  expect(name).toEqual('BazingaLayout')
+  const layoutCode =
+    files[
+      '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.js'
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default BazingaLayoutLayout')
+  ).toBeTruthy()
 })
 
 test('creates a single word layout component', () => {

@@ -56,12 +56,12 @@ test('returns exactly 3 files', () => {
   expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
 })
 
-test('trims Component from end of name', () => {
+test('keeps Component in name', () => {
   const { name } = yargs
     .command('component <name>', false, component.builder)
     .parse('component BazingaComponent')
 
-  expect(name).toEqual('Bazinga')
+  expect(name).toEqual('BazingaComponent')
 })
 
 test('creates a single word component', () => {

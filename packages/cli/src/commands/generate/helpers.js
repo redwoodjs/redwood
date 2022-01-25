@@ -112,10 +112,10 @@ const appendPositionalsToCmd = (commandString, positionalsObj) => {
   }
 }
 
-/** @type {(name: string, componentName: string) => string } **/
-export function coerceName(name, componentName) {
+/** @type {(name: string, generatorName: string) => string } **/
+export function removeGeneratorName(name, generatorName) {
   // page -> Page
-  const pascalComponentName = pascalcase(componentName)
+  const pascalComponentName = pascalcase(generatorName)
 
   // Replace 'Page' at the end of `name` with ''
   const coercedName = name.replace(new RegExp(pascalComponentName + '$'), '')
@@ -124,16 +124,18 @@ export function coerceName(name, componentName) {
 }
 
 /**
- * Reduces boilerplate for creating a yargs handler that writes a component/page/layout to a
- * location.
+ * Reduces boilerplate for creating a yargs handler that writes a
+ * component/page/layout/etc to a location.
  */
 export const createYargsForComponentGeneration = ({
   componentName,
   preTasksFn = (options) => options,
-  filesFn,
+  /** filesFn is not used if generator implements its own `handler` */
+  filesFn = () => ({}),
   optionsObj = yargsDefaults,
   positionalsObj = {},
-  includeAdditionalTasks = () => [], // function that takes the options object and returns an array of listr tasks
+  /** function that takes the options object and returns an array of listr tasks */
+  includeAdditionalTasks = () => [],
 }) => {
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
@@ -143,7 +145,6 @@ export const createYargsForComponentGeneration = ({
         .positional('name', {
           description: `Name of the ${componentName}`,
           type: 'string',
-          coerce: (name) => coerceName(name, componentName),
         })
         .epilogue(
           `Also see the ${terminalLink(
