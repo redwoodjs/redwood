@@ -1,13 +1,5 @@
 #!/usr/bin/env node
 /* eslint-env node, es6*/
-/**
- * notes
- * ---
- * - push/lerna
- * - milestones
- * - prompts
- * - tokens
- */
 import prompts from 'prompts'
 import { $ } from 'zx'
 
