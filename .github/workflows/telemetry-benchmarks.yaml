@@ -44,20 +44,23 @@ jobs:
           yarn install --immutable
           yarn build:clean && yarn build:js
 
-      - name: Create a temporary directory
+      - if: matrix.os == 'ubuntu-latest'
+        name: Create a temporary directory (ubuntu)
         id: createpath
-        if: matrix.os == 'ubuntu-latest'
-          run: |
-            project_path=$(mktemp -d -t redwood.XXXXXX)
-            echo "::set-output name=project_path::$project_path"
-            framework_path=$(pwd)
-            echo "::set-output name=framework_path::$framework_path"
-        if: matrix.os == 'windows-latest'
-          run: |
-            $project_path = New-TempDirectory -Prefix 'redwood.'
-            echo "::set-output name=project_path::$project_path"
-            $framework_path = Get-Location
-            echo "::set-output name=framework_path::$framework_path"
+        run: |
+          project_path=$(mktemp -d -t redwood.XXXXXX)
+          echo "::set-output name=project_path::$project_path"
+          framework_path=$(pwd)
+          echo "::set-output name=framework_path::$framework_path"
+
+      - if: matrix.os == 'windows-latest'
+        name: Create a temporary directory (windows)
+        id: createpath
+        run: |
+          $project_path = New-TempDirectory -Prefix 'redwood.'
+          echo "::set-output name=project_path::$project_path"
+          $framework_path = Get-Location
+          echo "::set-output name=framework_path::$framework_path"
 
       - name: Create Redwood Project
         run: |
