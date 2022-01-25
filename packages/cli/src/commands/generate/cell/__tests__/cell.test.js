@@ -116,8 +116,6 @@ test('trims Cell from end of name', async () => {
     stories: true,
   })
 
-  console.log('files', files)
-
   const cellCode =
     files[
       path.normalize(
