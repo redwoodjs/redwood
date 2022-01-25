@@ -6,6 +6,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
@@ -116,6 +118,7 @@ export const handler = async (yargs) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.log(c.error(e.message))
     process.exit(1)
   }
