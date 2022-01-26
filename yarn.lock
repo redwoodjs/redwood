@@ -16320,7 +16320,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"globby@npm:^12.0.1":
+"globby@npm:^12.0.1, globby@npm:^12.0.2":
   version: 12.2.0
   resolution: "globby@npm:12.2.0"
   dependencies:
@@ -16331,20 +16331,6 @@ fsevents@^1.2.7:
     merge2: ^1.4.1
     slash: ^4.0.0
   checksum: 121fee62bb9a43a35a32731cda9540241003ef578f9cee5ad87b27d3020b94857ff62f8d82cb99dbeedf6f26981c9fa62509d873392642ceb37674f3d6ec4e52
-  languageName: node
-  linkType: hard
-
-"globby@npm:^12.0.2":
-  version: 12.0.2
-  resolution: "globby@npm:12.0.2"
-  dependencies:
-    array-union: ^3.0.1
-    dir-glob: ^3.0.1
-    fast-glob: ^3.2.7
-    ignore: ^5.1.8
-    merge2: ^1.4.1
-    slash: ^4.0.0
-  checksum: 61057effcc7edc7ca7ba9e27a435f08e05b2b8d80c13d2a18e14804936efcc7b1fae528536b6e6f85969f0a76fb0c86d65b3003f39e060457a2e524a3016b704
   languageName: node
   linkType: hard
 
