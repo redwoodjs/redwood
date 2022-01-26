@@ -204,7 +204,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 }
 
 /**
- * This is incomplete.
+ * This is a WIP.
  *
  * @param {string} nextVersion
  */
@@ -214,13 +214,28 @@ async function releasePatch(nextVersion) {
   await $`git push origin release/patch/${nextVersion}`
   await `open https://github.com/redwoodjs/redwood/compare/${previousVersion}..release/patch/${nextVersion}`
 
-  /**
-   * - cherry pick
-   * - handle conflicts
-   * - push
-   * - diff
-   * - publish rc
-   */
+  const diffLooksGood = await confirm('Does the diff look good?')
+
+  if (!diffLooksGood) {
+    console.log('Resetting...')
+  }
+
+  const proceed = await confirm('Cherry pick and handle the conflicts')
+
+  if (!proceed) {
+    console.log('Resetting...')
+  }
+
+  await $`git push origin release/patch/${nextVersion}`
+  await `open https://github.com/redwoodjs/redwood/compare/${previousVersion}..release/patch/${nextVersion}`
+
+  const diffLooksGood2 = await confirm('Does the diff look good?')
+
+  if (!diffLooksGood2) {
+    console.log('Resetting...')
+  }
+
+  // publish rc
 
   await $`git clean -fxd`
   await $`yarn install`
@@ -228,12 +243,11 @@ async function releasePatch(nextVersion) {
   await $`./tasks/update-package-versions ${nextVersion}`
 
   await $`yarn build`
+
   await $`git commit -am "${nextVersion}"`
   await $`git tag -am ${nextVersion} "${nextVersion}"`
 
-  /**
-   * - checkout main
-   * - merge commit
-   * - delete release branch
-   */
+  await $`git checkout main`
+  // merge commit
+  await $`git branch -d release/patch/${nextVersion}`
 }
