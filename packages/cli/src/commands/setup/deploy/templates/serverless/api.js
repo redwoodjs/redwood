@@ -6,7 +6,7 @@ import { getPaths } from '../../../../../lib'
 export const PROJECT_NAME = path.basename(getPaths().base)
 
 export const SERVERLESS_API_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
-service: ${PROJECT_NAME}
+service: ${PROJECT_NAME}-api
 
 # Uncomment org and app if you want to integrate your deployment with the
 # Serverless dashboard, or run \`serverless\` to be prompted to connect.
