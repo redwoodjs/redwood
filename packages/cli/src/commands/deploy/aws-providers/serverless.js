@@ -1,9 +1,12 @@
+import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
+import prompts from 'prompts'
 
-import { getPaths } from '../../../lib'
+import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
 import ntfPack from '../packing/nft'
 
@@ -16,6 +19,13 @@ export const builder = (yargs) => {
       'serverless stage pass through param: https://www.serverless.com/blog/stages-and-environments',
     default: 'dev',
     type: 'string',
+  })
+
+  yargs.option('first-run', {
+    describe:
+      'Set this flag the first time you deploy, to configure your API URL on the webside',
+    default: false,
+    type: 'boolean',
   })
 }
 
@@ -42,7 +52,7 @@ export const buildCommands = ({ side: sides }) => [
   },
 ]
 
-export const deployCommands = ({ stage, sides }) => {
+export const deployCommands = ({ stage, sides, firstRun }) => {
   const slsStage = stage ? ['--stage', stage] : []
 
   return sides.map((side) => {
@@ -50,11 +60,17 @@ export const deployCommands = ({ stage, sides }) => {
       title: `Deploying ${side}....`,
       command: ['yarn', ['serverless', 'deploy', ...slsStage]],
       cwd: path.join(getPaths().base, side),
+      skip: () => {
+        if (firstRun && side === 'web') {
+          return 'Skipping web deploy, until environment configured'
+        }
+      },
     }
   })
 }
 
 export const handler = async (yargs) => {
+  const rwjsPaths = getPaths()
   const tasks = new Listr(
     [
       ...preRequisites(yargs).map(mapCommandsToListr),
@@ -63,10 +79,55 @@ export const handler = async (yargs) => {
     ],
     {
       exitOnError: true,
+      renderer: yargs.verbose && VerboseRenderer,
     }
   )
   try {
     await tasks.run()
+
+    if (yargs.firstRun) {
+      const { stdout: slsInfo } = await execa(
+        'yarn serverless info --verbose',
+        {
+          shell: true,
+          cwd: getPaths().api.base,
+        }
+      )
+
+      const deployedApiUrl = slsInfo.match(/HttpApiUrl: (https:\/\/.*)/)[1]
+
+      console.log()
+      console.log(`Found ${c.green(deployedApiUrl)}`)
+      const { addDotEnv } = await prompts({
+        type: 'confirm',
+        name: 'addDotEnv',
+        message: `Add API_URL to your .env.production? This will be used when you build your web side`,
+      })
+
+      if (addDotEnv) {
+        fs.writeFileSync(
+          path.join(rwjsPaths.base, `.env.production`),
+          `API_URL=${deployedApiUrl}`
+        )
+      }
+
+      if (yargs.sides.includes('web')) {
+        console.log('---- Deploying web side with updated url ----')
+
+        console.log('First deploys can take a good few minutes..')
+
+        const webDeployTasks = new Listr([
+          ...buildCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
+            mapCommandsToListr
+          ),
+          ...deployCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
+            mapCommandsToListr
+          ),
+        ])
+        // Deploy the web side now
+        await webDeployTasks.run()
+      }
+    }
   } catch (e) {
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
