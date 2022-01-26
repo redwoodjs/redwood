@@ -3,6 +3,8 @@ import path from 'path'
 
 import Listr from 'listr'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
@@ -22,7 +24,7 @@ const notes = [
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
-    updateApiURLTask('./netlify/function'),
+    updateApiURLTask('/.netlify/functions'),
     addFilesTask({
       files,
       force,
@@ -32,6 +34,7 @@ export const handler = async ({ force }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

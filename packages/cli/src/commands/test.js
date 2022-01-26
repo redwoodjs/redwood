@@ -3,6 +3,7 @@ import terminalLink from 'terminal-link'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 
@@ -103,7 +104,6 @@ export const handler = async ({
     collectCoverage ? '--collectCoverage' : null,
     '--passWithNoTests',
     ...jestFilterArgs,
-    '--runInBand', // @TODO always run in band, even for web as we get babel errors https://github.com/redwoodjs/redwood/issues/3646
   ].filter((flagOrValue) => flagOrValue !== null) // Filter out nulls, not booleans because user may have passed a --something false flag
 
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
@@ -158,6 +158,7 @@ export const handler = async ({
     })
   } catch (e) {
     // Errors already shown from execa inherited stderr
+    errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
 }

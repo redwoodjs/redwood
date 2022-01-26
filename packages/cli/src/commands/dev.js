@@ -4,6 +4,7 @@ import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
 import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -60,12 +61,17 @@ export const handler = async ({
         schema: rwjsPaths.api.dbSchema,
       })
     } catch (e) {
+      errorTelemetry(
+        process.argv,
+        `Error generating prisma client: ${e.message}`
+      )
       console.error(c.error(e.message))
     }
 
     try {
       await shutdownPort(getConfig().api.port)
     } catch (e) {
+      errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
       console.error(
         `Error whilst shutting down "api" port: ${c.error(e.message)}`
       )
@@ -76,6 +82,7 @@ export const handler = async ({
     try {
       await shutdownPort(getConfig().web.port)
     } catch (e) {
+      errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
         `Error whilst shutting down "web" port: ${c.error(e.message)}`
       )
@@ -115,7 +122,7 @@ export const handler = async ({
   }
 
   // TODO: Convert jobs to an array and supply cwd command.
-  concurrently(
+  const { result } = concurrently(
     Object.keys(jobs)
       .map((job) => {
         if (side.includes(job) || job === 'gen') {
@@ -127,8 +134,13 @@ export const handler = async ({
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
     }
-  ).catch((e) => {
+  )
+  result.catch((e) => {
     if (typeof e?.message !== 'undefined') {
+      errorTelemetry(
+        process.argv,
+        `Error concurrently starting sides: ${e.message}`
+      )
       console.error(c.error(e.message))
       process.exit(1)
     }

@@ -64,7 +64,7 @@ ${
       return `${basename}:
     description: ${basename} function deployed on AWS Lambda
     package:
-      artifact: api/dist/zipball/${basename}.zip # This is the default location of the zip file generated during the deploy command.
+      artifact: dist/zipball/${basename}.zip # This is the default location of the zip file generated during the deploy command.
     memorySize: 1024 # mb
     timeout: 25 # seconds (max: 29)
     tags: # Tags for this specific lambda function
