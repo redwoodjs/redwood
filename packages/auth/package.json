@@ -13,7 +13,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "2.10.0",
-    "@clerk/clerk-sdk-node": "2.7.2",
+    "@clerk/clerk-sdk-node": "2.7.4",
     "@clerk/types": "1.23.0",
     "@supabase/supabase-js": "1.29.4",
     "@types/netlify-identity-widget": "1.9.2",
