@@ -5543,7 +5543,7 @@ __metadata:
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
     file-loader: 6.2.0
-    graphql: 16.2.0
+    graphql: 16.3.0
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
@@ -5632,7 +5632,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.20.3
-    graphql: 16.2.0
+    graphql: 16.3.0
     graphql-helix: 1.11.0
     graphql-playground-html: 1.6.30
     graphql-scalars: 1.14.1
@@ -5681,7 +5681,7 @@ __metadata:
     findup-sync: 5.0.0
     fs-extra: 10.0.0
     glob: 7.2.0
-    graphql: 16.2.0
+    graphql: 16.3.0
     graphql-tag: 2.12.6
     jest: 27.4.7
     kill-port: 1.6.1
@@ -5773,7 +5773,7 @@ __metadata:
     dotenv-defaults: 5.0.0
     enquirer: 2.3.6
     findup-sync: 5.0.0
-    graphql: 16.2.0
+    graphql: 16.3.0
     jest: 27.4.7
     lazy-get-decorator: 2.2.0
     line-column: 1.0.2
@@ -5860,7 +5860,7 @@ __metadata:
     "@redwoodjs/auth": 0.42.1
     "@types/react": 17.0.38
     core-js: 3.20.3
-    graphql: 16.2.0
+    graphql: 16.3.0
     jest: 27.4.7
     proptypes: 1.1.0
     react-helmet-async: 1.2.2
@@ -16538,10 +16538,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.2.0":
-  version: 16.2.0
-  resolution: "graphql@npm:16.2.0"
-  checksum: 99747dba43f4af9da3583d192de67785294c3780a4a976f936d2f18f86e9d15406dcc8d6f71bd47853a19aaf5eb6c5ebb8b98f6ebd21782494152bc3a3e30a27
+"graphql@npm:16.3.0":
+  version: 16.3.0
+  resolution: "graphql@npm:16.3.0"
+  checksum: 71f205c16c93a5085c8a5dc3f9a1a27c022140208042d5be1dfacf04c1d3063ec2f62e3d08b0ed2cfb536c59cca65dd027556a22c47082fc348a5050c5535c71
   languageName: node
   linkType: hard
 
