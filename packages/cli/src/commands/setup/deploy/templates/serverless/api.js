@@ -28,7 +28,7 @@ provider:
       allowedHeaders:
         - authorization
         - auth-provider
-        - content-Type
+        - content-type
         - X-Amz-Date
         - X-Api-Key
         - X-Amz-Security-Token
