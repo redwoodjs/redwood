@@ -1,61 +1,64 @@
-#!/usr/bin/env node
-/* eslint-env node, es6*/
+/* eslint-env node, es2021 */
 import prompts from 'prompts'
 import { $ } from 'zx'
 
 import updateNextReleasePRsMilestone from './updateNextReleasePRsMilestone.mjs'
 
-const { semver } = await exitOnCancelPrompts({
-  type: 'select',
-  name: 'semver',
-  message: 'which semver are you releasing?',
-  choices: ['major', 'minor', 'patch'],
-  initial: 2,
-})
+export default async function release() {
+  const { semver } = await exitOnCancelPrompts({
+    type: 'select',
+    name: 'semver',
+    message: 'which semver are you releasing?',
+    choices: ['major', 'minor', 'patch'],
+    initial: 2,
+  })
 
-// Get the most-recent tag and get the next version from it.
-// `git describe --abbrev=0` should output something like like `v0.42.1`.
-const PO = await $`git describe --abbrev=0`
-const previousVersion = PO.stdout.trim()
-let nextVersion = getNextVersion(semver, previousVersion)
+  // Get the most-recent tag and get the next version from it.
+  // `git describe --abbrev=0` should output something like like `v0.42.1`.
+  const PO = await $`git describe --abbrev=0`
+  const previousVersion = PO.stdout.trim()
+  let nextVersion = getNextVersion(semver, previousVersion)
 
-// Confirm that we got the next version right; give the user a chance to correct it if we didn't.
-nextVersion = confirmNextVersion(nextVersion)
+  // Confirm that we got the next version right; give the user a chance to correct it if we didn't.
+  nextVersion = confirmNextVersion(nextVersion)
 
-const shouldUpdateNextReleasePRsMilestone = await confirm(
-  `Update next-release PRs milestone to ${nextVersion}?`
-)
+  const shouldUpdateNextReleasePRsMilestone = await confirm(
+    `Update next-release PRs milestone to ${nextVersion}?`
+  )
 
-if (shouldUpdateNextReleasePRsMilestone) {
-  try {
-    await updateNextReleasePRsMilestone(nextVersion)
-  } catch (e) {
-    console.log(`Couldn't update next-release PRs milestone to ${nextVersion}`)
-    console.log(e)
-  }
-}
-
-switch (semver) {
-  case 'major':
-    {
-      const confirmed = await confirm(
-        "You're about to release a major version. Are you sure?"
+  if (shouldUpdateNextReleasePRsMilestone) {
+    try {
+      await updateNextReleasePRsMilestone(nextVersion)
+    } catch (e) {
+      console.log(
+        `Couldn't update next-release PRs milestone to ${nextVersion}`
       )
-      if (confirmed) {
-        console.log('Wait till after v1!')
-        // await releaseMajor(nextVersion)
-      }
+      console.log(e)
     }
-    break
-  case 'minor':
-    await releaseMinor(nextVersion)
-    break
-  case 'patch':
-    await releasePatch(nextVersion)
-    break
-}
+  }
 
-console.log(`Released ${nextVersion}`)
+  switch (semver) {
+    case 'major':
+      {
+        const confirmed = await confirm(
+          "You're about to release a major version. Are you sure?"
+        )
+        if (confirmed) {
+          console.log('Wait till after v1!')
+          // await releaseMajor(nextVersion)
+        }
+      }
+      break
+    case 'minor':
+      await releaseMinor(nextVersion)
+      break
+    case 'patch':
+      await releasePatch(previousVersion, nextVersion)
+      break
+  }
+
+  console.log(`Released ${nextVersion}`)
+}
 
 // Helpers
 
@@ -208,7 +211,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
  *
  * @param {string} nextVersion
  */
-async function releasePatch(nextVersion) {
+async function releasePatch(previousVersion, nextVersion) {
   await $`git checkout tags/${previousVersion} -b release/patch/${nextVersion}`
 
   await $`git push origin release/patch/${nextVersion}`

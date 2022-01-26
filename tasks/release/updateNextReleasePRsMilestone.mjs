@@ -1,51 +1,17 @@
-#!/usr/bin/env node
-/* eslint-env node, es6*/
-import { Octokit } from 'octokit'
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
-
-// If the user didn't provide a GitHub token, exit early.
-if (!process.env.GITHUB_TOKEN) {
-  console.log()
-  console.error(
-    `  You have to provide a GitHub personal-access token (PAT) by setting it to an env var named "GITHUB_TOKEN"`
-  )
-  console.error(
-    `  You can provision a PAT here: https://github.com/settings/tokens`
-  )
-  console.log()
-  process.exit(1)
-}
-
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
-})
-
-yargs(hideBin(process.argv))
-  .command(
-    'update-next-release-prs-milestone <milestone>',
-    'Update the milestone of next-release PRs',
-    (yargs) => {
-      yargs.positional('milestone', {
-        describe: 'the milestone to update next-release PRs to',
-        type: 'string',
-      })
-    },
-    (argv) => updateNextReleasePRsMilestone(argv.milestone)
-  )
-  .parse()
+/* eslint-env node, es2021 */
+import octokit from './octokit.mjs'
 
 /**
- * @param {string} nextVersion
+ * @param {string} milestone
  */
-export default async function updateNextReleasePRsMilestone(nextVersion) {
+export default async function updateNextReleasePRsMilestone(milestone) {
   // GitHub doesn't have a GraphQL API for creating milestones, so REST it is.
   const {
     data: { node_id: nextVersionId, number: nextVersionNumber },
   } = await octokit.request('POST /repos/{owner}/{repo}/milestones', {
     owner: 'redwoodjs',
     repo: 'redwood',
-    title: nextVersion,
+    title: milestone,
   })
 
   // Get the next-release milestone's id.

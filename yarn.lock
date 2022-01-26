@@ -7779,7 +7779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prompts@npm:^2":
+"@types/prompts@npm:2.4.0":
   version: 2.4.0
   resolution: "@types/prompts@npm:2.4.0"
   checksum: 24bb6d7021c5f50ac1265a2d0634fff1ccd2b4c40b6a8b55728ce5d9c17d132ea8f57b848d6601002d235d5d29cf100ae902ed60ef4a06091cf4b640b9e411cb
@@ -25515,7 +25515,7 @@ resolve@^2.0.0-next.3:
     "@types/jest": 27.4.0
     "@types/jscodeshift": 0.11.2
     "@types/lodash.template": 4.5.0
-    "@types/prompts": ^2
+    "@types/prompts": 2.4.0
     all-contributors-cli: 6.20.0
     ansi-colors: 4.1.1
     babel-jest: 27.4.6
