@@ -33,10 +33,6 @@ export const notes = [
   'dashboard to this app.\n',
   "• If you haven't already, familiarize yourself with the docs for your ",
   'preferred provider: https://www.serverless.com/framework/docs/providers\n',
-  'TL;DR: Run `yarn rw deploy serverless --first-setup',
-  'to deploy and get the api endpoint. Add that to `.env.production` (and DO NOT ',
-  'commit to git) and then run `yarn rw deploy serverless` to deploy both web ',
-  'and api sides.',
 ]
 
 const projectDevPackages = [
