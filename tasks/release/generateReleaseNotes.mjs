@@ -1,4 +1,5 @@
 /* eslint-env node, es2021 */
+
 import template from 'lodash.template'
 import fs from 'node:fs'
 import url from 'node:url'
@@ -68,7 +69,7 @@ async function getMilestoneId(title) {
  * }} GetMilestoneIdsRes
  */
 
-const GET_MILESTONE_IDS = `
+export const GET_MILESTONE_IDS = `
   query GetMilestoneIds($title: String) {
     repository(owner: "redwoodjs", name: "redwood") {
       milestones(
@@ -139,7 +140,7 @@ async function getPRsWithMilestone({ milestoneId, after }) {
  * }} GetPRsWithMilestoneRes
  */
 
-const GET_PRS_WITH_MILESTONE = `
+export const GET_PRS_WITH_MILESTONE = `
   query GetPRsWithMilestone($milestoneId: ID!, $after: String) {
     node(id: $milestoneId) {
       ... on Milestone {
