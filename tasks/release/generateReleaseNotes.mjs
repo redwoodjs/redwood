@@ -236,8 +236,6 @@ function sortPRs(prs) {
 }
 
 /**
- * A helper function for formatting PRs.
- *
  * @param {Array<PR>} pr
  */
 function formatPR(pr) {
