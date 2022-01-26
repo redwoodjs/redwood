@@ -11,7 +11,7 @@
     "@types/pascalcase": "1.0.1",
     "core-js": "3.20.3",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.25.0"
+    "react-hook-form": "7.25.1"
   },
   "repository": {
     "type": "git",
