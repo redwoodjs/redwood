@@ -66,6 +66,7 @@
     "build:clean": "yarn clean:prisma && rimraf packages/**/dist",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
+    "test-release": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs",
     "e2e": "node ./tasks/run-e2e",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "lint": "RWJS_CWD=packages/create-redwood-app/template eslint --config .eslintrc.js packages",

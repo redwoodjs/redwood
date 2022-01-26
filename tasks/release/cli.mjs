@@ -5,7 +5,7 @@ import { hideBin } from 'yargs/helpers'
 
 import generateReleaseNotes from './generateReleaseNotes.mjs'
 import release from './release.mjs'
-import updateNextReleasePRsMilestone from './updateNextReleasePRsMilestone.mjs'
+import updateNextReleasePullRequestsMilestone from './updateNextReleasePullRequestsMilestone.mjs'
 
 yargs(hideBin(process.argv))
   .scriptName('release')
@@ -30,7 +30,7 @@ yargs(hideBin(process.argv))
         type: 'string',
       })
     },
-    (argv) => updateNextReleasePRsMilestone(argv.milestone)
+    (argv) => updateNextReleasePullRequestsMilestone(argv.milestone)
   )
   .help()
   .parse()
