@@ -42,7 +42,8 @@ switch (semver) {
         "You're about to release a major version. Are you sure?"
       )
       if (confirmed) {
-        await releaseMajor(nextVersion)
+        console.log('Wait till after v1!')
+        // await releaseMajor(nextVersion)
       }
     }
     break
@@ -59,14 +60,23 @@ console.log(`Released ${nextVersion}`)
 // Helpers
 
 /**
- * @param {string} version
+ * Take the output from `git describe --abbrev=0` (which is something like `'v0.42.1'`),
+ * and return an array of numbers ([0, 42, 1]).
+ *
+ * @param {string} version the version string (obtain by running `git describe --abbrev=0`)
  * @returns [string, string, string]
  */
 function parseGitTag(version) {
-  return version.substring(1).split('.')
+  if (version.startsWith('v')) {
+    version = version.substring(1)
+  }
+
+  return version.split('.').map(Number)
 }
 
 /**
+ * Bump the version according to the semver we're releasing.
+ *
  * @typedef {'major' | 'minor' | 'patch'} Semver
  * @param {Semver} semver
  * @param {string} previousVersion
@@ -75,20 +85,22 @@ function getNextVersion(semver, previousVersion) {
   switch (semver) {
     case 'major': {
       const [major] = parseGitTag(previousVersion)
-      return `v${[+major + 1, 0, 0].join('.')}`
+      return `v${[major + 1, 0, 0].join('.')}`
     }
     case 'minor': {
       const [major, minor] = parseGitTag(previousVersion)
-      return `v${[major, +minor + 1, 0].join('.')}`
+      return `v${[major, minor + 1, 0].join('.')}`
     }
     case 'patch': {
       const [major, minor, patch] = parseGitTag(previousVersion)
-      return `v${[major, minor, +patch + 1].join('.')}`
+      return `v${[major, minor, patch + 1].join('.')}`
     }
   }
 }
 
 /**
+ * Wrapper around `prompts` to exit on crtl c.
+ *
  * @template Name
  * @param {import('prompts').PromptObject<Name>} promptsObject
  * @param {import('prompts').Options} promptsOptions
@@ -101,6 +113,8 @@ function exitOnCancelPrompts(promptsObject, promptsOptions) {
 }
 
 /**
+ * Wrapper around confirm type `prompts`.
+ *
  * @param {string} message
  * @returns {Promise<boolean>}
  */
@@ -136,12 +150,13 @@ async function confirmNextVersion(nextVersion) {
 }
 
 /**
+ * Right now releasing a major is the same as releasing a minor.
  *
  * @param {string} nextVersion
  */
-function releaseMajor(nextVersion) {
-  return releaseMajorOrMinor('major', nextVersion)
-}
+// function releaseMajor(nextVersion) {
+//   return releaseMajorOrMinor('major', nextVersion)
+// }
 
 /**
  * @param {string} nextVersion
@@ -151,6 +166,15 @@ function releaseMinor(nextVersion) {
 }
 
 /**
+ * Does all the work of releasing a major or minor.
+ *
+ * - starting from main, checkout a release branch
+ * - prepare the repo for release
+ * - update the versions and build
+ * - commit and tag
+ * - push and publish
+ * - genreate release notes
+ *
  * @param {Semver} semver
  * @param {string} nextVersion
  */
@@ -180,6 +204,8 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 }
 
 /**
+ * This is incomplete.
+ *
  * @param {string} nextVersion
  */
 async function releasePatch(nextVersion) {
