@@ -199,6 +199,14 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   await $`yarn build`
 
+  const looksGood = await confirm(
+    "You're about to release. Everything look good?"
+  )
+
+  if (!looksGood) {
+    return
+  }
+
   await $`git commit -am "${nextVersion}"`
   await $`git tag -am ${nextVersion} "${nextVersion}"`
 
