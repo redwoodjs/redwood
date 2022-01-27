@@ -11,7 +11,7 @@ export default async function release() {
   const { semver } = await exitOnCancelPrompts({
     type: 'select',
     name: 'semver',
-    message: 'which semver are you releasing?',
+    message: `${c.bgBlue(c.black('  ASK  '))} Which semver are you releasing?`,
     choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
     initial: 2,
   })
@@ -125,7 +125,7 @@ export async function confirm(message) {
   const answer = await exitOnCancelPrompts({
     type: 'confirm',
     name: 'confirm',
-    message,
+    message: `${c.bgBlue(c.black('  ASK  '))} ${message}`,
   })
 
   return answer.confirm
@@ -136,7 +136,7 @@ export async function confirm(message) {
  */
 async function confirmNextVersion(nextVersion) {
   const nextVersionConfirmed = await confirm(
-    `the next release is ${c.green(nextVersion)}`
+    `The next release is ${c.green(nextVersion)}`
   )
 
   if (nextVersionConfirmed) {
@@ -243,7 +243,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   const okToRelease = await confirm(
     `${c.bgYellow(
       c.black(' CHECK ')
-    )} Everything passed your local QA. Are you ready push your branch to GitHub and publish to NPM?`
+    )} Everything passed local QA. Are you ready push your branch to GitHub and publish to NPM?`
   )
 
   if (!okToRelease) {
