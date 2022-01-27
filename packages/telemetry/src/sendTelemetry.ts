@@ -67,9 +67,10 @@ const getInfo = async (presets = {}) => {
   )
 
   // get shell name instead of path
-  if (info.System?.Shell?.path?.match('/')) {
+  const shell = info.System?.Shell // Windows doesn't always provide shell info, I guess
+  if (shell?.path?.match('/')) {
     info.System.Shell.name = info.System.Shell.path.split('/').pop()
-  } else if (info.System.Shell.path.match('\\')) {
+  } else if (shell?.path.match('\\')) {
     info.System.Shell.name = info.System.Shell.path.split('\\').pop()
   }
 
