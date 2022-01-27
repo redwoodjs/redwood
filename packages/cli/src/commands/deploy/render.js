@@ -1,6 +1,8 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { serveApi } from '@redwoodjs/api-server'
+
 import { getPaths } from '../../lib'
 
 export const command = 'render <side> [...commands]'
@@ -23,11 +25,6 @@ export const builder = (yargs) => {
       default: 'true',
       alias: 'dm',
     })
-    .option('serve', {
-      description: 'Run server for api in production',
-      type: 'boolean',
-      default: 'true',
-    })
     .epilogue(
       `For more commands, options, and examples, see ${terminalLink(
         'Redwood CLI Reference',
@@ -36,7 +33,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side, prisma, dm: dataMigrate, serve }) => {
+export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   const paths = getPaths()
   let commandSet = []
   if (side == 'api') {
@@ -46,19 +43,22 @@ export const handler = async ({ side, prisma, dm: dataMigrate, serve }) => {
     if (dataMigrate) {
       commandSet.push('yarn rw dataMigrate up')
     }
-    if (serve) {
-      commandSet.push('yarn rw serve api')
-    }
   } else if (side == 'web') {
     commandSet.push('yarn')
     commandSet.push('yarn rw build web')
   }
 
-  execa(commandSet.join(' && '), {
-    shell: true,
-    stdio: 'inherit',
-    cwd: paths.base,
-    extendEnv: true,
-    cleanup: true,
-  })
+  if (commandSet.length) {
+    execa(commandSet.join(' && '), {
+      shell: true,
+      stdio: 'inherit',
+      cwd: paths.base,
+      extendEnv: true,
+      cleanup: true,
+    })
+  }
+
+  if (side == 'api') {
+    serveApi()
+  }
 }

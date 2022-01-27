@@ -5,7 +5,8 @@
   "bin": {
     "rw-api-server": "./dist/index.js",
     "rw-api-server-watch": "./dist/watch.js",
-    "rw-log-formatter": "./dist/logFormatter/bin.js"
+    "rw-log-formatter": "./dist/logFormatter/bin.js",
+    "rw-serve": "./dist/index.js"
   },
   "files": [
     "dist"
@@ -42,6 +43,7 @@
     "@types/lodash.escape": "4.0.6",
     "@types/qs": "6.9.7",
     "@types/split2": "3.2.1",
+    "@types/yargs": "16.0.4",
     "aws-lambda": "1.0.7",
     "jest": "27.4.7",
     "typescript": "4.5.5"
