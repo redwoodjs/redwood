@@ -20,9 +20,11 @@ const jsonDisplay = (obj) => {
 
 const timeTag = (datetime) => {
   return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
+    datetime && (
+      <time dateTime={datetime} title={datetime}>
+        {new Date(datetime).toUTCString()}
+      </time>
+    )
   )
 }
 
