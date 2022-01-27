@@ -16,6 +16,7 @@ import c from '../../lib/colors'
 import ntfPack from './packing/nft'
 
 export const command = 'serverless'
+export const aliases = ['aws serverless']
 export const description = 'Deploy to AWS via the serverless framework'
 
 export const builder = (yargs) => {
