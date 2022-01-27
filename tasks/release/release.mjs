@@ -1,5 +1,6 @@
 /* eslint-env node, es2021 */
 
+import c from 'ansi-colors'
 import prompts from 'prompts'
 import { $ } from 'zx'
 
@@ -25,7 +26,7 @@ export default async function release() {
   nextVersion = await confirmNextVersion(nextVersion)
 
   const shouldUpdateNextReleasePRsMilestone = await confirm(
-    `Update next-release PRs milestone to ${nextVersion}?`
+    `Update next-release PRs milestone to ${c.green(nextVersion)}?`
   )
 
   if (shouldUpdateNextReleasePRsMilestone) {
@@ -42,13 +43,8 @@ export default async function release() {
   switch (semver) {
     case 'major':
       {
-        const confirmed = await confirm(
-          "You're about to release a major version. Are you sure?"
-        )
-        if (confirmed) {
-          console.log('Wait till after v1!')
-          // await releaseMajor(nextVersion)
-        }
+        console.log('Wait till after v1!')
+        // await releaseMajor(nextVersion)
       }
       break
     case 'minor':
@@ -138,7 +134,7 @@ export async function confirm(message) {
  */
 async function confirmNextVersion(nextVersion) {
   const nextVersionConfirmed = await confirm(
-    `the next release is ${nextVersion}`
+    `the next release is ${c.green(nextVersion)}`
   )
 
   if (nextVersionConfirmed) {
@@ -190,6 +186,16 @@ async function releaseMajorOrMinor(semver, nextVersion) {
     await $`git checkout main`
   }
 
+  const okToCheckout = await confirm(
+    `${c.bgBlue(
+      c.black(' ASK ')
+    )} Ok to check out release/${semver}/${nextVersion}?`
+  )
+
+  if (!okToCheckout) {
+    return
+  }
+
   await $`git checkout -b release/${semver}/${nextVersion}`
 
   await $`git clean -fxd`
@@ -199,25 +205,58 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   await $`yarn build`
 
-  const looksGood = await confirm(
-    "You're about to release. Everything look good?"
+  const versionsLookRight = await confirm(
+    `${c.bgYellow(
+      c.black(' CHECK ')
+    )} The package versions have been updated. Does everything look right?`
   )
 
-  if (!looksGood) {
+  if (!versionsLookRight) {
+    return
+  }
+
+  const commitTagQA = await confirm(
+    `${c.bgBlue(
+      c.black(' ASK ')
+    )} I'm going to commit, tag, and run through local QA`
+  )
+
+  if (!commitTagQA) {
     return
   }
 
   await $`git commit -am "${nextVersion}"`
   await $`git tag -am ${nextVersion} "${nextVersion}"`
 
+  // QA
+  await $`yarn build`
+  await $`yarn lint`
+  await $`yarn test`
+
+  const release = await confirm(
+    `${c.bgYellow(
+      c.black(' CHECK ')
+    )} Everything passed your local QA. Are you ready to push your commits and publish to npm?`
+  )
+
+  if (!release) {
+    return
+  }
+
   // await $`git push && git push --tags`
   // await $`yarn lerna publish from-package`
 
-  try {
-    await generateReleaseNotes(nextVersion)
-  } catch (e) {
-    console.log("Couldn't generate release notes")
-    console.log(e)
+  const shouldGenerateReleaseNotes = await confirm(
+    `${c.bgBlue(c.black(' ASK '))} Generate release notes?`
+  )
+
+  if (shouldGenerateReleaseNotes) {
+    try {
+      await generateReleaseNotes(nextVersion)
+    } catch (e) {
+      console.log("Couldn't generate release notes")
+      console.log(e)
+    }
   }
 }
 
@@ -286,4 +325,8 @@ async function releasePatch(previousVersion, nextVersion) {
  *
  * - i found 0 prs with the milestone 43...
  * - convert over?
+ *
+ * is:pr is:merged milestone:v0.43.0
+ *
+ * - milestone still exists, for you to delete
  */

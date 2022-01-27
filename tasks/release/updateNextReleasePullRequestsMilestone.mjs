@@ -55,7 +55,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
       pullRequestIds.length
     } PRs: https://github.com/redwoodjs/redwood/milestone/${
       milestone.number
-    }\n  Does this look right?`
+    }\n  Does everything look right?`
   )
 
   if (!looksRight) {
