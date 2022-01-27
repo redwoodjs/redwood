@@ -3,6 +3,7 @@
 import prompts from 'prompts'
 import { $ } from 'zx'
 
+import generateReleaseNotes from './generateReleaseNotes.mjs'
 import updateNextReleasePullRequestsMilestone from './updateNextReleasePullRequestsMilestone.mjs'
 
 export default async function release() {
@@ -92,7 +93,6 @@ function getNextVersion(semver, previousVersion) {
       return `v${[major + 1, 0, 0].join('.')}`
     }
     case 'minor': {
-      console.log('here')
       const [major, minor] = parseGitTag(previousVersion)
       return `v${[major, minor + 1, 0].join('.')}`
     }
@@ -199,13 +199,18 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   await $`yarn build`
 
-  await $`git commit -am ${nextVersion}`
-  await $`git tag -am ${nextVersion} ${nextVersion}`
+  await $`git commit -am "${nextVersion}"`
+  await $`git tag -am ${nextVersion} "${nextVersion}"`
 
   // await $`git push && git push --tags`
   // await $`yarn lerna publish from-package`
 
-  await $`yarn release-notes ${nextVersion}`
+  try {
+    await generateReleaseNotes(nextVersion)
+  } catch (e) {
+    console.log("Couldn't generate release notes")
+    console.log(e)
+  }
 }
 
 /**
@@ -266,4 +271,11 @@ async function releasePatch(previousVersion, nextVersion) {
  * do a graphql check for this...
  *
  * milestone:next-release-patch should also be empty
+ *
+ * - you're ready to publish?
+ * - are you sure? check
+ * - moving into publishing
+ *
+ * - i found 0 prs with the milestone 43...
+ * - convert over?
  */
