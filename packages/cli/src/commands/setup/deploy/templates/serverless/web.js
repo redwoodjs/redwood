@@ -8,7 +8,7 @@ export const SERVERLESS_WEB_YML = `# See the full yml reference at https://www.s
 service: ${PROJECT_NAME}-web
 
 # Uncomment \`org\` and \`app\` and enter manually if you want to integrate your
-# deployment with the Serverless dashboard, or run \`yarn rw serverless\` to be
+# deployment with the Serverless dashboard, or run \`yarn serverless\` in ./web to be
 # prompted to connect to an app and these will be filled in for you.
 # See https://www.serverless.com/framework/docs/dashboard/ for more details.
 # org: your-org
