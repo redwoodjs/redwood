@@ -10,7 +10,7 @@ export default async function release() {
     type: 'select',
     name: 'semver',
     message: 'which semver are you releasing?',
-    choices: ['major', 'minor', 'patch'],
+    choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
     initial: 2,
   })
 
@@ -21,7 +21,7 @@ export default async function release() {
   let nextVersion = getNextVersion(semver, previousVersion)
 
   // Confirm that we got the next version right; give the user a chance to correct it if we didn't.
-  nextVersion = confirmNextVersion(nextVersion)
+  nextVersion = await confirmNextVersion(nextVersion)
 
   const shouldUpdateNextReleasePRsMilestone = await confirm(
     `Update next-release PRs milestone to ${nextVersion}?`
@@ -92,6 +92,7 @@ function getNextVersion(semver, previousVersion) {
       return `v${[major + 1, 0, 0].join('.')}`
     }
     case 'minor': {
+      console.log('here')
       const [major, minor] = parseGitTag(previousVersion)
       return `v${[major, minor + 1, 0].join('.')}`
     }
@@ -255,3 +256,14 @@ async function releasePatch(previousVersion, nextVersion) {
   // merge commit
   await $`git branch -d release/patch/${nextVersion}`
 }
+
+/**
+ * QA
+ *
+ * ---
+ *
+ * is:pr is:merged no:milestone -> should be nothing
+ * do a graphql check for this...
+ *
+ * milestone:next-release-patch should also be empty
+ */
