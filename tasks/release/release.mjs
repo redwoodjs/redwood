@@ -3,7 +3,7 @@
 import prompts from 'prompts'
 import { $ } from 'zx'
 
-import updateNextReleasePRsMilestone from './updateNextReleasePRsMilestone.mjs'
+import updateNextReleasePullRequestsMilestone from './updateNextReleasePullRequestsMilestone.mjs'
 
 export default async function release() {
   const { semver } = await exitOnCancelPrompts({
@@ -29,7 +29,7 @@ export default async function release() {
 
   if (shouldUpdateNextReleasePRsMilestone) {
     try {
-      await updateNextReleasePRsMilestone(nextVersion)
+      await updateNextReleasePullRequestsMilestone(nextVersion)
     } catch (e) {
       console.log(
         `Couldn't update next-release PRs milestone to ${nextVersion}`
@@ -122,7 +122,7 @@ function exitOnCancelPrompts(promptsObject, promptsOptions) {
  * @param {string} message
  * @returns {Promise<boolean>}
  */
-async function confirm(message) {
+export async function confirm(message) {
   const answer = await exitOnCancelPrompts({
     type: 'confirm',
     name: 'confirm',

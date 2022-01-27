@@ -1,40 +1,145 @@
 /* eslint-env node, es2021 */
+import c from 'ansi-colors'
+
 import octokit from './octokit.mjs'
+import { confirm } from './release.mjs'
 
 /**
- * @param {string} milestone
+ * @param {string} title
  */
-export default async function updateNextReleasePullRequestsMilestone(
-  milestone
-) {
-  const {
-    data: { node_id: nextVersionId, number: nextVersionNumber },
-  } = await createMilestone(milestone)
+export default async function updateNextReleasePullRequestsMilestone(title) {
+  let milestone = await getMilestone(title)
 
-  const pullRequestIds = await getPullRequestIdsWithNextReleaseMilestone()
+  if (!milestone) {
+    const okToCreate = await confirm(
+      `Milestone ${c.green(title)} doesn't exist. Ok to create it?`
+    )
+
+    if (!okToCreate) {
+      return
+    }
+
+    const {
+      data: { node_id: id, number },
+    } = await createMilestone(title)
+
+    milestone = { id, number }
+
+    console.log(`Created milestone ${c.green(title)}`)
+  }
+
+  const nextReleaseMilestoneId = await getNextReleaseMilestoneId()
+
+  const pullRequestIds = await getPullRequestIdsWithMilestone(
+    nextReleaseMilestoneId
+  )
+
+  const okToUpdate = await confirm(
+    `Ok to update the milestone of ${pullRequestIds.length} PRs from ${c.green(
+      'next-release'
+    )} to ${c.green(title)}?`
+  )
+
+  if (!okToUpdate) {
+    return
+  }
 
   await Promise.all(
     pullRequestIds.map((pullRequestId) =>
-      updatePullRequestMilestone(pullRequestId, nextVersionId)
+      updatePullRequestMilestone(pullRequestId, milestone.id)
     )
   )
 
-  // Close the milestone we just created.
-  return closeMilestone(nextVersionNumber)
+  const looksRight = await confirm(
+    `${c.bgYellow(c.black(' CHECK '))} Updated the milestone of ${
+      pullRequestIds.length
+    } PRs: https://github.com/redwoodjs/redwood/milestone/${
+      milestone.number
+    }\n  Does this look right?`
+  )
+
+  if (!looksRight) {
+    const undo = await confirm(`Do you want to undo the changes to the PRs?`)
+
+    if (!undo) {
+      return
+    }
+
+    await Promise.all(
+      pullRequestIds.map((pullRequestId) =>
+        updatePullRequestMilestone(pullRequestId, nextReleaseMilestoneId)
+      )
+    )
+
+    console.log('Changes to the PRs undone')
+
+    return
+  }
+
+  const okToClose = await confirm(`Ok to close milestone ${c.green(title)}?`)
+
+  if (okToClose) {
+    closeMilestone(milestone.number)
+  }
+
+  console.log('Done')
 }
 
 // Helpers
 
 /**
- * @param {string} milestone
+ * @typedef {{
+ *   repository: {
+ *     milestones: {
+ *       nodes: Array<{ title: string, id: string }>
+ *     }
+ *   }
+ * }} GetMilestonesRes
+ *
+ * @param {string} [title]
+ */
+async function getMilestone(title) {
+  const {
+    repository: {
+      milestones: { nodes: milestones },
+    },
+  } = /** @type GetMilestonesRes */ (
+    await octokit.graphql(GET_MILESTONES, { title })
+  )
+
+  let milestone = milestones.find((milestone) => milestone.title === title)
+
+  return milestone
+}
+
+export const GET_MILESTONES = `
+  query GetMilestoneIds($title: String) {
+    repository(owner: "redwoodjs", name: "redwood") {
+      milestones(
+        query: $title
+        first: 3
+        orderBy: { field: NUMBER, direction: DESC }
+      ) {
+        nodes {
+          title
+          id
+          number
+        }
+      }
+    }
+  }
+`
+
+/**
+ * @param {string} title
  * @returns {Promise<{ data: { node_id: string, number: number } }>}
  */
-function createMilestone(milestone) {
+function createMilestone(title) {
   // GitHub doesn't have a GraphQL API for creating milestones, so REST it is.
   return octokit.request('POST /repos/{owner}/{repo}/milestones', {
     owner: 'redwoodjs',
     repo: 'redwood',
-    title: milestone,
+    title,
   })
 }
 
@@ -45,60 +150,67 @@ function createMilestone(milestone) {
  *       nodes: Array<{ title: string, id: string }>
  *     }
  *   }
- * }} GetMilestoneIdsRes
- *
- * @typedef {{
- *   node: {
- *     pullRequests: {
- *       nodes: Array<{ id: string }>
- *     }
- *   }
- * }} GetNextReleasePullRequestsRes
+ * }} GetNextReleaseMilestoneIdRes
  */
-export async function getPullRequestIdsWithNextReleaseMilestone() {
-  // Get the next-release milestone's id.
+async function getNextReleaseMilestoneId() {
   const {
     repository: {
       milestones: { nodes: milestones },
     },
-  } = /** @type {GetMilestoneIdsRes} */ (
-    await octokit.graphql(GET_MILESTONE_IDS)
+  } = /** @type {GetNextReleaseMilestoneIdRes} */ (
+    await octokit.graphql(GET_NEXT_RELEASE_MILESTONE_ID)
   )
 
   const { id } = milestones.find(
     (milestone) => milestone.title === 'next-release'
   )
 
-  // Get all the PRs with the next-release milestone.
-  // Not handling if we merge more than 100 PRs...
+  return id
+}
+
+export const GET_NEXT_RELEASE_MILESTONE_ID = `
+  query GetNextReleaseMilestoneId {
+    repository(owner: "redwoodjs", name: "redwood") {
+      milestones(query: "next-release", first: 5) {
+        nodes {
+          title
+          id
+        }
+      }
+    }
+  }
+`
+
+/**
+ * @typedef {{
+ *   node: {
+ *     pullRequests: {
+ *       nodes: Array<{ id: string }>
+ *     }
+ *   }
+ * }} GetNextReleasePullRequestIdsRes
+ *
+ * @param {string} milestoneId
+ */
+export async function getPullRequestIdsWithMilestone(milestoneId) {
+  /**
+   * Right now we're not handling the case that we merge more than 100 PRs.
+   */
   const {
     node: {
       pullRequests: { nodes: pullRequests },
     },
-  } = /** @type {GetNextReleasePullRequestsRes} */ (
+  } = /** @type {GetNextReleasePullRequestIdsRes} */ (
     await octokit.graphql(GET_NEXT_RELEASE_PULL_REQUEST_IDS, {
-      milestoneId: id,
+      milestoneId,
     })
   )
 
   return pullRequests.map((pullRequest) => pullRequest.id)
 }
 
-export const GET_MILESTONE_IDS = `
-query GetMilestoneIds {
-  repository(owner: "redwoodjs", name: "redwood") {
-    milestones(query: "next-release", first: 5) {
-      nodes {
-        title
-        id
-      }
-    }
-  }
-}
-`
-
 export const GET_NEXT_RELEASE_PULL_REQUEST_IDS = `
-  query GetNextReleasePullRequests($milestoneId: ID!) {
+  query GetNextReleasePullRequestIds($milestoneId: ID!) {
     node(id: $milestoneId) {
       ... on Milestone {
         pullRequests(first: 100) {
@@ -133,7 +245,7 @@ export const UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE = `
 `
 
 /**
- * @param {number} number
+ * @param {number} milestone_number
  */
 function closeMilestone(milestone_number) {
   return octokit.request(
