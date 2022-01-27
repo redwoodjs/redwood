@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import boxen from 'boxen'
+import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import execa from 'execa'
 import Listr from 'listr'
@@ -18,7 +20,7 @@ export const builder = (yargs) => {
   yargs.option('stage', {
     describe:
       'serverless stage pass through param: https://www.serverless.com/blog/stages-and-environments',
-    default: 'staging',
+    default: 'production',
     type: 'string',
   })
 
@@ -47,17 +49,19 @@ export const preRequisites = () => [
   },
 ]
 
-export const buildCommands = ({ side: sides }) => [
-  {
-    title: `Building ${sides.join(' & ')}...`,
-    command: ['yarn', ['rw', 'build', ...sides]],
-  },
-  {
-    title: 'Packing Functions...',
-    enabled: () => sides.includes('api'),
-    task: ntfPack,
-  },
-]
+export const buildCommands = ({ sides }) => {
+  return [
+    {
+      title: `Building ${sides.join(' & ')}...`,
+      command: ['yarn', ['rw', 'build', ...sides]],
+    },
+    {
+      title: 'Packing Functions...',
+      enabled: () => sides.includes('api'),
+      task: ntfPack,
+    },
+  ]
+}
 
 export const deployCommands = ({ stage, sides, firstRun, packOnly }) => {
   const slsStage = stage ? ['--stage', stage] : []
@@ -80,16 +84,21 @@ export const deployCommands = ({ stage, sides, firstRun, packOnly }) => {
   })
 }
 
-export const handler = async (yargs) => {
-  const rwjsPaths = getPaths()
-  const dotEnvPath = path.join(rwjsPaths.base, `.env.${yargs.stage}`)
-
+const loadDotEnvForStage = (dotEnvPath) => {
   // Make sure we use the correct .env based on the stage
   config({
     path: dotEnvPath,
     defaults: path.join(getPaths().base, '.env.defaults'),
     encoding: 'utf8',
   })
+}
+
+export const handler = async (yargs) => {
+  const rwjsPaths = getPaths()
+  const dotEnvPath = path.join(rwjsPaths.base, `.env.${yargs.stage}`)
+
+  // Make sure .env.staging, .env.production, etc are loaded based on the --stage flag
+  loadDotEnvForStage(dotEnvPath)
 
   const tasks = new Listr(
     [
@@ -106,6 +115,11 @@ export const handler = async (yargs) => {
     await tasks.run()
 
     if (yargs.firstRun) {
+      const SETUP_MARKER = chalk.bgBlue(chalk.black('First Setup '))
+      console.log()
+
+      console.log(SETUP_MARKER, c.green('Starting first setup wizard...'))
+
       const { stdout: slsInfo } = await execa(
         'yarn serverless info --verbose',
         {
@@ -117,33 +131,70 @@ export const handler = async (yargs) => {
       const deployedApiUrl = slsInfo.match(/HttpApiUrl: (https:\/\/.*)/)[1]
 
       console.log()
-      console.log(`Found ${c.green(deployedApiUrl)}`)
+      console.log(SETUP_MARKER, `Found ${c.green(deployedApiUrl)}`)
+      console.log()
+
       const { addDotEnv } = await prompts({
         type: 'confirm',
         name: 'addDotEnv',
-        message: `Add API_URL to your .env.${yargs.stage}? This will be used when you build your web side`,
+        message: `Add API_URL to your .env.production? This will be used if you deploy the web side from your machine`,
       })
 
       if (addDotEnv) {
         fs.writeFileSync(dotEnvPath, `API_URL=${deployedApiUrl}`)
+
+        // Reload dotenv, after adding the new file
+        loadDotEnvForStage(dotEnvPath)
       }
 
       if (yargs.sides.includes('web')) {
-        console.log('---- Deploying web side with updated url ----')
+        console.log()
+        console.log(SETUP_MARKER, 'Deploying web side with updated API_URL')
 
-        console.log('First deploys can take a good few minutes..')
+        console.log(
+          SETUP_MARKER,
+          'First deploys can take a good few minutes...'
+        )
+        console.log()
 
-        const webDeployTasks = new Listr([
-          ...buildCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
-            mapCommandsToListr
-          ),
-          ...deployCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
-            mapCommandsToListr
-          ),
-        ])
+        const webDeployTasks = new Listr(
+          [
+            // Rebuild web with the new API_URL
+            ...buildCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
+              mapCommandsToListr
+            ),
+            ...deployCommands({
+              ...yargs,
+              sides: ['web'],
+              firstRun: false,
+            }).map(mapCommandsToListr),
+          ],
+          {
+            exitOnError: true,
+            renderer: yargs.verbose && VerboseRenderer,
+          }
+        )
 
         // Deploy the web side now that the API_URL has been configured
         await webDeployTasks.run()
+
+        const message = [
+          c.bold('Successful first deploy!'),
+          '',
+          'You can use serverless.com CI/CD by connecting/creating an app',
+          'To do this run `yarn serverless` on each of the sides, and connect your account',
+          '',
+          'Find more information in our docs:',
+          c.underline('https://redwoodjs.com/docs/deploy#aws_serverless'),
+        ]
+
+        console.log(
+          boxen(message.join('\n'), {
+            padding: { top: 0, bottom: 0, right: 1, left: 1 },
+            margin: 1,
+            borderColor: 'gray',
+          })
+        )
       }
     }
   } catch (e) {
