@@ -67,7 +67,7 @@ const getInfo = async (presets = {}) => {
   )
 
   // get shell name instead of path
-  if (info.System.Shell.path.match('/')) {
+  if (info.System?.Shell?.path?.match('/')) {
     info.System.Shell.name = info.System.Shell.path.split('/').pop()
   } else if (info.System.Shell.path.match('\\')) {
     info.System.Shell.name = info.System.Shell.path.split('\\').pop()
