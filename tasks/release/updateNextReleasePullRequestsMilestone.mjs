@@ -1,4 +1,9 @@
 /* eslint-env node, es2021 */
+/**
+ * - is:pr is:merged no:milestone -> should empty
+ * - milestone:next-release-patch -> check empty
+ * - close milestone _after_ publish
+ */
 import c from 'ansi-colors'
 
 import octokit from './octokit.mjs'
@@ -53,7 +58,8 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   const looksRight = await confirm(
     `${c.bgYellow(c.black(' CHECK '))} Updated the milestone of ${
       pullRequestIds.length
-    } PRs: https://github.com/redwoodjs/redwood/milestone/${
+    } PRs:
+    https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${
       milestone.number
     }\n  Does everything look right?`
   )
@@ -72,6 +78,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
     )
 
     console.log('Changes to the PRs undone')
+    console.log(c.yellow(`Note that milestone ${title} still exists`))
 
     return
   }
@@ -81,8 +88,6 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   if (okToClose) {
     closeMilestone(milestone.number)
   }
-
-  console.log('Done')
 }
 
 // Helpers

@@ -1,4 +1,7 @@
 /* eslint-env node, es2021 */
+/**
+ * - branch already exists? start on the "update the versions" step
+ */
 
 import c from 'ansi-colors'
 import prompts from 'prompts'
@@ -18,12 +21,23 @@ export default async function release() {
 
   // Get the most-recent tag and get the next version from it.
   // `git describe --abbrev=0` should output something like like `v0.42.1`.
-  const PO = await $`git describe --abbrev=0`
-  const previousVersion = PO.stdout.trim()
+  const gitDescribePO = await $`git describe --abbrev=0`
+  const previousVersion = gitDescribePO.stdout.trim()
   let nextVersion = getNextVersion(semver, previousVersion)
 
   // Confirm that we got the next version right; give the user a chance to correct it if we didn't.
   nextVersion = await confirmNextVersion(nextVersion)
+
+  // Check that the git tag doesn't already exist.
+  const gitTagPO = await $`git tag -l ${nextVersion}`
+  if (gitTagPO.stdout.trim()) {
+    console.log(
+      c.yellow(
+        `Git tag ${nextVersion} already exists. Please delete it before proceeding`
+      )
+    )
+    return
+  }
 
   const shouldUpdateNextReleasePRsMilestone = await confirm(
     `Do you want to update next-release PRs' milestone to ${c.green(
@@ -45,8 +59,7 @@ export default async function release() {
   switch (semver) {
     case 'major':
       {
-        console.log('Wait till after v1!')
-        // await releaseMajor(nextVersion)
+        console.log(c.yellow('Wait till after v1!'))
       }
       break
     case 'minor':
@@ -201,6 +214,14 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   await $`git checkout -b release/${semver}/${nextVersion}`
 
+  const okToProceed = await confirm(
+    'Checked out release branch. If you want to continue publishing, proceed. Otherwise, stop here to publish this branch to GitHub to create an RC'
+  )
+
+  if (!okToProceed) {
+    return
+  }
+
   const okToCleanInstallUpdate = await confirm(
     'Ok to clean, install, and update package versions?'
   )
@@ -315,20 +336,3 @@ async function releasePatch(previousVersion, nextVersion) {
   // merge commit
   await $`git branch -d release/patch/${nextVersion}`
 }
-
-/**
- * is:pr is:merged no:milestone -> should be nothing
- * do a graphql check for this...
- *
- * milestone:next-release-patch should also be empty
- *
- * -> is:pr is:merged milestone:v0.43.0
- *
- * - milestone still exists--for you to delete
- *
- * - close milestone _after_ publish
- *
- * -> don't say done (update pull request)
- *
- * -> git tag...
- */
