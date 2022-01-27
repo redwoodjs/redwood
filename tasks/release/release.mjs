@@ -26,7 +26,9 @@ export default async function release() {
   nextVersion = await confirmNextVersion(nextVersion)
 
   const shouldUpdateNextReleasePRsMilestone = await confirm(
-    `Update next-release PRs milestone to ${c.green(nextVersion)}?`
+    `Do you want to update next-release PRs' milestone to ${c.green(
+      nextVersion
+    )}?`
   )
 
   if (shouldUpdateNextReleasePRsMilestone) {
@@ -182,14 +184,15 @@ function releaseMinor(nextVersion) {
 async function releaseMajorOrMinor(semver, nextVersion) {
   const PO = await $`git branch --show-current`
   const branch = PO.stdout.trim()
+
   if (branch !== 'main') {
     await $`git checkout main`
   }
 
   const okToCheckout = await confirm(
-    `${c.bgBlue(
-      c.black(' ASK ')
-    )} Ok to check out release/${semver}/${nextVersion}?`
+    `Ok to check out new branch ${c.green(
+      ['release', 'semver', nextVersion].join('/')
+    )}?`
   )
 
   if (!okToCheckout) {
@@ -198,12 +201,18 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   await $`git checkout -b release/${semver}/${nextVersion}`
 
+  const okToCleanInstallUpdate = await confirm(
+    'Ok to clean, install, and update package versions?'
+  )
+
+  if (!okToCleanInstallUpdate) {
+    return
+  }
+
   await $`git clean -fxd`
   await $`yarn install`
 
   await $`./tasks/update-package-versions ${nextVersion}`
-
-  await $`yarn build`
 
   const versionsLookRight = await confirm(
     `${c.bgYellow(
@@ -216,9 +225,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   }
 
   const commitTagQA = await confirm(
-    `${c.bgBlue(
-      c.black(' ASK ')
-    )} I'm going to commit, tag, and run through local QA`
+    'Ok to commit, tag, and run through local QA?'
   )
 
   if (!commitTagQA) {
@@ -233,13 +240,13 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   await $`yarn lint`
   await $`yarn test`
 
-  const release = await confirm(
+  const okToRelease = await confirm(
     `${c.bgYellow(
       c.black(' CHECK ')
-    )} Everything passed your local QA. Are you ready to push your commits and publish to npm?`
+    )} Everything passed your local QA. Are you ready push your commits and publish to npm?`
   )
 
-  if (!release) {
+  if (!okToRelease) {
     return
   }
 
@@ -247,7 +254,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   // await $`yarn lerna publish from-package`
 
   const shouldGenerateReleaseNotes = await confirm(
-    `${c.bgBlue(c.black(' ASK '))} Generate release notes?`
+    'Do you want to generate release notes?'
   )
 
   if (shouldGenerateReleaseNotes) {
@@ -310,23 +317,18 @@ async function releasePatch(previousVersion, nextVersion) {
 }
 
 /**
- * QA
- *
- * ---
- *
  * is:pr is:merged no:milestone -> should be nothing
  * do a graphql check for this...
  *
  * milestone:next-release-patch should also be empty
  *
- * - you're ready to publish?
- * - are you sure? check
- * - moving into publishing
+ * -> is:pr is:merged milestone:v0.43.0
  *
- * - i found 0 prs with the milestone 43...
- * - convert over?
+ * - milestone still exists--for you to delete
  *
- * is:pr is:merged milestone:v0.43.0
+ * - close milestone _after_ publish
  *
- * - milestone still exists, for you to delete
+ * -> don't say done (update pull request)
+ *
+ * -> git tag...
  */
