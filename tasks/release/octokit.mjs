@@ -1,5 +1,4 @@
 /* eslint-env node, es2021 */
-
 import { Octokit } from 'octokit'
 
 /**

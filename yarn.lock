@@ -16574,6 +16574,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"growly@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "growly@npm:1.3.0"
+  checksum: 3043bd5c064e87f89e8c9b66894ed09fd882c7fa645621a543b45b72f040c7241e25061207a858ab191be2fbdac34795ff57c2a40962b154a6b2908a5e509252
+  languageName: node
+  linkType: hard
+
 "gtoken@npm:^5.0.4":
   version: 5.3.1
   resolution: "gtoken@npm:5.3.1"
@@ -21603,6 +21610,20 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"node-notifier@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "node-notifier@npm:10.0.0"
+  dependencies:
+    growly: ^1.3.0
+    is-wsl: ^2.2.0
+    semver: ^7.3.5
+    shellwords: ^0.1.1
+    uuid: ^8.3.2
+    which: ^2.0.2
+  checksum: 9c3fb4af37de1721e753a2b90e8c6f580741a9660a633bcd6aa02cc4ea522515a43aee216243630ecf0b82e0d7b66348e0510507bf01c061e6de9b5b2d348f8d
+  languageName: node
+  linkType: hard
+
 "node-releases@npm:^2.0.1":
   version: 2.0.1
   resolution: "node-releases@npm:2.0.1"
@@ -25501,6 +25522,7 @@ resolve@^2.0.0-next.3:
     lerna: 4.0.0
     lodash.template: 4.5.0
     msw: 0.36.7
+    node-notifier: ^10.0.0
     nodemon: 2.0.15
     npm-packlist: 3.0.0
     octokit: 1.7.1
@@ -26086,6 +26108,13 @@ resolve@^2.0.0-next.3:
   version: 1.7.3
   resolution: "shell-quote@npm:1.7.3"
   checksum: cf997c325f49c4393a859074f1ee9ca3da7d9e1940225bab24a86f0266504c7d7e356b83f13c74932cb243d53125b5c8c57b714017c53490bf1fe10540422014
+  languageName: node
+  linkType: hard
+
+"shellwords@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "shellwords@npm:0.1.1"
+  checksum: 7d66b28927e0b524b71b2e185651fcd88a70473a077dd230fbf86188380e948ffb36cea00832d78fc13c93cd15f6f52286fb05f2746b7580623ca1ec619eb004
   languageName: node
   linkType: hard
 

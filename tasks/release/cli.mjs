@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 /* eslint-env node, es2021 */
-
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
