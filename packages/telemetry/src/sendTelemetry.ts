@@ -80,7 +80,7 @@ const getInfo = async (presets = {}) => {
   return {
     os: info.System.OS.split(' ')[0],
     osVersion: info.System.OS.split(' ')[1],
-    shell: info.System.Shell.name,
+    shell: info.System.Shell?.name,
     nodeVersion: info.Binaries?.Node?.version,
     yarnVersion: info.Binaries?.Node?.version,
     npmVersion: info.Binaries?.Node?.version,
