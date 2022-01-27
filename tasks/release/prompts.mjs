@@ -26,7 +26,7 @@ export function exitOnCancelPrompts(promptsObject, promptsOptions) {
 }
 
 /**
- * Wrapper around confirm type `prompts`.
+ * Wrapper around confirm-type `prompts`.
  *
  * @param {string} message
  * @returns {Promise<boolean>}
