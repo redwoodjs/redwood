@@ -59,9 +59,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
     `${c.bgYellow(c.black(' CHECK '))} Updated the milestone of ${
       pullRequestIds.length
     } PRs:
-    https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${
-      milestone.number
-    }\n  Does everything look right?`
+    https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\n  Does everything look right?`
   )
 
   if (!looksRight) {
