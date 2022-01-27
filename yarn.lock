@@ -5346,6 +5346,7 @@ __metadata:
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
+    "@types/yargs": 16.0.4
     ansi-colors: 4.1.1
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -5368,6 +5369,7 @@ __metadata:
     rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
+    rw-serve: ./dist/index.js
   languageName: unknown
   linkType: soft
 
