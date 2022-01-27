@@ -191,7 +191,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   const okToCheckout = await confirm(
     `Ok to check out new branch ${c.green(
-      ['release', 'semver', nextVersion].join('/')
+      ['release', semver, nextVersion].join('/')
     )}?`
   )
 
