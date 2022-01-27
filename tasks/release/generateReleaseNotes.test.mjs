@@ -114,20 +114,17 @@ const server = setupServer(handleGetMilestoneIds, handleGetPRsWithMilestone)
 
 beforeAll(() => server.listen())
 
-afterAll(() => server.close())
+afterAll(() => {
+  server.close()
+
+  if (
+    fs.existsSync(new URL('./next-releaseReleaseNotes.md', import.meta.url))
+  ) {
+    fs.rmSync(new URL('./next-releaseReleaseNotes.md', import.meta.url))
+  }
+})
 
 describe('generateReleaseNotes', () => {
-  it('works', async () => {
-    await generateReleaseNotes('next-release')
-
-    expect(
-      fs.readFileSync(
-        new URL('./next-releaseReleaseNotes.md', import.meta.url),
-        'utf8'
-      )
-    ).toMatchSnapshot()
-  })
-
   it('uses the right queries', () => {
     expect(GET_MILESTONE_IDS).toMatchInlineSnapshot(`
       "
@@ -177,5 +174,16 @@ describe('generateReleaseNotes', () => {
         }
       "
     `)
+  })
+
+  it('MSW unit test', async () => {
+    await generateReleaseNotes('next-release')
+
+    expect(
+      fs.readFileSync(
+        new URL('./next-releaseReleaseNotes.md', import.meta.url),
+        'utf8'
+      )
+    ).toMatchSnapshot()
   })
 })

@@ -3,7 +3,8 @@ import { rest, graphql } from 'msw'
 import { setupServer } from 'msw/node'
 
 import updateNextReleasePullRequestsMilestone, {
-  GET_MILESTONE_IDS,
+  GET_MILESTONES,
+  GET_NEXT_RELEASE_MILESTONE_ID,
   GET_NEXT_RELEASE_PULL_REQUEST_IDS,
   UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE,
 } from './updateNextReleasePullRequestsMilestone.mjs'
@@ -162,14 +163,30 @@ beforeAll(() => server.listen())
 afterAll(() => server.close())
 
 describe('updateNextReleasePullRequestsMilestone', () => {
-  it('works', async () => {
-    await updateNextReleasePullRequestsMilestone('v0.42.1')
-  })
-
-  it.only('uses the right queries', () => {
-    expect(GET_MILESTONE_IDS).toMatchInlineSnapshot(`
+  it('uses the right queries', () => {
+    expect(GET_MILESTONES).toMatchInlineSnapshot(`
       "
-        query GetMilestoneIds {
+        query GetMilestoneIds($title: String) {
+          repository(owner: \\"redwoodjs\\", name: \\"redwood\\") {
+            milestones(
+              query: $title
+              first: 3
+              orderBy: { field: NUMBER, direction: DESC }
+            ) {
+              nodes {
+                title
+                id
+                number
+              }
+            }
+          }
+        }
+      "
+    `)
+
+    expect(GET_NEXT_RELEASE_MILESTONE_ID).toMatchInlineSnapshot(`
+      "
+        query GetNextReleaseMilestoneId {
           repository(owner: \\"redwoodjs\\", name: \\"redwood\\") {
             milestones(query: \\"next-release\\", first: 5) {
               nodes {
@@ -209,5 +226,12 @@ describe('updateNextReleasePullRequestsMilestone', () => {
         }
       "
     `)
+  })
+
+  /**
+   * This needs a few tweaks.
+   */
+  it.skip('MSW unit test', async () => {
+    await updateNextReleasePullRequestsMilestone('v0.42.1')
   })
 })

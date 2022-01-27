@@ -7,18 +7,16 @@ import url from 'node:url'
 import octokit from './octokit.mjs'
 
 /**
- * Compiles the release notes for a given milestone.
+ * Generates release notes for a milestone.
  *
  * @remarks
  *
- * If no milestone's provided, just fetch the latest version milestone (e.g. `v0.42.0`).
+ * If no milestone's given, just fetch the latest version milestone (e.g. `v0.42.0`).
  *
  * @param {string} [milestone]
  */
 export default async function generateReleaseNotes(milestone) {
-  /**
-   * Get the milestone's title, id, and PRs.
-   */
+  // Get the milestone's title, id, and PRs.
   const { title, id } = await getMilestoneId(milestone)
   const prs = await getPRsWithMilestone({ milestoneId: id })
 
@@ -37,29 +35,6 @@ export default async function generateReleaseNotes(milestone) {
 // Helpers
 
 /**
- * @param {string} [title]
- */
-async function getMilestoneId(title) {
-  const data = /** @type GetMilestoneIdsRes */ (
-    await octokit.graphql(GET_MILESTONE_IDS, { title })
-  )
-
-  if (!title) {
-    const [latestMilestone] = data.repository.milestones.nodes
-    console.log(
-      `No milestone was provided; using the latest: ${latestMilestone.title}`
-    )
-    return latestMilestone
-  }
-
-  let milestone = data.repository.milestones.nodes.find(
-    (milestone) => milestone.title === title
-  )
-
-  return milestone
-}
-
-/**
  * @typedef {{
  *   repository: {
  *     milestones: {
@@ -67,7 +42,30 @@ async function getMilestoneId(title) {
  *     }
  *   }
  * }} GetMilestoneIdsRes
+ *
+ * @param {string} [title]
  */
+async function getMilestoneId(title) {
+  const {
+    repository: {
+      milestones: { nodes: milestones },
+    },
+  } = /** @type GetMilestoneIdsRes */ (
+    await octokit.graphql(GET_MILESTONE_IDS, { title })
+  )
+
+  if (!title) {
+    const [latestMilestone] = milestones
+    console.log(
+      `No milestone was provided; using the latest: ${latestMilestone.title}`
+    )
+    return latestMilestone
+  }
+
+  let milestone = milestones.find((milestone) => milestone.title === title)
+
+  return milestone
+}
 
 export const GET_MILESTONE_IDS = `
   query GetMilestoneIds($title: String) {
@@ -85,32 +83,6 @@ export const GET_MILESTONE_IDS = `
     }
   }
 `
-
-/**
- * @param {{ milestoneId: string, after?: string }}
- * @returns {Promise<Array<PR>>}
- */
-async function getPRsWithMilestone({ milestoneId, after }) {
-  const {
-    node: { pullRequests },
-  } = /** @type GetPRsWithMilestoneRes */ (
-    await octokit.graphql(GET_PRS_WITH_MILESTONE, {
-      milestoneId,
-      after,
-    })
-  )
-
-  if (!pullRequests.pageInfo.hasNextPage) {
-    return pullRequests.nodes
-  }
-
-  const prs = await getPRsWithMilestone({
-    milestoneId,
-    after: pullRequests.pageInfo.endCursor,
-  })
-
-  return [...pullRequests.nodes, ...prs]
-}
 
 /**
  * @typedef {{
@@ -138,7 +110,31 @@ async function getPRsWithMilestone({ milestoneId, after }) {
  *     }
  *   }
  * }} GetPRsWithMilestoneRes
+ *
+ * @param {{ milestoneId: string, after?: string }}
+ * @returns {Promise<Array<PR>>}
  */
+async function getPRsWithMilestone({ milestoneId, after }) {
+  const {
+    node: { pullRequests },
+  } = /** @type GetPRsWithMilestoneRes */ (
+    await octokit.graphql(GET_PRS_WITH_MILESTONE, {
+      milestoneId,
+      after,
+    })
+  )
+
+  if (!pullRequests.pageInfo.hasNextPage) {
+    return pullRequests.nodes
+  }
+
+  const prs = await getPRsWithMilestone({
+    milestoneId,
+    after: pullRequests.pageInfo.endCursor,
+  })
+
+  return [...pullRequests.nodes, ...prs]
+}
 
 export const GET_PRS_WITH_MILESTONE = `
   query GetPRsWithMilestone($milestoneId: ID!, $after: String) {
@@ -182,7 +178,10 @@ function getNoOfUniqueContributors(prs) {
 }
 
 /**
- * @todo This could be a little better.
+ * @remarks
+ *
+ * This could be a little better.
+ *
  * @param {Array<PR>} prs
  */
 function sortPRs(prs) {
