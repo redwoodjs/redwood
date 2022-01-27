@@ -7,7 +7,7 @@
 import c from 'ansi-colors'
 
 import octokit from './octokit.mjs'
-import { confirm } from './release.mjs'
+import { confirm, ASK, CHECK } from './release.mjs'
 
 /**
  * @param {string} title
@@ -17,7 +17,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
 
   if (!milestone) {
     const okToCreate = await confirm(
-      `Milestone ${c.green(title)} doesn't exist. Ok to create it?`
+      `${ASK} Milestone ${c.green(title)} doesn't exist. Ok to create it?`
     )
 
     if (!okToCreate) {
@@ -28,7 +28,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
       data: { node_id: id, number },
     } = await createMilestone(title)
 
-    milestone = { id, number }
+    milestone = { title, id, number }
 
     console.log(`Created milestone ${c.green(title)}`)
   }
@@ -40,9 +40,9 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   )
 
   const okToUpdate = await confirm(
-    `Ok to update the milestone of ${pullRequestIds.length} PRs from ${c.green(
-      'next-release'
-    )} to ${c.green(title)}?`
+    `${ASK} Ok to update the milestone of ${
+      pullRequestIds.length
+    } PRs from ${c.green('next-release')} to ${c.green(title)}?`
   )
 
   if (!okToUpdate) {
@@ -56,36 +56,35 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   )
 
   const looksRight = await confirm(
-    `${c.bgYellow(c.black(' CHECK '))} Updated the milestone of ${
-      pullRequestIds.length
-    } PRs:
-    https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\n  Does everything look right?`
+    `${CHECK} Updated the milestone of ${pullRequestIds.length} PRs:
+    https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\nDoes everything look right?`
   )
 
   if (!looksRight) {
-    const undo = await confirm(`Do you want to undo the changes to the PRs?`)
-
-    if (!undo) {
-      return
-    }
-
-    await Promise.all(
-      pullRequestIds.map((pullRequestId) =>
-        updatePullRequestMilestone(pullRequestId, nextReleaseMilestoneId)
-      )
+    const undoPRs = await confirm(
+      `${ASK} Do you want to undo the changes to the PRs?`
     )
 
-    console.log('Changes to the PRs undone')
-    console.log(c.yellow(`Note that milestone ${title} still exists`))
+    if (undoPRs) {
+      await Promise.all(
+        pullRequestIds.map((pullRequestId) =>
+          updatePullRequestMilestone(pullRequestId, nextReleaseMilestoneId)
+        )
+      )
+    }
+
+    const undoMilestone = await confirm(
+      `${ASK} Do you want to delete the milestone`
+    )
+
+    if (undoMilestone) {
+      await deleteMilestone(milestone.number)
+    }
 
     return
   }
 
-  const okToClose = await confirm(`Ok to close milestone ${c.green(title)}?`)
-
-  if (okToClose) {
-    closeMilestone(milestone.number)
-  }
+  return milestone
 }
 
 // Helpers
@@ -94,7 +93,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
  * @typedef {{
  *   repository: {
  *     milestones: {
- *       nodes: Array<{ title: string, id: string }>
+ *       nodes: Array<{ title: string, id: string, number: number }>
  *     }
  *   }
  * }} GetMilestonesRes
@@ -250,7 +249,7 @@ export const UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE = `
 /**
  * @param {number} milestone_number
  */
-function closeMilestone(milestone_number) {
+export function closeMilestone(milestone_number) {
   return octokit.request(
     'POST /repos/{owner}/{repo}/milestones/{milestone_number}',
     {
@@ -258,6 +257,20 @@ function closeMilestone(milestone_number) {
       repo: 'redwood',
       milestone_number,
       state: 'closed',
+    }
+  )
+}
+
+/**
+ * @param {number} milestone_number
+ */
+function deleteMilestone(milestone_number) {
+  return octokit.request(
+    'DELETE /repos/{owner}/{repo}/milestones/{milestone_number}',
+    {
+      owner: 'redwoodjs',
+      repo: 'redwood',
+      milestone_number,
     }
   )
 }

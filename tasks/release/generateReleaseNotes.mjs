@@ -248,5 +248,36 @@ function formatPR(pr) {
  * @see {@link https://nodejs.org/docs/latest-v15.x/api/esm.html#esm_no_filename_or_dirname}
  */
 const interpolate = template(
-  fs.readFileSync(new URL('releaseNotes.md.template', import.meta.url), 'utf8')
+  [
+    '# Changelog',
+    '',
+    'Unique contributors: ${uniqueContributors}',
+    '',
+    'PRs merged: ${prsMerged}',
+    '',
+    '## Features',
+    '',
+    '${features}',
+    '',
+    '## Fixed',
+    '',
+    '${fixed}',
+    '',
+    '## Chore',
+    '',
+    '${chore}',
+    '',
+    '### Package Dependencies',
+    '',
+    '<details>',
+    '<summary>View all Dependency Version Upgrades</summary>',
+    '<ul>',
+    '${packageDependencies}',
+    '</ul>',
+    '</details>',
+    '',
+    '## Manual',
+    '',
+    '${manual}',
+  ].join('\n')
 )
