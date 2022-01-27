@@ -1,7 +1,6 @@
-import path from 'path'
+import fs from 'fs'
 
-import { getDMMF } from '@prisma/sdk'
-import pascalcase from 'pascalcase'
+import { getConfig, getDMMF } from '@prisma/sdk'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
@@ -16,20 +15,32 @@ import { getPaths } from './'
 const schemaMemo = {}
 
 /**
- * Checks if a model with the given name exists in schema.prisma
+ * Searches for the given model (ignoring case) in schema.prisma
+ * and returns the name as it is written by the user, or
+ * `undefined` if no model could be found
  */
-const isExistingModel = async (name) => {
+const getExistingModelName = async (name) => {
   if (!name) {
-    return false
+    return undefined
   }
+  // Support PascalCase, camelCase, kebab-case, UPPER_CASE, and lowercase model
+  // names
+  const modelName = name.replace(/[_-]/g, '').toLowerCase()
 
-  if (schemaMemo[name]) {
-    return true
+  for (let model of Object.values(schemaMemo)) {
+    if (model.name.toLowerCase() === modelName) {
+      return model.name
+    }
   }
 
   const schema = await getSchemaDefinitions()
 
-  return schema.datamodel.models.some((model) => model.name === name)
+  for (let model of schema.datamodel.models) {
+    if (model.name.toLowerCase() === modelName) {
+      return model.name
+    }
+  }
+  return undefined
 }
 
 /**
@@ -39,10 +50,16 @@ const isExistingModel = async (name) => {
  */
 export const getSchema = async (name) => {
   if (name) {
-    if (!schemaMemo[name]) {
+    const modelName = await getExistingModelName(name)
+    if (!modelName) {
+      throw new Error(
+        `No schema definition found for \`${name}\` in schema.prisma file`
+      )
+    }
+    if (!schemaMemo[modelName]) {
       const schema = await getSchemaDefinitions()
       const model = schema.datamodel.models.find((model) => {
-        return model.name === name
+        return model.name === modelName
       })
 
       if (model) {
@@ -58,14 +75,10 @@ export const getSchema = async (name) => {
         })
 
         // memoize based on the model name
-        schemaMemo[name] = model
-      } else {
-        throw new Error(
-          `No schema definition found for \`${name}\` in schema.prisma file`
-        )
+        schemaMemo[modelName] = model
       }
     }
-    return schemaMemo[name]
+    return schemaMemo[modelName]
   } else {
     return (await getSchemaDefinitions()).datamodel
   }
@@ -100,23 +113,26 @@ export const getEnum = async (name) => {
  * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
 export const getSchemaDefinitions = () => {
-  const datamodelPath = path.join(getPaths().api.db, 'schema.prisma')
+  return getDMMF({ datamodelPath: getPaths().api.dbSchema })
+}
 
-  return getDMMF({ datamodelPath })
+/*
+ * Returns the config info defined in `schema.prisma` (provider, datasource, etc.)
+ */
+export const getSchemaConfig = () => {
+  return getConfig({
+    datamodel: fs.readFileSync(getPaths().api.dbSchema).toString(),
+  })
 }
 
 export async function verifyModelName(options) {
-  let modelName = undefined
-
-  if (await isExistingModel(pascalcase(options.name))) {
-    modelName = pascalcase(options.name)
-  } else if (await isExistingModel(pascalcase(singularize(options.name)))) {
-    modelName = pascalcase(singularize(options.name))
-  }
+  const modelName =
+    (await getExistingModelName(options.name)) ||
+    (await getExistingModelName(singularize(options.name)))
 
   if (modelName === undefined) {
     throw new Error(
-      `"${modelName}" model not found, check if it exists in "./api/db/schema.prisma"`
+      `"${options.name}" model not found, check if it exists in "./api/db/schema.prisma"`
     )
   }
 

@@ -7,6 +7,7 @@ import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
@@ -60,8 +61,7 @@ export const templateForComponentFile = ({
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
-  const outputComponentName =
-    componentName || pascalcase(paramCase(name)) + suffix
+  const outputComponentName = componentName || pascalcase(name) + suffix
   const componentOutputPath =
     outputPath ||
     path.join(basePath, outputComponentName, outputComponentName + extension)
@@ -184,6 +184,7 @@ export const createYargsForComponentGeneration = ({
 
         await tasks.run()
       } catch (e) {
+        errorTelemetry(process.argv, e.message)
         console.error(c.error(e.message))
         process.exit(e?.exitCode || 1)
       }

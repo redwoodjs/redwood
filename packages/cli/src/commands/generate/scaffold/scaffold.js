@@ -114,11 +114,22 @@ const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   }
 }
 
+// Checks whether Tailwind is installed, and if the `flag` argument is not
+// already set, returns true. Otherwise just returns `flag`
+export const shouldUseTailwindCSS = (flag) => {
+  if (flag === undefined) {
+    return fs.existsSync(path.join(getPaths().web.config, 'tailwind.config.js'))
+  } else {
+    return flag
+  }
+}
+
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
   tests = true,
   typescript = false,
+  tailwind = false,
   nestScaffoldByModel,
 }) => {
   const model = await getSchema(name)
@@ -158,7 +169,7 @@ export const files = async ({
       tests,
       typescript,
     })),
-    ...assetFiles(name),
+    ...assetFiles(name, tailwind),
     ...layoutFiles(
       name,
       pascalScaffoldPath,
@@ -177,7 +188,7 @@ export const files = async ({
   }
 }
 
-const assetFiles = (name) => {
+const assetFiles = (name, tailwind) => {
   let fileList = {}
   const assets = fs.readdirSync(
     customOrDefaultTemplatePath({
@@ -188,25 +199,33 @@ const assetFiles = (name) => {
   )
 
   assets.forEach((asset) => {
-    const outputAssetName = asset.replace(/\.template/, '')
-    const outputPath = path.join(getPaths().web.src, outputAssetName)
-
-    // skip assets that already exist on disk, never worry about overwriting
+    // check if the asset name matches the Tailwind preference
     if (
-      !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
-      !fs.existsSync(outputPath)
+      (tailwind && asset.match(/tailwind/)) ||
+      (!tailwind && !asset.match(/tailwind/))
     ) {
-      const template = generateTemplate(
-        customOrDefaultTemplatePath({
-          side: 'web',
-          generator: 'scaffold',
-          templatePath: path.join('assets', asset),
-        }),
-        {
-          name,
-        }
-      )
-      fileList[outputPath] = template
+      const outputAssetName = asset
+        .replace(/\.template/, '')
+        .replace(/\.tailwind/, '')
+      const outputPath = path.join(getPaths().web.src, outputAssetName)
+
+      // skip assets that already exist on disk, never worry about overwriting
+      if (
+        !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
+        !fs.existsSync(outputPath)
+      ) {
+        const template = generateTemplate(
+          customOrDefaultTemplatePath({
+            side: 'web',
+            generator: 'scaffold',
+            templatePath: path.join('assets', asset),
+          }),
+          {
+            name,
+          }
+        )
+        fileList[outputPath] = template
+      }
     }
   })
 
@@ -311,7 +330,6 @@ const pageFiles = async (
         templatePath: path.join('pages', page),
       }),
       {
-        idType,
         idTsType,
         name,
         pascalScaffoldPath,
@@ -344,7 +362,7 @@ const componentFiles = async (
     Boolean: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
-      validation: false,
+      validation: () => false,
       listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
@@ -366,6 +384,10 @@ const componentFiles = async (
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
+    },
+    Decimal: {
       validation: (isRequired) =>
         `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },
@@ -596,6 +618,11 @@ export const builder = (yargs) => {
       description: 'Generate test files',
       type: 'boolean',
     })
+    .option('tailwind', {
+      description:
+        'Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -608,7 +635,15 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force, tests, typescript, javascript }) => {
+export const tasks = ({
+  model,
+  path,
+  force,
+  tests,
+  typescript,
+  javascript,
+  tailwind,
+}) => {
   return new Listr(
     [
       {
@@ -620,6 +655,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
             tests,
             typescript,
             javascript,
+            tailwind,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
@@ -654,22 +690,25 @@ export const handler = async ({
   force,
   tests,
   typescript,
+  tailwind,
 }) => {
-  if (modelArg.toLowerCase() === 'dbauth') {
-    console.info(c.green('\nGenerate dbAuth pages with:\n'))
-    console.info('  yarn rw generate dbAuth\n')
-
-    process.exit(0)
-  }
-
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
 
+  tailwind = shouldUseTailwindCSS(tailwind)
+
   try {
     const { name } = await verifyModelName({ name: model })
-    const t = tasks({ model: name, path, force, tests, typescript })
+    const t = tasks({
+      model: name,
+      path,
+      force,
+      tests,
+      typescript,
+      tailwind,
+    })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

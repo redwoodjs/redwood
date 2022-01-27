@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import { Spec } from './router'
+import { Spec } from './util'
 import {
   createNamedContext,
   getAnnouncement,
@@ -29,7 +29,7 @@ export const usePageLoadingContext = () => {
   return pageLoadingContext
 }
 
-type synchonousLoaderSpec = () => { default: React.ComponentType }
+type synchronousLoaderSpec = () => { default: React.ComponentType }
 interface State {
   Page?: React.ComponentType
   pageName?: string
@@ -67,15 +67,11 @@ export class PageLoader extends React.Component<Props> {
     return !isEqual(s1.params, s2.params)
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
+  shouldComponentUpdate(nextProps: Props) {
     if (this.propsChanged(this.props, nextProps)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition(nextProps)
       return false
-    }
-
-    if (this.stateChanged(this.state, nextState)) {
-      return true
     }
 
     return true
@@ -146,13 +142,11 @@ export class PageLoader extends React.Component<Props> {
   }
 
   render() {
-    const { Page } = this.state
-
     if (global.__REDWOOD__PRERENDERING) {
-      // babel autoloader plugin uses withStaticImport in prerender mode
+      // babel auto-loader plugin uses withStaticImport in prerender mode
       // override the types for this condition
       const syncPageLoader = this.props.spec
-        .loader as unknown as synchonousLoaderSpec
+        .loader as unknown as synchronousLoaderSpec
       const PageFromLoader = syncPageLoader().default
 
       return (
@@ -162,7 +156,13 @@ export class PageLoader extends React.Component<Props> {
       )
     }
 
-    if (Page) {
+    if (this.state.slowModuleImport && this.props.whileLoadingPage) {
+      return this.props.whileLoadingPage()
+    }
+
+    if (this.state.Page) {
+      const { Page } = this.state
+
       return (
         <PageLoadingContext.Provider
           value={{ loading: this.state.slowModuleImport }}
@@ -188,10 +188,8 @@ export class PageLoader extends React.Component<Props> {
           ></div>
         </PageLoadingContext.Provider>
       )
-    } else {
-      return this.state.slowModuleImport
-        ? this.props.whileLoadingPage?.() || null
-        : null
     }
+
+    return null
   }
 }

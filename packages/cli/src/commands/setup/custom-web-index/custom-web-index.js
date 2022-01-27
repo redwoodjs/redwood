@@ -4,13 +4,15 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
 export const command = 'custom-web-index'
 
 export const description =
-  'Setup a custom index.js file, so you can customise how Redwood web is mounted in your browser'
+  'Set up a custom index.js file, so you can customise how Redwood web is mounted in your browser'
 
 export const builder = (yargs) => {
   yargs.option('force', {
@@ -64,6 +66,7 @@ export const handler = async ({ force }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

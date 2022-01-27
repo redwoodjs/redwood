@@ -858,15 +858,6 @@
       ]
     },
     {
-      "login": "agiannelli",
-      "name": "Amanda Giannelli",
-      "avatar_url": "https://avatars.githubusercontent.com/u/53096355?v=4",
-      "profile": "https://github.com/agiannelli",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "TawfikYasser",
       "name": "Tawfik Yasser",
       "avatar_url": "https://avatars.githubusercontent.com/u/54971231?v=4",
@@ -1195,6 +1186,96 @@
       "name": "Bob",
       "avatar_url": "https://avatars.githubusercontent.com/u/10007010?v=4",
       "profile": "https://github.com/0x1a4f7d58",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "doesnotexist",
+      "name": "Omar El-Domeiri",
+      "avatar_url": "https://avatars.githubusercontent.com/u/304697?v=4",
+      "profile": "https://github.com/doesnotexist",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "orta",
+      "name": "Orta Therox",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49038?v=4",
+      "profile": "https://orta.io/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "7shantanu7",
+      "name": "Shantanu Zadbuke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51382138?v=4",
+      "profile": "https://www.linkedin.com/in/shantanu-zadbuke-0a194b188/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "zakmandhro",
+      "name": "Zak Mandhro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15746?v=4",
+      "profile": "https://github.com/zakmandhro",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "vivshaw",
+      "name": "Hannah Vivian Shaw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23173985?v=4",
+      "profile": "https://github.com/vivshaw",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "memarino92",
+      "name": "Michael Marino",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62777339?v=4",
+      "profile": "https://github.com/memarino92",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "viperfx",
+      "name": "Tharshan Muthulingam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/328257?v=4",
+      "profile": "https://uservitalshq.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "usman-coe",
+      "name": "usman kareemee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2543952?v=4",
+      "profile": "https://github.com/usman-coe",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "watway",
+      "name": "watway",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2321110?v=4",
+      "profile": "https://github.com/watway",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jbschrades",
+      "name": "Jeff Schroeder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2105665?v=4",
+      "profile": "https://www.vaporware.net/",
       "contributions": [
         "doc"
       ]

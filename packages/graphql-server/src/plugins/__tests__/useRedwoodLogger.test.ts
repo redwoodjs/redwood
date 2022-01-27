@@ -11,7 +11,9 @@ import {
   testSchema,
   testQuery,
   testErrorQuery,
+  testParseErrorQuery,
   testFilteredQuery,
+  testValidationErrorQuery,
 } from '../__fixtures__/common'
 import { LoggerConfig, useRedwoodLogger } from '../useRedwoodLogger'
 
@@ -37,13 +39,15 @@ const watchFileCreated = (filename) => {
 }
 
 const parseLogFile = (logFile) => {
-  return JSON.parse(
+  const parsedLogFile = JSON.parse(
     `[${readFileSync(logFile)
       .toString()
       .trim()
       .split(/\r\n|\n/)
       .join(',')}]`
   )
+
+  return parsedLogFile
 }
 
 const setupLogger = (
@@ -53,7 +57,7 @@ const setupLogger = (
   logger: Logger
 } => {
   const logger = createLogger({
-    options: { prettyPrint: false, ...loggerOptions },
+    options: { ...loggerOptions },
     destination: destination,
   })
 
@@ -110,6 +114,69 @@ describe('Populates context', () => {
     expect(executionCompleted.data).toHaveProperty('me')
     expect(executionCompleted.operationName).toEqual('meQuery')
     expect(executionCompleted.data.me.name).toEqual('Ba Zinga')
+  })
+
+  it('Should log an error when GraphQL the parsing phase fails', async () => {
+    const loggerConfig = {
+      logger,
+      options: { data: true, query: true, operationName: true },
+    } as LoggerConfig
+
+    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+
+    await testkit.execute(testParseErrorQuery, {}, {})
+
+    await watchFileCreated(logFile)
+
+    const logStatements = parseLogFile(logFile)
+
+    const lastStatement = logStatements.pop()
+
+    expect(lastStatement.level).toEqual(50)
+
+    expect(lastStatement).toHaveProperty('level')
+    expect(lastStatement).toHaveProperty('time')
+    expect(lastStatement).toHaveProperty('msg')
+    expect(lastStatement.name).toEqual('graphql-server')
+
+    expect(lastStatement.msg).toEqual(
+      'Cannot query field "unknown_field" on type "User".'
+    )
+  })
+
+  it('Should log an error when the GraphQL validation phase fails', async () => {
+    const loggerConfig = {
+      logger,
+      options: { data: true, query: true, operationName: true },
+    } as LoggerConfig
+
+    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+
+    await testkit.execute(testValidationErrorQuery, {}, {})
+
+    await watchFileCreated(logFile)
+
+    const logStatements = parseLogFile(logFile)
+
+    const lastStatement = logStatements.pop()
+
+    expect(lastStatement.level).toEqual(50)
+
+    expect(lastStatement).toHaveProperty('level')
+    expect(lastStatement.name).toEqual('graphql-server')
+    expect(lastStatement).toHaveProperty('time')
+
+    expect(lastStatement).toHaveProperty('msg')
+    expect(lastStatement.msg).toEqual(
+      'Syntax Error: Expected "$", found Name "id".'
+    )
+
+    expect(lastStatement).toHaveProperty('err')
+    expect(lastStatement.err).toHaveProperty('type')
+    expect(lastStatement.err.type).toEqual('GraphQLError')
+    expect(lastStatement.err.message).toEqual(
+      'Syntax Error: Expected "$", found Name "id".'
+    )
   })
 
   it('Should log an error when the resolver raises an exception', async () => {

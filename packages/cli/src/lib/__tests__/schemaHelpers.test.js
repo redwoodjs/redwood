@@ -9,6 +9,7 @@ jest.mock('@redwoodjs/internal', () => {
         base: BASE_PATH,
         api: {
           db: BASE_PATH, // this folder
+          dbSchema: path.join(BASE_PATH, 'schema.prisma'),
         },
       }
     },
@@ -83,15 +84,45 @@ describe('verifyModelName', () => {
     expect(modelName).toEqual({ name: 'CustomData' })
   })
 
-  it('Uses the plural form of the model even if a singular form also exists (PascalCase)', async () => {
-    prompts.inject('PostsList')
-    const modelName = await verifyModelName({ name: 'Posts' })
-    expect(modelName).toEqual({ name: 'Posts' })
+  describe('case insensitivity', () => {
+    test('CustomData', async () => {
+      prompts.inject('CustomDatas')
+      const modelName = await verifyModelName({ name: 'CustomData' })
+      expect(modelName).toEqual({ name: 'CustomData' })
+    })
+    test('customData', async () => {
+      prompts.inject('CustomDatas')
+      const modelName = await verifyModelName({ name: 'customData' })
+      expect(modelName).toEqual({ name: 'CustomData' })
+    })
+    test('customdata', async () => {
+      prompts.inject('CustomDatas')
+      const modelName = await verifyModelName({ name: 'customdata' })
+      expect(modelName).toEqual({ name: 'CustomData' })
+    })
+    test('CUstOMdaTA', async () => {
+      prompts.inject('CustomDatas')
+      const modelName = await verifyModelName({ name: 'CUstOMdaTA' })
+      expect(modelName).toEqual({ name: 'CustomData' })
+    })
+
+    test('userprofiles', async () => {
+      const modelName = await verifyModelName({ name: 'userprofiles' })
+      expect(modelName).toEqual({ name: 'UserProfile' })
+    })
   })
 
-  it('Uses the plural form of the model even if a singular form also exists (camelCase)', async () => {
-    prompts.inject('PostsList')
-    const modelName = await verifyModelName({ name: 'posts' })
-    expect(modelName).toEqual({ name: 'Posts' })
+  describe('Uses the plural form of the model even if a singular form also exists', () => {
+    test('Pascalcase', async () => {
+      prompts.inject('PostsList')
+      const modelName = await verifyModelName({ name: 'Posts' })
+      expect(modelName).toEqual({ name: 'Posts' })
+    })
+
+    test('camelCase', async () => {
+      prompts.inject('PostsList')
+      const modelName = await verifyModelName({ name: 'posts' })
+      expect(modelName).toEqual({ name: 'Posts' })
+    })
   })
 })

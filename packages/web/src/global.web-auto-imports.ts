@@ -3,19 +3,21 @@ import type _React from 'react'
 import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
 
+// These are the global types exposed to a user's project
+// For "internal" global types see ambient.d.ts
+
 declare global {
   const React: typeof _React
   const PropTypes: typeof _PropTypes
   const gql: typeof _gql
 
   interface Window {
-    /**
-     * @deprecated Please use RWJS_API_GRAPHQL_URL or RWJS_API_DBAUTH_URL
-     */
-    __REDWOOD__API_PROXY_PATH: never
-
+    /** URL or absolute path to the DbAuth serverless function */
     RWJS_API_DBAUTH_URL: string
+    /** URL or absolute path to the GraphQL serverless function */
     RWJS_API_GRAPHQL_URL: string
+    /** URL or absolute path to serverless functions */
+    RWJS_API_URL: string
     __REDWOOD__APP_TITLE: string
   }
 
@@ -47,5 +49,4 @@ declare global {
     onCompleted?: (data: TData) => void
     [key: string]: any
   }
-  /* eslint-enable @typescript-eslint/no-unused-vars */
 }

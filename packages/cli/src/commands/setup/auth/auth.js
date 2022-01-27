@@ -8,6 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
@@ -297,7 +298,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force }) => {
+export const handler = async ({ provider, force, rwVersion }) => {
   const providerData = await import(`./providers/${provider}`)
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
@@ -361,7 +362,7 @@ export const handler = async ({ provider, force }) => {
             'web',
             'add',
             ...providerData.webPackages,
-            '@redwoodjs/auth',
+            `@redwoodjs/auth@${rwVersion}`,
           ])
         },
       },
@@ -406,6 +407,7 @@ export const handler = async ({ provider, force }) => {
 
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

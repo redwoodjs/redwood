@@ -112,9 +112,11 @@ beforeAll(() => {
   typescriptParamTypeFiles = page.files({
     name: 'TSParamTypeFiles',
     typescript: true,
-    tests: true,
-    stories: true,
-    ...page.paramVariants(pathName('{id:Int}', 'typescript-param-with-type')),
+    tests: false,
+    stories: false,
+    ...page.paramVariants(
+      pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
+    ),
   })
 })
 
@@ -232,12 +234,62 @@ test('creates a single-word route name', () => {
   })
 })
 
-test('creates a camelCase route name for multiple word names', () => {
+test('creates a camelCase route name for lowercase words', () => {
   const names = ['FooBar', 'foo_bar', 'foo-bar', 'fooBar']
 
   names.forEach((name) => {
     expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
       '<Route path="foo-bar" page={FooBarPage} name="fooBar" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for uppercase words', () => {
+  const names = ['FOO_BAR', 'FOO-BAR']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={FOOBARPage} name="fooBar" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for uppercase and lowercase mixed words', () => {
+  const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={FOOBarPage} name="fooBar" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['AbTest', 'abTest', 'ab-test', 'ab_test']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={AbTestPage} name="abTest" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple words with uppercase character after special character', () => {
+  const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={ABtestPage} name="aBtest" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple words starting with uppercase characters', () => {
+  const names = ['ABTest', 'AB_test', 'AB-test']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={ABTestPage} name="abTest" />',
     ])
   })
 })
@@ -396,7 +448,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.stories.tsx'
+        '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx'
       )
     ]
   ).toMatchSnapshot()
@@ -404,7 +456,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.test.tsx'
+        '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx'
       )
     ]
   ).toMatchSnapshot()
@@ -412,7 +464,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptParamFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx'
+        '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx'
       )
     ]
   ).toMatchSnapshot()
@@ -420,7 +472,7 @@ test('generates typescript pages', () => {
   expect(
     typescriptParamTypeFiles[
       path.normalize(
-        '/path/to/project/web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx'
+        '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx'
       )
     ]
   ).toMatchSnapshot()

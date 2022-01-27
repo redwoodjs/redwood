@@ -65,13 +65,6 @@ test('wraps components in other components', async () => {
             <h1>
               ChildB
             </h1>
-            <div
-              aria-atomic="true"
-              aria-live="assertive"
-              id="redwood-announcer"
-              role="alert"
-              style="position: absolute; top: 0px; width: 1px; height: 1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
-            />
           </div>
           <footer>
             This is a footer
@@ -81,6 +74,13 @@ test('wraps components in other components', async () => {
           Custom Wrapper End
         </p>
       </div>
+      <div
+        aria-atomic="true"
+        aria-live="assertive"
+        id="redwood-announcer"
+        role="alert"
+        style="position: absolute; top: 0px; width: 1px; height: 1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
+      />
     </div>
   `)
 })
@@ -132,18 +132,18 @@ test('passes props to wrappers', async () => {
           <h1>
             ChildA
           </h1>
-          <div
-            aria-atomic="true"
-            aria-live="assertive"
-            id="redwood-announcer"
-            role="alert"
-            style="position: absolute; top: 0px; width: 1px; height: 1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
-          />
           <footer>
             This is a footer
           </footer>
         </div>
       </div>
+      <div
+        aria-atomic="true"
+        aria-live="assertive"
+        id="redwood-announcer"
+        role="alert"
+        style="position: absolute; top: 0px; width: 1px; height: 1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
+      />
     </div>
   `)
 })

@@ -7,6 +7,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
@@ -39,6 +41,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('dedupe', {
+      description: 'Skip dedupe check with --no-dedupe',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -55,7 +62,7 @@ export const builder = (yargs) => {
     )
 }
 
-// Used in yargs builder to coerce tag
+// Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
 const validateTag = (tag) => {
@@ -77,7 +84,7 @@ const validateTag = (tag) => {
   return tag
 }
 
-export const handler = async ({ dryRun, tag, verbose }) => {
+export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
@@ -99,6 +106,11 @@ export const handler = async ({ dryRun, tag, verbose }) => {
         title: 'Refreshing the Prisma client',
         task: (_ctx, task) => refreshPrismaClient(task, { verbose }),
         skip: () => dryRun,
+      },
+      {
+        title: 'De-duplicating dependencies',
+        skip: () => dryRun || !dedupe,
+        task: (_ctx, task) => dedupeDeps(task, { verbose }),
       },
       {
         title: 'One more thing..',
@@ -125,6 +137,7 @@ export const handler = async ({ dryRun, tag, verbose }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
@@ -238,4 +251,45 @@ async function refreshPrismaClient(task, { verbose }) {
     )
     console.log(c.error(e.message))
   }
+}
+
+const getCmdMajorVersion = async (command) => {
+  // Get current version
+  const { stdout } = await execa(command, ['--version'], {
+    cwd: getPaths().base,
+  })
+  if (!SEMVER_REGEX.test(stdout)) {
+    throw new Error(`Unable to verify ${command} version.`)
+  }
+
+  // Get major version number
+  const version = stdout.match(SEMVER_REGEX)[0]
+  return parseInt(version.split('.')[0])
+}
+
+const dedupeDeps = async (task, { verbose }) => {
+  try {
+    const yarnVersion = await getCmdMajorVersion('yarn')
+    const npxVersion = await getCmdMajorVersion('npx')
+    if (yarnVersion > 1) {
+      task.skip('Deduplication is only required for <=1.x')
+      return
+    }
+    let npxArgs = []
+    if (npxVersion > 6) {
+      npxArgs = ['--yes']
+    }
+
+    await execa('npx', [...npxArgs, 'yarn-deduplicate'], {
+      shell: true,
+      stdio: verbose ? 'inherit' : 'pipe',
+      cwd: getPaths().base,
+    })
+  } catch (e) {
+    console.log(c.error(e.message))
+    throw new Error(
+      'Could not finish deduplication. If the project is using yarn 1.x, please run `npx yarn-deduplicate`, before continuing'
+    )
+  }
+  await yarnInstall({ verbose })
 }

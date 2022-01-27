@@ -3,6 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../../lib'
@@ -29,6 +30,17 @@ export const builder = (yargs) => {
       default: 'api',
       type: 'array',
     })
+    .option('verbose', {
+      describe: 'verbosity of logs',
+      default: true,
+      type: 'boolean',
+    })
+    .option('stage', {
+      describe:
+        'serverless stage pass through param: https://www.serverless.com/blog/stages-and-environments',
+      default: 'dev',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -37,9 +49,32 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider }) => {
+export const handler = async (yargs) => {
+  const { provider, verbose } = yargs
   const BASE_DIR = getPaths().base
   const providerData = await import(`./aws-providers/${provider}`)
+
+  const mapCommandsToListr = ({ title, command, task, errorMessage }) => {
+    return {
+      title: title,
+      task: task
+        ? task
+        : async () => {
+            try {
+              const executingCommand = execa(...command, {
+                cwd: BASE_DIR,
+              })
+              executingCommand.stdout.pipe(process.stdout)
+              await executingCommand
+            } catch (error) {
+              if (errorMessage) {
+                error.message = error.message + '\n' + errorMessage.join(' ')
+              }
+              throw error
+            }
+          },
+    }
+  }
 
   const tasks = new Listr(
     [
@@ -48,52 +83,27 @@ export const handler = async ({ provider }) => {
           title: 'Checking pre-requisites',
           task: () =>
             new Listr(
-              providerData.preRequisites.map((preReq) => {
-                return {
-                  title: preReq.title,
-                  task: async () => {
-                    try {
-                      await execa(...preReq.command)
-                    } catch (error) {
-                      error.message =
-                        error.message + '\n' + preReq.errorMessage.join(' ')
-                      throw error
-                    }
-                  },
-                }
-              })
+              providerData.preRequisites(yargs).map(mapCommandsToListr)
             ),
         },
       {
         title: 'Building and Packaging...',
         task: () =>
-          new Listr(
-            providerData.buildCommands.map((commandDetail) => {
-              return {
-                title: commandDetail.title,
-                task: async () => {
-                  await execa(...commandDetail.command, {
-                    cwd: BASE_DIR,
-                  })
-                },
-              }
-            }),
-            { collapse: false }
-          ),
+          new Listr(providerData.buildCommands(yargs).map(mapCommandsToListr), {
+            collapse: false,
+          }),
+      },
+      {
+        title: 'Deploying to AWS',
+        task: () =>
+          new Listr(providerData.deployCommands(yargs).map(mapCommandsToListr)),
       },
     ].filter(Boolean),
-    { collapse: false }
+    { collapse: false, renderer: verbose && VerboseRenderer }
   )
 
   try {
     await tasks.run()
-
-    console.log(c.green(providerData.deployCommand.title))
-    const deploy = execa(...providerData.deployCommand.command, {
-      cwd: BASE_DIR,
-    })
-    deploy.stdout.pipe(process.stdout)
-    await deploy
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(1)

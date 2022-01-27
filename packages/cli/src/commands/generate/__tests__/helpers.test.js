@@ -14,12 +14,8 @@ import { MetaTags } from '@redwoodjs/web'
 const FooBarPage = () => {
   return (
     <>
-      <MetaTags
-        title="FooBar"
-        // description="FooBar description"
-        /* you should un-comment description and add a unique description, 155 characters or less
-        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title="FooBar" description="FooBar page" />
+
       <h1>FooBarPage</h1>
       <p>
         Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>
@@ -82,7 +78,7 @@ test('customOrDefaultTemplatePath returns the app path with proper side, generat
 })
 
 test('templateForComponentFile creates a proper output path for files', () => {
-  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar', 'FOO_BAR', 'FOOBar']
+  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar']
 
   names.forEach((name) => {
     const output = helpers.templateForComponentFile({
@@ -96,6 +92,63 @@ test('templateForComponentFile creates a proper output path for files', () => {
 
     expect(output[0]).toEqual(
       path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files with all caps in component name', () => {
+  const names = ['FOO_BAR', 'FOO-BAR', 'FOOBAR']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files for starting with uppercase and ending with lowercase', () => {
+  const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files with uppercase after special characters in component name', () => {
+  const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js')
     )
   })
 })

@@ -8,10 +8,12 @@ import terminalLink from 'terminal-link'
 
 import { buildApi, loadAndValidateSdls } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
+import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
 import { getTasks as getPrerenderTasks } from './prerender'
 
@@ -71,6 +73,7 @@ export const builder = (yargs) => {
       default: false,
       description: 'Measure build performance',
     })
+    .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -189,9 +192,12 @@ export const handler = async ({
   })
 
   try {
-    await jobs.run()
+    await timedTelemetry(process.argv, { type: 'build' }, async () => {
+      await jobs.run()
+    })
   } catch (e) {
     console.log(c.error(e.message))
+    errorTelemetry(process.argv, e.message)
     process.exit(1)
   }
 }

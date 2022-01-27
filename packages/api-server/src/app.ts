@@ -1,13 +1,13 @@
-import express from 'express'
-import type { Response, Request, Application } from 'express'
-import morgan from 'morgan'
+import Fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 
-// Base express app, with common config
-const createApp = (): Application => {
-  const app = express()
+const DEFAULT_OPTIONS = {
+  logger: {
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+  },
+}
 
-  // Add common middleware
-  app.use(morgan<Request, Response>('dev'))
+export const createApp = (options?: FastifyServerOptions): FastifyInstance => {
+  const app = Fastify(options || DEFAULT_OPTIONS)
 
   return app
 }

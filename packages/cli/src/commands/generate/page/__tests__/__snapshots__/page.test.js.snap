@@ -7,12 +7,7 @@ import { MetaTags } from '@redwoodjs/web'
 const HomePage = () => {
   return (
     <>
-      <MetaTags
-        title=\\"Home\\"
-        // description=\\"Home description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"Home\\" description=\\"Home page\\" />
 
       <h1>HomePage</h1>
       <p>
@@ -37,12 +32,7 @@ import { MetaTags } from '@redwoodjs/web'
 const ContactUsPage = () => {
   return (
     <>
-      <MetaTags
-        title=\\"ContactUs\\"
-        // description=\\"ContactUs description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"ContactUs\\" description=\\"ContactUs page\\" />
 
       <h1>ContactUsPage</h1>
       <p>
@@ -67,12 +57,7 @@ import { MetaTags } from '@redwoodjs/web'
 const CatsPage = () => {
   return (
     <>
-      <MetaTags
-        title=\\"Cats\\"
-        // description=\\"Cats description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"Cats\\" description=\\"Cats page\\" />
 
       <h1>CatsPage</h1>
       <p>
@@ -97,12 +82,7 @@ import { MetaTags } from '@redwoodjs/web'
 const PostPage = ({ id }) => {
   return (
     <>
-      <MetaTags
-        title=\\"Post\\"
-        // description=\\"Post description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"Post\\" description=\\"Post page\\" />
 
       <h1>PostPage</h1>
       <p>
@@ -228,12 +208,7 @@ import { MetaTags } from '@redwoodjs/web'
 const HomePage = () => {
   return (
     <>
-      <MetaTags
-        title=\\"Home\\"
-        // description=\\"Home description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"Home\\" description=\\"Home page\\" />
 
       <h1>HomePage</h1>
       <p>
@@ -312,12 +287,7 @@ import { MetaTags } from '@redwoodjs/web'
 const PostPage = ({ id }) => {
   return (
     <>
-      <MetaTags
-        title=\\"Post\\"
-        // description=\\"Post description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"Post\\" description=\\"Post page\\" />
 
       <h1>PostPage</h1>
       <p>
@@ -357,34 +327,7 @@ export default Routes",
 }
 `;
 
-exports[`generates typescript pages 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-const TsFilesPage = () => {
-  return (
-    <>
-      <MetaTags
-        title=\\"TsFiles\\"
-        // description=\\"TsFiles description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
-      <h1>TsFilesPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/TsFilesPage/TsFilesPage.tsx</code>
-      </p>
-      <p>
-        My default route is named <code>tsFiles</code>, link to me with \`
-        <Link to={routes.tsFiles()}>TsFiles</Link>\`
-      </p>
-    </>
-  )
-}
-
-export default TsFilesPage
-"
-`;
+exports[`generates typescript pages 1`] = `undefined`;
 
 exports[`generates typescript pages 2`] = `
 "import TsFilesPage from './TsFilesPage'
@@ -423,15 +366,11 @@ type TsParamFilesPageProps = {
 const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
   return (
     <>
-      <MetaTags
-        title=\\"TsParamFiles\\"
-        // description=\\"TsParamFiles description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"TsParamFiles\\" description=\\"TsParamFiles page\\" />
+
       <h1>TsParamFilesPage</h1>
       <p>
-        Find me in <code>./web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx</code>
+        Find me in <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamFiles</code>, link to me with \`
@@ -457,15 +396,11 @@ type TsParamTypeFilesPageProps = {
 const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
   return (
     <>
-      <MetaTags
-        title=\\"TsParamTypeFiles\\"
-        // description=\\"TsParamTypeFiles description\\"
-        /* you should un-comment description and add a unique description, 155 characters or less
-        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
+      <MetaTags title=\\"TsParamTypeFiles\\" description=\\"TsParamTypeFiles page\\" />
+
       <h1>TsParamTypeFilesPage</h1>
       <p>
-        Find me in <code>./web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx</code>
+        Find me in <code>./web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamTypeFiles</code>, link to me with \`

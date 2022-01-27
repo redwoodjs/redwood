@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { generate } from '@graphql-codegen/cli'
+import { generate, loadCodegenConfig } from '@graphql-codegen/cli'
+import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'
 
 import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
@@ -191,15 +192,10 @@ export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
 }
 
-// TODO: We're going to have to give the user an entry point into this
-// configuration file because they may have to define other scalars
-// and they may want to generate a custom side. :shrug
-// TODO: Figure out how to get a list of scalars from the api-side so that
-// they don't get out of sync.
 export const generateTypeDefGraphQLApi = async () => {
   try {
     const rwjsPaths = getPaths()
-    const f = await generateTypeDefGraphQL({
+    const f = await runCodegenGraphQL({
       [path.join(rwjsPaths.api.types, 'graphql.d.ts')]: {
         plugins: [
           {
@@ -219,57 +215,76 @@ export const generateTypeDefGraphQLApi = async () => {
 }
 
 export const generateTypeDefGraphQLWeb = async () => {
-  if (findCells().length) {
-    const rwjsPaths = getPaths()
-    try {
-      const f = await generateTypeDefGraphQL({
-        [path.join(rwjsPaths.web.types, 'graphql.d.ts')]: {
-          documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
-          plugins: [
-            {
-              typescript: {
-                enumsAsTypes: true,
-              },
+  const rwjsPaths = getPaths()
+  try {
+    const f = await runCodegenGraphQL({
+      [path.join(rwjsPaths.web.types, 'graphql.d.ts')]: {
+        documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
+        plugins: [
+          {
+            typescript: {
+              enumsAsTypes: true,
             },
-            'typescript-operations',
-          ],
-        },
-      })
-      return f
-    } catch (e) {
-      console.error()
-      console.error('Error: Could not generate GraphQL type definitions (web)')
-      console.error()
-      return []
-    }
-  } else {
+          },
+          'typescript-operations',
+        ],
+      },
+    })
+    return f
+  } catch (e) {
+    console.error()
+    console.error('Error: Could not generate GraphQL type definitions (web)')
+    console.error()
     return []
   }
 }
 
-const generateTypeDefGraphQL = async (generates: Record<string, unknown>) => {
+/**
+ * This is the function used internally by generateTypeDefGraphQLApi and generateTypeDefGraphQLWeb
+ * And contains the base configuration for generating gql types with codegen
+ *
+ * Named a little differently to make it easier to spot
+ */
+
+// CLI generate also takes cwd
+type CodegenConfig = CodegenTypes.Config & { cwd: string }
+
+const runCodegenGraphQL = async (
+  generates: Record<string, CodegenTypes.ConfiguredOutput>
+) => {
   const rwjsPaths = getPaths()
   type GenerateResponse = { filename: string; contents: string }[]
+
+  const codegenConfig: CodegenConfig = {
+    cwd: rwjsPaths.base,
+    schema: rwjsPaths.generated.schema,
+    config: {
+      namingConvention: 'keep', // to allow camelCased query names
+      scalars: {
+        // We need these, otherwise these scalars are mapped to any
+        // @TODO is there a way we can use scalars defined in packages/graphql-server/src/rootSchema.ts
+        BigInt: 'number',
+        DateTime: 'string',
+        Date: 'string',
+        JSON: 'Record<string, unknown>',
+        JSONObject: 'Record<string, unknown>',
+        Time: 'string',
+      },
+      omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc
+    },
+    generates,
+    silent: false,
+    errorsOnly: true,
+  }
+
+  const userCodegenConfig = await loadCodegenConfig({
+    configFilePath: rwjsPaths.base,
+  })
+
   // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
   const f: GenerateResponse = await generate(
-    {
-      cwd: rwjsPaths.base,
-      schema: rwjsPaths.generated.schema,
-      config: {
-        scalars: {
-          DateTime: 'string',
-          Date: 'string',
-          JSON: 'Record<string, unknown>',
-          JSONObject: 'Record<string, unknown>',
-          Time: 'string',
-        },
-        omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
-      },
-      // @ts-expect-error TODO: Figure out how to get the proper type here.
-      generates,
-      silent: false,
-      errorsOnly: true,
-    },
+    // Merge in user codegen config with the rw built-in one
+    { ...codegenConfig, ...userCodegenConfig?.config },
     true
   )
   return f.map(({ filename }) => filename)

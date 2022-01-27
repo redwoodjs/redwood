@@ -10,4 +10,4 @@ Redwood is anchored to a single `redwood.toml` file. We use this to determine th
 
 ### Sides
 
-Redwood seperates your project into sides, by default we have a "web side" and an "api side." Each side has a target ("browser" for "web" and "node" for "api"). We use the concept of sides and targets to determine how to build, test, lint and manage your project.
+Redwood separates your project into sides, by default we have a "web side" and an "api side." Each side has a target ("browser" for "web" and "node" for "api"). We use the concept of sides and targets to determine how to build, test, lint and manage your project.

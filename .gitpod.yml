@@ -20,6 +20,7 @@ tasks:
     before: |
       export RWFW_PATH="/workspace/redwood"
       export RWJS_DEV_API_URL="http://localhost"
+      export REDWOOD_DISABLE_TELEMETRY=1
     init: |
       cd /workspace/redwood
       yarn install
