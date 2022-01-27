@@ -243,7 +243,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   const okToRelease = await confirm(
     `${c.bgYellow(
       c.black(' CHECK ')
-    )} Everything passed your local QA. Are you ready push your commits and publish to npm?`
+    )} Everything passed your local QA. Are you ready push your branch to GitHub and publish to NPM?`
   )
 
   if (!okToRelease) {
