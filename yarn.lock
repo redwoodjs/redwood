@@ -1750,9 +1750,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.10.0":
-  version: 2.10.0
-  resolution: "@clerk/clerk-js@npm:2.10.0"
+"@clerk/clerk-js@npm:2.11.0":
+  version: 2.11.0
+  resolution: "@clerk/clerk-js@npm:2.11.0"
   dependencies:
     "@clerk/types": 1.23.0
     "@popperjs/core": ^2.4.4
@@ -1766,7 +1766,7 @@ __metadata:
     react-dom: 16.13.1
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 97c9bfe8b9880474181774e1635760a1f0d573bfbad7c3fc63367197cf5c0febaedc433f26a9f7653e529697f490122defbf4ef4d7d09db2e8fe653b11b2b994
+  checksum: d83c047c31e092c907fbe6352192dc06d8451253d392803730321bf5cf422e7521473d9df1d8a21d359e096cfdfbf4cdfe6ac34abd755d28ddeb038391ca4a8c
   languageName: node
   linkType: hard
 
@@ -5405,7 +5405,7 @@ __metadata:
     "@azure/msal-browser": 2.21.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.10.0
+    "@clerk/clerk-js": 2.11.0
     "@clerk/clerk-sdk-node": 2.7.4
     "@clerk/types": 1.23.0
     "@supabase/supabase-js": 1.29.4
@@ -5419,7 +5419,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     nhost-js-sdk: 3.1.0
     react: 17.0.2
-    supertokens-auth-react: 0.18.4
+    supertokens-auth-react: 0.18.5
     typescript: 4.5.5
   languageName: unknown
   linkType: soft
@@ -5538,7 +5538,7 @@ __metadata:
     core-js: 3.20.3
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.4.1
-    dotenv-webpack: 7.0.3
+    dotenv-webpack: 7.1.0
     esbuild: 0.14.14
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
@@ -13413,14 +13413,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-webpack@npm:7.0.3":
-  version: 7.0.3
-  resolution: "dotenv-webpack@npm:7.0.3"
+"dotenv-webpack@npm:7.1.0":
+  version: 7.1.0
+  resolution: "dotenv-webpack@npm:7.1.0"
   dependencies:
     dotenv-defaults: ^2.0.2
   peerDependencies:
     webpack: ^4 || ^5
-  checksum: 1209f72c980989a4de550e6be7fab9efe7c34f56496760e8b91cd577ddba461b36acbb7de3a56416e60af9ef67c9b7d224bdf6a61e4dca60e23dc8e1673a16eb
+  checksum: 780bb44aaa400ccad12c47afdab5e2e4c1cba26c92d5092bacbf5233d2d81a578489b5533af9f2dc12dd311b027649ec9ba78317d445650111bdadcd66bd0d23
   languageName: node
   linkType: hard
 
@@ -27064,9 +27064,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.18.4":
-  version: 0.18.4
-  resolution: "supertokens-auth-react@npm:0.18.4"
+"supertokens-auth-react@npm:0.18.5":
+  version: 0.18.5
+  resolution: "supertokens-auth-react@npm:0.18.5"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: ^2.1.2
@@ -27079,7 +27079,7 @@ resolve@^2.0.0-next.3:
     supertokens-website: ^10.0.4
   peerDependencies:
     react: ">=16.8.0"
-  checksum: c66e4109b24ed4e69e882f6de286efc6fa726a4496fe763a04913758867fae7c69c371e3a151421d8b088823b66f730a1680535161191f96028eb0e329e5fb10
+  checksum: a98b8a8dbbcfafdc1a25e21b2262a1f42ed4f42c9c1abe4545e5ce0714b4a4ed0c86c0b9b11bee332b576aa505f78ffce68771e2b425087f62ddf50c1566ea39
   languageName: node
   linkType: hard
 
