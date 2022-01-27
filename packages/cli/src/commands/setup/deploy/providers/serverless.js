@@ -26,10 +26,13 @@ export const notes = [
   `${c.green(
     "You're almost ready to deploy using the Serverless framework!"
   )}\n`,
-  '• See https://redwoodjs.com/docs/deploy#aws_serverless for more info, including ',
-  'the important first-deploy experience.\n',
-  '• If you want to use the serverless.com dashboard, create an account and then ',
-  'run `yarn serverless` in both the `web` and `api` directories to connect your ',
+  '• See https://redwoodjs.com/docs/deploy#serverless for more info, including ',
+  'the important first deploy experience. If you want to give it a shot, run ',
+  '`yarn rw deploy serverless --first-run`. For subsequent deploys you can ',
+  'just run `yarn rw deploy serverless`.\n',
+  '• If you want to use the serverless.com dashboard to manage our app, create ',
+  'an account and then run `yarn serverless login` to add your credentials, ',
+  'then run `yarn serverless` in both the`web` and `api` directories to connect your ',
   'dashboard to this app.\n',
   "• If you haven't already, familiarize yourself with the docs for your ",
   'preferred provider: https://www.serverless.com/framework/docs/providers\n',
