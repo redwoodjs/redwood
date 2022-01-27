@@ -21610,7 +21610,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-notifier@npm:^10.0.0":
+"node-notifier@npm:10.0.0":
   version: 10.0.0
   resolution: "node-notifier@npm:10.0.0"
   dependencies:
@@ -25522,7 +25522,7 @@ resolve@^2.0.0-next.3:
     lerna: 4.0.0
     lodash.template: 4.5.0
     msw: 0.36.7
-    node-notifier: ^10.0.0
+    node-notifier: 10.0.0
     nodemon: 2.0.15
     npm-packlist: 3.0.0
     octokit: 1.7.1
