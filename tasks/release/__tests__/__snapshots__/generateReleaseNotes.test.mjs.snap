@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generateReleaseNotes works 1`] = `
+exports[`generateReleaseNotes MSW unit test 1`] = `
 "# Changelog
 
 Unique contributors: 3
@@ -29,7 +29,6 @@ PRs merged: 3
 </details>
 
 ## Manual
-
 
 "
 `;

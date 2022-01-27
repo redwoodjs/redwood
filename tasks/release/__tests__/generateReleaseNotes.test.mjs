@@ -5,32 +5,31 @@ import fs from 'node:fs'
 import generateReleaseNotes, {
   GET_MILESTONE_IDS,
   GET_PRS_WITH_MILESTONE,
-} from './generateReleaseNotes.mjs'
+} from '../generateReleaseNotes.mjs'
 
 const handleGetMilestoneIds = graphql.query(
   'GetMilestoneIds',
   (req, res, ctx) => {
     const { title } = req.variables
-
-    const payload = {
-      repository: {
-        milestones: {
-          nodes: [
-            title
-              ? {
-                  title,
-                  id: `123-${title}`,
-                }
-              : {
-                  title: 'v0.42.1',
-                  id: 'MI_kwDOC2M2f84Ac_Ij',
-                },
-          ],
+    return res(
+      ctx.data({
+        repository: {
+          milestones: {
+            nodes: [
+              title
+                ? {
+                    title,
+                    id: `123-${title}`,
+                  }
+                : {
+                    title: 'v0.42.1',
+                    id: 'MI_kwDOC2M2f84Ac_Ij',
+                  },
+            ],
+          },
         },
-      },
-    }
-
-    return res(ctx.data(payload))
+      })
+    )
   }
 )
 
@@ -116,11 +115,10 @@ beforeAll(() => server.listen())
 
 afterAll(() => {
   server.close()
-
   if (
-    fs.existsSync(new URL('./next-releaseReleaseNotes.md', import.meta.url))
+    fs.existsSync(new URL('../next-releaseReleaseNotes.md', import.meta.url))
   ) {
-    fs.rmSync(new URL('./next-releaseReleaseNotes.md', import.meta.url))
+    fs.rmSync(new URL('../next-releaseReleaseNotes.md', import.meta.url))
   }
 })
 
@@ -181,7 +179,7 @@ describe('generateReleaseNotes', () => {
 
     expect(
       fs.readFileSync(
-        new URL('./next-releaseReleaseNotes.md', import.meta.url),
+        new URL('../next-releaseReleaseNotes.md', import.meta.url),
         'utf8'
       )
     ).toMatchSnapshot()
