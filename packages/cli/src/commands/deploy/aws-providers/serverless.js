@@ -1,12 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
+import { config } from 'dotenv-defaults'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import prompts from 'prompts'
 
-import { getPaths, writeFilesTask } from '../../../lib'
+import { getPaths } from '../../../lib'
 import c from '../../../lib/colors'
 import ntfPack from '../packing/nft'
 
@@ -17,8 +18,14 @@ export const builder = (yargs) => {
   yargs.option('stage', {
     describe:
       'serverless stage pass through param: https://www.serverless.com/blog/stages-and-environments',
-    default: 'dev',
+    default: 'staging',
     type: 'string',
+  })
+
+  yargs.option('pack-only', {
+    describe: 'Only build and pack, and dont push code up using serverless',
+    default: false,
+    type: 'boolean',
   })
 
   yargs.option('first-run', {
@@ -52,7 +59,7 @@ export const buildCommands = ({ side: sides }) => [
   },
 ]
 
-export const deployCommands = ({ stage, sides, firstRun }) => {
+export const deployCommands = ({ stage, sides, firstRun, packOnly }) => {
   const slsStage = stage ? ['--stage', stage] : []
 
   return sides.map((side) => {
@@ -64,6 +71,10 @@ export const deployCommands = ({ stage, sides, firstRun }) => {
         if (firstRun && side === 'web') {
           return 'Skipping web deploy, until environment configured'
         }
+
+        if (packOnly) {
+          return 'Finishing early due to --pack-only flag. Your Redwood project is packaged and ready to deploy'
+        }
       },
     }
   })
@@ -71,6 +82,15 @@ export const deployCommands = ({ stage, sides, firstRun }) => {
 
 export const handler = async (yargs) => {
   const rwjsPaths = getPaths()
+  const dotEnvPath = path.join(rwjsPaths.base, `.env.${yargs.stage}`)
+
+  // Make sure we use the correct .env based on the stage
+  config({
+    path: dotEnvPath,
+    defaults: path.join(getPaths().base, '.env.defaults'),
+    encoding: 'utf8',
+  })
+
   const tasks = new Listr(
     [
       ...preRequisites(yargs).map(mapCommandsToListr),
@@ -101,14 +121,11 @@ export const handler = async (yargs) => {
       const { addDotEnv } = await prompts({
         type: 'confirm',
         name: 'addDotEnv',
-        message: `Add API_URL to your .env.production? This will be used when you build your web side`,
+        message: `Add API_URL to your .env.${yargs.stage}? This will be used when you build your web side`,
       })
 
       if (addDotEnv) {
-        fs.writeFileSync(
-          path.join(rwjsPaths.base, `.env.production`),
-          `API_URL=${deployedApiUrl}`
-        )
+        fs.writeFileSync(dotEnvPath, `API_URL=${deployedApiUrl}`)
       }
 
       if (yargs.sides.includes('web')) {
@@ -124,7 +141,8 @@ export const handler = async (yargs) => {
             mapCommandsToListr
           ),
         ])
-        // Deploy the web side now
+
+        // Deploy the web side now that the API_URL has been configured
         await webDeployTasks.run()
       }
     }
