@@ -8,8 +8,9 @@ export const PROJECT_NAME = path.basename(getPaths().base)
 export const SERVERLESS_API_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 service: ${PROJECT_NAME}-api
 
-# Uncomment org and app if you want to integrate your deployment with the
-# Serverless dashboard, or run \`serverless\` to be prompted to connect.
+# Uncomment \`org\` and \`app\` and enter manually if you want to integrate your
+# deployment with the Serverless dashboard, or run \`yarn rw serverless\` to be
+# prompted to connect to an app and these will be filled in for you.
 # See https://www.serverless.com/framework/docs/dashboard/ for more details.
 # org: your-org
 # app: your-app
@@ -19,8 +20,8 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs14.x
-  region: us-east-2 # This is the AWS region where the service will be deployed.
-  httpApi: # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
+  region: us-east-2 # AWS region where the service will be deployed
+  httpApi:          # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
     cors:
       allowedOrigins:
         - '*' # This is the default value. You can remove this line if you want to restrict the CORS to a specific origin.
@@ -28,7 +29,7 @@ provider:
       allowedHeaders:
         - authorization
         - auth-provider
-        - content-Type
+        - content-type
         - X-Amz-Date
         - X-Api-Key
         - X-Amz-Security-Token
@@ -64,14 +65,14 @@ ${
       return `${basename}:
     description: ${basename} function deployed on AWS Lambda
     package:
-      artifact: dist/zipball/${basename}.zip # This is the default location of the zip file generated during the deploy command.
-    memorySize: 1024 # mb
-    timeout: 25 # seconds (max: 29)
-    tags: # Tags for this specific lambda function
+      artifact: dist/zipball/${basename}.zip
+    memorySize: 1024 # in megabytes
+    timeout: 25      # seconds (max: 900 [15 minutes])
+    tags:            # tags for this specific lambda function
       endpoint: /${basename}
     handler: ${basename}.handler
     events:
-      - httpApi:
+      - httpApi:     # if a function should be limited to only GET or POST you can remove one or the other here
           path: /${basename}
           method: GET
       - httpApi:

@@ -26,12 +26,13 @@ export const notes = [
   `${c.green(
     "You're almost ready to deploy using the Serverless framework!"
   )}\n`,
-  '• See https://redwoodjs.com/docs/deploy#aws_serverless for more info, including',
+  '• See https://redwoodjs.com/docs/deploy#aws_serverless for more info, including ',
   'the important first-deploy experience.\n',
-  '• If you want to use the serverless.com dashboard, create an account and then',
-  'run `yarn serverless` to connect your dashboard to this app.\n',
-  "• If you haven't already, familiarize yourself with the docs for your",
-  'preferred provider: https://www.serverless.com/framework/docs/providers',
+  '• If you want to use the serverless.com dashboard, create an account and then ',
+  'run `yarn serverless` in both the `web` and `api` directories to connect your ',
+  'dashboard to this app.\n',
+  "• If you haven't already, familiarize yourself with the docs for your ",
+  'preferred provider: https://www.serverless.com/framework/docs/providers\n',
 ]
 
 const projectDevPackages = [
@@ -73,9 +74,12 @@ const updateRedwoodTomlTask = () => {
     task: () => {
       const configPath = path.join(getPaths().base, 'redwood.toml')
       const content = fs.readFileSync(configPath).toString()
+      console.info(content)
+      console.info('match', content.match(/^(\s*)apiUrl.*?\n/m))
+
       const newContent = content.replace(
-        /apiUrl.*?\n/,
-        'apiUrl = "${API_URL:/api}"\n'
+        /apiUrl.*?\n/m,
+        'apiUrl = "${API_URL:/api}" # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless#api_url'
       )
       fs.writeFileSync(configPath, newContent)
     },
