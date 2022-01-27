@@ -5487,7 +5487,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jscodeshift": 0.11.2
     "@types/prettier": 2.4.3
-    "@vscode/ripgrep": 1.14.1
+    "@vscode/ripgrep": 1.14.2
     core-js: 3.20.3
     deepmerge: 4.2.2
     fast-glob: 3.2.11
@@ -8219,13 +8219,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vscode/ripgrep@npm:1.14.1":
-  version: 1.14.1
-  resolution: "@vscode/ripgrep@npm:1.14.1"
+"@vscode/ripgrep@npm:1.14.2":
+  version: 1.14.2
+  resolution: "@vscode/ripgrep@npm:1.14.2"
   dependencies:
-    https-proxy-agent: ^4.0.0
+    https-proxy-agent: ^5.0.0
     proxy-from-env: ^1.1.0
-  checksum: 2acc85a96a721e4559e9947db41f35d3bc4122881f7612645cfb4f291b81b6ca68c20943e5518265532d275f9f4de8a637e7463b413dfc6ce2f0d1abf47137ed
+  checksum: e6ca97b8bab121a6c397f7c42cdbbb4322b0726dc323b0d280ea2d867bdc879f64e23afe7158861e81db8d58918f3e8c61bf4773f8d87b53de9b785e8d3cb602
   languageName: node
   linkType: hard
 
@@ -8788,13 +8788,6 @@ __metadata:
   version: 1.1.2
   resolution: "address@npm:1.1.2"
   checksum: 3ac908133d1d8cc52110473833718e82775428e73b4eb51b42cd7c7f571c7459c28c3c54592231efdcb96f6ed376eb490194e97c533df9e8efb910fa29a34e55
-  languageName: node
-  linkType: hard
-
-"agent-base@npm:5":
-  version: 5.1.1
-  resolution: "agent-base@npm:5.1.1"
-  checksum: 3baa3f01072c16e3955ce7802166e576cde9831af82b262aae1c780af49c0c84e82e64ba9ef9e7d1704fe29e9f0096a78a4f998ec137360fee3cb95186f97161
   languageName: node
   linkType: hard
 
@@ -17232,16 +17225,6 @@ fsevents@^1.2.7:
     agent-base: 6
     debug: 4
   checksum: 670c04f7f0effb5a449c094ea037cbcfb28a5ab93ed22e8c343095202cc7288027869a5a21caf4ee3b8ea06f9624ef1e1fc9044669c0fd92617654ff39f30806
-  languageName: node
-  linkType: hard
-
-"https-proxy-agent@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "https-proxy-agent@npm:4.0.0"
-  dependencies:
-    agent-base: 5
-    debug: 4
-  checksum: fbba3e037ec04e1850e867064a763b86dd884baae9c5f4ad380504e321068c9e9b5de79cf2f3a28ede7c36036dce905b58d9f51703c5b3884d887114f4887f77
   languageName: node
   linkType: hard
 
