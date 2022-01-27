@@ -8,10 +8,12 @@ import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import prompts from 'prompts'
+import terminalLink from 'terminal-link'
 
-import { getPaths } from '../../../lib'
-import c from '../../../lib/colors'
-import ntfPack from '../packing/nft'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
+
+import ntfPack from './packing/nft'
 
 export const command = 'serverless'
 export const description = 'Deploy to AWS via the serverless framework'
@@ -22,6 +24,20 @@ export const builder = (yargs) => {
       'serverless stage pass through param: https://www.serverless.com/blog/stages-and-environments',
     default: 'production',
     type: 'string',
+  })
+
+  yargs.option('sides', {
+    describe: 'which Side(s) to deploy',
+    choices: ['api', 'web'],
+    default: ['api', 'web'],
+    alias: 'side',
+    type: 'array',
+  })
+
+  yargs.option('verbose', {
+    describe: 'verbosity of logs',
+    default: true,
+    type: 'boolean',
   })
 
   yargs.option('pack-only', {
@@ -36,6 +52,13 @@ export const builder = (yargs) => {
     default: false,
     type: 'boolean',
   })
+
+  yargs.epilogue(
+    `Also see the ${terminalLink(
+      'Redwood CLI Reference',
+      'https://redwoodjs.com/docs/cli-commands#deploy'
+    )}\n`
+  )
 }
 
 export const preRequisites = () => [
