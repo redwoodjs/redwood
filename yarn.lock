@@ -5495,7 +5495,7 @@ __metadata:
     fs-extra: 10.0.0
     jest: 27.4.7
     jscodeshift: 0.13.0
-    node-fetch: 2.6.6
+    node-fetch: 2.6.7
     prettier: 2.5.1
     tasuku: 1.0.2
     tempy: 1.0.1
@@ -5640,7 +5640,7 @@ __metadata:
     jest: 27.4.7
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    node-fetch: 2.6.6
+    node-fetch: 2.6.7
     typescript: 4.5.5
     uuid: 8.3.2
   languageName: unknown
@@ -5714,7 +5714,7 @@ __metadata:
     cheerio: 1.0.0-rc.10
     jest: 27.4.7
     mime-types: 2.1.34
-    node-fetch: 2.6.6
+    node-fetch: 2.6.7
     typescript: 4.5.5
   peerDependencies:
     react: 17.0.2
@@ -5807,7 +5807,7 @@ __metadata:
     ci-info: ^3.3.0
     envinfo: 7.8.1
     jest: 27.4.7
-    node-fetch: 2.6.6
+    node-fetch: 2.6.7
     systeminformation: 5.11.0
     uuid: 8.3.2
     yargs: 16.2.0
