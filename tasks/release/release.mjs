@@ -85,17 +85,7 @@ export default async function release() {
   // Check that there's no merged PRs without a milestone
   const {
     search: { nodes: pullRequests },
-  } = await octokit.graphql(`
-    {
-      search(query: "repo:redwoodjs/redwood is:pr is:merged no:milestone", first: 5, type: ISSUE) {
-        nodes {
-          ... on PullRequest {
-            id
-          }
-        }
-      }
-    }
-  `)
+  } = await octokit.graphql(MERGED_PRS_NO_MILESTONE)
   if (pullRequests.length) {
     console.log(
       c.bold(
@@ -109,17 +99,7 @@ export default async function release() {
   if (semver !== 'patch') {
     const {
       search: { nodes: nextReleasePatchPullRequests },
-    } = await octokit.graphql(`
-      {
-        search(query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch", first: 5, type: ISSUE) {
-          nodes {
-            ... on PullRequest {
-              id
-            }
-          }
-        }
-      }
-    `)
+    } = await octokit.graphql(MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE)
     if (nextReleasePatchPullRequests.length) {
       console.log(
         c.bold(
@@ -200,6 +180,30 @@ function getNextVersion(semver, previousVersion) {
     }
   }
 }
+
+export const MERGED_PRS_NO_MILESTONE = `
+    {
+      search(query: "repo:redwoodjs/redwood is:pr is:merged no:milestone", first: 5, type: ISSUE) {
+        nodes {
+          ... on PullRequest {
+            id
+          }
+        }
+      }
+    }
+  `
+
+export const MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE = `
+  {
+    search(query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch", first: 5, type: ISSUE) {
+      nodes {
+        ... on PullRequest {
+          id
+        }
+      }
+    }
+  }
+`
 
 /**
  * Right now releasing a major is the same as releasing a minor.
