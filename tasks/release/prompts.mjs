@@ -3,14 +3,6 @@ import c from 'ansi-colors'
 import boxen from 'boxen'
 import prompts from 'prompts'
 
-export const ASK = c.bgBlue(c.black('  ASK  '))
-export const CHECK = c.bgYellow(c.black(' CHECK '))
-export const FIX = c.bgRed(c.black('  FIX  '))
-export const OK = c.bgGreen(c.black('  O K  '))
-// https://stackoverflow.com/questions/38760554/how-to-print-cross-mark-or-check-mark-in-tcl
-export const HEAVY_X = c.red('\u2716')
-export const HEAVY_CHECK = c.green('\u2714')
-
 /**
  * Wrapper around `prompts` to exit on crtl c.
  *
@@ -58,3 +50,32 @@ export function rocketBoxen(message) {
     },
   })
 }
+
+/**
+ * @param {string} prefix
+ * @returns (string, ...values) => string
+ */
+function makeStringFormatter(prefix) {
+  return function formatter(strings, ...values) {
+    const message = strings.reduce(
+      (string, nextString, i) =>
+        (string += nextString + c.green(values[i] ?? '')),
+      ''
+    )
+
+    return `${prefix} ${message}`
+  }
+}
+
+export const ASK = c.bgBlue(c.black('  ASK  '))
+export const CHECK = c.bgYellow(c.black(' CHECK '))
+export const FIX = c.bgRed(c.black('  FIX  '))
+export const OK = c.bgGreen(c.black('  O K  '))
+// https://stackoverflow.com/questions/38760554/how-to-print-cross-mark-or-check-mark-in-tcl
+export const HEAVY_X = c.red('\u2716')
+export const HEAVY_CHECK = c.green('\u2714')
+
+export const ask = makeStringFormatter(ASK)
+export const check = makeStringFormatter(CHECK)
+export const fix = makeStringFormatter(`${HEAVY_X} ${FIX}`)
+export const ok = makeStringFormatter(`${HEAVY_CHECK} ${OK}`)

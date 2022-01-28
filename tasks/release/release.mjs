@@ -24,12 +24,10 @@ import octokit from './octokit.mjs'
 import {
   confirm,
   exitOnCancelPrompts,
-  ASK,
-  CHECK,
-  FIX,
-  HEAVY_X,
-  OK,
-  HEAVY_CHECK,
+  ask,
+  check,
+  fix,
+  ok,
   rocketBoxen,
 } from './prompts.mjs'
 import updateNextReleasePullRequestsMilestone, {
@@ -42,7 +40,7 @@ export default async function release() {
   const { semver } = await exitOnCancelPrompts({
     type: 'select',
     name: 'semver',
-    message: `${ASK} Which semver are you releasing?`,
+    message: ask`Which semver are you releasing?`,
     choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
     initial: 2,
   })
@@ -56,15 +54,20 @@ export default async function release() {
   // Confirm that we got the next version right.
   // Give the user a chance to correct it if we didn't.
   const nextVersionConfirmed = await confirm(
-    `${CHECK} The next release is ${c.green(nextVersion)}`
+    check`The next release is ${nextVersion}`
   )
   if (!nextVersionConfirmed) {
     const answer = await exitOnCancelPrompts({
       type: 'text',
       name: 'nextVersion',
-      message: `${ASK} enter the next version`,
+      message: ask`Enter the next version`,
     })
     nextVersion = answer.nextVersion
+    // Do some basic validation.
+    if (!nextVersion.startsWith('v')) {
+      console.log(c.bold(fix`The next version has to start with a "v"`))
+      return
+    }
   }
 
   // Validation
@@ -74,9 +77,7 @@ export default async function release() {
   if (gitTagPO.stdout.trim()) {
     console.log(
       c.bold(
-        `${HEAVY_X} ${FIX} Git tag ${c.green(
-          nextVersion
-        )} already exists locally. You must resolve this before proceeding`
+        fix`Git tag ${nextVersion} already exists locally. You must resolve this before proceeding`
       )
     )
     return
@@ -98,12 +99,12 @@ export default async function release() {
   if (pullRequests.length) {
     console.log(
       c.bold(
-        `${HEAVY_X} ${FIX} There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
+        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
       )
     )
     return
   }
-  console.log(c.bold(`${HEAVY_CHECK} ${OK} No PRs without a milestone`))
+  console.log(c.bold(ok`No PRs without a milestone`))
   // If we're not releasing a patch, check that there's no merged PRs with next-release-patch
   if (semver !== 'patch') {
     const {
@@ -122,23 +123,17 @@ export default async function release() {
     if (nextReleasePatchPullRequests.length) {
       console.log(
         c.bold(
-          `${HEAVY_X} ${FIX} If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
+          fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
         )
       )
       return
     }
-    console.log(
-      c.bold(
-        `${HEAVY_CHECK} ${OK} No PRs with the next-release-patch milestone`
-      )
-    )
+    console.log(c.bold(ok`No PRs with the next-release-patch milestone`))
   }
 
   // Update next-release PRs' milestone.
   const shouldUpdateNextReleasePRsMilestone = await confirm(
-    `${ASK} Do you want to update next-release PRs' milestone to ${c.green(
-      nextVersion
-    )}?`
+    ask`Do you want to update next-release PRs' milestone to ${nextVersion}?`
   )
   if (shouldUpdateNextReleasePRsMilestone) {
     try {
@@ -154,7 +149,7 @@ export default async function release() {
   // Do the release.
   switch (semver) {
     case 'major':
-      console.log(c.bold(`${HEAVY_X} ${FIX} Wait till after v1`))
+      console.log(c.bold(fix`Wait till after v1`))
       return
     case 'minor':
       await releaseMinor(nextVersion)
@@ -236,7 +231,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 
   const releaseBranch = ['release', semver, nextVersion].join('/')
   const okToCheckout = await confirm(
-    `${ASK} Ok to checkout new branch ${c.green(releaseBranch)}?`
+    ask`Ok to checkout new branch ${releaseBranch}?`
   )
   if (!okToCheckout) {
     return
@@ -244,16 +239,14 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   await $`git checkout -b ${releaseBranch}`
 
   const okToProceed = await confirm(
-    `${ASK} Checked out new release branch ${c.green(
-      releaseBranch
-    )}.\nIf you want to continue publishing, proceed.\nOtherwise, stop here to publish this branch to GitHub to create an RC`
+    ask`Checked out new release branch ${releaseBranch}.\nIf you want to continue publishing, proceed.\nOtherwise, stop here to publish this branch to GitHub to create an RC`
   )
   if (!okToProceed) {
     return
   }
 
   const okToCleanInstallUpdate = await confirm(
-    `${ASK} Ok to clean, install, and update package versions?`
+    ask`Ok to clean, install, and update package versions?`
   )
   if (!okToCleanInstallUpdate) {
     return
@@ -264,14 +257,14 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   await $`./tasks/update-package-versions ${nextVersion}`
   notifier.notify('done')
   const versionsLookRight = await confirm(
-    `${CHECK} The package versions have been updated. Does everything look right?`
+    check`The package versions have been updated. Does everything look right?`
   )
   if (!versionsLookRight) {
     return
   }
 
   const commitTagQA = await confirm(
-    `${ASK} Ok to commit, tag, and run through local QA?`
+    ask`Ok to commit, tag, and run through local QA?`
   )
   if (!commitTagQA) {
     return
@@ -285,7 +278,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   notifier.notify('done')
 
   const okToRelease = await confirm(
-    `${ASK} Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`
+    ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`
   )
   if (!okToRelease) {
     return
@@ -295,7 +288,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
 
   const shouldGenerateReleaseNotes = await confirm(
-    `${ASK} Do you want to generate release notes?`
+    ask`Do you want to generate release notes?`
   )
   if (shouldGenerateReleaseNotes) {
     try {
@@ -307,9 +300,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   }
 
   if (milestone) {
-    const okToClose = await confirm(
-      `${ASK} Ok to close milestone ${c.green(nextVersion)}?`
-    )
+    const okToClose = await confirm(ask`Ok to close milestone ${nextVersion}?`)
     if (okToClose) {
       closeMilestone(milestone.number)
     }
