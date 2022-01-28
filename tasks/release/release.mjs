@@ -276,8 +276,8 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   if (!okToRelease) {
     return
   }
-  // await $`git push && git push --tags`
-  // await $`yarn lerna publish from-package`
+  await $`git push && git push --tags`
+  await $`yarn lerna publish from-package`
   console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
 
   const shouldGenerateReleaseNotes = await confirm(
