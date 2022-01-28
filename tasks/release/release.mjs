@@ -1,8 +1,19 @@
 /* eslint-env node, es2021 */
 /**
- * Notes
- * - branch already exists? start on the "update package versions" step
- * - consider using xstate
+ * Use this script to release a version of RedwoodJS:
+ *
+ * ```
+ * yarn release
+ * ```
+ *
+ * @remarks
+ *
+ * You'll need a GitHub token and an NPM token. (So only @thedavidprice can do this right now.)
+ *
+ * @remarks
+ *
+ * - handle the case where a branch already exists; start on the "update package versions" step
+ * - at this point, consider using xstate
  */
 import c from 'ansi-colors'
 import notifier from 'node-notifier'
@@ -42,7 +53,8 @@ export default async function release() {
   const previousVersion = gitDescribePO.stdout.trim()
   let nextVersion = getNextVersion(semver, previousVersion)
 
-  // Confirm that we got the next version right; give the user a chance to correct it if we didn't.
+  // Confirm that we got the next version right.
+  // Give the user a chance to correct it if we didn't.
   const nextVersionConfirmed = await confirm(
     `${CHECK} The next release is ${c.green(nextVersion)}`
   )
@@ -122,6 +134,7 @@ export default async function release() {
     )
   }
 
+  // Update next-release PRs' milestone.
   const shouldUpdateNextReleasePRsMilestone = await confirm(
     `${ASK} Do you want to update next-release PRs' milestone to ${c.green(
       nextVersion
@@ -138,6 +151,7 @@ export default async function release() {
     }
   }
 
+  // Do the release.
   switch (semver) {
     case 'major':
       console.log(c.bold(`${HEAVY_X} ${FIX} Wait till after v1`))
