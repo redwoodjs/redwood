@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/telemetry",
-  "version": "0.42.1",
+  "version": "0.43.0",
   "files": [
     "dist"
   ],
@@ -9,8 +9,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@redwoodjs/internal": "0.42.1",
-    "@redwoodjs/structure": "0.42.1",
+    "@redwoodjs/internal": "v0.43.0",
+    "@redwoodjs/structure": "v0.43.0",
     "ci-info": "^3.3.0",
     "envinfo": "7.8.1",
     "node-fetch": "2.6.7",
