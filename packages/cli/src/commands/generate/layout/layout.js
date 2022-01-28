@@ -3,15 +3,17 @@ import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
+  removeGeneratorName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Layout'
 const REDWOOD_WEB_PATH_NAME = 'layouts'
 
 export const files = ({ name, typescript = false, ...options }) => {
+  const layoutName = removeGeneratorName(name, 'layout')
   const extension = typescript ? '.tsx' : '.js'
   const layoutFile = templateForComponentFile({
-    name,
+    name: layoutName,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     extension,
@@ -21,7 +23,7 @@ export const files = ({ name, typescript = false, ...options }) => {
       : 'layout.tsx.template',
   })
   const testFile = templateForComponentFile({
-    name,
+    name: layoutName,
     suffix: COMPONENT_SUFFIX,
     extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
@@ -29,7 +31,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     templatePath: 'test.tsx.template',
   })
   const storyFile = templateForComponentFile({
-    name,
+    name: layoutName,
     suffix: COMPONENT_SUFFIX,
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,

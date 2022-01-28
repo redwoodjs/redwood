@@ -1,6 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
+import yargs from 'yargs'
+
 // Load mocks
 import '../../../../lib/test'
 
@@ -254,6 +256,14 @@ const itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired = (
     ).toMatchSnapshot()
   })
 }
+
+test('keeps Service in name', () => {
+  const { name } = yargs
+    .command('service <name>', false, service.builder)
+    .parse('service BazingaService')
+
+  expect(name).toEqual('BazingaService')
+})
 
 describe('in javascript mode', () => {
   const baseArgs = { ...getDefaultArgs(service.defaults), tests: true }
