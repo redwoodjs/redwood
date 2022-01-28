@@ -4,5 +4,5 @@ export default {
   // ESM-specific settings:
   transform: {},
   moduleFileExtensions: ['js', 'mjs'],
-  testMatch: ['<rootDir>/*.test.mjs'],
+  testMatch: ['<rootDir>/__tests__/*.test.mjs'],
 }

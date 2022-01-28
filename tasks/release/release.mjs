@@ -5,18 +5,27 @@
  * - consider using xstate
  */
 import c from 'ansi-colors'
-import boxen from 'boxen'
-import prompts from 'prompts'
+import notifier from 'node-notifier'
 import { $ } from 'zx'
 
 import generateReleaseNotes from './generateReleaseNotes.mjs'
+import octokit from './octokit.mjs'
+import {
+  confirm,
+  exitOnCancelPrompts,
+  ASK,
+  CHECK,
+  FIX,
+  HEAVY_X,
+  OK,
+  HEAVY_CHECK,
+  rocketBoxen,
+} from './prompts.mjs'
 import updateNextReleasePullRequestsMilestone, {
   closeMilestone,
 } from './updateNextReleasePullRequestsMilestone.mjs'
 
-export const ASK = c.bgBlue(c.black('  ASK  '))
-export const CHECK = c.bgYellow(c.black(' CHECK '))
-export const FIX = c.bgRed(c.black('  FIX  '))
+let milestone
 
 export default async function release() {
   const { semver } = await exitOnCancelPrompts({
@@ -46,17 +55,71 @@ export default async function release() {
     nextVersion = answer.nextVersion
   }
 
+  // Validation
+  //
   // Check that the git tag doesn't already exist.
   const gitTagPO = await $`git tag -l ${nextVersion}`
   if (gitTagPO.stdout.trim()) {
     console.log(
       c.bold(
-        `${c.red('\u2716')} ${FIX} Git tag ${c.green(
+        `${HEAVY_X} ${FIX} Git tag ${c.green(
           nextVersion
         )} already exists locally. You must resolve this before proceeding`
       )
     )
     return
+  }
+  // Check that there's no merged PRs without a milestone
+  const {
+    search: { nodes: pullRequests },
+  } = await octokit.graphql(`
+    {
+      search(query: "repo:redwoodjs/redwood is:pr is:merged no:milestone", first: 5, type: ISSUE) {
+        nodes {
+          ... on PullRequest {
+            id
+          }
+        }
+      }
+    }
+  `)
+  if (pullRequests.length) {
+    console.log(
+      c.bold(
+        `${HEAVY_X} ${FIX} There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
+      )
+    )
+    return
+  }
+  console.log(c.bold(`${HEAVY_CHECK} ${OK} No PRs without a milestone`))
+  // If we're not releasing a patch, check that there's no merged PRs with next-release-patch
+  if (semver !== 'patch') {
+    const {
+      search: { nodes: nextReleasePatchPullRequests },
+    } = await octokit.graphql(`
+      {
+        search(query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch", first: 5, type: ISSUE) {
+          nodes {
+            ... on PullRequest {
+              id
+            }
+          }
+        }
+      }
+    `)
+    if (nextReleasePatchPullRequests.length) {
+      console.log(
+        c.bold(
+          `${HEAVY_X} ${FIX} If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
+        )
+      )
+      return
+    }
+    console.log(
+      c.bold(
+        `${HEAVY_CHECK} ${OK} No PRs with the next-release-patch milestone`
+      )
+    )
   }
 
   const shouldUpdateNextReleasePRsMilestone = await confirm(
@@ -64,9 +127,6 @@ export default async function release() {
       nextVersion
     )}?`
   )
-
-  let milestone
-
   if (shouldUpdateNextReleasePRsMilestone) {
     try {
       milestone = await updateNextReleasePullRequestsMilestone(nextVersion)
@@ -80,39 +140,14 @@ export default async function release() {
 
   switch (semver) {
     case 'major':
-      {
-        console.log(c.yellow('Wait till after v1!'))
-      }
-      break
+      console.log(c.bold(`${HEAVY_X} ${FIX} Wait till after v1`))
+      return
     case 'minor':
       await releaseMinor(nextVersion)
       break
     case 'patch':
       await releasePatch(previousVersion, nextVersion)
       break
-  }
-
-  console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
-
-  const shouldGenerateReleaseNotes = await confirm(
-    `${ASK} Do you want to generate release notes?`
-  )
-  if (shouldGenerateReleaseNotes) {
-    try {
-      await generateReleaseNotes(nextVersion)
-    } catch (e) {
-      console.log("Couldn't generate release notes")
-      console.log(e)
-    }
-  }
-
-  if (milestone) {
-    const okToClose = await confirm(
-      `${ASK} Ok to close milestone ${c.green(nextVersion)}?`
-    )
-    if (okToClose) {
-      closeMilestone(milestone.number)
-    }
   }
 }
 
@@ -155,36 +190,6 @@ function getNextVersion(semver, previousVersion) {
       return `v${[major, minor, patch + 1].join('.')}`
     }
   }
-}
-
-/**
- * Wrapper around `prompts` to exit on crtl c.
- *
- * @template Name
- * @param {import('prompts').PromptObject<Name>} promptsObject
- * @param {import('prompts').Options} promptsOptions
- */
-function exitOnCancelPrompts(promptsObject, promptsOptions) {
-  return prompts(promptsObject, {
-    ...promptsOptions,
-    onCancel: () => process.exit(1),
-  })
-}
-
-/**
- * Wrapper around confirm type `prompts`.
- *
- * @param {string} message
- * @returns {Promise<boolean>}
- */
-export async function confirm(message) {
-  const answer = await exitOnCancelPrompts({
-    type: 'confirm',
-    name: 'confirm',
-    message,
-  })
-
-  return answer.confirm
 }
 
 /**
@@ -243,6 +248,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   await $`git clean -fxd`
   await $`yarn install`
   await $`./tasks/update-package-versions ${nextVersion}`
+  notifier.notify('done')
   const versionsLookRight = await confirm(
     `${CHECK} The package versions have been updated. Does everything look right?`
   )
@@ -256,13 +262,13 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   if (!commitTagQA) {
     return
   }
-
   await $`git commit -am "${nextVersion}"`
   await $`git tag -am ${nextVersion} "${nextVersion}"`
   // QA
   await $`yarn build`
   await $`yarn lint`
   await $`yarn test`
+  notifier.notify('done')
 
   const okToRelease = await confirm(
     `${ASK} Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`
@@ -272,6 +278,28 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   }
   // await $`git push && git push --tags`
   // await $`yarn lerna publish from-package`
+  console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
+
+  const shouldGenerateReleaseNotes = await confirm(
+    `${ASK} Do you want to generate release notes?`
+  )
+  if (shouldGenerateReleaseNotes) {
+    try {
+      await generateReleaseNotes(nextVersion)
+    } catch (e) {
+      console.log("Couldn't generate release notes")
+      console.log(e)
+    }
+  }
+
+  if (milestone) {
+    const okToClose = await confirm(
+      `${ASK} Ok to close milestone ${c.green(nextVersion)}?`
+    )
+    if (okToClose) {
+      closeMilestone(milestone.number)
+    }
+  }
 }
 
 /**
@@ -321,22 +349,4 @@ async function releasePatch(previousVersion, nextVersion) {
   await $`git checkout main`
   // merge commit
   await $`git branch -d release/patch/${nextVersion}`
-}
-
-/**
- * @param {string} message
- */
-function rocketBoxen(message) {
-  boxen(message, {
-    padding: 1,
-    margin: 1,
-    borderStyle: {
-      bottomLeft: '🚀',
-      bottomRight: '🚀',
-      horizontal: '—',
-      topLeft: '🚀',
-      topRight: '🚀',
-      vertical: '🚀',
-    },
-  })
 }

@@ -7,7 +7,7 @@
 import c from 'ansi-colors'
 
 import octokit from './octokit.mjs'
-import { confirm, ASK, CHECK } from './release.mjs'
+import { confirm, ASK, CHECK } from './prompts.mjs'
 
 /**
  * @param {string} title

@@ -1,5 +1,4 @@
 /* eslint-env node, es2021 */
-
 import template from 'lodash.template'
 import fs from 'node:fs'
 import url from 'node:url'
@@ -27,9 +26,7 @@ export default async function generateReleaseNotes(milestone) {
     ...sortPRs(prs),
   })
   fs.writeFileSync(filename, filedata)
-
   console.log(`Written to ${url.fileURLToPath(filename)}`)
-  console.log('Done')
 }
 
 // Helpers

@@ -7,7 +7,7 @@ import updateNextReleasePullRequestsMilestone, {
   GET_NEXT_RELEASE_MILESTONE_ID,
   GET_NEXT_RELEASE_PULL_REQUEST_IDS,
   UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE,
-} from './updateNextReleasePullRequestsMilestone.mjs'
+} from '../updateNextReleasePullRequestsMilestone.mjs'
 
 /**
  * MSW setup
