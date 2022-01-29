@@ -1,31 +1,29 @@
-## TODO
+Redwood [Fastify](https://www.fastify.io) Server
 
-rw-serve
-Not intended for production use
-- Runs web on port
-- Listens on port/apiRootPath
+## package.json Server Binaries
 
-webCliOptions = {
-  port: 8910
-  socket
-},
+### `rw-serve`
+Not intended for production use.
+- Runs web on redwood.toml web.port (default 8910)
+- API listens on web port at path redwood.toml web.apiUrl
+- Command Options:
+    - port (default 8910)
+    - socket (optional)
+    - apiHost (default redwood.toml web.apiUrl)
 
-rw-serve api
-Intended for production use
-- runs api on port/apiRootPath
+### `rw-server api` or `rw-api-server`
+For production use.
+- Runs api on redwood.toml api.port (default 8911)
+- Command Options:
+    - port (default 8911)
+    - socket (optional)
+    - apiRootPath (default '/')
 
-apiCliOptions = {
-  port: 8911
-  socket
-  apiRootPath: '/',
-},
-
-rw-serve web
-Intended for production use(?)
-- runs web on port
-
-webCliOptions = {
-  port: 8910
-  socket
-  apiHost: redwood.toml.apiUrl,
-},
+### `rw-serve web`
+Not optimized for production use. Recommended to use CDN or Nginx as performant alternatives.
+- Runs web on redwood.toml web.port (default 8910)
+- GraphQL endpoint is set to redwood.toml web.apiUrl/graphql
+- Command Options:
+    - port (default 8910)
+    - socket (optional)
+    - apiHost (default redwood.toml web.apiUrl)
