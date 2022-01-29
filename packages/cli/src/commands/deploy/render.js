@@ -50,7 +50,7 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   }
 
   if (commandSet.length) {
-    execa(commandSet.join(' && '), {
+    await execa(commandSet.join(' && '), {
       shell: true,
       stdio: 'inherit',
       cwd: paths.base,
@@ -60,7 +60,7 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   }
 
   if (side === 'api') {
-    apiServerHandler({
+    await apiServerHandler({
       port: getConfig().api?.port || 8911,
       apiRootPath: '/',
     })
