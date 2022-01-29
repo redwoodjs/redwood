@@ -104,10 +104,6 @@ export const handler = async ({ force, database }) => {
         return writeFilesTask(files, { overwriteExisting: force })
       },
     },
-    addPackagesTask({
-      packages: ['@redwoodjs/api-server'],
-      side: 'api',
-    }),
     updateApiURLTask('/.redwood/functions'),
     // Add health check api function
     addFilesTask({
