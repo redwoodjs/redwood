@@ -44,10 +44,8 @@ model UserProfile {
 
 model NoEditableField {
   id Int @id @default(autoincrement())
-  uuid String @default(uuid())
-  cuid String @default(cuid())
   autoincrementNotID Int @default(autoincrement())
-  dbGeneratedField String @default(dbgenerated())
+
 }
 
 model Favorite {
