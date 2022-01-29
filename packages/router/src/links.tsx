@@ -96,7 +96,7 @@ interface NavLinkProps {
   to: string
   activeClassName: string
   activeMatchParams?: FlattenSearchParams
-  onClick: React.MouseEventHandler<HTMLAnchorElement>
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 const NavLink = forwardRef<
@@ -149,7 +149,7 @@ const NavLink = forwardRef<
 )
 
 interface RedirectProps {
-  /** The name of the route to redirect to */
+  /** The path to redirect to */
   to: string
 }
 

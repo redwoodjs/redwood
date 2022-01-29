@@ -8,7 +8,7 @@ yarn-error.log
 **/*.tsbuildinfo
 tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
-tasks/release-notes/*.md
+tasks/release/*.md
 tmp/
 blog-test-project/*
 .yarn/*

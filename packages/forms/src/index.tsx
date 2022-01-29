@@ -1,4 +1,15 @@
 /**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
+/**
  * @module @redwoodjs/forms
  *
  * Redwood's form library.
@@ -286,7 +297,7 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-interface FormProps
+export interface FormProps
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
@@ -365,7 +376,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
   }
 )
 
-interface LabelProps
+export interface LabelProps
   extends Pick<FieldProps, 'errorClassName' | 'errorStyle'>,
     React.ComponentPropsWithoutRef<'label'> {
   name: string
@@ -399,7 +410,8 @@ const Label = ({
   )
 }
 
-interface FieldErrorProps extends React.ComponentPropsWithoutRef<'span'> {
+export interface FieldErrorProps
+  extends React.ComponentPropsWithoutRef<'span'> {
   /**
    * The name of the field the `<FieldError>`'s associated with.
    */
@@ -467,7 +479,7 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
   return validationError ? <span {...rest}>{errorMessage}</span> : null
 }
 
-interface TextAreaFieldProps
+export interface TextAreaFieldProps
   extends FieldProps<HTMLTextAreaElement>,
     Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
@@ -516,7 +528,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   }
 )
 
-interface SelectFieldProps
+export interface SelectFieldProps
   extends FieldProps<HTMLSelectElement>,
     Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
@@ -565,7 +577,7 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   }
 )
 
-interface CheckboxFieldProps
+export interface CheckboxFieldProps
   extends FieldProps<HTMLInputElement>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
@@ -672,7 +684,7 @@ const INPUT_TYPES = [
 
 type InputType = typeof INPUT_TYPES[number]
 
-interface InputFieldProps
+export interface InputFieldProps
   extends FieldProps<HTMLInputElement>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
   /**

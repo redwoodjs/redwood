@@ -345,7 +345,6 @@ const pageFiles = async (
         templatePath: path.join('pages', page),
       }),
       {
-        idType,
         idTsType,
         name,
         pascalScaffoldPath,
@@ -400,6 +399,10 @@ const componentFiles = async (
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
+    },
+    Decimal: {
       validation: (isRequired) =>
         `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },

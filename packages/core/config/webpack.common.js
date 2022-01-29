@@ -42,7 +42,7 @@ const getEnvVars = () => {
 const getStyleLoaders = (isEnvProduction) => {
   const styleOrExtractLoader = isEnvProduction
     ? MiniCssExtractPlugin.loader
-    : 'style-loader'
+    : require.resolve('style-loader')
 
   const cssLoader = (withModules, importLoaders) => {
     // Obscured classnames in production, more expressive classnames in development.
@@ -51,7 +51,7 @@ const getStyleLoaders = (isEnvProduction) => {
       : '[path][name]__[local]--[contenthash:base64:5]'
 
     const loaderConfig = {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options: {
         sourceMap: !isEnvProduction,
         importLoaders,
@@ -73,7 +73,7 @@ const getStyleLoaders = (isEnvProduction) => {
   // at web/config/postcss.config.js
   const postCssLoader = hasPostCssConfig
     ? {
-        loader: 'postcss-loader',
+        loader: require.resolve('postcss-loader'),
         options: {
           postcssOptions: {
             config: paths.web.postcss,
@@ -172,6 +172,7 @@ const getSharedPlugins = (isEnvProduction) => {
     new Dotenv({
       path: path.resolve(redwoodPaths.base, '.env'),
       silent: true,
+      ignoreStub: true, // FIXME: this might not be necessary once the storybook webpack 4/5 stuff is ironed out. See also: https://github.com/mrsteele/dotenv-webpack#processenv-stubbing--replacing
     }),
   ].filter(Boolean)
 }
@@ -188,7 +189,14 @@ module.exports = (webpackEnv) => {
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
-    devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
+    ...(isEnvProduction
+      ? {
+          // this is so that users can debug a production build by setting sourceMap = true in redwood.toml
+          devtool: redwoodConfig.web.sourceMap ? 'source-map' : false,
+        }
+      : {
+          devtool: 'cheap-module-source-map',
+        }),
     entry: {
       /**
        * Prerender requires a top-level component.
@@ -280,7 +288,7 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: [
                 {
-                  loader: 'babel-loader',
+                  loader: require.resolve('babel-loader'),
                   options: {
                     ...webBabelOptions,
                     cwd: redwoodPaths.base,
@@ -299,7 +307,7 @@ module.exports = (webpackEnv) => {
             // (6)
             isEnvProduction && {
               test: require.resolve('@redwoodjs/router/dist/splash-page'),
-              use: 'null-loader',
+              use: require.resolve('null-loader'),
             },
             // (7)
             {

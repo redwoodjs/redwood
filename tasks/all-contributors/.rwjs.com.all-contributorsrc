@@ -858,15 +858,6 @@
       ]
     },
     {
-      "login": "agiannelli",
-      "name": "Amanda Giannelli",
-      "avatar_url": "https://avatars.githubusercontent.com/u/53096355?v=4",
-      "profile": "https://github.com/agiannelli",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "TawfikYasser",
       "name": "Tawfik Yasser",
       "avatar_url": "https://avatars.githubusercontent.com/u/54971231?v=4",
@@ -1276,6 +1267,15 @@
       "name": "watway",
       "avatar_url": "https://avatars.githubusercontent.com/u/2321110?v=4",
       "profile": "https://github.com/watway",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jbschrades",
+      "name": "Jeff Schroeder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2105665?v=4",
+      "profile": "https://www.vaporware.net/",
       "contributions": [
         "doc"
       ]

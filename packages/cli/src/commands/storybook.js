@@ -37,6 +37,21 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('smoke-test', {
+      describe:
+        "CI mode plus Smoke-test (skip prompts, don't open browser, exit after successful start)",
+      type: 'boolean',
+      default: false,
+    })
+    .check((argv) => {
+      if (argv.build && argv.smokeTest) {
+        throw new Error('Can not provide both "--build" and "--smoke-test"')
+      }
+      if (argv.build && argv.open) {
+        throw new Error('Can not provide both "--build" or "--open"')
+      }
+      return true
+    })
 }
 
 export const handler = ({
@@ -45,6 +60,7 @@ export const handler = ({
   build,
   buildDirectory,
   managerCache,
+  smokeTest,
 }) => {
   const cwd = getPaths().web.base
 
@@ -67,11 +83,10 @@ export const handler = ({
       `--config-dir "${storybookConfig}"`,
       !build && `--port ${port}`,
       !build && '--no-version-updates',
-      !build && `--static-dir "${staticAssetsFolder}"`,
       !managerCache && '--no-manager-cache',
-      build &&
-        `--output-dir "${path.join(getPaths().web.base, buildDirectory)}"`,
-      !open && '--ci',
+      build && `--output-dir "${buildDirectory}"`,
+      !open && !smokeTest && `--ci`,
+      smokeTest && `--ci --smoke-test`,
     ].filter(Boolean),
     {
       stdio: 'inherit',

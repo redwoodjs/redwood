@@ -5,6 +5,7 @@ import {
   OperationDefinitionNode,
   FieldNode,
   parse,
+  InlineFragmentNode,
 } from 'graphql'
 
 interface Operation {
@@ -53,9 +54,23 @@ const getFields = (field: FieldNode): any => {
       [field.name.value]: [],
     }
 
-    field.selectionSet.selections.forEach((subField) => {
-      obj[field.name.value].push(getFields(subField as FieldNode))
-    })
+    const lookAtFieldNode = (node: FieldNode | InlineFragmentNode): void => {
+      node.selectionSet?.selections.forEach((subField) => {
+        switch (subField.kind) {
+          case 'Field':
+            obj[field.name.value].push(getFields(subField as FieldNode))
+            break
+          case 'FragmentSpread':
+            // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests
+            break
+          case 'InlineFragment':
+            lookAtFieldNode(subField)
+        }
+      })
+    }
+
+    lookAtFieldNode(field)
+
     return obj
   }
 }

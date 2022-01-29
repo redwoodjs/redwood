@@ -1,9 +1,0 @@
-{
-  "name": "release-notes",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "octokit": "1.7.1"
-  }
-}

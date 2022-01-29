@@ -1,6 +1,10 @@
-import c from 'ansi-colors'
+import fs from 'fs'
+import path from 'path'
 
-import { getConfig } from '@redwoodjs/internal'
+import c from 'ansi-colors'
+import { FastifyServerOptions } from 'fastify'
+
+import { getConfig, getPaths } from '@redwoodjs/internal'
 
 import createApp from './app'
 import withApiProxy from './plugins/withApiProxy'
@@ -52,7 +56,8 @@ export const apiServerHandler = async ({
 }: ApiServerArgs) => {
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...')))
-  let app = createApp()
+
+  let app = createApp(loadServerConfig())
   // Import Server Functions.
   app = await withFunctions(app, apiRootPath)
 
@@ -79,7 +84,7 @@ export const bothServerHandler = async ({
 }: Omit<HttpServerParams, 'app'>) => {
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
-  let app = createApp()
+  let app = createApp(loadServerConfig())
 
   // Attach plugins
   app = await withFunctions(app, apiRootPath)
@@ -113,7 +118,7 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  const fastifyInstance = createApp()
+  const fastifyInstance = createApp(loadServerConfig())
 
   // serve static files from "web/dist"
   let app = withWebServer(fastifyInstance)
@@ -145,4 +150,21 @@ function coerceRootPath(path: string) {
   const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
 
   return `${prefix}${path}${suffix}`
+}
+
+function loadServerConfig() {
+  const serverConfigPath = path.join(
+    getPaths().base,
+    getConfig().api.serverConfig
+  )
+
+  // If a server.config.js is not found, use the default
+  // options set in packages/api-server/src/app.ts
+  if (!fs.existsSync(serverConfigPath)) {
+    return
+  }
+
+  console.log(`Loading server config from ${serverConfigPath} \n`)
+
+  return require(serverConfigPath) as FastifyServerOptions
 }

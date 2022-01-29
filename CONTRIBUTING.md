@@ -10,7 +10,8 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Code Organization](#code-organization)
   - [Local Setup](#local-setup)
     - [Redwood Framework](#redwood-framework)
-    - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
+    - [Redwood Project: Options](#redwood-project-options)
+      - [Redwood Functional Test Project](#redwood-functional-test-project)
     - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
     - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
   - [Browser-based Setup](#browser-based-setup)
@@ -49,16 +50,20 @@ cd redwood
 yarn install
 ```
 
-### Redwood Project: Create a Functional Test Project
+### Redwood Project: Options
 
 You'll almost always want to test the functionality of your changes to the Redwood Framework in a Redwood Project. When it comes to getting a Redwood Project to test your changes out in, you have several options:
 
 - run `yarn create redwood-app ./redwood-project`
 - `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
 - use a project you've already created
-- run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project 👀
+- create a functional test project using `yarn run build:test-project <project directory>`  👀
 
-**Using the functional test project might be the fastest and easiest way to test your changes.** You can create a Redwood Project that contains a lot of functionality in just a few minutes. For example, here's a brief overview of all the things `yarn run build:test-project <project directory>` does. It...
+**Using the functional test project might be the fastest and easiest way to test your changes.** 
+
+#### Redwood Functional Test Project
+
+You can create a Redwood Project that contains a lot of functionality in just a few minutes. For example, here's a brief overview of all the things `yarn run build:test-project <project directory>` does. It...
 
 1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
@@ -66,24 +71,29 @@ You'll almost always want to test the functionality of your changes to the Redwo
 4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
-Unless you've already got a project with a lot of functionality, it'd take quite some to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
-
-But how do you actually test your changes in the Redwood Framework in your Redwood Project? With another command, this time in the root of your Redwood Project: `yarn rwfw`.
+Run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project.
 
 > Besides `<project directory>`, `build:test-project` takes a few other options as well:
 >
-> | Arguments & Options   | Description                                                        |
-> |-----------------------|--------------------------------------------------------------------|
-> | `<project directory>` | Directory to build test project [default: "./blog-test-project"]   |
-> | `--typescript, --ts`  | Generate a TypeScript project [default: JavaScript]                |
-> | `--canary`            | Upgrade project to latest canary version [default: true]           |
-> | `--help `             | Show help                                                          |
+> | Arguments & Options   | Description                                                                           |
+> |-----------------------|---------------------------------------------------------------------------------------|
+> | `<project directory>` | Directory to build test project [default: "./blog-test-project"] |
+> | `--typescript, --ts`  | Generate a TypeScript project [default: javascript] |
+> | `--link`              | Copy Framework dependencies and packages into Test-project [default: false]  |
+> | `--verbose`           | Verbose output [default: false]                                                       |
+> | `--clean`             | Delete existing directory and recreate Test-project [default: false] |
+> | `--canary`            | Upgrade project to latest canary version; NOT compatible with --link [default: true]  |
+> | `--help `             | Show help                                                                             |
 >
 > **Example:**
 > ```terminal
 > cd redwood/
-> yarn run build:test-project ~/my-repos/redwood-project --typescript --canary
+> yarn run build:test-project ~/my-repos/redwood-project --typescript --link
 > ```
+
+Unless you've already got a project with a lot of functionality, it'd take quite some to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
+
+But how do you actually test your changes in the Redwood Framework in your Redwood Project? With another command, this time in the root of your Redwood Project: `yarn rwfw`.
 
 ### Testing the Framework in Your Project
 
@@ -142,7 +152,7 @@ To do that, use the `--cwd` option to set the current working directory to your 
 cd redwood
 yarn build
 cd packages/cli
-yarn dev --cwd <project directory>
+yarn dev <cli command> --cwd <project directory>
 ```
 
 `yarn dev` runs the CLI and `--cwd` makes the command run in your Redwood Project. If you make a change to the code, remember to rebuild the packages!
@@ -195,7 +205,7 @@ git commit -am "<version>"
 git tag -am <version> "<version>"
 git push && git push --tags
 yarn build
-yarn framework lerna publish from-package
+yarn lerna publish from-package
 ```
 
 This...

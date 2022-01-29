@@ -49,8 +49,6 @@ _note: this file is also used for all aggregated contributors_
 
 `cd tasks/all-contributors`
 
-`yarn install`
-
 > **NOTE:**
 > Do not add [bot] accounts to the files.
 >
@@ -73,6 +71,11 @@ _note: this file is also used for all aggregated contributors_
 > - KrisCoulson
 > - keithtelliott
 > - callingmedic911
+> - agiannelli
+> ==BOTS==
+> - dependabot[bot]
+> - renovate[bot]
+> - codesee-architecture-diagrams[bot]
 
 #### Framework
 ```js
@@ -90,15 +93,6 @@ yarn all-contributors check --config .rwjs.com.all-contributorsrc
 // For each contributor listed in output, repeat the following:
 
 yarn all-contributors add --config .rwjs.com.all-contributorsrc <contributor> doc
-```
-
-#### Create-Redwood-App
-```js
-yarn all-contributors check --config .crwa.all-contributorsrc
-
-// For each contributor listed in output, repeat the following:
-
-yarn all-contributors add --config .crwa.all-contributorsrc <contributor> tool
 ```
 
 #### Learn.Redwoodjs.com

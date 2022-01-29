@@ -1,8 +1,10 @@
 global.__dirname = __dirname
-import path from 'path'
-
 // Load shared mocks
 import '../../../../lib/test'
+
+import path from 'path'
+
+import yargs from 'yargs'
 
 import * as functionGenerator from '../function'
 
@@ -42,6 +44,14 @@ test('returns tests, scenario and function file', () => {
       expect.stringContaining('foo.scenarios.js'),
     ])
   )
+})
+
+test('Keeps Function in name', () => {
+  const { name } = yargs
+    .command('function <name>', false, functionGenerator.builder)
+    .parse('function BazingaFunction')
+
+  expect(name).toEqual('BazingaFunction')
 })
 
 test('creates a single word function file', () => {
