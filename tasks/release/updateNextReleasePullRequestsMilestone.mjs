@@ -4,8 +4,6 @@
  * - milestone:next-release-patch -> check empty
  * - close milestone _after_ publish
  */
-import c from 'ansi-colors'
-
 import octokit from './octokit.mjs'
 import { confirm, ask, check } from './prompts.mjs'
 
@@ -51,31 +49,27 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   const looksOk = await confirm(
     check`Updated the milestone of ${pullRequestIds.length} PRs: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\nDoes everything look ok?`
   )
-
-  if (!looksOk) {
-    const undoPRs = await confirm(
-      ask`Do you want to undo the changes to the PRs?`
-    )
-
-    if (undoPRs) {
-      await Promise.all(
-        pullRequestIds.map((pullRequestId) =>
-          updatePullRequestMilestone(pullRequestId, nextReleaseMilestoneId)
-        )
-      )
-    }
-
-    const undoMilestone = await confirm(
-      ask`Do you want to delete the milestone`
-    )
-    if (undoMilestone) {
-      await deleteMilestone(milestone.number)
-    }
-
-    return
+  if (looksOk) {
+    return milestone
   }
 
-  return milestone
+  const undoPRs = await confirm(
+    ask`Do you want to undo the changes to the PRs?`
+  )
+  if (undoPRs) {
+    await Promise.all(
+      pullRequestIds.map((pullRequestId) =>
+        updatePullRequestMilestone(pullRequestId, nextReleaseMilestoneId)
+      )
+    )
+  }
+
+  const undoMilestone = await confirm(ask`Do you want to delete the milestone`)
+  if (undoMilestone) {
+    await deleteMilestone(milestone.number)
+  }
+
+  return
 }
 
 // Helpers
