@@ -53,4 +53,14 @@ if (require.main === module) {
   }
 }
 
-export { serveApi, serveWeb, serveBoth }
+export {
+  serveApi,
+  serveWeb,
+  serveBoth,
+  apiCliOptions,
+  webCliOptions,
+  commonOptions,
+  apiServerHandler,
+  webServerHandler,
+  bothServerHandler,
+}
