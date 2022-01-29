@@ -6,12 +6,12 @@
     "rw-api-server": "./dist/index.js",
     "rw-api-server-watch": "./dist/watch.js",
     "rw-log-formatter": "./dist/logFormatter/bin.js",
-    "rw-serve": "./dist/index.js"
+    "rw-server": "./dist/index.js"
   },
   "files": [
     "dist"
   ],
-  "main": "dist/index",
+  "main": "dist/cliHandlers",
   "license": "MIT",
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.16.7",

@@ -10,18 +10,6 @@ import {
   bothServerHandler,
 } from './cliHandlers'
 
-function serveApi() {
-  apiServerHandler(yargs.options(apiCliOptions).argv)
-}
-
-function serveWeb() {
-  webServerHandler(yargs.options(webCliOptions).argv)
-}
-
-function serveBoth() {
-  bothServerHandler(yargs.options(commonOptions).argv)
-}
-
 const commandPath = yargs.argv.$0
 
 const positionalArgs = yargs.argv._
@@ -30,37 +18,23 @@ const positionalArgs = yargs.argv._
 //   "rw-api-server": "./dist/index.js",
 //   "rw-api-server-watch": "./dist/watch.js",
 //   "rw-log-formatter": "./dist/logFormatter/bin.js",
-//   "rw-serve": "./dist/index.js"
+//   "rw-server": "./dist/index.js"
 // },
 
-// rw-api-server is legacy
-// suggest deprecating and moving to rw-serve; TBD
+// suggest deprecating rw-api-server in favor of rw-server; TBD
 
 if (require.main === module) {
   if (
     commandPath.includes('rw-api-server') ||
     (positionalArgs.includes('api') && !positionalArgs.includes('web'))
   ) {
-    serveApi()
+    apiServerHandler(yargs.options(apiCliOptions).argv)
   } else if (
     positionalArgs.includes('web') &&
     !positionalArgs.includes('api')
   ) {
-    serveWeb()
-    console.log('IT WORKED for rw-serve web')
+    webServerHandler(yargs.options(webCliOptions).argv)
   } else {
-    serveBoth()
+    bothServerHandler(yargs.options(commonOptions).argv)
   }
-}
-
-export {
-  serveApi,
-  serveWeb,
-  serveBoth,
-  apiCliOptions,
-  webCliOptions,
-  commonOptions,
-  apiServerHandler,
-  webServerHandler,
-  bothServerHandler,
 }

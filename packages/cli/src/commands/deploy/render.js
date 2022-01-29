@@ -1,12 +1,13 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { serveApi } from '@redwoodjs/api-server'
+import { apiServerHandler } from '@redwoodjs/api-server'
+import { getConfig } from '@redwoodjs/internal'
 
 import { getPaths } from '../../lib'
 
-export const command = 'render <side> [...commands]'
-export const description = 'Build command for Render deploy'
+export const command = 'render <side>'
+export const description = 'Build, Migrate, and Serve command for Render deploy'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
@@ -36,14 +37,14 @@ export const builder = (yargs) => {
 export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   const paths = getPaths()
   let commandSet = []
-  if (side == 'api') {
+  if (side === 'api') {
     if (prisma) {
       commandSet.push('yarn rw prisma migrate deploy')
     }
     if (dataMigrate) {
       commandSet.push('yarn rw dataMigrate up')
     }
-  } else if (side == 'web') {
+  } else if (side === 'web') {
     commandSet.push('yarn')
     commandSet.push('yarn rw build web')
   }
@@ -58,7 +59,10 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
     })
   }
 
-  if (side == 'api') {
-    serveApi()
+  if (side === 'api') {
+    apiServerHandler({
+      port: getConfig().api?.port || 8911,
+      apiRootPath: '/',
+    })
   }
 }
