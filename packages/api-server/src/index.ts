@@ -25,7 +25,8 @@ const positionalArgs = yargs.argv._
 
 if (require.main === module) {
   if (
-    commandPath.includes('rw-api-server') ||
+    commandPath.includes('.bin/rw-api-server') ||
+    commandPath.includes('dist/index.js') ||
     (positionalArgs.includes('api') && !positionalArgs.includes('web'))
   ) {
     apiServerHandler(yargs.options(apiCliOptions).argv)
