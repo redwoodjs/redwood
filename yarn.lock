@@ -5369,7 +5369,7 @@ __metadata:
     rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
-    rw-serve: ./dist/index.js
+    rw-server: ./dist/index.js
   languageName: unknown
   linkType: soft
 
