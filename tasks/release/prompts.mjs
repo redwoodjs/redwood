@@ -18,19 +18,35 @@ export function exitOnCancelPrompts(promptsObject, promptsOptions) {
 }
 
 /**
+ * @typedef {'major' | 'minor' | 'patch'} Semver
+ * @returns {Promise<Semver>}
+ */
+export async function promptForSemver() {
+  const { semver } = await exitOnCancelPrompts({
+    type: 'select',
+    name: 'semver',
+    message: ask`Which semver are you releasing?`,
+    choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
+    initial: 2,
+  })
+
+  return semver
+}
+
+/**
  * Wrapper around confirm-type `prompts`.
  *
  * @param {string} message
  * @returns {Promise<boolean>}
  */
 export async function confirm(message) {
-  const answer = await exitOnCancelPrompts({
+  const { confirmed } = await exitOnCancelPrompts({
     type: 'confirm',
-    name: 'confirm',
+    name: 'confirmed',
     message,
   })
 
-  return answer.confirm
+  return confirmed
 }
 
 /**
@@ -79,3 +95,28 @@ export const ask = makeStringFormatter(ASK)
 export const check = makeStringFormatter(CHECK)
 export const fix = makeStringFormatter(`${HEAVY_X} ${FIX}`)
 export const ok = makeStringFormatter(`${HEAVY_CHECK} ${OK}`)
+
+/**
+ * @param {string} message
+ * @param {Array<() => Promise<any>>} runs
+ */
+export async function confirmRuns(message, runs) {
+  const confirmed = await confirm(message)
+
+  if (!confirmed) {
+    return false
+  }
+
+  if (!Array.isArray(runs)) {
+    return runs()
+  }
+
+  const runResults = []
+
+  for (const run of runs) {
+    const runResult = await run()
+    runResults.push(runResult)
+  }
+
+  return runResults
+}

@@ -7,7 +7,7 @@
 import c from 'ansi-colors'
 
 import octokit from './octokit.mjs'
-import { confirm, ASK, CHECK } from './prompts.mjs'
+import { confirm, ask, check } from './prompts.mjs'
 
 /**
  * @param {string} title
@@ -16,11 +16,10 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   let milestone = await getMilestone(title)
 
   if (!milestone) {
-    const okToCreate = await confirm(
-      `${ASK} Milestone ${c.green(title)} doesn't exist. Ok to create it?`
+    const createOk = await confirm(
+      ask`Milestone ${title} doesn't exist. Ok to create it?`
     )
-
-    if (!okToCreate) {
+    if (!createOk) {
       return
     }
 
@@ -29,23 +28,17 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
     } = await createMilestone(title)
 
     milestone = { title, id, number }
-
-    console.log(`Created milestone ${c.green(title)}`)
   }
 
   const nextReleaseMilestoneId = await getNextReleaseMilestoneId()
-
   const pullRequestIds = await getPullRequestIdsWithMilestone(
     nextReleaseMilestoneId
   )
 
-  const okToUpdate = await confirm(
-    `${ASK} Ok to update the milestone of ${
-      pullRequestIds.length
-    } PRs from ${c.green('next-release')} to ${c.green(title)}?`
+  const updateOk = await confirm(
+    ask`Ok to update the milestone of ${pullRequestIds.length} PRs from next-release to ${title}?`
   )
-
-  if (!okToUpdate) {
+  if (!updateOk) {
     return
   }
 
@@ -55,14 +48,13 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
     )
   )
 
-  const looksRight = await confirm(
-    `${CHECK} Updated the milestone of ${pullRequestIds.length} PRs:
-    https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\nDoes everything look right?`
+  const looksOk = await confirm(
+    check`Updated the milestone of ${pullRequestIds.length} PRs: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\nDoes everything look ok?`
   )
 
-  if (!looksRight) {
+  if (!looksOk) {
     const undoPRs = await confirm(
-      `${ASK} Do you want to undo the changes to the PRs?`
+      ask`Do you want to undo the changes to the PRs?`
     )
 
     if (undoPRs) {
@@ -74,9 +66,8 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
     }
 
     const undoMilestone = await confirm(
-      `${ASK} Do you want to delete the milestone`
+      ask`Do you want to delete the milestone`
     )
-
     if (undoMilestone) {
       await deleteMilestone(milestone.number)
     }
