@@ -104,7 +104,9 @@ export const bothServerHandler = async ({
       ? socket
       : c.magenta(`http://localhost:${port}${apiRootPath}`)
     const webServer = c.green(`http://localhost:${port}`)
+    const apiServer = c.magenta(`http://localhost:${port}`)
     console.log(`Web server started on ${webServer}`)
+    console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
