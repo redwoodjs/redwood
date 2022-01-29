@@ -9,12 +9,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../../lib'
 import c from '../../../../lib/colors'
-import {
-  addFilesTask,
-  addPackagesTask,
-  printSetupNotes,
-  updateApiURLTask,
-} from '../helpers'
+import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
 import {
   POSTGRES_YAML,
   RENDER_HEALTH_CHECK,
