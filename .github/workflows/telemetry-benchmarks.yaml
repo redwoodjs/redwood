@@ -75,7 +75,7 @@ jobs:
 
       - name: Create Redwood Project
         run: |
-          yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${{ REDWOOD_PROJECT_PATH }} --no-yarn-install
+          yarn babel-node packages/create-redwood-app/src/create-redwood-app.js $REDWOOD_PROJECT_PATH --no-yarn-install
 
       # - name: Add Framework Dependencies to Project
       #   run: |
