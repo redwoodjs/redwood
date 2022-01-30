@@ -29,18 +29,15 @@ function createProjectDir() {
 
 async function exportEnv() {
   try {
+    await execa.sync('echo "{REDWOOD_PROJECT_PATH}=$RW_PATH" >> $GITHUB_ENV', {
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RW_PATH: REDWOOD_PROJECT_PATH,
+      },
+    })
     await execa.sync(
-      'echo "{REDWOOD_PROJECT_PATH}={$RW_PATH}" >> $GITHUB_ENV',
-      {
-        shell: true,
-        stdio: 'inherit',
-        env: {
-          RW_PATH: REDWOOD_PROJECT_PATH,
-        },
-      }
-    )
-    await execa.sync(
-      'echo "{REDWOOD_FRAMEWORK_PATH}={$RWFW_PATH}" >> $GITHUB_ENV',
+      'echo "{REDWOOD_FRAMEWORK_PATH}=$RWFW_PATH" >> $GITHUB_ENV',
       {
         shell: true,
         stdio: 'inherit',
