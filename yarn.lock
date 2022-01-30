@@ -5534,7 +5534,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     babel-plugin-module-resolver: 4.1.0
     babel-timing: 0.9.1
-    copy-webpack-plugin: 10.2.2
+    copy-webpack-plugin: 10.2.3
     core-js: 3.20.3
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.4.1
@@ -12013,9 +12013,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:10.2.2":
-  version: 10.2.2
-  resolution: "copy-webpack-plugin@npm:10.2.2"
+"copy-webpack-plugin@npm:10.2.3":
+  version: 10.2.3
+  resolution: "copy-webpack-plugin@npm:10.2.3"
   dependencies:
     fast-glob: ^3.2.7
     glob-parent: ^6.0.1
@@ -12025,7 +12025,7 @@ __metadata:
     serialize-javascript: ^6.0.0
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 67adaf5627d1d20506a3fc4a57e3457ef4a4247966920d7c2d459bcfb67c4e07a078b49e4bdeaa84c04ccdf106946158b804d5c5053f3d7586c3bc1b201d7d98
+  checksum: 9bfab9b488627cf7d984acf8bf80184212235cd6eaaa9f5bb4b93db90fbe3a0a56b5fb10b6141912cf1ef9bfeffa3b53a031beeb05e6e364221dafe926954ef5
   languageName: node
   linkType: hard
 
