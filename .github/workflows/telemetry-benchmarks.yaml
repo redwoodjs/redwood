@@ -54,54 +54,64 @@ jobs:
       #     framework_path=$(pwd)
       #     echo "::set-output name=framework_path::$framework_path"
 
-      - if: matrix.os == 'windows-latest'
-        name: Create a temporary directory (windows)
-        id: createpath
+      # - if: matrix.os == 'windows-latest'
+      #   name: Create a temporary directory (windows)
+      #   id: createpath
+      #   run: |
+      #     $project_path = New-TempDirectory -Prefix 'redwood.'
+      #     echo "::set-output name=project_path::$project_path"
+      #     $framework_path = Get-Location
+      #     echo "::set-output name=framework_path::$framework_path"
+
+      - name: Create Project Directory
         run: |
-          $project_path = New-TempDirectory -Prefix 'redwood.'
-          echo "::set-output name=project_path::$project_path"
-          $framework_path = Get-Location
-          echo "::set-output name=framework_path::$framework_path"
+          chmod +x ./tasks/make-tmp-dir
+          ./tasks/make-tmp-dir
+
+      - name: Check Env Vars REDWOOD_PROJECT_PATH and REDWOOD_FRAMEWORK_PATH
+        run: |
+          echo "$REDWOOD_PROJECT_PATH"
+          echo "$REDWOOD_FRAMEWORK_PATH"
 
       - name: Create Redwood Project
         run: |
-          yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${{ steps.createpath.outputs.project_path }} --no-yarn-install
+          yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${{ REDWOOD_PROJECT_PATH }} --no-yarn-install
 
-      - name: Add Framework Dependencies to Project
-        run: |
-          yarn project:deps ${{ steps.createpath.outputs.project_path }}
+      # - name: Add Framework Dependencies to Project
+      #   run: |
+      #     yarn project:deps ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run Project Yarn Install
-        run: |
-          yarn install
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      # - name: Run Project Yarn Install
+      #   run: |
+      #     yarn install
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Copy Framework Packages to Project
-        run: |
-          yarn project:copy ${{ steps.createpath.outputs.project_path }}
+      # - name: Copy Framework Packages to Project
+      #   run: |
+      #     yarn project:copy ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw info`
-        run: |
-          yarn rw info
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      # - name: Run `rw info`
+      #   run: |
+      #     yarn rw info
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw build`
-        run: |
-          yarn rw build
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      # - name: Run `rw build`
+      #   run: |
+      #     yarn rw build
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run "prisma migrate dev"
-        run: |
-          yarn rw prisma migrate dev --name ci-test
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      # - name: Run "prisma migrate dev"
+      #   run: |
+      #     yarn rw prisma migrate dev --name ci-test
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run "g page"
-        run: |
-          yarn rw g page home /
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      # - name: Run "g page"
+      #   run: |
+      #     yarn rw g page home /
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Throw Error | Run `rw g sdl <model>`
-        run: |
-          yarn rw g sdl DoesNotExist
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-        continue-on-error: true
+      # - name: Throw Error | Run `rw g sdl <model>`
+      #   run: |
+      #     yarn rw g sdl DoesNotExist
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
+      #   continue-on-error: true
