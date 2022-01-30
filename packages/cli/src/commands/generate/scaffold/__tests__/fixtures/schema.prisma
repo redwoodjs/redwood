@@ -27,12 +27,25 @@ model Post {
   favorites  Favorite[]
 }
 
+model Address {
+  id           String  @id @default(uuid())
+  country      String
+  state        String?
+  zip          String
+  town         String
+  street       String
+  streetNumber String // Can be 12C for example
+  users        User[]
+}
+
 model User {
-  id       Int           @id @default(autoincrement())
-  name     String?
-  email    String        @unique
-  isAdmin  Boolean       @default(false)
-  profiles UserProfile[]
+  id        Int           @id @default(autoincrement())
+  name      String?
+  email     String        @unique
+  isAdmin   Boolean       @default(false)
+  profiles  UserProfile[]
+  addressId String?
+  address   Address?      @relation(fields: [addressId], references: [id])
 }
 
 model UserProfile {

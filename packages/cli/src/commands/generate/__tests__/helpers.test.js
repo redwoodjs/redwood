@@ -489,6 +489,69 @@ test('intForeignKeysForModel does not include foreign keys of other datatypes', 
   expect(helpers.intForeignKeysForModel(model)).toEqual([])
 })
 
+test('optionalStringForeignKeysForModel returns names of optional foreign keys that are String datatypes', () => {
+  const model = {
+    name: 'User',
+    dbName: null,
+    fields: [
+      {
+        name: 'id',
+        kind: 'scalar',
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: true,
+        isReadOnly: false,
+        type: 'Int',
+        hasDefaultValue: true,
+        default: {
+          name: 'autoincrement',
+          args: [],
+        },
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'addressId',
+        kind: 'scalar',
+        isList: false,
+        isRequired: false,
+        isUnique: false,
+        isId: false,
+        isReadOnly: true,
+        type: 'String',
+        hasDefaultValue: false,
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'address',
+        kind: 'object',
+        isList: false,
+        isRequired: false,
+        isUnique: false,
+        isId: false,
+        isReadOnly: false,
+        type: 'Address',
+        hasDefaultValue: false,
+        relationName: 'AddressToUser',
+        relationFromFields: ['addressId'],
+        relationToFields: ['id'],
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+    ],
+    isGenerated: false,
+    primaryKey: null,
+    uniqueFields: [],
+    uniqueIndexes: [],
+  }
+
+  expect(helpers.optionalStringForeignKeysForModel(model)).toEqual([
+    'addressId',
+  ])
+})
+
 describe('mapRouteParamTypeToTsType', () => {
   it('maps scalar type String to TS type string', () => {
     expect(helpers.mapRouteParamTypeToTsType('String')).toBe('string')

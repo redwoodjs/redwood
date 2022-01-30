@@ -392,6 +392,22 @@ describe('in javascript (default) mode', () => {
       ]
     ).toMatchSnapshot()
   })
+
+  test('creates a UserForm with empty optional string foreign keys transformed to null', async () => {
+    const foreignKeyFiles = await scaffold.files({
+      model: 'User',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
+
+    expect(
+      foreignKeyFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/User/UserForm/UserForm.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
 })
 
 describe('in typescript mode', () => {
@@ -676,6 +692,23 @@ describe('in typescript mode', () => {
       foreignKeyFiles[
         path.normalize(
           '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  test('creates a UserForm with empty optional string foreign keys transformed to null', async () => {
+    const foreignKeyFiles = await scaffold.files({
+      model: 'User',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
+
+    expect(
+      foreignKeyFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/User/UserForm/UserForm.tsx'
         )
       ]
     ).toMatchSnapshot()

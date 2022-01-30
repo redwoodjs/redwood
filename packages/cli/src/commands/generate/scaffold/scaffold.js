@@ -31,6 +31,7 @@ import {
   relationsForModel,
   intForeignKeysForModel,
   mapPrismaScalarToPagePropTsType,
+  optionalStringForeignKeysForModel,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -357,6 +358,7 @@ const componentFiles = async (
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const intForeignKeys = intForeignKeysForModel(model)
+  const optionalStringForeignKeys = optionalStringForeignKeysForModel(model)
   let fileList = {}
   const componentMetadata = {
     Boolean: {
@@ -406,7 +408,9 @@ const componentFiles = async (
     .map((column) => {
       let validation
 
-      if (componentMetadata[column.type]?.validation) {
+      if (optionalStringForeignKeys.includes(column.name)) {
+        validation = '{{ setValueAs: (val: string) => val || null }}'
+      } else if (componentMetadata[column.type]?.validation) {
         validation = componentMetadata[column.type]?.validation(
           column?.isRequired
         )

@@ -1,5 +1,117 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`in javascript (default) mode creates a UserForm with empty optional string foreign keys transformed to null 1`] = `
+"import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  TextField,
+  CheckboxField,
+  Submit,
+} from '@redwoodjs/forms'
+
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
+  }
+}
+
+const UserForm = (props) => {
+  const onSubmit = (data) => {
+    props.onSave(data, props?.user?.id)
+  }
+
+  return (
+    <div className=\\"rw-form-wrapper\\">
+      <Form onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName=\\"rw-form-error-wrapper\\"
+          titleClassName=\\"rw-form-error-title\\"
+          listClassName=\\"rw-form-error-list\\"
+        />
+
+        <Label
+          name=\\"name\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Name
+        </Label>
+        <TextField
+          name=\\"name\\"
+          defaultValue={props.user?.name}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+        />
+
+        <FieldError name=\\"name\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"email\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Email
+        </Label>
+        <TextField
+          name=\\"email\\"
+          defaultValue={props.user?.email}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
+        />
+
+        <FieldError name=\\"email\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"isAdmin\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Is admin
+        </Label>
+        <CheckboxField
+          name=\\"isAdmin\\"
+          defaultChecked={props.user?.isAdmin}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+        />
+
+        <FieldError name=\\"isAdmin\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"addressId\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Address id
+        </Label>
+        <TextField
+          name=\\"addressId\\"
+          defaultValue={props.user?.addressId}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ setValueAs: (val) => val || null }}
+        />
+
+        <FieldError name=\\"addressId\\" className=\\"rw-field-error\\" />
+
+        <div className=\\"rw-button-group\\">
+          <Submit disabled={props.loading} className=\\"rw-button rw-button-blue\\">
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default UserForm
+"
+`;
+
 exports[`in javascript (default) mode creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
@@ -1203,6 +1315,117 @@ const PostsList = ({ posts }) => {
 }
 
 export default PostsList
+"
+`;
+
+exports[`in typescript mode creates a UserForm with empty optional string foreign keys transformed to null 1`] = `
+"import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  TextField,
+  CheckboxField,
+  Submit,
+} from '@redwoodjs/forms'
+
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
+  }
+}
+
+const UserForm = (props) => {
+  const onSubmit = (data) => {
+    props.onSave(data, props?.user?.id)
+  }
+
+  return (
+    <div className=\\"rw-form-wrapper\\">
+      <Form onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName=\\"rw-form-error-wrapper\\"
+          titleClassName=\\"rw-form-error-title\\"
+          listClassName=\\"rw-form-error-list\\"
+        />
+
+        <Label
+          name=\\"name\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Name
+        </Label>
+        <TextField
+          name=\\"name\\"
+          defaultValue={props.user?.name}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+        />
+        <FieldError name=\\"name\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"email\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Email
+        </Label>
+        <TextField
+          name=\\"email\\"
+          defaultValue={props.user?.email}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
+        />
+        <FieldError name=\\"email\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"isAdmin\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Is admin
+        </Label>
+        <CheckboxField
+          name=\\"isAdmin\\"
+          defaultChecked={props.user?.isAdmin}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+        />
+        <FieldError name=\\"isAdmin\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"addressId\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Address id
+        </Label>
+        <TextField
+          name=\\"addressId\\"
+          defaultValue={props.user?.addressId}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ setValueAs: (val: string) => val || null }}
+        />
+        <FieldError name=\\"addressId\\" className=\\"rw-field-error\\" />
+
+        <div className=\\"rw-button-group\\">
+          <Submit
+            disabled={props.loading}
+            className=\\"rw-button rw-button-blue\\"
+          >
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default UserForm
 "
 `;
 

@@ -221,6 +221,12 @@ export const intForeignKeysForModel = (model) => {
     .map((f) => f.name)
 }
 
+export const optionalStringForeignKeysForModel = (model) => {
+  return model.fields
+    .filter((f) => f.name.match(/Id$/) && f.type === 'String' && !f.isRequired)
+    .map((f) => f.name)
+}
+
 /**
  * Adds "List" to the end of words we can't pluralize
  */
