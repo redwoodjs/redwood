@@ -44,6 +44,9 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn dedupe --check
 
+      - name: 'Check that package.jsons are sorted'
+        run: yarn workspaces foreach --parallel dlx sort-package-json --check
+
       - name: Build
         run: yarn build
 
