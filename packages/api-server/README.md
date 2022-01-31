@@ -26,7 +26,9 @@ From package.json
 > Note: because we use Yargs to parse in index, using these within the context of a Redwood CLI command will throw due to Yargs object "collision". Needs to be re-architected in the future.
 
 ### `rw-server`
-Not intended for production use.
+Indended for dev and prototyping (i.e. pre-production).
+
+This command runs both the API and Web server on the same port and is not performant at scale for production use. Instead, use the separate commands to run the API and (if needed) Web servers independently, along with tools like PM2, Nginx, or Kubernetes, which appropriately handle concurrent requests, errors, static asset, etc. for production contexts.
 - Runs web on redwood.toml web.port (default 8910)
 - API listens on web port at path redwood.toml web.apiUrl
 - Command Options:
@@ -34,7 +36,7 @@ Not intended for production use.
     - socket (optional)
     - apiHost (default redwood.toml web.apiUrl)
 
-### `rw-server api` or `rw-api-server`
+### `rw-server api`
 For production use.
 - Runs api on redwood.toml api.port (default 8911)
 - Command Options:
@@ -43,7 +45,7 @@ For production use.
     - apiRootPath (default '/')
 
 ### `rw-server web`
-Not optimized for production use. Recommended to use CDN or Nginx as performant alternatives.
+Not optimized for production use at scale (see comments above for `rw-server`). Recommended to use CDN or Nginx as performant alternatives.
 - Runs web on redwood.toml web.port (default 8910)
 - GraphQL endpoint is set to redwood.toml web.apiUrl/graphql
 - Command Options:
