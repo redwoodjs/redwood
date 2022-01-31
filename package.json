@@ -38,7 +38,7 @@
     "jscodeshift": "0.13.0",
     "lerna": "4.0.0",
     "lodash.template": "4.5.0",
-    "msw": "0.36.7",
+    "msw": "0.36.8",
     "node-notifier": "10.0.0",
     "nodemon": "2.0.15",
     "npm-packlist": "3.0.0",
@@ -60,7 +60,7 @@
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-types": "3.16.0",
     "vscode-languageserver": "6.1.1",
-    "vscode-languageserver-textdocument": "1.0.3"
+    "vscode-languageserver-textdocument": "1.0.4"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

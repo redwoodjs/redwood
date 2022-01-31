@@ -8,7 +8,7 @@
     "@babel/eslint-parser": "7.16.5",
     "@babel/eslint-plugin": "7.16.5",
     "@redwoodjs/internal": "v0.43.0",
-    "@typescript-eslint/eslint-plugin": "5.10.1",
+    "@typescript-eslint/eslint-plugin": "5.10.2",
     "@typescript-eslint/parser": "5.10.1",
     "eslint": "8.8.0",
     "eslint-config-prettier": "8.3.0",

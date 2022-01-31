@@ -1,6 +1,7 @@
 /* eslint-env jest, es2021 */
 import { rest, graphql } from 'msw'
 import { setupServer } from 'msw/node'
+import prompts from 'prompts'
 
 import updateNextReleasePullRequestsMilestone, {
   GET_MILESTONES,
@@ -12,6 +13,37 @@ import updateNextReleasePullRequestsMilestone, {
 /**
  * MSW setup
  */
+const nextReleaseMilestone = {
+  title: 'next-release',
+  id: 'MI_kwDOC2M2f84Aa82f',
+}
+
+const milestonesNodes = [
+  {
+    title: 'next-release-patch',
+    id: 'MDk6TWlsZXN0b25lNjc1Nzk0MQ==',
+  },
+  {
+    title: 'next-release-priority',
+    id: 'MDk6TWlsZXN0b25lNjc3MTI3MQ==',
+  },
+  nextReleaseMilestone,
+]
+
+const handleGetMilestones = graphql.query(
+  /Get(.*)MilestoneId(s?)/,
+  (_req, res, ctx) =>
+    res(
+      ctx.data({
+        repository: {
+          milestones: {
+            nodes: milestonesNodes,
+          },
+        },
+      })
+    )
+)
+
 let nextVersionMilestone
 
 const handleCreateMilestone = rest.post(
@@ -30,41 +62,12 @@ const handleCreateMilestone = rest.post(
     }
 
     nextVersionMilestone = {
+      title,
       node_id: `123-${title}`,
       number: 1,
     }
 
     return res(ctx.json(nextVersionMilestone))
-  }
-)
-
-const nextReleaseMilestone = {
-  title: 'next-release',
-  id: 'MI_kwDOC2M2f84Aa82f',
-}
-
-const handleGetMilestoneIds = graphql.query(
-  'GetMilestoneIds',
-  (_req, res, ctx) => {
-    return res(
-      ctx.data({
-        repository: {
-          milestones: {
-            nodes: [
-              {
-                title: 'next-release-patch',
-                id: 'MDk6TWlsZXN0b25lNjc1Nzk0MQ==',
-              },
-              {
-                title: 'next-release-priority',
-                id: 'MDk6TWlsZXN0b25lNjc3MTI3MQ==',
-              },
-              nextReleaseMilestone,
-            ],
-          },
-        },
-      })
-    )
   }
 )
 
@@ -111,7 +114,7 @@ const handleUpdatePullRequestMilestone = graphql.mutation(
     const { pullRequestId, milestoneId } = req.variables
 
     if (
-      milestoneId !== nextVersionMilestone.node_id ||
+      milestoneId !== nextVersionMilestone.nod_id ||
       !pullRequests.map((pullRequest) => pullRequest.id).includes(pullRequestId)
     ) {
       return res(
@@ -151,8 +154,8 @@ const handleCloseMilestone = rest.post(
 )
 
 const server = setupServer(
+  handleGetMilestones,
   handleCreateMilestone,
-  handleGetMilestoneIds,
   handleGetNextReleasePullRequestIds,
   handleUpdatePullRequestMilestone,
   handleCloseMilestone
@@ -228,10 +231,18 @@ describe('updateNextReleasePullRequestsMilestone', () => {
     `)
   })
 
-  /**
-   * This needs a few tweaks.
-   */
-  it.skip('MSW unit test', async () => {
-    await updateNextReleasePullRequestsMilestone('v0.42.1')
+  it('MSW unit test', async () => {
+    prompts.inject([
+      // createOk
+      true,
+      // updateOk
+      true,
+      // looksOk
+      true,
+    ])
+
+    const milestone = await updateNextReleasePullRequestsMilestone('v0.42.1')
+    const { node_id: id, ...rest } = nextVersionMilestone
+    expect(milestone).toEqual({ id, ...rest })
   })
 })
