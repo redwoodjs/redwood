@@ -82,7 +82,7 @@ const updateRedwoodTomlTask = () => {
 
       const newContent = content.replace(
         /apiUrl.*?\n/m,
-        'apiUrl = "${API_URL:/api}" # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless#api_url\n'
+        'apiUrl = "${API_URL:/api}"       # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless#api_url\n'
       )
       fs.writeFileSync(configPath, newContent)
     },
