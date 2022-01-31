@@ -198,7 +198,7 @@ async function validateMergedPRs(semver) {
   } = await octokit.graphql(MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE)
 
   if (!nextReleasePatchPullRequests.length) {
-    console.log(c.bold(ok`No PRs with the next-release-patch milestone`))
+    console.log(c.bold(ok`No PRs with the ${'next-release-patch'} milestone`))
     return
   }
 
