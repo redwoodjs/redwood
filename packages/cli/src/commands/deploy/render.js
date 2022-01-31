@@ -36,33 +36,36 @@ export const builder = (yargs) => {
 
 export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   const paths = getPaths()
-  let commandSet = []
-  if (side === 'api') {
-    if (prisma) {
-      commandSet.push('yarn rw prisma migrate deploy')
-    }
-    if (dataMigrate) {
-      commandSet.push('yarn rw dataMigrate up')
-    }
-  } else if (side === 'web') {
-    commandSet.push('yarn')
-    commandSet.push('yarn rw build web')
+
+  const execaConfig = {
+    shell: true,
+    stdio: 'inherit',
+    cwd: paths.base,
+    extendEnv: true,
+    cleanup: true,
   }
 
-  if (commandSet.length) {
-    await execa(commandSet.join(' && '), {
-      shell: true,
-      stdio: 'inherit',
-      cwd: paths.base,
-      extendEnv: true,
-      cleanup: true,
-    })
-  }
-
-  if (side === 'api') {
+  async function runApiCommands() {
+    prisma && (await execa('yarn rw prisma migrate deploy', execaConfig))
+    dataMigrate && (await execa('yarn rw dataMigrate up', execaConfig))
     await apiServerHandler({
       port: getConfig().api?.port || 8911,
       apiRootPath: '/',
     })
+  }
+
+  async function runWebCommands() {
+    await execa('yarn install', execaConfig)
+    await execa('yarn rw build web', execaConfig)
+  }
+
+  if (side === 'api') {
+    runApiCommands()
+  } else if (side === 'web') {
+    console.log('\nRunning yarn install and building web...')
+    runWebCommands()
+  } else {
+    console.log('Error with arguments provided')
+    // you broke something, which should be caught by Yargs
   }
 }
