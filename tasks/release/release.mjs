@@ -288,19 +288,25 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   await commitTagQA(nextVersion)
   notifier.notify('done')
 
-  await confirm(
+  await confirmRuns(
     ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`,
+    [
+      () => $`git push && git push --tags`,
+      // We've had an issue with this one.
+      async () => {
+        try {
+          await $`yarn lerna publish from-package`
+          console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
+        } catch (e) {
+          console.log(
+            `Couldn't run ${c.green('yarn lerna publish from-package')}`
+          )
+          console.log(e)
+        }
+      },
+    ],
     { exit: true }
   )
-
-  await $`git push && git push --tags`
-  try {
-    await $`yarn lerna publish from-package`
-    console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
-  } catch (e) {
-    console.log("Couldn't run yarn lerna publish from-package")
-    console.log(e)
-  }
 
   await confirmRuns(ask`Do you want to generate release notes?`, () =>
     generateReleaseNotes(nextVersion)
