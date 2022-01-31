@@ -1,8 +1,19 @@
 /* eslint-env node, es2021 */
 /**
- * Notes
- * - branch already exists? start on the "update package versions" step
- * - consider using xstate
+ * Use this script to release a version of RedwoodJS:
+ *
+ * ```
+ * yarn release
+ * ```
+ *
+ * @remarks
+ *
+ * You'll need a GitHub token and an NPM token. (So only @thedavidprice can do this right now.)
+ *
+ * @remarks
+ *
+ * - handle the case where a branch already exists; start on the "update package versions" step
+ * - at this point, consider using xstate
  */
 import c from 'ansi-colors'
 import notifier from 'node-notifier'
@@ -11,14 +22,14 @@ import { $ } from 'zx'
 import generateReleaseNotes from './generateReleaseNotes.mjs'
 import octokit from './octokit.mjs'
 import {
+  promptForSemver,
   confirm,
+  confirmRuns,
   exitOnCancelPrompts,
-  ASK,
-  CHECK,
-  FIX,
-  HEAVY_X,
-  OK,
-  HEAVY_CHECK,
+  ask,
+  check,
+  fix,
+  ok,
   rocketBoxen,
 } from './prompts.mjs'
 import updateNextReleasePullRequestsMilestone, {
@@ -28,125 +39,27 @@ import updateNextReleasePullRequestsMilestone, {
 let milestone
 
 export default async function release() {
-  const { semver } = await exitOnCancelPrompts({
-    type: 'select',
-    name: 'semver',
-    message: `${ASK} Which semver are you releasing?`,
-    choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
-    initial: 2,
-  })
+  const semver = await promptForSemver()
+  let [currentVersion, nextVersion] = await getCurrentAndNextVersions(semver)
 
-  // Get the most-recent tag and get the next version from it.
-  // `git describe --abbrev=0` should output something like like `v0.42.1`.
-  const gitDescribePO = await $`git describe --abbrev=0`
-  const previousVersion = gitDescribePO.stdout.trim()
-  let nextVersion = getNextVersion(semver, previousVersion)
+  await validateGitTag(nextVersion)
+  await validateMergedPRs(semver)
 
-  // Confirm that we got the next version right; give the user a chance to correct it if we didn't.
-  const nextVersionConfirmed = await confirm(
-    `${CHECK} The next release is ${c.green(nextVersion)}`
+  milestone = await confirmRuns(
+    ask`Do you want to update next-release PRs' milestone to ${nextVersion}?`,
+    () => updateNextReleasePullRequestsMilestone(nextVersion)
   )
-  if (!nextVersionConfirmed) {
-    const answer = await exitOnCancelPrompts({
-      type: 'text',
-      name: 'nextVersion',
-      message: `${ASK} enter the next version`,
-    })
-    nextVersion = answer.nextVersion
-  }
 
-  // Validation
-  //
-  // Check that the git tag doesn't already exist.
-  const gitTagPO = await $`git tag -l ${nextVersion}`
-  if (gitTagPO.stdout.trim()) {
-    console.log(
-      c.bold(
-        `${HEAVY_X} ${FIX} Git tag ${c.green(
-          nextVersion
-        )} already exists locally. You must resolve this before proceeding`
-      )
-    )
-    return
-  }
-  // Check that there's no merged PRs without a milestone
-  const {
-    search: { nodes: pullRequests },
-  } = await octokit.graphql(`
-    {
-      search(query: "repo:redwoodjs/redwood is:pr is:merged no:milestone", first: 5, type: ISSUE) {
-        nodes {
-          ... on PullRequest {
-            id
-          }
-        }
-      }
-    }
-  `)
-  if (pullRequests.length) {
-    console.log(
-      c.bold(
-        `${HEAVY_X} ${FIX} There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
-      )
-    )
-    return
-  }
-  console.log(c.bold(`${HEAVY_CHECK} ${OK} No PRs without a milestone`))
-  // If we're not releasing a patch, check that there's no merged PRs with next-release-patch
-  if (semver !== 'patch') {
-    const {
-      search: { nodes: nextReleasePatchPullRequests },
-    } = await octokit.graphql(`
-      {
-        search(query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch", first: 5, type: ISSUE) {
-          nodes {
-            ... on PullRequest {
-              id
-            }
-          }
-        }
-      }
-    `)
-    if (nextReleasePatchPullRequests.length) {
-      console.log(
-        c.bold(
-          `${HEAVY_X} ${FIX} If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
-        )
-      )
-      return
-    }
-    console.log(
-      c.bold(
-        `${HEAVY_CHECK} ${OK} No PRs with the next-release-patch milestone`
-      )
-    )
-  }
-
-  const shouldUpdateNextReleasePRsMilestone = await confirm(
-    `${ASK} Do you want to update next-release PRs' milestone to ${c.green(
-      nextVersion
-    )}?`
-  )
-  if (shouldUpdateNextReleasePRsMilestone) {
-    try {
-      milestone = await updateNextReleasePullRequestsMilestone(nextVersion)
-    } catch (e) {
-      console.log(
-        `Couldn't update next-release PRs milestone to ${nextVersion}`
-      )
-      console.log(e)
-    }
-  }
-
+  // Do the release.
   switch (semver) {
     case 'major':
-      console.log(c.bold(`${HEAVY_X} ${FIX} Wait till after v1`))
-      return
+      console.log(c.bold(fix`Wait till after v1`))
+      break
     case 'minor':
       await releaseMinor(nextVersion)
       break
     case 'patch':
-      await releasePatch(previousVersion, nextVersion)
+      await releasePatch(currentVersion, nextVersion)
       break
   }
 }
@@ -173,24 +86,154 @@ function parseGitTag(version) {
  *
  * @typedef {'major' | 'minor' | 'patch'} Semver
  * @param {Semver} semver
- * @param {string} previousVersion
+ * @param {string} currentVersion
  */
-function getNextVersion(semver, previousVersion) {
+function getNextVersion(semver, currentVersion) {
   switch (semver) {
     case 'major': {
-      const [major] = parseGitTag(previousVersion)
+      const [major] = parseGitTag(currentVersion)
       return `v${[major + 1, 0, 0].join('.')}`
     }
     case 'minor': {
-      const [major, minor] = parseGitTag(previousVersion)
+      const [major, minor] = parseGitTag(currentVersion)
       return `v${[major, minor + 1, 0].join('.')}`
     }
     case 'patch': {
-      const [major, minor, patch] = parseGitTag(previousVersion)
+      const [major, minor, patch] = parseGitTag(currentVersion)
       return `v${[major, minor, patch + 1].join('.')}`
     }
   }
 }
+
+/**
+ * @param {Semver} semver
+ * @returns {[string, string]}
+ */
+async function getCurrentAndNextVersions(semver) {
+  // Get the most-recent tag and get the next version from it.
+  // `git describe --abbrev=0` should output something like like `v0.42.1`.
+  const gitDescribePO = await $`git describe --abbrev=0`
+  const currentVersion = gitDescribePO.stdout.trim()
+  let nextVersion = getNextVersion(semver, currentVersion)
+
+  // Confirm that we got the next version right.
+  // Give the user a chance to correct it if we didn't.
+  const nextVersionConfirmed = await confirm(
+    check`The next release is ${nextVersion}`
+  )
+
+  if (!nextVersionConfirmed) {
+    const answer = await exitOnCancelPrompts({
+      type: 'text',
+      name: 'nextVersion',
+      message: ask`Enter the next version`,
+      validate: (value) =>
+        value.startsWith('v')
+          ? true
+          : `The next version has to start with a "v"`,
+    })
+
+    nextVersion = answer.nextVersion
+  }
+
+  return [currentVersion, nextVersion]
+}
+
+// Validation
+
+/**
+ * Check that the git tag doesn't already exist.
+ *
+ * @param {string} nextVersion
+ */
+async function validateGitTag(nextVersion) {
+  const gitTagPO = await $`git tag -l ${nextVersion}`
+
+  if (!gitTagPO.stdout.trim()) {
+    return
+  }
+
+  console.log(
+    c.bold(
+      fix`Git tag ${nextVersion} already exists locally. You must resolve this before proceeding`
+    )
+  )
+
+  process.exit(1)
+}
+
+/**
+ * Check that there's no merged PRs without a milestone
+ *
+ * @remarks
+ *
+ * If we're not releasing a patch, check that there's no merged PRs with next-release-patch
+ *
+ * @param {Semver} semver
+ */
+async function validateMergedPRs(semver) {
+  const {
+    search: { nodes: pullRequests },
+  } = await octokit.graphql(MERGED_PRS_NO_MILESTONE)
+
+  if (pullRequests.length) {
+    console.log(
+      c.bold(
+        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
+      )
+    )
+    process.exit(1)
+  }
+
+  console.log(c.bold(ok`No PRs without a milestone`))
+
+  // If we're releasing a patch, we're done.
+  // But if we're not, check that there's no PRs with the next-release-patch milestone.
+  if (semver === 'patch') {
+    return
+  }
+
+  const {
+    search: { nodes: nextReleasePatchPullRequests },
+  } = await octokit.graphql(MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE)
+
+  if (!nextReleasePatchPullRequests.length) {
+    console.log(c.bold(ok`No PRs with the next-release-patch milestone`))
+    return
+  }
+
+  console.log(
+    c.bold(
+      fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
+    )
+  )
+
+  process.exit(1)
+}
+
+export const MERGED_PRS_NO_MILESTONE = `
+  {
+    search(query: "repo:redwoodjs/redwood is:pr is:merged no:milestone", first: 5, type: ISSUE) {
+      nodes {
+        ... on PullRequest {
+          id
+        }
+      }
+    }
+  }
+`
+
+export const MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE = `
+  {
+    search(query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch", first: 5, type: ISSUE) {
+      nodes {
+        ... on PullRequest {
+          id
+        }
+      }
+    }
+  }
+`
 
 /**
  * Right now releasing a major is the same as releasing a minor.
@@ -198,7 +241,7 @@ function getNextVersion(semver, previousVersion) {
  * @param {string} nextVersion
  */
 // function releaseMajor(nextVersion) {
-//   return releaseMajorOrMinor('major', nextVersion)
+//   return eleaseMajorOrMinor('major', nextVersion)
 // }
 
 /**
@@ -213,140 +256,171 @@ function releaseMinor(nextVersion) {
  * @param {string} nextVersion
  */
 async function releaseMajorOrMinor(semver, nextVersion) {
-  const PO = await $`git branch --show-current`
-  const branch = PO.stdout.trim()
-  if (branch !== 'main') {
-    console.log('Not on main. Checking out main')
+  // Checkout main.
+  const currentBranchPO = await $`git branch --show-current`
+  const currentBranch = currentBranchPO.stdout.trim()
+  if (currentBranch !== 'main') {
     await $`git checkout main`
   }
 
   const releaseBranch = ['release', semver, nextVersion].join('/')
-  const okToCheckout = await confirm(
-    `${ASK} Ok to checkout new branch ${c.green(releaseBranch)}?`
+  // In the future we'll expand the control flow on whether the branch exists or not:
+  // await releaseBranchExists(releaseBranch)
+  await confirmRuns(
+    ask`Ok to checkout new branch ${releaseBranch}?`,
+    () => $`git checkout -b ${releaseBranch}`,
+    { exit: true }
   )
-  if (!okToCheckout) {
-    return
-  }
-  await $`git checkout -b ${releaseBranch}`
 
-  const okToProceed = await confirm(
-    `${ASK} Checked out new release branch ${c.green(
-      releaseBranch
-    )}.\nIf you want to continue publishing, proceed.\nOtherwise, stop here to publish this branch to GitHub to create an RC`
+  await confirm(
+    ask`Checked out new release branch ${releaseBranch}.\nContinue to publish or stop here to push this branch to GitHub to create an RC`,
+    { exit: true }
   )
-  if (!okToProceed) {
-    return
-  }
 
-  const okToCleanInstallUpdate = await confirm(
-    `${ASK} Ok to clean, install, and update package versions?`
-  )
-  if (!okToCleanInstallUpdate) {
-    return
-  }
-
-  await $`git clean -fxd`
-  await $`yarn install`
-  await $`./tasks/update-package-versions ${nextVersion}`
-  notifier.notify('done')
-  const versionsLookRight = await confirm(
-    `${CHECK} The package versions have been updated. Does everything look right?`
-  )
-  if (!versionsLookRight) {
-    return
-  }
-
-  const commitTagQA = await confirm(
-    `${ASK} Ok to commit, tag, and run through local QA?`
-  )
-  if (!commitTagQA) {
-    return
-  }
-  await $`git commit -am "${nextVersion}"`
-  await $`git tag -am ${nextVersion} "${nextVersion}"`
-  // QA
-  await $`yarn build`
-  await $`yarn lint`
-  await $`yarn test`
+  await cleanInstallUpdate(nextVersion)
   notifier.notify('done')
 
-  const okToRelease = await confirm(
-    `${ASK} Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`
+  await confirm(
+    check`The package versions have been updated. Does everything look ok?`,
+    { exit: true }
   )
-  if (!okToRelease) {
-    return
-  }
+
+  await commitTagQA(nextVersion)
+  notifier.notify('done')
+
+  await confirm(
+    ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`,
+    { exit: true }
+  )
+
   await $`git push && git push --tags`
-  await $`yarn lerna publish from-package`
-  console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
-
-  const shouldGenerateReleaseNotes = await confirm(
-    `${ASK} Do you want to generate release notes?`
-  )
-  if (shouldGenerateReleaseNotes) {
-    try {
-      await generateReleaseNotes(nextVersion)
-    } catch (e) {
-      console.log("Couldn't generate release notes")
-      console.log(e)
-    }
+  try {
+    await $`yarn lerna publish from-package`
+    console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
+  } catch (e) {
+    console.log("Couldn't run yarn lerna publish from-package")
+    console.log(e)
   }
+
+  await confirmRuns(ask`Do you want to generate release notes?`, () =>
+    generateReleaseNotes(nextVersion)
+  )
 
   if (milestone) {
-    const okToClose = await confirm(
-      `${ASK} Ok to close milestone ${c.green(nextVersion)}?`
-    )
-    if (okToClose) {
+    await confirmRuns(ask`Ok to close milestone ${nextVersion}?`, () =>
       closeMilestone(milestone.number)
-    }
+    )
   }
 }
+
+/**
+ * Check if the release branch already exists.
+ * If it does, offer to check it out. Otherwise, offer to create it.
+ *
+ * @param {string} releaseBranch
+ */
+// async function releaseBranchExists(releaseBranch) {
+//   const gitBranchPO = await $`git branch`
+
+//   const branches = gitBranchPO.stdout
+//     .trim()
+//     .split('\n')
+//     .map((branch) => branch.trim())
+
+//   if (branches.includes(releaseBranch)) {
+//     return true
+//   }
+
+//   return false
+// }
 
 /**
  * This is a WIP.
  *
  * @param {string} nextVersion
  */
-async function releasePatch(previousVersion, nextVersion) {
-  await $`git checkout tags/${previousVersion} -b release/patch/${nextVersion}`
+async function releasePatch(currentVersion, nextVersion) {
+  const previousReleaseBranch = ['tag', currentVersion].join('/')
+  const releaseBranch = ['release', 'patch', nextVersion].join('/')
 
-  await $`git push origin release/patch/${nextVersion}`
-  await `open https://github.com/redwoodjs/redwood/compare/${previousVersion}..release/patch/${nextVersion}`
+  await confirmRuns(
+    ask`Ok to checkout new branch ${releaseBranch} from ${previousReleaseBranch}?`,
+    () => $`git checkout ${previousReleaseBranch} -b ${releaseBranch}`,
+    { exit: true }
+  )
 
-  const diffLooksGood = await confirm('Does the diff look good?')
+  await pushAndDiff(releaseBranch, currentVersion)
+  await confirm('Does the diff look ok?', { exit: true })
+  await confirm(
+    ask`Cherry pick and handle the conflicts—tell me when you're done`,
+    { exit: true }
+  )
 
-  if (!diffLooksGood) {
-    console.log('Resetting...')
-  }
+  await pushAndDiff(releaseBranch, currentVersion, { exit: true })
+  await confirm('Does the diff look ok?', { exit: true })
 
-  const proceed = await confirm('Cherry pick and handle the conflicts')
+  await cleanInstallUpdate(nextVersion)
+  notifier.notify('done')
 
-  if (!proceed) {
-    console.log('Resetting...')
-  }
+  await confirm(
+    check`The package versions have been updated. Does everything look right?`,
+    { exit: true }
+  )
 
-  await $`git push origin release/patch/${nextVersion}`
-  await `open https://github.com/redwoodjs/redwood/compare/${previousVersion}..release/patch/${nextVersion}`
+  await commitTagQA(nextVersion)
+  notifier.notify('done')
 
-  const diffLooksGood2 = await confirm('Does the diff look good?')
+  // Merge commit
+  // await $`git checkout main`
+  // await $`git branch -d release/patch/${nextVersion}`
+}
 
-  if (!diffLooksGood2) {
-    console.log('Resetting...')
-  }
+/**
+ * @param {string} nextVersion
+ */
+function cleanInstallUpdate(nextVersion) {
+  return confirmRuns(
+    ask`Ok to clean, install, and update package versions?`,
+    [
+      () => $`git clean -fxd`,
+      () => $`yarn install`,
+      () => $`./tasks/update-package-versions ${nextVersion}`,
+    ],
+    { exit: true }
+  )
+}
 
-  // publish rc
+/**
+ * @param {string} nextVersion
+ */
+function commitTagQA(nextVersion) {
+  return confirmRuns(
+    ask`Ok to commit, tag, and run through local QA?`,
+    [
+      () => $`git commit -am "${nextVersion}"`,
+      () => $`git tag -am ${nextVersion} "${nextVersion}"`,
+      () => $`yarn build`,
+      () => $`yarn lint`,
+      () => $`yarn test`,
+    ],
+    {
+      exit: true,
+    }
+  )
+}
 
-  await $`git clean -fxd`
-  await $`yarn install`
-
-  await $`./tasks/update-package-versions ${nextVersion}`
-
-  await $`yarn build`
-
-  await $`git commit -am "${nextVersion}"`
-  await $`git tag -am ${nextVersion} "${nextVersion}"`
-
-  await $`git checkout main`
-  // merge commit
-  await $`git branch -d release/patch/${nextVersion}`
+/**
+ * @param {string} releaseBranch
+ * @param {string} currentVersion
+ */
+function pushAndDiff(releaseBranch, currentVersion) {
+  return confirmRuns(
+    ask`Ok to push new branch ${releaseBranch} and open diff?`,
+    [
+      () => $`git push origin ${releaseBranch}`,
+      () =>
+        $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}..${releaseBranch}`,
+    ],
+    { exit: true }
+  )
 }

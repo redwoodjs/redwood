@@ -3,14 +3,6 @@ import c from 'ansi-colors'
 import boxen from 'boxen'
 import prompts from 'prompts'
 
-export const ASK = c.bgBlue(c.black('  ASK  '))
-export const CHECK = c.bgYellow(c.black(' CHECK '))
-export const FIX = c.bgRed(c.black('  FIX  '))
-export const OK = c.bgGreen(c.black('  O K  '))
-// https://stackoverflow.com/questions/38760554/how-to-print-cross-mark-or-check-mark-in-tcl
-export const HEAVY_X = c.red('\u2716')
-export const HEAVY_CHECK = c.green('\u2714')
-
 /**
  * Wrapper around `prompts` to exit on crtl c.
  *
@@ -26,19 +18,44 @@ export function exitOnCancelPrompts(promptsObject, promptsOptions) {
 }
 
 /**
+ * @typedef {'major' | 'minor' | 'patch'} Semver
+ * @returns {Promise<Semver>}
+ */
+export async function promptForSemver() {
+  const { semver } = await exitOnCancelPrompts({
+    type: 'select',
+    name: 'semver',
+    message: ask`Which semver are you releasing?`,
+    choices: [{ value: 'major' }, { value: 'minor' }, { value: 'patch' }],
+    initial: 2,
+  })
+
+  return semver
+}
+
+/**
  * Wrapper around confirm-type `prompts`.
  *
+ * @typedef {{ exit: boolean, exitCode: string }} ConfirmOptions
  * @param {string} message
+ * @param {ConfirmOptions} options
  * @returns {Promise<boolean>}
  */
-export async function confirm(message) {
-  const answer = await exitOnCancelPrompts({
+export async function confirm(
+  message,
+  { exit, exitCode } = { exit: false, exitCode: 0 }
+) {
+  const { confirmed } = await exitOnCancelPrompts({
     type: 'confirm',
-    name: 'confirm',
+    name: 'confirmed',
     message,
   })
 
-  return answer.confirm
+  if (!exit) {
+    return confirmed
+  }
+
+  process.exit(exitCode)
 }
 
 /**
@@ -57,4 +74,63 @@ export function rocketBoxen(message) {
       vertical: '🚀',
     },
   })
+}
+
+/**
+ * @param {string} prefix
+ * @returns (string, ...values) => string
+ */
+function makeStringFormatter(prefix) {
+  return function formatter(strings, ...values) {
+    const message = strings.reduce(
+      (string, nextString, i) =>
+        (string += nextString + c.green(values[i] ?? '')),
+      ''
+    )
+
+    return `${prefix} ${message}`
+  }
+}
+
+export const ASK = c.bgBlue(c.black('  ASK  '))
+export const CHECK = c.bgYellow(c.black(' CHECK '))
+export const FIX = c.bgRed(c.black('  FIX  '))
+export const OK = c.bgGreen(c.black('  O K  '))
+// https://stackoverflow.com/questions/38760554/how-to-print-cross-mark-or-check-mark-in-tcl
+export const HEAVY_X = c.red('\u2716')
+export const HEAVY_CHECK = c.green('\u2714')
+
+export const ask = makeStringFormatter(ASK)
+export const check = makeStringFormatter(CHECK)
+export const fix = makeStringFormatter(`${HEAVY_X} ${FIX}`)
+export const ok = makeStringFormatter(`${HEAVY_CHECK} ${OK}`)
+
+/**
+ * @param {string} message
+ * @param {Array<() => Promise<any>>} runs
+ * @param {{ exit: boolean, exitCode: string }} options
+ */
+export async function confirmRuns(
+  message,
+  runs,
+  { exit, exitCode } = { exit: false, exitCode: 0 }
+) {
+  const confirmed = await confirm(message, { exit, exitCode })
+
+  if (!confirmed) {
+    return false
+  }
+
+  if (!Array.isArray(runs)) {
+    return runs()
+  }
+
+  const runResults = []
+
+  for (const run of runs) {
+    const runResult = await run()
+    runResults.push(runResult)
+  }
+
+  return runResults
 }
