@@ -109,6 +109,26 @@ test('returns exactly 4 files', () => {
   expect(Object.keys(singleWordFiles).length).toEqual(4)
 })
 
+test('trims Cell from end of name', async () => {
+  const files = await cell.files({
+    name: 'BazingaCell',
+    tests: true,
+    stories: true,
+  })
+
+  const cellCode =
+    files[
+      path.normalize(
+        '/path/to/project/web/src/components/BazingaCell/BazingaCell.js'
+      )
+    ]
+
+  expect(cellCode).not.toBeUndefined()
+  expect(
+    cellCode.split('\n').includes('export const Success = ({ bazinga }) => {')
+  ).toBeTruthy()
+})
+
 test('creates a cell component with a single word name', () => {
   expect(
     singleWordFiles[

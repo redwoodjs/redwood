@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.42.1",
+  "version": "0.43.0",
   "files": [
     "dist",
     "logger",
@@ -17,7 +17,7 @@
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "7.6.4",
+    "pino": "7.6.5",
     "uuid": "8.3.2"
   },
   "repository": {
@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@redwoodjs/auth": "0.42.1",
+    "@redwoodjs/auth": "v0.43.0",
     "@types/crypto-js": "4.1.0",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.1",

@@ -37,7 +37,7 @@ const ${singularPascalName}Form = (props) => {
         </Label>
         <${column.component}
           name="${column.name}"
-          ${column.defaultProp}={${column.deserilizeFunction && column.deserilizeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserilizeFunction && ')'}}
+          ${column.defaultProp}={${column.deserializeFunction && column.deserializeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserializeFunction && ')'}}
           className="rw-input"
           errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
           validation=${column.validation}` %>

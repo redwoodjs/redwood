@@ -18,9 +18,9 @@ exports[`in javascript (default) mode creates a form component 1`] = `
   FieldError,
   Label,
   TextField,
+  DatetimeLocalField,
   CheckboxField,
   NumberField,
-  DatetimeLocalField,
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
@@ -131,6 +131,22 @@ const PostForm = (props) => {
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
 
         <Label
+          name=\\"postedAt\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Posted at
+        </Label>
+        <DatetimeLocalField
+          name=\\"postedAt\\"
+          defaultValue={formatDatetime(props.post?.postedAt)}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+        />
+
+        <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
+
+        <Label
           name=\\"isPinned\\"
           className=\\"rw-label\\"
           errorClassName=\\"rw-label rw-label-error\\"
@@ -153,12 +169,12 @@ const PostForm = (props) => {
         >
           Read time
         </Label>
-        <NumberField
+        <TextField
           name=\\"readTime\\"
           defaultValue={props.post?.readTime}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
+          validation={{ valueAsNumber: true, required: true }}
         />
 
         <FieldError name=\\"readTime\\" className=\\"rw-field-error\\" />
@@ -181,20 +197,21 @@ const PostForm = (props) => {
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
         <Label
-          name=\\"postedAt\\"
+          name=\\"upvotes\\"
           className=\\"rw-label\\"
           errorClassName=\\"rw-label rw-label-error\\"
         >
-          Posted at
+          Upvotes
         </Label>
-        <DatetimeLocalField
-          name=\\"postedAt\\"
-          defaultValue={formatDatetime(props.post?.postedAt)}
+        <NumberField
+          name=\\"upvotes\\"
+          defaultValue={props.post?.upvotes}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
 
-        <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
+        <FieldError name=\\"upvotes\\" className=\\"rw-field-error\\" />
 
         <Label
           name=\\"metadata\\"
@@ -212,6 +229,23 @@ const PostForm = (props) => {
         />
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"hugeNumber\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Huge number
+        </Label>
+        <TextField
+          name=\\"hugeNumber\\"
+          defaultValue={props.post?.hugeNumber}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
+        />
+
+        <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
 
         <div className=\\"rw-button-group\\">
           <Submit disabled={props.loading} className=\\"rw-button rw-button-blue\\">
@@ -382,11 +416,13 @@ export const QUERY = gql\`
       author
       body
       image
+      postedAt
       isPinned
       readTime
       rating
-      postedAt
+      upvotes
       metadata
+      hugeNumber
     }
   }
 \`
@@ -428,9 +464,11 @@ const jsonDisplay = (obj) => {
 
 const timeTag = (datetime) => {
   return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
+    datetime && (
+      <time dateTime={datetime} title={datetime}>
+        {new Date(datetime).toUTCString()}
+      </time>
+    )
   )
 }
 
@@ -490,6 +528,10 @@ const Post = ({ post }) => {
               <td>{post.image}</td>
             </tr>
             <tr>
+              <th>Posted at</th>
+              <td>{timeTag(post.postedAt)}</td>
+            </tr>
+            <tr>
               <th>Is pinned</th>
               <td>{checkboxInputTag(post.isPinned)}</td>
             </tr>
@@ -502,12 +544,16 @@ const Post = ({ post }) => {
               <td>{post.rating}</td>
             </tr>
             <tr>
-              <th>Posted at</th>
-              <td>{timeTag(post.postedAt)}</td>
+              <th>Upvotes</th>
+              <td>{post.upvotes}</td>
             </tr>
             <tr>
               <th>Metadata</th>
               <td>{jsonDisplay(post.metadata)}</td>
+            </tr>
+            <tr>
+              <th>Huge number</th>
+              <td>{post.hugeNumber}</td>
             </tr>
           </tbody>
         </table>
@@ -987,11 +1033,13 @@ export const QUERY = gql\`
       author
       body
       image
+      postedAt
       isPinned
       readTime
       rating
-      postedAt
+      upvotes
       metadata
+      hugeNumber
     }
   }
 \`
@@ -1050,9 +1098,11 @@ const jsonTruncate = (obj) => {
 
 const timeTag = (datetime) => {
   return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
+    datetime && (
+      <time dateTime={datetime} title={datetime}>
+        {new Date(datetime).toUTCString()}
+      </time>
+    )
   )
 }
 
@@ -1092,11 +1142,13 @@ const PostsList = ({ posts }) => {
             <th>Author</th>
             <th>Body</th>
             <th>Image</th>
+            <th>Posted at</th>
             <th>Is pinned</th>
             <th>Read time</th>
             <th>Rating</th>
-            <th>Posted at</th>
+            <th>Upvotes</th>
             <th>Metadata</th>
+            <th>Huge number</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -1109,11 +1161,13 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
+              <td>{timeTag(post.postedAt)}</td>
               <td>{checkboxInputTag(post.isPinned)}</td>
               <td>{truncate(post.readTime)}</td>
               <td>{truncate(post.rating)}</td>
-              <td>{timeTag(post.postedAt)}</td>
+              <td>{truncate(post.upvotes)}</td>
               <td>{jsonTruncate(post.metadata)}</td>
+              <td>{truncate(post.hugeNumber)}</td>
               <td>
                 <nav className=\\"rw-table-actions\\">
                   <Link
@@ -1174,9 +1228,9 @@ exports[`in typescript mode creates a form component 1`] = `
   FieldError,
   Label,
   TextField,
+  DatetimeLocalField,
   CheckboxField,
   NumberField,
-  DatetimeLocalField,
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
@@ -1282,6 +1336,21 @@ const PostForm = (props) => {
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
 
         <Label
+          name=\\"postedAt\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Posted at
+        </Label>
+        <DatetimeLocalField
+          name=\\"postedAt\\"
+          defaultValue={formatDatetime(props.post?.postedAt)}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+        />
+        <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
+
+        <Label
           name=\\"isPinned\\"
           className=\\"rw-label\\"
           errorClassName=\\"rw-label rw-label-error\\"
@@ -1303,12 +1372,12 @@ const PostForm = (props) => {
         >
           Read time
         </Label>
-        <NumberField
+        <TextField
           name=\\"readTime\\"
           defaultValue={props.post?.readTime}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
+          validation={{ valueAsNumber: true, required: true }}
         />
         <FieldError name=\\"readTime\\" className=\\"rw-field-error\\" />
 
@@ -1329,19 +1398,20 @@ const PostForm = (props) => {
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
         <Label
-          name=\\"postedAt\\"
+          name=\\"upvotes\\"
           className=\\"rw-label\\"
           errorClassName=\\"rw-label rw-label-error\\"
         >
-          Posted at
+          Upvotes
         </Label>
-        <DatetimeLocalField
-          name=\\"postedAt\\"
-          defaultValue={formatDatetime(props.post?.postedAt)}
+        <NumberField
+          name=\\"upvotes\\"
+          defaultValue={props.post?.upvotes}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
-        <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
+        <FieldError name=\\"upvotes\\" className=\\"rw-field-error\\" />
 
         <Label
           name=\\"metadata\\"
@@ -1358,6 +1428,22 @@ const PostForm = (props) => {
           validation={{ valueAsJSON: true, required: true }}
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
+
+        <Label
+          name=\\"hugeNumber\\"
+          className=\\"rw-label\\"
+          errorClassName=\\"rw-label rw-label-error\\"
+        >
+          Huge number
+        </Label>
+        <TextField
+          name=\\"hugeNumber\\"
+          defaultValue={props.post?.hugeNumber}
+          className=\\"rw-input\\"
+          errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
+        />
+        <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
 
         <div className=\\"rw-button-group\\">
           <Submit
@@ -1541,11 +1627,13 @@ export const QUERY = gql\`
       author
       body
       image
+      postedAt
       isPinned
       readTime
       rating
-      postedAt
+      upvotes
       metadata
+      hugeNumber
     }
   }
 \`
@@ -1587,9 +1675,11 @@ const jsonDisplay = (obj) => {
 
 const timeTag = (datetime) => {
   return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
+    datetime && (
+      <time dateTime={datetime} title={datetime}>
+        {new Date(datetime).toUTCString()}
+      </time>
+    )
   )
 }
 
@@ -1641,6 +1731,9 @@ const Post = ({ post }) => {
               <th>Image</th>
               <td>{post.image}</td>
             </tr><tr>
+              <th>Posted at</th>
+              <td>{timeTag(post.postedAt)}</td>
+            </tr><tr>
               <th>Is pinned</th>
               <td>{checkboxInputTag(post.isPinned)}</td>
             </tr><tr>
@@ -1650,11 +1743,14 @@ const Post = ({ post }) => {
               <th>Rating</th>
               <td>{post.rating}</td>
             </tr><tr>
-              <th>Posted at</th>
-              <td>{timeTag(post.postedAt)}</td>
+              <th>Upvotes</th>
+              <td>{post.upvotes}</td>
             </tr><tr>
               <th>Metadata</th>
               <td>{jsonDisplay(post.metadata)}</td>
+            </tr><tr>
+              <th>Huge number</th>
+              <td>{post.hugeNumber}</td>
             </tr>
           </tbody>
         </table>
@@ -1686,7 +1782,7 @@ exports[`in typescript mode creates a show page 1`] = `
 "import PostCell from 'src/components/Post/PostCell'
 
 type PostPageProps = {
-  id: Int
+  id: number
 }
 
 const PostPage = ({ id }: PostPageProps) => {
@@ -2066,11 +2162,13 @@ export const QUERY = gql\`
       author
       body
       image
+      postedAt
       isPinned
       readTime
       rating
-      postedAt
+      upvotes
       metadata
+      hugeNumber
     }
   }
 \`
@@ -2083,11 +2181,13 @@ const UPDATE_POST_MUTATION = gql\`
       author
       body
       image
+      postedAt
       isPinned
       readTime
       rating
-      postedAt
+      upvotes
       metadata
+      hugeNumber
     }
   }
 \`
@@ -2209,11 +2309,13 @@ export const QUERY = gql\`
       author
       body
       image
+      postedAt
       isPinned
       readTime
       rating
-      postedAt
+      upvotes
       metadata
+      hugeNumber
     }
   }
 \`
@@ -2275,9 +2377,11 @@ const jsonTruncate = (obj) => {
 
 const timeTag = (datetime) => {
   return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
+    datetime && (
+      <time dateTime={datetime} title={datetime}>
+        {new Date(datetime).toUTCString()}
+      </time>
+    )
   )
 }
 
@@ -2317,11 +2421,13 @@ const PostsList = ({ posts }) => {
             <th>Author</th>
             <th>Body</th>
             <th>Image</th>
+            <th>Posted at</th>
             <th>Is pinned</th>
             <th>Read time</th>
             <th>Rating</th>
-            <th>Posted at</th>
+            <th>Upvotes</th>
             <th>Metadata</th>
+            <th>Huge number</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -2334,11 +2440,13 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
+              <td>{timeTag(post.postedAt)}</td>
               <td>{checkboxInputTag(post.isPinned)}</td>
               <td>{truncate(post.readTime)}</td>
               <td>{truncate(post.rating)}</td>
-              <td>{timeTag(post.postedAt)}</td>
+              <td>{truncate(post.upvotes)}</td>
               <td>{jsonTruncate(post.metadata)}</td>
+              <td>{truncate(post.hugeNumber)}</td>
               <td>
                 <nav className=\\"rw-table-actions\\">
                   <Link
