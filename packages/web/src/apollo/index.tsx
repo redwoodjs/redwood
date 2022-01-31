@@ -112,16 +112,12 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    *
    * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/}
    */
-  const { isAuthenticated, getToken, type: authProviderType } = useAuth()
+  const { getToken, type: authProviderType } = useAuth()
 
   const withToken = setContext(async () => {
-    if (isAuthenticated && getToken) {
-      const token = await getToken()
+    const token = await getToken()
 
-      return { token }
-    }
-
-    return { token: null }
+    return { token }
   })
 
   const { headers, uri } = useFetchConfig()
