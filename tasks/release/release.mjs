@@ -266,46 +266,32 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   const releaseBranch = ['release', semver, nextVersion].join('/')
   // In the future we'll expand the control flow on whether the branch exists or not:
   // await releaseBranchExists(releaseBranch)
-  const runsCheckout = await confirmRuns(
+  await confirmRuns(
     ask`Ok to checkout new branch ${releaseBranch}?`,
-    () => $`git checkout -b ${releaseBranch}`
+    () => $`git checkout -b ${releaseBranch}`,
+    { exit: true }
   )
-  if (!runsCheckout) {
-    return
-  }
 
-  const proceedOk = await confirm(
-    ask`Checked out new release branch ${releaseBranch}.\nContinue to publish or stop here to push this branch to GitHub to create an RC`
+  await confirm(
+    ask`Checked out new release branch ${releaseBranch}.\nContinue to publish or stop here to push this branch to GitHub to create an RC`,
+    { exit: true }
   )
-  if (!proceedOk) {
-    return
-  }
 
-  const runsCleanInstallUpdate = await cleanInstallUpdate(nextVersion)
-  if (!runsCleanInstallUpdate) {
-    return
-  }
+  await cleanInstallUpdate(nextVersion)
   notifier.notify('done')
 
-  const versionsOk = await confirm(
-    check`The package versions have been updated. Does everything look ok?`
+  await confirm(
+    check`The package versions have been updated. Does everything look ok?`,
+    { exit: true }
   )
-  if (!versionsOk) {
-    return
-  }
 
-  const runsCommitTagQA = await commitTagQA(nextVersion)
-  if (!runsCommitTagQA) {
-    return
-  }
+  await commitTagQA(nextVersion)
   notifier.notify('done')
 
-  const releaseOk = await confirm(
-    ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`
+  await confirm(
+    ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`,
+    { exit: true }
   )
-  if (!releaseOk) {
-    return
-  }
 
   await $`git push && git push --tags`
   try {
@@ -357,62 +343,31 @@ async function releasePatch(currentVersion, nextVersion) {
   const previousReleaseBranch = ['tag', currentVersion].join('/')
   const releaseBranch = ['release', 'patch', nextVersion].join('/')
 
-  const runsCheckout = await confirmRuns(
+  await confirmRuns(
     ask`Ok to checkout new branch ${releaseBranch} from ${previousReleaseBranch}?`,
-    () => $`git checkout ${previousReleaseBranch} -b ${releaseBranch}`
+    () => $`git checkout ${previousReleaseBranch} -b ${releaseBranch}`,
+    { exit: true }
   )
-  if (!runsCheckout) {
-    return
-  }
 
-  let runsPushAndDiff = await pushAndDiff(releaseBranch, currentVersion)
-  if (!runsPushAndDiff) {
-    return
-  }
-
-  let diffOk = await confirm('Does the diff look ok?')
-  if (!diffOk) {
-    console.log('todo: resetting...')
-    // delete remote?
-    return
-  }
-
-  const proceedOk = await confirm(
-    ask`Cherry pick and handle the conflicts—tell me when you're done`
+  await pushAndDiff(releaseBranch, currentVersion)
+  await confirm('Does the diff look ok?', { exit: true })
+  await confirm(
+    ask`Cherry pick and handle the conflicts—tell me when you're done`,
+    { exit: true }
   )
-  if (!proceedOk) {
-    console.log('todo: resetting...')
-    return
-  }
 
-  runsPushAndDiff = await runsPushAndDiff(releaseBranch, currentVersion)
-  if (!runsPushAndDiff) {
-    return
-  }
+  await pushAndDiff(releaseBranch, currentVersion, { exit: true })
+  await confirm('Does the diff look ok?', { exit: true })
 
-  diffOk = await confirm('Does the diff look ok?')
-  if (!diffOk) {
-    console.log('todo: resetting...')
-    return
-  }
-
-  const runsCleanInstallUpdate = await cleanInstallUpdate(nextVersion)
-  if (!runsCleanInstallUpdate) {
-    return
-  }
+  await cleanInstallUpdate(nextVersion)
   notifier.notify('done')
 
-  const versionsOk = await confirm(
-    check`The package versions have been updated. Does everything look right?`
+  await confirm(
+    check`The package versions have been updated. Does everything look right?`,
+    { exit: true }
   )
-  if (!versionsOk) {
-    return
-  }
 
-  const runsCommitTagQA = await commitTagQA(nextVersion)
-  if (!runsCommitTagQA) {
-    return
-  }
+  await commitTagQA(nextVersion)
   notifier.notify('done')
 
   // Merge commit
@@ -424,24 +379,34 @@ async function releasePatch(currentVersion, nextVersion) {
  * @param {string} nextVersion
  */
 function cleanInstallUpdate(nextVersion) {
-  return confirmRuns(ask`Ok to clean, install, and update package versions?`, [
-    () => $`git clean -fxd`,
-    () => $`yarn install`,
-    () => $`./tasks/update-package-versions ${nextVersion}`,
-  ])
+  return confirmRuns(
+    ask`Ok to clean, install, and update package versions?`,
+    [
+      () => $`git clean -fxd`,
+      () => $`yarn install`,
+      () => $`./tasks/update-package-versions ${nextVersion}`,
+    ],
+    { exit: true }
+  )
 }
 
 /**
  * @param {string} nextVersion
  */
 function commitTagQA(nextVersion) {
-  return confirmRuns(ask`Ok to commit, tag, and run through local QA?`, [
-    () => $`git commit -am "${nextVersion}"`,
-    () => $`git tag -am ${nextVersion} "${nextVersion}"`,
-    () => $`yarn build`,
-    () => $`yarn lint`,
-    () => $`yarn test`,
-  ])
+  return confirmRuns(
+    ask`Ok to commit, tag, and run through local QA?`,
+    [
+      () => $`git commit -am "${nextVersion}"`,
+      () => $`git tag -am ${nextVersion} "${nextVersion}"`,
+      () => $`yarn build`,
+      () => $`yarn lint`,
+      () => $`yarn test`,
+    ],
+    {
+      exit: true,
+    }
+  )
 }
 
 /**
@@ -455,6 +420,7 @@ function pushAndDiff(releaseBranch, currentVersion) {
       () => $`git push origin ${releaseBranch}`,
       () =>
         $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}..${releaseBranch}`,
-    ]
+    ],
+    { exit: true }
   )
 }

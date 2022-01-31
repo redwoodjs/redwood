@@ -36,17 +36,26 @@ export async function promptForSemver() {
 /**
  * Wrapper around confirm-type `prompts`.
  *
+ * @typedef {{ exit: boolean, exitCode: string }} ConfirmOptions
  * @param {string} message
+ * @param {ConfirmOptions} options
  * @returns {Promise<boolean>}
  */
-export async function confirm(message) {
+export async function confirm(
+  message,
+  { exit, exitCode } = { exit: false, exitCode: 0 }
+) {
   const { confirmed } = await exitOnCancelPrompts({
     type: 'confirm',
     name: 'confirmed',
     message,
   })
 
-  return confirmed
+  if (!exit) {
+    return confirmed
+  }
+
+  process.exit(exitCode)
 }
 
 /**
@@ -99,9 +108,14 @@ export const ok = makeStringFormatter(`${HEAVY_CHECK} ${OK}`)
 /**
  * @param {string} message
  * @param {Array<() => Promise<any>>} runs
+ * @param {{ exit: boolean, exitCode: string }} options
  */
-export async function confirmRuns(message, runs) {
-  const confirmed = await confirm(message)
+export async function confirmRuns(
+  message,
+  runs,
+  { exit, exitCode } = { exit: false, exitCode: 0 }
+) {
+  const confirmed = await confirm(message, { exit, exitCode })
 
   if (!confirmed) {
     return false
