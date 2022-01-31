@@ -5,7 +5,7 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@actions/core@npm:^1.6.0":
+"@actions/core@npm:1.6.0":
   version: 1.6.0
   resolution: "@actions/core@npm:1.6.0"
   dependencies:
@@ -14,7 +14,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:^1.1.0":
+"@actions/exec@npm:1.1.0":
   version: 1.1.0
   resolution: "@actions/exec@npm:1.1.0"
   dependencies:
@@ -25514,8 +25514,8 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@actions/core": ^1.6.0
-    "@actions/exec": ^1.1.0
+    "@actions/core": 1.6.0
+    "@actions/exec": 1.1.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/node": 7.16.7
