@@ -30,7 +30,7 @@ export const notes = [
   'the important first deploy experience. If you want to give it a shot, run ',
   '`yarn rw deploy serverless --first-run`. For subsequent deploys you can ',
   'just run `yarn rw deploy serverless`.\n',
-  '• If you want to use the serverless.com dashboard to manage our app, create ',
+  '• If you want to use the serverless.com dashboard to manage your app, create ',
   'an account and then run `yarn serverless login` to add your credentials, ',
   'then run `yarn serverless` in both the`web` and `api` directories to connect your ',
   'dashboard to this app.\n',
@@ -82,7 +82,7 @@ const updateRedwoodTomlTask = () => {
 
       const newContent = content.replace(
         /apiUrl.*?\n/m,
-        'apiUrl = "${API_URL:/api}" # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless#api_url'
+        'apiUrl = "${API_URL:/api}" # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless#api_url\n'
       )
       fs.writeFileSync(configPath, newContent)
     },
