@@ -21,7 +21,7 @@ const positionalArgs = yargs.argv._
 //   "rw-server": "./dist/index.js"
 // },
 
-// suggest deprecating rw-api-server in favor of rw-server; TBD
+// DEPRECATION Warning: the bin rw-api-server will be deprecated with 1.0.0
 
 if (require.main === module) {
   if (
