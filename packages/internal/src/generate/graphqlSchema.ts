@@ -42,6 +42,7 @@ export const generateGraphQLSchema = async () => {
     )
     return f[0].filename
   } catch (e: any) {
+    process.exitCode = 1
     // `generate` outputs errors which are helpful.
     // This tries to clean up the output of those errors.
     console.error(e)
