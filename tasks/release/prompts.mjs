@@ -51,7 +51,7 @@ export async function confirm(
     message,
   })
 
-  if (!exit) {
+  if (confirmed || !exit) {
     return confirmed
   }
 

@@ -21,16 +21,30 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@types/pascalcase": "1.0.1",
-    "core-js": "3.20.3",
+    "@babel/runtime-corejs3": "7.16.7",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.25.3"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
+    "@testing-library/dom": "8.11.3",
+    "@testing-library/jest-dom": "5.16.1",
+    "@testing-library/react": "12.1.2",
+    "@testing-library/user-event": "13.5.0",
+    "@types/pascalcase": "1.0.1",
+    "@types/react": "17.0.38",
+    "@types/react-dom": "17.0.11",
+    "@types/testing-library__jest-dom": "5.14.2",
     "jest": "27.4.7",
+    "nodemon": "2.0.15",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "typescript": "4.5.5"
+  },
+  "peerDependencies": {
+    "graphql": "16.3.0",
+    "react": "17.0.2"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
