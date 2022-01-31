@@ -5598,12 +5598,25 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@types/pascalcase": 1.0.1
-    core-js: 3.20.3
+    "@babel/runtime-corejs3": 7.16.7
+    "@testing-library/dom": ^8.11.3
+    "@testing-library/jest-dom": 5.16.1
+    "@testing-library/react": 12.1.2
+    "@testing-library/user-event": 13.5.0
+    "@types/pascalcase": ^1.0.1
+    "@types/react": 17.0.38
+    "@types/react-dom": ^17
+    "@types/testing-library__jest-dom": ^5
     jest: 27.4.7
+    nodemon: 2.0.15
     pascalcase: 1.0.0
+    react: 17.0.2
+    react-dom: 17.0.2
     react-hook-form: 7.25.3
     typescript: 4.5.5
+  peerDependencies:
+    graphql: 16.3.0
+    react: 17.0.2
   languageName: unknown
   linkType: soft
 
@@ -6896,6 +6909,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/dom@npm:^8.11.3":
+  version: 8.11.3
+  resolution: "@testing-library/dom@npm:8.11.3"
+  dependencies:
+    "@babel/code-frame": ^7.10.4
+    "@babel/runtime": ^7.12.5
+    "@types/aria-query": ^4.2.0
+    aria-query: ^5.0.0
+    chalk: ^4.1.0
+    dom-accessibility-api: ^0.5.9
+    lz-string: ^1.4.4
+    pretty-format: ^27.0.2
+  checksum: 2a27ace6e6172c26be6e7dd689ead87d874b34fa887017dcf1e20d1e0f6160f26236c53364217af005c14d87ad76680579e51b18ed2a8738e1b72c5ea908f6b2
+  languageName: node
+  linkType: hard
+
 "@testing-library/jest-dom@npm:5.16.1":
   version: 5.16.1
   resolution: "@testing-library/jest-dom@npm:5.16.1"
@@ -7749,7 +7778,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pascalcase@npm:1.0.1":
+"@types/pascalcase@npm:^1.0.1":
   version: 1.0.1
   resolution: "@types/pascalcase@npm:1.0.1"
   checksum: beb5e1568f9dc2335c20c1f7df1332b0a357c6492e3ba04e14e0b908ff2e10509c94a991d1f90a384a0dae7c862d8c1107141dacab80532738fadd085cdbb26e
@@ -7807,7 +7836,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:17.0.11":
+"@types/react-dom@npm:17.0.11, @types/react-dom@npm:^17":
   version: 17.0.11
   resolution: "@types/react-dom@npm:17.0.11"
   dependencies:
@@ -7968,7 +7997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:^5.9.1":
+"@types/testing-library__jest-dom@npm:^5, @types/testing-library__jest-dom@npm:^5.9.1":
   version: 5.14.2
   resolution: "@types/testing-library__jest-dom@npm:5.14.2"
   dependencies:
