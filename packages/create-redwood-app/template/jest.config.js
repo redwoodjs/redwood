@@ -1,7 +1,6 @@
-// This the monorepo jest config
-// Each side has their configuration setup e.g. in `web/jest.config.js`
-
-// Note that jest configs aren't merged!
+// This the Redwood root jest config
+// Each side, e.g. ./web/ and ./api/ has specific config that references this root
+// More info at https://redwoodjs.com/docs/project-configuration
 
 module.exports = {
   rootDir: '.',

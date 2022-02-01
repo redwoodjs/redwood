@@ -9,9 +9,7 @@ const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 const { babelrc } = getApiSideDefaultBabelConfig()
 
-// @TODO
-// @TODO Not sure this logic is super solid
-// @TODO
+// @NOTE: is there a better way we could implmenet this?
 if (process.env.SKIP_DB_PUSH !== '1') {
   const process = require('process')
   const path = require('path')
