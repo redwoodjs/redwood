@@ -1,21 +1,32 @@
 {
   "name": "@redwoodjs/cli",
-  "description": "The Redwood Command Line",
   "version": "0.43.0",
+  "description": "The Redwood Command Line",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/cli"
+  },
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
     "rw": "./dist/index.js",
     "rwfw": "./dist/rwfw.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/cli"
-  },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
+    "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
+    "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
+    "prepublishOnly": "yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
   "dependencies": {
     "@prisma/sdk": "3.8.1",
     "@redwoodjs/api-server": "v0.43.0",
@@ -59,17 +70,6 @@
     "@types/node-fetch": "2.5.12",
     "jest": "27.4.7",
     "typescript": "4.5.5"
-  },
-  "scripts": {
-    "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
-    "build": "yarn build:js",
-    "prepublishOnly": "yarn build",
-    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
-    "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

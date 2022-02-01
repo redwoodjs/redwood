@@ -16,6 +16,7 @@ Before interacting with the Redwood community, please read and understand our [C
     - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
   - [Browser-based Setup](#browser-based-setup)
   - [Integration Tests](#integration-tests)
+  - [Troubleshooting Dependencies](#troubleshooting-dependencies)
   - [Releases](#releases)
   - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
     - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
@@ -59,7 +60,7 @@ You'll almost always want to test the functionality of your changes to the Redwo
 - use a project you've already created
 - create a functional test project using `yarn run build:test-project <project directory>`  👀
 
-**Using the functional test project might be the fastest and easiest way to test your changes.** 
+**Using the functional test project might be the fastest and easiest way to test your changes.**
 
 #### Redwood Functional Test Project
 
@@ -190,6 +191,17 @@ yarn e2e <project directory>
 In this case, the command will _not_ upgrade the project to the most-recent `canary` release.
 
 > **Windows Not Supported:** The command for this is written in bash and will not work on Windows.
+
+## Troubleshooting Dependencies
+
+Most of the time your contribution to Redwood won't involve adding any new dependencies. But of course it also sometimes will, and there's some gotchas in our CI checks that you should be aware of:
+
+- we have a yarn constraint that fails if it sees a caret in a version (e.g. something like `^2.5.4` isn't allowed)
+  - the solution to this is simple: pin the version (e.g. `2.5.4`, without the caret—`yarn constraints --fix` may do this for you)
+- we check for duplicate dependencies and fail if we find any
+  - the solution to this is also simple: run `yarn dedupe`
+- we check that all of our `package.json`s are sorted
+  - if you happen to accidentally "unsort" a package.json, fixing this should be easy: run `yarn dlx sort-package-json` in the unsorted workspace
 
 ## Releases
 

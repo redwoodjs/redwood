@@ -5,6 +5,40 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
+"@actions/core@npm:1.6.0":
+  version: 1.6.0
+  resolution: "@actions/core@npm:1.6.0"
+  dependencies:
+    "@actions/http-client": ^1.0.11
+  checksum: c508f429bf814b8fdbb5f7de5accc63ca278ebc1ebde0b98b0c3c31657998b3861abf6c37afccb3b3724fc60efdf06692026d77e506069679f607aad278e6dc3
+  languageName: node
+  linkType: hard
+
+"@actions/exec@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@actions/exec@npm:1.1.0"
+  dependencies:
+    "@actions/io": ^1.0.1
+  checksum: ebda3187c22ecf3944d42a5947ba07a709d5baf7d5d055a485cf172dcfcaa1fc344bd039066f7d5f8f3865e31cf1f4bf708ce71c148118e01d7613c345357d87
+  languageName: node
+  linkType: hard
+
+"@actions/http-client@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "@actions/http-client@npm:1.0.11"
+  dependencies:
+    tunnel: 0.0.6
+  checksum: e3939d93cd3aa6509cf23109a1b32390007d2efa25a59af56758d6c23b48b220e19a7af703d01ef93a71957b9c542ae910d8f2921529302e56aed660c77dfd54
+  languageName: node
+  linkType: hard
+
+"@actions/io@npm:^1.0.1":
+  version: 1.1.1
+  resolution: "@actions/io@npm:1.1.1"
+  checksum: 592a35c8c75164fdf3621b660c78fbbd29c74d98d2a08f6f3fc663b8c533ecc0c1344bc1cd3c15fe4e5c28c896c8acb0c31e49821b63bc8ecc6e583c2893f4c5
+  languageName: node
+  linkType: hard
+
 "@apollo/client@npm:3.5.8":
   version: 3.5.8
   resolution: "@apollo/client@npm:3.5.8"
@@ -25493,6 +25527,8 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@actions/core": 1.6.0
+    "@actions/exec": 1.1.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/node": 7.16.7
@@ -28155,6 +28191,13 @@ resolve@^2.0.0-next.3:
   dependencies:
     safe-buffer: ^5.0.1
   checksum: 4c7a1b813e7beae66fdbf567a65ec6d46313643753d0beefb3c7973d66fcec3a1e7f39759f0a0b4465883499c6dc8b0750ab8b287399af2e583823e40410a17a
+  languageName: node
+  linkType: hard
+
+"tunnel@npm:0.0.6":
+  version: 0.0.6
+  resolution: "tunnel@npm:0.0.6"
+  checksum: e27e7e896f2426c1c747325b5f54efebc1a004647d853fad892b46d64e37591ccd0b97439470795e5262b5c0748d22beb4489a04a0a448029636670bfd801b75
   languageName: node
   linkType: hard
 
