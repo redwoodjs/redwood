@@ -85,5 +85,5 @@
     "zx": "4.3.0"
   },
   "npmClient": "yarn",
-  "packageManager": "yarn@3.0.2"
+  "packageManager": "yarn@3.1.1"
 }
