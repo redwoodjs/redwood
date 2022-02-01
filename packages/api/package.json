@@ -43,7 +43,7 @@
     "@types/md5": "2.3.1",
     "aws-lambda": "1.0.7",
     "jest": "27.4.7",
-    "supertokens-node": "8.5.0",
+    "supertokens-node": "8.6.0",
     "typescript": "4.5.5"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
