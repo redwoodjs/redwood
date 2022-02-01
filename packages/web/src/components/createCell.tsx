@@ -248,11 +248,6 @@ export function createCell<CellProps = any>({
       options
     )
 
-    const commonProps = {
-      updating: loading,
-      ...queryRest,
-    }
-
     if (error) {
       if (Failure) {
         return (
@@ -260,7 +255,8 @@ export function createCell<CellProps = any>({
             error={error}
             errorCode={error.graphQLErrors?.[0]?.extensions?.['code'] as string}
             {...props}
-            {...commonProps}
+            updating={loading}
+            {...queryRest}
           />
         )
       } else {
@@ -270,9 +266,23 @@ export function createCell<CellProps = any>({
       const afterQueryData = afterQuery(data)
 
       if (isEmpty(data, { isDataEmpty }) && Empty) {
-        return <Empty {...{ ...props, ...afterQueryData, ...commonProps }} />
+        return (
+          <Empty
+            {...props}
+            {...afterQueryData}
+            updating={loading}
+            {...queryRest}
+          />
+        )
       } else {
-        return <Success {...{ ...props, ...afterQueryData, ...commonProps }} />
+        return (
+          <Success
+            {...props}
+            {...afterQueryData}
+            updating={loading}
+            {...queryRest}
+          />
+        )
       }
     } else if (loading) {
       return <Loading {...{ ...queryRest, ...props }} />
