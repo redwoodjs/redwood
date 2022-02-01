@@ -3,7 +3,9 @@
 Love Redwood and want to get involved? You’re in the right place!
 
 > ⚡️ **Quick Links**
+>
 > There are several contributing docs and references, each covering specific topics:
+>
 > 1. 🧭 [Overview and Orientation](https://redwoodjs.com/docs/contributing)
 > 2. 📓 **Reference: Contributing to the Framework Packages** (👈 you are here)
 > 3. 🪜 [Step-by-step Walkthrough](https://redwoodjs.com/docs/contributing-walkthrough) (including Video Recording)
@@ -188,10 +190,13 @@ This generates a functional test project and links it with the Redwood Framework
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/redwood)
 
 ## Local QA and Integration Tests
-All of these checks are included in Redwood’s GitHub PR Continuous Integration (CI) automation. However, it’s good practice to understand what they do by using them locally. The E2E tests aren’t something we use every time anymore (because it takes a while), but you should learn how to use it because it comes in handy when your code is failing tests on GitHub and you need to diagnose.
+
+All of these checks are included in Redwood’s GitHub PR Continuous Integration (CI) automation. But it’s good practice to understand what they do by using them locally too. The E2E tests aren’t something we use every time anymore (because it takes a while), but you should learn how to use it because it comes in handy when your code is failing tests on GitHub and you need to diagnose.
 
 ### Build, Lint, Test, and Check
+
 Within your Framework directory, use the following tools and commands to test your code:
+
 1. **Build the packages**: `yarn build`
     - to delete all previous build directories: `yarn build:clean`
 2. **Syntax and Formatting**: `yarn lint`
@@ -201,6 +206,7 @@ Within your Framework directory, use the following tools and commands to test yo
     - includes yarn dedupe, constraints, and package.json formatter
 
 ### E2E Integration Tests
+
 We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
@@ -322,27 +328,35 @@ If needed, there's more information in [this PR #3154 comment](https://github.co
 - how "postinstall" script works
 
 # Release Publishing
+
 ## Canary publishing
-Every time a commit is added to the `main` branch, a `canary` release is automatically published to npm. The most recent Canary packages can be used in Redwood Project via the following command:
+
+Every time a commit is added to the `main` branch, a `canary` release is automatically published to npm. The most recent `canary` packages can be used in Redwood Project via the following command:
 ```
 yarn rw upgrade --tag canary
 ```
 
 ## Release Candidate publishing
-For testing and QA purposed, Release Candidates will be published prior to a GA release. The process is (will be) automated:
-1. a release branch is created from `main`, e.g. `release/minor/v1.2.0`
-2. once published, any commits to the release branch will trigger automatic publishing of an rc, e.g. `v1.2.0-rc.1`
 
-The most recent RC packages can be used in Redwood Project via the following command:
+For testing and QA purposes, Release Candidates (RCs) will be published prior to a GA release. The process is (will be) automated:
+
+1. a release branch is created from `main`, e.g. `release/minor/v1.2.0`
+2. once published, any commits to the release branch will trigger automatic publishing of an RC, e.g. `v1.2.0-rc.1`
+
+The most recent RC packages can be used in Redwood Projects via the following command:
+
 ```
 yarn rw upgrade --tag rc
 ```
 
 ## Publishing New Versions: `@latest`
+
 > **New `yarn release` Publishing Command**
-> As of February 2022, there is a new command `yarn release` that covers all the necessary steps:
+>
+> As of February 2022, there's a new command `yarn release` that covers all the necessary steps:
+>
 > 1. starting with creating a release branch
-> 2. to creaing a milestone and assigned to PRs
+> 2. to creating a milestone and assigning it to PRs
 > 3. to preparing and publishing packages
 > 4. to creating release notes
 >
@@ -350,7 +364,7 @@ yarn rw upgrade --tag rc
 
 To publish a new version of Redwood to NPM, run the following commands:
 
-> NOTE: `<version>` should be formatted `v0.24.0` (for example)
+> NOTE: `<version>` should be formatted like `v0.24.0` (for example)
 
 ```bash
 git clean -dfx
@@ -364,9 +378,10 @@ yarn lerna publish from-package
 ```
 
 This...
+
   1) changes the version of **all the packages** (even those that haven't changed),
   2) changes the version of the packages within the CRWA Template
-  3) Commits, Tags, and Pushes to GH
+  3) commits, tags, and pushes to GitHub
   4) and finally publishes all packages to NPM.
 
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
