@@ -1,23 +1,34 @@
-# Contributing
+# Contributing to the Framework Packages (Reference Doc)
 
 Love Redwood and want to get involved? You’re in the right place!
 
-Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).
+> ⚡️ **Quick Links**
+> There are several contributing docs and references, each covering specific topics:
+> 1. 🧭 [Overview and Orientation](https://redwoodjs.com/docs/contributing)
+> 2. 📓 **Reference: Contributing to the Framework Packages** (👈 you are here)
+> 3. 🪜 [Step-by-step Walkthrough](https://redwoodjs.com/docs/contributing-walkthrough) (including Video Recording)
+> 4. 📈 [Current Project Status: v1 Release Board](https://github.com/orgs/redwoodjs/projects/6)
+> 5. 🤔 What should I work on?
+>     - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)
+>     - [Discovery Process and Open Issues](https://redwoodjs.com/docs/contributing#what-should-i-work-on)
+
+_Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md)._
 
 **Table of Contents**
 
-- [Contributing](#contributing)
-  - [Code Organization](#code-organization)
-  - [Local Setup](#local-setup)
+- [Contributing to the Framework Packages (Reference Doc)](#contributing-to-the-framework-packages-reference-doc)
+  - [Code Organization: Project and Framework](#code-organization-project-and-framework)
+  - [Local Development Setup](#local-development-setup)
     - [Redwood Framework](#redwood-framework)
-    - [Redwood Project: Options](#redwood-project-options)
+    - [Redwood Project: Setup Options](#redwood-project-setup-options)
       - [Redwood Functional Test Project](#redwood-functional-test-project)
     - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
     - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-  - [Browser-based Setup](#browser-based-setup)
-  - [Integration Tests](#integration-tests)
+  - [Browser-based Development Setup](#browser-based-development-setup)
+  - [Local QA and Integration Tests](#local-qa-and-integration-tests)
+    - [Build, Lint, Test, and Check](#build-lint-test-and-check)
+    - [E2E Integration Tests](#e2e-integration-tests)
   - [Troubleshooting Dependencies](#troubleshooting-dependencies)
-  - [Releases](#releases)
   - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
     - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
     - [New Yarn Commands and Utilities](#new-yarn-commands-and-utilities)
@@ -26,12 +37,16 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Benefits](#benefits)
       - [New Files](#new-files)
       - [Advanced Cases](#advanced-cases)
+- [Release Publishing](#release-publishing)
+  - [Canary publishing](#canary-publishing)
+  - [Release Candidate publishing](#release-candidate-publishing)
+  - [Publishing New Versions: `@latest`](#publishing-new-versions-latest)
 
-## Code Organization
+## Code Organization: Project and Framework
 
-As a Redwood user, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a Redwood Project.
+As a Redwood developer, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a **Redwood Project**.
 
-As a contributor, you'll have to familiarize yourself with one more codebase: the Redwood Framework. The Redwood Framework lives in the monorepo [redwoodjs/redwood](https://github.com/redwoodjs/redwood) (which is where you're probably reading this). It contains all the packages that make Redwood Projects work the way they do. In a Redwood Project, you can find the Redwood Framework in `node_modules/@redwoodjs`.
+As a contributor, you'll have to familiarize yourself with one more codebase: the **Redwood Framework**. The Redwood Framework lives in the monorepo [redwoodjs/redwood](https://github.com/redwoodjs/redwood) (which is where you're probably reading this). It contains all the packages that make Redwood Projects work the way they do. In a Redwood Project, you can find the Redwood Framework in `node_modules/@redwoodjs`.
 
 Here we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood Project is in a directory called `redwood-project`.
 
@@ -39,7 +54,7 @@ Chances are that you'll have more than a few VS Codes open when you're contribut
 
 ![image](https://user-images.githubusercontent.com/32992335/130697522-313317f8-21e5-4f71-8b8e-9690dbad412a.png)
 
-## Local Setup
+## Local Development Setup
 
 ### Redwood Framework
 
@@ -51,7 +66,7 @@ cd redwood
 yarn install
 ```
 
-### Redwood Project: Options
+### Redwood Project: Setup Options
 
 You'll almost always want to test the functionality of your changes to the Redwood Framework in a Redwood Project. When it comes to getting a Redwood Project to test your changes out in, you have several options:
 
@@ -143,7 +158,7 @@ If you've made build or design time changes to RedwoodJS—that is, if you've mo
 - structure
 - testing
 
-—you can run a development version of the CLI directly from your local copy of the Redwood Framework. You don't even have to sync any dependencies or files!
+You can run a development version of the CLI directly from your local copy of the Redwood Framework. You don't even have to sync any dependencies or files!
 
 > For all the packages above, the entry point is the CLI. They're what we consider "build time" and "design time" packages, rather than "run-time" packages (which are web, auth, api, and forms).
 
@@ -162,7 +177,7 @@ yarn dev <cli command> --cwd <project directory>
 >
 > Tip 2: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.
 
-## Browser-based Setup
+## Browser-based Development Setup
 
 You can use the button below to start a development environment in the cloud and access it through your browser!
 
@@ -172,8 +187,20 @@ This generates a functional test project and links it with the Redwood Framework
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/redwood)
 
-## Integration Tests
+## Local QA and Integration Tests
+All of these checks are included in Redwood’s GitHub PR Continuous Integration (CI) automation. However, it’s good practice to understand what they do by using them locally. The E2E tests aren’t something we use every time anymore (because it takes a while), but you should learn how to use it because it comes in handy when your code is failing tests on GitHub and you need to diagnose.
 
+### Build, Lint, Test, and Check
+Within your Framework directory, use the following tools and commands to test your code:
+1. **Build the packages**: `yarn build`
+    - to delete all previous build directories: `yarn build:clean`
+2. **Syntax and Formatting**: `yarn lint`
+    - to fix errors or warnings: `yarn lint:fix`
+3. **Run unit tests for each package**: `yarn test`
+4. **Check Yarn resolutions and package.json format**: `yarn check`
+    - includes yarn dedupe, constraints, and package.json formatter
+
+### E2E Integration Tests
 We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
@@ -202,31 +229,6 @@ Most of the time your contribution to Redwood won't involve adding any new depen
   - the solution to this is also simple: run `yarn dedupe`
 - we check that all of our `package.json`s are sorted
   - if you happen to accidentally "unsort" a package.json, fixing this should be easy: run `yarn dlx sort-package-json` in the unsorted workspace
-
-## Releases
-
-To publish a new version of Redwood to NPM, run the following commands:
-
-> NOTE: `<version>` should be formatted `v0.24.0` (for example)
-
-```bash
-git clean -dfx
-yarn install
-./tasks/update-package-versions <version>
-git commit -am "<version>"
-git tag -am <version> "<version>"
-git push && git push --tags
-yarn build
-yarn lerna publish from-package
-```
-
-This...
-  1) changes the version of **all the packages** (even those that haven't changed),
-  2) changes the version of the packages within the CRWA Template
-  3) Commits, Tags, and Pushes to GH
-  4) and finally publishes all packages to NPM.
-
-If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
 
 ## Yarn v3: Tips and Troubleshooting
 
@@ -318,3 +320,53 @@ If needed, there's more information in [this PR #3154 comment](https://github.co
 - `yarn dlx`
 - Set `YARN_IGNORE_PATH=1` to ignore local yarn version settings.
 - how "postinstall" script works
+
+# Release Publishing
+## Canary publishing
+Every time a commit is added to the `main` branch, a `canary` release is automatically published to npm. The most recent Canary packages can be used in Redwood Project via the following command:
+```
+yarn rw upgrade --tag canary
+```
+
+## Release Candidate publishing
+For testing and QA purposed, Release Candidates will be published prior to a GA release. The process is (will be) automated:
+1. a release branch is created from `main`, e.g. `release/minor/v1.2.0`
+2. once published, any commits to the release branch will trigger automatic publishing of an rc, e.g. `v1.2.0-rc.1`
+
+The most recent RC packages can be used in Redwood Project via the following command:
+```
+yarn rw upgrade --tag rc
+```
+
+## Publishing New Versions: `@latest`
+> **New `yarn release` Publishing Command**
+> As of February 2022, there is a new command `yarn release` that covers all the necessary steps:
+> 1. starting with creating a release branch
+> 2. to creaing a milestone and assigned to PRs
+> 3. to preparing and publishing packages
+> 4. to creating release notes
+>
+> 🚀
+
+To publish a new version of Redwood to NPM, run the following commands:
+
+> NOTE: `<version>` should be formatted `v0.24.0` (for example)
+
+```bash
+git clean -dfx
+yarn install
+./tasks/update-package-versions <version>
+git commit -am "<version>"
+git tag -am <version> "<version>"
+git push && git push --tags
+yarn build
+yarn lerna publish from-package
+```
+
+This...
+  1) changes the version of **all the packages** (even those that haven't changed),
+  2) changes the version of the packages within the CRWA Template
+  3) Commits, Tags, and Pushes to GH
+  4) and finally publishes all packages to NPM.
+
+If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
