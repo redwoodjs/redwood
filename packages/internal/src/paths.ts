@@ -86,22 +86,23 @@ const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
 const PATH_API_DIR_SRC = 'api/src'
-const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
-const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
-const PATH_WEB_DIR_PAGES = 'web/src/pages/'
-const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
-const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_SRC_APP = 'web/src/App'
-const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
-const PATH_WEB_DIR_GENERATORS = 'web/generators'
-const PATH_WEB_DIR_CONFIG = 'web/config'
-const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
-const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
-const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
-const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
-const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
-const PATH_WEB_DIR_DIST = 'web/dist'
+const PATH_WEB_ROUTES = '/src/Routes' // .js|.tsx
+const PATH_WEB_DIR_LAYOUTS = '/src/layouts/'
+const PATH_WEB_DIR_PAGES = '/src/pages/'
+const PATH_WEB_DIR_COMPONENTS = '/src/components'
+const PATH_WEB_DIR_SRC = '/src'
+const PATH_WEB_DIR_SRC_APP = '/src/App'
+const PATH_WEB_DIR_SRC_INDEX = '/src/index' // .js|.tsx
+const PATH_WEB_DIR_GENERATORS = '/generators'
+const PATH_WEB_DIR_CONFIG = '/config'
+const PATH_WEB_DIR_CONFIG_WEBPACK = '/config/webpack.config.js'
+const PATH_WEB_DIR_CONFIG_POSTCSS = '/config/postcss.config.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = '/config/storybook.config.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = '/config/storybook.preview.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = '/config/storybook.manager.js'
+
+const PATH_WEB_DIR_DIST = '/dist'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -151,7 +152,8 @@ export const resolveFile = (
  */
 // TODO: Make this a proxy and make it lazy.
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
-  const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
+  const { path: webPath } = getConfig(getConfigPath(BASE_DIR)).web
+  const routes = resolveFile(path.join(BASE_DIR, webPath, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
 
@@ -190,31 +192,31 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
     web: {
       routes,
-      base: path.join(BASE_DIR, 'web'),
-      pages: path.join(BASE_DIR, PATH_WEB_DIR_PAGES),
-      components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
-      layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
-      src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
-      app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
-      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
-      config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
-      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
-      postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
+      base: path.join(BASE_DIR, webPath),
+      pages: path.join(BASE_DIR, webPath, PATH_WEB_DIR_PAGES),
+      components: path.join(BASE_DIR, webPath, PATH_WEB_DIR_COMPONENTS),
+      layouts: path.join(BASE_DIR, webPath, PATH_WEB_DIR_LAYOUTS),
+      src: path.join(BASE_DIR, webPath, PATH_WEB_DIR_SRC),
+      generators: path.join(BASE_DIR, webPath, PATH_WEB_DIR_GENERATORS),
+      app: resolveFile(path.join(BASE_DIR, webPath, PATH_WEB_DIR_SRC_APP)) as string,
+      index: resolveFile(path.join(BASE_DIR, webPath, PATH_WEB_DIR_SRC_INDEX)),
+      config: path.join(BASE_DIR, webPath, PATH_WEB_DIR_CONFIG),
+      webpack: path.join(BASE_DIR, webPath, PATH_WEB_DIR_CONFIG_WEBPACK),
+      postcss: path.join(BASE_DIR, webPath, PATH_WEB_DIR_CONFIG_POSTCSS),
       storybookConfig: path.join(
-        BASE_DIR,
+        BASE_DIR, webPath,
         PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
       ),
       storybookPreviewConfig: path.join(
-        BASE_DIR,
+        BASE_DIR, webPath,
         PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
       ),
       storybookManagerConfig: path.join(
-        BASE_DIR,
+        BASE_DIR, webPath,
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
-      dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
-      types: path.join(BASE_DIR, 'web/types'),
+      dist: path.join(BASE_DIR, webPath, PATH_WEB_DIR_DIST),
+      types: path.join(BASE_DIR, webPath, '/types'),
     },
   }
 
