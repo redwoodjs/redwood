@@ -1,18 +1,31 @@
 {
   "name": "create-redwood-app",
-  "version": "0.42.1",
+  "version": "0.43.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/create-redwood-app"
+  },
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
     "dist",
     "template"
   ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist",
+    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
   "dependencies": {
     "@babel/core": "7.16.7",
     "@babel/node": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
-    "@redwoodjs/internal": "0.42.1",
-    "@redwoodjs/telemetry": "0.42.1",
+    "@redwoodjs/internal": "v0.43.0",
+    "@redwoodjs/telemetry": "v0.43.0",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
     "execa": "5.1.1",
@@ -20,23 +33,10 @@
     "listr": "0.14.3",
     "yargs": "16.2.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/create-redwood-app"
-  },
-  "scripts": {
-    "build": "yarn build:js",
-    "build:js": "babel src -d dist",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
-  },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "jest": "27.4.7",
     "typescript": "4.5.5"
-  }
+  },
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

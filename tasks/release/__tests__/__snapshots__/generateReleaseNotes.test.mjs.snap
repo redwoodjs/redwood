@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateReleaseNotes MSW unit test 1`] = `
+"# Changelog
+
+Unique contributors: 3
+
+PRs merged: 3
+
+## Features
+
+- Added Decimal field type to Scaffold #4169 by @BBurnworth
+
+## Fixed
+
+- Type fix for \`mockGraphQL\` data argument #4164 by @callingmedic911
+
+## Chore
+
+- Add storybook ci option to test that Storybook starts \\"ok\\" #3515 by @virtuoushub
+
+### Package Dependencies
+
+<details>
+<summary>View all Dependency Version Upgrades</summary>
+<ul>
+
+</ul>
+</details>
+
+## Manual
+
+"
+`;

@@ -371,7 +371,7 @@ test('file generation', async () => {
   global.mockFs = true
 
   await page.handler({
-    name: 'home',
+    name: 'HomePage', // 'Page' should be trimmed from name
     path: '',
     force: false,
     tests: true,

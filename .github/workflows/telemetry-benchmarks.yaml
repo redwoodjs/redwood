@@ -42,7 +42,8 @@ jobs:
       - name: Install dependencies and Build Framework
         run: |
           yarn install --immutable
-          yarn build:clean && yarn build:js
+          yarn build:clean || echo "Project already clean"
+          yarn build:js
 
       - name: Create a temporary directory
         id: createpath

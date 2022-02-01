@@ -1,40 +1,40 @@
 {
   "name": "@redwoodjs/record",
-  "version": "0.42.1",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "license": "MIT",
-  "dependencies": {
-    "@prisma/client": "3.8.1",
-    "@prisma/sdk": "3.8.1",
-    "core-js": "3.20.3"
-  },
+  "version": "0.43.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
     "directory": "packages/record"
   },
-  "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
-    "jest": "27.4.7"
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "datamodel:parse": "node src/scripts/parse.js",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
   },
   "jest": {
     "testPathIgnorePatterns": [
       "/dist/"
     ]
   },
-  "scripts": {
-    "datamodel:parse": "node src/scripts/parse.js",
-    "build": "yarn build:js",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
+  "dependencies": {
+    "@prisma/client": "3.8.1",
+    "@prisma/sdk": "3.8.1",
+    "core-js": "3.20.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
+    "jest": "27.4.7"
   },
   "gitHead": "d583dfdf18f9433038098a64e71f6a421c6d1c04"
 }
