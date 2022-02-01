@@ -342,6 +342,12 @@ exports[`creates a cell test with a camelCase word name 1`] = `
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
 describe('UserProfileCell', () => {
   it('renders Loading successfully', () => {
     expect(() => {
@@ -380,6 +386,12 @@ exports[`creates a cell test with a kebabCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('UserProfileCell', () => {
   it('renders Loading successfully', () => {
@@ -420,6 +432,12 @@ exports[`creates a cell test with a multi word name 1`] = `
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
 describe('UserProfileCell', () => {
   it('renders Loading successfully', () => {
     expect(() => {
@@ -459,6 +477,12 @@ exports[`creates a cell test with a single word name 1`] = `
 import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
 describe('UserCell', () => {
   it('renders Loading successfully', () => {
     expect(() => {
@@ -497,6 +521,12 @@ exports[`creates a cell test with a snakeCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('UserProfileCell', () => {
   it('renders Loading successfully', () => {
