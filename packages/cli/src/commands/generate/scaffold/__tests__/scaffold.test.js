@@ -682,7 +682,7 @@ describe('in typescript mode', () => {
   })
 })
 
-describe.only('tailwind flag', () => {
+describe('tailwind flag', () => {
   test('set to `false` generates a scaffold.css with raw CSS', async () => {
     const files = await scaffold.files({
       ...getDefaultArgs(defaults),

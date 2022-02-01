@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.42.1",
+  "version": "0.43.0",
   "files": [
     "dist",
     "apollo",
@@ -11,10 +11,10 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "3.5.7",
-    "@redwoodjs/auth": "0.42.1",
+    "@apollo/client": "3.5.8",
+    "@redwoodjs/auth": "v0.43.0",
     "core-js": "3.20.3",
-    "graphql": "16.2.0",
+    "graphql": "16.3.0",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.2.2",
     "react-hot-toast": "2.2.0"
