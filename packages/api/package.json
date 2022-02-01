@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/client": "3.8.1",
+    "@prisma/client": "3.9.0",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",

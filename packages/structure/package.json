@@ -30,7 +30,7 @@
     ]
   },
   "dependencies": {
-    "@prisma/sdk": "3.8.1",
+    "@prisma/sdk": "3.9.0",
     "@redwoodjs/internal": "v0.43.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
