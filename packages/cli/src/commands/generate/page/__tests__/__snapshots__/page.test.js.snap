@@ -128,7 +128,7 @@ exports[`creates a page test 1`] = `
 
 import HomePage from './HomePage'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('HomePage', () => {
@@ -146,7 +146,7 @@ exports[`creates a test for a component with multiple words for a name 1`] = `
 
 import ContactUsPage from './ContactUsPage'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('ContactUsPage', () => {
@@ -164,7 +164,7 @@ exports[`creates a test for page component with params 1`] = `
 
 import PostPage from './PostPage'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('PostPage', () => {
@@ -197,7 +197,7 @@ Object {
 
 import HomePage from './HomePage'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('HomePage', () => {
@@ -279,7 +279,7 @@ Object {
 
 import PostPage from './PostPage'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('PostPage', () => {
@@ -360,7 +360,7 @@ exports[`generates typescript pages 3`] = `
 
 import TsFilesPage from './TsFilesPage'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('TsFilesPage', () => {

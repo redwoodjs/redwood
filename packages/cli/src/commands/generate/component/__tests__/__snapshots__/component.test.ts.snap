@@ -19,7 +19,7 @@ exports[`creates a TS component and test 2`] = `
 
 import TypescriptUser from './TypescriptUser'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
 describe('TypescriptUser', () => {
@@ -62,7 +62,7 @@ exports[`creates a multi word component test 1`] = `
 
 import UserProfile from './UserProfile'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
 describe('UserProfile', () => {
@@ -105,7 +105,7 @@ exports[`creates a single word component test 1`] = `
 
 import User from './User'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
 describe('User', () => {

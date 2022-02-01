@@ -16,6 +16,7 @@ exports[`in javascript mode creates a multi word service test file 1`] = `
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('userProfiles', () => {
   scenario('returns all userProfiles', async (scenario) => {
@@ -40,6 +41,7 @@ exports[`in javascript mode creates a multi word service test file with crud act
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('transactions', () => {
   scenario('returns all transactions', async (scenario) => {
@@ -207,6 +209,7 @@ exports[`in javascript mode creates a single word service test file 1`] = `
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('users', () => {
   scenario('returns all users', async (scenario) => {
@@ -235,6 +238,7 @@ import type { StandardScenario } from './userProfiles.scenarios'
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('userProfiles', () => {
   scenario('returns all userProfiles', async (scenario: StandardScenario) => {
@@ -260,6 +264,7 @@ import type { StandardScenario } from './transactions.scenarios'
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('transactions', () => {
   scenario('returns all transactions', async (scenario: StandardScenario) => {
@@ -453,6 +458,7 @@ import type { StandardScenario } from './users.scenarios'
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('users', () => {
   scenario('returns all users', async (scenario: StandardScenario) => {

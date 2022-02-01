@@ -72,7 +72,7 @@ exports[`creates a multi word layout test 1`] = `
 
 import SinglePageLayout from './SinglePageLayout'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('SinglePageLayout', () => {
@@ -121,7 +121,7 @@ exports[`creates a single word layout test 1`] = `
 
 import AppLayout from './AppLayout'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('AppLayout', () => {

@@ -157,7 +157,7 @@ exports[`creates a single word function file: Test snapshot 1`] = `
 
 import { handler } from './foo'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-functions
 
 describe('foo function', () => {
