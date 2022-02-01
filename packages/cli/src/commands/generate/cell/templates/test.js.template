@@ -6,6 +6,7 @@ import { standard } from './${pascalName}Cell.mock'
 // and can fail without adjustments, e.g. Float and DateTime types.
 //           Please refer to the RedwoodJS Testing Docs:
 //        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('${pascalName}Cell', () => {
   it('renders Loading successfully', () => {

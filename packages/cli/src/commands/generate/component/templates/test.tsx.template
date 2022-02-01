@@ -2,7 +2,7 @@ import { render } from '@redwoodjs/testing/web'
 
 import ${pascalName} from './${pascalName}'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
 describe('${pascalName}', () => {

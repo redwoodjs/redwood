@@ -2,7 +2,7 @@ import { mockHttpEvent } from '@redwoodjs/testing/api'
 
 import { handler } from './${name}'
 
-//  Please refer to the RedwoodJS Testing Docs for any issues:
+//   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-functions
 
 describe('${name} function', () => {
