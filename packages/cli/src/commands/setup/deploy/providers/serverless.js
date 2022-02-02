@@ -77,8 +77,6 @@ const updateRedwoodTomlTask = () => {
     task: () => {
       const configPath = path.join(getPaths().base, 'redwood.toml')
       const content = fs.readFileSync(configPath).toString()
-      console.info(content)
-      console.info('match', content.match(/^(\s*)apiUrl.*?\n/m))
 
       const newContent = content.replace(
         /apiUrl.*?\n/m,
