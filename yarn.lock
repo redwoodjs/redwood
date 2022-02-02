@@ -1773,14 +1773,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "@clerk/backend-core@npm:0.2.2"
+"@clerk/backend-core@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@clerk/backend-core@npm:0.3.0"
   dependencies:
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
-  checksum: c084dfb3c655965da23ef73c2a983093ade63bd6201305c9e4a1abefb0871fdc18dcaddcd21f2e5bc4b9712ba27498ccc4073ac3d03cb18b50a86a22d0571f51
+  checksum: fbc8fa13f0c84f6dd43033b67d51fd341be83eb8ea16d0343da5347c258c81e353906f61b958121cc6c08169968993d90d8cae493eeec78ea72f680f9a95480c
   languageName: node
   linkType: hard
 
@@ -1804,11 +1804,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.7.5":
-  version: 2.7.5
-  resolution: "@clerk/clerk-sdk-node@npm:2.7.5"
+"@clerk/clerk-sdk-node@npm:2.8.0":
+  version: 2.8.0
+  resolution: "@clerk/clerk-sdk-node@npm:2.8.0"
   dependencies:
-    "@clerk/backend-core": ^0.2.2
+    "@clerk/backend-core": ^0.3.0
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -1818,7 +1818,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 267424b6b5a4a382f6c7ca2390efe8704f063984a53d37ff15360a716c350f05a6eb8ac24ff6c7dd398e3453f4d1d700e0d068c7b4f40e146749dd991f1b532e
+  checksum: eb79a72d25dc3460a2af8f29afda931a6c7d2e2bacda3852a64d4d3f09ce850c16e0a4a4e4f8c05f1b49481f041b16ae1a10f36b1086d0083221787783f605ec
   languageName: node
   linkType: hard
 
@@ -5441,7 +5441,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.12.1
-    "@clerk/clerk-sdk-node": 2.7.5
+    "@clerk/clerk-sdk-node": 2.8.0
     "@clerk/types": 1.24.1
     "@supabase/supabase-js": 1.29.4
     "@types/netlify-identity-widget": 1.9.2
