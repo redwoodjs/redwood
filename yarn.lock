@@ -5444,7 +5444,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 2.8.0
     "@clerk/types": 1.24.1
     "@supabase/supabase-js": 1.29.4
-    "@types/netlify-identity-widget": 1.9.2
+    "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.38
     firebase: 9.6.5
     firebase-admin: 10.0.2
@@ -5593,7 +5593,7 @@ __metadata:
     webpack: 5.68.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.2
-    webpack-dev-server: 4.7.3
+    webpack-dev-server: 4.7.4
     webpack-manifest-plugin: 4.1.1
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
@@ -7362,7 +7362,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*":
+"@types/express@npm:*, @types/express@npm:^4.17.13":
   version: 4.17.13
   resolution: "@types/express@npm:4.17.13"
   dependencies:
@@ -7724,10 +7724,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/netlify-identity-widget@npm:1.9.2":
-  version: 1.9.2
-  resolution: "@types/netlify-identity-widget@npm:1.9.2"
-  checksum: 0e5456b70ddd9d071f68579acb5b63066f49ca0fa470922ea6e762c9d248a782cec09cc9ccc119ac17203eec7ea8e12f20e39d3eea6eb1d99b1d7068ab19d3a6
+"@types/netlify-identity-widget@npm:1.9.3":
+  version: 1.9.3
+  resolution: "@types/netlify-identity-widget@npm:1.9.3"
+  checksum: 921f5439c3b8fa0fb27058be39f5c6e965ee69a82484a55d3ccb247f6849fd0b4e8170a42e45667bc64869e1ec46d8a2577e63689c949c3fbdb7f67199dfcb86
   languageName: node
   linkType: hard
 
@@ -11165,7 +11165,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:3.5.3, chokidar@npm:^3.4.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.2":
+"chokidar@npm:3.5.3, chokidar@npm:^3.4.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -20732,12 +20732,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"memfs@npm:^3.1.2, memfs@npm:^3.2.2":
-  version: 3.4.0
-  resolution: "memfs@npm:3.4.0"
+"memfs@npm:^3.1.2, memfs@npm:^3.2.2, memfs@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "memfs@npm:3.4.1"
   dependencies:
     fs-monkey: 1.0.3
-  checksum: b6d5d7c78afa005db0f708150a4b1c18e4db4d1f2f9370ee02400910442680289b0a8b1cf9cc86ac70c01d528d7e72bdca8aa54bd596382ac31dfcec6fa7d4cc
+  checksum: d8f73f0903c7802027fea07b5cc39fc984f0fdff528214a0ef2937001fec88e11d755675a725e83a2b14a7c96c054c903bf7d1774d5133116597f201c37f6a5e
   languageName: node
   linkType: hard
 
@@ -29486,33 +29486,34 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "webpack-dev-middleware@npm:5.3.0"
+"webpack-dev-middleware@npm:^5.3.1":
+  version: 5.3.1
+  resolution: "webpack-dev-middleware@npm:5.3.1"
   dependencies:
     colorette: ^2.0.10
-    memfs: ^3.2.2
+    memfs: ^3.4.1
     mime-types: ^2.1.31
     range-parser: ^1.2.1
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
-  checksum: a486502bdc6215e1cf37080af2d3c473d2589c24473c163dcb04989bf73eb179a0085090c7ad12c85f25914d0bd14ddbd72e56e38c82ece3e4756ae87dbe56ab
+  checksum: 705553c7af45eae6d8f93c5d8e6a6254085d7e1a7a789c58b1aec1c6c6c8f4bb65d5663a7c34c793920351d3c580cf566690d4fd5776a198d39a3b2c708e6ca5
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.7.3":
-  version: 4.7.3
-  resolution: "webpack-dev-server@npm:4.7.3"
+"webpack-dev-server@npm:4.7.4":
+  version: 4.7.4
+  resolution: "webpack-dev-server@npm:4.7.4"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
+    "@types/express": ^4.17.13
     "@types/serve-index": ^1.9.1
     "@types/sockjs": ^0.3.33
     "@types/ws": ^8.2.2
     ansi-html-community: ^0.0.8
     bonjour: ^3.5.0
-    chokidar: ^3.5.2
+    chokidar: ^3.5.3
     colorette: ^2.0.10
     compression: ^1.7.4
     connect-history-api-fallback: ^1.6.0
@@ -29532,8 +29533,8 @@ resolve@^2.0.0-next.3:
     sockjs: ^0.3.21
     spdy: ^4.0.2
     strip-ansi: ^7.0.0
-    webpack-dev-middleware: ^5.3.0
-    ws: ^8.1.0
+    webpack-dev-middleware: ^5.3.1
+    ws: ^8.4.2
   peerDependencies:
     webpack: ^4.37.0 || ^5.0.0
   peerDependenciesMeta:
@@ -29541,7 +29542,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 3c488f035a733ff4233592d35c8eeaacccb643fe3de907317188c54030ca19e92f95a85e8acdd6fbda998b077a0342cd3b73a3a824b10a25de357d1641ebf5d9
+  checksum: 6c5b3c55aaca50a9ed7700f0813bd0cf42caabade2dfaf254fb9aa0866cf6d2084e9386b627c8256d3921b99cd2149a0022d69e6f9608d37550afa49f61b9ad5
   languageName: node
   linkType: hard
 
@@ -30024,9 +30025,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ws@npm:>=7.4.6, ws@npm:^8.0.0, ws@npm:^8.1.0, ws@npm:^8.2.3, ws@npm:^8.3.0":
-  version: 8.4.0
-  resolution: "ws@npm:8.4.0"
+"ws@npm:>=7.4.6, ws@npm:^8.0.0, ws@npm:^8.2.3, ws@npm:^8.3.0, ws@npm:^8.4.2":
+  version: 8.4.2
+  resolution: "ws@npm:8.4.2"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ^5.0.2
@@ -30035,7 +30036,7 @@ resolve@^2.0.0-next.3:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: c6ad0101531e7c716f7cab4d63ac237ffadc5b70e40cb4d6159bab22941ff340f8a10e394de4709ec3deace4c09aa799de64c76f480f3fed5d91bedc962a5539
+  checksum: 6ce80cc740f00103611918147ca486938b1f9080216b8c251e8f07378d23eecf187255ed857cdf673c0757e0f1999a91dd4bcbcc18e0073bb7b1f86033eafd8d
   languageName: node
   linkType: hard
 
