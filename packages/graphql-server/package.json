@@ -25,7 +25,7 @@
     "@envelop/core": "1.7.1",
     "@envelop/depth-limit": "1.2.1",
     "@envelop/disable-introspection": "3.0.0",
-    "@envelop/filter-operation-type": "2.0.0",
+    "@envelop/filter-operation-type": "3.0.0",
     "@envelop/parser-cache": "4.0.0",
     "@envelop/validation-cache": "3.0.0",
     "@graphql-tools/merge": "8.2.1",
@@ -47,7 +47,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@envelop/testing": "3.0.1",
+    "@envelop/testing": "4.0.0",
     "@envelop/types": "1.5.1",
     "@redwoodjs/auth": "v0.43.0",
     "@types/lodash.merge": "4.6.6",
