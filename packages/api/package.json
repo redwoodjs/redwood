@@ -1,17 +1,31 @@
 {
   "name": "@redwoodjs/api",
   "version": "0.43.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/api"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "logger",
     "webhooks"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/client": "3.8.1",
+    "@prisma/client": "3.9.1",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
@@ -19,11 +33,6 @@
     "pascalcase": "1.0.0",
     "pino": "7.6.5",
     "uuid": "8.3.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/api"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
@@ -34,17 +43,8 @@
     "@types/md5": "2.3.1",
     "aws-lambda": "1.0.7",
     "jest": "27.4.7",
-    "supertokens-node": "8.5.0",
+    "supertokens-node": "8.6.0",
     "typescript": "4.5.5"
-  },
-  "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

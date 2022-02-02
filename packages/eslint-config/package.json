@@ -1,15 +1,23 @@
 {
   "name": "@redwoodjs/eslint-config",
   "version": "0.43.0",
-  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/eslint-config"
+  },
   "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Nothing to build..'"
+  },
   "dependencies": {
     "@babel/core": "7.16.7",
     "@babel/eslint-parser": "7.16.5",
     "@babel/eslint-plugin": "7.16.5",
     "@redwoodjs/internal": "v0.43.0",
     "@typescript-eslint/eslint-plugin": "5.10.2",
-    "@typescript-eslint/parser": "5.10.1",
+    "@typescript-eslint/parser": "5.10.2",
     "eslint": "8.8.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-babel-module": "5.3.1",
@@ -22,18 +30,10 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "prettier": "2.5.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/eslint-config"
-  },
-  "scripts": {
-    "build": "echo 'Nothing to build..'"
-  },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "jest": "27.4.7",
     "typescript": "4.5.5"
-  }
+  },
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

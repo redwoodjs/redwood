@@ -19,6 +19,9 @@ exports[`creates a TS component and test 2`] = `
 
 import TypescriptUser from './TypescriptUser'
 
+//   Improve this test with help from the Redwood Testing Doc:
+//    https://redwoodjs.com/docs/testing#testing-components
+
 describe('TypescriptUser', () => {
   it('renders successfully', () => {
     expect(() => {
@@ -59,6 +62,9 @@ exports[`creates a multi word component test 1`] = `
 
 import UserProfile from './UserProfile'
 
+//   Improve this test with help from the Redwood Testing Doc:
+//    https://redwoodjs.com/docs/testing#testing-components
+
 describe('UserProfile', () => {
   it('renders successfully', () => {
     expect(() => {
@@ -98,6 +104,9 @@ exports[`creates a single word component test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import User from './User'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//    https://redwoodjs.com/docs/testing#testing-components
 
 describe('User', () => {
   it('renders successfully', () => {

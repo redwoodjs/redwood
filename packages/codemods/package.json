@@ -1,19 +1,32 @@
 {
   "name": "@redwoodjs/codemods",
-  "description": "Codemods to ease upgrading a RedwoodJS Project",
   "version": "0.43.0",
+  "description": "Codemods to ease upgrading a RedwoodJS Project",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/codemods"
+  },
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
+    "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "yarn build",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "yarn test --watch"
+  },
   "dependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@babel/plugin-transform-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@vscode/ripgrep": "1.14.2",
-    "core-js": "3.20.3",
+    "core-js": "3.21.0",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",
@@ -24,19 +37,6 @@
     "tasuku": "1.0.2",
     "toml": "3.0.0",
     "yargs": "16.2.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/codemods"
-  },
-  "scripts": {
-    "build": "yarn build:js",
-    "prepublishOnly": "yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
-    "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
-    "test": "NODE_ENV=test jest",
-    "test:watch": "yarn test --watch"
   },
   "devDependencies": {
     "@types/babel__core": "7.1.18",

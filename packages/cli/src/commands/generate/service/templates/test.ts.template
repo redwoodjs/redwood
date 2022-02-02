@@ -15,6 +15,11 @@ const stringifyButNotScenario = (obj) => {
 import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}'
 import type { StandardScenario } from './${pluralCamelName}.scenarios'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('${pluralCamelName}', () => {
   scenario('returns all ${pluralCamelName}', async (scenario: StandardScenario) => {

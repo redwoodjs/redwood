@@ -185,7 +185,7 @@ const JSONValidation = (value: Record<string, unknown> | null) => value !== null
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type }: { type?: string } = {}
+  { type, name }: { type?: string; name: string }
 ) => {
   if (
     validation.valueAsNumber ||
@@ -206,14 +206,22 @@ const setCoercion = (
     if (valueAsProp === 'valueAsJSON' && !validation.validate) {
       validation.validate = JSONValidation
     }
-  } else if (type) {
-    if (type === 'checkbox') {
-      validation.setValueAs = valueAsProps['valueAsBoolean']
-    } else if (type === 'date' || type === 'datetime-local') {
-      validation.valueAsDate = true
-    } else if (type === 'number') {
-      validation.valueAsNumber = true
-    }
+  } else if (type === 'checkbox') {
+    validation.setValueAs = valueAsProps['valueAsBoolean']
+  } else if (type === 'date' || type === 'datetime-local') {
+    validation.valueAsDate = true
+  } else if (type === 'number') {
+    validation.valueAsNumber = true
+  } else if (
+    // type is undefined for <select> and most other fields that aren't input
+    // fields
+    (type === 'text' || type === undefined) &&
+    /Id$/.test(name || '') &&
+    !validation.required
+  ) {
+    // This is for handling optional relation id fields, like a text input for
+    // `userId` if the user relation is optional
+    validation.setValueAs = (val: string) => val || undefined
   }
 }
 
@@ -253,7 +261,7 @@ const useRegister = <
 
   const validation = props.validation || { required: false }
 
-  setCoercion(validation, { type: props.type })
+  setCoercion(validation, { type: props.type, name: props.name })
 
   const {
     ref: _ref,

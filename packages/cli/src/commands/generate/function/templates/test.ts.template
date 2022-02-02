@@ -2,6 +2,9 @@ import { mockHttpEvent } from '@redwoodjs/testing/api'
 
 import { handler } from './${name}'
 
+//   Improve this test with help from the Redwood Testing Doc:
+//    https://redwoodjs.com/docs/testing#testing-functions
+
 describe('${name} function', () => {
 
   it('Should respond with 200', async () => {
