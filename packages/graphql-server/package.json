@@ -27,7 +27,7 @@
     "@envelop/disable-introspection": "3.0.0",
     "@envelop/filter-operation-type": "3.0.0",
     "@envelop/parser-cache": "4.0.0",
-    "@envelop/validation-cache": "3.0.0",
+    "@envelop/validation-cache": "4.0.0",
     "@graphql-tools/merge": "8.2.1",
     "@graphql-tools/schema": "8.3.1",
     "@graphql-tools/utils": "8.6.1",
