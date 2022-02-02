@@ -6,6 +6,7 @@ import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -56,10 +57,12 @@ export const builder = (yargs) => {
       default: true,
     })
     .epilogue(
-      `Also see the ${terminalLink(
+      `For all available flags, run jest cli directly ${c.green(
+        'yarn jest --help'
+      )}\n\nAlso see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/reference/command-line-interface#test'
-      )}`
+      )}\n`
     )
 }
 
@@ -79,10 +82,20 @@ export const handler = async ({
       return []
     } else {
       // and forward on the other flags
-      return [
-        flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
-        others[flagName],
-      ]
+      const flagValue = others[flagName]
+
+      if (Array.isArray(flagValue)) {
+        // jest does not collapse flags e.g. --coverageReporters=html --coverageReporters=text
+        // so we pass it on. Yargs collapses these flags into an array of values
+        return flagValue.flatMap((val) => {
+          return [flagName.length > 1 ? `--${flagName}` : `-${flagName}`, val]
+        })
+      } else {
+        return [
+          flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
+          flagValue,
+        ]
+      }
     }
   })
 
