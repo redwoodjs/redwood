@@ -26,7 +26,7 @@ _Before interacting with the Redwood community, please read and understand our [
       - [Redwood Functional Test Project](#redwood-functional-test-project)
     - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
     - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-  - [Browser-based Development Setup](#browser-based-development-setup)
+  - [Cloud Developer Environment](#cloud-developer-environment)
   - [Local QA and Integration Tests](#local-qa-and-integration-tests)
     - [Build, Lint, Test, and Check](#build-lint-test-and-check)
     - [E2E Integration Tests](#e2e-integration-tests)
@@ -179,9 +179,9 @@ yarn dev <cli command> --cwd <project directory>
 >
 > Tip 2: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.
 
-## Browser-based Development Setup
+## Cloud Developer Environment
 
-You can use the button below to start a development environment in the cloud and access it through your browser!
+You can use the button below to start a developer environment in the cloud and access it through your browser or favourite IDE locally!
 
 This generates a functional test project and links it with the Redwood Framework code in `main`, giving you an easy playground to try out your fixes and contributions.
 
