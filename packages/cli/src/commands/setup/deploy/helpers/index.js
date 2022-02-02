@@ -180,6 +180,27 @@ export const addToGitIgnoreTask = ({ paths }) => {
   }
 }
 
+export const addToDotEnvTask = ({ lines }) => {
+  return {
+    title: 'Updating .env...',
+    skip: () => {
+      if (!fs.existsSync(path.resolve(getPaths().base, '.env'))) {
+        return 'No .env present, skipping.'
+      }
+    },
+    task: async (_ctx, task) => {
+      const env = path.resolve(getPaths().base, '.env')
+      const content = fs.readFileSync(env).toString()
+
+      if (lines.every((line) => content.includes(line.split('=')[0]))) {
+        task.skip('.env already includes the additions.')
+      }
+
+      fs.appendFileSync(env, lines.join('\n'))
+    },
+  }
+}
+
 export const printSetupNotes = (notes) => {
   return {
     title: 'One more thing...',

@@ -16,7 +16,7 @@ import c from '../../lib/colors'
 import ntfPack from './packing/nft'
 
 export const command = 'serverless'
-export const aliases = ['aws serverless']
+export const aliases = ['aws serverless', 'sls']
 export const description = 'Deploy to AWS via the serverless framework'
 
 export const builder = (yargs) => {
@@ -93,8 +93,14 @@ export const deployCommands = ({ stage, sides, firstRun, packOnly }) => {
   return sides.map((side) => {
     return {
       title: `Deploying ${side}....`,
-      command: ['yarn', ['serverless', 'deploy', ...slsStage]],
-      cwd: path.join(getPaths().base, side),
+      task: async () => {
+        await execa('yarn', ['serverless', 'deploy', ...slsStage], {
+          cwd: path.join(getPaths().base, side),
+          shell: true,
+          stdio: 'inherit',
+          cleanup: true,
+        })
+      },
       skip: () => {
         if (firstRun && side === 'web') {
           return 'Skipping web deploy, until environment configured'
@@ -145,7 +151,7 @@ export const handler = async (yargs) => {
       console.log(SETUP_MARKER, c.green('Starting first setup wizard...'))
 
       const { stdout: slsInfo } = await execa(
-        'yarn serverless info --verbose',
+        `yarn serverless info --verbose --stage=${yargs.stage}`,
         {
           shell: true,
           cwd: getPaths().api.base,
@@ -202,8 +208,20 @@ export const handler = async (yargs) => {
         // Deploy the web side now that the API_URL has been configured
         await webDeployTasks.run()
 
+        const { stdout: slsInfo } = await execa(
+          `yarn serverless info --verbose --stage=${yargs.stage}`,
+          {
+            shell: true,
+            cwd: getPaths().web.base,
+          }
+        )
+
+        const deployedWebUrl = slsInfo.match(/url: (https:\/\/.*)/)[1]
+
         const message = [
           c.bold('Successful first deploy!'),
+          '',
+          `View your deployed site at: ${c.green(deployedWebUrl)}`,
           '',
           'You can use serverless.com CI/CD by connecting/creating an app',
           'To do this run `yarn serverless` on each of the sides, and connect your account',

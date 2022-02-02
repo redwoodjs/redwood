@@ -10,6 +10,7 @@ import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   addToGitIgnoreTask,
+  addToDotEnvTask,
   addFilesTask,
   addPackagesTask,
   printSetupNotes,
@@ -23,19 +24,21 @@ export const description = 'Setup deployments via the Serverless Framework'
 export const aliases = ['aws-serverless']
 
 export const notes = [
-  `${c.green(
-    "You're almost ready to deploy using the Serverless framework!"
-  )}\n`,
-  '• See https://redwoodjs.com/docs/deploy#serverless for more info, including ',
-  'the important first deploy experience. If you want to give it a shot, run ',
-  '`yarn rw deploy serverless --first-run`. For subsequent deploys you can ',
-  'just run `yarn rw deploy serverless`.\n',
-  '• If you want to use the serverless.com dashboard to manage your app, create ',
-  'an account and then run `yarn serverless login` to add your credentials, ',
-  'then run `yarn serverless` in both the`web` and `api` directories to connect your ',
-  'dashboard to this app.\n',
-  "• If you haven't already, familiarize yourself with the docs for your ",
-  'preferred provider: https://www.serverless.com/framework/docs/providers\n',
+  c.green("You're almost ready to deploy using the Serverless framework!"),
+  '',
+  '• See https://redwoodjs.com/docs/deploy#serverless for more info. If you ',
+  '  want to give it a shot, open your `.env` file and add your AWS credentials,',
+  '  then run: ',
+  '',
+  '    yarn rw deploy serverless --first-run',
+  '',
+  '  For subsequent deploys you can just run `yarn rw deploy serverless`.',
+  '',
+  '• If you want to use the Serverless Dashboard to manage your app, plug in',
+  '  the values for `org` and `app` in `web/serverless.yml` and `api/serverless.yml`',
+  '',
+  "• If you haven't already, familiarize yourself with the docs for your",
+  '  preferred provider: https://www.serverless.com/framework/docs/providers',
 ]
 
 const projectDevPackages = [
@@ -101,6 +104,12 @@ export const handler = async ({ force }) => {
       updateRedwoodTomlTask(),
       addToGitIgnoreTask({
         paths: ['.serverless'],
+      }),
+      addToDotEnvTask({
+        lines: [
+          'AWS_ACCESS_KEY_ID=<your-key-here>',
+          'AWS_SECRET_ACCESS_KEY=<your-secret-key-here>',
+        ],
       }),
       {
         title: 'Adding necessary Prisma binaries...',

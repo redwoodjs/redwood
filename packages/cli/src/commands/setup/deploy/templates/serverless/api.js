@@ -20,7 +20,7 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs14.x
-  region: us-east-2 # AWS region where the service will be deployed
+  region: us-east-1 # AWS region where the service will be deployed, defaults to N. Virgina
   httpApi:          # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
     cors:
       allowedOrigins:
