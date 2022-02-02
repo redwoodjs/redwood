@@ -13,7 +13,9 @@ const isUsingBabelRc = () => {
     }).length > 0
   )
 }
-const BABEL_SETTINGS_LINK = c.warning('https://redwoodjs.com/docs/babel')
+const BABEL_SETTINGS_LINK = c.warning(
+  'https://redwoodjs.com/docs/project-configuration-dev-test-build'
+)
 
 const checkForBabelConfig = () => {
   if (isUsingBabelRc()) {
