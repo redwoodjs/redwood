@@ -2137,15 +2137,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@envelop/parser-cache@npm:3.0.0"
+"@envelop/parser-cache@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@envelop/parser-cache@npm:4.0.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
-    "@envelop/core": ^1.7.0
+    "@envelop/core": ^2.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 765e6f4a8fdf7184c0b26b1579a43dd5ef9737b1c7baaddb843ebc25544388251cab85405aaa972812f8504c7fb4bc52beb7498fd83e5e7fe2dab01d88744991
+  checksum: e63a3984226a7d81e64d13af92ddd10203691be6c8454a23defaff876174c4025e194963819725ddaa30bfd71d4790bd1c4df77efa23c3455ac6ed0d4eb9236f
   languageName: node
   linkType: hard
 
@@ -5665,7 +5665,7 @@ __metadata:
     "@envelop/depth-limit": 1.2.1
     "@envelop/disable-introspection": 2.0.0
     "@envelop/filter-operation-type": 2.0.0
-    "@envelop/parser-cache": 3.0.0
+    "@envelop/parser-cache": 4.0.0
     "@envelop/testing": 3.0.1
     "@envelop/types": 1.5.1
     "@envelop/validation-cache": 3.0.0
