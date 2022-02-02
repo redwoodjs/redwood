@@ -27,8 +27,8 @@
     ]
   },
   "dependencies": {
-    "@prisma/client": "3.9.0",
-    "@prisma/sdk": "3.9.0",
+    "@prisma/client": "3.9.1",
+    "@prisma/sdk": "3.9.1",
     "core-js": "3.21.0"
   },
   "devDependencies": {
