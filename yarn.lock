@@ -21649,9 +21649,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-notifier@npm:10.0.0":
-  version: 10.0.0
-  resolution: "node-notifier@npm:10.0.0"
+"node-notifier@npm:10.0.1":
+  version: 10.0.1
+  resolution: "node-notifier@npm:10.0.1"
   dependencies:
     growly: ^1.3.0
     is-wsl: ^2.2.0
@@ -21659,7 +21659,7 @@ fsevents@^1.2.7:
     shellwords: ^0.1.1
     uuid: ^8.3.2
     which: ^2.0.2
-  checksum: 9c3fb4af37de1721e753a2b90e8c6f580741a9660a633bcd6aa02cc4ea522515a43aee216243630ecf0b82e0d7b66348e0510507bf01c061e6de9b5b2d348f8d
+  checksum: 8888f6c4c277c588e6be991019e32ebbf4abdd598151683de59b9f70c31e6bbbddf0e443ea373da44338ab82a958695dcf73035c96e336a398940228d59399eb
   languageName: node
   linkType: hard
 
@@ -25563,7 +25563,7 @@ resolve@^2.0.0-next.3:
     lerna: 4.0.0
     lodash.template: 4.5.0
     msw: 0.36.8
-    node-notifier: 10.0.0
+    node-notifier: 10.0.1
     nodemon: 2.0.15
     npm-packlist: 3.0.0
     octokit: 1.7.1
