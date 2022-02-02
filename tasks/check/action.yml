@@ -1,0 +1,5 @@
+name: 'Check'
+description: "Check constraints, dependencies, and package.json's"
+runs:
+  using: 'node16'
+  main: 'check.mjs'

@@ -1,21 +1,38 @@
 {
   "name": "@redwoodjs/internal",
   "version": "0.43.0",
-  "files": [
-    "dist"
-  ],
-  "bin": {
-    "rw-gen": "./dist/generate/generate.js",
-    "rw-gen-watch": "./dist/generate/watch.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
     "directory": "packages/internal"
   },
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "license": "MIT",
+  "bin": {
+    "rw-gen": "./dist/generate/generate.js",
+    "rw-gen-watch": "./dist/generate/watch.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/fixtures/",
+      "/__fixtures__/"
+    ]
+  },
   "dependencies": {
     "@babel/parser": "7.16.7",
     "@babel/plugin-transform-typescript": "7.16.7",
@@ -26,16 +43,16 @@
     "@graphql-codegen/core": "2.4.0",
     "@graphql-codegen/schema-ast": "2.4.1",
     "@graphql-codegen/typescript": "2.4.2",
-    "@graphql-codegen/typescript-operations": "2.2.2",
+    "@graphql-codegen/typescript-operations": "2.2.3",
     "@graphql-codegen/typescript-react-apollo": "3.2.4",
     "@graphql-codegen/typescript-resolvers": "2.4.3",
     "@redwoodjs/graphql-server": "v0.43.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.5.0",
     "chalk": "4.1.2",
-    "core-js": "3.20.3",
+    "core-js": "3.21.0",
     "deepmerge": "4.2.2",
-    "esbuild": "0.14.14",
+    "esbuild": "0.14.18",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",
     "fs-extra": "10.0.0",
@@ -60,23 +77,6 @@
     "graphql-tag": "2.12.6",
     "jest": "27.4.7",
     "typescript": "4.5.5"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/fixtures/",
-      "/__fixtures__/"
-    ]
-  },
-  "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
-    "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
