@@ -38,7 +38,7 @@
     "babel-timing": "0.9.1",
     "copy-webpack-plugin": "10.2.4",
     "core-js": "3.21.0",
-    "css-loader": "6.5.1",
+    "css-loader": "6.6.0",
     "css-minimizer-webpack-plugin": "3.4.1",
     "dotenv-webpack": "7.1.0",
     "esbuild": "0.14.17",
