@@ -5444,7 +5444,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 2.8.0
     "@clerk/types": 1.24.1
     "@supabase/supabase-js": 1.29.4
-    "@types/netlify-identity-widget": 1.9.2
+    "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.38
     firebase: 9.6.5
     firebase-admin: 10.0.2
@@ -7724,10 +7724,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/netlify-identity-widget@npm:1.9.2":
-  version: 1.9.2
-  resolution: "@types/netlify-identity-widget@npm:1.9.2"
-  checksum: 0e5456b70ddd9d071f68579acb5b63066f49ca0fa470922ea6e762c9d248a782cec09cc9ccc119ac17203eec7ea8e12f20e39d3eea6eb1d99b1d7068ab19d3a6
+"@types/netlify-identity-widget@npm:1.9.3":
+  version: 1.9.3
+  resolution: "@types/netlify-identity-widget@npm:1.9.3"
+  checksum: 921f5439c3b8fa0fb27058be39f5c6e965ee69a82484a55d3ccb247f6849fd0b4e8170a42e45667bc64869e1ec46d8a2577e63689c949c3fbdb7f67199dfcb86
   languageName: node
   linkType: hard
 
