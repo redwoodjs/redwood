@@ -4,7 +4,6 @@ const path = require('path')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
@@ -24,16 +23,22 @@ const redwoodPaths = getPaths()
 /** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
-  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
+  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables || []
+
+  // Initialize "include env vars" on the web side
+  // We do this, so that we don't get "process.env undefined" error in Webpack 5
+  // The actual values are set in redwoodEnvKeys
+  const initWebIncludedEnvVars = includeEnvKeys.reduce((envObj, varName) => {
+    envObj[`process.env.${varName}`] = undefined
+    return envObj
+  }, {})
+
   const redwoodEnvKeys = Object.keys(process.env).reduce((prev, next) => {
-    if (
-      next.startsWith(redwoodEnvPrefix) ||
-      (includeEnvKeys && includeEnvKeys.includes(next))
-    ) {
+    if (next.startsWith(redwoodEnvPrefix) || includeEnvKeys.includes(next)) {
       prev[`process.env.${next}`] = JSON.stringify(process.env[next])
     }
     return prev
-  }, {})
+  }, initWebIncludedEnvVars)
 
   return redwoodEnvKeys
 }
@@ -168,11 +173,6 @@ const getSharedPlugins = (isEnvProduction) => {
         redwoodConfig.web.title || path.basename(redwoodPaths.base)
       ),
       ...getEnvVars(),
-    }),
-    new Dotenv({
-      path: path.resolve(redwoodPaths.base, '.env'),
-      silent: true,
-      ignoreStub: true, // FIXME: this might not be necessary once the storybook webpack 4/5 stuff is ironed out. See also: https://github.com/mrsteele/dotenv-webpack#processenv-stubbing--replacing
     }),
   ].filter(Boolean)
 }

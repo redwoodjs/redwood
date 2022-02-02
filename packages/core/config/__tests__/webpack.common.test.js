@@ -1,11 +1,14 @@
-import { getEnvVars } from '../webpack.common'
+// @NOTE
+// No babel in the package, so use standard node syntax
+
+const { getEnvVars } = require('../webpack.common')
 
 jest.mock('@redwoodjs/internal', () => {
   return {
     getConfigPath: () => '/path/to/project/redwood.toml',
     getConfig: () => ({
       web: {
-        includeEnvironmentVariables: ['API_KEY', 'API_SECRET'],
+        includeEnvironmentVariables: ['API_KEY', 'API_SECRET', 'IM_NOT_THERE'],
       },
     }),
     getPaths: () => ({
@@ -33,6 +36,7 @@ describe('getEnvVars', () => {
     expect(getEnvVars()).toEqual({
       'process.env.API_KEY': '"dog"',
       'process.env.API_SECRET': '"cat"',
+      'process.env.IM_NOT_THERE': undefined, // even if value isn't there, the key is defined, so that webpack 5 doesn't throw "process.env undefined" error
     })
   })
 })

@@ -5573,7 +5573,6 @@ __metadata:
     core-js: 3.21.0
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.4.1
-    dotenv-webpack: 7.1.0
     esbuild: 0.14.16
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
@@ -5581,6 +5580,7 @@ __metadata:
     graphql: 16.3.0
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
+    jest: 27.4.7
     lodash.escaperegexp: 4.1.2
     mini-css-extract-plugin: 2.5.3
     nodemon: 2.0.15
@@ -13452,30 +13452,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-defaults@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "dotenv-defaults@npm:2.0.2"
-  dependencies:
-    dotenv: ^8.2.0
-  checksum: 14b7b8f6c21a30404106384398728746e63405bfeabe47ef7aadd0e81de49986d5896a612e5b1acddf655af6472a24947b7b113aa3ef3270a2877afa9c5bd287
-  languageName: node
-  linkType: hard
-
 "dotenv-expand@npm:^5.1.0":
   version: 5.1.0
   resolution: "dotenv-expand@npm:5.1.0"
   checksum: 24ac633de853ef474d0421cc639328b7134109c8dc2baaa5e3afb7495af5e9237136d7e6971e55668e4dce915487eb140967cdd2b3e99aa439e0f6bf8b56faeb
-  languageName: node
-  linkType: hard
-
-"dotenv-webpack@npm:7.1.0":
-  version: 7.1.0
-  resolution: "dotenv-webpack@npm:7.1.0"
-  dependencies:
-    dotenv-defaults: ^2.0.2
-  peerDependencies:
-    webpack: ^4 || ^5
-  checksum: 780bb44aaa400ccad12c47afdab5e2e4c1cba26c92d5092bacbf5233d2d81a578489b5533af9f2dc12dd311b027649ec9ba78317d445650111bdadcd66bd0d23
   languageName: node
   linkType: hard
 
@@ -13500,7 +13480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^8.0.0, dotenv@npm:^8.2.0":
+"dotenv@npm:^8.0.0":
   version: 8.6.0
   resolution: "dotenv@npm:8.6.0"
   checksum: 6750431dea8efbd54b9f2d9681b04e1ccc7989486461dcf058bb708d9e3d63b04115fcdf8840e38ad1e24a4a2e1e7c1560626c5e3ac7bc09371b127c49e2d45f
