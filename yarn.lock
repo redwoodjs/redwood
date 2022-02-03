@@ -5522,7 +5522,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@types/babel__core": 7.1.18
     "@types/fs-extra": 9.0.13
-    "@types/jscodeshift": 0.11.2
+    "@types/jscodeshift": 0.11.3
     "@types/prettier": 2.4.3
     "@vscode/ripgrep": 1.14.2
     core-js: 3.21.0
@@ -5531,7 +5531,7 @@ __metadata:
     findup-sync: 5.0.0
     fs-extra: 10.0.0
     jest: 27.4.7
-    jscodeshift: 0.13.0
+    jscodeshift: 0.13.1
     node-fetch: 2.6.7
     prettier: 2.5.1
     tasuku: 1.0.2
@@ -7525,13 +7525,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:0.11.2":
-  version: 0.11.2
-  resolution: "@types/jscodeshift@npm:0.11.2"
+"@types/jscodeshift@npm:0.11.3":
+  version: 0.11.3
+  resolution: "@types/jscodeshift@npm:0.11.3"
   dependencies:
     ast-types: ^0.14.1
     recast: ^0.20.3
-  checksum: b821b3437711f42789f24a01e0f8ec05a3b57380620147a32de781d849642438a7186b87a5de5b82902b526348c6910847fa972606f281de7f54d6a577133a68
+  checksum: 52ef08bc6145932ea74f1a3781fc25f9c2f0897515b8198a1907547409e50e1373e95f86300d97bf356a99bc4148a9aaa818e5a591407d290a4d91817405fead
   languageName: node
   linkType: hard
 
@@ -11579,7 +11579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:1.4.0, colors@npm:^1.1.2, colors@npm:^1.4.0":
+"colors@npm:1.4.0, colors@npm:^1.4.0":
   version: 1.4.0
   resolution: "colors@npm:1.4.0"
   checksum: 9af357c019da3c5a098a301cf64e3799d27549d8f185d86f79af23069e4f4303110d115da98483519331f6fb71c8568d5688fa1c6523600044fd4a54e97c4efb
@@ -19169,9 +19169,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jscodeshift@npm:0.13.0":
-  version: 0.13.0
-  resolution: "jscodeshift@npm:0.13.0"
+"jscodeshift@npm:0.13.1":
+  version: 0.13.1
+  resolution: "jscodeshift@npm:0.13.1"
   dependencies:
     "@babel/core": ^7.13.16
     "@babel/parser": ^7.13.16
@@ -19183,7 +19183,7 @@ fsevents@^1.2.7:
     "@babel/preset-typescript": ^7.13.0
     "@babel/register": ^7.13.16
     babel-core: ^7.0.0-bridge.0
-    colors: ^1.1.2
+    chalk: ^4.1.2
     flow-parser: 0.*
     graceful-fs: ^4.2.4
     micromatch: ^3.1.10
@@ -19196,7 +19196,7 @@ fsevents@^1.2.7:
     "@babel/preset-env": ^7.1.6
   bin:
     jscodeshift: bin/jscodeshift.js
-  checksum: b3d2bb5225d463bf7601125fcc7748f8dd45cbbb4cabfae55d87fa79fbc8017b23f9c8b5c193297ca7be68ef1e8085dd2d34f1bc16492c936f5c9efb6c2bcae3
+  checksum: 0f85ff41855f489e92229ce99a1951b1c265c12847b1bcd84921c37345ea35c876b2d2d362851aa1ec6e50f9716df8d965213133af247eb4a3d13a2f7320c2a4
   languageName: node
   linkType: hard
 
@@ -25546,7 +25546,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.4.0
-    "@types/jscodeshift": 0.11.2
+    "@types/jscodeshift": 0.11.3
     "@types/lodash.template": 4.5.0
     "@types/prompts": 2.4.0
     all-contributors-cli: 6.20.0
@@ -25561,7 +25561,7 @@ resolve@^2.0.0-next.3:
     eslint: 8.8.0
     fast-glob: 3.2.11
     jest: 27.4.7
-    jscodeshift: 0.13.0
+    jscodeshift: 0.13.1
     lerna: 4.0.0
     lodash.template: 4.5.0
     msw: 0.36.8
