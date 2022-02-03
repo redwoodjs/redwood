@@ -55,7 +55,7 @@ export const apiServerHandler = async ({
   apiRootPath,
 }: ApiServerArgs) => {
   const tsApiServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API Server...')))
+  process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
   let app = createApp(loadServerConfig())
   // Import Server Functions.
@@ -71,7 +71,9 @@ export const apiServerHandler = async ({
     const on = socket
       ? socket
       : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    console.log(`Listening on ${on}`)
+    console.log(`API listening on ${on}`)
+    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
+    console.log(`GraphQL endpoint at ${graphqlEnd}`)
   })
   process.on('exit', () => {
     http?.close()
@@ -82,6 +84,8 @@ export const bothServerHandler = async ({
   port,
   socket,
 }: Omit<HttpServerParams, 'app'>) => {
+  const tsServer = Date.now()
+  process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
   let app = createApp(loadServerConfig())
@@ -95,14 +99,17 @@ export const bothServerHandler = async ({
     socket,
     app,
   }).ready(() => {
-    if (socket) {
-      console.log(`Listening on ${socket}`)
-    }
-
-    console.log(`Web server started on ${port} `)
-    console.log(
-      `API serving from ${apiRootPath} listening on ${port} with GraphQL endpoint at ${apiRootPath}graphql`
-    )
+    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
+    const on = socket
+      ? socket
+      : c.magenta(`http://localhost:${port}${apiRootPath}`)
+    const webServer = c.green(`http://localhost:${port}`)
+    const apiServer = c.magenta(`http://localhost:${port}`)
+    console.log(`Web server started on ${webServer}`)
+    console.log(`API serving from ${apiServer}`)
+    console.log(`API listening on ${on}`)
+    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
+    console.log(`GraphQL endpoint at ${graphqlEnd}`)
   })
 }
 
@@ -111,6 +118,8 @@ interface WebServerArgs extends Omit<HttpServerParams, 'app'> {
 }
 
 export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
+  const tsServer = Date.now()
+  process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
   const apiUrl = getConfig().web.apiUrl
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
@@ -135,12 +144,13 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     socket,
     app,
   }).ready(() => {
+    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
     if (socket) {
-      console.log(`Listening on ${socket}`)
+      console.log(`Listening on ` + c.magenta(`${socket}`))
     }
-
-    console.log(`Web server started on port ${port} `)
-    console.log(`GraphQL endpoint is ${graphqlEndpoint}`)
+    const webServer = c.green(`http://localhost:${port}`)
+    console.log(`Web server started on ${webServer}`)
+    console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
   })
 }
 

@@ -1,10 +1,13 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { apiServerHandler } from '@redwoodjs/api-server'
+import { getConfig } from '@redwoodjs/internal'
+
 import { getPaths } from '../../lib'
 
-export const command = 'render <side> [...commands]'
-export const description = 'Build command for Render deploy'
+export const command = 'render <side>'
+export const description = 'Build, Migrate, and Serve command for Render deploy'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
@@ -23,11 +26,6 @@ export const builder = (yargs) => {
       default: 'true',
       alias: 'dm',
     })
-    .option('serve', {
-      description: 'Run server for api in production',
-      type: 'boolean',
-      default: 'true',
-    })
     .epilogue(
       `For more commands, options, and examples, see ${terminalLink(
         'Redwood CLI Reference',
@@ -36,29 +34,38 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side, prisma, dm: dataMigrate, serve }) => {
+export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   const paths = getPaths()
-  let commandSet = []
-  if (side == 'api') {
-    if (prisma) {
-      commandSet.push('yarn rw prisma migrate deploy')
-    }
-    if (dataMigrate) {
-      commandSet.push('yarn rw dataMigrate up')
-    }
-    if (serve) {
-      commandSet.push('yarn rw serve api')
-    }
-  } else if (side == 'web') {
-    commandSet.push('yarn')
-    commandSet.push('yarn rw build web')
-  }
 
-  execa(commandSet.join(' && '), {
+  const execaConfig = {
     shell: true,
     stdio: 'inherit',
     cwd: paths.base,
     extendEnv: true,
     cleanup: true,
-  })
+  }
+
+  async function runApiCommands() {
+    prisma && (await execa('yarn rw prisma migrate deploy', execaConfig))
+    dataMigrate && (await execa('yarn rw dataMigrate up', execaConfig))
+    await apiServerHandler({
+      port: getConfig().api?.port || 8911,
+      apiRootPath: '/',
+    })
+  }
+
+  async function runWebCommands() {
+    await execa('yarn install', execaConfig)
+    await execa('yarn rw build web', execaConfig)
+  }
+
+  if (side === 'api') {
+    runApiCommands()
+  } else if (side === 'web') {
+    console.log('\nRunning yarn install and building web...')
+    runWebCommands()
+  } else {
+    console.log('Error with arguments provided')
+    // you broke something, which should be caught by Yargs
+  }
 }

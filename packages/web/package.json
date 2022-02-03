@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.5.8",
-    "@redwoodjs/auth": "v0.43.0",
+    "@redwoodjs/auth": "v0.44.0",
     "core-js": "3.21.0",
     "graphql": "16.3.0",
     "proptypes": "1.1.0",

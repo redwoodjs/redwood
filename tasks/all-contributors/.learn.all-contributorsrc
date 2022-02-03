@@ -271,6 +271,15 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "mvila",
+      "name": "Manuel Vila",
+      "avatar_url": "https://avatars.githubusercontent.com/u/381671?v=4",
+      "profile": "https://mvila.me/",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5
