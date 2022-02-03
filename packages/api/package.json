@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@redwoodjs/auth": "v0.43.0",
+    "@redwoodjs/auth": "v0.44.0",
     "@types/crypto-js": "4.1.0",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.1",
