@@ -1,9 +1,8 @@
 const { defaults } = require('jest-config');
 
-const config = {
+module.exports = {
   rootDir: '../',
   preset: '@redwoodjs/testing/config/jest/web',
-  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
-}
 
-module.exports = config
+  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx']
+}

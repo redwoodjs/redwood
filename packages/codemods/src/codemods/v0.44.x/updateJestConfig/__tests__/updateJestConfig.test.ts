@@ -9,9 +9,9 @@ describe('Update Jest Config', () => {
     await matchFolderTransform(updateJestConfig, 'default')
   })
 
-  // it('Keeps custom jest config in api and web', async () => {
-  //   await matchFolderTransform(updateJestConfig, 'custom')
-  // })
+  it('Keeps custom jest config in api and web', async () => {
+    await matchFolderTransform(updateJestConfig, 'custom')
+  })
 
   it('transforms', async () => {
     await matchTransformSnapshot('updateJestConfig.transform', 'default')

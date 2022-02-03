@@ -1,9 +1,11 @@
+// import { FileInfo, API } from 'jscodeshift'
 import fetchFileFromTemplate from '../../../lib/fetchFileFromTemplate'
+
 /**
  * @param {import('jscodeshift').FileInfo} file
- * @param {import('jscodeshift').API} _api
+ * @param {import('jscodeshift').API} api
  */
-export default async function transform(file, _api) {
+export default async function transform(file, api) {
   // This is the easy case.
   const match = file.source
     .trim()
@@ -20,20 +22,25 @@ export default async function transform(file, _api) {
     return file.source
   }
 
-  // const j = api.jscodeshift
-  // const ast = j(file.source)
+  const j = api.jscodeshift
+  const ast = j(file.source)
 
-  // const paths = ast.find(j.CallExpression, { callee: { name: 'require' } })
-  // const testingRequire = paths.filter((path) => {
-  //   return path.node.arguments.some((argument) => {
-  //     return (
-  //       argument.type === j.ExpressionKind &&
-  //       argument.value === '@redwoodjs/testing/config/jest/api'
-  //     )
-  //   })
-  // })
+  const paths = ast.find(j.SpreadElement, {
+    argument: { callee: { name: 'require' } },
+  })
 
-  // console.log({ testingRequire: testingRequire.nodes() })
+  const oldConfig = paths.filter((path) => {
+    return (
+      path.node.argument.arguments[0].value ===
+      '@redwoodjs/testing/config/jest/web'
+    )
+  })
 
-  // return ast.toSource()
+  oldConfig.replaceWith(
+    ["rootDir: '../'", "preset: '@redwoodjs/testing/config/jest/web'"].join(
+      ',\n'
+    )
+  )
+
+  return ast.toSource()
 }

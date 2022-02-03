@@ -1,3 +1,1 @@
-const rwApiConfig = require('@redwoodjs/testing/config/jest/api')
-
-module.exports = rwApiConfig
+module.exports = require('@redwoodjs/testing/config/jest/api')
