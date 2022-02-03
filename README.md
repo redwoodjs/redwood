@@ -609,6 +609,9 @@ And there you have it.
   <tr>
     <td align="center"><a href="https://www.linkedin.com/in/rishabh-poddar-b64b73129/"><img src="https://avatars.githubusercontent.com/u/2976287?v=4" width="100px;" alt=""/><br /><sub><b>Rishabh Poddar</b></sub></a></td>
     <td align="center"><a href="https://vitaliimelnychuk.com/"><img src="https://avatars.githubusercontent.com/u/22550335?v=4" width="100px;" alt=""/><br /><sub><b>Vitalii Melnychuk</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bdefore"><img src="https://avatars.githubusercontent.com/u/142472?v=4" width="100px;" alt=""/><br /><sub><b>Buck DeFore</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kamarel"><img src="https://avatars.githubusercontent.com/u/84261846?v=4" width="100px;" alt=""/><br /><sub><b>Kamarel Malanda</b></sub></a></td>
+    <td align="center"><a href="https://mvila.me/"><img src="https://avatars.githubusercontent.com/u/381671?v=4" width="100px;" alt=""/><br /><sub><b>Manuel Vila</b></sub></a></td>
   </tr>
 </table>
 
