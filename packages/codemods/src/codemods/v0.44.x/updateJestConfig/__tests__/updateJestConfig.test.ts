@@ -5,9 +5,9 @@ describe('Update Jest Config', () => {
     await matchFolderTransform(updateJestConfig, 'missing')
   })
 
-  // it('Updates the v0.43.0 template', async () => {
-  //   await matchFolderTransform(updateJestConfig, 'default')
-  // })
+  it('Updates the v0.43.0 template', async () => {
+    await matchFolderTransform(updateJestConfig, 'default')
+  })
 
   // it('Keeps custom jest config in api and web', async () => {
   //   await matchFolderTransform(updateJestConfig, 'custom')

@@ -20,6 +20,7 @@ export default function transform(file, _api) {
       '}',
       '',
       'module.exports = config',
+      '',
     ].join('\n')
 
     return file.source
