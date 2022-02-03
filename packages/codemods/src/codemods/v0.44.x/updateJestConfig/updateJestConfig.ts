@@ -45,8 +45,8 @@ export async function updateJestConfig() {
       const apiWebJestConfigTemplate = await fetchFileFromTemplate(tag, file)
       fs.writeFileSync(apiWebJestConfigPath, apiWebJestConfigTemplate)
     } else {
-      runTransform({
-        transformPath: './udpateJestConfig.transform.ts',
+      await runTransform({
+        transformPath: path.join(__dirname, 'updateJestConfig.transform.js'),
         targetPaths: [apiWebJestConfigPath],
       })
     }

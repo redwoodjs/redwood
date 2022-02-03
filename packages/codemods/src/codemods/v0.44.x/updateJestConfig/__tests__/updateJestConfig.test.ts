@@ -10,10 +10,10 @@ describe('Update Jest Config', () => {
   // })
 
   // it('Keeps custom jest config in api and web', async () => {
-  //   await matchFolderTransform(transform, 'custom')
+  //   await matchFolderTransform(updateJestConfig, 'custom')
   // })
 
-  // it('transforms', async () => {
-  //   await matchTransformSnapshot('updateJestConfig.transform', 'simple')
-  // })
+  it('transforms', async () => {
+    await matchTransformSnapshot('updateJestConfig.transform', 'default')
+  })
 })

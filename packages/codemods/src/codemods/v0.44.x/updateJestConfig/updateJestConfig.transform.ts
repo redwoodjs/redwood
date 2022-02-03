@@ -1,11 +1,9 @@
 import type { API, FileInfo } from 'jscodeshift'
 
 export default function transform(file: FileInfo, _api: API) {
-  console.log('yooo')
-
   // This is the easy case.
   if (
-    file.source ===
+    file.source.trim() ===
     "module.exports = require('@redwoodjs/testing/config/jest/api')"
   ) {
     file.source = [
