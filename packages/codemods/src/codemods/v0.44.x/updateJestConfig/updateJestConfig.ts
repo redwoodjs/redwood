@@ -22,8 +22,7 @@ export async function updateJestConfig() {
 
   const [rootJestConfigPath, ...apiWebJestConfigPaths] = jestConfigPaths
 
-  // const tag = 'main'
-  const tag = 'b04a032556b5e1b1807d1086c2d37106ad6e7348'
+  const tag = 'main'
 
   if (!fs.existsSync(rootJestConfigPath)) {
     const rootJestConfigTemplate = await fetchFileFromTemplate(
