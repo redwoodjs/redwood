@@ -26,7 +26,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - name: Remove the tsc problem matcher if not ubuntu-node-16
-        if: matrix.os != 'ubuntu-latest' || matrix.node-version != '16'
+        if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '16') == false
         run: echo "echo "::remove-matcher owner=tsc::""
 
       - name: Cache yarn
