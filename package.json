@@ -26,7 +26,7 @@
     "test-release": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
   },
   "resolutions": {
-    "@types/react": "17.0.38",
+    "@types/react": "17.0.39",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
