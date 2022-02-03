@@ -1,8 +1,9 @@
+import fetchFileFromTemplate from '../../../lib/fetchFileFromTemplate'
 /**
  * @param {import('jscodeshift').FileInfo} file
  * @param {import('jscodeshift').API} _api
  */
-export default function transform(file, _api) {
+export default async function transform(file, _api) {
   // This is the easy case.
   const match = file.source
     .trim()
@@ -11,17 +12,10 @@ export default function transform(file, _api) {
     )
 
   if (match?.length) {
-    file.source = [
-      '// More info at https://redwoodjs.com/docs/project-configuration-dev-test-build',
-      '',
-      'const config = {',
-      "  rootDir: '../',",
-      `  preset: '@redwoodjs/testing/config/jest/${match.groups?.side}',`,
-      '}',
-      '',
-      'module.exports = config',
-      '',
-    ].join('\n')
+    file.source = await fetchFileFromTemplate(
+      'main',
+      `${match.groups?.side}/jest.config.js`
+    )
 
     return file.source
   }
