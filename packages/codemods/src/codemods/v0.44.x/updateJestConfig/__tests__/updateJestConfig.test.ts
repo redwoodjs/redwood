@@ -10,7 +10,9 @@ describe('Update Jest Config', () => {
   })
 
   it('Keeps custom jest config in api and web', async () => {
-    await matchFolderTransform(updateJestConfig, 'custom')
+    await matchFolderTransform(updateJestConfig, 'custom', {
+      removeWhitespace: true,
+    })
   })
 
   it('transforms', async () => {
