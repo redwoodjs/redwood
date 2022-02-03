@@ -5,13 +5,7 @@ export default function transform(file: FileInfo, api: API) {
 
   return j(file.source)
     .find(j.CallExpression, (path) => {
-      // After updating jscodeshift to 0.13.1 and @types/jscodeshift to 0.11.3,
-      // the property `name` on `path.callee` suddenly became undefined.
-      // But it's still there if you `console.log`, so we're typecasting for now.
-      return (
-        (path.callee as typeof path.callee & { name: string }).name ===
-        'defineScenario'
-      )
+      return path.callee.name === 'defineScenario'
     })
     .forEach((scenarioPath) => {
       // The first argument is the definition.
