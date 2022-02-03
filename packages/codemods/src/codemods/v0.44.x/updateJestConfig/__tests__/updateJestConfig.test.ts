@@ -1,4 +1,4 @@
-import { updateJestConfig } from '../updateJestConfig'
+import updateJestConfig from '../updateJestConfig'
 
 describe('Update Jest Config', () => {
   it('Adds missing files', async () => {

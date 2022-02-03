@@ -8,7 +8,7 @@ import fetchFileFromTemplate from '../../../lib/fetchFileFromTemplate'
 import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
-export async function updateJestConfig() {
+export default async function updateJestConfig() {
   const rwPaths = getRWPaths()
 
   /**
