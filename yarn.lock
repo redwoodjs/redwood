@@ -5637,7 +5637,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@testing-library/dom": 8.11.3
-    "@testing-library/jest-dom": 5.16.1
+    "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/pascalcase": 1.0.1
@@ -5879,7 +5879,7 @@ __metadata:
     "@storybook/builder-webpack5": 6.4.18
     "@storybook/manager-webpack5": 6.4.18
     "@storybook/react": 6.4.18
-    "@testing-library/jest-dom": 5.16.1
+    "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/aws-lambda": 8.10.92
@@ -6946,9 +6946,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.16.1":
-  version: 5.16.1
-  resolution: "@testing-library/jest-dom@npm:5.16.1"
+"@testing-library/jest-dom@npm:5.16.2":
+  version: 5.16.2
+  resolution: "@testing-library/jest-dom@npm:5.16.2"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -6959,7 +6959,7 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: a510110bb3f37597a315bd2625162c1833432e8e86f15187294137059da443bb6cdf9bff320490ff482319da845f09ef8a5395040d1d1308c240fc6edd588b27
+  checksum: f57ee673318f97ace6d7aac94a466f39264060afa5857c41f2fa39c40c6a9dfd29373f624a329286912eb078d95e7afdd2c728f02dae8cf0e82ad628263200d8
   languageName: node
   linkType: hard
 
@@ -25542,7 +25542,7 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@testing-library/jest-dom": 5.16.1
+    "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
     "@types/jest": 27.4.0
