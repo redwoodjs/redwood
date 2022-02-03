@@ -42,5 +42,5 @@ export default async function transform(file, api) {
     )
   )
 
-  return ast.toSource()
+  return ast.toSource({ trailingComma: true })
 }
