@@ -1,25 +1,29 @@
-import type { API, FileInfo } from 'jscodeshift'
-
-export default function transform(file: FileInfo, _api: API) {
+/**
+ * @param {import('jscodeshift').FileInfo} file
+ * @param {import('jscodeshift').API} _api
+ */
+export default function transform(file, _api) {
   // This is the easy case.
-  if (
-    file.source.trim() ===
-    "module.exports = require('@redwoodjs/testing/config/jest/api')"
-  ) {
+  const match = file.source
+    .trim()
+    .match(
+      /module.exports = require\('@redwoodjs\/testing\/config\/jest\/(?<side>api|web)'\)/
+    )
+
+  if (match?.length) {
     file.source = [
+      '// More info at https://redwoodjs.com/docs/project-configuration-dev-test-build',
+      '',
       'const config = {',
       "  rootDir: '../',",
-      "  preset: '@redwoodjs/testing/config/jest/web',",
+      `  preset: '@redwoodjs/testing/config/jest/${match.groups?.side}',`,
       '}',
-
       '',
       'module.exports = config',
     ].join('\n')
 
     return file.source
   }
-
-  return null
 
   // const j = api.jscodeshift
   // const ast = j(file.source)
