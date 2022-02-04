@@ -13,8 +13,6 @@ import terminalLink from 'terminal-link'
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
-import ntfPack from './packing/nft'
-
 export const command = 'serverless'
 export const aliases = ['aws serverless', 'sls']
 export const description = 'Deploy to AWS via the serverless framework'
@@ -82,7 +80,13 @@ export const buildCommands = ({ sides }) => {
     {
       title: 'Packing Functions...',
       enabled: () => sides.includes('api'),
-      task: ntfPack,
+      task: async () => {
+        // Dynamically import this function
+        // becuase its dependencies are only installed when `rw setup deploy serverless` is run
+        const { default: nftPack } = await import('./packing/nft')
+
+        await nftPack()
+      },
     },
   ]
 }
