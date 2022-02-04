@@ -175,7 +175,7 @@ export const { command, description, builder, handler } =
       return [
         {
           title: `Generating types ...`,
-          task: () => generateTypes,
+          task: generateTypes,
         },
       ]
     },
