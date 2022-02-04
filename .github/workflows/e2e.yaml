@@ -122,3 +122,11 @@ jobs:
       - name: Run `rw data-migrate up`
         run: yarn rw dm up
         working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw deploy --help`
+        run: yarn rw setup deploy --help && yarn rw deploy --help
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw setup ui --help`
+        run: yarn rw setup --help && yarn rw setup ui --help
+        working-directory: ${{ steps.createpath.outputs.project_path }}
