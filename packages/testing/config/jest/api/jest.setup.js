@@ -12,7 +12,10 @@ const { defineScenario } = require('@redwoodjs/testing/dist/api')
 // fails on DELETE
 const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
 const DEFAULT_SCENARIO = 'standard'
-const TEARDOWN_CACHE_PATH = path.join(process.cwd(), 'scenarioTeardown.json')
+const TEARDOWN_CACHE_PATH = path.join(
+  getPaths().generated.base,
+  'scenarioTeardown.json'
+)
 let teardownOrder = []
 let originalTeardownOrder = []
 
