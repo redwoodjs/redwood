@@ -1,3 +1,5 @@
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -35,19 +37,24 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ side, prisma, dm: dataMigrate }) => {
-  const paths = getPaths()
+  const rwjsPaths = getPaths()
 
   const execaConfig = {
     shell: true,
     stdio: 'inherit',
-    cwd: paths.base,
+    cwd: rwjsPaths.base,
     extendEnv: true,
     cleanup: true,
   }
 
   async function runApiCommands() {
-    prisma && (await execa('yarn rw prisma migrate deploy', execaConfig))
-    dataMigrate && (await execa('yarn rw dataMigrate up', execaConfig))
+    prisma &&
+      execa.sync(
+        path.join(rwjsPaths.base, 'node_modules/.bin/prisma'),
+        ['migrate', 'deploy', '--schema', `"${rwjsPaths.api.dbSchema}"`],
+        execaConfig
+      )
+    dataMigrate && execa.sync('yarn rw dataMigrate up', execaConfig)
     await apiServerHandler({
       port: getConfig().api?.port || 8911,
       apiRootPath: '/',
@@ -55,8 +62,8 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   }
 
   async function runWebCommands() {
-    await execa('yarn install', execaConfig)
-    await execa('yarn rw build web', execaConfig)
+    execa.sync('yarn install', execaConfig)
+    execa.sync('yarn rw build web', execaConfig)
   }
 
   if (side === 'api') {
