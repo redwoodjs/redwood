@@ -359,6 +359,13 @@ const componentFiles = async (
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
   const componentMetadata = {
+    Enum: {
+      componentName: 'CheckboxField',
+      defaultProp: 'defaultChecked',
+      validation: () => false,
+      listDisplayFunction: 'enumAsList',
+      displayFunction: 'enumAsList',
+    },
     Boolean: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
@@ -416,25 +423,35 @@ const componentFiles = async (
           : null
       }
 
+      const isEnum = column.kind === 'enum'
+
       return {
         ...column,
         label: humanize(column.name),
-        component:
-          componentMetadata[column.type]?.componentName ||
-          componentMetadata.default.componentName,
-        defaultProp:
-          componentMetadata[column.type]?.defaultProp ||
-          componentMetadata.default.defaultProp,
-        deserializeFunction:
-          componentMetadata[column.type]?.deserializeFunction ||
-          componentMetadata.default.deserializeFunction,
+        component: isEnum
+          ? componentMetadata['Enum']?.componentName
+          : componentMetadata[column.type]?.componentName ||
+            componentMetadata.default.componentName,
+        defaultProp: isEnum
+          ? componentMetadata['Enum']?.defaultProp
+          : componentMetadata[column.type]?.defaultProp ||
+            componentMetadata.default.defaultProp,
+        deserializeFunction: isEnum
+          ? componentMetadata['Enum']?.deserializeFunction
+          : componentMetadata[column.type]?.deserializeFunction ||
+            componentMetadata.default.deserializeFunction,
         validation,
-        listDisplayFunction:
-          componentMetadata[column.type]?.listDisplayFunction ||
-          componentMetadata.default.listDisplayFunction,
-        displayFunction:
-          componentMetadata[column.type]?.displayFunction ||
-          componentMetadata.default.displayFunction,
+        listDisplayFunction: isEnum
+          ? componentMetadata['Enum']?.listDisplayFunction
+          : componentMetadata[column.type]?.listDisplayFunction ||
+            componentMetadata.default.listDisplayFunction,
+        displayFunction: isEnum
+          ? componentMetadata['Enum']?.displayFunction
+          : componentMetadata[column.type]?.displayFunction ||
+            componentMetadata.default.displayFunction,
+        values: isEnum ? column.enumValues : [],
+        isList: column.isList,
+        isEnum,
       }
     })
   const editableColumns = columns.filter((column) => {

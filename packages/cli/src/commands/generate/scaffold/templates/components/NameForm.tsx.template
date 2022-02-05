@@ -7,6 +7,12 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+const humanize = (value) => {
+  if (value) {
+    return value.replace(/:\d{2}\.\d{3}\w/, '')
+  }
+}
+
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
@@ -35,13 +41,28 @@ const ${singularPascalName}Form = (props) => {
         >
           ${column.label}
         </Label>
-        <${column.component}
-          name="${column.name}"
-          ${column.defaultProp}={${column.deserializeFunction && column.deserializeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserializeFunction && ')'}}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
-          validation=${column.validation}` %>
-        />
+
+        <% if (column.isEnum) { %>
+          <% column.values?.forEach(value => { %>
+            <${column.component}
+              name="${column.name}"
+              value="${value.name}"
+              ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
+              className="rw-input"
+              errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
+              validation=${column.validation}` %>
+            />${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+          <% }) %>
+        <% } else { %>
+          <${column.component}
+            name="${column.name}"
+            ${column.defaultProp}={${column.deserializeFunction && column.deserializeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserializeFunction && ')'}}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
+            validation=${column.validation}` %>
+          />
+        <% } %>
+
         <FieldError name="${column.name}" className="rw-field-error" />
 <% }) %>
         <div className="rw-button-group">

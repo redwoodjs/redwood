@@ -14,6 +14,23 @@ const DELETE_${singularConstantName}_MUTATION = gql`
 
 const MAX_STRING_LENGTH = 150
 
+const humanize = (value) => {
+  if (value) {
+    return value.
+      replace('_', ' ').
+      toLowerCase().
+      replace(/\b\w/g, l => l.toUpperCase())
+  }
+}
+
+const enumAsList = (values) => {
+  if (values) {
+    const humanizedValues = values.map(value => humanize(value))
+    const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
+    return formatter.format(humanizedValues)
+  }
+}
+
 const truncate = (text) => {
   let output = text
   if (text && text.length > MAX_STRING_LENGTH) {
