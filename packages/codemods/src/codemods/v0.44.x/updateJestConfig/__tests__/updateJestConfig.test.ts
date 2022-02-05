@@ -37,19 +37,9 @@ describe('Update Jest Config', () => {
     })
   })
 
-  it('Updates the v0.43.0 template', async () => {
-    await matchFolderTransform(updateJestConfig, 'default', {
-      removeWhitespace: true,
-    })
-  })
-
   it('Keeps custom jest config in api and web', async () => {
     await matchFolderTransform(updateJestConfig, 'custom', {
       removeWhitespace: true,
     })
-  })
-
-  it('transforms', async () => {
-    await matchTransformSnapshot('updateJestConfig.transform', 'default')
   })
 })
