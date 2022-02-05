@@ -2,6 +2,7 @@ import updateJestConfig from '../updateJestConfig'
 
 jest.mock('../../../../lib/fetchFileFromTemplate', () =>
   jest.fn((_tag, file) => {
+    console.log('is mocked')
     if (file === 'jest.config.js') {
       return [
         '// This the Redwood root jest config',
