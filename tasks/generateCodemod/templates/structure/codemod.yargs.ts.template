@@ -1,0 +1,16 @@
+import task from 'tasuku'
+
+import ${name} from './${name}'
+
+export const command = '${kebabName}'
+export const description = '(${version}->${version}) Changes the structure of your Redwood Project'
+
+export const handler = () => {
+  task('${titleName}', async ({ setError }: task.TaskInnerApi) => {
+    try {
+      await ${name}()
+    } catch (e: any) {
+      setError('Failed to codemod your project \n' + e?.message)
+    }
+  })
+}

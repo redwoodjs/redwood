@@ -1,0 +1,10 @@
+import type { FileInfo, API } from 'jscodeshift'
+
+export default function transform(file: FileInfo, api: API) {
+  const j = api.jscodeshift
+  const ast = j(file.source)
+
+  ast.find(j.Literal, { value: 'hello world' }).replaceWith(`'hello bazinga'`)
+
+  return ast.toSource()
+}

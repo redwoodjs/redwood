@@ -17,6 +17,7 @@
     "check:tarball": "yarn jest ./tasks/checkTarball.test.js",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "e2e": "node ./tasks/run-e2e",
+    "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "lint": "RWJS_CWD=packages/create-redwood-app/template eslint --config .eslintrc.js packages",
     "lint:fix": "yarn lint --fix",
     "project:copy": "node ./tasks/framework-tools/frameworkFilesToProject.mjs",
