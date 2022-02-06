@@ -1,3 +1,5 @@
+import humanize from 'humanize-string'
+
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
@@ -9,14 +11,6 @@ const DELETE_${singularConstantName}_MUTATION = gql`
     }
   }
 `
-const humanize = (value) => {
-  if (value) {
-    return value.
-      replace('_', ' ').
-      toLowerCase().
-      replace(/\b\w/g, l => l.toUpperCase())
-  }
-}
 
 const formatEnum = (values) => {
   if (values && Array.isArray(values)) {

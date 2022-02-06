@@ -401,7 +401,9 @@ export const Success = ({ post }) => {
 `;
 
 exports[`in javascript (default) mode creates a show component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
@@ -412,14 +414,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-const humanize = (value) => {
-  if (value) {
-    return value
-      .replace('_', ' ')
-      .toLowerCase()
-      .replace(/\\\\b\\\\w/g, (l) => l.toUpperCase())
-  }
-}
 
 const formatEnum = (values) => {
   if (values && Array.isArray(values)) {
@@ -1054,7 +1048,9 @@ export const Success = ({ posts }) => {
 `;
 
 exports[`in javascript (default) mode creates an index component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
 
@@ -1069,15 +1065,6 @@ const DELETE_POST_MUTATION = gql\`
 \`
 
 const MAX_STRING_LENGTH = 150
-
-const humanize = (value) => {
-  if (value) {
-    return value
-      .replace('_', ' ')
-      .toLowerCase()
-      .replace(/\\\\b\\\\w/g, (l) => l.toUpperCase())
-  }
-}
 
 const formatEnum = (values) => {
   if (values && Array.isArray(values)) {
@@ -1684,7 +1671,9 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 `;
 
 exports[`in typescript mode creates a show component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
@@ -1695,14 +1684,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-const humanize = (value) => {
-  if (value) {
-    return value.
-      replace('_', ' ').
-      toLowerCase().
-      replace(/\\\\b\\\\w/g, l => l.toUpperCase())
-  }
-}
 
 const formatEnum = (values) => {
   if (values && Array.isArray(values)) {
@@ -2402,7 +2383,9 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 `;
 
 exports[`in typescript mode creates an index component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
 
@@ -2418,15 +2401,6 @@ const DELETE_POST_MUTATION = gql\`
 
 const MAX_STRING_LENGTH = 150
 
-const humanize = (value) => {
-  if (value) {
-    return value.
-      replace('_', ' ').
-      toLowerCase().
-      replace(/\\\\b\\\\w/g, l => l.toUpperCase())
-  }
-}
-
 const formatEnum = (values) => {
   if (values && Array.isArray(values)) {
     const humanizedValues = values.map(value => humanize(value))
@@ -2436,7 +2410,6 @@ const formatEnum = (values) => {
     return humanize(values)
   }
 }
-
 
 const truncate = (text) => {
   let output = text

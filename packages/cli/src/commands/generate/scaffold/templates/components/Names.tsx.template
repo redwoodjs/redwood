@@ -1,3 +1,5 @@
+import humanize from 'humanize-string'
+
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
@@ -14,15 +16,6 @@ const DELETE_${singularConstantName}_MUTATION = gql`
 
 const MAX_STRING_LENGTH = 150
 
-const humanize = (value) => {
-  if (value) {
-    return value.
-      replace('_', ' ').
-      toLowerCase().
-      replace(/\b\w/g, l => l.toUpperCase())
-  }
-}
-
 const formatEnum = (values) => {
   if (values && Array.isArray(values)) {
     const humanizedValues = values.map(value => humanize(value))
@@ -32,7 +25,6 @@ const formatEnum = (values) => {
     return humanize(values)
   }
 }
-
 
 const truncate = (text) => {
   let output = text
