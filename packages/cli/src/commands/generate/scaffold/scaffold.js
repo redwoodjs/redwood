@@ -152,8 +152,7 @@ export const files = async ({
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings,
-      typescript
+      templateStrings
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -170,20 +169,13 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
-    ...layoutFiles(
-      name,
-      pascalScaffoldPath,
-      typescript,
-      templateStrings,
-      typescript
-    ),
+    ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings,
-      typescript
+      templateStrings
     )),
   }
 }
