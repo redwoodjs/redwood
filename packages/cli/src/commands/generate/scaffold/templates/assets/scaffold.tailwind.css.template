@@ -128,7 +128,7 @@
 }
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
-  @apply w-4 ml-0;
+  @apply inline w-4 ml-0 mr-1;
 }
 .rw-input:focus {
   @apply border-gray-400;

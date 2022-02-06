@@ -21,6 +21,14 @@ const formatDatetime = (value) => {
 
 const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
+
+  <% editableColumns.forEach(column => { %>
+    <% if (column.isEnum) { %>
+      if (data.${column.name}) {
+        data.${column.name} = data.${column.name}.filter((value) => value !== false)
+      }
+    <% } %>
+  <% }) %>
     props.onSave(data, props?.${singularCamelName}?.id)
   }
 
@@ -33,7 +41,7 @@ const ${singularPascalName}Form = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-<% editableColumns.forEach(column => { %>
+      <% editableColumns.forEach(column => { %>
         <Label
           name="${column.name}"
           className="rw-label"
@@ -43,15 +51,16 @@ const ${singularPascalName}Form = (props) => {
         </Label>
 
         <% if (column.isEnum) { %>
-          <% column.values?.forEach(value => { %>
+          <% column.values?.forEach((value, i) => { %>
             <${column.component}
-              name="${column.name}"
-              value="${value.name}"
+              id="${singularCamelName}-${column.name}-${i}"
+              name="${column.name}[${i}]"
+              defaultValue="${value.name}"
               ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
               className="rw-input"
-              errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
-              validation=${column.validation}` %>
+              errorClassName="rw-input rw-input-error"
             />${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+            <br/>
           <% }) %>
         <% } else { %>
           <${column.component}
