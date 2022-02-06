@@ -431,7 +431,8 @@ const componentFiles = async (
       }
 
       const isEnum = column.kind === 'enum'
-      const enumType = isEnum && column.isList ? 'EnumList' : 'Enum'
+      const isList = column.isList
+      const enumType = isEnum && isList ? 'EnumList' : 'Enum'
 
       return {
         ...column,
@@ -458,7 +459,7 @@ const componentFiles = async (
           : componentMetadata[column.type]?.displayFunction ||
             componentMetadata.default.displayFunction,
         values: isEnum ? column.enumValues : [],
-        isList: column.isList,
+        isList,
         isEnum,
       }
     })
@@ -703,7 +704,7 @@ export const tasks = ({
       },
       {
         title: `Generating types ...`,
-        task: generateTypes,
+        task: () => generateTypes(),
       },
     ],
     { collapse: false, exitOnError: true }
