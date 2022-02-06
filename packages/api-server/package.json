@@ -52,7 +52,7 @@
     "@types/split2": "3.2.1",
     "@types/yargs": "16.0.4",
     "aws-lambda": "1.0.7",
-    "jest": "27.4.7",
+    "jest": "27.5.0",
     "typescript": "4.5.5"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
