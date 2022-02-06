@@ -25,12 +25,6 @@ exports[`in javascript (default) mode creates a form component 1`] = `
   Submit,
 } from '@redwoodjs/forms'
 
-const humanize = (value) => {
-  if (value) {
-    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
-  }
-}
-
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
@@ -1302,17 +1296,13 @@ exports[`in typescript mode creates a form component 1`] = `
   Submit,
 } from '@redwoodjs/forms'
 
-const humanize = (value) => {
-  if (value) {
-    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
-  }
-}
 
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
   }
 }
+
 
 const PostForm = (props) => {
   const onSubmit = (data) => {

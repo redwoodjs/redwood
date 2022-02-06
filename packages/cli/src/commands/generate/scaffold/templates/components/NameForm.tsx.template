@@ -7,17 +7,13 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-const humanize = (value) => {
-  if (value) {
-    return value.replace(/:\d{2}\.\d{3}\w/, '')
-  }
-}
-
+<% if (fieldsToImport.includes('DatetimeLocalField')) { %>
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
+<% } %>
 
 const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
