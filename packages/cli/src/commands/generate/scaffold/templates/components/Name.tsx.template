@@ -18,11 +18,13 @@ const humanize = (value) => {
   }
 }
 
-const enumAsList = (values) => {
-  if (values) {
+const formatEnum = (values) => {
+  if (values && Array.isArray(values)) {
     const humanizedValues = values.map(value => humanize(value))
     const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
     return formatter.format(humanizedValues)
+  } else {
+    return humanize(values)
   }
 }
 

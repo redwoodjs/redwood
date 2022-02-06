@@ -23,9 +23,9 @@ const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
 
   <% editableColumns.forEach(column => { %>
-    <% if (column.isEnum) { %>
+    <% if (column.isEnum && column.isList) { %>
       if (data.${column.name}) {
-        data.${column.name} = data.${column.name}.filter((value) => value !== false)
+        data.${column.name} = data.${column.name}.filter((value) => !!value)
       }
     <% } %>
   <% }) %>
@@ -51,10 +51,12 @@ const ${singularPascalName}Form = (props) => {
         </Label>
 
         <% if (column.isEnum) { %>
-          <% column.values?.forEach((value, i) => { %>
+          <% column.values?.forEach((value, i) => {
+            const columnComponentName = column.isList ? `${column.name}[${i}]` : column.name
+            %>
             <${column.component}
               id="${singularCamelName}-${column.name}-${i}"
-              name="${column.name}[${i}]"
+              name="${columnComponentName}"
               defaultValue="${value.name}"
               ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
               className="rw-input"

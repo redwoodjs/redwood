@@ -360,11 +360,18 @@ const componentFiles = async (
   let fileList = {}
   const componentMetadata = {
     Enum: {
+      componentName: 'RadioField',
+      defaultProp: 'defaultChecked',
+      validation: () => false,
+      listDisplayFunction: 'formatEnum',
+      displayFunction: 'formatEnum',
+    },
+    EnumList: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
       validation: () => false,
-      listDisplayFunction: 'enumAsList',
-      displayFunction: 'enumAsList',
+      listDisplayFunction: 'formatEnum',
+      displayFunction: 'formatEnum',
     },
     Boolean: {
       componentName: 'CheckboxField',
@@ -424,29 +431,30 @@ const componentFiles = async (
       }
 
       const isEnum = column.kind === 'enum'
+      const enumType = isEnum && column.isList ? 'EnumList' : 'Enum'
 
       return {
         ...column,
         label: humanize(column.name),
         component: isEnum
-          ? componentMetadata['Enum']?.componentName
+          ? componentMetadata[enumType]?.componentName
           : componentMetadata[column.type]?.componentName ||
             componentMetadata.default.componentName,
         defaultProp: isEnum
-          ? componentMetadata['Enum']?.defaultProp
+          ? componentMetadata[enumType]?.defaultProp
           : componentMetadata[column.type]?.defaultProp ||
             componentMetadata.default.defaultProp,
         deserializeFunction: isEnum
-          ? componentMetadata['Enum']?.deserializeFunction
+          ? componentMetadata[enumType]?.deserializeFunction
           : componentMetadata[column.type]?.deserializeFunction ||
             componentMetadata.default.deserializeFunction,
         validation,
         listDisplayFunction: isEnum
-          ? componentMetadata['Enum']?.listDisplayFunction
+          ? componentMetadata[enumType]?.listDisplayFunction
           : componentMetadata[column.type]?.listDisplayFunction ||
             componentMetadata.default.listDisplayFunction,
         displayFunction: isEnum
-          ? componentMetadata['Enum']?.displayFunction
+          ? componentMetadata[enumType]?.displayFunction
           : componentMetadata[column.type]?.displayFunction ||
             componentMetadata.default.displayFunction,
         values: isEnum ? column.enumValues : [],
