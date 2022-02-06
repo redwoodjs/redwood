@@ -156,6 +156,9 @@
 .rw-table td {
   @apply p-3;
 }
+.rw-table td {
+  @apply bg-white text-gray-900
+}
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
 }
