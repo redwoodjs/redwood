@@ -5920,17 +5920,27 @@ __metadata:
     "@apollo/client": 3.5.8
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
+    "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": v0.44.0
+    "@testing-library/jest-dom": 5.16.2
+    "@testing-library/react": 12.1.2
     "@types/react": 17.0.39
-    core-js: 3.21.0
+    "@types/react-dom": 17.0.11
+    "@types/testing-library__jest-dom": 5.14.2
     graphql: 16.3.0
+    graphql-tag: 2.12.6
     jest: 27.5.0
-    proptypes: 1.1.0
+    nodemon: 2.0.15
+    react: 17.0.2
+    react-dom: 17.0.2
     react-helmet-async: 1.2.2
     react-hot-toast: 2.2.0
+    ts-toolbelt: 9.6.0
     typescript: 4.5.5
   peerDependencies:
+    prop-types: 15.8.1
     react: 17.0.2
+    react-dom: 17.0.2
   languageName: unknown
   linkType: soft
 
@@ -23922,13 +23932,6 @@ fsevents@^1.2.7:
   dependencies:
     xtend: ^4.0.0
   checksum: d54b77c31dc13bb6819559080b2c67d37d94be7dc271f404f139a16a57aa96fcc0b3ad806d4a5baef9e031744853e4afe3df2e37275aacb1f78079bbb652c5af
-  languageName: node
-  linkType: hard
-
-"proptypes@npm:1.1.0":
-  version: 1.1.0
-  resolution: "proptypes@npm:1.1.0"
-  checksum: 8944fb0763433438cbe5c34fac004edabb33be3cf4454079cbef10f752f614c4082c935d916b7347d4541323323e17e159ac2f804ef783cdf19870298f64eca6
   languageName: node
   linkType: hard
 
