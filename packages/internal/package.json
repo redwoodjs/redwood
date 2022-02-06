@@ -75,7 +75,7 @@
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
-    "jest": "27.4.7",
+    "jest": "27.5.0",
     "typescript": "4.5.5"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"

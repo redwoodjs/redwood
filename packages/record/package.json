@@ -34,7 +34,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "jest": "27.4.7"
+    "jest": "27.5.0"
   },
   "gitHead": "d583dfdf18f9433038098a64e71f6a421c6d1c04"
 }
