@@ -902,6 +902,10 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 .rw-table td {
   padding: 0.75rem;
 }
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
+}
 .rw-table thead tr {
   background-color: #e2e8f0;
   color: #4a5568;
@@ -2225,6 +2229,10 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 .rw-table td {
   padding: 0.75rem;
 }
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
+}
 .rw-table thead tr {
   background-color: #e2e8f0;
   color: #4a5568;
@@ -2939,6 +2947,10 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 .rw-table td {
   padding: 0.75rem;
 }
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
+}
 .rw-table thead tr {
   background-color: #e2e8f0;
   color: #4a5568;
@@ -3178,6 +3190,9 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 .rw-table th,
 .rw-table td {
   @apply p-3;
+}
+.rw-table td {
+  @apply bg-white text-gray-900;
 }
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
