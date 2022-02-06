@@ -433,31 +433,27 @@ const componentFiles = async (
       const isEnum = column.kind === 'enum'
       const isList = column.isList
       const enumType = isEnum && isList ? 'EnumList' : 'Enum'
+      const metadataKey = isEnum ? enumType : column.type
 
       return {
         ...column,
         label: humanize(column.name),
         component: isEnum
-          ? componentMetadata[enumType]?.componentName
-          : componentMetadata[column.type]?.componentName ||
-            componentMetadata.default.componentName,
+          ? componentMetadata[metadataKey]?.componentName
+          : componentMetadata.default.componentName,
         defaultProp: isEnum
-          ? componentMetadata[enumType]?.defaultProp
-          : componentMetadata[column.type]?.defaultProp ||
-            componentMetadata.default.defaultProp,
+          ? componentMetadata[metadataKey]?.defaultProp
+          : componentMetadata.default.defaultProp,
         deserializeFunction: isEnum
-          ? componentMetadata[enumType]?.deserializeFunction
-          : componentMetadata[column.type]?.deserializeFunction ||
-            componentMetadata.default.deserializeFunction,
+          ? componentMetadata[metadataKey]?.deserializeFunction
+          : componentMetadata.default.deserializeFunction,
         validation,
         listDisplayFunction: isEnum
-          ? componentMetadata[enumType]?.listDisplayFunction
-          : componentMetadata[column.type]?.listDisplayFunction ||
-            componentMetadata.default.listDisplayFunction,
+          ? componentMetadata[metadataKey]?.listDisplayFunction
+          : componentMetadata.default.listDisplayFunction,
         displayFunction: isEnum
-          ? componentMetadata[enumType]?.displayFunction
-          : componentMetadata[column.type]?.displayFunction ||
-            componentMetadata.default.displayFunction,
+          ? componentMetadata[metadataKey]?.displayFunction
+          : componentMetadata.default.displayFunction,
         values: isEnum ? column.enumValues : [],
         isList,
         isEnum,
