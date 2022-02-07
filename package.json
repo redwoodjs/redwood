@@ -13,6 +13,8 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
     "check": "yarn node ./tasks/check/check.mjs",
+    "check:deps": "yarn node ./tasks/checkDeps.mjs $INIT_CWD",
+    "check:tarball": "yarn jest ./tasks/checkTarball.test.js",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "e2e": "node ./tasks/run-e2e",
     "lint": "RWJS_CWD=packages/create-redwood-app/template eslint --config .eslintrc.js packages",
