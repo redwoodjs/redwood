@@ -52,7 +52,7 @@
     "chalk": "4.1.2",
     "core-js": "3.21.0",
     "deepmerge": "4.2.2",
-    "esbuild": "0.14.19",
+    "esbuild": "0.14.20",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",
     "fs-extra": "10.0.0",
