@@ -3247,15 +3247,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.2.1, @graphql-tools/merge@npm:^8.2.1":
-  version: 8.2.1
-  resolution: "@graphql-tools/merge@npm:8.2.1"
+"@graphql-tools/merge@npm:8.2.2, @graphql-tools/merge@npm:^8.2.1":
+  version: 8.2.2
+  resolution: "@graphql-tools/merge@npm:8.2.2"
   dependencies:
     "@graphql-tools/utils": ^8.5.1
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 369037651ea0b648f6c3b16366de1d89076a2b6ddbaf4b59e18daacb867558ee6da8bc83c5f42fd70ec77010d6e8cb7243743b44dae33138326e053109fc551d
+  checksum: e8786acfeaaf4de7f29ae50aa8b2dba994cf1f5e33de009c4fde14481b9258bfee843939073fdf9e7c7b2aa06b0ea35dda759941906e604e09fc7fccae804403
   languageName: node
   linkType: hard
 
@@ -5671,7 +5671,7 @@ __metadata:
     "@envelop/testing": 4.0.0
     "@envelop/types": 1.5.1
     "@envelop/validation-cache": 4.0.0
-    "@graphql-tools/merge": 8.2.1
+    "@graphql-tools/merge": 8.2.2
     "@graphql-tools/schema": 8.3.1
     "@graphql-tools/utils": 8.6.1
     "@prisma/client": 3.9.1
