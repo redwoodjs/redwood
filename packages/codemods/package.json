@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "0.44.0",
+  "version": "0.44.1",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -45,5 +45,6 @@
     "@types/prettier": "2.4.3",
     "fs-extra": "10.0.0",
     "tempy": "1.0.1"
-  }
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
