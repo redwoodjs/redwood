@@ -12,13 +12,12 @@ const DELETE_${singularConstantName}_MUTATION = gql`
   }
 `
 
-const formatEnum = (values) => {
+const formatEnum = (values: string | string[]) => {
   if (values && Array.isArray(values)) {
-    const humanizedValues = values.map(value => humanize(value))
-    const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
-    return formatter.format(humanizedValues)
+    const humanizedValues = values.map((value) => humanize(value))
+    return humanizedValues.join(', ')
   } else {
-    return humanize(values)
+    return humanize(values as string)
   }
 }
 

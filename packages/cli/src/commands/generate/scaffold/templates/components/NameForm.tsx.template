@@ -50,15 +50,19 @@ const ${singularPascalName}Form = (props) => {
           <% column.values?.forEach((value, i) => {
             const columnComponentName = column.isList ? `${column.name}[${i}]` : column.name
             %>
-            <${column.component}
-              id="${singularCamelName}-${column.name}-${i}"
-              name="${columnComponentName}"
-              defaultValue="${value.name}"
-              ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
-              className="rw-input"
-              errorClassName="rw-input rw-input-error"
-            />${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
-            <br/>
+        <div className="rw-check-radio-items">
+          <${column.component}
+            id="${singularCamelName}-${column.name}-${i}"
+            name="${columnComponentName}"
+            defaultValue="${value.name}"
+            ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>
+            ${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+          </div>
+        </div>
           <% }) %>
         <% } else { %>
           <${column.component}

@@ -223,12 +223,17 @@
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;

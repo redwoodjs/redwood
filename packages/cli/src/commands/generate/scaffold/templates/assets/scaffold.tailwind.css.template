@@ -126,9 +126,12 @@
 .rw-input {
   @apply block mt-2 w-full p-2 bg-white border border-gray-200 rounded outline-none;
 }
+.rw-check-radio-items {
+  @apply flex justify-items-center;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
-  @apply inline w-4 ml-0 mr-1;
+  @apply inline w-4 ml-0 mr-1 mt-1;
 }
 .rw-input:focus {
   @apply border-gray-400;
