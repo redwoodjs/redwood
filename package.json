@@ -25,7 +25,7 @@
     "publish:canary": "lerna publish --force-publish --canary --include-merged-tags --preid canary --dist-tag canary --yes --loglevel verbose",
     "release": "node ./tasks/release/cli.mjs",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "test-release": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
+    "test:release-script": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
   },
   "resolutions": {
     "@types/react": "17.0.39",
