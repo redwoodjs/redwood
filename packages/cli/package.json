@@ -28,7 +28,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@prisma/sdk": "3.9.1",
+    "@prisma/sdk": "3.8.1",
     "@redwoodjs/api-server": "v0.44.0",
     "@redwoodjs/internal": "v0.44.0",
     "@redwoodjs/prerender": "v0.44.0",
@@ -56,7 +56,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.5.1",
-    "prisma": "3.9.1",
+    "prisma": "3.8.1",
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
