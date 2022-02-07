@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@envelop/core": "1.7.1",
+    "@envelop/core": "2.0.0",
     "@envelop/depth-limit": "1.2.1",
     "@envelop/disable-introspection": "3.0.0",
     "@envelop/filter-operation-type": "3.0.0",
