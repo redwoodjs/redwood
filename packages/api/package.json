@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.44.0",
+  "version": "0.44.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@redwoodjs/auth": "v0.44.0",
+    "@redwoodjs/auth": "v0.44.1",
     "@types/crypto-js": "4.1.0",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.1",
@@ -46,5 +46,5 @@
     "supertokens-node": "8.6.0",
     "typescript": "4.5.5"
   },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
