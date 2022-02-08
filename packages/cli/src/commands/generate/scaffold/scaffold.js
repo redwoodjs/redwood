@@ -692,7 +692,7 @@ export const tasks = ({
       },
       {
         title: `Generating types ...`,
-        task: () => generateTypes(),
+        task: generateTypes,
       },
     ],
     { collapse: false, exitOnError: true }
