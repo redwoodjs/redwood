@@ -24,6 +24,33 @@ const getProxyConfig = () => {
         headers: {
           Connection: 'keep-alive',
         },
+        onError: function (err, req, res) {
+          if (err.code === 'ECONNRESET' || err.code === 'ECONNREFUSED') {
+            const msg = {
+              errors: [
+                {
+                  message:
+                    'The RedwoodJS API server is not available or is currently reloading. Please try again.',
+                },
+              ],
+            }
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.write(JSON.stringify(msg))
+            res.end()
+          } else {
+            const msg = {
+              errors: [
+                {
+                  message:
+                    'An error occurred. Please try restarting your RedwoodJS api server.',
+                },
+              ],
+            }
+            res.writeHead(500, { 'Content-Type': 'application/json' })
+            res.write(JSON.stringify(msg))
+            res.end()
+          }
+        },
       },
     }
   }
