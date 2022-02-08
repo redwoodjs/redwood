@@ -148,11 +148,14 @@ const handleCloseMilestone = rest.post(
       return res(ctx.status(404))
     }
 
-    const { state } = req.body
+    // eslint-disable-next-line camelcase
+    const { state, due_on } = req.body
 
     return res(
       ctx.json({
         state,
+        // eslint-disable-next-line camelcase
+        due_on,
       })
     )
   }

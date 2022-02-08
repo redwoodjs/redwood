@@ -174,9 +174,10 @@ async function validateMergedPRs(semver) {
   if (pullRequests.length) {
     console.log(
       c.bold(
-        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
+        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding`
       )
     )
+    await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+no%3Amilestone`
     process.exit(1)
   }
 
@@ -199,10 +200,10 @@ async function validateMergedPRs(semver) {
 
   console.log(
     c.bold(
-      fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
+      fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding`
     )
   )
-
+  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3Anext-release-patch`
   process.exit(1)
 }
 
@@ -236,7 +237,7 @@ export const MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE = `
  * @param {string} nextVersion
  */
 // function releaseMajor(nextVersion) {
-//   return eleaseMajorOrMinor('major', nextVersion)
+//   return releaseMajorOrMinor('major', nextVersion)
 // }
 
 /**
@@ -253,10 +254,9 @@ function releaseMinor(nextVersion) {
 async function releaseMajorOrMinor(semver, nextVersion) {
   const currentBranch = getCurrentBranch()
   const releaseBranch = ['release', semver, nextVersion].join('/')
+  const releaseBranchExists = await branchExists(releaseBranch)
 
   if (currentBranch !== releaseBranch) {
-    const releaseBranchExists = await branchExists(releaseBranch)
-
     if (releaseBranchExists) {
       await checkoutExisting(releaseBranch)
     } else {
@@ -285,11 +285,13 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   notifier.notify('done')
 
   await confirmRuns(
-    ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`,
+    ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
     [
-      () => $`git push`,
-      // This is supposedly safer than `git push --tags`.
-      // See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
+      () =>
+        $`${['git push', !releaseBranchExists && `-u origin ${releaseBranch}`]
+          .filter(Boolean)
+          .join(' ')}`,
+      // This is supposedly safer than `git push --tags`. See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
       () => $`git push --follow-tags`,
       // We've had an issue with this one.
       async () => {
@@ -346,12 +348,35 @@ async function releasePatch(currentVersion, nextVersion) {
   const releaseBranchExistsOnOrigin = await branchExistsOnOrigin(releaseBranch)
 
   if (!releaseBranchExistsOnOrigin) {
-    await pushAndDiff(releaseBranch, currentVersion)
+    await confirmRuns(
+      ask`Ok to push new branch ${releaseBranch} to GitHub and open diff?`,
+      [
+        () => $`git push -u origin ${releaseBranch}`,
+        () =>
+          $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}...${releaseBranch}`,
+      ],
+      { exit: true }
+    )
     await confirm('Does the diff look ok?', { exit: true })
 
-    await confirm(ask`Done cherry picking?`, { exit: true })
+    await confirm(
+      ask`${[
+        'Done cherry picking?',
+        'Remember to cherry pick PRs in the same order as they were merged',
+        `And after you're done, run ${`yarn`} and ${`yarn check`}`,
+      ].join('\n')}`,
+      { exit: true }
+    )
 
-    await pushAndDiff(releaseBranch, currentVersion)
+    await confirmRuns(
+      ask`Ok to push new branch ${releaseBranch} to GitHub and open diff?`,
+      [
+        () => $`git push`,
+        () =>
+          $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}...${releaseBranch}`,
+      ],
+      { exit: true }
+    )
     await confirm('Does the diff look ok?', { exit: true })
   }
 
@@ -366,43 +391,43 @@ async function releasePatch(currentVersion, nextVersion) {
   await commitTagQA(nextVersion)
   notifier.notify('done')
 
-  // I think we need to do a merge commit:
-  //
-  // await $`git checkout main`
-  // await $`git branch -d release/patch/${nextVersion}`
-  //
-  // And I need to confirm if these steps are the same...
-  //
-  // await confirmRuns(
-  //   ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`,
-  //   [
-  //     () => $`git push`,
-  //     () => $`git push --follow-tags`,
-  //     // We've had an issue with this one.
-  //     async () => {
-  //       try {
-  //         await $`yarn lerna publish from-package`
-  //         console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
-  //       } catch (e) {
-  //         console.log(
-  //           `Couldn't run ${c.green('yarn lerna publish from-package')}`
-  //         )
-  //         console.log(e)
-  //       }
-  //     },
-  //   ],
-  //   { exit: true }
-  // )
-  //
-  // await confirmRuns(ask`Do you want to generate release notes?`, () =>
-  //   generateReleaseNotes(nextVersion)
-  // )
-  //
-  // if (milestone) {
-  //   await confirmRuns(ask`Ok to close milestone ${nextVersion}?`, () =>
-  //     closeMilestone(milestone.number)
-  //   )
-  // }
+  await confirmRuns(
+    ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
+    [
+      () => $`git push`,
+      // This is supposedly safer than `git push --tags`. See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
+      () => $`git push --follow-tags`,
+      // We've had an issue with this one.
+      async () => {
+        try {
+          await $`yarn lerna publish from-package`
+          console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
+        } catch (e) {
+          console.log(
+            `Couldn't run ${c.green('yarn lerna publish from-package')}`
+          )
+          console.log(e)
+        }
+      },
+    ],
+    { exit: true }
+  )
+
+  await confirmRuns(
+    ask`Do you want to generate release notes?`,
+    () => generateReleaseNotes(nextVersion),
+    { name: 'generate-release-notes' }
+  )
+
+  if (milestone) {
+    await confirmRuns(ask`Ok to close milestone ${nextVersion}?`, () =>
+      closeMilestone(milestone.number)
+    )
+  }
+
+  await confirm(ask`Did you merge the release branch into main?`)
+  await confirm(ask`Did you update yarn.lock?`)
+  await confirm(ask`Did you delete the release branch?`)
 }
 
 /**
@@ -437,22 +462,6 @@ function commitTagQA(nextVersion) {
       name: 'commit-tag-qa',
       exit: true,
     }
-  )
-}
-
-/**
- * @param {string} releaseBranch
- * @param {string} currentVersion
- */
-function pushAndDiff(releaseBranch, currentVersion) {
-  return confirmRuns(
-    ask`Ok to push new branch ${releaseBranch} to GitHub and open diff?`,
-    [
-      () => $`git push origin ${releaseBranch}`,
-      () =>
-        $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}..${releaseBranch}`,
-    ],
-    { exit: true }
   )
 }
 
