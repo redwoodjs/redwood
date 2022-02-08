@@ -801,6 +801,9 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-check-radio-item-none {
+  font-style: italic;
+}
 .rw-check-radio-items {
   display: flex;
   justify-items: center;
@@ -2071,6 +2074,9 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #4a5568;
   border-radius: 0.25rem;
   outline: none;
+}
+.rw-check-radio-item-none {
+  font-style: italic;
 }
 .rw-check-radio-items {
   display: flex;
