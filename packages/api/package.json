@@ -43,7 +43,7 @@
     "@types/md5": "2.3.2",
     "@types/split2": "3.2.1",
     "aws-lambda": "1.0.7",
-    "jest": "27.5.0",
+    "jest": "27.5.1",
     "split2": "4.1.0",
     "supertokens-node": "8.6.0",
     "typescript": "4.5.5"
