@@ -223,6 +223,9 @@
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-check-radio-item-none {
+  font-style: italic;
+}
 .rw-check-radio-items {
   display: flex;
   justify-items: center;

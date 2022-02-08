@@ -61,7 +61,7 @@ const ${singularPascalName}Form = (props) => {
               className="rw-input"
               errorClassName="rw-input rw-input-error"
             />
-            <div>
+            <div className="rw-check-radio-item-none">
               None
             </div>
           </div>

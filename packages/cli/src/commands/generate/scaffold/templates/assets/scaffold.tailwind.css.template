@@ -129,6 +129,9 @@
 .rw-check-radio-items {
   @apply flex justify-items-center;
 }
+.rw-check-radio-item-none {
+  @apply italic;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
   @apply inline w-4 ml-0 mr-1 mt-1;
