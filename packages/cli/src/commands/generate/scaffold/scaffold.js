@@ -38,6 +38,7 @@ import {
   builder as serviceBuilder,
 } from '../service/service'
 
+// note a better way to do this is in https://github.com/redwoodjs/redwood/pull/3783/files
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
