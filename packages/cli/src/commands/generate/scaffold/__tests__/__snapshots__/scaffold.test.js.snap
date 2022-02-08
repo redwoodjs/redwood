@@ -18,8 +18,18 @@ exports[`in javascript (default) mode creates a form component 1`] = `
   FieldError,
   Label,
   TextField,
+  DatetimeLocalField,
+  CheckboxField,
+  NumberField,
+  TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
+
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
+  }
+}
 
 const PostForm = (props) => {
   const onSubmit = (data) => {
@@ -133,9 +143,9 @@ const PostForm = (props) => {
           Posted at
         </Label>
 
-        <TextField
+        <DatetimeLocalField
           name=\\"postedAt\\"
-          defaultValue={props.post?.postedAt}
+          defaultValue={formatDatetime(props.post?.postedAt)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
         />
@@ -150,9 +160,9 @@ const PostForm = (props) => {
           Is pinned
         </Label>
 
-        <TextField
+        <CheckboxField
           name=\\"isPinned\\"
-          defaultValue={props.post?.isPinned}
+          defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
         />
@@ -203,7 +213,7 @@ const PostForm = (props) => {
           Upvotes
         </Label>
 
-        <TextField
+        <NumberField
           name=\\"upvotes\\"
           defaultValue={props.post?.upvotes}
           className=\\"rw-input\\"
@@ -221,9 +231,9 @@ const PostForm = (props) => {
           Metadata
         </Label>
 
-        <TextField
+        <TextAreaField
           name=\\"metadata\\"
-          defaultValue={props.post?.metadata}
+          defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ valueAsJSON: true, required: true }}
@@ -544,11 +554,11 @@ const Post = ({ post }) => {
             </tr>
             <tr>
               <th>Posted at</th>
-              <td>{post.postedAt}</td>
+              <td>{timeTag(post.postedAt)}</td>
             </tr>
             <tr>
               <th>Is pinned</th>
-              <td>{post.isPinned}</td>
+              <td>{checkboxInputTag(post.isPinned)}</td>
             </tr>
             <tr>
               <th>Read time</th>
@@ -564,7 +574,7 @@ const Post = ({ post }) => {
             </tr>
             <tr>
               <th>Metadata</th>
-              <td>{post.metadata}</td>
+              <td>{jsonDisplay(post.metadata)}</td>
             </tr>
             <tr>
               <th>Huge number</th>
@@ -1200,12 +1210,12 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
-              <td>{truncate(post.postedAt)}</td>
-              <td>{truncate(post.isPinned)}</td>
+              <td>{timeTag(post.postedAt)}</td>
+              <td>{checkboxInputTag(post.isPinned)}</td>
               <td>{truncate(post.readTime)}</td>
               <td>{truncate(post.rating)}</td>
               <td>{truncate(post.upvotes)}</td>
-              <td>{truncate(post.metadata)}</td>
+              <td>{jsonTruncate(post.metadata)}</td>
               <td>{truncate(post.hugeNumber)}</td>
               <td>
                 <nav className=\\"rw-table-actions\\">
@@ -1267,9 +1277,19 @@ exports[`in typescript mode creates a form component 1`] = `
   FieldError,
   Label,
   TextField,
+  DatetimeLocalField,
+  CheckboxField,
+  NumberField,
+  TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
 
+
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
+  }
+}
 
 
 const PostForm = (props) => {
@@ -1332,7 +1352,6 @@ const PostForm = (props) => {
         >
           Title
         </Label>
-
         
           <TextField
             name=\\"title\\"
@@ -1352,7 +1371,6 @@ const PostForm = (props) => {
         >
           Slug
         </Label>
-
         
           <TextField
             name=\\"slug\\"
@@ -1372,7 +1390,6 @@ const PostForm = (props) => {
         >
           Author
         </Label>
-
         
           <TextField
             name=\\"author\\"
@@ -1392,7 +1409,6 @@ const PostForm = (props) => {
         >
           Body
         </Label>
-
         
           <TextField
             name=\\"body\\"
@@ -1412,7 +1428,6 @@ const PostForm = (props) => {
         >
           Image
         </Label>
-
         
           <TextField
             name=\\"image\\"
@@ -1431,11 +1446,10 @@ const PostForm = (props) => {
         >
           Posted at
         </Label>
-
         
-          <TextField
+          <DatetimeLocalField
             name=\\"postedAt\\"
-            defaultValue={props.post?.postedAt}
+            defaultValue={formatDatetime(props.post?.postedAt)}
             className=\\"rw-input\\"
             errorClassName=\\"rw-input rw-input-error\\"
           />
@@ -1450,11 +1464,10 @@ const PostForm = (props) => {
         >
           Is pinned
         </Label>
-
         
-          <TextField
+          <CheckboxField
             name=\\"isPinned\\"
-            defaultValue={props.post?.isPinned}
+            defaultChecked={props.post?.isPinned}
             className=\\"rw-input\\"
             errorClassName=\\"rw-input rw-input-error\\"
           />
@@ -1469,7 +1482,6 @@ const PostForm = (props) => {
         >
           Read time
         </Label>
-
         
           <TextField
             name=\\"readTime\\"
@@ -1489,7 +1501,6 @@ const PostForm = (props) => {
         >
           Rating
         </Label>
-
         
           <TextField
             name=\\"rating\\"
@@ -1509,9 +1520,8 @@ const PostForm = (props) => {
         >
           Upvotes
         </Label>
-
         
-          <TextField
+          <NumberField
             name=\\"upvotes\\"
             defaultValue={props.post?.upvotes}
             className=\\"rw-input\\"
@@ -1529,11 +1539,10 @@ const PostForm = (props) => {
         >
           Metadata
         </Label>
-
         
-          <TextField
+          <TextAreaField
             name=\\"metadata\\"
-            defaultValue={props.post?.metadata}
+            defaultValue={JSON.stringify(props.post?.metadata)}
             className=\\"rw-input\\"
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ valueAsJSON: true, required: true }}
@@ -1549,7 +1558,6 @@ const PostForm = (props) => {
         >
           Huge number
         </Label>
-
         
           <TextField
             name=\\"hugeNumber\\"
@@ -1862,10 +1870,10 @@ const Post = ({ post }) => {
               <td>{post.image}</td>
             </tr><tr>
               <th>Posted at</th>
-              <td>{post.postedAt}</td>
+              <td>{timeTag(post.postedAt)}</td>
             </tr><tr>
               <th>Is pinned</th>
-              <td>{post.isPinned}</td>
+              <td>{checkboxInputTag(post.isPinned)}</td>
             </tr><tr>
               <th>Read time</th>
               <td>{post.readTime}</td>
@@ -1877,7 +1885,7 @@ const Post = ({ post }) => {
               <td>{post.upvotes}</td>
             </tr><tr>
               <th>Metadata</th>
-              <td>{post.metadata}</td>
+              <td>{jsonDisplay(post.metadata)}</td>
             </tr><tr>
               <th>Huge number</th>
               <td>{post.hugeNumber}</td>
@@ -2594,12 +2602,12 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
-              <td>{truncate(post.postedAt)}</td>
-              <td>{truncate(post.isPinned)}</td>
+              <td>{timeTag(post.postedAt)}</td>
+              <td>{checkboxInputTag(post.isPinned)}</td>
               <td>{truncate(post.readTime)}</td>
               <td>{truncate(post.rating)}</td>
               <td>{truncate(post.upvotes)}</td>
-              <td>{truncate(post.metadata)}</td>
+              <td>{jsonTruncate(post.metadata)}</td>
               <td>{truncate(post.hugeNumber)}</td>
               <td>
                 <nav className=\\"rw-table-actions\\">
