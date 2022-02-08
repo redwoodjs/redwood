@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.44.0",
+  "version": "0.44.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -26,22 +26,32 @@
   },
   "dependencies": {
     "@apollo/client": "3.5.8",
-    "@redwoodjs/auth": "v0.44.0",
-    "core-js": "3.21.0",
+    "@babel/runtime-corejs3": "7.16.7",
+    "@redwoodjs/auth": "v0.44.1",
     "graphql": "16.3.0",
-    "proptypes": "1.1.0",
+    "graphql-tag": "2.12.6",
     "react-helmet-async": "1.2.2",
-    "react-hot-toast": "2.2.0"
+    "react-hot-toast": "2.2.0",
+    "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
+    "@testing-library/jest-dom": "5.16.2",
+    "@testing-library/react": "12.1.2",
     "@types/react": "17.0.39",
+    "@types/react-dom": "17.0.11",
+    "@types/testing-library__jest-dom": "5.14.2",
     "jest": "27.5.0",
+    "nodemon": "2.0.15",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "typescript": "4.5.5"
   },
   "peerDependencies": {
-    "react": "17.0.2"
+    "prop-types": "15.8.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
