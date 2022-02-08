@@ -177,7 +177,7 @@ async function validateMergedPRs(semver) {
         fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding`
       )
     )
-    await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
+    await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+no%3Amilestone`
     process.exit(1)
   }
 
@@ -203,7 +203,7 @@ async function validateMergedPRs(semver) {
       fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding`
     )
   )
-  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
+  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3Anext-release-patch`
   process.exit(1)
 }
 
@@ -362,8 +362,8 @@ async function releasePatch(currentVersion, nextVersion) {
     await confirm(
       ask`${[
         'Done cherry picking?',
-        'Remember to cherry pick in the same order as the PRs were merged',
-        "And after you've cherry picked, run yarn and yarn check",
+        'Remember to cherry pick PRs in the same order as they were merged',
+        `And after you're done, run ${`yarn`} and ${`yarn check`}`,
       ].join('\n')}`,
       { exit: true }
     )
