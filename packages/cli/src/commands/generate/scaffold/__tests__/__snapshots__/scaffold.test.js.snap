@@ -459,15 +459,13 @@ const DELETE_POST_MUTATION = gql\`
 \`
 
 const formatEnum = (values) => {
-  if (values && Array.isArray(values)) {
-    const humanizedValues = values.map((value) => humanize(value))
-    const formatter = new Intl.ListFormat('en', {
-      style: 'long',
-      type: 'conjunction',
-    })
-    return formatter.format(humanizedValues)
-  } else {
-    return humanize(values)
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values)
+    }
   }
 }
 
@@ -836,12 +834,17 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -1110,15 +1113,13 @@ const DELETE_POST_MUTATION = gql\`
 const MAX_STRING_LENGTH = 150
 
 const formatEnum = (values) => {
-  if (values && Array.isArray(values)) {
-    const humanizedValues = values.map((value) => humanize(value))
-    const formatter = new Intl.ListFormat('en', {
-      style: 'long',
-      type: 'conjunction',
-    })
-    return formatter.format(humanizedValues)
-  } else {
-    return humanize(values)
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values)
+    }
   }
 }
 
@@ -1276,27 +1277,39 @@ const PostForm = (props) => {
 
   
     
-  
     
   
     
-  
     
   
     
-  
     
   
     
-  
     
   
     
-  
     
   
     
+    
   
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
     
   
     props.onSave(data, props?.post?.id)
@@ -1771,13 +1784,14 @@ const DELETE_POST_MUTATION = gql\`
   }
 \`
 
-const formatEnum = (values) => {
-  if (values && Array.isArray(values)) {
-    const humanizedValues = values.map(value => humanize(value))
-    const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
-    return formatter.format(humanizedValues)
-  } else {
-    return humanize(values)
+const formatEnum = (values: string | string[] | null | undefined) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values as string)
+    }
   }
 }
 
@@ -2136,12 +2150,17 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -2487,13 +2506,14 @@ const DELETE_POST_MUTATION = gql\`
 
 const MAX_STRING_LENGTH = 150
 
-const formatEnum = (values) => {
-  if (values && Array.isArray(values)) {
-    const humanizedValues = values.map(value => humanize(value))
-    const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
-    return formatter.format(humanizedValues)
-  } else {
-    return humanize(values)
+const formatEnum = (values: string | string[] | null | undefined) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values as string)
+    }
   }
 }
 
@@ -2846,12 +2866,17 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -3104,9 +3129,12 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 .rw-input {
   @apply block mt-2 w-full p-2 bg-white border border-gray-200 rounded outline-none;
 }
+.rw-check-radio-items {
+  @apply flex justify-items-center;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
-  @apply inline w-4 ml-0 mr-1;
+  @apply inline w-4 ml-0 mr-1 mt-1;
 }
 .rw-input:focus {
   @apply border-gray-400;

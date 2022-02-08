@@ -19,6 +19,11 @@ const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
 
   <% editableColumns.forEach(column => { %>
+    <% if (column.isEnum && !column.isList && !column.isRequired) { %>
+      if (data.${column.name} === '') {
+        data.${column.name} = null
+      }
+    <% } %>
     <% if (column.isEnum && column.isList) { %>
       if (data.${column.name}) {
         data.${column.name} = data.${column.name}.filter((value) => !!value)
@@ -47,6 +52,23 @@ const ${singularPascalName}Form = (props) => {
         </Label>
 
         <% if (column.isEnum) { %>
+
+          <% if (!column.isRequired) { %>
+            <div className="rw-check-radio-items">
+              <${column.component}
+                id="${singularCamelName}-${column.name}-none"
+                name="${column.name}"
+                defaultValue=""
+                ${column.defaultProp}={!props.spot?.spotType}
+                className="rw-input"
+                errorClassName="rw-input rw-input-error"
+              />
+              <div>
+                None
+              </div>
+            </div>
+          <% } %>
+
           <% column.values?.forEach((value, i) => {
             const columnComponentName = column.isList ? `${column.name}[${i}]` : column.name
             %>
