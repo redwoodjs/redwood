@@ -8,6 +8,7 @@ import {
   FastifyRequest,
   RequestGenericInterface,
 } from 'fastify'
+import fastifyFormBody from 'fastify-formbody'
 import fastifyRawBody from 'fastify-raw-body'
 import fastifyUrlData from 'fastify-url-data'
 import escape from 'lodash.escape'
@@ -106,6 +107,7 @@ const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
   // Add extra fastify plugins
   app.register(fastifyUrlData)
   app.register(fastifyRawBody)
+  app.register(fastifyFormBody)
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
