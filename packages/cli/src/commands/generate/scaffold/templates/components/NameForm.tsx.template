@@ -50,25 +50,22 @@ const ${singularPascalName}Form = (props) => {
         >
           ${column.label}
         </Label>
-
         <% if (column.isEnum) { %>
-
           <% if (!column.isRequired) { %>
-            <div className="rw-check-radio-items">
-              <${column.component}
-                id="${singularCamelName}-${column.name}-none"
-                name="${column.name}"
-                defaultValue=""
-                ${column.defaultProp}={!props.spot?.spotType}
-                className="rw-input"
-                errorClassName="rw-input rw-input-error"
-              />
-              <div>
-                None
-              </div>
+          <div className="rw-check-radio-items">
+            <${column.component}
+              id="${singularCamelName}-${column.name}-none"
+              name="${column.name}"
+              defaultValue=""
+              ${column.defaultProp}={!props.spot?.spotType}
+              className="rw-input"
+              errorClassName="rw-input rw-input-error"
+            />
+            <div>
+              None
             </div>
+          </div>
           <% } %>
-
           <% column.values?.forEach((value, i) => {
             const columnComponentName = column.isList ? `${column.name}[${i}]` : column.name
             %>

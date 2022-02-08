@@ -430,23 +430,23 @@ const componentFiles = async (
       return {
         ...column,
         label: humanize(column.name),
-        component: isEnum
-          ? componentMetadata[metadataKey]?.componentName
-          : componentMetadata.default.componentName,
-        defaultProp: isEnum
-          ? componentMetadata[metadataKey]?.defaultProp
-          : componentMetadata.default.defaultProp,
-        deserializeFunction: isEnum
-          ? componentMetadata[metadataKey]?.deserializeFunction
-          : componentMetadata.default.deserializeFunction,
+        component:
+          componentMetadata[metadataKey]?.componentName ||
+          componentMetadata.default.componentName,
+        defaultProp:
+          componentMetadata[metadataKey]?.defaultProp ||
+          componentMetadata.default.defaultProp,
+        deserializeFunction:
+          componentMetadata[metadataKey]?.deserializeFunction ||
+          componentMetadata.default.deserializeFunction,
         validation,
-        listDisplayFunction: isEnum
-          ? componentMetadata[metadataKey]?.listDisplayFunction
-          : componentMetadata.default.listDisplayFunction,
-        displayFunction: isEnum
-          ? componentMetadata[metadataKey]?.displayFunction
-          : componentMetadata.default.displayFunction,
-        values: isEnum ? column.enumValues : [],
+        listDisplayFunction:
+          componentMetadata[metadataKey]?.listDisplayFunction ||
+          componentMetadata.default.listDisplayFunction,
+        displayFunction:
+          componentMetadata[metadataKey]?.displayFunction ||
+          componentMetadata.default.displayFunction,
+        values: column.enumValues || [],
         isList,
         isEnum,
       }
