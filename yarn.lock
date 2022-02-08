@@ -5418,7 +5418,7 @@ __metadata:
     "@redwoodjs/auth": v0.44.1
     "@types/crypto-js": 4.1.0
     "@types/jsonwebtoken": 8.5.8
-    "@types/md5": 2.3.1
+    "@types/md5": 2.3.2
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
     crypto-js: 4.1.1
@@ -7686,12 +7686,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:2.3.1":
-  version: 2.3.1
-  resolution: "@types/md5@npm:2.3.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: 06a22845efd270bc9436ed9a006018f64bffb9741912fd651aed1ab7d536e283842da38549e79f27a574b274a7d682402f7673fbba592badc1dfaa288ec1acb8
+"@types/md5@npm:2.3.2":
+  version: 2.3.2
+  resolution: "@types/md5@npm:2.3.2"
+  checksum: caea0f607c79af22b80d25c9eae08ff3bb50abfcd4b776fbbabeb90791897c7ab1ac2342acd3f6ac80784106d93b3851b887c7cb62b2979c81a213738cda0a49
   languageName: node
   linkType: hard
 
