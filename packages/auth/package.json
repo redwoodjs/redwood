@@ -26,7 +26,7 @@
     "@azure/msal-browser": "2.22.0",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@clerk/clerk-js": "2.12.1",
+    "@clerk/clerk-js": "2.13.1",
     "@clerk/clerk-sdk-node": "2.9.0",
     "@clerk/types": "1.24.1",
     "@supabase/supabase-js": "1.30.0",
