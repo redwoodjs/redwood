@@ -425,9 +425,9 @@ async function releasePatch(currentVersion, nextVersion) {
     )
   }
 
-  confirm(ask`Did you merge the release branch into main?`)
-  confirm(ask`Did you update yarn.lock?`)
-  confirm(ask`Did you delete the release branch?`)
+  await confirm(ask`Did you merge the release branch into main?`)
+  await confirm(ask`Did you update yarn.lock?`)
+  await confirm(ask`Did you delete the release branch?`)
 }
 
 /**
