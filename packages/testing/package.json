@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "0.44.0",
+  "version": "0.44.1",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -26,11 +26,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@redwoodjs/auth": "v0.44.0",
-    "@redwoodjs/graphql-server": "v0.44.0",
-    "@redwoodjs/internal": "v0.44.0",
-    "@redwoodjs/router": "v0.44.0",
-    "@redwoodjs/web": "v0.44.0",
+    "@redwoodjs/auth": "v0.44.1",
+    "@redwoodjs/graphql-server": "v0.44.1",
+    "@redwoodjs/internal": "v0.44.1",
+    "@redwoodjs/router": "v0.44.1",
+    "@redwoodjs/web": "v0.44.1",
     "@storybook/addon-a11y": "6.4.18",
     "@storybook/builder-webpack5": "6.4.18",
     "@storybook/manager-webpack5": "6.4.18",
@@ -45,9 +45,9 @@
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.11",
     "@types/webpack": "5.28.0",
-    "babel-jest": "27.5.0",
+    "babel-jest": "27.5.1",
     "babel-plugin-inline-react-svg": "2.0.1",
-    "jest": "27.5.0",
+    "jest": "27.5.1",
     "jest-watch-typeahead": "1.0.0",
     "msw": "0.36.8",
     "ts-toolbelt": "9.6.0",
@@ -58,5 +58,5 @@
     "@babel/core": "7.16.7",
     "typescript": "4.5.5"
   },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

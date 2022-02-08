@@ -1,6 +1,8 @@
 /* eslint-env node, es2021 */
+import { $ } from 'zx'
+
 import octokit from './octokit.mjs'
-import { confirm, ask, check, ok } from './prompts.mjs'
+import { confirm, confirmRuns, ask, check, ok } from './prompts.mjs'
 
 /**
  * @param {'next-release' | 'next-release-patch'} fromTitle
@@ -46,8 +48,10 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
     )
   )
 
-  const looksOk = await confirm(
-    check`Updated the milestone of ${pullRequestIds.length} PRs: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${toTitle}\nDoes everything look ok?`
+  const looksOk = await confirmRuns(
+    check`Updated the milestone of ${pullRequestIds.length} PRs\nDoes everything look ok?`,
+    () =>
+      $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
   )
   if (looksOk) {
     return milestone
@@ -206,6 +210,7 @@ export function closeMilestone(milestone_number) {
       // eslint-disable-next-line camelcase
       milestone_number,
       state: 'closed',
+      due_on: new Date().toISOString(),
     }
   )
 }
