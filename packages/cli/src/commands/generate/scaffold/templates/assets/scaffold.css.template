@@ -224,14 +224,20 @@
   outline: none;
 }
 .rw-check-radio-item-none {
-  color: #4a5568'
+  color: #4a5568
 }
 .rw-check-radio-items {
   display: flex;
   justify-items: center;
 }
-.rw-input[type='checkbox'],
-.rw-input[type='radio'] {
+.rw-input[type="checkbox"] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.rw-input[type="radio"] {
   display: inline;
   width: 1rem;
   margin-left: 0;

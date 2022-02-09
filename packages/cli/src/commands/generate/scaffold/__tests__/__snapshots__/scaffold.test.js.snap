@@ -845,13 +845,19 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   outline: none;
 }
 .rw-check-radio-item-none {
-  font-style: italic;
+  color: #4a5568;
 }
 .rw-check-radio-items {
   display: flex;
   justify-items: center;
 }
-.rw-input[type='checkbox'],
+.rw-input[type='checkbox'] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
@@ -2162,13 +2168,19 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   outline: none;
 }
 .rw-check-radio-item-none {
-  font-style: italic;
+  color: #4a5568;
 }
 .rw-check-radio-items {
   display: flex;
   justify-items: center;
 }
-.rw-input[type='checkbox'],
+.rw-input[type='checkbox'] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
@@ -2881,13 +2893,19 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   outline: none;
 }
 .rw-check-radio-item-none {
-  font-style: italic;
+  color: #4a5568;
 }
 .rw-check-radio-items {
   display: flex;
   justify-items: center;
 }
-.rw-input[type='checkbox'],
+.rw-input[type='checkbox'] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
 .rw-input[type='radio'] {
   display: inline;
   width: 1rem;
@@ -3150,7 +3168,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply flex justify-items-center;
 }
 .rw-check-radio-item-none {
-  @apply italic;
+  @apply text-gray-600;
 }
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
