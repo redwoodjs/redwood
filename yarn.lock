@@ -2163,6 +2163,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@envelop/types@npm:1.5.1":
+  version: 1.5.1
+  resolution: "@envelop/types@npm:1.5.1"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 6693d2b1526ed5fbac4ee735cf62ca0fb50784635c99f806e097b774f93a6f64d6abe64b0835b0faef24d29148a97080d1559480f89261342f31cf257ae3a4c1
+  languageName: node
+  linkType: hard
+
 "@envelop/types@npm:2.0.0":
   version: 2.0.0
   resolution: "@envelop/types@npm:2.0.0"
@@ -5683,7 +5692,7 @@ __metadata:
     "@envelop/filter-operation-type": 3.0.0
     "@envelop/parser-cache": 4.0.0
     "@envelop/testing": 4.0.0
-    "@envelop/types": 2.0.0
+    "@envelop/types": 1.5.1
     "@envelop/validation-cache": 4.0.0
     "@graphql-tools/merge": 8.2.2
     "@graphql-tools/schema": 8.3.1
