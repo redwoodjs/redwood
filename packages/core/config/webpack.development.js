@@ -34,7 +34,12 @@ const getProxyConfig = () => {
                 },
               ],
             }
-            res.writeHead(200, { 'Content-Type': 'application/json' })
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
+            // The HyperText Transfer Protocol (HTTP) 503 Service Unavailable server error response code indicates that the server is not ready to handle the request.
+            res.writeHead(503, {
+              'Content-Type': 'application/json',
+              'Retry-After': 10,
+            })
             res.write(JSON.stringify(msg))
             res.end()
           } else {
