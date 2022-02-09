@@ -11,6 +11,7 @@ import {
 import fastifyRawBody from 'fastify-raw-body'
 import fastifyUrlData from 'fastify-url-data'
 import escape from 'lodash.escape'
+import fastifyFormBody from 'fastify-formbody'
 
 import { findApiDistFunctions } from '@redwoodjs/internal'
 
@@ -106,6 +107,7 @@ const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
   // Add extra fastify plugins
   app.register(fastifyUrlData)
   app.register(fastifyRawBody)
+  app.register(fastifyFormBody)
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
