@@ -42,7 +42,7 @@
     "@types/babel__core": "7.1.18",
     "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.3",
-    "@types/prettier": "2.4.3",
+    "@types/prettier": "2.4.4",
     "fs-extra": "10.0.0",
     "tempy": "1.0.1"
   },
