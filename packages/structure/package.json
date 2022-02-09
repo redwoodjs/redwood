@@ -60,7 +60,7 @@
     "@types/lru-cache": "5.1.1",
     "@types/node": "16.11.22",
     "@types/vscode": "1.64.0",
-    "jest": "27.5.0",
+    "jest": "27.5.1",
     "typescript": "4.5.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
