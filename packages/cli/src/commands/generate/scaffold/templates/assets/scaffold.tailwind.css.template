@@ -130,7 +130,7 @@
   @apply flex justify-items-center;
 }
 .rw-check-radio-item-none {
-  @apply italic;
+  @apply text-gray-600;
 }
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {

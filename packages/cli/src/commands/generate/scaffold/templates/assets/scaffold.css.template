@@ -224,7 +224,7 @@
   outline: none;
 }
 .rw-check-radio-item-none {
-  font-style: italic;
+  color: #4a5568'
 }
 .rw-check-radio-items {
   display: flex;
@@ -267,6 +267,8 @@
   min-width: 48rem;
 }
 .rw-table {
+
+
   table-layout: auto;
   width: 100%;
   font-size: 0.875rem;
