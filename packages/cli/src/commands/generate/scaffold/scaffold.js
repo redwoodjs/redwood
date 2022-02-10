@@ -38,6 +38,7 @@ import {
   builder as serviceBuilder,
 } from '../service/service'
 
+// note a better way to do this is in https://github.com/redwoodjs/redwood/pull/3783/files
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
@@ -152,8 +153,7 @@ export const files = async ({
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings,
-      typescript
+      templateStrings
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -170,20 +170,13 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
-    ...layoutFiles(
-      name,
-      pascalScaffoldPath,
-      typescript,
-      templateStrings,
-      typescript
-    ),
+    ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings,
-      typescript
+      templateStrings
     )),
   }
 }
@@ -359,6 +352,20 @@ const componentFiles = async (
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
   const componentMetadata = {
+    Enum: {
+      componentName: 'RadioField',
+      defaultProp: 'defaultChecked',
+      validation: () => false,
+      listDisplayFunction: 'formatEnum',
+      displayFunction: 'formatEnum',
+    },
+    EnumList: {
+      componentName: 'CheckboxField',
+      defaultProp: 'defaultChecked',
+      validation: () => false,
+      listDisplayFunction: 'formatEnum',
+      displayFunction: 'formatEnum',
+    },
     Boolean: {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
@@ -416,25 +423,33 @@ const componentFiles = async (
           : null
       }
 
+      const isEnum = column.kind === 'enum'
+      const isList = column.isList
+      const enumType = isEnum && isList ? 'EnumList' : 'Enum'
+      const metadataKey = isEnum ? enumType : column.type
+
       return {
         ...column,
         label: humanize(column.name),
         component:
-          componentMetadata[column.type]?.componentName ||
+          componentMetadata[metadataKey]?.componentName ||
           componentMetadata.default.componentName,
         defaultProp:
-          componentMetadata[column.type]?.defaultProp ||
+          componentMetadata[metadataKey]?.defaultProp ||
           componentMetadata.default.defaultProp,
         deserializeFunction:
-          componentMetadata[column.type]?.deserializeFunction ||
+          componentMetadata[metadataKey]?.deserializeFunction ||
           componentMetadata.default.deserializeFunction,
         validation,
         listDisplayFunction:
-          componentMetadata[column.type]?.listDisplayFunction ||
+          componentMetadata[metadataKey]?.listDisplayFunction ||
           componentMetadata.default.listDisplayFunction,
         displayFunction:
-          componentMetadata[column.type]?.displayFunction ||
+          componentMetadata[metadataKey]?.displayFunction ||
           componentMetadata.default.displayFunction,
+        values: column.enumValues || [],
+        isList,
+        isEnum,
       }
     })
   const editableColumns = columns.filter((column) => {
