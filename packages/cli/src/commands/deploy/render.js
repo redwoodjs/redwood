@@ -74,7 +74,6 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   }
 
   if (side === 'api') {
-    process.env.REDWOOD_DISABLE_TELEMETRY = 1
     runApiCommands()
   } else if (side === 'web') {
     console.log('\nRunning yarn install and building web...')
