@@ -28,7 +28,7 @@
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "2.13.1",
     "@clerk/clerk-sdk-node": "2.9.0",
-    "@clerk/types": "1.24.1",
+    "@clerk/types": "1.25.0",
     "@supabase/supabase-js": "1.30.0",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.39",
