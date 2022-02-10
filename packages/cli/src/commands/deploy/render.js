@@ -36,6 +36,13 @@ export const builder = (yargs) => {
     )
 }
 
+// Telemetry mem usage exceeds Render free plan limit for API service
+// Because telemetryMiddleware is added to Yargs as middleware,
+// we need to set env outside handler to correctly disable Telemetry
+if (process.argv.slice(2).includes('api')) {
+  process.env.REDWOOD_DISABLE_TELEMETRY = 1
+}
+
 export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   const rwjsPaths = getPaths()
 
@@ -67,6 +74,7 @@ export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   }
 
   if (side === 'api') {
+    process.env.REDWOOD_DISABLE_TELEMETRY = 1
     runApiCommands()
   } else if (side === 'web') {
     console.log('\nRunning yarn install and building web...')
