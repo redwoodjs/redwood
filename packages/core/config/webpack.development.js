@@ -30,7 +30,7 @@ const getProxyConfig = () => {
               errors: [
                 {
                   message:
-                    'The RedwoodJS API server is not available or is currently reloading. Please try again.',
+                    'The RedwoodJS API server is not available or is currently reloading. Please refresh.',
                 },
               ],
             }
