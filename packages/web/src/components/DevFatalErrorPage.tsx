@@ -196,6 +196,10 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
   const [openQuery, setOpenQuery] = useState(false)
   const [openResponse, setOpenResponse] = useState(false)
 
+  console.debug(props, '>>> props')
+
+  console.debug(props.error, '>>>> props/error')
+
   return (
     <div className="request-response">
       {props.error.mostRecentRequest ? (
@@ -220,7 +224,11 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
                 onClick={() => setOpenQuery(!openQuery)}
                 className={openQuery ? 'open' : 'preview'}
               >
-                {props.error.mostRecentRequest.query}
+                {JSON.stringify(
+                  props.error.mostRecentRequest.query,
+                  null,
+                  '  '
+                )}
               </pre>
             </code>
           </div>
@@ -247,206 +255,249 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
 }
 
 const css = `
-  body {
-    background-color: rgb(253, 248, 246);
-    font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  }
+body {
+  background-color: rgb(253, 248, 246);
+  font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.panic-overlay {
+  background-color: white;
+  padding: 0 2.5em;
+}
+.panic-overlay strong {
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align: center;
+  justify-content: space-between;
+  padding: 1em 2.5em;
+}
+
+nav h1 {
+  color: black;
+  margin: 0;
+  padding: 0;
+  font-size: 1.2em;
+  font-weight: 400;
+  opacity: 1;
+  color: rgb(191, 71, 34);
+}
+
+nav h1 a {
+  color: black;
+  text-decoration: underline;
+}
+
+nav svg {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  fill: rgb(191, 71, 34);
+}
+
+nav svg.discourse {
+  height: 20px;
+  width: 20px;
+}
+
+nav svg:hover {
+  fill: rgb(200, 32, 32);
+}
+
+nav div {
+  line-height: 2sem;
+}
+
+.panic-overlay .error {
+  padding: 3em 0;
+}
+.panic-overlay .error-title {
+  display: flex;
+  align-items: stretch;
+}
+
+.panic-overlay .error-type {
+  min-height: 2.8em;
+  display: flex !important;
+  align-items: center;
+  padding: 0 1em;
+  background: rgb(195, 74, 37);
+  color: white;
+  margin-right: 2em;
+  white-space: nowrap;
+  text-align: center;
+}
+.panic-overlay .error-counter {
+  color: white;
+  opacity: 0.3;
+  position: absolute;
+  left: 0.8em;
+}
+.panic-overlay .error-message {
+  display: flex !important;
+  align-items: center;
+  font-weight: 300;
+  line-height: 1.1em;
+  font-size: 2.8em;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+.panic-overlay .error-stack {
+  margin-top: 2em;
+  white-space: pre;
+  padding-left: var(--left-pad);
+}
+
+.panic-overlay .stack-entry.clickable {
+  cursor: pointer;
+}
+
+.panic-overlay .stack-entry {
+  margin-left: 2.5em;
+}
+
+.panic-overlay .stack-entry .file {
+  font-weight: light;
+  color: rgb(195, 74, 37, 0.8);
+}
+
+.panic-overlay .stack-entry.first .file {
+  font-weight: bold;
+  color: rgb(200, 47, 47);
+}
+
+.panic-overlay .file strong {
+  font-weight: normal;
+
+  text-decoration: underline;
+}
+.panic-overlay .file:before,
+.panic-overlay .more:before {
+  content: "@ ";
+  opacity: 0.5;
+  margin-left: -1.25em;
+}
+.panic-overlay .more:before {
+  content: "▷ ";
+  opacity: 0.5;
+}
+.panic-overlay .more {
+  opacity: 0.25;
+  color: black;
+  font-size: 0.835em;
+  cursor: pointer;
+  text-align: center;
+  display: none;
+}
+.panic-overlay .more em {
+  font-style: normal;
+  font-weight: normal;
+  border-bottom: 1px dashed black;
+}
+.panic-overlay .collapsed .panic-overlay .more {
+  display: block;
+}
+.panic-overlay .lines, .request-response code {
+  color: rgb(187, 165, 165);
+  font-size: 0.835em;
+  margin-bottom: 2.5em;
+  font-family: Menlo, Monaco, "Courier New", Courier, monospace;
+}
+.panic-overlay .lines:not(.panic-overlay .no-fade) {
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
+}
+.panic-overlay .line-number {
+  padding-right: 1.5em;
+  opacity: 0.5;
+}
+.panic-overlay .line-hili {
+  background: rgb(253, 248, 246);
+  color: #5f4545;
+}
+.panic-overlay .stack-entry:first-child .panic-overlay .line-hili strong {
+  text-decoration: underline wavy #ff0040;
+}
+.panic-overlay .line-hili em {
+  font-style: italic;
+  color: rgb(195, 74, 37);
+  font-size: 0.75em;
+  margin-left: 2em;
+  opacity: 0.25;
+  position: relative;
+  top: -0.115em;
+  white-space: nowrap;
+}
+.panic-overlay .line-hili em:before {
+  content: "← ";
+}
+.panic-overlay .no-source {
+  font-style: italic;
+}
+
+.panic-overlay .request-response {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.panic-overlay .request-response > div {
+  flex: 1;
+}
+
+.panic-overlay .request-response .response {
+  margin-left: 2rem;
+}
+
+.panic-overlay .request-response h3 {
+  background-color: rgb(195, 74, 37);
+  color: white;
+  font-size: 2rem;
+  padding: 0.2rem 1rem;
+}
+
+.panic-overlay .request-response > div > div {
+  margin: 1rem 1rem;
+}
+
+.panic-overlay .request-response pre {
+  background-color: rgb(253, 248, 246);
+  padding: 0.3rem 1rem;
+  color: black;
+}
+
+.panic-overlay .request-response pre.open {
+  max-height: auto;
+}
+
+.panic-overlay .request-response pre.preview {
+  max-height: 13.5rem;
+  overflow-y: auto;
+
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
+}
+
+@media only screen and (max-width: 640px) {
   .panic-overlay {
-    background-color: white;
-    padding: 0 2.5em;
-  }
-  .panic-overlay strong {
-    font-weight: bold;
+    font-size: 15px;
   }
 
-  nav {
-    display: flex;
-    flex-direction: row;
-    align: center;
-    justify-content: space-between;
-    padding: 1em 2.5em;
+  .panic-overlay h1 {
+    margin: 40px 0;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .panic-overlay {
+    font-size: 14px;
   }
 
-  nav h1 {
-    color: black;
-    margin: 0;
-    padding: 0;
-    font-size: 1.2em;
-    font-weight: 400;
-    opacity: 1;
-    color: rgb(191, 71, 34);
+  .panic-overlay h1 {
+    margin: 30px 0;
   }
-
-  nav h1 a {
-    color: black;
-    text-decoration: underline;
-  }
-
-  nav svg {
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    fill: rgb(191, 71, 34);
-  }
-
-  nav svg.discourse {
-    height: 20px;
-    width: 20px;
-  }
-
-  nav svg:hover {
-    fill: rgb(200, 32, 32);
-  }
-
-  nav div {
-    line-height: 2sem;
-  }
-
-  .panic-overlay .error {
-    padding: 3em 0;
-  }
-  .panic-overlay .error-title {
-    display: flex;
-    align-items: stretch;
-  }
-
-  .panic-overlay .error-type {
-    min-height: 2.8em;
-    display: flex !important;
-    align-items: center;
-    padding: 0 1em;
-    background: rgb(195, 74, 37);
-    color: white;
-    margin-right: 2em;
-    white-space: nowrap;
-    text-align: center;
-  }
-  .panic-overlay .error-counter {
-    color: white;
-    opacity: 0.3;
-    position: absolute;
-    left: 0.8em;
-  }
-  .panic-overlay .error-message {
-    display: flex !important;
-    align-items: center;
-    font-weight: 300;
-    line-height: 1.1em;
-    font-size: 2.8em;
-    word-break: break-all;
-    white-space: pre-wrap;
-  }
-  .panic-overlay .error-stack {
-    margin-top: 2em;
-    white-space: pre;
-    padding-left: var(--left-pad);
-  }
-
-  .panic-overlay .stack-entry.clickable {
-    cursor: pointer;
-  }
-
-  .panic-overlay .stack-entry {
-    margin-left: 2.5em;
-  }
-
-  .panic-overlay .stack-entry .file {
-    font-weight: light;
-    color: rgb(195, 74, 37, 0.8);
-  }
-
-  .panic-overlay .stack-entry.first .file {
-    font-weight: bold;
-    color: rgb(200, 47, 47);
-  }
-
-  .panic-overlay .file strong {
-    font-weight: normal;
-
-    text-decoration: underline;
-  }
-  .panic-overlay .file:before,
-  .panic-overlay .more:before {
-    content: "@ ";
-    opacity: 0.5;
-    margin-left: -1.25em;
-  }
-  .panic-overlay .more:before {
-    content: "▷ ";
-    opacity: 0.5;
-  }
-  .panic-overlay .more {
-    opacity: 0.25;
-    color: black;
-    font-size: 0.835em;
-    cursor: pointer;
-    text-align: center;
-    display: none;
-  }
-  .panic-overlay .more em {
-    font-style: normal;
-    font-weight: normal;
-    border-bottom: 1px dashed black;
-  }
-  .panic-overlay .collapsed .panic-overlay .more {
-    display: block;
-  }
-  .panic-overlay .lines {
-    color: rgb(187, 165, 165);
-    font-size: 0.835em;
-    margin-bottom: 2.5em;
-    font-family: Menlo, Monaco, "Courier New", Courier, monospace;
-  }
-  .panic-overlay .lines:not(.panic-overlay .no-fade) {
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0));
-  }
-  .panic-overlay .line-number {
-    padding-right: 1.5em;
-    opacity: 0.5;
-  }
-  .panic-overlay .line-hili {
-    background: rgb(253, 248, 246);
-    color: #5f4545;
-  }
-  .panic-overlay .stack-entry:first-child .panic-overlay .line-hili strong {
-    text-decoration: underline wavy #ff0040;
-  }
-  .panic-overlay .line-hili em {
-    font-style: italic;
-    color: rgb(195, 74, 37);
-    font-size: 0.75em;
-    margin-left: 2em;
-    opacity: 0.25;
-    position: relative;
-    top: -0.115em;
-    white-space: nowrap;
-  }
-  .panic-overlay .line-hili em:before {
-    content: "← ";
-  }
-  .panic-overlay .no-source {
-    font-style: italic;
-  }
-
-  @media only screen and (max-width: 640px) {
-    .panic-overlay {
-      font-size: 15px;
-    }
-
-    .panic-overlay h1 {
-      margin: 40px 0;
-    }
-  }
-  @media only screen and (max-width: 500px) {
-    .panic-overlay {
-      font-size: 14px;
-    }
-
-    .panic-overlay h1 {
-      margin: 30px 0;
-    }
-  }
+}
 `
 
 const Discourse = () => (
