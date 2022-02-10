@@ -2907,9 +2907,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.5.0":
-  version: 2.5.0
-  resolution: "@graphql-codegen/cli@npm:2.5.0"
+"@graphql-codegen/cli@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@graphql-codegen/cli@npm:2.6.0"
   dependencies:
     "@graphql-codegen/core": 2.5.0
     "@graphql-codegen/plugin-helpers": ^2.4.0
@@ -2957,7 +2957,7 @@ __metadata:
     gql-gen: bin.js
     graphql-code-generator: bin.js
     graphql-codegen: bin.js
-  checksum: 5f2f848ecf63b3bccd14f94a2a59bae207e748987f79c277fa18bd1b5c91e6e9a678e53757eb718f9506e119e65f27138a4ee4dfe029051e573ded0f4864c98d
+  checksum: d418e46ef8c6e54d99edea9336c8905dc998688fe691e3acad10b54859b899625f53eb0f7ccafb781cf68fcb7105d399f643c703b6e468674c8daf7f2a2fe929
   languageName: node
   linkType: hard
 
@@ -3004,9 +3004,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-operations@npm:2.2.4":
-  version: 2.2.4
-  resolution: "@graphql-codegen/typescript-operations@npm:2.2.4"
+"@graphql-codegen/typescript-operations@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@graphql-codegen/typescript-operations@npm:2.3.0"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
     "@graphql-codegen/typescript": ^2.4.3
@@ -3015,7 +3015,7 @@ __metadata:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 21cdd6f52b1ab388b4bdba3988a61a1cce7e0c9a665f520c3147c61fce8af084d31d1f2a91d9d42423033c6e7c8123a3c3e9001e92fbe08b45e6272ad47fa362
+  checksum: 1b554bd91d2a2aad35e0c01c83857c64adba92f42c8ec14cde326e98117527fb021b270540df3bc5178569d62eae0cfd288698cc9e40fcf6d799e5722f3c280d
   languageName: node
   linkType: hard
 
@@ -5719,11 +5719,11 @@ __metadata:
     "@babel/register": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@babel/traverse": 7.16.7
-    "@graphql-codegen/cli": 2.5.0
+    "@graphql-codegen/cli": 2.6.0
     "@graphql-codegen/core": 2.5.0
     "@graphql-codegen/schema-ast": 2.4.1
     "@graphql-codegen/typescript": 2.4.3
-    "@graphql-codegen/typescript-operations": 2.2.4
+    "@graphql-codegen/typescript-operations": 2.3.0
     "@graphql-codegen/typescript-react-apollo": 3.2.5
     "@graphql-codegen/typescript-resolvers": 2.5.0
     "@redwoodjs/graphql-server": v0.44.1
