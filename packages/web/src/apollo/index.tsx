@@ -115,28 +115,24 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    */
   const { getToken, type: authProviderType } = useAuth()
 
-  // Keeps track of the most recent req/res data so they can be passed into
+  // updateDataApolloLink keeps track of the most recent req/res data so they can be passed into
   // any errors passed up to a error boundary.
-
   const data = {
     mostRecentRequest: undefined,
     mostRecentResponse: undefined,
   } as any
 
   const updateDataApolloLink = new ApolloLink((operation, forward) => {
-    console.debug(operation, '+++++++ updateDataApolloLink operation')
     data.mostRecentRequest = operation
 
     return forward(operation).map((result) => {
       data.mostRecentResponse = result
-      console.debug(result, '+++++++ updateDataApolloLink result')
 
       return result
     })
   })
 
   const withToken = setContext(async () => {
-    console.debug('+++++++ withToken')
     const token = await getToken()
 
     return { token }
@@ -145,8 +141,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const { headers, uri } = useFetchConfig()
 
   const authMiddleware = new ApolloLink((operation, forward) => {
-    console.debug('+++++++ authMiddleware')
-
     const { token } = operation.getContext()
 
     // Only add auth headers when token is present
@@ -179,7 +173,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const httpLink = new HttpLink({ uri, ...httpLinkConfig })
 
   /**
-   * The order here's important.
+   * The order here is important. The last link *must* be a terminating link like HttpLink.
    */
   const rwLinks = [
     withToken,
@@ -290,7 +284,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
         /**
-         * This order so that the user can still completely ovwrite the cache.
+         * This order so that the user can still completely overwrite the cache.
          */
         config={{ cache, ...config }}
         useAuth={useAuth}
