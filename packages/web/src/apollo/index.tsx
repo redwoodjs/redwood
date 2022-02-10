@@ -82,8 +82,8 @@ export type GraphQLClientConfigProp = Omit<
         rwLinks: [
           apolloClient.ApolloLink,
           apolloClient.ApolloLink,
-          apolloClient.HttpLink,
-          apolloClient.ApolloLink
+          apolloClient.ApolloLink,
+          apolloClient.HttpLink
         ]
       ) => apolloClient.ApolloLink)
 }
@@ -124,14 +124,19 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   } as any
 
   const updateDataApolloLink = new ApolloLink((operation, forward) => {
+    console.debug(operation, '+++++++ updateDataApolloLink operation')
     data.mostRecentRequest = operation
+
     return forward(operation).map((result) => {
       data.mostRecentResponse = result
+      console.debug(result, '+++++++ updateDataApolloLink result')
+
       return result
     })
   })
 
   const withToken = setContext(async () => {
+    console.debug('+++++++ withToken')
     const token = await getToken()
 
     return { token }
@@ -140,6 +145,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const { headers, uri } = useFetchConfig()
 
   const authMiddleware = new ApolloLink((operation, forward) => {
+    console.debug('+++++++ authMiddleware')
+
     const { token } = operation.getContext()
 
     // Only add auth headers when token is present
@@ -177,13 +184,13 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const rwLinks = [
     withToken,
     authMiddleware,
-    httpLink,
     updateDataApolloLink,
+    httpLink,
   ] as [
     apolloClient.ApolloLink,
     apolloClient.ApolloLink,
-    apolloClient.HttpLink,
-    apolloClient.ApolloLink
+    apolloClient.ApolloLink,
+    apolloClient.HttpLink
   ]
 
   /**
