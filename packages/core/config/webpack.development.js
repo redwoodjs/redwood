@@ -47,7 +47,7 @@ const getProxyConfig = () => {
               errors: [
                 {
                   message:
-                    'An error occurred. Please try restarting your RedwoodJS api server.',
+                    'An error occurred. Please check your dev console for logs, or restart your RedwoodJS api server.',
                 },
               ],
             }
