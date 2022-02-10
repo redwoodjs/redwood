@@ -29,19 +29,13 @@ export const getWebSideBabelPlugins = (
             // Jest monorepo and multi project runner is not correctly determining
             // the `cwd`: https://github.com/facebook/jest/issues/7359
             forJest ? rwjsPaths.web.src : './src',
+          shared: path.join(rwjsPaths.base, 'shared'),
         },
         root: [rwjsPaths.web.base],
         cwd: 'packagejson',
         loglevel: 'silent', // to silence the unnecessary warnings
       },
       'rwjs-module-resolver',
-    ],
-    [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.web.src,
-      },
-      'rwjs-babel-src-alias',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
