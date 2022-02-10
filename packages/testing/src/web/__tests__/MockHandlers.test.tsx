@@ -5,6 +5,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { mockGraphQLQuery } from '../mockRequests'
 
+jest.setTimeout(6_000)
+
 describe('GraphQLMockHandlers', () => {
   it('should allow you to compose mock graphql handlers for more complex tests', async () => {
     const baseResult = {
@@ -81,27 +83,40 @@ describe('GraphQLMockHandlers', () => {
 
     fireEvent.click(button)
 
-    await waitFor(() =>
-      expect(JSON.parse(result.textContent)).toEqual({
-        data: onceResult,
-      })
+    await waitFor(
+      () =>
+        expect(JSON.parse(result.textContent)).toEqual({
+          data: onceResult,
+        }),
+      {
+        timeout: 2_000,
+      }
     )
 
     fireEvent.click(button)
 
-    await waitFor(() =>
-      expect(JSON.parse(result.textContent)).toEqual({
-        data: baseResult,
-      })
+    await waitFor(
+      () =>
+        expect(JSON.parse(result.textContent)).toEqual({
+          data: baseResult,
+        }),
+      {
+        timeout: 2_000,
+      }
     )
 
     fireEvent.click(button)
 
-    await waitFor(() => {
-      expect(status).toHaveTextContent('false')
-      expect(JSON.parse(result.textContent)).toEqual({
-        data: baseResult,
-      })
-    })
+    await waitFor(
+      () => {
+        expect(status).toHaveTextContent('false')
+        expect(JSON.parse(result.textContent)).toEqual({
+          data: baseResult,
+        })
+      },
+      {
+        timeout: 2_000,
+      }
+    )
   })
 })

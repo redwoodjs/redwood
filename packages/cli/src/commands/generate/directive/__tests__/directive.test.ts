@@ -4,10 +4,12 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import { files } from '../directive'
+import yargs from 'yargs'
+
+import * as directive from '../directive'
 
 test('creates a JavaScript validator directive', () => {
-  const output = files({
+  const output = directive.files({
     name: 'require-admin', // checking camel casing too!
     typescript: false,
     tests: true,
@@ -28,7 +30,7 @@ test('creates a JavaScript validator directive', () => {
 })
 
 test('creates a TypeScript transformer directive', () => {
-  const output = files({
+  const output = directive.files({
     name: 'bazinga-foo_bar', // checking camel casing too!
     typescript: true,
     tests: true,
@@ -46,4 +48,12 @@ test('creates a TypeScript transformer directive', () => {
   expect(Object.keys(output)).toContainEqual(expectedTestOutputPath)
   expect(output[expectedOutputPath]).toMatchSnapshot('ts directive')
   expect(output[expectedTestOutputPath]).toMatchSnapshot('ts directive test')
+})
+
+test('keeps Directive in name', () => {
+  const { name } = yargs
+    .command('directive <name>', false, directive.builder)
+    .parse('directive BazingaDirective')
+
+  expect(name).toEqual('BazingaDirective')
 })

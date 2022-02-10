@@ -1,4 +1,15 @@
 /**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
+/**
  * @module @redwoodjs/forms
  *
  * Redwood's form library.
@@ -174,7 +185,7 @@ const JSONValidation = (value: Record<string, unknown> | null) => value !== null
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type }: { type?: string } = {}
+  { type, name }: { type?: string; name: string }
 ) => {
   if (
     validation.valueAsNumber ||
@@ -195,14 +206,22 @@ const setCoercion = (
     if (valueAsProp === 'valueAsJSON' && !validation.validate) {
       validation.validate = JSONValidation
     }
-  } else if (type) {
-    if (type === 'checkbox') {
-      validation.setValueAs = valueAsProps['valueAsBoolean']
-    } else if (type === 'date' || type === 'datetime-local') {
-      validation.valueAsDate = true
-    } else if (type === 'number') {
-      validation.valueAsNumber = true
-    }
+  } else if (type === 'checkbox') {
+    validation.setValueAs = valueAsProps['valueAsBoolean']
+  } else if (type === 'date' || type === 'datetime-local') {
+    validation.valueAsDate = true
+  } else if (type === 'number') {
+    validation.valueAsNumber = true
+  } else if (
+    // type is undefined for <select> and most other fields that aren't input
+    // fields
+    (type === 'text' || type === undefined) &&
+    /Id$/.test(name || '') &&
+    !validation.required
+  ) {
+    // This is for handling optional relation id fields, like a text input for
+    // `userId` if the user relation is optional
+    validation.setValueAs = (val: string) => val || undefined
   }
 }
 
@@ -242,7 +261,7 @@ const useRegister = <
 
   const validation = props.validation || { required: false }
 
-  setCoercion(validation, { type: props.type })
+  setCoercion(validation, { type: props.type, name: props.name })
 
   const {
     ref: _ref,
@@ -286,7 +305,7 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-interface FormProps
+export interface FormProps
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
@@ -365,7 +384,7 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
   }
 )
 
-interface LabelProps
+export interface LabelProps
   extends Pick<FieldProps, 'errorClassName' | 'errorStyle'>,
     React.ComponentPropsWithoutRef<'label'> {
   name: string
@@ -399,7 +418,8 @@ const Label = ({
   )
 }
 
-interface FieldErrorProps extends React.ComponentPropsWithoutRef<'span'> {
+export interface FieldErrorProps
+  extends React.ComponentPropsWithoutRef<'span'> {
   /**
    * The name of the field the `<FieldError>`'s associated with.
    */
@@ -467,7 +487,7 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
   return validationError ? <span {...rest}>{errorMessage}</span> : null
 }
 
-interface TextAreaFieldProps
+export interface TextAreaFieldProps
   extends FieldProps<HTMLTextAreaElement>,
     Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
@@ -516,7 +536,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   }
 )
 
-interface SelectFieldProps
+export interface SelectFieldProps
   extends FieldProps<HTMLSelectElement>,
     Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
@@ -565,7 +585,7 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   }
 )
 
-interface CheckboxFieldProps
+export interface CheckboxFieldProps
   extends FieldProps<HTMLInputElement>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
@@ -672,7 +692,7 @@ const INPUT_TYPES = [
 
 type InputType = typeof INPUT_TYPES[number]
 
-interface InputFieldProps
+export interface InputFieldProps
   extends FieldProps<HTMLInputElement>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
   /**

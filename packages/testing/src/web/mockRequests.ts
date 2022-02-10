@@ -76,7 +76,7 @@ export type DataFunction = (
     req: GraphQLRequest<any>
     ctx: GraphQLContext<Record<string, any>>
   }
-) => Record<string, unknown>
+) => Record<string, unknown> | void
 
 // These should get exported from MSW
 type ResponseFunction<BodyType = any> = (

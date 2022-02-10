@@ -1279,6 +1279,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "bdefore",
+      "name": "Buck DeFore",
+      "avatar_url": "https://avatars.githubusercontent.com/u/142472?v=4",
+      "profile": "https://github.com/bdefore",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kamarel",
+      "name": "Kamarel Malanda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84261846?v=4",
+      "profile": "https://github.com/kamarel",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5

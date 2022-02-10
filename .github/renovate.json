@@ -1,6 +1,16 @@
 {
-  "extends": [
-    "config:base"
+  "extends": ["config:base"],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "assignees": ["@jtoar"],
+  "labels": ["release:chore"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    }
   ],
   "ignoreDeps": [
     "boxen",
@@ -13,20 +23,26 @@
     "tempy",
     "terminal-link",
     "@types/node-fetch",
-    "chalk"
-  ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true
-    }
-  ],
-  "postUpdateOptions": ["yarnDedupeHighest"],
-  "assignees": [
-    "@jtoar"
-  ],
-  "labels": ["release:chore"]
+    "chalk",
+    "pascalcase",
+    "node-fetch",
+    "@redwoodjs/api",
+    "@redwoodjs/api-server",
+    "@redwoodjs/auth",
+    "@redwoodjs/cli",
+    "@redwoodjs/codemods",
+    "@redwoodjs/core",
+    "@redwoodjs/create-redwood-app",
+    "@redwoodjs/eslint-config",
+    "@redwoodjs/forms",
+    "@redwoodjs/graphql-server",
+    "@redwoodjs/internal",
+    "@redwoodjs/prerender",
+    "@redwoodjs/record",
+    "@redwoodjs/router",
+    "@redwoodjs/structure",
+    "@redwoodjs/telemetry",
+    "@redwoodjs/testing",
+    "@redwoodjs/web"
+  ]
 }

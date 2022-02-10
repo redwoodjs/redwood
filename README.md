@@ -603,6 +603,15 @@ And there you have it.
     <td align="center"><a href="https://github.com/kataqatsi"><img src="https://avatars.githubusercontent.com/u/14959199?v=4" width="100px;" alt=""/><br /><sub><b>kataqatsi</b></sub></a></td>
     <td align="center"><a href="https://www.vaporware.net/"><img src="https://avatars.githubusercontent.com/u/2105665?v=4" width="100px;" alt=""/><br /><sub><b>Jeff Schroeder</b></sub></a></td>
     <td align="center"><a href="https://github.com/manunamz"><img src="https://avatars.githubusercontent.com/u/75578970?v=4" width="100px;" alt=""/><br /><sub><b>mnm</b></sub></a></td>
+    <td align="center"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>BBurnworth</b></sub></a></td>
+    <td align="center"><a href="https://refactorthis.dev/"><img src="https://avatars.githubusercontent.com/u/30505583?v=4" width="100px;" alt=""/><br /><sub><b>Jonathan</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://www.linkedin.com/in/rishabh-poddar-b64b73129/"><img src="https://avatars.githubusercontent.com/u/2976287?v=4" width="100px;" alt=""/><br /><sub><b>Rishabh Poddar</b></sub></a></td>
+    <td align="center"><a href="https://vitaliimelnychuk.com/"><img src="https://avatars.githubusercontent.com/u/22550335?v=4" width="100px;" alt=""/><br /><sub><b>Vitalii Melnychuk</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bdefore"><img src="https://avatars.githubusercontent.com/u/142472?v=4" width="100px;" alt=""/><br /><sub><b>Buck DeFore</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kamarel"><img src="https://avatars.githubusercontent.com/u/84261846?v=4" width="100px;" alt=""/><br /><sub><b>Kamarel Malanda</b></sub></a></td>
+    <td align="center"><a href="https://mvila.me/"><img src="https://avatars.githubusercontent.com/u/381671?v=4" width="100px;" alt=""/><br /><sub><b>Manuel Vila</b></sub></a></td>
   </tr>
 </table>
 

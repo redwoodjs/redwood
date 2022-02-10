@@ -3,6 +3,9 @@
     "noEmit": true,
     "allowJs": true,
     "esModuleInterop": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "$api/*": [
