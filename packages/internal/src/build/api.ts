@@ -14,7 +14,9 @@ export const buildApi = async () => {
   // but right now we just delete everything.
   cleanApiBuild()
 
-  // const srcFiles = findApiFiles()
+  // findApiFiles()
+  //   .filter((path): path is string => path !== undefined)
+  //   .flatMap(generateProxyFilesForNestedFunction)
 
   // prebuildApiFiles(srcFiles)
   //   .filter((path): path is string => path !== undefined)
@@ -26,7 +28,7 @@ export const buildApi = async () => {
   // )
   // const preTranspiledApiFunctions = findApiServerFunctions(functionsPath)
 
-  return await transpileApi(findApiServerFunctions())
+  return await transpileApi([...findApiServerFunctions()])
 }
 
 export const cleanApiBuild = () => {
@@ -134,14 +136,16 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   })
 }
 
-const makeAllPackagesExternalPlugin = {
-  name: 'make-all-packages-external',
+const makeAllNodeModulesExternalPlugin = {
+  name: 'make-all-node-modules-external',
   setup(build: esbuild.PluginBuild) {
     const filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/ // Must not start with "/" or "./" or "../"
-    build.onResolve({ filter }, (args) => ({
-      path: args.path,
-      external: true,
-    }))
+    build.onResolve({ filter }, (args) => {
+      return {
+        path: args.path,
+        external: true,
+      }
+    })
   },
 }
 
@@ -177,7 +181,7 @@ export const transpileApi = (files: string[], options = {}) => {
     target: 'node12', // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
     format: 'cjs',
     bundle: true,
-    plugins: [makeAllPackagesExternalPlugin, runRwBabelTransformsPlugin],
+    plugins: [makeAllNodeModulesExternalPlugin, runRwBabelTransformsPlugin],
     outdir: path.join(rwjsPaths.api.dist, 'functions'),
     // setting this to 'true' will generate an external sourcemap x.js.map
     // AND set the sourceMappingURL comment

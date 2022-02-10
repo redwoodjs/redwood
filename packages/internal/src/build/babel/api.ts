@@ -50,7 +50,9 @@ export const getApiSideBabelPresets = (
   ].filter(Boolean) as TransformOptions['presets']
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = (
+  { forJest: _forJest } = { forJest: false }
+) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
   // a custom "name" is supplied so that user's do not accidently overwrite
@@ -101,11 +103,12 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       },
     ],
     // // still needed for jest.mock
-    forJest && [
+    [
       'babel-plugin-module-resolver',
       {
         alias: {
           src: './src',
+          shared: '../shared',
         },
         root: [rwjsPaths.api.base],
         cwd: 'packagejson',
@@ -113,13 +116,13 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       },
       'rwjs-api-module-resolver',
     ],
-    [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.api.src,
-      },
-      'rwjs-babel-src-alias',
-    ],
+    // [
+    //   require('../babelPlugins/babel-plugin-redwood-src-alias').default,
+    //   {
+    //     srcAbsPath: rwjsPaths.api.src,
+    //   },
+    //   'rwjs-babel-src-alias',
+    // ],
     [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
         .default,

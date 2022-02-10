@@ -46,6 +46,10 @@ export interface BrowserTargetPaths {
 
 export interface Paths {
   base: string
+  shared: {
+    base: string
+    src: string
+  }
   generated: {
     base: string
     schema: string
@@ -166,6 +170,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         mirror: path.join(BASE_DIR, '.redwood/types/mirror'),
       },
       prebuild: path.join(BASE_DIR, '.redwood/prebuild'),
+    },
+
+    shared: {
+      base: path.join(BASE_DIR, 'shared'),
+      src: path.join(BASE_DIR, 'shared/src'),
     },
 
     scripts: path.join(BASE_DIR, PATH_RW_SCRIPTS),
