@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -139,6 +142,22 @@ export const handler = async ({
       rwjsPaths.generated.base
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+
+    if (sides.includes('api')) {
+      if (!fs.existsSync(path.join(rwjsPaths.base, 'api/jest.config.js'))) {
+        throw new Error()
+        // TODO output config is missing
+        // provide instruction to use the codemod
+      }
+    }
+
+    if (sides.includes('web')) {
+      if (!fs.existsSync(path.join(rwjsPaths.base, 'web/jest.config.js'))) {
+        throw new Error()
+        // TODO output config is missing
+        // provide instruction to use the codemod
+      }
+    }
 
     if (sides.includes('api') && !dbPush) {
       // @NOTE
