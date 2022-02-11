@@ -34,11 +34,10 @@ const getProxyConfig = () => {
                 },
               ],
             }
-            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
-            // The HyperText Transfer Protocol (HTTP) 503 Service Unavailable server error response code indicates that the server is not ready to handle the request.
-            res.writeHead(503, {
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/205
+            // The HTTP 205 Reset Content response status tells the client to reset the document view, so for example to clear the content of a form, reset a canvas state, or to refresh the UI.
+            res.writeHead(205, {
               'Content-Type': 'application/json',
-              'Retry-After': 10,
             })
             res.write(JSON.stringify(msg))
             res.end()
@@ -51,7 +50,7 @@ const getProxyConfig = () => {
                 },
               ],
             }
-            res.writeHead(500, { 'Content-Type': 'application/json' })
+            res.writeHead(205, { 'Content-Type': 'application/json' })
             res.write(JSON.stringify(msg))
             res.end()
           }
