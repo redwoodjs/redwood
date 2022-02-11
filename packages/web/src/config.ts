@@ -2,4 +2,5 @@
 global.RWJS_API_GRAPHQL_URL = process.env.RWJS_API_GRAPHQL_URL as string
 global.RWJS_API_DBAUTH_URL = process.env.RWJS_API_DBAUTH_URL as string
 global.RWJS_API_URL = process.env.RWJS_API_URL as string
+global.RWJS_SRC_ROOT = process.env.RWJS_SRC_ROOT as string
 global.__REDWOOD__APP_TITLE = process.env.__REDWOOD__APP_TITLE as string

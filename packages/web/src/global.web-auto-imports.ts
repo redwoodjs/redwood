@@ -18,6 +18,7 @@ declare global {
     RWJS_API_GRAPHQL_URL: string
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
+    RWJS_SRC_ROOT: string
     __REDWOOD__APP_TITLE: string
   }
 
