@@ -133,6 +133,7 @@ function StackEntry({
 
   const rootClasses = [
     'stack-entry',
+    !fileReference.includes('node_modules') && 'rwfw',
     i === 0 && ' first',
     lines.length && 'clickable',
   ].filter(Boolean)
@@ -363,6 +364,10 @@ nav div {
 
 .panic-overlay .stack-entry {
   margin-left: 2.5em;
+}
+
+.panic-overlay .stack-entry.rwfw {
+  font-weight: bold;
 }
 
 .panic-overlay .stack-entry .file {
