@@ -6,8 +6,9 @@ import { useState } from 'react'
 
 import StackTracey from 'stacktracey'
 
-// This should be able to be accessible from webpack pretty trivially
-const appRoot = process.env.RWJS_SRC_ROOT
+// RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
+// It can also be set in an app's redwood.toml web config using `srcRoot`
+const appRoot = (process.env.RWJS_SRC_ROOT || '').substring(1)
 
 // Allow APIs client to attach response/request
 type ErrorWithRequestMeta = Error & {
@@ -128,6 +129,7 @@ function StackEntry({
     i === 0 && ' first',
     lines.length && 'clickable',
   ].filter(Boolean)
+
   return (
     <LinkToVSCode>
       <div className={rootClasses.join(' ')}>
@@ -195,10 +197,6 @@ function prettyMessage(msg: string) {
 function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
   const [openQuery, setOpenQuery] = useState(false)
   const [openResponse, setOpenResponse] = useState(false)
-
-  console.debug(props, '>>> props')
-
-  console.debug(props.error, '>>>> props/error')
 
   return (
     <div className="request-response">
