@@ -81,7 +81,7 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   )
 }
 
-function showStackLine(fileReference: string): boolean {
+function hideStackLine(fileReference: string): boolean {
   return fileReference.length === 1 || fileReference.includes('node_modules')
 }
 
@@ -134,7 +134,7 @@ function StackEntry({
     lines.length && 'clickable',
   ].filter(Boolean)
 
-  return showStackLine(fileReference) ? (
+  return hideStackLine(fileReference) ? (
     <div></div>
   ) : (
     <LinkToVSCode>
