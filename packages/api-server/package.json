@@ -32,7 +32,6 @@
     "chokidar": "3.5.3",
     "fast-json-parse": "1.0.3",
     "fastify": "3.27.1",
-    "fastify-formbody": "5.2.0",
     "fastify-http-proxy": "6.2.2",
     "fastify-raw-body": "3.2.0",
     "fastify-static": "4.5.0",
