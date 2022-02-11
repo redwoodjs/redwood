@@ -82,7 +82,10 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
 }
 
 function hideStackLine(fileReference: string): boolean {
-  return fileReference.length === 1 || fileReference.includes('node_modules')
+  return (
+    fileReference.length === 1 ||
+    fileReference.includes('node_modules/react-dom')
+  )
 }
 
 function StackEntry({
@@ -208,7 +211,7 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
     <div className="request-response">
       {props.error.mostRecentRequest ? (
         <div>
-          <h3>Request: {props.error.mostRecentRequest.operationName}</h3>
+          <h4>Request: {props.error.mostRecentRequest.operationName}</h4>
           <div>
             <h5>Variables:</h5>
             <code>
@@ -240,7 +243,7 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
       ) : null}
       {props.error.mostRecentRequest ? (
         <div className="response">
-          <h3>Response</h3>
+          <h4>Response</h4>
           <div>
             <h5>JSON:</h5>
             <code>
@@ -407,6 +410,7 @@ nav div {
   color: rgb(187, 165, 165);
   font-size: 0.835em;
   margin-bottom: 2.5em;
+  padding: 2rem;
   font-family: Menlo, Monaco, "Courier New", Courier, monospace;
 }
 .panic-overlay .lines:not(.panic-overlay .no-fade) {
@@ -455,10 +459,10 @@ nav div {
   margin-left: 2rem;
 }
 
-.panic-overlay .request-response h3 {
+.panic-overlay .request-response h4 {
   background-color: rgb(195, 74, 37);
   color: white;
-  font-size: 2rem;
+  font-size: 1.5rem;
   padding: 0.2rem 1rem;
 }
 
@@ -468,7 +472,7 @@ nav div {
 
 .panic-overlay .request-response pre {
   background-color: rgb(253, 248, 246);
-  padding: 0.3rem 1rem;
+  padding: 1rem 1rem;
   color: black;
 }
 
