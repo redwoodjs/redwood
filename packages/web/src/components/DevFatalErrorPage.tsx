@@ -81,6 +81,10 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   )
 }
 
+function showStackLine(fileReference: string): boolean {
+  return fileReference.length === 1 || fileReference.includes('node_modules')
+}
+
 function StackEntry({
   entry,
   i,
@@ -130,7 +134,9 @@ function StackEntry({
     lines.length && 'clickable',
   ].filter(Boolean)
 
-  return (
+  return showStackLine(fileReference) ? (
+    <div></div>
+  ) : (
     <LinkToVSCode>
       <div className={rootClasses.join(' ')}>
         <div className="file">{fileReference + ' in ' + entry.callee}</div>
