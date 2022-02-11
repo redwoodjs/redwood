@@ -7,7 +7,7 @@ import { useState } from 'react'
 import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
-// It can also be set in an app's redwood.toml web config using `srcRoot`
+// Chop of the first slash character (maybe be OSX/Linux only?)
 const appRoot = (process.env.RWJS_SRC_ROOT || '').substring(1)
 
 // Allow APIs client to attach response/request
