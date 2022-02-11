@@ -13,9 +13,9 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/forms": "v0.44.1",
-    "@redwoodjs/router": "v0.44.1",
-    "@redwoodjs/web": "v0.44.1",
+    "@redwoodjs/forms": "v0.45.0",
+    "@redwoodjs/router": "v0.45.0",
+    "@redwoodjs/web": "v0.45.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
