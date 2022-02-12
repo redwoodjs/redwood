@@ -494,6 +494,17 @@ export interface TextAreaFieldProps
 /**
  * Renders a `<textarea>` field.
  */
+/**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
 const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   (
     {
@@ -535,6 +546,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
     )
   }
 )
+/* eslint-enable react/prop-types */
 
 export interface SelectFieldProps
   extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
@@ -543,6 +555,17 @@ export interface SelectFieldProps
 /**
  * Renders a `<select>` field.
  */
+/**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
 const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   (
     {
@@ -584,6 +607,7 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
     )
   }
 )
+/* eslint-enable react/prop-types */
 
 export interface CheckboxFieldProps
   extends Omit<FieldProps<HTMLInputElement>, 'type'>,
@@ -592,6 +616,17 @@ export interface CheckboxFieldProps
 /**
  * Renders an `<input type="checkbox">` field.
  */
+/**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
 export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
   (
     {
@@ -643,6 +678,7 @@ export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
     )
   }
 )
+/* eslint-enable react/prop-types */
 
 /**
  * Renders a `<button type="submit">` field.
@@ -711,6 +747,17 @@ export interface InputFieldProps
  *
  * @see {@link https://redwoodjs.com/docs/form#inputfields}
  */
+/**
+ * FIXME:
+ * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
+ * disabling eslint rule "react/prop-types" is the recommended approach
+ * to resolve false positives in eslint.
+ *
+ * see:
+ * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
+ * - https://github.com/redwoodjs/redwood/pull/3762
+ */
+/* eslint-disable react/prop-types */
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
   (
     {
@@ -760,6 +807,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     )
   }
 )
+/* eslint-enable react/prop-types */
 
 /**
  * `React.ForwardRefExoticComponent` is `forwardRef`'s return type.
