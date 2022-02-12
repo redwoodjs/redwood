@@ -489,15 +489,7 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
 
 export interface TextAreaFieldProps
   extends Omit<FieldProps<HTMLTextAreaElement>, 'type'>,
-    Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {
-  name: string
-  id?: string
-  errorClassName?: string
-  errorStyle?: React.CSSProperties
-  validation?: RedwoodRegisterOptions
-  onBlur?: React.FocusEventHandler<Element>
-  onChange?: React.ChangeEventHandler<Element>
-}
+    Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
 /**
  * Renders a `<textarea>` field.
@@ -546,15 +538,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
 
 export interface SelectFieldProps
   extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
-    Omit<React.ComponentPropsWithRef<'select'>, 'name'> {
-  name: string
-  id?: string
-  errorClassName?: string
-  errorStyle?: React.CSSProperties
-  validation?: RedwoodRegisterOptions
-  onBlur?: React.FocusEventHandler<Element>
-  onChange?: React.ChangeEventHandler<Element>
-}
+    Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
 /**
  * Renders a `<select>` field.
@@ -603,15 +587,7 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 
 export interface CheckboxFieldProps
   extends Omit<FieldProps<HTMLInputElement>, 'type'>,
-    Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
-  name: string
-  id?: string
-  errorClassName?: string
-  errorStyle?: React.CSSProperties
-  validation?: RedwoodRegisterOptions
-  onBlur?: React.FocusEventHandler<Element>
-  onChange?: React.ChangeEventHandler<Element>
-}
+    Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
 /**
  * Renders an `<input type="checkbox">` field.
@@ -728,13 +704,6 @@ export interface InputFieldProps
    * Even though we provide a separate `<CheckboxField>`, maybe we should reconsider the typing here?
    */
   type?: InputType
-  name: string
-  id?: string
-  errorClassName?: string
-  errorStyle?: React.CSSProperties
-  validation?: RedwoodRegisterOptions
-  onBlur?: React.FocusEventHandler<Element>
-  onChange?: React.ChangeEventHandler<Element>
 }
 
 /**
