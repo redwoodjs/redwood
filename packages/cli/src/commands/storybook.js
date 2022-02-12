@@ -14,7 +14,7 @@ export const builder = (yargs) => {
     .option('open', {
       describe: 'Open storybooks in your browser on start',
       type: 'boolean',
-      default: true,
+      default: false,
     })
     .option('build', {
       describe: 'Build Storybook',
@@ -33,7 +33,7 @@ export const builder = (yargs) => {
     })
     .option('manager-cache', {
       describe:
-        "Cache the manager UI. Disable this when you're making changes to `storybook.manager.js`.",
+      "Cache the manager UI. Disable this when you're making changes to `storybook.manager.js`.",
       type: 'boolean',
       default: true,
     })
@@ -85,7 +85,6 @@ export const handler = ({
       !build && '--no-version-updates',
       !managerCache && '--no-manager-cache',
       build && `--output-dir "${buildDirectory}"`,
-      !open && !smokeTest && `--ci`,
       smokeTest && `--ci --smoke-test`,
     ].filter(Boolean),
     {
