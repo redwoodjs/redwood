@@ -417,4 +417,149 @@ describe('Form', () => {
     )
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
+
+  it('Fields without emptyAsUndefined or emptyAsNull defined return appropriate values', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" />
+        <NumberField name="numberField" />
+        <DateField name="dateField" />
+        <SelectField name="selectField" data-testid="select2" defaultValue="">
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: '',
+        numberField: NaN,
+        dateField: expect.any(Date),
+        selectField: '',
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('Fields with emptyAsUndefined defined return appropriate values', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" emptyAsUndefined />
+        <NumberField name="numberField" emptyAsUndefined />
+        <DateField name="dateField" emptyAsUndefined />
+        <SelectField
+          name="selectField"
+          data-testid="select2"
+          defaultValue=""
+          emptyAsUndefined
+        >
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: undefined,
+        numberField: undefined,
+        dateField: undefined,
+        selectField: undefined,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('Fields with emptyAsNull defined return appropriate values', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" emptyAsUndefined />
+        <NumberField name="numberField" emptyAsUndefined />
+        <DateField name="dateField" emptyAsUndefined />
+        <SelectField
+          name="selectField"
+          data-testid="select2"
+          defaultValue=""
+          emptyAsUndefined
+        >
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: null,
+        numberField: null,
+        dateField: null,
+        selectField: null,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('Fields with both emptyAsNull and emptyAsUndefined return undefined and console.warn', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" emptyAsUndefined />
+        <NumberField name="numberField" emptyAsUndefined />
+        <DateField name="dateField" emptyAsUndefined />
+        <SelectField
+          name="selectField"
+          data-testid="select2"
+          defaultValue=""
+          emptyAsUndefined
+        >
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    jest.spyOn(global.console, 'warn')
+
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: undefined,
+        numberField: undefined,
+        dateField: undefined,
+        selectField: undefined,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
 })

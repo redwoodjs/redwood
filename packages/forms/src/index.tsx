@@ -101,6 +101,8 @@ interface FieldProps<
 > {
   name: string
   id?: string
+  emptyAsNull: boolean
+  emptyAsUndefined: boolean
   errorClassName?: string
   errorStyle?: React.CSSProperties
   className?: string
@@ -185,7 +187,11 @@ const JSONValidation = (value: Record<string, unknown> | null) => value !== null
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type, name }: { type?: string; name: string }
+  {
+    type,
+    name,
+    emptyAsUndefined = false,
+  }: { type?: string; name: string; emptyAsUndefined?: boolean }
 ) => {
   if (
     validation.valueAsNumber ||
@@ -211,7 +217,16 @@ const setCoercion = (
   } else if (type === 'date' || type === 'datetime-local') {
     validation.valueAsDate = true
   } else if (type === 'number') {
-    validation.valueAsNumber = true
+    console.log('number')
+    // Note we cannot use standard r-h-f valueAsNumber prop because we cannot ut the emptyAsUndefined logic
+    //    validation.valueAsNumber = true
+    validation.setValueAs = (value: string) => {
+      if (value === '') {
+        return emptyAsUndefined ? undefined : NaN
+      } else {
+        return +value
+      }
+    }
   } else if (
     // type is undefined for <select> and most other fields that aren't input
     // fields
@@ -222,7 +237,21 @@ const setCoercion = (
     // This is for handling optional relation id fields, like a text input for
     // `userId` if the user relation is optional
     validation.setValueAs = (val: string) => val || undefined
-  }
+  } else {
+    if (emptyAsUndefined) {
+      validation.setValueAs = (val: string) => val || undefined
+    }
+  } /*  We are effectively replacing this function withein react-hook-form/src/logic/getFieldValueAs.ts
+  isUndefined(value) ? value :
+     valueAsNumber ?
+                     value === '' ? NaN : +value
+                    :
+     valueAsDate && isString(value) ?
+                    new Date(value)
+                    :
+      setValueAs ? setValueAs(value)
+              : value
+    */
 }
 
 type UseRegisterProps<
@@ -255,13 +284,18 @@ const useRegister = <
     | HTMLInputElement = HTMLInputElement
 >(
   props: UseRegisterProps<Element> & { element?: string },
-  ref?: React.ForwardedRef<T>
+  ref?: React.ForwardedRef<T>,
+  emptyAsUndefined?: boolean
 ) => {
   const { register } = useFormContext()
 
   const validation = props.validation || { required: false }
 
-  setCoercion(validation, { type: props.type, name: props.name })
+  setCoercion(validation, {
+    type: props.type,
+    name: props.name,
+    emptyAsUndefined: emptyAsUndefined,
+  })
 
   const {
     ref: _ref,
@@ -716,6 +750,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     {
       name,
       id,
+      emptyAsUndefined,
       // for useErrorStyles
       errorClassName,
       errorStyle,
@@ -746,7 +781,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         onChange,
         type,
       },
-      ref
+      ref,
+      emptyAsUndefined
     )
 
     return (
