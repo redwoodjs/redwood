@@ -581,18 +581,7 @@ export interface CheckboxFieldProps
 /**
  * Renders an `<input type="checkbox">` field.
  */
-/**
- * FIXME:
- * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
- * disabling eslint rule "react/prop-types" is the recommended approach
- * to resolve false positives in eslint.
- *
- * see:
- * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
- * - https://github.com/redwoodjs/redwood/pull/3762
- */
-/* eslint-disable react/prop-types */
-export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
+export const CheckboxField = forwardRef(
   (
     {
       name,
@@ -607,8 +596,8 @@ export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: CheckboxFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -643,7 +632,6 @@ export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
     )
   }
 )
-/* eslint-enable react/prop-types */
 
 /**
  * Renders a `<button type="submit">` field.
