@@ -700,18 +700,7 @@ export interface InputFieldProps
  *
  * @see {@link https://redwoodjs.com/docs/form#inputfields}
  */
-/**
- * FIXME:
- * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
- * disabling eslint rule "react/prop-types" is the recommended approach
- * to resolve false positives in eslint.
- *
- * see:
- * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
- * - https://github.com/redwoodjs/redwood/pull/3762
- */
-/* eslint-disable react/prop-types */
-const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
+const InputField = forwardRef(
   (
     {
       name,
@@ -727,8 +716,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       onChange,
       type,
       ...rest
-    },
-    ref
+    }: InputFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -760,7 +749,6 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     )
   }
 )
-/* eslint-enable react/prop-types */
 
 /**
  * `React.ForwardRefExoticComponent` is `forwardRef`'s return type.
