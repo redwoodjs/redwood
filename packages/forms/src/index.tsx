@@ -532,18 +532,7 @@ export interface SelectFieldProps
 /**
  * Renders a `<select>` field.
  */
-/**
- * FIXME:
- * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
- * disabling eslint rule "react/prop-types" is the recommended approach
- * to resolve false positives in eslint.
- *
- * see:
- * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
- * - https://github.com/redwoodjs/redwood/pull/3762
- */
-/* eslint-disable react/prop-types */
-const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
+const SelectField = forwardRef(
   (
     {
       name,
@@ -558,8 +547,8 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: SelectFieldProps,
+    ref: ForwardedRef<HTMLSelectElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -584,7 +573,6 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
     )
   }
 )
-/* eslint-enable react/prop-types */
 
 export interface CheckboxFieldProps
   extends Omit<FieldProps<HTMLInputElement>, 'type'>,
