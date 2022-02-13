@@ -338,7 +338,7 @@ export interface FormProps
 /**
  * Renders a `<form>` with the required context.
  */
-const Form = forwardRef<HTMLFormElement, FormProps>(
+const Form = forwardRef(
   (
     {
       config,
@@ -347,8 +347,8 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
       onSubmit,
       children,
       ...rest
-    },
-    ref
+    }: FormProps,
+    ref: ForwardedRef<HTMLFormElement>
   ) => {
     const hookFormMethods = useForm(config)
     const formMethods = propFormMethods || hookFormMethods
