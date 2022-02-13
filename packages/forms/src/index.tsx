@@ -524,7 +524,6 @@ const TextAreaField = forwardRef(
     )
   }
 )
-/* eslint-enable react/prop-types */
 
 export interface SelectFieldProps
   extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
