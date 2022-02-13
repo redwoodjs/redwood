@@ -3,12 +3,11 @@ import { rest, graphql } from 'msw'
 import { setupServer } from 'msw/node'
 import prompts from 'prompts'
 
-import updateNextReleasePullRequestsMilestone, {
+import updatePRsMilestone, {
   GET_MILESTONES,
-  GET_NEXT_RELEASE_MILESTONE_ID,
-  GET_NEXT_RELEASE_PULL_REQUEST_IDS,
-  UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE,
-} from '../updateNextReleasePullRequestsMilestone.mjs'
+  GET_PULL_REQUEST_IDS,
+  UPDATE_PULL_REQUEST_MILESTONE,
+} from '../updatePRsMilestone.mjs'
 
 /**
  * MSW setup
@@ -18,30 +17,30 @@ const nextReleaseMilestone = {
   id: 'MI_kwDOC2M2f84Aa82f',
 }
 
+const nextReleasePatchMilestone = {
+  title: 'next-release-patch',
+  id: 'MDk6TWlsZXN0b25lNjc1Nzk0MQ==',
+}
+
 const milestonesNodes = [
-  {
-    title: 'next-release-patch',
-    id: 'MDk6TWlsZXN0b25lNjc1Nzk0MQ==',
-  },
+  nextReleaseMilestone,
+  nextReleasePatchMilestone,
   {
     title: 'next-release-priority',
     id: 'MDk6TWlsZXN0b25lNjc3MTI3MQ==',
   },
-  nextReleaseMilestone,
 ]
 
-const handleGetMilestones = graphql.query(
-  /Get(.*)MilestoneId(s?)/,
-  (_req, res, ctx) =>
-    res(
-      ctx.data({
-        repository: {
-          milestones: {
-            nodes: milestonesNodes,
-          },
+const handleGetMilestones = graphql.query('GetMilestoneIds', (_req, res, ctx) =>
+  res(
+    ctx.data({
+      repository: {
+        milestones: {
+          nodes: milestonesNodes,
         },
-      })
-    )
+      },
+    })
+  )
 )
 
 let nextVersionMilestone
@@ -83,12 +82,16 @@ const pullRequests = [
   },
 ]
 
-const handleGetNextReleasePullRequestIds = graphql.query(
-  'GetNextReleasePullRequestIds',
+const handleGetPullRequestIds = graphql.query(
+  'GetPullRequestIds',
   (req, res, ctx) => {
     const { milestoneId } = req.variables
 
-    if (milestoneId !== nextReleaseMilestone.id) {
+    if (
+      ![nextReleaseMilestone.id, nextReleasePatchMilestone.id].includes(
+        milestoneId
+      )
+    ) {
       return res(
         ctx.data({
           node: null,
@@ -114,7 +117,7 @@ const handleUpdatePullRequestMilestone = graphql.mutation(
     const { pullRequestId, milestoneId } = req.variables
 
     if (
-      milestoneId !== nextVersionMilestone.nod_id ||
+      milestoneId !== nextVersionMilestone.node_id ||
       !pullRequests.map((pullRequest) => pullRequest.id).includes(pullRequestId)
     ) {
       return res(
@@ -137,17 +140,22 @@ const handleUpdatePullRequestMilestone = graphql.mutation(
 const handleCloseMilestone = rest.post(
   'https://api.github.com/repos/:owner/:repo/milestones/:milestone_number',
   (req, res, ctx) => {
+    // eslint-disable-next-line camelcase
     const { milestone_number } = req.params
 
+    // eslint-disable-next-line camelcase
     if (+milestone_number !== nextVersionMilestone.number) {
       return res(ctx.status(404))
     }
 
-    const { state } = req.body
+    // eslint-disable-next-line camelcase
+    const { state, due_on } = req.body
 
     return res(
       ctx.json({
         state,
+        // eslint-disable-next-line camelcase
+        due_on,
       })
     )
   }
@@ -156,7 +164,7 @@ const handleCloseMilestone = rest.post(
 const server = setupServer(
   handleGetMilestones,
   handleCreateMilestone,
-  handleGetNextReleasePullRequestIds,
+  handleGetPullRequestIds,
   handleUpdatePullRequestMilestone,
   handleCloseMilestone
 )
@@ -165,7 +173,7 @@ beforeAll(() => server.listen())
 
 afterAll(() => server.close())
 
-describe('updateNextReleasePullRequestsMilestone', () => {
+describe('updatePRsMilestone', () => {
   it('uses the right queries', () => {
     expect(GET_MILESTONES).toMatchInlineSnapshot(`
       "
@@ -187,24 +195,9 @@ describe('updateNextReleasePullRequestsMilestone', () => {
       "
     `)
 
-    expect(GET_NEXT_RELEASE_MILESTONE_ID).toMatchInlineSnapshot(`
+    expect(GET_PULL_REQUEST_IDS).toMatchInlineSnapshot(`
       "
-        query GetNextReleaseMilestoneId {
-          repository(owner: \\"redwoodjs\\", name: \\"redwood\\") {
-            milestones(query: \\"next-release\\", first: 5) {
-              nodes {
-                title
-                id
-              }
-            }
-          }
-        }
-      "
-    `)
-
-    expect(GET_NEXT_RELEASE_PULL_REQUEST_IDS).toMatchInlineSnapshot(`
-      "
-        query GetNextReleasePullRequestIds($milestoneId: ID!) {
+        query GetPullRequestIds($milestoneId: ID!) {
           node(id: $milestoneId) {
             ... on Milestone {
               pullRequests(first: 100) {
@@ -218,7 +211,7 @@ describe('updateNextReleasePullRequestsMilestone', () => {
       "
     `)
 
-    expect(UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE).toMatchInlineSnapshot(`
+    expect(UPDATE_PULL_REQUEST_MILESTONE).toMatchInlineSnapshot(`
       "
         mutation UpdatePullRequestMilestone($pullRequestId: ID!, $milestoneId: ID!) {
           updatePullRequest(
@@ -231,7 +224,7 @@ describe('updateNextReleasePullRequestsMilestone', () => {
     `)
   })
 
-  it('MSW unit test', async () => {
+  it('changes next-release milestones to a version milestone', async () => {
     prompts.inject([
       // createOk
       true,
@@ -241,7 +234,22 @@ describe('updateNextReleasePullRequestsMilestone', () => {
       true,
     ])
 
-    const milestone = await updateNextReleasePullRequestsMilestone('v0.42.1')
+    const milestone = await updatePRsMilestone('next-release', 'v0.42.1')
+    const { node_id: id, ...rest } = nextVersionMilestone
+    expect(milestone).toEqual({ id, ...rest })
+  })
+
+  it('changes next-release-patch milestones to a version milestone', async () => {
+    prompts.inject([
+      // createOk
+      true,
+      // updateOk
+      true,
+      // looksOk
+      true,
+    ])
+
+    const milestone = await updatePRsMilestone('next-release-patch', 'v0.42.1')
     const { node_id: id, ...rest } = nextVersionMilestone
     expect(milestone).toEqual({ id, ...rest })
   })

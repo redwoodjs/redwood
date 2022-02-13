@@ -110,6 +110,12 @@ const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
 
+  app.addContentTypeParser(
+    ['application/x-www-form-urlencoded', 'multipart/form-data'],
+    { parseAs: 'string' },
+    app.defaultTextParser
+  )
+
   await loadFunctionsFromDist()
 
   return app

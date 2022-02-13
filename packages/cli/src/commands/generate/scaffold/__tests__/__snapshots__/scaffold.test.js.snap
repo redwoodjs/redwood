@@ -53,6 +53,7 @@ const PostForm = (props) => {
         >
           Title
         </Label>
+
         <TextField
           name=\\"title\\"
           defaultValue={props.post?.title}
@@ -70,6 +71,7 @@ const PostForm = (props) => {
         >
           Slug
         </Label>
+
         <TextField
           name=\\"slug\\"
           defaultValue={props.post?.slug}
@@ -87,6 +89,7 @@ const PostForm = (props) => {
         >
           Author
         </Label>
+
         <TextField
           name=\\"author\\"
           defaultValue={props.post?.author}
@@ -104,6 +107,7 @@ const PostForm = (props) => {
         >
           Body
         </Label>
+
         <TextField
           name=\\"body\\"
           defaultValue={props.post?.body}
@@ -121,6 +125,7 @@ const PostForm = (props) => {
         >
           Image
         </Label>
+
         <TextField
           name=\\"image\\"
           defaultValue={props.post?.image}
@@ -137,6 +142,7 @@ const PostForm = (props) => {
         >
           Posted at
         </Label>
+
         <DatetimeLocalField
           name=\\"postedAt\\"
           defaultValue={formatDatetime(props.post?.postedAt)}
@@ -153,6 +159,7 @@ const PostForm = (props) => {
         >
           Is pinned
         </Label>
+
         <CheckboxField
           name=\\"isPinned\\"
           defaultChecked={props.post?.isPinned}
@@ -169,6 +176,7 @@ const PostForm = (props) => {
         >
           Read time
         </Label>
+
         <TextField
           name=\\"readTime\\"
           defaultValue={props.post?.readTime}
@@ -186,6 +194,7 @@ const PostForm = (props) => {
         >
           Rating
         </Label>
+
         <TextField
           name=\\"rating\\"
           defaultValue={props.post?.rating}
@@ -203,6 +212,7 @@ const PostForm = (props) => {
         >
           Upvotes
         </Label>
+
         <NumberField
           name=\\"upvotes\\"
           defaultValue={props.post?.upvotes}
@@ -220,6 +230,7 @@ const PostForm = (props) => {
         >
           Metadata
         </Label>
+
         <TextAreaField
           name=\\"metadata\\"
           defaultValue={JSON.stringify(props.post?.metadata)}
@@ -237,6 +248,7 @@ const PostForm = (props) => {
         >
           Huge number
         </Label>
+
         <TextField
           name=\\"hugeNumber\\"
           defaultValue={props.post?.hugeNumber}
@@ -442,7 +454,9 @@ export const Success = ({ post }) => {
 `;
 
 exports[`in javascript (default) mode creates a show component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
@@ -453,6 +467,17 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
+
+const formatEnum = (values) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values)
+    }
+  }
+}
 
 const jsonDisplay = (obj) => {
   return (
@@ -819,10 +844,26 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'],
-.rw-input[type='radio'] {
+.rw-check-radio-item-none {
+  color: #4a5568;
+}
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
+.rw-input[type='checkbox'] {
+  display: inline;
   width: 1rem;
   margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.rw-input[type='radio'] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -860,6 +901,10 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 .rw-table th,
 .rw-table td {
   padding: 0.75rem;
+}
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
 }
 .rw-table thead tr {
   background-color: #e2e8f0;
@@ -1068,7 +1113,9 @@ export const Success = ({ posts }) => {
 `;
 
 exports[`in javascript (default) mode creates an index component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
 
@@ -1083,6 +1130,17 @@ const DELETE_POST_MUTATION = gql\`
 \`
 
 const MAX_STRING_LENGTH = 150
+
+const formatEnum = (values) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values)
+    }
+  }
+}
 
 const truncate = (text) => {
   let output = text
@@ -1235,14 +1293,54 @@ exports[`in typescript mode creates a form component 1`] = `
   Submit,
 } from '@redwoodjs/forms'
 
+
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
   }
 }
 
+
 const PostForm = (props) => {
   const onSubmit = (data) => {
+
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
     props.onSave(data, props?.post?.id)
   }
 
@@ -1255,7 +1353,7 @@ const PostForm = (props) => {
           titleClassName=\\"rw-form-error-title\\"
           listClassName=\\"rw-form-error-list\\"
         />
-
+      
         <Label
           name=\\"title\\"
           className=\\"rw-label\\"
@@ -1263,13 +1361,16 @@ const PostForm = (props) => {
         >
           Title
         </Label>
-        <TextField
-          name=\\"title\\"
-          defaultValue={props.post?.title}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name=\\"title\\"
+            defaultValue={props.post?.title}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ required: true }}
+          />
+        
+
         <FieldError name=\\"title\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1279,13 +1380,16 @@ const PostForm = (props) => {
         >
           Slug
         </Label>
-        <TextField
-          name=\\"slug\\"
-          defaultValue={props.post?.slug}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name=\\"slug\\"
+            defaultValue={props.post?.slug}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ required: true }}
+          />
+        
+
         <FieldError name=\\"slug\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1295,13 +1399,16 @@ const PostForm = (props) => {
         >
           Author
         </Label>
-        <TextField
-          name=\\"author\\"
-          defaultValue={props.post?.author}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name=\\"author\\"
+            defaultValue={props.post?.author}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ required: true }}
+          />
+        
+
         <FieldError name=\\"author\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1311,13 +1418,16 @@ const PostForm = (props) => {
         >
           Body
         </Label>
-        <TextField
-          name=\\"body\\"
-          defaultValue={props.post?.body}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name=\\"body\\"
+            defaultValue={props.post?.body}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ required: true }}
+          />
+        
+
         <FieldError name=\\"body\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1327,12 +1437,15 @@ const PostForm = (props) => {
         >
           Image
         </Label>
-        <TextField
-          name=\\"image\\"
-          defaultValue={props.post?.image}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-        />
+        
+          <TextField
+            name=\\"image\\"
+            defaultValue={props.post?.image}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+          />
+        
+
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1342,12 +1455,15 @@ const PostForm = (props) => {
         >
           Posted at
         </Label>
-        <DatetimeLocalField
-          name=\\"postedAt\\"
-          defaultValue={formatDatetime(props.post?.postedAt)}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-        />
+        
+          <DatetimeLocalField
+            name=\\"postedAt\\"
+            defaultValue={formatDatetime(props.post?.postedAt)}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+          />
+        
+
         <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1357,12 +1473,15 @@ const PostForm = (props) => {
         >
           Is pinned
         </Label>
-        <CheckboxField
-          name=\\"isPinned\\"
-          defaultChecked={props.post?.isPinned}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-        />
+        
+          <CheckboxField
+            name=\\"isPinned\\"
+            defaultChecked={props.post?.isPinned}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+          />
+        
+
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1372,13 +1491,16 @@ const PostForm = (props) => {
         >
           Read time
         </Label>
-        <TextField
-          name=\\"readTime\\"
-          defaultValue={props.post?.readTime}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ valueAsNumber: true, required: true }}
-        />
+        
+          <TextField
+            name=\\"readTime\\"
+            defaultValue={props.post?.readTime}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ valueAsNumber: true, required: true }}
+          />
+        
+
         <FieldError name=\\"readTime\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1388,13 +1510,16 @@ const PostForm = (props) => {
         >
           Rating
         </Label>
-        <TextField
-          name=\\"rating\\"
-          defaultValue={props.post?.rating}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ valueAsNumber: true }}
-        />
+        
+          <TextField
+            name=\\"rating\\"
+            defaultValue={props.post?.rating}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ valueAsNumber: true }}
+          />
+        
+
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1404,13 +1529,16 @@ const PostForm = (props) => {
         >
           Upvotes
         </Label>
-        <NumberField
-          name=\\"upvotes\\"
-          defaultValue={props.post?.upvotes}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-        />
+        
+          <NumberField
+            name=\\"upvotes\\"
+            defaultValue={props.post?.upvotes}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ required: true }}
+          />
+        
+
         <FieldError name=\\"upvotes\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1420,13 +1548,16 @@ const PostForm = (props) => {
         >
           Metadata
         </Label>
-        <TextAreaField
-          name=\\"metadata\\"
-          defaultValue={JSON.stringify(props.post?.metadata)}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ valueAsJSON: true, required: true }}
-        />
+        
+          <TextAreaField
+            name=\\"metadata\\"
+            defaultValue={JSON.stringify(props.post?.metadata)}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ valueAsJSON: true, required: true }}
+          />
+        
+
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
         <Label
@@ -1436,13 +1567,16 @@ const PostForm = (props) => {
         >
           Huge number
         </Label>
-        <TextField
-          name=\\"hugeNumber\\"
-          defaultValue={props.post?.hugeNumber}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-        />
+        
+          <TextField
+            name=\\"hugeNumber\\"
+            defaultValue={props.post?.hugeNumber}
+            className=\\"rw-input\\"
+            errorClassName=\\"rw-input rw-input-error\\"
+            validation={{ required: true }}
+          />
+        
+
         <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
 
         <div className=\\"rw-button-group\\">
@@ -1653,7 +1787,9 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 `;
 
 exports[`in typescript mode creates a show component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
@@ -1664,6 +1800,17 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
+
+const formatEnum = (values: string | string[] | null | undefined) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values as string)
+    }
+  }
+}
 
 const jsonDisplay = (obj) => {
   return (
@@ -2020,10 +2167,26 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'],
-.rw-input[type='radio'] {
+.rw-check-radio-item-none {
+  color: #4a5568;
+}
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
+.rw-input[type='checkbox'] {
+  display: inline;
   width: 1rem;
   margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.rw-input[type='radio'] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -2061,6 +2224,10 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 .rw-table th,
 .rw-table td {
   padding: 0.75rem;
+}
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
 }
 .rw-table thead tr {
   background-color: #e2e8f0;
@@ -2347,7 +2514,9 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 `;
 
 exports[`in typescript mode creates an index component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import humanize from 'humanize-string'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
 
@@ -2362,6 +2531,17 @@ const DELETE_POST_MUTATION = gql\`
 \`
 
 const MAX_STRING_LENGTH = 150
+
+const formatEnum = (values: string | string[] | null | undefined) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values as string)
+    }
+  }
+}
 
 const truncate = (text) => {
   let output = text
@@ -2712,10 +2892,26 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'],
-.rw-input[type='radio'] {
+.rw-check-radio-item-none {
+  color: #4a5568;
+}
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
+.rw-input[type='checkbox'] {
+  display: inline;
   width: 1rem;
   margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.rw-input[type='radio'] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -2753,6 +2949,10 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 .rw-table th,
 .rw-table td {
   padding: 0.75rem;
+}
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
 }
 .rw-table thead tr {
   background-color: #e2e8f0;
@@ -2964,9 +3164,15 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 .rw-input {
   @apply block mt-2 w-full p-2 bg-white border border-gray-200 rounded outline-none;
 }
+.rw-check-radio-items {
+  @apply flex justify-items-center;
+}
+.rw-check-radio-item-none {
+  @apply text-gray-600;
+}
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
-  @apply w-4 ml-0;
+  @apply inline w-4 ml-0 mr-1 mt-1;
 }
 .rw-input:focus {
   @apply border-gray-400;
@@ -2993,6 +3199,9 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 .rw-table th,
 .rw-table td {
   @apply p-3;
+}
+.rw-table td {
+  @apply bg-white text-gray-900;
 }
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
