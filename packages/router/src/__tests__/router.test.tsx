@@ -1279,6 +1279,8 @@ test('params should be updated if navigated to different route with same page', 
 
   const screen = render(<TestRouter />)
   act(() => navigate('/user'))
+  // Wait for page load
+  await waitFor(() => screen.getByText('param no-id'))
   act(() => navigate('/user/99'))
 
   await waitFor(() => {
