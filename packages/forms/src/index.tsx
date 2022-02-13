@@ -44,7 +44,7 @@
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
  */
-import React, { useContext, forwardRef } from 'react'
+import React, { useContext, forwardRef, ForwardedRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import {
@@ -483,18 +483,7 @@ export interface TextAreaFieldProps
 /**
  * Renders a `<textarea>` field.
  */
-/**
- * FIXME:
- * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
- * disabling eslint rule "react/prop-types" is the recommended approach
- * to resolve false positives in eslint.
- *
- * see:
- * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
- * - https://github.com/redwoodjs/redwood/pull/3762
- */
-/* eslint-disable react/prop-types */
-const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
+const TextAreaField = forwardRef(
   (
     {
       name,
@@ -509,8 +498,8 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: TextAreaFieldProps,
+    ref: ForwardedRef<HTMLTextAreaElement>
   ) => {
     const styles = useErrorStyles({
       name,
