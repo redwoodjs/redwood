@@ -34,10 +34,12 @@ const getProxyConfig = () => {
                 },
               ],
             }
-            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/205
-            // The HTTP 205 Reset Content response status tells the client to reset the document view, so for example to clear the content of a form, reset a canvas state, or to refresh the UI.
-            res.writeHead(205, {
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/203
+            // The HTTP 203 Non-Authoritative Information response status indicates that the request was successful
+            // but the enclosed payload has been modified by a transforming proxy from that of the origin server's 200 (OK) response
+            res.writeHead(203, {
               'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
             })
             res.write(JSON.stringify(msg))
             res.end()
