@@ -1784,23 +1784,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.13.1":
-  version: 2.13.1
-  resolution: "@clerk/clerk-js@npm:2.13.1"
+"@clerk/clerk-js@npm:2.13.2":
+  version: 2.13.2
+  resolution: "@clerk/clerk-js@npm:2.13.2"
   dependencies:
-    "@clerk/types": 1.25.0
+    "@clerk/types": ^1.25.1
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
-    classnames: ^2.2.6
+    classnames: ^2.3.1
     core-js: ^3.18.3
     deepmerge: ^4.2.2
     js-cookie: ^2.2.1
     qs: ^6.9.4
-    react: 16.13.1
-    react-dom: 16.13.1
+    react: 17.0.2
+    react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 147fb60d182de1e44185faa412b2f3d9429726d7b547888c484926b0bfd5154179d7203084826ed54ca5dee632c5e93e27f6a6da97abc3db05105f2a8624e8a8
+  checksum: 939f10a2a160e0ce3df85165f5015bae85d4a62ef43aec0d999bdda32e076bf43bf4027db27e2008020da08767157b382d33dddc0f33327651e25fb52719bed9
   languageName: node
   linkType: hard
 
@@ -1826,6 +1826,13 @@ __metadata:
   version: 1.25.0
   resolution: "@clerk/types@npm:1.25.0"
   checksum: 9214f83be53c10331899ce27a6d674c45604dc14b177d60a721e94701fa0fe16228e980c004fd55a81f5a0f189f80100f7340ab5800fe4d946e73ef72679a72b
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^1.25.1":
+  version: 1.25.1
+  resolution: "@clerk/types@npm:1.25.1"
+  checksum: 0a3886e87757303c62aa3345ff84c1af5f8d5c968ab11d0c1470dc7d798cbde25eead40b0f8f096c1a19df81088bec50f2e38e00f1c8bbd491b280b5ef9509b2
   languageName: node
   linkType: hard
 
@@ -5455,7 +5462,7 @@ __metadata:
     "@azure/msal-browser": 2.22.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.13.1
+    "@clerk/clerk-js": 2.13.2
     "@clerk/clerk-sdk-node": 2.9.0
     "@clerk/types": 1.25.0
     "@supabase/supabase-js": 1.30.0
@@ -11333,7 +11340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.5, classnames@npm:^2.2.6":
+"classnames@npm:^2.2.5, classnames@npm:^2.3.1":
   version: 2.3.1
   resolution: "classnames@npm:2.3.1"
   checksum: e3b832219042802464e648c41c2e8be96c2c64d2522cfa22fbb5ec088418406c61ab351a682c077c07f691c8b00c9f0ee7939b20fabc6c23da69063252a4ab89
