@@ -11,6 +11,10 @@
   "files": [
     "config"
   ],
+  "scripts": {
+    "test": "jest",
+    "test:watch": "yarn test --watch"
+  },
   "dependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
@@ -64,6 +68,9 @@
     "webpack-manifest-plugin": "4.1.1",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "3.0.0"
+  },
+  "devDependencies": {
+    "jest": "27.5.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
