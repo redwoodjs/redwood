@@ -254,16 +254,75 @@ describe('Form', () => {
     )
   })
 
+  it('ensures required textField is enforced by validation', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField
+          name="userId2"
+          defaultValue=""
+          validation={{ required: true }}
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+    })
+  })
+
+  it('ensures required selectField is enforced by validation', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <SelectField
+          name="groupId2"
+          defaultValue=""
+          validation={{ required: true }}
+        >
+          <option value="">No group</option>
+          <option value={1}>Group 1</option>
+          <option value={2}>Group 2</option>
+        </SelectField>
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+    })
+  })
+
   it('handles int and float blank values gracefully', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <NumberField name="int" defaultValue="" />
+        <NumberField name="int" defaultValue="" emptyAsUndefined={false} />
         <TextField
           name="float"
           defaultValue=""
           validation={{ valueAsNumber: true }}
+          emptyAsUndefined={false}
         />
         <Submit>Save</Submit>
       </Form>
@@ -291,6 +350,60 @@ describe('Form', () => {
           defaultValue="{bad-json}"
           data-testid="jsonField"
           validation={{ valueAsJSON: true }}
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+    fireEvent.click(screen.getByText('Save'))
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+    })
+  })
+
+  it('for a TextAreaField with valueAsJSON.  Bad JSON case 2', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextAreaField
+          name="jsonField"
+          defaultValue="{bad-json}"
+          data-testid="jsonField"
+          validation={{ valueAsJSON: true }}
+          emptyAsUndefined={false}
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+    fireEvent.click(screen.getByText('Save'))
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+    })
+  })
+
+  it('for a TextAreaField with valueAsJSON.  Bad JSON case 3', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextAreaField
+          name="jsonField"
+          defaultValue="{bad-json}"
+          data-testid="jsonField"
+          validation={{ valueAsJSON: true }}
+          emptyAsNull={false}
         />
         <Submit>Save</Submit>
       </Form>
@@ -418,20 +531,33 @@ describe('Form', () => {
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
 
-  it('Fields without emptyAsUndefined or emptyAsNull defined return appropriate values', async () => {
+  it('Fields with emptyAsUndefined={false} and not emptyAsNull defined return appropriate values', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" />
-        <NumberField name="numberField" />
-        <DateField name="dateField" />
-        <SelectField name="selectField" data-testid="select2" defaultValue="">
+        <TextField name="textField" emptyAsUndefined={false} />
+        <TextField name="textAreaField" emptyAsUndefined={false} />
+        <NumberField name="numberField" emptyAsUndefined={false} />
+        <DateField name="dateField" emptyAsUndefined={false} />
+        <SelectField
+          name="selectField"
+          data-testid="select2"
+          defaultValue=""
+          emptyAsUndefined={false}
+        >
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          emptyAsUndefined={false}
+        />
+
         <Submit>Save</Submit>
       </Form>
     )
@@ -442,9 +568,52 @@ describe('Form', () => {
     expect(mockFn).toBeCalledWith(
       {
         textField: '',
+        textAreaField: '',
         numberField: NaN,
-        dateField: expect.any(Date),
+        dateField: expect.objectContaining(new Date(NaN)),
         selectField: '',
+        jsonField: null,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('Fields with emptyAsUndefined not defined return appropriate values (emptyAsUndefined default = true)', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" />
+        <TextAreaField name="textAreaField" />
+        <NumberField name="numberField" />
+        <DateField name="dateField" />
+        <SelectField name="selectField" data-testid="select2" defaultValue="">
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+        />
+
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: undefined,
+        textAreaField: undefined,
+        numberField: undefined,
+        dateField: undefined,
+        selectField: undefined,
+        jsonField: undefined,
       },
       expect.anything() // event that triggered the onSubmit call
     )
@@ -456,6 +625,7 @@ describe('Form', () => {
     render(
       <Form onSubmit={mockFn}>
         <TextField name="textField" emptyAsUndefined />
+        <TextAreaField name="textAreaField" emptyAsUndefined />
         <NumberField name="numberField" emptyAsUndefined />
         <DateField name="dateField" emptyAsUndefined />
         <SelectField
@@ -469,6 +639,13 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          emptyAsUndefined
+        />
+
         <Submit>Save</Submit>
       </Form>
     )
@@ -479,9 +656,11 @@ describe('Form', () => {
     expect(mockFn).toBeCalledWith(
       {
         textField: undefined,
+        textAreaField: undefined,
         numberField: undefined,
         dateField: undefined,
         selectField: undefined,
+        jsonField: undefined,
       },
       expect.anything() // event that triggered the onSubmit call
     )
@@ -492,20 +671,32 @@ describe('Form', () => {
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsUndefined />
-        <NumberField name="numberField" emptyAsUndefined />
-        <DateField name="dateField" emptyAsUndefined />
+        <TextField name="textField" emptyAsNull emptyAsUndefined={false} />
+        <TextAreaField
+          name="textAreaField"
+          emptyAsNull
+          emptyAsUndefined={false}
+        />
+        <NumberField name="numberField" emptyAsNull />
+        <DateField name="dateField" emptyAsNull />
         <SelectField
           name="selectField"
           data-testid="select2"
           defaultValue=""
-          emptyAsUndefined
+          emptyAsNull
         >
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          emptyAsNull
+        />
+
         <Submit>Save</Submit>
       </Form>
     )
@@ -516,26 +707,30 @@ describe('Form', () => {
     expect(mockFn).toBeCalledWith(
       {
         textField: null,
+        textAreaField: null,
         numberField: null,
         dateField: null,
         selectField: null,
+        jsonField: null,
       },
       expect.anything() // event that triggered the onSubmit call
     )
   })
 
-  it('Fields with both emptyAsNull and emptyAsUndefined return undefined and console.warn', async () => {
+  it('Fields with both emptyAsNull and emptyAsUndefined return null if empty', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsUndefined />
-        <NumberField name="numberField" emptyAsUndefined />
-        <DateField name="dateField" emptyAsUndefined />
+        <TextField name="textField" emptyAsNull emptyAsUndefined />
+        <TextAreaField name="textAreaField" emptyAsNull emptyAsUndefined />
+        <NumberField name="numberField" emptyAsNull emptyAsUndefined />
+        <DateField name="dateField" emptyAsNull emptyAsUndefined />
         <SelectField
           name="selectField"
           data-testid="select2"
           defaultValue=""
+          emptyAsNull
           emptyAsUndefined
         >
           <option value="">No option selected</option>
@@ -543,6 +738,14 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          emptyAsNull
+          emptyAsUndefined
+        />
+
         <Submit>Save</Submit>
       </Form>
     )
@@ -550,14 +753,127 @@ describe('Form', () => {
     fireEvent.click(screen.getByText('Save'))
 
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
-    jest.spyOn(global.console, 'warn')
+    //    jest.spyOn(global.console, 'warn')
 
     expect(mockFn).toBeCalledWith(
       {
-        textField: undefined,
-        numberField: undefined,
-        dateField: undefined,
-        selectField: undefined,
+        textField: null,
+        textAreaField: null,
+        numberField: null,
+        dateField: null,
+        selectField: null,
+        jsonField: null,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('NumberFields and DateFields with emptyAsNull still have appropriate validation', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <NumberField
+          name="numberField"
+          data-testid="numberField"
+          emptyAsNull
+          validation={{ min: 10 }}
+        />
+        <DateField name="dateField" emptyAsNull />
+        <Submit>Save</Submit>
+      </Form>
+    )
+    fireEvent.change(screen.getByTestId('numberField'), {
+      target: { value: 2 },
+    })
+    fireEvent.click(screen.getByText('Save'))
+
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+    })
+  })
+
+  it('A textfield with valueAsNumber returns a number, regardless of emptyAsUndefined or emptyAsUndefined', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField
+          name="tf1"
+          validation={{ valueAsNumber: true }}
+          defaultValue="42"
+          emptyAsUndefined={false}
+        />
+        <TextField
+          name="tf2"
+          validation={{ valueAsNumber: true }}
+          defaultValue="42"
+        />
+        <TextField
+          name="tf3"
+          validation={{ valueAsNumber: true }}
+          defaultValue="42"
+          emptyAsNull
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+
+    expect(mockFn).toBeCalledWith(
+      {
+        tf1: 42,
+        tf2: 42,
+        tf3: 42,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('A textfield with valueAsDate returns a date, regardless of emptyAsUndefined or emptyAsUndefined', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField
+          name="tf1"
+          validation={{ valueAsDate: true }}
+          defaultValue="2022-02-01"
+          emptyAsUndefined={false}
+        />
+        <TextField
+          name="tf2"
+          validation={{ valueAsDate: true }}
+          defaultValue="2022-02-01"
+        />
+        <TextField
+          name="tf3"
+          validation={{ valueAsDate: true }}
+          defaultValue="2022-02-01"
+          emptyAsNull
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+
+    expect(mockFn).toBeCalledWith(
+      {
+        tf1: new Date('2022-02-01'),
+        tf2: new Date('2022-02-01'),
+        tf3: new Date('2022-02-01'),
       },
       expect.anything() // event that triggered the onSubmit call
     )
