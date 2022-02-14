@@ -206,10 +206,12 @@ const SET_VALUE_AS_FCNS = {
   },
 }
 
+// This function is passed into r-h-f's validate function if valueAsJSON is set
 const JSONValidation = (val: Record<string, unknown> | null | number) =>
   typeof val === 'number' ? !isNaN(val) : true
 
 /**
+ * ** setCoercion **
  * Handles the flow of coercion, providing a default if none is specified. (And if it can.)
  * Also implements Redwood's extensions to `react-hook-form`'s `valueAs` props.
  *
