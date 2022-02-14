@@ -66,7 +66,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   // Convert command and options into a string that's run via execa
   let args = commands
   for (const [name, value] of Object.entries(options)) {
-    args.push(`--${name}`)
+    args.push(name.length > 1 ? `--${name}`: `-${name}`)
     if (typeof value !== 'boolean') {
       args.push(value)
     }
