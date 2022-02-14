@@ -44,7 +44,7 @@
     "@graphql-codegen/schema-ast": "2.4.1",
     "@graphql-codegen/typescript": "2.4.3",
     "@graphql-codegen/typescript-operations": "2.3.0",
-    "@graphql-codegen/typescript-react-apollo": "3.2.5",
+    "@graphql-codegen/typescript-react-apollo": "3.2.6",
     "@graphql-codegen/typescript-resolvers": "2.5.0",
     "@redwoodjs/graphql-server": "v0.45.0",
     "babel-plugin-graphql-tag": "3.3.0",
