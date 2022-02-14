@@ -87,8 +87,18 @@ export const findApiServerFunctions = (
   return files.filter((f) => isApiFunction(f, cwd))
 }
 
+export const findApiLibFunctions = (cwd: string = getPaths().api.lib) => {
+  const files = fg.sync('**/*.{js,ts}', {
+    cwd,
+    absolute: true,
+    ignore: ignoreApiFiles,
+  })
+
+  return files
+}
+
 export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
-  return fg.sync('dist/functions/*.{ts,js}', {
+  return fg.sync('dist/functions/**/*.{ts,js}', {
     cwd,
     absolute: true,
   })
