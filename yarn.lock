@@ -5401,7 +5401,7 @@ __metadata:
     fastify-url-data: 3.0.3
     jest: 27.5.1
     lodash.escape: 4.0.1
-    pretty-bytes: 5.6.0
+    pretty-bytes: 6.0.0
     pretty-ms: 7.0.1
     qs: 6.10.3
     split2: 4.1.0
@@ -23803,7 +23803,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:5.6.0, pretty-bytes@npm:^5.6.0":
+"pretty-bytes@npm:6.0.0":
+  version: 6.0.0
+  resolution: "pretty-bytes@npm:6.0.0"
+  checksum: 4ef1f24efd118d084a7fdf56887444cb9c66ac4203894d49559dd895e8a5cac2b55b19389b457d7c6e7c6f5e44efff9b4b60c76de92cd86ee2d6068c59686d8b
+  languageName: node
+  linkType: hard
+
+"pretty-bytes@npm:^5.6.0":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
   checksum: f69f494dcc1adda98dbe0e4a36d301e8be8ff99bfde7a637b2ee2820e7cb583b0fc0f3a63b0e3752c01501185a5cf38602c7be60da41bdf84ef5b70e89c370f3
