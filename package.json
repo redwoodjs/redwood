@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:clean": "yarn clean:prisma && rimraf packages/**/dist",
+    "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\"",
     "build:js": "lerna run build:js",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
