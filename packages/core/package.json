@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.44.0",
+  "version": "0.45.0",
   "description": "Foundational packages and config required to build RedwoodJS.",
   "repository": {
     "type": "git",
@@ -26,10 +26,10 @@
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.4",
-    "@redwoodjs/cli": "v0.44.0",
-    "@redwoodjs/eslint-config": "v0.44.0",
-    "@redwoodjs/internal": "v0.44.0",
-    "@redwoodjs/testing": "v0.44.0",
+    "@redwoodjs/cli": "v0.45.0",
+    "@redwoodjs/eslint-config": "v0.45.0",
+    "@redwoodjs/internal": "v0.45.0",
+    "@redwoodjs/testing": "v0.45.0",
     "babel-loader": "8.2.3",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -41,7 +41,7 @@
     "css-loader": "6.6.0",
     "css-minimizer-webpack-plugin": "3.4.1",
     "dotenv-webpack": "7.1.0",
-    "esbuild": "0.14.19",
+    "esbuild": "0.14.21",
     "esbuild-loader": "2.18.0",
     "fast-glob": "3.2.11",
     "file-loader": "6.2.0",
@@ -65,5 +65,5 @@
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "3.0.0"
   },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

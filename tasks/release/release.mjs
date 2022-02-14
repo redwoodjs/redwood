@@ -7,13 +7,7 @@
  * ```
  *
  * @remarks
- *
  * You'll need a GitHub token and an NPM token. (So only @thedavidprice can do this right now.)
- *
- * @remarks
- *
- * - handle the case where a branch already exists; start on the "update package versions" step
- * - at this point, consider using xstate
  */
 import c from 'ansi-colors'
 import notifier from 'node-notifier'
@@ -32,9 +26,7 @@ import {
   ok,
   rocketBoxen,
 } from './prompts.mjs'
-import updateNextReleasePullRequestsMilestone, {
-  closeMilestone,
-} from './updateNextReleasePullRequestsMilestone.mjs'
+import updatePRsMilestone, { closeMilestone } from './updatePRsMilestone.mjs'
 
 let milestone
 
@@ -45,9 +37,12 @@ export default async function release() {
   await validateGitTag(nextVersion)
   await validateMergedPRs(semver)
 
+  const fromTitle = 'next-release' + (semver === 'patch' ? '-patch' : '')
+
   milestone = await confirmRuns(
-    ask`Do you want to update next-release PRs' milestone to ${nextVersion}?`,
-    () => updateNextReleasePullRequestsMilestone(nextVersion)
+    ask`Do you want to update ${fromTitle} PRs' milestone to ${nextVersion}?`,
+    () => updatePRsMilestone(fromTitle, nextVersion),
+    { name: 'update-prs-milestone' }
   )
 
   // Do the release.
@@ -179,9 +174,10 @@ async function validateMergedPRs(semver) {
   if (pullRequests.length) {
     console.log(
       c.bold(
-        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone`
+        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding`
       )
     )
+    await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+no%3Amilestone`
     process.exit(1)
   }
 
@@ -204,10 +200,10 @@ async function validateMergedPRs(semver) {
 
   console.log(
     c.bold(
-      fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch`
+      fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding`
     )
   )
-
+  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3Anext-release-patch`
   process.exit(1)
 }
 
@@ -241,7 +237,7 @@ export const MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE = `
  * @param {string} nextVersion
  */
 // function releaseMajor(nextVersion) {
-//   return eleaseMajorOrMinor('major', nextVersion)
+//   return releaseMajorOrMinor('major', nextVersion)
 // }
 
 /**
@@ -256,24 +252,24 @@ function releaseMinor(nextVersion) {
  * @param {string} nextVersion
  */
 async function releaseMajorOrMinor(semver, nextVersion) {
-  // Checkout main.
-  const currentBranchPO = await $`git branch --show-current`
-  const currentBranch = currentBranchPO.stdout.trim()
-  if (currentBranch !== 'main') {
-    await $`git checkout main`
+  const currentBranch = getCurrentBranch()
+  const releaseBranch = ['release', semver, nextVersion].join('/')
+  const releaseBranchExists = await branchExists(releaseBranch)
+
+  if (currentBranch !== releaseBranch) {
+    if (releaseBranchExists) {
+      await checkoutExisting(releaseBranch)
+    } else {
+      await confirmRuns(
+        ask`Ok to checkout new branch ${releaseBranch}?`,
+        [() => $`git checkout main`, () => $`git checkout -b ${releaseBranch}`],
+        { name: 'checkout', exit: true }
+      )
+    }
   }
 
-  const releaseBranch = ['release', semver, nextVersion].join('/')
-  // In the future we'll expand the control flow on whether the branch exists or not:
-  // await releaseBranchExists(releaseBranch)
-  await confirmRuns(
-    ask`Ok to checkout new branch ${releaseBranch}?`,
-    () => $`git checkout -b ${releaseBranch}`,
-    { exit: true }
-  )
-
   await confirm(
-    ask`Checked out new release branch ${releaseBranch}.\nContinue to publish or stop here to push this branch to GitHub to create an RC`,
+    ask`Continue to publish or stop here to push this branch to GitHub to create an RC`,
     { exit: true }
   )
 
@@ -289,9 +285,14 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   notifier.notify('done')
 
   await confirmRuns(
-    ask`Everything passed local QA. Are you ready to push your branch to GitHub and publish to NPM?`,
+    ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
     [
-      () => $`git push && git push --tags`,
+      () =>
+        $`${['git push', !releaseBranchExists && `-u origin ${releaseBranch}`]
+          .filter(Boolean)
+          .join(' ')}`,
+      // This is supposedly safer than `git push --tags`. See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
+      () => $`git push --follow-tags`,
       // We've had an issue with this one.
       async () => {
         try {
@@ -308,8 +309,10 @@ async function releaseMajorOrMinor(semver, nextVersion) {
     { exit: true }
   )
 
-  await confirmRuns(ask`Do you want to generate release notes?`, () =>
-    generateReleaseNotes(nextVersion)
+  await confirmRuns(
+    ask`Do you want to generate release notes?`,
+    () => generateReleaseNotes(nextVersion),
+    { name: 'generate-release-notes' }
   )
 
   if (milestone) {
@@ -320,65 +323,111 @@ async function releaseMajorOrMinor(semver, nextVersion) {
 }
 
 /**
- * Check if the release branch already exists.
- * If it does, offer to check it out. Otherwise, offer to create it.
- *
- * @param {string} releaseBranch
- */
-// async function releaseBranchExists(releaseBranch) {
-//   const gitBranchPO = await $`git branch`
-
-//   const branches = gitBranchPO.stdout
-//     .trim()
-//     .split('\n')
-//     .map((branch) => branch.trim())
-
-//   if (branches.includes(releaseBranch)) {
-//     return true
-//   }
-
-//   return false
-// }
-
-/**
- * This is a WIP.
- *
  * @param {string} nextVersion
  */
 async function releasePatch(currentVersion, nextVersion) {
-  const previousReleaseBranch = ['tag', currentVersion].join('/')
+  const currentBranch = await getCurrentBranch()
   const releaseBranch = ['release', 'patch', nextVersion].join('/')
 
-  await confirmRuns(
-    ask`Ok to checkout new branch ${releaseBranch} from ${previousReleaseBranch}?`,
-    () => $`git checkout ${previousReleaseBranch} -b ${releaseBranch}`,
-    { exit: true }
-  )
+  if (currentBranch !== releaseBranch) {
+    const releaseBranchExists = await branchExists(releaseBranch)
 
-  await pushAndDiff(releaseBranch, currentVersion)
-  await confirm('Does the diff look ok?', { exit: true })
-  await confirm(
-    ask`Cherry pick and handle the conflicts—tell me when you're done`,
-    { exit: true }
-  )
+    if (releaseBranchExists) {
+      await checkoutExisting(releaseBranch)
+    } else {
+      await confirmRuns(
+        ask`Ok to checkout new branch ${releaseBranch} from ${currentVersion} tag?`,
+        // See https://git-scm.com/book/en/v2/Git-Basics-Tagging
+        // Scroll down to "Checking out Tags".
+        () => $`git checkout -b ${releaseBranch} ${currentVersion}`,
+        { name: 'checkout', exit: true }
+      )
+    }
+  }
 
-  await pushAndDiff(releaseBranch, currentVersion, { exit: true })
-  await confirm('Does the diff look ok?', { exit: true })
+  const releaseBranchExistsOnOrigin = await branchExistsOnOrigin(releaseBranch)
+
+  if (!releaseBranchExistsOnOrigin) {
+    await confirmRuns(
+      ask`Ok to push new branch ${releaseBranch} to GitHub and open diff?`,
+      [
+        () => $`git push -u origin ${releaseBranch}`,
+        () =>
+          $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}...${releaseBranch}`,
+      ],
+      { exit: true }
+    )
+    await confirm('Does the diff look ok?', { exit: true })
+
+    await confirm(
+      ask`${[
+        'Done cherry picking?',
+        'Remember to cherry pick PRs in the same order as they were merged',
+        `And after you're done, run ${`yarn`} and ${`yarn check`}`,
+      ].join('\n')}`,
+      { exit: true }
+    )
+
+    await confirmRuns(
+      ask`Ok to push new branch ${releaseBranch} to GitHub and open diff?`,
+      [
+        () => $`git push`,
+        () =>
+          $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}...${releaseBranch}`,
+      ],
+      { exit: true }
+    )
+    await confirm('Does the diff look ok?', { exit: true })
+  }
 
   await cleanInstallUpdate(nextVersion)
   notifier.notify('done')
 
   await confirm(
-    check`The package versions have been updated. Does everything look right?`,
+    check`The package versions have been updated. Does everything look ok?`,
     { exit: true }
   )
 
   await commitTagQA(nextVersion)
   notifier.notify('done')
 
-  // Merge commit
-  // await $`git checkout main`
-  // await $`git branch -d release/patch/${nextVersion}`
+  await confirmRuns(
+    ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
+    [
+      () => $`git push`,
+      // This is supposedly safer than `git push --tags`. See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
+      () => $`git push --follow-tags`,
+      // We've had an issue with this one.
+      async () => {
+        try {
+          await $`yarn lerna publish from-package`
+          console.log(rocketBoxen(`Released ${c.green(nextVersion)}`))
+        } catch (e) {
+          console.log(
+            `Couldn't run ${c.green('yarn lerna publish from-package')}`
+          )
+          console.log(e)
+        }
+      },
+    ],
+    { exit: true }
+  )
+
+  await confirmRuns(
+    ask`Do you want to generate release notes?`,
+    () => generateReleaseNotes(nextVersion),
+    { name: 'generate-release-notes' }
+  )
+
+  if (milestone) {
+    await confirmRuns(ask`Ok to close milestone ${nextVersion}?`, () =>
+      closeMilestone(milestone.number)
+    )
+  }
+
+  await confirm(ask`Did you merge the release branch into main?`)
+  await confirm(ask`Did you update yarn.lock?`)
+  await confirm(ask`Did you delete the release branch?`)
 }
 
 /**
@@ -392,7 +441,7 @@ function cleanInstallUpdate(nextVersion) {
       () => $`yarn install`,
       () => $`./tasks/update-package-versions ${nextVersion}`,
     ],
-    { exit: true }
+    { name: 'clean-install-update', exit: true }
   )
 }
 
@@ -410,23 +459,54 @@ function commitTagQA(nextVersion) {
       () => $`yarn test`,
     ],
     {
+      name: 'commit-tag-qa',
       exit: true,
     }
   )
 }
 
+async function getCurrentBranch() {
+  const { stdout } = await $`git branch --show-current`
+  return stdout.trim()
+}
+
 /**
- * @param {string} releaseBranch
- * @param {string} currentVersion
+ * @param {string} branch
  */
-function pushAndDiff(releaseBranch, currentVersion) {
-  return confirmRuns(
-    ask`Ok to push new branch ${releaseBranch} and open diff?`,
-    [
-      () => $`git push origin ${releaseBranch}`,
-      () =>
-        $`open https://github.com/redwoodjs/redwood/compare/${currentVersion}..${releaseBranch}`,
-    ],
-    { exit: true }
+// eslint-disable-next-line no-unused-vars
+async function branchExists(branch) {
+  const { stdout } = await $`git branch`
+
+  const branches = stdout
+    .trim()
+    .split('\n')
+    .map((branch) => branch.trim())
+
+  if (branches.includes(branch)) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * @param {string} branch
+ */
+async function branchExistsOnOrigin(branch) {
+  const { stdout } =
+    await $`git ls-remote --heads git@github.com:redwoodjs/redwood ${branch}`
+
+  if (stdout.length) {
+    return true
+  }
+
+  return false
+}
+
+function checkoutExisting(releaseBranch) {
+  confirmRuns(
+    ask`Ok to checkout existing release branch ${releaseBranch}?`,
+    () => $`git checkout ${releaseBranch}`,
+    { name: 'checkout', exit: true }
   )
 }

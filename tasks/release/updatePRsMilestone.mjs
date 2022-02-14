@@ -1,21 +1,19 @@
 /* eslint-env node, es2021 */
-/**
- * - is:pr is:merged no:milestone -> should empty
- * - milestone:next-release-patch -> check empty
- * - close milestone _after_ publish
- */
+import { $ } from 'zx'
+
 import octokit from './octokit.mjs'
-import { confirm, ask, check } from './prompts.mjs'
+import { confirm, confirmRuns, ask, check, ok } from './prompts.mjs'
 
 /**
- * @param {string} title
+ * @param {'next-release' | 'next-release-patch'} fromTitle
+ * @param {string} toTitle
  */
-export default async function updateNextReleasePullRequestsMilestone(title) {
-  let milestone = await getMilestone(title)
+export default async function updatePRsMilestone(fromTitle, toTitle) {
+  let milestone = await getMilestone(toTitle)
 
   if (!milestone) {
     const createOk = await confirm(
-      ask`Milestone ${title} doesn't exist. Ok to create it?`
+      ask`Milestone ${toTitle} doesn't exist. Ok to create it?`
     )
     if (!createOk) {
       return
@@ -23,18 +21,22 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
 
     const {
       data: { node_id: id, number },
-    } = await createMilestone(title)
+    } = await createMilestone(toTitle)
 
-    milestone = { title, id, number }
+    milestone = { title: toTitle, id, number }
   }
 
-  const nextReleaseMilestoneId = await getNextReleaseMilestoneId()
-  const pullRequestIds = await getPullRequestIdsWithMilestone(
-    nextReleaseMilestoneId
-  )
+  const fromMilestoneId = (await getMilestone(fromTitle)).id
+
+  const pullRequestIds = await getPullRequestIdsWithMilestone(fromMilestoneId)
+
+  if (!pullRequestIds.length) {
+    console.log(ok`No pull requests with milestone ${fromTitle}`)
+    return
+  }
 
   const updateOk = await confirm(
-    ask`Ok to update the milestone of ${pullRequestIds.length} PRs from next-release to ${title}?`
+    ask`Ok to update the milestone of ${pullRequestIds.length} PRs from ${fromTitle} to ${toTitle}?`
   )
   if (!updateOk) {
     return
@@ -46,8 +48,10 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
     )
   )
 
-  const looksOk = await confirm(
-    check`Updated the milestone of ${pullRequestIds.length} PRs: https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${title}\nDoes everything look ok?`
+  const looksOk = await confirmRuns(
+    check`Updated the milestone of ${pullRequestIds.length} PRs\nDoes everything look ok?`,
+    () =>
+      $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
   )
   if (looksOk) {
     return milestone
@@ -59,7 +63,7 @@ export default async function updateNextReleasePullRequestsMilestone(title) {
   if (undoPRs) {
     await Promise.all(
       pullRequestIds.map((pullRequestId) =>
-        updatePullRequestMilestone(pullRequestId, nextReleaseMilestoneId)
+        updatePullRequestMilestone(pullRequestId, fromMilestoneId)
       )
     )
   }
@@ -132,50 +136,12 @@ function createMilestone(title) {
 
 /**
  * @typedef {{
- *   repository: {
- *     milestones: {
- *       nodes: Array<{ title: string, id: string }>
- *     }
- *   }
- * }} GetNextReleaseMilestoneIdRes
- */
-async function getNextReleaseMilestoneId() {
-  const {
-    repository: {
-      milestones: { nodes: milestones },
-    },
-  } = /** @type {GetNextReleaseMilestoneIdRes} */ (
-    await octokit.graphql(GET_NEXT_RELEASE_MILESTONE_ID)
-  )
-
-  const { id } = milestones.find(
-    (milestone) => milestone.title === 'next-release'
-  )
-
-  return id
-}
-
-export const GET_NEXT_RELEASE_MILESTONE_ID = `
-  query GetNextReleaseMilestoneId {
-    repository(owner: "redwoodjs", name: "redwood") {
-      milestones(query: "next-release", first: 5) {
-        nodes {
-          title
-          id
-        }
-      }
-    }
-  }
-`
-
-/**
- * @typedef {{
  *   node: {
  *     pullRequests: {
  *       nodes: Array<{ id: string }>
  *     }
  *   }
- * }} GetNextReleasePullRequestIdsRes
+ * }} GetPullRequestIdsRes
  *
  * @param {string} milestoneId
  */
@@ -187,8 +153,8 @@ export async function getPullRequestIdsWithMilestone(milestoneId) {
     node: {
       pullRequests: { nodes: pullRequests },
     },
-  } = /** @type {GetNextReleasePullRequestIdsRes} */ (
-    await octokit.graphql(GET_NEXT_RELEASE_PULL_REQUEST_IDS, {
+  } = /** @type {GetPullRequestIdsRes} */ (
+    await octokit.graphql(GET_PULL_REQUEST_IDS, {
       milestoneId,
     })
   )
@@ -196,8 +162,8 @@ export async function getPullRequestIdsWithMilestone(milestoneId) {
   return pullRequests.map((pullRequest) => pullRequest.id)
 }
 
-export const GET_NEXT_RELEASE_PULL_REQUEST_IDS = `
-  query GetNextReleasePullRequestIds($milestoneId: ID!) {
+export const GET_PULL_REQUEST_IDS = `
+  query GetPullRequestIds($milestoneId: ID!) {
     node(id: $milestoneId) {
       ... on Milestone {
         pullRequests(first: 100) {
@@ -215,13 +181,13 @@ export const GET_NEXT_RELEASE_PULL_REQUEST_IDS = `
  * @param {string} milestoneId
  */
 function updatePullRequestMilestone(pullRequestId, milestoneId) {
-  return octokit.graphql(UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE, {
+  return octokit.graphql(UPDATE_PULL_REQUEST_MILESTONE, {
     pullRequestId,
     milestoneId,
   })
 }
 
-export const UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE = `
+export const UPDATE_PULL_REQUEST_MILESTONE = `
   mutation UpdatePullRequestMilestone($pullRequestId: ID!, $milestoneId: ID!) {
     updatePullRequest(
       input: { pullRequestId: $pullRequestId, milestoneId: $milestoneId }
@@ -234,14 +200,17 @@ export const UPDATE_NEXT_RELEASE_PULL_REQUEST_MILESTONE = `
 /**
  * @param {number} milestone_number
  */
+// eslint-disable-next-line camelcase
 export function closeMilestone(milestone_number) {
   return octokit.request(
     'POST /repos/{owner}/{repo}/milestones/{milestone_number}',
     {
       owner: 'redwoodjs',
       repo: 'redwood',
+      // eslint-disable-next-line camelcase
       milestone_number,
       state: 'closed',
+      due_on: new Date().toISOString(),
     }
   )
 }
@@ -249,12 +218,14 @@ export function closeMilestone(milestone_number) {
 /**
  * @param {number} milestone_number
  */
+// eslint-disable-next-line camelcase
 function deleteMilestone(milestone_number) {
   return octokit.request(
     'DELETE /repos/{owner}/{repo}/milestones/{milestone_number}',
     {
       owner: 'redwoodjs',
       repo: 'redwood',
+      // eslint-disable-next-line camelcase
       milestone_number,
     }
   )
