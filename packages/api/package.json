@@ -38,7 +38,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@redwoodjs/auth": "v0.45.0",
-    "@types/crypto-js": "4.1.0",
+    "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.2",
     "@types/split2": "3.2.1",
