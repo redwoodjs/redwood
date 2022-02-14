@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:clean": "yarn clean:prisma && rimraf packages/**/dist",
+    "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\"",
     "build:js": "lerna run build:js",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
@@ -67,7 +67,7 @@
     "core-js": "3.21.0",
     "cypress": "9.4.1",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.8.0",
+    "eslint": "8.9.0",
     "fast-glob": "3.2.11",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
@@ -84,7 +84,7 @@
     "terminal-link": "2.1.1",
     "typescript": "4.5.5",
     "typescript-transform-paths": "3.3.1",
-    "zx": "4.3.0"
+    "zx": "5.0.0"
   },
   "npmClient": "yarn",
   "packageManager": "yarn@3.1.1"
