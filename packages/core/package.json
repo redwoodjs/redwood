@@ -70,7 +70,7 @@
     "webpack-retry-chunk-load-plugin": "3.0.0"
   },
   "devDependencies": {
-    "jest": "27.5.0"
+    "jest": "27.5.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
