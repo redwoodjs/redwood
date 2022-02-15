@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.44.1",
+  "version": "0.45.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@reach/skip-nav": "0.16.0",
-    "@redwoodjs/auth": "v0.44.1",
+    "@redwoodjs/auth": "v0.45.0",
     "core-js": "3.21.0",
     "lodash.isequal": "4.5.0"
   },

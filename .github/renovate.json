@@ -43,6 +43,8 @@
     "@redwoodjs/structure",
     "@redwoodjs/telemetry",
     "@redwoodjs/testing",
-    "@redwoodjs/web"
+    "@redwoodjs/web",
+    "lru-cache",
+    "pretty-bytes"
   ]
 }

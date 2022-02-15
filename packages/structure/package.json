@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/structure",
-  "version": "0.44.1",
+  "version": "0.45.0",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@prisma/sdk": "3.9.2",
-    "@redwoodjs/internal": "v0.44.1",
+    "@redwoodjs/internal": "v0.45.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
     "deepmerge": "4.2.2",
@@ -58,7 +58,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.178",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.11.24",
+    "@types/node": "16.11.25",
     "@types/vscode": "1.64.0",
     "jest": "27.5.1",
     "typescript": "4.5.5"
