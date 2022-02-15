@@ -207,9 +207,9 @@ export const generateTypeDefGraphQLApi = async () => {
     })
     return f
   } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (api)')
-    console.error()
+    console.log()
+    console.log('No GraphQL type definitions generated (api)')
+    console.log()
     return []
   }
 }
@@ -232,9 +232,9 @@ export const generateTypeDefGraphQLWeb = async () => {
     })
     return f
   } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (web)')
-    console.error()
+    console.log()
+    console.log('No GraphQL type definitions generated (web)')
+    console.log()
     return []
   }
 }
