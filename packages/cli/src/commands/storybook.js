@@ -122,7 +122,6 @@ export const handler = ({
       [
         `--config-dir "${storybookConfig}"`,
         `--output-dir "${buildDirectory}"`,
-        `--open=false`,
       ].filter(Boolean),
       {
         stdio: 'inherit',
