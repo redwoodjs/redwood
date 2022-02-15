@@ -52,7 +52,10 @@ const getProxyConfig = () => {
                 },
               ],
             }
-            res.writeHead(205, { 'Content-Type': 'application/json' })
+            res.writeHead(203, {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
+            })
             res.write(JSON.stringify(msg))
             res.end()
           }
