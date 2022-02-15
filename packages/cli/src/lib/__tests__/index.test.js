@@ -39,7 +39,7 @@ test('nameVariants returns a single word cased variables', () => {
 })
 
 test('nameVariants returns a multi word cased variables', () => {
-  const names = ['FooBar', 'fooBar', 'foo_bar', 'foo-bar', 'FOOBar']
+  const names = ['FooBar', 'fooBar', 'foo_bar', 'foo-bar']
 
   names.forEach((name) => {
     const vars = index.nameVariants(name)
@@ -53,6 +53,17 @@ test('nameVariants returns a multi word cased variables', () => {
     expect(vars.singularParamName).toEqual('foo-bar')
     expect(vars.pluralParamName).toEqual('foo-bars')
   })
+
+  const vars = index.nameVariants('QRCode')
+
+  expect(vars.pascalName).toEqual('QRCode')
+  expect(vars.camelName).toEqual('qrCode')
+  expect(vars.singularPascalName).toEqual('QrCode')
+  expect(vars.pluralPascalName).toEqual('QrCodes')
+  expect(vars.singularCamelName).toEqual('qrCode')
+  expect(vars.pluralCamelName).toEqual('qrCodes')
+  expect(vars.singularParamName).toEqual('qr-code')
+  expect(vars.pluralParamName).toEqual('qr-codes')
 })
 
 test('generateTemplate returns a lodash-templated string', () => {

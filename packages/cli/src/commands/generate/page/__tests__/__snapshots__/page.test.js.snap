@@ -342,31 +342,54 @@ export default Routes",
 }
 `;
 
-exports[`generates typescript pages 1`] = `undefined`;
+exports[`generates typescript pages 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
-exports[`generates typescript pages 2`] = `
-"import TsFilesPage from './TsFilesPage'
+const TSFilesPage = () => {
+  return (
+    <>
+      <MetaTags title=\\"TSFiles\\" description=\\"TSFiles page\\" />
 
-export const generated = () => {
-  return <TsFilesPage />
+      <h1>TSFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSFilesPage/TSFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsFiles</code>, link to me with \`
+        <Link to={routes.tsFiles()}>TSFiles</Link>\`
+      </p>
+    </>
+  )
 }
 
-export default { title: 'Pages/TsFilesPage' }
+export default TSFilesPage
+"
+`;
+
+exports[`generates typescript pages 2`] = `
+"import TSFilesPage from './TSFilesPage'
+
+export const generated = () => {
+  return <TSFilesPage />
+}
+
+export default { title: 'Pages/TSFilesPage' }
 "
 `;
 
 exports[`generates typescript pages 3`] = `
 "import { render } from '@redwoodjs/testing/web'
 
-import TsFilesPage from './TsFilesPage'
+import TSFilesPage from './TSFilesPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
-describe('TsFilesPage', () => {
+describe('TSFilesPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TsFilesPage />)
+      render(<TSFilesPage />)
     }).not.toThrow()
   })
 })
@@ -377,29 +400,29 @@ exports[`generates typescript pages 4`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-type TsParamFilesPageProps = {
+type TSParamFilesPageProps = {
   id: string
 }
 
-const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
+const TSParamFilesPage = ({ id }: TSParamFilesPageProps) => {
   return (
     <>
-      <MetaTags title=\\"TsParamFiles\\" description=\\"TsParamFiles page\\" />
+      <MetaTags title=\\"TSParamFiles\\" description=\\"TSParamFiles page\\" />
 
-      <h1>TsParamFilesPage</h1>
+      <h1>TSParamFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamFiles</code>, link to me with \`
-        <Link to={routes.tsParamFiles({ id: '42' })}>TsParamFiles 42</Link>\`
+        <Link to={routes.tsParamFiles({ id: '42' })}>TSParamFiles 42</Link>\`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>
   )
 }
 
-export default TsParamFilesPage
+export default TSParamFilesPage
 "
 `;
 
@@ -407,28 +430,28 @@ exports[`generates typescript pages 5`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-type TsParamTypeFilesPageProps = {
+type TSParamTypeFilesPageProps = {
   id: number
 }
 
-const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
+const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
   return (
     <>
-      <MetaTags title=\\"TsParamTypeFiles\\" description=\\"TsParamTypeFiles page\\" />
+      <MetaTags title=\\"TSParamTypeFiles\\" description=\\"TSParamTypeFiles page\\" />
 
-      <h1>TsParamTypeFilesPage</h1>
+      <h1>TSParamTypeFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamTypeFiles</code>, link to me with \`
-        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TsParamTypeFiles 42</Link>\`
+        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TSParamTypeFiles 42</Link>\`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>
   )
 }
 
-export default TsParamTypeFilesPage
+export default TSParamTypeFilesPage
 "
 `;
