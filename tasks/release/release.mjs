@@ -287,7 +287,10 @@ async function releaseMajorOrMinor(semver, nextVersion) {
   await confirmRuns(
     ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
     [
-      () => $`git push ${[!releaseBranchExists && `-u origin ${releaseBranch}`].filter(Boolean)}`,
+      () =>
+        $`git push ${[
+          !releaseBranchExists && `-u origin ${releaseBranch}`,
+        ].filter(Boolean)}`,
       () => $`git push --tags`,
       // We've had an issue with this one.
       async () => {
