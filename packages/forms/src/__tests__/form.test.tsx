@@ -317,12 +317,11 @@ describe('Form', () => {
 
     render(
       <Form onSubmit={mockFn}>
-        <NumberField name="int" defaultValue="" emptyAsUndefined={false} />
+        <NumberField name="int" defaultValue="" />
         <TextField
           name="float"
           defaultValue=""
           validation={{ valueAsNumber: true }}
-          emptyAsUndefined={false}
         />
         <Submit>Save</Submit>
       </Form>
@@ -376,7 +375,6 @@ describe('Form', () => {
           defaultValue="{bad-json}"
           data-testid="jsonField"
           validation={{ valueAsJSON: true }}
-          emptyAsUndefined={false}
         />
         <Submit>Save</Submit>
       </Form>
@@ -403,7 +401,6 @@ describe('Form', () => {
           defaultValue="{bad-json}"
           data-testid="jsonField"
           validation={{ valueAsJSON: true }}
-          emptyAsNull={false}
         />
         <Submit>Save</Submit>
       </Form>
@@ -531,31 +528,27 @@ describe('Form', () => {
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
 
-  it('Fields with emptyAsUndefined={false} and not emptyAsNull defined return appropriate values', async () => {
+  it('Fields with emptyAsUndefined and emptyAsNull not defined return appropriate values', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsUndefined={false} />
-        <TextField name="textAreaField" emptyAsUndefined={false} />
-        <NumberField name="numberField" emptyAsUndefined={false} />
-        <DateField name="dateField" emptyAsUndefined={false} />
-        <SelectField
-          name="selectField"
-          data-testid="select2"
-          defaultValue=""
-          emptyAsUndefined={false}
-        >
+        <TextField name="textField" />
+        <TextField name="textAreaField" />
+        <NumberField name="numberField" />
+        <DateField name="dateField" />
+        <SelectField name="selectField" data-testid="select2" defaultValue="">
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <CheckboxField name="checkboxField0" defaultChecked={false} />
+        <CheckboxField name="checkboxField1" defaultChecked={true} />
         <TextAreaField
           name="jsonField"
           defaultValue=""
           validation={{ valueAsJSON: true }}
-          emptyAsUndefined={false}
         />
 
         <Submit>Save</Submit>
@@ -572,48 +565,9 @@ describe('Form', () => {
         numberField: NaN,
         dateField: expect.objectContaining(new Date(NaN)),
         selectField: '',
+        checkboxField0: false,
+        checkboxField1: true,
         jsonField: null,
-      },
-      expect.anything() // event that triggered the onSubmit call
-    )
-  })
-
-  it('Fields with emptyAsUndefined not defined return appropriate values (emptyAsUndefined default = true)', async () => {
-    const mockFn = jest.fn()
-
-    render(
-      <Form onSubmit={mockFn}>
-        <TextField name="textField" />
-        <TextAreaField name="textAreaField" />
-        <NumberField name="numberField" />
-        <DateField name="dateField" />
-        <SelectField name="selectField" data-testid="select2" defaultValue="">
-          <option value="">No option selected</option>
-          <option value={1}>Option 1</option>
-          <option value={2}>Option 2</option>
-          <option value={3}>Option 3</option>
-        </SelectField>
-        <TextAreaField
-          name="jsonField"
-          defaultValue=""
-          validation={{ valueAsJSON: true }}
-        />
-
-        <Submit>Save</Submit>
-      </Form>
-    )
-
-    fireEvent.click(screen.getByText('Save'))
-
-    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
-    expect(mockFn).toBeCalledWith(
-      {
-        textField: undefined,
-        textAreaField: undefined,
-        numberField: undefined,
-        dateField: undefined,
-        selectField: undefined,
-        jsonField: undefined,
       },
       expect.anything() // event that triggered the onSubmit call
     )
@@ -639,6 +593,16 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <CheckboxField
+          name="checkboxField0"
+          defaultChecked={false}
+          emptyAsUndefined
+        />
+        <CheckboxField
+          name="checkboxField1"
+          defaultChecked={true}
+          emptyAsUndefined
+        />
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -660,6 +624,9 @@ describe('Form', () => {
         numberField: undefined,
         dateField: undefined,
         selectField: undefined,
+        checkboxField0: undefined,
+        checkboxField1: true,
+
         jsonField: undefined,
       },
       expect.anything() // event that triggered the onSubmit call
@@ -671,7 +638,7 @@ describe('Form', () => {
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsNull emptyAsUndefined={false} />
+        <TextField name="textField" emptyAsNull />
         <TextAreaField
           name="textAreaField"
           emptyAsNull
@@ -690,6 +657,16 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <CheckboxField
+          name="checkboxField0"
+          defaultChecked={false}
+          emptyAsNull
+        />
+        <CheckboxField
+          name="checkboxField1"
+          defaultChecked={true}
+          emptyAsNull
+        />
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -711,6 +688,8 @@ describe('Form', () => {
         numberField: null,
         dateField: null,
         selectField: null,
+        checkboxField0: null,
+        checkboxField1: true,
         jsonField: null,
       },
       expect.anything() // event that triggered the onSubmit call
@@ -738,6 +717,18 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <CheckboxField
+          name="checkboxField0"
+          defaultChecked={false}
+          emptyAsNull
+          emptyAsUndefined
+        />
+        <CheckboxField
+          name="checkboxField1"
+          defaultChecked={true}
+          emptyAsNull
+          emptyAsUndefined
+        />
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -762,6 +753,8 @@ describe('Form', () => {
         numberField: null,
         dateField: null,
         selectField: null,
+        checkboxField0: null,
+        checkboxField1: true,
         jsonField: null,
       },
       expect.anything() // event that triggered the onSubmit call
@@ -799,7 +792,7 @@ describe('Form', () => {
     })
   })
 
-  it('A textfield with valueAsNumber returns a number, regardless of emptyAsUndefined or emptyAsUndefined', async () => {
+  it('A textfield with valueAsNumber returns a number, regardless of emptyAsUndefined or emptyAsNull', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -808,12 +801,12 @@ describe('Form', () => {
           name="tf1"
           validation={{ valueAsNumber: true }}
           defaultValue="42"
-          emptyAsUndefined={false}
         />
         <TextField
           name="tf2"
           validation={{ valueAsNumber: true }}
           defaultValue="42"
+          emptyAsUndefined
         />
         <TextField
           name="tf3"
@@ -839,7 +832,7 @@ describe('Form', () => {
     )
   })
 
-  it('A textfield with valueAsDate returns a date, regardless of emptyAsUndefined or emptyAsUndefined', async () => {
+  it('A textfield with valueAsDate returns a date, regardless of emptyAsUndefined or emptyAsNull', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -848,12 +841,12 @@ describe('Form', () => {
           name="tf1"
           validation={{ valueAsDate: true }}
           defaultValue="2022-02-01"
-          emptyAsUndefined={false}
         />
         <TextField
           name="tf2"
           validation={{ valueAsDate: true }}
           defaultValue="2022-02-01"
+          emptyAsUndefined
         />
         <TextField
           name="tf3"

@@ -158,7 +158,13 @@ const isValueEmpty = (val: string): boolean => val === ''
 // if appropriate, one of the functions in the SET_VALUE_AS_FCNS object is
 // passed to the react-hook-forms setValueAs prop by the setCoercion function
 const SET_VALUE_AS_FCNS = {
-  valueAsBoolean: (val: string) => !!val,
+  valueAsBoolean: {
+    // r-h-f returns a boolean if a checkBox type, but also handle string case in case valueAsBoolean is used
+    base: (val: boolean | string): boolean => !!val,
+    emptyAsNull: (val: boolean | string): boolean | null => (val ? true : null),
+    emptyAsUndefined: (val: boolean | string): boolean | undefined =>
+      val ? true : undefined,
+  },
   valueAsDate: {
     emptyAsNull: (val: string): Date | null =>
       isValueEmpty(val) ? null : new Date(val),
@@ -239,7 +245,13 @@ const setCoercion = (
 
   if (validation.valueAsBoolean || type === 'checkbox') {
     // boolean case
-    validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean
+    if (emptyAsNull) {
+      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean.emptyAsNull
+    } else if (emptyAsUndefined) {
+      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean.emptyAsUndefined
+    } else {
+      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean.base
+    }
     delete validation.valueAsBoolean
   } else if (validation.valueAsJSON) {
     // JSON case
@@ -591,7 +603,7 @@ const TextAreaField = forwardRef(
       name,
       id,
       emptyAsNull = false,
-      emptyAsUndefined = true,
+      emptyAsUndefined = false,
 
       // for useErrorStyles
       errorClassName,
@@ -647,7 +659,7 @@ const SelectField = forwardRef(
       name,
       id,
       emptyAsNull = false,
-      emptyAsUndefined = true,
+      emptyAsUndefined = false,
 
       // for useErrorStyles
       errorClassName,
@@ -701,6 +713,8 @@ export const CheckboxField = forwardRef(
     {
       name,
       id,
+      emptyAsNull = false,
+      emptyAsUndefined = false,
       // for useErrorStyles
       errorClassName,
       errorStyle,
@@ -732,8 +746,8 @@ export const CheckboxField = forwardRef(
         onChange,
         type,
       },
-      false, // emptyAsNull
-      false, // emptyAsUndefined
+      emptyAsNull,
+      emptyAsUndefined,
       ref
     )
 
@@ -823,7 +837,7 @@ const InputField = forwardRef(
       name,
       id,
       emptyAsNull = false,
-      emptyAsUndefined = true,
+      emptyAsUndefined = false,
       // for useErrorStyles
       errorClassName,
       errorStyle,
