@@ -22,14 +22,14 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@auth0/auth0-spa-js": "1.19.4",
+    "@auth0/auth0-spa-js": "1.20.0",
     "@azure/msal-browser": "2.22.0",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "2.13.2",
     "@clerk/clerk-sdk-node": "2.9.1",
-    "@clerk/types": "1.25.0",
-    "@supabase/supabase-js": "1.30.0",
+    "@clerk/types": "1.25.1",
+    "@supabase/supabase-js": "1.30.2",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.39",
     "firebase": "9.6.6",
