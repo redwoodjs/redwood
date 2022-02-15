@@ -3,6 +3,7 @@ import path from 'path'
 
 import { transform } from '@babel/core'
 import fg from 'fast-glob'
+import { readJSONSync, writeJSONSync } from 'fs-extra'
 import { format } from 'prettier'
 
 import { getPaths } from './paths'
@@ -63,10 +64,10 @@ export function convertTsConfigsToJsConfigs(cwd = getPaths().base) {
 
   tsConfigs
     .filter((tsConfig) => fs.existsSync(path.join(cwd, tsConfig)))
-    .map((tsConfig) => readJSONFileSync(path.join(cwd, tsConfig)))
+    .map((tsConfig) => readJSONSync(path.join(cwd, tsConfig)))
     .map(convertTsConfigToJsConfig)
     .forEach((jsConfig, i) => {
-      writeJSONFileSync(
+      writeJSONSync(
         path.join(cwd, tsConfigs[i].replace('tsconfig', 'jsconfig')),
         jsConfig
       )
@@ -76,14 +77,6 @@ export function convertTsConfigsToJsConfigs(cwd = getPaths().base) {
 function convertTsConfigToJsConfig(tsConfig: any) {
   delete tsConfig.compilerOptions.allowJs
   return tsConfig
-}
-
-function readJSONFileSync(path: string) {
-  return JSON.parse(fs.readFileSync(path, 'utf8'))
-}
-
-function writeJSONFileSync(path: string, data: any) {
-  return fs.writeFileSync(path, JSON.stringify(data, null, 2), 'utf8')
 }
 
 /**
