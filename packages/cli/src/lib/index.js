@@ -45,7 +45,7 @@ export const nameVariants = (name) => {
   const normalizedName = pascalcase(paramCase(singularize(name)))
 
   return {
-    pascalName: pascalcase(paramCase(name)),
+    pascalName: pascalcase(name),
     camelName: camelcase(name),
     singularPascalName: normalizedName,
     pluralPascalName: pluralize(normalizedName),
