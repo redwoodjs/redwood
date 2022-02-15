@@ -68,18 +68,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.19.4":
-  version: 1.19.4
-  resolution: "@auth0/auth0-spa-js@npm:1.19.4"
+"@auth0/auth0-spa-js@npm:1.20.0":
+  version: 1.20.0
+  resolution: "@auth0/auth0-spa-js@npm:1.20.0"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.20.0
+    core-js: ^3.20.3
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
     promise-polyfill: ^8.2.1
     unfetch: ^4.2.0
-  checksum: 6dd53f25f7175dd48a599237898f434bdf1f3953ac5b7f33f64be46407cfb46484ea9ccfab7995db1b3012f8f730823e41ef6993aad48994e312f721f33246d8
+  checksum: 5f45ec3ae04f3834c9a3bbff6c1656b1c13cb1a6099039b6d1445981940298e72e7151eb2594cc0cd08a15bf81b7d310ca8496d2407b30919477473548139642
   languageName: node
   linkType: hard
 
@@ -1822,14 +1822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.25.0":
-  version: 1.25.0
-  resolution: "@clerk/types@npm:1.25.0"
-  checksum: 9214f83be53c10331899ce27a6d674c45604dc14b177d60a721e94701fa0fe16228e980c004fd55a81f5a0f189f80100f7340ab5800fe4d946e73ef72679a72b
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^1.25.1":
+"@clerk/types@npm:1.25.1, @clerk/types@npm:^1.25.1":
   version: 1.25.1
   resolution: "@clerk/types@npm:1.25.1"
   checksum: 0a3886e87757303c62aa3345ff84c1af5f8d5c968ab11d0c1470dc7d798cbde25eead40b0f8f096c1a19df81088bec50f2e38e00f1c8bbd491b280b5ef9509b2
@@ -3026,9 +3019,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-react-apollo@npm:3.2.5":
-  version: 3.2.5
-  resolution: "@graphql-codegen/typescript-react-apollo@npm:3.2.5"
+"@graphql-codegen/typescript-react-apollo@npm:3.2.6":
+  version: 3.2.6
+  resolution: "@graphql-codegen/typescript-react-apollo@npm:3.2.6"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
     "@graphql-codegen/visitor-plugin-common": 2.6.0
@@ -3038,7 +3031,7 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-tag: ^2.0.0
-  checksum: 27db3e0ba3d60e9e97b0ce9cf37a3eb380e9e24f90ad294672e4ecdfd6807d8d203fbdeee35e41f57fffb2c129e3db9a0f75ecc0fc883a3b24d9918d3085c0c8
+  checksum: db4637aad5d842653961e912ec838e71889fb2aa04e411a6cfdc09b679ba96177991cdf9c38680375a15a68a008d1d92042964a1ec335732f59d7df1acd1ac22
   languageName: node
   linkType: hard
 
@@ -5424,7 +5417,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@prisma/client": 3.9.2
     "@redwoodjs/auth": v0.45.0
-    "@types/crypto-js": 4.1.0
+    "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
     "@types/md5": 2.3.2
     "@types/split2": 3.2.1
@@ -5458,13 +5451,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.19.4
+    "@auth0/auth0-spa-js": 1.20.0
     "@azure/msal-browser": 2.22.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.13.2
     "@clerk/clerk-sdk-node": 2.9.1
-    "@clerk/types": 1.25.0
+    "@clerk/types": 1.25.1
     "@supabase/supabase-js": 1.30.0
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.39
@@ -5732,7 +5725,7 @@ __metadata:
     "@graphql-codegen/schema-ast": 2.4.1
     "@graphql-codegen/typescript": 2.4.3
     "@graphql-codegen/typescript-operations": 2.3.0
-    "@graphql-codegen/typescript-react-apollo": 3.2.5
+    "@graphql-codegen/typescript-react-apollo": 3.2.6
     "@graphql-codegen/typescript-resolvers": 2.5.0
     "@redwoodjs/graphql-server": v0.45.0
     "@types/babel-plugin-tester": 9.0.4
@@ -5758,7 +5751,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.2
+    systeminformation: 5.11.3
     toml: 3.0.0
     typescript: 4.5.5
   bin:
@@ -5836,7 +5829,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.178
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.11.24
+    "@types/node": 16.11.25
     "@types/vscode": 1.64.0
     camelcase: 6.3.0
     deepmerge: 4.2.2
@@ -5878,7 +5871,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.2
+    systeminformation: 5.11.3
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -5905,7 +5898,7 @@ __metadata:
     "@types/aws-lambda": 8.10.92
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.0
-    "@types/node": 16.11.24
+    "@types/node": 16.11.25
     "@types/react": 17.0.39
     "@types/react-dom": 17.0.11
     "@types/webpack": 5.28.0
@@ -7314,10 +7307,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/crypto-js@npm:4.1.0":
-  version: 4.1.0
-  resolution: "@types/crypto-js@npm:4.1.0"
-  checksum: 2c646429d01c2166513ee8dd7764e284d9a23dc3f2693f3da0c68edd5845b8446b7390852850abf8706b221ded3be0f86fe0e8627436c128addd472153a48b0f
+"@types/crypto-js@npm:4.1.1":
+  version: 4.1.1
+  resolution: "@types/crypto-js@npm:4.1.1"
+  checksum: e53b712c5d3b72d19c67a06c8bbaaafd989d78f71a2168f1376c8fb84d5744e5166b58d79528a124645e13f13fe4d2c97ee8f03d649ef913e93ca6b8cee41370
   languageName: node
   linkType: hard
 
@@ -7787,10 +7780,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.24":
-  version: 16.11.24
-  resolution: "@types/node@npm:16.11.24"
-  checksum: 288fa4870a40bd05816f1c1c1fbb0764fc5a9f2d5909463765aa660064610af537699df611a45f76686d2da5949b3c30311443a63ab0e823c6f193c676367618
+"@types/node@npm:16.11.25":
+  version: 16.11.25
+  resolution: "@types/node@npm:16.11.25"
+  checksum: 6070de6d1355e0a0b044319467bcaa5d18b77f87a4409418911fc99195e3200eab2eeec9db78e820dc132f5d57e977b8efc69ce3a044c45514e5a9231c3801cc
   languageName: node
   linkType: hard
 
@@ -12147,7 +12140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.21.0, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.20.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.21.0, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.20.3, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.21.0
   resolution: "core-js@npm:3.21.0"
   checksum: ab79d310a853a01474cf69836ecd3fa35bd8abd23527d78d0d233dfe92abe9cab0fd24cb1036ed031612ac4dcf9aff500b9a6e236d4401190fd54137a8d116ad
@@ -27515,12 +27508,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.2":
-  version: 5.11.2
-  resolution: "systeminformation@npm:5.11.2"
+"systeminformation@npm:5.11.3":
+  version: 5.11.3
+  resolution: "systeminformation@npm:5.11.3"
   bin:
     systeminformation: lib/cli.js
-  checksum: 5cb78e2c3c2fbd4cf4f240f05c615863b99f2fb0239b190c747e6d5f047aef0858a6fc1ae0284e64f2ae567ff8915e262e8c7e36792547e0252ec9a70203c0fa
+  checksum: a1b493a84c6b9eb8ca987b06f5f802d430bed96fa0b16a1257526b30aa9518df412b3b25bba404d4853ce16623e5adebf849830b2a66131baf46c660f3dd9a76
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
