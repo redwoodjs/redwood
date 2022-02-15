@@ -5636,13 +5636,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth@npm:v0.44.1":
-  version: 0.44.1
-  resolution: "@redwoodjs/auth@npm:0.44.1"
-  checksum: c5df8d5294befbf8f275e2194ff0d195d06cb6b753f6ea558cba6e76d53639967ea225e489b6e8ff8f4581e1d2ffdb2f75bafe82495cbe5419031751e7d9d6ee
-  languageName: node
-  linkType: hard
-
 "@redwoodjs/auth@v0.45.0, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
@@ -5885,7 +5878,7 @@ __metadata:
     "@graphql-tools/utils": 8.6.1
     "@prisma/client": 3.9.2
     "@redwoodjs/api": v0.45.0
-    "@redwoodjs/auth": v0.44.1
+    "@redwoodjs/auth": v0.45.0
     "@types/lodash.merge": 4.6.6
     "@types/lodash.omitby": 4.6.6
     "@types/uuid": 8.3.4

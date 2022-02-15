@@ -49,7 +49,7 @@
     "@babel/core": "7.16.7",
     "@envelop/testing": "4.0.0",
     "@envelop/types": "2.0.0",
-    "@redwoodjs/auth": "v0.44.1",
+    "@redwoodjs/auth": "v0.45.0",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.4",
