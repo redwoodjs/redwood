@@ -1,20 +1,24 @@
 import path from 'path'
 
 import execa from 'execa'
+import terminalLink from 'terminal-link'
 
 import { getPaths } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
+import c from '../lib/colors'
 
 export const command = 'storybook'
 export const aliases = ['sb']
 export const description =
-  'Launch Storybook: An isolated component development environment'
+  'Launch Storybook: a tool for building UI components and pages in isolation'
 
 export const builder = (yargs) => {
   yargs
     .option('open', {
       describe: 'Open storybooks in your browser on start',
       type: 'boolean',
-      default: false,
+      default: true,
     })
     .option('build', {
       describe: 'Build Storybook',
@@ -43,24 +47,30 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
-    .check((argv) => {
-      if (argv.build && argv.smokeTest) {
-        throw new Error('Can not provide both "--build" and "--smoke-test"')
-      }
-      if (argv.build && argv.open) {
-        throw new Error('Can not provide both "--build" or "--open"')
-      }
-      return true
-    })
+    // .check((argv) => {
+    //   if (argv.build && argv.smokeTest) {
+    //     throw new Error('Can not provide both "--build" and "--smoke-test"')
+    //   }
+    //   if (argv.build && argv.open) {
+    //     throw new Error('Can not provide both "--build" or "--open"')
+    //   }
+    //   return true
+    // })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#storybook'
+      )}`
+    )
 }
 
 export const handler = ({
-  open,
-  port,
-  build,
-  buildDirectory,
-  managerCache,
-  smokeTest,
+  open = true,
+  port = 7910,
+  build = false,
+  buildDirectory = 'public/storybook',
+  managerCache = true,
+  smokeTest = false,
 }) => {
   const cwd = getPaths().web.base
 
@@ -77,20 +87,75 @@ export const handler = ({
     require.resolve('@redwoodjs/testing/config/storybook/main.js')
   )
 
-  execa(
-    `yarn ${build ? 'build' : 'start'}-storybook`,
-    [
-      `--config-dir "${storybookConfig}"`,
-      !build && `--port ${port}`,
-      !build && '--no-version-updates',
-      !managerCache && '--no-manager-cache',
-      build && `--output-dir "${buildDirectory}"`,
-      smokeTest && `--ci --smoke-test`,
-    ].filter(Boolean),
-    {
-      stdio: 'inherit',
-      shell: true,
-      cwd,
+  // Case 1: yarn rw sb
+  // run start-storybook
+  // open in browser (default true)
+  // set port (default 7910)
+  // directory options are hard-coded
+  //NOTE: `--no-manager-cache` option is only available for `start-storybook`
+
+  if (open) {
+    execa(
+      `yarn start-storybook`,
+      [
+        `--config-dir "${storybookConfig}"`,
+        `--port ${port}`,
+        !managerCache && '--no-manager-cache',
+      ].filter(Boolean),
+      {
+        stdio: 'inherit',
+        shell: true,
+        cwd,
+      }
+    )
+  }
+
+  // Case 2: yarn rw sb --build
+  // build-directory option (default web/public/storybook)
+  // directory for config is hard-coded
+  // manager-cache option (default true)
+  //NOTE: `--no-manager-cache` option is only available for `start-storybook`
+
+  if (build) {
+    execa(
+      `yarn build-storybook`,
+      [
+        `--config-dir "${storybookConfig}"`,
+        `--output-dir "${buildDirectory}"`,
+        `--open=false`,
+      ].filter(Boolean),
+      {
+        stdio: 'inherit',
+        shell: true,
+        cwd,
+      }
+    )
+  }
+
+  // Case 3: yarn rw sb --smoke-test
+  // runs the start-storybook command; exits gracefully if started successful, throws otherwise
+  // passes --smoke-test and --ci options
+  try {
+    if (smokeTest) {
+      execa(
+        `yarn start-storybook`,
+        [
+          `--config-dir "${storybookConfig}"`,
+          `--port ${port}`,
+          // !managerCache && '--no-manager-cache',
+          `--smoke-test`,
+          `--ci`,
+        ].filter(Boolean),
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd,
+        }
+      )
     }
-  )
+  } catch (e) {
+    console.log(c.error(e.message))
+    errorTelemetry(process.argv, e.message)
+    process.exit(1)
+  }
 }
