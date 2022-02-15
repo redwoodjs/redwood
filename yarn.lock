@@ -5458,7 +5458,7 @@ __metadata:
     "@clerk/clerk-js": 2.13.2
     "@clerk/clerk-sdk-node": 2.9.1
     "@clerk/types": 1.25.1
-    "@supabase/supabase-js": 1.30.0
+    "@supabase/supabase-js": 1.30.2
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.39
     firebase: 9.6.6
@@ -6923,15 +6923,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.30.0":
-  version: 1.30.0
-  resolution: "@supabase/supabase-js@npm:1.30.0"
+"@supabase/supabase-js@npm:1.30.2":
+  version: 1.30.2
+  resolution: "@supabase/supabase-js@npm:1.30.2"
   dependencies:
     "@supabase/gotrue-js": ^1.22.0
     "@supabase/postgrest-js": ^0.36.0
     "@supabase/realtime-js": ^1.3.5
     "@supabase/storage-js": ^1.5.1
-  checksum: e06ab57f07e2ff7fab9cee5412bd13c9bf90a6e7b5e13cb62de1804399de87e5cc2a7fca2505d78c11f7616cad12bacd04ec81e6ca1e969d32906d225dc75c78
+  checksum: 89c9d6355d465e0234bb8371f4a840be771ca0de6369f58920df156c809f91261259cc6980350150c79b986ac5b6b5c207f9510804e21181a556451edf28c4d7
   languageName: node
   linkType: hard
 
