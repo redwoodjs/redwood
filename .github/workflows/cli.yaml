@@ -12,7 +12,7 @@ jobs:
         os: ['ubuntu-latest', 'windows-latest']
         node-version: ['16']
         # TODO determine if we need both versions
-      fail-fast: true
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     env:
@@ -50,9 +50,7 @@ jobs:
         id: createpath
         run: |
           yarn make-dir /tmp/redwood-project
-          project_path="/tmp/redwood-project"
-          echo "::set-output name=project_path::$project_path"
-          echo $project_path
+          echo "::set-output name=project_path::'/tmp/redwood-project'"
 
       - name: Create Redwood Project
         run: |
