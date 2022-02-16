@@ -56,19 +56,15 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
  * @param {string} cwd
  */
 export function convertTsConfigsToJsConfigs(cwd = getPaths().base) {
-  const tsConfigs = [
-    'api/tsconfig.json',
-    'web/tsconfig.json',
-    'scripts/tsconfig.json',
-  ]
+  // Should find 'api/tsconfig.json`, `web/tsconfig.json`, and `scripts/tsconfig.json`.
+  const tsConfigs = fg.sync('*/tsconfig.json', { cwd, absolute: true })
 
   tsConfigs
-    .filter((tsConfig) => fs.existsSync(path.join(cwd, tsConfig)))
-    .map((tsConfig) => readJSONSync(path.join(cwd, tsConfig)))
+    .map((tsConfig) => readJSONSync(tsConfig))
     .map(convertTsConfigToJsConfig)
     .forEach((jsConfig, i) => {
       writeJSONSync(
-        path.join(cwd, tsConfigs[i].replace('tsconfig', 'jsconfig')),
+        path.join(tsConfigs[i].replace('tsconfig', 'jsconfig')),
         jsConfig
       )
     })
