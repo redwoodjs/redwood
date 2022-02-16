@@ -100,7 +100,8 @@ export const sanitizeArgv = (argv: Array<string>) => {
     SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
   if (sensativeCommand) {
-    // redact .positions does not exist on type
+    // redact positional arguments
+    // TODO .positions does not exist on type
     if (sensativeCommand.positions) {
       sensativeCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
