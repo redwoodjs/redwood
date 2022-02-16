@@ -6,6 +6,7 @@ const path = require('path')
 
 const chalk = require('chalk')
 const execa = require('execa')
+const fse = require('fs-extra')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
 const rimraf = require('rimraf')
@@ -37,6 +38,11 @@ const args = yargs
     type: 'boolean',
     describe: 'Verbose output',
   })
+  .option('copyFromFixture', {
+    default: true,
+    type: 'boolean',
+    describe: 'Copy the test project from the __fixtures__ folder',
+  })
   .option('clean', {
     default: false,
     type: 'boolean',
@@ -61,7 +67,7 @@ const args = yargs
   .help()
   .strict().argv
 
-const { typescript, canary, link, verbose, clean } = args
+const { typescript, canary, link, verbose, clean, copyFromFixture } = args
 
 const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
 
@@ -101,6 +107,23 @@ const createProject = async () => {
   )
 }
 
+const copyProject = async () => {
+  if (clean) {
+    rimraf.sync(OUTPUT_PROJECT_PATH)
+  }
+
+  const FIXTURE_TESTPROJ_PATH = path.join(
+    RW_FRAMEWORKPATH,
+    '__fixtures__/test-project'
+  )
+
+  await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
+
+  // Make sure no lockfiles are accidentally copied
+  fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
+  return
+}
+
 const globalTasks = () =>
   new Listr(
     [
@@ -116,7 +139,13 @@ const globalTasks = () =>
       },
       {
         title: 'Creating project',
-        task: () => createProject(),
+        task: () => {
+          if (copyFromFixture) {
+            return copyProject()
+          } else {
+            return createProject()
+          }
+        },
       },
       {
         title: '[link] Building Redwood framework',
@@ -153,6 +182,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
+        skip: () => copyFromFixture, // already configured in fixture
       },
       {
         title: 'Installing node_modules',
@@ -162,6 +192,29 @@ const globalTasks = () =>
             ['--non-interactive', !verbose && '--silent'].filter(Boolean),
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
+        },
+      },
+      {
+        title: 'Updating ports in redwood.toml...',
+        task: () => {
+          const REDWOOD_TOML_PATH = path.join(
+            OUTPUT_PROJECT_PATH,
+            'redwood.toml'
+          )
+          const redwoodToml = fs.readFileSync(REDWOOD_TOML_PATH).toString()
+          let newRedwoodToml = redwoodToml
+
+          newRedwoodToml = newRedwoodToml.replace(
+            /\port = 8910/,
+            'port = "${WEB_DEV_PORT:8910}"'
+          )
+
+          newRedwoodToml = newRedwoodToml.replace(
+            /\port = 8911/,
+            'port = "${API_DEV_PORT:8911}"'
+          )
+
+          fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
         },
       },
       {
@@ -205,10 +258,22 @@ const globalTasks = () =>
       {
         title: 'Apply web codemods',
         task: () => webTasks(OUTPUT_PROJECT_PATH, { verbose, link }),
+        enabled: () => !copyFrameworkPackages,
       },
       {
         title: 'Apply api codemods',
         task: () => apiTasks(OUTPUT_PROJECT_PATH, { verbose }),
+        enabled: () => !copyFrameworkPackages,
+      },
+      {
+        title: 'Running prisma migrate reset',
+        task: () => {
+          return execa(
+            'yarn rw prisma migrate reset',
+            ['--force'],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
       },
       {
         title: 'Convert to JS',
