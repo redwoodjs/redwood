@@ -48,10 +48,10 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
     )
   )
 
-  const looksOk = await confirmRuns(
-    check`Updated the milestone of ${pullRequestIds.length} PRs\nDoes everything look ok?`,
-    () =>
-      $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
+  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
+
+  const looksOk = await confirm(
+    check`Updated the milestone of ${pullRequestIds.length} PRs\nDoes everything look ok?`
   )
   if (looksOk) {
     return milestone
