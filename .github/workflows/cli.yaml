@@ -56,7 +56,7 @@ jobs:
 
       - name: Create Redwood Project
         run: |
-          cp ./__fixtures__/test-project ${{ steps.createpath.outputs.project_path }}
+          cp -R ./__fixtures__/test-project ${{ steps.createpath.outputs.project_path }}
 
       - name: Add Framework Dependencies to Project
         run: |
