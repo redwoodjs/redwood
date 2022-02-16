@@ -42,7 +42,7 @@ export const ActiveRouteLoader = ({
   const announcementRef = useRef<HTMLDivElement>(null)
   const waitingFor = useRef<string>('')
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
-    [path]: { page: ArlNullPage, state: 'PRE_SHOW', location },
+    [path]: { page: ArlNullPage, specName: '', state: 'PRE_SHOW', location },
   })
   const [renderedChildren, setRenderedChildren] = useState<
     React.ReactNode | undefined
@@ -80,6 +80,7 @@ export const ActiveRouteLoader = ({
         ...loadingState,
         [path]: {
           page: ArlNullPage,
+          specName: '',
           state: 'PRE_SHOW',
           location,
         },
@@ -95,6 +96,7 @@ export const ActiveRouteLoader = ({
             ...loadingState,
             [path]: {
               page: whileLoadingPage || ArlWhileLoadingNullPage,
+              specName: '',
               state: 'SHOW_LOADING',
               location,
             },
@@ -119,6 +121,7 @@ export const ActiveRouteLoader = ({
             ...loadingState,
             [path]: {
               page: module.default,
+              specName: name,
               state: 'DONE',
               location,
             },
@@ -134,11 +137,31 @@ export const ActiveRouteLoader = ({
       clearLoadingTimeout()
       startPageLoadTransition(spec, delay)
     } else {
-      // Handle navigating to the same page again, but with different path
-      // params (i.e. new `location`)
-      setLoadingState((loadingState) => {
-        const page = loadingState[path]?.page || ArlNullPage
-        return { ...loadingState, [path]: { page, state: 'DONE', location } }
+      unstable_batchedUpdates(() => {
+        // Handle navigating to the same page again, but with different path
+        // params (i.e. new `location` or route params)
+        setLoadingState((loadingState) => {
+          // If path is same, fetch the page again
+          let existingPage = loadingState[path]?.page
+          // If path is different, try to find the existing page
+          if (!existingPage) {
+            const pageState = Object.values(loadingState).find(
+              (state) => state?.specName === spec.name
+            )
+            existingPage = pageState?.page
+          }
+          return {
+            ...loadingState,
+            [path]: {
+              page: existingPage || ArlNullPage,
+              specName: spec.name,
+              state: 'DONE',
+              location,
+            },
+          }
+        })
+        setRenderedChildren(children)
+        setRenderedPath(path)
       })
     }
 
@@ -159,6 +182,7 @@ export const ActiveRouteLoader = ({
     const prerenderLoadingState: LoadingStateRecord = {
       [path]: {
         state: 'DONE',
+        specName: spec.name,
         page: PageFromLoader,
         location,
       },

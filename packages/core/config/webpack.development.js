@@ -24,6 +24,42 @@ const getProxyConfig = () => {
         headers: {
           Connection: 'keep-alive',
         },
+        onError: function (err, req, res) {
+          if (err.code === 'ECONNRESET' || err.code === 'ECONNREFUSED') {
+            const msg = {
+              errors: [
+                {
+                  message:
+                    'The RedwoodJS API server is not available or is currently reloading. Please refresh.',
+                },
+              ],
+            }
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/203
+            // The HTTP 203 Non-Authoritative Information response status indicates that the request was successful
+            // but the enclosed payload has been modified by a transforming proxy from that of the origin server's 200 (OK) response
+            res.writeHead(203, {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
+            })
+            res.write(JSON.stringify(msg))
+            res.end()
+          } else {
+            const msg = {
+              errors: [
+                {
+                  message:
+                    'An error occurred. Please check your dev console for logs, or restart your RedwoodJS api server.',
+                },
+              ],
+            }
+            res.writeHead(203, {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
+            })
+            res.write(JSON.stringify(msg))
+            res.end()
+          }
+        },
       },
     }
   }

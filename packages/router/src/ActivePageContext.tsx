@@ -7,6 +7,7 @@ export type LoadingState = 'PRE_SHOW' | 'SHOW_LOADING' | 'DONE'
 export type LoadingStateRecord = Record<
   string,
   | {
+      specName: string
       state: LoadingState
       page: React.ComponentType<unknown>
       location: LocationContextType
