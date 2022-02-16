@@ -52,7 +52,7 @@
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@testing-library/jest-dom": "5.16.2",
-    "@testing-library/react": "12.1.2",
+    "@testing-library/react": "12.1.3",
     "@testing-library/user-event": "13.5.0",
     "@types/jest": "27.4.0",
     "@types/jscodeshift": "0.11.3",
