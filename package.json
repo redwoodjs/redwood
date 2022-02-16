@@ -57,7 +57,7 @@
     "@types/jest": "27.4.0",
     "@types/jscodeshift": "0.11.3",
     "@types/lodash.template": "4.5.0",
-    "@types/ncp": "^2",
+    "@types/ncp": "2.0.5",
     "@types/prompts": "2.4.0",
     "all-contributors-cli": "6.20.0",
     "ansi-colors": "4.1.1",
