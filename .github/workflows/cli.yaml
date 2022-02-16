@@ -71,28 +71,56 @@ jobs:
         run: |
           yarn project:copy ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw info`
-        run: |
-          yarn rw info
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
       - name: Run `rw build`
         run: |
           yarn rw build
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run "prisma migrate dev"
+      - name: Run `rw lint`
         run: |
-          yarn rw prisma migrate dev --name ci-test
+          yarn rw lint ./api/src --fix
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run "g page"
+      - name: Run "rw test"
         run: |
-          yarn rw g page home /
+          yarn rw test --no-watch
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Throw Error | Run `rw g sdl <model>`
+      - name: Run "rw type-check"
         run: |
-          yarn rw g sdl DoesNotExist
+          yarn rw type-check
         working-directory: ${{ steps.createpath.outputs.project_path }}
-        continue-on-error: true
+
+      - name: Run "rw storybook"
+        run: |
+          yarn rw sb --smoke-test
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "rw exec"
+        run: |
+          yarn rw g script testScript && yarn rw exec testScript
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "prisma generate"
+        run: |
+          yarn rw prisma generate
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "data-migrate install"
+        run: |
+          yarn rw data-migrate install
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "prisma migrate"
+        run: |
+          yarn rw prisma migrate dev --name=just-a-test
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "rw data-migrate"
+        run: |
+          yarn rw dataMigrate up
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+
+
+
