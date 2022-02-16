@@ -61,7 +61,7 @@ jobs:
       - name: Run Project Yarn Install
         run: |
           yarn install
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: "${{ steps.createpath.outputs.project_path }}"
 
       - name: Copy Framework Packages to Project
         run: |
