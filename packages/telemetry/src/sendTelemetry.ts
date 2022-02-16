@@ -86,6 +86,7 @@ const getInfo = async (presets = {}) => {
     npmVersion: info.Binaries?.npm?.version,
     vsCodeVersion: info.IDEs?.VSCode?.version,
     redwoodVersion:
+      //TODO redwoodVersion undefinded
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
   }
@@ -99,7 +100,7 @@ export const sanitizeArgv = (argv: Array<string>) => {
     SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
   if (sensativeCommand) {
-    // redact positional arguments
+    // redact .positions does not exist on type
     if (sensativeCommand.positions) {
       sensativeCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
@@ -110,6 +111,7 @@ export const sanitizeArgv = (argv: Array<string>) => {
     }
 
     // redact --option arguments
+    //TODO .options does not exist on type
     if (sensativeCommand.options) {
       sensativeCommand.options.forEach((option: string, index: number) => {
         const argIndex = args.indexOf(option)
