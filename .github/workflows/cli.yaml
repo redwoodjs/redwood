@@ -48,7 +48,11 @@ jobs:
 
       - name: Create a temporary directory
         id: createpath
-        uses: ./.github/actions/mktempdir
+        run: |
+          project_path=$(yarn make-dir /tmp/redwood-project)
+          echo "::set-output name=project_path::$project_path"
+          framework_path=$(pwd)
+          echo "::set-output name=framework_path::$framework_path"
 
       - name: Create Redwood Project
         run: |
