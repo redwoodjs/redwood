@@ -1,7 +1,7 @@
 name: 'mktempdir'
 description: 'Make a temporary directory'
 outputs:
-  tempdir:
+  project_path:
     description: 'The path to the temporary directory'
 runs:
   using: 'node16'
