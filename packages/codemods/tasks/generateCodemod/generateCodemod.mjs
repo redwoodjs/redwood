@@ -63,7 +63,7 @@ async function generateCodemod(version, name, kind) {
 
   // Make the destination.
   const dest = new URL(
-    `../../packages/codemods/src/codemods/${version}/${name}/`,
+    `../../src/codemods/${version}/${name}/`,
     import.meta.url
   )
   const [testFixturesDest, testsDest] = ['__testfixtures__/', '__tests__/'].map(
