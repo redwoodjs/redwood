@@ -1,8 +1,0 @@
-name: 'mktempdir'
-description: 'Make a temporary directory'
-outputs:
-  project_path:
-    description: 'The path to the temporary directory'
-runs:
-  using: 'node16'
-  main: 'mktempdir.mjs'

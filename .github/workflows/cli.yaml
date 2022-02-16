@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  cypress-run:
+  cli-checks-and-telemetry-benchmarks:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
@@ -46,114 +46,95 @@ jobs:
           yarn build:clean || echo "Project already clean"
           yarn build:js
 
-      - name: Create a temporary directory
-        id: createpath
-        run: |
-          yarn make-dir /tmp/redwood-project
-          echo "::set-output name=project_path::/tmp/redwood-project"
-
-      - name: Create Redwood Project
-        run: |
-          yarn ncp __fixtures__/test-project ${{ steps.createpath.outputs.project_path }}
-
-      - name: Add Framework Dependencies to Project
-        run: |
-          yarn project:deps ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run Project Yarn Install
-        run: |
-          yarn install
-        working-directory: "${{ steps.createpath.outputs.project_path }}"
-
-      - name: Copy Framework Packages to Project
-        run: |
-          yarn project:copy ${{ steps.createpath.outputs.project_path }}
+      - name: Setup test project
+        id: setup_test_project
+        uses: ./.github/actions/setup_test_project
 
       - name: Run `rw info`
         run: |
           yarn rw info
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw build` without prerender
         run: |
           yarn rw build --no-prerender
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw prerender`
         run: |
           yarn rw prerender --verbose
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw lint`
         run: |
           yarn rw lint ./api/src --fix
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw test api"
         run: |
           yarn rw test api --no-watch
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw test web"
         run: |
           yarn rw test web --no-watch
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw type-check"
         run: |
           yarn rw type-check
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw check"
         run: |
           yarn rw check
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw storybook"
         run: |
           yarn rw sb --smoke-test
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw exec"
         run: |
           yarn rw g script testScript && yarn rw exec testScript
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "prisma generate"
         run: |
           yarn rw prisma generate
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "data-migrate install"
         run: |
           yarn rw data-migrate install
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "prisma migrate"
         run: |
           yarn rw prisma migrate dev --name ci-test
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw data-migrate"
         run: |
           yarn rw dataMigrate up
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw deploy --help`
         run: yarn rw setup deploy --help && yarn rw deploy --help
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw setup ui --help`
         run: yarn rw setup --help && yarn rw setup ui --help
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "g page"
         run: |
           yarn rw g page ciTest
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Throw Error | Run `rw g sdl <model>`
         run: |
           yarn rw g sdl DoesNotExist
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
         continue-on-error: true
