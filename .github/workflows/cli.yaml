@@ -50,7 +50,7 @@ jobs:
         id: createpath
         run: |
           yarn make-dir /tmp/redwood-project
-          echo "::set-output name=project_path::'/tmp/redwood-project'"
+          echo "::set-output name=project_path::/tmp/redwood-project"
 
       - name: Create Redwood Project
         run: |
