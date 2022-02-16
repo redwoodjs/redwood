@@ -76,19 +76,34 @@ jobs:
           yarn rw build
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: Run `rw prerender`
+        run: |
+          yarn rw prerender --verbose
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
       - name: Run `rw lint`
         run: |
           yarn rw lint ./api/src --fix
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run "rw test"
+      - name: Run "rw test api"
         run: |
-          yarn rw test --no-watch
+          yarn rw test api --no-watch
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "rw test web"
+        run: |
+          yarn rw test web --no-watch
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run "rw type-check"
         run: |
           yarn rw type-check
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "rw check"
+        run: |
+          yarn rw check
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run "rw storybook"
@@ -121,6 +136,10 @@ jobs:
           yarn rw dataMigrate up
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: Run `rw deploy --help`
+        run: yarn rw setup deploy --help && yarn rw deploy --help
+        working-directory: ${{ steps.createpath.outputs.project_path }}
 
-
-
+      - name: Run `rw setup ui --help`
+        run: yarn rw setup --help && yarn rw setup ui --help
+        working-directory: ${{ steps.createpath.outputs.project_path }}
