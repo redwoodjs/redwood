@@ -47,15 +47,19 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
-    // .check((argv) => {
-    //   if (argv.build && argv.smokeTest) {
-    //     throw new Error('Can not provide both "--build" and "--smoke-test"')
-    //   }
-    //   if (argv.build && argv.open) {
-    //     throw new Error('Can not provide both "--build" or "--open"')
-    //   }
-    //   return true
-    // })
+    .check((argv) => {
+      if (argv.build && argv.smokeTest) {
+        throw new Error('Can not provide both "--build" and "--smoke-test"')
+      }
+      if (argv.build && argv.open) {
+        console.warn(
+          c.warning(
+            'Warning: --open option has no effect when running Storybook build'
+          )
+        )
+      }
+      return true
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -65,12 +69,13 @@ export const builder = (yargs) => {
 }
 
 export const handler = ({
-  open = true,
-  port = 7910,
-  build = false,
-  buildDirectory = 'public/storybook',
-  managerCache = true,
-  smokeTest = false,
+  // eslint-disable-next-line no-unused-vars
+  open,
+  port,
+  build,
+  buildDirectory,
+  managerCache,
+  smokeTest,
 }) => {
   const cwd = getPaths().web.base
 
@@ -87,63 +92,45 @@ export const handler = ({
     require.resolve('@redwoodjs/testing/config/storybook/main.js')
   )
 
-  // Case 1: yarn rw sb
-  // run start-storybook
-  // open in browser (default true)
-  // set port (default 7910)
-  // directory options are hard-coded
-  //NOTE: `--no-manager-cache` option is only available for `start-storybook`
-
-  if (open) {
-    execa(
-      `yarn start-storybook`,
-      [
-        `--config-dir "${storybookConfig}"`,
-        `--port ${port}`,
-        !managerCache && '--no-manager-cache',
-      ].filter(Boolean),
-      {
-        stdio: 'inherit',
-        shell: true,
-        cwd,
-      }
-    )
-  }
-
-  // Case 2: yarn rw sb --build
-  // build-directory option (default web/public/storybook)
-  // directory for config is hard-coded
-  // manager-cache option (default true)
-  //NOTE: `--no-manager-cache` option is only available for `start-storybook`
-
-  if (build) {
-    execa(
-      `yarn build-storybook`,
-      [
-        `--config-dir "${storybookConfig}"`,
-        `--output-dir "${buildDirectory}"`,
-      ].filter(Boolean),
-      {
-        stdio: 'inherit',
-        shell: true,
-        cwd,
-      }
-    )
-  }
-
-  // Case 3: yarn rw sb --smoke-test
-  // runs the start-storybook command; exits gracefully if started successful, throws otherwise
-  // passes --smoke-test and --ci options
   try {
-    if (smokeTest) {
+    if (build) {
+      execa(
+        `yarn build-storybook`,
+        [
+          `--config-dir "${storybookConfig}"`,
+          `--output-dir "${buildDirectory}"`,
+          !managerCache && '--no-manager-cache',
+        ].filter(Boolean),
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd,
+        }
+      )
+    } else if (smokeTest) {
       execa(
         `yarn start-storybook`,
         [
           `--config-dir "${storybookConfig}"`,
           `--port ${port}`,
-          // !managerCache && '--no-manager-cache',
           `--smoke-test`,
           `--ci`,
+          `--no-version-updates`,
+        ].filter(Boolean),
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd,
+        }
+      )
+    } else {
+      execa(
+        `yarn start-storybook`,
+        [
+          `--config-dir "${storybookConfig}"`,
+          `--port ${port}`,
+          !managerCache && '--no-manager-cache',
+          '--no-version-updates',
         ].filter(Boolean),
         {
           stdio: 'inherit',
