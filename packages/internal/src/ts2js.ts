@@ -57,8 +57,11 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
  */
 export function convertTsConfigsToJsConfigs(cwd = getPaths().base) {
   // Should find 'api/tsconfig.json`, `web/tsconfig.json`, and `scripts/tsconfig.json`.
-  const tsConfigs = fg.sync('*/tsconfig.json', { cwd, absolute: true, ignore: '**/node_modules'
- })
+  const tsConfigs = fg.sync('*/tsconfig.json', {
+    cwd,
+    absolute: true,
+    ignore: ['node_modules'],
+  })
 
   tsConfigs
     .map((tsConfig) => readJSONSync(tsConfig))
