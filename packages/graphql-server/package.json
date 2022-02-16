@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@envelop/core": "1.7.1",
+    "@envelop/core": "2.0.0",
     "@envelop/depth-limit": "1.2.3",
     "@envelop/disable-introspection": "3.0.0",
     "@envelop/filter-operation-type": "3.0.0",
@@ -48,7 +48,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@envelop/testing": "4.0.0",
-    "@envelop/types": "1.5.1",
+    "@envelop/types": "2.0.0",
     "@redwoodjs/auth": "v0.45.0",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
