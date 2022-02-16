@@ -99,7 +99,7 @@ export const handler = ({
         [
           `--config-dir "${storybookConfig}"`,
           `--output-dir "${buildDirectory}"`,
-          !managerCache && '--no-manager-cache',
+          !managerCache && `--no-manager-cache`,
         ].filter(Boolean),
         {
           stdio: 'inherit',
@@ -129,8 +129,8 @@ export const handler = ({
         [
           `--config-dir "${storybookConfig}"`,
           `--port ${port}`,
-          !managerCache && '--no-manager-cache',
-          '--no-version-updates',
+          !managerCache && `--no-manager-cache`,
+          `--no-version-updates`,
         ].filter(Boolean),
         {
           stdio: 'inherit',
