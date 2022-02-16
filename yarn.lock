@@ -7748,6 +7748,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ncp@npm:^2":
+  version: 2.0.5
+  resolution: "@types/ncp@npm:2.0.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 19b009b5e8b82bec7a00b974bb99f241b7a2fe80309803d4f765bdf527b37fbd890dc6cc5ea71c3287b9e14f8a7636251a02981f2758919c0e3f3422f679fe8b
+  languageName: node
+  linkType: hard
+
 "@types/netlify-identity-widget@npm:1.9.3":
   version: 1.9.3
   resolution: "@types/netlify-identity-widget@npm:1.9.3"
@@ -21515,6 +21524,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"ncp@npm:2.0.0":
+  version: 2.0.0
+  resolution: "ncp@npm:2.0.0"
+  bin:
+    ncp: ./bin/ncp
+  checksum: d515babf9d3205ab9252e7d640af7c3e1a880317016d41f2fce2e6b9c8f60eb8bb6afde30e8c4f8e1e3fa551465f094433c3f364b25a85d6a28ec52c1ad6e067
+  languageName: node
+  linkType: hard
+
 "negotiator@npm:0.6.2, negotiator@npm:^0.6.2":
   version: 0.6.2
   resolution: "negotiator@npm:0.6.2"
@@ -25646,6 +25664,7 @@ resolve@^2.0.0-next.3:
     "@types/jest": 27.4.0
     "@types/jscodeshift": 0.11.3
     "@types/lodash.template": 4.5.0
+    "@types/ncp": ^2
     "@types/prompts": 2.4.0
     all-contributors-cli: 6.20.0
     ansi-colors: 4.1.1
@@ -25663,6 +25682,7 @@ resolve@^2.0.0-next.3:
     lerna: 4.0.0
     lodash.template: 4.5.0
     msw: 0.36.8
+    ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.15
     npm-packlist: 3.0.0
