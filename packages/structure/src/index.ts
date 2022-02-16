@@ -1,5 +1,7 @@
 export { DefaultHost, Host } from './hosts'
 export { RWProject } from './model'
+import { exit } from 'process'
+import { ThrowStatement } from 'ts-morph'
 import { DefaultHost } from './hosts'
 import { RWProject } from './model'
 import {
@@ -26,7 +28,7 @@ export async function printDiagnostics(
     let errors = 0
     for (const d of await project.collectDiagnostics()) {
       const str = ExtendedDiagnostic_format(d, formatOpts)
-      console.log(str)
+      console.log(`\n${str}\n`)
       // counts number of warnings (2) and errors (1) encountered
       if (d.diagnostic.severity === 2) {
         warnings++
@@ -37,10 +39,11 @@ export async function printDiagnostics(
     }
 
     if (warnings === 0 && errors === 0) {
-      console.log('Success: no errors or warnings were detected')
+      console.log('\nSuccess: no errors or warnings were detected\n')
     }
     else if (errors > 0) {
-      throw new Error(`Failure: ${errors} errors and ${warnings} warnings detected`)
+      console.error(`\nFailure: ${errors} errors and ${warnings} warnings detected\n`)
+      process.exit(1)
     }
 
   } catch (e: any) {
