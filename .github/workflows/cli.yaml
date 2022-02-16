@@ -75,7 +75,7 @@ jobs:
       - name: Run `rw prerender`
         run: |
           yarn rw prerender --verbose
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+        working-directory: ${{ steps.createpath.outputs.tempdir }}
 
       - name: Run `rw lint`
         run: |
