@@ -67,9 +67,9 @@ jobs:
         run: |
           yarn project:copy ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw build`
+      - name: Run `rw build` without prerender
         run: |
-          yarn rw build
+          yarn rw build --no-prerender
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw prerender`
