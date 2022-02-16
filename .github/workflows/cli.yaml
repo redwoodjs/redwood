@@ -48,11 +48,7 @@ jobs:
 
       - name: Create a temporary directory
         id: createpath
-        run: |
-          project_path=$(mktemp -d -t redwood.XXXXXX)
-          echo "::set-output name=project_path::$project_path"
-          framework_path=$(pwd)
-          echo "::set-output name=framework_path::$framework_path"
+        uses: ./.github/actions/mktempdir
 
       - name: Create Redwood Project
         run: |
