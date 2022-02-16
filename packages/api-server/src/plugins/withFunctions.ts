@@ -62,7 +62,7 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
 
   Promise.all(imports).then((_results) => {
     console.log(
-      c.italic(c.dim('... Imported in ' + (Date.now() - tsImport) + ' ms'))
+      c.italic(c.dim('...Done importing in ' + (Date.now() - tsImport) + ' ms'))
     )
   })
 }
@@ -109,6 +109,12 @@ const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
+
+  app.addContentTypeParser(
+    ['application/x-www-form-urlencoded', 'multipart/form-data'],
+    { parseAs: 'string' },
+    app.defaultTextParser
+  )
 
   await loadFunctionsFromDist()
 

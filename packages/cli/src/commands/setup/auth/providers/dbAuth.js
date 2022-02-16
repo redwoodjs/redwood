@@ -31,7 +31,7 @@ export const task = {
       characters: [password.lower, password.upper, password.digits],
     })
     const content = [
-      '// Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.',
+      '# Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.',
       `SESSION_SECRET=${secret}`,
       '',
     ]

@@ -262,6 +262,24 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "manunamz",
+      "name": "mnm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75578970?v=4",
+      "profile": "https://github.com/manunamz",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "mvila",
+      "name": "Manuel Vila",
+      "avatar_url": "https://avatars.githubusercontent.com/u/381671?v=4",
+      "profile": "https://mvila.me/",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5

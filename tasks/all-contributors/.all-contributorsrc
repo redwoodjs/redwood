@@ -1475,15 +1475,6 @@
       ]
     },
     {
-      "login": "agiannelli",
-      "name": "Amanda Giannelli",
-      "avatar_url": "https://avatars.githubusercontent.com/u/53096355?v=4",
-      "profile": "https://github.com/agiannelli",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "TawfikYasser",
       "name": "Tawfik Yasser",
       "avatar_url": "https://avatars.githubusercontent.com/u/54971231?v=4",
@@ -2299,6 +2290,96 @@
       "name": "Mateo Carriquí",
       "avatar_url": "https://avatars.githubusercontent.com/u/29718978?v=4",
       "profile": "https://tryhackme.com/p/zast99",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "kataqatsi",
+      "name": "kataqatsi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959199?v=4",
+      "profile": "https://github.com/kataqatsi",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jbschrades",
+      "name": "Jeff Schroeder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2105665?v=4",
+      "profile": "https://www.vaporware.net/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "manunamz",
+      "name": "mnm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75578970?v=4",
+      "profile": "https://github.com/manunamz",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "BBurnworth",
+      "name": "BBurnworth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5750537?v=4",
+      "profile": "https://github.com/BBurnworth",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "refactor-this",
+      "name": "Jonathan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30505583?v=4",
+      "profile": "https://refactorthis.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rishabhpoddar",
+      "name": "Rishabh Poddar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2976287?v=4",
+      "profile": "https://www.linkedin.com/in/rishabh-poddar-b64b73129/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vitaliimelnychuk",
+      "name": "Vitalii Melnychuk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22550335?v=4",
+      "profile": "https://vitaliimelnychuk.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bdefore",
+      "name": "Buck DeFore",
+      "avatar_url": "https://avatars.githubusercontent.com/u/142472?v=4",
+      "profile": "https://github.com/bdefore",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kamarel",
+      "name": "Kamarel Malanda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84261846?v=4",
+      "profile": "https://github.com/kamarel",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mvila",
+      "name": "Manuel Vila",
+      "avatar_url": "https://avatars.githubusercontent.com/u/381671?v=4",
+      "profile": "https://mvila.me/",
       "contributions": [
         "tutorial"
       ]

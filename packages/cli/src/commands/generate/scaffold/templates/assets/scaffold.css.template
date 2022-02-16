@@ -223,10 +223,26 @@
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'],
-.rw-input[type='radio'] {
+.rw-check-radio-item-none {
+  color: #4a5568
+}
+.rw-check-radio-items {
+  display: flex;
+  justify-items: center;
+}
+.rw-input[type="checkbox"] {
+  display: inline;
   width: 1rem;
   margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.rw-input[type="radio"] {
+  display: inline;
+  width: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .rw-input:focus {
   border-color: #a0aec0;
@@ -257,6 +273,8 @@
   min-width: 48rem;
 }
 .rw-table {
+
+
   table-layout: auto;
   width: 100%;
   font-size: 0.875rem;
@@ -264,6 +282,10 @@
 .rw-table th,
 .rw-table td {
   padding: 0.75rem;
+}
+.rw-table td {
+  background-color: #ffffff;
+  color: #1a202c;
 }
 .rw-table thead tr {
   background-color: #e2e8f0;

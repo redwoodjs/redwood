@@ -5,6 +5,7 @@ import path from 'path'
 import 'cypress-wait-until'
 
 import {
+  waitForApiSide,
   test_first_page,
   test_pages,
   test_layouts,
@@ -52,6 +53,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
+
+    waitForApiSide()
+
     cy.visit('http://localhost:8910')
 
     // cy.get('h1').should().contains('FOO!')

@@ -66,6 +66,86 @@ test('returns exactly 3 files', () => {
   expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
 })
 
+test('trims Layout from end of name', () => {
+  const files = layout.files({
+    name: 'BazingaLayout',
+    tests: true,
+    stories: true,
+  })
+
+  const layoutCode =
+    files[
+      path.normalize(
+        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.js'
+      )
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default BazingaLayout')
+  ).toBeTruthy()
+})
+
+test('Does not trim Layout from beginning of name', () => {
+  const files = layout.files({
+    name: 'LayoutForBazinga',
+    tests: true,
+    stories: true,
+  })
+
+  const layoutCode =
+    files[
+      path.normalize(
+        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.js'
+      )
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default LayoutForBazingaLayout')
+  ).toBeTruthy()
+})
+
+test('Does not trim Layout from middle of name', () => {
+  const files = layout.files({
+    name: 'MyLayoutForBazinga',
+    tests: true,
+    stories: true,
+  })
+
+  const layoutCode =
+    files[
+      path.normalize(
+        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.js'
+      )
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default MyLayoutForBazingaLayout')
+  ).toBeTruthy()
+})
+
+test('Only trims Layout once', () => {
+  const files = layout.files({
+    name: 'BazingaLayoutLayout',
+    tests: true,
+    stories: true,
+  })
+
+  const layoutCode =
+    files[
+      path.normalize(
+        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.js'
+      )
+    ]
+
+  expect(layoutCode).not.toBeUndefined()
+  expect(
+    layoutCode.split('\n').includes('export default BazingaLayoutLayout')
+  ).toBeTruthy()
+})
+
 test('creates a single word layout component', () => {
   expect(
     singleWordDefaultFiles[

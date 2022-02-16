@@ -1,60 +1,61 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.40.0",
+  "version": "0.45.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/graphql-server"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
   "dependencies": {
-    "@envelop/core": "1.6.5",
-    "@envelop/depth-limit": "1.2.1",
-    "@envelop/disable-introspection": "1.2.1",
-    "@envelop/filter-operation-type": "1.2.1",
-    "@envelop/parser-cache": "2.2.1",
-    "@envelop/validation-cache": "2.3.0",
-    "@graphql-tools/merge": "8.2.1",
+    "@envelop/core": "1.7.1",
+    "@envelop/depth-limit": "1.2.3",
+    "@envelop/disable-introspection": "3.0.0",
+    "@envelop/filter-operation-type": "3.0.0",
+    "@envelop/parser-cache": "4.0.0",
+    "@envelop/validation-cache": "4.0.0",
+    "@graphql-tools/merge": "8.2.2",
     "@graphql-tools/schema": "8.3.1",
-    "@graphql-tools/utils": "8.5.5",
-    "@prisma/client": "3.6.0",
-    "@redwoodjs/api": "0.40.0",
-    "core-js": "3.20.0",
-    "graphql": "16.2.0",
+    "@graphql-tools/utils": "8.6.1",
+    "@prisma/client": "3.9.2",
+    "@redwoodjs/api": "v0.45.0",
+    "core-js": "3.21.0",
+    "graphql": "16.3.0",
     "graphql-helix": "1.11.0",
     "graphql-playground-html": "1.6.30",
     "graphql-scalars": "1.14.1",
     "graphql-tag": "2.12.6",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
-    "node-fetch": "2.6.6",
+    "node-fetch": "2.6.7",
     "uuid": "8.3.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/graphql-server"
-  },
   "devDependencies": {
-    "@babel/cli": "7.16.0",
-    "@envelop/testing": "2.1.1",
+    "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
+    "@envelop/testing": "4.0.0",
     "@envelop/types": "1.5.1",
-    "@redwoodjs/auth": "0.40.0",
+    "@redwoodjs/auth": "v0.45.0",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
-    "@types/uuid": "8.3.3",
+    "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
-    "jest": "27.4.5",
-    "typescript": "4.5.4"
+    "jest": "27.5.1",
+    "typescript": "4.5.5"
   },
-  "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
-  },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

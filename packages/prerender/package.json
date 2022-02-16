@@ -1,53 +1,54 @@
 {
   "name": "@redwoodjs/prerender",
+  "version": "0.45.0",
   "description": "RedwoodJS prerender",
-  "version": "0.40.0",
-  "license": "MIT",
-  "files": [
-    "dist",
-    "browserUtils",
-    "detection"
-  ],
-  "main": "dist/index.js",
-  "peerDependencies": {
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
-  },
-  "dependencies": {
-    "@redwoodjs/auth": "0.40.0",
-    "@redwoodjs/internal": "0.40.0",
-    "@redwoodjs/router": "0.40.0",
-    "@redwoodjs/structure": "0.40.0",
-    "@redwoodjs/web": "0.40.0",
-    "babel-plugin-ignore-html-and-css-imports": "0.1.0",
-    "cheerio": "1.0.0-rc.10",
-    "mime-types": "2.1.34",
-    "node-fetch": "2.6.6"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
     "directory": "packages/prerender"
   },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "browserUtils",
+    "detection"
+  ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "yarn build",
     "test": "jest src",
     "test:watch": "yarn test --watch"
+  },
+  "dependencies": {
+    "@redwoodjs/auth": "v0.45.0",
+    "@redwoodjs/internal": "v0.45.0",
+    "@redwoodjs/router": "v0.45.0",
+    "@redwoodjs/structure": "v0.45.0",
+    "@redwoodjs/web": "v0.45.0",
+    "babel-plugin-ignore-html-and-css-imports": "0.1.0",
+    "cheerio": "1.0.0-rc.10",
+    "mime-types": "2.1.34",
+    "node-fetch": "2.6.7"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
+    "@types/mime-types": "2.1.1",
+    "babel-plugin-tester": "10.1.0",
+    "jest": "27.5.1",
+    "typescript": "4.5.5"
+  },
+  "peerDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "externals": {
     "react": "react",
     "react-dom": "react-dom"
   },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
-  "devDependencies": {
-    "@babel/cli": "7.16.0",
-    "@types/mime-types": "2.1.1",
-    "babel-plugin-tester": "10.1.0",
-    "jest": "27.4.5",
-    "typescript": "4.5.4"
-  }
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

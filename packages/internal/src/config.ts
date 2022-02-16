@@ -21,6 +21,7 @@ export interface NodeTargetConfig {
   path: string
   target: TargetEnum.NODE
   schemaPath: string
+  serverConfig: string
 }
 
 interface BrowserTargetConfig {
@@ -90,6 +91,7 @@ const DEFAULT_CONFIG: Config = {
     path: './api',
     target: TargetEnum.NODE,
     schemaPath: './api/db/schema.prisma',
+    serverConfig: './api/server.config.js',
   },
   browser: {
     open: false,

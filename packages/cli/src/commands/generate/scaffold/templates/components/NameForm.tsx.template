@@ -7,14 +7,29 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+<% if (fieldsToImport.includes('DatetimeLocalField')) { %>
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
+<% } %>
 
 const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
+
+  <% editableColumns.forEach(column => { %>
+    <% if (column.isEnum && !column.isList && !column.isRequired) { %>
+      if (data.${column.name} === '') {
+        data.${column.name} = null
+      }
+    <% } %>
+    <% if (column.isEnum && column.isList) { %>
+      if (data.${column.name}) {
+        data.${column.name} = data.${column.name}.filter((value) => !!value)
+      }
+    <% } %>
+  <% }) %>
     props.onSave(data, props?.${singularCamelName}?.id)
   }
 
@@ -27,7 +42,7 @@ const ${singularPascalName}Form = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-<% editableColumns.forEach(column => { %>
+      <% editableColumns.forEach(column => { %>
         <Label
           name="${column.name}"
           className="rw-label"
@@ -35,13 +50,49 @@ const ${singularPascalName}Form = (props) => {
         >
           ${column.label}
         </Label>
-        <${column.component}
-          name="${column.name}"
-          ${column.defaultProp}={${column.deserilizeFunction && column.deserilizeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserilizeFunction && ')'}}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
-          validation=${column.validation}` %>
-        />
+        <% if (column.isEnum) { %>
+          <% if (!column.isRequired) { %>
+          <div className="rw-check-radio-items">
+            <${column.component}
+              id="${singularCamelName}-${column.name}-none"
+              name="${column.name}"
+              defaultValue=""
+              ${column.defaultProp}={!props.spot?.spotType}
+              className="rw-input"
+              errorClassName="rw-input rw-input-error"
+            />
+            <div className="rw-check-radio-item-none">
+              None
+            </div>
+          </div>
+          <% } %>
+          <% column.values?.forEach((value, i) => {
+            const columnComponentName = column.isList ? `${column.name}[${i}]` : column.name
+            %>
+        <div className="rw-check-radio-items">
+          <${column.component}
+            id="${singularCamelName}-${column.name}-${i}"
+            name="${columnComponentName}"
+            defaultValue="${value.name}"
+            ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>
+            ${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+          </div>
+        </div>
+          <% }) %>
+        <% } else { %>
+          <${column.component}
+            name="${column.name}"
+            ${column.defaultProp}={${column.deserializeFunction && column.deserializeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserializeFunction && ')'}}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
+            validation=${column.validation}` %>
+          />
+        <% } %>
+
         <FieldError name="${column.name}" className="rw-field-error" />
 <% }) %>
         <div className="rw-button-group">

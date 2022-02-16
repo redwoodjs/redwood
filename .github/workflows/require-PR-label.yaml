@@ -1,0 +1,14 @@
+name: Require PR label "release:*"
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize, reopened]
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 1
+          labels: "release:chore, release:fix, release:feature, release:feature-breaking"

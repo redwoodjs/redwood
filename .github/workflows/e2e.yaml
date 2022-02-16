@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      # For network flakiness. See https://github.com/vercel/next.js/pull/28264
+      - name: Tune linux network
+        run: sudo ethtool -K eth0 tx off rx off
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -78,13 +82,15 @@ jobs:
           working-directory: ./tasks/e2e
           spec: |
              cypress/integration/01-tutorial/*.spec.js
-             cypress/integration/03-storybook/*.spec.js
              cypress/integration/04-logger/*.spec.js
-             cypress/integration/05-tutorial-envelop/*.spec.js
 
       - name: Prepare for CLI checks by restoring 01-tutorial end state
         run: |
           git restore . && git clean -df
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw storybook`
+        run: yarn rw storybook --smoke-test
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw test api`
@@ -115,4 +121,12 @@ jobs:
 
       - name: Run `rw data-migrate up`
         run: yarn rw dm up
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw deploy --help`
+        run: yarn rw setup deploy --help && yarn rw deploy --help
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw setup ui --help`
+        run: yarn rw setup --help && yarn rw setup ui --help
         working-directory: ${{ steps.createpath.outputs.project_path }}
