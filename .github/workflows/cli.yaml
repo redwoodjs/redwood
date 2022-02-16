@@ -1,4 +1,4 @@
-name: CLI Checks
+name: CLI Checks and Telemetry Benchmarks
 
 on:
   pull_request:
@@ -69,6 +69,11 @@ jobs:
         run: |
           yarn project:copy ${{ steps.createpath.outputs.project_path }}
 
+      - name: Run `rw info`
+        run: |
+          yarn rw info
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
       - name: Run `rw build` without prerender
         run: |
           yarn rw build --no-prerender
@@ -126,7 +131,7 @@ jobs:
 
       - name: Run "prisma migrate"
         run: |
-          yarn rw prisma migrate dev --name=just-a-test
+          yarn rw prisma migrate dev --name ci-test
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run "rw data-migrate"
@@ -141,3 +146,14 @@ jobs:
       - name: Run `rw setup ui --help`
         run: yarn rw setup --help && yarn rw setup ui --help
         working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run "g page"
+        run: |
+          yarn rw g page ciTest
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Throw Error | Run `rw g sdl <model>`
+        run: |
+          yarn rw g sdl DoesNotExist
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+        continue-on-error: true
