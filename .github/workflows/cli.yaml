@@ -49,10 +49,10 @@ jobs:
       - name: Create a temporary directory
         id: createpath
         run: |
-          project_path=$(yarn make-dir /tmp/redwood-project)
+          yarn make-dir /tmp/redwood-project
+          project_path="/tmp/redwood-project"
           echo "::set-output name=project_path::$project_path"
-          framework_path=$(pwd)
-          echo "::set-output name=framework_path::$framework_path"
+          echo $project_path
 
       - name: Create Redwood Project
         run: |
