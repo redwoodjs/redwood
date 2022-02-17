@@ -40,11 +40,9 @@ jobs:
           restore-keys: |
             yarn-
 
-      - name: Install dependencies and Build Framework
+      - name: Install framework dependencies
         run: |
           yarn install --immutable
-          yarn build:clean || echo "Project already clean"
-          yarn build:js
 
       - name: Setup test project
         id: setup_test_project
@@ -54,7 +52,7 @@ jobs:
         run:  npx playwright install-deps chromium
 
       - name: Run tests
-        working-directory: ./tasks/test-project/playwright
+        working-directory: ./tasks/smoke-test
         run: npx playwright test
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
