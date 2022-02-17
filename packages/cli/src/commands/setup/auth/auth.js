@@ -138,7 +138,7 @@ const updateWebRender = (content, authProvider) => {
   const props = objectToComponentProps(authProvider)
   const renderContent = `<AuthProvider ${props.join(' ')}>`
 
-  return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
+  return content.replace(/<AuthProvider.*type=['"](.*)['"]>/s, renderContent)
 }
 
 // returns the content of App.{js,tsx} without the old auth import
