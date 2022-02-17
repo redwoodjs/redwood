@@ -1,8 +1,6 @@
 import { expect } from '@playwright/test'
 
-import test from '../playwright-fixtures/devServer.fixture'
-
-test('Smoke test', async ({ page, webServerPort }) => {
+export const smokeTest = async ({ page, webServerPort }) => {
   // Go to http://localhost:8910/
   await page.goto(`http://localhost:${webServerPort}/`)
 
@@ -26,4 +24,4 @@ test('Smoke test', async ({ page, webServerPort }) => {
   // Click text=Admin
   await page.click('text=Admin')
   expect(page.url()).toBe(`http://localhost:${webServerPort}/posts`)
-})
+}

@@ -51,7 +51,13 @@ jobs:
       - name: Install Playwright deps
         run: npx playwright install --with-deps
 
-      - name: Run tests
+      - name: Run `rw build`
+        run: |
+          yarn rw build
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      # We run prisma reset, seed, rw dev, rw build and rw serve
+      - name: Run smoke tests
         working-directory: ./tasks/smoke-test
         run: npx playwright test
         env:
