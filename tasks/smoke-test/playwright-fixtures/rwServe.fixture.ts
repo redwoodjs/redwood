@@ -33,13 +33,7 @@ const test = base.extend<any, DevServerFixtures>({
         )
       }
 
-      console.log(`Building project at ${projectPath}`)
-
-      // @TODO build should be the step before running smoke test
-      // execa.sync('yarn rw build', {
-      //   cwd: projectPath,
-      //   shell: true,
-      // })
+      console.log(`Running rw serve at ${projectPath}`)
 
       // Don't wait for this to finish, because it doens't
       const rwServeHandler = execa.command(`yarn rw serve -p ${port}`, {
@@ -47,7 +41,7 @@ const test = base.extend<any, DevServerFixtures>({
         shell: true,
       })
 
-      // So we can see the dev server logs too
+      // So we can see the rw serve logs too
       rwServeHandler.stdout.pipe(process.stdout)
 
       console.log('Waiting for dev servers.....')

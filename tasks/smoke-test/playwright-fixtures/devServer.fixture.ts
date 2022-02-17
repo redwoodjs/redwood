@@ -31,7 +31,6 @@ const test = base.extend<any, DevServerFixtures>({
   // "server" fixture starts automatically for every worker - we pass "auto" for that.
   server: [
     async ({ webServerPort, apiServerPort }, use) => {
-      // Setup express app.
       console.log('Starting dev server.....')
 
       const projectPath = process.env.PROJECT_PATH
@@ -66,8 +65,6 @@ const test = base.extend<any, DevServerFixtures>({
 
       console.log('Starting tests!')
       await use(true) // we just set true here, because we don't actually care about this fixture
-
-      // TODO cleanup if we need to
     },
     { scope: 'worker', auto: true },
   ],

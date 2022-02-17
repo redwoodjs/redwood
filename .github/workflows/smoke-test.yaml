@@ -63,40 +63,30 @@ jobs:
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw info`
-      #   run: |
-      #     yarn rw info
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run `rw info`
+        run: |
+          yarn rw info
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw info`
-      #   run: |
-      #     yarn rw info
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run `rw prerender`
+        run: |
+          yarn rw prerender --verbose
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw build` without prerender
-      #   run: |
-      #     yarn rw build --no-prerender
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run `rw lint`
+        run: |
+          yarn rw lint ./api/src --fix
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw prerender`
-      #   run: |
-      #     yarn rw prerender --verbose
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw test api"
+        run: |
+          yarn rw test api --no-watch
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw lint`
-      #   run: |
-      #     yarn rw lint ./api/src --fix
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
-      # - name: Run "rw test api"
-      #   run: |
-      #     yarn rw test api --no-watch
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
-      # - name: Run "rw test web"
-      #   run: |
-      #     yarn rw test web --no-watch
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw test web"
+        run: |
+          yarn rw test web --no-watch
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       # # Fails in CI with "Cannot find name 'gql'"
       # #
@@ -112,51 +102,51 @@ jobs:
       # #     yarn rw check
       # #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "rw storybook"
-      #   run: |
-      #     yarn rw sb --smoke-test
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw storybook"
+        run: |
+          yarn rw sb --smoke-test
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "rw exec"
-      #   run: |
-      #     yarn rw g script testScript && yarn rw exec testScript
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw exec"
+        run: |
+          yarn rw g script testScript && yarn rw exec testScript
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "prisma generate"
-      #   run: |
-      #     yarn rw prisma generate
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "prisma generate"
+        run: |
+          yarn rw prisma generate
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "data-migrate install"
-      #   run: |
-      #     yarn rw data-migrate install
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "data-migrate install"
+        run: |
+          yarn rw data-migrate install
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "prisma migrate"
-      #   run: |
-      #     yarn rw prisma migrate dev --name ci-test
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "prisma migrate"
+        run: |
+          yarn rw prisma migrate dev --name ci-test
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "rw data-migrate"
-      #   run: |
-      #     yarn rw dataMigrate up
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw data-migrate"
+        run: |
+          yarn rw dataMigrate up
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw deploy --help`
-      #   run: yarn rw setup deploy --help && yarn rw deploy --help
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run `rw deploy --help`
+        run: yarn rw setup deploy --help && yarn rw deploy --help
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run `rw setup ui --help`
-      #   run: yarn rw setup --help && yarn rw setup ui --help
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run `rw setup ui --help`
+        run: yarn rw setup --help && yarn rw setup ui --help
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Run "g page"
-      #   run: |
-      #     yarn rw g page ciTest
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "g page"
+        run: |
+          yarn rw g page ciTest
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # - name: Throw Error | Run `rw g sdl <model>`
-      #   run: |
-      #     yarn rw g sdl DoesNotExist
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-      #   continue-on-error: true
+      - name: Throw Error | Run `rw g sdl <model>`
+        run: |
+          yarn rw g sdl DoesNotExist
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+        continue-on-error: true
