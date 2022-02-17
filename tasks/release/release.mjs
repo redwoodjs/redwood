@@ -288,11 +288,10 @@ async function releaseMajorOrMinor(semver, nextVersion) {
     ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
     [
       () =>
-        $`${['git push', !releaseBranchExists && `-u origin ${releaseBranch}`]
-          .filter(Boolean)
-          .join(' ')}`,
-      // This is supposedly safer than `git push --tags`. See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
-      () => $`git push --follow-tags`,
+        $`git push ${[
+          !releaseBranchExists && `-u origin ${releaseBranch}`,
+        ].filter(Boolean)}`,
+      () => $`git push --tags`,
       // We've had an issue with this one.
       async () => {
         try {
@@ -395,8 +394,7 @@ async function releasePatch(currentVersion, nextVersion) {
     ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
     [
       () => $`git push`,
-      // This is supposedly safer than `git push --tags`. See https://git-scm.com/book/en/v2/Git-Basics-Tagging.
-      () => $`git push --follow-tags`,
+      () => $`git push --tags`,
       // We've had an issue with this one.
       async () => {
         try {

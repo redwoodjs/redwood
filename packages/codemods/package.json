@@ -27,7 +27,7 @@
     "@babel/plugin-transform-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@vscode/ripgrep": "1.14.2",
-    "core-js": "3.21.0",
+    "core-js": "3.21.1",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",

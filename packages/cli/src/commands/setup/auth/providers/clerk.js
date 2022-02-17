@@ -1,18 +1,21 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [
-    `import { ClerkProvider, ClerkLoaded, useClerk } from '@clerk/clerk-react'`,
-  ],
+  imports: [`import { ClerkProvider, withClerk } from '@clerk/clerk-react'`],
   init: `
+// Wrap <ClerkAuthProvider> around the Redwood <AuthProvider>
+//
 // You can set user roles in a "roles" array on the public metadata in Clerk.
+//
 // Also, you need to add two env variables: CLERK_FRONTEND_API_URL for web and
 // CLERK_API_KEY for api, with the frontend api host and api key, respectively,
 // both from your Clerk.dev dashboard.
-let clerk
-const ClerkAuthConsumer = ({ children }) => {
-  clerk = useClerk()
-  return React.cloneElement(children, { client: clerk })
-}
+//
+// Lastly, be sure to add the key "CLERK_FRONTEND_API_URL" in your app's redwood.toml
+// [web] config "includeEnvironmentVariables" setting.
+
+const ClerkAuthConsumer = withClerk(({ children, clerk }) => {
+  return React.cloneElement(children as React.ReactElement<any>, { client: clerk })
+})
 
 const ClerkAuthProvider = ({ children }) => {
   const frontendApi = process.env.CLERK_FRONTEND_API_URL
@@ -22,16 +25,12 @@ const ClerkAuthProvider = ({ children }) => {
 
   return (
     <ClerkProvider frontendApi={frontendApi}>
-      <ClerkLoaded>
-        <ClerkAuthConsumer>{children}</ClerkAuthConsumer>
-      </ClerkLoaded>
+      <ClerkAuthConsumer>{children}</ClerkAuthConsumer>
     </ClerkProvider>
   )
 }`,
   authProvider: {
-    client: 'clerk',
     type: 'clerk',
-    render: ['ClerkAuthProvider'],
   },
 }
 
