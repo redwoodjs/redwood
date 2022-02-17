@@ -3,15 +3,6 @@ import { expect } from '@playwright/test'
 import test from '../playwright-fixtures/devServer.fixture'
 
 test('Smoke test', async ({ page, webServerPort }) => {
-  page.on('request', (request) => {
-    if (request.url().includes('/.redwood/functions/graphql')) {
-      expect(request.method()).toBe('XXX')
-    }
-  })
-  page.on('response', (response) =>
-    console.log('<< BAZINGA RESPONSE', response.status(), response.url())
-  )
-
   // Go to http://localhost:8910/
   await page.goto(`http://localhost:${webServerPort}/`)
 
