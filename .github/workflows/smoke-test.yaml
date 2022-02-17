@@ -49,7 +49,7 @@ jobs:
         uses: ./.github/actions/setup_test_project
 
       - name: Install Playwright deps
-        run:  npx playwright install
+        run: npx playwright install --with-deps
 
       - name: Run tests
         working-directory: ./tasks/smoke-test
