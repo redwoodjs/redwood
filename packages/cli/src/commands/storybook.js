@@ -69,7 +69,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = ({
-  // eslint-disable-next-line no-unused-vars
   open,
   port,
   build,
@@ -131,6 +130,7 @@ export const handler = ({
           `--port ${port}`,
           !managerCache && `--no-manager-cache`,
           `--no-version-updates`,
+          !open && `--no-open`,
         ].filter(Boolean),
         {
           stdio: 'inherit',
