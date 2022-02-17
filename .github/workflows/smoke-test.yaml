@@ -18,6 +18,7 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      PLAYWRIGHT_BROWSERS_PATH: 0
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -49,7 +50,7 @@ jobs:
         uses: ./.github/actions/setup_test_project
 
       - name: Install Playwright deps
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
       - name: Run `rw build`
         run: |
