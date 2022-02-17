@@ -8,7 +8,15 @@ import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
 // Chop of the first slash character (maybe be OSX/Linux only?)
-const appRoot = (process.env.RWJS_SRC_ROOT || '').substring(1)
+const srcRoot = process.env.RWJS_SRC_ROOT || ''
+
+let appRoot: string
+
+if (/^[A-Z]:\\/.test(srcRoot)) {
+  appRoot = srcRoot.substring(3).replace(/\\/g, '/')
+} else {
+  appRoot = srcRoot.substring(1)
+}
 
 // Allow APIs client to attach response/request
 type ErrorWithRequestMeta = Error & {
@@ -119,7 +127,9 @@ function StackEntry({
   const highlightIndex = (line || 0) - start - 1
   const onLastLine = highlightIndex === lines.length - 1
 
+  console.log('fileShort', fileShort)
   const shortestPath = (path: string) => path.replace(appRoot || '', '')
+  console.log('shortestPath', shortestPath(fileShort))
   const expanded = !shouldHideEntry(entry, i)
 
   const clickable = lines.length
