@@ -298,10 +298,20 @@ nav h1 a {
   text-decoration: underline;
 }
 
+nav div {
+  display: flex;
+  align-items: center;
+  line-height: 2em;
+}
+
+nav div a {
+  display: flex;
+  margin: 0 0.3em;
+}
+
 nav svg {
   width: 24px;
   height: 24px;
-  display: inline-block;
   fill: rgb(191, 71, 34);
 }
 
@@ -314,8 +324,8 @@ nav svg:hover {
   fill: rgb(200, 32, 32);
 }
 
-nav div {
-  line-height: 2sem;
+.panic-overlay a {
+  text-decoration: none;
 }
 
 .panic-overlay .error {
@@ -371,7 +381,6 @@ nav div {
 }
 
 .panic-overlay .stack-entry .file {
-  font-weight: light;
   color: rgb(195, 74, 37, 0.8);
 }
 
@@ -382,8 +391,6 @@ nav div {
 
 .panic-overlay .file strong {
   font-weight: normal;
-
-  text-decoration: underline;
 }
 .panic-overlay .file:before,
 .panic-overlay .more:before {
