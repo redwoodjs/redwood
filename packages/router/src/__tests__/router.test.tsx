@@ -1259,3 +1259,32 @@ describe('trailing slashes', () => {
     await waitFor(() => screen.getByText(/Contact Page/i))
   })
 })
+
+test('params should be updated if navigated to different route with same page', async () => {
+  const UserPage = ({ id }: { id?: number }) => {
+    const { id: idFromContext } = useParams()
+    return (
+      <>
+        <p>param {id ? id : 'no-id'}</p>
+        <p>hookparams {idFromContext ? idFromContext : 'no-param-id'} </p>
+      </>
+    )
+  }
+  const TestRouter = () => (
+    <Router>
+      <Route path="/user" page={UserPage} name="allUsers" />
+      <Route path="/user/{id:Int}" page={UserPage} name="user" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+  act(() => navigate('/user'))
+  // Wait for page load
+  await waitFor(() => screen.getByText('param no-id'))
+  act(() => navigate('/user/99'))
+
+  await waitFor(() => {
+    expect(screen.queryByText('param 99')).toBeInTheDocument()
+    expect(screen.queryByText('hookparams 99')).toBeInTheDocument()
+  })
+})

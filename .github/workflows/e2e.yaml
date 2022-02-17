@@ -84,49 +84,4 @@ jobs:
              cypress/integration/01-tutorial/*.spec.js
              cypress/integration/04-logger/*.spec.js
 
-      - name: Prepare for CLI checks by restoring 01-tutorial end state
-        run: |
-          git restore . && git clean -df
-        working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw storybook`
-        run: yarn rw storybook --smoke-test
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw test api`
-        run: yarn rw test api --no-watch
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw test web`
-        run: yarn rw test web --no-watch
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw build` (no prerender)
-        run: yarn rw build --no-prerender --verbose
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw prerender`
-        run: yarn rw prerender --verbose
-        # TODO: We should have a script that verifies this.
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rwfw lint`
-        # choosing a simple command to verify; --help requires prompt input
-        run: RWFW_PATH=${{ steps.createpath.outputs.framework_path }} yarn rwfw lint
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw exec` generate and execute
-        run: yarn rw g script testScript && yarn rw exec testScript
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw data-migrate up`
-        run: yarn rw dm up
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw deploy --help`
-        run: yarn rw setup deploy --help && yarn rw deploy --help
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-      - name: Run `rw setup ui --help`
-        run: yarn rw setup --help && yarn rw setup ui --help
-        working-directory: ${{ steps.createpath.outputs.project_path }}

@@ -31,14 +31,14 @@
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "7.6.5",
+    "pino": "7.8.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@redwoodjs/auth": "v0.45.0",
-    "@types/crypto-js": "4.1.0",
+    "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.2",
     "@types/split2": "3.2.1",
@@ -49,7 +49,7 @@
     "typescript": "4.5.5"
   },
   "peerDependencies": {
-    "@clerk/clerk-sdk-node": "2.9.0",
+    "@clerk/clerk-sdk-node": "2.9.3",
     "@magic-sdk/admin": "1.3.4",
     "firebase-admin": "10.0.2"
   },

@@ -1,15 +1,4 @@
 /**
- * FIXME:
- * Until an upstream dependency issue in "eslint-plugin-react" is resolved,
- * disabling eslint rule "react/prop-types" is the recommended approach
- * to resolve false positives in eslint.
- *
- * see:
- * - https://github.com/yannickcr/eslint-plugin-react/issues/3140
- * - https://github.com/redwoodjs/redwood/pull/3762
- */
-/* eslint-disable react/prop-types */
-/**
  * @module @redwoodjs/forms
  *
  * Redwood's form library.
@@ -55,7 +44,7 @@
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
  */
-import React, { useContext, forwardRef } from 'react'
+import React, { useContext, forwardRef, ForwardedRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import {
@@ -349,7 +338,7 @@ export interface FormProps
 /**
  * Renders a `<form>` with the required context.
  */
-const Form = forwardRef<HTMLFormElement, FormProps>(
+const Form = forwardRef(
   (
     {
       config,
@@ -358,8 +347,8 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
       onSubmit,
       children,
       ...rest
-    },
-    ref
+    }: FormProps,
+    ref: ForwardedRef<HTMLFormElement>
   ) => {
     const hookFormMethods = useForm(config)
     const formMethods = propFormMethods || hookFormMethods
@@ -488,13 +477,13 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
 }
 
 export interface TextAreaFieldProps
-  extends FieldProps<HTMLTextAreaElement>,
+  extends Omit<FieldProps<HTMLTextAreaElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
 /**
  * Renders a `<textarea>` field.
  */
-const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
+const TextAreaField = forwardRef(
   (
     {
       name,
@@ -509,8 +498,8 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: TextAreaFieldProps,
+    ref: ForwardedRef<HTMLTextAreaElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -537,13 +526,13 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
 )
 
 export interface SelectFieldProps
-  extends FieldProps<HTMLSelectElement>,
+  extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
 /**
  * Renders a `<select>` field.
  */
-const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
+const SelectField = forwardRef(
   (
     {
       name,
@@ -558,8 +547,8 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: SelectFieldProps,
+    ref: ForwardedRef<HTMLSelectElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -586,13 +575,13 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 )
 
 export interface CheckboxFieldProps
-  extends FieldProps<HTMLInputElement>,
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
 /**
  * Renders an `<input type="checkbox">` field.
  */
-export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
+export const CheckboxField = forwardRef(
   (
     {
       name,
@@ -607,8 +596,8 @@ export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: CheckboxFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -693,7 +682,7 @@ const INPUT_TYPES = [
 type InputType = typeof INPUT_TYPES[number]
 
 export interface InputFieldProps
-  extends FieldProps<HTMLInputElement>,
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
   /**
    * @privateRemarks
@@ -711,7 +700,7 @@ export interface InputFieldProps
  *
  * @see {@link https://redwoodjs.com/docs/form#inputfields}
  */
-const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
+const InputField = forwardRef(
   (
     {
       name,
@@ -727,8 +716,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       onChange,
       type,
       ...rest
-    },
-    ref
+    }: InputFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const styles = useErrorStyles({
       name,
