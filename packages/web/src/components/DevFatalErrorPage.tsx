@@ -7,14 +7,15 @@ import { useState } from 'react'
 import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
-// Chop of the first slash character (maybe be OSX/Linux only?)
 const srcRoot = process.env.RWJS_SRC_ROOT || ''
 
 let appRoot: string
 
 if (/^[A-Z]:\\/.test(srcRoot)) {
+  // On Windows srcRoot will be something like C:\Users\bob\dev\rwApp
   appRoot = srcRoot.substring(3).replace(/\\/g, '/')
 } else {
+  // On Linux/MacOS srcRoot will be something like /Users/bob/dev/rwApp
   appRoot = srcRoot.substring(1)
 }
 
