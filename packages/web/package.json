@@ -30,7 +30,7 @@
     "@redwoodjs/auth": "v0.45.0",
     "graphql": "16.3.0",
     "graphql-tag": "2.12.6",
-    "react-helmet-async": "1.2.2",
+    "react-helmet-async": "1.2.3",
     "react-hot-toast": "2.2.0",
     "ts-toolbelt": "9.6.0"
   },
