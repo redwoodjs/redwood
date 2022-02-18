@@ -47,29 +47,39 @@ export interface AuthContextInterface {
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
    */
-  client: SupportedAuthClients
-  type: SupportedAuthTypes
+  client?: SupportedAuthClients
+  type?: SupportedAuthTypes
   hasError: boolean
   error?: Error
 }
 
-// @ts-expect-error - We do not supply default values for the functions.
 export const AuthContext = React.createContext<AuthContextInterface>({
   loading: true,
   isAuthenticated: false,
   userMetadata: null,
   currentUser: null,
+  logIn: () => Promise.resolve(),
+  logOut: () => Promise.resolve(),
+  signUp: () => Promise.resolve(),
+  getToken: () => Promise.resolve(null),
+  getCurrentUser: () => Promise.resolve(null),
+  hasRole: () => true,
+  reauthenticate: () => Promise.resolve(),
+  forgotPassword: () => Promise.resolve(),
+  resetPassword: () => Promise.resolve(),
+  validateResetToken: () => Promise.resolve(),
+  hasError: false,
 })
 
 type AuthProviderProps =
   | {
       client: SupportedAuthClients
-      type: Omit<SupportedAuthTypes, 'dbAuth'>
+      type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
       skipFetchCurrentUser?: boolean
     }
   | {
       client?: never
-      type: 'dbAuth'
+      type: 'dbAuth' | 'clerk'
       skipFetchCurrentUser?: boolean
     }
 

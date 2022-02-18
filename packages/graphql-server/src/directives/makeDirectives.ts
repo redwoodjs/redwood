@@ -74,7 +74,7 @@ export const createValidatorDirective = (
   return {
     name: directiveName,
     schema,
-    onExecute: directiveFunc,
+    onResolverCalled: directiveFunc,
     type: DirectiveType.VALIDATOR,
   }
 }
@@ -98,7 +98,7 @@ export const createTransformerDirective = (
   return {
     name: directiveName,
     schema,
-    onExecute: directiveFunc,
+    onResolverCalled: directiveFunc,
     type: DirectiveType.TRANSFORMER,
   }
 }

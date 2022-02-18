@@ -47,7 +47,10 @@ declare global {
   const matchFolderTransform: MatchFolder
   namespace jest {
     interface Matchers<R> {
-      toMatchFileContents(fixturePath: string): R
+      toMatchFileContents(
+        fixturePath: string,
+        { removeWhitespace }: { removeWhitespace: boolean }
+      ): R
     }
   }
 }

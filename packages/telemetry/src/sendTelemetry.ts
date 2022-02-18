@@ -82,8 +82,8 @@ const getInfo = async (presets = {}) => {
     osVersion: info.System?.OS?.split(' ')[1],
     shell: info.System?.Shell?.name,
     nodeVersion: info.Binaries?.Node?.version,
-    yarnVersion: info.Binaries?.Node?.version,
-    npmVersion: info.Binaries?.Node?.version,
+    yarnVersion: info.Binaries?.Yarn?.version,
+    npmVersion: info.Binaries?.npm?.version,
     vsCodeVersion: info.IDEs?.VSCode?.version,
     redwoodVersion:
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,

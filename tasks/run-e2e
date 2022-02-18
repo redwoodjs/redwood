@@ -5,6 +5,7 @@ const os = require('os')
 const path = require('path')
 
 const execa = require('execa')
+const fg = require('fast-glob')
 const fs = require('fs-extra')
 const yargs = require('yargs')
 
@@ -24,11 +25,20 @@ const makeDirectory = () => {
 
 const buildRedwoodFramework = () => {
   try {
-    execa.sync('yarn build:clean && yarn build:js', {
-      cwd: REDWOODJS_FRAMEWORK_PATH,
-      shell: true,
-      stdio: 'inherit',
+    const files = fg.sync('packages/**/dist', {
+      onlyDirectories: true,
     })
+
+    execa.sync(
+      [files.length && 'yarn build:clean', 'yarn build:js']
+        .filter(Boolean)
+        .join('&&'),
+      {
+        cwd: REDWOODJS_FRAMEWORK_PATH,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
   } catch (e) {
     console.error('Error: Could not build Redwood Framework')
     console.error(e)

@@ -1,15 +1,12 @@
-/* eslint-env jest */
+// /* eslint-env jest */
 const fs = require('fs')
 const path = require('path')
 
-const {
-  getSchemaDefinitions,
-  getSchemaConfig,
-} = require('@redwoodjs/cli/dist/lib/schemaHelpers')
+const { getConfig, getDMMF } = require('@prisma/sdk')
+
 const { setContext } = require('@redwoodjs/graphql-server')
-const { getPaths } = require('@redwoodjs/internal')
+const { getPaths } = require('@redwoodjs/internal/dist/paths')
 const { defineScenario } = require('@redwoodjs/testing/dist/api')
-const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
 // Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
 // fails on DELETE
@@ -30,20 +27,10 @@ const isIdenticalArray = (a, b) => {
   return JSON.stringify(a) === JSON.stringify(b)
 }
 
-// determine what kind of quotes are needed around table names in raw SQL
-const getQuoteStyle = async () => {
-  const config = await getSchemaConfig()
-
-  switch (config.datasources?.[0]?.provider) {
-    case 'mysql':
-      return '`'
-    default:
-      return '"'
-  }
-}
-
 const configureTeardown = async () => {
-  const schema = await getSchemaDefinitions()
+  // @NOTE prisma utils are available in cli lib/schemaHelpers
+  // But avoid importing them, to prevent memory leaks in jest
+  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
   const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
 
   // check if pre-defined delete order already exists and if so, use it to start
@@ -62,6 +49,8 @@ const configureTeardown = async () => {
 
 const seedScenario = async (scenario) => {
   if (scenario) {
+    const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+
     const scenarios = {}
     for (const [model, namedFixtures] of Object.entries(scenario)) {
       scenarios[model] = {}
@@ -80,7 +69,24 @@ const seedScenario = async (scenario) => {
 }
 
 const teardown = async () => {
+  // Don't populate global scope, keep util functions inside teardown
+  // determine what kind of quotes are needed around table names in raw SQL
+  const getQuoteStyle = async () => {
+    const config = await getConfig({
+      datamodel: fs.readFileSync(getPaths().api.dbSchema).toString(),
+    })
+
+    switch (config.datasources?.[0]?.provider) {
+      case 'mysql':
+        return '`'
+      default:
+        return '"'
+    }
+  }
+
   const quoteStyle = await getQuoteStyle()
+
+  const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
   for (const modelName of teardownOrder) {
     try {
@@ -167,13 +173,14 @@ global.mockCurrentUser = (currentUser) => {
   setContext({ currentUser })
 }
 
-// Disable perRequestContext for tests
 beforeAll(async () => {
+  // Disable perRequestContext for tests
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
   await configureTeardown()
 })
 
 afterAll(async () => {
+  const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
   await db.$disconnect()
 })
 

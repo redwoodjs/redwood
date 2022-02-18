@@ -224,7 +224,7 @@ export const handler = async ({
       },
       {
         title: `Generating types...`,
-        task: () => generateTypes,
+        task: generateTypes,
       },
       {
         title: 'One more thing...',

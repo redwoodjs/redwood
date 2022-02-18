@@ -172,7 +172,7 @@ const getSharedPlugins = (isEnvProduction) => {
     new Dotenv({
       path: path.resolve(redwoodPaths.base, '.env'),
       silent: true,
-      ignoreStub: true, // FIXME: this might not be necessary once the storybook webpack 4/5 stuff is ironed out. See also: https://github.com/mrsteele/dotenv-webpack#processenv-stubbing--replacing
+      // ignoreStub: true, // FIXME: this might not be necessary once the storybook webpack 4/5 stuff is ironed out. See also: https://github.com/mrsteele/dotenv-webpack#processenv-stubbing--replacing
     }),
   ].filter(Boolean)
 }

@@ -32,6 +32,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     )
 
     waitForApiSide()
+
     cy.visit('http://localhost:8910/blog-post/3')
 
     cy.visit('http://localhost:8910/posts')

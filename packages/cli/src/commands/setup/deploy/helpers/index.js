@@ -154,7 +154,6 @@ export const addFilesTask = ({
       files.forEach((fileData) => {
         fileNameToContentMap[fileData.path] = fileData.content
       })
-
       return writeFilesTask(fileNameToContentMap, { overwriteExisting: force })
     },
   }
@@ -181,12 +180,33 @@ export const addToGitIgnoreTask = ({ paths }) => {
   }
 }
 
+export const addToDotEnvTask = ({ lines }) => {
+  return {
+    title: 'Updating .env...',
+    skip: () => {
+      if (!fs.existsSync(path.resolve(getPaths().base, '.env'))) {
+        return 'No .env present, skipping.'
+      }
+    },
+    task: async (_ctx, task) => {
+      const env = path.resolve(getPaths().base, '.env')
+      const content = fs.readFileSync(env).toString()
+
+      if (lines.every((line) => content.includes(line.split('=')[0]))) {
+        task.skip('.env already includes the additions.')
+      }
+
+      fs.appendFileSync(env, lines.join('\n'))
+    },
+  }
+}
+
 export const printSetupNotes = (notes) => {
   return {
     title: 'One more thing...',
     task: (_ctx, task) => {
-      task.title = `One more thing...\n\n ${boxen(notes.join('\n   '), {
-        padding: { top: 0, bottom: 0, right: 0, left: 0 },
+      task.title = `One more thing...\n\n ${boxen(notes.join('\n'), {
+        padding: { top: 1, bottom: 1, right: 1, left: 1 },
         margin: 1,
         borderColour: 'gray',
       })}  \n`

@@ -6,7 +6,7 @@ export const getApiGraphQLUrl = () => {
 
 export interface FetchConfig {
   uri: string
-  headers?: { 'auth-provider': SupportedAuthTypes; authorization?: string }
+  headers?: { 'auth-provider'?: SupportedAuthTypes; authorization?: string }
 }
 
 export const FetchConfigContext = React.createContext<FetchConfig>({
