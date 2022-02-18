@@ -7973,15 +7973,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@types/node-fetch@npm:3.0.2"
-  dependencies:
-    node-fetch: "*"
-  checksum: 2fedd8ff347c0d1fcd0491a3408087a1d8306a38a2425464ec72049ab3353debdec99d988e2a5ab5b32ee9f275aab30c1e10a250f2b6c3b91824b7aa26653700
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^17.0":
   version: 17.0.18
   resolution: "@types/node@npm:17.0.18"
@@ -21882,17 +21873,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:*, node-fetch@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "node-fetch@npm:3.2.0"
-  dependencies:
-    data-uri-to-buffer: ^4.0.0
-    fetch-blob: ^3.1.4
-    formdata-polyfill: ^4.0.10
-  checksum: 50fd341dea9126e8d85dcdee85ffee9a72383fc3559dd420f2b16a072d6053f3ec50d0b5d21baacfcc94a22cbb45068ed1e0c6be8338b454ae4df83ab419c934
-  languageName: node
-  linkType: hard
-
 "node-fetch@npm:2.6.1":
   version: 2.6.1
   resolution: "node-fetch@npm:2.6.1"
@@ -21911,6 +21891,17 @@ __metadata:
     encoding:
       optional: true
   checksum: fcae80f5ac52fbf5012f5e19df2bd3915e67d3b3ad51cb5942943df2238d32ba15890fecabd0e166876a9f98a581ab50f3f10eb942b09405c49ef8da36b826c7
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "node-fetch@npm:3.2.0"
+  dependencies:
+    data-uri-to-buffer: ^4.0.0
+    fetch-blob: ^3.1.4
+    formdata-polyfill: ^4.0.10
+  checksum: 50fd341dea9126e8d85dcdee85ffee9a72383fc3559dd420f2b16a072d6053f3ec50d0b5d21baacfcc94a22cbb45068ed1e0c6be8338b454ae4df83ab419c934
   languageName: node
   linkType: hard
 
@@ -25996,7 +25987,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.5.5
     typescript-transform-paths: 3.3.1
-    zx: 5.0.0
+    zx: 5.1.0
   languageName: unknown
   linkType: soft
 
@@ -30828,14 +30819,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:5.0.0":
-  version: 5.0.0
-  resolution: "zx@npm:5.0.0"
+"zx@npm:5.1.0":
+  version: 5.1.0
+  resolution: "zx@npm:5.1.0"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
     "@types/node": ^17.0
-    "@types/node-fetch": ^3.0.2
     chalk: ^5.0.0
     fs-extra: ^10.0.0
     globby: ^13.1.1
@@ -30846,6 +30836,6 @@ __metadata:
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: 1deb841ed81166b72b115ceb50daf7442213c7dfdbd32033ae9f21897b64e522d65467082ffdb77046f08c774dc8ee94da7e2adb99436c520946699c9b73492c
+  checksum: f1e1eb3c754c87f57a4a3f2ff1bf4828ec424711b5e6385eb0933b79e913626bab2e27eddeffc15eb0e5d06a6464c74facec96362203e6f614feb2d26e66be91
   languageName: node
   linkType: hard
