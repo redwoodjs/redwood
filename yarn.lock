@@ -5576,7 +5576,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     fast-json-parse: 1.0.3
-    fastify: 3.27.1
+    fastify: 3.27.2
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -6122,7 +6122,7 @@ __metadata:
     nodemon: 2.0.15
     react: 17.0.2
     react-dom: 17.0.2
-    react-helmet-async: 1.2.2
+    react-helmet-async: 1.2.3
     react-hot-toast: 2.2.0
     ts-toolbelt: 9.6.0
     typescript: 4.5.5
@@ -15436,9 +15436,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.27.1":
-  version: 3.27.1
-  resolution: "fastify@npm:3.27.1"
+"fastify@npm:3.27.2":
+  version: 3.27.2
+  resolution: "fastify@npm:3.27.2"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
@@ -15454,8 +15454,8 @@ __metadata:
     rfdc: ^1.1.4
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
-    tiny-lru: ^7.0.0
-  checksum: 62e0e3af623f6e4d3491db720eecda4b1fa7ab5f5b441326fa0a45bfc9ed575e2940535b68e92a3a5b655363b0540c1faebdf07d30607455c4cd7f28473c8006
+    tiny-lru: ^8.0.1
+  checksum: d34c22d2c5bc1abf0ca078192bf38c6a2a6de87e7fd0d8aba3d90a57eb347067ff35acb2f250b59e91bbd90ccbd9f8727e35df8fa7501704ac86480a5baed480
   languageName: node
   linkType: hard
 
@@ -24795,9 +24795,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:1.2.2, react-helmet-async@npm:^1.0.7":
-  version: 1.2.2
-  resolution: "react-helmet-async@npm:1.2.2"
+"react-helmet-async@npm:1.2.3, react-helmet-async@npm:^1.0.7":
+  version: 1.2.3
+  resolution: "react-helmet-async@npm:1.2.3"
   dependencies:
     "@babel/runtime": ^7.12.5
     invariant: ^2.2.4
@@ -24807,7 +24807,7 @@ __metadata:
   peerDependencies:
     react: ^16.6.0 || ^17.0.0
     react-dom: ^16.6.0 || ^17.0.0
-  checksum: 29cfa2f521b12d2f899a4f09dcba3106168f676a92ac2c9fc1a3acef19452896961e9b30b432195d9c7a59589fcbcef32afc136642affe82d014b8f31b442c1e
+  checksum: 69ea4a4597fd37f8f22c2f8e207e477b5f5fedad4dd00dc846d73c728bd8dfb2d0ccdf3fff076921a18381cf6eeca01962d6115a4e1330ff42fbc5f95ea5b946
   languageName: node
   linkType: hard
 
@@ -28204,7 +28204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:7.0.6, tiny-lru@npm:^7.0.0":
+"tiny-lru@npm:7.0.6":
   version: 7.0.6
   resolution: "tiny-lru@npm:7.0.6"
   checksum: bf155e9f8eb85b32f5bdbaad6040e152ace4611267d000fda17af3c831f950b5a77065b185da57469e45c5d8c7a7c4f54b597d2c03c9f31be6e4fa7ea574153c
