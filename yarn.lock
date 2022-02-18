@@ -5576,7 +5576,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     fast-json-parse: 1.0.3
-    fastify: 3.27.1
+    fastify: 3.27.2
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
     fastify-static: 4.5.0
@@ -15436,9 +15436,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.27.1":
-  version: 3.27.1
-  resolution: "fastify@npm:3.27.1"
+"fastify@npm:3.27.2":
+  version: 3.27.2
+  resolution: "fastify@npm:3.27.2"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
     abstract-logging: ^2.0.0
@@ -15454,8 +15454,8 @@ __metadata:
     rfdc: ^1.1.4
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
-    tiny-lru: ^7.0.0
-  checksum: 62e0e3af623f6e4d3491db720eecda4b1fa7ab5f5b441326fa0a45bfc9ed575e2940535b68e92a3a5b655363b0540c1faebdf07d30607455c4cd7f28473c8006
+    tiny-lru: ^8.0.1
+  checksum: d34c22d2c5bc1abf0ca078192bf38c6a2a6de87e7fd0d8aba3d90a57eb347067ff35acb2f250b59e91bbd90ccbd9f8727e35df8fa7501704ac86480a5baed480
   languageName: node
   linkType: hard
 
@@ -28204,7 +28204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:7.0.6, tiny-lru@npm:^7.0.0":
+"tiny-lru@npm:7.0.6":
   version: 7.0.6
   resolution: "tiny-lru@npm:7.0.6"
   checksum: bf155e9f8eb85b32f5bdbaad6040e152ace4611267d000fda17af3c831f950b5a77065b185da57469e45c5d8c7a7c4f54b597d2c03c9f31be6e4fa7ea574153c
