@@ -122,7 +122,9 @@ export const handler = async ({ force, install }) => {
           }
         }
 
-        await execa('yarn', ['tailwindcss', 'init', tailwindConfigPath])
+        await execa('yarn', ['tailwindcss', 'init', tailwindConfigPath], {
+          cwd: rwPaths.web.base,
+        })
 
         // Replace `content`.
         const tailwindConfig = fs.readFileSync(tailwindConfigPath, 'utf-8')
