@@ -144,7 +144,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
 }
 async function yarnInstall({ verbose }) {
   try {
-    await execa('yarn install', ['--force', '--non-interactive'], {
+    await execa('yarn install', {
       shell: true,
       stdio: verbose ? 'inherit' : 'pipe',
 
