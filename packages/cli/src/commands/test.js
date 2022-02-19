@@ -145,10 +145,15 @@ export const handler = async ({
 
     if (sides.includes('api')) {
       if (!fs.existsSync(path.join(rwjsPaths.api.base, 'jest.config.js'))) {
-        throw new Error(
-          c.error('Jest config file not found in `api/jest.config.js.`'),
+        console.error(
+          c.error('Error: Jest config file not found in `api/jest.config.js.`')
+        )
+        console.error(
+          c.error('Run `npx @redwoodjs/codemods@latest update-jest-config`.')
+        )
+        console.error(
           c.error(
-            'Run `npx @redwoodjs/codemods@latest update-jest-config`. This command will automatically update to the new config.'
+            'This command will automatically update your project to the latest Jest config.'
           )
         )
       }
@@ -156,10 +161,15 @@ export const handler = async ({
 
     if (sides.includes('web')) {
       if (!fs.existsSync(path.join(rwjsPaths.web.base, 'jest.config.js'))) {
-        throw new Error(
-          c.error('Jest config file not found in `web/jest.config.js.`'),
+        console.error(
+          c.error('Error: Jest config file not found in `web/jest.config.js.`')
+        )
+        console.error(
+          c.error('Run `npx @redwoodjs/codemods@latest update-jest-config`.')
+        )
+        console.error(
           c.error(
-            'Run `npx @redwoodjs/codemods@latest update-jest-config`. This command will automatically update to the new config.'
+            'This command will automatically update your project to the latest Jest config.'
           )
         )
       }
