@@ -32,7 +32,7 @@
     "graphql-tag": "2.12.6",
     "react-helmet-async": "1.2.3",
     "react-hot-toast": "2.2.0",
-    "stacktracey": "2.1.7",
+    "stacktracey": "2.1.8",
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
