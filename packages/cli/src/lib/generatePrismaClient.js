@@ -21,7 +21,7 @@ export const generatePrismaCommand = (schema) => {
   }
 
   return {
-    cmd: path.join(getPaths().base, 'node_modules/.bin/prisma'),
+    cmd: `node "${require.resolve('prisma/build/index.js')}"`,
     args: ['generate', schema && `--schema="${schema}"`],
   }
 }
