@@ -6124,7 +6124,7 @@ __metadata:
     react-dom: 17.0.2
     react-helmet-async: 1.2.3
     react-hot-toast: 2.2.0
-    stacktracey: 2.1.7
+    stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
     typescript: 4.5.5
   peerDependencies:
@@ -27181,13 +27181,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stacktracey@npm:2.1.7":
-  version: 2.1.7
-  resolution: "stacktracey@npm:2.1.7"
+"stacktracey@npm:2.1.8":
+  version: 2.1.8
+  resolution: "stacktracey@npm:2.1.8"
   dependencies:
     as-table: ^1.0.36
     get-source: ^2.0.12
-  checksum: 6f5c3f53430d3e091201a412f77f6da23ad986db11a394f9d06597f153dd901248908481b50f35646d7a814f6ace79e3a8b10ab33bfb2485dc6ebff8630bfb88
+  checksum: e17357d0a532d303138899b910ab660572009a1f4cde1cbf73b99416957a2378e6e1c791b3c31b043cf7c5f37647da1dd114e66c9203f23c65b34f783665405b
   languageName: node
   linkType: hard
 
