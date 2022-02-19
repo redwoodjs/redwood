@@ -22,6 +22,14 @@ export const builder = (yargs) =>
   })
 
 export const handler = ({ length }) => {
+  if (!process.stdout.isTTY) {
+    // If the output is being piped we only print the secret, no
+    // information messages. This makes it easier to programmatically use the
+    // output
+    console.log(generateSecret(length))
+    return
+  }
+
   console.info('')
   console.info(`  ${generateSecret(length)}`)
   console.info('')
