@@ -25,8 +25,10 @@ export const handler = ({ length }) => {
   if (!process.stdout.isTTY) {
     // If the output is being piped we only print the secret, no
     // information messages. This makes it easier to programmatically use the
-    // output
-    console.log(generateSecret(length))
+    // output.
+    // Using stdout.write here to not get the newline that console.log always
+    // adds
+    process.stdout.write(generateSecret(length))
     return
   }
 
