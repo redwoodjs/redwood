@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -139,6 +142,28 @@ export const handler = async ({
       rwjsPaths.generated.base
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+
+    if (sides.includes('api')) {
+      if (!fs.existsSync(path.join(rwjsPaths.api.base, 'jest.config.js'))) {
+        throw new Error(
+          c.error('Jest config file not found in `api/jest.config.js.`'),
+          c.error(
+            'Run `npx @redwoodjs/codemods@latest update-jest-config`. This command will automatically update to the new config.'
+          )
+        )
+      }
+    }
+
+    if (sides.includes('web')) {
+      if (!fs.existsSync(path.join(rwjsPaths.web.base, 'jest.config.js'))) {
+        throw new Error(
+          c.error('Jest config file not found in `web/jest.config.js.`'),
+          c.error(
+            'Run `npx @redwoodjs/codemods@latest update-jest-config`. This command will automatically update to the new config.'
+          )
+        )
+      }
+    }
 
     if (sides.includes('api') && !dbPush) {
       // @NOTE
