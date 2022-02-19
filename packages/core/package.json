@@ -11,6 +11,7 @@
   "bin": {
     "cross-env": "./dist/bins/cross-env.js",
     "eslint": "./dist/bins/eslint.js",
+    "jest": "./dist/bins/jest.js",
     "nodemon": "./dist/bins/nodemon.js",
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js",
