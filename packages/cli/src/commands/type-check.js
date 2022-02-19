@@ -57,11 +57,9 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
 
     const tscForAllSides = sides.map((side) => {
       const projectDir = path.join(getPaths().base, side)
-      // -s flag to suppress error output from yarn. For example yarn doc link on non-zero status.
-      // Since it'll be printed anyways after the whole execution.
       return {
         cwd: projectDir,
-        command: `yarn -s tsc --noEmit --skipLibCheck`,
+        command: `yarn tsc --noEmit --skipLibCheck`,
       }
     })
 

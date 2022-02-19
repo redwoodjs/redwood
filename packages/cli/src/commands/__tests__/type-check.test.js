@@ -70,12 +70,12 @@ test('Should run tsc commands correctly, in order', async () => {
   // Ensure tsc command run correctly for web side
   expect(concurrentlyArgs.commands).toContainEqual({
     cwd: path.join('myBasePath', 'web'),
-    command: 'yarn -s tsc --noEmit --skipLibCheck',
+    command: 'yarn tsc --noEmit --skipLibCheck',
   })
   // Ensure tsc command run correctly for web side
   expect(concurrentlyArgs.commands).toContainEqual({
     cwd: path.join('myBasePath', 'api'),
-    command: 'yarn -s tsc --noEmit --skipLibCheck',
+    command: 'yarn tsc --noEmit --skipLibCheck',
   })
   // Ensure we have raw sequential output from tsc
   expect(concurrentlyArgs.options).toEqual({ group: true, raw: true })
@@ -95,9 +95,9 @@ test('Should generate prisma client', async () => {
   // Ensure tsc command run correctly for web side
   expect(concurrentlyArgs.commands).toContainEqual({
     cwd: path.join('myBasePath', 'api'),
-    command: 'yarn -s tsc --noEmit --skipLibCheck',
+    command: 'yarn tsc --noEmit --skipLibCheck',
   })
-  expect(runCommandTask.mock.results[0].value[0]).toEqual(
-    'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
+  expect(runCommandTask.mock.results[0].value[0]).toMatch(
+    /node ".+\/prisma\/build\/index.js" generate --schema="\.\.\/\.\.\/__fixtures__\/example-todo-main\/api\/prisma"/
   )
 })
