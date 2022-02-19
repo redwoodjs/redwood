@@ -15,6 +15,8 @@ declare global {
   var RWJS_API_GRAPHQL_URL: string
   /** URL or absolute path to serverless functions */
   var RWJS_API_URL: string
+  /** Path to Redwood app source used by Development Error page to resolve source code paths */
+  var RWJS_SRC_ROOT: string
 
   namespace NodeJS {
     interface Global {
