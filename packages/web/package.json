@@ -12,6 +12,7 @@
     "msw": "./dist/bins/msw.js",
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js",
+    "rwfw": "./dist/bins/rwfw.js",
     "start-storybook": "./dist/bins/start-storybook.js",
     "tsc": "./dist/bins/tsc.js",
     "webpack": "./dist/bins/webpack.js"
