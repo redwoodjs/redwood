@@ -61,13 +61,13 @@ export const mockRedwoodDirective: DirectiveMocker = (
   return () => {
     if (directive.type === DirectiveType.TRANSFORMER) {
       const { mockedResolvedValue } = others as TransformerMock
-      return directive.onResolverCalled({
+      return directive.onExecute({
         resolvedValue: mockedResolvedValue,
         context: globalContext,
         ...others,
       } as DirectiveParams)
     } else {
-      directive.onResolverCalled({
+      directive.onExecute({
         context: globalContext,
         directiveArgs,
         ...others,

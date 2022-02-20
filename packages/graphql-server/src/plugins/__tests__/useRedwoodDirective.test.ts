@@ -95,14 +95,14 @@ const schemaWithDirectiveQueries = makeExecutableSchema({
 const testInstance = createTestkit(
   [
     useRedwoodDirective({
-      onResolverCalled: () => {
+      onExecute: () => {
         throw new Error(AUTH_ERROR_MESSAGE)
       },
       type: DirectiveType.VALIDATOR,
       name: 'requireAuth',
     }),
     useRedwoodDirective({
-      onResolverCalled: () => {
+      onExecute: () => {
         return
       },
       type: DirectiveType.VALIDATOR,

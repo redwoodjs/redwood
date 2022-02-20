@@ -60,13 +60,13 @@ export interface TransformerDirective extends TransformerDirectiveOptions {
 }
 
 interface ValidatorDirectiveOptions {
-  onResolverCalled: ValidatorDirectiveFunc
+  onExecute: ValidatorDirectiveFunc
   type: DirectiveType.VALIDATOR
   name: string
 }
 
 interface TransformerDirectiveOptions {
-  onResolverCalled: TransformerDirectiveFunc
+  onExecute: TransformerDirectiveFunc
   type: DirectiveType.TRANSFORMER
   name: string
 }
@@ -113,57 +113,61 @@ export function getDirectiveByName(
 export const useRedwoodDirective = (
   options: DirectivePluginOptions
 ): Plugin<{
-  onResolverCalled: ValidatorDirectiveFunc | TransformerDirectiveFunc
+  onExecute: ValidatorDirectiveFunc | TransformerDirectiveFunc
 }> => {
   return {
-    async onResolverCalled({ args, root, context, info }) {
-      const directiveNode = getDirectiveByName(info, options.name)
-      const directive = directiveNode
-        ? info.schema.getDirective(directiveNode.name.value)
-        : null
+    onExecute({ args: executionArgs }) {
+      return {
+        async onResolverCalled({ args, root, context, info }) {
+          const directiveNode = getDirectiveByName(info, options.name)
+          const directive = directiveNode
+            ? executionArgs.schema.getDirective(directiveNode.name.value)
+            : null
 
-      if (directiveNode && directive) {
-        const directiveArgs =
-          getDirectiveValues(
-            directive,
-            { directives: [directiveNode] },
-            info.variableValues
-          ) || {}
+          if (directiveNode && directive) {
+            const directiveArgs =
+              getDirectiveValues(
+                directive,
+                { directives: [directiveNode] },
+                executionArgs.variableValues
+              ) || {}
 
-        if (_isValidator(options)) {
-          await options.onResolverCalled({
-            root,
-            args,
-            context,
-            info,
-            directiveNode,
-            directiveArgs,
-          })
-        }
+            if (_isValidator(options)) {
+              await options.onExecute({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
+            }
 
-        // In order to change the value of the field, we have to return a function in this form
-        // ({result, setResult}) => { setResult(newValue)}
-        // Not super clear but mentioned here: https://www.envelop.dev/docs/plugins/lifecycle#onexecuteapi
+            // In order to change the value of the field, we have to return a function in this form
+            // ({result, setResult}) => { setResult(newValue)}
+            // Not super clear but mentioned here: https://www.envelop.dev/docs/plugins/lifecycle#onexecuteapi
 
-        if (_isTransformer(options)) {
-          return ({ result, setResult }) => {
-            // @NOTE! A transformer cannot be async
-            const transformedValue = options.onResolverCalled({
-              root,
-              args,
-              context,
-              info,
-              directiveNode,
-              directiveArgs,
-              resolvedValue: result,
-            })
+            if (_isTransformer(options)) {
+              return ({ result, setResult }) => {
+                // @NOTE! A transformer cannot be async
+                const transformedValue = options.onExecute({
+                  root,
+                  args,
+                  context,
+                  info,
+                  directiveNode,
+                  directiveArgs,
+                  resolvedValue: result,
+                })
 
-            setResult(transformedValue)
+                setResult(transformedValue)
+              }
+            }
           }
-        }
-      }
 
-      return
+          return
+        },
+      }
     },
   }
 }
