@@ -41,11 +41,15 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
       })
     },
     getToken: async () => {
-      // The client refresh function only actually refreshes token
-      // when it's been expired. Don't panic
-      await client.refresh()
-      const user = await client.currentUser()
-      return user?.token?.access_token || null
+      try {
+        // The client refresh function only actually refreshes token
+        // when it's been expired. Don't panic
+        await client.refresh()
+        const user = await client.currentUser()
+        return user?.token?.access_token || null
+      } catch {
+        return null
+      }
     },
     getUserMetadata: async () => {
       return client.currentUser()
