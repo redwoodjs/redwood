@@ -3,7 +3,6 @@ import {
   envelop,
   EnvelopError,
   FormatErrorHandler,
-  useImmediateIntrospection,
   useMaskedErrors,
   useSchema,
 } from '@envelop/core'
@@ -168,8 +167,6 @@ export const createGraphQLHandler = ({
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
-  } else {
-    plugins.push(useImmediateIntrospection())
   }
 
   // Simple LRU for caching parse results.
