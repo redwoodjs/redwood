@@ -1,7 +1,12 @@
 import { RedwoodError } from '../errors'
 
 export class ServiceValidationError extends RedwoodError {
-  constructor(message: string, substitutions = {}) {
+  constructor(
+    message: string,
+    substitutions = {},
+    fieldName?: string,
+    extensions?: Record<string, any>
+  ) {
     let errorMessage = message
 
     // replace instances of a string like `{max}` with any substituted values
@@ -9,7 +14,7 @@ export class ServiceValidationError extends RedwoodError {
       errorMessage = errorMessage.replaceAll(`\${${key}}`, String(value))
     }
 
-    super(errorMessage)
+    super(errorMessage, fieldName, extensions)
     this.name = 'ServiceValidationError'
   }
 }
@@ -39,11 +44,23 @@ export class AcceptanceValidationError extends ServiceValidationError {
 export class EmailValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = '${name} must be formatted like an email address',
+    fieldName?: string,
+    message = '${name} is invalid',
     substitutions = {}
   ) {
+    const messages: Record<string, any> = {}
+    const key = fieldName || name.toLowerCase()
+    messages[key] = ['is not formatted like an email address']
+
     super(message, Object.assign(substitutions, { name }))
     this.name = 'EmailValidationError'
+
+    this.extensions = {
+      code: 'BAD_USER_INPUT',
+      properties: {
+        messages,
+      },
+    }
   }
 }
 
