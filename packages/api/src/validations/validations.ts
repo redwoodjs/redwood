@@ -550,6 +550,10 @@ export function validate(
   }
 
   for (const [validator, options] of Object.entries(validationRecipe)) {
+    if (typeof options === 'undefined') {
+      continue
+    }
+
     VALIDATORS[validator as keyof typeof VALIDATORS](value, label, options)
   }
 }

@@ -1,6 +1,18 @@
 import * as ValidationErrors from '../errors'
 import { validate, validateUniqueness, validateWith } from '../validations'
 
+const ValidatorOptions = [
+  'absence',
+  'acceptance',
+  'email',
+  'exclusion',
+  'format',
+  'inclusion',
+  'length',
+  'numericality',
+  'presence',
+]
+
 describe('validate absence', () => {
   it('checks if value is null or undefined', () => {
     expect(() =>
@@ -844,6 +856,12 @@ describe('validate', () => {
         format: /^\d+$/,
       })
     ).not.toThrow()
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => {
+      ValidatorOptions.forEach((opt) => validate('foo', { [opt]: undefined }))
+    }).not.toThrow()
   })
 })
 
