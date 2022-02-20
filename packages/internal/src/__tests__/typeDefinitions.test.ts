@@ -42,6 +42,7 @@ test('generate the correct mirror types for cells', () => {
   expect(p).toMatchInlineSnapshot(`
     Array [
       ".redwood/types/mirror/web/src/components/NumTodosCell/index.d.ts",
+      ".redwood/types/mirror/web/src/components/NumTodosTwoCell/index.d.ts",
       ".redwood/types/mirror/web/src/components/TodoListCell/index.d.ts",
     ]
   `)

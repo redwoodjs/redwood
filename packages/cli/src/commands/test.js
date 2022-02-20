@@ -3,8 +3,10 @@ import terminalLink from 'terminal-link'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -55,10 +57,12 @@ export const builder = (yargs) => {
       default: true,
     })
     .epilogue(
-      `Also see the ${terminalLink(
+      `For all available flags, run jest cli directly ${c.green(
+        'yarn jest --help'
+      )}\n\nAlso see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/reference/command-line-interface#test'
-      )}`
+      )}\n`
     )
 }
 
@@ -78,10 +82,20 @@ export const handler = async ({
       return []
     } else {
       // and forward on the other flags
-      return [
-        flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
-        others[flagName],
-      ]
+      const flagValue = others[flagName]
+
+      if (Array.isArray(flagValue)) {
+        // jest does not collapse flags e.g. --coverageReporters=html --coverageReporters=text
+        // so we pass it on. Yargs collapses these flags into an array of values
+        return flagValue.flatMap((val) => {
+          return [flagName.length > 1 ? `--${flagName}` : `-${flagName}`, val]
+        })
+      } else {
+        return [
+          flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
+          flagValue,
+        ]
+      }
     }
   })
 
@@ -102,8 +116,6 @@ export const handler = async ({
     ...forwardJestFlags,
     collectCoverage ? '--collectCoverage' : null,
     '--passWithNoTests',
-    ...jestFilterArgs,
-    '--runInBand', // @TODO always run in band, even for web as we get babel errors https://github.com/redwoodjs/redwood/issues/3646
   ].filter((flagOrValue) => flagOrValue !== null) // Filter out nulls, not booleans because user may have passed a --something false flag
 
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
@@ -118,11 +130,6 @@ export const handler = async ({
     getProject().sides.forEach((side) => sides.push(side))
   }
 
-  jestArgs.push(
-    '--config',
-    `"${require.resolve('@redwoodjs/testing/config/jest/jest.config.js')}"`
-  )
-
   if (sides.length > 0) {
     jestArgs.push('--projects', ...sides)
   }
@@ -133,18 +140,10 @@ export const handler = async ({
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-    if (sides.includes('api') && dbPush) {
-      // Sync||create test database
-      await execa(
-        `yarn rw`,
-        ['prisma db push', '--force-reset', '--accept-data-loss'],
-        {
-          cwd: rwjsPaths.api.base,
-          stdio: 'inherit',
-          shell: true,
-          env: { DATABASE_URL },
-        }
-      )
+    if (sides.includes('api') && !dbPush) {
+      // @NOTE
+      // DB push code now lives in packages/testing/config/jest/api/jest-preset.js
+      process.env.SKIP_DB_PUSH = '1'
     }
 
     // **NOTE** There is no official way to run Jest programmatically,
@@ -158,6 +157,7 @@ export const handler = async ({
     })
   } catch (e) {
     // Errors already shown from execa inherited stderr
+    errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
 }

@@ -1,6 +1,6 @@
 const body = `
 <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-<Form onSubmit={onSubmit} validation={{ mode: 'onBlur' }} error={error}>
+<Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
   <Label
     name="name"
     className="block text-gray-700 uppercase text-sm"

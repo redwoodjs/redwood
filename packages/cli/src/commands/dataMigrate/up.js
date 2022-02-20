@@ -6,6 +6,7 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
@@ -26,6 +27,8 @@ const sortMigrations = (migrations) => {
   })
 }
 
+const SUPPORTED_EXTENSIONS = ['.js', '.ts']
+
 // Return the list of migrations that haven't run against the database yet
 const getMigrations = async (db) => {
   const basePath = path.join(getPaths().api.dataMigrations)
@@ -37,7 +40,7 @@ const getMigrations = async (db) => {
   // gets all migrations present in the app
   const files = fs
     .readdirSync(basePath)
-    .filter((m) => path.extname(m) === '.js')
+    .filter((m) => SUPPORTED_EXTENSIONS.includes(path.extname(m)))
     .map((m) => {
       return {
         [m.split('-')[0]]: path.join(basePath, m),
@@ -165,9 +168,13 @@ export const handler = async () => {
     await tasks.run()
     await db.$disconnect()
     report(counters)
+    if (counters.error) {
+      process.exit(1)
+    }
   } catch (e) {
     await db.$disconnect()
     report(counters)
+    errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
 }

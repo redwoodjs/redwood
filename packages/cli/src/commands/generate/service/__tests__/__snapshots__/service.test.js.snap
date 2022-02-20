@@ -12,6 +12,12 @@ export const userProfiles = () => {
 exports[`in javascript mode creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
 describe('userProfiles', () => {
   scenario('returns all userProfiles', async (scenario) => {
     const result = await userProfiles()
@@ -30,6 +36,12 @@ exports[`in javascript mode creates a multi word service test file with crud act
   updateTransaction,
   deleteTransaction,
 } from './transactions'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('transactions', () => {
   scenario('returns all transactions', async (scenario) => {
@@ -193,6 +205,12 @@ exports[`in javascript mode creates a single word service scenario file 1`] = `
 exports[`in javascript mode creates a single word service test file 1`] = `
 "import { users } from './users'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
 describe('users', () => {
   scenario('returns all users', async (scenario) => {
     const result = await users()
@@ -216,6 +234,12 @@ exports[`in typescript mode creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
 import type { StandardScenario } from './userProfiles.scenarios'
 
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
 describe('userProfiles', () => {
   scenario('returns all userProfiles', async (scenario: StandardScenario) => {
     const result = await userProfiles()
@@ -235,6 +259,12 @@ exports[`in typescript mode creates a multi word service test file with crud act
   deleteTransaction,
 } from './transactions'
 import type { StandardScenario } from './transactions.scenarios'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('transactions', () => {
   scenario('returns all transactions', async (scenario: StandardScenario) => {
@@ -423,6 +453,12 @@ export type StandardScenario = typeof standard
 exports[`in typescript mode creates a single word service test file 1`] = `
 "import { users } from './users'
 import type { StandardScenario } from './users.scenarios'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('users', () => {
   scenario('returns all users', async (scenario: StandardScenario) => {

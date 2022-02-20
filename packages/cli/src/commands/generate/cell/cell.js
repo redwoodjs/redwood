@@ -11,6 +11,7 @@ import {
   templateForComponentFile,
   createYargsForComponentGeneration,
   forcePluralizeWord,
+  removeGeneratorName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Cell'
@@ -54,7 +55,7 @@ export const files = async ({
   typescript: generateTypescript,
   ...options
 }) => {
-  let cellName = name
+  let cellName = removeGeneratorName(name, 'cell')
   let idType,
     model = null
   let templateNameSuffix = ''
@@ -62,16 +63,17 @@ export const files = async ({
   // Create a unique operation name.
 
   const shouldGenerateList =
-    (isWordPluralizable(name) ? isPlural(name) : options.list) || options.list
+    (isWordPluralizable(cellName) ? isPlural(cellName) : options.list) ||
+    options.list
 
   if (shouldGenerateList) {
-    cellName = forcePluralizeWord(name)
+    cellName = forcePluralizeWord(cellName)
     templateNameSuffix = 'List'
     // override operationName so that its find_operationName
   } else {
     // needed for the singular cell GQL query find by id case
     try {
-      model = await getSchema(pascalcase(singularize(name)))
+      model = await getSchema(pascalcase(singularize(cellName)))
       idType = getIdType(model)
     } catch {
       // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
@@ -173,7 +175,7 @@ export const { command, description, builder, handler } =
       return [
         {
           title: `Generating types ...`,
-          task: () => generateTypes,
+          task: generateTypes,
         },
       ]
     },

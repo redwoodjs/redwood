@@ -41,17 +41,19 @@ test('Should map globs to defined structure correctly', async () => {
     makeDirectivesForPlugin(directiveFiles)
 
   expect(fooDirective.name).toBe('foo')
-  expect(fooDirective.onExecute({} as DirectiveParams)).toBe('I am foo')
+  expect(fooDirective.onResolverCalled({} as DirectiveParams)).toBe('I am foo')
   expect(fooDirective.schema.kind).toBe('Document')
 
   expect(bazingaDirective.name).toBe('bazinga')
-  expect(bazingaDirective.onExecute).rejects.toThrowError(
+  expect(bazingaDirective.onResolverCalled).rejects.toThrowError(
     'Only soft kittens allowed'
   )
   expect(bazingaDirective.schema.kind).toBe('Document')
 
   expect(barDirective.name).toBe('bar')
-  expect(await barDirective.onExecute({} as DirectiveParams)).toBe('I am bar')
+  expect(await barDirective.onResolverCalled({} as DirectiveParams)).toBe(
+    'I am bar'
+  )
   expect(barDirective.schema.kind).toBe('Document')
 })
 

@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## Current and Previous Versions 
+## Upcoming 1.0.0 Deprecations
+The following items are scheduled for 1.0.0 deprecation:
+- api-server binary `rw-api-server`; use `rw-server api` instead (See [api-server/src/index.ts](https://github.com/redwoodjs/redwood/blob/main/packages/api-server/src/index.ts))
+
+## Current and Previous Versions
 For all changelog information since v0.0.1:
 - [GitHub Releases](https://github.com/redwoodjs/redwood/releases)
 

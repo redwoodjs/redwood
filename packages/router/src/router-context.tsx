@@ -4,11 +4,8 @@ import { useAuth } from '@redwoodjs/auth'
 
 import type { ParamType } from './util'
 
-const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
-
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
-  pageLoadingDelay?: number
   useAuth: typeof useAuth
 }
 
@@ -34,13 +31,11 @@ function stateReducer(state: RouterState, newState: Partial<RouterState>) {
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   useAuth: customUseAuth,
   paramTypes,
-  pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
     useAuth: customUseAuth || useAuth,
     paramTypes,
-    pageLoadingDelay,
   })
 
   return (

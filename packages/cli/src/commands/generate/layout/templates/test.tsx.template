@@ -2,6 +2,9 @@ import { render } from '@redwoodjs/testing/web'
 
 import ${pascalName}Layout from './${pascalName}Layout'
 
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
 describe('${pascalName}Layout', () => {
   it('renders successfully', () => {
     expect(() => {

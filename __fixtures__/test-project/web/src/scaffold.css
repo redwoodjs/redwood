@@ -1,0 +1,223 @@
+.rw-scaffold {
+  @apply bg-white text-gray-600;
+}
+.rw-scaffold h1,
+.rw-scaffold h2 {
+  @apply m-0;
+}
+.rw-scaffold a {
+  @apply bg-transparent;
+}
+.rw-scaffold ul {
+  @apply m-0 p-0;
+}
+.rw-scaffold input:-ms-input-placeholder {
+  @apply text-gray-500;
+}
+.rw-scaffold input::-ms-input-placeholder {
+  @apply text-gray-500;
+}
+.rw-scaffold input::placeholder {
+  @apply text-gray-500;
+}
+.rw-header {
+  @apply flex justify-between py-4 px-8;
+}
+.rw-main {
+  @apply mx-4 pb-4;
+}
+.rw-segment {
+  @apply rounded-lg overflow-hidden w-full;
+}
+.rw-segment-header {
+  @apply bg-gray-200 text-gray-700 py-3 px-4;
+}
+.rw-segment-main {
+  @apply bg-gray-100 p-4;
+}
+.rw-link {
+  @apply text-blue-400 underline;
+}
+.rw-link:hover {
+  @apply text-blue-500;
+}
+.rw-forgot-link {
+  @apply text-xs text-gray-400 text-right mt-1 underline;
+}
+.rw-forgot-link:hover {
+  @apply text-blue-500;
+}
+.rw-heading {
+  @apply font-semibold;
+}
+.rw-heading.rw-heading-primary {
+  @apply text-xl;
+}
+.rw-heading.rw-heading-secondary {
+  @apply text-sm;
+}
+.rw-heading .rw-link {
+  @apply text-gray-600 no-underline;
+}
+.rw-heading .rw-link:hover {
+  @apply text-gray-900 underline;
+}
+.rw-cell-error {
+  @apply text-sm font-semibold;
+}
+.rw-form-wrapper {
+  @apply text-sm -mt-4;
+}
+.rw-cell-error,
+.rw-form-error-wrapper {
+  @apply p-4 bg-red-50 text-red-600 border border-red-100 rounded my-4;
+}
+.rw-form-error-title {
+  @apply m-0 font-semibold;
+}
+.rw-form-error-list {
+  @apply mt-2 list-disc list-inside;
+}
+.rw-button {
+  @apply flex justify-center py-1 px-4 border-0 rounded bg-gray-200 text-gray-500 text-xs font-semibold uppercase tracking-wide leading-loose no-underline cursor-pointer transition duration-100;
+}
+.rw-button:hover {
+  @apply bg-gray-500 text-white;
+}
+.rw-button.rw-button-small {
+  @apply text-xs rounded-sm py-1 px-2;
+}
+.rw-button.rw-button-green {
+  @apply bg-green-500 text-white;
+}
+.rw-button.rw-button-green:hover {
+  @apply bg-green-700;
+}
+.rw-button.rw-button-blue {
+  @apply bg-blue-500 text-white;
+}
+.rw-button.rw-button-blue:hover {
+  @apply bg-blue-700;
+}
+.rw-button.rw-button-red {
+  @apply bg-red-500 text-white;
+}
+.rw-button.rw-button-red:hover {
+  @apply bg-red-700 text-white;
+}
+.rw-button-icon {
+  @apply text-xl leading-5 mr-1;
+}
+.rw-button-group {
+  @apply flex justify-center my-3 mx-2;
+}
+.rw-button-group .rw-button {
+  @apply mx-1;
+}
+.rw-form-wrapper .rw-button-group {
+  @apply mt-8;
+}
+.rw-label {
+  @apply block mt-6 text-gray-600 font-semibold;
+}
+.rw-label.rw-label-error {
+  @apply text-red-600;
+}
+.rw-input {
+  @apply block mt-2 w-full p-2 bg-white border border-gray-200 rounded outline-none;
+}
+.rw-check-radio-items {
+  @apply flex justify-items-center;
+}
+.rw-check-radio-item-none {
+  @apply text-gray-600;
+}
+.rw-input[type='checkbox'],
+.rw-input[type='radio'] {
+  @apply inline w-4 ml-0 mr-1 mt-1;
+}
+.rw-input:focus {
+  @apply border-gray-400;
+}
+.rw-input-error {
+  @apply border-red-600 text-red-600;
+}
+.rw-input-error:focus {
+  @apply border-red-600 outline-none;
+  box-shadow: 0 0 5px #c53030;
+}
+.rw-field-error {
+  @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
+}
+.rw-table-wrapper-responsive {
+  @apply overflow-x-scroll;
+}
+.rw-table-wrapper-responsive .rw-table {
+  min-width: 48rem;
+}
+.rw-table {
+  @apply w-full text-sm;
+}
+.rw-table th,
+.rw-table td {
+  @apply p-3;
+}
+.rw-table td {
+  @apply bg-white text-gray-900;
+}
+.rw-table thead tr {
+  @apply bg-gray-200 text-gray-600;
+}
+.rw-table th {
+  @apply font-semibold text-left;
+}
+.rw-table thead th {
+  @apply text-left;
+}
+.rw-table tbody th {
+  @apply text-right;
+}
+@media (min-width: 768px) {
+  .rw-table tbody th {
+    @apply w-1/5;
+  }
+}
+.rw-table tbody tr {
+  @apply bg-gray-50 border-t border-gray-200;
+}
+.rw-table input {
+  @apply ml-0;
+}
+.rw-table-actions {
+  @apply flex justify-end items-center h-4 pr-1;
+}
+.rw-table-actions .rw-button {
+  @apply bg-transparent;
+}
+.rw-table-actions .rw-button:hover {
+  @apply bg-gray-500 text-white;
+}
+.rw-table-actions .rw-button-blue {
+  @apply text-blue-500;
+}
+.rw-table-actions .rw-button-blue:hover {
+  @apply bg-blue-500 text-white;
+}
+.rw-table-actions .rw-button-red {
+  @apply text-red-600;
+}
+.rw-table-actions .rw-button-red:hover {
+  @apply bg-red-600 text-white;
+}
+.rw-text-center {
+  @apply text-center;
+}
+.rw-login-container {
+  @apply flex items-center justify-center flex-wrap mx-auto w-96 my-16;
+}
+.rw-login-container .rw-form-wrapper {
+  @apply w-full;
+}
+.rw-login-link {
+  @apply mt-4 text-gray-600 text-sm text-center w-full;
+}

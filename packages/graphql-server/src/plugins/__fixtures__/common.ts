@@ -8,6 +8,7 @@ export const testSchema = makeExecutableSchema({
 
     type Query {
       forbiddenUser: User!
+      getUser(id: Int!): User!
     }
 
     type User {
@@ -22,6 +23,9 @@ export const testSchema = makeExecutableSchema({
       },
       forbiddenUser: () => {
         throw Error('You are forbidden')
+      },
+      getUser: (id) => {
+        return { id, firstName: 'Ba', lastName: 'Zinga' }
       },
     },
     User: {
@@ -52,6 +56,25 @@ export const testFilteredQuery = /* GraphQL */ `
 export const testErrorQuery = /* GraphQL */ `
   query forbiddenUserQuery {
     forbiddenUser {
+      id
+      name
+    }
+  }
+`
+
+export const testParseErrorQuery = /* GraphQL */ `
+  query ParseErrorQuery {
+    me {
+      id
+      name
+      unknown_field
+    }
+  }
+`
+
+export const testValidationErrorQuery = /* GraphQL */ `
+  query ValidationErrorQuery(id: Int!) {
+    getUser(id: 'one') {
       id
       name
     }

@@ -11,6 +11,16 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
   let nodesToInsert: any[] = []
 
+  // export const standard = ${ex}
+  const createExportStandard = (
+    ex: types.CallExpression | types.ArrowFunctionExpression
+  ) =>
+    t.exportNamedDeclaration(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(t.identifier('standard'), ex),
+      ])
+    )
+
   return {
     name: 'babel-plugin-redwood-mock-cell-data',
 
@@ -40,27 +50,69 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // 4. The Cell has a operation name for the QUERY export.
 
         const d = p.node.declaration
-        if (d?.type !== 'VariableDeclaration') {
-          return
-        }
+        const filename = state.file.opts.filename
 
-        const vd = d.declarations[0] as types.VariableDeclarator
-        const id = vd.id as types.Identifier
-        const exportName = id?.name
-        if (exportName !== 'standard') {
-          return
-        }
+        let mockFunction
 
-        const init = vd?.init
-        if (!init) {
-          return
+        // Only auto-mock the standard export
+
+        switch (d?.type) {
+          case 'VariableDeclaration':
+            // If its an arrow function
+            // or export standard = function()
+            {
+              const standardMockExport = d.declarations[0]
+              const id = standardMockExport.id as types.Identifier
+              const exportName = id?.name
+
+              if (exportName !== 'standard') {
+                return
+              }
+
+              const mockFunctionMaybe = standardMockExport?.init
+              if (!mockFunctionMaybe) {
+                return
+              }
+
+              // If they're not exporting a function, blow up
+              if (
+                mockFunctionMaybe.type !== 'ArrowFunctionExpression' &&
+                mockFunctionMaybe.type !== 'FunctionExpression'
+              ) {
+                throw new Error(
+                  `\n \n Mock Error: You must export your standard mock as a function \n \n`
+                )
+              }
+
+              mockFunction = mockFunctionMaybe
+            }
+            break
+
+          case 'FunctionDeclaration':
+            {
+              const exportName = d.id?.name
+
+              if (exportName !== 'standard') {
+                return
+              }
+
+              // if its a normal function export e.g. export function standard()
+              // convert the named FunctionDeclaration to an arrow func i.e. (..args)=>{//originalbody here}
+              mockFunction = t.arrowFunctionExpression(d.params, d.body)
+            }
+            break
+
+          default:
+            // If it isn't a mock function called standard, ignore it
+            return
         }
 
         // Find the model of the Cell that is in the same directory.
-        const filename = state.file.opts.filename
         const dir = URL_file(path.dirname(state.file.opts.filename))
         const project = getProject(getBaseDirFromFile(filename))
-        const cell = project.cells.find((x: any) => x.uri.startsWith(dir))
+        const cell = project.cells.find((path: { uri: string }) => {
+          return path.uri.startsWith(dir)
+        })
 
         if (!cell || !cell?.filePath) {
           return
@@ -70,20 +122,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           return
         }
 
-        // export const standard
-        const exportStandard = (
-          ex: types.CallExpression | types.ArrowFunctionExpression
-        ) =>
-          t.exportNamedDeclaration(
-            t.variableDeclaration('const', [
-              t.variableDeclarator(t.identifier('standard'), ex),
-            ])
-          )
-
-        // mockGraphQLQuery(<operationName>, <data>)
+        // mockGraphQLQuery(<operationName>, <mockFunction>)
         const mockGraphQLCall = t.callExpression(
           t.identifier('mockGraphQLQuery'),
-          [t.stringLiteral(cell.queryOperationName), init]
+          [t.stringLiteral(cell.queryOperationName), mockFunction]
         )
 
         // Delete original "export const standard"
@@ -105,7 +147,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           nodesToInsert = [
             ...nodesToInsert,
             importAfterQuery,
-            exportStandard(
+            createExportStandard(
               t.arrowFunctionExpression(
                 [],
                 t.callExpression(t.identifier('afterQuery'), [
@@ -116,7 +158,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           ]
         } else {
           // + export const standard = mo
-          nodesToInsert = [...nodesToInsert, exportStandard(mockGraphQLCall)]
+          nodesToInsert = [
+            ...nodesToInsert,
+            createExportStandard(mockGraphQLCall),
+          ]
         }
       },
     },

@@ -35,10 +35,9 @@ config.set('RWFW_PATH', absRwFwPath)
 const projectPath = path.dirname(
   getConfigPath(process.env.RWJS_CWD ?? process.cwd())
 )
-const fwToolsPath = path.join(absRwFwPath, 'tasks/framework-tools')
 console.log(
   'Redwood Framework Tools Path:',
-  TerminalLink(fwToolsPath, fwToolsPath)
+  TerminalLink(absRwFwPath, absRwFwPath)
 )
 
 let command = process.argv.slice(2)
@@ -48,7 +47,7 @@ if (!command.length || command.some((cmd) => helpCommands.includes(cmd))) {
 }
 
 try {
-  execa.sync('yarn', ['--cwd', fwToolsPath, ...command], {
+  execa.sync('yarn', ['--cwd', absRwFwPath, ...command], {
     stdio: 'inherit',
     shell: true,
     env: {

@@ -263,6 +263,7 @@ const runCodegenGraphQL = async (
       scalars: {
         // We need these, otherwise these scalars are mapped to any
         // @TODO is there a way we can use scalars defined in packages/graphql-server/src/rootSchema.ts
+        BigInt: 'number',
         DateTime: 'string',
         Date: 'string',
         JSON: 'Record<string, unknown>',

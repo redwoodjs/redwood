@@ -25,6 +25,10 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
+      - name: Remove the tsc problem matcher if not ubuntu-node-16
+        if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '16') == false
+        run: echo "echo "::remove-matcher owner=tsc::""
+
       - name: Cache yarn
         uses: actions/cache@v2
         id: yarn-cache
@@ -37,12 +41,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
-        run: yarn constraints
-
-      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn dedupe --check
+      - name: Check constraints, dependencies, and package.json's
+        uses: ./tasks/check
 
       - name: Build
         run: yarn build

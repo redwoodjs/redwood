@@ -30,8 +30,12 @@ async function webTasks(outputPath, { link, verbose }) {
   const execaOptions = getExecaOptions(outputPath)
 
   const createBuilder = (cmd) => {
-    return async function createItem(name) {
-      await execa(`${cmd} ${name}`, [], execaOptions)
+    return async function createItem(positionals) {
+      await execa(
+        cmd,
+        Array.isArray(positionals) ? positionals : [positionals],
+        execaOptions
+      )
     }
   }
 
@@ -113,7 +117,7 @@ async function webTasks(outputPath, { link, verbose }) {
 
     await createCell('blogPosts')
 
-    applyCodemod(
+    await applyCodemod(
       'blogPostsCell.js',
       fullPath('web/src/components/BlogPostsCell/BlogPostsCell')
     )
@@ -123,6 +127,22 @@ async function webTasks(outputPath, { link, verbose }) {
     return applyCodemod(
       'blogPostCell.js',
       fullPath('web/src/components/BlogPostCell/BlogPostCell')
+    )
+  }
+
+  const updateCellMocks = async () => {
+    await applyCodemod(
+      'updateBlogPostMocks.js',
+      fullPath('web/src/components/BlogPostCell/BlogPostCell.mock.ts', {
+        addExtension: false,
+      })
+    )
+
+    return applyCodemod(
+      'updateBlogPostMocks.js',
+      fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock.ts', {
+        addExtension: false,
+      })
     )
   }
 
@@ -145,6 +165,10 @@ async function webTasks(outputPath, { link, verbose }) {
         task: () => createCells(),
       },
       {
+        title: 'Updating cell mocks',
+        task: () => updateCellMocks(),
+      },
+      {
         title: 'Changing routes',
         task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
       },
@@ -156,7 +180,7 @@ async function webTasks(outputPath, { link, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer',
+            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer@^9.8.8',
             [],
             getExecaOptions(outputPath)
           ),

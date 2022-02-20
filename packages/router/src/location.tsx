@@ -21,7 +21,8 @@ interface LocationProviderProps {
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {
-  // When prerendering, there might be more than one level of location providers. Use the values from the one above.
+  // When prerendering, there might be more than one level of location
+  // providers. Use the values from the one above.
   static contextType = LocationContext
   HISTORY_LISTENER_ID: string | undefined = undefined
 
@@ -35,7 +36,8 @@ class LocationProvider extends React.Component<LocationProviderProps> {
     if (typeof window !== 'undefined') {
       const { pathname } = window.location
 
-      // Since we have to update the URL, we might as well handle the trailing slash here, before matching.
+      // Since we have to update the URL, we might as well handle the trailing
+      // slash here, before matching.
       //
       // - never -> strip trailing slashes ("/about/" -> "/about")
       // - always -> add trailing slashes ("/about" -> "/about/")

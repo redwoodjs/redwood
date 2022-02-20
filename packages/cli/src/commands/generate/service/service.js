@@ -46,6 +46,9 @@ export const scenarioFieldValue = (field) => {
   const randInt = parseInt(Math.random() * 10000000)
 
   switch (field.type) {
+    case 'BigInt':
+      // eslint-disable-next-line no-undef
+      return `${BigInt(randInt)}n`
     case 'Boolean':
       return true
     case 'DateTime':
@@ -113,14 +116,39 @@ export const buildScenario = async (model) => {
   // turn scalar fields into actual scenario data
   for (const name of DEFAULT_SCENARIO_NAMES) {
     standardScenario[scenarioModelName][name] = {}
-    standardScenario[scenarioModelName][name].data = await fieldsToScenario(
+
+    const scenarioData = await fieldsToScenario(
       scalarFields,
       relations,
       foreignKeys
     )
+
+    Object.keys(scenarioData).forEach((key) => {
+      const value = scenarioData[key]
+
+      if (value && typeof value === 'string' && value.match(/^\d+n$/)) {
+        scenarioData[key] = `${value.substr(0, value.length - 1)}n`
+      }
+    })
+
+    standardScenario[scenarioModelName][name].data = scenarioData
   }
 
   return standardScenario
+}
+
+// creates the scenario data based on the data definitions in schema.prisma
+// and transforms data types to strings and other values that are compatible with Prisma
+export const buildStringifiedScenario = async (model) => {
+  const scenario = await buildScenario(model)
+
+  return JSON.stringify(scenario, (key, value) =>
+    typeof value === 'bigint'
+      ? value.toString()
+      : typeof value === 'string' && value.match(/^\d+n$/)
+      ? Number(value.substr(0, value.length - 1))
+      : value
+  )
 }
 
 // outputs fields necessary to create an object in the test file
@@ -177,6 +205,10 @@ export const fieldsToUpdate = async (model) => {
 
     // depending on the field type, append/update the value to something different
     switch (field.type) {
+      case 'BigInt':
+        // eslint-disable-next-line no-undef
+        newValue = `${newValue + 1n}`
+        break
       case 'Boolean': {
         newValue = !value
         break
@@ -264,6 +296,7 @@ export const files = async ({
     templatePath: `scenarios.${extension}.template`,
     templateVars: {
       scenario: await buildScenario(model),
+      stringifiedScenario: await buildStringifiedScenario(model),
       prismaTypeName: `${model}CreateArgs`,
       ...rest,
     },

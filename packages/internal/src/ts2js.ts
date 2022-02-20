@@ -61,6 +61,12 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
       path.join(cwd, 'web/jsconfig.json')
     )
   }
+  if (fs.existsSync(path.join(cwd, 'scripts/tsconfig.json'))) {
+    fs.renameSync(
+      path.join(cwd, 'scripts/tsconfig.json'),
+      path.join(cwd, 'scripts/jsconfig.json')
+    )
+  }
 }
 
 /**
