@@ -16,6 +16,7 @@
     "build": "yarn build:js",
     "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
     "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
+    "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "prepublishOnly": "yarn build",
     "test": "NODE_ENV=test jest",
     "test:watch": "yarn test --watch"
