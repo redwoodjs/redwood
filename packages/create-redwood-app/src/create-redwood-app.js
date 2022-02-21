@@ -69,7 +69,7 @@ const {
   .option('overwrite', {
     default: false,
     type: 'boolean',
-    describe: 'Create even if target directory is empty',
+    describe: "Create even if target directory isn't empty",
   })
   .option('telemetry', {
     default: true,
