@@ -1,4 +1,6 @@
-import { generateSecret, handler } from './../secret.js'
+import yargs from 'yargs'
+
+import { generateSecret, handler, builder } from './../secret.js'
 
 describe('generateSecret', () => {
   it('contains only uppercase letters, lowercase letters, and digits', () => {
@@ -13,26 +15,26 @@ describe('generateSecret', () => {
     expect(secret.length).toEqual(16)
   })
 
-  it('only prints the secret when stdout is not a tty', () => {
+  it('prints nothing but the secret when setting the --raw flag', () => {
     const realLog = console.log
     const realInfo = console.info
     const realWrite = process.stdout.write
-    const realIsTty = process.stdout.isTTY
 
     let output = ''
 
     console.log = (...args) => (output += args.join(' ') + '\n')
     console.info = (...args) => (output += args.join(' ') + '\n')
     process.stdout.write = (str) => (output += str)
-    process.stdout.isTTY = false
 
-    handler({})
-
-    expect(output).toMatch(/^[A-Za-z0-9]{64}$/)
+    const { raw, length } = yargs
+      .command('secret', false, builder, handler)
+      .parse('secret --raw')
 
     console.log = realLog
     console.info = realInfo
     process.stdout.write = realWrite
-    process.stdout.isTTY = realIsTty
+
+    expect(raw).toBeTruthy()
+    expect(output).toMatch(new RegExp(`^[A-Za-z0-9]{${length}}$`))
   })
 })

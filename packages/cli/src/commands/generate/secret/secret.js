@@ -14,18 +14,22 @@ export const description =
   'Generates a secret key using a cryptographically-secure source of entropy'
 
 export const builder = (yargs) =>
-  yargs.option('length', {
-    description: 'Length of the generated secret',
-    type: 'integer',
-    required: false,
-    default: DEFAULT_LENGTH,
-  })
+  yargs
+    .option('length', {
+      description: 'Length of the generated secret',
+      type: 'integer',
+      required: false,
+      default: DEFAULT_LENGTH,
+    })
+    .option('raw', {
+      description: 'Prints just the raw secret',
+      type: 'boolean',
+      required: false,
+      default: false,
+    })
 
-export const handler = ({ length }) => {
-  if (!process.stdout.isTTY) {
-    // If the output is being piped we only print the secret, no
-    // information messages. This makes it easier to programmatically use the
-    // output.
+export const handler = ({ length, raw }) => {
+  if (raw) {
     // Using stdout.write here to not get the newline that console.log always
     // adds
     process.stdout.write(generateSecret(length))
