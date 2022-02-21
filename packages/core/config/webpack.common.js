@@ -157,6 +157,7 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
+      ['process.env.RWJS_SRC_ROOT']: JSON.stringify(redwoodPaths.base),
       ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
         redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
       ),

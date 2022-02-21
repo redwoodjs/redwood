@@ -38,6 +38,8 @@ describe('Update Jest Config', () => {
   })
 
   it('Keeps custom jest config in api and web', async () => {
+    jest.setTimeout(25_000)
+
     await matchFolderTransform(updateJestConfig, 'custom', {
       removeWhitespace: true,
     })

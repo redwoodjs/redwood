@@ -75,7 +75,7 @@
     "lerna": "4.0.0",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
-    "msw": "0.36.8",
+    "msw": "0.38.1",
     "ncp": "2.0.0",
     "node-notifier": "10.0.1",
     "nodemon": "2.0.15",
@@ -87,7 +87,7 @@
     "terminal-link": "2.1.1",
     "typescript": "4.5.5",
     "typescript-transform-paths": "3.3.1",
-    "zx": "5.0.0"
+    "zx": "5.1.0"
   },
   "npmClient": "yarn",
   "packageManager": "yarn@3.1.1"
