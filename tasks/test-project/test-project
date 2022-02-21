@@ -121,7 +121,6 @@ const copyProject = async () => {
 
   // Make sure no lockfiles are accidentally copied
   fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
-  return
 }
 
 const globalTasks = () =>
@@ -139,10 +138,13 @@ const globalTasks = () =>
       },
       {
         title: 'Creating project',
-        task: () => {
+        task: (_ctx, task) => {
           if (copyFromFixture) {
+            task.output =
+              'Copying test-project from __fixtures__/test-project...'
             return copyProject()
           } else {
+            task.output = 'Building test-project from scratch...'
             return createProject()
           }
         },
