@@ -30,9 +30,7 @@ export const builder = (yargs) =>
 
 export const handler = ({ length, raw }) => {
   if (raw) {
-    // Using stdout.write here to not get the newline that console.log always
-    // adds
-    process.stdout.write(generateSecret(length))
+    console.log(generateSecret(length))
     return
   }
 

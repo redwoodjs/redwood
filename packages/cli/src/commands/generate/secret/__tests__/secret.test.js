@@ -35,6 +35,6 @@ describe('generateSecret', () => {
     process.stdout.write = realWrite
 
     expect(raw).toBeTruthy()
-    expect(output).toMatch(new RegExp(`^[A-Za-z0-9]{${length}}$`))
+    expect(output).toMatch(new RegExp(`^[A-Za-z0-9]{${length}}\n$`))
   })
 })
