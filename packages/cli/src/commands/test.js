@@ -138,24 +138,22 @@ export const handler = async ({
   }
 
   try {
-    const cacheDirDb = `file:${ensurePosixPath(
-      rwjsPaths.generated.base
-    )}/test.db`
-    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
-
     if (sides.includes('api')) {
       if (!fs.existsSync(path.join(rwjsPaths.api.base, 'jest.config.js'))) {
         console.error(
           c.error('Error: Jest config file not found in `api/jest.config.js.`')
         )
         console.error(
-          c.error('Run `npx @redwoodjs/codemods@latest update-jest-config`.')
+          c.error(
+            'Run codemod `npx @redwoodjs/codemods@latest update-jest-config`.'
+          )
         )
         console.error(
           c.error(
             'This command will automatically update your project to the latest Jest config.'
           )
         )
+        throw new Error('Error: Jest config file not found in api side')
       }
     }
 
@@ -165,15 +163,28 @@ export const handler = async ({
           c.error('Error: Jest config file not found in `web/jest.config.js.`')
         )
         console.error(
-          c.error('Run `npx @redwoodjs/codemods@latest update-jest-config`.')
+          c.error(
+            'Run codemod `npx @redwoodjs/codemods@latest update-jest-config`.'
+          )
         )
         console.error(
           c.error(
             'This command will automatically update your project to the latest Jest config.'
           )
         )
+        throw new Error('Error: Jest config file not found in web side')
       }
     }
+  } catch (e) {
+    errorTelemetry(process.argv, e.message)
+    process.exit(e?.exitCode || 1)
+  }
+
+  try {
+    const cacheDirDb = `file:${ensurePosixPath(
+      rwjsPaths.generated.base
+    )}/test.db`
+    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
     if (sides.includes('api') && !dbPush) {
       // @NOTE
