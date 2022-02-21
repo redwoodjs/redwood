@@ -37,7 +37,7 @@ const test = base.extend<any, DevServerFixtures>({
 
       if (!projectPath) {
         throw new Error(
-          'PROJECT_PATH not defined. Need this to launch the dev server'
+          'PROJECT_PATH env var not defined. Please build a test project, and re-run with PROJECT_PATH defined'
         )
       }
 
@@ -56,15 +56,20 @@ const test = base.extend<any, DevServerFixtures>({
         }
       )
 
-      // So we can see the dev server logs too
-      devServerHandler.stdout.pipe(process.stdout)
+      // Pipe out logs so we can debug, when required
+      devServerHandler.stdout.on('data', (data) => {
+        console.log(
+          '[devServer-fixture] ',
+          Buffer.from(data, 'utf-8').toString()
+        )
+      })
 
       console.log('Waiting for dev servers.....')
       await waitForServer(webServerPort, 1000)
       await waitForServer(apiServerPort, 1000)
 
       console.log('Starting tests!')
-      await use(true) // we just set true here, because we don't actually care about this fixture
+      await use()
     },
     { scope: 'worker', auto: true },
   ],
