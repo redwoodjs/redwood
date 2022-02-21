@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8c0
 
 "@actions/core@npm:1.6.0":
@@ -5940,7 +5940,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.3
+    systeminformation: 5.11.4
     toml: 3.0.0
     typescript: 4.5.5
   bin:
@@ -6060,7 +6060,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.3
+    systeminformation: 5.11.4
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -9044,7 +9044,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.0.4, acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.7.0":
+"acorn@npm:^8.0.4, acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.0":
   version: 8.7.0
   resolution: "acorn@npm:8.7.0"
   bin:
@@ -27849,12 +27849,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.3":
-  version: 5.11.3
-  resolution: "systeminformation@npm:5.11.3"
+"systeminformation@npm:5.11.4":
+  version: 5.11.4
+  resolution: "systeminformation@npm:5.11.4"
   bin:
     systeminformation: lib/cli.js
-  checksum: a1b493a84c6b9eb8ca987b06f5f802d430bed96fa0b16a1257526b30aa9518df412b3b25bba404d4853ce16623e5adebf849830b2a66131baf46c660f3dd9a76
+  checksum: 424982214ec0c8fb9cc4549f54759f9b75846fb68022260c2d4ff223c2f0ca19cd7feac23c2c78e33a28f83408ee87bf5878f080cb198c5e81ba144a93c19e2b
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
@@ -28799,11 +28799,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>":
   version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6a8888c9fe41d0a19324125c636b1adb9ec5c984342fc7a26f2a389a432a94639c24b72e6e019ffbbb03cb614c1f008b4c31e48fb560b772e45e6581265c500b
+  checksum: e7c8f7eb15922501b9c453724f243feee42fe07403e7fdcc83b293a70e88b85cd60cf3faf40d49134573d2323b8b3a3238f3def4b11218dd06227b893dfc903d
   languageName: node
   linkType: hard
 
