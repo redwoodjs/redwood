@@ -157,7 +157,7 @@ const isValueEmpty = (val: string): boolean => val === ''
 
 // if appropriate, one of the functions in the SET_VALUE_AS_FCNS object is
 // passed to the react-hook-forms setValueAs prop by the setCoercion function
-const SET_VALUE_AS_FCNS = {
+const SET_VALUE_AS_FUNCTIONS = {
   valueAsBoolean: {
     // r-h-f returns a boolean if a checkBox type, but also handle string case in case valueAsBoolean is used
     base: (val: boolean | string): boolean => !!val,
@@ -227,7 +227,7 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  * Otherwise we check to see if any of Redwood's `valueAs` props are present.
  */
 
-type SetCoersionProps = {
+interface SetCoersionProps {
   type?: string
   name: string
   emptyAsNull: boolean
@@ -246,23 +246,25 @@ const setCoercion = (
   if (validation.valueAsBoolean || type === 'checkbox') {
     // boolean case
     if (emptyAsNull) {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean.emptyAsNull
+      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsBoolean.emptyAsNull
     } else if (emptyAsUndefined) {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean.emptyAsUndefined
+      validation.setValueAs =
+        SET_VALUE_AS_FUNCTIONS.valueAsBoolean.emptyAsUndefined
     } else {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsBoolean.base
+      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsBoolean.base
     }
     delete validation.valueAsBoolean
   } else if (validation.valueAsJSON) {
     // JSON case
     if (emptyAsNull) {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsJSON.emptyAsNull
+      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsNull
     } else if (emptyAsUndefined) {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsJSON.emptyAsUndefined
+      validation.setValueAs =
+        SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsUndefined
     } else {
       validation.setValueAs = validation.required
-        ? SET_VALUE_AS_FCNS.valueAsJSON.emptyAsDefaultRequired
-        : SET_VALUE_AS_FCNS.valueAsJSON.emptyAsNull
+        ? SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsDefaultRequired
+        : SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsNull
     }
     validation.validate = JSONValidation
     delete validation.valueAsJSON
@@ -273,15 +275,16 @@ const setCoercion = (
   ) {
     // Date case
     // Note we cannot pass on the standard r-h-f valueAsDate prop because
-    // the setValue technique is not compatible with r-h-f valueAsDate prop
-    // this prevents the use the emptyAsUndefined and emptyAsNull logic
+    // the setValue technique is not compatible with r-h-f valueAsDate prop.
+    // This prevents the use of the emptyAsUndefined and emptyAsNull logic.
     // Thus, we need to implement our own value to date conversion
     if (emptyAsNull) {
       delete validation.valueAsDate
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsDate.emptyAsNull
+      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsDate.emptyAsNull
     } else if (emptyAsUndefined) {
       delete validation.valueAsDate
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsDate.emptyAsUndefined
+      validation.setValueAs =
+        SET_VALUE_AS_FUNCTIONS.valueAsDate.emptyAsUndefined
     } else {
       // we can use redwood hook forms usevalueAsDate
       validation.valueAsDate = true
@@ -294,10 +297,11 @@ const setCoercion = (
     // Thus, we need to implement our own value to number conversion
     if (emptyAsNull) {
       delete validation.valueAsNumber
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsNumber.emptyAsNull
+      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsNumber.emptyAsNull
     } else if (emptyAsUndefined) {
       delete validation.valueAsNumber
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsNumber.emptyAsUndefined
+      validation.setValueAs =
+        SET_VALUE_AS_FUNCTIONS.valueAsNumber.emptyAsUndefined
     } else {
       // we can use redwood hook forms usevalueAsNumber
       validation.valueAsNumber = true
@@ -314,9 +318,10 @@ const setCoercion = (
     validation.setValueAs = (val: string) => val || undefined
   } else {
     if (emptyAsNull) {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsText.emptyAsNull
+      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsText.emptyAsNull
     } else if (emptyAsUndefined) {
-      validation.setValueAs = SET_VALUE_AS_FCNS.valueAsText.emptyAsUndefined
+      validation.setValueAs =
+        SET_VALUE_AS_FUNCTIONS.valueAsText.emptyAsUndefined
     }
   }
 }

@@ -633,7 +633,7 @@ describe('Form', () => {
     )
   })
 
-  it('Fields with emptyAsNull defined return appropriate values', async () => {
+  it('returns appropriate values for fields with emptyAsNull defined', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -696,7 +696,7 @@ describe('Form', () => {
     )
   })
 
-  it('Fields with both emptyAsNull and emptyAsUndefined return null if empty', async () => {
+  it('returns null if empty for fields with both emptyAsNull and emptyAsUndefined', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -744,7 +744,6 @@ describe('Form', () => {
     fireEvent.click(screen.getByText('Save'))
 
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
-    //    jest.spyOn(global.console, 'warn')
 
     expect(mockFn).toBeCalledWith(
       {
@@ -761,7 +760,7 @@ describe('Form', () => {
     )
   })
 
-  it('NumberFields and DateFields with emptyAsNull still have appropriate validation', async () => {
+  it('should have appropriate validation for NumberFields and DateFields with emptyAsNull', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -792,7 +791,7 @@ describe('Form', () => {
     })
   })
 
-  it('A textfield with valueAsNumber returns a number, regardless of emptyAsUndefined or emptyAsNull', async () => {
+  it('should return a number for a textfield with valueAsNumber, regardless of emptyAsUndefined or emptyAsNull', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -832,7 +831,7 @@ describe('Form', () => {
     )
   })
 
-  it('A textfield with valueAsDate returns a date, regardless of emptyAsUndefined or emptyAsNull', async () => {
+  it('should return a date for a textfield with valueAsDate, regardless of emptyAsUndefined or emptyAsNull', async () => {
     const mockFn = jest.fn()
 
     render(
