@@ -5813,8 +5813,13 @@ __metadata:
     "@babel/eslint-parser": 7.16.5
     "@babel/eslint-plugin": 7.16.5
     "@redwoodjs/internal": 0.46.0
+<<<<<<< HEAD
     "@typescript-eslint/eslint-plugin": 5.12.1
     "@typescript-eslint/parser": 5.12.1
+=======
+    "@typescript-eslint/eslint-plugin": 5.12.0
+    "@typescript-eslint/parser": 5.12.0
+>>>>>>> release/patch/v0.46.1
     eslint: 8.9.0
     eslint-config-prettier: 8.4.0
     eslint-import-resolver-babel-module: 5.3.1
