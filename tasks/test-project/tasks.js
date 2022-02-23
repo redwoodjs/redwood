@@ -347,7 +347,7 @@ async function apiTasks(outputPath, { verbose }) {
         task: async () => {
           await applyCodemod(
             'contactsService.js',
-            fullPath('api/src/services/contacts/contacts.ts')
+            fullPath('api/src/services/contacts/contacts')
           )
         },
       },

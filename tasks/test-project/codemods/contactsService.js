@@ -1,6 +1,5 @@
 const createContacts = `
 export const createContact = ({ input }) => {
-  validate(input)
   return db.contact.create({ data: input })
 }
 `
