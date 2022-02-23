@@ -281,6 +281,26 @@ async function apiTasks(outputPath, { verbose }) {
     )
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
 
+    // update requireAuth test
+    const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.js`
+    const contentRequireAuth = fs.readFileSync(pathRequireAuth).toString()
+    const resultsRequireAuth = contentRequireAuth.replace(
+      /const mockExecution([^}]*){} }\)/,
+      `const mockExecution = mockRedwoodDirective(requireAuth, {
+        context: { currentUser: { id: 1, name: 'Lebron McGretzky' } },
+      })`
+    )
+    fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
+
+    // remove unused userAttributes
+    const pathAuthJs = `${OUTPUT_PATH}/api/src/functions/auth.js`
+    const contentAuthJs = fs.readFileSync(pathAuthJs).toString()
+    const resultsAuthJs = contentAuthJs.replace(
+      /handler: \({ username,([^}]*)userAttributes }\) => {/,
+      `handler: ({ username, hashedPassword, salt }) => {`
+    )
+    fs.writeFileSync(pathAuthJs, resultsAuthJs)
+
     await execa(
       'yarn rw prisma migrate dev --name dbAuth',
       [],
