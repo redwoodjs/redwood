@@ -222,6 +222,17 @@ const globalTasks = () =>
         enabled: () => !typescript,
       },
       {
+        title: 'Lint --fix all the things',
+        task: async () => {
+          return execa(
+            'yarn rw lint --fix',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+        enabled: () => !typescript,
+      },
+      {
         title: 'All done!',
         task: async () => {
           console.log()
