@@ -24,4 +24,30 @@ export const smokeTest = async ({ page, webServerPort }) => {
   // Click text=Admin
   await page.click('text=Admin')
   expect(page.url()).toBe(`http://localhost:${webServerPort}/posts`)
+
+  // Auth
+  await page.goto(`http://localhost:${webServerPort}/posts/1/edit`)
+
+  // unAuthenticated
+  await page.click('text=SAVE')
+  expect(page).toHaveTextContent("You don't have permission to do that.")
+
+  // create user and Save post
+  await page.goto(`http://localhost:${webServerPort}/signup`)
+
+  await page.fill('#username', 'thedavid')
+  await page.fill('#password', 'isthebest')
+  await page.click('text=SIGN UP')
+  expect(page).toHaveTextContent('Log Out')
+
+  await page.goto(`http://localhost:${webServerPort}/posts/1/edit`)
+
+  // Authenticated
+  await page.click('text=SAVE')
+  expect(page).toHaveTextContent('Welcome to the blog!')
+
+  // Log Out
+  await page.goto(`http://localhost:${webServerPort}/about`)
+  await page.click('text=Log Out')
+  expect(page).toHaveTextContent('Log In')
 }
