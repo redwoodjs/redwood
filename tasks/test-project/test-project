@@ -83,18 +83,6 @@ const {
   rebuildFixture,
 } = args
 
-// if (rebuildFixture) {
-//   console.log()
-// } else {
-//   const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
-// }
-
-// handle incompatible option config
-if (rebuildFixture && copyFromFixture) {
-  console.error('\nERROR Incompatible options: cannot Rebuild and Copy\n')
-  process.exit(1)
-}
-
 const OUTPUT_PROJECT_PATH = rebuildFixture
   ? path.join(
       os.tmpdir(),
@@ -216,7 +204,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        skip: () => copyFromFixture, // already configured in fixture
+        skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture
       },
       {
         title: 'Installing node_modules',
@@ -297,12 +285,23 @@ const globalTasks = () =>
       {
         title: 'Apply web codemods',
         task: () => webTasks(OUTPUT_PROJECT_PATH, { verbose, link }),
-        enabled: () => !copyFrameworkPackages,
+        enabled: () => !copyFrameworkPackages || rebuildFixture,
       },
       {
         title: 'Apply api codemods',
         task: () => apiTasks(OUTPUT_PROJECT_PATH, { verbose }),
-        enabled: () => !copyFrameworkPackages,
+        enabled: () => !copyFrameworkPackages || rebuildFixture,
+      },
+      {
+        title: 'Generate dbAuth Secret',
+        task: async () => {
+          return execa(
+            'echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+        enabled: () => !rebuildFixture,
       },
       {
         title: 'Running prisma migrate reset',
@@ -323,17 +322,32 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => !typescript || !rebuildFixture,
+        enabled: () =>
+          (!typescript && !rebuildFixture) || (typescript && !rebuildFixture),
       },
       {
         title: 'Lint --fix all the things',
         task: async () => {
-          return execa(
-            'yarn rw lint --fix',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+          try {
+            await execa(
+              'yarn rw lint --fix',
+              [],
+              // getExecaOptions(OUTPUT_PROJECT_PATH)
+              {
+                shell: true,
+                stdio: 'ignore',
+                cleanup: true,
+                cwd: OUTPUT_PROJECT_PATH,
+                env: {
+                  RW_PATH: path.join(__dirname, '../../'),
+                },
+              }
+            )
+          } catch (e) {
+            // nothing to see here
+          }
         },
+        enabled: () => rebuildFixture,
       },
       {
         title: 'Replace Fixture',
@@ -341,6 +355,7 @@ const globalTasks = () =>
           // remove all .gitignore
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/dist`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/node_modules`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
