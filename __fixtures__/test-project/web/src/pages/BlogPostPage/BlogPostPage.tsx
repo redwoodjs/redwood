@@ -5,10 +5,8 @@ type BlogPostPageProps = {
   id: number
 }
 
-import BlogPostCell from "src/components/BlogPostCell";
+import BlogPostCell from 'src/components/BlogPostCell'
 
-const BlogPostPage = ({ id }: BlogPostPageProps) => 
-<BlogPostCell id={id} />
-
+const BlogPostPage = ({ id }: BlogPostPageProps) => <BlogPostCell id={id} />
 
 export default BlogPostPage
