@@ -18,7 +18,7 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
-      PLAYWRIGHT_BROWSERS_PATH: 0
+      PLAYWRIGHT_BROWSERS_PATH: 0 # this makes sure that playwright dependencies are cached in node_modules
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -54,15 +54,15 @@ jobs:
 
       - name: Run `rw build`
         run: |
-          yarn rw build
+          yarn rw build --no-prerender
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # We run prisma reset, seed, rw dev, rw build and rw serve
-      - name: Run smoke tests
+      - name: Run smoke tests on 'rw dev' and 'rw serve'
         working-directory: ./tasks/smoke-test
         run: npx playwright test
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: Run `rw info`
         run: |

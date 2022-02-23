@@ -199,6 +199,10 @@ const globalTasks = () =>
       {
         title: 'Updating ports in redwood.toml...',
         task: () => {
+          // We do this, to make it easier to run multiple test projects in parallel
+          // But on different ports. If API_DEV_PORT or WEB_DEV_PORT aren't supplied,
+          // It just defaults to 8910 and 8911
+          // This is helpful in playwright smoke tests to allow us to parallelize
           const REDWOOD_TOML_PATH = path.join(
             OUTPUT_PROJECT_PATH,
             'redwood.toml'
