@@ -127,16 +127,6 @@ const globalTasks = () =>
   new Listr(
     [
       {
-        title: `Installing script packages`,
-        task: async () => {
-          return execa(
-            'yarn install',
-            [],
-            getExecaOptions(path.resolve(__dirname))
-          )
-        },
-      },
-      {
         title: 'Creating project',
         task: (_ctx, task) => {
           if (copyFromFixture) {
