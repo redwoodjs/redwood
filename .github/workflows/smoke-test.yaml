@@ -52,7 +52,7 @@ jobs:
       - name: Install Playwright deps
         run: npx playwright install --with-deps chromium
 
-      - name: Run `rw build`
+      - name: Run `rw build` without prerender
         run: |
           yarn rw build --no-prerender
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}

@@ -73,7 +73,7 @@
     "cypress-wait-until": "1.7.2",
     "eslint": "8.9.0",
     "fast-glob": "3.2.11",
-    "fs-extra": "10.0.0",
+    "fs-extra": "10.0.1",
     "is-port-reachable": "3.1.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
