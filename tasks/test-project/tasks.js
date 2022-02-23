@@ -282,7 +282,7 @@ async function apiTasks(outputPath, { verbose }) {
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
 
     // update requireAuth test
-    const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.js`
+    const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.ts`
     const contentRequireAuth = fs.readFileSync(pathRequireAuth).toString()
     const resultsRequireAuth = contentRequireAuth.replace(
       /const mockExecution([^}]*){} }\)/,
@@ -293,7 +293,7 @@ async function apiTasks(outputPath, { verbose }) {
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
 
     // remove unused userAttributes
-    const pathAuthJs = `${OUTPUT_PATH}/api/src/functions/auth.js`
+    const pathAuthJs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
     const contentAuthJs = fs.readFileSync(pathAuthJs).toString()
     const resultsAuthJs = contentAuthJs.replace(
       /handler: \({ username,([^}]*)userAttributes }\) => {/,
