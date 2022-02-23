@@ -18625,10 +18625,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-port-reachable@npm:3.1.0":
-  version: 3.1.0
-  resolution: "is-port-reachable@npm:3.1.0"
-  checksum: 9063ffeedc984ab9c856cbf58805a0f45e5bfaa54a33da475d91c65dca80754ca5d4737a9d7a1a315f147db39e886f9a4082c6e3183412111e4a99e6cdc1bec1
+"is-port-reachable@npm:4.0.0":
+  version: 4.0.0
+  resolution: "is-port-reachable@npm:4.0.0"
+  checksum: f0fddd9b5c082f7c32356faab38c3c6eab5ea5b54491184f5688f3189d482017d2142c648927ee5964299e4a62da83d41ee52a1d73bf1f700325c370c9ed0cef
   languageName: node
   linkType: hard
 
@@ -26175,7 +26175,7 @@ __metadata:
     eslint: 8.9.0
     fast-glob: 3.2.11
     fs-extra: 10.0.1
-    is-port-reachable: 3.1.0
+    is-port-reachable: 4.0.0
     jest: 27.5.1
     jscodeshift: 0.13.1
     lerna: 4.0.0

@@ -74,7 +74,7 @@
     "eslint": "8.9.0",
     "fast-glob": "3.2.11",
     "fs-extra": "10.0.1",
-    "is-port-reachable": "3.1.0",
+    "is-port-reachable": "4.0.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
     "lerna": "4.0.0",
