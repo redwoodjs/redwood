@@ -47,7 +47,8 @@ const args = yargs
   .option('rebuildFixture', {
     default: false,
     type: 'boolean',
-    describe: 'Rebuild __fixtures__/test-project',
+    describe:
+      'Rebuild __fixtures__/test-project. Note: must pass faux <project directory>',
   })
   .option('clean', {
     default: false,
