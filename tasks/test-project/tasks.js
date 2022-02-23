@@ -311,14 +311,12 @@ async function apiTasks(outputPath, { verbose }) {
         },
       },
       {
-        title: 'Seeding database',
+        title: 'Adding seed script',
         task: async () => {
           await applyCodemod(
             'seed.js',
             fullPath('scripts/seed.ts', { addExtension: false })
           )
-
-          return execa('yarn rw prisma db seed', [], execaOptionsForProject)
         },
       },
       {
