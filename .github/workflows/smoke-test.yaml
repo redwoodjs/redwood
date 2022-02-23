@@ -48,6 +48,8 @@ jobs:
       - name: Setup test project
         id: setup_test_project
         uses: ./.github/actions/setup_test_project
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: Install Playwright deps
         run: npx playwright install --with-deps chromium

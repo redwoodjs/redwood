@@ -18,4 +18,4 @@ console.log({
 core.setOutput('test_project_path', test_project_path)
 
 
-await exec(`REDWOOD_DISABLE_TELEMETRY=1 yarn build:test-project --ts --link ${test_project_path}`)
+await exec(`yarn build:test-project --ts --link ${test_project_path}`)
