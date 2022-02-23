@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "0.45.0",
+  "version": "0.46.1",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -26,11 +26,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@redwoodjs/auth": "v0.45.0",
-    "@redwoodjs/graphql-server": "v0.45.0",
-    "@redwoodjs/internal": "v0.45.0",
-    "@redwoodjs/router": "v0.45.0",
-    "@redwoodjs/web": "v0.45.0",
+    "@redwoodjs/auth": "0.46.1",
+    "@redwoodjs/graphql-server": "0.46.1",
+    "@redwoodjs/internal": "0.46.1",
+    "@redwoodjs/router": "0.46.1",
+    "@redwoodjs/web": "0.46.1",
     "@storybook/addon-a11y": "6.4.19",
     "@storybook/builder-webpack5": "6.4.19",
     "@storybook/manager-webpack5": "6.4.19",
@@ -49,7 +49,7 @@
     "babel-plugin-inline-react-svg": "2.0.1",
     "jest": "27.5.1",
     "jest-watch-typeahead": "1.0.0",
-    "msw": "0.36.8",
+    "msw": "0.38.1",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },

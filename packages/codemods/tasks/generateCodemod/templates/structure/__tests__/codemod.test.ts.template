@@ -1,0 +1,7 @@
+import ${name} from '../${name}'
+
+describe('${name}', () => {
+  it('Changes the structure of a redwood project', async () => {
+    await matchFolderTransform(${name}, 'default')
+  })
+})

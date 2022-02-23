@@ -33,8 +33,12 @@ export const goTrue = (client: GoTrue): AuthClientGoTrue => {
     signup: async ({ email, password, remember }) =>
       client.signup(email, password, remember),
     getToken: async () => {
-      const user = await client.currentUser()
-      return user?.jwt() || null
+      try {
+        const user = await client.currentUser()
+        return user?.jwt() || null
+      } catch {
+        return null
+      }
     },
     getUserMetadata: async () => client.currentUser(),
   }
