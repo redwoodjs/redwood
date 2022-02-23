@@ -46,7 +46,7 @@
     "envinfo": "7.8.1",
     "execa": "5.1.1",
     "fast-glob": "3.2.11",
-    "fs-extra": "10.0.0",
+    "fs-extra": "10.0.1",
     "humanize-string": "2.1.0",
     "latest-version": "5.1.0",
     "listr": "0.14.3",
