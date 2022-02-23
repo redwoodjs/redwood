@@ -2,6 +2,7 @@
 /* eslint-env node, es6*/
 //@ts-check
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
 
 const chalk = require('chalk')
@@ -43,6 +44,11 @@ const args = yargs
     type: 'boolean',
     describe: 'Copy the test project from the __fixtures__ folder',
   })
+  .option('rebuildFixture', {
+    default: false,
+    type: 'boolean',
+    describe: 'Rebuild __fixtures__/test-project',
+  })
   .option('clean', {
     default: false,
     type: 'boolean',
@@ -67,9 +73,36 @@ const args = yargs
   .help()
   .strict().argv
 
-const { typescript, canary, link, verbose, clean, copyFromFixture } = args
+const {
+  typescript,
+  canary,
+  link,
+  verbose,
+  clean,
+  copyFromFixture,
+  rebuildFixture,
+} = args
 
-const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
+// if (rebuildFixture) {
+//   console.log()
+// } else {
+//   const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
+// }
+
+// handle incompatible option config
+if (rebuildFixture && copyFromFixture) {
+  console.error('\nERROR Incompatible options: cannot Rebuild and Copy\n')
+  process.exit(1)
+}
+
+const OUTPUT_PROJECT_PATH = rebuildFixture
+  ? path.join(
+      os.tmpdir(),
+      'redwood-test-project',
+      // ":" is problematic with paths
+      new Date().toISOString().split(':').join('-')
+    )
+  : path.resolve(String(args._))
 
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
@@ -108,7 +141,7 @@ const createProject = async () => {
 }
 
 const copyProject = async () => {
-  if (clean) {
+  if (clean && !rebuildFixture) {
     rimraf.sync(OUTPUT_PROJECT_PATH)
   }
 
@@ -117,10 +150,19 @@ const copyProject = async () => {
     '__fixtures__/test-project'
   )
 
-  await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
-
-  // Make sure no lockfiles are accidentally copied
-  fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
+  if (rebuildFixture) {
+    // remove existing Fixture
+    rimraf.sync(FIXTURE_TESTPROJ_PATH)
+    // copy from tempDir to Fixture dir
+    await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
+    // cleanup after ourselves
+    rimraf.sync(OUTPUT_PROJECT_PATH)
+  } else {
+    // copying existing Fixture to new Project
+    await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
+    // Make sure no lockfiles are accidentally copied
+    fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
+  }
 }
 
 const globalTasks = () =>
@@ -129,7 +171,7 @@ const globalTasks = () =>
       {
         title: 'Creating project',
         task: (_ctx, task) => {
-          if (copyFromFixture) {
+          if (copyFromFixture && !rebuildFixture) {
             task.output =
               'Copying test-project from __fixtures__/test-project...'
             return copyProject()
@@ -157,13 +199,13 @@ const globalTasks = () =>
             throw new Error('Failed to build framework')
           }
         },
-        enabled: () => link,
+        enabled: () => link && !rebuildFixture,
       },
       {
         title: '[link] Adding framework dependencies to project',
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link,
+        enabled: () => link && !rebuildFixture,
       },
       {
         title: 'Set yarn v1 version in test-project directory',
@@ -212,12 +254,13 @@ const globalTasks = () =>
 
           fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
         },
+        enabled: () => rebuildFixture,
       },
       {
         title: '[link] Copying framework packages to project',
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link,
+        enabled: () => link && !rebuildFixture,
       },
       {
         title: '[link] Add rwfw project:copy postinstall',
@@ -238,7 +281,7 @@ const globalTasks = () =>
             JSON.stringify(projectPackageJson, undefined, 2)
           )
         },
-        enabled: () => link,
+        enabled: () => link && !rebuildFixture,
       },
       {
         title: 'Upgrading to latest canary version',
@@ -249,7 +292,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => canary && !link,
+        enabled: () => canary && !link && !rebuildFixture,
       },
       {
         title: 'Apply web codemods',
@@ -280,7 +323,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => !typescript,
+        enabled: () => !typescript || !rebuildFixture,
       },
       {
         title: 'Lint --fix all the things',
@@ -291,7 +334,24 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => !typescript,
+      },
+      {
+        title: 'Replace Fixture',
+        task: async () => {
+          // remove all .gitignore
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/dist`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/node_modules`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/.env`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
+
+          // removes existing Fixture and replaces with newly built project,
+          // then removes new Project temp directory
+          copyProject()
+        },
+        enabled: () => rebuildFixture,
       },
       {
         title: 'All done!',
