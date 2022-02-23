@@ -98,12 +98,10 @@ jobs:
       #     yarn rw type-check
       #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # Service needs implemented
-      #
-      # - name: Run "rw check"
-      #   run: |
-      #     yarn rw check
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw check"
+        run: |
+          yarn rw check
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw storybook"
         run: |
