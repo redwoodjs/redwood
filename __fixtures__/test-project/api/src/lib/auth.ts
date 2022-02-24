@@ -48,10 +48,16 @@ type AllowedRoles = string | string[] | undefined
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
   if (!isAuthenticated()) {
     return false
   }
+
+  /**
+   *  You can specify check for roles by uncommenting the code below
+   *  But make sure you return "role" or an array of "roles" from the
+   *  getCurrentUser function.
 
   if (roles) {
     if (Array.isArray(roles)) {
@@ -65,6 +71,7 @@ export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
     // roles not found
     return false
   }
+  */
 
   return true
 }
