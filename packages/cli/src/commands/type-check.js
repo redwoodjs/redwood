@@ -8,6 +8,7 @@ import terminalLink from 'terminal-link'
 import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getCmdMajorVersion } from '../commands/upgrade'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
@@ -55,11 +56,17 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
   const typeCheck = async () => {
     let conclusiveExitCode = 0
 
+    const yarnVersion = await getCmdMajorVersion('yarn')
+
     const tscForAllSides = sides.map((side) => {
       const projectDir = path.join(getPaths().base, side)
+      // -s flag to suppress error output from yarn. For example yarn doc link on non-zero status.
+      // Since it'll be printed anyways after the whole execution.
       return {
         cwd: projectDir,
-        command: `yarn tsc --noEmit --skipLibCheck`,
+        command: `yarn ${
+          yarnVersion > 1 ? '' : '-s'
+        } tsc --noEmit --skipLibCheck`,
       }
     })
 

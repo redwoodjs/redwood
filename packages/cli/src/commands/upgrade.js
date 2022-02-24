@@ -259,11 +259,12 @@ async function refreshPrismaClient(task, { verbose }) {
   }
 }
 
-const getCmdMajorVersion = async (command) => {
+export const getCmdMajorVersion = async (command) => {
   // Get current version
   const { stdout } = await execa(command, ['--version'], {
     cwd: getPaths().base,
   })
+
   if (!SEMVER_REGEX.test(stdout)) {
     throw new Error(`Unable to verify ${command} version.`)
   }
