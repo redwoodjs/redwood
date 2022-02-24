@@ -2,7 +2,7 @@
 const execa = require('execa')
 
 const addFrameworkDepsToProject = (frameworkPath, projectPath) => {
-  return execa('yarn project:deps', {
+  return execa('yarn project:deps:yarn3', {
     cwd: frameworkPath,
     shell: true,
     stdio: 'inherit',
