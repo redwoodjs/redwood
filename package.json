@@ -24,6 +24,7 @@
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "publish:canary": "lerna publish --force-publish --canary --include-merged-tags --preid canary --dist-tag canary --yes --loglevel verbose",
     "release": "node ./tasks/release/cli.mjs",
+    "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "test:release-script": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
   },
@@ -51,10 +52,12 @@
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
+    "@playwright/test": "1.19.1",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "12.1.3",
     "@testing-library/user-event": "13.5.0",
-    "@types/jest": "27.4.0",
+    "@types/fs-extra": "9.0.13",
+    "@types/jest": "27.4.1",
     "@types/jscodeshift": "0.11.3",
     "@types/lodash.template": "4.5.0",
     "@types/ncp": "2.0.5",
@@ -70,12 +73,14 @@
     "cypress-wait-until": "1.7.2",
     "eslint": "8.9.0",
     "fast-glob": "3.2.11",
+    "fs-extra": "10.0.1",
+    "is-port-reachable": "3.1.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
     "lerna": "4.0.0",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
-    "msw": "0.36.8",
+    "msw": "0.38.1",
     "ncp": "2.0.0",
     "node-notifier": "10.0.1",
     "nodemon": "2.0.15",
@@ -90,5 +95,5 @@
     "zx": "5.1.0"
   },
   "npmClient": "yarn",
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.2.0"
 }

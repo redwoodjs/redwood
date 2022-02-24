@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "description": "The Redwood Command Line",
   "repository": {
     "type": "git",
@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "@prisma/sdk": "3.9.2",
-    "@redwoodjs/api-server": "0.46.0",
-    "@redwoodjs/internal": "0.46.0",
-    "@redwoodjs/prerender": "0.46.0",
-    "@redwoodjs/structure": "0.46.0",
-    "@redwoodjs/telemetry": "0.46.0",
+    "@redwoodjs/api-server": "0.47.0",
+    "@redwoodjs/internal": "0.47.0",
+    "@redwoodjs/prerender": "0.47.0",
+    "@redwoodjs/structure": "0.47.0",
+    "@redwoodjs/telemetry": "0.47.0",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
@@ -46,7 +46,7 @@
     "envinfo": "7.8.1",
     "execa": "5.1.1",
     "fast-glob": "3.2.11",
-    "fs-extra": "10.0.0",
+    "fs-extra": "10.0.1",
     "humanize-string": "2.1.0",
     "latest-version": "5.1.0",
     "listr": "0.14.3",

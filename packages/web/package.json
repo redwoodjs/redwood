@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -27,12 +27,12 @@
   "dependencies": {
     "@apollo/client": "3.5.9",
     "@babel/runtime-corejs3": "7.16.7",
-    "@redwoodjs/auth": "0.46.0",
+    "@redwoodjs/auth": "0.47.0",
     "graphql": "16.3.0",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "1.2.3",
     "react-hot-toast": "2.2.0",
-    "stacktracey": "2.1.7",
+    "stacktracey": "2.1.8",
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
