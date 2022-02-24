@@ -30,6 +30,29 @@ function isInMercurialRepository() {
   }
 }
 
+function isJestConfigFile(sides) {
+  const rwjsPaths = getPaths()
+  for (let side of sides) {
+    try {
+      if (sides.includes(side)) {
+        if (!fs.existsSync(path.join(rwjsPaths.side.base, 'jest.config.js'))) {
+          console.error(
+            c.error(
+              `Error: Jest config file not found ${side}/jest.config.js`,
+              '\n',
+              'To add this file, run `npx @redwoodjs/codemods update-jest-config`'
+            )
+          )
+          throw new Error(`Error: Jest config file not found in ${side} side`)
+        }
+      }
+    } catch (e) {
+      errorTelemetry(process.argv, e.message)
+      process.exit(e?.exitCode || 1)
+    }
+  }
+}
+
 export const command = 'test [filter..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
@@ -137,48 +160,8 @@ export const handler = async ({
     jestArgs.push('--projects', ...sides)
   }
 
-  try {
-    if (sides.includes('api')) {
-      if (!fs.existsSync(path.join(rwjsPaths.api.base, 'jest.config.js'))) {
-        console.error(
-          c.error('Error: Jest config file not found in `api/jest.config.js.`')
-        )
-        console.error(
-          c.error(
-            'Run codemod `npx @redwoodjs/codemods@latest update-jest-config`.'
-          )
-        )
-        console.error(
-          c.error(
-            'This command will automatically update your project to the latest Jest config.'
-          )
-        )
-        throw new Error('Error: Jest config file not found in api side')
-      }
-    }
-
-    if (sides.includes('web')) {
-      if (!fs.existsSync(path.join(rwjsPaths.web.base, 'jest.config.js'))) {
-        console.error(
-          c.error('Error: Jest config file not found in `web/jest.config.js.`')
-        )
-        console.error(
-          c.error(
-            'Run codemod `npx @redwoodjs/codemods@latest update-jest-config`.'
-          )
-        )
-        console.error(
-          c.error(
-            'This command will automatically update your project to the latest Jest config.'
-          )
-        )
-        throw new Error('Error: Jest config file not found in web side')
-      }
-    }
-  } catch (e) {
-    errorTelemetry(process.argv, e.message)
-    process.exit(e?.exitCode || 1)
-  }
+  //checking if Jest config files exists in each of the sides
+  isJestConfigFile(sides)
 
   try {
     const cacheDirDb = `file:${ensurePosixPath(
