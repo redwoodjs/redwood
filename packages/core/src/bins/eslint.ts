@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { createRequire } from 'module'
 
 const requireFromESLint = createRequire(require.resolve('eslint/package.json'))

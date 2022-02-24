@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { createRequire } from 'module'
 
 const requireFromStorybook = createRequire(

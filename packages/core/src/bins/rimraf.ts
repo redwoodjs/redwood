@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { createRequire } from 'module'
 
 const requireFromRimraf = createRequire(require.resolve('rimraf/package.json'))
