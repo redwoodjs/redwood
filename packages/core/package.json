@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "bin": {
+    "eslint": "./dist/bins/eslint.js",
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js"
   },

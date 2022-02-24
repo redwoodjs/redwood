@@ -5891,6 +5891,7 @@ __metadata:
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
   bin:
+    eslint: ./dist/bins/eslint.js
     redwood: ./dist/bins/redwood.js
     rw: ./dist/bins/redwood.js
   languageName: unknown
