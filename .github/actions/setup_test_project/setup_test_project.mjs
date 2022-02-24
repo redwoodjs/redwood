@@ -25,9 +25,10 @@ try {
     !(fs.existsSync(join(test_project_path, 'web/tsconfig.json')) ||
     fs.existsSync(join(test_project_path, 'api/tsconfig.json')))
   ) {
-    throw 'Error: Test-project is expected to be TypeScript'
+    throw new Error()
   }
 } catch(e) {
-  console.error(`\n${e}\nExiting test-project setup.\n`)
+  console.error('\nError: Test-project is expected to be TypeScript\nExiting test-project setup.\n')
   process.exit(1)
 }
+
