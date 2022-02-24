@@ -1,9 +1,9 @@
 import os from 'node:os'
 import path from 'node:path'
+import fs from 'fs-extra'
 
 import { exec } from '@actions/exec'
 import * as core from '@actions/core'
-import { getProject } from '@redwoodjs/structure'
 
 const test_project_path = path.join(
   os.tmpdir(),
@@ -21,7 +21,12 @@ core.setOutput('test_project_path', test_project_path)
 await exec(`yarn build:test-project --ts --link ${test_project_path}`)
 
 try {
-  if(!getProject(test_project_path).isTypeScriptProject) throw 'Error: Test-project is expected to be TypeScript'
+  if (
+    !(fs.existsSync(join(test_project_path, 'web/tsconfig.json')) ||
+    fs.existsSync(join(test_project_path, 'api/tsconfig.json')))
+  ) {
+    throw 'Error: Test-project is expected to be TypeScript'
+  }
 } catch(e) {
   console.error(`\n${e}\nExiting test-project setup.\n`)
   process.exit(1)
