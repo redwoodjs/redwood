@@ -7,6 +7,10 @@
     "directory": "packages/api"
   },
   "license": "MIT",
+  "bin": {
+    "redwood": "./dist/bins/redwood.js",
+    "rw": "./dist/bins/redwood.js"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [

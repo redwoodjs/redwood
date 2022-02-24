@@ -8,9 +8,19 @@
     "directory": "packages/core"
   },
   "license": "MIT",
+  "bin": {
+    "redwood": "./dist/bins/redwood.js",
+    "rw": "./dist/bins/redwood.js"
+  },
   "files": [
-    "config"
+    "config",
+    "dist"
   ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "prepublishOnly": "NODE_ENV=production yarn build"
+  },
   "dependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
