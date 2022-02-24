@@ -7,6 +7,8 @@
     "directory": "packages/web"
   },
   "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "cross-env": "./dist/bins/cross-env.js",
     "msw": "./dist/bins/msw.js",
@@ -17,8 +19,6 @@
     "tsc": "./dist/bins/tsc.js",
     "webpack": "./dist/bins/webpack.js"
   },
-  "main": "./dist/index.js",
-  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "apollo",

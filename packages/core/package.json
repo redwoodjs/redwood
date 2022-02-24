@@ -14,6 +14,7 @@
     "jest": "./dist/bins/jest.js",
     "nodemon": "./dist/bins/nodemon.js",
     "redwood": "./dist/bins/redwood.js",
+    "rimraf": "./dist/bins/rimraf.js",
     "rw": "./dist/bins/redwood.js",
     "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
     "rw-gen": "./dist/bins/rw-gen.js",
@@ -71,6 +72,7 @@
     "nodemon": "2.0.15",
     "null-loader": "4.0.1",
     "react-refresh": "0.11.0",
+    "rimraf": "3.0.2",
     "style-loader": "3.3.1",
     "svg-react-loader": "0.4.6",
     "typescript": "4.5.5",
@@ -82,6 +84,9 @@
     "webpack-manifest-plugin": "4.1.1",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/rimraf": "3.0.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

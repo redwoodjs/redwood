@@ -72,7 +72,7 @@ const createRedwoodJSApp = () => {
 
 const addFrameworkDepsToProject = () => {
   try {
-    execa.sync('yarn project:deps', {
+    execa.sync('yarn project:deps:yarn3', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -107,38 +107,10 @@ const copyFrameworkPackages = () => {
     process.exit(1)
   }
 }
-const checkYarnVersion = () => {
-  try {
-    const { stdout } = execa.sync('yarn --version', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-    })
-    console.log('Yarn version is', stdout)
-    if (!stdout.startsWith('1')) {
-      setYarnClassic()
-    }
-  } catch (e) {
-    console.error(e)
-    console.error('Error: We could not find yarn')
-    process.exit(1)
-  }
-}
-const setYarnClassic = () => {
-  try {
-    execa.sync('yarn set version classic', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      stdio: 'inherit',
-    })
-  } catch (e) {
-    console.error(e)
-    console.error('Error: We could not set yarn classic')
-    process.exit(1)
-  }
-}
+
 const runYarnInstall = () => {
   try {
-    execa.sync('yarn install', {
+    execa.sync('yarn install --no-immutable', {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
       stdio: 'inherit',
@@ -241,7 +213,6 @@ const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
   copyFramework && addFrameworkDepsToProject,
-  copyFramework && checkYarnVersion,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,

@@ -5858,6 +5858,7 @@ __metadata:
     "@redwoodjs/eslint-config": 0.46.1
     "@redwoodjs/internal": 0.46.1
     "@redwoodjs/testing": 0.46.1
+    "@types/rimraf": 3.0.2
     babel-loader: 8.2.3
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -5881,6 +5882,7 @@ __metadata:
     nodemon: 2.0.15
     null-loader: 4.0.1
     react-refresh: 0.11.0
+    rimraf: 3.0.2
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
     typescript: 4.5.5
@@ -5898,6 +5900,7 @@ __metadata:
     jest: ./dist/bins/jest.js
     nodemon: ./dist/bins/nodemon.js
     redwood: ./dist/bins/redwood.js
+    rimraf: ./dist/bins/rimraf.js
     rw: ./dist/bins/redwood.js
     rw-api-server-watch: ./dist/bins/rw-api-server-watch.js
     rw-gen: ./dist/bins/rw-gen.js
