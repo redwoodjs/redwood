@@ -5891,9 +5891,13 @@ __metadata:
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
   bin:
+    cross-env: ./dist/bins/cross-env.js
     eslint: ./dist/bins/eslint.js
+    nodemon: ./dist/bins/nodemon.js
     redwood: ./dist/bins/redwood.js
     rw: ./dist/bins/redwood.js
+    rw-api-server-watch: ./dist/bins/rw-api-server-watch.js
+    rw-gen-watch: ./dist/bins/rw-gen-watch.js
   languageName: unknown
   linkType: soft
 
