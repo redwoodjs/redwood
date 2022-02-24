@@ -8,10 +8,12 @@
   },
   "license": "MIT",
   "bin": {
+    "cross-env": "./dist/bins/cross-env.js",
     "msw": "./dist/bins/msw.js",
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js",
-    "start-storybook": "./dist/bins/start-storybook.js"
+    "start-storybook": "./dist/bins/start-storybook.js",
+    "webpack": "./dist/bins/webpack.js"
   },
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
