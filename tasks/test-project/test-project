@@ -316,15 +316,18 @@ const globalTasks = () =>
       },
       {
         title: 'Convert to JS',
-        task: async () => {
-          return execa(
-            'yarn rw ts-to-js',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+        task: async (_ctx, task) => {
+          if (!rebuildFixture) {
+            return execa(
+              'yarn rw ts-to-js',
+              [],
+              getExecaOptions(OUTPUT_PROJECT_PATH)
+            )
+          } else {
+            task.output = 'Rebuilding Fixture: skip ts-to-js'
+          }
         },
-        enabled: () =>
-          (!typescript && !rebuildFixture) || (typescript && !rebuildFixture),
+        enabled: () => !typescript,
       },
       {
         title: 'Lint --fix all the things',
