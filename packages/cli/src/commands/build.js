@@ -98,7 +98,7 @@ export const handler = async ({
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
         '@redwoodjs/core/config/webpack.perf.js'
       )}`,
-      { stdio: 'inherit', shell: true }
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
     )
     // We do not want to continue building...
     return
@@ -110,7 +110,7 @@ export const handler = async ({
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
         '@redwoodjs/core/config/webpack.stats.js'
       )}`,
-      { stdio: 'inherit', shell: true }
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
     )
     // We do not want to continue building...
     return
