@@ -31,7 +31,6 @@ function isInMercurialRepository() {
 }
 
 function isJestConfigFile(sides) {
-  const rwjsPaths = getPaths()
   for (let side of sides) {
     try {
       if (sides.includes(side)) {
