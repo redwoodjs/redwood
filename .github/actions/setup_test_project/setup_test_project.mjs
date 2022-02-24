@@ -22,13 +22,14 @@ await exec(`yarn build:test-project --ts --link ${test_project_path}`)
 
 try {
   if (
-    !(fs.existsSync(join(test_project_path, 'web/tsconfig.json')) ||
-    fs.existsSync(join(test_project_path, 'api/tsconfig.json')))
+    !fs.existsSync(path.join(test_project_path, 'web/tsconfig.json')) ||
+    !fs.existsSync(path.join(test_project_path, 'api/tsconfig.json'))
   ) {
-    throw new Error()
+    throw ('Test-project is not TypeScript')
   }
 } catch(e) {
+  console.log('********************************')
   console.error('\nError: Test-project is expected to be TypeScript\nExiting test-project setup.\n')
+  console.log('********************************')
   process.exit(1)
 }
-
