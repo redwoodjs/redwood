@@ -35,7 +35,7 @@ function isJestConfigFile(sides) {
   for (let side of sides) {
     try {
       if (sides.includes(side)) {
-        if (!fs.existsSync(path.join(rwjsPaths.side.base, 'jest.config.js'))) {
+        if (!fs.existsSync(path.join(side, 'jest.config.js'))) {
           console.error(
             c.error(
               `Error: Jest config file not found ${side}/jest.config.js`,
