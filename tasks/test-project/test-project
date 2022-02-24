@@ -212,7 +212,7 @@ const globalTasks = () =>
         task: async () => {
           return execa(
             'yarn install',
-            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            [!verbose && '--silent'].filter(Boolean),
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
