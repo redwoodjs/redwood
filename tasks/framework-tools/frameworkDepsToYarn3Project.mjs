@@ -10,6 +10,11 @@ const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 const projectWebPath = path.join(projectPath, 'web')
 const projectApiPath = path.join(projectPath, 'api')
 
+// Get yarn major version
+cd(projectPath)
+const { stdout } = await $`yarn --version`
+const yarnMajorVersion = stdout.trim().split('.').shift()
+
 // Core
 console.log('-'.repeat(80))
 cd(`${frameworkPath}/packages/core`)
@@ -20,7 +25,7 @@ await $`mv package.tgz ${projectPath}`
 
 cd(projectPath)
 await $`tar -xvzf ./package.tgz`
-await $`yarn add -D ./package`
+await $`yarn add -D${yarnMajorVersion === '1' ? 'W' : ''} ./package`
 await $`yarn bin`
 
 // Web
