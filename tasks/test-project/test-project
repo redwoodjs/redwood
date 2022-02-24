@@ -323,7 +323,8 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => !typescript,
+        enabled: () =>
+          (!typescript && !rebuildFixture) || (typescript && !rebuildFixture),
       },
       {
         title: 'Lint --fix all the things',
