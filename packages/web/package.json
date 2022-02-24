@@ -8,8 +8,10 @@
   },
   "license": "MIT",
   "bin": {
+    "msw": "./dist/bins/msw.js",
     "redwood": "./dist/bins/redwood.js",
-    "rw": "./dist/bins/redwood.js"
+    "rw": "./dist/bins/redwood.js",
+    "start-storybook": "./dist/bins/start-storybook.js"
   },
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",

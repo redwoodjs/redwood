@@ -6224,8 +6224,10 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
   bin:
+    msw: ./dist/bins/msw.js
     redwood: ./dist/bins/redwood.js
     rw: ./dist/bins/redwood.js
+    start-storybook: ./dist/bins/start-storybook.js
   languageName: unknown
   linkType: soft
 
