@@ -37,9 +37,8 @@ function isJestConfigFile(sides) {
         if (!fs.existsSync(path.join(side, 'jest.config.js'))) {
           console.error(
             c.error(
-              `Error: Jest config file not found ${side}/jest.config.js`,
-              '\n',
-              'To add this file, run `npx @redwoodjs/codemods update-jest-config`'
+              `\nError: Missing Jest config file ${side}/jest.config.js
+              To add this file, run 'npx @redwoodjs/codemods update-jest-config'\n`
             )
           )
           throw new Error(`Error: Jest config file not found in ${side} side`)
