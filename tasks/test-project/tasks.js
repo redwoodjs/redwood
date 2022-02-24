@@ -287,7 +287,7 @@ async function apiTasks(outputPath, { verbose }) {
     const resultsRequireAuth = contentRequireAuth.replace(
       /const mockExecution([^}]*){} }\)/,
       `const mockExecution = mockRedwoodDirective(requireAuth, {
-        context: { currentUser: { id: 1, name: 'Lebron McGretzky' } },
+        context: { currentUser: { id: 1 } },
       })`
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
