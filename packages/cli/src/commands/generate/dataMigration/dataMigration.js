@@ -7,6 +7,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
+import { yargsDefaults } from '../../generate'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:'
@@ -15,20 +16,21 @@ const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
      yarn rw dataMigrate up
 `
 
-const TEMPLATE_PATH = path.resolve(
-  __dirname,
-  'templates',
-  'dataMigration.js.template'
-)
+const TEMPLATE_PATHS = {
+  js: path.resolve(__dirname, 'templates', 'dataMigration.js.template'),
+  ts: path.resolve(__dirname, 'templates', 'dataMigration.ts.template'),
+}
 
-export const files = ({ name }) => {
+export const files = ({ name, typescript }) => {
   const now = new Date().toISOString()
   const timestamp = now.split('.')[0].replace(/\D/g, '')
-  const outputFilename = `${timestamp}-${paramCase(name)}.js`
+  const basename = `${timestamp}-${paramCase(name)}`
+  const extension = typescript ? 'ts' : 'js'
+  const outputFilename = basename + '.' + extension
   const outputPath = path.join(getPaths().api.dataMigrations, outputFilename)
 
   return {
-    [outputPath]: fs.readFileSync(TEMPLATE_PATH).toString(),
+    [outputPath]: fs.readFileSync(TEMPLATE_PATHS[extension]).toString(),
   }
 }
 
@@ -46,6 +48,11 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#generate-auth'
       )}`
     )
+
+  // Merge generator defaults in
+  Object.entries(yargsDefaults).forEach(([option, config]) => {
+    yargs.option(option, config)
+  })
 }
 
 export const handler = async (args) => {

@@ -12,7 +12,8 @@ describe(
   'Redwood Storybook Integration',
   { baseUrl: 'http://localhost:8910' },
   () => {
-    it('0. Build Storybook Static Files', () => {
+    // 0. Build Storybook Static Files
+    before(() => {
       cy.writeFile(
         path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.stories.js'),
         Step1_1_BlogPostStory
@@ -33,13 +34,11 @@ describe(
       )
 
       // Slow!
-      cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
+      cy.exec(`cd ${BASE_DIR} || exit; yarn rw storybook --build`, {
         timeout: 300_0000,
-      }).then((result) => {
-        const { code, stderr } = result
-        expect(code).to.eq(0)
-        expect(stderr).to.not.contain('ERR!')
       })
+        .its('stderr')
+        .should('not.contain', 'ERR!')
     })
 
     it('1. Component: BlogPost', () => {

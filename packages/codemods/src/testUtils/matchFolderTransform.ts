@@ -7,7 +7,8 @@ import { createProjectMock } from './index'
 
 export const matchFolderTransform = async (
   transformFunction: () => any,
-  fixtureName: string
+  fixtureName: string,
+  { removeWhitespace } = { removeWhitespace: false }
 ) => {
   const tempDir = createProjectMock()
 
@@ -58,7 +59,7 @@ export const matchFolderTransform = async (
     const actualPath = path.join(tempDir, transformedFile)
     const expectedPath = path.join(fixtureOutputDir, transformedFile)
 
-    expect(actualPath).toMatchFileContents(expectedPath)
+    expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
   })
 
   delete process.env['RWJS_CWD']

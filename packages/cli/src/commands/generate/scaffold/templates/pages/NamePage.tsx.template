@@ -1,7 +1,7 @@
 import ${singularPascalName}Cell from '${importComponentNameCell}'
 
 type ${pascalName}PageProps = {
-  id: ${idType}
+  id: ${idTsType}
 }
 
 const ${singularPascalName}Page = ({ id }: ${pascalName}PageProps) => {

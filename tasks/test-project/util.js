@@ -11,6 +11,7 @@ async function applyCodemod(codemod, target) {
     `${path.resolve(__dirname, 'codemods', codemod)} ${target}`,
     '--parser',
     'tsx',
+    '--verbose=2',
   ]
 
   args.push()

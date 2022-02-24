@@ -241,16 +241,12 @@ export function createCell<CellProps = any>({
 
     const options = beforeQuery(variables)
 
+    // queryRest includes `variables: { ... }`, with any variables returned
+    // from beforeQuery
     const { error, loading, data, ...queryRest } = useQuery(
       typeof QUERY === 'function' ? QUERY(options) : QUERY,
       options
     )
-
-    const commonProps = {
-      updating: loading,
-      ...queryRest,
-      ...props,
-    }
 
     if (error) {
       if (Failure) {
@@ -258,7 +254,9 @@ export function createCell<CellProps = any>({
           <Failure
             error={error}
             errorCode={error.graphQLErrors?.[0]?.extensions?.['code'] as string}
-            {...commonProps}
+            {...props}
+            updating={loading}
+            {...queryRest}
           />
         )
       } else {
@@ -268,9 +266,23 @@ export function createCell<CellProps = any>({
       const afterQueryData = afterQuery(data)
 
       if (isEmpty(data, { isDataEmpty }) && Empty) {
-        return <Empty {...{ ...afterQueryData, ...commonProps }} />
+        return (
+          <Empty
+            {...props}
+            {...afterQueryData}
+            updating={loading}
+            {...queryRest}
+          />
+        )
       } else {
-        return <Success {...{ ...afterQueryData, ...commonProps }} />
+        return (
+          <Success
+            {...props}
+            {...afterQueryData}
+            updating={loading}
+            {...queryRest}
+          />
+        )
       }
     } else if (loading) {
       return <Loading {...{ ...queryRest, ...props }} />

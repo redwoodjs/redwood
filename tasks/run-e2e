@@ -5,6 +5,7 @@ const os = require('os')
 const path = require('path')
 
 const execa = require('execa')
+const fg = require('fast-glob')
 const fs = require('fs-extra')
 const yargs = require('yargs')
 
@@ -24,11 +25,20 @@ const makeDirectory = () => {
 
 const buildRedwoodFramework = () => {
   try {
-    execa.sync('yarn build:clean && yarn build:js', {
-      cwd: REDWOODJS_FRAMEWORK_PATH,
-      shell: true,
-      stdio: 'inherit',
+    const files = fg.sync('packages/**/dist', {
+      onlyDirectories: true,
     })
+
+    execa.sync(
+      [files.length && 'yarn build:clean', 'yarn build:js']
+        .filter(Boolean)
+        .join('&&'),
+      {
+        cwd: REDWOODJS_FRAMEWORK_PATH,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
   } catch (e) {
     console.error('Error: Could not build Redwood Framework')
     console.error(e)
@@ -40,9 +50,15 @@ const createRedwoodJSApp = () => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
-      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--typescript'],
+      [
+        REDWOOD_PROJECT_DIRECTORY,
+        '--no-yarn-install',
+        '--typescript',
+        '--no-telemetry',
+      ],
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
+        env: { REDWOOD_CI: '1' },
         shell: true,
         stdio: 'inherit',
       }
@@ -139,6 +155,7 @@ const convertProjectToJavaScript = () => {
     execa.sync('yarn rw ts-to-js', {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
+      env: { REDWOOD_CI: '1' },
       stdio: 'inherit',
     })
   } catch (e) {
@@ -156,6 +173,7 @@ const runDevServerInBackground = () => {
     stdio: 'inherit',
     env: {
       RWJS_DELAY_RESTART: '500',
+      REDWOOD_CI: '1',
     },
   })
 }

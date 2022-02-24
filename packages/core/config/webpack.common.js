@@ -157,6 +157,7 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
+      ['process.env.RWJS_SRC_ROOT']: JSON.stringify(redwoodPaths.base),
       ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
         redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
       ),
@@ -172,6 +173,7 @@ const getSharedPlugins = (isEnvProduction) => {
     new Dotenv({
       path: path.resolve(redwoodPaths.base, '.env'),
       silent: true,
+      // ignoreStub: true, // FIXME: this might not be necessary once the storybook webpack 4/5 stuff is ironed out. See also: https://github.com/mrsteele/dotenv-webpack#processenv-stubbing--replacing
     }),
   ].filter(Boolean)
 }

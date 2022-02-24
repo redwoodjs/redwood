@@ -1,15 +1,20 @@
 ---
-name: Holiday issue template
-about: Project Status over the Holidays
+name: Issue template
+about: v1-rc info
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-Happy Holidays!🎄🎉 
+The Redwood v1 release candidate has been published, and we're actively working toward a 1.0.0 GA. 🎯
 
-Redwood project activity will be slow until Monday, January 3rd. Read the following "Redwood Holiday Updates" to learn more:
-- https://github.com/redwoodjs/redwood/issues/3992
+Read @mojombo's post about what to expect, what this means for current priorities, and how to help:
+- v1-rc Announcement: https://community.redwoodjs.com/t/what-the-1-0-release-candidate-phase-means-and-when-1-0-will-drop/2604
+- v1-rc Priorities that need community help: https://redwoodjs.com/good-first-issue
 
-To proceed with your Issue, just delete this message. Core Team maintainers will get back to you in 2022! 😃
+New Issues and PRs are always welcome and helpful! 😀 We will respond and prioritize. If you need help faster than what we can provide here, you can reach out via the community chat or forums:
+- Discord Chat: https://discord.gg/jjSYEQd
+- Discourse Forum: https://community.redwoodjs.com/
+
+**When you're ready to proceed, just delete this message.**

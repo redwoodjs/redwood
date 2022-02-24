@@ -5,7 +5,10 @@ export default function transform(file: FileInfo, api: API) {
 
   return j(file.source)
     .find(j.CallExpression, (path) => {
-      return path.callee.name === 'defineScenario'
+      return (
+        path.callee.type === 'Identifier' &&
+        path.callee.name === 'defineScenario'
+      )
     })
     .forEach((scenarioPath) => {
       // The first argument is the definition.

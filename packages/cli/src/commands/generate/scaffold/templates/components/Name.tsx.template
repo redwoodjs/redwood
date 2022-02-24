@@ -1,3 +1,5 @@
+import humanize from 'humanize-string'
+
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
@@ -10,6 +12,17 @@ const DELETE_${singularConstantName}_MUTATION = gql`
   }
 `
 
+const formatEnum = (values: string | string[] | null | undefined) => {
+  if (values) {
+    if (Array.isArray(values)) {
+      const humanizedValues = values.map((value) => humanize(value))
+      return humanizedValues.join(', ')
+    } else {
+      return humanize(values as string)
+    }
+  }
+}
+
 const jsonDisplay = (obj) => {
   return (
     <pre>
@@ -20,9 +33,11 @@ const jsonDisplay = (obj) => {
 
 const timeTag = (datetime) => {
   return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
+    datetime && (
+      <time dateTime={datetime} title={datetime}>
+        {new Date(datetime).toUTCString()}
+      </time>
+    )
   )
 }
 

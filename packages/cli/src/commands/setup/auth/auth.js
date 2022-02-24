@@ -8,6 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
@@ -137,7 +138,7 @@ const updateWebRender = (content, authProvider) => {
   const props = objectToComponentProps(authProvider)
   const renderContent = `<AuthProvider ${props.join(' ')}>`
 
-  return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
+  return content.replace(/<AuthProvider.*type=['"](.*)['"]>/s, renderContent)
 }
 
 // returns the content of App.{js,tsx} without the old auth import
@@ -406,6 +407,7 @@ export const handler = async ({ provider, force, rwVersion }) => {
 
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

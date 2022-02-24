@@ -44,7 +44,7 @@
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
  */
-import React, { useContext, forwardRef } from 'react'
+import React, { useContext, forwardRef, ForwardedRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import {
@@ -174,7 +174,7 @@ const JSONValidation = (value: Record<string, unknown> | null) => value !== null
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type }: { type?: string } = {}
+  { type, name }: { type?: string; name: string }
 ) => {
   if (
     validation.valueAsNumber ||
@@ -195,14 +195,22 @@ const setCoercion = (
     if (valueAsProp === 'valueAsJSON' && !validation.validate) {
       validation.validate = JSONValidation
     }
-  } else if (type) {
-    if (type === 'checkbox') {
-      validation.setValueAs = valueAsProps['valueAsBoolean']
-    } else if (type === 'date' || type === 'datetime-local') {
-      validation.valueAsDate = true
-    } else if (type === 'number') {
-      validation.valueAsNumber = true
-    }
+  } else if (type === 'checkbox') {
+    validation.setValueAs = valueAsProps['valueAsBoolean']
+  } else if (type === 'date' || type === 'datetime-local') {
+    validation.valueAsDate = true
+  } else if (type === 'number') {
+    validation.valueAsNumber = true
+  } else if (
+    // type is undefined for <select> and most other fields that aren't input
+    // fields
+    (type === 'text' || type === undefined) &&
+    /Id$/.test(name || '') &&
+    !validation.required
+  ) {
+    // This is for handling optional relation id fields, like a text input for
+    // `userId` if the user relation is optional
+    validation.setValueAs = (val: string) => val || undefined
   }
 }
 
@@ -242,7 +250,7 @@ const useRegister = <
 
   const validation = props.validation || { required: false }
 
-  setCoercion(validation, { type: props.type })
+  setCoercion(validation, { type: props.type, name: props.name })
 
   const {
     ref: _ref,
@@ -330,7 +338,7 @@ export interface FormProps
 /**
  * Renders a `<form>` with the required context.
  */
-const Form = forwardRef<HTMLFormElement, FormProps>(
+const Form = forwardRef(
   (
     {
       config,
@@ -339,8 +347,8 @@ const Form = forwardRef<HTMLFormElement, FormProps>(
       onSubmit,
       children,
       ...rest
-    },
-    ref
+    }: FormProps,
+    ref: ForwardedRef<HTMLFormElement>
   ) => {
     const hookFormMethods = useForm(config)
     const formMethods = propFormMethods || hookFormMethods
@@ -469,13 +477,13 @@ const FieldError = ({ name, ...rest }: FieldErrorProps) => {
 }
 
 export interface TextAreaFieldProps
-  extends FieldProps<HTMLTextAreaElement>,
+  extends Omit<FieldProps<HTMLTextAreaElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
 /**
  * Renders a `<textarea>` field.
  */
-const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
+const TextAreaField = forwardRef(
   (
     {
       name,
@@ -490,8 +498,8 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: TextAreaFieldProps,
+    ref: ForwardedRef<HTMLTextAreaElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -518,13 +526,13 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
 )
 
 export interface SelectFieldProps
-  extends FieldProps<HTMLSelectElement>,
+  extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
 /**
  * Renders a `<select>` field.
  */
-const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
+const SelectField = forwardRef(
   (
     {
       name,
@@ -539,8 +547,8 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: SelectFieldProps,
+    ref: ForwardedRef<HTMLSelectElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -567,13 +575,13 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 )
 
 export interface CheckboxFieldProps
-  extends FieldProps<HTMLInputElement>,
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
 /**
  * Renders an `<input type="checkbox">` field.
  */
-export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
+export const CheckboxField = forwardRef(
   (
     {
       name,
@@ -588,8 +596,8 @@ export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
       onBlur,
       onChange,
       ...rest
-    },
-    ref
+    }: CheckboxFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const styles = useErrorStyles({
       name,
@@ -674,7 +682,7 @@ const INPUT_TYPES = [
 type InputType = typeof INPUT_TYPES[number]
 
 export interface InputFieldProps
-  extends FieldProps<HTMLInputElement>,
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
   /**
    * @privateRemarks
@@ -692,7 +700,7 @@ export interface InputFieldProps
  *
  * @see {@link https://redwoodjs.com/docs/form#inputfields}
  */
-const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
+const InputField = forwardRef(
   (
     {
       name,
@@ -708,8 +716,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       onChange,
       type,
       ...rest
-    },
-    ref
+    }: InputFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
   ) => {
     const styles = useErrorStyles({
       name,

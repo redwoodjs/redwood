@@ -31,10 +31,7 @@ import type { AvailableRoutes } from './index'
 // components, and appending them to this object.
 const namedRoutes: AvailableRoutes = {}
 
-type PageType =
-  | Spec
-  | React.ComponentType<unknown>
-  | ((props: any) => JSX.Element)
+type PageType = Spec | React.ComponentType<any> | ((props: any) => JSX.Element)
 
 interface RouteProps {
   path: string

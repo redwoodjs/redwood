@@ -5,6 +5,7 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
   addRoutesToRouterTask,
@@ -17,6 +18,7 @@ import {
   pathName,
   templateForComponentFile,
   mapRouteParamTypeToTsType,
+  removeGeneratorName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
@@ -26,6 +28,8 @@ const REDWOOD_WEB_PATH_NAME = 'pages'
 const mapRouteParamTypeToDefaultValue = (paramType) => {
   switch (paramType) {
     case 'Int':
+      // "42" is just a value used for demonstrating parameter usage in the
+      // generated page-, test-, and story-files.
       return 42
 
     case 'Float':
@@ -64,11 +68,9 @@ export const paramVariants = (path) => {
   const defaultValueAsProp =
     routeParamType === 'String' ? `'${defaultValue}'` : defaultValue
 
-  // "42" is just a value used for demonstrating parameter usage in the
-  // generated page-, test-, and story-files.
   return {
     propParam: `{ ${paramName} }`,
-    propValueParam: `${paramName}={${defaultValueAsProp}} `, // used it story
+    propValueParam: `${paramName}={${defaultValueAsProp}} `, // used in story
     argumentParam: `{ ${paramName}: ${defaultValueAsProp} }`,
     paramName,
     paramValue: defaultValue,
@@ -150,11 +152,7 @@ const positionalsObj = {
 // @NOTE: Not exporting handler from function
 // As pages need a special handler
 export const { command, description, builder } =
-  createYargsForComponentGeneration({
-    componentName: 'page',
-    filesFn: files,
-    positionalsObj,
-  })
+  createYargsForComponentGeneration({ componentName: 'page', positionalsObj })
 
 export const handler = async ({
   name,
@@ -164,6 +162,8 @@ export const handler = async ({
   stories,
   typescript = false,
 }) => {
+  const pageName = removeGeneratorName(name, 'page')
+
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
@@ -202,9 +202,9 @@ export const handler = async ({
       {
         title: 'Generating page files...',
         task: async () => {
-          path = pathName(path, name)
+          path = pathName(path, pageName)
           const f = await files({
-            name,
+            name: pageName,
             path,
             tests,
             stories,
@@ -217,12 +217,14 @@ export const handler = async ({
       {
         title: 'Updating routes file...',
         task: async () => {
-          addRoutesToRouterTask(routes({ name, path: pathName(path, name) }))
+          addRoutesToRouterTask(
+            routes({ name: pageName, path: pathName(path, pageName) })
+          )
         },
       },
       {
         title: `Generating types...`,
-        task: () => generateTypes,
+        task: generateTypes,
       },
       {
         title: 'One more thing...',
@@ -243,6 +245,7 @@ export const handler = async ({
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

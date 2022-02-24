@@ -9,6 +9,7 @@ const {
   getConfig,
   getPaths,
 } = require('@redwoodjs/internal')
+const { getProject } = require('@redwoodjs/structure')
 
 const config = getConfig()
 
@@ -135,6 +136,15 @@ const baseConfig = {
   // only set staticDirs when running Storybook process; will fail if set for SB --build
   ...(process.env.NODE_ENV !== 'production' && {
     staticDirs: [`${staticAssetsFolder}`],
+  }),
+  // only set up type checking for typescript projects
+  ...(getProject().isTypeScriptProject && {
+    // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
+    typescript: {
+      check: true,
+      // By default, the checker runs asynchronously in dev mode. Force it to run synchronously.
+      checkOptions: { async: false },
+    },
   }),
 }
 

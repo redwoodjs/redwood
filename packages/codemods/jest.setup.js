@@ -12,12 +12,21 @@ global.matchFolderTransform =
 // e.g. expect(transformedPath).toMatchFileContents(expectedPath)
 // Mainly so we throw more helpful errors
 expect.extend({
-  toMatchFileContents(receivedPath, expectedPath) {
+  toMatchFileContents(
+    receivedPath,
+    expectedPath,
+    { removeWhitespace } = { removeWhitespace: false }
+  ) {
     let pass = true
     let message = ''
     try {
-      const actualOutput = fs.readFileSync(receivedPath, 'utf-8')
-      const expectedOutput = fs.readFileSync(expectedPath, 'utf-8')
+      let actualOutput = fs.readFileSync(receivedPath, 'utf-8')
+      let expectedOutput = fs.readFileSync(expectedPath, 'utf-8')
+
+      if (removeWhitespace) {
+        actualOutput = actualOutput.replace(/\s/g, '')
+        expectedOutput = expectedOutput.replace(/\s/g, '')
+      }
 
       expect(actualOutput).toEqual(expectedOutput)
     } catch (e) {

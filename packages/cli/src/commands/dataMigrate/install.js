@@ -5,6 +5,8 @@ import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
@@ -90,6 +92,7 @@ export const handler = async () => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
