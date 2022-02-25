@@ -140,7 +140,7 @@ const copyFrameworkPackages = () => {
 
 const runYarnInstall = (yarn3) => {
   try {
-    execa.sync(`yarn install ${yarn3 ? '' : '--no-immutable'}`, {
+    execa.sync(`yarn install ${yarn3 ? '--no-immutable' : ''}`, {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
       stdio: 'inherit',
