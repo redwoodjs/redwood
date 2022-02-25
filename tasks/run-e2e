@@ -70,9 +70,27 @@ const createRedwoodJSApp = () => {
   }
 }
 
-const addFrameworkDepsToProject = () => {
+const upgradeToYarn3 = () => {
   try {
-    execa.sync('yarn project:deps:yarn3', {
+    execa.sync(
+      `RWJS_CWD=${REDWOOD_PROJECT_DIRECTORY} yarn node ./packages/codemods/dist/codemods.js upgrade-yarn`,
+      {
+        cwd: REDWOODJS_FRAMEWORK_PATH,
+        env: { REDWOOD_CI: '1' },
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+  } catch (e) {
+    console.error('Error: Could not upgrade Redwood Project to yarn 3')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const addFrameworkDepsToProject = (yarn3) => {
+  try {
+    execa.sync(yarn3 ? 'yarn project:deps:yarn3' : 'yarn project:deps', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -184,6 +202,7 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .option('yarn3', { default: true, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -207,12 +226,19 @@ makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
-let { buildFramework, copyFramework, createProject, typescript, autoStart } =
-  args
+let {
+  buildFramework,
+  copyFramework,
+  createProject,
+  typescript,
+  autoStart,
+  yarn3,
+} = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
-  copyFramework && addFrameworkDepsToProject,
+  yarn3 && upgradeToYarn3,
+  copyFramework && (() => addFrameworkDepsToProject(yarn3)),
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
