@@ -59,6 +59,9 @@ export const matchFolderTransform = async (
     const actualPath = path.join(tempDir, transformedFile)
     const expectedPath = path.join(fixtureOutputDir, transformedFile)
 
+    // console.log(actualPath, '>>>> actualPath')
+    // console.log(expectedPath, '>>>> expectedPath')
+
     expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
   })
 

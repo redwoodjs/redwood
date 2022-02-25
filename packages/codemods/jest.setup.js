@@ -23,6 +23,16 @@ expect.extend({
       let actualOutput = fs.readFileSync(receivedPath, 'utf-8')
       let expectedOutput = fs.readFileSync(expectedPath, 'utf-8')
 
+      console.log(receivedPath, '++++++++++++++++++++++++++++++++ receivedPath')
+
+      console.log(expectedPath, '++++++++++++++++++++++++++++++++ expectedPath')
+
+      console.log(actualOutput, '++++++++++++++++++++++++++++++++ actualOutput')
+      console.log(
+        expectedOutput,
+        '++++++++++++++++++++++++++++++++ expectedOutput'
+      )
+
       if (removeWhitespace) {
         actualOutput = actualOutput.replace(/\s/g, '')
         expectedOutput = expectedOutput.replace(/\s/g, '')
