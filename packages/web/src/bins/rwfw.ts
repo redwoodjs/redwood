@@ -7,4 +7,5 @@ const requireFromCli = createRequire(
 
 const bins = requireFromCli('./package.json')['bin']
 
+process.chdir('../')
 requireFromCli(bins['rwfw'])

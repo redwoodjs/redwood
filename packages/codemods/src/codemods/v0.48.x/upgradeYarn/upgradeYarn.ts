@@ -26,19 +26,19 @@ async function upgradeYarn() {
     cwd: rwPaths.base,
   })
 
-  console.log('Setting yarn version to 3.1.1...')
+  console.log('Setting yarn version to 3...')
 
-  // This is a two step process.
   spawnSync('yarn set version stable', {
     shell: true,
     cwd: rwPaths.base,
   })
 
-  spawnSync('yarn set version 3.1.1', {
+  const { stdout } = spawnSync('yarn --version', {
     shell: true,
     cwd: rwPaths.base,
-    stdio: 'inherit',
   })
+
+  const yarnVersion = stdout.toString().trim()
 
   console.log()
   console.log('Writing .yarnrc.yml and appending to .gitignore...')
@@ -55,7 +55,7 @@ async function upgradeYarn() {
       '',
       'nodeLinker: node-modules',
       '',
-      'yarnPath: .yarn/releases/yarn-3.1.1.cjs',
+      `yarnPath: .yarn/releases/yarn-${yarnVersion}.cjs`,
     ].join('\n')
   )
 

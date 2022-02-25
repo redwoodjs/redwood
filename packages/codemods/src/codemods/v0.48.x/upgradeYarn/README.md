@@ -14,7 +14,7 @@ Its only available on node >= `v14.9.0`, so we check for that first.
 After enabling corepack, we set the yarn version:
 
 ```
-yarn set version 3.1.1
+yarn set version stable
 ```
 
 Finally, before installing, we have to update `.yarnrc.yml` and `.gitignore`.
