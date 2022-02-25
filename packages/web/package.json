@@ -10,6 +10,7 @@
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
+    "build-storybook": "./dist/bins/build-storybook.js",
     "cross-env": "./dist/bins/cross-env.js",
     "msw": "./dist/bins/msw.js",
     "redwood": "./dist/bins/redwood.js",
