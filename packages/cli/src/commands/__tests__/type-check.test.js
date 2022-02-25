@@ -104,6 +104,6 @@ test('Should generate prisma client', async () => {
     command: 'yarn  tsc --noEmit --skipLibCheck',
   })
   expect(runCommandTask.mock.results[0].value[0]).toMatch(
-    /node ".+\/prisma\/build\/index.js" generate --schema="\.\.\/\.\.\/__fixtures__\/example-todo-main\/api\/prisma"/
+    /.+(\\\\|\/)prisma(\\\\|\/)build(\\\\|\/)index.js+/
   )
 })
