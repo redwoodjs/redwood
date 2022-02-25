@@ -10,7 +10,7 @@ const frameworkCorePath = path.join(frameworkPath, 'packages', 'core')
 const frameworkWebPath = path.join(frameworkPath, 'packages', 'web')
 const frameworkApiPath = path.join(frameworkPath, 'packages', 'api')
 
-const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
+const projectPath = process.argv[2] ?? process.env.RWJS_CWD
 const projectWebPath = path.join(projectPath, 'web')
 const projectApiPath = path.join(projectPath, 'api')
 
@@ -22,7 +22,7 @@ await $`yarn build`
 await $`yarn pack`
 await $`tar -xzf ./package.tgz`
 cd(projectPath)
-await $`yarn add -D ${path.relative(projectPath, frameworkCorePath, 'package')}`
+await $`yarn add -D ${path.join(frameworkCorePath, 'package')}`
 await $`yarn bin`
 
 // Web
@@ -33,7 +33,7 @@ await $`yarn build`
 await $`yarn pack`
 await $`tar -xzf ./package.tgz`
 cd(projectWebPath)
-await $`yarn add ${path.relative(projectWebPath, frameworkWebPath, 'package')}`
+await $`yarn add ${path.join(frameworkWebPath, 'package')}`
 await $`yarn bin`
 
 // Api
@@ -44,15 +44,34 @@ await $`yarn build`
 await $`yarn pack`
 await $`tar -xzf ./package.tgz`
 cd(projectApiPath)
-await $`yarn add ${path.relative(projectApiPath, frameworkApiPath, 'package')}`
+await $`yarn add ${path.join(frameworkApiPath, 'package')}`
 await $`yarn bin`
 
 // Dist files
 console.log('-'.repeat(80))
 cd(frameworkPath)
 // So that rwfw works
-const rwfw = 'cli/dist/rwfw.js'
-await $`cp ${frameworkPath}/packages/${rwfw} ${projectPath}/node_modules/@redwoodjs/${rwfw}`
+const rwfw = path.join('cli', 'dist', 'rwfw.js')
+await $`cp ${path.join(frameworkPath, 'packages', rwfw)} ${path.join(
+  projectPath,
+  'node_modules',
+  '@redwoodjs',
+  rwfw
+)}`
 // So that building prisma works
-const generatePrismaClientPath = 'cli/dist/lib/generatePrismaClient.js'
-await $`cp ${frameworkPath}/packages/${generatePrismaClientPath} ${projectPath}/node_modules/@redwoodjs/${generatePrismaClientPath}`
+const generatePrismaClientPath = path.join(
+  'cli',
+  'dist',
+  'lib',
+  'generatePrismaClient.js'
+)
+await $`cp ${path.join(
+  frameworkPath,
+  'packages',
+  generatePrismaClientPath
+)} ${path.join(
+  projectPath,
+  'node_modules',
+  '@redwoodjs',
+  generatePrismaClientPath
+)}`
