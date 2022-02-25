@@ -7,4 +7,6 @@ const requireFromInternal = createRequire(
 
 const bins = requireFromInternal('./package.json')['bin']
 
-requireFromInternal(bins['rw-gen'])
+const { run } = requireFromInternal(bins['rw-gen'])
+
+run()
