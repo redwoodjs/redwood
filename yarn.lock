@@ -6128,7 +6128,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.178
-    "@types/lru-cache": 5.1.1
+    "@types/lru-cache": 7.4.0
     "@types/node": 16.11.26
     "@types/vscode": 1.64.0
     camelcase: 6.3.0
@@ -7972,7 +7972,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lru-cache@npm:5.1.1, @types/lru-cache@npm:^5.1.0":
+"@types/lru-cache@npm:7.4.0":
+  version: 7.4.0
+  resolution: "@types/lru-cache@npm:7.4.0"
+  checksum: 38203996c44172a0591b488021867b0dfdc2b71e5d10f92f8a09fdfcb97e2d2aa2ffdc5eaae010cb29f50b566813356c89a8aa1ac3f7894fac4d5d4efe9df8b0
+  languageName: node
+  linkType: hard
+
+"@types/lru-cache@npm:^5.1.0":
   version: 5.1.1
   resolution: "@types/lru-cache@npm:5.1.1"
   checksum: 1f17ec9b202c01a89337cc5528198a690be6b61a6688242125fbfb7fa17770e453e00e4685021abf5ae605860ca0722209faac5c254b780d0104730bb0b9e354
