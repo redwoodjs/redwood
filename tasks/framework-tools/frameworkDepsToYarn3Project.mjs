@@ -6,47 +6,45 @@ import { $, cd } from 'zx'
 process.env.FORCE_COLOR = '1'
 
 const frameworkPath = path.resolve('../../', process.cwd())
+const frameworkCorePath = path.join(frameworkPath, 'packages', 'core')
+const frameworkWebPath = path.join(frameworkPath, 'packages', 'web')
+const frameworkApiPath = path.join(frameworkPath, 'packages', 'api')
+
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 const projectWebPath = path.join(projectPath, 'web')
 const projectApiPath = path.join(projectPath, 'api')
 
 // Core
 console.log('-'.repeat(80))
-cd(`${frameworkPath}/packages/core`)
+cd(frameworkCorePath)
 await $`rm -rf dist`
 await $`yarn build`
 await $`yarn pack`
-await $`mv package.tgz ${projectPath}`
-
+await $`tar -xzf ./package.tgz`
 cd(projectPath)
-await $`tar -xvzf ./package.tgz`
-await $`yarn add -D ./package`
+await $`yarn add -D ${path.relative(projectPath, frameworkCorePath, 'package')}`
 await $`yarn bin`
 
 // Web
 console.log('-'.repeat(80))
-cd(`${frameworkPath}/packages/web`)
+cd(frameworkWebPath)
 await $`rm -rf dist`
 await $`yarn build`
 await $`yarn pack`
-await $`mv package.tgz ${projectWebPath}`
-
+await $`tar -xzf ./package.tgz`
 cd(projectWebPath)
-await $`tar -xvzf ./package.tgz`
-await $`yarn add ./package`
+await $`yarn add ${path.relative(projectWebPath, frameworkWebPath, 'package')}`
 await $`yarn bin`
 
 // Api
 console.log('-'.repeat(80))
-cd(`${frameworkPath}/packages/api`)
+cd(frameworkApiPath)
 await $`rm -rf dist`
 await $`yarn build`
 await $`yarn pack`
-await $`mv package.tgz ${projectApiPath}`
-
+await $`tar -xzf ./package.tgz`
 cd(projectApiPath)
-await $`tar -xvzf ./package.tgz`
-await $`yarn add ./package`
+await $`yarn add ${path.relative(projectApiPath, frameworkApiPath, 'package')}`
 await $`yarn bin`
 
 // Dist files
