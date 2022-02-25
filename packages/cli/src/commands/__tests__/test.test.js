@@ -7,6 +7,9 @@ jest.mock('execa', () =>
     params,
   }))
 )
+
+import fs from 'fs'
+
 import execa from 'execa'
 
 import { handler } from '../test'
@@ -19,7 +22,19 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
+jest.mock('fs')
+
+const MOCK_CONFIG_FILES = {
+  'api/jest.config.js': 'api jest config file',
+  'web/jest.config.js': 'web jest config file',
+}
+
+beforeEach(() => {
+  fs.__setMockFiles(MOCK_CONFIG_FILES)
+})
+
 afterEach(() => {
+  fs.__setMockFiles({})
   jest.clearAllMocks()
 })
 
