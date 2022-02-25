@@ -47,8 +47,7 @@ const args = yargs
   .option('rebuildFixture', {
     default: false,
     type: 'boolean',
-    describe:
-      'Rebuild __fixtures__/test-project. Note: must pass faux <project directory>',
+    describe: 'Rebuild __fixtures__/test-project',
   })
   .option('clean', {
     default: false,
@@ -61,16 +60,6 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
-  .demandCommand(
-    1,
-    1,
-    chalk.red.bold(
-      '  Specify a project directory outside the framework directory\n\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
-    ),
-    chalk.red.bold(
-      '  Only specify *one* project directory outside the framework directory (no spaces allowed)\n\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
-    )
-  )
   .help()
   .strict().argv
 
@@ -83,6 +72,32 @@ const {
   copyFromFixture,
   rebuildFixture,
 } = args
+
+// Do not use demandCommand becuase rebuildFixture doesn't require <project directory>
+// Require 1 and only 1 arg if not rebuildFixture
+if (!rebuildFixture && args._.length > 1) {
+  console.log(
+    chalk.red.bold(
+      `
+      Multiple <project directory> arguments
+      Secify ONE project directory outside the framework directory (no spaces allowed)
+      EXAMPLE: 'yarn build:test-project ../test-project'
+      `
+    )
+  )
+  process.exit(1)
+} else if (!rebuildFixture && args._.length < 1) {
+  console.log(
+    chalk.red.bold(
+      `
+      Missing <project directory> argument
+      Specify a project directory outside the framework directory
+      EXAMPLE: 'yarn build:test-project ../test-project'
+      `
+    )
+  )
+  process.exit(1)
+}
 
 const OUTPUT_PROJECT_PATH = rebuildFixture
   ? path.join(
@@ -102,14 +117,14 @@ if (
   !relativePathCheck.startsWith('..') &&
   !path.isAbsolute(relativePathCheck)
 ) {
-  console.log()
   console.log(
     chalk.red.bold(
-      `  Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'\n`
+      `
+      Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'
+      Specify a project directory outside the framework directory
+      EXAMPLE: 'yarn build:test-project ../test-project'
+      `
     )
-  )
-  console.log(
-    '  Specify a project directory outside the framework directory\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
   )
   process.exit(1)
 }
@@ -316,15 +331,18 @@ const globalTasks = () =>
       },
       {
         title: 'Convert to JS',
-        task: async () => {
-          return execa(
-            'yarn rw ts-to-js',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+        task: async (_ctx, task) => {
+          if (!rebuildFixture) {
+            return execa(
+              'yarn rw ts-to-js',
+              [],
+              getExecaOptions(OUTPUT_PROJECT_PATH)
+            )
+          } else {
+            task.output = 'Rebuilding Fixture: skip ts-to-js'
+          }
         },
-        enabled: () =>
-          (!typescript && !rebuildFixture) || (typescript && !rebuildFixture),
+        enabled: () => !typescript,
       },
       {
         title: 'Lint --fix all the things',

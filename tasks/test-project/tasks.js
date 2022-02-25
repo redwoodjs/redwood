@@ -203,7 +203,7 @@ async function webTasks(outputPath, { link, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer@^9.8.8',
+            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer',
             [],
             getExecaOptions(outputPath)
           ),
@@ -287,7 +287,7 @@ async function apiTasks(outputPath, { verbose }) {
     const resultsRequireAuth = contentRequireAuth.replace(
       /const mockExecution([^}]*){} }\)/,
       `const mockExecution = mockRedwoodDirective(requireAuth, {
-        context: { currentUser: { id: 1, name: 'Lebron McGretzky' } },
+        context: { currentUser: { id: 1 } },
       })`
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
