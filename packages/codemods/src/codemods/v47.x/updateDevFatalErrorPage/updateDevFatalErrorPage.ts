@@ -16,10 +16,7 @@ export const updateDevFatalErrorPage = async () => {
    *
    */
   const webFatalErrorPagesDir = path.join(rwPaths.web.pages, 'FatalErrorPage')
-  console.log(
-    webFatalErrorPagesDir,
-    '>>>>>>>>>>>>>>>>>>>>>>>>> webFatalErrorPagesDir'
-  )
+
   const dirs = {
     [webFatalErrorPagesDir]: {
       [path.join(webFatalErrorPagesDir, 'FatalErrorPage')]:
@@ -40,11 +37,7 @@ export const updateDevFatalErrorPage = async () => {
 
       const text = await res.text()
 
-      console.log(text, '====================> fetched file content!!')
-
       const newFatalErrorPage = `${filename}.${isTSProject ? 'tsx' : 'js'}`
-
-      console.log(newFatalErrorPage, '<<<<<<<<<<<<<<< newFatalErrorPage')
 
       fs.writeFileSync(newFatalErrorPage, text)
     }
