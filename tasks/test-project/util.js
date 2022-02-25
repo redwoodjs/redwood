@@ -1,5 +1,6 @@
 /* eslint-env node, es6*/
 
+const fs = require('fs')
 const path = require('path')
 
 const execa = require('execa')
@@ -34,7 +35,23 @@ const getExecaOptions = (cwd) => ({
   },
 })
 
+const updatePkgJsonScripts = ({ projectPath, scripts }) => {
+  const projectPackageJsonPath = path.join(projectPath, 'package.json')
+  const projectPackageJson = JSON.parse(
+    fs.readFileSync(projectPackageJsonPath, 'utf-8')
+  )
+  projectPackageJson.scripts = {
+    ...projectPackageJson.scripts,
+    ...scripts,
+  }
+  fs.writeFileSync(
+    projectPackageJsonPath,
+    JSON.stringify(projectPackageJson, undefined, 2)
+  )
+}
+
 module.exports = {
   getExecaOptions,
   applyCodemod,
+  updatePkgJsonScripts,
 }

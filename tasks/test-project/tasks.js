@@ -24,7 +24,7 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
-async function webTasks(outputPath, { link, verbose }) {
+async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -207,14 +207,14 @@ async function webTasks(outputPath, { link, verbose }) {
             [],
             getExecaOptions(outputPath)
           ),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       {
         title: '[link] Copy local framework files again',
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa('yarn rwfw project:copy', [], getExecaOptions(outputPath)),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       // =========
       {
@@ -222,7 +222,9 @@ async function webTasks(outputPath, { link, verbose }) {
         task: () => {
           return execa(
             'yarn rw setup ui tailwindcss',
-            ['--force', link && '--no-install'].filter(Boolean),
+            ['--force', linkWithLatestFwBuild && '--no-install'].filter(
+              Boolean
+            ),
             execaOptions
           )
         },
@@ -243,7 +245,7 @@ async function addModel(schema) {
   fs.writeFileSync(path, `${current}\n\n${schema}`)
 }
 
-async function apiTasks(outputPath, { verbose }) {
+async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptionsForProject = getExecaOptions(outputPath)
@@ -254,6 +256,10 @@ async function apiTasks(outputPath, { verbose }) {
       [],
       getExecaOptions(outputPath)
     )
+
+    if (linkWithLatestFwBuild) {
+      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+    }
 
     await execa('yarn rw g dbAuth', [], getExecaOptions(outputPath))
 
