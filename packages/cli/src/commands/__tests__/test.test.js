@@ -20,6 +20,7 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
+// Before rw tests run, api/ and web/ `jest.config.js` is confirmed via existsSync()
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
