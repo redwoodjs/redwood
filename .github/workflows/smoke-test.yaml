@@ -1,11 +1,11 @@
-name: CLI Checks and Telemetry Benchmarks
+name: Smoke test, CLI Checks and Telemetry Benchmarks
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  cli-checks-and-telemetry-benchmarks:
+  smoke-test:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
@@ -18,12 +18,13 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      PLAYWRIGHT_BROWSERS_PATH: 0 # this makes sure that playwright dependencies are cached in node_modules
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -40,24 +41,34 @@ jobs:
           restore-keys: |
             yarn-
 
-      - name: Install dependencies and Build Framework
+      - name: Install framework dependencies
         run: |
           yarn install --immutable
-          yarn build:clean || echo "Project already clean"
-          yarn build:js
 
       - name: Setup test project
         id: setup_test_project
         uses: ./.github/actions/setup_test_project
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: Run `rw info`
-        run: |
-          yarn rw info
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Install Playwright deps
+        run: npx playwright install --with-deps chromium
 
       - name: Run `rw build` without prerender
         run: |
           yarn rw build --no-prerender
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run smoke tests on 'rw dev' and 'rw serve'
+        working-directory: ./tasks/smoke-test
+        run: npx playwright test
+        env:
+          PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
+          REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: Run `rw info`
+        run: |
+          yarn rw info
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw prerender`
@@ -87,12 +98,10 @@ jobs:
       #     yarn rw type-check
       #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # Service needs implemented
-      #
-      # - name: Run "rw check"
-      #   run: |
-      #     yarn rw check
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw check"
+        run: |
+          yarn rw check
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw storybook"
         run: |

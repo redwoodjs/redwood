@@ -3,7 +3,7 @@ import terminalLink from 'terminal-link'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
-import { errorTelemetry } from '@redwoodjs/telemetry'
+import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -149,12 +149,22 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programmatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    await execa('yarn jest', jestArgs, {
-      cwd: rwjsPaths.base,
-      shell: true,
-      stdio: 'inherit',
-      env: { DATABASE_URL },
-    })
+    const runCommand = async () => {
+      await execa('yarn jest', jestArgs, {
+        cwd: rwjsPaths.base,
+        shell: true,
+        stdio: 'inherit',
+        env: { DATABASE_URL },
+      })
+    }
+
+    if (watch) {
+      await runCommand()
+    } else {
+      await timedTelemetry(process.argv, { type: 'test' }, async () => {
+        await runCommand()
+      })
+    }
   } catch (e) {
     // Errors already shown from execa inherited stderr
     errorTelemetry(process.argv, e.message)

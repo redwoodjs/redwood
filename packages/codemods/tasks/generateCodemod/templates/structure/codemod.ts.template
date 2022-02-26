@@ -1,0 +1,14 @@
+import fs from 'fs'
+import path from 'path'
+
+import getRWPaths from '../../../lib/getRWPaths'
+
+async function ${name}() {
+  const fileThatShouldntBeThereAnymore = path.join(
+    getRWPaths().base,
+    'babel.config.js'
+  )
+  fs.rmSync(fileThatShouldntBeThereAnymore)
+}
+
+export default ${name}
