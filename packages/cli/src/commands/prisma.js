@@ -57,7 +57,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       }
       options.schema = `"${rwjsPaths.api.dbSchema}"`
 
-      if (commands[1] === 'seed') {
+      if (['seed', 'diff'].includes(commands[1])) {
         delete options.schema
       }
     }
