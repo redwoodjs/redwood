@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -24,6 +27,27 @@ function isInMercurialRepository() {
     return true
   } catch (e) {
     return false
+  }
+}
+
+function isJestConfigFile(sides) {
+  for (let side of sides) {
+    try {
+      if (sides.includes(side)) {
+        if (!fs.existsSync(path.join(side, 'jest.config.js'))) {
+          console.error(
+            c.error(
+              `\nError: Missing Jest config file ${side}/jest.config.js` +
+                '\nTo add this file, run `npx @redwoodjs/codemods update-jest-config`\n'
+            )
+          )
+          throw new Error(`Error: Jest config file not found in ${side} side`)
+        }
+      }
+    } catch (e) {
+      errorTelemetry(process.argv, e.message)
+      process.exit(e?.exitCode || 1)
+    }
   }
 }
 
@@ -133,6 +157,9 @@ export const handler = async ({
   if (sides.length > 0) {
     jestArgs.push('--projects', ...sides)
   }
+
+  //checking if Jest config files exists in each of the sides
+  isJestConfigFile(sides)
 
   try {
     const cacheDirDb = `file:${ensurePosixPath(
