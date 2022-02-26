@@ -2394,9 +2394,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@eslint/eslintrc@npm:1.1.0"
+"@eslint/eslintrc@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@eslint/eslintrc@npm:1.2.0"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
@@ -2407,7 +2407,7 @@ __metadata:
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: 66dd26170466c867f61bd8c8b1ba6bf9cafbdd494ae57da6e14336e91d69b473271bb169a93fa64c4b91bb0ba431cd0e9356055e5102dd513dad8bac406a4393
+  checksum: fab5ddba4cc1815efeb0d3b2fb172df7bd98d61f0eeeb1b0126c3aba5af236ceb507b685aa8c3185502632ac0d8ca85c9fc1ee4083d81d67671becde84e1c895
   languageName: node
   linkType: hard
 
@@ -5926,7 +5926,7 @@ __metadata:
     "@redwoodjs/internal": 0.47.0
     "@typescript-eslint/eslint-plugin": 5.12.1
     "@typescript-eslint/parser": 5.12.1
-    eslint: 8.9.0
+    eslint: 8.10.0
     eslint-config-prettier: 8.4.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -14815,11 +14815,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.9.0":
-  version: 8.9.0
-  resolution: "eslint@npm:8.9.0"
+"eslint@npm:8.10.0":
+  version: 8.10.0
+  resolution: "eslint@npm:8.10.0"
   dependencies:
-    "@eslint/eslintrc": ^1.1.0
+    "@eslint/eslintrc": ^1.2.0
     "@humanwhocodes/config-array": ^0.9.2
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -14856,7 +14856,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 8fa9df38622fb62b01a3ca29cd315a51fce574c4338bcf11e1edcd084f64fccc289097965bb0d4e4a35f12be1b87621be71a52a44d0f7dd57eaaec0b5481a587
+  checksum: 4bbbc348caaa84fb7b2ab1a454fc3b999b26b5bc23c74613da2974a0a798502c031bd31a17c3c10fb9ad389c7cf35bf6d6b163f9dd1c20554f6d3a779c1bc8fd
   languageName: node
   linkType: hard
 
@@ -26183,7 +26183,7 @@ __metadata:
     core-js: 3.21.1
     cypress: 9.5.0
     cypress-wait-until: 1.7.2
-    eslint: 8.9.0
+    eslint: 8.10.0
     fast-glob: 3.2.11
     fs-extra: 10.0.1
     is-port-reachable: 3.1.0
