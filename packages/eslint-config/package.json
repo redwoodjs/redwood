@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.46.1",
+  "version": "0.47.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -15,10 +15,10 @@
     "@babel/core": "7.16.7",
     "@babel/eslint-parser": "7.16.5",
     "@babel/eslint-plugin": "7.16.5",
-    "@redwoodjs/internal": "0.46.1",
+    "@redwoodjs/internal": "0.47.0",
     "@typescript-eslint/eslint-plugin": "5.12.1",
     "@typescript-eslint/parser": "5.12.1",
-    "eslint": "8.9.0",
+    "eslint": "8.10.0",
     "eslint-config-prettier": "8.4.0",
     "eslint-import-resolver-babel-module": "5.3.1",
     "eslint-plugin-babel": "5.3.1",
@@ -26,7 +26,7 @@
     "eslint-plugin-jest-dom": "4.0.1",
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-prettier": "4.0.0",
-    "eslint-plugin-react": "7.28.0",
+    "eslint-plugin-react": "7.29.1",
     "eslint-plugin-react-hooks": "4.3.0",
     "prettier": "2.5.1"
   },
