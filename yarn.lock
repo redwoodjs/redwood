@@ -5934,7 +5934,7 @@ __metadata:
     eslint-plugin-jest-dom: 4.0.1
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
-    eslint-plugin-react: 7.29.1
+    eslint-plugin-react: 7.29.2
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
     prettier: 2.5.1
@@ -6051,7 +6051,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.4
+    systeminformation: 5.11.5
     toml: 3.0.0
     typescript: 4.5.5
   bin:
@@ -6171,7 +6171,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.4
+    systeminformation: 5.11.5
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -14729,9 +14729,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.29.1":
-  version: 7.29.1
-  resolution: "eslint-plugin-react@npm:7.29.1"
+"eslint-plugin-react@npm:7.29.2":
+  version: 7.29.2
+  resolution: "eslint-plugin-react@npm:7.29.2"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flatmap: ^1.2.5
@@ -14749,7 +14749,7 @@ __metadata:
     string.prototype.matchall: ^4.0.6
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: cca055a1801532311f4199857a4760d7d007cc3e0d326376f3a26cab347dc47f08045c7b3719dfee13e39308e68cfd5a851e5d2afd63e6cc6db41a4260ece3c2
+  checksum: a81b5ce16bf0cb9d32f9ca2409783c75fb2e46d580563b42f4dce330ac3826fa769dabfe49836172e1710d77589c8ef29cef023a985afc32a1f7b6297db9757b
   languageName: node
   linkType: hard
 
@@ -28068,12 +28068,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.4":
-  version: 5.11.4
-  resolution: "systeminformation@npm:5.11.4"
+"systeminformation@npm:5.11.5":
+  version: 5.11.5
+  resolution: "systeminformation@npm:5.11.5"
   bin:
     systeminformation: lib/cli.js
-  checksum: 424982214ec0c8fb9cc4549f54759f9b75846fb68022260c2d4ff223c2f0ca19cd7feac23c2c78e33a28f83408ee87bf5878f080cb198c5e81ba144a93c19e2b
+  checksum: e31fb6eb38811af115c9cf05afe9f8183fdcda51c004e9f9f3563d4b13d753b714574fad6eba3d27bdb033464fabd20317a9b73a58e1c9ec7b4845d074229a02
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
