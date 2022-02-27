@@ -371,7 +371,7 @@ const globalTasks = () =>
             // nothing to see here
           }
         },
-        enabled: () => rebuildFixture,
+        enabled: () => rebuildFixture || !copyFromFixture,
       },
       {
         title: '[Rebuild Fixture] Replace and Cleanup Fixture',
