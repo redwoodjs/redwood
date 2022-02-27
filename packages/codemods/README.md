@@ -42,6 +42,15 @@ The difference is that it's overwriting files.
 That means things that Babel doesn't care about, like spaces, styling (single quotes or double quotes, etc.), all of a sudden matter a lot.
 The parser jscodeshift uses, [recast](https://github.com/benjamn/recast), knows how to preserve these details as much as possible.
 
+### Generating a new Codemod
+
+```
+cd packages/codemods
+yarn generate:codemod
+```
+
+Follow the interactive guide to specify the Redwood framework version for the codemod and type odf codemod.
+
 ### Structure of this package
 
 The root of the CLI is run from `src/codemods.ts`, which loads all the available codemods from the `src/codemods/*` folder.
