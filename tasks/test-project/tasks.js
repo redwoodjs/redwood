@@ -270,7 +270,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
-    const contentContactsSdl = fs.readFileSync(pathContactsSdl).toString()
+    const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
     const resultsContactsSdl = contentContactsSdl.replace(
       /createContact([^}]*)@requireAuth/,
       `createContact(input: CreateContactInput!): Contact @skipAuth`
@@ -279,13 +279,22 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
     // update directive in contacts.sdl.ts
     const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
-    const contentPostsSdl = fs.readFileSync(pathPostsSdl).toString()
+    const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
     const resultsPostsSdl = contentPostsSdl.replace(
       /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
       `posts: [Post!]! @skipAuth
       post(id: Int!): Post @skipAuth`
     )
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
+
+    // Update src/lib/auth to return roles, so tsc doesn't complain
+    const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
+    const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
+    const newLibAuthContent = libAuthContent.replace(
+      'select: { id: true }',
+      'select: { id: true, roles: true }'
+    )
+    fs.writeFileSync(libAuthPath, newLibAuthContent)
 
     // update requireAuth test
     const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.ts`
@@ -305,6 +314,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       /handler: \({ username,([^}]*)userAttributes }\) => {/,
       `handler: ({ username, hashedPassword, salt }) => {`
     )
+
     fs.writeFileSync(pathAuthJs, resultsAuthJs)
 
     await execa(
