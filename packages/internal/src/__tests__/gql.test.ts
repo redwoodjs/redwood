@@ -35,3 +35,62 @@ test('parses a document AST', () => {
     ]
   `)
 })
+
+test('handles inline fragments', () => {
+  const QUERY = gql`
+    query MyCellQuery {
+      something {
+        ... on SomeType {
+          __typename
+        }
+        ... on SomeOtherType {
+          __typename
+        }
+      }
+    }
+  `
+
+  expect(parseDocumentAST(QUERY)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "fields": Array [
+          Object {
+            "something": Array [
+              "__typename",
+              "__typename",
+            ],
+          },
+        ],
+        "name": "MyCellQuery",
+        "operation": "query",
+      },
+    ]
+  `)
+})
+
+test('handles fragments', () => {
+  const QUERY = gql`
+    fragment ABC on B {
+      a
+    }
+    query MyCellQuery {
+      something {
+        ...ABC
+      }
+    }
+  `
+
+  expect(parseDocumentAST(QUERY)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "fields": Array [
+          Object {
+            "something": Array [],
+          },
+        ],
+        "name": "MyCellQuery",
+        "operation": "query",
+      },
+    ]
+  `)
+})

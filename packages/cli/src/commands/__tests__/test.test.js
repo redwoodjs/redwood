@@ -7,6 +7,7 @@ jest.mock('execa', () =>
     params,
   }))
 )
+
 import execa from 'execa'
 
 import { handler } from '../test'
@@ -19,38 +20,24 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
-afterEach(() => {
-  jest.clearAllMocks()
+// Before rw tests run, api/ and web/ `jest.config.js` is confirmed via existsSync()
+jest.mock('fs', () => {
+  return {
+    ...jest.requireActual('fs'),
+    existsSync: () => true,
+  }
 })
 
-test('Creates/resets a test db when side has api, before calling jest', async () => {
-  await handler({
-    filter: ['api'],
-  })
-
-  expect(execa.mock.results[0].value).toEqual({
-    cmd: 'yarn rw',
-    params: ['prisma db push', '--force-reset', '--accept-data-loss'],
-  })
-
-  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
-
-  // Api tests need to run sequentially for scenarios
-  expect(execa.mock.results[1].value.params).toContain('--runInBand')
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 test('Runs tests for all available sides if no filter passed', async () => {
   await handler({})
 
-  // Api side runs db reset first
-  expect(execa.mock.results[0].value).toEqual({
-    cmd: 'yarn rw',
-    params: ['prisma db push', '--force-reset', '--accept-data-loss'],
-  })
-
-  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
-  expect(execa.mock.results[1].value.params).toContain('web')
-  expect(execa.mock.results[1].value.params).toContain('api')
+  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value.params).toContain('web')
+  expect(execa.mock.results[0].value.params).toContain('api')
 })
 
 test('Syncs or creates test database when the flag --db-push is set to true', async () => {
@@ -59,15 +46,9 @@ test('Syncs or creates test database when the flag --db-push is set to true', as
     dbPush: true,
   })
 
-  expect(execa.mock.results[0].value).toEqual({
-    cmd: 'yarn rw',
-    params: ['prisma db push', '--force-reset', '--accept-data-loss'],
-  })
+  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
 
-  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
-
-  // Api tests need to run sequentially for scenarios
-  expect(execa.mock.results[1].value.params).toContain('--runInBand')
+  expect(execa.mock.results[0].value.params).toContain('--projects', 'api')
 })
 
 test('Skips test database sync/creation when the flag --db-push is set to false', async () => {
@@ -84,16 +65,10 @@ test('Runs tests for all available sides if no side filter passed', async () => 
     filter: ['bazinga'],
   })
 
-  // Api side runs db reset first
-  expect(execa.mock.results[0].value).toEqual({
-    cmd: 'yarn rw',
-    params: ['prisma db push', '--force-reset', '--accept-data-loss'],
-  })
-
-  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
-  expect(execa.mock.results[1].value.params).toContain('bazinga')
-  expect(execa.mock.results[1].value.params).toContain('web')
-  expect(execa.mock.results[1].value.params).toContain('api')
+  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value.params).toContain('bazinga')
+  expect(execa.mock.results[0].value.params).toContain('web')
+  expect(execa.mock.results[0].value.params).toContain('api')
 })
 
 test('Runs tests specified side if even with additional filters', async () => {
@@ -101,7 +76,6 @@ test('Runs tests specified side if even with additional filters', async () => {
     filter: ['web', 'bazinga'],
   })
 
-  // Api side would have run prisma reset
   expect(execa.mock.results[0].value.cmd).not.toBe('yarn rw')
   expect(execa.mock.results[0].value.params).not.toContain('api')
 
@@ -135,12 +109,11 @@ test('Passes other flags to jest', async () => {
     collectCoverage: true,
   })
 
-  // Second command because api side runs
-  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
-  expect(execa.mock.results[1].value.params).toContain('-u')
-  expect(execa.mock.results[1].value.params).toContain('--debug')
-  expect(execa.mock.results[1].value.params).toContain('--json')
-  expect(execa.mock.results[1].value.params).toContain('--collectCoverage')
+  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value.params).toContain('-u')
+  expect(execa.mock.results[0].value.params).toContain('--debug')
+  expect(execa.mock.results[0].value.params).toContain('--json')
+  expect(execa.mock.results[0].value.params).toContain('--collectCoverage')
 })
 
 test('Passes values of other flags to jest', async () => {
@@ -150,15 +123,15 @@ test('Passes values of other flags to jest', async () => {
   })
 
   // Second command because api side runs
-  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
 
   // Note that these below tests aren't the best, since they don't check for order
   // But I'm making sure only 2 extra params get passed
-  expect(execa.mock.results[1].value.params).toEqual(
+  expect(execa.mock.results[0].value.params).toEqual(
     expect.arrayContaining(['--bazinga', false])
   )
 
-  expect(execa.mock.results[1].value.params).toEqual(
+  expect(execa.mock.results[0].value.params).toEqual(
     expect.arrayContaining(['--hello', 'world'])
   )
 })

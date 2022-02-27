@@ -54,9 +54,9 @@ export function waitForApiSide() {
           failOnStatusCode: false,
         })
         .then((r) => {
-          return r.status === 200 // The first response should be 504
+          return r.status === 200 // The first response could be 504 or 203 (reloading api server)
         }),
-    { interval: 2_000 }
+    { timeout: 10_000, interval: 2_000 }
   )
 }
 

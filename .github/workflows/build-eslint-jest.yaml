@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node-version: ['14', '16']
+        node-version: ['14', '16.10']
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
@@ -17,13 +17,17 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Remove the tsc problem matcher if not ubuntu-node-16
+        if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '16.10') == false
+        run: echo "echo "::remove-matcher owner=tsc::""
 
       - name: Cache yarn
         uses: actions/cache@v2
@@ -37,12 +41,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
-        run: yarn constraints
-
-      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn dedupe --check
+      - name: Check constraints, dependencies, and package.json's
+        uses: ./tasks/check
 
       - name: Build
         run: yarn build

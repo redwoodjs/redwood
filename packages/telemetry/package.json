@@ -1,0 +1,49 @@
+{
+  "name": "@redwoodjs/telemetry",
+  "version": "0.47.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/telemetry"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/dist/"
+    ]
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.16.7",
+    "@redwoodjs/internal": "0.47.0",
+    "@redwoodjs/structure": "0.47.0",
+    "ci-info": "^3.3.0",
+    "envinfo": "7.8.1",
+    "node-fetch": "2.6.7",
+    "systeminformation": "5.11.5",
+    "uuid": "8.3.2",
+    "yargs": "16.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.16.7",
+    "@babel/core": "7.16.7",
+    "@types/envinfo": "7.8.1",
+    "@types/node-fetch": "2.5.12",
+    "@types/uuid": "8.3.4",
+    "@types/yargs": "16.0.4",
+    "jest": "27.5.1"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

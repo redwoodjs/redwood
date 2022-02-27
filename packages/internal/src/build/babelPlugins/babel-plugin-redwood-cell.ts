@@ -1,3 +1,5 @@
+import { parse } from 'path'
+
 import type { PluginObj, types } from '@babel/core'
 
 // This wraps a file that has a suffix of `Cell` in Redwood's `createCell` higher
@@ -6,7 +8,7 @@ import type { PluginObj, types } from '@babel/core'
 // ```js
 // import { createCell } from '@redwoodjs/web'
 // <YOUR CODE>
-// export default createCell({ QUERY, Loading, Success, Failure, isEmpty, Empty, beforeQuery, afterQuery })
+// export default createCell({ QUERY, Loading, Success, Failure, isEmpty, Empty, beforeQuery, afterQuery, displayName })
 // ```
 
 // A cell can export the declarations below.
@@ -80,20 +82,32 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           )
 
           // Insert at the bottom of the file:
-          // + export default createCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, isEmpty, afterQuery? })
+          // + export default createCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, isEmpty, afterQuery?, displayName? })
           path.node.body.push(
             t.exportDefaultDeclaration(
               t.callExpression(t.identifier('createCell'), [
-                t.objectExpression(
-                  exportNames.map((name) =>
+                t.objectExpression([
+                  ...exportNames.map((name) =>
                     t.objectProperty(
                       t.identifier(name),
                       t.identifier(name),
                       false,
                       true
                     )
-                  )
-                ),
+                  ),
+                  /**
+                   * Add the `displayName` property
+                   * so we can name the Cell after the filename.
+                   */
+                  t.objectProperty(
+                    t.identifier('displayName'),
+                    t.stringLiteral(
+                      parse(this.file.opts.filename as string).name
+                    ),
+                    false,
+                    true
+                  ),
+                ]),
               ])
             )
           )

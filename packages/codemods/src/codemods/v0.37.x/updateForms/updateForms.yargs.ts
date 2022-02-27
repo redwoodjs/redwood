@@ -21,7 +21,7 @@ export const handler = () => {
     if (files.length === 0) {
       setWarning('No files found')
     } else {
-      runTransform({
+      await runTransform({
         transformPath: path.join(__dirname, 'updateForms.js'),
         targetPaths: files,
       })

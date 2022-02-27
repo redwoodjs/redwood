@@ -228,6 +228,32 @@ describe('Form', () => {
     )
   })
 
+  it('sets the value to undefined for empty string on optional relational fields', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        {/* This is an optional relational field because the name ends with "Id"
+            and it doesn't have { required: true } */}
+        <TextField name="userId" defaultValue="" />
+        <SelectField name="groupId" defaultValue="">
+          <option value="">No group</option>
+          <option value={1}>Group 1</option>
+          <option value={2}>Group 2</option>
+        </SelectField>
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      { userId: undefined, groupId: undefined },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
   it('handles int and float blank values gracefully', async () => {
     const mockFn = jest.fn()
 

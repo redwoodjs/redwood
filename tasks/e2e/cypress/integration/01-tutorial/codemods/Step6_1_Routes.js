@@ -2,6 +2,7 @@ export default `
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogLayout from 'src/layouts/BlogLayout'
 import PostsLayout from 'src/layouts/PostsLayout'
+import HomePage from 'src/pages/HomePage'
 
 const Routes = () => {
   return (

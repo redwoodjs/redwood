@@ -3,6 +3,7 @@ import path from 'path'
 import fg from 'fast-glob'
 import task from 'tasuku'
 
+import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-scenarios'
@@ -24,9 +25,12 @@ export const description =
  */
 export const handler = () => {
   task('Updating Scenarios', async () => {
-    runTransform({
+    await runTransform({
       transformPath: path.join(__dirname, 'updateScenarios.js'),
-      targetPaths: fg.sync('api/src/services/**/*.scenarios.{js,ts}'),
+      targetPaths: fg.sync('api/src/services/**/*.scenarios.{js,ts}', {
+        cwd: getRWPaths().base,
+        absolute: true,
+      }),
     })
   })
 }

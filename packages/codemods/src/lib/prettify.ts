@@ -14,6 +14,8 @@ const getPrettierConfig = () => {
 
 const prettify = (code: string) =>
   format(code, {
+    singleQuote: true,
+    semi: false,
     ...getPrettierConfig(),
     parser: 'babel',
   })

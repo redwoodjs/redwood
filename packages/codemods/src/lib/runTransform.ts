@@ -1,38 +1,28 @@
 /**
- * A simple wrapper around the jscodeshift CLI.
+ * A simple wrapper around the jscodeshift.
  *
  * @see jscodeshift CLI's usage {@link https://github.com/facebook/jscodeshift#usage-cli}
  * @see prisma/codemods {@link https://github.com/prisma/codemods/blob/main/utils/runner.ts}
  * @see react-codemod {@link https://github.com/reactjs/react-codemod/blob/master/bin/cli.js}
  */
-import path from 'path'
 
-import execa from 'execa'
+// @ts-expect-error We don't have this in types but need for workaround https://github.com/facebook/jscodeshift/issues/398
+import * as jscodeshift from 'jscodeshift/src/Runner'
 
-const getExecaArgs = () => {
-  if (process.platform === 'win32') {
-    return {
-      command: 'yarn jscodeshift',
-      cmdArgs: [],
-    }
-  } else {
-    /**
-     * We can't run jscodeshift with yarn (like `yarn jscodeshift -t ...`) on macos/linux
-     *
-     * @see {@link https://github.com/facebook/jscodeshift/issues/424}
-     *
-     * But on Windows, yarn jscodeshift does
-     */
-    const jscodeshiftExecutable = path.resolve(
-      __dirname,
-      '../../../../node_modules/.bin/jscodeshift'
-    )
-
-    return {
-      command: 'node',
-      cmdArgs: [jscodeshiftExecutable],
-    }
-  }
+const defaultJscodeshiftOpts = {
+  verbose: 0,
+  dry: false,
+  print: false,
+  babel: true,
+  extensions: 'js',
+  ignorePattern: '**/node_modules/**',
+  ignoreConfig: [],
+  runInBand: false,
+  silent: false,
+  parser: 'babel',
+  parserConfig: {},
+  failOnError: false,
+  stdin: false,
 }
 
 export interface RunTransform {
@@ -48,74 +38,26 @@ export interface RunTransform {
   /**
    * jscodeshift options and transform options.
    */
-  options?: Record<string, any>
+  options?: Partial<Record<keyof typeof defaultJscodeshiftOpts, any>>
 }
 
-export const runTransform = ({
+export const runTransform = async ({
   transformPath,
   targetPaths,
   parser = 'tsx',
   options = {},
 }: RunTransform) => {
-  /**
-   * Transforms `{ key: val }` to `'--key=val'`
-   */
-  const flags = Object.entries(options).map((key, val) => `--${key}=${val}`)
+  try {
+    await jscodeshift.run(transformPath, targetPaths, {
+      ...defaultJscodeshiftOpts,
+      parser,
+      babel: process.env.NODE_ENV === 'test',
+      ...options, // Putting options here lets them override all the defaults.
+    })
+  } catch (e: any) {
+    console.error('Transform Error', e.message)
 
-  if (process.env.NODE_ENV === 'test') {
-    const { command, cmdArgs } = getExecaArgs()
-
-    try {
-      execa.sync(
-        command,
-        [
-          ...cmdArgs,
-          `--parser=${parser}`,
-          process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
-          '--ignore-pattern=**/node_modules/**',
-          // Putting flags here lets them override all the defaults.
-          ...flags,
-          '-t',
-          transformPath,
-          ...targetPaths,
-        ],
-        {
-          stdio: 'inherit',
-        }
-      )
-    } catch (e: any) {
-      console.error('Transform Error', e.message)
-
-      throw new Error('Failed to invoke transform')
-    }
-  } else {
-    try {
-      const jscodeshiftExecutable = path.resolve(
-        __dirname,
-        '../../node_modules/.bin/jscodeshift'
-      )
-
-      execa.sync(
-        jscodeshiftExecutable,
-        [
-          `--parser=${parser}`,
-          process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
-          '--ignore-pattern=**/node_modules/**',
-          // Putting flags here lets them override all the defaults.
-          ...flags,
-          '-t',
-          transformPath,
-          ...targetPaths,
-        ],
-        {
-          stdio: 'inherit',
-        }
-      )
-    } catch (e: any) {
-      console.error('Transform Error', e.message)
-
-      throw new Error('Failed to invoke transform')
-    }
+    throw new Error('Failed to invoke transform')
   }
 }
 

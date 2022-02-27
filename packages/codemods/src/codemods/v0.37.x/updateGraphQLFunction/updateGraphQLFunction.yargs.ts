@@ -11,7 +11,7 @@ export const description =
 
 export const handler = () => {
   task('Updating the GraphQL Function', async () => {
-    runTransform({
+    await runTransform({
       transformPath: path.join(__dirname, 'updateGraphQLFunction.js'),
       targetPaths: fg.sync('api/src/functions/graphql.{js,ts}'),
     })

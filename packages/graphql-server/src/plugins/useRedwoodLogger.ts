@@ -1,5 +1,5 @@
 import { Plugin } from '@envelop/core'
-import { handleStreamOrSingleExecutionResult } from '@envelop/types'
+import { handleStreamOrSingleExecutionResult } from '@envelop/core'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -156,6 +156,10 @@ const logResult =
         options['data'] = result.data
       }
 
+      if (result.extensions?.responseCache) {
+        options['responseCache'] = result.extensions?.responseCache
+      }
+
       if (includeTracing) {
         options['tracing'] = result.extensions?.envelopTracing
       }
@@ -209,6 +213,32 @@ export const useRedwoodLogger = (
         }
       })
     },
+    onParse({ params }) {
+      const options = params.options as any
+
+      const envelopLogger = childLogger.child({
+        ...options,
+      })
+
+      return ({ result }) => {
+        if (result instanceof Error) {
+          envelopLogger.error(result)
+        }
+      }
+    },
+    onValidate({ params }) {
+      const options = params.options as any
+
+      const envelopLogger = childLogger.child({
+        ...options,
+      })
+
+      return ({ result }) => {
+        result.forEach((item) => {
+          item.message && envelopLogger.error(item.message)
+        })
+      }
+    },
     onExecute({ args }) {
       const options = {} as any
       const rootOperation = args.document.definitions.find(
@@ -246,6 +276,7 @@ export const useRedwoodLogger = (
       })
 
       envelopLogger.debug(`GraphQL execution started: ${operationName}`)
+
       const handleResult = logResult(loggerConfig, envelopLogger, operationName)
 
       return {

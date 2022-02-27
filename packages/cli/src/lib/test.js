@@ -11,6 +11,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import './mockTelemetry'
+
 jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {

@@ -21,7 +21,7 @@ In v0.38 we started supporting node 16. That means in the root package json of a
     },
     "engines": {
 -     "node": "14.x",
-+     "node": ">=14.x <=16.x",
++     "node": ">=14.17 <=16.x",
       "yarn": "1.x"
     },
     "prisma": {

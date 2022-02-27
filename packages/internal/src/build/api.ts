@@ -7,7 +7,7 @@ import { moveSync, removeSync } from 'fs-extra'
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
 
-import { getApiSideBabelPlugins, prebuildFile } from './babel/api'
+import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
 
 export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,
@@ -113,7 +113,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    const result = prebuildFile(srcPath, dstPath, plugins)
+    const result = prebuildApiFile(srcPath, dstPath, plugins)
     if (!result?.code) {
       // TODO: Figure out a better way to return these programatically.
       console.warn('Error:', srcPath, 'could not prebuilt.')

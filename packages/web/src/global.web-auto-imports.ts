@@ -12,11 +12,6 @@ declare global {
   const gql: typeof _gql
 
   interface Window {
-    /**
-     * @deprecated Please use RWJS_API_GRAPHQL_URL or RWJS_API_DBAUTH_URL
-     */
-    __REDWOOD__API_PROXY_PATH: never
-
     /** URL or absolute path to the DbAuth serverless function */
     RWJS_API_DBAUTH_URL: string
     /** URL or absolute path to the GraphQL serverless function */

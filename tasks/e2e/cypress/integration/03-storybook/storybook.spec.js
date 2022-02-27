@@ -12,7 +12,8 @@ describe(
   'Redwood Storybook Integration',
   { baseUrl: 'http://localhost:8910' },
   () => {
-    it('0. Build Storybook Static Files', () => {
+    // 0. Build Storybook Static Files
+    before(() => {
       cy.writeFile(
         path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.stories.js'),
         Step1_1_BlogPostStory
@@ -33,13 +34,11 @@ describe(
       )
 
       // Slow!
-      cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
+      cy.exec(`cd ${BASE_DIR} || exit; yarn rw storybook --build`, {
         timeout: 300_0000,
-      }).then((result) => {
-        const { code, stderr } = result
-        expect(code).to.eq(0)
-        expect(stderr).to.not.contain('ERR!')
       })
+        .its('stderr')
+        .should('not.contain', 'ERR!')
     })
 
     it('1. Component: BlogPost', () => {
@@ -81,18 +80,18 @@ describe(
     it('4. Pages: AboutPage, ContactPage, and HomePage', () => {
       // About
       cy.visit(
-        `/storybook/iframe.html?id=pages-aboutpage--generated&viewMode=story`
+        '/storybook/iframe.html?id=pages-aboutpage--generated&args=&viewMode=story'
       )
       cy.get('p').should('contain.text', 'This site was created')
       // Contact
       cy.visit(
-        `/storybook/iframe.html?id=pages-contactpage--generated&viewMode=story`
+        `/storybook/iframe.html?id=pages-contactpage--generated&args=&viewMode=story`
       )
       cy.get('label').eq(0).should('contain.text', 'Name')
       cy.get('button').should('contain.text', 'Save')
       // Home
       cy.visit(
-        `/storybook/iframe.html?id=pages-homepage--generated&viewMode=story`
+        `/storybook/iframe.html?id=pages-homepage--generated&args=&viewMode=story`
       )
       cy.get('article div').eq(0).should('contain.text', 'Hello world!')
       cy.get('header h2').eq(1).should('contain.text', 'Third post')

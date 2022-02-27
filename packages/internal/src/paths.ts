@@ -21,6 +21,7 @@ export interface NodeTargetPaths {
   config: string
   dist: string
   types: string
+  models: string
 }
 
 export interface BrowserTargetPaths {
@@ -38,6 +39,7 @@ export interface BrowserTargetPaths {
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string
+  storybookManagerConfig: string
   dist: string
   types: string
 }
@@ -78,6 +80,7 @@ const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
+const PATH_API_DIR_MODELS = 'api/src/models'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
@@ -96,6 +99,7 @@ const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
 
@@ -181,6 +185,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
+      models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
     },
 
     web: {
@@ -203,6 +208,10 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       storybookPreviewConfig: path.join(
         BASE_DIR,
         PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      ),
+      storybookManagerConfig: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       types: path.join(BASE_DIR, 'web/types'),

@@ -20,6 +20,7 @@ export const generateGraphQLSchema = async () => {
         ],
         config: {
           scalars: {
+            BigInt: 'number',
             DateTime: 'string',
             Date: 'string',
             JSON: 'Record<string, unknown>',
@@ -45,7 +46,7 @@ export const generateGraphQLSchema = async () => {
     // This tries to clean up the output of those errors.
     console.error(e)
     console.error(chalk.red('Error parsing SDLs or Schema'))
-    for (const error of e?.errors) {
+    for (const error of e.errors ?? []) {
       console.error(error.details)
     }
 

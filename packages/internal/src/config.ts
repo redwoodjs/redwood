@@ -21,6 +21,7 @@ export interface NodeTargetConfig {
   path: string
   target: TargetEnum.NODE
   schemaPath: string
+  serverConfig: string
 }
 
 interface BrowserTargetConfig {
@@ -53,6 +54,7 @@ interface BrowserTargetConfig {
 
   fastRefresh: boolean
   a11y: boolean
+  sourceMap: boolean
 }
 
 export interface Config {
@@ -80,6 +82,7 @@ const DEFAULT_CONFIG: Config = {
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
+    sourceMap: false,
   },
   api: {
     title: 'Redwood App',
@@ -88,6 +91,7 @@ const DEFAULT_CONFIG: Config = {
     path: './api',
     target: TargetEnum.NODE,
     schemaPath: './api/db/schema.prisma',
+    serverConfig: './api/server.config.js',
   },
   browser: {
     open: false,

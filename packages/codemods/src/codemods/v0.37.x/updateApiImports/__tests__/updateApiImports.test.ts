@@ -1,5 +1,5 @@
 describe('Update API Imports', () => {
-  it('Updates @redwoodjs/api imports', () => {
-    matchTransformSnapshot('updateApiImports', 'apiImports')
+  it('Updates @redwoodjs/api imports', async () => {
+    await matchTransformSnapshot('updateApiImports', 'apiImports')
   })
 })

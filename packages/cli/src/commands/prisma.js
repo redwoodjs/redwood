@@ -5,6 +5,7 @@ import boxen from 'boxen'
 import execa from 'execa'
 
 import { getPaths } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 
@@ -63,9 +64,10 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   }
 
   // Convert command and options into a string that's run via execa
-  let args = commands
+  const args = commands
   for (const [name, value] of Object.entries(options)) {
-    args.push(`--${name}`)
+    // Allow both long and short form commands, e.g. --name and -n
+    args.push(name.length > 1 ? `--${name}` : `-${name}`)
     if (typeof value !== 'boolean') {
       args.push(value)
     }
@@ -92,6 +94,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       printWrapInfo()
     }
   } catch (e) {
+    errorTelemetry(process.argv, `Error generating prisma client: ${e.message}`)
     process.exit(e?.exitCode || 1)
   }
 }

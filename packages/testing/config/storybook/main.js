@@ -9,10 +9,36 @@ const {
   getConfig,
   getPaths,
 } = require('@redwoodjs/internal')
+const { getProject } = require('@redwoodjs/structure')
 
 const config = getConfig()
 
 const rwjsPaths = getPaths()
+
+const staticAssetsFolder = path.join(getPaths().web.base, 'public')
+
+function isPackageInstalled(alias) {
+  try {
+    return Boolean(require(alias))
+  } catch (e) {
+    return false
+  }
+}
+
+function withEmotionVersionFallback(config) {
+  const alias = Object.entries({
+    '@emotion/core': '@emotion/core',
+    '@emotion/styled': '@emotion/styled',
+    'emotion-theming': '@emotion/react',
+  }).reduce((acc, [packageName, alias]) => {
+    if (isPackageInstalled(alias)) {
+      acc[packageName] = require.resolve(alias)
+    }
+    return acc
+  }, {})
+
+  return merge(config, { resolve: { alias } })
+}
 
 const baseConfig = {
   core: {
@@ -22,6 +48,16 @@ const baseConfig = {
     `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
   ],
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
+  // Storybook's UI uses a seperate Webpack configuration
+  managerWebpack: (sbConfig) => {
+    const userManagerPath = fs.existsSync(rwjsPaths.web.storybookManagerConfig)
+      ? rwjsPaths.web.storybookManagerConfig
+      : './manager.example.js'
+    sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_MANAGER_CONFIG'] =
+      userManagerPath
+
+    return sbConfig
+  },
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction =
@@ -66,7 +102,9 @@ const baseConfig = {
       os: false,
       tty: false,
       crypto: false,
+      stream: false,
       zlib: false,
+      path: false,
     }
 
     // ** PLUGINS **
@@ -91,8 +129,23 @@ const baseConfig = {
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
 
+    sbConfig = withEmotionVersionFallback(sbConfig)
+
     return sbConfig
   },
+  // only set staticDirs when running Storybook process; will fail if set for SB --build
+  ...(process.env.NODE_ENV !== 'production' && {
+    staticDirs: [`${staticAssetsFolder}`],
+  }),
+  // only set up type checking for typescript projects
+  ...(getProject().isTypeScriptProject && {
+    // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
+    typescript: {
+      check: true,
+      // By default, the checker runs asynchronously in dev mode. Force it to run synchronously.
+      checkOptions: { async: false },
+    },
+  }),
 }
 
 const mergeUserStorybookConfig = (baseConfig) => {

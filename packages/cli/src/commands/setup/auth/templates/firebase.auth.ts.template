@@ -7,9 +7,7 @@ const adminApp = admin.initializeApp({
 })
 
 /**
- * getCurrentUser returns the user information together with
- * an optional collection of roles used by requireAuth() to check
- * if the user is authenticated or has role-based access
+ * getCurrentUser returns the user information from the decoded JWT
  *
  * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
  * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
@@ -24,7 +22,7 @@ const adminApp = admin.initializeApp({
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
- export const getCurrentUser = async (
+export const getCurrentUser = async (
   decoded,
   { _token, _type },
   { _event, _context }

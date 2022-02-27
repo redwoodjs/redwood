@@ -104,7 +104,11 @@ export const MetaTags = (props: MetaTagsProps) => {
         </Head>
       )}
 
-      {ogUrl && <meta property="og:url" content={ogUrl} />}
+      {ogUrl && (
+        <Head>
+          <meta property="og:url" content={ogUrl} />
+        </Head>
+      )}
 
       {/* en_US by default */}
       {locale && (
@@ -114,11 +118,21 @@ export const MetaTags = (props: MetaTagsProps) => {
         </Head>
       )}
 
-      <meta property="og:type" content={ogType} />
+      <Head>
+        <meta property="og:type" content={ogType} />
+      </Head>
 
-      {ogContentUrl && <meta property={tag} content={ogContentUrl} />}
+      {ogContentUrl && (
+        <Head>
+          <meta property={tag} content={ogContentUrl} />
+        </Head>
+      )}
 
-      {contentType && <meta property={`${tag}:type`} content={contentType} />}
+      {contentType && (
+        <Head>
+          <meta property={`${tag}:type`} content={contentType} />
+        </Head>
+      )}
 
       {tag === 'og:image' && (
         <Head>
@@ -130,10 +144,12 @@ export const MetaTags = (props: MetaTagsProps) => {
       )}
 
       {robots && (
-        <meta
-          name="robots"
-          content={Array.isArray(robots) ? robots.join(', ') : robots}
-        />
+        <Head>
+          <meta
+            name="robots"
+            content={Array.isArray(robots) ? robots.join(', ') : robots}
+          />
+        </Head>
       )}
 
       {children}

@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0 # Required because lerna uses tags to determine the version.
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
 
@@ -63,7 +63,7 @@ jobs:
       - name: Publish to npm
         run: |
           git describe
-          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > ./tasks/framework-tools/.npmrc
-          yarn framework publish:canary
+          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+          yarn publish:canary
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

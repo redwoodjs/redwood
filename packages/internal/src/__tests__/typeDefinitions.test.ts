@@ -42,6 +42,7 @@ test('generate the correct mirror types for cells', () => {
   expect(p).toMatchInlineSnapshot(`
     Array [
       ".redwood/types/mirror/web/src/components/NumTodosCell/index.d.ts",
+      ".redwood/types/mirror/web/src/components/NumTodosTwoCell/index.d.ts",
       ".redwood/types/mirror/web/src/components/TodoListCell/index.d.ts",
     ]
   `)
@@ -194,4 +195,31 @@ test('mirror path for dir cells', () => {
   expect(cleanPaths(p[0])).toMatchInlineSnapshot(
     `".redwood/types/mirror/web/src/components/NumTodosCell"`
   )
+})
+
+test('respects user provided codegen config', async () => {
+  const customCodegenConfigPath = path.join(FIXTURE_PATH, 'codegen.yml')
+  // Add codegen.yml to fixture folder
+  fs.writeFileSync(
+    customCodegenConfigPath,
+    `config:
+  omitOperationSuffix: false
+  namingConvention:
+    typeNames: change-case-all#upperCase`
+  )
+
+  await generateGraphQLSchema()
+  const [outputPath] = await generateTypeDefGraphQLWeb()
+
+  const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
+
+  // Should be upper cased type
+  expect(gqlTypesOutput).toContain('ADDTODO_CREATETODOMUTATION')
+
+  // because we override omitOPerationSuffix to false, it should append QUERY
+  // for __fixtures__/example-todo-main/../NumTodosCell.js
+  expect(gqlTypesOutput).toContain('NUMTODOSCELL_GETCOUNTQUERY')
+
+  // Delete added codegen.yml
+  fs.rmSync(customCodegenConfigPath)
 })

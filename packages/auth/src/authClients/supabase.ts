@@ -1,5 +1,5 @@
 import { Session, User, Provider } from '@supabase/gotrue-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, ApiError } from '@supabase/supabase-js'
 
 import type { AuthClient } from './index'
 
@@ -15,7 +15,8 @@ export interface AuthClientSupabase extends AuthClient {
    * @param options.password The user's password.
    * @param options.phone The user's phone number.
    * @param options.refreshToken A valid refresh token that was returned on login.
-   * @param { 'apple' | 'azure' | 'bitbucket' | 'discord' | 'facebook' | 'github' | 'gitlab' | 'google' | 'twitch' | 'twitter' } options.provider One of the providers supported by GoTrue.
+   * @param options.provider One of the supported third-party providers.
+   * @see https://supabase.com/docs/guides/auth#third-party-logins
    * @param redirectTo A URL or mobile address to send the user to after they are confirmed.
    * @param scopes A space-separated list of scopes granted to the OAuth application.
    */
@@ -32,10 +33,9 @@ export interface AuthClientSupabase extends AuthClient {
     user: User | null
     provider?: Provider
     url?: string | null
-    error: Error | null
-    data: Session | null // Deprecated
+    error: ApiError | null
   }>
-  logout(): Promise<{ error: Error | null }>
+  logout(): Promise<{ error: ApiError | null }>
   /**
    * Creates a new user.
    *
@@ -53,8 +53,7 @@ export interface AuthClientSupabase extends AuthClient {
   }): Promise<{
     user: User | null
     session: Session | null
-    error: Error | null
-    data: Session | User | null // Deprecated
+    error: ApiError | null
   }>
   /**
    * Restore Redwood authentication state when an OAuth or magiclink
@@ -76,8 +75,7 @@ export interface AuthClientSupabase extends AuthClient {
   }): Promise<{
     user: User | null
     session: Session | null
-    error: Error | null
-    data: Session | User | null // Deprecated
+    error: ApiError | null
   }>
   client: Supabase
 }

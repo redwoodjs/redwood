@@ -4,12 +4,14 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import { files } from '../script'
+import yargs from 'yargs'
+
+import * as script from '../script'
 
 beforeAll(() => {})
 
 test('creates a JavaScript function to execute', () => {
-  const output = files({
+  const output = script.files({
     name: 'scriptyMcScript',
     typescript: false,
   })
@@ -23,7 +25,7 @@ test('creates a JavaScript function to execute', () => {
 })
 
 test('creates a TypeScript function to execute', () => {
-  const output = files({
+  const output = script.files({
     name: 'typescriptyTypescript',
     typescript: true,
   })
@@ -41,4 +43,12 @@ test('creates a TypeScript function to execute', () => {
 
   // Should generate tsconfig, because its not present
   expect(outputFilePaths).toContainEqual(tsconfigPath)
+})
+
+test('keeps Script in name', () => {
+  const { name } = yargs
+    .command('script <name>', false, script.builder)
+    .parse('script BazingaScript')
+
+  expect(name).toEqual('BazingaScript')
 })
