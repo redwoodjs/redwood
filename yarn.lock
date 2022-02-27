@@ -5758,7 +5758,7 @@ __metadata:
     "@clerk/clerk-js": 2.14.3
     "@clerk/clerk-sdk-node": 2.9.4
     "@clerk/types": 1.25.4
-    "@supabase/supabase-js": 1.30.6
+    "@supabase/supabase-js": 1.30.7
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.39
     firebase: 9.6.7
@@ -5934,7 +5934,7 @@ __metadata:
     eslint-plugin-jest-dom: 4.0.1
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
-    eslint-plugin-react: 7.29.1
+    eslint-plugin-react: 7.29.2
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
     prettier: 2.5.1
@@ -6051,7 +6051,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.4
+    systeminformation: 5.11.5
     toml: 3.0.0
     typescript: 4.5.5
   bin:
@@ -6171,7 +6171,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.4
+    systeminformation: 5.11.5
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -7187,21 +7187,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/gotrue-js@npm:^1.22.1":
-  version: 1.22.1
-  resolution: "@supabase/gotrue-js@npm:1.22.1"
+"@supabase/gotrue-js@npm:^1.22.3":
+  version: 1.22.3
+  resolution: "@supabase/gotrue-js@npm:1.22.3"
   dependencies:
     cross-fetch: ^3.0.6
-  checksum: ce9fc7003b99cc83f3d19fa69a0d3716628f7ff0d761120992e463515e0c67141c385a99e734ab6fa0a4f10f408cc7ec09bb6bec7f7aaa233936b3520be6fb4b
+  checksum: ab805f457edb60aeceaa28192ab02c810b5a122134676aae6bbc21b696363b189923dd232877b9367f86fdfd32bef1b5d5210adfb8f3f781fdd883c4a605c95a
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:^0.36.0":
-  version: 0.36.0
-  resolution: "@supabase/postgrest-js@npm:0.36.0"
+"@supabase/postgrest-js@npm:^0.36.2":
+  version: 0.36.2
+  resolution: "@supabase/postgrest-js@npm:0.36.2"
   dependencies:
     cross-fetch: ^3.0.6
-  checksum: bac2ad5a64bccf5dbb7d20a8ec2d6ec8bb4816d0889874b2c52c548755ffd8b89fef38ecffd7a231eefb3643c5d318eecd4f7d08d07ddfa69c5733c564efb50f
+  checksum: 1747efba03a6897781fb68288b2e2bd8793b5ca9bd11651434caac5a35d11706f2a45bef4c1df1adf8e924800da808d398a2d2a9422559bd9826ba1d4635ae0d
   languageName: node
   linkType: hard
 
@@ -7215,24 +7215,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/storage-js@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "@supabase/storage-js@npm:1.6.2"
+"@supabase/storage-js@npm:^1.6.4":
+  version: 1.6.4
+  resolution: "@supabase/storage-js@npm:1.6.4"
   dependencies:
     cross-fetch: ^3.1.0
-  checksum: 7c4dfe67839e6ffa114a4cf1b51b5b2682e60eea68e4c6e0f600d288046f5835469a0a2302057e89d3e69a7edd41c28d41a88f816cb44371425f463bb45285f3
+  checksum: fc73bf12288cce034b159c72c5f14e27c749de9779640a689c592dd26c195e7481ce5f454eca1a43cbdb62dda4fcc317adc817ae4d9f2cd721e31df176646dc1
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.30.6":
-  version: 1.30.6
-  resolution: "@supabase/supabase-js@npm:1.30.6"
+"@supabase/supabase-js@npm:1.30.7":
+  version: 1.30.7
+  resolution: "@supabase/supabase-js@npm:1.30.7"
   dependencies:
-    "@supabase/gotrue-js": ^1.22.1
-    "@supabase/postgrest-js": ^0.36.0
+    "@supabase/gotrue-js": ^1.22.3
+    "@supabase/postgrest-js": ^0.36.2
     "@supabase/realtime-js": ^1.3.6
-    "@supabase/storage-js": ^1.6.2
-  checksum: 34dda1b1424f82fe36689ba8fb540d58f3c3e40124530c26ecb82a6507c839c0a9cce172883b942fd55131431e4f7d42a4f5eaeb560c4d215d36d14ce86a67e1
+    "@supabase/storage-js": ^1.6.4
+  checksum: 9559dbd2dd93bb394c441207a87b10246a36e4653cb581f812abaa98a8b2e856910fa755c0adc70ba48035bbbc532880c7dd9337b79ae4a17907ee2487f048d0
   languageName: node
   linkType: hard
 
@@ -14729,9 +14729,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.29.1":
-  version: 7.29.1
-  resolution: "eslint-plugin-react@npm:7.29.1"
+"eslint-plugin-react@npm:7.29.2":
+  version: 7.29.2
+  resolution: "eslint-plugin-react@npm:7.29.2"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flatmap: ^1.2.5
@@ -14749,7 +14749,7 @@ __metadata:
     string.prototype.matchall: ^4.0.6
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: cca055a1801532311f4199857a4760d7d007cc3e0d326376f3a26cab347dc47f08045c7b3719dfee13e39308e68cfd5a851e5d2afd63e6cc6db41a4260ece3c2
+  checksum: a81b5ce16bf0cb9d32f9ca2409783c75fb2e46d580563b42f4dce330ac3826fa769dabfe49836172e1710d77589c8ef29cef023a985afc32a1f7b6297db9757b
   languageName: node
   linkType: hard
 
@@ -28068,12 +28068,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.4":
-  version: 5.11.4
-  resolution: "systeminformation@npm:5.11.4"
+"systeminformation@npm:5.11.5":
+  version: 5.11.5
+  resolution: "systeminformation@npm:5.11.5"
   bin:
     systeminformation: lib/cli.js
-  checksum: 424982214ec0c8fb9cc4549f54759f9b75846fb68022260c2d4ff223c2f0ca19cd7feac23c2c78e33a28f83408ee87bf5878f080cb198c5e81ba144a93c19e2b
+  checksum: e31fb6eb38811af115c9cf05afe9f8183fdcda51c004e9f9f3563d4b13d753b714574fad6eba3d27bdb033464fabd20317a9b73a58e1c9ec7b4845d074229a02
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
