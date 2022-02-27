@@ -160,7 +160,7 @@ const copyProject = async () => {
     // copy from tempDir to Fixture dir
     await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
     // cleanup after ourselves
-    // rimraf.sync(OUTPUT_PROJECT_PATH)
+    rimraf.sync(OUTPUT_PROJECT_PATH)
   } else {
     // copying existing Fixture to new Project
     await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
