@@ -214,10 +214,21 @@ const globalTasks = () =>
       {
         title: 'Set yarn v1 version in test-project directory',
         task: async () => {
-          return execa(
+          await execa(
             'yarn set version classic',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+
+          // remove "packageManager": "yarn@3.2.0" from package.json
+          const packageJsonPath = path.join(OUTPUT_PROJECT_PATH, 'package.json')
+          const packageJson = JSON.parse(
+            fs.readFileSync(packageJsonPath, 'utf-8')
+          )
+          delete packageJson.packageManager
+          fs.writeFileSync(
+            packageJsonPath,
+            JSON.stringify(packageJson, undefined, 2)
           )
         },
         skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture, but copyFromFixture is default
