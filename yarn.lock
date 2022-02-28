@@ -16173,7 +16173,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:10.0.1, fs-extra@npm:^10.0.0":
+"fs-extra@npm:10.0.1, fs-extra@npm:^10.0.1":
   version: 10.0.1
   resolution: "fs-extra@npm:10.0.1"
   dependencies:
@@ -26204,7 +26204,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.5.5
     typescript-transform-paths: 3.3.1
-    zx: 5.1.0
+    zx: 5.2.0
   languageName: unknown
   linkType: soft
 
@@ -31079,15 +31079,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:5.1.0":
-  version: 5.1.0
-  resolution: "zx@npm:5.1.0"
+"zx@npm:5.2.0":
+  version: 5.2.0
+  resolution: "zx@npm:5.2.0"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
     "@types/node": ^17.0
     chalk: ^5.0.0
-    fs-extra: ^10.0.0
+    fs-extra: ^10.0.1
     globby: ^13.1.1
     minimist: ^1.2.5
     node-fetch: ^3.2.0
@@ -31096,6 +31096,6 @@ __metadata:
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: f1e1eb3c754c87f57a4a3f2ff1bf4828ec424711b5e6385eb0933b79e913626bab2e27eddeffc15eb0e5d06a6464c74facec96362203e6f614feb2d26e66be91
+  checksum: 8f970b8cc168b40e957b6dcca74c9fe7bcc4d77341791a484f32f2322d30134ad93e6bcb846e6a81ab363e8c559eb281b88f7592e76ceb54416e1045d9daf40c
   languageName: node
   linkType: hard
