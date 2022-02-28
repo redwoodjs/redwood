@@ -42,7 +42,7 @@ export const builder = (yargs) => {
       description: 'Generate the Prisma client',
     })
     .option('list', {
-      alias: 'ls',
+      alias: 'l',
       type: 'boolean',
       default: false,
       description: 'List available scripts',
