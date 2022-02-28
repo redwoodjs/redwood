@@ -1,7 +1,6 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
-
 /**
  * The session object sent in as the first argument to getCurrentUser() will
  * have a single key `id` containing the unique ID of the logged in user
@@ -56,7 +55,11 @@ export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
 
   if (roles) {
     if (Array.isArray(roles)) {
-      return context.currentUser.roles?.some((r) => roles.includes(r))
+      if (Array.isArray(context.currentUser.roles)) {
+        return context.currentUser.roles?.some((r) => roles.includes(r))
+      } else {
+        roles.some((r) => context.currentUser.roles?.includes(r))
+      }
     }
 
     if (typeof roles === 'string') {

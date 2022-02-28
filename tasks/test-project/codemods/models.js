@@ -22,6 +22,7 @@ const user = `model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  roles               String?
 }`
 
 module.exports = { post, contact, user }
