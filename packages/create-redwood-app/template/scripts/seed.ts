@@ -9,7 +9,7 @@ export default async () => {
     //
     // Update "const data = []" to match your data model and seeding needs
     //
-    const data: Prisma.UserExampleCreateInput['data'][] = [
+    const data: Prisma.UserExampleCreateArgs['data'][] = [
       // To try this example data with the UserExample model in schema.prisma,
       // uncomment the lines below and run 'yarn rw prisma migrate dev'
       //
@@ -28,7 +28,7 @@ export default async () => {
       //
       // Change to match your data model and seeding needs
       //
-      data.map(async (data: Prisma.UserExampleCreateInput['data']) => {
+      data.map(async (data: Prisma.UserExampleCreateArgs['data']) => {
         const record = await db.userExample.create({ data })
         console.log(record)
       })
