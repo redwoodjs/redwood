@@ -50,7 +50,7 @@
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.4",
     "vscode-languageserver-types": "3.16.0",
-    "yargs-parser": "21.0.0"
+    "yargs-parser": "21.0.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",

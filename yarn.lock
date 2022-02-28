@@ -6150,7 +6150,7 @@ __metadata:
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.4
     vscode-languageserver-types: 3.16.0
-    yargs-parser: 21.0.0
+    yargs-parser: 21.0.1
   languageName: unknown
   linkType: soft
 
@@ -30930,10 +30930,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.0.0, yargs-parser@npm:^21.0.0":
-  version: 21.0.0
-  resolution: "yargs-parser@npm:21.0.0"
-  checksum: e7605acabf7a57bd382e781a83702bd2e13069b2c55bbe04d3c40aa6e8104f53ad4e3c78eabb8932306795187ef655e64ac7576f188914ce46c7c9f480155c99
+"yargs-parser@npm:21.0.1, yargs-parser@npm:^21.0.0":
+  version: 21.0.1
+  resolution: "yargs-parser@npm:21.0.1"
+  checksum: 384ca19e113a053bb7858cf47f891e630c10ea6ad91f9ad7cae84ea1cdfb09b155a2d0fa97b51116ee6f01e038faaa6c46964953afecd453fa64a761bb87475f
   languageName: node
   linkType: hard
 
