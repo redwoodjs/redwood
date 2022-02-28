@@ -72,7 +72,7 @@
     "core-js": "3.21.1",
     "cypress": "9.5.0",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.9.0",
+    "eslint": "8.10.0",
     "fast-glob": "3.2.11",
     "fs-extra": "10.0.1",
     "is-port-reachable": "3.1.0",
@@ -93,7 +93,7 @@
     "terminal-link": "2.1.1",
     "typescript": "4.5.5",
     "typescript-transform-paths": "3.3.1",
-    "zx": "5.1.0"
+    "zx": "5.2.0"
   },
   "npmClient": "yarn",
   "packageManager": "yarn@3.2.0"
