@@ -20,5 +20,8 @@
   },
   "prisma": {
     "seed": "yarn rw exec seed"
+  },
+  "scripts": {
+    "postinstall": ""
   }
 }
