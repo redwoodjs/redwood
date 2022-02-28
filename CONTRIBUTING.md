@@ -119,7 +119,7 @@ As you make changes to the Redwood Framework, you'll want to see your changes re
 
 > `rwfw` is short for Redwood Framework.
 
-Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`:
+Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`
 
 ```terminal
 cd redwood-project
