@@ -5,7 +5,8 @@ CREATE TABLE "User" (
     "hashedPassword" TEXT NOT NULL,
     "salt" TEXT NOT NULL,
     "resetToken" TEXT,
-    "resetTokenExpiresAt" DATETIME
+    "resetTokenExpiresAt" DATETIME,
+    "roles" TEXT
 );
 
 -- CreateIndex
