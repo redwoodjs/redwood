@@ -152,9 +152,6 @@ const timestampSchemeVerifier = (
       return createSignature({ payload, secret, timestamp: options?.timestamp })
     },
     verify: ({ payload, secret, signature }) => {
-      if (options?.signatureTransformer) {
-        signature = options.signatureTransformer(signature)
-      }
       return verifySignature({ payload, secret, signature, options })
     },
     type: 'timestampSchemeVerifier',

@@ -88,9 +88,6 @@ export const jwtVerifier = (options?: VerifyOptions): JwtVerifier => {
       return createSignature({ payload, secret, options })
     },
     verify: ({ payload, secret, signature }) => {
-      if (options?.signatureTransformer) {
-        signature = options.signatureTransformer(signature)
-      }
       return verifySignature({ payload, secret, signature, options })
     },
     type: 'jwtVerifier',

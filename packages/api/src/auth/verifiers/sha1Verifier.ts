@@ -97,15 +97,12 @@ export const verifySignature = ({
  * @see https://vercel.com/docs/api#integrations/webhooks/securing-webhooks
  *
  */
-const sha1Verifier = (options?: VerifyOptions): Sha1Verifier => {
+const sha1Verifier = (_options?: VerifyOptions): Sha1Verifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret })
     },
     verify: ({ payload, secret, signature }) => {
-      if (options?.signatureTransformer) {
-        signature = options.signatureTransformer(signature)
-      }
       return verifySignature({ payload, secret, signature })
     },
     type: 'sha1Verifier',
