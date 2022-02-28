@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 const execa = require('execa')
+const prompts = require('prompts')
 
 async function applyCodemod(codemod, target) {
   const args = [
@@ -50,8 +51,33 @@ const updatePkgJsonScripts = ({ projectPath, scripts }) => {
   )
 }
 
+// Confirmation prompt when using --no-copyFromFixture --no-link'
+async function confirmNoFixtureNoLink(copyFromFixtureOption, linkOption) {
+  if (!copyFromFixtureOption && !linkOption) {
+    const { checkNoLink } = await prompts(
+      {
+        type: 'confirm',
+        name: 'checkNoLink',
+        message:
+          'WARNING: You are building a raw project without the `--link` option.' +
+          '\nThe new test-project will NOT build with templates from this branch.' +
+          '\nInstead it will build using latest release generator template code.' +
+          '\nIf not intended, exit and add the `--link` option.' +
+          '\nOtherwise, enter "(y)es" to continue:',
+      },
+      {
+        onCancel: () => {
+          process.exit(1)
+        },
+      }
+    )
+    return checkNoLink
+  }
+}
+
 module.exports = {
   getExecaOptions,
   applyCodemod,
   updatePkgJsonScripts,
+  confirmNoFixtureNoLink,
 }

@@ -18,7 +18,11 @@ const {
   copyFrameworkPackages,
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tasks')
-const { getExecaOptions, updatePkgJsonScripts } = require('./util')
+const {
+  getExecaOptions,
+  updatePkgJsonScripts,
+  confirmNoFixtureNoLink,
+} = require('./util')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
@@ -424,9 +428,19 @@ const globalTasks = () =>
     }
   )
 
-globalTasks()
-  .run()
-  .catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
+async function runCommand() {
+  // confirm usage for case raw build without Link
+  if (!copyFromFixture && !link) {
+    // if prompt returns 'no', exit
+    ;(await confirmNoFixtureNoLink(copyFromFixture, link)) || process.exit(1)
+  }
+
+  await globalTasks()
+    .run()
+    .catch((err) => {
+      console.error(err)
+      process.exit(1)
+    })
+}
+
+runCommand()
