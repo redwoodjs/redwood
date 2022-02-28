@@ -17,9 +17,6 @@ function toNormalizedJsonString(payload: Record<string, unknown>) {
   })
 }
 
-/**
- * createSignature
- */
 const createSignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
@@ -38,9 +35,6 @@ const createSignature = ({
   return digest.toString('base64')
 }
 
-/**
- * verifySignature
- */
 export const verifySignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
@@ -78,16 +72,14 @@ export const verifySignature = ({
 }
 
 /**
+ * Base64 SHA256 HMAC Payload Verifier
  *
- * SHA256 HMAC Payload Verifier
- *
- * Based on Clerk's webhook payload verification
+ * Based on Svix's webhook payload verification
  * @see https://docs.svix.com/receiving/verifying-payloads/how-manual
  * @see https://github.com/svix/svix-webhooks/blob/main/javascript/src/index.ts
- *
  */
 const base64Sha256Verifier = (
-  options?: VerifyOptions | undefined
+  options?: VerifyOptions
 ): Base64Sha256Verifier => {
   return {
     sign: ({ payload, secret }) => {

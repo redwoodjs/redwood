@@ -82,14 +82,15 @@ export const verifySignature = ({
  * @see: https://docs.netlify.com/site-deploys/notifications/#payload-signature
  *
  */
-export const jwtVerifier = (
-  options?: VerifyOptions | undefined
-): JwtVerifier => {
+export const jwtVerifier = (options?: VerifyOptions): JwtVerifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, options })
     },
     verify: ({ payload, secret, signature }) => {
+      if (options?.signatureTransformer) {
+        signature = options.signatureTransformer(signature)
+      }
       return verifySignature({ payload, secret, signature, options })
     },
     type: 'jwtVerifier',

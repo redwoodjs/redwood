@@ -83,7 +83,8 @@ describe('base64 sha256 verifier', () => {
           'svix-timestamp': '1646004463',
           'svix-id': 'msg_25hz5cPxRz5ilWSQSiYfgxpYHTH',
         },
-        body: '{"data": {"abandon_at": 1648585920141, ' +
+        body:
+          '{"data": {"abandon_at": 1648585920141, ' +
           '"client_id": "client_25hz3vm5USqCG3a7jMXqdjzjJyK", ' +
           '"created_at": 1645993920141, "expire_at": 1646598720141, ' +
           '"id": "sess_25hz5CxFyrNJgDO1TY52LGPtM0e", ' +

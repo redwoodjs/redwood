@@ -1,3 +1,5 @@
+import base64Sha1Verifier from './base64Sha1Verifier'
+import type { Base64Sha1Verifier } from './base64Sha1Verifier'
 import base64Sha256Verifier from './base64Sha256Verifier'
 import type { Base64Sha256Verifier } from './base64Sha256Verifier'
 import jwtVerifier from './jwtVerifier'
@@ -18,6 +20,7 @@ export const verifierLookup = {
   secretKeyVerifier,
   sha1Verifier,
   sha256Verifier,
+  base64Sha1Verifier,
   base64Sha256Verifier,
   timestampSchemeVerifier,
   jwtVerifier,
@@ -28,6 +31,7 @@ export type SupportedVerifiers =
   | SecretKeyVerifier
   | Sha1Verifier
   | Sha256Verifier
+  | Base64Sha1Verifier
   | Base64Sha256Verifier
   | Sha1Verifier
   | TimestampSchemeVerifier
