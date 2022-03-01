@@ -28,12 +28,12 @@
   },
   "dependencies": {
     "@prisma/client": "3.10.0",
-    "@prisma/sdk": "3.10.0",
     "core-js": "3.21.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
+    "@prisma/sdk": "3.10.0",
     "jest": "27.5.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

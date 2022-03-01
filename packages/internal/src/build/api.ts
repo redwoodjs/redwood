@@ -108,21 +108,26 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   const plugins = getApiSideBabelPlugins()
 
   return srcFiles.map((srcPath) => {
+    let fileContent
     const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
     const dstPath = path
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    const result = prebuildApiFile(srcPath, dstPath, plugins)
-    if (!result?.code) {
-      // TODO: Figure out a better way to return these programatically.
-      console.warn('Error:', srcPath, 'could not prebuilt.')
+    if (srcPath.endsWith('.json')) {
+      fileContent = fs.readFileSync(srcPath, 'utf-8')
+    } else {
+      const result = prebuildApiFile(srcPath, dstPath, plugins)
+      if (!result?.code) {
+        // TODO: Figure out a better way to return these programatically.
+        console.warn('Error:', srcPath, 'could not prebuilt.')
 
-      return undefined
+        return undefined
+      }
+      fileContent = result.code
     }
-
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
-    fs.writeFileSync(dstPath, result.code)
+    fs.writeFileSync(dstPath, fileContent)
 
     return dstPath
   })
