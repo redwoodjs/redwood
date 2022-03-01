@@ -110,7 +110,7 @@ const verifySignature = ({
   const signedStamp = Number(match[1])
   const signedPayload = match[2]
 
-  const timestamp = options?.timestamp ?? Date.now()
+  const timestamp = options?.currentTimestampOverride ?? Date.now()
   const tolerance = options?.tolerance ?? DEFAULT_TOLERANCE
 
   const difference = Math.abs(timestamp - signedStamp)
@@ -143,7 +143,11 @@ const timestampSchemeVerifier = (
 ): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {
-      return createSignature({ payload, secret, timestamp: options?.timestamp })
+      return createSignature({
+        payload,
+        secret,
+        timestamp: options?.currentTimestampOverride,
+      })
     },
     verify: ({ payload, secret, signature }) => {
       return verifySignature({ payload, secret, signature, options })

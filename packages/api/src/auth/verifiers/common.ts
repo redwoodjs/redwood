@@ -105,8 +105,8 @@ export class WebhookSignError extends WebhookError {
  * @param {(signature: string) => string} signatureTransformer - Optional
  * function that receives the signature from the headers and returns a new
  * signature to use in the Verifier
- * @param {number} timestamp - Optional timestamp to use as the "current"
- * timestamp, in msec
+ * @param {number} currentTimestampOverride - Optional timestamp to use as the
+ * "current" timestamp, in msec
  * @param {number} eventTimestamp - Optional timestamp to use as the event
  * timestamp, in msec. If this is provided the webhook verification will fail
  * if the eventTimestamp is too far from the current time (or the time passed
@@ -117,7 +117,7 @@ export class WebhookSignError extends WebhookError {
 export interface VerifyOptions {
   signatureHeader?: string
   signatureTransformer?: (signature: string) => string
-  timestamp?: number
+  currentTimestampOverride?: number
   eventTimestamp?: number
   tolerance?: number
   issuer?: string

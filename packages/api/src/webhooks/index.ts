@@ -98,7 +98,7 @@ export const verifyEvent = (
   }
 
   if (options?.eventTimestamp) {
-    const timestamp = options?.timestamp ?? Date.now()
+    const timestamp = options?.currentTimestampOverride ?? Date.now()
     const difference = Math.abs(timestamp - options?.eventTimestamp)
     const tolerance = options?.tolerance ?? DEFAULT_TOLERANCE
 

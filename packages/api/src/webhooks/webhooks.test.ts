@@ -334,7 +334,7 @@ describe('webhooks', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options: { timestamp: Date.now() - TEN_MINUTES },
+          options: { currentTimestampOverride: Date.now() - TEN_MINUTES },
         })
 
         const event = buildEvent({
@@ -356,7 +356,7 @@ describe('webhooks', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options: { timestamp: Date.now() - TEN_MINUTES },
+          options: { currentTimestampOverride: Date.now() - TEN_MINUTES },
         })
 
         const event = buildEvent({
@@ -392,7 +392,7 @@ describe('webhooks', () => {
             secret,
             options: {
               eventTimestamp: Date.now(),
-              timestamp: Date.now() - FIFTEEN_MINUTES,
+              currentTimestampOverride: Date.now() - FIFTEEN_MINUTES,
               tolerance: ONE_MINUTE,
             },
           })
@@ -449,7 +449,8 @@ describe('webhooks', () => {
               eventTimestamp: parseInt(svix_timestamp, 10) * 1000,
               // One minute from the event's timestamp is within the default
               // tolerance of five minutes
-              timestamp: parseInt(svix_timestamp, 10) * 1000 - ONE_MINUTE,
+              currentTimestampOverride:
+                parseInt(svix_timestamp, 10) * 1000 - ONE_MINUTE,
             },
           })
         ).toBeTruthy()
