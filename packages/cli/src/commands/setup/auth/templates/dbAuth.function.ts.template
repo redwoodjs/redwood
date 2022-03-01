@@ -140,6 +140,21 @@ export const handler = async (event, context) => {
       resetTokenExpiresAt: 'resetTokenExpiresAt',
     },
 
+    // Specifies attributes on the cookie that dbAuth sets in order to remember
+    // who is logged in. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
+    cookie: {
+      HttpOnly: true,
+      Path: '/',
+      SameSite: 'Strict',
+      Secure: process.env.NODE_ENV !== 'development',
+
+      // If your web and api sides are deployed to different hosts you'll need
+      // to set the Domain. For example, setting it to "example.com" would allow
+      // the cookie to be sent to both www.example.com and api.example.com
+
+      // Domain: 'example.com',
+    },
+
     forgotPassword: forgotPasswordOptions,
     login: loginOptions,
     resetPassword: resetPasswordOptions,

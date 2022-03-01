@@ -31,6 +31,16 @@ interface DbAuthHandlerOptions {
     resetTokenExpiresAt: string
   }
   /**
+   * Object containing cookie config options
+   */
+  cookie?: {
+    Path: string
+    HttpOnly: boolean
+    Secure: boolean
+    SameSite: string
+    Domain: string
+  }
+  /**
    * Object containing forgot password options
    */
   forgotPassword: {
@@ -168,6 +178,7 @@ export class DbAuthHandler {
   }
 
   // class constant: all the attributes of the cookie other than the value itself
+  // DEPRECATED: Remove once deprecation warning is removed from _cookieAttributes()
   static get COOKIE_META() {
     const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict']
 
@@ -517,10 +528,37 @@ export class DbAuthHandler {
   // pass the argument `expires` set to "now" to get the attributes needed to expire
   // the session, or "future" (or left out completely) to set to `_futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
-    const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
+    let meta
 
-    if (process.env.NODE_ENV !== 'development') {
-      meta.push('Secure')
+    // DEPRECATED: Remove deprecation logic after a few releases, assume this.options.cookie contains config
+    // TODO: Once old behavior is removed, throw an error if there is no cookie config present
+    if (!this.options.cookie) {
+      console.warn(
+        `\n[Deprecation Notice] dbAuth cookie config has moved to\n  api/src/function/auth.js for better customization.\n  See https://redwoodjs.com/docs/authentication#cookieconfig\n`
+      )
+      meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
+
+      if (process.env.NODE_ENV !== 'development') {
+        meta.push('Secure')
+      }
+    } else {
+      meta = Object.keys(this.options.cookie)
+        .map((key) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore-next-line
+          if (this.options.cookie[key] === true) {
+            return key
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore-next-line
+          } else if (this.options.cookie[key] === false) {
+            return null
+          } else {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore-next-line
+            return `${key}=${this.options.cookie[key]}`
+          }
+        })
+        .filter((v) => v)
     }
 
     const expiresAt =
