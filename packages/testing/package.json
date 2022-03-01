@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "0.47.0",
+  "version": "0.47.1",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -26,11 +26,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@redwoodjs/auth": "0.47.0",
-    "@redwoodjs/graphql-server": "0.47.0",
-    "@redwoodjs/internal": "0.47.0",
-    "@redwoodjs/router": "0.47.0",
-    "@redwoodjs/web": "0.47.0",
+    "@redwoodjs/auth": "0.47.1",
+    "@redwoodjs/graphql-server": "0.47.1",
+    "@redwoodjs/internal": "0.47.1",
+    "@redwoodjs/router": "0.47.1",
+    "@redwoodjs/web": "0.47.1",
     "@storybook/addon-a11y": "6.4.19",
     "@storybook/builder-webpack5": "6.4.19",
     "@storybook/manager-webpack5": "6.4.19",
