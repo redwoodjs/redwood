@@ -1,7 +1,7 @@
 import type { FindBlogPostQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import BlogPost from "src/components/BlogPost";
+import BlogPost from 'src/components/BlogPost'
 
 export const QUERY = gql`
   query FindBlogPostQuery($id: Int!) {
@@ -22,4 +22,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ blogPost }: CellSuccessProps<FindBlogPostQuery>) => <BlogPost blogPost={blogPost} />
+export const Success = ({ blogPost }: CellSuccessProps<FindBlogPostQuery>) => (
+  <BlogPost blogPost={blogPost} />
+)
