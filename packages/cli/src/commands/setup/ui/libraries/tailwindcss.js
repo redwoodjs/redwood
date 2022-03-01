@@ -30,9 +30,11 @@ export const builder = (yargs) => {
 }
 
 const tailwindImports = [
-  '@import "tailwindcss/base";',
-  '@import "tailwindcss/components";',
-  '@import "tailwindcss/utilities";',
+  // using outer double quotes and inner single quotes here to generate code
+  // the way prettier wants it in the actual RW app where this will be used
+  "@import 'tailwindcss/base';",
+  "@import 'tailwindcss/components';",
+  "@import 'tailwindcss/utilities';",
 ]
 
 const tailwindImportsExist = (indexCSS) =>

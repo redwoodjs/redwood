@@ -86,11 +86,15 @@ export const verifyEvent = (
     body = eventBody(event)
   }
 
-  const signature = signatureFromEvent({
+  let signature = signatureFromEvent({
     event,
     signatureHeader:
       options?.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
+
+  if (options?.signatureTransformer) {
+    signature = options.signatureTransformer(signature)
+  }
 
   const { verify } = createVerifier(type, options)
 
