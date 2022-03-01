@@ -196,7 +196,7 @@ export const LogFormatter = () => {
   const formatCustom = (query: any) => {
     if (!isEmptyObject(query)) {
       return chalk.white(
-        newline + ' Custom' + newline + JSON.stringify(query, null, 2)
+        newline + '🗒 Custom' + newline + JSON.stringify(query, null, 2)
       )
     }
 

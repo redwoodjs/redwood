@@ -110,7 +110,7 @@ describe('LogFormatter', () => {
   })
 
   describe('Custom log data', () => {
-    test('Should include a the custom log attribute text', () => {
+    test('Should include the custom log attribute text', () => {
       expect(
         logFormatter({
           level: 10,
@@ -119,7 +119,16 @@ describe('LogFormatter', () => {
       ).toMatch('I should see this')
     })
 
-    test('Should include a the custom log attribute info', () => {
+    test('Should include the custom log attribute info a custom emoji and label', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          custom: 'I should see this custom emoji and label',
+        })
+      ).toMatch('🗒 Custom')
+    })
+
+    test('Should include the custom log attribute info with nested text message', () => {
       expect(
         logFormatter({
           level: 10,
@@ -129,7 +138,9 @@ describe('LogFormatter', () => {
         })
       ).toMatch('I should see this custom message in the log')
     })
+  })
 
+  test('Should include the custom log attribute info with a number attribute', () => {
     expect(
       logFormatter({
         level: 10,
@@ -139,7 +150,21 @@ describe('LogFormatter', () => {
         },
       })
     ).toMatch('100')
+  })
 
+  test('Should include the custom log attribute info with a nested object attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom object in the log',
+          obj: { foo: 'bar' },
+        },
+      })
+    ).toMatch('"foo": "bar"')
+  })
+
+  test('Should include the custom log attribute info with a nested object attribute', () => {
     expect(
       logFormatter({
         level: 10,
