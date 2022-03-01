@@ -46,6 +46,13 @@ export const VERIFICATION_ERROR_MESSAGE =
 
 export const VERIFICATION_SIGN_MESSAGE = 'Unable to sign payload'
 
+const FIVE_MINUTES = 5 * 60_000
+
+/**
+ * @const {number} DEFAULT_TOLERANCE - Five minutes
+ */
+export const DEFAULT_TOLERANCE = FIVE_MINUTES
+
 /**
  * Class representing a WebhookError
  * @extends Error
@@ -98,7 +105,12 @@ export class WebhookSignError extends WebhookError {
  * @param {(signature: string) => string} signatureTransformer - Optional
  * function that receives the signature from the headers and returns a new
  * signature to use in the Verifier
- * @param {number} timestamp - Optional timestamp in msec
+ * @param {number} timestamp - Optional timestamp to use as the "current"
+ * timestamp, in msec
+ * @param {number} eventTimestamp - Optional timestamp to use as the event
+ * timestamp, in msec. If this is provided the webhook verification will fail
+ * if the eventTimestamp is too far from the current time (or the time passed
+ * as the `timestamp` option)
  * @param {number} tolerance - Optional tolerance in msec
  * @param {string} issuer - Options JWT issuer for JWTVerifier
  */
@@ -106,6 +118,7 @@ export interface VerifyOptions {
   signatureHeader?: string
   signatureTransformer?: (signature: string) => string
   timestamp?: number
+  eventTimestamp?: number
   tolerance?: number
   issuer?: string
 }

@@ -10,6 +10,9 @@ import {
 
 const payload = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
+const ONE_MINUTE = 60_000
+const TEN_MINUTES = 10 * ONE_MINUTE
+const FIFTEEN_MINUTES = 15 * ONE_MINUTE
 
 // See: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/aws-lambda/trigger/api-gateway-proxy.d.ts
 const buildEvent = ({
@@ -331,7 +334,7 @@ describe('webhooks', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options: { timestamp: Date.now() - 10 * 60_000 },
+          options: { timestamp: Date.now() - TEN_MINUTES },
         })
 
         const event = buildEvent({
@@ -344,7 +347,7 @@ describe('webhooks', () => {
           verifyEvent('timestampSchemeVerifier', {
             event,
             secret,
-            options: { tolerance: 100_000 },
+            options: { tolerance: FIFTEEN_MINUTES },
           })
         }).toBeTruthy()
       })
@@ -353,7 +356,7 @@ describe('webhooks', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options: { timestamp: Date.now() - 10 * 60_000 },
+          options: { timestamp: Date.now() - TEN_MINUTES },
         })
 
         const event = buildEvent({
@@ -367,6 +370,31 @@ describe('webhooks', () => {
             event,
             secret,
             options: { tolerance: 5_000 },
+          })
+        }).toThrow(WebhookVerificationError)
+      })
+
+      test('it denies verification when verifying with a short tolerance also for sha1 verifier', () => {
+        const signature = signPayload('sha1Verifier', {
+          payload,
+          secret,
+        })
+
+        const event = buildEvent({
+          payload,
+          signature,
+          signatureHeader: DEFAULT_WEBHOOK_SIGNATURE_HEADER,
+        })
+
+        expect(() => {
+          verifyEvent('sha1Verifier', {
+            event,
+            secret,
+            options: {
+              eventTimestamp: Date.now(),
+              timestamp: Date.now() - FIFTEEN_MINUTES,
+              tolerance: ONE_MINUTE,
+            },
           })
         }).toThrow(WebhookVerificationError)
       })
@@ -418,6 +446,10 @@ describe('webhooks', () => {
                   }
                 }
               },
+              eventTimestamp: parseInt(svix_timestamp, 10) * 1000,
+              // One minute from the event's timestamp is within the default
+              // tolerance of five minutes
+              timestamp: parseInt(svix_timestamp, 10) * 1000 - ONE_MINUTE,
             },
           })
         ).toBeTruthy()
