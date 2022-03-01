@@ -1,11 +1,11 @@
-import { LogFormatter } from './index'
+import { LogFormatter } from '../logFormatter/index'
 
 const logFormatter = LogFormatter()
 
 describe('LogFormatter', () => {
   describe('Formats log levels as emoji', () => {
     test('Formats Trace level', () => {
-      expect(logFormatter({ level: 10 })).toMatch('🔍')
+      expect(logFormatter({ level: 10 })).toMatch('🧵')
     })
 
     test('Formats Debug level', () => {
@@ -17,7 +17,7 @@ describe('LogFormatter', () => {
     })
 
     test('Formats Warn level', () => {
-      expect(logFormatter({ level: 40 })).toMatch('⚠️')
+      expect(logFormatter({ level: 40 })).toMatch('🚦')
     })
 
     test('Formats Error level', () => {
@@ -107,5 +107,47 @@ describe('LogFormatter', () => {
         })
       ).not.toMatch('I should not see this')
     })
+  })
+
+  describe('Custom log data', () => {
+    test('Should include a the custom log attribute text', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          custom: 'I should see this custom message text',
+        })
+      ).toMatch('I should see this')
+    })
+
+    test('Should include a the custom log attribute info', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          custom: {
+            msg: 'I should see this custom message in the log',
+          },
+        })
+      ).toMatch('I should see this custom message in the log')
+    })
+
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom message and number in the log',
+          number: 100,
+        },
+      })
+    ).toMatch('100')
+
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom object in the log',
+          obj: { foo: 'bar' },
+        },
+      })
+    ).toMatch('"foo": "bar"')
   })
 })
