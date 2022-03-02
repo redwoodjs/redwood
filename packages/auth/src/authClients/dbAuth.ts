@@ -43,6 +43,7 @@ export const dbAuth = (_client: null, config: DbAuthConfig): AuthClient => {
   const login = async (attributes: LoginAttributes) => {
     const { username, password } = attributes
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+      ...config,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, method: 'login' }),
@@ -52,6 +53,7 @@ export const dbAuth = (_client: null, config: DbAuthConfig): AuthClient => {
 
   const logout = async () => {
     await fetch(global.RWJS_API_DBAUTH_URL, {
+      ...config,
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
     })
@@ -60,6 +62,7 @@ export const dbAuth = (_client: null, config: DbAuthConfig): AuthClient => {
 
   const resetPassword = async (attributes: ResetPasswordAttributes) => {
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+      ...config,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'resetPassword' }),
@@ -69,6 +72,7 @@ export const dbAuth = (_client: null, config: DbAuthConfig): AuthClient => {
 
   const signup = async (attributes: SignupAttributes) => {
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+      ...config,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'signup' }),
@@ -78,6 +82,7 @@ export const dbAuth = (_client: null, config: DbAuthConfig): AuthClient => {
 
   const validateResetToken = async (resetToken: string | null) => {
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+      ...config,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ resetToken, method: 'validateResetToken' }),
