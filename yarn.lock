@@ -4808,17 +4808,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.13.3":
-  version: 0.13.3
-  resolution: "@mswjs/interceptors@npm:0.13.3"
+"@mswjs/interceptors@npm:^0.13.5":
+  version: 0.13.6
+  resolution: "@mswjs/interceptors@npm:0.13.6"
   dependencies:
     "@open-draft/until": ^1.0.3
     "@xmldom/xmldom": ^0.7.5
     debug: ^4.3.3
-    headers-polyfill: ^3.0.3
+    headers-polyfill: ^3.0.4
     outvariant: ^1.2.1
     strict-event-emitter: ^0.2.0
-  checksum: 34b0dbce956f14995fab7c5a1725b00603e733082e7cabc6f574b987f181061e35b26b97e8b5239ec6d7e91477fa2a7f4f9c8facf85ce2c3ed93e49cef0e060b
+  checksum: c9296eb7b84dc1c63140048f4d5b40794f0df1ef4252ca79188caa266a1eb6a47ba848a5c0f7feb487eb95bcada492a3a800a256bc53b62e66af2bb3860bbad2
   languageName: node
   linkType: hard
 
@@ -6209,7 +6209,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     jest: 27.5.1
     jest-watch-typeahead: 1.0.0
-    msw: 0.38.1
+    msw: 0.38.2
     ts-toolbelt: 9.6.0
     typescript: 4.6.2
     whatwg-fetch: 3.6.2
@@ -17367,10 +17367,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"headers-polyfill@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "headers-polyfill@npm:3.0.3"
-  checksum: fe43b34d2d0d9b045fe82196b158b720b97db9cdec28c0246b44c10ca4bc07a7921b774d35dc7610d5d1166173dd05a96da53a8fb372cc623e17c3f950c83017
+"headers-polyfill@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "headers-polyfill@npm:3.0.4"
+  checksum: 6d5429a7f7deb8d1a567d2578e0be428f318d367a8a6269c32168357441832e6198b0fa5d694f87454be8e3ade19b2663a1e758fdff70d00dab4ba970cbe8e5d
   languageName: node
   linkType: hard
 
@@ -21768,12 +21768,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.38.1":
-  version: 0.38.1
-  resolution: "msw@npm:0.38.1"
+"msw@npm:0.38.2":
+  version: 0.38.2
+  resolution: "msw@npm:0.38.2"
   dependencies:
     "@mswjs/cookies": ^0.1.7
-    "@mswjs/interceptors": ^0.13.3
+    "@mswjs/interceptors": ^0.13.5
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
     "@types/js-levenshtein": ^1.1.1
@@ -21781,7 +21781,7 @@ __metadata:
     chokidar: ^3.4.2
     cookie: ^0.4.2
     graphql: ^16.3.0
-    headers-polyfill: ^3.0.3
+    headers-polyfill: ^3.0.4
     inquirer: ^8.2.0
     is-node-process: ^1.0.1
     js-levenshtein: ^1.1.6
@@ -21793,7 +21793,7 @@ __metadata:
     yargs: ^17.3.1
   bin:
     msw: cli/index.js
-  checksum: 793c42c863d8c8c708d822102ec7b1d24158099247cf5e82902df1ef99443d02e0c5326d8519d05f864dc3b747f0b28a8c87de2563efed94e791ba7f94ba7b41
+  checksum: 54e71bceadcc86c7025f3b9cef4e00ea5330346afc607449051b47eb5b75a211edc0c01cb83c766fcac08173f5d7b76fd8e0761bb0d5dae09bb898161c890cdd
   languageName: node
   linkType: hard
 
@@ -26195,7 +26195,7 @@ __metadata:
     lerna: 4.0.0
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.38.1
+    msw: 0.38.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.15
