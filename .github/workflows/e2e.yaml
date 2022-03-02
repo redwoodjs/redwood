@@ -84,6 +84,7 @@ jobs:
           working-directory: ./tasks/e2e
           spec: |
              cypress/integration/01-tutorial/*.spec.js
+             cypress/integration/03-storybook/*.spec.js
              cypress/integration/04-logger/*.spec.js
 
 
