@@ -145,6 +145,8 @@ export class AuthProvider extends React.Component<
     const token = await this.getToken()
     const response = await global.fetch(this.getApiGraphQLUrl(), {
       method: 'POST',
+      // TODO: how can user configure this? inherit same `config` options given to auth client?
+      credentials: 'include',
       headers: {
         'content-type': 'application/json',
         'auth-provider': this.rwClient.type,
