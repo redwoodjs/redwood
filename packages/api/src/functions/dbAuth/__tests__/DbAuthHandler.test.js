@@ -1147,7 +1147,7 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_cookieAttributes', () => {
+  describe('_cookieAttributes', ;() => {
     // DEPRECATED: cookie config should come from options object now
     it('returns an array of attributes for the session cookie', () => {
       const dbAuth = new DbAuthHandler(
@@ -1248,6 +1248,26 @@ describe('dbAuth', () => {
 
       expect(attributes[0]).toEqual('Domain=example.com')
     })
+
+    it('includes no cookie attributes if cookie options are empty', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: {},
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes.length).toEqual(1)
+      expect(attributes[0]).toMatch(/Expires=/)
+    })
+
+    // DEPRECATED: can't test until deprecated functionality is removed
+    // it('includes no cookie attributes if cookie options not set', () => {
+    //   const dbAuth = new DbAuthHandler(event, context, options)
+    //   const attributes = dbAuth._cookieAttributes({})
+
+    //   expect(attributes.length).toEqual(1)
+    //   expect(attributes[0]).toMatch(/Expires=/)
+    // })
   })
 
   describe('_createSessionHeader()', () => {
