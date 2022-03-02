@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "0.47.0",
+  "version": "0.47.1",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",

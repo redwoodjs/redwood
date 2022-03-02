@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.47.0",
+  "version": "0.47.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -32,7 +32,7 @@
     "@graphql-tools/schema": "8.3.2",
     "@graphql-tools/utils": "8.6.2",
     "@prisma/client": "3.10.0",
-    "@redwoodjs/api": "0.47.0",
+    "@redwoodjs/api": "0.47.1",
     "core-js": "3.21.1",
     "graphql": "16.3.0",
     "graphql-helix": "1.11.0",
@@ -49,7 +49,7 @@
     "@babel/core": "7.16.7",
     "@envelop/testing": "4.0.0",
     "@envelop/types": "2.0.0",
-    "@redwoodjs/auth": "0.47.0",
+    "@redwoodjs/auth": "0.47.1",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.4",

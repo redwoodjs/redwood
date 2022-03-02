@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.47.0",
+  "version": "0.47.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,9 +25,9 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@apollo/client": "3.5.9",
+    "@apollo/client": "3.5.10",
     "@babel/runtime-corejs3": "7.16.7",
-    "@redwoodjs/auth": "0.47.0",
+    "@redwoodjs/auth": "0.47.1",
     "graphql": "16.3.0",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "1.2.3",

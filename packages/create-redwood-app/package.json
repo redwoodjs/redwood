@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "0.47.0",
+  "version": "0.47.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,8 +24,8 @@
     "@babel/core": "7.16.7",
     "@babel/node": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
-    "@redwoodjs/internal": "0.47.0",
-    "@redwoodjs/telemetry": "0.47.0",
+    "@redwoodjs/internal": "0.47.1",
+    "@redwoodjs/telemetry": "0.47.1",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
     "execa": "5.1.1",
