@@ -37,11 +37,11 @@ interface DbAuthHandlerOptions {
    * Object containing cookie config options
    */
   cookie?: {
-    Path: string
-    HttpOnly: boolean
-    Secure: boolean
-    SameSite: string
-    Domain: string
+    Path?: string
+    HttpOnly?: boolean
+    Secure?: boolean
+    SameSite?: string
+    Domain?: string
   }
   /**
    * Object containing forgot password options
@@ -581,7 +581,6 @@ export class DbAuthHandler {
     let meta
 
     // DEPRECATED: Remove deprecation logic after a few releases, assume this.options.cookie contains config
-    // TODO: Once old behavior is removed, throw an error if there is no cookie config present
     if (!this.options.cookie) {
       console.warn(
         `\n[Deprecation Notice] dbAuth cookie config has moved to\n  api/src/function/auth.js for better customization.\n  See https://redwoodjs.com/docs/authentication#cookie-config\n`
@@ -592,7 +591,7 @@ export class DbAuthHandler {
         meta.push('Secure')
       }
     } else {
-      const cookieOptions = this.options.cookie
+      const cookieOptions = this.options.cookie || {}
       meta = Object.keys(cookieOptions)
         .map((key) => {
           const optionValue =
