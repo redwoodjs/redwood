@@ -297,6 +297,7 @@ export class DbAuthHandler {
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
+        // @ts-ignore
         if (!response) {
           response = this._notFound()
         }
@@ -304,6 +305,7 @@ export class DbAuthHandler {
 
       // make sure it's using the correct verb, GET vs POST
       if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
+        // @ts-ignore
         if (!response) {
           response = this._notFound()
         }
@@ -314,15 +316,18 @@ export class DbAuthHandler {
         method
       ]()
 
+      // @ts-ignore
       if (!response) {
         response = this._ok(body, headers, options)
       }
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
+        // @ts-ignore
         if (!response) {
           response = this._notFound()
         }
       } else {
+        // @ts-ignore
         if (!response) {
           response = this._badRequest(e.message || e)
         }
