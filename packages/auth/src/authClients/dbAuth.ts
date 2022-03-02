@@ -14,7 +14,9 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 export type DbAuth = () => null
 
-export const dbAuth = (): AuthClient => {
+export type DbAuthConfig = RequestInit
+
+export const dbAuth = (_client: null, config: DbAuthConfig): AuthClient => {
   const forgotPassword = async (username: string) => {
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
       method: 'POST',
@@ -26,7 +28,8 @@ export const dbAuth = (): AuthClient => {
 
   const getToken = async () => {
     const response = await fetch(
-      `${global.RWJS_API_DBAUTH_URL}?method=getToken`
+      `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
+      config
     )
     const token = await response.text()
 

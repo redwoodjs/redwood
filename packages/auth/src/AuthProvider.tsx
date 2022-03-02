@@ -4,6 +4,7 @@ import { createAuthClient } from './authClients'
 import type {
   AuthClient,
   SupportedAuthTypes,
+  SupportedAuthConfig,
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
@@ -75,11 +76,13 @@ type AuthProviderProps =
   | {
       client: SupportedAuthClients
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
+      config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
   | {
       client?: never
       type: 'dbAuth' | 'clerk'
+      config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
 
@@ -123,7 +126,8 @@ export class AuthProvider extends React.Component<
     super(props)
     this.rwClient = createAuthClient(
       props.client as SupportedAuthClients,
-      props.type as SupportedAuthTypes
+      props.type as SupportedAuthTypes,
+      props.config as SupportedAuthConfig
     )
   }
 
