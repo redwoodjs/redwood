@@ -25,6 +25,7 @@ const isEmptyObject = (object: any) => {
 const isPinoLog = (log: any) => {
   return log && Object.prototype.hasOwnProperty.call(log, 'level')
 }
+
 const isWideEmoji = (character: any) => {
   return character !== '🚦'
 }
@@ -108,6 +109,7 @@ export const LogFormatter = () => {
     const statusCode = res ? res.statusCode : logData.statusCode
     const responseTime = logData.responseTime || logData.elapsed
     const method = req ? req.method : logData.method
+    const custom = logData.custom
     const contentLength = logData.contentLength
     const operationName = logData.operationName
     const query = logData.query
@@ -140,6 +142,10 @@ export const LogFormatter = () => {
 
     if (contentLength != null) {
       output.push(formatBundleSize(contentLength))
+    }
+
+    if (custom) {
+      output.push(formatCustom(custom))
     }
 
     if (responseTime != null) {
@@ -185,6 +191,16 @@ export const LogFormatter = () => {
     const bytes = parseInt(bundle, 10)
     const size = prettyBytes(bytes).replace(/ /, '')
     return chalk.gray(size)
+  }
+
+  const formatCustom = (query: any) => {
+    if (!isEmptyObject(query)) {
+      return chalk.white(
+        newline + '🗒 Custom' + newline + JSON.stringify(query, null, 2)
+      )
+    }
+
+    return
   }
 
   const formatData = (data: any) => {
