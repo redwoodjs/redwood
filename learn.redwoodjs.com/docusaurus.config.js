@@ -52,8 +52,9 @@ module.exports = {
       isCloseable: false, // Defaults to `true`.
     },
     algolia: {
-      apiKey: process.env.ALGOLIA_API_KEY || 'dev',
-      indexName: process.env.ALGOLIA_INDEX_NAME || 'dev',
+      appId: 'dev',
+      apiKey: 'dev',
+      indexName: 'dev',
       contextualSearch: true,
       searchParameters: {},
     },
@@ -142,6 +143,7 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/redwoodjs/learn.redwoodjs.com/blob/main/', // base path for repo edit pages

@@ -22,6 +22,7 @@
   --ifm-code-background: #faeae5;
   --ifm-background-surface-color: #faeae5;
   --ifm-blockquote-color: #e38163;
+  --ifm-blockquote-padding-vertical: var(--ifm-global-spacing);
   --ifm-color-emphasis-300: #eba48e;
   --ifm-code-border-radius: 0.25rem;
   --ifm-code-font-size: 90%;
