@@ -5730,6 +5730,7 @@ __metadata:
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
+    node-fetch: 2.6.6
     pascalcase: 1.0.0
     pino: 7.8.0
     split2: 4.1.0
@@ -22017,6 +22018,15 @@ __metadata:
     object.getownpropertydescriptors: ^2.0.3
     semver: ^5.7.0
   checksum: 8be86f294f8b065a1e126e9ceb7a4b38b75eb7ec6391060e6e093ab9649e5c1fa977f2a5fe799b6ada862d65ce8259d1b7eabf2057774d641306e467d58cb96b
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:2.6.6":
+  version: 2.6.6
+  resolution: "node-fetch@npm:2.6.6"
+  dependencies:
+    whatwg-url: ^5.0.0
+  checksum: f9b5c8789c7bcd393a2fb70d752e36d5b5e84eb52bd5bffceb4fb64ac81dce1a1f55ca023a990e51bbf8594fc502ea9bea3004037e6eab65205cd84e8af94fc9
   languageName: node
   linkType: hard
 

@@ -104,6 +104,8 @@ let event, context, options
 
 describe('dbAuth', () => {
   beforeEach(() => {
+    // hide deprecation warnings during test
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
     delete process.env.DBAUTH_COOKIE_DOMAIN
@@ -164,6 +166,7 @@ describe('dbAuth', () => {
   })
 
   afterEach(async () => {
+    jest.spyOn(console, 'warn').mockRestore()
     await db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
@@ -1145,6 +1148,7 @@ describe('dbAuth', () => {
   })
 
   describe('_cookieAttributes', () => {
+    // DEPRECATED: cookie config should come from options object now
     it('returns an array of attributes for the session cookie', () => {
       const dbAuth = new DbAuthHandler(
         { headers: { referer: 'http://test.host' } },
@@ -1163,6 +1167,7 @@ describe('dbAuth', () => {
       expect(attributes[4]).toMatch(UTC_DATE_REGEX)
     })
 
+    // DEPRECATED: Secure will be set or not in cookie config options
     it('does not include the Secure attribute when in development environment', () => {
       const oldEnv = process.env.NODE_ENV
       process.env.NODE_ENV = 'development'
@@ -1177,6 +1182,7 @@ describe('dbAuth', () => {
       process.env.NODE_ENV = oldEnv
     })
 
+    // DEPRECATED: Domain will be set or not in cookie config options
     it('includes a Domain in the cookie if DBAUTH_COOKIE_DOMAIN is set', () => {
       process.env.DBAUTH_COOKIE_DOMAIN = 'site.test'
 
@@ -1184,6 +1190,63 @@ describe('dbAuth', () => {
       const attributes = dbAuth._cookieAttributes({})
 
       expect(attributes[3]).toEqual('Domain=site.test')
+    })
+
+    it('returns an array of attributes for the session cookie', () => {
+      const dbAuth = new DbAuthHandler(
+        { headers: { referer: 'http://test.host' } },
+        context,
+        {
+          ...options,
+          cookie: {
+            Path: '/',
+            HttpOnly: true,
+            SameSite: 'Strict',
+            Secure: true,
+            Domain: 'example.com',
+          },
+        }
+      )
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes.length).toEqual(6)
+      expect(attributes[0]).toEqual('Path=/')
+      expect(attributes[1]).toEqual('HttpOnly')
+      expect(attributes[2]).toEqual('SameSite=Strict')
+      expect(attributes[3]).toEqual('Secure')
+      expect(attributes[4]).toEqual('Domain=example.com')
+      expect(attributes[5]).toMatch(`Expires=`)
+      expect(attributes[5]).toMatch(UTC_DATE_REGEX)
+    })
+
+    it('includes just a key if option set to `true`', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: { Secure: true },
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[0]).toEqual('Secure')
+    })
+
+    it('does not include a key if option set to `false`', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: { Secure: false },
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[0]).not.toEqual('Secure')
+    })
+
+    it('includes key=value if property value is set', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: { Domain: 'example.com' },
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[0]).toEqual('Domain=example.com')
     })
   })
 
