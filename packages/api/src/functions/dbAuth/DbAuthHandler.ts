@@ -281,15 +281,15 @@ export class DbAuthHandler {
       }
     }
 
-    // if there was a problem decryption the session, just return the logout
-    // response immediately
-    if (this.hasInvalidSession) {
-      return this._ok(...this._logoutResponse())
-    }
-
     let response: {
       statusCode: number
       headers?: Record<string, string>
+    }
+
+    // if there was a problem decryption the session, just return the logout
+    // response immediately
+    if (this.hasInvalidSession) {
+      response = this._ok(...this._logoutResponse())
     }
 
     try {
@@ -297,12 +297,16 @@ export class DbAuthHandler {
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
-        response = this._notFound()
+        if (!response) {
+          response = this._notFound()
+        }
       }
 
       // make sure it's using the correct verb, GET vs POST
       if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
-        response = this._notFound()
+        if (!response) {
+          response = this._notFound()
+        }
       }
 
       // call whatever auth method was requested and return the body and headers
@@ -310,12 +314,18 @@ export class DbAuthHandler {
         method
       ]()
 
-      response = this._ok(body, headers, options)
+      if (!response) {
+        response = this._ok(body, headers, options)
+      }
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
-        response = this._notFound()
+        if (!response) {
+          response = this._notFound()
+        }
       } else {
-        response = this._badRequest(e.message || e)
+        if (!response) {
+          response = this._badRequest(e.message || e)
+        }
       }
     }
 
