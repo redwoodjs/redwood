@@ -14,8 +14,8 @@ const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 // See: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/aws-lambda/trigger/api-gateway-proxy.d.ts
 const buildEvent = ({
   payload,
-  signature,
-  signatureHeader,
+  signature = '',
+  signatureHeader = '',
   isBase64Encoded = false,
 }): APIGatewayProxyEvent => {
   const headers = {}
@@ -191,8 +191,69 @@ describe('webhooks', () => {
     })
   })
 
+  describe('using the base64 sha1 verifier', () => {
+    describe('signs a payload', () => {
+      test('it signs and verifies', () => {
+        const signature = signPayload('base64Sha1Verifier', {
+          payload,
+          secret,
+        })
+
+        expect(
+          verifySignature('base64Sha1Verifier', {
+            payload,
+            secret,
+            signature,
+          })
+        ).toBeTruthy()
+      })
+    })
+  })
+
+  describe('using the base64 sha256 verifier', () => {
+    describe('signs a payload', () => {
+      test('it has a base64 sha256 signature', () => {
+        const body =
+          '{"data": {"abandon_at": 1648585920141, ' +
+          '"client_id": "client_25hz3vm5USqCG3a7jMXqdjzjJyK", ' +
+          '"created_at": 1645993920141, "expire_at": 1646598720141, ' +
+          '"id": "sess_25hz5CxFyrNJgDO1TY52LGPtM0e", ' +
+          '"last_active_at": 1645993920141, "object": "session", ' +
+          '"status": "active", "updated_at": 1645993920149, ' +
+          '"user_id": "user_25h1zRMh7owJp6us0Sqs3UXwW0y"}, ' +
+          '"object": "event", "type": "session.created"}'
+
+        const payload = `msg_25hz5cPxRz5ilWSQSiYfgxpYHTH.1646004463.${body}`
+        const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
+        const signature = signPayload('base64Sha256Verifier', {
+          payload,
+          secret,
+        })
+
+        expect(signature).toMatch(
+          'AaP4EgcpPC5oE3eppI/s6EMtQCZ4Ap34wNHPoxBoikI='
+        )
+      })
+
+      test('it signs and verifies', () => {
+        const signature = signPayload('base64Sha256Verifier', {
+          payload,
+          secret,
+        })
+
+        expect(
+          verifySignature('base64Sha256Verifier', {
+            payload,
+            secret,
+            signature,
+          })
+        ).toBeTruthy()
+      })
+    })
+  })
+
   describe('webhooks via event', () => {
-    describe('when it receives and event extracts the signature and payload from the event', () => {
+    describe('when it receives an event it extracts the signature and payload from the event', () => {
       test('it can verify an event body payload with a signature it generates', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
@@ -308,6 +369,58 @@ describe('webhooks', () => {
             options: { tolerance: 5_000 },
           })
         }).toThrow(WebhookVerificationError)
+      })
+    })
+
+    describe('provider specific tests', () => {
+      test('clerk', () => {
+        const body =
+          '{"data": {"abandon_at": 1648585920141, ' +
+          '"client_id": "client_25hz3vm5USqCG3a7jMXqdjzjJyK", ' +
+          '"created_at": 1645993920141, "expire_at": 1646598720141, ' +
+          '"id": "sess_25hz5CxFyrNJgDO1TY52LGPtM0e", ' +
+          '"last_active_at": 1645993920141, "object": "session", ' +
+          '"status": "active", "updated_at": 1645993920149, ' +
+          '"user_id": "user_25h1zRMh7owJp6us0Sqs3UXwW0y"}, ' +
+          '"object": "event", "type": "session.created"}'
+
+        const event = buildEvent({ payload: body })
+
+        event.headers = {
+          'svix-signature': 'v1,AaP4EgcpPC5oE3eppI/s6EMtQCZ4Ap34wNHPoxBoikI=',
+          'svix-timestamp': '1646004463',
+          'svix-id': 'msg_25hz5cPxRz5ilWSQSiYfgxpYHTH',
+        }
+
+        const svix_id = event.headers['svix-id']
+        const svix_timestamp = event.headers['svix-timestamp']
+
+        const payload = `${svix_id}.${svix_timestamp}.${event.body}`
+        const secret = 'whsec_MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'.slice(6)
+
+        expect(
+          verifyEvent('base64Sha256Verifier', {
+            event,
+            secret,
+            payload,
+            options: {
+              signatureHeader: 'svix-signature',
+              signatureTransformer: (signature: string) => {
+                // Clerk can pass a space separated list of signatures.
+                // Let's just use the first one that's of version 1
+                const passedSignatures = signature.split(' ')
+
+                for (const versionedSignature of passedSignatures) {
+                  const [version, signature] = versionedSignature.split(',')
+
+                  if (version === 'v1') {
+                    return signature
+                  }
+                }
+              },
+            },
+          })
+        ).toBeTruthy()
       })
     })
   })
