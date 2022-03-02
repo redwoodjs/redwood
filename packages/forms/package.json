@@ -34,7 +34,7 @@
     "@testing-library/user-event": "13.5.0",
     "@types/pascalcase": "1.0.1",
     "@types/react": "17.0.39",
-    "@types/react-dom": "17.0.11",
+    "@types/react-dom": "17.0.12",
     "@types/testing-library__jest-dom": "5.14.2",
     "jest": "27.5.1",
     "nodemon": "2.0.15",
