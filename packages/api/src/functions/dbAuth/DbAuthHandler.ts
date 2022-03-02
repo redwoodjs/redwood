@@ -582,20 +582,19 @@ export class DbAuthHandler {
         meta.push('Secure')
       }
     } else {
-      meta = Object.keys(this.options.cookie)
+      const cookieOptions = this.options.cookie
+      meta = Object.keys(cookieOptions)
         .map((key) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore-next-line
-          if (this.options.cookie[key] === true) {
+          const optionValue =
+            cookieOptions[key as keyof DbAuthHandlerOptions['cookie']]
+
+          // Convert the options to valid cookie string
+          if (optionValue === true) {
             return key
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore-next-line
-          } else if (this.options.cookie[key] === false) {
+          } else if (optionValue === false) {
             return null
           } else {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore-next-line
-            return `${key}=${this.options.cookie[key]}`
+            return `${key}=${optionValue}`
           }
         })
         .filter((v) => v)
