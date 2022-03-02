@@ -1998,11 +1998,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.14.3":
-  version: 2.14.3
-  resolution: "@clerk/clerk-js@npm:2.14.3"
+"@clerk/clerk-js@npm:2.15.0":
+  version: 2.15.0
+  resolution: "@clerk/clerk-js@npm:2.15.0"
   dependencies:
-    "@clerk/types": ^1.25.4
+    "@clerk/types": ^1.26.0
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.3.1
@@ -2014,7 +2014,7 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 6cc3c651ed316a345713e8b0056471a24f8d5d40211c900d45bae7373d77f41c5bf7224854a8fea93534b9728c10387ec35c915ce0d859d5f0e8eff85272d5c4
+  checksum: 818eabefac1014e4d507ee8490d0f21697789e6d891f89c04b8d949b481bbe105321399240df0a46f943b9cda7a282b72a9a7318294e1418035483597fe9abe1
   languageName: node
   linkType: hard
 
@@ -2036,7 +2036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.26.0, @clerk/types@npm:^1.25.4":
+"@clerk/types@npm:1.26.0, @clerk/types@npm:^1.26.0":
   version: 1.26.0
   resolution: "@clerk/types@npm:1.26.0"
   checksum: e502ac845bb36c1bd7e337e82fb62ef564bba27c023c9ee25eee32b42ebf18514fe2c1cf942898b2f001ff38a38a71061dbde3137392cd9bac089a1b7d1d930a
@@ -5758,7 +5758,7 @@ __metadata:
     "@azure/msal-browser": 2.22.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.14.3
+    "@clerk/clerk-js": 2.15.0
     "@clerk/clerk-sdk-node": 2.9.4
     "@clerk/types": 1.26.0
     "@supabase/supabase-js": 1.30.7
@@ -6054,7 +6054,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.5
+    systeminformation: 5.11.6
     toml: 3.0.0
     typescript: 4.6.2
   bin:
@@ -6174,7 +6174,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.5
+    systeminformation: 5.11.6
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -28071,12 +28071,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.5":
-  version: 5.11.5
-  resolution: "systeminformation@npm:5.11.5"
+"systeminformation@npm:5.11.6":
+  version: 5.11.6
+  resolution: "systeminformation@npm:5.11.6"
   bin:
     systeminformation: lib/cli.js
-  checksum: e31fb6eb38811af115c9cf05afe9f8183fdcda51c004e9f9f3563d4b13d753b714574fad6eba3d27bdb033464fabd20317a9b73a58e1c9ec7b4845d074229a02
+  checksum: 9a778278d652da56bf280ff188945d6f0efe50823eeee4172412e10f2d1c15e154ada2a9ec79fe51cf7af3e70df39ebdd090c62a106fbee361fe915a14e1d038
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
