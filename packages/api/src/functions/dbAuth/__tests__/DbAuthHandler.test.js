@@ -1147,7 +1147,7 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_cookieAttributes', ;() => {
+  describe('_cookieAttributes', () => {
     // DEPRECATED: cookie config should come from options object now
     it('returns an array of attributes for the session cookie', () => {
       const dbAuth = new DbAuthHandler(
