@@ -1,3 +1,4 @@
+import { spawnSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -114,10 +115,14 @@ export const addPackagesTask = ({
       ].filter(Boolean),
     ]
   } else {
+    const { stdout } = spawnSync('yarn', ['--version'])
+
+    const yarnVersion = stdout.toString()
+
     installCommand = [
       'yarn',
       [
-        '-W',
+        yarnVersion.startsWith('1') && '-W',
         'add',
         devDependency && '--dev',
         ...packagesWithSameRWVersion,
