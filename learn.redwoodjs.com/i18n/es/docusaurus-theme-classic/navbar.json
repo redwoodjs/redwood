@@ -1,0 +1,18 @@
+{
+  "title": {
+    "message": "Aprender RedwoodJS",
+    "description": "The title in the navbar"
+  },
+  "item.label.Docs": {
+    "message": "Docs",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.Redwoodjs.com": {
+    "message": "Redwoodjs.com",
+    "description": "Navbar item with label Redwoodjs.com"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

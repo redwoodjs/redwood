@@ -1,0 +1,7 @@
+files:
+  - source: /docs/tutorial/
+    translation: >-
+      /i18n/%two_letters_code%/docusaurus-plugin-content-docs/current/tutorial/%original_file_name%
+  - source: /docs/tutorial2/*.md
+    translation: >-
+      /i18n/%two_letters_code%/docusaurus-plugin-content-docs/current/tutorial2/%original_file_name%
