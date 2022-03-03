@@ -6020,7 +6020,7 @@ __metadata:
     graphql: 16.3.0
     graphql-helix: 1.11.0
     graphql-playground-html: 1.6.30
-    graphql-scalars: 1.14.1
+    graphql-scalars: 1.15.0
     graphql-tag: 2.12.6
     jest: 27.5.1
     lodash.merge: 4.6.2
@@ -17029,14 +17029,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:1.14.1":
-  version: 1.14.1
-  resolution: "graphql-scalars@npm:1.14.1"
+"graphql-scalars@npm:1.15.0":
+  version: 1.15.0
+  resolution: "graphql-scalars@npm:1.15.0"
   dependencies:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3191bde8fbfa660b9d5f032fca45b8b13124c6b62ce98c7d93ef4faf7591f9938aadc9c27f8e48998eed56eda297c100eeb1ff1f9907a65e838c0c1c939c6f7b
+  checksum: e7ec5858e9494bf5a8a6e4afdd8095b0593ac84d58da740267d0eb29563a9a978366ccd7181c5fe502cccc2e5f58a601e2c45ce5f1e324c39294299de9f15a2e
   languageName: node
   linkType: hard
 
