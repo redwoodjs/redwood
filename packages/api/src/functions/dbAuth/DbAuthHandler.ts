@@ -278,7 +278,7 @@ export class DbAuthHandler {
       corsHeaders = this.corsContext.getRequestHeaders(request)
       // Return CORS headers for OPTIONS requests
       if (this.corsContext.shouldHandleCors(request)) {
-        return this._buildResponseWithCorsHeadders(
+        return this._buildResponseWithCorsHeaders(
           { body: '', statusCode: 200 },
           corsHeaders
         )
@@ -288,7 +288,7 @@ export class DbAuthHandler {
     // if there was a problem decryption the session, just return the logout
     // response immediately
     if (this.hasInvalidSession) {
-      return this._buildResponseWithCorsHeadders(
+      return this._buildResponseWithCorsHeaders(
         this._ok(...this._logoutResponse()),
         corsHeaders
       )
@@ -299,18 +299,12 @@ export class DbAuthHandler {
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
-        return this._buildResponseWithCorsHeadders(
-          this._notFound(),
-          corsHeaders
-        )
+        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       }
 
       // make sure it's using the correct verb, GET vs POST
       if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
-        return this._buildResponseWithCorsHeadders(
-          this._notFound(),
-          corsHeaders
-        )
+        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       }
 
       // call whatever auth method was requested and return the body and headers
@@ -318,18 +312,15 @@ export class DbAuthHandler {
         method
       ]()
 
-      return this._buildResponseWithCorsHeadders(
+      return this._buildResponseWithCorsHeaders(
         this._ok(body, headers, options),
         corsHeaders
       )
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
-        return this._buildResponseWithCorsHeadders(
-          this._notFound(),
-          corsHeaders
-        )
+        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       } else {
-        return this._buildResponseWithCorsHeadders(
+        return this._buildResponseWithCorsHeaders(
           this._badRequest(e.message || e),
           corsHeaders
         )
@@ -873,7 +864,7 @@ export class DbAuthHandler {
     }
   }
 
-  _buildResponseWithCorsHeadders(
+  _buildResponseWithCorsHeaders(
     response: {
       body?: string
       statusCode: number
