@@ -2308,14 +2308,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@envelop/core@npm:2.0.0"
+"@envelop/core@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@envelop/core@npm:2.1.0"
   dependencies:
     "@envelop/types": 2.0.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 890b9ea371253649185094fdedbf5018fd3f8359dc826fd6f185c20920c20f2f693f08a48ab7aa0d0315f281cf74a9716670873b9c983aec216f97ee067d1f34
+  checksum: 445153e09520d2dcd20effa6851b144ca0d09d4671873cef062bc6dff95b91f106ff542fbeb31a4f040493e7cc4e6825516350b02002fe508f7f0d080aea6e2e
   languageName: node
   linkType: hard
 
@@ -5998,7 +5998,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@envelop/core": 2.0.0
+    "@envelop/core": 2.1.0
     "@envelop/depth-limit": 1.2.3
     "@envelop/disable-introspection": 3.0.0
     "@envelop/filter-operation-type": 3.0.0
