@@ -31,6 +31,7 @@ export function fixProjectBinaries(projectPath) {
       fs.symlinkSync(binPath, binSymlink)
     }
     console.log('chmod +x', terminalLink(binName, binPath))
+    fs.chmodSync(binSymlink, '755')
     fs.chmodSync(binPath, '755')
   }
 }
