@@ -47,9 +47,10 @@ if (!command.length || command.some((cmd) => helpCommands.includes(cmd))) {
 }
 
 try {
-  execa.sync('yarn', ['--cwd', absRwFwPath, ...command], {
+  execa.sync('yarn', [...command], {
     stdio: 'inherit',
     shell: true,
+    cwd: absRwFwPath,
     env: {
       RWJS_CWD: projectPath,
     },

@@ -13,7 +13,7 @@ export const generate = async () => {
   ) as string[]
 }
 
-const run = async () => {
+export const run = async () => {
   console.log()
   console.log('Generating...')
   console.log()
