@@ -4,7 +4,12 @@ import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
-import { CorsConfig, CorsContext, createCorsContext } from '../../cors'
+import {
+  CorsConfig,
+  CorsContext,
+  CorsHeaders,
+  createCorsContext,
+} from '../../cors'
 import { normalizeRequest } from '../../transforms'
 
 import * as DbAuthError from './errors'
@@ -273,23 +278,20 @@ export class DbAuthHandler {
       corsHeaders = this.corsContext.getRequestHeaders(request)
       // Return CORS headers for OPTIONS requests
       if (this.corsContext.shouldHandleCors(request)) {
-        return {
-          body: '',
-          statusCode: 200,
-          headers: corsHeaders,
-        }
+        return this._buildResponseWithCorsHeadders(
+          { body: '', statusCode: 200 },
+          corsHeaders
+        )
       }
-    }
-
-    let response: {
-      statusCode: number
-      headers?: Record<string, string>
     }
 
     // if there was a problem decryption the session, just return the logout
     // response immediately
     if (this.hasInvalidSession) {
-      response = this._ok(...this._logoutResponse())
+      return this._buildResponseWithCorsHeadders(
+        this._ok(...this._logoutResponse()),
+        corsHeaders
+      )
     }
 
     try {
@@ -297,18 +299,18 @@ export class DbAuthHandler {
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
-        // @ts-ignore
-        if (!response) {
-          response = this._notFound()
-        }
+        return this._buildResponseWithCorsHeadders(
+          this._notFound(),
+          corsHeaders
+        )
       }
 
       // make sure it's using the correct verb, GET vs POST
       if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
-        // @ts-ignore
-        if (!response) {
-          response = this._notFound()
-        }
+        return this._buildResponseWithCorsHeadders(
+          this._notFound(),
+          corsHeaders
+        )
       }
 
       // call whatever auth method was requested and return the body and headers
@@ -316,30 +318,22 @@ export class DbAuthHandler {
         method
       ]()
 
-      // @ts-ignore
-      if (!response) {
-        response = this._ok(body, headers, options)
-      }
+      return this._buildResponseWithCorsHeadders(
+        this._ok(body, headers, options),
+        corsHeaders
+      )
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
-        // @ts-ignore
-        if (!response) {
-          response = this._notFound()
-        }
+        return this._buildResponseWithCorsHeadders(
+          this._notFound(),
+          corsHeaders
+        )
       } else {
-        // @ts-ignore
-        if (!response) {
-          response = this._badRequest(e.message || e)
-        }
+        return this._buildResponseWithCorsHeadders(
+          this._badRequest(e.message || e),
+          corsHeaders
+        )
       }
-    }
-
-    return {
-      ...response,
-      headers: {
-        ...(response.headers || {}),
-        ...corsHeaders,
-      },
     }
   }
 
@@ -876,6 +870,23 @@ export class DbAuthHandler {
       statusCode: 400,
       body: JSON.stringify({ error: message }),
       headers: { 'Content-Type': 'application/json' },
+    }
+  }
+
+  _buildResponseWithCorsHeadders(
+    response: {
+      body?: string
+      statusCode: number
+      headers?: Record<string, string>
+    },
+    corsHeaders: CorsHeaders
+  ) {
+    return {
+      ...response,
+      headers: {
+        ...(response.headers || {}),
+        ...corsHeaders,
+      },
     }
   }
 }
