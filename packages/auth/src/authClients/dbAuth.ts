@@ -1,3 +1,5 @@
+import fetch from 'node-fetch'
+
 import { AuthClient } from './index'
 
 export interface LoginAttributes {
@@ -28,6 +30,7 @@ export const dbAuth = (
 
   const forgotPassword = async (username: string) => {
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+      credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, method: 'forgotPassword' }),
