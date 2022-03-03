@@ -2,10 +2,12 @@
 /* eslint-env node, es6*/
 //@ts-check
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
 
 const chalk = require('chalk')
 const execa = require('execa')
+const fse = require('fs-extra')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
 const rimraf = require('rimraf')
@@ -16,7 +18,11 @@ const {
   copyFrameworkPackages,
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tasks')
-const { getExecaOptions } = require('./util')
+const {
+  getExecaOptions,
+  updatePkgJsonScripts,
+  confirmNoFixtureNoLink,
+} = require('./util')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
@@ -37,6 +43,16 @@ const args = yargs
     type: 'boolean',
     describe: 'Verbose output',
   })
+  .option('copyFromFixture', {
+    default: true,
+    type: 'boolean',
+    describe: 'Copy the test project from the __fixtures__ folder',
+  })
+  .option('rebuildFixture', {
+    default: false,
+    type: 'boolean',
+    describe: 'Rebuild __fixtures__/test-project',
+  })
   .option('clean', {
     default: false,
     type: 'boolean',
@@ -48,22 +64,53 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
-  .demandCommand(
-    1,
-    1,
-    chalk.red.bold(
-      '  Specify a project directory outside the framework directory\n\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
-    ),
-    chalk.red.bold(
-      '  Only specify *one* project directory outside the framework directory (no spaces allowed)\n\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
-    )
-  )
   .help()
   .strict().argv
 
-const { typescript, canary, link, verbose, clean } = args
+const {
+  typescript,
+  canary,
+  link,
+  verbose,
+  clean,
+  copyFromFixture,
+  rebuildFixture,
+} = args
 
-const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
+// Do not use demandCommand becuase rebuildFixture doesn't require <project directory>
+// Require 1 and only 1 arg if not rebuildFixture
+if (!rebuildFixture && args._.length > 1) {
+  console.log(
+    chalk.red.bold(
+      `
+      Multiple <project directory> arguments
+      Secify ONE project directory outside the framework directory (no spaces allowed)
+      EXAMPLE: 'yarn build:test-project ../test-project'
+      `
+    )
+  )
+  process.exit(1)
+} else if (!rebuildFixture && args._.length < 1) {
+  console.log(
+    chalk.red.bold(
+      `
+      Missing <project directory> argument
+      Specify a project directory outside the framework directory
+      EXAMPLE: 'yarn build:test-project ../test-project'
+      `
+    )
+  )
+  process.exit(1)
+}
+
+const OUTPUT_PROJECT_PATH = rebuildFixture
+  ? path.join(
+      os.tmpdir(),
+      'redwood-test-project',
+      // ":" is problematic with paths
+      new Date().toISOString().split(':').join('-')
+    )
+  : path.resolve(String(args._))
 
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
@@ -74,14 +121,14 @@ if (
   !relativePathCheck.startsWith('..') &&
   !path.isAbsolute(relativePathCheck)
 ) {
-  console.log()
   console.log(
     chalk.red.bold(
-      `  Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'\n`
+      `
+      Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'
+      Specify a project directory outside the framework directory
+      EXAMPLE: 'yarn build:test-project ../test-project'
+      `
     )
-  )
-  console.log(
-    '  Specify a project directory outside the framework directory\n  EXAMPLE: `yarn build:test-project ../test-project`\n'
   )
   process.exit(1)
 }
@@ -101,22 +148,46 @@ const createProject = async () => {
   )
 }
 
+const copyProject = async () => {
+  if (clean && !rebuildFixture) {
+    rimraf.sync(OUTPUT_PROJECT_PATH)
+  }
+
+  const FIXTURE_TESTPROJ_PATH = path.join(
+    RW_FRAMEWORKPATH,
+    '__fixtures__/test-project'
+  )
+
+  if (rebuildFixture) {
+    // remove existing Fixture
+    rimraf.sync(FIXTURE_TESTPROJ_PATH)
+    // copy from tempDir to Fixture dir
+    await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
+    // cleanup after ourselves
+    rimraf.sync(OUTPUT_PROJECT_PATH)
+  } else {
+    // copying existing Fixture to new Project
+    await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
+    // Make sure no lockfiles are accidentally copied
+    fse.remove(path.join(OUTPUT_PROJECT_PATH, 'yarn.lock'))
+  }
+}
+
 const globalTasks = () =>
   new Listr(
     [
       {
-        title: `Installing script packages`,
-        task: async () => {
-          return execa(
-            'yarn install',
-            [],
-            getExecaOptions(path.resolve(__dirname))
-          )
-        },
-      },
-      {
         title: 'Creating project',
-        task: () => createProject(),
+        task: (_ctx, task) => {
+          if (copyFromFixture && !rebuildFixture) {
+            task.output =
+              'Copying test-project from __fixtures__/test-project...'
+            return copyProject()
+          } else {
+            task.output = 'Building test-project from scratch...'
+            return createProject()
+          }
+        },
       },
       {
         title: '[link] Building Redwood framework',
@@ -136,23 +207,35 @@ const globalTasks = () =>
             throw new Error('Failed to build framework')
           }
         },
-        enabled: () => link,
+        enabled: () => link || rebuildFixture,
       },
       {
         title: '[link] Adding framework dependencies to project',
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link,
+        enabled: () => link && !rebuildFixture,
       },
       {
         title: 'Set yarn v1 version in test-project directory',
         task: async () => {
-          return execa(
+          await execa(
             'yarn set version classic',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
+
+          // remove "packageManager": "yarn@3.2.0" from package.json
+          const packageJsonPath = path.join(OUTPUT_PROJECT_PATH, 'package.json')
+          const packageJson = JSON.parse(
+            fs.readFileSync(packageJsonPath, 'utf-8')
+          )
+          delete packageJson.packageManager
+          fs.writeFileSync(
+            packageJsonPath,
+            JSON.stringify(packageJson, undefined, 2)
+          )
         },
+        skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture, but copyFromFixture is default
       },
       {
         title: 'Installing node_modules',
@@ -165,31 +248,50 @@ const globalTasks = () =>
         },
       },
       {
+        title: 'Updating ports in redwood.toml...',
+        task: () => {
+          // We do this, to make it easier to run multiple test projects in parallel
+          // But on different ports. If API_DEV_PORT or WEB_DEV_PORT aren't supplied,
+          // It just defaults to 8910 and 8911
+          // This is helpful in playwright smoke tests to allow us to parallelize
+          const REDWOOD_TOML_PATH = path.join(
+            OUTPUT_PROJECT_PATH,
+            'redwood.toml'
+          )
+          const redwoodToml = fs.readFileSync(REDWOOD_TOML_PATH).toString()
+          let newRedwoodToml = redwoodToml
+
+          newRedwoodToml = newRedwoodToml.replace(
+            /\port = 8910/,
+            'port = "${WEB_DEV_PORT:8910}"'
+          )
+
+          newRedwoodToml = newRedwoodToml.replace(
+            /\port = 8911/,
+            'port = "${API_DEV_PORT:8911}"'
+          )
+
+          fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
+        },
+        enabled: () => rebuildFixture,
+      },
+      {
         title: '[link] Copying framework packages to project',
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link,
+        enabled: () => link || rebuildFixture,
       },
       {
         title: '[link] Add rwfw project:copy postinstall',
         task: () => {
-          const projectPackageJsonPath = path.join(
-            OUTPUT_PROJECT_PATH,
-            'package.json'
-          )
-          const projectPackageJson = JSON.parse(
-            fs.readFileSync(projectPackageJsonPath, 'utf-8')
-          )
-          projectPackageJson.scripts = {
-            ...projectPackageJson.scripts,
-            postinstall: 'yarn rwfw project:copy',
-          }
-          fs.writeFileSync(
-            projectPackageJsonPath,
-            JSON.stringify(projectPackageJson, undefined, 2)
-          )
+          updatePkgJsonScripts({
+            projectPath: OUTPUT_PROJECT_PATH,
+            scripts: {
+              postinstall: 'yarn rwfw project:copy',
+            },
+          })
         },
-        enabled: () => link,
+        enabled: () => link || rebuildFixture, // Note that we undo this when we rebuildFixture at the end
       },
       {
         title: 'Upgrading to latest canary version',
@@ -200,37 +302,123 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        enabled: () => canary && !link,
+        enabled: () => canary && !link && !rebuildFixture,
       },
       {
         title: 'Apply web codemods',
-        task: () => webTasks(OUTPUT_PROJECT_PATH, { verbose, link }),
+        task: () =>
+          webTasks(OUTPUT_PROJECT_PATH, {
+            verbose,
+            linkWithLatestFwBuild: link || rebuildFixture,
+          }),
+        enabled: () => !copyFromFixture || rebuildFixture,
       },
       {
         title: 'Apply api codemods',
-        task: () => apiTasks(OUTPUT_PROJECT_PATH, { verbose }),
+        task: () =>
+          apiTasks(OUTPUT_PROJECT_PATH, {
+            verbose,
+            linkWithLatestFwBuild: link || rebuildFixture,
+          }),
+        enabled: () => !copyFromFixture || rebuildFixture,
       },
       {
-        title: 'Convert to JS',
+        title: 'Generate dbAuth Secret',
         task: async () => {
           return execa(
-            'yarn rw ts-to-js',
+            'echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
+        enabled: () => !rebuildFixture,
+      },
+      {
+        title: 'Running prisma migrate reset',
+        task: () => {
+          return execa(
+            'yarn rw prisma migrate reset',
+            ['--force'],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+      },
+      {
+        title: 'Convert to JS',
+        task: async (_ctx, task) => {
+          if (!rebuildFixture) {
+            return execa(
+              'yarn rw ts-to-js',
+              [],
+              getExecaOptions(OUTPUT_PROJECT_PATH)
+            )
+          } else {
+            task.output = 'Rebuilding Fixture: skip ts-to-js'
+          }
+        },
         enabled: () => !typescript,
       },
       {
-        title: 'All done!',
+        title: 'Lint --fix all the things',
         task: async () => {
-          console.log()
-          console.log('-'.repeat(30))
-          console.log()
-          console.log('✅ Success your project has been generated at:')
-          console.log(OUTPUT_PROJECT_PATH)
-          console.log()
-          console.log('-'.repeat(30))
+          try {
+            await execa('yarn rw lint --fix', [], {
+              shell: true,
+              stdio: 'ignore',
+              cleanup: true,
+              cwd: OUTPUT_PROJECT_PATH,
+              env: {
+                RW_PATH: path.join(__dirname, '../../'),
+              },
+            })
+          } catch (e) {
+            // nothing to see here
+          }
+        },
+        enabled: () => rebuildFixture || !copyFromFixture,
+      },
+      {
+        title: '[Rebuild Fixture] Replace and Cleanup Fixture',
+        task: async () => {
+          // remove all .gitignore
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/dist`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/node_modules`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/.env`)
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
+
+          // Remove project:copy from the fixture
+          updatePkgJsonScripts({
+            projectPath: OUTPUT_PROJECT_PATH,
+            scripts: {
+              postinstall: '', // We do this so we don't have project:copy in the fixture
+            },
+          })
+
+          // removes existing Fixture and replaces with newly built project,
+          // then removes new Project temp directory
+          copyProject()
+        },
+        enabled: () => rebuildFixture,
+      },
+      {
+        title: 'All done!',
+        task: async (_ctx, task) => {
+          if (verbose) {
+            // Without verbose these logs aren't visible anyway
+            console.log()
+            console.log('-'.repeat(30))
+            console.log()
+            console.log('✅ Success your project has been generated at:')
+            console.log(OUTPUT_PROJECT_PATH)
+            console.log()
+            console.log('-'.repeat(30))
+          } else {
+            task.output = `Generated project at ${OUTPUT_PROJECT_PATH}`
+          }
         },
       },
     ],
@@ -240,9 +428,19 @@ const globalTasks = () =>
     }
   )
 
-globalTasks()
-  .run()
-  .catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
+async function runCommand() {
+  // confirm usage for case raw build without Link
+  if (!copyFromFixture && !link) {
+    // if prompt returns 'no', exit
+    ;(await confirmNoFixtureNoLink(copyFromFixture, link)) || process.exit(1)
+  }
+
+  await globalTasks()
+    .run()
+    .catch((err) => {
+      console.error(err)
+      process.exit(1)
+    })
+}
+
+runCommand()

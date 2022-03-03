@@ -82,6 +82,7 @@ export type GraphQLClientConfigProp = Omit<
         rwLinks: [
           apolloClient.ApolloLink,
           apolloClient.ApolloLink,
+          apolloClient.ApolloLink,
           apolloClient.HttpLink
         ]
       ) => apolloClient.ApolloLink)
@@ -113,6 +114,23 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/}
    */
   const { getToken, type: authProviderType } = useAuth()
+
+  // updateDataApolloLink keeps track of the most recent req/res data so they can be passed into
+  // any errors passed up to a error boundary.
+  const data = {
+    mostRecentRequest: undefined,
+    mostRecentResponse: undefined,
+  } as any
+
+  const updateDataApolloLink = new ApolloLink((operation, forward) => {
+    data.mostRecentRequest = operation
+
+    return forward(operation).map((result) => {
+      data.mostRecentResponse = result
+
+      return result
+    })
+  })
 
   const withToken = setContext(async () => {
     const token = await getToken()
@@ -155,9 +173,15 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const httpLink = new HttpLink({ uri, ...httpLinkConfig })
 
   /**
-   * The order here's important.
+   * The order here is important. The last link *must* be a terminating link like HttpLink.
    */
-  const rwLinks = [withToken, authMiddleware, httpLink] as [
+  const rwLinks = [
+    withToken,
+    authMiddleware,
+    updateDataApolloLink,
+    httpLink,
+  ] as [
+    apolloClient.ApolloLink,
     apolloClient.ApolloLink,
     apolloClient.ApolloLink,
     apolloClient.HttpLink
@@ -206,7 +230,35 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     ...rest,
   })
 
-  return <ApolloProvider client={client}>{children}</ApolloProvider>
+  const extendErrorAndRethrow = (error: any, _errorInfo: React.ErrorInfo) => {
+    error['mostRecentRequest'] = data.mostRecentRequest
+    error['mostRecentResponse'] = data.mostRecentResponse
+    throw error
+  }
+
+  return (
+    <ApolloProvider client={client}>
+      <ErrorBoundary onError={extendErrorAndRethrow}>{children}</ErrorBoundary>
+    </ApolloProvider>
+  )
+}
+
+type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
+
+interface ErrorBoundaryProps {
+  error?: unknown
+  onError: NonNullable<ComponentDidCatch>
+}
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
+  componentDidCatch(...args: Parameters<NonNullable<ComponentDidCatch>>) {
+    this.setState({})
+    this.props.onError(...args)
+  }
+
+  render() {
+    return this.props.children
+  }
 }
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
@@ -232,7 +284,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
         /**
-         * This order so that the user can still completely ovwrite the cache.
+         * This order so that the user can still completely overwrite the cache.
          */
         config={{ cache, ...config }}
         useAuth={useAuth}
