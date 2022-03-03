@@ -105,7 +105,7 @@ export interface AuthClient {
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes,
-  config: SupportedAuthConfig
+  config?: SupportedAuthConfig
 ): AuthClient => {
   if (!typesToClients[type]) {
     throw new Error(
