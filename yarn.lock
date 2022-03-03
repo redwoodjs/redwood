@@ -2308,36 +2308,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@envelop/core@npm:2.0.0"
+"@envelop/core@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@envelop/core@npm:2.1.0"
   dependencies:
     "@envelop/types": 2.0.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 890b9ea371253649185094fdedbf5018fd3f8359dc826fd6f185c20920c20f2f693f08a48ab7aa0d0315f281cf74a9716670873b9c983aec216f97ee067d1f34
+  checksum: 445153e09520d2dcd20effa6851b144ca0d09d4671873cef062bc6dff95b91f106ff542fbeb31a4f040493e7cc4e6825516350b02002fe508f7f0d080aea6e2e
   languageName: node
   linkType: hard
 
-"@envelop/depth-limit@npm:1.2.3":
-  version: 1.2.3
-  resolution: "@envelop/depth-limit@npm:1.2.3"
+"@envelop/depth-limit@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@envelop/depth-limit@npm:1.3.0"
   dependencies:
     graphql-depth-limit: ^1.1.0
   peerDependencies:
-    "@envelop/core": ^2.0.0
+    "@envelop/core": ^2.1.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 425acccc86509cda6bed121185147abb0f7a948491e73f5f30f613738376fccbd73ce5b33e93f2e93831c41609bf23d1124872740f2dc5c8414a0667ed29eb07
+  checksum: 9e534fd04b8a280c39298fee75a6972c1ad80502b3a9bf39004fb300359a77d1ca8492110047cd803f2c751d179f5fd7ce32636b23ff8cd7aebf999ed61cdfaa
   languageName: node
   linkType: hard
 
-"@envelop/disable-introspection@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@envelop/disable-introspection@npm:3.0.0"
+"@envelop/disable-introspection@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@envelop/disable-introspection@npm:3.1.0"
   peerDependencies:
-    "@envelop/core": ^2.0.0
+    "@envelop/core": ^2.1.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 87d2ce8f8770d4a7e8cc9a56a6490afb33d70d4bfdcb700d20bfb8692348093fd84c27f49ff9bc8956c14adb8669fec68fc64213c4334ad49fe1c1a33bbcb5e6
+  checksum: 3fb095fbb4b62d416bcf71f605c911fb5997a06d9a51f6faf813ee77f3cd287fae661fd677b7df6b4c9f26c697646e9b4f0db7e4e3c52636b8a55bce1b882541
   languageName: node
   linkType: hard
 
@@ -5998,9 +5998,9 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@envelop/core": 2.0.0
-    "@envelop/depth-limit": 1.2.3
-    "@envelop/disable-introspection": 3.0.0
+    "@envelop/core": 2.1.0
+    "@envelop/depth-limit": 1.3.0
+    "@envelop/disable-introspection": 3.1.0
     "@envelop/filter-operation-type": 3.0.0
     "@envelop/parser-cache": 4.0.0
     "@envelop/testing": 4.0.0

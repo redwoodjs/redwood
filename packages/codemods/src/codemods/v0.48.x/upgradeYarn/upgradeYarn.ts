@@ -7,27 +7,34 @@ import getRWPaths from '../../../lib/getRWPaths'
 async function upgradeYarn() {
   const rwPaths = getRWPaths()
 
-  // Projects need to be on node v14.9.0 or greater for corepack to work.
-  const [major, minor] = process.version.replace('v', '').split('.').map(Number)
-
-  if (major < 14) {
-    console.log('You have to be on node v14.9.0 or greater')
-    process.exit(1)
-  }
-
-  if (major === 14 && minor < 9) {
-    console.log('You have to be on node v14.9.0 or greater')
-    process.exit(1)
-  }
-
   console.log('Enabling corepack...')
-  spawnSync('corepack enable', {
+
+  const { status, ...rest } = spawnSync('corepack enable', {
     shell: true,
     cwd: rwPaths.base,
   })
 
-  console.log('Setting yarn version to 3...')
+  if (status !== 0) {
+    throw new Error(
+      [
+        '',
+        'Failed to enable corepack:',
+        '',
+        `  ${rest.stderr.toString().trim()}`,
+        '',
+        'Your node version may be less than v14.19',
+        'Please install corepack globally via ',
+        '',
+        '  npm install -g corepack',
+        '',
+        'For more information, see:',
+        '- https://yarnpkg.com/getting-started/install',
+        '- https://nodejs.org/dist/latest/docs/api/corepack.html',
+      ].join('\n')
+    )
+  }
 
+  console.log('Setting yarn version to 3...')
   spawnSync('yarn set version stable', {
     shell: true,
     cwd: rwPaths.base,
@@ -41,7 +48,7 @@ async function upgradeYarn() {
   const yarnVersion = stdout.toString().trim()
 
   console.log()
-  console.log('Writing .yarnrc.yml and appending to .gitignore...')
+  console.log('Adding .yarnrc.yml and updating .gitignore...')
 
   fs.writeFileSync(
     path.join(rwPaths.base, '.yarnrc.yml'),
