@@ -76,12 +76,18 @@ type AuthProviderProps =
   | {
       client: SupportedAuthClients
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
-      config?: SupportedAuthConfig
+      config?: never
       skipFetchCurrentUser?: boolean
     }
   | {
       client?: never
-      type: 'dbAuth' | 'clerk'
+      type: 'clerk'
+      config?: never
+      skipFetchCurrentUser?: boolean
+    }
+  | {
+      client?: never
+      type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
