@@ -5930,7 +5930,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.13.0
     "@typescript-eslint/parser": 5.13.0
     eslint: 8.10.0
-    eslint-config-prettier: 8.4.0
+    eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.25.4
@@ -14595,14 +14595,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:8.4.0":
-  version: 8.4.0
-  resolution: "eslint-config-prettier@npm:8.4.0"
+"eslint-config-prettier@npm:8.5.0":
+  version: 8.5.0
+  resolution: "eslint-config-prettier@npm:8.5.0"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 2a1ce84dc4eb13d3a9f880b79077b62ad8e5d272aa0e3bae142e151f8f0d1cdd3025817ba6d78670469cfad3467731d73bac0413bc263e912141429279947a0b
+  checksum: e01efe3a30cc7a9d4944242b7944c4488514dfa198707d268474e1b938c6b8d1be1320c40ad01f1f3cde93bf393770b2d013e709c8411d41d9d0421fff86a12a
   languageName: node
   linkType: hard
 
