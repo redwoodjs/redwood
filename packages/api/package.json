@@ -9,6 +9,12 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "redwood": "./dist/bins/redwood.js",
+    "rw": "./dist/bins/redwood.js",
+    "rwfw": "./dist/bins/rwfw.js",
+    "tsc": "./dist/bins/tsc.js"
+  },
   "files": [
     "dist",
     "logger",

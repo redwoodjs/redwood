@@ -8,9 +8,28 @@
     "directory": "packages/core"
   },
   "license": "MIT",
+  "bin": {
+    "cross-env": "./dist/bins/cross-env.js",
+    "eslint": "./dist/bins/eslint.js",
+    "jest": "./dist/bins/jest.js",
+    "nodemon": "./dist/bins/nodemon.js",
+    "redwood": "./dist/bins/redwood.js",
+    "rimraf": "./dist/bins/rimraf.js",
+    "rw": "./dist/bins/redwood.js",
+    "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
+    "rw-gen": "./dist/bins/rw-gen.js",
+    "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
+    "rwfw": "./dist/bins/rwfw.js"
+  },
   "files": [
-    "config"
+    "config",
+    "dist"
   ],
+  "scripts": {
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "prepublishOnly": "NODE_ENV=production yarn build"
+  },
   "dependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
@@ -53,6 +72,7 @@
     "nodemon": "2.0.15",
     "null-loader": "4.0.1",
     "react-refresh": "0.11.0",
+    "rimraf": "3.0.2",
     "style-loader": "3.3.1",
     "svg-react-loader": "0.4.6",
     "typescript": "4.6.2",
@@ -64,6 +84,9 @@
     "webpack-manifest-plugin": "4.1.1",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/rimraf": "3.0.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

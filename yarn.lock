@@ -1998,11 +1998,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.15.0":
-  version: 2.15.0
-  resolution: "@clerk/clerk-js@npm:2.15.0"
+"@clerk/clerk-js@npm:2.16.0":
+  version: 2.16.0
+  resolution: "@clerk/clerk-js@npm:2.16.0"
   dependencies:
-    "@clerk/types": ^1.26.0
+    "@clerk/types": ^1.27.0
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.3.1
@@ -2014,7 +2014,7 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 818eabefac1014e4d507ee8490d0f21697789e6d891f89c04b8d949b481bbe105321399240df0a46f943b9cda7a282b72a9a7318294e1418035483597fe9abe1
+  checksum: 943d39471bc5d42d5a02c90296b08361c10c51bcc7ca25851f06094f16bbe5e5147e6f6ffbf7921c4838d6e4c80fd9dbd755bfa3eaec734be54e107d8e5d9e6b
   languageName: node
   linkType: hard
 
@@ -2036,10 +2036,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.26.0, @clerk/types@npm:^1.26.0":
-  version: 1.26.0
-  resolution: "@clerk/types@npm:1.26.0"
-  checksum: e502ac845bb36c1bd7e337e82fb62ef564bba27c023c9ee25eee32b42ebf18514fe2c1cf942898b2f001ff38a38a71061dbde3137392cd9bac089a1b7d1d930a
+"@clerk/types@npm:1.27.0, @clerk/types@npm:^1.27.0":
+  version: 1.27.0
+  resolution: "@clerk/types@npm:1.27.0"
+  checksum: 05c74a52ed36917ab6e086944188932b82190bc974352ce32b73bb369fd127d405be3f3e239babb4e78225f7d4997cd07e637a44bf7aa979b5b7a2b4af661911
   languageName: node
   linkType: hard
 
@@ -4808,17 +4808,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.13.3":
-  version: 0.13.3
-  resolution: "@mswjs/interceptors@npm:0.13.3"
+"@mswjs/interceptors@npm:^0.13.5":
+  version: 0.13.6
+  resolution: "@mswjs/interceptors@npm:0.13.6"
   dependencies:
     "@open-draft/until": ^1.0.3
     "@xmldom/xmldom": ^0.7.5
     debug: ^4.3.3
-    headers-polyfill: ^3.0.3
+    headers-polyfill: ^3.0.4
     outvariant: ^1.2.1
     strict-event-emitter: ^0.2.0
-  checksum: 34b0dbce956f14995fab7c5a1725b00603e733082e7cabc6f574b987f181061e35b26b97e8b5239ec6d7e91477fa2a7f4f9c8facf85ce2c3ed93e49cef0e060b
+  checksum: c9296eb7b84dc1c63140048f4d5b40794f0df1ef4252ca79188caa266a1eb6a47ba848a5c0f7feb487eb95bcada492a3a800a256bc53b62e66af2bb3860bbad2
   languageName: node
   linkType: hard
 
@@ -5680,7 +5680,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
-    "@types/aws-lambda": 8.10.92
+    "@types/aws-lambda": 8.10.93
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -5748,6 +5748,11 @@ __metadata:
       optional: true
     firebase-admin:
       optional: true
+  bin:
+    redwood: ./dist/bins/redwood.js
+    rw: ./dist/bins/redwood.js
+    rwfw: ./dist/bins/rwfw.js
+    tsc: ./dist/bins/tsc.js
   languageName: unknown
   linkType: soft
 
@@ -5759,9 +5764,9 @@ __metadata:
     "@azure/msal-browser": 2.22.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.15.0
+    "@clerk/clerk-js": 2.16.0
     "@clerk/clerk-sdk-node": 2.9.4
-    "@clerk/types": 1.26.0
+    "@clerk/types": 1.27.0
     "@supabase/supabase-js": 1.30.7
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.39
@@ -5882,6 +5887,7 @@ __metadata:
     "@redwoodjs/eslint-config": 0.47.1
     "@redwoodjs/internal": 0.47.1
     "@redwoodjs/testing": 0.47.1
+    "@types/rimraf": 3.0.2
     babel-loader: 8.2.3
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -5905,6 +5911,7 @@ __metadata:
     nodemon: 2.0.15
     null-loader: 4.0.1
     react-refresh: 0.11.0
+    rimraf: 3.0.2
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
     typescript: 4.6.2
@@ -5916,6 +5923,18 @@ __metadata:
     webpack-manifest-plugin: 4.1.1
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
+  bin:
+    cross-env: ./dist/bins/cross-env.js
+    eslint: ./dist/bins/eslint.js
+    jest: ./dist/bins/jest.js
+    nodemon: ./dist/bins/nodemon.js
+    redwood: ./dist/bins/redwood.js
+    rimraf: ./dist/bins/rimraf.js
+    rw: ./dist/bins/redwood.js
+    rw-api-server-watch: ./dist/bins/rw-api-server-watch.js
+    rw-gen: ./dist/bins/rw-gen.js
+    rw-gen-watch: ./dist/bins/rw-gen-watch.js
+    rwfw: ./dist/bins/rwfw.js
   languageName: unknown
   linkType: soft
 
@@ -5931,7 +5950,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.13.0
     "@typescript-eslint/parser": 5.13.0
     eslint: 8.10.0
-    eslint-config-prettier: 8.4.0
+    eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.25.4
@@ -5959,8 +5978,8 @@ __metadata:
     "@testing-library/user-event": 13.5.0
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.39
-    "@types/react-dom": 17.0.12
-    "@types/testing-library__jest-dom": 5.14.2
+    "@types/react-dom": 17.0.13
+    "@types/testing-library__jest-dom": 5.14.3
     jest: 27.5.1
     nodemon: 2.0.15
     pascalcase: 1.0.0
@@ -6199,18 +6218,18 @@ __metadata:
     "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.3
     "@testing-library/user-event": 13.5.0
-    "@types/aws-lambda": 8.10.92
+    "@types/aws-lambda": 8.10.93
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.1
     "@types/node": 16.11.26
     "@types/react": 17.0.39
-    "@types/react-dom": 17.0.12
+    "@types/react-dom": 17.0.13
     "@types/webpack": 5.28.0
     babel-jest: 27.5.1
     babel-plugin-inline-react-svg: 2.0.1
     jest: 27.5.1
     jest-watch-typeahead: 1.0.0
-    msw: 0.38.1
+    msw: 0.38.2
     ts-toolbelt: 9.6.0
     typescript: 4.6.2
     whatwg-fetch: 3.6.2
@@ -6229,8 +6248,8 @@ __metadata:
     "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.3
     "@types/react": 17.0.39
-    "@types/react-dom": 17.0.12
-    "@types/testing-library__jest-dom": 5.14.2
+    "@types/react-dom": 17.0.13
+    "@types/testing-library__jest-dom": 5.14.3
     graphql: 16.3.0
     graphql-tag: 2.12.6
     jest: 27.5.1
@@ -6246,6 +6265,16 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
+  bin:
+    build-storybook: ./dist/bins/build-storybook.js
+    cross-env: ./dist/bins/cross-env.js
+    msw: ./dist/bins/msw.js
+    redwood: ./dist/bins/redwood.js
+    rw: ./dist/bins/redwood.js
+    rwfw: ./dist/bins/rwfw.js
+    start-storybook: ./dist/bins/start-storybook.js
+    tsc: ./dist/bins/tsc.js
+    webpack: ./dist/bins/webpack.js
   languageName: unknown
   linkType: soft
 
@@ -7384,10 +7413,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.92, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.92
-  resolution: "@types/aws-lambda@npm:8.10.92"
-  checksum: f1b0f2a516dcbe9e3da6d532bfeab88a5d5f3c2067e7870c097ec3ba389f4a1ef0e6f022413b555f0217cd5a0904787d588edac6e3da363abfcadde4f9912f7e
+"@types/aws-lambda@npm:8.10.93, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.93
+  resolution: "@types/aws-lambda@npm:8.10.93"
+  checksum: a4f4892eda175b586393d7f142a37a3fff27fc7e16b345e4bd8f8f78c00c4f3be97591d0f620d66fb2b67aad00a37939f4e5130f196973bab4b57ff2b2fac768
   languageName: node
   linkType: hard
 
@@ -8200,12 +8229,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:*, @types/react-dom@npm:17.0.12":
-  version: 17.0.12
-  resolution: "@types/react-dom@npm:17.0.12"
+"@types/react-dom@npm:*, @types/react-dom@npm:17.0.13":
+  version: 17.0.13
+  resolution: "@types/react-dom@npm:17.0.13"
   dependencies:
     "@types/react": "*"
-  checksum: 3c40af8d4704d3242a8f2e15f0a4ec2986de3a72fe80a1a5d87b926da532e74c0bfa5ca5e231f5349da192d06308061f79c4ca6381f053329c8023d9371f35e8
+  checksum: 245e353626f3e75eb27ae797a5f6390aab2d8be19f1fb426ebf69a3393e8fcbcc54471397bc226e54f28de188084d8a3b9f86883c7cbad27cc5ea0ae8d2d0158
   languageName: node
   linkType: hard
 
@@ -8361,12 +8390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:5.14.2, @types/testing-library__jest-dom@npm:^5.9.1":
-  version: 5.14.2
-  resolution: "@types/testing-library__jest-dom@npm:5.14.2"
+"@types/testing-library__jest-dom@npm:5.14.3, @types/testing-library__jest-dom@npm:^5.9.1":
+  version: 5.14.3
+  resolution: "@types/testing-library__jest-dom@npm:5.14.3"
   dependencies:
     "@types/jest": "*"
-  checksum: 775b5fb3dd26dfff1a17dc7f404c9b06c7aeb388e55802607ba6e08593deaa585fb1ed5e6809090cfe13707667bf413cbf56036952a26b383ac7d7efadac6e30
+  checksum: bfc5b3807c01240c9985955f2f4fcf23c66946da02b77a001f06ecbf0196b12fecdd13ab956ef347893e08ccd2a71db0fa8d513927ce6618598853a5873267a1
   languageName: node
   linkType: hard
 
@@ -14596,14 +14625,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:8.4.0":
-  version: 8.4.0
-  resolution: "eslint-config-prettier@npm:8.4.0"
+"eslint-config-prettier@npm:8.5.0":
+  version: 8.5.0
+  resolution: "eslint-config-prettier@npm:8.5.0"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 2a1ce84dc4eb13d3a9f880b79077b62ad8e5d272aa0e3bae142e151f8f0d1cdd3025817ba6d78670469cfad3467731d73bac0413bc263e912141429279947a0b
+  checksum: e01efe3a30cc7a9d4944242b7944c4488514dfa198707d268474e1b938c6b8d1be1320c40ad01f1f3cde93bf393770b2d013e709c8411d41d9d0421fff86a12a
   languageName: node
   linkType: hard
 
@@ -17368,10 +17397,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"headers-polyfill@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "headers-polyfill@npm:3.0.3"
-  checksum: fe43b34d2d0d9b045fe82196b158b720b97db9cdec28c0246b44c10ca4bc07a7921b774d35dc7610d5d1166173dd05a96da53a8fb372cc623e17c3f950c83017
+"headers-polyfill@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "headers-polyfill@npm:3.0.4"
+  checksum: 6d5429a7f7deb8d1a567d2578e0be428f318d367a8a6269c32168357441832e6198b0fa5d694f87454be8e3ade19b2663a1e758fdff70d00dab4ba970cbe8e5d
   languageName: node
   linkType: hard
 
@@ -21769,12 +21798,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.38.1":
-  version: 0.38.1
-  resolution: "msw@npm:0.38.1"
+"msw@npm:0.38.2":
+  version: 0.38.2
+  resolution: "msw@npm:0.38.2"
   dependencies:
     "@mswjs/cookies": ^0.1.7
-    "@mswjs/interceptors": ^0.13.3
+    "@mswjs/interceptors": ^0.13.5
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
     "@types/js-levenshtein": ^1.1.1
@@ -21782,7 +21811,7 @@ __metadata:
     chokidar: ^3.4.2
     cookie: ^0.4.2
     graphql: ^16.3.0
-    headers-polyfill: ^3.0.3
+    headers-polyfill: ^3.0.4
     inquirer: ^8.2.0
     is-node-process: ^1.0.1
     js-levenshtein: ^1.1.6
@@ -21794,7 +21823,7 @@ __metadata:
     yargs: ^17.3.1
   bin:
     msw: cli/index.js
-  checksum: 793c42c863d8c8c708d822102ec7b1d24158099247cf5e82902df1ef99443d02e0c5326d8519d05f864dc3b747f0b28a8c87de2563efed94e791ba7f94ba7b41
+  checksum: 54e71bceadcc86c7025f3b9cef4e00ea5330346afc607449051b47eb5b75a211edc0c01cb83c766fcac08173f5d7b76fd8e0761bb0d5dae09bb898161c890cdd
   languageName: node
   linkType: hard
 
@@ -26205,7 +26234,7 @@ __metadata:
     lerna: 4.0.0
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.38.1
+    msw: 0.38.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.15
