@@ -1,11 +1,11 @@
-import { LogFormatter } from './index'
+import { LogFormatter } from '../logFormatter/index'
 
 const logFormatter = LogFormatter()
 
 describe('LogFormatter', () => {
   describe('Formats log levels as emoji', () => {
     test('Formats Trace level', () => {
-      expect(logFormatter({ level: 10 })).toMatch('🔍')
+      expect(logFormatter({ level: 10 })).toMatch('🧵')
     })
 
     test('Formats Debug level', () => {
@@ -17,7 +17,7 @@ describe('LogFormatter', () => {
     })
 
     test('Formats Warn level', () => {
-      expect(logFormatter({ level: 40 })).toMatch('⚠️')
+      expect(logFormatter({ level: 40 })).toMatch('🚦')
     })
 
     test('Formats Error level', () => {
@@ -107,5 +107,72 @@ describe('LogFormatter', () => {
         })
       ).not.toMatch('I should not see this')
     })
+  })
+
+  describe('Custom log data', () => {
+    test('Should include the custom log attribute text', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          custom: 'I should see this custom message text',
+        })
+      ).toMatch('I should see this')
+    })
+
+    test('Should include the custom log attribute info a custom emoji and label', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          custom: 'I should see this custom emoji and label',
+        })
+      ).toMatch('🗒 Custom')
+    })
+
+    test('Should include the custom log attribute info with nested text message', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          custom: {
+            msg: 'I should see this custom message in the log',
+          },
+        })
+      ).toMatch('I should see this custom message in the log')
+    })
+  })
+
+  test('Should include the custom log attribute info with a number attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom message and number in the log',
+          number: 100,
+        },
+      })
+    ).toMatch('100')
+  })
+
+  test('Should include the custom log attribute info with a nested object attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom object in the log',
+          obj: { foo: 'bar' },
+        },
+      })
+    ).toMatch('"foo": "bar"')
+  })
+
+  test('Should include the custom log attribute info with a nested object attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom object in the log',
+          obj: { foo: 'bar' },
+        },
+      })
+    ).toMatch('"foo": "bar"')
   })
 })

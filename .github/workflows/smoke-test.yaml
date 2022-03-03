@@ -21,7 +21,7 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: 0 # this makes sure that playwright dependencies are cached in node_modules
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup node
         uses: actions/setup-node@v3

@@ -7,21 +7,16 @@ import {
 } from './common'
 import type { WebhookVerifier, VerifyOptions } from './common'
 
-export interface Sha256Verifier extends WebhookVerifier {
-  type: 'sha256Verifier'
+export interface Base64Sha256Verifier extends WebhookVerifier {
+  type: 'base64Sha256Verifier'
 }
 
 function toNormalizedJsonString(payload: Record<string, unknown>) {
   return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, (s) => {
-    return s.substr(0, 3) + s.substr(3).toUpperCase()
+    return s.slice(0, 3) + s.slice(3).toUpperCase()
   })
 }
 
-/**
- *
- * createSignature
- *
- */
 const createSignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
@@ -30,24 +25,16 @@ const createSignature = ({
   secret: string
 }): string => {
   const algorithm = 'sha256'
-  const hmac = createHmac(algorithm, secret)
+  const hmac = createHmac(algorithm, Buffer.from(secret, 'base64'))
 
   payload =
     typeof payload === 'string' ? payload : toNormalizedJsonString(payload)
 
-  const digest = Buffer.from(
-    algorithm + '=' + hmac.update(payload).digest('hex'),
-    'utf8'
-  )
+  const digest = hmac.update(payload).digest()
 
-  return digest.toString()
+  return digest.toString('base64')
 }
 
-/**
- *
- * verifySignature
- *
- */
 export const verifySignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
@@ -58,27 +45,22 @@ export const verifySignature = ({
   signature: string
 }): boolean => {
   try {
-    const algorithm = signature.split('=')[0]
-    const webhookSignature = Buffer.from(signature || '', 'utf8')
-    const hmac = createHmac(algorithm, secret)
+    const webhookSignature = Buffer.from(signature || '', 'base64')
+    const hmac = createHmac('sha256', Buffer.from(secret, 'base64'))
 
     payload =
       typeof payload === 'string' ? payload : toNormalizedJsonString(payload)
 
-    const digest = Buffer.from(
-      algorithm + '=' + hmac.update(payload).digest('hex'),
-      'utf8'
-    )
+    const digest = hmac.update(payload).digest()
 
     // constant time comparison to prevent timing attacks
     // https://stackoverflow.com/a/31096242/206879
     // https://en.wikipedia.org/wiki/Timing_attack
-    const verified =
+    if (
       webhookSignature.length === digest.length &&
       timingSafeEqual(digest, webhookSignature)
-
-    if (verified) {
-      return verified
+    ) {
+      return true
     }
 
     throw new WebhookVerificationError()
@@ -90,14 +72,15 @@ export const verifySignature = ({
 }
 
 /**
+ * Base64 SHA256 HMAC Payload Verifier
  *
- * SHA256 HMAC Payload Verifier
- *
- * Based on GitHub's webhook payload verification
- * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
- *
+ * Based on Svix's webhook payload verification
+ * @see https://docs.svix.com/receiving/verifying-payloads/how-manual
+ * @see https://github.com/svix/svix-webhooks/blob/main/javascript/src/index.ts
  */
-const sha256Verifier = (_options?: VerifyOptions): Sha256Verifier => {
+const base64Sha256Verifier = (
+  _options?: VerifyOptions
+): Base64Sha256Verifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret })
@@ -105,8 +88,8 @@ const sha256Verifier = (_options?: VerifyOptions): Sha256Verifier => {
     verify: ({ payload, secret, signature }) => {
       return verifySignature({ payload, secret, signature })
     },
-    type: 'sha256Verifier',
+    type: 'base64Sha256Verifier',
   }
 }
 
-export default sha256Verifier
+export default base64Sha256Verifier
