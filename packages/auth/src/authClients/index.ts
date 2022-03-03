@@ -114,6 +114,6 @@ export const createAuthClient = (
       ).join(', ')}`
     )
   }
-  // @ts-ignore
+
   return typesToClients[type](client, config)
 }
