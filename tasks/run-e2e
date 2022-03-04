@@ -126,9 +126,9 @@ const copyFrameworkPackages = () => {
   }
 }
 
-const runYarnInstall = (yarn3) => {
+const runYarnInstall = () => {
   try {
-    execa.sync(`yarn install ${yarn3 ? '--no-immutable' : ''}`, {
+    execa.sync('yarn install', {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
       stdio: 'inherit',
@@ -239,7 +239,7 @@ const tasks = [
   createProject && createRedwoodJSApp,
   yarn3 && upgradeToYarn3,
   copyFramework && addFrameworkDepsToProject,
-  copyFramework && (() => runYarnInstall(yarn3)),
+  copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
