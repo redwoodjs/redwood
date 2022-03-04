@@ -2,6 +2,8 @@ import { spawnSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
+import { isCI } from 'ci-info'
+
 import getRWPaths from '../../../lib/getRWPaths'
 
 async function upgradeYarn() {
@@ -82,11 +84,14 @@ async function upgradeYarn() {
   )
 
   console.log('Installing...')
-  spawnSync('yarn install', {
-    shell: true,
-    cwd: rwPaths.base,
-    stdio: 'inherit',
-  })
+  spawnSync(
+    ['yarn install', isCI && '--no-immutable'].filter(Boolean).join(' '),
+    {
+      shell: true,
+      cwd: rwPaths.base,
+      stdio: 'inherit',
+    }
+  )
 
   console.log()
   console.log('Done! Be sure to commit the changes')
