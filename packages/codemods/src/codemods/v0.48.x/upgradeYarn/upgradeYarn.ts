@@ -7,20 +7,23 @@ import getRWPaths from '../../../lib/getRWPaths'
 async function upgradeYarn() {
   const rwPaths = getRWPaths()
 
-  console.log('Enabling corepack...')
+  console.log('Preparing and enabling corepack...')
 
-  const { status, ...rest } = spawnSync('corepack enable', {
-    shell: true,
-    cwd: rwPaths.base,
-  })
+  const corepackPreparePO = spawnSync(
+    'corepack prepare yarn@1.22.17 --activate',
+    {
+      shell: true,
+      cwd: rwPaths.base,
+    }
+  )
 
-  if (status !== 0) {
+  if (corepackPreparePO.status !== 0) {
     throw new Error(
       [
         '',
-        'Failed to enable corepack:',
+        'Failed to prepare yarn@1.22.17 via corepack:',
         '',
-        `  ${rest.stderr.toString().trim()}`,
+        `  ${corepackPreparePO.stderr.toString().trim()}`,
         '',
         'Your node version may be less than v14.19',
         'Please install corepack globally via ',
@@ -33,6 +36,11 @@ async function upgradeYarn() {
       ].join('\n')
     )
   }
+
+  spawnSync('corepack enable', {
+    shell: true,
+    cwd: rwPaths.base,
+  })
 
   console.log('Setting yarn version to 3...')
   spawnSync('yarn set version stable', {
