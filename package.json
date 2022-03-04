@@ -84,7 +84,7 @@
     "ncp": "2.0.0",
     "node-notifier": "10.0.1",
     "nodemon": "2.0.15",
-    "npm-packlist": "3.0.0",
+    "npm-packlist": "4.0.0",
     "octokit": "1.7.1",
     "ora": "5.4.1",
     "prompts": "2.4.2",
