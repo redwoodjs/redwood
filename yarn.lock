@@ -5730,6 +5730,7 @@ __metadata:
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
+    node-fetch: 2.6.7
     pascalcase: 1.0.0
     pino: 7.8.0
     split2: 4.1.0
