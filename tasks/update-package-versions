@@ -4,7 +4,7 @@ const child = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-const version = process.argv[2]
+const version = process.argv[2].replace(/v/, '')
 if (!version) {
   console.error(
     'You must supply a version.\nUsage ./update-package-versions [version]'
@@ -62,15 +62,26 @@ child.execSync(cmd, {
 })
 console.log()
 
-console.log('Updating template...')
+// Updates create-redwood-app template
+console.log('UPDATING CRWA template...')
 console.log('Changes: ')
 const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
 updatePackageVersion(templatePath, version)
 updatePackageVersion(path.join(templatePath, 'api'), version)
 updatePackageVersion(path.join(templatePath, 'web'), version)
 console.log()
+
+// Updates __fixtures__/test-project packages
+console.log('UPDATING Test-project Fixture...')
+console.log('Changes: ')
+const fixturePath = path.join(cwd, '__fixtures__/test-project')
+updatePackageVersion(fixturePath, version)
+updatePackageVersion(path.join(fixturePath, 'api'), version)
+updatePackageVersion(path.join(fixturePath, 'web'), version)
+console.log()
+
 // Lerna adds '^' to dependencies. To pin, we need to overwrite.
-console.log("Clean up Lerna version bump dependency '^'...")
+console.log("CLEANUP Lerna version bump dependency '^'...")
 const packagesDir = path.join(cwd, 'packages')
 fs.readdirSync(packagesDir).forEach((file) => {
   if (fs.statSync(packagesDir + '/' + file).isDirectory()) {

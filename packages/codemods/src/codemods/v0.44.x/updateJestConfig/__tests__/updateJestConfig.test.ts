@@ -30,6 +30,8 @@ jest.mock('../../../../lib/fetchFileFromTemplate', () =>
   })
 )
 
+jest.setTimeout(25_000)
+
 describe('Update Jest Config', () => {
   it('Adds missing files', async () => {
     await matchFolderTransform(updateJestConfig, 'missing', {
@@ -38,8 +40,6 @@ describe('Update Jest Config', () => {
   })
 
   it('Keeps custom jest config in api and web', async () => {
-    jest.setTimeout(25_000)
-
     await matchFolderTransform(updateJestConfig, 'custom', {
       removeWhitespace: true,
     })
