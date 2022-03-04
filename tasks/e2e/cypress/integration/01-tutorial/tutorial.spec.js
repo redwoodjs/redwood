@@ -58,8 +58,10 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     cy.visit('http://localhost:8910')
 
+    waitForApiSide()
+
     // cy.get('h1').should().contains('FOO!')
-    cy.get('h1', { timeout: 3000 }).should('contain', 'Welcome to')
+    cy.get('h1', { timeout: 5000 }).should('contain', 'Welcome to')
   })
 
   test_first_page()
