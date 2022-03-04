@@ -1,6 +1,7 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { Headers } from 'node-fetch'
 
-import { normalizeRequest } from '../graphql'
+import { normalizeRequest } from '@redwoodjs/api'
 
 export const createMockedEvent = (
   httpMethod = 'POST',
@@ -62,7 +63,7 @@ test('Normalizes an aws event with base64', () => {
   )
 
   expect(normalizeRequest(corsEventB64)).toEqual({
-    headers: corsEventB64.headers,
+    headers: new Headers(corsEventB64.headers),
     method: 'POST',
     query: null,
     body: {
@@ -75,7 +76,7 @@ test('Handles CORS requests with and without b64 encoded', () => {
   const corsEventB64 = createMockedEvent('OPTIONS', undefined, true)
 
   expect(normalizeRequest(corsEventB64)).toEqual({
-    headers: corsEventB64.headers,
+    headers: new Headers(corsEventB64.headers),
     method: 'OPTIONS',
     query: null,
     body: undefined,
@@ -84,7 +85,7 @@ test('Handles CORS requests with and without b64 encoded', () => {
   const corsEventWithoutB64 = createMockedEvent('OPTIONS', undefined, false)
 
   expect(normalizeRequest(corsEventWithoutB64)).toEqual({
-    headers: corsEventB64.headers,
+    headers: new Headers(corsEventB64.headers),
     method: 'OPTIONS',
     query: null,
     body: undefined,
