@@ -517,6 +517,29 @@ describe('dbAuth', () => {
       expect(response.body).toEqual('{"error":"Logout error"}')
     })
 
+    it('handlers CORS OPTIONS request', async () => {
+      event.httpMethod = 'OPTIONS'
+      event.body = JSON.stringify({ method: 'auth' })
+
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cors: {
+          origin: 'https://www.myRedwoodWebSide.com',
+          credentials: true,
+        },
+      })
+      dbAuth.logout = jest.fn(() => {
+        throw Error('Logout error')
+      })
+      const response = await dbAuth.invoke()
+
+      expect(response.statusCode).toEqual(200)
+      expect(response.headers['access-control-allow-credentials']).toBe('true')
+      expect(response.headers['access-control-allow-origin']).toBe(
+        'https://www.myRedwoodWebSide.com'
+      )
+    })
+
     it('calls the appropriate auth function', async () => {
       event.body = JSON.stringify({ method: 'logout' })
       event.httpMethod = 'POST'
