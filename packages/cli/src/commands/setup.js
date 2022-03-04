@@ -5,8 +5,6 @@ import detectRwVersion from '../middleware/detectProjectRwVersion'
 export const command = 'setup <commmand>'
 export const description = 'Initialize project config and install packages'
 
-import detectRwVersion from '../middleware/detectProjectRwVersion'
-
 export const builder = (yargs) =>
   yargs
     .commandDir('./setup', {
