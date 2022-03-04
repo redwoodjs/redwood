@@ -1998,11 +1998,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.16.1":
-  version: 2.16.1
-  resolution: "@clerk/clerk-js@npm:2.16.1"
+"@clerk/clerk-js@npm:2.17.0":
+  version: 2.17.0
+  resolution: "@clerk/clerk-js@npm:2.17.0"
   dependencies:
-    "@clerk/types": ^1.27.1
+    "@clerk/types": ^1.28.0
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.3.1
@@ -2014,7 +2014,7 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: b982c7ba38865ea9325f0cb892d1921f8fd22eb956d1eecf2ee8bb06d5f203b87a7daff66dd5b815d3a195c5c60f4e079bc294679c3fc31bcd4234a36bc36a95
+  checksum: 2865237dd889495b34053303e3181c807b863c22acf65f271341ed39d3f92b0e6847b6e4a20397cb93c01bc01740a6303ceb0f9557ad75d4839e2c7dc1be0381
   languageName: node
   linkType: hard
 
@@ -2036,10 +2036,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.27.1, @clerk/types@npm:^1.27.1":
+"@clerk/types@npm:1.27.1":
   version: 1.27.1
   resolution: "@clerk/types@npm:1.27.1"
   checksum: 19aa14ffda83ab5f1d0f7df72e940e69b281c164328a2c4687cadf74d70d2899a681f00c27361334445e3196528a5798b422741562d6e7272f0e2474b0e103ac
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^1.28.0":
+  version: 1.28.0
+  resolution: "@clerk/types@npm:1.28.0"
+  checksum: 323251470698a9d377d539ad8954bc2d0cd4959358d67e7c426971a3dc76a98fdbd955b6198cfec8e71c6a65b1f6da085bcb279e1685d2c8ede3cd0a091763e7
   languageName: node
   linkType: hard
 
@@ -5763,7 +5770,7 @@ __metadata:
     "@azure/msal-browser": 2.22.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.16.1
+    "@clerk/clerk-js": 2.17.0
     "@clerk/clerk-sdk-node": 2.9.4
     "@clerk/types": 1.27.1
     "@supabase/supabase-js": 1.30.7
