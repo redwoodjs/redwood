@@ -110,7 +110,7 @@ export class WebhookSignError extends WebhookError {
  * @param {number} eventTimestamp - Optional timestamp to use as the event
  * timestamp, in msec. If this is provided the webhook verification will fail
  * if the eventTimestamp is too far from the current time (or the time passed
- * as the `timestamp` option)
+ * as the `currentTimestampOverride` option)
  * @param {number} tolerance - Optional tolerance in msec
  * @param {string} issuer - Options JWT issuer for JWTVerifier
  */
