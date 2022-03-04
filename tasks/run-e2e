@@ -88,20 +88,8 @@ const upgradeToYarn3 = () => {
   }
 }
 
-const addFrameworkDepsToProject = (yarn3) => {
+const addFrameworkDepsToProject = () => {
   try {
-    if (yarn3) {
-      execa.sync('yarn project:deps:yarn3', {
-        cwd: REDWOODJS_FRAMEWORK_PATH,
-        shell: true,
-        stdio: 'inherit',
-        env: {
-          RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
-          RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
-        },
-      })
-    }
-
     execa.sync('yarn project:deps', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
@@ -250,7 +238,7 @@ const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
   yarn3 && upgradeToYarn3,
-  copyFramework && (() => addFrameworkDepsToProject(yarn3)),
+  copyFramework && addFrameworkDepsToProject,
   copyFramework && (() => runYarnInstall(yarn3)),
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
