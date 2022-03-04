@@ -5895,7 +5895,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 10.2.4
     core-js: 3.21.1
-    css-loader: 6.6.0
+    css-loader: 6.7.0
     css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.1.0
     esbuild: 0.14.25
@@ -12812,12 +12812,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.6.0":
-  version: 6.6.0
-  resolution: "css-loader@npm:6.6.0"
+"css-loader@npm:6.7.0":
+  version: 6.7.0
+  resolution: "css-loader@npm:6.7.0"
   dependencies:
     icss-utils: ^5.1.0
-    postcss: ^8.4.5
+    postcss: ^8.4.7
     postcss-modules-extract-imports: ^3.0.0
     postcss-modules-local-by-default: ^4.0.0
     postcss-modules-scope: ^3.0.0
@@ -12826,7 +12826,7 @@ __metadata:
     semver: ^7.3.5
   peerDependencies:
     webpack: ^5.0.0
-  checksum: e43347d9342aa98546abf22eb02f02cfd5d7e5565b081b85aa527918e0c02fb98b736c81de0e4784e13801e6e5b942a3ba465bdb52637c4dfc9503ab3efc5cff
+  checksum: 494e873cc594d275c13e5a7c0fbbe19d11d4f8a3ad53b40e27a7f516f77aa1c0d8d464f7bbc0e7c1389e8a9bf33dd585b715e1d0b38101b47825ffd755a797ab
   languageName: node
   linkType: hard
 
@@ -21934,12 +21934,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.2.0":
-  version: 3.3.0
-  resolution: "nanoid@npm:3.3.0"
+"nanoid@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "nanoid@npm:3.3.1"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: f023c74162096771f2240084c1b4002545efcd7f3bd1ad708d28b42e9acaab7a92a945afe7feff7ee685f09ea1f7e2fd803c50e4ead522121a23301dc2683655
+  checksum: 1034d71e438490e620bfc2419bb203e7dccbc122fd2e62a6101227b50d08992fdc114de197e77604c419dbcf4f41b142e6ff61d0516db4d24cd32f9bbc390f6b
   languageName: node
   linkType: hard
 
@@ -24252,14 +24252,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.3.5, postcss@npm:^8.4.5":
-  version: 8.4.6
-  resolution: "postcss@npm:8.4.6"
+"postcss@npm:^8.2.15, postcss@npm:^8.3.5, postcss@npm:^8.4.7":
+  version: 8.4.7
+  resolution: "postcss@npm:8.4.7"
   dependencies:
-    nanoid: ^3.2.0
+    nanoid: ^3.3.1
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: 0a7ffac250d87776f3c27c9d5e9b0c9edf5fba710655d4be2a79956fff1629beb4a0239a2896ce4d26b2732f810ab6f74c629f8a85f78fa68efe66f31bd6fd2f
+  checksum: 46d7d85f2c63f52ce28f6cca47afb2d232b6ec7a0f3da401ce631ea46606874c26939cb152395b1d3bec683d62fc126941d3b3d163a8f27ddcda2f8938f8a179
   languageName: node
   linkType: hard
 
