@@ -5846,7 +5846,6 @@ __metadata:
     "@types/jscodeshift": 0.11.3
     "@types/prettier": 2.4.4
     "@vscode/ripgrep": 1.14.2
-    ci-info: 3.3.0
     core-js: 3.21.1
     deepmerge: 4.2.2
     fast-glob: 3.2.11
