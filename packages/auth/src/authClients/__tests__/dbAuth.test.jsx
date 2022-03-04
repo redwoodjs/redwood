@@ -1,13 +1,19 @@
-import fetch from 'node-fetch'
-
 import { dbAuth } from '../dbAuth'
 
 global.RWJS_API_DBAUTH_URL = '/.redwood/functions'
 
 jest.mock('node-fetch', () => {
-  return jest.fn().mockImplementation(() => {
+  return
+})
+
+beforeAll(() => {
+  global.fetch = jest.fn().mockImplementation(() => {
     return { text: () => '', json: () => ({}) }
   })
+})
+
+beforeEach(() => {
+  global.fetch.mockClear()
 })
 
 describe('dbAuth', () => {
@@ -15,7 +21,7 @@ describe('dbAuth', () => {
     const client = dbAuth(() => null)
     await client.getToken()
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
       {
         credentials: 'same-origin',
@@ -29,7 +35,7 @@ describe('dbAuth', () => {
     })
     await client.forgotPassword('username')
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -43,7 +49,7 @@ describe('dbAuth', () => {
     })
     await client.getToken()
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
       {
         credentials: 'include',
@@ -57,7 +63,7 @@ describe('dbAuth', () => {
     })
     await client.login({ username: 'username', password: 'password' })
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -71,7 +77,7 @@ describe('dbAuth', () => {
     })
     await client.logout()
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -85,7 +91,7 @@ describe('dbAuth', () => {
     })
     await client.resetPassword({})
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -99,7 +105,7 @@ describe('dbAuth', () => {
     })
     await client.signup({})
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -113,7 +119,7 @@ describe('dbAuth', () => {
     })
     await client.validateResetToken('token')
 
-    expect(fetch).toBeCalledWith(
+    expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
