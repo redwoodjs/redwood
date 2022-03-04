@@ -5915,7 +5915,7 @@ __metadata:
     svg-react-loader: 0.4.6
     typescript: 4.6.2
     url-loader: 4.1.1
-    webpack: 5.69.1
+    webpack: 5.70.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.2
     webpack-dev-server: 4.7.4
@@ -14139,13 +14139,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.8.3":
-  version: 5.9.0
-  resolution: "enhanced-resolve@npm:5.9.0"
+"enhanced-resolve@npm:^5.9.2":
+  version: 5.9.2
+  resolution: "enhanced-resolve@npm:5.9.2"
   dependencies:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
-  checksum: 396fb1a2ab2fcfc1b8b68fb29dfa50f1bf113d075230318f6a2eb740bd49113d84903eaf1755e47eda4667d456b7800ee3f7890d3cb18aa69ac6c5d714bffe59
+  checksum: 0732469279b1ee1b4a46bacb84298d179e9285a6365f83f5076da5841f1213eeb8556b0761bf3a8c4b194e54f1fa7c4c6adbb294a34b8ef0334ab18d1b22554e
   languageName: node
   linkType: hard
 
@@ -30395,9 +30395,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.69.1, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.69.1
-  resolution: "webpack@npm:5.69.1"
+"webpack@npm:5.70.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.70.0
+  resolution: "webpack@npm:5.70.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -30408,7 +30408,7 @@ __metadata:
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.8.3
+    enhanced-resolve: ^5.9.2
     es-module-lexer: ^0.9.0
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -30428,7 +30428,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: a6f88586b36777fe1aa7b472549ea47477bad53b9cb769c020b5c962df70cf50393ebdf52998e99c5c20a9717a7eb2f61ce64574fd2ded9564112c8dcae01fd4
+  checksum: 35daf94ac734f7c456a5065161e3cf2420bbf99c71369bec9d4f9045bd4e8aac7ff6568e1aa90da9e7af421f4ea695ca17a52c063e61b1b056441da884efde16
   languageName: node
   linkType: hard
 
