@@ -5906,7 +5906,7 @@ __metadata:
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
-    mini-css-extract-plugin: 2.5.3
+    mini-css-extract-plugin: 2.6.0
     nodemon: 2.0.15
     null-loader: 4.0.1
     react-refresh: 0.11.0
@@ -5956,7 +5956,7 @@ __metadata:
     eslint-plugin-jest-dom: 4.0.1
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
-    eslint-plugin-react: 7.29.2
+    eslint-plugin-react: 7.29.3
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
     prettier: 2.5.1
@@ -6152,7 +6152,7 @@ __metadata:
     "@types/lodash": 4.14.179
     "@types/lru-cache": 5.1.1
     "@types/node": 16.11.26
-    "@types/vscode": 1.64.0
+    "@types/vscode": 1.65.0
     camelcase: 6.3.0
     deepmerge: 4.2.2
     dotenv-defaults: 5.0.0
@@ -8421,10 +8421,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:1.64.0":
-  version: 1.64.0
-  resolution: "@types/vscode@npm:1.64.0"
-  checksum: 5d14a8211887d2f368a57cdb1fe2b99e0fe175daa2dddb9d1413384f78191fe6e40a3c27c0216c05b957178c6facb6d7e841ce03c96e76d53fbd061cec71cbd4
+"@types/vscode@npm:1.65.0":
+  version: 1.65.0
+  resolution: "@types/vscode@npm:1.65.0"
+  checksum: 9ad8f12514a7763f80ef68a804e24c1509ab9094e94885780ac1c20f1d3fb998c0cc98bd36f5c0def883edc30e82229999b4c1f5ddce04b4167345cc1a0919ec
   languageName: node
   linkType: hard
 
@@ -14780,9 +14780,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.29.2":
-  version: 7.29.2
-  resolution: "eslint-plugin-react@npm:7.29.2"
+"eslint-plugin-react@npm:7.29.3":
+  version: 7.29.3
+  resolution: "eslint-plugin-react@npm:7.29.3"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flatmap: ^1.2.5
@@ -14800,7 +14800,7 @@ __metadata:
     string.prototype.matchall: ^4.0.6
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: a81b5ce16bf0cb9d32f9ca2409783c75fb2e46d580563b42f4dce330ac3826fa769dabfe49836172e1710d77589c8ef29cef023a985afc32a1f7b6297db9757b
+  checksum: 6d2ecffe26103769f7755bec69336158f201cd9435378d467cd68cde62449b61db2a3400210a82557b873d52d77da10a84eb8ba7e4b42eab8a248c8f917dd97a
   languageName: node
   linkType: hard
 
@@ -16722,7 +16722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:7.2.0, glob@npm:^7.0.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
+"glob@npm:7.2.0, glob@npm:^7.0.0, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.2.0":
   version: 7.2.0
   resolution: "glob@npm:7.2.0"
   dependencies:
@@ -21525,14 +21525,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.5.3":
-  version: 2.5.3
-  resolution: "mini-css-extract-plugin@npm:2.5.3"
+"mini-css-extract-plugin@npm:2.6.0":
+  version: 2.6.0
+  resolution: "mini-css-extract-plugin@npm:2.6.0"
   dependencies:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: aeb70639d0f7af6e7ee96842a30ad5446922ed5afca4c7bb36c868809b839e59fcfe78d78c89a7b2270d0d6c6d3e5cbccce6c471a66e18afa7280ccb0135eaa4
+  checksum: 1d13b97d03cbcc083bbda474b5f18777664168ddd9aba186b3e9f31709205bdf263dded907af4fc82bce0ab88ba8cbee4778a2d6c6b24fca8d82a227afa90dc9
   languageName: node
   linkType: hard
 
@@ -22355,7 +22355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-bundled@npm:^1.1.1":
+"npm-bundled@npm:^1.1.1, npm-bundled@npm:^1.1.2":
   version: 1.1.2
   resolution: "npm-bundled@npm:1.1.2"
   dependencies:
@@ -22407,17 +22407,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-packlist@npm:3.0.0":
-  version: 3.0.0
-  resolution: "npm-packlist@npm:3.0.0"
+"npm-packlist@npm:4.0.0":
+  version: 4.0.0
+  resolution: "npm-packlist@npm:4.0.0"
   dependencies:
-    glob: ^7.1.6
+    glob: ^7.2.0
     ignore-walk: ^4.0.1
-    npm-bundled: ^1.1.1
+    npm-bundled: ^1.1.2
     npm-normalize-package-bin: ^1.0.1
   bin:
     npm-packlist: bin/index.js
-  checksum: 88d6c56beee05d0541314813959ea52250f5e9d44cc79854a066d955b204a2c838c66f39f0819f60dd233f8ecb8f10d59ca6bf39464c2f02ecba9de9af128099
+  checksum: 5110dc0b9cc06e72769804de4f1e8b552984fd6bd6a2cdd3011cf62c68b29e488918b836071b22fa6841ef8094701dbee050bff2edb86de7e1572600eb3fc8bb
   languageName: node
   linkType: hard
 
@@ -26256,7 +26256,7 @@ __metadata:
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.15
-    npm-packlist: 3.0.0
+    npm-packlist: 4.0.0
     octokit: 1.7.1
     ora: 5.4.1
     prompts: 2.4.2
