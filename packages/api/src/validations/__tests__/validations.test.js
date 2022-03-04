@@ -37,6 +37,10 @@ describe('validate absence', () => {
       expect(e.message).toEqual('No email please')
     }
   })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { absence: undefined })).not.toThrow()
+  })
 })
 
 describe('validate acceptance', () => {
@@ -76,6 +80,10 @@ describe('validate acceptance', () => {
     } catch (e) {
       expect(e.message).toEqual('gotta accept')
     }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { acceptance: undefined })).not.toThrow()
   })
 })
 
@@ -123,6 +131,10 @@ describe('validate email', () => {
       expect(e.message).toEqual('gotta accept')
     }
   })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { email: undefined })).not.toThrow()
+  })
 })
 
 describe('validate exclusion', () => {
@@ -158,6 +170,10 @@ describe('validate exclusion', () => {
     } catch (e) {
       expect(e.message).toEqual('Bad choice')
     }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { exclusion: undefined })).not.toThrow()
   })
 })
 
@@ -221,6 +237,10 @@ describe('validate format', () => {
     }
     expect.assertions(1)
   })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { format: undefined })).not.toThrow()
+  })
 })
 
 describe('validate inclusion', () => {
@@ -256,6 +276,10 @@ describe('validate inclusion', () => {
     } catch (e) {
       expect(e.message).toEqual('Bad choice')
     }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { inclusion: undefined })).not.toThrow()
   })
 })
 
@@ -379,6 +403,10 @@ describe('validate length', () => {
     expect(() =>
       validate('foobar', 'username', { length: { between: [2, 10] } })
     ).not.toThrow()
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { length: undefined })).not.toThrow()
   })
 })
 
@@ -709,6 +737,10 @@ describe('validate numericality', () => {
     }
     expect.assertions(6)
   })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { numericality: undefined })).not.toThrow()
+  })
 })
 
 describe('validate presence', () => {
@@ -772,6 +804,10 @@ describe('validate presence', () => {
     } catch (e) {
       expect(e.message).toEqual('Gimmie an email')
     }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { presence: undefined })).not.toThrow()
   })
 })
 
@@ -844,6 +880,12 @@ describe('validate', () => {
         format: /^\d+$/,
       })
     ).not.toThrow()
+  })
+
+  it('will not throw when no recipes are provided', () => {
+    expect(() => {
+      validate('foo', {})
+    }).not.toThrow()
   })
 })
 

@@ -25,7 +25,9 @@ export interface AuthorizationHeader {
 export const parseAuthorizationHeader = (
   event: APIGatewayProxyEvent
 ): AuthorizationHeader => {
-  const parts = event.headers?.authorization?.split(' ')
+  const parts = (
+    event.headers?.authorization || event.headers?.Authorization
+  )?.split(' ')
   if (parts?.length !== 2) {
     throw new Error('The `Authorization` header is not valid.')
   }

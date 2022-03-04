@@ -161,7 +161,7 @@ export const getApiSideBabelConfigPath = () => {
   if (fs.existsSync(p)) {
     return p
   } else {
-    return false
+    return undefined
   }
 }
 
@@ -169,7 +169,7 @@ export const getApiSideDefaultBabelConfig = () => {
   return {
     presets: getApiSideBabelPresets(),
     plugins: getApiSideBabelPlugins(),
-    configFile: getApiSideBabelConfigPath(),
+    extends: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
   }
@@ -187,7 +187,7 @@ export const registerApiSideBabelHook = ({
     presets: getApiSideBabelPresets({
       presetEnv: true,
     }),
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx'],
     plugins: [...defaultOptions.plugins, ...plugins],
     cache: false,
     ...rest,

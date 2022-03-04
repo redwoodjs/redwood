@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "api",
+      "web",
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "@redwoodjs/core": "0.48.0",
+    "autoprefixer": "10.4.2",
+    "postcss": "8.4.7",
+    "postcss-loader": "6.2.1",
+    "tailwindcss": "3.0.23"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "root": true
+  },
+  "engines": {
+    "node": ">=14.17 <=16.x",
+    "yarn": ">=1.15 <2"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
+  },
+  "scripts": {
+    "postinstall": ""
+  }
+}

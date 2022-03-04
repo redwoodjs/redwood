@@ -20,6 +20,7 @@ export const generateGraphQLSchema = async () => {
         ],
         config: {
           scalars: {
+            BigInt: 'number',
             DateTime: 'string',
             Date: 'string',
             JSON: 'Record<string, unknown>',

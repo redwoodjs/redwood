@@ -1,6 +1,6 @@
 const query = `
     query BlogPostsQuery {
-        posts {
+        blogPosts: posts {
             id
             title
             body
@@ -9,7 +9,7 @@ const query = `
     }
 `
 const successBody = `<div className="divide-y divide-grey-700">
-{posts.map((post) => <BlogPost key={post.id} post={post} />)}
+{blogPosts.map((post) => <BlogPost key={post.id} blogPost={post} />)}
 </div>`
 
 export default (file, api) => {
@@ -36,17 +36,6 @@ export default (file, api) => {
         [j.templateElement({ raw: query, cooked: query }, true)],
         []
       )
-      return node
-    })
-
-  root
-    .find(j.Identifier, {
-      type: 'Identifier',
-      name: 'blogPosts',
-    })
-    .replaceWith((nodePath) => {
-      const { node } = nodePath
-      node.name = 'posts'
       return node
     })
 

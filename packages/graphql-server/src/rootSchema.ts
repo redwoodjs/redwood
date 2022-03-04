@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
+  BigIntResolver,
   DateResolver,
   TimeResolver,
   DateTimeResolver,
@@ -24,6 +25,7 @@ interface GlobalContext extends Record<string, unknown> {}
  * "generateTypeDefGraphQL" on @redwoodjs/internal.
  */
 export const schema = gql`
+  scalar BigInt
   scalar Date
   scalar Time
   scalar DateTime
@@ -42,6 +44,7 @@ export const schema = gql`
 `
 
 export interface Resolvers {
+  BigInt: typeof BigIntResolver
   Date: typeof DateResolver
   Time: typeof TimeResolver
   DateTime: typeof DateTimeResolver
@@ -51,6 +54,7 @@ export interface Resolvers {
 }
 
 export const resolvers: Resolvers = {
+  BigInt: BigIntResolver,
   Date: DateResolver,
   Time: TimeResolver,
   DateTime: DateTimeResolver,

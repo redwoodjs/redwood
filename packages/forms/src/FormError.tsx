@@ -53,7 +53,7 @@ const FormError = ({
 
   let rootMessage = error.message
   const messages: string[] = []
-  const hasGraphQLError = !!error.graphQLErrors[0]
+  const hasGraphQLError = !!error.graphQLErrors?.[0]
   const hasNetworkError =
     !!error.networkError && Object.keys(error.networkError).length > 0
 

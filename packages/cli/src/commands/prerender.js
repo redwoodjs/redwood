@@ -7,6 +7,7 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import { getPaths } from '@redwoodjs/internal'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 
@@ -104,6 +105,8 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
                   routeToPrerender.path
                 }" ${c.info('-'.repeat(10))}`
               )
+
+              errorTelemetry(process.argv, `Error prerendering: ${e.message}`)
 
               console.error(c.error(e.stack))
               console.log()

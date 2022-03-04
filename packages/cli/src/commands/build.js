@@ -8,6 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { buildApi, loadAndValidateSdls } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -97,7 +98,7 @@ export const handler = async ({
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
         '@redwoodjs/core/config/webpack.perf.js'
       )}`,
-      { stdio: 'inherit', shell: true }
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
     )
     // We do not want to continue building...
     return
@@ -109,7 +110,7 @@ export const handler = async ({
       `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
         '@redwoodjs/core/config/webpack.stats.js'
       )}`,
-      { stdio: 'inherit', shell: true }
+      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
     )
     // We do not want to continue building...
     return
@@ -191,9 +192,12 @@ export const handler = async ({
   })
 
   try {
-    await jobs.run()
+    await timedTelemetry(process.argv, { type: 'build' }, async () => {
+      await jobs.run()
+    })
   } catch (e) {
     console.log(c.error(e.message))
+    errorTelemetry(process.argv, e.message)
     process.exit(1)
   }
 }

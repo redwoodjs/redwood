@@ -6,6 +6,7 @@
 // Usage:
 // `$ yarn create redwood-app ./path/to/new-project`
 
+import { spawn } from 'child_process'
 import path from 'path'
 
 import chalk from 'chalk'
@@ -48,6 +49,7 @@ const {
   'yarn-install': yarnInstall,
   typescript,
   overwrite,
+  telemetry: telemetry,
 } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
@@ -67,7 +69,13 @@ const {
   .option('overwrite', {
     default: false,
     type: 'boolean',
-    describe: 'Create even if target directory is empty',
+    describe: "Create even if target directory isn't empty",
+  })
+  .option('telemetry', {
+    default: true,
+    type: 'boolean',
+    describe:
+      'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
   })
   .version(version)
   .strict().argv
@@ -178,6 +186,42 @@ const installNodeModulesTasks = ({ newAppDir }) => {
   ]
 }
 
+const sendTelemetry = ({ error } = {}) => {
+  // send 'create' telemetry event, or disable for new app
+  if (telemetry) {
+    const command = process.argv
+    // make command show 'create redwood-app [path] --flags'
+    command.splice(2, 0, 'create', 'redwood-app')
+    command[4] = '[path]'
+
+    let args = [
+      '--root',
+      newAppDir,
+      '--argv',
+      JSON.stringify(command),
+      '--duration',
+      Date.now() - startTime,
+      '--rwVersion',
+      version,
+    ]
+    if (error) {
+      args = [...args, '--error', `"${error}"`]
+    }
+
+    spawn(process.execPath, [path.join(__dirname, 'telemetry.js'), ...args], {
+      detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
+      stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
+    }).unref()
+  } else {
+    fs.appendFileSync(
+      path.join(newAppDir, '.env'),
+      'REDWOOD_DISABLE_TELEMETRY=1\n'
+    )
+  }
+}
+
+const startTime = Date.now()
+
 new Listr(
   [
     {
@@ -213,6 +257,8 @@ new Listr(
 )
   .run()
   .then(() => {
+    sendTelemetry()
+
     // zOMG the semicolon below is a real Prettier thing. What??
     // https://prettier.io/docs/en/rationale.html#semicolons
     ;[
@@ -265,6 +311,8 @@ new Listr(
   .catch((e) => {
     console.log()
     console.log(e)
+    sendTelemetry({ error: e.message })
+
     if (fs.existsSync(newAppDir)) {
       console.log(
         style.warning(`\nWarning: Directory `) +

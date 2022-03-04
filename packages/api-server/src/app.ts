@@ -1,18 +1,13 @@
-import Fastify, { FastifyInstance } from 'fastify'
+import Fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 
-export const createApp = (): FastifyInstance => {
-  const app = Fastify({
-    logger: {
-      // These settings are identical to the default Redwood logger
-      prettyPrint: process.env.NODE_ENV === 'development' && {
-        colorize: true,
-        ignore: 'hostname,pid',
-        levelFirst: true,
-        messageFormat: false,
-        translateTime: true,
-      },
-    },
-  })
+const DEFAULT_OPTIONS = {
+  logger: {
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+  },
+}
+
+export const createApp = (options?: FastifyServerOptions): FastifyInstance => {
+  const app = Fastify(options || DEFAULT_OPTIONS)
 
   return app
 }

@@ -32,7 +32,7 @@ export const runPrerender = async ({
     ],
   })
 
-  registerShims()
+  registerShims(routerPath)
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)

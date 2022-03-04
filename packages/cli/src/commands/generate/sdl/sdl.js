@@ -7,6 +7,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
   generateTemplate,
@@ -232,7 +233,7 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
         },
         {
           title: `Generating types ...`,
-          task: () => generateTypes,
+          task: generateTypes,
         },
       ].filter(Boolean),
       { collapse: false, exitOnError: true }
@@ -240,6 +241,7 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
 
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

@@ -4,7 +4,11 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { findScripts, registerApiSideBabelHook } from '@redwoodjs/internal'
+import {
+  findScripts,
+  getWebSideDefaultBabelConfig,
+  registerApiSideBabelHook,
+} from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -24,7 +28,7 @@ const runScript = async (scriptPath, scriptArgs) => {
   return
 }
 
-export const command = 'exec <name>'
+export const command = 'exec [name]'
 export const description = 'Run scripts generated with yarn generate script'
 export const builder = (yargs) => {
   yargs
@@ -37,6 +41,12 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate the Prisma client',
     })
+    .option('list', {
+      alias: 'l',
+      type: 'boolean',
+      default: false,
+      description: 'List available scripts',
+    })
     .strict(false)
     .epilogue(
       `Also see the ${terminalLink(
@@ -46,9 +56,29 @@ export const builder = (yargs) => {
     )
 }
 
+const printAvailableScriptsToConsole = () => {
+  console.log('Available scripts:')
+  findScripts().forEach((scriptPath) => {
+    const { name } = path.parse(scriptPath)
+    console.log(c.info(`- ${name}`))
+  })
+  console.log()
+}
+
 export const handler = async (args) => {
-  const { name, prisma, ...scriptArgs } = args
+  const { name, prisma, list, ...scriptArgs } = args
+  if (list || !name) {
+    printAvailableScriptsToConsole()
+    return
+  }
+
   const scriptPath = path.join(getPaths().scripts, name)
+
+  const {
+    overrides: _overrides,
+    plugins: webPlugins,
+    ...otherWebConfig
+  } = getWebSideDefaultBabelConfig()
 
   // Import babel config for running script
   registerApiSideBabelHook({
@@ -59,7 +89,10 @@ export const handler = async (args) => {
           alias: {
             $api: getPaths().api.base,
             $web: getPaths().web.base,
+            api: getPaths().api.base,
+            web: getPaths().web.base,
           },
+          loglevel: 'silent', // to silence the unnecessary warnings
         },
         'exec-$side-module-resolver',
       ],
@@ -74,6 +107,7 @@ export const handler = async (args) => {
               alias: {
                 src: getPaths().api.src,
               },
+              loglevel: 'silent',
             },
             'exec-api-src-module-resolver',
           ],
@@ -82,16 +116,19 @@ export const handler = async (args) => {
       {
         test: ['./web/'],
         plugins: [
+          ...webPlugins,
           [
             'babel-plugin-module-resolver',
             {
               alias: {
                 src: getPaths().web.src,
               },
+              loglevel: 'silent',
             },
             'exec-web-src-module-resolver',
           ],
         ],
+        ...otherWebConfig,
       },
     ],
   })
@@ -103,12 +140,7 @@ export const handler = async (args) => {
       c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
     )
 
-    console.log('Available scripts:')
-    findScripts().forEach((scriptPath) => {
-      const { name } = path.parse(scriptPath)
-      console.log(c.info(`- ${name}`))
-    })
-    console.log()
+    printAvailableScriptsToConsole()
     process.exit(1)
   }
 

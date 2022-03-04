@@ -3,34 +3,49 @@
   <h1 align="center">Redwood</h1>
 </p>
 
-_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than two hundred amazing contributors (see end of file for a full list)._
+_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than
+250 amazing contributors (see end of file for a full list)._
 
-**Redwood is an opinionated, full-stack, serverless-ready web application framework
-that will allow you to build and deploy with ease.**
-Imagine a React frontend, statically delivered by CDN, that talks via GraphQL to
-your backend running on AWS Lambdas (or containers) around the world, all deployable with just a
-`git push`—that's Redwood. By making a lot of decisions for you, Redwood lets
-you get to work on what makes your application special, instead of wasting
-cycles choosing and re-choosing various technologies and configurations. Plus,
-because Redwood is a proper framework, you benefit from continued performance
-and feature upgrades over time and with minimum effort.
+**Redwood is an opinionated, full-stack, JavaScript/TypeScript web application
+framework designed to keep you moving fast as your app grows from side project
+to startup.**
 
-Redwood is the latest open source project initiated by Tom Preston-Werner, cofounder of GitHub (most popular code host on the planet), creator of Jekyll (one of the first and most popular static site generators), creator of Gravatar (the most popular avatar service on the planet), author of the Semantic Versioning specification (powers the Node packaging ecosystem), and inventor of TOML (an obvious, minimal configuration language used by many projects).
+At the highest level, a Redwood app is a React frontend that talks to a custom
+GraphQL API. The API uses Prisma to operate on a database. Out of the box you
+get tightly integrated testing with Jest, logging with Pino, and a UI component
+catalog with Storybook. Setting up authentication (like Auth0) or CSS frameworks
+(like Tailwind CSS) are a single command line invocation away. And to top it
+off, Redwood's architecture allows you to deploy to either serverless providers
+(e.g. Netlify, Vercel) or traditional server and container providers (e.g. AWS,
+Render) with nearly no code changes between the two!
 
-> **NOTICE:** RedwoodJS is very close to a stable version 1.0. In the last two years,
-> the project has matured significantly and is already used in production by a number
-> of startups. We intend to have a 1.0 release candidate before the end of 2021 and
-> to release a truly production-ready 1.0 in early 2022.
+By making a lot of decisions for you, Redwood lets you get to work on what makes
+your application special, instead of wasting cycles choosing and re-choosing
+various technologies and configurations. Plus, because Redwood is a proper
+framework, you benefit from continued performance and feature upgrades over time
+and with minimum effort.
 
-> **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
-> [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
+Redwood is the latest open source project initiated by Tom Preston-Werner,
+cofounder of GitHub (most popular code host on the planet), creator of Jekyll
+(one of the first and most popular static site generators), creator of Gravatar
+(the most popular avatar service on the planet), author of the Semantic
+Versioning specification (powers the Node packaging ecosystem), and inventor of
+TOML (an obvious, minimal configuration language used by many projects).
 
-> **QUICK START:** You can install and run a full-stack Redwood application on your
-> machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
-> guide to get started.
+> **NOTICE:** RedwoodJS is very close to a stable version 1.0. In the last two
+> years, the project has matured significantly and is already used in production
+> by a number of VC-backed startups. We are currently in the release candidate
+> phase and intend to release a final v1.0.0 in March of 2022.
 
-**EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
-like, take a look at the following projects:
+> **TUTORIAL:** The best way to get to know Redwood is by going through the
+> extensive [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
+
+> **QUICK START:** You can install and run a full-stack Redwood application on
+> your machine with only a couple commands. Check out the [Quick
+> Start](https://redwoodjs.com/docs/quick-start) guide to get started.
+
+**EXAMPLES:** If you'd like to see some simple examples of what a Redwood
+application looks like, take a look at the following projects:
 
 - [Todo](https://github.com/redwoodjs/example-todo)
 - [Blog](https://github.com/redwoodjs/example-blog)
@@ -78,52 +93,12 @@ use:
 - API Server using [Fastify](https://www.fastify.io) for Serverful deploys
 - First-class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
 
-## Roadmap
-
-We intend to have a 1.0 release candidate before the end of 2021 and to release a truly production-ready 1.0 in early 2022.
-To see all the features we plan on including in Redwood's first major release, you can check out our [Roadmap](https://redwoodjs.com/roadmap).
-
-A framework like Redwood has a lot of moving parts; the Roadmap is a great way to get a high-level overview of where the framework is relative to where we want it to be. And since we link to all of our GitHub project boards, it's also a great way to get involved!
-
-## The Redwood philosophy
-
-Redwood believes that [Jamstack](https://jamstack.org/) architecture is a huge leap forward in how we can write web
-applications that are easy to write, deploy, scale, and maintain.
-
-Redwood believes that there is power in standards, and makes decisions for you
-about which technologies to use, how to organize your code into files, and how to
-name things. With a shared understanding of the Redwood conventions, a developer
-should be able to jump into any Redwood application and get up to speed very
-quickly.
-
-Redwood believes that traditional, relational databases like PostgreSQL and
-MySQL are still the workhorses of today's web applications and should be first-class
-citizens. However, Redwood also shines with NoSQL databases like [FaunaDB](https://fauna.com/).
-
-Redwood believes that, as much as possible, you should be able to operate in a
-serverless mindset and deploy to a generic computational grid. This helps unlock
-the next point...
-
-Redwood believes that deployment and scaling should be super easy, whether deploying to serverless or traditional infrastructure. To deploy
-your application, you should only need to commit and push to your Git
-repository. To scale from zero to thousands of users should not require your
-intervention. The principles of JAMstack and serverless make this possible.
-
-Redwood believes that it should be equally useful for writing both simple, toy
-applications and complex, mission-critical applications. In addition, it should
-require very little operational work to grow your app from the former to the
-latter.
-
-Redwood believes that you can use JavaScript as your primary language on both
-the frontend and backend. Using a single language simplifies everything
-from code reuse to hiring developers.
-
 ## How it works
 
 A Redwood application is split into two parts: a frontend and a backend. This is
-represented as two node projects within a single monorepo. We use [Yarn](https://yarnpkg.com/) to make
-it easy to operate across both projects while keeping them in a single
-Git repository.
+represented as two JS/TS projects within a single monorepo. We use
+[Yarn](https://yarnpkg.com/) to make it easy to operate across both projects
+while keeping them in a single Git repository.
 
 The frontend project is called `web` and the backend project is called `api`.
 For clarity, we will refer to these in prose as "sides", i.e. the "web side" and
@@ -156,32 +131,16 @@ because Redwood conceives of a world where you may have other sides like
 "mobile", "desktop", "cli", etc., all consuming the same GraphQL API and living
 in the same monorepo.
 
-## How can it be serverless if it involves a GraphQL API and database?
+## Roadmap
 
-I'm glad you asked! Currently, Redwood can deploy your GraphQL API to a Lambda
-function. This is not appropriate for all use cases, but on hosting providers
-like Netlify, it makes deployment a breeze. As time goes on, "functions" will
-continue to enjoy performance improvements which will further increase the
-number of use cases that can take advantage of this technology.
+We intend to release a truly production-ready 1.0 in early 2022. To see all the
+features we plan on including in Redwood's first major release, you can check
+out our [Roadmap](https://redwoodjs.com/roadmap).
 
-Databases are a little trickier, especially the traditional relational ones
-like PostgreSQL and MySQL. Right now, you still need to set these up manually,
-but we are working hard with Netlify and other providers to fulfill the
-serverless dream here too.
-
-Redwood is intentionally pushing the boundaries of what's possible with
-JAMstack. In fact, the whole reason I (Tom) started working on Redwood is
-because of a tweet I posted some time ago:
-
-> Prediction: within 5 years, you’ll build your next large scale, fully featured
-> web app with #JAMstack and deploy on @Netlify.
-> [—@mojombo • 9 July 2018](https://twitter.com/mojombo/status/1016506622477135872)
-
-I kept waiting for a high quality full-stack framework to arrive, but it didn't,
-so I decided to take matters into my own hands. And that's why Redwood exists.
-
-If you are like minded, then I hope you'll join me in helping build Redwood and
-hasten the arrival of the future I predicted!
+A framework like Redwood has a lot of moving parts; the Roadmap is a great way
+to get a high-level overview of where the framework is relative to where we want
+it to be. And since we link to all of our GitHub project boards, it's also a
+great way to get involved!
 
 ## Why is it called Redwood?
 
@@ -245,6 +204,7 @@ And there you have it.
     <td align="center"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a><br /><sub>community</sub></td>
     <td align="center"><a href="https://adityaworks.com/"><img src="https://avatars.githubusercontent.com/u/2629902?v=4" width="100px;" alt=""/><br /><sub><b>Aditya Pandey</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
+    <td align="center"><a href="https://github.com/agiannelli"><img src="https://avatars.githubusercontent.com/u/53096355?v=4" width="100px;" alt=""/><br /><sub><b>Amanda Giannelli</b></sub></a><br /><sub>community</sub></td>
 </tr>
 </table>
 <!-- markdownlint-restore -->
@@ -475,114 +435,142 @@ And there you have it.
   <tr>
     <td align="center"><a href="https://github.com/VinayaSathyanarayana"><img src="https://avatars.githubusercontent.com/u/16976677?v=4" width="100px;" alt=""/><br /><sub><b>Vinaya Sathyanarayana</b></sub></a></td>
     <td align="center"><a href="https://www.willminshew.com/"><img src="https://avatars.githubusercontent.com/u/9845502?v=4" width="100px;" alt=""/><br /><sub><b>Will Minshew</b></sub></a></td>
-    <td align="center"><a href="https://github.com/agiannelli"><img src="https://avatars.githubusercontent.com/u/53096355?v=4" width="100px;" alt=""/><br /><sub><b>Amanda Giannelli</b></sub></a></td>
     <td align="center"><a href="https://www.linkedin.com/in/tawfikyasser"><img src="https://avatars.githubusercontent.com/u/54971231?v=4" width="100px;" alt=""/><br /><sub><b>Tawfik Yasser</b></sub></a></td>
     <td align="center"><a href="https://sebastienlorber.com/"><img src="https://avatars.githubusercontent.com/u/749374?v=4" width="100px;" alt=""/><br /><sub><b>Sébastien Lorber</b></sub></a></td>
+    <td align="center"><a href="https://github.com/o0charlie0o"><img src="https://avatars.githubusercontent.com/u/1259226?v=4" width="100px;" alt=""/><br /><sub><b>Charlie Ray</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/o0charlie0o"><img src="https://avatars.githubusercontent.com/u/1259226?v=4" width="100px;" alt=""/><br /><sub><b>Charlie Ray</b></sub></a></td>
     <td align="center"><a href="https://github.com/jangxyz"><img src="https://avatars.githubusercontent.com/u/52015?v=4" width="100px;" alt=""/><br /><sub><b>Kim, Jang-hwan</b></sub></a></td>
     <td align="center"><a href="https://wafuwafu13.hateblo.jp/"><img src="https://avatars.githubusercontent.com/u/50798936?v=4" width="100px;" alt=""/><br /><sub><b>TagawaHirotaka</b></sub></a></td>
     <td align="center"><a href="https://github.com/andrew-hwahin"><img src="https://avatars.githubusercontent.com/u/61768800?v=4" width="100px;" alt=""/><br /><sub><b>Andrew Lam</b></sub></a></td>
     <td align="center"><a href="https://github.com/bdurette"><img src="https://avatars.githubusercontent.com/u/403387?v=4" width="100px;" alt=""/><br /><sub><b>Brandon DuRette</b></sub></a></td>
+    <td align="center"><a href="https://github.com/cjreimer"><img src="https://avatars.githubusercontent.com/u/51102303?v=4" width="100px;" alt=""/><br /><sub><b>Curtis Reimer</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/cjreimer"><img src="https://avatars.githubusercontent.com/u/51102303?v=4" width="100px;" alt=""/><br /><sub><b>Curtis Reimer</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/webstacker"><img src="https://avatars.githubusercontent.com/u/6331356?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Brown</b></sub></a></td>
     <td align="center"><a href="https://github.com/adriatic"><img src="https://avatars.githubusercontent.com/u/2712405?v=4" width="100px;" alt=""/><br /><sub><b>Nikolaj Ivancic</b></sub></a></td>
     <td align="center"><a href="https://github.com/nunopato"><img src="https://avatars.githubusercontent.com/u/1523504?v=4" width="100px;" alt=""/><br /><sub><b>Nuno Pato</b></sub></a></td>
     <td align="center"><a href="https://github.com/renansoares"><img src="https://avatars.githubusercontent.com/u/1657840?v=4" width="100px;" alt=""/><br /><sub><b>Renan Andrade</b></sub></a></td>
+    <td align="center"><a href="https://github.com/saideepesh000"><img src="https://avatars.githubusercontent.com/u/43727167?v=4" width="100px;" alt=""/><br /><sub><b>Sai Deepesh</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/saideepesh000"><img src="https://avatars.githubusercontent.com/u/43727167?v=4" width="100px;" alt=""/><br /><sub><b>Sai Deepesh</b></sub></a></td>
     <td align="center"><a href="https://github.com/bl-ue"><img src="https://avatars.githubusercontent.com/u/54780737?v=4" width="100px;" alt=""/><br /><sub><b>bl-ue</b></sub></a></td>
     <td align="center"><a href="https://www.figma.com/@realstandal"><img src="https://avatars.githubusercontent.com/u/25166787?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Lockard</b></sub></a></td>
     <td align="center"><a href="https://github.com/svenhanssen"><img src="https://avatars.githubusercontent.com/u/445182?v=4" width="100px;" alt=""/><br /><sub><b>Sven Hanssen</b></sub></a></td>
     <td align="center"><a href="https://mudssrali.github.io/"><img src="https://avatars.githubusercontent.com/u/24487349?v=4" width="100px;" alt=""/><br /><sub><b>Mudassar Ali</b></sub></a></td>
+    <td align="center"><a href="https://github.com/sangheestyle"><img src="https://avatars.githubusercontent.com/u/319490?v=4" width="100px;" alt=""/><br /><sub><b>SangHee Kim</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/sangheestyle"><img src="https://avatars.githubusercontent.com/u/319490?v=4" width="100px;" alt=""/><br /><sub><b>SangHee Kim</b></sub></a></td>
     <td align="center"><a href="http://loonyb.in/"><img src="https://avatars.githubusercontent.com/u/78673?v=4" width="100px;" alt=""/><br /><sub><b>Subhash Chandra</b></sub></a></td>
     <td align="center"><a href="https://github.com/seonghyeonkimm"><img src="https://avatars.githubusercontent.com/u/13966404?v=4" width="100px;" alt=""/><br /><sub><b>KimSeonghyeon</b></sub></a></td>
     <td align="center"><a href="https://github.com/origami-z"><img src="https://avatars.githubusercontent.com/u/5257855?v=4" width="100px;" alt=""/><br /><sub><b>Zhihao Cui</b></sub></a></td>
     <td align="center"><a href="https://corbt.com/"><img src="https://avatars.githubusercontent.com/u/176426?v=4" width="100px;" alt=""/><br /><sub><b>Kyle Corbitt</b></sub></a></td>
+    <td align="center"><a href="https://github.com/SEANDOUGHTY"><img src="https://avatars.githubusercontent.com/u/12256202?v=4" width="100px;" alt=""/><br /><sub><b>Sean Doughty</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/SEANDOUGHTY"><img src="https://avatars.githubusercontent.com/u/12256202?v=4" width="100px;" alt=""/><br /><sub><b>Sean Doughty</b></sub></a></td>
     <td align="center"><a href="https://github.com/zakmandhro"><img src="https://avatars.githubusercontent.com/u/15746?v=4" width="100px;" alt=""/><br /><sub><b>Zak Mandhro</b></sub></a></td>
     <td align="center"><a href="https://bozdoz.com/"><img src="https://avatars.githubusercontent.com/u/1410985?v=4" width="100px;" alt=""/><br /><sub><b>bozdoz</b></sub></a></td>
     <td align="center"><a href="https://mountaintopcoding.dev/"><img src="https://avatars.githubusercontent.com/u/14932877?v=4" width="100px;" alt=""/><br /><sub><b>Isaac Tait</b></sub></a></td>
     <td align="center"><a href="https://jace.pro/"><img src="https://avatars.githubusercontent.com/u/638764?v=4" width="100px;" alt=""/><br /><sub><b>Jace</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bernsno"><img src="https://avatars.githubusercontent.com/u/13946?v=4" width="100px;" alt=""/><br /><sub><b>Noah Bernsohn</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/bernsno"><img src="https://avatars.githubusercontent.com/u/13946?v=4" width="100px;" alt=""/><br /><sub><b>Noah Bernsohn</b></sub></a></td>
     <td align="center"><a href="https://github.com/rene-demonsters"><img src="https://avatars.githubusercontent.com/u/20322259?v=4" width="100px;" alt=""/><br /><sub><b>rene-demonsters</b></sub></a></td>
     <td align="center"><a href="https://sharov.dev/"><img src="https://avatars.githubusercontent.com/u/1423028?v=4" width="100px;" alt=""/><br /><sub><b>Sergey Sharov</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/blackpr"><img src="https://avatars.githubusercontent.com/u/30457?v=4" width="100px;" alt=""/><br /><sub><b>Tim Pap</b></sub></a></td>
     <td align="center"><a href="https://github.com/in-in"><img src="https://avatars.githubusercontent.com/u/8797432?v=4" width="100px;" alt=""/><br /><sub><b>in-in</b></sub></a></td>
+    <td align="center"><a href="https://github.com/mlabate"><img src="https://avatars.githubusercontent.com/u/17139676?v=4" width="100px;" alt=""/><br /><sub><b>mlabate</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/mlabate"><img src="https://avatars.githubusercontent.com/u/17139676?v=4" width="100px;" alt=""/><br /><sub><b>mlabate</b></sub></a></td>
     <td align="center"><a href="https://github.com/pdjota"><img src="https://avatars.githubusercontent.com/u/93544?v=4" width="100px;" alt=""/><br /><sub><b>Pablo Dejuan</b></sub></a></td>
     <td align="center"><a href="https://github.com/bugsfunny"><img src="https://avatars.githubusercontent.com/u/12965842?v=4" width="100px;" alt=""/><br /><sub><b>bugsfunny</b></sub></a></td>
     <td align="center"><a href="https://github.com/luispinto23"><img src="https://avatars.githubusercontent.com/u/4148663?v=4" width="100px;" alt=""/><br /><sub><b>Luís Pinto</b></sub></a></td>
     <td align="center"><a href="https://www.leighhalliday.com/"><img src="https://avatars.githubusercontent.com/u/603921?v=4" width="100px;" alt=""/><br /><sub><b>Leigh Halliday</b></sub></a></td>
+    <td align="center"><a href="https://github.com/BlackHawkSigma"><img src="https://avatars.githubusercontent.com/u/14921811?v=4" width="100px;" alt=""/><br /><sub><b>BlackHawkSigma</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/BlackHawkSigma"><img src="https://avatars.githubusercontent.com/u/14921811?v=4" width="100px;" alt=""/><br /><sub><b>BlackHawkSigma</b></sub></a></td>
     <td align="center"><a href="https://www.linkedin.com/in/devhmac/"><img src="https://avatars.githubusercontent.com/u/52307383?v=4" width="100px;" alt=""/><br /><sub><b>Devin MacGillivray</b></sub></a></td>
     <td align="center"><a href="https://github.com/pachoclo"><img src="https://avatars.githubusercontent.com/u/3608140?v=4" width="100px;" alt=""/><br /><sub><b>Francisco Jaramillo</b></sub></a></td>
     <td align="center"><a href="https://orta.io/"><img src="https://avatars.githubusercontent.com/u/49038?v=4" width="100px;" alt=""/><br /><sub><b>Orta Therox</b></sub></a></td>
     <td align="center"><a href="https://github.com/viperfx"><img src="https://avatars.githubusercontent.com/u/328257?v=4" width="100px;" alt=""/><br /><sub><b>Tharshan Muthulingam</b></sub></a></td>
+    <td align="center"><a href="https://brianypliu.com/"><img src="https://avatars.githubusercontent.com/u/3888780?v=4" width="100px;" alt=""/><br /><sub><b>Brian Liu</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://brianypliu.com/"><img src="https://avatars.githubusercontent.com/u/3888780?v=4" width="100px;" alt=""/><br /><sub><b>Brian Liu</b></sub></a></td>
     <td align="center"><a href="https://github.com/ajoslin103"><img src="https://avatars.githubusercontent.com/u/443893?v=4" width="100px;" alt=""/><br /><sub><b>allen joslin</b></sub></a></td>
     <td align="center"><a href="https://github.com/wongyouth"><img src="https://avatars.githubusercontent.com/u/944583?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Wang</b></sub></a></td>
     <td align="center"><a href="https://github.com/Vashiru"><img src="https://avatars.githubusercontent.com/u/11370057?v=4" width="100px;" alt=""/><br /><sub><b>Vashiru</b></sub></a></td>
     <td align="center"><a href="http://prolabprints.com/"><img src="https://avatars.githubusercontent.com/u/7111699?v=4" width="100px;" alt=""/><br /><sub><b>Ron Dyar</b></sub></a></td>
+    <td align="center"><a href="https://github.com/toddpress"><img src="https://avatars.githubusercontent.com/u/2934422?v=4" width="100px;" alt=""/><br /><sub><b>Todd Pressley</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/toddpress"><img src="https://avatars.githubusercontent.com/u/2934422?v=4" width="100px;" alt=""/><br /><sub><b>Todd Pressley</b></sub></a></td>
     <td align="center"><a href="https://github.com/zackdotcomputer"><img src="https://avatars.githubusercontent.com/u/643058?v=4" width="100px;" alt=""/><br /><sub><b>Zack Sheppard</b></sub></a></td>
     <td align="center"><a href="http://www.albertgao.xyz/"><img src="https://avatars.githubusercontent.com/u/18282328?v=4" width="100px;" alt=""/><br /><sub><b>AlbertGao</b></sub></a></td>
     <td align="center"><a href="https://github.com/vchoy"><img src="https://avatars.githubusercontent.com/u/1700776?v=4" width="100px;" alt=""/><br /><sub><b>vchoy</b></sub></a></td>
     <td align="center"><a href="https://github.com/alicelovescake"><img src="https://avatars.githubusercontent.com/u/66543449?v=4" width="100px;" alt=""/><br /><sub><b>Alice Zhao</b></sub></a></td>
+    <td align="center"><a href="https://github.com/macovedj"><img src="https://avatars.githubusercontent.com/u/20097860?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Macovei</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/macovedj"><img src="https://avatars.githubusercontent.com/u/20097860?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Macovei</b></sub></a></td>
     <td align="center"><a href="https://github.com/igneel64"><img src="https://avatars.githubusercontent.com/u/15251081?v=4" width="100px;" alt=""/><br /><sub><b>Peter Perlepes</b></sub></a></td>
     <td align="center"><a href="https://github.com/benada002"><img src="https://avatars.githubusercontent.com/u/45796304?v=4" width="100px;" alt=""/><br /><sub><b>Benedict Adams</b></sub></a></td>
     <td align="center"><a href="https://hampuskraft.com/"><img src="https://avatars.githubusercontent.com/u/24176136?v=4" width="100px;" alt=""/><br /><sub><b>Hampus Kraft</b></sub></a></td>
     <td align="center"><a href="https://github.com/HarunKilic"><img src="https://avatars.githubusercontent.com/u/13366825?v=4" width="100px;" alt=""/><br /><sub><b>Harun Kilic</b></sub></a></td>
+    <td align="center"><a href="https://www.mikenikles.com/"><img src="https://avatars.githubusercontent.com/u/788827?v=4" width="100px;" alt=""/><br /><sub><b>Mike Nikles</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://www.mikenikles.com/"><img src="https://avatars.githubusercontent.com/u/788827?v=4" width="100px;" alt=""/><br /><sub><b>Mike Nikles</b></sub></a></td>
     <td align="center"><a href="https://github.com/shahbaz17"><img src="https://avatars.githubusercontent.com/u/6962565?v=4" width="100px;" alt=""/><br /><sub><b>Mohammad Shahbaz Alam</b></sub></a></td>
     <td align="center"><a href="https://www.aggmoulik.me/"><img src="https://avatars.githubusercontent.com/u/22260031?v=4" width="100px;" alt=""/><br /><sub><b>Moulik Aggarwal</b></sub></a></td>
     <td align="center"><a href="https://github.com/doesnotexist"><img src="https://avatars.githubusercontent.com/u/304697?v=4" width="100px;" alt=""/><br /><sub><b>Omar El-Domeiri</b></sub></a></td>
     <td align="center"><a href="http://paulmckellar.com/"><img src="https://avatars.githubusercontent.com/u/8290?v=4" width="100px;" alt=""/><br /><sub><b>Paul McKellar</b></sub></a></td>
+    <td align="center"><a href="https://github.com/sarthaktexas"><img src="https://avatars.githubusercontent.com/u/28282096?v=4" width="100px;" alt=""/><br /><sub><b>Sarthak Mohanty</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/sarthaktexas"><img src="https://avatars.githubusercontent.com/u/28282096?v=4" width="100px;" alt=""/><br /><sub><b>Sarthak Mohanty</b></sub></a></td>
     <td align="center"><a href="https://github.com/justinjurenka"><img src="https://avatars.githubusercontent.com/u/19280122?v=4" width="100px;" alt=""/><br /><sub><b>Justin Jurenka</b></sub></a></td>
     <td align="center"><a href="https://github.com/redstab"><img src="https://avatars.githubusercontent.com/u/26380995?v=4" width="100px;" alt=""/><br /><sub><b>Jens Lindström</b></sub></a></td>
     <td align="center"><a href="https://pnfc.re/"><img src="https://avatars3.githubusercontent.com/u/24176136?v=4" width="100px;" alt=""/><br /><sub><b>Hampus Kraft</b></sub></a></td>
     <td align="center"><a href="http://ryanchenkie.com/"><img src="https://avatars.githubusercontent.com/u/1847678?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Chenkie</b></sub></a></td>
+    <td align="center"><a href="https://www.linkedin.com/profile/view?id=AAIAABLBfC4BE232yLpsGEF-dPR_QMXNvqrVucM&trk=nav_responsive_tab_profile_pic"><img src="https://avatars.githubusercontent.com/u/8780812?v=4" width="100px;" alt=""/><br /><sub><b>George Cameron</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://www.linkedin.com/profile/view?id=AAIAABLBfC4BE232yLpsGEF-dPR_QMXNvqrVucM&trk=nav_responsive_tab_profile_pic"><img src="https://avatars.githubusercontent.com/u/8780812?v=4" width="100px;" alt=""/><br /><sub><b>George Cameron</b></sub></a></td>
     <td align="center"><a href="https://github.com/Dozacode"><img src="https://avatars.githubusercontent.com/u/35405844?v=4" width="100px;" alt=""/><br /><sub><b>John</b></sub></a></td>
     <td align="center"><a href="http://powerboard.co.nz/"><img src="https://avatars.githubusercontent.com/u/1866452?v=4" width="100px;" alt=""/><br /><sub><b>Shannon Smith</b></sub></a></td>
     <td align="center"><a href="https://github.com/0x1a4f7d58"><img src="https://avatars.githubusercontent.com/u/10007010?v=4" width="100px;" alt=""/><br /><sub><b>Bob</b></sub></a></td>
     <td align="center"><a href="https://github.com/facinick"><img src="https://avatars.githubusercontent.com/u/12322728?v=4" width="100px;" alt=""/><br /><sub><b>facinick</b></sub></a></td>
+    <td align="center"><a href="https://github.com/virtuoushub"><img src="https://avatars.githubusercontent.com/u/4303638?v=4" width="100px;" alt=""/><br /><sub><b>Peter Colapietro</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/virtuoushub"><img src="https://avatars.githubusercontent.com/u/4303638?v=4" width="100px;" alt=""/><br /><sub><b>Peter Colapietro</b></sub></a></td>
     <td align="center"><a href="https://greener.bio/"><img src="https://avatars.githubusercontent.com/u/41754896?v=4" width="100px;" alt=""/><br /><sub><b>Teodoro Villaneuva</b></sub></a></td>
     <td align="center"><a href="https://github.com/SarveshLimaye"><img src="https://avatars.githubusercontent.com/u/74766567?v=4" width="100px;" alt=""/><br /><sub><b>Sarvesh Limaye</b></sub></a></td>
     <td align="center"><a href="https://github.com/7shantanu7"><img src="https://avatars.githubusercontent.com/u/51382138?v=4" width="100px;" alt=""/><br /><sub><b>Shantanu Zadbuke</b></sub></a></td>
     <td align="center"><a href="https://github.com/DukeManh"><img src="https://avatars.githubusercontent.com/u/51073515?v=4" width="100px;" alt=""/><br /><sub><b>Duke Manh</b></sub></a></td>
+    <td align="center"><a href="https://github.com/memarino92"><img src="https://avatars.githubusercontent.com/u/62777339?v=4" width="100px;" alt=""/><br /><sub><b>Michael Marino</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/kibertoad"><img src="https://avatars.githubusercontent.com/u/1847934?v=4" width="100px;" alt=""/><br /><sub><b>Igor Savin</b></sub></a></td>
+    <td align="center"><a href="https://jacobarriola.com/"><img src="https://avatars.githubusercontent.com/u/1371573?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Arriola</b></sub></a></td>
+    <td align="center"><a href="https://github.com/microsoft/Secure-Supply-Chain/"><img src="https://avatars.githubusercontent.com/u/90813519?v=4" width="100px;" alt=""/><br /><sub><b>Jingying Gu</b></sub></a></td>
+    <td align="center"><a href="https://kolberger.eu/"><img src="https://avatars.githubusercontent.com/u/16899513?v=4" width="100px;" alt=""/><br /><sub><b>Tim Kolberger</b></sub></a></td>
+    <td align="center"><a href="https://github.com/nzdjb"><img src="https://avatars.githubusercontent.com/u/825061?v=4" width="100px;" alt=""/><br /><sub><b>nzdjb</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/vivshaw"><img src="https://avatars.githubusercontent.com/u/23173985?v=4" width="100px;" alt=""/><br /><sub><b>Hannah Vivian Shaw</b></sub></a></td>
+    <td align="center"><a href="https://github.com/usman-coe"><img src="https://avatars.githubusercontent.com/u/2543952?v=4" width="100px;" alt=""/><br /><sub><b>usman kareemee</b></sub></a></td>
+    <td align="center"><a href="https://github.com/watway"><img src="https://avatars.githubusercontent.com/u/2321110?v=4" width="100px;" alt=""/><br /><sub><b>watway</b></sub></a></td>
+    <td align="center"><a href="https://github.com/edapm"><img src="https://avatars.githubusercontent.com/u/67737851?v=4" width="100px;" alt=""/><br /><sub><b>Edward Mason</b></sub></a></td>
+    <td align="center"><a href="https://tryhackme.com/p/zast99"><img src="https://avatars.githubusercontent.com/u/29718978?v=4" width="100px;" alt=""/><br /><sub><b>Mateo Carriquí</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/kataqatsi"><img src="https://avatars.githubusercontent.com/u/14959199?v=4" width="100px;" alt=""/><br /><sub><b>kataqatsi</b></sub></a></td>
+    <td align="center"><a href="https://www.vaporware.net/"><img src="https://avatars.githubusercontent.com/u/2105665?v=4" width="100px;" alt=""/><br /><sub><b>Jeff Schroeder</b></sub></a></td>
+    <td align="center"><a href="https://github.com/manunamz"><img src="https://avatars.githubusercontent.com/u/75578970?v=4" width="100px;" alt=""/><br /><sub><b>mnm</b></sub></a></td>
+    <td align="center"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>BBurnworth</b></sub></a></td>
+    <td align="center"><a href="https://refactorthis.dev/"><img src="https://avatars.githubusercontent.com/u/30505583?v=4" width="100px;" alt=""/><br /><sub><b>Jonathan</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://www.linkedin.com/in/rishabh-poddar-b64b73129/"><img src="https://avatars.githubusercontent.com/u/2976287?v=4" width="100px;" alt=""/><br /><sub><b>Rishabh Poddar</b></sub></a></td>
+    <td align="center"><a href="https://vitaliimelnychuk.com/"><img src="https://avatars.githubusercontent.com/u/22550335?v=4" width="100px;" alt=""/><br /><sub><b>Vitalii Melnychuk</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bdefore"><img src="https://avatars.githubusercontent.com/u/142472?v=4" width="100px;" alt=""/><br /><sub><b>Buck DeFore</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kamarel"><img src="https://avatars.githubusercontent.com/u/84261846?v=4" width="100px;" alt=""/><br /><sub><b>Kamarel Malanda</b></sub></a></td>
+    <td align="center"><a href="https://mvila.me/"><img src="https://avatars.githubusercontent.com/u/381671?v=4" width="100px;" alt=""/><br /><sub><b>Manuel Vila</b></sub></a></td>
   </tr>
 </table>
 

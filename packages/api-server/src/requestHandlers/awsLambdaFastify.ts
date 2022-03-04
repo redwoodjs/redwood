@@ -30,6 +30,7 @@ const lambdaEventForFastifyRequest = (
     path: request.urlData('path'),
     queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
     requestContext: {
+      requestId: request.id,
       identity: {
         sourceIp: request.ip,
       },
@@ -42,7 +43,12 @@ const fastifyResponseForLambdaResult = (
   reply: FastifyReply,
   lambdaResult: APIGatewayProxyResult
 ) => {
-  const { statusCode = 200, headers, body = '' } = lambdaResult
+  const {
+    statusCode = 200,
+    headers,
+    body = '',
+    multiValueHeaders,
+  } = lambdaResult
 
   if (headers) {
     Object.keys(headers).forEach((headerName) => {
@@ -50,6 +56,14 @@ const fastifyResponseForLambdaResult = (
       reply.header(headerName, headerValue)
     })
   }
+
+  if (multiValueHeaders) {
+    Object.keys(multiValueHeaders).forEach((headerName) => {
+      const headerValue: Array<any> = multiValueHeaders[headerName]
+      reply.header(headerName, headerValue)
+    })
+  }
+
   reply.status(statusCode)
 
   if (lambdaResult.isBase64Encoded) {

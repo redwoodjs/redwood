@@ -8,5 +8,5 @@ module.exports = {
     'dist',
   ],
   setupFilesAfterEnv: ['./jest.setup.js'],
-  testTimeout: 15000,
+  testTimeout: 20_000,
 }

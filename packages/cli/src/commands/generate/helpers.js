@@ -7,6 +7,7 @@ import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
@@ -80,8 +81,8 @@ export const templateForComponentFile = ({
 }
 
 /**
- * Creates a route path, either returning the existing path if passed, otherwise
- * creates one based on the name. If the passed path is just a route parameter
+ * Creates a route path, either returning the existing path if passed, or
+ * creating one based on the name. If the passed path is just a route parameter
  * a new path based on the name is created, with the parameter appended to it
  */
 export const pathName = (path, name) => {
@@ -111,17 +112,30 @@ const appendPositionalsToCmd = (commandString, positionalsObj) => {
   }
 }
 
+/** @type {(name: string, generatorName: string) => string } **/
+export function removeGeneratorName(name, generatorName) {
+  // page -> Page
+  const pascalComponentName = pascalcase(generatorName)
+
+  // Replace 'Page' at the end of `name` with ''
+  const coercedName = name.replace(new RegExp(pascalComponentName + '$'), '')
+
+  return coercedName
+}
+
 /**
- * Reduces boilerplate for creating a yargs handler that writes a component/page/layout to a
- * location.
+ * Reduces boilerplate for creating a yargs handler that writes a
+ * component/page/layout/etc to a location.
  */
 export const createYargsForComponentGeneration = ({
   componentName,
   preTasksFn = (options) => options,
-  filesFn,
+  /** filesFn is not used if generator implements its own `handler` */
+  filesFn = () => ({}),
   optionsObj = yargsDefaults,
   positionalsObj = {},
-  includeAdditionalTasks = () => [], // function that takes the options object and returns an array of listr tasks
+  /** function that takes the options object and returns an array of listr tasks */
+  includeAdditionalTasks = () => [],
 }) => {
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
@@ -183,6 +197,7 @@ export const createYargsForComponentGeneration = ({
 
         await tasks.run()
       } catch (e) {
+        errorTelemetry(process.argv, e.message)
         console.error(c.error(e.message))
         process.exit(e?.exitCode || 1)
       }
@@ -229,7 +244,7 @@ export const mapRouteParamTypeToTsType = (paramType) => {
   return routeParamToTsType[paramType] || 'unknown'
 }
 
-/** @type {(paramType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
+/** @type {(scalarType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
 export const mapPrismaScalarToPagePropTsType = (scalarType) => {
   const prismaScalarToTsType = {
     String: 'string',
