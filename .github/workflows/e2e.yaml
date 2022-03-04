@@ -53,6 +53,8 @@ jobs:
 
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false
 
       - name: Init Git for RedwoodJS app directory
         run: |
