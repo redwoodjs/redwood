@@ -1,0 +1,8 @@
+name: 'Setup test project'
+description: 'Setup for CLI checks and telemetry benchmarks'
+outputs:
+  test_project_path:
+    description: 'Path to the test project'
+runs:
+  using: 'node16'
+  main: 'setup_test_project.mjs'

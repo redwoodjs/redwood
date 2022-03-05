@@ -91,10 +91,22 @@ const updateRedwoodTomlTask = () => {
 }
 
 export const handler = async ({ force }) => {
+  const [serverless, serverlessLift, ...rest] = projectDevPackages
+
   const tasks = new Listr(
     [
       addPackagesTask({
-        packages: projectDevPackages,
+        packages: [serverless, ...rest],
+        devDependency: true,
+      }),
+      addPackagesTask({
+        packages: [serverless, serverlessLift],
+        side: 'web',
+        devDependency: true,
+      }),
+      addPackagesTask({
+        packages: [serverless],
+        side: 'api',
         devDependency: true,
       }),
       addFilesTask({

@@ -24,7 +24,7 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
-async function webTasks(outputPath, { link, verbose }) {
+async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -146,6 +146,25 @@ async function webTasks(outputPath, { link, verbose }) {
     )
   }
 
+  // add prerender to 3 routes
+  const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
+  const addPrerender = async () => {
+    const contentRoutes = fs.readFileSync(pathRoutes).toString()
+    const resultsRoutesAbout = contentRoutes.replace(
+      /name="about"/,
+      `name="about" prerender`
+    )
+    const resultsRoutesHome = resultsRoutesAbout.replace(
+      /name="home"/,
+      `name="home" prerender`
+    )
+    const resultsRoutesNotFound = resultsRoutesHome.replace(
+      /page={NotFoundPage}/,
+      `page={NotFoundPage} prerender`
+    )
+    fs.writeFileSync(pathRoutes, resultsRoutesNotFound)
+  }
+
   return new Listr(
     [
       {
@@ -172,6 +191,10 @@ async function webTasks(outputPath, { link, verbose }) {
         title: 'Changing routes',
         task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
       },
+      {
+        title: 'Add Prerender to Routes',
+        task: () => addPrerender(),
+      },
 
       // ====== NOTE: rufus needs this workaround for tailwind =======
       // Setup tailwind in a linked project, due to rwfw we install deps manually
@@ -180,18 +203,18 @@ async function webTasks(outputPath, { link, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer@^9.8.8',
+            'yarn add -W -D postcss postcss-loader tailwindcss autoprefixer',
             [],
             getExecaOptions(outputPath)
           ),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       {
         title: '[link] Copy local framework files again',
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa('yarn rwfw project:copy', [], getExecaOptions(outputPath)),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       // =========
       {
@@ -199,7 +222,9 @@ async function webTasks(outputPath, { link, verbose }) {
         task: () => {
           return execa(
             'yarn rw setup ui tailwindcss',
-            ['--force', link && '--no-install'].filter(Boolean),
+            ['--force', linkWithLatestFwBuild && '--no-install'].filter(
+              Boolean
+            ),
             execaOptions
           )
         },
@@ -220,10 +245,84 @@ async function addModel(schema) {
   fs.writeFileSync(path, `${current}\n\n${schema}`)
 }
 
-async function apiTasks(outputPath, { verbose }) {
+async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptionsForProject = getExecaOptions(outputPath)
+
+  const addDbAuth = async () => {
+    await execa(
+      'yarn rw setup auth dbAuth --force',
+      [],
+      getExecaOptions(outputPath)
+    )
+
+    if (linkWithLatestFwBuild) {
+      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+    }
+
+    await execa('yarn rw g dbAuth', [], getExecaOptions(outputPath))
+
+    // add dbAuth User model
+    const { user } = await import('./codemods/models.js')
+
+    addModel(user)
+
+    // update directive in contacts.sdl.ts
+    const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
+    const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
+    const resultsContactsSdl = contentContactsSdl.replace(
+      /createContact([^}]*)@requireAuth/,
+      `createContact(input: CreateContactInput!): Contact @skipAuth`
+    )
+    fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
+
+    // update directive in contacts.sdl.ts
+    const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
+    const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
+    const resultsPostsSdl = contentPostsSdl.replace(
+      /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
+      `posts: [Post!]! @skipAuth
+      post(id: Int!): Post @skipAuth`
+    )
+    fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
+
+    // Update src/lib/auth to return roles, so tsc doesn't complain
+    const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
+    const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
+    const newLibAuthContent = libAuthContent.replace(
+      'select: { id: true }',
+      'select: { id: true, roles: true }'
+    )
+    fs.writeFileSync(libAuthPath, newLibAuthContent)
+
+    // update requireAuth test
+    const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.ts`
+    const contentRequireAuth = fs.readFileSync(pathRequireAuth).toString()
+    const resultsRequireAuth = contentRequireAuth.replace(
+      /const mockExecution([^}]*){} }\)/,
+      `const mockExecution = mockRedwoodDirective(requireAuth, {
+        context: { currentUser: { id: 1, roles: 'ADMIN' } },
+      })`
+    )
+    fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
+
+    // remove unused userAttributes
+    const pathAuthJs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
+    const contentAuthJs = fs.readFileSync(pathAuthJs).toString()
+    const resultsAuthJs = contentAuthJs.replace(
+      /handler: \({ username,([^}]*)userAttributes }\) => {/,
+      `handler: ({ username, hashedPassword, salt }) => {`
+    )
+
+    fs.writeFileSync(pathAuthJs, resultsAuthJs)
+
+    await execa(
+      'yarn rw prisma migrate dev --name dbAuth',
+      [],
+      getExecaOptions(outputPath)
+    )
+  }
 
   return new Listr(
     [
@@ -248,14 +347,12 @@ async function apiTasks(outputPath, { verbose }) {
         },
       },
       {
-        title: 'Seeding database',
+        title: 'Adding seed script',
         task: async () => {
           await applyCodemod(
             'seed.js',
             fullPath('scripts/seed.ts', { addExtension: false })
           )
-
-          return execa('yarn rw prisma db seed', [], execaOptionsForProject)
         },
       },
       {
@@ -278,6 +375,19 @@ async function apiTasks(outputPath, { verbose }) {
             fullPath('api/src/graphql/contacts.sdl')
           )
         },
+      },
+      {
+        title: 'Adding createContact to contacts service',
+        task: async () => {
+          await applyCodemod(
+            'contactsService.js',
+            fullPath('api/src/services/contacts/contacts')
+          )
+        },
+      },
+      {
+        title: 'Add dbAuth',
+        task: async () => addDbAuth(),
       },
     ],
     {

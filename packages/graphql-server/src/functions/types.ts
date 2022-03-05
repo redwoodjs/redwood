@@ -5,10 +5,10 @@ import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from '@redwoodjs/api'
+import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
-import { CorsConfig } from '../cors'
 import { OnHealthcheckFn } from '../healthcheck'
 import { LoggerConfig } from '../plugins/useRedwoodLogger'
 import { SdlGlobImports, ServicesGlobImports } from '../types'

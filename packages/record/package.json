@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/record",
-  "version": "0.45.0",
+  "version": "0.48.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -27,9 +27,9 @@
     ]
   },
   "dependencies": {
-    "@prisma/client": "3.9.2",
-    "@prisma/sdk": "3.9.2",
-    "core-js": "3.21.0"
+    "@prisma/client": "3.10.0",
+    "@prisma/sdk": "3.10.0",
+    "core-js": "3.21.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
