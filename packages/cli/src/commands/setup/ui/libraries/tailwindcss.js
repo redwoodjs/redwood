@@ -30,9 +30,11 @@ export const builder = (yargs) => {
 }
 
 const tailwindImports = [
-  '@import "tailwindcss/base";',
-  '@import "tailwindcss/components";',
-  '@import "tailwindcss/utilities";',
+  // using outer double quotes and inner single quotes here to generate code
+  // the way prettier wants it in the actual RW app where this will be used
+  "@import 'tailwindcss/base';",
+  "@import 'tailwindcss/components';",
+  "@import 'tailwindcss/utilities';",
 ]
 
 const tailwindImportsExist = (indexCSS) =>
@@ -122,7 +124,9 @@ export const handler = async ({ force, install }) => {
           }
         }
 
-        await execa('yarn', ['tailwindcss', 'init', tailwindConfigPath])
+        await execa('yarn', ['tailwindcss', 'init', tailwindConfigPath], {
+          cwd: rwPaths.web.base,
+        })
 
         // Replace `content`.
         const tailwindConfig = fs.readFileSync(tailwindConfigPath, 'utf-8')

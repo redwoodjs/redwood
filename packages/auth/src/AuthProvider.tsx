@@ -4,6 +4,7 @@ import { createAuthClient } from './authClients'
 import type {
   AuthClient,
   SupportedAuthTypes,
+  SupportedAuthConfig,
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
@@ -47,29 +48,47 @@ export interface AuthContextInterface {
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
    */
-  client: SupportedAuthClients
-  type: SupportedAuthTypes
+  client?: SupportedAuthClients
+  type?: SupportedAuthTypes
   hasError: boolean
   error?: Error
 }
 
-// @ts-expect-error - We do not supply default values for the functions.
 export const AuthContext = React.createContext<AuthContextInterface>({
   loading: true,
   isAuthenticated: false,
   userMetadata: null,
   currentUser: null,
+  logIn: () => Promise.resolve(),
+  logOut: () => Promise.resolve(),
+  signUp: () => Promise.resolve(),
+  getToken: () => Promise.resolve(null),
+  getCurrentUser: () => Promise.resolve(null),
+  hasRole: () => true,
+  reauthenticate: () => Promise.resolve(),
+  forgotPassword: () => Promise.resolve(),
+  resetPassword: () => Promise.resolve(),
+  validateResetToken: () => Promise.resolve(),
+  hasError: false,
 })
 
 type AuthProviderProps =
   | {
       client: SupportedAuthClients
-      type: Omit<SupportedAuthTypes, 'dbAuth'>
+      type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
+      config?: never
+      skipFetchCurrentUser?: boolean
+    }
+  | {
+      client?: never
+      type: 'clerk'
+      config?: never
       skipFetchCurrentUser?: boolean
     }
   | {
       client?: never
       type: 'dbAuth'
+      config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
 
@@ -113,7 +132,8 @@ export class AuthProvider extends React.Component<
     super(props)
     this.rwClient = createAuthClient(
       props.client as SupportedAuthClients,
-      props.type as SupportedAuthTypes
+      props.type as SupportedAuthTypes,
+      props.config as SupportedAuthConfig
     )
   }
 
@@ -131,6 +151,8 @@ export class AuthProvider extends React.Component<
     const token = await this.getToken()
     const response = await global.fetch(this.getApiGraphQLUrl(), {
       method: 'POST',
+      // TODO: how can user configure this? inherit same `config` options given to auth client?
+      credentials: 'include',
       headers: {
         'content-type': 'application/json',
         'auth-provider': this.rwClient.type,

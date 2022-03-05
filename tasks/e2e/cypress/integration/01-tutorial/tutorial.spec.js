@@ -5,6 +5,7 @@ import path from 'path'
 import 'cypress-wait-until'
 
 import {
+  waitForApiSide,
   test_first_page,
   test_pages,
   test_layouts,
@@ -36,26 +37,28 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   })
   it('0. Starting Development', () => {
     // disable auth
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_3_DisableAuth
-    )
+    // cy.writeFile(
+    //   path.join(BASE_DIR, 'api/src/lib/auth.js'),
+    //   Step9_3_DisableAuth
+    // )
 
     // reset redwood toml to use standard apollo server aka not envelop
-    cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
+    // cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
 
     // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/functions/graphql.js'),
-      Step0_2_GraphQL
-    )
+    // cy.writeFile(
+    //   path.join(BASE_DIR, 'api/src/functions/graphql.js'),
+    //   Step0_2_GraphQL
+    // )
 
     // https://redwoodjs.com/tutorial/installation-starting-development
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
+
+    waitForApiSide()
+
     cy.visit('http://localhost:8910')
 
     // cy.get('h1').should().contains('FOO!')
-    cy.get('h1', { timeout: 3000 }).should('contain', 'Welcome to')
+    cy.get('h1', { timeout: 10000 }).should('contain', 'Welcome to')
   })
 
   test_first_page()

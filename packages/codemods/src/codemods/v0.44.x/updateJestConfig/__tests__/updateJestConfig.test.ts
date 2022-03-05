@@ -30,6 +30,8 @@ jest.mock('../../../../lib/fetchFileFromTemplate', () =>
   })
 )
 
+jest.setTimeout(25_000)
+
 describe('Update Jest Config', () => {
   it('Adds missing files', async () => {
     await matchFolderTransform(updateJestConfig, 'missing', {

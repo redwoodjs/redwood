@@ -806,6 +806,6 @@ test('proxies validateResetToken() calls to client', async () => {
     </AuthProvider>
   )
 
-  // for whatever reason, forgotPassword is invoked twice
+  // for whatever reason, validateResetToken is invoked twice
   expect.assertions(2)
 })

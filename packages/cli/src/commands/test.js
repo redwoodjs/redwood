@@ -1,9 +1,12 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
-import { errorTelemetry } from '@redwoodjs/telemetry'
+import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -24,6 +27,27 @@ function isInMercurialRepository() {
     return true
   } catch (e) {
     return false
+  }
+}
+
+function isJestConfigFile(sides) {
+  for (let side of sides) {
+    try {
+      if (sides.includes(side)) {
+        if (!fs.existsSync(path.join(side, 'jest.config.js'))) {
+          console.error(
+            c.error(
+              `\nError: Missing Jest config file ${side}/jest.config.js` +
+                '\nTo add this file, run `npx @redwoodjs/codemods update-jest-config`\n'
+            )
+          )
+          throw new Error(`Error: Jest config file not found in ${side} side`)
+        }
+      }
+    } catch (e) {
+      errorTelemetry(process.argv, e.message)
+      process.exit(e?.exitCode || 1)
+    }
   }
 }
 
@@ -134,6 +158,9 @@ export const handler = async ({
     jestArgs.push('--projects', ...sides)
   }
 
+  //checking if Jest config files exists in each of the sides
+  isJestConfigFile(sides)
+
   try {
     const cacheDirDb = `file:${ensurePosixPath(
       rwjsPaths.generated.base
@@ -149,12 +176,22 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programmatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    await execa('yarn jest', jestArgs, {
-      cwd: rwjsPaths.base,
-      shell: true,
-      stdio: 'inherit',
-      env: { DATABASE_URL },
-    })
+    const runCommand = async () => {
+      await execa('yarn jest', jestArgs, {
+        cwd: rwjsPaths.base,
+        shell: true,
+        stdio: 'inherit',
+        env: { DATABASE_URL },
+      })
+    }
+
+    if (watch) {
+      await runCommand()
+    } else {
+      await timedTelemetry(process.argv, { type: 'test' }, async () => {
+        await runCommand()
+      })
+    }
   } catch (e) {
     // Errors already shown from execa inherited stderr
     errorTelemetry(process.argv, e.message)

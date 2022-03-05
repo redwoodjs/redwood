@@ -38,7 +38,7 @@ const BASE_DIR = Cypress.env('RW_PATH')
 export function waitForApiSide() {
   // Pause because chokidar `ignoreInitial` and debounce add at least 1000ms delay
   // to restarting the api-server in the e2e environment.
-  cy.wait(1_000)
+  cy.wait(10_000)
   cy.waitUntil(
     () =>
       cy
@@ -54,7 +54,7 @@ export function waitForApiSide() {
           failOnStatusCode: false,
         })
         .then((r) => {
-          return r.status === 200 // The first response should be 504
+          return r.status === 200 // The first response could be 504 or 203 (reloading api server)
         }),
     { timeout: 10_000, interval: 2_000 }
   )
