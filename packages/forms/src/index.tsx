@@ -230,8 +230,8 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
 interface SetCoersionProps {
   type?: string
   name: string
-  emptyAsNull: boolean
-  emptyAsUndefined: boolean
+  emptyAsNull?: boolean
+  emptyAsUndefined?: boolean
 }
 
 const setCoercion = (
@@ -244,16 +244,8 @@ const setCoercion = (
   }
 
   if (validation.valueAsBoolean || type === 'checkbox') {
-    // boolean case
-    if (emptyAsNull) {
-      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsBoolean.emptyAsNull
-    } else if (emptyAsUndefined) {
-      validation.setValueAs =
-        SET_VALUE_AS_FUNCTIONS.valueAsBoolean.emptyAsUndefined
-    } else {
-      validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsBoolean.base
-    }
-    delete validation.valueAsBoolean
+    // Note the setValueAs does not work in react-hook-forms for checkboxes
+    return
   } else if (validation.valueAsJSON) {
     // JSON case
     if (emptyAsNull) {
@@ -356,9 +348,9 @@ const useRegister = <
     | HTMLInputElement = HTMLInputElement
 >(
   props: UseRegisterProps<Element> & { element?: string },
-  emptyAsNull: boolean,
-  emptyAsUndefined: boolean,
-  ref?: React.ForwardedRef<T>
+  ref?: React.ForwardedRef<T>,
+  emptyAsNull?: boolean,
+  emptyAsUndefined?: boolean
 ) => {
   const { register } = useFormContext()
 
@@ -639,10 +631,9 @@ const TextAreaField = forwardRef(
         onBlur,
         onChange,
       },
+      ref,
       emptyAsNull,
-      emptyAsUndefined,
-
-      ref
+      emptyAsUndefined
     )
 
     return (
@@ -694,10 +685,9 @@ const SelectField = forwardRef(
         onBlur,
         onChange,
       },
+      ref,
       emptyAsNull,
-      emptyAsUndefined,
-
-      ref
+      emptyAsUndefined
     )
 
     return (
@@ -707,7 +697,10 @@ const SelectField = forwardRef(
 )
 
 export interface CheckboxFieldProps
-  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
+  extends Omit<
+      FieldProps<HTMLInputElement>,
+      'type' | 'emptyAsNull' | 'emptyAsUndefined'
+    >,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
 /**
@@ -718,8 +711,6 @@ export const CheckboxField = forwardRef(
     {
       name,
       id,
-      emptyAsNull = false,
-      emptyAsUndefined = false,
       // for useErrorStyles
       errorClassName,
       errorStyle,
@@ -751,8 +742,6 @@ export const CheckboxField = forwardRef(
         onChange,
         type,
       },
-      emptyAsNull,
-      emptyAsUndefined,
       ref
     )
 
@@ -873,9 +862,9 @@ const InputField = forwardRef(
         onChange,
         type,
       },
+      ref,
       emptyAsNull,
-      emptyAsUndefined,
-      ref
+      emptyAsUndefined
     )
 
     return (

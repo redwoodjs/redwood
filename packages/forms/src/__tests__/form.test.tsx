@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { toHaveFocus, toHaveClass } from '@testing-library/jest-dom/matchers'
+import {
+  toHaveFocus,
+  toHaveClass,
+  toBeInTheDocument,
+} from '@testing-library/jest-dom/matchers'
 import {
   screen,
   render,
@@ -9,7 +13,8 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-expect.extend({ toHaveFocus, toHaveClass })
+import { act } from 'react-dom/test-utils'
+expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 import {
   Form,
@@ -268,17 +273,12 @@ describe('Form', () => {
       </Form>
     )
 
-    fireEvent.click(screen.getByText('Save'))
+    await act(async () => {
+      fireEvent.submit(screen.getByText('Save'))
+    })
 
     // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
-    })
+    expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('ensures required selectField is enforced by validation', async () => {
@@ -299,17 +299,12 @@ describe('Form', () => {
       </Form>
     )
 
-    fireEvent.click(screen.getByText('Save'))
+    await act(async () => {
+      fireEvent.submit(screen.getByText('Save'))
+    })
 
     // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
-    })
+    expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('handles int and float blank values gracefully', async () => {
@@ -353,16 +348,12 @@ describe('Form', () => {
         <Submit>Save</Submit>
       </Form>
     )
-    fireEvent.click(screen.getByText('Save'))
-    // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
+    await act(async () => {
+      fireEvent.submit(screen.getByText('Save'))
     })
+
+    // The validation should catch and prevent the onSubmit from being called
+    expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('for a TextAreaField with valueAsJSON.  Bad JSON case 2', async () => {
@@ -379,16 +370,12 @@ describe('Form', () => {
         <Submit>Save</Submit>
       </Form>
     )
-    fireEvent.click(screen.getByText('Save'))
-    // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
+    await act(async () => {
+      fireEvent.submit(screen.getByText('Save'))
     })
+
+    // The validation should catch and prevent the onSubmit from being called
+    expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('for a TextAreaField with valueAsJSON.  Bad JSON case 3', async () => {
@@ -402,19 +389,19 @@ describe('Form', () => {
           data-testid="jsonField"
           validation={{ valueAsJSON: true }}
         />
+        <FieldError name="jsonField" data-testid="FieldError" />
         <Submit>Save</Submit>
       </Form>
     )
-    fireEvent.click(screen.getByText('Save'))
+    //    await act(async () => {
+    fireEvent.submit(screen.getByText('Save'))
+    //    })
+    await waitFor(() =>
+      expect(screen.getByTestId('FieldError')).toBeInTheDocument()
+    )
+
     // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
-    })
+    expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('for a FieldError with name set to path', async () => {
@@ -440,23 +427,22 @@ describe('Form', () => {
         <Submit>Save</Submit>
       </Form>
     )
-    fireEvent.click(screen.getByText('Save'))
-    // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
+    //    await act(async () => {
+    fireEvent.submit(screen.getByText('Save'))
+    //    })
 
-      const phoneError = screen.getByTestId('phoneFieldError').textContent
-      const streetError = screen.getByTestId('streetFieldError').textContent
-      const streetField = screen.getByTestId('streetField')
-      expect(phoneError).toEqual('phone is not formatted correctly')
-      expect(streetError).toEqual('address.street is not formatted correctly')
-      expect(streetField).toHaveClass('border-red', { exact: true })
-    })
+    await waitFor(() =>
+      expect(screen.getByTestId('phoneFieldError')).toBeInTheDocument()
+    )
+    // The validation should catch and prevent the onSubmit from being called
+    expect(mockFn).not.toHaveBeenCalled()
+
+    const phoneError = screen.getByTestId('phoneFieldError').textContent
+    const streetError = screen.getByTestId('streetFieldError').textContent
+    const streetField = screen.getByTestId('streetField')
+    expect(phoneError).toEqual('phone is not formatted correctly')
+    expect(streetError).toEqual('address.street is not formatted correctly')
+    expect(streetField).toHaveClass('border-red', { exact: true })
   })
 
   it("doesn't crash on Labels without name", async () => {
@@ -593,16 +579,6 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
-        <CheckboxField
-          name="checkboxField0"
-          defaultChecked={false}
-          emptyAsUndefined
-        />
-        <CheckboxField
-          name="checkboxField1"
-          defaultChecked={true}
-          emptyAsUndefined
-        />
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -624,9 +600,6 @@ describe('Form', () => {
         numberField: undefined,
         dateField: undefined,
         selectField: undefined,
-        checkboxField0: undefined,
-        checkboxField1: true,
-
         jsonField: undefined,
       },
       expect.anything() // event that triggered the onSubmit call
@@ -657,16 +630,6 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
-        <CheckboxField
-          name="checkboxField0"
-          defaultChecked={false}
-          emptyAsNull
-        />
-        <CheckboxField
-          name="checkboxField1"
-          defaultChecked={true}
-          emptyAsNull
-        />
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -688,8 +651,6 @@ describe('Form', () => {
         numberField: null,
         dateField: null,
         selectField: null,
-        checkboxField0: null,
-        checkboxField1: true,
         jsonField: null,
       },
       expect.anything() // event that triggered the onSubmit call
@@ -717,18 +678,6 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
-        <CheckboxField
-          name="checkboxField0"
-          defaultChecked={false}
-          emptyAsNull
-          emptyAsUndefined
-        />
-        <CheckboxField
-          name="checkboxField1"
-          defaultChecked={true}
-          emptyAsNull
-          emptyAsUndefined
-        />
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -752,8 +701,6 @@ describe('Form', () => {
         numberField: null,
         dateField: null,
         selectField: null,
-        checkboxField0: null,
-        checkboxField1: true,
         jsonField: null,
       },
       expect.anything() // event that triggered the onSubmit call
@@ -778,17 +725,12 @@ describe('Form', () => {
     fireEvent.change(screen.getByTestId('numberField'), {
       target: { value: 2 },
     })
-    fireEvent.click(screen.getByText('Save'))
+    await act(async () => {
+      fireEvent.submit(screen.getByText('Save'))
+    })
 
     // The validation should catch and prevent the onSubmit from being called
-    await waitFor(async () => {
-      await new Promise((res) =>
-        setTimeout(() => {
-          res(1)
-        }, 50)
-      )
-      expect(mockFn).not.toHaveBeenCalled()
-    })
+    expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('should return a number for a textfield with valueAsNumber, regardless of emptyAsUndefined or emptyAsNull', async () => {
