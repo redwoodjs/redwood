@@ -87,6 +87,17 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           )
         },
       },
+      {
+        title: 'Creating profile page',
+        task: async () => {
+          await createPage('profile /profile')
+
+          return applyCodemod(
+            'profilePage.js',
+            fullPath('web/src/pages/ProfilePage/ProfilePage')
+          )
+        },
+      },
     ])
   }
 
@@ -292,7 +303,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
     const newLibAuthContent = libAuthContent.replace(
       'select: { id: true }',
-      'select: { id: true, roles: true }'
+      'select: { id: true, roles: true, email: true}'
     )
     fs.writeFileSync(libAuthPath, newLibAuthContent)
 
