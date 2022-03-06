@@ -69,7 +69,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   name,
   redirect,
   notfound,
-}) => {
+}: InternalRouteProps) => {
   const routerState = useRouterState()
   const activePageContext = useActivePageContext()
 

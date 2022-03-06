@@ -8,7 +8,7 @@ interface SplashPageProps {
 const SplashPage: React.VFC<SplashPageProps> = ({
   hasGeneratedRoutes,
   routes,
-}) => {
+}: SplashPageProps) => {
   const version = useVersion()
   return (
     <>
