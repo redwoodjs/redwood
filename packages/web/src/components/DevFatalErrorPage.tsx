@@ -128,9 +128,7 @@ function StackEntry({
   const highlightIndex = (line || 0) - start - 1
   const onLastLine = highlightIndex === lines.length - 1
 
-  console.log('fileShort', fileShort)
   const shortestPath = (path: string) => path.replace(appRoot || '', '')
-  console.log('shortestPath', shortestPath(fileShort))
   const expanded = !shouldHideEntry(entry, i)
 
   const clickable = lines.length
