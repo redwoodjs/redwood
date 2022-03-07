@@ -24,7 +24,12 @@ type SetProps<P> = P & {
   private?: boolean
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated?: string
+  /** Route is permitted when authenticated and use has any of the provided roles such as "admin" or ["admin", "editor"]
+   * @deprecated Use roles instead,
+   */
   role?: string | string[]
+  /** Route is permitted when authenticated and use has any of the provided roles such as "admin" or ["admin", "editor"] */
+  roles?: string | string[]
   /** Prerender all pages in the set */
   prerender?: boolean
   children: ReactNode
@@ -42,7 +47,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
     children,
     private: privateSet,
     unauthenticated,
-    role,
+    roles,
     whileLoadingAuth,
     ...rest
   } = props
@@ -56,8 +61,8 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   }
 
   const unauthorized = useCallback(() => {
-    return !(isAuthenticated && (!role || hasRole(role)))
-  }, [isAuthenticated, role, hasRole])
+    return !(isAuthenticated && (!roles || hasRole(roles)))
+  }, [isAuthenticated, roles, hasRole])
 
   // Make sure `wrappers` is always an array with at least one wrapper component
   const wrappers = Array.isArray(wrap) ? wrap : [wrap ? wrap : IdentityWrapper]
@@ -103,7 +108,7 @@ type PrivateProps<P> = Omit<
 }
 
 export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
-  const { children, unauthenticated, role, wrap, ...rest } = props
+  const { children, unauthenticated, roles, wrap, ...rest } = props
 
   return (
     // @MARK Doesn't matter that we pass `any` here
@@ -114,7 +119,7 @@ export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
     <Set<any>
       private
       unauthenticated={unauthenticated}
-      role={role}
+      roles={roles}
       wrap={wrap}
       {...rest}
     >
