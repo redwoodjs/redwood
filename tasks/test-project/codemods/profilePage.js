@@ -1,4 +1,4 @@
-const profilePageBody = `const { currentUser, isAuthenticated, hasRole } = useAuth()
+const profilePageBody = `{ const { currentUser, isAuthenticated, hasRole } = useAuth()
 return (
   <>
     <MetaTags title="Profile" description="Profile page" />
@@ -34,18 +34,19 @@ return (
       </tbody>
     </table>
   </>
-)`
+)
+      }`
 
 export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
   const useAuthImport = j.importDeclaration(
-    [j.importDefaultSpecifier(j.identifier('useAuth'))],
+    [j.importSpecifier(j.identifier('useAuth'))],
     j.stringLiteral('@redwoodjs/auth')
   )
 
-  root.find(j.ExportNamedDeclaration).at(0).insertBefore(useAuthImport)
+  root.find(j.ImportDeclaration).at(0).insertBefore(useAuthImport)
 
   return root
     .find(j.VariableDeclarator, {
