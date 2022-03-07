@@ -59,28 +59,17 @@ module.exports = {
       searchParameters: {},
     },
     navbar: {
-      title: 'Learn RedwoodJS',
+      title: 'RedwoodJS',
       logo: {
         alt: 'RedwoodJS pinecone logo',
         src: 'img/logo.svg',
       },
       items: [
         {
-          to: 'https://redwoodjs.com/docs/introduction',
-          activeBasePath: 'docs',
-          label: 'Docs ⇗',
-          position: 'left',
-        },
-        {
-          to: 'https://redwoodjs.com/cookbook/custom-function',
-          label: 'Cookbook ⇗',
-          position: 'left',
-        },
-        { type: 'localeDropdown', position: 'right' },
-        {
           href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
-          label: 'GitHub',
           position: 'right',
+          className: 'github-logo',
+          'aria-label': 'GitHub repository',
         },
       ],
     },
