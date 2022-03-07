@@ -7,7 +7,6 @@ export * from './errors'
 export * from './functions/graphql'
 export * from './functions/useRequireAuth'
 export * from './makeMergedSchema/makeMergedSchema'
-export * from './scalars'
 export * from './types'
 
 export {
