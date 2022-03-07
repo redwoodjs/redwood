@@ -18,7 +18,7 @@ type HasRoleAuthClient = AuthClient & {
 let CURRENT_USER_DATA: {
   name: string
   email: string
-  roles?: string[] | string
+  roles?: Array<string> | string
 } = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
