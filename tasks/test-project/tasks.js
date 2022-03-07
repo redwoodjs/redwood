@@ -92,6 +92,35 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
         task: async () => {
           await createPage('profile /profile')
 
+          // Update the profile page test
+          const testFileContent = `import { render, waitFor, screen } from '@redwoodjs/testing/web'
+
+          import ProfilePage from './ProfilePage'
+
+          describe('ProfilePage', () => {
+            it('renders successfully', async () => {
+              mockCurrentUser({
+                email: 'danny@bazinga.com',
+                id: 84849020,
+                roles: 'BAZINGA',
+              })
+
+              await waitFor(async () => {
+                expect(() => {
+                  render(<ProfilePage />)
+                }).not.toThrow()
+              })
+
+              expect(await screen.findByText('danny@bazinga.com')).toBeInTheDocument()
+            })
+          })
+          `
+
+          fs.writeFileSync(
+            fullPath('web/src/pages/ProfilePage/ProfilePage.test'),
+            testFileContent
+          )
+
           return applyCodemod(
             'profilePage.js',
             fullPath('web/src/pages/ProfilePage/ProfilePage')
