@@ -1,0 +1,9 @@
+{
+  "editor.tabSize": 2,
+  "files.trimTrailingWhitespace": true,
+  "eslint.format.enable": true,
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+  },
+}

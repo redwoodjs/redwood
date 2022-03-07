@@ -1,0 +1,14 @@
+.idea
+node_modules
+dist
+yarn-error.log
+.docz
+.env
+.DS_Store
+.wip
+api/prisma/dev.sqlite
+
+# Generated files
+.redwood
+api/types/
+web/types/

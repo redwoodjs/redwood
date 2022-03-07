@@ -1,0 +1,16 @@
+datasource sqlite {
+  url      = "file:./dev.sqlite"
+  provider = "sqlite"
+}
+
+generator photonjs {
+  provider = "prisma-client-js"
+}
+
+// Define your own models here and run `yarn rw db save` to create
+// migrations for them.
+model Todo {
+  id     Int    @default(autoincrement()) @id
+  body   String @unique
+  status String @default("off")
+}
