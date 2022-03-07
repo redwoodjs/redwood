@@ -7,12 +7,12 @@ function renameTimestamp(
 ) {
   j(optionsObject)
     .find(j.ObjectProperty, { key: { name: 'timestamp' } })
-    .replaceWith((op) => {
+    .replaceWith((objectProperty) => {
       const currentTimestampOverride = j.objectProperty.from({
         key: j.identifier('currentTimestampOverride'),
-        value: op.value.value,
-        // @ts-expect-error - comments
-        comments: op.value.trailingComments || null,
+        value: objectProperty.value.value,
+        // @ts-expect-error - trailingComments
+        comments: objectProperty.value.trailingComments || null,
       })
       return currentTimestampOverride
     })
@@ -63,13 +63,12 @@ export default function transform(file: FileInfo, api: API) {
           //   options: verifierOptions,
           // })
 
-          // @ts-expect-error - properties
-          if (options.value.properties) {
-            // inline options object has `properties`
+          if (j.ObjectExpression.check(options.value)) {
+            // An inline options object is an ObjectExpression
             renameTimestamp(j, options.value)
-          } else {
-            // An options object referenced by name has a `name` value
-            // @ts-expect-error - name
+          } else if (j.Identifier.check(options.value)) {
+            // An options object referenced by name is an Identifier.
+            // Identifiers have a `name`
             ast.findVariableDeclarators(options.value.name).forEach((n) => {
               renameTimestamp(j, n.node)
             })
