@@ -42,15 +42,6 @@ module.exports = {
   organizationName: 'redwoodjs', // Usually your GitHub org/user name.
   projectName: 'learn.redwoodjs.com', // Usually your repo name.,
   themeConfig: {
-    announcementBar: {
-      id: 'support_us', // Any value that will identify this message.
-      content:
-        'We are looking for help translating this site into <b>French</b>, <b>Spanish</b>, <b>Portuguese</b>, and <b>Italian</b>! <a target="_blank" rel="noopener noreferrer" href="https://github.com/redwoodjs/learn.redwoodjs.com/blob/main/README_TRANSLATION_GUIDE.md">See our guide</a>',
-      // NOTE: setting colors in custom.css instead as text color below was not rendering
-      // backgroundColor: '#120401',
-      // textColor: '##ffffff',
-      isCloseable: false, // Defaults to `true`.
-    },
     algolia: {
       appId: 'dev',
       apiKey: 'dev',
