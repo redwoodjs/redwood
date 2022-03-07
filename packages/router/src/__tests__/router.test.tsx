@@ -65,13 +65,19 @@ const mockUseAuth =
     {
       isAuthenticated = false,
       loading = false,
-    }: { isAuthenticated?: boolean; loading?: boolean } = {
+      hasRole = false,
+    }: { isAuthenticated?: boolean; loading?: boolean; hasRole?: boolean } = {
       isAuthenticated: false,
       loading: false,
+      hasRole: false,
     }
   ) =>
   () =>
-    createDummyAuthContextValues({ loading, isAuthenticated })
+    createDummyAuthContextValues({
+      loading,
+      isAuthenticated,
+      hasRole: () => hasRole,
+    })
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -115,9 +121,15 @@ describe('slow imports', () => {
     )
   }
 
-  const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
+  const TestRouter = ({
+    authenticated,
+    hasRole,
+  }: {
+    authenticated?: boolean
+    hasRole?: boolean
+  }) => (
     <Router
-      useAuth={mockUseAuth({ isAuthenticated: authenticated })}
+      useAuth={mockUseAuth({ isAuthenticated: authenticated, hasRole })}
       pageLoadingDelay={100}
     >
       <Route
@@ -150,6 +162,22 @@ describe('slow imports', () => {
           path="/private"
           page={PrivatePage}
           name="private"
+          whileLoadingPage={PrivatePagePlaceholder}
+        />
+      </Private>
+      <Private unauthenticated="login" roles="admin">
+        <Route
+          path="/private_with_role"
+          page={PrivatePage}
+          name="private_with_role"
+          whileLoadingPage={PrivatePagePlaceholder}
+        />
+      </Private>
+      <Private unauthenticated="login" roles={['admin', 'moderator']}>
+        <Route
+          path="/private_with_several_roles"
+          page={PrivatePage}
+          name="private_with_several_roles"
           whileLoadingPage={PrivatePagePlaceholder}
         />
       </Private>
@@ -243,6 +271,32 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('Private Page'))
     await waitFor(() => {
       expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
+    })
+  })
+
+  test('Private page when authenticated but does not have the role', async () => {
+    act(() => navigate('/private_with_role'))
+    const screen = render(<TestRouter authenticated={true} hasRole={false} />)
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('PrivatePagePlaceholder')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
+      expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
+    })
+    await waitFor(() => screen.getByText('Login Page'))
+  })
+
+  test('Private page when authenticated but does have the role', async () => {
+    act(() => navigate('/private_with_role'))
+    const screen = render(<TestRouter authenticated={true} hasRole={true} />)
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('PrivatePagePlaceholder')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Private Page')).toBeInTheDocument()
     })
   })
 
