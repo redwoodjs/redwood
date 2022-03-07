@@ -11,7 +11,7 @@ export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
 export const DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE =
-  'Please check that the requireAuth roles is a string or an array of strings. For example, @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])'
+  'Please check that the requireAuth roles is a string or an array of strings.'
 export function validateSchemaForDirectives(
   schemaDocumentNode: DocumentNode,
   typesToCheck: string[] = ['Query', 'Mutation']
@@ -98,9 +98,9 @@ export function validateSchemaForDirectives(
     )
 
     throw new Error(
-      `${DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE} for\n${fieldWithInvalidRoleValues.join(
+      `${DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE}\n\n${fieldWithInvalidRoleValues.join(
         '\n'
-      )} \n`
+      )} \n\nFor example: @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])`
     )
   }
 }
