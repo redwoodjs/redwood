@@ -15,7 +15,11 @@ type HasRoleAuthClient = AuthClient & {
   hasRole: (role?: string | string[]) => Promise<boolean | null>
 }
 
-let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
+let CURRENT_USER_DATA: {
+  name: string
+  email: string
+  roles?: string[] | string
+} = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
 }
@@ -606,6 +610,59 @@ test('Authenticated user has assigned role access as expected', async () => {
     return true
   })
 
+  expect(screen.getByText('Has Admin as Array: yes')).toBeInTheDocument()
+
+  // Log out
+  fireEvent.click(screen.getByText('Log Out'))
+  await waitFor(() => screen.getByText('Log In'))
+})
+
+test('Checks roles successfully when roles in currentUser is a string', async () => {
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => {},
+    logout: async () => {},
+    getToken: async () => 'hunter2',
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
+    client: () => {},
+    type: 'custom',
+  }
+
+  CURRENT_USER_DATA = {
+    name: 'Peter Pistorius',
+    email: 'nospam@example.net',
+    roles: 'admin',
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <AuthConsumer />
+    </AuthProvider>
+  )
+
+  // We're booting up!
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+  // The user is not authenticated
+  await waitFor(() => screen.getByText('Log In'))
+
+  expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
+  expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
+
+  // Replace "getUserMetadata" with actual data, and login!
+  mockAuthClient.getUserMetadata = jest.fn(async () => {
+    return {
+      sub: 'abcdefg|123456',
+      username: 'peterp',
+    }
+  })
+  fireEvent.click(screen.getByText('Log In'))
+
+  // Check that you're logged in!
+  await waitFor(() => screen.getByText('Log Out'))
+
+  expect(screen.getByText('Has Admin: yes')).toBeInTheDocument()
   expect(screen.getByText('Has Admin as Array: yes')).toBeInTheDocument()
 
   // Log out

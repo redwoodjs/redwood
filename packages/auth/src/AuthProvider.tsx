@@ -10,9 +10,8 @@ import type {
 } from './authClients'
 
 export interface CurrentUser {
-  roles?: Array<string>
+  roles?: Array<string> | string
 }
-
 export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
@@ -187,18 +186,26 @@ export class AuthProvider extends React.Component<
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    */
-  hasRole = (role: string | string[]): boolean => {
+  hasRole = (roleToCheck: string | string[]): boolean => {
     if (
-      typeof role !== 'undefined' &&
+      typeof roleToCheck !== 'undefined' &&
       this.state.currentUser &&
       this.state.currentUser.roles
     ) {
-      if (typeof role === 'string') {
-        return this.state.currentUser.roles?.includes(role) || false
+      if (typeof roleToCheck === 'string') {
+        return this.state.currentUser.roles?.includes(roleToCheck) || false
       }
 
-      if (Array.isArray(role)) {
-        return this.state.currentUser.roles.some((r) => role.includes(r))
+      if (Array.isArray(roleToCheck)) {
+        if (Array.isArray(this.state.currentUser.roles)) {
+          return this.state.currentUser.roles?.some((r) =>
+            roleToCheck.includes(r)
+          )
+        } else {
+          return roleToCheck.some((r) =>
+            this.state.currentUser?.roles?.includes(r)
+          )
+        }
       }
     }
 
