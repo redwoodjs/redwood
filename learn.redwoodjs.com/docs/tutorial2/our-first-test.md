@@ -1,8 +1,4 @@
----
-id: our-first-test
-title: "Our First Test"
-sidebar_label: "Our First Test"
----
+# Our First Test
 
 So if Storybook is the first phase of creating/updating a component, phase two must be confirming the functionality with a test. Let's add a test for our new summary feature.
 

@@ -1,8 +1,4 @@
----
-id: getting-dynamic
-title: "Getting Dynamic"
-sidebar_label: "Getting Dynamic"
----
+# Getting Dynamic
 
 These two pages are great and all but where are the actual blog posts in this blog? Let's work on those next.
 

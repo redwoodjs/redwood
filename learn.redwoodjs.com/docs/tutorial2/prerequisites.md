@@ -1,8 +1,4 @@
----
-id: prerequisites
-title: "Prerequisites"
-sidebar_label: "Prerequisites"
----
+# Prerequisites
 
 You'll need to be on at least a release candidate of Redwood v1.0 to make it through this tutorial.
 

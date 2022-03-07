@@ -1,8 +1,4 @@
----
-id: a-second-page-and-a-link
-title: "A Second Page and a Link"
-sidebar_label: "A Second Page and a Link"
----
+# A Second Page and a Link
 
 Let's create an "About" page for our blog so everyone knows about the geniuses behind this achievement. We'll create another page using `redwood`:
 

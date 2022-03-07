@@ -1,8 +1,4 @@
----
-id: multiple-comments
-title: "Multiple Comments"
-sidebar_label: "Multiple Comments"
----
+# Multiple Comments
 
 Our amazing blog posts will obviously garner a huge and passionate fanbase and we will very rarely have only a single comment. Let's work on displaying a list of comments.
 

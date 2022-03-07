@@ -1,8 +1,4 @@
----
-id: adding-comments-to-the-schema
-title: "Adding Comments to the Schema"
-sidebar_label: "Adding Comments to the Schema"
----
+# Adding Comments to the Schema
 
 Let's take a moment to appreciate how amazing this is—we built, designed and tested a completely new component for our app, which displays data from an API call (which would pull that data from a database) without actually having to build any of that backend functionality! Redwood let us provide fake data to Storybook and Jest so we could get our component working.
 

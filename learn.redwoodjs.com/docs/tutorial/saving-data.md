@@ -1,8 +1,4 @@
----
-id: saving-data
-title: "Saving Data"
-sidebar_label: "Saving Data"
----
+# Saving Data
 
 ### Add a Contact Model
 

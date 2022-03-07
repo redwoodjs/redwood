@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Quick Start
 
 > RedwoodJS requires [Node.js](https://nodejs.org/en/) (>=14.x <=16.x) and [Yarn](https://classic.yarnpkg.com/en/docs/install/) (>=1.15).

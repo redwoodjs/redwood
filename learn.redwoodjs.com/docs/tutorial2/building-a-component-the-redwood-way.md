@@ -1,8 +1,4 @@
----
-id: building-a-component-the-redwood-way
-title: "Building a Component the Redwood Way"
-sidebar_label: "Building a Component the Redwood Way"
----
+# Building a Component the Redwood Way
 
 What's our blog missing? Comments. Let's add a simple comment engine so people can leave
 their completely rational, well-reasoned comments on our blog posts. It's the internet,

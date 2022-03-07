@@ -1,8 +1,4 @@
----
-id: wrapping-up
-title: "Wrapping Up"
-sidebar_label: "Wrapping Up"
----
+# Wrapping Up
 
 You made it! If you really went through the whole tutorial: congratulations! If you just skipped ahead to this page to try and get a free congratulations: tsk, tsk!
 

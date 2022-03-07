@@ -1,8 +1,4 @@
----
-id: role-based-authorization-control-rbac
-title: "Role-Based Access Control (RBAC)"
-sidebar_label: "Role-Based Access Control (RBAC)"
----
+# Role-Based Access Control (RBAC)
 
 Imagine a few weeks in the future of our blog when every post hits the front page of the New York Times and we're getting hundreds of comments a day. We can't be expected to come up with quality content each day *and* moderate the endless stream of (mostly well-meaning) comments! We're going to need help. Let's hire a comment moderator to remove obvious spam and bad intentioned posts and help make the internet a better place.
 

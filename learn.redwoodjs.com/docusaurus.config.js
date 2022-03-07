@@ -123,7 +123,6 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/redwoodjs/learn.redwoodjs.com/blob/main/', // base path for repo edit pages

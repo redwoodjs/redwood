@@ -1,8 +1,4 @@
----
-id: our-first-story
-title: "Our First Story"
-sidebar_label: "Our First Story"
----
+# Our First Story
 
 Let's say that on our homepage we only want to show the first couple of sentences in our blog post as a short summary, and then you'll have to click through to see the full post.
 

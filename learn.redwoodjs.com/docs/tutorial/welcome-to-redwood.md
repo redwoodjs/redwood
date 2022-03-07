@@ -1,8 +1,4 @@
----
-id: welcome-to-redwood
-title: "Welcome to RedwoodJS"
-sidebar_label: "Welcome to RedwoodJS"
----
+# Welcome to RedwoodJS
 
 Welcome to Redwood! If you haven't yet, check out the [Redwood README](https://github.com/redwoodjs/redwood/blob/main/README.md) to get a little background on why we created Redwood and the problems it's meant to solve. Redwood brings several existing technologies together for the first time into what we think is the future of database-backed single page applications.
 

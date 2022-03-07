@@ -1,8 +1,4 @@
----
-id: installation-starting-development
-title: "Installation & Starting Development"
-sidebar_label: "Installation & Starting Development"
----
+# Installation & Starting Development
 
 We'll use yarn ([yarn](https://yarnpkg.com/en/docs/install) is a requirement) to create the basic structure of our app:
 

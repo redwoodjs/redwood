@@ -1,3 +1,7 @@
+---
+slug: creating-a-background-worker-with-exec-and-faktory
+---
+
 # Creating a Background Worker with Exec and Faktory
 
 In this cookbook, we'll use Redwood's [exec CLI command](/docs/cli-commands#exec) to create a background worker using [Faktory](https://contribsys.com/faktory/).
@@ -60,7 +64,7 @@ For this type of work, we typically don't want to hold up the request/response c
 
 export const postSignupTask = async ({ userId, emailPayload }) => {
   // Send a welcome email to new user.
-  // You'll have to have an integration with an email service for this to work. 
+  // You'll have to have an integration with an email service for this to work.
   await sendEmailWithTemplate({
     ...emailPayload,
     TemplateModel: {

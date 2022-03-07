@@ -1,8 +1,4 @@
----
-id: welcome-to-redwood-part-ii-redwoods-revenge
-title: "Welcome to Redwood, Part II: Redwood's Revenge"
-sidebar_label: "Welcome to Redwood, Part II: Redwood's Revenge"
----
+# Welcome to Redwood, Part II: Redwood's Revenge
 
 Part 1 of the tutorial was a huge success! It introduced billions (maybe an exaggeration) of developers to what Redwood could do to make web development in the Javascript ecosystem a delight. But that was just the beginning.
 

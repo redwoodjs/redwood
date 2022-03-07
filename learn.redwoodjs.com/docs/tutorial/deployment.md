@@ -1,8 +1,4 @@
----
-id: deployment
-title: "Deployment"
-sidebar_label: "Deployment"
----
+# Deployment
 
 The whole reason we started building Redwood was to make full-stack web apps easier to build and deploy on the Jamstack. While technically we already deployed in the previous section, it doesn't actually work yet. Let's fix that.
 

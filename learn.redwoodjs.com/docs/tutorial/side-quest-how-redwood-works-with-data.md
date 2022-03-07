@@ -1,8 +1,4 @@
----
-id: side-quest-how-redwood-works-with-data
-title: "Side Quest: How Redwood Works with Data"
-sidebar_label: "Side Quest: How Redwood Works with Data"
----
+# Side Quest: How Redwood Works with Data
 
 Redwood likes GraphQL. We think it's the API of the future. Our GraphQL implementation is built with [Apollo](https://www.apollographql.com/) (on the client) and [GraphQL Helix & Envelop](https://community.redwoodjs.com/t/using-graphql-envelop-helix-in-redwood-v0-35/2276) (on the server). Remember in our file system layout, there was a directory `api/src/functions` and a single file in there, `graphql.js`. If you were to deploy your app to a [serverless](https://en.wikipedia.org/wiki/Serverless_computing) stack (which we will do later in the [Deployment](/docs/tutorial/deployment) section), that `graphql.js` file would be compiled into a serverless function and would become the GraphQL API endpoint. Here's how a typical GraphQL query works its way through your app:
 

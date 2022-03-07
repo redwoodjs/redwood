@@ -1,8 +1,4 @@
----
-id: redwood-file-structure
-title: "Redwood File Structure"
-sidebar_label: "Redwood File Structure"
----
+# Redwood File Structure
 
 Let's take a look at the files and directories that were created for us (config files have been excluded for now):
 

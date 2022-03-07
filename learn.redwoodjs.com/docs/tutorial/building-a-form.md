@@ -1,8 +1,4 @@
----
-id: building-a-form
-title: "Building a Form"
-sidebar_label: "Building a Form"
----
+# Building a Form
 
 Wait, don't close your browser! You had to know this was coming eventually, didn't you? And you've probably realized by now we wouldn't even have this section in the tutorial unless Redwood had figured out a way to make forms less soul-sucking than usual. In fact Redwood might even make you _love_ building forms.
 

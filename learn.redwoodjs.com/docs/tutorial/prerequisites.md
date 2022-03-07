@@ -1,8 +1,4 @@
----
-id: prerequisites
-title: 'Prerequisites'
-sidebar_label: 'Prerequisites'
----
+# Prerequisites
 
 Redwood is composed of several popular libraries to make full-stack web development easier. Unfortunately, we can't teach all of those technologies from scratch during this tutorial, so we're going to assume you are already familiar with a few core concepts:
 

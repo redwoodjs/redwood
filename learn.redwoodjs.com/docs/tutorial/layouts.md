@@ -1,8 +1,4 @@
----
-id: layouts
-title: "Layouts"
-sidebar_label: "Layouts"
----
+# Layouts
 
 One way to solve the duplication of the `<header>` would be to create a `<Header>` component and include it in both `HomePage` and `AboutPage`. That works, but is there a better solution? Ideally there should only be one reference to the `<header>` anywhere in our code.
 

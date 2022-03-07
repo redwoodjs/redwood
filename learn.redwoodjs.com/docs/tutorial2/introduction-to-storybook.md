@@ -1,8 +1,4 @@
----
-id: introduction-to-storybook
-title: "Introduction to Storybook"
-sidebar_label: "Introduction to Storybook"
----
+# Introduction to Storybook
 
 Let's see what this Storybook thing is all about. Run this command to start up the Storybook server (you could stop your dev or test runners and then run this, or start another new terminal instance):
 

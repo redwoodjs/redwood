@@ -1,8 +1,4 @@
----
-id: creating-a-comment-form
-title: "Creating a Comment Form"
-sidebar_label: "Creating a Comment Form"
----
+# Creating a Comment Form
 
 Let's generate a component to house our new comment form, build it out and integrate it via Storybook, then add some tests:
 

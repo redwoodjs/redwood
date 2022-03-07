@@ -1,8 +1,4 @@
----
-id: wrapping-up
-title: "Wrapping up"
-sidebar_label: "Wrapping up"
----
+# Wrapping up
 
 You made it! Again! In Part 1 of the tutorial we learned about a lot of features that make it easier to create functionality for your users—cells, forms, scaffolding, and more. In Part 2 we learned more about the features that make life easier for us, the developers: Storybook and testing.
 
