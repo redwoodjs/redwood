@@ -89,7 +89,6 @@ const DEFAULT_CONFIG: Config = {
     title: 'Redwood App',
     host: 'localhost',
     port: 8911,
-    debugPort: -1,
     path: './api',
     target: TargetEnum.NODE,
     schemaPath: './api/db/schema.prisma',
