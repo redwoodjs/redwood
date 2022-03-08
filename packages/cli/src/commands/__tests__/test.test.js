@@ -7,6 +7,7 @@ jest.mock('execa', () =>
     params,
   }))
 )
+
 import execa from 'execa'
 
 import { handler } from '../test'
@@ -16,6 +17,14 @@ jest.mock('@redwoodjs/structure', () => {
     getProject: () => ({
       sides: ['web', 'api'],
     }),
+  }
+})
+
+// Before rw tests run, api/ and web/ `jest.config.js` is confirmed via existsSync()
+jest.mock('fs', () => {
+  return {
+    ...jest.requireActual('fs'),
+    existsSync: () => true,
   }
 })
 

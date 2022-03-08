@@ -145,7 +145,7 @@ const verifySignature = ({
  *
  */
 const timestampSchemeVerifier = (
-  options?: VerifyOptions | undefined
+  options?: VerifyOptions
 ): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {

@@ -1,3 +1,7 @@
+import base64Sha1Verifier from './base64Sha1Verifier'
+import type { Base64Sha1Verifier } from './base64Sha1Verifier'
+import base64Sha256Verifier from './base64Sha256Verifier'
+import type { Base64Sha256Verifier } from './base64Sha256Verifier'
 import jwtVerifier from './jwtVerifier'
 import type { JwtVerifier } from './jwtVerifier'
 import secretKeyVerifier from './secretKeyVerifier'
@@ -16,6 +20,8 @@ export const verifierLookup = {
   secretKeyVerifier,
   sha1Verifier,
   sha256Verifier,
+  base64Sha1Verifier,
+  base64Sha256Verifier,
   timestampSchemeVerifier,
   jwtVerifier,
 }
@@ -25,6 +31,8 @@ export type SupportedVerifiers =
   | SecretKeyVerifier
   | Sha1Verifier
   | Sha256Verifier
+  | Base64Sha1Verifier
+  | Base64Sha256Verifier
   | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
@@ -85,14 +93,18 @@ export class WebhookSignError extends WebhookError {
  *
  * Used when verifying a signature based on the verifier's requirements
  *
- * @param {string} signatureHeader - Optional Header that contains the signature to verify
- * will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
+ * @param {string} signatureHeader - Optional Header that contains the signature
+ * to verify. Will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
+ * @param {(signature: string) => string} signatureTransformer - Optional
+ * function that receives the signature from the headers and returns a new
+ * signature to use in the Verifier
  * @param {number} timestamp - Optional timestamp in msec
  * @param {number} tolerance - Optional tolerance in msec
  * @param {string} issuer - Options JWT issuer for JWTVerifier
  */
 export interface VerifyOptions {
   signatureHeader?: string
+  signatureTransformer?: (signature: string) => string
   timestamp?: number
   tolerance?: number
   issuer?: string

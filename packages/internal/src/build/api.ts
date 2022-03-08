@@ -133,6 +133,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
 
       return undefined
     }
+
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
     fs.writeFileSync(dstPath, result.code)
 

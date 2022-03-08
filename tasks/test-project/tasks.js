@@ -24,7 +24,7 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
-async function webTasks(outputPath, { link, verbose }) {
+async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -207,14 +207,14 @@ async function webTasks(outputPath, { link, verbose }) {
             [],
             getExecaOptions(outputPath)
           ),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       {
         title: '[link] Copy local framework files again',
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa('yarn rwfw project:copy', [], getExecaOptions(outputPath)),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       // =========
       {
@@ -222,7 +222,9 @@ async function webTasks(outputPath, { link, verbose }) {
         task: () => {
           return execa(
             'yarn rw setup ui tailwindcss',
-            ['--force', link && '--no-install'].filter(Boolean),
+            ['--force', linkWithLatestFwBuild && '--no-install'].filter(
+              Boolean
+            ),
             execaOptions
           )
         },
@@ -243,7 +245,7 @@ async function addModel(schema) {
   fs.writeFileSync(path, `${current}\n\n${schema}`)
 }
 
-async function apiTasks(outputPath, { verbose }) {
+async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptionsForProject = getExecaOptions(outputPath)
@@ -255,6 +257,10 @@ async function apiTasks(outputPath, { verbose }) {
       getExecaOptions(outputPath)
     )
 
+    if (linkWithLatestFwBuild) {
+      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+    }
+
     await execa('yarn rw g dbAuth', [], getExecaOptions(outputPath))
 
     // add dbAuth User model
@@ -264,7 +270,7 @@ async function apiTasks(outputPath, { verbose }) {
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
-    const contentContactsSdl = fs.readFileSync(pathContactsSdl).toString()
+    const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
     const resultsContactsSdl = contentContactsSdl.replace(
       /createContact([^}]*)@requireAuth/,
       `createContact(input: CreateContactInput!): Contact @skipAuth`
@@ -273,7 +279,7 @@ async function apiTasks(outputPath, { verbose }) {
 
     // update directive in contacts.sdl.ts
     const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
-    const contentPostsSdl = fs.readFileSync(pathPostsSdl).toString()
+    const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
     const resultsPostsSdl = contentPostsSdl.replace(
       /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
       `posts: [Post!]! @skipAuth
@@ -281,13 +287,22 @@ async function apiTasks(outputPath, { verbose }) {
     )
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
 
+    // Update src/lib/auth to return roles, so tsc doesn't complain
+    const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
+    const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
+    const newLibAuthContent = libAuthContent.replace(
+      'select: { id: true }',
+      'select: { id: true, roles: true }'
+    )
+    fs.writeFileSync(libAuthPath, newLibAuthContent)
+
     // update requireAuth test
     const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.ts`
     const contentRequireAuth = fs.readFileSync(pathRequireAuth).toString()
     const resultsRequireAuth = contentRequireAuth.replace(
       /const mockExecution([^}]*){} }\)/,
       `const mockExecution = mockRedwoodDirective(requireAuth, {
-        context: { currentUser: { id: 1 } },
+        context: { currentUser: { id: 1, roles: 'ADMIN' } },
       })`
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
@@ -299,6 +314,7 @@ async function apiTasks(outputPath, { verbose }) {
       /handler: \({ username,([^}]*)userAttributes }\) => {/,
       `handler: ({ username, hashedPassword, salt }) => {`
     )
+
     fs.writeFileSync(pathAuthJs, resultsAuthJs)
 
     await execa(
