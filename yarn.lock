@@ -5897,7 +5897,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 10.2.4
     core-js: 3.21.1
-    css-loader: 6.7.0
+    css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.1.0
     esbuild: 0.14.25
@@ -12814,9 +12814,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.7.0":
-  version: 6.7.0
-  resolution: "css-loader@npm:6.7.0"
+"css-loader@npm:6.7.1":
+  version: 6.7.1
+  resolution: "css-loader@npm:6.7.1"
   dependencies:
     icss-utils: ^5.1.0
     postcss: ^8.4.7
@@ -12828,7 +12828,7 @@ __metadata:
     semver: ^7.3.5
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 494e873cc594d275c13e5a7c0fbbe19d11d4f8a3ad53b40e27a7f516f77aa1c0d8d464f7bbc0e7c1389e8a9bf33dd585b715e1d0b38101b47825ffd755a797ab
+  checksum: c9e900e2a6012a988ab36cf87598fa1e74cd570ab25dbcc8a5d7f10a91a0f9549ff3656b9bbb2bf26b9f5a39f76b9b4b148513c4085c23b73c9c1d5cc2f7de12
   languageName: node
   linkType: hard
 
