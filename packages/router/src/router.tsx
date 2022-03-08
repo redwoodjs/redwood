@@ -63,7 +63,7 @@ function Route(props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
   return <InternalRoute {...props} />
 }
 
-const InternalRoute: React.VFC<InternalRouteProps> = ({
+const InternalRoute = ({
   path,
   page,
   name,
