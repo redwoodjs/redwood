@@ -5,7 +5,6 @@ export const smokeTest = async ({ page, webServerPort }) => {
   await page.goto(`http://localhost:${webServerPort}/`)
 
   // Check that the blog posts are being loaded
-  await page.textContent('text=Welcome to the blog!')
   await page.textContent('text=What is the meaning of life?')
   await page.textContent('text=A little more about me')
 

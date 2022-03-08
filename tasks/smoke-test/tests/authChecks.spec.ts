@@ -40,7 +40,7 @@ devServerTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
 })
 
 devServerTest(
-  'useAuth checks',
+  'useAuth hook, auth redirects checks',
   async ({ page, webUrl }: PlaywrightTestArgs & DevServerFixtures) => {
     await page.goto(`${webUrl}/profile`)
 
