@@ -15,4 +15,14 @@ const contact = `model Contact {
   createdAt DateTime @default(now())
 }`
 
-module.exports = { post, contact }
+const user = `model User {
+  id                  Int       @id @default(autoincrement())
+  email               String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  roles               String?
+}`
+
+module.exports = { post, contact, user }

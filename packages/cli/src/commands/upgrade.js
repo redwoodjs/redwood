@@ -143,13 +143,19 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
   }
 }
 async function yarnInstall({ verbose }) {
-  try {
-    await execa('yarn install', ['--force', '--non-interactive'], {
-      shell: true,
-      stdio: verbose ? 'inherit' : 'pipe',
+  const yarnVersion = await getCmdMajorVersion('yarn')
 
-      cwd: getPaths().base,
-    })
+  try {
+    await execa(
+      'yarn install',
+      yarnVersion > 1 ? [] : ['--force', '--non-interactive'],
+      {
+        shell: true,
+        stdio: verbose ? 'inherit' : 'pipe',
+
+        cwd: getPaths().base,
+      }
+    )
   } catch (e) {
     throw new Error(
       'Could not finish installation. Please run `yarn install --force`, before continuing'
@@ -253,11 +259,12 @@ async function refreshPrismaClient(task, { verbose }) {
   }
 }
 
-const getCmdMajorVersion = async (command) => {
+export const getCmdMajorVersion = async (command) => {
   // Get current version
   const { stdout } = await execa(command, ['--version'], {
     cwd: getPaths().base,
   })
+
   if (!SEMVER_REGEX.test(stdout)) {
     throw new Error(`Unable to verify ${command} version.`)
   }

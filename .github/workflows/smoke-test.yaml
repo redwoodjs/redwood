@@ -10,9 +10,8 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node-version: ['16']
-        # TODO determine if we need both versions
-      fail-fast: false
+        node-version: ['14', '16']
+      fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     env:
@@ -21,10 +20,10 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: 0 # this makes sure that playwright dependencies are cached in node_modules
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -91,19 +90,15 @@ jobs:
           yarn rw test web --no-watch
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # Fails in CI with "Cannot find name 'gql'"
-      #
-      # - name: Run "rw type-check"
-      #   run: |
-      #     yarn rw type-check
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw type-check"
+        run: |
+          yarn rw type-check
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      # Service needs implemented
-      #
-      # - name: Run "rw check"
-      #   run: |
-      #     yarn rw check
-      #   working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+      - name: Run "rw check"
+        run: |
+          yarn rw check
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw storybook"
         run: |
