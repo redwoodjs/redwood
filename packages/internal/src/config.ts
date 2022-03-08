@@ -22,6 +22,7 @@ export interface NodeTargetConfig {
   target: TargetEnum.NODE
   schemaPath: string
   serverConfig: string
+  debugPort: number
 }
 
 interface BrowserTargetConfig {
@@ -88,6 +89,7 @@ const DEFAULT_CONFIG: Config = {
     title: 'Redwood App',
     host: 'localhost',
     port: 8911,
+    debugPort: 18911,
     path: './api',
     target: TargetEnum.NODE,
     schemaPath: './api/db/schema.prisma',

@@ -62,7 +62,11 @@ const rebuildApiServer = () => {
     httpServerProcess = fork(path.join(__dirname, 'index.js'), [
       '--port',
       getConfig().api.port.toString(),
-    ])
+    ], {
+      execArgv: process.execArgv.concat([
+        `--inspect=${getConfig().api.debugPort.toString()}`
+      ]),
+    })
   } catch (e) {
     console.error(e)
   }
