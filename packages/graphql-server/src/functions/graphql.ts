@@ -13,7 +13,7 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
-import { RedwoodError } from '@redwoodjs/api'
+import { normalizeRequest, RedwoodError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -23,12 +23,11 @@ import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
 import {
   getGraphQLParameters,
   processRequest,
-  Request,
   shouldRenderGraphiQL,
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
-import { createCorsContext } from '../cors'
+import { createCorsContext } from '@redwoodjs/api'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
@@ -45,32 +44,6 @@ import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
-/**
- * Extracts and parses body payload from event with base64 encoding check
- *
- */
-const parseEventBody = (event: APIGatewayProxyEvent) => {
-  if (!event.body) {
-    return
-  }
-
-  if (event.isBase64Encoded) {
-    return JSON.parse(Buffer.from(event.body, 'base64').toString('utf-8'))
-  } else {
-    return JSON.parse(event.body)
-  }
-}
-
-export function normalizeRequest(event: APIGatewayProxyEvent): Request {
-  const body = parseEventBody(event)
-
-  return {
-    headers: event.headers || {},
-    method: event.httpMethod,
-    query: event.queryStringParameters,
-    body,
-  }
-}
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.

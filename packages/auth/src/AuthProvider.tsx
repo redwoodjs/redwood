@@ -4,6 +4,7 @@ import { createAuthClient } from './authClients'
 import type {
   AuthClient,
   SupportedAuthTypes,
+  SupportedAuthConfig,
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
@@ -75,11 +76,19 @@ type AuthProviderProps =
   | {
       client: SupportedAuthClients
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
+      config?: never
       skipFetchCurrentUser?: boolean
     }
   | {
       client?: never
-      type: 'dbAuth' | 'clerk'
+      type: 'clerk'
+      config?: never
+      skipFetchCurrentUser?: boolean
+    }
+  | {
+      client?: never
+      type: 'dbAuth'
+      config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
 
@@ -123,7 +132,8 @@ export class AuthProvider extends React.Component<
     super(props)
     this.rwClient = createAuthClient(
       props.client as SupportedAuthClients,
-      props.type as SupportedAuthTypes
+      props.type as SupportedAuthTypes,
+      props.config as SupportedAuthConfig
     )
   }
 
@@ -141,6 +151,8 @@ export class AuthProvider extends React.Component<
     const token = await this.getToken()
     const response = await global.fetch(this.getApiGraphQLUrl(), {
       method: 'POST',
+      // TODO: how can user configure this? inherit same `config` options given to auth client?
+      credentials: 'include',
       headers: {
         'content-type': 'application/json',
         'auth-provider': this.rwClient.type,

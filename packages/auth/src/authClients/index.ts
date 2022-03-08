@@ -10,7 +10,7 @@ import type { Clerk, ClerkUser } from './clerk'
 import { custom } from './custom'
 import type { Custom } from './custom'
 import { dbAuth } from './dbAuth'
-import type { DbAuth } from './dbAuth'
+import type { DbAuth, DbAuthConfig } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
 import { firebase } from './firebase'
@@ -62,6 +62,8 @@ export type SupportedAuthClients =
 
 export type SupportedAuthTypes = keyof typeof typesToClients
 
+export type SupportedAuthConfig = DbAuthConfig
+
 export type { Auth0User }
 export type { AzureActiveDirectoryUser }
 export type { DbAuth }
@@ -102,7 +104,8 @@ export interface AuthClient {
 
 export const createAuthClient = (
   client: SupportedAuthClients,
-  type: SupportedAuthTypes
+  type: SupportedAuthTypes,
+  config?: SupportedAuthConfig
 ): AuthClient => {
   if (!typesToClients[type]) {
     throw new Error(
@@ -111,5 +114,6 @@ export const createAuthClient = (
       ).join(', ')}`
     )
   }
-  return typesToClients[type](client)
+
+  return typesToClients[type](client, config)
 }
