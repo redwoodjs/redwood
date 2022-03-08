@@ -52,7 +52,7 @@ const ignoreApiFiles = [
 ]
 
 export const findApiFiles = (cwd: string = getPaths().api.src) => {
-  const files = fg.sync('**/*.{js,ts,json}', {
+  const files = fg.sync('**/*.{js,ts}', {
     cwd,
     absolute: true,
     ignore: ignoreApiFiles,

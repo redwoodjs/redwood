@@ -20,7 +20,20 @@ export const buildApi = () => {
     .filter((path): path is string => path !== undefined)
     .flatMap(generateProxyFilesForNestedFunction)
 
-  return transpileApi(prebuiltFiles)
+  // Save the return for later
+  const transpileResult = transpileApi(prebuiltFiles)
+
+  // Just copy over `datamodel.json` if it exists at the right path
+  const DATAMODEL_PATH = path.join(getPaths().api.models, 'datamodel.json')
+
+  if (fs.existsSync(DATAMODEL_PATH)) {
+    fs.copyFileSync(
+      DATAMODEL_PATH,
+      path.join(getPaths().api.dist, 'models', 'datamodel.json')
+    )
+  }
+
+  return transpileResult
 }
 
 export const cleanApiBuild = () => {
@@ -108,26 +121,20 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   const plugins = getApiSideBabelPlugins()
 
   return srcFiles.map((srcPath) => {
-    let fileContent
     const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
     const dstPath = path
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    if (srcPath.endsWith('.json')) {
-      fileContent = fs.readFileSync(srcPath, 'utf-8')
-    } else {
-      const result = prebuildApiFile(srcPath, dstPath, plugins)
-      if (!result?.code) {
-        // TODO: Figure out a better way to return these programatically.
-        console.warn('Error:', srcPath, 'could not prebuilt.')
+    const result = prebuildApiFile(srcPath, dstPath, plugins)
+    if (!result?.code) {
+      // TODO: Figure out a better way to return these programatically.
+      console.warn('Error:', srcPath, 'could not prebuilt.')
 
-        return undefined
-      }
-      fileContent = result.code
+      return undefined
     }
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
-    fs.writeFileSync(dstPath, fileContent)
+    fs.writeFileSync(dstPath, result.code)
 
     return dstPath
   })
