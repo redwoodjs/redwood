@@ -5935,6 +5935,7 @@ __metadata:
     rw-api-server-watch: ./dist/bins/rw-api-server-watch.js
     rw-gen: ./dist/bins/rw-gen.js
     rw-gen-watch: ./dist/bins/rw-gen-watch.js
+    rw-log-formatter: ./dist/bins/rw-log-formatter.js
     rwfw: ./dist/bins/rwfw.js
   languageName: unknown
   linkType: soft
@@ -6020,7 +6021,7 @@ __metadata:
     aws-lambda: 1.0.7
     core-js: 3.21.1
     graphql: 16.3.0
-    graphql-helix: 1.11.0
+    graphql-helix: 1.12.0
     graphql-playground-html: 1.6.30
     graphql-scalars: 1.15.0
     graphql-tag: 2.12.6
@@ -17009,12 +17010,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-helix@npm:1.11.0":
-  version: 1.11.0
-  resolution: "graphql-helix@npm:1.11.0"
+"graphql-helix@npm:1.12.0":
+  version: 1.12.0
+  resolution: "graphql-helix@npm:1.12.0"
   peerDependencies:
     graphql: ^15.3.0 || ^16.0.0
-  checksum: 23015d60d65181dc07643be7f465861bd645bf53d27cf845d67030252914ecc53ce02d452509952d928091024594884f09002ae7a015a5936e5efbacc6312294
+  checksum: a17d46bf054d3e6924f165d80ce1852de0cdbc14cf47dedaf95c6d1d7d65a108bb4378f952a9f3e3378990623eb9e1b0ce1178a7c2a64625e1c519cb22e5c982
   languageName: node
   linkType: hard
 
