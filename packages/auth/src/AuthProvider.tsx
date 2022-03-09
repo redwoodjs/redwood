@@ -186,23 +186,29 @@ export class AuthProvider extends React.Component<
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    */
-  hasRole = (roleToCheck: string | string[]): boolean => {
-    if (
-      typeof roleToCheck !== 'undefined' &&
-      this.state.currentUser &&
-      this.state.currentUser.roles
-    ) {
-      if (typeof roleToCheck === 'string') {
-        return this.state.currentUser.roles?.includes(roleToCheck) || false
+  hasRole = (rolesToCheck: string | string[]): boolean => {
+    if (typeof rolesToCheck !== 'undefined' && this.state.currentUser?.roles) {
+      if (typeof rolesToCheck === 'string') {
+        if (typeof this.state.currentUser.roles === 'string') {
+          // roleToCheck is a string, currentUser.roles is a string
+          return this.state.currentUser.roles === rolesToCheck || false
+        } else if (Array.isArray(this.state.currentUser.roles)) {
+          // roleToCheck is a string, currentUser.roles is an array
+          return this.state.currentUser.roles?.some(
+            (allowedRole) => rolesToCheck === allowedRole
+          )
+        }
       }
 
-      if (Array.isArray(roleToCheck)) {
+      if (Array.isArray(rolesToCheck)) {
         if (Array.isArray(this.state.currentUser.roles)) {
-          return this.state.currentUser.roles?.some((r) =>
-            roleToCheck.includes(r)
+          // roleToCheck is an array, currentUser.roles is an array
+          return this.state.currentUser.roles?.some((allowedRole) =>
+            rolesToCheck.includes(allowedRole)
           )
-        } else {
-          return roleToCheck.some((r) =>
+        } else if (typeof this.state.currentUser.roles === 'string') {
+          // roleToCheck is an array, currentUser.roles is a string
+          return rolesToCheck.some((r) =>
             this.state.currentUser?.roles?.includes(r)
           )
         }
