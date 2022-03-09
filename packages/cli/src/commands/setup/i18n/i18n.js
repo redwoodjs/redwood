@@ -174,7 +174,7 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding mock for "react-i18next"',
-      task: (_ctx, task) => {
+      task: () => {
         if (!force && mocksExists()) {
           throw new Error(
             '__mocks__/react-i18next.js already exists.\nUse --force to override existing mocks.'
