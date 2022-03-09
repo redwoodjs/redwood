@@ -456,6 +456,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThan: 2.1 } })
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
+    expect(() =>
+      validate(2, 'number', { numericality: { lessThan: 0 } })
+    ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
 
     expect(() =>
       validate(2, 'number', { numericality: { lessThan: 3 } })
@@ -470,7 +473,7 @@ describe('validate numericality', () => {
     } catch (e) {
       expect(e.message).toEqual('number must be less than 1')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks if value is less than or equal to required number', () => {
@@ -486,6 +489,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThanOrEqual: 2 } })
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate(2, 'number', { numericality: { lessThanOrEqual: 0 } })
+    ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
 
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.3 } })
@@ -500,7 +506,7 @@ describe('validate numericality', () => {
     } catch (e) {
       expect(e.message).toEqual('number must be less than or equal to 2')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks if value is greater than required number', () => {
@@ -519,6 +525,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.0, 'number', { numericality: { greaterThan: 3 } })
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate(-1, 'number', { numericality: { greaterThan: 0 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
 
     expect(() =>
       validate(3, 'number', { numericality: { greaterThan: 2 } })
@@ -533,7 +542,7 @@ describe('validate numericality', () => {
     } catch (e) {
       expect(e.message).toEqual('number must be greater than 3')
     }
-    expect.assertions(8)
+    expect.assertions(9)
   })
 
   it('checks if value is greater than or equal to required number', () => {
@@ -542,6 +551,9 @@ describe('validate numericality', () => {
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
     expect(() =>
       validate(3.0, 'number', { numericality: { greaterThanOrEqual: 3.1 } })
+    ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate(-1, 'number', { numericality: { greaterThanOrEqual: 0 } })
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
 
     expect(() =>
@@ -567,7 +579,7 @@ describe('validate numericality', () => {
     } catch (e) {
       expect(e.message).toEqual('number must be greater than or equal to 3')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks if value is not equal to required number', () => {
@@ -583,6 +595,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.9, 'number', { numericality: { equal: 3 } })
     ).toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() => validate(2, 'number', { numericality: { equal: 0 } })).toThrow(
+      ValidationErrors.EqualNumericalityValidationError
+    )
 
     expect(() =>
       validate(2, 'number', { numericality: { equal: 2 } })
@@ -603,7 +618,7 @@ describe('validate numericality', () => {
     } catch (e) {
       expect(e.message).toEqual('number must equal 3')
     }
-    expect.assertions(9)
+    expect.assertions(10)
   })
 
   it('checks if not equal to required number', () => {
@@ -615,6 +630,9 @@ describe('validate numericality', () => {
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
       validate(3.0, 'number', { numericality: { otherThan: 3 } })
+    ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+    expect(() =>
+      validate(0, 'number', { numericality: { otherThan: 0 } })
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
 
     expect(() =>
@@ -633,7 +651,7 @@ describe('validate numericality', () => {
     } catch (e) {
       expect(e.message).toEqual('number must not equal 3')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks for a value being even', () => {
