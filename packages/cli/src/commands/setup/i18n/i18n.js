@@ -43,6 +43,9 @@ const i18nConfigExists = () => {
 const localesExists = (lng) => {
   return fs.existsSync(path.join(getPaths().web.src, 'locales', lng + '.json'))
 }
+const mocksExists = () => {
+  return fs.existsSync(path.join(getPaths().web, '__mocks__/react-i18next.js'))
+}
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
@@ -168,6 +171,26 @@ export const handler = async ({ force }) => {
           fs.writeFileSync(APP_JS_PATH, addI18nImport(appJS))
         }
       },
+    },
+    {
+      title: 'Adding mock for "react-i18next"',
+      task: (_ctx, task) => {
+        if (!force && mocksExists()) {
+          throw new Error(
+            '__mocks__/react-i18next.js already exists.\nUse --force to override existing mocks.'
+          )
+        } else {
+          return writeFile(
+            path.join(getPaths().web, '__mocks__/react-i18next.js'),
+            fs
+              .readFileSync(
+                path.resolve(__dirname, 'templates', 'mock.js.template')
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
+      }
     },
     {
       title: 'One more thing...',
