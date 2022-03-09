@@ -53,24 +53,34 @@ export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
     return false
   }
 
-  if (roles) {
-    if (Array.isArray(roles)) {
-      if (Array.isArray(context.currentUser.roles)) {
-        return context.currentUser.roles?.some((r) => roles.includes(r))
-      } else {
-        roles.some((r) => context.currentUser.roles?.includes(r))
-      }
-    }
+  const currentUserRoles = context.currentUser?.roles
 
-    if (typeof roles === 'string') {
-      return context.currentUser.roles?.includes(roles)
+  if (typeof roles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roleToCheck is a string, currentUser.roles is a string
+      return currentUserRoles === roles
+    } else if (Array.isArray(currentUserRoles)) {
+      // roleToCheck is a string, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
-
-    // roles not found
-    return false
   }
 
-  return true
+  if (Array.isArray(roles)) {
+    if (Array.isArray(currentUserRoles)) {
+      // roleToCheck is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof context.currentUser.roles === 'string') {
+      // roleToCheck is an array, currentUser.roles is a string
+      return roles.some(
+        (allowedRole) => context.currentUser?.roles === allowedRole
+      )
+    }
+  }
+
+  // roles not found
+  return false
 }
 
 /**
@@ -92,7 +102,7 @@ export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (!hasRole({ roles })) {
+  if (roles && !hasRole({ roles })) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }

@@ -191,7 +191,7 @@ export class AuthProvider extends React.Component<
       if (typeof rolesToCheck === 'string') {
         if (typeof this.state.currentUser.roles === 'string') {
           // roleToCheck is a string, currentUser.roles is a string
-          return this.state.currentUser.roles === rolesToCheck || false
+          return this.state.currentUser.roles === rolesToCheck
         } else if (Array.isArray(this.state.currentUser.roles)) {
           // roleToCheck is a string, currentUser.roles is an array
           return this.state.currentUser.roles?.some(
@@ -208,8 +208,8 @@ export class AuthProvider extends React.Component<
           )
         } else if (typeof this.state.currentUser.roles === 'string') {
           // roleToCheck is an array, currentUser.roles is a string
-          return rolesToCheck.some((r) =>
-            this.state.currentUser?.roles?.includes(r)
+          return rolesToCheck.some(
+            (allowedRole) => this.state.currentUser?.roles === allowedRole
           )
         }
       }
