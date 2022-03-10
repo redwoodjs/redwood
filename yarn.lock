@@ -5735,7 +5735,7 @@ __metadata:
     pascalcase: 1.0.0
     pino: 7.8.1
     split2: 4.1.0
-    supertokens-node: 8.6.0
+    supertokens-node: 9.0.1
     typescript: 4.6.2
     uuid: 8.3.2
   peerDependencies:
@@ -27961,9 +27961,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-node@npm:8.6.0":
-  version: 8.6.0
-  resolution: "supertokens-node@npm:8.6.0"
+"supertokens-node@npm:9.0.1":
+  version: 9.0.1
+  resolution: "supertokens-node@npm:9.0.1"
   dependencies:
     axios: 0.21.4
     body-parser: 1.19.0
@@ -27976,7 +27976,7 @@ __metadata:
     psl: 1.8.0
     supertokens-js-override: ^0.0.4
     verify-apple-id-token: ^2.1.0
-  checksum: 5679bde717f6480408c2f4e0dd8abe79d04db06d5ca5b2dc1485c7962cedcd104af813cc735b37fee8273dd135dc6c9b22fdb1a276846adce54315e43a8557c8
+  checksum: 5612b6a3c08e8cba59c3e4978a2d7a5e34e70734796d4fe42ce7ec33852b939b5ef33ae516792610f748b0b7ff9b4792e9a67c766d7d00560a7a293bd264439f
   languageName: node
   linkType: hard
 
