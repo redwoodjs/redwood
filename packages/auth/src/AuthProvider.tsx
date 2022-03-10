@@ -10,7 +10,7 @@ import type {
 } from './authClients'
 
 export interface CurrentUser {
-  roles?: Array<string> | string
+  roles?: Array<string>
 }
 
 export interface AuthContextInterface {
