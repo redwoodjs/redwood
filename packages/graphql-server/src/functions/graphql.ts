@@ -1,19 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  envelop,
   EnvelopError,
   FormatErrorHandler,
-  useMaskedErrors,
-  useSchema,
-} from '@envelop/core'
-import type { PluginOrDisabledPlugin } from '@envelop/core'
+  GraphQLYogaError,
+} from '@graphql-yoga/common'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { useParserCache } from '@envelop/parser-cache'
-import { useValidationCache } from '@envelop/validation-cache'
-import { normalizeRequest, RedwoodError } from '@redwoodjs/api'
+import { RedwoodError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -21,16 +17,14 @@ import type {
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
 import {
-  getGraphQLParameters,
-  processRequest,
+  CORSOptions,
+  createServer,
   shouldRenderGraphiQL,
-} from 'graphql-helix'
+} from '@graphql-yoga/common'
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
-import { createCorsContext } from '@redwoodjs/api'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
-import { createHealthcheckContext } from '../healthcheck'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import {
@@ -44,6 +38,7 @@ import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
+import { Request } from 'cross-undici-fetch'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -51,7 +46,7 @@ import type { GraphQLHandlerOptions } from './types'
  * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
  **/
 export const formatError: FormatErrorHandler = (err: any, message: string) => {
-  const allowErrors = [EnvelopError, RedwoodError]
+  const allowErrors = [GraphQLYogaError, EnvelopError, RedwoodError]
 
   // If using graphql-scalars, when validating input
   // the original TypeError is wrapped in an GraphQLError object.
@@ -97,7 +92,6 @@ export const createGraphQLHandler = ({
   services,
   sdls,
   directives = [],
-  onHealthCheck,
   depthLimitOptions,
   allowedOperations,
   defaultError = 'Something went wrong.',
@@ -142,13 +136,6 @@ export const createGraphQLHandler = ({
     plugins.push(useDisableIntrospection())
   }
 
-  // Simple LRU for caching parse results.
-  plugins.push(useParserCache())
-  // Simple LRU for caching validate results.
-  plugins.push(useValidationCache())
-  // Simplest plugin to provide your GraphQL schema.
-  plugins.push(useSchema(schema))
-
   // Custom Redwood plugins
   plugins.push(useRedwoodAuthContext(getCurrentUser))
   plugins.push(useRedwoodGlobalContextSetter())
@@ -182,51 +169,54 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
-
-  const corsContext = createCorsContext(cors)
-
-  const healthcheckContext = createHealthcheckContext(
-    onHealthCheck,
-    corsContext
-  )
-
-  const createSharedEnvelop = envelop({
+  const yoga = createServer({
+    schema,
     plugins,
-    enableInternalTracing: loggerConfig.options?.tracing,
+    maskedErrors: {
+      formatError,
+      errorMessage: defaultError,
+    },
+    logging: logger,
+    graphiql: false,
+    cors: (request: Request) => {
+      const corsOptions: CORSOptions = {}
+      if (cors && cors.origin) {
+        const requestOrigin = request.headers.get('origin')
+        if (typeof cors.origin === 'string') {
+          corsOptions.origin = [cors.origin]
+        } else if (
+          requestOrigin &&
+          (typeof cors.origin === 'boolean' ||
+            (Array.isArray(cors.origin) &&
+              requestOrigin &&
+              cors.origin.includes(requestOrigin)))
+        ) {
+          corsOptions.origin = [requestOrigin]
+        }
+
+        const requestAccessControlRequestHeaders = request.headers.get(
+          'access-control-request-headers'
+        )
+        if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
+          corsOptions.allowedHeaders = [requestAccessControlRequestHeaders]
+        }
+      }
+      return {}
+    },
   })
 
   const handlerFn = async (
     event: APIGatewayProxyEvent,
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
-    const enveloped = createSharedEnvelop({
-      event,
-      requestContext: lambdaContext,
+    const request = new Request(`http://localhost${event.path}`, {
+      method: event.httpMethod,
+      headers: event.headers as HeadersInit,
+      body: event.body,
     })
 
-    const logger = loggerConfig.logger
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
-
-    // In the future, the normalizeRequest can take more flexible params, maybe even cloud provider name
-    // and return a normalized request structure.
-    const request = normalizeRequest(event)
-
-    if (healthcheckContext.isHealthcheckRequest(event.path)) {
-      return healthcheckContext.handleHealthCheck(request, event)
-    }
-
-    const corsHeaders = cors ? corsContext.getRequestHeaders(request) : {}
-
-    if (corsContext.shouldHandleCors(request)) {
-      return {
-        body: '',
-        statusCode: 200,
-        headers: corsHeaders,
-      }
-    }
 
     if (isDevEnv && shouldRenderGraphiQL(request)) {
       return {
@@ -236,48 +226,26 @@ export const createGraphQLHandler = ({
         statusCode: 200,
         headers: {
           'Content-Type': 'text/html',
-          ...corsHeaders,
         },
       }
     }
 
-    const { operationName, query, variables } = getGraphQLParameters(request)
-
     let lambdaResponse: APIGatewayProxyResult
 
     try {
-      const result = await processRequest({
-        operationName,
-        query,
-        variables,
-        request,
-        validationRules: undefined,
-        ...enveloped,
-        contextFactory: enveloped.contextFactory,
+      const response = await yoga.handleRequest(request, {
+        event,
+        requestContext: lambdaContext,
       })
-
-      if (result.type === 'RESPONSE') {
-        lambdaResponse = {
-          body: JSON.stringify(result.payload),
-          statusCode: 200,
-          headers: {
-            ...(result.headers || {}).reduce(
-              (prev, header) => ({ ...prev, [header.name]: header.value }),
-              {}
-            ),
-            ...corsHeaders,
-          },
-        }
-      } else if (result.type === 'MULTIPART_RESPONSE') {
-        lambdaResponse = {
-          body: JSON.stringify({ error: 'Streaming is not supported yet!' }),
-          statusCode: 500,
-        }
-      } else {
-        lambdaResponse = {
-          body: JSON.stringify({ error: 'Unexpected flow' }),
-          statusCode: 500,
-        }
+      const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
+      response.headers.forEach((value, key) => {
+        multiValueHeaders[key] = multiValueHeaders[key] || []
+        multiValueHeaders[key].push(value)
+      })
+      lambdaResponse = {
+        body: await response.text(),
+        statusCode: response.status,
+        multiValueHeaders,
       }
     } catch (e: any) {
       logger.error(e)
