@@ -290,10 +290,13 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     // Update src/lib/auth to return roles, so tsc doesn't complain
     const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
     const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
-    const newLibAuthContent = libAuthContent.replace(
-      'select: { id: true }',
-      'select: { id: true, roles: true }'
-    )
+
+    const newLibAuthContent = libAuthContent
+      .replace('select: { id: true }', 'select: { id: true, roles: true }')
+      .replace(
+        'const currentUserRoles = context.currentUser?.roles',
+        'const currentUserRoles = context.currentUser?.roles as string | string[]'
+      )
     fs.writeFileSync(libAuthPath, newLibAuthContent)
 
     // update requireAuth test
