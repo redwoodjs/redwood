@@ -3,38 +3,27 @@ import {
   expect,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
+import execa from 'execa'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import devServerTest, {
   DevServerFixtures,
 } from '../playwright-fixtures/devServer.fixture'
+
+import { loginAsTestUser, signUpTestUser } from './common'
 
 // Signs up a user before these tests
 
 devServerTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
   const page = await browser.newPage()
 
-  await page.goto(`http://localhost:9000/signup`)
-
-  await page.locator('input[name="username"]').click()
-  // Fill input[name="username"]
-  await page.locator('input[name="username"]').fill('testuser@bazinga.com')
-  // Press Tab
-  await page.locator('input[name="username"]').press('Tab')
-  // Fill input[name="password"]
-  await page.locator('input[name="password"]').fill('test123')
-
-  const alreadyRegisteredErr = page.locator(
-    'text=Username `testuser@bazinga.com` already in use'
-  )
-
-  await page.locator('text=Sign Up').click()
-
-  // Either wait for signup to succeed and redirect
-  // Or get the username already registered error, either way is fine!
-  await Promise.race([
-    page.waitForNavigation({ url: '**/' }),
-    alreadyRegisteredErr.waitFor({ timeout: 2000 }),
-  ])
+  await signUpTestUser({
+    // @NOTE we can't access webUrl in beforeAll, so hardcoded
+    // But we can switch to beforeEach if required
+    webUrl: 'http://localhost:9000',
+    page,
+  })
 
   await page.close()
 })
@@ -99,22 +88,3 @@ devServerTest('requireAuth graphql checks', async ({ page, webUrl }) => {
 
   await expect(page.locator('text=This is an edited title!')).toBeTruthy()
 })
-
-const loginAsTestUser = async ({ webUrl, page }) => {
-  await page.goto(`${webUrl}/login`)
-
-  // Click input[name="username"]
-  await page.locator('input[name="username"]').click()
-  // Fill input[name="username"]
-  await page.locator('input[name="username"]').fill('testuser@bazinga.com')
-  // Click input[name="password"]
-  await page.locator('input[name="password"]').click()
-  // Fill input[name="password"]
-  await page.locator('input[name="password"]').fill('test123')
-
-  // Click button:has-text("Login")
-  await Promise.all([
-    page.waitForNavigation({ url: '**/' }),
-    page.locator('button:has-text("Login")').click(),
-  ])
-}

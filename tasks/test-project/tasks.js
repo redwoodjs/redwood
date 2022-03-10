@@ -320,11 +320,16 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     // update directive in contacts.sdl.ts
     const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
     const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
-    const resultsPostsSdl = contentPostsSdl.replace(
-      /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
-      `posts: [Post!]! @skipAuth
+    const resultsPostsSdl = contentPostsSdl
+      .replace(
+        /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
+        `posts: [Post!]! @skipAuth
       post(id: Int!): Post @skipAuth`
-    )
+      ) // make posts accessible to all
+      .replace(
+        'createPost(input: CreatePostInput!): Post! @requireAuth',
+        'createPost(input: CreatePostInput!): Post! @requireAuth(roles:["ADMIN"])'
+      ) // make creating posts admin only
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
 
     // Update src/lib/auth to return roles, so tsc doesn't complain
