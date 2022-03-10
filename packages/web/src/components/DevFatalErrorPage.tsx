@@ -4,8 +4,6 @@
 
 import { useState } from 'react'
 
-import type { ASTNode } from 'graphql'
-import { print } from 'graphql'
 import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
@@ -24,7 +22,7 @@ if (/^[A-Z]:\\/.test(srcRoot)) {
 // Allow APIs client to attach response/request
 type ErrorWithRequestMeta = Error & {
   mostRecentRequest?: {
-    query: ASTNode
+    query: string
     operationName: string
     operationKind: string
     variables: any
@@ -243,7 +241,7 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
                 onClick={() => setOpenQuery(!openQuery)}
                 className={openQuery ? 'open' : 'preview'}
               >
-                {print(props.error.mostRecentRequest.query)}
+                {props.error.mostRecentRequest.query}
               </pre>
             </code>
           </div>
