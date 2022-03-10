@@ -3,7 +3,12 @@ import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 const ProfilePage = () => {
-  const { currentUser, isAuthenticated, hasRole } = useAuth()
+  const { currentUser, isAuthenticated, hasRole, loading } = useAuth()
+
+  if (loading) {
+    return <p>Loading...</p>
+  }
+
   return (
     <>
       <MetaTags title="Profile" description="Profile page" />
