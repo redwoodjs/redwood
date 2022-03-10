@@ -1,4 +1,9 @@
-const profilePageBody = `{ const { currentUser, isAuthenticated, hasRole } = useAuth()
+const profilePageBody = `{ const { currentUser, isAuthenticated, hasRole, loading } = useAuth()
+
+if (loading) {
+  return <p>Loading...</p>
+}
+
 return (
   <>
     <MetaTags title="Profile" description="Profile page" />
