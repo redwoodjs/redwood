@@ -30,6 +30,7 @@
     "@redwoodjs/internal": "0.49.1",
     "@redwoodjs/structure": "0.49.1",
     "ci-info": "3.3.0",
+    "cross-undici-fetch": "0.1.25",
     "envinfo": "7.8.1",
     "node-fetch": "2.6.7",
     "systeminformation": "5.11.9",
@@ -40,7 +41,6 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/envinfo": "7.8.1",
-    "@types/node-fetch": "2.5.12",
     "@types/uuid": "8.3.4",
     "@types/yargs": "16.0.4",
     "jest": "27.5.1"
