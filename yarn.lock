@@ -2036,14 +2036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.28.1":
-  version: 1.28.1
-  resolution: "@clerk/types@npm:1.28.1"
-  checksum: ddbec9c7d2507c9af88c88129fc078f2309813592af5e360d511f48e574261f752c0348f740e3ff80debf2298c918cf4e01ad9d169e172d97d72f82b243b9efd
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^1.28.3":
+"@clerk/types@npm:1.28.3, @clerk/types@npm:^1.28.3":
   version: 1.28.3
   resolution: "@clerk/types@npm:1.28.3"
   checksum: 16315351f2f218ddaf75821589d4925a0d676be450d055fd9919b672d989cef0d1206dc80e4fc1be6dbc856f7d4987c835eae4d422f7bee6434d11493380ce3a
@@ -3229,71 +3222,71 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-operations@npm:2.3.2":
-  version: 2.3.2
-  resolution: "@graphql-codegen/typescript-operations@npm:2.3.2"
+"@graphql-codegen/typescript-operations@npm:2.3.4":
+  version: 2.3.4
+  resolution: "@graphql-codegen/typescript-operations@npm:2.3.4"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
-    "@graphql-codegen/typescript": ^2.4.5
-    "@graphql-codegen/visitor-plugin-common": 2.7.1
+    "@graphql-codegen/typescript": ^2.4.7
+    "@graphql-codegen/visitor-plugin-common": 2.7.3
     auto-bind: ~4.0.0
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 149393312830b188a21488263cbdfb473ea16b3be07224bf03b567faaee1f3cce45fc9071acf9918b639ac9e974c6ec3fc032ead3353e99c9ea75f90658ea7a8
+  checksum: bfcd30a0a9cd62f2ee91f993c80a4e9d1118d7922a193afc7d757b91873bbb5f6197485de30b16eab74f898ef84308c27d90d0e97f26b887ae3e245682f5f434
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-react-apollo@npm:3.2.8":
-  version: 3.2.8
-  resolution: "@graphql-codegen/typescript-react-apollo@npm:3.2.8"
+"@graphql-codegen/typescript-react-apollo@npm:3.2.10":
+  version: 3.2.10
+  resolution: "@graphql-codegen/typescript-react-apollo@npm:3.2.10"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
-    "@graphql-codegen/visitor-plugin-common": 2.7.1
+    "@graphql-codegen/visitor-plugin-common": 2.7.3
     auto-bind: ~4.0.0
     change-case-all: 1.0.14
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-tag: ^2.0.0
-  checksum: 24aafb30076f8dc757f2b95792a396106f3e948b22732db46052f5964dac62695b1fb35664e16a0ef17e69ca6662363a374da3f3425e94f1678a85ba1a1bf588
+  checksum: 00ffd9eddf8f7f32b3aa6688e5cf25470e8e5c0c7156eb86fce5f4c5017d3e29205571dbedab07e0b93c5bc1245a99879dd91ae22e19c206988f2b6b137ad37e
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-resolvers@npm:2.5.2":
-  version: 2.5.2
-  resolution: "@graphql-codegen/typescript-resolvers@npm:2.5.2"
+"@graphql-codegen/typescript-resolvers@npm:2.5.4":
+  version: 2.5.4
+  resolution: "@graphql-codegen/typescript-resolvers@npm:2.5.4"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
-    "@graphql-codegen/typescript": ^2.4.5
-    "@graphql-codegen/visitor-plugin-common": 2.7.1
+    "@graphql-codegen/typescript": ^2.4.7
+    "@graphql-codegen/visitor-plugin-common": 2.7.3
     "@graphql-tools/utils": ^8.1.1
     auto-bind: ~4.0.0
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: ee4d41016cfe9430fc47249c8f975958ff70127eb90a6efe44655332df400803a076840fefbd270530edd368d33e47eb132de669cbec06958fcbb50eef4b58d6
+  checksum: 18f6d413a4448e0bd007e54da13f8f3a23447f8a9f759d9eba4ca895eff7ce72777a98d61287b4f82b1eed41347fc8b97e5e0542ad99314296361fa87e94cc87
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript@npm:2.4.5, @graphql-codegen/typescript@npm:^2.4.5":
-  version: 2.4.5
-  resolution: "@graphql-codegen/typescript@npm:2.4.5"
+"@graphql-codegen/typescript@npm:2.4.7, @graphql-codegen/typescript@npm:^2.4.7":
+  version: 2.4.7
+  resolution: "@graphql-codegen/typescript@npm:2.4.7"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
     "@graphql-codegen/schema-ast": ^2.4.1
-    "@graphql-codegen/visitor-plugin-common": 2.7.1
+    "@graphql-codegen/visitor-plugin-common": 2.7.3
     auto-bind: ~4.0.0
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 0965146f1597409a014a7acdc2321c717c1092af2c89ed70e6db9bb8974423b3ffba2504cb4470081cbab1827f504f4d5948f4b4046a8ae2022fdcf0b1d07403
+  checksum: 76964b6429ffc8ad50cb3e69b80046313c7f314fc11c8f030bdaca5a00a3d58e9fd1e73603ac120f99340ee669d428f4503862af3591c4701e2eb5e756b87a31
   languageName: node
   linkType: hard
 
-"@graphql-codegen/visitor-plugin-common@npm:2.7.1":
-  version: 2.7.1
-  resolution: "@graphql-codegen/visitor-plugin-common@npm:2.7.1"
+"@graphql-codegen/visitor-plugin-common@npm:2.7.3":
+  version: 2.7.3
+  resolution: "@graphql-codegen/visitor-plugin-common@npm:2.7.3"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
     "@graphql-tools/optimize": ^1.0.1
@@ -3307,7 +3300,7 @@ __metadata:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 64c9c534495911493b56e81124082c9966444d352a23a717825336fdd55f9ee873a4ae77136f8fa7579b1cababf969bea2c7c8f9da7ca29d3b30653e8c60ed06
+  checksum: cd6573215672503f1e8349869bbead24964e4fdf2722eeb6fbf00c2a760b0b9424784b165708efcd820fb63b1900ae4c8362fceb23326b937e9fd50900ce05bb
   languageName: node
   linkType: hard
 
@@ -5740,7 +5733,7 @@ __metadata:
     md5: 2.3.0
     node-fetch: 2.6.7
     pascalcase: 1.0.0
-    pino: 7.8.0
+    pino: 7.8.1
     split2: 4.1.0
     supertokens-node: 8.6.0
     typescript: 4.6.2
@@ -5774,7 +5767,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.3
     "@clerk/clerk-sdk-node": 2.9.8
-    "@clerk/types": 1.28.1
+    "@clerk/types": 1.28.3
     "@supabase/supabase-js": 1.31.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
@@ -5928,7 +5921,7 @@ __metadata:
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.2
     webpack-dev-server: 4.7.4
-    webpack-manifest-plugin: 4.1.1
+    webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
   bin:
@@ -5983,7 +5976,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@testing-library/dom": 8.11.3
     "@testing-library/jest-dom": 5.16.2
-    "@testing-library/react": 12.1.3
+    "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.40
@@ -6055,10 +6048,10 @@ __metadata:
     "@graphql-codegen/cli": 2.6.2
     "@graphql-codegen/core": 2.5.1
     "@graphql-codegen/schema-ast": 2.4.1
-    "@graphql-codegen/typescript": 2.4.5
-    "@graphql-codegen/typescript-operations": 2.3.2
-    "@graphql-codegen/typescript-react-apollo": 3.2.8
-    "@graphql-codegen/typescript-resolvers": 2.5.2
+    "@graphql-codegen/typescript": 2.4.7
+    "@graphql-codegen/typescript-operations": 2.3.4
+    "@graphql-codegen/typescript-react-apollo": 3.2.10
+    "@graphql-codegen/typescript-resolvers": 2.5.4
     "@redwoodjs/graphql-server": 0.49.1
     "@types/babel-plugin-tester": 9.0.4
     "@types/babel__core": 7.1.18
@@ -6083,7 +6076,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.6
+    systeminformation: 5.11.7
     toml: 3.0.0
     typescript: 4.6.2
   bin:
@@ -6203,7 +6196,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.6
+    systeminformation: 5.11.7
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -6225,7 +6218,7 @@ __metadata:
     "@storybook/manager-webpack5": 6.4.19
     "@storybook/react": 6.4.19
     "@testing-library/jest-dom": 5.16.2
-    "@testing-library/react": 12.1.3
+    "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/aws-lambda": 8.10.93
     "@types/babel-core": 6.25.7
@@ -6255,7 +6248,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": 0.49.1
     "@testing-library/jest-dom": 5.16.2
-    "@testing-library/react": 12.1.3
+    "@testing-library/react": 12.1.4
     "@types/react": 17.0.40
     "@types/react-dom": 17.0.13
     "@types/testing-library__jest-dom": 5.14.3
@@ -7329,9 +7322,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:12.1.3":
-  version: 12.1.3
-  resolution: "@testing-library/react@npm:12.1.3"
+"@testing-library/react@npm:12.1.4":
+  version: 12.1.4
+  resolution: "@testing-library/react@npm:12.1.4"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^8.0.0
@@ -7339,7 +7332,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: b435b111fb30d11d4f0af4024eec3a2ffbf54ef40909216fc947a74fc9320f8d0bc8ea8b4f1fa2f99e806138cf743009e7d02400f20cbed93aaedf5d445303a0
+  checksum: 037c78246dc5f120b0c0714de6c4f8245a8f52617cb273193283fe8dc195a8cb9dc753ac717cf7140d0519973aaa46e087a9183e99a2d9a3f7e65e81ca53352f
   languageName: node
   linkType: hard
 
@@ -23640,9 +23633,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:7.8.0":
-  version: 7.8.0
-  resolution: "pino@npm:7.8.0"
+"pino@npm:7.8.1":
+  version: 7.8.1
+  resolution: "pino@npm:7.8.1"
   dependencies:
     fast-redact: ^3.0.0
     on-exit-leak-free: ^0.2.0
@@ -23656,7 +23649,7 @@ __metadata:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: 6d8d299f1f82ac32e531f843ca9333dc10e2c83774375f0e53bae2bb476fad7e1f7dcbae61429a61853edf33d1b751bd5f78cc5820164264ea9fbccc651bf60f
+  checksum: 1e9dc1ef6d4bd90d00e55e6c616848e761def2dec113eea7235122b1166eaa0056aae5adccf41c228bfe5bdfc7517c35604ee0f61f1da0b4a182d8b8b03a9520
   languageName: node
   linkType: hard
 
@@ -26236,7 +26229,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@playwright/test": 1.19.2
     "@testing-library/jest-dom": 5.16.2
-    "@testing-library/react": 12.1.3
+    "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.4.1
@@ -28138,12 +28131,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.6":
-  version: 5.11.6
-  resolution: "systeminformation@npm:5.11.6"
+"systeminformation@npm:5.11.7":
+  version: 5.11.7
+  resolution: "systeminformation@npm:5.11.7"
   bin:
     systeminformation: lib/cli.js
-  checksum: 9a778278d652da56bf280ff188945d6f0efe50823eeee4172412e10f2d1c15e154ada2a9ec79fe51cf7af3e70df39ebdd090c62a106fbee361fe915a14e1d038
+  checksum: 764c9b6ca5fdf6e911998a7fe664672652a1a7882859a30bbbe5e49fef9477f7383e5fe1bb3d09fc920215bcacab6b9c6e8273d43b3981becef5bc6288cde255
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
@@ -30309,15 +30302,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-manifest-plugin@npm:4.1.1":
-  version: 4.1.1
-  resolution: "webpack-manifest-plugin@npm:4.1.1"
+"webpack-manifest-plugin@npm:5.0.0":
+  version: 5.0.0
+  resolution: "webpack-manifest-plugin@npm:5.0.0"
   dependencies:
     tapable: ^2.0.0
     webpack-sources: ^2.2.0
   peerDependencies:
-    webpack: ^4.44.2 || ^5.47.0
-  checksum: 9486f399c86358e5811f314c71ba0ef2915c2db885ae01fd14002f2fb3d791bc9cf7b0fbe92e9f012c85c06f2efd94ecfc50f85d3fbce6359757f327039a7839
+    webpack: ^5.47.0
+  checksum: c6baed67855c48363a7bd677bc05ac532e2d817370894ec5a785524c1df08859330198eda419efb17d0e4233dc74d194f423a4ac5d34ab5521ba2617d14ea572
   languageName: node
   linkType: hard
 
