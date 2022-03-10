@@ -1209,6 +1209,8 @@ test('redirect replacing route', async () => {
   // starts on home page
   await waitFor(() => screen.getByText('Home Page'))
 
+  // This will navigate to /list, which will then redirect to /list?_limit=10
+  // which will render `<h1>List Page</h1>`
   act(() => navigate(routes.list()))
   await waitFor(() => screen.getByText('List Page'))
   act(() => back())
