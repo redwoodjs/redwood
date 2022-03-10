@@ -6076,7 +6076,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.6
+    systeminformation: 5.11.7
     toml: 3.0.0
     typescript: 4.6.2
   bin:
@@ -6196,7 +6196,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
-    systeminformation: 5.11.6
+    systeminformation: 5.11.7
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -28131,12 +28131,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.6":
-  version: 5.11.6
-  resolution: "systeminformation@npm:5.11.6"
+"systeminformation@npm:5.11.7":
+  version: 5.11.7
+  resolution: "systeminformation@npm:5.11.7"
   bin:
     systeminformation: lib/cli.js
-  checksum: 9a778278d652da56bf280ff188945d6f0efe50823eeee4172412e10f2d1c15e154ada2a9ec79fe51cf7af3e70df39ebdd090c62a106fbee361fe915a14e1d038
+  checksum: 764c9b6ca5fdf6e911998a7fe664672652a1a7882859a30bbbe5e49fef9477f7383e5fe1bb3d09fc920215bcacab6b9c6e8273d43b3981becef5bc6288cde255
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
