@@ -202,6 +202,7 @@ Within your Framework directory, use the following tools and commands to test yo
 2. **Syntax and Formatting**: `yarn lint`
     - to fix errors or warnings: `yarn lint:fix`
 3. **Run unit tests for each package**: `yarn test`
+    - to run tests for a specific package, first `cd` into the package director, e.g. `cd packages/record`
 4. **Check Yarn resolutions and package.json format**: `yarn check`
     - includes yarn dedupe, constraints, and package.json formatter
 
