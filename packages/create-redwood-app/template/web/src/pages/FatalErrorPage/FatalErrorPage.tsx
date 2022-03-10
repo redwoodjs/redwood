@@ -10,7 +10,7 @@
 // Ensures that production builds do not include the error page
 let RedwoodDevFatalErrorPage = undefined
 if (process.env.NODE_ENV === 'development') {
-  RedwoodDevFatalErrorPage = require('@redwoodjs/web').DevFatalErrorPage
+  RedwoodDevFatalErrorPage = require('@redwoodjs/web/dist/components/DevFatalErrorPage').DevFatalErrorPage
 }
 
 export default RedwoodDevFatalErrorPage ||
