@@ -61,10 +61,10 @@ console.log(await db.user.findMany())
     '<td>EMAIL</td><td>admin@bazinga.com</td>'
   )
 
-  // const isAdminRow = await page.waitForSelector('*css=tr >> text=Is Admin')
-  // await expect(await isAdminRow.innerHTML()).toBe(
-  //   '<td>Is Admin</td><td>true</td>'
-  // )
+  const isAdminRow = await page.waitForSelector('*css=tr >> text=Is Admin')
+  await expect(await isAdminRow.innerHTML()).toBe(
+    '<td>Is Admin</td><td>true</td>'
+  )
 
   await page.goto(`${webUrl}/posts/new`)
 
