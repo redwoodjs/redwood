@@ -155,6 +155,104 @@ describe('User subclass', () => {
       })
     })
 
+    describe('upsert', () => {
+      it('builds record and calls instance method', async () => {
+        const attributes = {
+          email: 'rob@redwoodjs.com',
+          name: 'Rob Awesome Cameron',
+          hashedPassword: 'abcd',
+          salt: '1234',
+        }
+
+        const where = {
+          email: 'rob@redwoodjs.com',
+        }
+
+        const buildSpy = jest.spyOn(User, 'build')
+        const upsertSpy = jest.spyOn(User.prototype, 'upsert')
+
+        await User.upsert(attributes, where)
+
+        expect(buildSpy).toHaveBeenCalledWith(attributes)
+        expect(upsertSpy).toHaveBeenCalledWith(where, {})
+
+        buildSpy.mockRestore()
+        upsertSpy.mockRestore()
+      })
+
+      it('updates an existing record from a list of attributes and a matching clause', async () => {
+        const attributes = {
+          email: 'rob@redwoodjs.com',
+          name: 'Rob Cameron',
+          hashedPassword: 'new password',
+          salt: '5678',
+        }
+
+        const where = {
+          email: 'rob@redwoodjs.com',
+        }
+
+        db.user.upsert = jest.fn(() => ({
+          id: 1,
+          ...attributes,
+        }))
+
+        const user = await User.upsert(attributes, where)
+
+        expect(db.user.upsert).toHaveBeenCalledWith({
+          where,
+          update: attributes,
+          create: attributes,
+        })
+        expect(user instanceof User).toEqual(true)
+        expect(user.attributes).toEqual({ id: 1, ...attributes })
+      })
+
+      it('creates a new record from a list of attributes if the matching clause does not match anything', async () => {
+        const attributes = {
+          email: 'peter@redwoodjs.com',
+          name: 'Peter Pistorius',
+          hashedPassword: 'abc',
+          salt: 'abc',
+        }
+
+        const where = {
+          email: attributes.email,
+        }
+
+        db.user.upsert = jest.fn(() => ({
+          id: 3,
+          ...attributes,
+        }))
+
+        const user = await User.upsert(attributes, where)
+
+        expect(user instanceof User).toEqual(true)
+        expect(user.id).not.toEqual(undefined)
+        expect(user.attributes).toEqual({ id: user.id, ...attributes })
+      })
+
+      it('throws an error if some required attributes are missing', async () => {
+        const attributes = {
+          name: 'Peter Pistorius',
+          hashedPassword: '12345',
+          salt: '1234',
+        }
+
+        const where = {
+          email: 'peter@redwoodjs.com',
+        }
+
+        db.user.upsert = jest.fn(() => {
+          throw new Error('Argument email for create.email is missing.')
+        })
+
+        await expect(
+          async () => await User.upsert(attributes, where, { throw: true })
+        ).rejects.toThrowError(Errors.RedwoodRecordMissingAttributeError)
+      })
+    })
+
     describe('find', () => {
       it('finds a user by ID', async () => {
         const id = 1
