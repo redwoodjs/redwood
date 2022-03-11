@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { print } from 'graphql/language/printer'
 import type { F } from 'ts-toolbelt'
 
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
@@ -123,7 +124,13 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   } as any
 
   const updateDataApolloLink = new ApolloLink((operation, forward) => {
-    data.mostRecentRequest = operation
+    const { operationName, query, variables } = operation
+
+    data.mostRecentRequest = {}
+    data.mostRecentRequest.operationName = operationName
+    data.mostRecentRequest.operationKind = query?.kind.toString()
+    data.mostRecentRequest.variables = variables
+    data.mostRecentRequest.query = query && print(operation.query)
 
     return forward(operation).map((result) => {
       data.mostRecentResponse = result
