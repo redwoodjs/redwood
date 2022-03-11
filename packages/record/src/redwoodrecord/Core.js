@@ -58,6 +58,12 @@ export default class Core {
     return await record.save(options)
   }
 
+  static async upsert(attributes, where, options = {}) {
+    const record = this.build(attributes)
+
+    return await record.upsert(where, options)
+  }
+
   // Find a single record by ID.
   static async find(id, options = {}) {
     const record = await this.findBy(
@@ -181,6 +187,23 @@ export default class Core {
   async update(attributes = {}, options = {}) {
     this.#attributes = Object.assign(this.#attributes, attributes)
     return await this.save(options)
+  }
+
+  async upsert(where, options = {}) {
+    const attributes = JSON.parse(JSON.stringify(this.attributes))
+
+    try {
+      this.attributes = await this.constructor.accessor.upsert({
+        where,
+        create: attributes,
+        update: attributes,
+      })
+    } catch (e) {
+      this._saveErrorHandler(e, options.throw)
+      return false
+    }
+
+    return this
   }
 
   ////////////////////////////
