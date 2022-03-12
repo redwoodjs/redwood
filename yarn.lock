@@ -2404,20 +2404,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@eslint/eslintrc@npm:1.2.0"
+"@eslint/eslintrc@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@eslint/eslintrc@npm:1.2.1"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
     espree: ^9.3.1
     globals: ^13.9.0
-    ignore: ^4.0.6
+    ignore: ^5.2.0
     import-fresh: ^3.2.1
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: fab5ddba4cc1815efeb0d3b2fb172df7bd98d61f0eeeb1b0126c3aba5af236ceb507b685aa8c3185502632ac0d8ca85c9fc1ee4083d81d67671becde84e1c895
+  checksum: 58b5d7469550e8d96c387c53e79719162f59e0e3ea1f3da65827a454f6c468f172aa7a2d99a99c8c19c35a8bd0b770c9a0f79a130c6ca0b5b05b5943f62b8542
   languageName: node
   linkType: hard
 
@@ -5957,7 +5957,7 @@ __metadata:
     "@redwoodjs/internal": 0.49.1
     "@typescript-eslint/eslint-plugin": 5.14.0
     "@typescript-eslint/parser": 5.14.0
-    eslint: 8.10.0
+    eslint: 8.11.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -14831,11 +14831,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.10.0":
-  version: 8.10.0
-  resolution: "eslint@npm:8.10.0"
+"eslint@npm:8.11.0":
+  version: 8.11.0
+  resolution: "eslint@npm:8.11.0"
   dependencies:
-    "@eslint/eslintrc": ^1.2.0
+    "@eslint/eslintrc": ^1.2.1
     "@humanwhocodes/config-array": ^0.9.2
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -14872,7 +14872,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 4bbbc348caaa84fb7b2ab1a454fc3b999b26b5bc23c74613da2974a0a798502c031bd31a17c3c10fb9ad389c7cf35bf6d6b163f9dd1c20554f6d3a779c1bc8fd
+  checksum: 16dee7d878104196ea4c7ead8defca3c42ff9f9e05b02fff1f6ae8932bcd0c64c8dc743658bb224829dcc5fe58f8febcc01745105210535310b18a597dc231eb
   languageName: node
   linkType: hard
 
@@ -17880,7 +17880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore@npm:^4.0.3, ignore@npm:^4.0.6":
+"ignore@npm:^4.0.3":
   version: 4.0.6
   resolution: "ignore@npm:4.0.6"
   checksum: 836ee7dc7fd9436096e2dba429359dbb9fa0e33d309e2b2d81692f375f6ca82024fc00567f798613d50c6b989e9cd2ad2b065acf116325cde177f02c86b7d4e0
@@ -26162,7 +26162,7 @@ __metadata:
     core-js: 3.21.1
     cypress: 9.5.1
     cypress-wait-until: 1.7.2
-    eslint: 8.10.0
+    eslint: 8.11.0
     fast-glob: 3.2.11
     fs-extra: 10.0.1
     is-port-reachable: 3.1.0
