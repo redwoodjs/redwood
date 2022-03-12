@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test'
+import { expect, PlaywrightTestArgs } from '@playwright/test'
 
 export const smokeTest = async ({ page, webServerPort }) => {
   // Go to http://localhost:8910/
@@ -25,12 +25,19 @@ export const smokeTest = async ({ page, webServerPort }) => {
   expect(page.url()).toBe(`http://localhost:${webServerPort}/posts`)
 }
 
+interface AuthUtilsParams {
+  webUrl: string
+  email?: string
+  password?: string
+  page: PlaywrightTestArgs['page']
+}
+
 export const signUpTestUser = async ({
   webUrl,
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
-}) => {
+}: AuthUtilsParams) => {
   await page.goto(`${webUrl}/signup`)
 
   await page.locator('input[name="username"]').click()
@@ -45,14 +52,17 @@ export const signUpTestUser = async ({
     `text=Username \`${email}\` already in use`
   )
 
-  await page.locator('text=Sign Up').click()
-
   // Either wait for signup to succeed and redirect
   // Or get the username already registered error, either way is fine!
-  await Promise.race([
-    page.waitForNavigation({ url: '**/' }),
-    alreadyRegisteredErr.waitFor({ timeout: 2000 }),
+  await Promise.all([
+    Promise.race([
+      page.waitForNavigation({ url: '**/' }),
+      alreadyRegisteredErr.waitFor({ timeout: 5000 }),
+    ]),
+    page.locator('text=Sign Up').click(),
   ])
+
+  console.log(`Signup successful for ${email}!`)
 }
 
 export const loginAsTestUser = async ({
@@ -60,7 +70,7 @@ export const loginAsTestUser = async ({
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
-}) => {
+}: AuthUtilsParams) => {
   await page.goto(`${webUrl}/login`)
 
   // Click input[name="username"]

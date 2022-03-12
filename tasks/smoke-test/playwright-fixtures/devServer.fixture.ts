@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
-import execa from 'execa'
+import execa, { ExecaChildProcess } from 'execa'
 import isPortReachable from 'is-port-reachable'
 
 import { waitForServer } from '../util'
@@ -50,6 +50,8 @@ const test = base.extend<any, DevServerFixtures>({
         host: 'localhost',
       })
 
+      let devServerHandler: ExecaChildProcess
+
       if (isServerAlreadyUp) {
         console.log('Reusing server....')
         console.log({
@@ -60,15 +62,17 @@ const test = base.extend<any, DevServerFixtures>({
         console.log(`Launching dev server at ${projectPath}`)
 
         // Don't wait for this to finish, because it doens't
-        const devServerHandler = execa.command(
+        devServerHandler = execa(
           `yarn rw dev --fwd="--no-open" --no-generate`,
           {
             cwd: projectPath,
             shell: true,
+            detached: false,
             env: {
               WEB_DEV_PORT: webServerPort,
               API_DEV_PORT: apiServerPort,
             },
+            cleanup: true,
           }
         )
 
@@ -86,7 +90,17 @@ const test = base.extend<any, DevServerFixtures>({
       await waitForServer(apiServerPort, 1000)
 
       console.log('Starting tests!')
+
       await use()
+
+      // Cleanup launcced server
+      await new Promise<void>((done) => {
+        console.log('Terminating dev server fixture...')
+        devServerHandler?.kill('SIGKILL', {
+          forceKillAfterTimeout: 50,
+        })
+        done()
+      })
     },
     { scope: 'worker', auto: true },
   ],
