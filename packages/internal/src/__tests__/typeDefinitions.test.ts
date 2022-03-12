@@ -225,7 +225,10 @@ test('respects user provided codegen config', async () => {
 })
 
 test("Doesn't throw or print any errors with empty project", async () => {
-  const fixturePath = path.resolve(__dirname, './fixtures/empty-project')
+  const fixturePath = path.resolve(
+    __dirname,
+    '../../../../__fixtures__/empty-project'
+  )
   process.env.RWJS_CWD = fixturePath
   const oldConsoleError = console.error
   console.error = jest.fn()
