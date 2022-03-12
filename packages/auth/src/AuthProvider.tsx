@@ -219,7 +219,15 @@ export class AuthProvider extends React.Component<
   }
 
   getToken = async () => {
-    return this.rwClient.getToken()
+    let token
+
+    try {
+      token = await this.rwClient.getToken()
+    } catch (error) {
+      token = null
+    }
+
+    return token
   }
 
   reauthenticate = async () => {

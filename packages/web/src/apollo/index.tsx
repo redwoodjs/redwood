@@ -140,13 +140,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   })
 
   const withToken = setContext(async () => {
-    let token
-
-    try {
-      token = await getToken()
-    } catch (error) {
-      token = null
-    }
+    const token = await getToken()
 
     return { token }
   })
