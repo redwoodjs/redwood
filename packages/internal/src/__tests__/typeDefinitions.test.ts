@@ -223,3 +223,27 @@ test('respects user provided codegen config', async () => {
   // Delete added codegen.yml
   fs.rmSync(customCodegenConfigPath)
 })
+
+test("Doesn't throw or print any errors with empty project", async () => {
+  const fixturePath = path.resolve(__dirname, './fixtures/empty-project')
+  process.env.RWJS_CWD = fixturePath
+  const oldConsoleError = console.error
+  console.error = jest.fn()
+
+  try {
+    await generateGraphQLSchema()
+    await generateTypeDefGraphQLWeb()
+    await generateTypeDefGraphQLApi()
+  } catch (e) {
+    console.error(e)
+    // Fail if any of the three above calls throws an error
+    expect(false).toBeTruthy()
+  }
+
+  try {
+    expect(console.error).not.toHaveBeenCalled()
+  } finally {
+    console.error = oldConsoleError
+    delete process.env.RWJS_CWD
+  }
+})
