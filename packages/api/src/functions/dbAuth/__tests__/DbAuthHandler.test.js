@@ -1297,11 +1297,28 @@ describe('dbAuth', () => {
     it('returns a Set-Cookie header', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const headers = dbAuth._createSessionHeader({ foo: 'bar' }, 'abcd')
+      const expiresTimeString = headers['Set-Cookie']
+        .split(';')[5]
+        .match(/Expires=(.*)/)[1]
 
       expect(Object.keys(headers).length).toEqual(1)
+      // Because there is a non-zero delay between _createSessionHeader and the
+      // call to `expect()` below we can't compare the exact time strings
       expect(headers['Set-Cookie']).toMatch(
-        `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
+        new RegExp(
+          `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${UTC_DATE_REGEX.source}`
+        )
       )
+      // Make sure the time-diff between the Expires= timestamp and
+      // _futureExpiresDate is at most a second (we only have seconds
+      // resolution here because of the UTC string conversion, so it's either
+      // going to be a 0 or 1000 ms diff)
+      expect(
+        Math.abs(
+          new Date(expiresTimeString).getTime() -
+            new Date(dbAuth._futureExpiresDate).getTime()
+        )
+      ).toBeLessThanOrEqual(1000)
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
       // characters that would be returned by the hash function
