@@ -92,15 +92,6 @@ const test = base.extend<any, DevServerFixtures>({
       console.log('Starting tests!')
 
       await use()
-
-      // Cleanup launcced server
-      await new Promise<void>((done) => {
-        console.log('Terminating dev server fixture...')
-        devServerHandler?.kill('SIGKILL', {
-          forceKillAfterTimeout: 50,
-        })
-        done()
-      })
     },
     { scope: 'worker', auto: true },
   ],

@@ -38,15 +38,17 @@ const test = base.extend<any, DevServerFixtures>({
       console.log(`Running rw serve at ${projectPath}`)
 
       if (projectNeedsBuilding(projectPath)) {
+        console.log('Building project...')
         // skip rw build if its already done
         execa.sync(`yarn rw build`, {
           cwd: projectPath,
           shell: true,
+          stdio: 'inherit',
         })
       }
 
       // Don't wait for this to finish, because it doens't
-      const serverHandler = execa(`yarn rw serve -p ${port}`, {
+      const serverHandler = execa.command(`yarn rw serve -p ${port}`, {
         cwd: projectPath,
         shell: true,
         detached: false,
@@ -65,15 +67,6 @@ const test = base.extend<any, DevServerFixtures>({
 
       console.log('Starting tests!')
       await use()
-
-      // Cleanup.
-      await new Promise<void>((done) => {
-        console.log('Terminating serve fixture...')
-        serverHandler?.kill('SIGKILL', {
-          forceKillAfterTimeout: 50,
-        })
-        done()
-      })
     },
     { scope: 'worker', auto: true },
   ],

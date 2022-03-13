@@ -311,31 +311,32 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
     const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
-    const resultsContactsSdl = contentContactsSdl.replace(
-      /createContact([^}]*)@requireAuth/,
-      `createContact(input: CreateContactInput!): Contact @skipAuth`
-    )
+    const resultsContactsSdl = contentContactsSdl
+      .replace(
+        'createContact(input: CreateContactInput!): Contact @requireAuth',
+        `createContact(input: CreateContactInput!): Contact @skipAuth`
+      )
+      .replace(
+        'deleteContact(id: Int!): Contact! @requireAuth',
+        'deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])'
+      ) // make deleting contacts admin only
     fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
 
-    // update directive in contacts.sdl.ts
+    // update directive in posts.sdl.ts
     const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
     const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
-    const resultsPostsSdl = contentPostsSdl
-      .replace(
-        /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
-        `posts: [Post!]! @skipAuth
+    const resultsPostsSdl = contentPostsSdl.replace(
+      /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
+      `posts: [Post!]! @skipAuth
       post(id: Int!): Post @skipAuth`
-      ) // make posts accessible to all
-      .replace(
-        'createPost(input: CreatePostInput!): Post! @requireAuth',
-        'createPost(input: CreatePostInput!): Post! @requireAuth(roles:["ADMIN"])'
-      ) // make creating posts admin only
+    ) // make posts accessible to all
+
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
 
     // Update src/lib/auth to return roles, so tsc doesn't complain
     const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
     const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
-    
+
     const newLibAuthContent = libAuthContent
       .replace(
         'select: { id: true }',
@@ -419,21 +420,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
             execaOptionsForProject
           )
 
-          await execa(`yarn rw g sdl contact`, [], execaOptionsForProject)
+          await execa(`yarn rw g scaffold contacts`, [], execaOptionsForProject)
 
-          await applyCodemod(
-            'contactsSdl.js',
-            fullPath('api/src/graphql/contacts.sdl')
-          )
-        },
-      },
-      {
-        title: 'Adding createContact to contacts service',
-        task: async () => {
-          await applyCodemod(
-            'contactsService.js',
-            fullPath('api/src/services/contacts/contacts')
-          )
+          // await applyCodemod(
+          //   'contactsSdl.js',
+          //   fullPath('api/src/graphql/contacts.sdl')
+          // )
         },
       },
       {
