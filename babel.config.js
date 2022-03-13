@@ -5,7 +5,7 @@ const packageJSON = require(path.join(__dirname, 'package.json'))
 // RedwoodJS targets Node.js 14.x because it's the default version for Netlify and Vercel's functions:
 // - https://docs.netlify.com/functions/build-with-javascript/#runtime-settings
 // - https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version
-const TARGETS_NODE = '14.18'
+const TARGETS_NODE = '14.19'
 
 // Run `npx browserslist "defaults, not IE 11, not IE_Mob 11"` to see a list
 // of target browsers.

@@ -64,7 +64,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node12', // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
+    target: 'node14', // Netlify defaults NodeJS 14: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,
