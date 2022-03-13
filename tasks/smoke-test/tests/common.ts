@@ -5,8 +5,12 @@ export const smokeTest = async ({ page, webServerPort }) => {
   await page.goto(`http://localhost:${webServerPort}/`)
 
   // Check that the blog posts are being loaded
-  await page.textContent('text=What is the meaning of life?')
-  await page.textContent('text=A little more about me')
+  // Avoid checking titles, because we edit them in other tests
+  await page.textContent('text=Meh waistcoat succulents umami')
+  await page.textContent('text=Raclette shoreditch before they sold out lyft.')
+  await page.textContent(
+    'text=baby single- origin coffee kickstarter lo - fi paleo skateboard.'
+  )
 
   // Click text=About
   await page.click('text=About')
