@@ -65,7 +65,9 @@ devServerTest('requireAuth graphql checks', async ({ page, webUrl }) => {
   // unAuthenticated
   await page.click('text=SAVE')
   await expect(
-    page.locator("text=You don't have permission to do that")
+    page
+      .locator('.rw-scaffold')
+      .locator("text=You don't have permission to do that")
   ).toBeTruthy()
 
   // Authenticated

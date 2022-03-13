@@ -313,7 +313,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
     const resultsContactsSdl = contentContactsSdl
       .replace(
-        'createContact(input: CreateContactInput!): Contact @requireAuth',
+        'createContact(input: CreateContactInput!): Contact! @requireAuth',
         `createContact(input: CreateContactInput!): Contact @skipAuth`
       )
       .replace(
@@ -421,11 +421,6 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           )
 
           await execa(`yarn rw g scaffold contacts`, [], execaOptionsForProject)
-
-          // await applyCodemod(
-          //   'contactsSdl.js',
-          //   fullPath('api/src/graphql/contacts.sdl')
-          // )
         },
       },
       {

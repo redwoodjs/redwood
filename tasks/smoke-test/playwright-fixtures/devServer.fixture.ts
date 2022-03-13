@@ -47,7 +47,7 @@ const test = base.extend<any, DevServerFixtures>({
       }
 
       const isServerAlreadyUp = await isPortReachable(webServerPort, {
-        host: 'localhost',
+        timeout: 5000,
       })
 
       let devServerHandler: ExecaChildProcess
