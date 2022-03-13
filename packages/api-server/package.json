@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "0.49.0",
+  "version": "0.49.1",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
     "fast-json-parse": "1.0.3",
-    "fastify": "3.27.3",
+    "fastify": "3.27.4",
     "fastify-http-proxy": "6.2.2",
     "fastify-raw-body": "3.2.0",
     "fastify-static": "4.5.0",
