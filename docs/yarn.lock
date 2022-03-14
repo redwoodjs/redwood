@@ -4631,6 +4631,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"docs@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "docs@workspace:."
+  dependencies:
+    "@docusaurus/core": 2.0.0-beta.17
+    "@docusaurus/plugin-content-docs": 2.0.0-beta.17
+    "@docusaurus/preset-classic": 2.0.0-beta.17
+    "@mdx-js/react": 1.6.22
+    clsx: 1.1.1
+    react: 17.0.2
+    react-dom: 17.0.2
+  languageName: unknown
+  linkType: soft
+
 "dom-converter@npm:^0.2.0":
   version: 0.2.0
   resolution: "dom-converter@npm:0.2.0"
@@ -6711,20 +6725,6 @@ __metadata:
   checksum: 6219631d8651467c54c58ef1b5d5c5c53e146f5ae2b0ecbb78b202da3eaad55b05b043db2d2d6f1d4230ee071b2ae8c2f85089e01377e4338bad97fa76a963b7
   languageName: node
   linkType: hard
-
-"learn-redwoodjs-com@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "learn-redwoodjs-com@workspace:."
-  dependencies:
-    "@docusaurus/core": 2.0.0-beta.17
-    "@docusaurus/plugin-content-docs": 2.0.0-beta.17
-    "@docusaurus/preset-classic": 2.0.0-beta.17
-    "@mdx-js/react": 1.6.22
-    clsx: 1.1.1
-    react: 17.0.2
-    react-dom: 17.0.2
-  languageName: unknown
-  linkType: soft
 
 "leven@npm:^3.1.0":
   version: 3.1.0
