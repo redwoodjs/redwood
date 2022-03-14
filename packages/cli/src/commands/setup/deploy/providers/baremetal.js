@@ -24,7 +24,7 @@ const files = [
     content: ECOSYSTEM,
   },
   {
-    path: path.join(getPaths().web, 'serve', '.keep'),
+    path: path.join(getPaths().web.base, 'serve', '.keep'),
     content: '',
   },
 ]

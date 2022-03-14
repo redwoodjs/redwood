@@ -27,6 +27,7 @@ export const DEPLOY = `# This file contains config for a baremetal deployment, s
 connect = "user@server.com"
 sides = ["api", "web"]
 path = "/var/www/app"
+redwood_web_server = true
 
 # If you have separate api and web servers, you can configure each separately:
 #
@@ -40,5 +41,5 @@ path = "/var/www/app"
 # sides = ["web"]
 # path = "/var/www/app"
 # migrate = false
-
+# redwood_web_server = false
 `
