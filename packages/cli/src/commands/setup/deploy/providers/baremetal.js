@@ -12,20 +12,25 @@ import { DEPLOY, ECOSYSTEM } from '../templates/baremetal'
 
 export const command = 'baremetal'
 export const description = 'Setup Baremetal deploy'
+export const configFilename = 'deploy.toml'
 
 const files = [
   {
-    path: path.join(getPaths().base, 'deploy.toml'),
+    path: path.join(getPaths().base, configFilename),
     content: DEPLOY,
   },
   {
     path: path.join(getPaths().base, 'ecosystem.config.js'),
     content: ECOSYSTEM,
   },
+  {
+    path: path.join(getPaths().web, 'serve', '.keep'),
+    content: '',
+  },
 ]
 
 const notes = [
-  'You are almost ready to deploy to BAREMETAL!',
+  'You are almost ready to go BAREMETAL!',
   '',
   'TODO: Instructions for config setup and first deploy.',
   '',
