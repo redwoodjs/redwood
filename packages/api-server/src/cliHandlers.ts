@@ -74,6 +74,9 @@ export const apiServerHandler = async ({
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    if (typeof process.send !== 'undefined') {
+      process.send('ready')
+    }
   })
   process.on('exit', () => {
     http?.close()
