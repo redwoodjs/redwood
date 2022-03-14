@@ -164,6 +164,7 @@ export class DbAuthHandler {
   session: SessionRecord | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
+  futureExpiresDate: string
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
@@ -214,13 +215,6 @@ export class DbAuthHandler {
     return uuidv4()
   }
 
-  // convert to the UTC datetime string that's required for cookies
-  get _futureExpiresDate() {
-    const futureDate = new Date()
-    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
-    return futureDate.toUTCString()
-  }
-
   // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
   get _deleteSessionHeader() {
     return {
@@ -247,6 +241,9 @@ export class DbAuthHandler {
     this.dbAccessor = this.db[this.options.authModelAccessor]
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
+    const futureDate = new Date()
+    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
+    this.futureExpiresDate = futureDate.toUTCString()
 
     if (options.cors) {
       this.corsContext = createCorsContext(options.cors)
@@ -566,7 +563,7 @@ export class DbAuthHandler {
   // returns all the cookie attributes in an array with the proper expiration date
   //
   // pass the argument `expires` set to "now" to get the attributes needed to expire
-  // the session, or "future" (or left out completely) to set to `_futureExpiresDate`
+  // the session, or "future" (or left out completely) to set to `futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
     let meta
 
@@ -602,7 +599,7 @@ export class DbAuthHandler {
     const expiresAt =
       expires === 'now'
         ? DbAuthHandler.PAST_EXPIRES_DATE
-        : this._futureExpiresDate
+        : this.futureExpiresDate
     meta.push(`Expires=${expiresAt}`)
 
     return meta
