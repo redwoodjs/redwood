@@ -21,8 +21,10 @@ import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
  */
 export const getCurrentUser = async (
   decoded,
-  { _token, _type },
-  { _event, _context }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  { token, type },
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  { event, context }
 ) => {
   return { ...decoded, roles: parseJWT({ decoded }).roles }
 }
