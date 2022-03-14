@@ -8,12 +8,16 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import { addFilesTask, printSetupNotes } from '../helpers'
-import { ECOSYSTEM } from '../templates/netlify'
+import { DEPLOY, ECOSYSTEM } from '../templates/baremetal'
 
 export const command = 'baremetal'
 export const description = 'Setup Baremetal deploy'
 
 const files = [
+  {
+    path: path.join(getPaths().base, 'deploy.toml'),
+    content: DEPLOY,
+  },
   {
     path: path.join(getPaths().base, 'ecosystem.config.js'),
     content: ECOSYSTEM,
@@ -21,8 +25,11 @@ const files = [
 ]
 
 const notes = [
-  'You are almost ready to deploy!',
-  'See: https://redwoodjs.com/docs/deploy#netlify-deploy',
+  'You are almost ready to deploy to BAREMETAL!',
+  '',
+  'TODO: Instructions for config setup and first deploy.',
+  '',
+  'See: https://redwoodjs.com/docs/deploy#baremetal-deploy',
 ]
 
 export const handler = async ({ force }) => {
