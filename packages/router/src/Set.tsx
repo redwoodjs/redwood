@@ -24,10 +24,6 @@ type SetProps<P> = P & {
   private?: boolean
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated?: string
-  /** Route is permitted when authenticated and use has any of the provided roles such as "admin" or ["admin", "editor"]
-   * @deprecated Use roles instead,
-   */
-  role?: string | string[]
   /** Route is permitted when authenticated and use has any of the provided roles such as "admin" or ["admin", "editor"] */
   roles?: string | string[]
   /** Prerender all pages in the set */

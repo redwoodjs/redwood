@@ -12,7 +12,7 @@ import { AuthProvider } from '../AuthProvider'
 import { useAuth } from '../useAuth'
 
 type HasRoleAuthClient = AuthClient & {
-  hasRole: (role?: string | string[]) => Promise<boolean | null>
+  hasRole: (rolesToCheck?: string | string[]) => Promise<boolean | null>
 }
 
 let CURRENT_USER_DATA: {
