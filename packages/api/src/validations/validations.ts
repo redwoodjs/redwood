@@ -516,8 +516,6 @@ const validationError = (
   const errorClassName = `${pascalcase(
     type
   )}ValidationError` as keyof typeof ValidationErrors
-
-  console.log(options, '>>>>>> validationError')
   const ErrorClass = ValidationErrors[errorClassName]
   const errorMessage =
     typeof options === 'object' ? (options.message as string) : undefined

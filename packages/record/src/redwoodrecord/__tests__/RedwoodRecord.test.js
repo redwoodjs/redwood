@@ -65,7 +65,7 @@ describe('save()', () => {
     const user = new User()
     await user.save()
 
-    expect(user.errors.email).toEqual(['email must be present'])
+    expect(user.errors.email).toEqual(['Email must be present'])
   })
 })
 

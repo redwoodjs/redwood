@@ -4,14 +4,9 @@ import { titleCase } from 'title-case'
 import { RedwoodError } from '../errors'
 
 export class ServiceValidationError extends RedwoodError {
-  constructor(
-    message: string,
-    substitutions = {},
-    extensions?: Record<string, any>
-  ) {
+  constructor(message: string, substitutions = {}) {
     let errorMessage = message
-
-    console.log(message, '>>> ServiceValidationError message')
+    let extensions = {}
 
     // in the main error message, replace instances of a string like
     // `{max}` with any substituted values that are titlecased and humanized
@@ -21,6 +16,10 @@ export class ServiceValidationError extends RedwoodError {
         titleCase(humanize(String(value)))
       )
 
+      // this mimics the Apollo Server use of error codes and extensions needed
+      // for the web side FormError handlings to show the message at the field level
+      // with an UserInputError (aka 'BAD_USER_INPUT" code) style error
+      // @see: https://www.apollographql.com/docs/apollo-server/data/errors/#including-custom-error-details
       extensions = {
         code: 'BAD_USER_INPUT',
         properties: {
@@ -61,7 +60,7 @@ export class AcceptanceValidationError extends ServiceValidationError {
 export class EmailValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = '${name} must be formatted like an email address222',
+    message = '${name} must be formatted like an email address',
     substitutions = {}
   ) {
     super(message, Object.assign(substitutions, { name }))

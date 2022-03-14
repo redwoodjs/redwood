@@ -24,7 +24,7 @@ describe('validate absence', () => {
     try {
       validate('rob@redwoodjs.com', 'email', { absence: true })
     } catch (e) {
-      expect(e.message).toEqual('email is not absent')
+      expect(e.message).toEqual('Email is not absent')
     }
   })
 
@@ -158,7 +158,7 @@ describe('validate exclusion', () => {
     try {
       validate('foo', 'selection', { exclusion: ['foo', 'bar'] })
     } catch (e) {
-      expect(e.message).toEqual('selection is reserved')
+      expect(e.message).toEqual('Selection is reserved')
     }
   })
 
@@ -222,7 +222,7 @@ describe('validate format', () => {
     try {
       validate('foobar', 'text', { format: /baz/ })
     } catch (e) {
-      expect(e.message).toEqual('text is not formatted correctly')
+      expect(e.message).toEqual('Text is not formatted correctly')
     }
     expect.assertions(1)
   })
@@ -264,7 +264,7 @@ describe('validate inclusion', () => {
     try {
       validate('foo', 'selection', { inclusion: ['foo', 'bar'] })
     } catch (e) {
-      expect(e.message).toEqual('selection is not valid')
+      expect(e.message).toEqual('Selection is not valid')
     }
   })
 
@@ -293,7 +293,7 @@ describe('validate length', () => {
     try {
       validate('a', 'username', { length: { min: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have at least 2 characters')
+      expect(e.message).toEqual('Username must have at least 2 characters')
     }
 
     // custom error
@@ -354,7 +354,7 @@ describe('validate length', () => {
     try {
       validate('foobar', 'username', { length: { equal: 5 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have exactly 5 characters')
+      expect(e.message).toEqual('Username must have exactly 5 characters')
     }
 
     // custom error
@@ -387,7 +387,7 @@ describe('validate length', () => {
     try {
       validate('foobar', 'username', { length: { between: [2, 4] } })
     } catch (e) {
-      expect(e.message).toEqual('username must be between 2 and 4 characters')
+      expect(e.message).toEqual('Username must be between 2 and 4 characters')
     }
 
     // custom error
@@ -439,7 +439,7 @@ describe('validate numericality', () => {
     try {
       validate(1.2, 'number', { numericality: { integer: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be an integer')
+      expect(e.message).toEqual('Number must be an integer')
     }
   })
 
@@ -471,7 +471,7 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { lessThan: 1 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be less than 1')
+      expect(e.message).toEqual('Number must be less than 1')
     }
     expect.assertions(8)
   })
@@ -504,7 +504,7 @@ describe('validate numericality', () => {
     try {
       validate(3, 'number', { numericality: { lessThanOrEqual: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be less than or equal to 2')
+      expect(e.message).toEqual('Number must be less than or equal to 2')
     }
     expect.assertions(8)
   })
@@ -540,7 +540,7 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { greaterThan: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be greater than 3')
+      expect(e.message).toEqual('Number must be greater than 3')
     }
     expect.assertions(9)
   })
@@ -577,7 +577,7 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { greaterThanOrEqual: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be greater than or equal to 3')
+      expect(e.message).toEqual('Number must be greater than or equal to 3')
     }
     expect.assertions(8)
   })
@@ -616,7 +616,7 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { equal: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must equal 3')
+      expect(e.message).toEqual('Number must equal 3')
     }
     expect.assertions(10)
   })
@@ -649,7 +649,7 @@ describe('validate numericality', () => {
     try {
       validate(3, 'number', { numericality: { otherThan: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must not equal 3')
+      expect(e.message).toEqual('Number must not equal 3')
     }
     expect.assertions(8)
   })
@@ -673,7 +673,7 @@ describe('validate numericality', () => {
     try {
       validate(3, 'number', { numericality: { even: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be even')
+      expect(e.message).toEqual('Number must be even')
     }
     expect.assertions(5)
   })
@@ -697,7 +697,7 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { odd: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be odd')
+      expect(e.message).toEqual('Number must be odd')
     }
     expect.assertions(5)
   })
@@ -724,7 +724,7 @@ describe('validate numericality', () => {
     try {
       validate(-1, 'number', { numericality: { positive: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be positive')
+      expect(e.message).toEqual('Number must be positive')
     }
     expect.assertions(6)
   })
@@ -751,7 +751,7 @@ describe('validate numericality', () => {
     try {
       validate(1, 'number', { numericality: { negative: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be negative')
+      expect(e.message).toEqual('Number must be negative')
     }
     expect.assertions(6)
   })
@@ -812,7 +812,7 @@ describe('validate presence', () => {
     try {
       validate(undefined, 'email', { presence: true })
     } catch (e) {
-      expect(e.message).toEqual('email must be present')
+      expect(e.message).toEqual('Email must be present')
     }
   })
 
@@ -1007,7 +1007,7 @@ describe('validateUniqueness', () => {
         () => {}
       )
     } catch (e) {
-      expect(e.message).toEqual('name, email must be unique')
+      expect(e.message).toEqual('Name, email must be unique')
     }
     expect.assertions(2)
   })
