@@ -325,10 +325,18 @@ const globalTasks = () =>
       {
         title: 'Generate dbAuth Secret',
         task: async () => {
-          return execa(
-            'echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env',
+          const { stdout: dbAuthSecret } = await execa(
+            `yarn --silent rw g secret --raw`,
             [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
+            {
+              ...getExecaOptions(),
+              stdio: 'pipe',
+            }
+          )
+
+          fs.appendFileSync(
+            path.join(OUTPUT_PROJECT_PATH, '.env'),
+            `SESSION_SECRET=${dbAuthSecret}`
           )
         },
         enabled: () => !rebuildFixture,
