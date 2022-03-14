@@ -20,20 +20,7 @@ export const buildApi = () => {
     .filter((path): path is string => path !== undefined)
     .flatMap(generateProxyFilesForNestedFunction)
 
-  // Save the return for later
-  const transpileResult = transpileApi(prebuiltFiles)
-
-  // Just copy over `datamodel.json` if it exists at the right path
-  const DATAMODEL_PATH = path.join(getPaths().api.models, 'datamodel.json')
-
-  if (fs.existsSync(DATAMODEL_PATH)) {
-    fs.copyFileSync(
-      DATAMODEL_PATH,
-      path.join(getPaths().api.dist, 'models', 'datamodel.json')
-    )
-  }
-
-  return transpileResult
+    return transpileApi(prebuiltFiles)
 }
 
 export const cleanApiBuild = () => {

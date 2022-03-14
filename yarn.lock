@@ -6125,6 +6125,7 @@ __metadata:
     "@prisma/client": 3.10.0
     "@prisma/sdk": 3.10.0
     core-js: 3.21.1
+    esbuild: 0.14.25
     jest: 27.5.1
   languageName: unknown
   linkType: soft
