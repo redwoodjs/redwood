@@ -1007,7 +1007,7 @@ describe('validateUniqueness', () => {
         () => {}
       )
     } catch (e) {
-      expect(e.message).toEqual('Name, email must be unique')
+      expect(e.message).toEqual('name, email must be unique')
     }
     expect.assertions(2)
   })
