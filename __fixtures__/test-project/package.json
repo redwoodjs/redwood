@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "0.47.1",
+    "@redwoodjs/core": "0.49.1",
     "autoprefixer": "10.4.2",
     "postcss": "8.4.7",
     "postcss-loader": "6.2.1",

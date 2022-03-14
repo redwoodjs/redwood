@@ -56,7 +56,7 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   ) : null
 
   return (
-    <main>
+    <main className="error-page">
       <style
         dangerouslySetInnerHTML={{
           __html: css,
@@ -128,9 +128,7 @@ function StackEntry({
   const highlightIndex = (line || 0) - start - 1
   const onLastLine = highlightIndex === lines.length - 1
 
-  console.log('fileShort', fileShort)
   const shortestPath = (path: string) => path.replace(appRoot || '', '')
-  console.log('shortestPath', shortestPath(fileShort))
   const expanded = !shouldHideEntry(entry, i)
 
   const clickable = lines.length
@@ -243,11 +241,7 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
                 onClick={() => setOpenQuery(!openQuery)}
                 className={openQuery ? 'open' : 'preview'}
               >
-                {JSON.stringify(
-                  props.error.mostRecentRequest.query,
-                  null,
-                  '  '
-                )}
+                {props.error.mostRecentRequest.query}
               </pre>
             </code>
           </div>
@@ -275,18 +269,20 @@ function ResponseRequest(props: { error: ErrorWithRequestMeta }) {
 
 const css = `
 body {
-  background-color: rgb(253, 248, 246);
-  font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: rgb(253, 248, 246) !important;
+  font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif  !important;
 }
+
 .panic-overlay {
   background-color: white;
   padding: 0 2.5em;
 }
+
 .panic-overlay strong {
   font-weight: bold;
 }
 
-nav {
+main.error-page nav {
   display: flex;
   flex-direction: row;
   align: center;
@@ -294,7 +290,7 @@ nav {
   padding: 1em 2.5em;
 }
 
-nav h1 {
+main.error-page  nav h1 {
   color: black;
   margin: 0;
   padding: 0;
@@ -304,35 +300,40 @@ nav h1 {
   color: rgb(191, 71, 34);
 }
 
-nav h1 a {
+main.error-page nav h1 a {
   color: black;
   text-decoration: underline;
 }
 
-nav div {
+main.error-page nav div {
   display: flex;
   align-items: center;
   line-height: 2em;
 }
 
-nav div a {
+main.error-page nav div a {
   display: flex;
   margin: 0 0.3em;
 }
 
-nav svg {
+main.error-page nav svg {
   width: 24px;
   height: 24px;
   fill: rgb(191, 71, 34);
 }
 
-nav svg.discourse {
+main.error-page nav svg.discourse {
   height: 20px;
   width: 20px;
 }
 
-nav svg:hover {
+main.error-page nav svg:hover {
   fill: rgb(200, 32, 32);
+}
+
+.request-response div div code,
+.request-response div div pre {
+  background-color: transparent !important;
 }
 
 .panic-overlay a {
@@ -342,6 +343,7 @@ nav svg:hover {
 .panic-overlay .error {
   padding: 3em 0;
 }
+
 .panic-overlay .error-title {
   display: flex;
   align-items: stretch;
