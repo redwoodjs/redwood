@@ -511,8 +511,7 @@ const validationError = (
   type: string,
   name: string,
   options: any,
-  substitutions = {},
-  fieldName?: string
+  substitutions = {}
 ) => {
   const errorClassName = `${pascalcase(
     type
@@ -521,7 +520,7 @@ const validationError = (
   const errorMessage =
     typeof options === 'object' ? (options.message as string) : undefined
 
-  throw new ErrorClass(name, fieldName, errorMessage, substitutions)
+  throw new ErrorClass(name, errorMessage, substitutions)
 }
 
 // Main validation function, `directives` decides which actual validators
@@ -588,7 +587,7 @@ export const validateWith = (func: () => void) => {
 // There is an optional `$scope` key which contains additional the `where`
 // clauses to include when checking whether the field is unique. So rather than
 // a product name having to be unique across the entire database, you could
-// check that it is only unique among a subset of records with the same
+// check that it is only unique amoung a subset of records with the same
 // `companyId`.
 //
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
