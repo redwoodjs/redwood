@@ -1,6 +1,6 @@
 import { forwardRef, useEffect } from 'react'
 
-import { navigate } from './history'
+import { navigate, NavigateOptions } from './history'
 import { useLocation } from './location'
 import { flattenSearchParams, matchPath } from './util'
 
@@ -151,13 +151,14 @@ const NavLink = forwardRef<
 interface RedirectProps {
   /** The path to redirect to */
   to: string
+  options?: NavigateOptions
 }
 
 /**
  * A declarative way to redirect to a route name
  */
-const Redirect = ({ to }: RedirectProps) => {
-  useEffect(() => navigate(to), [to])
+const Redirect = ({ to, options }: RedirectProps) => {
+  useEffect(() => navigate(to, options), [to, options])
   return null
 }
 

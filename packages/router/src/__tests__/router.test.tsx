@@ -1245,6 +1245,33 @@ test('jump to new route, then go back', async () => {
   await waitFor(() => screen.getByText('Home Page'))
 })
 
+test('redirect replacing route', async () => {
+  const ListWithDefaultParamsPage = (props) => {
+    if (props['_limit']) {
+      return <h1>List Page</h1>
+    }
+    return <Redirect to="/list?_limit=10" options={{ replace: true }} />
+  }
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/list" page={ListWithDefaultParamsPage} name="list" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText('Home Page'))
+
+  // This will navigate to /list, which will then redirect to /list?_limit=10
+  // which will render `<h1>List Page</h1>`
+  act(() => navigate(routes.list()))
+  await waitFor(() => screen.getByText('List Page'))
+  act(() => back())
+  // without options.replace = true in Redirect, back would go to List Page
+  await waitFor(() => screen.getByText('Home Page'))
+})
+
 describe('trailing slashes', () => {
   const TSNeverRouter = () => (
     <Router trailingSlashes={'never'}>
