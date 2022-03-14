@@ -1986,15 +1986,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@clerk/backend-core@npm:0.6.0"
+"@clerk/backend-core@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "@clerk/backend-core@npm:0.6.1"
   dependencies:
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: 0097a00ab61f4960d40e814c29aa01b3e1ae65655dc8d1d100e9df3d50342aa11dc1bb310117becedbb168b6f022460c872e9707598a48adb3656602d9512cf0
+  checksum: 41cb3982eefb42e01f78cd9d048cd82e0824f7a094996b4ac3359aaccf8970935cfed4dc33ea113c26d0aa37bb079c0346f092764fb214dc46a75c7379782fb8
   languageName: node
   linkType: hard
 
@@ -2018,11 +2018,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.9.9":
-  version: 2.9.9
-  resolution: "@clerk/clerk-sdk-node@npm:2.9.9"
+"@clerk/clerk-sdk-node@npm:2.9.10":
+  version: 2.9.10
+  resolution: "@clerk/clerk-sdk-node@npm:2.9.10"
   dependencies:
-    "@clerk/backend-core": ^0.6.0
+    "@clerk/backend-core": ^0.6.1
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -2032,7 +2032,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 67a88c427f69be34753dce617fc67fedd49faf3ab4eb81a49803f88b379eb573678b5f220963e4749b18b7723e672354f5ab63d4c3ed8227f039f56c58cc6348
+  checksum: a37a291c1072280d715e0f7ff5cc0f64dc98245d9eca04f7360f8f01fc3942ef316643afac92408aa8bd36ed9b22d3d0e197cb56519b8aa458f9eba75e4c477a
   languageName: node
   linkType: hard
 
@@ -5745,7 +5745,7 @@ __metadata:
     typescript: 4.6.2
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 2.9.9
+    "@clerk/clerk-sdk-node": 2.9.10
     "@magic-sdk/admin": 1.3.4
     firebase-admin: 10.0.2
   peerDependenciesMeta:
@@ -5772,7 +5772,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.4
-    "@clerk/clerk-sdk-node": 2.9.9
+    "@clerk/clerk-sdk-node": 2.9.10
     "@clerk/types": 1.28.3
     "@supabase/supabase-js": 1.31.1
     "@types/netlify-identity-widget": 1.9.3
