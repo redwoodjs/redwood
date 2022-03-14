@@ -1,1 +1,0 @@
-''.replaceAll('a', 'b')
