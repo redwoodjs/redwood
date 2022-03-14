@@ -26,15 +26,19 @@ export const DEPLOY = `# This file contains config for a baremetal deployment, s
 [[servers]]
 connect = "user@server.com"
 sides = ["api", "web"]
+path = "/var/www/app"
 
 # If you have separate api and web servers, you can configure each separately:
 #
 # [[servers]]
 # connect = "user@api.server.com"
 # sides = ["api"]
+# path = "/var/www/app"
 #
 # [[servers]]
 # connect = "user@web.server.com"
 # sides = ["web"]
+# path = "/var/www/app"
 # migrate = false
+
 `
