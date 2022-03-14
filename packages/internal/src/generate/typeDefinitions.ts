@@ -315,8 +315,7 @@ export const generateTypeDefGraphQLWeb = async () => {
   }
 
   try {
-    const f = await runCodegenGraphQL(generates)
-    return f
+    return await runCodegenGraphQL(generates)
   } catch {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (web)')
