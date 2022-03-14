@@ -329,7 +329,7 @@ const globalTasks = () =>
             `yarn --silent rw g secret --raw`,
             [],
             {
-              ...getExecaOptions(),
+              ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',
             }
           )
