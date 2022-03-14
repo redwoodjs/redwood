@@ -48,6 +48,12 @@ export const isAuthenticated = () => {
  * When checking role membership, roles can be a single value, a list, or none.
  * You can use Prisma enums too (if you're using them for roles), just import your enum type from `@prisma/client`
  */
+type AllowedRoles = string | string[] | undefined
+
+/**
+ * When checking role membership, roles can be a single value, a list, or none.
+ * You can use Prisma enums too (if you're using them for roles), just import your enum type from `@prisma/client`
+ */
 
 /**
  * Checks if the currentUser is authenticated (and assigned one of the given roles)
@@ -57,7 +63,7 @@ export const isAuthenticated = () => {
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
  */
-export const hasRole = ({ roles }) => {
+export const hasRole = (roles : AllowedRoles): boolean => {
   if (!isAuthenticated()) {
     return false
   }
@@ -111,7 +117,7 @@ export const requireAuth = ({ roles }) => {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (roles && !hasRole({ roles })) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
