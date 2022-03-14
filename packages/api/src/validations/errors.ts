@@ -1,15 +1,37 @@
+import humanize from 'humanize-string'
+import { titleCase } from 'title-case'
+
 import { RedwoodError } from '../errors'
 
 export class ServiceValidationError extends RedwoodError {
-  constructor(message: string, substitutions = {}) {
+  constructor(
+    message: string,
+    substitutions = {},
+    extensions?: Record<string, any>
+  ) {
     let errorMessage = message
 
-    // replace instances of a string like `{max}` with any substituted values
+    console.log(message, '>>> ServiceValidationError message')
+
+    // in the main error message, replace instances of a string like
+    // `{max}` with any substituted values that are titlecased and humanized
     for (const [key, value] of Object.entries(substitutions)) {
-      errorMessage = errorMessage.replaceAll(`\${${key}}`, String(value))
+      errorMessage = errorMessage.replaceAll(
+        `\${${key}}`,
+        titleCase(humanize(String(value)))
+      )
+
+      extensions = {
+        code: 'BAD_USER_INPUT',
+        properties: {
+          messages: {
+            [String(value)]: errorMessage,
+          },
+        },
+      }
     }
 
-    super(errorMessage)
+    super(errorMessage, extensions)
     this.name = 'ServiceValidationError'
   }
 }
@@ -39,14 +61,13 @@ export class AcceptanceValidationError extends ServiceValidationError {
 export class EmailValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = '${name} must be formatted like an email address',
+    message = '${name} must be formatted like an email address222',
     substitutions = {}
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'EmailValidationError'
   }
 }
-
 export class ExclusionValidationError extends ServiceValidationError {
   constructor(
     name: string,
@@ -270,8 +291,9 @@ export class NegativeNumericalityValidationError extends ServiceValidationError 
 export class UniquenessValidationError extends ServiceValidationError {
   constructor(name: string, message: string | undefined, _substitutions = {}) {
     const errorMessage = message ? message : `${name} must be unique`
+    const fieldErrorMessage = errorMessage
 
-    super(errorMessage)
+    super(errorMessage, fieldErrorMessage)
     this.name = 'UniquenessValidationError'
   }
 }

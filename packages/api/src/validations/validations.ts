@@ -516,6 +516,8 @@ const validationError = (
   const errorClassName = `${pascalcase(
     type
   )}ValidationError` as keyof typeof ValidationErrors
+
+  console.log(options, '>>>>>> validationError')
   const ErrorClass = ValidationErrors[errorClassName]
   const errorMessage =
     typeof options === 'object' ? (options.message as string) : undefined
@@ -571,7 +573,7 @@ export const validateWith = (func: () => void) => {
     func()
   } catch (e) {
     const message = (e as Error).message || (e as string)
-    throw new ValidationErrors.ServiceValidationError(message)
+    throw new ValidationErrors.ServiceValidationError(message, message)
   }
 }
 
