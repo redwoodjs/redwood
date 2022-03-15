@@ -5,10 +5,7 @@ interface SplashPageProps {
   routes: any[]
 }
 
-const SplashPage: React.VFC<SplashPageProps> = ({
-  hasGeneratedRoutes,
-  routes,
-}) => {
+const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
   const version = useVersion()
   return (
     <>
