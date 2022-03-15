@@ -11381,10 +11381,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "chalk@npm:5.0.0"
-  checksum: 9f4c44cf4638fb04037cb32b82691d32e73bb1b33cd2280e26a1c98e7e2e67bf065bc6f36fa97c5890fec86646b34ded0fe1baa586fb3c9835c306fceb39d148
+"chalk@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "chalk@npm:5.0.1"
+  checksum: 97898611ae40cfdeda9778901731df1404ea49fac0eb8253804e8d21b8064917df9823e29c0c9d766aab623da1a0b43d0e072d19a73d4f62d0d9115aef4c64e6
   languageName: node
   linkType: hard
 
@@ -22010,14 +22010,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "node-fetch@npm:3.2.0"
+"node-fetch@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "node-fetch@npm:3.2.3"
   dependencies:
     data-uri-to-buffer: ^4.0.0
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
-  checksum: 50fd341dea9126e8d85dcdee85ffee9a72383fc3559dd420f2b16a072d6053f3ec50d0b5d21baacfcc94a22cbb45068ed1e0c6be8338b454ae4df83ab419c934
+  checksum: ee39de722bab67076716ce51554aec5f108c51301ab3497b78a58ca5caa6b8f4a2d15f34c28fb24e86dcbada908c54b224cb708231f0dbdd4c2ac1869292d6fd
   languageName: node
   linkType: hard
 
@@ -26166,7 +26166,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.6.2
     typescript-transform-paths: 3.3.1
-    zx: 5.2.0
+    zx: 5.3.0
   languageName: unknown
   linkType: soft
 
@@ -30998,23 +30998,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:5.2.0":
-  version: 5.2.0
-  resolution: "zx@npm:5.2.0"
+"zx@npm:5.3.0":
+  version: 5.3.0
+  resolution: "zx@npm:5.3.0"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
     "@types/node": ^17.0
-    chalk: ^5.0.0
+    chalk: ^5.0.1
     fs-extra: ^10.0.1
     globby: ^13.1.1
     minimist: ^1.2.5
-    node-fetch: ^3.2.0
+    node-fetch: ^3.2.3
     ps-tree: ^1.2.0
     which: ^2.0.2
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: 8f970b8cc168b40e957b6dcca74c9fe7bcc4d77341791a484f32f2322d30134ad93e6bcb846e6a81ab363e8c559eb281b88f7592e76ceb54416e1045d9daf40c
+  checksum: 09294838dfce8b9b07dd76fc71ab26863d6009e238d5fc18c43e8309828fb1904e1572050c6acaa24c50b123b1d863ef4d0dfe2889353c3068b6e427d0e34bf8
   languageName: node
   linkType: hard
