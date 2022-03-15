@@ -43,7 +43,7 @@ export const parseDatamodel = () => {
     const modelNames = fs
       .readdirSync(MODELS_PATH)
       .map((file) => {
-        if (file !== 'index.js' && file !== 'datamodel.json') {
+        if (file !== 'index.js' && file !== 'datamodel.js') {
           return file.split('.')[0]
         }
       })

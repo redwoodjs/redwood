@@ -4,7 +4,7 @@ import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'
 import RelationProxy from '../RelationProxy'
 
-import datamodel from './datamodel.json'
+import datamodel from './datamodel.js'
 
 const db = { user: jest.fn() }
 

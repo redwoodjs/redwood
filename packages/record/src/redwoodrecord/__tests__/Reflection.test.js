@@ -21,7 +21,7 @@
 import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'
 
-import datamodel from './datamodel.json'
+import datamodel from './datamodel.js'
 
 class User extends RedwoodRecord {}
 class Post extends RedwoodRecord {}
