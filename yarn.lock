@@ -2021,14 +2021,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.28.3":
-  version: 1.28.3
-  resolution: "@clerk/types@npm:1.28.3"
-  checksum: 16315351f2f218ddaf75821589d4925a0d676be450d055fd9919b672d989cef0d1206dc80e4fc1be6dbc856f7d4987c835eae4d422f7bee6434d11493380ce3a
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^1.29.0":
+"@clerk/types@npm:1.29.0, @clerk/types@npm:^1.29.0":
   version: 1.29.0
   resolution: "@clerk/types@npm:1.29.0"
   checksum: 2c13581fffa57e9ac02f2da3c24864fa99a7ecf6e1496121c98ac6018b21badcb1ee194f098f04bbbb1c782078d29991f78060aac53131600f5dd42882506cab
@@ -4791,19 +4784,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/cookies@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@mswjs/cookies@npm:0.1.7"
+"@mswjs/cookies@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@mswjs/cookies@npm:0.2.0"
   dependencies:
     "@types/set-cookie-parser": ^2.4.0
     set-cookie-parser: ^2.4.6
-  checksum: 647e97c1cd970be0b49c359faa4798a1eaa9cbf3ad7e88b184bcec5c6ee183e45b720708d3084b3a3ca8c797d86a64cd57e04d553fc10ef28b1f3d3e3929582e
+  checksum: fc94748a453e1e147f5262a1fe002859bc3382a61d866946d7b642aff195b8f05f6d479d2ed9a3401f92e3cfc57f38979cc3fbb104460154af9e53166ebcb55e
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.13.5":
-  version: 0.13.6
-  resolution: "@mswjs/interceptors@npm:0.13.6"
+"@mswjs/interceptors@npm:^0.15.1":
+  version: 0.15.1
+  resolution: "@mswjs/interceptors@npm:0.15.1"
   dependencies:
     "@open-draft/until": ^1.0.3
     "@xmldom/xmldom": ^0.7.5
@@ -4811,7 +4804,7 @@ __metadata:
     headers-polyfill: ^3.0.4
     outvariant: ^1.2.1
     strict-event-emitter: ^0.2.0
-  checksum: c9296eb7b84dc1c63140048f4d5b40794f0df1ef4252ca79188caa266a1eb6a47ba848a5c0f7feb487eb95bcada492a3a800a256bc53b62e66af2bb3860bbad2
+  checksum: 054c9f0b05b71a6924565d241c635eb8fdc62b47d20238978a5baa0be076ff859218d3d78efa4199efd209b0c4e33758d8de8f09cbed48585f977549271cc623
   languageName: node
   linkType: hard
 
@@ -5754,7 +5747,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.4
     "@clerk/clerk-sdk-node": 2.9.10
-    "@clerk/types": 1.28.3
+    "@clerk/types": 1.29.0
     "@supabase/supabase-js": 1.31.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
@@ -6218,7 +6211,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     jest: 27.5.1
     jest-watch-typeahead: 1.0.0
-    msw: 0.38.2
+    msw: 0.39.2
     ts-toolbelt: 9.6.0
     typescript: 4.6.2
     whatwg-fetch: 3.6.2
@@ -21744,12 +21737,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.38.2":
-  version: 0.38.2
-  resolution: "msw@npm:0.38.2"
+"msw@npm:0.39.2":
+  version: 0.39.2
+  resolution: "msw@npm:0.39.2"
   dependencies:
-    "@mswjs/cookies": ^0.1.7
-    "@mswjs/interceptors": ^0.13.5
+    "@mswjs/cookies": ^0.2.0
+    "@mswjs/interceptors": ^0.15.1
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
     "@types/js-levenshtein": ^1.1.1
@@ -21769,7 +21762,7 @@ __metadata:
     yargs: ^17.3.1
   bin:
     msw: cli/index.js
-  checksum: 54e71bceadcc86c7025f3b9cef4e00ea5330346afc607449051b47eb5b75a211edc0c01cb83c766fcac08173f5d7b76fd8e0761bb0d5dae09bb898161c890cdd
+  checksum: 6b078f5cf41e3631743eff9a8e7d137617a0fc73f01ce07db6b240247486244a6ceed1c4b16b4cc62c0a4df79985df5d2b488a03d2375a66575347587327c4cb
   languageName: node
   linkType: hard
 
@@ -26154,7 +26147,7 @@ __metadata:
     lerna: 4.0.0
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.38.2
+    msw: 0.39.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.15
