@@ -3,12 +3,10 @@ import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
-import chalk from 'chalk'
-import { config } from 'dotenv-defaults'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-import prompts from 'prompts'
+import { NodeSSH } from 'node-ssh'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../../lib'
@@ -18,9 +16,11 @@ import { configFilename } from '../setup/deploy/providers/baremetal'
 export const command = 'baremetal'
 export const description = 'Deploy to baremetal server(s)'
 
+const ssh = new NodeSSH()
+
 export const execaOptions = {
   cwd: path.join(getPaths().base),
-  stdio: 'pipe',
+  stdio: 'inherit',
   shell: true,
   cleanup: true,
 }
@@ -32,13 +32,6 @@ export const builder = (yargs) => {
     default: ['api', 'web'],
     alias: 'side',
     type: 'array',
-  })
-
-  yargs.option('deploy', {
-    describe:
-      'This flag is set when this command runs on the server to actually deploy (should not be set manually)',
-    default: -1,
-    type: 'number',
   })
 
   yargs.option('first-run', {
@@ -145,158 +138,106 @@ const sideProcessTasks = (side, yargs, config) => {
   return tasks
 }
 
-const clientCommands = (yargs) => {
-  const flags = []
-  if (yargs.firstRun) {
-    flags.push('--first-run')
-  }
-  if (!yargs.pull) {
-    flags.push('--no-pull')
-  }
-  if (!yargs.install) {
-    flags.push('--no-install')
-  }
-  if (!yargs.migrate) {
-    flags.push('--no-migrate')
-  }
-  if (!yargs.build) {
-    flags.push('--no-build')
-  }
-  if (!yargs.restart) {
-    flags.push('--no-restart')
-  }
-  // sides will be configured right at deploy time depending on deploy.toml
+const sshExec = async (sshOptions, task, path, command, args) => {
+  await ssh.connect(sshOptions)
 
-  // parse config and get server list
-  const deployConfig = toml.parse(
-    fs.readFileSync(path.join(getPaths().base, configFilename))
-  )
+  await ssh.exec(command, args, {
+    cwd: path,
+    onStdout: async (chunk) => {
+      task.output = chunk.toString('utf-8')
+    },
+    onStderr: (chunk) => {
+      throw new Error(chunk.toString('utf-8'))
+    },
+  })
 
-  const rwDeployCommand = ['yarn', 'rw', 'deploy', 'baremetal', ...flags]
-
-  // run the remote deploy command on each server
-  const tasks = []
-  let index = 0
-
-  for (const serverConfig of deployConfig.servers) {
-    const deploySides = yargs.sides.filter((side) =>
-      serverConfig.sides.includes(side)
-    )
-
-    if (!deploySides.length) {
-      console.info(
-        `Server ${serverConfig.connect} has no deployable sides, skipping...`
-      )
-      continue
-    }
-
-    const sshDeployCommand = [
-      ...rwDeployCommand,
-      `--deploy=${index}`,
-      ...deploySides.map((side) => `--sides=${side}`),
-    ]
-
-    console.info(sshDeployCommand)
-
-    tasks.push({
-      title: `Deploying ${serverConfig.sides} to ${serverConfig.connect}...`,
-      task: async () => {
-        await execa(
-          'ssh',
-          [
-            serverConfig.connect,
-            '-o',
-            `ConnectTimeout=${serverConfig.timeout || 5}`,
-            `"cd ${serverConfig.path} && ${sshDeployCommand.join(' ')}"`,
-          ],
-          execaOptions
-        )
-      },
-    })
-
-    index++
-  }
-
-  return tasks
+  await ssh.dispose()
 }
 
-const serverCommands = (yargs) => {
+const commands = (yargs) => {
   // parse config and get server list
   const deployConfig = toml.parse(
     fs.readFileSync(path.join(getPaths().base, configFilename))
   )
-  const serverConfig = deployConfig.servers[yargs.deploy]
 
-  // Is this a valid server config array index?
-  if (!serverConfig) {
-    throw new Error(
-      `Invalid server index value: got index ${yargs.deploy}, deploy config only has ${deployConfig.servers.length} server(s) configured`
-    )
-  }
+  const tasks = []
 
-  // Is this attempting to deploy to a side that this server does not support?
-  // The client shouldn't have made this call at all, but in case someone is
-  // messing around and rolling their own
-  const deploySides = yargs.sides.filter((side) =>
-    serverConfig.sides.includes(side)
-  )
+  for (const serverConfig of deployConfig.servers) {
+    const sshOptions = {
+      host: serverConfig.host,
+      username: serverConfig.username,
+      password: serverConfig.password,
+      privateKey: serverConfig.privateKey,
+      passphrase: serverConfig.passphrase,
+      agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
+      agentForward: serverConfig.agentForward,
+    }
 
-  if (!deploySides.length) {
-    throw new Error(
-      `Server is not configured for this deploy side, got ${JSON.stringify(
-        yargs.sides
-      )} but this server only handles ${JSON.stringify(serverConfig.sides)}`
-    )
-  }
-
-  console.info(yargs)
-  console.info(serverConfig)
-
-  let tasks = [
-    {
-      title: 'Pulling latest code...',
-      task: async () => {
-        await execa('git', ['pull'], execaOptions)
+    tasks.push({
+      title: `Pulling latest code...`,
+      task: async (_ctx, task) => {
+        await sshExec(sshOptions, task, serverConfig.path, 'git', ['pull'])
       },
       skip: () => {
         if (!yargs.pull) {
           return 'Skipping'
         }
       },
-    },
-    {
-      title: 'yarn install...',
-      task: async () => {
-        await execa('yarn', ['install'], execaOptions)
-      },
-      skip: () => {
-        if (!yargs.install) {
-          return 'Skipping'
-        }
-      },
-    },
-  ]
+    })
 
-  // If the server doesn't even support migrations via config, do not include
-  // in task list at all, otherwise show, but skip if --no-migrate is set
-  if (serverConfig.migrate !== false) {
     tasks.push({
-      title: 'Migrating database...',
-      task: async () => {
-        await execa('yarn', ['rw', 'prisma', 'migrate', 'deploy'], execaOptions)
-        await execa('yarn', ['rw', 'prisma', 'generate'], execaOptions)
-        await execa('yarn', ['rw', 'dataMigrate', 'up'], execaOptions)
+      title: `yarn install...`,
+      task: async (_ctx, task) => {
+        await sshExec(sshOptions, task, serverConfig.path, 'yarn', ['install'])
       },
       skip: () => {
-        if (!yargs.migrate) {
+        if (!yargs.pull) {
           return 'Skipping'
         }
       },
     })
-  }
 
-  for (const side of yargs.sides) {
-    tasks = tasks.concat(sideProcessTasks(side, yargs, serverConfig))
+    // tasks.push({
+    //   title: `[${serverConfig.host}] Hanging up...`,
+    //   task: () => {
+    //     ssh.end()
+    //   },
+    // })
+
+    //   {
+    //     title: 'yarn install...',
+    //     task: async () => {
+    //       await execa('yarn', ['install'], execaOptions)
+    //     },
+    //     skip: () => {
+    //       if (!yargs.install) {
+    //         return 'Skipping'
+    //       }
+    //     },
+    //   },
+    // ]
+
+    // // If the server doesn't even support migrations via config, do not include
+    // // in task list at all, otherwise show, but skip if --no-migrate is set
+    // if (serverConfig.migrate !== false) {
+    //   tasks.push({
+    //     title: 'Migrating database...',
+    //     task: async () => {
+    //       await execa('yarn', ['rw', 'prisma', 'migrate', 'deploy'], execaOptions)
+    //       await execa('yarn', ['rw', 'prisma', 'generate'], execaOptions)
+    //       await execa('yarn', ['rw', 'dataMigrate', 'up'], execaOptions)
+    //     },
+    //     skip: () => {
+    //       if (!yargs.migrate) {
+    //         return 'Skipping'
+    //       }
+    //     },
+    //   })
+    // }
+
+    // for (const side of yargs.sides) {
+    //   tasks = tasks.concat(sideProcessTasks(side, yargs, serverConfig))
+    // }
   }
 
   return tasks
@@ -304,23 +245,15 @@ const serverCommands = (yargs) => {
 
 export const handler = async (yargs) => {
   try {
-    if (yargs.deploy === -1) {
-      const clientTasks = new Listr(clientCommands(yargs), {
-        exitOnError: true,
-        renderer: yargs.verbose && VerboseRenderer,
-      })
-      await clientTasks.run()
-    } else {
-      const serverTasks = new Listr(serverCommands(yargs), {
-        exitOnError: true,
-        renderer: yargs.verbose && VerboseRenderer,
-      })
-      await serverTasks.run()
-    }
+    const tasks = new Listr(commands(yargs), {
+      exitOnError: true,
+      renderer: yargs.verbose && VerboseRenderer,
+    })
+    await tasks.run()
   } catch (e) {
     console.error(c.error('\nDeploy failed:'))
     console.error(
-      boxen(e.stderr, {
+      boxen(e.stderr || e.message, {
         padding: { top: 0, bottom: 0, right: 1, left: 1 },
         margin: 0,
         borderColor: 'red',
