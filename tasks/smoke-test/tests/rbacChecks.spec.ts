@@ -27,38 +27,35 @@ devServerTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
   const webUrl = 'http://localhost:9000'
 
   const adminSignupPage = await browser.newPage()
-
-  await signUpTestUser({
-    // @NOTE we can't access webUrl in beforeAll, so hardcoded
-    // But we can switch to beforeEach if required
-    webUrl,
-    page: adminSignupPage,
-    email: adminEmail,
-    password,
-  })
-
-  await adminSignupPage.close()
-
-  const regularUserSignupPage = await browser.newPage()
-  // Signup non-admin user
-  await signUpTestUser({
-    webUrl,
-    page: regularUserSignupPage,
-  })
-
-  await regularUserSignupPage.close()
-
   const incognitoPage = await browser.newPage()
+  const regularUserSignupPage = await browser.newPage()
 
-  messageDate = Date.now().toPrecision()
+  await Promise.all([
+    signUpTestUser({
+      // @NOTE we can't access webUrl in beforeAll, so hardcoded
+      // But we can switch to beforeEach if required
+      webUrl,
+      page: adminSignupPage,
+      email: adminEmail,
+      password,
+    }),
+    // Signup non-admin user
+    signUpTestUser({
+      webUrl,
+      page: regularUserSignupPage,
+    }),
+    fillOutContactFormAsAnonymousUser({
+      page: incognitoPage,
+      webUrl,
+      messageDate,
+    }),
+  ])
 
-  await fillOutContactFormAsAnonymousUser({
-    page: incognitoPage,
-    webUrl,
-    messageDate,
-  })
-
-  await incognitoPage.close()
+  await Promise.all([
+    adminSignupPage.close(),
+    regularUserSignupPage.close(),
+    incognitoPage.close(),
+  ])
 })
 
 devServerTest(
@@ -93,6 +90,10 @@ devServerTest(
     await expect(
       page.locator('.rw-scaffold').locator('text=Contact deleted')
     ).toBeHidden()
+
+    await expect(
+      await page.locator('text=charlie@chimichanga.com').count()
+    ).toBeGreaterThan(0)
   }
 )
 
@@ -146,6 +147,10 @@ console.log(await db.user.findMany())
     await expect(
       page.locator('.rw-scaffold').locator('text=Contact deleted')
     ).toBeVisible()
+
+    await expect(
+      await page.locator('text=charlie@chimichanga.com').count()
+    ).toBe(0)
   }
 )
 
