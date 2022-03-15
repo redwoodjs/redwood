@@ -3,6 +3,7 @@ export default (file, api) => {
   const root = j(file.source)
 
   const setImport = j.importSpecifier(j.identifier('Set'))
+  const privateImport = j.importSpecifier(j.identifier('Private'))
 
   const blogImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('BlogLayout'))],
@@ -17,10 +18,11 @@ export default (file, api) => {
       },
     })
     .insertAfter(setImport)
+    .insertAfter(privateImport)
 
   root.find(j.ImportDeclaration).insertAfter(blogImport)
 
-  return root
+  root
     .find(j.JSXElement)
     .at(0)
     .replaceWith((nodePath) => {
@@ -41,6 +43,33 @@ export default (file, api) => {
       ]
 
       return node
+    })
+
+  // Wrap profile page in <Private>
+  return root
+    .findJSXElements('Route')
+    .filter(
+      j.filters.JSXElement.hasAttributes({
+        name: 'profile',
+        path: '/profile',
+      })
+    )
+    .at(0)
+    .replaceWith((nodePath) => {
+      const { node } = nodePath
+
+      const privateSetWrapped = j.jsxElement(
+        j.jsxOpeningElement(j.jsxIdentifier('Private'), [
+          j.jsxAttribute(
+            j.jsxIdentifier('unauthenticated'),
+            j.literal('login')
+          ),
+        ]),
+        j.jsxClosingElement(j.jsxIdentifier('Private')),
+        [node]
+      )
+
+      return privateSetWrapped
     })
     .toSource()
 }
