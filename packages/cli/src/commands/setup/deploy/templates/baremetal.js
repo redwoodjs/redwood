@@ -21,25 +21,40 @@ export const ECOSYSTEM = `module.exports = {
   ],
 }`
 
-export const DEPLOY = `# This file contains config for a baremetal deployment, see http://redwoodjs.com/docs/deploy#baremetal-deploy
+export const DEPLOY = `# This file contains config for a baremetal deployment
+#
+# SSH connection options include:
+#
+# * host - the remote server hostname/IP
+# * port - defaults to 22
+# * username - required, the user you're connecting as
+# * password - only set if you're not using key-based authentication
+# * privateKey - local file path to a private key that will be sent with the connection request
+# * passphrase - used if your private key has a passphrase
+# * agentForward - set to \`true\` to forward the client machine's ssh credentials
+#
+# See https://redwoodjs.com/docs/deploy#baremetal-deploy for more info
 
 [[servers]]
-connect = "user@server.com"
-sides = ["api", "web"]
+host = "server.com"
+username = "user"
+agentForward = true
+sides = ["api","web"]
 path = "/var/www/app"
-redwood_web_server = true
+redwood_web_server = false
 
-# If you have separate api and web servers, you can configure each separately:
+# If you have separate api and web servers:
 #
 # [[servers]]
-# connect = "user@api.server.com"
+# host = "api.server.com"
+# user = "user"
 # sides = ["api"]
 # path = "/var/www/app"
 #
 # [[servers]]
-# connect = "user@web.server.com"
+# host = "web.server.com"
+# user = "user"
 # sides = ["web"]
 # path = "/var/www/app"
 # migrate = false
-# redwood_web_server = false
 `
