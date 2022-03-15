@@ -36,6 +36,10 @@ export const builder = (yargs) => {
       type: 'boolean',
       description: 'Reload on changes to node_modules',
     })
+    .option('apiDebugPort', {
+      type: 'number',
+      description: 'Port on which to expose API server debugger.',
+    })
     .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
@@ -50,6 +54,7 @@ export const handler = async ({
   forward = '',
   generate = true,
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
+  apiDebugPort,
 }) => {
   const rwjsPaths = getPaths()
 
@@ -99,7 +104,7 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps API_DEBUG_PORT=${apiDebugPort} yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
