@@ -10,30 +10,24 @@ import {
 
 import type { GetCurrentUser } from './types'
 
-export const useRequireAuth = ({
-  handlerFn,
-  getCurrentUser,
-}: {
+interface Args {
   handlerFn: (
     event: APIGatewayEvent,
     context: LambdaContext,
     ...others: any
   ) => any
   getCurrentUser: GetCurrentUser
-}) => {
+}
+
+export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
   return async (
     event: APIGatewayEvent,
     context: LambdaContext,
     ...rest: any
-  ): Promise<any> => {
+  ) => {
     const authEnrichedFunction = async () => {
       try {
-        let authContext = undefined
-
-        authContext = await getAuthenticationContext({
-          event: event,
-          context: context,
-        })
+        const authContext = await getAuthenticationContext({ event, context })
 
         if (authContext) {
           const currentUser = getCurrentUser

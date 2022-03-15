@@ -57,7 +57,7 @@ export const getAuthenticationContext = async ({
 }): Promise<undefined | AuthContextPayload> => {
   const type = getAuthProviderHeader(event)
   // No `auth-provider` header means that the user is logged out,
-  // and none of this is auth malarky is required.
+  // and none of this auth malarky is required.
   if (!type) {
     return undefined
   }
