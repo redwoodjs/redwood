@@ -357,7 +357,7 @@ You can pass any flags to the command and use them within your script:
 - A background worker you can off-load long running tasks
 - Custom seed scripts for your application during development
 
-See [this cookbook](/cookbook/creating-a-background-worker-with-exec-and-faktory) for an example of using exec to run a background worker.
+See [this cookbook](cookbook/background-worker.md) for an example of using exec to run a background worker.
 
 ## generate (alias g)
 

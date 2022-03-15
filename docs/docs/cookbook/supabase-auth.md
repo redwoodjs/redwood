@@ -1,6 +1,6 @@
 # Supabase Auth
 
-Let's call this cookbook a port of the [Redwood GoTrue Auth Cookbook](/cookbook/gotrue-auth) to [Supabase](https://supabase.io/).
+Let's call this cookbook a port of the [Redwood GoTrue Auth Cookbook](gotrue-auth.md) to [Supabase](https://supabase.io/).
 I won't get original style points because I copy-pasted (and updated, for good measure) the original.
 Why? Because Supabase auth is based on [Netlify GoTrue](https://github.com/netlify/gotrue), an API service for handling user registration and authentication. The Supabase folks build on solid open-source foundations.
 
@@ -30,7 +30,7 @@ Before getting started, there are a few steps you should complete:
 
 Why the React Quick Start before the Redwood? I found it helpful to first interact directly with the [Supabase Client](https://github.com/supabase/supabase-js). Eventually, you'll use the [Redwood Auth wrapper](/docs/authentication#supabase), which provides a level of abstraction and a clean, consistent style. But I needed a couple hours of direct client experimentation to gain comfort in the Redwood one.
 
-So, just this once, I hereby give you permission to fire-up Create React App as you follow-along the Supabase React Quick Start. I worked through it first. Then I worked through the Supabase Redwood Quick start, observing the slight differences. This helped me understand the details that the Redwood wrapper abstracts for us. 
+So, just this once, I hereby give you permission to fire-up Create React App as you follow-along the Supabase React Quick Start. I worked through it first. Then I worked through the Supabase Redwood Quick start, observing the slight differences. This helped me understand the details that the Redwood wrapper abstracts for us.
 
 > **Auth Alphabet Soup**
 >
@@ -102,7 +102,7 @@ That's (almost) all for configuration.
 ## Sign Up
 
 Sign Up feels like an appropriate place to start building our interface.
-Our first iteration won't include features like email confirmation or password recovery. 
+Our first iteration won't include features like email confirmation or password recovery.
 To forgo email confirmation, turn off "Enable email confirmations" on your Supabase management console, found under `Authentication > Settings`:
 
 ![Supabase email confirmation toggle](https://user-images.githubusercontent.com/43206213/147164458-1b6723ef-d7dd-4c7c-b228-73ca4ba7b1ff.png)
@@ -117,9 +117,9 @@ Let's generate a Sign Up page:
 yarn redwood generate page signup
 ```
 
-This adds a Sign Up [route](/docs/redwood-router) to our routes file and creates a `SignupPage` component.
+This adds a Sign Up [route](../router.md) to our routes file and creates a `SignupPage` component.
 
-In the just-generated `SignupPage` component (`web/src/pages/SignupPage/SignupPage.[js/tsx]`), let's import some [Redwood Form components](/docs/form) and make a very basic form:
+In the just-generated `SignupPage` component (`web/src/pages/SignupPage/SignupPage.[js/tsx]`), let's import some [Redwood Form components](../forms.md) and make a very basic form:
 
 ```js
 // web/src/pages/SignupPage/SignupPage.[js/tsx]
@@ -213,7 +213,7 @@ const SignupPage = () => {
   const onSubmit = async (data) => {
     try {
       const response = await client.auth.signUp({
-        email: data.email, 
+        email: data.email,
         password: data.password
       })
       console.log('response: ', response)
@@ -254,7 +254,7 @@ const SignupPage = () => {
     setError(null)
     try {
       const response = await client.auth.signUp({
-        email: data.email, 
+        email: data.email,
         password: data.password
       })
       console.log('response: ', response)
@@ -293,7 +293,7 @@ First, if you haven't already, [generate](/docs/cli-commands#generate-page) a ho
 yarn redwood generate page home /
 ```
 
-Let's import `routes` and `navigate` from [Redwood Router](/docs/router#navigate) and use them to redirect to the home page upon successful sign up:
+Let's import `routes` and `navigate` from [Redwood Router](../router.md#navigate) and use them to redirect to the home page upon successful sign up:
 
 ```js {5,18}
 // web/src/pages/SignupPage/SignupPage.js
@@ -310,7 +310,7 @@ const SignupPage = () => {
     setError(null)
     try {
       const response = await client.auth.signUp({
-        email: data.email, 
+        email: data.email,
         password: data.password
       })
       response?.error?.message ? setError(response.error.message) : navigate(routes.home())
@@ -405,7 +405,7 @@ const SigninPage = () => {
 export default SigninPage
 ```
 
-Now we'll add `logIn` to our `onSubmit` function. This time we'll be passing an object to our function as we're using Redwood Auth's `logIn` function directly (as opposed to `client`). This object takes an email and password. 
+Now we'll add `logIn` to our `onSubmit` function. This time we'll be passing an object to our function as we're using Redwood Auth's `logIn` function directly (as opposed to `client`). This object takes an email and password.
 
 ```js {12-17}
 // web/src/pages/SigninPage/SigninPage.js
@@ -445,7 +445,7 @@ export default SigninPage
 
 Let's redirect our user back to the home page upon a successful login.
 
-In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](/docs/router) and add them after awaiting `logIn`:
+In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](../router.md) and add them after awaiting `logIn`:
 
 ```js {12-18}
 // web/src/pages/SigninPage/SigninPage.js
@@ -486,7 +486,7 @@ export default SigninPage
 
 Well done! We've created a sign in page and form that successfully handles sign in.
 
-> The remainder of the cookbook is the same as the [Netlify GoTrue Auth](https://redwoodjs.com/cookbook/gotrue-auth) version. This highlights one of the fun benefits of the Redwood Auth wrappers: code specific to a certain auth implementation scheme can live in a few specific spots, as we walked through above. Then, general Redwood Auth functions can be used elsewhere in the app.
+> The remainder of the cookbook is the same as the [Netlify GoTrue Auth](gotrue-auth.md) version. This highlights one of the fun benefits of the Redwood Auth wrappers: code specific to a certain auth implementation scheme can live in a few specific spots, as we walked through above. Then, general Redwood Auth functions can be used elsewhere in the app.
 
 ## Sign Out
 
@@ -567,8 +567,8 @@ Let's start by [generating a navigation component](/docs/cli-commands#generate-c
 yarn redwood generate component navigation
 ```
 
-This creates `web/src/components/Navigation/Navigation.js`. In that file, let's import [the `Link` component and the `routes` object](/docs/redwood-router#link-and-named-route-functions) from `@redwoodjs/router`.
-We'll also import [`useAuth`](/docs/authentication#api) since we'll need to subscribe to the auth state for our component to decide what to render:
+This creates `web/src/components/Navigation/Navigation.js`. In that file, let's import [the `Link` component and the `routes` object](../router.md#link-and-named-route-functions) from `@redwoodjs/router`.
+We'll also import [`useAuth`](../authentication.md#api) since we'll need to subscribe to the auth state for our component to decide what to render:
 
 ```js
 // web/src/components/Navigation/Navigation.js
@@ -661,7 +661,7 @@ const GlobalLayout = ({ children }) => {
 export default GlobalLayout
 ```
 
-Finally, we'll wrap each of our generated pages in this `GlobalLayout` component. To do this efficiently, we'll update the routes defined in our `web\src\Routes.[js/tsx]` file with the [`Set` component](/docs/router#sets-of-routes):
+Finally, we'll wrap each of our generated pages in this `GlobalLayout` component. To do this efficiently, we'll update the routes defined in our `web\src\Routes.[js/tsx]` file with the [`Set` component](../router.md#sets-of-routes):
 
 ```js
 // web/src/Routes.[js/tsx]

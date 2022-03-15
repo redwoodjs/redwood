@@ -395,7 +395,7 @@ it('renders a link with a name', () => {
 
 #### Jest Expect: Type Considerations
 
-Redwood uses [prisma](https://www.prisma.io/) as an ORM for connecting to different databases like PostgreSQL, MySQL, and many more. The database models are defined in the `schema.prisma` file. Prisma schema supports [`model` field scaler types](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#model-field-scalar-types) which is used to define the data types for the models properties. 
+Redwood uses [prisma](https://www.prisma.io/) as an ORM for connecting to different databases like PostgreSQL, MySQL, and many more. The database models are defined in the `schema.prisma` file. Prisma schema supports [`model` field scaler types](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#model-field-scalar-types) which is used to define the data types for the models properties.
 
 Due to this, there are some exceptions that can occur while testing your API and UI components.
 
@@ -427,12 +427,12 @@ Prisma returns [DateTime](https://www.prisma.io/docs/reference/api-reference/pri
 
 ```javascript{1}
 //  Output: '2021-10-15T19:40:33.000Z'
-const isoString = new Date("2021-10-15T19:40:33Z").toISOString() 
+const isoString = new Date("2021-10-15T19:40:33Z").toISOString()
 ```
 
 #### Other Queries/Matchers
 
-There are several other node/text types you can query against with React Testing Library, including `title`, `role` and `alt` attributes, Form labels, placeholder text, and more. 
+There are several other node/text types you can query against with React Testing Library, including `title`, `role` and `alt` attributes, Form labels, placeholder text, and more.
 
 If you still can't access the node or text you're looking for there's a fallback attribute you can add to any DOM element that can always be found: `data-testid` which you can access using `getByTestId`, `queryByTestId` and others (but it involves including that attribute in your rendered HTML always, not just when running the test suite).
 
@@ -440,9 +440,9 @@ You can refer to the [Cheatsheet](https://testing-library.com/docs/react-testing
 
 The full list of available matchers like `toBeInTheDocument()` and `toHaveAttribute()` don't seem to have nice docs on the Testing Library site, but you can find them in the [README](https://github.com/testing-library/jest-dom) inside the main repo.
 
-In addition to testing for static things like text and attributes, you can also use fire events and check that the DOM responds as expected. 
+In addition to testing for static things like text and attributes, you can also use fire events and check that the DOM responds as expected.
 
-You can read more about these in below documentations: 
+You can read more about these in below documentations:
 
 
 - [React Testing Library User Events](https://testing-library.com/docs/ecosystem-user-event)
@@ -575,7 +575,7 @@ it('renders an error message', async () => {
 
 #### mockGraphQLMutation()
 
-Similar to how we mocked GraphQL queries, we can mock mutations as well. Read more about GraphQL mocking in our [Mocking GraphQL requests](/docs/mocking-graphql-requests.html) docs.
+Similar to how we mocked GraphQL queries, we can mock mutations as well. Read more about GraphQL mocking in our [Mocking GraphQL requests](mocking-graphql-requests.md) docs.
 
 ### Mocking Auth
 

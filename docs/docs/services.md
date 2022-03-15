@@ -71,7 +71,7 @@ export const createUser = async ({ input }) => {
 
 ### Displaying to the User
 
-If you're using [Redwood's scaffolds](/docs/cli-commands.html#generate-scaffold) then you'll see requisite error messages when trying to save a form that runs into these validation errors automatically:
+If you're using [Redwood's scaffolds](cli-commands.md#generate-scaffold) then you'll see requisite error messages when trying to save a form that runs into these validation errors automatically:
 
 ![image](https://user-images.githubusercontent.com/300/138919184-89eddd9e-8ee7-4956-b7ed-ba8daaa0f6ea.png)
 

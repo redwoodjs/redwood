@@ -1,10 +1,10 @@
 # Cells
 
-Cells are a declarative approach to data fetching and one of Redwood's signature modes of abstraction. 
+Cells are a declarative approach to data fetching and one of Redwood's signature modes of abstraction.
 By providing conventions around data fetching, Redwood can get in between the request and the response to do things like query optimization and more, all without you ever having to change your code.
 
 While it might seem like there's a lot of magic involved, all a Cell really does is execute a GraphQL query and manage its lifecycle.
-The idea is that, by exporting named constants that declare what you want your UI to look like throughout a query's lifecycle, 
+The idea is that, by exporting named constants that declare what you want your UI to look like throughout a query's lifecycle,
 Redwood can assemble these into a component template at build-time using a Babel plugin.
 All without you having to write a single line of imperative code!
 
@@ -32,12 +32,12 @@ Done in 1.07s.
 
 ### Single Item Cell vs List Cell
 
-Sometimes you want a Cell that renders a single item, like the example above, and other times you want a Cell that renders a list. 
-Redwood's Cell generator can do both. 
+Sometimes you want a Cell that renders a single item, like the example above, and other times you want a Cell that renders a list.
+Redwood's Cell generator can do both.
 
-First, it detects if `<name>` is singular or plural. 
+First, it detects if `<name>` is singular or plural.
 For example, to generate a Cell that renders a list of users, run `yarn rw generate cell users`.
-Second, for **irregular words** whose singular and plural are identical, such as *equipment* or *pokemon*, you can specify the `--list` flag to tell Redwood to generate a list Cell explicitly: 
+Second, for **irregular words** whose singular and plural are identical, such as *equipment* or *pokemon*, you can specify the `--list` flag to tell Redwood to generate a list Cell explicitly:
 
 ```
 yarn rw generate cell equipment --list
@@ -68,12 +68,12 @@ Only `QUERY` and `Success` are required. If you don't export `Empty`, empty resu
 
 In addition to displaying the right component, Cells also make sure to funnel the right props to the right component.  `Loading`, `Empty`, `Failure`, and `Success` all have access to the props passed down from the Cell in good ol' React fashion, and most of `useQuery`'s return (more on that below). In addition to all those props, `Empty` and `Success` also get the `data` returned from the query and an `updating` boolean prop saying whether the Cell is currently fetching new data or not. `Failure` also gets `updating` and exclusive access to `error` and `errorCode`.
 
-With this many props coming in, there's a risk of name clashing. A couple things to look out for are: 
+With this many props coming in, there's a risk of name clashing. A couple things to look out for are:
 
-- Your Cell has a prop with the same name as root-level data returned by your query. 
+- Your Cell has a prop with the same name as root-level data returned by your query.
   - In this case, the root-level data overrides your prop. But since props double as query variables, you can destructure the `variables` prop that `useQuery` returns to retrieve it. Or you can just rename the prop on the Cell!
 
-- Your Cell has props or query results with the same name as any of `useQuery`'s returns. 
+- Your Cell has props or query results with the same name as any of `useQuery`'s returns.
   - In this case, `useQuery`'s returns overwrite the props and results.
 
 We mentioned above that Cells receive "most" of what's returned from `useQuery`. You can see exactly what `useQuery` returns in Apollo Client's [API reference](https://www.apollographql.com/docs/react/api/react/hooks/#result). Note that, as we just mentioned, `error` and `data` get some special treatment.
@@ -147,9 +147,9 @@ By default, `beforeQuery` gives any props passed from the parent component to `Q
 
 ```javascript
 export const beforeQuery = (props) => {
-  return { 
-    variables: props, 
-    fetchPolicy: 'cache-and-network' 
+  return {
+    variables: props,
+    fetchPolicy: 'cache-and-network'
    }
 }
 ```
@@ -165,7 +165,7 @@ export const beforeQuery = (props) => {
 
 ### isEmpty
 
-`isEmpty` is an optional lifecycle hook. It returns a boolean to indicate if Cell is empty. Use it to override the [default check](/docs/cells.html#empty).
+`isEmpty` is an optional lifecycle hook. It returns a boolean to indicate if Cell is empty. Use it to override the [default check](#empty).
 
 It receives the `data`, and the default check reference `isDataEmpty`, so it's possible to extend the default check with custom logic.
 
@@ -187,7 +187,7 @@ export const afterQuery = (data) => ({...data})
 
 ### Loading
 
-If there's no cached data and the request is in flight, a Cell renders `Loading`. 
+If there's no cached data and the request is in flight, a Cell renders `Loading`.
 
 For a production example, navigate to [predictcovid.com](https://predictcovid.com), the first site made with Redwood. Usually, when you first navigate there, you'll see most of the dashboard spinning. Those are `Loading` components in action!
 

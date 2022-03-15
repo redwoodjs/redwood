@@ -721,7 +721,7 @@ If your function receives an incoming Webhook from a third party, see [Webhooks]
 
 Serverless functions can use the same user-authentication strategy used by [GraphQL Directives](/docs/graphql#secure-directives) to [secure your services](/docs/graphql#secure-services) via the `useRequireAuth` wrapper.
 
-> If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](/webhooks) with a signed payload and verifier.
+> If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
 
 #### How to Secure a Function with Redwood Auth
 

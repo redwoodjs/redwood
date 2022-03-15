@@ -1,6 +1,6 @@
 # GoTrue Auth
 
-If you've completed the [Authentication section](/tutorial/authentication) of The Tutorial, you've seen how you can add the [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget) to your Redwood app in a matter of minutes.
+If you've completed the [Authentication section](../tutorial/authentication.md) of The Tutorial, you've seen how you can add the [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget) to your Redwood app in a matter of minutes.
 But what do you do if you want to use Netlify Identity, but ditch the widget? There are many cases where we want much more control over our authentication interface and functionality, while still maintaining some _ease-of-use_ when it comes to development.
 
 Enter [GoTrue-JS](https://github.com/netlify/gotrue-js), a client library for interfacing with Netlify Identity's GoTrue API.
@@ -113,7 +113,7 @@ Let's generate a Sign Up page:
 yarn redwood generate page Signup
 ```
 
-This adds a Signup [route](/docs/redwood-router#router-and-route) to our routes file and creates a SignupPage component.
+This adds a Signup [route](../router.md#router-and-route) to our routes file and creates a SignupPage component.
 
 In the just-generated SignupPage component (`web/src/pages/SignupPage/SignupPage.js`), let's import some [Redwood Form components](https://redwoodjs.com/docs/form) and add a very basic form to our render component:
 
@@ -277,7 +277,7 @@ Start by [generating](/docs/cli-commands#generate-page) a sign in page:
 yarn redwood generate page Signin
 ```
 
-Back in our `SignupPage`, let's import `routes` and `navigate` from [Redwood Router](/docs/redwood-router#navigate) and use them to redirect on successful sign up:
+Back in our `SignupPage`, let's import `routes` and `navigate` from [Redwood Router](../router.md#navigate) and use them to redirect on successful sign up:
 
 ```js {5,15}
 // web/src/pages/SignupPage/SignupPage.js
@@ -424,7 +424,7 @@ Now then, upon a successful login let's redirect our user back to the home page.
 yarn redwood generate page Home /
 ```
 
-In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](/docs/redwood-router) and add them to the `then` function:
+In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](../router.md) and add them to the `then` function:
 
 ```js {5,14}
 // web/src/pages/SigninPage/SigninPage.js
@@ -543,7 +543,7 @@ Let's start by [generating a navigation component](/docs/cli-commands#generate-c
 yarn redwood generate component Navigation
 ```
 
-This creates `web/src/components/Navigation/Navigation.js`. In that file, let's import [the `Link` component and the `routes` object](/docs/redwood-router#link-and-named-route-functions) from `@redwoodjs/router`.
+This creates `web/src/components/Navigation/Navigation.js`. In that file, let's import [the `Link` component and the `routes` object](../router.md#link-and-named-route-functions) from `@redwoodjs/router`.
 
 We'll also import [`useAuth`](/docs/authentication#api) since we'll need to subscribe to the auth state in order for our components to decide what to render:
 

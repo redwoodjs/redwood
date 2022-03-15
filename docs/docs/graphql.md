@@ -476,14 +476,14 @@ To fix these errors, simple declare with `@requireAuth` to enforce authenticatio
 
 GraphQL scalar types give data meaning and validate that their values makes sense. Out of the box, GraphQL comes with `Int`, `Float`, `String`, `Boolean` and `ID`. While those can cover a wide variety of use cases, you may need more specific scalar types to better describe and validate your application's data.
 
-For example, if there's a `Person` type in your schema that has a field like `ageInYears`, if it's actually supposed to represent a person's age, technically it should only be a positive integer—never a negative one. 
+For example, if there's a `Person` type in your schema that has a field like `ageInYears`, if it's actually supposed to represent a person's age, technically it should only be a positive integer—never a negative one.
 Something like the [`PositiveInt` scalar](https://www.graphql-scalars.dev/docs/scalars/positive-int) provides that meaning and validation.
 
 ### Scalars vs Service vs Directives
 
 How are custom scalars different from Service Validations or Validator Directives?
 
-[Service validations](services.html#service-validations) run when resolving the service. Because they run at the start of your Service function and throw if conditions aren't met, they're great for validating whenever you use a Service—anywhere, anytime.
+[Service validations](services.md#service-validations) run when resolving the service. Because they run at the start of your Service function and throw if conditions aren't met, they're great for validating whenever you use a Service—anywhere, anytime.
 For example, they'll validate via GraphQL, Serverless Functions, webhooks, etc. Custom scalars, however, only validate via GraphQL and not anywhere else.
 
 Service validations also perform more fine-grained checks than scalars which are more geared toward validating that data is of a specific **type**.
@@ -492,14 +492,14 @@ Service validations also perform more fine-grained checks than scalars which are
 
 ### How To Add a Custom Scalar
 
-Let's say that you have a `Product` type that has three fields: a name, a description, and the type of currency. 
+Let's say that you have a `Product` type that has three fields: a name, a description, and the type of currency.
 The built-in `String` scalar should suffice for the first two, but for the third, you'd be better off with a more-specific `String` scalar that only accepts [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency codes, like `USD`, `EUR`, `CAD`, etc.
 Luckily there's already a [`Currency` scalar type](https://github.com/Urigo/graphql-scalars/blob/master/src/scalars/Currency.ts) that does exactly that!
 All you have to do is add it to your GraphQL schema.
 
 To add a custom scalar to your GraphQL schema:
 
-1. Add the scalar definition to one of your sdl files, such as `api/src/graphql/scalars.sdl.ts` 
+1. Add the scalar definition to one of your sdl files, such as `api/src/graphql/scalars.sdl.ts`
 
 > Note that you may have to create this file. Moreover, it's just a convention—custom scalar type definitions can be in any of your sdl files.
 
@@ -559,13 +559,13 @@ export const schema = gql`
   input CreateProductInput {
     name: String!
     description: String!
-    currency_iso_4217: Currency! // validate on mutation 
+    currency_iso_4217: Currency! // validate on mutation
   }
 
   input UpdateProductInput {
     name: String
     description: String
-    currency_iso_4217: Currency // validate on mutation 
+    currency_iso_4217: Currency // validate on mutation
   }
 
   type Mutation {
@@ -638,7 +638,7 @@ Logging is essential in production apps to be alerted about critical errors and 
 
 We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you move visibility into your GraphQL api.
 
-By configuring the GraphQL handler to use your api side [RedwoodJS logger](https://redwoodjs.com/docs/logger), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](https://redwoodjs.com/docs/logger#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
+By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](https://redwoodjs.com/docs/logger#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
 
 You configure the logger using the `loggerConfig` that accepts a [`logger`](<(https://redwoodjs.com/docs/logger)>) and a set of [GraphQL Logger Options](#graphql-logger-options).
 
