@@ -56,7 +56,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/fs-extra": "9.0.13",
-    "@types/lodash": "4.14.179",
+    "@types/lodash": "4.14.180",
     "@types/lru-cache": "5.1.1",
     "@types/node": "16.11.26",
     "@types/vscode": "1.65.0",
