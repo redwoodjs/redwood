@@ -9,6 +9,10 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
+import {
+  checkStorybookStatus,
+  configureStorybook,
+} from '../ui/tasks/configure-storybook'
 
 export const command = 'i18n'
 export const description = 'Set up i18n'
@@ -168,6 +172,11 @@ export const handler = async ({ force }) => {
           fs.writeFileSync(APP_JS_PATH, addI18nImport(appJS))
         }
       },
+    },
+    {
+      title: 'Configure Storybook...',
+      skip: () => checkStorybookStatus({ force }) === 'done',
+      task: async () => configureStorybook(),
     },
     {
       title: 'One more thing...',
