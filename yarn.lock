@@ -5673,7 +5673,7 @@ __metadata:
     "@types/lodash.escape": 4.0.6
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
-    "@types/yargs": 16.0.4
+    "@types/yargs": 17.0.9
     ansi-colors: 4.1.1
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -5691,7 +5691,7 @@ __metadata:
     qs: 6.10.3
     split2: 4.1.0
     typescript: 4.6.2
-    yargs: 16.2.0
+    yargs: 17.3.1
   bin:
     rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
@@ -5814,7 +5814,7 @@ __metadata:
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     typescript: 4.6.2
-    yargs: 16.2.0
+    yargs: 17.3.1
   bin:
     redwood: ./dist/index.js
     rw: ./dist/index.js
@@ -5847,7 +5847,7 @@ __metadata:
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
-    yargs: 16.2.0
+    yargs: 17.3.1
   bin:
     codemods: ./dist/codemods.js
   languageName: unknown
@@ -6178,14 +6178,14 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/node-fetch": 2.5.12
     "@types/uuid": 8.3.4
-    "@types/yargs": 16.0.4
+    "@types/yargs": 17.0.9
     ci-info: 3.3.0
     envinfo: 7.8.1
     jest: 27.5.1
     node-fetch: 2.6.7
     systeminformation: 5.11.8
     uuid: 8.3.2
-    yargs: 16.2.0
+    yargs: 17.3.1
   languageName: unknown
   linkType: soft
 
@@ -8486,7 +8486,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:16.0.4, @types/yargs@npm:^16.0.0":
+"@types/yargs@npm:17.0.9":
+  version: 17.0.9
+  resolution: "@types/yargs@npm:17.0.9"
+  dependencies:
+    "@types/yargs-parser": "*"
+  checksum: 461088bd5c8715f2671f7c74e04f0f15e862120b18e688e0f8840143f8ab92459aec512d8d3ef62184a2f34b8ee24b633c4bc5a2a337eda0888e2e7972dd5760
+  languageName: node
+  linkType: hard
+
+"@types/yargs@npm:^16.0.0":
   version: 16.0.4
   resolution: "@types/yargs@npm:16.0.4"
   dependencies:
@@ -12631,7 +12640,7 @@ __metadata:
     jest: 27.5.1
     listr: 0.14.3
     typescript: 4.6.2
-    yargs: 16.2.0
+    yargs: 17.3.1
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
   languageName: unknown
@@ -30873,18 +30882,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.2.0, yargs@npm:^16.2.0":
-  version: 16.2.0
-  resolution: "yargs@npm:16.2.0"
+"yargs@npm:17.3.1, yargs@npm:^17.0.0, yargs@npm:^17.3.1":
+  version: 17.3.1
+  resolution: "yargs@npm:17.3.1"
   dependencies:
     cliui: ^7.0.2
     escalade: ^3.1.1
     get-caller-file: ^2.0.5
     require-directory: ^2.1.1
-    string-width: ^4.2.0
+    string-width: ^4.2.3
     y18n: ^5.0.5
-    yargs-parser: ^20.2.2
-  checksum: b1dbfefa679848442454b60053a6c95d62f2d2e21dd28def92b647587f415969173c6e99a0f3bab4f1b67ee8283bf735ebe3544013f09491186ba9e8a9a2b651
+    yargs-parser: ^21.0.0
+  checksum: 2c5ff77132468093a1872b8a9798cdcc5da0bcf7a2b0660264ffa91766324b0926c3346e091d249dc3a86caf7e8e623aa0f8de660c9baf440188d4da7d4378c4
   languageName: node
   linkType: hard
 
@@ -30907,18 +30916,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.0.0, yargs@npm:^17.3.1":
-  version: 17.3.1
-  resolution: "yargs@npm:17.3.1"
+"yargs@npm:^16.2.0":
+  version: 16.2.0
+  resolution: "yargs@npm:16.2.0"
   dependencies:
     cliui: ^7.0.2
     escalade: ^3.1.1
     get-caller-file: ^2.0.5
     require-directory: ^2.1.1
-    string-width: ^4.2.3
+    string-width: ^4.2.0
     y18n: ^5.0.5
-    yargs-parser: ^21.0.0
-  checksum: 2c5ff77132468093a1872b8a9798cdcc5da0bcf7a2b0660264ffa91766324b0926c3346e091d249dc3a86caf7e8e623aa0f8de660c9baf440188d4da7d4378c4
+    yargs-parser: ^20.2.2
+  checksum: b1dbfefa679848442454b60053a6c95d62f2d2e21dd28def92b647587f415969173c6e99a0f3bab4f1b67ee8283bf735ebe3544013f09491186ba9e8a9a2b651
   languageName: node
   linkType: hard
 

@@ -37,7 +37,7 @@
     "prettier": "2.5.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
-    "yargs": "16.2.0"
+    "yargs": "17.3.1"
   },
   "devDependencies": {
     "@types/babel__core": "7.1.18",
