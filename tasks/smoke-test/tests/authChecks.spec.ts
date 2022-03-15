@@ -56,34 +56,40 @@ devServerTest(
   }
 )
 
-devServerTest('requireAuth graphql checks', async ({ page, webUrl }) => {
-  // Auth
-  await page.goto(`${webUrl}/posts/1/edit`)
+devServerTest(
+  'requireAuth graphql checks',
+  async ({ page, webUrl }: DevServerFixtures & PlaywrightTestArgs) => {
+    // Auth
+    await page.goto(`${webUrl}/posts/1/edit`)
 
-  await page.locator('input[name="title"]').fill('This is an edited title!')
+    await page.locator('input[name="title"]').fill('This is an edited title!')
 
-  // unAuthenticated
-  await page.click('text=SAVE')
-  await expect(
-    page
-      .locator('.rw-scaffold')
-      .locator("text=You don't have permission to do that")
-  ).toBeTruthy()
+    await page.click('text=SAVE')
 
-  // Authenticated
-  await loginAsTestUser({ webUrl, page })
-  await page.goto(`${webUrl}/posts/1/edit`)
-  await page.locator('input[name="title"]').fill('This is an edited title!')
+    await page.goto(`${webUrl}/posts`)
 
-  await Promise.all([
-    page.waitForNavigation({ url: '**/' }),
-    page.click('text=SAVE'),
-  ])
+    await expect(
+      // Count posts with the edited title
+      await page.locator('text=This is an edited title!').count()
+    ).toBe(0)
 
-  // Log Out
-  await page.goto(`${webUrl}/`)
-  await page.click('text=Log Out')
-  await expect(page.locator('text=Login')).toBeTruthy()
+    // Authenticated
+    await loginAsTestUser({ webUrl, page })
+    await page.goto(`${webUrl}/posts/1/edit`)
+    await page.locator('input[name="title"]').fill('This is an edited title!')
 
-  await expect(page.locator('text=This is an edited title!')).toBeTruthy()
-})
+    await Promise.all([
+      page.waitForNavigation({ url: '**/' }),
+      page.click('text=SAVE'),
+    ])
+
+    // Log Out
+    await page.goto(`${webUrl}/`)
+    await page.click('text=Log Out')
+    await expect(await page.locator('text=Login')).toBeTruthy()
+
+    await expect(
+      await page.locator('text=This is an edited title!').count()
+    ).toBe(1)
+  }
+)
