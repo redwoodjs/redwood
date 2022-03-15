@@ -1,10 +1,14 @@
 import { Plugin } from '@envelop/types'
+import { mapSchema, MapperKind } from '@graphql-tools/utils'
 import {
+  defaultFieldResolver,
   DirectiveNode,
   DocumentNode,
   getDirectiveValues,
+  GraphQLFieldConfig,
   GraphQLObjectType,
   GraphQLResolveInfo,
+  GraphQLSchema,
 } from 'graphql'
 
 import { GlobalContext } from '../index'
@@ -91,23 +95,99 @@ export function hasDirective(info: GraphQLResolveInfo): boolean {
 }
 
 export function getDirectiveByName(
-  info: GraphQLResolveInfo,
-  name: string
+  fieldConfig: GraphQLFieldConfig<any, any, any>,
+  directiveName: string
 ): null | DirectiveNode {
-  try {
-    const { parentType, fieldName, schema } = info
-    const schemaType = schema.getType(parentType.name) as GraphQLObjectType
-    const field = schemaType.getFields()[fieldName]
-    const astNode = field.astNode
-    const associatedDirective = astNode?.directives?.find(
-      (directive) => directive.name.value === name
-    )
+  const associatedDirective = fieldConfig.astNode?.directives?.find(
+    (directive) => directive.name.value === directiveName
+  )
+  return associatedDirective ?? null
+}
 
-    return associatedDirective || null
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+export function isPromise(value: any): value is Promise<unknown> {
+  return typeof value?.then === 'function'
+}
+
+function wrapAffectedResolvers(
+  schema: GraphQLSchema,
+  options: DirectivePluginOptions
+): GraphQLSchema {
+  return mapSchema(schema, {
+    [MapperKind.OBJECT_FIELD](fieldConfig, _, __, schema) {
+      const directiveNode = getDirectiveByName(fieldConfig, options.name)
+      const directive = directiveNode
+        ? schema.getDirective(directiveNode.name.value)
+        : null
+      if (directiveNode && directive) {
+        const directiveArgs =
+          getDirectiveValues(directive, { directives: [directiveNode] }) || {}
+        const originalResolve = fieldConfig.resolve ?? defaultFieldResolver
+        if (_isValidator(options)) {
+          return {
+            ...fieldConfig,
+            resolve: function useRedwoodDirectiveValidatorResolver(
+              root,
+              args,
+              context,
+              info
+            ) {
+              const result = options.onResolverCalled({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
+
+              if (isPromise(result)) {
+                return result.then(() =>
+                  originalResolve(root, args, context, info)
+                )
+              }
+              return originalResolve(root, args, context, info)
+            },
+          }
+        }
+        if (_isTransformer(options)) {
+          return {
+            ...fieldConfig,
+            resolve: function useRedwoodDirectiveTransformerResolver(
+              root,
+              args,
+              context,
+              info
+            ) {
+              const resolvedValue = originalResolve(root, args, context, info)
+              if (isPromise(resolvedValue)) {
+                return resolvedValue.then((resolvedValue) =>
+                  options.onResolverCalled({
+                    root,
+                    args,
+                    context,
+                    info,
+                    directiveNode,
+                    directiveArgs,
+                    resolvedValue,
+                  })
+                )
+              }
+              return options.onResolverCalled({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+                resolvedValue,
+              })
+            },
+          }
+        }
+      }
+      return fieldConfig
+    },
+  })
 }
 
 export const useRedwoodDirective = (
@@ -115,55 +195,29 @@ export const useRedwoodDirective = (
 ): Plugin<{
   onResolverCalled: ValidatorDirectiveFunc | TransformerDirectiveFunc
 }> => {
+  /**
+   * This symbol is added to the schema extensions for checking whether the transform got already applied.
+   */
+  const didMapSchemaSymbol = Symbol('useRedwoodDirective.didMapSchemaSymbol')
   return {
-    async onResolverCalled({ args, root, context, info }) {
-      const directiveNode = getDirectiveByName(info, options.name)
-      const directive = directiveNode
-        ? info.schema.getDirective(directiveNode.name.value)
-        : null
-
-      if (directiveNode && directive) {
-        const directiveArgs =
-          getDirectiveValues(
-            directive,
-            { directives: [directiveNode] },
-            info.variableValues
-          ) || {}
-
-        if (_isValidator(options)) {
-          await options.onResolverCalled({
-            root,
-            args,
-            context,
-            info,
-            directiveNode,
-            directiveArgs,
-          })
-        }
-
-        // In order to change the value of the field, we have to return a function in this form
-        // ({result, setResult}) => { setResult(newValue)}
-        // Not super clear but mentioned here: https://www.envelop.dev/docs/plugins/lifecycle#onexecuteapi
-
-        if (_isTransformer(options)) {
-          return ({ result, setResult }) => {
-            // @NOTE! A transformer cannot be async
-            const transformedValue = options.onResolverCalled({
-              root,
-              args,
-              context,
-              info,
-              directiveNode,
-              directiveArgs,
-              resolvedValue: result,
-            })
-
-            setResult(transformedValue)
-          }
-        }
+    onSchemaChange({ schema, replaceSchema }) {
+      /**
+       * Currently graphql-js extensions typings are limited to string keys.
+       * We are using symbols as each useRedwoodDirective plugin instance should use its own unique symbol.
+       */
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (schema.extensions?.[didMapSchemaSymbol] === true) {
+        return
       }
-
-      return
+      const transformedSchema = wrapAffectedResolvers(schema, options)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      transformedSchema.extensions = {
+        ...schema.extensions,
+        [didMapSchemaSymbol]: true,
+      }
+      replaceSchema(transformedSchema)
     },
   }
 }
