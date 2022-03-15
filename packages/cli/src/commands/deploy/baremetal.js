@@ -3,7 +3,6 @@ import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
-import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { NodeSSH } from 'node-ssh'
@@ -86,60 +85,8 @@ export const builder = (yargs) => {
   )
 }
 
-// Handles building/reloading each side
-const sideProcessTasks = (side, yargs, config) => {
-  const tasks = []
-
-  tasks.push({
-    title: `Building ${side}...`,
-    task: async () => {
-      await execa('yarn', ['rw', 'build', side], execaOptions)
-    },
-  })
-
-  // if the web side is being served by something like nginx, do the symlink thing
-  if (side === 'web' && !config.redwood_web_server) {
-    tasks.push({
-      title: `Symlinking ${side}/serve/current...`,
-      task: async () => {
-        await execa(
-          'cp',
-          ['-r', 'web/dist', `web/serve/${yargs.releaseDir}`],
-          execaOptions
-        )
-        await execa(
-          'ln',
-          ['-nsf', yargs.releaseDir, 'web/serve/current'],
-          execaOptions
-        )
-      },
-    })
-    // TODO: add process for cleaning up old deploys
-  }
-
-  // Restart processes. For sure if it's not the web side, otherwise only if
-  // the deploy config says we're using Redwood to serve web
-  if (side !== 'web' || config.redwood_web_server) {
-    const command = yargs.firstRun ? 'start' : 'restart'
-
-    // on first run, start processes
-    tasks.push({
-      title: `Starting ${side} processes...`,
-      task: async () => {
-        await execa(
-          'yarn',
-          ['pm2', command, 'ecosystem.config.js', '--only', side],
-          execaOptions
-        )
-      },
-    })
-  }
-
-  return tasks
-}
-
 const sshExec = async (sshOptions, task, path, command, args) => {
-  await ssh.connect(sshOptions)
+  // await ssh.connect(sshOptions)
 
   await ssh.exec(command, args, {
     cwd: path,
@@ -147,11 +94,22 @@ const sshExec = async (sshOptions, task, path, command, args) => {
       task.output = chunk.toString('utf-8')
     },
     onStderr: (chunk) => {
-      throw new Error(chunk.toString('utf-8'))
+      console.error(c.error(`\nDeploy failed!`))
+      console.error(
+        c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
+      )
+      console.error(
+        boxen(chunk.toString('utf-8'), {
+          padding: { top: 0, bottom: 0, right: 1, left: 1 },
+          margin: 0,
+          borderColor: 'red',
+        })
+      )
+      process.exit(1)
     },
   })
 
-  await ssh.dispose()
+  // await ssh.dispose()
 }
 
 const commands = (yargs) => {
@@ -160,7 +118,8 @@ const commands = (yargs) => {
     fs.readFileSync(path.join(getPaths().base, configFilename))
   )
 
-  const tasks = []
+  let servers = []
+  let tasks = []
 
   for (const serverConfig of deployConfig.servers) {
     const sshOptions = {
@@ -174,7 +133,12 @@ const commands = (yargs) => {
     }
 
     tasks.push({
-      title: `Pulling latest code...`,
+      title: 'Connecting...',
+      task: () => ssh.connect(sshOptions),
+    })
+
+    tasks.push({
+      title: `Updating codebase...`,
       task: async (_ctx, task) => {
         await sshExec(sshOptions, task, serverConfig.path, 'git', ['pull'])
       },
@@ -186,58 +150,131 @@ const commands = (yargs) => {
     })
 
     tasks.push({
-      title: `yarn install...`,
+      title: `Installing dependencies...`,
       task: async (_ctx, task) => {
         await sshExec(sshOptions, task, serverConfig.path, 'yarn', ['install'])
       },
       skip: () => {
-        if (!yargs.pull) {
+        if (!yargs.install) {
           return 'Skipping'
         }
       },
     })
 
-    // tasks.push({
-    //   title: `[${serverConfig.host}] Hanging up...`,
-    //   task: () => {
-    //     ssh.end()
-    //   },
-    // })
+    tasks.push({
+      title: `DB Migrations...`,
+      task: async (_ctx, task) => {
+        await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+          'rw',
+          'prisma',
+          'migrate',
+          'deploy',
+        ])
+        await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+          'rw',
+          'prisma',
+          'generate',
+        ])
+        await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+          'rw',
+          'dataMigrate',
+          'up',
+        ])
+      },
+      skip: () => {
+        if (!yargs.migrate) {
+          return 'Skipping'
+        }
+      },
+    })
 
-    //   {
-    //     title: 'yarn install...',
-    //     task: async () => {
-    //       await execa('yarn', ['install'], execaOptions)
-    //     },
-    //     skip: () => {
-    //       if (!yargs.install) {
-    //         return 'Skipping'
-    //       }
-    //     },
-    //   },
-    // ]
+    for (const side of yargs.sides) {
+      if (serverConfig.sides.includes(side)) {
+        tasks = tasks.concat(
+          sideProcessTasks(side, yargs, serverConfig, sshOptions)
+        )
+      }
+    }
 
-    // // If the server doesn't even support migrations via config, do not include
-    // // in task list at all, otherwise show, but skip if --no-migrate is set
-    // if (serverConfig.migrate !== false) {
-    //   tasks.push({
-    //     title: 'Migrating database...',
-    //     task: async () => {
-    //       await execa('yarn', ['rw', 'prisma', 'migrate', 'deploy'], execaOptions)
-    //       await execa('yarn', ['rw', 'prisma', 'generate'], execaOptions)
-    //       await execa('yarn', ['rw', 'dataMigrate', 'up'], execaOptions)
-    //     },
-    //     skip: () => {
-    //       if (!yargs.migrate) {
-    //         return 'Skipping'
-    //       }
-    //     },
-    //   })
-    // }
+    tasks.push({
+      title: 'Disconnecting...',
+      task: () => ssh.dispose(),
+    })
 
-    // for (const side of yargs.sides) {
-    //   tasks = tasks.concat(sideProcessTasks(side, yargs, serverConfig))
-    // }
+    servers.push({
+      title: serverConfig.host,
+      task: () => {
+        return new Listr(tasks)
+      },
+    })
+  }
+
+  return servers
+}
+
+// Handles building/reloading each side
+const sideProcessTasks = (side, yargs, config, sshOptions) => {
+  const tasks = []
+
+  tasks.push({
+    title: `Building ${side}...`,
+    task: async (_ctx, task) => {
+      await sshExec(sshOptions, task, config.path, 'yarn', [
+        'rw',
+        'build',
+        side,
+      ])
+    },
+  })
+
+  // if the web side is being served by something like nginx, do the symlink thing
+  if (side === 'web' && !config.redwood_web_server) {
+    tasks.push({
+      title: `Symlinking ${side}/serve/current...`,
+      task: async (_ctx, task) => {
+        await sshExec(sshOptions, task, config.path, 'cp', [
+          '-r',
+          'web/dist',
+          `web/serve/${yargs.releaseDir}`,
+        ])
+        await sshExec(sshOptions, task, config.path, 'ln', [
+          '-nsf',
+          yargs.releaseDir,
+          'web/serve/current',
+        ])
+      },
+    })
+    // TODO: add process for cleaning up old deploys
+  }
+
+  // Restart processes. For sure if it's not the web side, otherwise only if
+  // the deploy config says we're using Redwood to serve web
+  if (side !== 'web' || config.redwood_web_server) {
+    if (yargs.firstRun) {
+      tasks.push({
+        title: `Starting ${side} process for the first time...`,
+        task: async (_ctx, task) => {
+          await sshExec(sshOptions, task, config.path, 'yarn', [
+            'pm2',
+            'start',
+            'ecosystem.config.js',
+            '--only',
+            side,
+          ])
+        },
+      })
+    } else {
+      tasks.push({
+        title: `Restarting ${side} process...`,
+        task: async (_ctx, task) => {
+          await sshExec(sshOptions, task, config.path, 'yarn', [
+            'pm2',
+            'restart',
+            side,
+          ])
+        },
+      })
+    }
   }
 
   return tasks
@@ -246,6 +283,7 @@ const commands = (yargs) => {
 export const handler = async (yargs) => {
   try {
     const tasks = new Listr(commands(yargs), {
+      concurrent: true,
       exitOnError: true,
       renderer: yargs.verbose && VerboseRenderer,
     })
