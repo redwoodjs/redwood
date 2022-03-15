@@ -250,3 +250,72 @@ test("Doesn't throw or print any errors with empty project", async () => {
     delete process.env.RWJS_CWD
   }
 })
+
+test("Doesn't swallow legit errors - invalidQueryType", async () => {
+  const fixturePath = path.resolve(
+    __dirname,
+    './fixtures/typeDefinitions/invalidQueryType'
+  )
+  process.env.RWJS_CWD = fixturePath
+  const oldConsoleError = console.error
+  console.error = jest.fn()
+
+  await generateTypeDefGraphQLWeb({ logErrors: true })
+
+  try {
+    expect(console.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringMatching(/field.*softKitten.*Query/),
+      })
+    )
+  } finally {
+    console.error = oldConsoleError
+    delete process.env.RWJS_CWD
+  }
+})
+
+test("Doesn't swallow legit errors - missingType", async () => {
+  const fixturePath = path.resolve(
+    __dirname,
+    './fixtures/typeDefinitions/missingType'
+  )
+  process.env.RWJS_CWD = fixturePath
+  const oldConsoleError = console.error
+  console.error = jest.fn()
+
+  await generateTypeDefGraphQLWeb({ logErrors: true })
+
+  try {
+    expect(console.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringMatching(/Unknown type.*Todo/),
+      })
+    )
+  } finally {
+    console.error = oldConsoleError
+    delete process.env.RWJS_CWD
+  }
+})
+
+test("Doesn't swallow legit errors - nonExistingField", async () => {
+  const fixturePath = path.resolve(
+    __dirname,
+    './fixtures/typeDefinitions/nonExistingField'
+  )
+  process.env.RWJS_CWD = fixturePath
+  const oldConsoleError = console.error
+  console.error = jest.fn()
+
+  await generateTypeDefGraphQLWeb({ logErrors: true })
+
+  try {
+    expect(console.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringMatching(/field.*done.*Todo/),
+      })
+    )
+  } finally {
+    console.error = oldConsoleError
+    delete process.env.RWJS_CWD
+  }
+})

@@ -217,7 +217,7 @@ export const generateTypeDefGraphQLApi = async () => {
   }
 }
 
-function generateLoadTypedefsConfig(
+function getLoadDocumentsOptions(
   generates: Record<
     string,
     CodegenTypes.ConfiguredOutput | CodegenTypes.ConfiguredPlugin[]
@@ -251,7 +251,7 @@ function generateLoadTypedefsConfig(
   return loadTypedefsConfig
 }
 
-function generateCodegenConfig(
+function getCodegenInput(
   generates: Record<
     string,
     CodegenTypes.ConfiguredOutput | CodegenTypes.ConfiguredPlugin[]
@@ -287,7 +287,12 @@ function generateCodegenConfig(
   return codegenConfig
 }
 
-export const generateTypeDefGraphQLWeb = async () => {
+interface Args {
+  /** used for tests */
+  logErrors?: boolean | undefined
+}
+
+export const generateTypeDefGraphQLWeb = async ({ logErrors }: Args = {}) => {
   const rwjsPaths = getPaths()
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
 
@@ -305,7 +310,7 @@ export const generateTypeDefGraphQLWeb = async () => {
     },
   }
 
-  const options = generateLoadTypedefsConfig(generates)
+  const options = getLoadDocumentsOptions(generates)
 
   try {
     await loadDocuments([documentsGlob], options)
@@ -316,10 +321,15 @@ export const generateTypeDefGraphQLWeb = async () => {
 
   try {
     return await runCodegenGraphQL(generates)
-  } catch {
+  } catch (e) {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (web)')
     console.error()
+
+    if (logErrors) {
+      console.error(e)
+    }
+
     return []
   }
 }
@@ -347,7 +357,7 @@ const runCodegenGraphQL = async (
   // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
   const f: GenerateResponse = await generate(
     // Merge in user codegen config with the rw built-in one
-    { ...generateCodegenConfig(generates), ...userCodegenConfig?.config },
+    { ...getCodegenInput(generates), ...userCodegenConfig?.config },
     true
   )
   return f.map(({ filename }) => filename)
