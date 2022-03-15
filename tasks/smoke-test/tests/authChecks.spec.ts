@@ -61,7 +61,7 @@ devServerTest(
   }
 )
 
-devServerTest.only(
+devServerTest(
   'requireAuth graphql checks',
   async ({ page, webUrl }: DevServerFixtures & PlaywrightTestArgs) => {
     // Create posts
@@ -93,9 +93,9 @@ devServerTest.only(
 
     await page.goto(`${webUrl}/`)
     await expect(
-      await page.locator(
-        'article:has-text("Hello world! Soft kittens are the best.")'
-      )
+      await page
+        .locator('article:has-text("Hello world! Soft kittens are the best.")')
+        .first()
     ).not.toBeEmpty()
   }
 )
