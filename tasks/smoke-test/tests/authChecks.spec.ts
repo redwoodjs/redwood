@@ -69,7 +69,7 @@ devServerTest(
 
     await expect(
       page
-        .locator('.rw-scaffold')
+        .locator('.rw-form-error-title')
         .locator("text=You don't have permission to do that")
     ).toBeTruthy()
 
@@ -86,10 +86,7 @@ devServerTest(
       page,
     })
 
-    await Promise.all([
-      page.waitForNavigation({ url: '**/' }),
-      createNewPost({ page, webUrl }),
-    ])
+    await createNewPost({ page, webUrl })
 
     await page.goto(`${webUrl}/`)
     await expect(
@@ -114,5 +111,17 @@ async function createNewPost({ webUrl, page }) {
   // Fill input[name="body"]
   await page.locator('input[name="body"]').fill('Bazinga, bazinga, bazinga')
 
-  await page.click('text=SAVE')
+  const permissionError = page
+    .locator('.rw-form-error-title')
+    .locator(`text=You don't have permission to do that`)
+
+  // Either wait for success and redirect
+  // Or get the error
+  await Promise.all([
+    Promise.race([
+      page.waitForNavigation({ url: '**/' }),
+      permissionError.waitFor({ timeout: 5000 }),
+    ]),
+    await page.click('text=SAVE'),
+  ])
 }
