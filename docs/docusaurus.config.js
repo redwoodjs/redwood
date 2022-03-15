@@ -8,16 +8,20 @@ module.exports = {
       tutorial2: 'welcome-to-redwood-part-ii-redwoods-revenge',
     },
   },
-  title: 'Learn RedwoodJS',
+  // ?
+  title: 'RedwoodJS Docs',
+  // ?
   tagline:
     'Built on React, GraphQL, and Prisma, Redwood works with the components and development workflow you love, but with simple conventions and helpers to make your experience even better.',
+  // ?
   url: 'https://learn-redwood.netlify.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'redwoodjs', // Usually your GitHub org/user name.
-  projectName: 'learn.redwoodjs.com', // Usually your repo name.,
+  // ?
+  projectName: 'redwood', // Usually your repo name.,
   themeConfig: {
     algolia: {
       appId: 'dev',
@@ -41,6 +45,7 @@ module.exports = {
         },
       ],
     },
+    // ?
     footer: {
       style: 'dark',
       links: [
@@ -83,7 +88,7 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
+              href: 'https://github.com/redwoodjs/redwood',
             },
           ],
         },
@@ -97,8 +102,8 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/redwoodjs/learn.redwoodjs.com/blob/main/', // base path for repo edit pages
+          // ? — blob? tree?
+          editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs', // base path for repo edit pages
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -106,6 +111,7 @@ module.exports = {
       },
     ],
   ],
+  // ?
   scripts: [
     {
       src: 'https://plausible.io/js/plausible.js',
