@@ -196,6 +196,8 @@ const clientCommands = (yargs) => {
       ...deploySides.map((side) => `--sides=${side}`),
     ]
 
+    console.info(sshDeployCommand)
+
     tasks.push({
       title: `Deploying ${serverConfig.sides} to ${serverConfig.connect}...`,
       task: async () => {
@@ -297,8 +299,7 @@ const serverCommands = (yargs) => {
     tasks = tasks.concat(sideProcessTasks(side, yargs, serverConfig))
   }
 
-  // return tasks
-  return []
+  return tasks
 }
 
 export const handler = async (yargs) => {
