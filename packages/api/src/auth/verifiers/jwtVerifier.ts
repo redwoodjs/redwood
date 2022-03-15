@@ -67,9 +67,7 @@ export const verifySignature = ({
     }
 
     return true
-
-    throw new WebhookVerificationError()
-  } catch (error) {
+  } catch {
     throw new WebhookVerificationError()
   }
 }
