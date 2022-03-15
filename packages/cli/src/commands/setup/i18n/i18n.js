@@ -9,10 +9,11 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
+
 import {
   checkStorybookStatus,
   configureStorybook,
-} from '../ui/tasks/configure-storybook'
+} from './tasks/configure-storybook'
 
 export const command = 'i18n'
 export const description = 'Set up i18n'
