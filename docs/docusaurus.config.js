@@ -1,28 +1,5 @@
-const translationGuideUrl =
-  'https://github.com/redwoodjs/learn.redwoodjs.com/blob/main/README_TRANSLATION_GUIDE.md' // replaces editUrl on localized Pages
-
-const locales = ['en', 'fr', 'es']
-
-const localeConfigs = {
-  en: {
-    label: 'English',
-  },
-  fr: {
-    label: 'français',
-  },
-  es: {
-    label: 'español',
-  },
-}
-
 module.exports = {
-  i18n: {
-    defaultLocale: 'en',
-    locales,
-    localeConfigs,
-  },
   customFields: {
-    translationGuideUrl,
     defaultDocsLandingPage: 'tutorial/welcome-to-redwood', // redirects here when hitting /docs/
     defaultSectionLandingPages: {
       // map of what is considered the first article in each section
@@ -107,10 +84,6 @@ module.exports = {
             {
               label: 'GitHub',
               href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
-            },
-            {
-              label: 'Help us translate',
-              href: translationGuideUrl,
             },
           ],
         },
