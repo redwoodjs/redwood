@@ -6,7 +6,11 @@ import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../,,/../paths'
-import { validateSchemaForDirectives } from '../validateSchema'
+import {
+  validateSchemaForDirectives,
+  DIRECTIVE_REQUIRED_ERROR_MESSAGE,
+  DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE,
+} from '../validateSchema'
 
 const FIXTURE_ERROR_PATH = path.resolve(
   __dirname,
@@ -26,29 +30,19 @@ const projectTypeSrc = async (sdlFile: string) =>
     cwd: getPaths().api.src,
   })
 
-const validateSdlFile = async (sdlFile: string): Promise<boolean> => {
-  let isSdlValid
-
+const validateSdlFile = async (sdlFile: string) => {
   const projectTypeSrcFiles = await projectTypeSrc(sdlFile)
 
-  try {
-    // The output of the above function doesn't give us the documents directly
-    const projectDocumentNodes = Object.values(projectTypeSrcFiles)
-      .map(({ document }) => document)
-      .filter((documentNode): documentNode is DocumentNode => {
-        return !!documentNode
-      })
+  // The output of the above function doesn't give us the documents directly
+  const projectDocumentNodes = Object.values(projectTypeSrcFiles)
+    .map(({ document }) => document)
+    .filter((documentNode): documentNode is DocumentNode => {
+      return !!documentNode
+    })
 
-    // Merge in the rootSchema with JSON scalars, etc.
-    const mergedDocumentNode = mergeTypeDefs([projectDocumentNodes])
-
-    validateSchemaForDirectives(mergedDocumentNode)
-    isSdlValid = true
-  } catch (e) {
-    isSdlValid = false
-  }
-
-  return isSdlValid
+  // Merge in the rootSchema with JSON scalars, etc.
+  const mergedDocumentNode = mergeTypeDefs([projectDocumentNodes])
+  validateSchemaForDirectives(mergedDocumentNode)
 }
 
 describe('SDL uses auth directives', () => {
@@ -58,28 +52,33 @@ describe('SDL uses auth directives', () => {
   afterAll(() => {
     delete process.env.RWJS_CWD
   })
-  test('Is valid with proper roles set on directives', async () => {
-    const isSdlValid = await validateSdlFile('todosWithAuthRoles')
-    expect(isSdlValid).toBe(true)
+  test('is valid with proper roles set on directives', async () => {
+    await expect(
+      validateSdlFile('todosWithAuthRoles')
+    ).resolves.not.toThrowError()
   })
 
-  test('Is invalid because missing directives', async () => {
-    const isSdlValid = await validateSdlFile('todos')
-    expect(isSdlValid).toBe(false)
+  test('is invalid because missing directives', async () => {
+    await expect(validateSdlFile('todos')).rejects.toThrowError(
+      DIRECTIVE_REQUIRED_ERROR_MESSAGE
+    )
   })
 
-  test('Is invalid due to auth role errors', async () => {
-    const isSdlValid = await validateSdlFile('todosWithAuthInvalidRolesErrors')
-    expect(isSdlValid).toBe(false)
+  test('is invalid due to auth role errors', async () => {
+    await expect(
+      validateSdlFile('todosWithAuthInvalidRolesErrors')
+    ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
   })
 
-  test('Is invalid due to auth role errors when the role is missing/null', async () => {
-    const isSdlValid = await validateSdlFile('todosWithAuthMissingRoleError')
-    expect(isSdlValid).toBe(false)
+  test('is invalid due to auth role errors when the role is missing/null', async () => {
+    await expect(
+      validateSdlFile('todosWithAuthMissingRoleError')
+    ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
   })
 
-  test('Is invalid due to auth role being numeric instead of string', async () => {
-    const isSdlValid = await validateSdlFile('todosWithNumericRoleAuthError')
-    expect(isSdlValid).toBe(false)
+  test('is invalid due to auth role being numeric instead of string', async () => {
+    await expect(
+      validateSdlFile('todosWithAuthMissingRoleError')
+    ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
   })
 })

@@ -97,7 +97,7 @@ export function validateSchemaForDirectives(
         `- ${field.fieldName} has an invalid ${field.invalid}`
     )
 
-    throw new Error(
+    throw new RangeError(
       `${DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE}\n\n${fieldWithInvalidRoleValues.join(
         '\n'
       )} \n\nFor example: @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])`
