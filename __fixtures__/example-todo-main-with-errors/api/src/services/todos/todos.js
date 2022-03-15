@@ -8,6 +8,8 @@ export const todosWithInvalidRole = () => db.todo.findMany()
 export const todosWithInvalidRoles = () => db.todo.findMany()
 export const todosWithMissingRoles = () => db.todo.findMany()
 export const todosWithBuiltInDeprecatedDirective = () => db.todo.findMany()
+export const todosWithMissingRolesAttribute = () => db.todo.findMany()
+export const todosWithMissingRolesAttributeNumeric = () => db.todo.findMany()
 
 export const createTodo = ({ body }) => db.todo.create({ data: { body } })
 

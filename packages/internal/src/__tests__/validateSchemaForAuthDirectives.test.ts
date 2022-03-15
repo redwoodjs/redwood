@@ -97,5 +97,21 @@ describe('SDL uses auth directives', () => {
         validateSdlFile('todosWithAuthMissingRoleError')
       ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
     })
+
+    describe('and SDL missing the roles attribute', () => {
+      test('due to requireAuthDirective missing roles attribute but argument value is a string', async () => {
+        await expect(
+          validateSdlFile('todosWithMissingAuthRolesAttributeError')
+        ).rejects.toThrowError(
+          'Syntax Error: Expected Name, found String "ADMIN"'
+        )
+      })
+
+      test('due to requireAuthDirective missing roles attribute when argument value is numeric', async () => {
+        await expect(
+          validateSdlFile('todosWithMissingAuthRolesAttributeNumericError')
+        ).rejects.toThrowError('Syntax Error: Expected Name, found Int "42".')
+      })
+    })
   })
 })
