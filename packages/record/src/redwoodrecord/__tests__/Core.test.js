@@ -1,7 +1,6 @@
 import * as Errors from '../../errors'
+import datamodel from '../__fixtures__/datamodel.js'
 import Core from '../Core'
-
-import datamodel from './datamodel.js'
 
 // Mock Prisma
 const db = { user: jest.fn() }
