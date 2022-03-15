@@ -45,6 +45,7 @@
     "@redwoodjs/testing",
     "@redwoodjs/web",
     "lru-cache",
+    "@types/lru-cache",
     "pretty-bytes",
     "is-port-reachable"
   ]
