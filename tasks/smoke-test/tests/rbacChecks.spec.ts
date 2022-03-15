@@ -20,40 +20,46 @@ import { loginAsTestUser, signUpTestUser } from './common'
 const adminEmail = 'admin@bazinga.com'
 const password = 'test123'
 
-devServerTest.beforeEach(
-  async ({ webUrl, context }: PlaywrightTestArgs & DevServerFixtures) => {
-    const adminSignupPage = await context.newPage()
+let messageDate
+devServerTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
+  // @NOTE we can't access webUrl in beforeAll, so hardcoded
+  // But we can switch to beforeEach if required
+  const webUrl = 'http://localhost:9000'
 
-    await signUpTestUser({
-      // @NOTE we can't access webUrl in beforeAll, so hardcoded
-      // But we can switch to beforeEach if required
-      webUrl,
-      page: adminSignupPage,
-      email: adminEmail,
-      password,
-    })
+  const adminSignupPage = await browser.newPage()
 
-    await adminSignupPage.close()
+  await signUpTestUser({
+    // @NOTE we can't access webUrl in beforeAll, so hardcoded
+    // But we can switch to beforeEach if required
+    webUrl,
+    page: adminSignupPage,
+    email: adminEmail,
+    password,
+  })
 
-    const regularUserSignupPage = await context.newPage()
-    // Signup non-admin user
-    await signUpTestUser({
-      webUrl,
-      page: regularUserSignupPage,
-    })
+  await adminSignupPage.close()
 
-    await regularUserSignupPage.close()
+  const regularUserSignupPage = await browser.newPage()
+  // Signup non-admin user
+  await signUpTestUser({
+    webUrl,
+    page: regularUserSignupPage,
+  })
 
-    const incognitoPage = await context.newPage()
+  await regularUserSignupPage.close()
 
-    await fillOutContactFormAsAnonymousUser({
-      page: incognitoPage,
-      webUrl,
-    })
+  const incognitoPage = await browser.newPage()
 
-    await incognitoPage.close()
-  }
-)
+  messageDate = Date.now().toPrecision()
+
+  await fillOutContactFormAsAnonymousUser({
+    page: incognitoPage,
+    webUrl,
+    messageDate,
+  })
+
+  await incognitoPage.close()
+})
 
 devServerTest(
   'RBAC: Should not be able to delete contact as non-admin user',
@@ -146,9 +152,11 @@ console.log(await db.user.findMany())
 async function fillOutContactFormAsAnonymousUser({
   page,
   webUrl,
+  messageDate,
 }: {
   page: PlaywrightTestArgs['page']
   webUrl: string
+  messageDate: string
 }) {
   await page.goto(`${webUrl}/contact`)
   // Click input[name="name"]
@@ -164,7 +172,7 @@ async function fillOutContactFormAsAnonymousUser({
   // Fill textarea[name="message"]
   await page
     .locator('textarea[name="message"]')
-    .fill('Hello, I love Mexican food. What about you? ')
+    .fill(`Hello, I love Mexican food. What about you? - ${messageDate}`)
   // Click text=Save
   const successMessage = page.locator(`text=Thank you for your submission!`)
 
