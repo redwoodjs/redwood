@@ -29,11 +29,6 @@ export const commonOptions = {
 
 export const apiCliOptions = {
   port: { default: getConfig().api?.port || 8911, type: 'number', alias: 'p' },
-  debugPort: {
-    default: getConfig().api?.debugPort,
-    type: 'number',
-    alias: 'dp',
-  },
   socket: { type: 'string' },
   apiRootPath: {
     alias: ['rootPath', 'root-path'],

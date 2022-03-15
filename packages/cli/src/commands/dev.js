@@ -100,8 +100,8 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
-  const apiDebugPortEnvVar = process.env.API_DEBUG_PORT
-    ? `API_DEBUG_PORT=${process.env.API_DEBUG_PORT}`
+  const apiDebugPortEnvVar = apiDebugPort
+    ? `API_DEBUG_PORT=${apiDebugPort}`
     : ''
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {

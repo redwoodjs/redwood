@@ -58,19 +58,13 @@ const rebuildApiServer = () => {
     buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
-    let {
-      api: { debugPort },
-    } = getConfig()
-    if (!debugPort && process.env.API_DEBUG_PORT) {
-      debugPort = +process.env.API_DEBUG_PORT
-    }
     const forkOpts = {
       execArgv: process.execArgv,
     }
-    if (debugPort != null) {
-      forkOpts.execArgv = forkOpts.execArgv.concat([
-        `--inspect=${debugPort.toString()}`,
-      ])
+    const debugPort =
+      process.env.API_DEBUG_PORT || '' + (getConfig().api.debugPort || '')
+    if (debugPort) {
+      forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
     }
 
     // Start API server
