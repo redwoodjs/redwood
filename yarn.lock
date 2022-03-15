@@ -2021,14 +2021,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.28.3":
-  version: 1.28.3
-  resolution: "@clerk/types@npm:1.28.3"
-  checksum: 16315351f2f218ddaf75821589d4925a0d676be450d055fd9919b672d989cef0d1206dc80e4fc1be6dbc856f7d4987c835eae4d422f7bee6434d11493380ce3a
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^1.29.0":
+"@clerk/types@npm:1.29.0, @clerk/types@npm:^1.29.0":
   version: 1.29.0
   resolution: "@clerk/types@npm:1.29.0"
   checksum: 2c13581fffa57e9ac02f2da3c24864fa99a7ecf6e1496121c98ac6018b21badcb1ee194f098f04bbbb1c782078d29991f78060aac53131600f5dd42882506cab
@@ -5754,7 +5747,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.4
     "@clerk/clerk-sdk-node": 2.9.10
-    "@clerk/types": 1.28.3
+    "@clerk/types": 1.29.0
     "@supabase/supabase-js": 1.31.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
