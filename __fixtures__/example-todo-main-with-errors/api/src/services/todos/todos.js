@@ -7,6 +7,7 @@ export const todosWithMultipleRoles = () => db.todo.findMany()
 export const todosWithInvalidRole = () => db.todo.findMany()
 export const todosWithInvalidRoles = () => db.todo.findMany()
 export const todosWithMissingRoles = () => db.todo.findMany()
+export const todosWithBuiltInDeprecatedDirective = () => db.todo.findMany()
 
 export const createTodo = ({ body }) => db.todo.create({ data: { body } })
 
@@ -20,4 +21,9 @@ export const renameTodo = ({ id, body }) =>
   db.todo.update({
     data: { body },
     where: { id },
+  })
+
+export const deleteTodo = ({ id }) =>
+  db.todo.delete({
+    where: { id: 1 },
   })

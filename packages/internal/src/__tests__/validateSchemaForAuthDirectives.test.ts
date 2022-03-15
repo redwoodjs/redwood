@@ -52,33 +52,50 @@ describe('SDL uses auth directives', () => {
   afterAll(() => {
     delete process.env.RWJS_CWD
   })
-  test('is valid with proper roles set on directives', async () => {
-    await expect(
-      validateSdlFile('todosWithAuthRoles')
-    ).resolves.not.toThrowError()
+
+  describe('SDL is valid', () => {
+    test('with proper roles set on directives', async () => {
+      await expect(
+        validateSdlFile('todosWithAuthRoles')
+      ).resolves.not.toThrowError()
+    })
+
+    test('with uppercase single string roles declared on a Mutation', async () => {
+      await expect(
+        validateSdlFile('todosMutations')
+      ).resolves.not.toThrowError()
+    })
+
+    test('with a built-in @deprecated directive', async () => {
+      await expect(
+        validateSdlFile('todosWithBuiltInDirectives')
+      ).resolves.not.toThrowError()
+    })
   })
 
-  test('is invalid because missing directives', async () => {
-    await expect(validateSdlFile('todos')).rejects.toThrowError(
-      DIRECTIVE_REQUIRED_ERROR_MESSAGE
-    )
-  })
+  describe('SDL is invalid', () => {
+    test('because missing directives', async () => {
+      await expect(validateSdlFile('todos')).rejects.toThrowError(
+        DIRECTIVE_REQUIRED_ERROR_MESSAGE
+      )
+    })
 
-  test('is invalid due to auth role errors', async () => {
-    await expect(
-      validateSdlFile('todosWithAuthInvalidRolesErrors')
-    ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
-  })
+    test('due to auth role errors', async () => {
+      await expect(
+        validateSdlFile('todosWithAuthInvalidRolesErrors')
+      ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
+    })
 
-  test('is invalid due to auth role errors when the role is missing/null', async () => {
-    await expect(
-      validateSdlFile('todosWithAuthMissingRoleError')
-    ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
-  })
+    test('due to auth role errors when the role is missing/null', async () => {
+      await expect(
+        validateSdlFile('todosWithAuthMissingRoleError')
+      ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
+    })
 
-  test('is invalid due to auth role being numeric instead of string', async () => {
-    await expect(
-      validateSdlFile('todosWithAuthMissingRoleError')
-    ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
+    test('due to auth role being numeric instead of string', async () => {
+      await expect(
+        validateSdlFile('todosWithAuthMissingRoleError')
+      ).rejects.toThrowError(DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE)
+    })
   })
 })
