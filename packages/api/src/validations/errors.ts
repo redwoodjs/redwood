@@ -290,9 +290,8 @@ export class NegativeNumericalityValidationError extends ServiceValidationError 
 export class UniquenessValidationError extends ServiceValidationError {
   constructor(name: string, message: string | undefined, _substitutions = {}) {
     const errorMessage = message ? message : `${name} must be unique`
-    const fieldErrorMessage = errorMessage
 
-    super(errorMessage, fieldErrorMessage)
+    super(errorMessage)
     this.name = 'UniquenessValidationError'
   }
 }
