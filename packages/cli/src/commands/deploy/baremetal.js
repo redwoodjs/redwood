@@ -117,6 +117,7 @@ const commands = (yargs) => {
   let servers = []
   let tasks = []
 
+  // loop through each server in deploy.toml
   for (const serverConfig of deployConfig.servers) {
     const sshOptions = {
       host: serverConfig.host,
@@ -184,6 +185,7 @@ const commands = (yargs) => {
       },
     })
 
+    // build & start/restart processes
     for (const side of yargs.sides) {
       if (serverConfig.sides.includes(side)) {
         tasks = tasks.concat(
@@ -197,6 +199,8 @@ const commands = (yargs) => {
       task: () => ssh.dispose(),
     })
 
+    // Sets each server as a "parent" task so that the actual deploy tasks
+    // run as children. Each server deploy can run concurrently
     servers.push({
       title: serverConfig.host,
       task: () => {
@@ -224,6 +228,7 @@ const sideProcessTasks = (side, yargs, config, sshOptions) => {
   })
 
   // if the web side is being served by something like nginx, do the symlink thing
+  // otherwise this will continue and run `yarn pm2 restart web` instead
   if (side === 'web' && !config.redwood_web_server) {
     tasks.push({
       title: `Symlinking ${side}/serve/current...`,
