@@ -26,7 +26,7 @@
   --ifm-color-emphasis-300: #eba48e;
   --ifm-code-border-radius: 0.25rem;
   --ifm-code-font-size: 90%;
-  --ifm-font-family-base: 'Open Sans', system-ui, -apple-system,
+  --ifm-font-family-base: 'Inter', 'Open Sans', system-ui, -apple-system,
     BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --ifm-font-family-monospace: 'Fira Code', 'Fira Mono', SFMono-Regular, Menlo,
     Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
