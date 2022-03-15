@@ -100,11 +100,14 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
+  const apiDebugPortEnvVar = process.env.API_DEBUG_PORT
+    ? `API_DEBUG_PORT=${process.env.API_DEBUG_PORT}`
+    : ''
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps API_DEBUG_PORT=${apiDebugPort} yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps ${apiDebugPortEnvVar} yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
