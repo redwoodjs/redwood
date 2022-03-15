@@ -5831,6 +5831,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 3.0.2
     secure-random-password: 0.2.3
+    simple-ssh: ^1.1.0
     terminal-link: 2.1.1
     typescript: 4.6.2
     yargs: 16.2.0
@@ -9841,7 +9842,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:~0.2.3":
+"asn1@npm:^0.2.4, asn1@npm:~0.2.3":
   version: 0.2.6
   resolution: "asn1@npm:0.2.6"
   dependencies:
@@ -10586,7 +10587,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bcrypt-pbkdf@npm:^1.0.0":
+"bcrypt-pbkdf@npm:^1.0.0, bcrypt-pbkdf@npm:^1.0.2":
   version: 1.0.2
   resolution: "bcrypt-pbkdf@npm:1.0.2"
   dependencies:
@@ -12554,6 +12555,16 @@ __metadata:
     nested-error-stacks: ^2.0.0
     p-event: ^4.1.0
   checksum: db3ef3e3e466742f392ae71edb9b2cdbb314e855d97630a65de57bc1097bacf6e844f6d9d44882b8678c0de26ba7e656c2c915960435970067823372e807eafa
+  languageName: node
+  linkType: hard
+
+"cpu-features@npm:0.0.2":
+  version: 0.0.2
+  resolution: "cpu-features@npm:0.0.2"
+  dependencies:
+    nan: ^2.14.1
+    node-gyp: latest
+  checksum: 54e6b66bcb3e046ce39a0116ddfde209a77202574ecedc820128021ff56e1022601d666721545342e0d08922b748a33d43c7c1e7d0040079c3c431a8bafe4b3a
   languageName: node
   linkType: hard
 
@@ -21844,7 +21855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.12.1":
+"nan@npm:^2.12.1, nan@npm:^2.14.1, nan@npm:^2.15.0":
   version: 2.15.0
   resolution: "nan@npm:2.15.0"
   dependencies:
@@ -26805,6 +26816,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"simple-ssh@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "simple-ssh@npm:1.1.0"
+  dependencies:
+    ssh2: ^1.5.0
+    xtend: ^4.0.1
+  checksum: f8b1f91e6a9660c2e95d6ceb8a53bbbe8e17ecc6e23de07ff076a1a9b39149e497beeefd63520a90ec7045b86f8fd3a0181f0136fc83b1104d490301d22a0e80
+  languageName: node
+  linkType: hard
+
 "sirv@npm:^1.0.7":
   version: 1.0.19
   resolution: "sirv@npm:1.0.19"
@@ -27277,6 +27298,23 @@ __metadata:
   version: 1.0.3
   resolution: "sprintf-js@npm:1.0.3"
   checksum: ecadcfe4c771890140da5023d43e190b7566d9cf8b2d238600f31bec0fc653f328da4450eb04bd59a431771a8e9cc0e118f0aa3974b683a4981b4e07abc2a5bb
+  languageName: node
+  linkType: hard
+
+"ssh2@npm:^1.5.0":
+  version: 1.7.0
+  resolution: "ssh2@npm:1.7.0"
+  dependencies:
+    asn1: ^0.2.4
+    bcrypt-pbkdf: ^1.0.2
+    cpu-features: 0.0.2
+    nan: ^2.15.0
+  dependenciesMeta:
+    cpu-features:
+      optional: true
+    nan:
+      optional: true
+  checksum: 313ab70d1cd077a878a7d7ae61204eb323c6d1b75bf1a6713099e7f3ba351f911644b845030426fdcafa3a2439e3927d16aacb812b713d1c184751176fd9c242
   languageName: node
   linkType: hard
 

@@ -60,6 +60,7 @@
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
+    "simple-ssh": "^1.1.0",
     "terminal-link": "2.1.1",
     "yargs": "16.2.0"
   },
