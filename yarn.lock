@@ -481,7 +481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.13.0, @babel/helper-plugin-utils@npm:^7.14.5, @babel/helper-plugin-utils@npm:^7.16.7, @babel/helper-plugin-utils@npm:^7.8.0, @babel/helper-plugin-utils@npm:^7.8.3":
+"@babel/helper-plugin-utils@npm:7.16.7, @babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.13.0, @babel/helper-plugin-utils@npm:^7.14.5, @babel/helper-plugin-utils@npm:^7.16.7, @babel/helper-plugin-utils@npm:^7.8.0, @babel/helper-plugin-utils@npm:^7.8.3":
   version: 7.16.7
   resolution: "@babel/helper-plugin-utils@npm:7.16.7"
   checksum: 14c50026d019d0ee6f8bb63fbb302323d443857a111006becf8cc65c41de1289b2c6374e48d97a6f733ddbd098ed4d2141693392d76c901b8e8cdc075b5eaf41
@@ -1450,21 +1450,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 1b7cb9a7cd08643b5bbcfc38f8fb0d4a1436b4af80b7c68341175a768094e680dc4285744e4fb16a04f2e754b81da57c5ee22ff88c92949c308a49366600a988
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-transform-react-jsx@npm:7.16.7":
-  version: 7.16.7
-  resolution: "@babel/plugin-transform-react-jsx@npm:7.16.7"
-  dependencies:
-    "@babel/helper-annotate-as-pure": ^7.16.7
-    "@babel/helper-module-imports": ^7.16.7
-    "@babel/helper-plugin-utils": ^7.16.7
-    "@babel/plugin-syntax-jsx": ^7.16.7
-    "@babel/types": ^7.16.7
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: adbadacd4d227cd3f3dff04be7fbe78715af18cd34c62a97cdb1858254df60d8a3f25edfe0afd50cf37afec02447026c6c067ce05da9fc4384d549a1cfe3a2e3
   languageName: node
   linkType: hard
 
@@ -5318,12 +5303,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.19.2":
-  version: 1.19.2
-  resolution: "@playwright/test@npm:1.19.2"
+"@playwright/test@npm:1.20.0":
+  version: 1.20.0
+  resolution: "@playwright/test@npm:1.20.0"
   dependencies:
     "@babel/code-frame": 7.16.7
     "@babel/core": 7.16.12
+    "@babel/helper-plugin-utils": 7.16.7
     "@babel/plugin-proposal-class-properties": 7.16.7
     "@babel/plugin-proposal-dynamic-import": 7.16.7
     "@babel/plugin-proposal-export-namespace-from": 7.16.7
@@ -5338,31 +5324,26 @@ __metadata:
     "@babel/plugin-syntax-object-rest-spread": 7.8.3
     "@babel/plugin-syntax-optional-catch-binding": 7.8.3
     "@babel/plugin-transform-modules-commonjs": 7.16.8
-    "@babel/plugin-transform-react-jsx": 7.16.7
     "@babel/preset-typescript": 7.16.7
-    babel-plugin-module-resolver: 4.1.0
     colors: 1.4.0
     commander: 8.3.0
     debug: 4.3.3
     expect: 27.2.5
     jest-matcher-utils: 27.2.5
-    jpeg-js: 0.4.3
     json5: 2.2.0
     mime: 3.0.0
     minimatch: 3.0.4
     ms: 2.1.3
     open: 8.4.0
     pirates: 4.0.4
-    pixelmatch: 5.2.1
-    playwright-core: 1.19.2
-    pngjs: 6.0.0
+    playwright-core: 1.20.0
     rimraf: 3.0.2
     source-map-support: 0.4.18
     stack-utils: 2.0.5
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: 59a2275ee2e36b7521f507b04641753ad38faf87b60b48d23a4ed484b9532bea9a4a4c01e10a5f710d9165dc4b6e03031133404d3351eee7fe018e0a4f0e9ec2
+  checksum: b8e59ddc51b25056c5db9e198ed88a39a6879d267bdf2b0c634efee9d19abf81f2024081d5e1002ce52a32a0312aa559d76a907ef1323468db0b45af284f980c
   languageName: node
   linkType: hard
 
@@ -23666,16 +23647,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.19.2":
-  version: 1.19.2
-  resolution: "playwright-core@npm:1.19.2"
+"playwright-core@npm:1.20.0":
+  version: 1.20.0
+  resolution: "playwright-core@npm:1.20.0"
   dependencies:
+    colors: 1.4.0
     commander: 8.3.0
     debug: 4.3.3
     extract-zip: 2.0.1
     https-proxy-agent: 5.0.0
     jpeg-js: 0.4.3
     mime: 3.0.0
+    pixelmatch: 5.2.1
     pngjs: 6.0.0
     progress: 2.0.3
     proper-lockfile: 4.1.2
@@ -23688,7 +23671,7 @@ __metadata:
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: ba2f402cd538a4b89b1ff084c32a21994eed4c5efff68017f3f79838a74e65e70d3cc53ba8a08c963ffd3f493d4818c0b7c7c1717b513892df53dafb56b2d6d1
+  checksum: 2f26fe49cad5ee89f0cdbe4f26dc2df7d84513fc53bc9ee4c4abc2c4d8938935e5a8b40c288c1cc01c040e74a3d0fd3ffbf03af855917984a6eb0274ce38422f
   languageName: node
   linkType: hard
 
@@ -26143,7 +26126,7 @@ __metadata:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@playwright/test": 1.19.2
+    "@playwright/test": 1.20.0
     "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
