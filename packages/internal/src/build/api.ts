@@ -20,7 +20,7 @@ export const buildApi = () => {
     .filter((path): path is string => path !== undefined)
     .flatMap(generateProxyFilesForNestedFunction)
 
-    return transpileApi(prebuiltFiles)
+  return transpileApi(prebuiltFiles)
 }
 
 export const cleanApiBuild = () => {
