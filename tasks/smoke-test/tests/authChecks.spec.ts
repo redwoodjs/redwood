@@ -53,43 +53,66 @@ devServerTest(
     await expect(await isAdminRow.innerHTML()).toBe(
       '<td>Is Admin</td><td>false</td>'
     )
-  }
-)
-
-devServerTest(
-  'requireAuth graphql checks',
-  async ({ page, webUrl }: DevServerFixtures & PlaywrightTestArgs) => {
-    // Auth
-    await page.goto(`${webUrl}/posts/1/edit`)
-
-    await page.locator('input[name="title"]').fill('This is an edited title!')
-
-    await page.click('text=SAVE')
-
-    await page.goto(`${webUrl}/posts`)
-
-    await expect(
-      // Count posts with the edited title
-      await page.locator('text=This is an edited title!').count()
-    ).toBe(0)
-
-    // Authenticated
-    await loginAsTestUser({ webUrl, page })
-    await page.goto(`${webUrl}/posts/1/edit`)
-    await page.locator('input[name="title"]').fill('This is an edited title!')
-
-    await Promise.all([
-      page.waitForNavigation({ url: '**/' }),
-      page.click('text=SAVE'),
-    ])
 
     // Log Out
     await page.goto(`${webUrl}/`)
     await page.click('text=Log Out')
     await expect(await page.locator('text=Login')).toBeTruthy()
-
-    await expect(
-      await page.locator('text=This is an edited title!').count()
-    ).toBe(1)
   }
 )
+
+devServerTest.only(
+  'requireAuth graphql checks',
+  async ({ page, webUrl }: DevServerFixtures & PlaywrightTestArgs) => {
+    // Create posts
+    await createNewPost({ page, webUrl })
+
+    await expect(
+      page
+        .locator('.rw-scaffold')
+        .locator("text=You don't have permission to do that")
+    ).toBeTruthy()
+
+    await page.goto(`${webUrl}/`)
+
+    await expect(
+      await page
+        .locator('article:has-text("Hello world! Soft kittens are the best.")')
+        .count()
+    ).toBe(0)
+
+    await loginAsTestUser({
+      webUrl,
+      page,
+    })
+
+    await Promise.all([
+      page.waitForNavigation({ url: '**/' }),
+      createNewPost({ page, webUrl }),
+    ])
+
+    await page.goto(`${webUrl}/`)
+    await expect(
+      await page.locator(
+        'article:has-text("Hello world! Soft kittens are the best.")'
+      )
+    ).not.toBeEmpty()
+  }
+)
+
+async function createNewPost({ webUrl, page }) {
+  await page.goto(`${webUrl}/posts/new`)
+
+  // Click input[name="title"]
+  await page.locator('input[name="title"]').click()
+  // Fill input[name="title"]
+  await page
+    .locator('input[name="title"]')
+    .fill('Hello world! Soft kittens are the best.')
+  // Press Tab
+  await page.locator('input[name="title"]').press('Tab')
+  // Fill input[name="body"]
+  await page.locator('input[name="body"]').fill('Bazinga, bazinga, bazinga')
+
+  await page.click('text=SAVE')
+}
