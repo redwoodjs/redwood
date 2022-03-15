@@ -86,8 +86,6 @@ export const builder = (yargs) => {
 }
 
 const sshExec = async (sshOptions, task, path, command, args) => {
-  // await ssh.connect(sshOptions)
-
   await ssh.exec(command, args, {
     cwd: path,
     onStdout: async (chunk) => {
@@ -108,8 +106,6 @@ const sshExec = async (sshOptions, task, path, command, args) => {
       process.exit(1)
     },
   })
-
-  // await ssh.dispose()
 }
 
 const commands = (yargs) => {
