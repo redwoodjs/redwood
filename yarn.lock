@@ -3450,15 +3450,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.2.3, @graphql-tools/merge@npm:^8.2.1, @graphql-tools/merge@npm:^8.2.3":
-  version: 8.2.3
-  resolution: "@graphql-tools/merge@npm:8.2.3"
+"@graphql-tools/merge@npm:8.2.4, @graphql-tools/merge@npm:^8.2.1":
+  version: 8.2.4
+  resolution: "@graphql-tools/merge@npm:8.2.4"
   dependencies:
-    "@graphql-tools/utils": ^8.6.2
+    "@graphql-tools/utils": 8.6.3
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 0a3045d712dda6d160f468a27727ab08a8079837deb2d02599230766bea42acfa15b360c0163f1d4cb0b0d6eeef8238f9da95bdd87f9d2ce7c2ea2705348b34a
+  checksum: 2d6c504430f5daf9139f77dfd2b81f08a0a42ad5a4b2f379163db8b06bbee45801b3da3f949911b38960b1269aac625c776caee93f2e2b753fc10e5e2dc6b538
   languageName: node
   linkType: hard
 
@@ -3530,17 +3530,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.2, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
-  version: 8.3.2
-  resolution: "@graphql-tools/schema@npm:8.3.2"
+"@graphql-tools/schema@npm:8.3.3, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
+  version: 8.3.3
+  resolution: "@graphql-tools/schema@npm:8.3.3"
   dependencies:
-    "@graphql-tools/merge": ^8.2.3
-    "@graphql-tools/utils": ^8.6.2
+    "@graphql-tools/merge": 8.2.4
+    "@graphql-tools/utils": 8.6.3
     tslib: ~2.3.0
     value-or-promise: 1.0.11
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 1eabd673d1bb1fe5d9e5a84d3aec332439b34f1b58df19445684a618948c772f5746cf953ad5a70e837b3421ff0c4653c2ab056c1ef42b9208862d0132dab250
+  checksum: a31d84732ece6553acd08803aa03e4c76460d3a5735e5bb11930dc7955f4fd21c2015596a9d9f24cb272b7b1309d3eb060466287430055514ceacf6bae02e1e3
   languageName: node
   linkType: hard
 
@@ -3584,14 +3584,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.2, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1, @graphql-tools/utils@npm:^8.6.2":
-  version: 8.6.2
-  resolution: "@graphql-tools/utils@npm:8.6.2"
+"@graphql-tools/utils@npm:8.6.3, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
+  version: 8.6.3
+  resolution: "@graphql-tools/utils@npm:8.6.3"
   dependencies:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: ea40775aee73f1860fa5a16bc59a365d2f62fbca94739470c6a860f156fb0994a79455cea247e55b19eac0068e3826c0f71ea0aa3880b019a41841d7a945c995
+  checksum: 7d57d7672b324096c39255711fb073e9287ab286b29087203bcce5e5eaf9199900e00081b06a74b830be779ad5420e7b6b4b2cab01adb5727eeeeae0e409ed7d
   languageName: node
   linkType: hard
 
@@ -5989,9 +5989,9 @@ __metadata:
     "@envelop/testing": 4.1.0
     "@envelop/types": 2.0.0
     "@envelop/validation-cache": 4.1.0
-    "@graphql-tools/merge": 8.2.3
-    "@graphql-tools/schema": 8.3.2
-    "@graphql-tools/utils": 8.6.2
+    "@graphql-tools/merge": 8.2.4
+    "@graphql-tools/schema": 8.3.3
+    "@graphql-tools/utils": 8.6.3
     "@prisma/client": 3.11.0
     "@redwoodjs/api": 0.49.1
     "@redwoodjs/auth": 0.49.1
@@ -26159,7 +26159,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.6.2
     typescript-transform-paths: 3.3.1
-    zx: 5.3.0
+    zx: 6.0.1
   languageName: unknown
   linkType: soft
 
@@ -30991,9 +30991,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:5.3.0":
-  version: 5.3.0
-  resolution: "zx@npm:5.3.0"
+"zx@npm:6.0.1":
+  version: 6.0.1
+  resolution: "zx@npm:6.0.1"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
@@ -31008,6 +31008,6 @@ __metadata:
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: 09294838dfce8b9b07dd76fc71ab26863d6009e238d5fc18c43e8309828fb1904e1572050c6acaa24c50b123b1d863ef4d0dfe2889353c3068b6e427d0e34bf8
+  checksum: 9965e01d8f1b340123605add34db7241aab528809b3f28deb103627a374eab6d0641338564a91216f31cdf05b2dc63e7ca311638e987c14e16cee0644d954f5b
   languageName: node
   linkType: hard
