@@ -67,25 +67,23 @@ export const files = async ({
     (isWordPluralizable(cellName) ? isPlural(cellName) : options.list) ||
     options.list
 
+  // needed for the singular cell GQL query find by id case
+  try {
+    model = await getSchema(pascalcase(singularize(cellName)))
+    idType = getIdType(model)
+    mockIdValue = idType === 'String' ? "'42'" : 42
+  } catch {
+    // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
+    // assume id will be Int, otherwise generated will keep throwing
+    idType = 'Int'
+    mockIdValue = 42
+  }
+
   if (shouldGenerateList) {
     cellName = forcePluralizeWord(cellName)
     templateNameSuffix = 'List'
-    mockIdValue = idType === 'String' ? "'42'" : 42
     // override operationName so that its find_operationName
-  } else {
-    // needed for the singular cell GQL query find by id case
-    try {
-      model = await getSchema(pascalcase(singularize(cellName)))
-      idType = getIdType(model)
-      mockIdValue = idType === 'String' ? "'42'" : 42
-    } catch {
-      // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
-      // assume id will be Int, otherwise generated will keep throwing
-      idType = 'Int'
-      mockIdValue = 42
-    }
   }
-
   const operationName = await uniqueOperationName(cellName, {
     list: shouldGenerateList,
   })
