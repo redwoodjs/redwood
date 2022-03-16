@@ -1,18 +1,9 @@
 export const ECOSYSTEM = `module.exports = {
   apps: [
     {
-      name: 'api',
+      name: 'serve',
       script: 'node_modules/.bin/rw',
-      args: 'serve api',
-      instances: 'max',
-      exec_mode: 'cluster',
-      wait_ready: true,
-      listen_timeout: 10000,
-    },
-    {
-      name: 'web',
-      script: 'node_modules/.bin/rw',
-      args: 'serve web',
+      args: 'serve',
       instances: 'max',
       exec_mode: 'cluster',
       wait_ready: true,
@@ -41,20 +32,24 @@ username = "user"
 agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
-redwood_web_server = false
+processNames = ["serve"]
 
 # If you have separate api and web servers:
 #
 # [[servers]]
 # host = "api.server.com"
 # user = "user"
+# agentForward = true
 # sides = ["api"]
 # path = "/var/www/app"
+# processNames = ["api"]
 #
 # [[servers]]
 # host = "web.server.com"
 # user = "user"
+# agentForward = true
 # sides = ["web"]
 # path = "/var/www/app"
-# migrate = false
+# migrate = false # only one server in a cluster needs to migrate
+# processNames = ["web"]
 `
