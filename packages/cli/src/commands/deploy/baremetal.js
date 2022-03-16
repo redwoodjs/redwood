@@ -85,27 +85,25 @@ export const builder = (yargs) => {
   )
 }
 
-const sshExec = async (sshOptions, task, path, command, args) => {
-  await ssh.exec(command, args, {
+const sshExec = async (sshOptions, task, path, command, args, options = {}) => {
+  const result = await ssh.execCommand(`${command} ${args.join(' ')}`, {
     cwd: path,
-    onStdout: async (chunk) => {
-      task.output = chunk.toString('utf-8')
-    },
-    onStderr: (chunk) => {
-      console.error(c.error(`\nDeploy failed!`))
-      console.error(
-        c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
-      )
-      console.error(
-        boxen(chunk.toString('utf-8'), {
-          padding: { top: 0, bottom: 0, right: 1, left: 1 },
-          margin: 0,
-          borderColor: 'red',
-        })
-      )
-      process.exit(1)
-    },
   })
+
+  if (result.code !== 0) {
+    console.error(c.error(`\nDeploy failed!`))
+    console.error(
+      c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
+    )
+    console.error(
+      boxen(result.stderr, {
+        padding: { top: 0, bottom: 0, right: 1, left: 1 },
+        margin: 0,
+        borderColor: 'red',
+      })
+    )
+    process.exit(1)
+  }
 }
 
 const commands = (yargs) => {
@@ -134,6 +132,9 @@ const commands = (yargs) => {
       task: () => ssh.connect(sshOptions),
     })
 
+    // TODO: Add a `preInstall` step for executing arbitrary scripts after everything else
+
+    // TODO: add ability to have a different strategy, like a full clone
     tasks.push({
       title: `Updating codebase...`,
       task: async (_ctx, task) => {
@@ -173,14 +174,53 @@ const commands = (yargs) => {
       skip: () => !yargs.migrate || serverConfig?.migrate === false,
     })
 
-    // build & start/restart processes
+    // build sides
     for (const side of yargs.sides) {
       if (serverConfig.sides.includes(side)) {
-        tasks = tasks.concat(
-          sideProcessTasks(side, yargs, serverConfig, sshOptions)
-        )
+        tasks.push({
+          title: `Building ${side}...`,
+          task: async (_ctx, task) => {
+            await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+              'rw',
+              'build',
+              side,
+            ])
+          },
+          skip: () => !yargs.build,
+        })
       }
     }
+
+    // start/restart monitoring processes
+    for (const process of serverConfig.processNames) {
+      if (yargs.firstRun) {
+        tasks.push({
+          title: `Starting ${process} process for the first time...`,
+          task: async (_ctx, task) => {
+            await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+              'pm2',
+              'start',
+              'ecosystem.config.js',
+              '--only',
+              process,
+            ])
+          },
+        })
+      } else {
+        tasks.push({
+          title: `Restarting ${process} process...`,
+          task: async (_ctx, task) => {
+            await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+              'pm2',
+              'restart',
+              process,
+            ])
+          },
+        })
+      }
+    }
+
+    // TODO: Add a `postInstall` step for executing arbitrary scripts after everything else
 
     tasks.push({
       title: 'Disconnecting...',
@@ -198,75 +238,6 @@ const commands = (yargs) => {
   }
 
   return servers
-}
-
-// Handles building/reloading each side
-const sideProcessTasks = (side, yargs, config, sshOptions) => {
-  const tasks = []
-
-  tasks.push({
-    title: `Building ${side}...`,
-    task: async (_ctx, task) => {
-      await sshExec(sshOptions, task, config.path, 'yarn', [
-        'rw',
-        'build',
-        side,
-      ])
-    },
-  })
-
-  // if the web side is being served by something like nginx, do the symlink thing
-  // otherwise this will continue and run `yarn pm2 restart web` instead
-  if (side === 'web' && !config.redwood_web_server) {
-    tasks.push({
-      title: `Symlinking ${side}/serve/current...`,
-      task: async (_ctx, task) => {
-        await sshExec(sshOptions, task, config.path, 'cp', [
-          '-r',
-          'web/dist',
-          `web/serve/${yargs.releaseDir}`,
-        ])
-        await sshExec(sshOptions, task, config.path, 'ln', [
-          '-nsf',
-          yargs.releaseDir,
-          'web/serve/current',
-        ])
-      },
-    })
-    // TODO: add process for cleaning up old deploys
-  }
-
-  // Restart processes. For sure if it's not the web side, otherwise only if
-  // the deploy config says we're using Redwood to serve web
-  if (side !== 'web' || config.redwood_web_server) {
-    if (yargs.firstRun) {
-      tasks.push({
-        title: `Starting ${side} process for the first time...`,
-        task: async (_ctx, task) => {
-          await sshExec(sshOptions, task, config.path, 'yarn', [
-            'pm2',
-            'start',
-            'ecosystem.config.js',
-            '--only',
-            side,
-          ])
-        },
-      })
-    } else {
-      tasks.push({
-        title: `Restarting ${side} process...`,
-        task: async (_ctx, task) => {
-          await sshExec(sshOptions, task, config.path, 'yarn', [
-            'pm2',
-            'restart',
-            side,
-          ])
-        },
-      })
-    }
-  }
-
-  return tasks
 }
 
 export const handler = async (yargs) => {
