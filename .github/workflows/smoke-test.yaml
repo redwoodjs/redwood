@@ -121,9 +121,9 @@ jobs:
           yarn rw prisma migrate dev --name ci-test
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      - name: Run "prisma generate"
+      - name: Run "prisma migrate reset"
         run: |
-          yarn rw prisma generate
+          yarn rw prisma migrate reset --force
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw data-migrate"
