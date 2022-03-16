@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -56,4 +59,9 @@ export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
     extendEnv: true,
     cleanup: true,
   })
+}
+
+export const isWebIndexPrerendered = () => {
+  const basePrerenderedHtml = path.join(getPaths().web.dist, '200.html')
+  return fs.existsSync(basePrerenderedHtml)
 }
