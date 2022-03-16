@@ -1,9 +1,8 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [`import { createClient } from 'nhost-js-sdk'`],
-  init: `const nhostClient = createClient({
-  baseURL: process.env.NHOST_BACKEND_URL,
-  autoLogin: false,
+  imports: [`import { NhostClient } from '@nhost/nhost-js'`],
+  init: `const nhostClient = new NhostClient({
+  backendUrl: process.env.NHOST_BACKEND_URL,
 });
 `,
   authProvider: {
@@ -13,7 +12,7 @@ export const config = {
 }
 
 // required packages to install
-export const webPackages = ['nhost-js-sdk']
+export const webPackages = ['@nhost/nhost-js']
 export const apiPackages = []
 
 // any notes to print out when the job is done

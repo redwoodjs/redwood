@@ -1,4 +1,5 @@
-import type { Session, NhostClient, User } from 'nhost-js-sdk'
+import type { User, Session } from '@nhost/hasura-auth-js'
+import type { NhostClient } from '@nhost/nhost-js'
 
 import { AuthClient } from './'
 
@@ -57,34 +58,24 @@ export const nhost = (client: Nhost): AuthClient => {
   return {
     type: 'nhost',
     client,
-    login: async ({ email, password, provider }) => {
-      if (email && password) {
-        return await client.auth.login({ email, password })
-      }
-
-      if (provider) {
-        return await client.auth.login({ provider })
-      }
-
-      throw new Error(
-        'You must provide an email/password or a third-party OAuth provider.'
-      )
+    login: async ({ email, password, provider, options }) => {
+      return await client.auth.signIn({ email, password, provider, options })
     },
     logout: async () => {
-      return await client.auth.logout()
+      return await client.auth.signOut()
     },
     signup: async ({ email, password }) => {
-      return await client.auth.register({
+      return await client.auth.signUp({
         email,
         password,
-        options: { userData: { display_name: email } },
+        options: { metadata: { display_name: email } },
       })
     },
     getToken: async () => {
-      return await client.auth.getJWTToken()
+      return (await client.auth.getJWTToken()) || null
     },
     getUserMetadata: async () => {
-      return await client.auth.user()
+      return await client.auth.getUser()
     },
     restoreAuthState: async () => {
       return await client.auth.refreshSession()
