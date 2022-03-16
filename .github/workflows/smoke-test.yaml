@@ -111,11 +111,6 @@ jobs:
           yarn rw g script testScript && yarn rw exec testScript
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      - name: Run "prisma generate"
-        run: |
-          yarn rw prisma generate
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
       - name: Run "data-migrate install"
         run: |
           yarn rw data-migrate install
@@ -124,6 +119,11 @@ jobs:
       - name: Run "prisma migrate"
         run: |
           yarn rw prisma migrate dev --name ci-test
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "prisma generate"
+        run: |
+          yarn rw prisma generate
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw data-migrate"
