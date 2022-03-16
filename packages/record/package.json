@@ -27,13 +27,13 @@
     ]
   },
   "dependencies": {
-    "@prisma/client": "3.10.0",
+    "@prisma/client": "3.11.0",
     "core-js": "3.21.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@prisma/sdk": "3.10.0",
+    "@prisma/sdk": "3.11.0",
     "esbuild": "0.14.27",
     "jest": "27.5.1"
   },
