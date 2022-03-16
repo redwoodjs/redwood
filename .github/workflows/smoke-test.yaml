@@ -128,7 +128,7 @@ jobs:
 
       - name: Run "rw data-migrate"
         run: |
-          yarn rw data-migrate up
+          yarn rw dataMigrate up
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw deploy --help`
