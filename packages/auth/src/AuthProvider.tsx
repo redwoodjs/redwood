@@ -35,7 +35,7 @@ export interface AuthContextInterface {
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    **/
-  hasRole(role: string | string[]): boolean
+  hasRole(rolesToCheck: string | string[]): boolean
   /**
    * Redetermine authentication state and update the state.
    */
