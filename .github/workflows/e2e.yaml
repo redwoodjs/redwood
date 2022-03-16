@@ -27,6 +27,10 @@ jobs:
       - name: Tune linux network
         run: sudo ethtool -K eth0 tx off rx off
 
+      # uncomment for hard reset if cache causing problems
+      - name: Clear Yarn Global Cache
+        run: yarn cache clean --all
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
