@@ -206,13 +206,11 @@ export const useRedwoodDirective = (
        * We are using symbols as each useRedwoodDirective plugin instance should use its own unique symbol.
        */
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error See https://github.com/graphql/graphql-js/pull/3511
+      // @ts-expect-error See https://github.com/graphql/graphql-js/pull/3511 - remove this comments once merged
       if (schema.extensions?.[didMapSchemaSymbol] === true) {
         return
       }
       const transformedSchema = wrapAffectedResolvers(schema, options)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error See https://github.com/graphql/graphql-js/pull/3511
       transformedSchema.extensions = {
         ...schema.extensions,
         [didMapSchemaSymbol]: true,
