@@ -139,11 +139,7 @@ const commands = (yargs) => {
       task: async (_ctx, task) => {
         await sshExec(sshOptions, task, serverConfig.path, 'git', ['pull'])
       },
-      skip: () => {
-        if (!yargs.pull) {
-          return 'Skipping'
-        }
-      },
+      skip: () => !yargs.pull,
     })
 
     tasks.push({
@@ -151,11 +147,7 @@ const commands = (yargs) => {
       task: async (_ctx, task) => {
         await sshExec(sshOptions, task, serverConfig.path, 'yarn', ['install'])
       },
-      skip: () => {
-        if (!yargs.install) {
-          return 'Skipping'
-        }
-      },
+      skip: () => !yargs.install,
     })
 
     tasks.push({
@@ -178,11 +170,7 @@ const commands = (yargs) => {
           'up',
         ])
       },
-      skip: () => {
-        if (!yargs.migrate) {
-          return 'Skipping'
-        }
-      },
+      skip: () => !yargs.migrate || serverConfig?.migrate === false,
     })
 
     // build & start/restart processes
