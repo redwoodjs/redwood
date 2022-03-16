@@ -67,7 +67,7 @@ const args = yargs
   .option('yarn1', {
     default: false,
     type: 'boolean',
-    describe: 'Set Yarn v1 in the created project',
+    describe: 'Use yarn 1 instead of yarn 3',
   })
   .help()
   .strict().argv
@@ -222,7 +222,7 @@ const globalTasks = () =>
         enabled: () => link && !rebuildFixture,
       },
       {
-        title: 'Set yarn version 1 in created project',
+        title: 'Setting yarn version to 1',
         task: async () => {
           await execa(
             'yarn set version classic',
