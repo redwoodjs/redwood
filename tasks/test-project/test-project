@@ -64,6 +64,11 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .option('yarn1', {
+    default: false,
+    type: 'boolean',
+    describe: 'Set Yarn v1 in the created project',
+  })
   .help()
   .strict().argv
 
@@ -75,6 +80,7 @@ const {
   clean,
   copyFromFixture,
   rebuildFixture,
+  yarn1,
 } = args
 
 // Do not use demandCommand becuase rebuildFixture doesn't require <project directory>
@@ -216,33 +222,23 @@ const globalTasks = () =>
         enabled: () => link && !rebuildFixture,
       },
       {
-        title: 'Set yarn v1 version in test-project directory',
+        title: 'Set yarn version 1 in created project',
         task: async () => {
           await execa(
             'yarn set version classic',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
-
-          // remove "packageManager": "yarn@3.2.0" from package.json
-          const packageJsonPath = path.join(OUTPUT_PROJECT_PATH, 'package.json')
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, 'utf-8')
-          )
-          delete packageJson.packageManager
-          fs.writeFileSync(
-            packageJsonPath,
-            JSON.stringify(packageJson, undefined, 2)
-          )
         },
-        skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture, but copyFromFixture is default
+        enabled: () => yarn1,
       },
       {
         title: 'Installing node_modules',
         task: async () => {
           return execa(
             'yarn install',
-            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            yarn1 &&
+              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
