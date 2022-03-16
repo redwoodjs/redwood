@@ -200,11 +200,11 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_futureExpiresDate', () => {
+  describe('futureExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      expect(dbAuth._futureExpiresDate).toMatch(UTC_DATE_REGEX)
+      expect(dbAuth.futureExpiresDate).toMatch(UTC_DATE_REGEX)
     })
   })
 
@@ -1300,7 +1300,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
+        `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth.futureExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
