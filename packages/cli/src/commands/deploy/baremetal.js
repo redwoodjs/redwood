@@ -85,7 +85,7 @@ export const builder = (yargs) => {
   )
 }
 
-const sshExec = async (sshOptions, task, path, command, args, options = {}) => {
+const sshExec = async (sshOptions, task, path, command, args) => {
   const result = await ssh.execCommand(`${command} ${args.join(' ')}`, {
     cwd: path,
   })
