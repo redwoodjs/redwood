@@ -156,7 +156,7 @@ user.errors.email // => ['must be formatted like an email address']
 
 ### Validation
 
-Records can be checked for valid data before saving to the database by using the same [validation types](/docs/services#absence) available to [Service Validations](/docs/services/service-validations):
+Records can be checked for valid data before saving to the database by using the same [validation types](services.md#absence) available to [Service Validations](services.md#service-validations):
 
 ```javascript
 export default class User extends RedwoodRecord {
@@ -306,7 +306,7 @@ await user.destroy({ throw: true })
 
 ### Relationships
 
-As shown in [Background and Terminology](background-and-terminology) above, RedwoodRecord provides a way to get data from related models. For example, to get the posts belonging to a user via what we call a *relation proxy*:
+As shown in [Background and Terminology](#background-and-terminology) above, RedwoodRecord provides a way to get data from related models. For example, to get the posts belonging to a user via what we call a *relation proxy*:
 
 ```javascript
 const user = await User.find(123)

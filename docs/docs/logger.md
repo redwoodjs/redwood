@@ -298,7 +298,7 @@ Redwood-specific [GraphQL log data](docs/graphql#logging) included by the the `u
 
 By the way, when logging in production, you may want to:
 
-- send the logs as [ndjson](<(http://ndjson.org)>) to your host's log handler or application monitoring service to process, store and display. Therefore, you would not format your logs with `LogFormatter`.
+- send the logs as [ndjson](http://ndjson.org) to your host's log handler or application monitoring service to process, store and display. Therefore, you would not format your logs with `LogFormatter`.
 - log only `warn` and `errors` to avoid chatty `info` or `debug` messages (that would be better suited for a staging or integration environment)
 
 ### Nested Logging

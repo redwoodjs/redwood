@@ -8,7 +8,7 @@ Since there's two parts to GraphQL in Redwood, the client and the server, we've 
 
 On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/docs/react/) by default though you can swap it out for something else if you want.
 
-The `api` side offers a GraphQL server built on [GraphQL Helix](<(https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44)>) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+The `api` side offers a GraphQL server built on [GraphQL Helix](https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
 One of the tenets of the Redwood philosophy is "Redwood believes that, as much as possible, you should be able to operate in a serverless mindset and deploy to a generic computational grid.”
@@ -45,7 +45,7 @@ const App = () => (
 // ...
 ```
 
-You can use Apollo's `useQuery` and `useMutation` hooks by importing them from `@redwoodjs/web`, though if you're using `useQuery`, we recommend that you use a [Cell](https://redwoodjs.com/docs/cells):
+You can use Apollo's `useQuery` and `useMutation` hooks by importing them from `@redwoodjs/web`, though if you're using `useQuery`, we recommend that you use a [Cell](cells.md):
 
 ```js
 // web/src/components/MutateButton.js
@@ -76,7 +76,7 @@ Note that you're free to use any of Apollo's other hooks, you'll just have to im
 
 ### Customizing the Apollo Client and Cache
 
-By default, `RedwoodApolloProvider` configures an `ApolloClient` instance with 1) a default instance of `InMemoryCache` to cache responses from the GraphQL API and 2) an `authMiddleware` to sign API requests for use with [Redwood's built-in auth](https://redwoodjs.com/docs/authentication). Beyond the `cache` and `link` params, which are used to set up that functionality, you can specify additional params to be passed to `ApolloClient` using the `graphQLClientConfig` prop. The full list of available configuration options for the client are [documented here on Apollo's site](https://www.apollographql.com/docs/react/api/core/ApolloClient/#options).
+By default, `RedwoodApolloProvider` configures an `ApolloClient` instance with 1) a default instance of `InMemoryCache` to cache responses from the GraphQL API and 2) an `authMiddleware` to sign API requests for use with [Redwood's built-in auth](authentication.md). Beyond the `cache` and `link` params, which are used to set up that functionality, you can specify additional params to be passed to `ApolloClient` using the `graphQLClientConfig` prop. The full list of available configuration options for the client are [documented here on Apollo's site](https://www.apollographql.com/docs/react/api/core/ApolloClient/#options).
 
 Depending on your use case, you may want to configure `InMemoryCache`. For example, you may need to specify a type policy to change the key by which a model is cached or to enable pagination on a query. [This article from Apollo](https://www.apollographql.com/docs/react/caching/cache-configuration/) explains in further detail why and how you might want to do this.
 
@@ -638,9 +638,9 @@ Logging is essential in production apps to be alerted about critical errors and 
 
 We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you move visibility into your GraphQL api.
 
-By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](https://redwoodjs.com/docs/logger#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
+By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger.md#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
 
-You configure the logger using the `loggerConfig` that accepts a [`logger`](<(https://redwoodjs.com/docs/logger)>) and a set of [GraphQL Logger Options](#graphql-logger-options).
+You configure the logger using the `loggerConfig` that accepts a [`logger`](logger.md) and a set of [GraphQL Logger Options](#graphql-logger-options).
 
 ### Configure the GraphQL Logger
 
@@ -778,7 +778,7 @@ export const post = async ({ id }) => {
 //...
 ```
 
-The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](https://redwoodjs.com/docs/logger#log-level) and above.
+The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](logger.md#log-level) and above.
 
 > You can also disable the statements in production by just logging at the `warn` [level](https://redwoodjs.com/docs/logger#log-level) or above
 
@@ -815,7 +815,7 @@ Stream to third-party log and application monitoring services vital to productio
 
 Everyone has heard of reports that Company X logged emails, or passwords to files or systems that may not have been secured. While RedwoodJS logging won't necessarily prevent that, it does provide you with the mechanism to ensure that won't happen.
 
-To redact sensitive information, you can supply paths to keys that hold sensitive data using the RedwoodJS logger [redact option](https://redwoodjs.com/docs/logger#redaction).
+To redact sensitive information, you can supply paths to keys that hold sensitive data using the RedwoodJS logger [redact option](logger.md#redaction).
 
 Because this logger is used with the GraphQL handler, it will respect any redaction paths setup.
 
@@ -904,7 +904,7 @@ We'll document more GraphQL security best practices as Redwood reaches a `v1.0` 
 
 ### Secure Services
 
-Some of the biggest security improvements we'll be making revolve around Services (which are intimately linked to GraphQL since they're wrapped into your resolvers). For `v1.0` we plan to make all of your GraphQL resolvers secure by default. You can even opt into this behavior now—see the [Secure Services](https://redwoodjs.com/docs/services.html#secure-services) section.
+Some of the biggest security improvements we'll be making revolve around Services (which are intimately linked to GraphQL since they're wrapped into your resolvers). For `v1.0` we plan to make all of your GraphQL resolvers secure by default. You can even opt into this behavior now—see the [Secure Services](services.md#secure-services) section.
 
 ### Introspection and Playground Disabled in Production
 
