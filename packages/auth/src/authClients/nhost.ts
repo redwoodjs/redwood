@@ -1,4 +1,9 @@
-import type { User, Session } from '@nhost/hasura-auth-js'
+import type {
+  User,
+  Session,
+  SignInParams,
+  SignUpParams,
+} from '@nhost/hasura-auth-js'
 import type { NhostClient } from '@nhost/nhost-js'
 
 import { AuthClient } from './'
@@ -6,43 +11,33 @@ import { AuthClient } from './'
 export type Nhost = NhostClient
 export type NhostUser = User
 
-type NhostProvider = 'google' | 'github' | 'facebook' | 'linkedin'
 export interface AuthClientNhost extends AuthClient {
   /**
-   * Log In an existing user with email/password or via a OAuth provider
-   * Log In via a OAuth provider also registers the account in case it doesn't exist
-   * @param options.email The user's email address
-   * @param options.password The user's password
-   * @param options.provider One of NhostProvider
+   * Log In an existing user with email/password, magiclink, sms or via a OAuth provider
+   * Log In via a OAuth provider also creates the account in case it doesn't exist
+   *
+   * https://github.com/nhost/nhost/blob/main/packages/hasura-auth-js/src/utils/types.ts#L104
+   * @param options.SignInParams
    */
-  login(options: {
-    email?: string
-    password?: string
-    provider?: NhostProvider
-  }): Promise<{
+  login(options: SignInParams): Promise<{
     session: Session | null
-    user: NhostUser | null
     mfa?: {
       ticket: string
     }
+    providerUrl?: string
+    provider?: string
+    error: { message: string; status: number } | null
   }>
   logout(): Promise<void>
   /**
    * Creates a new user account
-   * @param options.email The user's email address
-   * @param options.password The user's password
+   *
+   * https://github.com/nhost/nhost/blob/main/packages/hasura-auth-js/src/utils/types.ts#L39
+   * @param options.SignUpParams
    */
-  signup(options: {
-    email: string
-    password: string
-    registrationOptions?: {
-      userData?: any
-      defaultRole?: string
-      allowedRoles?: string[]
-    }
-  }): Promise<{
+  signup(options: SignUpParams): Promise<{
     session: Session | null
-    user: User | null
+    error: { message: string; status: number } | null
   }>
 
   getToken(): Promise<string | null>
@@ -58,18 +53,14 @@ export const nhost = (client: Nhost): AuthClient => {
   return {
     type: 'nhost',
     client,
-    login: async ({ email, password, provider, options }) => {
-      return await client.auth.signIn({ email, password, provider, options })
+    login: async (options: SignInParams) => {
+      return await client.auth.signIn(options)
     },
     logout: async () => {
       return await client.auth.signOut()
     },
-    signup: async ({ email, password }) => {
-      return await client.auth.signUp({
-        email,
-        password,
-        options: { metadata: { display_name: email } },
-      })
+    signup: async (options: SignUpParams) => {
+      return await client.auth.signUp(options)
     },
     getToken: async () => {
       return (await client.auth.getJWTToken()) || null
