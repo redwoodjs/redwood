@@ -32,9 +32,8 @@ const files = [
 const notes = [
   'You are almost ready to go BAREMETAL!',
   '',
-  'TODO: Instructions for config setup and first deploy.',
-  '',
-  'See: https://redwoodjs.com/docs/deploy#baremetal-deploy',
+  'See https://redwoodjs.com/docs/deploy#baremetal-deploy for the remaining',
+  'config and setup required before you can perform your first deploy.',
 ]
 
 export const handler = async ({ force }) => {
