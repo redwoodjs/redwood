@@ -2,9 +2,13 @@ import isPortReachable from 'is-port-reachable'
 
 export function waitForServer(port, interval) {
   return new Promise((resolve) => {
-    setInterval(async () => {
+    const watchInterval = setInterval(async () => {
+      console.log(`Waiting for server at localhost:${port}....`)
       const isServerUp = await isPortReachable(port, { host: 'localhost' })
-      isServerUp && resolve(true)
+      if (isServerUp) {
+        clearInterval(watchInterval)
+        resolve(true)
+      }
     }, interval)
   })
 }

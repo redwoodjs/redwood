@@ -135,7 +135,7 @@ export class CsrfTokenMismatchError extends Error {
 
 export class SessionDecryptionError extends Error {
   constructor() {
-    super('Session has potentially be tampered with')
+    super('Session has potentially been tampered with')
     this.name = 'SessionDecryptionError'
   }
 }

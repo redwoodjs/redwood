@@ -1,7 +1,7 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 import { Request } from 'graphql-helix'
 
-import { CorsContext } from './cors'
+import { CorsContext } from '@redwoodjs/api'
 
 const HEALTH_CHECK_PATH = '/health'
 
