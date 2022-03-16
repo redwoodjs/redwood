@@ -85,6 +85,8 @@ export const builder = (yargs) => {
   )
 }
 
+// Executes a single command via SSH connection, capturing the exit code of the
+// process. Displays an error and will exit(1) if code is non-zero
 const sshExec = async (sshOptions, task, path, command, args) => {
   const result = await ssh.execCommand(`${command} ${args.join(' ')}`, {
     cwd: path,
@@ -189,6 +191,26 @@ const commands = (yargs) => {
           skip: () => !yargs.build,
         })
       }
+    }
+
+    // symlink web dist dir
+    if (serverConfig.symlinkWeb) {
+      tasks.push({
+        title: `Symlinking web/serve/current...`,
+        task: async (_ctx, task) => {
+          await sshExec(sshOptions, task, serverConfig.path, 'cp', [
+            '-r',
+            'web/dist',
+            `web/serve/${yargs.releaseDir}`,
+          ])
+          await sshExec(sshOptions, task, serverConfig.path, 'ln', [
+            '-nsf',
+            yargs.releaseDir,
+            'web/serve/current',
+          ])
+        },
+      })
+      // TODO: add process for cleaning up old deploys
     }
 
     // start/restart monitoring processes
