@@ -54,11 +54,14 @@ In both cases you end up with an authenticated user that you can access in both 
 Redwood includes [integrations](https://redwoodjs.com/docs/authentication) for several of the most popular third-party auth providers:
 
 - [Auth0](https://auth0.com/)
+- [Clerk](https://clerk.dev/)
 - [Netlify Identity](https://docs.netlify.com/visitor-access/identity/)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
-- [Magic Links](https://github.com/MagicHQ/magic-js)
+- [Magic](https://magic.link)
+- [Nhost](https://nhost.io)
 - [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
 - [Supabase](https://supabase.io/docs/guides/auth)
+- [SuperTokens](https://supertokens.com)
 - [WalletConnect](https://github.com/oneclickdapp/ethereum-auth)
 
 As for our blog, we're going to use self-hosted authentication (named *dbAuth* in Redwood) since it's the simplest to get started with and doesn't involve any third party signups.

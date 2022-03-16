@@ -18,7 +18,7 @@ yarn rw g page contact
 
 We can put a link to Contact in our layout's header:
 
-```javascript {17-19}
+```javascript {20-22}
 // web/src/layouts/BlogLayout/BlogLayout.js
 
 import { Link, routes } from '@redwoodjs/router'
@@ -54,7 +54,7 @@ export default BlogLayout
 
 And then use the `BlogLayout` for the `ContactPage` by making sure its wrapped by the same `<Set>` as the other pages in the routes file:
 
-```javascript {16}
+```javascript {18}
 // web/src/Routes.js
 
 import { Router, Route, Set } from '@redwoodjs/router'
