@@ -42,18 +42,20 @@ export interface GraphQLHandlerOptions {
   loggerConfig: LoggerConfig
 
   /**
-   * @description  Modify the resolver and global context.
+   * @description Modify the resolver and global context.
    */
   context?: Context | ContextFunction
 
   /**
-   * A @description n async function that maps the auth token retrieved from the request headers to an object.
-   * Is it executed when the `auth-provider` contains one of the supported providers.
+   * @description An async function that maps the auth token retrieved from the
+   * request headers to an object.
+   * Is it executed when the `auth-provider` contains one of the supported
+   * providers.
    */
   getCurrentUser?: GetCurrentUser
 
   /**
-   *  @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   * @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
 
@@ -82,17 +84,17 @@ export interface GraphQLHandlerOptions {
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 
   /**
-   *  @description CORS configuration
+   * @description CORS configuration
    */
   cors?: CorsConfig
 
   /**
-   *  @description Healthcheck
+   * @description Healthcheck
    */
   onHealthCheck?: OnHealthcheckFn
 
   /**
-   *  @description Limit the complexity of the queries solely by their depth.
+   * @description Limit the complexity of the queries solely by their depth.
    *
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
@@ -122,15 +124,14 @@ export interface GraphQLHandlerOptions {
   allowedOperations?: AllowedOperations
 
   /**
-   * @description  Custom Envelop plugins
+   * @description Custom Envelop plugins
    */
   extraPlugins?: PluginOrDisabledPlugin[]
 
   /**
-   * @description  Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
    *
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
-   *
    */
   graphiQLEndpoint?: string
 }
