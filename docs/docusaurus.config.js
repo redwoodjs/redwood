@@ -14,7 +14,7 @@ module.exports = {
   tagline:
     'Built on React, GraphQL, and Prisma, Redwood works with the components and development workflow you love, but with simple conventions and helpers to make your experience even better.',
   // ?
-  url: 'https://learn-redwood.netlify.app',
+  url: 'https://redwoodjs.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
