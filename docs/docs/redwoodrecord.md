@@ -55,14 +55,14 @@ If you want to create the join table yourself and potentially store additional d
 
 > TODO: We'll be adding logic soon that will let you get to the categories from a product record (and vice versa) in explicit many-to-manys without having to manually go through ProductCategory. From this:
 >
->     const product = Product.find(1)
->     const productCategories = product.productCategories.all()
->     const categories = productCategories.map(pc => pc.categories.all()).flat()
+>     const product = await Product.find(1)
+>     const productCategories = await product.productCategories.all()
+>     const categories = productCategories.map(async (pc) => await pc.categories.all()).flat()
 >
 > To this:
 >
->     const product = Product.find(1)
->     const categories = product.categories.all()
+>     const product = await Product.find(1)
+>     const categories = await product.categories.all()
 
 The only other terminology to keep in mind are the terms *model* and *record*. A *model* is the name for the class that represents one database table. The example above has three models: User, Post and Comment. Prisma also calls each database-table declaration in their `schema.prisma` declaration file a "model", but when we refer to a "model" in this doc it will mean the class that extends `RedwoodRecord`. A *record* is a single instance of our model that now represents a single row of data in the database.
 
@@ -111,13 +111,13 @@ const { User } = require('./api/src/models')
 And now we can start querying and modifying our data:
 
 ```javascript
-User.all()
-const newUser = User.create({ name: 'Rob', email: 'rob@redwoodjs.com' })
+await User.all()
+const newUser = await User.create({ name: 'Rob', email: 'rob@redwoodjs.com' })
 newUser.name = 'Robert'
-newUser.save()
-User.find(1)
-User.findBy({ email: 'rob@redwoodjs.com' })
-newUser.destroy()
+await newUser.save()
+await User.find(1)
+await User.findBy({ email: 'rob@redwoodjs.com' })
+await newUser.destroy()
 ```
 
 ### Initializing New Records
@@ -128,6 +128,8 @@ To create a new record in memory only (not yet saved to the database) use `build
 const user = User.build({ firstName: 'David', lastName: 'Price' })
 ```
 
+Note that `build` simply builds the record in memory, and thus is not asynchronous, whereas other model methods that interact with Prisma/the DB are.
+
 See [create/save](#save) below for saving this record to the database.
 
 ### Errors
@@ -135,7 +137,7 @@ See [create/save](#save) below for saving this record to the database.
 When a record cannot be saved to the database, either because of database errors or [validation](#validation) errors, the `errors` property will be populated with the error message(s).
 
 ```javascript
-const User.build({ name: 'Rob Cameron' })
+const user = User.build({ name: 'Rob Cameron' })
 await user.save() // => false
 user.hasError()   // => true
 user.errors       // => { base: [], email: ['must not be null'] }
@@ -146,11 +148,11 @@ user.errors.email // => ['must not be null']
 >
 > `user.errors.base // => ['User record to destroy not found']`
 
-You can preemptively check for errors before attempting to modify the record, but only for errors that would be caught with [validation](#validation), by using `isValid()`:
+You can preemptively check for errors before attempting to modify the record, but only for errors that would be caught with [validation](#validation), by using `isValid`:
 
 ```javascript
-const User.build({ name: 'Rob Cameron' })
-user.isValid()    // => false
+const user = User.build({ name: 'Rob Cameron' })
+user.isValid    // => false
 user.errors.email // => ['must be formatted like an email address']
 ```
 
@@ -184,9 +186,9 @@ There are a few different ways to find records for a model. Sometimes you want t
 `where()` is for finding multiple records. It returns an array of model records. The first argument is the properties that you would normally set as the `where` value in Prisma's [`findMany()` function](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany). The second argument (optional) is any additional properties (like ordering or limiting) that you want to perform on the resulting records:
 
 ```javascript
-User.where() // would return all records
-User.where({ emailPreference: 'weekly' })
-User.where({ theme: 'dark' }, { orderBy: { createdAt: 'desc' } })
+await User.where() // would return all records
+await User.where({ emailPreference: 'weekly' })
+await User.where({ theme: 'dark' }, { orderBy: { createdAt: 'desc' } })
 ```
 
 #### all()
@@ -194,8 +196,8 @@ User.where({ theme: 'dark' }, { orderBy: { createdAt: 'desc' } })
 `all()` is simply a synonym for `where()` but makes it clearer that your intention is truly to select all records (and optionally sort/order them). The first (and only) argument is now the additional properties (like `sort` and `orderBy`):
 
 ```javascript
-User.all()
-User.all({ orderBy: { lastName: 'asc' } })
+await User.all()
+await User.all({ orderBy: { lastName: 'asc' } })
 ```
 
 #### find()
@@ -211,7 +213,7 @@ export default class User extends RecordRecord {
 This call will throw an error if the record is not found: if you are trying to select a user by ID, presumably you expect that user to exist. So, it not existing is an exceptional condition. Behind the scenes this uses Prisma's [`findFirst()` function](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findfirst).
 
 ```javascript
-User.find(123)
+await User.find(123)
 ```
 
 #### findBy()
@@ -219,9 +221,11 @@ User.find(123)
 Finds a single record by certain criteria. Similar to `where()`, but will only return the first record that matches. The first argument is the properties that you would normally set as the `where` value to Prisma's [`findFirst()` function](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany). The second argument (optional) is any additional properties (like ordering or limiting) that you want to perform on the resulting records before selecting one:
 
 ```javascript
-User.findBy({ email: 'rob@redwoodjs.com' })
-User.findBy({ email: { endsWith: { 'redwoodjs.com' } } }, { orderBy: { lastName: 'asc' }, take: 10 })
+await User.findBy({ email: 'rob@redwoodjs.com' })
+await User.findBy({ email: { endsWith: { 'redwoodjs.com' } } }, { orderBy: { lastName: 'asc' }, take: 10 })
 ```
+
+If no record matching your query was found, it returns `null`.
 
 #### first()
 
@@ -242,8 +246,8 @@ Initializes a new record and saves it. If the save fails, `create` will return `
 The first argument is the data that would be given to Prisma's `create()` function. The (optional) second argument are any additional properties that are passed on to Prisma:
 
 ```javascript
-User.create({ name: 'Tom Preston-Werner' })
-User.create({ firstName: 'Rob', email: 'rob@redwoodjs.com' }, { select: ['email'] })
+await User.create({ name: 'Tom Preston-Werner' })
+await User.create({ firstName: 'Rob', email: 'rob@redwoodjs.com' }, { select: ['email'] })
 ```
 
 #### save()
@@ -254,9 +258,9 @@ If the record cannot be saved you can inspect it for errors.
 
 ```javascript
 const user = User.build({ firstName: 'Peter', lastName: 'Pistorius' })
-user.save()
+await user.save()
 // or
-user.save({ throw: true })
+await user.save({ throw: true })
 // check for errors
 user.hasErrors // => true
 user.errors.email // => ['can't be null']
@@ -271,7 +275,7 @@ There are two ways to update a record. You can either 1) list all of the attribu
 Call `update()` on a record, including the attributes to change as the first argument. The second (optional) argument are any properties to forward to Prisma on updating. Returns `false` if the record did not save, otherwise returns itself with the newly saves attributes.
 
 ```javascript
-const user = User.find(123)
+const user = await User.find(123)
 await user.update({ email: 'rob.cameron@redwoodjs.com' })
 // or
 await user.update({ email: 'rob.cameron@redwoodjs.com' }, { throw: true })
@@ -282,7 +286,7 @@ await user.update({ email: 'rob.cameron@redwoodjs.com' }, { throw: true })
 Save changes made to a record. The first (optional) argument includes any properties to be forwarded to Prisma, as well as the option to throw an error on a failed save:
 
 ```javascript
-const user = User.find(123)
+const user = await User.find(123)
 user.email = 'rob.cameron@redwoodjs.com'
 await user.save()
 // or
@@ -298,7 +302,7 @@ Records can be deleted easily enough. Coming soon will be class functions for de
 Call on a record to delete it in the database. The first (optional) argument are any properties to forward to Prisma when deleting, as well as the option to throw an error if the delete fails. This function returns `false` if the record could not be deleted, otherwise returns the record itself.
 
 ```javascript
-const user = User.find(123)
+const user = await User.find(123)
 await user.destroy()
 // or
 await user.destroy({ throw: true })
@@ -310,7 +314,7 @@ As shown in [Background and Terminology](#background-and-terminology) above, Red
 
 ```javascript
 const user = await User.find(123)
-const posts = user.posts.all()
+const posts = await user.posts.all()
 ```
 
 In this example `posts` is the proxy. All of the normal finder methods available on a model (`where()`, `all()`, `find()` and `findBy()`) are all available to be called on the relation proxy. But that's not all: you can create records as well and they will automatically be associated to the parent record:
@@ -356,7 +360,7 @@ If you have an implicit many-to-many relationship then you will access the recor
 
 ```javascript
 const product = await Product.find(123)
-const categories = product.categories.all()
+const categories = await product.categories.all()
 ```
 
 If you have an explicit many-to-many relationship then you need to treat it as a two-step request. First, get the one-to-many relationships for the join table, then a belongs-to relationship for the data you actually want:
@@ -368,8 +372,8 @@ Product -> one-to-many -> ProductCategories -> belongs-to -> Category
 
 ```javascript
 const product = await Product.find(123)
-const productCategories = product.productCategories.all()
-const categories = Promise.all(productCategories.map(async (pc) => await pc.category))
+const productCategories = await product.productCategories.all()
+const categories = await Promise.all(productCategories.map(async (pc) => await pc.category))
 ```
 
 If you wanted to create a new record this way, you would need to create the join table record after having already created/retrieved the records on either side of the relation:

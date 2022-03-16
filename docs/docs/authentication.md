@@ -21,7 +21,7 @@ Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 
 ## Self-hosted Auth Installation and Setup
 
-Redwood's own dbAuth provides several benefits:
+Redwood's own **dbAuth** provides several benefits:
 
 - Use your own database for storing user credentials
 - Use your own login, signup and forgot password pages (or use Redwood's pre-built ones)
@@ -187,6 +187,24 @@ If you changed the path to the Reset Password page in your routes you'll need to
 #### resetPassword.handler()
 
 This handler is invoked after the password has been successfully changed in the database. Returning something truthy (like `return user`) will automatically log the user in after their password is changed. If you'd like to return them to the login page and make them log in manually, `return false` and redirect the user in the Reset Password page.
+
+#### Cookie config
+
+These options determine how the cookie that tracks whether the client is authorized is stored in the browser. The default configuration should work for most use cases. If you serve your web and api sides from different domains you'll need to make some changes: set `SameSite` to `None` and then add [CORS configuration](#cors-config).
+
+```javascript
+cookie: {
+  HttpOnly: true,
+  Path: '/',
+  SameSite: 'Strict',
+  Secure: true,
+  // Domain: 'example.com',
+}
+```
+
+#### CORS config
+
+If you're using dbAuth and your api and web sides are deployed to different domains then you'll need to configure CORS for both GraphQL in general and dbAuth. You'll also need to enable a couple of options to be sure and send/accept credentials in XHR requests. For more info, see the complete [CORS doc](/docs/cors#cors-and-authentication).
 
 #### Error Messages
 
@@ -524,8 +542,8 @@ The two values you'll need from Clerk are your instance's "Frontend API" url and
 
 Otherwise, feel free to configure your instances however you wish with regards to their appearance and functionality.
 
-> **Including Environment Variables in Serverless Deploys** 
-> 
+> **Including Environment Variables in Serverless Deploys**
+>
 > In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables). You should expose the `CLERK_FRONTEND_API_URL` only to the `web` workspace and expose `CLERK_API_KEY` **only** to the `api` workspace.
 
 #### Login and Logout Options

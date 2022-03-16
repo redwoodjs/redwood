@@ -319,7 +319,7 @@ When the browser tries to fetch data from the `/graphql` function, you'll see an
 To fix this, you need to "configure CORS" by adding:
 
 ```
-'Access-Control-Allow-Origin': '*'
+'Access-Control-Allow-Origin': 'https://example.com'
 'Access-Control-Allow-Credentials': true
 ```
 
@@ -342,6 +342,8 @@ export const handler = createGraphQLHandler({
   },
 })
 ```
+
+For more in-depth discussion and configuration of CORS when it comes to using a cookie-based auth system (like [dbAuth](authentication.md#self-hosted-auth-installation-and-setup)), see the [CORS documentation](cors.md).
 
 ## Health Checks
 

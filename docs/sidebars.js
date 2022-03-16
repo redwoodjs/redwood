@@ -15,6 +15,7 @@ module.exports = {
         'connection-pooling',
         'contributing-overview',
         'contributing-walkthrough',
+        'cors',
         'custom-web-index',
         'data-migrations',
         'deploy',
