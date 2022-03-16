@@ -28,6 +28,22 @@ describe('validate absence', () => {
     }
   })
 
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate('rob@redwoodjs.com', 'my_email', { absence: true })
+    } catch (e) {
+      expect(e.message).toEqual('My Email is not absent')
+    }
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate('rob@redwoodjs.com', 'myEmail', { absence: true })
+    } catch (e) {
+      expect(e.message).toEqual('My Email is not absent')
+    }
+  })
+
   it('throws with a custom message', () => {
     try {
       validate('rob@redwoodjs.com', {
@@ -68,13 +84,29 @@ describe('validate acceptance', () => {
 
   it('throws with a default message', () => {
     try {
-      validate(false, 'Terms', { acceptance: true })
+      validate(false, 'terms', { acceptance: true })
     } catch (e) {
       expect(e.message).toEqual('Terms must be accepted')
     }
   })
 
-  it('throws with a custom message', () => {
+  it('throws with a default message', () => {
+    try {
+      validate(false, 'terms_of_purchase', { acceptance: true })
+    } catch (e) {
+      expect(e.message).toEqual('Terms of Purchase must be accepted')
+    }
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate(false, 'termsOfPurchase', { acceptance: true })
+    } catch (e) {
+      expect(e.message).toEqual('Terms of Purchase must be accepted')
+    }
+  })
+
+  it('throws with a custom message when input form field name is camel case', () => {
     try {
       validate(false, { acceptance: { message: 'gotta accept' } })
     } catch (e) {
@@ -162,6 +194,30 @@ describe('validate exclusion', () => {
     }
   })
 
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate('foo', 'selection_of_widgets', { exclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('Selection of Widgets is reserved')
+    }
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate('foo', 'selectionOfWidgets', { exclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('Selection of Widgets is reserved')
+    }
+  })
+
+  it('throws with a default message', () => {
+    try {
+      validate('foo', 'selection', { exclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('Selection is reserved')
+    }
+  })
+
   it('throws with a custom message', () => {
     try {
       validate('foo', {
@@ -223,6 +279,24 @@ describe('validate format', () => {
       validate('foobar', 'text', { format: /baz/ })
     } catch (e) {
       expect(e.message).toEqual('Text is not formatted correctly')
+    }
+    expect.assertions(1)
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate('foobar', 'the_text', { format: /baz/ })
+    } catch (e) {
+      expect(e.message).toEqual('The Text is not formatted correctly')
+    }
+    expect.assertions(1)
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate('foobar', 'theText', { format: /baz/ })
+    } catch (e) {
+      expect(e.message).toEqual('The Text is not formatted correctly')
     }
     expect.assertions(1)
   })
@@ -816,6 +890,22 @@ describe('validate presence', () => {
     }
   })
 
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate(undefined, 'primary_email', { presence: true })
+    } catch (e) {
+      expect(e.message).toEqual('Primary Email must be present')
+    }
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate(undefined, 'workEmail', { presence: true })
+    } catch (e) {
+      expect(e.message).toEqual('Work Email must be present')
+    }
+  })
+
   it('throws with a custom message', () => {
     try {
       validate(undefined, { presence: { message: 'Gimmie an email' } })
@@ -855,6 +945,28 @@ describe('validate', () => {
   it('accepts the three argument version', () => {
     try {
       validate(null, 'Email Address', {
+        presence: true,
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email Address must be present')
+    }
+    expect.assertions(1)
+  })
+
+  it('accepts the three argument version when input form field name is snake case', () => {
+    try {
+      validate(null, 'email_address', {
+        presence: true,
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email Address must be present')
+    }
+    expect.assertions(1)
+  })
+
+  it('accepts the three argument version when input form field name is camel case', () => {
+    try {
+      validate(null, 'emailAddress', {
         presence: true,
       })
     } catch (e) {
