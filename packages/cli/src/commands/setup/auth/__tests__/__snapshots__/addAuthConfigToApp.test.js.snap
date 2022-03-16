@@ -296,7 +296,7 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches nhost Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import { createClient } from 'nhost-js-sdk'
+import { NhostClient } from '@nhost/nhost-js'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -305,9 +305,8 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const nhostClient = createClient({
-  baseURL: process.env.NHOST_BACKEND_URL,
-  autoLogin: false,
+const nhostClient = new NhostClient({
+  backendUrl: process.env.NHOST_BACKEND_URL,
 });
 
 
