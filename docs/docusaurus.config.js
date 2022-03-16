@@ -24,9 +24,9 @@ module.exports = {
   projectName: 'redwood', // Usually your repo name.,
   themeConfig: {
     algolia: {
-      appId: 'dev',
-      apiKey: 'dev',
-      indexName: 'dev',
+      appId: 'FK1BZ27LVA',
+      apiKey: 'cfc36f6fc808745d1d2c7725fd0720a5',
+      indexName: 'docs',
       contextualSearch: true,
       searchParameters: {},
     },
