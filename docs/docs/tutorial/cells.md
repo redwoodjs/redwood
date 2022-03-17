@@ -1,12 +1,12 @@
 # Cells
 
-The features we listed at the end of the last page (loading state, error messaging, blank slate text) are common in most web apps. We wanted to see if there was something we could do to make developers' lives easier when it comes to adding them to a typical component. We think we've come up with something to help. We call them _Cells_. Cells provide a simpler and more declarative approach to data fetching. ([Read the full documentation about Cells](https://redwoodjs.com/docs/cells).)
+The features we listed at the end of the last page (loading state, error messaging, blank slate text) are common in most web apps. We wanted to see if there was something we could do to make developers' lives easier when it comes to adding them to a typical component. We think we've come up with something to help. We call them _Cells_. Cells provide a simpler and more declarative approach to data fetching. ([Read the full documentation about Cells](../cells.md).)
 
 In addition to these states, cells are also responsible for their own data fetching. This means that rather than fetching data in some parent component and then passing props down to the child components that need them, a cell is completely self-contained and fetches and displays its own data! Let's add one to our blog to get a feel for how they work.
 
 When you create a cell you export several specially named constants and then Redwood takes it from there. A typical cell may look something like:
 
-```javascript
+```jsx
 export const QUERY = gql`
   query {
     posts {
@@ -63,11 +63,9 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [part 2](/docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge) of the tutorial!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [part 2](../tutorial2/welcome-to-redwood-part-ii-redwoods-revenge.md) of the tutorial!). This file will contain some boilerplate to get you started:
 
-```javascript
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
     articles {
@@ -110,11 +108,10 @@ export const Success = ({ articles }) => {
 
 To get you off and running as quickly as possible the generator assumes you've got a root GraphQL query named the same thing as your cell and gives you the minimum query needed to get something out of the database. In this case the query is named `articles`:
 
-```javascript {5}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
+    // highlight-next-line
     articles {
       id
     }
@@ -122,15 +119,14 @@ export const QUERY = gql`
 `
 ```
 
-However, this is not a valid query name for our existing Posts SDL (`src/graphql/posts.sdl.js`) and Service (`src/services/posts/posts.js`). (To see where these files come from, go back to the [Creating a Post Editor section](./getting-dynamic#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
+However, this is not a valid query name for our existing Posts SDL (`src/graphql/posts.sdl.js`) and Service (`src/services/posts/posts.js`). (To see where these files come from, go back to the [Creating a Post Editor section](getting-dynamic.md#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
 
 We'll have to rename them to `posts` in both the query name and in the prop name in `Success`:
 
-```javascript {5,17,20}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query BlogPostsQuery {
+    // highlight-next-line
     posts {
       id
     }
@@ -145,9 +141,11 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
+// highlight-next-line
 export const Success = ({ posts }) => {
   return (
     <ul>
+      // highlight-next-line
       {posts.map((item) => {
         return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
@@ -158,17 +156,17 @@ export const Success = ({ posts }) => {
 
 Let's plug this cell into our `HomePage` and see what happens:
 
-```javascript {3,7}
-// web/src/pages/HomePage/HomePage.js
-
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { MetaTags } from '@redwoodjs/web'
 
+// highlight-next-line
 import ArticlesCell from 'src/components/ArticlesCell'
 
 const HomePage = () => {
   return (
     <>
       <MetaTags title="Home" description="Home page" />
+      // highlight-next-line
       <ArticlesCell />
     </>
   )
@@ -177,7 +175,7 @@ const HomePage = () => {
 export default HomePage
 ```
 
-The browser should actually show the `id` and a GraphQL-specific `__typename` properties for any posts in the database. If you just see "Empty" then return to the scaffold we created [last time](./getting-dynamic#creating-a-post-editor) and add a couple. Neat!
+The browser should actually show the `id` and a GraphQL-specific `__typename` properties for any posts in the database. If you just see "Empty" then return to the scaffold we created [last time](getting-dynamic.md#creating-a-post-editor) and add a couple. Neat!
 
 <img src="https://user-images.githubusercontent.com/300/145910525-6a9814d1-0808-4f7e-aeab-303bd5dbac5e.png" alt="Showing articles in the database" />
 
@@ -203,11 +201,10 @@ The browser should actually show the `id` and a GraphQL-specific `__typename` pr
 
 In fact, let's use the aforementioned alias so that the name of our cell, and the data we're iterating over, is consistent:
 
-```javascript {5,17,20}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query BlogPostsQuery {
+    // highlight-next-line
     articles: posts {
       id
     }
@@ -222,10 +219,12 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }) => {
+// highlight-next-line
+export const Success = ({ posts }) => {
   return (
     <ul>
-      {articles.map((item) => {
+      // highlight-next-line
+      {posts.map((item) => {
         return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
@@ -235,16 +234,16 @@ export const Success = ({ articles }) => {
 
 In addition to the `id` that was added to the `query` by the generator, let's get the `title`, `body`, and `createdAt` values as well:
 
-```javascript {7-9}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
       id
+      // highlight-start
       title
       body
       createdAt
+      // highlight-end
     }
   }
 `
@@ -256,9 +255,7 @@ The page should now show a dump of all the data you created for any blog posts y
 
 Now we're in the realm of good ol' React components, so just build out the `Success` component to display the blog post in a nicer format:
 
-```javascript {4-12}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx {2-10} title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const Success = ({ articles }) => {
   return articles.map((article) => (
     <article key={article.id}>

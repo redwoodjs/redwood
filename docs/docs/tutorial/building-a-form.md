@@ -18,7 +18,7 @@ yarn rw g page contact
 
 We can put a link to Contact in our layout's header:
 
-```javascript {20-22}
+```jsx {20-22}
 // web/src/layouts/BlogLayout/BlogLayout.js
 
 import { Link, routes } from '@redwoodjs/router'
@@ -54,7 +54,7 @@ export default BlogLayout
 
 And then use the `BlogLayout` for the `ContactPage` by making sure its wrapped by the same `<Set>` as the other pages in the routes file:
 
-```javascript {18}
+```jsx {18}
 // web/src/Routes.js
 
 import { Router, Route, Set } from '@redwoodjs/router'
@@ -94,7 +94,7 @@ We think Redwood is a step or two in the right direction by not only freeing you
 
 We won't be pulling any data from the database on our Contact page so we won't create a cell. Let's create the form right in the page. Redwood forms start with the...wait for it...`<Form>` tag:
 
-```javascript {4,11}
+```jsx {4,11}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -115,7 +115,7 @@ export default ContactPage
 
 Well that was anticlimactic. You can't even see it in the browser. Let's add a form field so we can at least see something. Redwood ships with several inputs and a plain text input box is the `<TextField>`. We'll also give the field a `name` attribute so that once there are multiple inputs on this page we'll know which contains which data:
 
-```javascript {4,12}
+```jsx {4,12}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -140,7 +140,7 @@ export default ContactPage
 
 Something is showing! Still, pretty boring. How about adding a submit button?
 
-```javascript {4,13}
+```jsx {4,13}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -170,7 +170,7 @@ We have what might actually be considered a real, bonafide form here. Try typing
 
 Similar to a plain HTML form we'll give `<Form>` an `onSubmit` handler. That handler will be called with a single argument—an object containing all of the submitted form fields:
 
-```javascript {4,7-9,15}
+```jsx {4,7-9,15}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -202,7 +202,7 @@ Now try filling in some data and submitting, then checking out the console in We
 
 Great! Let's turn this into a more useful form by adding a couple fields. We'll rename the existing one to "name" and add "email" and "message":
 
-```javascript {4,16-18}
+```jsx {4,16-18}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -236,7 +236,7 @@ See the new `<TextAreaField>` component here which generates an HTML `<textarea>
 
 Let's add some labels:
 
-```javascript {16,19,22}
+```jsx {16,19,22}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -280,7 +280,7 @@ Try filling out the form and submitting and you should get a console message wit
 
 All three of these fields should be required in order for someone to send a message to us. Let's enforce that with the standard HTML `required` attribute:
 
-```javascript {6,9,12}
+```jsx {6,9,12}
 // web/src/pages/ContactPage/ContactPage.js
 
 return (
@@ -305,7 +305,7 @@ Now when trying to submit there'll be message from the browser noting that a fie
 
 Yes! Let's update that `required` call to instead be an object we pass to a custom attribute on Redwood form helpers called `validation`:
 
-```javascript {6,9,12}
+```jsx {6,9,12}
 // web/src/pages/ContactPage/ContactPage.js
 
 return (
@@ -330,7 +330,7 @@ And now when we submit the form with blank fields...the Name field gets focus. B
 
 Introducing `<FieldError>` (don't forget to include it in the `import` statement at the top):
 
-```javascript {5,24,28,32}
+```jsx {5,24,28,32}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -379,7 +379,7 @@ Note that the `name` attribute matches the `name` of the input field above it. T
 
 But this is just the beginning. Let's make sure folks realize this is an error message. Remember the basic styles we added to `index.css` back at the start? There's an `.error` class in there that we can use. Set the `className` attribute on `<FieldError>`:
 
-```javascript {24,28,32}
+```jsx {24,28,32}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -426,7 +426,7 @@ export default ContactPage
 
 You know what would be nice? If the input itself somehow displayed the fact that there was an error. Check out the `errorClassName` attributes on the inputs:
 
-```javascript {26,34,42}
+```jsx {26,34,42}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'
@@ -485,7 +485,7 @@ export default ContactPage
 
 Oooo, what if the _label_ could change as well? It can, but we'll need Redwood's custom `<Label>` component for that. Note that the `htmlFor` attribute of `<label>` becomes the `name` prop on `<Label>`, just like with the other Redwood form components. And don't forget the import:
 
-```javascript {7,23-25,33-35,43-45}
+```jsx {7,23-25,33-35,43-45}
 // web/src/pages/ContactPage/ContactPage.js
 
 import { MetaTags } from '@redwoodjs/web'

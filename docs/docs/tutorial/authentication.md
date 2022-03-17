@@ -4,9 +4,7 @@
 
 Having the admin screens at `/admin` is a reasonable thing to do. Let's update the routes to make that happen by updating the four routes where the URL begins with `/posts` to start with `/admin/posts` instead:
 
-```javascript {11-14}
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -15,10 +13,12 @@ const Routes = () => {
   return (
     <Router>
       <Set wrap={PostsLayout}>
+        // highlight-start
         <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
         <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
         <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
         <Route path="/admin/posts" page={PostPostsPage} name="posts" />
+        // highlight-end
       </Set>
       <Set wrap={BlogLayout}>
         <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
@@ -51,7 +51,7 @@ Redwood includes two authentication paths out of the box:
 
 In both cases you end up with an authenticated user that you can access in both the web and api sides of your app.
 
-Redwood includes [integrations](https://redwoodjs.com/docs/authentication) for several of the most popular third-party auth providers:
+Redwood includes [integrations](../authentication.md) for several of the most popular third-party auth providers:
 
 - [Auth0](https://auth0.com/)
 - [Clerk](https://clerk.dev/)
@@ -78,7 +78,7 @@ As for our blog, we're going to use self-hosted authentication (named *dbAuth* i
 > * **Authentication** deals with determining whether someone is who they say they are, generally by "logging in" with an email and password, or a third party provider like Auth0.
 > * **Authorization** is whether a user (who has usually already been authenticated) is allowed to do something they want to do. This generally involves some combination of roles and permission checking before allowing access to a URL or feature of your site.
 >
-> This section of the tutorial focuses on **Authentication** only. See [part 2 of the tutorial](https://learn.redwoodjs.com/docs/tutorial2/role-based-authorization-control-rbac) to learn about Authorization in Redwood.
+> This section of the tutorial focuses on **Authentication** only. See [part 2 of the tutorial](../tutorial2/role-based-authorization-control-rbac.md) to learn about Authorization in Redwood.
 
 ## Auth Setup
 
@@ -102,7 +102,7 @@ First we'll need to add a couple of fields to our `User` model. We don't even ha
 
 Open up `schema.prisma` and add:
 
-```javascript {}
+```javascript
 // api/db/schema.prisma
 
 datasource db {
@@ -162,7 +162,7 @@ Try reloading the Posts admin and we'll see something that's 50% correct:
 
 Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<Private>`:
 
-```javascript {3,10,17}
+```jsx {3,10,17}
 // web/src/Routes.js
 
 import { Private, Router, Route, Set } from '@redwoodjs/router'
@@ -206,7 +206,7 @@ It's because the `posts` query in `posts.sdl` is used by both the homepage *and*
 
 Now that our admin pages are behind a `<Private>` route, what if we set the `posts` query to be `@skipAuth` instead? Let's try:
 
-```javascript {12}
+```graphql {12}
 // api/src/graphql/posts.sdl.js
 
 export const schema = gql`
@@ -250,7 +250,7 @@ They're back! Let's just check that if we click on one of our posts that we can 
 
 This page shows a single post, using the `post` query, not `posts`! So, we need to `@skipAuth` on that one as well:
 
-```javascript {13}
+```graphql {13}
 // api/src/graphql/posts.sdl.js
 
 export const schema = gql`
@@ -322,15 +322,15 @@ And after clicking "Signup" you should end up back on the homepage, where everyt
 
 ![Posts admin](https://user-images.githubusercontent.com/300/146465485-c169a4b8-f398-47ec-8412-4fc15a666976.png)
 
-Awesome! Signing up will automatically log you in (although this behavior [can be changed](https://redwoodjs.com/docs/authentication#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
+Awesome! Signing up will automatically log you in (although this behavior [can be changed](../authentication.md#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
 
 #### Add a Logout Link
 
 Now that we're logged in, how do we log out? Let's add a link to the `BlogLayout` so that it's present on all pages, and also include an indicator of who you're actually logged in as.
 
-Redwood provides a [hook](https://redwoodjs.com/docs/authentication#api) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
+Redwood provides a [hook](../authentication.md#api) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
 
-```javascript {3,7}
+```jsx {3,7}
 // web/src/layouts/BlogLayout/BlogLayout.js
 
 import { useAuth } from '@redwoodjs/auth'
@@ -375,7 +375,7 @@ As you can probably tell by the names:
 
 At the top right of the page, let's show the email address of the user (if they're logged in) as well as a link to log out. If they're not logged in, let's show a link to do just that:
 
-```javascript {12,16-26}
+```jsx {12,16-26}
 // web/src/layouts/BlogLayout/BlogLayout.js
 
 import { useAuth } from '@redwoodjs/auth'
@@ -496,10 +496,10 @@ Before we leave this file, take a look at `requireAuth()`. Remember when we talk
 
 Believe it or not, that's pretty much it for authentication! You can use the combination of `@requireAuth` and `@skipAuth` directives to lock down access to GraphQL query/mutations, and the `<Private>` component to restrict access to entire pages of your app. If you only want to restrict access to certain components, or certain parts of a component, you can always get `isAuthenticated` from the `useAuth()` hook and then render one thing or another.
 
-Head over to the Redwood docs to read more about [self-hosted authentication](https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup) and [third-party authentication](https://redwoodjs.com/docs/authentication#third-party-providers-installation-and-setup).
+Head over to the Redwood docs to read more about [self-hosted authentication](../authentication.md#self-hosted-auth-installation-and-setup) and [third-party authentication](../authentication.md#third-party-providers-installation-and-setup).
 
 ## One More Thing
 
-Remember the GraphQL Playground exercise at the end of [Creating a Contact](/docs/tutorial/saving-data#creating-a-contact)? Try to run that again now that authentication is in place and you should get that error we've been talking about because of the `@requireAuth` directive! But, creating a *new* contact should still work just fine (because we're using `@skipAuth` on that mutation).
+Remember the GraphQL Playground exercise at the end of [Creating a Contact](saving-data.md#creating-a-contact)? Try to run that again now that authentication is in place and you should get that error we've been talking about because of the `@requireAuth` directive! But, creating a *new* contact should still work just fine (because we're using `@skipAuth` on that mutation).
 
 However, simulating a logged-in user through the GraphQL Playground is no picnic. But, we're working on improving the experience!

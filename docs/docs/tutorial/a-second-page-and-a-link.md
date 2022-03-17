@@ -10,7 +10,7 @@ Notice that we didn't specify a route path this time. If you leave it off the `r
 
 > **Code-splitting each page**
 >
-> As you add more pages to your app, you may start to worry that more and more code has to be downloaded by the client on any initial page load. Fear not! Redwood will automatically code-split on each Page, which means that initial page loads can be blazingly fast, and you can create as many Pages as you want without having to worry about impacting overall webpack bundle size. If, however, you do want specific Pages to be included in the main bundle, you can [override the default behavior](https://redwoodjs.com/docs/router.html#not-code-splitting).
+> As you add more pages to your app, you may start to worry that more and more code has to be downloaded by the client on any initial page load. Fear not! Redwood will automatically code-split on each Page, which means that initial page loads can be blazingly fast, and you can create as many Pages as you want without having to worry about impacting overall webpack bundle size. If, however, you do want specific Pages to be included in the main bundle, you can [override the default behavior](../router.md#not-code-splitting).
 
 [http://localhost:8910/about](http://localhost:8910/about) should show our new page:
 
@@ -18,9 +18,8 @@ Notice that we didn't specify a route path this time. If you leave it off the `r
 
 But no one's going to find it by manually changing the URL so let's add a link from our homepage to the About page and vice versa. We'll start by creating a simple header and nav bar at the same time on the HomePage:
 
-```javascript {3,14-24}
-// web/src/pages/HomePage/HomePage.js
-
+```jsx title="web/src/pages/HomePage/HomePage.js"
+// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -29,6 +28,7 @@ const HomePage = () => {
     <>
       <MetaTags title="Home" description="Home page" />
 
+      // highlight-start
       <header>
         <h1>Redwood Blog</h1>
         <nav>
@@ -40,6 +40,7 @@ const HomePage = () => {
         </nav>
       </header>
       <main>Home</main>
+      // highlight-end
     </>
   )
 }
@@ -50,7 +51,7 @@ export default HomePage
 Let's point out a few things here:
 
 - Redwood loves [Function Components](https://www.robinwieruch.de/react-function-component). We'll make extensive use of [React Hooks](https://reactjs.org/docs/hooks-intro.html) as we go and these are only enabled in function components. You're free to use class components, but we recommend avoiding them unless you need their special capabilities.
-- Redwood's `<Link>` tag, in its most basic usage, takes a single `to` attribute. That `to` attribute calls a [_named route function_](https://redwoodjs.com/docs/router#link-and-named-route-functions) in order to generate the correct URL. The function has the same name as the `name` attribute on the `<Route>`:
+- Redwood's `<Link>` tag, in its most basic usage, takes a single `to` attribute. That `to` attribute calls a [_named route function_](../router.md#link-and-named-route-functions) in order to generate the correct URL. The function has the same name as the `name` attribute on the `<Route>`:
 
   `<Route path="/about" page={AboutPage} name="about" />`
 
@@ -60,9 +61,8 @@ Let's point out a few things here:
 
 Once we get to the About page we don't have any way to get back so let's add a link there as well:
 
-```javascript {3,14-30}
-// web/src/pages/AboutPage/AboutPage.js
-
+```jsx title="web/src/pages/AboutPage/AboutPage.js"
+// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -71,6 +71,7 @@ const AboutPage = () => {
     <>
       <MetaTags title="About" description="About page" />
 
+      // highlight-start
       <header>
         <h1>Redwood Blog</h1>
         <nav>
@@ -81,6 +82,7 @@ const AboutPage = () => {
           </ul>
         </nav>
       </header>
+      // highlight-end
       <main>
         <p>
           This site was created to demonstrate my mastery of Redwood: Look on my
