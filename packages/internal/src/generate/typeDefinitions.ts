@@ -342,6 +342,7 @@ export const User: UserQueries = {
 `
 
   const typeExports = typesWithFields
+    // Skip the hardcoded ones
     .filter((t) => !(t.name === 'Query') && !(t.name === 'Mutation'))
     .map(
       (t) =>
