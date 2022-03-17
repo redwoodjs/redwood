@@ -36,7 +36,7 @@ jobs:
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ secrets.CACHE_VERSION }}-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             yarn-
 
