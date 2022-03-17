@@ -156,7 +156,7 @@ export const builder = (yargs) =>
 // any notes to print out when the job is done
 const notes = [
   'You are ready to deploy to Flightcontrol!\n',
-  '1. Create your project at https://app.flightcontrol.dev/signup',
+  '1. Create your project at https://app.flightcontrol.dev/signup?ref=redwood',
   '2. After your project is provisioned,',
   'go to the Flightcontrol dashboard and set the REDWOOD_API_URL env var to the URL of your API service\n',
   'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions',
