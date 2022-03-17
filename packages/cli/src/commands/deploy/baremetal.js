@@ -25,14 +25,6 @@ export const execaOptions = {
 }
 
 export const builder = (yargs) => {
-  yargs.option('sides', {
-    describe: 'Which Side(s) to deploy',
-    choices: ['api', 'web'],
-    default: ['api', 'web'],
-    alias: 'side',
-    type: 'array',
-  })
-
   yargs.option('first-run', {
     describe:
       'Set this flag the first time you deploy: starts server processes from scratch',
@@ -53,13 +45,19 @@ export const builder = (yargs) => {
   })
 
   yargs.option('migrate', {
-    describe: 'Whether or not to run database migration tasks',
+    describe: 'Run database migration tasks',
     default: true,
     type: 'boolean',
   })
 
   yargs.option('build', {
     describe: 'Run build process for the deployed `sides`',
+    default: true,
+    type: 'boolean',
+  })
+
+  yargs.option('symlink', {
+    describe: 'Symlink web/dist to web/serve/current for zero-downtime deploys',
     default: true,
     type: 'boolean',
   })
@@ -76,6 +74,8 @@ export const builder = (yargs) => {
     default: new Date().toISOString().replace(/[:\-T.Z]/g, ''),
     type: 'string',
   })
+
+  // TODO: Allow option to pass --sides and only deploy select sides instead of all, always
 
   yargs.epilogue(
     `Also see the ${terminalLink(
@@ -177,20 +177,18 @@ const commands = (yargs) => {
     })
 
     // build sides
-    for (const side of yargs.sides) {
-      if (serverConfig.sides.includes(side)) {
-        tasks.push({
-          title: `Building ${side}...`,
-          task: async (_ctx, task) => {
-            await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
-              'rw',
-              'build',
-              side,
-            ])
-          },
-          skip: () => !yargs.build,
-        })
-      }
+    for (const side of serverConfig.sides) {
+      tasks.push({
+        title: `Building ${side}...`,
+        task: async (_ctx, task) => {
+          await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+            'rw',
+            'build',
+            side,
+          ])
+        },
+        skip: () => !yargs.build,
+      })
     }
 
     // symlink web dist dir
@@ -209,7 +207,9 @@ const commands = (yargs) => {
             'web/serve/current',
           ])
         },
+        skip: () => !yargs.symlink,
       })
+
       // TODO: add process for cleaning up old deploys
     }
 
@@ -227,6 +227,7 @@ const commands = (yargs) => {
               process,
             ])
           },
+          skip: () => !yargs.restart,
         })
       } else {
         tasks.push({
@@ -238,6 +239,7 @@ const commands = (yargs) => {
               process,
             ])
           },
+          skip: () => !yargs.restart,
         })
       }
     }
