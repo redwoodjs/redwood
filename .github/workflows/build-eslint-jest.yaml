@@ -34,9 +34,9 @@ jobs:
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-1234-${{ hashFiles('yarn.lock') }}
+          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
           restore-keys: |
-            yarn-
+            yarn-1234
 
       - name: Install dependencies
         run: yarn install --immutable
