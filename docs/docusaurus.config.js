@@ -34,7 +34,7 @@ module.exports = {
       title: 'RedwoodJS',
       logo: {
         alt: 'RedwoodJS pinecone logo',
-        src: 'img/logo.svg',
+        src: 'https://d33wubrfki0l68.cloudfront.net/72b0d56596a981835c18946d6c4f8a968b08e694/82254/images/logo.svg',
       },
       items: [
         {
