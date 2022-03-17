@@ -2,7 +2,7 @@ require('whatwg-fetch')
 
 import { useEffect, useState } from 'react'
 
-import { act, render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
@@ -883,34 +883,20 @@ test('getToken doesnt fail if client throws an error', async () => {
       const getTokenAsync = async () => {
         let token
 
-        // If the getToken function throws  we will catch it
+        // If the getToken function throws we will catch it
         // here which will let us know that something is wrong.
         try {
           token = await getToken()
-
-          act(() => {
-            setAuthTokenResult({ success: true, token })
-          })
+          setAuthTokenResult({ success: true, token })
         } catch (error) {
-          act(() => {
-            setAuthTokenResult({ success: false, token: 'FAIL' })
-          })
+          setAuthTokenResult({ success: false, token: 'FAIL' })
         }
       }
 
       getTokenAsync()
     }, [getToken])
 
-    if (!authTokenResult) {
-      return null
-    }
-
-    return (
-      <>
-        <div>getToken Complete</div>
-        <div>Token: {`${authTokenResult.token}`}</div>
-      </>
-    )
+    return <div>Token: {`${authTokenResult?.token}`}</div>
   }
 
   render(
@@ -919,7 +905,5 @@ test('getToken doesnt fail if client throws an error', async () => {
     </AuthProvider>
   )
 
-  await waitFor(() => screen.getByText('getToken Complete'))
-
-  expect(screen.getByText('Token: null')).toBeInTheDocument()
+  await waitFor(() => screen.getByText('Token: null'))
 })

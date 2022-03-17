@@ -23,6 +23,10 @@ export interface AuthContextInterface {
   logIn(options?: unknown): Promise<any>
   logOut(options?: unknown): Promise<any>
   signUp(options?: unknown): Promise<any>
+  /**
+   * Clients should always return null or string
+   * It is expected that they catch any errors internally
+   */
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -218,6 +222,12 @@ export class AuthProvider extends React.Component<
     return false
   }
 
+  /**
+   * Clients should always return null or token string.
+   * It is expected that they catch any errors internally.
+   * This catch is a last resort effort in case any errors are
+   * missed or slip through.
+   */
   getToken = async () => {
     let token
 
