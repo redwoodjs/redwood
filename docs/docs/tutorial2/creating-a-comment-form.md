@@ -20,9 +20,7 @@ You'll see that there's a **CommentForm** entry in Storybook now, ready for us t
 
 Let's build a simple form to take the user's name and their comment and add some styling to match it to the blog:
 
-```javascript
-// web/src/components/CommentForm/CommentForm.js
-
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 import {
   Form,
   Label,
@@ -80,19 +78,20 @@ You can even try submitting the form right in Storybook! If you leave "name" or 
 
 Submitting the form should use the `createComment` function we added to our services and GraphQL. We'll need to add a mutation to the form component and an `onSubmit` hander to the form so that the create can be called with the data in the form. And since `createComment` could return an error we'll add the **FormError** component to display it:
 
-```javascript {5,11,13-22,25,27-29,34,35-39,65}
-// web/src/components/CommentForm/CommentForm.js
-
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 import {
   Form,
+  // highlight-next-line
   FormError,
   Label,
   TextField,
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
+// highlight-end
 import { useMutation } from '@redwoodjs/web'
 
+// highlight-start
 const CREATE = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
     createComment(input: $input) {
@@ -103,23 +102,29 @@ const CREATE = gql`
     }
   }
 `
+// highlight-end
 
 const CommentForm = () => {
+  // highlight-next-line
   const [createComment, { loading, error }] = useMutation(CREATE)
 
+  // highlight-start
   const onSubmit = (input) => {
     createComment({ variables: { input } })
   }
+  // highlight-end
 
   return (
     <div>
       <h3 className="font-light text-lg text-gray-600">Leave a Comment</h3>
+      // highlight-start
       <Form className="mt-4 w-full" onSubmit={onSubmit}>
         <FormError
           error={error}
           titleClassName="font-semibold"
           wrapperClassName="bg-red-100 text-red-900 text-sm p-3 rounded"
         />
+        // highlight-end
         <Label
           name="name"
           className="block text-xs font-semibold text-gray-500 uppercase"
@@ -145,6 +150,7 @@ const CommentForm = () => {
         />
 
         <Submit
+          // highlight-next-line
           disabled={loading}
           className="block mt-4 bg-blue-500 text-white text-xs font-semibold uppercase tracking-wide rounded px-3 py-2 disabled:opacity-50"
         >
@@ -160,12 +166,11 @@ export default CommentForm
 
 If you try to submit the form you'll get an error in the web console—Storybook will automatically mock GraphQL queries, but not mutations. But, we can mock the request in the story and handle the response manually:
 
-```javascript {6-18}
-// web/src/components/CommentForm/CommentForm.stories.js
-
+```jsx title="web/src/components/CommentForm/CommentForm.stories.js"
 import CommentForm from './CommentForm'
 
 export const generated = () => {
+  // highlight-start
   mockGraphQLMutation('CreateCommentMutation', (variables, { ctx }) => {
     const id = parseInt(Math.random() * 1000)
     ctx.delay(1000)
@@ -179,6 +184,7 @@ export const generated = () => {
       },
     }
   })
+  // highlight-end
 
   return <CommentForm />
 }
@@ -204,11 +210,10 @@ Maybe `CommentsCell` should really only be responsible for retrieving and displa
 
 So let's use `Article` as the cleaning house for where all these disparate parts are combined—the actual blog post, the form to add a new comment, and the list of comments (and a little margin between them):
 
-```javascript {5,23-24,28}
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
 import CommentsCell from 'src/components/CommentsCell'
+// highlight-next-line
 import CommentForm from 'src/components/CommentForm'
 
 const truncate = (text, length) => {
@@ -227,11 +232,14 @@ const Article = ({ article, summary = false }) => {
         {summary ? truncate(article.body, 100) : article.body}
       </div>
       {!summary && (
+        // highlight-start
         <div className="mt-12">
           <CommentForm />
+          // highlight-end
           <div className="mt-12">
             <CommentsCell />
           </div>
+        // highlight-next-line
         </div>
       )}
     </article>
@@ -263,9 +271,7 @@ What happened here? Notice towards the end of the error message: `Field "postId"
 
 First let's pass the post's ID as a prop to `CommentForm`:
 
-```javascript {24}
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
 import CommentsCell from 'src/components/CommentsCell'
 import CommentForm from 'src/components/CommentForm'
@@ -287,6 +293,7 @@ const Article = ({ article, summary = false }) => {
       </div>
       {!summary && (
         <div className="mt-12">
+          // highlight-next-line
           <CommentForm postId={article.id} />
           <div className="mt-12">
             <CommentsCell />
@@ -298,18 +305,17 @@ const Article = ({ article, summary = false }) => {
 }
 
 export default Article
-
 ```
 
 And then we'll append that ID to the `input` object that's being passed to `createComment` in the `CommentForm`:
 
-```javascript {3,7}
-// web/src/components/CommentForm/CommentForm.js
-
+```javascript title="web/src/components/CommentForm/CommentForm.js"
+// highlight-next-line
 const CommentForm = ({ postId }) => {
   const [createComment, { loading, error }] = useMutation(CREATE)
 
   const onSubmit = (input) => {
+    // highlight-next-line
     createComment({ variables: { input: { postId, ...input } } })
   }
 
@@ -331,9 +337,7 @@ Much has been written about the [complexities](https://medium.com/swlh/how-i-met
 
 Along with the variables you pass to a mutation function (`createComment` in our case) there's an option named `refetchQueries` where you pass an array of queries that should be re-run because, presumably, the data you just mutated is reflected in the result of those queries. In our case there's a single query, the `QUERY` export of `CommentsCell`. We'll import that at the top of `CommentForm` (and rename so it's clear what it is to the rest of our code) and then pass it along to the `refetchQueries` option:
 
-```javascript {12,17-19}
-// web/src/components/CommentForm/CommentForm.js
-
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 import {
   Form,
   FormError,
@@ -343,14 +347,17 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
+// highlight-next-line
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 
 // ...
 
 const CommentForm = ({ postId }) => {
+  // highlight-start
   const [createComment, { loading, error }] = useMutation(CREATE, {
     refetchQueries: [{ query: CommentsQuery }],
   })
+  // highlight-end
 
   //...
 }
@@ -360,9 +367,7 @@ Now when we create a comment it appears right away! It might be hard to tell bec
 
 We'll make use of good old fashioned React state to keep track of whether a comment has been posted in the form yet or not. If so, let's remove the comment form completely and show a "Thanks for your comment" message. Redwood includes [react-hot-toast](https://react-hot-toast.com/) for showing popup notifications, so let's use that to thank the user for their comment. We'll remove the form with just a couple of CSS classes:
 
-```javascript {12,14,28,30-33,42}
-// web/src/components/CommentForm/CommentForm.js
-
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 import {
   Form,
   FormError,
@@ -372,8 +377,10 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
+// highlight-next-line
 import { toast } from '@redwoodjs/web/toast'
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
+// highlight-next-line
 import { useState } from 'react'
 
 const CREATE = gql`
@@ -388,12 +395,15 @@ const CREATE = gql`
 `
 
 const CommentForm = ({ postId }) => {
+  // highlight-next-line
   const [hasPosted, setHasPosted] = useState(false)
   const [createComment, { loading, error }] = useMutation(CREATE, {
+    // highlight-start
     onCompleted: () => {
       setHasPosted(true)
       toast.success('Thank you for your comment!')
     },
+    // highlight-end
     refetchQueries: [{ query: CommentsQuery }],
   })
 
@@ -402,6 +412,7 @@ const CommentForm = ({ postId }) => {
   }
 
   return (
+    // highlight-next-line
     <div className={hasPosted ? 'hidden' : ''}>
       <h3 className="font-light text-lg text-gray-600">Leave a Comment</h3>
       <Form className="mt-4 w-full" onSubmit={onSubmit}>
@@ -452,11 +463,10 @@ export default CommentForm
 
 We used `hidden` to just hide the form and "Leave a comment" title completely from the page, but keeps the component itself mounted. But where's our "Thank you for your comment" notification? We still need to add the `Toaster` component (from react-host-toast) somewhere in our app so that the message can actually be displayed. We could just add it here, in `CommentForm`, but what if we want other code to be able to post notifications, even when `CommentForm` isn't mounted? Where's the one place we put UI elements that should be visible everywhere? The `BlogLayout`!
 
-```javascript {5,12}
-// web/src/layouts/BlogLayout/BlogLayout.js
-
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
+// highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
 
 const BlogLayout = ({ children }) => {
@@ -464,6 +474,7 @@ const BlogLayout = ({ children }) => {
 
   return (
     <>
+      // highlight-next-line
       <Toaster />
       <header className="relative flex justify-between items-center py-4 px-8 bg-blue-700 text-white">
         <h1 className="text-5xl font-semibold tracking-tight">
@@ -682,10 +693,9 @@ Try running the test suite (or if it's already running take a peek at that termi
 
 Open up the **comments** service test and let's update it to pass the `postId` argument to the `comments()` function like we tested out in the console:
 
-```javascript {4}
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
 scenario('returns all comments', async (scenario) => {
+  // highlight-next-line
   const result = await comments({ postId: scenario.comment.jane.postId })
   expect(result.length).toEqual(Object.keys(scenario.comment).length)
 })
@@ -695,9 +705,7 @@ When the test suite runs everything will still pass. Javascript won't care if yo
 
 Let's take a look at the scenario we're using (remember, it's `standard()` by default):
 
-```javascript
-// api/src/services/comments/comments.scenarios.js
-
+```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   comment: {
     jane: {
@@ -730,20 +738,21 @@ export const standard = defineScenario({
 
 Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting commnents for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
 
-```javascript {4,9-13}
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
 import { comments, createComment } from './comments'
+// highlight-next-line
 import { db } from 'api/src/lib/db'
 
 describe('comments', () => {
   scenario('returns all comments', async (scenario) => {
     const result = await comments({ postId: scenario.comment.jane.postId })
+    // highlight-start
     const post = await db.post.findUnique({
       where: { id: scenario.comment.jane.postId },
       include: { comments: true },
     })
     expect(result.length).toEqual(post.comments.length)
+    // highlight-end
   })
 
   // ...
@@ -766,11 +775,11 @@ So we expected to receive 1 (from `post.comments.length`), but we actually got 2
 
 Before we get it passing again, let's also change the name of the test to reflect what it's actually testing:
 
-```javascript {3,4}
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
+// highlight-start
 scenario(
   'returns all comments for a single post from the database',
+  // highlight-end
   async (scenario) => {
     const result = await comments({ postId: scenario.comment.jane.postId })
     const post = await db.post.findUnique({
@@ -780,14 +789,11 @@ scenario(
     expect(result.length).toEqual(post.comments.length)
   }
 )
-
 ```
 
 Okay, open up the actual `comments.js` service and we'll update it to accept the `postId` argument and use it as an option to `findMany()`:
 
-```javascript {3,4}
-// api/src/services/comments/comments.js
-
+```javascript title="api/src/services/comments/comments.js"
 export const comments = ({ postId }) => {
   return db.comment.findMany({ where: { postId } })
 }
@@ -799,10 +805,9 @@ Save that and the test should pass again!
 
 Next we need to let GraphQL know that it should expect a `postId` to be passed for the `comments` query, and it's required (we don't currently have any view that allows you see all comments everywhere so we can ask that it always be present). Open up the `comments.sdl.js` file:
 
-```javascript {4}
-// api/src/graphql/comments.sdl.js
-
+```graphql title="api/src/graphql/comments.sdl.js"
 type Query {
+  // highlight-next-line
   comments(postId: Int!): [Comment!]!
 }
 ```
@@ -821,9 +826,7 @@ First we'll need to get the `postId` to the cell itself. Remember when we added 
 
 Open up `Article`:
 
-```javascript {18}
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 const Article = ({ article, summary = false }) => {
   return (
     <article>
@@ -839,6 +842,7 @@ const Article = ({ article, summary = false }) => {
         <div className="mt-12">
           <CommentForm postId={article.id} />
           <div className="mt-12">
+            // highlight-next-line
             <CommentsCell postId={article.id} />
           </div>
         </div>
@@ -850,12 +854,12 @@ const Article = ({ article, summary = false }) => {
 
 And finally, we need to take that `postId` and pass it on to the `QUERY` in the cell:
 
-```javascript {4,5}
-// web/src/components/CommentsCell/CommentsCell.js
-
+```graphql title="web/src/components/CommentsCell/CommentsCell.js"
 export const QUERY = gql`
+  // highlight-start
   query CommentsQuery($postId: Int!) {
     comments(postId: $postId) {
+    // highlight-end
       id
       name
       body
@@ -877,14 +881,13 @@ However, you may have noticed that now when you post a comment it no longer appe
 
 Okay this is the last fix, promise!
 
-```javascript {8}
-// web/src/components/CommentForm/CommentForm.js
-
+```javascript title="web/src/components/CommentForm/CommentForm.js"
 const [createComment, { loading, error }] = useMutation(CREATE, {
   onCompleted: () => {
     setHasPosted(true)
     toast.success('Thank you for your comment!')
   },
+  // highlight-next-line
   refetchQueries: [{ query: CommentsQuery, variables: { postId } }],
 })
 ```

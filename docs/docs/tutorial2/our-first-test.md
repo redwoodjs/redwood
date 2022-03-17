@@ -18,19 +18,19 @@ The test was looking for the full text of the blog post, but remember that in `A
 
 Let's update the test so that it checks for the expected behavior instead. There are entire books written on the best way to test, so no matter what we decide on testing in this code there will be someone out there to tell us we're doing it wrong. As just one example, the simplest test would be to just copy what's output and use that for the text in the test:
 
-```javascript {7-12}
-// web/src/components/BlogPostsCell.test.js
-
+```jsx title="web/src/components/BlogPostsCell.test.js"
 test('Success renders successfully', async () => {
   const posts = standard().posts
   render(<Success posts={posts} />)
 
+  // highlight-start
   expect(screen.getByText(posts[0].title)).toBeInTheDocument()
   expect(
     screen.getByText(
       'Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Str...'
     )
   ).toBeInTheDocument()
+  // highlight-end
 })
 ```
 
@@ -48,9 +48,7 @@ This gives us a buffer if we decide to truncate to something like 25 words, or e
 
 Okay, let's do this:
 
-```javascript {30-38}
-// web/src/components/ArticlesCell.test.js
-
+```jsx title="web/src/components/ArticlesCell.test.js"
 import { render, screen } from '@redwoodjs/testing'
 import { Loading, Empty, Failure, Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
@@ -78,6 +76,7 @@ describe('ArticlesCell', () => {
     const articles = standard().articles
     render(<Success articles={articles} />)
 
+    // highlight-start
     articles.forEach((article) => {
       const truncatedBody = article.body.substring(0, 10)
       const matchedBody = screen.getByText(truncatedBody, { exact: false })
@@ -87,6 +86,7 @@ describe('ArticlesCell', () => {
       expect(screen.queryByText(article.body)).not.toBeInTheDocument()
       expect(matchedBody).toBeInTheDocument()
       expect(ellipsis).toBeInTheDocument()
+    // highlight-end
     })
   })
 })
@@ -170,7 +170,8 @@ export const standard = () => ({
 
 The first key in the object that's returned is named `articles`. That's also the name of the prop that's expected to be sent into **Success** in the cell:
 
-```javascript {1}
+```jsx
+// highlight-next-line
 export const Success = ({ articles }) => {
   return (
     { articles.map((article) => <Article article={article} />) }
@@ -180,11 +181,12 @@ export const Success = ({ articles }) => {
 
 So we can just spread the result of `standard()` in a story or test when using the **Success** component and everything works out:
 
-```javascript {5}
+```jsx
 import { Success } from './BlogPostsCell'
 import { standard } from './BlogPostsCell.mock'
 
 export const success = () => {
+  // highlight-next-line
   return Success ? <Success {...standard()} /> : null
 }
 
@@ -193,11 +195,12 @@ export default { title: 'Cells/BlogPostsCell' }
 
 Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashoined way:
 
-```javascript {5}
+```jsx
 import { Success } from './BlogPostsCell'
 import { standard } from './BlogPostsCell.mock'
 
 export const success = () => {
+  // highlight-next-line
   return Success ? <Success article={standard().article} /> : null
 }
 
@@ -223,27 +226,31 @@ In this case let's just test that the output matches an exact string. You could 
 
 We'll move the sample post data to a constant and then use it in both the existing test (which tests that not passing the `summary` prop at all results in the full body being rendered) and our new test that checks for the summary version being rendered:
 
-```javascript {6-11,15,17-18,21-30}
-// web/src/components/Article/Article.test.js
-
+```jsx title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing'
 import Article from './Article'
 
+// highlight-start
 const ARTICLE = {
   id: 1,
   title: 'First post',
   body: `Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Street art next level umami squid. Hammock hexagon glossier 8-bit banjo. Neutra la croix mixtape echo park four loko semiotics kitsch forage chambray. Semiotics salvia selfies jianbing hella shaman. Letterpress helvetica vaporware cronut, shaman butcher YOLO poke fixie hoodie gentrify woke heirloom.`,
   createdAt: new Date().toISOString(),
 }
+// highlight-end
 
 describe('Article', () => {
   it('renders a blog post', () => {
+    // highlight-next-line
     render(<Article article={ARTICLE} />)
 
+    // highlight-start
     expect(screen.getByText(ARTICLE.title)).toBeInTheDocument()
     expect(screen.getByText(ARTICLE.body)).toBeInTheDocument()
+    // highlight-end
   })
 
+  // highlight-start
   it('renders a summary of a blog post', () => {
     render(<Article article={ARTICLE} summary={true} />)
 
@@ -254,6 +261,7 @@ describe('Article', () => {
       )
     ).toBeInTheDocument()
   })
+  // highlight-end
 })
 ```
 
