@@ -3238,9 +3238,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-resolvers@npm:2.5.4":
-  version: 2.5.4
-  resolution: "@graphql-codegen/typescript-resolvers@npm:2.5.4"
+"@graphql-codegen/typescript-resolvers@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@graphql-codegen/typescript-resolvers@npm:2.6.0"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
     "@graphql-codegen/typescript": ^2.4.7
@@ -3250,7 +3250,7 @@ __metadata:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 18f6d413a4448e0bd007e54da13f8f3a23447f8a9f759d9eba4ca895eff7ce72777a98d61287b4f82b1eed41347fc8b97e5e0542ad99314296361fa87e94cc87
+  checksum: fde18b98bc4f4cefb4fb188fe1d7970cba0f3480188880268890533bb1807deec289271ff1c1007c03a8fbe59664e9b73bcc49469a56d80857856c3cc88445af
   languageName: node
   linkType: hard
 
@@ -6064,7 +6064,7 @@ __metadata:
     "@graphql-codegen/typescript": 2.4.7
     "@graphql-codegen/typescript-operations": 2.3.4
     "@graphql-codegen/typescript-react-apollo": 3.2.10
-    "@graphql-codegen/typescript-resolvers": 2.5.4
+    "@graphql-codegen/typescript-resolvers": 2.6.0
     "@redwoodjs/graphql-server": 0.49.1
     "@types/babel-plugin-tester": 9.0.4
     "@types/babel__core": 7.1.18
