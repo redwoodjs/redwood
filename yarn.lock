@@ -14,12 +14,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@actions/exec@npm:1.1.0"
+"@actions/exec@npm:1.1.1":
+  version: 1.1.1
+  resolution: "@actions/exec@npm:1.1.1"
   dependencies:
     "@actions/io": ^1.0.1
-  checksum: ebda3187c22ecf3944d42a5947ba07a709d5baf7d5d055a485cf172dcfcaa1fc344bd039066f7d5f8f3865e31cf1f4bf708ce71c148118e01d7613c345357d87
+  checksum: 4a09f6bdbe50ce68b5cf8a7254d176230d6a74bccf6ecc3857feee209a8c950ba9adec87cc5ecceb04110182d1c17117234e45557d72fde6229b7fd3a395322a
   languageName: node
   linkType: hard
 
@@ -2021,10 +2021,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.29.0, @clerk/types@npm:^1.29.0":
-  version: 1.29.0
-  resolution: "@clerk/types@npm:1.29.0"
-  checksum: 2c13581fffa57e9ac02f2da3c24864fa99a7ecf6e1496121c98ac6018b21badcb1ee194f098f04bbbb1c782078d29991f78060aac53131600f5dd42882506cab
+"@clerk/types@npm:1.29.2, @clerk/types@npm:^1.29.0":
+  version: 1.29.2
+  resolution: "@clerk/types@npm:1.29.2"
+  checksum: 0bebcf9ca225675e5352f7b41b2332f613e9ed0171746979b335198a96ceb7181c47292f90054bf39477d78afdc4f213a6a70ba0b7decc82626710a1f5fa19d1
   languageName: node
   linkType: hard
 
@@ -5779,7 +5779,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.4
     "@clerk/clerk-sdk-node": 2.9.10
-    "@clerk/types": 1.29.0
+    "@clerk/types": 1.29.2
     "@nhost/nhost-js": 0.3.12
     "@supabase/supabase-js": 1.31.1
     "@types/netlify-identity-widget": 1.9.3
@@ -26158,7 +26158,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@actions/core": 1.6.0
-    "@actions/exec": 1.1.0
+    "@actions/exec": 1.1.1
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/node": 7.16.7
