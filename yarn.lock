@@ -5829,7 +5829,7 @@ __metadata:
     listr: 0.14.3
     listr-verbose-renderer: 0.6.0
     lodash: 4.17.21
-    node-ssh: 12.0.3
+    node-ssh: 12.0.4
     param-case: 3.0.4
     pascalcase: 1.0.0
     pluralize: 8.0.0
@@ -22188,9 +22188,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-ssh@npm:12.0.3":
-  version: 12.0.3
-  resolution: "node-ssh@npm:12.0.3"
+"node-ssh@npm:12.0.4":
+  version: 12.0.4
+  resolution: "node-ssh@npm:12.0.4"
   dependencies:
     is-stream: ^2.0.0
     make-dir: ^3.1.0
@@ -22198,7 +22198,7 @@ __metadata:
     sb-scandir: ^3.1.0
     shell-escape: ^0.2.0
     ssh2: ^1.5.0
-  checksum: 8ebf7ee67a24979eb77ffdcd1f7e5e491653f5132a925913b2446af6b4c6e92d9a982de12123b0df908ef860c30325e146d83cf2c534ec13f9f643fa316c1d45
+  checksum: 077ffcdca7613b9192e59b2e9246065b7b84b5c29d7ed67f4c3985d224e8aa242cc8b95f1197171383ac415a2a55e500e5328495373b88e010abb50f8e77e516
   languageName: node
   linkType: hard
 
