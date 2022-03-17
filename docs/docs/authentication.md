@@ -13,7 +13,7 @@ We currently support the following third-party authentication providers:
 - [Firebase](https://firebase.google.com/docs/auth)
 - [Ethereum](https://github.com/oneclickdapp/ethereum-auth)
 - [Supabase](https://supabase.io/docs/guides/auth)
-- [Nhost](https://docs.nhost.io/auth)
+- [Nhost](https://docs.nhost.io/platform/authentication)
 - Custom
 - [Contribute one](https://github.com/redwoodjs/redwood/tree/main/packages/auth), it's SuperEasy™!
 
@@ -925,7 +925,7 @@ yarn rw setup auth nhost
 
 Update your .env file with the following setting which can be found on your Nhost project's dashboard.
 
-- `NHOST_BACKEND_URL` with the unique Nhost Backend (Auth & Storage) URL for your project.
+- `NHOST_BACKEND_URL` with the unique Nhost Backend URL that can be found in the app's dashboard.
 - `NHOST_JWT_SECRET` with the JWT Key secret that you have set in your project's Settings > Hasura "JWT Key" section.
 
 #### Usage
@@ -933,15 +933,17 @@ Update your .env file with the following setting which can be found on your Nhos
 Nhost supports the following methods:
 
 - email/password
-- OAuth (via GitHub, Google, Facebook, or Linkedin).
+- passwordless with email
+- passwordless with SMS
+- OAuth Providers (via GitHub, Google, Facebook, Spotify, Discord, Twitch, Apple, Twitter, Microsoft and Linkedin).
 
 Depending on the credentials provided:
 
 - A user can sign in either via email or a supported OAuth provider.
 - A user can sign up via email and password. For OAuth simply sign in and the user account will be created if it does not exist.
-- Note: You must enable and configure the OAuth provider appropriately. To configure these providers, you can go to the project's Settings -> Sign-In Methods page at `console.nhost.io`.
+- Note: You must enable and configure the OAuth provider appropriately. To enable and configure a provider, please navigate to Users -> Login settings, from your app's dashboard.
 
-For the docs on Authentication, see: <https://docs.nhost.io/auth>
+For the docs on Authentication, see: <https://docs.nhost.io/platform/authentication>
 
 If you are also **using Nhost as your GraphQL API server**, you will need to pass `skipFetchCurrentUser` as a prop to `AuthProvider` , as follows:
 
