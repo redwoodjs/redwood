@@ -223,8 +223,9 @@ describe('users', () => {
 
 exports[`in typescript mode creates a multi word service file 1`] = `
 "import { db } from 'src/lib/db'
+import type { Queries } from 'types/resolvers'
 
-export const userProfiles = () => {
+export const userProfiles: Queries['userProfiles'] = () => {
   return db.userProfile.findMany()
 }
 "
@@ -314,50 +315,42 @@ describe('transactions', () => {
 
 exports[`in typescript mode creates a single word service file 1`] = `
 "import { db } from 'src/lib/db'
+import type { Queries } from 'types/resolvers'
 
-export const users = () => {
+export const users: Queries['users'] = () => {
   return db.user.findMany()
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
-"import type { Prisma } from '@prisma/client'
+"import { db } from 'src/lib/db'
+import type { Queries, Mutations } from 'types/resolvers'
 
-import { db } from 'src/lib/db'
-
-export const posts = () => {
+export const posts: Queries['posts'] = () => {
   return db.post.findMany()
 }
 
-export const post = ({ id }: Prisma.PostWhereUniqueInput) => {
+export const post: Queries['post'] = ({ id }) => {
   return db.post.findUnique({
     where: { id },
   })
 }
 
-interface CreatePostArgs {
-  input: Prisma.PostCreateInput
-}
-
-export const createPost = ({ input }: CreatePostArgs) => {
+export const createPost: Mutations['createPost'] = ({ input }) => {
   return db.post.create({
     data: input,
   })
 }
 
-interface UpdatePostArgs extends Prisma.PostWhereUniqueInput {
-  input: Prisma.PostUpdateInput
-}
-
-export const updatePost = ({ id, input }: UpdatePostArgs) => {
+export const updatePost: Mutations['createPost'] = ({ id, input }) => {
   return db.post.update({
     data: input,
     where: { id },
   })
 }
 
-export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
+export const deletePost: Mutations['deletePost'] = ({ id }) => {
   return db.post.delete({
     where: { id },
   })
@@ -366,71 +359,65 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 `;
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import type { Prisma } from '@prisma/client'
-import type { ResolverArgs } from '@redwoodjs/graphql-server'
+"import { db } from 'src/lib/db'
+import type { Queries, userQueries } from 'types/resolvers'
 
-import { db } from 'src/lib/db'
-
-export const users = () => {
+export const users: Queries['users'] = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+export const user: Queries['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
 }
 
-export const User = {
-  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
+export const User: userQueries = {
+  identity: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import type { Prisma } from '@prisma/client'
-import type { ResolverArgs } from '@redwoodjs/graphql-server'
+"import { db } from 'src/lib/db'
+import type { Queries, userQueries } from 'types/resolvers'
 
-import { db } from 'src/lib/db'
-
-export const users = () => {
+export const users: Queries['users'] = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+export const user: Queries['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
 }
 
-export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
+export const User: userQueries = {
+  userProfiles: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import type { Prisma } from '@prisma/client'
-import type { ResolverArgs } from '@redwoodjs/graphql-server'
+"import { db } from 'src/lib/db'
+import type { Queries, userQueries } from 'types/resolvers'
 
-import { db } from 'src/lib/db'
-
-export const users = () => {
+export const users: Queries['users'] = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+export const user: Queries['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
 }
 
-export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
+export const User: userQueries = {
+  userProfiles: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
+  identity: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
 "
