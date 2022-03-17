@@ -587,7 +587,7 @@ export const validateWith = (func: () => void) => {
 // There is an optional `$scope` key which contains additional the `where`
 // clauses to include when checking whether the field is unique. So rather than
 // a product name having to be unique across the entire database, you could
-// check that it is only unique amoung a subset of records with the same
+// check that it is only unique among a subset of records with the same
 // `companyId`.
 //
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
