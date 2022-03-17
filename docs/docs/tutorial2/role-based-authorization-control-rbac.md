@@ -10,9 +10,7 @@ Enter role-based access control, thankfully shortened to the common phrase **RBA
 
 We've got a User model so let's add a `roles` property to that:
 
-```javascript {11}
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 model User {
   id                  Int @id @default(autoincrement())
   name                String?
@@ -21,6 +19,7 @@ model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  // highlight-next-line
   roles               String
 }
 ```
@@ -42,9 +41,7 @@ What does this mean? We made `roles` a required field. But, we have a user in th
 
 For now let's have two roles, `admin` and `moderator`. `admin` can create/edit/delete blog posts and `moderator` can only remove comments. Of those two `moderator` is the safer default since it's more restrictive:
 
-```javascript {11}
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 model User {
   id                  Int @id @default(autoincrement())
   name                String?
@@ -53,6 +50,7 @@ model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  // highlight-next-line
   roles               String @default("moderator")
 }
 ```
@@ -69,12 +67,11 @@ If we log in and try to go the posts admin page at [http://localhost:8910/admin/
 
 Before we do that, we'll need to make sure that the web side has access to the roles on `currentUser`. Take a look at `api/src/lib/auth.js`. Remember when we had to add `email` to the list of fields being included in Part 1? We need to add `roles` as well:
 
-```javascript {6}
-// api/src/lib/auth.js
-
+```javascript title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
+    // highlight-next-line
     select: { id: true, email: true, roles: true },
   })
 }
@@ -84,9 +81,8 @@ export const getCurrentUser = async (session) => {
 
 The easiest way to prevent access to an entire URL is via the Router. The `<Private>` component takes a prop `role` in which you can give a list of only those role(s) that should have access:
 
-```javascript {3}
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
+// highlight-next-line
 <Private unauthenticated="home" role="admin">
   <Set wrap={PostsLayout}>
     <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
@@ -151,7 +147,7 @@ In our case we're not sending emails anywhere, and don't require them to be veri
 
 > If you disabled the new user signup as suggested at the end of the first part of the tutorial then you'll have a slightly harder time creating a new user (the Signup page is still enabled in the example repo for convenience). You could create one with the Redwood console, but you'll need to be clever—remember that we don't store the original password, just the hashed result when combined with a salt. Here's the commands to enter at the console for creating a new user (replace 'password' with your password of choice):
 >
-> ```bash
+> ```javascript
 > const CryptoJS = require('crypto-js')
 > const salt = CryptoJS.lib.WordArray.random(128 / 8).toString()
 > const hashedPassword = CryptoJS.PBKDF2('password', salt, { keySize: 256 / 32 }).toString()
@@ -165,9 +161,8 @@ Locking down a whole page is easy enough via the Router, but what about individu
 
 Redwood provides a `hasRole()` function you can get from the `useAuth()` hook (you may recall us using that to get `currentUser` and display their email address in Part 1) which returns `true` or `false` depending on whether the logged in user has the given role. Let's try it out by adding a `Delete` button when a moderator is viewing a blog post's comments:
 
-```javascript {3,12-17,20,28-36}
-// web/src/components/Comment/Comment.js
-
+```jsx title="web/src/components/Comment/Comment.js"
+// highlight-next-line
 import { useAuth } from '@redwoodjs/auth'
 
 const formattedDate = (datetime) => {
@@ -177,14 +172,17 @@ const formattedDate = (datetime) => {
 }
 
 const Comment = ({ comment }) => {
+  // highlight-start
   const { hasRole } = useAuth()
   const moderate = () => {
     if (confirm('Are you sure?')) {
       // TODO: delete comment
     }
   }
+  // highlight-end
 
   return (
+    // highlight-next-line
     <div className="bg-gray-200 p-8 rounded-lg relative">
       <header className="flex justify-between">
         <h2 className="font-semibold text-gray-700">{comment.name}</h2>
@@ -193,6 +191,7 @@ const Comment = ({ comment }) => {
         </time>
       </header>
       <p className="text-sm mt-2">{comment.body}</p>
+      // highlight-start
       {hasRole('moderator') && (
         <button
           type="button"
@@ -202,6 +201,7 @@ const Comment = ({ comment }) => {
           Delete
         </button>
       )}
+      // highlight-end
     </div>
   )
 }
@@ -217,13 +217,14 @@ What should we put in place of the `// TODO` note we left ourselves? A GraphQL m
 
 And due to the nice encapsulation of our **Comment** component we can make all the required web-site changes in this one component:
 
-```javascript {4-5,7-13,23-30,33-37}
-// web/src/components/Comment/Comment.js
-
+```jsx title="web/src/components/Comment/Comment.js"
 import { useAuth } from '@redwoodjs/auth'
+// highlight-start
 import { useMutation } from '@redwoodjs/web'
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
+// highlight-end
 
+// highlight-start
 const DELETE = gql`
   mutation DeleteCommentMutation($id: Int!) {
     deleteComment(id: $id) {
@@ -231,6 +232,7 @@ const DELETE = gql`
     }
   }
 `
+// highlight-end
 
 const formattedDate = (datetime) => {
   const parsedDate = new Date(datetime)
@@ -240,6 +242,7 @@ const formattedDate = (datetime) => {
 
 const Comment = ({ comment }) => {
   const { hasRole } = useAuth()
+  // highlight-start
   const [deleteComment] = useMutation(DELETE, {
     refetchQueries: [
       {
@@ -248,13 +251,16 @@ const Comment = ({ comment }) => {
       },
     ],
   })
+  // highlight-end
 
   const moderate = () => {
+    // highlight-start
     if (confirm('Are you sure?')) {
       deleteComment({
         variables: { id: comment.id },
       })
     }
+    // highlight-end
   }
 
   return (
@@ -284,9 +290,7 @@ export default Comment
 
 We'll also need to update the `CommentsQuery` we're importing from `CommentsCell` to include the `postId` field, since we are relying on it to perform the `refetchQuery` after a successful deletion:
 
-```javascript {11}
-// web/src/components/CommentsCell/CommentsCell.js
-
+```javascript title="web/src/components/CommentsCell/CommentsCell.js"
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`
@@ -295,6 +299,7 @@ export const QUERY = gql`
       id
       name
       body
+      // highlight-next-line
       postId
       createdAt
     }
@@ -312,11 +317,10 @@ Similar to how we can mock GraphQL calls in Storybook, we can mock user authenti
 
 In `Comment.stories.js` let's add a second story for the moderator view of the component (and rename the existing one for clarity):
 
-```javascript {5,19-31}
-// web/src/components/Comment/Comment.stories.js
-
+```jsx title="web/src/components/Comment/Comment.stories.js"
 import Comment from './Comment'
 
+// highlight-next-line
 export const defaultView = () => {
   return (
     <div className="m-4">
@@ -332,6 +336,7 @@ export const defaultView = () => {
   )
 }
 
+// highlight-start
 export const moderatorView = () => {
   return (
     <div className="m-4">
@@ -344,6 +349,7 @@ export const moderatorView = () => {
         }}
       />
     </div>
+    // highlight-end
   )
 }
 
@@ -352,13 +358,13 @@ export default { title: 'Components/Comment' }
 
 The **moderatorView** story needs to have a user available that has the moderator role. We can do that with the `mockCurrentUser` function:
 
-```javascript {4-6}
-// web/src/components/Comment/Comment.stories.js
-
+```jsx title="web/src/components/Comment/Comment.stories.js"
 export const moderatorView = () => {
+  // highlight-start
   mockCurrentUser({
     roles: 'moderator',
   })
+  // highlight-end
 
   return (
     <div className="m-4">
@@ -389,30 +395,36 @@ Check out **Comment** in Storybook and you should see two stories for Comment, o
 
 We can use the same `mockCurrentUser()` function in our Jest tests as well. Let's check that the word "Delete" is present in the component's output when the user is a moderator, and that it's not present if the user has any other role (or no role):
 
-```javascript {3,6-10,14,16-17,21,24-37}
-// web/src/components/Comment/Comment.test.js
-
+```jsx title="web/src/components/Comment/Comment.test.js"
+// highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
 import Comment from './Comment'
 
+// highlight-start
 const COMMENT = {
   name: 'John Doe',
   body: 'This is my comment',
   createdAt: '2020-01-02T12:34:56Z',
 }
+// highlight-end
 
 describe('Comment', () => {
   it('renders successfully', () => {
+    // highlight-next-line
     render(<Comment comment={COMMENT} />)
 
+    // highlight-start
     expect(screen.getByText(COMMENT.name)).toBeInTheDocument()
     expect(screen.getByText(COMMENT.body)).toBeInTheDocument()
+    // highlight-end
     const dateExpect = screen.getByText('2 January 2020')
     expect(dateExpect).toBeInTheDocument()
     expect(dateExpect.nodeName).toEqual('TIME')
+    // highlight-next-line
     expect(dateExpect).toHaveAttribute('datetime', COMMENT.createdAt)
   })
 
+  // highlight-start
   it('does not render a delete button if user is logged out', async () => {
     render(<Comment comment={COMMENT} />)
 
@@ -427,6 +439,7 @@ describe('Comment', () => {
 
     await waitFor(() => expect(screen.getByText('Delete')).toBeInTheDocument())
   })
+  // highlight-end
 })
 ```
 
@@ -460,15 +473,14 @@ console.error
 
 If you take a look at `CommentsCell.mock.js` you'll see the mock data there used during the test. We're requesting `postId` in the `QUERY` in `CommentsCell` now, but this mock doesn't return it! We can fix that by simply adding that field to both mocks:
 
-```javascript {9,16}
-// web/src/components/CommentsCell/CommentsCell.mock.js
-
+```javascript title="web/src/components/CommentsCell/CommentsCell.mock.js"
 export const standard = () => ({
   comments: [
     {
       id: 1,
       name: 'Rob Cameron',
       body: 'First comment',
+      // highlight-next-line
       postId: 1,
       createdAt: '2020-01-02T12:34:56Z',
     },
@@ -476,6 +488,7 @@ export const standard = () => ({
       id: 2,
       name: 'David Price',
       body: 'Second comment',
+      // highlight-next-line
       postId: 2,
       createdAt: '2020-02-03T23:00:00Z',
     },
@@ -491,7 +504,7 @@ Remember: never trust the client! We need to lock down the backend to be sure th
 
 Recall in Part 1 of the tutorial we used a [directive](../directives.md) `@requireAuth` to be sure that someone was logged in before allowing them to access a given GraphQL query or mutation. It turns out that `@requireAuth` can take an optional `roles` argument:
 
-```javascript {29}
+```graphql
 export const schema = gql`
   type Comment {
     id: Int!
@@ -520,6 +533,7 @@ export const schema = gql`
 
   type Mutation {
     createComment(input: CreateCommentInput!): Comment! @skipAuth
+    // highlight-next-line
     deleteComment(id: Int!): Comment! @requireAuth(roles: "moderator")
   }
 `
@@ -529,15 +543,15 @@ Now a raw GraphQL query to the `deleteComment` mutation will result in an error 
 
 This check only prevents access to `deleteComment` via GraphQL. What if you're calling one service from another? If we wanted the same protection within the service itself, we could call `requireAuth` directly:
 
-```javascript {4,9}
-// api/src/services/comments/comments.js
-
+```javascript title="api/src/services/comments/comments.js"
 import { db } from 'src/lib/db'
+// highlight-next-line
 import { requireAuth } from 'src/lib/auth'
 
 // ...
 
 export const deleteComment = ({ id }) => {
+  // highlight-next-line
   requireAuth({ roles: 'moderator' })
   return db.comment.delete({
     where: { id },
@@ -547,11 +561,11 @@ export const deleteComment = ({ id }) => {
 
 We'll need a test to go along with that functionality. How do we test `requireAuth()`? The api side also has a `mockCurrentUser()` function which behaves the same as the one on the web side:
 
-```javascript {3,5,35-71}
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
+// highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
 import { db } from 'api/src/lib/db'
+// highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 describe('comments', () => {
@@ -582,6 +596,7 @@ describe('comments', () => {
     expect(comment.createdAt).not.toEqual(null)
   })
 
+  // highlight-start
   scenario('allows a moderator to delete a comment', async (scenario) => {
     mockCurrentUser({ roles: ['moderator'] })
 
@@ -619,6 +634,7 @@ describe('comments', () => {
       ).toThrow(AuthenticationError)
     }
   )
+  // highlight-end
 })
 ```
 
