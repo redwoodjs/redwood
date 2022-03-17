@@ -3,6 +3,12 @@ module.exports = {
     {
       type: 'category',
       label: 'Docs',
+      link: {
+        type: 'generated-index',
+        title: 'Docs',
+        // description: '',
+        slug: '/index',
+      },
       className: 'docs-sidebar-category',
       items: [
         'a11y',
@@ -89,6 +95,12 @@ module.exports = {
     {
       type: 'category',
       label: 'Cookbook',
+      link: {
+        type: 'generated-index',
+        title: 'Cookbook',
+        // description: '',
+        slug: '/cookbook/index',
+      },
       className: 'cookbook-sidebar-category',
       items: [
         {
