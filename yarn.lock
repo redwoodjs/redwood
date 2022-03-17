@@ -26209,7 +26209,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.6.2
     typescript-transform-paths: 3.3.1
-    zx: 6.0.1
+    zx: 6.0.3
   languageName: unknown
   linkType: soft
 
@@ -31081,9 +31081,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:6.0.1":
-  version: 6.0.1
-  resolution: "zx@npm:6.0.1"
+"zx@npm:6.0.3":
+  version: 6.0.3
+  resolution: "zx@npm:6.0.3"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
@@ -31098,6 +31098,6 @@ __metadata:
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: 9965e01d8f1b340123605add34db7241aab528809b3f28deb103627a374eab6d0641338564a91216f31cdf05b2dc63e7ca311638e987c14e16cee0644d954f5b
+  checksum: 83cf4e42b02d2cb05a065b2248bc19ecb2e7fb5bd2ea2106f31557d9178456c41a28508638ed247cee5af8e6835c33d7440d3578317471beacf7de4fff810163
   languageName: node
   linkType: hard
