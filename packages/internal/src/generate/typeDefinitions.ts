@@ -275,13 +275,23 @@ export type GQLResolverToRedwoodResolver<T, CTX = {}> = {
 
 import type { RedwoodGraphQLContext } from "@redwoodjs/graphql-server/dist/functions/types"
 import type { OperationDefinitionNode } from "graphql"
-
-interface ResolverContext {}
 `
 
-  // This is duplicated from makeMergedSchema, might be worth consolidating if used again
+  const contextOverrides = `\ninterface ResolverContext {}\n`
+
+  // We want to grab SDL types which have some significance, dropping some well-known
+  // types which aren't going to have custom resolvers.
   const typesWithFields = Object.keys(schema.getTypeMap())
-    .filter((name) => !name.startsWith('_'))
+    .filter(
+      (name) =>
+        !name.startsWith('_') &&
+        !name.endsWith('Input') &&
+        !name.endsWith('Connection') &&
+        !name.endsWith('Edge') &&
+        !(name === 'PageCursor') &&
+        !(name === 'PageCursors') &&
+        !(name === 'PageInfo')
+    )
     .filter(
       (name) =>
         typeof (schema.getType(name) as GraphQLTypeWithFields).getFields !==
@@ -296,21 +306,58 @@ interface ResolverContext {}
     )
 
   const typeImports =
-    `// prettier-ignore\nimport {` +
-    typesWithFields.map((t) => t.name + 'Resolvers').join(',') +
-    `} from 'types/graphql'`
+    `// prettier-ignore\nimport type { ` +
+    typesWithFields.map((t) => t.name + 'Resolvers').join(', ') +
+    ` } from 'types/graphql'\n`
+
+  const hardcodedRootQuries = `
+/**
+ * A type containing all of the root queries in your schema. To get the type for your resolver, use
+ * the index operator to extract it.
+ *
+ * @example
+ * const puzzle: Queries["puzzle"] = (args) => { ...
+ */
+export type Queries = GQLResolverToRedwoodResolver<QueryResolvers, ResolverContext>
+
+/**
+ * A type containing all of the mutations in your schema. To get the type for your mutation's resolver, use
+ * the index operator to extract it.
+ *
+ * @example
+ * const createPuzzle: Mutations["createPuzzle"] = (args) => { ...
+ */
+export type Mutations = GQLResolverToRedwoodResolver<MutationResolvers, ResolverContext>
+
+  `
+
+  const exportInfo = `
+/* A set of types that can be used when handling custom resolvers on your GraphQL types.
+For example if you have a User type with a "puzzles" resolver that calls prisma, you would write:
+
+export const User: UserQueries = {
+  puzzles: (_obj, { root }) => db.puzzles.findUnique({ where: { id: root.id } }).puzzles(),
+}
+*/
+`
 
   const typeExports = typesWithFields
+    .filter((t) => !(t.name === 'Query') && !(t.name === 'Mutation'))
     .map(
       (t) =>
         `export type ${t.name}Queries = GQLResolverToRedwoodResolver<${t.name}Resolvers, ResolverContext>`
     )
     .join('\n')
 
-  // probably need to special case query?
-
   const writePath = path.join(rwjsPaths.api.types, 'resolvers.d.ts')
-  const content = header + typeImports + typeExports + footer
+  const content =
+    header +
+    typeImports +
+    contextOverrides +
+    hardcodedRootQuries +
+    exportInfo +
+    typeExports +
+    footer
   fs.writeFileSync(writePath, content)
 
   return [writePath]
