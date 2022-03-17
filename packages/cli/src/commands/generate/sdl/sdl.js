@@ -137,7 +137,7 @@ const sdlFromSchemaModel = async (name, crud) => {
   }
 }
 
-export const files = async ({ name, crud, tests, typescript }) => {
+export const files = async ({ name, crud = true, tests, typescript }) => {
   const { query, createInput, updateInput, idType, relations, enums } =
     await sdlFromSchemaModel(name, crud)
 
