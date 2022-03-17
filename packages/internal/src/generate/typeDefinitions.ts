@@ -3,6 +3,9 @@ import path from 'path'
 
 import { generate, loadCodegenConfig } from '@graphql-codegen/cli'
 import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'
+import { buildSchema } from 'graphql'
+
+import { GraphQLTypeWithFields } from '@redwoodjs/graphql-server'
 
 import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
@@ -48,6 +51,7 @@ export const generateTypeDefs = async () => {
     ...generateTypeDefGlobalContext(),
     ...generateTypeDefScenarios(),
     ...generateTypeDefTestMocks(),
+    ...generateTypeDefForResolvers(),
     ...gqlApi,
     ...gqlWeb,
   ]
@@ -237,6 +241,79 @@ export const generateTypeDefGraphQLWeb = async () => {
     console.error()
     return []
   }
+}
+
+export const generateTypeDefForResolvers = () => {
+  const rwjsPaths = getPaths()
+  const schemaFilePath = rwjsPaths.generated.schema
+  if (!fs.existsSync(schemaFilePath)) {
+    return []
+  }
+
+  const schema = buildSchema(fs.readFileSync(schemaFilePath, 'utf8'))
+
+  const footer = `
+
+/** Converts the types generated from graphql-codegen to match the shape of a Redwood resolver. */
+export type GQLResolverToRedwoodResolver<T, CTX = {}> = {
+  [Property in keyof T]: (
+    resolverArgs: Parameters<T[Property]>[1],
+    processing: {
+      root: Parameters<T[Property]>[0]
+      context: {
+        document: DocumentNode
+        operation: OperationDefinitionNode
+        variables: any
+      } & RedwoodGraphQLContext &
+        CTX
+      info?: GraphQLResolveInfo | string
+    }
+  ) => ReturnType<T[Property]>
+}
+`
+  const header = `// Auto-generated types for the resolvers in your GraphQL schema.
+
+import type { RedwoodGraphQLContext } from "@redwoodjs/graphql-server/dist/functions/types"
+import type { OperationDefinitionNode } from "graphql"
+
+interface ResolverContext {}
+`
+
+  // This is duplicated from makeMergedSchema, might be worth consolidating if used again
+  const typesWithFields = Object.keys(schema.getTypeMap())
+    .filter((name) => !name.startsWith('_'))
+    .filter(
+      (name) =>
+        typeof (schema.getType(name) as GraphQLTypeWithFields).getFields !==
+        'undefined'
+    )
+    .map((name) => {
+      return schema.getType(name)
+    })
+    .filter(
+      (type): type is GraphQLTypeWithFields =>
+        type !== undefined && type !== null
+    )
+
+  const typeImports =
+    `// prettier-ignore\nimport {` +
+    typesWithFields.map((t) => t.name + 'Resolvers').join(',') +
+    `} from 'types/graphql'`
+
+  const typeExports = typesWithFields
+    .map(
+      (t) =>
+        `export type ${t.name}Queries = GQLResolverToRedwoodResolver<${t.name}Resolvers, ResolverContext>`
+    )
+    .join('\n')
+
+  // probably need to special case query?
+
+  const writePath = path.join(rwjsPaths.api.types, 'resolvers.d.ts')
+  const content = header + typeImports + typeExports + footer
+  fs.writeFileSync(writePath, content)
+
+  return [writePath]
 }
 
 /**
