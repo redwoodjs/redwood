@@ -58,7 +58,12 @@ const FormError = ({
     !!error.networkError && Object.keys(error.networkError).length > 0
 
   if (hasGraphQLError) {
-    rootMessage = 'Errors prevented this form from being saved:'
+    rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong'
+
+    // override top-level message for ServiceValidation errorrs
+    if (error.graphQLErrors[0]?.extensions?.code === 'BAD_USER_INPUT') {
+      rootMessage = 'Errors prevented this form from being saved'
+    }
 
     const properties = error.graphQLErrors[0].extensions?.[
       'properties'
