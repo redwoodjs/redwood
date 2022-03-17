@@ -893,7 +893,7 @@ test('getToken doesnt fail if client throws an error', async () => {
           })
         } catch (error) {
           act(() => {
-            setAuthTokenResult({ success: false, token: null })
+            setAuthTokenResult({ success: false, token: 'FAIL' })
           })
         }
       }
