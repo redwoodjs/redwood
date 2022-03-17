@@ -2,7 +2,7 @@ require('whatwg-fetch')
 
 import { useEffect, useState } from 'react'
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { act, render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
@@ -865,4 +865,61 @@ test('proxies validateResetToken() calls to client', async () => {
 
   // for whatever reason, validateResetToken is invoked twice
   expect.assertions(2)
+})
+
+test('getToken doesnt fail if client throws an error', async () => {
+  const mockAuthClient = {
+    getToken: async () => {
+      throw 'Login Required'
+    },
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { getToken } = useAuth()
+    const [authTokenResult, setAuthTokenResult] = useState(null)
+
+    useEffect(() => {
+      const getTokenAsync = async () => {
+        let token
+
+        // If the getToken function throws  we will catch it
+        // here which will let us know that something is wrong.
+        try {
+          token = await getToken()
+
+          act(() => {
+            setAuthTokenResult({ success: true, token })
+          })
+        } catch (error) {
+          act(() => {
+            setAuthTokenResult({ success: false, token: null })
+          })
+        }
+      }
+
+      getTokenAsync()
+    }, [getToken])
+
+    if (!authTokenResult) {
+      return null
+    }
+
+    return (
+      <>
+        <div>getToken Complete</div>
+        <div>Token: {`${authTokenResult.token}`}</div>
+      </>
+    )
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  await waitFor(() => screen.getByText('getToken Complete'))
+
+  expect(screen.getByText('Token: null')).toBeInTheDocument()
 })

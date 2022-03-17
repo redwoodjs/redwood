@@ -223,7 +223,7 @@ export class AuthProvider extends React.Component<
 
     try {
       token = await this.rwClient.getToken()
-    } catch (error) {
+    } catch {
       token = null
     }
 
