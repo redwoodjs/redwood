@@ -102,9 +102,7 @@ First we'll need to add a couple of fields to our `User` model. We don't even ha
 
 Open up `schema.prisma` and add:
 
-```javascript
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -162,9 +160,8 @@ Try reloading the Posts admin and we'll see something that's 50% correct:
 
 Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<Private>`:
 
-```jsx {3,10,17}
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
+// highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -172,6 +169,7 @@ import BlogLayout from 'src/layouts/BlogLayout'
 const Routes = () => {
   return (
     <Router>
+      // highlight-next-line
       <Private unauthenticated="home">
         <Set wrap={PostsLayout}>
           <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
@@ -179,6 +177,7 @@ const Routes = () => {
           <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
           <Route path="/admin/posts" page={PostPostsPage} name="posts" />
         </Set>
+      // highlight-next-line
       </Private>
       <Set wrap={BlogLayout}>
         <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
@@ -206,9 +205,7 @@ It's because the `posts` query in `posts.sdl` is used by both the homepage *and*
 
 Now that our admin pages are behind a `<Private>` route, what if we set the `posts` query to be `@skipAuth` instead? Let's try:
 
-```graphql {12}
-// api/src/graphql/posts.sdl.js
-
+```graphql title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   type Post {
     id: Int!
@@ -218,6 +215,7 @@ export const schema = gql`
   }
 
   type Query {
+    // highlight-next-line
     posts: [Post!]! @skipAuth
     post(id: Int!): Post @requireAuth
   }
@@ -250,9 +248,7 @@ They're back! Let's just check that if we click on one of our posts that we can 
 
 This page shows a single post, using the `post` query, not `posts`! So, we need to `@skipAuth` on that one as well:
 
-```graphql {13}
-// api/src/graphql/posts.sdl.js
-
+```graphql title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   type Post {
     id: Int!
@@ -263,6 +259,7 @@ export const schema = gql`
 
   type Query {
     posts: [Post!]! @skipAuth
+    // highlight-next-line
     post(id: Int!): Post @skipAuth
   }
 
@@ -330,13 +327,13 @@ Now that we're logged in, how do we log out? Let's add a link to the `BlogLayout
 
 Redwood provides a [hook](../authentication.md#api) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
 
-```jsx {3,7}
-// web/src/layouts/BlogLayout/BlogLayout.js
-
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+// highlight-next-line
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
+  // highlight-next-line
   const { isAuthenticated, currentUser, logOut } = useAuth()
 
   return (
@@ -375,9 +372,7 @@ As you can probably tell by the names:
 
 At the top right of the page, let's show the email address of the user (if they're logged in) as well as a link to log out. If they're not logged in, let's show a link to do just that:
 
-```jsx {12,16-26}
-// web/src/layouts/BlogLayout/BlogLayout.js
-
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
@@ -387,10 +382,12 @@ const BlogLayout = ({ children }) => {
   return (
     <>
       <header>
+        // highlight-next-line
         <div className="flex-between">
           <h1>
             <Link to={routes.home()}>Redwood Blog</Link>
           </h1>
+          // highlight-start
           {isAuthenticated ? (
             <div>
               <span>Logged in as {currentUser.email}</span>{' '}
@@ -402,6 +399,7 @@ const BlogLayout = ({ children }) => {
             <Link to={routes.login()}>Login</Link>
           )}
         </div>
+        // highlight-end
         <nav>
           <ul>
             <li>
@@ -428,9 +426,7 @@ export default BlogLayout
 
 Well, it's almost right! Where's our email address? By default, the function that determines what's in `currentUser` only returns that user's `id` field for security reasons (better to expose too little than too much, remember!). To add email to that list, check out `api/src/lib/auth.js`:
 
-```javascript
-// api/src/lib/auth.js
-
+```javascript title="api/src/lib/auth.js"
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
@@ -475,12 +471,11 @@ export const requireAuth = ({ roles }) => {
 
 The `getCurrentUser()` function is where the magic happens: whatever is returned by this function is the content of `currentUser`, in both the web and api sides! In the case of dbAuth, the single argument passed in, `session`, contains the `id` of the user that's logged in. It then looks up the user in the database with Prisma, selecting just the `id`. Let's add `email` to this list:
 
-```javascript {6}
-// api/src/lib/auth.js
-
+```javascript title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
+    // highlight-next-line
     select: { id: true, email: true},
   })
 }
