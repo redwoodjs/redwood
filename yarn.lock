@@ -5741,6 +5741,7 @@ __metadata:
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
     crypto-js: 4.1.1
+    humanize-string: 2.1.0
     jest: 27.5.1
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
