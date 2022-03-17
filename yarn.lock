@@ -5750,6 +5750,7 @@ __metadata:
     pascalcase: 1.0.0
     pino: 7.8.1
     split2: 4.1.0
+    title-case: 3.0.3
     typescript: 4.6.2
     uuid: 8.3.2
   peerDependencies:
@@ -28489,7 +28490,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"title-case@npm:^3.0.3":
+"title-case@npm:3.0.3, title-case@npm:^3.0.3":
   version: 3.0.3
   resolution: "title-case@npm:3.0.3"
   dependencies:
