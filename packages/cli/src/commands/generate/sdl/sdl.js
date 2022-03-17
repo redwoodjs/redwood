@@ -182,7 +182,7 @@ export const files = async ({ name, crud, tests, typescript }) => {
 export const defaults = {
   ...yargsDefaults,
   crud: {
-    default: false,
+    default: true,
     description: 'Also generate mutations',
     type: 'boolean',
   },
