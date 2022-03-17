@@ -27,22 +27,18 @@ jobs:
       - name: Tune linux network
         run: sudo ethtool -K eth0 tx off rx off
 
-      # uncomment for hard reset if cache causing problems
-      - name: Clear Yarn Global Cache
-        run: yarn cache clean --all
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      # - name: Cache yarn
-      #   uses: actions/cache@v2
-      #   id: yarn-cache
-      #   with:
-      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #     key: yarn-${{ hashFiles('yarn.lock') }}
-      #     restore-keys: |
-      #       yarn-
+      - name: Cache yarn
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
+          restore-keys: |
+            yarn-1234
 
       - name: Install dependencies
         run: yarn install --immutable
