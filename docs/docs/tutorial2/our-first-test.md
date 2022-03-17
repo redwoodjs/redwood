@@ -2,7 +2,7 @@
 
 So if Storybook is the first phase of creating/updating a component, phase two must be confirming the functionality with a test. Let's add a test for our new summary feature.
 
-If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](https://redwoodjs.com/docs/testing) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain Javascript to take some of the mystery out of how this all works!
+If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](../testing.md) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain Javascript to take some of the mystery out of how this all works!
 
 First let's run the existing suite to see if we broke anything:
 
