@@ -86,8 +86,8 @@ describe('ArticlesCell', () => {
       expect(screen.queryByText(article.body)).not.toBeInTheDocument()
       expect(matchedBody).toBeInTheDocument()
       expect(ellipsis).toBeInTheDocument()
-    // highlight-end
     })
+    // highlight-end
   })
 })
 ```
