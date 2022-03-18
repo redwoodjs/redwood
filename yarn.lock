@@ -5745,7 +5745,7 @@ __metadata:
     md5: 2.3.0
     node-fetch: 2.6.7
     pascalcase: 1.0.0
-    pino: 7.8.1
+    pino: 7.9.1
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.6.2
@@ -23592,9 +23592,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:7.8.1":
-  version: 7.8.1
-  resolution: "pino@npm:7.8.1"
+"pino@npm:7.9.1":
+  version: 7.9.1
+  resolution: "pino@npm:7.9.1"
   dependencies:
     fast-redact: ^3.0.0
     on-exit-leak-free: ^0.2.0
@@ -23608,7 +23608,7 @@ __metadata:
     thread-stream: ^0.13.0
   bin:
     pino: bin.js
-  checksum: 1e9dc1ef6d4bd90d00e55e6c616848e761def2dec113eea7235122b1166eaa0056aae5adccf41c228bfe5bdfc7517c35604ee0f61f1da0b4a182d8b8b03a9520
+  checksum: 1dd747aae705d46a4507af49e7e42ede0c63679da3bb5c0763350e4c41939241c7f013a52b3bc58a3480d7912cbdf38971addd05df9f15f71a26bab336d31a60
   languageName: node
   linkType: hard
 
