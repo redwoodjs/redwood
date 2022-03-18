@@ -250,7 +250,7 @@ import { Router, Route, Private } from '@redwoodjs/router'
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="home" role="admin">
+      <Private unauthenticated="home" roles="admin">
         <Route path="/admin/users" page={UsersPage} name="users" />
       </Private>
     </Router>
@@ -266,13 +266,15 @@ import { Router, Route, Private } from '@redwoodjs/router'
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="home" role={['admin', 'editor', 'publisher']}>
+      <Private unauthenticated="home" roles={['admin', 'editor', 'publisher']}>
         <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
       </Private>
     </Router>
   )
 }
 ```
+
+> Note: If you are using `Set` you can use its `private` attribute instead of the `<Private>` component.
 
 If the currentUser is not assigned the role, they will be redirected to the page specified in the `unauthenticated` property. Therefore, you can define a specific page to be seen when attempting to access the protected route and denied access such as a "forbidden" page:
 
@@ -474,39 +476,12 @@ requireAuth({ roles: ['admin', 'author', 'publisher'] })
 This function should be located in `api/src/lib/auth.js` for your RedwoodJS app (ie, where your `getCurrentUser()` is located).
 
 ```js
-/**
- * Use requireAuth in your services to check that a user is logged in,
- * whether or not they are assigned a role, and optionally raise an
- * error if they're not.
- *
- * @param {string=} roles - An optional role or list of roles
- * @param {array=} roles - An optional list of roles
-
- * @example
- *
- * // checks if currentUser is authenticated
- * requireAuth()
- *
- * @example
- *
- * // checks if currentUser is authenticated and assigned one of the given roles
- * requireAuth({ roles: 'editor' })
- * requireAuth({ roles: ['admin', 'author', 'publisher'] })
- */
 export const requireAuth = ({ roles } = {}) => {
-  if (!context.currentUser) {
+    if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (typeof roles !== 'undefined' && typeof roles === 'string' && !context.currentUser.roles?.includes(roles)) {
-    throw new ForbiddenError("You don't have access to do that.")
-  }
-
-  if (
-    typeof roles !== 'undefined' &&
-    Array.isArray(roles) &&
-    !context.currentUser.roles?.some((role) => roles.includes(role))
-  ) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
@@ -543,7 +518,7 @@ import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
   try {
-    requireAuth({ role: 'admin' })
+    requireAuth({ roles: 'admin' })
 
     return {
       headers: {

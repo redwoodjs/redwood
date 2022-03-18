@@ -615,25 +615,15 @@ We have email validation on the client, but any developer worth their silicon kn
 >
 > We've even got another layer of validation: because name, email and message were set as required in our schema.prisma file, the database itself will prevent any `null`s from being recorded. It's like if you decided to run out onto the field in the middle of a sporting even wearing your favorite [Redwood t-shirt](https://shop.redwoodjs.com/): even if you somehow made it past the security guard (GraphQL), once you get out there you're going to have to deal with actual professional athletes (the database). They've spent their whole life training to run faster and pick up heavier things than you. You won't make it very far if they decide to stop you!
 
-We talked about business logic belonging in our services files and this is a perfect example. Let's add a `validate` function to our `contacts` service:
+We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with  [Service Validations](https://redwoodjs.com/docs/services#service-validations).
+
+We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
 ```javascript title="api/src/services/contacts/contacts.js"
 // highlight-next-line
-import { UserInputError } from '@redwoodjs/graphql-server'
+import { validate } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
-
-// highlight-start
-const validate = (input) => {
-  if (input.email && !input.email.match(/[^@]+@[^.]+\..+/)) {
-    throw new UserInputError("Can't create new contact", {
-      messages: {
-        email: ['is not formatted like an email address'],
-      },
-    })
-  }
-}
-// highlight-end
 
 export const contacts = () => {
   return db.contact.findMany()
@@ -641,49 +631,38 @@ export const contacts = () => {
 
 export const createContact = ({ input }) => {
   // highlight-next-line
-  validate(input)
+  validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
 }
 ```
 
+That's a lot of references to `email` so let's break them down:
+
+1. The first argument is the value that we want to check, in this case `input` contains all our contact data and the value of `email` is the one we want to check
+2. The second argument is the `name` prop from the `<TextField>`, so that we know which input field on the page has an error
+3. The third argument is an object containing the **validation directives** we want to invoke. In this case it's just one, and `email: true` means we want to use the built-in email validator
+
 So when `createContact` is called it will first validate the inputs and only if no errors are thrown will it continue to actually create the record in the database.
 
-We already capture any existing error in the `error` constant that we got from `useMutation`, so we _could_ manually display an error box on the page somewhere containing those errors, maybe at the top of the form (you can put this in your contact form, but we're about to change it to something even better):
+Right now we won't even be able to test our validation on the server because we're already checking that the input is formatted like an email address with the `validation` prop in `<TextField>`. Let's temporarily remove it so that the bad data will be sent up to the server:
 
-```jsx
-<Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
-  // highlight-start
-  {error && (
-    <div style={{ color: 'red' }}>
-      {"We couldn't send your message: "}
-      {error.message}
-    </div>
-  )}
-  // highlight-end
-  // ...
-```
-
-To get a server error to fire, let's remove the email format validation so that the client-side error isn't shown:
-
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```diff title="web/src/pages/ContactPage/ContactPage.js"
 <TextField
   name="email"
   validation={{
     required: true,
+-   pattern: {
+-     value: /^[^@]+@[^.]+\..+$/,
+-     message: 'Please enter a valid email address',
+-   },
   }}
   errorClassName="error"
 />
 ```
 
-If you made the change above and then try to fill out the form with an invalid email address:
-
-<img src="https://user-images.githubusercontent.com/300/146272057-0651d028-ddde-4229-b978-4de26643d30d.png" />
-
-It ain't pretty, but it works. It would be nice if the field itself was highlighted like it was when the inline validation was in place...
-
 Remember when we said that `<Form>` had one more trick up its sleeve? Here it comes!
 
-Remove the inline error display (if you added it, the block starting with `{ error && ...}`) and replace it with `<FormError>`, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
+Add a `<FormError>` component, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
@@ -775,30 +754,58 @@ export default ContactPage
 
 Now submit a message with an invalid email address:
 
-<img src="https://user-images.githubusercontent.com/300/146273310-c065a3ee-af2a-434c-987b-0f6126c13021.png" />
+![Email error from the server side](https://user-images.githubusercontent.com/300/158897801-8a3f7ae8-6e67-4fc0-b828-3095c264507e.png)
 
-We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't have to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
-
-The fact that the error message was also attached to the form field is enabled by the format of the error that we threw in the Contacts service:
-
-```javascript
-throw new UserInputError("Can't create new contact", {
-  messages: {
-    email: ['is not formatted like an email address'],
-  },
-})
-```
-
-That second argument is an object with a key, `messages`, that points to another object with keys the same as the `name` of the input/label and values that are an array of strings containing the actual error message. All of these are also combined into the content of `<FormError>`.
+We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't *have* to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
 
 > **`<FormError>` styling options**
 >
 > `<FormError>` has several styling options which are attached to different parts of the message:
 >
 > - `wrapperStyle` / `wrapperClassName`: the container for the entire message
-> - `titleStyle` / `titleClassName`: the "Can't create new contact" title
+> - `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
 > - `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
 > - `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
+
+This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
+
+```javascript
+export const createCar = ({ input }) => {
+  validate(input.make, 'make', {
+    inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
+  })
+  validate(input.color, 'color', {
+    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+  })
+  validate(input.hasDamage, 'hasDamage', {
+    absence: true
+  })
+  validate(input.vin, 'vin', {
+    format: /[A-Z0-9]+/,
+    length: { equal: 17 }
+  })
+  validate(input.odometer, 'odometer', {
+    numericality: { positive: true, lessThanOrEqual: 10000 }
+  })
+
+  return db.car.create({ data: input })
+}
+```
+
+You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
+
+```javascript
+validateWith(() => {
+  const oneWeekAgo = new Date()
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+
+  if (input.lastCarWashDate < oneWeekAgo) {
+    throw new Error("We don't accept dirty cars")
+  }
+})
+```
+
+Now you can be sure you won't be getting some old jalopy!
 
 ### One more thing...
 
