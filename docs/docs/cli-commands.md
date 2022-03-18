@@ -1136,6 +1136,9 @@ export const User = {
 }
 ```
 
+> Note: error see [SDL errs​](./schema-relations.md#sdl-errs)
+
+
 ### generate secret
 
 Generate a secret key using a cryptographically-secure source of entropy. Commonly used when setting up dbAuth.

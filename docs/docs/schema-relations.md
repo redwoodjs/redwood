@@ -95,3 +95,8 @@ Which creates a table structure like:
 ```
 
 Almost identical! But now there's an `id` and the SDL/scaffold generators will work as expected. The explicit syntax gives you a couple additional benefits—you can customize the table name and even add more fields. Maybe you want to track which user tagged a product—add a `userId` column to `ProductsOnTags` and now you know.
+
+
+## SDL errs
+
+when [g your sdl](./cli-commands.md#generate-sdl) if error
