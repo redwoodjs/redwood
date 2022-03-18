@@ -50,6 +50,7 @@ jobs:
         uses: ./.github/actions/setup_test_project
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Install Playwright deps
         run: npx playwright install --with-deps chromium
@@ -116,6 +117,11 @@ jobs:
           yarn rw prisma generate
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
+      - name: Run "rw data-migrate"
+        run: |
+          yarn rw dataMigrate up
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
       - name: Run "data-migrate install"
         run: |
           yarn rw data-migrate install
@@ -124,11 +130,6 @@ jobs:
       - name: Run "prisma migrate"
         run: |
           yarn rw prisma migrate dev --name ci-test
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
-      - name: Run "rw data-migrate"
-        run: |
-          yarn rw dataMigrate up
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw deploy --help`
