@@ -1046,14 +1046,15 @@ whether or not they are assigned a role, and optionally raise an
 error if they're not.
 
 ```js
-export const requireAuth = ({ role }) => {
-  if (!context.currentUser) {
+export const requireAuth = ({ roles }) => {
+  if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (typeof role !== 'undefined' && !context.currentUser.roles?.includes(role)) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
+}}
 }
 ```
 
@@ -1476,11 +1477,11 @@ const Routes = () => {
         <Route path="/secret-page" page={SecretPage} name="secret" />
       </Private>
 
-      <Set private unauthenticated="forbidden" role="admin">
+      <Set private unauthenticated="forbidden" roles="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
       </Set>
 
-      <Private unauthenticated="forbidden" role={['author', 'editor']}>
+      <Private unauthenticated="forbidden" roles={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
       </Private>
     </Router>
