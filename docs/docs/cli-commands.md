@@ -1049,7 +1049,7 @@ $ /redwood-app/node_modules/.bin/redwood g sdl user
 Done in 1.04s.
 ```
 
-The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--crud=false` option.
+The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--no-crud` option.
 
 ```javascript
 // ./api/src/graphql/users.sdl.js
