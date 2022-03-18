@@ -63,7 +63,7 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [part 2](/docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge) of the tutorial!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [part 2](/docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge) of the tutorial!). This file will contain some boilerplate to get you started:
 
 ```javascript
 // web/src/components/ArticlesCell/ArticlesCell.js
@@ -122,7 +122,7 @@ export const QUERY = gql`
 `
 ```
 
-However, this is not a valid query name for our existing Posts SDL (`src/graphql/posts.sdl.js`) and Service (`src/services/posts/posts.js`). (To see where these files come from, go back to the [Creating a Post Editor section](./getting-dynamic#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
+However, this is not a valid query name for our existing Posts SDL (`api/src/graphql/posts.sdl.js`) and Service (`api/src/services/posts/posts.js`). (To see where these files come from, go back to the [Creating a Post Editor section](./getting-dynamic#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
 
 We'll have to rename them to `posts` in both the query name and in the prop name in `Success`:
 

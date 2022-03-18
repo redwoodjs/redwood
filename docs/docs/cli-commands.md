@@ -1673,6 +1673,25 @@ And then check `web/generators/page` for the page, storybook and test template f
 
 The only exception to this rule is the scaffold templates. You'll get four directories, `assets`, `components`, `layouts` and `pages`. If you want to customize any one of the templates in those directories, you will need to keep all the other files inside of that same directory, even if you make no changes besides the one you care about. (This is due to the way the scaffold looks up its template files.) For example, if you wanted to customize only the index page of the scaffold (the one that lists all available records in the database) you would edit `web/generators/scaffold/pages/NamesPage.tsx.template` and keep the other pages in that directory. You _could_ delete the other three directories (`assets`, `components`, `layouts`) if you don't need to customize them.
 
+**Name Variants**
+
+Your template will receive the provided `name` in a number of different variations.
+
+For example, given the name `fooBar` your template will receive the following _variables_ with the given _values_
+
+| Variable                  | Value         |
+| :------------------------ | :------------ |
+| `pascalName`              | `FooBar`      |
+| `camelName`               | `fooBar`      |
+| `singularPascalName`      | `FooBar`      |
+| `pluralPascalName`        | `FooBars`     |
+| `singularCamelName`       | `fooBar`      |
+| `pluralCamelName`         | `fooBars`     |
+| `singularParamName`       | `foo-bar`     |
+| `pluralParamName`         | `foo-bars`    |
+| `singularConstantName`    | `FOO_BAR`     |
+| `pluralConstantName`      | `FOO_BARS`    |
+
 **Example**
 
 Copying the cell generator templates:
