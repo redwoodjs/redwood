@@ -1022,7 +1022,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Also generate mutations                                                              |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                              |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--tests`            | Generate service test and scenario [default: true]                                   |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
@@ -1075,7 +1075,7 @@ $ /redwood-app/node_modules/.bin/redwood g sdl user
 Done in 1.04s.
 ```
 
-The generated sdl defines a corresponding type, query, and create/update inputs, without defining any mutations. To also get mutations, add the `--crud` option.
+The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--no-crud` option.
 
 ```javascript
 // ./api/src/graphql/users.sdl.js
@@ -1088,7 +1088,7 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -1100,10 +1100,16 @@ export const schema = gql`
     email: String
     name: String
   }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
+  }
 `
 ```
 
-The services file fulfills the query. If the `--crud` option is added, this file will be much more complex.
+The services file fulfills the query. If the `--no-crud` option is added, this file will be less complex.
 
 ```javascript
 // ./api/src/services/users/users.js
@@ -1129,7 +1135,7 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -1140,6 +1146,12 @@ export const schema = gql`
   input UpdateUserInput {
     email: String
     name: String
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
   }
 `
 ```
