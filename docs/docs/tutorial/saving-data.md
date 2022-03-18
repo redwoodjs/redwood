@@ -647,17 +647,17 @@ So when `createContact` is called it will first validate the inputs and only if 
 Right now we won't even be able to test our validation on the server because we're already checking that the input is formatted like an email address with the `validation` prop in `<TextField>`. Let's temporarily remove it so that the bad data will be sent up to the server:
 
 ```diff title="web/src/pages/ContactPage/ContactPage.js"
-<TextField
-  name="email"
-  validation={{
-    required: true,
--   pattern: {
--     value: /^[^@]+@[^.]+\..+$/,
--     message: 'Please enter a valid email address',
--   },
-  }}
-  errorClassName="error"
-/>
+ <TextField
+   name="email"
+   validation={{
+     required: true,
+-    pattern: {
+-      value: /^[^@]+@[^.]+\..+$/,
+-      message: 'Please enter a valid email address',
+-    },
+   }}
+   errorClassName="error"
+ />
 ```
 
 Remember when we said that `<Form>` had one more trick up its sleeve? Here it comes!
