@@ -57,7 +57,7 @@ export const files = async ({
 }) => {
   let cellName = removeGeneratorName(name, 'cell')
   let idType,
-    mockIdValue,
+    mockIdValues = [42, 43, 44],
     model = null
   let templateNameSuffix = ''
 
@@ -71,14 +71,16 @@ export const files = async ({
   try {
     model = await getSchema(pascalcase(singularize(cellName)))
     idType = getIdType(model)
-    mockIdValue = idType === 'String' ? "'42'" : 42
+    mockIdValues =
+      idType === 'String'
+        ? mockIdValues.map((value) => `'${value}'`)
+        : mockIdValues
   } catch {
     // Eat error so that the destroy cell generator doesn't raise an error
     // when trying to find prisma query engine in test runs.
 
-    // Assume id will be Int, otherwise generated will keep throwing
+    // Assume id will be Int, otherwise generated cell will keep throwing
     idType = 'Int'
-    mockIdValue = 42
   }
 
   if (shouldGenerateList) {
@@ -129,7 +131,7 @@ export const files = async ({
     generator: 'cell',
     templatePath: `mock${templateNameSuffix}.js.template`,
     templateVars: {
-      mockIdValue,
+      mockIdValues,
     },
   })
 
