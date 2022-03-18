@@ -82,7 +82,6 @@ const AboutPage = () => {
           </ul>
         </nav>
       </header>
-      // highlight-end
       <main>
         <p>
           This site was created to demonstrate my mastery of Redwood: Look on my
@@ -90,6 +89,7 @@ const AboutPage = () => {
         </p>
         <Link to={routes.home()}>Return home</Link>
       </main>
+      // highlight-end
     </>
   )
 }

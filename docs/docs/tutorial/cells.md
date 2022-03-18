@@ -97,10 +97,12 @@ export const Success = ({ articles }) => {
 >
 > When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
 >
->     yarn rw g cell blog_articles
->     yarn rw g cell blog-articles
->     yarn rw g cell blogArticles
->     yarn rw g cell BlogArticles
+> ```bash
+> yarn rw g cell blog_articles
+> yarn rw g cell blog-articles
+> yarn rw g cell blogArticles
+> yarn rw g cell BlogArticles
+> ```
 >
 > You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
 >
