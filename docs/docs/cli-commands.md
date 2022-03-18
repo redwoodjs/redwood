@@ -1022,7 +1022,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Set to `false` if you do not want to generate mutations                              |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                              |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 
