@@ -26,9 +26,7 @@ So, the idea here is that you can build out your components/cells/pages in isola
 
 When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.js` you'll see what it takes to explain this component to Storybook, and it isn't much:
 
-```javascript
-// web/src/components/Article/Article.stories.js
-
+```jsx title="web/src/components/Article/Article.stories.js"
 import Article from './Article'
 
 export const generated = () => {
@@ -58,7 +56,7 @@ export default { title: 'Components/BlogPost' }
 
 You import the component you want to use and then all of the named exports in the file will be a single "story" as displayed in Storybook. In this case the generator named it "generated" which shows as the "Generated" story in the tree view:
 
-```bash
+```
 Components
 └── Article
     └── Generated
@@ -70,7 +68,9 @@ This makes it easy to create variants of your component and have them all displa
 >
 > In your actual app you'd use this component like so:
 >
->     <Article article={article} />
+> ```jsx
+> <Article article={article} />
+> ```
 >
 > Where the `article` in that prop comes from somewhere outside of this component. Here in Storybook there is no "outside" of this component, so we just send the article object into the prop directly.
 >

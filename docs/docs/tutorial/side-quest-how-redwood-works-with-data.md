@@ -1,6 +1,6 @@
 # Side Quest: How Redwood Works with Data
 
-Redwood likes GraphQL. We think it's the API of the future. Our GraphQL implementation is built with [Apollo](https://www.apollographql.com/) (on the client) and [GraphQL Helix & Envelop](https://community.redwoodjs.com/t/using-graphql-envelop-helix-in-redwood-v0-35/2276) (on the server). Remember in our file system layout, there was a directory `api/src/functions` and a single file in there, `graphql.js`. If you were to deploy your app to a [serverless](https://en.wikipedia.org/wiki/Serverless_computing) stack (which we will do later in the [Deployment](/docs/tutorial/deployment) section), that `graphql.js` file would be compiled into a serverless function and would become the GraphQL API endpoint. Here's how a typical GraphQL query works its way through your app:
+Redwood likes GraphQL. We think it's the API of the future. Our GraphQL implementation is built with [Apollo](https://www.apollographql.com/) (on the client) and [GraphQL Helix & Envelop](https://community.redwoodjs.com/t/using-graphql-envelop-helix-in-redwood-v0-35/2276) (on the server). Remember in our file system layout, there was a directory `api/src/functions` and a single file in there, `graphql.js`. If you were to deploy your app to a [serverless](https://en.wikipedia.org/wiki/Serverless_computing) stack (which we will do later in the [Deployment](deployment.md) section), that `graphql.js` file would be compiled into a serverless function and would become the GraphQL API endpoint. Here's how a typical GraphQL query works its way through your app:
 
 ![Redwood Data Flow](https://user-images.githubusercontent.com/300/75402679-50bdd180-58ba-11ea-92c9-bb5a5f4da659.png)
 
@@ -14,9 +14,7 @@ Redwood has a better way! Remember the `api/src/services` directory? Redwood wil
 
 Consider the following SDL Javascript snippet:
 
-```javascript
-// api/src/graphql/posts.sdl.js
-
+```graphql title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   type Post {
     id: Int!
@@ -58,8 +56,7 @@ In this example, Redwood will look in `api/src/services/posts/posts.js` for the 
 
 To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that Apollo expects based on what you defined in `posts.sdl.js`.
 
-```javascript
-// api/src/services/posts/posts.js
+```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
 
 export const posts = () => {

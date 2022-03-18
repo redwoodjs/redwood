@@ -16,7 +16,7 @@ We'll need a database somewhere on the internet to store our data. We've been us
 
 > **!!! Extremely Important Notice You Should Read !!!**
 >
-> Prisma only supports one database provider at a time, and since we can't use SQLite in production and *must* switch to Postgres or MySQL, that means we need to use the same database on our local development system after making this change. See our [Local Postgres Setup](https://redwoodjs.com/docs/local-postgres-setup) guide to get you started.
+> Prisma only supports one database provider at a time, and since we can't use SQLite in production and *must* switch to Postgres or MySQL, that means we need to use the same database on our local development system after making this change. See our [Local Postgres Setup](../local-postgres-setup.md) guide to get you started.
 
 There are several hosting providers where you can quickly start up a Postgres instance:
 
@@ -147,7 +147,7 @@ Another neat feature of Netlify is _Branch Deploys_. When you create a branch an
 
 #### Connections
 
-In this tutorial, your serverless functions will be connecting directly to the Postgres database. Because Postgres has a limited number of concurrent connections it will accept, this does not scale—imagine a flood of traffic to your site which causes a 100x increase in the number of serverless function calls. Netlify (and behind the scenes, AWS) will happily spin up 100+ serverless Lambda instances to handle the traffic. The problem is that each one will open it's own connection to your database, potentially exhausting the number of available connections. The proper solution is to put a connection pooling service in front of Postgres and connect to that from your lambda functions. To learn how to do that, see the [Connection Pooling](https://redwoodjs.com/docs/connection-pooling) guide.
+In this tutorial, your serverless functions will be connecting directly to the Postgres database. Because Postgres has a limited number of concurrent connections it will accept, this does not scale—imagine a flood of traffic to your site which causes a 100x increase in the number of serverless function calls. Netlify (and behind the scenes, AWS) will happily spin up 100+ serverless Lambda instances to handle the traffic. The problem is that each one will open it's own connection to your database, potentially exhausting the number of available connections. The proper solution is to put a connection pooling service in front of Postgres and connect to that from your lambda functions. To learn how to do that, see the [Connection Pooling](../connection-pooling.md) guide.
 
 #### Security
 
