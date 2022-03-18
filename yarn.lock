@@ -5705,7 +5705,7 @@ __metadata:
     fastify: 3.27.4
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
-    fastify-static: 4.5.0
+    fastify-static: 4.6.0
     fastify-url-data: 3.0.3
     jest: 27.5.1
     lodash.escape: 4.0.1
@@ -15565,9 +15565,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-static@npm:4.5.0":
-  version: 4.5.0
-  resolution: "fastify-static@npm:4.5.0"
+"fastify-static@npm:4.6.0":
+  version: 4.6.0
+  resolution: "fastify-static@npm:4.6.0"
   dependencies:
     content-disposition: ^0.5.3
     encoding-negotiator: ^2.0.1
@@ -15576,7 +15576,7 @@ __metadata:
     p-limit: ^3.1.0
     readable-stream: ^3.4.0
     send: ^0.17.1
-  checksum: 86ec395d52ed558eb51ee3813dc29a43c1d75cbf2a2c1411e350351bc7c9f7a5871832d1bf3ac81325fc1c9394b3d5117c67b63618bb43872abc205502409064
+  checksum: 6090548bce646b6c93f4658f6471260a5fea250f33c185447695c8313630af1c32785761bf1565afd8fa5bdb30df0da4ae28e8a47bdfc8460d57448364bc5fc7
   languageName: node
   linkType: hard
 
