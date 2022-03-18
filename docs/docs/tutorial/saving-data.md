@@ -4,9 +4,7 @@
 
 Let's add a new database table. Open up `api/db/schema.prisma` and add a Contact model after the Post model that's there now:
 
-```javascript {20-26}
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -24,6 +22,7 @@ model Post {
   createdAt DateTime @default(now())
 }
 
+// highlight-start
 model Contact {
   id        Int @id @default(autoincrement())
   name      String
@@ -31,6 +30,7 @@ model Contact {
   message   String
   createdAt DateTime @default(now())
 }
+// highlight-end
 ```
 
 > **Prisma syntax for optional fields**
@@ -58,13 +58,11 @@ Just like the `scaffold` command, this will create two new files under the `api`
 1. `api/src/graphql/contacts.sdl.js`: defines the GraphQL schema in GraphQL's schema definition language
 2. `api/src/services/contacts/contacts.js`: contains your app's business logic (also creates associated test files)
 
-If you remember our discussion in [how Redwood works with data](/docs/tutorial/side-quest-how-redwood-works-with-data) you'll recall that queries and mutations in an SDL file are automatically mapped to resolvers defined in a service, so when you generate an SDL file you'll get a service file as well, since one requires the other.
+If you remember our discussion in [how Redwood works with data](side-quest-how-redwood-works-with-data.md) you'll recall that queries and mutations in an SDL file are automatically mapped to resolvers defined in a service, so when you generate an SDL file you'll get a service file as well, since one requires the other.
 
 Open up `api/src/graphql/contacts.sdl.js` and you'll see the `Contact`, `CreateContactInput` and `UpdateContactInput` types were already defined for us—the `generate sdl` command introspected the schema and created a `Contact` type containing each database field in the table, as well as a `Query` type with a single query `contacts` which returns an array of `Contact` types.
 
-```javascript
-// api/src/graphql/contacts.sdl.js
-
+```graphql title="api/src/graphql/contacts.sdl.js"
 export const schema = gql`
   type Contact {
     id: Int!
@@ -104,7 +102,7 @@ Since all of the DB columns were required in the `schema.prisma` file they are m
 >
 > GraphQL's SDL syntax requires an extra `!` when a field _is_ required. Remember: `schema.prisma` syntax requires an extra `?` character when a field is _not_ required.
 
-As described in [Side Quest: How Redwood Deals with Data](side-quest-how-redwood-works-with-data), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.js`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.js`).
+As described in [Side Quest: How Redwood Deals with Data](side-quest-how-redwood-works-with-data.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.js`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.js`).
 
 So the default SDL that's created by the generators is effectively read-only: there is no way to create or update an existing record. Which means we'll need to add our own create functionality.
 
@@ -116,9 +114,7 @@ So the default SDL that's created by the generators is effectively read-only: th
 
 In this case we're creating a single `Mutation` that we'll call `createContact`. Add that to the end of the SDL file (before the closing backtick):
 
-```javascript {28-30}
-// api/src/graphql/contacts.sdl.js
-
+```graphql title="api/src/graphql/contacts.sdl.js"
 export const schema = gql`
   type Contact {
     id: Int!
@@ -144,9 +140,11 @@ export const schema = gql`
     message: String
   }
 
+  // highlight-start
   type Mutation {
     createContact(input: CreateContactInput!): Contact @skipAuth
   }
+  // highlight-end
 `
 ```
 
@@ -156,18 +154,18 @@ The `createContact` mutation will accept a single variable, `input`, that is an 
 
 That's it for the SDL file, let's define the service that will actually save the data to the database. The service includes a default `contacts` function for getting all contacts from the database. Let's add our mutation to create a new one:
 
-```javascript {9-11}
-// api/src/services/contacts/contacts.js
-
+```javascript  title="api/src/services/contacts/contacts.js"
 import { db } from 'src/lib/db'
 
 export const contacts = () => {
   return db.contact.findMany()
 }
 
+// highlight-start
 export const createContact = ({ input }) => {
   return db.contact.create({ data: input })
 }
+// highlight-end
 ```
 
 Before we plug this into the UI, let's take a look at a nifty GUI you get just by running `yarn redwood dev`.
@@ -194,9 +192,7 @@ The GraphQL Playground is a great way to experiment with your API or troubleshoo
 
 Our GraphQL mutation is ready to go on the backend so all that's left is to invoke it on the frontend. Everything related to our form is in `ContactPage` so that's where we'll put the mutation call. First we define the mutation as a constant that we call later (this can be defined outside of the component itself, right after the `import` statements):
 
-```javascript {13-19}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -207,6 +203,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+// highlight-start
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
@@ -214,6 +211,7 @@ const CREATE_CONTACT = gql`
     }
   }
 `
+// highlight-end
 
 const ContactPage = () => {
   const onSubmit = (data) => {
@@ -274,9 +272,7 @@ We reference the `createContact` mutation we defined in the Contacts SDL passing
 
 Next we'll call the `useMutation` hook provided by Redwood which will allow us to execute the mutation when we're ready (don't forget the `import` statement):
 
-```javascript {12,23}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -286,6 +282,7 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
+// highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
@@ -297,6 +294,7 @@ const CREATE_CONTACT = gql`
 `
 
 const ContactPage = () => {
+  // highlight-next-line
   const [create] = useMutation(CREATE_CONTACT)
 
   const onSubmit = (data) => {
@@ -371,9 +369,7 @@ If you'll recall `<Form>` gives us all of the fields in a nice object where the 
 
 That means we can update the `onSubmit` function to invoke the mutation with the data it receives:
 
-```javascript {26}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -397,6 +393,7 @@ const ContactPage = () => {
   const [create] = useMutation(CREATE_CONTACT)
 
   const onSubmit = (data) => {
+    // highlight-next-line
     create({ variables: { input: data } })
   }
 
@@ -450,7 +447,7 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
-Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](/docs/tutorial/getting-dynamic#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
+Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](getting-dynamic.md#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
 
 ![image](https://user-images.githubusercontent.com/300/76250632-ed5d6900-6202-11ea-94ce-bd88e3a11ade.png)
 
@@ -472,12 +469,11 @@ Let's address these issues.
 
 The `useMutation` hook returns a couple more elements along with the function to invoke it. We can destructure these as the second element in the array that's returned. The two we care about are `loading` and `error`:
 
-```javascript {6}
-// web/src/pages/ContactPage/ContactPage.js
-
+```javascript title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
 const ContactPage = () => {
+  // highlight-next-line
   const [create, { loading, error }] = useMutation(CREATE_CONTACT)
 
   const onSubmit = (data) => {
@@ -493,11 +489,10 @@ const ContactPage = () => {
 
 Now we know if the database call is still in progress by looking at `loading`. An easy fix for our multiple submit issue would be to disable the submit button if the response is still in progress. We can set the `disabled` attribute on the "Save" button to the value of `loading`:
 
-```javascript {5}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 return (
   // ...
+  // highlight-next-line
   <Submit disabled={loading}>Save</Submit>
   // ...
 )
@@ -517,9 +512,7 @@ Next, let's show a notification to let the user know their submission was succes
 
 Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt;** component in our `return`, just before the **&lt;Form&gt;**:
 
-```javascript {13,24-28,38}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -530,6 +523,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
+// highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
@@ -541,11 +535,13 @@ const CREATE_CONTACT = gql`
 `
 
 const ContactPage = () => {
+  // highlight-start
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
     onCompleted: () => {
       toast.success('Thank you for your submission!')
     },
   })
+  // highlight-end
 
   const onSubmit = (data) => {
     create({ variables: { input: data } })
@@ -555,6 +551,7 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
+      // highlight-next-line
       <Toaster />
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -604,7 +601,7 @@ export default ContactPage
 
 ![Toast notification on successful submission](https://user-images.githubusercontent.com/300/146271487-f6b77e76-99c1-43e8-bcda-5ba3c9b03137.png)
 
-You can read the full documentation for Toast [here](https://redwoodjs.com/docs/toast-notifications).
+You can read the full documentation for Toast [here](../toast-notifications.md).
 
 ### Displaying Server Errors
 
@@ -616,83 +613,63 @@ We have email validation on the client, but any developer worth their silicon kn
 >
 > Why don't we need server-side validation for the existence of name, email and message? Because GraphQL is already doing that for us! You may remember the `String!` declaration in our SDL file for the `Contact` type: that adds a constraint that those fields cannot be `null` as soon as it arrives on the api side. If it is, GraphQL would reject the request and throw an error back to us on the client.
 >
-> We've even got another layer of validation: because name, email and message were set as required in our schema.prisma file, the database itself will prevent any `null`s from being recorded. It's like if you decided to run out onto the field in the middle of a sporting even wearing your favorite [Redwood t-shirt](https://shop.redwoodjs.com/): even if you somehow made it past the security guard (GraphQL), once you get out there you're going to have to deal with actual professional athletes (the database). They've spent their whole life training to run faster and pick up heavier things than you. You won't make it very far if they decide to stop you!
+> We've even got another layer of validation: because name, email and message were set as required in our schema.prisma file, the database itself will prevent any `null`s from being recorded. It's like if you decided to run out onto the field in the middle of a sporting event wearing your favorite [Redwood t-shirt](https://shop.redwoodjs.com/): even if you somehow made it past the security guard (GraphQL), once you get out there you're going to have to deal with actual professional athletes (the database). They've spent their whole life training to run faster and pick up heavier things than you. You won't make it very far if they decide to stop you!
 
-We talked about business logic belonging in our services files and this is a perfect example. Let's add a `validate` function to our `contacts` service:
+We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with  [Service Validations](https://redwoodjs.com/docs/services#service-validations).
 
-```javascript {3,7-15,22}
-// api/src/services/contacts/contacts.js
+We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
-import { UserInputError } from '@redwoodjs/graphql-server'
+```javascript title="api/src/services/contacts/contacts.js"
+// highlight-next-line
+import { validate } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
-
-const validate = (input) => {
-  if (input.email && !input.email.match(/[^@]+@[^.]+\..+/)) {
-    throw new UserInputError("Can't create new contact", {
-      messages: {
-        email: ['is not formatted like an email address'],
-      },
-    })
-  }
-}
 
 export const contacts = () => {
   return db.contact.findMany()
 }
 
 export const createContact = ({ input }) => {
-  validate(input)
+  // highlight-next-line
+  validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
 }
 ```
 
+That's a lot of references to `email` so let's break them down:
+
+1. The first argument is the value that we want to check, in this case `input` contains all our contact data and the value of `email` is the one we want to check
+2. The second argument is the `name` prop from the `<TextField>`, so that we know which input field on the page has an error
+3. The third argument is an object containing the **validation directives** we want to invoke. In this case it's just one, and `email: true` means we want to use the built-in email validator
+
 So when `createContact` is called it will first validate the inputs and only if no errors are thrown will it continue to actually create the record in the database.
 
-We already capture any existing error in the `error` constant that we got from `useMutation`, so we _could_ manually display an error box on the page somewhere containing those errors, maybe at the top of the form (you can put this in your contact form, but we're about to change it to something even better):
+Right now we won't even be able to test our validation on the server because we're already checking that the input is formatted like an email address with the `validation` prop in `<TextField>`. Let's temporarily remove it so that the bad data will be sent up to the server:
 
-```jsx {2-7}
-<Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
-  {error && (
-    <div style={{ color: 'red' }}>
-      {"We couldn't send your message: "}
-      {error.message}
-    </div>
-  )}
-  // ...
+```diff title="web/src/pages/ContactPage/ContactPage.js"
+ <TextField
+   name="email"
+   validation={{
+     required: true,
+-    pattern: {
+-      value: /^[^@]+@[^.]+\..+$/,
+-      message: 'Please enter a valid email address',
+-    },
+   }}
+   errorClassName="error"
+ />
 ```
-
-To get a server error to fire, let's remove the email format validation so that the client-side error isn't shown:
-
-```html
-// web/src/pages/ContactPage/ContactPage.js
-
-<TextField
-  name="email"
-  validation={{
-    required: true,
-  }}
-  errorClassName="error"
-/>
-```
-
-If you made the change above and then try to fill out the form with an invalid email address:
-
-<img src="https://user-images.githubusercontent.com/300/146272057-0651d028-ddde-4229-b978-4de26643d30d.png" />
-
-It ain't pretty, but it works. It would be nice if the field itself was highlighted like it was when the inline validation was in place...
 
 Remember when we said that `<Form>` had one more trick up its sleeve? Here it comes!
 
-Remove the inline error display (if you added it, the block starting with `{ error && ...}`) and replace it with `<FormError>`, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
+Add a `<FormError>` component, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
 
-```javascript {7,40-44}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
+  // highlight-next-line
   FormError,
   Label,
   TextField,
@@ -726,11 +703,13 @@ const ContactPage = () => {
       <MetaTags title="Contact" description="Contact page" />
 
       <Toaster toastOptions={{ duration: 100000 }} />
+      // highlight-start
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
         <FormError
           error={error}
           wrapperClassName="form-error"
         />
+        // highlight-end
 
         <Label name="name" errorClassName="error">
           Name
@@ -775,30 +754,58 @@ export default ContactPage
 
 Now submit a message with an invalid email address:
 
-<img src="https://user-images.githubusercontent.com/300/146273310-c065a3ee-af2a-434c-987b-0f6126c13021.png" />
+![Email error from the server side](https://user-images.githubusercontent.com/300/158897801-8a3f7ae8-6e67-4fc0-b828-3095c264507e.png)
 
-We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't have to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
-
-The fact that the error message was also attached to the form field is enabled by the format of the error that we threw in the Contacts service:
-
-```javascript
-throw new UserInputError("Can't create new contact", {
-  messages: {
-    email: ['is not formatted like an email address'],
-  },
-})
-```
-
-That second argument is an object with a key, `messages`, that points to another object with keys the same as the `name` of the input/label and values that are an array of strings containing the actual error message. All of these are also combined into the content of `<FormError>`.
+We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't *have* to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
 
 > **`<FormError>` styling options**
 >
 > `<FormError>` has several styling options which are attached to different parts of the message:
 >
 > - `wrapperStyle` / `wrapperClassName`: the container for the entire message
-> - `titleStyle` / `titleClassName`: the "Can't create new contact" title
+> - `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
 > - `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
 > - `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
+
+This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
+
+```javascript
+export const createCar = ({ input }) => {
+  validate(input.make, 'make', {
+    inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
+  })
+  validate(input.color, 'color', {
+    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+  })
+  validate(input.hasDamage, 'hasDamage', {
+    absence: true
+  })
+  validate(input.vin, 'vin', {
+    format: /[A-Z0-9]+/,
+    length: { equal: 17 }
+  })
+  validate(input.odometer, 'odometer', {
+    numericality: { positive: true, lessThanOrEqual: 10000 }
+  })
+
+  return db.car.create({ data: input })
+}
+```
+
+You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
+
+```javascript
+validateWith(() => {
+  const oneWeekAgo = new Date()
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+
+  if (input.lastCarWashDate < oneWeekAgo) {
+    throw new Error("We don't accept dirty cars")
+  }
+})
+```
+
+Now you can be sure you won't be getting some old jalopy!
 
 ### One more thing...
 
@@ -808,9 +815,7 @@ Redwood includes a hook called `useForm()` (from React Hook Form) which is norma
 
 First we'll import `useForm`:
 
-```javascript {11}
-// web/src/pages/ContactPage/ContactPage.js
-
+```javascript title="web/src/pages/ContactPage/ContactPage.js"
 import {
   FieldError,
   Form,
@@ -819,25 +824,23 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  // highlight-next-line
   useForm,
 } from '@redwoodjs/forms'
 ```
 
 And now call it inside of our component:
 
-```javascript {4}
-// web/src/pages/ContactPage/ContactPage.js
-
+```javascript title="web/src/pages/ContactPage/ContactPage.js"
 const ContactPage = () => {
+  // highlight-next-line
   const formMethods = useForm()
   //...
 ```
 
 Finally we'll tell `<Form>` to use the `formMethods` we just got from `useForm()` instead of doing it itself:
 
-```javascript {10}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 return (
   <>
     <Toaster />
@@ -845,6 +848,7 @@ return (
       onSubmit={onSubmit}
       config={{ mode: 'onBlur' }}
       error={error}
+      // highlight-next-line
       formMethods={formMethods}
     >
     // ...
@@ -852,14 +856,13 @@ return (
 
 Now we can call `reset()` on `formMethods` after we call `toast()`:
 
-```javascript {8}
-// web/src/pages/ContactPage/ContactPage.js
-
+```javascript title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
 const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
   onCompleted: () => {
     toast.success('Thank you for your submission!')
+    // highlight-next-line
     formMethods.reset()
   },
 })
@@ -871,9 +874,7 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 
 Here's the entire page:
 
-```javascript
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -972,11 +973,9 @@ That's it! [React Hook Form](https://react-hook-form.com/) provides a bunch of [
 
 > You may have noticed that the onBlur form config stopped working once you started calling `useForm()` yourself. That's because Redwood calls `useForm()` behind the scenes and automatically passes it the `config` prop that you gave to `<Form>`. Redwood is no longer calling `useForm()` for you so if you need some options passed you need to do it manually:
 >
-> ```javascript
-> // web/src/pages/ContactPage/ContactPage.js
->
+> ```javascript title="web/src/pages/ContactPage/ContactPage.js"
 > const ContactPage = () => {
->  const formMethods = useForm({ mode: 'onBlur' })
+>   const formMethods = useForm({ mode: 'onBlur' })
 >   //...
 > ```
 

@@ -58,7 +58,12 @@ const FormError = ({
     !!error.networkError && Object.keys(error.networkError).length > 0
 
   if (hasGraphQLError) {
-    rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong.'
+    rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong'
+
+    // override top-level message for ServiceValidation errorrs
+    if (error.graphQLErrors[0]?.extensions?.code === 'BAD_USER_INPUT') {
+      rootMessage = 'Errors prevented this form from being saved'
+    }
 
     const properties = error.graphQLErrors[0].extensions?.[
       'properties'
@@ -69,7 +74,7 @@ const FormError = ({
     if (propertyMessages) {
       for (const e in propertyMessages) {
         propertyMessages[e].forEach((fieldError: any) => {
-          messages.push(`${e} ${fieldError}`)
+          messages.push(fieldError)
         })
       }
     }

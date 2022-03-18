@@ -4,7 +4,7 @@ Let's take a look at the files and directories that were created for us (config 
 
 > Don't worry about trying to memorize this directory structure right now, it's just a brief overview to get you oriented. Seeing dozens of files before you've even written a single line of code can be daunting, but there's a great organizational structure here, promise. You can also ignore this all for now and we'll touch upon many of these files and directories as we go.
 
-```plaintext
+```
 ├── api
 │   ├── db
 │   │   ├── schema.prisma

@@ -8,9 +8,9 @@ As an anonymous Twitter user once mused: "If you enjoy switching between feeling
 
 ### What's Next?
 
-If you're ready for even more Redwood, head to the [Tutorial Part 2](../tutorial2/welcome-to-redwood-part-ii-redwoods-revenge)! We'll look at Storybook and Jest and build a new feature for the blog: comments. Storybook introduces a new way to build components. We'll also add tests and run them with Jest to make sure things keep working as we expect. We cover authorization as well by giving a special role to comment moderators.
+If you're ready for even more Redwood, head to the [Tutorial Part 2](../tutorial2/welcome-to-redwood-part-ii-redwoods-revenge.md)! We'll look at Storybook and Jest and build a new feature for the blog: comments. Storybook introduces a new way to build components. We'll also add tests and run them with Jest to make sure things keep working as we expect. We cover authorization as well by giving a special role to comment moderators.
 
-Want to add some more features to your app? Check out some of our Cookbook recipes like [calling to a third party API](https://redwoodjs.com/cookbook/using-a-third-party-api) and [deploying an app without an API at all](https://redwoodjs.com/cookbook/disable-api-database). Have you grown out of SQLite and want to [install Postgres locally](https://redwoodjs.com/docs/local-postgres-setup)? We've also got lots of [guides](https://redwoodjs.com/docs/introduction) for more info on Redwood's internals.
+Want to add some more features to your app? Check out some of our Cookbook recipes like [calling to a third party API](../cookbook/using-a-third-party-api.md) and [deploying an app without an API at all](../cookbook/disable-api-database.md). Have you grown out of SQLite and want to [install Postgres locally](../local-postgres-setup.md)? We've also got lots of [guides](https://redwoodjs.com/docs/introduction) for more info on Redwood's internals.
 
 ### Roadmap
 

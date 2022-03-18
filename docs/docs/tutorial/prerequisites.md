@@ -50,10 +50,10 @@ Please do upgrade accordingly. Then proceed to the Redwood installation when you
 >
 > - `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm).
 >
-> If you're confused about which of the two current Node versions to use, we recommend using the most recent LTS, which is currently [v16.x](https://nodejs.org/download/release/latest-gallium/.
+> If you're confused about which of the two current Node versions to use, we recommend using the most recent LTS, which is currently [v16.x](https://nodejs.org/download/release/latest-gallium/).
 
 > **Windows:** Recommended Development Setup
 >
 > JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
 >
-> - [Recommended Windows Development Setup](https://redwoodjs.com/cookbook/windows-development-setup)
+> - [Recommended Windows Development Setup](../cookbook/windows-development-setup.md)
