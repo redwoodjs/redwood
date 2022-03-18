@@ -287,7 +287,7 @@ We're looping through each `comment` from the mock, the same mock used by Storyb
 The functionality we added to `Article` says to show the comments for the post if we are *not* showing the summary. We've got a test for both the "full" and "summary" renders already. Generally you want your tests to be testing "one thing" so let's add two additional tests for our new functionality:
 
 ```javascript {3,5,22-29,42-49}
-// web/src/components/BlogPost/BlogPost.test.js
+// web/src/components/Article/Article.test.js
 
 import { render, screen, waitFor } from '@redwoodjs/testing'
 import Article from './Article'
