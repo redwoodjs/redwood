@@ -73,7 +73,9 @@ export const files = async ({
     idType = getIdType(model)
     mockIdValue = idType === 'String' ? "'42'" : 42
   } catch {
-    // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
+    // Eat error so that the destroy cell generator doesn't raise an error
+    // when trying to find prisma query engine in test runs.
+
     // assume id will be Int, otherwise generated will keep throwing
     idType = 'Int'
     mockIdValue = 42
