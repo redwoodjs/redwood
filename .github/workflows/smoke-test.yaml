@@ -3,6 +3,7 @@ name: Smoke test, CLI Checks and Telemetry Benchmarks
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths-ignore: ['docs/**']
 
 jobs:
   smoke-test:
