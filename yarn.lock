@@ -5705,7 +5705,7 @@ __metadata:
     fastify: 3.27.4
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
-    fastify-static: 4.6.0
+    fastify-static: 4.6.1
     fastify-url-data: 3.0.3
     jest: 27.5.1
     lodash.escape: 4.0.1
@@ -8487,6 +8487,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 866f31a394d4fbcb4055420daaec16096e42666e30c573ca4291fc7fcde8316eb2ab4995f7f21c6e5e37572bcbf72483d8a6d340db303c6c2fcbbf79377b8b5a
+  languageName: node
+  linkType: hard
+
+"@types/which@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@types/which@npm:2.0.1"
+  checksum: 70bdcc57ef4cad876d05def62dbec098cdb3f09c708568e5bba97e6c7a5f1814653da04140720d5e45246cb0db4dad37e64c010987aa20cfe72329db4219415b
   languageName: node
   linkType: hard
 
@@ -15565,9 +15572,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-static@npm:4.6.0":
-  version: 4.6.0
-  resolution: "fastify-static@npm:4.6.0"
+"fastify-static@npm:4.6.1":
+  version: 4.6.1
+  resolution: "fastify-static@npm:4.6.1"
   dependencies:
     content-disposition: ^0.5.3
     encoding-negotiator: ^2.0.1
@@ -15576,7 +15583,7 @@ __metadata:
     p-limit: ^3.1.0
     readable-stream: ^3.4.0
     send: ^0.17.1
-  checksum: 6090548bce646b6c93f4658f6471260a5fea250f33c185447695c8313630af1c32785761bf1565afd8fa5bdb30df0da4ae28e8a47bdfc8460d57448364bc5fc7
+  checksum: 59ac784b90d0da8f09461b9810dbce601fb207e6aa7783c5069ca381b2d1fbc254e3e9f9e61b4b6d02345431de812ec01fe1da346e542b99944f7a6933eb2bb4
   languageName: node
   linkType: hard
 
@@ -26209,7 +26216,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.6.2
     typescript-transform-paths: 3.3.1
-    zx: 6.0.3
+    zx: 6.0.6
   languageName: unknown
   linkType: soft
 
@@ -31081,13 +31088,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:6.0.3":
-  version: 6.0.3
-  resolution: "zx@npm:6.0.3"
+"zx@npm:6.0.6":
+  version: 6.0.6
+  resolution: "zx@npm:6.0.6"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
     "@types/node": ^17.0
+    "@types/which": ^2.0.1
     chalk: ^5.0.1
     fs-extra: ^10.0.1
     globby: ^13.1.1
@@ -31098,6 +31106,6 @@ __metadata:
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: 83cf4e42b02d2cb05a065b2248bc19ecb2e7fb5bd2ea2106f31557d9178456c41a28508638ed247cee5af8e6835c33d7440d3578317471beacf7de4fff810163
+  checksum: 8c21450e83582fda94f458245db959af735bca449c687b732dc4c07a54003be184385010204617e0fa9c9bddf5c402df1a879cf8da78bb5d2fcbf76f4da1fb55
   languageName: node
   linkType: hard

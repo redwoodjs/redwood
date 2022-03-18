@@ -78,6 +78,7 @@ const itCreatesAMultiWordServiceFile = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'UserProfile',
+      crud: false,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -96,6 +97,7 @@ const itCreatesAMultiWordServiceTestFile = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'UserProfile',
+      crud: false,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -185,6 +187,7 @@ const itCreatesASingleWordServiceFileWithAHasManyRelation = (baseArgs) => {
       ...baseArgs,
       name: 'User',
       relations: ['userProfiles'],
+      crud: false,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -204,6 +207,7 @@ const itCreatesASingleWordServiceFileWithABelongsToRelation = (baseArgs) => {
       ...baseArgs,
       name: 'User',
       relations: ['identity'],
+      crud: false,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -223,6 +227,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
       ...baseArgs,
       name: 'User',
       relations: ['userProfiles', 'identity'],
+      crud: false,
     })
     const extension = extensionForBaseArgs(baseArgs)
 

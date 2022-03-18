@@ -14,9 +14,7 @@ If you went through the first part of the tutorial you should be somewhat famili
 
 Let's do that now:
 
-```javascript {17,39-46}
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -31,6 +29,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   body      String
+  // highlight-next-line
   comments  Comment[]
   createdAt DateTime @default(now())
 }
@@ -53,6 +52,7 @@ model User {
   resetTokenExpiresAt DateTime?
 }
 
+// highlight-start
 model Comment {
   id        Int      @id @default(autoincrement())
   name      String
@@ -61,6 +61,7 @@ model Comment {
   postId    Int
   createdAt DateTime @default(now())
 }
+// highlight-end
 ```
 
 Most of these lines look very similar to what we've already seen, but this is the first instance of a [relation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/relations) between two models. `Comment` gets two entries to denote this relationship:
@@ -116,9 +117,7 @@ yarn rw g sdl Comment
 
 That command will create both the SDL and the service. One change we'll need to make to the generated code is to allow access to anonymous users to view all comments. Change the `@requireAuth` directive to `@skipAuth` instead:
 
-```javascript {14}
-// api/src/graphql/comments.sdl.js
-
+```graphql title="api/src/graphql/comments.sdl.js"
 export const schema = gql`
   type Comment {
     id: Int!
@@ -130,6 +129,7 @@ export const schema = gql`
   }
 
   type Query {
+    // highlight-next-line
     comments: [Comment!]! @skipAuth
   }
 
@@ -153,10 +153,9 @@ Now if you take a look back at the real app in the browser (not Storybook) you s
 
 "Empty" means the Cell rendered correctly! There just aren't any comments in the database yet. Let's update the `CommentsCell` component to make that "Empty" message a little more friendly:
 
-```javascript {4}
-// web/src/components/CommentsCell/CommentsCell.js
-
+```jsx title="web/src/components/CommentsCell/CommentsCell.js"
 export const Empty = () => {
+  // highlight-next-line
   return <div className="text-center text-gray-500">No comments yet</div>
 }
 ```
@@ -165,12 +164,12 @@ export const Empty = () => {
 
 That's better. Let's update the test that covers the Empty component render as well:
 
-```javascript {4-5}
-// web/src/components/CommentsCell/CommentsCell.test.js
-
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
 it('renders Empty successfully', async () => {
+  // highlight-start
   render(<Empty />)
   expect(screen.getByText('No comments yet')).toBeInTheDocument()
+  // highlight-end
 })
 ```
 
@@ -180,9 +179,7 @@ Okay, let's focus on the service for a bit. We'll need to add a function to let 
 
 By virtue of using the generator we've already got the function we need to select all comments from the database:
 
-```javascript
-// api/src/services/comments/comments.js
-
+```javascript title="api/src/services/comments/comments.js"
 import { db } from 'src/lib/db'
 
 export const comments = () => {
@@ -203,7 +200,7 @@ export const Comment = {
 
 We've also got a function that returns only a single comment, as well as this `Comment` object at the end. That allows us to return nested post data for a comment through GraphQL using syntax like this (don't worry about adding this code to our app, this is just an example):
 
-```javascript
+```graphql
 query CommentsQuery {
   comments {
     id
@@ -226,9 +223,7 @@ query CommentsQuery {
 
 We need to be able to create a comment as well. We'll use the same convention that's used in Redwood's generated scaffolds: the create endpoint will accept a single parameter `input` which is an object with the individual model fields:
 
-```javascript
-// api/src/services/comments/comments.js
-
+```javascript title="api/src/services/comments/comments.js"
 export const createComment = ({ input }) => {
   return db.comment.create({
     data: input,
@@ -238,9 +233,7 @@ export const createComment = ({ input }) => {
 
 We'll also need to expose this function via GraphQL so we'll add a Mutation to the SDL and use `@skipAuth` since, again, it can be accessed by everyone:
 
-```graphql {29-31}
-// api/src/graphql/comments.sdl.js
-
+```graphql title="api/src/graphql/comments.sdl.js"
 export const schema = gql`
   type Comment {
     id: Int!
@@ -267,9 +260,11 @@ export const schema = gql`
     postId: Int
   }
 
+  // highlight-start
   type Mutation {
     createComment(input: CreateCommentInput!): Comment! @skipAuth
   }
+  // highlight-end
 `
 ```
 
@@ -279,9 +274,7 @@ That's all we need on the api-side to create a comment! But let's think for a mo
 
 What about deleting a comment? We won't let a user delete their own comment, but as owners of the blog we should be able to delete/moderate them. So we'll need a delete function and API endpoint as well. Let's add those:
 
-```javascript
-// api/src/services/comments/comments.js
-
+```javascript title="api/src/services/comments/comments.js"
 export const deleteComment = ({ id }) => {
   return db.comment.delete({
     where: { id },
@@ -291,11 +284,10 @@ export const deleteComment = ({ id }) => {
 
 Since we only want owners of the blog to be able to delete comments, we'll use `@requireAuth`:
 
-```graphql {5}
-// api/src/graphql/comments.sdl.js
-
+```graphql title="api/src/graphql/comments.sdl.js"
 type Mutation {
   createComment(input: CreateCommentInput!): Comment! @skipAuth
+  // highlight-next-line
   deleteComment(id: Int!): Comment! @requireAuth
 }
 ```
@@ -308,9 +300,7 @@ Let's make sure our service functionality is working and continues to work as we
 
 If you open up `api/src/services/comments/comments.test.js` you'll see there's one in there already, making sure that retrieving all comments (the default `comments()` function that was generated along with the service) works:
 
-```javascript
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
 import { comments } from './comments'
 
 describe('comments', () => {
@@ -379,10 +369,9 @@ When you receive the `scenario` argument in your test, the `data` key gets unwra
 
 Let's replace that scenario data with something more like the real data our app will be expecting:
 
-```javascript {4-29}
-// api/src/services/comments/comments.scenarios.js
-
+```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
+  // highlight-start
   comment: {
     jane: {
       data: {
@@ -409,6 +398,7 @@ export const standard = defineScenario({
       }
     }
   }
+  // highlight-end
 })
 ```
 
@@ -420,13 +410,12 @@ The test created by the service generator simply checks to make sure the same nu
 
 Let's add our first service test by making sure that `createComment()` actually stores a new comment in the database. When creating a comment we're not as worried about existing data in the database so let's create a new scenario which only contains a post—the post we'll be linking the new comment to through the comment's `postId` field:
 
-```javascript {7-16}
-// api/src/services/comments/comments.scenarios.js
-
+```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   // ...
 })
 
+// highlight-start
 export const postOnly = defineScenario({
   post: {
     bark: {
@@ -437,13 +426,13 @@ export const postOnly = defineScenario({
     }
   }
 })
+// highlight-end
 ```
 
 Now we can pass the `postOnly` scenario name as the first argument to a new `scenario()` test:
 
-```javascript {3,12-25}
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
+// highlight-next-line
 import { comments, createComment } from './comments'
 
 describe('comments', () => {
@@ -453,6 +442,7 @@ describe('comments', () => {
     expect(result.length).toEqual(Object.keys(scenario.comment).length)
   })
 
+  // highlight-start
   scenario('postOnly', 'creates a new comment', async (scenario) => {
     const comment = await createComment({
       input: {
@@ -467,6 +457,7 @@ describe('comments', () => {
     expect(comment.postId).toEqual(scenario.post.bark.id)
     expect(comment.createdAt).not.toEqual(null)
   })
+  // highlight-end
 })
 ```
 

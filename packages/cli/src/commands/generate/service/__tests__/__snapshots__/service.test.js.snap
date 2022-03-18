@@ -93,6 +93,31 @@ exports[`in javascript mode creates a single word service file 1`] = `
 export const users = () => {
   return db.user.findMany()
 }
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
+export const createUser = ({ input }) => {
+  return db.user.create({
+    data: input,
+  })
+}
+
+export const updateUser = ({ id, input }) => {
+  return db.user.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteUser = ({ id }) => {
+  return db.user.delete({
+    where: { id },
+  })
+}
 "
 `;
 
@@ -203,7 +228,7 @@ exports[`in javascript mode creates a single word service scenario file 1`] = `
 `;
 
 exports[`in javascript mode creates a single word service test file 1`] = `
-"import { users } from './users'
+"import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -216,6 +241,37 @@ describe('users', () => {
     const result = await users()
 
     expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+
+  scenario('returns a single user', async (scenario) => {
+    const result = await user({ id: scenario.user.one.id })
+
+    expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('creates a user', async () => {
+    const result = await createUser({
+      input: { email: 'String1234567' },
+    })
+
+    expect(result.email).toEqual('String1234567')
+  })
+
+  scenario('updates a user', async (scenario) => {
+    const original = await user({ id: scenario.user.one.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { email: 'String12345672' },
+    })
+
+    expect(result.email).toEqual('String12345672')
+  })
+
+  scenario('deletes a user', async (scenario) => {
+    const original = await deleteUser({ id: scenario.user.one.id })
+    const result = await user({ id: original.id })
+
+    expect(result).toEqual(null)
   })
 })
 "
@@ -313,10 +369,45 @@ describe('transactions', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import { db } from 'src/lib/db'
+"import type { Prisma } from '@prisma/client'
+
+import { db } from 'src/lib/db'
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
+interface CreateUserArgs {
+  input: Prisma.UserCreateInput
+}
+
+export const createUser = ({ input }: CreateUserArgs) => {
+  return db.user.create({
+    data: input,
+  })
+}
+
+interface UpdateUserArgs extends Prisma.UserWhereUniqueInput {
+  input: Prisma.UserUpdateInput
+}
+
+export const updateUser = ({ id, input }: UpdateUserArgs) => {
+  return db.user.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteUser = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.delete({
+    where: { id },
+  })
 }
 "
 `;
@@ -451,7 +542,7 @@ export type StandardScenario = typeof standard
 `;
 
 exports[`in typescript mode creates a single word service test file 1`] = `
-"import { users } from './users'
+"import { users, user, createUser, updateUser, deleteUser } from './users'
 import type { StandardScenario } from './users.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -465,6 +556,37 @@ describe('users', () => {
     const result = await users()
 
     expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+
+  scenario('returns a single user', async (scenario: StandardScenario) => {
+    const result = await user({ id: scenario.user.one.id })
+
+    expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('creates a user', async () => {
+    const result = await createUser({
+      input: { email: 'String1234567' },
+    })
+
+    expect(result.email).toEqual('String1234567')
+  })
+
+  scenario('updates a user', async (scenario: StandardScenario) => {
+    const original = await user({ id: scenario.user.one.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { email: 'String12345672' },
+    })
+
+    expect(result.email).toEqual('String12345672')
+  })
+
+  scenario('deletes a user', async (scenario: StandardScenario) => {
+    const original = await deleteUser({ id: scenario.user.one.id })
+    const result = await user({ id: original.id })
+
+    expect(result).toEqual(null)
   })
 })
 "
