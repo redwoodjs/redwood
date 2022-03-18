@@ -128,6 +128,7 @@ model Contact {
   createdAt DateTime @default(now())
 }
 
+// highlight-start
 model User {
   id                  Int @id @default(autoincrement())
   name                String?
@@ -137,6 +138,7 @@ model User {
   resetToken          String?
   resetTokenExpiresAt DateTime?
 }
+// highlight-end
 ```
 
 This gives us a user with a name and email, as well as four fields that dbAuth will control:
