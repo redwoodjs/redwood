@@ -65,65 +65,6 @@ test('api files are prebuilt', () => {
   )
 })
 
-describe("Should create a 'proxy' function for nested functions", () => {
-  it('Handles functions nested with the same name', () => {
-    const [buildPath, reExportPath] = generateProxyFilesForNestedFunction(
-      fullPath('.redwood/prebuild/api/src/functions/nested/nested.js')
-    )
-
-    // Hidden path in the _nestedFunctions folder
-    expect(cleanPaths(buildPath)).toBe(
-      '.redwood/prebuild/api/src/_nestedFunctions/nested/nested.js'
-    )
-
-    // Proxy/reExport function placed in the function directory
-    expect(cleanPaths(reExportPath)).toBe(
-      '.redwood/prebuild/api/src/functions/nested.js'
-    )
-
-    const reExportContent = fs.readFileSync(reExportPath, 'utf-8')
-    expect(reExportContent).toMatchInlineSnapshot(
-      `"export * from '../_nestedFunctions/nested/nested';"`
-    )
-  })
-
-  it('Handles folders with an index file', () => {
-    const [buildPath, reExportPath] = generateProxyFilesForNestedFunction(
-      fullPath('.redwood/prebuild/api/src/functions/x/index.js')
-    )
-
-    // Hidden path in the _build folder
-    expect(cleanPaths(buildPath)).toBe(
-      '.redwood/prebuild/api/src/_nestedFunctions/x/index.js'
-    )
-
-    // Proxy/reExport function placed in the function directory
-    expect(cleanPaths(reExportPath)).toBe(
-      '.redwood/prebuild/api/src/functions/x.js'
-    )
-
-    const reExportContent = fs.readFileSync(reExportPath, 'utf-8')
-
-    expect(reExportContent).toMatchInlineSnapshot(
-      `"export * from '../_nestedFunctions/x';"`
-    )
-  })
-
-  it('Should not put files that dont match the folder name in dist/functions', () => {
-    const [buildPath, reExportPath] = generateProxyFilesForNestedFunction(
-      fullPath('.redwood/prebuild/api/src/functions/invalid/x.js')
-    )
-
-    // File is transpiled to the _nestedFunctions folder
-    expect(cleanPaths(buildPath)).toEqual(
-      '.redwood/prebuild/api/src/_nestedFunctions/invalid/x.js'
-    )
-
-    // But not exposed as a serverless function
-    expect(reExportPath).toBe(undefined)
-  })
-})
-
 test('api prebuild finds babel.config.js', () => {
   let p = getApiSideBabelConfigPath()
   p = cleanPaths(p)
