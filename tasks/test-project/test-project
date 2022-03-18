@@ -235,7 +235,7 @@ const globalTasks = () =>
             JSON.stringify(packageJson, undefined, 2)
           )
         },
-        skip: () => !(copyFromFixture && !rebuildFixture),
+        skip: () => !copyFromFixture && rebuildFixture,
       },
       {
         title: 'Installing node_modules',
