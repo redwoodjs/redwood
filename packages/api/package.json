@@ -33,12 +33,14 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@prisma/client": "3.11.0",
     "crypto-js": "4.1.1",
+    "humanize-string": "2.1.0",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "node-fetch": "2.6.7",
     "pascalcase": "1.0.0",
-    "pino": "7.8.1",
+    "pino": "7.9.1",
+    "title-case": "3.0.3",
     "uuid": "8.3.2"
   },
   "devDependencies": {

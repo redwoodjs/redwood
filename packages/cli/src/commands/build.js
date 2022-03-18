@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
@@ -155,8 +156,8 @@ export const handler = async ({
     },
     side.includes('web') && {
       title: 'Building Web...',
-      task: () => {
-        return execa(
+      task: async () => {
+        await execa(
           `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
             '@redwoodjs/core/config/webpack.production.js'
           )}`,
@@ -165,6 +166,15 @@ export const handler = async ({
             shell: true,
             cwd: rwjsPaths.web.base,
           }
+        )
+
+        console.log('Creating 200.html...')
+
+        const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
+
+        fs.copyFileSync(
+          indexHtmlPath,
+          path.join(getPaths().web.dist, '200.html')
         )
       },
     },

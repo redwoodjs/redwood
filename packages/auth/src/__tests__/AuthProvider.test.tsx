@@ -866,3 +866,44 @@ test('proxies validateResetToken() calls to client', async () => {
   // for whatever reason, validateResetToken is invoked twice
   expect.assertions(2)
 })
+
+test('getToken doesnt fail if client throws an error', async () => {
+  const mockAuthClient = {
+    getToken: async () => {
+      throw 'Login Required'
+    },
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { getToken } = useAuth()
+    const [authTokenResult, setAuthTokenResult] = useState(null)
+
+    useEffect(() => {
+      const getTokenAsync = async () => {
+        let token
+
+        // If the getToken function throws we will catch it
+        // here which will let us know that something is wrong.
+        try {
+          token = await getToken()
+          setAuthTokenResult({ success: true, token })
+        } catch (error) {
+          setAuthTokenResult({ success: false, token: 'FAIL' })
+        }
+      }
+
+      getTokenAsync()
+    }, [getToken])
+
+    return <div>Token: {`${authTokenResult?.token}`}</div>
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  await waitFor(() => screen.getByText('Token: null'))
+})
