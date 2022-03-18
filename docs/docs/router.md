@@ -498,6 +498,8 @@ const SomePage = () => {
 }
 ```
 
+In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](https://redwoodjs.com/docs/router#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
+
 ## Code-splitting
 
 By default, the router will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, the router will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
