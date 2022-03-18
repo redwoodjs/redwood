@@ -1024,9 +1024,34 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | `model`              | Model to generate the sdl for                                                        |
 | `--crud`             | Also generate mutations                                                              |
 | `--force, -f`        | Overwrite existing files                                                             |
+| `--tests`            | Generate service test and scenario [default: true]                                   |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
+
+**Regenerating the SDL**
+
+Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time having to make those changes manually.
+
+But, since the `generate` command prevents you from overwriting files accidentally, you could use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
+
+In that case, you can run the following to "regenerate" **just** the SDL file and leave your tests and scenarios intact and not lose your hard work.
+
+```
+yarn redwood g sdl <model> --force --tests=false
+```
+
+**Example**
+
+```terminal
+~/redwood-app$ yarn redwood generate sdl user --force --tests=false
+yarn run v1.22.4
+$ /redwood-app/node_modules/.bin/redwood g sdl user
+  ✔ Generating SDL files...
+    ✔ Writing `./api/src/graphql/users.sdl.js`...
+    ✔ Writing `./api/src/services/users/users.js`...
+Done in 1.04s.
+```
 
 **Destroying**
 
@@ -1044,6 +1069,7 @@ yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
   ✔ Generating SDL files...
     ✔ Writing `./api/src/graphql/users.sdl.js`...
+    ✔ Writing `./api/src/services/users/users.scenarios.js`...
     ✔ Writing `./api/src/services/users/users.test.js`...
     ✔ Writing `./api/src/services/users/users.js`...
 Done in 1.04s.
@@ -1167,8 +1193,8 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `name`               | Name of the service                                                                  |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-| `--tests`            | Generate test files [default: true]                                                  |
-| `--stories`          | Generate Storybook files [default: true]                                             |
+| `--tests`            | Generate test and scenario files [default: true]                                                  |
+
 
 **Destroying**
 
@@ -1185,6 +1211,7 @@ Generating a user service:
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g service user
   ✔ Generating service files...
+    ✔ Writing `./api/src/services/users/users.scenarios.js`...
     ✔ Writing `./api/src/services/users/users.test.js`...
     ✔ Writing `./api/src/services/users/users.js`...
 Done in 1.02s.
