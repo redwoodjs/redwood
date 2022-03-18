@@ -82,13 +82,14 @@ export const writePrerenderedHtmlFile = (
   content: string
 ) => {
   const outputHtmlAbsPath = path.join(getPaths().base, outputHtmlPath)
-  // Copy default index.html to 200.html first
+  // Copy default (unprerendered) index.html to 200.html first
   // This is to prevent recursively rendering the home page
   if (outputHtmlPath === 'web/dist/index.html') {
-    fs.copyFileSync(
-      outputHtmlAbsPath,
-      path.join(getPaths().base, 'web/dist/200.html')
-    )
+    const html200Path = path.join(getPaths().web.dist, '200.html')
+
+    if (!fs.existsSync(html200Path)) {
+      fs.copyFileSync(outputHtmlAbsPath, html200Path)
+    }
   }
 
   writeToDist(outputHtmlAbsPath, content)
