@@ -76,7 +76,7 @@ export const files = async ({
     // Eat error so that the destroy cell generator doesn't raise an error
     // when trying to find prisma query engine in test runs.
 
-    // assume id will be Int, otherwise generated will keep throwing
+    // Assume id will be Int, otherwise generated will keep throwing
     idType = 'Int'
     mockIdValue = 42
   }
