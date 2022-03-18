@@ -1083,7 +1083,7 @@ export const schema = gql`
 `
 ```
 
-The services file fulfills the query with . If the `--crud=false` option is added, this file will be less complex.
+The services file fulfills the query. If the `--no-crud` option is added, this file will be less complex.
 
 ```javascript
 // ./api/src/services/users/users.js
