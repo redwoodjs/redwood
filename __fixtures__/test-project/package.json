@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "@redwoodjs/core": "0.49.1",
-    "autoprefixer": "^10.4.3",
-    "postcss": "^8.4.11",
+    "autoprefixer": "^10.4.4",
+    "postcss": "^8.4.12",
     "postcss-loader": "^6.2.1",
     "tailwindcss": "^3.0.23"
   },
@@ -19,7 +19,7 @@
     "root": true
   },
   "engines": {
-    "node": ">=14.17 <=16.x",
+    "node": ">=14.19 <=16.x",
     "yarn": ">=1.15 <2"
   },
   "prisma": {
