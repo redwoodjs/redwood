@@ -504,7 +504,7 @@ Remember: never trust the client! We need to lock down the backend to be sure th
 
 Recall in Part 1 of the tutorial we used a [directive](../directives.md) `@requireAuth` to be sure that someone was logged in before allowing them to access a given GraphQL query or mutation. It turns out that `@requireAuth` can take an optional `roles` argument:
 
-```graphql
+```graphql title="api/src/graphql/comments.sdl.js"
 export const schema = gql`
   type Comment {
     id: Int!

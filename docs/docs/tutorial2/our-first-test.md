@@ -50,7 +50,8 @@ Okay, let's do this:
 
 ```jsx title="web/src/components/ArticlesCell.test.js"
 import { render, screen } from '@redwoodjs/testing'
-import { Loading, Empty, Failure, Success } from './ArticlesCell'
+// highlight-next-line
+import { Loading, Empty, Failure, Success, within } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
 describe('ArticlesCell', () => {
