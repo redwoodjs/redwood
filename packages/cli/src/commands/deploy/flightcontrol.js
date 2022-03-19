@@ -9,8 +9,9 @@ import { getConfig } from '@redwoodjs/internal'
 import { getPaths } from '../../lib'
 
 export const command = 'flightcontrol <side>'
+export const alias = 'fc'
 export const description =
-  'Build, Migrate, and Serve command for Flightcontrol deploy'
+  'Build, Migrate, and Serve commands for Flightcontrol deploy'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
@@ -21,17 +22,17 @@ export const builder = (yargs) => {
     .option('prisma', {
       description: 'Apply database migrations',
       type: 'boolean',
-      default: 'true',
+      default: true,
     })
     .option('serve', {
       description: 'Run server for api in production',
       type: 'boolean',
-      default: 'false',
+      default: false,
     })
     .option('data-migrate', {
       description: 'Migrate the data in your database',
       type: 'boolean',
-      default: 'true',
+      default: true,
       alias: 'dm',
     })
     .epilogue(
@@ -57,7 +58,7 @@ export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
     if (serve) {
       console.log('\nStarting api...')
       await apiServerHandler({
-        port: process.env.PORT,
+        port: getConfig().api?.port || 8911,
         apiRootPath: '/',
       })
     } else {

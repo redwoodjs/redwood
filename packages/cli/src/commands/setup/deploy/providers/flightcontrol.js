@@ -19,6 +19,7 @@ import {
 } from '../templates/flightcontrol'
 
 export const command = 'flightcontrol'
+export const alias = 'fc'
 export const description = 'Setup Flightcontrol deploy'
 
 export const getFlightcontrolJson = async (database) => {
@@ -50,7 +51,6 @@ export const getFlightcontrolJson = async (database) => {
       default:
         throw new Error(`
        Unexpected datasource provider found: ${database}`)
-
     }
     return {
       path: path.join(getPaths().base, 'flightcontrol.json'),
@@ -60,17 +60,15 @@ export const getFlightcontrolJson = async (database) => {
           {
             ...flightcontrolConfig.environments[0],
             services: [
-              ...flightcontrolConfig.environments[0].services.map(
-                (service) => {
-                  if (service.id === 'redwood-api') {
-                    return {
-                      ...service,
-                      envVariables: databaseEnvVariables,
-                    }
+              ...flightcontrolConfig.environments[0].services.map((service) => {
+                if (service.id === 'redwood-api') {
+                  return {
+                    ...service,
+                    envVariables: databaseEnvVariables,
                   }
-                  return service
                 }
-              ),
+                return service
+              }),
               dbService,
             ],
           },
@@ -90,8 +88,8 @@ export const getFlightcontrolJson = async (database) => {
 
 const updateGraphQLFunction = () => {
   return {
-    title: 'Adding cors config to createGraphQLHandler...',
-    task: (_ctx, task) => {
+    title: 'Adding CORS config to createGraphQLHandler...',
+    task: (_ctx) => {
       const graphqlTsPath = path.join(
         getPaths().base,
         'api/src/functions/graphql.ts'
@@ -144,6 +142,30 @@ const updateGraphQLFunction = () => {
   }
 }
 
+// We need to set the apiUrl evn var for local dev
+const addToDotEnvDefaultTask = () => {
+  return {
+    title: 'Updating .env.defaults...',
+    skip: () => {
+      if (!fs.existsSync(path.resolve(getPaths().base, '.env.defaults'))) {
+        return `
+        WARNING: could not update .env.defaults
+
+        You'll have to add the following env var manually:
+
+        REDWOOD_API_URL=/.redwood/functions
+        `
+      }
+    },
+    task: async (_ctx, task) => {
+      const env = path.resolve(getPaths().base, '.env.defaults')
+      const line = 'REDWOOD_API_URL=/.redwood/functions'
+
+      fs.appendFileSync(env, line)
+    },
+  }
+}
+
 export const builder = (yargs) =>
   yargs.option('database', {
     alias: 'd',
@@ -175,6 +197,7 @@ export const handler = async ({ force, database }) => {
     },
     updateGraphQLFunction(),
     updateApiURLTask('${REDWOOD_API_URL}'),
+    addToDotEnvDefaultTask(),
     printSetupNotes(notes),
   ])
 
