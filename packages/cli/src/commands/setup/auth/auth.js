@@ -29,7 +29,7 @@ const OUTPUT_PATHS = {
 const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
-export const getWebAppPath = () => getPaths().web.app
+const getWebAppPath = () => getPaths().web.app
 
 const getSupportedProviders = () =>
   fs
