@@ -86,15 +86,20 @@ Additionally, if your application uses env vars on the Web Side, you must config
 
 ## Flightcontrol Deploy
 
- [Flightcontrol](https://www.flightcontrol.dev?ref=redwood) is a new platform that makes AWS as easy as Heroku or Netlify but still lets you pop the hood and leverage the raw power of AWS if you need. It supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
+ [Flightcontrol](https://www.flightcontrol.dev?ref=redwood) is a new platform that brings world-class deployment DX natively to your AWS account. It's easy to use but lets you pop the hood and leverage the raw power of AWS when needed. It currently supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
 
- ### Flightcontrol tl;dr Deploy
+ ### Flightcontrol Deploy Setup
 
- If you simply want to experience the Flightcontrol deployment process, including a Postgres or MySQL database, you can do the following:
+ 1. In your project, run the command `yarn rw setup deploy flightcontrol`
+ 2. Commit the changes and push to github 
+ 3. If you don't have an account, sign up at [app.flightcontrol.dev/signup](https://app.flightcontrol.dev/signup?ref=redwood)
+ 4. Create a new project at [app.flightcontrol.dev/projects/new/1](https://app.flightcontrol.dev/projects/new/1)
+   1. Connect your Github account and select your repo 
+   2. Select "Config Type" as `flightcontrol.json`
+   3. Select the AWS region to deploy to. 
+   4. Click "Create Project"
 
- 1. create a new redwood project: `yarn create redwood-app ./flightcontrol-deploy`
- 2. after your `flightcontrol-deploy` project installation is complete, init git, commit, and add it as a new repo to GitHub or GitLab
- 3. run the command `yarn rw setup deploy flightcontrol`.
+If you have *any* problems or questions, Flightcontrol is very responsive in [their support Discord](https://discord.gg/yY8rSPrD6q).
 
 ## Netlify Deploy
 
