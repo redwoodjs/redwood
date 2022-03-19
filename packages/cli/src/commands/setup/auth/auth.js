@@ -220,10 +220,8 @@ export const files = (provider) => {
 }
 
 // actually inserts the required config lines into App.{js,tsx}
-export const addConfigToApp = async (config, force, options = {}) => {
-  const { webAppPath: customWebAppPath } = options || {}
-
-  const webAppPath = customWebAppPath || getWebAppPath()
+export const addConfigToApp = async (config, force) => {
+  const webAppPath = getWebAppPath()
 
   let content = fs.readFileSync(webAppPath).toString()
 

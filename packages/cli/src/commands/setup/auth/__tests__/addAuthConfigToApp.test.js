@@ -1,3 +1,6 @@
+// Have to use `var` here to avoid "Temporal Dead Zone" issues
+var mockWebAppPath = ''
+
 import fs from 'fs'
 
 import '../../../../lib/mockTelemetry'
@@ -15,7 +18,7 @@ jest.mock('../../../../lib', () => {
         src: path.join(__dirname, '../create-redwood-app/template/web/src'),
         app: path.join(
           __dirname,
-          '../create-redwood-app/template/web/src/App.tsx'
+          mockWebAppPath || '../create-redwood-app/template/web/src/App.tsx'
         ),
       },
     }),
@@ -84,30 +87,20 @@ describe('Should add config lines to App.{js,tsx}', () => {
 
 describe('Should add config lines when RedwoodApolloProvider has props', () => {
   it('Matches Auth0 Snapshot', async () => {
-    const path = require('path')
-    const __dirname = path.resolve()
+    mockWebAppPath =
+      'src/commands/setup/auth/__tests__/__templates__/AppWithCustomRedwoodApolloProvider.template'
 
     const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false, {
-      webAppPath: path.join(
-        __dirname,
-        'src/commands/setup/auth/__tests__/__templates__/AppWithCustomRedwoodApolloProvider.template'
-      ),
-    })
+    await addConfigToApp(auth0Data.config, false)
   })
 })
 
 describe('Should add auth config when using explicit return', () => {
   it('Matches Auth0 Snapshot', async () => {
-    const path = require('path')
-    const __dirname = path.resolve()
+    mockWebAppPath =
+      'src/commands/setup/auth/__tests__/__templates__/AppWithExplicitReturn.template'
 
     const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false, {
-      webAppPath: path.join(
-        __dirname,
-        'src/commands/setup/auth/__tests__/__templates__/AppWithExplicitReturn.template'
-      ),
-    })
+    await addConfigToApp(auth0Data.config, false)
   })
 })
