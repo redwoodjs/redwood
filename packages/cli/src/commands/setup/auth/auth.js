@@ -29,7 +29,7 @@ const OUTPUT_PATHS = {
 const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
-const getWebAppPath = () => getPaths().web.app
+export const getWebAppPath = () => getPaths().web.app
 
 const getSupportedProviders = () =>
   fs
@@ -68,13 +68,17 @@ const addWebImports = (content, imports) => {
 // returns the content of App.{js,tsx} with init lines added (if there are any)
 const addWebInit = (content, init) => {
   if (init) {
-    return content.replace(
-      'const App = () => (',
-      `${init}\n\nconst App = () => (`
-    )
-  } else {
-    return content
+    const regex = /(const App = \(.*\) => [\(\{])/
+    const match = content.match(regex)
+
+    if (!match) {
+      return content
+    }
+
+    return content.replace(regex, `${init}\n\n${match[0]}`)
   }
+
+  return content
 }
 
 const objectToComponentProps = (obj, options = { exclude: [] }) => {
@@ -96,7 +100,7 @@ const objectToComponentProps = (obj, options = { exclude: [] }) => {
 // returns the content of App.{js,tsx} with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
-    /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
+    /(\s+)(<RedwoodApolloProvider.*>.*<\/RedwoodApolloProvider>)/s
   )
 
   const redwoodApolloProviderLines = redwoodApolloProvider
@@ -128,7 +132,7 @@ const addWebRender = (content, authProvider) => {
     customRenderClose
 
   return content.replace(
-    /\s+<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>/s,
+    /\s+<RedwoodApolloProvider.*>.*<\/RedwoodApolloProvider>/s,
     renderContent
   )
 }
@@ -216,8 +220,10 @@ export const files = (provider) => {
 }
 
 // actually inserts the required config lines into App.{js,tsx}
-export const addConfigToApp = async (config, force) => {
-  const webAppPath = getWebAppPath()
+export const addConfigToApp = async (config, force, options = {}) => {
+  const { webAppPath: customWebAppPath } = options || {}
+
+  const webAppPath = customWebAppPath || getWebAppPath()
 
   let content = fs.readFileSync(webAppPath).toString()
 
