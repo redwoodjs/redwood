@@ -58,7 +58,7 @@ export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
     if (serve) {
       console.log('\nStarting api...')
       await apiServerHandler({
-        port: getConfig().api?.port || 8911,
+        port: 3000,
         apiRootPath: '/',
       })
     } else {
