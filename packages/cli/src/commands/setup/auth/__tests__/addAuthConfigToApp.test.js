@@ -1,12 +1,15 @@
 import fs from 'fs'
+import path from 'path'
 
 import '../../../../lib/mockTelemetry'
 
-import { addConfigToApp } from '../auth'
+import * as authActions from '../auth'
+const { addConfigToApp } = authActions
 
 jest.mock('../../../../lib', () => {
   const path = require('path')
   const __dirname = path.resolve()
+
   return {
     getPaths: () => ({
       api: { functions: '', src: '', lib: '' },
@@ -78,5 +81,35 @@ describe('Should add config lines to App.{js,tsx}', () => {
   it('Matches nhost Snapshot', async () => {
     const nhostData = await import(`../providers/nhost`)
     await addConfigToApp(nhostData.config, false)
+  })
+})
+
+describe('Should add config lines when RedwoodApolloProvider has props', () => {
+  it('Matches Auth0 Snapshot', async () => {
+    const path = require('path')
+    const __dirname = path.resolve()
+
+    const auth0Data = await import(`../providers/auth0`)
+    await addConfigToApp(auth0Data.config, false, {
+      webAppPath: path.join(
+        __dirname,
+        'src/commands/setup/auth/__tests__/__templates__/AppWithCustomRedwoodApolloProvider.template'
+      ),
+    })
+  })
+})
+
+describe('Should add auth config when using explicit return', () => {
+  it('Matches Auth0 Snapshot', async () => {
+    const path = require('path')
+    const __dirname = path.resolve()
+
+    const auth0Data = await import(`../providers/auth0`)
+    await addConfigToApp(auth0Data.config, false, {
+      webAppPath: path.join(
+        __dirname,
+        'src/commands/setup/auth/__tests__/__templates__/AppWithExplicitReturn.template'
+      ),
+    })
   })
 })
