@@ -1022,11 +1022,36 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Also generate mutations                                                              |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                              |
 | `--force, -f`        | Overwrite existing files                                                             |
+| `--tests`            | Generate service test and scenario [default: true]                                   |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
+
+**Regenerating the SDL**
+
+Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time having to make those changes manually.
+
+But, since the `generate` command prevents you from overwriting files accidentally, you could use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
+
+In that case, you can run the following to "regenerate" **just** the SDL file and leave your tests and scenarios intact and not lose your hard work.
+
+```
+yarn redwood g sdl <model> --force --tests=false
+```
+
+**Example**
+
+```terminal
+~/redwood-app$ yarn redwood generate sdl user --force --tests=false
+yarn run v1.22.4
+$ /redwood-app/node_modules/.bin/redwood g sdl user
+  ✔ Generating SDL files...
+    ✔ Writing `./api/src/graphql/users.sdl.js`...
+    ✔ Writing `./api/src/services/users/users.js`...
+Done in 1.04s.
+```
 
 **Destroying**
 
@@ -1044,12 +1069,13 @@ yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
   ✔ Generating SDL files...
     ✔ Writing `./api/src/graphql/users.sdl.js`...
+    ✔ Writing `./api/src/services/users/users.scenarios.js`...
     ✔ Writing `./api/src/services/users/users.test.js`...
     ✔ Writing `./api/src/services/users/users.js`...
 Done in 1.04s.
 ```
 
-The generated sdl defines a corresponding type, query, and create/update inputs, without defining any mutations. To also get mutations, add the `--crud` option.
+The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--no-crud` option.
 
 ```javascript
 // ./api/src/graphql/users.sdl.js
@@ -1062,7 +1088,7 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -1074,10 +1100,16 @@ export const schema = gql`
     email: String
     name: String
   }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
+  }
 `
 ```
 
-The services file fulfills the query. If the `--crud` option is added, this file will be much more complex.
+The services file fulfills the query. If the `--no-crud` option is added, this file will be less complex.
 
 ```javascript
 // ./api/src/services/users/users.js
@@ -1103,7 +1135,7 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -1114,6 +1146,12 @@ export const schema = gql`
   input UpdateUserInput {
     email: String
     name: String
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
   }
 `
 ```
@@ -1167,8 +1205,8 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `name`               | Name of the service                                                                  |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-| `--tests`            | Generate test files [default: true]                                                  |
-| `--stories`          | Generate Storybook files [default: true]                                             |
+| `--tests`            | Generate test and scenario files [default: true]                                                  |
+
 
 **Destroying**
 
@@ -1185,6 +1223,7 @@ Generating a user service:
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g service user
   ✔ Generating service files...
+    ✔ Writing `./api/src/services/users/users.scenarios.js`...
     ✔ Writing `./api/src/services/users/users.test.js`...
     ✔ Writing `./api/src/services/users/users.js`...
 Done in 1.02s.
@@ -1645,6 +1684,25 @@ yarn rw setup generator page
 And then check `web/generators/page` for the page, storybook and test template files. You don't need to keep all of these templates—you could customize just `page.tsx.template` and delete the others and they would still be generated, but using the default Redwood templates.
 
 The only exception to this rule is the scaffold templates. You'll get four directories, `assets`, `components`, `layouts` and `pages`. If you want to customize any one of the templates in those directories, you will need to keep all the other files inside of that same directory, even if you make no changes besides the one you care about. (This is due to the way the scaffold looks up its template files.) For example, if you wanted to customize only the index page of the scaffold (the one that lists all available records in the database) you would edit `web/generators/scaffold/pages/NamesPage.tsx.template` and keep the other pages in that directory. You _could_ delete the other three directories (`assets`, `components`, `layouts`) if you don't need to customize them.
+
+**Name Variants**
+
+Your template will receive the provided `name` in a number of different variations.
+
+For example, given the name `fooBar` your template will receive the following _variables_ with the given _values_
+
+| Variable                  | Value         |
+| :------------------------ | :------------ |
+| `pascalName`              | `FooBar`      |
+| `camelName`               | `fooBar`      |
+| `singularPascalName`      | `FooBar`      |
+| `pluralPascalName`        | `FooBars`     |
+| `singularCamelName`       | `fooBar`      |
+| `pluralCamelName`         | `fooBars`     |
+| `singularParamName`       | `foo-bar`     |
+| `pluralParamName`         | `foo-bars`    |
+| `singularConstantName`    | `FOO_BAR`     |
+| `pluralConstantName`      | `FOO_BARS`    |
 
 **Example**
 

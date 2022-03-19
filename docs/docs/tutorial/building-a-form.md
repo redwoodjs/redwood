@@ -18,9 +18,7 @@ yarn rw g page contact
 
 We can put a link to Contact in our layout's header:
 
-```javascript {20-22}
-// web/src/layouts/BlogLayout/BlogLayout.js
-
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
@@ -38,9 +36,11 @@ const BlogLayout = ({ children }) => {
             <li>
               <Link to={routes.about()}>About</Link>
             </li>
+            // highlight-start
             <li>
               <Link to={routes.contact()}>Contact</Link>
             </li>
+            // highlight-end
           </ul>
         </nav>
       </header>
@@ -54,9 +54,7 @@ export default BlogLayout
 
 And then use the `BlogLayout` for the `ContactPage` by making sure its wrapped by the same `<Set>` as the other pages in the routes file:
 
-```javascript {18}
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -72,6 +70,7 @@ const Routes = () => {
       </Set>
       <Set wrap={BlogLayout}>
         <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
+        // highlight-next-line
         <Route path="/contact" page={ContactPage} name="contact" />
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/" page={HomePage} name="home" />
@@ -94,10 +93,9 @@ We think Redwood is a step or two in the right direction by not only freeing you
 
 We won't be pulling any data from the database on our Contact page so we won't create a cell. Let's create the form right in the page. Redwood forms start with the...wait for it...`<Form>` tag:
 
-```javascript {4,11}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
 import { Form } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -105,6 +103,7 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
+      // highlight-next-line
       <Form></Form>
     </>
   )
@@ -115,10 +114,9 @@ export default ContactPage
 
 Well that was anticlimactic. You can't even see it in the browser. Let's add a form field so we can at least see something. Redwood ships with several inputs and a plain text input box is the `<TextField>`. We'll also give the field a `name` attribute so that once there are multiple inputs on this page we'll know which contains which data:
 
-```javascript {4,12}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
 import { Form, TextField } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -127,6 +125,7 @@ const ContactPage = () => {
       <MetaTags title="Contact" description="Contact page" />
 
       <Form>
+        // highlight-next-line
         <TextField name="input" />
       </Form>
     </>
@@ -140,10 +139,9 @@ export default ContactPage
 
 Something is showing! Still, pretty boring. How about adding a submit button?
 
-```javascript {4,13}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -153,6 +151,7 @@ const ContactPage = () => {
 
       <Form>
         <TextField name="input" />
+        // highlight-next-line
         <Submit>Save</Submit>
       </Form>
     </>
@@ -170,21 +169,23 @@ We have what might actually be considered a real, bonafide form here. Try typing
 
 Similar to a plain HTML form we'll give `<Form>` an `onSubmit` handler. That handler will be called with a single argument—an object containing all of the submitted form fields:
 
-```javascript {4,7-9,15}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
+  // highlight-start
   const onSubmit = (data) => {
     console.log(data)
   }
+  // highlight-end
 
   return (
     <>
       <MetaTags title="Contact" description="Contact page" />
 
+      // highlight-next-line
       <Form onSubmit={onSubmit}>
         <TextField name="input" />
         <Submit>Save</Submit>
@@ -202,10 +203,9 @@ Now try filling in some data and submitting, then checking out the console in We
 
 Great! Let's turn this into a more useful form by adding a couple fields. We'll rename the existing one to "name" and add "email" and "message":
 
-```javascript {4,16-18}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
 import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -218,9 +218,11 @@ const ContactPage = () => {
       <MetaTags title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
+        // highlight-start
         <TextField name="name" />
         <TextField name="email" />
         <TextAreaField name="message" />
+        // highlight-end
         <Submit>Save</Submit>
       </Form>
     </>
@@ -236,9 +238,7 @@ See the new `<TextAreaField>` component here which generates an HTML `<textarea>
 
 Let's add some labels:
 
-```javascript {16,19,22}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
@@ -252,12 +252,15 @@ const ContactPage = () => {
       <MetaTags title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
+        // highlight-next-line
         <label htmlFor="name">Name</label>
         <TextField name="name" />
 
+        // highlight-next-line
         <label htmlFor="email">Email</label>
         <TextField name="email" />
 
+        // highlight-next-line
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" />
 
@@ -280,18 +283,19 @@ Try filling out the form and submitting and you should get a console message wit
 
 All three of these fields should be required in order for someone to send a message to us. Let's enforce that with the standard HTML `required` attribute:
 
-```javascript {6,9,12}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 return (
   <Form onSubmit={onSubmit}>
     <label htmlFor="name">Name</label>
+    // highlight-next-line
     <TextField name="name" required />
 
     <label htmlFor="email">Email</label>
+    // highlight-next-line
     <TextField name="email" required />
 
     <label htmlFor="message">Message</label>
+    // highlight-next-line
     <TextAreaField name="message" required />
 
     <Submit>Save</Submit>
@@ -305,18 +309,19 @@ Now when trying to submit there'll be message from the browser noting that a fie
 
 Yes! Let's update that `required` call to instead be an object we pass to a custom attribute on Redwood form helpers called `validation`:
 
-```javascript {6,9,12}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 return (
   <Form onSubmit={onSubmit}>
     <label htmlFor="name">Name</label>
+    // highlight-next-line
     <TextField name="name" validation={{ required: true }} />
 
     <label htmlFor="email">Email</label>
+    // highlight-next-line
     <TextField name="email" validation={{ required: true }} />
 
     <label htmlFor="message">Message</label>
+    // highlight-next-line
     <TextAreaField name="message" validation={{ required: true }} />
 
     <Submit>Save</Submit>
@@ -330,11 +335,10 @@ And now when we submit the form with blank fields...the Name field gets focus. B
 
 Introducing `<FieldError>` (don't forget to include it in the `import` statement at the top):
 
-```javascript {5,24,28,32}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
+  // highlight-next-line
   FieldError,
   Form,
   TextField,
@@ -354,14 +358,17 @@ const ContactPage = () => {
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
         <TextField name="name" validation={{ required: true }} />
+        // highlight-next-line
         <FieldError name="name" />
 
         <label htmlFor="email">Email</label>
         <TextField name="email" validation={{ required: true }} />
+        // highlight-next-line
         <FieldError name="email" />
 
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" validation={{ required: true }} />
+        // highlight-next-line
         <FieldError name="message" />
 
         <Submit>Save</Submit>
@@ -379,9 +386,7 @@ Note that the `name` attribute matches the `name` of the input field above it. T
 
 But this is just the beginning. Let's make sure folks realize this is an error message. Remember the basic styles we added to `index.css` back at the start? There's an `.error` class in there that we can use. Set the `className` attribute on `<FieldError>`:
 
-```javascript {24,28,32}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -403,14 +408,17 @@ const ContactPage = () => {
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
         <TextField name="name" validation={{ required: true }} />
+        // highlight-next-line
         <FieldError name="name" className="error" />
 
         <label htmlFor="email">Email</label>
         <TextField name="email" validation={{ required: true }} />
+        // highlight-next-line
         <FieldError name="email" className="error" />
 
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" validation={{ required: true }} />
+        // highlight-next-line
         <FieldError name="message" className="error" />
 
         <Submit>Save</Submit>
@@ -426,9 +434,7 @@ export default ContactPage
 
 You know what would be nice? If the input itself somehow displayed the fact that there was an error. Check out the `errorClassName` attributes on the inputs:
 
-```javascript {26,34,42}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -452,6 +458,7 @@ const ContactPage = () => {
         <TextField
           name="name"
           validation={{ required: true }}
+          // highlight-next-line
           errorClassName="error"
         />
         <FieldError name="name" className="error" />
@@ -460,6 +467,7 @@ const ContactPage = () => {
         <TextField
           name="email"
           validation={{ required: true }}
+          // highlight-next-line
           errorClassName="error"
         />
         <FieldError name="email" className="error" />
@@ -468,6 +476,7 @@ const ContactPage = () => {
         <TextAreaField
           name="message"
           validation={{ required: true }}
+          // highlight-next-line
           errorClassName="error"
         />
         <FieldError name="message" className="error" />
@@ -485,13 +494,12 @@ export default ContactPage
 
 Oooo, what if the _label_ could change as well? It can, but we'll need Redwood's custom `<Label>` component for that. Note that the `htmlFor` attribute of `<label>` becomes the `name` prop on `<Label>`, just like with the other Redwood form components. And don't forget the import:
 
-```javascript {7,23-25,33-35,43-45}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
+  // highlight-next-line
   Label,
   TextField,
   TextAreaField,
@@ -508,9 +516,11 @@ const ContactPage = () => {
       <MetaTags title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
+        // highlight-start
         <Label name="name" errorClassName="error">
           Name
         </Label>
+        // highlight-end
         <TextField
           name="name"
           validation={{ required: true }}
@@ -518,9 +528,11 @@ const ContactPage = () => {
         />
         <FieldError name="name" className="error" />
 
+        // highlight-start
         <Label name="email" errorClassName="error">
           Email
         </Label>
+        // highlight-end
         <TextField
           name="email"
           validation={{ required: true }}
@@ -528,9 +540,11 @@ const ContactPage = () => {
         />
         <FieldError name="email" className="error" />
 
+        // highlight-start
         <Label name="message" errorClassName="error">
           Message
         </Label>
+        // highlight-end
         <TextAreaField
           name="message"
           validation={{ required: true }}
@@ -559,16 +573,16 @@ And notice that if you fill in something in a field that's marked as an error, t
 
 We should make sure the email field actually contains an email:
 
-```html {7-9}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 <TextField
   name="email"
   validation={{
     required: true,
+    // highlight-start
     pattern: {
       value: /^[^@]+@[^.]+\..+$/,
     },
+    // highlight-end
   }}
   errorClassName="error"
 />
@@ -576,15 +590,14 @@ We should make sure the email field actually contains an email:
 
 That is definitely not the end-all-be-all for email address validation, but pretend it's bulletproof. Let's also change the message on the email validation to be a little more friendly:
 
-```html {9}
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 <TextField
   name="email"
   validation={{
     required: true,
     pattern: {
       value: /^[^@]+@[^.]+\..+$/,
+      // highlight-next-line
       message: 'Please enter a valid email address',
     },
   }}
@@ -600,9 +613,7 @@ That is definitely not the end-all-be-all for email address validation, but pret
 
 Finally, you know what would _really_ be nice? If the fields were validated as soon as the user leaves each one so they don't fill out the whole thing and submit just to see multiple errors appear. Let's do that:
 
-```html
-// web/src/pages/ContactPage/ContactPage.js
-
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
 ```
 
@@ -610,7 +621,7 @@ Well, what do you think? Was it worth the hype? A couple of new components and y
 
 > **Learn more about Redwood Forms**
 >
-> Redwood's forms are built on top of [React Hook Form](https://react-hook-form.com/) so there is even more functionality available than we've documented here. Visit the [Form docs](https://redwoodjs.com/docs/form) to learn more about all form functionalities.
+> Redwood's forms are built on top of [React Hook Form](https://react-hook-form.com/) so there is even more functionality available than we've documented here. Visit the [Form docs](../forms.md) to learn more about all form functionalities.
 
 Redwood has one more trick up its sleeve when it comes to forms but we'll save that for when we're actually submitting one to the server.
 

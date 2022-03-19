@@ -4,15 +4,16 @@ Let's say that on our homepage we only want to show the first couple of sentence
 
 First let's update the `Article` component to contain that functionality:
 
-```javascript {5-7,9,18}
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
 
+// highlight-start
 const truncate = (text, length) => {
   return text.substring(0, length) + '...'
 }
+// highlight-end
 
+// highlight-next-line
 const Article = ({ article, summary = false }) => {
   return (
     <article className="mt-10">
@@ -22,6 +23,7 @@ const Article = ({ article, summary = false }) => {
         </h2>
       </header>
       <div className="mt-2 text-gray-900 font-light">
+        // highlight-next-line
         {summary ? truncate(article.body, 100) : article.body}
       </div>
     </article>
@@ -35,24 +37,28 @@ We'll pass an additional `summary` prop to the component to let it know if it sh
 
 Now in the Storybook story let's create a `summary` story that uses the `Article` component the same way that `generated` does, but adds the new `summary` prop. We'll take the content of the sample post and put that in a constant that both stories will use. We'll also rename `generated` to `full` to make it clear what's different between the two:
 
-```javascript {5-9,11-13,15-17}
-// web/components/Article/Article.stories.js
-
+```jsx title="web/components/Article/Article.stories.js"
 import Article from './Article'
 
+// highlight-start
 const ARTICLE = {
   id: 1,
   title: 'First Post',
   body: `Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Street art next level umami squid. Hammock hexagon glossier 8-bit banjo. Neutra la croix mixtape echo park four loko semiotics kitsch forage chambray. Semiotics salvia selfies jianbing hella shaman. Letterpress helvetica vaporware cronut, shaman butcher YOLO poke fixie hoodie gentrify woke heirloom.`,
 }
+// highlight-end
 
+// highlight-start
 export const full = () => {
   return <Article article={ARTICLE} />
 }
+// highlight-end
 
+// highlight-start
 export const summary = () => {
   return <Article article={ARTICLE} summary={true} />
 }
+// highlight-end
 
 export default { title: 'Components/Article' }
 ```
@@ -65,9 +71,7 @@ As soon as you save the change the stories Storybook should refresh and show the
 
 Great! Now to complete the picture let's use the summary in our home page display of blog posts. The actual Home page isn't what references the `Article` component though, that's in the `ArticlesCell`. We'll add the `summary` prop and then check the result in Storybook:
 
-```javascript {26}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
@@ -91,6 +95,7 @@ export const Success = ({ articles }) => {
   return (
     <div className="space-y-10">
       {articles.map((article) => (
+        // highlight-next-line
         <Article article={article} key={article.id} summary={true} />
       ))}
     </div>

@@ -8,9 +8,8 @@ yarn rw g page Article
 
 Now let's link the title of the post on the homepage to the detail page (and include the `import` for `Link` and `routes`):
 
-```javascript {3,12}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
 // QUERY, Loading, Empty and Failure definitions...
@@ -20,6 +19,7 @@ export const Success = ({ articles }) => {
     <article key={article.id}>
       <header>
         <h2>
+          // highlight-next-line
           <Link to={routes.article()}>{article.title}</Link>
         </h2>
       </header>
@@ -36,17 +36,13 @@ If you click the link on the title of the blog post you should see the boilerpla
 
 But what we really need is to specify _which_ post we want to view on this page. It would be nice to be able to specify the ID of the post in the URL with something like `/article/1`. Let's tell the `<Route>` to expect another part of the URL, and when it does, give that part a name that we can reference later:
 
-```jsx
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
 <Route path="/article/{id}" page={ArticlePage} name="article" />
 ```
 
 Notice the `{id}`. Redwood calls these _route parameters_. They say "whatever value is in this position in the path, let me reference it by the name inside the curly braces". And while we're in the routes file, lets move the route inside the `Set` with the `BlogLayout`.
 
-```jsx {15}
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -61,6 +57,7 @@ const Routes = () => {
         <Route path="/posts" page={PostPostsPage} name="posts" />
       </Set>
       <Set wrap={BlogLayout}>
+        // highlight-next-line
         <Route path="/article/{id}" page={ArticlePage} name="article" />
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/" page={HomePage} name="home" />
@@ -75,9 +72,7 @@ export default Routes
 
 Cool, cool, cool. Now we need to construct a link that has the ID of a post in it:
 
-```jsx
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 <h2>
   <Link to={routes.article({ id: article.id })}>{article.title}</Link>
 </h2>
@@ -87,9 +82,7 @@ For routes with route parameters, the named route function expects an object whe
 
 You may have noticed that when trying to view the new single-article page that you're getting an error. This is because the boilerplate code included with the page when it was generated includes a link to the page itself—a link which now requires an `id`. Remove the link and your page should be working again:
 
-```diff
-// web/src/pages/ArticlePage.js
-
+```diff title="web/src/pages/ArticlePage.js"
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -123,10 +116,9 @@ yarn rw g cell Article
 
 And then we'll use that cell in `ArticlePage`:
 
-```javascript {4,11}
-// web/src/pages/ArticlePage/ArticlePage.js
-
+```jsx title="web/src/pages/ArticlePage/ArticlePage.js"
 import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
 import ArticleCell from 'src/components/ArticleCell'
 
 const ArticlePage = () => {
@@ -134,6 +126,7 @@ const ArticlePage = () => {
     <>
       <MetaTags title="Article" description="Article page" />
 
+      // highlight-next-line
       <ArticleCell />
     </>
   )
@@ -144,16 +137,18 @@ export default ArticlePage
 
 Now over to the cell, we need access to that `{id}` route param so we can look up the ID of the post in the database. Let's update the query to accept a variable (and alias the real query name `post` to `article`):
 
-```javascript {4,5,7-9}
-// web/src/components/ArticleCell/ArticleCell.js
-
+```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 export const QUERY = gql`
+  // highlight-start
   query ArticleQuery($id: Int!) {
     article: post(id: $id) {
+      // highlight-end
       id
+      // highlight-start
       title
       body
       createdAt
+      // highlight-end
     }
   }
 `
@@ -173,17 +168,17 @@ export const Success = ({ article }) => {
 
 Okay, we're getting closer. Still, where will that `$id` come from? Redwood has another trick up its sleeve. Whenever you put a route param in a route, that param is automatically made available to the page that route renders. Which means we can update `ArticlePage` to look like this:
 
-```javascript {6,11}
-// web/src/pages/ArticlePage/ArticlePage.js
-
+```jsx title="web/src/pages/ArticlePage/ArticlePage.js"
 import { MetaTags } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
+// highlight-next-line
 const ArticlePage = ({ id }) => {
   return (
     <>
       <MetaTags title="Article" description="Article page" />
 
+      // highlight-next-line
       <ArticleCell id={id} />
     </>
   )
@@ -200,7 +195,7 @@ We can prove it! Try going to the detail page for a post in the browser and—uh
 
 > By the way, this error message you're seeing is thanks to the `Failure` section of our Cell!
 
-```plaintext
+```
 Error: Variable "$id" got invalid value "1"; Int cannot represent non-integer value: "1"
 ```
 
@@ -210,9 +205,7 @@ It turns out that route params are extracted as strings from the URL, but GraphQ
 
 What if you could request the conversion right in the route's path? Introducing **route param types**. It's as easy as adding `:Int` to our existing route param:
 
-```html
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
 <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
 ```
 
@@ -222,7 +215,7 @@ Voilà! Not only will this convert the `id` param to a number before passing it 
 >
 > All of the props you give to the cell will be automatically available as props in the render components. Only the ones that match the GraphQL variables list will be given to the query. You get the best of both worlds! In our post display above, if you wanted to display some random number along with the post (for some contrived, tutorial-like reason), just pass that prop:
 >
-> ```javascript
+> ```jsx
 > <ArticleCell id={id} rand={Math.random()} />
 > ```
 >
@@ -246,9 +239,7 @@ yarn rw g component Article
 
 Which creates `web/src/components/Article/Article.js` (and corresponding test and more!) as a super simple React component:
 
-```javascript
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 const Article = () => {
   return (
     <div>
@@ -265,13 +256,14 @@ export default Article
 
 Let's copy the `<article>` section from `ArticlesCell` and put it here instead, taking the `article` itself in as a prop:
 
-```javascript {3,5,7-14}
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
+// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
+// highlight-next-line
 const Article = ({ article }) => {
   return (
+    // highlight-start
     <article>
       <header>
         <h2>
@@ -281,6 +273,7 @@ const Article = ({ article }) => {
       <div>{article.body}</div>
       <div>Posted at: {article.createdAt}</div>
     </article>
+    // highlight-end
   )
 }
 
@@ -289,9 +282,8 @@ export default Article
 
 And update `ArticlesCell` and `ArticleCell` (note the plural and singular naming) to use this new component instead:
 
-```javascript {3,26}
-// web/src/components/ArticlesCell/ArticlesCell.js
-
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+// highlight-next-line
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
@@ -315,15 +307,14 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ articles }) => {
   return articles.map((article) => (
+    // highlight-next-line
     <Article key={article.id} article={article} />
   ))
 }
-
 ```
 
-```javascript {3,25}
-// web/src/components/ArticleCell/ArticleCell.js
-
+```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+// highlight-next-line
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
@@ -346,6 +337,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ article }) => {
+  // highlight-next-line
   return <Article article={article} />
 }
 ```
@@ -354,7 +346,7 @@ And there we go! We should be able to move back and forth between the homepage a
 
 ![Article page showing an article](https://user-images.githubusercontent.com/300/146101296-f1d43812-45df-4f1e-a3da-4f6a085bfc08.png)
 
-> If you like what you've been seeing from the router, you can dive deeper into the [Redwood Router](https://redwoodjs.com/docs/redwood-router) guide.
+> If you like what you've been seeing from the router, you can dive deeper into the [Redwood Router](../router.md) guide.
 
 ### Summary
 

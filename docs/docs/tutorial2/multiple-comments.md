@@ -36,18 +36,19 @@ Where did that come from? Check out `CommentsCell.mock.js`: there's no Prisma mo
 
 Let's update the `Success` component to use the `Comment` component created earlier, and add all of the fields we'll need for the **Comment** to render to the `QUERY`:
 
-```javascript {3,9-11,25-27}
-// web/src/components/CommentsCell/CommentsCell.js
-
+```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+// highlight-next-line
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`
   query CommentsQuery {
     comments {
       id
+      // highlight-start
       name
       body
       createdAt
+      // highlight-end
     }
   }
 `
@@ -61,9 +62,11 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ comments }) => {
+  // highlight-start
   return comments.map((comment) => (
     <Comment key={comment.id} comment={comment} />
   ))
+  // highlight-end
 }
 ```
 
@@ -71,10 +74,9 @@ We're passing an additional `key` prop to make React happy when iterating over a
 
 If you check Storybook, you'll see that we do indeed render the `Comment` component three times, but there's no data to display. Let's update the mock with some sample data:
 
-```javascript {4-17}
-// web/src/components/CommentsCell/CommentsCell.mock.js
-
+```javascript title="web/src/components/CommentsCell/CommentsCell.mock.js"
 export const standard = () => ({
+  // highlight-start
   comments: [
     {
       id: 1,
@@ -89,6 +91,7 @@ export const standard = () => ({
       createdAt: '2020-02-03T23:00:00Z',
     },
   ],
+  // highlight-end
 })
 ```
 
@@ -100,15 +103,15 @@ Storybook refreshes and we've got comments! It's a little hard to distinguish be
 
 Since `CommentsCell` is the one responsible for drawing multiple comments, it makes sense that it should be "in charge" of how they're displayed, including the gap between them. Let's add a style to do that in `CommentsCell`:
 
-```javascript {5,9}
-// web/src/components/CommentsCell/CommentsCell.js
-
+```jsx title="web/src/components/CommentsCell/CommentsCell.js"
 export const Success = ({ comments }) => {
   return (
+    // highlight-next-line
     <div className="space-y-8">
       {comments.map((comment) => (
         <Comment comment={comment} key={comment.id} />
       ))}
+    // highlight-next-line
     </div>
   )
 }
@@ -118,10 +121,9 @@ export const Success = ({ comments }) => {
 
 Looking good! Let's add our CommentsCell to the actual blog post display page:
 
-```javascript {4,21}
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
+// highlight-next-line
 import CommentsCell from 'src/components/CommentsCell'
 
 const truncate = (text, length) => {
@@ -139,6 +141,7 @@ const Article = ({ article, summary = false }) => {
       <div className="mt-2 text-gray-900 font-light">
         {summary ? truncate(article.body, 100) : article.body}
       </div>
+      // highlight-next-line
       {!summary && <CommentsCell />}
     </article>
   )
@@ -159,9 +162,7 @@ Adding the comments to the article display has exposed another design issue: the
 
 Let's add a gap between the two:
 
-```javascript {15-17}
-// web/src/components/BlogPost/BlogPost.js
-
+```jsx title="web/src/components/BlogPost/BlogPost.js"
 const BlogPost = ({ post, summary = false }) => {
   return (
     <article className="mt-10">
@@ -174,9 +175,11 @@ const BlogPost = ({ post, summary = false }) => {
         {summary ? truncate(post.body, 100) : post.body}
       </div>
       {!summary && (
+        // highlight-start
         <div className="mt-12">
           <CommentsCell />
         </div>
+        // highlight-end
       )}
     </article>
   )
@@ -206,7 +209,7 @@ The actual `Comment` component does most of the work so there's no need to test 
 
 The default `CommentsCell.test.js` actually tests every state for us, albeit at an absolute minimum level—it make sure no errors are thrown:
 
-```javascript
+```jsx
 import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
@@ -242,9 +245,8 @@ And that's nothing to scoff at! As you've probably experienced, a React componen
 
 But in this case we can do a little more to make sure `CommentsCell` is doing what we expect. Let's update the `Success` test in `CommentsCell.test.js` to check that exactly the number of comments we passed in as a prop are rendered. How do we know a comment was rendered? How about if we check that each `comment.body` (the most important part of the comment) is present on the screen:
 
-```javascript {3,27-32}
-// web/src/components/CommentsCell/CommentsCell.test.js
-
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
+// highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
@@ -269,12 +271,14 @@ describe('CommentsCell', () => {
   })
 
   it('renders Success successfully', async () => {
+    // highlight-start
     const comments = standard().comments
     render(<Success comments={comments} />)
 
     comments.forEach((comment) => {
       expect(screen.getByText(comment.body)).toBeInTheDocument()
     })
+    // highlight-end
   })
 })
 
@@ -286,11 +290,11 @@ We're looping through each `comment` from the mock, the same mock used by Storyb
 
 The functionality we added to `Article` says to show the comments for the post if we are *not* showing the summary. We've got a test for both the "full" and "summary" renders already. Generally you want your tests to be testing "one thing" so let's add two additional tests for our new functionality:
 
-```javascript {3,5,22-29,42-49}
-// web/src/components/BlogPost/BlogPost.test.js
-
+```jsx title="web/src/components/Article/Article.test.js"
+// highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
 import Article from './Article'
+// highlight-next-line
 import { standard } from 'src/components/CommentsCell/CommentsCell.mock'
 
 const ARTICLE = {
@@ -308,6 +312,7 @@ describe('Article', () => {
     expect(screen.getByText(ARTICLE.body)).toBeInTheDocument()
   })
 
+  // highlight-start
   it('renders comments when displaying a full blog post', async () => {
     const comment = standard().comments[0]
     render(<Article article={ARTICLE} />)
@@ -316,6 +321,7 @@ describe('Article', () => {
       expect(screen.getByText(comment.body)).toBeInTheDocument()
     )
   })
+  // highlight-end
 
   it('renders a summary of a blog post', () => {
     render(<Article article={ARTICLE} summary={true} />)
@@ -328,6 +334,7 @@ describe('Article', () => {
     ).toBeInTheDocument()
   })
 
+  // highlight-start
   it('does not render comments when displaying a summary', async () => {
     const comment = standard().comments[0]
     render(<Article article={ARTICLE} summary={true} />)
@@ -336,6 +343,7 @@ describe('Article', () => {
       expect(screen.queryByText(comment.body)).not.toBeInTheDocument()
     )
   })
+  // highlight-end
 })
 ```
 

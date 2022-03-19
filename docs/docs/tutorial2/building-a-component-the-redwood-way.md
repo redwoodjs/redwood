@@ -25,15 +25,16 @@ Storybook should refresh and our "Generated" Comment story will be ready to go:
 
 Let's think about what we want to ask users for and then display in a comment. How about just their name and the content of the comment itself? And we'll throw in the date/time it was created. Let's update the **Comment** component to accept a `comment` object with those three properties:
 
-```javascript {3,6-8}
-// web/src/components/Comment/Comment.js
-
+```jsx title="web/src/components/Comment/Comment.js"
+// highlight-next-line
 const Comment = ({ comment }) => {
   return (
     <div>
+      // highlight-start
       <h2>{comment.name}</h2>
       <time datetime={comment.createdAt}>{comment.createdAt}</time>
       <p>{comment.body}</p>
+      // highlight-end
     </div>
   )
 }
@@ -47,19 +48,19 @@ Once you save that file and Storybook reloads you'll see it blow up:
 
 We need to update the story to include that comment object and pass it as a prop:
 
-```javascript {8-12}
-// web/src/components/Comment/Comment.stories.js
-
+```jsx title="web/src/components/Comment/Comment.stories.js"
 import Comment from './Comment'
 
 export const generated = () => {
   return (
     <Comment
+      // highlight-start
       comment={{
         name: 'Rob Cameron',
         body: 'This is the first comment!',
         createdAt: '2020-01-01T12:34:56Z'
       }}
+      // highlight-end
     />
   )
 }
@@ -75,17 +76,18 @@ Storybook will reload and be much happier:
 
 Let's add a little bit of styling and date conversion to get this **Comment** component looking like a nice, completed design element:
 
-```javascript {3-7,11-19}
-// web/src/components/Comment/Comment.js
-
+```jsx title="web/src/components/Comment/Comment.js"
+// highlight-start
 const formattedDate = (datetime) => {
   const parsedDate = new Date(datetime)
   const month = parsedDate.toLocaleString('default', { month: 'long' })
   return `${parsedDate.getDate()} ${month} ${parsedDate.getFullYear()}`
 }
+// highlight-end
 
 const Comment = ({ comment }) => {
   return (
+    // highlight-start
     <div className="bg-gray-200 p-8 rounded-lg">
       <header className="flex justify-between">
         <h2 className="font-semibold text-gray-700">{comment.name}</h2>
@@ -95,6 +97,7 @@ const Comment = ({ comment }) => {
       </header>
       <p className="text-sm mt-2">{comment.body}</p>
     </div>
+    // highlight-end
   )
 }
 
@@ -113,14 +116,13 @@ The default test that comes with a generated component just makes sure that no e
 
 Let's add a sample comment to the test and check that the various parts are being rendered:
 
-```javascript {8-20}
-// web/src/components/Comment.test.js
-
+```jsx title="web/src/components/Comment.test.js"
 import { render, screen } from '@redwoodjs/testing'
 import Comment from './Comment'
 
 describe('Comment', () => {
   it('renders successfully', () => {
+    // highlight-start
     const comment = {
       name: 'John Doe',
       body: 'This is my comment',
@@ -134,6 +136,7 @@ describe('Comment', () => {
     expect(dateExpect).toBeInTheDocument()
     expect(dateExpect.nodeName).toEqual('TIME')
     expect(dateExpect).toHaveAttribute('datetime', comment.createdAt)
+    // highlight-end
   })
 })
 ```

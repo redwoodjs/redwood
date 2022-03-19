@@ -27,14 +27,13 @@ It's not pretty, but it's a start! Open the page in your editor, change some tex
 
 Open up `web/src/Routes.js` and take a look at the route that was created:
 
-```jsx{8}
-// web/src/Routes.js
-
+```jsx title="web/src/Routes.js"
 import { Router, Route } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
     <Router>
+      // highlight-next-line
       <Route path="/" page={HomePage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
@@ -46,7 +45,7 @@ export default Routes
 
 Try changing the route to something like:
 
-```html
+```jsx
 <Route path="/hello" page={HomePage} name="home" />
 ```
 
@@ -58,7 +57,7 @@ Change the route path back to `/` before continuing!
 
 Previous versions of this tutorial had you build everything without any styling, so we could really focus on the code, but let's face it: an unstyled site is pretty ugly. Let's add a really simple stylesheet that will just make things a *little* easier on the eyes as we build out the site. Paste the following into `web/src/index.css`:
 
-```css
+```css title="web/src/index.css"
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
