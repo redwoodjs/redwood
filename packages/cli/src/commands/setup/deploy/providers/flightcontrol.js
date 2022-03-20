@@ -142,6 +142,44 @@ const updateGraphQLFunction = () => {
   }
 }
 
+const updateDbAuth = () => {
+  return {
+    title: 'Updating dbAuth cookie config (if used)...',
+    task: (_ctx) => {
+      const authTsPath = path.join(getPaths().base, 'api/src/functions/auth.ts')
+      const authJsPath = path.join(getPaths().base, 'api/src/functions/auth.js')
+
+      let authFnPath
+      if (fs.existsSync(authTsPath)) {
+        authFnPath = authTsPath
+      } else if (fs.existsSync(authJsPath)) {
+        authFnPath = authJsPath
+      } else {
+        console.log(`Skipping, did not detect api/src/functions/auth.js`)
+        return
+      }
+
+      const authContent = fs.readFileSync(authFnPath, 'utf8').split(EOL)
+      const sameSiteLineIndex = authContent.findIndex((line) =>
+        line.match(/SameSite:.*,/)
+      )
+
+      if (sameSiteLineIndex === -1) {
+        console.log(`
+    Couldn't find cookie SameSite config in api/src/functions/auth.js.
+
+    You need to ensure SameSite is set to "None"
+    `)
+        return
+      }
+
+      authContent[sameSiteLineIndex] = `    SameSite: "None",`
+
+      fs.writeFileSync(authFnPath, authContent.join(EOL))
+    },
+  }
+}
+
 // We need to set the apiUrl evn var for local dev
 const addToDotEnvDefaultTask = () => {
   return {
@@ -180,8 +218,9 @@ const notes = [
   'You are ready to deploy to Flightcontrol!\n',
   '1. Create your project at https://app.flightcontrol.dev/signup?ref=redwood',
   '2. After your project is provisioned,',
-  'go to the Flightcontrol dashboard and set the REDWOOD_API_URL env var to the URL of your API service\n',
-  'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions',
+  'go to the Flightcontrol dashboard and set the REDWOOD_API_URL env var to the full URL of your API service\n',
+  'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions\n',
+  "NOTE: If you are using yarn v1, remove the installCommand's from flightcontrol.json",
 ]
 
 export const handler = async ({ force, database }) => {
@@ -196,6 +235,7 @@ export const handler = async ({ force, database }) => {
       },
     },
     updateGraphQLFunction(),
+    updateDbAuth(),
     updateApiURLTask('${REDWOOD_API_URL}'),
     addToDotEnvDefaultTask(),
     printSetupNotes(notes),
