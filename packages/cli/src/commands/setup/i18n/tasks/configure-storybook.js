@@ -26,7 +26,7 @@ export function checkStorybookStatus({ force }) {
 }
 
 /**
- * Configure Storybook for Chakra UI by creating a custom preview config
+ * Configure Storybook for i18n by creating a custom preview config
  */
 export function configureStorybook() {
   const { storybookPreviewConfig } = getPaths().web
