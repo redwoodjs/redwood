@@ -30,8 +30,8 @@ export const generateTypeDefGraphQLApi = async () => {
 
   try {
     return await runCodegenGraphQL([], extraPlugins, filename)
-  } catch (e) {
-    console.error(e)
+  } catch {
+    console.error()
     console.error('Error: Could not generate GraphQL type definitions (api)')
     console.error()
 
@@ -69,7 +69,7 @@ export const generateTypeDefGraphQLWeb = async ({ logErrors }: Args = {}) => {
   try {
     return await runCodegenGraphQL(documents, extraPlugins, filename)
   } catch (e) {
-    console.error(e)
+    console.error()
     console.error('Error: Could not generate GraphQL type definitions (web)')
     console.error()
 
@@ -105,6 +105,8 @@ async function runCodegenGraphQL(
   const options = getCodegenOptions(documents, mergedConfig, extraPlugins)
   const output = await codegen(options)
 
+  const dirname = path.dirname(filename)
+  fs.mkdirSync(dirname, { recursive: true })
   fs.writeFileSync(filename, output)
 
   return [filename]

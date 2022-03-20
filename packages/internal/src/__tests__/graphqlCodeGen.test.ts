@@ -59,12 +59,14 @@ test('respects user provided codegen config', async () => {
     typeNames: change-case-all#upperCase`
   )
 
-  await generateGraphQLSchema()
-  const [outputPath] = await generateTypeDefGraphQLWeb()
-
-  const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
-
+  // Wrapping in `try` to make sure codegen.yml is always deleted, even if the
+  // test fails
   try {
+    await generateGraphQLSchema()
+    const [outputPath] = await generateTypeDefGraphQLWeb()
+
+    const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
+
     // Should be upper cased type
     expect(gqlTypesOutput).toContain('ADDTODO_CREATETODOMUTATION')
 
