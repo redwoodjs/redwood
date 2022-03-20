@@ -5856,7 +5856,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/plugin-transform-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@types/babel__core": 7.1.18
+    "@types/babel__core": 7.1.19
     "@types/fs-extra": 9.0.13
     "@types/jscodeshift": 0.11.3
     "@types/prettier": 2.4.4
@@ -6000,7 +6000,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.28.0
+    react-hook-form: 7.28.1
     typescript: 4.6.2
   peerDependencies:
     graphql: 16.3.0
@@ -6067,7 +6067,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 2.6.1
     "@redwoodjs/graphql-server": 0.49.1
     "@types/babel-plugin-tester": 9.0.4
-    "@types/babel__core": 7.1.18
+    "@types/babel__core": 7.1.19
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
     "@types/rimraf": 3.0.2
@@ -7494,16 +7494,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.1.18, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
-  version: 7.1.18
-  resolution: "@types/babel__core@npm:7.1.18"
+"@types/babel__core@npm:*, @types/babel__core@npm:7.1.19, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
+  version: 7.1.19
+  resolution: "@types/babel__core@npm:7.1.19"
   dependencies:
     "@babel/parser": ^7.1.0
     "@babel/types": ^7.0.0
     "@types/babel__generator": "*"
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
-  checksum: af7165b49a816eb6842fc0bd9834390665ed8216bf29096f051e648a9cd09d337c129261d5fcfcfa8e0e166b3facce85519ea5000bbb941671e83dd6cd6e0518
+  checksum: d07442fee0a1331405c80efc06dd74fe815fc9ac1351de54c4eaf06fea9e516992a6f6a139361d78df5828b0a94977f33c977d9391b09949b959fd20d80f48d8
   languageName: node
   linkType: hard
 
@@ -25036,12 +25036,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.28.0":
-  version: 7.28.0
-  resolution: "react-hook-form@npm:7.28.0"
+"react-hook-form@npm:7.28.1":
+  version: 7.28.1
+  resolution: "react-hook-form@npm:7.28.1"
   peerDependencies:
     react: ^16.8.0 || ^17
-  checksum: 129434c9d1a0f38c5c1b32e8db41c8ccac4298a872c871521cb0bcf02ab9ba35bb2ca2129d881db236d704467ce251f34822b12ea0b6ba26c3c6ef262732ceb2
+  checksum: 03b6f2352ca3c1f7138722ac6b453724bf455f41ea5b101264afe65b6cdd5d3b94808be230654ea59761fe5760e4d7f98117cf766f5c34fd31abf82c87a051e7
   languageName: node
   linkType: hard
 

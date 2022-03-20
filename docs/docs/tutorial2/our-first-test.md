@@ -18,7 +18,7 @@ The test was looking for the full text of the blog post, but remember that in `A
 
 Let's update the test so that it checks for the expected behavior instead. There are entire books written on the best way to test, so no matter what we decide on testing in this code there will be someone out there to tell us we're doing it wrong. As just one example, the simplest test would be to just copy what's output and use that for the text in the test:
 
-```jsx title="web/src/components/BlogPostsCell.test.js"
+```jsx title="web/src/components/ArticlesCell.test.js"
 test('Success renders successfully', async () => {
   const posts = standard().posts
   render(<Success posts={posts} />)
@@ -49,9 +49,9 @@ This gives us a buffer if we decide to truncate to something like 25 words, or e
 Okay, let's do this:
 
 ```jsx title="web/src/components/ArticlesCell.test.js"
-import { render, screen } from '@redwoodjs/testing'
 // highlight-next-line
-import { Loading, Empty, Failure, Success, within } from './ArticlesCell'
+import { render, screen, within } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
 describe('ArticlesCell', () => {

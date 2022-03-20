@@ -40,7 +40,7 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@types/babel__core": "7.1.18",
+    "@types/babel__core": "7.1.19",
     "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.3",
     "@types/prettier": "2.4.4",
