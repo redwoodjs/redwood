@@ -49,9 +49,9 @@ This gives us a buffer if we decide to truncate to something like 25 words, or e
 Okay, let's do this:
 
 ```jsx title="web/src/components/ArticlesCell.test.js"
-import { render, screen } from '@redwoodjs/testing'
 // highlight-next-line
-import { Loading, Empty, Failure, Success, within } from './ArticlesCell'
+import { render, screen, within } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
 describe('ArticlesCell', () => {
