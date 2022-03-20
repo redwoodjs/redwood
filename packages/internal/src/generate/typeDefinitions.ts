@@ -1,18 +1,16 @@
 import fs from 'fs'
 import path from 'path'
 
-import { generate, loadCodegenConfig } from '@graphql-codegen/cli'
-import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'
-import { CodeFileLoader } from '@graphql-tools/code-file-loader'
-import { loadDocuments } from '@graphql-tools/load'
-import type { LoadTypedefsOptions } from '@graphql-tools/load'
-
 import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
 import { getPaths, processPagesDir } from '../paths'
 
+import {
+  generateTypeDefGraphQLApi,
+  generateTypeDefGraphQLWeb,
+} from './graphqlCodeGen'
 import { writeTemplate } from './templates'
 
 // TODO:
@@ -193,172 +191,4 @@ export const generateTypeDefGlobImports = () => {
 
 export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
-}
-
-export const generateTypeDefGraphQLApi = async () => {
-  try {
-    const rwjsPaths = getPaths()
-    const f = await runCodegenGraphQL({
-      [path.join(rwjsPaths.api.types, 'graphql.d.ts')]: {
-        plugins: [
-          {
-            typescript: { enumsAsTypes: true },
-          },
-          'typescript-resolvers',
-        ],
-      },
-    })
-    return f
-  } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (api)')
-    console.error()
-    return []
-  }
-}
-
-function getLoadDocumentsOptions(
-  generates: Record<
-    string,
-    CodegenTypes.ConfiguredOutput | CodegenTypes.ConfiguredPlugin[]
-  >
-) {
-  const rwjsPaths = getPaths()
-
-  const ignore = []
-  for (const generatePath of Object.keys(generates)) {
-    if (path.extname(generatePath) === '') {
-      // we omit paths that don't resolve to a specific file
-      continue
-    }
-    ignore.push(path.join(process.cwd(), generatePath))
-  }
-
-  const loaders = [
-    new CodeFileLoader({
-      pluckConfig: {
-        skipIndent: true,
-      },
-    }),
-  ]
-
-  const loadTypedefsConfig: LoadTypedefsOptions<{ cwd: string }> = {
-    ignore,
-    loaders,
-    cwd: rwjsPaths.base,
-  }
-
-  return loadTypedefsConfig
-}
-
-function getCodegenInput(
-  generates: Record<
-    string,
-    CodegenTypes.ConfiguredOutput | CodegenTypes.ConfiguredPlugin[]
-  >
-) {
-  const rwjsPaths = getPaths()
-
-  const codegenConfig: CodegenConfig = {
-    cwd: rwjsPaths.base,
-    schema: rwjsPaths.generated.schema,
-    config: {
-      namingConvention: 'keep', // to allow camelCased query names
-      scalars: {
-        // We need these, otherwise these scalars are mapped to any
-        // @TODO is there a way we can use scalars defined in
-        // packages/graphql-server/src/rootSchema.ts
-        BigInt: 'number',
-        DateTime: 'string',
-        Date: 'string',
-        JSON: 'Record<string, unknown>',
-        JSONObject: 'Record<string, unknown>',
-        Time: 'string',
-      },
-      // prevent type names being PetQueryQuery, RW generators already append
-      // Query/Mutation/etc
-      omitOperationSuffix: true,
-    },
-    generates,
-    silent: false,
-    errorsOnly: true,
-  }
-
-  return codegenConfig
-}
-
-interface Args {
-  /** used for tests */
-  logErrors?: boolean | undefined
-}
-
-export const generateTypeDefGraphQLWeb = async ({ logErrors }: Args = {}) => {
-  const rwjsPaths = getPaths()
-  const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
-
-  const generates = {
-    [path.join(rwjsPaths.web.types, 'graphql.d.ts')]: {
-      documents: documentsGlob,
-      plugins: [
-        {
-          typescript: {
-            enumsAsTypes: true,
-          },
-        },
-        'typescript-operations',
-      ],
-    },
-  }
-
-  const options = getLoadDocumentsOptions(generates)
-
-  try {
-    await loadDocuments([documentsGlob], options)
-  } catch {
-    // No GraphQL documents present (web), no need to try to run codegen
-    return []
-  }
-
-  try {
-    return await runCodegenGraphQL(generates)
-  } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (web)')
-    console.error()
-
-    if (logErrors) {
-      console.error(e)
-    }
-
-    return []
-  }
-}
-
-/**
- * This is the function used internally by generateTypeDefGraphQLApi and generateTypeDefGraphQLWeb
- * And contains the base configuration for generating gql types with codegen
- *
- * Named a little differently to make it easier to spot
- */
-
-// CLI generate also takes cwd
-type CodegenConfig = CodegenTypes.Config & { cwd: string }
-
-const runCodegenGraphQL = async (
-  generates: Record<string, CodegenTypes.ConfiguredOutput>
-) => {
-  const rwjsPaths = getPaths()
-  type GenerateResponse = { filename: string; contents: string }[]
-
-  const userCodegenConfig = await loadCodegenConfig({
-    configFilePath: rwjsPaths.base,
-  })
-
-  // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
-  const f: GenerateResponse = await generate(
-    // Merge in user codegen config with the rw built-in one
-    { ...getCodegenInput(generates), ...userCodegenConfig?.config },
-    true
-  )
-  return f.map(({ filename }) => filename)
 }

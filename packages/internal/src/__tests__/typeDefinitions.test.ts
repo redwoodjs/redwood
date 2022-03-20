@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import { findCells, findDirectoryNamedModules } from '../files'
-import { generateGraphQLSchema } from '../generate/graphqlSchema'
 import {
   generateMirrorCells,
   generateMirrorDirectoryNamedModules,
@@ -14,8 +13,6 @@ import {
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
   generateTypeDefScenarios,
-  generateTypeDefGraphQLApi,
-  generateTypeDefGraphQLWeb,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -162,23 +159,6 @@ test('generate scenario type defs', () => {
   expect(p[0]).toEqual('.redwood/types/includes/api-scenarios.d.ts')
 })
 
-test('Generate gql typedefs to correct paths', async () => {
-  // Generate schema first
-
-  await generateGraphQLSchema()
-  const p1 = await generateTypeDefGraphQLWeb()
-  const p2 = await generateTypeDefGraphQLApi()
-  const paths = [...p1, ...p2]
-  const p = paths.map(cleanPaths)
-
-  expect(p).toEqual(
-    expect.arrayContaining([
-      expect.stringMatching('web/types/graphql.d.ts'),
-      expect.stringMatching('api/types/graphql.d.ts'),
-    ])
-  )
-}, 10_000) // Set timeout to 10s. Windows test runners are slow.
-
 test('mirror path for directory named modules', () => {
   const d = findDirectoryNamedModules()
   const p = mirrorPathForDirectoryNamedModules(d[0])
@@ -195,127 +175,4 @@ test('mirror path for dir cells', () => {
   expect(cleanPaths(p[0])).toMatchInlineSnapshot(
     `".redwood/types/mirror/web/src/components/NumTodosCell"`
   )
-})
-
-test('respects user provided codegen config', async () => {
-  const customCodegenConfigPath = path.join(FIXTURE_PATH, 'codegen.yml')
-  // Add codegen.yml to fixture folder
-  fs.writeFileSync(
-    customCodegenConfigPath,
-    `config:
-  omitOperationSuffix: false
-  namingConvention:
-    typeNames: change-case-all#upperCase`
-  )
-
-  await generateGraphQLSchema()
-  const [outputPath] = await generateTypeDefGraphQLWeb()
-
-  const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
-
-  // Should be upper cased type
-  expect(gqlTypesOutput).toContain('ADDTODO_CREATETODOMUTATION')
-
-  // because we override omitOPerationSuffix to false, it should append QUERY
-  // for __fixtures__/example-todo-main/../NumTodosCell.js
-  expect(gqlTypesOutput).toContain('NUMTODOSCELL_GETCOUNTQUERY')
-
-  // Delete added codegen.yml
-  fs.rmSync(customCodegenConfigPath)
-})
-
-test("Doesn't throw or print any errors with empty project", async () => {
-  const fixturePath = path.resolve(
-    __dirname,
-    '../../../../__fixtures__/empty-project'
-  )
-  process.env.RWJS_CWD = fixturePath
-  const oldConsoleError = console.error
-  console.error = jest.fn()
-
-  try {
-    await generateGraphQLSchema()
-    await generateTypeDefGraphQLWeb()
-    await generateTypeDefGraphQLApi()
-  } catch (e) {
-    console.error(e)
-    // Fail if any of the three above calls throws an error
-    expect(false).toBeTruthy()
-  }
-
-  try {
-    expect(console.error).not.toHaveBeenCalled()
-  } finally {
-    console.error = oldConsoleError
-    delete process.env.RWJS_CWD
-  }
-})
-
-test("Doesn't swallow legit errors - invalidQueryType", async () => {
-  const fixturePath = path.resolve(
-    __dirname,
-    './fixtures/typeDefinitions/invalidQueryType'
-  )
-  process.env.RWJS_CWD = fixturePath
-  const oldConsoleError = console.error
-  console.error = jest.fn()
-
-  await generateTypeDefGraphQLWeb({ logErrors: true })
-
-  try {
-    expect(console.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(/field.*softKitten.*Query/),
-      })
-    )
-  } finally {
-    console.error = oldConsoleError
-    delete process.env.RWJS_CWD
-  }
-})
-
-test("Doesn't swallow legit errors - missingType", async () => {
-  const fixturePath = path.resolve(
-    __dirname,
-    './fixtures/typeDefinitions/missingType'
-  )
-  process.env.RWJS_CWD = fixturePath
-  const oldConsoleError = console.error
-  console.error = jest.fn()
-
-  await generateTypeDefGraphQLWeb({ logErrors: true })
-
-  try {
-    expect(console.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(/Unknown type.*Todo/),
-      })
-    )
-  } finally {
-    console.error = oldConsoleError
-    delete process.env.RWJS_CWD
-  }
-})
-
-test("Doesn't swallow legit errors - nonExistingField", async () => {
-  const fixturePath = path.resolve(
-    __dirname,
-    './fixtures/typeDefinitions/nonExistingField'
-  )
-  process.env.RWJS_CWD = fixturePath
-  const oldConsoleError = console.error
-  console.error = jest.fn()
-
-  await generateTypeDefGraphQLWeb({ logErrors: true })
-
-  try {
-    expect(console.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(/field.*done.*Todo/),
-      })
-    )
-  } finally {
-    console.error = oldConsoleError
-    delete process.env.RWJS_CWD
-  }
 })
