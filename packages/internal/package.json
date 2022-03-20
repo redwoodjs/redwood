@@ -27,12 +27,6 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/fixtures/",
-      "/__fixtures__/"
-    ]
-  },
   "dependencies": {
     "@babel/parser": "7.16.7",
     "@babel/plugin-transform-typescript": "7.16.7",
