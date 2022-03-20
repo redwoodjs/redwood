@@ -60,3 +60,12 @@ html[data-theme="dark"] blockquote {
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: var(--ifm-global-radius);
 }
+
+/* for shiki */
+[data-theme="light"] .shiki.nord {
+  display: none;
+}
+
+[data-theme="dark"] .shiki.min-light {
+  display: none;
+}
