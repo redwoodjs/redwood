@@ -107,9 +107,6 @@ async function runCodegenGraphQL(
 
   const dirname = path.dirname(filename)
 
-  console.log('filename', filename)
-  console.log('dirname', dirname)
-
   try {
     fs.mkdirSync(dirname, { recursive: true })
     fs.writeFileSync(filename, output)

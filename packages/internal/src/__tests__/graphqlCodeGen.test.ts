@@ -6,7 +6,6 @@ import {
   generateTypeDefGraphQLWeb,
 } from '../generate/graphqlCodeGen'
 import { generateGraphQLSchema } from '../generate/graphqlSchema'
-import { ensurePosixPath } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -25,11 +24,10 @@ test('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 
   const webPaths = await generateTypeDefGraphQLWeb()
-  const webPath = ensurePosixPath(webPaths[0])
-  const gqlTypesWebOutput = fs.readFileSync(webPath, 'utf-8')
+  const gqlTypesWebOutput = fs.readFileSync(webPaths[0], 'utf-8')
 
   expect(webPaths).toHaveLength(1)
-  expect(webPath).toMatch('web/types/graphql.d.ts')
+  expect(webPaths[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
 
   // This would be better tested with a snapshot, but I couldn't get them
   // working on GitHub CI
@@ -58,11 +56,10 @@ test('Generate gql typedefs api', async () => {
   await generateGraphQLSchema()
 
   const apiPaths = await generateTypeDefGraphQLApi()
-  const apiPath = ensurePosixPath(apiPaths[0])
-  const gqlTypesApiOutput = fs.readFileSync(apiPath, 'utf-8')
+  const gqlTypesApiOutput = fs.readFileSync(apiPaths[0], 'utf-8')
 
   expect(apiPaths).toHaveLength(1)
-  expect(apiPath).toMatch('api/types/graphql.d.ts')
+  expect(apiPaths[0]).toMatch(path.join('api', 'types', 'graphql.d.ts'))
 
   // This would be better tested with a snapshot, but I couldn't get them
   // working on GitHub CI
