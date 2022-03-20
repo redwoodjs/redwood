@@ -105,15 +105,8 @@ async function runCodegenGraphQL(
   const options = getCodegenOptions(documents, mergedConfig, extraPlugins)
   const output = await codegen(options)
 
-  const dirname = path.dirname(filename)
-
-  try {
-    fs.mkdirSync(dirname, { recursive: true })
-    fs.writeFileSync(filename, output)
-  } catch (e) {
-    console.log('file ops failed')
-    console.log(e)
-  }
+  fs.mkdirSync(path.dirname(filename), { recursive: true })
+  fs.writeFileSync(filename, output)
 
   return [filename]
 }
