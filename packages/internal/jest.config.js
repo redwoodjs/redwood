@@ -1,6 +1,6 @@
 module.exports = {
-  testMatch: ['**/src/__tests__/*.test.ts'],
-  testPathIgnorePatterns: [],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/*.test.[jt]s?(x)'],
+  testPathIgnorePatterns: ['fixtures', 'dist'],
   moduleNameMapper: {
     'src/(.*)': '<rootDir>/src/$1',
   },
