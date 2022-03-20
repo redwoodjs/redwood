@@ -1031,20 +1031,20 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 
 **Regenerating the SDL**
 
-Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time having to make those changes manually.
+Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time not having to make those changes manually.
 
-But, since the `generate` command prevents you from overwriting files accidentally, you could use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
+But, since the `generate` command prevents you from overwriting files accidentally, you use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
 
 In that case, you can run the following to "regenerate" **just** the SDL file and leave your tests and scenarios intact and not lose your hard work.
 
 ```
-yarn redwood g sdl <model> --force --tests=false
+yarn redwood g sdl <model> --force --no-tests
 ```
 
 **Example**
 
 ```terminal
-~/redwood-app$ yarn redwood generate sdl user --force --tests=false
+~/redwood-app$ yarn redwood generate sdl user --force --no-tests
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
   ✔ Generating SDL files...
