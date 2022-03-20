@@ -69,7 +69,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/babel-plugin-tester": "9.0.4",
-    "@types/babel__core": "7.1.18",
+    "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
     "@types/rimraf": "3.0.2",
