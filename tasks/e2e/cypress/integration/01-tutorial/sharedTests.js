@@ -70,7 +70,7 @@ export const test_first_page = () =>
 
 export const test_pages = () =>
   it('2. A Second Page and a Link', () => {
-    // https://redwoodjs.com/tutorial/a-second-page-and-a-link
+    // https://redwoodjs.com/docs/tutorial/a-second-page-and-a-link
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
@@ -114,7 +114,7 @@ export const test_layouts = () =>
 
 export const test_dynamic = () =>
   it('4. Getting Dynamic', () => {
-    // https://redwoodjs.com/tutorial/getting-dynamic
+    // https://redwoodjs.com/docs/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     // need to also handle case where Prisma Client be out of sync
@@ -208,7 +208,7 @@ export const test_cells = () =>
 
 export const test_routing_params = () =>
   it('6. Routing Params', () => {
-    // https://redwoodjs.com/tutorial/routing-params
+    // https://redwoodjs.com/docs/tutorial/routing-params
     cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
@@ -273,7 +273,7 @@ export const test_routing_params = () =>
 
 export const test_forms = () =>
   it("7. Everyone's Favorite Thing to Build: Forms", () => {
-    // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
+    // https://redwoodjs.com/docs/tutorial/everyone-s-favorite-thing-to-build-forms
     cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
