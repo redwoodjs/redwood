@@ -25,8 +25,8 @@ import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('The Redwood Tutorial - Golden path edition', () => {
-  // TODO: https://redwoodjs.com/docs/tutorial/saving-data
-  // TODO: https://redwoodjs.com/docs/tutorial/administration
+  // TODO: https://redwoodjs.com/docs/tutorial/chapter3/saving-data
+  // TODO: https://redwoodjs.com/docs/tutorial/chapter4/administration
   after(() => {
     cy.exec(
       `cd ${BASE_DIR}; git add . && git commit -a --message=01-tutorial`,

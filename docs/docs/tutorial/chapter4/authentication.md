@@ -497,6 +497,6 @@ Head over to the Redwood docs to read more about [self-hosted authentication](..
 
 ## One More Thing
 
-Remember the GraphQL Playground exercise at the end of [Creating a Contact](saving-data.md#creating-a-contact)? Try to run that again now that authentication is in place and you should get that error we've been talking about because of the `@requireAuth` directive! But, creating a *new* contact should still work just fine (because we're using `@skipAuth` on that mutation).
+Remember the GraphQL Playground exercise at the end of [Creating a Contact](/docs/tutorial/chapter3/saving-data#creating-a-contact)? Try to run that again now that authentication is in place and you should get that error we've been talking about because of the `@requireAuth` directive! But, creating a *new* contact should still work just fine (because we're using `@skipAuth` on that mutation).
 
 However, simulating a logged-in user through the GraphQL Playground is no picnic. But, we're working on improving the experience!
