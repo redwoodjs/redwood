@@ -621,7 +621,7 @@ Well, what do you think? Was it worth the hype? A couple of new components and y
 
 > **Learn more about Redwood Forms**
 >
-> Redwood's forms are built on top of [React Hook Form](https://react-hook-form.com/) so there is even more functionality available than we've documented here. Visit the [Form docs](../forms.md) to learn more about all form functionalities.
+> Redwood's forms are built on top of [React Hook Form](https://react-hook-form.com/) so there is even more functionality available than we've documented here. Visit the [Form docs](/docs/forms) to learn more about all form functionalities.
 
 Redwood has one more trick up its sleeve when it comes to forms but we'll save that for when we're actually submitting one to the server.
 

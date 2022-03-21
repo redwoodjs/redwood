@@ -93,7 +93,7 @@ If you simply want to experience the Netlify deployment process without a databa
 4. use the Netlify [Quick Start](https://app.netlify.com/signup) to deploy
 
 ### Netlify Complete Deploy Walkthrough
-For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/docs/tutorial/deployment).
+For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/docs/tutorial/chapter4/deployment).
 
 ## Render Deploy
 Render is a unified cloud to build and run all your apps and websites with free SSL, a global CDN, private networks and auto deploys from Git — **database included**!
@@ -120,7 +120,7 @@ _If you choose this quick deploy experience, the following steps do not apply._
 ### Redwood Project Setup
 If you already have a Redwood project, proceed to the next step.
 
-Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/welcome-to-redwood). Simply return to these instructions when you reach the "Deployment" section.
+Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/forward). Simply return to these instructions when you reach the "Deployment" section.
 
 ### Redwood Deploy Configuration
 

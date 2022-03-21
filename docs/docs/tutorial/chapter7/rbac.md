@@ -502,7 +502,7 @@ We don't do anything with the actual post data in our tests, so there's no need 
 
 Remember: never trust the client! We need to lock down the backend to be sure that someone can't discover our `deleteComment` GraphQL resource and start deleing comments willy nilly.
 
-Recall in Part 1 of the tutorial we used a [directive](../directives.md) `@requireAuth` to be sure that someone was logged in before allowing them to access a given GraphQL query or mutation. It turns out that `@requireAuth` can take an optional `roles` argument:
+Recall in Part 1 of the tutorial we used a [directive](/docs/directives) `@requireAuth` to be sure that someone was logged in before allowing them to access a given GraphQL query or mutation. It turns out that `@requireAuth` can take an optional `roles` argument:
 
 ```graphql title="api/src/graphql/comments.sdl.js"
 export const schema = gql`
