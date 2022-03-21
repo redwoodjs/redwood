@@ -2293,7 +2293,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:2.1.0":
+"@envelop/core@npm:^2.0.0":
   version: 2.1.0
   resolution: "@envelop/core@npm:2.1.0"
   dependencies:
@@ -2316,7 +2316,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/disable-introspection@npm:3.1.0":
+"@envelop/disable-introspection@npm:3.1.0, @envelop/disable-introspection@npm:^3.0.0":
   version: 3.1.0
   resolution: "@envelop/disable-introspection@npm:3.1.0"
   peerDependencies:
@@ -2336,7 +2336,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:4.1.0":
+"@envelop/parser-cache@npm:4.1.0, @envelop/parser-cache@npm:^4.0.0":
   version: 4.1.0
   resolution: "@envelop/parser-cache@npm:4.1.0"
   dependencies:
@@ -2370,7 +2370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/validation-cache@npm:4.1.0":
+"@envelop/validation-cache@npm:4.1.0, @envelop/validation-cache@npm:^4.0.0":
   version: 4.1.0
   resolution: "@envelop/validation-cache@npm:4.1.0"
   dependencies:
@@ -3607,12 +3607,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0":
+"@graphql-typed-document-node/core@npm:^3.0.0, @graphql-typed-document-node/core@npm:^3.1.1":
   version: 3.1.1
   resolution: "@graphql-typed-document-node/core@npm:3.1.1"
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: c186e5adceb0dfdaa770856d2f17c831a474f5927d79f984326ecb3d8680ba3c1ee2314f7def1d863692cd9cbe4dffc8bb52fc74ee0aa9b31e9491f24ef59f90
+  languageName: node
+  linkType: hard
+
+"@graphql-yoga/common@npm:0.1.0-beta.4":
+  version: 0.1.0-beta.4
+  resolution: "@graphql-yoga/common@npm:0.1.0-beta.4"
+  dependencies:
+    "@envelop/core": ^2.0.0
+    "@envelop/disable-introspection": ^3.0.0
+    "@envelop/parser-cache": ^4.0.0
+    "@envelop/validation-cache": ^4.0.0
+    "@graphql-tools/schema": ^8.3.1
+    "@graphql-tools/utils": ^8.6.0
+    "@graphql-typed-document-node/core": ^3.1.1
+    "@graphql-yoga/render-graphiql": 0.1.0-beta.1
+    "@graphql-yoga/subscription": 0.0.1-beta.1
+    cross-undici-fetch: ^0.1.25
+    dset: ^3.1.1
+    tslib: ^2.3.1
+  peerDependencies:
+    graphql: ^15.2.0 || ^16.0.0
+  checksum: 8591c4fc0a5e36273da6507a819018f5731029048ef3df8703f58a0514c90466b603a30ca110e776e721ee309771a24601b935642be9b52821184feb716f7b65
+  languageName: node
+  linkType: hard
+
+"@graphql-yoga/render-graphiql@npm:0.1.0-beta.1":
+  version: 0.1.0-beta.1
+  resolution: "@graphql-yoga/render-graphiql@npm:0.1.0-beta.1"
+  checksum: 40ac74af7feabbe789a24ee40a856f82ad652d826c8f17ace097af4fbe6a38d587649b9fa66ccb246bb67d5123244b1f49460b5c7cc992705ebb6e2b3ba8b7db
+  languageName: node
+  linkType: hard
+
+"@graphql-yoga/subscription@npm:0.0.1-beta.1":
+  version: 0.0.1-beta.1
+  resolution: "@graphql-yoga/subscription@npm:0.0.1-beta.1"
+  dependencies:
+    "@repeaterjs/repeater": ^3.0.4
+    tslib: ^2.3.1
+  checksum: 218cd291f823dd8df2f63a78a38151dc6b459944455dd08920e6160076af69e41bcbe61c7e9b65f3091e684971faeee5ddf9fa5159ed56d0fbd63a826eaffefb
   languageName: node
   linkType: hard
 
@@ -5737,13 +5776,13 @@ __metadata:
     "@types/md5": 2.3.2
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
+    cross-undici-fetch: 0.1.25
     crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 27.5.1
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
-    node-fetch: 2.6.7
     pascalcase: 1.0.0
     pino: 7.9.1
     split2: 4.1.0
@@ -5809,7 +5848,6 @@ __metadata:
     "@redwoodjs/structure": 0.49.1
     "@redwoodjs/telemetry": 0.49.1
     "@types/listr": 0.14.4
-    "@types/node-fetch": 2.5.12
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -5862,13 +5900,13 @@ __metadata:
     "@types/prettier": 2.4.4
     "@vscode/ripgrep": 1.14.2
     core-js: 3.21.1
+    cross-undici-fetch: 0.1.25
     deepmerge: 4.2.2
     fast-glob: 3.2.11
     findup-sync: 5.0.0
     fs-extra: 10.0.1
     jest: 27.5.1
     jscodeshift: 0.13.1
-    node-fetch: 2.6.7
     prettier: 2.5.1
     tasuku: 1.0.2
     tempy: 1.0.1
@@ -6014,7 +6052,6 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@envelop/core": 2.1.0
     "@envelop/depth-limit": 1.3.0
     "@envelop/disable-introspection": 3.1.0
     "@envelop/filter-operation-type": 3.1.0
@@ -6025,6 +6062,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.4
     "@graphql-tools/schema": 8.3.3
     "@graphql-tools/utils": 8.6.3
+    "@graphql-yoga/common": 0.1.0-beta.4
     "@prisma/client": 3.11.0
     "@redwoodjs/api": 0.49.1
     "@redwoodjs/auth": 0.49.1
@@ -6033,15 +6071,13 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.21.1
+    cross-undici-fetch: 0.1.25
     graphql: 16.3.0
-    graphql-helix: 1.12.0
-    graphql-playground-html: 1.6.30
     graphql-scalars: 1.15.0
     graphql-tag: 2.12.6
     jest: 27.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    node-fetch: 2.6.7
     typescript: 4.6.2
     uuid: 8.3.2
   languageName: unknown
@@ -6113,9 +6149,9 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
+    cross-undici-fetch: 0.1.25
     jest: 27.5.1
     mime-types: 2.1.35
-    node-fetch: 2.6.7
     typescript: 4.6.2
   peerDependencies:
     react: 17.0.2
@@ -6203,13 +6239,12 @@ __metadata:
     "@redwoodjs/internal": 0.49.1
     "@redwoodjs/structure": 0.49.1
     "@types/envinfo": 7.8.1
-    "@types/node-fetch": 2.5.12
     "@types/uuid": 8.3.4
     "@types/yargs": 16.0.4
     ci-info: 3.3.0
+    cross-undici-fetch: 0.1.25
     envinfo: 7.8.1
     jest: 27.5.1
-    node-fetch: 2.6.7
     systeminformation: 5.11.9
     uuid: 8.3.2
     yargs: 16.2.0
@@ -6293,6 +6328,13 @@ __metadata:
     webpack: ./dist/bins/webpack.js
   languageName: unknown
   linkType: soft
+
+"@repeaterjs/repeater@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@repeaterjs/repeater@npm:3.0.4"
+  checksum: 9a2928d70f2be4a8f72857f8f7553810015ac970f174b4b20f07289644379af57fa68947601d67e557c1a7c33ddf805e787cf2a1d5e9037ba485d24075a81b6b
+  languageName: node
+  linkType: hard
 
 "@samverschueren/stream-to-observable@npm:^0.3.0":
   version: 0.3.1
@@ -8094,16 +8136,6 @@ __metadata:
   version: 1.9.3
   resolution: "@types/netlify-identity-widget@npm:1.9.3"
   checksum: 921f5439c3b8fa0fb27058be39f5c6e965ee69a82484a55d3ccb247f6849fd0b4e8170a42e45667bc64869e1ec46d8a2577e63689c949c3fbdb7f67199dfcb86
-  languageName: node
-  linkType: hard
-
-"@types/node-fetch@npm:2.5.12":
-  version: 2.5.12
-  resolution: "@types/node-fetch@npm:2.5.12"
-  dependencies:
-    "@types/node": "*"
-    form-data: ^3.0.0
-  checksum: aaa69c354e596f9e293136ac43c9e5d91503415fb4eddfae3a9689153f0f033863bbd627e700b3f419ce14d06303e18e1d61b788d9085411f1fc12fc56afe356
   languageName: node
   linkType: hard
 
@@ -12024,7 +12056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.20.3":
+"commander@npm:^2.19.0, commander@npm:^2.20.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: 74c781a5248c2402a0a3e966a0a2bba3c054aad144f5c023364be83265e796b20565aa9feff624132ff629aa64e16999fa40a743c10c12f7c61e96a794b99288
@@ -12731,9 +12763,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:^0.1.19":
-  version: 0.1.24
-  resolution: "cross-undici-fetch@npm:0.1.24"
+"cross-undici-fetch@npm:0.1.25, cross-undici-fetch@npm:^0.1.19, cross-undici-fetch@npm:^0.1.25":
+  version: 0.1.25
+  resolution: "cross-undici-fetch@npm:0.1.25"
   dependencies:
     abort-controller: ^3.0.0
     form-data-encoder: ^1.7.1
@@ -12741,7 +12773,7 @@ __metadata:
     node-fetch: ^2.6.7
     undici: ^4.9.3
     web-streams-polyfill: ^3.2.0
-  checksum: afe312649db875a338a58023194b17e46e8f6e1afac34bfccda747cfcf30718219984338bd322ceaa79d796e7a2f5112bd0ccafaf1d0cff35c01808b5c151dca
+  checksum: cc3d7203335729da04aa402182ba86e4125221a55b20956f3b9ec7549d8e898cc02b9960554001184310ad177cda9d1595323d9c0672a26c947d4bf1ebea82f8
   languageName: node
   linkType: hard
 
@@ -12965,13 +12997,6 @@ __metadata:
   bin:
     cssesc: bin/cssesc
   checksum: 6bcfd898662671be15ae7827120472c5667afb3d7429f1f917737f3bf84c4176003228131b643ae74543f17a394446247df090c597bb9a728cce298606ed0aa7
-  languageName: node
-  linkType: hard
-
-"cssfilter@npm:0.0.10":
-  version: 0.0.10
-  resolution: "cssfilter@npm:0.0.10"
-  checksum: 478a227a616fb6e9bb338eb95f690df141b86231ec737cbea574484f31a09a51db894b4921afc4987459dae08d584355fd689ff2a7a7c7a74de4bb4c072ce553
   languageName: node
   linkType: hard
 
@@ -13937,7 +13962,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dset@npm:^3.1.0":
+"dset@npm:^3.1.0, dset@npm:^3.1.1":
   version: 3.1.1
   resolution: "dset@npm:3.1.1"
   checksum: b26e14f364b2b849f4a4f779fe0f14d9e3e6224ed0c4139f5592c4f253ba44768ecd689b1cf04b920f0a6f88c64d959ef332745d1564c2d18e8496a1e7262a43
@@ -17005,24 +17030,6 @@ __metadata:
   peerDependencies:
     graphql: "*"
   checksum: 8f50268ab3e2553cfe64fad532a3bd60068865217f113ac7388bfea1484d36a7e711a1c26f6a03e67969923967f2a84b62618c07732ca2ca603c295f8a19dbf9
-  languageName: node
-  linkType: hard
-
-"graphql-helix@npm:1.12.0":
-  version: 1.12.0
-  resolution: "graphql-helix@npm:1.12.0"
-  peerDependencies:
-    graphql: ^15.3.0 || ^16.0.0
-  checksum: a17d46bf054d3e6924f165d80ce1852de0cdbc14cf47dedaf95c6d1d7d65a108bb4378f952a9f3e3378990623eb9e1b0ce1178a7c2a64625e1c519cb22e5c982
-  languageName: node
-  linkType: hard
-
-"graphql-playground-html@npm:1.6.30":
-  version: 1.6.30
-  resolution: "graphql-playground-html@npm:1.6.30"
-  dependencies:
-    xss: ^1.0.6
-  checksum: 32c87615b221610e57db41b68788bccf1e548ae66f38489521d4cfd2abf35666c76acf8250ce178f86b2bd825c2a9b083d496684abede1085847ca2dc7e71fb6
   languageName: node
   linkType: hard
 
@@ -30854,18 +30861,6 @@ __metadata:
   version: 4.0.0
   resolution: "xregexp@npm:4.0.0"
   checksum: cc7f49f03b999013544ce9d58ffc356f71c95c21b5e0478386f2c639fb2a89adf02cf9dbe25e9262e1e336d7b812c220aa3a644a4ac39020747ddb6773b6284f
-  languageName: node
-  linkType: hard
-
-"xss@npm:^1.0.6":
-  version: 1.0.10
-  resolution: "xss@npm:1.0.10"
-  dependencies:
-    commander: ^2.20.3
-    cssfilter: 0.0.10
-  bin:
-    xss: bin/xss
-  checksum: 959bd06ef802c553fb6133bbc70de837c996202cfc292d230aedfaa1bc0c67729b913d884028ae4b1ea0a7566d35b6cadeeb7f73066f97af01596077ae12d066
   languageName: node
   linkType: hard
 

@@ -2,8 +2,8 @@ import fs from 'fs'
 import path from 'path'
 
 import ci from 'ci-info'
+import { fetch } from 'cross-undici-fetch'
 import envinfo from 'envinfo'
-import fetch from 'node-fetch'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
