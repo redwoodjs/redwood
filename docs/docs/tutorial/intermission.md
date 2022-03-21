@@ -1,4 +1,50 @@
-# Prerequisites
+# Intermission
+
+You made it! If you really went through the whole tutorial: congratulations! If you just skipped ahead to this page to try and get a free congratulations: tsk, tsk!
+
+That was potentially a lot of new concepts to absorb all at once so don't feel bad if all of it didn't fully sink in. React, GraphQL, Prisma, serverless functions...so many things! Even those of us working on the framework are heading over to Google multiple times per day to figure out how to get these things to work together.
+
+As an anonymous Twitter user once mused: "If you enjoy switching between feeling like the smartest person on earth and the dumbest person in history all in the same day, programming may be the career for you!"
+
+### What's Next?
+
+If you're ready for even more Redwood, head to the [Tutorial Part 2](../tutorial2/welcome-to-redwood-part-ii-redwoods-revenge.md)! We'll look at Storybook and Jest and build a new feature for the blog: comments. Storybook introduces a new way to build components. We'll also add tests and run them with Jest to make sure things keep working as we expect. We cover authorization as well by giving a special role to comment moderators.
+
+Want to add some more features to your app? Check out some of our Cookbook recipes like [calling to a third party API](../cookbook/using-a-third-party-api.md) and [deploying an app without an API at all](../cookbook/disable-api-database.md). Have you grown out of SQLite and want to [install Postgres locally](../local-postgres-setup.md)? We've also got lots of [guides](https://redwoodjs.com/docs/introduction) for more info on Redwood's internals.
+
+### Roadmap
+
+Check out our [Roadmap](https://redwoodjs.com/roadmap) to see where we're headed and how we're going to get there.
+If you're interested in helping with anything you see, just let us know over on the [RedwoodJS Forum](https://community.redwoodjs.com/) and we'll be happy to get you set up. The general availability of version 1.0 is expected in the first half of 2022!
+
+### Help Us!
+
+What did you think of Redwood? Is it the Next Step for JS frameworks? What can it do better? We've got a lot more planned. Want to help us build these upcoming features?
+
+- [Open a PR](https://github.com/redwoodjs/redwood/pulls)
+- [Write some docs](https://redwoodjs.com/docs/introduction)
+- [Join the community](https://community.redwoodjs.com)
+
+Thanks for following along. Now go out and build something amazing!
+
+
+
+
+## Welcome to Redwood, Part II: Redwood's Revenge
+
+Part 1 of the tutorial was a huge success! It introduced billions (maybe an exaggeration) of developers to what Redwood could do to make web development in the Javascript ecosystem a delight. But that was just the beginning.
+
+If you read the README [closely](https://github.com/redwoodjs/redwood#technologies) you may have seen a few technologies that we didn't touch on at all in the first tutorial: [Storybook](https://storybook.js.org/) and [Jest](https://jestjs.io/) to name a couple. In reality, these have been core to the very idea of Redwood from the beginning—an improvement to the entire experience of developing a web application.
+
+While they're totally optional, we believe using these two tools will greatly improve your development experience, making your applications easier to develop, easier to maintain, and easier to share with a larger team. In this second tutorial we're going to show you how. And while we're at it we'll introduce Role-based Access Control (RBAC).
+
+Why "Redwood's Revenge"? Because all great sequels have "Revenge" in their title. But also this tutorial is focused more on ourselves, the codebase in general, and making our jobs easier. Part 1 of the tutorial was about getting up and running quickly and getting an app out the door for users to start using. Part 2 is about helping us, the developers, build new features quicker and making sure the code we wrote keeps working as intended. And as the old saying goes: the best revenge is living well.
+
+> This tutorial assumes you are using a v1.0 Release Candidate of RedwoodJS.
+
+
+
+## Prerequisites
 
 You'll need to be on at least a release candidate of Redwood v1.0 to make it through this tutorial.
 
