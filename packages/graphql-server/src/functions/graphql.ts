@@ -172,16 +172,18 @@ export const createGraphQLHandler = ({
       errorMessage: defaultError,
     },
     logging: logger,
-    graphiql: isDevEnv ? {
-      title: 'Redwood GraphQL playground',
-      endpoint: graphiQLEndpoint,
-      defaultQuery: `query Redwood {
+    graphiql: isDevEnv
+      ? {
+          title: 'Redwood GraphQL playground',
+          endpoint: graphiQLEndpoint,
+          defaultQuery: `query Redwood {
         redwood {
           version
         }
       }`,
-      headerEditorEnabled: true
-    } : false,
+          headerEditorEnabled: true,
+        }
+      : false,
     cors: (request: Request) => {
       const yogaCORSOptions: CORSOptions = {}
       if (cors?.methods) {
