@@ -270,7 +270,7 @@ const addToDotEnvDefaultTask = () => {
     },
     task: async (_ctx) => {
       const env = path.resolve(getPaths().base, '.env.defaults')
-      const line = 'REDWOOD_API_URL=/.redwood/functions'
+      const line = '\n\nREDWOOD_API_URL=/.redwood/functions\n'
 
       fs.appendFileSync(env, line)
     },
