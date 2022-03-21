@@ -6246,7 +6246,6 @@ __metadata:
     cross-undici-fetch: 0.1.25
     envinfo: 7.8.1
     jest: 27.5.1
-    node-fetch: 2.6.7
     systeminformation: 5.11.9
     uuid: 8.3.2
     yargs: 16.2.0
