@@ -32,7 +32,7 @@
     "@nhost/nhost-js": "0.3.12",
     "@supabase/supabase-js": "1.31.1",
     "@types/netlify-identity-widget": "1.9.3",
-    "@types/react": "17.0.40",
+    "@types/react": "17.0.41",
     "firebase": "9.6.9",
     "firebase-admin": "10.0.2",
     "gotrue-js": "0.9.29",

@@ -42,7 +42,7 @@
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.4.1",
     "@types/node": "16.11.26",
-    "@types/react": "17.0.40",
+    "@types/react": "17.0.41",
     "@types/react-dom": "17.0.14",
     "@types/webpack": "5.28.0",
     "babel-jest": "27.5.1",
