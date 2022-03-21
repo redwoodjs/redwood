@@ -5,12 +5,12 @@
 
 [[redirects]]
   from = "/docs/tutorial"
-  to = "/docs/tutorial/forward"
+  to = "/docs/tutorial/foreward"
   status = 301
 
 [[redirects]]
   from = "/docs/tutorial/welcome-to-redwood"
-  to = "/docs/tutorial/forward"
+  to = "/docs/tutorial/foreward"
   status = 301
 
 [[redirects]]

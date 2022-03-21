@@ -120,7 +120,7 @@ _If you choose this quick deploy experience, the following steps do not apply._
 ### Redwood Project Setup
 If you already have a Redwood project, proceed to the next step.
 
-Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/forward). Simply return to these instructions when you reach the "Deployment" section.
+Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/foreward). Simply return to these instructions when you reach the "Deployment" section.
 
 ### Redwood Deploy Configuration
 
