@@ -196,6 +196,63 @@ const updateDbAuth = () => {
   }
 }
 
+const updateApp = () => {
+  return {
+    title: 'Updating App.js fetch config...',
+    task: (_ctx) => {
+      const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
+      const appJsPath = path.join(getPaths().base, 'web/src/App.js')
+
+      let appPath
+      if (fs.existsSync(appTsPath)) {
+        appPath = appTsPath
+      } else if (fs.existsSync(appJsPath)) {
+        appPath = appJsPath
+      } else {
+        console.log(`Skipping, did not detect api/src/functions/auth.js`)
+        return
+      }
+
+      const appContent = fs.readFileSync(appPath, 'utf8').split(EOL)
+      const authLineIndex = appContent.findIndex((line) =>
+        line.includes('<AuthProvider')
+      )
+      if (authLineIndex === -1) {
+        console.log(`
+    Couldn't find <AuthProvider in web/src/App.js
+    You'll have to add the following fetch config manually:
+
+    config={{ fetchConfig: { credentials: 'include' } }}
+    `)
+      } else {
+        appContent[
+          authLineIndex
+        ] = `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
+`
+      }
+
+      const gqlLineIndex = appContent.findIndex((line) =>
+        line.includes('<RedwoodApolloProvider')
+      )
+      if (gqlLineIndex === -1) {
+        console.log(`
+    Couldn't find <RedwoodApolloProvider in web/src/App.js
+    You'll have to add the following fetch config manually:
+
+    graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}}
+    `)
+      } else {
+        appContent[
+          gqlLineIndex
+        ] = `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
+`
+      }
+
+      fs.writeFileSync(appPath, appContent.join(EOL))
+    },
+  }
+}
+
 // We need to set the apiUrl evn var for local dev
 const addToDotEnvDefaultTask = () => {
   return {
@@ -252,6 +309,7 @@ export const handler = async ({ force, database }) => {
     },
     updateGraphQLFunction(),
     updateDbAuth(),
+    updateApp(),
     updateApiURLTask('${REDWOOD_API_URL}'),
     addToDotEnvDefaultTask(),
     printSetupNotes(notes),
