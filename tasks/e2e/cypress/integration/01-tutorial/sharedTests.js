@@ -114,7 +114,7 @@ export const test_layouts = () =>
 
 export const test_dynamic = () =>
   it('4. Getting Dynamic', () => {
-    // https://redwoodjs.com/docs/tutorial/getting-dynamic
+    // https://redwoodjs.com/docs/tutorial/chatper2/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     // need to also handle case where Prisma Client be out of sync

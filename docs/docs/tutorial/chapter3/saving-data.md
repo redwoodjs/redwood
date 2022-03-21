@@ -447,7 +447,7 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
-Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](getting-dynamic.md#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
+Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](/docs/tutorial/chapter2/getting-dynamic#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
 
 ![image](https://user-images.githubusercontent.com/300/76250632-ed5d6900-6202-11ea-94ce-bd88e3a11ade.png)
 
