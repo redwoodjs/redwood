@@ -1,3 +1,7 @@
+---
+description: How Redwood generators work with Prisma relations
+keywords: [RedwoodJS,Prisma,Prisma schema]
+---
 # Prisma Relations and Redwood's Generators
 
 These docs apply to Redwood v0.25 and greater. Previous versions of Redwood had limitations when creating scaffolds for any one-to-many or many-to-many relationships. Most of those have been resolved so you should definitely [upgrade to 0.25](https://community.redwoodjs.com/t/upgrading-to-redwoodjs-v0-25-and-prisma-v2-16-db-upgrades-and-project-code-mods/1811) if at all possible!
@@ -5,7 +9,7 @@ These docs apply to Redwood v0.25 and greater. Previous versions of Redwood had 
 ## Many-to-many Relationships
 
 [Here](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#many-to-many-relations)
-are Prisma's docs for creating many-to-many relationships - A many-to-many
+are Prisma's docs for creating many-to-many [relationships](https://www.prisma.io/docs/concepts/components/prisma-schema/relations) - A many-to-many
 relationship is accomplished by creating a "join" or "lookup" table between two
 other tables. For example, if a **Product** can have many **Tag**s, any given
 **Tag** can also have many **Product**s that it is attached to. A database
@@ -96,7 +100,154 @@ Which creates a table structure like:
 
 Almost identical! But now there's an `id` and the SDL/scaffold generators will work as expected. The explicit syntax gives you a couple additional benefits—you can customize the table name and even add more fields. Maybe you want to track which user tagged a product—add a `userId` column to `ProductsOnTags` and now you know.
 
+## Troubleshooting Generators
+### Errors when Generating SDL or Scaffolds for Relations
 
-## SDL errs
+There is a known issue in the RedwoodJS 1.0 GraphQL type generation that happens while using the Schema Definition Language (SDL) and Scaffold generators with a Prisma schema that contains related models **before both models** exist.
 
-when [g your sdl](./cli-commands.md#generate-sdl) if error
+This can be an easy situation to get into if you begin to model out your entire schema (with relations) from the start -- or you [introspect](https://www.prisma.io/docs/concepts/components/introspection) an existing schema.
+
+#### Example of Type Generation Error with Relations
+
+For example, consider this simple model for a Bookshelf:
+
+1. Create both the `Book` and `Shelf` models with relation (at the same time in a single migration).
+
+Here is a Book that is on a Shelf. And a Shelf has many Books.
+
+```
+model Book {
+  id      Int    @id @default(autoincrement())
+  title   String @unique
+  Shelf   Shelf? @relation(fields: [shelfId], references: [id])
+  shelfId Int?
+}
+
+model Shelf {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  books Book[]
+}
+```
+
+2. `yarn rw prisma migrate dev`
+
+3. Now, I want sdls and services (or perhaps you scaffold a `Book`).
+
+`yarn rw g sdl Book`
+
+4. The sdl and service files **do generate**:
+
+```bash
+ ✔ Generating SDL files...
+    ✔ Successfully wrote file `./api/src/graphql/books.sdl.js`
+    ✔ Successfully wrote file `./api/src/services/books/books.scenarios.js`
+    ✔ Successfully wrote file `./api/src/services/books/books.test.js`
+    ✔ Successfully wrote file `./api/src/services/books/books.js`
+```
+
+5. **But**, when generating types, the schema fails to load **because** `Book` needs `Shelf` to exist, be we haven't yet created a `Shelf`. A book needs a shelf and vice versa, but here type generation doesn't yet know a shelf exists.
+
+See: `Error: Unknown type:` below for an example of what this error looks like.
+
+```
+  ⠙ Generating types ...
+Failed to load schema
+
+//...
+
+type Query {
+  redwood: Redwood
+},graphql/**/*.sdl.{js,ts},directives/**/*.{js,ts}:
+
+        Unknown type: "Shelf".
+        Error: Unknown type: "Shelf".
+```
+
+6. Even if you now generate a `Shelf`, you'll still have that error because `Book` depends on `Shelf`.
+
+#### How to Fix Type Generation Error with Relations
+
+The easiest way to solve this error is to:
+
+1. First, **remove the all** the relations
+
+```
+model Book {
+  id      Int    @id @default(autoincrement())
+  title   String @unique
+}
+
+model Shelf {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+}
+```
+
+2. Then, **migrate** so that both `Book` and `Shelf` exist as separate models -- but are as yet do not have a relation.
+
+ `yarn rw prisma migrate dev`
+
+ 3. Next, generate the SDL (or scaffold) for each model separately
+
+ `yarn rw g sdl Book`
+ `yarn rw g sdl Shelf`
+
+4. After that, setup the relationships a you had originally:
+
+```
+model Book {
+  id      Int    @id @default(autoincrement())
+  title   String @unique
+  Shelf   Shelf? @relation(fields: [shelfId], references: [id])
+  shelfId Int?
+}
+
+model Shelf {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  books Book[]
+}
+```
+
+5. Then **migrate** again to create the relationships in the database
+
+ `yarn rw prisma migrate dev`
+
+ 6. Last, regenerate your SDL (but you will need to `force` to overwrite existing files and use the `no-tests` to preserve your tests and scenario files if needed)
+
+`yarn rw g sdl Book --force --no-tests`
+`yarn rw g sdl Shelf --force --no-tests`
+
+Now you have a schema, SDL, service that correctly represents your models and relationships.
+
+### Self-Relation Tips
+
+[Self-relations](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations) are useful when you need to have a recursive relationship of the same model. You can see this often in business/academic organizational charts, building structures, or family trees where the "parent" and the "children" are the "same type of thing".
+
+For example, in a business everyone is an "Employee" with some defined role and some possible direct reports.
+
+* President - each business has one President
+* Director - reports to the President
+* Manager - reports to a Director
+* Employee - reports to a Manager, but has no direct reports
+
+```
+model Employee {
+  id            Int       @id @default(autoincrement())
+  name          String
+  jobTitle      String
+  reportsToId   Int?      @unique
+  reportsTo     Employee? @relation("OrgChart", fields: [reportsToId], references: [id])
+  directReports Employee? @relation("OrgChart")
+}
+```
+
+What is important here for the RedwoodJS generators is that the related models **be optional**. That is, the `reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that the item is not required.
+
+That's because if you are at the top, say you are the President, then you don't have a `reportsTo` and if you are simply an Employee, then you do not have anyone that directly reports to you.
+
+> The Redwood generators may complain or fail if you try to force a requirement here. If that happens, please set these to be optional.
+
+You can find more information about self-relations in the [Prisma documentation](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations).
+

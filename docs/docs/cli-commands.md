@@ -1,3 +1,6 @@
+---
+description: A comprehensive reference of the Redwood CLI
+---
 # Command Line Interface
 
 The following is a comprehensive reference of the Redwood CLI. You can get a glimpse of all the commands by scrolling the aside to the right.
@@ -1006,6 +1009,12 @@ Notes:
   nestScaffoldByModel = false
 ```
 
+#### Troubleshooting
+
+If you see a `Error: Unknown type:` when scaffolding, there is a known issue in the RedwoodJS 1.0 GraphQL type generation that happens while using the Schema Definition Language (SDL) generator with a Prisma schema that contains related models **before both models** exist.
+
+Please see [How to Fix Type Generation Error with Relations​](./schema-relations#errors-when-generating-sdl-or-scaffolds-for-relations) for help.
+
 ### generate sdl
 
 Generate a GraphQL schema and service object.
@@ -1136,7 +1145,11 @@ export const User = {
 }
 ```
 
-> Note: error see [SDL errs​](./schema-relations.md#sdl-errs)
+#### Troubleshooting
+
+If you see a `Error: Unknown type:` when generating SDLs, there is a known issue in the RedwoodJS 1.0 GraphQL type generation that happens while using the Schema Definition Language (SDL) generator with a Prisma schema that contains related models **before both models** exist.
+
+Please see [How to Fix Type Generation Error with Relations​](./schema-relations#errors-when-generating-sdl-or-scaffolds-for-relations) for help.
 
 
 ### generate secret
