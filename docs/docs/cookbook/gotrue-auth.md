@@ -19,7 +19,7 @@ But first, some housekeeping...
 
 Before getting started, there are a few steps you should have completed:
 
-- [Create a Redwood app](https://redwoodjs.com/docs/tutorial/installation-starting-development)
+- [Create a Redwood app](https://redwoodjs.com/docs/tutorial/installation)
 - [Create a Netlify account](https://www.netlify.com/)
 - [Deploy your Netlify site](https://redwoodjs.com/docs/tutorial/deployment)
 - [Enable Netlify Identity](#enable-netlify-identity)

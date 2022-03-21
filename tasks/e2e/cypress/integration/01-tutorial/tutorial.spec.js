@@ -51,7 +51,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     //   Step0_2_GraphQL
     // )
 
-    // https://redwoodjs.com/docs/tutorial/installation-starting-development
+    // https://redwoodjs.com/docs/tutorial/installation
 
     waitForApiSide()
 
