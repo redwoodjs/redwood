@@ -6,6 +6,7 @@ import {
 } from '@graphql-yoga/common'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
+
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -19,9 +20,7 @@ import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
 import {
   CORSOptions,
   createServer,
-  shouldRenderGraphiQL,
 } from '@graphql-yoga/common'
-import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -95,7 +94,7 @@ export const createGraphQLHandler = ({
   depthLimitOptions,
   allowedOperations,
   defaultError = 'Something went wrong.',
-  graphiQLEndpoint,
+  graphiQLEndpoint = '/graphql',
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
@@ -177,7 +176,16 @@ export const createGraphQLHandler = ({
       errorMessage: defaultError,
     },
     logging: logger,
-    graphiql: false,
+    graphiql: isDevEnv ? {
+      title: 'Redwood GraphQL playground',
+      endpoint: graphiQLEndpoint,
+      defaultQuery: `query Redwood {
+        redwood {
+          version
+        }
+      }`,
+      headerEditorEnabled: true
+    } : false,
     cors: (request: Request) => {
       const yogaCORSOptions: CORSOptions = {}
       if (cors?.methods) {
@@ -243,23 +251,11 @@ export const createGraphQLHandler = ({
     const request = new Request(`http://localhost${event.path}`, {
       method: event.httpMethod,
       headers: event.headers as HeadersInit,
-      body: event.body,
+      body: (event.httpMethod !== 'GET' && event.httpMethod !== 'HEAD') ? event.body : null,
     })
 
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
-
-    if (isDevEnv && shouldRenderGraphiQL(request)) {
-      return {
-        body: renderPlaygroundPage({
-          endpoint: graphiQLEndpoint || '/graphql',
-        }),
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'text/html',
-        },
-      }
-    }
 
     let lambdaResponse: APIGatewayProxyResult
 
