@@ -3607,7 +3607,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0, @graphql-typed-document-node/core@npm:^3.1.1":
+"@graphql-typed-document-node/core@npm:^3.0.0":
   version: 3.1.1
   resolution: "@graphql-typed-document-node/core@npm:3.1.1"
   peerDependencies:
@@ -3616,9 +3616,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:0.1.0-beta.4":
-  version: 0.1.0-beta.4
-  resolution: "@graphql-yoga/common@npm:0.1.0-beta.4"
+"@graphql-yoga/common@npm:0.1.0-canary-bfd2627.0":
+  version: 0.1.0-canary-bfd2627.0
+  resolution: "@graphql-yoga/common@npm:0.1.0-canary-bfd2627.0"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3626,7 +3626,6 @@ __metadata:
     "@envelop/validation-cache": ^4.0.0
     "@graphql-tools/schema": ^8.3.1
     "@graphql-tools/utils": ^8.6.0
-    "@graphql-typed-document-node/core": ^3.1.1
     "@graphql-yoga/render-graphiql": 0.1.0-beta.1
     "@graphql-yoga/subscription": 0.0.1-beta.1
     cross-undici-fetch: ^0.1.25
@@ -3634,7 +3633,7 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 8591c4fc0a5e36273da6507a819018f5731029048ef3df8703f58a0514c90466b603a30ca110e776e721ee309771a24601b935642be9b52821184feb716f7b65
+  checksum: 2a787418f9e1e4e371b26ed7af0bd76e8e0feafec27e61ee018447e253907c77e0ee3be1a2a6ad513f3825ff8a23d6061a83ca3df5b76c5cff3a508d89823bc5
   languageName: node
   linkType: hard
 
@@ -6062,7 +6061,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.4
     "@graphql-tools/schema": 8.3.3
     "@graphql-tools/utils": 8.6.3
-    "@graphql-yoga/common": 0.1.0-beta.4
+    "@graphql-yoga/common": 0.1.0-canary-bfd2627.0
     "@prisma/client": 3.11.0
     "@redwoodjs/api": 0.49.1
     "@redwoodjs/auth": 0.49.1
@@ -26223,7 +26222,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.6.2
     typescript-transform-paths: 3.3.1
-    zx: 6.0.6
+    zx: 6.0.7
   languageName: unknown
   linkType: soft
 
@@ -31083,9 +31082,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:6.0.6":
-  version: 6.0.6
-  resolution: "zx@npm:6.0.6"
+"zx@npm:6.0.7":
+  version: 6.0.7
+  resolution: "zx@npm:6.0.7"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
@@ -31101,6 +31100,6 @@ __metadata:
     yaml: ^1.10.2
   bin:
     zx: zx.mjs
-  checksum: 8c21450e83582fda94f458245db959af735bca449c687b732dc4c07a54003be184385010204617e0fa9c9bddf5c402df1a879cf8da78bb5d2fcbf76f4da1fb55
+  checksum: 37266f0c0285ff52dfedc58e4b30a126e2166c06822b127f25ff55c1631a606415e4b96d009b80e266df14ac5b802274527535dc14ef5afb43e687290b2d885e
   languageName: node
   linkType: hard
