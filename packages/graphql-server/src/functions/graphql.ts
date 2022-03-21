@@ -6,7 +6,6 @@ import {
 } from '@graphql-yoga/common'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
-
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -17,10 +16,7 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import {
-  CORSOptions,
-  createServer,
-} from '@graphql-yoga/common'
+import { CORSOptions, createServer } from '@graphql-yoga/common'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -37,7 +33,7 @@ import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
-import { Request } from 'cross-undici-fetch'
+import { Headers, Request } from 'cross-undici-fetch'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -248,11 +244,37 @@ export const createGraphQLHandler = ({
     event: APIGatewayProxyEvent,
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
-    const request = new Request(`http://localhost${event.path}`, {
-      method: event.httpMethod,
-      headers: event.headers as HeadersInit,
-      body: (event.httpMethod !== 'GET' && event.httpMethod !== 'HEAD') ? event.body : null,
-    })
+    const requestHeaders = new Headers()
+    for (const headerName in event.headers) {
+      const headerValue = event.headers[headerName]
+      if (headerValue) {
+        requestHeaders.append(headerName, headerValue)
+      }
+    }
+    for (const headerName in event.multiValueHeaders) {
+      const headerValues = event.multiValueHeaders[headerName]
+      if (headerValues) {
+        for (const headerValue of headerValues) {
+          requestHeaders.append(headerName, headerValue)
+        }
+      }
+    }
+
+    const requestProtocol = event.requestContext.protocol || 'http'
+    const requestUrl = new URL(event.path, requestProtocol + '://localhost')
+    let request: Request
+    if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
+      request = new Request(requestUrl.toString(), {
+        method: event.httpMethod,
+        headers: requestHeaders,
+      })
+    } else {
+      request = new Request(requestUrl.toString(), {
+        method: event.httpMethod,
+        headers: requestHeaders,
+        body: event.body,
+      })
+    }
 
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
@@ -265,10 +287,10 @@ export const createGraphQLHandler = ({
         requestContext: lambdaContext,
       })
       const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
-      response.headers.forEach((value, key) => {
+      for (const [key, value] of response.headers) {
         multiValueHeaders[key] = multiValueHeaders[key] || []
         multiValueHeaders[key].push(value)
-      })
+      }
       lambdaResponse = {
         body: await response.text(),
         statusCode: response.status,
