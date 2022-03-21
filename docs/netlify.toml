@@ -1,0 +1,9 @@
+[build]
+  base = "docs"
+  publish = "build"
+  command = "yarn build"
+
+[[redirects]]
+  from = "/docs/tutorial/welcome-to-redwood"
+  to = "/docs/tutorial/forward"
+  status = 302
