@@ -232,7 +232,7 @@ export const createGraphQLHandler = ({
           yogaCORSOptions.allowedHeaders = [requestAccessControlRequestHeaders]
         }
       }
-      return {}
+      return yogaCORSOptions
     },
   })
 
