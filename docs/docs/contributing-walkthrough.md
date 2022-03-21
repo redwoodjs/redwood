@@ -30,8 +30,8 @@ These are the foundations for contributing, which you should be familiar with be
 
 **The Redwood Tutorial**
 The best (and most fun) way to learn Redwood and the underlying tools and technologies:
-- [Tutorial Part 1](https://redwoodjs.com/tutorial)
-- [Tutorial Part 2](https://redwoodjs.com/tutorial2/welcome-to-redwood-part-ii-redwood-s-revenge)
+- [Tutorial Part 1](https://redwoodjs.com/docs/tutorial)
+- [Tutorial Part 2](https://redwoodjs.com/docs/tutorial2/welcome-to-redwood-part-ii-redwood-s-revenge)
 
 **Docs and Cookbook**
 - Start with the [Introduction](https://redwoodjs.com/docs/introduction) Doc

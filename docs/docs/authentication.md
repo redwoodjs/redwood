@@ -261,7 +261,7 @@ yarn add @redwoodjs/auth netlify-identity-widget
 
 #### Setup
 
-You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
+You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/docs/tutorial/authentication#netlify-identity-setup).
 
 ```js
 // web/src/App.js
@@ -318,7 +318,7 @@ yarn add @redwoodjs/auth gotrue-js
 
 #### Setup
 
-You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
+You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/docs/tutorial/authentication#netlify-identity-setup).
 
 Add the GoTrue-JS package to the web side:
 
