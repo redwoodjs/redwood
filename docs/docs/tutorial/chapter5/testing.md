@@ -1,83 +1,21 @@
-# Introduction to Storybook
+# Introduction to Testing
 
-Let's see what this Storybook thing is all about. Run this command to start up the Storybook server (you could stop your dev or test runners and then run this, or start another new terminal instance):
+Let's run the test suite to make sure everything is working as expected (you can keep the dev server running and start this in a second terminal window):
 
 ```bash
-yarn rw storybook
+yarn rw test
 ```
 
-After some compiling you should get a message saying that Storybook has started and it's available at [http://localhost:7910](http://localhost:7910)
+The `test` command starts a persistent process which watches for file changes and automatically runs any tests associated with the changed file(s) (changing a component *or* its tests will trigger a test run).
 
-![image](https://user-images.githubusercontent.com/300/153311732-21a62ee8-5bdf-45b7-b163-35a5ec0ce318.png)
+Since we just started the suite, and we haven't changed any files yet, it may not actually run any tests at all. Hit `a` to tell it run **a**ll tests and we should get a passing suite:
 
-If you poke around at the file tree on the left you'll see all of the components, cells, layouts and pages we created during the tutorial. Where did they come from? You may recall that every time we generated a new page/cell/component we actually created at least *three* files:
+![image](https://user-images.githubusercontent.com/300/153299412-ba191f0b-27bf-4e56-8d23-fb462a4c69c9.png)
 
-* `Article.js`
-* `Article.stories.js`
-* `Article.test.js`
+If you continued with your own repo from chapters 1-4, you may see some failures here: we made a lot of changes to the pages, components and cells we generated, but didn't update the tests to reflect the changes we made. (Another reason to start with the [example repo](#using-the-example-repo)!)
 
-> If you generated a cell then you also got a `.mock.js` file (more on those later).
+To switch back to the default mode where test are **o**nly run for changed files, press `o` now (or quit and restart `yarn rw test`).
 
-Those `.stories.js` files are what makes the tree on the left side of the Storybook browser possible! From their [homepage](https://storybook.js.org/), Storybook describes itself as:
+This is always what we want to aim for—all green in that left column. In fact best practices tell us you should not even commit any code to your repo unless the test suite passes locally. Not everyone adheres to this policy quite as strictly as others...*&lt;cough, cough&gt;*
 
-*"...an open source tool for developing UI components in isolation for React, Vue, Angular, and more. It makes building stunning UIs organized and efficient."*
-
-So, the idea here is that you can build out your components/cells/pages in isolation, get them looking the way you want and displaying the correct data, then plug them into your full application.
-
-When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.js` you'll see what it takes to explain this component to Storybook, and it isn't much:
-
-```jsx title="web/src/components/Article/Article.stories.js"
-import Article from './Article'
-
-export const generated = () => {
-  return (
-    <Article
-      article={{
-        id: 1,
-        title: 'First Post',
-        body: `Neutra tacos hot chicken prism raw denim, put
-              a bird on it enamel pin post-ironic vape cred
-              DIY. Street art next level umami squid.
-              Hammock hexagon glossier 8-bit banjo. Neutra
-              la croix mixtape echo park four loko semiotics
-              kitsch forage chambray. Semiotics salvia
-              selfies jianbing hella shaman. Letterpress
-              helvetica vaporware cronut, shaman butcher
-              YOLO poke fixie hoodie gentrify woke
-              heirloom.`,
-        createdAt: '2020-01-01T12:34:45Z'
-      }}
-    />
-  )
-}
-
-export default { title: 'Components/BlogPost' }
-```
-
-You import the component you want to use and then all of the named exports in the file will be a single "story" as displayed in Storybook. In this case the generator named it "generated" which shows as the "Generated" story in the tree view:
-
-```
-Components
-└── Article
-    └── Generated
-```
-
-This makes it easy to create variants of your component and have them all displayed together.
-
-> **Where did that sample blog post data come from?**
->
-> In your actual app you'd use this component like so:
->
-> ```jsx
-> <Article article={article} />
-> ```
->
-> Where the `article` in that prop comes from somewhere outside of this component. Here in Storybook there is no "outside" of this component, so we just send the article object into the prop directly.
->
-> **But where did the pre-filled article data come from?**
->
-> We (the Redwood team) added that to the story in the `redwood-tutorial` repo to show you what a story might look like after you hook up some sample data. Several of the stories need data like this, some inline and some in those `.mock.js` files. The rest of the tutorial will be showing you how to do this yourself with new components as you create them.
->
-> **Where did the *actual* text in the body come from?**
->
-> [Hipster Ipsum](https://hipsum.co/), a fun alternative to Lorem Ipsum filler text!
+We've got an excellect document on [Testing](/docs/testing) which you should definitely read if you're brand new to testing, especially the [Terminology](/docs/testing#terminology) and [Redwood and Testing](/docs/testing#redwood-and-testing) sections.
