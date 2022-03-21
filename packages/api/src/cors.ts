@@ -1,5 +1,6 @@
-import type { Request } from 'graphql-helix'
-import { Headers } from 'node-fetch'
+import { Headers } from 'cross-undici-fetch'
+
+import type { Request } from './transforms'
 
 export type CorsConfig = {
   origin?: boolean | string | string[]
@@ -62,9 +63,7 @@ export function createCorsContext(cors: CorsConfig | undefined) {
       return request.method === 'OPTIONS'
     },
     getRequestHeaders(request: Request): CorsHeaders {
-      const eventHeaders = new Headers(
-        request.headers as Record<string, string>
-      )
+      const eventHeaders = new Headers(request.headers as HeadersInit)
       const requestCorsHeaders = new Headers(corsHeaders)
 
       if (cors && cors.origin) {
