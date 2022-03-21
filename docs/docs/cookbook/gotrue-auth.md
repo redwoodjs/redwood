@@ -21,7 +21,7 @@ Before getting started, there are a few steps you should have completed:
 
 - [Create a Redwood app](https://redwoodjs.com/docs/tutorial/chapter1/installation)
 - [Create a Netlify account](https://www.netlify.com/)
-- [Deploy your Netlify site](https://redwoodjs.com/docs/tutorial/deployment)
+- [Deploy your Netlify site](https://redwoodjs.com/docs/tutorial/chapter4/deployment)
 - [Enable Netlify Identity](#enable-netlify-identity)
 - Fire up a dev server: `yarn redwood dev`
 
