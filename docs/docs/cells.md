@@ -326,7 +326,7 @@ When would you want to do this? If you just want a file to end in "Cell" for som
 
 If we didn't do all that built-time stuff for you, how might you go about implementing a Cell yourself?
 
-Consider the [example from the Tutorial](https://learn.redwoodjs.com/docs/tutorial/cells#our-first-cell) where we're fetching posts:
+Consider the [example from the Tutorial](/docs/tutorial/cells#our-first-cell) where we're fetching posts:
 
 ```javascript
 export const QUERY = gql`

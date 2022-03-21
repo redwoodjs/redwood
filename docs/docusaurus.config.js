@@ -37,7 +37,7 @@ module.exports = {
       },
       items: [
         {
-          href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
+          href: 'https://github.com/redwoodjs/redwood',
           position: 'right',
           className: 'github-logo',
           'aria-label': 'GitHub repository',
