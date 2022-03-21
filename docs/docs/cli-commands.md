@@ -886,7 +886,7 @@ The content of the generated components is different from what you'd get by runn
 
 **Usage**
 
-See [Creating a Post Editor](https://redwoodjs.com/docs/tutorial/chatper2/getting-dynamic#creating-a-post-editor).
+See [Creating a Post Editor](https://redwoodjs.com/docs/tutorial/chapter2/getting-dynamic#creating-a-post-editor).
 
 **Nesting of Components and Pages**
 
