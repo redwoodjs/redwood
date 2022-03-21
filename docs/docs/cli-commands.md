@@ -1198,7 +1198,7 @@ Generate a service component.
 yarn redwood generate service <name>
 ```
 
-Services are where Redwood puts its business logic. They can be used by your GraphQL API or any other place in your backend code. See [How Redwood Works with Data](https://redwoodjs.com/docs/tutorial/side-quest-how-redwood-works-with-data).
+Services are where Redwood puts its business logic. They can be used by your GraphQL API or any other place in your backend code. See [How Redwood Works with Data](/docs/tutorial/chapter2/side-quest).
 
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |
