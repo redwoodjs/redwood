@@ -93,7 +93,7 @@ If you simply want to experience the Netlify deployment process without a databa
 4. use the Netlify [Quick Start](https://app.netlify.com/signup) to deploy
 
 ### Netlify Complete Deploy Walkthrough
-For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/tutorial/deployment).
+For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/docs/tutorial/deployment).
 
 ## Render Deploy
 Render is a unified cloud to build and run all your apps and websites with free SSL, a global CDN, private networks and auto deploys from Git — **database included**!
