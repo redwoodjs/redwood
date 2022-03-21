@@ -311,7 +311,7 @@ new Listr(
       '',
       `${style.redwood(
         ' ❖ Get started with the Tutorial'
-      )}: https://redwoodjs.com/tutorial`,
+      )}: https://redwoodjs.com/docs/tutorial`,
       `${style.redwood(
         ' ❖ Read the Documentation'
       )}: https://redwoodjs.com/docs`,

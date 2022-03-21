@@ -1,6 +1,6 @@
 # File Uploads
 
-As you've probably heard, Redwood thinks the future is serverless. This concept introduces some interesting problems you might not have had to worry about in the past. For example, where do files go when you upload them? There's no server! Like many tasks you may have done [yourself](https://redwoodjs.com/tutorial/authentication) in the past, this is another job that we can farm out to a third-party service.
+As you've probably heard, Redwood thinks the future is serverless. This concept introduces some interesting problems you might not have had to worry about in the past. For example, where do files go when you upload them? There's no server! Like many tasks you may have done [yourself](https://redwoodjs.com/docs/tutorial/authentication) in the past, this is another job that we can farm out to a third-party service.
 
 ## The Service
 
@@ -390,13 +390,13 @@ const thumbnail = (url) => {
 }
 ```
 
-What this does is turn a URL like 
+What this does is turn a URL like
 
 ```
 https://cdn.filestackcontent.com/81m7qIrURxSp7WHcft9a
-``` 
+```
 
-into 
+into
 
 ```
 https://cdn.filestackcontent.com/resize=width:100/81m7qIrURxSp7WHcft9a
@@ -468,7 +468,7 @@ We're borrowing the styles from the submit button and making sure that the image
 
 ## The Wrap-up
 
-Files uploaded! 
+Files uploaded!
 
 There's plenty of ways to integrate a file picker. This is just one, but we think it's simple, yet flexible. We use the same technique on the [example-blog](https://github.com/redwoodjs/example-blog).
 
