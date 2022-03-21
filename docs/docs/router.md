@@ -158,7 +158,7 @@ Here's the same example again, but now using `<Private>`
 </Router>
 ```
 
-Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](https://redwoodjs.com/docs/tutorial/authentication).
+Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](https://redwoodjs.com/docs/tutorial/chapter4/authentication).
 
 ## Link and named route functions
 

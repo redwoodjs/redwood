@@ -1,11 +1,10 @@
 module.exports = {
   customFields: {
-    defaultDocsLandingPage: 'tutorial/welcome-to-redwood', // redirects here when hitting /docs/
+    defaultDocsLandingPage: 'index', // redirects here when hitting /docs/
     defaultSectionLandingPages: {
       // map of what is considered the first article in each section
       // section: id
-      tutorial: 'welcome-to-redwood',
-      tutorial2: 'welcome-to-redwood-part-ii-redwoods-revenge',
+      tutorial: 'forward',
     },
   },
   // ?
@@ -38,7 +37,7 @@ module.exports = {
       },
       items: [
         {
-          href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
+          href: 'https://github.com/redwoodjs/redwood',
           position: 'right',
           className: 'github-logo',
           'aria-label': 'GitHub repository',
@@ -54,11 +53,7 @@ module.exports = {
           items: [
             {
               label: 'Tutorial',
-              to: 'docs/tutorial/welcome-to-redwood',
-            },
-            {
-              label: 'Tutorial II',
-              to: 'docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge',
+              to: 'docs/tutorial/foreward',
             },
           ],
         },
