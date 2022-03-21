@@ -659,7 +659,7 @@ Layouts wrap pages and help you stay DRY.
 
 **Usage**
 
-See the [Layouts](https://redwoodjs.com/docs/tutorial/layouts) section of the tutorial.
+See the [Layouts](https://redwoodjs.com/docs/tutorial/chapter1/layouts) section of the tutorial.
 
 **Destroying**
 

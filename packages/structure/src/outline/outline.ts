@@ -146,7 +146,7 @@ function _layouts(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate layout ...'),
-      doc: Command_open('https://redwoodjs.com/docs/tutorial/layouts'),
+      doc: Command_open('https://redwoodjs.com/docs/tutorial/chapter1/layouts'),
     },
   }
 }
