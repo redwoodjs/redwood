@@ -16,12 +16,7 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import {
-  CORSOptions,
-  createServer,
-  shouldRenderGraphiQL,
-} from '@graphql-yoga/common'
-import { renderPlaygroundPage } from 'graphql-playground-html'
+import { CORSOptions, createServer } from '@graphql-yoga/common'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -177,7 +172,12 @@ export const createGraphQLHandler = ({
       errorMessage: defaultError,
     },
     logging: logger,
-    graphiql: false,
+    graphiql: isDevEnv
+      ? {
+          title: 'Redwood GraphiQL',
+          endpoint: graphiQLEndpoint,
+        }
+      : false,
     cors: (request: Request) => {
       const yogaCORSOptions: CORSOptions = {}
       if (cors?.methods) {
@@ -256,15 +256,15 @@ export const createGraphQLHandler = ({
       }
     }
 
+    const requestProtocol = event.requestContext.protocol || 'http'
+    const requestUrl = new URL(event.path, requestProtocol + '://localhost')
     let request: Request
     if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
-      request = new Request(event.path, {
+      request = new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
       })
     } else {
-      const requestProtocol = event.requestContext.protocol || 'http'
-      const requestUrl = new URL(event.path, requestProtocol + '://localhost')
       request = new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
@@ -274,18 +274,6 @@ export const createGraphQLHandler = ({
 
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
-
-    if (isDevEnv && shouldRenderGraphiQL(request)) {
-      return {
-        body: renderPlaygroundPage({
-          endpoint: graphiQLEndpoint || '/graphql',
-        }),
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'text/html',
-        },
-      }
-    }
 
     let lambdaResponse: APIGatewayProxyResult
 

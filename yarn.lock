@@ -6073,7 +6073,6 @@ __metadata:
     core-js: 3.21.1
     cross-undici-fetch: 0.1.25
     graphql: 16.3.0
-    graphql-playground-html: 1.6.30
     graphql-scalars: 1.15.0
     graphql-tag: 2.12.6
     jest: 27.5.1
@@ -12057,7 +12056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.20.3":
+"commander@npm:^2.19.0, commander@npm:^2.20.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: 74c781a5248c2402a0a3e966a0a2bba3c054aad144f5c023364be83265e796b20565aa9feff624132ff629aa64e16999fa40a743c10c12f7c61e96a794b99288
@@ -12998,13 +12997,6 @@ __metadata:
   bin:
     cssesc: bin/cssesc
   checksum: 6bcfd898662671be15ae7827120472c5667afb3d7429f1f917737f3bf84c4176003228131b643ae74543f17a394446247df090c597bb9a728cce298606ed0aa7
-  languageName: node
-  linkType: hard
-
-"cssfilter@npm:0.0.10":
-  version: 0.0.10
-  resolution: "cssfilter@npm:0.0.10"
-  checksum: 478a227a616fb6e9bb338eb95f690df141b86231ec737cbea574484f31a09a51db894b4921afc4987459dae08d584355fd689ff2a7a7c7a74de4bb4c072ce553
   languageName: node
   linkType: hard
 
@@ -17038,15 +17030,6 @@ __metadata:
   peerDependencies:
     graphql: "*"
   checksum: 8f50268ab3e2553cfe64fad532a3bd60068865217f113ac7388bfea1484d36a7e711a1c26f6a03e67969923967f2a84b62618c07732ca2ca603c295f8a19dbf9
-  languageName: node
-  linkType: hard
-
-"graphql-playground-html@npm:1.6.30":
-  version: 1.6.30
-  resolution: "graphql-playground-html@npm:1.6.30"
-  dependencies:
-    xss: ^1.0.6
-  checksum: 32c87615b221610e57db41b68788bccf1e548ae66f38489521d4cfd2abf35666c76acf8250ce178f86b2bd825c2a9b083d496684abede1085847ca2dc7e71fb6
   languageName: node
   linkType: hard
 
@@ -30878,18 +30861,6 @@ __metadata:
   version: 4.0.0
   resolution: "xregexp@npm:4.0.0"
   checksum: cc7f49f03b999013544ce9d58ffc356f71c95c21b5e0478386f2c639fb2a89adf02cf9dbe25e9262e1e336d7b812c220aa3a644a4ac39020747ddb6773b6284f
-  languageName: node
-  linkType: hard
-
-"xss@npm:^1.0.6":
-  version: 1.0.10
-  resolution: "xss@npm:1.0.10"
-  dependencies:
-    commander: ^2.20.3
-    cssfilter: 0.0.10
-  bin:
-    xss: bin/xss
-  checksum: 959bd06ef802c553fb6133bbc70de837c996202cfc292d230aedfaa1bc0c67729b913d884028ae4b1ea0a7566d35b6cadeeb7f73066f97af01596077ae12d066
   languageName: node
   linkType: hard
 
