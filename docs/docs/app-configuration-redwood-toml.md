@@ -20,7 +20,7 @@ The options and their structure are based on Redwood's notion of sides and targe
 
 The idea is that, in the future, changes here will have cascading, "app-level" effects. Using generators as an example, based on your side and target, the generators will behave differently, but appropriately different.
 
-> For the difference between a side and a target, see [Redwood File Structure](https://redwoodjs.com/tutorial/redwood-file-structure).
+> For the difference between a side and a target, see [Redwood File Structure](/docs/tutorial/chapter1/file-structure).
 
 You can think of `redwood.toml` as a convenience layer over Redwood's webpack configuration files. That is, for certain settings, instead of having to deal with webpack directly, we give you quick access via `redwood.toml`. Some of these settings are for development, some are for production, and some are for both. You can actually see this reflected in which webpack file each configuration option is referenced in&mdash;[webpack.development.js](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.development.js), [webpack.production.js](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.production.js), and [webpack.common.js](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.common.js).
 

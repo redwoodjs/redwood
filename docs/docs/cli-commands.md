@@ -414,9 +414,9 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 
 **Usage**
 
-The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](https://redwoodjs.com/docs/cells.html#single-item-cell-vs-list-cell) section of the Cell documentation.
+The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](/docs/tutorial/chapter2/cells#single-item-cell-vs-list-cell) section of the Cell documentation.
 
-See the [Cells](https://redwoodjs.com/tutorial/cells) section of the Tutorial for usage examples.
+See the [Cells](/docs/tutorial/chapter2/cells) section of the Tutorial for usage examples.
 
 **Destroying**
 
@@ -659,7 +659,7 @@ Layouts wrap pages and help you stay DRY.
 
 **Usage**
 
-See the [Layouts](https://redwoodjs.com/tutorial/layouts) section of the tutorial.
+See the [Layouts](https://redwoodjs.com/docs/tutorial/chapter1/layouts) section of the tutorial.
 
 **Destroying**
 
@@ -886,7 +886,7 @@ The content of the generated components is different from what you'd get by runn
 
 **Usage**
 
-See [Creating a Post Editor](https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor).
+See [Creating a Post Editor](https://redwoodjs.com/docs/tutorial/chapter2/getting-dynamic#creating-a-post-editor).
 
 **Nesting of Components and Pages**
 
@@ -1022,7 +1022,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                              |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations         |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--tests`            | Generate service test and scenario [default: true]                                   |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
@@ -1031,20 +1031,20 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 
 **Regenerating the SDL**
 
-Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time having to make those changes manually.
+Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time not having to make those changes manually.
 
-But, since the `generate` command prevents you from overwriting files accidentally, you could use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
+But, since the `generate` command prevents you from overwriting files accidentally, you use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
 
 In that case, you can run the following to "regenerate" **just** the SDL file and leave your tests and scenarios intact and not lose your hard work.
 
 ```
-yarn redwood g sdl <model> --force --tests=false
+yarn redwood g sdl <model> --force --no-tests
 ```
 
 **Example**
 
 ```terminal
-~/redwood-app$ yarn redwood generate sdl user --force --tests=false
+~/redwood-app$ yarn redwood generate sdl user --force --no-tests
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
   ✔ Generating SDL files...
@@ -1198,7 +1198,7 @@ Generate a service component.
 yarn redwood generate service <name>
 ```
 
-Services are where Redwood puts its business logic. They can be used by your GraphQL API or any other place in your backend code. See [How Redwood Works with Data](https://redwoodjs.com/tutorial/side-quest-how-redwood-works-with-data).
+Services are where Redwood puts its business logic. They can be used by your GraphQL API or any other place in your backend code. See [How Redwood Works with Data](/docs/tutorial/chapter2/side-quest).
 
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |

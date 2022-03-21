@@ -562,6 +562,214 @@ describe('UserProfileCell', () => {
 "
 `;
 
+exports[`generates a cell with a string primary id key 1`] = `
+"export const QUERY = gql\`
+  query FindAddressQuery($id: String!) {
+    address: address(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ address }) => {
+  return <div>{JSON.stringify(address)}</div>
+}
+"
+`;
+
+exports[`generates a cell with a string primary id key 2`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './AddressCell'
+import { standard } from './AddressCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('AddressCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success address={standard().address} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`generates a cell with a string primary id key 3`] = `
+"import { Loading, Empty, Failure, Success } from './AddressCell'
+import { standard } from './AddressCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/AddressCell' }
+"
+`;
+
+exports[`generates a cell with a string primary id key 4`] = `
+"// Define your own mock data here:
+export const standard = () => ({
+  address: {
+    id: '42',
+  },
+})
+"
+`;
+
+exports[`generates list a cell with a string primary id keys 1`] = `
+"export const QUERY = gql\`
+  query AddressesQuery {
+    addresses {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ addresses }) => {
+  return (
+    <ul>
+      {addresses.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+"
+`;
+
+exports[`generates list a cell with a string primary id keys 2`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './AddressesCell'
+import { standard } from './AddressesCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('AddressesCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success addresses={standard().addresses} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`generates list a cell with a string primary id keys 3`] = `
+"import { Loading, Empty, Failure, Success } from './AddressesCell'
+import { standard } from './AddressesCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/AddressesCell' }
+"
+`;
+
+exports[`generates list a cell with a string primary id keys 4`] = `
+"// Define your own mock data here:
+export const standard = () => ({
+  addresses: [{ id: '42' }, { id: '43' }, { id: '44' }],
+})
+"
+`;
+
 exports[`generates list cells if list flag passed in 1`] = `
 "export const QUERY = gql\`
   query MembersQuery {
@@ -588,6 +796,83 @@ export const Success = ({ members }) => {
     </ul>
   )
 }
+"
+`;
+
+exports[`generates list cells if list flag passed in 2`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './MembersCell'
+import { standard } from './MembersCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('MembersCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success members={standard().members} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`generates list cells if list flag passed in 3`] = `
+"import { Loading, Empty, Failure, Success } from './MembersCell'
+import { standard } from './MembersCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/MembersCell' }
+"
+`;
+
+exports[`generates list cells if list flag passed in 4`] = `
+"// Define your own mock data here:
+export const standard = () => ({
+  members: [{ id: 42 }, { id: 43 }, { id: 44 }],
+})
 "
 `;
 

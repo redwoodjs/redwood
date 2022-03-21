@@ -38,7 +38,7 @@ TOML (an obvious, minimal configuration language used by many projects).
 > phase and intend to release a final v1.0.0 in March of 2022.
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the
-> extensive [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
+> extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial). Have fun!
 
 > **QUICK START:** You can install and run a full-stack Redwood application on
 > your machine with only a couple commands. Check out the [Quick

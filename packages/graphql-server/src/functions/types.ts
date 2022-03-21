@@ -1,7 +1,7 @@
-import type { PluginOrDisabledPlugin } from '@envelop/core'
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from '@redwoodjs/api'
@@ -9,7 +9,6 @@ import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
-import { OnHealthcheckFn } from '../healthcheck'
 import { LoggerConfig } from '../plugins/useRedwoodLogger'
 import { SdlGlobImports, ServicesGlobImports } from '../types'
 
@@ -89,12 +88,7 @@ export interface GraphQLHandlerOptions {
   cors?: CorsConfig
 
   /**
-   * @description Healthcheck
-   */
-  onHealthCheck?: OnHealthcheckFn
-
-  /**
-   * @description Limit the complexity of the queries solely by their depth.
+   *  @description Limit the complexity of the queries solely by their depth.
    *
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */

@@ -15,7 +15,7 @@ export const handler = async () => {
     console.log(c.warning('\n' + 'WARNING: deprecated "tailwind" command'))
     console.log(
       c.green('See "rw setup ui tailwindcss" command: ') +
-        'https://redwoodjs.com/reference/command-line-interface#ui' +
+        'https://redwoodjs.com/docs/cli-commands#setup-ui' +
         '\n'
     )
     await execa('yarn rw setup ui tailwindcss', {

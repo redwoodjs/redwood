@@ -17,7 +17,7 @@ yarn start
 For links to other docs inside the `tutorials` directory, USE RELATIVE LINKS!
 
 ```
-In [previous section](./our-first-page) we....
+In [previous section](./first-page) we....
 ```
 
 ## Contributing
