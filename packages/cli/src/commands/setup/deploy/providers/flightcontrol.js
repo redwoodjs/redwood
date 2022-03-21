@@ -109,7 +109,7 @@ const updateGraphQLFunction = () => {
     Couldn't find graphql handler in api/src/functions/graphql.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: process.env.REDWOOD_API_URL, credentials: true}
+      cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true}
     `)
         return
       }
@@ -126,7 +126,7 @@ const updateGraphQLFunction = () => {
     Couldn't find graphql handler in api/src/functions/graphql.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: process.env.REDWOOD_API_URL,, credentials: true}
+      cors: { origin: process.env.REDWOOD_WEB_URL,, credentials: true}
     `)
         return
       }
@@ -134,7 +134,7 @@ const updateGraphQLFunction = () => {
       graphqlContent.splice(
         graphqlHanderIndex + 1,
         0,
-        '  cors: { origin: process.env.REDWOOD_API_URL,, credentials: true },'
+        '  cors: { origin: process.env.REDWOOD_WEB_URL,, credentials: true },'
       )
 
       fs.writeFileSync(graphqlFunctionsPath, graphqlContent.join(EOL))
@@ -181,14 +181,14 @@ const updateDbAuth = () => {
     Couldn't find DbAuthHandler in api/src/functions/auth.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: process.env.REDWOOD_API_URL,, credentials: true}
+      cors: { origin: process.env.REDWOOD_WEB_URL,, credentials: true}
     `)
         return
       }
       authContent.splice(
         dbHandlerIndex + 1,
         0,
-        '  cors: { origin: process.env.REDWOOD_API_URL,, credentials: true },'
+        '  cors: { origin: process.env.REDWOOD_WEB_URL,, credentials: true },'
       )
 
       fs.writeFileSync(authFnPath, authContent.join(EOL))
@@ -291,7 +291,7 @@ const notes = [
   'You are ready to deploy to Flightcontrol!\n',
   '1. Create your project at https://app.flightcontrol.dev/signup?ref=redwood',
   '2. After your project is provisioned,',
-  `go to the Flightcontrol dashboard and set the REDWOOD_API_URL env var to the full URL of your API service, including 'https://'\n`,
+  `go to the Flightcontrol dashboard and set the REDWOOD_WEB_URL & REDWOOD_API_URL env vars to the full URL of those services, including 'https://'\n`,
   'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions\n',
   "NOTE: If you are using yarn v1, remove the installCommand's from flightcontrol.json",
 ]
