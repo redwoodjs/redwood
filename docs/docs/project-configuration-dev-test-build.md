@@ -53,7 +53,7 @@ Now your custom web-side Babel config will be merged with Redwood's.
 Redwood uses [Jest](https://jestjs.io/) for testing.
 Let's take a peek at how it's all configured.
 
-At the root of your project is `jest.config.js`. 
+At the root of your project is `jest.config.js`.
 It should look like this:
 
 ```js
@@ -104,7 +104,7 @@ Redwood uses [GraphQL Code Generator](https://www.graphql-code-generator.com) to
 While the defaults are configured so that things JustWork™️, you can customize them by adding a `./codegen.yml` file to the root of your project.
 Your custom settings will be merged with the built-in ones.
 
-> If you're curious about the built-in settings, they can be found [here](https://github.com/redwoodjs/redwood/blob/main/packages/internal/src/generate/typeDefinitions.ts) in the Redwood source. Look for the `generateTypeDefGraphQLWeb` and `generateTypeDefGraphQLApi` functions.
+> If you're curious about the built-in settings, they can be found [here](https://github.com/redwoodjs/redwood/blob/main/packages/internal/src/generate/graphqlCodeGen.ts) in the Redwood source. Look for the `generateTypeDefGraphQLWeb` and `generateTypeDefGraphQLApi` functions.
 
 For example, adding this `codegen.yml` to the root of your project will transform all the generated types to UPPERCASE:
 
@@ -116,4 +116,4 @@ config:
     typeNames: change-case-all#upperCase
 ```
 
-For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator.
+For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator. Note that we currently only support the root level `config` option.

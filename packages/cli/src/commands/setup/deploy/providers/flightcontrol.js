@@ -109,7 +109,7 @@ const updateGraphQLFunction = () => {
     Couldn't find graphql handler in api/src/functions/graphql.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: '*', credentials: true}
+      cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true}
     `)
         return
       }
@@ -126,7 +126,7 @@ const updateGraphQLFunction = () => {
     Couldn't find graphql handler in api/src/functions/graphql.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: '*', credentials: true}
+      cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true}
     `)
         return
       }
@@ -134,10 +134,121 @@ const updateGraphQLFunction = () => {
       graphqlContent.splice(
         graphqlHanderIndex + 1,
         0,
-        "  cors: { origin: '*', credentials: true },"
+        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },'
       )
 
       fs.writeFileSync(graphqlFunctionsPath, graphqlContent.join(EOL))
+    },
+  }
+}
+
+const updateDbAuth = () => {
+  return {
+    title: 'Updating dbAuth cookie config (if used)...',
+    task: (_ctx) => {
+      const authTsPath = path.join(getPaths().base, 'api/src/functions/auth.ts')
+      const authJsPath = path.join(getPaths().base, 'api/src/functions/auth.js')
+
+      let authFnPath
+      if (fs.existsSync(authTsPath)) {
+        authFnPath = authTsPath
+      } else if (fs.existsSync(authJsPath)) {
+        authFnPath = authJsPath
+      } else {
+        console.log(`Skipping, did not detect api/src/functions/auth.js`)
+        return
+      }
+
+      const authContent = fs.readFileSync(authFnPath, 'utf8').split(EOL)
+      const sameSiteLineIndex = authContent.findIndex((line) =>
+        line.match(/SameSite:.*,/)
+      )
+      if (sameSiteLineIndex === -1) {
+        console.log(`
+    Couldn't find cookie SameSite config in api/src/functions/auth.js.
+
+    You need to ensure SameSite is set to "None"
+    `)
+        return
+      }
+      authContent[sameSiteLineIndex] = `      SameSite: 'None',`
+
+      const dbHandlerIndex = authContent.findIndex((line) =>
+        line.includes('new DbAuthHandler(')
+      )
+      if (dbHandlerIndex === -1) {
+        console.log(`
+    Couldn't find DbAuthHandler in api/src/functions/auth.js.
+    You'll have to add the following cors config manually:
+
+      cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true}
+    `)
+        return
+      }
+      authContent.splice(
+        dbHandlerIndex + 1,
+        0,
+        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },'
+      )
+
+      fs.writeFileSync(authFnPath, authContent.join(EOL))
+    },
+  }
+}
+
+const updateApp = () => {
+  return {
+    title: 'Updating App.js fetch config...',
+    task: (_ctx) => {
+      const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
+      const appJsPath = path.join(getPaths().base, 'web/src/App.js')
+
+      let appPath
+      if (fs.existsSync(appTsPath)) {
+        appPath = appTsPath
+      } else if (fs.existsSync(appJsPath)) {
+        appPath = appJsPath
+      } else {
+        console.log(`Skipping, did not detect api/src/functions/auth.js`)
+        return
+      }
+
+      const appContent = fs.readFileSync(appPath, 'utf8').split(EOL)
+      const authLineIndex = appContent.findIndex((line) =>
+        line.includes('<AuthProvider')
+      )
+      if (authLineIndex === -1) {
+        console.log(`
+    Couldn't find <AuthProvider in web/src/App.js
+    You'll have to add the following fetch config manually:
+
+    config={{ fetchConfig: { credentials: 'include' } }}
+    `)
+      } else {
+        appContent[
+          authLineIndex
+        ] = `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
+`
+      }
+
+      const gqlLineIndex = appContent.findIndex((line) =>
+        line.includes('<RedwoodApolloProvider')
+      )
+      if (gqlLineIndex === -1) {
+        console.log(`
+    Couldn't find <RedwoodApolloProvider in web/src/App.js
+    You'll have to add the following fetch config manually:
+
+    graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}}
+    `)
+      } else {
+        appContent[
+          gqlLineIndex
+        ] = `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
+`
+      }
+
+      fs.writeFileSync(appPath, appContent.join(EOL))
     },
   }
 }
@@ -159,7 +270,7 @@ const addToDotEnvDefaultTask = () => {
     },
     task: async (_ctx) => {
       const env = path.resolve(getPaths().base, '.env.defaults')
-      const line = 'REDWOOD_API_URL=/.redwood/functions'
+      const line = '\n\nREDWOOD_API_URL=/.redwood/functions\n'
 
       fs.appendFileSync(env, line)
     },
@@ -180,8 +291,9 @@ const notes = [
   'You are ready to deploy to Flightcontrol!\n',
   '1. Create your project at https://app.flightcontrol.dev/signup?ref=redwood',
   '2. After your project is provisioned,',
-  'go to the Flightcontrol dashboard and set the REDWOOD_API_URL env var to the URL of your API service\n',
-  'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions',
+  `go to the Flightcontrol dashboard and set the REDWOOD_WEB_URL & REDWOOD_API_URL env vars to the full URL of those services, including 'https://'\n`,
+  'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions\n',
+  "NOTE: If you are using yarn v1, remove the installCommand's from flightcontrol.json",
 ]
 
 export const handler = async ({ force, database }) => {
@@ -196,6 +308,8 @@ export const handler = async ({ force, database }) => {
       },
     },
     updateGraphQLFunction(),
+    updateDbAuth(),
+    updateApp(),
     updateApiURLTask('${REDWOOD_API_URL}'),
     addToDotEnvDefaultTask(),
     printSetupNotes(notes),
