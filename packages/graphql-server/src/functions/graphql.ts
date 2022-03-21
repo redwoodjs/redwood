@@ -179,11 +179,42 @@ export const createGraphQLHandler = ({
     logging: logger,
     graphiql: false,
     cors: (request: Request) => {
-      const corsOptions: CORSOptions = {}
-      if (cors && cors.origin) {
+      const yogaCORSOptions: CORSOptions = {}
+      if (cors?.methods) {
+        if (typeof cors.methods === 'string') {
+          yogaCORSOptions.methods = [cors.methods]
+        } else if (Array.isArray(cors.methods)) {
+          yogaCORSOptions.methods = cors.methods
+        }
+      }
+      if (cors?.allowedHeaders) {
+        if (typeof cors.allowedHeaders === 'string') {
+          yogaCORSOptions.allowedHeaders = [cors.allowedHeaders]
+        } else if (Array.isArray(cors.allowedHeaders)) {
+          yogaCORSOptions.allowedHeaders = cors.allowedHeaders
+        }
+      }
+
+      if (cors?.exposedHeaders) {
+        if (typeof cors.exposedHeaders === 'string') {
+          yogaCORSOptions.exposedHeaders = [cors.exposedHeaders]
+        } else if (Array.isArray(cors.exposedHeaders)) {
+          yogaCORSOptions.exposedHeaders = cors.exposedHeaders
+        }
+      }
+
+      if (cors?.credentials) {
+        yogaCORSOptions.credentials = cors.credentials
+      }
+
+      if (cors?.maxAge) {
+        yogaCORSOptions.maxAge = cors.maxAge
+      }
+
+      if (cors?.origin) {
         const requestOrigin = request.headers.get('origin')
         if (typeof cors.origin === 'string') {
-          corsOptions.origin = [cors.origin]
+          yogaCORSOptions.origin = [cors.origin]
         } else if (
           requestOrigin &&
           (typeof cors.origin === 'boolean' ||
@@ -191,14 +222,14 @@ export const createGraphQLHandler = ({
               requestOrigin &&
               cors.origin.includes(requestOrigin)))
         ) {
-          corsOptions.origin = [requestOrigin]
+          yogaCORSOptions.origin = [requestOrigin]
         }
 
         const requestAccessControlRequestHeaders = request.headers.get(
           'access-control-request-headers'
         )
         if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
-          corsOptions.allowedHeaders = [requestAccessControlRequestHeaders]
+          yogaCORSOptions.allowedHeaders = [requestAccessControlRequestHeaders]
         }
       }
       return {}
