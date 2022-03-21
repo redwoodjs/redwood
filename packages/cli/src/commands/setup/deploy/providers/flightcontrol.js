@@ -163,7 +163,6 @@ const updateDbAuth = () => {
       const sameSiteLineIndex = authContent.findIndex((line) =>
         line.match(/SameSite:.*,/)
       )
-
       if (sameSiteLineIndex === -1) {
         console.log(`
     Couldn't find cookie SameSite config in api/src/functions/auth.js.
@@ -172,8 +171,25 @@ const updateDbAuth = () => {
     `)
         return
       }
-
       authContent[sameSiteLineIndex] = `    SameSite: "None",`
+
+      const dbHandlerIndex = authContent.findIndex((line) =>
+        line.includes('new DbAuthHandler(')
+      )
+      if (dbHandlerIndex === -1) {
+        console.log(`
+    Couldn't find DbAuthHandler in api/src/functions/auth.js.
+    You'll have to add the following cors config manually:
+
+      cors: { origin: '*', credentials: true}
+    `)
+        return
+      }
+      authContent.splice(
+        dbHandlerIndex + 1,
+        0,
+        "  cors: { origin: '*', credentials: true },"
+      )
 
       fs.writeFileSync(authFnPath, authContent.join(EOL))
     },
