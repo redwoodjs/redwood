@@ -20,7 +20,7 @@ But first, some housekeeping...
 
 Before getting started, there are a few steps you should complete:
 
-- [Create a Redwood app](https://redwoodjs.com/docs/tutorial/installation)
+- [Create a Redwood app](https://redwoodjs.com/docs/tutorial/chapter1/installation)
 - [Create a Supabase account](https://www.supabase.io/)
 - [Go through the Supabase React Quick Start](https://supabase.io/docs/guides/with-react)
 - [Go through the Supabase Redwood Quick Start](https://supabase.io/docs/guides/with-redwoodjs)
