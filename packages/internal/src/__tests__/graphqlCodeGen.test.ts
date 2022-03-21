@@ -49,26 +49,7 @@ test('Generate gql typedefs web', async () => {
     .mockImplementation(
       (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
         expect(file).toMatch(path.join('web', 'types', 'graphql.d.ts'))
-
-        // This would be better tested with a snapshot, but I couldn't get them
-        // working on GitHub CI
-        expect(data).toContain('export type Maybe<T> = T | null;')
-        expect(data).toContain('String: string')
-        expect(data).toContain('BigInt: number;')
-        expect(data).toContain('JSONObject: Record<string, unknown>')
-        expect(data).toContain('updateTodoStatus?: Maybe<Todo>;')
-        expect(data).toContain('export type MutationupdateTodoStatusArgs = {')
-        expect(data).toContain(
-          "export type AddTodo_CreateTodo = { __typename?: 'Mutation', createTodo?: { __typename: 'Todo', id: number, body: string, status: string } | null };"
-        )
-        expect(data)
-          .toContain(`export type TodoListCell_CheckTodoVariables = Exact<{
-  id: Scalars['Int'];
-  status: Scalars['String'];
-}>;`)
-        expect(data).toContain(
-          "export type TodoListCell_GetTodos = { __typename?: 'Query', todos?: Array<{ __typename?: 'Todo', id: number, body: string, status: string } | null> | null };"
-        )
+        expect(data).toMatchSnapshot()
       }
     )
 
@@ -86,32 +67,7 @@ test('Generate gql typedefs api', async () => {
     .mockImplementation(
       (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
         expect(file).toMatch(path.join('api', 'types', 'graphql.d.ts'))
-
-        // This would be better tested with a snapshot, but I couldn't get them
-        // working on GitHub CI
-        expect(data).toContain('export type Maybe<T> = T | null;')
-        expect(data).toContain('JSON: Record<string, unknown>;')
-        expect(data).toContain(`export type MutationupdateTodoStatusArgs = {
-  id: Scalars['Int'];
-  status: Scalars['String'];
-};`)
-        expect(data).toContain(`export type Redwood = {
-  __typename?: 'Redwood';
-  currentUser?: Maybe<Scalars['JSON']>;
-  prismaVersion?: Maybe<Scalars['String']>;
-  version?: Maybe<Scalars['String']>;
-};`)
-        expect(data).toContain(`export type Todo = {
-  __typename?: 'Todo';
-  body: Scalars['String'];
-  id: Scalars['Int'];
-  status: Scalars['String'];
-};`)
-        expect(data).toContain('JSON?: GraphQLScalarType;')
-        expect(data)
-          .toContain(`export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
-  name: 'BigInt';
-}`)
+        expect(data).toMatchSnapshot()
       }
     )
 
