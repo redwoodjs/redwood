@@ -62,7 +62,7 @@ export function waitForApiSide() {
 
 export const test_first_page = () =>
   it('1. Our First Page', () => {
-    //redwoodjs.com/docs/tutorial/first-page
+    //redwoodjs.com/docs/tutorial/chapter1/first-page
     cy.visit('http://localhost:8910')
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page home / --force`)
     cy.get('h1').should('contain', 'HomePage')
