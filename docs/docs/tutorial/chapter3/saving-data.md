@@ -601,7 +601,7 @@ export default ContactPage
 
 ![Toast notification on successful submission](https://user-images.githubusercontent.com/300/146271487-f6b77e76-99c1-43e8-bcda-5ba3c9b03137.png)
 
-You can read the full documentation for Toast [here](../toast-notifications.md).
+You can read the full documentation for Toast [here](/docs/toast-notifications).
 
 ### Displaying Server Errors
 

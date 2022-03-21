@@ -51,7 +51,7 @@ Redwood includes two authentication paths out of the box:
 
 In both cases you end up with an authenticated user that you can access in both the web and api sides of your app.
 
-Redwood includes [integrations](../authentication) for several of the most popular third-party auth providers:
+Redwood includes [integrations](/docs/authentication) for several of the most popular third-party auth providers:
 
 - [Auth0](https://auth0.com/)
 - [Clerk](https://clerk.dev/)
@@ -78,7 +78,7 @@ As for our blog, we're going to use self-hosted authentication (named *dbAuth* i
 > * **Authentication** deals with determining whether someone is who they say they are, generally by "logging in" with an email and password, or a third party provider like Auth0.
 > * **Authorization** is whether a user (who has usually already been authenticated) is allowed to do something they want to do. This generally involves some combination of roles and permission checking before allowing access to a URL or feature of your site.
 >
-> This section of the tutorial focuses on **Authentication** only. See [chapter 7 of the tutorial](../tutorial/chapter5/rbac) to learn about Authorization in Redwood.
+> This section of the tutorial focuses on **Authentication** only. See [chapter 7 of the tutorial](/docs/tutorial/chapter7/rbac) to learn about Authorization in Redwood.
 
 ## Auth Setup
 
@@ -321,13 +321,13 @@ And after clicking "Signup" you should end up back on the homepage, where everyt
 
 ![Posts admin](https://user-images.githubusercontent.com/300/146465485-c169a4b8-f398-47ec-8412-4fc15a666976.png)
 
-Awesome! Signing up will automatically log you in (although this behavior [can be changed](../authentication#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
+Awesome! Signing up will automatically log you in (although this behavior [can be changed](/docs/authentication#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
 
 #### Add a Logout Link
 
 Now that we're logged in, how do we log out? Let's add a link to the `BlogLayout` so that it's present on all pages, and also include an indicator of who you're actually logged in as.
 
-Redwood provides a [hook](../authentication#api) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
+Redwood provides a [hook](/docs/authentication#api) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 // highlight-next-line
@@ -493,7 +493,7 @@ Before we leave this file, take a look at `requireAuth()`. Remember when we talk
 
 Believe it or not, that's pretty much it for authentication! You can use the combination of `@requireAuth` and `@skipAuth` directives to lock down access to GraphQL query/mutations, and the `<Private>` component to restrict access to entire pages of your app. If you only want to restrict access to certain components, or certain parts of a component, you can always get `isAuthenticated` from the `useAuth()` hook and then render one thing or another.
 
-Head over to the Redwood docs to read more about [self-hosted authentication](../authentication#self-hosted-auth-installation-and-setup) and [third-party authentication](../authentication#third-party-providers-installation-and-setup).
+Head over to the Redwood docs to read more about [self-hosted authentication](/docs/authentication#self-hosted-auth-installation-and-setup) and [third-party authentication](/docs/authentication#third-party-providers-installation-and-setup).
 
 ## One More Thing
 

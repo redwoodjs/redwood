@@ -414,7 +414,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 
 **Usage**
 
-The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](/docs/chapter2/cells#single-item-cell-vs-list-cell) section of the Cell documentation.
+The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](/docs/tutorial/chapter2/cells#single-item-cell-vs-list-cell) section of the Cell documentation.
 
 See the [Cells](/docs/tutorial/chapter2/cells) section of the Tutorial for usage examples.
 
