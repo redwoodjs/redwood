@@ -208,7 +208,7 @@ export const test_cells = () =>
 
 export const test_routing_params = () =>
   it('6. Routing Params', () => {
-    // https://redwoodjs.com/docs/tutorial/routing-params
+    // https://redwoodjs.com/docs/tutorial/chapter2/routing-params
     cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
