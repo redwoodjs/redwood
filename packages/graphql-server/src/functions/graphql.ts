@@ -262,7 +262,7 @@ export const createGraphQLHandler = ({
       }
     }
 
-    const requestProtocol = event.requestContext.protocol || 'http'
+    const requestProtocol = event.requestContext?.protocol || 'http'
     const requestUrl = new URL(event.path, requestProtocol + '://localhost')
     let request: Request
     if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
