@@ -159,7 +159,7 @@ function _cells(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate cell ...'),
-      doc: Command_open('https://redwoodjs.com/docs/tutorial/cells'),
+      doc: Command_open('https://redwoodjs.com/docs/tutorial/chapter2/cells'),
     },
   }
 }

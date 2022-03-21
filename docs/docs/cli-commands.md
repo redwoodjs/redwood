@@ -414,9 +414,9 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 
 **Usage**
 
-The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](https://redwoodjs.com/docs/cells.html#single-item-cell-vs-list-cell) section of the Cell documentation.
+The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](/docs/chapter2/cells#single-item-cell-vs-list-cell) section of the Cell documentation.
 
-See the [Cells](https://redwoodjs.com/docs/tutorial/cells) section of the Tutorial for usage examples.
+See the [Cells](/docs/tutorial/chapter2/cells) section of the Tutorial for usage examples.
 
 **Destroying**
 
@@ -886,7 +886,7 @@ The content of the generated components is different from what you'd get by runn
 
 **Usage**
 
-See [Creating a Post Editor](https://redwoodjs.com/docs/tutorial/getting-dynamic#creating-a-post-editor).
+See [Creating a Post Editor](https://redwoodjs.com/docs/tutorial/chatper2/getting-dynamic#creating-a-post-editor).
 
 **Nesting of Components and Pages**
 
