@@ -55,7 +55,7 @@ module.exports = {
       label: 'Tutorial',
       className: 'tutorials-sidebar-category',
       items: [
-        'tutorial/forward',
+        { type: 'doc', label: 'Foreward', id: 'tutorial/foreward' },
         {
           'Chapter 1': [
             'tutorial/chapter1/prerequisites',
