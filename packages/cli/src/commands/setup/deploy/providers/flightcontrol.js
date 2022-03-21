@@ -109,7 +109,7 @@ const updateGraphQLFunction = () => {
     Couldn't find graphql handler in api/src/functions/graphql.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: '*', credentials: true}
+      cors: { origin: process.env.REDWOOD_API_URL, credentials: true}
     `)
         return
       }
@@ -126,7 +126,7 @@ const updateGraphQLFunction = () => {
     Couldn't find graphql handler in api/src/functions/graphql.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: '*', credentials: true}
+      cors: { origin: process.env.REDWOOD_API_URL,, credentials: true}
     `)
         return
       }
@@ -134,7 +134,7 @@ const updateGraphQLFunction = () => {
       graphqlContent.splice(
         graphqlHanderIndex + 1,
         0,
-        "  cors: { origin: '*', credentials: true },"
+        '  cors: { origin: process.env.REDWOOD_API_URL,, credentials: true },'
       )
 
       fs.writeFileSync(graphqlFunctionsPath, graphqlContent.join(EOL))
@@ -181,14 +181,14 @@ const updateDbAuth = () => {
     Couldn't find DbAuthHandler in api/src/functions/auth.js.
     You'll have to add the following cors config manually:
 
-      cors: { origin: '*', credentials: true}
+      cors: { origin: process.env.REDWOOD_API_URL,, credentials: true}
     `)
         return
       }
       authContent.splice(
         dbHandlerIndex + 1,
         0,
-        "  cors: { origin: '*', credentials: true },"
+        '  cors: { origin: process.env.REDWOOD_API_URL,, credentials: true },'
       )
 
       fs.writeFileSync(authFnPath, authContent.join(EOL))
