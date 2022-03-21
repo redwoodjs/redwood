@@ -103,7 +103,7 @@ function _pages(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate page ...'),
-      doc: Command_open('https://redwoodjs.com/docs/tutorial/our-first-page'),
+      doc: Command_open('https://redwoodjs.com/docs/tutorial/first-page'),
     },
   }
 }
