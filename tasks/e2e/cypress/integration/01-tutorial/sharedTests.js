@@ -70,7 +70,7 @@ export const test_first_page = () =>
 
 export const test_pages = () =>
   it('2. A Second Page and a Link', () => {
-    // https://redwoodjs.com/docs/tutorial/a-second-page-and-a-link
+    // https://redwoodjs.com/docs/tutorial/second-page
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
