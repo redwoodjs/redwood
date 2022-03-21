@@ -63,7 +63,7 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [part 2](../tutorial2/welcome-to-redwood-part-ii-redwoods-revenge.md) of the tutorial!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [part 2](/docs/tutorial/intermission.md) of the tutorial!). This file will contain some boilerplate to get you started:
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`

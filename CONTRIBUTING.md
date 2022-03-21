@@ -86,7 +86,7 @@ You can create a Redwood Project that contains a lot of functionality in just a 
 1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
-4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
+4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/forward/) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
 Run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project.
@@ -207,7 +207,7 @@ Within your Framework directory, use the following tools and commands to test yo
 
 ### E2E Integration Tests
 
-We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
+We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/forward/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
 yarn e2e
