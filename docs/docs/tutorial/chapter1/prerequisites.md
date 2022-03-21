@@ -56,4 +56,4 @@ Please do upgrade accordingly. Then proceed to the Redwood installation when you
 >
 > JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
 >
-> - [Recommended Windows Development Setup](../cookbook/windows-development-setup.md)
+> - [Recommended Windows Development Setup](/docs/cookbook/windows-development-setup)

@@ -75,7 +75,7 @@ We have some other [generators](https://redwoodjs.com/docs/cli-commands#generate
 
 ## Next Steps
 
-Need more? The best way to get to know Redwood is by going through the extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/welcome-to-redwood).
+Need more? The best way to get to know Redwood is by going through the extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/forward).
 
 - Join our [Discord Server](https://discord.gg/redwoodjs)
 - Join our [Discourse Community](https://community.redwoodjs.com)
