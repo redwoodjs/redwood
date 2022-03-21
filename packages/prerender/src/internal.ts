@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import fetch from 'node-fetch'
+import { fetch } from 'cross-undici-fetch'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/internal'

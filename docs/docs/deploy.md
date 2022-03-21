@@ -8,10 +8,12 @@ Redwood is designed for both serverless and traditional infrastructure deploymen
 4. the hosting provider deploys the built Web static assets to a CDN and the API code to a serverless backend (e.g. AWS Lambdas)
 
 Currently, these are the officially supported deploy targets:
+- [Flightcontrol](https://www.flightcontrol.dev?ref=redwood)
 - [Netlify](https://www.netlify.com/)
-- [Vercel](https://vercel.com)
-- [Serverless.com](https://serverless.com)
 - [Render](https://render.com)
+- [Serverless.com](https://serverless.com)
+- [Vercel](https://vercel.com)
+
 
 Redwood has a CLI generator that adds the code and configuration required by the specified provider (see the [CLI Doc](https://redwoodjs.com/docs/cli-commands#deploy-config) for more information):
 ```shell
@@ -82,6 +84,22 @@ Any environment variables used locally, e.g. in your `env.defaults` or `.env`, m
 
 Additionally, if your application uses env vars on the Web Side, you must configure Redwood's build process to make them available in production. See the [Redwood Environment Variables doc](https://redwoodjs.com/docs/environment-variables) for instructions.
 
+## Flightcontrol Deploy
+
+ [Flightcontrol](https://www.flightcontrol.dev?ref=redwood) is a new platform that brings world-class deployment DX natively to your AWS account. It's easy to use but lets you pop the hood and leverage the raw power of AWS when needed. It currently supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
+
+ ### Flightcontrol Deploy Setup
+
+ 1. In your project, run the command `yarn rw setup deploy flightcontrol`
+ 2. Commit the changes and push to github 
+ 3. If you don't have an account, sign up at [app.flightcontrol.dev/signup](https://app.flightcontrol.dev/signup?ref=redwood)
+ 4. Create a new project at [app.flightcontrol.dev/projects/new/1](https://app.flightcontrol.dev/projects/new/1)
+   1. Connect your Github account and select your repo 
+   2. Select "Config Type" as `flightcontrol.json`
+   3. Select the AWS region to deploy to. 
+   4. Click "Create Project"
+
+If you have *any* problems or questions, Flightcontrol is very responsive in [their support Discord](https://discord.gg/yY8rSPrD6q).
 
 ## Netlify Deploy
 
@@ -93,7 +111,7 @@ If you simply want to experience the Netlify deployment process without a databa
 4. use the Netlify [Quick Start](https://app.netlify.com/signup) to deploy
 
 ### Netlify Complete Deploy Walkthrough
-For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/docs/tutorial/deployment).
+For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/docs/tutorial/chapter4/deployment).
 
 ## Render Deploy
 Render is a unified cloud to build and run all your apps and websites with free SSL, a global CDN, private networks and auto deploys from Git — **database included**!
@@ -103,73 +121,6 @@ If you simply want to experience the Render deployment process, including a Post
 2. after your "render-deploy" project installation is complete, init git, commit, and add it as a new repo to GitHub or GitLab
 3. run the command `yarn rw setup deploy render`, use the flag `--database` to select from `postgresql`, `sqlite` or `none` to proceed without a database [default : `postgresql`]
 4. follow the [Render Redwood Deploy Docs](https://render.com/docs/deploy-redwood) for detailed instructions
-
-## Vercel Deploy
->The following instructions assume you have read the [General Deployment Setup](#general-deployment-setup) section above.
-
-### Vercel tl;dr Deploy
-If you simply want to experience the Vercel deployment process without a database and/or adding custom code, you can do the following:
-1. create a new redwood project: `yarn create redwood-app ./vercel-deploy`
-2. after your "vercel-deploy" project installation is complete, init git, commit, and add it as a new repo to GitHub, BitBucket, or GitLab
-3. run the command `yarn rw setup deploy vercel` and commit and push changes
-4. use the Vercel [Quick Start](https://vercel.com/#get-started) to deploy
-
-_If you choose this quick deploy experience, the following steps do not apply._
-
-
-### Redwood Project Setup
-If you already have a Redwood project, proceed to the next step.
-
-Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/docs/tutorial/welcome-to-redwood). Simply return to these instructions when you reach the "Deployment" section.
-
-### Redwood Deploy Configuration
-
-Complete the following two steps. Then save, commit, and push your changes.
-
-#### Step 1. Serverless Functions Path
-Run the following CLI Command:
-```shell
-yarn rw setup deploy vercel
-```
-
-This updates your `redwood.toml` file, setting `apiUrl = "/api"`:
-
-#### Step 2. Database Settings
-Follow the steps in the [Prisma and Database](#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
-
-### Vercel Initial Setup and Configuration
-Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
-
-Then select the "Continue" button within the "From Git Repository" section:
-<img src="https://user-images.githubusercontent.com/2951/90482970-e6f3e700-e0e8-11ea-8b3e-979745b0a226.png" />
-
-Next, select the provider where your repo is hosted: GitHub, GitLab, or Bitbucket. You'll be asked to login and then provider the URL of the repository, e.g. for a GitHub repo `https://github.com/your-account/your-project.git`. Select "Continue".
-
-You'll then need to provide permissions for Vercel to access the repo on your hosting provider.
-
-### Import and Deploy your Project
-Vercel will recognize your repo as a Redwood project and take care of most configuration heavy lifting. You should see the following options and, most importantly, the "Framework Preset" showing RedwoodJS.
-
-<img src="https://user-images.githubusercontent.com/2951/90486275-9337cc80-e0ed-11ea-9af3-fd9613c1256b.png" />
-
-Leave the **Build and Output Settings** at the default settings (unless you know what you're doing and have very specific needs).
-
-In the "Environment Variables" dropdown, add `DATABASE_URL` and your app's database connection string as the value. (Or skip if not applicable.)
-
-> When configuring a database, you'll want to append `?connection_limit=1` to the URI. This is [recommended by Prisma](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/deployment#recommended-connection-limit) when working with relational databases in a Serverless context. For production apps, you should setup [connection pooling](https://redwoodjs.com/docs/connection-pooling).
-
-For example, a postgres connection string should look like `postgres://<user>:<pass>@<url>/<db>?connection_limit=1`
-
-Finally, click the "Deploy" button. You'll hopefully see a build log without errors (warnings are fine) and end up on a screen that looks like this:
-
-<img src="https://user-images.githubusercontent.com/2951/90487627-9469f900-e0ef-11ea-9378-9bb85e02a792.png" />
-
-Go ahead, click that "Visit" button. You’ve earned it 🎉
-
-### Vercel Dashboard Settings
-From the Vercel Dashboard you can access the full settings and information for your Redwood App. The default settings seem to work just fine for most Redwood projects. Do take a look around, but be sure check out the [docs as well](https://vercel.com/docs).
-
-From now on, each time you push code to your git repo, Vercel will automatically trigger a deploy of the new code. You can also manually redeploy if you select "Deployments", then the specific deployment from the list, and finally the "Redeploy" option from the vertical dots menu next to "Visit".
 
 ## Serverless Deploy
 
@@ -271,3 +222,71 @@ This will take several minutes, so grab your favorite beverage and enjoy your ne
 > Pro tip: if you get tired of typing `serverless` each time, you can use the much shorter `sls` alias:
 >
 >   `yarn rw deploy sls`
+
+
+## Vercel Deploy
+>The following instructions assume you have read the [General Deployment Setup](#general-deployment-setup) section above.
+
+### Vercel tl;dr Deploy
+If you simply want to experience the Vercel deployment process without a database and/or adding custom code, you can do the following:
+1. create a new redwood project: `yarn create redwood-app ./vercel-deploy`
+2. after your "vercel-deploy" project installation is complete, init git, commit, and add it as a new repo to GitHub, BitBucket, or GitLab
+3. run the command `yarn rw setup deploy vercel` and commit and push changes
+4. use the Vercel [Quick Start](https://vercel.com/#get-started) to deploy
+
+_If you choose this quick deploy experience, the following steps do not apply._
+
+
+### Redwood Project Setup
+If you already have a Redwood project, proceed to the next step.
+
+Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/tutorial/welcome-to-redwood). Simply return to these instructions when you reach the "Deployment" section.
+
+### Redwood Deploy Configuration
+
+Complete the following two steps. Then save, commit, and push your changes.
+
+#### Step 1. Serverless Functions Path
+Run the following CLI Command:
+```shell
+yarn rw setup deploy vercel
+```
+
+This updates your `redwood.toml` file, setting `apiUrl = "/api"`:
+
+#### Step 2. Database Settings
+Follow the steps in the [Prisma and Database](#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
+
+### Vercel Initial Setup and Configuration
+Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
+
+Then select the "Continue" button within the "From Git Repository" section:
+<img src="https://user-images.githubusercontent.com/2951/90482970-e6f3e700-e0e8-11ea-8b3e-979745b0a226.png" />
+
+Next, select the provider where your repo is hosted: GitHub, GitLab, or Bitbucket. You'll be asked to login and then provider the URL of the repository, e.g. for a GitHub repo `https://github.com/your-account/your-project.git`. Select "Continue".
+
+You'll then need to provide permissions for Vercel to access the repo on your hosting provider.
+
+### Import and Deploy your Project
+Vercel will recognize your repo as a Redwood project and take care of most configuration heavy lifting. You should see the following options and, most importantly, the "Framework Preset" showing RedwoodJS.
+
+<img src="https://user-images.githubusercontent.com/2951/90486275-9337cc80-e0ed-11ea-9af3-fd9613c1256b.png" />
+
+Leave the **Build and Output Settings** at the default settings (unless you know what you're doing and have very specific needs).
+
+In the "Environment Variables" dropdown, add `DATABASE_URL` and your app's database connection string as the value. (Or skip if not applicable.)
+
+> When configuring a database, you'll want to append `?connection_limit=1` to the URI. This is [recommended by Prisma](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/deployment#recommended-connection-limit) when working with relational databases in a Serverless context. For production apps, you should setup [connection pooling](https://redwoodjs.com/docs/connection-pooling).
+
+For example, a postgres connection string should look like `postgres://<user>:<pass>@<url>/<db>?connection_limit=1`
+
+Finally, click the "Deploy" button. You'll hopefully see a build log without errors (warnings are fine) and end up on a screen that looks like this:
+
+<img src="https://user-images.githubusercontent.com/2951/90487627-9469f900-e0ef-11ea-9378-9bb85e02a792.png" />
+
+Go ahead, click that "Visit" button. You’ve earned it 🎉
+
+### Vercel Dashboard Settings
+From the Vercel Dashboard you can access the full settings and information for your Redwood App. The default settings seem to work just fine for most Redwood projects. Do take a look around, but be sure check out the [docs as well](https://vercel.com/docs).
+
+From now on, each time you push code to your git repo, Vercel will automatically trigger a deploy of the new code. You can also manually redeploy if you select "Deployments", then the specific deployment from the list, and finally the "Redeploy" option from the vertical dots menu next to "Visit".
