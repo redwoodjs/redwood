@@ -1022,7 +1022,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Also generate mutations                                                              |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations         |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--tests`            | Generate service test and scenario [default: true]                                   |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
@@ -1031,20 +1031,20 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 
 **Regenerating the SDL**
 
-Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time having to make those changes manually.
+Often, as you iterate on your data model, you may add, remove, or rename fields. You still want Redwood to update the generated SDL and service files for those updates because it saves time not having to make those changes manually.
 
-But, since the `generate` command prevents you from overwriting files accidentally, you could use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
+But, since the `generate` command prevents you from overwriting files accidentally, you use the `--force` option -- but a `force` will reset any test and scenarios you may have written which you don't want to lose.
 
 In that case, you can run the following to "regenerate" **just** the SDL file and leave your tests and scenarios intact and not lose your hard work.
 
 ```
-yarn redwood g sdl <model> --force --tests=false
+yarn redwood g sdl <model> --force --no-tests
 ```
 
 **Example**
 
 ```terminal
-~/redwood-app$ yarn redwood generate sdl user --force --tests=false
+~/redwood-app$ yarn redwood generate sdl user --force --no-tests
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
   ✔ Generating SDL files...
@@ -1075,7 +1075,7 @@ $ /redwood-app/node_modules/.bin/redwood g sdl user
 Done in 1.04s.
 ```
 
-The generated sdl defines a corresponding type, query, and create/update inputs, without defining any mutations. To also get mutations, add the `--crud` option.
+The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--no-crud` option.
 
 ```javascript
 // ./api/src/graphql/users.sdl.js
@@ -1088,7 +1088,7 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -1100,10 +1100,16 @@ export const schema = gql`
     email: String
     name: String
   }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
+  }
 `
 ```
 
-The services file fulfills the query. If the `--crud` option is added, this file will be much more complex.
+The services file fulfills the query. If the `--no-crud` option is added, this file will be less complex.
 
 ```javascript
 // ./api/src/services/users/users.js
@@ -1129,7 +1135,7 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -1140,6 +1146,12 @@ export const schema = gql`
   input UpdateUserInput {
     email: String
     name: String
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
   }
 `
 ```
@@ -1672,6 +1684,25 @@ yarn rw setup generator page
 And then check `web/generators/page` for the page, storybook and test template files. You don't need to keep all of these templates—you could customize just `page.tsx.template` and delete the others and they would still be generated, but using the default Redwood templates.
 
 The only exception to this rule is the scaffold templates. You'll get four directories, `assets`, `components`, `layouts` and `pages`. If you want to customize any one of the templates in those directories, you will need to keep all the other files inside of that same directory, even if you make no changes besides the one you care about. (This is due to the way the scaffold looks up its template files.) For example, if you wanted to customize only the index page of the scaffold (the one that lists all available records in the database) you would edit `web/generators/scaffold/pages/NamesPage.tsx.template` and keep the other pages in that directory. You _could_ delete the other three directories (`assets`, `components`, `layouts`) if you don't need to customize them.
+
+**Name Variants**
+
+Your template will receive the provided `name` in a number of different variations.
+
+For example, given the name `fooBar` your template will receive the following _variables_ with the given _values_
+
+| Variable                  | Value         |
+| :------------------------ | :------------ |
+| `pascalName`              | `FooBar`      |
+| `camelName`               | `fooBar`      |
+| `singularPascalName`      | `FooBar`      |
+| `pluralPascalName`        | `FooBars`     |
+| `singularCamelName`       | `fooBar`      |
+| `pluralCamelName`         | `fooBars`     |
+| `singularParamName`       | `foo-bar`     |
+| `pluralParamName`         | `foo-bars`    |
+| `singularConstantName`    | `FOO_BAR`     |
+| `pluralConstantName`      | `FOO_BARS`    |
 
 **Example**
 

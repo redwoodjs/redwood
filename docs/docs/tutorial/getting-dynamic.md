@@ -17,9 +17,7 @@ We use [Prisma](https://www.prisma.io/) to talk to the database. Prisma has anot
 
 First let's define the data structure for a post in the database. Open up `api/db/schema.prisma` and add the definition of our Post table (remove any "sample" models that are present in the file, like the `UserExample` model). Once you're done, the entire schema file should look like:
 
-```plaintext {13-18}
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -30,12 +28,14 @@ generator client {
   binaryTargets = "native"
 }
 
+// highlight-start
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
   body      String
   createdAt DateTime @default(now())
 }
+// highlight-end
 ```
 
 This says that we want a table called `Post` and it should have:

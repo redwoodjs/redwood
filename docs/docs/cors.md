@@ -71,7 +71,7 @@ export const handler = createGraphQLHandler({
   services,
 + cors: {
 +   origin: 'https://www.example.com', // <-- web side domain
-+   credentials: 'include',
++   credentials: true,
 + },
   onException: () => {
     db.$disconnect()

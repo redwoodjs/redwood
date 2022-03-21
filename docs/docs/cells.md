@@ -53,16 +53,16 @@ Off the bat, this file exports five constants: `QUERY`, `Loading` , `Empty` , `F
 
 With Cells, you have a total of seven exports to work with:
 
-| Name          | Type              | Description                                                  |
-| :------------ | :---------------- | :----------------------------------------------------------- |
-| `QUERY`       | `string|function` | The query to execute                                         |
-| `beforeQuery` | `function`        | Lifecycle hook; prepares variables and options for the query |
-| `isEmpty`     | `function`        | Lifecycle hook; decides if Cell should render Empty          |
-| `afterQuery`  | `function`        | Lifecycle hook; sanitizes data returned from the query       |
-| `Loading`     | `component`       | If the request is in flight, render this component           |
-| `Empty`       | `component`       | If there's no data (`null` or `[]`), render this component   |
-| `Failure`     | `component`       | If something went wrong, render this component               |
-| `Success`     | `component`       | If the data has loaded, render this component                |
+| Name          | Type               | Description                                                  |
+| :------------ | :----------------- | :----------------------------------------------------------- |
+| `QUERY`       | `string\|function` | The query to execute                                         |
+| `beforeQuery` | `function`         | Lifecycle hook; prepares variables and options for the query |
+| `isEmpty`     | `function`         | Lifecycle hook; decides if Cell should render Empty          |
+| `afterQuery`  | `function`         | Lifecycle hook; sanitizes data returned from the query       |
+| `Loading`     | `component`        | If the request is in flight, render this component           |
+| `Empty`       | `component`        | If there's no data (`null` or `[]`), render this component   |
+| `Failure`     | `component`        | If something went wrong, render this component               |
+| `Success`     | `component`        | If the data has loaded, render this component                |
 
 Only `QUERY` and `Success` are required. If you don't export `Empty`, empty results are sent to `Success`, and if you don't export `Failure`, error is output to the console.
 

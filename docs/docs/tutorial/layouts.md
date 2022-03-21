@@ -20,13 +20,13 @@ That created `web/src/layouts/BlogLayout/BlogLayout.js` and an associated test f
 
 Cut the `<header>` from both `HomePage` and `AboutPage` and paste it in the layout instead. Let's take out the duplicated `<main>` tag as well:
 
-```javascript {3,7-19}
-// web/src/layouts/BlogLayout/BlogLayout.js
-
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
   return (
+    // highlight-start
     <>
       <header>
         <h1>Redwood Blog</h1>
@@ -40,15 +40,14 @@ const BlogLayout = ({ children }) => {
       </header>
       <main>{children}</main>
     </>
+    // highlight-end
   )
 }
 
 export default BlogLayout
 ```
 
-```javascript
-// web/src/pages/AboutPage/AboutPage.js
-
+```jsx title="web/src/pages/AboutPage/AboutPage.js"
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -69,9 +68,7 @@ const AboutPage = () => {
 export default AboutPage
 ```
 
-```javascript
-// web/src/pages/HomePage/HomePage.js
-
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
@@ -91,19 +88,21 @@ In `BlogLayout.js`, `children` is where the magic will happen. Any page content 
 
 To actually render our layout we'll need to make a change to our routes files. We'll wrap `HomePage` and `AboutPage` with the `BlogLayout`, using a `<Set>`. Unlike pages, we do actually need an `import` statement for layouts:
 
-```javascript {3,4,9-12}
-// web/src/Routes.js
-
+```javascript title="web/src/Routes.js"
+// highlight-start
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogLayout from 'src/layouts/BlogLayout'
+// highlight-end
 
 const Routes = () => {
   return (
     <Router>
+      // highlight-start
       <Set wrap={BlogLayout}>
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/" page={HomePage} name="home" />
       </Set>
+      // highlight-end
       <Route notfound page={NotFoundPage} />
     </Router>
   )
@@ -132,23 +131,25 @@ Back to the browser (you may need to manually refresh) and you should see...noth
 
 A couple more `<Link>`s: let's have the title/logo link back to the homepage, and we'll add a nav link to Home as well:
 
-```javascript {9-11,14-16}
-// web/src/layouts/BlogLayout/BlogLayout.js
-
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
   return (
     <>
       <header>
+        // highlight-start
         <h1>
           <Link to={routes.home()}>Redwood Blog</Link>
         </h1>
+        // highlight-end
         <nav>
           <ul>
+            // highlight-start
             <li>
               <Link to={routes.home()}>Home</Link>
             </li>
+            // highlight-end
             <li>
               <Link to={routes.about()}>About</Link>
             </li>
@@ -165,9 +166,7 @@ export default BlogLayout
 
 And then we can remove the extra "Return to Home" link (and Link/routes import) that we had on the About page:
 
-```javascript
-// web/src/pages/AboutPage/AboutPage.js
-
+```jsx title="web/src/pages/AboutPage/AboutPage.js"
 import { MetaTags } from '@redwoodjs/web'
 
 const AboutPage = () => {
