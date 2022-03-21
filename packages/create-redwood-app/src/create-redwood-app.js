@@ -140,7 +140,7 @@ const createProjectTasks = ({ newAppDir, overwrite }) => {
             )
             logStatements.push(
               style.warning(
-                `/docs/tutorial/prerequisites/#nodejs-and-yarn-versions\n`
+                `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
               )
             )
             return reject(new Error(logStatements.join('\n')))
