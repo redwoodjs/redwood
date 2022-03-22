@@ -207,13 +207,13 @@ export const createGraphQLHandler = ({
     logging: logger,
     graphiql: isDevEnv
       ? {
-          title: 'Redwood GraphQL playground',
+          title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
           defaultQuery: `query Redwood {
-        redwood {
-          version
-        }
-      }`,
+  redwood {
+    version
+  }
+}`,
           headerEditorEnabled: true,
         }
       : false,
