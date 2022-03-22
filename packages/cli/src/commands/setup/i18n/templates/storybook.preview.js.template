@@ -18,7 +18,6 @@ export const globalTypes = {
 }
 
 const withI18n = (StoryFn, context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
