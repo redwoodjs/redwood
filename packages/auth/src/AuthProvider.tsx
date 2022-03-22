@@ -134,17 +134,26 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
 ) => {
   const skipFetchCurrentUser = props.skipFetchCurrentUser || false
 
+  const [hasRestoredState, setHasRestoredState] = useState(false)
+
   const [authProviderState, setAuthProviderState] = useState(
     defaultAuthProviderState
   )
 
   const rwClient: AuthClient = useMemo(() => {
+    // If ever we rebuild the rwClient, we need to re-restore the state.
+    // This is not desired behavior, but may happen if for some reason the host app's
+    // auth configuration changes mid-flight.
+    setHasRestoredState(false)
+
     return createAuthClient(
       props.client as SupportedAuthClients,
       props.type as SupportedAuthTypes,
       props.config as SupportedAuthConfig
     )
   }, [props.client, props.type, props.config])
+
+  const waitingOnUnderlyingClient = !!rwClient.useIsWaitingForClient?.()
 
   const getApiGraphQLUrl = useCallback(() => {
     return global.RWJS_API_GRAPHQL_URL
@@ -239,18 +248,6 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
     getCurrentUser,
   ])
 
-  /** Whenever the rwClient is ready to go, restore auth and reauthenticate */
-  useEffect(() => {
-    if (rwClient) {
-      const doRestoreState = async () => {
-        await rwClient.restoreAuthState?.()
-        reauthenticate()
-      }
-
-      doRestoreState()
-    }
-  }, [rwClient, reauthenticate])
-
   /**
    * @example
    * ```js
@@ -303,7 +300,7 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
 
   const logIn = useCallback(
     async (options?: any) => {
-      setAuthProviderState({ ...defaultAuthProviderState, loading: true })
+      setAuthProviderState(defaultAuthProviderState)
       const loginOutput = await rwClient.login(options)
       await reauthenticate()
 
@@ -374,6 +371,20 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
     },
     [rwClient]
   )
+
+  /** Whenever the rwClient is ready to go, restore auth and reauthenticate */
+  useEffect(() => {
+    if (rwClient && !waitingOnUnderlyingClient && !hasRestoredState) {
+      setHasRestoredState(true)
+
+      const doRestoreState = async () => {
+        await rwClient.restoreAuthState?.()
+        reauthenticate()
+      }
+
+      doRestoreState()
+    }
+  }, [rwClient, reauthenticate, waitingOnUnderlyingClient, hasRestoredState])
 
   rwClient.useListenForUpdates?.({
     reauthenticate,

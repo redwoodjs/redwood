@@ -19,6 +19,9 @@ export interface AuthClient {
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
 
+  /** Hooks for managing the hosting AuthProvider's life-cycle */
+  /** An optional hook to hold off the restoration of state until the underlying client is ready */
+  useIsWaitingForClient?(): boolean
   /** An optional hook to listen for updates from the 3rd party provider */
   useListenForUpdates?(handlers: { reauthenticate: () => Promise<void> }): void
 
