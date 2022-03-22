@@ -268,7 +268,7 @@ export const createGraphQLHandler = ({
 
     const requestUrl = new URL(
       event.path,
-      protocol + '://' + event.requestContext.domainName || 'localhost'
+      protocol + '://' + event.requestContext?.domainName || 'localhost'
     )
 
     if (event.queryStringParameters) {
