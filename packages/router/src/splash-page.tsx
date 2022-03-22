@@ -5,10 +5,7 @@ interface SplashPageProps {
   routes: any[]
 }
 
-const SplashPage: React.VFC<SplashPageProps> = ({
-  hasGeneratedRoutes,
-  routes,
-}) => {
+const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
   const version = useVersion()
   return (
     <>
@@ -365,7 +362,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/"
+                      href="/docs/tutorial/foreward/"
                       target="_blank"
                       rel="noreferrer"
                     ></a>

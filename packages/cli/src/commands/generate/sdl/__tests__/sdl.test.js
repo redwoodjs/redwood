@@ -75,7 +75,7 @@ const itCreatesAService = (baseArgs = {}) => {
 
 const itCreatesASingleWordSDLFile = (baseArgs = {}) => {
   test('creates a single word sdl file', async () => {
-    const files = await sdl.files({ ...baseArgs, name: 'User' })
+    const files = await sdl.files({ ...baseArgs, name: 'User', crud: false })
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(

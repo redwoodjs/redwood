@@ -589,6 +589,7 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
 
   type Query {
     userProfiles: [UserProfile!]! @requireAuth
+    userProfile(id: Int!): UserProfile @requireAuth
   }
 
   input CreateUserProfileInput {
@@ -599,6 +600,13 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
   input UpdateUserProfileInput {
     username: String
     userId: Int
+  }
+
+  type Mutation {
+    createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
+    updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
+      @requireAuth
+    deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
 "
@@ -789,6 +797,7 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
 
   type Query {
     userProfiles: [UserProfile!]! @requireAuth
+    userProfile(id: Int!): UserProfile @requireAuth
   }
 
   input CreateUserProfileInput {
@@ -799,6 +808,13 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
   input UpdateUserProfileInput {
     username: String
     userId: Int
+  }
+
+  type Mutation {
+    createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
+    updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
+      @requireAuth
+    deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
 "

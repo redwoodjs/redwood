@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.49.0",
+  "version": "0.49.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -27,12 +27,6 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/fixtures/",
-      "/__fixtures__/"
-    ]
-  },
   "dependencies": {
     "@babel/parser": "7.16.7",
     "@babel/plugin-transform-typescript": "7.16.7",
@@ -42,17 +36,17 @@
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/core": "2.5.1",
     "@graphql-codegen/schema-ast": "2.4.1",
-    "@graphql-codegen/typescript": "2.4.5",
-    "@graphql-codegen/typescript-operations": "2.3.2",
-    "@graphql-codegen/typescript-react-apollo": "3.2.8",
-    "@graphql-codegen/typescript-resolvers": "2.5.2",
-    "@redwoodjs/graphql-server": "0.49.0",
+    "@graphql-codegen/typescript": "2.4.8",
+    "@graphql-codegen/typescript-operations": "2.3.5",
+    "@graphql-codegen/typescript-react-apollo": "3.2.11",
+    "@graphql-codegen/typescript-resolvers": "2.6.1",
+    "@redwoodjs/graphql-server": "0.49.1",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.5.0",
     "chalk": "4.1.2",
     "core-js": "3.21.1",
     "deepmerge": "4.2.2",
-    "esbuild": "0.14.25",
+    "esbuild": "0.14.27",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",
     "fs-extra": "10.0.1",
@@ -62,14 +56,14 @@
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.11.6",
+    "systeminformation": "5.11.9",
     "toml": "3.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/babel-plugin-tester": "9.0.4",
-    "@types/babel__core": "7.1.18",
+    "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
     "@types/rimraf": "3.0.2",
