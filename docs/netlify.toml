@@ -144,6 +144,6 @@
   status = 301
 
 [[redirects]]
-  from = "/img"
+  from = "/img/*"
   to = "https://redwoodjs-docs.netlify.app/img/:splat"
-  status = 301
+  status = 200
