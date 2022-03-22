@@ -11,6 +11,9 @@
 /* You can override the default Infima variables here. */
 :root {
   --ifm-spacing-horizontal: 2rem;
+  --tw-text-opacity: 1;
+  --ifm-color-primary: rgb(124 45 18 / var(--tw-text-opacity));
+  --ifm-link-color: rgb(13 148 136 / var(--tw-text-opacity));
 }
 
 .row .col--6 {
