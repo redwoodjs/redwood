@@ -142,8 +142,3 @@
   from = "/docs/tutorial2/wrapping-up"
   to = "/docs/tutorial/afterword"
   status = 301
-
-[[redirects]]
-  from = "/img"
-  to = "https://redwoodjs-docs.netlify.app/img/:splat"
-  status = 301
