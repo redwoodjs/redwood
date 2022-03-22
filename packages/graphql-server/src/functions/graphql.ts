@@ -174,7 +174,7 @@ export const createGraphQLHandler = ({
     logging: logger,
     graphiql: isDevEnv
       ? {
-          title: 'Redwood GraphQL playground',
+          title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
           defaultQuery: `query Redwood {
         redwood {
@@ -184,6 +184,8 @@ export const createGraphQLHandler = ({
           headerEditorEnabled: true,
         }
       : false,
+    healthCheckPath: 'graphql', // @todo: may default here, but need to configure per app or derive from event path?
+    readinessCheckPath: 'graphql', // but we don't have access to event yet
     cors: (request: Request) => {
       const yogaCORSOptions: CORSOptions = {}
       if (cors?.methods) {
@@ -262,8 +264,12 @@ export const createGraphQLHandler = ({
       }
     }
 
-    const requestProtocol = event.requestContext?.protocol || 'http'
-    const requestUrl = new URL(event.path, requestProtocol + '://localhost')
+    const requestProtocol = isDevEnv ? 'http' : 'https'
+    const requestDomain = event.requestContext?.domainName || 'localhost'
+    const requestUrl = new URL(
+      event.path,
+      requestProtocol + `://${requestDomain}`
+    )
     let request: Request
     if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
       request = new Request(requestUrl.toString(), {
