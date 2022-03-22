@@ -1,7 +1,7 @@
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import { DocumentNode, ObjectTypeDefinitionNode, visit } from 'graphql'
+import { DocumentNode, Kind, ObjectTypeDefinitionNode, visit } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
 
@@ -10,11 +10,14 @@ import { getPaths } from './paths'
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
+export const DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE =
+  'Please check that the requireAuth roles is a string or an array of strings.'
 export function validateSchemaForDirectives(
   schemaDocumentNode: DocumentNode,
   typesToCheck: string[] = ['Query', 'Mutation']
 ) {
   const validationOutput: string[] = []
+  const directiveRoleValidationOutput: Record<string, any> = []
 
   visit(schemaDocumentNode, {
     ObjectTypeDefinition(typeNode) {
@@ -31,9 +34,45 @@ export function validateSchemaForDirectives(
           // skip validation for redwood query and currentUser
           if (!(isRedwoodQuery || isCurrentUserQuery)) {
             const hasDirective = field.directives?.length
+
             if (!hasDirective) {
               validationOutput.push(`${fieldName} ${fieldTypeName}`)
             }
+
+            // we want to check that the requireAuth directive roles argument value
+            // is a string or an array of strings
+            field.directives?.forEach((directive) => {
+              if (directive.name.value === 'requireAuth') {
+                directive.arguments?.forEach((arg) => {
+                  if (arg.name.value === 'roles') {
+                    if (
+                      arg.value.kind !== Kind.STRING &&
+                      arg.value.kind !== Kind.LIST
+                    ) {
+                      directiveRoleValidationOutput.push({
+                        fieldName: fieldName,
+                        invalid: arg.value.kind,
+                      })
+                    }
+
+                    // check list (array)
+                    if (arg.value.kind === Kind.LIST) {
+                      const invalidValues = arg.value.values?.filter(
+                        (val) => val.kind !== Kind.STRING
+                      )
+                      if (invalidValues.length > 0) {
+                        invalidValues.forEach((invalid) => {
+                          directiveRoleValidationOutput.push({
+                            fieldName: fieldName,
+                            invalid: invalid.kind,
+                          })
+                        })
+                      }
+                    }
+                  }
+                })
+              }
+            })
           }
         }
       }
@@ -49,6 +88,19 @@ export function validateSchemaForDirectives(
       `${DIRECTIVE_REQUIRED_ERROR_MESSAGE} for\n${fieldsWithoutDirectives.join(
         '\n'
       )} \n`
+    )
+  }
+
+  if (directiveRoleValidationOutput.length > 0) {
+    const fieldWithInvalidRoleValues = directiveRoleValidationOutput.map(
+      (field: Record<string, any>) =>
+        `- ${field.fieldName} has an invalid ${field.invalid}`
+    )
+
+    throw new RangeError(
+      `${DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE}\n\n${fieldWithInvalidRoleValues.join(
+        '\n'
+      )} \n\nFor example: @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])`
     )
   }
 }

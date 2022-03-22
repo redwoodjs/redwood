@@ -29,7 +29,9 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
  */
 export const getCurrentUser = async (
   decoded,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   { token, type },
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   { event, context }
 ): Promise<RedwoodUser> => {
   if (!decoded) {
@@ -68,7 +70,7 @@ type AllowedRoles = string | string[] | undefined
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
  */
-export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
+export const hasRole = (roles: AllowedRoles): boolean => {
   if (!isAuthenticated()) {
     return false
   }
@@ -122,7 +124,7 @@ export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (roles && !hasRole({ roles })) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }

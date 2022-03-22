@@ -2,7 +2,7 @@ import { dbAuth } from '../dbAuth'
 
 global.RWJS_API_DBAUTH_URL = '/.redwood/functions'
 
-jest.mock('node-fetch', () => {
+jest.mock('cross-undici-fetch', () => {
   return
 })
 
