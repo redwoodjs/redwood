@@ -17,7 +17,7 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'https://redwoodjs.com/favicon.png',
   organizationName: 'redwoodjs', // Usually your GitHub org/user name.
   // ?
   projectName: 'redwood', // Usually your repo name.,
