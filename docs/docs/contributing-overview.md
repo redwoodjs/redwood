@@ -11,17 +11,17 @@ There are several ways you can contribute to Redwood:
 
 _Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md#contributor-covenant-code-of-conduct)._
 
-> ⚡️ **Quick Links**  
+> ⚡️ **Quick Links**
 >
 > There are several contributing docs and references, each covering specific topics:
 >
 > 1. 🧭 **Overview and Orientation** (👈 you are here)
 > 2. 📓 [Reference: Contributing to the Framework Packages](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md)
-> 3. 🪜 [Step-by-step Walkthrough](https://redwoodjs.com/docs/contributing-walkthrough) (including Video Recording)
+> 3. 🪜 [Step-by-step Walkthrough](contributing-walkthrough.md) (including Video Recording)
 > 4. 📈 [Current Project Status: v1 Release Board](https://github.com/orgs/redwoodjs/projects/6)
-> 5. 🤔 What should I work on?  
->     - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)  
->     - [Discovery Process and Open Issues](https://redwoodjs.com/docs/contributing#what-should-i-work-on)   
+> 5. 🤔 What should I work on?
+>     - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)
+>     - [Discovery Process and Open Issues](#what-should-i-work-on)
 
 ## The Characteristics of a Contributor
 More than committing code, contributing is about human collaboration and relationship. Our community mantra is **“By helping each other be successful with Redwood, we make the Redwood project successful.”** We have a specific vision for the effect this project and community will have on you — it should give you superpowers to build+create, progress in skills, and help advance your career.
@@ -41,16 +41,16 @@ Even if you know the mechanics, it’s hard to get started without a starting pl
 There are other more direct ways to get started as well, which are outlined below.
 
 ### Roadmap to Redwood v1: Project Boards and GitHub Issues
-Over the next few months, our focus is to achieve a v1.0.0 release of Redwood. You can read Tom’s important announcement about the v1 release candidate process [via this forum post](https://community.redwoodjs.com/t/what-the-1-0-release-candidate-phase-means-and-when-1-0-will-drop/2604). 
+Over the next few months, our focus is to achieve a v1.0.0 release of Redwood. You can read Tom’s important announcement about the v1 release candidate process [via this forum post](https://community.redwoodjs.com/t/what-the-1-0-release-candidate-phase-means-and-when-1-0-will-drop/2604).
 
 > **What a v1 release candidate means:**
 >
-> 1. all core features are complete and 
+> 1. all core features are complete and
 > 2. we are done making breaking changes
 >
 > During the release candidate cycle, we are completing all remaining tasks necessary to publish v1.0.0 GA.
 
-The Redwood Core Team is working publicly — progress is updated daily on the [Release Project Board](https://github.com/orgs/redwoodjs/projects/6). There’s also a Triage Board, including an important tab view of Issues that are priorities but need community help. 
+The Redwood Core Team is working publicly — progress is updated daily on the [Release Project Board](https://github.com/orgs/redwoodjs/projects/6). There’s also a Triage Board, including an important tab view of Issues that are priorities but need community help.
 - 👉 **Start here**: [v1 Help Wanted tab on the Triage Project Board](https://github.com/orgs/redwoodjs/projects/4) (sorted by difficulty)
 
 
@@ -58,7 +58,7 @@ Eventually, all this leads you back to Redwood’s GitHub Issues page. Here you�
 1. [Good First Issue](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22): these items are more likely to be an accessible entry point to the Framework. It’s less about skill level and more about focused scope.
 2. [Help Wanted](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22): these items especially need contribution help from the community.
 3. [v1 Priority](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Av1%2Fpriority+): to reach Redwood v1.0.0, we need to close all Issues with this label.
-4. [Bugs 🐛](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Abug%2Fconfirmed): Last but not least, we always need help with bugs. Some are technically less challenging than others. Sometimes the best way you can help is to attempt to reproduce the bug and confirm whether or not it’s still an issue.  
+4. [Bugs 🐛](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Abug%2Fconfirmed): Last but not least, we always need help with bugs. Some are technically less challenging than others. Sometimes the best way you can help is to attempt to reproduce the bug and confirm whether or not it’s still an issue.
 
 **The sweet spot is a “v1 Priority” Issue that’s either a “Good First Issue” or “Help Wanted”.** Yes, please!
 
@@ -122,7 +122,7 @@ The Tutorial is a standalone document that serves a specific purpose as an intro
 
 Docs are explanation-driven how-to content. They're more direct and to-the-point than The Tutorial and Cookbook Recipes. The idea is much more about finding something or getting something done than any kind of learning journey.
 
-Before you take on a doc, you should read [Form](https://redwoodjs.com/docs/form) and [Redwood Router](https://redwoodjs.com/docs/redwood-router); they have the kind of content you should be striving for. They're comprehensive yet conversational.
+Before you take on a doc, you should read [Forms](forms.md) and [Router](router.md); they have the kind of content you should be striving for. They're comprehensive yet conversational.
 
 In general, don't be afraid to go into too much detail. We'd rather you err on the side of too much than too little. One tip for finding good content is searching the forum and repo for "prior art"&mdash;what are people talking about where this comes up?
 
@@ -154,7 +154,7 @@ In general, they should consist of more straightforward explanations, are allowe
 In general, we don’t have a formal structure for PRs. Our goal is to make it as efficient as possible for anyone to open a PR. But there are some good practices, which are flexible. Just keep in mind that after opening a PR there’s more to do before getting to the finish line:
 1. Reviews from other contributors and maintainers
 2. Update code and, after maintainer approval, merge-in changes to the `main` branch
-3. Once PR is merged, it will be released and added to the next version Release Notes with a link for anyone to look at the PR and understand it. 
+3. Once PR is merged, it will be released and added to the next version Release Notes with a link for anyone to look at the PR and understand it.
 
 Some tips and advice:
 - **Connect the dots and leave a breadcrumb**: link to related Issues, Forum discussions, etc. Help others follow the trail leading up to this PR.
@@ -162,7 +162,7 @@ Some tips and advice:
 - **Draft or Work in Progress**: You don’t have to finish the code to open a PR. Once you have a start, open it up! Most often the best way to move an Issue forward is to see the code in action. Also, often this helps identify ways forward before you spend a lot of time polishing.
 - **Questions, Items for Discussion, Etc.**: Another reason to open a Draft PR is to ask questions and get direction via review.
 - **Loop in a Maintainer for Feedback and Review**: ping someone with an `@`. And nudge again in a few days if there’s no reply. We appreciate it and truly don’t want the PR to get lost in the shuffle!
-- **Next Steps**: Once the PR is merged, will there be a follow up step? If so, link to an Issue. How about Docs to-do or Docs to-merge?    
+- **Next Steps**: Once the PR is merged, will there be a follow up step? If so, link to an Issue. How about Docs to-do or Docs to-merge?
 
 The best thing you can do is look through existing PRs, which will give you a feel for how things work and what you think is helpful.
 

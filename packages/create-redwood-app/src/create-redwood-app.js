@@ -140,7 +140,7 @@ const createProjectTasks = ({ newAppDir, overwrite }) => {
             )
             logStatements.push(
               style.warning(
-                `https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions\n`
+                `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
               )
             )
             return reject(new Error(logStatements.join('\n')))
@@ -311,7 +311,7 @@ new Listr(
       '',
       `${style.redwood(
         ' ❖ Get started with the Tutorial'
-      )}: https://redwoodjs.com/tutorial`,
+      )}: https://redwoodjs.com/docs/tutorial`,
       `${style.redwood(
         ' ❖ Read the Documentation'
       )}: https://redwoodjs.com/docs`,

@@ -81,7 +81,7 @@ When you run `yarn rw dev` - it'll watch for changes and make your functions ava
 - `localhost:8911/{functionName}` and
 - `localhost:8910/.redwood/functions/{functionName}` (used by the web side).
 
-Note that the `.redwood/functions` path is determined by your setting in your [redwood.toml](https://redwoodjs.com/docs/app-configuration-redwood-toml#apiUrl) - and is used both in development and in the deployed Redwood app
+Note that the `.redwood/functions` path is determined by your setting in your [redwood.toml](app-configuration-redwood-toml.md#web) - and is used both in development and in the deployed Redwood app
 
 ## Testing
 
@@ -93,7 +93,7 @@ To help you mock the `event` and `context` information, we've provided several a
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `mockHttpEvent`     | Use this to mock out the http request `event` that is received by your function in unit tests. Here you can set `headers`, `httpMethod`, `queryStringParameters` as well as the `body` and if the body `isBase64Encoded`. The `event` contains information from the invoker as JSON-formatted string whose structure will vary. See [Working with AWS Lambda proxy integrations for HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html) for the payload format. |
 | `mockContext`       | Use this function to mock the http `context`. Your function handler receives a context object with properties that provide information about the invocation, function, and execution environment. See [AWS Lambda context object in Node.js](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html) for what context properties you can mock.                                                                                                                                                                       |
-| `mockSignedWebhook` | Use this function to mock a signed webhook. This is a specialized `mockHttpEvent` mock that also signs the payload and adds a signature header needed to verify that the webhook is trustworthy. See [How to Receive and Verify an Incoming Webhook](https://redwoodjs.com/docs/webhooks#how-to-receive-and-verify-an-incoming-webhook) to learn more about signing and verifying webhooks.                                                                                                                                    |
+| `mockSignedWebhook` | Use this function to mock a signed webhook. This is a specialized `mockHttpEvent` mock that also signs the payload and adds a signature header needed to verify that the webhook is trustworthy. See [How to Receive and Verify an Incoming Webhook](webhooks.md#how-to-receive-and-verify-an-incoming-webhook) to learn more about signing and verifying webhooks.                                                                                                                                    |
 
 ### How to Test Serverless Functions
 
@@ -273,7 +273,7 @@ And finally, we can also add a test to handle the error when we try to divide by
 
 The `divide` function is a simple example, but you can use the `mockHttpEvent` to set any event values you handler needs to test more complex functions.
 
-You can also `mockContext` and pass the mocked `context` to the handler and even create scenario data if your function interacts with your database. For an example of using scenarios when test functions, please look at a specialized serverless function: the [webhook below](https://redwoodjs.com/docs/serverless-functions#how-to-test-webhooks).
+You can also `mockContext` and pass the mocked `context` to the handler and even create scenario data if your function interacts with your database. For an example of using scenarios when test functions, please look at a specialized serverless function: the [webhook below](#how-to-test-webhooks).
 
 #### Running Function Tests
 
@@ -364,9 +364,9 @@ You can then define multiple fixtures to define all the cases in a central place
 
 ### How to Test Webhooks
 
-[Webhooks](https://redwoodjs.com/docs/webhooks#webhooks) are specialized serverless functions that will verify a signature header to ensure you can trust the incoming request and use the payload with confidence.
+[Webhooks](webhooks.md) are specialized serverless functions that will verify a signature header to ensure you can trust the incoming request and use the payload with confidence.
 
-> **Note:** Want to learn more about webhooks? See a [Detailed discussion of webhooks](https://redwoodjs.com/docs/webhooks) to find out how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps.
+> **Note:** Want to learn more about webhooks? See a [Detailed discussion of webhooks](webhooks.md) to find out how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps.
 
 In the following example, we'll have the webhook interact with our app's database, so we can see how we can use **scenario testing** to create data that the handler can access and modify.
 
@@ -418,7 +418,7 @@ api
 The `updateOrderStatus` webhook will expect:
 
 - a signature header named `X-Webhook-Signature`
-- that the signature in that header will signed using the [SHA256 method](https://redwoodjs.com/docs/webhooks#sha256-verifier-used-by-github-discourse)
+- that the signature in that header will signed using the [SHA256 method](webhooks.md#sha256-verifier-used-by-github-discourse)
 - verify the signature and throw an [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) error if the event cannot be trusted (that is, it failed signature verification)
 - if verified, then proceed to
 - find the order by the tracking number provided
@@ -715,11 +715,11 @@ And, in some other cases, you may even want to limit how often the function is c
 
 ### Webhooks
 
-If your function receives an incoming Webhook from a third party, see [Webhooks](https://redwoodjs.com/docs/webhooks) in the RedwoodJS documentation to verify and trust its payload.
+If your function receives an incoming Webhook from a third party, see [Webhooks](webhooks.md) in the RedwoodJS documentation to verify and trust its payload.
 
 ### Serverless Functions with Redwood User Authentication
 
-Serverless functions can use the same user-authentication strategy used by [GraphQL Directives](/docs/graphql#secure-directives) to [secure your services](/docs/graphql#secure-services) via the `useRequireAuth` wrapper.
+Serverless functions can use the same user-authentication strategy used by GraphQL Directives to [secure your services](graphql.md#secure-services) via the `useRequireAuth` wrapper.
 
 > If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
 
@@ -828,7 +828,7 @@ Logging in production — and monitoring for suspicious activity, unknown IP add
 
 Third-party log services like [logFlare](https://logflare.app/), [Datadog](https://www.datadoghq.com/) and [LogDNA](https://www.logdna.com/) all have features that store logs for inspection, but also can trigger alerts and notifications if something you deem untoward occurs.
 
-See [Logger](/docs/logger) in the RedwoodJS docs for more information about how to setup and use logging services.
+See [Logger](logger.md) in the RedwoodJS docs for more information about how to setup and use logging services.
 
 #### Rate Limiting
 

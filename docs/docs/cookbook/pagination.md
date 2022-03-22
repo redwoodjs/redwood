@@ -1,6 +1,6 @@
 # Pagination
 
-This tutorial will show you one way to implement pagination in an app built using RedwoodJS. It builds on top of [the tutorial](https://redwoodjs.com/tutorial) and I'll assume you have a folder with the code from the tutorial that you can continue working on. (If you don't, you can clone this repo: https://github.com/thedavidprice/redwood-tutorial-test)
+This tutorial will show you one way to implement pagination in an app built using RedwoodJS. It builds on top of [the tutorial](../tutorial/foreword.md) and I'll assume you have a folder with the code from the tutorial that you can continue working on. (If you don't, you can clone this repo: https://github.com/thedavidprice/redwood-tutorial-test)
 
 ![redwoodjs-pagination](https://user-images.githubusercontent.com/30793/94778130-ec6d6e00-03c4-11eb-9fd0-97cbcdf68ec2.png)
 

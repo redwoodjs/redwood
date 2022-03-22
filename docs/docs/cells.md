@@ -47,7 +47,7 @@ yarn rw generate cell equipment --list
 
 We'll go over each of these files in detail. But know that the file appended with just `.js` (in the example above, `UserCell.js`) contains all your Cell's logic.
 
-Off the bat, this file exports five constants: `QUERY`, `Loading` , `Empty` , `Failure`  and `Success`. The root query in `QUERY` is the same as `<name>` so that, if you're generating a cell based on a model in your `schema.prisma`, you can get something out of the database right away. But there's a good chance you won't generate your Cell this way, so if you need to, make sure to change the root query. See the [Cells](https://redwoodjs.com/tutorial/cells#our-first-cell) section of the Tutorial for a great example of this.
+Off the bat, this file exports five constants: `QUERY`, `Loading` , `Empty` , `Failure`  and `Success`. The root query in `QUERY` is the same as `<name>` so that, if you're generating a cell based on a model in your `schema.prisma`, you can get something out of the database right away. But there's a good chance you won't generate your Cell this way, so if you need to, make sure to change the root query. See the [Cells](tutorial/chapter2/cells.md#our-first-cell) section of the Tutorial for a great example of this.
 
 ## Usage
 
@@ -326,7 +326,7 @@ When would you want to do this? If you just want a file to end in "Cell" for som
 
 If we didn't do all that built-time stuff for you, how might you go about implementing a Cell yourself?
 
-Consider the [example from the Tutorial](https://learn.redwoodjs.com/docs/tutorial/cells#our-first-cell) where we're fetching posts:
+Consider the [example from the Tutorial](tutorial/chapter2/cells.md#our-first-cell) where we're fetching posts:
 
 ```javascript
 export const QUERY = gql`

@@ -47,7 +47,7 @@ The proper one will be included in the CORS header depending on where the respon
 
 ## Authentication Config
 
-The following config only applies if you're using [dbAuth](/docs/authentication#self-hosted-auth-installation-and-setup), which is Redwood's own cookie-based auth system.
+The following config only applies if you're using [dbAuth](authentication.md#self-hosted-auth-installation-and-setup), which is Redwood's own cookie-based auth system.
 
 You'll need to configure several things:
 

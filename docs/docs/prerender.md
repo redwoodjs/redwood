@@ -163,7 +163,7 @@ Since we just shipped this in v0.26, we're actively looking for feedback! Do let
 
 <!-- should name it... -->
 
-Images and assets continue to work the way they used to. For more, see [this doc](https://redwoodjs.com/docs/assets-and-files).
+Images and assets continue to work the way they used to. For more, see [this doc](assets-and-files.md).
 
 Note that there's a subtlety in how SVGs are handled. Importing an SVG and using it in a component works great:
 

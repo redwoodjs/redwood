@@ -1,0 +1,31 @@
+scalar BigInt
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON
+
+scalar JSONObject
+
+type Mutation {
+  createTodo(body: String!): Todo
+}
+
+type Query {
+  redwood: Redwood
+}
+
+type Redwood {
+  currentUser: JSON
+  prismaVersion: String
+  version: String
+}
+
+scalar Time
+
+type Todo {
+  body: String!
+  id: Int!
+  status: String!
+}

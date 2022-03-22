@@ -98,7 +98,7 @@ Read the post-install instructions carefully as they contain instructions for ad
 >
 > yarn rw generate dbAuth
 
-Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](/docs/logger#redaction) docs for info.
+Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](logger.md#redaction) docs for info.
 
 ### Scaffolding Login/Signup/Forgot Password Pages
 
@@ -204,7 +204,7 @@ cookie: {
 
 #### CORS config
 
-If you're using dbAuth and your api and web sides are deployed to different domains then you'll need to configure CORS for both GraphQL in general and dbAuth. You'll also need to enable a couple of options to be sure and send/accept credentials in XHR requests. For more info, see the complete [CORS doc](/docs/cors#cors-and-authentication).
+If you're using dbAuth and your api and web sides are deployed to different domains then you'll need to configure CORS for both GraphQL in general and dbAuth. You'll also need to enable a couple of options to be sure and send/accept credentials in XHR requests. For more info, see the complete [CORS doc](cors.md#cors-and-authentication).
 
 #### Error Messages
 
@@ -261,7 +261,8 @@ yarn add @redwoodjs/auth netlify-identity-widget
 
 #### Setup
 
-You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
+You will need to enable Identity on your Netlify site.
+<!-- See [Netlify Identity Setup](tutorial/chapter4/authentication.md#netlify-identity-setup). -->
 
 ```js
 // web/src/App.js
@@ -293,7 +294,7 @@ export default App
 
 #### Netlify Identity Auth Provider Specific Setup
 
-See the Netlify Identity information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Netlify Identity information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 
 +++
 
@@ -318,7 +319,8 @@ yarn add @redwoodjs/auth gotrue-js
 
 #### Setup
 
-You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
+You will need to enable Identity on your Netlify site.
+<!-- See [Netlify Identity Setup](tutorial/chapter4/authentication.md#netlify-identity-setup). -->
 
 Add the GoTrue-JS package to the web side:
 
@@ -393,7 +395,7 @@ You can increase security by using refresh token rotation which issues a new ref
 
 Rotating the refresh token reduces the risk of a compromised refresh token. For more information, see: [https://auth0.com/docs/tokens/refresh-tokens/refresh-token-rotation](https://auth0.com/docs/tokens/refresh-tokens/refresh-token-rotation).
 
-> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
+> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](environment-variables.md) to include them in your `redwood.toml`.
 
 ```js
 // web/src/App.js
@@ -478,7 +480,7 @@ const UserAuthTools = () => {
 
 #### Auth0 Auth Provider Specific Setup
 
-See the Auth0 information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Auth0 information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 
 +++
 
@@ -544,7 +546,7 @@ Otherwise, feel free to configure your instances however you wish with regards t
 
 > **Including Environment Variables in Serverless Deploys**
 >
-> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables). You should expose the `CLERK_FRONTEND_API_URL` only to the `web` workspace and expose `CLERK_API_KEY` **only** to the `api` workspace.
+> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](environment-variables.md). You should expose the `CLERK_FRONTEND_API_URL` only to the `web` workspace and expose `CLERK_API_KEY` **only** to the `api` workspace.
 
 #### Login and Logout Options
 
@@ -680,7 +682,7 @@ yarn add @redwoodjs/auth magic-sdk
 
 To get your application keys, go to [dashboard.magic.link](https://dashboard.magic.link/) then navigate to the API keys add them to your `.env`.
 
-> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
+> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](environment-variables.md) to "Whitelist them in your `redwood.toml`".
 
 ```js
 // web/src/App.js|tsx
@@ -728,7 +730,7 @@ export default Routes
 
 #### Magic.Link Auth Provider Specific Integration
 
-See the Magic.Link information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Magic.Link information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 +++
 
 ### Firebase
