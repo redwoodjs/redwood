@@ -17,7 +17,8 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: '/img/favicon.ico',
+  // query param to force refresh
+  favicon: '/img/favicon.ico?v=2',
   organizationName: 'redwoodjs', // Usually your GitHub org/user name.
   // ?
   projectName: 'redwood', // Usually your repo name.,
