@@ -375,6 +375,10 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
     [rwClient]
   )
 
+  rwClient.useListenForUpdates?.({
+    reauthenticate,
+  })
+
   const { client, type, children } = props
 
   return (

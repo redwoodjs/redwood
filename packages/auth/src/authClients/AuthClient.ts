@@ -19,6 +19,9 @@ export interface AuthClient {
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
 
+  /** An optional hook to listen for updates from the 3rd party provider */
+  useListenForUpdates?(handlers: { reauthenticate: () => Promise<void> }): void
+
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }

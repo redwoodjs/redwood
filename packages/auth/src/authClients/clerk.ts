@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
+
 import Clerk from '@clerk/clerk-js'
+import { useUser as useClerkUser } from '@clerk/clerk-react'
 import {
   UserResource as ClerkUserResource,
   SignInProps,
@@ -35,6 +38,12 @@ export const clerk = (client: Clerk): AuthClientClerk => {
       clerkClient(client)?.signOut(options),
     signup: async (options?: SignUpProps) =>
       clerkClient(client)?.openSignUp(options || {}),
+    useListenForUpdates: ({ reauthenticate }) => {
+      const { isSignedIn, user } = useClerkUser()
+      useEffect(() => {
+        reauthenticate()
+      }, [isSignedIn, user, reauthenticate])
+    },
     // Clerk uses the session ID PLUS the __session cookie.
     getToken: async () => clerkClient(client)?.session?.id || null,
     getUserMetadata: async () => {

@@ -1983,11 +1983,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.17.6":
-  version: 2.17.6
-  resolution: "@clerk/clerk-js@npm:2.17.6"
+"@clerk/clerk-js@npm:^3.0.1-alpha.2":
+  version: 3.0.1-alpha.2
+  resolution: "@clerk/clerk-js@npm:3.0.1-alpha.2"
   dependencies:
-    "@clerk/types": ^1.29.2
+    "@clerk/types": ^2.0.1-alpha.2
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.3.1
@@ -1999,7 +1999,19 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: e7eece94eecac686e1bd672aed50662968307f1579a25af19599792bbb028d8dbfe07e1324fd5a5381f65c194d514b6c32417abfa965f88377fdbae743bb678b
+  checksum: e53d168ba7ffef1acdc19a2c9a544b9de5e771d40705c34f180ac6ebfbc7132b08b1d4eae5a61847f366d04c492061ecbd1855bffd7a6dbca676353b22f60e4c
+  languageName: node
+  linkType: hard
+
+"@clerk/clerk-react@npm:^3.0.1-alpha.2":
+  version: 3.0.1-alpha.2
+  resolution: "@clerk/clerk-react@npm:3.0.1-alpha.2"
+  dependencies:
+    "@clerk/types": ^2.0.1-alpha.2
+    tslib: ^2.3.1
+  peerDependencies:
+    react: ">=16"
+  checksum: a99f9c53f4981b40aba89ca4baeaa6a5cfb38f4153d682a4ac63ee3aee3bf09679b35cfe0892034dc1b7910d58ca8e4062c4a8efb1256e6911d11f46ed1c4631
   languageName: node
   linkType: hard
 
@@ -2021,10 +2033,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.29.2, @clerk/types@npm:^1.29.2":
+"@clerk/types@npm:1.29.2":
   version: 1.29.2
   resolution: "@clerk/types@npm:1.29.2"
   checksum: 0bebcf9ca225675e5352f7b41b2332f613e9ed0171746979b335198a96ceb7181c47292f90054bf39477d78afdc4f213a6a70ba0b7decc82626710a1f5fa19d1
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^2.0.1-alpha.2":
+  version: 2.0.1-alpha.2
+  resolution: "@clerk/types@npm:2.0.1-alpha.2"
+  checksum: 96d11a7806e7e58616f475c0e448dc7827d167386a29d82e7e48a3e30dfa95f1928cfd6b728928db948b31c9465d488ed49f582f79a9541aec3350cb8e1f8fb8
   languageName: node
   linkType: hard
 
@@ -5777,7 +5796,8 @@ __metadata:
     "@azure/msal-browser": 2.22.1
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.17.6
+    "@clerk/clerk-js": ^3.0.1-alpha.2
+    "@clerk/clerk-react": ^3.0.1-alpha.2
     "@clerk/clerk-sdk-node": 2.9.10
     "@clerk/types": 1.29.2
     "@nhost/nhost-js": 0.3.12
