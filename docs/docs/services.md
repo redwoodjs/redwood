@@ -30,7 +30,7 @@ Service functions can also call each other. For example, that theoretical Servic
 └───────────┘      └───────────┘
 ```
 
-Finally, Services can also be called from [serverless functions](/docs/serverless-functions). Confusingly, these are also called "functions", but are meant to be run in a serverless environment where the code only exists long enough to complete a task and is then shut down. Redwood loves serverless functions. In fact, your GraphQL endpoint is, itself, a serverless function! In Redwood, these go in `api/src/functions`. Serverless functions can make use of Services, rather than duplicating business logic inside of themselves. In our bank transfer example, a third party service could initiate a webhook call to one of our serverless functions saying that Alice just got paid. Our (serverless) function can then call our (Service) function to make the transfer from the third party to Alice.
+Finally, Services can also be called from [serverless functions](serverless-functions.md). Confusingly, these are also called "functions", but are meant to be run in a serverless environment where the code only exists long enough to complete a task and is then shut down. Redwood loves serverless functions. In fact, your GraphQL endpoint is, itself, a serverless function! In Redwood, these go in `api/src/functions`. Serverless functions can make use of Services, rather than duplicating business logic inside of themselves. In our bank transfer example, a third party service could initiate a webhook call to one of our serverless functions saying that Alice just got paid. Our (serverless) function can then call our (Service) function to make the transfer from the third party to Alice.
 
 ```
 ┌───────────────────────┐      ┌───────────┐
@@ -65,7 +65,7 @@ export const createUser = async ({ input }) => {
 
 > **What's the difference between Service Validations and Validator Directives?**
 >
-> [Validator Directives](https://redwoodjs.com/docs/directives#validators) were added to Redwood in v0.37 and provide a way to validate whether data going through GraphQL is allowed based on the user that's currently requesting it (the user that is logged in). These directives control *access* to data, while Service Validators operate on a different level, outside of GraphQL, and make sure data is formatted properly before, most commonly, putting it into a database.
+> [Validator Directives](directives.md#validators) were added to Redwood in v0.37 and provide a way to validate whether data going through GraphQL is allowed based on the user that's currently requesting it (the user that is logged in). These directives control *access* to data, while Service Validators operate on a different level, outside of GraphQL, and make sure data is formatted properly before, most commonly, putting it into a database.
 >
 > You could use these in combination to, for example, prevent a client from accessing the email addresses of any users that aren't themselves (Validator Directives) while also verifying that when creating a user, an email address is present, formatted correctly, and unique (Service Validations).
 

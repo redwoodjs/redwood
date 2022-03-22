@@ -18,4 +18,4 @@ To switch back to the default mode where test are **o**nly run for changed files
 
 This is always what we want to aim for—all green in that left column. In fact best practices tell us you should not even commit any code to your repo unless the test suite passes locally. Not everyone adheres to this policy quite as strictly as others...*&lt;cough, cough&gt;*
 
-We've got an excellect document on [Testing](/docs/testing) which you should definitely read if you're brand new to testing, especially the [Terminology](/docs/testing#terminology) and [Redwood and Testing](/docs/testing#redwood-and-testing) sections.
+We've got an excellent document on [Testing](../../testing.md) which you should definitely read if you're brand new to testing, especially the [Terminology](../../testing.md#terminology) and [Redwood and Testing](../../testing.md#redwood-and-testing) sections.
