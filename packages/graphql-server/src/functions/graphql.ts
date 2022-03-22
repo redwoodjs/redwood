@@ -271,15 +271,6 @@ export const createGraphQLHandler = ({
       protocol + '://' + event.requestContext?.domainName || 'localhost'
     )
 
-    if (event.queryStringParameters) {
-      for (const queryStringParam in event.queryStringParameters) {
-        const queryStringValue = event.queryStringParameters[queryStringParam]
-        if (queryStringValue) {
-          requestUrl.searchParams.append(queryStringParam, queryStringValue)
-        }
-      }
-    }
-
     if (event.multiValueQueryStringParameters) {
       for (const queryStringParam in event.multiValueQueryStringParameters) {
         const queryStringValues =
