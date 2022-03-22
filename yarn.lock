@@ -3607,7 +3607,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0":
+"@graphql-typed-document-node/core@npm:^3.0.0, @graphql-typed-document-node/core@npm:^3.1.1":
   version: 3.1.1
   resolution: "@graphql-typed-document-node/core@npm:3.1.1"
   peerDependencies:
@@ -3616,9 +3616,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:0.1.0-canary-bfd2627.0":
-  version: 0.1.0-canary-bfd2627.0
-  resolution: "@graphql-yoga/common@npm:0.1.0-canary-bfd2627.0"
+"@graphql-yoga/common@npm:0.1.0-beta.6":
+  version: 0.1.0-beta.6
+  resolution: "@graphql-yoga/common@npm:0.1.0-beta.6"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3626,21 +3626,22 @@ __metadata:
     "@envelop/validation-cache": ^4.0.0
     "@graphql-tools/schema": ^8.3.1
     "@graphql-tools/utils": ^8.6.0
-    "@graphql-yoga/render-graphiql": 0.1.0-beta.1
+    "@graphql-typed-document-node/core": ^3.1.1
+    "@graphql-yoga/render-graphiql": 0.1.0-beta.2
     "@graphql-yoga/subscription": 0.0.1-beta.1
     cross-undici-fetch: ^0.1.25
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 2a787418f9e1e4e371b26ed7af0bd76e8e0feafec27e61ee018447e253907c77e0ee3be1a2a6ad513f3825ff8a23d6061a83ca3df5b76c5cff3a508d89823bc5
+  checksum: 76cee5aa181472b70b8b651c6bae15f0897b3dd63a84164512235ac7b7d1116613b3c027473112c606d4859229ab87f5c4b7784f30ce280ed03bd9841bd077cd
   languageName: node
   linkType: hard
 
-"@graphql-yoga/render-graphiql@npm:0.1.0-beta.1":
-  version: 0.1.0-beta.1
-  resolution: "@graphql-yoga/render-graphiql@npm:0.1.0-beta.1"
-  checksum: 40ac74af7feabbe789a24ee40a856f82ad652d826c8f17ace097af4fbe6a38d587649b9fa66ccb246bb67d5123244b1f49460b5c7cc992705ebb6e2b3ba8b7db
+"@graphql-yoga/render-graphiql@npm:0.1.0-beta.2":
+  version: 0.1.0-beta.2
+  resolution: "@graphql-yoga/render-graphiql@npm:0.1.0-beta.2"
+  checksum: 6a52f2ef3bc1edaf314f83767d640ac76b4011d771dada02030b13d448fcbebbae9f9e42996a6e3f5b5f9cb338b312956915a129f82db38fdad277d55ffa8c6b
   languageName: node
   linkType: hard
 
@@ -6061,7 +6062,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.4
     "@graphql-tools/schema": 8.3.3
     "@graphql-tools/utils": 8.6.3
-    "@graphql-yoga/common": 0.1.0-canary-bfd2627.0
+    "@graphql-yoga/common": 0.1.0-beta.6
     "@prisma/client": 3.11.0
     "@redwoodjs/api": 0.49.1
     "@redwoodjs/auth": 0.49.1
