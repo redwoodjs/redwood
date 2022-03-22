@@ -20,7 +20,7 @@ But first, some housekeeping...
 
 Before getting started, there are a few steps you should complete:
 
-- [Create a Redwood app](https://redwoodjs.com/tutorial/installation-starting-development)
+- [Create a Redwood app](https://redwoodjs.com/docs/tutorial/chapter1/installation)
 - [Create a Supabase account](https://www.supabase.io/)
 - [Go through the Supabase React Quick Start](https://supabase.io/docs/guides/with-react)
 - [Go through the Supabase Redwood Quick Start](https://supabase.io/docs/guides/with-redwoodjs)
@@ -141,7 +141,7 @@ const SignupPage = () => {
 export default SignupPage
 ```
 
-Did I mention it was basic? If you want to add some polish, you might find both the [Redwood Form docs](/docs/forms) and the [tutorial section on forms](https://learn.redwoodjs.com/docs/tutorial/everyones-favorite-thing-to-build-forms) quite useful. For our purposes, let's just focus on the functionality.
+Did I mention it was basic? If you want to add some polish, you might find both the [Redwood Form docs](/docs/forms) and the [tutorial section on forms](/docs/tutorial/chapter3/forms) quite useful. For our purposes, let's just focus on the functionality.
 
 Now that we have a form interface, we're going to want to do something when the user submits it. Let's add an `onSubmit` function to our component and pass it as a prop to our Form component:
 

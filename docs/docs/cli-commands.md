@@ -414,9 +414,9 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 
 **Usage**
 
-The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](https://redwoodjs.com/docs/cells.html#single-item-cell-vs-list-cell) section of the Cell documentation.
+The cell generator supports both single items and lists. See the [Single Item Cell vs List Cell](/docs/tutorial/chapter2/cells#single-item-cell-vs-list-cell) section of the Cell documentation.
 
-See the [Cells](https://redwoodjs.com/tutorial/cells) section of the Tutorial for usage examples.
+See the [Cells](/docs/tutorial/chapter2/cells) section of the Tutorial for usage examples.
 
 **Destroying**
 
@@ -659,7 +659,7 @@ Layouts wrap pages and help you stay DRY.
 
 **Usage**
 
-See the [Layouts](https://redwoodjs.com/tutorial/layouts) section of the tutorial.
+See the [Layouts](https://redwoodjs.com/docs/tutorial/chapter1/layouts) section of the tutorial.
 
 **Destroying**
 
@@ -886,7 +886,7 @@ The content of the generated components is different from what you'd get by runn
 
 **Usage**
 
-See [Creating a Post Editor](https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor).
+See [Creating a Post Editor](https://redwoodjs.com/docs/tutorial/chapter2/getting-dynamic#creating-a-post-editor).
 
 **Nesting of Components and Pages**
 
@@ -1198,7 +1198,7 @@ Generate a service component.
 yarn redwood generate service <name>
 ```
 
-Services are where Redwood puts its business logic. They can be used by your GraphQL API or any other place in your backend code. See [How Redwood Works with Data](https://redwoodjs.com/tutorial/side-quest-how-redwood-works-with-data).
+Services are where Redwood puts its business logic. They can be used by your GraphQL API or any other place in your backend code. See [How Redwood Works with Data](/docs/tutorial/chapter2/side-quest).
 
 | Arguments & Options  | Description                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------ |

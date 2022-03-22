@@ -1,11 +1,10 @@
 module.exports = {
   customFields: {
-    defaultDocsLandingPage: 'tutorial/welcome-to-redwood', // redirects here when hitting /docs/
+    defaultDocsLandingPage: 'index', // redirects here when hitting /docs/
     defaultSectionLandingPages: {
       // map of what is considered the first article in each section
       // section: id
-      tutorial: 'welcome-to-redwood',
-      tutorial2: 'welcome-to-redwood-part-ii-redwoods-revenge',
+      tutorial: 'forward',
     },
   },
   // ?
@@ -24,9 +23,9 @@ module.exports = {
   projectName: 'redwood', // Usually your repo name.,
   themeConfig: {
     algolia: {
-      appId: 'FK1BZ27LVA',
-      apiKey: 'cfc36f6fc808745d1d2c7725fd0720a5',
-      indexName: 'docs',
+      appId: '37B3LHULK0',
+      apiKey: '1d7f2f299d9a38c157501c301425f090',
+      indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
     },
@@ -38,7 +37,7 @@ module.exports = {
       },
       items: [
         {
-          href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
+          href: 'https://github.com/redwoodjs/redwood',
           position: 'right',
           className: 'github-logo',
           'aria-label': 'GitHub repository',
@@ -54,11 +53,7 @@ module.exports = {
           items: [
             {
               label: 'Tutorial',
-              to: 'docs/tutorial/welcome-to-redwood',
-            },
-            {
-              label: 'Tutorial II',
-              to: 'docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge',
+              to: 'docs/tutorial/foreward',
             },
           ],
         },
@@ -121,6 +116,6 @@ module.exports = {
   ],
   stylesheets: [
     'https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap',
   ],
 }
