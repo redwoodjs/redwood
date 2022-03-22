@@ -28,6 +28,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
+    "@layer0/cli": "^4.10.3",
     "@prisma/sdk": "3.10.0",
     "@redwoodjs/api-server": "0.49.0",
     "@redwoodjs/internal": "0.49.0",
