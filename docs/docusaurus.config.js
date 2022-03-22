@@ -53,7 +53,7 @@ module.exports = {
           items: [
             {
               label: 'Tutorial',
-              to: 'docs/tutorial/foreward',
+              to: 'docs/tutorial/foreword',
             },
           ],
         },
