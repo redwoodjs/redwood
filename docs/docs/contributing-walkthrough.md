@@ -33,7 +33,7 @@ These are the foundations for contributing, which you should be familiar with be
 The best (and most fun) way to learn Redwood and the underlying tools and technologies.
 
 **Docs and Cookbook**
-- Start with the [Introduction](introduction) Doc
+- Start with the [Introduction](https://github.com/redwoodjs/redwood/blob/main/README.md) Doc
 - And browse through [Cookbook recipes](cookbook/index)
 
 ### GitHub (and Git)
