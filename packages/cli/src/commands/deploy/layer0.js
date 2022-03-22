@@ -1,6 +1,7 @@
 import path from 'path'
 
 import { builder as layer0Builder } from '@layer0/cli/commands/deploy'
+import build from '@layer0/cli/utils/build'
 import execa from 'execa'
 import fs from 'fs-extra'
 import omit from 'lodash/omit'
@@ -51,14 +52,7 @@ export const handler = async (args) => {
     // check that Layer0 is setup in the project
     await execa('yarn', ['layer0', '--version'], execaOptions)
   } catch (e) {
-    throwAndExit(
-      'Layer0 not found!',
-      [
-        'It looks like Layer0 is not configured for your project.',
-        'Run the following to add Layer0 to your project:',
-        `  ${c.info('yarn add -D @layer0/cli')}`,
-      ].join('\n')
-    )
+    logAndExit(ERR_MESSAGE_MISSING_CLI)
   }
 
   // check that the project has been already been initialized.
@@ -67,14 +61,7 @@ export const handler = async (args) => {
 
   if (!configExists) {
     if (args.skipInit) {
-      throwAndExit(
-        'Layer0 not initialized!',
-        [
-          'It looks like Layer0 is not configured for your project.',
-          'Run the following to initialize Layer0 on your project:',
-          `  ${c.info('yarn layer0 init')}`,
-        ].join('\n')
-      )
+      logAndExit(ERR_MESSAGE_NOT_INITIALIZED)
     }
 
     await execa('yarn', ['layer0', 'init'], execaOptions)
@@ -112,19 +99,39 @@ export const handler = async (args) => {
   await execa('yarn', ['layer0', 'deploy', ...deployArgs], execaOptions)
 }
 
-function throwAndExit(title, message) {
-  console.log(
-    [
-      c.bold(c.error(title)),
-      '',
-      message,
-      '',
-      `Also see the ${terminalLink(
-        'RedwoodJS on Layer0 Guide',
-        'https://docs.layer0.co/guides/redwoodjs'
-      )} for additional resources.`,
-      '',
-    ].join('\n')
-  )
+export const ERR_MESSAGE_MISSING_CLI = buildErrorMessage(
+  'Layer0 not found!',
+  [
+    'It looks like Layer0 is not configured for your project.',
+    'Run the following to add Layer0 to your project:',
+    `  ${c.info('yarn add -D @layer0/cli')}`,
+  ].join('\n')
+)
+
+export const ERR_MESSAGE_NOT_INITIALIZED = buildErrorMessage(
+  'Layer0 not initialized!',
+  [
+    'It looks like Layer0 is not configured for your project.',
+    'Run the following to initialize Layer0 on your project:',
+    `  ${c.info('yarn layer0 init')}`,
+  ].join('\n')
+)
+
+export function buildErrorMessage(title, message) {
+  return [
+    c.bold(c.error(title)),
+    '',
+    message,
+    '',
+    `Also see the ${terminalLink(
+      'RedwoodJS on Layer0 Guide',
+      'https://docs.layer0.co/guides/redwoodjs'
+    )} for additional resources.`,
+    '',
+  ].join('\n')
+}
+
+function logAndExit(message) {
+  console.log(message)
   process.exit(1)
 }
