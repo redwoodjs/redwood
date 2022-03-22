@@ -15,7 +15,7 @@ Currently, these are the officially supported deploy targets:
 - [Vercel](https://vercel.com)
 
 
-Redwood has a CLI generator that adds the code and configuration required by the specified provider (see the [CLI Doc](https://redwoodjs.com/docs/cli-commands#deploy-config) for more information):
+Redwood has a CLI generator that adds the code and configuration required by the specified provider (see the [CLI Doc](cli-commands.md#deploy-config) for more information):
 ```shell
 yarn rw setup deploy <provider>
 ```
@@ -75,14 +75,14 @@ Whenever you make changes to your `schema.prisma`, you must run the following co
 $ yarn rw prisma migrate dev # creates and applies a new Prisma DB migration
 ```
 
-> Note: when setting your production DATABASE_URL env var, be sure to also set any connection-pooling or sslmode parameters. For example, if using Supabase Postgres with pooling, then you would use a connection string similar to `postgresql://postgres:mydb.supabase.co:6432/postgres?sslmode=require&pgbouncer=true` that uses a specific 6432 port, informs Prisma to consider pgBouncer, and also to use SSL. See: [Connection Pooling](https://redwoodjs.com/docs/connection-pooling) for more info.
+> Note: when setting your production DATABASE_URL env var, be sure to also set any connection-pooling or sslmode parameters. For example, if using Supabase Postgres with pooling, then you would use a connection string similar to `postgresql://postgres:mydb.supabase.co:6432/postgres?sslmode=require&pgbouncer=true` that uses a specific 6432 port, informs Prisma to consider pgBouncer, and also to use SSL. See: [Connection Pooling](connection-pooling.md) for more info.
 
 
 
 ### 4. Environment Variables
 Any environment variables used locally, e.g. in your `env.defaults` or `.env`, must also be added to your hosting provider settings. (See documentation specific to your provider.)
 
-Additionally, if your application uses env vars on the Web Side, you must configure Redwood's build process to make them available in production. See the [Redwood Environment Variables doc](https://redwoodjs.com/docs/environment-variables) for instructions.
+Additionally, if your application uses env vars on the Web Side, you must configure Redwood's build process to make them available in production. See the [Redwood Environment Variables doc](environment-variables.md) for instructions.
 
 ## Flightcontrol Deploy
 
@@ -91,12 +91,12 @@ Additionally, if your application uses env vars on the Web Side, you must config
  ### Flightcontrol Deploy Setup
 
  1. In your project, run the command `yarn rw setup deploy flightcontrol`
- 2. Commit the changes and push to github 
+ 2. Commit the changes and push to github
  3. If you don't have an account, sign up at [app.flightcontrol.dev/signup](https://app.flightcontrol.dev/signup?ref=redwood)
  4. Create a new project at [app.flightcontrol.dev/projects/new/1](https://app.flightcontrol.dev/projects/new/1)
-   1. Connect your Github account and select your repo 
+   1. Connect your Github account and select your repo
    2. Select "Config Type" as `flightcontrol.json`
-   3. Select the AWS region to deploy to. 
+   3. Select the AWS region to deploy to.
    4. Click "Create Project"
 
 If you have *any* problems or questions, Flightcontrol is very responsive in [their support Discord](https://discord.gg/yY8rSPrD6q).
@@ -111,7 +111,7 @@ If you simply want to experience the Netlify deployment process without a databa
 4. use the Netlify [Quick Start](https://app.netlify.com/signup) to deploy
 
 ### Netlify Complete Deploy Walkthrough
-For the complete deployment process on Netlify, see the [Tutorial Deployment section](https://redwoodjs.com/docs/tutorial/chapter4/deployment).
+For the complete deployment process on Netlify, see the [Tutorial Deployment section](tutorial/chapter4/deployment.md).
 
 ## Render Deploy
 Render is a unified cloud to build and run all your apps and websites with free SSL, a global CDN, private networks and auto deploys from Git — **database included**!
@@ -240,7 +240,7 @@ _If you choose this quick deploy experience, the following steps do not apply._
 ### Redwood Project Setup
 If you already have a Redwood project, proceed to the next step.
 
-Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](https://redwoodjs.com/tutorial/welcome-to-redwood). Simply return to these instructions when you reach the "Deployment" section.
+Otherwise, we recommend experiencing the full Redwood DX via the [Redwood Tutorial](tutorial/foreword.md). Simply return to these instructions when you reach the "Deployment" section.
 
 ### Redwood Deploy Configuration
 

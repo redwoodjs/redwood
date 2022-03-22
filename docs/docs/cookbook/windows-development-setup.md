@@ -47,7 +47,7 @@ Now you have both Node and npm installed! Redwood also uses yarn, which you can 
 
 You now have everything ready to build your Redwood app.
 
-Next, you should start the amazing [**Redwood Tutorial**](/docs/tutorial/chapter1/installation) to learn how to use the framework.
+Next, you should start the amazing [**Redwood Tutorial**](tutorial/chapter1/installation.md) to learn how to use the framework.
 
 Or run `yarn create redwood-app myApp` to get started with a new project.
 

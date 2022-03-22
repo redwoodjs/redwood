@@ -20,7 +20,7 @@ But first, some housekeeping...
 
 Before getting started, there are a few steps you should complete:
 
-- [Create a Redwood app](https://redwoodjs.com/docs/tutorial/chapter1/installation)
+- [Create a Redwood app](../tutorial/chapter1/installation.md)
 - [Create a Supabase account](https://www.supabase.io/)
 - [Go through the Supabase React Quick Start](https://supabase.io/docs/guides/with-react)
 - [Go through the Supabase Redwood Quick Start](https://supabase.io/docs/guides/with-redwoodjs)
@@ -28,7 +28,7 @@ Before getting started, there are a few steps you should complete:
 
 ### About the Supabase Quick Starts
 
-Why the React Quick Start before the Redwood? I found it helpful to first interact directly with the [Supabase Client](https://github.com/supabase/supabase-js). Eventually, you'll use the [Redwood Auth wrapper](/docs/authentication#supabase), which provides a level of abstraction and a clean, consistent style. But I needed a couple hours of direct client experimentation to gain comfort in the Redwood one.
+Why the React Quick Start before the Redwood? I found it helpful to first interact directly with the [Supabase Client](https://github.com/supabase/supabase-js). Eventually, you'll use the [Redwood Auth wrapper](../authentication.md#supabase), which provides a level of abstraction and a clean, consistent style. But I needed a couple hours of direct client experimentation to gain comfort in the Redwood one.
 
 So, just this once, I hereby give you permission to fire-up Create React App as you follow-along the Supabase React Quick Start. I worked through it first. Then I worked through the Supabase Redwood Quick start, observing the slight differences. This helped me understand the details that the Redwood wrapper abstracts for us.
 
@@ -44,7 +44,7 @@ So, just this once, I hereby give you permission to fire-up Create React App as 
 
 Armed with some knowledge and insight from going through the Supabase Quick Starts, let's head back to the Redwood app created as part of the prerequisites.
 
-Start by installing the required packages and generating boilerplate for Redwood Auth, all with this simple [CLI command](/docs/cli-commands#setup-auth):
+Start by installing the required packages and generating boilerplate for Redwood Auth, all with this simple [CLI command](../cli-commands.md#setup-auth):
 
 ```bash
 yarn redwood setup auth supabase
@@ -141,7 +141,7 @@ const SignupPage = () => {
 export default SignupPage
 ```
 
-Did I mention it was basic? If you want to add some polish, you might find both the [Redwood Form docs](/docs/forms) and the [tutorial section on forms](/docs/tutorial/chapter3/forms) quite useful. For our purposes, let's just focus on the functionality.
+Did I mention it was basic? If you want to add some polish, you might find both the [Redwood Form docs](../forms.md) and the [tutorial section on forms](../tutorial/chapter3/forms.md) quite useful. For our purposes, let's just focus on the functionality.
 
 Now that we have a form interface, we're going to want to do something when the user submits it. Let's add an `onSubmit` function to our component and pass it as a prop to our Form component:
 
@@ -170,7 +170,7 @@ const SignupPage = () => {
 //...
 ```
 
-The _something_ we need to do is—surprise!—sign up. To do this, we'll need a way to communicate with `<AuthProvider />` and the Supabase GoTrue-JS client we passed to it. Look no further than the [`useAuth` hook](/docs/authentication#api), which lets us subscribe to our auth state and its properties. In our case, we'll be glad to now have access to `client` and, thusly, our Supabase GoTrue-JS instance and [all of its functions](https://github.com/supabase/supabase-js).
+The _something_ we need to do is—surprise!—sign up. To do this, we'll need a way to communicate with `<AuthProvider />` and the Supabase GoTrue-JS client we passed to it. Look no further than the [`useAuth` hook](../authentication.md#api), which lets us subscribe to our auth state and its properties. In our case, we'll be glad to now have access to `client` and, thusly, our Supabase GoTrue-JS instance and [all of its functions](https://github.com/supabase/supabase-js).
 
 Let's import `useAuth` and destructure `client` from it in our component:
 
@@ -287,7 +287,7 @@ export default SignupPage
 
 Now we can handle a successful submission. If we sign up without email confirmation, then successful sign up also _signs in_ the user. Once they've signed in, we'll want to redirect them back to our app.
 
-First, if you haven't already, [generate](/docs/cli-commands#generate-page) a homepage:
+First, if you haven't already, [generate](../cli-commands.md#generate-page) a homepage:
 
 ```bash
 yarn redwood generate page home /
@@ -338,7 +338,7 @@ Hoorah! We've just added a sign up page and created a sign up form. We created a
 
 ## Sign In
 
-Let's get right to it. Start by [generating](/docs/cli-commands#generate-page) a sign in page:
+Let's get right to it. Start by [generating](../cli-commands.md#generate-page) a sign in page:
 
 ```bash
 yarn redwood generate page signin
@@ -492,7 +492,7 @@ Well done! We've created a sign in page and form that successfully handles sign 
 
 Sign Out is by far the easiest to implement. All we need to do is call `useAuth`'s `logOut` method.
 
-Let's start by [generating a component](/docs/cli-commands#generate-component) to house our Sign Out Button:
+Let's start by [generating a component](../cli-commands.md#generate-component) to house our Sign Out Button:
 
 ```bash
 yarn redwood generate component signoutBtn
@@ -561,7 +561,7 @@ In this section we'll implement some auth-related navigation that conditionally 
 - when the user's logged out, we should see **Sign Up** and **Sign In**
 - when the user's logged in, we should see **Log Out**
 
-Let's start by [generating a navigation component](/docs/cli-commands#generate-component):
+Let's start by [generating a navigation component](../cli-commands.md#generate-component):
 
 ```bash
 yarn redwood generate component navigation
@@ -635,7 +635,7 @@ const Navigation = () => {
 export default Navigation
 ```
 
-We have a working navigation component, but we still need to render it somewhere. Let's [generate a layout](/docs/cli-commands#generate-layout) called GlobalLayout:
+We have a working navigation component, but we still need to render it somewhere. Let's [generate a layout](../cli-commands.md#generate-layout) called GlobalLayout:
 
 ```bash
 yarn redwood generate layout global
@@ -692,7 +692,7 @@ We've configured Supabase GoTrue Auth with Redwood Auth, created a Sign Up page,
 
 As you continue refining your app, the following resources may come in handy:
 
-- [Redwood Supabase Auth Installation & Setup](https://redwoodjs.com/docs/authentication#supabase)
+- [Redwood Supabase Auth Installation & Setup](../authentication.md#supabase)
 - [Redwood Auth Playground](https://redwood-playground-auth.netlify.app/supabase)
 - [Redwood Supabase Auth Client Implementation](https://github.com/redwoodjs/redwood/blob/main/packages/auth/src/authClients/supabase.ts)
 - [Supabase GoTrue client implementation](https://github.com/supabase/gotrue-js/blob/d7b334a4283027c65814aa81715ffead262f0bfa/src/GoTrueClient.ts)

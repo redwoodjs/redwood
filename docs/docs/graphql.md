@@ -19,7 +19,7 @@ The same should be true of your GraphQL Server. [GraphQL Helix](https://dev.to/d
 
 > Existing libraries like Apollo Server provide you with either a complete HTTP server or a middleware function that you can plug into your framework of choice. GraphQL Helix takes a different approach—it just provides a handful of functions that you can use to turn an HTTP request into a GraphQL execution result. In other words, GraphQL Helix leaves it up to you to decide how to send back the response.
 
-We leverage Envelop plugins to provide GraphQL [security best practices](/docs/graphql#security) and implement custom internal plugins to help with authentication, [logging](/docs/graphql#logging), [directive handling](/docs/graphql#directives), and more.
+We leverage Envelop plugins to provide GraphQL [security best practices](#security) and implement custom internal plugins to help with authentication, [logging](#logging), [directive handling](#directives), and more.
 
 All this gets us closer to Redwood's goal of being able to deploy to a "generic computation grid". And that’s exciting!
 
@@ -632,7 +632,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-> Note: Check-out the [in-depth look at Redwood Directives](https://www.redwoodjs.com/docs/directives) that explains how to generate directives so you may use them to validate access and transform the response.
+> Note: Check-out the [in-depth look at Redwood Directives](directives.md) that explains how to generate directives so you may use them to validate access and transform the response.
 
 ## Logging
 
@@ -782,7 +782,7 @@ export const post = async ({ id }) => {
 
 The GraphQL handler will then take care of logging your query and data -- as long as your logger is setup to log at the `info` [level](logger.md#log-level) and above.
 
-> You can also disable the statements in production by just logging at the `warn` [level](https://redwoodjs.com/docs/logger#log-level) or above
+> You can also disable the statements in production by just logging at the `warn` [level](logger.md#log-level) or above
 
 This means that you can keep your services free of logger statements, but still see what's happening!
 
@@ -974,7 +974,7 @@ In many GraphQL servers, when an error is thrown, the details of that error are 
 Redwood is here to help!
 
 Redwood prevents leaking sensitive error-stack information out-of-the-box for unexpected errors.
-If an error that isn't one of [Redwood's GraphQL Errors](/docs/graphql#redwood-errors) or isn't based on a GraphQLError is thrown:
+If an error that isn't one of [Redwood's GraphQL Errors](#redwood-errors) or isn't based on a GraphQLError is thrown:
 
 - The original error and its message will be logged using the defined GraphQL logger, so you'll know what went wrong
 - A default message "Something went wrong" will replace the error message in the response (Note: you can customize this message)
@@ -982,7 +982,7 @@ If an error that isn't one of [Redwood's GraphQL Errors](/docs/graphql#redwood-e
 #### Customizing the Error Message
 
 But what if you still want to share an error message with client?
-Simply use one of [Redwood's GraphQL Errors](/docs/graphql#redwood-errors) and your custom message will be shared with your users.
+Simply use one of [Redwood's GraphQL Errors](#redwood-errors) and your custom message will be shared with your users.
 
 #### Customizing the Default Error Message
 
