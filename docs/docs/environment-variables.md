@@ -53,8 +53,8 @@ Like the option above, these are also removed and replaced with the _actual valu
 
 ### Accessing API URLs
 
-Redwood automatically makes your API URL configurations from the web section of your `redwood.toml` available globally. 
-They're accessible via the `window` or `global` objects. 
+Redwood automatically makes your API URL configurations from the web section of your `redwood.toml` available globally.
+They're accessible via the `window` or `global` objects.
 For example, `global.RWJS_API_GRAPHQL_URL` gives you the URL for your graphql endpoint.
 
 The toml values are mapped as follows:
@@ -65,7 +65,7 @@ The toml values are mapped as follows:
 | `apiGraphQLUrl`    | `global.RWJS_API_GRAPHQL_URL` | URL or absolute path to GraphQL function |
 | `apiDbAuthUrl`     | `global.RWJS_API_DBAUTH_URL`  | URL or absolute path to DbAuth function  |
 
-See the [redwood.toml reference](https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths) for more details. 
+See the [redwood.toml reference](app-configuration-redwood-toml.md#api-paths) for more details.
 
 ## API
 

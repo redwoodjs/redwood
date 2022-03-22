@@ -579,7 +579,7 @@ Similar to how we mocked GraphQL queries, we can mock mutations as well. Read mo
 
 ### Mocking Auth
 
-Most applications will eventually add [Authentication/Authorization](https://redwoodjs.com/docs/authentication) to the mix. How do we test that a component behaves a certain way when someone is logged in, or has a certain role?
+Most applications will eventually add [Authentication/Authorization](authentication.md) to the mix. How do we test that a component behaves a certain way when someone is logged in, or has a certain role?
 
 Consider the following component (that happens to be a page) which displays a "welcome" message if the user is logged in, and a button to log in if they aren't:
 
@@ -780,7 +780,7 @@ export const Success = ({ article }) => {
 }
 ```
 
-Here we're exporting four components and if you created this Cell with the [Cell generator](https://redwoodjs.com/docs/cli-commands.html#cell) then you'll already have four tests that make sure that each component renders without errors:
+Here we're exporting four components and if you created this Cell with the [Cell generator](cli-commands.md#generate-cell) then you'll already have four tests that make sure that each component renders without errors:
 
 ```javascript
 // web/src/components/ArticleCell/ArticleCell.test.js
@@ -1254,7 +1254,7 @@ export const standard = defineScenario({
 
 This scenario creates two user records. The generator can't determine the intent of your fields, it can only tell the datatypes, so strings get prefilled with just 'String'. What's up with the `one` and `two` keys? Those are friendly names you can use to reference your scenario data in your test.
 
-The `data` key is one of Prisma's [create options](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create). It's the same as in your Services—everything in the `one` and `two` keys actually just gets passed to Prisma's create. You can even create [relationships](https://redwoodjs.com/docs/testing.html#relationships) if you want.
+The `data` key is one of Prisma's [create options](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create). It's the same as in your Services—everything in the `one` and `two` keys actually just gets passed to Prisma's create. You can even create [relationships](#relationships) if you want.
 
 Let's look at a better example. We'll update the scenario with some additional data and give them a more distinctive name:
 
@@ -1626,15 +1626,15 @@ scenario('creates anonymous comment if logged out', async (scenario) => {
 
 ## Testing Functions
 
-Testing [serverless functions](https://redwoodjs.com/docs/serverless-functions) and [webhooks](https://redwoodjs.com/docs/webhooks) can be difficult and time-consuming because you have to construct the event and context information that the function handler needs.
+Testing [serverless functions](serverless-functions.md) and [webhooks](webhooks.md) can be difficult and time-consuming because you have to construct the event and context information that the function handler needs.
 
 Webhook testing is even more complex because you might need to open a http tunnel to a running dev server to accept an incoming request, then you'll have to sign the webhook payload so that the request is trusted, and then you might even trigger events from your third-party service ... all manually. Every. Time.
 
-Luckily, RedwoodJS has several api testing utilities to make [testing functions and webhooks](https://redwoodjs.com/docs/serverless-functions#how-to-test-serverless-functions) a breeze -- and without having to run a dev server.
+Luckily, RedwoodJS has several api testing utilities to make [testing functions and webhooks](serverless-functions.md#how-to-test-serverless-functions) a breeze -- and without having to run a dev server.
 
-> Want to learn to [How to Test Serverless Functions](https://redwoodjs.com/docs/serverless-functions#how-to-test-serverless-functions) and [Webhooks](https://?redwoodjs.com/docs/serverless-functions#how-to-test-webhooks)?
+> Want to learn to [How to Test Serverless Functions](serverless-functions.md#how-to-test-serverless-functions) and [Webhooks](serverless-functions.md#how-to-test-webhooks)?
 >
-> We have an entire testing section in the [Serverless Functions documentation](https://redwoodjs.com/docs/serverless-functions) that will walk your through an example of a function and a webhook.
+> We have an entire testing section in the [Serverless Functions documentation](serverless-functions.md) that will walk your through an example of a function and a webhook.
 
 ## Wrapping Up
 
