@@ -70,7 +70,7 @@ For example, if you set title in your Layout, and a title in your Page, it'll re
 
 > **Side note**
 > for these headers to appear to bots and scrapers e.g. for twitter to show your title, you have to make sure your page is prerendered
-> If your content is static you can use Redwood's built in [Prerender](/docs/prerender). For dynamic tags, check the [Dynamic head tags](#dynamic-tags)
+> If your content is static you can use Redwood's built in [Prerender](prerender.md). For dynamic tags, check the [Dynamic head tags](#dynamic-tags)
 
 ## Setting meta tags / open graph directives
 Often we want to set more than just the title - most commonly to set "og" headers. Og standing for

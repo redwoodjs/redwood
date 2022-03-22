@@ -565,7 +565,7 @@ export default ContactPage
 
 > **Error styling**
 >
-> In addition to `className` and `errorClassName` you can also use `style` and `errorStyle`. Check out the [Form docs](https://redwoodjs.com/docs/form) for more details on error styling.
+> In addition to `className` and `errorClassName` you can also use `style` and `errorStyle`. Check out the [Form docs](../../forms.md) for more details on error styling.
 
 And notice that if you fill in something in a field that's marked as an error, the error instantly goes away! This is great feedback for our users that they're doing what we want, and they don't have to wait to click the "Save" button again just to see if what they changed is now correct.
 
@@ -621,7 +621,7 @@ Well, what do you think? Was it worth the hype? A couple of new components and y
 
 > **Learn more about Redwood Forms**
 >
-> Redwood's forms are built on top of [React Hook Form](https://react-hook-form.com/) so there is even more functionality available than we've documented here. Visit the [Form docs](/docs/forms) to learn more about all form functionalities.
+> Redwood's forms are built on top of [React Hook Form](https://react-hook-form.com/) so there is even more functionality available than we've documented here. Visit the [Form docs](../../forms.md) to learn more about all form functionalities.
 
 Redwood has one more trick up its sleeve when it comes to forms but we'll save that for when we're actually submitting one to the server.
 

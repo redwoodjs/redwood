@@ -346,7 +346,7 @@ And there we go! We should be able to move back and forth between the homepage a
 
 ![Article page showing an article](https://user-images.githubusercontent.com/300/146101296-f1d43812-45df-4f1e-a3da-4f6a085bfc08.png)
 
-> If you like what you've been seeing from the router, you can dive deeper into the [Redwood Router](/docs/router) guide.
+> If you like what you've been seeing from the router, you can dive deeper into the [Redwood Router](../../router.md) guide.
 
 ### Summary
 

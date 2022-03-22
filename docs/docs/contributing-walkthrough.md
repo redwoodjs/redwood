@@ -4,13 +4,13 @@
 >
 > There are several contributing docs and references, each covering specific topics:
 >
-> 1. 🧭 [Overview and Orientation](https://redwoodjs.com/docs/contributing-overview.html)
+> 1. 🧭 [Overview and Orientation](contributing-overview.md)
 > 2. 📓 [Reference: Contributing to the Framework Packages](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md)
 > 3. 🪜 **Step-by-step Walkthrough** (👈 you are here)
 > 4. 📈 [Current Project Status: v1 Release Board](https://github.com/orgs/redwoodjs/projects/6)
 > 5. 🤔 What should I work on?
 >     - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)
->     - [Discovery Process and Open Issues](https://redwoodjs.com/docs/contributing#what-should-i-work-on)
+>     - [Discovery Process and Open Issues](contributing-overview.md#what-should-i-work-on)
 
 
 ## Video Recording of Complete Contributing Process
@@ -28,14 +28,13 @@ The following recording is from a Contributing Workshop, following through the e
 ## Prologue: Getting Started with Redwood and GitHub (and git)
 These are the foundations for contributing, which you should be familiar with before starting the walkthrough.
 
-**The Redwood Tutorial**
-The best (and most fun) way to learn Redwood and the underlying tools and technologies:
-- [Tutorial Part 1](https://redwoodjs.com/docs/tutorial)
-- [Tutorial Part 2](https://redwoodjs.com/docs/tutorial2/welcome-to-redwood-part-ii-redwood-s-revenge)
+[**The Redwood Tutorial**](tutorial/foreword.md)
+
+The best (and most fun) way to learn Redwood and the underlying tools and technologies.
 
 **Docs and Cookbook**
-- Start with the [Introduction](https://redwoodjs.com/docs/introduction) Doc
-- And browse through [Cookbook recipes](https://redwoodjs.com/docs/cookbook)
+- Start with the [Introduction](https://github.com/redwoodjs/redwood/blob/main/README.md) Doc
+- And browse through [Cookbook recipes](cookbook/index)
 
 ### GitHub (and Git)
 Diving into Git and the GitHub workflow can feel intimidating if you haven’t experienced it before. The good news is there’s a lot of great material to help you learn and be committing in no time!
@@ -76,7 +75,7 @@ There’s nothing wrong with Terminal (on Mac) and bash. (If you’re on Windows
 Unfortunately, there are a lot of “gotchas” when it comes to working with Javascript-based frameworks on Windows. We do our best to point out (and resolve) issues, but our priority focus is on developing a Redwood app vs contributing to the Framework. (If you’re interested, there’s a lengthy Forum conversation about this with many suggestions.)
 
 All that said, we highly recommend using one of the following setups to maximize your workflow:
-1. Use [Git for Windows and Git Bash](https://redwoodjs.com/cookbook/windows-development-setup.html#windows-development-setup) (included in installation)
+1. Use [Git for Windows and Git Bash](cookbook/windows-development-setup.md) (included in installation)
 2. Use [WSL following this setup guide on the Forums](https://community.redwoodjs.com/t/windows-subsystem-for-linux-setup/2439)
 
 Lastly, the new GitPod integration is a great option and only getting better. You might just want to start using it from the beginning (see section below in “Local Development Setup”).
@@ -86,7 +85,7 @@ We recently added an integration with [GitPod](http://gitpod.io) that automatica
 
 But don’t skip out reading the following steps in “Local Development Setup” — GitPod uses the same workflow and tools to initialize. If you want to develop in GitPod, you’ll need to understand how it all works.
 
-But when you’re ready, learn how to use it in the section at the end [“GitPod: Browser-based Development”](https://redwooodjs.com/docs/contributing-walkthrough#gitpod-browser-based-development).
+But when you’re ready, learn how to use it in the section at the end [“GitPod: Browser-based Development”](#gitpod-browser-based-development).
 
 ### Local Development Setup
 #### Step 1: Redwood Framework
