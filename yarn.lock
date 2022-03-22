@@ -5791,7 +5791,7 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 7.9.1
+    pino: 7.9.2
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.6.2
@@ -23613,9 +23613,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:7.9.1":
-  version: 7.9.1
-  resolution: "pino@npm:7.9.1"
+"pino@npm:7.9.2":
+  version: 7.9.2
+  resolution: "pino@npm:7.9.2"
   dependencies:
     fast-redact: ^3.0.0
     on-exit-leak-free: ^0.2.0
@@ -23626,10 +23626,10 @@ __metadata:
     real-require: ^0.1.0
     safe-stable-stringify: ^2.1.0
     sonic-boom: ^2.2.1
-    thread-stream: ^0.13.0
+    thread-stream: ^0.15.0
   bin:
     pino: bin.js
-  checksum: 1dd747aae705d46a4507af49e7e42ede0c63679da3bb5c0763350e4c41939241c7f013a52b3bc58a3480d7912cbdf38971addd05df9f15f71a26bab336d31a60
+  checksum: 540858157405db1dd2ec7ff43aa5042dc0f76178f92813f3dda556fddff6468148775595645324e6b6c2359d6477215661545ee6fdf853b9b3f1f6d4c094b3a3
   languageName: node
   linkType: hard
 
@@ -28387,12 +28387,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"thread-stream@npm:^0.13.0":
-  version: 0.13.1
-  resolution: "thread-stream@npm:0.13.1"
+"thread-stream@npm:^0.15.0":
+  version: 0.15.1
+  resolution: "thread-stream@npm:0.15.1"
   dependencies:
     real-require: ^0.1.0
-  checksum: 8acdc2bd82bd1ffe0e3d0db438181c4d91aee150f4af79851811094c14cbcc6e704af15fc62e398893227c7ed48a5ba57eff3820a58825e466d0423a794ca837
+  checksum: a54733aefa3e9d81b968762677ca7985f02e073b06098e9ad09a3823f096a5f8369f910fd47cec5c85584f0295eb1756f7b3f54b1d4f8c7bd9c746ff4e983327
   languageName: node
   linkType: hard
 
