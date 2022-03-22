@@ -264,9 +264,11 @@ export const createGraphQLHandler = ({
       }
     }
 
+    const protocol = isDevEnv ? 'http' : 'https'
+
     const requestUrl = new URL(
       event.path,
-      'https://' + event.requestContext.domainName || 'localhost'
+      protocol + '://' + event.requestContext.domainName || 'localhost'
     )
 
     if (event.queryStringParameters) {
