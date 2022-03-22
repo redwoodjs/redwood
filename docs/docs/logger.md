@@ -286,7 +286,7 @@ Logging with Prisma query statement output.
 
 #### GraphQL Logging
 
-Redwood-specific [GraphQL log data](docs/graphql#logging) included by the the `useRedwoodLogger` envelop plug-in is supported:
+Redwood-specific [GraphQL log data](graphql.md#logging) included by the the `useRedwoodLogger` envelop plug-in is supported:
 
 - Request Id
 - User-Agent
@@ -380,7 +380,7 @@ Some examples of common configurations and overrides that demonstrate how you ca
 
 ### Override Log Level
 
-You can set the minimum [level](https://redwoodjs.com/docs/logger#log-level) to log via the `level` option. This is useful if you need to override the default Production settings (just `warn` and `error`) to in this case `debug`.
+You can set the minimum [level](#log-level) to log via the `level` option. This is useful if you need to override the default Production settings (just `warn` and `error`) to in this case `debug`.
 
 ```js
 /**

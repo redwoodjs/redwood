@@ -158,7 +158,7 @@ Here's the same example again, but now using `<Private>`
 </Router>
 ```
 
-Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](https://redwoodjs.com/docs/tutorial/chapter4/authentication).
+Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](tutorial/chapter4/authentication.md).
 
 ## Link and named route functions
 
@@ -498,7 +498,7 @@ const SomePage = () => {
 }
 ```
 
-In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](https://redwoodjs.com/docs/router#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
+In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
 
 ## Code-splitting
 

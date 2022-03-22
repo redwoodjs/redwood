@@ -31,13 +31,13 @@ The following will show all the available commands in the Redwood CLI (note: rw 
 yarn rw --help
 ```
 
-Some commands, like [prisma](https://redwoodjs.com/docs/cli-commands#db), have a lot of options. You can dig further into a specific command by adding `--help` to the command like so:
+Some commands, like [prisma](cli-commands.md#prisma), have a lot of options. You can dig further into a specific command by adding `--help` to the command like so:
 
 ```
 yarn rw prisma --help
 ```
 
-Take a visit to the [CLI Doc](https://redwoodjs.com/docs/cli-commands.html) to see detailed information on all commands and options.
+Visit the [CLI Doc](cli-commands.md) to see detailed information on all commands and options.
 
 ## Generators
 
@@ -71,11 +71,11 @@ Just like that, we are done. No seriously. Visit http://localhost:8910/user-exam
 
 Redwood has created everything we need to create, edit, delete and view a User. And you didn't have to write one line of boilerplate code.
 
-We have some other [generators](https://redwoodjs.com/docs/cli-commands#generate-alias-g) that are just as awesome, don't forget to check them out as well.
+We have some other [generators](cli-commands.md#generate-alias-g) that are just as awesome, don't forget to check them out as well.
 
 ## Next Steps
 
-Need more? The best way to get to know Redwood is by going through the extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial).
+Need more? The best way to get to know Redwood is by going through the extensive [Redwood Tutorial](tutorial/foreword.md).
 
 - Join our [Discord Server](https://discord.gg/redwoodjs)
 - Join our [Discourse Community](https://community.redwoodjs.com)
