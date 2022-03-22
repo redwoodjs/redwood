@@ -78,21 +78,30 @@ a:hover {
 }
 
 html[data-theme='dark'] {
-  --ifm-background-color: #120502;
+  --ifm-font-color-base: #fafaf9;
+  --ifm-background-color: #1f0b04;
   --ifm-background-surface-color: #341309;
-  --ifm-menu-color-background-active: #1f0a04;
+  --ifm-menu-color-background-active: #7c2d12;
+  --ifm-heading-color: #14b8a6;
+
+  --ifm-menu-color-background-active: #ffedd5;
+  --ifm-menu-color-background-hover: #ffedd5;
 }
 
 html[data-theme='dark'] a {
-  color: #e38163;
+  color: var(--ifm-color-primary-lightest);
 }
 
 html[data-theme='dark'] .navbar__link--active {
-  color: #e38163;
+  color: var(--ifm-color-primary-lightest);
+}
+
+html[data-theme='dark'] .menu__link:hover {
+  color: var(--ifm-color-primary-dark);
 }
 
 html[data-theme='dark'] .menu__link--active {
-  color: #e38163;
+  color: var(--ifm-color-primary-dark);
 }
 
 .react-toggle-track {
@@ -110,7 +119,6 @@ html[data-theme='dark'] .menu__link--active {
 html[data-theme='dark'] .DocSearch-Button {
   color: #e38163 !important;
 }
-
 
 .DocSearch-Button-Placeholder {
   font-size: 0.9rem !important;
@@ -178,8 +186,9 @@ blockquote code {
 }
 
 html[data-theme='dark'] blockquote {
-  background-color: #1f0a04;
-  color: #e38163;
+  background-color: #4c1502;
+  border-color: #7c2d12;
+  color: #ffedd5;
 }
 
 code {
@@ -194,7 +203,7 @@ html[data-theme='dark'] blockquote [class^='codeBlockLines'] {
 }
 
 [class^='codeBlockLines'] {
-  background-color: #230b07 !important;
+  background-color: #0d0201 !important;
 }
 
 .token.comment {
@@ -223,7 +232,7 @@ html[data-theme='dark'] blockquote [class^='codeBlockLines'] {
 }
 
 html[data-theme='dark'] .footer {
-  background-color: #1f0a04;
+  background-color: var(--ifm-background-surface-color);
 }
 
 .footer__title {
@@ -299,7 +308,6 @@ html[data-theme='dark'] [class^='announcementBarContent'] a {
 .docs-sidebar-category > div {
   align-items: center;
 }
-
 
 .tutorials-sidebar-category > div {
   align-items: center;
