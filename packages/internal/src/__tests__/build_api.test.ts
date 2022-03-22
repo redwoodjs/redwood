@@ -3,11 +3,7 @@ import path from 'path'
 
 import * as babel from '@babel/core'
 
-import {
-  prebuildApiFiles,
-  cleanApiBuild,
-  generateProxyFilesForNestedFunction,
-} from '../build/api'
+import { cleanApiBuild, prebuildApiFiles } from '../build/api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -23,10 +19,6 @@ const FIXTURE_PATH = path.resolve(
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
-}
-
-const fullPath = (p) => {
-  return path.join(FIXTURE_PATH, p)
 }
 
 // Fixtures, filled in beforeAll
