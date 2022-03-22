@@ -207,13 +207,13 @@ export const createGraphQLHandler = ({
     logging: logger,
     graphiql: isDevEnv
       ? {
-          title: 'Redwood GraphQL playground',
+          title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
           defaultQuery: `query Redwood {
-        redwood {
-          version
-        }
-      }`,
+  redwood {
+    version
+  }
+}`,
           headerEditorEnabled: true,
         }
       : false,
@@ -268,26 +268,24 @@ export const createGraphQLHandler = ({
 
     const requestUrl = new URL(
       event.path,
-      protocol + '://' + event.requestContext.domainName || 'localhost'
+      protocol + '://' + event.requestContext?.domainName || 'localhost'
     )
-
-    if (event.queryStringParameters) {
-      for (const queryStringParam in event.queryStringParameters) {
-        const queryStringValue = event.queryStringParameters[queryStringParam]
-        if (queryStringValue) {
-          requestUrl.searchParams.append(queryStringParam, queryStringValue)
-        }
-      }
-    }
 
     if (event.multiValueQueryStringParameters) {
       for (const queryStringParam in event.multiValueQueryStringParameters) {
         const queryStringValues =
           event.multiValueQueryStringParameters[queryStringParam]
-        if (queryStringValues) {
+        if (queryStringValues && Array.isArray(queryStringValues)) {
           for (const queryStringValue of queryStringValues) {
             requestUrl.searchParams.append(queryStringParam, queryStringValue)
           }
+        }
+      }
+    } else if (event.queryStringParameters) {
+      for (const queryStringParam in event.queryStringParameters) {
+        const queryStringValue = event.queryStringParameters[queryStringParam]
+        if (queryStringValue) {
+          requestUrl.searchParams.append(queryStringParam, queryStringValue)
         }
       }
     }

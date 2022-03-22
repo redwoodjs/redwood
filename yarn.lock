@@ -1983,11 +1983,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:2.17.6":
-  version: 2.17.6
-  resolution: "@clerk/clerk-js@npm:2.17.6"
+"@clerk/clerk-js@npm:2.17.7":
+  version: 2.17.7
+  resolution: "@clerk/clerk-js@npm:2.17.7"
   dependencies:
-    "@clerk/types": ^1.29.2
+    "@clerk/types": ^1.29.3
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.3.1
@@ -1999,7 +1999,7 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: e7eece94eecac686e1bd672aed50662968307f1579a25af19599792bbb028d8dbfe07e1324fd5a5381f65c194d514b6c32417abfa965f88377fdbae743bb678b
+  checksum: 294d68035f3ae98cd4f8e1a274f2ac4d1ce2e7be33b640817866f9ecf1dcd15f7d8285ab2f4433101614085bb1bbcb46692f081f4c125c7c10a69bda6a31dcef
   languageName: node
   linkType: hard
 
@@ -2021,10 +2021,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.29.2, @clerk/types@npm:^1.29.2":
+"@clerk/types@npm:1.29.2":
   version: 1.29.2
   resolution: "@clerk/types@npm:1.29.2"
   checksum: 0bebcf9ca225675e5352f7b41b2332f613e9ed0171746979b335198a96ceb7181c47292f90054bf39477d78afdc4f213a6a70ba0b7decc82626710a1f5fa19d1
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^1.29.3":
+  version: 1.29.3
+  resolution: "@clerk/types@npm:1.29.3"
+  checksum: 1a555babe21794367707809cd1663b935b707424ddd0520b4a40a1530205a5887fa92d84d6f97da87143b831418f86044d9f5b3e5a57d35e23e3eeaec559a3d7
   languageName: node
   linkType: hard
 
@@ -3447,15 +3454,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.2.4, @graphql-tools/merge@npm:^8.2.1":
-  version: 8.2.4
-  resolution: "@graphql-tools/merge@npm:8.2.4"
+"@graphql-tools/merge@npm:8.2.5, @graphql-tools/merge@npm:^8.2.1":
+  version: 8.2.5
+  resolution: "@graphql-tools/merge@npm:8.2.5"
   dependencies:
-    "@graphql-tools/utils": 8.6.3
+    "@graphql-tools/utils": 8.6.4
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 2d6c504430f5daf9139f77dfd2b81f08a0a42ad5a4b2f379163db8b06bbee45801b3da3f949911b38960b1269aac625c776caee93f2e2b753fc10e5e2dc6b538
+  checksum: 6eb33603542e1867ff0902dfbb5f1229a859b9e310a46c47f2d506a83f76fbe3662c84a624b4a676478091ad42f55ce427b41c388e9d8fbc1e23f0d6e977d306
   languageName: node
   linkType: hard
 
@@ -3527,17 +3534,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.3, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
-  version: 8.3.3
-  resolution: "@graphql-tools/schema@npm:8.3.3"
+"@graphql-tools/schema@npm:8.3.4, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
+  version: 8.3.4
+  resolution: "@graphql-tools/schema@npm:8.3.4"
   dependencies:
-    "@graphql-tools/merge": 8.2.4
-    "@graphql-tools/utils": 8.6.3
+    "@graphql-tools/merge": 8.2.5
+    "@graphql-tools/utils": 8.6.4
     tslib: ~2.3.0
     value-or-promise: 1.0.11
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: a31d84732ece6553acd08803aa03e4c76460d3a5735e5bb11930dc7955f4fd21c2015596a9d9f24cb272b7b1309d3eb060466287430055514ceacf6bae02e1e3
+  checksum: fbbb908f1dcba83fd05de47e9c10ec0da074f30f270805a76b23e2561cd15f8a5ba5f8674d118ff00ac2e73679ec1755121eeba57b9fef701ef9dee3b2b0b57f
   languageName: node
   linkType: hard
 
@@ -3581,14 +3588,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.3, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
-  version: 8.6.3
-  resolution: "@graphql-tools/utils@npm:8.6.3"
+"@graphql-tools/utils@npm:8.6.4, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
+  version: 8.6.4
+  resolution: "@graphql-tools/utils@npm:8.6.4"
   dependencies:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 7d57d7672b324096c39255711fb073e9287ab286b29087203bcce5e5eaf9199900e00081b06a74b830be779ad5420e7b6b4b2cab01adb5727eeeeae0e409ed7d
+  checksum: edfc2f9068403ce65e86a38db22c00544ff7b877b047e570991a3556b1f2ce190a929dc836ece69e54267a67535f81342598c28da5f23025489ff39cfd1c2c04
   languageName: node
   linkType: hard
 
@@ -5816,7 +5823,7 @@ __metadata:
     "@azure/msal-browser": 2.22.1
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 2.17.6
+    "@clerk/clerk-js": 2.17.7
     "@clerk/clerk-sdk-node": 2.9.10
     "@clerk/types": 1.29.2
     "@nhost/nhost-js": 0.3.12
@@ -6059,9 +6066,9 @@ __metadata:
     "@envelop/testing": 4.1.0
     "@envelop/types": 2.0.0
     "@envelop/validation-cache": 4.1.0
-    "@graphql-tools/merge": 8.2.4
-    "@graphql-tools/schema": 8.3.3
-    "@graphql-tools/utils": 8.6.3
+    "@graphql-tools/merge": 8.2.5
+    "@graphql-tools/schema": 8.3.4
+    "@graphql-tools/utils": 8.6.4
     "@graphql-yoga/common": 0.1.0-beta.6
     "@prisma/client": 3.11.0
     "@redwoodjs/api": 0.49.1
