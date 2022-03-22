@@ -164,6 +164,39 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
+  const baseYogaCORSOptions: CORSOptions = {}
+
+  if (cors?.methods) {
+    if (typeof cors.methods === 'string') {
+      baseYogaCORSOptions.methods = [cors.methods]
+    } else if (Array.isArray(cors.methods)) {
+      baseYogaCORSOptions.methods = cors.methods
+    }
+  }
+  if (cors?.allowedHeaders) {
+    if (typeof cors.allowedHeaders === 'string') {
+      baseYogaCORSOptions.allowedHeaders = [cors.allowedHeaders]
+    } else if (Array.isArray(cors.allowedHeaders)) {
+      baseYogaCORSOptions.allowedHeaders = cors.allowedHeaders
+    }
+  }
+
+  if (cors?.exposedHeaders) {
+    if (typeof cors.exposedHeaders === 'string') {
+      baseYogaCORSOptions.exposedHeaders = [cors.exposedHeaders]
+    } else if (Array.isArray(cors.exposedHeaders)) {
+      baseYogaCORSOptions.exposedHeaders = cors.exposedHeaders
+    }
+  }
+
+  if (cors?.credentials) {
+    baseYogaCORSOptions.credentials = cors.credentials
+  }
+
+  if (cors?.maxAge) {
+    baseYogaCORSOptions.maxAge = cors.maxAge
+  }
+
   const yoga = createServer({
     schema,
     plugins,
@@ -185,36 +218,8 @@ export const createGraphQLHandler = ({
         }
       : false,
     cors: (request: Request) => {
-      const yogaCORSOptions: CORSOptions = {}
-      if (cors?.methods) {
-        if (typeof cors.methods === 'string') {
-          yogaCORSOptions.methods = [cors.methods]
-        } else if (Array.isArray(cors.methods)) {
-          yogaCORSOptions.methods = cors.methods
-        }
-      }
-      if (cors?.allowedHeaders) {
-        if (typeof cors.allowedHeaders === 'string') {
-          yogaCORSOptions.allowedHeaders = [cors.allowedHeaders]
-        } else if (Array.isArray(cors.allowedHeaders)) {
-          yogaCORSOptions.allowedHeaders = cors.allowedHeaders
-        }
-      }
-
-      if (cors?.exposedHeaders) {
-        if (typeof cors.exposedHeaders === 'string') {
-          yogaCORSOptions.exposedHeaders = [cors.exposedHeaders]
-        } else if (Array.isArray(cors.exposedHeaders)) {
-          yogaCORSOptions.exposedHeaders = cors.exposedHeaders
-        }
-      }
-
-      if (cors?.credentials) {
-        yogaCORSOptions.credentials = cors.credentials
-      }
-
-      if (cors?.maxAge) {
-        yogaCORSOptions.maxAge = cors.maxAge
+      const yogaCORSOptions: CORSOptions = {
+        ...baseYogaCORSOptions,
       }
 
       if (cors?.origin) {
@@ -242,10 +247,7 @@ export const createGraphQLHandler = ({
     },
   })
 
-  const handlerFn = async (
-    event: APIGatewayProxyEvent,
-    lambdaContext: LambdaContext
-  ): Promise<APIGatewayProxyResult> => {
+  function buildRequestObject(event: APIGatewayProxyEvent) {
     const requestHeaders = new Headers()
     for (const headerName in event.headers) {
       const headerValue = event.headers[headerName]
@@ -262,28 +264,57 @@ export const createGraphQLHandler = ({
       }
     }
 
-    const requestProtocol = event.requestContext?.protocol || 'http'
-    const requestUrl = new URL(event.path, requestProtocol + '://localhost')
-    let request: Request
+    const requestUrl = new URL(
+      event.path,
+      'https://' + event.requestContext.domainName || 'localhost'
+    )
+
+    if (event.queryStringParameters) {
+      for (const queryStringParam in event.queryStringParameters) {
+        const queryStringValue = event.queryStringParameters[queryStringParam]
+        if (queryStringValue) {
+          requestUrl.searchParams.append(queryStringParam, queryStringValue)
+        }
+      }
+    }
+
+    if (event.multiValueQueryStringParameters) {
+      for (const queryStringParam in event.multiValueQueryStringParameters) {
+        const queryStringValues =
+          event.multiValueQueryStringParameters[queryStringParam]
+        if (queryStringValues) {
+          for (const queryStringValue of queryStringValues) {
+            requestUrl.searchParams.append(queryStringParam, queryStringValue)
+          }
+        }
+      }
+    }
+
     if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
-      request = new Request(requestUrl.toString(), {
+      return new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
       })
     } else {
-      request = new Request(requestUrl.toString(), {
+      return new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
         body: event.body,
       })
     }
+  }
 
+  const handlerFn = async (
+    event: APIGatewayProxyEvent,
+    lambdaContext: LambdaContext
+  ): Promise<APIGatewayProxyResult> => {
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
 
     let lambdaResponse: APIGatewayProxyResult
 
     try {
+      const request = buildRequestObject(event)
       const response = await yoga.handleRequest(request, {
         event,
         requestContext: lambdaContext,
