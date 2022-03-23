@@ -12,6 +12,7 @@ import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
+const defaultApiDebugPort = 18911
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
 export const builder = (yargs) => {
@@ -102,10 +103,10 @@ export const handler = async ({
 
   const getApiDebugFlag = () => {
     // Passed in flag takes precedence
-    if (apiDebugPort in argv && typeof argv.apiDebugPort === 'undefined') {
-      return `--debug-port 18911`
-    } else if (apiDebugPort) {
+    if (apiDebugPort) {
       return `--debug-port ${apiDebugPort}`
+    } else if (argv.includes('--apiDebugPort')) {
+      return `--debug-port ${defaultApiDebugPort}`
     }
 
     const apiDebugPortInToml = getConfig().api.debugPort
