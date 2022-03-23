@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli",
-  "version": "0.49.1",
+  "version": "0.50.0",
   "description": "The Redwood Command Line",
   "repository": {
     "type": "git",
@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "@prisma/sdk": "3.11.0",
-    "@redwoodjs/api-server": "0.49.1",
-    "@redwoodjs/internal": "0.49.1",
-    "@redwoodjs/prerender": "0.49.1",
-    "@redwoodjs/structure": "0.49.1",
-    "@redwoodjs/telemetry": "0.49.1",
+    "@redwoodjs/api-server": "0.50.0",
+    "@redwoodjs/internal": "0.50.0",
+    "@redwoodjs/prerender": "0.50.0",
+    "@redwoodjs/structure": "0.50.0",
+    "@redwoodjs/telemetry": "0.50.0",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
@@ -52,6 +52,7 @@
     "listr": "0.14.3",
     "listr-verbose-renderer": "0.6.0",
     "lodash": "4.17.21",
+    "node-ssh": "12.0.4",
     "param-case": "3.0.4",
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
@@ -67,7 +68,6 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/listr": "0.14.4",
-    "@types/node-fetch": "2.5.12",
     "jest": "27.5.1",
     "typescript": "4.6.2"
   },

@@ -22,7 +22,7 @@ interface GlobalContext extends Record<string, unknown> {}
  * This also adds a root Query type which is needed to start the GraphQL server on a fresh install.
  *
  * NOTE: When you add a new Scalar type you must add it to
- * "generateTypeDefGraphQL" on @redwoodjs/internal.
+ * "generateTypeDefGraphQL" in @redwoodjs/internal.
  */
 export const schema = gql`
   scalar BigInt

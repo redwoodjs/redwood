@@ -23,6 +23,10 @@ export interface AuthContextInterface {
   logIn(options?: unknown): Promise<any>
   logOut(options?: unknown): Promise<any>
   signUp(options?: unknown): Promise<any>
+  /**
+   * Clients should always return null or string
+   * It is expected that they catch any errors internally
+   */
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -35,7 +39,7 @@ export interface AuthContextInterface {
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    **/
-  hasRole(role: string | string[]): boolean
+  hasRole(rolesToCheck: string | string[]): boolean
   /**
    * Redetermine authentication state and update the state.
    */
@@ -218,8 +222,22 @@ export class AuthProvider extends React.Component<
     return false
   }
 
+  /**
+   * Clients should always return null or token string.
+   * It is expected that they catch any errors internally.
+   * This catch is a last resort effort in case any errors are
+   * missed or slip through.
+   */
   getToken = async () => {
-    return this.rwClient.getToken()
+    let token
+
+    try {
+      token = await this.rwClient.getToken()
+    } catch {
+      token = null
+    }
+
+    return token
   }
 
   reauthenticate = async () => {

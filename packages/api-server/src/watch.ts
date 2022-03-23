@@ -77,11 +77,12 @@ const rebuildApiServer = () => {
     }
 
     // Start API server
-    httpServerProcess = fork(
-      path.join(__dirname, 'index.js'),
-      ['--port', getConfig().api.port.toString()],
+    httpServerProcess = fork(path.join(__dirname, 'index.js'), [
+      'api',
+      '--port',
+      getConfig().api.port.toString(),
       forkOpts
-    )
+    ])
   } catch (e) {
     console.error(e)
   }

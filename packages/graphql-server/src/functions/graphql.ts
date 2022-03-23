@@ -1,36 +1,25 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  envelop,
   EnvelopError,
   FormatErrorHandler,
-  useMaskedErrors,
-  useSchema,
-} from '@envelop/core'
-import type { PluginOrDisabledPlugin } from '@envelop/core'
+  GraphQLYogaError,
+} from '@graphql-yoga/common'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { useParserCache } from '@envelop/parser-cache'
-import { useValidationCache } from '@envelop/validation-cache'
-import { normalizeRequest, RedwoodError } from '@redwoodjs/api'
+import { RedwoodError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import {
-  getGraphQLParameters,
-  processRequest,
-  shouldRenderGraphiQL,
-} from 'graphql-helix'
-import { renderPlaygroundPage } from 'graphql-playground-html'
+import { CORSOptions, createServer } from '@graphql-yoga/common'
 
-import { createCorsContext } from '@redwoodjs/api'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
-import { createHealthcheckContext } from '../healthcheck'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import {
@@ -44,6 +33,7 @@ import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
+import { Headers, Request } from 'cross-undici-fetch'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -51,7 +41,7 @@ import type { GraphQLHandlerOptions } from './types'
  * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
  **/
 export const formatError: FormatErrorHandler = (err: any, message: string) => {
-  const allowErrors = [EnvelopError, RedwoodError]
+  const allowErrors = [GraphQLYogaError, EnvelopError, RedwoodError]
 
   // If using graphql-scalars, when validating input
   // the original TypeError is wrapped in an GraphQLError object.
@@ -97,11 +87,10 @@ export const createGraphQLHandler = ({
   services,
   sdls,
   directives = [],
-  onHealthCheck,
   depthLimitOptions,
   allowedOperations,
   defaultError = 'Something went wrong.',
-  graphiQLEndpoint,
+  graphiQLEndpoint = '/graphql',
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
@@ -142,13 +131,6 @@ export const createGraphQLHandler = ({
     plugins.push(useDisableIntrospection())
   }
 
-  // Simple LRU for caching parse results.
-  plugins.push(useParserCache())
-  // Simple LRU for caching validate results.
-  plugins.push(useValidationCache())
-  // Simplest plugin to provide your GraphQL schema.
-  plugins.push(useSchema(schema))
-
   // Custom Redwood plugins
   plugins.push(useRedwoodAuthContext(getCurrentUser))
   plugins.push(useRedwoodGlobalContextSetter())
@@ -182,102 +164,177 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
+  const baseYogaCORSOptions: CORSOptions = {}
 
-  const corsContext = createCorsContext(cors)
+  if (cors?.methods) {
+    if (typeof cors.methods === 'string') {
+      baseYogaCORSOptions.methods = [cors.methods]
+    } else if (Array.isArray(cors.methods)) {
+      baseYogaCORSOptions.methods = cors.methods
+    }
+  }
+  if (cors?.allowedHeaders) {
+    if (typeof cors.allowedHeaders === 'string') {
+      baseYogaCORSOptions.allowedHeaders = [cors.allowedHeaders]
+    } else if (Array.isArray(cors.allowedHeaders)) {
+      baseYogaCORSOptions.allowedHeaders = cors.allowedHeaders
+    }
+  }
 
-  const healthcheckContext = createHealthcheckContext(
-    onHealthCheck,
-    corsContext
-  )
+  if (cors?.exposedHeaders) {
+    if (typeof cors.exposedHeaders === 'string') {
+      baseYogaCORSOptions.exposedHeaders = [cors.exposedHeaders]
+    } else if (Array.isArray(cors.exposedHeaders)) {
+      baseYogaCORSOptions.exposedHeaders = cors.exposedHeaders
+    }
+  }
 
-  const createSharedEnvelop = envelop({
+  if (cors?.credentials) {
+    baseYogaCORSOptions.credentials = cors.credentials
+  }
+
+  if (cors?.maxAge) {
+    baseYogaCORSOptions.maxAge = cors.maxAge
+  }
+
+  const yoga = createServer({
+    schema,
     plugins,
-    enableInternalTracing: loggerConfig.options?.tracing,
+    maskedErrors: {
+      formatError,
+      errorMessage: defaultError,
+    },
+    logging: logger,
+    graphiql: isDevEnv
+      ? {
+          title: 'Redwood GraphQL Playground',
+          endpoint: graphiQLEndpoint,
+          defaultQuery: `query Redwood {
+  redwood {
+    version
+  }
+}`,
+          headerEditorEnabled: true,
+        }
+      : false,
+    cors: (request: Request) => {
+      const yogaCORSOptions: CORSOptions = {
+        ...baseYogaCORSOptions,
+      }
+
+      if (cors?.origin) {
+        const requestOrigin = request.headers.get('origin')
+        if (typeof cors.origin === 'string') {
+          yogaCORSOptions.origin = [cors.origin]
+        } else if (
+          requestOrigin &&
+          (typeof cors.origin === 'boolean' ||
+            (Array.isArray(cors.origin) &&
+              requestOrigin &&
+              cors.origin.includes(requestOrigin)))
+        ) {
+          yogaCORSOptions.origin = [requestOrigin]
+        }
+
+        const requestAccessControlRequestHeaders = request.headers.get(
+          'access-control-request-headers'
+        )
+        if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
+          yogaCORSOptions.allowedHeaders = [requestAccessControlRequestHeaders]
+        }
+      }
+      return yogaCORSOptions
+    },
   })
+
+  function buildRequestObject(event: APIGatewayProxyEvent) {
+    const requestHeaders = new Headers()
+    for (const headerName in event.headers) {
+      const headerValue = event.headers[headerName]
+      if (headerValue) {
+        requestHeaders.append(headerName, headerValue)
+      }
+    }
+    for (const headerName in event.multiValueHeaders) {
+      const headerValues = event.multiValueHeaders[headerName]
+      if (headerValues) {
+        for (const headerValue of headerValues) {
+          requestHeaders.append(headerName, headerValue)
+        }
+      }
+    }
+
+    const protocol = isDevEnv ? 'http' : 'https'
+
+    const requestUrl = new URL(
+      event.path,
+      protocol + '://' + (event.requestContext?.domainName || 'localhost')
+    )
+
+    if (event.multiValueQueryStringParameters) {
+      for (const queryStringParam in event.multiValueQueryStringParameters) {
+        const queryStringValues =
+          event.multiValueQueryStringParameters[queryStringParam]
+        if (queryStringValues && Array.isArray(queryStringValues)) {
+          for (const queryStringValue of queryStringValues) {
+            requestUrl.searchParams.append(queryStringParam, queryStringValue)
+          }
+        }
+      }
+    } else if (event.queryStringParameters) {
+      for (const queryStringParam in event.queryStringParameters) {
+        const queryStringValue = event.queryStringParameters[queryStringParam]
+        if (queryStringValue) {
+          requestUrl.searchParams.append(queryStringParam, queryStringValue)
+        }
+      }
+    }
+
+    if (
+      event.httpMethod === 'GET' ||
+      event.httpMethod === 'HEAD' ||
+      event.body == null
+    ) {
+      return new Request(requestUrl.toString(), {
+        method: event.httpMethod,
+        headers: requestHeaders,
+      })
+    } else {
+      const body = event.isBase64Encoded
+        ? Buffer.from(event.body, 'base64').toString('utf-8')
+        : event.body
+      return new Request(requestUrl.toString(), {
+        method: event.httpMethod,
+        headers: requestHeaders,
+        body,
+      })
+    }
+  }
 
   const handlerFn = async (
     event: APIGatewayProxyEvent,
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
-    const enveloped = createSharedEnvelop({
-      event,
-      requestContext: lambdaContext,
-    })
-
-    const logger = loggerConfig.logger
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
-
-    // In the future, the normalizeRequest can take more flexible params, maybe even cloud provider name
-    // and return a normalized request structure.
-    const request = normalizeRequest(event)
-
-    if (healthcheckContext.isHealthcheckRequest(event.path)) {
-      return healthcheckContext.handleHealthCheck(request, event)
-    }
-
-    const corsHeaders = cors ? corsContext.getRequestHeaders(request) : {}
-
-    if (corsContext.shouldHandleCors(request)) {
-      return {
-        body: '',
-        statusCode: 200,
-        headers: corsHeaders,
-      }
-    }
-
-    if (isDevEnv && shouldRenderGraphiQL(request)) {
-      return {
-        body: renderPlaygroundPage({
-          endpoint: graphiQLEndpoint || '/graphql',
-        }),
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'text/html',
-          ...corsHeaders,
-        },
-      }
-    }
-
-    const { operationName, query, variables } = getGraphQLParameters(request)
 
     let lambdaResponse: APIGatewayProxyResult
 
     try {
-      const result = await processRequest({
-        operationName,
-        query,
-        variables,
-        request,
-        validationRules: undefined,
-        ...enveloped,
-        contextFactory: enveloped.contextFactory,
+      const request = buildRequestObject(event)
+      const response = await yoga.handleRequest(request, {
+        event,
+        requestContext: lambdaContext,
       })
-
-      if (result.type === 'RESPONSE') {
-        lambdaResponse = {
-          body: JSON.stringify(result.payload),
-          statusCode: 200,
-          headers: {
-            ...(result.headers || {}).reduce(
-              (prev, header) => ({ ...prev, [header.name]: header.value }),
-              {}
-            ),
-            ...corsHeaders,
-          },
-        }
-      } else if (result.type === 'MULTIPART_RESPONSE') {
-        lambdaResponse = {
-          body: JSON.stringify({ error: 'Streaming is not supported yet!' }),
-          statusCode: 500,
-        }
-      } else {
-        lambdaResponse = {
-          body: JSON.stringify({ error: 'Unexpected flow' }),
-          statusCode: 500,
-        }
+      const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
+      for (const [key, value] of response.headers) {
+        multiValueHeaders[key] = multiValueHeaders[key] || []
+        multiValueHeaders[key].push(value)
+      }
+      lambdaResponse = {
+        body: await response.text(),
+        statusCode: response.status,
+        multiValueHeaders,
       }
     } catch (e: any) {
       logger.error(e)
