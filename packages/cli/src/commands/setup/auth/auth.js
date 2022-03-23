@@ -68,7 +68,7 @@ const addWebImports = (content, imports) => {
 // returns the content of App.{js,tsx} with init lines added (if there are any)
 const addWebInit = (content, init) => {
   if (init) {
-    const regex = /(const App = \(.*\) => [\(\{])/
+    const regex = /const App = \(.*\) => [({]/
     const match = content.match(regex)
 
     if (!match) {
