@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import yargs from 'yargs'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
-
 import {
   apiCliOptions,
   webCliOptions,
@@ -11,8 +9,6 @@ import {
   webServerHandler,
   bothServerHandler,
 } from './cliHandlers'
-
-const commandPath = yargs.argv.$0
 
 const positionalArgs = yargs.argv._
 
@@ -23,10 +19,7 @@ const positionalArgs = yargs.argv._
 // },
 
 if (require.main === module) {
-  if (
-    ensurePosixPath(commandPath).includes('dist/index.js') ||
-    (positionalArgs.includes('api') && !positionalArgs.includes('web'))
-  ) {
+  if (positionalArgs.includes('api') && !positionalArgs.includes('web')) {
     apiServerHandler(yargs.options(apiCliOptions).argv)
   } else if (
     positionalArgs.includes('web') &&
