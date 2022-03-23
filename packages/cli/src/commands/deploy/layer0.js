@@ -1,7 +1,6 @@
 import path from 'path'
 
 import { builder as layer0Builder } from '@layer0/cli/commands/deploy'
-import build from '@layer0/cli/utils/build'
 import execa from 'execa'
 import fs from 'fs-extra'
 import omit from 'lodash/omit'
