@@ -7,7 +7,11 @@ import {
   ERR_MESSAGE_MISSING_CLI,
   ERR_MESSAGE_NOT_INITIALIZED,
 } from '../../../deploy/layer0'
-import { preRequisiteCheckTask, printSetupNotes } from '../helpers'
+import {
+  preRequisiteCheckTask,
+  printSetupNotes,
+  addPackagesTask,
+} from '../helpers'
 
 export const command = 'layer0'
 export const description = 'Setup Layer0 deploy'
@@ -21,6 +25,10 @@ const notes = [
 
 export const handler = async () => {
   const tasks = new Listr([
+    addPackagesTask({
+      packages: ['@layer0/cli'],
+      devDependency: true,
+    }),
     preRequisiteCheckTask([
       {
         title: 'Checking if Layer0 is installed...',

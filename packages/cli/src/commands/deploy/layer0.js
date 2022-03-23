@@ -1,6 +1,5 @@
 import path from 'path'
 
-import { builder as layer0Builder } from '@layer0/cli/commands/deploy'
 import execa from 'execa'
 import fs from 'fs-extra'
 import omit from 'lodash/omit'
@@ -16,6 +15,7 @@ export const command = 'layer0 [...commands]'
 export const description = 'Build command for Layer0 deploy'
 
 export const builder = async (yargs) => {
+  const { builder: layer0Builder } = require('@layer0/cli/commands/deploy')
   deployBuilder(yargs)
 
   layer0Builder['skip-init'] = {
@@ -45,6 +45,7 @@ const execaOptions = {
 }
 
 export const handler = async (args) => {
+  const { builder: layer0Builder } = require('@layer0/cli/commands/deploy')
   const cwd = path.join(getPaths().base)
 
   try {
