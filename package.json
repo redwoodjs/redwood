@@ -92,8 +92,8 @@
     "terminal-link": "2.1.1",
     "typescript": "4.6.2",
     "typescript-transform-paths": "3.3.1",
-    "zx": "6.0.6"
+    "zx": "6.0.7"
   },
-  "npmClient": "yarn",
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "npmClient": "yarn"
 }

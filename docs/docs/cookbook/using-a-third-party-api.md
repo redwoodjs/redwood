@@ -349,10 +349,10 @@ We'll enter our query at the top left and the variables (zip) at the lower left.
 
 ![image](https://user-images.githubusercontent.com/300/79395014-9cd9d980-7f2d-11ea-83b1-45aaa8506706.png)
 
-Okay lets pull the real data from OpenWeather now. We'll use a package `node-fetch` that mimics the Fetch API in the browser:
+Okay lets pull the real data from OpenWeather now. We'll use a package `cross-undici-fetch` that mimics the Fetch API in the browser:
 
 ```terminal
-yarn workspace api add node-fetch@2
+yarn workspace api add cross-undici-fetch
 ```
 
 And import that into the service and make the fetch. Note that `fetch` returns a Promise so we're going to convert our service to `async`/`await` to simplify things:
@@ -360,7 +360,7 @@ And import that into the service and make the fetch. Note that `fetch` returns a
 ```javascript
 // api/src/services/weather/weather.js
 
-import fetch from 'node-fetch'
+import { fetch } from 'cross-undici-fetch'
 
 export const getWeather = async ({ zip }) => {
   const response = await fetch(
@@ -515,7 +515,7 @@ Okay, let's look for that `cod` and if it's `404` then we know the zip isn't fou
 ```javascript {4, 12-14}
 // api/src/services/weather/weather.js
 
-import fetch from 'node-fetch'
+import { fetch } from 'cross-undici-fetch'
 import { UserInputError } from '@redwoodjs/graphql-server'
 
 export const getWeather = async ({ zip }) => {

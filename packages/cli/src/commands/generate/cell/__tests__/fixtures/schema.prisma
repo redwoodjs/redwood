@@ -23,3 +23,10 @@ model UserProfile {
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
 }
+
+model Address {
+  id       String    @id @default(uuid())
+  street   String
+  city     String
+  country  String
+}

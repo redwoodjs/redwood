@@ -1,0 +1,144 @@
+[build]
+  base = "docs"
+  publish = "build"
+  command = "yarn build"
+
+[[redirects]]
+  from = "/docs/tutorial"
+  to = "/docs/tutorial/foreword"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/welcome-to-redwood"
+  to = "/docs/tutorial/foreword"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/prerequisites"
+  to = "/docs/tutorial/chapter1/prerequisites"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/installation-starting-development"
+  to = "/docs/tutorial/chapter1/installation"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/redwood-file-structure"
+  to = "/docs/tutorial/chapter1/file-structure"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/our-first-page"
+  to = "/docs/tutorial/chapter1/first-page"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/a-second-page-and-a-link"
+  to = "/docs/tutorial/chapter1/second-page"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/layouts"
+  to = "/docs/tutorial/chapter1/layouts"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/getting-dynamic"
+  to = "/docs/tutorial/chapter2/getting-dynamic"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/cells"
+  to = "/docs/tutorial/chapter2/cells"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/side-quest-how-redwood-works-with-data"
+  to = "/docs/tutorial/chapter2/side-quest"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/routing-params"
+  to = "/docs/tutorial/chapter2/routing-params"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/building-a-form"
+  to = "/docs/tutorial/chapter3/forms"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/saving-data"
+  to = "/docs/tutorial/chapter3/saving-data"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/authentication"
+  to = "/docs/tutorial/chapter4/authentication"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/deployment"
+  to = "/docs/tutorial/chapter4/deployment"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial/wrapping-up"
+  to = "/docs/tutorial/intermission"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge"
+  to = "/docs/tutorial/intermission"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/prerequisites"
+  to = "/docs/tutorial/intermission"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/introduction-to-storybook"
+  to = "/docs/tutorial/chapter5/storybook"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/our-first-story"
+  to = "/docs/tutorial/chapter5/first-story"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/our-first-test"
+  to = "/docs/tutorial/chapter5/first-test"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/building-a-component-the-redwood-way"
+  to = "/docs/tutorial/chapter6/the-redwood-way"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/multiple-comments"
+  to = "/docs/tutorial/chapter6/multiple-comments"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/adding-comments-to-the-schema"
+  to = "/docs/tutorial/chapter6/comments-schema"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/creating-a-comment-form"
+  to = "/docs/tutorial/chapter6/comment-form"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/role-based-authorization-control-rbac"
+  to = "/docs/tutorial/chapter7/rbac"
+  status = 301
+
+[[redirects]]
+  from = "/docs/tutorial2/wrapping-up"
+  to = "/docs/tutorial/afterword"
+  status = 301

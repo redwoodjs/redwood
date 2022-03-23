@@ -57,9 +57,9 @@ If your 🏠 could enforce RBAC, it needs to know the rules.
 
 | Role     | Kitchen | Basement | Office | Bathroom | Laundry | Bedroom |
 | -------- | :-----: | :------: | :----: | :------: | :-----: | :-----: |
-| Neighbor |   ✅    |          |   ✅   |    ✅    |         |         |
-| Plumber  |   ✅    |    ✅    |        |    ✅    |   ✅    |         |
-| Owner    |   ✅    |    ✅    |   ✅   |    ✅    |   ✅    |         |
+| Neighbor |    ✅    |          |   ✅    |    ✅     |         |         |
+| Plumber  |    ✅    |    ✅     |        |    ✅     |    ✅    |         |
+| Owner    |    ✅    |    ✅     |   ✅    |    ✅     |    ✅    |         |
 
 #### RBAC Example: Blog
 
@@ -72,12 +72,12 @@ In our Blog example anyone can view Posts (authenticated or not). They are _publ
 
 #### Role Matrix for Blog RBAC
 
-| Role      | View | New | Edit | Delete | Manage Users |
-| --------- | :--: | :-: | :--: | :----: | :----------: |
-| Author    |  ✅  | ✅  |      |        |              |
-| Editor    |  ✅  |     |  ✅  |        |              |
-| Publisher |  ✅  | ✅  |  ✅  |   ✅   |              |
-| Admin     |  ✅  | ✅  |  ✅  |   ✅   |      ✅      |
+| Role      | View  |  New  | Edit  | Delete | Manage Users |
+| --------- | :---: | :---: | :---: | :----: | :----------: |
+| Author    |   ✅   |   ✅   |       |        |              |
+| Editor    |   ✅   |       |   ✅   |        |              |
+| Publisher |   ✅   |   ✅   |   ✅   |   ✅    |              |
+| Admin     |   ✅   |   ✅   |   ✅   |   ✅    |      ✅       |
 
 ## Auth and RBAC Checklist
 
@@ -89,7 +89,7 @@ In order to integrate RBAC in a RedwoodJS app, you will have to:
 - Enforce Access
 - Secure Web and Api sides
 
-Helps to be familiar with [Blog Tutorial](https://redwoodjs.com/tutorial/welcome-to-redwood) as well as pages, cells, services, authentication, and routes.
+Helps to be familiar with [Blog Tutorial](../tutorial/foreword.md) as well as pages, cells, services, authentication, and routes.
 
 ## Identity as a Service
 

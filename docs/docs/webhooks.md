@@ -789,7 +789,7 @@ export const sendOutGoingWebhooks = async ({ payload }) => {
 
 ## How To Test Webhooks
 
-Because your webhook is typically sent from a third-party's system, manually testing webhooks can be difficult and time-consuming. See [How To Test Webhooks](https://redwoodjs.com/docs/serverless-functions#how-to-test-webhooks) to learn how to write tests that can automate tests and help you implement your webhook handler.
+Because your webhook is typically sent from a third-party's system, manually testing webhooks can be difficult and time-consuming. See [How To Test Webhooks](serverless-functions.md#how-to-test-webhooks) to learn how to write tests that can automate tests and help you implement your webhook handler.
 
 ## More Information
 

@@ -1,6 +1,6 @@
 # GoTrue Auth
 
-If you've completed the [Authentication section](../tutorial/authentication.md) of The Tutorial, you've seen how you can add the [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget) to your Redwood app in a matter of minutes.
+If you've completed the [Authentication section](../tutorial/chapter4/authentication.md) of The Tutorial, you've seen how you can add the [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget) to your Redwood app in a matter of minutes.
 But what do you do if you want to use Netlify Identity, but ditch the widget? There are many cases where we want much more control over our authentication interface and functionality, while still maintaining some _ease-of-use_ when it comes to development.
 
 Enter [GoTrue-JS](https://github.com/netlify/gotrue-js), a client library for interfacing with Netlify Identity's GoTrue API.
@@ -19,9 +19,9 @@ But first, some housekeeping...
 
 Before getting started, there are a few steps you should have completed:
 
-- [Create a Redwood app](https://redwoodjs.com/tutorial/installation-starting-development)
+- [Create a Redwood app](../tutorial/chapter1/installation.md)
 - [Create a Netlify account](https://www.netlify.com/)
-- [Deploy your Netlify site](https://redwoodjs.com/tutorial/deployment)
+- [Deploy your Netlify site](../tutorial/chapter4/deployment.md)
 - [Enable Netlify Identity](#enable-netlify-identity)
 - Fire up a dev server: `yarn redwood dev`
 
@@ -35,7 +35,7 @@ Now you should see an Identity API endpoint, e.g. `https://my-bodacious-app.netl
 
 ## Generate Auth Configuration
 
-Let's start by installing the required packages and generating boilerplate code and files for Redwood Auth, all with this simple [CLI command](/docs/cli-commands#generate-auth):
+Let's start by installing the required packages and generating boilerplate code and files for Redwood Auth, all with this simple [CLI command](../cli-commands.md#setup-auth):
 
 ```bash
 yarn redwood setup auth goTrue
@@ -115,7 +115,7 @@ yarn redwood generate page Signup
 
 This adds a Signup [route](../router.md#router-and-route) to our routes file and creates a SignupPage component.
 
-In the just-generated SignupPage component (`web/src/pages/SignupPage/SignupPage.js`), let's import some [Redwood Form components](https://redwoodjs.com/docs/form) and add a very basic form to our render component:
+In the just-generated SignupPage component (`web/src/pages/SignupPage/SignupPage.js`), let's import some [Redwood Form components](../forms.md) and add a very basic form to our render component:
 
 ```js
 // web/src/pages/SignupPage/SignupPage.js
@@ -271,7 +271,7 @@ export default SignupPage
 
 Now we can handle a successful submission. Once a user has signed up, we should direct them to the sign in page that we'll be building out in the next section.
 
-Start by [generating](/docs/cli-commands#generate-page) a sign in page:
+Start by [generating](../cli-commands.md#generate-page) a sign in page:
 
 ```bash
 yarn redwood generate page Signin
@@ -418,7 +418,7 @@ const SigninPage = () => {
 export default SigninPage
 ```
 
-Now then, upon a successful login let's redirect our user back to the home page. First, [generate](/docs/cli-commands#generate-page) a homepage (if you haven't already):
+Now then, upon a successful login let's redirect our user back to the home page. First, [generate](../cli-commands.md#generate-page) a homepage (if you haven't already):
 
 ```bash
 yarn redwood generate page Home /
@@ -466,7 +466,7 @@ Well done! We've created a sign in page and form and we successfully handle sign
 
 Sign out is by far the easiest auth functionality to implement: all we need to do is fire off useAuth's `logOut` method.
 
-Let's start by [generating a component](/docs/cli-commands#generate-component) to house our Sign Out Button:
+Let's start by [generating a component](../cli-commands.md#generate-component) to house our Sign Out Button:
 
 ```bash
 yarn redwood generate component SignoutBtn
@@ -487,7 +487,7 @@ const SignoutBtn = () => {
 export default SignoutBtn
 ```
 
-Now we can import [`useAuth` from `@redwoodjs/auth`](/docs/authentication#api). We'll destructure its `logOut` method and invoke it in the `onClick` function:
+Now we can import [`useAuth` from `@redwoodjs/auth`](../authentication.md#api). We'll destructure its `logOut` method and invoke it in the `onClick` function:
 
 ```js {3,6,9}
 // web/src/components/SignoutBtn/SignoutBtn.js
@@ -537,7 +537,7 @@ Here we'll implement some auth-related navigation that conditionally renders the
 - When the user is not logged in, we should see **Sign Up** and **Sign In**.
 - When the user is logged in, we should see **Log Out**.
 
-Let's start by [generating a navigation component](/docs/cli-commands#generate-component):
+Let's start by [generating a navigation component](../cli-commands.md#generate-component):
 
 ```bash
 yarn redwood generate component Navigation
@@ -545,7 +545,7 @@ yarn redwood generate component Navigation
 
 This creates `web/src/components/Navigation/Navigation.js`. In that file, let's import [the `Link` component and the `routes` object](../router.md#link-and-named-route-functions) from `@redwoodjs/router`.
 
-We'll also import [`useAuth`](/docs/authentication#api) since we'll need to subscribe to the auth state in order for our components to decide what to render:
+We'll also import [`useAuth`](../authentication.md#api) since we'll need to subscribe to the auth state in order for our components to decide what to render:
 
 ```js
 // web/src/components/Navigation/Navigation.js
@@ -560,7 +560,7 @@ const Navigation = () => {
 export default Navigation
 ```
 
-Let's destructure [`isAuthenticated` from the `useAuth`](/docs/authentication#api) API and apply it to some conditionals in the render method:
+Let's destructure [`isAuthenticated` from the `useAuth`](../authentication.md#api) API and apply it to some conditionals in the render method:
 
 ```js {7,10-14}
 // web/src/components/Navigation/Navigation.js
@@ -614,7 +614,7 @@ const Navigation = () => {
 export default Navigation
 ```
 
-We have a working navigation component, but we still need to render it somewhere. Let's [generate a layout](/docs/cli-commands#generate-layout) called GlobalLayout:
+We have a working navigation component, but we still need to render it somewhere. Let's [generate a layout](../cli-commands.md#generate-layout) called GlobalLayout:
 
 ```bash
 yarn redwood generate layout Global
