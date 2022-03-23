@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.50.0",
+  "version": "1.0.0-rc.final.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
