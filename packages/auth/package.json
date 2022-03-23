@@ -30,7 +30,7 @@
     "@clerk/clerk-sdk-node": "2.9.10",
     "@clerk/types": "1.29.3",
     "@nhost/nhost-js": "0.3.12",
-    "@supabase/supabase-js": "1.31.1",
+    "@supabase/supabase-js": "1.31.2",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.40",
     "firebase": "9.6.9",
