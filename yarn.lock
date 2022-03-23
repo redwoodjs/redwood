@@ -13288,7 +13288,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:4.3.3, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.3":
+"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.3":
+  version: 4.3.4
+  resolution: "debug@npm:4.3.4"
+  dependencies:
+    ms: 2.1.2
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: cedbec45298dd5c501d01b92b119cd3faebe5438c3917ff11ae1bff86a6c722930ac9c8659792824013168ba6db7c4668225d845c633fbdafbbf902a6389f736
+  languageName: node
+  linkType: hard
+
+"debug@npm:4.3.3":
   version: 4.3.3
   resolution: "debug@npm:4.3.3"
   dependencies:
@@ -24270,7 +24282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.5.1, prettier@npm:^2.0.1, prettier@npm:^2.2.1":
+"prettier@npm:2.5.1":
   version: 2.5.1
   resolution: "prettier@npm:2.5.1"
   bin:
@@ -24285,6 +24297,15 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: b9f434af2f25a37aad0b133894827e980885eb8bf317444c9dde0401ed2c7f463f9996d691f5ee5a0a4450ab46a894cd6557516b561e2522821522ce1f4c6668
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.0.1, prettier@npm:^2.2.1":
+  version: 2.6.0
+  resolution: "prettier@npm:2.6.0"
+  bin:
+    prettier: bin-prettier.js
+  checksum: aa29412e52be673e1e63ceb17eb6bbbec5a2d6fd126f66c31a935a2d35463f8ba28bc54b20cb1e89712cb3928ef60d27f53174e99a5222fbd414ba654929d693
   languageName: node
   linkType: hard
 
