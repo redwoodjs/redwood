@@ -110,7 +110,7 @@ const addWebRender = (content, authProvider) => {
   const redwoodProviderChildrenLines = redwoodProviderChildren
     .split('\n')
     .map((line, index) => {
-      return `${index !== 0 ? '  ' : ''}` + line
+      return `${index === 0 ? '' : '  '}` + line
     })
 
   // Wrap with custom components e.g.
