@@ -2,10 +2,10 @@ module.exports = {
   main: [
     {
       type: 'category',
-      label: 'Docs',
+      label: 'Reference',
       link: {
         type: 'generated-index',
-        title: 'Docs',
+        title: 'Reference',
         // description: '',
         slug: '/index',
       },
