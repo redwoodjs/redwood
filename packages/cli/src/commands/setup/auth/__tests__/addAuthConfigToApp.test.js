@@ -32,6 +32,7 @@ const writeFileSyncSpy = jest.fn((_, content) => {
 })
 
 beforeEach(() => {
+  mockWebAppPath = ''
   jest.restoreAllMocks()
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
 })
@@ -99,6 +100,16 @@ describe('Should add auth config when using explicit return', () => {
   it('Matches Auth0 Snapshot', async () => {
     mockWebAppPath =
       'src/commands/setup/auth/__tests__/fixtures/AppWithExplicitReturn.js'
+
+    const auth0Data = await import(`../providers/auth0`)
+    await addConfigToApp(auth0Data.config, false)
+  })
+})
+
+describe('Should add auth config when app is missing RedwoodApolloProvider', () => {
+  it('Matches Auth0 Snapshot', async () => {
+    mockWebAppPath =
+      'src/commands/setup/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
     const auth0Data = await import(`../providers/auth0`)
     await addConfigToApp(auth0Data.config, false)
