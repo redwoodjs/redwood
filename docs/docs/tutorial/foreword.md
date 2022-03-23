@@ -14,6 +14,6 @@ When you see a callout like this:
 
 It's usually something that goes into more detail about a specific point, refers you to further reading, or calls out something important you should know. Here comes one now:
 
-> This tutorial assumes you are using a v1.0 Release Candidate of RedwoodJS.
+> This tutorial assumes you are using version >= 0.50.0 (or v1.0 release candidate 7) of RedwoodJS.
 
 Let's get started!
