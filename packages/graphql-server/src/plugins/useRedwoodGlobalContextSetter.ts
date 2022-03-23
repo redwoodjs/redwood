@@ -1,4 +1,4 @@
-import { Plugin } from '@envelop/core'
+import { Plugin } from '@graphql-yoga/common'
 
 import { RedwoodGraphQLContext } from '../functions/types'
 import { setContext } from '../index'
