@@ -46,7 +46,7 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = () => {
+const createRedwoodJSApp = ({ yarn1 }) => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
@@ -55,7 +55,8 @@ const createRedwoodJSApp = () => {
         '--no-yarn-install',
         '--typescript',
         '--no-telemetry',
-      ],
+        yarn1 && '--yarn1',
+      ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         env: { REDWOOD_CI: '1' },
@@ -65,24 +66,6 @@ const createRedwoodJSApp = () => {
     )
   } catch (e) {
     console.error('Error: Could not create Redwood Project')
-    console.error(e)
-    process.exit(1)
-  }
-}
-
-const upgradeToYarn3 = () => {
-  try {
-    execa.sync(
-      `RWJS_CWD=${REDWOOD_PROJECT_DIRECTORY} yarn node ./packages/codemods/dist/codemods.js upgrade-yarn`,
-      {
-        cwd: REDWOODJS_FRAMEWORK_PATH,
-        env: { REDWOOD_CI: '1' },
-        shell: true,
-        stdio: 'inherit',
-      }
-    )
-  } catch (e) {
-    console.error('Error: Could not upgrade Redwood Project to yarn 3')
     console.error(e)
     process.exit(1)
   }
@@ -202,7 +185,7 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
-  .option('yarn3', { default: true, type: 'boolean' })
+  .option('yarn1', { default: false, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -232,12 +215,11 @@ let {
   createProject,
   typescript,
   autoStart,
-  yarn3,
+  yarn1,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && createRedwoodJSApp,
-  yarn3 && upgradeToYarn3,
+  createProject && (() => createRedwoodJSApp({ yarn1 })),
   copyFramework && addFrameworkDepsToProject,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
