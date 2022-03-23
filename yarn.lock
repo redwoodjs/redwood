@@ -1971,15 +1971,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^0.6.1":
-  version: 0.6.1
-  resolution: "@clerk/backend-core@npm:0.6.1"
+"@clerk/backend-core@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@clerk/backend-core@npm:0.7.0"
   dependencies:
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: 41cb3982eefb42e01f78cd9d048cd82e0824f7a094996b4ac3359aaccf8970935cfed4dc33ea113c26d0aa37bb079c0346f092764fb214dc46a75c7379782fb8
+  checksum: e97d926b17845a731debffc17eb35befa81ebdcb9b1002ce8e57f73fb82aaaf24fd334388c40eb0b1cbab109927f757421b59f0c401794fe5da12b01b9b48866
   languageName: node
   linkType: hard
 
@@ -2003,11 +2003,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:2.9.10":
-  version: 2.9.10
-  resolution: "@clerk/clerk-sdk-node@npm:2.9.10"
+"@clerk/clerk-sdk-node@npm:2.10.0":
+  version: 2.10.0
+  resolution: "@clerk/clerk-sdk-node@npm:2.10.0"
   dependencies:
-    "@clerk/backend-core": ^0.6.1
+    "@clerk/backend-core": ^0.7.0
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -2017,18 +2017,11 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: a37a291c1072280d715e0f7ff5cc0f64dc98245d9eca04f7360f8f01fc3942ef316643afac92408aa8bd36ed9b22d3d0e197cb56519b8aa458f9eba75e4c477a
+  checksum: abf6903fbcd4caf62fad56b841997b4590df4c28b1a3884f827ff1168626cd88239e74a66755b15dce934802ea38a68062793aa35f2c639f1dfc50d2bcf763d1
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:1.29.2":
-  version: 1.29.2
-  resolution: "@clerk/types@npm:1.29.2"
-  checksum: 0bebcf9ca225675e5352f7b41b2332f613e9ed0171746979b335198a96ceb7181c47292f90054bf39477d78afdc4f213a6a70ba0b7decc82626710a1f5fa19d1
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^1.29.3":
+"@clerk/types@npm:1.29.3, @clerk/types@npm:^1.29.3":
   version: 1.29.3
   resolution: "@clerk/types@npm:1.29.3"
   checksum: 1a555babe21794367707809cd1663b935b707424ddd0520b4a40a1530205a5887fa92d84d6f97da87143b831418f86044d9f5b3e5a57d35e23e3eeaec559a3d7
@@ -3454,15 +3447,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.2.5, @graphql-tools/merge@npm:^8.2.1":
-  version: 8.2.5
-  resolution: "@graphql-tools/merge@npm:8.2.5"
+"@graphql-tools/merge@npm:8.2.6, @graphql-tools/merge@npm:^8.2.1":
+  version: 8.2.6
+  resolution: "@graphql-tools/merge@npm:8.2.6"
   dependencies:
-    "@graphql-tools/utils": 8.6.4
+    "@graphql-tools/utils": 8.6.5
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 6eb33603542e1867ff0902dfbb5f1229a859b9e310a46c47f2d506a83f76fbe3662c84a624b4a676478091ad42f55ce427b41c388e9d8fbc1e23f0d6e977d306
+  checksum: edc40bf42c2df304c5b949279962d988b0d341592a5248238472c227dbc5fdb6cdf693d18bdc609fb889324999fa0f0384da9a9ac4af6827e1527193704266cf
   languageName: node
   linkType: hard
 
@@ -3534,17 +3527,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.4, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
-  version: 8.3.4
-  resolution: "@graphql-tools/schema@npm:8.3.4"
+"@graphql-tools/schema@npm:8.3.5, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
+  version: 8.3.5
+  resolution: "@graphql-tools/schema@npm:8.3.5"
   dependencies:
-    "@graphql-tools/merge": 8.2.5
-    "@graphql-tools/utils": 8.6.4
+    "@graphql-tools/merge": 8.2.6
+    "@graphql-tools/utils": 8.6.5
     tslib: ~2.3.0
     value-or-promise: 1.0.11
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: fbbb908f1dcba83fd05de47e9c10ec0da074f30f270805a76b23e2561cd15f8a5ba5f8674d118ff00ac2e73679ec1755121eeba57b9fef701ef9dee3b2b0b57f
+  checksum: 0412886a19c4797f87759b3737e71c92f35d142582d47e97f728b75080b329c98cbc53a0ceb62acff17b9f4625b4f6eb9e66912d5acfc544c80991540b3aaeb3
   languageName: node
   linkType: hard
 
@@ -3588,14 +3581,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.4, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
-  version: 8.6.4
-  resolution: "@graphql-tools/utils@npm:8.6.4"
+"@graphql-tools/utils@npm:8.6.5, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
+  version: 8.6.5
+  resolution: "@graphql-tools/utils@npm:8.6.5"
   dependencies:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: edfc2f9068403ce65e86a38db22c00544ff7b877b047e570991a3556b1f2ce190a929dc836ece69e54267a67535f81342598c28da5f23025489ff39cfd1c2c04
+  checksum: 3908e8135683760f23dcb0da7a1bec474ace395c9b9c98b84f48f773fe4858d04d8d4681ce022914f1b6eeb838bbbbc25b95a0b2226561bccaa6f65cbf67a689
   languageName: node
   linkType: hard
 
@@ -5837,13 +5830,13 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 7.9.1
+    pino: 7.9.2
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.6.2
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 2.9.10
+    "@clerk/clerk-sdk-node": 2.10.0
     "@magic-sdk/admin": 1.3.4
     firebase-admin: 10.0.2
   peerDependenciesMeta:
@@ -5870,10 +5863,10 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.7
-    "@clerk/clerk-sdk-node": 2.9.10
-    "@clerk/types": 1.29.2
+    "@clerk/clerk-sdk-node": 2.10.0
+    "@clerk/types": 1.29.3
     "@nhost/nhost-js": 0.3.12
-    "@supabase/supabase-js": 1.31.1
+    "@supabase/supabase-js": 1.31.2
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
     firebase: 9.6.9
@@ -6113,9 +6106,9 @@ __metadata:
     "@envelop/testing": 4.1.0
     "@envelop/types": 2.0.0
     "@envelop/validation-cache": 4.1.0
-    "@graphql-tools/merge": 8.2.5
-    "@graphql-tools/schema": 8.3.4
-    "@graphql-tools/utils": 8.6.4
+    "@graphql-tools/merge": 8.2.6
+    "@graphql-tools/schema": 8.3.5
+    "@graphql-tools/utils": 8.6.5
     "@graphql-yoga/common": 0.1.0-beta.6
     "@prisma/client": 3.11.0
     "@redwoodjs/api": 0.49.1
@@ -7369,15 +7362,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.31.1":
-  version: 1.31.1
-  resolution: "@supabase/supabase-js@npm:1.31.1"
+"@supabase/supabase-js@npm:1.31.2":
+  version: 1.31.2
+  resolution: "@supabase/supabase-js@npm:1.31.2"
   dependencies:
     "@supabase/gotrue-js": ^1.22.3
     "@supabase/postgrest-js": ^0.37.0
     "@supabase/realtime-js": ^1.3.6
     "@supabase/storage-js": ^1.6.4
-  checksum: 5dec76e5dda2939ff33210de2e00f4a500acde5fb53d662165293729f1a13f4c1939ae0abb11c115df63d8cbdcfa3d919f930dc8b7eb282b53f175ef653727ef
+  checksum: c7c832572341b8237d3e40928d35edfbe3ad973712433785170111f8f6bfb24fee490362035318d6e34a40188307c47faf7ced255a295cfbbbfaa9b9dbbb556d
   languageName: node
   linkType: hard
 
@@ -23863,9 +23856,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:7.9.1":
-  version: 7.9.1
-  resolution: "pino@npm:7.9.1"
+"pino@npm:7.9.2":
+  version: 7.9.2
+  resolution: "pino@npm:7.9.2"
   dependencies:
     fast-redact: ^3.0.0
     on-exit-leak-free: ^0.2.0
@@ -23876,10 +23869,10 @@ __metadata:
     real-require: ^0.1.0
     safe-stable-stringify: ^2.1.0
     sonic-boom: ^2.2.1
-    thread-stream: ^0.13.0
+    thread-stream: ^0.15.0
   bin:
     pino: bin.js
-  checksum: 1dd747aae705d46a4507af49e7e42ede0c63679da3bb5c0763350e4c41939241c7f013a52b3bc58a3480d7912cbdf38971addd05df9f15f71a26bab336d31a60
+  checksum: 540858157405db1dd2ec7ff43aa5042dc0f76178f92813f3dda556fddff6468148775595645324e6b6c2359d6477215661545ee6fdf853b9b3f1f6d4c094b3a3
   languageName: node
   linkType: hard
 
@@ -28693,12 +28686,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"thread-stream@npm:^0.13.0":
-  version: 0.13.1
-  resolution: "thread-stream@npm:0.13.1"
+"thread-stream@npm:^0.15.0":
+  version: 0.15.1
+  resolution: "thread-stream@npm:0.15.1"
   dependencies:
     real-require: ^0.1.0
-  checksum: 8acdc2bd82bd1ffe0e3d0db438181c4d91aee150f4af79851811094c14cbcc6e704af15fc62e398893227c7ed48a5ba57eff3820a58825e466d0423a794ca837
+  checksum: a54733aefa3e9d81b968762677ca7985f02e073b06098e9ad09a3823f096a5f8369f910fd47cec5c85584f0295eb1756f7b3f54b1d4f8c7bd9c746ff4e983327
   languageName: node
   linkType: hard
 
