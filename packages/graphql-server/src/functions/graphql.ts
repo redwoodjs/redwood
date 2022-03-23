@@ -66,17 +66,6 @@ export const formatError: FormatErrorHandler = (err: any, message: string) => {
   return err
 }
 
-// Converts base64 string to ArrayBuffer for Request body
-function base64ToArrayBuffer(base64: string): ArrayBuffer {
-  const binary_string = atob(base64)
-  const len = binary_string.length
-  const bytes = new Uint8Array(len)
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binary_string.charCodeAt(i)
-  }
-  return bytes.buffer
-}
-
 /**
  * Creates an Enveloped GraphQL Server, configured with default Redwood plugins
  *
@@ -312,7 +301,7 @@ export const createGraphQLHandler = ({
       })
     } else {
       const body = event.isBase64Encoded
-        ? base64ToArrayBuffer(event.body)
+        ? Buffer.from(event.body, 'base64').toString('utf-8')
         : event.body
       return new Request(requestUrl.toString(), {
         method: event.httpMethod,
