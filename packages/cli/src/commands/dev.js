@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { argv } from 'process'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
@@ -38,7 +39,8 @@ export const builder = (yargs) => {
     })
     .option('apiDebugPort', {
       type: 'number',
-      description: 'Port on which to expose API server debugger.',
+      description:
+        'Port on which to expose API server debugger. If you supply the flag with no value it defaults to 18911.',
     })
     .middleware(checkForBabelConfig)
     .epilogue(
@@ -100,7 +102,9 @@ export const handler = async ({
 
   const getApiDebugFlag = () => {
     // Passed in flag takes precedence
-    if (apiDebugPort) {
+    if (apiDebugPort in argv && typeof argv.apiDebugPort === 'undefined') {
+      return `--debug-port 18911`
+    } else if (apiDebugPort) {
       return `--debug-port ${apiDebugPort}`
     }
 
