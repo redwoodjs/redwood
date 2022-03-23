@@ -4,6 +4,11 @@
   command = "yarn build"
 
 [[redirects]]
+  from = "/docs/introduction"
+  to = "/docs/index"
+  status = 301
+
+[[redirects]]
   from = "/docs/tutorial"
   to = "/docs/tutorial/foreword"
   status = 301

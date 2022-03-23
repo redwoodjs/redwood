@@ -268,7 +268,7 @@ export const createGraphQLHandler = ({
 
     const requestUrl = new URL(
       event.path,
-      protocol + '://' + event.requestContext?.domainName || 'localhost'
+      protocol + '://' + (event.requestContext?.domainName || 'localhost')
     )
 
     if (event.multiValueQueryStringParameters) {
@@ -290,16 +290,23 @@ export const createGraphQLHandler = ({
       }
     }
 
-    if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
+    if (
+      event.httpMethod === 'GET' ||
+      event.httpMethod === 'HEAD' ||
+      event.body == null
+    ) {
       return new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
       })
     } else {
+      const body = event.isBase64Encoded
+        ? Buffer.from(event.body, 'base64').toString('utf-8')
+        : event.body
       return new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
-        body: event.body,
+        body,
       })
     }
   }
