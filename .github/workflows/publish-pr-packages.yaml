@@ -68,14 +68,14 @@ jobs:
 
       - name: Create comment
         if: ${{ steps.fc.outputs.comment-id == 0 }}
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ steps.pr_number.outputs.pr_number }}
           body: ${{ steps.comment_msg.outputs.msg }}
 
       - name: Update comment
         if: ${{ steps.fc.outputs.comment-id != 0 }}
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: ${{ steps.comment_msg.outputs.msg }}
