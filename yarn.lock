@@ -5755,7 +5755,6 @@ __metadata:
     typescript: 4.6.2
     yargs: 16.2.0
   bin:
-    rw-api-server: ./dist/index.js
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
     rw-server: ./dist/index.js

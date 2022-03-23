@@ -192,19 +192,6 @@ export class DbAuthHandler {
     }
   }
 
-  // class constant: all the attributes of the cookie other than the value itself
-  // DEPRECATED: Remove once deprecation warning is removed from _cookieAttributes()
-  static get COOKIE_META() {
-    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict']
-
-    // set DBAUTH_COOKIE_DOMAIN if you need any subdomains to access this cookie
-    if (process.env.DBAUTH_COOKIE_DOMAIN) {
-      meta.push(`Domain=${process.env.DBAUTH_COOKIE_DOMAIN}`)
-    }
-
-    return meta
-  }
-
   // default to epoch when we want to expire
   static get PAST_EXPIRES_DATE() {
     return new Date('1970-01-01T00:00:00.000+00:00').toUTCString()
@@ -565,36 +552,22 @@ export class DbAuthHandler {
   // pass the argument `expires` set to "now" to get the attributes needed to expire
   // the session, or "future" (or left out completely) to set to `futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
-    let meta
+    const cookieOptions = this.options.cookie || {}
+    const meta = Object.keys(cookieOptions)
+      .map((key) => {
+        const optionValue =
+          cookieOptions[key as keyof DbAuthHandlerOptions['cookie']]
 
-    // DEPRECATED: Remove deprecation logic after a few releases, assume this.options.cookie contains config
-    if (!this.options.cookie) {
-      console.warn(
-        `\n[Deprecation Notice] dbAuth cookie config has moved to\n  api/src/function/auth.js for better customization.\n  See https://redwoodjs.com/docs/authentication#cookie-config\n`
-      )
-      meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
-
-      if (process.env.NODE_ENV !== 'development') {
-        meta.push('Secure')
-      }
-    } else {
-      const cookieOptions = this.options.cookie || {}
-      meta = Object.keys(cookieOptions)
-        .map((key) => {
-          const optionValue =
-            cookieOptions[key as keyof DbAuthHandlerOptions['cookie']]
-
-          // Convert the options to valid cookie string
-          if (optionValue === true) {
-            return key
-          } else if (optionValue === false) {
-            return null
-          } else {
-            return `${key}=${optionValue}`
-          }
-        })
-        .filter((v) => v)
-    }
+        // Convert the options to valid cookie string
+        if (optionValue === true) {
+          return key
+        } else if (optionValue === false) {
+          return null
+        } else {
+          return `${key}=${optionValue}`
+        }
+      })
+      .filter((v) => v)
 
     const expiresAt =
       expires === 'now'
