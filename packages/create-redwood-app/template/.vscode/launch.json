@@ -6,6 +6,20 @@
       "name": "launch development",
       "request": "launch",
       "type": "node-terminal"
+    },
+    {
+      "name": "Attach",
+      "port": 18911,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "protocol": "inspector",
+      "stopOnEntry": false,
+      "localRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
+      "remoteRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
+      "sourceMaps": true
     }
   ]
 }

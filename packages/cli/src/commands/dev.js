@@ -98,16 +98,28 @@ export const handler = async ({
     '@redwoodjs/core/config/webpack.development.js'
   )
 
+  const getApiDebugFlag = () => {
+    // Passed in flag takes precedence
+    if (apiDebugPort) {
+      return `--debug-port ${apiDebugPort}`
+    }
+
+    const apiDebugPortInToml = getConfig().api.debugPort
+    if (apiDebugPortInToml) {
+      return `--debug-port ${apiDebugPortInToml}`
+    }
+
+    // Dont pass in debug port flag, unless configured
+    return ''
+  }
+
   const redwoodConfigPath = getConfigPath()
 
-  const apiDebugPortEnvVar = apiDebugPort
-    ? `API_DEBUG_PORT=${apiDebugPort}`
-    : ''
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps ${apiDebugPortEnvVar} yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
