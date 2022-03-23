@@ -59,7 +59,7 @@ const rebuildApiServer = () => {
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     // Start API server
-    httpServerProcess = fork(path.join(__dirname, 'index.js '), [
+    httpServerProcess = fork(path.join(__dirname, 'index.js'), [
       'api',
       '--port',
       getConfig().api.port.toString(),
