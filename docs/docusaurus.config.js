@@ -28,6 +28,7 @@ module.exports = {
       indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
+      externalUrlRegex: 'redwoodjs.com',
     },
     navbar: {
       title: 'RedwoodJS',
