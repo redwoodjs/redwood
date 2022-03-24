@@ -22,6 +22,7 @@ export interface NodeTargetConfig {
   target: TargetEnum.NODE
   schemaPath: string
   serverConfig: string
+  debugPort?: number
 }
 
 interface BrowserTargetConfig {
