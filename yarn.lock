@@ -5365,9 +5365,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.20.0":
-  version: 1.20.0
-  resolution: "@playwright/test@npm:1.20.0"
+"@playwright/test@npm:1.20.1":
+  version: 1.20.1
+  resolution: "@playwright/test@npm:1.20.1"
   dependencies:
     "@babel/code-frame": 7.16.7
     "@babel/core": 7.16.12
@@ -5392,20 +5392,20 @@ __metadata:
     debug: 4.3.3
     expect: 27.2.5
     jest-matcher-utils: 27.2.5
-    json5: 2.2.0
+    json5: 2.2.1
     mime: 3.0.0
     minimatch: 3.0.4
     ms: 2.1.3
     open: 8.4.0
     pirates: 4.0.4
-    playwright-core: 1.20.0
+    playwright-core: 1.20.1
     rimraf: 3.0.2
     source-map-support: 0.4.18
     stack-utils: 2.0.5
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: b8e59ddc51b25056c5db9e198ed88a39a6879d267bdf2b0c634efee9d19abf81f2024081d5e1002ce52a32a0312aa559d76a907ef1323468db0b45af284f980c
+  checksum: d5ffbf4e282bf1bcc67366b0024b13311f02c93c8c423c051bf69a60828e1fabe3e8d1706c71a3e24f7e8b9883b5a97c9374bdc3a3f889e201b218bd785498f9
   languageName: node
   linkType: hard
 
@@ -19856,14 +19856,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:2.2.0, json5@npm:^2.1.2, json5@npm:^2.1.3, json5@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "json5@npm:2.2.0"
-  dependencies:
-    minimist: ^1.2.5
+"json5@npm:2.2.1, json5@npm:^2.1.2, json5@npm:^2.1.3, json5@npm:^2.2.0":
+  version: 2.2.1
+  resolution: "json5@npm:2.2.1"
   bin:
     json5: lib/cli.js
-  checksum: fbe021f69fa100f0a863e5ab9105ead3971ad5141e7c0dc5134c6148545dae98a69602fb8f9f4dd65af0db7ca00887bf5b35af60be34c10f58fb5fc1f2366a4e
+  checksum: a7174bc4e146613750a04a8a7fe2bc4ab6f4cad20486f8d7026cc4546b3ee1dc3762fc5e7377557ae99414745aac782486e409f31c363084a455e05cb495ce7a
   languageName: node
   linkType: hard
 
@@ -23715,9 +23713,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.20.0":
-  version: 1.20.0
-  resolution: "playwright-core@npm:1.20.0"
+"playwright-core@npm:1.20.1":
+  version: 1.20.1
+  resolution: "playwright-core@npm:1.20.1"
   dependencies:
     colors: 1.4.0
     commander: 8.3.0
@@ -23739,7 +23737,7 @@ __metadata:
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: 2f26fe49cad5ee89f0cdbe4f26dc2df7d84513fc53bc9ee4c4abc2c4d8938935e5a8b40c288c1cc01c040e74a3d0fd3ffbf03af855917984a6eb0274ce38422f
+  checksum: fcecb1f11b226fc1fb59a1b136bcf14d0d4c8ece6c4cc73ff138d02958611a1ca7e6cc49f17f96a617b0f0e43e74102c778e1f3a382327a272e44a3b8ea75329
   languageName: node
   linkType: hard
 
@@ -26203,7 +26201,7 @@ __metadata:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@playwright/test": 1.20.0
+    "@playwright/test": 1.20.1
     "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
