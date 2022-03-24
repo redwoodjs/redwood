@@ -44,7 +44,9 @@ module.exports = {
         },
       ],
     },
-    // ?
+    prism: {
+      additionalLanguages: ['toml'],
+    },
     footer: {
       style: 'dark',
       links: [
