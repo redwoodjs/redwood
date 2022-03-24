@@ -7,9 +7,9 @@ import {
   configureStorybook,
 } from '../tasks/configure-storybook'
 import {
-  checkSetupStatus,
-  wrapWithMantineProvider,
-} from '../tasks/setup-mantine'
+  appSourceContentContains,
+  wrapRootComponentWithComponent,
+} from '../tasks/setup-component-library'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -50,8 +50,9 @@ export function builder(yargs) {
 }
 
 export async function handler({ force, install, packages }) {
+  console.error(ALL_KEYWORD, packages, packages.indexOf(ALL_KEYWORD) !== -1)
   const installPackages = (
-    ALL_KEYWORD in packages ? ALL_MANTINE_PACKAGES : packages
+    packages.indexOf(ALL_KEYWORD) !== -1 ? ALL_MANTINE_PACKAGES : packages
   ).map((pack) => `@mantine/${pack}`)
 
   const tasks = new Listr([
@@ -77,8 +78,13 @@ export async function handler({ force, install, packages }) {
     },
     {
       title: 'Setting up Mantine',
-      skip: () => checkSetupStatus() === 'done',
-      task: () => wrapWithMantineProvider(),
+      skip: () => appSourceContentContains('MantineProvider'),
+      task: () =>
+        wrapRootComponentWithComponent({
+          componentName: 'MantineProvider',
+          props: {},
+          imports: ["import { MantineProvider } from '@mantine/core'"],
+        }),
     },
     {
       title: 'Configure Storybook...',

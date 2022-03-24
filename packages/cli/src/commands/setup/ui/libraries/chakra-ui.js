@@ -6,7 +6,10 @@ import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
-import { checkSetupStatus, wrapWithChakraProvider } from '../tasks/setup-chakra'
+import {
+  appSourceContentContains,
+  wrapRootComponentWithComponent,
+} from '../tasks/setup-component-library'
 
 export const command = 'chakra-ui'
 export const description = 'Set up Chakra UI'
@@ -57,8 +60,16 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Setting up Chakra UI...',
-      skip: () => checkSetupStatus() === 'done',
-      task: () => wrapWithChakraProvider(),
+      skip: () => appSourceContentContains('ChakraProvider'),
+      task: () =>
+        wrapRootComponentWithComponent({
+          componentName: 'ChakraProvider',
+          props: {},
+          imports: [
+            "import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'",
+          ],
+          before: '<ColorModeScript />',
+        }),
     },
     {
       title: 'Configure Storybook...',
