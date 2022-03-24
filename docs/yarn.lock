@@ -4642,7 +4642,7 @@ __metadata:
     clsx: 1.1.1
     react: 17.0.2
     react-dom: 17.0.2
-    react-player: ^2.10.0
+    react-player: 2.10.0
   languageName: unknown
   linkType: soft
 
@@ -8793,7 +8793,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:^2.10.0":
+"react-player@npm:2.10.0":
   version: 2.10.0
   resolution: "react-player@npm:2.10.0"
   dependencies:
