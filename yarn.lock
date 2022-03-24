@@ -4864,25 +4864,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-storage-js@npm:0.0.12":
-  version: 0.0.12
-  resolution: "@nhost/hasura-storage-js@npm:0.0.12"
+"@nhost/hasura-storage-js@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@nhost/hasura-storage-js@npm:0.1.0"
   dependencies:
     axios: ^0.21.1
-  checksum: bc32f3afc2b98e8021ec7c2db66bc9478e46e7cf942ee1cd3f9f2d3dd41728930f9254289d581bcb4b628b8e1b722cb6e57d03f7bf1e060271b0d1990efdc288
+  checksum: ea461a6d01c501dc933b316e9ab38265adf00736625618425022ede7ffdc7803b787fa50ba986a5a6db2d9015c47f5bbffb6ac5215749e997a76c1a4815592e8
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:0.3.12":
-  version: 0.3.12
-  resolution: "@nhost/nhost-js@npm:0.3.12"
+"@nhost/nhost-js@npm:0.3.13":
+  version: 0.3.13
+  resolution: "@nhost/nhost-js@npm:0.3.13"
   dependencies:
     "@nhost/hasura-auth-js": 0.1.15
-    "@nhost/hasura-storage-js": 0.0.12
+    "@nhost/hasura-storage-js": 0.1.0
     axios: ^0.23.0
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
-  checksum: 1f7c1f800df9d062564b442eea9ba908dca3382040c55d1a2400ca7d130c61ee7e7af2ca48139fb1f77974fe0e45cfa7d682a22f08d6eed742826bc194650ed6
+  checksum: 52fe39b8566100a0aee0d637a540f02c500d1a37fdfe8726f69bf30e0bab3a8c8ef36763ae7e26f578c1cf9ea509e52a523c7d49f71bafb5c28a245c029a1434
   languageName: node
   linkType: hard
 
@@ -5818,7 +5818,7 @@ __metadata:
     "@clerk/clerk-js": 2.17.7
     "@clerk/clerk-sdk-node": 2.10.0
     "@clerk/types": 1.29.3
-    "@nhost/nhost-js": 0.3.12
+    "@nhost/nhost-js": 0.3.13
     "@supabase/supabase-js": 1.31.2
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
