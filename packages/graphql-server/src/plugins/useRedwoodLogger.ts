@@ -145,9 +145,11 @@ const logResult =
         } else {
           envelopLogger.error(
             {
-              error,
+              error: error.originalError,
             },
-            error.message || `Error in GraphQL execution: ${operationName}`
+            error?.originalError?.message ||
+              error.message ||
+              `Error in GraphQL execution: ${operationName}`
           )
         }
       })

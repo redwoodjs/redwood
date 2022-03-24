@@ -60,7 +60,15 @@ export const formatError: FormatErrorHandler = (err: any, message: string) => {
       (allowedError) => err.originalError instanceof allowedError
     )
   ) {
-    return new GraphQLError(message)
+    return new GraphQLError(
+      message,
+      err.nodes,
+      err.source,
+      err.positions,
+      err.path,
+      err,
+      undefined
+    )
   }
 
   return err
