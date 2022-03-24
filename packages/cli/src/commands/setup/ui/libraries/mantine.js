@@ -6,10 +6,27 @@ import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
-import { checkSetupStatus, wrapWithChakraProvider } from '../tasks/setup-chakra'
+import {
+  checkSetupStatus,
+  wrapWithMantineProvider,
+} from '../tasks/setup-mantine'
 
-export const command = 'chakra-ui'
-export const description = 'Set up Chakra UI'
+export const command = 'mantine'
+export const description = 'Set up Mantine UI'
+
+const ALL_KEYWORD = 'all'
+const ALL_MANTINE_PACKAGES = [
+  'core',
+  'dates',
+  'dropzone',
+  'form',
+  'hooks',
+  'modals',
+  'notifications',
+  'prism',
+  'rte',
+  'spotlight',
+]
 
 export function builder(yargs) {
   yargs.option('force', {
@@ -24,15 +41,18 @@ export function builder(yargs) {
     description: 'Install packages',
     type: 'boolean',
   })
+  yargs.option('packages', {
+    alias: 'p',
+    default: ['core', 'hooks'],
+    description: `Mantine packages to install. Specify '${ALL_KEYWORD}' to install all packages. Default: ['core', 'hooks']`,
+    type: 'array',
+  })
 }
 
-export async function handler({ force, install }) {
-  const packages = [
-    '@chakra-ui/react',
-    '@emotion/react@^11',
-    '@emotion/styled@^11',
-    'framer-motion@^4',
-  ]
+export async function handler({ force, install, packages }) {
+  const installPackages = (
+    ALL_KEYWORD in packages ? ALL_MANTINE_PACKAGES : packages
+  ).map((pack) => `@mantine/${pack}`)
 
   const tasks = new Listr([
     {
@@ -41,14 +61,14 @@ export async function handler({ force, install }) {
       task: () => {
         return new Listr([
           {
-            title: `Install ${packages.join(', ')}`,
+            title: `Install ${installPackages.join(', ')}`,
             task: async () => {
               await execa('yarn', [
                 'workspace',
                 'web',
                 'add',
                 '-D',
-                ...packages,
+                ...installPackages,
               ])
             },
           },
@@ -56,15 +76,15 @@ export async function handler({ force, install }) {
       },
     },
     {
-      title: 'Setting up Chakra UI...',
+      title: 'Setting up Mantine',
       skip: () => checkSetupStatus() === 'done',
-      task: () => wrapWithChakraProvider(),
+      task: () => wrapWithMantineProvider(),
     },
     {
       title: 'Configure Storybook...',
       skip: () => checkStorybookStatus({ force }) === 'done',
       task: async () =>
-        configureStorybook('chakra.storybook.preview.js.template'),
+        configureStorybook('mantine.storybook.preview.js.template'),
     },
   ])
 

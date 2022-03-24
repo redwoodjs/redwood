@@ -1,0 +1,13 @@
+import * as React from 'react'
+
+import { MantineProvider } from '@mantine/core'
+
+const withMantine = (StoryFn) => {
+  return (
+    <MantineProvider>
+      <StoryFn />
+    </MantineProvider>
+  )
+}
+
+export const decorators = [withMantine]

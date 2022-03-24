@@ -28,11 +28,11 @@ export function checkStorybookStatus({ force }) {
 /**
  * Configure Storybook for Chakra UI by creating a custom preview config
  */
-export function configureStorybook() {
+export function configureStorybook(templateFileName) {
   const { storybookPreviewConfig } = getPaths().web
 
   const storybookPreview = fs.readFileSync(
-    path.join(__dirname, '..', 'templates', 'storybook.preview.js.template'),
+    path.join(__dirname, '..', 'templates', templateFileName),
     'utf-8'
   )
 
