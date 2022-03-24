@@ -1,15 +1,15 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "configurations": [
     {
-      "command": "yarn redwood dev",
-      "name": "launch development",
+      "command": "yarn redwood dev --apiDebugPort 18911",
+      "name": "Run Dev Server",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "name": "Attach",
-      "port": 18911,
+      "name": "Attach API debugger",
+      "port": 18911, // you can change this port by passing --apiDebugPort {PORT} to yanr rw dev
       "request": "attach",
       "skipFiles": [
         "<node_internals>/**"
@@ -19,7 +19,8 @@
       "stopOnEntry": false,
       "localRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
       "remoteRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
-      "sourceMaps": true
+      "sourceMaps": true,
+      "restart": true
     }
   ]
 }
