@@ -28,7 +28,7 @@ module.exports = {
       indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
-      externalUrlRegex: 'redwoodjs.com',
+      externalUrlRegex: 'https://learn-redwood.netlify.app',
     },
     navbar: {
       title: 'RedwoodJS',
