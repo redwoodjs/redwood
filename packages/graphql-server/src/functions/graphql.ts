@@ -34,7 +34,6 @@ import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
 import { Headers, Request } from 'cross-undici-fetch'
-import isString from 'lodash/isString'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -281,8 +280,11 @@ export const createGraphQLHandler = ({
             for (const queryStringValue of queryStringValues) {
               requestUrl.searchParams.append(queryStringParam, queryStringValue)
             }
-          } else if (isString(queryStringValues)) {
-            requestUrl.searchParams.append(queryStringParam, queryStringValues)
+          } else {
+            requestUrl.searchParams.append(
+              queryStringParam,
+              String(queryStringValues)
+            )
           }
         }
       }
