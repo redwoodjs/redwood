@@ -500,7 +500,35 @@ We don't do anything with the actual post data in our tests, so there's no need 
 
 ### Roles on the API Side
 
-Remember: never trust the client! We need to lock down the backend to be sure that someone can't discover our `deleteComment` GraphQL resource and start deleing comments willy nilly.
+Remember: never trust the client! We need to lock down the backend to be sure that someone can't discover our `deleteComment` GraphQL resource and start deleting comments willy nilly.
+
+To enable roles on the API side we have to add the implementation to check for roles in the `hasRole` function. We have already set up everything we need for that by uncommenting the corresponding lines.
+
+```javascript title="api/src/lib/auth.js"
+export const hasRole = ({ roles }) => {
+  if (!isAuthenticated()) {
+    return false
+  }
+
+  // If your User model includes roles, uncomment the role checks on currentUser
+  if (roles) {
+    if (Array.isArray(roles)) {
+      // highlight-next-line
+      return context.currentUser.roles?.some((r) => roles.includes(r))
+    }
+
+    if (typeof roles === 'string') {
+      // highlight-next-line
+      return context.currentUser.roles?.includes(roles)
+    }
+
+    // roles not found
+    return false
+  }
+
+  return true
+}
+```
 
 Recall in Part 1 of the tutorial we used a [directive](../../directives.md) `@requireAuth` to be sure that someone was logged in before allowing them to access a given GraphQL query or mutation. It turns out that `@requireAuth` can take an optional `roles` argument:
 
