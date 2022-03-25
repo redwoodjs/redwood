@@ -35,8 +35,17 @@ export const clerk = (client: Clerk): AuthClientClerk => {
       clerkClient(client)?.signOut(options),
     signup: async (options?: SignUpProps) =>
       clerkClient(client)?.openSignUp(options || {}),
-    // Clerk uses the session ID PLUS the __session cookie.
-    getToken: async () => clerkClient(client)?.session?.id || null,
+    getToken: async () => {
+      let token
+
+      try {
+        token = await clerkClient(client)?.session?.getToken()
+      } catch {
+        token = null
+      }
+
+      return token || null
+    },
     getUserMetadata: async () => {
       return clerkClient(client)?.user
         ? {
