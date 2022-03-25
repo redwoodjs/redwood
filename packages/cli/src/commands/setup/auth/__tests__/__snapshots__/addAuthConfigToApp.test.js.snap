@@ -4,12 +4,13 @@ exports[`Should add auth config when app is missing RedwoodApolloProvider Matche
 "import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
 import './index.css'
+
+const queryClient = {}
 
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN,
@@ -34,7 +35,11 @@ const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={auth0} type=\\"auth0\\">
-        <Routes />
+        <QueryClientProvider client={queryClient}>
+          <RedwoodReactQueryProvider>
+            <Routes />
+          </RedwoodReactQueryProvider>
+        </QueryClientProvider>
       </AuthProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>
