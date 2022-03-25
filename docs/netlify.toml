@@ -147,3 +147,8 @@
   from = "/docs/tutorial2/wrapping-up"
   to = "/docs/tutorial/afterword"
   status = 301
+
+[[redirects]]
+  from = "/docs/contributing-overview"
+  to = "/docs/contributing"
+  status = 301
