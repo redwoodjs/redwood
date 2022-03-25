@@ -43,13 +43,21 @@ const Routes = () => {
 export default Routes
 ```
 
+As long as you have a Home route with path `/`, you'll never see the initial Redwood splash screen again.
+
+When no route can be found that matches the requested URL, Redwood will render the `NotFoundPage`.
+
 Try changing the route to something like:
 
 ```jsx
 <Route path="/hello" page={HomePage} name="home" />
 ```
 
-As soon as you add your first route, you'll never see the initial Redwood splash screen again. From now on, when no route can be found that matches the requested URL, Redwood will render the `NotFoundPage`. Change your URL to [http://localhost:8910/hello](http://localhost:8910/hello) and you should see the homepage again.
+The splash screen is available again at [http://localhost:8910/](http://localhost:8910/), giving you a list of all the available URLs in your app.
+
+![Redwood Splash Screen](https://user-images.githubusercontent.com/17789536/160120107-1157af8e-4cbd-4ec8-b3aa-8adb28ea6eaf.png)
+
+Go to `/hello` and you should see the homepage again.
 
 Change the route path back to `/` before continuing!
 
