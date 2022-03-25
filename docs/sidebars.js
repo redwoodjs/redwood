@@ -11,6 +11,7 @@ module.exports = {
       },
       className: 'docs-sidebar-category',
       items: [
+        'quick-start',
         'a11y',
         'app-configuration-redwood-toml',
         'assets-and-files',
@@ -34,7 +35,6 @@ module.exports = {
         'mocking-graphql-requests',
         'prerender',
         'project-configuration-dev-test-build',
-        'quick-start',
         'redwoodrecord',
         'router',
         'schema-relations',
