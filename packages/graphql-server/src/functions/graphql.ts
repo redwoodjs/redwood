@@ -274,9 +274,16 @@ export const createGraphQLHandler = ({
       for (const queryStringParam in event.multiValueQueryStringParameters) {
         const queryStringValues =
           event.multiValueQueryStringParameters[queryStringParam]
-        if (queryStringValues && Array.isArray(queryStringValues)) {
-          for (const queryStringValue of queryStringValues) {
-            requestUrl.searchParams.append(queryStringParam, queryStringValue)
+        if (queryStringValues) {
+          if (Array.isArray(queryStringValues)) {
+            for (const queryStringValue of queryStringValues) {
+              requestUrl.searchParams.append(queryStringParam, queryStringValue)
+            }
+          } else {
+            requestUrl.searchParams.append(
+              queryStringParam,
+              String(queryStringValues)
+            )
           }
         }
       }
