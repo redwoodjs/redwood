@@ -3,6 +3,7 @@ import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
+  useMaskedErrors,
 } from '@graphql-yoga/common'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
@@ -197,13 +198,11 @@ export const createGraphQLHandler = ({
     baseYogaCORSOptions.maxAge = cors.maxAge
   }
 
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
   const yoga = createServer({
     schema,
     plugins,
-    maskedErrors: {
-      formatError,
-      errorMessage: defaultError,
-    },
+    maskedErrors: false,
     logging: logger,
     graphiql: isDevEnv
       ? {
