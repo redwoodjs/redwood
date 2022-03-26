@@ -7,7 +7,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes } from '../helpers'
+import { addFilesTask, addPackagesTask, printSetupNotes } from '../helpers'
 import { DEPLOY, ECOSYSTEM } from '../templates/baremetal'
 
 export const command = 'baremetal'
@@ -38,6 +38,10 @@ const notes = [
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
+    addPackagesTask({
+      packages: ['node-ssh'],
+      devDependency: true,
+    }),
     addFilesTask({
       files,
       force,
