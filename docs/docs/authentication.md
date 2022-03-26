@@ -538,15 +538,15 @@ import { UserButton, SignInButton } from '@clerk/clerk-react'
 }
 ```
 
-Applications in Clerk have different instances. By default, there's one for development, one for staging, and one for production. You'll need to pull two values from one of these instances. We recommend storing the development values in your local `.env` file and using the staging and production values in the appropriate env setups for your hosting platform when you deploy.
+Applications in Clerk have different instances. By default, there's one for development, one for staging, and one for production. You'll need to pull three values from one of these instances. We recommend storing the development values in your local `.env` file and using the staging and production values in the appropriate env setups for your hosting platform when you deploy.
 
-The two values you'll need from Clerk are your instance's "Frontend API" url and an API key from your instance's settings. The Frontend API url should be stored in an env variable named `CLERK_FRONTEND_API_URL`. The API key should be named `CLERK_API_KEY`.
+The three values you'll need from Clerk are your instance's "Frontend API Key" url, a "Backend API key" and a "JWT verification key", all from your instance's settings under "API Keys". The Frontend API url should be stored in an env variable named `CLERK_FRONTEND_API_URL`. The Backend API key should be named `CLERK_API_KEY`. Finally, the JWT key should be named `CLERK_JWT_KEY`
 
 Otherwise, feel free to configure your instances however you wish with regards to their appearance and functionality.
 
 > **Including Environment Variables in Serverless Deploys**
 >
-> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](environment-variables.md). You should expose the `CLERK_FRONTEND_API_URL` only to the `web` workspace and expose `CLERK_API_KEY` **only** to the `api` workspace.
+> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](environment-variables.md). You need to expose the `CLERK_FRONTEND_API_URL` variable to the `web` side.
 
 #### Login and Logout Options
 
