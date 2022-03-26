@@ -537,7 +537,7 @@ See the [Data Migration](data-migrations.md) docs.
 
 **Usage**
 
-See the [Deploy](deploy.md) docs.
+See the [Deploy](/docs/deploy/introduction) docs.
 
 ### generate directive
 
