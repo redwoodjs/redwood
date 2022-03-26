@@ -84,9 +84,7 @@ Clicking to show the details on one of the users you should see a page similar t
 
 To add our button, and the actions connected to it, we need to add a fair bit of code to the User component. I've put the full code below to make sure you don't miss anything.
 
-```tsx
-// src/components/User/User
-
+```tsx title="src/components/User/User.tsx"
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'

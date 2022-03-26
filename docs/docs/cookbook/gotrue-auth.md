@@ -584,11 +584,9 @@ We have a working navigation component, but we still need to render it somewhere
 yarn redwood generate layout Global
 ```
 
-Then import and render the navigation component in the newly generated `web/src/layouts/GlobalLayout/GlobalLayout`:
+Then import and render the navigation component in the newly generated `web/src/layouts/GlobalLayout/GlobalLayout.js`:
 
-```js
-// web/src/layouts/GlobalLayout/GlobalLayout
-
+```jsx title="web/src/layouts/GlobalLayout/GlobalLayout.js"
 import Navigation from 'src/components/Navigation/Navigation'
 
 const GlobalLayout = ({ children }) => {
