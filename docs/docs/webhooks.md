@@ -211,7 +211,7 @@ This is a variation on the SHA256 HMAC verification that works with binary buffe
 
 Svix (and by extension, Clerk) gives you a secret token that it uses to create a hash signature with each payload. This hash signature is included with the headers of each request as `svix-signature`.
 
-```ts
+```tsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import {
   verifyEvent,

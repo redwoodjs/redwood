@@ -219,13 +219,13 @@ Sometimes you will want to log a 🗒 Custom message or payload object that isn'
 
 You can use the `custom` option:
 
-```ts
+```tsx
 logger.debug({ custom: post.title }, 'The title of a Post')
 ```
 
 Or, you can also log a custom object payload:
 
-```ts
+```tsx
 logger.debug(
   {
     custom: {
@@ -239,7 +239,7 @@ logger.debug(
 
 Or, a more nested payload:
 
-```ts
+```tsx
 logger.debug(
   {
     custom: {
@@ -257,7 +257,7 @@ logger.debug(
 
 Or, an entire object:
 
-```ts
+```tsx
 logger.debug(
   {
     custom: post,

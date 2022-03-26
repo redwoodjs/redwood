@@ -125,7 +125,7 @@ If the function can successfully divide the two numbers, the function returns a 
 
 And, we'll have some error handling to consider the case when either the dividend or divisor is missing and return a [HTTP 400 Bad Request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400) status code; or, if we try to divide by zero or something else goes wrong, we return a [500 Internal Server Error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500).
 
-```typescript title="api/src/functions/divide/divide.ts"
+```tsx title="api/src/functions/divide/divide.ts"
 import type { APIGatewayEvent } from 'aws-lambda'
 
 export const handler = async (event: APIGatewayEvent) => {
@@ -416,7 +416,7 @@ The `updateOrderStatus` webhook will expect:
 - and if so, update the error and return the order and message
 - or if not, return a [500 internal server error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500) with a message that the order couldn't be updated
 
-```ts
+```tsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import { verifyEvent, VerifyOptions, WebhookVerificationError } from '@redwoodjs/api/webhooks'
 import { db } from 'src/lib/db'
@@ -497,7 +497,7 @@ We'll use these to test that you cannot update an order to the delivered status 
 
 We can refer to these individual orders in our tests as `scenario.order.placed`, `scenario.order.shipped` , or `scenario.order.delivered`.
 
-```ts title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
+```tsx title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
 export const standard = defineScenario({
   order: {
     placed: {
@@ -531,7 +531,7 @@ In each test scenario we will:
 
 In our first scenario, we'll use the shipped order to test that we can update the order given a valid tracking number and change its status to delivered:
 
-```ts title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
+```tsx title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
 import { mockSignedWebhook } from '@redwoodjs/testing/api'
 import { handler } from './updateOrderStatus'
 
@@ -719,7 +719,7 @@ The `useRequireAuth` wrapper configures your handler's `context` so that you can
 - implement your serverless function as you would, but do not `export` it (see `myHandler` below).
 - pass your implementation and `getCurrentUser` to the `useRequireAuth` wrapper and export its return
 
-```ts {3,5,22-25}
+```tsx {3,5,22-25}
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { useRequireAuth } from '@redwoodjs/graphql-server'
@@ -784,7 +784,7 @@ By default, RedwoodJS functions return strings or JSON. If you need to return bi
 
 Here's an example of how to return a binary file from the filesystem:
 
-```typescript title="api/src/functions/myCustomFunction.ts"
+```tsx title="api/src/functions/myCustomFunction.ts"
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 import fs from 'fs'
 

@@ -499,7 +499,7 @@ To get started with Clerk, sign up on [their website](https://clerk.dev/) and cr
 
 It's important that the `ClerkAuthProvider` added to your `App.{js|ts}` file during setup is within the `RedwoodProvider` and around Redwood's `AuthProvider`:
 
-```ts {6,12} title="web/src/App.{js|ts}"
+```tsx {6,12} title="web/src/App.{js|ts}"
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
@@ -517,7 +517,7 @@ const App = () => (
 
 The [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) also explains how to use `@clerk/clerk-react` components with Redwood's `useAuth()` hook:
 
-```ts
+```tsx
 import { UserButton, SignInButton } from '@clerk/clerk-react'
 
 // ...

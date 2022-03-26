@@ -313,7 +313,7 @@ To fix this, you need to "configure CORS" by adding:
 
 to the GraphQL response headers which you can do this by setting the `cors` option in `api/src/functions/graphql.{js|t}s`:
 
-```ts
+```tsx
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
   directives,
@@ -339,7 +339,7 @@ Health checks are used determine if a server is available and ready to start ser
 
 If you need more than the default basic health check, you can provide a custom implementation via an `onHealthCheck` function when creating the GraphQLHandler. If defined, this async `onHealthCheck` function should return if the server is deemed ready or throw if there is an error.
 
-```ts title="api/src/functions/graphql.{ts,js}"
+```tsx title="api/src/functions/graphql.{ts,js}"
 const myCustomHealthCheck = async () => {
   if (ok) {
     // Implement your custom check, such as:
@@ -501,7 +501,7 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```ts {11-14} title="api/src/functions/graphql.ts"
+```tsx {11-14} title="api/src/functions/graphql.ts"
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
 // ...
@@ -526,7 +526,7 @@ export const handler = createGraphQLHandler({
 
 3. Use the scalar in your types
 
-```ts {6,18,24}
+```tsx {6,18,24}
 export const schema = gql`
   type Product {
     id: Int!
@@ -567,7 +567,7 @@ Directives supercharge your GraphQL services. They add configuration to fields, 
 
 You'll recognize a directive by its preceded by the `@` character, e.g. `@myDirective`, and by being declared alongside a field:
 
-```ts
+```tsx
 type Bar {
   name: String! @myDirective
 }
@@ -575,7 +575,7 @@ type Bar {
 
 or a Query or Mutation:
 
-```ts
+```tsx
 type Query {
   bars: [Bar!]! @myDirective
 }
@@ -591,7 +591,7 @@ Redwood makes it easy to code, organize, and map your directives into the GraphQ
 
 You simply add them to the `directives` directory and the `createGraphQLHandler` will do all the work.
 
-```ts title="api/src/functions/graphql.ts"
+```tsx title="api/src/functions/graphql.ts"
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}' // 👈 directives live here
@@ -960,7 +960,7 @@ Simply use one of [Redwood's GraphQL Errors](#redwood-errors) and your custom me
 
 You can customize the default "Something went wrong" message used when the error is masked via the `defaultError` setting on the `createGraphQLHandler`:
 
-```ts
+```tsx
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
   directives,
@@ -988,7 +988,7 @@ To use a Redwood Error, import each from `@redwoodjs/graphql-server`.
 
 If you use one of the errors, then the message provided will not be masked and will be shared in the GraphQL response:
 
-```ts
+```tsx
 import { UserInputError } from '@redwoodjs/graphql-server'
 // ...
 throw new UserInputError('An email is required.')
@@ -1004,7 +1004,7 @@ Maybe you're integrating with a third-party api and want to handle errors from t
 
 Simply extend from `RedwoodGraphQLError` and you're all set!
 
-```ts
+```tsx
 export class MyCustomError extends RedwoodGraphQLError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
@@ -1014,7 +1014,7 @@ export class MyCustomError extends RedwoodGraphQLError {
 
 For example, in your service, you can create and use it to handle the error and return a friendly message:
 
-```ts
+```tsx
 export class WeatherError extends RedwoodGraphQLError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
