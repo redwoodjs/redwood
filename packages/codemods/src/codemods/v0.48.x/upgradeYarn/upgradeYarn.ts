@@ -4,6 +4,26 @@ import path from 'path'
 
 import getRWPaths from '../../../lib/getRWPaths'
 
+const updateEngineVersion = (pkgPath: string, version: string) => {
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(pkgPath, 'package.json'), 'utf-8')
+  )
+
+  if (pkg.engines) {
+    for (const engineName of Object.keys(pkg.engines).filter((engine) =>
+      engine.startsWith('yarn')
+    )) {
+      console.log(` - ${engineName}: ${pkg.engines[engineName]} => ${version}`)
+      pkg.engines[engineName] = `${version}`
+    }
+  }
+
+  fs.writeFileSync(
+    path.join(pkgPath, 'package.json'),
+    JSON.stringify(pkg, undefined, 2) + '\n'
+  )
+}
+
 async function upgradeYarn() {
   const rwPaths = getRWPaths()
 
@@ -56,7 +76,7 @@ async function upgradeYarn() {
   const yarnVersion = stdout.toString().trim()
 
   console.log()
-  console.log('Adding .yarnrc.yml and updating .gitignore...')
+  console.log('Adding .yarnrc.yml and updating package.json and .gitignore...')
 
   fs.writeFileSync(
     path.join(rwPaths.base, '.yarnrc.yml'),
@@ -73,6 +93,8 @@ async function upgradeYarn() {
       `yarnPath: .yarn/releases/yarn-${yarnVersion}.cjs`,
     ].join('\n')
   )
+
+  updateEngineVersion(rwPaths.base, yarnVersion)
 
   const gitignorePath = path.join(rwPaths.base, '.gitignore')
   const gitignore = fs.readFileSync(gitignorePath)
