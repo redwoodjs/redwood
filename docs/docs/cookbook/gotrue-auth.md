@@ -142,7 +142,7 @@ Did I mention it was basic? If you want to add some polish, you might find both 
 
 Now that we have a form interface, we're going to want to do something when the user submits it. Let's add an `onSubmit` function to our component and pass it as a prop to our Form component:
 
-```js{6-8,13}
+```js {6-8,13}
 // web/src/pages/SignupPage/SignupPage.js
 
 // imports...

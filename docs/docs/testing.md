@@ -20,7 +20,7 @@ const add = (a, b) => {
 
 You test this code by writing another piece of code (which usually lives in a separate file and can be run in isolation), just including the functionality from the real codebase that you need for the test to run. For our examples here we'll put the code and its test side-by-side so that everything can be run at once. Our first test will call the `add()` function and make sure that it does indeed add two numbers together:
 
-```javascript{5-9}
+```javascript {5-9}
 const add = (a, b) => {
   return a + b
 }
@@ -90,7 +90,7 @@ Where did *that* come from? Well, our subject `add()` didn't raise any errors (J
 
 To respond properly to this case we'll make one slight modification: add another "fail" log message if the code somehow gets past the call to `add(1)` *without* throwing an error:
 
-```javascript{3,8}
+```javascript {3,8}
 try {
   add(1)
   console.error('fail: no error thrown')
@@ -261,7 +261,7 @@ In most cases you will want to exclude the design elements and structure of your
 
 In our **&lt;Article&gt;** component it seems like we really just want to test that the title of the product is rendered. *How* and *what it looks like* aren't really a concern for this test. Let's update the test to just check for the presence of the title itself:
 
-```javascript{3,7-9}
+```javascript {3,7-9}
 // web/src/components/Article/Article.test.js
 
 import { render, screen } from '@redwoodjs/testing/web'
@@ -309,7 +309,7 @@ export default Article
 
 If we're only displaying the summary of an article then we'll only show the first 100 characters with an ellipsis on the end ("...") and include a link to "Read more" to see the full article. A reasonable test for this component would be that when the `summary` prop is `true` then the "Read more" text should be present. If `summary` is `false` then it should *not* be present. That's where `queryByText()` comes in (relevant test lines are highlighted):
 
-```javascript{18,24}
+```javascript {18,24}
 // web/src/components/Article/Article.test.js
 
 import { render, screen } from '@redwoodjs/testing/web'
@@ -371,7 +371,7 @@ it('renders a link with a name', () => {
 
 But what if we wanted to check the `href` of the link itself to be sure it's correct? In that case we can capture the `screen.getByRole()` return and run expectations on that as well (the `forEach()` loop has been removed here for simplicity):
 
-```javascript{2,6-8}
+```javascript {2,6-8}
 import { routes } from '@redwoodjs/router'
 
 it('renders a link with a name', () => {
@@ -403,7 +403,7 @@ Due to this, there are some exceptions that can occur while testing your API and
 Prisma recommends using `Decimal` instead of `Float` because of accuracy in precision. Float is inaccurate in the number of digits after decimal whereas Prisma returns a string for Decimal value which preserves all the digits after the decimal point.
 
 e.g., using `Float` type
-```javascript{4}
+```javascript {4}
 Expected: 1498892.0256940164
 Received: 1498892.025694016
 
@@ -411,7 +411,7 @@ expect(result.floatingNumber).toEqual(1498892.0256940164)
 ```
 
 e.g., using `Decimal` type
-```javascript{4}
+```javascript {4}
 Expected: 7420440.088194787
 Received: "7420440.088194787"
 
@@ -425,7 +425,7 @@ In the above examples, we can see expect doesn't preserve the floating numbers. 
 #### DateTime
 Prisma returns [DateTime](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datetime) as ISO 8601-formatted strings. So, you can convert the date to ISO String in JavaScript:
 
-```javascript{1}
+```javascript {1}
 //  Output: '2021-10-15T19:40:33.000Z'
 const isoString = new Date("2021-10-15T19:40:33Z").toISOString()
 ```
@@ -492,7 +492,7 @@ export default Article
 
 Redwood provides the test function `mockGraphQLQuery()` for providing the result of a given named GraphQL. In this case our query is named `getArticle` and we can mock that in our test as follows:
 
-```javascript{8-16,20}
+```javascript {8-16,20}
 // web/src/components/Article/Article.test.js
 
 import { render, screen } from '@redwoodjs/testing/web'
@@ -523,7 +523,7 @@ Note that you need to make the test function `async` and put an `await` before t
 
 The function that's given as the second argument to `mockGraphQLQuery` will be sent a couple of arguments. The first&mdash;and only one we're using here&mdash;is `variables` which will contain the variables given to the query when `useQuery` was called. In this test we passed an `id` of `1` to the **&lt;Article&gt;** component when test rendering, so `variables` will contain `{id: 1}`. Using this variable in the callback function to `mockGraphQLQuery` allows us to reference those same variables in the body of our response. Here we're making sure that the returned article's `id` is the same as the one that was requested:
 
-```javascript{3}
+```javascript {3}
 return {
   article: {
     id: variables.id,
@@ -543,7 +543,7 @@ mockGraphQLQuery('getArticle', (variables, { ctx }) => {
 
 You could then test that you show a proper error message in your component:
 
-```javascript{4,8-10,21,27}
+```javascript {4,8-10,21,27}
 // web/src/components/Article/Article.js
 
 const Article = ({ id }) => {
@@ -963,7 +963,7 @@ describe('ProductPage', () => {
 
 Be aware that if you do this, and continue to use the `standard()` mock in your regular cell tests, you'll either need to start passing in `variables` yourself:
 
-```javascript{8}
+```javascript {8}
 // web/src/components/ArticleCell/ArticleCell.test.js
 
 describe('ArticleCell', () => {
@@ -978,7 +978,7 @@ describe('ArticleCell', () => {
 
 Or conditionally check that `variables` exists at all before basing any logic on them:
 
-```javascript{4,15}
+```javascript {4,15}
 // web/src/components/ArticleCell/ArticleCell.mock.js
 
 export const standard = (variables) => {

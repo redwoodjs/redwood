@@ -82,7 +82,7 @@ We mentioned above that Cells receive "most" of what's returned from `useQuery`.
 
 `QUERY` can be a string or a function. Note that it's totally more than ok to have more than one root query. Here's an example of that:
 
-```javascript{7-10}
+```javascript {7-10}
 export const QUERY = gql`{
   query {
     posts {
@@ -111,7 +111,7 @@ Use a function if your queries need to be more dynamic:
 <!-- Source: https://community.redwoodjs.com/t/custom-github-jwt-auth-with-redwood-auth-advice-needed/610 -->
 But what about variables? Well, Cells are setup to use any props they receive from their parent as variables (things are setup this way in `beforeQuery`). For example, here `BlogPostCell` takes a prop, `numberToShow`, so `numberToShow` is just available to your `QUERY`:
 
-```javascript{7}
+```javascript {7}
 import BlogPostsCell from 'src/components/BlogPostsCell'
 
 const HomePage = () => {
@@ -126,7 +126,7 @@ const HomePage = () => {
 export default HomePage
 ```
 
-```javascript{2-3}
+```javascript {2-3}
 export const QUERY = gql`
   query($numberToShow: Int!) {
     posts(numberToShow: $numberToShow) {
@@ -226,7 +226,7 @@ const isEmpty = (data: DataObject) => {
 
 A Cell renders this component if something went wrong. You can quickly see this in action (it's easy to break things) if you add a nonsense field to your `QUERY`:
 
-```javascript{6}
+```javascript {6}
 const QUERY = gql`
   query {
     posts {

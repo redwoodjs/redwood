@@ -77,7 +77,7 @@ If you're using [Redwood's scaffolds](cli-commands.md#generate-scaffold) then yo
 
 Otherwise you'll need to use the `error` property that you can [destructure](https://www.apollographql.com/docs/react/data/mutations/#executing-a-mutation) from `useMutation()` and display an element containing the error message (Redwood's [form helpers](/docs/forms) will do some of the heavy lifting for you for displaying the error):
 
-```javascript{13,21}
+```javascript {13,21}
 import { Form, FormError, Label, TextField, Submit } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 
@@ -627,7 +627,7 @@ So `validateUniqueness()` first tries to find a record with the given fields, an
 
 Being able to use transactions with the above syntax is experimental for Prisma as of v2.29.0, so you need to enable it as a preview feature. In your `api/db/schema.prisma` file:
 
-```text{4}
+```text {4}
 generator client {
   provider        = "prisma-client-js"
   binaryTargets   = "native"

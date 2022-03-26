@@ -69,7 +69,7 @@ Done in 17.37s.
 
 Files are output to each side's `dist` directory:
 
-```plaintext{2,6}
+```plaintext {2,6}
 ├── api
 │   ├── dist
 │   ├── prisma
@@ -624,7 +624,7 @@ export const handler = async (event, context) => {
 
 Now if we run `yarn redwood dev api`:
 
-```plaintext{11}
+```plaintext {11}
 ~/redwood-app$ yarn redwood dev api
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood dev api
@@ -793,7 +793,7 @@ export default HomePage
 
 And the route is added to `Routes.js`:
 
-```javascript{6}
+```javascript {6}
 // ./web/src/Routes.js
 
 const Routes = () => {
@@ -822,7 +822,7 @@ Done in 1.02s.
 
 The generated page will get the route parameter as a prop:
 
-```javascript{5,12,14}
+```javascript {5,12,14}
 // ./web/src/pages/QuotePage/QuotePage.js
 
 import { Link, routes } from '@redwoodjs/router'
@@ -846,7 +846,7 @@ export default QuotePage
 
 And the route is added to `Routes.js`, with the route parameter added:
 
-```javascript{6}
+```javascript {6}
 // ./web/src/Routes.js
 
 const Routes = () => {
@@ -894,7 +894,7 @@ By default, redwood will nest the components and pages in a directory named as p
 `yarn rw g scaffold post`
 will output the following files, with the components and pages nested in a `Post` directory:
 
-```plaintext{9-20}
+```plaintext {9-20}
   √ Generating scaffold files...
     √ Successfully wrote file `./api/src/graphql/posts.sdl.js`
     √ Successfully wrote file `./api/src/services/posts/posts.js`
@@ -936,7 +936,7 @@ Notes:
 
 You can namespace your scaffolds by providing `<path/model>`. The layout, pages, cells, and components will be nested in newly created dir(s). In addition, the nesting folder, based upon the model name, is still applied after the path for components and pages, unless turned off in the `redwood.toml` as described above. For example, given a model `user`, running `yarn redwood generate scaffold admin/user` will nest the layout, pages, and components in a newly created `Admin` directory created for each of the `layouts`, `pages`, and `components` folders:
 
-```plaintext{9-20}
+```plaintext {9-20}
 ~/redwood-app$ yarn redwood generate scaffold admin/user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g scaffold admin/user
@@ -966,7 +966,7 @@ Done in 1.21s.
 
 The routes wrapped in the [`Set`](router.md#sets-of-routes) component with generated layout will be nested too:
 
-```javascript{6-11}
+```javascript {6-11}
 // ./web/src/Routes.js
 
 const Routes = () => {
@@ -1123,7 +1123,7 @@ export const users = () => {
 
 For a model with a relation, the field will be listed in the sdl:
 
-```javascript{8}
+```javascript {8}
 // ./api/src/graphql/users.sdl.js
 
 export const schema = gql`
@@ -1158,7 +1158,7 @@ export const schema = gql`
 
 And the service will export an object with the relation as a property:
 
-```javascript{9-13}
+```javascript {9-13}
 // ./api/src/services/users/users.js
 
 import { db } from 'src/lib/db'

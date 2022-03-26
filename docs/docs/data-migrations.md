@@ -128,7 +128,7 @@ Take our example above—what happens when a new developer comes long and attemp
 
 One technique to combat this is to check for the existence of these columns before the data migration does anything. If `user.newsletter` doesn't exist, then don't bother running the data migration at all and assume that your [seed data](cli-commands.md#prisma-db-seed) is already in the correct format:
 
-```javascript{4,15}
+```javascript {4,15}
 export default async ({ db }) => {
   const users = await db.user.findMany()
 

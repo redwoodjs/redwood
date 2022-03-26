@@ -188,7 +188,7 @@ The terminological way of saying this is, to create a resolver for a field on a 
 
 Sometimes you want to do this since you can do things like add completely custom fields this way:
 
-```js{5}
+```js {5}
 export const Users = {
   id: (_args, { root }) => root.id,
   email: (_args, { root }) => root.email,
@@ -517,7 +517,7 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```ts{11-14}
+```ts {11-14}
 // api/src/functions/graphql.ts
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
@@ -543,7 +543,7 @@ export const handler = createGraphQLHandler({
 
 3. Use the scalar in your types
 
-```ts{6,18,24}
+```ts {6,18,24}
 export const schema = gql`
   type Product {
     id: Int!
@@ -693,7 +693,7 @@ export const handler = createGraphQLHandler({
 You can exclude GraphQL operations by name with `excludeOperations`.
 This is useful when you want to filter out certain operations from the log output, for example, `IntrospectionQuery` from GraphQL playground:
 
-```js{5}
+```js {5}
 // api/src/functions/graphql.ts
 export const handler = createGraphQLHandler({
   loggerConfig: {

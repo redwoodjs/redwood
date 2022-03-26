@@ -14,7 +14,7 @@ We thought a lot about what the developer experience should be for route-based p
 
 Prerendering a page is as easy as it gets. Just add the `prerender` prop to the Route that you want to prerender:
 
-```js{3}
+```js {3}
 // Routes.js
 
 <Route path="/" page={HomePage} name="home" prerender/>
@@ -29,7 +29,7 @@ Then run `yarn rw build` and enjoy the performance boost!
 
 Just add the `prerender` prop to the Set that wraps all Pages you want to prerender:
 
-```js{3}
+```js {3}
 // Routes.js
 
 <Set prerender>
@@ -53,7 +53,7 @@ This will prerender your NotFoundPage to `404.html` in your dist folder. Note th
 
 How does Prerendering handle dynamic data? For Cells, Redwood prerenders your Cells' `<Loading/>` component. Similarly, for Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
 
-```js{1,2}
+```js {1,2}
 <Private >
   // Loading is shown while we're checking to see if the user's logged in
   <Route path="/super-secret-admin-dashboard" page={SuperSecretAdminDashboard} name="ssad" whileLoadingAuth={() => <Loading />} prerender/>
@@ -167,7 +167,7 @@ Images and assets continue to work the way they used to. For more, see [this doc
 
 Note that there's a subtlety in how SVGs are handled. Importing an SVG and using it in a component works great:
 
-```js{1}
+```js {1}
 import logo from './my-logo.svg'
 
 function Header() {

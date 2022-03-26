@@ -83,7 +83,7 @@ yarn workspace web add filestack-react
 
 We want the uploader on our scaffolded form, so let's head over to `ImageForm`, import Filestack's inline picker, and try replacing the **Url** input with it:
 
-```javascript{11,51}
+```javascript {11,51}
 // web/src/components/ImageForm/ImageForm.js
 
 import {
@@ -169,7 +169,7 @@ But that doesn't help us attach anything to our database record. Let's do that.
 
 Let's see what's going on when an upload completes. The Filestack picker takes an `onSuccess` prop with a function to call when complete:
 
-```javascript{10-12,18}
+```javascript {10-12,18}
 // web/src/components/ImageForm/ImageForm.js
 
 // imports and stuff...
@@ -197,7 +197,7 @@ Well lookie here:
 
 `filesUploaded[0].url` seems to be exactly what we need—the public URL to the image that was just uploaded. Excellent! How about we use a little state to track that for us so it's available when we submit our form:
 
-```javascript{12,21,28}
+```javascript {12,21,28}
 // web/src/components/ImageForm/ImageForm.js
 
 import {
@@ -236,7 +236,7 @@ So we'll use `setState` to store the URL for the image. We default it to the exi
 
 The last thing we need to do is set the value of `url` in the `data` object before it gets passed to the `onSave` handler:
 
-```javascript{4,5}
+```javascript {4,5}
 // web/src/components/ImageForm/ImageForm.js
 
 const onSubmit = (data) => {
@@ -251,7 +251,7 @@ Now try uploading a file and saving the form:
 
 It worked! Next let's update the display here to actually show the image as a thumbnail and make it clickable to see the full version:
 
-```javascript{78-80}
+```javascript {78-80}
 // web/src/components/Images/Images.js
 
 import { useMutation } from '@redwoodjs/web'
@@ -420,7 +420,7 @@ It'd be nice if, after uploading, you could see the image you uploaded. Likewise
 
 We're already storing the attached image URL in state, so let's use the existence of that state to show the attached image. In fact, let's also hide the uploader and assume you're done (you'll be able to show it again if needed):
 
-```javascript{7,10}
+```javascript {7,10}
 // web/src/components/ImageForm/ImageForm.js
 
 <PickerInline
@@ -439,7 +439,7 @@ Now if you create a new image record, you'll see the picker, and as soon as the 
 
 Now let's add the ability to bring back the uploader if you decide you want to change the image. We can do that by clearing the image that's in state:
 
-```javascript{10-20}
+```javascript {10-20}
 // web/src/components/ImageForm/ImageForm.js
 
 <PickerInline

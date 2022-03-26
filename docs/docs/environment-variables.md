@@ -79,7 +79,7 @@ HELLO_ENV=hello world
 
 and make a hello Function (`yarn rw generate function hello`) and reference `HELLO_ENV` in the body of our response:
 
-```javascript{6}
+```javascript {6}
 // ./api/src/functions/hello.js
 
 export const handler = async (event, context) => {
@@ -108,7 +108,7 @@ Whichever platform you deploy to, they'll have some specific way of making envir
 
 Since it usually contains sensitive information, you should [never commit your `.env` file](https://github.com/motdotla/dotenv#should-i-commit-my-env-file). Note that you'd actually have to go out of your way to do this as, by default, a Redwood app's `.gitignore` explicitly ignores `.env`:
 
-```plaintext{2}
+```plaintext {2}
 .DS_Store
 .env
 .netlify

@@ -58,7 +58,7 @@ Your Linux server should have a user for deployment, configured with an SSH key 
 
 Typically, you keep your Nginx configuration file at `/etc/nginx/sites-available/redwood-pm2` and symlink it to `/etc/nginx/sites-enabled/redwood-pm2`. It should look something like this:
 
-```nginx{10}
+```nginx {10}
 server {
   server_name redwood-pm2.example.com;
   listen 80;

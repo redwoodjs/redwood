@@ -194,7 +194,7 @@ This helper renders a `<div>` containing a "title" message and a `<ul>` enumerat
 
 For example, let's say you have a form with a `<TextField>` for a user's email address, but you didn't specify any validation on it:
 
-```javascript{22}
+```javascript {22}
 import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
@@ -342,7 +342,7 @@ In these two examples, one with multiple-field selection, validation requires th
 <FieldError name="selectSingle" style={{ color: 'red' }} />
 ```
 
-```js{2}
+```js {2}
 <SelectField
   multiple={true}
   name="selectMultiple"

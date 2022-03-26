@@ -732,7 +732,7 @@ The `useRequireAuth` wrapper configures your handler's `context` so that you can
 - implement your serverless function as you would, but do not `export` it (see `myHandler` below).
 - pass your implementation and `getCurrentUser` to the `useRequireAuth` wrapper and export its return
 
-```ts{3,5,22-25}
+```ts {3,5,22-25}
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { useRequireAuth } from '@redwoodjs/graphql-server'

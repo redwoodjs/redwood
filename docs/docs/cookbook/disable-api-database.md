@@ -24,7 +24,7 @@ When it comes time to deploy, we need to let Netlify know that it shouldn't both
 
 Open up `netlify.toml`. We're going to comment out one line:
 
-```toml{4}
+```toml {4}
 [build]
   command = "yarn rw build"
   publish = "web/dist"
@@ -274,7 +274,7 @@ yarn workspace web add chart.js
 
 Let's generate a sample graph:
 
-```javascript{1,2,5,15-32,34}
+```javascript {1,2,5,15-32,34}
 import { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js'
 
