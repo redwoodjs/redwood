@@ -9,6 +9,11 @@
   status = 301
 
 [[redirects]]
+  from = "/docs/deploy"
+  to = "/docs/deploy/introduction"
+  status = 301
+
+[[redirects]]
   from = "/docs/tutorial"
   to = "/docs/tutorial/foreword"
   status = 301
