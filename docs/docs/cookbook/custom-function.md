@@ -49,7 +49,7 @@ Time for an interlude within an interlude, because that's how you'll always feel
 
 If you don't know much about CORS, it's something you probably should know some about at some point. CORS stands for Cross Origin Resource Sharing; in a nutshell, by default, browsers aren't allowed to access resources outside their own domain. So, requests from `localhost:8910` can only access resources at `localhost:8910`. Since all your serverless functions are at `localhost:8911`, doing something like
 
-```js
+```jsx
 // the `http://` is important!
 const serverTime = await fetch('http://localhost:8911/serverTime')
 ```
@@ -66,7 +66,7 @@ We could set the headers for `serverTime` to allow requests from any origin... b
 
 Ok&mdash;back to our custom Function. Let's get the current time and return it in the body of our handler:
 
-```javascript {6} title="api/src/functions/serverTime.js"
+```jsx {6} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -81,7 +81,7 @@ export const handler = async (event, context) => {
 
 How about we make sure the response is a JSON object:
 
-```javascript {6-7} title="api/src/functions/serverTime.js"
+```jsx {6-7} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -103,7 +103,7 @@ Since you are most definitely an elite hacker, you probably noticed that our new
 
 Inspecting the `event` argument being sent to `handler` gets us all kinds of juicy details on this request:
 
-```javascript {4} title="api/src/functions/serverTime.js"
+```jsx {4} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   console.log(event)
   return {
@@ -143,7 +143,7 @@ Take a look in the terminal window where you're running `yarn rw dev` to see the
 
 That first entry, `httpMethod`, is what we want. Let's check the method and return a 404 if it isn't a **GET**:
 
-```javascript {4-6} title="api/src/functions/serverTime.js"
+```jsx {4-6} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   if (event.httpMethod !== 'GET') {
     return { statusCode: 404 }
@@ -186,7 +186,7 @@ $ curl http://localhost:8911/serverTime
 
 Redwood uses the async/await version of Function handlers, but you can also use the callback version. In that case your Function would look something like:
 
-```javascript {3,5,8,12} title="api/src/functions/serverTime.js"
+```jsx {3,5,8,12} title="api/src/functions/serverTime.js"
 export const handler = (event, context, callback) => {
   if (event.httpMethod !== 'GET') {
     callback(null, { statusCode: 404 })

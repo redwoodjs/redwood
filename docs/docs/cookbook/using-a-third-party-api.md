@@ -94,7 +94,7 @@ yarn rw generate page home /
 
 The browser should have refreshed with a message about where to find our new homepage, `web/src/pages/HomePage/HomePage.js`. Let's open that up and create a form so the user can actually enter their zip code:
 
-```javascript title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const HomePage = () => {
@@ -150,7 +150,7 @@ You'll need to balance these risks in a real-world app so choose carefully!
 
 We've got the zip code in our `onSubmit` handler so it makes sense to simply make the API call from there and then do something with the result. We'll use the browser's built in [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) since it does exactly what we need. For now let's just dump the result to the console (be sure to use your actual API key):
 
-```javascript title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.js"
 const onSubmit = (data) => {
   fetch('https://api.openweathermap.org/data/2.5/weather?zip=66952,us&appid=YOUR_API_KEY')
     .then(response => response.json())
@@ -164,7 +164,7 @@ const onSubmit = (data) => {
 
 Well that was easy! We have the zip code hardcoded into that URL so let's replace that with the actual value from our text box:
 
-```javascript title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.js"
 const onSubmit = (data) => {
   fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${data.zip},us&appid=YOUR_API_KEY`)
     .then(response => response.json())
@@ -176,7 +176,7 @@ const onSubmit = (data) => {
 
 We're getting our data just fine but now we need to update the page with the weather. Let's use state to keep track of the result and trigger a refresh in the UI (don't forget the new fragment `<> </>` around the form and weather output):
 
-```javascript title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { useState } from 'react'
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
@@ -216,7 +216,7 @@ That should give us a simple text dump of the JSON:
 
 Finally, let's output the actual weather data along with a couple of helper functions to format the output:
 
-```javascript title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { useState } from 'react'
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
@@ -291,7 +291,7 @@ Redwood comes with GraphQL integration built in so that seems like a logical way
 
 We can create whatever data structure we want so let's take this opportunity to strip out the data we don't care about coming from OpenWeather and just return the good stuff:
 
-```javascript title="api/src/graphql/weather.sdl.js"
+```jsx title="api/src/graphql/weather.sdl.js"
 export const schema = gql`
   type Weather {
     zip: String!
@@ -315,7 +315,7 @@ That's it for our client-to-server API interface! Now let's define the GraphQL r
 
 In Redwood GraphQL Query types are automatically mapped to functions exported from a service with the same name, so we'll create a `weather.js` service and name the function `getWeather`:
 
-```javascript title="api/src/services/weather/weather.js"
+```jsx title="api/src/services/weather/weather.js"
 export const getWeather = ({ zip }) => {
   return {
     zip,
@@ -343,7 +343,7 @@ yarn workspace api add cross-undici-fetch
 
 And import that into the service and make the fetch. Note that `fetch` returns a Promise so we're going to convert our service to `async`/`await` to simplify things:
 
-```javascript title="api/src/services/weather/weather.js"
+```jsx title="api/src/services/weather/weather.js"
 import { fetch } from 'cross-undici-fetch'
 
 export const getWeather = async ({ zip }) => {
@@ -376,7 +376,7 @@ yarn rw generate cell weather
 
 This will create `web/src/components/WeatherCell/WeatherCell.js`:
 
-```javascript title="web/src/components/WeatherCell/WeatherCell.js"
+```jsx title="web/src/components/WeatherCell/WeatherCell.js"
 export const QUERY = gql`
   query FindWeatherQuery($id: Int!) {
     weather: weather(id: $id) {
@@ -400,7 +400,7 @@ export const Success = ({ weather }) => {
 
 Let's update the QUERY to match the signature of our API:
 
-```javascript
+```jsx
 export const QUERY = gql`
   query GetWeatherQuery($zip: String!) {
     weather: getWeather(zip: $zip) {
@@ -418,7 +418,7 @@ Note the `weather: getWeather` part. This will actually call the API endpoint `g
 
 Let's leave the display as-is for now to make sure this is working. We'll use the `WeatherCell` in our `HomePage` and introduce some state to keep track of when the zip is submitted:
 
-```javascript title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 import { useState } from 'react'
 import WeatherCell from 'src/components/WeatherCell'
@@ -455,7 +455,7 @@ If your copy/paste-fu is strong you should get a dump of the JSON from the Graph
 
 Now all that's left is to format everything a little nicer. How about a little something like this in `WeatherCell`:
 
-```javascript title="web/src/components/WeatherCell/WeatherCell.js"
+```jsx title="web/src/components/WeatherCell/WeatherCell.js"
 export const Success = ({ weather }) => {
   return (
     <section>
@@ -490,7 +490,7 @@ Gross. This happens when our service tries to parse the response from OpenWeathe
 
 Okay, let's look for that `cod` and if it's `404` then we know the zip isn't found and can return a more helpful error from our service. Open up the service and let's add a check:
 
-```javascript {4, 12-14} title="api/src/services/weather/weather.js"
+```jsx {4, 12-14} title="api/src/services/weather/weather.js"
 import { fetch } from 'cross-undici-fetch'
 import { UserInputError } from '@redwoodjs/graphql-server'
 
@@ -520,7 +520,7 @@ And now if we submit **11111**:
 
 That's much better! Let's strip out that "Error: " part, and maybe make it look a little more error-like. This is a job for the `Failure` component in our `WeatherCell`:
 
-```javascript title="web/src/components/WeatherCell/WeatherCell.js"
+```jsx title="web/src/components/WeatherCell/WeatherCell.js"
 export const Failure = ({ error }) => (
   <span
     style={{

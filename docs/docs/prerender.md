@@ -14,7 +14,7 @@ We thought a lot about what the developer experience should be for route-based p
 
 Prerendering a page is as easy as it gets. Just add the `prerender` prop to the Route that you want to prerender:
 
-```js {3} title="Routes.js"
+```jsx {3} title="Routes.js"
 <Route path="/" page={HomePage} name="home" prerender/>
 ```
 
@@ -27,7 +27,7 @@ Then run `yarn rw build` and enjoy the performance boost!
 
 Just add the `prerender` prop to the Set that wraps all Pages you want to prerender:
 
-```js {3} title="Routes.js"
+```jsx {3} title="Routes.js"
 <Set prerender>
   <Route path="/" page={HomePage} name="home" />
   <Route path="/about" page={AboutPage} name="hello" />
@@ -49,7 +49,7 @@ This will prerender your NotFoundPage to `404.html` in your dist folder. Note th
 
 How does Prerendering handle dynamic data? For Cells, Redwood prerenders your Cells' `<Loading/>` component. Similarly, for Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
 
-```js {1,2}
+```jsx {1,2}
 <Private >
   // Loading is shown while we're checking to see if the user's logged in
   <Route path="/super-secret-admin-dashboard" page={SuperSecretAdminDashboard} name="ssad" whileLoadingAuth={() => <Loading />} prerender/>
@@ -58,7 +58,7 @@ How does Prerendering handle dynamic data? For Cells, Redwood prerenders your Ce
 
 Right now prerendering won't work for dynamic URLs. We're working on this. If you try to prerender one of them, nothing will break, but nothing happens.
 
-```js title="web/src/Routes.js"
+```jsx title="web/src/Routes.js"
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
 
@@ -115,7 +115,7 @@ const MySpecialComponent = () => {
 
 If you need to guard against prerendering outside React, you can use the `isBrowser` boolean. This is especially handy when running initializing code that only works in the browser:
 
-```js
+```jsx
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 
 if (isBrowser) {
@@ -127,7 +127,7 @@ if (isBrowser) {
 
 If you dynamically load third-party libraries that aren't part of your JS bundle, using these prerendering utils can help you avoid loading them at build time:
 
-```js
+```jsx
 import { useIsBrowser } from '@redwoodjs/prerender/browserUtils'
 
 const ComponentUsingAnExternalLibrary = () => {
@@ -161,7 +161,7 @@ Images and assets continue to work the way they used to. For more, see [this doc
 
 Note that there's a subtlety in how SVGs are handled. Importing an SVG and using it in a component works great:
 
-```js {1}
+```jsx {1}
 import logo from './my-logo.svg'
 
 function Header() {
@@ -171,13 +171,13 @@ function Header() {
 
 But re-exporting the SVG as a component requires a small change:
 
-```js
+```jsx
 // ❌ due to how Redwood handles SVGs, this syntax isn't supported.
 import Logo from './Logo.svg'
 export default Logo
 ```
 
-```js
+```jsx
 // ✅ use this instead.
 import Logo from './Logo.svg'
 
@@ -226,7 +226,7 @@ You can add a 404 redirect if you want:
 
 You might notice a flash after page load. A quick workaround for this is to make sure whatever page you're seeing the flash on isn't code split. You can do this by explicitly importing the page in `Routes.js`:
 
-```js
+```jsx
 import { Router, Route } from '@redwoodjs/router'
 import HomePage from 'src/pages/HomePage'
 

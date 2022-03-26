@@ -43,7 +43,7 @@ yarn redwood setup auth goTrue
 
 By specifying `goTrue` as the provider, Redwood automatically added the necessary GoTrue-JS config to our App.js. Let's open up `web/src/App.js` and inspect. You should see:
 
-```js {3-4,13-16,20,24} title="web/src/App.js"
+```jsx {3-4,13-16,20,24} title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import GoTrue from 'gotrue-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -74,7 +74,7 @@ export default App
 
 Time to use that API endpoint we copied from the Netlify Identity page. Replace the value of `APIUrl` with your API endpoint. For example:
 
-```js {6} title="web/src/App.js"
+```jsx {6} title="web/src/App.js"
 // imports...
 
 const goTrueClient = new GoTrue({
@@ -113,7 +113,7 @@ This adds a Signup [route](../router.md#router-and-route) to our routes file and
 
 In the just-generated SignupPage component (`web/src/pages/SignupPage/SignupPage.js`), let's import some [Redwood Form components](../forms.md) and add a very basic form to our render component:
 
-```js title="web/src/pages/SignupPage/SignupPage.js"
+```jsx title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 
 const SignupPage = () => {
@@ -136,7 +136,7 @@ Did I mention it was basic? If you want to add some polish, you might find both 
 
 Now that we have a form interface, we're going to want to do something when the user submits it. Let's add an `onSubmit` function to our component and pass it as a prop to our Form component:
 
-```js {6-8,13} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {6-8,13} title="web/src/pages/SignupPage/SignupPage.js"
 // imports...
 
 const SignupPage = () => {
@@ -162,7 +162,7 @@ The _something_ we need to do is—surprise!—sign up. To do this, we'll need a
 
 Let's import `useAuth` and destructure `client` from it in our component:
 
-```js {4,7} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {4,7} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -190,7 +190,7 @@ export default SignupPage
 
 And now we'll attempt to create a new user in the `onSubmit` function with [`client.signup()`](https://github.com/netlify/gotrue-js/blob/master/README.md#create-a-new-user) by passing in the `email` and `password` values that we've captured from our form:
 
-```js {10-13} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {10-13} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -223,7 +223,7 @@ Presently, our sign up will work as is, but simply console-logging the response 
 
 Let's display errors to the user if there is one. To do this, we'll set up `React.useState()` to manage our error state and conditionally render the error message if there is one. We'll also want to reset the error state at the beginning of every submission with `setError(null)`:
 
-```js {8,11,15,22} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {8,11,15,22} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -265,7 +265,7 @@ yarn redwood generate page Signin
 
 Back in our `SignupPage`, let's import `routes` and `navigate` from [Redwood Router](../router.md#navigate) and use them to redirect on successful sign up:
 
-```js {5,15} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {5,15} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { routes, navigate } from '@redwoodjs/router'
@@ -304,7 +304,7 @@ Hoorah! We've just added a sign up page and created a sign up form. We created a
 
 Let's get right to it. In the SigninPage we generated in the last section, let's add a basic form with `email` and `password` fields, some error reporting setup, and a hollow `onSubmit` function:
 
-```js title="web/src/pages/SigninPage/SigninPage.js"
+```jsx title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 
 const SigninPage = () => {
@@ -332,7 +332,7 @@ export default SigninPage
 
 Then we'll need to import `useAuth` from `@redwoodjs/auth` and destructure `logIn` so that we can use it in our `onSubmit` function:
 
-```js {4,7} title="web/src/pages/SigninPage/SigninPage.js"
+```jsx {4,7} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -363,7 +363,7 @@ export default SigninPage
 
 Now we'll add `logIn` to our `onSubmit` function. This time we'll be passing an object to our function as we're using Redwood Auth's logIn function directly (as opposed to `client`). This object takes an email, password, and a remember boolean. We'll also chain on `then` and `catch` to handle the response:
 
-```js {12-16} title="web/src/pages/SigninPage/SigninPage.js"
+```jsx {12-16} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -404,7 +404,7 @@ yarn redwood generate page Home /
 
 In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](../router.md) and add them to the `then` function:
 
-```js {5,14} title="web/src/pages/SigninPage/SigninPage.js"
+```jsx {5,14} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
@@ -450,7 +450,7 @@ yarn redwood generate component SignoutBtn
 
 In the `web/src/components/SignoutBtn/SignoutBtn.js` file we just generated, let's render a button and add a click handler:
 
-```js title="web/src/components/SignoutBtn/SignoutBtn.js"
+```jsx title="web/src/components/SignoutBtn/SignoutBtn.js"
 const SignoutBtn = () => {
   const onClick = () => {
     // do sign out here.
@@ -463,7 +463,7 @@ export default SignoutBtn
 
 Now we can import [`useAuth` from `@redwoodjs/auth`](../authentication.md#api). We'll destructure its `logOut` method and invoke it in the `onClick` function:
 
-```js {3,6,9} title="web/src/components/SignoutBtn/SignoutBtn.js"
+```jsx {3,6,9} title="web/src/components/SignoutBtn/SignoutBtn.js"
 import { useAuth } from '@redwoodjs/auth'
 
 const SignoutBtn = () => {
@@ -481,7 +481,7 @@ export default SignoutBtn
 
 This works as is, but, because the user may be in a private area of your app when the Sign Out button is clicked, we should make sure we also navigate the user away from this page:
 
-```js {4,10} title="web/src/components/SignoutBtn/SignoutBtn.js"
+```jsx {4,10} title="web/src/components/SignoutBtn/SignoutBtn.js"
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 
@@ -517,7 +517,7 @@ This creates `web/src/components/Navigation/Navigation.js`. In that file, let's 
 
 We'll also import [`useAuth`](../authentication.md#api) since we'll need to subscribe to the auth state in order for our components to decide what to render:
 
-```js title="web/src/components/Navigation/Navigation.js"
+```jsx title="web/src/components/Navigation/Navigation.js"
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -530,7 +530,7 @@ export default Navigation
 
 Let's destructure [`isAuthenticated` from the `useAuth`](../authentication.md#api) API and apply it to some conditionals in the render method:
 
-```js {7,10-14} title="web/src/components/Navigation/Navigation.js"
+```jsx {7,10-14} title="web/src/components/Navigation/Navigation.js"
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -554,7 +554,7 @@ Because Redwood Auth uses [React's Context API](https://reactjs.org/docs/context
 
 So, now let's import our sign out button and add it, as well as sign in and sign up links, to the appropriate blocks in the conditional:
 
-```javascript {5,11-18} title="web/src/components/Navigation/Navigation.js"
+```jsx {5,11-18} title="web/src/components/Navigation/Navigation.js"
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import SignoutBtn from 'src/components/SignoutBtn/SignoutBtn'
@@ -607,7 +607,7 @@ Finally, we'll import and wrap each of our generated pages in this GlobalLayout 
 
 **Home**
 
-```js title="web/src/pages/HomePage/Homepage.js"
+```jsx title="web/src/pages/HomePage/Homepage.js"
 import GlobalLayout from 'src/layouts/GlobalLayout/GlobalLayout'
 
 const HomePage = () => {
@@ -624,7 +624,7 @@ export default HomePage
 
 **Sign Up**
 
-```js title="web/src/pages/SignupPage/SignupPage.js"
+```jsx title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { routes, navigate } from '@redwoodjs/router'
@@ -661,7 +661,7 @@ export default SignupPage
 
 **Sign In**
 
-```js title="web/src/pages/SigninPage/SigninPage.js"
+```jsx title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'

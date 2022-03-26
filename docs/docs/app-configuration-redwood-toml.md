@@ -147,7 +147,7 @@ Examples include: logger settings, timeouts, maximum payload limits, and more.
 
 > **Note:** This configuration does not apply in a serverless deploy.
 
-```js title="./api/server.config.js"
+```jsx title="./api/server.config.js"
 /**
  * This file allows you to configure the Fastify Server settings
  * used by the RedwoodJS dev server.

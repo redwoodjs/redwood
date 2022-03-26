@@ -248,7 +248,7 @@ yarn rw generate page home /
 
 Next we'll use the browser's builtin `fetch()` function to get the data and then we'll just dump it to the screen to make sure it works:
 
-```javascript
+```jsx
 import { useState, useEffect } from 'react'
 
 const HomePage = () => {
@@ -274,7 +274,7 @@ yarn workspace web add chart.js
 
 Let's generate a sample graph:
 
-```javascript {1,2,5,15-32,34}
+```jsx {1,2,5,15-32,34}
 import { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js'
 
@@ -318,7 +318,7 @@ export default HomePage
 
 If that looks good then all that's left is to transform the weather data JSON into the format that Chart.js wants. Here's the final `HomePage` including a couple of functions to transform our data and display the dates properly:
 
-```javascript
+```jsx
 import { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js'
 

@@ -4,7 +4,7 @@ Testing and building components without having to rely on the API is a good best
 
 The argument signatures of these functions are identical. Internally, they target different operation types based on their suffix.
 
-```js
+```jsx
 mockGraphQLQuery('OperationName', (variables, { ctx, req }) => {
   ctx.delay(1500) // pause for 1.5 seconds
   return {
@@ -20,12 +20,12 @@ mockGraphQLQuery('OperationName', (variables, { ctx, req }) => {
 
 The first argument is the [operation name](https://graphql.org/learn/queries/#operation-name); it's used to associate mock-data with a query or a mutation:
 
-```js
+```jsx
 query UserProfileQuery { /*...*/ }
 mockGraphQLQuery('UserProfileQuery', { /*... */ })
 ```
 
-```js
+```jsx
 mutation SetUserProfile { /*...*/ }
 mockGraphQLMutation('SetUserProfile', { /*... */ })
 ```
@@ -36,7 +36,7 @@ Operation names should be unique.
 
 The second argument can be an object or a function:
 
-```js {1}
+```jsx {1}
 mockGraphQLQuery('OperationName', (variables, { ctx }) => {
   ctx.delay(1500) // pause for 1.5 seconds
   return {
@@ -52,7 +52,7 @@ If it's a function, it'll receive two arguments: `variables` and `{ ctx }`. The 
 
 - `ctx.status(code: number, text?: string)`: set a http response code:
 
-```js {2}
+```jsx {2}
 mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
   ctx.status(404)
 })
@@ -62,7 +62,7 @@ mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
 
 - `ctx.delay(numOfMS)`: delay the response
 
-```js {2}
+```jsx {2}
 mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
   ctx.delay(1500) // pause for 1.5 seconds
   return { id: 42 }
@@ -73,7 +73,7 @@ mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
 
 - `ctx.errors(e: GraphQLError[])`: return an error object in the response:
 
-```js {2}
+```jsx {2}
 mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
   ctx.errors([{ message: 'Uh, oh!' }])
 })
@@ -95,7 +95,7 @@ We suggest always starting with globally-scoped mocks.
 
 To mock a Cell's `QUERY`, find the file ending with with `.mock.js` in your Cell's directory. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
 
-```js {4,5,6,12,13,14} title="UserProfileCell/UserProfileCell.js"
+```jsx {4,5,6,12,13,14} title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {

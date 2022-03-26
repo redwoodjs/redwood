@@ -440,7 +440,7 @@ Done in 1.00s.
 
 A cell defines and exports four constants: `QUERY`, `Loading`, `Empty`, `Failure`, and `Success`:
 
-```javascript title="./web/src/components/UserCell/UserCell.js"
+```jsx title="./web/src/components/UserCell/UserCell.js"
 export const QUERY = gql`
   query {
     user {
@@ -500,7 +500,7 @@ Done in 1.02s.
 
 The component will export some jsx telling you where to find it.
 
-```javascript title="./web/src/components/User/User.js"
+```jsx title="./web/src/components/User/User.js"
 const User = () => {
   return (
     <div>
@@ -607,7 +607,7 @@ Done in 16.04s.
 
 Functions get passed `context` which provides access to things like the current user:
 
-```javascript title="./api/src/functions/user.js"
+```jsx title="./api/src/functions/user.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -677,7 +677,7 @@ Done in 1.00s.
 
 A layout will just export it's children:
 
-```javascript title="./web/src/layouts/UserLayout/UserLayout.test.js"
+```jsx title="./web/src/layouts/UserLayout/UserLayout.test.js"
 const UserLayout = ({ children }) => {
   return <>{children}</>
 }
@@ -768,7 +768,7 @@ Done in 1.02s.
 
 The page returns jsx telling you where to find it:
 
-```javascript title="./web/src/pages/HomePage/HomePage.js"
+```jsx title="./web/src/pages/HomePage/HomePage.js"
 const HomePage = () => {
   return (
     <div>
@@ -783,7 +783,7 @@ export default HomePage
 
 And the route is added to `Routes.js`:
 
-```javascript {6} title="./web/src/Routes.js"
+```jsx {6} title="./web/src/Routes.js"
 const Routes = () => {
   return (
     <Router>
@@ -810,7 +810,7 @@ Done in 1.02s.
 
 The generated page will get the route parameter as a prop:
 
-```javascript {5,12,14} title="./web/src/pages/QuotePage/QuotePage.js"
+```jsx {5,12,14} title="./web/src/pages/QuotePage/QuotePage.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const QuotePage = ({ id }) => {
@@ -832,7 +832,7 @@ export default QuotePage
 
 And the route is added to `Routes.js`, with the route parameter added:
 
-```javascript {6} title="./web/src/Routes.js"
+```jsx {6} title="./web/src/Routes.js"
 const Routes = () => {
   return (
     <Router>
@@ -950,7 +950,7 @@ Done in 1.21s.
 
 The routes wrapped in the [`Set`](router.md#sets-of-routes) component with generated layout will be nested too:
 
-```javascript {6-11} title="./web/src/Routes.js"
+```jsx {6-11} title="./web/src/Routes.js"
 const Routes = () => {
   return (
     <Router>
@@ -1059,7 +1059,7 @@ Done in 1.04s.
 
 The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--no-crud` option.
 
-```javascript title="./api/src/graphql/users.sdl.js"
+```jsx title="./api/src/graphql/users.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
@@ -1091,7 +1091,7 @@ export const schema = gql`
 
 The services file fulfills the query. If the `--no-crud` option is added, this file will be less complex.
 
-```javascript title="./api/src/services/users/users.js"
+```jsx title="./api/src/services/users/users.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -1101,7 +1101,7 @@ export const users = () => {
 
 For a model with a relation, the field will be listed in the sdl:
 
-```javascript {8} title="./api/src/graphql/users.sdl.js"
+```jsx {8} title="./api/src/graphql/users.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
@@ -1134,7 +1134,7 @@ export const schema = gql`
 
 And the service will export an object with the relation as a property:
 
-```javascript {9-13} title="./api/src/services/users/users.js"
+```jsx {9-13} title="./api/src/services/users/users.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -1209,7 +1209,7 @@ Done in 1.02s.
 
 The generated service component will export a `findMany` query:
 
-```javascript title="./api/src/services/users/users.js"
+```jsx title="./api/src/services/users/users.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -1470,7 +1470,7 @@ If you use the Redwood Logger as part of your seed script, you can pipe the comm
 
 For example, if your `scripts.seed.js` imports the `logger`:
 
-```js title="scripts/seed.js"
+```jsx title="scripts/seed.js"
 import { db } from 'api/src/lib/db'
 import { logger } from 'api/src/lib/logger'
 

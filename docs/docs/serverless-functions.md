@@ -16,7 +16,7 @@ This will generate a stub serverless function in the folder `api/src/functions/<
 
 _Example of a bare minimum handler you need to get going:_
 
-```js
+```jsx
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -50,7 +50,7 @@ For a lambda function to be a lambda function, it must export a handler that ret
 
 You can use code in `api/src` in your serverless function, some examples:
 
-```js
+```jsx
 // importing `db` directly
 import { db } from 'src/lib/db'
 
@@ -204,7 +204,7 @@ Let's look at a series of tests that mock the event with different information i
 
 First, let's write a test that divides 20 by 5 and we'll expect to get 4 as the quotient:
 
-```javascript title="api/src/functions/divideBy/divide.test.ts"
+```jsx title="api/src/functions/divideBy/divide.test.ts"
 import { mockHttpEvent } from '@redwoodjs/testing/api'
 import { handler } from './divide'
 
@@ -228,7 +228,7 @@ describe('divide serverless function',  () => {
 
 Then we can also add a test to handle the error when we don't provide a dividend:
 
-```javascript title="api/src/functions/divideBy/divide.test.ts"
+```jsx title="api/src/functions/divideBy/divide.test.ts"
 it('requires a dividend', async () => {
   const httpEvent = mockHttpEvent({
     queryStringParameters: {
@@ -246,7 +246,7 @@ it('requires a dividend', async () => {
 
 And finally, we can also add a test to handle the error when we try to divide by 0:
 
-```javascript
+```jsx
   it('cannot divide by 0', async () => {
     const httpEvent = mockHttpEvent({
       queryStringParameters: {
@@ -315,7 +315,7 @@ api
 
 Let's define a fixture for a new test case: when the function is invoked, but it is missing a divisor:
 
-```js title="api/src/functions/divide/divide.fixtures.ts"
+```jsx title="api/src/functions/divide/divide.fixtures.ts"
 import { mockHttpEvent } from '@redwoodjs/testing/api'
 
 export const missingDivisor = () =>
@@ -330,7 +330,7 @@ The `missingDivisor()` fixture constructs and mocks the event for the test case 
 
 Now, let's use this fixture in a test by providing the handler with the event we mocked in the fixture:
 
-```js title="api/src/functions/divide/divide.test.ts"
+```jsx title="api/src/functions/divide/divide.test.ts"
 import { missingDivisor } from './divide.fixtures'
 
 describe('divide serverless function', () => {
@@ -376,7 +376,7 @@ For our webhook test example, we'll create a webhook that updates a Order's Stat
 
 Because we'll be interacting with data, our app has an `Order` model defined in the Prisma schema that has a unique `trackingNumber` and `status`:
 
-```js title="/api/db/schema.prisma"
+```jsx title="/api/db/schema.prisma"
 model Order {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
@@ -567,7 +567,7 @@ Because the header isn't what the webhook expects (it wants to see a header name
 
 > Note: For brevity we didn't test that the order's status wasn't changed, but that could be checked as well
 
-```javascript
+```jsx
 scenario('with an invalid signature header, the webhook is unauthorized', async (scenario) => {
   const order = scenario.order.placed
 
@@ -589,7 +589,7 @@ Next, we test what happens if the event payload is signed, but with a different 
 
 Again, we expect as 401 Unauthorized response.
 
-```javascript
+```jsx
 scenario('with the wrong webhook secret the webhook is unauthorized', async (scenario) => {
   const order = scenario.order.placed
 
@@ -609,7 +609,7 @@ scenario('with the wrong webhook secret the webhook is unauthorized', async (sce
 
 Next, what happens if the order cannot be found? We'll try a tracking number that doesn't exist (that is we did not create it in our scenario order data):
 
-```javascript
+```jsx
 scenario('when the tracking number cannot be found, returns an error', async (scenario) => {
   const order = scenario.order.placed
 
@@ -636,7 +636,7 @@ Therefore our scenario uses the `scenario.order.delivered` data where the order 
 
 > Note: you'll have additional tests here to check that if the order is placed you cannot update it to be delivered and if the order is shipped you cannot update to be placed, etc
 
-```javascript
+```jsx
   scenario('when the order has already been delivered, returns an error',
             async (scenario) => {
     const order = scenario.order.delivered
@@ -765,7 +765,7 @@ In your request, you must include the following headers:
 
 You can find the auth provider type as the `type` attribute set on the `AuthProvider`:
 
-```js
+```jsx
 <AuthProvider client={netlifyIdentity} type="netlify">
 <AuthProvider client={supabaseClient} type="supabase">
 ```
@@ -835,7 +835,7 @@ For more information about Rate Limiting in Node.js, consider:
 
 Because the `event` passed to the function handler contains the request's IP address, you could decide to whitelist only certain known and trusted IP addresses.
 
-```js
+```jsx
 const ipAddress = ({ event }) => {
   return event?.headers?.['client-ip'] || event?.requestContext?.identity?.sourceIp || 'localhost'
 }

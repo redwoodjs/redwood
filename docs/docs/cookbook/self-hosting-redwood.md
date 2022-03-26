@@ -85,7 +85,7 @@ Please note that the trailing slash in `proxy_pass` is essential to correctly ma
 
 Let's configure PM2 with the `pm2.config.js` file we made earlier. The most important variables are at the top. Note that the port is only used locally on the server and should match the port in the Nginx config:
 
-```javascript
+```jsx
 const name = 'redwood-pm2' // Name to use in PM2
 const repo = 'git@github.com:njjkgeerts/redwood-pm2.git' // Link to your repo
 const user = 'deploy' // Server user

@@ -77,7 +77,7 @@ HELLO_ENV=hello world
 
 and make a hello Function (`yarn rw generate function hello`) and reference `HELLO_ENV` in the body of our response:
 
-```javascript {6} title="./api/src/functions/hello.js"
+```jsx {6} title="./api/src/functions/hello.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -121,7 +121,7 @@ For all the variables in your `.env` and `.env.defaults` files to make their way
 
 It's in [the CLI](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/index.js#L6-L12)&mdash;every time you run a `yarn rw` command:
 
-```javascript title="packages/cli/src/index.js"
+```jsx title="packages/cli/src/index.js"
 import { config } from 'dotenv-defaults'
 
 config({

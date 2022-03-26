@@ -82,7 +82,7 @@ We mentioned above that Cells receive "most" of what's returned from `useQuery`.
 
 `QUERY` can be a string or a function. Note that it's totally more than ok to have more than one root query. Here's an example of that:
 
-```javascript {7-10}
+```jsx {7-10}
 export const QUERY = gql`{
   query {
     posts {
@@ -99,7 +99,7 @@ export const QUERY = gql`{
 
 So in this case, both `posts` and `authors` would be available to `Success`:
 
-```js
+```jsx
 export const Success = ({ posts, authors }) => {
   // render logic with posts and authors
 }
@@ -111,7 +111,7 @@ Use a function if your queries need to be more dynamic:
 <!-- Source: https://community.redwoodjs.com/t/custom-github-jwt-auth-with-redwood-auth-advice-needed/610 -->
 But what about variables? Well, Cells are setup to use any props they receive from their parent as variables (things are setup this way in `beforeQuery`). For example, here `BlogPostCell` takes a prop, `numberToShow`, so `numberToShow` is just available to your `QUERY`:
 
-```javascript {7}
+```jsx {7}
 import BlogPostsCell from 'src/components/BlogPostsCell'
 
 const HomePage = () => {
@@ -126,7 +126,7 @@ const HomePage = () => {
 export default HomePage
 ```
 
-```javascript {2-3}
+```jsx {2-3}
 export const QUERY = gql`
   query($numberToShow: Int!) {
     posts(numberToShow: $numberToShow) {
@@ -145,7 +145,7 @@ This means you can think backwards about your Cell's props from your SDL: whatev
 
 By default, `beforeQuery` gives any props passed from the parent component to `Query` so that they're available as variables for `QUERY`. It'll also set the fetch policy to `'cache-and-network'` since we felt it matched the behavior users want most of the time.
 
-```javascript
+```jsx
 export const beforeQuery = (props) => {
   return {
     variables: props,
@@ -157,7 +157,7 @@ export const beforeQuery = (props) => {
 For example, if you wanted to turn on Apollo's polling option, and prevent caching, you could export something like this (see Apollo's docs on [polling](https://www.apollographql.com/docs/react/data/queries/#polling) and [caching](https://www.apollographql.com/docs/react/data/queries/#setting-a-fetch-policy))
 
 <!-- Source: https://github.com/redwoodjs/redwood/issues/717 -->
-```javascript
+```jsx
 export const beforeQuery = (props) => {
   return { variables: props, fetchPolicy: 'no-cache', pollInterval: 2500 }
 }
@@ -169,7 +169,7 @@ export const beforeQuery = (props) => {
 
 It receives the `data`, and the default check reference `isDataEmpty`, so it's possible to extend the default check with custom logic.
 
-```javascript
+```jsx
 export const isEmpty = (data, { isDataEmpty }) =>
   isDataEmpty(data) || data?.blog?.status === 'hidden'
 ```
@@ -181,7 +181,7 @@ Use it to sanitize data returned from `QUERY` before it gets there.
 
 By default, `afterQuery` just returns the data as it is:
 
-```javascript
+```jsx
 export const afterQuery = (data) => ({...data})
 ```
 
@@ -201,7 +201,7 @@ A Cell renders this component if there's no data.
 
 What do we mean by no data? We mean if the response is 1) `null` or 2) an empty array (`[]`). There's actually four functions in [createCell.tsx](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/components/createCell.tsx) dedicated just to figuring this out:
 
-```javascript title="createCell.tsx"
+```jsx title="createCell.tsx"
 const isDataNull = (data: DataObject) => {
   return dataField(data) === null
 }
@@ -224,7 +224,7 @@ const isEmpty = (data: DataObject) => {
 
 A Cell renders this component if something went wrong. You can quickly see this in action (it's easy to break things) if you add a nonsense field to your `QUERY`:
 
-```javascript {6}
+```jsx {6}
 const QUERY = gql`
   query {
     posts {
@@ -262,7 +262,7 @@ As mentioned, Success gets exclusive access to the `data` prop. But if you try t
 
 So, if you're querying for `posts` and `authors`, instead of doing:
 
-```js
+```jsx
 export const Success = ({ data }) => {
   const { posts, authors } = data
 
@@ -273,7 +273,7 @@ export const Success = ({ data }) => {
 
 Redwood does:
 
-```js
+```jsx
 export const Success = ({ posts, authors }) => {
   // render logic with posts and authors
   ...
@@ -288,7 +288,7 @@ Whenever you want to fetch data. Let Redwood juggle what's displayed when. You j
 
 While you can use a Cell whenever you want to fetch data, it's important to note that you don't have to. You can do anything you want! For example, for one-off queries, there's always `useApolloClient`. This hook returns the client, which you can use to execute queries, among other things:
 
-```javascript
+```jsx
 // In a react component...
 
 client = useApolloClient()
@@ -326,7 +326,7 @@ If we didn't do all that built-time stuff for you, how might you go about implem
 
 Consider the [example from the Tutorial](tutorial/chapter2/cells.md#our-first-cell) where we're fetching posts:
 
-```javascript
+```jsx
 export const QUERY = gql`
   query {
     posts {
@@ -361,7 +361,7 @@ And now let's say that Babel isn't going to come along and assemble our exports.
 We'd probably do something like this:
 
 <!-- {35,39,44,47,49} -->
-```javascript
+```jsx
 const QUERY = gql`
   query {
     posts {
