@@ -41,7 +41,7 @@
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
     "supertokens-auth-react": "0.19.0",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

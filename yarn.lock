@@ -5760,7 +5760,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.10.3
     split2: 4.1.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     yargs: 16.2.0
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -5794,7 +5794,7 @@ __metadata:
     pino: 7.9.2
     split2: 4.1.0
     title-case: 3.0.3
-    typescript: 4.6.2
+    typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
     "@clerk/clerk-sdk-node": 2.10.0
@@ -5838,7 +5838,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     react: 17.0.2
     supertokens-auth-react: 0.19.0
-    typescript: 4.6.2
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -5883,7 +5883,7 @@ __metadata:
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 4.6.2
+    typescript: 4.6.3
     yargs: 16.2.0
   bin:
     redwood: ./dist/index.js
@@ -5972,7 +5972,7 @@ __metadata:
     rimraf: 3.0.2
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
-    typescript: 4.6.2
+    typescript: 4.6.3
     url-loader: 4.1.1
     webpack: 5.70.0
     webpack-bundle-analyzer: 4.5.0
@@ -6020,7 +6020,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
     prettier: 2.5.1
-    typescript: 4.6.2
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -6045,7 +6045,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-hook-form: 7.28.1
-    typescript: 4.6.2
+    typescript: 4.6.3
   peerDependencies:
     graphql: 16.3.0
     react: 17.0.2
@@ -6084,7 +6084,7 @@ __metadata:
     jest: 27.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -6133,7 +6133,7 @@ __metadata:
     string-env-interpolation: 1.0.1
     systeminformation: 5.11.9
     toml: 3.0.0
-    typescript: 4.6.2
+    typescript: 4.6.3
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -6158,7 +6158,7 @@ __metadata:
     cross-undici-fetch: 0.1.27
     jest: 27.5.1
     mime-types: 2.1.35
-    typescript: 4.6.2
+    typescript: 4.6.3
   peerDependencies:
     react: 17.0.2
     react-dom: 17.0.2
@@ -6194,7 +6194,7 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
-    typescript: 4.6.2
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -6227,7 +6227,7 @@ __metadata:
     proxyquire: 2.1.3
     toml: 3.0.0
     ts-morph: 14.0.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.4
     vscode-languageserver-types: 3.16.0
@@ -6288,7 +6288,7 @@ __metadata:
     jest-watch-typeahead: 1.0.0
     msw: 0.39.2
     ts-toolbelt: 9.6.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -6317,7 +6317,7 @@ __metadata:
     react-hot-toast: 2.2.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 4.6.2
+    typescript: 4.6.3
   peerDependencies:
     prop-types: 15.8.1
     react: 17.0.2
@@ -12713,7 +12713,7 @@ __metadata:
     fs-extra: 10.0.1
     jest: 27.5.1
     listr: 0.14.3
-    typescript: 4.6.2
+    typescript: 4.6.3
     yargs: 16.2.0
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -26222,7 +26222,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.6.2
+    typescript: 4.6.3
     typescript-transform-paths: 3.3.1
     zx: 6.0.7
   languageName: unknown
@@ -28993,23 +28993,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.6.2":
-  version: 4.6.2
-  resolution: "typescript@npm:4.6.2"
+"typescript@npm:4.6.3":
+  version: 4.6.3
+  resolution: "typescript@npm:4.6.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 29fb8edbdc3bfc0ee043b1da9fb1d13e53f08997b920f3b2afbc5b1800c1510a2e9dbaec75135a1123cca8c405b5483629e9dd04f3933c6a0357b79e6d9fe460
+  checksum: 53e8bcf00abde8ecb2002d1f1e15160b21cb62b2dd0ff71bad2ef55fa96141f76316fce649a415758d3f17bd8e0c5676d8f017c34ec3e38b585812d4717a712c
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>":
-  version: 4.6.2
-  resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=bda367"
+"typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>":
+  version: 4.6.3
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 92fe25239f0db8d649f4c8d061f78b43deacc1a95727f45ea5d799ebafae2a4891b11d6c6310e8ea38a928851da92d61ecd0e89b515a32e317279a4f1c707da1
+  checksum: 8d62a37d9f238d83b6cdc738be90bb476a61c7e05d5924ecfb894eb63f39406b0660bd931876546a2be6895cd2678ddcb7f6793ceaab1454bc4e39f3cd9eb889
   languageName: node
   linkType: hard
 
