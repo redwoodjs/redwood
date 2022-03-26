@@ -281,7 +281,7 @@ export const handler = createGraphQLHandler({
 
 Did you know that you can query `redwood`? Try it in the GraphQL Playground (you can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running&mdash;`yarn rw dev api`):
 
-```gql
+```graphql
 query {
   redwood {
     version
