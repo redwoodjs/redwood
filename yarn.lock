@@ -5760,7 +5760,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.10.3
     split2: 4.1.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     yargs: 16.2.0
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -5794,7 +5794,7 @@ __metadata:
     pino: 7.9.2
     split2: 4.1.0
     title-case: 3.0.3
-    typescript: 4.6.2
+    typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
     "@clerk/clerk-sdk-node": 2.10.0
@@ -5827,7 +5827,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 2.10.0
     "@clerk/types": 1.29.3
     "@nhost/nhost-js": 0.3.13
-    "@supabase/supabase-js": 1.31.2
+    "@supabase/supabase-js": 1.32.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
     firebase: 9.6.10
@@ -5838,7 +5838,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     react: 17.0.2
     supertokens-auth-react: 0.19.0
-    typescript: 4.6.2
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -5874,7 +5874,6 @@ __metadata:
     listr: 0.14.3
     listr-verbose-renderer: 0.6.0
     lodash: 4.17.21
-    node-ssh: 12.0.4
     param-case: 3.0.4
     pascalcase: 1.0.0
     pluralize: 8.0.0
@@ -5884,7 +5883,7 @@ __metadata:
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 4.6.2
+    typescript: 4.6.3
     yargs: 16.2.0
   bin:
     redwood: ./dist/index.js
@@ -5973,7 +5972,7 @@ __metadata:
     rimraf: 3.0.2
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
-    typescript: 4.6.2
+    typescript: 4.6.3
     url-loader: 4.1.1
     webpack: 5.70.0
     webpack-bundle-analyzer: 4.5.0
@@ -6021,7 +6020,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
     prettier: 2.5.1
-    typescript: 4.6.2
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -6046,7 +6045,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-hook-form: 7.28.1
-    typescript: 4.6.2
+    typescript: 4.6.3
   peerDependencies:
     graphql: 16.3.0
     react: 17.0.2
@@ -6085,7 +6084,7 @@ __metadata:
     jest: 27.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -6134,7 +6133,7 @@ __metadata:
     string-env-interpolation: 1.0.1
     systeminformation: 5.11.9
     toml: 3.0.0
-    typescript: 4.6.2
+    typescript: 4.6.3
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -6159,7 +6158,7 @@ __metadata:
     cross-undici-fetch: 0.1.27
     jest: 27.5.1
     mime-types: 2.1.35
-    typescript: 4.6.2
+    typescript: 4.6.3
   peerDependencies:
     react: 17.0.2
     react-dom: 17.0.2
@@ -6195,7 +6194,7 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
-    typescript: 4.6.2
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -6228,7 +6227,7 @@ __metadata:
     proxyquire: 2.1.3
     toml: 3.0.0
     ts-morph: 14.0.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.4
     vscode-languageserver-types: 3.16.0
@@ -6289,7 +6288,7 @@ __metadata:
     jest-watch-typeahead: 1.0.0
     msw: 0.39.2
     ts-toolbelt: 9.6.0
-    typescript: 4.6.2
+    typescript: 4.6.3
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -6318,7 +6317,7 @@ __metadata:
     react-hot-toast: 2.2.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 4.6.2
+    typescript: 4.6.3
   peerDependencies:
     prop-types: 15.8.1
     react: 17.0.2
@@ -7285,16 +7284,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/gotrue-js@npm:^1.22.3":
-  version: 1.22.3
-  resolution: "@supabase/gotrue-js@npm:1.22.3"
+"@supabase/functions-js@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@supabase/functions-js@npm:1.2.0"
   dependencies:
-    cross-fetch: ^3.0.6
-  checksum: ab805f457edb60aeceaa28192ab02c810b5a122134676aae6bbc21b696363b189923dd232877b9367f86fdfd32bef1b5d5210adfb8f3f781fdd883c4a605c95a
+    cross-fetch: ^3.1.5
+  checksum: 1380816dc572244b48d873034844522d1567599e9ac95456618a8c7f6c912c0ff063a21e4f86802ff7bf7d9ebd945d4b51771c4a923fcdf75b83069f5ee39763
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:^0.37.0":
+"@supabase/gotrue-js@npm:^1.22.8":
+  version: 1.22.8
+  resolution: "@supabase/gotrue-js@npm:1.22.8"
+  dependencies:
+    cross-fetch: ^3.0.6
+  checksum: 57ab412fdd160c4027755ad8837f0de56cf121783250a6b670371a24a7db16b13dfcfa1ef67cc2416f63a9281738dcc32111377138fae842e4a0834cb770ed16
+  languageName: node
+  linkType: hard
+
+"@supabase/postgrest-js@npm:^0.37.1":
   version: 0.37.1
   resolution: "@supabase/postgrest-js@npm:0.37.1"
   dependencies:
@@ -7303,13 +7311,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^1.3.6":
-  version: 1.3.6
-  resolution: "@supabase/realtime-js@npm:1.3.6"
+"@supabase/realtime-js@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@supabase/realtime-js@npm:1.4.0"
   dependencies:
+    "@types/lodash.clonedeep": ^4.5.6
+    "@types/phoenix": ^1.5.4
     "@types/websocket": ^1.0.3
+    lodash.clonedeep: ^4.5.0
     websocket: ^1.0.34
-  checksum: 5429b54dae79b47fab91771056556ed996609b5b159d7d71052197ee644060d1122f0021cc1512562aead9a2784f2e890a73bc1b7089e2ead20440e76510c598
+  checksum: 837766467e7fb459bafafb6fbaca57e1c08ea44f81d711e1cc6a6d209d32f885820239fa1a617212788b413e54a43fcb8d187a182594c5161442df9eb44203ff
   languageName: node
   linkType: hard
 
@@ -7322,15 +7333,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.31.2":
-  version: 1.31.2
-  resolution: "@supabase/supabase-js@npm:1.31.2"
+"@supabase/supabase-js@npm:1.32.1":
+  version: 1.32.1
+  resolution: "@supabase/supabase-js@npm:1.32.1"
   dependencies:
-    "@supabase/gotrue-js": ^1.22.3
-    "@supabase/postgrest-js": ^0.37.0
-    "@supabase/realtime-js": ^1.3.6
+    "@supabase/functions-js": ^1.2.0
+    "@supabase/gotrue-js": ^1.22.8
+    "@supabase/postgrest-js": ^0.37.1
+    "@supabase/realtime-js": ^1.4.0
     "@supabase/storage-js": ^1.6.4
-  checksum: c7c832572341b8237d3e40928d35edfbe3ad973712433785170111f8f6bfb24fee490362035318d6e34a40188307c47faf7ced255a295cfbbbfaa9b9dbbb556d
+  checksum: e9c74861ebc1632d58aa743a000f90da9b4ba426fb3b8e0cf05cc568cb6caf62a9d6ac13ea1078e0ac99b593cf1b6433e43a428ca3d5a4c11a4916b17e24122f
   languageName: node
   linkType: hard
 
@@ -8004,6 +8016,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.clonedeep@npm:^4.5.6":
+  version: 4.5.6
+  resolution: "@types/lodash.clonedeep@npm:4.5.6"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: a0aeb1779171e59753cb6cb5abc2682db71bdd8f55631b556f8207fbb4247607451ecc486ee7d4c53b58aa071e1164c43960ed2e73d7a7c78150ee49848e5223
+  languageName: node
+  linkType: hard
+
 "@types/lodash.escape@npm:4.0.6":
   version: 4.0.6
   resolution: "@types/lodash.escape@npm:4.0.6"
@@ -8232,6 +8253,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: aff340fad5e6cbb580853e9cd11f16fa6ecbcb4d76b68ab862d8b06e5e283fc45a17e2784f8e093605af8e0e43148ae064c4df435f5bcc7afdb202282b8bf65d
+  languageName: node
+  linkType: hard
+
+"@types/phoenix@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "@types/phoenix@npm:1.5.4"
+  checksum: ea146325918847b94c545d99c62d233dca9cf71111bed674eeee3c75e5a8e967fe785c9cf70e4b869c12337200955346bce63fa42de2eb3969f7db621c2da48b
   languageName: node
   linkType: hard
 
@@ -9888,7 +9916,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:^0.2.4, asn1@npm:~0.2.3":
+"asn1@npm:~0.2.3":
   version: 0.2.6
   resolution: "asn1@npm:0.2.6"
   dependencies:
@@ -10651,7 +10679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bcrypt-pbkdf@npm:^1.0.0, bcrypt-pbkdf@npm:^1.0.2":
+"bcrypt-pbkdf@npm:^1.0.0":
   version: 1.0.2
   resolution: "bcrypt-pbkdf@npm:1.0.2"
   dependencies:
@@ -12622,16 +12650,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cpu-features@npm:0.0.2":
-  version: 0.0.2
-  resolution: "cpu-features@npm:0.0.2"
-  dependencies:
-    nan: ^2.14.1
-    node-gyp: latest
-  checksum: 54e6b66bcb3e046ce39a0116ddfde209a77202574ecedc820128021ff56e1022601d666721545342e0d08922b748a33d43c7c1e7d0040079c3c431a8bafe4b3a
-  languageName: node
-  linkType: hard
-
 "cpy@npm:^8.1.2":
   version: 8.1.2
   resolution: "cpy@npm:8.1.2"
@@ -12724,7 +12742,7 @@ __metadata:
     fs-extra: 10.0.1
     jest: 27.5.1
     listr: 0.14.3
-    typescript: 4.6.2
+    typescript: 4.6.3
     yargs: 16.2.0
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -21897,7 +21915,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.12.1, nan@npm:^2.14.1, nan@npm:^2.15.0":
+"nan@npm:^2.12.1":
   version: 2.15.0
   resolution: "nan@npm:2.15.0"
   dependencies:
@@ -22216,20 +22234,6 @@ __metadata:
   version: 2.0.2
   resolution: "node-releases@npm:2.0.2"
   checksum: d4f0f090670c02c3537b38c43ff39216be0addd75908cd7027bfff30a3ce8ac9b1db0c802c60756d1e79c33b8154dd0c9f2e5bbfb0deaaf39563299d52458ae9
-  languageName: node
-  linkType: hard
-
-"node-ssh@npm:12.0.4":
-  version: 12.0.4
-  resolution: "node-ssh@npm:12.0.4"
-  dependencies:
-    is-stream: ^2.0.0
-    make-dir: ^3.1.0
-    sb-promise-queue: ^2.1.0
-    sb-scandir: ^3.1.0
-    shell-escape: ^0.2.0
-    ssh2: ^1.5.0
-  checksum: 077ffcdca7613b9192e59b2e9246065b7b84b5c29d7ed67f4c3985d224e8aa242cc8b95f1197171383ac415a2a55e500e5328495373b88e010abb50f8e77e516
   languageName: node
   linkType: hard
 
@@ -26247,7 +26251,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.6.2
+    typescript: 4.6.3
     typescript-transform-paths: 3.3.1
     zx: 6.0.7
   languageName: unknown
@@ -26385,22 +26389,6 @@ __metadata:
   dependencies:
     xmlchars: ^2.2.0
   checksum: b7476c41dbe1c3a89907d2546fecfba234de5e66743ef914cde2603f47b19bed09732ab51b528ad0f98b958369d8be72b6f5af5c9cfad69972a73d061f0b3952
-  languageName: node
-  linkType: hard
-
-"sb-promise-queue@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "sb-promise-queue@npm:2.1.0"
-  checksum: 76ee74af0c7c4db89fac2acf12615c1801f2c2848fd8028a97b515d13adcc680f68f353ebb6ddc7f4253619326e62b7cf5f1afc6a675b1470d4df30b726452ed
-  languageName: node
-  linkType: hard
-
-"sb-scandir@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "sb-scandir@npm:3.1.0"
-  dependencies:
-    sb-promise-queue: ^2.1.0
-  checksum: 550ac637d8e4a5c05ab8220bd9d2978f6f69a32f7096200474450684d54245fed76182976b6d1348939365d6ac60b65c24be2a35715b5c694e3c36d93d00f41f
   languageName: node
   linkType: hard
 
@@ -26820,13 +26808,6 @@ __metadata:
   version: 3.0.0
   resolution: "shebang-regex@npm:3.0.0"
   checksum: 1dbed0726dd0e1152a92696c76c7f06084eb32a90f0528d11acd764043aacf76994b2fb30aa1291a21bd019d6699164d048286309a278855ee7bec06cf6fb690
-  languageName: node
-  linkType: hard
-
-"shell-escape@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "shell-escape@npm:0.2.0"
-  checksum: 501616713d13fd053b3858da18b613d83bfcdc8368e62be393dc563cc9fe2550492d403f73211e9a84429f39c8b9617f1e016dabee177b0ebdcb298fa47fc612
   languageName: node
   linkType: hard
 
@@ -27366,23 +27347,6 @@ __metadata:
   version: 1.0.3
   resolution: "sprintf-js@npm:1.0.3"
   checksum: ecadcfe4c771890140da5023d43e190b7566d9cf8b2d238600f31bec0fc653f328da4450eb04bd59a431771a8e9cc0e118f0aa3974b683a4981b4e07abc2a5bb
-  languageName: node
-  linkType: hard
-
-"ssh2@npm:^1.5.0":
-  version: 1.7.0
-  resolution: "ssh2@npm:1.7.0"
-  dependencies:
-    asn1: ^0.2.4
-    bcrypt-pbkdf: ^1.0.2
-    cpu-features: 0.0.2
-    nan: ^2.15.0
-  dependenciesMeta:
-    cpu-features:
-      optional: true
-    nan:
-      optional: true
-  checksum: 313ab70d1cd077a878a7d7ae61204eb323c6d1b75bf1a6713099e7f3ba351f911644b845030426fdcafa3a2439e3927d16aacb812b713d1c184751176fd9c242
   languageName: node
   linkType: hard
 
@@ -29058,23 +29022,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.6.2":
-  version: 4.6.2
-  resolution: "typescript@npm:4.6.2"
+"typescript@npm:4.6.3":
+  version: 4.6.3
+  resolution: "typescript@npm:4.6.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 29fb8edbdc3bfc0ee043b1da9fb1d13e53f08997b920f3b2afbc5b1800c1510a2e9dbaec75135a1123cca8c405b5483629e9dd04f3933c6a0357b79e6d9fe460
+  checksum: 53e8bcf00abde8ecb2002d1f1e15160b21cb62b2dd0ff71bad2ef55fa96141f76316fce649a415758d3f17bd8e0c5676d8f017c34ec3e38b585812d4717a712c
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>":
-  version: 4.6.2
-  resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=bda367"
+"typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>":
+  version: 4.6.3
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 92fe25239f0db8d649f4c8d061f78b43deacc1a95727f45ea5d799ebafae2a4891b11d6c6310e8ea38a928851da92d61ecd0e89b515a32e317279a4f1c707da1
+  checksum: 8d62a37d9f238d83b6cdc738be90bb476a61c7e05d5924ecfb894eb63f39406b0660bd931876546a2be6895cd2678ddcb7f6793ceaab1454bc4e39f3cd9eb889
   languageName: node
   linkType: hard
 
