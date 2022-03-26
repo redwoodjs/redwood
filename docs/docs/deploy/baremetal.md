@@ -43,6 +43,8 @@ This will create a couple of files and add a dependency or two to your `package.
 >
 > PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not laywers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
 
+If you see an error from `gyp` you may need to add some additional dependencies before `yarn install` will be able to complete. See the README for `node-type` for more info: https://github.com/nodejs/node-gyp#installation
+
 ## Configuration
 
 Before your first deply you'll need to add some configuration.
