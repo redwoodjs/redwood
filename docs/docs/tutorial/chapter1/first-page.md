@@ -43,7 +43,7 @@ const Routes = () => {
 export default Routes
 ```
 
-As long as you have a Home route with path `/`, you'll never see the initial Redwood splash screen again.
+As long as you have a route with path `/`, you'll never see the initial Redwood splash screen again.
 
 When no route can be found that matches the requested URL, Redwood will render the `NotFoundPage`.
 
