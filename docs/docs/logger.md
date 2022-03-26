@@ -29,9 +29,7 @@ To start 🌲🪓 api-side logging, just
 - import the logger in your service, function, or any other lib
 - use `logger` with the level just as you might have with `console`
 
-```js
-// api/lib/logger.ts
-
+```js title="api/lib/logger.ts"
 import { createLogger } from '@redwoodjs/api/logger'
 
 /**
@@ -540,8 +538,7 @@ export const logger = createLogger({
 - Configure the `stream` with your [API key and sourceToken](https://github.com/Logflare/pino-logflare/blob/master/docs/API.md)
 - Set the logger `destination` to the `stream`
 
-```js
-// api/src/lib/logger.ts
+```js title="api/src/lib/logger.ts"
 import { createWriteStream } from 'pino-logflare'
 
 /**
@@ -575,8 +572,7 @@ yarn workspace api add pino-logdna
 - Configure the `stream` with your [ingestion key](https://github.com/Logflare/pino-logflare/blob/master/docs/API.md)
 - Set the logger `destination` to the `stream`
 
-```js
-// api/src/lib/logger.ts
+```js title="api/src/lib/logger.ts"
 import pinoLogDna from 'pino-logdna'
 
 const stream = pinoLogDna({

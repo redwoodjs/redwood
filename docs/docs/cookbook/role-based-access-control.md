@@ -153,9 +153,7 @@ Roles may be stored within `app_metadata` or sometimes within `authorization` un
 
 The `parseJWT` helper will consider both locations to extract roles on the decoded JWT.
 
-```js
-// api/lib/auth.js
-
+```js title="api/lib/auth.js"
 import { parseJWT } from '@redwoodjs/api'
 
 export const getCurrentUser = async (decoded) => {
@@ -213,9 +211,7 @@ Given that your decoded JWT `sub` claim will contain the `uuid`, you can fetch t
 
 Once you have the `UserRole`s, then you can set an array of their `name`s on the `currentUser`.
 
-```js
-// api/lib/auth.js
-
+```js title="api/lib/auth.js"
 export const getCurrentUser = async (decoded) => {
   const userRoles = await db.userRole.findMany({
     where: { user: { uuid: decoded.sub } },
@@ -563,9 +559,7 @@ If you return a status other than 200 or 204 from one of these event functions, 
 
 If your serverless function returns a 200, you can also return a JSON object with new user_metadata or app_metadata for the Identity user.
 
-```js
-// api/src/functions/identity-signup.js
-
+```js title="api/src/functions/identity-signup.js"
 export const handler = async (req, _context) => {
   const body = JSON.parse(req.body)
 

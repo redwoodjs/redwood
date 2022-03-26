@@ -201,9 +201,7 @@ A Cell renders this component if there's no data.
 
 What do we mean by no data? We mean if the response is 1) `null` or 2) an empty array (`[]`). There's actually four functions in [createCell.tsx](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/components/createCell.tsx) dedicated just to figuring this out:
 
-```javascript
-// createCell.tsx
-
+```javascript title="createCell.tsx"
 const isDataNull = (data: DataObject) => {
   return dataField(data) === null
 }

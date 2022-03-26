@@ -264,8 +264,7 @@ yarn add @redwoodjs/auth netlify-identity-widget
 You will need to enable Identity on your Netlify site.
 <!-- See [Netlify Identity Setup](tutorial/chapter4/authentication.md#netlify-identity-setup). -->
 
-```js
-// web/src/App.js
+```js title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import netlifyIdentity from 'netlify-identity-widget'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
@@ -330,8 +329,7 @@ yarn workspace web add gotrue-js
 
 Instantiate GoTrue and pass in your configuration. Be sure to set APIUrl to the API endpoint found in your Netlify site's Identity tab:
 
-```js
-// web/src/App.js
+```js title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import GoTrue from 'gotrue-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -397,8 +395,7 @@ Rotating the refresh token reduces the risk of a compromised refresh token. For 
 
 > **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](environment-variables.md) to include them in your `redwood.toml`.
 
-```js
-// web/src/App.js
+```js title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -502,9 +499,7 @@ To get started with Clerk, sign up on [their website](https://clerk.dev/) and cr
 
 It's important that the `ClerkAuthProvider` added to your `App.{js|ts}` file during setup is within the `RedwoodProvider` and around Redwood's `AuthProvider`:
 
-```ts {6,12}
-// web/src/App.{js|ts}
-
+```ts {6,12} title="web/src/App.{js|ts}"
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
@@ -595,8 +590,7 @@ Enter allowed redirect urls for the integrations, e.g. `http://localhost:8910/lo
 
 The Authority is a URL that indicates a directory that MSAL can request tokens from which you can read about [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority). However, you most likely want to have e.g. `https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>` is the Azure Active Directory tenant id. This will be the `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
-```js
-// web/src/App.js
+```js title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import { PublicClientApplication } from '@azure/msal-browser'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -684,8 +678,7 @@ To get your application keys, go to [dashboard.magic.link](https://dashboard.mag
 
 > **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](environment-variables.md) to "Whitelist them in your `redwood.toml`".
 
-```js
-// web/src/App.js|tsx
+```js title="web/src/App.js|tsx"
 import { useAuth, AuthProvider } from '@redwoodjs/auth'
 import { Magic } from 'magic-sdk'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -711,8 +704,7 @@ const App = () => (
 export default App
 ```
 
-```js
-// web/src/Routes.js|tsx
+```js title="web/src/Routes.js|tsx"
 import { useAuth } from '@redwoodjs/auth'
 import { Router, Route } from '@redwoodjs/router'
 
@@ -751,8 +743,7 @@ We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/
 
 > **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
 
-```js
-// web/src/App.js
+```js title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import { initializeApp, getApps, getApp } from '@firebase/app'
 import * as firebaseAuth from '@firebase/auth'
@@ -1193,8 +1184,7 @@ If you intend to support, RBAC then in your `api/src/lib/auth.js` you need to ex
 
 If your roles are on a namespaced `app_metadata` claim, then `parseJWT` provides an option to provide this value.
 
-```js
-// api/src/lib/auth.js`
+```js title="api/src/lib/auth.js"
 const NAMESPACE = 'https://example.com'
 
 const currentUserWithRoles = async (decoded) => {
@@ -1235,8 +1225,7 @@ yarn workspace api add @magic-sdk/admin
 
 To get your application running _without setting up_ `Prisma`, get your `SECRET KEY` from [dashboard.magic.link](https://dashboard.magic.link/). Then add `MAGICLINK_SECRET` to your `.env`.
 
-```js
-// redwood/api/src/lib/auth.js|ts
+```js title="redwood/api/src/lib/auth.js|ts"
 import { Magic } from '@magic-sdk/admin'
 
 export const getCurrentUser = async (_decoded, { token }) => {
@@ -1248,8 +1237,7 @@ export const getCurrentUser = async (_decoded, { token }) => {
 
 Magic.link recommends using the issuer as the userID to retrieve user metadata via `Prisma`
 
-```js
-// redwood/api/src/lib/auth.ts
+```js title="redwood/api/src/lib/auth.ts"
 import { Magic } from '@magic-sdk/admin'
 
 export const getCurrentUser = async (_decoded, { token }) => {
@@ -1412,8 +1400,7 @@ Netlify will store the user's roles on the `app_metadata` claim and the `parseJW
 
 For example:
 
-```js
-// api/src/lib/auth.js`
+```js title="api/src/lib/auth.js"
 export const getCurrentUser = async (decoded) => {
   return context.currentUser || { ...decoded, roles: parseJWT({ decoded }).roles }
 }

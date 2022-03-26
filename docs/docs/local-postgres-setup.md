@@ -12,16 +12,16 @@ brew install postgres
 ```
 
 > **Install Postgres? I've messed up my Postgres installation so many times, I wish I could just uninstall everything and start over!**
-> 
+>
 > We've been there before. For those of you on a Mac, [this video](https://www.youtube.com/watch?v=1aybOgni7lI) is a great resource on how to wipe the various Postgres installs off your machine so you can get back to a blank slate.
 > Obviously, warning! This resource will teach you how to wipe the various Postgres installs off your machine. Please only do it if you know you can!
 
 ### Windows and Other Platforms
-If you're using another platform, see Prisma's [Data Guide](https://www.prisma.io/docs/guides/database-workflows/setting-up-a-database/postgresql) for detailed instructions on how to get up and running. 
+If you're using another platform, see Prisma's [Data Guide](https://www.prisma.io/docs/guides/database-workflows/setting-up-a-database/postgresql) for detailed instructions on how to get up and running.
 
 ## Creating a database
 
-If everything went well, then Postgres should be running and you should have a few commands at your disposal (namely, `psql`, `createdb`, and `dropdb`). 
+If everything went well, then Postgres should be running and you should have a few commands at your disposal (namely, `psql`, `createdb`, and `dropdb`).
 
 Check that Postgres is running with `brew services` (the `$(whoami)` bit in the code block below is just where your username should appear):
 
@@ -49,7 +49,7 @@ You'll probably get an error like:
 psql: error: FATAL:  database $(whoami) does not exist
 ```
 
-This is because `psql` tries to log you into a database of the same name as your user. But if you just installed Postgres, odds are that database doesn't exist. 
+This is because `psql` tries to log you into a database of the same name as your user. But if you just installed Postgres, odds are that database doesn't exist.
 
 Luckily it's super easy to create one using another of the commands you got, `createdb`:
 
@@ -67,7 +67,7 @@ Type "help" for help.
 $(whoami)=#
 ```
 
-If it worked, you should see a prompt like the one above&mdash;your username followed by `=#`. You're in the PostgreSQL interactive terminal! While we won't get into `psql`, here's a few the commands you should know: 
+If it worked, you should see a prompt like the one above&mdash;your username followed by `=#`. You're in the PostgreSQL interactive terminal! While we won't get into `psql`, here's a few the commands you should know:
 
 - `\q` &mdash; quit (super important!)
 - `\l` &mdash; list databases
@@ -80,8 +80,7 @@ If you'd rather not follow any of the advice here and create another Postgres us
 Tell Prisma to use a Postgres database instead of SQLite by updating the `provider` attribute in your
 `schema.prisma` file:
 
-```prisma
-// prisma/schema.prisma
+```prisma title="prisma/schema.prisma"
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
@@ -136,7 +135,7 @@ yarn redwood prisma migrate dev
 If you've already created migrations using SQLite, e.g. you have a migrations directory at `api/db/migrations`, follow this two-step process.
 
 #### 1. Remove existing migrations
-**For Linux and Mac OS**  
+**For Linux and Mac OS**
 From your project root directory, run either command corresponding to your OS.
 ```bash
 rm -rf api/db/migrations

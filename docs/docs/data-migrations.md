@@ -25,9 +25,7 @@ You'll see a new directory created at `api/db/dataMigrations` which will store o
 
 Take a look at `schema.prisma` to see the new model definition:
 
-```javascript
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 model RW_DataMigration {
   version    String   @id
   name       String
@@ -54,9 +52,7 @@ To create a data migration we have a generator:
 
 This will create `api/db/dataMigrations/20200721123456-copy-preferences.js`:
 
-```javascript
-// api/db/dataMigrations/20200721123456-copy-preferences.js
-
+```javascript title="api/db/dataMigrations/20200721123456-copy-preferences.js"
 export default async ({ db }) => {
   // Migration here...
 }
@@ -68,9 +64,7 @@ export default async ({ db }) => {
 
 Now it's up to you to define your data migration. In our user/preference example, it may look something like:
 
-```javascript
-// api/db/dataMigrations/20200721123456-copy-preferences.js
-
+```javascript title="api/db/dataMigrations/20200721123456-copy-preferences.js"
 const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)

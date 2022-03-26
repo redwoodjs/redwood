@@ -95,8 +95,7 @@ We suggest always starting with globally-scoped mocks.
 
 To mock a Cell's `QUERY`, find the file ending with with `.mock.js` in your Cell's directory. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
 
-```js {4,5,6,12,13,14}
-// UserProfileCell/UserProfileCell.js
+```js {4,5,6,12,13,14} title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {
@@ -115,8 +114,7 @@ export const standard = {
 
 Since the value assigned to `standard` is the mock-data associated with the `QUERY`, modifying the `QUERY` means you also need to modify the mock-data.
 
-```diff
-// UserProfileCell/UserProfileCell.js
+```diff title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {

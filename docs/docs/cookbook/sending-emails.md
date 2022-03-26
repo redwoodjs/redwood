@@ -211,9 +211,7 @@ export default User
 
 We're using a GraphQL mutation here to trigger the sending of the email. To make that mutation work we need to add it to the users SDL.
 
-```ts
-// users.sdl.ts
-
+```ts title="users.sdl.ts"
 export const schema = gql`
   // ...
 
@@ -227,9 +225,7 @@ export const schema = gql`
 
 And then in the users service we'll just create a dummy method to start with.
 
-```ts
-// users.ts
-
+```ts title="users.ts"
 // ...
 
 export const emailUser = async ({ id }: Prisma.UserWhereUniqueInput) => {
@@ -275,8 +271,7 @@ That's it for SendInBlue. It's set up, and you have the key you need to send ema
 
 Now let's write the function that'll fire off the email. On the api side, in the `lib` folder, create a new file named `email.ts`. Paste this code in the file
 
-```ts
-// email.ts
+```ts title="email.ts"
 import * as nodemailer from 'nodemailer'
 
 interface Options {
@@ -317,9 +312,7 @@ In the code above you should replace "your@email.com" in two places with the ema
 
 Now let's go back to the users service and add the missing pieces there. At the top, after the db import, add the `sendEmail` import
 
-```ts
-// users.ts
-
+```ts title="users.ts"
 // ...
 
 import { sendEmail } from 'src/lib/email'
@@ -329,9 +322,7 @@ import { sendEmail } from 'src/lib/email'
 
 Then paste this function somewhere in the file
 
-```ts
-// users.ts
-
+```ts title="users.ts"
 // ...
 
 function sendTestEmail(emailAddress: string) {
@@ -350,9 +341,7 @@ function sendTestEmail(emailAddress: string) {
 
 Finally, replace the `console.log` we left earlier with this code
 
-```ts
-// users.ts
-
+```ts title="users.ts"
 // ...
 
 await sendTestEmail(user.email)
@@ -370,9 +359,7 @@ One thing I wanted to note here is that this might bypass security measures you 
 
 With that little PSA out of the way, let's make this auditing stuff happen!
 
-```ts
-// users.ts
-
+```ts title="users.ts"
 // ...
 
 import { createAudit } from '../audits/audits'

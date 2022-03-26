@@ -181,8 +181,7 @@ type user {
 
 and if the `currentUser` is an `ADMIN`, then skip the masking transform and simply return the original resolved field value:
 
-```jsx
-// ./api/directives/maskedEmail.directive.js
+```jsx title="./api/directives/maskedEmail.directive.js"
 import { createTransformerDirective, TransformerDirectiveFunc } from '@redwoodjs/graphql-server'
 
 export const schema = gql`
@@ -372,9 +371,7 @@ You simply add them to the `directives` directory and the `createGraphQLHandler`
 
 > **Note**: Redwood has a generator that will do all the heavy lifting setup for you!
 
-```ts
-// api/src/functions/graphql.ts
-
+```ts title="api/src/functions/graphql.ts"
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}' // 👈 directives live here
@@ -447,9 +444,7 @@ It's your responsibility to implement the `requireAuth()` function in your app's
 
 The `@requireAuth` directive will call the `requireAuth()` function to determine if the user is authenticated or not.
 
-```ts
-// api/src/lib/auth.ts
-
+```ts title="api/src/lib/auth.ts"
 // ...
 
 export const isAuthenticated = (): boolean => {
@@ -547,8 +542,7 @@ const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
 
 Here we can access the `context` parameter and then check to see if the `currentUser` is authenticated and if they belong to the `SUBSCRIBER` role:
 
-```ts
-// /api/src/directives/isSubscriber/isSubscriber.ts
+```ts title="/api/src/directives/isSubscriber/isSubscriber.ts"
 // ...
 
 const validate: ValidatorDirectiveFunc = ({ context }) => {

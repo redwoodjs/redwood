@@ -125,9 +125,7 @@ If the function can successfully divide the two numbers, the function returns a 
 
 And, we'll have some error handling to consider the case when either the dividend or divisor is missing and return a [HTTP 400 Bad Request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400) status code; or, if we try to divide by zero or something else goes wrong, we return a [500 Internal Server Error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500).
 
-```typescript
-// api/src/functions/divide/divide.ts
-
+```typescript title="api/src/functions/divide/divide.ts"
 import type { APIGatewayEvent } from 'aws-lambda'
 
 export const handler = async (event: APIGatewayEvent) => {
@@ -206,9 +204,7 @@ Let's look at a series of tests that mock the event with different information i
 
 First, let's write a test that divides 20 by 5 and we'll expect to get 4 as the quotient:
 
-```javascript
-// api/src/functions/divideBy/divide.test.ts
-
+```javascript title="api/src/functions/divideBy/divide.test.ts"
 import { mockHttpEvent } from '@redwoodjs/testing/api'
 import { handler } from './divide'
 
@@ -232,8 +228,7 @@ describe('divide serverless function',  () => {
 
 Then we can also add a test to handle the error when we don't provide a dividend:
 
-```javascript
-// api/src/functions/divideBy/divide.test.ts
+```javascript title="api/src/functions/divideBy/divide.test.ts"
 it('requires a dividend', async () => {
   const httpEvent = mockHttpEvent({
     queryStringParameters: {
@@ -320,9 +315,7 @@ api
 
 Let's define a fixture for a new test case: when the function is invoked, but it is missing a divisor:
 
-```js
-// api/src/functions/divide/divide.fixtures.ts
-
+```js title="api/src/functions/divide/divide.fixtures.ts"
 import { mockHttpEvent } from '@redwoodjs/testing/api'
 
 export const missingDivisor = () =>
@@ -337,8 +330,7 @@ The `missingDivisor()` fixture constructs and mocks the event for the test case 
 
 Now, let's use this fixture in a test by providing the handler with the event we mocked in the fixture:
 
-```js
-// api/src/functions/divide/divide.test.ts
+```js title="api/src/functions/divide/divide.test.ts"
 import { missingDivisor } from './divide.fixtures'
 
 describe('divide serverless function', () => {
@@ -384,9 +376,7 @@ For our webhook test example, we'll create a webhook that updates a Order's Stat
 
 Because we'll be interacting with data, our app has an `Order` model defined in the Prisma schema that has a unique `trackingNumber` and `status`:
 
-```js
-// /api/db/schema.prisma
-
+```js title="/api/db/schema.prisma"
 model Order {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
@@ -507,9 +497,7 @@ We'll use these to test that you cannot update an order to the delivered status 
 
 We can refer to these individual orders in our tests as `scenario.order.placed`, `scenario.order.shipped` , or `scenario.order.delivered`.
 
-```ts
-// api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts
-
+```ts title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
 export const standard = defineScenario({
   order: {
     placed: {
@@ -543,8 +531,7 @@ In each test scenario we will:
 
 In our first scenario, we'll use the shipped order to test that we can update the order given a valid tracking number and change its status to delivered:
 
-```ts
-// api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts
+```ts title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
 import { mockSignedWebhook } from '@redwoodjs/testing/api'
 import { handler } from './updateOrderStatus'
 
@@ -797,9 +784,7 @@ By default, RedwoodJS functions return strings or JSON. If you need to return bi
 
 Here's an example of how to return a binary file from the filesystem:
 
-```typescript
-// api/src/functions/myCustomFunction.ts
-
+```typescript title="api/src/functions/myCustomFunction.ts"
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 import fs from 'fs'
 

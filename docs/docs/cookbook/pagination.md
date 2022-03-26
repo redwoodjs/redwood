@@ -10,9 +10,7 @@ So you have a blog, and probably only a few short posts. But as the blog grows b
 
 We'll begin by updating the SDL. To our `Query` type a new query is added to get just a single page of posts. We'll pass in the page we want, and when returning the result we'll also include the total number of posts as that'll be needed when building our pagination component.
 
-```javascript
-// api/src/graphql/posts.sdl.js
-
+```javascript title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   # ...
 
@@ -34,9 +32,7 @@ export const schema = gql`
 You might have noticed that we made the page optional. That's because we want to be able to default to the first page if no page is provided.
 
 Now we need to add a resolver for this new query to our posts service.
-```javascript
-// api/src/services/posts/posts.js
-
+```javascript title="api/src/services/posts/posts.js"
 const POSTS_PER_PAGE = 5
 
 export const postPage = ({ page = 1 }) => {
@@ -57,9 +53,7 @@ So now we can make a GraphQL request (using [Apollo](https://www.apollographql.c
 
 With these updates to the API side of things done, it's time to move over to the web side. It's the BlogPostsCell component that makes the gql query to display the list of blog posts on the HomePage of the blog, so let's update that query.
 
-```javascript
-// web/src/components/BlogPostsCell/BlogPostsCell.js
-
+```javascript title="web/src/components/BlogPostsCell/BlogPostsCell.js"
 export const QUERY = gql`
   query BlogPostsQuery($page: Int) {
     postPage(page: $page) {
@@ -77,9 +71,7 @@ export const QUERY = gql`
 
 The `Success` component in the same file also needs a bit of an update to handle the new gql query result structure.
 
-```javascript
-// web/src/components/BlogPostsCell/BlogPostsCell.js
-
+```javascript title="web/src/components/BlogPostsCell/BlogPostsCell.js"
 export const Success = ({ postPage }) => {
   return postPage.posts.map((post) => <BlogPost key={post.id} post={post} />)
 }
@@ -87,9 +79,7 @@ export const Success = ({ postPage }) => {
 
 Now we need a way to pass a value for the `page` parameter to the query. To do that we'll take advantage of a little RedwoodJS magic. Remember from the tutorial how you made the post id part of the route path `(<Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />)` and that id was then sent as a prop to the BlogPostPage component? We'll do something similar here for the page number, but instead of making it a part of the url path, we'll make it a url query string. These, too, are magically passed as a prop to the relevant page component. And you don't even have to update the route to make it work! Let's update `HomePage.js` to handle the prop.
 
-```javascript
-// web/src/pages/HomePage/HomePage.js
-
+```javascript title="web/src/pages/HomePage/HomePage.js"
 const HomePage = ({ page = 1 }) => {
   return (
     <BlogLayout>
@@ -103,9 +93,7 @@ So now if someone navigates to https://awesomeredwoodjsblog.com?page=2 (and the 
 
 Going back to `BlogPostsCell` there is one me thing to add before the query parameter work.
 
-```javascript
-// web/src/components/BlogPostsCell/BlogPostsCell.js
-
+```javascript title="web/src/components/BlogPostsCell/BlogPostsCell.js"
 export const beforeQuery = ({ page }) => {
   page = page ? parseInt(page, 10) : 1
 
@@ -121,9 +109,7 @@ The final thing to add is a page selector, or pagination component, to the end o
 
 Generate a new component with`yarn rw g component Pagination`
 
-```javascript
-// web/src/components/Pagination/Pagination.js
-
+```javascript title="web/src/components/Pagination/Pagination.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const POSTS_PER_PAGE = 5
@@ -156,9 +142,7 @@ Keeping with the theme of the official RedwoodJS tutorial we're not adding any c
 
 Finally let's add this new component to the end of `BlogPostsCell`. Don't forget to `import` it at the top as well.
 
-```javascript
-// web/src/components/BlogPostsCell/BlogPostsCell.js
-
+```javascript title="web/src/components/BlogPostsCell/BlogPostsCell.js"
 import Pagination from 'src/components/Pagination'
 
 // ...

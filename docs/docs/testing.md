@@ -229,9 +229,7 @@ which will only run test specs matching "Comment" in the API side
 
 Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
 
-```javascript
-// web/src/components/Article/Article.js
-
+```javascript title="web/src/components/Article/Article.js"
 const Article = ({ article }) => {
   return <article>{ article.title }</article>
 }
@@ -261,9 +259,7 @@ In most cases you will want to exclude the design elements and structure of your
 
 In our **&lt;Article&gt;** component it seems like we really just want to test that the title of the product is rendered. *How* and *what it looks like* aren't really a concern for this test. Let's update the test to just check for the presence of the title itself:
 
-```javascript {3,7-9}
-// web/src/components/Article/Article.test.js
-
+```javascript {3,7-9} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 
 describe('Article', () => {
@@ -287,9 +283,7 @@ Why not use `getByText()` for everything? Because it will raise an error if the 
 
 Consider an update to our **&lt;Article&gt;** component:
 
-```javascript
-// web/src/components/Article/Article.js
-
+```javascript title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const Article = ({ article, summary }) => {
@@ -309,9 +303,7 @@ export default Article
 
 If we're only displaying the summary of an article then we'll only show the first 100 characters with an ellipsis on the end ("...") and include a link to "Read more" to see the full article. A reasonable test for this component would be that when the `summary` prop is `true` then the "Read more" text should be present. If `summary` is `false` then it should *not* be present. That's where `queryByText()` comes in (relevant test lines are highlighted):
 
-```javascript {18,24}
-// web/src/components/Article/Article.test.js
-
+```javascript {18,24} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -455,9 +447,7 @@ If you're using GraphQL inside your components, you can mock them to return the 
 
 > Normally we recommend using a cell for exactly this functionality, but for the sake of completeness we're showing how to test when doing GraphQL queries the manual way!
 
-```javascript
-// web/src/components/Article/Article.js
-
+```javascript title="web/src/components/Article/Article.js"
 import { useQuery } from '@redwoodjs/web'
 
 const GET_ARTICLE = gql`
@@ -492,9 +482,7 @@ export default Article
 
 Redwood provides the test function `mockGraphQLQuery()` for providing the result of a given named GraphQL. In this case our query is named `getArticle` and we can mock that in our test as follows:
 
-```javascript {8-16,20}
-// web/src/components/Article/Article.test.js
-
+```javascript {8-16,20} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -543,9 +531,7 @@ mockGraphQLQuery('getArticle', (variables, { ctx }) => {
 
 You could then test that you show a proper error message in your component:
 
-```javascript {4,8-10,21,27}
-// web/src/components/Article/Article.js
-
+```javascript {4,8-10,21,27} title="web/src/components/Article/Article.js"
 const Article = ({ id }) => {
   const { data, error } = useQuery(GET_ARTICLE, {
     variables: { id },
@@ -583,9 +569,7 @@ Most applications will eventually add [Authentication/Authorization](authenticat
 
 Consider the following component (that happens to be a page) which displays a "welcome" message if the user is logged in, and a button to log in if they aren't:
 
-```javascript
-// web/src/pages/HomePage/HomePage.js
-
+```javascript title="web/src/pages/HomePage/HomePage.js"
 import { useAuth } from '@redwoodjs/auth'
 
 const HomePage = () => {
@@ -606,9 +590,7 @@ const HomePage = () => {
 
 If we didn't do anything special, there would be no user logged in and we could only ever test the not-logged-in state:
 
-```javascript
-// web/src/pages/HomePage/HomePage.test.js
-
+```javascript title="web/src/pages/HomePage/HomePage.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import HomePage from './HomePage'
 
@@ -627,9 +609,7 @@ This test is a little more explicit in that it expects an actual `<button>` elem
 
 How do we test that when a user *is* logged in, it outputs a message welcoming them, and that the button is *not* present? Similar to `mockGraphQLQuery()` Redwood also provides a `mockCurrentUser()` which tells Redwood what to return when the `getCurrentUser()` function of `api/src/lib/auth.js` is invoked:
 
-```javascript
-// web/src/pages/HomePage/HomePage.test.js
-
+```javascript title="web/src/pages/HomePage/HomePage.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 import HomePage from './HomePage'
 
@@ -754,9 +734,7 @@ Two situations make testing Cells unique:
 
 The first situation is really no different than regular component testing: you just test more than one component in your test. For example:
 
-```javascript
-// web/src/components/ArticleCell/ArticleCell.js
-
+```javascript title="web/src/components/ArticleCell/ArticleCell.js"
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
@@ -782,9 +760,7 @@ export const Success = ({ article }) => {
 
 Here we're exporting four components and if you created this Cell with the [Cell generator](cli-commands.md#generate-cell) then you'll already have four tests that make sure that each component renders without errors:
 
-```javascript
-// web/src/components/ArticleCell/ArticleCell.test.js
-
+```javascript title="web/src/components/ArticleCell/ArticleCell.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './ArticleCell'
 import { standard } from './ArticleCell.mock'
@@ -826,9 +802,7 @@ When the **&lt;Success&gt;** component is tested, what's this `standard()` funct
 
 If you used the Cell generator, you'll get a `mocks.js` file along with the cell component and the test file:
 
-```javascript
-// web/src/components/ArticleCell.mocks.js
-
+```javascript title="web/src/components/ArticleCell.mocks.js"
 export const standard = () => ({
   article: {
     id: 42,
@@ -844,9 +818,7 @@ Why not just include this data inline in the test? We're about to reveal the ans
 
 Once you start testing more scenarios you can add custom mocks with different names for use in your tests. For example, maybe you have a case where an article has no body, only a title, and you want to be sure that your component still renders correctly. You could create an additional mock that simulates this condition:
 
-```javascript
-// web/src/components/ArticleCell.mocks.js
-
+```javascript title="web/src/components/ArticleCell.mocks.js"
 export const standard = () => ({
   article: {
     id: 1,
@@ -866,9 +838,7 @@ export const missingBody = {
 
 And then you just reference that new mock in your test:
 
-```javascript
-// web/src/components/ArticleCell/ArticleCell.test.js
-
+```javascript title="web/src/components/ArticleCell/ArticleCell.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './ArticleCell'
 import { standard, missingBody } from './ArticleCell.mock'
@@ -905,9 +875,7 @@ So, all of that is to say that when `standard()` is called it will receive the v
 
 Perhaps you have a products page that renders either in stock or out of stock products. You could inspect the `status` that's passed into via `variables.status` and return a different inventory count depending on whether the calling code wants in-stock or out-of-stock items:
 
-```javascript
-// web/src/components/ProductCell/ProductCell.mock.js
-
+```javascript title="web/src/components/ProductCell/ProductCell.mock.js"
 export const standard = (variables) => {
   return {
     products: [
@@ -923,9 +891,7 @@ export const standard = (variables) => {
 
 Assuming you had a **&lt;ProductPage&gt;** component:
 
-```javascript
-// web/src/components/ProductCell/ProductCell.mock.js
-
+```javascript title="web/src/components/ProductCell/ProductCell.mock.js"
 import ProductCell from 'src/components/ProductCell'
 
 const ProductPage = ({ status }) => {
@@ -940,9 +906,7 @@ const ProductPage = ({ status }) => {
 
 Which, in your page test, would let you do something like:
 
-```javascript
-// web/src/pages/ProductPage/ProductPage.test.js
-
+```javascript title="web/src/pages/ProductPage/ProductPage.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import ArticleCell from 'src/components/ArticleCell'
 
@@ -963,9 +927,7 @@ describe('ProductPage', () => {
 
 Be aware that if you do this, and continue to use the `standard()` mock in your regular cell tests, you'll either need to start passing in `variables` yourself:
 
-```javascript {8}
-// web/src/components/ArticleCell/ArticleCell.test.js
-
+```javascript {8} title="web/src/components/ArticleCell/ArticleCell.test.js"
 describe('ArticleCell', () => {
   /// other tests...
   test('Success renders successfully', async () => {
@@ -978,9 +940,7 @@ describe('ArticleCell', () => {
 
 Or conditionally check that `variables` exists at all before basing any logic on them:
 
-```javascript {4,15}
-// web/src/components/ArticleCell/ArticleCell.mock.js
-
+```javascript {4,15} title="web/src/components/ArticleCell/ArticleCell.mock.js"
 export const standard = (variables) => {
   return {
     product: {
@@ -1010,8 +970,7 @@ yarn workspace web add -D @testing-library/user-event
 
 Let's assume you've already created a component using `yarn rw g component`. This component is built using the `@redwoodjs/forms` package and provides a simple interface for using the form: we subscribe to changes via an `onSubmit` callback-prop.
 
-```javascript
-// NameForm.js
+```javascript title="NameForm.js"
 import { Form, Submit, TextField } from '@redwoodjs/forms'
 
 const NameForm = ({ onSubmit }) => {
@@ -1047,8 +1006,7 @@ Now, we can extend the `test` file which Redwood generated. We're going to want 
 2) Add an import to `@testing-library/user-event` for its `default`.
 3) Provide an `onSubmit` prop to our "renders successfully" test.
 
-```javascript
-// NameForm.test.js
+```javascript title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 import userEvent from '@testing-library/user-event'
 
@@ -1077,8 +1035,7 @@ The important takeaways are:
 * We use `waitFor` because `user-event`'s methods are synchronous, which contradicts the above.
   * `waitFor` acts as our declaration of [`act`](https://reactjs.org/docs/test-utils.html#act), required when updating the state of a React component from a test.
 
-```javascript
-// NameForm.test.js
+```javascript title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 import userEvent from '@testing-library/user-event'
 
@@ -1175,8 +1132,7 @@ When you start your test suite you may notice some output from Prisma talking ab
 
 A Service test can be just as simple as a component test:
 
-```javascript
-// api/src/services/users/users.js
+```javascript title="api/src/services/users/users.js"
 export const createUser = ({ input }) => {
   return db.user.create({ data: input })
 }
@@ -1576,9 +1532,7 @@ Just like when testing the web-side, we can use `mockCurrentUser()` to mock out 
 
 Let's say our blog, when commenting, would attach a comment to a user record if that user was logged in while commenting. Otherwise the comment would be anonymous:
 
-```javascript
-// api/src/services/comments/comments.js
-
+```javascript title="api/src/services/comments/comments.js"
 export const createComment = ({ input }) => {
   if (context.currentUser) {
     return db.comment.create({ data: { userId: context.currentUser.id, ...input }})
@@ -1590,9 +1544,7 @@ export const createComment = ({ input }) => {
 
 We could include a couple of tests that verify this functionality like so:
 
-```javascript
-// api/src/services/comments/comments.test.js
-
+```javascript title="api/src/services/comments/comments.test.js"
 scenario('attaches a comment to a logged in user', async (scenario) => {
   mockCurrentUser({ id: 123, name: 'Rob' })
 

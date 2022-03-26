@@ -5,8 +5,8 @@ Redwood uses webpack. And with webpack comes configuration.
 One of Redwood's tenets is convention over configuration, so it's worth repeating that you don't have to do any of this!
 Take the golden path and everything will work just fine.
 
-But another of Redwood's tenets is to make the hard stuff possible. 
-Whether configuring webpack counts as hard-stuff or not is up for debate, but one thing we know for sure is that it can be an epic time sink. 
+But another of Redwood's tenets is to make the hard stuff possible.
+Whether configuring webpack counts as hard-stuff or not is up for debate, but one thing we know for sure is that it can be an epic time sink.
 We hope that documenting it well makes it fast and easy.
 
 ## Configuring Webpack
@@ -19,9 +19,7 @@ yarn rw setup webpack
 
 This command adds a file called `webpack.config.js` to your project's `web/config` directory, creating `web/config` if it doesn't exist:
 
-```js
-// web/config/webpack.config.js
-
+```js title="web/config/webpack.config.js"
 module.exports = (config, { mode }) => {
   if (mode === 'development') {
     /**

@@ -29,9 +29,7 @@ All this gets us closer to Redwood's goal of being able to deploy to a "generic 
 
 By default, Redwood Apps come ready-to-query with the `RedwoodApolloProvider`. As you can tell from the name, this Provider wraps [ApolloProvider](https://www.apollographql.com/docs/react/api/react/hooks/#the-apolloprovider-component). Omitting a few things, this is what you'll normally see in Redwood Apps:
 
-```js
-// web/src/App.js
-
+```js title="web/src/App.js"
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 // ...
@@ -47,9 +45,7 @@ const App = () => (
 
 You can use Apollo's `useQuery` and `useMutation` hooks by importing them from `@redwoodjs/web`, though if you're using `useQuery`, we recommend that you use a [Cell](cells.md):
 
-```js
-// web/src/components/MutateButton.js
-
+```js title="web/src/components/MutateButton.js"
 import { useMutation } from '@redwoodjs/web'
 
 const MUTATION = gql`
@@ -123,9 +119,7 @@ The key question Apollo Server asks is: "Does the parent argument (in Redwood ap
 
 Let's walk through an example. Say our sdl looks like this:
 
-```javascript
-// api/src/graphql/user.sdl.js
-
+```javascript title="api/src/graphql/user.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
@@ -151,9 +145,7 @@ model User {
 
 If you create your Services for this model using Redwood's generator (`yarn rw g services user`), your Services will look like this:
 
-```javascript
-// api/src/services/user/user.js
-
+```javascript title="api/src/services/user/user.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -168,9 +160,7 @@ As we just mentioned, Apollo defines them for you. And since the `root` argument
 
 But, if you wanted to be explicit about it, this is what it would look like:
 
-```javascript
-// api/src/services/user/user.js
-
+```javascript title="api/src/services/user/user.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -244,9 +234,7 @@ To populate or enrich the context on a per-request basis with additional attribu
 
 For example, if we want to populate a new, custom `ipAddress` attribute on the context with the information from the request's event, declare the `setIpAddress` ContextFunction as seen here:
 
-```js
-// api/src/functions/graphql.js
-
+```js title="api/src/functions/graphql.js"
 // ...
 
 const ipAddress = ({ event }) => {
@@ -351,9 +339,7 @@ Health checks are used determine if a server is available and ready to start ser
 
 If you need more than the default basic health check, you can provide a custom implementation via an `onHealthCheck` function when creating the GraphQLHandler. If defined, this async `onHealthCheck` function should return if the server is deemed ready or throw if there is an error.
 
-```ts
-// api/src/functions/graphql.{ts,js}
-
+```ts title="api/src/functions/graphql.{ts,js}"
 const myCustomHealthCheck = async () => {
   if (ok) {
     // Implement your custom check, such as:
@@ -505,9 +491,7 @@ To add a custom scalar to your GraphQL schema:
 
 > Note that you may have to create this file. Moreover, it's just a convention—custom scalar type definitions can be in any of your sdl files.
 
-```js
-// api/src/graphql/scalars.sdl.ts
-
+```js title="api/src/graphql/scalars.sdl.ts"
 export const schema = gql`
   scalar Currency
 `
@@ -517,8 +501,7 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```ts {11-14}
-// api/src/functions/graphql.ts
+```ts {11-14} title="api/src/functions/graphql.ts"
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
 // ...
@@ -608,9 +591,7 @@ Redwood makes it easy to code, organize, and map your directives into the GraphQ
 
 You simply add them to the `directives` directory and the `createGraphQLHandler` will do all the work.
 
-```ts
-// api/src/functions/graphql.ts
-
+```ts title="api/src/functions/graphql.ts"
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}' // 👈 directives live here
@@ -648,8 +629,7 @@ You configure the logger using the `loggerConfig` that accepts a [`logger`](logg
 
 A typical GraphQLHandler `graphql.ts` is as follows:
 
-```js
-// api/src/functions/graphql.ts
+```js title="api/src/functions/graphql.ts"
 // ...
 
 import { logger } from 'src/lib/logger'
@@ -676,9 +656,7 @@ The `loggerConfig` takes several options that logs meaningful information along 
 
 Therefore, if you wish to log the GraphQL `query` made, the `data` returned, and the `operationName` used, you would
 
-```js
-// api/src/functions/graphql.ts
-
+```js title="api/src/functions/graphql.ts"
 export const handler = createGraphQLHandler({
   loggerConfig: {
     logger,
@@ -693,8 +671,7 @@ export const handler = createGraphQLHandler({
 You can exclude GraphQL operations by name with `excludeOperations`.
 This is useful when you want to filter out certain operations from the log output, for example, `IntrospectionQuery` from GraphQL playground:
 
-```js {5}
-// api/src/functions/graphql.ts
+```js {5} title="api/src/functions/graphql.ts"
 export const handler = createGraphQLHandler({
   loggerConfig: {
     logger,
@@ -735,8 +712,7 @@ The [operation name](https://graphql.org/learn/queries/#operation-name) is a mea
 
 Because your cell typically has a unique operation name, logging this can help you identify which cell made a request.
 
-```js
-// api/src/functions/graphql.ts
+```js title="api/src/functions/graphql.ts"
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { operationName: true } },
@@ -749,8 +725,7 @@ Often times, your deployment provider will provide a request identifier to help 
 
 You can include the request identifier setting the `requestId` logger option to `true`.
 
-```js
-// api/src/functions/graphql.ts
+```js title="api/src/functions/graphql.ts"
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { requestId: true } },
@@ -763,8 +738,7 @@ And then, when working to resolve a support issue with your deployment provider,
 
 By configuring your GraphQL logger to include `data` and `query` information about each request you can keep your service implementation clean, concise and free of repeated logger statements in every resolver -- and still log the useful debugging information.
 
-```js
-// api/src/functions/graphql.ts
+```js title="api/src/functions/graphql.ts"
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { data: true, operationName: true, query: true } },
@@ -825,8 +799,7 @@ For example, you have chosen to log `data` return by each request, then you may 
 
 Here is an example of an application `/api/src/lib/logger.ts` configured to redact email addresses. Take note of the path `data.users[*].email` as this says, in the `data` attribute, redact the `email` from every `user`:
 
-```js
-// /api/src/lib/logger.ts
+```js title="/api/src/lib/logger.ts"
 import { createLogger, redactionsList } from '@redwoodjs/api/logger'
 
 export const logger = createLogger({
@@ -842,8 +815,7 @@ Often you want to measure and report how long your queries take to execute and r
 
 You may turn on logging these metrics via the `tracing` GraphQL configuration option.
 
-```js
-// api/src/functions/graphql.ts
+```js title="api/src/functions/graphql.ts"
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { tracing: true } },

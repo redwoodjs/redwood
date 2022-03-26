@@ -78,9 +78,7 @@ yarn add -W api @redwoodjs/record
 
 First you'll need to create a model to represent the database table you want to access. In our blog example, let's create a User model:
 
-```javascript
-// api/src/models/User.js
-
+```javascript title="api/src/models/User.js"
 import { RedwoodRecord } from '@redwoodjs/record'
 
 export default class User extends RedwoodRecord { }

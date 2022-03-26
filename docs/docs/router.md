@@ -10,8 +10,7 @@ The first thing you need is a `Router`. It will contain all of your routes. The 
 
 Each route is specified with a `Route`. Our first route will tell the router what to render when no other route matches:
 
-```js
-// Routes.js
+```js title="Routes.js"
 import { Router, Route } from '@redwoodjs/router'
 
 const Routes = () => (
@@ -27,8 +26,7 @@ The router expects a single `Route` with a `notfound` prop. When no other route 
 
 To create a route to a normal Page, you'll pass three props: `path`, `page`, and `name`:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/" page={HomePage} name="home" />
 ```
 
@@ -44,9 +42,7 @@ We support this using private `<Set>`s or the `<Private>` component. Read more [
 
 You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
 
-```js
-// Routes.js
-
+```js title="Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -82,9 +78,7 @@ Conceptually, this fits with how we think about Context and Layouts as things th
 
 There's a lot of flexibility here. You can even nest `Sets` to great effect:
 
-```js
-// Routes.js
-
+```js title="Routes.js"
 import { Router, Route, Set, Private } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -134,8 +128,7 @@ For more fine-grained control, you can specify `role` (which takes an array of r
 
 Here's an example of how you'd use a private set:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Set private unauthenticated="home">
@@ -148,8 +141,7 @@ Private routes are important and should be easy to spot in your Routes file. The
 
 Here's the same example again, but now using `<Private>`
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Private unauthenticated="home">
@@ -164,8 +156,7 @@ Redwood uses the `useAuth` hook under the hood to determine if the user is authe
 
 When it comes to routing, matching URLs to Pages is only half the equation. The other half is generating links to your pages. The router makes this really simple without having to hardcode URL paths. In a Page component, you can do this (only relevant bits are shown in code samples from now on):
 
-```js
-// SomePage.js
+```js title="SomePage.js"
 import { Link, routes } from '@redwoodjs/router'
 
 // Given the route in the last section, this produces: <a href="/">
@@ -180,8 +171,7 @@ Named route functions simply return a string, so you can still pass in hardcoded
 
 `NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches **exactly** the current URL.
 
-```js
-// MainMenu.js
+```js title="MainMenu.js"
 import { NavLink, routes } from '@redwoodjs/router'
 
 // Will render <a className="link activeLink" {...rest}> respectively when on the page
@@ -271,22 +261,19 @@ const CustomLink = ({ to, ...rest }) => {
 
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/user/{id}>" page={UserPage} name="user" />
 ```
 
 This route will match URLs like `/user/7` or `/user/mojombo`. You can have as many route parameters as you like:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/blog/{year}/{month}/{day}/{slug}" page={PostPage} name="post" />
 ```
 
 By default, route parameters will match up to the next slash or end-of-string. Once extracted, the route parameters are sent as props to the Page component. In the 2nd example above, you can receive them like so:
 
-```js
-// PostPage.js
+```js title="PostPage.js"
 const PostPage = ({ year, month, day, slug }) => { ... }
 ```
 
@@ -294,8 +281,7 @@ const PostPage = ({ year, month, day, slug }) => { ... }
 
 If a route has route parameters, then its named route function will take an object of those same parameters as an argument:
 
-```js
-// SomePage.js
+```js title="SomePage.js"
 <Link to={routes.user({ id: 7 })}>...</Link>
 ```
 
@@ -303,8 +289,7 @@ All parameters will be converted to strings before being inserted into the gener
 
 If you specify parameters to the named route function that do not correspond to parameters defined on the route, they will be appended to the end of the generated URL as search params in `key=val` format:
 
-```js
-// SomePage.js
+```js title="SomePage.js"
 <Link to={routes.users({ sort: 'desc', filter: 'all' })}>...</Link>
 // => "/users?sort=desc&filter=all"
 ```
@@ -313,15 +298,13 @@ If you specify parameters to the named route function that do not correspond to 
 
 Route parameters are extracted as strings by default, but they will often represent typed data. The router offers a convenient way to auto-convert certain types right in the `path` specification:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/user/{id:Int}" page={UserPage} name="user" />
 ```
 
 By adding `:Int` onto the route parameter, you are telling the router to only match `/\d+/` and then use `Number()` to convert the parameter into a number. Now, instead of a string being sent to the Page, a number will be sent! This means you could have both a route that matches numeric user IDs **and** a route that matches string IDs:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/user/{id:Int}" page={UserIntPage} name="userInt" />
 <Route path="/user/{id}" page={UserStringPage} name="userString" />
 ```
@@ -343,8 +326,7 @@ We call built-in parameter types _core parameter types_. All core parameter type
 
 There is one more core type that is a bit different: the glob type. Instead of matching to the next `/` or the end of the string, it will greedily match as much as possible (including `/` characters) and capture the match as a string.
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/file/{filePath...}" page={FilePage} name="file" />
 ```
 
@@ -352,8 +334,7 @@ In this example, we want to take everything after `/file/` and have it sent to t
 
 You can use multiple globs in your paths:
 
-```js
-// Routes.js
+```js title="Routes.js"
 <Route path="/from/{fromDate...}/to/{toDate...}" page={DatePage} name="dateRange" />
 ```
 
@@ -363,8 +344,7 @@ This will match a path like `/from/2021/11/03/to/2021/11/17`. Note that for this
 
 The router goes even further, allowing you to define your own route parameter types. Your custom types must begin with a lowercase letter. You can specify them like so:
 
-```js
-// Routes.js
+```js title="Routes.js"
 const userRouteParamTypes = {
   slug: {
     match: /\w+-\w+/,
@@ -408,8 +388,7 @@ In the following example, `/about/` will _not_ match `/about` and you will be se
 
 Sometimes it's convenient to receive route parameters as the props to the Page, but in the case where a deeply nested component needs access to the route parameters, it quickly becomes tedious to pass those props through every intervening component. The router solves this with the `useParams` hook:
 
-```js
-// SomeDeeplyNestedComponent.js
+```js title="SomeDeeplyNestedComponent.js"
 import { useParams } from '@redwoodjs/router'
 
 const SomeDeeplyNestedComponent = () => {
@@ -453,8 +432,7 @@ const App = () => {
 
 If you'd like to programmatically navigate to a different page, you can simply use the `navigate` function:
 
-```js
-// SomePage.js
+```js title="SomePage.js"
 import { navigate, routes } from '@redwoodjs/router'
 
 const SomePage = () => {
@@ -471,8 +449,7 @@ The browser keeps track of the browsing history in a stack. By default when you 
 
 Going back is as easy as using the `back()` function that's exported from the router.
 
-```js
-// SomePage.js
+```js title="SomePage.js"
 import { back } from '@redwoodjs/router'
 
 const SomePage = () => {
@@ -489,8 +466,7 @@ If you want to declaratively redirect to a different page, use the `<Redirect>` 
 
 In the example below, SomePage will redirect to the home page.
 
-```js
-// SomePage.js
+```js title="SomePage.js"
 import { Redirect, routes } from '@redwoodjs/router'
 
 const SomePage = () => {
@@ -508,9 +484,7 @@ By default, the router will code-split on every Page, creating a separate lazy-l
 
 If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, you can simply add the import statement to the `Routes.js` file:
 
-```js
-// Routes.js
-
+```js title="Routes.js"
 import HomePage from 'src/pages/HomePage'
 ```
 
@@ -524,8 +498,7 @@ Because lazily-loaded pages can take a non-negligible amount of time to load (de
 
 In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
 
-```js
-// Routes.js
+```js title="Routes.js"
 import SkeletonLoader from 'src/components/SkeletonLoader'
 <Router>
   <Set whileLoadingPage={SkeletonLoader}>
@@ -537,9 +510,7 @@ import SkeletonLoader from 'src/components/SkeletonLoader'
 
 After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! The router takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
 
-```js
-// Routes.js
-
+```js title="Routes.js"
 <Router pageLoadingDelay={500}>...</Router>
 ```
 
@@ -551,9 +522,7 @@ An alternative way to implement whileLoadingPage is to use `usePageLoadingContex
 
 > **VIDEO:** If you'd prefer to watch a video, there's one accompanying this section: https://www.youtube.com/watch?v=BVkyXjUQADs&feature=youtu.be
 
-```js
-// SomeLayout.js
-
+```js title="SomeLayout.js"
 import { usePageLoadingContext } from '@redwoodjs/router'
 
 const SomeLayout = (props) => {

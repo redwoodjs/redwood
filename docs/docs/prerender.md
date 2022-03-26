@@ -14,9 +14,7 @@ We thought a lot about what the developer experience should be for route-based p
 
 Prerendering a page is as easy as it gets. Just add the `prerender` prop to the Route that you want to prerender:
 
-```js {3}
-// Routes.js
-
+```js {3} title="Routes.js"
 <Route path="/" page={HomePage} name="home" prerender/>
 ```
 
@@ -29,9 +27,7 @@ Then run `yarn rw build` and enjoy the performance boost!
 
 Just add the `prerender` prop to the Set that wraps all Pages you want to prerender:
 
-```js {3}
-// Routes.js
-
+```js {3} title="Routes.js"
 <Set prerender>
   <Route path="/" page={HomePage} name="home" />
   <Route path="/about" page={AboutPage} name="hello" />
@@ -62,9 +58,7 @@ How does Prerendering handle dynamic data? For Cells, Redwood prerenders your Ce
 
 Right now prerendering won't work for dynamic URLs. We're working on this. If you try to prerender one of them, nothing will break, but nothing happens.
 
-```js
-// web/src/Routes.js
-
+```js title="web/src/Routes.js"
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
 

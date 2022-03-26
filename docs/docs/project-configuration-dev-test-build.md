@@ -35,9 +35,7 @@ yarn workspace web add --dev @emotion/babel-plugin
 <br />
 
 3. Add the plugin to `web/babel.config.js`:
-```js
-// web/babel.config.js
-
+```js title="web/babel.config.js"
 module.exports = {
   plugins: ["@emotion"] // 👈 add the emotion plugin
 }
@@ -56,9 +54,7 @@ Let's take a peek at how it's all configured.
 At the root of your project is `jest.config.js`.
 It should look like this:
 
-```js
-// jest.config.js
-
+```js title="jest.config.js"
 module.exports = {
   rootDir: '.',
   projects: ['<rootDir>/{*,!(node_modules)/**/}/jest.config.js'],
