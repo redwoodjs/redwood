@@ -40,7 +40,7 @@ export const apiPackages = ['@clerk/clerk-sdk-node']
 
 // any notes to print out when the job is done
 export const notes = [
-  'You will need to add two environment variables with your Clerk URL and API key.',
+  'You will need to add three environment variables with your Clerk URL, API and JWT keys.',
   'Check out web/src/App.{js,tsx} for the variables you need to add.',
   'See also: https://redwoodjs.com/docs/authentication#clerk',
 ]
