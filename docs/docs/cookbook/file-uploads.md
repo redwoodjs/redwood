@@ -45,7 +45,7 @@ yarn rw dev
 
 We'll create a single model to store our image data:
 
-```prisma title="api/db/schema.prisma"
+```graphql title="api/db/schema.prisma"
 model Image {
   id    Int    @id @default(autoincrement())
   title String

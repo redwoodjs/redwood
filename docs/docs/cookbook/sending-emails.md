@@ -22,7 +22,7 @@ yarn workspace api add nodemailer
 
 Now, fire up your editor of choice and find the `schema.prisma` file and remove the example model. The app we're building is going to have two models. One for our users and one for the audit logs. Paste the following two models in your schema file.
 
-```prisma
+```graphql
 model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())

@@ -80,7 +80,7 @@ If you'd rather not follow any of the advice here and create another Postgres us
 Tell Prisma to use a Postgres database instead of SQLite by updating the `provider` attribute in your
 `schema.prisma` file:
 
-```prisma title="prisma/schema.prisma"
+```graphql title="prisma/schema.prisma"
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
