@@ -248,7 +248,7 @@ You will need to instantiate your authentication client and pass it to the `<Aut
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth netlify
 ```
 
@@ -305,7 +305,7 @@ See the Netlify Identity information within this doc's [Auth Provider Specific I
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth goTrue
 ```
 
@@ -323,7 +323,7 @@ You will need to enable Identity on your Netlify site.
 
 Add the GoTrue-JS package to the web side:
 
-```terminal
+```bash
 yarn workspace web add gotrue-js
 ```
 
@@ -368,7 +368,7 @@ export default App
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth auth0
 ```
 
@@ -489,7 +489,7 @@ See the Auth0 information within this doc's [Auth Provider Specific Integration]
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth clerk
 ```
 
@@ -565,7 +565,7 @@ Redwood's integration of Clerk is based on [Clerk's React SDK](https://docs.cler
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth azureActiveDirectory
 ```
 
@@ -661,7 +661,7 @@ See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-libr
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth magicLink
 ```
 
@@ -733,7 +733,7 @@ See the Magic.Link information within this doc's [Auth Provider Specific Integra
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth firebase
 ```
 
@@ -831,7 +831,7 @@ See the Firebase information within this doc's [Auth Provider Specific Integrati
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth supabase
 ```
 
@@ -892,7 +892,7 @@ For Supabase Authentication documentation, see: <https://supabase.io/docs/guides
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth ethereum
 ```
 
@@ -910,7 +910,7 @@ To complete setup, you'll also need to update your `api` server manually. See ht
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth nhost
 ```
 
@@ -957,7 +957,7 @@ Important: The `skipFetchCurrentUser` attribute is **only** needed if you are **
 
 The following CLI command (not implemented, see https://github.com/redwoodjs/redwood/issues/1585) will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth custom
 ```
 
@@ -1217,7 +1217,7 @@ The Redwood API does not include the functionality to decode Magic.link authenti
 
 First, you must manually install the **Magic Admin SDK** in your project's `api/package.json`.
 
-```terminal
+```bash
 yarn workspace api add @magic-sdk/admin
 ```
 

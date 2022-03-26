@@ -28,7 +28,7 @@ You can think of `redwood.toml` as a convenience layer over Redwood's webpack co
 
 `redwood.toml` also serves a slightly larger purpose: it's used to determine the base directory of a Redwood project. So this file is what really makes a Redwood app a Redwood app. If you remove it and run `yarn rw dev`, you'll get an error:
 
-```terminal
+```bash
 Error: Could not find a "redwood.toml" file, are you sure you're in a Redwood project?
 ```
 

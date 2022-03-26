@@ -12,13 +12,13 @@ All without you having to write a single line of imperative code!
 
 You can generate a Cell with Redwood's Cell generator:
 
-```terminal
+```bash
 yarn rw generate cell <name>
 ```
 
 This creates a directory named `<name>Cell` in `web/src/components` with four files:
 
-```terminal
+```bash
 ~/redwood-app$ yarn rw generate cell user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/rw g cell user

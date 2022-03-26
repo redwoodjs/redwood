@@ -171,7 +171,7 @@ echo "{\"level\": 30, \"message\": \"Hello RedwoodJS\"}" | yarn rw-log-formatter
 
 Output:
 
-```terminal
+```bash
 11:00:28 🌲 Hello RedwoodJS
 ✨  Done in 0.14s.
 ```
@@ -195,7 +195,7 @@ yarn rw serve api | yarn rw-log-formatter
 
 You'll see that formatted output by default when you launch your RedwoodJS app using:
 
-```terminal
+```bash
 yarn rw dev
 ```
 
@@ -481,7 +481,7 @@ To stream your logs to [Datadog](https://www.datadoghq.com/), you can
 
 - Install the [`pino-datadog`](https://www.npmjs.com/package/pino-datadog) package into `api`
 
-```terminal
+```bash
 yarn workspace api add pino-datadog
 ```
 
@@ -564,7 +564,7 @@ export const logger = createLogger({
 
 - Install the [pino-logdna](https://www.npmjs.com/package/pino-logdna) package into `api`
 
-```terminal
+```bash
 yarn workspace api add pino-logdna
 ```
 
@@ -604,7 +604,7 @@ export const logger = createLogger({
 
 - Install the [pino-papertrail](https://www.npmjs.com/package/pino-papertrail) package into `api`
 
-```terminal
+```bash
 yarn workspace api add pino-papertrail]
 ```
 

@@ -14,7 +14,7 @@ How about a custom Function that returns the timestamp from the server?
 
 Step one is to actually create the custom Function. Naturally, we have a generator for that. Let's call our custom Function "serverTime":
 
-```terminal
+```bash
 yarn rw generate function serverTime
 ```
 
@@ -159,13 +159,13 @@ export const handler = async (event, context) => {
 
 It's tough to test other HTTP methods in the browser without installing an extension, but we can do it from the command line with curl:
 
-```terminal
+```bash
 $ curl -XPOST http://localhost:8911/serverTime -I
 ```
 
 You should see:
 
-```terminal
+```bash
 HTTP/1.1 404 Not Found
 X-Powered-By: Express
 Date: Thu, 07 May 2020 22:33:55 GMT
@@ -175,7 +175,7 @@ Content-Length: 0
 
 And just to be sure, let's make that same request with a **GET** (curl's default method):
 
-```terminal
+```bash
 $ curl http://localhost:8911/serverTime
 {"time":"2020-05-07T22:36:12.973Z"}
 ```

@@ -408,7 +408,7 @@ If any fail this check, you will see:
 
 When building via the `yarn rw build` command and the SDL fails verification, you will see output that lists each query or mutation missing the directive:
 
-```terminal
+```bash
   ✔ Generating Prisma Client...
   ✖ Verifying graphql schema...
     → - deletePost Mutation
@@ -431,7 +431,7 @@ You must specify one of @requireAuth, @skipAuth or a custom directive for
 
 When launching the dev server via the `yarn rw dev` command, you will see output that lists each query or mutation missing the directive:
 
-```terminal
+```bash
 
 api | [nodemon] 2.0.12
 api | [nodemon] to restart at any time, enter `rs`
@@ -760,7 +760,7 @@ The GraphQL handler will then take care of logging your query and data -- as lon
 
 This means that you can keep your services free of logger statements, but still see what's happening!
 
-```terminal
+```bash
 api | POST /graphql 200 7.754 ms - 1772
 api | DEBUG [2021-09-29 16:04:09.313 +0000] (graphql-server): GraphQL execution started: BlogPostQuery
 api |     operationName: "BlogPostQuery"
@@ -834,7 +834,7 @@ We see that this request took about 500 msecs (note: duration is reported in nan
 
 For more details about the information logged and its format, see [Apollo Tracing](https://github.com/apollographql/apollo-tracing).
 
-```terminal
+```bash
 pi | INFO [2021-07-09 14:25:52.452 +0000] (graphql-server): GraphQL willSendResponse
 api |     tracing: {
 api |       "version": 1,

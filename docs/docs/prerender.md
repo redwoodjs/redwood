@@ -147,7 +147,7 @@ const ComponentUsingAnExternalLibrary = () => {
 
 If you just want to debug your app, or check for possible prerendering errors, after you've built it, you can run this command:
 
-```terminal
+```bash
 yarn rw prerender --dry-run
 ```
 

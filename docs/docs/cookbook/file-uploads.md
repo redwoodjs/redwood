@@ -22,14 +22,14 @@ Let's create a very simple DAM (Digital Asset Manager) that lets users upload an
 
 Create a new Redwood app:
 
-```terminal
+```bash
 yarn create redwood-app uploader
 cd uploader
 ```
 
 The first thing we'll do is create an environment variable to hold our Filestack API key. This is a best practice so that the key isn't living in our repository for prying eyes to see. Add the key to the `.env` file in the root of our app:
 
-```terminal
+```bash
 REDWOOD_ENV_FILESTACK_API_KEY=AM18i8xV4QpoiGwetoTWd
 ```
 
@@ -37,7 +37,7 @@ REDWOOD_ENV_FILESTACK_API_KEY=AM18i8xV4QpoiGwetoTWd
 
 Now we can start our development server:
 
-```terminal
+```bash
 yarn rw dev
 ```
 
@@ -57,13 +57,13 @@ model Image {
 
 Create a migration to update the database; when prompted, name it "add image":
 
-```terminal
+```bash
 yarn rw prisma migrate dev
 ```
 
 To make our lives easier, let's scaffold the screens necessary to create/update/delete an image, then we'll worry about adding the uploader:
 
-```terminal
+```bash
 yarn rw generate scaffold image
 ```
 
@@ -75,7 +75,7 @@ Now head to http://localhost:8910/images/new and let's figure this out!
 
 Filestack has a couple of [React components](https://github.com/filestack/filestack-react) that handle all the uploading for us. Let's add the package:
 
-```terminal
+```bash
 yarn workspace web add filestack-react
 ```
 

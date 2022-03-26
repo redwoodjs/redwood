@@ -27,7 +27,7 @@ yarn add -DW pm2
 
 Then create a PM2 ecosystem configuration file. For clarity, it's recommended to rename `ecosystem.config.js` to something like `pm2.config.js`:
 
-```terminal
+```bash
 yarn pm2 init
 mv ecosystem.config.js pm2.config.js
 ```
@@ -133,14 +133,14 @@ If you need to seed your production database during your first deployment, `yarn
 
 First, we need to create the PM2 directories:
 
-```terminal
+```bash
 yarn install
 yarn deploy:setup
 ```
 
 Your server directories are now set, but we haven't configured the `.env` settings yet. SSH into your server and create an `.env` file in the `current` subdirectory of the deploy directory:
 
-```terminal
+```bash
 vim /home/deploy/redwood-pm2/current/.env
 ```
 
@@ -152,7 +152,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/redwood-pm2
 
 Now we can deploy the app! Just run the following; it should update the code, take care of database migrations, and restart the app in PM2:
 
-```terminal
+```bash
 yarn deploy
 ```
 

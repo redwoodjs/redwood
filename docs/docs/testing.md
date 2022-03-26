@@ -188,7 +188,7 @@ Redwood's generators will include test files for basic functionality automatical
 
 You can use a single command to run your entire suite :
 
-```terminal
+```bash
 yarn rw test
 ```
 
@@ -196,7 +196,7 @@ This will start Jest in "watch" mode which will continually run and monitor the 
 
 To start the process without watching, add the `--no-watch` flag:
 
-```terminal
+```bash
 yarn rw test --no-watch
 ```
 
@@ -207,20 +207,20 @@ This one is handy before committing some changes to be sure you didn't inadverte
 
 You can run only the web- or api-side test suites by including the side as another argument to the command:
 
-```terminal
+```bash
 yarn rw test web
 yarn rw test api
 ```
 
 Let's say you have a test file called `CommentForm.test.js`. In order to only watch and run tests in this file you can run
 
-```terminal
+```bash
 yarn rw test CommentForm
 ```
 
 If you need to be more specific, you can combine side filters, with other filters
 
-```terminal
+```bash
 yarn rw test api Comment
 ```
 which will only run test specs matching "Comment" in the API side

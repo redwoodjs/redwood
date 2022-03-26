@@ -601,7 +601,7 @@ export const handler = async (req, _context) => {
 
 So long as `yarn rw dev` is running, `netlify-cli` can be used to invoke your function. Steps are:
 
-```terminal
+```bash
 # Install the cli
 yarn add netlify-cli -g
 

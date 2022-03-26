@@ -78,7 +78,7 @@ If it's still not ready let's start working on the app and hopefully it will be 
 
 We'll start our app the way we start all Redwood apps:
 
-```terminal
+```bash
 yarn create redwood-app weatherstation
 cd weatherstation
 yarn rw dev
@@ -86,7 +86,7 @@ yarn rw dev
 
 That will open a browser to http://localhost:8910. Let's create a landing page:
 
-```terminal
+```bash
 yarn rw generate page home /
 ```
 
@@ -337,7 +337,7 @@ We'll enter our query at the top left and the variables (zip) at the lower left.
 
 Okay lets pull the real data from OpenWeather now. We'll use a package `cross-undici-fetch` that mimics the Fetch API in the browser:
 
-```terminal
+```bash
 yarn workspace api add cross-undici-fetch
 ```
 
@@ -370,7 +370,7 @@ If you click "Play" in the GraphQL playground we should see the real data from t
 
 All that's left now is to display it in the client! Since we're getting data from our GraphQL API we can use a Redwood Cell to simplify all the work that goes around writing API access, displaying a loading state, etc. We can use a generator to get the shell of our Cell:
 
-```terminal
+```bash
 yarn rw generate cell weather
 ```
 

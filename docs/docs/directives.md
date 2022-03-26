@@ -405,7 +405,7 @@ When your app builds and your server starts up, Redwood checks that **all** quer
 
 If not, then your build will fail:
 
-```terminal
+```bash
   ✖ Verifying graphql schema...
     Building API...
     Cleaning Web...
@@ -421,7 +421,7 @@ You must specify one of @requireAuth, @skipAuth or a custom directive for
 
 or your server won't startup and you should see that "Schema validation failed":
 
-```terminal
+```bash
 gen | Generating TypeScript definitions and GraphQL schemas...
 gen | 47 files generated
 api | Building... Took 593 ms
@@ -492,7 +492,7 @@ yarn redwood generate directive myDirective
 
 After picking the directive type, the files will be created in your `api/src/directives` directory:
 
-```terminal
+```bash
   ✔ Generating directive file ...
     ✔ Successfully wrote file `./api/src/directives/myDirective/myDirective.test.ts`
     ✔ Successfully wrote file `./api/src/directives/myDirective/myDirective.ts`
@@ -517,7 +517,7 @@ After picking the directive type, the files will be created in your `api/src/dir
 
 Let's create a `@isSubscriber` directive that checks roles to see if the user is a subscriber.
 
-```terminal
+```bash
 yarn rw g directive isSubscriber --type validator
 ```
 
@@ -589,7 +589,7 @@ describe('isSubscriber directive', () => {
 
 Let's create a `@maskedEmail` directive that checks roles to see if the user should see the complete email address or if it should be obfuscated from prying eyes:
 
-```terminal
+```bash
 yarn rw g directive maskedEmail --type transformer
 ```
 

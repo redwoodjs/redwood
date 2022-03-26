@@ -12,7 +12,7 @@ We assume you're deploying to Netlify in this recipe. Your mileage may vary for 
 
 Just delete the `/api` directory altogether and your app will still work in dev mode:
 
-```terminal
+```bash
 rm -rf api
 ```
 
@@ -242,7 +242,7 @@ Any files that you put in `web/public` will be served by Netlify, skipping any b
 
 Next let's have a React component get that data remotely and then display it on a page. For this example we'll generate a homepage:
 
-```terminal
+```bash
 yarn rw generate page home /
 ```
 
@@ -268,7 +268,7 @@ export default HomePage
 
 We use `useState` to keep track of the forecast data and `useEffect` to actually trigger the loading of the data when the component mounts. Now we just need a graph! Let's add [chart.js](https://www.chartjs.org/) for some simple graphing:
 
-```terminal
+```bash
 yarn workspace web add chart.js
 ```
 

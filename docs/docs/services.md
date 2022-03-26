@@ -637,7 +637,7 @@ generator client {
 
 You'll need to regenerate the prisma client and restart your dev server for changes to take effect:
 
-```terminal
+```bash
 yarn rw prisma generate
 yarn rw dev
 ```

@@ -301,7 +301,7 @@ Now that our pages are behind login, let's actually create a login page so that 
 
 Yet another generator is here for you, this time one that will create pages for login, signup and forgot password pages:
 
-```terminal
+```bash
 yarn rw g dbAuth
 ```
 

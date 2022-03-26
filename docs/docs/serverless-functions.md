@@ -8,7 +8,7 @@ Redwood looks for serverless functions in `api/src/functions`. Each function is 
 
 Creating serverless functions is easy with Redwood's function generator:
 
-```terminal
+```bash
 yarn rw g function <name>
 ```
 
@@ -105,20 +105,20 @@ See [Working with AWS Lambda proxy integrations for HTTP APIs](https://docs.aws.
 
 Let's generate our function:
 
-```terminal
+```bash
 yarn rw generate function divide
 ```
 
 We'll use the querystring to pass the `dividend` and `divisor` to the function handler on the event as seen here to divide 10 by 2.
 
-```terminal
+```bash
 // request
 http://localhost:8911/divide?dividend=10&divisor=2
 ```
 
 If the function can successfully divide the two numbers, the function returns a body payload back in the response with a [HTTP 200 Success](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200) status:
 
-```terminal
+```bash
 // response
 {"message":"10 / 2 = 5","dividend":"10","divisor":"2","quotient":5}
 ```
@@ -183,7 +183,7 @@ That means we need to write some tests.
 
 To test a serverless function, you'll work with the test script associated with the function. You'll find it in the same directory as your function:
 
-```terminal
+```bash
 api
 ├── src
 │   ├── functions
@@ -274,13 +274,13 @@ You can also `mockContext` and pass the mocked `context` to the handler and even
 
 To run an individual serverless function test:
 
-```terminal
+```bash
 yarn rw test api divide
 ```
 
 When the test run completes (and succeeds), you see the results:
 
-```terminal
+```bash
  PASS   api  api/src/functions/divide/divide.test.ts (12.69 s)
   divide serverless function
     ✓ divides two numbers successfully (153 ms)
@@ -303,7 +303,7 @@ Often times your serverless function will have a variety of test cases, but beca
 
 First, let's create a fixture for the `divide` function alongside your function and test as `divide.fixtures.ts`:
 
-```terminal
+```bash
 api
 ├── src
 │   ├── functions
@@ -390,11 +390,11 @@ model Order {
 
 Let's generate our webhook function:
 
-```terminal
+```bash
 yarn rw generate function updateOrderStatus
 ```
 
-```terminal
+```bash
 api
 ├── src
 │   ├── functions
@@ -665,13 +665,13 @@ As with other serverless function testing, you can also `mockContext` and pass t
 
 To run an individual webhook test:
 
-```terminal
+```bash
 yarn rw test api updateOrderStatus
 ```
 
 When the test run completes (and succeeds), you see the results:
 
-```terminal
+```bash
  PASS   api  api/src/functions/updateOrderStatus/updateOrderStatus.test.ts (10.3 s)
   updates an order via a webhook
     ✓ with a shipped order, updates the status to DELIVERED (549 ms)
