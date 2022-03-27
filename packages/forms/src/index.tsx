@@ -72,6 +72,12 @@ interface RedwoodRegisterOptions extends RegisterOptions {
 }
 
 /**
+ * We allow the field to return a variety of values if the input has an empty value
+ */
+
+type EmptyAsValue = null | 'undefined' | 0 | '' | 'NaN'
+
+/**
  * The main interface, just to have some sort of source of truth.
  *
  * @typeParam E - The type of element; we're only ever working with a few HTMLElements.
@@ -90,8 +96,7 @@ interface FieldProps<
 > {
   name: string
   id?: string
-  emptyAsNull?: boolean
-  emptyAsUndefined?: boolean
+  emptyAs?: EmptyAsValue
   errorClassName?: string
   errorStyle?: React.CSSProperties
   className?: string
@@ -157,14 +162,14 @@ const isValueEmpty = (val: string): boolean => val === ''
 
 // if appropriate, one of the functions in the SET_VALUE_AS_FCNS object is
 // passed to the react-hook-forms setValueAs prop by the setCoercion function
-const SET_VALUE_AS_FUNCTIONS = {
-  valueAsBoolean: {
+const SET_VALUE_AS_FUNCTIONS: Record<string, Record<string, any>> = {
+  /*  valueAsBoolean: {
     // r-h-f returns a boolean if a checkBox type, but also handle string case in case valueAsBoolean is used
     base: (val: boolean | string): boolean => !!val,
     emptyAsNull: (val: boolean | string): boolean | null => (val ? true : null),
     emptyAsUndefined: (val: boolean | string): boolean | undefined =>
       val ? true : undefined,
-  },
+  },*/
   valueAsDate: {
     emptyAsNull: (val: string): Date | null =>
       isValueEmpty(val) ? null : new Date(val),
@@ -212,6 +217,52 @@ const SET_VALUE_AS_FUNCTIONS = {
   },
 }
 
+const getSetValueAsFcn = (type: string, emptyAs?: EmptyAsValue) => {
+  const typeObj = SET_VALUE_AS_FUNCTIONS[type]
+  if (typeObj === undefined) {
+    throw Error(`Type ${type} is unsupported.`)
+  }
+  let fcn
+  switch (emptyAs) {
+    case null:
+      fcn = typeObj['emptyAsNull']
+      break
+    case 'undefined':
+      fcn = typeObj['emptyAsUndefined']
+      break
+    case 0:
+      fcn = typeObj['emptyAsZero']
+      break
+    case '':
+      fcn = typeObj['emptyAsString']
+      break
+    case 'NaN':
+      fcn = typeObj['emptyAsNaN']
+      break
+    case undefined:
+    default:
+      // set the default SetValueAsFcn
+      switch (type) {
+        case 'number':
+          // default r-h-f operation, which
+          fcn = SET_VALUE_AS_FUNCTIONS.valueAsNumber.emptyAsNaN
+          break
+        case 'date':
+        case 'datetime-local':
+          why not type error
+          fcn = SET_VALUE_AS_FUNCTIONS.valueAsDate.emptyAsNull
+          break
+        case 'text':
+          break
+      }
+      break
+  }
+  if (fcn === undefined) {
+    throw Error(`emptyAs prop of ${emptyAs} is unsupported for this type.`)
+  }
+  return fcn
+}
+
 // This function is passed into r-h-f's validate function if valueAsJSON is set
 const JSONValidation = (val: Record<string, unknown> | null | number) =>
   typeof val === 'number' ? !isNaN(val) : true
@@ -230,13 +281,12 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
 interface SetCoersionProps {
   type?: string
   name: string
-  emptyAsNull?: boolean
-  emptyAsUndefined?: boolean
+  emptyAs?: EmptyAsValue
 }
 
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type, name, emptyAsNull, emptyAsUndefined }: SetCoersionProps
+  { type, name, emptyAs }: SetCoersionProps
 ) => {
   if (validation.setValueAs) {
     // Note, this case could overide other props
@@ -244,11 +294,14 @@ const setCoercion = (
   }
 
   if (validation.valueAsBoolean || type === 'checkbox') {
-    // Note the setValueAs does not work in react-hook-forms for checkboxes
+    // Note the react-hook-forms setValueAs does not work in react-hook-forms
+    // for checkboxes and thus Redwood does not provide emptyAs functionality
+    // for checkboxes for now.
     return
   } else if (validation.valueAsJSON) {
-    // JSON case
-    if (emptyAsNull) {
+    validation.setValueAs = getSetValueAsFcn('valueAsJSON', emptyAs)
+    /*    // JSON case
+    if (emptyAs === null) {
       validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsNull
     } else if (emptyAsUndefined) {
       validation.setValueAs =
@@ -257,7 +310,7 @@ const setCoercion = (
       validation.setValueAs = validation.required
         ? SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsDefaultRequired
         : SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsNull
-    }
+    }*/
     validation.validate = JSONValidation
     delete validation.valueAsJSON
   } else if (
@@ -349,8 +402,7 @@ const useRegister = <
 >(
   props: UseRegisterProps<Element> & { element?: string },
   ref?: React.ForwardedRef<T>,
-  emptyAsNull?: boolean,
-  emptyAsUndefined?: boolean
+  emptyAs?: EmptyAsValue
 ) => {
   const { register } = useFormContext()
 
@@ -359,8 +411,7 @@ const useRegister = <
   setCoercion(validation, {
     type: props.type,
     name: props.name,
-    emptyAsUndefined,
-    emptyAsNull,
+    emptyAs,
   })
 
   const {
@@ -599,8 +650,7 @@ const TextAreaField = forwardRef(
     {
       name,
       id,
-      emptyAsNull = false,
-      emptyAsUndefined = false,
+      emptyAs,
 
       // for useErrorStyles
       errorClassName,
@@ -632,8 +682,7 @@ const TextAreaField = forwardRef(
         onChange,
       },
       ref,
-      emptyAsNull,
-      emptyAsUndefined
+      emptyAs
     )
 
     return (
@@ -654,8 +703,7 @@ const SelectField = forwardRef(
     {
       name,
       id,
-      emptyAsNull = false,
-      emptyAsUndefined = false,
+      emptyAs = null,
 
       // for useErrorStyles
       errorClassName,
@@ -686,8 +734,7 @@ const SelectField = forwardRef(
         onChange,
       },
       ref,
-      emptyAsNull,
-      emptyAsUndefined
+      emptyAs
     )
 
     return (
@@ -697,10 +744,7 @@ const SelectField = forwardRef(
 )
 
 export interface CheckboxFieldProps
-  extends Omit<
-      FieldProps<HTMLInputElement>,
-      'type' | 'emptyAsNull' | 'emptyAsUndefined'
-    >,
+  extends Omit<FieldProps<HTMLInputElement>, 'type' | 'emptyAs'>,
     Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
 /**
@@ -830,8 +874,7 @@ const InputField = forwardRef(
     {
       name,
       id,
-      emptyAsNull = false,
-      emptyAsUndefined = false,
+      emptyAs,
       // for useErrorStyles
       errorClassName,
       errorStyle,
@@ -863,8 +906,7 @@ const InputField = forwardRef(
         type,
       },
       ref,
-      emptyAsNull,
-      emptyAsUndefined
+      emptyAs
     )
 
     return (

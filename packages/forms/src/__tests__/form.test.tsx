@@ -564,7 +564,7 @@ describe('Form', () => {
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsUndefined />
+        <TextField name="textField" emptyAs={'undefined'} />
         <TextAreaField name="textAreaField" emptyAsUndefined />
         <NumberField name="numberField" emptyAsUndefined />
         <DateField name="dateField" emptyAsUndefined />
@@ -572,7 +572,7 @@ describe('Form', () => {
           name="selectField"
           data-testid="select2"
           defaultValue=""
-          emptyAsUndefined
+          emptyAs={null}
         >
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
