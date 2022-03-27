@@ -143,7 +143,7 @@ export const handler = async ({ force }) => {
         }
 
         return writeFile(path.join(jestConfigPath), newJestConfig, {
-          overwriteExisting: force,
+          overwriteExisting: true,
         })
       },
     },
