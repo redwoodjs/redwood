@@ -24,7 +24,9 @@ let singleWordFiles,
   listFlagPassedIn,
   listInferredFromName,
   modelPluralMatchesSingularWithList,
-  modelPluralMatchesSingularWithoutList
+  modelPluralMatchesSingularWithoutList,
+  modelWithStringId,
+  modelWithStringIdList
 
 beforeAll(async () => {
   singleWordFiles = await cell.files({
@@ -101,6 +103,20 @@ beforeAll(async () => {
     tests: true,
     stories: true,
     list: false,
+  })
+
+  modelWithStringId = await cell.files({
+    name: 'address',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+
+  modelWithStringIdList = await cell.files({
+    name: 'address',
+    tests: true,
+    stories: true,
+    list: true,
   })
 })
 
@@ -388,6 +404,9 @@ test('generates list cells if list flag passed in', () => {
 
   // Check the contents
   expect(listFlagPassedIn[CELL_PATH]).toMatchSnapshot()
+  expect(listFlagPassedIn[TEST_PATH]).toMatchSnapshot()
+  expect(listFlagPassedIn[STORY_PATH]).toMatchSnapshot()
+  expect(listFlagPassedIn[MOCK_PATH]).toMatchSnapshot()
 })
 
 test('generates list cells if name is plural', () => {
@@ -475,4 +494,68 @@ test('"equipment" withOUT list flag should find equipment by id', () => {
 
   // Check the contents
   expect(modelPluralMatchesSingularWithoutList[CELL_PATH]).toMatchSnapshot()
+})
+
+test('generates a cell with a string primary id key', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelWithStringId)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelWithStringId[CELL_PATH]).toMatchSnapshot()
+  expect(modelWithStringId[TEST_PATH]).toMatchSnapshot()
+  expect(modelWithStringId[STORY_PATH]).toMatchSnapshot()
+  expect(modelWithStringId[MOCK_PATH]).toMatchSnapshot()
+})
+
+test('generates list a cell with a string primary id keys', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelWithStringIdList)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelWithStringIdList[CELL_PATH]).toMatchSnapshot()
+  expect(modelWithStringIdList[TEST_PATH]).toMatchSnapshot()
+  expect(modelWithStringIdList[STORY_PATH]).toMatchSnapshot()
+  expect(modelWithStringIdList[MOCK_PATH]).toMatchSnapshot()
 })

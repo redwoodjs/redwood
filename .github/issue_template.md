@@ -14,7 +14,7 @@ Read @mojombo's post about what to expect, what this means for current prioritie
 - v1-rc Priorities that need community help: https://redwoodjs.com/good-first-issue
 
 New Issues and PRs are always welcome and helpful! 😀 We will respond and prioritize. If you need help faster than what we can provide here, you can reach out via the community chat or forums:
-- Discord Chat: https://discord.gg/jjSYEQd
+- Discord Chat: https://discord.gg/redwoodjs
 - Discourse Forum: https://community.redwoodjs.com/
 
 **When you're ready to proceed, just delete this message.**

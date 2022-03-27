@@ -1,5 +1,7 @@
-import { Plugin } from '@envelop/core'
-import { handleStreamOrSingleExecutionResult } from '@envelop/core'
+import {
+  Plugin,
+  handleStreamOrSingleExecutionResult,
+} from '@graphql-yoga/common'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
 import { v4 as uuidv4 } from 'uuid'
 

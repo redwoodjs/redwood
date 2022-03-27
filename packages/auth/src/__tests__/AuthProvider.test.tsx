@@ -12,10 +12,14 @@ import { AuthProvider } from '../AuthProvider'
 import { useAuth } from '../useAuth'
 
 type HasRoleAuthClient = AuthClient & {
-  hasRole: (role?: string | string[]) => Promise<boolean | null>
+  hasRole: (rolesToCheck?: string | string[]) => Promise<boolean | null>
 }
 
-let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
+let CURRENT_USER_DATA: {
+  name: string
+  email: string
+  roles?: Array<string> | string
+} = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
 }
@@ -613,6 +617,59 @@ test('Authenticated user has assigned role access as expected', async () => {
   await waitFor(() => screen.getByText('Log In'))
 })
 
+test('Checks roles successfully when roles in currentUser is a string', async () => {
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => {},
+    logout: async () => {},
+    getToken: async () => 'hunter2',
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
+    client: () => {},
+    type: 'custom',
+  }
+
+  CURRENT_USER_DATA = {
+    name: 'Peter Pistorius',
+    email: 'nospam@example.net',
+    roles: 'admin',
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <AuthConsumer />
+    </AuthProvider>
+  )
+
+  // We're booting up!
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+  // The user is not authenticated
+  await waitFor(() => screen.getByText('Log In'))
+
+  expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
+  expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
+
+  // Replace "getUserMetadata" with actual data, and login!
+  mockAuthClient.getUserMetadata = jest.fn(async () => {
+    return {
+      sub: 'abcdefg|123456',
+      username: 'peterp',
+    }
+  })
+  fireEvent.click(screen.getByText('Log In'))
+
+  // Check that you're logged in!
+  await waitFor(() => screen.getByText('Log Out'))
+
+  expect(screen.getByText('Has Admin: yes')).toBeInTheDocument()
+  expect(screen.getByText('Has Admin as Array: yes')).toBeInTheDocument()
+
+  // Log out
+  fireEvent.click(screen.getByText('Log Out'))
+  await waitFor(() => screen.getByText('Log In'))
+})
+
 /**
  * Check if assigned one of the roles in an array
  */
@@ -808,4 +865,45 @@ test('proxies validateResetToken() calls to client', async () => {
 
   // for whatever reason, validateResetToken is invoked twice
   expect.assertions(2)
+})
+
+test('getToken doesnt fail if client throws an error', async () => {
+  const mockAuthClient = {
+    getToken: async () => {
+      throw 'Login Required'
+    },
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { getToken } = useAuth()
+    const [authTokenResult, setAuthTokenResult] = useState(null)
+
+    useEffect(() => {
+      const getTokenAsync = async () => {
+        let token
+
+        // If the getToken function throws we will catch it
+        // here which will let us know that something is wrong.
+        try {
+          token = await getToken()
+          setAuthTokenResult({ success: true, token })
+        } catch (error) {
+          setAuthTokenResult({ success: false, token: 'FAIL' })
+        }
+      }
+
+      getTokenAsync()
+    }, [getToken])
+
+    return <div>Token: {`${authTokenResult?.token}`}</div>
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  await waitFor(() => screen.getByText('Token: null'))
 })

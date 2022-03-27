@@ -1,5 +1,5 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
-import { Headers } from 'node-fetch'
+import { Headers } from 'cross-undici-fetch'
 
 import { normalizeRequest } from '../transforms'
 

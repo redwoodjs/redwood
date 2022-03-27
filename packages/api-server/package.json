@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "0.48.0",
+  "version": "0.50.0",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -10,7 +10,6 @@
   "license": "MIT",
   "main": "dist/cliHandlers",
   "bin": {
-    "rw-api-server": "./dist/index.js",
     "rw-api-server-watch": "./dist/watch.js",
     "rw-log-formatter": "./dist/logFormatter/bin.js",
     "rw-server": "./dist/index.js"
@@ -33,10 +32,10 @@
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
     "fast-json-parse": "1.0.3",
-    "fastify": "3.27.2",
+    "fastify": "3.27.4",
     "fastify-http-proxy": "6.2.2",
     "fastify-raw-body": "3.2.0",
-    "fastify-static": "4.5.0",
+    "fastify-static": "4.6.1",
     "fastify-url-data": "3.0.3",
     "lodash.escape": "4.0.1",
     "pretty-bytes": "5.6.0",
@@ -55,7 +54,7 @@
     "@types/yargs": "16.0.4",
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

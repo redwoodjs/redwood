@@ -57,6 +57,7 @@ export const files = async ({
 }) => {
   let cellName = removeGeneratorName(name, 'cell')
   let idType,
+    mockIdValues = [42, 43, 44],
     model = null
   let templateNameSuffix = ''
 
@@ -66,22 +67,27 @@ export const files = async ({
     (isWordPluralizable(cellName) ? isPlural(cellName) : options.list) ||
     options.list
 
+  // needed for the singular cell GQL query find by id case
+  try {
+    model = await getSchema(pascalcase(singularize(cellName)))
+    idType = getIdType(model)
+    mockIdValues =
+      idType === 'String'
+        ? mockIdValues.map((value) => `'${value}'`)
+        : mockIdValues
+  } catch {
+    // Eat error so that the destroy cell generator doesn't raise an error
+    // when trying to find prisma query engine in test runs.
+
+    // Assume id will be Int, otherwise generated cell will keep throwing
+    idType = 'Int'
+  }
+
   if (shouldGenerateList) {
     cellName = forcePluralizeWord(cellName)
     templateNameSuffix = 'List'
     // override operationName so that its find_operationName
-  } else {
-    // needed for the singular cell GQL query find by id case
-    try {
-      model = await getSchema(pascalcase(singularize(cellName)))
-      idType = getIdType(model)
-    } catch {
-      // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
-      // assume id will be Int, otherwise generated will keep throwing
-      idType = 'Int'
-    }
   }
-
   const operationName = await uniqueOperationName(cellName, {
     list: shouldGenerateList,
   })
@@ -124,6 +130,9 @@ export const files = async ({
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `mock${templateNameSuffix}.js.template`,
+    templateVars: {
+      mockIdValues,
+    },
   })
 
   const files = [cellFile]

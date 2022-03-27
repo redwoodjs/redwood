@@ -1,0 +1,74 @@
+/* IMPORTANT: use class substring matching for classes that include "@docusaurus". This prevents styling build failures in production   */
+/* ex: [class^='docTitle'] instead of .docTitle_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocItem-  */
+
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-spacing-horizontal: 2rem;
+  --tw-text-opacity: 1;
+  --ifm-color-primary: rgb(124 45 18 / var(--tw-text-opacity));
+  --ifm-link-color: rgb(13 148 136 / var(--tw-text-opacity));
+}
+
+.row .col--6 {
+  padding: 0 0 0 2rem;
+}
+
+h1 {
+  margin-top: 1.5rem;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+.menu {
+  padding: 0.5rem 0.5rem 2rem !important;
+}
+
+blockquote {
+  background-color: var(--ifm-color-secondary-lighter);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  border-left: none;
+}
+
+html[data-theme="dark"] blockquote {
+  background-color: #242526;
+}
+
+.docusaurus-highlight-code-line {
+  display: block;
+  background-color: rgba(238, 249, 253, 0.1);
+  margin: 0 calc(var(--ifm-pre-padding)*-1);
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.markdown img {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  margin: 1rem 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
