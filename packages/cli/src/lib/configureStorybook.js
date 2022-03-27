@@ -1,8 +1,6 @@
-import path from 'path'
-
 import fs from 'fs-extra'
 
-import { getPaths } from '../../../../lib'
+import { getPaths } from '.'
 
 /**
  * @param options {{ force?: boolean }}
@@ -26,15 +24,10 @@ export function checkStorybookStatus({ force }) {
 }
 
 /**
- * Configure Storybook for Chakra UI by creating a custom preview config
+ * Configure Storybook for the given template by creating a custom preview config
  */
-export function configureStorybook() {
+export function configureStorybook(storybookPreview) {
   const { storybookPreviewConfig } = getPaths().web
-
-  const storybookPreview = fs.readFileSync(
-    path.join(__dirname, '..', 'templates', 'storybook.preview.js.template'),
-    'utf-8'
-  )
 
   fs.outputFileSync(storybookPreviewConfig, storybookPreview)
 }
