@@ -32,7 +32,7 @@ const ClerkAuthProvider = ({ children }) => {
 }
 
 // required packages to install
-export const webPackages = ['@clerk/clerk-react@^3.0.1-alpha.2']
+export const webPackages = ['@clerk/clerk-react']
 export const apiPackages = ['@clerk/clerk-sdk-node']
 
 // any notes to print out when the job is done
