@@ -1,6 +1,10 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import Listr from 'listr'
 
+import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   checkStorybookStatus,
@@ -50,7 +54,8 @@ export function builder(yargs) {
 }
 
 export async function handler({ force, install, packages }) {
-  console.error(ALL_KEYWORD, packages, packages.indexOf(ALL_KEYWORD) !== -1)
+  const rwPaths = getPaths()
+
   const installPackages = (
     packages.indexOf(ALL_KEYWORD) !== -1 ? ALL_MANTINE_PACKAGES : packages
   ).map((pack) => `@mantine/${pack}`)
@@ -82,9 +87,40 @@ export async function handler({ force, install, packages }) {
       task: () =>
         wrapRootComponentWithComponent({
           componentName: 'MantineProvider',
-          props: {},
-          imports: ["import { MantineProvider } from '@mantine/core'"],
+          // props: 'theme={extendedTheme}',
+          props: { theme: 'extendedTheme' },
+          imports: [
+            "import { MantineProvider, extendTheme } from '@mantine/core'",
+            "import * as theme from 'src/config/mantine.config'",
+          ],
+          moduleScopeLines: ['const extendedTheme = extendTheme(theme)'],
         }),
+    },
+    {
+      title: `Creating Theme File`,
+      task: async () => {
+        const mantineConfigPath = path.join(
+          rwPaths.web.config,
+          'mantine.config.js'
+        )
+        if (fs.existsSync(mantineConfigPath)) {
+          if (force) {
+            fs.unlinkSync(mantineConfigPath)
+          } else {
+            throw new Error(
+              'Mantine config already exists.\nUse --force to override existing config.'
+            )
+          }
+        }
+
+        fs.writeFileSync(
+          mantineConfigPath,
+          `
+        // This object will be used to override Mantine theme defaults.
+        // See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
+        module.exports = {}`
+        )
+      },
     },
     {
       title: 'Configure Storybook...',

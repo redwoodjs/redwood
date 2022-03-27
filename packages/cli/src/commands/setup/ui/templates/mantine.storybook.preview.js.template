@@ -1,10 +1,13 @@
 import * as React from 'react'
 
-import { MantineProvider } from '@mantine/core'
+import { MantineProvider, extendTheme } from '@mantine/core'
+import * as theme from 'src/config/mantine.config'
+
+const extendedTheme = extendedTheme(theme)
 
 const withMantine = (StoryFn) => {
   return (
-    <MantineProvider>
+    <MantineProvider theme={extendedTheme}>
       <StoryFn />
     </MantineProvider>
   )
