@@ -7,8 +7,7 @@ import Listr from 'listr'
 import {
   checkStorybookStatus,
   configureStorybook,
-} from 'src/lib/configureStorybook.js'
-
+} from '../../../../configureStorybook.js'
 import c from '../../../../lib/colors'
 import { checkSetupStatus, wrapWithChakraProvider } from '../tasks/setup-chakra'
 
