@@ -61,7 +61,7 @@
     "@types/node": "16.11.26",
     "@types/vscode": "1.65.0",
     "jest": "27.5.1",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

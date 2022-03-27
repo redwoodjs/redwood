@@ -5,7 +5,6 @@ import toml from '@iarna/toml'
 import boxen from 'boxen'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-import { NodeSSH } from 'node-ssh'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../../lib'
@@ -14,8 +13,6 @@ import { configFilename } from '../setup/deploy/providers/baremetal'
 
 export const command = 'baremetal'
 export const description = 'Deploy to baremetal server(s)'
-
-const ssh = new NodeSSH()
 
 export const execaOptions = {
   cwd: path.join(getPaths().base),
@@ -87,7 +84,7 @@ export const builder = (yargs) => {
 
 // Executes a single command via SSH connection, capturing the exit code of the
 // process. Displays an error and will exit(1) if code is non-zero
-const sshExec = async (sshOptions, task, path, command, args) => {
+const sshExec = async (ssh, sshOptions, task, path, command, args) => {
   const result = await ssh.execCommand(`${command} ${args.join(' ')}`, {
     cwd: path,
   })
@@ -108,7 +105,7 @@ const sshExec = async (sshOptions, task, path, command, args) => {
   }
 }
 
-const commands = (yargs) => {
+const commands = (yargs, ssh) => {
   // parse config and get server list
   const deployConfig = toml.parse(
     fs.readFileSync(path.join(getPaths().base, configFilename))
@@ -140,7 +137,7 @@ const commands = (yargs) => {
     tasks.push({
       title: `Updating codebase...`,
       task: async (_ctx, task) => {
-        await sshExec(sshOptions, task, serverConfig.path, 'git', ['pull'])
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', ['pull'])
       },
       skip: () => !yargs.pull,
     })
@@ -148,7 +145,9 @@ const commands = (yargs) => {
     tasks.push({
       title: `Installing dependencies...`,
       task: async (_ctx, task) => {
-        await sshExec(sshOptions, task, serverConfig.path, 'yarn', ['install'])
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+          'install',
+        ])
       },
       skip: () => !yargs.install,
     })
@@ -156,18 +155,18 @@ const commands = (yargs) => {
     tasks.push({
       title: `DB Migrations...`,
       task: async (_ctx, task) => {
-        await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
           'rw',
           'prisma',
           'migrate',
           'deploy',
         ])
-        await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
           'rw',
           'prisma',
           'generate',
         ])
-        await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
           'rw',
           'dataMigrate',
           'up',
@@ -181,7 +180,7 @@ const commands = (yargs) => {
       tasks.push({
         title: `Building ${side}...`,
         task: async (_ctx, task) => {
-          await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
             'rw',
             'build',
             side,
@@ -196,12 +195,12 @@ const commands = (yargs) => {
       tasks.push({
         title: `Symlinking web/serve/current...`,
         task: async (_ctx, task) => {
-          await sshExec(sshOptions, task, serverConfig.path, 'cp', [
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'cp', [
             '-r',
             'web/dist',
             `web/serve/${yargs.releaseDir}`,
           ])
-          await sshExec(sshOptions, task, serverConfig.path, 'ln', [
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
             '-nsf',
             yargs.releaseDir,
             'web/serve/current',
@@ -219,7 +218,7 @@ const commands = (yargs) => {
         tasks.push({
           title: `Starting ${process} process for the first time...`,
           task: async (_ctx, task) => {
-            await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
               'pm2',
               'start',
               'ecosystem.config.js',
@@ -233,7 +232,7 @@ const commands = (yargs) => {
         tasks.push({
           title: `Restarting ${process} process...`,
           task: async (_ctx, task) => {
-            await sshExec(sshOptions, task, serverConfig.path, 'yarn', [
+            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
               'pm2',
               'restart',
               process,
@@ -265,8 +264,11 @@ const commands = (yargs) => {
 }
 
 export const handler = async (yargs) => {
+  const { NodeSSH } = require('node-ssh')
+  const ssh = new NodeSSH()
+
   try {
-    const tasks = new Listr(commands(yargs), {
+    const tasks = new Listr(commands(yargs, ssh), {
       concurrent: true,
       exitOnError: true,
       renderer: yargs.verbose && VerboseRenderer,
