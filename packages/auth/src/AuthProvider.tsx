@@ -10,9 +10,8 @@ import type {
 } from './authClients'
 
 export interface CurrentUser {
-  roles?: Array<string>
+  roles?: Array<string> | string
 }
-
 export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
@@ -24,6 +23,10 @@ export interface AuthContextInterface {
   logIn(options?: unknown): Promise<any>
   logOut(options?: unknown): Promise<any>
   signUp(options?: unknown): Promise<any>
+  /**
+   * Clients should always return null or string
+   * It is expected that they catch any errors internally
+   */
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -36,7 +39,7 @@ export interface AuthContextInterface {
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    **/
-  hasRole(role: string | string[]): boolean
+  hasRole(rolesToCheck: string | string[]): boolean
   /**
    * Redetermine authentication state and update the state.
    */
@@ -187,26 +190,54 @@ export class AuthProvider extends React.Component<
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    */
-  hasRole = (role: string | string[]): boolean => {
-    if (
-      typeof role !== 'undefined' &&
-      this.state.currentUser &&
-      this.state.currentUser.roles
-    ) {
-      if (typeof role === 'string') {
-        return this.state.currentUser.roles?.includes(role) || false
+  hasRole = (rolesToCheck: string | string[]): boolean => {
+    if (this.state.currentUser?.roles) {
+      if (typeof rolesToCheck === 'string') {
+        if (typeof this.state.currentUser.roles === 'string') {
+          // rolesToCheck is a string, currentUser.roles is a string
+          return this.state.currentUser.roles === rolesToCheck
+        } else if (Array.isArray(this.state.currentUser.roles)) {
+          // rolesToCheck is a string, currentUser.roles is an array
+          return this.state.currentUser.roles?.some(
+            (allowedRole) => rolesToCheck === allowedRole
+          )
+        }
       }
 
-      if (Array.isArray(role)) {
-        return this.state.currentUser.roles.some((r) => role.includes(r))
+      if (Array.isArray(rolesToCheck)) {
+        if (Array.isArray(this.state.currentUser.roles)) {
+          // rolesToCheck is an array, currentUser.roles is an array
+          return this.state.currentUser.roles?.some((allowedRole) =>
+            rolesToCheck.includes(allowedRole)
+          )
+        } else if (typeof this.state.currentUser.roles === 'string') {
+          // rolesToCheck is an array, currentUser.roles is a string
+          return rolesToCheck.some(
+            (allowedRole) => this.state.currentUser?.roles === allowedRole
+          )
+        }
       }
     }
 
     return false
   }
 
+  /**
+   * Clients should always return null or token string.
+   * It is expected that they catch any errors internally.
+   * This catch is a last resort effort in case any errors are
+   * missed or slip through.
+   */
   getToken = async () => {
-    return this.rwClient.getToken()
+    let token
+
+    try {
+      token = await this.rwClient.getToken()
+    } catch {
+      token = null
+    }
+
+    return token
   }
 
   reauthenticate = async () => {

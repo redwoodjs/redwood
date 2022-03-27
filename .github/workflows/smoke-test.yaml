@@ -3,6 +3,7 @@ name: Smoke test, CLI Checks and Telemetry Benchmarks
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths-ignore: ['docs/**']
 
 jobs:
   smoke-test:
@@ -10,8 +11,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node-version: ['16']
-        # TODO determine if we need both versions
+        node-version: ['14', '16']
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
@@ -33,13 +33,13 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - name: Cache yarn
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
           restore-keys: |
-            yarn-
+            yarn-1234
 
       - name: Install framework dependencies
         run: |
@@ -50,6 +50,7 @@ jobs:
         uses: ./.github/actions/setup_test_project
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Install Playwright deps
         run: npx playwright install --with-deps chromium
@@ -116,6 +117,11 @@ jobs:
           yarn rw prisma generate
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
+      - name: Run "rw data-migrate"
+        run: |
+          yarn rw dataMigrate up
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
       - name: Run "data-migrate install"
         run: |
           yarn rw data-migrate install
@@ -124,11 +130,6 @@ jobs:
       - name: Run "prisma migrate"
         run: |
           yarn rw prisma migrate dev --name ci-test
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
-      - name: Run "rw data-migrate"
-        run: |
-          yarn rw dataMigrate up
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw deploy --help`

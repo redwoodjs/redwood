@@ -48,29 +48,39 @@ type AllowedRoles = string | string[] | undefined
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
  */
-export const hasRole = ({ roles }: { roles: AllowedRoles }): boolean => {
+export const hasRole = (roles: AllowedRoles): boolean => {
   if (!isAuthenticated()) {
     return false
   }
 
-  if (roles) {
-    if (Array.isArray(roles)) {
-      if (Array.isArray(context.currentUser.roles)) {
-        return context.currentUser.roles?.some((r) => roles.includes(r))
-      } else {
-        roles.some((r) => context.currentUser.roles?.includes(r))
-      }
-    }
+  const currentUserRoles = context.currentUser?.roles
 
-    if (typeof roles === 'string') {
-      return context.currentUser.roles?.includes(roles)
+  if (typeof roles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roles to check is a string, currentUser.roles is a string
+      return currentUserRoles === roles
+    } else if (Array.isArray(currentUserRoles)) {
+      // roles to check is a string, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
-
-    // roles not found
-    return false
   }
 
-  return true
+  if (Array.isArray(roles)) {
+    if (Array.isArray(currentUserRoles)) {
+      // roles to check is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof context.currentUser.roles === 'string') {
+      // roles to check is an array, currentUser.roles is a string
+      return roles.some(
+        (allowedRole) => context.currentUser?.roles === allowedRole
+      )
+    }
+  }
+
+  // roles not found
+  return false
 }
 
 /**
@@ -92,7 +102,7 @@ export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (!hasRole({ roles })) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }

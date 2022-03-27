@@ -32,13 +32,8 @@ cofounder of GitHub (most popular code host on the planet), creator of Jekyll
 Versioning specification (powers the Node packaging ecosystem), and inventor of
 TOML (an obvious, minimal configuration language used by many projects).
 
-> **NOTICE:** RedwoodJS is very close to a stable version 1.0. In the last two
-> years, the project has matured significantly and is already used in production
-> by a number of VC-backed startups. We are currently in the release candidate
-> phase and intend to release a final v1.0.0 in March of 2022.
-
 > **TUTORIAL:** The best way to get to know Redwood is by going through the
-> extensive [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
+> extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial). Have fun!
 
 > **QUICK START:** You can install and run a full-stack Redwood application on
 > your machine with only a couple commands. Check out the [Quick
@@ -133,14 +128,10 @@ in the same monorepo.
 
 ## Roadmap
 
-We intend to release a truly production-ready 1.0 in early 2022. To see all the
-features we plan on including in Redwood's first major release, you can check
-out our [Roadmap](https://redwoodjs.com/roadmap).
-
 A framework like Redwood has a lot of moving parts; the Roadmap is a great way
 to get a high-level overview of where the framework is relative to where we want
 it to be. And since we link to all of our GitHub project boards, it's also a
-great way to get involved!
+great way to get involved! [Roadmap](https://redwoodjs.com/roadmap)
 
 ## Why is it called Redwood?
 
