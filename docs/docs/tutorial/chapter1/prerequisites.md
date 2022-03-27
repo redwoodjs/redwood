@@ -1,5 +1,9 @@
 # Prerequisites
 
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/HJOzmp8oCIQ?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+</div>
+
 Redwood is composed of several popular libraries to make full-stack web development easier. Unfortunately, we can't teach all of those technologies from scratch during this tutorial, so we're going to assume you are already familiar with a few core concepts:
 
 - [React](https://reactjs.org/)
@@ -13,7 +17,7 @@ You could definitely learn them all at once, but it will be harder to determine 
 
 ### Redwood Versions
 
-You will want to be on the latest release candidate of v1.0 or greater of Redwood to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
+You will want to be on at least version 0.50.0, or 1.0.0-final.1, to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
 
 If you have an existing site created with a prior version, you'll need to upgrade and (most likely) apply code modifications. Follow this two step process:
 

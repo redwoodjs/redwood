@@ -2,15 +2,16 @@ module.exports = {
   main: [
     {
       type: 'category',
-      label: 'Docs',
+      label: 'Reference',
       link: {
         type: 'generated-index',
-        title: 'Docs',
+        title: 'Reference',
         // description: '',
         slug: '/index',
       },
       className: 'docs-sidebar-category',
       items: [
+        'quick-start',
         'a11y',
         'app-configuration-redwood-toml',
         'assets-and-files',
@@ -24,7 +25,17 @@ module.exports = {
         'cors',
         'custom-web-index',
         'data-migrations',
-        'deploy',
+        {
+          Deployment: [
+            { type: 'doc', label: 'Introduction', id: 'deploy/introduction' },
+            { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
+            { type: 'doc', label: 'Flightcontrol', id: 'deploy/flightcontrol' },
+            { type: 'doc', label: 'Netlify', id: 'deploy/netlify' },
+            { type: 'doc', label: 'Render', id: 'deploy/render' },
+            { type: 'doc', label: 'Serverless.com', id: 'deploy/serverless' },
+            { type: 'doc', label: 'Vercel', id: 'deploy/vercel' },
+          ],
+        },
         'directives',
         'environment-variables',
         'forms',
@@ -34,7 +45,6 @@ module.exports = {
         'mocking-graphql-requests',
         'prerender',
         'project-configuration-dev-test-build',
-        'quick-start',
         'redwoodrecord',
         'router',
         'schema-relations',

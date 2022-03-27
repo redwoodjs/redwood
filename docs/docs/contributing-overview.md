@@ -1,3 +1,7 @@
+---
+slug: contributing
+---
+
 # Contributing: Overview and Orientation
 
 Love Redwood and want to get involved? You’re in the right place and in good company! As of this writing, there are more than [250 contributors](https://github.com/redwoodjs/redwood/blob/main/README.md#contributors) who have helped make Redwood awesome by contributing code and documentation. This doesn't include all those who participate in the vibrant, helpful, and encouraging Forums and Discord, which are both great places to get started if you have any questions.
