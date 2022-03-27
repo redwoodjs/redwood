@@ -5,10 +5,7 @@ import execa from 'execa'
 import Listr from 'listr'
 
 import c from '../../../../lib/colors'
-import {
-  checkStorybookStatus,
-  configureStorybook,
-} from '../../../../lib/configureStorybook.js'
+import configureStorybook from '../../../../lib/configureStorybook.js'
 import { checkSetupStatus, wrapWithChakraProvider } from '../tasks/setup-chakra'
 
 export const command = 'chakra-ui'
@@ -65,9 +62,9 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Configure Storybook...',
-      skip: () => checkStorybookStatus({ force }) === 'done',
       task: async () =>
         configureStorybook(
+          { force },
           fs.readFileSync(
             path.join(
               __dirname,
