@@ -4,11 +4,11 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 
+import c from '../../../../lib/colors'
 import {
   checkStorybookStatus,
   configureStorybook,
-} from '../../../../configureStorybook.js'
-import c from '../../../../lib/colors'
+} from '../../../../lib/configureStorybook.js'
 import { checkSetupStatus, wrapWithChakraProvider } from '../tasks/setup-chakra'
 
 export const command = 'chakra-ui'
