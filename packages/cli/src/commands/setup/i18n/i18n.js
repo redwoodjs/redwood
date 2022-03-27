@@ -157,7 +157,7 @@ export const handler = async ({ force }) => {
           path.join(getPaths().web.base, '__mocks__/react-i18next.js'),
           fs
             .readFileSync(
-              path.resolve(__dirname, 'templates', 'react-i18next.js')
+              path.resolve(__dirname, 'templates', 'react-i18next.template')
             )
             .toString(),
           { overwriteExisting: force }
