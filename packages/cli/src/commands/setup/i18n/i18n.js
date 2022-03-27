@@ -3,6 +3,7 @@ import path from 'path'
 
 import chalk from 'chalk'
 import execa from 'execa'
+import { readFileSync } from 'fs-extra'
 import Listr from 'listr'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -95,6 +96,72 @@ export const handler = async ({ force }) => {
             { overwriteExisting: force }
           )
         }
+      },
+    },
+    {
+      title: 'Updating Jest configuration to support i18n...',
+      task: () => {
+        /**
+         * Add the appropriate line in the
+         * module name mapper of web/jest.config.js.
+         */
+        const jestConfigPath = path.join(getPaths().web.base, '/jest.config.js')
+
+        const jestConfig = readFileSync(jestConfigPath).toString()
+
+        let newJestConfig
+
+        const operation = {
+          add: {
+            pattern: "preset: '@redwoodjs/testing/config/jest/web',",
+            value: `
+  preset: '@redwoodjs/testing/config/jest/web',
+  moduleNameMapper: {
+    'react-i18next': '<rootDir>/web/__mocks__/react-i18next.js',
+  },
+`,
+          },
+          update: {
+            pattern: /moduleNameMapper:\s{/,
+            value: `
+   moduleNameMapper: {
+    'react-i18next': '<rootDir>/web/__mocks__/react-i18next.js',
+`,
+          },
+        }
+
+        if (operation.update.pattern.test(jestConfig)) {
+          newJestConfig = jestConfig.replace(
+            operation.update.pattern,
+            operation.update.value
+          )
+        } else {
+          newJestConfig = jestConfig.replace(
+            operation.add.pattern,
+            operation.add.value
+          )
+        }
+
+        return writeFile(path.join(jestConfigPath), newJestConfig, {
+          overwriteExisting: force,
+        })
+      },
+    },
+    {
+      title: 'Adding Jest react-i18next mock...',
+      task: () => {
+        /**
+         * Add web/__mocks__/react-i18next.js if it doesn't exist
+         */
+        return writeFile(
+          path.join(getPaths().web.base, '__mocks__/react-i18next.js'),
+          fs
+            .readFileSync(
+              path.resolve(__dirname, 'templates', 'react-i18next.js')
+            )
+            .toString(),
+          { overwriteExisting: force }
+        )
       },
     },
     {
