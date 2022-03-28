@@ -39,8 +39,11 @@ export default function configureStorybook({ force }, newStorybookPreview) {
           .replace(/import *. as React from 'react'/, '')
           .replace(/export const decorators = .*/, '')
 
-      let ReverseCurrentStorybookConfig =
-        CurrentStorybookConfig.split('\n').reverse()
+      const CurrentStorybookConfigWithoutDecoration =
+        CurrentStorybookConfig.replace(/export const decorators = .*/, '')
+
+      const ReverseCurrentStorybookConfig =
+        CurrentStorybookConfigWithoutDecoration.split('\n').reverse()
 
       const indexOfLastImport = ReverseCurrentStorybookConfig.findIndex(
         (value) => /import/.test(value)
