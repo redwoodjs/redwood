@@ -20,7 +20,7 @@ export default function configureStorybook({ force }, newStorybookPreview) {
       fs.unlinkSync(storybookPreviewConfig)
       finalNewStorybookPreview = newStorybookPreview
     } else {
-      const CurrentStorybookConfig = fs
+      const currentConfig = fs
         .readFileSync(storybookPreviewConfig)
         .toString()
 
