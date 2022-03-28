@@ -8,7 +8,7 @@ import { getPaths } from '.'
 export default function configureStorybook({ force }, newStorybookPreview) {
   const storybookPreviewConfigPath = getPaths().web.storybookPreviewConfig
 
-  let finalNewStorybookPreview
+  let storybookPreviewConfig
   /**
    *  Check if storybookPreviewConfig already exists.
    *  Merge both files if it does.
