@@ -7,6 +7,7 @@ import { getPaths } from '.'
  */
 export default function configureStorybook({ force }, newStorybookPreview) {
   const { storybookPreviewConfig } = getPaths().web
+
   let finalNewStorybookPreview
   /**
    *  Check if storybookPreviewConfig already exists.
@@ -19,47 +20,42 @@ export default function configureStorybook({ force }, newStorybookPreview) {
       fs.unlinkSync(storybookPreviewConfig)
       finalNewStorybookPreview = newStorybookPreview
     } else {
-      const insideCurrentStorybookConfig = fs
+      const CurrentStorybookConfig = fs
         .readFileSync(storybookPreviewConfig)
         .toString()
 
-      const insideNewStorybookConfig = fs
-        .readFileSync(newStorybookPreview)
-        .toString()
-
-      const newDecoratorsName = insideNewStorybookConfig.match(
+      const newDecoratorsName = newStorybookPreview.match(
         /export const decorators = \[(.*?)\]/
       )[1]
 
-      const currentDecoratorsName = insideCurrentStorybookConfig.match(
+      const currentDecoratorsName = CurrentStorybookConfig.match(
         /export const decorators = \[(.*?)\]/
       )[1]
 
       const finalDecoratorsExport = `export const decorators = [${currentDecoratorsName}, ${newDecoratorsName}]`
 
       const insideNewStorybookConfigWithoutReactAndDecoration =
-        insideNewStorybookConfig
+        newStorybookPreview
           .replace(/import *. as React from 'react'/, '')
           .replace(/export const decorators = .*/, '')
 
-      let ReverseInsideCurrentStorybookConfig = insideCurrentStorybookConfig
-        .split('\n')
-        .reverse()
+      let ReverseCurrentStorybookConfig =
+        CurrentStorybookConfig.split('\n').reverse()
 
-      const indexOfLastImport = ReverseInsideCurrentStorybookConfig.findIndex(
+      const indexOfLastImport = ReverseCurrentStorybookConfig.findIndex(
         (value) => /import/.test(value)
       )
-      ReverseInsideCurrentStorybookConfig.splice(
+      ReverseCurrentStorybookConfig.splice(
         indexOfLastImport,
         0,
         insideNewStorybookConfigWithoutReactAndDecoration
       )
-      const finalInsideCurrentStorybookConfig =
-        ReverseInsideCurrentStorybookConfig.reverse().join(`\n`) +
+      const finalCurrentStorybookConfig =
+        ReverseCurrentStorybookConfig.reverse().join(`\n`) +
         `\n` +
         finalDecoratorsExport
 
-      finalNewStorybookPreview = finalInsideCurrentStorybookConfig
+      finalNewStorybookPreview = finalCurrentStorybookConfig
     }
   } else {
     finalNewStorybookPreview = newStorybookPreview
