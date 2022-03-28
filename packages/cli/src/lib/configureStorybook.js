@@ -5,23 +5,23 @@ import { getPaths } from '.'
 /**
  * Configure Storybook for the given template by creating a custom preview config
  */
-export default function configureStorybook({ force }, newStorybookPreviewConfig) {
-  const storybookPreviewConfigPath = getPaths().web.storybookPreviewConfig
+export default function configureStorybook({ force }, newStorybookPreview) {
+  const storybookPreviewConfigPath = getPaths().web.storybookPreviewConfigPath
 
   let storybookPreviewConfig
   /**
-   *  Check if storybookPreviewConfig already exists.
+   *  Check if storybookPreviewConfigPath already exists.
    *  Merge both files if it does.
    *  By removing import react and export decorator from new config
    *  And put new config inside current config after last import
    */
-  if (fs.existsSync(storybookPreviewConfig)) {
+  if (fs.existsSync(storybookPreviewConfigPath)) {
     if (force) {
-      fs.unlinkSync(storybookPreviewConfig)
-      finalNewStorybookPreview = newStorybookPreview
+      fs.unlinkSync(storybookPreviewConfigPath)
+      storybookPreviewConfig = newStorybookPreview
     } else {
       const currentConfig = fs
-        .readFileSync(storybookPreviewConfig)
+        .readFileSync(storybookPreviewConfigPath)
         .toString()
 
       const newDecoratorsName = newStorybookPreview.match(
@@ -39,30 +39,34 @@ export default function configureStorybook({ force }, newStorybookPreviewConfig)
           .replace(/import *. as React from 'react'/, '')
           .replace(/export const decorators = .*/, '')
 
-      const currentConfigWithoutDecoration =
-        currentConfig.replace(/export const decorators = .*/, '')
+      const CurrentConfigWithoutDecoration = currentConfig.replace(
+        /export const decorators = .*/,
+        ''
+      )
 
       const reverseCurrentConfig =
-        currentConfigWithoutDecoration.split('\n').reverse()
+        CurrentConfigWithoutDecoration.split('\n').reverse()
 
-      const indexOfLastImport = reverseCurrentStorybookConfig.findIndex(
-        (value) => /^import /.test(value)
+      const indexOfLastImport = reverseCurrentConfig.findIndex((value) =>
+        /^import /.test(value)
       )
       reverseCurrentConfig.splice(
         indexOfLastImport,
         0,
         insideNewStorybookConfigWithoutReactAndDecoration
       )
-      const finalCurrentStorybookConfig =
+      const finalCurrentConfig =
         reverseCurrentConfig.reverse().join(`\n`) +
         `\n` +
-        finalDecoratorsExport
+        currentConfig +
+        `\n` +
+        decoratorsExport
 
-      finalNewStorybookPreview = finalCurrentStorybookConfig
+      storybookPreviewConfig = finalCurrentConfig
     }
   } else {
-    finalNewStorybookPreview = newStorybookPreview
+    storybookPreviewConfig = newStorybookPreview
   }
 
-  fs.outputFileSync(storybookPreviewConfig, finalNewStorybookPreview)
+  fs.outputFileSync(storybookPreviewConfigPath, storybookPreviewConfig)
 }
