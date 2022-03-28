@@ -10,10 +10,7 @@ import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
-import {
-  appSourceContentContains,
-  wrapRootComponentWithComponent,
-} from '../tasks/setup-component-library'
+import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -83,17 +80,18 @@ export async function handler({ force, install, packages }) {
     },
     {
       title: 'Setting up Mantine',
-      skip: () => appSourceContentContains('MantineProvider'),
+      skip: () => appJSContains('MantineProvider'),
       task: () =>
-        wrapRootComponentWithComponent({
-          componentName: 'MantineProvider',
-          // props: 'theme={extendedTheme}',
-          props: { theme: 'extendedTheme' },
+        extendAppJS({
+          wrapTag: {
+            wrapperComponent: 'MantineProvider',
+            wrapperProps: { theme: 'theme' },
+            wrappedComponent: 'RedwoodApolloProvider',
+          },
           imports: [
-            "import { MantineProvider, extendTheme } from '@mantine/core'",
-            "import * as theme from 'src/config/mantine.config'",
+            "import { MantineProvider } from '@mantine/core'",
+            "import * as theme from 'config/mantine.config'",
           ],
-          moduleScopeLines: ['const extendedTheme = extendTheme(theme)'],
         }),
     },
     {
@@ -115,10 +113,12 @@ export async function handler({ force, install, packages }) {
 
         fs.writeFileSync(
           mantineConfigPath,
-          `
-        // This object will be used to override Mantine theme defaults.
-        // See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
-        module.exports = {}`
+          [
+            '// This object will be used to override Mantine theme defaults.',
+            '// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options',
+            'module.exports = {}',
+            '', // Add a trailing newline.
+          ].join('\n')
         )
       },
     },
