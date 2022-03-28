@@ -40,7 +40,7 @@ export default function configureStorybook({ force }, newStorybookPreview) {
           .replace(/export const decorators = .*/, '')
 
       const currentConfigWithoutDecoration =
-        CurrentStorybookConfig.replace(/export const decorators = .*/, '')
+        currentConfig.replace(/export const decorators = .*/, '')
 
       const ReverseCurrentStorybookConfig =
         currentConfigWithoutDecoration.split('\n').reverse()
