@@ -53,7 +53,7 @@
     "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

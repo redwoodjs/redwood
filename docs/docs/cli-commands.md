@@ -537,7 +537,7 @@ See the [Data Migration](data-migrations.md) docs.
 
 **Usage**
 
-See the [Deploy](deploy.md) docs.
+See the [Deploy](/docs/deploy/introduction) docs.
 
 ### generate directive
 
@@ -1187,7 +1187,11 @@ Generate a secret key using a cryptographically-secure source of entropy. Common
 Using the `--raw` option you can easily append a secret key to your .env file, like so:
 
 ```
+# yarn v1
 echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env
+
+# yarn v3
+echo "SESSION_SECRET=$(yarn rw g secret --raw)" >> .env
 ```
 
 ### generate service
