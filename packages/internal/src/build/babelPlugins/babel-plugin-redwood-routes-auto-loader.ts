@@ -14,8 +14,18 @@ interface PluginOptions {
   useStaticImports?: boolean
 }
 
-const getPathRelativeToSrc = (absolutePath: string) => {
-  return `./${path.relative(getPaths().web.src, absolutePath)}`
+/**
+ * When running from the CLI: Babel-plugin-module-resolver will convert
+ * For dev/build/prerender (forJest == false): 'src/pages/ExamplePage' -> './pages/ExamplePage'
+ * For test (forJest == true): 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+ */
+const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
+  // If the path is already relative
+  if (!path.isAbsolute(maybeAbsolutePath)) {
+    return maybeAbsolutePath
+  }
+
+  return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
 }
 
 const withRelativeImports = (page: PagesDependency) => {
@@ -46,6 +56,7 @@ export default function (
         // Remove Page imports in prerender mode (see babel-preset)
         // This is to make sure that all the imported "Page modules" are normal imports
         // and not asynchronous ones.
+        // But note that jest in a user's project does not enter this block, but our tests do
         if (useStaticImports) {
           // Match import paths, const name could be different
           const userImportPath = getPathRelativeToSrc(
@@ -55,11 +66,6 @@ export default function (
           const pageThatUserImported = pages.find((page) => {
             return page.relativeImport === userImportPath
           })
-
-          // When running from the CLI: Babel-plugin-module-resolver will convert
-          // For dev/build/prerender: 'src/pages/ExamplePage' -> './pages/ExamplePage'
-          // For test: 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
-          // But note that jest in a user's project does not enter this block
 
           if (pageThatUserImported) {
             const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
