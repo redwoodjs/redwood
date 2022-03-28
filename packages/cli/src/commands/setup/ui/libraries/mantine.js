@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs, { promises as asyncfs } from 'fs'
 import path from 'path'
 
 import execa from 'execa'
@@ -29,6 +29,13 @@ const ALL_MANTINE_PACKAGES = [
   'spotlight',
 ]
 
+const MANTINE_THEME_AND_COMMENTS = [
+  '// This object will be used to override Mantine theme defaults.',
+  '// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options',
+  'module.exports = {}',
+  '', // Add a trailing newline.
+]
+
 export function builder(yargs) {
   yargs.option('force', {
     alias: 'f',
@@ -48,6 +55,37 @@ export function builder(yargs) {
     description: `Mantine packages to install. Specify '${ALL_KEYWORD}' to install all packages. Default: ['core', 'hooks']`,
     type: 'array',
   })
+}
+
+/**
+ * Asynchronously creates a file at the specified path with the provided content, join()ed with '\n'
+ * If overwrite is false, and the file already exists, throws `Error(alreadyExistsError)`
+ * @param {string} path File path at which to create the file
+ * @param {Array} contentLines Array of lines to join and write into the file.
+ * @param {Boolean} overwrite Indicates if the file should be overwritten, if it already exists.
+ * @param {string} alreadyExistsError Message to throw if !overwrite && file already exists.
+ * // TODO: this seems like too general of a function to belong here. Where should it go?
+ */
+async function createFile({
+  filepath,
+  contentLines,
+  overwrite = false,
+  alreadyExistsError,
+}) {
+  if (fs.existsSync(filepath) && !overwrite) {
+    throw new Error(alreadyExistsError)
+  } else {
+    return asyncfs
+      .mkdir(path.dirname(filepath), { recursive: true })
+      .then((_) => {
+        return asyncfs.writeFile(filepath, contentLines.join('\n'), {
+          flag: 'w',
+        })
+      })
+      .catch((reason) => {
+        console.error(`Failed to write ${filepath}. Reason: ${reason}`)
+      })
+  }
 }
 
 export async function handler({ force, install, packages }) {
@@ -97,29 +135,13 @@ export async function handler({ force, install, packages }) {
     {
       title: `Creating Theme File`,
       task: async () => {
-        const mantineConfigPath = path.join(
-          rwPaths.web.config,
-          'mantine.config.js'
-        )
-        if (fs.existsSync(mantineConfigPath)) {
-          if (force) {
-            fs.unlinkSync(mantineConfigPath)
-          } else {
-            throw new Error(
-              'Mantine config already exists.\nUse --force to override existing config.'
-            )
-          }
-        }
-
-        fs.writeFileSync(
-          mantineConfigPath,
-          [
-            '// This object will be used to override Mantine theme defaults.',
-            '// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options',
-            'module.exports = {}',
-            '', // Add a trailing newline.
-          ].join('\n')
-        )
+        return createFile({
+          filepath: path.join(rwPaths.web.config, 'mantine.config.js'),
+          overwrite: force,
+          contentLines: MANTINE_THEME_AND_COMMENTS,
+          alreadyExistsError:
+            'Mantine config already exists.\nUse --force to override existing config.',
+        })
       },
     },
     {
