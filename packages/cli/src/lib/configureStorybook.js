@@ -32,7 +32,7 @@ export default function configureStorybook({ force }, newStorybookPreviewConfig)
         /export const decorators = \[(.*?)\]/
       )[1]
 
-      const finalDecoratorsExport = `export const decorators = [${currentDecoratorsName}, ${newDecoratorsName}]`
+      const decoratorsExport = `export const decorators = [${currentDecoratorsName}, ${newDecoratorsName}]`
 
       const insideNewStorybookConfigWithoutReactAndDecoration =
         newStorybookPreview
