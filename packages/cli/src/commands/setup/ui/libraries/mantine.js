@@ -35,8 +35,7 @@ const ALL_MANTINE_PACKAGES = [
 const MANTINE_THEME_AND_COMMENTS = [
   '// This object will be used to override Mantine theme defaults.',
   '// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options',
-  'module.exports = {}',
-  '', // Add a trailing newline.
+  'module.exports = {}\n',
 ]
 
 export function builder(yargs) {
