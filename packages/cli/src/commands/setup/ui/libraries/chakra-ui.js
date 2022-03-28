@@ -1,14 +1,18 @@
+import path from 'path'
+
 import execa from 'execa'
 import Listr from 'listr'
 
+import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
 import {
-  appSourceContentContains,
-  wrapRootComponentWithComponent,
+  appJSContains,
+  extendAppJS,
+  createFile,
 } from '../tasks/setup-component-library'
 
 export const command = 'chakra-ui'
@@ -29,7 +33,16 @@ export function builder(yargs) {
   })
 }
 
+const CHAKRA_THEME_AND_COMMENTS = [
+  '// This object will be used to override Chakra-UI theme defaults.',
+  '// See https://chakra-ui.com/docs/styled-system/theming/theme for theming options',
+  'module.exports = {}',
+  '', // Add a trailing newline.
+]
+
 export async function handler({ force, install }) {
+  const rwPaths = getPaths()
+
   const packages = [
     '@chakra-ui/react',
     '@emotion/react@^11',
@@ -60,16 +73,33 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Setting up Chakra UI...',
-      skip: () => appSourceContentContains('ChakraProvider'),
+      skip: () => appJSContains('ChakraProvider'),
       task: () =>
-        wrapRootComponentWithComponent({
-          componentName: 'ChakraProvider',
-          props: {},
+        extendAppJS({
+          wrapTag: {
+            wrapperComponent: 'ChakraProvider',
+            wrapperProps: { theme: 'extendedTheme' },
+            wrappedComponent: 'RedwoodApolloProvider',
+            before: '<ColorModeScript />',
+          },
           imports: [
-            "import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'",
+            "import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'",
+            "import * as theme from 'config/chakra.config'",
           ],
-          before: '<ColorModeScript />',
+          moduleScopeLines: ['const extendedTheme = extendTheme(theme)'],
         }),
+    },
+    {
+      title: `Creating Theme File...`,
+      task: async () => {
+        return createFile({
+          filepath: path.join(rwPaths.web.config, 'chakra.config.js'),
+          overwrite: force,
+          contentLines: CHAKRA_THEME_AND_COMMENTS,
+          alreadyExistsError:
+            'Chakra config already exists.\nUse --force to override existing config.',
+        })
+      },
     },
     {
       title: 'Configure Storybook...',

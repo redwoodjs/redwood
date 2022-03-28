@@ -1,4 +1,3 @@
-import fs, { promises as asyncfs } from 'fs'
 import path from 'path'
 
 import execa from 'execa'
@@ -10,7 +9,11 @@ import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
-import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
+import {
+  appJSContains,
+  extendAppJS,
+  createFile,
+} from '../tasks/setup-component-library'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -57,37 +60,6 @@ export function builder(yargs) {
   })
 }
 
-/**
- * Asynchronously creates a file at the specified path with the provided content, join()ed with '\n'
- * If overwrite is false, and the file already exists, throws `Error(alreadyExistsError)`
- * @param {string} path File path at which to create the file
- * @param {Array} contentLines Array of lines to join and write into the file.
- * @param {Boolean} overwrite Indicates if the file should be overwritten, if it already exists.
- * @param {string} alreadyExistsError Message to throw if !overwrite && file already exists.
- * // TODO: this seems like too general of a function to belong here. Where should it go?
- */
-async function createFile({
-  filepath,
-  contentLines,
-  overwrite = false,
-  alreadyExistsError,
-}) {
-  if (fs.existsSync(filepath) && !overwrite) {
-    throw new Error(alreadyExistsError)
-  } else {
-    return asyncfs
-      .mkdir(path.dirname(filepath), { recursive: true })
-      .then((_) => {
-        return asyncfs.writeFile(filepath, contentLines.join('\n'), {
-          flag: 'w',
-        })
-      })
-      .catch((reason) => {
-        console.error(`Failed to write ${filepath}. Reason: ${reason}`)
-      })
-  }
-}
-
 export async function handler({ force, install, packages }) {
   const rwPaths = getPaths()
 
@@ -117,7 +89,7 @@ export async function handler({ force, install, packages }) {
       },
     },
     {
-      title: 'Setting up Mantine',
+      title: 'Setting up Mantine...',
       skip: () => appJSContains('MantineProvider'),
       task: () =>
         extendAppJS({
@@ -133,7 +105,7 @@ export async function handler({ force, install, packages }) {
         }),
     },
     {
-      title: `Creating Theme File`,
+      title: `Creating Theme File...`,
       task: async () => {
         return createFile({
           filepath: path.join(rwPaths.web.config, 'mantine.config.js'),
