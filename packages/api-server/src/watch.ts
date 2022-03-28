@@ -8,6 +8,7 @@ import c from 'ansi-colors'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
+import yargs from 'yargs'
 
 import {
   getPaths,
@@ -16,6 +17,15 @@ import {
   ensurePosixPath,
   loadAndValidateSdls,
 } from '@redwoodjs/internal'
+
+const argv = yargs
+  .option('debug-port', {
+    alias: 'dp',
+    description: 'Debugging port',
+    type: 'number',
+  })
+  .help()
+  .alias('help', 'h').argv
 
 const rwjsPaths = getPaths()
 
@@ -58,12 +68,20 @@ const rebuildApiServer = () => {
     buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
+    const forkOpts = {
+      execArgv: process.execArgv,
+    }
+    const debugPort = argv['debug-port']
+    if (debugPort) {
+      forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
+    }
+
     // Start API server
-    httpServerProcess = fork(path.join(__dirname, 'index.js'), [
-      'api',
-      '--port',
-      getConfig().api.port.toString(),
-    ])
+    httpServerProcess = fork(
+      path.join(__dirname, 'index.js'),
+      ['api', '--port', getConfig().api.port.toString()],
+      forkOpts
+    )
   } catch (e) {
     console.error(e)
   }
