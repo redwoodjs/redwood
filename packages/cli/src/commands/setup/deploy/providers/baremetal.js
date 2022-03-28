@@ -7,7 +7,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes } from '../helpers'
+import { addFilesTask, addPackagesTask, printSetupNotes } from '../helpers'
 import { DEPLOY, ECOSYSTEM } from '../templates/baremetal'
 
 export const command = 'baremetal'
@@ -32,12 +32,16 @@ const files = [
 const notes = [
   'You are almost ready to go BAREMETAL!',
   '',
-  'See https://redwoodjs.com/docs/deploy#baremetal-deploy for the remaining',
+  'See https://redwoodjs.com/docs/deploy/baremetal for the remaining',
   'config and setup required before you can perform your first deploy.',
 ]
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
+    addPackagesTask({
+      packages: ['node-ssh'],
+      devDependency: true,
+    }),
     addFilesTask({
       files,
       force,
