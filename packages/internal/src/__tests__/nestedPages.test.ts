@@ -5,72 +5,91 @@ import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
 
-const FIXTURE_PATH = path.resolve(__dirname, 'fixtures/nestedPages')
+const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages') //?
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
 }
 
-beforeEach(() => {
-  process.env.RWJS_CWD = FIXTURE_PATH
-  cleanWebBuild()
-})
-afterAll(() => {
-  delete process.env.RWJS_CWD
-})
+describe('User specified imports, with static imports', () => {
+  let outputWithStaticImports
+  let webSrcDir
+  beforeEach(() => {
+    process.env.RWJS_CWD = FIXTURE_PATH
+    cleanWebBuild()
+  })
 
-test('Check routes are imported with require when staticImports flag is enabled', () => {
-  const routesFile = getPaths().web.routes
+  afterAll(() => {
+    delete process.env.RWJS_CWD
+  })
 
-  const withStaticImports = prebuildWebFile(routesFile, {
-    staticImports: true,
-  }).code //?
+  beforeAll(() => {
+    process.env.RWJS_CWD = FIXTURE_PATH
 
-  /* Check that imports have the form
-   `const HomePage = {
-     name: "HomePage",
-     loader: () => require("` 👈 Uses a require statement
-     */
-  expect(withStaticImports).toContain(`const HomePage = {`)
-  expect(withStaticImports).toContain(`const BarPage = {`)
+    const routesFile = getPaths().web.routes
+    outputWithStaticImports = prebuildWebFile(routesFile, {
+      staticImports: true,
+      forJest: true,
+    }).code
+    webSrcDir = getPaths().web.src
+  })
 
-  /*
-    👇 Foo page is an explicitly imported page in the source
-    const FooPage = {
-      name: "FooPage",
-      loader: () => require(
-    */
-  expect(withStaticImports).toContain(`const FooPage = {`)
-  expect(withStaticImports).not.toContain(
-    `var _FooPage = _interopRequireDefault(require(`
-  )
-})
+  it('Imports layouts correctly', () => {
+    expect(outputWithStaticImports).toContain(
+      `var _AdminLayout = _interopRequireDefault(require("${webSrcDir}/layouts/AdminLayout/AdminLayout"))`
+    )
+    expect(outputWithStaticImports).toContain(
+      `var _MainLayout = _interopRequireDefault(require("${webSrcDir}/layouts/MainLayout/MainLayout"))`
+    )
+  })
 
-test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
-  const routesFile = getPaths().web.routes
+  it('Adds loaders for non-nested pages, that do not have an explicit import', () => {
+    expect(outputWithStaticImports).toContain(
+      `const LoginPage = {
+  name: "LoginPage",
+  loader: () => require("./pages/LoginPage/LoginPage")
+}`
+    )
 
-  const withoutStaticImports = prebuildWebFile(routesFile).code
+    expect(outputWithStaticImports).toContain(
+      `const HomePage = {
+  name: "HomePage",
+  loader: () => require("./pages/HomePage/HomePage")
+}`
+    )
+  })
 
-  /* Check that imports have the form
-   `const HomePage = {
-     name: "HomePage",
-     loader: () => import("` 👈 Uses an (async) import statement
-     */
+  it('Loads for imported nested page uses user specified name', () => {
+    // Import statement: import JobsPage from 'src/pages/Jobs/JobsPage'
+    expect(outputWithStaticImports).toContain(
+      `const NewJobPage = {
+  name: "NewJobPage",
+  loader: () => require("./pages/Jobs/NewJobPage/NewJobPage")
+}`
+    )
 
-  expect(withoutStaticImports).toContain(`const HomePage = {`)
-  expect(withoutStaticImports).toContain(`const BarPage = {`)
+    // Import statement is this: import BazingaJobProfilePageWithFunnyName from 'src/pages/Jobs/JobProfilePage'
+    expect(outputWithStaticImports).toContain(
+      `const BazingaJobProfilePageWithFunnyName = {
+  name: "BazingaJobProfilePageWithFunnyName",
+  loader: () => require("./pages/Jobs/JobProfilePage/JobProfilePage")
+}`
+    )
 
-  /*
-    👇 Foo page is an explicitly imported page, so it should
-    var _FooPage = _interopRequireDefault(require(\\"./pages/FooPage/FooPage\\"))
-    (inverse of the static imports one)
-    .
-    .
-    .
-    page: _FooPage[\\"default\\"],
-  */
-  expect(withoutStaticImports).not.toContain(`const FooPage = {`)
-  expect(withoutStaticImports).toContain(
-    `var _FooPage = _interopRequireDefault(require(`
-  )
+    // Check that the explicitly imported nested pages are removed too
+    expect(outputWithStaticImports).not.toContain(
+      `var _NewJobPage = _interopRequireDefault`
+    )
+
+    expect(outputWithStaticImports).not.toContain(
+      `var _JobProfilePage = _interopRequireDefault`
+    )
+
+    // Generate react component still uses the user specified name
+    expect(outputWithStaticImports).toContain(`.createElement(_router.Route, {
+    path: "/job-profiles/{id:Int}",
+    page: BazingaJobProfilePageWithFunnyName,
+    name: "jobProfile"
+  })`)
+  })
 })

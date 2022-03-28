@@ -29,6 +29,7 @@ export default function (
   { types: t }: { types: typeof types },
   { useStaticImports = false }: PluginOptions
 ): PluginObj {
+  // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
 
   return {
@@ -47,17 +48,27 @@ export default function (
         // and not asynchronous ones.
         if (useStaticImports) {
           // Match import paths, const name could be different
-          const userImportPath = importStatementPath(p.node.source?.value)
-          const relativePageImportPaths = pages.map((page) => {
-            return page.relativeImport
+          const userImportPath = getPathRelativeToSrc(
+            importStatementPath(p.node.source?.value)
+          )
+
+          const pageThatUserImported = pages.find((page) => {
+            return page.relativeImport === userImportPath
           })
 
           // When running from the CLI: Babel-plugin-module-resolver will convert
           // For dev/build/prerender: 'src/pages/ExamplePage' -> './pages/ExamplePage'
           // For test: 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+          // But note that jest in a user's project does not enter this block
 
-          // Check only relative (dev/build/prerender)  - jest doesn't enter this block
-          if (relativePageImportPaths.includes(userImportPath)) {
+          if (pageThatUserImported) {
+            const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
+              t.isImportDefaultSpecifier(specifiers)
+            )[0]
+
+            // Update the import name, with the user's import name
+            // So that the JSX name stays consistent
+            pageThatUserImported.importName = defaultSpecifier.local.name
             p.remove()
           }
 
