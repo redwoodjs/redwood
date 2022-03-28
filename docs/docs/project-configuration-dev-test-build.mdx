@@ -1,3 +1,5 @@
+import ReactPlayer from 'react-player'
+
 # Project Configuration: Dev, Test, Build
 
 ## Babel
@@ -117,3 +119,48 @@ config:
 ```
 
 For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator. Note that we currently only support the root level `config` option.
+
+## Debugger configuration
+The `yarn rw dev` command is configured by default to launch a debugger on the port `18911`, your Redwood app also ships with default configuration to attach a debugger from VSCode.
+
+Simply run your dev server, then attach the debugger from the "run and debug" panel. Quick demo below:
+
+<ReactPlayer width='100%' height='100%' controls url='https://user-images.githubusercontent.com/1521877/159887978-95075ccd-d10c-403c-90cc-a5b944c429e3.mp4' />
+
+
+<br/>
+
+> **ℹ️ Tip: Can't see the "Attach debugger" configuration?** In VSCode
+>
+> You can grab the latest launch.json from the Redwood template [here](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/template/.vscode/launch.json). Copy the contents into your project's `.vscode/launch.json`
+
+
+#### Customizing the debug port
+You can choose to use a different debug port in one of two ways:
+
+**a) Using the redwood.toml**
+
+Add/change the `debugPort` under your api settings
+
+```toml title="redwood.toml"
+[web]
+  # .
+  # .
+[api]
+  port = 8911
+  // highlight-next-line
+  debugPort = 18911 # 👈 change me!
+```
+
+If you set it to `false`, no debug port will be exposed. The `debugPort` is only ever used during development when running `yarn rw dev`
+
+**b) Pass a flag to `rw dev` command**
+
+You can also pass a flag when you launch your dev servers, for example:
+
+```bash
+yarn rw dev --debugPort 75028
+```
+The flag passed in the CLI will always take precendence over your setting in the redwood.toml
+
+Just remember to also change the port you are attaching to in your `./vscode/launch.json`
