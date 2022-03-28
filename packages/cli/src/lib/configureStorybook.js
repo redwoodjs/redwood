@@ -28,7 +28,7 @@ export default function configureStorybook({ force }, newStorybookPreview) {
         /export const decorators = \[(.*?)\]/
       )[1]
 
-      const currentDecoratorsName = CurrentStorybookConfig.match(
+      const currentDecoratorsName = currentConfig.match(
         /export const decorators = \[(.*?)\]/
       )[1]
 
