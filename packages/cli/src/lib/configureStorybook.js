@@ -6,7 +6,7 @@ import { getPaths } from '.'
  * Configure Storybook for the given template by creating a custom preview config
  */
 export default function configureStorybook({ force }, newStorybookPreview) {
-  const storybookPreviewConfigPath = getPaths().web.storybookPreviewConfigPath
+  const storybookPreviewConfigPath = getPaths().web.storybookPreviewConfig
 
   let storybookPreviewConfig
   /**
