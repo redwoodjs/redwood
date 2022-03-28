@@ -5,7 +5,7 @@ import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
 
-const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages') //?
+const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
