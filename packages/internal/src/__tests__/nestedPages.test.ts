@@ -1,15 +1,10 @@
 import path from 'path'
 
 import { prebuildWebFile } from '../build/babel/web'
-import { prebuildWebFiles, cleanWebBuild } from '../build/web'
-import { findWebFiles } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
+import { cleanWebBuild } from '../build/web'
+import { getPaths } from '../paths'
 
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
-
-const cleanPaths = (p) => {
-  return ensurePosixPath(path.relative(FIXTURE_PATH, p))
-}
 
 describe('User specified imports, with static imports', () => {
   let outputWithStaticImports
