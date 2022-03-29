@@ -54,6 +54,8 @@
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
+    "@okta/jwt-verifier": "^2.3.0",
+    "@okta/okta-auth-js": "^6.2.0",
     "@playwright/test": "1.23.4",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
