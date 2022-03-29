@@ -22,14 +22,14 @@ Let's create a very simple DAM (Digital Asset Manager) that lets users upload an
 
 Create a new Redwood app:
 
-```terminal
+```bash
 yarn create redwood-app uploader
 cd uploader
 ```
 
 The first thing we'll do is create an environment variable to hold our Filestack API key. This is a best practice so that the key isn't living in our repository for prying eyes to see. Add the key to the `.env` file in the root of our app:
 
-```terminal
+```bash
 REDWOOD_ENV_FILESTACK_API_KEY=AM18i8xV4QpoiGwetoTWd
 ```
 
@@ -37,7 +37,7 @@ REDWOOD_ENV_FILESTACK_API_KEY=AM18i8xV4QpoiGwetoTWd
 
 Now we can start our development server:
 
-```terminal
+```bash
 yarn rw dev
 ```
 
@@ -45,9 +45,7 @@ yarn rw dev
 
 We'll create a single model to store our image data:
 
-```prisma
-// api/db/schema.prisma
-
+```javascript title="api/db/schema.prisma"
 model Image {
   id    Int    @id @default(autoincrement())
   title String
@@ -59,13 +57,13 @@ model Image {
 
 Create a migration to update the database; when prompted, name it "add image":
 
-```terminal
+```bash
 yarn rw prisma migrate dev
 ```
 
 To make our lives easier, let's scaffold the screens necessary to create/update/delete an image, then we'll worry about adding the uploader:
 
-```terminal
+```bash
 yarn rw generate scaffold image
 ```
 
@@ -77,15 +75,13 @@ Now head to http://localhost:8910/images/new and let's figure this out!
 
 Filestack has a couple of [React components](https://github.com/filestack/filestack-react) that handle all the uploading for us. Let's add the package:
 
-```terminal
+```bash
 yarn workspace web add filestack-react
 ```
 
 We want the uploader on our scaffolded form, so let's head over to `ImageForm`, import Filestack's inline picker, and try replacing the **Url** input with it:
 
-```javascript{11,51}
-// web/src/components/ImageForm/ImageForm.js
-
+```jsx {9,49} title="web/src/components/ImageForm/ImageForm.js"
 import {
   Form,
   FormError,
@@ -169,9 +165,7 @@ But that doesn't help us attach anything to our database record. Let's do that.
 
 Let's see what's going on when an upload completes. The Filestack picker takes an `onSuccess` prop with a function to call when complete:
 
-```javascript{10-12,18}
-// web/src/components/ImageForm/ImageForm.js
-
+```jsx {8-10,16} title="web/src/components/ImageForm/ImageForm.js"
 // imports and stuff...
 
 const ImageForm = (props) => {
@@ -197,9 +191,7 @@ Well lookie here:
 
 `filesUploaded[0].url` seems to be exactly what we need—the public URL to the image that was just uploaded. Excellent! How about we use a little state to track that for us so it's available when we submit our form:
 
-```javascript{12,21,28}
-// web/src/components/ImageForm/ImageForm.js
-
+```jsx {10,19,26} title="web/src/components/ImageForm/ImageForm.js"
 import {
   Form,
   FormError,
@@ -236,9 +228,7 @@ So we'll use `setState` to store the URL for the image. We default it to the exi
 
 The last thing we need to do is set the value of `url` in the `data` object before it gets passed to the `onSave` handler:
 
-```javascript{4,5}
-// web/src/components/ImageForm/ImageForm.js
-
+```jsx {2,3} title="web/src/components/ImageForm/ImageForm.js"
 const onSubmit = (data) => {
   const dataWithUrl = Object.assign(data, { url })
   props.onSave(dataWithUrl, props?.image?.id)
@@ -251,9 +241,7 @@ Now try uploading a file and saving the form:
 
 It worked! Next let's update the display here to actually show the image as a thumbnail and make it clickable to see the full version:
 
-```javascript{78-80}
-// web/src/components/Images/Images.js
-
+```jsx {76-78} title="web/src/components/Images/Images.js"
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
@@ -380,9 +368,7 @@ Why 100px? Most phones and many laptops and desktop displays are now 4k or large
 
 We need to add a special indicator to the URL itself to trigger the transform so let's add a function that does that for a given image URL (this can go either inside or outside of the component definition):
 
-```javascript
-// web/src/components/Images/Images.js
-
+```jsx title="web/src/components/Images/Images.js"
 const thumbnail = (url) => {
   const parts = url.split('/')
   parts.splice(3, 0, 'resize=width:100')
@@ -404,9 +390,7 @@ https://cdn.filestackcontent.com/resize=width:100/81m7qIrURxSp7WHcft9a
 
 Now we'll use the result of that function in the `<img>` tag:
 
-```javascript
-// web/src/components/Images/Images.js
-
+```jsx title="web/src/components/Images/Images.js"
 <img src={thumbnail(image.url)} style={{ maxWidth: '50px' }} />
 ```
 
@@ -420,9 +404,7 @@ It'd be nice if, after uploading, you could see the image you uploaded. Likewise
 
 We're already storing the attached image URL in state, so let's use the existence of that state to show the attached image. In fact, let's also hide the uploader and assume you're done (you'll be able to show it again if needed):
 
-```javascript{7,10}
-// web/src/components/ImageForm/ImageForm.js
-
+```jsx {5,8} title="web/src/components/ImageForm/ImageForm.js"
 <PickerInline
   apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
   onSuccess={onFileUpload}
@@ -439,9 +421,7 @@ Now if you create a new image record, you'll see the picker, and as soon as the 
 
 Now let's add the ability to bring back the uploader if you decide you want to change the image. We can do that by clearing the image that's in state:
 
-```javascript{10-20}
-// web/src/components/ImageForm/ImageForm.js
-
+```jsx {8-18} title="web/src/components/ImageForm/ImageForm.js"
 <PickerInline
   apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
   onSuccess={onFileUpload}

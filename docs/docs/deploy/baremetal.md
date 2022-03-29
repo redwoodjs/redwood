@@ -53,7 +53,7 @@ Before your first deply you'll need to add some configuration.
 
 By default, baremetal assumes you want to run the `yarn rw serve` command, which provides both the web and api sides. The web side will be available on port 8910 unless you update your `redwood.toml` file to make it available on another port. The default generated `ecosystem.config.js` will contain this config only, within a service called "serve":
 
-```javascript title="ecosystem.config.js"
+```jsx title="ecosystem.config.js"
 module.exports = {
   apps: [
     {
@@ -71,7 +71,7 @@ module.exports = {
 
 If you follow our recommended config [below](#redwood-serves-api-nginx-serves-web-side), you could update this to only serve the api side, because the web side will be handled by [nginx](https://www.nginx.com/). That could look like:
 
-```javascript title="ecosystem.config.js"
+```jsx title="ecosystem.config.js"
 module.exports = {
   apps: [
     {
@@ -143,7 +143,7 @@ processNames = ["web"]
 ```
 
 
-```javascript title="ecosystem.config.js"
+```jsx title="ecosystem.config.js"
 module.exports = {
   apps: [
     {

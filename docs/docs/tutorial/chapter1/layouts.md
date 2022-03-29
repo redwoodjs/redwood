@@ -88,7 +88,7 @@ In `BlogLayout.js`, `children` is where the magic will happen. Any page content 
 
 To actually render our layout we'll need to make a change to our routes files. We'll wrap `HomePage` and `AboutPage` with the `BlogLayout`, using a `<Set>`. Unlike pages, we do actually need an `import` statement for layouts:
 
-```javascript title="web/src/Routes.js"
+```jsx title="web/src/Routes.js"
 // highlight-start
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogLayout from 'src/layouts/BlogLayout'

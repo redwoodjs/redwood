@@ -14,7 +14,7 @@ How about a custom Function that returns the timestamp from the server?
 
 Step one is to actually create the custom Function. Naturally, we have a generator for that. Let's call our custom Function "serverTime":
 
-```terminal
+```bash
 yarn rw generate function serverTime
 ```
 
@@ -26,7 +26,7 @@ That creates a stub you can test out right away. Make sure your dev server is ru
 
 The `.redwood/functions` bit in the link you pointed your browser to is what's called the `apiUrl`. You can configure it in your `redwood.toml`:
 
-```toml{5}
+```toml {5}
 # redwood.toml
 
 [web]
@@ -49,7 +49,7 @@ Time for an interlude within an interlude, because that's how you'll always feel
 
 If you don't know much about CORS, it's something you probably should know some about at some point. CORS stands for Cross Origin Resource Sharing; in a nutshell, by default, browsers aren't allowed to access resources outside their own domain. So, requests from `localhost:8910` can only access resources at `localhost:8910`. Since all your serverless functions are at `localhost:8911`, doing something like
 
-```js
+```javascript
 // the `http://` is important!
 const serverTime = await fetch('http://localhost:8911/serverTime')
 ```
@@ -66,9 +66,7 @@ We could set the headers for `serverTime` to allow requests from any origin... b
 
 Ok&mdash;back to our custom Function. Let's get the current time and return it in the body of our handler:
 
-```javascript{6}
-// api/src/functions/serverTime.js
-
+```javascript {4} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -83,9 +81,7 @@ export const handler = async (event, context) => {
 
 How about we make sure the response is a JSON object:
 
-```javascript{6-7}
-// api/src/functions/serverTime.js
-
+```javascript {4-5} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -107,9 +103,7 @@ Since you are most definitely an elite hacker, you probably noticed that our new
 
 Inspecting the `event` argument being sent to `handler` gets us all kinds of juicy details on this request:
 
-```javascript{4}
-// api/src/functions/serverTime.js
-
+```javascript {2} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   console.log(event)
   return {
@@ -149,9 +143,7 @@ Take a look in the terminal window where you're running `yarn rw dev` to see the
 
 That first entry, `httpMethod`, is what we want. Let's check the method and return a 404 if it isn't a **GET**:
 
-```javascript{4-6}
-// api/src/functions/serverTime.js
-
+```javascript {2-4} title="api/src/functions/serverTime.js"
 export const handler = async (event, context) => {
   if (event.httpMethod !== 'GET') {
     return { statusCode: 404 }
@@ -167,13 +159,13 @@ export const handler = async (event, context) => {
 
 It's tough to test other HTTP methods in the browser without installing an extension, but we can do it from the command line with curl:
 
-```terminal
+```bash
 $ curl -XPOST http://localhost:8911/serverTime -I
 ```
 
 You should see:
 
-```terminal
+```bash
 HTTP/1.1 404 Not Found
 X-Powered-By: Express
 Date: Thu, 07 May 2020 22:33:55 GMT
@@ -183,7 +175,7 @@ Content-Length: 0
 
 And just to be sure, let's make that same request with a **GET** (curl's default method):
 
-```terminal
+```bash
 $ curl http://localhost:8911/serverTime
 {"time":"2020-05-07T22:36:12.973Z"}
 ```
@@ -194,9 +186,7 @@ $ curl http://localhost:8911/serverTime
 
 Redwood uses the async/await version of Function handlers, but you can also use the callback version. In that case your Function would look something like:
 
-```javascript{3,5,8,12}
-// api/src/functions/serverTime.js
-
+```javascript {1,3,6,10} title="api/src/functions/serverTime.js"
 export const handler = (event, context, callback) => {
   if (event.httpMethod !== 'GET') {
     callback(null, { statusCode: 404 })

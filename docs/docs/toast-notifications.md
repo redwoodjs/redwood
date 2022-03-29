@@ -16,7 +16,7 @@ This doc will not cover everything you can do with toasts, and the [react-hot-to
 
 Wherever you want your notifications to be output, include the **&lt;Toaster&gt;** component:
 
-```javascript
+```jsx
 import { Toaster } from '@redwoodjs/web/toast'
 
 const HomePage = () => {
@@ -42,7 +42,7 @@ export default HomePage
 
 and a delay for how long to show each type of notification:
 
-```javascript
+```jsx
 <Toaster
   position="bottom-right"
   toastOptions={{success: { duration: 3000 } }}
@@ -55,7 +55,7 @@ See the [official Toaster docs](https://react-hot-toast.com/docs/toaster) for mo
 
 To show a toast message, just include a call to the `toast` object:
 
-```javascript
+```jsx
 import { toast } from '@redwoodjs/web/toast'
 
 const UserForm = () => {
