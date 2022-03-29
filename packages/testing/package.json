@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "0.46.0",
+  "version": "0.50.0",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -26,37 +26,37 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@redwoodjs/auth": "0.46.0",
-    "@redwoodjs/graphql-server": "0.46.0",
-    "@redwoodjs/internal": "0.46.0",
-    "@redwoodjs/router": "0.46.0",
-    "@redwoodjs/web": "0.46.0",
+    "@redwoodjs/auth": "0.50.0",
+    "@redwoodjs/graphql-server": "0.50.0",
+    "@redwoodjs/internal": "0.50.0",
+    "@redwoodjs/router": "0.50.0",
+    "@redwoodjs/web": "0.50.0",
     "@storybook/addon-a11y": "6.4.19",
     "@storybook/builder-webpack5": "6.4.19",
     "@storybook/manager-webpack5": "6.4.19",
     "@storybook/react": "6.4.19",
-    "@testing-library/jest-dom": "5.16.2",
-    "@testing-library/react": "12.1.3",
+    "@testing-library/jest-dom": "5.16.3",
+    "@testing-library/react": "12.1.4",
     "@testing-library/user-event": "13.5.0",
-    "@types/aws-lambda": "8.10.92",
+    "@types/aws-lambda": "8.10.93",
     "@types/babel-core": "6.25.7",
-    "@types/jest": "27.4.0",
-    "@types/node": "16.11.25",
-    "@types/react": "17.0.39",
-    "@types/react-dom": "17.0.11",
+    "@types/jest": "27.4.1",
+    "@types/node": "16.11.26",
+    "@types/react": "17.0.40",
+    "@types/react-dom": "17.0.14",
     "@types/webpack": "5.28.0",
     "babel-jest": "27.5.1",
     "babel-plugin-inline-react-svg": "2.0.1",
     "jest": "27.5.1",
     "jest-watch-typeahead": "1.0.0",
-    "msw": "0.38.1",
+    "msw": "0.39.2",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "typescript": "4.5.5"
+    "typescript": "4.6.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

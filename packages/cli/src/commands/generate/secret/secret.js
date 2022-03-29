@@ -14,14 +14,26 @@ export const description =
   'Generates a secret key using a cryptographically-secure source of entropy'
 
 export const builder = (yargs) =>
-  yargs.option('length', {
-    description: 'Length of the generated secret',
-    type: 'integer',
-    required: false,
-    default: DEFAULT_LENGTH,
-  })
+  yargs
+    .option('length', {
+      description: 'Length of the generated secret',
+      type: 'integer',
+      required: false,
+      default: DEFAULT_LENGTH,
+    })
+    .option('raw', {
+      description: 'Prints just the raw secret',
+      type: 'boolean',
+      required: false,
+      default: false,
+    })
 
-export const handler = ({ length }) => {
+export const handler = ({ length, raw }) => {
+  if (raw) {
+    console.log(generateSecret(length))
+    return
+  }
+
   console.info('')
   console.info(`  ${generateSecret(length)}`)
   console.info('')

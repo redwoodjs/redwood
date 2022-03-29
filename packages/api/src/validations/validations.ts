@@ -152,11 +152,11 @@ interface ValidationRecipe {
    *
    * Opposite of the [`presence`](https://redwoodjs.com/docs/services.html#presence) validator.
    */
-  absence?: AbsenceValidatorOptions
+  absence?: boolean | AbsenceValidatorOptions
   /**
    * Requires that the passed value be `true`, or within an array of allowed values that will be considered "true".
    */
-  acceptance?: AcceptanceValidatorOptions
+  acceptance?: boolean | AcceptanceValidatorOptions
   /**
    * Requires that the value be formatted like an email address by comparing against a regular expression.
    * The regex is extremely lax: `/^[^@\s]+@[^.\s]+\.[^\s]+$/`
@@ -172,7 +172,7 @@ interface ValidationRecipe {
    * Since the official email regex is around 6,300 characters long, we though this one was good enough.
    * If you have a different, preferred email validation regular expression, use the format validation.
    */
-  email?: EmailValidatorOptions
+  email?: boolean | EmailValidatorOptions
   /**
    * Requires that the given value not equal to any in a list of given values.
    *
@@ -196,13 +196,13 @@ interface ValidationRecipe {
   /**
    * The awesomely-named Numericality Validation requires that the value passed meet one or more criteria that are all number related.
    */
-  numericality?: NumericalityValidatorOptions
+  numericality?: boolean | NumericalityValidatorOptions
   /**
    * Requires that a field be present, meaning it must not be null or undefined.
    *
    * Opposite of the [absence](https://redwoodjs.com/docs/services.html#absence) validator.
    */
-  presence?: PresenceValidatorOptions
+  presence?: boolean | PresenceValidatorOptions
 }
 // We extend ValidationRecipe to get its method's documentation.
 // Adding docs below will completely overwrite ValidationRecipe's.
@@ -407,38 +407,41 @@ const VALIDATORS = {
       if (options.integer && !Number.isInteger(value)) {
         validationError('integerNumericality', name, options)
       }
-      if (options.lessThan && (value as number) >= options.lessThan) {
+      if (options.lessThan != null && (value as number) >= options.lessThan) {
         validationError('lessThanNumericality', name, options, {
           lessThan: options.lessThan,
         })
       }
       if (
-        options.lessThanOrEqual &&
+        options.lessThanOrEqual != null &&
         (value as number) > options.lessThanOrEqual
       ) {
         validationError('lessThanOrEqualNumericality', name, options, {
           lessThanOrEqual: options.lessThanOrEqual,
         })
       }
-      if (options.greaterThan && (value as number) <= options.greaterThan) {
+      if (
+        options.greaterThan != null &&
+        (value as number) <= options.greaterThan
+      ) {
         validationError('greaterThanNumericality', name, options, {
           greaterThan: options.greaterThan,
         })
       }
       if (
-        options.greaterThanOrEqual &&
+        options.greaterThanOrEqual != null &&
         (value as number) < options.greaterThanOrEqual
       ) {
         validationError('greaterThanOrEqualNumericality', name, options, {
           greaterThanOrEqual: options.greaterThanOrEqual,
         })
       }
-      if (options.equal && value !== options.equal) {
+      if (options.equal != null && value !== options.equal) {
         validationError('equalNumericality', name, options, {
           equal: options.equal,
         })
       }
-      if (options.otherThan && value === options.otherThan) {
+      if (options.otherThan != null && value === options.otherThan) {
         validationError('otherThanNumericality', name, options, {
           otherThan: options.otherThan,
         })
@@ -550,6 +553,10 @@ export function validate(
   }
 
   for (const [validator, options] of Object.entries(validationRecipe)) {
+    if (typeof options === 'undefined') {
+      continue
+    }
+
     VALIDATORS[validator as keyof typeof VALIDATORS](value, label, options)
   }
 }
@@ -580,7 +587,7 @@ export const validateWith = (func: () => void) => {
 // There is an optional `$scope` key which contains additional the `where`
 // clauses to include when checking whether the field is unique. So rather than
 // a product name having to be unique across the entire database, you could
-// check that it is only unique amoung a subset of records with the same
+// check that it is only unique among a subset of records with the same
 // `companyId`.
 //
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be

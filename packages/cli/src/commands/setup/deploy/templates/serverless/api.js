@@ -20,12 +20,12 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs14.x
-  region: us-east-1 # AWS region where the service will be deployed, defaults to N. Virgina
+  region: us-east-1 # AWS region where the service will be deployed, defaults to N. Virginia
   httpApi:          # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
     cors:
       allowedOrigins:
         - '*' # This is the default value. You can remove this line if you want to restrict the CORS to a specific origin.
-      # allowCredentials: true # allowCrednetials should only be used when allowedOrigins doesn't include '*'
+      # allowCredentials: true # allowCredentials should only be used when allowedOrigins doesn't include '*'
       allowedHeaders:
         - authorization
         - auth-provider

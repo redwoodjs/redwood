@@ -4,14 +4,14 @@ import { createAuthClient } from './authClients'
 import type {
   AuthClient,
   SupportedAuthTypes,
+  SupportedAuthConfig,
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
 
 export interface CurrentUser {
-  roles?: Array<string>
+  roles?: Array<string> | string
 }
-
 export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
@@ -23,6 +23,10 @@ export interface AuthContextInterface {
   logIn(options?: unknown): Promise<any>
   logOut(options?: unknown): Promise<any>
   signUp(options?: unknown): Promise<any>
+  /**
+   * Clients should always return null or string
+   * It is expected that they catch any errors internally
+   */
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -35,7 +39,7 @@ export interface AuthContextInterface {
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    **/
-  hasRole(role: string | string[]): boolean
+  hasRole(rolesToCheck: string | string[]): boolean
   /**
    * Redetermine authentication state and update the state.
    */
@@ -75,11 +79,19 @@ type AuthProviderProps =
   | {
       client: SupportedAuthClients
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
+      config?: never
       skipFetchCurrentUser?: boolean
     }
   | {
       client?: never
-      type: 'dbAuth' | 'clerk'
+      type: 'clerk'
+      config?: never
+      skipFetchCurrentUser?: boolean
+    }
+  | {
+      client?: never
+      type: 'dbAuth'
+      config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
 
@@ -123,7 +135,8 @@ export class AuthProvider extends React.Component<
     super(props)
     this.rwClient = createAuthClient(
       props.client as SupportedAuthClients,
-      props.type as SupportedAuthTypes
+      props.type as SupportedAuthTypes,
+      props.config as SupportedAuthConfig
     )
   }
 
@@ -141,6 +154,8 @@ export class AuthProvider extends React.Component<
     const token = await this.getToken()
     const response = await global.fetch(this.getApiGraphQLUrl(), {
       method: 'POST',
+      // TODO: how can user configure this? inherit same `config` options given to auth client?
+      credentials: 'include',
       headers: {
         'content-type': 'application/json',
         'auth-provider': this.rwClient.type,
@@ -175,26 +190,54 @@ export class AuthProvider extends React.Component<
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    */
-  hasRole = (role: string | string[]): boolean => {
-    if (
-      typeof role !== 'undefined' &&
-      this.state.currentUser &&
-      this.state.currentUser.roles
-    ) {
-      if (typeof role === 'string') {
-        return this.state.currentUser.roles?.includes(role) || false
+  hasRole = (rolesToCheck: string | string[]): boolean => {
+    if (this.state.currentUser?.roles) {
+      if (typeof rolesToCheck === 'string') {
+        if (typeof this.state.currentUser.roles === 'string') {
+          // rolesToCheck is a string, currentUser.roles is a string
+          return this.state.currentUser.roles === rolesToCheck
+        } else if (Array.isArray(this.state.currentUser.roles)) {
+          // rolesToCheck is a string, currentUser.roles is an array
+          return this.state.currentUser.roles?.some(
+            (allowedRole) => rolesToCheck === allowedRole
+          )
+        }
       }
 
-      if (Array.isArray(role)) {
-        return this.state.currentUser.roles.some((r) => role.includes(r))
+      if (Array.isArray(rolesToCheck)) {
+        if (Array.isArray(this.state.currentUser.roles)) {
+          // rolesToCheck is an array, currentUser.roles is an array
+          return this.state.currentUser.roles?.some((allowedRole) =>
+            rolesToCheck.includes(allowedRole)
+          )
+        } else if (typeof this.state.currentUser.roles === 'string') {
+          // rolesToCheck is an array, currentUser.roles is a string
+          return rolesToCheck.some(
+            (allowedRole) => this.state.currentUser?.roles === allowedRole
+          )
+        }
       }
     }
 
     return false
   }
 
+  /**
+   * Clients should always return null or token string.
+   * It is expected that they catch any errors internally.
+   * This catch is a last resort effort in case any errors are
+   * missed or slip through.
+   */
   getToken = async () => {
-    return this.rwClient.getToken()
+    let token
+
+    try {
+      token = await this.rwClient.getToken()
+    } catch {
+      token = null
+    }
+
+    return token
   }
 
   reauthenticate = async () => {

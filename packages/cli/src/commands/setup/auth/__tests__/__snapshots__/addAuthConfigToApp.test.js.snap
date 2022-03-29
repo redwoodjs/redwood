@@ -1,5 +1,111 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Should add auth config when app is missing RedwoodApolloProvider Matches Auth0 Snapshot 1`] = `
+"import { AuthProvider } from '@redwoodjs/auth'
+import { Auth0Client } from '@auth0/auth0-spa-js'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
+const queryClient = {}
+
+const auth0 = new Auth0Client({
+  domain: process.env.AUTH0_DOMAIN,
+  client_id: process.env.AUTH0_CLIENT_ID,
+  redirect_uri: process.env.AUTH0_REDIRECT_URI,
+
+  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
+  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
+  // they can retrieve the tokens stored in local storage.
+  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
+  cacheLocation: 'localstorage',
+  audience: process.env.AUTH0_AUDIENCE,
+
+  // @MARK: useRefreshTokens is required for automatically extending sessions
+  // beyond that set in the initial JWT expiration.
+  //
+  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
+  // useRefreshTokens: true,
+})
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+      <AuthProvider client={auth0} type=\\"auth0\\">
+        <QueryClientProvider client={queryClient}>
+          <RedwoodReactQueryProvider>
+            <Routes />
+          </RedwoodReactQueryProvider>
+        </QueryClientProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Should add auth config when using explicit return Matches Auth0 Snapshot 1`] = `
+"import { AuthProvider } from '@redwoodjs/auth'
+import { Auth0Client } from '@auth0/auth0-spa-js'
+import { useEffect } from 'react'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
+const auth0 = new Auth0Client({
+  domain: process.env.AUTH0_DOMAIN,
+  client_id: process.env.AUTH0_CLIENT_ID,
+  redirect_uri: process.env.AUTH0_REDIRECT_URI,
+
+  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
+  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
+  // they can retrieve the tokens stored in local storage.
+  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
+  cacheLocation: 'localstorage',
+  audience: process.env.AUTH0_AUDIENCE,
+
+  // @MARK: useRefreshTokens is required for automatically extending sessions
+  // beyond that set in the initial JWT expiration.
+  //
+  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
+  // useRefreshTokens: true,
+})
+
+const App = (props) => {
+  const { cache } = props
+
+  useEffect(() => {
+    console.log('Running my custom useEffect hook on each render.')
+  })
+
+  return (
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+        <AuthProvider client={auth0} type=\\"auth0\\">
+          <RedwoodApolloProvider>
+            <AnotherProvider>
+              <Routes />
+            </AnotherProvider>
+          </RedwoodApolloProvider>
+        </AuthProvider>
+      </RedwoodProvider>
+    </FatalErrorBoundary>
+  )
+}
+
+export default App
+"
+`;
+
 exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
@@ -296,7 +402,7 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches nhost Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import { createClient } from 'nhost-js-sdk'
+import { NhostClient } from '@nhost/nhost-js'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -305,9 +411,8 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const nhostClient = createClient({
-  baseURL: process.env.NHOST_BACKEND_URL,
-  autoLogin: false,
+const nhostClient = new NhostClient({
+  backendUrl: process.env.NHOST_BACKEND_URL,
 });
 
 
@@ -348,6 +453,52 @@ const App = () => (
     <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={supabaseClient} type=\\"supabase\\">
         <RedwoodApolloProvider>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Should add config lines when RedwoodApolloProvider has props Matches Auth0 Snapshot 1`] = `
+"import { AuthProvider } from '@redwoodjs/auth'
+import { Auth0Client } from '@auth0/auth0-spa-js'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
+const auth0 = new Auth0Client({
+  domain: process.env.AUTH0_DOMAIN,
+  client_id: process.env.AUTH0_CLIENT_ID,
+  redirect_uri: process.env.AUTH0_REDIRECT_URI,
+
+  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
+  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
+  // they can retrieve the tokens stored in local storage.
+  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
+  cacheLocation: 'localstorage',
+  audience: process.env.AUTH0_AUDIENCE,
+
+  // @MARK: useRefreshTokens is required for automatically extending sessions
+  // beyond that set in the initial JWT expiration.
+  //
+  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
+  // useRefreshTokens: true,
+})
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+      <AuthProvider client={auth0} type=\\"auth0\\">
+        <RedwoodApolloProvider graphQLClientConfig={{ cache }}>
           <Routes />
         </RedwoodApolloProvider>
       </AuthProvider>

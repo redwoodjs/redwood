@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/structure",
-  "version": "0.46.0",
+  "version": "0.50.0",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
   "repository": {
     "type": "git",
@@ -30,8 +30,8 @@
     ]
   },
   "dependencies": {
-    "@prisma/sdk": "3.9.2",
-    "@redwoodjs/internal": "0.46.0",
+    "@prisma/sdk": "3.11.1",
+    "@redwoodjs/internal": "0.50.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
     "deepmerge": "4.2.2",
@@ -46,22 +46,22 @@
     "lru-cache": "6.0.0",
     "proxyquire": "2.1.3",
     "toml": "3.0.0",
-    "ts-morph": "13.0.3",
+    "ts-morph": "14.0.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.4",
     "vscode-languageserver-types": "3.16.0",
-    "yargs-parser": "21.0.0"
+    "yargs-parser": "21.0.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/fs-extra": "9.0.13",
-    "@types/lodash": "4.14.178",
+    "@types/lodash": "4.14.180",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.11.25",
-    "@types/vscode": "1.64.0",
+    "@types/node": "16.11.26",
+    "@types/vscode": "1.65.0",
     "jest": "27.5.1",
-    "typescript": "4.5.5"
+    "typescript": "4.6.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

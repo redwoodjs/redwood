@@ -50,6 +50,7 @@ const {
   typescript,
   overwrite,
   telemetry: telemetry,
+  yarn1,
 } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
@@ -69,13 +70,18 @@ const {
   .option('overwrite', {
     default: false,
     type: 'boolean',
-    describe: 'Create even if target directory is empty',
+    describe: "Create even if target directory isn't empty",
   })
   .option('telemetry', {
     default: true,
     type: 'boolean',
     describe:
       'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
+  })
+  .option('yarn1', {
+    default: false,
+    type: 'boolean',
+    describe: 'Use yarn 1. yarn 3 by default',
   })
   .version(version)
   .strict().argv
@@ -134,7 +140,7 @@ const createProjectTasks = ({ newAppDir, overwrite }) => {
             )
             logStatements.push(
               style.warning(
-                `https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions\n`
+                `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
               )
             )
             return reject(new Error(logStatements.join('\n')))
@@ -162,6 +168,33 @@ const createProjectTasks = ({ newAppDir, overwrite }) => {
           path.join(newAppDir, 'gitignore.template'),
           path.join(newAppDir, '.gitignore')
         )
+      },
+    },
+    {
+      title: 'Converting to yarn 1',
+      enabled: () => yarn1,
+      task: () => {
+        // rm files:
+        // - .yarnrc.yml
+        // - .yarn
+        fs.rmSync(path.join(newAppDir, '.yarnrc.yml'))
+        fs.rmdirSync(path.join(newAppDir, '.yarn'), { recursive: true })
+
+        // rm after `.pnp.*`
+        const gitignore = fs.readFileSync(path.join(newAppDir, '.gitignore'), {
+          encoding: 'utf-8',
+        })
+        const [yarn1Gitignore, _yarn3Gitignore] = gitignore.split('.pnp.*')
+        fs.writeFileSync(path.join(newAppDir, '.gitignore'), yarn1Gitignore)
+
+        // rm `packageManager` from package.json
+        const packageJSON = fs.readJSONSync(
+          path.join(newAppDir, 'package.json')
+        )
+        delete packageJSON.packageManager
+        fs.writeJSONSync(path.join(newAppDir, 'package.json'), packageJSON, {
+          spaces: 2,
+        })
       },
     },
   ]
@@ -278,7 +311,7 @@ new Listr(
       '',
       `${style.redwood(
         ' ❖ Get started with the Tutorial'
-      )}: https://redwoodjs.com/tutorial`,
+      )}: https://redwoodjs.com/docs/tutorial`,
       `${style.redwood(
         ' ❖ Read the Documentation'
       )}: https://redwoodjs.com/docs`,
