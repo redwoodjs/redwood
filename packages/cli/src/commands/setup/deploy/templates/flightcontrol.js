@@ -19,6 +19,7 @@ export const flightcontrolConfig = {
           buildCommand: 'yarn rw deploy flightcontrol api',
           startCommand: 'yarn rw deploy flightcontrol api --serve',
           postBuildCommand: 'echo 0',
+          port: 8911,
           healthCheckPath: '/graphql/health',
           envVariables: {},
         },
