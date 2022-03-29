@@ -75,7 +75,11 @@ export default function (
             // Update the import name, with the user's import name
             // So that the JSX name stays consistent
             pageThatUserImported.importName = defaultSpecifier.local.name
-            p.remove()
+
+            // Remove the default import for the page and leave all the others
+            p.node.specifiers = p.node.specifiers.filter(
+              (specifier) => !t.isImportDefaultSpecifier(specifier)
+            )
           }
 
           return
@@ -85,7 +89,8 @@ export default function (
           (specifier) => specifier.local.name
         )
 
-        pages = pages.filter((dep) => !declaredImports.includes(dep.const))
+        // @TODO: I think we need to be more clever than just import name
+        pages = pages.filter((page) => !declaredImports.includes(page.const))
       },
       Program: {
         enter() {
