@@ -1,13 +1,6 @@
 # Command Line Interface
 
-The following is a comprehensive reference of the Redwood CLI. You can get a glimpse of all the commands by scrolling the aside to the right.
-
-The Redwood CLI has two entry-point commands:
-
-1. **redwood** (alias `rw`), which is for developing an application, and
-2. **redwood-tools** (alias `rwt`), which is for contributing to the framework.
-
-This document covers the `redwood` command . For `redwood-tools`, see [Contributing](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#cli-reference-redwood-tools) in the Redwood repo.
+The following is a comprehensive reference of the Redwood CLI.
 
 **A Quick Note on Syntax**
 
@@ -17,13 +10,13 @@ We use [yargs](http://yargs.js.org/) and borrow its syntax here:
 yarn redwood generate page <name> [path] --option
 ```
 
-- `redwood g page` is the command.
-- `<name>` and `[path]` are positional arguments.
-  - `<>` denotes a required argument.
-  - `[]` denotes an optional argument.
-- `--option` is an option.
+- `redwood g page` is the command
+- `<name>` and `[path]` are positional arguments
+  - `<>` denotes a required argument
+  - `[]` denotes an optional argument
+- `--option` is an option
 
-Every argument and option has a type. Here `<name>` and `[path]` are strings and `--option` is a boolean.
+Arguments and options have a type. Here `<name>` and `[path]` are strings and `--option` is a boolean.
 
 You'll also sometimes see arguments with trailing `..` like:
 
@@ -1893,33 +1886,26 @@ yarn rw serve web | yarn rw-log-formatter
 
 ## upgrade
 
-Upgrade all `@redwoodjs` packages via an interactive CLI.
+Upgrade Redwood.
 
-```bash
+```
 yarn redwood upgrade
 ```
 
-This command does all the heavy-lifting of upgrading to a new release for you.
+This command bumps the version of all the `@redwoodjs` packages.
+Note that you still may have to run codemods or make changes manually.
+Always read the release notes.
 
-Besides upgrading to a new stable release, you can use this command to upgrade to either of our unstable releases, `canary` and `rc`, or you can upgrade to a specific release version.
+Using the `--tag, -t` option, you can also use this command to upgrade to the unstable `canary` release:
 
-A canary release is published to npm every time a PR is merged to the `main` branch, and when we're getting close to a new release, we publish release candidates.
+```
+yarn redwood upgrade --tag canary
+```
+
+We release a canary every time a PR is merged to the `main` branch.
+When we're getting close to a release, we also publish release candidates under the `rc` tag.
 
 | Option          | Description                                                                                                                                                                                                        |
 | :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
-| `--tag, -t`     | Choices are "canary", "rc", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary" and "rc", which will force upgrade packages to the most recent release of the specified tag. |
-
-**Example**
-
-Upgrade to the most recent canary:
-
-```bash
-yarn redwood upgrade -t canary
-```
-
-Upgrade to a specific version:
-
-```bash
-yarn redwood upgrade -t 0.19.3
-```
+| `--tag, -t`     | Choices are `canary`, `rc`, or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of `canary` and `rc`, which will force upgrade packages to the most recent release of the specified tag. |
