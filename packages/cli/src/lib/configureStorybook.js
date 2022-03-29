@@ -39,7 +39,7 @@ export default function configureStorybook({ force }, newStorybookPreview) {
           .replace(/import *. as React from 'react'/, '')
           .replace(/export const decorators = .*/, '')
 
-      const CurrentConfigWithoutDecoration = currentConfig.replace(
+      const currentConfigWithoutDecoration = currentConfig.replace(
         /export const decorators = .*/,
         ''
       )
