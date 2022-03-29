@@ -44,7 +44,7 @@ All of these files get merged with Redwood's default configurations, which you c
 
 While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/react/configure/overview#configure-your-storybook-project) in `storybook.config.js`, you'll probably only want to configure `addons`:
 
-```jsx title="web/config/storybook.config.js"
+```javascript title="web/config/storybook.config.js"
 module.exports = {
   /**
    * This line adds all of Storybook's essential addons.
