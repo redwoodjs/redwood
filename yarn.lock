@@ -3631,9 +3631,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:0.1.0-beta.6":
-  version: 0.1.0-beta.6
-  resolution: "@graphql-yoga/common@npm:0.1.0-beta.6"
+"@graphql-yoga/common@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@graphql-yoga/common@npm:2.0.0"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3642,31 +3642,32 @@ __metadata:
     "@graphql-tools/schema": ^8.3.1
     "@graphql-tools/utils": ^8.6.0
     "@graphql-typed-document-node/core": ^3.1.1
-    "@graphql-yoga/render-graphiql": 0.1.0-beta.2
-    "@graphql-yoga/subscription": 0.0.1-beta.1
+    "@graphql-yoga/render-graphiql": 2.0.0
+    "@graphql-yoga/subscription": 2.0.0
+    chalk: 4.1.2
     cross-undici-fetch: ^0.1.25
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 76cee5aa181472b70b8b651c6bae15f0897b3dd63a84164512235ac7b7d1116613b3c027473112c606d4859229ab87f5c4b7784f30ce280ed03bd9841bd077cd
+  checksum: af76695cf0097bfce977b450f5deeca3dc647deb17ed29e86c7f0ed6bb1e7dcb34c9451614ede01e80c19bd92bdd7e91a945e22164145b2484a2b419eabdf694
   languageName: node
   linkType: hard
 
-"@graphql-yoga/render-graphiql@npm:0.1.0-beta.2":
-  version: 0.1.0-beta.2
-  resolution: "@graphql-yoga/render-graphiql@npm:0.1.0-beta.2"
-  checksum: 6a52f2ef3bc1edaf314f83767d640ac76b4011d771dada02030b13d448fcbebbae9f9e42996a6e3f5b5f9cb338b312956915a129f82db38fdad277d55ffa8c6b
+"@graphql-yoga/render-graphiql@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@graphql-yoga/render-graphiql@npm:2.0.0"
+  checksum: e0564aec947272d9f436b44fc74d7ba0f1cedfbb34bb43be3297d940f4994a324bf9a1b9a8550ed5eea22ad7a9ee73472613315b691074269511b8ad36a7dedf
   languageName: node
   linkType: hard
 
-"@graphql-yoga/subscription@npm:0.0.1-beta.1":
-  version: 0.0.1-beta.1
-  resolution: "@graphql-yoga/subscription@npm:0.0.1-beta.1"
+"@graphql-yoga/subscription@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@graphql-yoga/subscription@npm:2.0.0"
   dependencies:
     "@repeaterjs/repeater": ^3.0.4
     tslib: ^2.3.1
-  checksum: 218cd291f823dd8df2f63a78a38151dc6b459944455dd08920e6160076af69e41bcbe61c7e9b65f3091e684971faeee5ddf9fa5159ed56d0fbd63a826eaffefb
+  checksum: f0c5ead250b08e9f42efda15db16f7463c5d0053023b3ca1340bb02536a83997e899025face33d6cb4bfc71dadecd60143fdd8b4214bffa791f69da81cb3ff8e
   languageName: node
   linkType: hard
 
@@ -6075,7 +6076,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.6
     "@graphql-tools/schema": 8.3.5
     "@graphql-tools/utils": 8.6.5
-    "@graphql-yoga/common": 0.1.0-beta.6
+    "@graphql-yoga/common": 2.0.0
     "@prisma/client": 3.11.1
     "@redwoodjs/api": 0.50.0
     "@redwoodjs/auth": 0.50.0
