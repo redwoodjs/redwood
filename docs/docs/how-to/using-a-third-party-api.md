@@ -1,4 +1,4 @@
-# Using a Third Party API
+# Using a Third-party API
 
 The time will come when you'll need data from a source you don't own. This how to will present the scenario of accessing a third party's API from a Redwood app. We'll show an example of accessing an API from both the client side and the server side.
 
@@ -90,8 +90,6 @@ That will open a browser to http://localhost:8910. Let's create a landing page:
 yarn rw generate page home /
 ```
 
-> If you like typing you can use the full command `yarn redwood generate page home /`
-
 The browser should have refreshed with a message about where to find our new homepage, `web/src/pages/HomePage/HomePage.js`. Let's open that up and create a form so the user can actually enter their zip code:
 
 ```jsx title="web/src/pages/HomePage/HomePage.js"
@@ -150,7 +148,7 @@ You'll need to balance these risks in a real-world app so choose carefully!
 
 We've got the zip code in our `onSubmit` handler so it makes sense to simply make the API call from there and then do something with the result. We'll use the browser's built in [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) since it does exactly what we need. For now let's just dump the result to the console (be sure to use your actual API key):
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
+```js title="web/src/pages/HomePage/HomePage.js"
 const onSubmit = (data) => {
   fetch('https://api.openweathermap.org/data/2.5/weather?zip=66952,us&appid=YOUR_API_KEY')
     .then(response => response.json())
@@ -164,7 +162,7 @@ const onSubmit = (data) => {
 
 Well that was easy! We have the zip code hardcoded into that URL so let's replace that with the actual value from our text box:
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
+```js title="web/src/pages/HomePage/HomePage.js"
 const onSubmit = (data) => {
   fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${data.zip},us&appid=YOUR_API_KEY`)
     .then(response => response.json())
@@ -291,7 +289,7 @@ Redwood comes with GraphQL integration built in so that seems like a logical way
 
 We can create whatever data structure we want so let's take this opportunity to strip out the data we don't care about coming from OpenWeather and just return the good stuff:
 
-```javascript title="api/src/graphql/weather.sdl.js"
+```js title="api/src/graphql/weather.sdl.js"
 export const schema = gql`
   type Weather {
     zip: String!
@@ -343,7 +341,7 @@ yarn workspace api add cross-undici-fetch
 
 And import that into the service and make the fetch. Note that `fetch` returns a Promise so we're going to convert our service to `async`/`await` to simplify things:
 
-```javascript title="api/src/services/weather/weather.js"
+```js title="api/src/services/weather/weather.js"
 import { fetch } from 'cross-undici-fetch'
 
 export const getWeather = async ({ zip }) => {
@@ -490,7 +488,7 @@ Gross. This happens when our service tries to parse the response from OpenWeathe
 
 Okay, let's look for that `cod` and if it's `404` then we know the zip isn't found and can return a more helpful error from our service. Open up the service and let's add a check:
 
-```javascript {2, 10-12} title="api/src/services/weather/weather.js"
+```js {2, 10-12} title="api/src/services/weather/weather.js"
 import { fetch } from 'cross-undici-fetch'
 import { UserInputError } from '@redwoodjs/graphql-server'
 
