@@ -1,109 +1,63 @@
 # TypeScript
-Redwood comes with full TypeScript support out of the box, and you don't have to give up any of the conveniences that Redwood offers to enjoy all the benefits of a type-safe codebase. You can use TypeScript and have great DX too.
 
-## Starting a TypeScript Redwood project
-You can use the `--typescript` flag on create-redwood-app to generate a project with TypeScript configured:
-```shell
-yarn create redwood-app --typescript my-redwood-app
+Redwood comes with full TypeScript support, and you don't have to give up any of the conveniences that Redwood offers to enjoy all the benefits of a type-safe codebase.
+
+## Starting a Redwood Project in TypeScript
+
+You can use the `--typescript` option on `yarn create redwood-app` to use TypeScript from the get-go:
+
+```
+yarn create redwood-app ./redwoodblog --typescript
 ```
 
-## Converting an existing JS project to TypeScript
-If you already have a Redwood app, but want to configure it for TypeScript, you can use our setup command:
+## Converting a JavaScript Project to TypeScript
+
+Started your project in JavaScript but want to switch to TypeScript?
+Start by using the tsconfig setup command:
 
 ```
 yarn rw setup tsconfig
 ```
-Remember you don't _need_ to convert all your files to TypeScript, you can always do it incrementally. Start by renaming your files from `.js` to `.ts` or `.tsx`
 
-Having issues with automatic setup? See instructions for manual setup below:
+This adds `tsconfig.json` files to both the web and the api side, telling VSCode that this's a TypeScript project.
+(You can go ahead and remove the `jsconfig.json` files in both sides now.)
 
-<details>
-<summary>Manually setup TypeScript</summary>
+You don't need to convert all your JavaScript files to TypeScript right away.
+In fact, you probably shouldn't.
+Do it incrementally.
+Start by renaming your files from `.js` to `.ts`, or, if they include React components, `.tsx`.
 
-This is what the setup command does for you step by step:
+## Sharing Types between Sides
 
-**API**
+To share types between sides:
 
-1. Create a `./api/tsconfig.json` file:
+1. Put them in a directory called `types` at the root of your project (note that you may have to create this directory)
+   - Redwood's `tsconfig.json` is already configured to pick up types from this directory
+2. Restart your editor's TypeScript server
+   - In VSCode, you can do this by searching for "TypeScript: Restart TS server" using the command palette (make sure you're in a `.js` or `.ts` file)
 
-```shell
-touch api/tsconfig.json
-```
+## Type Checking your Project
 
-<br />
+Behind the scenes, Redwood actually uses Babel to transpile TypeScript.
+This's why you're able to convert your project from JavaScript to TypeScript incrementally, but it also means that, strictly speaking, dev and build don't care about what the TypeScript compiler has to say.
 
-2. Now copy and paste the latest config from the Redwood template [api/tsconfig.json](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/template/api/tsconfig.json) file here
+That's where the `type-check` command comes in:
 
-**WEB**
-
-1. Create a `./api/tsconfig.json` file:
-
-```shell
-touch web/tsconfig.json
-```
-
-<br />
-
-2. Now copy and paste the latest config from the Redwood template [web/tsconfig.json](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/template/web/tsconfig.json) file here
-
-
-You should now have type definitions&mdash;you can rename your files from `.js` to `.ts`, and the files that contain JSX to `.tsx`.
-</details>
-
-## Sharing Types between sides
-For your shared types, we need to do a few things:
-
-1. Put your shared types at the root of the project (makes sense right?), in a folder called `types` at the root
-2. Run 'Restart TS Server' in vscode via the command palette. And your new types should now be available on both web and api sides!
-
-Redwood's tsconfig already contains the config for picking up types from `web/types`, `api/types` and `types` folders in your project.
-
-If you have an outdated tsconfig, and would like to replace it (i.e. overwrite it), use the setup command with the force flag
-
-```
-yarn rw setup tsconfig --force
-```
-
-## Running type checks
-
-Redwood uses Babel to transpile your TypeScript - which is why you are able to incrementally convert your project from JS to TS. However, it also means that just doing a build won't show you errors that the TypeScript compiler finds in your project <br/> <br/> That's why we have the handy `redwood type-check` command!
-
-To check your TypeScript project for errors, run
 ```
 yarn rw type-check
 ```
-This will run `tsc` on all the sides in your project, and make sure all the generated types are generated first, including Prisma.
 
+This runs `tsc` on your project while also ensuring that all the necessary generated types are generated first, including Prisma.
 
-### Check then build, on CI
-> **Tip!**<br/>
-> You don't need to build your project to run `rw type-check`
+## Auto-generated Types
 
-If your project is fully TypeScript, it might be useful to add typechecks before you run the deploy command in your CI.
+The CLI automatically generates types for you.
+These generated types not only include your GraphQL queries, but also your named routes, Cells, scenarios, and tests.
 
-For example, if you're deploying to Vercel, you could add a `build:ci` script to your `package.json`
-```diff
-"scripts": {
-  .
-  .
-+  "build:ci": "yarn rw type-check && yarn rw test --no-watch && yarn rw deploy vercel",
-}
+When you run `yarn rw dev`, the CLI watches for file changes and triggers the type generator, but you can also trigger it manually:
+
 ```
-Configure your project's build command to be `yarn build:ci` - and you even have your type checks and tests run whenever a pull request is opened!
-
-
-
-
-
-## Auto generated types
-Redwood's CLI automatically generates types for you, which not only includes types for your GraphQL queries, but also for your named routes, Cells, scenarios and tests.
-
-When you run `yarn rw dev`, the CLI watches for file changes and automatically triggers the type generator.
-
-To trigger type generation, you can run:
-```shell
 yarn rw g types
 ```
 
-
-If you're curious, you can see the generated types in the `.redwood/types` folder, and in `./api/types/graphql.d.ts` and `./web/types/graphql.d.ts` in your project
+> If you're curious, you can find the generated types in the `.redwood/types`, `web/types/graphql.d.ts`, and `api/types/graphql.d.ts` directories.
