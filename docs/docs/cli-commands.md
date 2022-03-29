@@ -37,7 +37,7 @@ The `..` operator indicates that the argument accepts an array of values. See [V
 
 Build for production.
 
-```terminal
+```bash
 yarn redwood build [side..]
 ```
 
@@ -57,7 +57,7 @@ See [Builds](builds.md).
 
 Running `yarn redwood build` without any arguments generates the Prisma client and builds both sides of your project:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood build
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood build
@@ -69,7 +69,7 @@ Done in 17.37s.
 
 Files are output to each side's `dist` directory:
 
-```plaintext{2,6}
+```plaintext {2,6}
 ├── api
 │   ├── dist
 │   ├── prisma
@@ -90,7 +90,7 @@ yarn redwood check
 
 **Example**
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood check
 yarn run v1.22.4
 web/src/Routes.js:14:5: error: You must specify a 'notfound' page
@@ -115,7 +115,7 @@ Right now, you can only use the Redwood console to interact with your database:
 
 **Example**
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood console
 yarn run v1.22.4
 > await db.user.findMany()
@@ -141,7 +141,7 @@ yarn redwood dataMigrate <command>
 - Creates a DB migration using `yarn redwood prisma migrate dev --create-only create_data_migrations`.
 - Creates `api/db/dataMigrations` directory to contain data migration scripts
 
-```terminal
+```bash
 yarn redwood dataMigrate install
 ```
 
@@ -151,7 +151,7 @@ Executes outstanding data migrations against the database. Compares the list of 
 
 If an error occurs during script execution, any remaining scripts are skipped and console output will let you know the error and how many subsequent scripts were skipped.
 
-```terminal
+```bash
 yarn redwood dataMigrate up
 ```
 
@@ -159,7 +159,7 @@ yarn redwood dataMigrate up
 
 Start development servers for api and web.
 
-```terminal
+```bash
 yarn redwood dev [side..]
 ```
 
@@ -397,7 +397,7 @@ Most generate commands (i.e., everything but `yarn redwood generate dataMigratio
 
 Generate a cell component.
 
-```terminal
+```bash
 yarn redwood generate cell <name>
 ```
 
@@ -428,7 +428,7 @@ yarn redwood d cell <name>
 
 Generating a user cell:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate cell user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g cell user
@@ -440,9 +440,7 @@ Done in 1.00s.
 
 A cell defines and exports four constants: `QUERY`, `Loading`, `Empty`, `Failure`, and `Success`:
 
-```javascript
-// ./web/src/components/UserCell/UserCell.js
-
+```jsx title="./web/src/components/UserCell/UserCell.js"
 export const QUERY = gql`
   query {
     user {
@@ -466,7 +464,7 @@ export const Success = ({ user }) => {
 
 Generate a component.
 
-```terminal
+```bash
 yarn redwood generate component <name>
 ```
 
@@ -490,7 +488,7 @@ yarn redwood d component <name>
 
 Generating a user component:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate component user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g component user
@@ -502,9 +500,7 @@ Done in 1.02s.
 
 The component will export some jsx telling you where to find it.
 
-```javascript
-// ./web/src/components/User/User.js
-
+```jsx title="./web/src/components/User/User.js"
 const User = () => {
   return (
     <div>
@@ -543,7 +539,7 @@ See the [Deploy](/docs/deploy/introduction) docs.
 
 Generate a directive.
 
-```terminal
+```bash
 yarn redwood generate directive <name>
 ```
 
@@ -562,7 +558,7 @@ See [Redwood Directives](directives.md).
 
 Generating a `myDirective` directive using the interactive command:
 
-```terminal
+```bash
 yarn rw g directive myDirective
 
 ? What type of directive would you like to generate? › - Use arrow-keys. Return to submit.
@@ -600,7 +596,7 @@ yarn redwood d function <name>
 
 Generating a user function:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate function user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g function user
@@ -611,9 +607,7 @@ Done in 16.04s.
 
 Functions get passed `context` which provides access to things like the current user:
 
-```javascript
-// ./api/src/functions/user.js
-
+```jsx title="./api/src/functions/user.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -624,7 +618,7 @@ export const handler = async (event, context) => {
 
 Now if we run `yarn redwood dev api`:
 
-```plaintext{11}
+```plaintext {11}
 ~/redwood-app$ yarn redwood dev api
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood dev api
@@ -642,7 +636,7 @@ $ /redwood-app/node_modules/.bin/dev-server
 
 Generate a layout component.
 
-```terminal
+```bash
 yarn redwood generate layout <name>
 ```
 
@@ -671,7 +665,7 @@ yarn redwood d layout <name>
 
 Generating a user layout:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate layout user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g layout user
@@ -683,9 +677,7 @@ Done in 1.00s.
 
 A layout will just export it's children:
 
-```javascript
-// ./web/src/layouts/UserLayout/UserLayout.test.js
-
+```jsx title="./web/src/layouts/UserLayout/UserLayout.test.js"
 const UserLayout = ({ children }) => {
   return <>{children}</>
 }
@@ -697,7 +689,7 @@ export default UserLayout
 
 Generate a RedwoodRecord model.
 
-```terminal
+```bash
 yarn redwood generate model <name>
 ```
 
@@ -712,7 +704,7 @@ See the [RedwoodRecord docs](redwoodrecord.md).
 
 **Example**
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate model User
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g model User
@@ -732,7 +724,7 @@ Generating a model automatically runs `yarn rw record init` as well.
 
 Generates a page component and updates the routes.
 
-```terminal
+```bash
 yarn redwood generate page <name> [path]
 ```
 
@@ -776,9 +768,7 @@ Done in 1.02s.
 
 The page returns jsx telling you where to find it:
 
-```javascript
-// ./web/src/pages/HomePage/HomePage.js
-
+```jsx title="./web/src/pages/HomePage/HomePage.js"
 const HomePage = () => {
   return (
     <div>
@@ -793,9 +783,7 @@ export default HomePage
 
 And the route is added to `Routes.js`:
 
-```javascript{6}
-// ./web/src/Routes.js
-
+```jsx {6} title="./web/src/Routes.js"
 const Routes = () => {
   return (
     <Router>
@@ -822,9 +810,7 @@ Done in 1.02s.
 
 The generated page will get the route parameter as a prop:
 
-```javascript{5,12,14}
-// ./web/src/pages/QuotePage/QuotePage.js
-
+```jsx {5,12,14} title="./web/src/pages/QuotePage/QuotePage.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const QuotePage = ({ id }) => {
@@ -846,9 +832,7 @@ export default QuotePage
 
 And the route is added to `Routes.js`, with the route parameter added:
 
-```javascript{6}
-// ./web/src/Routes.js
-
+```jsx {6} title="./web/src/Routes.js"
 const Routes = () => {
   return (
     <Router>
@@ -863,7 +847,7 @@ const Routes = () => {
 
 Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts `<path/model>`.
 
-```terminal
+```bash
 yarn redwood generate scaffold <model>
 ```
 
@@ -894,7 +878,7 @@ By default, redwood will nest the components and pages in a directory named as p
 `yarn rw g scaffold post`
 will output the following files, with the components and pages nested in a `Post` directory:
 
-```plaintext{9-20}
+```plaintext {9-20}
   √ Generating scaffold files...
     √ Successfully wrote file `./api/src/graphql/posts.sdl.js`
     √ Successfully wrote file `./api/src/services/posts/posts.js`
@@ -936,7 +920,7 @@ Notes:
 
 You can namespace your scaffolds by providing `<path/model>`. The layout, pages, cells, and components will be nested in newly created dir(s). In addition, the nesting folder, based upon the model name, is still applied after the path for components and pages, unless turned off in the `redwood.toml` as described above. For example, given a model `user`, running `yarn redwood generate scaffold admin/user` will nest the layout, pages, and components in a newly created `Admin` directory created for each of the `layouts`, `pages`, and `components` folders:
 
-```plaintext{9-20}
+```plaintext {9-20}
 ~/redwood-app$ yarn redwood generate scaffold admin/user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g scaffold admin/user
@@ -966,9 +950,7 @@ Done in 1.21s.
 
 The routes wrapped in the [`Set`](router.md#sets-of-routes) component with generated layout will be nested too:
 
-```javascript{6-11}
-// ./web/src/Routes.js
-
+```jsx {6-11} title="./web/src/Routes.js"
 const Routes = () => {
   return (
     <Router>
@@ -1010,7 +992,7 @@ Notes:
 
 Generate a GraphQL schema and service object.
 
-```terminal
+```bash
 yarn redwood generate sdl <model>
 ```
 
@@ -1043,7 +1025,7 @@ yarn redwood g sdl <model> --force --no-tests
 
 **Example**
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate sdl user --force --no-tests
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
@@ -1063,7 +1045,7 @@ yarn redwood d sdl <model>
 
 Generating a user sdl:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate sdl user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
@@ -1077,9 +1059,7 @@ Done in 1.04s.
 
 The generated sdl defines a corresponding type, query, create/update inputs, and any mutations. To prevent defining mutations, add the `--no-crud` option.
 
-```javascript
-// ./api/src/graphql/users.sdl.js
-
+```jsx title="./api/src/graphql/users.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
@@ -1111,9 +1091,7 @@ export const schema = gql`
 
 The services file fulfills the query. If the `--no-crud` option is added, this file will be less complex.
 
-```javascript
-// ./api/src/services/users/users.js
-
+```jsx title="./api/src/services/users/users.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -1123,9 +1101,7 @@ export const users = () => {
 
 For a model with a relation, the field will be listed in the sdl:
 
-```javascript{8}
-// ./api/src/graphql/users.sdl.js
-
+```jsx {8} title="./api/src/graphql/users.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
@@ -1158,9 +1134,7 @@ export const schema = gql`
 
 And the service will export an object with the relation as a property:
 
-```javascript{9-13}
-// ./api/src/services/users/users.js
-
+```jsx {9-13} title="./api/src/services/users/users.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -1198,7 +1172,7 @@ echo "SESSION_SECRET=$(yarn rw g secret --raw)" >> .env
 
 Generate a service component.
 
-```terminal
+```bash
 yarn redwood generate service <name>
 ```
 
@@ -1222,7 +1196,7 @@ yarn redwood d service <name>
 
 Generating a user service:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood generate service user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g service user
@@ -1235,9 +1209,7 @@ Done in 1.02s.
 
 The generated service component will export a `findMany` query:
 
-```javascript
-// ./api/src/services/users/users.js
-
+```jsx title="./api/src/services/users/users.js"
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -1249,7 +1221,7 @@ export const users = () => {
 
 Generates supplementary code (project types)
 
-```terminal
+```bash
 yarn redwood generate types
 ```
 
@@ -1317,13 +1289,13 @@ Scripts have access to services and libraries used in your project. Some example
 
 Print your system environment information.
 
-```terminal
+```bash
 yarn redwood info
 ```
 
 This command's primarily intended for getting information others might need to know to help you debug:
 
-```terminal
+```bash
 ~/redwood-app$ yarn redwood info
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood info
@@ -1347,7 +1319,7 @@ Done in 1.98s.
 
 Lint your files.
 
-```terminal
+```bash
 yarn redwood lint
 ```
 
@@ -1498,8 +1470,7 @@ If you use the Redwood Logger as part of your seed script, you can pipe the comm
 
 For example, if your `scripts.seed.js` imports the `logger`:
 
-```js
-// scripts/seed.js
+```jsx title="scripts/seed.js"
 import { db } from 'api/src/lib/db'
 import { logger } from 'api/src/lib/logger'
 
@@ -1712,7 +1683,7 @@ For example, given the name `fooBar` your template will receive the following _v
 
 Copying the cell generator templates:
 
-```terminal
+```bash
 ~/redwood-app$ yarn rw setup generator cell
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/rw setup generator cell
@@ -1800,7 +1771,7 @@ yarn rw setup ui <library>
 
 Starts Storybook locally
 
-```terminal
+```bash
 yarn redwood storybook
 ```
 
@@ -1820,7 +1791,7 @@ RedwoodJS supports Storybook by creating stories when generating cells, componen
 
 Run Jest tests for api and web.
 
-```terminal
+```bash
 yarn redwood test [side..]
 ```
 
@@ -1841,7 +1812,7 @@ yarn redwood test [side..]
 
 Runs a TypeScript compiler check on both the api and the web sides.
 
-```terminal
+```bash
 yarn redwood type-check [side]
 ```
 
@@ -1857,7 +1828,7 @@ See [Running Type Checks](typescript.md#running-type-checks).
 
 Runs a server that serves both the api and the web sides.
 
-```terminal
+```bash
 yarn redwood serve [side]
 ```
 
@@ -1924,7 +1895,7 @@ yarn rw serve web | yarn rw-log-formatter
 
 Upgrade all `@redwoodjs` packages via an interactive CLI.
 
-```terminal
+```bash
 yarn redwood upgrade
 ```
 
@@ -1943,12 +1914,12 @@ A canary release is published to npm every time a PR is merged to the `main` bra
 
 Upgrade to the most recent canary:
 
-```terminal
+```bash
 yarn redwood upgrade -t canary
 ```
 
 Upgrade to a specific version:
 
-```terminal
+```bash
 yarn redwood upgrade -t 0.19.3
 ```

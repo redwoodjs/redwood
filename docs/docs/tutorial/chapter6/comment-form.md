@@ -309,7 +309,7 @@ export default Article
 
 And then we'll append that ID to the `input` object that's being passed to `createComment` in the `CommentForm`:
 
-```javascript title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 // highlight-next-line
 const CommentForm = ({ postId }) => {
   const [createComment, { loading, error }] = useMutation(CREATE)
@@ -693,7 +693,7 @@ Try running the test suite (or if it's already running take a peek at that termi
 
 Open up the **comments** service test and let's update it to pass the `postId` argument to the `comments()` function like we tested out in the console:
 
-```javascript title="api/src/services/comments/comments.test.js"
+```jsx title="api/src/services/comments/comments.test.js"
 scenario('returns all comments', async (scenario) => {
   // highlight-next-line
   const result = await comments({ postId: scenario.comment.jane.postId })
@@ -705,7 +705,7 @@ When the test suite runs everything will still pass. Javascript won't care if yo
 
 Let's take a look at the scenario we're using (remember, it's `standard()` by default):
 
-```javascript title="api/src/services/comments/comments.scenarios.js"
+```jsx title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   comment: {
     jane: {
@@ -738,7 +738,7 @@ export const standard = defineScenario({
 
 Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting commnents for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
 
-```javascript title="api/src/services/comments/comments.test.js"
+```jsx title="api/src/services/comments/comments.test.js"
 import { comments, createComment } from './comments'
 // highlight-next-line
 import { db } from 'api/src/lib/db'
@@ -775,7 +775,7 @@ So we expected to receive 1 (from `post.comments.length`), but we actually got 2
 
 Before we get it passing again, let's also change the name of the test to reflect what it's actually testing:
 
-```javascript title="api/src/services/comments/comments.test.js"
+```jsx title="api/src/services/comments/comments.test.js"
 // highlight-start
 scenario(
   'returns all comments for a single post from the database',
@@ -793,7 +793,7 @@ scenario(
 
 Okay, open up the actual `comments.js` service and we'll update it to accept the `postId` argument and use it as an option to `findMany()`:
 
-```javascript title="api/src/services/comments/comments.js"
+```jsx title="api/src/services/comments/comments.js"
 export const comments = ({ postId }) => {
   return db.comment.findMany({ where: { postId } })
 }
@@ -881,7 +881,7 @@ However, you may have noticed that now when you post a comment it no longer appe
 
 Okay this is the last fix, promise!
 
-```javascript title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 const [createComment, { loading, error }] = useMutation(CREATE, {
   onCompleted: () => {
     setHasPosted(true)
