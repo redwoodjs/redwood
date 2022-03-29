@@ -3,17 +3,13 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths } from '../../../../lib'
+import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
-import {
-  appJSContains,
-  extendAppJS,
-  createFile,
-} from '../tasks/setup-component-library'
+import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
 
 export const command = 'chakra-ui'
 export const description = 'Set up Chakra UI'
@@ -33,11 +29,11 @@ export function builder(yargs) {
   })
 }
 
-const CHAKRA_THEME_AND_COMMENTS = [
-  '// This object will be used to override Chakra-UI theme defaults.',
-  '// See https://chakra-ui.com/docs/styled-system/theming/theme for theming options',
-  'module.exports = {}\n',
-]
+const CHAKRA_THEME_AND_COMMENTS = `\
+// This object will be used to override Chakra-UI theme defaults.
+// See https://chakra-ui.com/docs/styled-system/theming/theme for theming options
+module.exports = {}
+`
 
 export async function handler({ force, install }) {
   const rwPaths = getPaths()
@@ -90,14 +86,12 @@ export async function handler({ force, install }) {
     },
     {
       title: `Creating Theme File...`,
-      task: async () => {
-        return createFile({
-          filepath: path.join(rwPaths.web.config, 'chakra.config.js'),
-          overwrite: force,
-          contentLines: CHAKRA_THEME_AND_COMMENTS,
-          alreadyExistsError:
-            'Chakra config already exists.\nUse --force to override existing config.',
-        })
+      task: () => {
+        writeFile(
+          path.join(rwPaths.web.config, 'chakra.config.js'),
+          CHAKRA_THEME_AND_COMMENTS,
+          { overwriteExisting: force }
+        )
       },
     },
     {

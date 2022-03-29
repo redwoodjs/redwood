@@ -1,38 +1,6 @@
-import fs, { promises as asyncfs } from 'fs'
-import path from 'path'
+import fs from 'fs'
 
 import { getPaths } from '../../../../lib'
-
-/**
- * Asynchronously creates a file at the specified path with the provided content, join()ed with '\n'
- * If overwrite is false, and the file already exists, throws `Error(alreadyExistsError)`
- * @param {string} path File path at which to create the file
- * @param {Array} contentLines Array of lines to join and write into the file.
- * @param {Boolean} overwrite Indicates if the file should be overwritten, if it already exists.
- * @param {string} alreadyExistsError Message to throw if !overwrite && file already exists.
- * // TODO: this seems like too general of a function to belong here. Where should it go?
- */
-export async function createFile({
-  filepath,
-  contentLines,
-  overwrite = false,
-  alreadyExistsError,
-}) {
-  if (fs.existsSync(filepath) && !overwrite) {
-    throw new Error(alreadyExistsError)
-  } else {
-    return asyncfs
-      .mkdir(path.dirname(filepath), { recursive: true })
-      .then((_) => {
-        return asyncfs.writeFile(filepath, contentLines.join('\n'), {
-          flag: 'w',
-        })
-      })
-      .catch((reason) => {
-        console.error(`Failed to write ${filepath}. Reason: ${reason}`)
-      })
-  }
-}
 
 /**
  * @param {string} str The value to search for.

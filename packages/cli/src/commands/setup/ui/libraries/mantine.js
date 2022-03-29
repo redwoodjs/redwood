@@ -3,17 +3,13 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths } from '../../../../lib'
+import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   checkStorybookStatus,
   configureStorybook,
 } from '../tasks/configure-storybook'
-import {
-  appJSContains,
-  extendAppJS,
-  createFile,
-} from '../tasks/setup-component-library'
+import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -32,11 +28,11 @@ const ALL_MANTINE_PACKAGES = [
   'spotlight',
 ]
 
-const MANTINE_THEME_AND_COMMENTS = [
-  '// This object will be used to override Mantine theme defaults.',
-  '// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options',
-  'module.exports = {}\n',
-]
+const MANTINE_THEME_AND_COMMENTS = `\
+// This object will be used to override Mantine theme defaults.
+// See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
+module.exports = {}
+`
 
 export function builder(yargs) {
   yargs.option('force', {
@@ -105,14 +101,12 @@ export async function handler({ force, install, packages }) {
     },
     {
       title: `Creating Theme File...`,
-      task: async () => {
-        return createFile({
-          filepath: path.join(rwPaths.web.config, 'mantine.config.js'),
-          overwrite: force,
-          contentLines: MANTINE_THEME_AND_COMMENTS,
-          alreadyExistsError:
-            'Mantine config already exists.\nUse --force to override existing config.',
-        })
+      task: () => {
+        writeFile(
+          path.join(rwPaths.web.config, 'mantine.config.js'),
+          MANTINE_THEME_AND_COMMENTS,
+          { overwriteExisting: force }
+        )
       },
     },
     {
