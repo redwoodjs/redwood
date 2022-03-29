@@ -784,7 +784,7 @@ By default, RedwoodJS functions return strings or JSON. If you need to return bi
 
 Here's an example of how to return a binary file from the filesystem:
 
-```tsx title="api/src/functions/myCustomFunction.ts"
+```typescript title="api/src/functions/myCustomFunction.ts"
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 import fs from 'fs'
 
