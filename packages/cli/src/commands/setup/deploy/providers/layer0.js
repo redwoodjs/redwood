@@ -42,7 +42,7 @@ const prismaBinaryTargetAdditions = () => {
 export const handler = async () => {
   const tasks = new Listr([
     addPackagesTask({
-      packages: ['@layer0/cli@4.10.4-next-1648482161-3af568297.0'],
+      packages: ['@layer0/cli'],
       devDependency: true,
     }),
     preRequisiteCheckTask([
