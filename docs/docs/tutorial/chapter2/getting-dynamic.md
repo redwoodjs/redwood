@@ -1,5 +1,9 @@
 # Getting Dynamic
 
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/cb_PseqpoG8?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+</div>
+
 These two pages are great and all but where are the actual blog posts in this blog? Let's work on those next.
 
 For the purposes of our tutorial we're going to get our blog posts from a database. Because relational databases are still the workhorses of many complex (and not-so-complex) web applications, we've made SQL access a first-class citizen. For Redwood apps, it all starts with the schema.
@@ -126,6 +130,11 @@ Okay but what if we click "Delete"?
 <img src="https://user-images.githubusercontent.com/300/73031339-aea95600-3df0-11ea-9d58-475d9ef43988.png" />
 
 So, Redwood just created all the pages, components and services necessary to perform all CRUD actions on our posts table. No need to even open Prisma Studio or login through a terminal window and write SQL from scratch. Redwood calls these _scaffolds_.
+
+> If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
+>
+> 1. Run `yarn rw g types` in a terminal
+> 2. Reload the GraphQL engine in VSCode: open the Command Palette (Cmd+Shift+P for Mac, Ctrl+Shift+P for Windows) and find "VSCode GraphQL: Manual Restart"
 
 Here's what happened when we ran that `yarn rw g scaffold post` command:
 

@@ -28,6 +28,7 @@ module.exports = {
       indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
+      externalUrlRegex: 'https://learn-redwood.netlify.app',
     },
     navbar: {
       title: 'RedwoodJS',
@@ -44,7 +45,9 @@ module.exports = {
         },
       ],
     },
-    // ?
+    prism: {
+      additionalLanguages: ['toml'],
+    },
     footer: {
       style: 'dark',
       links: [

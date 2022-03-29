@@ -125,13 +125,14 @@ API_KEY=...
 
 Configuration for the api side.
 
-| Key            | Description                         | Default                    | Context       |
-| :------------- | :---------------------------------- | :------------------------- | :------------ |
-| `host`         | Hostname to listen on               | `'localhost'`              | `development` |
-| `port`         | Port to listen on                   | `8911`                     | `development` |
-| `path`         | Path to the api side                | `'./api'`                  | `both`        |
-| `serverConfig` | Path to the `server.config.js` file | `'./api/server.config.js'` | `both`        |
-| `target`       | Target for the api side             | `'node'`                   | `both`        |
+| Key            | Description                                         | Default                    | Context       |
+|:---------------|:----------------------------------------------------|:---------------------------|:--------------|
+| `host`         | Hostname to listen on                               | `'localhost'`              | `development` |
+| `port`         | Port to listen on                                   | `8911`                     | `development` |
+| `debugPort`    | Port to expose for debugger to attach to during dev | `18911`                    | `development` |
+| `path`         | Path to the api side                                | `'./api'`                  | `both`        |
+| `serverConfig` | Path to the `server.config.js` file                 | `'./api/server.config.js'` | `both`        |
+| `target`       | Target for the api side                             | `'node'`                   | `both`        |
 
 ### Server Configuration
 

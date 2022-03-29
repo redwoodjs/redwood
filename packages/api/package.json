@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/client": "3.11.0",
+    "@prisma/client": "3.11.1",
     "cross-undici-fetch": "0.1.27",
     "crypto-js": "4.1.1",
     "humanize-string": "2.1.0",
@@ -54,7 +54,7 @@
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
     "split2": "4.1.0",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   },
   "peerDependencies": {
     "@clerk/clerk-sdk-node": "2.10.0",

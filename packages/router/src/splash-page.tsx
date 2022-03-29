@@ -523,7 +523,7 @@ const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
                 </a>
                 <a
                   className="social-link"
-                  href="https://discord.gg/jjSYEQd"
+                  href="https://discord.gg/redwoodjs"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Go to RedwoodJS Discord server"
