@@ -171,7 +171,7 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: 'Configure Storybook...',
+      title: 'Configuring Storybook...',
       task: async () =>
         configureStorybook(
           { force },
