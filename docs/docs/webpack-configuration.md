@@ -19,7 +19,7 @@ yarn rw setup webpack
 
 This command adds a file called `webpack.config.js` to your project's `web/config` directory, creating `web/config` if it doesn't exist:
 
-```jsx title="web/config/webpack.config.js"
+```javascript title="web/config/webpack.config.js"
 module.exports = (config, { mode }) => {
   if (mode === 'development') {
     /**
