@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
+    "@okta/jwt-verifier": "^2.3.0",
     "@prisma/client": "3.11.0",
     "cross-undici-fetch": "0.1.27",
     "crypto-js": "4.1.1",
