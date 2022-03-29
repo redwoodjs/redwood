@@ -17,7 +17,7 @@ export const globalTypes = {
   },
 }
 
-const WithI18n = (StoryFn, context) => {
+const withI18n = (StoryFn, context) => {
   React.useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
@@ -29,4 +29,4 @@ const WithI18n = (StoryFn, context) => {
   )
 }
 
-export const decorators = [WithI18n]
+export const decorators = [withI18n]

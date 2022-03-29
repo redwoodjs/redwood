@@ -73,7 +73,7 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: 'Configuring i18n...',
+      title: 'Configure i18n...',
       task: () => {
         /**
          *  Write i18n.js in web/src
