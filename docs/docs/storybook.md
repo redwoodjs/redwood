@@ -94,7 +94,7 @@ yarn workspace web add -D @storybook/addons @storybook/theming
 
 Then, we'll configure our theme by creating a `storybook.manager.js` file. Below we're enabling Storybook's dark theme.
 
-```jsx title="web/config/storybook.manager.js"
+```javascript title="web/config/storybook.manager.js"
 import { addons } from '@storybook/addons'
 import { themes } from '@storybook/theming'
 
