@@ -102,7 +102,7 @@ First we'll need to add a couple of fields to our `User` model. We don't even ha
 
 Open up `schema.prisma` and add:
 
-```jsx title="api/db/schema.prisma"
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -428,7 +428,7 @@ export default BlogLayout
 
 Well, it's almost right! Where's our email address? By default, the function that determines what's in `currentUser` only returns that user's `id` field for security reasons (better to expose too little than too much, remember!). To add email to that list, check out `api/src/lib/auth.js`:
 
-```jsx title="api/src/lib/auth.js"
+```javascript title="api/src/lib/auth.js"
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
@@ -473,7 +473,7 @@ export const requireAuth = ({ roles }) => {
 
 The `getCurrentUser()` function is where the magic happens: whatever is returned by this function is the content of `currentUser`, in both the web and api sides! In the case of dbAuth, the single argument passed in, `session`, contains the `id` of the user that's logged in. It then looks up the user in the database with Prisma, selecting just the `id`. Let's add `email` to this list:
 
-```jsx title="api/src/lib/auth.js"
+```javascript title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },

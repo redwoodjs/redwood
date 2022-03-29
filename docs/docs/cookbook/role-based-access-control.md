@@ -131,7 +131,7 @@ This decoded token also includes:
 
 Roles may be stored within `app_metadata` or sometimes within `authorization` under `app_metadata`.
 
-```jsx
+```json
 {
   "exp": 1598628532,
   "sub": "1d271db5-f0cg-21f4-8b43-a01ddd3be294",
@@ -153,7 +153,7 @@ Roles may be stored within `app_metadata` or sometimes within `authorization` un
 
 The `parseJWT` helper will consider both locations to extract roles on the decoded JWT.
 
-```jsx title="api/lib/auth.js"
+```javascript title="api/lib/auth.js"
 import { parseJWT } from '@redwoodjs/api'
 
 export const getCurrentUser = async (decoded) => {
@@ -167,7 +167,7 @@ If your AuthProvider does not set the role information in the token, you can que
 
 Consider the following schema where a `User` has many `UserRoles`.
 
-```jsx
+```javascript
 model User {
   id        Int        @id @default(autoincrement())
   uuid      String     @unique
@@ -190,7 +190,7 @@ model UserRole {
 
 You can have seeded the `User` and `UserRole` tables with a new User that has a `uuid` from your identity service and also assigned that user a role of `editor`:
 
-```jsx
+```javascript
 const uuid = '1683d760-5b4d-2ced-a078-23fdfebe2e19'
 
 const newUser = await db.user.create({
@@ -211,7 +211,7 @@ Given that your decoded JWT `sub` claim will contain the `uuid`, you can fetch t
 
 Once you have the `UserRole`s, then you can set an array of their `name`s on the `currentUser`.
 
-```jsx title="api/lib/auth.js"
+```javascript title="api/lib/auth.js"
 export const getCurrentUser = async (decoded) => {
   const userRoles = await db.userRole.findMany({
     where: { user: { uuid: decoded.sub } },
@@ -459,19 +459,19 @@ Use `requireAuth()` in your services to check that a user is logged in, whether 
 
 It checks for a single role:
 
-```jsx
+```javascript
 requireAuth({ roles: 'editor' })
 ```
 
 or multiple roles:
 
-```jsx
+```javascript
 requireAuth({ roles: ['admin', 'author', 'publisher'] })
 ```
 
 This function should be located in `api/src/lib/auth.js` for your RedwoodJS app (ie, where your `getCurrentUser()` is located).
 
-```jsx
+```javascript
 export const requireAuth = ({ roles } = {}) => {
     if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
@@ -485,7 +485,7 @@ export const requireAuth = ({ roles } = {}) => {
 
 #### How to Protect a Service
 
-```jsx
+```javascript
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
@@ -508,7 +508,7 @@ export const createPost = ({ input }) => {
 
 Since `requireAuth()` raises an exception, catch and return a `HTTP 401 Unauthorized` or `HTTP 403 Forbidden` client error status response code.
 
-```jsx
+```javascript
 import { requireAuth } from 'src/lib/auth'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 
@@ -559,7 +559,7 @@ If you return a status other than 200 or 204 from one of these event functions, 
 
 If your serverless function returns a 200, you can also return a JSON object with new user_metadata or app_metadata for the Identity user.
 
-```jsx title="api/src/functions/identity-signup.js"
+```javascript title="api/src/functions/identity-signup.js"
 export const handler = async (req, _context) => {
   const body = JSON.parse(req.body)
 

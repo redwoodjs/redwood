@@ -56,7 +56,7 @@ In this example, Redwood will look in `api/src/services/posts/posts.js` for the 
 
 To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that Apollo expects based on what you defined in `posts.sdl.js`.
 
-```jsx title="api/src/services/posts/posts.js"
+```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
 
 export const posts = () => {

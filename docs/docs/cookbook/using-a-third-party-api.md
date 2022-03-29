@@ -291,7 +291,7 @@ Redwood comes with GraphQL integration built in so that seems like a logical way
 
 We can create whatever data structure we want so let's take this opportunity to strip out the data we don't care about coming from OpenWeather and just return the good stuff:
 
-```jsx title="api/src/graphql/weather.sdl.js"
+```javascript title="api/src/graphql/weather.sdl.js"
 export const schema = gql`
   type Weather {
     zip: String!
@@ -315,7 +315,7 @@ That's it for our client-to-server API interface! Now let's define the GraphQL r
 
 In Redwood GraphQL Query types are automatically mapped to functions exported from a service with the same name, so we'll create a `weather.js` service and name the function `getWeather`:
 
-```jsx title="api/src/services/weather/weather.js"
+```javascript title="api/src/services/weather/weather.js"
 export const getWeather = ({ zip }) => {
   return {
     zip,
@@ -343,7 +343,7 @@ yarn workspace api add cross-undici-fetch
 
 And import that into the service and make the fetch. Note that `fetch` returns a Promise so we're going to convert our service to `async`/`await` to simplify things:
 
-```jsx title="api/src/services/weather/weather.js"
+```javascript title="api/src/services/weather/weather.js"
 import { fetch } from 'cross-undici-fetch'
 
 export const getWeather = async ({ zip }) => {
@@ -490,7 +490,7 @@ Gross. This happens when our service tries to parse the response from OpenWeathe
 
 Okay, let's look for that `cod` and if it's `404` then we know the zip isn't found and can return a more helpful error from our service. Open up the service and let's add a check:
 
-```jsx {4, 12-14} title="api/src/services/weather/weather.js"
+```javascript {2, 10-12} title="api/src/services/weather/weather.js"
 import { fetch } from 'cross-undici-fetch'
 import { UserInputError } from '@redwoodjs/graphql-server'
 

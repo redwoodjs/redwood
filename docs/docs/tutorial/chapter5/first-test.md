@@ -95,37 +95,41 @@ describe('ArticlesCell', () => {
 
 This loops through each article in our `standard()` mock and for each one:
 
-```jsx
+```javascript
 const truncatedBody = article.body.substring(0, 10)
 ```
+
 Create a variable `truncatedBody` containing the first 10 characters of the post body
 
-```jsx
+```javascript
 const matchedBody = screen.getByText(truncatedBody, { exact: false })
 ```
+
 Search through the rendered HTML on the screen and find the HTML element that contains the truncated body (note the `{ exact: false }` here, as normally the exact text, and only that text, would need to be present, but in this case there's probably more than just the 10 characters)
 
-```jsx
+```javascript
 const ellipsis = within(matchedBody).getByText('...', { exact: false })
 ```
+
 Within the HTML element that was found in the previous line, find `...`, again without an exact match
 
-```jsx
+```javascript
 expect(screen.getByText(article.title)).toBeInTheDocument()
 ```
+
 Find the title of the article in the page
 
-```jsx
+```javascript
 expect(screen.queryByText(article.body)).not.toBeInTheDocument()
 ```
 When trying to find the *full* text of the body, it should *not* be present
 
-```jsx
+```javascript
 expect(matchedBody).toBeInTheDocument()
 ```
 Assert that the truncated text is present
 
-```jsx
+```javascript
 expect(ellipsis).toBeInTheDocument()
 ```
 Assert that the ellipsis is present
@@ -150,7 +154,7 @@ The names you give your mocks are then available in your tests and stories files
 
 Let's say our mock looks like this:
 
-```jsx
+```javascript
 export const standard = () => ({
   articles: [
     {
