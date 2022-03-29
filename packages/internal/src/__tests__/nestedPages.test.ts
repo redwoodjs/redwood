@@ -2,7 +2,7 @@ import path from 'path'
 
 import { prebuildWebFile } from '../build/babel/web'
 import { cleanWebBuild } from '../build/web'
-import { getPaths } from '../paths'
+import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
 
@@ -32,7 +32,7 @@ describe('User specified imports, with static imports', () => {
       forJest: true,
     }).code
 
-    webSrcDir = getPaths().web.src
+    webSrcDir = ensurePosixPath(getPaths().web.src)
   })
 
   it('Imports layouts correctly', () => {
