@@ -74,7 +74,7 @@ We're passing an additional `key` prop to make React happy when iterating over a
 
 If you check Storybook, you'll see that we do indeed render the `Comment` component three times, but there's no data to display. Let's update the mock with some sample data:
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.mock.js"
+```javascript title="web/src/components/CommentsCell/CommentsCell.mock.js"
 export const standard = () => ({
   // highlight-start
   comments: [

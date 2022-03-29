@@ -693,7 +693,7 @@ Try running the test suite (or if it's already running take a peek at that termi
 
 Open up the **comments** service test and let's update it to pass the `postId` argument to the `comments()` function like we tested out in the console:
 
-```jsx title="api/src/services/comments/comments.test.js"
+```javascript title="api/src/services/comments/comments.test.js"
 scenario('returns all comments', async (scenario) => {
   // highlight-next-line
   const result = await comments({ postId: scenario.comment.jane.postId })
@@ -705,7 +705,7 @@ When the test suite runs everything will still pass. Javascript won't care if yo
 
 Let's take a look at the scenario we're using (remember, it's `standard()` by default):
 
-```jsx title="api/src/services/comments/comments.scenarios.js"
+```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   comment: {
     jane: {
@@ -775,7 +775,7 @@ So we expected to receive 1 (from `post.comments.length`), but we actually got 2
 
 Before we get it passing again, let's also change the name of the test to reflect what it's actually testing:
 
-```jsx title="api/src/services/comments/comments.test.js"
+```javascript title="api/src/services/comments/comments.test.js"
 // highlight-start
 scenario(
   'returns all comments for a single post from the database',
@@ -793,7 +793,7 @@ scenario(
 
 Okay, open up the actual `comments.js` service and we'll update it to accept the `postId` argument and use it as an option to `findMany()`:
 
-```jsx title="api/src/services/comments/comments.js"
+```javascript title="api/src/services/comments/comments.js"
 export const comments = ({ postId }) => {
   return db.comment.findMany({ where: { postId } })
 }

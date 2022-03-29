@@ -4,7 +4,7 @@
 
 Let's add a new database table. Open up `api/db/schema.prisma` and add a Contact model after the Post model that's there now:
 
-```jsx title="api/db/schema.prisma"
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -158,7 +158,7 @@ export const schema = gql`
 
 That's it for the SDL file, let's take a look at the service:
 
-```jsx title="api/src/services/contacts/contacts.js"
+```javascript title="api/src/services/contacts/contacts.js"
 import { db } from 'src/lib/db'
 
 export const contacts = () => {
@@ -380,7 +380,7 @@ export default ContactPage
 
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
 
-```jsx
+```javascript
 create({
   variables: {
     input: {
@@ -646,7 +646,7 @@ We talked about business logic belonging in our services files and this is a per
 
 We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
-```jsx title="api/src/services/contacts/contacts.js"
+```javascript title="api/src/services/contacts/contacts.js"
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
@@ -796,7 +796,7 @@ We get that error message at the top saying something went wrong in plain Englis
 
 This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
-```jsx
+```javascript
 export const createCar = ({ input }) => {
   validate(input.make, 'make', {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
@@ -821,7 +821,7 @@ export const createCar = ({ input }) => {
 
 You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
 
-```jsx
+```javascript
 validateWith(() => {
   const oneWeekAgo = new Date()
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)

@@ -52,7 +52,7 @@ yarn redwood setup auth supabase
 
 By specifying `supabase` as the provider, Redwood automatically added the necessary Supabase config to our app. Let's open up `web/src/App.[js/tsx]` and inspect. You should see:
 
-```jsx {2-3,13,18} title="web/src/App.[js/tsx]"
+```jsx {1-2,12,17} title="web/src/App.[js/tsx]"
 import { AuthProvider } from '@redwoodjs/auth'
 import { createClient } from '@supabase/supabase-js'
 
@@ -143,7 +143,7 @@ Did I mention it was basic? If you want to add some polish, you might find both 
 
 Now that we have a form interface, we're going to want to do something when the user submits it. Let's add an `onSubmit` function to our component and pass it as a prop to our Form component:
 
-```jsx {6-8,13} title="web/src/pages/SignupPage/SignupPage.[js/tsx]"
+```jsx {4-6,11} title="web/src/pages/SignupPage/SignupPage.[js/tsx]"
 // ...
 
 const SignupPage = () => {
@@ -170,7 +170,7 @@ The _something_ we need to do is—surprise!—sign up. To do this, we'll need a
 
 Let's import `useAuth` and destructure `client` from it in our component:
 
-```jsx {3,6} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {2,5} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -197,7 +197,7 @@ export default SignupPage
 
 And now we'll attempt to create a new user in the `onSubmit` function with [`client.auth.signUp()`](https://supabase.io/docs/reference/javascript/auth-signup) by passing the `email` and `password` values that we captured from our form:
 
-```jsx {9-17} title="web/src/pages/SignupPage/SignupPage.[js/tsx]"
+```jsx {8-16} title="web/src/pages/SignupPage/SignupPage.[js/tsx]"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -234,7 +234,7 @@ Presently, our sign up works as is, but simply console-logging the response from
 
 Let's display errors to the user if there are any. To do this, we'll set up `React.useState()` to manage our error state and conditionally render the error message. We'll also want to reset the error state at the beginning of every submission with `setError(null)`:
 
-```jsx {8,11,18,20,28} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {6,9,16,18,26} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -287,7 +287,7 @@ yarn redwood generate page home /
 
 Let's import `routes` and `navigate` from [Redwood Router](../router.md#navigate) and use them to redirect to the home page upon successful sign up:
 
-```jsx {5,18} title="web/src/pages/SignupPage/SignupPage.js"
+```jsx {3,16} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { routes, navigate } from '@redwoodjs/router'
@@ -364,7 +364,7 @@ export default SigninPage
 
 Then we'll need to import `useAuth` from `@redwoodjs/auth` and destructure `logIn` so that we can use it in our `onSubmit` function:
 
-```jsx {3,6} title="web/src/pages/SigninPage/SigninPage.js"
+```jsx {2,5} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -395,7 +395,7 @@ export default SigninPage
 
 Now we'll add `logIn` to our `onSubmit` function. This time we'll be passing an object to our function as we're using Redwood Auth's `logIn` function directly (as opposed to `client`). This object takes an email and password.
 
-```jsx {12-17} title="web/src/pages/SigninPage/SigninPage.js"
+```jsx {10-15} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -433,7 +433,7 @@ Let's redirect our user back to the home page upon a successful login.
 
 In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](../router.md) and add them after awaiting `logIn`:
 
-```jsx {12-18} title="web/src/pages/SigninPage/SigninPage.js"
+```jsx {10-16} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
@@ -497,7 +497,7 @@ export default SignoutBtn
 
 Now let's import `useAuth` from `@redwoodjs/auth`. We'll destructure its `logOut` method and invoke it in `onClick`:
 
-```jsx {2,5,8} title="web/src/components/SignoutBtn/SignoutBtn.[js/tsx]"
+```jsx {1,4,7} title="web/src/components/SignoutBtn/SignoutBtn.[js/tsx]"
 import { useAuth } from '@redwoodjs/auth'
 
 const SignoutBtn = () => {
@@ -514,7 +514,7 @@ export default SignoutBtn
 
 This works as is, but because the user may be in a restricted part of your app when they sign out, we should make sure to navigate them away from this page:
 
-```jsx {3,9-10} title="web/src/components/SignoutBtn/SignoutBtn.[js/tsx]"
+```jsx {2,8-9} title="web/src/components/SignoutBtn/SignoutBtn.[js/tsx]"
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 
@@ -563,7 +563,7 @@ export default Navigation
 
 Let's destructure `isAuthenticated` from the `useAuth` hook and use it in some conditionals:
 
-```jsx {6,9-13} title="web/src/components/Navigation/Navigation.js"
+```jsx {5,8-12} title="web/src/components/Navigation/Navigation.js"
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -587,7 +587,7 @@ Because Redwood Auth uses [React's Context API](https://reactjs.org/docs/context
 
 Now let's import our sign out button and add it, as well as sign in and sign up links, to the appropriate blocks in the conditional:
 
-```jsx {5,11-18} title="web/src/components/Navigation/Navigation.[js/tsx]"
+```jsx {3,9-16} title="web/src/components/Navigation/Navigation.[js/tsx]"
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import SignoutBtn from 'src/components/SignoutBtn/SignoutBtn'
