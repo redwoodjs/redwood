@@ -6,9 +6,9 @@ export const config = {
 //
 // You can set user roles in a "roles" array on the public metadata in Clerk.
 //
-// Also, you need to add two env variables: CLERK_FRONTEND_API_URL for web and
-// CLERK_API_KEY for api, with the frontend api host and api key, respectively,
-// both from your Clerk.dev dashboard.
+// Also, you need to add three env variables: CLERK_FRONTEND_API_URL for web and
+// CLERK_API_KEY plus CLERK_JWT_KEY for api. All three can be found under "API Keys"
+// on your Clerk.dev dashboard.
 //
 // Lastly, be sure to add the key "CLERK_FRONTEND_API_URL" in your app's redwood.toml
 // [web] config "includeEnvironmentVariables" setting.
@@ -40,7 +40,7 @@ export const apiPackages = ['@clerk/clerk-sdk-node']
 
 // any notes to print out when the job is done
 export const notes = [
-  'You will need to add two environment variables with your Clerk URL and API key.',
+  'You will need to add three environment variables with your Clerk URL, API key and JWT key.',
   'Check out web/src/App.{js,tsx} for the variables you need to add.',
   'See also: https://redwoodjs.com/docs/authentication#clerk',
 ]
