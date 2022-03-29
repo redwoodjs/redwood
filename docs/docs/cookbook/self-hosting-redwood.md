@@ -27,7 +27,7 @@ yarn add -DW pm2
 
 Then create a PM2 ecosystem configuration file. For clarity, it's recommended to rename `ecosystem.config.js` to something like `pm2.config.js`:
 
-```terminal
+```bash
 yarn pm2 init
 mv ecosystem.config.js pm2.config.js
 ```
@@ -58,7 +58,7 @@ Your Linux server should have a user for deployment, configured with an SSH key 
 
 Typically, you keep your Nginx configuration file at `/etc/nginx/sites-available/redwood-pm2` and symlink it to `/etc/nginx/sites-enabled/redwood-pm2`. It should look something like this:
 
-```nginx{10}
+```nginx {10}
 server {
   server_name redwood-pm2.example.com;
   listen 80;
@@ -85,7 +85,7 @@ Please note that the trailing slash in `proxy_pass` is essential to correctly ma
 
 Let's configure PM2 with the `pm2.config.js` file we made earlier. The most important variables are at the top. Note that the port is only used locally on the server and should match the port in the Nginx config:
 
-```javascript
+```jsx
 const name = 'redwood-pm2' // Name to use in PM2
 const repo = 'git@github.com:njjkgeerts/redwood-pm2.git' // Link to your repo
 const user = 'deploy' // Server user
@@ -133,14 +133,14 @@ If you need to seed your production database during your first deployment, `yarn
 
 First, we need to create the PM2 directories:
 
-```terminal
+```bash
 yarn install
 yarn deploy:setup
 ```
 
 Your server directories are now set, but we haven't configured the `.env` settings yet. SSH into your server and create an `.env` file in the `current` subdirectory of the deploy directory:
 
-```terminal
+```bash
 vim /home/deploy/redwood-pm2/current/.env
 ```
 
@@ -152,7 +152,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/redwood-pm2
 
 Now we can deploy the app! Just run the following; it should update the code, take care of database migrations, and restart the app in PM2:
 
-```terminal
+```bash
 yarn deploy
 ```
 

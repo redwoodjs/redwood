@@ -21,7 +21,7 @@ We use [Prisma](https://www.prisma.io/) to talk to the database. Prisma has anot
 
 First let's define the data structure for a post in the database. Open up `api/db/schema.prisma` and add the definition of our Post table (remove any "sample" models that are present in the file, like the `UserExample` model). Once you're done, the entire schema file should look like:
 
-```javascript title="api/db/schema.prisma"
+```jsx title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -130,6 +130,11 @@ Okay but what if we click "Delete"?
 <img src="https://user-images.githubusercontent.com/300/73031339-aea95600-3df0-11ea-9d58-475d9ef43988.png" />
 
 So, Redwood just created all the pages, components and services necessary to perform all CRUD actions on our posts table. No need to even open Prisma Studio or login through a terminal window and write SQL from scratch. Redwood calls these _scaffolds_.
+
+> If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
+>
+> 1. Run `yarn rw g types` in a terminal
+> 2. Reload the GraphQL engine in VSCode: open the Command Palette (Cmd+Shift+P for Mac, Ctrl+Shift+P for Windows) and find "VSCode GraphQL: Manual Restart"
 
 Here's what happened when we ran that `yarn rw g scaffold post` command:
 

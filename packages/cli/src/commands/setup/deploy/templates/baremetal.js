@@ -24,7 +24,7 @@ export const DEPLOY = `# This file contains config for a baremetal deployment
 # * passphrase - used if your private key has a passphrase
 # * agentForward - set to \`true\` to forward the client machine's ssh credentials
 #
-# See https://redwoodjs.com/docs/deploy#baremetal-deploy for more info
+# See https://redwoodjs.com/docs/deploy/baremetal for more info
 
 [[servers]]
 host = "server.com"

@@ -12,7 +12,7 @@ We assume you're deploying to Netlify in this recipe. Your mileage may vary for 
 
 Just delete the `/api` directory altogether and your app will still work in dev mode:
 
-```terminal
+```bash
 rm -rf api
 ```
 
@@ -24,7 +24,7 @@ When it comes time to deploy, we need to let Netlify know that it shouldn't both
 
 Open up `netlify.toml`. We're going to comment out one line:
 
-```toml{4}
+```toml {4}
 [build]
   command = "yarn rw build"
   publish = "web/dist"
@@ -242,13 +242,13 @@ Any files that you put in `web/public` will be served by Netlify, skipping any b
 
 Next let's have a React component get that data remotely and then display it on a page. For this example we'll generate a homepage:
 
-```terminal
+```bash
 yarn rw generate page home /
 ```
 
 Next we'll use the browser's builtin `fetch()` function to get the data and then we'll just dump it to the screen to make sure it works:
 
-```javascript
+```jsx
 import { useState, useEffect } from 'react'
 
 const HomePage = () => {
@@ -268,13 +268,13 @@ export default HomePage
 
 We use `useState` to keep track of the forecast data and `useEffect` to actually trigger the loading of the data when the component mounts. Now we just need a graph! Let's add [chart.js](https://www.chartjs.org/) for some simple graphing:
 
-```terminal
+```bash
 yarn workspace web add chart.js
 ```
 
 Let's generate a sample graph:
 
-```javascript{1,2,5,15-32,34}
+```jsx {1,2,5,15-32,34}
 import { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js'
 
@@ -318,7 +318,7 @@ export default HomePage
 
 If that looks good then all that's left is to transform the weather data JSON into the format that Chart.js wants. Here's the final `HomePage` including a couple of functions to transform our data and display the dates properly:
 
-```javascript
+```jsx
 import { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js'
 

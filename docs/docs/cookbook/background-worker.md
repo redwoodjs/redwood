@@ -23,9 +23,7 @@ yarn rw g script faktoryWorker
 
 We'll start by registering a task called `postSignupTask` in our worker:
 
-```javascript
-// scripts/faktoryWorker.js
-
+```jsx title="scripts/faktoryWorker.js"
 const { postSignupTask } from '$api/src/lib/tasks'
 import { logger } from '$api/src/lib/logger'
 
@@ -59,9 +57,7 @@ Set `FAKTORY_URL` in `.env` to where your server's running.
 In `postSignupTask`, we may want to perform operations that need to contact external services, such as sending an email.
 For this type of work, we typically don't want to hold up the request/response cycle and can perform it in the background:
 
-```javascript
-// api/src/lib/tasks.js
-
+```jsx title="api/src/lib/tasks.js"
 export const postSignupTask = async ({ userId, emailPayload }) => {
   // Send a welcome email to new user.
   // You'll have to have an integration with an email service for this to work.
@@ -78,9 +74,7 @@ Once we've created our task, we need to call it in the right place.
 For this task, it makes sense to call it right after the user has completed their signup.
 This is an example of a Service that'll most likely be called via a GraphQL Mutation.
 
-```javascript
-// src/services/auth/auth.js
-
+```jsx title="src/services/auth/auth.js"
 const faktory = require('faktory-worker')
 
 export const signUp = async ({ input }) => {

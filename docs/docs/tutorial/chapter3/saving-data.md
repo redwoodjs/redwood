@@ -4,7 +4,7 @@
 
 Let's add a new database table. Open up `api/db/schema.prisma` and add a Contact model after the Post model that's there now:
 
-```javascript title="api/db/schema.prisma"
+```jsx title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -60,7 +60,7 @@ Just like the `scaffold` command, this will create two new files under the `api`
 
 If you remember our discussion in [how Redwood works with data](../chapter2/side-quest.md) you'll recall that queries and mutations in an SDL file are automatically mapped to resolvers defined in a service, so when you generate an SDL file you'll get a service file as well, since one requires the other.
 
-Open up `api/src/graphql/contacts.sdl.js` and you'll see the `Contact`, `CreateContactInput` and `UpdateContactInput` types were already defined for us—the `generate sdl` command introspected the schema and created a `Contact` type containing each database field in the table, as well as a `Query` type with a single query `contacts` which returns an array of `Contact` types.
+Open up `api/src/graphql/contacts.sdl.js` and you'll see the same Query and Mutation types defined for Contact that were created for the Post scaffold. `Contact`, `CreateContactInput` and `UpdateContactInput` types, as well as a `Query` type with `contacts` and `contact`, and a `Mutation` type with `createContact`, `updateContact` and `deleteContact`.
 
 ```graphql title="api/src/graphql/contacts.sdl.js"
 export const schema = gql`
@@ -74,6 +74,7 @@ export const schema = gql`
 
   type Query {
     contacts: [Contact!]! @requireAuth
+    contact(id: Int!): Contact @requireAuth
   }
 
   input CreateContactInput {
@@ -87,10 +88,16 @@ export const schema = gql`
     email: String
     message: String
   }
+
+  type Mutation {
+    createContact(input: CreateContactInput!): Contact! @requireAuth
+    updateContact(id: Int!, input: UpdateContactInput!): Contact! @requireAuth
+    deleteContact(id: Int!): Contact! @requireAuth
+  }
 `
 ```
 
-The `@requireAuth` string is a [schema directive](https://www.graphql-tools.com/docs/schema-directives) which says that in order to access this GraphQL query the user is required to be authenticated. We haven't added authentication yet, so this won't have any effect—anyone will be able to query it, logged in or not, because until you add authentication the function behind `@requireAuth` always returns `true`.
+The `@requireAuth` string you see after the `Query` and `Mutation` types is a [schema directive](https://www.graphql-tools.com/docs/schema-directives) which says that in order to access this GraphQL query the user is required to be authenticated. We haven't added authentication yet, so this won't have any effect—anyone will be able to query it, logged in or not, because until you add authentication the function behind `@requireAuth` always returns `true`.
 
 What's `CreateContactInput` and `UpdateContactInput`? Redwood follows the GraphQL recommendation of using [Input Types](https://graphql.org/graphql-js/mutations-and-input-types/) in mutations rather than listing out each and every field that can be set. Any fields required in `schema.prisma` are also required in `CreateContactInput` (you can't create a valid record without them) but nothing is explicitly required in `UpdateContactInput`. This is because you could want to update only a single field, or two fields, or all fields. The alternative would be to create separate Input types for every permutation of fields you would want to update. We felt that only having one update input type was a good compromise for optimal developer experience.
 
@@ -104,17 +111,19 @@ Since all of the DB columns were required in the `schema.prisma` file they are m
 
 As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.js`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.js`).
 
-So the default SDL that's created by the generators is effectively read-only: there is no way to create or update an existing record. Which means we'll need to add our own create functionality.
-
-> *Psssstttt* I'll let you in on a little secret: you can have Redwood create all the operators you need to perform CRUD (Create, Retrieve, Update, Delete) functions against your data automatically! But that wouldn't teach you anything, so we're doing it the hard way here. The next time you generate an SDL, try adding the `--crud` flag:
+> *Psssstttt* I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
 >
->    `yarn rw g sdl Contact --crud`
+>    `yarn rw g sdl Contact --no-crud`
 >
-> Shhhhhhhhh...
+> You'd only get a single `contacts` type to return them all.
 
-In this case we're creating a single `Mutation` that we'll call `createContact`. Add that to the end of the SDL file (before the closing backtick):
+We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need want to change `@requireAuth` to `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
 
-```graphql title="api/src/graphql/contacts.sdl.js"
+> Serendipitously, the default schema directive of `@requireAuth` is exactly what we want for the `contacts` query that returns ALL contacts—only we, the owners of the blog, should have access to read them all.
+
+We're not going to let anyone update or delete a comment, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
+
+```diff title="api/src/graphql/contacts.sdl.js"
 export const schema = gql`
   type Contact {
     id: Int!
@@ -126,6 +135,7 @@ export const schema = gql`
 
   type Query {
     contacts: [Contact!]! @requireAuth
+    contact(id: Int!): Contact @requireAuth
   }
 
   input CreateContactInput {
@@ -140,33 +150,50 @@ export const schema = gql`
     message: String
   }
 
-  // highlight-start
   type Mutation {
-    createContact(input: CreateContactInput!): Contact @skipAuth
+    createContact(input: CreateContactInput!): Contact! @skipAuth
   }
-  // highlight-end
 `
 ```
 
-The `createContact` mutation will accept a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. We've also added on a new directive: `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
+That's it for the SDL file, let's take a look at the service:
 
-> Serendipitously, the default schema directive of `@requireAuth` is exactly what we want for the `contacts` query that returns ALL contacts—only we, the owners of the blog, should have access to read them all.
-
-That's it for the SDL file, let's define the service that will actually save the data to the database. The service includes a default `contacts` function for getting all contacts from the database. Let's add our mutation to create a new one:
-
-```javascript  title="api/src/services/contacts/contacts.js"
+```jsx title="api/src/services/contacts/contacts.js"
 import { db } from 'src/lib/db'
 
 export const contacts = () => {
   return db.contact.findMany()
 }
 
-// highlight-start
-export const createContact = ({ input }) => {
-  return db.contact.create({ data: input })
+export const contact = ({ id }) => {
+  return db.contact.findUnique({
+    where: { id },
+  })
 }
-// highlight-end
+
+export const createContact = ({ input }) => {
+  return db.contact.create({
+    data: input,
+  })
+}
+
+export const updateContact = ({ id, input }) => {
+  return db.contact.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteContact = ({ id }) => {
+  return db.contact.delete({
+    where: { id },
+  })
+}
 ```
+
+Pretty simple. You can see here how the `createContact()` function expects the `input` argument and just passes that on to Prisma in the `create()` call.
+
+You can delete `updateContact` and `deleteContact` here if you want, but since there's no longer an assessible GraphQL field for them they can't be used by the client anyway.
 
 Before we plug this into the UI, let's take a look at a nifty GUI you get just by running `yarn redwood dev`.
 
@@ -353,7 +380,7 @@ export default ContactPage
 
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
 
-```javascript
+```jsx
 create({
   variables: {
     input: {
@@ -469,7 +496,7 @@ Let's address these issues.
 
 The `useMutation` hook returns a couple more elements along with the function to invoke it. We can destructure these as the second element in the array that's returned. The two we care about are `loading` and `error`:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
 const ContactPage = () => {
@@ -619,7 +646,7 @@ We talked about business logic belonging in our services files and this is a per
 
 We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
-```javascript title="api/src/services/contacts/contacts.js"
+```jsx title="api/src/services/contacts/contacts.js"
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
@@ -769,7 +796,7 @@ We get that error message at the top saying something went wrong in plain Englis
 
 This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
-```javascript
+```jsx
 export const createCar = ({ input }) => {
   validate(input.make, 'make', {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
@@ -794,7 +821,7 @@ export const createCar = ({ input }) => {
 
 You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
 
-```javascript
+```jsx
 validateWith(() => {
   const oneWeekAgo = new Date()
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
@@ -815,7 +842,7 @@ Redwood includes a hook called `useForm()` (from React Hook Form) which is norma
 
 First we'll import `useForm`:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import {
   FieldError,
   Form,
@@ -831,7 +858,7 @@ import {
 
 And now call it inside of our component:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 const ContactPage = () => {
   // highlight-next-line
   const formMethods = useForm()
@@ -856,7 +883,7 @@ return (
 
 Now we can call `reset()` on `formMethods` after we call `toast()`:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
 const [create, { loading, error }] = useMutation(CREATE_CONTACT, {

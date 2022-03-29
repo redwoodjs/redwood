@@ -8,9 +8,9 @@
 > You can edit this doc [here](https://github.com/redwoodjs/redwoodjs.com/blob/main/docs/assetsAndFiles.md).
 > If you have any questions, just ask for help! We're active on the [forums](https://community.redwoodjs.com/c/contributing/9) and on [discord](https://discord.com/channels/679514959968993311/747258086569541703).
 
-There are two methods for adding assets to a Redwood app: 
+There are two methods for adding assets to a Redwood app:
 
-i)  Webpack imports and 
+i)  Webpack imports and
 ii) directly adding to the `/public` folder.
 
 ## Importing Assets
@@ -21,7 +21,7 @@ In general, it's best to import files directly into a template, page or componen
 
 Using `import`, we can do the following:
 
-```javascript
+```jsx
 import React from 'react'
 import logo from './my-logo.jpg'
 

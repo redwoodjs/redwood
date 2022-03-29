@@ -28,7 +28,7 @@ You can think of `redwood.toml` as a convenience layer over Redwood's webpack co
 
 `redwood.toml` also serves a slightly larger purpose: it's used to determine the base directory of a Redwood project. So this file is what really makes a Redwood app a Redwood app. If you remove it and run `yarn rw dev`, you'll get an error:
 
-```terminal
+```bash
 Error: Could not find a "redwood.toml" file, are you sure you're in a Redwood project?
 ```
 
@@ -125,13 +125,14 @@ API_KEY=...
 
 Configuration for the api side.
 
-| Key            | Description                         | Default                    | Context       |
-| :------------- | :---------------------------------- | :------------------------- | :------------ |
-| `host`         | Hostname to listen on               | `'localhost'`              | `development` |
-| `port`         | Port to listen on                   | `8911`                     | `development` |
-| `path`         | Path to the api side                | `'./api'`                  | `both`        |
-| `serverConfig` | Path to the `server.config.js` file | `'./api/server.config.js'` | `both`        |
-| `target`       | Target for the api side             | `'node'`                   | `both`        |
+| Key            | Description                                         | Default                    | Context       |
+|:---------------|:----------------------------------------------------|:---------------------------|:--------------|
+| `host`         | Hostname to listen on                               | `'localhost'`              | `development` |
+| `port`         | Port to listen on                                   | `8911`                     | `development` |
+| `debugPort`    | Port to expose for debugger to attach to during dev | `18911`                    | `development` |
+| `path`         | Path to the api side                                | `'./api'`                  | `both`        |
+| `serverConfig` | Path to the `server.config.js` file                 | `'./api/server.config.js'` | `both`        |
+| `target`       | Target for the api side                             | `'node'`                   | `both`        |
 
 ### Server Configuration
 
@@ -147,8 +148,7 @@ Examples include: logger settings, timeouts, maximum payload limits, and more.
 
 > **Note:** This configuration does not apply in a serverless deploy.
 
-```js
-// ./api/server.config.js
+```javascript title="api/server.config.js"
 /**
  * This file allows you to configure the Fastify Server settings
  * used by the RedwoodJS dev server.

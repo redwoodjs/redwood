@@ -13,8 +13,7 @@
 ## Mocking a Cell's Query
 
 Locate the file ending with with `.mock.js` in your Cell's folder. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
-```js{4,5,6,12,13,14}
-// UserProfileCell/UserProfileCell.js
+```jsx {4,5,6,12,13,14} title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {
@@ -32,8 +31,7 @@ export const standard = {
 ```
 
 The value assigned to `standard` is the mock-data associated to the `QUERY`, so modifying the `QUERY` means you need to modify the mock-data.
-```diff
-// UserProfileCell/UserProfileCell.js
+```diff title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {
@@ -57,8 +55,7 @@ export const standard = {
 ### GraphQL request variables
 
 If you want to dynamically modify mock-data based on a queries variables the `standard` export can also be a function, and the first parameter will be an object containing the variables:
-```js{2,7}
-// UserProfileCell/UserProfileCell.mock.js
+```jsx {2,7} title="UserProfileCell/UserProfileCell.mock.js"
 export const standard = (variables) => {
   return {
     userProfile: {
@@ -74,15 +71,14 @@ export const standard = (variables) => {
 
 If you're not using a Cell, or if you want to overwrite a globally scoped mock, you can use `mockGraphQLQuery`:
 
-```jsx
-// Header/Header.stories.js
+```jsx title="Header/Header.stories.js"
 export const withReallyLongName = () => {
   mockGraphQLQuery('UserProfileQuery', () => {
     return {
       userProfile: {
         id: 99,
         name: 'Hubert Blaine Wolfeschlegelsteinhausenbergerdorff Sr.'
-      } 
+      }
     }
   })
   return <Header />
@@ -93,8 +89,7 @@ export const withReallyLongName = () => {
 
 Use `mockGraphQLMutation`:
 
-```js
-// UserProfileCell/UserProfileCell.mock.js
+```jsx title="UserProfileCell/UserProfileCell.mock.js"
 export const standard = /* ... */
 
 mockGraphQLMutation('UpdateUserName', ({ name }) => {
@@ -102,7 +97,7 @@ mockGraphQLMutation('UpdateUserName', ({ name }) => {
     userProfile: {
       id: 99,
       name,
-    } 
+    }
   }
 })
 ```
@@ -111,7 +106,7 @@ mockGraphQLMutation('UpdateUserName', ({ name }) => {
 
 `mockGraphQLQuery` and `mockGraphQLMutation` have access to `ctx` which allows you to modify the mock-response:
 
-```js
+```jsx
 mockGraphQLQuery('UserProfileQuery', (_vars, { ctx }) => {
   // Forbidden
   ctx.status(403)

@@ -110,7 +110,7 @@ export const Success = ({ articles }) => {
 
 To get you off and running as quickly as possible the generator assumes you've got a root GraphQL query named the same thing as your cell and gives you the minimum query needed to get something out of the database. In this case the query is named `articles`:
 
-```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -236,7 +236,7 @@ export const Success = ({ posts }) => {
 
 In addition to the `id` that was added to the `query` by the generator, let's get the `title`, `body`, and `createdAt` values as well:
 
-```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
