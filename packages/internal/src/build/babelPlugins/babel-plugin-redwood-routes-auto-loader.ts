@@ -64,7 +64,7 @@ export default function (
           )
 
           const pageThatUserImported = pages.find((page) => {
-            return page.relativeImport === userImportPath
+            return page.relativeImport === ensurePosixPath(userImportPath)
           })
 
           if (pageThatUserImported) {
