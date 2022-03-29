@@ -11,7 +11,6 @@ import { Private, Route, Router, Set } from '@redwoodjs/router'
 
 import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
-import ShowcaseLayout from 'src/layouts/ShowcaseLayout'
 
 import JobsPage from 'src/pages/Jobs/JobsPage'
 import JobPage from 'src/pages/Jobs/JobPage'
@@ -29,7 +28,6 @@ const Routes = () => {
       <Set wrap={MainLayout}>
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />
-        <Route path="/examples" page={ExamplesPage} name="examples" />
         <Route path="/jobs/new" page={NewJobPage} name="newJob" />
         <Route path="/jobs/all" page={AllJobsPage} name="allJobs" />
         <Route path="/jobs/{id:Int}" page={JobPage} name="job" />
@@ -39,14 +37,6 @@ const Routes = () => {
         <Route path="/job-profiles/all" page={AllJobProfilesPage} name="allJobProfiles" />
         <Route path="/job-profiles/{id:Int}" page={BazingaJobProfilePageWithFunnyName} name="jobProfile" />
         <Route path="/job-profiles/{id:Int}/edit" page={EditJobProfilePage} name="editJobProfile" />
-
-        {/* Pre-Rendered Showcase Pages */}
-        <Set prerender>
-        <Route path="/showcase" page={ShowcasePage} name="showcase" />
-        <Set wrap={[ShowcaseLayout]}>
-          <Route path="/showcase/snaplet" page={ShowcaseSnapletPage} name="showcaseSnaplet" />
-        </Set>
-        </Set>
 
         <Route path="/" page={HomePage} name="home" />
 
