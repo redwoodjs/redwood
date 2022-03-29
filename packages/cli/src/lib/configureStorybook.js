@@ -55,14 +55,12 @@ export default function configureStorybook({ force }, newStorybookPreview) {
         0,
         insideNewStorybookConfigWithoutReactAndDecoration
       )
-      const finalCurrentConfig =
-        reverseCurrentConfig.reverse().join(`\n`) +
+      storybookPreviewConfig =
+        reversedCurrentConfig.reverse().join(`\n`) +
         `\n` +
         currentConfig +
         `\n` +
         decoratorsExport
-
-      storybookPreviewConfig = finalCurrentConfig
     }
   } else {
     storybookPreviewConfig = newStorybookPreview
