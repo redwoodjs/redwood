@@ -131,7 +131,7 @@ This decoded token also includes:
 
 Roles may be stored within `app_metadata` or sometimes within `authorization` under `app_metadata`.
 
-```js
+```jsx
 {
   "exp": 1598628532,
   "sub": "1d271db5-f0cg-21f4-8b43-a01ddd3be294",
@@ -153,9 +153,7 @@ Roles may be stored within `app_metadata` or sometimes within `authorization` un
 
 The `parseJWT` helper will consider both locations to extract roles on the decoded JWT.
 
-```js
-// api/lib/auth.js
-
+```jsx title="api/lib/auth.js"
 import { parseJWT } from '@redwoodjs/api'
 
 export const getCurrentUser = async (decoded) => {
@@ -169,7 +167,7 @@ If your AuthProvider does not set the role information in the token, you can que
 
 Consider the following schema where a `User` has many `UserRoles`.
 
-```js
+```jsx
 model User {
   id        Int        @id @default(autoincrement())
   uuid      String     @unique
@@ -192,7 +190,7 @@ model UserRole {
 
 You can have seeded the `User` and `UserRole` tables with a new User that has a `uuid` from your identity service and also assigned that user a role of `editor`:
 
-```js
+```jsx
 const uuid = '1683d760-5b4d-2ced-a078-23fdfebe2e19'
 
 const newUser = await db.user.create({
@@ -213,9 +211,7 @@ Given that your decoded JWT `sub` claim will contain the `uuid`, you can fetch t
 
 Once you have the `UserRole`s, then you can set an array of their `name`s on the `currentUser`.
 
-```js
-// api/lib/auth.js
-
+```jsx title="api/lib/auth.js"
 export const getCurrentUser = async (decoded) => {
   const userRoles = await db.userRole.findMany({
     where: { user: { uuid: decoded.sub } },
@@ -244,7 +240,7 @@ export const getCurrentUser = async (decoded) => {
 
 To protect a `Private` route for access by a single role:
 
-```js
+```jsx
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -260,7 +256,7 @@ const Routes = () => {
 
 To protect a `Private` route for access by a multiple roles:
 
-```js
+```jsx
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -278,7 +274,7 @@ const Routes = () => {
 
 If the currentUser is not assigned the role, they will be redirected to the page specified in the `unauthenticated` property. Therefore, you can define a specific page to be seen when attempting to access the protected route and denied access such as a "forbidden" page:
 
-```js
+```jsx
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -302,7 +298,7 @@ A `NavLink` is a specialized `Link` used for navigation or menu links that is st
 
 To protect the `NavLink` for access by a single role:
 
-```js
+```jsx
 import { NavLink, Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -325,7 +321,7 @@ const SidebarLayout = ({ children }) => {
 
 To protect the `NavLink` for access by multiple roles:
 
-```js
+```jsx
 import { NavLink, Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -352,7 +348,7 @@ Note that `hasRole()` also checks if the currentUser is authenticated.
 
 To protect content in a `Component` for access by a single role:
 
-```js
+```jsx
 import { useAuth } from '@redwoodjs/auth'
 
 const Post = ({ post }) => {
@@ -372,7 +368,7 @@ const Post = ({ post }) => {
 
 To protect content in a `Component` for access by multiple roles:
 
-```js
+```jsx
 import { useAuth } from '@redwoodjs/auth'
 
 const Post = ({ post }) => {
@@ -396,7 +392,7 @@ Note that `hasRole()` also checks if the currentUser is authenticated.
 
 To protect markup in a `Page` for access by a single role:
 
-```js
+```jsx
 import { useAuth } from "@redwoodjs/auth";
 import SidebarLayout from "src/layouts/SidebarLayout";
 
@@ -423,7 +419,7 @@ const SettingsPage = () => {
 
 To protect markup in a `Page` for access by multiple roles:
 
-```js
+```jsx
 import { useAuth } from "@redwoodjs/auth";
 import SidebarLayout from "src/layouts/SidebarLayout";
 
@@ -463,19 +459,19 @@ Use `requireAuth()` in your services to check that a user is logged in, whether 
 
 It checks for a single role:
 
-```js
+```jsx
 requireAuth({ roles: 'editor' })
 ```
 
 or multiple roles:
 
-```js
+```jsx
 requireAuth({ roles: ['admin', 'author', 'publisher'] })
 ```
 
 This function should be located in `api/src/lib/auth.js` for your RedwoodJS app (ie, where your `getCurrentUser()` is located).
 
-```js
+```jsx
 export const requireAuth = ({ roles } = {}) => {
     if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
@@ -489,7 +485,7 @@ export const requireAuth = ({ roles } = {}) => {
 
 #### How to Protect a Service
 
-```js
+```jsx
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
@@ -512,7 +508,7 @@ export const createPost = ({ input }) => {
 
 Since `requireAuth()` raises an exception, catch and return a `HTTP 401 Unauthorized` or `HTTP 403 Forbidden` client error status response code.
 
-```js
+```jsx
 import { requireAuth } from 'src/lib/auth'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 
@@ -563,9 +559,7 @@ If you return a status other than 200 or 204 from one of these event functions, 
 
 If your serverless function returns a 200, you can also return a JSON object with new user_metadata or app_metadata for the Identity user.
 
-```js
-// api/src/functions/identity-signup.js
-
+```jsx title="api/src/functions/identity-signup.js"
 export const handler = async (req, _context) => {
   const body = JSON.parse(req.body)
 
@@ -607,7 +601,7 @@ export const handler = async (req, _context) => {
 
 So long as `yarn rw dev` is running, `netlify-cli` can be used to invoke your function. Steps are:
 
-```terminal
+```bash
 # Install the cli
 yarn add netlify-cli -g
 

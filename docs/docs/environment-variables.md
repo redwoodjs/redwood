@@ -33,9 +33,7 @@ Just like for the API Side, you'll also have to set them up with your provider.
 
 For Example:
 
-```toml
-// redwood.toml
-
+```toml title="redwood.toml"
 [web]
   includeEnvironmentVariables = ['SECRET_API_KEY', 'ANOTHER_ONE']
 ```
@@ -79,9 +77,7 @@ HELLO_ENV=hello world
 
 and make a hello Function (`yarn rw generate function hello`) and reference `HELLO_ENV` in the body of our response:
 
-```javascript{6}
-// ./api/src/functions/hello.js
-
+```jsx {6} title="./api/src/functions/hello.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -108,7 +104,7 @@ Whichever platform you deploy to, they'll have some specific way of making envir
 
 Since it usually contains sensitive information, you should [never commit your `.env` file](https://github.com/motdotla/dotenv#should-i-commit-my-env-file). Note that you'd actually have to go out of your way to do this as, by default, a Redwood app's `.gitignore` explicitly ignores `.env`:
 
-```plaintext{2}
+```plaintext {2}
 .DS_Store
 .env
 .netlify
@@ -125,9 +121,7 @@ For all the variables in your `.env` and `.env.defaults` files to make their way
 
 It's in [the CLI](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/index.js#L6-L12)&mdash;every time you run a `yarn rw` command:
 
-```javascript
-// packages/cli/src/index.js
-
+```jsx title="packages/cli/src/index.js"
 import { config } from 'dotenv-defaults'
 
 config({

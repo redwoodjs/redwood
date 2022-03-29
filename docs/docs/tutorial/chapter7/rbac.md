@@ -10,7 +10,7 @@ Enter role-based access control, thankfully shortened to the common phrase **RBA
 
 We've got a User model so let's add a `roles` property to that:
 
-```javascript title="api/db/schema.prisma"
+```jsx title="api/db/schema.prisma"
 model User {
   id                  Int @id @default(autoincrement())
   name                String?
@@ -41,7 +41,7 @@ What does this mean? We made `roles` a required field. But, we have a user in th
 
 For now let's have two roles, `admin` and `moderator`. `admin` can create/edit/delete blog posts and `moderator` can only remove comments. Of those two `moderator` is the safer default since it's more restrictive:
 
-```javascript title="api/db/schema.prisma"
+```jsx title="api/db/schema.prisma"
 model User {
   id                  Int @id @default(autoincrement())
   name                String?
@@ -67,7 +67,7 @@ If we log in and try to go the posts admin page at [http://localhost:8910/admin/
 
 Before we do that, we'll need to make sure that the web side has access to the roles on `currentUser`. Take a look at `api/src/lib/auth.js`. Remember when we had to add `email` to the list of fields being included in Part 1? We need to add `roles` as well:
 
-```javascript title="api/src/lib/auth.js"
+```jsx title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
@@ -290,7 +290,7 @@ export default Comment
 
 We'll also need to update the `CommentsQuery` we're importing from `CommentsCell` to include the `postId` field, since we are relying on it to perform the `refetchQuery` after a successful deletion:
 
-```javascript title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.js"
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`
@@ -473,7 +473,7 @@ console.error
 
 If you take a look at `CommentsCell.mock.js` you'll see the mock data there used during the test. We're requesting `postId` in the `QUERY` in `CommentsCell` now, but this mock doesn't return it! We can fix that by simply adding that field to both mocks:
 
-```javascript title="web/src/components/CommentsCell/CommentsCell.mock.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.mock.js"
 export const standard = () => ({
   comments: [
     {
@@ -543,7 +543,7 @@ Now a raw GraphQL query to the `deleteComment` mutation will result in an error 
 
 This check only prevents access to `deleteComment` via GraphQL. What if you're calling one service from another? If we wanted the same protection within the service itself, we could call `requireAuth` directly:
 
-```javascript title="api/src/services/comments/comments.js"
+```jsx title="api/src/services/comments/comments.js"
 import { db } from 'src/lib/db'
 // highlight-next-line
 import { requireAuth } from 'src/lib/auth'
@@ -561,7 +561,7 @@ export const deleteComment = ({ id }) => {
 
 We'll need a test to go along with that functionality. How do we test `requireAuth()`? The api side also has a `mockCurrentUser()` function which behaves the same as the one on the web side:
 
-```javascript title="api/src/services/comments/comments.test.js"
+```jsx title="api/src/services/comments/comments.test.js"
 // highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
 import { db } from 'api/src/lib/db'
