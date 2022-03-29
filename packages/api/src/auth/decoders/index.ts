@@ -2,7 +2,6 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
-// import { okta } from '@redwoodjs/auth/src/authClients/okta'
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import { clerk } from './clerk'
