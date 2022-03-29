@@ -499,7 +499,7 @@ To get started with Clerk, sign up on [their website](https://clerk.dev/) and cr
 
 It's important that the `ClerkAuthProvider` added to your `App.{js|ts}` file during setup is within the `RedwoodProvider` and around Redwood's `AuthProvider`:
 
-```tsx {6,12} title="web/src/App.{js|ts}"
+```tsx {4,10} title="web/src/App.{js|ts}"
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
