@@ -1,14 +1,18 @@
 # CORS
 
-CORS stands for [Cross Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). In a nutshell, by default, browsers aren't allowed to access resources outside their own domain.
+CORS stands for [cross-origin resource sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). In a nutshell, by default, browsers aren't allowed to access resources outside their own domain.
 
 ## When you need to worry about CORS
 
-If your api and web sides are deployed to different domains, you'll have to worry about CORS. For example, if your web side is deployed to `example.com` but your api is `api.example.com`. For security reasons your browser will not allow XHR requests (like the kind that the GraphQL client makes) to a domain other than the one currently in the browser's address bar.
+If your web and api sides are deployed to different domains, you'll have to worry about CORS.
+For example, if your web side is deployed to `example.com` and your api is deployed to `api.example.com`.
+For security reasons, your browser won't allow XHR requests (like the kind that the GraphQL client makes) to a domain other than the one that's currently in the browser's address bar.
+This'll become obvious when you navigate to your site and don't see data.
+When you look in the web inspector, you'll see a message along the lines of:
 
-This will become obvious when you point your browser to your site and see none of your GraphQL data. When you look in the web inspector you'll see a message along the lines of:
-
-> ⛔️ Access to fetch https://api.example.com has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+⛔️ Access to fetch https://api.example.com has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
 
 ## Avoiding CORS
 
