@@ -1,70 +1,100 @@
 # Assets and Files
 
-> ⚠ **Work in Progress** ⚠️
->
-> There's more to document here. In the meantime, you can check our [community forum](https://community.redwoodjs.com/search?q=assets%20and%20files) for answers.
->
-> Want to contribute? Redwood welcomes contributions and loves helping people become contributors.
-> You can edit this doc [here](https://github.com/redwoodjs/redwoodjs.com/blob/main/docs/assetsAndFiles.md).
-> If you have any questions, just ask for help! We're active on the [forums](https://community.redwoodjs.com/c/contributing/9) and on [discord](https://discord.com/channels/679514959968993311/747258086569541703).
+There are two ways to add an asset to your Redwood app:
 
-There are two methods for adding assets to a Redwood app:
+1. co-locate it with the component using it and import it into the component as if it were code
+2. add it to the `web/public` directory and reference it relative to your site's root
 
-i)  Webpack imports and
-ii) directly adding to the `/public` folder.
+Where possible, prefer the first strategy.
+It lets webpack include the asset in the bundle, opting-in to all of webpack's benefits.
 
-## Importing Assets
+### Co-locating and Importing Assets
 
-In general, it's best to import files directly into a template, page or component. This allows Webpack to include that file in the bundle, ensuring correct processing for the distribution folder while providing error checks and correct paths along the way.
+Let's say you want to show your app's logo in your `Header` component.
+First, add your logo to the `Header` component's directory:
 
-### Example Asset Import with Webpack
+```text
+web/src/components/Header/
+// highlight-next-line
+├── logo.png
+├── Header.js
+├── Header.stories.js
+└── Header.test.js
+```
 
-Using `import`, we can do the following:
+Then, in the `Header` component, import your logo as if it were code:
 
-```jsx
-import React from 'react'
-import logo from './my-logo.jpg'
+```jsx title="web/src/components/Header/Header.js"
+// highlight-next-line
+import logo from './logo.png'
 
-function Header() {
-  return <img src={logo} alt="Logo" />
+const Header = () => {
+  return (
+    <header>
+      {/* ... */}
+      // highlight-next-line
+      <img src={logo} alt="Logo" />
+    </header>
+  )
 }
 
 export default Header
 ```
 
-Webpack will correctly handle the file path and add the file to the distribution folder within `/dist/media` (created when Webpack builds for production).
+If you're curious how this works, see the webpack docs on [asset management](https://webpack.js.org/guides/asset-management/).
 
-> Note: In this example, the file `my-logo.jpg` is located in the same directory as the component. This is recommended practice to keep all files related to a component in a single directory.
+## Adding to the `web/public` Directory
 
-Behind the scenes, we are using Webpack's ["file-loader"](https://webpack.js.org/loaders/file-loader/) and ["url-loader"](https://webpack.js.org/loaders/url-loader/) (which transforms images less than 10kb into data URIs for improved performance).
+You can also add assets to the `web/public` directory, effectively adding static files to your app.
+During dev and build, Redwood copies `web/public`'s contents into `web/dist`.
 
-## Directly Adding Assets using the "Public" Folder
+> Changes to `web/public` don't hot-reload.
 
-Alternately, you can add files directly to the folder "web/public", effectively adding static files to your app. All included files and folders will be copied into the production build `web/dist` folder. They will also be available during development when you run `yarn rw dev`.
+Again, because assets in this directory don't go through webpack, use this strategy sparingly, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with webpack—etc.
 
-Because assets in this folder are bypassing the javascript module system, **this folder should be used sparingly** for assets such as favicons, robots.txt, manifests, libraries incompatible with Webpack, etc.
+### Example: Adding Your Logo and Favicon to `web/public`
 
-> Note: files will _not_ hot reload while the development server is running. You'll need to manually stop/start to access file changes.
+Let's say that you've added your logo and favicon to `web/public`:
 
-Behind the scenes, Redwood is using Webpack's ["copy-webpack-plugin"](https://github.com/webpack-contrib/copy-webpack-plugin).
-
-### Example Use
-
-Assuming `public/` includes the following:
-
-- `favicon.png`
-- `static-files/my-logo.jpg`
-
-Running `yarn build` will copy the file `favicon.png` to `/dist/favicon.png`. The new directory with file `static-files/my-logo.jpg` will be copied to `/dist/static-files/my-logo.jpg`. These can be referenced in your code directly without any special handling, e.g.
-
-```html
-<link rel="icon" type="image/png" href="/favicon.png" />
+```
+web/public/
+├── img/
+│  └── logo.png
+└── favicon.png
 ```
 
-and
+When you run `yarn rw dev` and `yarn rw build`, Redwood copies
+`web/public/img/logo.png` to `web/dist/img/logo.png` and `web/public/favicon.png` to `web/dist/favicon.png`:
 
-```html
-<img src="/static-files/my-logo.jpg" alt="Logo" />
+```text
+web/dist/
+├── static/
+│  ├── js/
+│  └── css/
+// highlight-start
+├── img/
+│  └── logo.png
+└── favicon.png
+// highlight-end
 ```
 
-> Note: because the directory `dist/` becomes your production root, it should not be included in the path.
+You can reference these files in your code without any special handling:
+
+```jsx title="web/src/components/Header/Header.js"
+import { Head } from '@redwoodjs/web'
+
+const Header = () => {
+  return (
+    <>
+      <Head>
+        // highlight-next-line
+        <link rel="icon" type="image/png" href="favicon.png" />
+      </Head>
+      // highlight-next-line
+      <img src="img/logo.png" alt="Logo" />
+    </>
+  )
+}
+
+export default Header
+```
