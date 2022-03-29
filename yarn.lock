@@ -13142,9 +13142,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.5.2":
-  version: 9.5.2
-  resolution: "cypress@npm:9.5.2"
+"cypress@npm:9.5.3":
+  version: 9.5.3
+  resolution: "cypress@npm:9.5.3"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -13178,7 +13178,7 @@ __metadata:
     listr2: ^3.8.3
     lodash: ^4.17.21
     log-symbols: ^4.0.0
-    minimist: ^1.2.5
+    minimist: ^1.2.6
     ospath: ^1.2.2
     pretty-bytes: ^5.6.0
     proxy-from-env: 1.0.0
@@ -13190,7 +13190,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 43ef6014ea93a7daa46425aa57181f1d65cf9ab011c46028d01f86c2cd6f3f4fc0ea18315e58666e9e9207d57d21226f052eebcacdd5e445e1b94cfe9b110e55
+  checksum: 41c33ab1874c81adcfaa2c8d8a5bbe611abefe03ab699c6a40ca4a9c64e34b51268eaa813968c62cae7d1501797f655ee7e4f808c1feeae4335a034a912f949f
   languageName: node
   linkType: hard
 
@@ -21602,10 +21602,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "minimist@npm:1.2.5"
-  checksum: c143b0c199af4df7a55c7a37b6465cdd438acdc6a3a345ba0fe9d94dfcc2042263f650879bc73be607c843deeaeaadf39c864e55bc6d80b36a025eca1a062ee7
+"minimist@npm:^1.2.0, minimist@npm:^1.2.5, minimist@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "minimist@npm:1.2.6"
+  checksum: d0b566204044481c4401abbd24cc75814e753b37268e7fe7ccc78612bf3e37bf1e45a6c43fb0b119445ea1c413c000bde013f320b7211974f2f49bcbec1d0dbf
   languageName: node
   linkType: hard
 
@@ -26226,7 +26226,7 @@ __metadata:
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
     core-js: 3.21.1
-    cypress: 9.5.2
+    cypress: 9.5.3
     cypress-wait-until: 1.7.2
     eslint: 8.12.0
     fast-glob: 3.2.11
