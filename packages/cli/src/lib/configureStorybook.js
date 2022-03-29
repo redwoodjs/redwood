@@ -36,7 +36,7 @@ export default function configureStorybook({ force }, newStorybookPreview) {
 
       const insideNewStorybookConfigWithoutReactAndDecoration =
         newStorybookPreview
-          .replace(/import *. as React from 'react'/, '')
+          .replace(/import \* as React from 'react'/, '')
           .replace(/export const decorators = .*/, '')
 
       const currentConfigWithoutDecoration = currentConfig.replace(
@@ -44,8 +44,9 @@ export default function configureStorybook({ force }, newStorybookPreview) {
         ''
       )
 
-      const reversedCurrentConfig =
-        currentConfigWithoutDecoration.split('\n').reverse()
+      const reversedCurrentConfig = currentConfigWithoutDecoration
+        .split('\n')
+        .reverse()
 
       const indexOfLastImport = reversedCurrentConfig.findIndex((value) =>
         /^import /.test(value)
