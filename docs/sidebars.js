@@ -82,7 +82,6 @@ module.exports = {
             },
           ],
         },
-        'builds',
         'cells',
         'cli-commands',
         'connection-pooling',
