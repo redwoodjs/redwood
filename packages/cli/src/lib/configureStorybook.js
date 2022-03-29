@@ -45,7 +45,7 @@ export default function configureStorybook({ force }, newStorybookPreview) {
       )
 
       const reverseCurrentConfig =
-        CurrentConfigWithoutDecoration.split('\n').reverse()
+        currentConfigWithoutDecoration.split('\n').reverse()
 
       const indexOfLastImport = reverseCurrentConfig.findIndex((value) =>
         /^import /.test(value)
