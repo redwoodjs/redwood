@@ -126,13 +126,13 @@ function wrapComponentWithComponent(
   wrappedComponent,
   { component, props, before, after }
 ) {
-  const findTagIndex = (regexString) => {
-    const openTagRegex = new RegExp(regexString)
-    return content.findIndex((line) => openTagRegex.test(line))
-  }
+  const findTagIndex = (regex) => content.findIndex((line) => regex.test(line))
 
-  const open = findTagIndex(`([^\S\r\n]*)<${wrappedComponent}\s*(.*)\s*>`)
-  const close = findTagIndex(`([^\S\r\n]*)<\/${wrappedComponent}>`) + 1
+  const open = findTagIndex(
+    new RegExp(`([^\S\r\n]*)<${wrappedComponent}\s*(.*)\s*>`)
+  )
+  const close =
+    findTagIndex(new RegExp(`([^\S\r\n]*)<\/${wrappedComponent}>`)) + 1
 
   if (open === -1 || close === -1) {
     throw new Error(`Could not find tags for ${wrappedComponent}`)
