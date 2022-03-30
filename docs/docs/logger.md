@@ -1,26 +1,27 @@
 # Logger
 
-RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing and after you have deployed.
+RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing and after you've deployed.
 
-Logging in the serverless ecosystem is not trivial and neither is its configuration. Redwood aims to make this easier.
+Logging in the serverless ecosystem isn't trivial and neither is its configuration.
+Redwood aims to make this easier.
 
-When choosing a Node.js logger to add to the framework, RedwoodJS required that it:
+When choosing a Node.js logger to add to the framework, we required that it:
 
-- Have a low-overhead, and be fast
-- Output helpful, readable information in development
-- Be highly configurable to set log levels, time formatting, and more
-- Support key redaction to prevent passwords or tokens from leaking out
-- Save to a file in local (or other) environments that can write to the file system
-- Stream to third-party log and application monitoring services vital to production logging in serverless environments like [LogFlare](https://logflare.app/), [Datadog](https://www.datadoghq.com/) or [LogDNA](https://www.logdna.com/)
-- Hook into [Prisma logging](https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging) to give visibility into connection issues, slow queries, and any unexpected errors
-- Have a solid Developer experience (DX) to get logging out-of-the-gate quickly
-- Use a compact configuration to set how to log (its `options`) and where to log -- file, stdout, or remote transport stream -- (its `destination`)
+- have low-overhead, and be fast
+- output helpful, readable information in development
+- be highly configurable
+- support key redaction to prevent sensitive information from leaking out
+- save to a file in environments that can write to the file system
+- stream to third-party log- and application-monitoring services vital to production logging in serverless environments
+- hook into [Prisma's logging capabilities](https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging) to give visibility into connection issues, slow queries, and any unexpected errors
 
-With those criteria in mind, Redwood includes [pino](https://github.com/pinojs/pino) with its rich [features](https://github.com/pinojs/pino/blob/master/docs/api.md), [ecosystem](https://github.com/pinojs/pino/blob/master/docs/ecosystem.md) and [community](https://github.com/pinojs/pino/blob/master/docs/ecosystem.md#community).
+With all this in mind, Redwood includes [pino](https://github.com/pinojs/pino) with its rich [features](https://github.com/pinojs/pino/blob/master/docs/api.md), [ecosystem](https://github.com/pinojs/pino/blob/master/docs/ecosystem.md) and [community](https://github.com/pinojs/pino/blob/master/docs/ecosystem.md#community).
 
-Plus ... pino means 🌲 pine tree! How perfect is that for RedwoodJS?
+Plus, pino means pine tree! 🌲 How perfect is that for Redwood?
 
-Note: RedwoodJS logging is setup for its api side only. For browser and web side error reporting or exception handling, these features will be considered in future releases.
+> **Logging is setup for the api side only**
+>
+> For browser and web side error reporting or exception handling, these features will be considered in future releases.
 
 ## Quick Start
 
