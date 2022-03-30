@@ -6,15 +6,20 @@ The router is designed to list all routes in a single file, with limited nesting
 
 ## Router and Route
 
-The first thing you need is a `Router`. It will contain all of your routes. The router will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
+The first thing you need is a `Router`.
+It'll contain all of your routes.
+The router attempts to match the current URL to each route in turn, and only render those with a matching `path`.
+The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
-Each route is specified with a `Route`. Our first route will tell the router what to render when no other route matches:
+Each route is specified using a `Route` component.
+Our first route will tell the router what to render when no other route matches:
 
-```jsx title="Routes.js"
+```jsx title="web/src/Routes.js"
 import { Router, Route } from '@redwoodjs/router'
 
 const Routes = () => (
   <Router>
+    // highlight-next-line
     <Route notfound page={NotFoundPage} />
   </Router>
 )
@@ -22,7 +27,7 @@ const Routes = () => (
 export default Routes
 ```
 
-The router expects a single `Route` with a `notfound` prop. When no other route is found to match, the component in the `page` prop will be rendered.
+The router expects a single `Route` with a `notfound` prop. When no routes match, the router renders the component in the not-found route's `page` prop.
 
 To create a route to a normal Page, you'll pass three props: `path`, `page`, and `name`:
 
@@ -34,9 +39,9 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 ## Private Routes
 
-Some pages should only be visible to authenticated users.
-
-We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
+Some pages should only be accessible to authenticated users.
+Redwood supports this using private `Set`s or the `Private` component.
+Read more [further down](#private-set).
 
 ## Sets of Routes
 
@@ -462,9 +467,8 @@ const SomePage = () => {
 
 ## Redirect
 
-If you want to declaratively redirect to a different page, use the `<Redirect>` component.
-
-In the example below, SomePage will redirect to the home page.
+If you want to declaratively redirect to a different page, use the `Redirect` component.
+For example, in the codeblock below, `SomePage` redirects to the home page:
 
 ```jsx title="SomePage.js"
 import { Redirect, routes } from '@redwoodjs/router'
@@ -474,21 +478,23 @@ const SomePage = () => {
 }
 ```
 
-In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
+In addition to the `to` prop, `Redirect` also takes an `options` prop. This is the same as [`navigate`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
 
 ## Code-splitting
 
-By default, the router will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, the router will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
+By default, the router code-splits on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, the router waits till the new Page module has loaded before re-rendering, thus preventing the "white-flash" effect.
 
-## Not code splitting
+### Opting-out of code-splitting
 
-If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, you can simply add the import statement to the `Routes.js` file:
+If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, simply import the Page into `web/src/Routes.js`:
 
-```jsx title="Routes.js"
+```jsx title="web/src/Routes.js"
 import HomePage from 'src/pages/HomePage'
 ```
 
-Redwood will detect your explicit import and refrain from splitting that page into a separate bundle. Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
+The router detects explicit imports and refrains from splitting explicitly-imported Pages into a separate bundle.
+
+Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
 
 ## Page loaders & PageLoadingContext
 
@@ -496,11 +502,14 @@ Redwood will detect your explicit import and refrain from splitting that page in
 
 Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link.
 
-In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
+To show a loader when your page chunks are loading, simply add the `whileLoadingPage` prop to your `Route`, `Set` or `Private` component:
 
-```jsx title="Routes.js"
+```jsx title="web/src/Routes.js"
+// highlight-next-line
 import SkeletonLoader from 'src/components/SkeletonLoader'
+
 <Router>
+  // highlight-next-line
   <Set whileLoadingPage={SkeletonLoader}>
     <Route path="/contact" page={ContactPage} name="contact" />
     <Route path="/about" page={AboutPage} name="about" />
@@ -508,13 +517,17 @@ import SkeletonLoader from 'src/components/SkeletonLoader'
 </Router>
 ```
 
-After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! The router takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
+After adding this to your app, you probably won't see it when navigating between pages.
+This's because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page.
+In fact, this behavior makes it feel like your pages take even longer to load than they actually do!
+
+The router takes this into account and, by default, only shows the loader when it takes more than 1000ms for the page to load. You can change this to whatever you like using the `pageLoadingDelay` prop on `Router`:
 
 ```jsx title="Routes.js"
 <Router pageLoadingDelay={500}>...</Router>
 ```
 
-Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
+Now the loader shows up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
 
 #### Using PageLoadingContext
 
