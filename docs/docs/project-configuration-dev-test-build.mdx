@@ -37,9 +37,7 @@ yarn workspace web add --dev @emotion/babel-plugin
 <br />
 
 3. Add the plugin to `web/babel.config.js`:
-```js
-// web/babel.config.js
-
+```jsx title="web/babel.config.js"
 module.exports = {
   plugins: ["@emotion"] // 👈 add the emotion plugin
 }
@@ -58,9 +56,7 @@ Let's take a peek at how it's all configured.
 At the root of your project is `jest.config.js`.
 It should look like this:
 
-```js
-// jest.config.js
-
+```jsx title="jest.config.js"
 module.exports = {
   rootDir: '.',
   projects: ['<rootDir>/{*,!(node_modules)/**/}/jest.config.js'],
@@ -74,7 +70,7 @@ This just tells Jest that the actual config files sit in each side, allowing Jes
 
 The web side's configuration sits in `./web/jest.config.js`
 
-```js
+```jsx
 const config = {
   rootDir: '../',
   preset: '@redwoodjs/testing/config/jest/web',
