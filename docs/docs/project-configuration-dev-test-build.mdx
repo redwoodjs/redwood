@@ -4,40 +4,42 @@ import ReactPlayer from 'react-player'
 
 ## Babel
 
-Out of the box Redwood configures [Babel](https://babeljs.io/) so that you can write modern JavaScript and TypeScript without needing to worry about transpilation at all.
+Redwood uses [Babel](https://babeljs.io/) so that you can write modern JavaScript and TypeScript without needing to worry about transpilation at all.
 GraphQL tags, JSX, SVG imports—all of it's handled for you.
 
-For those well-versed in Babel config, you can find Redwood's in [@redwoodjs/internal](https://github.com/redwoodjs/redwood/tree/main/packages/internal/src/build/babel).
+> For those well-versed in Babel config, you can find Redwood's in the [`@redwoodjs/internal`](https://github.com/redwoodjs/redwood/tree/main/packages/internal/src/build/babel) package.
 
 ### Configuring Babel
 
-For most projects, you won't need to configure Babel at all, but if you need to you can configure each side (web, api) individually using side-specific `babel.config.js` files.
+For most projects, you won't need to configure Babel at all.
+But if you need to, you can configure each side (web, api) individually using side-specific `babel.config.js` files.
 
 > **Heads up**
 >
 > `.babelrc{.js}` files are ignored.
-> You have to put your custom config in the appropriate side's `babel.config.js`: `web/babel.config.js` for web and `api/babel.config.js` for api.
+> You have to put custom config in the appropriate side's `babel.config.js`: `web/babel.config.js` for web and `api/babel.config.js` for api.
 
-Let's go over an example.
+Let's look at an example.
 
 #### Example: Adding Emotion
 
 Let's say we want to add the styling library [emotion](https://emotion.sh), which requires adding a Babel plugin.
 
 1. Create a `babel.config.js` file in `web`:
-```shell
+
+```
 touch web/babel.config.js
 ```
-<br />
 
 2. Add the `@emotion/babel-plugin` as a dependency:
-```shell
+
+```
 yarn workspace web add --dev @emotion/babel-plugin
 ```
-<br />
 
 3. Add the plugin to `web/babel.config.js`:
-```jsx title="web/babel.config.js"
+
+```js title="web/babel.config.js"
 module.exports = {
   plugins: ["@emotion"] // 👈 add the emotion plugin
 }
@@ -53,10 +55,10 @@ Now your custom web-side Babel config will be merged with Redwood's.
 Redwood uses [Jest](https://jestjs.io/) for testing.
 Let's take a peek at how it's all configured.
 
-At the root of your project is `jest.config.js`.
-It should look like this:
+At the root of your project is a file named `jest.config.js`.
+It should look something like this:
 
-```jsx title="jest.config.js"
+```js title="jest.config.js"
 module.exports = {
   rootDir: '.',
   projects: ['<rootDir>/{*,!(node_modules)/**/}/jest.config.js'],
@@ -68,9 +70,9 @@ This just tells Jest that the actual config files sit in each side, allowing Jes
 
 #### Web Jest Config
 
-The web side's configuration sits in `./web/jest.config.js`
+The web side's configuration sits in `web/jest.config.js`
 
-```jsx
+```js titile="web/jest.config.js"
 const config = {
   rootDir: '../',
   preset: '@redwoodjs/testing/config/jest/web',
@@ -79,8 +81,6 @@ const config = {
 
 module.exports = config
 ```
-
-> You can always see Redwood's latest configuration templates in the [create-redwood-app package](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/template/web/jest.config.js).
 
 The preset includes all the setup required to test everything that's going on in web: rendering React components and transforming JSX, automatically mocking Cells, transpiling with Babel, mocking the Router and the GraphQL client—the list goes on!
 You can find all the details in the [source](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/jest/web/jest-preset.js).
