@@ -1,48 +1,15 @@
 # Webhooks
 
-If you've used [Automate](https://automate.io/), [IFTTT](https://ifttt.com/maker_webhooks), [Pipedream](https://pipedream.com/docs/api/rest/webhooks/), or [Zapier](https://zapier.com/apps/webhook/integrations) then you're familiar with how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps. RedwoodJS helps you work with webhooks by giving you the tools to both receive and verify incoming webhooks and sign outgoing ones with ease.
+Webhooks enable third-party integrations and complex workflows such as one-to-one automation and data syncing between apps.
+They're glue for the web, and
+Redwood has with built-in support for receiving and verifying incoming webhooks as well as for signing outgoing ones.
 
-## What is a webhook
+## Verifying Webhooks
 
-Simply put, webhooks are a common way that third-party services notify your RedwoodJS application when an event of interest happens. They are a form of messaging and automation allowing distinct web applications to communicate with each other and send real-time data from one application to another whenever a given event occurs.
-
-The third-party considers these "outgoing Webhooks" and therefore your application receives "incoming Webhooks".
-
-When the api side of your Redwood app receives a webhook, it can parse it, process it, save it to replay later, or any other action needed.
-
-Webhooks are different from other integration methods in that the third-party pushes new events to your app instead of your app constantly pulling or polling for new data.
-
-### Examples of Webhooks
-
-Some examples of outgoing Webhooks are:
-
-- Netlify successfully [deploys a site](https://docs.netlify.com/site-deploys/notifications/#outgoing-webhooks)
-- Someone [pushes a PR to GitHub](https://docs.github.com/en/developers/webhooks-and-events/creating-webhooks)
-- Someone [posts in Discourse](https://meta.discourse.org/t/setting-up-webhooks/49045)
-- Stripe [completes a purchase](https://stripe.com/docs/webhooks)
-- A cron/scheduled task wants to invoke a long running [background function on Netlify](https://docs.netlify.com/functions/background-functions/)
-- and more webhook integrations via services like [IFTTT](https://ifttt.com/maker_webhooks), [Pipedream](https://pipedream.com/docs/api/rest/webhooks/) and [Zapier](https://zapier.com/apps/webhook/integrations)
-
-If you were to subscribe to one of these webhooks, you'd point it to an endpoint in your RedwoodJS api -- ie, a serverless function. But, because that function is out "in the cloud" you need to ensure that these run **only when they should**. That means your function must:
-
-- verify it comes from the place you expect
-- trust the party
-- know the payload sent in the hook hasn't been tampered with
-- ensure that the hook isn't reprocessed or replayed (sometimes)
-
-That is, you need to **verify your incoming webhooks**.
-
-## Verifying Webhooks with RedwoodJS Made Easy
-
-The RedwoodJS [`api/webhooks` package](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/webhooks/index.ts) makes it easy to receive and verify incoming webhooks by implementing many of the most commonly used Webhook signature verifiers.
-
-### Webhook Verification
-
-Webhooks have a few ways of letting you know they should be trusted. The most common is by sending along a "signature" header. They typically sign their payload with a secret key (in a few ways) and expect you to validate the signature before processing it.
-
-### Webhook Signature Verifiers
-
-Common signature verification methods are:
+Webhooks have a few ways of letting you know they should be trusted.
+The most common is by sending along a "signature" header.
+The third-party sending the webhook signs the payload with a secret key and expect you to validate the signature.
+The `@redwoodjs/api` package implements many of the most common webhook signature verifiers:
 
 - SHA256 ([GitHub](https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks#validating-payloads-from-github) and [Discourse](https://meta.discourse.org/t/setting-up-webhooks/49045))
 - Base64 SHA256 ([Svix](https://docs.svix.com/receiving/verifying-payloads/how-manual) and [Clerk](https://docs.clerk.dev/reference/webhooks#verifying-requests))
@@ -51,11 +18,11 @@ Common signature verification methods are:
 - Timestamp Scheme ([Stripe](https://stripe.com/docs/webhooks/best-practices) / Redwood default)
 - Secret Key (Custom, [Orbit](https://docs.orbit.love/docs/webhooks))
 
-RedwoodJS adds a way to do no verification as well of testing or in the case your third party doesn't sign the payload.
+And in case the third-part doesn't sign the payload, there's a way to skip verification too:
 
 - SkipVerifier (bypass verification, or no verification)
 
-RedwoodJS implements [signatureVerifiers](https://github.com/dthyresson/redwood/tree/dt-secure-handler/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
+Redwood implements [signatureVerifiers](https://github.com/dthyresson/redwood/tree/dt-secure-handler/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
 
 ```jsx
 export type SupportedVerifiers =
@@ -70,7 +37,7 @@ export type SupportedVerifiers =
   | JwtVerifier
 ```
 
-Each `SupportedVerifier` implements a method to `sign` and `verify` a payload with a secret (if needed).
+Each supported verifier implements a method to `sign` and `verify` a payload with a secret (if needed).
 
 When the webhook needs [creates a verifier](https://github.com/dthyresson/redwood/blob/b3b21a4a2c7a96ac8d1fd8b078a9869d3f2f1cec/packages/api/src/auth/verifiers/index.ts#L12) in order to `verifyEvent`, `verifySignature` or `signPayload` it does so via:
 
@@ -757,22 +724,26 @@ export const handler = async (event: APIGatewayEvent) => {
 }
 ```
 
-## Signing a Payload for an Outgoing Webhook
+## Signing an Outgoing Webhook
 
-To sign a payload for an outgoing webhook, the `api/webhooks` package exports [signPayload](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/webhooks/index.ts), a function that signs a payload using a [verification method](https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth/verifiers), creating your "webhook signature". Once you have the signature, you can add it to your request's http headers with a name of your choosing, and then post the request to the endpoint:
+To sign an outgoing webhook, the `@redwoodjs/api` package exports [signPayload](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/webhooks/index.ts), a function that signs a payload using a [verification method](https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth/verifiers), creating your "webhook signature".
+Once you have the signature, you can add it to your request's http headers with a name of your choosing, and then post the request to the endpoint:
 
-```jsx
+```js
 import got from 'got'
+// highlight-next-line
 import { signPayload } from '@redwoodjs/api/webhooks'
 
 const YOUR_OUTGOING_WEBHOOK_DESTINATION_URL = 'https://example.com/receive'
 const YOUR_WEBHOOK_SIGNATURE = process.env.WEBHOOK_SIGNATURE
 
 export const sendOutGoingWebhooks = async ({ payload }) => {
+  // highlight-start
   const signature = signPayload('timestampSchemeVerifier', {
     payload,
     secret,
   })
+  // highlight-end
 
   await got.post(YOUR_OUTGOING_WEBHOOK_DESTINATION_URL, {
     responseType: 'json',
@@ -787,18 +758,7 @@ export const sendOutGoingWebhooks = async ({ payload }) => {
 }
 ```
 
-## How To Test Webhooks
+## Testing Webhooks
 
-Because your webhook is typically sent from a third-party's system, manually testing webhooks can be difficult and time-consuming. See [How To Test Webhooks](serverless-functions.md#how-to-test-webhooks) to learn how to write tests that can automate tests and help you implement your webhook handler.
-
-## More Information
-
-Want to learn more about webhooks?
-
-- [Webhook.site lets you easily inspect, test and automate (with the visual Custom Actions builder, or WebhookScript) any incoming HTTP request or e-mail.](https://webhook.site/#!/)
-- [What is a Webhook](https://simonfredsted.com/1583) by Simon Fredsted
-- [About Webhooks](https://docs.github.com/en/developers/webhooks-and-events/about-webhooks) on GitHub
-- [What are Webhooks? A simple guide to connection apps with webhooks](https://zapier.com/blog/what-are-webhooks/) on Zapier
-- [What are Webhooks? Easy Explanation & Tutorial](https://snipcart.com/blog/what-are-webhooks-explained-example) on Snipcart
-- [What are Webhooks and Why You Can’t Afford to Ignore Them](https://www.chargebee.com/blog/what-are-webhooks-explained/) on Charbee
-- [What is a webhook: How they work and how to set them up](https://www.getvero.com/resources/webhooks/) on Vero
+Because webhook are typically something you receive from a third-party, testing them can be difficult and time consuming.
+For more, see [How To Test Webhooks](serverless-functions.md#how-to-test-webhooks).
