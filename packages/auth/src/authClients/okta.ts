@@ -19,13 +19,8 @@ export const okta = (client: Okta): AuthClientOkta => {
     client,
     restoreAuthState: async () => {
       if (client.isLoginRedirect()) {
-        const state = await client.handleLoginRedirect()
-        console.log('state: ' + state)
-      } else if (
-        global?.location?.search?.includes('code=') &&
-        global?.location?.search?.includes('state=')
-      ) {
-        console.log('test')
+        await client.storeTokensFromRedirect()
+        await client.handleLoginRedirect()
       } else if (!(await client.isAuthenticated)) {
         client.signInWithRedirect()
       }
@@ -33,7 +28,10 @@ export const okta = (client: Okta): AuthClientOkta => {
     login: async (options?) => client.signInWithRedirect(options),
     logout: (options?) => client.signOut(options),
     signup: async (options?) => client.signInWithRedirect(options),
-    getToken: async () => client.tokenManager.get('accessToken'),
+    getToken: async () =>
+      client.tokenManager.get('accessToken').then((res) => {
+        return res.accessToken
+      }),
     getUserMetadata: async () => {
       const user = client.token.getUserInfo()
       return user || null
