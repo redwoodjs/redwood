@@ -1,117 +1,71 @@
 # Serverless Functions
 
-<!-- `redwood.toml`&mdash;`api/src/functions` by default.  -->
+Redwood looks for serverless functions in `api/src/functions`. Each function is mapped to a URL based on its filename.
+For example, when you start the dev server, `api/src/functions/graphql.js` gets mapped to `http://localhost:8911/graphql`.
 
-Redwood looks for serverless functions in `api/src/functions`. Each function is mapped to a URI based on its filename. For example, you can find `api/src/functions/graphql.js` at `http://localhost:8911/graphql`.
+> They're called "serverless", but they can be used in "serverful" environments too, like Render or Heroku.
 
 ## Creating Serverless Functions
 
-Creating serverless functions is easy with Redwood's function generator:
+You can create a serverless function with the function generator:
 
-```bash
+```
 yarn rw g function <name>
 ```
 
-This will generate a stub serverless function in the folder `api/src/functions/<name>`, along with a test and an empty scenarios file.
+> **Directory and File Structure**
+>
+> Say you have an endpoint at `/hello`.
+> You could structure the hello function in any of the following ways:
+>
+> - `api/src/functions/hello.js`
+> - `api/src/functions/hello/hello.js`
+> - `api/src/functions/hello/index.js`
+>
+> Other files in the folder won't be exposed as an endpoint.
 
-_Example of a bare minimum handler you need to get going:_
+## The handler
 
-```jsx
+For a lambda function to be a lambda function, it has to export a handler that returns a status code.
+The handler receives two arguments: `event` and `context`.
+What it returns is the `response`, which should include a `statusCode` at the very least:
+
+```js title="api/src/functions/hello/hello.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      data: '${name} function',
-    }),
   }
 }
 ```
 
-> Just a note here, we call them 'serverless' but they can also be used on 'serverful' hosted environments too, such as Render or Heroku.
-
-## The handler
-
-For a lambda function to be a lambda function, it must export a handler that returns a status code. The handler receives two arguments: `event` and `context`. Whatever it returns is the `response`, which should include a `statusCode` at the very least.
-
-> **File/Folder Structure**
->
-> For example, with a target function endpoint name of /hello, you could save the function file in one of the following ways:
->
-> - `./api/src/functions/hello.{js,ts}`
-> - `./api/src/functions/hello/hello.{js,ts}`
-> - `./api/src/functions/hello/index.{js,ts}`
->
-> Other files in the folder will _not_ be exposed as an endpoint
-
-### Re-using/Sharing code
-
-You can use code in `api/src` in your serverless function, some examples:
-
-```jsx
-// importing `db` directly
-import { db } from 'src/lib/db'
-
-// importing services
-import { update } from 'src/services/subscriptions'
-
-// importing a custom shared library
-import { reportError } from 'src/lib/errorHandling'
-```
-
-If you just want to move some logic into another file, that's totally fine too!
-
-```bash
-api/src
-├── functions
-│   ├── graphql.ts
-│   └── helloWorld
-│       ├── helloWorld.scenarios.ts
-│       ├── helloWorld.test.ts
-│       └── helloWorld.ts     # <-- imports hellWorldLib
-│       └── helloWorldLib.ts  # <-- exports can be used in the helloWorld
-```
-
-## Developing locally
-
-When you run `yarn rw dev` - it'll watch for changes and make your functions available at:
-
-- `localhost:8911/{functionName}` and
-- `localhost:8910/.redwood/functions/{functionName}` (used by the web side).
-
-Note that the `.redwood/functions` path is determined by your setting in your [redwood.toml](app-configuration-redwood-toml.md#web) - and is used both in development and in the deployed Redwood app
-
 ## Testing
 
-You can write tests and scenarios for your serverless functions very much like you would for services, but it's important to properly mock the information that the function `handler` needs.
+You can write tests and scenarios for your serverless functions similar to the way you would for your services, but it's important to get your mocks right.
+Redwood has a few utilities to help you mock `event` and `context`:
 
-To help you mock the `event` and `context` information, we've provided several api testing fixture utilities:
-
-| Mock                | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Utility             | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `mockHttpEvent`     | Use this to mock out the http request `event` that is received by your function in unit tests. Here you can set `headers`, `httpMethod`, `queryStringParameters` as well as the `body` and if the body `isBase64Encoded`. The `event` contains information from the invoker as JSON-formatted string whose structure will vary. See [Working with AWS Lambda proxy integrations for HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html) for the payload format. |
+| `mockHttpEvent`     | Use this to mock HTTP request `event` that's received by your function in unit tests. Here you can set `headers`, `httpMethod`, `queryStringParameters` as well as the `body` and if the body `isBase64Encoded`. The `event` contains information from the invoker as JSON-formatted string whose structure will vary. See [Working with AWS Lambda proxy integrations for HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html) for the payload format. |
 | `mockContext`       | Use this function to mock the http `context`. Your function handler receives a context object with properties that provide information about the invocation, function, and execution environment. See [AWS Lambda context object in Node.js](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html) for what context properties you can mock.                                                                                                                                                                       |
-| `mockSignedWebhook` | Use this function to mock a signed webhook. This is a specialized `mockHttpEvent` mock that also signs the payload and adds a signature header needed to verify that the webhook is trustworthy. See [How to Receive and Verify an Incoming Webhook](webhooks.md#how-to-receive-and-verify-an-incoming-webhook) to learn more about signing and verifying webhooks.                                                                                                                                    |
+| `mockSignedWebhook` | Use this function to mock a signed webhook. This is a specialized `mockHttpEvent` mock that also signs the payload and adds a signature header needed to verify that the webhook is trustworthy. See [How to Receive and Verify an Incoming Webhook](webhooks.md#how-to-receive-and-verify-an-incoming-webhook) to learn more about signing and verifying webhooks.                                                                                                                                                            |
 
 ### How to Test Serverless Functions
 
-Let's learn how to test a serverless function by first creating a simple function that divides two numbers.
+Let's learn how to test a serverless function by creating one that divides two numbers.
 
-As with all serverless lambda functions, the handler accepts an `APIGatewayEvent` which contains information from the invoker.
-That means it will have the HTTP headers, the querystring parameters, the method (GET, POST, PUT, etc), cookies, and the body of the request.
+As with all lambda functions, the handler accepts an `APIGatewayEvent` which contains information from the invoker.
+That means it'll have the HTTP headers, the querystring parameters, the method (GET, POST, PUT, etc), cookies, and the body of the request.
 See [Working with AWS Lambda proxy integrations for HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html) for the payload format.
 
-Let's generate our function:
+Let's start by generating our function:
 
-```bash
+```
 yarn rw generate function divide
 ```
 
 We'll use the querystring to pass the `dividend` and `divisor` to the function handler on the event as seen here to divide 10 by 2.
 
-```bash
+```
 // request
 http://localhost:8911/divide?dividend=10&divisor=2
 ```
@@ -183,13 +137,11 @@ That means we need to write some tests.
 
 To test a serverless function, you'll work with the test script associated with the function. You'll find it in the same directory as your function:
 
-```bash
-api
-├── src
-│   ├── functions
-│   │   ├── divide
-│   │   │   ├── divide.ts
-│   │   │   ├── divide.test.ts
+```
+api/src/functions/divide/
+├── divide.js
+├── divide.test.js
+└── divide.scenarios.js
 ```
 
 The setup steps are to:
