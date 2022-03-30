@@ -15,10 +15,6 @@ rwServeTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
   })
 })
 
-rwServeTest.afterAll(async () => {
-  noJsBrowser.close()
-})
-
 rwServeTest(
   'Check that homepage is prerendered',
   async ({ port }: ServeFixture & PlaywrightTestArgs) => {
@@ -38,6 +34,8 @@ rwServeTest(
       'Admin',
       'Log In',
     ])
+
+    pageWithoutJs.close()
   }
 )
 
@@ -51,5 +49,6 @@ rwServeTest(
     expect(aboutPageContent).toBe(
       'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!'
     )
+    pageWithoutJs.close()
   }
 )
