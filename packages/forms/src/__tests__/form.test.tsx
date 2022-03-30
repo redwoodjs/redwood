@@ -58,16 +58,12 @@ describe('Form', () => {
           defaultValue="2021-04-16T12:34"
         />
         <DateField name="date" defaultValue="2021-04-16" />
-        <SelectField name="select1" data-testid="select1">
+        <SelectField name="select1">
           <option>Option 1</option>
           <option>Option 2</option>
           <option>Option 3</option>
         </SelectField>
-        <SelectField
-          name="select2"
-          data-testid="select2"
-          validation={{ valueAsNumber: true }}
-        >
+        <SelectField name="select2" validation={{ valueAsNumber: true }}>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
@@ -334,7 +330,7 @@ describe('Form', () => {
   })
 
   // Note the good JSON case is tested in an earlier test
-  it('for a TextAreaField with transformValue set to "Json", it automatically sets JSON validation.  Bad JSON case', async () => {
+  it('does not call the onSubmit function for a bad entry into a TextAreaField with valueAsJSON', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -342,7 +338,6 @@ describe('Form', () => {
         <TextAreaField
           name="jsonField"
           defaultValue="{bad-json}"
-          data-testid="jsonField"
           validation={{ valueAsJSON: true }}
         />
         <Submit>Save</Submit>
@@ -356,7 +351,7 @@ describe('Form', () => {
     expect(mockFn).not.toHaveBeenCalled()
   })
 
-  it('for a TextAreaField with valueAsJSON.  Bad JSON case 2', async () => {
+  it('displays a FieldError for a bad entry into a TextAreaField with valueAsJSON', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -364,29 +359,6 @@ describe('Form', () => {
         <TextAreaField
           name="jsonField"
           defaultValue="{bad-json}"
-          data-testid="jsonField"
-          validation={{ valueAsJSON: true }}
-        />
-        <Submit>Save</Submit>
-      </Form>
-    )
-    await act(async () => {
-      fireEvent.submit(screen.getByText('Save'))
-    })
-
-    // The validation should catch and prevent the onSubmit from being called
-    expect(mockFn).not.toHaveBeenCalled()
-  })
-
-  it('for a TextAreaField with valueAsJSON.  Bad JSON case 3', async () => {
-    const mockFn = jest.fn()
-
-    render(
-      <Form onSubmit={mockFn}>
-        <TextAreaField
-          name="jsonField"
-          defaultValue="{bad-json}"
-          data-testid="jsonField"
           validation={{ valueAsJSON: true }}
         />
         <FieldError name="jsonField" data-testid="FieldError" />
@@ -412,14 +384,12 @@ describe('Form', () => {
         <TextField
           name="phone"
           defaultValue="abcde"
-          data-testid="phoneField"
           validation={{ pattern: /^[0-9]+$/i }}
         />
         <FieldError name="phone" data-testid="phoneFieldError" />
         <TextField
           name="address.street"
           defaultValue="George123"
-          data-testid="streetField"
           validation={{ pattern: /^[a-zA-z]+$/i }}
           errorClassName="border-red"
         />
@@ -454,7 +424,6 @@ describe('Form', () => {
           id="phone"
           name="phone"
           defaultValue="abcde"
-          data-testid="phoneField"
           validation={{ pattern: /^[0-9]+$/i }}
         />
         <FieldError name="phone" data-testid="phoneFieldError" />
@@ -498,7 +467,6 @@ describe('Form', () => {
         <TextField
           name="0"
           defaultValue="abcde"
-          data-testid="phoneField"
           validation={{ pattern: /^[0-9]+$/i }}
         />
         <FieldError name="0" data-testid="phoneFieldError" />
@@ -514,7 +482,7 @@ describe('Form', () => {
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
 
-  it('Fields with emptyAsUndefined and emptyAsNull not defined return appropriate values', async () => {
+  it('Fields with emptyAs not defined return appropriate values', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -523,7 +491,7 @@ describe('Form', () => {
         <TextField name="textAreaField" />
         <NumberField name="numberField" />
         <DateField name="dateField" />
-        <SelectField name="selectField" data-testid="select2" defaultValue="">
+        <SelectField name="selectField" defaultValue="">
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
@@ -549,7 +517,7 @@ describe('Form', () => {
         textField: '',
         textAreaField: '',
         numberField: NaN,
-        dateField: expect.objectContaining(new Date(NaN)),
+        dateField: new Date(NaN),
         selectField: '',
         checkboxField0: false,
         checkboxField1: true,
@@ -559,21 +527,16 @@ describe('Form', () => {
     )
   })
 
-  it('Fields with emptyAsUndefined defined return appropriate values', async () => {
+  it(`returns appropriate values for fields with emptyAs={'undefined'}`, async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
         <TextField name="textField" emptyAs={'undefined'} />
-        <TextAreaField name="textAreaField" emptyAsUndefined />
-        <NumberField name="numberField" emptyAsUndefined />
-        <DateField name="dateField" emptyAsUndefined />
-        <SelectField
-          name="selectField"
-          data-testid="select2"
-          defaultValue=""
-          emptyAs={null}
-        >
+        <TextAreaField name="textAreaField" emptyAs={'undefined'} />
+        <NumberField name="numberField" emptyAs={'undefined'} />
+        <DateField name="dateField" emptyAs={'undefined'} />
+        <SelectField name="selectField" defaultValue="" emptyAs={'undefined'}>
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
@@ -583,7 +546,7 @@ describe('Form', () => {
           name="jsonField"
           defaultValue=""
           validation={{ valueAsJSON: true }}
-          emptyAsUndefined
+          emptyAs={'undefined'}
         />
 
         <Submit>Save</Submit>
@@ -606,25 +569,16 @@ describe('Form', () => {
     )
   })
 
-  it('returns appropriate values for fields with emptyAsNull defined', async () => {
+  it('returns null for empty values for fields with emptyAs={null}', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsNull />
-        <TextAreaField
-          name="textAreaField"
-          emptyAsNull
-          emptyAsUndefined={false}
-        />
-        <NumberField name="numberField" emptyAsNull />
-        <DateField name="dateField" emptyAsNull />
-        <SelectField
-          name="selectField"
-          data-testid="select2"
-          defaultValue=""
-          emptyAsNull
-        >
+        <TextField name="textField" emptyAs={null} />
+        <TextAreaField name="textAreaField" emptyAs={null} />
+        <NumberField name="numberField" emptyAs={null} />
+        <DateField name="dateField" emptyAs={null} />
+        <SelectField name="selectField" defaultValue="" emptyAs={null}>
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
@@ -634,7 +588,7 @@ describe('Form', () => {
           name="jsonField"
           defaultValue=""
           validation={{ valueAsJSON: true }}
-          emptyAsNull
+          emptyAs={null}
         />
 
         <Submit>Save</Submit>
@@ -657,22 +611,16 @@ describe('Form', () => {
     )
   })
 
-  it('returns null if empty for fields with both emptyAsNull and emptyAsUndefined', async () => {
+  it('returns appropriate value for empty values for fields with emptyAs={0}', async () => {
     const mockFn = jest.fn()
 
     render(
       <Form onSubmit={mockFn}>
-        <TextField name="textField" emptyAsNull emptyAsUndefined />
-        <TextAreaField name="textAreaField" emptyAsNull emptyAsUndefined />
-        <NumberField name="numberField" emptyAsNull emptyAsUndefined />
-        <DateField name="dateField" emptyAsNull emptyAsUndefined />
-        <SelectField
-          name="selectField"
-          data-testid="select2"
-          defaultValue=""
-          emptyAsNull
-          emptyAsUndefined
-        >
+        <TextField name="textField" emptyAs={0} />
+        <TextAreaField name="textAreaField" emptyAs={0} />
+        <NumberField name="numberField" emptyAs={0} />
+        <DateField name="dateField" emptyAs={0} />
+        <SelectField name="selectField" defaultValue="" emptyAs={0}>
           <option value="">No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
@@ -682,8 +630,7 @@ describe('Form', () => {
           name="jsonField"
           defaultValue=""
           validation={{ valueAsJSON: true }}
-          emptyAsNull
-          emptyAsUndefined
+          emptyAs={0}
         />
 
         <Submit>Save</Submit>
@@ -696,18 +643,104 @@ describe('Form', () => {
 
     expect(mockFn).toBeCalledWith(
       {
-        textField: null,
-        textAreaField: null,
-        numberField: null,
-        dateField: null,
-        selectField: null,
-        jsonField: null,
+        textField: 0,
+        textAreaField: 0,
+        numberField: 0,
+        dateField: 0,
+        selectField: 0,
+        jsonField: 0,
       },
       expect.anything() // event that triggered the onSubmit call
     )
   })
 
-  it('should have appropriate validation for NumberFields and DateFields with emptyAsNull', async () => {
+  it(`returns an empty string for empty values for a field with emptyAs={''}`, async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" emptyAs={''} />
+        <TextAreaField name="textAreaField" emptyAs={''} />
+        <NumberField name="numberField" emptyAs={''} />
+        <DateField name="dateField" emptyAs={''} />
+        <SelectField name="selectField" defaultValue="" emptyAs={''}>
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          emptyAs={''}
+        />
+
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: '',
+        textAreaField: '',
+        numberField: '',
+        dateField: '',
+        selectField: '',
+        jsonField: '',
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it(`returns a NaN value for empty values for a field with emptyAs={'NaN'}`, async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="textField" emptyAs={'NaN'} />
+        <TextAreaField name="textAreaField" emptyAs={'NaN'} />
+        <NumberField name="numberField" emptyAs={'NaN'} />
+        <DateField name="dateField" emptyAs={'NaN'} />
+        <SelectField name="selectField" defaultValue="" emptyAs={'NaN'}>
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          emptyAs={'NaN'}
+        />
+
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: NaN, // TBD - review if correct
+        textAreaField: NaN,
+        numberField: NaN,
+        dateField: new Date(NaN),
+        selectField: NaN,
+        jsonField: '', // Exception: NaN is not applicable to be assigned to a json field
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('should have appropriate validation for NumberFields and DateFields with emptyAs={null}', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -715,10 +748,10 @@ describe('Form', () => {
         <NumberField
           name="numberField"
           data-testid="numberField"
-          emptyAsNull
+          emptyAs={null}
           validation={{ min: 10 }}
         />
-        <DateField name="dateField" emptyAsNull />
+        <DateField name="dateField" emptyAs={null} />
         <Submit>Save</Submit>
       </Form>
     )
@@ -733,7 +766,7 @@ describe('Form', () => {
     expect(mockFn).not.toHaveBeenCalled()
   })
 
-  it('should return a number for a textfield with valueAsNumber, regardless of emptyAsUndefined or emptyAsNull', async () => {
+  it('should return a number for a textfield with valueAsNumber, regardless of emptyAs', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -747,13 +780,19 @@ describe('Form', () => {
           name="tf2"
           validation={{ valueAsNumber: true }}
           defaultValue="42"
-          emptyAsUndefined
+          emptyAs={'undefined'}
         />
         <TextField
           name="tf3"
           validation={{ valueAsNumber: true }}
           defaultValue="42"
-          emptyAsNull
+          emptyAs={null}
+        />
+        <TextField
+          name="tf4"
+          validation={{ valueAsNumber: true }}
+          defaultValue="42"
+          emptyAs={'NaN'}
         />
         <Submit>Save</Submit>
       </Form>
@@ -768,12 +807,13 @@ describe('Form', () => {
         tf1: 42,
         tf2: 42,
         tf3: 42,
+        tf4: 42,
       },
       expect.anything() // event that triggered the onSubmit call
     )
   })
 
-  it('should return a date for a textfield with valueAsDate, regardless of emptyAsUndefined or emptyAsNull', async () => {
+  it('should return a date for a textfield with valueAsDate, regardless of emptyAs', async () => {
     const mockFn = jest.fn()
 
     render(
@@ -787,13 +827,19 @@ describe('Form', () => {
           name="tf2"
           validation={{ valueAsDate: true }}
           defaultValue="2022-02-01"
-          emptyAsUndefined
+          emptyAs={'undefined'}
         />
         <TextField
           name="tf3"
           validation={{ valueAsDate: true }}
           defaultValue="2022-02-01"
-          emptyAsNull
+          emptyAs={null}
+        />
+        <TextField
+          name="tf4"
+          validation={{ valueAsDate: true }}
+          defaultValue="2022-02-01"
+          emptyAs={'NaN'}
         />
         <Submit>Save</Submit>
       </Form>
@@ -808,6 +854,7 @@ describe('Form', () => {
         tf1: new Date('2022-02-01'),
         tf2: new Date('2022-02-01'),
         tf3: new Date('2022-02-01'),
+        tf4: new Date('2022-02-01'),
       },
       expect.anything() // event that triggered the onSubmit call
     )

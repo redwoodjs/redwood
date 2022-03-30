@@ -72,7 +72,10 @@ interface RedwoodRegisterOptions extends RegisterOptions {
 }
 
 /**
- * We allow the field to return a variety of values if the input has an empty value
+ * EmptyAsValue defines the values that can be used for the field emptyAs prop
+ * It sets the value to be returned from the field if the field is empty.
+ * If the valueOf prop is truly undefined (not 'undefined'), it will return
+ * a default value corresponding to the type of field
  */
 
 type EmptyAsValue = null | 'undefined' | 0 | '' | 'NaN'
@@ -160,9 +163,16 @@ const useErrorStyles = ({
 // Used to determine if a value is empty.
 const isValueEmpty = (val: string): boolean => val === ''
 
+type ValueAsType =
+  | 'valueAsDate'
+  | 'valueAsJSON'
+  | 'valueAsNumber'
+  | 'valueAsText'
 // if appropriate, one of the functions in the SET_VALUE_AS_FCNS object is
 // passed to the react-hook-forms setValueAs prop by the setCoercion function
-const SET_VALUE_AS_FUNCTIONS: Record<string, Record<string, any>> = {
+// There may be an alternate solution using closures that is less explicit, but
+// would likely be more troublesome to debug.
+const SET_VALUE_AS_FUNCTIONS: Record<ValueAsType, Record<string, any>> = {
   /*  valueAsBoolean: {
     // r-h-f returns a boolean if a checkBox type, but also handle string case in case valueAsBoolean is used
     base: (val: boolean | string): boolean => !!val,
@@ -175,6 +185,12 @@ const SET_VALUE_AS_FUNCTIONS: Record<string, Record<string, any>> = {
       isValueEmpty(val) ? null : new Date(val),
     emptyAsUndefined: (val: string): Date | undefined =>
       isValueEmpty(val) ? undefined : new Date(val),
+    emptyAsNaN: (val: string): Date =>
+      isValueEmpty(val) ? new Date(NaN) : new Date(val),
+    emptyAsString: (val: string): Date | '' =>
+      isValueEmpty(val) ? '' : new Date(val),
+    emptyAsZero: (val: string): Date | 0 =>
+      isValueEmpty(val) ? 0 : new Date(val),
   },
   valueAsJSON: {
     emptyAsDefaultRequired: (val: string) => {
@@ -196,7 +212,27 @@ const SET_VALUE_AS_FUNCTIONS: Record<string, Record<string, any>> = {
     },
     emptyAsNull: (val: string) => {
       if (isValueEmpty(val)) {
-        return null // represents invalid JSON parse to JSONValidation function
+        return null
+      }
+      try {
+        return JSON.parse(val)
+      } catch (e) {
+        return NaN // represents invalid JSON parse to JSONValidation function
+      }
+    },
+    emptyAsString: (val: string) => {
+      if (isValueEmpty(val)) {
+        return ''
+      }
+      try {
+        return JSON.parse(val)
+      } catch (e) {
+        return NaN // represents invalid JSON parse to JSONValidation function
+      }
+    },
+    emptyAsZero: (val: string) => {
+      if (isValueEmpty(val)) {
+        return 0
       }
       try {
         return JSON.parse(val)
@@ -210,14 +246,24 @@ const SET_VALUE_AS_FUNCTIONS: Record<string, Record<string, any>> = {
       isValueEmpty(val) ? null : +val,
     emptyAsUndefined: (val: string): number | undefined =>
       isValueEmpty(val) ? undefined : +val,
+    emptyAsNaN: (val: string): number | typeof NaN =>
+      isValueEmpty(val) ? NaN : +val,
+    emptyAsString: (val: string): number | '' =>
+      isValueEmpty(val) ? '' : +val,
+    emptyAsZero: (val: string): number => (isValueEmpty(val) ? 0 : +val),
   },
   valueAsText: {
     emptyAsNull: (val: string) => (isValueEmpty(val) ? null : val),
     emptyAsUndefined: (val: string) => (isValueEmpty(val) ? undefined : val),
+    emptyAsNaN: (val: string): string | typeof NaN =>
+      isValueEmpty(val) ? NaN : val,
+    emptyAsString: (val: string): string => (isValueEmpty(val) ? '' : val),
+    emptyAsZero: (val: string): string | number =>
+      isValueEmpty(val) ? 0 : val,
   },
 }
 
-const getSetValueAsFcn = (type: string, emptyAs?: EmptyAsValue) => {
+const getSetValueAsFcn = (type: ValueAsType, emptyAs?: EmptyAsValue) => {
   const typeObj = SET_VALUE_AS_FUNCTIONS[type]
   if (typeObj === undefined) {
     throw Error(`Type ${type} is unsupported.`)
@@ -243,22 +289,24 @@ const getSetValueAsFcn = (type: string, emptyAs?: EmptyAsValue) => {
     default:
       // set the default SetValueAsFcn
       switch (type) {
-        case 'number':
+        case 'valueAsNumber':
           // default r-h-f operation, which
           fcn = SET_VALUE_AS_FUNCTIONS.valueAsNumber.emptyAsNaN
           break
-        case 'date':
-        case 'datetime-local':
-          why not type error
-          fcn = SET_VALUE_AS_FUNCTIONS.valueAsDate.emptyAsNull
+        case 'valueAsDate':
+          fcn = SET_VALUE_AS_FUNCTIONS.valueAsDate.emptyAsNaN
           break
-        case 'text':
+        case 'valueAsJSON':
+          fcn = SET_VALUE_AS_FUNCTIONS.valueAsJSON.emptyAsNull
+          break
+        case 'valueAsText':
+          fcn = SET_VALUE_AS_FUNCTIONS.valueAsText.emptyAsString
           break
       }
       break
   }
   if (fcn === undefined) {
-    throw Error(`emptyAs prop of ${emptyAs} is unsupported for this type.`)
+    console.error(`emptyAs prop of ${emptyAs} is unsupported for this type.`)
   }
   return fcn
 }
@@ -323,7 +371,8 @@ const setCoercion = (
     // the setValue technique is not compatible with r-h-f valueAsDate prop.
     // This prevents the use of the emptyAsUndefined and emptyAsNull logic.
     // Thus, we need to implement our own value to date conversion
-    if (emptyAsNull) {
+    validation.setValueAs = getSetValueAsFcn('valueAsDate', emptyAs)
+    /*    if (emptyAsNull) {
       delete validation.valueAsDate
       validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsDate.emptyAsNull
     } else if (emptyAsUndefined) {
@@ -333,13 +382,15 @@ const setCoercion = (
     } else {
       // we can use redwood hook forms usevalueAsDate
       validation.valueAsDate = true
-    }
+    }*/
   } else if (type === 'number' || validation.valueAsNumber) {
     // This is a number input
     // Note we cannot pass on the standard r-h-f valueAsNumber prop because
     // the setValue technique is not compatible with r-h-f valueAsNumber prop
     // this prevents the use the emptyAsUndefined and emptyAsNull logic
     // Thus, we need to implement our own value to number conversion
+    validation.setValueAs = getSetValueAsFcn('valueAsNumber', emptyAs)
+    /*
     if (emptyAsNull) {
       delete validation.valueAsNumber
       validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsNumber.emptyAsNull
@@ -350,24 +401,26 @@ const setCoercion = (
     } else {
       // we can use redwood hook forms usevalueAsNumber
       validation.valueAsNumber = true
-    }
+    }*/
   } else if (
     // type is undefined for <select> and most other fields that aren't input
     // fields
     (type === 'text' || type === undefined) &&
-    /Id$/.test(name || '') &&
-    !validation.required
+    /Id$/.test(name || '') /*&&
+    !validation.required*/
   ) {
     // This is for handling optional relation id fields, like a text input for
     // `userId` if the user relation is optional
-    validation.setValueAs = (val: string) => val || undefined
+    validation.setValueAs = getSetValueAsFcn('valueAsId', emptyAs)
+    //validation.setValueAs = (val: string) => val || undefined
   } else {
-    if (emptyAsNull) {
+    validation.setValueAs = getSetValueAsFcn('valueAsText', emptyAs)
+    /*    if (emptyAsNull) {
       validation.setValueAs = SET_VALUE_AS_FUNCTIONS.valueAsText.emptyAsNull
     } else if (emptyAsUndefined) {
       validation.setValueAs =
         SET_VALUE_AS_FUNCTIONS.valueAsText.emptyAsUndefined
-    }
+    }*/
   }
 }
 
