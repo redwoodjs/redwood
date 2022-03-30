@@ -19,7 +19,7 @@ yarn rw setup custom-web-index
 This generates a file named `index.js` in `web/src` that looks like this:
 
 ```jsx title="web/src/index.js"
-import ReactDOM from 'react-dom'
+import { hydrateRoot, createRoot } from 'react-dom/client'
 
 import App from './App'
 /**
@@ -31,9 +31,11 @@ import App from './App'
 const rootElement = document.getElementById('redwood-app')
 
 if (rootElement.hasChildNodes()) {
-  ReactDOM.hydrate(<App />, rootElement)
+  hydrateRoot(redwoodAppElement, <App />)
 } else {
-  ReactDOM.render(<App />, rootElement)
+  const root = createRoot(redwoodAppElement)
+  root.render(<App />)
+}
 ```
 
 This's actually the same file Redwood uses [internally](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/entry/index.js).

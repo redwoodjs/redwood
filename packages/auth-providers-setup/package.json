@@ -32,7 +32,7 @@
   "devDependencies": {
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
-    "@types/react": "17.0.50",
+    "@types/react": "18.0.24",
     "@types/secure-random-password": "0.2.1",
     "jest": "29.1.2",
     "typescript": "4.7.4"
