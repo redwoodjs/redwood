@@ -15,7 +15,9 @@ rwServeTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
   })
 })
 
-rwServeTest.afterAll(async () => {})
+rwServeTest.afterAll(async () => {
+  noJsBrowser.close()
+})
 
 rwServeTest(
   'Check that homepage is prerendered',
