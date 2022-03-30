@@ -4,11 +4,13 @@ slug: contributing
 
 # Contributing: Overview and Orientation
 
-Love Redwood and want to get involved? You’re in the right place and in good company! As of this writing, there are more than [250 contributors](https://github.com/redwoodjs/redwood/blob/main/README.md#contributors) who have helped make Redwood awesome by contributing code and documentation. This doesn't include all those who participate in the vibrant, helpful, and encouraging Forums and Discord, which are both great places to get started if you have any questions.
+Love Redwood and want to get involved? You’re in the right place and in good company!
+As of writing, there are more than [250 contributors](https://github.com/redwoodjs/redwood/blob/main/README.md#contributors) who have helped make Redwood awesome by contributing code and documentation.
+This doesn't include all those who participate in the vibrant, helpful, and encouraging Forums and Discord, which are both great places to get started if you have any questions.
 
 There are several ways you can contribute to Redwood:
 
-- join the [community Forums](https://community.redwoodjs.com/) and [Discord server](https://discord.gg/jjSYEQd) — encourage and help others 🙌
+- join the [community Forums](https://community.redwoodjs.com/) and [Discord server](https://discord.gg/jjSYEQd) and encourage and help others 🙌
 - [triage issues on the repo](https://github.com/redwoodjs/redwood/issues) and [review PRs](https://github.com/redwoodjs/redwood/pulls) 🩺
 - write and edit [docs](#contributing-docs) ✍️
 - and of course, write code! 👩‍💻
@@ -21,21 +23,31 @@ _Before interacting with the Redwood community, please read and understand our [
 >
 > 1. 🧭 **Overview and Orientation** (👈 you are here)
 > 2. 📓 [Reference: Contributing to the Framework Packages](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md)
-> 3. 🪜 [Step-by-step Walkthrough](contributing-walkthrough.md) (including Video Recording)
+> 3. 🪜 [Step-by-step Walkthrough](contributing-walkthrough.md) (includes video recordings)
 > 4. 📈 [Current Project Status: v1 Release Board](https://github.com/orgs/redwoodjs/projects/6)
 > 5. 🤔 What should I work on?
 >     - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)
 >     - [Discovery Process and Open Issues](#what-should-i-work-on)
 
 ## The Characteristics of a Contributor
-More than committing code, contributing is about human collaboration and relationship. Our community mantra is **“By helping each other be successful with Redwood, we make the Redwood project successful.”** We have a specific vision for the effect this project and community will have on you — it should give you superpowers to build+create, progress in skills, and help advance your career.
 
-So who do you need to become to achieve this? Specifically, what characteristics, skills, and capabilities will you need to cultivate through practice? Here are our suggestions:
-- Empathy
-- Gratitude
-- Generosity
+More than committing code, contributing is about human collaboration and relationship.
+Our community mantra is:
 
-All of these are applicable in relation to both others and yourself. The goal of putting them into practice is to create trust that will be a catalyst for risk-taking (another word to describe this process is “learning”!). These are the ingredients necessary for productive, positive collaboration.
+> By helping each other be successful with Redwood, we make Redwood successful.
+
+We have a specific vision for the effect this project and community will have on you.
+It should give you superpowers to build and create, progress in developer skills, and help advance your career.
+
+So who do you need to become to achieve this? Specifically, what characteristics, skills, and capabilities will you need to cultivate through practice?
+Here are our suggestions:
+
+- empathy
+- gratitude
+- generosity
+
+All of these are applicable in relation to both others and yourself.
+The goal of putting them into practice is to create trust that will be a catalyst for risk-taking (another word to describe this process is “learning”!). These are the ingredients necessary for productive, positive collaboration.
 
 And you thought all this was just about opening a PR 🤣 Yes, it’s a super rewarding experience. But that’s just the beginning!
 
