@@ -1,8 +1,8 @@
 # Security
 
-RedwoodJS wants you to be able build and deploy secure applications and takes the topic of security seriously.
+Redwood wants you to be able build and deploy secure applications and takes the topic of security seriously.
 
-* [RedwoodJS Security](https://github.com/redwoodjs/redwood/security) on GitHub
+* [Redwood Security](https://github.com/redwoodjs/redwood/security) on GitHub
 * [CodeQL code scanning](https://github.com/features/security)
 * [Authentication](authentication.md)
 * [Webhook signature verification](webhooks.md)
@@ -10,9 +10,12 @@ RedwoodJS wants you to be able build and deploy secure applications and takes th
 * [Environment variables for secure keys and tokens](environment-variables.md)
 
 > ⚠️ **Security is Your Responsibility**
-> While Redwood offers the tools, practices, and information to keep your application secure, it remains your responsibility to put these in place. Proper password, token, and key protection using disciplined communication, password management systems, and environment management services like [Doppler](https://www.doppler.com) are strongly encouraged.
+>
+> While Redwood offers the tools, practices, and information to keep your application secure, it remains your responsibility to put these in place.
+> Proper password, token, and key protection using disciplined communication, password management systems, and environment management services like [Doppler](https://www.doppler.com) are strongly encouraged.
 
 > **Security Policy and Contact Information**
+>
 > The RedwoodJS Security Policy is located [in the codebase repository on GitHub](https://github.com/redwoodjs/redwood/security/policy).
 >
 > To report a potential security vulnerability, contact us at [security@redwoodjs.com](mailto:security@redwoodjs.com).
@@ -53,15 +56,12 @@ For details on how to keep your functions secure, please see the [Serverless fun
 
 ## Webhooks
 
-[Webhooks](webhooks.md) are a common way that third-party services notify your RedwoodJS application when an event of interest happens.
+Since your app receives webhooks at an api endpoint, you need to ensure that these run **only when they should**.
+That means you need to:
 
-They are a form of messaging or automation and allows web applications to communicate with each other and send real-time data from one application to another whenever a given event occurs.
+* verify that it came from the place you expected it to
+* trust the party sending it
+* know that the payload hasn't been tampered with
+* ensure that the webhook isn't reprocessed or replayed
 
-Since each of these webhooks will call a function endpoint in your RedwoodJS api, you need to ensure that these run **only when they should**. That means you need to:
-
-* Verify it comes from the place you expect
-* Trust the party
-* Know the payload sent in the hook hasn't been tampered with
-* Ensure that the hook isn't reprocessed or replayed
-
-For details on how to keep your incoming webhooks secure and how to sign your outgoing webhooks, please see [Webhooks](webhooks.md).
+For details on how to keep your incoming webhooks secure and how to sign your outgoing webhooks, see [Webhooks](webhooks.md).
