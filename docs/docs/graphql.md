@@ -1,14 +1,16 @@
 # GraphQL
 
-GraphQL is a fundamental part of Redwood. Having said that, you can get going without knowing anything about it, and can actually get quite far without ever having to read [the docs](https://graphql.org/learn/). But to master Redwood, you'll need to have more than just a vague notion of what GraphQL is. You'll have to really grok it.
+GraphQL is a fundamental part of Redwood.
+Having said that, you can get going without knowing anything about it, and can actually get quite far without ever having to read [the docs](https://graphql.org/learn/).
+But to master Redwood, you'll need to have more than just a vague notion of what GraphQL is.
 
-The good thing is that, besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood. GraphQL is GraphQL. The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
+The good thing is that, besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood.
+GraphQL is GraphQL.
+The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
 
 Since there's two parts to GraphQL in Redwood, the client and the server, we've divided this doc up that way.
-
 On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/docs/react/) by default though you can swap it out for something else if you want.
-
-The `api` side offers a GraphQL server built on [GraphQL Helix](https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+The `api` side offers a GraphQL server built on [GraphQL Helix](https://www.graphql-yoga.com/) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
 One of the tenets of the Redwood philosophy is "Redwood believes that, as much as possible, you should be able to operate in a serverless mindset and deploy to a generic computational grid.”
@@ -869,8 +871,6 @@ By logging the operation name and extracting the duration for each query, you ca
 
 ## Security
 
-We'll document more GraphQL security best practices as Redwood reaches a `v1.0` release candidate. For now, know that Redwood already has some baked-in best practices; for example, when deploying GraphQL to production, GraphQL Playground is automatically disabled.
-
 ### Secure Services
 
 Some of the biggest security improvements we'll be making revolve around Services (which are intimately linked to GraphQL since they're wrapped into your resolvers). For `v1.0` we plan to make all of your GraphQL resolvers secure by default. You can even opt into this behavior now—see the [Secure Services](services.md#secure-services) section.
@@ -885,17 +885,15 @@ The [GraphQL Playground](https://github.com/graphql/graphql-playground) is a way
 
 ### Query Depth Limit
 
-Attackers often submit expensive, nested queries to abuse query depth that could overload your database or expend costly resources.
+Attackers often abuse query depth by submitting expensive nested queries that could overload your database or expend costly resources.
 
-Typically, these types of unbounded, complex and expensive GraphQL queries are usually huge deeply nested and take advantage of an understanding of your schema (hence why schema introspection is disabled by default in production) and the data model relationships to create "cyclical" queries.
+Typically, these types of unbounded, complex GraphQL queries are usually huge deeply nested and take advantage of an understanding of your schema (hence why schema introspection is disabled by default in production) and the data model relationships to create "cyclical" queries.
 
 An example of a cyclical query here takes advantage of knowing that and author has posts and each post has and author ... that has posts ... that has an another that ... etc.
 
 This cyclical query has a depth of 8.
 
-```jsx
-// cyclical query example
-// depth: 8+
+```graphql
 query cyclical {
   author(id: 'jules-verne') {
     posts {
@@ -917,15 +915,14 @@ query cyclical {
 }
 ```
 
-> To mitigate the risk of attacking your application via deeply nested queries, RedwoodJS by default sets the [Query Depth Limit](https://www.npmjs.com/package/graphql-depth-limit#documentation) to 11.
+To mitigate the risk of attacking your application via deeply nested queries, RedwoodJS caps the [Query Depth Limit](https://www.npmjs.com/package/graphql-depth-limit#documentation) to 11.
+You can change the default value via the `depthLimitOptions` option.
 
-You can change the default value via the `depthLimitOptions` setting when creating your GraphQL handler.
-
-You `depthLimitOptions` are `maxDepth` or `ignore` stops recursive depth checking based on a field name. Ignore can be [either a string or regexp](https://www.npmjs.com/package/graphql-depth-limit#documentation) to match the name, or a function that returns a boolean.
+Your `depthLimitOptions` are `maxDepth` or `ignore` stops recursive depth checking based on a field name. Ignore can be [either a string or regexp](https://www.npmjs.com/package/graphql-depth-limit#documentation) to match the name, or a function that returns a boolean.
 
 For example:
 
-```jsx
+```js
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { query: true } },
@@ -1030,14 +1027,3 @@ export const getWeather = async ({ input }: WeatherInput) {
   }
 }
 ```
-
-## FAQ
-
-### Why Doesn't Redwood Use Something Like Nexus?
-
-This might be one of our most frequently asked questions of all time. Here's [Tom's response in the forum](https://community.redwoodjs.com/t/anyone-playing-around-with-nexus-js/360/5):
-
-> We started with Nexus, but ended up pulling it out because we felt like it was too much of an abstraction over the SDL. It’s so nice being able to just read the raw SDL to see what the GraphQL API is.
-
-<!-- TODO -->
-<!-- This https://community.redwoodjs.com/t/how-to-add-resolvetype-resolver-for-interfaces/432/7 -->
