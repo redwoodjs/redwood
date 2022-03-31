@@ -290,7 +290,7 @@ export default Comment
 
 We'll also need to update the `CommentsQuery` we're importing from `CommentsCell` to include the `postId` field, since we are relying on it to perform the `refetchQuery` after a successful deletion:
 
-```javascript title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.js"
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`

@@ -76,7 +76,7 @@ Redwood uses Prisma for managing database access and migrations. The settings in
 
 To use PostgreSQL in production, include this in your `schema.prisma`:
 
-```javascript
+```jsx
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
