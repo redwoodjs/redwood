@@ -222,11 +222,11 @@ export const Failure = ({ error }) => (
 )
 
 // highlight-next-line
-export const Success = ({ posts }) => {
+export const Success = ({ articles }) => {
   return (
     <ul>
       // highlight-next-line
-      {posts.map((item) => {
+      {articles.map((item) => {
         return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
