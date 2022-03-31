@@ -14,50 +14,30 @@
 
 
 ## Video Recording of Complete Contributing Process
-The following recording is from a Contributing Workshop, following through the exact steps outlined below. The Workshop includes additional topics along with Q&A discussion.
 
-<iframe
-  class="w-full"
-  style={{ height: '24rem' }}
-  src="https://www.youtube.com/embed/aZs_9g-5Ms8"
-  frameborder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0"
-  allowfullscreen
-></iframe>
+The following video was recorded from a Contributing Workshop, and goes through the exact steps outlined below.
+The Workshop includes additional topics along with Q&A discussion.
 
-## Prologue: Getting Started with Redwood and GitHub (and git)
-These are the foundations for contributing, which you should be familiar with before starting the walkthrough.
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/aZs_9g-5Ms8?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+</div>
 
-[**The Redwood Tutorial**](tutorial/foreword.md)
+## The Full Workflow: From `git clone` to PR
 
-The best (and most fun) way to learn Redwood and the underlying tools and technologies.
+Before we start, some definitions:
 
-**Docs and How To**
+- We refer to the codebase of a Redwood application as a Project. This is what you install when you run `yarn create redwood-app <path-to-directory>`. It’s the thing you are building with Redwood.
 
-- Start with the [Introduction](https://github.com/redwoodjs/redwood/blob/main/README.md) Doc
-- And browse through [How To's](how-to/index)
-
-### GitHub (and Git)
-Diving into Git and the GitHub workflow can feel intimidating if you haven’t experienced it before. The good news is there’s a lot of great material to help you learn and be committing in no time!
-
-- [Introduction to GitHub](https://lab.github.com/githubtraining/introduction-to-github) (overview of concepts and workflow)
-- [First Day on GitHub](https://lab.github.com/githubtraining/first-day-on-github) (including Git)
-- [First Week on GitHub](https://lab.github.com/githubtraining/first-week-on-github) (parts 3 and 4 might be helpful)
-
-## The Full Workflow: From Local Development to a New PR
-
-### Definitions
-#### Redwood “Project”
-We refer to the codebase of a Redwood application as a Project. This is what you install when you run `yarn create redwood-app <path-to-directory>`. It’s the thing you are building with Redwood.
-
-Lastly, you’ll find the template used to create a new project (when you run create redwood-app) here in GitHub: [redwoodjs/redwood/packages/create-redwood-app/template/](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template)
+You’ll find the template used to create a new project (when you run create redwood-app) here in GitHub: [redwoodjs/redwood/packages/create-redwood-app/template/](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template)
 
 We refer to this as the **CRWA Template or Project Template**.
 
 #### Redwood “Framework”
+
 The Framework is the codebase containing all the packages (and other code) that is published on NPMjs.com as `@redwoodjs/<package-name>`. The Framework repository on GitHub is here: [https://github.com/redwoodjs/redwood](https://github.com/redwoodjs/redwood)
 
 ### Development tools
+
 These are the tools used and recommended by the Core Team.
 
 **VS Code**
@@ -89,7 +69,9 @@ But don’t skip out reading the following steps in “Local Development Setup�
 But when you’re ready, learn how to use it in the section at the end [“GitPod: Browser-based Development”](#gitpod-browser-based-development).
 
 ### Local Development Setup
+
 #### Step 1: Redwood Framework
+
 1. **Fork the [Redwood Framework](https://github.com/redwoodjs/redwood)** into a personal repo
 2. Using GitHub Desktop, **open the Framework Codebase** in a VS Code workspace
 3. Commands to “**start fresh**” when working on the Framework
@@ -99,6 +81,7 @@ But when you’re ready, learn how to use it in the section at the end [“GitPo
 First make sure you’ve pulled all changes from the remote origin (GitHub repo) into your local branch. (If you just cloned from your fork, you should be up to date.) Then create a new branch. The nomenclature used by David Price is `<davids_initials>-description-with-hyphens`, e.g. `dsp-add-eslint-config-redwood-toml`. It's simple to use VS Code or GitHub Desktop to manage branches. You can also do this via the CLI git checkout command.
 
 #### Step 2: Test Project
+
 There are several options for creating a local Redwood Project to use during development. Anytime you are developing against a test project, there are some specific gotchas to keep in mind:
 - New projects always use the latest stable version of the Redwood packages, which will not be up to date with the latest Framework code in the `main` branch.
 - To use the packages corresponding with the latest code in the Framework `main` branch, you can use the canary version published to NPM. All you need to do to install the canary versions is run `yarn rw upgrade --tag canary` in your Project
@@ -122,9 +105,10 @@ yarn babel-node packages/create-redwood-app/src/create-redwood-app.js <path/to/p
 
 4. **Install a fresh project**: `yarn create redwood-app <path/to/project>` If you just need a fresh installation 1) using the latest version template codebase and 2) without any features, then just install a new Redwood project. Note: this can have the same issues regarding the need to upgrade to canary and addressing breaking changes (see Notes from items 2 and 3 above).
 
-> Note: All the options above currently set the language to JavaScript. If you would like to work with TypeScript, you can add the option `--typescript` to either of the commands that run the create-redwood-app installation.
+> All the options above currently set the language to JavaScript. If you would like to work with TypeScript, you can add the option `--typescript` to either of the commands that run the create-redwood-app installation.
 
 #### Step 3: Link the local Framework with the local test Project
+
 Once you work on the Framework code, you’ll most often want to run the code in a Redwood app for testing. However, the Redwood Project you created for testing is currently using the latest version (or canary) packages of Redwood published on NPMjs.com, e.g. [@redwoodjs/core](https://www.npmjs.com/package/@redwoodjs/core)
 
 So we’ll use the Redwood Framework (rwfw) command to connect our local Framework and test Projects, which allows the Project to run on the code for Packages we are currently developing.
@@ -157,6 +141,7 @@ Step two is the only explicit change you'll see to your project. You'll see that
 All done? You’re ready to kill the link process with “ctrl + c”. You’ll need to confirm your root package.json no longer has the added dependencies. And, if you want to reset your test-project, you should run `yarn install --force`.
 
 #### Step 4: Framework Package(s) Local Testing
+
 Within your Framework directory, use the following tools and commands to test your code:
 1. **Build the packages**: `yarn build`
     - to delete all previous build directories: yarn build:clean
@@ -174,6 +159,7 @@ All of these checks are included in Redwood’s GitHub PR Continuous Integration
 > 2. When you create a PR, just ask for help from a maintainer
 
 #### Step 5: Open a PR 🚀
+
 You’ve made it to the fun part! It’s time to use the code you’re working on to create a new PR into the Redwood Framework `main` branch.
 
 We use GitHub Desktop to walk through the process of:
@@ -193,7 +179,9 @@ What isn’t a fun experience is spending a whole bunch of time on code that end
 When in doubt, just try first and ask for help and direction!
 
 ### GitPod: Browser-based Development
+
 [GitPod](http://gitpod.io) has recently been integrated with Redwood to JustWork™ with any branch or PR. When a virtual GitPod workspace is initialized, it automatically:
+
 1. Checks-out the code from your branch or PR
 2. Run Yarn installation
 3. Creates the functional Test Project via `yarn build:test-project`
@@ -202,6 +190,7 @@ When in doubt, just try first and ask for help and direction!
 6. 🤯
 
 > **Chrome works best**
+>
 > We’ve noticed some bugs using GitPod with either Brave or Safari. Currently we recommend sticking to Chrome (although it’s worth trying out Edge and Firefox).
 
 **Demo of GitPod**
@@ -231,5 +220,3 @@ For example, this link will start a workspace using the RedwoodJS main branch:
 
 And this link will start a workspace for a PR #3434:
 - https://gitpod.io/#https://github.com/redwoodjs/redwood/pull/3434
-
-
