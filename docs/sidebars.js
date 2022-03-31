@@ -32,7 +32,7 @@ module.exports = {
             { type: 'doc', label: 'Flightcontrol', id: 'deploy/flightcontrol' },
             { type: 'doc', label: 'Netlify', id: 'deploy/netlify' },
             { type: 'doc', label: 'Render', id: 'deploy/render' },
-            { type: 'doc', label: 'Serverless.com', id: 'deploy/serverless' },
+            { type: 'doc', label: 'Serverless Framework', id: 'deploy/serverless' },
             { type: 'doc', label: 'Vercel', id: 'deploy/vercel' },
           ],
         },
