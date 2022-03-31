@@ -1,23 +1,15 @@
 # Local Postgres Setup
 
-RedwoodJS uses a SQLite database by default. While SQLite makes local development easy, you're
-likely going to want to run the same database you use in production locally at some point. And since the odds of that database being Postgres are high, here's how to set up Postgres.
+By default, Redwood uses SQLite.
+While SQLite makes local development easy, you're likely going to want to run the same database you use in production locally at some point.
+And since the odds of that database being Postgres are high, here's a few pointers on setting up Postgres.
 
-## Install Postgres
-### Mac
-If you're on a Mac, we recommend using Homebrew:
+> Know that if you can't get this to work, you can always use railway.app, even for local development.
 
-```bash
-brew install postgres
-```
+## Installing Postgres
 
-> **Install Postgres? I've messed up my Postgres installation so many times, I wish I could just uninstall everything and start over!**
->
-> We've been there before. For those of you on a Mac, [this video](https://www.youtube.com/watch?v=1aybOgni7lI) is a great resource on how to wipe the various Postgres installs off your machine so you can get back to a blank slate.
-> Obviously, warning! This resource will teach you how to wipe the various Postgres installs off your machine. Please only do it if you know you can!
-
-### Windows and Other Platforms
-If you're using another platform, see Prisma's [Data Guide](https://www.prisma.io/docs/guides/database-workflows/setting-up-a-database/postgresql) for detailed instructions on how to get up and running.
+If you're on a Mac, we recommend [Postgres.app](https://postgresapp.com/).
+If you're on Windows or Linux, see Prisma's [Data Guide](https://www.prisma.io/docs/guides/database-workflows/setting-up-a-database/postgresql) for detailed instructions on how to get up and running.
 
 ## Creating a database
 
@@ -115,13 +107,14 @@ Here is an example of the structure of the base URL and the path using placehold
 postgresql://USER:PASSWORD@HOST:PORT/DATABASE
 ```
 The following components make up the base URL of your database, they are always required:
-| Name | Placeholder | Description |
-| ------ | ------ | ------|
-| Host | `HOST`| IP address/domain of your database server, e.g. `localhost` |
-| Port | `PORT` | Port on which your database server is running, e.g. `5432` |
-| User | `USER` | Name of your database user, e.g. `postgres` |
-| Password | `PASSWORD` | password of your database user |
-| Database | `DATABASE` | Name of the database you want to use, e.g. `redwoodblog_dev` |
+
+| Name     | Placeholder | Description                                                  |
+| :------- | :---------- | :----------------------------------------------------------- |
+| Host     | `HOST`      | IP address/domain of your database server, e.g. `localhost`  |
+| Port     | `PORT`      | Port on which your database server is running, e.g. `5432`   |
+| User     | `USER`      | Name of your database user, e.g. `postgres`                  |
+| Password | `PASSWORD`  | password of your database user                               |
+| Database | `DATABASE`  | Name of the database you want to use, e.g. `redwoodblog_dev` |
 
 ## Migrations
 Migrations are snapshots of your DB structure, which, when applied, manage the structure of both your local development DB and your production DB.
@@ -154,7 +147,10 @@ Run this command to create and apply a new migration to your local Postgres DB:
 yarn redwood prisma migrate dev
 ```
 
-## DB Management Tools
-Here are our recommendations in case you need a tool to manage your databases:
+## Database Management Tools
+
+If you're looking for a tool to manage your database, here are our recommendations:
+
+- [Postico](https://eggerapps.at/postico/) (Mac)
 - [TablePlus](https://tableplus.com/) (Mac, Windows)
-- [Beekeeper Studio](https://www.beekeeperstudio.io/) (Linux, Mac, Windows - Open Source)
+- [Beekeeper Studio](https://www.beekeeperstudio.io/) (Mac, Windows, Linux)
