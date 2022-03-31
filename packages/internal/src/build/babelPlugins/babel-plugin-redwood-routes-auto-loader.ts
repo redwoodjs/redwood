@@ -53,25 +53,28 @@ export default function (
           return
         }
 
+        const userImportRelativePath = getPathRelativeToSrc(
+          importStatementPath(p.node.source?.value)
+        )
+
+        const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
+          t.isImportDefaultSpecifier(specifiers)
+        )[0]
+
         // Remove Page imports in prerender mode (see babel-preset)
         // This is to make sure that all the imported "Page modules" are normal imports
         // and not asynchronous ones.
         // But note that jest in a user's project does not enter this block, but our tests do
         if (useStaticImports) {
           // Match import paths, const name could be different
-          const userImportPath = getPathRelativeToSrc(
-            importStatementPath(p.node.source?.value)
-          )
 
           const pageThatUserImported = pages.find((page) => {
-            return page.relativeImport === ensurePosixPath(userImportPath)
+            return (
+              page.relativeImport === ensurePosixPath(userImportRelativePath)
+            )
           })
 
           if (pageThatUserImported) {
-            const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
-              t.isImportDefaultSpecifier(specifiers)
-            )[0]
-
             // Update the import name, with the user's import name
             // So that the JSX name stays consistent
             pageThatUserImported.importName = defaultSpecifier.local.name
@@ -85,12 +88,14 @@ export default function (
           return
         }
 
-        const declaredImports = p.node.specifiers.map(
-          (specifier) => specifier.local.name
-        )
-
-        // @TODO: I think we need to be more clever than just import name
-        pages = pages.filter((page) => !declaredImports.includes(page.const))
+        if (userImportRelativePath && defaultSpecifier) {
+          // Remove the page from pages list, if it is already explicitly imported, so that we don't add loaders for these pages.
+          // We use the path & defaultSpecifier because the const name could be anything
+          pages = pages.filter(
+            (page) =>
+              !(page.relativeImport === ensurePosixPath(userImportRelativePath))
+          )
+        }
       },
       Program: {
         enter() {

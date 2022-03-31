@@ -29,7 +29,7 @@ describe('User specified imports, with static imports', () => {
 
     outputNoStaticImports = prebuildWebFile(routesFile, {
       forJest: true,
-    }).code
+    }).code //?
   })
 
   it('Imports layouts correctly', () => {
@@ -125,17 +125,32 @@ describe('User specified imports, with static imports', () => {
     name: "jobProfile"
   })`)
 
-    expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
-    path: "/jobs/new",
-    page: _NewJobPage["default"],
-    name: "newJob"
-  })`)
-
     // Uses the loader for a page that isn't imported
+    expect(outputNoStaticImports).toContain(`const HomePage = {
+  name: "HomePage",
+  loader: () => import("./pages/HomePage/HomePage")
+}`)
     expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
     path: "/",
     page: HomePage,
     name: "home"
+  })`)
+
+    // Should NOT add a loader for pages that have been explicitly loaded
+    expect(outputNoStaticImports).not.toContain(`const JobsJobPage = {
+  name: "JobsJobPage",
+  loader: () => import("./pages/Jobs/JobsPage/JobsPage")
+}`)
+
+    expect(outputNoStaticImports).not.toContain(`const JobsNewJobPage = {
+  name: "JobsNewJobPage",
+  loader: () => import("./pages/Jobs/NewJobPage/NewJobPage")
+}`)
+
+    expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
+    path: "/jobs",
+    page: _JobsPage["default"],
+    name: "jobs"
   })`)
   })
 })
