@@ -309,7 +309,7 @@ export default Article
 
 And then we'll append that ID to the `input` object that's being passed to `createComment` in the `CommentForm`:
 
-```javascript title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 // highlight-next-line
 const CommentForm = ({ postId }) => {
   const [createComment, { loading, error }] = useMutation(CREATE)
@@ -738,7 +738,7 @@ export const standard = defineScenario({
 
 Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting commnents for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
 
-```javascript title="api/src/services/comments/comments.test.js"
+```jsx title="api/src/services/comments/comments.test.js"
 import { comments, createComment } from './comments'
 // highlight-next-line
 import { db } from 'api/src/lib/db'
@@ -881,7 +881,7 @@ However, you may have noticed that now when you post a comment it no longer appe
 
 Okay this is the last fix, promise!
 
-```javascript title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.js"
 const [createComment, { loading, error }] = useMutation(CREATE, {
   onCompleted: () => {
     setHasPosted(true)

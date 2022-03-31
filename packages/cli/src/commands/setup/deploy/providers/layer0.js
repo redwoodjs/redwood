@@ -1,7 +1,10 @@
+import fs from 'fs'
+
 import Listr from 'listr'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   ERR_MESSAGE_MISSING_CLI,
@@ -23,6 +26,19 @@ const notes = [
   'config and setup required before you can perform your first deploy.',
 ]
 
+const prismaBinaryTargetAdditions = () => {
+  const content = fs.readFileSync(getPaths().api.dbSchema).toString()
+
+  if (!content.includes('rhel-openssl-1.0.x')) {
+    const result = content.replace(
+      /binaryTargets =.*\n/,
+      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`
+    )
+
+    fs.writeFileSync(getPaths().api.dbSchema, result)
+  }
+}
+
 export const handler = async () => {
   const tasks = new Listr([
     addPackagesTask({
@@ -41,6 +57,10 @@ export const handler = async () => {
         errorMessage: ERR_MESSAGE_NOT_INITIALIZED,
       },
     ]),
+    {
+      title: 'Adding necessary Prisma binaries...',
+      task: () => prismaBinaryTargetAdditions(),
+    },
     printSetupNotes(notes),
   ])
   try {

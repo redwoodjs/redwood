@@ -496,7 +496,7 @@ Let's address these issues.
 
 The `useMutation` hook returns a couple more elements along with the function to invoke it. We can destructure these as the second element in the array that's returned. The two we care about are `loading` and `error`:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
 const ContactPage = () => {
@@ -842,7 +842,7 @@ Redwood includes a hook called `useForm()` (from React Hook Form) which is norma
 
 First we'll import `useForm`:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import {
   FieldError,
   Form,
@@ -858,7 +858,7 @@ import {
 
 And now call it inside of our component:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 const ContactPage = () => {
   // highlight-next-line
   const formMethods = useForm()
@@ -883,7 +883,7 @@ return (
 
 Now we can call `reset()` on `formMethods` after we call `toast()`:
 
-```javascript title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
 const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
