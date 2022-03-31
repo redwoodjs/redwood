@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
@@ -5,10 +6,7 @@ import Listr from 'listr'
 
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
-import {
-  checkStorybookStatus,
-  configureStorybook,
-} from '../tasks/configure-storybook'
+import configureStorybook from '../../../../lib/configureStorybook.js'
 import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
 
 export const command = 'mantine'
@@ -111,9 +109,19 @@ export async function handler({ force, install, packages }) {
     },
     {
       title: 'Configure Storybook...',
-      skip: () => checkStorybookStatus({ force }) === 'done',
       task: async () =>
-        configureStorybook('mantine.storybook.preview.js.template'),
+        configureStorybook(
+          { force },
+          fs.readFileSync(
+            path.join(
+              __dirname,
+              '..',
+              'templates',
+              'mantine.storybook.preview.js.template'
+            ),
+            'utf-8'
+          )
+        ),
     },
   ])
 
