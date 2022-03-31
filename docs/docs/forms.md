@@ -1,11 +1,12 @@
 # Forms
 
-Redwood provides several helpers to make building forms easier.
-All of Redwood's helpers are simple wrappers around [React Hook Form](https://react-hook-form.com/) (RHF) that make it even easier to use in most cases.
+Redwood has several components to make building forms easier.
+All of Redwood's components are simple wrappers around [React Hook Form](https://react-hook-form.com/) (RHF) that make it even easier to use in most cases.
 
-If Redwood's helpers aren't flexible enough for you, you can use React Hook Form directly. `@redwoodjs/forms` exports everything it does:
+If Redwood's components aren't flexible enough for you, you can use React Hook Form directly.
+`@redwoodjs/forms` exports everything it does:
 
-```jsx
+```js
 import {
   useForm,
   useFormContext,
@@ -21,73 +22,75 @@ import {
 
 `@redwoodjs/forms` exports the following components:
 
-| Component         | Description                                                                                                                                        |
-|:------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<Form>`          | Surrounds all components, providing form and error contexts                                                                                        |
-| `<FormError>`     | Displays error messages from the server. Typically placed at the top of your form                                                                  |
-| `<Label>`         | Used in place of the HTML `<label>` tag. Accepts error-styling props                                                                               |
-| `<InputField>`    | Used in place of the HTML `<input>` tag. Accepts validation and error-styling props (also see the list of input field components enumerated below) |
-| `<SelectField>`   | Used in place of the HTML `<select>` tag. Accepts validation and error-styling props                                                               |
-| `<TextAreaField>` | Used in place of the HTML `<textarea>` tag. Accepts validation and error-styling props                                                             |
-| `<FieldError>`    | Displays error messages if the field with the same `name` prop has validation errors. Only renders if there's an error on the associated field     |
-| `<Submit>`        | Used in place of `<button type="submit">`. Triggers validation and "submission" (executes the function passed to `<Form>`'s `onSubmit` prop)       |
+| Component       | Description                                                                                                                                        |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Form`          | Surrounds all components, providing form and error contexts                                                                                        |
+| `FormError`     | Displays error messages from the server. Typically placed at the top of your form                                                                  |
+| `Label`         | Used in place of the `<label>` HTML element. Accepts error-styling props                                                                               |
+| `InputField`    | Used in place of the `<input>` HTML element. Accepts validation and error-styling props (also see the list of input-field components enumerated below) |
+| `SelectField`   | Used in place of the `<select>` HTML element. Accepts validation and error-styling props                                                               |
+| `TextAreaField` | Used in place of the `<textarea>` HTML element. Accepts validation and error-styling props                                                             |
+| `FieldError`    | Displays error messages if the field with the same `name` prop has validation errors |
+| `Submit`        | Used in place of the `<button type="submit">` HTML element. Triggers validation and "submission" (calls the function passed to `Form`'s `onSubmit` prop)       |
 
-All HTML `<input>` types are also available as components. They follow the naming convention `<TypeField>` where `Type` is one of the [HTML input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types).
+All HTML input types are also available as components.
+They follow the naming convention `TypeField` where `Type` is one of the [HTML input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types).
 We'll refer to them collectively as "input fields".
 The full list is:
 
-- `<ButtonField>`
-- `<CheckboxField>`
-- `<ColorField>`
-- `<DateField>`
-- `<DatetimeLocalField>`
-- `<EmailField>`
-- `<FileField>`
-- `<HiddenField>`
-- `<ImageField>`
-- `<MonthField>`
-- `<NumberField>`
-- `<PasswordField>`
-- `<RadioField>`
-- `<RangeField>`
-- `<ResetField>`
-- `<SearchField>`
-- `<SubmitField>`
-- `<TelField>`
-- `<TextField>`
-- `<TimeField>`
-- `<UrlField>`
-- `<WeekField>`
+- `ButtonField`
+- `CheckboxField`
+- `ColorField`
+- `DateField`
+- `DatetimeLocalField`
+- `EmailField`
+- `FileField`
+- `HiddenField`
+- `ImageField`
+- `MonthField`
+- `NumberField`
+- `PasswordField`
+- `RadioField`
+- `RangeField`
+- `ResetField`
+- `SearchField`
+- `SubmitField`
+- `TelField`
+- `TextField`
+- `TimeField`
+- `UrlField`
+- `WeekField`
 
 ### Validation and Error-styling Props
 
-All components ending in `Field` (i.e. all input fields, along with `<SelectField>` and `<TextAreaField>`) accept validation and error-styling props.
+All components ending in `Field` (i.e. all input fields, along with `SelectField` and `TextAreaField`) accept validation and error-styling props.
 By validation and error-styling props, we mean three props specifically:
 
-- `validation`, which accepts all of React Hook Form's [`register` options](https://react-hook-form.com/api/useform/register), plus the Redwood-exclusive coercion helpers `valueAsBoolean`, `valueAsJSON`
+<!-- todo? -->
+- `validation`, which accepts all of React Hook Form's [`register` options](https://react-hook-form.com/api/useform/register), plus the Redwood-exclusive coercion helpers `valueAsBoolean` and `valueAsJSON`
 - `errorClassName` and `errorStyle`, which are the classes and styles to apply if there's an error
 
 Besides `name`, all other props passed to these components are forwarded to the tag they render.
 Here's a table for reference:
 
 | Prop             | Description                                                                                                                                                                                                     |
-|:-----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`           | The name of the field. React Hook Form uses it a key to hook it up with everything else                                                                                                                         |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`           | The field's name. React Hook Form uses it a key to hook it up with everything else                                                                                                                         |
 | `validation`     | All your validation logic. Accepts all of React Hook Form's [`register` options](https://react-hook-form.com/api/useform/register), plus the Redwood-exclusive coercion helpers `valueAsBoolean`, `valueAsJSON` |
 | `errorClassName` | The class name to apply if there's an error                                                                                                                                                                     |
 | `errorStyle`     | The style to apply if there's an error                                                                                                                                                                          |
 
 ### Example
 
-A typical React component using these helpers would look something like this:
+A typical React component using these components would look something like this:
 
-```jsx
+```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import {
   Form,
   Label,
   TextField,
-  TextAreaField,
   FieldError,
+  TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
 
@@ -136,17 +139,17 @@ const ContactPage = () => {
 }
 ```
 
-## `<Form>`
+## `Form`
 
-Any form you want Redwood to validate and style in the presence errors should be surrounded by this tag.
+Any form you want Redwood to validate and style in the presence errors should be surrounded by this component.
 
 | Prop          | Description                                                                                                                                                    |
-|:--------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `config`      | Accepts an object containing options for React Hook Form's [`useForm` hook](https://react-hook-form.com/api/useform)                                           |
-| `formMethods` | The functions returned from `useForm`. You only need to use this prop if you need to access to one of the functions that `useForm` returns (see example below) |
+| `formMethods` | The functions returned from `useForm`. You only need to use this prop if you need to access to one of the functions that `useForm` returns (see the example below) |
 | `onSubmit`    | Accepts a function to be called if validation succeeds. Called with an object containing name-value pairs of all the fields in your form                       |
 
-All other props are forwarded to the `<form>` tag that it renders.
+All other props are forwarded to the `<form>` HTML element that it renders.
 
 ### `<Form>` Explained
 
@@ -186,13 +189,14 @@ const ContactPage = () => {
 }
 ```
 
-## `<FormError>`
+## `FormError`
 
-This helper renders a `<div>` containing a "title" message and a `<ul>` enumerating any errors reported by the server when trying to save your form. You can see it in a scaffold if you submit a form that somehow gets passed client-side validation:
+This component renders a `<div>` containing a "title" message and a `<ul>` enumerating errors reported by the server when trying to save your form.
+You can see it in a scaffold if you submit a form that somehow gets passed client-side validation:
 
 ![image](https://user-images.githubusercontent.com/32992335/138611080-9bb138a9-59cc-406d-b926-ef46f4aa7997.png)
 
-For example, let's say you have a form with a `<TextField>` for a user's email address, but you didn't specify any validation on it:
+For example, let's say you have a form with a `TextField` for a user's email address, but you didn't specify any validation on it:
 
 ```jsx {22}
 import { useMutation } from '@redwoodjs/web'
@@ -215,7 +219,7 @@ const ContactPage = () => {
   return (
     <Form onSubmit={onSubmit}>
       <FormError error={error}>
-      // No validation—any email goes!
+      {/* No validation—any email goes! */}
       <TextField name="email" />
     </Form>
   )
@@ -223,9 +227,10 @@ const ContactPage = () => {
 ```
 
 Since there's no validation, anything goes!
+
 On the client at least.
 GraphQL is built on types, so it's not going to let just anything through.
-Instead it'll throw an error and bubble it back up to the top (via the `error` object returned by the `useMutation` hook) where `<FormError>` can render something like:
+Instead it'll throw an error and bubble it back up to the top (via the `error` object returned by the `useMutation` hook) where `FormError` renders something like:
 
 ```html
 <div>
@@ -240,30 +245,21 @@ Instead it'll throw an error and bubble it back up to the top (via the `error` o
 </div>
 ```
 
-## `<Label>`
+## `Label`
 
-Renders an HTML `<label>` tag with different `className` and `style` props depending on whether the field it's associated with has a validation error.
+Renders a `<label>` HTML element whose `className` and `style` props depend on whether the field it's associated with has a validation error.
 
-This tag can be self-closing, in which case the `name` becomes the text of the label:
+This component can self-close, in which case the `name` becomes the text of the label:
 
-```html
+```jsx
 <Label name="name" className="input" errorClassName="input error" />
-
-<!-- Renders: <label for="name" class="input">name</label> -->
+// Renders <label for="name" class="input">name</label>
 ```
 
-It can also have standard separate open/close tags and take text inside, in which case that text is the text of the rendered `<label>`:
-
-```html
-<Label name="name" className="input" errorClassName="input error">Your Name</Label>
-
-<!-- Renders: <label for="name" class="input">Your Name</label> -->
-```
-
-All props are passed to the underlying `<label>` tag besides the ones listed below:
+Besides the ones listed below, all props are passed to the underlying `<label>` element:
 
 | Prop             | Description                                                                                                                               |
-|:-----------------|:------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `name`           | The name of the field that this label is associated with. This should be the same as the `name` prop on the input field this label is for |
 | `errorClassName` | The `className` that's used if the field with the same `name` has a validation error                                                      |
 | `errorStyle`     | The `style` that's used if the field with the same `name` has a validation error                                                          |
@@ -271,7 +267,7 @@ All props are passed to the underlying `<label>` tag besides the ones listed bel
 ## Input Fields
 
 Inputs are the backbone of most forms.
-While you can use `<InputField>` and it's `type` prop to make all the different kinds of input fields you'd use in a form, it's often easier to reach for the named input fields (listed above) which have defaults for things like coercion configured where appropriate.
+While you can use the `InputField` component and it's `type` prop to make all the different kinds of input fields you'd use in a form, it's often easier to reach for one of the [input-field components](#overview) which have defaults for things like coercion configured where appropriate.
 
 ### Default coercion
 
@@ -280,7 +276,7 @@ Certain input fields handle coercion automatically, but you can always override 
 The input fields that coerce automatically are:
 
 | Field                  | Default coercion |
-|:-----------------------|:-----------------|
+| :--------------------- | :--------------- |
 | `<CheckboxField>`      | `valueAsBoolean` |
 | `<NumberField>`        | `valueAsNumber`  |
 | `<DateField>`          | `valueAsDate`    |
@@ -384,7 +380,7 @@ But, as per the example below, the `valueAsNumber` can be used to return an `Int
 
 If `Option 3` is selected, the `<Form>`'s `onSubmit` function is passed data as follows:
 
-```jsx
+```js
 {
   select: 3,
 }
@@ -392,12 +388,10 @@ If `Option 3` is selected, the `<Form>`'s `onSubmit` function is passed data as 
 
 As with input fields, Redwood will automatically treat empty strings (`''`) as `undefined` for select fields whose name ends in `Id`. See the previous section about this for more info.
 
-## `<FieldError>`
+## `FieldError`
 
-Renders a `<span>` containing a validation error message if the field with the same `name` attribute has a validation error. Otherwise renders nothing.
+Renders a `<span>` containing a validation error message if the field with the same `name` attribute has a validation error.
 
-```html
+```jsx
 <FieldError name="name" className="error-message">
-
-<!-- Renders: <span class="error-message">name is required</span> -->
 ```
