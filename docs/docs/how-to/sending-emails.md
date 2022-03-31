@@ -1,26 +1,31 @@
 # Sending Emails
 
-Something a lot of applications will eventually have to do is send emails. To demonstrate how you can do that with RedwoodJS we're going to build a simple list of users and their email addresses, and allow you to trigger an email to them. We'll also include some auditing features, so you get a history of emails you sent to your users. The audit logs will be implemented by using one service from within another service &mdash; a powerful RedwoodJS feature.
+Something a lot of applications will eventually have to do is send emails.
+To demonstrate how you can do that with RedwoodJS we're going to build a simple list of users and their email addresses, and allow you to trigger an email to them.
+We'll also include some auditing features, so you get a history of emails you sent to your users.
+The audit logs will be implemented by using one service from within another service—a powerful RedwoodJS feature.
 
-The emails will be sent using the npm package [nodemailer](https://www.npmjs.com/package/nodemailer) together with [SendInBlue](https://sendinblue.com).
+We'll send emails using the [nodemailer](https://www.npmjs.com/package/nodemailer) package along with [SendInBlue](https://sendinblue.com).
 
 ## Setup
 
-The first thing to do is to create a new RedwoodJS project.
+The first thing to do is to create a new Redwood project:
 
-```zsh
+```
 yarn create redwood-app --typescript email
 ```
 
-When that's done, go into the `email` directory and install the `nodemailer` package.
+Then add the `nodemailer` package to the api side:
 
-```zsh
+```
 yarn workspace api add nodemailer
 ```
 
-### DB design
+### Database Design
 
-Now, fire up your editor of choice and find the `schema.prisma` file and remove the example model. The app we're building is going to have two models. One for our users and one for the audit logs. Paste the following two models in your schema file.
+Now, fire up your editor of choice and remove the example model in `schema.prisma`.
+The app we're building has two models: one for our users and one for the audit logs.
+Copy and paste the following in your `schema.prisma` file:
 
 ```graphql
 model User {
@@ -351,15 +356,21 @@ You can now test your app's new email sending capabilities by clicking on the em
 
 ## Using one service from another service
 
-The final thing to add is the auditing. When the users service sends an email we want to call the audits service to add a new audit log entry. Redwood makes this really easy. All you have to do is import the service and you can use all the functions it exports!
+The final thing to add is the auditing. When the users service sends an email, we want to call the audits service to add a new audit log entry.
 
-One thing I wanted to note here is that this might bypass security measures you have in place. When you call a service from the web side of your project you use GraphQL and the service is then protected by the `@requireAuth` directive. If you have a service that's open for everyone (i.e. that uses `@skipAuth`) and that service imports and uses another service it will be allowed to call any function in there, no matter what directives they use on the graphql side of things. In our case the `emailUser` mutation is using `@requireAuth`, so we're not affected by this.
+Redwood makes this really easy: all you have to do is import the service and you can use all the functions it exports!
+
+One thing I want to note here is that this might bypass security measures you have in place.
+When you call a service from the web side of your project you use GraphQL and the service is then protected by the `@requireAuth` directive.
+If you have a service that's open for everyone (i.e. that uses `@skipAuth`) and that service imports and uses another service it will be allowed to call any function in there, no matter what directives they use on the graphql side of things.
+In our case the `emailUser` mutation is using `@requireAuth`, so we're not affected by this.
 
 With that little PSA out of the way, let's make this auditing stuff happen!
 
-```ts title="users.ts"
+```ts title="api/src/services/users/users.ts"
 // ...
 
+// highlight-next-line
 import { createAudit } from '../audits/audits'
 
 // ...
@@ -368,9 +379,11 @@ export const emailUser = async ({ id }: Prisma.UserWhereUniqueInput) => {
   // ...
 
   await sendTestEmail(user.email)
+  // highlight-start
   await createAudit({
     input: { user: { connect: { id } }, log: 'Admin sent test email to user' },
   })
+  // highlight-end
 
   // ...
 }
@@ -378,8 +391,9 @@ export const emailUser = async ({ id }: Prisma.UserWhereUniqueInput) => {
 // ...
 ```
 
-That's it! We just import the audits service and call the exported `createAudit` function. The syntax for the argument object that is passed to `createAudit` might not be super obvious, but the TypeScript types help a lot with how it should be structured! What we're doing is we're connecting this new audit log with an existing user, and setting the log message. The audit entries will automatically get a timestamp (and a generated id).
+That's it! We just import the audits service and call the exported `createAudit` function. The syntax for the argument object that is passed to `createAudit` might not be super obvious, but the TypeScript types help a lot with how it should be structured!
 
-To view the audit logs you can use the scaffolded pages we created earlier. Just navigate to http://localhost:8910/audits and you should see them there.
+What we're doing is we're connecting this new audit log with an existing user, and setting the log message. The audit entries will automatically get a timestamp (and a generated id).
 
-Thanks for reading this! If you liked it, or have any questions, don't hesitate to reach out on [our forums](https://community.redwoodjs.com) or in our [Discord chat](https://discord.gg/jjSYEQd).
+To view the audit logs, you can use the scaffolded pages we created earlier.
+Just navigate to `http://localhost:8910/audits` and you should see them there.
