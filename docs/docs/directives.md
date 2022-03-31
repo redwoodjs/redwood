@@ -1,6 +1,6 @@
 # Directives
 
-Redwood Directives are a powerful feature, supercharging your GraphQL-backed Services.
+Directives are a powerful feature, supercharging your GraphQL-backed Services.
 
 You can think of directives like "middleware" that let you run reusable code during GraphQL execution to perform tasks like authentication and formatting.
 Redwood uses them to make it a snap to protect your API Services from unauthorized access.
@@ -239,9 +239,9 @@ type Query {
 
 ## When Should I Use a Redwood Directive?
 
-As noted in the [GraphQL spec](https://graphql.org/learn/queries/#directives):
+The [GraphQL spec](https://graphql.org/learn/queries/#directives) says that directives
 
-> Directives can be useful to get out of situations where you otherwise would need to do string manipulation to add and remove fields in your query. Server implementations may also add experimental features by defining completely new directives.
+> ...can be useful to get out of situations where you otherwise would need to do string manipulation to add and remove fields in your query. Server implementations may also add experimental features by defining completely new directives.
 
 Here's a helpful guide for deciding when you should use one of Redwood's Validator or Transformer directives:
 
@@ -345,7 +345,7 @@ And then, if they are, apply a mask to the email field.
 
 ### Cascade Transformers
 
-Maybe you want to apply multiple field formatting?
+Maybe you want to apply multiple field formatting.
 
 If your request event headers includes geographic or timezone info, you could compose a custom Transformer directive called `@localTimezone` could inspect the header value and convert the `createdAt` from UTC to local time -- something often done in the browser.
 
@@ -472,8 +472,8 @@ If, however, you want your query or mutation to be public, then simply use `@ski
 
 ## Custom Directives
 
-Want to write your own directive? You can of course!
-Just generate one using the Redwood CLI; it takes care of the boilerplate and even gives you a handy test!
+Want to write your own directive?
+Just generate one using the CLI; it takes care of the boilerplate and even gives you a handy test!
 
 ### Generators
 
