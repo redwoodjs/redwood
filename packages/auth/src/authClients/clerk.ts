@@ -6,12 +6,14 @@ import {
   SignOutCallback,
   GetTokenOptions,
   SignOutOptions,
-  SignOut
+  SignOut,
 } from '@clerk/types'
 
 import type { AuthClient } from '.'
 
-export interface AuthClientClerk extends AuthClient { logout: SignOut }
+export interface AuthClientClerk extends AuthClient {
+  logout: SignOut
+}
 
 export type { Clerk }
 
@@ -34,8 +36,10 @@ export const clerk = (client: Clerk): AuthClientClerk => {
     client,
     login: async (options?: SignInProps) =>
       clerkClient(client)?.openSignIn(options || {}),
-    logout: async (callbackOrOptions?: SignOutCallback | SignOutOptions, options?: SignOutOptions) =>
-      clerkClient(client)?.signOut(callbackOrOptions as any, options),
+    logout: async (
+      callbackOrOptions?: SignOutCallback | SignOutOptions,
+      options?: SignOutOptions
+    ) => clerkClient(client)?.signOut(callbackOrOptions as any, options),
     signup: async (options?: SignUpProps) =>
       clerkClient(client)?.openSignUp(options || {}),
     getToken: async (options?: GetTokenOptions) => {
