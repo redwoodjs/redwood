@@ -72,6 +72,10 @@ _note: this file is also used for all aggregated contributors_
 > - keithtelliott
 > - callingmedic911
 > - agiannelli
+> - alicelovescake
+> - chrisvdm
+> - realStandal
+> - virtuoushub
 > ==BOTS==
 > - dependabot[bot]
 > - renovate[bot]

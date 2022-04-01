@@ -1728,7 +1728,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/638764?v=4",
       "profile": "https://jace.pro/",
       "contributions": [
-        "doc"
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -2380,6 +2381,288 @@
       "name": "Manuel Vila",
       "avatar_url": "https://avatars.githubusercontent.com/u/381671?v=4",
       "profile": "https://mvila.me/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "ardatan",
+      "name": "Arda TANRIKULU",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20847995?v=4",
+      "profile": "http://the-guild.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tristanlee85",
+      "name": "Tristan Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1874318?v=4",
+      "profile": "https://github.com/tristanlee85",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "aguscha333",
+      "name": "Agustina Chaer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9297073?v=4",
+      "profile": "https://github.com/aguscha333",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ctison",
+      "name": "Charles Tison",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17789536?v=4",
+      "profile": "https://dev.to/ctison",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "josemasar",
+      "name": "Josema Sar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/65446320?v=4",
+      "profile": "https://github.com/josemasar",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kengreeff",
+      "name": "Ken Greeff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2705717?v=4",
+      "profile": "https://github.com/kengreeff",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "wiksien",
+      "name": "Wiktor Sienkiewicz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/88692323?v=4",
+      "profile": "https://github.com/wiksien",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "AlejandroFrias",
+      "name": "Alejandro Frias",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3598338?v=4",
+      "profile": "https://github.com/AlejandroFrias",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "beerose",
+      "name": "Aleksandra",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9019397?v=4",
+      "profile": "https://github.com/beerose",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "devchampian",
+      "name": "Ian McPhail",
+      "avatar_url": "https://avatars.githubusercontent.com/u/97047001?v=4",
+      "profile": "https://github.com/devchampian",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kwstewar",
+      "name": "Kyle Stewart",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7402034?v=4",
+      "profile": "https://github.com/kwstewar",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "n1ru4l",
+      "name": "Laurin Quast",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14338007?v=4",
+      "profile": "https://n1ru4l.cloud/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "martinjuhasz",
+      "name": "Martin Juhasz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/204190?v=4",
+      "profile": "https://juhasz.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "odjhey",
+      "name": "Odee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8198939?v=4",
+      "profile": "https://github.com/odjhey",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "stephenhandley",
+      "name": "Stephen Handley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3257?v=4",
+      "profile": "https://person.sh/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "srzainab",
+      "name": "Syeda Zainab",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83520846?v=4",
+      "profile": "https://github.com/srzainab",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "joriswill",
+      "name": "joriswill",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59565087?v=4",
+      "profile": "https://github.com/joriswill",
+      "contributions": [
+        "code",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "szainab",
+      "name": "szainab",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17282293?v=4",
+      "profile": "https://github.com/szainab",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "twodotsmax",
+      "name": "twodotsmax",
+      "avatar_url": "https://avatars.githubusercontent.com/u/100792426?v=4",
+      "profile": "https://github.com/twodotsmax",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "shilman",
+      "name": "Michael Shilman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/488689?v=4",
+      "profile": "http://shilman.net/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "nickpdemarco",
+      "name": "nickpdemarco",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12536895?v=4",
+      "profile": "https://github.com/nickpdemarco",
+      "contributions": [
+        "doc",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "davidlcorbitt",
+      "name": "davidlcorbitt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41524992?v=4",
+      "profile": "https://github.com/davidlcorbitt",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "ROZBEH",
+      "name": "ROZBEH",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10575385?v=4",
+      "profile": "https://www.valuecumulation.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "anhldbk",
+      "name": "Anh Le (Andy)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3270746?v=4",
+      "profile": "https://bigsonata.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "IsaacHook",
+      "name": "IsaacHook",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12621911?v=4",
+      "profile": "https://github.com/IsaacHook",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "mattsears18",
+      "name": "Matt Sears",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5251446?v=4",
+      "profile": "https://github.com/mattsears18",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "MthBarber",
+      "name": "MthBarber",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87272218?v=4",
+      "profile": "https://github.com/MthBarber",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "snettah",
+      "name": "Safi Nettah",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10152935?v=4",
+      "profile": "https://github.com/snettah",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "dietler",
+      "name": "dietler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/654584?v=4",
+      "profile": "https://github.com/dietler",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "palante",
+      "name": "Guedis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15256420?v=4",
+      "profile": "https://github.com/palante",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "rkmitra1",
+      "name": "rkmitra1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69916391?v=4",
+      "profile": "https://github.com/rkmitra1",
       "contributions": [
         "tutorial"
       ]
