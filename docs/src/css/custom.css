@@ -39,10 +39,16 @@ h3 {
 }
 
 blockquote {
-  background-color: var(--ifm-color-secondary-lighter);
+  background-color: #f8ded6;
   padding: 2rem;
   border-radius: 0.5rem;
   border-left: none;
+}
+
+blockquote code {
+  color: #db5b34;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }
 
 html[data-theme="dark"] blockquote {
