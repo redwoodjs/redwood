@@ -28,7 +28,7 @@
     "@envelop/parser-cache": "4.1.0",
     "@envelop/validation-cache": "4.1.0",
     "@graphql-tools/merge": "8.2.6",
-    "@graphql-tools/schema": "8.3.5",
+    "@graphql-tools/schema": "8.3.6",
     "@graphql-tools/utils": "8.6.5",
     "@graphql-yoga/common": "2.0.0",
     "@prisma/client": "3.11.1",
