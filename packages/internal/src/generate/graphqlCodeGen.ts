@@ -30,21 +30,17 @@ export const generateTypeDefGraphQLApi = async () => {
 
   try {
     return await runCodegenGraphQL([], extraPlugins, filename)
-  } catch {
+  } catch (e) {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (api)')
+    console.error(e)
     console.error()
 
     return []
   }
 }
 
-interface Args {
-  /** used for tests */
-  logErrors?: boolean | undefined
-}
-
-export const generateTypeDefGraphQLWeb = async ({ logErrors }: Args = {}) => {
+export const generateTypeDefGraphQLWeb = async () => {
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
@@ -71,11 +67,8 @@ export const generateTypeDefGraphQLWeb = async ({ logErrors }: Args = {}) => {
   } catch (e) {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (web)')
+    console.error(e)
     console.error()
-
-    if (logErrors) {
-      console.error(e)
-    }
 
     return []
   }
