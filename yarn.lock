@@ -3561,9 +3561,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.5, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
-  version: 8.3.5
-  resolution: "@graphql-tools/schema@npm:8.3.5"
+"@graphql-tools/schema@npm:8.3.6, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
+  version: 8.3.6
+  resolution: "@graphql-tools/schema@npm:8.3.6"
   dependencies:
     "@graphql-tools/merge": 8.2.6
     "@graphql-tools/utils": 8.6.5
@@ -3571,7 +3571,7 @@ __metadata:
     value-or-promise: 1.0.11
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 0412886a19c4797f87759b3737e71c92f35d142582d47e97f728b75080b329c98cbc53a0ceb62acff17b9f4625b4f6eb9e66912d5acfc544c80991540b3aaeb3
+  checksum: 1a1d4eac3c812eb8db7729a16087df70d60417b786637e0c5705e12f4d35daa95e8724e7ddc266d4e6517b0c0d3086bdf7b1ea1a9fb5668a35ee64c7c65e7dcc
   languageName: node
   linkType: hard
 
@@ -5866,7 +5866,7 @@ __metadata:
     "@types/md5": 2.3.2
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
-    cross-undici-fetch: 0.1.27
+    cross-undici-fetch: 0.1.28
     crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 27.5.1
@@ -5910,7 +5910,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 2.10.0
     "@clerk/types": 2.2.1
     "@nhost/nhost-js": 0.3.13
-    "@supabase/supabase-js": 1.33.1
+    "@supabase/supabase-js": 1.33.2
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.40
     firebase: 9.6.10
@@ -5989,7 +5989,7 @@ __metadata:
     "@types/prettier": 2.4.4
     "@vscode/ripgrep": 1.14.2
     core-js: 3.21.1
-    cross-undici-fetch: 0.1.27
+    cross-undici-fetch: 0.1.28
     deepmerge: 4.2.2
     fast-glob: 3.2.11
     findup-sync: 5.0.0
@@ -6040,7 +6040,7 @@ __metadata:
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.1.0
-    esbuild: 0.14.28
+    esbuild: 0.14.29
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
     file-loader: 6.2.0
@@ -6149,7 +6149,7 @@ __metadata:
     "@envelop/types": 2.0.0
     "@envelop/validation-cache": 4.1.0
     "@graphql-tools/merge": 8.2.6
-    "@graphql-tools/schema": 8.3.5
+    "@graphql-tools/schema": 8.3.6
     "@graphql-tools/utils": 8.6.5
     "@graphql-yoga/common": 2.0.0
     "@prisma/client": 3.11.1
@@ -6160,7 +6160,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.21.1
-    cross-undici-fetch: 0.1.27
+    cross-undici-fetch: 0.1.28
     graphql: 16.3.0
     graphql-scalars: 1.16.0
     graphql-tag: 2.12.6
@@ -6202,7 +6202,7 @@ __metadata:
     chalk: 4.1.2
     core-js: 3.21.1
     deepmerge: 4.2.2
-    esbuild: 0.14.28
+    esbuild: 0.14.29
     fast-glob: 3.2.11
     findup-sync: 5.0.0
     fs-extra: 10.0.1
@@ -6238,7 +6238,7 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
-    cross-undici-fetch: 0.1.27
+    cross-undici-fetch: 0.1.28
     jest: 27.5.1
     mime-types: 2.1.35
     typescript: 4.6.3
@@ -6257,7 +6257,7 @@ __metadata:
     "@prisma/client": 3.11.1
     "@prisma/sdk": 3.11.1
     core-js: 3.21.1
-    esbuild: 0.14.28
+    esbuild: 0.14.29
     jest: 27.5.1
   languageName: unknown
   linkType: soft
@@ -6331,7 +6331,7 @@ __metadata:
     "@types/uuid": 8.3.4
     "@types/yargs": 16.0.4
     ci-info: 3.3.0
-    cross-undici-fetch: 0.1.27
+    cross-undici-fetch: 0.1.28
     envinfo: 7.8.1
     jest: 27.5.1
     systeminformation: 5.11.9
@@ -7777,16 +7777,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.33.1":
-  version: 1.33.1
-  resolution: "@supabase/supabase-js@npm:1.33.1"
+"@supabase/supabase-js@npm:1.33.2":
+  version: 1.33.2
+  resolution: "@supabase/supabase-js@npm:1.33.2"
   dependencies:
     "@supabase/functions-js": ^1.3.2
     "@supabase/gotrue-js": ^1.22.10
     "@supabase/postgrest-js": ^0.37.2
     "@supabase/realtime-js": ^1.4.5
     "@supabase/storage-js": ^1.6.5
-  checksum: e5c04365548ac18ee85f265615b85ace37e9db949da040a46ce444c12e5472a7f07df2f67bd447c6787dd6ddb35eedb7d09bbc13f509548da718134d44049057
+  checksum: 2716d1196db873faae4bf8d5887a536b5374f8e227f69eb7b3349f7421bc8863a062a2025d7d26f830a0afd5402cc03b8035ef40072491d05f2df06824ad9899
   languageName: node
   linkType: hard
 
@@ -13254,17 +13254,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.1.27, cross-undici-fetch@npm:^0.1.19, cross-undici-fetch@npm:^0.1.25":
-  version: 0.1.27
-  resolution: "cross-undici-fetch@npm:0.1.27"
+"cross-undici-fetch@npm:0.1.28, cross-undici-fetch@npm:^0.1.19, cross-undici-fetch@npm:^0.1.25":
+  version: 0.1.28
+  resolution: "cross-undici-fetch@npm:0.1.28"
   dependencies:
     abort-controller: ^3.0.0
     form-data-encoder: ^1.7.1
     formdata-node: ^4.3.1
     node-fetch: ^2.6.7
-    undici: ^4.9.3
+    undici: ^5.0.0
     web-streams-polyfill: ^3.2.0
-  checksum: 4f6e7fa17c676c33fb1003b2d754478e01b27114eef0b2ac9ff1c35a26786c8764dbd80f2dd392f7923e23a037bf4819f9d940ef7c318ff2055e82e1202d981f
+  checksum: 121d4ce6dd0fdba0c1b6dbf5504020e28fa6cde16fe870f560df1a55558ae0b5a0709e061f54bc1411399ec17135c51b3a2505e13a8f6ff80187d2b48fbdf34c
   languageName: node
   linkType: hard
 
@@ -14884,100 +14884,100 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-android-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-android-64@npm:0.14.28"
+"esbuild-android-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-android-64@npm:0.14.29"
   conditions: os=android & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-android-arm64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-android-arm64@npm:0.14.28"
+"esbuild-android-arm64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-android-arm64@npm:0.14.29"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-darwin-64@npm:0.14.28"
+"esbuild-darwin-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-darwin-64@npm:0.14.29"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-arm64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-darwin-arm64@npm:0.14.28"
+"esbuild-darwin-arm64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-darwin-arm64@npm:0.14.29"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-freebsd-64@npm:0.14.28"
+"esbuild-freebsd-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-freebsd-64@npm:0.14.29"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-arm64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-freebsd-arm64@npm:0.14.28"
+"esbuild-freebsd-arm64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-freebsd-arm64@npm:0.14.29"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-32@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-32@npm:0.14.28"
+"esbuild-linux-32@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-32@npm:0.14.29"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-linux-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-64@npm:0.14.28"
+"esbuild-linux-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-64@npm:0.14.29"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-arm64@npm:0.14.28"
+"esbuild-linux-arm64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-arm64@npm:0.14.29"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-arm@npm:0.14.28"
+"esbuild-linux-arm@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-arm@npm:0.14.29"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"esbuild-linux-mips64le@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-mips64le@npm:0.14.28"
+"esbuild-linux-mips64le@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-mips64le@npm:0.14.29"
   conditions: os=linux & cpu=mips64el
   languageName: node
   linkType: hard
 
-"esbuild-linux-ppc64le@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-ppc64le@npm:0.14.28"
+"esbuild-linux-ppc64le@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-ppc64le@npm:0.14.29"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
 
-"esbuild-linux-riscv64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-riscv64@npm:0.14.28"
+"esbuild-linux-riscv64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-riscv64@npm:0.14.29"
   conditions: os=linux & cpu=riscv64
   languageName: node
   linkType: hard
 
-"esbuild-linux-s390x@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-linux-s390x@npm:0.14.28"
+"esbuild-linux-s390x@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-linux-s390x@npm:0.14.29"
   conditions: os=linux & cpu=s390x
   languageName: node
   linkType: hard
@@ -14998,72 +14998,72 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-netbsd-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-netbsd-64@npm:0.14.28"
+"esbuild-netbsd-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-netbsd-64@npm:0.14.29"
   conditions: os=netbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-openbsd-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-openbsd-64@npm:0.14.28"
+"esbuild-openbsd-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-openbsd-64@npm:0.14.29"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-sunos-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-sunos-64@npm:0.14.28"
+"esbuild-sunos-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-sunos-64@npm:0.14.29"
   conditions: os=sunos & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-32@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-windows-32@npm:0.14.28"
+"esbuild-windows-32@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-windows-32@npm:0.14.29"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-windows-64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-windows-64@npm:0.14.28"
+"esbuild-windows-64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-windows-64@npm:0.14.29"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-arm64@npm:0.14.28":
-  version: 0.14.28
-  resolution: "esbuild-windows-arm64@npm:0.14.28"
+"esbuild-windows-arm64@npm:0.14.29":
+  version: 0.14.29
+  resolution: "esbuild-windows-arm64@npm:0.14.29"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.14.28, esbuild@npm:^0.14.6":
-  version: 0.14.28
-  resolution: "esbuild@npm:0.14.28"
+"esbuild@npm:0.14.29, esbuild@npm:^0.14.6":
+  version: 0.14.29
+  resolution: "esbuild@npm:0.14.29"
   dependencies:
-    esbuild-android-64: 0.14.28
-    esbuild-android-arm64: 0.14.28
-    esbuild-darwin-64: 0.14.28
-    esbuild-darwin-arm64: 0.14.28
-    esbuild-freebsd-64: 0.14.28
-    esbuild-freebsd-arm64: 0.14.28
-    esbuild-linux-32: 0.14.28
-    esbuild-linux-64: 0.14.28
-    esbuild-linux-arm: 0.14.28
-    esbuild-linux-arm64: 0.14.28
-    esbuild-linux-mips64le: 0.14.28
-    esbuild-linux-ppc64le: 0.14.28
-    esbuild-linux-riscv64: 0.14.28
-    esbuild-linux-s390x: 0.14.28
-    esbuild-netbsd-64: 0.14.28
-    esbuild-openbsd-64: 0.14.28
-    esbuild-sunos-64: 0.14.28
-    esbuild-windows-32: 0.14.28
-    esbuild-windows-64: 0.14.28
-    esbuild-windows-arm64: 0.14.28
+    esbuild-android-64: 0.14.29
+    esbuild-android-arm64: 0.14.29
+    esbuild-darwin-64: 0.14.29
+    esbuild-darwin-arm64: 0.14.29
+    esbuild-freebsd-64: 0.14.29
+    esbuild-freebsd-arm64: 0.14.29
+    esbuild-linux-32: 0.14.29
+    esbuild-linux-64: 0.14.29
+    esbuild-linux-arm: 0.14.29
+    esbuild-linux-arm64: 0.14.29
+    esbuild-linux-mips64le: 0.14.29
+    esbuild-linux-ppc64le: 0.14.29
+    esbuild-linux-riscv64: 0.14.29
+    esbuild-linux-s390x: 0.14.29
+    esbuild-netbsd-64: 0.14.29
+    esbuild-openbsd-64: 0.14.29
+    esbuild-sunos-64: 0.14.29
+    esbuild-windows-32: 0.14.29
+    esbuild-windows-64: 0.14.29
+    esbuild-windows-arm64: 0.14.29
   dependenciesMeta:
     esbuild-android-64:
       optional: true
@@ -15107,7 +15107,7 @@ __metadata:
       optional: true
   bin:
     esbuild: bin/esbuild
-  checksum: baa5b2a897b6e21b5e312ed133d2fea638e659fe0884f6b0c4284e5e32a44fe9f7278942dc69556ed3ebd8627d83a773d8f049d55daa015096887dda43814e75
+  checksum: 29cccce3746cad83216a7c821ac9b1437e44e156abf24d647efdb6c2142e2fa95a49ffc7d56c09835b71633a912d4be77018aaf2b2a139b917659e4b26cf0249
   languageName: node
   linkType: hard
 
@@ -29828,10 +29828,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^4.0.0, undici@npm:^4.9.3":
+"undici@npm:^4.0.0":
   version: 4.14.1
   resolution: "undici@npm:4.14.1"
   checksum: 41f1a10ac15709dd1d3eafa62bb2f3a88c271c5f735b4c160ea07b60162493fb5eeb972046f7f4bb0e35aab235fcdaa94b93c00f70d822a35ac910f09ed5fad3
+  languageName: node
+  linkType: hard
+
+"undici@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "undici@npm:5.0.0"
+  checksum: 381cff91b1c937edab4672e16d0aeeda6ba432aba7e958a9e5bc8bc1b8c0a5527919a82f4ae73d7bf7ee43e6b2ac28292c2fdefaaf6e69d4f7b3a1223cf5fd15
   languageName: node
   linkType: hard
 

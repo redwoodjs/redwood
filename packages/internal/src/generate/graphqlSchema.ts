@@ -44,12 +44,14 @@ export const generateGraphQLSchema = async () => {
   } catch (e: any) {
     // `generate` outputs errors which are helpful.
     // This tries to clean up the output of those errors.
-    console.error(e)
     console.error(chalk.red('Error parsing SDLs or Schema'))
-    for (const error of e.errors ?? []) {
-      console.error(error.details)
+    if (e.errors?.length) {
+      for (const error of e.errors ?? []) {
+        console.error(error.details)
+      }
+    } else {
+      console.error(e)
     }
-
     console.warn()
   }
 
