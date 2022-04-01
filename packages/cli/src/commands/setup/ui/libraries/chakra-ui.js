@@ -69,11 +69,11 @@ export async function handler({ force, install }) {
       skip: () => appJSContains('ChakraProvider'),
       task: () =>
         extendAppJS({
-          wrapTag: {
-            wrapperComponent: 'ChakraProvider',
-            wrapperProps: { theme: 'extendedTheme' },
-            wrappedComponent: 'RedwoodApolloProvider',
-            before: '<ColorModeScript />',
+          insertComponent: {
+            name: 'ChakraProvider',
+            props: { theme: 'extendedTheme' },
+            within: 'RedwoodProvider',
+            insertBefore: '<ColorModeScript />',
           },
           imports: [
             "import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'",

@@ -14,26 +14,35 @@ export function appJSContains(str) {
 
 /**
  * Inject code into App.[js|tsx].
- * Use of wrapTag assumes there is only one use of wrappedTagName in the file. It will not work
- * correctly if there are multiple uses.
- * imports are added after the last redwoodjs import.
+ * Use of insertComponent assumes only one of (around|within) are used, and that the component
+ * identified by (around|within) occurs exactly once in App.js|tsx.
+ * Imports are added after the last redwoodjs import.
  * moduleScopeLines are added after the last import.
  *
  * @param {Object} options Configure behavior
- * @param {Object} options.wrapTag Configure tag-wrapping behavior
- * @param {string} options.wrapTag.wrappedComponent The name of the component to wrap.
- * @param {string} options.wrapTag.wrapperComponent The name of the component to with which to wrap.
- * @param {Object|string} options.wrapTag.wrapperProps Properties to pass to the wrapper component.
+ * @param {Object} options.insertComponent Configure component-inserting behavior
+ * @param {Object} options.insertComponent.name Name of component to insert.
+ * @param {Object|string} options.insertComponent.props Properties to pass to the inserted component.
+ * @param {string} options.insertComponent.around Name of the component around which the new
+ * component will be inserted. Mutually exclusive with insertComponent.within.
+ * @param {string} options.insertComponent.within Name of the component within which the new
+ * component will be inserted. Mutually exclusive with insertComponent.around.
+ * @param {string} options.insertComponent.insertBefore Content to insert before the inserted
+ * component.
+ * @param {string} options.insertComponent.insertAfter Content to insert after the inserted
+ * component.
  * @param {Array} options.imports Import declarations to inject after the last redwoodjs import.
  * @param {Array} options.moduleScopeLines Lines of code to inject after the last import statement.
+ * @returns Nothing; writes changes directly into App.js|tsx.
  */
 export function extendAppJS({
-  wrapTag: {
-    wrappedComponent = undefined,
-    wrapperComponent = undefined,
-    wrapperProps = undefined,
-    before = undefined,
-    after = undefined,
+  insertComponent: {
+    name = undefined,
+    props = undefined,
+    around = undefined,
+    within = undefined,
+    insertBefore = undefined,
+    insertAfter = undefined,
   },
   imports = [],
   moduleScopeLines = [],
@@ -59,12 +68,19 @@ export function extendAppJS({
     )
   }
 
-  if (wrappedComponent && wrapperComponent) {
-    wrapComponentWithComponent(content, wrappedComponent, {
-      component: wrapperComponent,
-      props: wrapperProps,
-      before,
-      after,
+  if (name) {
+    if ((around && within) || !(around || within)) {
+      throw new Error(
+        'To insert a component, exactly one of (around | within) must be defined. Choose one.'
+      )
+    }
+    insertComponent(content, {
+      component: name,
+      props,
+      around,
+      within,
+      insertBefore,
+      insertAfter,
     })
   }
 
@@ -79,45 +95,53 @@ export function extendAppJS({
  * Increases the indentation of newly-wrapped content by two spaces (one tab).
  *
  * @param {Array} content A JSX file split by newlines.
- * @param {*} wrappedComponent The name of the component to wrap with a new tag.
- * @param {Object} _anonymousObject Configure the wrapping tag.
- * @param {string} _anonymousObject.component Name of the wrapping tag.
- * @param {Object|string|undefined} _anonymousObject.props Properties to pass to the wrapper
- * component.
- * @param {string} _anonymousObject.before A string to prepend, at the same indentation, as the
- * wrapper.
- * @param {Object} _anonymousObject.after A string to append, at the same indentation, as the wrapper.
+ * @param {String} component Name of the component to insert.
+ * @param {String|Object} props Properties to pass to the new component.
+ * @param {String} around Name of the component around which to insert the new component. Mutually
+ * exclusive with within.
+ * @param {String} within Name of the component within which to insert the new component. Mutually
+ * exclusive with around.
+ * @param {String} insertBefore Content to insert before the inserted component.
+ * @param {String} insertAfter Content to insert after the inserted component.
  * @returns Nothing; modifies content in place.
  */
-function wrapComponentWithComponent(
+function insertComponent(
   content,
-  wrappedComponent,
-  { component, props, before, after }
+  { component, props, around, within, insertBefore, insertAfter }
 ) {
-  const findTagIndex = (regex) => content.findIndex((line) => regex.test(line))
-
-  const open = findTagIndex(
-    new RegExp(`([^\S\r\n]*)<${wrappedComponent}\s*(.*)\s*>`)
-  )
-  const close =
-    findTagIndex(new RegExp(`([^\S\r\n]*)<\/${wrappedComponent}>`)) + 1
-
-  if (open === -1 || close === -1) {
-    throw new Error(`Could not find tags for ${wrappedComponent}`)
+  if ((around && within) || !(around || within)) {
+    throw new Error(
+      'Exactly one of (around | within) must be defined. Choose one.'
+    )
   }
 
-  // Assuming closeTagLine has same indent depth.
+  const target = around || within
+  const findTagIndex = (regex) => content.findIndex((line) => regex.test(line))
+
+  let open = findTagIndex(new RegExp(`([^\S\r\n]*)<${target}\s*(.*)\s*>`))
+  let close = findTagIndex(new RegExp(`([^\S\r\n]*)<\/${target}>`)) + 1
+
+  if (open === -1 || close === -1) {
+    throw new Error(`Could not find tags for ${target}`)
+  }
+
+  if (within) {
+    open++
+    close--
+  }
+
+  // Assuming close line has same indent depth.
   const [, componentDepth] = content[open].match(/([^\S\r\n]*).*/)
 
   content.splice(
     open,
     close - open, // "Delete" the wrapped component contents. We put it back below.
-    before && componentDepth + before,
+    insertBefore && componentDepth + insertBefore,
     componentDepth + buildOpeningTag(component, props),
     // Increase indent of each now-nested tag by one tab (two spaces)
     ...content.slice(open, close).map((line) => '  ' + line),
     componentDepth + `</${component}>`,
-    after && componentDepth + after
+    insertAfter && componentDepth + insertAfter
   )
 }
 

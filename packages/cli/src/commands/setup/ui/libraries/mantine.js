@@ -86,10 +86,10 @@ export async function handler({ force, install, packages }) {
       skip: () => appJSContains('MantineProvider'),
       task: () =>
         extendAppJS({
-          wrapTag: {
-            wrapperComponent: 'MantineProvider',
-            wrapperProps: { theme: 'theme' },
-            wrappedComponent: 'RedwoodApolloProvider',
+          insertComponent: {
+            name: 'MantineProvider',
+            props: { theme: 'theme' },
+            within: 'RedwoodProvider',
           },
           imports: [
             "import { MantineProvider } from '@mantine/core'",
