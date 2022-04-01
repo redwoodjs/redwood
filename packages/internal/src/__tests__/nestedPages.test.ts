@@ -142,7 +142,7 @@ describe('User specified imports, with static imports', () => {
   loader: () => import("./pages/Jobs/JobsPage/JobsPage")
 }`)
 
-    expect(outputNoStaticImports).not.toContain(`const JobsNewJobPage = {
+    expect(outputNoStaticImports).not.toContain(`const EditJobPage = {
   name: "JobsNewJobPage",
   loader: () => import("./pages/Jobs/NewJobPage/NewJobPage")
 }`)
@@ -152,5 +152,23 @@ describe('User specified imports, with static imports', () => {
     page: _JobsPage["default"],
     name: "jobs"
   })`)
+  })
+
+  it('Handles when imports from a page include non-default imports too', () => {
+    // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
+
+    expect(outputWithStaticImports).toContain('var _EditJobPage = require("')
+    expect(outputWithStaticImports).toContain(`const EditJobPage = {
+  name: "EditJobPage",
+  loader: () => require("./pages/Jobs/EditJobPage/EditJobPage")
+}`)
+
+    expect(outputNoStaticImports).toContain(
+      'var _EditJobPage = _interopRequireWildcard('
+    )
+    expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
+    path: "/jobs/{id:Int}/edit",
+    page: _EditJobPage["default"],
+    name: "editJob"`)
   })
 })

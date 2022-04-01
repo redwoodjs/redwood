@@ -15,7 +15,7 @@ import MainLayout from 'src/layouts/MainLayout/MainLayout'
 import JobsPage from 'src/pages/Jobs/JobsPage'
 import JobPage from 'src/pages/Jobs/JobPage'
 import NewJobPage from 'src/pages/Jobs/NewJobPage'
-import EditJobPage from 'src/pages/Jobs/EditJobPage'
+import EditJobPage, { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
 import BazingaJobProfilePageWithFunnyName from 'src/pages/Jobs/JobProfilePage'
 import NewJobProfilePage from 'src/pages/Jobs/NewJobProfilePage'
 import EditJobProfilePage from 'src/pages/Jobs/EditJobProfilePage'
@@ -23,6 +23,7 @@ import AllJobsPage from 'src/pages/Jobs/AllJobsPage'
 import AllJobProfilesPage from 'src/pages/Jobs/AllJobProfilesPage'
 
 const Routes = () => {
+  console.log(NonDefaultExport)
   return (
     <Router>
       <Set wrap={MainLayout}>
