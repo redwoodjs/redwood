@@ -447,11 +447,6 @@ When launching the dev server via the `yarn rw dev` command, you will see output
 
 ```terminal
 
-api | [nodemon] 2.0.12
-api | [nodemon] to restart at any time, enter `rs`
-api | [nodemon] watching path(s): redwood.toml
-api | [nodemon] watching extensions: js,mjs,json
-api | [nodemon] starting `yarn rw-api-server-watch`
 gen | Generating TypeScript definitions and GraphQL schemas...
 gen | 37 files generated
 api | Building... Took 444 ms
