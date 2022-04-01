@@ -170,5 +170,10 @@ describe('User specified imports, with static imports', () => {
     path: "/jobs/{id:Int}/edit",
     page: _EditJobPage["default"],
     name: "editJob"`)
+
+    // Should not generate a loader, because page was explicitly imported
+    expect(outputNoStaticImports).not.toContain(
+      `loader: () => import("./pages/Jobs/EditJobPage/EditJobPage")`
+    )
   })
 })
