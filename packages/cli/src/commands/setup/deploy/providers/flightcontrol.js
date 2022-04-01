@@ -64,7 +64,10 @@ export const getFlightcontrolJson = async (database) => {
                 if (service.id === 'redwood-api') {
                   return {
                     ...service,
-                    envVariables: databaseEnvVariables,
+                    envVariables: {
+                      ...service.envVariables,
+                      ...databaseEnvVariables,
+                    },
                   }
                 }
                 return service
@@ -289,10 +292,8 @@ export const builder = (yargs) =>
 // any notes to print out when the job is done
 const notes = [
   'You are ready to deploy to Flightcontrol!\n',
-  '1. Create your project at https://app.flightcontrol.dev/signup?ref=redwood',
-  '2. After your project is provisioned,',
-  `go to the Flightcontrol dashboard and set the REDWOOD_WEB_URL & REDWOOD_API_URL env vars to the full URL of those services, including 'https://'\n`,
-  'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions\n',
+  '👉 Create your project at https://app.flightcontrol.dev/signup?ref=redwood\n',
+  'Check out the deployment docs at https://app.flightcontrol.dev/docs for detailed instructions\n',
   "NOTE: If you are using yarn v1, remove the installCommand's from flightcontrol.json",
 ]
 
