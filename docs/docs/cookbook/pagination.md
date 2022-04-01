@@ -10,7 +10,7 @@ So you have a blog, and probably only a few short posts. But as the blog grows b
 
 We'll begin by updating the SDL. To our `Query` type a new query is added to get just a single page of posts. We'll pass in the page we want, and when returning the result we'll also include the total number of posts as that'll be needed when building our pagination component.
 
-```jsx title="api/src/graphql/posts.sdl.js"
+```javascript title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   # ...
 
@@ -32,7 +32,7 @@ export const schema = gql`
 You might have noticed that we made the page optional. That's because we want to be able to default to the first page if no page is provided.
 
 Now we need to add a resolver for this new query to our posts service.
-```jsx title="api/src/services/posts/posts.js"
+```javascript title="api/src/services/posts/posts.js"
 const POSTS_PER_PAGE = 5
 
 export const postPage = ({ page = 1 }) => {

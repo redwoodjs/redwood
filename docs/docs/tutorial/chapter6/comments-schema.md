@@ -14,7 +14,7 @@ If you went through the first part of the tutorial you should be somewhat famili
 
 Let's do that now:
 
-```jsx title="api/db/schema.prisma"
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -85,13 +85,13 @@ This gives us a classic database model:
 
 Note that there is no real database column named `post` in `Comment`—this is special syntax for Prisma to know how to connect the models together and for you to reference that connection. When you query for a `Comment` using Prisma you can get access to the attached `Post` using that name:
 
-```jsx
+```javascript
 db.comment.findUnique({ where: { id: 1 }}).post()
 ```
 
 Prisma also added a convenience `comments` field to `Post` which gives us the same capability in reverse:
 
-```jsx
+```javascript
 db.post.findUnique({ where: { id: 1 }}).comments()
 ```
 
@@ -181,7 +181,7 @@ Okay, let's focus on the service for a bit. We'll need to add a function to let 
 
 By virtue of using the generator we've already got the function we need to select all comments from the database:
 
-```jsx title="api/src/services/comments/comments.js"
+```javascript title="api/src/services/comments/comments.js"
 import { db } from 'src/lib/db'
 
 export const comments = () => {
@@ -225,7 +225,7 @@ query CommentsQuery {
 
 We need to be able to create a comment as well. We'll use the same convention that's used in Redwood's generated scaffolds: the create endpoint will accept a single parameter `input` which is an object with the individual model fields:
 
-```jsx title="api/src/services/comments/comments.js"
+```javascript title="api/src/services/comments/comments.js"
 export const createComment = ({ input }) => {
   return db.comment.create({
     data: input,
@@ -276,7 +276,7 @@ That's all we need on the api-side to create a comment! But let's think for a mo
 
 What about deleting a comment? We won't let a user delete their own comment, but as owners of the blog we should be able to delete/moderate them. So we'll need a delete function and API endpoint as well. Let's add those:
 
-```jsx title="api/src/services/comments/comments.js"
+```javascript title="api/src/services/comments/comments.js"
 export const deleteComment = ({ id }) => {
   return db.comment.delete({
     where: { id },
@@ -302,7 +302,7 @@ Let's make sure our service functionality is working and continues to work as we
 
 If you open up `api/src/services/comments/comments.test.js` you'll see there's one in there already, making sure that retrieving all comments (the default `comments()` function that was generated along with the service) works:
 
-```jsx title="api/src/services/comments/comments.test.js"
+```javascript title="api/src/services/comments/comments.test.js"
 import { comments } from './comments'
 
 describe('comments', () => {
@@ -328,7 +328,7 @@ What is this `scenario()` function? That's made available by Redwood that mostly
 
 Where does that data come from? Take a look at the `comments.scenarios.js` file which is next door:
 
-```jsx
+```javascript
 export const standard = defineScenario({
   comment: {
     one: {
@@ -371,7 +371,7 @@ When you receive the `scenario` argument in your test, the `data` key gets unwra
 
 Let's replace that scenario data with something more like the real data our app will be expecting:
 
-```jsx title="api/src/services/comments/comments.scenarios.js"
+```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   // highlight-start
   comment: {
@@ -412,7 +412,7 @@ The test created by the service generator simply checks to make sure the same nu
 
 Let's add our first service test by making sure that `createComment()` actually stores a new comment in the database. When creating a comment we're not as worried about existing data in the database so let's create a new scenario which only contains a post—the post we'll be linking the new comment to through the comment's `postId` field:
 
-```jsx title="api/src/services/comments/comments.scenarios.js"
+```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   // ...
 })
@@ -433,7 +433,7 @@ export const postOnly = defineScenario({
 
 Now we can pass the `postOnly` scenario name as the first argument to a new `scenario()` test:
 
-```jsx title="api/src/services/comments/comments.test.js"
+```javascript title="api/src/services/comments/comments.test.js"
 // highlight-next-line
 import { comments, createComment } from './comments'
 

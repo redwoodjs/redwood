@@ -13,7 +13,7 @@
 ## Mocking a Cell's Query
 
 Locate the file ending with with `.mock.js` in your Cell's folder. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
-```jsx {4,5,6,12,13,14} title="UserProfileCell/UserProfileCell.js"
+```jsx {3,4,5,11,12,13} title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {
@@ -55,7 +55,7 @@ export const standard = {
 ### GraphQL request variables
 
 If you want to dynamically modify mock-data based on a queries variables the `standard` export can also be a function, and the first parameter will be an object containing the variables:
-```jsx {2,7} title="UserProfileCell/UserProfileCell.mock.js"
+```jsx {1,6} title="UserProfileCell/UserProfileCell.mock.js"
 export const standard = (variables) => {
   return {
     userProfile: {

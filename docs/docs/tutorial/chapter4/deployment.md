@@ -43,7 +43,7 @@ And believe it or not, we're done! Now we just need the connection URL. Click on
 
 We need to let Prisma know that we intend to use Postgres instead of SQLite from now on. Update the `provider` entry in `schema.prisma`:
 
-```jsx
+```javascript
 provider = "postgres"
 ```
 
