@@ -117,14 +117,14 @@ Before we get into the how-to, a little explanation. When thinking about docs, w
 
 ### Docs for Developing Redwood Apps
 
-redwoodjs.com has three kinds of Developing docs: Docs, How To's, and The Tutorial.
-You can find Docs and How To's within their respective directories on the redwood/redwoodjs.com repo: [docs/](https://github.com/redwoodjs/redwoodjs.com/tree/main/docs) and [how-to/](https://github.com/redwoodjs/redwoodjs.com/tree/main/how-to). The Tutorial is actually all in [one file](https://github.com/redwoodjs/redwoodjs.com/blob/main/TUTORIAL.md).
+redwoodjs.com has three kinds of Developing docs: References, How To's, and The Tutorial.
+You can find References and How To's within their respective directories on the redwood/redwood repo: [docs/](https://github.com/redwoodjs/redwood/tree/main/docs) and [how-to/](https://github.com/redwoodjs/redwood/tree/main/docs/how-to).
 
 The Tutorial is a standalone document that serves a specific purpose as an introduction to Redwood, an aspirational roadmap, and an example of developer experience. As such, it's distinct from the categories mentioned, although it's most similar to How To's.
 
-#### Docs
+#### References
 
-Docs are explanation-driven how-to content. They're more direct and to-the-point than The Tutorial and How To's. The idea is much more about finding something or getting something done than any kind of learning journey.
+References are explanation-driven how-to content. They're more direct and to-the-point than The Tutorial and How To's. The idea is much more about finding something or getting something done than any kind of learning journey.
 
 Before you take on a doc, you should read [Forms](forms.md) and [Router](router.md); they have the kind of content you should be striving for. They're comprehensive yet conversational.
 
