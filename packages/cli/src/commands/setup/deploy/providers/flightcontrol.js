@@ -203,6 +203,7 @@ const updateApp = () => {
   return {
     title: 'Updating App.js fetch config...',
     task: (_ctx) => {
+      // TODO Can improve in the future with RW getPaths()
       const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
       const appJsPath = path.join(getPaths().base, 'web/src/App.js')
 
@@ -212,7 +213,8 @@ const updateApp = () => {
       } else if (fs.existsSync(appJsPath)) {
         appPath = appJsPath
       } else {
-        console.log(`Skipping, did not detect api/src/functions/auth.js`)
+        // TODO this should never happen. Throw instead?
+        console.log(`Skipping, did not detect web/src/App.js|tsx`)
         return
       }
 
@@ -222,12 +224,13 @@ const updateApp = () => {
       )
       if (authLineIndex === -1) {
         console.log(`
-    Couldn't find <AuthProvider in web/src/App.js
-    You'll have to add the following fetch config manually:
+    Couldn't find <AuthProvider /> in web/src/App.js
+    If (and when) you use *dbAuth*, you'll have to add the following fetch config to <AuthProvider />:
 
     config={{ fetchConfig: { credentials: 'include' } }}
     `)
-      } else {
+        // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
+      } else if (appContent.toString().match(/dbAuth/)) {
         appContent[
           authLineIndex
         ] = `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
@@ -240,11 +243,12 @@ const updateApp = () => {
       if (gqlLineIndex === -1) {
         console.log(`
     Couldn't find <RedwoodApolloProvider in web/src/App.js
-    You'll have to add the following fetch config manually:
+    If (and when) you use *dbAuth*, you'll have to add the following fetch config manually:
 
     graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}}
     `)
-      } else {
+        // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
+      } else if (appContent.toString().match(/dbAuth/)) {
         appContent[
           gqlLineIndex
         ] = `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
