@@ -57,7 +57,7 @@ export async function handler({ force, install, packages }) {
   const rwPaths = getPaths()
 
   const installPackages = (
-    packages.indexOf(ALL_KEYWORD) !== -1 ? ALL_MANTINE_PACKAGES : packages
+    packages.includes(ALL_KEYWORD) ? ALL_MANTINE_PACKAGES : packages
   ).map((pack) => `@mantine/${pack}`)
 
   const tasks = new Listr([
