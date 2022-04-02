@@ -29,7 +29,7 @@ describe('User specified imports, with static imports', () => {
 
     outputNoStaticImports = prebuildWebFile(routesFile, {
       forJest: true,
-    }).code //?
+    }).code
   })
 
   it('Imports layouts correctly', () => {
@@ -142,7 +142,7 @@ describe('User specified imports, with static imports', () => {
   loader: () => import("./pages/Jobs/JobsPage/JobsPage")
 }`)
 
-    expect(outputNoStaticImports).not.toContain(`const EditJobPage = {
+    expect(outputNoStaticImports).not.toContain(`const JobsNewJobPage = {
   name: "JobsNewJobPage",
   loader: () => import("./pages/Jobs/NewJobPage/NewJobPage")
 }`)
