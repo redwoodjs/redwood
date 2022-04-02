@@ -69,8 +69,6 @@ Navigate to [http://localhost:8910/posts/new](http://localhost:8910/posts/new), 
 
 Did we just create a post in the database? Yup! With `yarn rw g scaffold <model>`, Redwood created all the pages, components, and services necessary to perform all CRUD actions on our posts table.
 
-We've only run a handful of commands and we already have a working app!
-
 ## Next Steps
 
 The best way to learn Redwood is by going through the comprehensive [Tutorial](tutorial/foreword.md) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
