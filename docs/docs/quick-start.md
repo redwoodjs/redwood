@@ -60,7 +60,7 @@ You'll be prompted for the name of your migration. `create posts` will do.
 Now let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on our `Post` model:
 
 ```
-yarn redwood g scaffold userExample
+yarn redwood g scaffold post
 ```
 
 Navigate to [http://localhost:8910/posts/new](http://localhost:8910/posts/new), fill in the title and body, and click "Save":
