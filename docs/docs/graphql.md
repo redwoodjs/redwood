@@ -8,14 +8,14 @@ Since there's two parts to GraphQL in Redwood, the client and the server, we've 
 
 On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/docs/react/) by default though you can swap it out for something else if you want.
 
-The `api` side offers a GraphQL server built on [GraphQL Helix](https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+The `api` side offers a GraphQL server built on [GraphQL Yoga](https://www.graphql-yoga.com) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
 One of the tenets of the Redwood philosophy is "Redwood believes that, as much as possible, you should be able to operate in a serverless mindset and deploy to a generic computational grid.”
 
 To be able to deploy to a “generic computation grid” means that, as a developer, you should be able to deploy using the provider or technology of your choosing. You should be able to deploy to Netlify, Vercel, Fly, Render, AWS Serverless, or elsewhere with ease and no vendor or platform lock in. You should be in control of the framework, what the response looks like, and how your clients consume it.
 
-The same should be true of your GraphQL Server. [GraphQL Helix](https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44) makes that possible.
+The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graphql-yoga.com) makes that possible.
 
 > Existing libraries like Apollo Server provide you with either a complete HTTP server or a middleware function that you can plug into your framework of choice. GraphQL Helix takes a different approach—it just provides a handful of functions that you can use to turn an HTTP request into a GraphQL execution result. In other words, GraphQL Helix leaves it up to you to decide how to send back the response.
 
