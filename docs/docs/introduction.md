@@ -7,18 +7,17 @@ Redwood features an end-to-end development workflow that weaves together the bes
 
 To get the most out of Redwood, do two things:
 
-- Read the [Tutorial](tutorial/foreword.md)
+- Start the [Tutorial](tutorial/foreword.md)
 - Join the [community](https://community.redwoodjs.com/)
 
-The Tutorial is a must.
+The Tutorial is the best way to start your Redwood adventure.
 It's readable, feature-ful, and fun.
-You'll go all the way from `git clone` to Netlify deploy, and by the end, you should feel comfortable enough the framework to start that side project!
+You'll go all the way from `git clone` to Netlify deploy!
+By the end, you should feel comfortable enough to start that side project.
 
-After you've read the Tutorial and started your side project, come say hi and tell us all about it by joining the community!
-Redwood wouldn't be where it is without the people who use it, and we love getting to know our users!
-
-> If you're in a hurry, would rather learn as you go, or need a quick reference, check out the [Quick Start](quick-start.md).
-> But try to make time to do the [Tutorial](tutorial/foreword.md) at least once.
+After you've read the Tutorial and started your side project, come say hi and tell us all about it by joining the community.
+Redwood wouldn't be where it is without the people who use it and contribute to it.
+We warmly welcome you!
 
 ## How these Docs are Organized
 
@@ -29,7 +28,7 @@ As you can probably tell from the sidebar, Redwood's docs are organized into thr
 - [How To](how-to/index)
 
 The order isn't arbitrary.
-This is more or less the learning journey we expect you to take.
+This is more or less the learning journey we have in mind for you.
 
 While we expect you to read the Tutorial from top to bottom (maybe even more than once?), we of course don't expect you to read the Reference and How To sections that way.
 The content in those sections is there on an as-needed basis.
@@ -42,10 +41,8 @@ For example, [Services](services.md) are fundamental to Redwood.
 It's worth getting to know them inside and out.
 And if you're not writing [tests](testing.md) and [stories](storybook.md), you're not using Redwood to its full potential.
 
-And if you're on Windows, the [Windows Development Setup](how-to/windows-development-setup.md) is most definitely required reading.
-
-> We realize the content doesn't always match the organization
-> For example, half the [Testing](testing.md) reference reads like a tutorial, and parts of the [Logger](logger.md) reference read like a how to.
+> We realize that the content doesn't always match the organization.
+> For example, half the [Testing](testing.md) reference reads like a tutorial, and half the [Logger](logger.md) reference read like a how to.
 >
-> Till now, we've focused on coverage, making sure we had content on every feature of the framework somewhere.
-> Now that we've released v1, we'll shift our focus to organization, and pay more attention to how we can curate the experience for you as a reader.
+> Till now, we've focused on coverage, making sure we had content on all of Redwood's feature somewhere at least.
+> We'll shift our focus to organization, and pay more attention to how we can curate the experience for our readers.
