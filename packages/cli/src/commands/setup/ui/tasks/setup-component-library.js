@@ -69,11 +69,6 @@ export function extendAppJS({
   }
 
   if (name) {
-    if ((around && within) || !(around || within)) {
-      throw new Error(
-        'To insert a component, exactly one of (around | within) must be defined. Choose one.'
-      )
-    }
     insertComponent(content, {
       component: name,
       props,
