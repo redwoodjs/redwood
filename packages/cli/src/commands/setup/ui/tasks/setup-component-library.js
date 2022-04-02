@@ -13,7 +13,7 @@ export function appJSContains(str) {
 }
 
 /**
- * Inject code into App.[js|tsx].
+ * Inject code into App.{js,tsx}.
  * Use of insertComponent assumes only one of (around|within) are used, and that the component
  * identified by (around|within) occurs exactly once in App.js|tsx.
  * Imports are added after the last redwoodjs import.
