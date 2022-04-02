@@ -15,7 +15,7 @@ export function appJSContains(str) {
 /**
  * Inject code into App.{js,tsx}.
  * Use of insertComponent assumes only one of (around|within) are used, and that the component
- * identified by (around|within) occurs exactly once in App.js|tsx.
+ * identified by (around|within) occurs exactly once in App.{js,tsx}.
  * Imports are added after the last redwoodjs import.
  * moduleScopeLines are added after the last import.
  *
@@ -33,7 +33,7 @@ export function appJSContains(str) {
  * component.
  * @param {Array} options.imports Import declarations to inject after the last redwoodjs import.
  * @param {Array} options.moduleScopeLines Lines of code to inject after the last import statement.
- * @returns Nothing; writes changes directly into App.js|tsx.
+ * @returns Nothing; writes changes directly into App.{js,tsx}.
  */
 export function extendAppJS({
   insertComponent: {
