@@ -60,6 +60,11 @@ jobs:
           yarn rw build --no-prerender
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
+      - name: Run `rw prerender`
+        run: |
+          yarn rw prerender --verbose
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
       - name: Run smoke tests on 'rw dev' and 'rw serve'
         working-directory: ./tasks/smoke-test
         run: npx playwright test
@@ -72,10 +77,6 @@ jobs:
           yarn rw info
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      - name: Run `rw prerender`
-        run: |
-          yarn rw prerender --verbose
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw lint`
         run: |
