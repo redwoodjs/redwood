@@ -48,7 +48,7 @@ export function extendAppJS({
   moduleScopeLines = [],
 }) {
   const webAppPath = getPaths().web.app
-  let content = fs.readFileSync(webAppPath).toString().split('\n')
+  const content = fs.readFileSync(webAppPath).toString().split('\n')
 
   if (moduleScopeLines && moduleScopeLines.length) {
     content.splice(
@@ -182,7 +182,7 @@ export function objectToComponentProps(
   obj,
   options = { exclude: [], raw: false }
 ) {
-  let props = []
+  const props = []
 
   const doRaw = (key) =>
     options.raw === true ||
