@@ -4,7 +4,7 @@ import { getPaths } from '../../../../lib'
 
 /**
  * @param {string} str The value to search for.
- * @returns true if the contents of App.[js|tsx] contains the given string, false otherwise.
+ * @returns true if the contents of App.{js,tsx} contains the given string, false otherwise.
  */
 export function appJSContains(str) {
   const webAppPath = getPaths().web.app
