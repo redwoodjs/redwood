@@ -1,3 +1,7 @@
+---
+description: An ORM with a natural interface
+---
+
 # RedwoodRecord
 
 > RedwoodRecord is currently considered to be **Experimental**. We are hoping folks will start using it and give us feedback to help shape it's development and developer experience.
