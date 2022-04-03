@@ -8,7 +8,7 @@ Redwood features an end-to-end development workflow that weaves together the bes
 To get the most out of Redwood, do two things:
 
 - Start the [Tutorial](tutorial/foreword.md)
-- Join the [community](https://community.redwoodjs.com/)
+- Join the [community](https://redwoodjs.com/community)
 
 The Tutorial is the best way to start your Redwood adventure.
 It's readable, feature-ful, and fun.
