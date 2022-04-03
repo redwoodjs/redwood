@@ -1,8 +1,7 @@
 ---
-title: GraphQL
-description: All about using GraphQL in Redwood's sides
-slug: graphql
+description: GraphQL is a fundamental part of Redwood
 ---
+
 # GraphQL
 
 GraphQL is a fundamental part of Redwood. Having said that, you can get going without knowing anything about it, and can actually get quite far without ever having to read [the docs](https://graphql.org/learn/). But to master Redwood, you'll need to have more than just a vague notion of what GraphQL is. You'll have to really grok it.

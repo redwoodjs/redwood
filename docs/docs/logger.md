@@ -1,8 +1,8 @@
 ---
 title: Logging
-description: Use the Redwood Logger to observe your application
-slug: logger
+description: Use the Logger to observe your application
 ---
+
 # Logger
 
 RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing and after you have deployed.

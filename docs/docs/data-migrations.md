@@ -1,8 +1,7 @@
 ---
-title: Data Migrations
-description: Track changes to your database structure and content
-slug: data-migrations
+description: Track changes to database content
 ---
+
 # Data Migrations
 
 > Data Migrations are available as of RedwoodJS v0.15

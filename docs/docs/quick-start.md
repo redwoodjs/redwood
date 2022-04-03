@@ -1,7 +1,5 @@
 ---
-title: Quick Start
-description: RedwoodJS Quick Start
-slug: quick-start
+description: Redwood quick start
 ---
 
 # Quick Start

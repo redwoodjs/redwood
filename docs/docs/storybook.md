@@ -1,8 +1,7 @@
 ---
-title: Storybook
 description: A frontend-first, component-driven development workflow
-slug: storybook
 ---
+
 # Storybook
 
 Storybook enables a kind of frontend-first, component-driven development workflow that we've always wanted.

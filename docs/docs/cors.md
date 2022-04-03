@@ -1,8 +1,8 @@
 ---
-title: Cross Origin Resource Sharing
-description: When you need to worry about CORS
-slug: cors
+title: Cross-Origin Resource Sharing
+description: For when you need to worry about CORS
 ---
+
 # CORS
 
 CORS stands for [Cross Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). In a nutshell, by default, browsers aren't allowed to access resources outside their own domain.

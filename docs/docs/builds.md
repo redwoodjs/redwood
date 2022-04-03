@@ -1,7 +1,5 @@
 ---
-title: Builds
-description: Building Redwood
-slug: builds
+description: What happens when you run `yarn rw build`
 ---
 # Builds
 

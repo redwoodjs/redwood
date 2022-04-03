@@ -1,8 +1,7 @@
 ---
-title: Assets and Files
-description: Import files, such as images, into your application.
-slug: assets-and-files
+description: How to include assets—like images—in your app
 ---
+
 # Assets and Files
 
 There are two ways to add an asset to your Redwood app:

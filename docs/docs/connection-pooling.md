@@ -1,8 +1,7 @@
 ---
-title: Connection Pooling
-description: Enable connection pooling to scale your Serverless functions.
-slug: connection-pooling
+description: Enable connection pooling to scale your serverless functions
 ---
+
 # Connection Pooling
 
 > ⚠ **Work in Progress** ⚠️

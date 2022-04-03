@@ -1,7 +1,5 @@
 ---
-title: Cells
-description: All about Cells and data fetching in RedwoodJS.
-slug: cells
+description: Declarative data fetching with Cells
 ---
 # Cells
 

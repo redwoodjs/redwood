@@ -1,8 +1,7 @@
 ---
-title: RedwoodRecord
-description: An ORM with a natural interface to the underlying data in your database
-slug: redwood-record
+description: An ORM with a natural interface
 ---
+
 # RedwoodRecord
 
 > RedwoodRecord is currently considered to be **Experimental**. We are hoping folks will start using it and give us feedback to help shape it's development and developer experience.

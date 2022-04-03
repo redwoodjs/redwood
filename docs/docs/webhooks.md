@@ -1,8 +1,7 @@
 ---
-title: Webhooks
-description: Integrate third-party services with webhooks securely
-slug: webhooks
+description: Securely integrate third-party services
 ---
+
 # Webhooks
 
 If you've used [Automate](https://automate.io/), [IFTTT](https://ifttt.com/maker_webhooks), [Pipedream](https://pipedream.com/docs/api/rest/webhooks/), or [Zapier](https://zapier.com/apps/webhook/integrations) then you're familiar with how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps. RedwoodJS helps you work with webhooks by giving you the tools to both receive and verify incoming webhooks and sign outgoing ones with ease.

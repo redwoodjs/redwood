@@ -1,7 +1,5 @@
 ---
-title: Environment Variables
-description: Use Environment Variables both api and web side.
-slug: environment-variables
+description: How to use environment variables on the api and web sides
 ---
 
 # Environment Variables

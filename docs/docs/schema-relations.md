@@ -1,8 +1,7 @@
 ---
-title: Prisma Relations and Generators
-description: Explains how Prisma relations work with scaffolding
-slug: schema-relations
+description: How Prisma relations work with scaffolds
 ---
+
 # Prisma Relations and Redwood's Generators
 
 These docs apply to Redwood v0.25 and greater. Previous versions of Redwood had limitations when creating scaffolds for any one-to-many or many-to-many relationships. Most of those have been resolved so you should definitely [upgrade to 0.25](https://community.redwoodjs.com/t/upgrading-to-redwoodjs-v0-25-and-prisma-v2-16-db-upgrades-and-project-code-mods/1811) if at all possible!

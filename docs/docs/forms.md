@@ -1,8 +1,7 @@
 ---
-title: Forms
-description: Redwood makes building forms easier with helpers
-slug: forms
+description: Redwood makes building forms easier with helper components
 ---
+
 # Forms
 
 Redwood provides several helpers to make building forms easier.

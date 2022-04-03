@@ -1,8 +1,7 @@
 ---
-title: Mocking GraphQL Requests
-description: Mock your GraphQL requests to test your components
-slug: mocking-graphql-requests
+description: Mock GraphQL requests to test your components
 ---
+
 # Mocking GraphQL Requests
 
 Testing and building components without having to rely on the API is a good best practice. Redwood makes this possible via `mockGraphQLQuery` and `mockGraphQLMutation`.

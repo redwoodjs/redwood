@@ -1,11 +1,10 @@
 ---
-title: Services
-description: Put all of your business logic in one place
-slug: services
+description: Put all your business logic in one place
 ---
+
 # Services
 
-Redwood aims to put all of your business logic in one place—Services. These can be used by your GraphQL API or any other place in your backend code. Redwood does all of the annoying stuff for you, just write your business logic!
+Redwood aims to put all your business logic in one place—Services. These can be used by your GraphQL API or any other place in your backend code. Redwood does all the annoying stuff for you, just write your business logic!
 
 ## Overview
 
@@ -122,7 +121,7 @@ import { validate, validateWith, validateUniqueness } from '@redwoodjs/api'
 
 ### validate()
 
-This is the main function to call when you have a piece of data to validate. There are two forms of this function call, one with 2 arguments and one with 3. The first argument is always the variable to validate and the last argument is an object with all of the validations you want to run against the first argument. The (optional) second argument is the name of the field to be used in a default error message if you do not provide a custom one:
+This is the main function to call when you have a piece of data to validate. There are two forms of this function call, one with 2 arguments and one with 3. The first argument is always the variable to validate and the last argument is an object with all the validations you want to run against the first argument. The (optional) second argument is the name of the field to be used in a default error message if you do not provide a custom one:
 
 ```jsx
 // Two argument form: validate(value, validations)
@@ -654,7 +653,7 @@ yarn rw dev
 3. [Optional] An object with options.
 4. Callback to be invoked if record is found to be unique.
 
-In its most basic usage, say you want to make sure that a user's email address is unique before creating the record. `input` is an object containing all of the user fields to save to the database, including `email` which must be unique:
+In its most basic usage, say you want to make sure that a user's email address is unique before creating the record. `input` is an object containing all the user fields to save to the database, including `email` which must be unique:
 
 ```jsx
 const createUser = (input) => {

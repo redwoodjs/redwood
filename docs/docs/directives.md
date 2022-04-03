@@ -1,8 +1,7 @@
 ---
-title: Directives
 description: Directives run reusable code during GraphQL execution
-slug: directives
 ---
+
 # Directives
 
 Redwood Directives are a powerful feature, supercharging your GraphQL-backed Services.

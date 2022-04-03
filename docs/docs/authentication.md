@@ -1,8 +1,7 @@
 ---
-title: Authentication
-description: Setup an authentication provider.
-slug: authentication
+description: Set up an authentication provider
 ---
+
 # Authentication
 
 `@redwoodjs/auth` contains both a built-in database-backed authentication system (dbAuth), as well as lightweight wrappers around popular SPA authentication libraries.

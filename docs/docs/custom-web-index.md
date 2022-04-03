@@ -1,7 +1,5 @@
 ---
-title: Custom Web Index
-description: Customize App mounting using a setup command
-slug: custom-web-index
+description: Customize how the App component mounts to the DOM
 ---
 
 # Custom Web Index

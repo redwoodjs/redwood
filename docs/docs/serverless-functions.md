@@ -1,8 +1,7 @@
 ---
-title: Serverless Functions
-description: Create, develop, and runn serverless functions
-slug: serverless-functions
+description: Create, develop, and run serverless functions
 ---
+
 # Serverless Functions
 
 <!-- `redwood.toml`&mdash;`api/src/functions` by default.  -->

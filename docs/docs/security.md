@@ -1,8 +1,7 @@
 ---
-title: Security
 description: Build and deploy secure applications
-slug: security
 ---
+
 # Security
 
 RedwoodJS wants you to be able build and deploy secure applications and takes the topic of security seriously.
