@@ -1,6 +1,6 @@
 ---
 title: Contributing
-description: There are several ways you can contribute to Redwood
+description: There's several ways to contribute to Redwood
 slug: contributing
 ---
 

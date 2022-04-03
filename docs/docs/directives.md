@@ -1,5 +1,5 @@
 ---
-description: Directives run reusable code during GraphQL execution
+description: Customize GraphQL execution
 ---
 
 # Directives

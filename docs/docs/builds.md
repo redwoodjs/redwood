@@ -1,5 +1,5 @@
 ---
-description: What happens when you run `yarn rw build`
+description: What happens when you build your app
 ---
 # Builds
 

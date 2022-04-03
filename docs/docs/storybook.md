@@ -1,5 +1,5 @@
 ---
-description: A frontend-first, component-driven development workflow
+description: A component-driven development workflow
 ---
 
 # Storybook

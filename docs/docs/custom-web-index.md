@@ -1,5 +1,5 @@
 ---
-description: Customize how the App component mounts to the DOM
+description: Change how App mounts to the DOM
 ---
 
 # Custom Web Index

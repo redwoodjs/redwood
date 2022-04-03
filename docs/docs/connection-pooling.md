@@ -1,5 +1,5 @@
 ---
-description: Enable connection pooling to scale your serverless functions
+description: Scale your serverless functions
 ---
 
 # Connection Pooling

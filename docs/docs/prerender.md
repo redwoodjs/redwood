@@ -1,5 +1,5 @@
 ---
-description: Render pages ahead of time for a faster user experience
+description: Render pages ahead of time
 ---
 
 # Prerender
