@@ -193,7 +193,7 @@ export const deleteContact = ({ id }) => {
 
 Pretty simple. You can see here how the `createContact()` function expects the `input` argument and just passes that on to Prisma in the `create()` call.
 
-You can delete `updateContact` and `deleteContact` here if you want, but since there's no longer an assessible GraphQL field for them they can't be used by the client anyway.
+You can delete `updateContact` and `deleteContact` here if you want, but since there's no longer an accessible GraphQL field for them they can't be used by the client anyway.
 
 Before we plug this into the UI, let's take a look at a nifty GUI you get just by running `yarn redwood dev`.
 
