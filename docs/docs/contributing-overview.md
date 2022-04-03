@@ -1,4 +1,6 @@
 ---
+title: Contributing
+description: There's several ways to contribute to Redwood
 slug: contributing
 ---
 

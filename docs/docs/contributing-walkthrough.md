@@ -1,3 +1,8 @@
+---
+title: Contributing Walkthrough
+description: Watch a video of the contributing process
+---
+
 # Contributing: Step-by-Step Walkthrough (with Video)
 
 > ⚡️ **Quick Links**
