@@ -20,15 +20,15 @@ To get the most out of Redwood, do two things:
 The tutorial is the best way to start your Redwood adventure.
 It's readable, feature-ful, and fun.
 You'll go all the way from `git clone` to Netlify deploy!
-By the end, you should feel comfortable enough to start that side project.
+And by the end, you should feel comfortable enough to start that side project.
 
 After you've read the tutorial and started your side project, come say hi and tell us all about it by joining the community.
-Redwood wouldn't be where it is without the people who use it and [contribute to it](https://github.com/redwoodjs/redwood#all-contributors).
+Redwood wouldn't be where it is without the people who use and contribute to it.
 We warmly welcome you!
 
 ## How these Docs are Organized
 
-As you can probably tell from the sidebar, Redwood's docs are organized into three categories:
+As you can probably tell from the sidebar, Redwood's docs are organized into three sections:
 
 - [Tutorial](tutorial/foreword.md)
 - [Reference](index)
@@ -42,14 +42,14 @@ The content in those sections is there on an as-needed basis.
 You need to know about the Router? Check out the [Router](router.md) reference.
 You need to upload files? Check out the [File Uploads](how-to/file-uploads.md) how to.
 
-That said, there are some references you should really consider reading at some point in Redwood learning journey.
+That said, there are some references you should consider reading at some point in your Redwood learning journey.
 Especially if you want to become an advanced user.
 For example, [Services](services.md) are fundamental to Redwood.
 It's worth getting to know them inside and out.
 And if you're not writing [tests](testing.md) and [stories](storybook.md), you're not using Redwood to its full potential.
 
-> We realize that the content doesn't always match the organization.
-> For example, half the [Testing](testing.md) reference reads like a tutorial, and half the [Logger](logger.md) reference read like a how to.
+> **We realize that the content doesn't always match the organization**
 >
+> For example, half the [Testing](testing.md) reference reads like a tutorial, and half the [Logger](logger.md) reference read like a how to.
 > Till now, we've focused on coverage, making sure we had content on all of Redwood's feature somewhere at least.
-> We'll shift our focus to organization, and pay more attention to how we can curate the experience for our readers.
+> We'll shift our focus to organization and pay more attention to how we can curate the experience.

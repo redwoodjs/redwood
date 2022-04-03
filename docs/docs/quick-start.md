@@ -40,7 +40,7 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 > ```
 > yarn redwood --help
 > ```
-> For all the details, see the [CLI reference](https://redwoodjs.com/docs/cli-commands).
+> For all the details, see the [CLI reference](cli-commands.md).
 
 ## Prisma and the database
 
@@ -125,4 +125,4 @@ yarn rw g setup auth --help
 
 ## Next Steps
 
-The best way to learn Redwood is by going through the comprehensive [Tutorial](tutorial/foreword.md) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
+The best way to learn Redwood is by going through the comprehensive [tutorial](tutorial/foreword.md) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
