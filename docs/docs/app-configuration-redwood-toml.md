@@ -153,20 +153,12 @@ Given an environment variable `DEPLOY_ENVIRONMENT` that declares `development`, 
 
 ## [browser]
 
-Configuration for the browser target.
-
-| Key    | Description                                                       | Default | Context       |
-| :----- | :---------------------------------------------------------------- | :------ | :------------ |
-| `open` | Open the browser to web's `host:port` after the dev server starts | `false` | `development` |
-
-### open
-
 ```toml title="redwood.toml"
 [browser]
   open = true
 ```
 
-Setting `open` to `true` opens your browser to `host:port` keys listed in the `[web]` table (by default, `localhost:8910`) after the dev server starts.
+Setting `open` to `true` opens your browser to `${host}:${port}` (by default, `localhost:8910`) after the dev server starts.
 If you want your browser to stop opening when you `yarn rw dev`, set this to false.
 (Or just remove it entirely.)
 
@@ -183,11 +175,6 @@ There's actually a lot more you can do here. For more, see webpack's docs on [de
 Many of Redwood's generators create Jest test or Storybook files.
 Understandably, this can be lot of files, and sometimes you don't want all of them, either because you don't plan on using Jest or Storybook, or are just getting started and don't want the overhead.
 These toml keys allows you to toggle the generation of test or story files.
-
-| Key       | Description                    | Default |
-| :-------- | :----------------------------- | :------ |
-| `tests`   | Generate Jest test files       | `true`  |
-| `stories` | Generate Storybook story files | `true`  |
 
 ## Using Environment Variables in `redwood.toml`
 
