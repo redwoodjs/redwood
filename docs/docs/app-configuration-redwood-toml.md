@@ -16,7 +16,7 @@ You can configure your Redwood app in `redwood.toml`. By default, `redwood.toml`
 
 These are listed by default because they're the ones that you're most likely to configure, but there are plenty more available.
 
-The options and their structure are based on Redwood's notion of sides and targets. Right now, Redwood has two fixed sides, api and web, that target Node.js Lambdas and browsers respectively. In the future, we'll add support for more sides and targets, and as we do, you'll see them reflected in `redwood.toml`.
+The options and their structure are based on Redwood's notion of sides and targets. Right now, Redwood has two sides, api and web, that target Node.js Lambdas and browsers respectively. In the future, we'll add support for more sides and targets, and as we do, you'll see them reflected in `redwood.toml`.
 
 > For the difference between a side and a target, see [Redwood File Structure](tutorial/chapter1/file-structure.md).
 
@@ -33,7 +33,7 @@ For certain options, instead of having to deal with build tools like webpack dir
 | `a11y`                        | Enable storybook `addon-a11y` and `eslint-plugin-jsx-a11y` | `true`                  |
 | `fastRefresh`                 | Enable webpack's fast refresh                              | `true`                  |
 | `host`                        | Hostname to listen on                                      | `"localhost"`           |
-| `includeEnvironmentVariables` | Environment variables in env files to include              | `[]`                    |
+| `includeEnvironmentVariables` | Environment variables to include                           | `[]`                    |
 | `path`                        | Path to the web side                                       | `"./web"`               |
 | `port`                        | Port to listen on                                          | `8910`                  |
 | `target`                      | Target for the web side                                    | `"browser"`             |
@@ -64,7 +64,7 @@ Now the GraphQL endpoint is at `https://api.coolredwoodapp.com/graphql`.
 
 ### Customizing the dbAuth Endpoint
 
-If you're using dbAuth, you may decide to point your serverless function (the serverless function used for login and signup) at a different host.
+If you're using dbAuth, you may decide to point its function at a different host.
 To do this without affecting your GraphQL endpoint, you can add `apiDbAuthUrl` to your `redwood.toml`:
 
 ```diff title="redwood.toml"
@@ -97,11 +97,11 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 | Key            | Description                         | Default                    |
 | :------------- | :---------------------------------- | :------------------------- |
 | `debugPort`    | Port to expose for the debugger     | `18911`                    |
-| `host`         | Hostname to listen on               | `'localhost'`              |
-| `path`         | Path to the api side                | `'./api'`                  |
+| `host`         | Hostname to listen on               | `"localhost"`              |
+| `path`         | Path to the api side                | `"./api"`                  |
 | `port`         | Port to listen on                   | `8911`                     |
-| `serverConfig` | Path to the `server.config.js` file | `'./api/server.config.js'` |
-| `target`       | Target for the api side             | `'node'`                   |
+| `serverConfig` | Path to the `server.config.js` file | `"./api/server.config.js"` |
+| `target`       | Target for the api side             | `"node"`                   |
 
 ### Fastify Server Configuration
 

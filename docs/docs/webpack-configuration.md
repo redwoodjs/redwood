@@ -7,7 +7,7 @@ Webpack is an awesome build tool, but we don't want it to be something that you 
 So it's worth repeating that you don't have to do any of this.
 
 But another of Redwood's tenets is to make the hard stuff possible.
-Whether configuring webpack counts as hard-stuff or not is up for debate, but one thing we know for sure is that it can be an epic time sink.
+Whether configuring webpack counts as hard stuff or not is up for debate, but one thing we know for sure is that it can be an epic time sink.
 
 Regardless, there'll probably come a time when you have to configure webpack.
 Here's how.
@@ -43,7 +43,7 @@ module.exports = (config, { mode }) => {
 
 If you're changing Redwood's webpack config, you should probably get familiar with it first.
 You can find Redwood's webpack configs in [`@redwoodjs/core`](https://github.com/redwoodjs/redwood/tree/main/packages/core/config).
-You'll find many there, but the final configuration that ends up as `config` in this function is made by merging the common configuration with another depending on your project's environment (i.e. `mode`).
+There's a few there, but the final configuration that ends up as `config` in this function is made by merging the [common configuration](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.common.js) with another depending on your project's environment (i.e. `mode`).
 
 ### Sass and Tailwind CSS
 
@@ -71,7 +71,7 @@ When you run `yarn rw dev`, keys in your `redwood.toml`'s `[web]` table—like `
 
 While you can configure webpack dev server using `web/config/webpack.config.js`, it's often simpler to use `yarn rw dev`'s `--forward` option.
 
-For example, if you'd prefer to go to `example.company.com` instead of `localhost:8910` when you're working on your app locally, instead of opening up the webpack config, just set [`allowedHosts`](https://webpack.js.org/configuration/dev-server/#devserverallowedhosts) and [`host`](https://webpack.js.org/configuration/dev-server/#devserverhost) straight from the CLI:
+For example, if you'd prefer to go to `example.company.com` instead of `localhost:8910` when you're working on your app locally, instead of opening up the webpack config, just set webpack dev server's [`allowedHosts`](https://webpack.js.org/configuration/dev-server/#devserverallowedhosts) and [`host`](https://webpack.js.org/configuration/dev-server/#devserverhost) options straight from the CLI (note that you'll have to use kebab-case):
 
 ```
 yarn rw dev --forward="--allowed-hosts example.company.com --host 0.0.0.0"
