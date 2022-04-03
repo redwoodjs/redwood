@@ -91,7 +91,7 @@ Mockup, build, and verify your React components, even in complete isolation from
 yarn rw storybook
 ```
 
-Before you start, see if the Redwood CLI's `setup ui` command has your favorite styling library:
+Before you start, see if the CLI's `setup ui` command has your favorite styling library:
 
 ```
 yarn rw setup ui --help
@@ -105,7 +105,7 @@ Redwood is designed for both serverless deploy targets like Netlify and Vercel a
 yarn rw g setup deploy --help
 ```
 
-And don't go live without auth.
+Don't go live without auth!
 Lock down your front and backends with Redwood's built-in, database-backed authentication system (dbAuth), or integrate with nearly a dozen third party auth providers:
 
 ```
