@@ -261,3 +261,10 @@ blockquote {
 [data-theme="dark"] [data-mode="light"] {
   display: none;
 }
+
+/*
+  Get rid of the "Back to main menu" button on mobile
+*/
+.navbar-sidebar__back {
+  display: none !important;
+}
