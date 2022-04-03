@@ -7,7 +7,7 @@ Welcome to [RedwoodJS](https://redwoodjs.com)!
 > - Redwood requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
 > - Are you on Windows? For best results, follow our [Windows development setup](https://redwoodjs.com/docs/how-to/windows-development-setup) guide
 
-Start by install dependencies:
+Start by installing dependencies:
 
 ```
 yarn install
@@ -21,6 +21,18 @@ yarn redwood dev
 ```
 
 Your browser should automatically open to http://localhost:8910 where you'll see the Welcome Page, which links out to a ton of great resources.
+
+> **The Redwood CLI**
+>
+> Congratulations on running your first Redwood CLI command!
+> From dev to deploy, the CLI is with you the whole way.
+> And there's quite a few commands at your disposal:
+> ```
+> yarn redwood --help
+> ```
+> For all the details, see the [CLI reference](https://redwoodjs.com/docs/cli-commands).
+
+## Prisma and the database
 
 Redwood wouldn't be a full-stack framework without a database. It all starts with the schema. Open the [`schema.prisma`](api/db/schema.prisma) file in `api/db` and replace the `UserExample` model with the following `Post` model:
 
@@ -59,7 +71,7 @@ Did we just create a post in the database? Yup! With `yarn rw g scaffold <model>
 
 ## Frontend first with Storybook
 
-Don't know what your data model looks like?
+Don't know what your data models look like?
 That's more than ok—Redwood integrates Storybook so that you can work on design without worrying about data.
 Mockup, build, and verify your React components, even in complete isolation from the backend:
 
@@ -93,14 +105,11 @@ yarn rw g setup deploy --help
 ```
 
 Don't go live without auth!
-Lock down your front and backends with Redwood's built-in, database-backed authentication system (dbAuth), or integrate with nearly a dozen third party auth providers:
+Lock down your front and backends with Redwood's built-in, database-backed authentication system ([dbAuth](https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third party auth providers:
 
 ```
 yarn rw g setup auth --help
 ```
-
-For all the details, see the [deployment](https://redwoodjs.com/docs/deploy/introduction) and [authentication](https://redwoodjs.com/docs/authentication) references.
-
 
 ## Next Steps
 

@@ -83,7 +83,7 @@ Did we just create a post in the database? Yup! With `yarn rw g scaffold <model>
 
 ## Frontend first with Storybook
 
-Don't know what your data model looks like?
+Don't know what your data models look like?
 That's more than ok—Redwood integrates Storybook so that you can work on design without worrying about data.
 Mockup, build, and verify your React components, even in complete isolation from the backend:
 
@@ -117,13 +117,11 @@ yarn rw g setup deploy --help
 ```
 
 Don't go live without auth!
-Lock down your front and backends with Redwood's built-in, database-backed authentication system (dbAuth), or integrate with nearly a dozen third party auth providers:
+Lock down your front and backends with Redwood's built-in, database-backed authentication system ([dbAuth](authentication.md#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third party auth providers:
 
 ```
 yarn rw g setup auth --help
 ```
-
-For all the details, see the [deployment](deploy/introduction.md) and [authentication](authentication.md) references.
 
 ## Next Steps
 
