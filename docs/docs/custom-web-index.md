@@ -8,7 +8,7 @@ But if you need to customize how this happens, you can provide a file named `ind
 
 To make this easy, there's a setup command that'll give you the file you need where you need it:
 
-```bash
+```
 yarn rw setup custom-web-index
 ```
 
