@@ -1,3 +1,8 @@
+---
+title: App Configuration
+description: Configure your app with redwood.toml
+slug: app-configuration
+---
 # App Configuration: redwood.toml
 
 You can configure your Redwood app's settings in `redwood.toml`. By default, `redwood.toml` lists the following configuration options:

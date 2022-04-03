@@ -1,3 +1,8 @@
+---
+title: TypeScript
+description: Redwood comes with full TypeScript support
+slug: typescript
+---
 # TypeScript
 
 Redwood comes with full TypeScript support, and you don't have to give up any of the conveniences that Redwood offers to enjoy all the benefits of a type-safe codebase.

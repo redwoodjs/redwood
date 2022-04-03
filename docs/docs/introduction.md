@@ -1,3 +1,8 @@
+---
+title: Introduction
+description: Redwood is the full-stack web framework designed to help you grow from side project to startup.
+slug: introduction
+---
 # Introduction
 
 Redwood is the full-stack web framework designed to help you grow from side project to startup.

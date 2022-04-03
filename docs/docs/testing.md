@@ -1,3 +1,8 @@
+---
+title: Testing
+description: Comprehensive reference for testing your application
+slug: testing
+---
 # Testing
 
 Testing. For some it's an essential part of their development workflow. For others it's something they know they *should* do, but for whatever reason it hasn't struck their fancy yet. For others still it's something they ignore completely, hoping the whole concept will go away. But tests are here to stay, and maybe Redwood can change some opinions about testing being awesome and fun.

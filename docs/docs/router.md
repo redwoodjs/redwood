@@ -1,3 +1,8 @@
+---
+title: Router
+description: About the built-in router for Redwood apps
+slug: router
+---
 # Router
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.

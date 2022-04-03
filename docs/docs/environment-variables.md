@@ -1,3 +1,9 @@
+---
+title: Environment Variables
+description: Use Environment Variables both api and web side.
+slug: environment-variables
+---
+
 # Environment Variables
 
 You can provide environment variables to each side of your Redwood app in different ways, depending on each Side's target, and whether you're in development or production.

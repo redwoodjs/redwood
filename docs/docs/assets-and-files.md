@@ -1,3 +1,8 @@
+---
+title: Assets and Files
+description: Import files, such as images, into your application.
+slug: assets-and-files
+---
 # Assets and Files
 
 > ⚠ **Work in Progress** ⚠️

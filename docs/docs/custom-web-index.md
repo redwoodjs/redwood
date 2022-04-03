@@ -1,3 +1,9 @@
+---
+title: Custom Web Index
+description: Customize App mounting using a setup command
+slug: custom-web-index
+---
+
 # Custom Web Index
 
 You might've noticed that there's no call to `ReactDOM.render` anywhere in your Redwood App (`v0.26` and greater). That's because Redwood automatically mounts your `<App />` in `web/src/App.js` to the DOM. But if you need to customize how this happens, you can provide a file called `index.js` in `web/src` and Redwood will use that instead.

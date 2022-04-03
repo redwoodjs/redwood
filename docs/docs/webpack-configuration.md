@@ -1,3 +1,8 @@
+---
+title: Webpack Configuration
+description: If you have to configure webpack, here's how.
+slug: webpack
+---
 # Webpack Configuration
 
 Redwood uses webpack. And with webpack comes configuration.

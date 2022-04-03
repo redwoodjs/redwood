@@ -1,3 +1,9 @@
+---
+title: Quick Start
+description: RedwoodJS Quick Start
+slug: quick-start
+---
+
 # Quick Start
 
 > **Prerequisites**

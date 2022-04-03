@@ -1,3 +1,8 @@
+---
+title: Cells
+description: All about Cells and data fetching in RedwoodJS.
+slug: cells
+---
 # Cells
 
 Cells are a declarative approach to data fetching and one of Redwood's signature modes of abstraction.

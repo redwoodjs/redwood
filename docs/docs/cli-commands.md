@@ -1,3 +1,8 @@
+---
+title: Command Line Interface
+description: A comprehensive reference of the Redwood CLI
+slug: cli
+---
 # Command Line Interface
 
 The following is a comprehensive reference of the Redwood CLI. You can get a glimpse of all the commands by scrolling the aside to the right.

@@ -1,3 +1,8 @@
+---
+title: Services
+description: Put all of your business logic in one place
+slug: services
+---
 # Services
 
 Redwood aims to put all of your business logic in one place—Services. These can be used by your GraphQL API or any other place in your backend code. Redwood does all of the annoying stuff for you, just write your business logic!
