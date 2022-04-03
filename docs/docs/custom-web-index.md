@@ -32,5 +32,5 @@ if (rootElement.hasChildNodes()) {
   ReactDOM.render(<App />, rootElement)
 ```
 
-This is actually the same file Redwood uses [internally](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/entry/index.js).
-So even if you don't customize anything, things will still work the way they did.
+This's actually the same file Redwood uses [internally](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/entry/index.js).
+So even if you don't customize anything, things still work the way they did.
