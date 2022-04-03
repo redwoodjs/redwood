@@ -50,7 +50,7 @@ During dev and build, Redwood copies `web/public`'s contents into `web/dist`.
 
 > Changes to `web/public` don't hot-reload.
 
-Again, because assets in this directory don't go through webpack, use this strategy sparingly, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with webpack—etc.
+Again, because assets in this directory don't go through webpack, **use this strategy sparingly**, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with webpack—etc.
 
 ### Example: Adding Your Logo and Favicon to `web/public`
 
