@@ -297,10 +297,11 @@ export default ContactPage
 
 We reference the `createContact` mutation we defined in the Contacts SDL passing it an `input` object which will contain the actual name, email and message values.
 
-Next we'll call the `useMutation` hook provided by Redwood which will allow us to execute the mutation when we're ready (don't forget the `import` statement):
+Next we'll call the `useMutation` hook provided by Redwood which will allow us to execute the mutation when we're ready (don't forget to `import` it):
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -309,8 +310,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-// highlight-next-line
-import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -397,7 +396,7 @@ If you'll recall `<Form>` gives us all of the fields in a nice object where the 
 That means we can update the `onSubmit` function to invoke the mutation with the data it receives:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -406,7 +405,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -540,7 +538,7 @@ Next, let's show a notification to let the user know their submission was succes
 Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt;** component in our `return`, just before the **&lt;Form&gt;**:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -549,7 +547,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
@@ -692,7 +689,7 @@ Remember when we said that `<Form>` had one more trick up its sleeve? Here it co
 Add a `<FormError>` component, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -703,7 +700,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
@@ -902,7 +898,7 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 Here's the entire page:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -913,7 +909,6 @@ import {
   Submit,
   useForm,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
