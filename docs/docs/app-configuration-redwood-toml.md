@@ -105,7 +105,7 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 
 ### Fastify Server Configuration
 
-You can configure the Fastify Server used by the dev server in `server.config.js`
+You can configure the Fastify Server used by the dev server in `api/server.config.js`.
 For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
 > This configuration doesn't apply in a serverless deploy
@@ -114,7 +114,6 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
 
 ```toml title="redwood.toml"
 [api]
-  port = 8911
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
