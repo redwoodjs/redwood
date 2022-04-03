@@ -152,3 +152,8 @@
   from = "/docs/contributing-overview"
   to = "/docs/contributing"
   status = 301
+
+[[redirects]]
+  from = "/docs/cookbook/*"
+  to = "/docs/how-to/:splat"
+  status = 301

@@ -1,6 +1,6 @@
 # Using a Third Party API
 
-The time will come when you'll need data from a source you don't own. This cookbook recipe will present the scenario of accessing a third party's API from a Redwood app. We'll show an example of accessing an API from both the client side and the server side.
+The time will come when you'll need data from a source you don't own. This how to will present the scenario of accessing a third party's API from a Redwood app. We'll show an example of accessing an API from both the client side and the server side.
 
 We're going to build a simple weather app that will display the current weather in the user's zip code (we'll assume only zip codes in the United States of America to keep the example code as simple as possible). To do this we'll get the current weather from the [OpenWeather API](https://openweathermap.org/) and display it on the only page of our app, the homepage. The final app could look something like this (if you apply a little more styling on top of the basic version we'll build):
 

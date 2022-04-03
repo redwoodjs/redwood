@@ -32,9 +32,10 @@ These are the foundations for contributing, which you should be familiar with be
 
 The best (and most fun) way to learn Redwood and the underlying tools and technologies.
 
-**Docs and Cookbook**
+**Docs and How To**
+
 - Start with the [Introduction](https://github.com/redwoodjs/redwood/blob/main/README.md) Doc
-- And browse through [Cookbook recipes](cookbook/index)
+- And browse through [How To's](how-to/index)
 
 ### GitHub (and Git)
 Diving into Git and the GitHub workflow can feel intimidating if you haven’t experienced it before. The good news is there’s a lot of great material to help you learn and be committing in no time!
@@ -75,7 +76,7 @@ There’s nothing wrong with Terminal (on Mac) and bash. (If you’re on Windows
 Unfortunately, there are a lot of “gotchas” when it comes to working with Javascript-based frameworks on Windows. We do our best to point out (and resolve) issues, but our priority focus is on developing a Redwood app vs contributing to the Framework. (If you’re interested, there’s a lengthy Forum conversation about this with many suggestions.)
 
 All that said, we highly recommend using one of the following setups to maximize your workflow:
-1. Use [Git for Windows and Git Bash](cookbook/windows-development-setup.md) (included in installation)
+1. Use [Git for Windows and Git Bash](how-to/windows-development-setup.md) (included in installation)
 2. Use [WSL following this setup guide on the Forums](https://community.redwoodjs.com/t/windows-subsystem-for-linux-setup/2439)
 
 Lastly, the new GitPod integration is a great option and only getting better. You might just want to start using it from the beginning (see section below in “Local Development Setup”).

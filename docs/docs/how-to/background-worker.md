@@ -4,7 +4,7 @@ slug: creating-a-background-worker-with-exec-and-faktory
 
 # Creating a Background Worker with Exec and Faktory
 
-In this cookbook, we'll use Redwood's [exec CLI command](cli-commands.md#exec) to create a background worker using [Faktory](https://contribsys.com/faktory/).
+In this how to, we'll use Redwood's [exec CLI command](cli-commands.md#exec) to create a background worker using [Faktory](https://contribsys.com/faktory/).
 
 At a high level, Faktory is a language-agnostic, persistent background-job server.
 You can run it [with Docker](https://github.com/contribsys/faktory/wiki/Docker).
