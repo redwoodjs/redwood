@@ -263,7 +263,9 @@ blockquote {
 }
 
 /*
+  ------------------------
   Get rid of the "Back to main menu" button on mobile
+  ------------------------
 */
 .navbar-sidebar__back {
   display: none !important;
