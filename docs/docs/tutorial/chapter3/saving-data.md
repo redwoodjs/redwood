@@ -539,6 +539,8 @@ Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
+// highlight-next-line
+import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
   Form,
@@ -547,8 +549,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-// highlight-next-line
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -690,6 +690,7 @@ Add a `<FormError>` component, passing the `error` constant we got from `useMuta
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
   Form,
@@ -700,7 +701,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -899,6 +899,7 @@ Here's the entire page:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
   Form,
@@ -909,7 +910,6 @@ import {
   Submit,
   useForm,
 } from '@redwoodjs/forms'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
