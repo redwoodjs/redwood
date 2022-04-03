@@ -113,8 +113,8 @@ function insertComponent(
   const target = around || within
   const findTagIndex = (regex) => content.findIndex((line) => regex.test(line))
 
-  let open = findTagIndex(new RegExp(`([^\S\r\n]*)<${target}\s*(.*)\s*>`))
-  let close = findTagIndex(new RegExp(`([^\S\r\n]*)<\/${target}>`)) + 1
+  let open = findTagIndex(new RegExp(`([^\\S\r\n]*)<${target}\\s*(.*)\\s*>`))
+  let close = findTagIndex(new RegExp(`([^\\S\r\n]*)<\/${target}>`)) + 1
 
   if (open === -1 || close === -1) {
     throw new Error(`Could not find tags for ${target}`)
