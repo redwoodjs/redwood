@@ -1,67 +1,64 @@
+---
+description: If you have to configure webpack, here's how
+---
+
 # Webpack Configuration
 
 Redwood uses webpack. And with webpack comes configuration.
 
-One of Redwood's tenets is convention over configuration, so it's worth repeating that you don't have to do any of this!
-Take the golden path and everything will work just fine.
+One of Redwood's tenets is convention over configuration.
+Webpack is an awesome build tool, but we don't want it to be something that you have to be familiar with to be productive.
+So it's worth repeating that you don't have to do any of this.
 
 But another of Redwood's tenets is to make the hard stuff possible.
-Whether configuring webpack counts as hard-stuff or not is up for debate, but one thing we know for sure is that it can be an epic time sink.
-We hope that documenting it well makes it fast and easy.
+Whether configuring webpack counts as hard stuff or not is up for debate, but one thing we know for sure is that it can be an epic time sink.
+
+Regardless, there'll probably come a time when you have to configure webpack.
+Here's how.
 
 ## Configuring Webpack
 
-The best way to start configuring webpack is with the webpack setup command:
+To get started, run the webpack setup command:
 
-```bash
+```
 yarn rw setup webpack
 ```
 
-This command adds a file called `webpack.config.js` to your project's `web/config` directory, creating `web/config` if it doesn't exist:
+This setup command adds a file named `webpack.config.js` to your project's `web/config` directory, creating `web/config` if it doesn't exist:
 
-```javascript title="web/config/webpack.config.js"
+```js title="web/config/webpack.config.js"
+/** @returns {import('webpack').Configuration} Webpack Configuration */
 module.exports = (config, { mode }) => {
   if (mode === 'development') {
-    /**
-     * Add a development-only plugin
-     */
+    // Add dev plugin
   }
 
-  /**
-   * Add custom rules and plugins:
-   *
-   * ```
-   * config.module.rules.push(YOUR_RULE)
-   * config.plugins.push(YOUR_PLUGIN)
-   * ```
-   */
+  // Add custom rules for your project
+  // config.module.rules.push(YOUR_RULE)
 
-  /**
-   * And make sure to return the config!
-   */
+  // Add custom plugins for your project
+  // config.plugins.push(YOUR_PLUGIN)
+
   return config
 }
 ```
 
-This file exports a function that gets passed two arguments: `config`, which is Redwood's webpack configuration, and an object with the property `mode`, which is either `'development'` or `'production'`.
+`config` is Redwood's webpack config, and `mode` is a string that's either `'development'` or `'production'`.
 
-In this function, you can add custom rules and plugins or modify Redwood's webpack configuration, which you can find in `@redwoodjs/core`.
-Redwood has a common webpack configuration that gets merged with others depending on your project's environment (i.e. development or production):
-- [webpack.common.js](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.common.js)—the common configuration; does most of the leg work
-- [webpack.development.js](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.development.js)—used when you start the dev server (`yarn rw dev`)
-- [webpack.production.js](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.production.js)—used when you build the web side (`yarn rw build web`)
+If you're changing Redwood's webpack config, you should probably get familiar with it first.
+You can find Redwood's webpack configs in [`@redwoodjs/core`](https://github.com/redwoodjs/redwood/tree/main/packages/core/config).
+There's a few there, but the final configuration that ends up as `config` in this function is made by merging the [common configuration](https://github.com/redwoodjs/redwood/blob/main/packages/core/config/webpack.common.js) with another depending on your project's environment (i.e. `mode`).
 
-### Sass
+### Sass and Tailwind CSS
 
-Redwood comes configured with support for Sass—all you have to do is install dependencies:
+If you're about to configure webpack just to use [Sass](https://sass-lang.com/) or [Tailwind CSS](https://tailwindcss.com/), don't!
+Redwood is already configured to use Sass, if the packages are there:
 
-```bash
+```
 yarn workspace web add -D sass sass-loader
 ```
 
-### Tailwind CSS
-
-Configuring webpack just to use Tailwind CSS? Don't! Use the setup command instead:
+And if you want to use Tailwind CSS, just run the setup command:
 
 ```
 yarn rw setup ui tailwindcss
@@ -69,31 +66,24 @@ yarn rw setup ui tailwindcss
 
 ## Webpack Dev Server
 
-Redwood uses [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/) for local development.
-When you run `yarn rw dev`, TOML keys in your `redwood.toml`'s `[web]` table, like `port` and `apiUrl`, are used as Webpack Dev Server options (in this case, [devServer.port](https://webpack.js.org/configuration/dev-server/#devserverport) and [devServer.proxy](https://webpack.js.org/configuration/dev-server/#devserverproxy) respectively).
+Redwood uses [webpack dev server](https://webpack.js.org/configuration/dev-server/) for local development.
+When you run `yarn rw dev`, keys in your `redwood.toml`'s `[web]` table—like `port` and `apiUrl`—are used as webpack dev server options (in this case, [devServer.port](https://webpack.js.org/configuration/dev-server/#devserverport) and [devServer.proxy](https://webpack.js.org/configuration/dev-server/#devserverproxy) respectively).
 
-### Passing options with `--forward`
+> For all the webpack dev server options, see the [webpack dev server docs](https://webpack.js.org/configuration/dev-server/).
 
-While you can configure Webpack Dev Server in `web/config/webpack.config.js`, it's often simpler to just pass options straight to `yarn rw dev` using the `--forward` flag.
+### Using `--forward`
 
-> For the full list of Webpack Dev Server options, see https://webpack.js.org/configuration/dev-server/.
+While you can configure webpack dev server using `web/config/webpack.config.js`, it's often simpler to use `yarn rw dev`'s `--forward` option.
 
-#### Example: Setting the Port and Disabling Browser Opening
+For example, if you'd prefer to go to `example.company.com` instead of `localhost:8910` when you're working on your app locally, instead of opening up the webpack config, just set webpack dev server's [`allowedHosts`](https://webpack.js.org/configuration/dev-server/#devserverallowedhosts) and [`host`](https://webpack.js.org/configuration/dev-server/#devserverhost) options straight from the CLI (note that you'll have to use kebab-case):
 
-In addition to passing new options, you can override those in your `redwood.toml`:
-
-```bash
-yarn rw dev --forward="--port 1234 --no-open"
 ```
-
-This starts your project on port `1234` and disables automatic browser opening.
-
-#### Example: Allow External Host Access
-
-If you're running Redwood in dev mode and trying to test your application from an external source (i.e. outside your network), you'll get an “Invalid Host Header”. To enable this workflow, run the following:
-
-```bash
 yarn rw dev --forward="--allowed-hosts example.company.com --host 0.0.0.0"
 ```
 
-This starts your project and forwards it to `example.company.com`.
+You can also use `--forward` to override keys in your `redwood.toml`.
+For example, the following starts your app on port `1234` and disables automatic browser opening:
+
+```
+yarn rw dev --forward="--port 1234 --no-open"
+```
