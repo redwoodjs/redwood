@@ -13,12 +13,14 @@
   --yellow-darkest: hsl(38deg 72% 46%);
 
   --green: hsl(85deg 55% 54%);
-  --green-lightest: hsl(85deg 55% 70%);
+  --green-lightest: hsl(85deg 55% 90%);
   --green-lighter: hsl(85deg 55% 62%);
   --green-light: hsl(85deg 55% 59%);
   --green-dark: hsl(85deg 55% 49%);
   --green-darker: hsl(85deg 55% 46%);
   --green-darkest: hsl(85deg 55% 38%);
+
+  --forest: hsl(144deg 61% 20%);
 
   --blue: hsl(184, 49%, 76%);
   --blue-lightest: hsl(200deg 60% 99%);
@@ -229,4 +231,42 @@ blockquote {
 */
 .row .col--6 {
   padding: 0 0 0 2rem;
+}
+
+/*
+  ------------------------
+  Details
+  ------------------------
+*/
+.alert {
+  --ifm-alert-background-color: var(--green-lightest) !important;
+  --ifm-alert-border-color: transparent !important;
+  --docusaurus-details-decoration-color: var(--black) !important;
+}
+
+[data-theme="dark"] .alert {
+  --ifm-alert-background-color: hsl(210deg 3% 15%) !important;
+  --docusaurus-details-decoration-color: hsl(210deg 11% 96%) !important;
+}
+
+/*
+  ------------------------
+  Hide dark mode things on light mode and vice versa.
+  ------------------------
+*/
+[data-theme="light"] [data-mode="dark"] {
+  display: none;
+}
+
+[data-theme="dark"] [data-mode="light"] {
+  display: none;
+}
+
+/*
+  ------------------------
+  Get rid of the "Back to main menu" button on mobile
+  ------------------------
+*/
+.navbar-sidebar__back {
+  display: none !important;
 }
