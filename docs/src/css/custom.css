@@ -248,3 +248,25 @@ blockquote {
   --ifm-alert-background-color: hsl(210deg 3% 15%) !important;
   --docusaurus-details-decoration-color: hsl(210deg 11% 96%) !important;
 }
+
+/*
+  ------------------------
+  Hide dark mode things on light mode and vice versa.
+  ------------------------
+*/
+[data-theme="light"] [data-mode="dark"] {
+  display: none;
+}
+
+[data-theme="dark"] [data-mode="light"] {
+  display: none;
+}
+
+/*
+  ------------------------
+  Get rid of the "Back to main menu" button on mobile
+  ------------------------
+*/
+.navbar-sidebar__back {
+  display: none !important;
+}
