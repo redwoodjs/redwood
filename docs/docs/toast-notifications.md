@@ -1,3 +1,7 @@
+---
+description: Toast notifications with react-hot-toast
+---
+
 # Toast Notifications
 
 Did you know that those little popup notifications that you sometimes see at the top of a page after you've performed an action are affectionately known as "toast" notifications?

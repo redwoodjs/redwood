@@ -1,3 +1,7 @@
+---
+description: Change how App mounts to the DOM
+---
+
 # Custom Web Index
 
 You may have noticed that there's no call to `ReactDOM.render` in your Redwood app.
