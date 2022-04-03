@@ -97,6 +97,17 @@ Before you start, see if the CLI's `setup ui` command has your favorite styling 
 yarn rw setup ui --help
 ```
 
+## Testing with Jest
+
+It'd be hard to scale from side project to startup without a few tests.
+Redwood fully integrates Jest with the front and the backends and makes it easy to keep your whole app covered by generating test files with all your components and services:
+
+```
+yarn rw test
+```
+
+To make the integration even more seamless, Redwood augments Jest with database [scenarios](testing.md#scenarios)  and [GraphQL mocking](testing.md#mocking-graphql-calls).
+
 ## Ship it
 
 Redwood is designed for both serverless deploy targets like Netlify and Vercel and serverful deploy targets like Render and AWS:
@@ -111,6 +122,8 @@ Lock down your front and backends with Redwood's built-in, database-backed authe
 ```
 yarn rw g setup auth --help
 ```
+
+For all the details, see the [deployment](https://redwoodjs.com/docs/deploy/introduction) and [authentication](https://redwoodjs.com/docs/authentication) references.
 
 ## Next Steps
 
