@@ -32,6 +32,18 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 
 <img data-mode="dark" src="https://user-images.githubusercontent.com/32992335/161387013-2fc6702c-dfd8-4afe-aa2f-9b06d575ba82.png" alt="Redwood Welcome Page" style={{ marginBottom: 20 }} />
 
+> **The Redwood CLI**
+>
+> Congratulations on running your first Redwood CLI command!
+> From dev to deploy, the CLI is with you the whole way.
+> And there's quite a few commands at your disposal:
+> ```
+> yarn redwood --help
+> ```
+> For all the details, see the [CLI reference](https://redwoodjs.com/docs/cli-commands).
+
+## Prisma and the database
+
 Redwood wouldn't be a full-stack framework without a database. It all starts with the schema. Open the `schema.prisma` file in `api/db` and replace the `UserExample` model with the following `Post` model:
 
 ```js title="api/db/schema.prisma"
