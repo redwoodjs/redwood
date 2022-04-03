@@ -2,21 +2,28 @@
 
 Redwood is the full-stack web framework designed to help you grow from side project to startup.
 Redwood features an end-to-end development workflow that weaves together the best parts of [React](https://reactjs.org/), [GraphQL](https://graphql.org/), [Prisma](https://www.prisma.io/), [TypeScript](https://www.typescriptlang.org/), [Jest](https://jestjs.io/), and [Storybook](https://storybook.js.org/).
+For full inspiration and vision, see Redwood's [README](https://github.com/redwoodjs/redwood/blob/main/README.md).
+
+Development happens in the [redwoodjs/redwood repo on GitHub](https://github.com/redwoodjs/redwood).
+The [docs](https://github.com/redwoodjs/redwood/tree/main/docs) are there too.
+While Redwood's [founders and core team](https://github.com/redwoodjs/redwood#core-team) handle both the high-priority items and the day-to-day,
+Redwood wouldn't be where it is without [all its contributors](https://github.com/redwoodjs/redwood#all-contributors)!
+Feel free to reach out to us on the [forums](https://community.redwoodjs.com) or on [Discord](https://discord.gg/redwoodjs), and follow us on [Twitter](https://twitter.com/redwoodjs) for updates.
 
 ## Getting the Most out of Redwood
 
 To get the most out of Redwood, do two things:
 
-- Start the [Tutorial](tutorial/foreword.md)
-- Join the [community](https://redwoodjs.com/community)
+- [Start the tutorial](tutorial/foreword.md)
+- [Join the community](https://redwoodjs.com/community)
 
-The Tutorial is the best way to start your Redwood adventure.
+The tutorial is the best way to start your Redwood adventure.
 It's readable, feature-ful, and fun.
 You'll go all the way from `git clone` to Netlify deploy!
 By the end, you should feel comfortable enough to start that side project.
 
-After you've read the Tutorial and started your side project, come say hi and tell us all about it by joining the community.
-Redwood wouldn't be where it is without the people who use it and contribute to it.
+After you've read the tutorial and started your side project, come say hi and tell us all about it by joining the community.
+Redwood wouldn't be where it is without the people who use it and [contribute to it](https://github.com/redwoodjs/redwood#all-contributors).
 We warmly welcome you!
 
 ## How these Docs are Organized
@@ -30,7 +37,7 @@ As you can probably tell from the sidebar, Redwood's docs are organized into thr
 The order isn't arbitrary.
 This is more or less the learning journey we have in mind for you.
 
-While we expect you to read the Tutorial from top to bottom (maybe even more than once?), we of course don't expect you to read the Reference and How To sections that way.
+While we expect you to read the tutorial from top to bottom (maybe even more than once?), we of course don't expect you to read the Reference and How To sections that way.
 The content in those sections is there on an as-needed basis.
 You need to know about the Router? Check out the [Router](router.md) reference.
 You need to upload files? Check out the [File Uploads](how-to/file-uploads.md) how to.
