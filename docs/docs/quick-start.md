@@ -97,6 +97,21 @@ Before you start, see if the Redwood CLI's `setup ui` command has your favorite 
 yarn rw setup ui --help
 ```
 
+## Ship it
+
+Redwood is designed for both serverless deploy targets like Netlify and Vercel and serverful deploy targets like Render and AWS:
+
+```
+yarn rw g setup deploy --help
+```
+
+And don't go live without auth.
+Lock down your front and backends with Redwood's built-in, database-backed authentication system (dbAuth), or integrate with nearly a dozen third party auth providers:
+
+```
+yarn rw g setup auth --help
+```
+
 ## Next Steps
 
 The best way to learn Redwood is by going through the comprehensive [Tutorial](tutorial/foreword.md) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
