@@ -1,7 +1,6 @@
 ---
 title: Command Line Interface
 description: A comprehensive reference of the Redwood CLI
-slug: cli
 ---
 # Command Line Interface
 
