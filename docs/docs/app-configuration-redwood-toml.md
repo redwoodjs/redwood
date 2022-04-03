@@ -27,17 +27,17 @@ For certain options, instead of having to deal with build tools like webpack dir
 
 | Key                           | Description                                                | Default                 |
 | :---------------------------- | :--------------------------------------------------------- | :---------------------- |
-| `title`                       | Title of your Redwood app                                  | `"Redwood App"`         |
-| `host`                        | Hostname to listen on                                      | `"localhost"`           |
-| `port`                        | Port to listen on                                          | `8910`                  |
-| `path`                        | Path to the web side                                       | `"./web"`               |
-| `target`                      | Target for the web side                                    | `"browser"`             |
 | `apiUrl`                      | The path or URL to your api-server                         | `"/.redwood/functions"` |
 | `apiGraphQLUrl`               | The path or URL to your GraphQL function                   | `"${apiUrl}/graphql"`   |
 | `apiDbAuthUrl`                | The path or URL to your dbAuth function                    | `"${apiUrl}/auth"`      |
-| `includeEnvironmentVariables` | Environment variables to include                           | `[]`                    |
-| `fastRefresh`                 | Enable webpack's fast refresh                              | `true`                  |
 | `a11y`                        | Enable storybook `addon-a11y` and `eslint-plugin-jsx-a11y` | `true`                  |
+| `fastRefresh`                 | Enable webpack's fast refresh                              | `true`                  |
+| `host`                        | Hostname to listen on                                      | `"localhost"`           |
+| `includeEnvironmentVariables` | Environment variables in env files to include              | `[]`                    |
+| `path`                        | Path to the web side                                       | `"./web"`               |
+| `port`                        | Port to listen on                                          | `8910`                  |
+| `target`                      | Target for the web side                                    | `"browser"`             |
+| `title`                       | Title of your Redwood app                                  | `"Redwood App"`         |
 
 ### Customizing the GraphQL Endpoint
 
@@ -98,8 +98,8 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 | :------------- | :---------------------------------- | :------------------------- |
 | `debugPort`    | Port to expose for the debugger     | `18911`                    |
 | `host`         | Hostname to listen on               | `'localhost'`              |
-| `port`         | Port to listen on                   | `8911`                     |
 | `path`         | Path to the api side                | `'./api'`                  |
+| `port`         | Port to listen on                   | `8911`                     |
 | `serverConfig` | Path to the `server.config.js` file | `'./api/server.config.js'` |
 | `target`       | Target for the api side             | `'node'`                   |
 
