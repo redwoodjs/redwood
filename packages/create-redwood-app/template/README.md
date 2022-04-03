@@ -57,6 +57,51 @@ Navigate to http://localhost:8910/posts/new, fill in the title and body, and cli
 
 Did we just create a post in the database? Yup! With `yarn rw g scaffold <model>`, Redwood created all the pages, components, and services necessary to perform all CRUD actions on our posts table.
 
+## Frontend first with Storybook
+
+Don't know what your data model looks like?
+That's more than ok—Redwood integrates Storybook so that you can work on design without worrying about data.
+Mockup, build, and verify your React components, even in complete isolation from the backend:
+
+```
+yarn rw storybook
+```
+
+Before you start, see if the CLI's `setup ui` command has your favorite styling library:
+
+```
+yarn rw setup ui --help
+```
+
+## Testing with Jest
+
+It'd be hard to scale from side project to startup without a few tests.
+Redwood fully integrates Jest with the front and the backends and makes it easy to keep your whole app covered by generating test files with all your components and services:
+
+```
+yarn rw test
+```
+
+To make the integration even more seamless, Redwood augments Jest with database [scenarios](https://redwoodjs.com/docs/testing.md#scenarios)  and [GraphQL mocking](https://redwoodjs.com/docs/testing.md#mocking-graphql-calls).
+
+## Ship it
+
+Redwood is designed for both serverless deploy targets like Netlify and Vercel and serverful deploy targets like Render and AWS:
+
+```
+yarn rw g setup deploy --help
+```
+
+Don't go live without auth!
+Lock down your front and backends with Redwood's built-in, database-backed authentication system (dbAuth), or integrate with nearly a dozen third party auth providers:
+
+```
+yarn rw g setup auth --help
+```
+
+For all the details, see the [deployment](https://redwoodjs.com/docs/deploy/introduction) and [authentication](https://redwoodjs.com/docs/authentication) references.
+
+
 ## Next Steps
 
 The best way to learn Redwood is by going through the comprehensive [Tutorial](https://redwoodjs.com/docs/tutorial/foreword) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).

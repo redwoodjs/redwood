@@ -123,7 +123,7 @@ Lock down your front and backends with Redwood's built-in, database-backed authe
 yarn rw g setup auth --help
 ```
 
-For all the details, see the [deployment](https://redwoodjs.com/docs/deploy/introduction) and [authentication](https://redwoodjs.com/docs/authentication) references.
+For all the details, see the [deployment](deploy/introduction.md) and [authentication](authentication.md) references.
 
 ## Next Steps
 
