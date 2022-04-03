@@ -103,47 +103,14 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 | `serverConfig` | Path to the `server.config.js` file | `'./api/server.config.js'` |
 | `target`       | Target for the api side             | `'node'`                   |
 
-### Server Configuration
+### Fastify Server Configuration
 
-You can customize the Fastify Server settings used by the RedwoodJS dev server by defining `server.config.js` file and declaring where to find it using the `serverConfig` key.
+You can configure the Fastify Server used by the dev server in `server.config.js`
+For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
-#### Example Server Configuration
+> This configuration doesn't apply in a serverless deploy
 
-The following is an example `server.config.js` and what is the current default if a `serverConfig` is not specified.
-
-For the [Fastify Server options](https://www.fastify.io/docs/latest/Reference/Server/#factory) that you can set, see: https://www.fastify.io/docs/latest/Reference/Server/#factory.
-
-Examples include: logger settings, timeouts, maximum payload limits, and more.
-
-> **Note:** This configuration does not apply in a serverless deploy.
-
-```javascript title="api/server.config.js"
-/**
- * This file allows you to configure the Fastify Server settings
- * used by the RedwoodJS dev server.
- *
- * It also applies when running the api server with `yarn rw serve`.
- *
- * For the Fastify server options that you can set, see:
- * https://www.fastify.io/docs/latest/Reference/Server/#factory
- *
- * Examples include: logger settings, timeouts, maximum payload limits, and more.
- *
- * Note: This configuration does not apply in a serverless deploy.
- */
-
-/** @type {import('fastify').FastifyServerOptions} */
-const config = {
-  requestTimeout: 15_000,
-  logger: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
-  },
-}
-```
-
-You may elect to configure different `server.config.js` based on your deployment environment and take advantage of [# Using Environment Variables in redwood.toml](#using-environment-variables-in-redwoodtoml).
-
-Given an environment variable `DEPLOY_ENVIRONMENT` that declares `development`, `staging`, `production`:
+Using [redwood.toml's env var interpolation](#using-environment-variables-in-redwoodtoml), you can configure a different `server.config.js` based on your deployment environment:
 
 ```toml title="redwood.toml"
 [api]
