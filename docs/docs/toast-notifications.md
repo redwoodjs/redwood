@@ -1,7 +1,6 @@
 ---
 title: Toast Notifications
 description: Render toast notifications with built-in components
-slug: toast
 ---
 # Toast Notifications
 
