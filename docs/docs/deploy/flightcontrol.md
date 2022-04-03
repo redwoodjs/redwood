@@ -11,13 +11,8 @@
   1. Connect your Github account and select your repo
   2. Select "Config Type" as `flightcontrol.json`
   3. Select the AWS region to deploy to.
-  4. Click "Create Project"
-5. After the urls for web and api services show in the dashboard:
-  1. Copy the url for web and api 
-  2. Click "Configuration"
-  3. Add the following environment variables: `REDWOOD_WEB_URL` and `REDWOOD_API_URL`
-      - Set them to the corresponding url, including `https://`
-      - Example: `REDWOOD_API_URL=https://d3ubi15gzyf6ac.cloudfront.net`
+  4. Click "Create Project" and complete any required steps like linking your AWS account.
+
 
 NOTE: If you are using yarn v1, remove the `installCommand`'s from flightcontrol.json
 
