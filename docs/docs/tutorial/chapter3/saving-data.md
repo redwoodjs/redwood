@@ -213,7 +213,7 @@ Not very exciting yet, but check out that "Docs" tab on the far right:
 
 It's the complete schema as defined by our SDL files! The Playground will ingest these definitions and give you autocomplete hints on the left to help you build queries from scratch. Try getting the IDs of all the posts in the database; type the query at the left and then click the "Play" button to execute:
 
-<!-- <img src="https://user-images.githubusercontent.com/300/70951466-52e0f580-2018-11ea-91d6-5a5712858781.png" /> -->
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161484821-8bcb2dbf-3c4e-497d-955f-8bd8bebefe6a.png" />
 
 The GraphQL Playground is a great way to experiment with your API or troubleshoot when you come across a query or mutation that isn't behaving in the way you expect.
 
