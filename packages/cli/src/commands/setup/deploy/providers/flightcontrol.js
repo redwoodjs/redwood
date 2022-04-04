@@ -64,7 +64,10 @@ export const getFlightcontrolJson = async (database) => {
                 if (service.id === 'redwood-api') {
                   return {
                     ...service,
-                    envVariables: databaseEnvVariables,
+                    envVariables: {
+                      ...service.envVariables,
+                      ...databaseEnvVariables,
+                    },
                   }
                 }
                 return service
@@ -200,6 +203,7 @@ const updateApp = () => {
   return {
     title: 'Updating App.js fetch config...',
     task: (_ctx) => {
+      // TODO Can improve in the future with RW getPaths()
       const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
       const appJsPath = path.join(getPaths().base, 'web/src/App.js')
 
@@ -209,7 +213,8 @@ const updateApp = () => {
       } else if (fs.existsSync(appJsPath)) {
         appPath = appJsPath
       } else {
-        console.log(`Skipping, did not detect api/src/functions/auth.js`)
+        // TODO this should never happen. Throw instead?
+        console.log(`Skipping, did not detect web/src/App.js|tsx`)
         return
       }
 
@@ -219,12 +224,13 @@ const updateApp = () => {
       )
       if (authLineIndex === -1) {
         console.log(`
-    Couldn't find <AuthProvider in web/src/App.js
-    You'll have to add the following fetch config manually:
+    Couldn't find <AuthProvider /> in web/src/App.js
+    If (and when) you use *dbAuth*, you'll have to add the following fetch config to <AuthProvider />:
 
     config={{ fetchConfig: { credentials: 'include' } }}
     `)
-      } else {
+        // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
+      } else if (appContent.toString().match(/dbAuth/)) {
         appContent[
           authLineIndex
         ] = `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
@@ -237,11 +243,12 @@ const updateApp = () => {
       if (gqlLineIndex === -1) {
         console.log(`
     Couldn't find <RedwoodApolloProvider in web/src/App.js
-    You'll have to add the following fetch config manually:
+    If (and when) you use *dbAuth*, you'll have to add the following fetch config manually:
 
     graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}}
     `)
-      } else {
+        // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
+      } else if (appContent.toString().match(/dbAuth/)) {
         appContent[
           gqlLineIndex
         ] = `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
@@ -289,10 +296,8 @@ export const builder = (yargs) =>
 // any notes to print out when the job is done
 const notes = [
   'You are ready to deploy to Flightcontrol!\n',
-  '1. Create your project at https://app.flightcontrol.dev/signup?ref=redwood',
-  '2. After your project is provisioned,',
-  `go to the Flightcontrol dashboard and set the REDWOOD_WEB_URL & REDWOOD_API_URL env vars to the full URL of those services, including 'https://'\n`,
-  'Check out the deployment docs at https://morning-citrine-14f.notion.site/Flightcontrol-Docs-8d9ca4edb5564165a9557df32818af0c for detailed instructions\n',
+  '👉 Create your project at https://app.flightcontrol.dev/signup?ref=redwood\n',
+  'Check out the deployment docs at https://app.flightcontrol.dev/docs for detailed instructions\n',
   "NOTE: If you are using yarn v1, remove the installCommand's from flightcontrol.json",
 ]
 

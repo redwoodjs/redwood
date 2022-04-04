@@ -1,10 +1,10 @@
 # Supabase Auth
 
-Let's call this cookbook a port of the [Redwood GoTrue Auth Cookbook](gotrue-auth.md) to [Supabase](https://supabase.io/).
+Let's call this how to a port of the [Redwood GoTrue Auth how to](gotrue-auth.md) to [Supabase](https://supabase.io/).
 I won't get original style points because I copy-pasted (and updated, for good measure) the original.
 Why? Because Supabase auth is based on [Netlify GoTrue](https://github.com/netlify/gotrue), an API service for handling user registration and authentication. The Supabase folks build on solid open-source foundations.
 
-Once I connected these dots, the Redwood GoTrue Auth Cookbook became a handy resource as I climbed the auth learning curve (and I started from sea level). Hopefully this Supabase-specific edition will help you climb your own too.
+Once I connected these dots, the Redwood GoTrue Auth how to became a handy resource as I climbed the auth learning curve (and I started from sea level). Hopefully this Supabase-specific edition will help you climb your own too.
 
 ## Time to Cook
 
@@ -470,7 +470,7 @@ export default SigninPage
 
 Well done! We've created a sign in page and form that successfully handles sign in.
 
-> The remainder of the cookbook is the same as the [Netlify GoTrue Auth](gotrue-auth.md) version. This highlights one of the fun benefits of the Redwood Auth wrappers: code specific to a certain auth implementation scheme can live in a few specific spots, as we walked through above. Then, general Redwood Auth functions can be used elsewhere in the app.
+> The remainder of the how to is the same as the [Netlify GoTrue Auth](gotrue-auth.md) version. This highlights one of the fun benefits of the Redwood Auth wrappers: code specific to a certain auth implementation scheme can live in a few specific spots, as we walked through above. Then, general Redwood Auth functions can be used elsewhere in the app.
 
 ## Sign Out
 
@@ -671,7 +671,7 @@ As you continue refining your app, the following resources may come in handy:
 - [Redwood Supabase Auth Client Implementation](https://github.com/redwoodjs/redwood/blob/main/packages/auth/src/authClients/supabase.ts)
 - [Supabase GoTrue client implementation](https://github.com/supabase/gotrue-js/blob/d7b334a4283027c65814aa81715ffead262f0bfa/src/GoTrueClient.ts)
 
-Finally, keep the following features in mind (future cookbooks could go deep into any of these):
+Finally, keep the following features in mind (future how to's could go deep into any of these):
 
 - Authentication state changes can be observed via an event listener.  The [Supabase Auth playground](https://github.com/redwoodjs/playground-auth/blob/main/web/src/lib/code-samples/supabase.md) shows an example.
 - Authentication options include...
