@@ -808,7 +808,7 @@ Next we need to let GraphQL know that it should expect a `postId` to be passed f
 ```graphql title="api/src/graphql/comments.sdl.js"
 type Query {
   // highlight-next-line
-  comments(postId: Int!): [Comment!]!
+  comments(postId: Int!): [Comment!]! @skipAuth
 }
 ```
 

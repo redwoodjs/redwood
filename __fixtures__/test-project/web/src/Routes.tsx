@@ -12,6 +12,7 @@ import ContactsLayout from 'src/layouts/ContactsLayout'
 import PostsLayout from 'src/layouts/PostsLayout'
 
 import BlogLayout from 'src/layouts/BlogLayout'
+import HomePage from 'src/pages/HomePage'
 
 const Routes = () => {
   return (

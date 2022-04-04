@@ -79,11 +79,11 @@ export const getCurrentUser = async (session) => {
 
 ### Restricting Access via Routes
 
-The easiest way to prevent access to an entire URL is via the Router. The `<Private>` component takes a prop `role` in which you can give a list of only those role(s) that should have access:
+The easiest way to prevent access to an entire URL is via the Router. The `<Private>` component takes a prop `roles` in which you can give a list of only those role(s) that should have access:
 
 ```jsx title="web/src/Routes.js"
 // highlight-next-line
-<Private unauthenticated="home" role="admin">
+<Private unauthenticated="home" roles="admin">
   <Set wrap={PostsLayout}>
     <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
     <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
@@ -108,7 +108,7 @@ yarn rw c
 Now we can update our user with a single command:
 
 ```bash
-> db.user.update({ where: { id: 1 } }, data: { roles: 'admin' } })
+> db.user.update({ where: { id: 1 } , data: { roles: 'admin' } })
 ```
 
 Which should return the new content of the user:

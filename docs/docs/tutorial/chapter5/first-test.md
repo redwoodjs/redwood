@@ -20,11 +20,11 @@ Let's update the test so that it checks for the expected behavior instead. There
 
 ```jsx title="web/src/components/ArticlesCell.test.js"
 test('Success renders successfully', async () => {
-  const posts = standard().posts
-  render(<Success posts={posts} />)
+  const articles = standard().articles
+  render(<Success articles={articles} />)
 
   // highlight-start
-  expect(screen.getByText(posts[0].title)).toBeInTheDocument()
+  expect(screen.getByText(articles[0].title)).toBeInTheDocument()
   expect(
     screen.getByText(
       'Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Str...'
