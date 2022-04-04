@@ -162,17 +162,17 @@ Adding the comments to the article display has exposed another design issue: the
 
 Let's add a gap between the two:
 
-```jsx title="web/src/components/BlogPost/BlogPost.js"
-const BlogPost = ({ post, summary = false }) => {
+```jsx title="web/src/components/Article/Article.js"
+const Article = ({ article, summary = false }) => {
   return (
     <article className="mt-10">
       <header>
         <h2 className="text-xl text-blue-700 font-semibold">
-          <Link to={routes.blogPost({ id: post.id })}>{post.title}</Link>
+          <Link to={routes.article({ id: article.id })}>{article.title}</Link>
         </h2>
       </header>
       <div className="mt-2 text-gray-900 font-light">
-        {summary ? truncate(post.body, 100) : post.body}
+        {summary ? truncate(article.body, 100) : article.body}
       </div>
       {!summary && (
         // highlight-start
