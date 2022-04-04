@@ -1,3 +1,7 @@
+---
+description: Use meta tags to set page info for SEO
+---
+
 # SEO & Meta tags
 
 ## Add app title
