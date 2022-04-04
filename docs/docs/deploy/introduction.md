@@ -1,3 +1,7 @@
+---
+description: Deploy to serverless or serverful providers
+---
+
 # Introduction to Deployment
 
 Redwood is designed for both serverless and traditional infrastructure deployments, offering a unique continuous deployment process in both cases:
