@@ -4,11 +4,6 @@
   command = "yarn build"
 
 [[redirects]]
-  from = "/docs/introduction"
-  to = "/docs/index"
-  status = 301
-
-[[redirects]]
   from = "/docs/deploy"
   to = "/docs/deploy/introduction"
   status = 301
