@@ -4,7 +4,7 @@
 
 Let's add a new database table. Open up `api/db/schema.prisma` and add a Contact model after the Post model that's there now:
 
-```javascript title="api/db/schema.prisma"
+```js title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -123,7 +123,7 @@ We'll only need `createContact` for our contact page. It accepts a single variab
 
 We're not going to let anyone update or delete a comment, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
 
-```diff title="api/src/graphql/contacts.sdl.js"
+```graphql title="api/src/graphql/contacts.sdl.js"
 export const schema = gql`
   type Contact {
     id: Int!
@@ -150,15 +150,17 @@ export const schema = gql`
     message: String
   }
 
+  // highlight-start
   type Mutation {
     createContact(input: CreateContactInput!): Contact! @skipAuth
   }
+  // highlight-end
 `
 ```
 
 That's it for the SDL file, let's take a look at the service:
 
-```javascript title="api/src/services/contacts/contacts.js"
+```js title="api/src/services/contacts/contacts.js"
 import { db } from 'src/lib/db'
 
 export const contacts = () => {
@@ -203,15 +205,15 @@ Often it's nice to experiment and call your API in a more "raw" form before you 
 
 When you started development with `yarn redwood dev` (or `yarn rw dev`) you actually started a second process running at the same time. Open a new browser tab and head to [http://localhost:8911/graphql](http://localhost:8911/graphql) This is Apollo Server's [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/), a web-based GUI for GraphQL APIs:
 
-<img src="https://user-images.githubusercontent.com/300/70950852-9b97af00-2016-11ea-9550-b6983ce664e2.png" />
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488164-37663b8a-0bfa-4d52-8312-8cfaac7c2915.png" />
 
 Not very exciting yet, but check out that "Docs" tab on the far right:
 
-<img src="https://user-images.githubusercontent.com/300/73311311-fce89b80-41da-11ea-9a7f-2ef6b8191052.png" />
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161487889-8525abd6-1b44-4ba6-b637-8a3426f53197.png" />
 
 It's the complete schema as defined by our SDL files! The Playground will ingest these definitions and give you autocomplete hints on the left to help you build queries from scratch. Try getting the IDs of all the posts in the database; type the query at the left and then click the "Play" button to execute:
 
-<img src="https://user-images.githubusercontent.com/300/70951466-52e0f580-2018-11ea-91d6-5a5712858781.png" />
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488332-53547702-81e7-4c8b-b674-aef2f3773ace.png" />
 
 The GraphQL Playground is a great way to experiment with your API or troubleshoot when you come across a query or mutation that isn't behaving in the way you expect.
 
@@ -380,7 +382,7 @@ export default ContactPage
 
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
 
-```javascript
+```js
 create({
   variables: {
     input: {
@@ -476,7 +478,7 @@ export default ContactPage
 
 Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](/docs/tutorial/chapter2/getting-dynamic#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
 
-![image](https://user-images.githubusercontent.com/300/76250632-ed5d6900-6202-11ea-94ce-bd88e3a11ade.png)
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488540-a7ad1a57-7432-4171-bd75-500eeaa17bcb.png" />
 
 > **Wait, I thought you said this was secure by default and someone couldn't view all contacts without being logged in?**
 >
@@ -646,7 +648,7 @@ We talked about business logic belonging in our services files and this is a per
 
 We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
-```javascript title="api/src/services/contacts/contacts.js"
+```js title="api/src/services/contacts/contacts.js"
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
@@ -796,7 +798,7 @@ We get that error message at the top saying something went wrong in plain Englis
 
 This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
-```javascript
+```js
 export const createCar = ({ input }) => {
   validate(input.make, 'make', {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
@@ -821,7 +823,7 @@ export const createCar = ({ input }) => {
 
 You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
 
-```javascript
+```js
 validateWith(() => {
   const oneWeekAgo = new Date()
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
@@ -1000,7 +1002,7 @@ That's it! [React Hook Form](https://react-hook-form.com/) provides a bunch of [
 
 > You may have noticed that the onBlur form config stopped working once you started calling `useForm()` yourself. That's because Redwood calls `useForm()` behind the scenes and automatically passes it the `config` prop that you gave to `<Form>`. Redwood is no longer calling `useForm()` for you so if you need some options passed you need to do it manually:
 >
-> ```javascript title="web/src/pages/ContactPage/ContactPage.js"
+> ```js title="web/src/pages/ContactPage/ContactPage.js"
 > const ContactPage = () => {
 >   const formMethods = useForm({ mode: 'onBlur' })
 >   //...
