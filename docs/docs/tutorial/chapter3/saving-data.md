@@ -478,7 +478,7 @@ export default ContactPage
 
 Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](/docs/tutorial/chapter2/getting-dynamic#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
 
-![image](https://user-images.githubusercontent.com/300/76250632-ed5d6900-6202-11ea-94ce-bd88e3a11ade.png)
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161485209-4b6d0306-7745-435f-b73f-99d713fa003d.png" />
 
 > **Wait, I thought you said this was secure by default and someone couldn't view all contacts without being logged in?**
 >
