@@ -165,7 +165,7 @@ Let's add a gap between the two:
 ```jsx title="web/src/components/Article/Article.js"
 const Article = ({ article, summary = false }) => {
   return (
-    <article className="mt-10">
+    <article>
       <header>
         <h2 className="text-xl text-blue-700 font-semibold">
           <Link to={routes.article({ id: article.id })}>{article.title}</Link>
