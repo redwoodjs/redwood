@@ -187,29 +187,29 @@ export const Success = ({ articles }) => {
 So we can just spread the result of `standard()` in a story or test when using the **Success** component and everything works out:
 
 ```jsx
-import { Success } from './BlogPostsCell'
-import { standard } from './BlogPostsCell.mock'
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
   return Success ? <Success {...standard()} /> : null
 }
 
-export default { title: 'Cells/BlogPostsCell' }
+export default { title: 'Cells/ArticlesCell' }
 ```
 
 Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashoined way:
 
 ```jsx
-import { Success } from './BlogPostsCell'
-import { standard } from './BlogPostsCell.mock'
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
   return Success ? <Success article={standard().article} /> : null
 }
 
-export default { title: 'Cells/BlogPostsCell' }
+export default { title: 'Cells/ArticlesCell' }
 ```
 
 You can have as many mocks as you want, just import the names of the ones you need and send them in as props to your components.
