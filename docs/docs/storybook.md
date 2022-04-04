@@ -1,3 +1,7 @@
+---
+description: A component-driven development workflow
+---
+
 # Storybook
 
 Storybook enables a kind of frontend-first, component-driven development workflow that we've always wanted.
