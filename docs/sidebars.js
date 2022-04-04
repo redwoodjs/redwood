@@ -30,6 +30,7 @@ module.exports = {
             { type: 'doc', label: 'Introduction', id: 'deploy/introduction' },
             { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
             { type: 'doc', label: 'Flightcontrol', id: 'deploy/flightcontrol' },
+            { type: 'doc', label: 'Fly.io', id: 'deploy/fly' },
             { type: 'doc', label: 'Netlify', id: 'deploy/netlify' },
             { type: 'doc', label: 'Render', id: 'deploy/render' },
             { type: 'doc', label: 'Serverless.com', id: 'deploy/serverless' },
