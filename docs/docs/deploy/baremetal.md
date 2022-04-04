@@ -1,6 +1,10 @@
+---
+description: Have complete control by hosting your own code
+---
+
 # Introduction to Baremetal
 
-Once you've grown beyond the confines and limitations of the cloud deployment providers, it's time to get serious: hosting your own code on big iron. Prepare for performance like you've only dreamed of! Also be prepared for IT and infrastructure responsibilties like you've only had nightmares of.
+Once you've grown beyond the confines and limitations of the cloud deployment providers, it's time to get serious: hosting your own code on big iron. Prepare for performance like you've only dreamed of! Also be prepared for IT and infrastructure responsibilities like you've only had nightmares of.
 
 With Redwood's Baremetal deployment option, the source (like your dev machine) will SSH into one or more remote machines and execute commands in order to update your codebase, run any database migrations and restart services.
 
@@ -18,13 +22,13 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 2. `yarn install` - installs dependencies
 3. `yarn rw prisma migrate deploy` - runs db migrations
 3. `yarn rw prisma generate` - generates latest Prisma Client libs
-4. `yarn rw dataMigrate up` - runs data migrations, igorning them if not installed
+4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
 5. `yarn rw build` - builds the web and/or api sides
 6. `yarn pm2 restart [service]` - restarts the serving process(es)
 
 There is a special `--first-run` flag which can be included in your deploy command the first time you run it, which starts the PM2 services rather than restarting them.
 
-> We're working on making the commands in this stack more customizeable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
+> We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
 
 ## Setup
 
@@ -41,7 +45,7 @@ This will create a couple of files and add a dependency or two to your `package.
 
 > **A Note about PM2 Licensing**
 >
-> PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not laywers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
+> PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not lawyers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
 
 If you see an error from `gyp` you may need to add some additional dependencies before `yarn install` will be able to complete. See the README for `node-type` for more info: https://github.com/nodejs/node-gyp#installation
 
@@ -121,7 +125,7 @@ The easiest connection method is generally to include your own public key in the
 
 #### Multiple Servers
 
-If you start horizontally scaling your application you may find it necessary to have the web and api sides served from different servers. The configuration files can accomodate this:
+If you start horizontally scaling your application you may find it necessary to have the web and api sides served from different servers. The configuration files can accommodate this:
 
 ```toml title="deploy.toml"
 [[servers]]
