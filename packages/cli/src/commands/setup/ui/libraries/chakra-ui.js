@@ -47,7 +47,6 @@ export async function handler({ force, install }) {
                 'workspace',
                 'web',
                 'add',
-                '-D',
                 ...packages,
               ])
             },
