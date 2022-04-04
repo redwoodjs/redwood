@@ -362,7 +362,7 @@ const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="/docs/tutorial/foreward/"
+                      href="https://redwoodjs.com/docs/tutorial/foreward/"
                       target="_blank"
                       rel="noreferrer"
                     ></a>
