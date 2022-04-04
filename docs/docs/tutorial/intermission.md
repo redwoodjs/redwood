@@ -38,11 +38,12 @@ If you haven't been through the first tutorial, or maybe you went through it on 
 git clone https://github.com/redwoodjs/redwood-tutorial
 cd redwood-tutorial
 yarn install
+echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env
 yarn rw prisma migrate dev
 yarn rw dev
 ```
 
-That'll check out the repo, install all the dependencies, create your local database (SQLite) and fill it with a few blog posts, and finally start up the dev server.
+That'll check out the repo, install all the dependencies, generate a `SESSION_SECRET` environment variable for you in `.env`, create your local database (SQLite) and fill it with a few blog posts, and finally start up the dev server.
 
 Your browser should open to a fresh new blog app:
 
