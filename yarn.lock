@@ -5881,7 +5881,7 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     "@clerk/clerk-sdk-node": 2.10.0
-    "@magic-sdk/admin": 1.3.4
+    "@magic-sdk/admin": 1.4.0
     firebase-admin: 10.0.2
   peerDependenciesMeta:
     "@clerk/clerk-sdk-node":
