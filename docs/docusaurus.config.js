@@ -116,7 +116,7 @@ module.exports = {
     {
       src: 'https://plausible.io/js/plausible.js',
       defer: true,
-      'data-domain': 'learn.redwoodjs.com',
+      'data-domain': 'redwoodjs.com',
     },
   ],
   stylesheets: [
