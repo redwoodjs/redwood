@@ -140,7 +140,7 @@ As soon as you saved that test file the test should have run and passed! Press `
 >
 > `getByText()` will throw an error if the text isn't found in the document, whereas `queryByText()` will  return `null` and let you continue with your testing (and is one way to test that some text is *not* present on the page). You can read more about these in the [DOM Testing Library Queries](https://testing-library.com/docs/dom-testing-library/api-queries) docs.
 
-To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and `expect(screen.queryByText(post.body)).not.toBeInTheDocument()` *is* in the document! Make sure to put the `summary={true}` back before we continue.
+To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` *is* in the document! Make sure to put the `summary={true}` back before we continue.
 
 ### What's the Deal with Mocks?
 
@@ -187,29 +187,29 @@ export const Success = ({ articles }) => {
 So we can just spread the result of `standard()` in a story or test when using the **Success** component and everything works out:
 
 ```jsx
-import { Success } from './BlogPostsCell'
-import { standard } from './BlogPostsCell.mock'
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
   return Success ? <Success {...standard()} /> : null
 }
 
-export default { title: 'Cells/BlogPostsCell' }
+export default { title: 'Cells/ArticlesCell' }
 ```
 
 Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashoined way:
 
 ```jsx
-import { Success } from './BlogPostsCell'
-import { standard } from './BlogPostsCell.mock'
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
   return Success ? <Success article={standard().article} /> : null
 }
 
-export default { title: 'Cells/BlogPostsCell' }
+export default { title: 'Cells/ArticlesCell' }
 ```
 
 You can have as many mocks as you want, just import the names of the ones you need and send them in as props to your components.
