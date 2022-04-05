@@ -6115,7 +6115,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@testing-library/dom": 8.12.0
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/pascalcase": 1.0.1
@@ -6356,7 +6356,7 @@ __metadata:
     "@storybook/builder-webpack5": 6.4.20
     "@storybook/manager-webpack5": 6.4.20
     "@storybook/react": 6.4.20
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/aws-lambda": 8.10.93
@@ -6386,7 +6386,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": 1.0.0
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@types/react": 17.0.40
     "@types/react-dom": 17.0.14
@@ -7823,9 +7823,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.16.3":
-  version: 5.16.3
-  resolution: "@testing-library/jest-dom@npm:5.16.3"
+"@testing-library/jest-dom@npm:5.16.4":
+  version: 5.16.4
+  resolution: "@testing-library/jest-dom@npm:5.16.4"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -7836,7 +7836,7 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: 002816824afe2bfca1ec04d827d11812c142993309d2c84866aec7b3caf9e821dc76ec4531be9981dfd34b64ea7f364c6b0121e484877fdad3d485ca307bd600
+  checksum: c34016bbc4865f8f9912d62ac63b409b87e785ff281a50f6eae8c1bc2364963c0831541da8a185bbd8b5964a6e3371fb623c339e8128d84706eb06f93f145801
   languageName: node
   linkType: hard
 
@@ -26887,7 +26887,7 @@ __metadata:
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@playwright/test": 1.20.2
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/fs-extra": 9.0.13
