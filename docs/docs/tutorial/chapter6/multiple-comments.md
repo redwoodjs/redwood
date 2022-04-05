@@ -62,11 +62,15 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ comments }) => {
+  return (
   // highlight-start
-  return comments.map((comment) => (
-    <Comment key={comment.id} comment={comment} />
-  ))
+    <>
+      {comments.map((comment) => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
+    </>
   // highlight-end
+  )
 }
 ```
 
