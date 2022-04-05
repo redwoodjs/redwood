@@ -1297,6 +1297,33 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "shilman",
+      "name": "Michael Shilman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/488689?v=4",
+      "profile": "http://shilman.net/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "odjhey",
+      "name": "Odee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8198939?v=4",
+      "profile": "https://github.com/odjhey",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "nickpdemarco",
+      "name": "nickpdemarco",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12536895?v=4",
+      "profile": "https://github.com/nickpdemarco",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5

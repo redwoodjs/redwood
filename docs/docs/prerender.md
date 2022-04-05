@@ -1,3 +1,7 @@
+---
+description: Render pages ahead of time
+---
+
 # Prerender
 
 Some of your pages don't have dynamic content; it'd be great if you could render them ahead of time, making for a faster experience for your end users.
