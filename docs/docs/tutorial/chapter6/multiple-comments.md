@@ -178,13 +178,13 @@ const Article = ({ article, summary = false }) => {
       <div className="mt-2 text-gray-900 font-light">
         {summary ? truncate(article.body, 100) : article.body}
       </div>
+      // highlight-start
       {!summary && (
-        // highlight-start
         <div className="mt-12">
           <CommentsCell />
         </div>
-        // highlight-end
       )}
+      // highlight-end
     </article>
   )
 }
