@@ -24,7 +24,7 @@ However, none of the screenshots that follow will come anywhere close to what yo
 
 If you're *still* set on continuting with your own repo, and you deployed to a service like Netlify, you would have changed database the provider in `schema.prisma` to `postgres`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead good ol' SQLite (what we were using locally to build everything in the first half).
 
-Once you're ready, start up the dev server with your repor:
+Once you're ready, start up the dev server:
 
 ```bash
 yarn rw dev
