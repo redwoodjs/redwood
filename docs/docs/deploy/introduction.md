@@ -12,14 +12,13 @@ Redwood is designed for both serverless and traditional infrastructure deploymen
 4. the hosting provider deploys the built Web static assets to a CDN and the API code to a serverless backend (e.g. AWS Lambdas)
 
 Currently, these are the officially supported deploy targets:
+- Baremetal (physical server that you have SSH access to)
 - [Flightcontrol.dev](https://www.flightcontrol.dev?ref=redwood)
 - [Layer0.co](https://layer0.co)
 - [Netlify.com](https://www.netlify.com/)
 - [Render.com](https://render.com)
 - [Serverless.com](https://serverless.com)
 - [Vercel.com](https://vercel.com)
-- Baremetal (physical server that you have SSH access to)
-
 
 Redwood has a CLI generator that adds the code and configuration required by the specified provider (see the [CLI Doc](cli-commands.md#deploy-config) for more information):
 ```shell
