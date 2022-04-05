@@ -71,21 +71,16 @@ See the [redwood.toml reference](app-configuration-redwood-toml.md#api-paths) fo
 
 ## Development Fatal Error Page
 
-Redwood ships with a web side `FatalErrorPage` that renders helpful info about the error stack and the request that created the problem.
-
-> Note: The version of the page only displays when developing locally; it is not built when deploying to production.
-
-As part of the stack trace, there are links to the original source files so they can be quickly opened in your IDE or editor of choice.
-
-The page defaults to use `Visual Studio Code`, but you can override the editor by setting the environment variable `REDWOOD_ENV_EDITOR` used as the `scheme` in the file URI scheme:
-
-```
-`${scheme}://file/<path_to_file>
+```text title=".env"
+REDWOOD_ENV_EDITOR=vscode
 ```
 
-| Environment Variable | Description                              |
-| ------------------   | -------------------------------------------------------------------- |
-| `REDWOOD_ENV_EDITOR` |  Sets the code editor or IDE used by the Development Fatal Error Page to open files using the File scheme URI. [default] `vscode` |
+Redwood comes with a `FatalErrorPage` that displays helpful information—like the stack trace and the request—when something breaks.
+
+> `FatalErrorPage` isn't bundled when deploying to production
+
+As part of the stack trace, there are links to the original source files so that they can be quickly opened in your editor.
+The page defaults to VSCode, but you can override the editor by setting the environment variable `REDWOOD_ENV_EDITOR`.
 
 ## API
 
