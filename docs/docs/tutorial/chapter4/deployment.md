@@ -129,7 +129,7 @@ If the deploy failed, check the log output in Netlify and see if you can make se
 
 #### Custom Subdomain
 
-You can customize the subdomain that your site is published at (who wants to go to `agitated-mongoose-849e99.netlify.app`??) by going to **Site Settings > Domain Management > Domains > Custom Domains**. Open up the **Options** menu and select **Edit site name**. Your site should be available at your custom subdomain (`redwood-tutorial.netlify.app` is much nicer) almost immediately.
+You can customize the subdomain that your site is published at (who wants to go to `agitated-mongoose-849e99.netlify.app`?) by going to **Site Settings > Domain Management > Domains > Custom Domains**. Open up the **Options** menu and select **Edit site name**. Your site should be available at your custom subdomain (`redwood-tutorial.netlify.app` is much nicer) almost immediately.
 
 ![image](https://user-images.githubusercontent.com/300/154521450-ee64c77c-e658-4045-9dd6-119858b6739e.png)
 
@@ -159,7 +159,7 @@ As this form of full-stack Jamstack gains more prominence we're counting on data
 
 Speaking of security, you may have noticed a glaring security hole in our build: anyone can come along and sign up for a new account and start creating blog posts! That's not ideal. A quick and easy solution would be to remove the `signup` route after you've created your own account: now there's no signup page accessible and a normal human will give up. But what about devious hackers?
 
-dbAuth provides an API for signup and login that the client knows how to call, but if someone were crafty enough they could make their own API calls to that same endpoint and still create a new user even without the signup page! Ahhhh! We finally made it through this long (but fun!) tutorial, can't we just take a break and put our feet up?? Unfortunately, the war against bad actors is never really ends.
+dbAuth provides an API for signup and login that the client knows how to call, but if someone were crafty enough they could make their own API calls to that same endpoint and still create a new user even without the signup page! Ahhhh! We finally made it through this long (but fun!) tutorial, can't we just take a break and put our feet up? Unfortunately, the war against bad actors never really ends.
 
 To close this hole, check out `api/src/functions/auth.js`, this is where the configuration for dbAuth lives. Take a gander at the `signupOptions` object, specifically the `handler()` function. This defines what to do with the user data that's submitted on the signup form. If you simply have this function return `false`, instead of creating a user, we will have effectively shut the door on the API signup hack.
 
