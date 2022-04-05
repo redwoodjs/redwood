@@ -246,7 +246,6 @@ And that's nothing to scoff at! As you've probably experienced, a React componen
 But in this case we can do a little more to make sure `CommentsCell` is doing what we expect. Let's update the `Success` test in `CommentsCell.test.js` to check that exactly the number of comments we passed in as a prop are rendered. How do we know a comment was rendered? How about if we check that each `comment.body` (the most important part of the comment) is present on the screen:
 
 ```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
-// highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
