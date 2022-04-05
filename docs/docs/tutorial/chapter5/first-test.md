@@ -198,7 +198,7 @@ export const success = () => {
 export default { title: 'Cells/ArticlesCell' }
 ```
 
-Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashoined way:
+Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashioned way:
 
 ```jsx
 import { Success } from './ArticlesCell'
