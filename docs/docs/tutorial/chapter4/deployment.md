@@ -129,7 +129,7 @@ If the deploy failed, check the log output in Netlify and see if you can make se
 
 #### Custom Subdomain
 
-You can customize the subdomain that your site is published at (who wants to go to `agitated-mongoose-849e99.netlify.app`?) by going to **Site Settings > Domain Management > Domains > Custom Domains**. Open up the **Options** menu and select **Edit site name**. Your site should be available at your custom subdomain (`redwood-tutorial.netlify.app` is much nicer) almost immediately.
+You can customize the subdomain that your site is published at (who wants to go to `agitated-mongoose-849e99.netlify.app`??) by going to **Site Settings > Domain Management > Domains > Custom Domains**. Open up the **Options** menu and select **Edit site name**. Your site should be available at your custom subdomain (`redwood-tutorial.netlify.app` is much nicer) almost immediately.
 
 ![image](https://user-images.githubusercontent.com/300/154521450-ee64c77c-e658-4045-9dd6-119858b6739e.png)
 
