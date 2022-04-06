@@ -44,7 +44,7 @@ And believe it or not, we're done! Now we just need the connection URL. Click on
 We need to let Prisma know that we intend to use Postgres instead of SQLite from now on. Update the `provider` entry in `schema.prisma`:
 
 ```javascript
-provider = "postgres"
+provider = "postgresql"
 ```
 
 ### Recreate Migrations
@@ -97,7 +97,7 @@ Go back to the main site page and then to **Site settings** at the top, and then
 
 > **Why the connection limit?**
 >
-> This is [recommended by Prisma](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/deployment#recommended-connection-limit) when working with relational databases in a Serverless context.
+> This is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
 
 We'll need to add one more environment variable, `SESSION_SECRET` which contains a big long string that's used to encrypt the session cookies for dbAuth. This was included in development when you installed dbAuth, but now we need to tell Netlify about it. If you look in your `.env` file you'll see it at the bottom, but we want to create a unique one for every environment we deploy to (each developer should have a unique one as well). We've got a CLI command to create a new one:
 
