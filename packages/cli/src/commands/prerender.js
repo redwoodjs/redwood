@@ -50,10 +50,10 @@ const mapRouterPathToHtml = (routerPath) => {
 // This is used directly in build.js for nested ListrTasks
 export const getTasks = async (dryrun, routerPathFilter = null) => {
   const prerenderRoutes = detectPrerenderRoutes()
-
+  const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
   if (prerenderRoutes.length === 0) {
-    console.error('\nSkipping prerender...')
-    console.error(
+    console.log('\nSkipping prerender...')
+    console.log(
       c.warning(
         'You have not marked any routes as `prerender` in `Routes.{js,tsx}` \n'
       )
@@ -63,7 +63,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     return []
   }
 
-  if (!fs.existsSync(path.join(getPaths().web.dist), 'index.html')) {
+  if (!fs.existsSync(indexHtmlPath)) {
     console.error(
       'You must run `yarn rw build web` before trying to prerender.'
     )

@@ -3,6 +3,7 @@ name: Cypress E2E tests
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths-ignore: ['docs/**']
 
 jobs:
   cypress-run:
@@ -16,7 +17,7 @@ jobs:
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -32,13 +33,13 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - name: Cache yarn
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
           restore-keys: |
-            yarn-
+            yarn-1234
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -53,6 +54,8 @@ jobs:
 
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Init Git for RedwoodJS app directory
         run: |

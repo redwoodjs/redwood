@@ -333,7 +333,7 @@ export const defaults = {
     type: 'boolean',
   },
   crud: {
-    default: false,
+    default: true,
     description: 'Create CRUD functions',
     type: 'boolean',
   },

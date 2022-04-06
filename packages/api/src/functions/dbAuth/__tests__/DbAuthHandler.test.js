@@ -73,8 +73,7 @@ const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
-const LOGOUT_COOKIE =
-  'session=;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 const createDbUser = async (attributes = {}) => {
   return await db.user.create({
@@ -104,6 +103,8 @@ let event, context, options
 
 describe('dbAuth', () => {
   beforeEach(() => {
+    // hide deprecation warnings during test
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
     delete process.env.DBAUTH_COOKIE_DOMAIN
@@ -164,6 +165,7 @@ describe('dbAuth', () => {
   })
 
   afterEach(async () => {
+    jest.spyOn(console, 'warn').mockRestore()
     await db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
@@ -197,11 +199,11 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('_futureExpiresDate', () => {
+  describe('futureExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      expect(dbAuth._futureExpiresDate).toMatch(UTC_DATE_REGEX)
+      expect(dbAuth.futureExpiresDate).toMatch(UTC_DATE_REGEX)
     })
   })
 
@@ -512,6 +514,29 @@ describe('dbAuth', () => {
 
       expect(response.statusCode).toEqual(400)
       expect(response.body).toEqual('{"error":"Logout error"}')
+    })
+
+    it('handlers CORS OPTIONS request', async () => {
+      event.httpMethod = 'OPTIONS'
+      event.body = JSON.stringify({ method: 'auth' })
+
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cors: {
+          origin: 'https://www.myRedwoodWebSide.com',
+          credentials: true,
+        },
+      })
+      dbAuth.logout = jest.fn(() => {
+        throw Error('Logout error')
+      })
+      const response = await dbAuth.invoke()
+
+      expect(response.statusCode).toEqual(200)
+      expect(response.headers['access-control-allow-credentials']).toBe('true')
+      expect(response.headers['access-control-allow-origin']).toBe(
+        'https://www.myRedwoodWebSide.com'
+      )
     })
 
     it('calls the appropriate auth function', async () => {
@@ -1149,41 +1174,76 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(
         { headers: { referer: 'http://test.host' } },
         context,
-        options
+        {
+          ...options,
+          cookie: {
+            Path: '/',
+            HttpOnly: true,
+            SameSite: 'Strict',
+            Secure: true,
+            Domain: 'example.com',
+          },
+        }
       )
       const attributes = dbAuth._cookieAttributes({})
 
-      expect(attributes.length).toEqual(5)
+      expect(attributes.length).toEqual(6)
       expect(attributes[0]).toEqual('Path=/')
-      // expect(attributes[1]).toEqual('Domain=site.test')
       expect(attributes[1]).toEqual('HttpOnly')
       expect(attributes[2]).toEqual('SameSite=Strict')
       expect(attributes[3]).toEqual('Secure')
-      expect(attributes[4]).toMatch(`Expires=`)
-      expect(attributes[4]).toMatch(UTC_DATE_REGEX)
+      expect(attributes[4]).toEqual('Domain=example.com')
+      expect(attributes[5]).toMatch(`Expires=`)
+      expect(attributes[5]).toMatch(UTC_DATE_REGEX)
     })
 
-    it('does not include the Secure attribute when in development environment', () => {
-      const oldEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+    it('includes just a key if option set to `true`', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: { Secure: true },
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[0]).toEqual('Secure')
+    })
+
+    it('does not include a key if option set to `false`', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: { Secure: false },
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[0]).not.toEqual('Secure')
+    })
+
+    it('includes key=value if property value is set', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: { Domain: 'example.com' },
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[0]).toEqual('Domain=example.com')
+    })
+
+    it('includes no cookie attributes if cookie options are empty', () => {
+      const dbAuth = new DbAuthHandler(event, context, {
+        ...options,
+        cookie: {},
+      })
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes.length).toEqual(1)
+      expect(attributes[0]).toMatch(/Expires=/)
+    })
+
+    it('includes no cookie attributes if cookie options not set', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const attributes = dbAuth._cookieAttributes({})
 
-      // not in its usual position
-      expect(attributes[3]).not.toEqual('Secure')
-      // or anywhere else
-      expect(attributes.join(';')).not.toMatch(`Secure`)
-
-      process.env.NODE_ENV = oldEnv
-    })
-
-    it('includes a Domain in the cookie if DBAUTH_COOKIE_DOMAIN is set', () => {
-      process.env.DBAUTH_COOKIE_DOMAIN = 'site.test'
-
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const attributes = dbAuth._cookieAttributes({})
-
-      expect(attributes[3]).toEqual('Domain=site.test')
+      expect(attributes.length).toEqual(1)
+      expect(attributes[0]).toMatch(/Expires=/)
     })
   })
 
@@ -1194,7 +1254,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
+        `Expires=${dbAuth.futureExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the

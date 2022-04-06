@@ -425,12 +425,12 @@ export const removeRoutesFromRouterTask = (routes, layout) => {
 
 export const runCommandTask = async (commands, { verbose }) => {
   const tasks = new Listr(
-    commands.map(({ title, cmd, args, opts = {} }) => ({
+    commands.map(({ title, cmd, args, opts = {}, cwd = getPaths().base }) => ({
       title,
       task: async () => {
         return execa(cmd, args, {
           shell: true,
-          cwd: `${getPaths().base}/api`,
+          cwd,
           stdio: verbose ? 'inherit' : 'pipe',
           extendEnv: true,
           cleanup: true,
