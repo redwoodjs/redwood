@@ -7,11 +7,6 @@ export const config = {
     redirectUri: 'process.env.OKTA_REDIRECT_URI',
     pkce: true,
   })
-  // @MARK: useRefreshTokens is required for automatically extending sessions
-  // beyond that set in the initial JWT expiration.
-  //
-  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
-  // useRefreshTokens: true,
 })`,
   authProvider: {
     client: 'okta',
