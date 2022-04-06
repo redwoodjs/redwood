@@ -2,10 +2,10 @@
   base = "docs"
   publish = "build"
   command = "yarn build"
-
+  
 [[redirects]]
-  from = "/docs/introduction"
-  to = "/docs/index"
+  from = "/docs"
+  to = "/docs/introduction"
   status = 301
 
 [[redirects]]
@@ -196,4 +196,9 @@
 [[redirects]]
   from = "/docs/cookbook/*"
   to = "/docs/how-to/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/how-to"
+  to = "/docs/how-to/index"
   status = 301

@@ -69,6 +69,19 @@ The toml values are mapped as follows:
 
 See the [redwood.toml reference](app-configuration-redwood-toml.md#api-paths) for more details.
 
+## Development Fatal Error Page
+
+```text title=".env"
+REDWOOD_ENV_EDITOR=vscode
+```
+
+Redwood comes with a `FatalErrorPage` that displays helpful information—like the stack trace and the request—when something breaks.
+
+> `FatalErrorPage` isn't bundled when deploying to production
+
+As part of the stack trace, there are links to the original source files so that they can be quickly opened in your editor.
+The page defaults to VSCode, but you can override the editor by setting the environment variable `REDWOOD_ENV_EDITOR`.
+
 ## API
 
 ### Development

@@ -84,12 +84,12 @@ All that said, we highly recommend using one of the following setups to maximize
 1. Use [Git for Windows and Git Bash](how-to/windows-development-setup.md) (included in installation)
 2. Use [WSL following this setup guide on the Forums](https://community.redwoodjs.com/t/windows-subsystem-for-linux-setup/2439)
 
-Lastly, the new GitPod integration is a great option and only getting better. You might just want to start using it from the beginning (see section below in “Local Development Setup”).
+Lastly, the new Gitpod integration is a great option and only getting better. You might just want to start using it from the beginning (see section below in “Local Development Setup”).
 
-**GitPod**
-We recently added an integration with [GitPod](http://gitpod.io) that automatically creates a Framework dev workspace, complete with test project, in a browser-based VS Code environment. It’s pretty amazing and we highly recommend giving it a shot. (If you’re developing on Windows, it’s also an amazing option for you anytime you run into something that isn’t working correctly or supported.)
+**Gitpod**
+We recently added an integration with [Gitpod](http://gitpod.io) that automatically creates a Framework dev workspace, complete with test project, in a browser-based VS Code environment. It’s pretty amazing and we highly recommend giving it a shot. (If you’re developing on Windows, it’s also an amazing option for you anytime you run into something that isn’t working correctly or supported.)
 
-But don’t skip out reading the following steps in “Local Development Setup” — GitPod uses the same workflow and tools to initialize. If you want to develop in GitPod, you’ll need to understand how it all works.
+But don’t skip out reading the following steps in “Local Development Setup” — Gitpod uses the same workflow and tools to initialize. If you want to develop in Gitpod, you’ll need to understand how it all works.
 
 But when you’re ready, learn how to use it in the section at the end [“GitPod: Browser-based Development”](#gitpod-browser-based-development).
 
@@ -113,7 +113,7 @@ There are several options for creating a local Redwood Project to use during dev
 With those details out of the way, now is the time to choose an option below that meets your needs based on functionality and codebase version.
 
 **Build a Functional Test Project [Recommended]**
-1. 👉 **Use the build script to create a test project**: From the Framework root directory, run `yarn build:test-project <path/to/directory>`. This command installs a new project using the Template codebase from your current Framework branch, it then adds Tutorial features, and finally it initializes the DB (with seed data!). It should work 90% of the time and is the recommended starting place. We also use this out-of-the-box with GitPod.
+1. 👉 **Use the build script to create a test project**: From the Framework root directory, run `yarn build:test-project <path/to/directory>`. This command installs a new project using the Template codebase from your current Framework branch, it then adds Tutorial features, and finally it initializes the DB (with seed data!). It should work 90% of the time and is the recommended starting place. We also use this out-of-the-box with Gitpod.
 
 **Other Options to create a project**
 
@@ -175,7 +175,7 @@ All of these checks are included in Redwood’s GitHub PR Continuous Integration
 
 > **Heads up for Windows Devs**
 > The Cypress E2E does *not* work on Windows. Two options are available if needed:
-> 1. Use GitPod (see related section for info)
+> 1. Use Gitpod (see related section for info)
 > 2. When you create a PR, just ask for help from a maintainer
 
 #### Step 5: Open a PR 🚀
@@ -197,8 +197,8 @@ What isn’t a fun experience is spending a whole bunch of time on code that end
 
 When in doubt, just try first and ask for help and direction!
 
-### GitPod: Browser-based Development
-[GitPod](http://gitpod.io) has recently been integrated with Redwood to JustWork™ with any branch or PR. When a virtual GitPod workspace is initialized, it automatically:
+### Gitpod: Browser-based Development
+[Gitpod](http://gitpod.io) has recently been integrated with Redwood to JustWork™ with any branch or PR. When a virtual Gitpod workspace is initialized, it automatically:
 1. Checks-out the code from your branch or PR
 2. Run Yarn installation
 3. Creates the functional Test Project via `yarn build:test-project`
@@ -207,19 +207,19 @@ When in doubt, just try first and ask for help and direction!
 6. 🤯
 
 > **Chrome works best**
-> We’ve noticed some bugs using GitPod with either Brave or Safari. Currently we recommend sticking to Chrome (although it’s worth trying out Edge and Firefox).
+> We’ve noticed some bugs using Gitpod with either Brave or Safari. Currently we recommend sticking to Chrome (although it’s worth trying out Edge and Firefox).
 
-**Demo of GitPod**
-David briefly walks-through an automatically prebuilt GitPod workspace here:
-- [GitPod + RedwoodJS 3-minute Walkthrough](https://youtu.be/_kMuTW3x--s)
+**Demo of Gitpod**
+David briefly walks-through an automatically prebuilt Gitpod workspace here:
+- [Gitpod + RedwoodJS 3-minute Walkthrough](https://youtu.be/_kMuTW3x--s)
 
 Make sure you watch until the end where David shows how to set up your integration with GitHub and VS Code sync. 🤩
 
-**Start a GitPod Workspace**
-There are two ways to get started with GitPod + Redwood.
+**Start a Gitpod Workspace**
+There are two ways to get started with Gitpod + Redwood.
 
 *Option 1: Open a PR*
-Every PR will trigger a GitPod prebuild using the PR branch. Just look for GitPod in the list of checks at the bottom of the PR — click the “Details” link and away you’ll go!
+Every PR will trigger a Gitpod prebuild using the PR branch. Just look for Gitpod in the list of checks at the bottom of the PR — click the “Details” link and away you’ll go!
 
 <img width="350" alt="PR Checks" src="https://user-images.githubusercontent.com/2951/151928088-58e26232-b752-4471-adf4-a2bc59b79ac8.png" />
 
