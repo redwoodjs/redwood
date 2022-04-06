@@ -1015,7 +1015,7 @@ console.log(context.currentUser)
 // }
 ```
 
-You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createCreateGraphQLHandler`
+You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createGraphQLHandler`
 
 Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser`. (Note: You may already have stub functions.)
 
