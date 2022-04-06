@@ -95,21 +95,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:2.22.1":
-  version: 2.22.1
-  resolution: "@azure/msal-browser@npm:2.22.1"
+"@azure/msal-browser@npm:2.23.0":
+  version: 2.23.0
+  resolution: "@azure/msal-browser@npm:2.23.0"
   dependencies:
-    "@azure/msal-common": ^6.1.0
-  checksum: 12e0acea7de3060bb128ad56988ecbe0c7a038cd3a1c17118890858e83d3d1752fec61af4a40f3f6348c9693ffbd4f23f6c040652659799cd07b0c585c50fe88
+    "@azure/msal-common": ^6.2.0
+  checksum: 24e58bd853c505ca7a44a384b52dd332afdaf45dcf08c17e417eb0fb89c6d237a561c5e7824e1e5fec7e2afc2ae25dfb1a5e513f2eb6dd2efbfb3532d824eef7
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@azure/msal-common@npm:6.1.0"
-  dependencies:
-    debug: ^4.1.1
-  checksum: a3a7a94b546d87c3c156650dfb07b4afb22539ad671d088d4d719db81c2bcec94992273baa4f86aef0881a44b4a23fb69f45335aad7570cf5c0cb6a1e993f86e
+"@azure/msal-common@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@azure/msal-common@npm:6.2.0"
+  checksum: 83a9ecbb6ad06292d186e8e831f08b068794f603c8006d98d17b8038cfb52679f7625259f2dff6ca95b3e7a651eb7f35ddfb7453f1ac867e04ba182c218702f7
   languageName: node
   linkType: hard
 
@@ -2028,10 +2026,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@clerk/types@npm:2.2.1"
-  checksum: 9e7d26151fafd6fe2289c440b04e63875a38a08a3f0f399105911483c8ad182d616735ad55194917a03657c81d93e80580ece15d36fa6c8cf65c9b84951852f1
+"@clerk/types@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@clerk/types@npm:2.3.0"
+  checksum: 81b0d9c7a6817cf10de1e2f24591904d7c0069ce5b15f820b6bc7cf4518482d0eb0b26c6391e9f5c6027abdde95e2819bd74ea8e073841bd27bfa2090b1df584
   languageName: node
   linkType: hard
 
@@ -5500,9 +5498,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.4, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.1":
-  version: 0.5.4
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.4"
+"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.5, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.1":
+  version: 0.5.5
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.5"
   dependencies:
     ansi-html-community: ^0.0.8
     common-path-prefix: ^3.0.0
@@ -5535,7 +5533,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: 305f7f9ed8164f787d97a2e2c2a301c7b6c9fb193e8ddf83a3e47cc9231944e8904b53243cf69ac85f44d19f1517cf25765c4c3c19159a77be9c9f8972e7f2da
+  checksum: bd20a6b59a521d74f628c4bfe73ea413b3212058bd68ff637b18b0dc13744f045f4720cb0b4c5eebdfbc761a18352efefda5d026c3e206cc4345b19400526397
   languageName: node
   linkType: hard
 
@@ -5903,12 +5901,12 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@auth0/auth0-spa-js": 1.21.0
-    "@azure/msal-browser": 2.22.1
+    "@azure/msal-browser": 2.23.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.7
     "@clerk/clerk-sdk-node": 2.10.0
-    "@clerk/types": 2.2.1
+    "@clerk/types": 2.3.0
     "@nhost/nhost-js": 0.3.13
     "@supabase/supabase-js": 1.33.3
     "@types/netlify-identity-widget": 1.9.3
@@ -6023,7 +6021,7 @@ __metadata:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@pmmmwh/react-refresh-webpack-plugin": 0.5.4
+    "@pmmmwh/react-refresh-webpack-plugin": 0.5.5
     "@redwoodjs/cli": 1.0.0
     "@redwoodjs/eslint-config": 1.0.0
     "@redwoodjs/internal": 1.0.0
@@ -6040,7 +6038,7 @@ __metadata:
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.1.0
-    esbuild: 0.14.30
+    esbuild: 0.14.32
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
     file-loader: 6.2.0
@@ -6115,7 +6113,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@testing-library/dom": 8.12.0
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/pascalcase": 1.0.1
@@ -6202,7 +6200,7 @@ __metadata:
     chalk: 4.1.2
     core-js: 3.21.1
     deepmerge: 4.2.2
-    esbuild: 0.14.30
+    esbuild: 0.14.32
     fast-glob: 3.2.11
     findup-sync: 5.0.0
     fs-extra: 10.0.1
@@ -6257,7 +6255,7 @@ __metadata:
     "@prisma/client": 3.11.1
     "@prisma/sdk": 3.11.1
     core-js: 3.21.1
-    esbuild: 0.14.30
+    esbuild: 0.14.32
     jest: 27.5.1
   languageName: unknown
   linkType: soft
@@ -6356,7 +6354,7 @@ __metadata:
     "@storybook/builder-webpack5": 6.4.20
     "@storybook/manager-webpack5": 6.4.20
     "@storybook/react": 6.4.20
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/aws-lambda": 8.10.93
@@ -6386,7 +6384,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": 1.0.0
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@types/react": 17.0.40
     "@types/react-dom": 17.0.14
@@ -7823,9 +7821,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.16.3":
-  version: 5.16.3
-  resolution: "@testing-library/jest-dom@npm:5.16.3"
+"@testing-library/jest-dom@npm:5.16.4":
+  version: 5.16.4
+  resolution: "@testing-library/jest-dom@npm:5.16.4"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -7836,7 +7834,7 @@ __metadata:
     dom-accessibility-api: ^0.5.6
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: 002816824afe2bfca1ec04d827d11812c142993309d2c84866aec7b3caf9e821dc76ec4531be9981dfd34b64ea7f364c6b0121e484877fdad3d485ca307bd600
+  checksum: c34016bbc4865f8f9912d62ac63b409b87e785ff281a50f6eae8c1bc2364963c0831541da8a185bbd8b5964a6e3371fb623c339e8128d84706eb06f93f145801
   languageName: node
   linkType: hard
 
@@ -14883,100 +14881,100 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-android-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-android-64@npm:0.14.30"
+"esbuild-android-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-android-64@npm:0.14.32"
   conditions: os=android & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-android-arm64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-android-arm64@npm:0.14.30"
+"esbuild-android-arm64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-android-arm64@npm:0.14.32"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-darwin-64@npm:0.14.30"
+"esbuild-darwin-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-darwin-64@npm:0.14.32"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-arm64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-darwin-arm64@npm:0.14.30"
+"esbuild-darwin-arm64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-darwin-arm64@npm:0.14.32"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-freebsd-64@npm:0.14.30"
+"esbuild-freebsd-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-freebsd-64@npm:0.14.32"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-arm64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-freebsd-arm64@npm:0.14.30"
+"esbuild-freebsd-arm64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-freebsd-arm64@npm:0.14.32"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-32@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-32@npm:0.14.30"
+"esbuild-linux-32@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-32@npm:0.14.32"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-linux-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-64@npm:0.14.30"
+"esbuild-linux-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-64@npm:0.14.32"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-arm64@npm:0.14.30"
+"esbuild-linux-arm64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-arm64@npm:0.14.32"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-arm@npm:0.14.30"
+"esbuild-linux-arm@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-arm@npm:0.14.32"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"esbuild-linux-mips64le@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-mips64le@npm:0.14.30"
+"esbuild-linux-mips64le@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-mips64le@npm:0.14.32"
   conditions: os=linux & cpu=mips64el
   languageName: node
   linkType: hard
 
-"esbuild-linux-ppc64le@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-ppc64le@npm:0.14.30"
+"esbuild-linux-ppc64le@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-ppc64le@npm:0.14.32"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
 
-"esbuild-linux-riscv64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-riscv64@npm:0.14.30"
+"esbuild-linux-riscv64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-riscv64@npm:0.14.32"
   conditions: os=linux & cpu=riscv64
   languageName: node
   linkType: hard
 
-"esbuild-linux-s390x@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-linux-s390x@npm:0.14.30"
+"esbuild-linux-s390x@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-linux-s390x@npm:0.14.32"
   conditions: os=linux & cpu=s390x
   languageName: node
   linkType: hard
@@ -14997,72 +14995,72 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-netbsd-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-netbsd-64@npm:0.14.30"
+"esbuild-netbsd-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-netbsd-64@npm:0.14.32"
   conditions: os=netbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-openbsd-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-openbsd-64@npm:0.14.30"
+"esbuild-openbsd-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-openbsd-64@npm:0.14.32"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-sunos-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-sunos-64@npm:0.14.30"
+"esbuild-sunos-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-sunos-64@npm:0.14.32"
   conditions: os=sunos & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-32@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-windows-32@npm:0.14.30"
+"esbuild-windows-32@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-windows-32@npm:0.14.32"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-windows-64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-windows-64@npm:0.14.30"
+"esbuild-windows-64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-windows-64@npm:0.14.32"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-arm64@npm:0.14.30":
-  version: 0.14.30
-  resolution: "esbuild-windows-arm64@npm:0.14.30"
+"esbuild-windows-arm64@npm:0.14.32":
+  version: 0.14.32
+  resolution: "esbuild-windows-arm64@npm:0.14.32"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.14.30, esbuild@npm:^0.14.6":
-  version: 0.14.30
-  resolution: "esbuild@npm:0.14.30"
+"esbuild@npm:0.14.32, esbuild@npm:^0.14.6":
+  version: 0.14.32
+  resolution: "esbuild@npm:0.14.32"
   dependencies:
-    esbuild-android-64: 0.14.30
-    esbuild-android-arm64: 0.14.30
-    esbuild-darwin-64: 0.14.30
-    esbuild-darwin-arm64: 0.14.30
-    esbuild-freebsd-64: 0.14.30
-    esbuild-freebsd-arm64: 0.14.30
-    esbuild-linux-32: 0.14.30
-    esbuild-linux-64: 0.14.30
-    esbuild-linux-arm: 0.14.30
-    esbuild-linux-arm64: 0.14.30
-    esbuild-linux-mips64le: 0.14.30
-    esbuild-linux-ppc64le: 0.14.30
-    esbuild-linux-riscv64: 0.14.30
-    esbuild-linux-s390x: 0.14.30
-    esbuild-netbsd-64: 0.14.30
-    esbuild-openbsd-64: 0.14.30
-    esbuild-sunos-64: 0.14.30
-    esbuild-windows-32: 0.14.30
-    esbuild-windows-64: 0.14.30
-    esbuild-windows-arm64: 0.14.30
+    esbuild-android-64: 0.14.32
+    esbuild-android-arm64: 0.14.32
+    esbuild-darwin-64: 0.14.32
+    esbuild-darwin-arm64: 0.14.32
+    esbuild-freebsd-64: 0.14.32
+    esbuild-freebsd-arm64: 0.14.32
+    esbuild-linux-32: 0.14.32
+    esbuild-linux-64: 0.14.32
+    esbuild-linux-arm: 0.14.32
+    esbuild-linux-arm64: 0.14.32
+    esbuild-linux-mips64le: 0.14.32
+    esbuild-linux-ppc64le: 0.14.32
+    esbuild-linux-riscv64: 0.14.32
+    esbuild-linux-s390x: 0.14.32
+    esbuild-netbsd-64: 0.14.32
+    esbuild-openbsd-64: 0.14.32
+    esbuild-sunos-64: 0.14.32
+    esbuild-windows-32: 0.14.32
+    esbuild-windows-64: 0.14.32
+    esbuild-windows-arm64: 0.14.32
   dependenciesMeta:
     esbuild-android-64:
       optional: true
@@ -15106,7 +15104,7 @@ __metadata:
       optional: true
   bin:
     esbuild: bin/esbuild
-  checksum: 17c7a9838dc8291a27a0836af5f65ef15263a5cc6adc6ca25c94b50e35c330ab500d41071d47184ea4e8bd0fa0416260915dc802513d71fe7780cdba10fb7c7e
+  checksum: 3f22c200ab74223bf270deabf76d71cd0dadf0dd369d4a89a95b970bd4b3391357f7be5378a12de2e0805c3ec4912393e041e9a842ddda971abcef62d1442dd6
   languageName: node
   linkType: hard
 
@@ -26887,7 +26885,7 @@ __metadata:
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@playwright/test": 1.20.2
-    "@testing-library/jest-dom": 5.16.3
+    "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@testing-library/user-event": 13.5.0
     "@types/fs-extra": 9.0.13
