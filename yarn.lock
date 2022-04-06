@@ -95,21 +95,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:2.22.1":
-  version: 2.22.1
-  resolution: "@azure/msal-browser@npm:2.22.1"
+"@azure/msal-browser@npm:2.23.0":
+  version: 2.23.0
+  resolution: "@azure/msal-browser@npm:2.23.0"
   dependencies:
-    "@azure/msal-common": ^6.1.0
-  checksum: 12e0acea7de3060bb128ad56988ecbe0c7a038cd3a1c17118890858e83d3d1752fec61af4a40f3f6348c9693ffbd4f23f6c040652659799cd07b0c585c50fe88
+    "@azure/msal-common": ^6.2.0
+  checksum: 24e58bd853c505ca7a44a384b52dd332afdaf45dcf08c17e417eb0fb89c6d237a561c5e7824e1e5fec7e2afc2ae25dfb1a5e513f2eb6dd2efbfb3532d824eef7
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@azure/msal-common@npm:6.1.0"
-  dependencies:
-    debug: ^4.1.1
-  checksum: a3a7a94b546d87c3c156650dfb07b4afb22539ad671d088d4d719db81c2bcec94992273baa4f86aef0881a44b4a23fb69f45335aad7570cf5c0cb6a1e993f86e
+"@azure/msal-common@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@azure/msal-common@npm:6.2.0"
+  checksum: 83a9ecbb6ad06292d186e8e831f08b068794f603c8006d98d17b8038cfb52679f7625259f2dff6ca95b3e7a651eb7f35ddfb7453f1ac867e04ba182c218702f7
   languageName: node
   linkType: hard
 
@@ -5903,7 +5901,7 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@auth0/auth0-spa-js": 1.21.0
-    "@azure/msal-browser": 2.22.1
+    "@azure/msal-browser": 2.23.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.7
