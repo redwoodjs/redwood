@@ -2,7 +2,7 @@
 export const config = {
   imports: [`import { OktaAuth } from '@okta/okta-auth-js'`],
   init: `
-  const client = new OktaAuth({
+  const okta = new OktaAuth({
     issuer: 'process.env.OKTA_ISSUER',
     clientId: 'process.env.OKTA_CLIENT_ID',
     redirectUri: 'process.env.OKTA_REDIRECT_URI',
