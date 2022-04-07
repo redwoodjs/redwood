@@ -59,7 +59,7 @@
     "@types/lodash": "4.14.181",
     "@types/lru-cache": "5.1.1",
     "@types/node": "16.11.26",
-    "@types/vscode": "1.65.0",
+    "@types/vscode": "1.66.0",
     "jest": "27.5.1",
     "typescript": "4.6.3"
   },
