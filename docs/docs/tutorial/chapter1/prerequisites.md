@@ -50,7 +50,7 @@ Please do upgrade accordingly. Then proceed to the Redwood installation when you
 > We recommend following the [instructions via Yarnpkg.com](https://classic.yarnpkg.com/en/docs/install/).
 >
 > **2. Node.js**
-> Using the latest [installation from Nodejs.org](https://nodejs.org/en/) works just fine.
+> Using the recommended [installation version from Nodejs.org](https://nodejs.org/en/) is preferred, as the latest version is not supported.
 >
 > - `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm).
 >
