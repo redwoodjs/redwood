@@ -195,7 +195,7 @@ export const deleteContact = ({ id }) => {
 
 Pretty simple. You can see here how the `createContact()` function expects the `input` argument and just passes that on to Prisma in the `create()` call.
 
-You can delete `updateContact` and `deleteContact` here if you want, but since there's no longer an assessible GraphQL field for them they can't be used by the client anyway.
+You can delete `updateContact` and `deleteContact` here if you want, but since there's no longer an accessible GraphQL field for them they can't be used by the client anyway.
 
 Before we plug this into the UI, let's take a look at a nifty GUI you get just by running `yarn redwood dev`.
 
@@ -299,10 +299,11 @@ export default ContactPage
 
 We reference the `createContact` mutation we defined in the Contacts SDL passing it an `input` object which will contain the actual name, email and message values.
 
-Next we'll call the `useMutation` hook provided by Redwood which will allow us to execute the mutation when we're ready (don't forget the `import` statement):
+Next we'll call the `useMutation` hook provided by Redwood which will allow us to execute the mutation when we're ready (don't forget to `import` it):
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+// highlight-next-line
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -311,8 +312,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-// highlight-next-line
-import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -399,7 +398,7 @@ If you'll recall `<Form>` gives us all of the fields in a nice object where the 
 That means we can update the `onSubmit` function to invoke the mutation with the data it receives:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -408,7 +407,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -542,7 +540,9 @@ Next, let's show a notification to let the user know their submission was succes
 Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt;** component in our `return`, just before the **&lt;Form&gt;**:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
+// highlight-next-line
+import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
   Form,
@@ -551,9 +551,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
-// highlight-next-line
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -694,7 +691,8 @@ Remember when we said that `<Form>` had one more trick up its sleeve? Here it co
 Add a `<FormError>` component, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
   Form,
@@ -705,8 +703,6 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -796,7 +792,7 @@ We get that error message at the top saying something went wrong in plain Englis
 > - `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
 > - `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
 
-This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
+This just scratches the surface of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
 ```js
 export const createCar = ({ input }) => {
@@ -904,7 +900,8 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 Here's the entire page:
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
   Form,
@@ -915,8 +912,6 @@ import {
   Submit,
   useForm,
 } from '@redwoodjs/forms'
-import { useMutation } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {

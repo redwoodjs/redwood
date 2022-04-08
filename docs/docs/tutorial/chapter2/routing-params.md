@@ -15,18 +15,22 @@ import { Link, routes } from '@redwoodjs/router'
 // QUERY, Loading, Empty and Failure definitions...
 
 export const Success = ({ articles }) => {
-  return articles.map((article) => (
-    <article key={article.id}>
-      <header>
-        <h2>
-          // highlight-next-line
-          <Link to={routes.article()}>{article.title}</Link>
-        </h2>
-      </header>
-      <p>{article.body}</p>
-      <div>Posted at: {article.createdAt}</div>
-    </article>
-  ))
+  return (
+    <>
+      {articles.map((article) => (
+        <article key={article.id}>
+          <header>
+            <h2>
+              // highlight-next-line
+              <Link to={routes.article()}>{article.title}</Link>
+            </h2>
+          </header>
+          <p>{article.body}</p>
+          <div>Posted at: {article.createdAt}</div>
+        </article>
+      ))}
+    </>
+  )
 }
 ```
 
@@ -306,10 +310,14 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ articles }) => {
-  return articles.map((article) => (
-    // highlight-next-line
-    <Article key={article.id} article={article} />
-  ))
+  return (
+    <>
+      {articles.map((article) => (
+        // highlight-next-line
+        <Article key={article.id} article={article} />
+      ))}
+    </>
+  )
 }
 ```
 
