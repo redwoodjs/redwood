@@ -1,20 +1,20 @@
 const OktaJwtVerifier = require('@okta/jwt-verifier')
 
-const oktaJwtVerifier = new OktaJwtVerifier({
-  issuer: 'https://dev-81077351.okta.com/oauth2/default',
-})
-
 export const okta = async (
   token: string
 ): Promise<null | Record<string, unknown>> => {
-  if (!process.env) {
-    console.error('env var is not set.')
-    throw new Error('env var is not set.')
+  const { OKTA_DOMAIN, OKTA_AUDIENCE } = process.env
+  if (!OKTA_AUDIENCE || !OKTA_DOMAIN) {
+    throw new Error('`OKTA_DOMAIN` or `OKTA_AUDIENCE` env vars are not set.')
   }
 
+  const client = new OktaJwtVerifier({
+    issuer: `https://${OKTA_DOMAIN}/oauth2/default`,
+  })
+
   return new Promise((resolve) => {
-    oktaJwtVerifier
-      .verifyAccessToken(token, 'api://default')
+    client
+      .verifyAccessToken(token, process.env.OKTA_AUDIENCE)
       .then((res: any) => {
         resolve(res.claims as Record<string, unknown>)
       })
