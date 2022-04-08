@@ -30,7 +30,7 @@ If you have an existing site created with a prior version, you'll need to upgrad
 
 During installation, RedwoodJS checks if your system meets version requirements for Node and Yarn:
 
-- node: ">=14.17 <=16.x"
+- node: ">=14.19 <=16.x"
 - yarn: ">=1.15"
 
 If your system versions do not meet both requirements, _the installation bootstrap will result in an ERROR._ To check, please run the following from your terminal command line:
@@ -60,4 +60,4 @@ Please do upgrade accordingly. Then proceed to the Redwood installation when you
 >
 > JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
 >
-> - [Recommended Windows Development Setup](../../cookbook/windows-development-setup.md)
+> - [Recommended Windows Development Setup](../../how-to/windows-development-setup.md)

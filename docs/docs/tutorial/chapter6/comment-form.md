@@ -76,7 +76,7 @@ You can even try submitting the form right in Storybook! If you leave "name" or 
 
 ### Submitting
 
-Submitting the form should use the `createComment` function we added to our services and GraphQL. We'll need to add a mutation to the form component and an `onSubmit` hander to the form so that the create can be called with the data in the form. And since `createComment` could return an error we'll add the **FormError** component to display it:
+Submitting the form should use the `createComment` function we added to our services and GraphQL. We'll need to add a mutation to the form component and an `onSubmit` handler to the form so that the create can be called with the data in the form. And since `createComment` could return an error we'll add the **FormError** component to display it:
 
 ```jsx title="web/src/components/CommentForm/CommentForm.js"
 import {
@@ -808,7 +808,7 @@ Next we need to let GraphQL know that it should expect a `postId` to be passed f
 ```graphql title="api/src/graphql/comments.sdl.js"
 type Query {
   // highlight-next-line
-  comments(postId: Int!): [Comment!]!
+  comments(postId: Int!): [Comment!]! @skipAuth
 }
 ```
 

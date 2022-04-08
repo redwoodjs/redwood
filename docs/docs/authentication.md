@@ -1,23 +1,27 @@
+---
+description: Set up an authentication provider
+---
+
 # Authentication
 
 `@redwoodjs/auth` contains both a built-in database-backed authentication system (dbAuth), as well as lightweight wrappers around popular SPA authentication libraries.
 
 We currently support the following third-party authentication providers:
 
-- [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
-- [Auth0](https://github.com/auth0/auth0-spa-js)
-- [Azure Active Directory](https://github.com/AzureAD/microsoft-authentication-library-for-js)
-- [Clerk](https://clerk.dev)
-- [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
-- [Magic Links - Magic.js](https://github.com/MagicHQ/magic-js)
-- [Firebase](https://firebase.google.com/docs/auth)
-- [Ethereum](https://github.com/oneclickdapp/ethereum-auth)
-- [Supabase](https://supabase.io/docs/guides/auth)
-- [Nhost](https://docs.nhost.io/platform/authentication)
+- Netlify Identity _([Repo on GitHub](https://github.com/netlify/netlify-identity-widget))_
+- Netlify GoTrue-JS _([Repo on GitHub](https://github.com/netlify/gotrue-js))_
+- Auth0 _([Repo on GitHub](https://github.com/auth0/auth0-spa-js))_
+- Clerk _([Website](https://clerk.dev))_
+- Azure Active Directory _([Repo on GitHub](https://github.com/AzureAD/microsoft-authentication-library-for-js))_
+- Magic Links - Magic.js _([Repo on GitHub](https://github.com/MagicHQ/magic-js))_
+- Firebase _([Documentation Website](https://firebase.google.com/docs/auth))_
+- Supabase _([Documentation Website](https://supabase.io/docs/guides/auth))_
+- Ethereum _([Repo on GitHub](https://github.com/oneclickdapp/ethereum-auth))_
+- Nhost _([Documentation Website](https://docs.nhost.io/platform/authentication))_
 - Custom
 - [Contribute one](https://github.com/redwoodjs/redwood/tree/main/packages/auth), it's SuperEasy™!
 
-Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
+> 👉 Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 
 ## Self-hosted Auth Installation and Setup
 
@@ -1011,7 +1015,7 @@ console.log(context.currentUser)
 // }
 ```
 
-You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createCreateGraphQLHandler`
+You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createGraphQLHandler`
 
 Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser`. (Note: You may already have stub functions.)
 

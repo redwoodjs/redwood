@@ -1,3 +1,7 @@
+---
+description: Deploy serverless in an instant with Vercel
+---
+
 # Deploy to Vercel
 
 >The following instructions assume you have read the [General Deployment Setup](#general-deployment-setup) section above.
@@ -11,7 +15,6 @@ If you simply want to experience the Vercel deployment process without a databas
 4. use the Vercel [Quick Start](https://vercel.com/#get-started) to deploy
 
 _If you choose this quick deploy experience, the following steps do not apply._
-
 
 ## Redwood Project Setup
 

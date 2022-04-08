@@ -1,3 +1,6 @@
+---
+description: What happens when you build your app
+---
 # Builds
 
 > ⚠ **Work in Progress** ⚠️
@@ -13,7 +16,7 @@
 
 The api side of Redwood is transpiled by Babel into the `./api/dist` folder.
 
-### steps on Netlify
+### Steps on Netlify
 
 To emulate Netlify's build steps locally:
 

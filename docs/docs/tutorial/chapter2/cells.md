@@ -127,7 +127,7 @@ We'll have to rename them to `posts` in both the query name and in the prop name
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
-  query BlogPostsQuery {
+  query ArticlesQuery {
     // highlight-next-line
     posts {
       id
@@ -183,11 +183,24 @@ The browser should actually show the `id` and a GraphQL-specific `__typename` pr
 
 > **In the `Success` component, where did `posts` come from?**
 >
-> In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data. You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
+> In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data.
+> ```javascript
+> export const QUERY = gql`
+>   query ArticlesQuery {
+>     // highlight-next-line
+>     posts {
+>       id
+>     }
+>   }
+> `
+> ```
+>
+> You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
 >
 > ```javascript
 > export const QUERY = gql`
 >   query ArticlesQuery {
+>     // highlight-next-line
 >     articles: posts {
 >       id
 >     }
@@ -205,7 +218,7 @@ In fact, let's use the aforementioned alias so that the name of our cell, and th
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
-  query BlogPostsQuery {
+  query ArticlesQuery {
     // highlight-next-line
     articles: posts {
       id
@@ -222,11 +235,11 @@ export const Failure = ({ error }) => (
 )
 
 // highlight-next-line
-export const Success = ({ posts }) => {
+export const Success = ({ articles }) => {
   return (
     <ul>
       // highlight-next-line
-      {posts.map((item) => {
+      {articles.map((item) => {
         return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
@@ -257,17 +270,21 @@ The page should now show a dump of all the data you created for any blog posts y
 
 Now we're in the realm of good ol' React components, so just build out the `Success` component to display the blog post in a nicer format:
 
-```jsx {2-10} title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx {3-13} title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const Success = ({ articles }) => {
-  return articles.map((article) => (
-    <article key={article.id}>
-      <header>
-        <h2>{article.title}</h2>
-      </header>
-      <p>{article.body}</p>
-      <div>Posted at: {article.createdAt}</div>
-    </article>
-  ))
+  return (
+    <>
+      {articles.map((article) => (
+        <article key={article.id}>
+          <header>
+            <h2>{article.title}</h2>
+          </header>
+          <p>{article.body}</p>
+          <div>Posted at: {article.createdAt}</div>
+        </article>
+      ))}
+    </>
+  )
 }
 ```
 

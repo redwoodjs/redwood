@@ -1,3 +1,6 @@
+---
+description: Declarative data fetching with Cells
+---
 # Cells
 
 Cells are a declarative approach to data fetching and one of Redwood's signature modes of abstraction.

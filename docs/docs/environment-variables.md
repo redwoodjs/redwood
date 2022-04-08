@@ -1,3 +1,7 @@
+---
+description: How to use environment variables on the api and web sides
+---
+
 # Environment Variables
 
 You can provide environment variables to each side of your Redwood app in different ways, depending on each Side's target, and whether you're in development or production.
@@ -64,6 +68,19 @@ The toml values are mapped as follows:
 | `apiDbAuthUrl`     | `global.RWJS_API_DBAUTH_URL`  | URL or absolute path to DbAuth function  |
 
 See the [redwood.toml reference](app-configuration-redwood-toml.md#api-paths) for more details.
+
+## Development Fatal Error Page
+
+```text title=".env"
+REDWOOD_ENV_EDITOR=vscode
+```
+
+Redwood comes with a `FatalErrorPage` that displays helpful information—like the stack trace and the request—when something breaks.
+
+> `FatalErrorPage` isn't bundled when deploying to production
+
+As part of the stack trace, there are links to the original source files so that they can be quickly opened in your editor.
+The page defaults to VSCode, but you can override the editor by setting the environment variable `REDWOOD_ENV_EDITOR`.
 
 ## API
 

@@ -1,3 +1,7 @@
+---
+description: Create, develop, and run serverless functions
+---
+
 # Serverless Functions
 
 <!-- `redwood.toml`&mdash;`api/src/functions` by default.  -->
