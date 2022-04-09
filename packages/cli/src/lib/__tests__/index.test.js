@@ -1,7 +1,7 @@
 global.__dirname = __dirname
-const BASE_PATH = path.join(global.__dirname, 'fixtures')
+const BASE_PATH = require('path').join(global.__dirname, 'fixtures')
+
 jest.mock('@redwoodjs/internal', () => {
-  const path = require('path')
   return {
     ...jest.requireActual('@redwoodjs/internal'),
     getPaths: () => {

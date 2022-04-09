@@ -61,7 +61,10 @@ export const handler = async ({ force, install }) => {
 
   const packages = ['postcss', 'postcss-loader', 'tailwindcss', 'autoprefixer']
 
-  const recommendedVSCodeExtensions = ['csstools.postcss', 'bradlc.vscode-tailwindcss']
+  const recommendedVSCodeExtensions = [
+    'csstools.postcss',
+    'bradlc.vscode-tailwindcss',
+  ]
 
   const tasks = new Listr([
     {
@@ -156,14 +159,20 @@ export const handler = async ({ force, install }) => {
     {
       title: 'Adding recommended VS Code extensions...',
       task: (_ctx, task) => {
-        const VS_CODE_EXTENSIONS_PATH = path.join(rwPaths.base, '.vscode/extensions.json')
+        const VS_CODE_EXTENSIONS_PATH = path.join(
+          rwPaths.base,
+          '.vscode/extensions.json'
+        )
 
         if (!usingVSCode()) {
-          task.skip('Looks like your\'re not using VS Code')
+          task.skip("Looks like your're not using VS Code")
         } else {
-          let originalExtensionsJson = {recommendations: []}
+          let originalExtensionsJson = { recommendations: [] }
           if (path.existsSync(VS_CODE_EXTENSIONS_PATH)) {
-            const originalExtensionsFile = fs.readFileSync(VS_CODE_EXTENSIONS_PATH, 'utf-8')
+            const originalExtensionsFile = fs.readFileSync(
+              VS_CODE_EXTENSIONS_PATH,
+              'utf-8'
+            )
             originalExtensionsJson = JSON.parse(originalExtensionsFile)
           }
           const newExtensionsJson = {
@@ -171,7 +180,7 @@ export const handler = async ({ force, install }) => {
             recommendations: [
               ...originalExtensionsJson.recommendations,
               ...recommendedVSCodeExtensions,
-            ]
+            ],
           }
           fs.writeFileSync(VS_CODE_EXTENSIONS_PATH, newExtensionsJson)
         }

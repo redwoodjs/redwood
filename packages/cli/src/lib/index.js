@@ -474,6 +474,6 @@ export const getDefaultArgs = (builder) => {
  */
 export const usingVSCode = () => {
   const redwoodPaths = getPaths()
-  const VS_CODE_PATH = path.join(redwoodPaths.base, ".vscode")
+  const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
   return path.existsSync(VS_CODE_PATH)
 }
