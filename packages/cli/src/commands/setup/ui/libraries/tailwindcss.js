@@ -7,7 +7,7 @@ import Listr from 'listr'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { getPaths, usingVSCode } from '../../../../lib'
 import c from '../../../../lib/colors'
 
 export const command = 'tailwindcss'
@@ -60,6 +60,8 @@ export const handler = async ({ force, install }) => {
   const rwPaths = getPaths()
 
   const packages = ['postcss', 'postcss-loader', 'tailwindcss', 'autoprefixer']
+
+  const recommendedVSCodeExtensions = ['csstools.postcss', 'bradlc.vscode-tailwindcss']
 
   const tasks = new Listr([
     {
@@ -148,6 +150,30 @@ export const handler = async ({ force, install }) => {
         } else {
           const newIndexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
           fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
+        }
+      },
+    },
+    {
+      title: 'Adding recommended VS Code extensions...',
+      task: (_ctx, task) => {
+        const VS_CODE_EXTENSIONS_PATH = path.join(rwPaths.base, '.vscode/extensions.json')
+
+        if (!usingVSCode()) {
+          task.skip('Looks like your\'re not using VS Code')
+        } else {
+          let originalExtensionsJson = {recommendations: []}
+          if (path.existsSync(VS_CODE_EXTENSIONS_PATH)) {
+            const originalExtensionsFile = fs.readFileSync(VS_CODE_EXTENSIONS_PATH, 'utf-8')
+            originalExtensionsJson = JSON.parse(originalExtensionsFile)
+          }
+          const newExtensionsJson = {
+            ...originalExtensionsJson,
+            recommendations: [
+              ...originalExtensionsJson.recommendations,
+              ...recommendedVSCodeExtensions,
+            ]
+          }
+          fs.writeFileSync(VS_CODE_EXTENSIONS_PATH, newExtensionsJson)
         }
       },
     },
