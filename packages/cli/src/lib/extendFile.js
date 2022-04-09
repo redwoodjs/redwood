@@ -1,26 +1,26 @@
 import fs from 'fs'
 
-import { getPaths } from '../../../../lib'
-
 /**
+ * Convenience function to check if a file contains a particular string.
+ * @param {string} path File to read and search for str.
  * @param {string} str The value to search for.
- * @returns true if the contents of App.{js,tsx} contains the given string, false otherwise.
+ * @returns true if the contents of the file at path contains the given string, false otherwise.
  */
-export function appJSContains(str) {
-  const webAppPath = getPaths().web.app
-  const content = fs.readFileSync(webAppPath).toString()
+export function fileContains(path, str) {
+  const content = fs.readFileSync(path).toString()
   return content.includes(str)
 }
 
 /**
- * Inject code into App.{js,tsx}.
+ * Inject code into the file at the given path.
  * Use of insertComponent assumes only one of (around|within) are used, and that the component
- * identified by (around|within) occurs exactly once in App.{js,tsx}.
+ * identified by (around|within) occurs exactly once in the file at the given path.
  * Imports are added after the last redwoodjs import.
  * moduleScopeLines are added after the last import.
  *
+ * @param {string} path Path to JSX file to extend.
  * @param {Object} options Configure behavior
- * @param {Object} options.insertComponent Configure component-inserting behavior
+ * @param {Object} options.insertComponent Configure component-inserting behavior.
  * @param {Object} options.insertComponent.name Name of component to insert.
  * @param {Object|string} options.insertComponent.props Properties to pass to the inserted component.
  * @param {string} options.insertComponent.around Name of the component around which the new
@@ -33,22 +33,24 @@ export function appJSContains(str) {
  * component.
  * @param {Array} options.imports Import declarations to inject after the last redwoodjs import.
  * @param {Array} options.moduleScopeLines Lines of code to inject after the last import statement.
- * @returns Nothing; writes changes directly into App.{js,tsx}.
+ * @returns Nothing; writes changes directly into the file at the given path.
  */
-export function extendAppJS({
-  insertComponent: {
-    name = undefined,
-    props = undefined,
-    around = undefined,
-    within = undefined,
-    insertBefore = undefined,
-    insertAfter = undefined,
-  },
-  imports = [],
-  moduleScopeLines = [],
-}) {
-  const webAppPath = getPaths().web.app
-  const content = fs.readFileSync(webAppPath).toString().split('\n')
+export function extendJSXFile(
+  path,
+  {
+    insertComponent: {
+      name = undefined,
+      props = undefined,
+      around = undefined,
+      within = undefined,
+      insertBefore = undefined,
+      insertAfter = undefined,
+    },
+    imports = [],
+    moduleScopeLines = [],
+  }
+) {
+  const content = fs.readFileSync(path).toString().split('\n')
 
   if (moduleScopeLines && moduleScopeLines.length) {
     content.splice(
@@ -79,10 +81,7 @@ export function extendAppJS({
     })
   }
 
-  fs.writeFileSync(
-    webAppPath,
-    content.filter((e) => e !== undefined).join('\n')
-  )
+  fs.writeFileSync(path, content.filter((e) => e !== undefined).join('\n'))
 }
 
 /**

@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
@@ -6,7 +5,7 @@ import Listr from 'listr'
 
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
-import configureStorybook from '../../../../lib/configureStorybook.js'
+import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
 import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
 
 export const command = 'chakra-ui'
@@ -95,16 +94,12 @@ export async function handler({ force, install }) {
     {
       title: 'Configure Storybook...',
       task: async () =>
-        configureStorybook(
-          { force },
-          fs.readFileSync(
-            path.join(
-              __dirname,
-              '..',
-              'templates',
-              'chakra.storybook.preview.js.template'
-            ),
-            'utf-8'
+        extendStorybookConfiguration(
+          path.join(
+            __dirname,
+            '..',
+            'templates',
+            'chakra.storybook.preview.js.template'
           )
         ),
     },

@@ -1,13 +1,12 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
 
+import { extendJSXFile, fileContains } from '../../../..//lib/extendFile'
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
-import configureStorybook from '../../../../lib/configureStorybook.js'
-import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
+import createOrExtendStorybookConfiguration from '../../../../lib/configureStorybook.js'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -83,9 +82,9 @@ export async function handler({ force, install, packages }) {
     },
     {
       title: 'Setting up Mantine...',
-      skip: () => appJSContains('MantineProvider'),
+      skip: () => fileContains(rwPaths.web.app, 'MantineProvider'),
       task: () =>
-        extendAppJS({
+        extendJSXFile(rwPaths.web.app, {
           insertComponent: {
             name: 'MantineProvider',
             props: { theme: 'theme' },
@@ -110,16 +109,12 @@ export async function handler({ force, install, packages }) {
     {
       title: 'Configure Storybook...',
       task: async () =>
-        configureStorybook(
-          { force },
-          fs.readFileSync(
-            path.join(
-              __dirname,
-              '..',
-              'templates',
-              'mantine.storybook.preview.js.template'
-            ),
-            'utf-8'
+        createOrExtendStorybookConfiguration(
+          path.join(
+            __dirname,
+            '..',
+            'templates',
+            'mantine.storybook.preview.js.template'
           )
         ),
     },
