@@ -4,7 +4,6 @@ import { getAuthenticationContext } from '@redwoodjs/api'
 
 import {
   getAsyncStoreInstance,
-  setContext,
   context as globalContext,
 } from '../globalContext'
 
