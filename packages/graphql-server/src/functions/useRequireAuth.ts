@@ -39,7 +39,6 @@ export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
             : null
 
           globalContext.currentUser = currentUser
-          setContext(globalContext)
         }
       } catch (e) {
         return {
