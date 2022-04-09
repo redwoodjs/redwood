@@ -164,7 +164,7 @@ for my nascent web app framework. Namely:
 And there you have it.
 
 ## Contributors
-*A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/redwoodjs.com) (docs!), and [Create-Redwood Template](https://github.com/redwoodjs/create-redwood-app). 🚀*
+*A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/redwoodjs.com) (docs!), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀*
 
 ### Core Team
 <!-- prettier-ignore-start -->
