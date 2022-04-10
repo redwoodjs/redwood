@@ -123,6 +123,9 @@ Note the `--no-crud` flag here. This gives us bare-bones functionality to start 
 
 That command will create both the SDL and the service. One change we'll need to make to the generated code is to allow access to anonymous users to view all comments. Change the `@requireAuth` directive to `@skipAuth` instead:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```graphql title="api/src/graphql/comments.sdl.js"
 export const schema = gql`
   type Comment {
@@ -153,11 +156,50 @@ export const schema = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```graphql title="api/src/graphql/comments.sdl.ts"
+export const schema = gql`
+  type Comment {
+    id: Int!
+    name: String!
+    body: String!
+    post: Post!
+    postId: Int!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    // highlight-next-line
+    comments: [Comment!]! @skipAuth
+  }
+
+  input CreateCommentInput {
+    name: String!
+    body: String!
+    postId: Int!
+  }
+
+  input UpdateCommentInput {
+    name: String
+    body: String
+    postId: Int
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 Now if you take a look back at the real app in the browser (not Storybook) you should see a different message than the GraphQL error we were seeing before:
 
 ![image](https://user-images.githubusercontent.com/300/101552505-d1405100-3967-11eb-883f-1227689e5f88.png)
 
 "Empty" means the Cell rendered correctly! There just aren't any comments in the database yet. Let's update the `CommentsCell` component to make that "Empty" message a little more friendly:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/CommentsCell/CommentsCell.js"
 export const Empty = () => {
@@ -166,9 +208,25 @@ export const Empty = () => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+export const Empty = () => {
+  // highlight-next-line
+  return <div className="text-center text-gray-500">No comments yet</div>
+}
+```
+
+</TabItem>
+</Tabs>
+
 ![image](https://user-images.githubusercontent.com/300/153501827-87b9f931-ee68-4baf-9342-3a70b03d55e2.png)
 
 That's better. Let's update the test that covers the Empty component render as well:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
 it('renders Empty successfully', async () => {
@@ -179,11 +237,29 @@ it('renders Empty successfully', async () => {
 })
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.ts"
+it('renders Empty successfully', async () => {
+  // highlight-start
+  render(<Empty />)
+  expect(screen.getByText('No comments yet')).toBeInTheDocument()
+  // highlight-end
+})
+```
+
+</TabItem>
+</Tabs>
+
 Okay, let's focus on the service for a bit. We'll need to add a function to let users create a new comment and we'll add a test that covers the new functionality.
 
 ### Building out the Service
 
 By virtue of using the generator we've already got the function we need to select all comments from the database:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments/comments.js"
 import { db } from 'src/lib/db'
@@ -203,6 +279,31 @@ export const Comment = {
     db.comment.findUnique({ where: { id: root.id } }).post(),
 }
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.ts"
+import { db } from 'src/lib/db'
+
+export const comments = () => {
+  return db.comment.findMany()
+}
+
+export const comment = ({ id }) => {
+  return db.comment.findUnique({
+    where: { id },
+  })
+}
+
+export const Comment = {
+  post: (_obj, { root }) =>
+    db.comment.findUnique({ where: { id: root.id } }).post(),
+}
+```
+
+</TabItem>
+</Tabs>
 
 We've also got a function that returns only a single comment, as well as this `Comment` object at the end. That allows us to return nested post data for a comment through GraphQL using syntax like this (don't worry about adding this code to our app, this is just an example):
 
@@ -233,6 +334,9 @@ Hmmm...
 
 We need to be able to create a comment as well. We'll use the same convention that's used in Redwood's generated scaffolds: the create endpoint will accept a single parameter `input` which is an object with the individual model fields:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```javascript title="api/src/services/comments/comments.js"
 export const createComment = ({ input }) => {
   return db.comment.create({
@@ -241,7 +345,24 @@ export const createComment = ({ input }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.ts"
+export const createComment = ({ input }) => {
+  return db.comment.create({
+    data: input,
+  })
+}
+```
+
+</TabItem>
+</Tabs>
+
 We'll also need to expose this function via GraphQL so we'll add a Mutation to the SDL and use `@skipAuth` since, again, it can be accessed by everyone:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```graphql title="api/src/graphql/comments.sdl.js"
 export const schema = gql`
@@ -278,6 +399,47 @@ export const schema = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```graphql title="api/src/graphql/comments.sdl.ts"
+export const schema = gql`
+  type Comment {
+    id: Int!
+    name: String!
+    body: String!
+    post: Post!
+    postId: Int!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    comments: [Comment!]! @skipAuth
+  }
+
+  input CreateCommentInput {
+    name: String!
+    body: String!
+    postId: Int!
+  }
+
+  input UpdateCommentInput {
+    name: String
+    body: String
+    postId: Int
+  }
+
+  // highlight-start
+  type Mutation {
+    createComment(input: CreateCommentInput!): Comment! @skipAuth
+  }
+  // highlight-end
+`
+```
+
+</TabItem>
+</Tabs>
+
 :::tip
 
 The `CreateCommentInput` type was already created for us by the SDL generator.
@@ -288,6 +450,9 @@ That's all we need on the api-side to create a comment! But let's think for a mo
 
 What about deleting a comment? We won't let a user delete their own comment, but as owners of the blog we should be able to delete/moderate them. So we'll need a delete function and API endpoint as well. Let's add those:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```javascript title="api/src/services/comments/comments.js"
 export const deleteComment = ({ id }) => {
   return db.comment.delete({
@@ -296,7 +461,24 @@ export const deleteComment = ({ id }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.ts"
+export const deleteComment = ({ id }) => {
+  return db.comment.delete({
+    where: { id },
+  })
+}
+```
+
+</TabItem>
+</Tabs>
+
 Since we only want owners of the blog to be able to delete comments, we'll use `@requireAuth`:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```graphql title="api/src/graphql/comments.sdl.js"
 type Mutation {
@@ -306,6 +488,20 @@ type Mutation {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```graphql title="api/src/graphql/comments.sdl.ts"
+type Mutation {
+  createComment(input: CreateCommentInput!): Comment! @skipAuth
+  // highlight-next-line
+  deleteComment(id: Int!): Comment! @requireAuth
+}
+```
+
+</TabItem>
+</Tabs>
+
 `deleteComment` will be given a single argument, the ID of the comment to delete, and it's required. A common pattern is to return the record that was just deleted in case you wanted to notify the user or some other system about the details of the thing that was just removed, so we'll do that here as well. But, you could just as well return `null`.
 
 ### Testing the Service
@@ -313,6 +509,9 @@ type Mutation {
 Let's make sure our service functionality is working and continues to work as we modify our app.
 
 If you open up `api/src/services/comments/comments.test.js` you'll see there's one in there already, making sure that retrieving all comments (the default `comments()` function that was generated along with the service) works:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments/comments.test.js"
 import { comments } from './comments'
@@ -325,6 +524,24 @@ describe('comments', () => {
   })
 })
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.test.ts"
+import { comments } from './comments'
+
+describe('comments', () => {
+  scenario('returns all comments', async (scenario) => {
+    const result = await comments()
+
+    expect(result.length).toEqual(Object.keys(scenario.comment).length)
+  })
+})
+```
+
+</TabItem>
+</Tabs>
 
 What is this `scenario()` function? That's made available by Redwood that mostly acts like Jest's built-in `it()` and `test()` functions, but with one important difference: it pre-seeds a test database with data that is then passed to you in the `scenario` argument. You can count on this data existing in the database and being reset between tests in case you make changes to it.
 
@@ -340,7 +557,7 @@ That being said, if you really wanted to you could use Jest's [mocking utilities
 
 :::
 
-Where does that data come from? Take a look at the `comments.scenarios.js` file which is next door:
+Where does that data come from? Take a look at the `comments.scenarios.{js,ts}` file which is next door:
 
 ```javascript
 export const standard = defineScenario({
@@ -389,6 +606,9 @@ When generating the service (and the test and scenarios) all we (Redwood) knows 
 
 Let's replace that scenario data with something more like the real data our app will be expecting:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
   // highlight-start
@@ -422,6 +642,45 @@ export const standard = defineScenario({
 })
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.scenarios.ts"
+export const standard = defineScenario({
+  // highlight-start
+  comment: {
+    jane: {
+      data: {
+        name: 'Jane Doe',
+        body: 'I like trees',
+        post: {
+          create: {
+            title: 'Redwood Leaves',
+            body: 'The quick brown fox jumped over the lazy dog.'
+          }
+        }
+      }
+    },
+    john: {
+      data: {
+        name: 'John Doe',
+        body: 'Hug a tree today',
+        post: {
+          create: {
+            title: 'Root Systems',
+            body: 'The five boxing wizards jump quickly.'
+          }
+        }
+      }
+    }
+  }
+  // highlight-end
+})
+```
+
+</TabItem>
+</Tabs>
+
 Note that we changed the names of the records from `one` and `two` to the names of the authors, `jane` and `john`. More on that later. Why didn't we include `id` or `createdAt` fields? We told Prisma, in `schema.prisma`, to assign defaults to these fields so they'll be set automatically when the records are created.
 
 The test created by the service generator simply checks to make sure the same number of records are returned so changing the content of the data here won't affect the test.
@@ -429,6 +688,9 @@ The test created by the service generator simply checks to make sure the same nu
 #### Testing createComment()
 
 Let's add our first service test by making sure that `createComment()` actually stores a new comment in the database. When creating a comment we're not as worried about existing data in the database so let's create a new scenario which only contains a post—the post we'll be linking the new comment to through the comment's `postId` field:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
@@ -449,7 +711,35 @@ export const postOnly = defineScenario({
 // highlight-end
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.scenarios.ts"
+export const standard = defineScenario({
+  // ...
+})
+
+// highlight-start
+export const postOnly = defineScenario({
+  post: {
+    bark: {
+      data: {
+        title: 'Bark',
+        body: "A tree's bark is worse than its bite"
+      }
+    }
+  }
+})
+// highlight-end
+```
+
+</TabItem>
+</Tabs>
+
 Now we can pass the `postOnly` scenario name as the first argument to a new `scenario()` test:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments/comments.test.js"
 // highlight-next-line
@@ -480,6 +770,42 @@ describe('comments', () => {
   // highlight-end
 })
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/comments/comments.test.ts"
+// highlight-next-line
+import { comments, createComment } from './comments'
+
+describe('comments', () => {
+  scenario('returns all comments', async (scenario) => {
+    const result = await comments()
+
+    expect(result.length).toEqual(Object.keys(scenario.comment).length)
+  })
+
+  // highlight-start
+  scenario('postOnly', 'creates a new comment', async (scenario) => {
+    const comment = await createComment({
+      input: {
+        name: 'Billy Bob',
+        body: 'What is your favorite tree bark?',
+        postId: scenario.post.bark.id
+      }
+    })
+
+    expect(comment.name).toEqual('Billy Bob')
+    expect(comment.body).toEqual('What is your favorite tree bark?')
+    expect(comment.postId).toEqual(scenario.post.bark.id)
+    expect(comment.createdAt).not.toEqual(null)
+  })
+  // highlight-end
+})
+```
+
+</TabItem>
+</Tabs>
 
 We pass an optional first argument to `scenario()` which is the named scenario to use, instead of the default of "standard."
 
