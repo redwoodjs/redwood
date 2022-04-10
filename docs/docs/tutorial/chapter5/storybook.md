@@ -12,23 +12,26 @@ After some compiling you should get a message saying that Storybook has started 
 
 If you poke around at the file tree on the left you'll see all of the components, cells, layouts and pages we created during the tutorial. Where did they come from? You may recall that every time we generated a new page/cell/component we actually created at least *three* files:
 
-* `Article.js`
-* `Article.stories.js`
-* `Article.test.js`
+* `Article.{js,tsx}`
+* `Article.stories.{js,tsx}`
+* `Article.test.{js,ts}`
 
 :::info
 
-If you generated a cell then you also got a `.mock.js` file (more on those later).
+If you generated a cell then you also got a `.mock.{js,ts}` file (more on those later).
 
 :::
 
-Those `.stories.js` files are what makes the tree on the left side of the Storybook browser possible! From their [homepage](https://storybook.js.org/), Storybook describes itself as:
+Those `.stories.{js,tsx}` files are what makes the tree on the left side of the Storybook browser possible! From their [homepage](https://storybook.js.org/), Storybook describes itself as:
 
 *"...an open source tool for developing UI components in isolation for React, Vue, Angular, and more. It makes building stunning UIs organized and efficient."*
 
 So, the idea here is that you can build out your components/cells/pages in isolation, get them looking the way you want and displaying the correct data, then plug them into your full application.
 
 When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.js` you'll see what it takes to explain this component to Storybook, and it isn't much:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/Article/Article.stories.js"
 import Article from './Article'
@@ -58,6 +61,40 @@ export const generated = () => {
 export default { title: 'Components/BlogPost' }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/Article/Article.stories.tsx"
+import Article from './Article'
+
+export const generated = () => {
+  return (
+    <Article
+      article={{
+        id: 1,
+        title: 'First Post',
+        body: `Neutra tacos hot chicken prism raw denim, put
+              a bird on it enamel pin post-ironic vape cred
+              DIY. Street art next level umami squid.
+              Hammock hexagon glossier 8-bit banjo. Neutra
+              la croix mixtape echo park four loko semiotics
+              kitsch forage chambray. Semiotics salvia
+              selfies jianbing hella shaman. Letterpress
+              helvetica vaporware cronut, shaman butcher
+              YOLO poke fixie hoodie gentrify woke
+              heirloom.`,
+        createdAt: '2020-01-01T12:34:45Z'
+      }}
+    />
+  )
+}
+
+export default { title: 'Components/BlogPost' }
+```
+
+</TabItem>
+</Tabs>
+
 You import the component you want to use and then all of the named exports in the file will be a single "story" as displayed in Storybook. In this case the generator named it "generated" which shows as the "Generated" story in the tree view:
 
 ```
@@ -72,9 +109,22 @@ This makes it easy to create variants of your component and have them all displa
 
 In your actual app you'd use this component like so:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx
 <Article article={article} />
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx
+<Article article={article} />
+```
+
+</TabItem>
+</Tabs>
 
 Where the `article` in that prop comes from somewhere outside of this component. Here in Storybook there is no "outside" of this component, so we just send the article object into the prop directly.
 
