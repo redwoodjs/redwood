@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Layouts
 
 One way to solve the duplication of the `<header>` would be to create a `<Header>` component and include it in both `HomePage` and `AboutPage`. That works, but is there a better solution? Ideally there should only be one reference to the `<header>` anywhere in our code.
@@ -21,6 +24,9 @@ From now on we'll use the shorter `g` alias instead of `generate`
 That created `web/src/layouts/BlogLayout/BlogLayout.js` and an associated test file. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
 
 Cut the `<header>` from both `HomePage` and `AboutPage` and paste it in the layout instead. Let's take out the duplicated `<main>` tag as well:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 // highlight-next-line
@@ -49,6 +55,42 @@ const BlogLayout = ({ children }) => {
 export default BlogLayout
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
+// highlight-next-line
+import { Link, routes } from '@redwoodjs/router'
+
+const BlogLayout = ({ children }) => {
+  return (
+    // highlight-start
+    <>
+      <header>
+        <h1>Redwood Blog</h1>
+        <nav>
+          <ul>
+            <li>
+              <Link to={routes.about()}>About</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>{children}</main>
+    </>
+    // highlight-end
+  )
+}
+
+export default BlogLayout
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/pages/AboutPage/AboutPage.js"
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
@@ -70,6 +112,36 @@ const AboutPage = () => {
 export default AboutPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const AboutPage = () => {
+  return (
+    <>
+      <MetaTags title="About" description="About page" />
+
+      <p>
+        This site was created to demonstrate my mastery of Redwood: Look on my
+        works, ye mighty, and despair!
+      </p>
+      <Link to={routes.home()}>Return home</Link>
+    </>
+  )
+}
+
+export default AboutPage
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/pages/HomePage/HomePage.js"
 import { MetaTags } from '@redwoodjs/web'
 
@@ -86,9 +158,34 @@ const HomePage = () => {
 export default HomePage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/HomePage/HomePage.tsx"
+import { MetaTags } from '@redwoodjs/web'
+
+const HomePage = () => {
+  return (
+    <>
+      <MetaTags title="Home" description="Home page" />
+
+      Home
+    </>
+  )
+}
+
+export default HomePage
+```
+
+</TabItem>
+</Tabs>
+
 In `BlogLayout.js`, `children` is where the magic will happen. Any page content given to the layout will be rendered here. And now the pages are back to focusing on the content they care about (we can remove the import for `Link` and `routes` from `HomePage` since those are in the Layout instead).
 
 To actually render our layout we'll need to make a change to our routes files. We'll wrap `HomePage` and `AboutPage` with the `BlogLayout`, using a `<Set>`. Unlike pages, we do actually need an `import` statement for layouts:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/Routes.js"
 // highlight-start
@@ -113,7 +210,36 @@ const Routes = () => {
 export default Routes
 ```
 
-:::info
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/Routes.tsx"
+// highlight-start
+import { Router, Route, Set } from '@redwoodjs/router'
+import BlogLayout from 'src/layouts/BlogLayout'
+// highlight-end
+
+const Routes = () => {
+  return (
+    <Router>
+      // highlight-start
+      <Set wrap={BlogLayout}>
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/" page={HomePage} name="home" />
+      </Set>
+      // highlight-end
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+</TabItem>
+</Tabs>
+
+:::info The `src` alias
 
 Notice that the import statement uses `src/layouts/BlogLayout` and not `../src/layouts/BlogLayout` or `./src/layouts/BlogLayout`. Being able to use just `src` is a convenience feature provided by Redwood: `src` is an alias to the `src` path in the current workspace. So if you're working in `web` then `src` points to `web/src` and in `api` it points to `api/src`.
 
@@ -136,6 +262,9 @@ If you're using the [React Developer Tools](https://chrome.google.com/webstore/d
 ### Back Home Again
 
 A couple more `<Link>`s: let's have the title/logo link back to the homepage, and we'll add a nav link to Home as well:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
 import { Link, routes } from '@redwoodjs/router'
@@ -170,7 +299,49 @@ const BlogLayout = ({ children }) => {
 export default BlogLayout
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+import { Link, routes } from '@redwoodjs/router'
+
+const BlogLayout = ({ children }) => {
+  return (
+    <>
+      <header>
+        // highlight-start
+        <h1>
+          <Link to={routes.home()}>Redwood Blog</Link>
+        </h1>
+        // highlight-end
+        <nav>
+          <ul>
+            // highlight-start
+            <li>
+              <Link to={routes.home()}>Home</Link>
+            </li>
+            // highlight-end
+            <li>
+              <Link to={routes.about()}>About</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>{children}</main>
+    </>
+  )
+}
+
+export default BlogLayout
+```
+
+</TabItem>
+</Tabs>
+
 And then we can remove the extra "Return to Home" link (and Link/routes import) that we had on the About page:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.js"
 import { MetaTags } from '@redwoodjs/web'
@@ -190,6 +361,31 @@ const AboutPage = () => {
 
 export default AboutPage
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
+import { MetaTags } from '@redwoodjs/web'
+
+const AboutPage = () => {
+  return (
+    <>
+      <MetaTags title="About" description="About page" />
+
+      <p>
+        This site was created to demonstrate my mastery of Redwood: Look on my
+        works, ye mighty, and despair!
+      </p>
+    </>
+  )
+}
+
+export default AboutPage
+```
+
+</TabItem>
+</Tabs>
 
 ![image](https://user-images.githubusercontent.com/300/145901020-1c33bb74-78f9-415e-a8c8-c8873bd6630f.png)
 

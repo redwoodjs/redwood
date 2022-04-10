@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
 # A Second Page and a Link
 
 Let's create an "About" page for our blog so everyone knows about the geniuses behind this achievement. We'll create another page using `redwood`:
@@ -19,6 +22,9 @@ As you add more pages to your app, you may start to worry that more and more cod
 ![About page](https://user-images.githubusercontent.com/300/145647906-56b02a6c-b92c-40c6-9d37-860584ffaa6b.png)
 
 But no one's going to find it by manually changing the URL so let's add a link from our homepage to the About page and vice versa. We'll start by creating a simple header and nav bar at the same time on the HomePage:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.js"
 // highlight-next-line
@@ -50,6 +56,42 @@ const HomePage = () => {
 export default HomePage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/HomePage/HomePage.tsx"
+// highlight-next-line
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const HomePage = () => {
+  return (
+    <>
+      <MetaTags title="Home" description="Home page" />
+
+      // highlight-start
+      <header>
+        <h1>Redwood Blog</h1>
+        <nav>
+          <ul>
+            <li>
+              <Link to={routes.about()}>About</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>Home</main>
+      // highlight-end
+    </>
+  )
+}
+
+export default HomePage
+```
+
+</TabItem>
+</Tabs>
+
 Let's point out a few things here:
 
 - Redwood loves [Function Components](https://www.robinwieruch.de/react-function-component). We'll make extensive use of [React Hooks](https://reactjs.org/docs/hooks-intro.html) as we go and these are only enabled in function components. You're free to use class components, but we recommend avoiding them unless you need their special capabilities.
@@ -62,6 +104,9 @@ Let's point out a few things here:
 ### Back Home
 
 Once we get to the About page we don't have any way to get back so let's add a link there as well:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.js"
 // highlight-next-line
@@ -98,6 +143,48 @@ const AboutPage = () => {
 
 export default AboutPage
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
+// highlight-next-line
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const AboutPage = () => {
+  return (
+    <>
+      <MetaTags title="About" description="About page" />
+
+      // highlight-start
+      <header>
+        <h1>Redwood Blog</h1>
+        <nav>
+          <ul>
+            <li>
+              <Link to={routes.about()}>About</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <p>
+          This site was created to demonstrate my mastery of Redwood: Look on my
+          works, ye mighty, and despair!
+        </p>
+        <Link to={routes.home()}>Return home</Link>
+      </main>
+      // highlight-end
+    </>
+  )
+}
+
+export default AboutPage
+```
+
+</TabItem>
+</Tabs>
 
 Great! Try that out in the browser and verify you can get back and forth.
 

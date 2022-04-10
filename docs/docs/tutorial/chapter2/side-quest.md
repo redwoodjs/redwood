@@ -14,6 +14,9 @@ Redwood has a better way! Remember the `api/src/services` directory? Redwood wil
 
 Consider the following SDL Javascript snippet:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```graphql title="api/src/graphql/posts.sdl.js"
 export const schema = gql`
   type Post {
@@ -46,6 +49,44 @@ export const schema = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```graphql title="api/src/graphql/posts.sdl.ts"
+export const schema = gql`
+  type Post {
+    id: Int!
+    title: String!
+    body: String!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    posts: [Post!]!
+    post(id: Int!): Post!
+  }
+
+  input CreatePostInput {
+    title: String!
+    body: String!
+  }
+
+  input UpdatePostInput {
+    title: String
+    body: String
+  }
+
+  type Mutation {
+    createPost(input: CreatePostInput!): Post! @requireAuth
+    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+    deletePost(id: Int!): Post! @requireAuth
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 In this example, Redwood will look in `api/src/services/posts/posts.js` for the following five resolvers:
 
 - `posts()`
@@ -55,6 +96,9 @@ In this example, Redwood will look in `api/src/services/posts/posts.js` for the 
 - `deletePost({ id })`
 
 To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that Apollo expects based on what you defined in `posts.sdl.js`.
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
@@ -88,6 +132,45 @@ export const deletePost = ({ id }) => {
   })
 }
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript title="api/src/services/posts/posts.ts"
+import { db } from 'src/lib/db'
+
+export const posts = () => {
+  return db.post.findMany()
+}
+
+export const post = ({ id }) => {
+  return db.post.findUnique({
+    where: { id },
+  })
+}
+
+export const createPost = ({ input }) => {
+  return db.post.create({
+    data: input,
+  })
+}
+
+export const updatePost = ({ id, input }) => {
+  return db.post.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deletePost = ({ id }) => {
+  return db.post.delete({
+    where: { id },
+  })
+}
+```
+
+</TabItem>
+</Tabs>
 
 :::info
 

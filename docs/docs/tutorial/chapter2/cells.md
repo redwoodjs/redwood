@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
 # Cells
 
 The features we listed at the end of the last page (loading state, error messaging, blank slate text) are common in most web apps. We wanted to see if there was something we could do to make developers' lives easier when it comes to adding them to a typical component. We think we've come up with something to help. We call them _Cells_. Cells provide a simpler and more declarative approach to data fetching. ([Read the full documentation about Cells](../../cells.md).)
@@ -5,6 +8,9 @@ The features we listed at the end of the last page (loading state, error messagi
 In addition to these states, cells are also responsible for their own data fetching. This means that rather than fetching data in some parent component and then passing props down to the child components that need them, a cell is completely self-contained and fetches and displays its own data! Let's add one to our blog to get a feel for how they work.
 
 When you create a cell you export several specially named constants and then Redwood takes it from there. A typical cell may look something like:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx
 export const QUERY = gql`
@@ -35,6 +41,42 @@ export const Success = ({ posts }) => {
   ))
 }
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx
+export const QUERY = gql`
+  query {
+    posts {
+      id
+      title
+      body
+      createdAt
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>No posts yet!</div>
+
+export const Failure = ({ error }) => (
+  <div>Error loading posts: {error.message}</div>
+)
+
+export const Success = ({ posts }) => {
+  return posts.map((post) => (
+    <article>
+      <h2>{post.title}</h2>
+      <div>{post.body}</div>
+    </article>
+  ))
+}
+```
+
+</TabItem>
+</Tabs>
 
 When React renders this component, Redwood will perform the `QUERY` and display the `Loading` component until a response is received.
 
@@ -67,6 +109,9 @@ yarn rw g cell Articles
 
 This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [chapter5](../chapter5/storybook.md) of the tutorial!). This file will contain some boilerplate to get you started:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
@@ -95,6 +140,40 @@ export const Success = ({ articles }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+export const QUERY = gql`
+  query ArticlesQuery {
+    articles {
+      id
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ articles }) => {
+  return (
+    <ul>
+      {articles.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+```
+
+</TabItem>
+</Tabs>
+
 :::info Indicating Multiplicity to the Cell Generator
 
 When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
@@ -114,6 +193,9 @@ Calling `yarn redwood g cell blogarticles` (without any indication that we're us
 
 To get you off and running as quickly as possible the generator assumes you've got a root GraphQL query named the same thing as your cell and gives you the minimum query needed to get something out of the database. In this case the query is named `articles`:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
@@ -125,9 +207,29 @@ export const QUERY = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    articles {
+      id
+    }
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 However, this is not a valid query name for our existing Posts SDL (`api/src/graphql/posts.sdl.js`) and Service (`api/src/services/posts/posts.js`). (To see where these files come from, go back to the [Creating a Post Editor section](getting-dynamic.md#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
 
 We'll have to rename them to `posts` in both the query name and in the prop name in `Success`:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
@@ -160,7 +262,47 @@ export const Success = ({ posts }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    posts {
+      id
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+// highlight-next-line
+export const Success = ({ posts }) => {
+  return (
+    <ul>
+      // highlight-next-line
+      {posts.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+```
+
+</TabItem>
+</Tabs>
+
 Let's plug this cell into our `HomePage` and see what happens:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.js"
 import { MetaTags } from '@redwoodjs/web'
@@ -181,6 +323,31 @@ const HomePage = () => {
 export default HomePage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/HomePage/HomePage.js"
+import { MetaTags } from '@redwoodjs/web'
+
+// highlight-next-line
+import ArticlesCell from 'src/components/ArticlesCell'
+
+const HomePage = () => {
+  return (
+    <>
+      <MetaTags title="Home" description="Home page" />
+      // highlight-next-line
+      <ArticlesCell />
+    </>
+  )
+}
+
+export default HomePage
+```
+
+</TabItem>
+</Tabs>
+
 The browser should actually show the `id` and a GraphQL-specific `__typename` properties for any posts in the database. If you just see "Empty" then return to the scaffold we created [last time](getting-dynamic.md#creating-a-post-editor) and add a couple. Neat!
 
 <img src="https://user-images.githubusercontent.com/300/145910525-6a9814d1-0808-4f7e-aeab-303bd5dbac5e.png" alt="Showing articles in the database" />
@@ -190,6 +357,10 @@ The browser should actually show the `id` and a GraphQL-specific `__typename` pr
 **In the `Success` component, where did `posts` come from?**
 
 In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data.
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```javascript
 export const QUERY = gql`
   query ArticlesQuery {
@@ -201,7 +372,27 @@ export const QUERY = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    posts {
+      id
+    }
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript
 export const QUERY = gql`
@@ -214,15 +405,48 @@ export const QUERY = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    articles: posts {
+      id
+    }
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 Now `articles` will be available in `Success` instead of `posts`:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```javascript
 export const Success = ({ articles }) => { ... }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => { ... }
+```
+
+</TabItem>
+</Tabs>
+
 :::
 
 In fact, let's use the aforementioned alias so that the name of our cell, and the data we're iterating over, is consistent:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
@@ -255,9 +479,49 @@ export const Success = ({ articles }) => {
 }
 ```
 
-In addition to the `id` that was added to the `query` by the generator, let's get the `title`, `body`, and `createdAt` values as well:
+</TabItem>
+<TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    articles: posts {
+      id
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }: CellFailureProps) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+// highlight-next-line
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+  return (
+    <ul>
+      // highlight-next-line
+      {articles.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+```
+
+</TabItem>
+</Tabs>
+
+In addition to the `id` that was added to the `query` by the generator, let's get the `title`, `body`, and `createdAt` values as well:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
@@ -272,15 +536,40 @@ export const QUERY = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts title="web/src/components/ArticlesCell/ArticlesCell.js"
+export const QUERY = gql`
+  query ArticlesQuery {
+    articles: posts {
+      id
+      // highlight-start
+      title
+      body
+      createdAt
+      // highlight-end
+    }
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 The page should now show a dump of all the data you created for any blog posts you scaffolded:
 
 <img src="https://user-images.githubusercontent.com/300/145911009-b83fd07f-0412-489c-a088-4e89faceea1c.png" alt="Articles with all DB values" />
 
 Now we're in the realm of good ol' React components, so just build out the `Success` component to display the blog post in a nicer format:
 
-```jsx {3-13} title="web/src/components/ArticlesCell/ArticlesCell.js"
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 export const Success = ({ articles }) => {
   return (
+    // highlight-start
     <>
       {articles.map((article) => (
         <article key={article.id}>
@@ -292,9 +581,36 @@ export const Success = ({ articles }) => {
         </article>
       ))}
     </>
+    // highlight-end
   )
 }
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+export const Success = ({ articles }) => {
+  return (
+    // highlight-start
+    <>
+      {articles.map((article) => (
+        <article key={article.id}>
+          <header>
+            <h2>{article.title}</h2>
+          </header>
+          <p>{article.body}</p>
+          <div>Posted at: {article.createdAt}</div>
+        </article>
+      ))}
+    </>
+    // highlight-end
+  )
+}
+```
+
+</TabItem>
+</Tabs>
 
 And just like that we have a blog! It may be the most basic blog that ever graced the internet, but it's something! You can create/edit/delete posts and the world can view them on the homepage. (Don't worry, we've got more features to add.)
 
