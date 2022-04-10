@@ -125,7 +125,7 @@ The easiest connection method is generally to include your own public key in the
 
 > **SSH and non-interactive sessions - Possible Issues**
 >
-> The deployment process uses a 'non-interactive' ssh session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path. A quick fix for this on Ubuntu is to edit the deployment users `.bashrc` and comment out the lines that stop non-interactive processing.
+> The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' ssh session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path. A quick fix for this on Ubuntu is to edit the deployment users `.bashrc` and comment out the lines that stop non-interactive processing.
 
 ```shell title=".bashrc"
 # If not running interactively, don't do anything
