@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
-
 # Our First Page
 
 Let's give our users something to look at besides the (awesome) Redwood welcome page (thanks [@alicelovescake](https://github.com/alicelovescake)!). We'll use the `redwood` command line tool to create a page for us:

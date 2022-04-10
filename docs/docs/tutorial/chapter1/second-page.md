@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
-
 # A Second Page and a Link
 
 Let's create an "About" page for our blog so everyone knows about the geniuses behind this achievement. We'll create another page using `redwood`:

@@ -1,3 +1,5 @@
+const autoImportTabs = require('./src/remark/auto-import-tabs')
+
 module.exports = {
   customFields: {
     defaultDocsLandingPage: 'index', // redirects here when hitting /docs/
@@ -104,6 +106,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // ? — blob? tree?
           editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs', // base path for repo edit pages
+          remarkPlugins: [autoImportTabs],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
-
 # Routing Params
 
 Now that we have our homepage listing all the posts, let's build the "detail" page—a canonical URL that displays a single post. First we'll generate the page and route:
