@@ -96,6 +96,6 @@ describe('usingVSCode', () => {
 
     const output = index.usingVSCode()
 
-    expect(output).toEqual(false)
+    expect(output).toEqual(true)
   })
 })
