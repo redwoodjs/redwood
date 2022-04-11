@@ -87,7 +87,7 @@ export const schema = gql`
 </TabItem>
 </Tabs>
 
-In this example, Redwood will look in `api/src/services/posts/posts.js` for the following five resolvers:
+In this example, Redwood will look in `api/src/services/posts/posts.{js,ts}` for the following five resolvers:
 
 - `posts()`
 - `post({ id })`
@@ -137,32 +137,42 @@ export const deletePost = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```javascript title="api/src/services/posts/posts.ts"
+import type { Prisma } from '@prisma/client'
+
 import { db } from 'src/lib/db'
 
 export const posts = () => {
   return db.post.findMany()
 }
 
-export const post = ({ id }) => {
+export const post = ({ id }: Prisma.PostWhereUniqueInput) => {
   return db.post.findUnique({
     where: { id },
   })
 }
 
-export const createPost = ({ input }) => {
+interface CreatePostArgs {
+  input: Prisma.PostCreateInput
+}
+
+export const createPost = ({ input }: CreatePostArgs) => {
   return db.post.create({
     data: input,
   })
 }
 
-export const updatePost = ({ id, input }) => {
+interface UpdatePostArgs extends Prisma.PostWhereUniqueInput {
+  input: Prisma.PostUpdateInput
+}
+
+export const updatePost = ({ id, input }: UpdatePostArgs) => {
   return db.post.update({
     data: input,
     where: { id },
   })
 }
 
-export const deletePost = ({ id }) => {
+export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
   return db.post.delete({
     where: { id },
   })

@@ -1,6 +1,6 @@
 # Routing Params
 
-Now that we have our homepage listing all the posts, let's build the "detail" page—a canonical URL that displays a single post. First we'll generate the page and route:
+Now that we have our homepage listing all the posts, let's build the "detail" page&mdash;a canonical URL that displays a single post. First we'll generate the page and route:
 
 ```bash
 yarn rw g page Article
@@ -46,7 +46,7 @@ import { Link, routes } from '@redwoodjs/router'
 
 // QUERY, Loading, Empty and Failure definitions...
 
-export const Success = ({ articles }) => {
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
   return (
     <>
       {articles.map((article) => (
@@ -85,7 +85,7 @@ But what we really need is to specify _which_ post we want to view on this page.
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.tsx"
 <Route path="/article/{id}" page={ArticlePage} name="article" />
 ```
 
@@ -190,54 +190,54 @@ You may have noticed that when trying to view the new single-article page that y
 <TabItem value="js" label="JavaScript">
 
 ```diff title="web/src/pages/ArticlePage.js"
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+- import { Link, routes } from '@redwoodjs/router'
+  import { MetaTags } from '@redwoodjs/web'
 
-const ArticlePage = () => {
-  return (
-    <>
-      <MetaTags title="Article" description="Article page" />
+  const ArticlePage = () => {
+    return (
+      <>
+        <MetaTags title="Article" description="Article page" />
 
-      <h1>ArticlePage</h1>
-      <p>
-        Find me in <code>./web/src/pages/ArticlePage/ArticlePage.js</code>
-      </p>
-      <p>
-        My default route is named <code>article</code>, link to me with `
--       <Link to={routes.article()}>Article</Link>`
-      </p>
-    </>
-  )
-}
+        <h1>ArticlePage</h1>
+        <p>
+          Find me in <code>./web/src/pages/ArticlePage/ArticlePage.js</code>
+        </p>
+        <p>
+          My default route is named <code>article</code>, link to me with `
+-         <Link to={routes.article()}>Article</Link>`
+        </p>
+      </>
+    )
+  }
 
-export default ArticlePage
+  export default ArticlePage
 ```
 
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
 ```diff title="web/src/pages/ArticlePage.tsx"
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+- import { Link, routes } from '@redwoodjs/router'
+  import { MetaTags } from '@redwoodjs/web'
 
-const ArticlePage = () => {
-  return (
-    <>
-      <MetaTags title="Article" description="Article page" />
+  const ArticlePage = () => {
+    return (
+      <>
+        <MetaTags title="Article" description="Article page" />
 
-      <h1>ArticlePage</h1>
-      <p>
-        Find me in <code>./web/src/pages/ArticlePage/ArticlePage.js</code>
-      </p>
-      <p>
-        My default route is named <code>article</code>, link to me with `
--       <Link to={routes.article()}>Article</Link>`
-      </p>
-    </>
-  )
-}
+        <h1>ArticlePage</h1>
+        <p>
+          Find me in <code>./web/src/pages/ArticlePage/ArticlePage.tsx</code>
+        </p>
+        <p>
+          My default route is named <code>article</code>, link to me with `
+-         <Link to={routes.article()}>Article</Link>`
+        </p>
+      </>
+    )
+  }
 
-export default ArticlePage
+  export default ArticlePage
 ```
 
 </TabItem>
@@ -300,17 +300,16 @@ export default ArticlePage
 </TabItem>
 </Tabs>
 
-Now over to the cell, we need access to that `{id}` route param so we can look up the ID of the post in the database. Let's update the query to accept a variable (and alias the real query name `post` to `article`):
+Now over to the cell, we need access to that `{id}` route param so we can look up the ID of the post in the database. Let's alias the real query name `post` to `article` and retrieve some more fields:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 export const QUERY = gql`
-  // highlight-start
   query ArticleQuery($id: Int!) {
+    // highlight-next-line
     article: post(id: $id) {
-      // highlight-end
       id
       // highlight-start
       title
@@ -337,12 +336,11 @@ export const Success = ({ article }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+```jsx title="web/src/components/ArticleCell/ArticleCell.tsx"
 export const QUERY = gql`
-  // highlight-start
   query ArticleQuery($id: Int!) {
+    // highlight-next-line
     article: post(id: $id) {
-      // highlight-end
       id
       // highlight-start
       title
@@ -357,11 +355,11 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
+export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }) => {
+export const Success = ({ article }: CellSuccessProps<FindArticleQuery>) => {
   return JSON.stringify(article)
 }
 ```
@@ -400,8 +398,14 @@ export default ArticlePage
 import { MetaTags } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
+// highlight-start
+interface Props {
+  id: number
+}
+// highlight-end
+
 // highlight-next-line
-const ArticlePage = ({ id }) => {
+const ArticlePage = ({ id }: Props) => {
   return (
     <>
       <MetaTags title="Article" description="Article page" />
@@ -494,11 +498,12 @@ export const Success = ({ article, id, rand }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript
-export const Success = ({ article, id, rand }) => {
-  //...
+```tsx
+interface Props extends CellSuccessProps<FindArticleQuery> {
+  rand: number
 }
-```
+
+export const Success = ({ article, id, rand }: Props) => {
 
 </TabItem>
 </Tabs>
@@ -515,7 +520,7 @@ Now let's display the actual post instead of just dumping the query result. We c
 yarn rw g component Article
 ```
 
-Which creates `web/src/components/Article/Article.js` (and corresponding test and more!) as a super simple React component:
+Which creates `web/src/components/Article/Article.{js,tsx}` (and corresponding test and more!) as a super simple React component:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -595,7 +600,16 @@ export default Article
 import { Link, routes } from '@redwoodjs/router'
 
 // highlight-next-line
-const Article = ({ article }) => {
+import type { Post } from 'types/graphql'
+
+// highlight-start
+interface Props {
+  article: Post
+}
+// highlight-end
+
+// highlight-next-line
+const Article = ({ article }: Props) => {
   return (
     // highlight-start
     <article>
@@ -664,6 +678,9 @@ export const Success = ({ articles }) => {
 // highlight-next-line
 import Article from 'src/components/Article'
 
+import type { ArticlesQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
@@ -679,11 +696,11 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
+export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }) => {
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
   return (
     <>
       {articles.map((article) => (
