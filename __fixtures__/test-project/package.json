@@ -28,5 +28,8 @@
   "scripts": {
     "postinstall": ""
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "resolutions": {
+    "@types/react": "17.0.40"
+  }
 }
