@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@envelop/depth-limit": "1.3.0",
-    "@envelop/disable-introspection": "3.1.0",
+    "@envelop/disable-introspection": "3.3.1",
     "@envelop/filter-operation-type": "3.1.0",
     "@envelop/parser-cache": "4.1.0",
     "@envelop/validation-cache": "4.1.0",
