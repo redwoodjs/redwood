@@ -168,7 +168,7 @@ export const handler = async ({ force, install }) => {
           task.skip("Looks like your're not using VS Code")
         } else {
           let originalExtensionsJson = { recommendations: [] }
-          if (path.existsSync(VS_CODE_EXTENSIONS_PATH)) {
+          if (fs.existsSync(VS_CODE_EXTENSIONS_PATH)) {
             const originalExtensionsFile = fs.readFileSync(
               VS_CODE_EXTENSIONS_PATH,
               'utf-8'
