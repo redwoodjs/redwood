@@ -322,10 +322,16 @@ export class DbAuthHandler {
           `Username is required`
       )
     }
+    let user
 
-    let user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
+    try {
+      user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     if (user) {
       const tokenExpires = new Date()
@@ -338,16 +344,21 @@ export class DbAuthHandler {
       const buffer = new Buffer(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
-      // set token and expires time
-      user = await this.dbAccessor.update({
-        where: {
-          [this.options.authFields.id]: user[this.options.authFields.id],
-        },
-        data: {
-          [this.options.authFields.resetToken]: token,
-          [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
-        },
-      })
+      try {
+        // set token and expires time
+        user = await this.dbAccessor.update({
+          where: {
+            [this.options.authFields.id]: user[this.options.authFields.id],
+          },
+          data: {
+            [this.options.authFields.resetToken]: token,
+            [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
+          },
+        })
+      } catch (e) {
+        console.log(e)
+        throw new DbAuthError.GenericError()
+      }
 
       // call user-defined handler in their functions/auth.js
       const response = await this.options.forgotPassword.handler(
@@ -431,15 +442,22 @@ export class DbAuthHandler {
       )
     }
 
-    // if we got here then we can update the password in the database
-    user = await this.dbAccessor.update({
-      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
-      data: {
-        [this.options.authFields.hashedPassword]: hashedPassword,
-        [this.options.authFields.resetToken]: null,
-        [this.options.authFields.resetTokenExpiresAt]: null,
-      },
-    })
+    try {
+      // if we got here then we can update the password in the database
+      user = await this.dbAccessor.update({
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
+        data: {
+          [this.options.authFields.hashedPassword]: hashedPassword,
+          [this.options.authFields.resetToken]: null,
+          [this.options.authFields.resetTokenExpiresAt]: null,
+        },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     // call the user-defined handler so they can decide what to do with this user
     const response = await this.options.resetPassword.handler(
@@ -637,13 +655,20 @@ export class DbAuthHandler {
   }
 
   async _clearResetToken(user: Record<string, unknown>) {
-    await this.dbAccessor.update({
-      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
-      data: {
-        [this.options.authFields.resetToken]: null,
-        [this.options.authFields.resetTokenExpiresAt]: null,
-      },
-    })
+    try {
+      await this.dbAccessor.update({
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
+        data: {
+          [this.options.authFields.resetToken]: null,
+          [this.options.authFields.resetTokenExpiresAt]: null,
+        },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
   }
 
   // verifies that a username and password are correct, and returns the user if so
@@ -663,10 +688,16 @@ export class DbAuthHandler {
       )
     }
 
-    // does user exist?
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
+    let user
+    try {
+      // does user exist?
+      user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     if (!user) {
       throw new DbAuthError.UserNotFoundError(
@@ -696,10 +727,16 @@ export class DbAuthHandler {
       throw new DbAuthError.NotLoggedInError()
     }
 
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.id]: this.session?.id },
-      select: { [this.options.authFields.id]: true },
-    })
+    let user
+    try {
+      user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.id]: this.session?.id },
+        select: { [this.options.authFields.id]: true },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     if (!user) {
       throw new DbAuthError.UserNotFoundError()
