@@ -18,7 +18,7 @@ From now on we'll use the shorter `g` alias instead of `generate`
 
 :::
 
-That created `web/src/layouts/BlogLayout/BlogLayout.js` and an associated test file. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
+That created `web/src/layouts/BlogLayout/BlogLayout.{js,tsx}` and associated test and stories files. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
 
 Cut the `<header>` from both `HomePage` and `AboutPage` and paste it in the layout instead. Let's take out the duplicated `<main>` tag as well:
 
@@ -59,7 +59,11 @@ export default BlogLayout
 // highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
-const BlogLayout = ({ children }) => {
+type BlogLayoutProps = {
+  children?: React.ReactNode
+}
+
+const BlogLayout = ({ children }: BlogLayoutProps) => {
   return (
     // highlight-start
     <>
@@ -146,7 +150,6 @@ const HomePage = () => {
   return (
     <>
       <MetaTags title="Home" description="Home page" />
-
       Home
     </>
   )
@@ -165,7 +168,6 @@ const HomePage = () => {
   return (
     <>
       <MetaTags title="Home" description="Home page" />
-
       Home
     </>
   )
@@ -177,7 +179,7 @@ export default HomePage
 </TabItem>
 </Tabs>
 
-In `BlogLayout.js`, `children` is where the magic will happen. Any page content given to the layout will be rendered here. And now the pages are back to focusing on the content they care about (we can remove the import for `Link` and `routes` from `HomePage` since those are in the Layout instead).
+In `BlogLayout.{js,tsx}`, `children` is where the magic will happen. Any page content given to the layout will be rendered here. And now the pages are back to focusing on the content they care about (we can remove the import for `Link` and `routes` from `HomePage` since those are in the Layout instead).
 
 To actually render our layout we'll need to make a change to our routes files. We'll wrap `HomePage` and `AboutPage` with the `BlogLayout`, using a `<Set>`. Unlike pages, we do actually need an `import` statement for layouts:
 
@@ -299,10 +301,14 @@ export default BlogLayout
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
 import { Link, routes } from '@redwoodjs/router'
 
-const BlogLayout = ({ children }) => {
+type BlogLayoutProps = {
+  children?: React.ReactNode
+}
+
+const BlogLayout = ({ children }: BlogLayoutProps) => {
   return (
     <>
       <header>

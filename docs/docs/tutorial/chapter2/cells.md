@@ -11,7 +11,7 @@ When you create a cell you export several specially named constants and then Red
 
 ```jsx
 export const QUERY = gql`
-  query {
+  query FindPosts {
     posts {
       id
       title
@@ -31,7 +31,7 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ posts }) => {
   return posts.map((post) => (
-    <article>
+    <article key={post.id}>
       <h2>{post.title}</h2>
       <div>{post.body}</div>
     </article>
@@ -44,7 +44,7 @@ export const Success = ({ posts }) => {
 
 ```jsx
 export const QUERY = gql`
-  query {
+  query FindPosts {
     posts {
       id
       title
@@ -58,13 +58,13 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>No posts yet!</div>
 
-export const Failure = ({ error }) => (
+export const Failure = ({ error }: CellFailureProps) => (
   <div>Error loading posts: {error.message}</div>
 )
 
-export const Success = ({ posts }) => {
+export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
   return posts.map((post) => (
-    <article>
+    <article key={post.id}>
       <h2>{post.title}</h2>
       <div>{post.body}</div>
     </article>
@@ -104,7 +104,7 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.js` (and `test.js` `mock.js` and `stories.js` files—more on those in [chapter5](../chapter5/storybook.md) of the tutorial!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter5](../chapter5/storybook.md) of the tutorial!). This file will contain some boilerplate to get you started:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -141,6 +141,9 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+import type { ArticlesQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 export const QUERY = gql`
   query ArticlesQuery {
     articles {
@@ -153,11 +156,11 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
+export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }) => {
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
   return (
     <ul>
       {articles.map((item) => {
@@ -173,7 +176,7 @@ export const Success = ({ articles }) => {
 
 :::info Indicating Multiplicity to the Cell Generator
 
-When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
+When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.{js,tsx}`):
 
 ```bash
 yarn rw g cell blog_articles
@@ -184,7 +187,7 @@ yarn rw g cell BlogArticles
 
 You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
 
-Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.js`.
+Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.{js,tsx}`.
 
 :::
 
@@ -221,7 +224,7 @@ export const QUERY = gql`
 </TabItem>
 </Tabs>
 
-However, this is not a valid query name for our existing Posts SDL (`api/src/graphql/posts.sdl.js`) and Service (`api/src/services/posts/posts.js`). (To see where these files come from, go back to the [Creating a Post Editor section](getting-dynamic.md#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
+However, this is not a valid query name for our existing Posts SDL (`api/src/graphql/posts.sdl.{js,ts}`) and Service (`api/src/services/posts/posts.{js,ts}`). (To see where these files come from, go back to the [Creating a Post Editor section](getting-dynamic.md#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
 
 We'll have to rename them to `posts` in both the query name and in the prop name in `Success`:
 
@@ -262,7 +265,10 @@ export const Success = ({ posts }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+import type { ArticlesQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -276,12 +282,12 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
+export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
 // highlight-next-line
-export const Success = ({ posts }) => {
+export const Success = ({ posts }: CellSuccessProps<ArticlesQuery>) => {
   return (
     <ul>
       // highlight-next-line
@@ -323,7 +329,7 @@ export default HomePage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 
 // highlight-next-line
@@ -479,7 +485,7 @@ export const Success = ({ articles }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -536,7 +542,7 @@ export const QUERY = gql`
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```ts title="web/src/components/ArticlesCell/ArticlesCell.js"
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
@@ -587,7 +593,7 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const Success = ({ articles }) => {
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
   return (
     // highlight-start
     <>

@@ -24,7 +24,6 @@ But no one's going to find it by manually changing the URL so let's add a link f
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.js"
-// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -57,7 +56,6 @@ export default HomePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.tsx"
-// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -96,7 +94,7 @@ Let's point out a few things here:
 
   `<Route path="/about" page={AboutPage} name="about" />`
 
-  If you don't like the name or path that `redwood generate` created for your route, feel free to change it in `Routes.js`! Named routes are awesome because if you ever change the path associated with a route (like going from `/about` to `/about-us`), you need only change it in `Routes.js` and every link using a named route function (`routes.about()`) will still point to the correct place! You can also pass a string to the `to` attribute (`routes.to("/about")`), but now if your path ever changed you would need to find and replace every instance of `/about` to `/about-us`.
+  If you don't like the name or path that `redwood generate` created for your route, feel free to change it in `Routes.js`! Named routes are awesome because if you ever change the path associated with a route (like going from `/about` to `/about-us`), you need only change it in `Routes.js` and every link using a named route function (`routes.about()`) will still point to the correct place! You can also pass a string to the `to` attribute (`to="/about"`), but now if your path ever changed you would need to find and replace every instance of `/about` to `/about-us`.
 
 ### Back Home
 
@@ -106,7 +104,6 @@ Once we get to the About page we don't have any way to get back so let's add a l
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.js"
-// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -145,7 +142,6 @@ export default AboutPage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
-// highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
