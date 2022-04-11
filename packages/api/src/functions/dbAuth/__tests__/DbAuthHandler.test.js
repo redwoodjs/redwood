@@ -646,6 +646,20 @@ describe('dbAuth', () => {
       await dbAuth.forgotPassword()
       expect.assertions(1)
     })
+
+    it('throws a generic error for an invalid client', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      // invalid db client
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.dbAccessor = undefined
+      dbAuth.forgotPassword().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.GenericError)
+      })
+      expect.assertions(1)
+    })
   })
 
   describe('login', () => {
@@ -1406,6 +1420,17 @@ describe('dbAuth', () => {
       expect.assertions(2)
     })
 
+    it('throws a generic error for an invalid client', async () => {
+      const dbUser = await createDbUser()
+      // invalid db client
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.dbAccessor = undefined
+      dbAuth._verifyUser(dbUser.email, 'password').catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.GenericError)
+      })
+      expect.assertions(1)
+    })
+
     it('returns the user with matching username and password', async () => {
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -1435,6 +1460,24 @@ describe('dbAuth', () => {
 
       dbAuth._getCurrentUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+      })
+      expect.assertions(1)
+    })
+
+    it('throws a generic error for an invalid client', async () => {
+      const dbUser = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: dbUser.id }) + ';' + 'token'
+          ),
+        },
+      }
+      // invalid db client
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.dbAccessor = undefined
+      dbAuth._getCurrentUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.GenericError)
       })
       expect.assertions(1)
     })
