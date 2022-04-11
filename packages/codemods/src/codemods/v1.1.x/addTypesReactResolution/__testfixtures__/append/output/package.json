@@ -23,6 +23,7 @@
   },
   "packageManager": "yarn@3.2.0",
   "resolutions": {
+    "somePackage": "42.0.0",
     "@types/react": "17.0.40"
   }
 }
