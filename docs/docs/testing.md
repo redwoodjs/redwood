@@ -360,7 +360,7 @@ it('renders a link with a name', () => {
   render(<List data={data} />)
 
   data.forEach((datum) => {
-    expect(screen.getByRole('link', { name: data.name })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: datum.name })).toBeInTheDocument()
   })
 })
 ```
