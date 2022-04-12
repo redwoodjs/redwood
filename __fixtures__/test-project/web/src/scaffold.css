@@ -27,7 +27,7 @@
   @apply mx-4 pb-4;
 }
 .rw-segment {
-  @apply rounded-lg overflow-hidden w-full;
+  @apply rounded-lg overflow-hidden w-full border border-gray-200;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
@@ -165,6 +165,9 @@
 .rw-table td {
   @apply bg-white text-gray-900;
 }
+.rw-table tr:nth-child(odd) td {
+  @apply bg-gray-50;
+}
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
 }
@@ -183,7 +186,7 @@
   }
 }
 .rw-table tbody tr {
-  @apply bg-gray-50 border-t border-gray-200;
+  @apply border-t border-gray-200;
 }
 .rw-table input {
   @apply ml-0;
