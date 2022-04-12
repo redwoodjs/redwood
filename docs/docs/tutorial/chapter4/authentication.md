@@ -131,7 +131,7 @@ Run this setup command to get the internals of dbAuth added to our app:
 yarn rw setup auth dbAuth
 ```
 
-When asked if you want to override the existing file `/api/src/lib/auth.js` say yes. The shell `auth.js` that's created in a new app make sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
+When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app make sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
 
 You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
 
@@ -169,9 +169,9 @@ model Contact {
 
 // highlight-start
 model User {
-  id                  Int @id @default(autoincrement())
+  id                  Int       @id @default(autoincrement())
   name                String?
-  email               String @unique
+  email               String    @unique
   hashedPassword      String
   salt                String
   resetToken          String?
@@ -546,7 +546,11 @@ export default BlogLayout
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
-const BlogLayout = ({ children }) => {
+type BlogLayoutProps = {
+  children?: React.ReactNode
+}
+
+const BlogLayout = ({ children }: BlogLayoutProps) => {
   // highlight-next-line
   const { isAuthenticated, currentUser, logOut } = useAuth()
 
@@ -649,7 +653,11 @@ export default BlogLayout
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
-const BlogLayout = ({ children }) => {
+type BlogLayoutProps = {
+  children?: React.ReactNode
+}
+
+const BlogLayout = ({ children }: BlogLayoutProps) => {
   const { isAuthenticated, currentUser, logOut } = useAuth()
 
   return (
@@ -700,7 +708,7 @@ export default BlogLayout
 
 ![image](https://user-images.githubusercontent.com/300/146466685-cd91d9e6-e341-4698-81a6-cc404d6b3098.png)
 
-Well, it's almost right! Where's our email address? By default, the function that determines what's in `currentUser` only returns that user's `id` field for security reasons (better to expose too little than too much, remember!). To add email to that list, check out `api/src/lib/auth.js`:
+Well, it's almost right! Where's our email address? By default, the function that determines what's in `currentUser` only returns that user's `id` field for security reasons (better to expose too little than too much, remember!). To add email to that list, check out `api/src/lib/auth.{js,ts}`:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -725,16 +733,34 @@ export const hasRole = ({ roles }) => {
     return false
   }
 
-  if (roles) {
-    if (Array.isArray(roles)) {
-      // return context.currentUser.roles?.some((r) => roles.includes(r))
+  const currentUserRoles = context.currentUser?.roles
+
+  if (typeof roles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roles to check is a string, currentUser.roles is a string
+      return currentUserRoles === roles
+    } else if (Array.isArray(currentUserRoles)) {
+      // roles to check is a string, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
-    if (typeof roles === 'string') {
-      // return context.currentUser.roles?.includes(roles)
-    }
-    return false
   }
-  return true
+
+  if (Array.isArray(roles)) {
+    if (Array.isArray(currentUserRoles)) {
+      // roles to check is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof context.currentUser.roles === 'string') {
+      // roles to check is an array, currentUser.roles is a string
+      return roles.some(
+        (allowedRole) => context.currentUser?.roles === allowedRole
+      )
+    }
+  }
+
+  // roles not found
+  return false
 }
 
 export const requireAuth = ({ roles }) => {
@@ -742,7 +768,7 @@ export const requireAuth = ({ roles }) => {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (!hasRole({ roles })) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
@@ -751,7 +777,7 @@ export const requireAuth = ({ roles }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/lib/auth.tsx"
+```ts title="api/src/lib/auth.ts"
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
@@ -762,33 +788,53 @@ export const getCurrentUser = async (session) => {
   })
 }
 
-export const isAuthenticated = () => {
+export const isAuthenticated = (): boolean => {
   return !!context.currentUser
 }
 
-export const hasRole = ({ roles }) => {
+type AllowedRoles = string | string[] | undefined
+
+export const hasRole = ({ roles }): boolean => {
   if (!isAuthenticated()) {
     return false
   }
 
-  if (roles) {
-    if (Array.isArray(roles)) {
-      // return context.currentUser.roles?.some((r) => roles.includes(r))
+  const currentUserRoles = context.currentUser?.roles
+
+  if (typeof roles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roles to check is a string, currentUser.roles is a string
+      return currentUserRoles === roles
+    } else if (Array.isArray(currentUserRoles)) {
+      // roles to check is a string, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
-    if (typeof roles === 'string') {
-      // return context.currentUser.roles?.includes(roles)
-    }
-    return false
   }
-  return true
+
+  if (Array.isArray(roles)) {
+    if (Array.isArray(currentUserRoles)) {
+      // roles to check is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof context.currentUser.roles === 'string') {
+      // roles to check is an array, currentUser.roles is a string
+      return roles.some(
+        (allowedRole) => context.currentUser?.roles === allowedRole
+      )
+    }
+  }
+
+  // roles not found
+  return false
 }
 
-export const requireAuth = ({ roles }) => {
+export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (!hasRole({ roles })) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
