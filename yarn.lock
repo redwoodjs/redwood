@@ -2350,13 +2350,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@envelop/filter-operation-type@npm:3.1.0"
+"@envelop/filter-operation-type@npm:3.3.1":
+  version: 3.3.1
+  resolution: "@envelop/filter-operation-type@npm:3.3.1"
   peerDependencies:
-    "@envelop/core": ^2.1.0
+    "@envelop/core": ^2.3.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 66a351a64889d768d9b7c9ab383856874b50f0ef102d5a40199dd62ba9a66dadd7e436918644cd4728bf3cacb5d891687f8a3c421ecd573650843c781140f415
+  checksum: 7a7aef6e580a00ece72b183b4597f29db4b425ba08d7db076475e783e145b0797df030db95caafe84fcc59b0db4e7b9276fa2a3e335de9dfcefec175bc1e2cd5
   languageName: node
   linkType: hard
 
@@ -6141,7 +6141,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@envelop/depth-limit": 1.3.0
     "@envelop/disable-introspection": 3.3.1
-    "@envelop/filter-operation-type": 3.1.0
+    "@envelop/filter-operation-type": 3.3.1
     "@envelop/parser-cache": 4.1.0
     "@envelop/testing": 4.3.1
     "@envelop/types": 2.0.0
