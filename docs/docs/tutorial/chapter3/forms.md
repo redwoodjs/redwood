@@ -62,10 +62,14 @@ export default BlogLayout
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
+```tsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
 import { Link, routes } from '@redwoodjs/router'
 
-const BlogLayout = ({ children }) => {
+type BlogLayoutProps = {
+  children?: React.ReactNode
+}
+
+const BlogLayout = ({ children }: BlogLayoutProps) => {
   return (
     <>
       <header>
@@ -136,7 +140,7 @@ export default Routes
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/Routes.js"
+```tsx title="web/src/Routes.tsx"
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -203,7 +207,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
 import { Form } from '@redwoodjs/forms'
@@ -254,7 +258,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField } from '@redwoodjs/forms'
@@ -310,7 +314,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
@@ -377,14 +381,20 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
+// highlight-start
+interface FormValues {
+  input: string
+}
+// highlight-end
+
 const ContactPage = () => {
   // highlight-start
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
   // highlight-end
@@ -449,13 +459,21 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
+interface FormValues {
+  // highlight-start
+  name: string
+  email: string
+  message: string
+  // highlight-end
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -528,12 +546,18 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -602,7 +626,7 @@ return (
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 return (
   <Form onSubmit={onSubmit}>
     <label htmlFor="name">Name</label>
@@ -657,7 +681,7 @@ return (
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 return (
   <Form onSubmit={onSubmit}>
     <label htmlFor="name">Name</label>
@@ -737,7 +761,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 import {
   // highlight-next-line
@@ -748,8 +772,14 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -841,7 +871,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -851,8 +881,14 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -954,7 +990,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -964,8 +1000,14 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -1090,7 +1132,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -1102,8 +1144,14 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -1195,7 +1243,7 @@ We should make sure the email field actually contains an email:
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 <TextField
   name="email"
   validation={{
@@ -1236,7 +1284,7 @@ That is definitely not the end-all-be-all for email address validation, but pret
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 <TextField
   name="email"
   validation={{
@@ -1274,7 +1322,7 @@ Finally, you know what would _really_ be nice? If the fields were validated as s
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
 ```
 

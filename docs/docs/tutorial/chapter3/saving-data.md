@@ -24,7 +24,7 @@ model Post {
 
 // highlight-start
 model Contact {
-  id        Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   email     String
   message   String
@@ -55,14 +55,14 @@ Now we'll create the GraphQL interface to access this table. We haven't used thi
 yarn rw g sdl Contact
 ```
 
-Just like the `scaffold` command, this will create two new files under the `api` directory:
+Just like the `scaffold` command, this will create a few new files under the `api` directory:
 
 1. `api/src/graphql/contacts.sdl.{js,tsx}`: defines the GraphQL schema in GraphQL's schema definition language
 2. `api/src/services/contacts/contacts.{js,tsx}`: contains your app's business logic (also creates associated test files)
 
 If you remember our discussion in [how Redwood works with data](../chapter2/side-quest.md) you'll recall that queries and mutations in an SDL file are automatically mapped to resolvers defined in a service, so when you generate an SDL file you'll get a service file as well, since one requires the other.
 
-Open up `api/src/graphql/contacts.sdl.js` and you'll see the same Query and Mutation types defined for Contact that were created for the Post scaffold. `Contact`, `CreateContactInput` and `UpdateContactInput` types, as well as a `Query` type with `contacts` and `contact`, and a `Mutation` type with `createContact`, `updateContact` and `deleteContact`.
+Open up `api/src/graphql/contacts.sdl.{js,ts}` and you'll see the same Query and Mutation types defined for Contact that were created for the Post scaffold. `Contact`, `CreateContactInput` and `UpdateContactInput` types, as well as a `Query` type with `contacts` and `contact`, and a `Mutation` type with `createContact`, `updateContact` and `deleteContact`.
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -304,32 +304,42 @@ export const deleteContact = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```js title="api/src/services/contacts/contacts.ts"
+import type { Prisma } from '@prisma/client'
+
 import { db } from 'src/lib/db'
 
 export const contacts = () => {
   return db.contact.findMany()
 }
 
-export const contact = ({ id }) => {
+export const contact = ({ id }: Prisma.ContactWhereUniqueInput) => {
   return db.contact.findUnique({
     where: { id },
   })
 }
 
-export const createContact = ({ input }) => {
+interface CreateContactArgs {
+  input: Prisma.ContactCreateInput
+}
+
+export const createContact = ({ input }: CreateContactArgs) => {
   return db.contact.create({
     data: input,
   })
 }
 
-export const updateContact = ({ id, input }) => {
+interface UpdateContactArgs extends Prisma.ContactWhereUniqueInput {
+  input: Prisma.ContactUpdateInput
+}
+
+export const updateContact = ({ id, input }: UpdateContactArgs) => {
   return db.contact.update({
     data: input,
     where: { id },
   })
 }
 
-export const deleteContact = ({ id }) => {
+export const deleteContact = ({ id }: Prisma.ContactWhereUniqueInput) => {
   return db.contact.delete({
     where: { id },
   })
@@ -449,7 +459,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 import {
   FieldError,
@@ -470,8 +480,14 @@ const CREATE_CONTACT = gql`
 `
 // highlight-end
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -616,7 +632,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 // highlight-next-line
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
@@ -636,11 +652,17 @@ const CREATE_CONTACT = gql`
   }
 `
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
   // highlight-next-line
   const [create] = useMutation(CREATE_CONTACT)
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data)
   }
 
@@ -737,10 +759,16 @@ const CREATE_CONTACT = gql`
   }
 `
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
   const [create] = useMutation(CREATE_CONTACT)
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     // highlight-next-line
     create({ variables: { input: data } })
   }
@@ -798,7 +826,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
@@ -914,7 +942,6 @@ const ContactPage = () => {
 
   const onSubmit = (data) => {
     create({ variables: { input: data } })
-    console.log(data)
   }
 
   return (...)
@@ -926,16 +953,15 @@ const ContactPage = () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 // ...
 
 const ContactPage = () => {
   // highlight-next-line
   const [create, { loading, error }] = useMutation(CREATE_CONTACT)
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     create({ variables: { input: data } })
-    console.log(data)
   }
 
   return (...)
@@ -964,7 +990,7 @@ return (
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 return (
   // ...
   // highlight-next-line
@@ -1082,7 +1108,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
@@ -1103,6 +1129,12 @@ const CREATE_CONTACT = gql`
   }
 `
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
   // highlight-start
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
@@ -1112,7 +1144,7 @@ const ContactPage = () => {
   })
   // highlight-end
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     create({ variables: { input: data } })
   }
 
@@ -1218,17 +1250,15 @@ export const createContact = ({ input }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```js title="api/src/services/contacts/contacts.ts"
+```ts title="api/src/services/contacts/contacts.ts"
+import type { Prisma } from '@prisma/client'
+
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
-import { db } from 'src/lib/db'
+// ...
 
-export const contacts = () => {
-  return db.contact.findMany()
-}
-
-export const createContact = ({ input }) => {
+export const createContact = ({ input }: CreateContactArgs) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
@@ -1240,7 +1270,7 @@ export const createContact = ({ input }) => {
 
 That's a lot of references to `email` so let's break them down:
 
-1. The first argument is the value that we want to check, in this case `input` contains all our contact data and the value of `email` is the one we want to check
+1. The first argument is the value that we want to check. In this case `input` contains all our contact data and the value of `email` is the one we want to check
 2. The second argument is the `name` prop from the `<TextField>`, so that we know which input field on the page has an error
 3. The third argument is an object containing the **validation directives** we want to invoke. In this case it's just one, and `email: true` means we want to use the built-in email validator
 
@@ -1329,13 +1359,10 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
-      <Toaster toastOptions={{ duration: 100000 }} />
+      <Toaster />
       // highlight-start
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
-        <FormError
-          error={error}
-          wrapperClassName="form-error"
-        />
+        <FormError error={error} wrapperClassName="form-error" />
         // highlight-end
 
         <Label name="name" errorClassName="error">
@@ -1382,7 +1409,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1404,6 +1431,12 @@ const CREATE_CONTACT = gql`
   }
 `
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
     onCompleted: () => {
@@ -1411,7 +1444,7 @@ const ContactPage = () => {
     },
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     create({ variables: { input: data } })
   }
 
@@ -1419,13 +1452,10 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
-      <Toaster toastOptions={{ duration: 100000 }} />
+      <Toaster />
       // highlight-start
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
-        <FormError
-          error={error}
-          wrapperClassName="form-error"
-        />
+        <FormError error={error} wrapperClassName="form-error" />
         // highlight-end
 
         <Label name="name" errorClassName="error">
@@ -1517,8 +1547,8 @@ export const createCar = ({ input }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```js
-export const createCar = ({ input }) => {
+```ts
+export const createCar = ({ input }: Car) => {
   validate(input.make, 'make', {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
   })
@@ -1595,9 +1625,9 @@ import {
   Form,
   FormError,
   Label,
-  TextField,
-  TextAreaField,
   Submit,
+  TextAreaField,
+  TextField,
   // highlight-next-line
   useForm,
 } from '@redwoodjs/forms'
@@ -1606,15 +1636,15 @@ import {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import {
   FieldError,
   Form,
   FormError,
   Label,
-  TextField,
-  TextAreaField,
   Submit,
+  TextAreaField,
+  TextField,
   // highlight-next-line
   useForm,
 } from '@redwoodjs/forms'
@@ -1670,7 +1700,7 @@ return (
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 return (
   <>
     <Toaster />
@@ -1709,7 +1739,7 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 // ...
 
 const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
@@ -1745,9 +1775,9 @@ import {
   Form,
   FormError,
   Label,
-  TextField,
-  TextAreaField,
   Submit,
+  TextAreaField,
+  TextField,
   useForm,
 } from '@redwoodjs/forms'
 
@@ -1777,7 +1807,7 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
-      <Toaster toastOptions={{ duration: 100000 }} />
+      <Toaster />
       <Form
         onSubmit={onSubmit}
         config={{ mode: 'onBlur' }}
@@ -1834,7 +1864,7 @@ export default ContactPage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1842,9 +1872,9 @@ import {
   Form,
   FormError,
   Label,
-  TextField,
-  TextAreaField,
   Submit,
+  TextAreaField,
+  TextField,
   useForm,
 } from '@redwoodjs/forms'
 
@@ -1856,6 +1886,12 @@ const CREATE_CONTACT = gql`
   }
 `
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
   const formMethods = useForm()
 
@@ -1866,7 +1902,7 @@ const ContactPage = () => {
     },
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     create({ variables: { input: data } })
   }
 
@@ -1874,7 +1910,7 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
-      <Toaster toastOptions={{ duration: 100000 }} />
+      <Toaster />
       <Form
         onSubmit={onSubmit}
         config={{ mode: 'onBlur' }}
@@ -1949,7 +1985,7 @@ const ContactPage = () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```js title="web/src/pages/ContactPage/ContactPage.tsx"
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 const ContactPage = () => {
   const formMethods = useForm({ mode: 'onBlur' })
   //...
