@@ -640,6 +640,8 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
 }
@@ -863,8 +865,10 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -872,6 +876,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -883,11 +888,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -1920,6 +1921,8 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
 }
@@ -2143,8 +2146,10 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2152,6 +2157,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2163,11 +2169,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;

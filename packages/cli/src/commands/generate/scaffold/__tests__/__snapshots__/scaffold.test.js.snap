@@ -683,6 +683,8 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
 }
@@ -906,8 +908,10 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -915,6 +919,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -926,11 +931,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -2006,6 +2007,8 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
 }
@@ -2229,8 +2232,10 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2238,6 +2243,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2249,11 +2255,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -2731,6 +2733,8 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
 }
@@ -2954,8 +2958,10 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2963,6 +2969,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2974,11 +2981,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -3065,7 +3068,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply mx-4 pb-4;
 }
 .rw-segment {
-  @apply rounded-lg overflow-hidden w-full;
+  @apply rounded-lg overflow-hidden w-full border border-gray-200;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
@@ -3203,6 +3206,9 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 .rw-table td {
   @apply bg-white text-gray-900;
 }
+.rw-table tr:nth-child(odd) td {
+  @apply bg-gray-50;
+}
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
 }
@@ -3221,7 +3227,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   }
 }
 .rw-table tbody tr {
-  @apply bg-gray-50 border-t border-gray-200;
+  @apply border-t border-gray-200;
 }
 .rw-table input {
   @apply ml-0;
