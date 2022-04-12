@@ -6114,7 +6114,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@testing-library/dom": 8.13.0
     "@testing-library/jest-dom": 5.16.4
-    "@testing-library/react": 12.1.4
+    "@testing-library/react": 12.1.5
     "@testing-library/user-event": 13.5.0
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.40
@@ -6355,7 +6355,7 @@ __metadata:
     "@storybook/manager-webpack5": 6.4.20
     "@storybook/react": 6.4.20
     "@testing-library/jest-dom": 5.16.4
-    "@testing-library/react": 12.1.4
+    "@testing-library/react": 12.1.5
     "@testing-library/user-event": 13.5.0
     "@types/aws-lambda": 8.10.93
     "@types/babel-core": 6.25.7
@@ -6385,7 +6385,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": 1.0.0
     "@testing-library/jest-dom": 5.16.4
-    "@testing-library/react": 12.1.4
+    "@testing-library/react": 12.1.5
     "@types/react": 17.0.40
     "@types/react-dom": 17.0.14
     "@types/testing-library__jest-dom": 5.14.3
@@ -7838,17 +7838,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:12.1.4":
-  version: 12.1.4
-  resolution: "@testing-library/react@npm:12.1.4"
+"@testing-library/react@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@testing-library/react@npm:12.1.5"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^8.0.0
-    "@types/react-dom": "*"
+    "@types/react-dom": <18.0.0
   peerDependencies:
-    react: "*"
-    react-dom: "*"
-  checksum: 037c78246dc5f120b0c0714de6c4f8245a8f52617cb273193283fe8dc195a8cb9dc753ac717cf7140d0519973aaa46e087a9183e99a2d9a3f7e65e81ca53352f
+    react: <18.0.0
+    react-dom: <18.0.0
+  checksum: 3c2433d2fdb6535261f62cd85d79657989cebd96f9072da03c098a1cfa56dec4dfec83d7c2e93633a3ccebdb178ea8578261533d11551600966edab77af00c8b
   languageName: node
   linkType: hard
 
@@ -8737,12 +8737,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:*, @types/react-dom@npm:17.0.14":
+"@types/react-dom@npm:17.0.14":
   version: 17.0.14
   resolution: "@types/react-dom@npm:17.0.14"
   dependencies:
     "@types/react": "*"
   checksum: 0168d77ff0ea0f8dd83f463dc0e542c0a8ab63638de3830d61dab0b97301ba06e8dc8833506a5de5d7fc92b08414359ea14ea78d5206acc17d8d413e4c299008
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:<18.0.0":
+  version: 17.0.15
+  resolution: "@types/react-dom@npm:17.0.15"
+  dependencies:
+    "@types/react": ^17
+  checksum: f6faa3b12c5301817f37a19a7b54beace8f35dee3480401a165cf9e9e4bcf2775496b7f37f3262ced9f44b0ee8e863b991efcce3b8588aec9a45a85268bdfb89
   languageName: node
   linkType: hard
 
@@ -26922,7 +26931,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@playwright/test": 1.20.2
     "@testing-library/jest-dom": 5.16.4
-    "@testing-library/react": 12.1.4
+    "@testing-library/react": 12.1.5
     "@testing-library/user-event": 13.5.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.4.1
