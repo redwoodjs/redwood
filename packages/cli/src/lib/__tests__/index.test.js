@@ -1,16 +1,10 @@
 global.__dirname = __dirname
-
-import fs from 'fs'
-import path from 'path'
-
-import * as index from '../index'
-
-const BASE_PATH = path.join(global.__dirname, 'fixtures')
-
 jest.mock('@redwoodjs/internal', () => {
+  const path = require('path')
   return {
     ...jest.requireActual('@redwoodjs/internal'),
     getPaths: () => {
+      const BASE_PATH = path.join(global.__dirname, 'fixtures')
       return {
         base: BASE_PATH,
         api: {
@@ -20,6 +14,11 @@ jest.mock('@redwoodjs/internal', () => {
     },
   }
 })
+
+import fs from 'fs'
+import path from 'path'
+
+import * as index from '../index'
 
 test('nameVariants returns a single word cased variables', () => {
   const names = ['Home', 'home']
@@ -93,6 +92,7 @@ describe('usingVSCode', () => {
   })
 
   test('return true when .vscode folder does exist', () => {
+    const BASE_PATH = path.join(global.__dirname, 'fixtures')
     fs.mkdirSync(path.join(BASE_PATH, '.vscode'))
 
     const output = index.usingVSCode()
