@@ -45,7 +45,12 @@ jobs:
         run: |
           yarn install --immutable
 
+      - name: Determine if the PR only changed docs
+        id: only_changed_docs
+        uses: ./.github/actions/only_changed_docs
+
       - name: Setup test project
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         id: setup_test_project
         uses: ./.github/actions/setup_test_project
         env:
@@ -53,19 +58,23 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Install Playwright deps
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: npx playwright install --with-deps chromium
 
       - name: Run `rw build` without prerender
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw build --no-prerender
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw prerender`
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw prerender --verbose
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run smoke tests on 'rw dev' and 'rw serve'
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         working-directory: ./tasks/smoke-test
         run: npx playwright test
         env:
@@ -73,80 +82,95 @@ jobs:
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: Run `rw info`
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw info
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-
       - name: Run `rw lint`
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw lint ./api/src --fix
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw test api"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw test api --no-watch
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw test web"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw test web --no-watch
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw type-check"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw type-check
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw check"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw check
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw storybook"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw sb --smoke-test
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw exec"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw g script testScript && yarn rw exec testScript
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "prisma generate"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw prisma generate
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw data-migrate"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw dataMigrate up
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "data-migrate install"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw data-migrate install
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "prisma migrate"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw prisma migrate dev --name ci-test
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw deploy --help`
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn rw setup deploy --help && yarn rw deploy --help
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run `rw setup ui --help`
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn rw setup --help && yarn rw setup ui --help
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "g page"
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw g page ciTest
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Throw Error | Run `rw g sdl <model>`
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           yarn rw g sdl DoesNotExist
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}

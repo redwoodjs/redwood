@@ -44,7 +44,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Determine if the PR only changed docs
+        id: only_changed_docs
+        uses: ./.github/actions/only_changed_docs
+
       - name: Create a temporary directory
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         id: createpath
         run: |
           project_path=$(mktemp -d -t redwood.XXXXXX)
@@ -53,11 +58,13 @@ jobs:
           echo "::set-output name=framework_path::$framework_path"
 
       - name: Create a RedwoodJS app
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
         env:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Init Git for RedwoodJS app directory
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
@@ -66,10 +73,12 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Start server in background
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn rw dev --no-generate --fwd="--no-open" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Cypress run
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         uses: cypress-io/github-action@v2
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

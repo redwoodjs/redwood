@@ -42,14 +42,22 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Determine if the PR only changed docs
+        id: only_changed_docs
+        uses: ./.github/actions/only_changed_docs
+
       - name: Check constraints, dependencies, and package.json's
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         uses: ./tasks/check
 
       - name: Build
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn build
 
       - name: Run ESLint
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn lint
 
       - name: Run tests
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn test

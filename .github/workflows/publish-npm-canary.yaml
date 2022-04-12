@@ -40,7 +40,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Determine if the PR only changed docs
+        id: only_changed_docs
+        uses: ./.github/actions/only_changed_docs
+
       - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn constraints
 
       - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
@@ -48,19 +53,23 @@ jobs:
         run: yarn dedupe --check
 
       - name: Build
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn build
 
       - name: Run ESLint
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn lint
         env:
           CI: true
 
       - name: Run tests
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: yarn test
         env:
           CI: true
 
       - name: Publish to npm
+        if: fromJSON(steps.only_changed_docs.outputs.only_changed_docs) == false
         run: |
           git describe
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc

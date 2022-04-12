@@ -1,0 +1,8 @@
+name: Only changed docs
+description: Determines if a PR only changed docs
+outputs:
+  only_changed_docs:
+    description: If the PR only changed docs or not
+runs:
+  using: 'node16'
+  main: 'only_changed_docs.mjs'
