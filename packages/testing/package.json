@@ -37,7 +37,7 @@
     "@storybook/manager-webpack5": "6.4.20",
     "@storybook/react": "6.4.20",
     "@testing-library/jest-dom": "5.16.4",
-    "@testing-library/react": "12.1.4",
+    "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "13.5.0",
     "@types/aws-lambda": "8.10.93",
     "@types/babel-core": "6.25.7",
