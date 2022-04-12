@@ -1,5 +1,11 @@
 global.__dirname = __dirname
-const BASE_PATH = require('path').join(global.__dirname, 'fixtures')
+
+import fs from 'fs'
+import path from 'path'
+
+import * as index from '../index'
+
+const BASE_PATH = path.join(global.__dirname, 'fixtures')
 
 jest.mock('@redwoodjs/internal', () => {
   return {
@@ -14,11 +20,6 @@ jest.mock('@redwoodjs/internal', () => {
     },
   }
 })
-
-import fs from 'fs'
-import path from 'path'
-
-import * as index from '../index'
 
 test('nameVariants returns a single word cased variables', () => {
   const names = ['Home', 'home']
