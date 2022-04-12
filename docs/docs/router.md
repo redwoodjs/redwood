@@ -128,7 +128,7 @@ becomes...
 
 Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
-For more fine-grained control, you can specify `role` (which takes an array of roles), and the router will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
+For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
 
 Here's an example of how you'd use a private set:
 
