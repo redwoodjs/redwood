@@ -11,6 +11,7 @@ With Redwood's Baremetal deployment option, the source (like your dev machine) w
 Deploying from a client (like your own development machine) consists of running a single command.
 
 First time deploy
+
 ```bash
 yarn rw deploy baremetal --first run
 ```
