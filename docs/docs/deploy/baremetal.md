@@ -38,7 +38,7 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 
 If the `--first-run` flag is specified step 6. above will be skipped and the following commands will run instead:
   - `yarn pm2 start [service]` - starts the serving process(es)
-  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See `First Deploy - Starting on Reboot` for further information
+  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
 
 > We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
 
