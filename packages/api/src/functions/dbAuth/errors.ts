@@ -188,3 +188,10 @@ export class ReusedPasswordError extends Error {
     this.name = 'ReusedPasswordError'
   }
 }
+
+export class GenericError extends Error {
+  constructor(message = 'unknown error occurred') {
+    super(message)
+    this.name = 'GenericError'
+  }
+}
