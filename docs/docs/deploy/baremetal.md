@@ -253,7 +253,8 @@ yarn rw deploy baremetal --first-run
 
 If there are any issues the deploy should stop and you'll see the error message printed to the console. Assume it worked, hooray! You're deployed to BAREMETAL.
 
-### Starting on reboot
+### Starting on Reboot
+
 The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
 
 1. Ssh into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
