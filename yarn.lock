@@ -2328,15 +2328,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/depth-limit@npm:1.3.0":
-  version: 1.3.0
-  resolution: "@envelop/depth-limit@npm:1.3.0"
+"@envelop/depth-limit@npm:1.5.1":
+  version: 1.5.1
+  resolution: "@envelop/depth-limit@npm:1.5.1"
   dependencies:
     graphql-depth-limit: ^1.1.0
   peerDependencies:
-    "@envelop/core": ^2.1.0
+    "@envelop/core": ^2.3.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 9e534fd04b8a280c39298fee75a6972c1ad80502b3a9bf39004fb300359a77d1ca8492110047cd803f2c751d179f5fd7ce32636b23ff8cd7aebf999ed61cdfaa
+  checksum: 28c5fcc386604bf8b147f0b2fddb4c5dc3ba6b376a5e3b9514b831f321142d793ea8eef0d29b8215839ff716903fc465966addbe71eb8cebcfb1e434daba19a9
   languageName: node
   linkType: hard
 
@@ -6139,7 +6139,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@envelop/depth-limit": 1.3.0
+    "@envelop/depth-limit": 1.5.1
     "@envelop/disable-introspection": 3.3.1
     "@envelop/filter-operation-type": 3.3.1
     "@envelop/parser-cache": 4.3.1
