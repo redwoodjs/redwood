@@ -42,7 +42,7 @@
   "devDependencies": {
     "@types/babel__core": "7.1.19",
     "@types/fs-extra": "9.0.13",
-    "@types/jscodeshift": "0.11.3",
+    "@types/jscodeshift": "0.11.4",
     "@types/prettier": "2.4.4",
     "fs-extra": "10.0.1",
     "tempy": "1.0.1"
