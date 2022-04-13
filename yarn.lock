@@ -2328,15 +2328,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/depth-limit@npm:1.3.0":
-  version: 1.3.0
-  resolution: "@envelop/depth-limit@npm:1.3.0"
+"@envelop/depth-limit@npm:1.5.1":
+  version: 1.5.1
+  resolution: "@envelop/depth-limit@npm:1.5.1"
   dependencies:
     graphql-depth-limit: ^1.1.0
   peerDependencies:
-    "@envelop/core": ^2.1.0
+    "@envelop/core": ^2.3.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 9e534fd04b8a280c39298fee75a6972c1ad80502b3a9bf39004fb300359a77d1ca8492110047cd803f2c751d179f5fd7ce32636b23ff8cd7aebf999ed61cdfaa
+  checksum: 28c5fcc386604bf8b147f0b2fddb4c5dc3ba6b376a5e3b9514b831f321142d793ea8eef0d29b8215839ff716903fc465966addbe71eb8cebcfb1e434daba19a9
   languageName: node
   linkType: hard
 
@@ -6115,7 +6115,7 @@ __metadata:
     "@testing-library/dom": 8.13.0
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 13.5.0
+    "@testing-library/user-event": 14.1.0
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.40
     "@types/react-dom": 17.0.15
@@ -6139,7 +6139,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@envelop/depth-limit": 1.3.0
+    "@envelop/depth-limit": 1.5.1
     "@envelop/disable-introspection": 3.3.1
     "@envelop/filter-operation-type": 3.3.1
     "@envelop/parser-cache": 4.3.1
@@ -6356,7 +6356,7 @@ __metadata:
     "@storybook/react": 6.4.21
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 13.5.0
+    "@testing-library/user-event": 14.1.0
     "@types/aws-lambda": 8.10.93
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.1
@@ -7852,14 +7852,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:13.5.0":
-  version: 13.5.0
-  resolution: "@testing-library/user-event@npm:13.5.0"
-  dependencies:
-    "@babel/runtime": ^7.12.5
+"@testing-library/user-event@npm:14.1.0":
+  version: 14.1.0
+  resolution: "@testing-library/user-event@npm:14.1.0"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: ff57edaeab31322c80c3f01d55404b4cebb907b9ec7672b96a1a14d053f172046b01c5f27b45677927ebee8ed91bce695a7d09edec9a48875cfacabe39d0426a
+  checksum: 94a8796145069b6fe99cae6e5ad526cb35e1ee7aff22c1b9e68009433b20b56cc6efc3f8b4e9423ca603e03cbfdcba2a4d1761ecae0b65748c18b9113aa6a1af
   languageName: node
   linkType: hard
 
@@ -26923,7 +26921,7 @@ __metadata:
     "@playwright/test": 1.21.0
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 13.5.0
+    "@testing-library/user-event": 14.1.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.4.1
     "@types/jscodeshift": 0.11.4
