@@ -22,7 +22,7 @@ Subsequent deploys
 yarn rw deploy baremetal
 ```
 
-## Deployment lifecycle
+## Deployment Lifecycle
 
 The baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
