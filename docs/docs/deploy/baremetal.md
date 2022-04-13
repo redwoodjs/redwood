@@ -8,7 +8,7 @@ Once you've grown beyond the confines and limitations of the cloud deployment pr
 
 With Redwood's Baremetal deployment option, the source (like your dev machine) will SSH into one or more remote machines and execute commands in order to update your codebase, run any database migrations and restart services.
 
-Deploying from a client (like your own development machine) consists of running a single command.
+Deploying from a client (like your own development machine) consists of running a single command:
 
 First time deploy
 
