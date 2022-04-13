@@ -817,7 +817,7 @@ export const createCar = ({ input }) => {
 }
 ```
 
-You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
+You can still include your own custom validation logic and have the errors handled in the same manner as the built-in validations:
 
 ```js
 validateWith(() => {

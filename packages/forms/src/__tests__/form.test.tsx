@@ -139,9 +139,9 @@ describe('Form', () => {
 
     render(<TestComponent onSubmit={mockFn} />)
 
-    userEvent.type(screen.getByDisplayValue('text'), 'text')
-    userEvent.type(screen.getByDisplayValue('42'), '24')
-    userEvent.type(screen.getByDisplayValue('3.14'), '1592')
+    await userEvent.type(screen.getByDisplayValue('text'), 'text')
+    await userEvent.type(screen.getByDisplayValue('42'), '24')
+    await userEvent.type(screen.getByDisplayValue('3.14'), '1592')
     fireEvent.change(screen.getByTestId('select1'), {
       target: { value: 'Option 2' },
     })

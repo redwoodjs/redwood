@@ -12,7 +12,7 @@
 
 ## Mocking a Cell's Query
 
-Locate the file ending with with `.mock.js` in your Cell's folder. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
+Locate the file ending with `.mock.js` in your Cell's folder. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
 ```jsx {3,4,5,11,12,13} title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
