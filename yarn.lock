@@ -6081,7 +6081,7 @@ __metadata:
     "@redwoodjs/internal": 1.0.0
     "@typescript-eslint/eslint-plugin": 5.17.0
     "@typescript-eslint/parser": 5.17.0
-    eslint: 8.12.0
+    eslint: 8.13.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -15410,9 +15410,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.12.0":
-  version: 8.12.0
-  resolution: "eslint@npm:8.12.0"
+"eslint@npm:8.13.0":
+  version: 8.13.0
+  resolution: "eslint@npm:8.13.0"
   dependencies:
     "@eslint/eslintrc": ^1.2.1
     "@humanwhocodes/config-array": ^0.9.2
@@ -15451,7 +15451,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: e6bbafe948ad7c5b29901e7c31fa9d0a70291aac31f7f5543688730292551540816891999ebe43dcd868b48e7aa786949e1be7dab646f480eafd7ae1ab49fd74
+  checksum: 6213839a3e645e7a15e814c7cd838ed7c90d63e333e1faa0cfaa6308f711c4f79402071e592cdc49cab8d8e8fcf003eb5055e3cfb6792ebe7e851bdb644d34c0
   languageName: node
   linkType: hard
 
@@ -26943,7 +26943,7 @@ __metadata:
     core-js: 3.21.1
     cypress: 9.5.4
     cypress-wait-until: 1.7.2
-    eslint: 8.12.0
+    eslint: 8.13.0
     fast-glob: 3.2.11
     fs-extra: 10.0.1
     is-port-reachable: 3.1.0
