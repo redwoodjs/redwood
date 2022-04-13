@@ -17,6 +17,7 @@ yarn rw deploy baremetal --first run
 ```
 
 Subsequent deploys
+
 ```bash
 yarn rw deploy baremetal
 ```
