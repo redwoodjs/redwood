@@ -8,13 +8,19 @@ Once you've grown beyond the confines and limitations of the cloud deployment pr
 
 With Redwood's Baremetal deployment option, the source (like your dev machine) will SSH into one or more remote machines and execute commands in order to update your codebase, run any database migrations and restart services.
 
-Deploying from a client (like your own development machine) consists of running a single command:
+Deploying from a client (like your own development machine) consists of running a single command.
 
+First time deploy
+```bash
+yarn rw deploy baremetal --first run
+```
+
+Subsequent deploys
 ```bash
 yarn rw deploy baremetal
 ```
 
-## Lifecycle
+## Deployment lifecycle
 
 The baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
@@ -24,9 +30,12 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 3. `yarn rw prisma generate` - generates latest Prisma Client libs
 4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
 5. `yarn rw build` - builds the web and/or api sides
-6. `yarn pm2 restart [service]` - restarts the serving process(es)
+6. `yarn pm2 restart [service]` - restarts the serving process(es).
 
-There is a special `--first-run` flag which can be included in your deploy command the first time you run it, which starts the PM2 services rather than restarting them.
+### First run lifecycle
+If the `--first-run` flag is specified step 6. aboce will be skipped and the following commands will run instead:
+  - `yarn pm2 start [service]` - starts the serving process(es)
+  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See `First Deploy - Starting on Reboot` for further information
 
 > We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
 
