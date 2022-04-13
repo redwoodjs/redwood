@@ -144,7 +144,7 @@
 }
 .rw-input-error:focus {
   @apply border-red-600 outline-none;
-  box-shadow: 0 0 5px #c53030;
+  box-shadow: 0 0 5px #dc2626;
 }
 .rw-field-error {
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
@@ -165,7 +165,8 @@
 .rw-table td {
   @apply bg-white text-gray-900;
 }
-.rw-table tr:nth-child(odd) td {
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th, {
   @apply bg-gray-50;
 }
 .rw-table thead tr {

@@ -142,6 +142,19 @@ export const files = ({
     files.push([scaffoldOutputPath, scaffoldTemplate])
   }
 
+  const scaffoldColorsOutputPath = path.join(getPaths().web.src, 'colors.css')
+  if (!fs.existsSync(scaffoldColorsOutputPath)) {
+    const scaffoldColorsTemplate = generateTemplate(
+      path.join(
+        __dirname,
+        '../scaffold/templates/assets/scaffold.css.colors.template'
+      ),
+      { name: 'colors' }
+    )
+
+    files.push([scaffoldColorsOutputPath, scaffoldColorsTemplate])
+  }
+
   return files.reduce((acc, [outputPath, content]) => {
     let template = content
 
