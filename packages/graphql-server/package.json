@@ -30,7 +30,7 @@
     "@graphql-tools/merge": "8.2.8",
     "@graphql-tools/schema": "8.3.8",
     "@graphql-tools/utils": "8.6.7",
-    "@graphql-yoga/common": "2.0.0",
+    "@graphql-yoga/common": "2.2.1",
     "@prisma/client": "3.11.1",
     "@redwoodjs/api": "1.0.0",
     "core-js": "3.21.1",
