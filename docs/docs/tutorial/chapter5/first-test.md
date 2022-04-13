@@ -40,7 +40,7 @@ test('Success renders successfully', async () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell.test.tsx"
+```tsx title="web/src/components/ArticlesCell.test.tsx"
 test('Success renders successfully', async () => {
   const articles = standard().articles
   render(<Success articles={articles} />)
@@ -124,7 +124,7 @@ describe('ArticlesCell', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell.test.ts"
+```tsx title="web/src/components/ArticlesCell.test.tsx"
 // highlight-next-line
 import { render, screen, within } from '@redwoodjs/testing'
 import { Loading, Empty, Failure, Success } from './ArticlesCell'
@@ -301,9 +301,9 @@ export const Success = ({ articles }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx
+```tsx
 // highlight-next-line
-export const Success = ({ articles }) => {
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
   return (
     { articles.map((article) => <Article article={article} />) }
   )
@@ -447,7 +447,7 @@ describe('Article', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.test.ts"
+```jsx title="web/src/components/Article/Article.test.tsx"
 import { render, screen } from '@redwoodjs/testing'
 import Article from './Article'
 

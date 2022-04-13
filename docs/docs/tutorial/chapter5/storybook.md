@@ -28,7 +28,7 @@ Those `.stories.{js,tsx}` files are what makes the tree on the left side of the 
 
 So, the idea here is that you can build out your components/cells/pages in isolation, get them looking the way you want and displaying the correct data, then plug them into your full application.
 
-When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.js` you'll see what it takes to explain this component to Storybook, and it isn't much:
+When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.{js,tsx}` you'll see what it takes to explain this component to Storybook, and it isn't much:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -58,13 +58,13 @@ export const generated = () => {
   )
 }
 
-export default { title: 'Components/BlogPost' }
+export default { title: 'Components/Article' }
 ```
 
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.stories.tsx"
+```tsx title="web/src/components/Article/Article.stories.tsx"
 import Article from './Article'
 
 export const generated = () => {
@@ -89,7 +89,7 @@ export const generated = () => {
   )
 }
 
-export default { title: 'Components/BlogPost' }
+export default { title: 'Components/Article' }
 ```
 
 </TabItem>
@@ -119,7 +119,7 @@ In your actual app you'd use this component like so:
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx
+```tsx
 <Article article={article} />
 ```
 

@@ -39,14 +39,23 @@ export default Article
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.tsx"
+```tsx title="web/src/components/Article/Article.tsx"
 import { Link, routes } from '@redwoodjs/router'
+
+import type { Post } from 'types/graphql'
 
 // highlight-start
 const truncate = (text, length) => {
   return text.substring(0, length) + '...'
 }
 // highlight-end
+
+interface Props {
+  // highlight-start
+  article: Omit<Post, 'createdAt'>
+  summary?: boolean
+  // highlight-end
+}
 
 // highlight-next-line
 const Article = ({ article, summary = false }) => {
@@ -108,7 +117,7 @@ export default { title: 'Components/Article' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/components/Article/Article.stories.tsx"
+```tsx title="web/components/Article/Article.stories.tsx"
 import Article from './Article'
 
 // highlight-start
@@ -183,8 +192,11 @@ export const Success = ({ articles }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 import Article from 'src/components/Article'
+
+import type { FindArticleQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
   query ArticlesQuery {
@@ -201,9 +213,11 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => <div>Error: {error.message}</div>
+export const Failure = ({ error }: CellFailureProps) => (
+  <div>Error: {error.message}</div>
+)
 
-export const Success = ({ articles }) => {
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
   return (
     <div className="space-y-10">
       {articles.map((article) => (
