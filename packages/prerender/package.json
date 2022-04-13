@@ -31,7 +31,7 @@
     "@redwoodjs/web": "1.0.0",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.10",
-    "cross-undici-fetch": "0.1.28",
+    "cross-undici-fetch": "0.2.5",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
