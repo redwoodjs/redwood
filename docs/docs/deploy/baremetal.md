@@ -258,7 +258,7 @@ If there are any issues the deploy should stop and you'll see the error message 
 
 The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
 
-1. Ssh into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
+1. SSH into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
 2. Run the command `yarn pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
 > The below text is an *example* output.  Yours will be different
