@@ -30,7 +30,7 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 3. `yarn rw prisma generate` - generates latest Prisma Client libs
 4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
 5. `yarn rw build` - builds the web and/or api sides
-6. `yarn pm2 restart [service]` - restarts the serving process(es).
+6. `yarn pm2 restart [service]` - restarts the serving process(es)
 
 ### First run lifecycle
 If the `--first-run` flag is specified step 6. aboce will be skipped and the following commands will run instead:
