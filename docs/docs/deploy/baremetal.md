@@ -34,7 +34,8 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 5. `yarn rw build` - builds the web and/or api sides
 6. `yarn pm2 restart [service]` - restarts the serving process(es)
 
-### First run lifecycle
+### First Run Lifecycle
+
 If the `--first-run` flag is specified step 6. above will be skipped and the following commands will run instead:
   - `yarn pm2 start [service]` - starts the serving process(es)
   - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See `First Deploy - Starting on Reboot` for further information
