@@ -3648,9 +3648,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@graphql-yoga/common@npm:2.0.0"
+"@graphql-yoga/common@npm:2.2.1":
+  version: 2.2.1
+  resolution: "@graphql-yoga/common@npm:2.2.1"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3659,22 +3659,14 @@ __metadata:
     "@graphql-tools/schema": ^8.3.1
     "@graphql-tools/utils": ^8.6.0
     "@graphql-typed-document-node/core": ^3.1.1
-    "@graphql-yoga/render-graphiql": 2.0.0
     "@graphql-yoga/subscription": 2.0.0
     chalk: 4.1.2
-    cross-undici-fetch: ^0.1.25
+    cross-undici-fetch: ^0.2.5
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: af76695cf0097bfce977b450f5deeca3dc647deb17ed29e86c7f0ed6bb1e7dcb34c9451614ede01e80c19bd92bdd7e91a945e22164145b2484a2b419eabdf694
-  languageName: node
-  linkType: hard
-
-"@graphql-yoga/render-graphiql@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@graphql-yoga/render-graphiql@npm:2.0.0"
-  checksum: e0564aec947272d9f436b44fc74d7ba0f1cedfbb34bb43be3297d940f4994a324bf9a1b9a8550ed5eea22ad7a9ee73472613315b691074269511b8ad36a7dedf
+  checksum: e16966d9da87262799d01258b1e94efe829c47e3bf41f2310c62cf344b05f8fa440e14aab8af91756358a3115c2cd49a4d9ebcc2f2ee309bb24bc3bc39268a1c
   languageName: node
   linkType: hard
 
@@ -5939,7 +5931,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 7.0.0
+    concurrently: 7.1.0
     configstore: 3.1.5
     core-js: 3.21.1
     cross-env: 7.0.3
@@ -6149,7 +6141,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.8
     "@graphql-tools/schema": 8.3.8
     "@graphql-tools/utils": 8.6.7
-    "@graphql-yoga/common": 2.0.0
+    "@graphql-yoga/common": 2.2.1
     "@prisma/client": 3.11.1
     "@redwoodjs/api": 1.0.0
     "@redwoodjs/auth": 1.0.0
@@ -12695,9 +12687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:7.0.0":
-  version: 7.0.0
-  resolution: "concurrently@npm:7.0.0"
+"concurrently@npm:7.1.0":
+  version: 7.1.0
+  resolution: "concurrently@npm:7.1.0"
   dependencies:
     chalk: ^4.1.0
     date-fns: ^2.16.1
@@ -12709,7 +12701,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     concurrently: dist/bin/concurrently.js
-  checksum: 3dd5478a9307b086789ae179b234f0a0a75c38cfdaeff52f66c0598a117655b47275922d1f89bf36354c7005a58114e7ab74cf8e64e625668b862c7e94a18400
+  checksum: e12b061f0afc2a411dbadec7218a0b112cd12e08a7760a3a38cc70fb51835fbb15f76a725d2aeefa7fe70c4354a398a9e1bab2189c7278176cd5e3b55885df9f
   languageName: node
   linkType: hard
 
@@ -13263,7 +13255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.1.28, cross-undici-fetch@npm:^0.1.19, cross-undici-fetch@npm:^0.1.25":
+"cross-undici-fetch@npm:0.1.28, cross-undici-fetch@npm:^0.1.19":
   version: 0.1.28
   resolution: "cross-undici-fetch@npm:0.1.28"
   dependencies:
@@ -13274,6 +13266,20 @@ __metadata:
     undici: ^5.0.0
     web-streams-polyfill: ^3.2.0
   checksum: 121d4ce6dd0fdba0c1b6dbf5504020e28fa6cde16fe870f560df1a55558ae0b5a0709e061f54bc1411399ec17135c51b3a2505e13a8f6ff80187d2b48fbdf34c
+  languageName: node
+  linkType: hard
+
+"cross-undici-fetch@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "cross-undici-fetch@npm:0.2.5"
+  dependencies:
+    abort-controller: ^3.0.0
+    form-data-encoder: ^1.7.1
+    formdata-node: ^4.3.1
+    node-fetch: ^2.6.7
+    undici: ^5.0.0
+    web-streams-polyfill: ^3.2.0
+  checksum: b009abcdbe637c36255de7a9d9d0a0038287fcc307a8767648d9100a1c36dc2a1f419b1dc9cf2cd8aaa0c61a52506b01d06d02cef5a2f9b959b7e97c9599d587
   languageName: node
   linkType: hard
 
