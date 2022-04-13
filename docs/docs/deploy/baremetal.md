@@ -251,6 +251,22 @@ yarn rw deploy baremetal --first-run
 
 If there are any issues the deploy should stop and you'll see the error message printed to the console. Assume it worked, hooray! You're deployed to BAREMETAL.
 
+### Starting on reboot
+The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
+
+1. Ssh into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
+2. Run the command `yarn pm2 startup`.  You will see some output similar to the output below.  Select this output starting with `sudo` and run it.  *Note* you will be using sudo so will need the root password to complete this
+
+> The below text is an *example* output.  Yours will be different
+
+```bash
+deploy@redwood:/var/www/my-app$ yarn pm2 startup
+[PM2] Init System found: systemd
+[PM2] To setup the Startup Script, copy/paste the following command:
+sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+```
+
+
 ### Customizing the Deploy
 
 If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip those steps completely:
