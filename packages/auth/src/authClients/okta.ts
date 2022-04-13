@@ -18,15 +18,20 @@ export const okta = (client: Okta): AuthClientOkta => {
     type: 'okta',
     client,
     restoreAuthState: async () => {
-      if (client.isLoginRedirect()) {
-        await client.storeTokensFromRedirect()
-        await client.handleLoginRedirect()
-      } else if (!(await client.isAuthenticated)) {
+      const previousState = client.authStateManager.getPreviousAuthState()
+
+      if (client.isLoginRedirect() && !previousState) {
+        try {
+          client.storeTokensFromRedirect()
+        } catch (e) {
+          console.error(e)
+        }
+      } else if (!(await client.isAuthenticated())) {
         client.signInWithRedirect()
       }
     },
     login: async (options?) => client.signInWithRedirect(options),
-    logout: (options?) => client.signOut(options),
+    logout: () => client.signOut(),
     signup: async (options?) => client.signInWithRedirect(options),
     getToken: async () =>
       client.tokenManager.get('accessToken').then((res) => {

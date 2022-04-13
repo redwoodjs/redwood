@@ -18,5 +18,6 @@ export const okta = async (
       .then((res: any) => {
         resolve(res.claims as Record<string, unknown>)
       })
+      .catch((err: any) => console.warn('Token failed validation: ' + err))
   })
 }
