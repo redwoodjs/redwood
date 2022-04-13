@@ -280,7 +280,7 @@ import { Router, Route, Private } from '@redwoodjs/router'
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="forbidden" role="admin">
+      <Private unauthenticated="forbidden" roles="admin">
         <Route path="/settings" page={SettingsPage} name="settings" />
         <Route path="/admin" page={AdminPage} name="sites" />
       </Private>
