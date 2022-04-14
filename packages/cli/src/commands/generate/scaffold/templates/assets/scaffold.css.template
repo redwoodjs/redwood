@@ -287,8 +287,8 @@
 .rw-table td {
   color: var(--gray-900);
 }
-.rw-table tr:nth-child(odd) td,
-.rw-table tr:nth-child(odd) th{
+.rw-table tbody tr:nth-child(odd) td,
+.rw-table tbody tr:nth-child(odd) th {
   background-color: var(--gray-50);
 }
 .rw-table thead tr {
