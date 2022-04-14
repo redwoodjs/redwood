@@ -89,5 +89,8 @@
   "devDependencies": {
     "@types/rimraf": "3.0.2"
   },
+  "resolutions": {
+    "@types/react": "17.0.40"
+  },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
