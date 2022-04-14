@@ -1,7 +1,3 @@
----
-description: A component-driven development workflow
----
-
 # Storybook
 
 Storybook enables a kind of frontend-first, component-driven development workflow that we've always wanted.
@@ -48,7 +44,9 @@ All of these files get merged with Redwood's default configurations, which you c
 
 While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/react/configure/overview#configure-your-storybook-project) in `storybook.config.js`, you'll probably only want to configure `addons`:
 
-```javascript title="web/config/storybook.config.js"
+```js
+// web/config/storybook.config.js
+
 module.exports = {
   /**
    * This line adds all of Storybook's essential addons.
@@ -67,7 +65,9 @@ Instead decorate all your stories with any custom rendering logic you want in `s
 
 For example, something you may want to do is add some margin to all your stories so that they're not glued to the top left corner:
 
-```jsx title="web/config/storybook.preview.js"
+```js
+// web/config/storybook.preview.js
+
 export const decorators = [
   (Story) => (
     <div style={{ margin: '48px' }}>
@@ -98,7 +98,9 @@ yarn workspace web add -D @storybook/addons @storybook/theming
 
 Then, we'll configure our theme by creating a `storybook.manager.js` file. Below we're enabling Storybook's dark theme.
 
-```javascript title="web/config/storybook.manager.js"
+```js
+// web/config/storybook.manager.js
+
 import { addons } from '@storybook/addons'
 import { themes } from '@storybook/theming'
 

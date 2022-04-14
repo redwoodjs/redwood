@@ -1,7 +1,3 @@
----
-description: Build and deploy secure applications
----
-
 # Security
 
 RedwoodJS wants you to be able build and deploy secure applications and takes the topic of security seriously.

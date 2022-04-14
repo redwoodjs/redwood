@@ -25,11 +25,8 @@ const baseConfig = {
       rwjsPaths.web.src
     )}/**/*.stories.@(js|jsx|ts|tsx|mdx)`,
   ],
-  addons: [
-    '@storybook/addon-essentials',
-    config.web.a11y && '@storybook/addon-a11y',
-  ].filter(Boolean),
-  // Storybook's UI uses a separate Webpack configuration
+  addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
+  // Storybook's UI uses a seperate Webpack configuration
   managerWebpack: (sbConfig) => {
     const userManagerPath = fs.existsSync(rwjsPaths.web.storybookManagerConfig)
       ? rwjsPaths.web.storybookManagerConfig

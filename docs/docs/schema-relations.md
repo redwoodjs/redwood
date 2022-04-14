@@ -1,7 +1,3 @@
----
-description: How Prisma relations work with scaffolds
----
-
 # Prisma Relations and Redwood's Generators
 
 ## Many-to-many Relationships
@@ -24,7 +20,7 @@ A database diagram for this relationship could look like:
 are Prisma's docs for creating many-to-many relationships.
 The `schema.prisma` syntax to create this relationship looks like:
 
-```jsx
+```javascript
 model Product {
   id       Int    @id @default(autoincrement())
   title    String
@@ -57,7 +53,7 @@ To support both CRUD actions and to remain consistent with Prisma's many-to-many
 
 You can get this working by creating an explicit relationship—defining the table structure yourself:
 
-```jsx
+```javascript
 model Product {
   id    Int         @id @default(autoincrement())
   title String

@@ -70,17 +70,13 @@ const addWebImports = (content, imports) => {
 // returns the content of App.{js,tsx} with init lines added (if there are any)
 const addWebInit = (content, init) => {
   if (init) {
-    const regex = /const App = \(.*\) => [({]/
-    const match = content.match(regex)
-
-    if (!match) {
-      return content
-    }
-
-    return content.replace(regex, `${init}\n\n${match[0]}`)
+    return content.replace(
+      'const App = () => (',
+      `${init}\n\nconst App = () => (`
+    )
+  } else {
+    return content
   }
-
-  return content
 }
 
 const objectToComponentProps = (obj, options = { exclude: [] }) => {
@@ -101,52 +97,40 @@ const objectToComponentProps = (obj, options = { exclude: [] }) => {
 
 // returns the content of App.{js,tsx} with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
-  const [
-    _,
-    newlineAndIndent,
-    redwoodProviderOpen,
-    redwoodProviderChildren,
-    redwoodProviderClose,
-  ] = content.match(/(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s)
+  const [_, indent, redwoodApolloProvider] = content.match(
+    /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
+  )
 
-  const redwoodProviderChildrenLines = redwoodProviderChildren
+  const redwoodApolloProviderLines = redwoodApolloProvider
     .split('\n')
-    .map((line, index) => {
-      return `${index === 0 ? '' : '  '}` + line
+    .map((line) => {
+      return '  ' + line
     })
 
-  // Wrap with custom components e.g.
-  // <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-  //     <FetchConfigProvider>
-  //     <ApolloInjector>
-  //     <AuthProvider client={ethereum} type="ethereum">
   const customRenderOpen = (authProvider.render || []).reduce(
-    (acc, component) => acc + newlineAndIndent + '  ' + `<${component}>`,
+    (acc, component) => acc + indent + `<${component}>`,
     ''
   )
 
   const customRenderClose = (authProvider.render || []).reduce(
-    (acc, component) => newlineAndIndent + '  ' + `</${component}>` + acc,
+    (acc, component) => indent + `</${component}>` + acc,
     ''
   )
 
   const props = objectToComponentProps(authProvider, { exclude: ['render'] })
 
   const renderContent =
-    newlineAndIndent +
-    redwoodProviderOpen +
     customRenderOpen +
-    newlineAndIndent +
-    '  ' +
+    indent +
     `<AuthProvider ${props.join(' ')}>` +
-    redwoodProviderChildrenLines.join('\n') +
+    indent +
+    redwoodApolloProviderLines.join('\n') +
+    indent +
     `</AuthProvider>` +
-    customRenderClose +
-    newlineAndIndent +
-    redwoodProviderClose
+    customRenderClose
 
   return content.replace(
-    /\s+<RedwoodProvider.*?>.*<\/RedwoodProvider>/s,
+    /\s+<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>/s,
     renderContent
   )
 }
@@ -234,10 +218,8 @@ export const files = (provider) => {
 }
 
 // actually inserts the required config lines into App.{js,tsx}
-export const addConfigToApp = async (config, force, options = {}) => {
-  const { webAppPath: customWebAppPath } = options || {}
-
-  const webAppPath = customWebAppPath || getWebAppPath()
+export const addConfigToApp = async (config, force) => {
+  const webAppPath = getWebAppPath()
 
   let content = fs.readFileSync(webAppPath).toString()
 

@@ -1,30 +1,41 @@
-import type IClerk from '@clerk/clerk-sdk-node/instance'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-export const clerk = async (token: string) => {
+interface Req {
+  event: APIGatewayProxyEvent
+  context: LambdaContext
+}
+
+export const clerk = async (token: string, req: Req) => {
   // Use require here, to prevent needing clerk sdk in api deps
-  const Clerk = require('@clerk/clerk-sdk-node/instance').default
+  const { sessions, users } = require('@clerk/clerk-sdk-node')
 
-  const { users, base }: IClerk = new Clerk()
-
-  if (!process.env.CLERK_JWT_KEY) {
-    console.error('CLERK_JWT_KEY env var is not set.')
-    throw new Error('CLERK_JWT_KEY env var is not set.')
+  if (!process.env.CLERK_API_KEY) {
+    console.error('CLERK_API_KEY env var is not set.')
+    throw new Error('CLERK_API_KEY env var is not set.')
   }
 
-  try {
-    const jwtPayload = await base.verifySessionToken(token)
+  // Clerk sessions are a combination of a clerk "current session id", which we store
+  // in the Redwood auth token, and the __session cookie, which contains a second session
+  // bearer token. The two tokens together define which device is browsing and as who.
+  const clerkCookieName = '__session'
+  const cookies = req.event.headers['cookie']?.split(';').map((c) => c.trim())
+  const sessionCookie = cookies
+    ?.find((c) => c.startsWith(clerkCookieName + '='))
+    ?.substring(clerkCookieName.length + 1)
 
-    if (!jwtPayload.sub) {
-      return Promise.reject(new Error('Session invalid'))
-    }
+  if (!sessionCookie || sessionCookie.length < 1) {
+    return Promise.reject(new Error('Clerk __session token is not set'))
+  }
 
-    const user = await users.getUser(jwtPayload.sub)
+  const session = await sessions.verifySession(token, sessionCookie)
+  if (!session.userId) {
+    return Promise.reject(new Error('Session invalid'))
+  }
 
-    return {
-      ...user,
-      roles: user.publicMetadata['roles'] ?? [],
-    }
-  } catch (error) {
-    return Promise.reject(error)
+  const user = await users.getUser(session.userId)
+
+  return {
+    ...user,
+    roles: user.publicMetadata['roles'] ?? [],
   }
 }

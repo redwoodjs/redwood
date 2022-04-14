@@ -1,15 +1,9 @@
----
-description: Customize GraphQL execution
----
-
 # Directives
 
 Redwood Directives are a powerful feature, supercharging your GraphQL-backed Services.
 
 You can think of directives like "middleware" that let you run reusable code during GraphQL execution to perform tasks like authentication and formatting.
-
 Redwood uses them to make it a snap to protect your API Services from unauthorized access.
-
 Here we call those types of directives **Validators**.
 
 You can also use them to transform the output of your query result to modify string values, format dates, shield sensitive data, and more!
@@ -17,7 +11,7 @@ We call those types of directives **Transformers**.
 
 You'll recognize a directive as being 1) preceded by `@` (e.g. `@myDirective`) and 2) declared alongside a field:
 
-```tsx
+```ts
 type Bar {
   name: String! @myDirective
 }
@@ -25,7 +19,7 @@ type Bar {
 
 or a Query or a Mutation:
 
-```tsx
+```ts
 type Query {
   bars: [Bar!]! @myDirective
 }
@@ -37,7 +31,7 @@ type Mutation {
 
 You can also define arguments that can be extracted and used when evaluating the directive:
 
-```tsx
+```ts
 type Bar {
   field: String! @myDirective(roles: ["ADMIN"])
 }
@@ -45,7 +39,7 @@ type Bar {
 
 or a Query or Mutation:
 
-```tsx
+```ts
 type Query {
   bars: [Bar!]! @myDirective(roles: ["ADMIN"])
 }
@@ -53,7 +47,7 @@ type Query {
 
 You can also use directives on relations:
 
-```tsx
+```ts
 type Baz {
   name: String!
 }
@@ -106,7 +100,7 @@ Validators should throw an Error such as `AuthenticationError` or `ForbiddenErro
 
 Here the `@isSubscriber` validator directive checks if the currentUser exists (and therefore is authenticated) and whether or not they have the `SUBSCRIBER` role. If they don't, then access is denied by throwing an error.
 
-```tsx
+```ts
 import {
   AuthenticationError,
   ForbiddenError,
@@ -136,7 +130,7 @@ export default isSubscriber
 
 Since validator directives can access arguments (such as `roles`), you can quickly provide RBAC (Role-based Access Control) to fields, queries and mutations.
 
-```tsx
+```ts
 import gql from 'graphql-tag'
 
 import { createValidatorDirective } from '@redwoodjs/graphql-server'
@@ -179,7 +173,7 @@ Since transformer directives can access arguments (such as `roles` or `maxLength
 
 That means that a transformer directive could consider the `permittedRoles` in:
 
-```tsx
+```ts
 type user {
   email: String! @maskedEmail(permittedRoles: ["ADMIN"])
 }
@@ -187,7 +181,8 @@ type user {
 
 and if the `currentUser` is an `ADMIN`, then skip the masking transform and simply return the original resolved field value:
 
-```jsx title="./api/directives/maskedEmail.directive.js"
+```jsx
+// ./api/directives/maskedEmail.directive.js
 import { createTransformerDirective, TransformerDirectiveFunc } from '@redwoodjs/graphql-server'
 
 export const schema = gql`
@@ -273,7 +268,7 @@ Let's say you want to only allow logged-in users to be able to query `User` deta
 You can apply the `@requireAuth` directive to the `user(id: Int!)` query so you have to be logged in.
 Then, you can compose a `@maskedEmail` directive that checks the logged-in user's role membership and if they're not an ADMIN, mask the email address:
 
-```tsx
+```ts
   type User {
     id: Int!
     name: String!
@@ -294,7 +289,7 @@ I can apply the `@requireAuth` directive to the `user(id: Int!)` query so I have
 
 And, I can apply the `@requireAuth` directive to the `email` field with a role argument.
 
-```tsx
+```ts
   type User {
     id: Int!
     name: String!
@@ -309,7 +304,7 @@ And, I can apply the `@requireAuth` directive to the `email` field with a role a
 
 Now, if a user who is not an ADMIN queries:
 
-```tsx
+```ts
 query user(id: 1) {
   id
   name
@@ -321,7 +316,7 @@ They will get a result.
 
 But, if they try to query:
 
-```tsx
+```ts
 query user(id: 1) {
   id
   name
@@ -340,7 +335,7 @@ For example, here we ensure that anyone trying to query a User and fetch the ema
 
 And then, if they are, apply a mask to the email field.
 
-```tsx
+```ts
   type User {
     id: Int!
     name: String!
@@ -357,7 +352,7 @@ If your request event headers includes geographic or timezone info, you could co
 
 Then, you can chain the `@dateFormat` Transformer, to just return the date portion of the timestamp -- and not the time.
 
-```tsx
+```ts
   type User {
     id: Int!
     name: String!
@@ -377,7 +372,9 @@ You simply add them to the `directives` directory and the `createGraphQLHandler`
 
 > **Note**: Redwood has a generator that will do all the heavy lifting setup for you!
 
-```tsx title="api/src/functions/graphql.ts"
+```ts
+// api/src/functions/graphql.ts
+
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}' // 👈 directives live here
@@ -411,7 +408,7 @@ When your app builds and your server starts up, Redwood checks that **all** quer
 
 If not, then your build will fail:
 
-```bash
+```terminal
   ✖ Verifying graphql schema...
     Building API...
     Cleaning Web...
@@ -427,7 +424,7 @@ You must specify one of @requireAuth, @skipAuth or a custom directive for
 
 or your server won't startup and you should see that "Schema validation failed":
 
-```bash
+```terminal
 gen | Generating TypeScript definitions and GraphQL schemas...
 gen | 47 files generated
 api | Building... Took 593 ms
@@ -450,7 +447,9 @@ It's your responsibility to implement the `requireAuth()` function in your app's
 
 The `@requireAuth` directive will call the `requireAuth()` function to determine if the user is authenticated or not.
 
-```tsx title="api/src/lib/auth.ts"
+```ts
+// api/src/lib/auth.ts
+
 // ...
 
 export const isAuthenticated = (): boolean => {
@@ -498,7 +497,7 @@ yarn redwood generate directive myDirective
 
 After picking the directive type, the files will be created in your `api/src/directives` directory:
 
-```bash
+```terminal
   ✔ Generating directive file ...
     ✔ Successfully wrote file `./api/src/directives/myDirective/myDirective.test.ts`
     ✔ Successfully wrote file `./api/src/directives/myDirective/myDirective.ts`
@@ -523,7 +522,7 @@ After picking the directive type, the files will be created in your `api/src/dir
 
 Let's create a `@isSubscriber` directive that checks roles to see if the user is a subscriber.
 
-```bash
+```terminal
 yarn rw g directive isSubscriber --type validator
 ```
 
@@ -536,7 +535,7 @@ The return value is ignored
 
 An example of `directiveArgs` is the `roles` argument in the directive `requireAuth(roles: "ADMIN")`
 
-```tsx
+```ts
 const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
   // You can also modify your directive to take arguments
   // and use the directiveArgs object provided to this function to get values
@@ -548,7 +547,8 @@ const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
 
 Here we can access the `context` parameter and then check to see if the `currentUser` is authenticated and if they belong to the `SUBSCRIBER` role:
 
-```tsx title="/api/src/directives/isSubscriber/isSubscriber.ts"
+```ts
+// /api/src/directives/isSubscriber/isSubscriber.ts
 // ...
 
 const validate: ValidatorDirectiveFunc = ({ context }) => {
@@ -572,7 +572,7 @@ When writing a Validator directive test, you'll want to:
 Since we stub out the `Error('Implementation missing for isSubscriber')` case when generating the Validator directive, these tests should pass.
 But once you begin implementing the validate logic, it's on you to update appropriately.
 
-```tsx
+```ts
 import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import isSubscriber from './isSubscriber'
@@ -615,7 +615,7 @@ describe('isSubscriber directive', () => {
 
 Let's create a `@maskedEmail` directive that checks roles to see if the user should see the complete email address or if it should be obfuscated from prying eyes:
 
-```bash
+```terminal
 yarn rw g directive maskedEmail --type transformer
 ```
 
@@ -627,7 +627,7 @@ You can throw an error, if you want to stop executing, but note that the value h
 
 Take note of the `resolvedValue`:
 
-```tsx
+```ts
 const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
   return resolvedValue.replace('foo', 'bar')
 }
@@ -654,7 +654,7 @@ Since we stub out and mock the `mockedResolvedValue` when generating the Transfo
 Here we mock the value `foo` and, since the generated `transform` function replaces `foo` with `bar`, we expect that after execution, the returned value will be `bar`.
 But once you begin implementing the validate logic, it's on you to update appropriately.
 
-```tsx
+```ts
 import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import maskedEmail from './maskedEmail'

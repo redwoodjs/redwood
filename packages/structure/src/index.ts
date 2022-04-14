@@ -28,7 +28,7 @@ export async function printDiagnostics(
     let errors = 0
     for (const d of await project.collectDiagnostics()) {
       const str = ExtendedDiagnostic_format(d, formatOpts)
-      console.log(`\n${str}`)
+      console.log(`\n${str}\n`)
       // counts number of warnings (2) and errors (1) encountered
       if (d.diagnostic.severity === 2) {
         warnings++

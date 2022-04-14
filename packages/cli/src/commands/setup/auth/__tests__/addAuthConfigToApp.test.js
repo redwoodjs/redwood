@@ -1,6 +1,3 @@
-// Have to use `var` here to avoid "Temporal Dead Zone" issues
-var mockWebAppPath = ''
-
 import fs from 'fs'
 
 import '../../../../lib/mockTelemetry'
@@ -10,7 +7,6 @@ import { addConfigToApp } from '../auth'
 jest.mock('../../../../lib', () => {
   const path = require('path')
   const __dirname = path.resolve()
-
   return {
     getPaths: () => ({
       api: { functions: '', src: '', lib: '' },
@@ -18,7 +14,7 @@ jest.mock('../../../../lib', () => {
         src: path.join(__dirname, '../create-redwood-app/template/web/src'),
         app: path.join(
           __dirname,
-          mockWebAppPath || '../create-redwood-app/template/web/src/App.tsx'
+          '../create-redwood-app/template/web/src/App.tsx'
         ),
       },
     }),
@@ -32,7 +28,6 @@ const writeFileSyncSpy = jest.fn((_, content) => {
 })
 
 beforeEach(() => {
-  mockWebAppPath = ''
   jest.restoreAllMocks()
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
 })
@@ -83,35 +78,5 @@ describe('Should add config lines to App.{js,tsx}', () => {
   it('Matches nhost Snapshot', async () => {
     const nhostData = await import(`../providers/nhost`)
     await addConfigToApp(nhostData.config, false)
-  })
-})
-
-describe('Should add config lines when RedwoodApolloProvider has props', () => {
-  it('Matches Auth0 Snapshot', async () => {
-    mockWebAppPath =
-      'src/commands/setup/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
-
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
-  })
-})
-
-describe('Should add auth config when using explicit return', () => {
-  it('Matches Auth0 Snapshot', async () => {
-    mockWebAppPath =
-      'src/commands/setup/auth/__tests__/fixtures/AppWithExplicitReturn.js'
-
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
-  })
-})
-
-describe('Should add auth config when app is missing RedwoodApolloProvider', () => {
-  it('Matches Auth0 Snapshot', async () => {
-    mockWebAppPath =
-      'src/commands/setup/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
-
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
   })
 })

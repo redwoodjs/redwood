@@ -1,7 +1,3 @@
----
-description: GraphQL is a fundamental part of Redwood
----
-
 # GraphQL
 
 GraphQL is a fundamental part of Redwood. Having said that, you can get going without knowing anything about it, and can actually get quite far without ever having to read [the docs](https://graphql.org/learn/). But to master Redwood, you'll need to have more than just a vague notion of what GraphQL is. You'll have to really grok it.
@@ -12,17 +8,16 @@ Since there's two parts to GraphQL in Redwood, the client and the server, we've 
 
 On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/docs/react/) by default though you can swap it out for something else if you want.
 
-
-The `api` side offers a GraphQL server built on [GraphQL Yoga](https://www.graphql-yoga.com) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+The `api` side offers a GraphQL server built on [GraphQL Helix](https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
 One of the tenets of the Redwood philosophy is "Redwood believes that, as much as possible, you should be able to operate in a serverless mindset and deploy to a generic computational grid.”
 
 To be able to deploy to a “generic computation grid” means that, as a developer, you should be able to deploy using the provider or technology of your choosing. You should be able to deploy to Netlify, Vercel, Fly, Render, AWS Serverless, or elsewhere with ease and no vendor or platform lock in. You should be in control of the framework, what the response looks like, and how your clients consume it.
 
-The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graphql-yoga.com) makes that possible.
+The same should be true of your GraphQL Server. [GraphQL Helix](https://dev.to/danielrearden/building-a-graphql-server-with-graphql-helix-2k44) makes that possible.
 
-> Existing libraries like Apollo Server provide you with either a complete HTTP server or a middleware function that you can plug into your framework of choice. GraphQL Yoga takes a different approach—it just provides a handful of functions that you can use to turn an HTTP request into a GraphQL execution result. In other words, GraphQL Yoga leaves it up to you to decide how to send back the response.
+> Existing libraries like Apollo Server provide you with either a complete HTTP server or a middleware function that you can plug into your framework of choice. GraphQL Helix takes a different approach—it just provides a handful of functions that you can use to turn an HTTP request into a GraphQL execution result. In other words, GraphQL Helix leaves it up to you to decide how to send back the response.
 
 We leverage Envelop plugins to provide GraphQL [security best practices](#security) and implement custom internal plugins to help with authentication, [logging](#logging), [directive handling](#directives), and more.
 
@@ -34,7 +29,9 @@ All this gets us closer to Redwood's goal of being able to deploy to a "generic 
 
 By default, Redwood Apps come ready-to-query with the `RedwoodApolloProvider`. As you can tell from the name, this Provider wraps [ApolloProvider](https://www.apollographql.com/docs/react/api/react/hooks/#the-apolloprovider-component). Omitting a few things, this is what you'll normally see in Redwood Apps:
 
-```jsx title="web/src/App.js"
+```js
+// web/src/App.js
+
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 // ...
@@ -50,7 +47,9 @@ const App = () => (
 
 You can use Apollo's `useQuery` and `useMutation` hooks by importing them from `@redwoodjs/web`, though if you're using `useQuery`, we recommend that you use a [Cell](cells.md):
 
-```jsx title="web/src/components/MutateButton.js"
+```js
+// web/src/components/MutateButton.js
+
 import { useMutation } from '@redwoodjs/web'
 
 const MUTATION = gql`
@@ -85,7 +84,7 @@ To configure the cache when it's created, use the `cacheConfig` property on `gra
 
 For example, if you have a query named `search` that supports [Apollo's offset pagination](https://www.apollographql.com/docs/react/pagination/core-api/), you could enable it by specifying:
 
-```jsx
+```js
 <RedwoodApolloProvider graphQLClientConfig={{
   cacheConfig: {
     typePolicies: {
@@ -124,7 +123,9 @@ The key question the Yoga server asks is: "Does the parent argument (in Redwood 
 
 Let's walk through an example. Say our sdl looks like this:
 
-```jsx title="api/src/graphql/user.sdl.js"
+```javascript
+// api/src/graphql/user.sdl.js
+
 export const schema = gql`
   type User {
     id: Int!
@@ -140,7 +141,7 @@ export const schema = gql`
 
 So we have a User model in our `schema.prisma` that looks like this:
 
-```jsx
+```javascript
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
@@ -150,7 +151,9 @@ model User {
 
 If you create your Services for this model using Redwood's generator (`yarn rw g service user`), your Services will look like this:
 
-```jsx title="api/src/services/user/user.js"
+```javascript
+// api/src/services/user/user.js
+
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -165,7 +168,9 @@ As we just mentioned, GraphQL Yoga defines them for you. And since the `root` ar
 
 But, if you wanted to be explicit about it, this is what it would look like:
 
-```jsx title="api/src/services/user/user.js"
+```javascript
+// api/src/services/user/user.js
+
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -183,7 +188,7 @@ The terminological way of saying this is, to create a resolver for a field on a 
 
 Sometimes you want to do this since you can do things like add completely custom fields this way:
 
-```jsx {5}
+```js{5}
 export const Users = {
   id: (_args, { root }) => root.id,
   email: (_args, { root }) => root.email,
@@ -204,7 +209,7 @@ export const Users = {
 
 Here's an example to make things clear:
 
-```jsx
+```javascript
 export const Post = {
   user: (args, { root, context, info }) => db.post.findUnique({ where: { id: root.id } }).user(),
 }
@@ -227,7 +232,7 @@ Of the four, you'll see `args` and `root` being used a lot.
 
 In Redwood, the `context` object that's passed to resolvers is actually available to all your Services, whether or not they're serving as resolvers. Just import it from `@redwoodjs/graphql-server`:
 
-```jsx
+```javascript
 import { context } from '@redwoodjs/graphql-server'
 ```
 
@@ -239,7 +244,9 @@ To populate or enrich the context on a per-request basis with additional attribu
 
 For example, if we want to populate a new, custom `ipAddress` attribute on the context with the information from the request's event, declare the `setIpAddress` ContextFunction as seen here:
 
-```jsx title="api/src/functions/graphql.js"
+```js
+// api/src/functions/graphql.js
+
 // ...
 
 const ipAddress = ({ event }) => {
@@ -268,13 +275,13 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-> **Note:** If you use the preview GraphQL Yoga/Envelop `graphql-server` package and a custom ContextFunction to modify the context in the createGraphQL handler, the function is provided **_only the context_** and **_not the event_**. However, the `event` information is available as an attribute of the context as `context.event`. Therefore, in the above example, one would fetch the ip address from the event this way: `ipAddress({ event: context.event })`.
+> **Note:** If you use the preview GraphQL Helix/Envelop `graphql-server` package and a custom ContextFunction to modify the context in the createGraphQL handler, the function is provided **_only the context_** and **_not the event_**. However, the `event` information is available as an attribute of the context as `context.event`. Therefore, in the above example, one would fetch the ip address from the event this way: `ipAddress({ event: context.event })`.
 
 ### The Root Schema
 
 Did you know that you can query `redwood`? Try it in the GraphQL Playground (you can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running&mdash;`yarn rw dev api`):
 
-```graphql
+```gql
 query {
   redwood {
     version
@@ -318,7 +325,7 @@ To fix this, you need to "configure CORS" by adding:
 
 to the GraphQL response headers which you can do this by setting the `cors` option in `api/src/functions/graphql.{js|t}s`:
 
-```tsx
+```ts
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
   directives,
@@ -344,7 +351,9 @@ Health checks are used determine if a server is available and ready to start ser
 
 If you need more than the default basic health check, you can provide a custom implementation via an `onHealthCheck` function when creating the GraphQLHandler. If defined, this async `onHealthCheck` function should return if the server is deemed ready or throw if there is an error.
 
-```tsx title="api/src/functions/graphql.{ts,js}"
+```ts
+// api/src/functions/graphql.{ts,js}
+
 const myCustomHealthCheck = async () => {
   if (ok) {
     // Implement your custom check, such as:
@@ -413,7 +422,7 @@ If any fail this check, you will see:
 
 When building via the `yarn rw build` command and the SDL fails verification, you will see output that lists each query or mutation missing the directive:
 
-```bash
+```terminal
   ✔ Generating Prisma Client...
   ✖ Verifying graphql schema...
     → - deletePost Mutation
@@ -436,8 +445,13 @@ You must specify one of @requireAuth, @skipAuth or a custom directive for
 
 When launching the dev server via the `yarn rw dev` command, you will see output that lists each query or mutation missing the directive:
 
-```bash
+```terminal
 
+api | [nodemon] 2.0.12
+api | [nodemon] to restart at any time, enter `rs`
+api | [nodemon] watching path(s): redwood.toml
+api | [nodemon] watching extensions: js,mjs,json
+api | [nodemon] starting `yarn rw-api-server-watch`
 gen | Generating TypeScript definitions and GraphQL schemas...
 gen | 37 files generated
 api | Building... Took 444 ms
@@ -491,7 +505,9 @@ To add a custom scalar to your GraphQL schema:
 
 > Note that you may have to create this file. Moreover, it's just a convention—custom scalar type definitions can be in any of your sdl files.
 
-```jsx title="api/src/graphql/scalars.sdl.ts"
+```js
+// api/src/graphql/scalars.sdl.ts
+
 export const schema = gql`
   scalar Currency
 `
@@ -501,7 +517,8 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```tsx {11-14} title="api/src/functions/graphql.ts"
+```ts{11-14}
+// api/src/functions/graphql.ts
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
 // ...
@@ -526,7 +543,7 @@ export const handler = createGraphQLHandler({
 
 3. Use the scalar in your types
 
-```tsx {6,18,24}
+```ts{6,18,24}
 export const schema = gql`
   type Product {
     id: Int!
@@ -567,7 +584,7 @@ Directives supercharge your GraphQL services. They add configuration to fields, 
 
 You'll recognize a directive by its preceded by the `@` character, e.g. `@myDirective`, and by being declared alongside a field:
 
-```tsx
+```ts
 type Bar {
   name: String! @myDirective
 }
@@ -575,7 +592,7 @@ type Bar {
 
 or a Query or Mutation:
 
-```tsx
+```ts
 type Query {
   bars: [Bar!]! @myDirective
 }
@@ -632,7 +649,9 @@ Redwood makes it easy to code, organize, and map your directives into the GraphQ
 
 You simply add them to the `directives` directory and the `createGraphQLHandler` will do all the work.
 
-```tsx title="api/src/functions/graphql.ts"
+```ts
+// api/src/functions/graphql.ts
+
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}' // 👈 directives live here
@@ -670,7 +689,8 @@ You configure the logger using the `loggerConfig` that accepts a [`logger`](logg
 
 A typical GraphQLHandler `graphql.ts` is as follows:
 
-```jsx title="api/src/functions/graphql.ts"
+```js
+// api/src/functions/graphql.ts
 // ...
 
 import { logger } from 'src/lib/logger'
@@ -697,7 +717,9 @@ The `loggerConfig` takes several options that logs meaningful information along 
 
 Therefore, if you wish to log the GraphQL `query` made, the `data` returned, and the `operationName` used, you would
 
-```jsx title="api/src/functions/graphql.ts"
+```js
+// api/src/functions/graphql.ts
+
 export const handler = createGraphQLHandler({
   loggerConfig: {
     logger,
@@ -712,7 +734,8 @@ export const handler = createGraphQLHandler({
 You can exclude GraphQL operations by name with `excludeOperations`.
 This is useful when you want to filter out certain operations from the log output, for example, `IntrospectionQuery` from GraphQL playground:
 
-```jsx {5} title="api/src/functions/graphql.ts"
+```js{5}
+// api/src/functions/graphql.ts
 export const handler = createGraphQLHandler({
   loggerConfig: {
     logger,
@@ -753,7 +776,8 @@ The [operation name](https://graphql.org/learn/queries/#operation-name) is a mea
 
 Because your cell typically has a unique operation name, logging this can help you identify which cell made a request.
 
-```jsx title="api/src/functions/graphql.ts"
+```js
+// api/src/functions/graphql.ts
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { operationName: true } },
@@ -766,7 +790,8 @@ Often times, your deployment provider will provide a request identifier to help 
 
 You can include the request identifier setting the `requestId` logger option to `true`.
 
-```jsx title="api/src/functions/graphql.ts"
+```js
+// api/src/functions/graphql.ts
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { requestId: true } },
@@ -779,7 +804,8 @@ And then, when working to resolve a support issue with your deployment provider,
 
 By configuring your GraphQL logger to include `data` and `query` information about each request you can keep your service implementation clean, concise and free of repeated logger statements in every resolver -- and still log the useful debugging information.
 
-```jsx title="api/src/functions/graphql.ts"
+```js
+// api/src/functions/graphql.ts
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { data: true, operationName: true, query: true } },
@@ -801,7 +827,7 @@ The GraphQL handler will then take care of logging your query and data -- as lon
 
 This means that you can keep your services free of logger statements, but still see what's happening!
 
-```bash
+```terminal
 api | POST /graphql 200 7.754 ms - 1772
 api | DEBUG [2021-09-29 16:04:09.313 +0000] (graphql-server): GraphQL execution started: BlogPostQuery
 api |     operationName: "BlogPostQuery"
@@ -840,7 +866,8 @@ For example, you have chosen to log `data` return by each request, then you may 
 
 Here is an example of an application `/api/src/lib/logger.ts` configured to redact email addresses. Take note of the path `data.users[*].email` as this says, in the `data` attribute, redact the `email` from every `user`:
 
-```jsx title="/api/src/lib/logger.ts"
+```js
+// /api/src/lib/logger.ts
 import { createLogger, redactionsList } from '@redwoodjs/api/logger'
 
 export const logger = createLogger({
@@ -856,7 +883,8 @@ Often you want to measure and report how long your queries take to execute and r
 
 You may turn on logging these metrics via the `tracing` GraphQL configuration option.
 
-```jsx title="api/src/functions/graphql.ts"
+```js
+// api/src/functions/graphql.ts
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { tracing: true } },
@@ -865,7 +893,7 @@ export const handler = createGraphQLHandler({
 
 Let's say we wanted to get some benchmark numbers for the "find post by id" resolver
 
-```jsx
+```js
 return await db.post.findUnique({
   where: { id },
 })
@@ -875,7 +903,7 @@ We see that this request took about 500 msecs (note: duration is reported in nan
 
 For more details about the information logged and its format, see [Apollo Tracing](https://github.com/apollographql/apollo-tracing).
 
-```bash
+```terminal
 pi | INFO [2021-07-09 14:25:52.452 +0000] (graphql-server): GraphQL willSendResponse
 api |     tracing: {
 api |       "version": 1,
@@ -939,7 +967,7 @@ An example of a cyclical query here takes advantage of knowing that and author h
 
 This cyclical query has a depth of 8.
 
-```jsx
+```js
 // cyclical query example
 // depth: 8+
 query cyclical {
@@ -971,7 +999,7 @@ You `depthLimitOptions` are `maxDepth` or `ignore` stops recursive depth checkin
 
 For example:
 
-```jsx
+```js
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { query: true } },
@@ -1001,7 +1029,7 @@ Simply use one of [Redwood's GraphQL Errors](#redwood-errors) and your custom me
 
 You can customize the default "Something went wrong" message used when the error is masked via the `defaultError` setting on the `createGraphQLHandler`:
 
-```tsx
+```ts
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
   directives,
@@ -1029,7 +1057,7 @@ To use a Redwood Error, import each from `@redwoodjs/graphql-server`.
 
 If you use one of the errors, then the message provided will not be masked and will be shared in the GraphQL response:
 
-```tsx
+```ts
 import { UserInputError } from '@redwoodjs/graphql-server'
 // ...
 throw new UserInputError('An email is required.')
@@ -1045,7 +1073,7 @@ Maybe you're integrating with a third-party api and want to handle errors from t
 
 Simply extend from `RedwoodGraphQLError` and you're all set!
 
-```tsx
+```ts
 export class MyCustomError extends RedwoodGraphQLError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
@@ -1055,7 +1083,7 @@ export class MyCustomError extends RedwoodGraphQLError {
 
 For example, in your service, you can create and use it to handle the error and return a friendly message:
 
-```tsx
+```ts
 export class WeatherError extends RedwoodGraphQLError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)

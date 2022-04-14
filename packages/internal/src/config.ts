@@ -22,7 +22,6 @@ export interface NodeTargetConfig {
   target: TargetEnum.NODE
   schemaPath: string
   serverConfig: string
-  debugPort?: number
 }
 
 interface BrowserTargetConfig {
@@ -93,7 +92,6 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.NODE,
     schemaPath: './api/db/schema.prisma',
     serverConfig: './api/server.config.js',
-    debugPort: 18911,
   },
   browser: {
     open: false,

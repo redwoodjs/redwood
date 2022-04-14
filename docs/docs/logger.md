@@ -1,8 +1,3 @@
----
-title: Logging
-description: Use the Logger to observe your application
----
-
 # Logger
 
 RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing and after you have deployed.
@@ -34,7 +29,9 @@ To start 🌲🪓 api-side logging, just
 - import the logger in your service, function, or any other lib
 - use `logger` with the level just as you might have with `console`
 
-```jsx title="api/lib/logger.ts"
+```js
+// api/lib/logger.ts
+
 import { createLogger } from '@redwoodjs/api/logger'
 
 /**
@@ -93,7 +90,7 @@ The 'silent' level disables logging.
 
 > If you are not seeing log output when deployed, consider setting the level to `info` or `debug`.
 
-```jsx
+```js
 import { createLogger } from '@redwoodjs/api/logger'
 
 /**
@@ -139,7 +136,7 @@ We've included a default set called the `redactionsList` that includes keys such
 
 You may wish to augment these defaults via the `redact` configuration setting, here adding a Social Security Number and Credit Card Number key to the list.
 
-```jsx
+```js
 /**
  * Custom redaction list
  */
@@ -176,7 +173,7 @@ echo "{\"level\": 30, \"message\": \"Hello RedwoodJS\"}" | yarn rw-log-formatter
 
 Output:
 
-```bash
+```terminal
 11:00:28 🌲 Hello RedwoodJS
 ✨  Done in 0.14s.
 ```
@@ -200,7 +197,7 @@ yarn rw serve api | yarn rw-log-formatter
 
 You'll see that formatted output by default when you launch your RedwoodJS app using:
 
-```bash
+```terminal
 yarn rw dev
 ```
 
@@ -224,13 +221,13 @@ Sometimes you will want to log a 🗒 Custom message or payload object that isn'
 
 You can use the `custom` option:
 
-```tsx
+```ts
 logger.debug({ custom: post.title }, 'The title of a Post')
 ```
 
 Or, you can also log a custom object payload:
 
-```tsx
+```ts
 logger.debug(
   {
     custom: {
@@ -244,7 +241,7 @@ logger.debug(
 
 Or, a more nested payload:
 
-```tsx
+```ts
 logger.debug(
   {
     custom: {
@@ -262,7 +259,7 @@ logger.debug(
 
 Or, an entire object:
 
-```tsx
+```ts
 logger.debug(
   {
     custom: post,
@@ -308,7 +305,7 @@ By the way, when logging in production, you may want to:
 
 Since you can log metadata information alongside your message as seen in:
 
-```jsx
+```js
 logger.debug({ item }, `Item ${item.name} detail`)
 logger.warn(item, `Item ${item.id} is missing a name`)
 logger.warn({ missing: { name: item.name } }, `Item ${item.id} is missing values`)
@@ -319,7 +316,7 @@ There could be cases where a key in that metadata collides with a key needed by 
 
 To prevent collisions and overwriting values, you can nest your metadata in `log` or `payload` (or some other attribute).
 
-```jsx
+```js
 nestedKey: 'log',
 ```
 
@@ -341,7 +338,7 @@ If you are in your development environment (or another environment in which you 
 
 Note: logging to a file is not permitted if deployed to Netlify or Vercel.
 
-```jsx
+```js
 /**
  * Log to a File
  */
@@ -385,7 +382,7 @@ Some examples of common configurations and overrides that demonstrate how you ca
 
 You can set the minimum [level](#log-level) to log via the `level` option. This is useful if you need to override the default Production settings (just `warn` and `error`) to in this case `debug`.
 
-```jsx
+```js
 /**
  * Override minimum log level to debug
  */
@@ -400,7 +397,7 @@ While the logger provides a default redaction list, you can specify additional k
 
 Please see [pino's redaction documentation](https://github.com/pinojs/pino/blob/master/docs/redaction.md) for other `redact` options, such as removing both keys and values and path matching.
 
-```jsx
+```js
 /**
  * Customize a redactions list to add `my_secret_key`
  */
@@ -417,7 +414,7 @@ If in your development environment or another environment in which you have writ
 
 Note: logging to a file is not permitted if deployed to Netlify or Vercel.
 
-```jsx
+```js
 /**
  * Log to a File
  */
@@ -445,7 +442,7 @@ yarn workspace api add @honeybadger-io/js
 
 - Import both `stream` and `@honeybadger-io/js` into `api/src/lib/logger.ts`
 
-```jsx
+```js
 import { createLogger } from '@redwoodjs/api/logger'
 import { Writable } from 'stream'
 
@@ -486,7 +483,7 @@ To stream your logs to [Datadog](https://www.datadoghq.com/), you can
 
 - Install the [`pino-datadog`](https://www.npmjs.com/package/pino-datadog) package into `api`
 
-```bash
+```terminal
 yarn workspace api add pino-datadog
 ```
 
@@ -494,7 +491,7 @@ yarn workspace api add pino-datadog
 - Configure the `stream` with your API key and [settings](https://github.com/ovhemert/pino-datadog/blob/master/docs/API.md)
 - Set the logger `destination` to the `stream`
 
-```jsx
+```js
 /**
  * Stream logs to Datadog
  */
@@ -543,7 +540,8 @@ export const logger = createLogger({
 - Configure the `stream` with your [API key and sourceToken](https://github.com/Logflare/pino-logflare/blob/master/docs/API.md)
 - Set the logger `destination` to the `stream`
 
-```jsx title="api/src/lib/logger.ts"
+```js
+// api/src/lib/logger.ts
 import { createWriteStream } from 'pino-logflare'
 
 /**
@@ -569,7 +567,7 @@ export const logger = createLogger({
 
 - Install the [pino-logdna](https://www.npmjs.com/package/pino-logdna) package into `api`
 
-```bash
+```terminal
 yarn workspace api add pino-logdna
 ```
 
@@ -577,7 +575,8 @@ yarn workspace api add pino-logdna
 - Configure the `stream` with your [ingestion key](https://github.com/Logflare/pino-logflare/blob/master/docs/API.md)
 - Set the logger `destination` to the `stream`
 
-```jsx title="api/src/lib/logger.ts"
+```js
+// api/src/lib/logger.ts
 import pinoLogDna from 'pino-logdna'
 
 const stream = pinoLogDna({
@@ -609,7 +608,7 @@ export const logger = createLogger({
 
 - Install the [pino-papertrail](https://www.npmjs.com/package/pino-papertrail) package into `api`
 
-```bash
+```terminal
 yarn workspace api add pino-papertrail]
 ```
 
@@ -617,7 +616,7 @@ yarn workspace api add pino-papertrail]
 - Configure the `stream` in your Papertrail `options` with your appname's [configuration settings](https://github.com/ovhemert/pino-papertrail/blob/master/docs/API.md#options)
 - Set the logger `destination` to the `stream`
 
-```jsx
+```js
 import papertrail from 'pino-papertrail'
 
 const stream = papertrail.createWriteStream({
@@ -676,7 +675,7 @@ levels via `emitLogLevels`.
 
 One may also log _every_ query by adding the `query` level to
 
-```jsx
+```js
 log: emitLogLevels(['info', 'warn', 'error', 'query']),
 ```
 
@@ -686,7 +685,7 @@ To configure Prisma logging, you first create the client and set the `log` optio
 
 Both `emitLogLevels` and `handlePrismaLogging` are `@redwoodjs/api/logger` package exports.
 
-```jsx
+```js
 /*
  * Instance of the Prisma Client
  */
@@ -711,7 +710,7 @@ Otherwise, any query exceeding a threshold duration will be logged on the `warn`
 
 The default threshold duration is 2 seconds. You can also pass `slowQueryThreshold` as an option to customize this duration when setting up Prisma logger. For example:
 
-```jsx
+```javascript
 handlePrismaLogging({
   db,
   logger,
@@ -734,7 +733,7 @@ Examples to come. (PRs welcome.)
 
 Flush the content of the buffer when an asynchronous destination:
 
-```jsx
+```js
 logger.flush()
 ```
 
@@ -748,7 +747,7 @@ See: [pino's Child Loggers documentation](https://github.com/pinojs/pino/blob/ma
 
 For example:
 
-```jsx
+```js
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
@@ -776,7 +775,7 @@ export const userExample = async ({ id }, { info }) => {
 
 The Redwood logger uses a child logger to inject the Prisma Client version into every Prisma log statement:
 
-```jsx
+```js
 logger.child({
   prisma: { clientVersion: db['_clientVersion'] },
 })

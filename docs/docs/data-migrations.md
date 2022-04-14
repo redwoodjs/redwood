@@ -1,7 +1,3 @@
----
-description: Track changes to database content
----
-
 # Data Migrations
 
 > Data Migrations are available as of RedwoodJS v0.15
@@ -29,7 +25,9 @@ You'll see a new directory created at `api/db/dataMigrations` which will store o
 
 Take a look at `schema.prisma` to see the new model definition:
 
-```jsx title="api/db/schema.prisma"
+```javascript
+// api/db/schema.prisma
+
 model RW_DataMigration {
   version    String   @id
   name       String
@@ -56,7 +54,9 @@ To create a data migration we have a generator:
 
 This will create `api/db/dataMigrations/20200721123456-copy-preferences.js`:
 
-```jsx title="api/db/dataMigrations/20200721123456-copy-preferences.js"
+```javascript
+// api/db/dataMigrations/20200721123456-copy-preferences.js
+
 export default async ({ db }) => {
   // Migration here...
 }
@@ -68,7 +68,9 @@ export default async ({ db }) => {
 
 Now it's up to you to define your data migration. In our user/preference example, it may look something like:
 
-```jsx title="api/db/dataMigrations/20200721123456-copy-preferences.js"
+```javascript
+// api/db/dataMigrations/20200721123456-copy-preferences.js
+
 const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
@@ -126,7 +128,7 @@ Take our example above—what happens when a new developer comes long and attemp
 
 One technique to combat this is to check for the existence of these columns before the data migration does anything. If `user.newsletter` doesn't exist, then don't bother running the data migration at all and assume that your [seed data](cli-commands.md#prisma-db-seed) is already in the correct format:
 
-```jsx {4,15}
+```javascript{4,15}
 export default async ({ db }) => {
   const users = await db.user.findMany()
 
