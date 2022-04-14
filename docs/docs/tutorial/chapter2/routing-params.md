@@ -1,6 +1,6 @@
 # Routing Params
 
-Now that we have our homepage listing all the posts, let's build the "detail" page&mdash;a canonical URL that displays a single post. First we'll generate the page and route:
+Now that we have our homepage listing all the posts, let's build the "detail" page—a canonical URL that displays a single post. First we'll generate the page and route:
 
 ```bash
 yarn rw g page Article

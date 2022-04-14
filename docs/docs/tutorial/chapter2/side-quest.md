@@ -184,7 +184,7 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 
 :::info
 
-Helix/Envelop assumes these functions return promises, which `db` (an instance of `PrismaClient`) does. Helix/Envelop waits for them to resolve before responding with your query results, so you don't need to worry about `async`/`await` or mess with callbacks yourself.
+Yoga/Envelop assumes these functions return promises, which `db` (an instance of `PrismaClient`) does. Yoga/Envelop waits for them to resolve before responding with your query results, so you don't need to worry about `async`/`await` or mess with callbacks yourself.
 
 :::
 
@@ -198,6 +198,6 @@ You don't have to make each function in your service available via GraphQL—lea
 
 By dividing your app into well-defined services and providing an API for those services (both for internal use **and** for GraphQL), you will naturally start to enforce separation of concerns and increases the maintainability of your codebase.
 
-Back to our data flow: Helix/Envelop has called the resolver which, in our case, retrieved data from the database. Helix/Envelop digs into the object and returns only the key/values that were asked for in the GraphQL query. It then packages up the response in a GraphQL payload and returns it to the browser.
+Back to our data flow: Yoga/Envelop has called the resolver which, in our case, retrieved data from the database. Yoga/Envelop digs into the object and returns only the key/values that were asked for in the GraphQL query. It then packages up the response in a GraphQL payload and returns it to the browser.
 
 If you're using a Redwood **cell** then this data will be available to you in your `Success` component ready to be looped through and/or displayed like any other React component.

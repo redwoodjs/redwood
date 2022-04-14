@@ -396,7 +396,7 @@ The actual `Comment` component does most of the work so there's no need to test 
 * Has a failure message
 * When it renders successfully, it outputs as many comments as were returned by the `QUERY` (*what* is rendered we'll leave to the `Comment` tests)
 
-The default `CommentsCell.test.{js,tsx}` actually tests every state for us, albeit at an absolute minimum level—it make sure no errors are thrown:
+The default `CommentsCell.test.{js,tsx}` actually tests every state for us, albeit at an absolute minimum level—it makes sure no errors are thrown:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
