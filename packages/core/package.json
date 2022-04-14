@@ -31,6 +31,9 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
+  "resolutions": {
+    "@types/react": "17.0.40"
+  },
   "dependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
