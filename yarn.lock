@@ -6387,7 +6387,7 @@ __metadata:
     nodemon: 2.0.15
     react: 17.0.2
     react-dom: 17.0.2
-    react-helmet-async: 1.2.3
+    react-helmet-async: 1.3.0
     react-hot-toast: 2.2.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
@@ -25731,9 +25731,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:1.2.3, react-helmet-async@npm:^1.0.7":
-  version: 1.2.3
-  resolution: "react-helmet-async@npm:1.2.3"
+"react-helmet-async@npm:1.3.0, react-helmet-async@npm:^1.0.7":
+  version: 1.3.0
+  resolution: "react-helmet-async@npm:1.3.0"
   dependencies:
     "@babel/runtime": ^7.12.5
     invariant: ^2.2.4
@@ -25741,9 +25741,9 @@ __metadata:
     react-fast-compare: ^3.2.0
     shallowequal: ^1.1.0
   peerDependencies:
-    react: ^16.6.0 || ^17.0.0
-    react-dom: ^16.6.0 || ^17.0.0
-  checksum: 69ea4a4597fd37f8f22c2f8e207e477b5f5fedad4dd00dc846d73c728bd8dfb2d0ccdf3fff076921a18381cf6eeca01962d6115a4e1330ff42fbc5f95ea5b946
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
+  checksum: 8f3e6d26beff61d2ed18f7b41561df3e4d83a7582914c7196aa65158c7f3cce939276547d7a0b8987952d9d44131406df74efba02d1f8fa8a3940b49e6ced70b
   languageName: node
   linkType: hard
 
