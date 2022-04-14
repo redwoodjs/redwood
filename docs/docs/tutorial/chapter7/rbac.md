@@ -711,7 +711,7 @@ Similar to `mockGraphQLQuery()` and `mockGraphQLMutation()`, `mockCurrentUser()`
 
 :::
 
-`mockCurrentUser()` accepts an object and you can put whatever you want in there (it should be similar to what you return in `getCurrentUser()` in `api/src/lib/auth.js`). But since we want `hasRole()` to work properly then the object must have a `roles` key that is a string or an array of strings.
+`mockCurrentUser()` accepts an object and you can put whatever you want in there (it should be similar to what you return in `getCurrentUser()` in `api/src/lib/auth.{js,ts}`). But since we want `hasRole()` to work properly then the object must have a `roles` key that is a string or an array of strings.
 
 Check out **Comment** in Storybook and you should see two stories for Comment, one with a "Delete" button and one without!
 
