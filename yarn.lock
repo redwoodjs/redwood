@@ -5908,7 +5908,7 @@ __metadata:
     "@nhost/nhost-js": 0.3.13
     "@supabase/supabase-js": 1.33.3
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.40
+    "@types/react": 18.0.5
     firebase: 9.6.10
     firebase-admin: 10.0.2
     gotrue-js: 0.9.29
@@ -6115,7 +6115,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.1.0
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.40
+    "@types/react": 18.0.5
     "@types/react-dom": 17.0.15
     "@types/testing-library__jest-dom": 5.14.3
     jest: 27.5.1
@@ -6359,7 +6359,7 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.1
     "@types/node": 16.11.27
-    "@types/react": 17.0.40
+    "@types/react": 18.0.5
     "@types/react-dom": 17.0.15
     "@types/webpack": 5.28.0
     babel-jest: 27.5.1
@@ -6384,7 +6384,7 @@ __metadata:
     "@redwoodjs/auth": 1.0.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@types/react": 17.0.40
+    "@types/react": 18.0.5
     "@types/react-dom": 17.0.15
     "@types/testing-library__jest-dom": 5.14.3
     graphql: 16.3.0
@@ -8760,14 +8760,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.40":
-  version: 17.0.40
-  resolution: "@types/react@npm:17.0.40"
+"@types/react@npm:18.0.5":
+  version: 18.0.5
+  resolution: "@types/react@npm:18.0.5"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 8b32469271f4a7cf22e5cf615a60b8f04d9f9bcf54655a7a075d599204a36bcc28fff18ccfff8c2f498f6a80488c7d5b334ebd297d9d0d3483c2911b390a8464
+  checksum: 648fba7666c411e72cf58e13bb066760a8e872f9dc86ccde22c5e5ca711903a40a7cf6cd5c0caa7f7c90c428f6310513f4d39bb7668eb1d46d16443039bc163a
   languageName: node
   linkType: hard
 
