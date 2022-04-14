@@ -66,6 +66,7 @@
   border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
 }
 .rw-segment::-webkit-scrollbar {
   height: initial;

@@ -28,6 +28,7 @@
 }
 .rw-segment {
   @apply rounded-lg overflow-hidden w-full border border-gray-200;
+  scrollbar-color: theme('colors.zinc.400') transparent;
 }
 .rw-segment::-webkit-scrollbar {
   height: initial;

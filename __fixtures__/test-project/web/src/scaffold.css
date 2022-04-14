@@ -28,6 +28,16 @@
 }
 .rw-segment {
   @apply rounded-lg overflow-hidden w-full border border-gray-200;
+  scrollbar-color: theme('colors.zinc.400') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-200 bg-transparent border-solid rounded-t-none rounded-b-[10px] border-0 border-t p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 bg-clip-content border-[3px] border-solid border-transparent rounded-full;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
