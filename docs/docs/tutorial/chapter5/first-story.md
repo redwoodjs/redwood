@@ -45,7 +45,7 @@ import { Link, routes } from '@redwoodjs/router'
 import type { Post } from 'types/graphql'
 
 // highlight-start
-const truncate = (text, length) => {
+const truncate = (text: string, length: number) => {
   return text.substring(0, length) + '...'
 }
 // highlight-end

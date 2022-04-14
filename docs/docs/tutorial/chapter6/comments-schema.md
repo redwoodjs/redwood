@@ -211,7 +211,7 @@ export const Empty = () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
 export const Empty = () => {
   // highlight-next-line
   return <div className="text-center text-gray-500">No comments yet</div>
@@ -240,7 +240,7 @@ it('renders Empty successfully', async () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.test.ts"
+```tsx title="web/src/components/CommentsCell/CommentsCell.test.tsx"
 it('renders Empty successfully', async () => {
   // highlight-start
   render(<Empty />)
@@ -349,7 +349,11 @@ export const createComment = ({ input }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```javascript title="api/src/services/comments/comments.ts"
-export const createComment = ({ input }) => {
+interface CreateCommentArgs {
+  input: Prisma.CommentCreateInput
+}
+
+export const createComment = ({ input }: CreateCommentArgs) => {
   return db.comment.create({
     data: input,
   })
@@ -464,8 +468,8 @@ export const deleteComment = ({ id }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.ts"
-export const deleteComment = ({ id }) => {
+```ts title="api/src/services/comments/comments.ts"
+export const deleteComment = ({ id }: Prisma.CommentWhereUniqueInput) => {
   return db.comment.delete({
     where: { id },
   })
@@ -532,7 +536,7 @@ describe('comments', () => {
 import { comments } from './comments'
 
 describe('comments', () => {
-  scenario('returns all comments', async (scenario) => {
+  scenario('returns all comments', async (scenario: StandardScenario) => {
     const result = await comments()
 
     expect(result.length).toEqual(Object.keys(scenario.comment).length)
@@ -559,7 +563,10 @@ That being said, if you really wanted to you could use Jest's [mocking utilities
 
 Where does that data come from? Take a look at the `comments.scenarios.{js,ts}` file which is next door:
 
-```javascript
+<Tabs>
+<TabItem value="js" label="JavaScript">
+
+```javascript title="api/src/services/comments.scenarios.js"
 export const standard = defineScenario({
   comment: {
     one: {
@@ -579,6 +586,35 @@ export const standard = defineScenario({
   },
 })
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts title="api/src/services/comments.scenarios.ts"
+import type { Prisma } from '@prisma/client'
+
+export const standard = defineScenario<Prisma.CommentCreateArgs>({
+  comment: {
+    one: {
+      data: {
+        name: 'String',
+        body: 'String',
+        post: { create: { title: 'String', body: 'String' } },
+      },
+    },
+    two: {
+      data: {
+        name: 'String',
+        body: 'String',
+        post: { create: { title: 'String', body: 'String' } },
+      },
+    },
+  },
+})
+```
+
+</TabItem>
+</Tabs>
 
 This calls a `defineScenario()` function which checks that your data structure matches what's defined in Prisma. Each scenario data object (for example, `scenario.comment.one`) is passed as-is to Prisma's [`create`](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create). That way you can customize the scenario object using any of Prisma's supported options.
 
@@ -646,7 +682,9 @@ export const standard = defineScenario({
 <TabItem value="ts" label="TypeScript">
 
 ```javascript title="api/src/services/comments/comments.scenarios.ts"
-export const standard = defineScenario({
+import type { Prisma } from '@prisma/client'
+
+export const standard = defineScenario<Prisma.CommentCreateArgs>({
   // highlight-start
   comment: {
     jane: {
@@ -668,7 +706,7 @@ export const standard = defineScenario({
         post: {
           create: {
             title: 'Root Systems',
-            body: 'The five boxing wizards jump quickly.'
+            body: 'The five boxing wizards jump quickly.',
           }
         }
       }
@@ -703,7 +741,7 @@ export const postOnly = defineScenario({
     bark: {
       data: {
         title: 'Bark',
-        body: "A tree's bark is worse than its bite"
+        body: "A tree's bark is worse than its bite",
       }
     }
   }
@@ -714,18 +752,20 @@ export const postOnly = defineScenario({
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.scenarios.ts"
-export const standard = defineScenario({
+```ts title="api/src/services/comments/comments.scenarios.ts"
+import type { Prisma } from '@prisma/client'
+
+export const standard = defineScenario<Prisma.CommentCreateArgs>({
   // ...
 })
 
 // highlight-start
-export const postOnly = defineScenario({
+export const postOnly = defineScenario<Prisma.PostCreateArgs>({
   post: {
     bark: {
       data: {
         title: 'Bark',
-        body: "A tree's bark is worse than its bite"
+        body: "A tree's bark is worse than its bite",
       }
     }
   }
@@ -758,8 +798,8 @@ describe('comments', () => {
       input: {
         name: 'Billy Bob',
         body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id
-      }
+        postId: scenario.post.bark.id,
+      },
     })
 
     expect(comment.name).toEqual('Billy Bob')
@@ -774,9 +814,11 @@ describe('comments', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.test.ts"
+```ts title="api/src/services/comments/comments.test.ts"
 // highlight-next-line
 import { comments, createComment } from './comments'
+
+import type { StandardScenario } from './comments.scenarios'
 
 describe('comments', () => {
   scenario('returns all comments', async (scenario) => {
@@ -791,8 +833,8 @@ describe('comments', () => {
       input: {
         name: 'Billy Bob',
         body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id
-      }
+        postId: scenario.post.bark.id,
+      },
     })
 
     expect(comment.name).toEqual('Billy Bob')

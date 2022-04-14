@@ -468,6 +468,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 // highlight-start
@@ -487,7 +488,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -642,6 +643,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -662,7 +664,7 @@ const ContactPage = () => {
   // highlight-next-line
   const [create] = useMutation(CREATE_CONTACT)
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -749,6 +751,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -768,7 +771,7 @@ interface FormValues {
 const ContactPage = () => {
   const [create] = useMutation(CREATE_CONTACT)
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     // highlight-next-line
     create({ variables: { input: data } })
   }
@@ -960,7 +963,7 @@ const ContactPage = () => {
   // highlight-next-line
   const [create, { loading, error }] = useMutation(CREATE_CONTACT)
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     create({ variables: { input: data } })
   }
 
@@ -1119,6 +1122,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -1144,7 +1148,7 @@ const ContactPage = () => {
   })
   // highlight-end
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     create({ variables: { input: data } })
   }
 
@@ -1421,6 +1425,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -1444,7 +1449,7 @@ const ContactPage = () => {
     },
   })
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     create({ variables: { input: data } })
   }
 
@@ -1873,6 +1878,7 @@ import {
   FormError,
   Label,
   Submit,
+  SubmitHandler,
   TextAreaField,
   TextField,
   useForm,
@@ -1902,7 +1908,7 @@ const ContactPage = () => {
     },
   })
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     create({ variables: { input: data } })
   }
 

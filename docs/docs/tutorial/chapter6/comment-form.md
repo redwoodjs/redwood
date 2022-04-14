@@ -74,7 +74,7 @@ export default CommentForm
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.tsx"
+```tsx title="web/src/components/CommentForm/CommentForm.tsx"
 import {
   Form,
   Label,
@@ -148,7 +148,7 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-// highlight-start
+// highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
 // highlight-start
@@ -236,8 +236,10 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  // highlight-next-line
+  SubmitHandler,
 } from '@redwoodjs/forms'
-// highlight-start
+// highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
 // highlight-start
@@ -258,7 +260,7 @@ const CommentForm = () => {
   const [createComment, { loading, error }] = useMutation(CREATE)
 
   // highlight-start
-  const onSubmit = (input) => {
+  const onSubmit: SubmitHandler<FormValues> = (input) => {
     createComment({ variables: { input } })
   }
   // highlight-end
@@ -327,7 +329,7 @@ import CommentForm from './CommentForm'
 export const generated = () => {
   // highlight-start
   mockGraphQLMutation('CreateCommentMutation', (variables, { ctx }) => {
-    const id = parseInt(Math.random() * 1000)
+    const id = Math.floor(Math.random() * 1000)
     ctx.delay(1000)
 
     return {
@@ -350,13 +352,13 @@ export default { title: 'Components/CommentForm' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.stories.tsx"
+```tsx title="web/src/components/CommentForm/CommentForm.stories.tsx"
 import CommentForm from './CommentForm'
 
 export const generated = () => {
   // highlight-start
   mockGraphQLMutation('CreateCommentMutation', (variables, { ctx }) => {
-    const id = parseInt(Math.random() * 1000)
+    const id = Math.floor(Math.random() * 1000)
     ctx.delay(1000)
 
     return {
@@ -442,13 +444,15 @@ export default Article
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.tsx"
+```tsx title="web/src/components/Article/Article.tsx"
 import { Link, routes } from '@redwoodjs/router'
 import CommentsCell from 'src/components/CommentsCell'
 // highlight-next-line
 import CommentForm from 'src/components/CommentForm'
 
-const truncate = (text, length) => {
+import type { Post } from 'types/graphql'
+
+const truncate = (text: string, length: number) => {
   return text.substring(0, length) + '...'
 }
 
@@ -555,7 +559,7 @@ import { Link, routes } from '@redwoodjs/router'
 import CommentsCell from 'src/components/CommentsCell'
 import CommentForm from 'src/components/CommentForm'
 
-const truncate = (text, length) => {
+const truncate = (text: string, length: number) => {
   return text.substring(0, length) + '...'
 }
 
@@ -614,11 +618,17 @@ const CommentForm = ({ postId }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/CommentForm/CommentForm.tsx"
+// highlight-start
+interface Props {
+  postId: number
+}
+// highlight-end
+
 // highlight-next-line
-const CommentForm = ({ postId }) => {
+const CommentForm = ({ postId }: Props) => {
   const [createComment, { loading, error }] = useMutation(CREATE)
 
-  const onSubmit = (input) => {
+  const onSubmit: SubmitHandler<FormValues> = (input) => {
     // highlight-next-line
     createComment({ variables: { input: { postId, ...input } } })
   }
@@ -691,7 +701,7 @@ import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 
 // ...
 
-const CommentForm = ({ postId }) => {
+const CommentForm = ({ postId }: Props) => {
   // highlight-start
   const [createComment, { loading, error }] = useMutation(CREATE, {
     refetchQueries: [{ query: CommentsQuery }],
@@ -815,6 +825,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 // highlight-next-line
@@ -834,7 +845,17 @@ const CREATE = gql`
   }
 `
 
-const CommentForm = ({ postId }) => {
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+interface Props {
+  postId: number
+}
+
+const CommentForm = ({ postId }: Props) => {
   // highlight-next-line
   const [hasPosted, setHasPosted] = useState(false)
   const [createComment, { loading, error }] = useMutation(CREATE, {
@@ -847,7 +868,7 @@ const CommentForm = ({ postId }) => {
     refetchQueries: [{ query: CommentsQuery }],
   })
 
-  const onSubmit = (input) => {
+  const onSubmit: SubmitHandler<FormValues> = (input) => {
     createComment({ variables: { input: { postId, ...input } } })
   }
 
@@ -989,7 +1010,11 @@ import { useAuth } from '@redwoodjs/auth'
 // highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
 
-const BlogLayout = ({ children }) => {
+type BlogLayoutProps = {
+  children?: React.ReactNode
+}
+
+const BlogLayout = ({ children }: BlogLayoutProps) => {
   const { logOut, isAuthenticated, currentUser } = useAuth()
 
   return (
@@ -1236,8 +1261,8 @@ scenario('returns all comments', async (scenario) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.test.ts"
-scenario('returns all comments', async (scenario) => {
+```ts title="api/src/services/comments/comments.test.ts"
+scenario('returns all comments', async (scenario: StandardScenario) => {
   // highlight-next-line
   const result = await comments({ postId: scenario.comment.jane.postId })
   expect(result.length).toEqual(Object.keys(scenario.comment).length)
@@ -1351,10 +1376,12 @@ describe('comments', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="api/src/services/comments/comments.test.ts"
+```tsx title="api/src/services/comments/comments.test.ts"
 import { comments, createComment } from './comments'
 // highlight-next-line
 import { db } from 'api/src/lib/db'
+
+import type { StandardScenario } from './comments.scenarios'
 
 describe('comments', () => {
   scenario('returns all comments', async (scenario) => {
@@ -1418,7 +1445,7 @@ scenario(
 scenario(
   'returns all comments for a single post from the database',
   // highlight-end
-  async (scenario) => {
+  async (scenario: StandardScenario) => {
     const result = await comments({ postId: scenario.comment.jane.postId })
     const post = await db.post.findUnique({
       where: { id: scenario.comment.jane.postId },
@@ -1446,8 +1473,10 @@ export const comments = ({ postId }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.ts"
-export const comments = ({ postId }) => {
+```ts title="api/src/services/comments/comments.ts"
+export const comments = ({
+  postId,
+}: Required<Pick<Prisma.CommentWhereInput, 'postId'>>) => {
   return db.comment.findMany({ where: { postId } })
 }
 ```

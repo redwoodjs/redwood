@@ -48,9 +48,20 @@ export default Comment
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.tsx"
+```tsx title="web/src/components/Comment/Comment.tsx"
+// highlight-start
+// Just a temporary type. We'll replace this later
+interface Props {
+  comment: {
+    name: string
+    createdAt: string
+    body: string
+  }
+}
+// highlight-end
+
 // highlight-next-line
-const Comment = ({ comment }) => {
+const Comment = ({ comment }: Props) => {
   return (
     <div>
       // highlight-start
@@ -81,17 +92,17 @@ We need to update the story to include that comment object and pass it as a prop
 import Comment from './Comment'
 
 export const generated = () => {
+  // highlight-start
   return (
     <Comment
-      // highlight-start
       comment={{
         name: 'Rob Cameron',
         body: 'This is the first comment!',
         createdAt: '2020-01-01T12:34:56Z'
       }}
-      // highlight-end
     />
   )
+  // highlight-end
 }
 
 export default { title: 'Components/Comment' }
@@ -100,21 +111,21 @@ export default { title: 'Components/Comment' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.txs"
+```tsx title="web/src/components/Comment/Comment.stories.txs"
 import Comment from './Comment'
 
 export const generated = () => {
+  // highlight-start
   return (
     <Comment
-      // highlight-start
       comment={{
         name: 'Rob Cameron',
         body: 'This is the first comment!',
         createdAt: '2020-01-01T12:34:56Z'
       }}
-      // highlight-end
     />
   )
+  // highlight-end
 }
 
 export default { title: 'Components/Comment' }
@@ -169,16 +180,25 @@ export default Comment
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.tsx"
+```tsx title="web/src/components/Comment/Comment.tsx"
 // highlight-start
-const formattedDate = (datetime) => {
+const formattedDate = (datetime: ConstructorParameters<typeof Date>[0]) => {
   const parsedDate = new Date(datetime)
   const month = parsedDate.toLocaleString('default', { month: 'long' })
   return `${parsedDate.getDate()} ${month} ${parsedDate.getFullYear()}`
 }
 // highlight-end
 
-const Comment = ({ comment }) => {
+// Just a temporary type. We'll replace this later
+interface Props {
+  comment: {
+    name: string
+    createdAt: string
+    body: string
+  }
+}
+
+const Comment = ({ comment }: Props) => {
   return (
     // highlight-start
     <div className="bg-gray-200 p-8 rounded-lg">
@@ -217,6 +237,7 @@ Let's add a sample comment to the test and check that the various parts are bein
 
 ```jsx title="web/src/components/Comment.test.js"
 import { render, screen } from '@redwoodjs/testing'
+
 import Comment from './Comment'
 
 describe('Comment', () => {
@@ -243,8 +264,9 @@ describe('Comment', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment.test.ts"
+```tsx title="web/src/components/Comment.test.tsx"
 import { render, screen } from '@redwoodjs/testing'
+
 import Comment from './Comment'
 
 describe('Comment', () => {

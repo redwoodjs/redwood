@@ -384,7 +384,7 @@ export default ContactPage
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
-import { Form, TextField, Submit } from '@redwoodjs/forms'
+import { Form, TextField, Submit, SubmitHandler } from '@redwoodjs/forms'
 
 // highlight-start
 interface FormValues {
@@ -394,7 +394,7 @@ interface FormValues {
 
 const ContactPage = () => {
   // highlight-start
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
   // highlight-end
@@ -461,8 +461,15 @@ export default ContactPage
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
-// highlight-next-line
-import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
+// highlight-start
+import {
+  Form,
+  TextField,
+  TextAreaField,
+  Submit,
+  SubmitHandler
+} from '@redwoodjs/forms'
+// highlight-end
 
 interface FormValues {
   // highlight-start
@@ -473,7 +480,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -548,7 +555,13 @@ export default ContactPage
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 import { MetaTags } from '@redwoodjs/web'
-import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
+import {
+  Form,
+  TextField,
+  TextAreaField,
+  Submit,
+  SubmitHandler
+} from '@redwoodjs/forms'
 
 interface FormValues {
   name: string
@@ -557,7 +570,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -770,6 +783,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -779,7 +793,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -879,6 +893,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -888,7 +903,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -998,6 +1013,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -1007,7 +1023,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 
@@ -1142,6 +1158,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -1151,7 +1168,7 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
   }
 

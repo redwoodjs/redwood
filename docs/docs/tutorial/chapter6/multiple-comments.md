@@ -34,7 +34,7 @@ Storybook updates with a new **CommentsCell** under the **Cells** folder, and it
 
 ![image](https://user-images.githubusercontent.com/300/153477642-0d5a15a5-f96f-485a-b8b0-dbc1c4515279.png)
 
-Where did that come from? Check out `CommentsCell.mock.js`: there's no Prisma model for a Comment yet, so Redwood took a guess that your model would at least contain an `id` field and just used that for the mock data.
+Where did that come from? Check out `CommentsCell.mock.{js,ts}`: there's no Prisma model for a Comment yet, so Redwood took a guess that your model would at least contain an `id` field and just used that for the mock data.
 
 Let's update the `Success` component to use the `Comment` component created earlier, and add all of the fields we'll need for the **Comment** to render to the `QUERY`:
 
@@ -78,9 +78,12 @@ export const Success = ({ comments }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
 // highlight-next-line
 import Comment from 'src/components/Comment'
+
+import type { CommentsQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
   query CommentsQuery {
@@ -99,11 +102,11 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
+export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ comments }) => {
+export const Success = ({ comments }: CellSuccessProps) => {
   // highlight-start
   return comments.map((comment) => (
     <Comment key={comment.id} comment={comment} />
@@ -146,7 +149,7 @@ export const standard = () => ({
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="web/src/components/CommentsCell/CommentsCell.mock.ts"
+```ts title="web/src/components/CommentsCell/CommentsCell.mock.ts"
 export const standard = () => ({
   // highlight-start
   comments: [
@@ -202,7 +205,7 @@ export const Success = ({ comments }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
 export const Success = ({ comments }) => {
   return (
     // highlight-next-line
@@ -262,16 +265,23 @@ export default Article
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.tsx"
+```tsx title="web/src/components/Article/Article.tsx"
 import { Link, routes } from '@redwoodjs/router'
 // highlight-next-line
 import CommentsCell from 'src/components/CommentsCell'
 
-const truncate = (text, length) => {
+import type { Post } from 'types/graphql'
+
+const truncate = (text: string, length: number) => {
   return text.substring(0, length) + '...'
 }
 
-const Article = ({ article, summary = false }) => {
+interface Props {
+  article: Omit<Post, 'createdAt'>
+  summary?: boolean
+}
+
+const Article = ({ article, summary = false }: Props) => {
   return (
     <article>
       <header>
@@ -323,13 +333,13 @@ const Article = ({ article, summary = false }) => {
       <div className="mt-2 text-gray-900 font-light">
         {summary ? truncate(article.body, 100) : article.body}
       </div>
+      // highlight-start
       {!summary && (
-        // highlight-start
         <div className="mt-12">
           <CommentsCell />
         </div>
-        // highlight-end
       )}
+      // highlight-end
     </article>
   )
 }
@@ -338,8 +348,8 @@ const Article = ({ article, summary = false }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.tsx"
-const Article = ({ article, summary = false }) => {
+```tsx title="web/src/components/Article/Article.tsx"
+const Article = ({ article, summary = false }: Props) => {
   return (
     <article>
       <header>
@@ -350,13 +360,13 @@ const Article = ({ article, summary = false }) => {
       <div className="mt-2 text-gray-900 font-light">
         {summary ? truncate(article.body, 100) : article.body}
       </div>
+      // highlight-start
       {!summary && (
-        // highlight-start
         <div className="mt-12">
           <CommentsCell />
         </div>
-        // highlight-end
       )}
+      // highlight-end
     </article>
   )
 }
@@ -391,7 +401,7 @@ The default `CommentsCell.test.{js,tsx}` actually tests every state for us, albe
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx
+```jsx title="web/src/components/CommentsCell/CommentsCell.js"
 import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
@@ -426,7 +436,7 @@ describe('CommentsCell', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx
+```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
 import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
@@ -510,7 +520,7 @@ describe('CommentsCell', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.test.ts"
+```tsx title="web/src/components/CommentsCell/CommentsCell.test.tsx"
 // highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
@@ -564,6 +574,7 @@ The functionality we added to `Article` says to show the comments for the post i
 ```jsx title="web/src/components/Article/Article.test.js"
 // highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
+
 import Article from './Article'
 // highlight-next-line
 import { standard } from 'src/components/CommentsCell/CommentsCell.mock'
@@ -621,9 +632,10 @@ describe('Article', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.test.ts"
+```tsx title="web/src/components/Article/Article.test.tsx"
 // highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
+
 import Article from './Article'
 // highlight-next-line
 import { standard } from 'src/components/CommentsCell/CommentsCell.mock'
