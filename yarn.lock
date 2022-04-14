@@ -6117,7 +6117,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.28.1
+    react-hook-form: 7.29.0
     typescript: 4.6.3
   peerDependencies:
     graphql: 16.3.0
@@ -6387,7 +6387,7 @@ __metadata:
     nodemon: 2.0.15
     react: 17.0.2
     react-dom: 17.0.2
-    react-helmet-async: 1.2.3
+    react-helmet-async: 1.3.0
     react-hot-toast: 2.2.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
@@ -25732,9 +25732,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:1.2.3, react-helmet-async@npm:^1.0.7":
-  version: 1.2.3
-  resolution: "react-helmet-async@npm:1.2.3"
+"react-helmet-async@npm:1.3.0, react-helmet-async@npm:^1.0.7":
+  version: 1.3.0
+  resolution: "react-helmet-async@npm:1.3.0"
   dependencies:
     "@babel/runtime": ^7.12.5
     invariant: ^2.2.4
@@ -25742,18 +25742,18 @@ __metadata:
     react-fast-compare: ^3.2.0
     shallowequal: ^1.1.0
   peerDependencies:
-    react: ^16.6.0 || ^17.0.0
-    react-dom: ^16.6.0 || ^17.0.0
-  checksum: 69ea4a4597fd37f8f22c2f8e207e477b5f5fedad4dd00dc846d73c728bd8dfb2d0ccdf3fff076921a18381cf6eeca01962d6115a4e1330ff42fbc5f95ea5b946
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
+  checksum: 8f3e6d26beff61d2ed18f7b41561df3e4d83a7582914c7196aa65158c7f3cce939276547d7a0b8987952d9d44131406df74efba02d1f8fa8a3940b49e6ced70b
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.28.1":
-  version: 7.28.1
-  resolution: "react-hook-form@npm:7.28.1"
+"react-hook-form@npm:7.29.0":
+  version: 7.29.0
+  resolution: "react-hook-form@npm:7.29.0"
   peerDependencies:
-    react: ^16.8.0 || ^17
-  checksum: 03b6f2352ca3c1f7138722ac6b453724bf455f41ea5b101264afe65b6cdd5d3b94808be230654ea59761fe5760e4d7f98117cf766f5c34fd31abf82c87a051e7
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 9867f99837022b52f6df75cd94cb0a746a5a717d19fa76732ca9a601a50880f9b269777bdb316ae325cc3b5505f35d184f977d859ca3a5ddf1b15e3511f61c8c
   languageName: node
   linkType: hard
 
