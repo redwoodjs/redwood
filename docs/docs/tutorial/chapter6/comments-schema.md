@@ -771,6 +771,10 @@ export const postOnly = defineScenario<Prisma.PostCreateArgs>({
   }
 })
 // highlight-end
+
+export type StandardScenario = typeof standard
+// highlight-next-line
+export type PostOnlyScenario = typeof postOnly
 ```
 
 </TabItem>
@@ -818,30 +822,35 @@ describe('comments', () => {
 // highlight-next-line
 import { comments, createComment } from './comments'
 
-import type { StandardScenario } from './comments.scenarios'
+// highlight-next-line
+import type { StandardScenario, PostOnlyScenario } from './comments.scenarios'
 
 describe('comments', () => {
-  scenario('returns all comments', async (scenario) => {
+  scenario('returns all comments', async (scenario: StandardScenario) => {
     const result = await comments()
 
     expect(result.length).toEqual(Object.keys(scenario.comment).length)
   })
 
   // highlight-start
-  scenario('postOnly', 'creates a new comment', async (scenario) => {
-    const comment = await createComment({
-      input: {
-        name: 'Billy Bob',
-        body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id,
-      },
-    })
+  scenario(
+    'postOnly',
+    'creates a new comment',
+    async (scenario: PostOnlyScenario) => {
+      const comment = await createComment({
+        input: {
+          name: 'Billy Bob',
+          body: 'What is your favorite tree bark?',
+          postId: scenario.post.bark.id,
+        },
+      })
 
-    expect(comment.name).toEqual('Billy Bob')
-    expect(comment.body).toEqual('What is your favorite tree bark?')
-    expect(comment.postId).toEqual(scenario.post.bark.id)
-    expect(comment.createdAt).not.toEqual(null)
-  })
+      expect(comment.name).toEqual('Billy Bob')
+      expect(comment.body).toEqual('What is your favorite tree bark?')
+      expect(comment.postId).toEqual(scenario.post.bark.id)
+      expect(comment.createdAt).not.toEqual(null)
+    }
+  )
   // highlight-end
 })
 ```

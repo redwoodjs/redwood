@@ -118,7 +118,7 @@ The easiest way to prevent access to an entire URL is via the Router. The `<Priv
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/Routes.tsx"
+```tsx title="web/src/Routes.tsx"
 // highlight-next-line
 <Private unauthenticated="home" roles="admin">
   <Set wrap={PostsLayout}>
@@ -180,7 +180,7 @@ Now head back to [http://localhost:8910/admin/posts](http://localhost:8910/admin
 
 ### Add a Moderator
 
-Let's create a new user that will represent the comment moderator. Since this is in development you can just make up an email address, but if you needed to this in a real system that verified email addresses you could use **The Plus Trick** to create a new, unique email address that is actually the same as your original email address!
+Let's create a new user that will represent the comment moderator. Since this is in development you can just make up an email address, but if you needed to do this in a real system that verified email addresses you could use **The Plus Trick** to create a new, unique email address that is actually the same as your original email address!
 
 :::tip The Plus Trick
 
@@ -272,17 +272,25 @@ export default Comment
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.tsx"
+```tsx title="web/src/components/Comment/Comment.tsx"
 // highlight-next-line
 import { useAuth } from '@redwoodjs/auth'
 
-const formattedDate = (datetime) => {
+const formattedDate = (datetime: ConstructorParameters<typeof Date>[0]) => {
   const parsedDate = new Date(datetime)
   const month = parsedDate.toLocaleString('default', { month: 'long' })
   return `${parsedDate.getDate()} ${month} ${parsedDate.getFullYear()}`
 }
 
-const Comment = ({ comment }) => {
+interface Props {
+  comment: {
+    name: string
+    createdAt: string
+    body: string
+  }
+}
+
+const Comment = ({ comment }: Props) => {
   // highlight-start
   const { hasRole } = useAuth()
   const moderate = () => {
@@ -371,13 +379,13 @@ const Comment = ({ comment }) => {
   // highlight-end
 
   const moderate = () => {
-    // highlight-start
     if (confirm('Are you sure?')) {
+      // highlight-start
       deleteComment({
         variables: { id: comment.id },
       })
+      // highlight-end
     }
-    // highlight-end
   }
 
   return (
@@ -408,12 +416,15 @@ export default Comment
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.tsx"
+```tsx title="web/src/components/Comment/Comment.tsx"
 import { useAuth } from '@redwoodjs/auth'
 // highlight-start
 import { useMutation } from '@redwoodjs/web'
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 // highlight-end
+
+// highlight-next-line
+import type { Comment as IComment } from 'types/graphql'
 
 // highlight-start
 const DELETE = gql`
@@ -425,13 +436,18 @@ const DELETE = gql`
 `
 // highlight-end
 
-const formattedDate = (datetime) => {
+const formattedDate = (datetime: ConstructorParameters<typeof Date>[0]) => {
   const parsedDate = new Date(datetime)
   const month = parsedDate.toLocaleString('default', { month: 'long' })
   return `${parsedDate.getDate()} ${month} ${parsedDate.getFullYear()}`
 }
 
-const Comment = ({ comment }) => {
+interface Props {
+  // highlight-next-line
+  comment: Pick<IComment, 'postId' | 'id' | 'name' | 'createdAt' | 'body'>
+}
+
+const Comment = ({ comment }: Props) => {
   const { hasRole } = useAuth()
   // highlight-start
   const [deleteComment] = useMutation(DELETE, {
@@ -445,13 +461,13 @@ const Comment = ({ comment }) => {
   // highlight-end
 
   const moderate = () => {
-    // highlight-start
     if (confirm('Are you sure?')) {
+      // highlight-start
       deleteComment({
         variables: { id: comment.id },
       })
+      // highlight-end
     }
-    // highlight-end
   }
 
   return (
@@ -507,7 +523,7 @@ export const QUERY = gql`
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`
@@ -549,6 +565,7 @@ export const defaultView = () => {
     <div className="m-4">
       <Comment
         comment={{
+          id: 1,
           name: 'Rob Cameron',
           body: 'This is the first comment!',
           createdAt: '2020-01-01T12:34:56Z',
@@ -565,16 +582,17 @@ export const moderatorView = () => {
     <div className="m-4">
       <Comment
         comment={{
+          id: 1,
           name: 'Rob Cameron',
           body: 'This is the first comment!',
           createdAt: '2020-01-01T12:34:56Z',
-          postId: 1
+          postId: 1,
         }}
       />
     </div>
-    // highlight-end
   )
 }
+// highlight-end
 
 export default { title: 'Components/Comment' }
 ```
@@ -582,7 +600,7 @@ export default { title: 'Components/Comment' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.ts"
+```tsx title="web/src/components/Comment/Comment.stories.ts"
 import Comment from './Comment'
 
 // highlight-next-line
@@ -591,10 +609,11 @@ export const defaultView = () => {
     <div className="m-4">
       <Comment
         comment={{
+          id: 1,
           name: 'Rob Cameron',
           body: 'This is the first comment!',
           createdAt: '2020-01-01T12:34:56Z',
-          postId: 1
+          postId: 1,
         }}
       />
     </div>
@@ -607,16 +626,17 @@ export const moderatorView = () => {
     <div className="m-4">
       <Comment
         comment={{
+          id: 1,
           name: 'Rob Cameron',
           body: 'This is the first comment!',
           createdAt: '2020-01-01T12:34:56Z',
-          postId: 1
+          postId: 1,
         }}
       />
     </div>
-    // highlight-end
   )
 }
+// highlight-end
 
 export default { title: 'Components/Comment' }
 ```
@@ -641,10 +661,11 @@ export const moderatorView = () => {
     <div className="m-4">
       <Comment
         comment={{
+          id: 1,
           name: 'Rob Cameron',
           body: 'This is the first comment!',
           createdAt: '2020-01-01T12:34:56Z',
-          postId: 1
+          postId: 1,
         }}
       />
     </div>
@@ -655,11 +676,13 @@ export const moderatorView = () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.ts"
+```tsx title="web/src/components/Comment/Comment.stories.tsx"
 export const moderatorView = () => {
   // highlight-start
   mockCurrentUser({
     roles: 'moderator',
+    id: 1,
+    email: 'moderator@moderator.com',
   })
   // highlight-end
 
@@ -667,10 +690,11 @@ export const moderatorView = () => {
     <div className="m-4">
       <Comment
         comment={{
+          id: 1,
           name: 'Rob Cameron',
           body: 'This is the first comment!',
           createdAt: '2020-01-01T12:34:56Z',
-          postId: 1
+          postId: 1,
         }}
       />
     </div>
@@ -739,7 +763,7 @@ describe('Comment', () => {
   })
 
   it('renders a delete button if the user is a moderator', async () => {
-    mockCurrentUser({ roles: ['moderator'] })
+    mockCurrentUser({ roles: 'moderator' })
     render(<Comment comment={COMMENT} />)
 
     await waitFor(() => expect(screen.getByText('Delete')).toBeInTheDocument())
@@ -751,16 +775,19 @@ describe('Comment', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Comment/Comment.test.ts"
+```tsx title="web/src/components/Comment/Comment.test.tsx"
 // highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
+
 import Comment from './Comment'
 
 // highlight-start
 const COMMENT = {
+  id: 1,
   name: 'John Doe',
   body: 'This is my comment',
   createdAt: '2020-01-02T12:34:56Z',
+  postId: 1,
 }
 // highlight-end
 
@@ -790,7 +817,12 @@ describe('Comment', () => {
   })
 
   it('renders a delete button if the user is a moderator', async () => {
-    mockCurrentUser({ roles: ['moderator'] })
+    mockCurrentUser({
+      roles: 'moderator',
+      id: 1,
+      email: 'moderator@moderator.com',
+    })
+
     render(<Comment comment={COMMENT} />)
 
     await waitFor(() => expect(screen.getByText('Delete')).toBeInTheDocument())
@@ -1004,7 +1036,7 @@ export const deleteComment = ({ id }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.ts"
+```ts title="api/src/services/comments/comments.ts"
 import { db } from 'src/lib/db'
 // highlight-next-line
 import { requireAuth } from 'src/lib/auth'
@@ -1108,12 +1140,14 @@ describe('comments', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/services/comments/comments.test.ts"
+```ts title="api/src/services/comments/comments.test.ts"
 // highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
 import { db } from 'api/src/lib/db'
 // highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
+
+import type { PostOnlyScenario, StandardScenario } from './comments.scenarios'
 
 describe('comments', () => {
   scenario(
@@ -1128,38 +1162,49 @@ describe('comments', () => {
     }
   )
 
-  scenario('postOnly', 'creates a new comment', async (scenario) => {
-    const comment = await createComment({
-      input: {
-        name: 'Billy Bob',
-        body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id,
-      },
-    })
+  scenario(
+    'postOnly',
+    'creates a new comment',
+    async (scenario: PostOnlyScenario) => {
+      const comment = await createComment({
+        input: {
+          name: 'Billy Bob',
+          body: 'What is your favorite tree bark?',
+          postId: scenario.post.bark.id,
+        },
+      })
 
-    expect(comment.name).toEqual('Billy Bob')
-    expect(comment.body).toEqual('What is your favorite tree bark?')
-    expect(comment.postId).toEqual(scenario.post.bark.id)
-    expect(comment.createdAt).not.toEqual(null)
-  })
+      expect(comment.name).toEqual('Billy Bob')
+      expect(comment.body).toEqual('What is your favorite tree bark?')
+      expect(comment.postId).toEqual(scenario.post.bark.id)
+      expect(comment.createdAt).not.toEqual(null)
+    }
+  )
 
   // highlight-start
-  scenario('allows a moderator to delete a comment', async (scenario) => {
-    mockCurrentUser({ roles: ['moderator'] })
+  scenario(
+    'allows a moderator to delete a comment',
+    async (scenario, StandardScenario) => {
+      mockCurrentUser({
+        roles: 'moderator',
+        id: 1,
+        email: 'moderator@moderator.com',
+      })
 
-    const comment = await deleteComment({
-      id: scenario.comment.jane.id,
-    })
-    expect(comment.id).toEqual(scenario.comment.jane.id)
+      const comment = await deleteComment({
+        id: scenario.comment.jane.id,
+      })
+      expect(comment.id).toEqual(scenario.comment.jane.id)
 
-    const result = await comments({ postId: scenario.comment.jane.id })
-    expect(result.length).toEqual(0)
-  })
+      const result = await comments({ postId: scenario.comment.jane.id })
+      expect(result.length).toEqual(0)
+    }
+  )
 
   scenario(
     'does not allow a non-moderator to delete a comment',
-    async (scenario) => {
-      mockCurrentUser({ roles: 'user' })
+    async (scenario: StandardScenario) => {
+      mockCurrentUser({ roles: 'user', id: 1, email: 'user@user.com' })
 
       expect(() =>
         deleteComment({
@@ -1171,7 +1216,7 @@ describe('comments', () => {
 
   scenario(
     'does not allow a logged out user to delete a comment',
-    async (scenario) => {
+    async (scenario: StandardScenario) => {
       mockCurrentUser(null)
 
       expect(() =>
@@ -1188,7 +1233,7 @@ describe('comments', () => {
 </TabItem>
 </Tabs>
 
-Our first scenario checks that we get the deleted comment back from a call to `deleteComment()`. The second expectation makes sure that the comment was actually removed from the database: trying to find a comment with that `id` now returns an empty array. If this was the only test we had it could lull us into a false sense of security—what if the user had a differnet role, or wasn't logged in at all?
+Our first scenario checks that we get the deleted comment back from a call to `deleteComment()`. The second expectation makes sure that the comment was actually removed from the database: trying to find a comment with that `id` now returns an empty array. If this was the only test we had it could lull us into a false sense of security—what if the user had a different role, or wasn't logged in at all?
 
 We aren't testing those cases here, so we add two more tests: one for if the user has a role other than "moderator" and one if the user isn't logged in at all. These two cases also raise different errors, so it's nice to see that codified here.
 
