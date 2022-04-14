@@ -25,6 +25,9 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "resolutions": {
+    "@types/react": "17.0.40"
+  },
   "dependencies": {
     "@redwoodjs/auth": "1.0.0",
     "@redwoodjs/graphql-server": "1.0.0",
@@ -58,9 +61,6 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "typescript": "4.6.3"
-  },
-  "resolutions": {
-    "@types/react": "17.0.40"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

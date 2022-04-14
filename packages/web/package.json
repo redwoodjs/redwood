@@ -35,6 +35,9 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "resolutions": {
+    "@types/react": "17.0.40"
+  },
   "dependencies": {
     "@apollo/client": "3.5.10",
     "@babel/runtime-corejs3": "7.16.7",
@@ -64,9 +67,6 @@
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
-  },
-  "resolutions": {
-    "@types/react": "17.0.40"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
