@@ -29,6 +29,21 @@
 .rw-segment {
   @apply rounded-lg overflow-hidden w-full border border-gray-200;
 }
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-200 bg-transparent border-solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 bg-clip-content;
+  border: 3px solid transparent;
+  border-radius: 10px;
+}
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
 }
@@ -150,7 +165,7 @@
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
 }
 .rw-table-wrapper-responsive {
-  @apply overflow-x-scroll;
+  @apply overflow-x-auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
