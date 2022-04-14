@@ -10,11 +10,19 @@ With Redwood's Baremetal deployment option, the source (like your dev machine) w
 
 Deploying from a client (like your own development machine) consists of running a single command:
 
+First time deploy
+
+```bash
+yarn rw deploy baremetal --first run
+```
+
+Subsequent deploys
+
 ```bash
 yarn rw deploy baremetal
 ```
 
-## Lifecycle
+## Deployment Lifecycle
 
 The baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
@@ -26,7 +34,11 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 5. `yarn rw build` - builds the web and/or api sides
 6. `yarn pm2 restart [service]` - restarts the serving process(es)
 
-There is a special `--first-run` flag which can be included in your deploy command the first time you run it, which starts the PM2 services rather than restarting them.
+### First Run Lifecycle
+
+If the `--first-run` flag is specified step 6. above will be skipped and the following commands will run instead:
+  - `yarn pm2 start [service]` - starts the serving process(es)
+  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
 
 > We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
 
@@ -241,6 +253,25 @@ yarn rw deploy baremetal --first-run
 ```
 
 If there are any issues the deploy should stop and you'll see the error message printed to the console. Assume it worked, hooray! You're deployed to BAREMETAL.
+
+### Starting on Reboot
+
+The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
+
+1. SSH into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
+2. Run the command `yarn pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
+
+> The below text is an *example* output.  Yours will be different
+
+```bash
+deploy@redwood:/var/www/my-app$ yarn pm2 startup
+[PM2] Init System found: systemd
+[PM2] To setup the Startup Script, copy/paste the following command:
+sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+```
+
+
+In this example, you would copy `sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy` and run it.
 
 ### Customizing the Deploy
 
