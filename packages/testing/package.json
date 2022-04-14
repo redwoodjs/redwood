@@ -25,6 +25,9 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "resolutions": {
+    "@types/react": "17.0.40"
+  },
   "dependencies": {
     "@redwoodjs/auth": "1.0.0",
     "@redwoodjs/graphql-server": "1.0.0",
