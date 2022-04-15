@@ -534,68 +534,6 @@ describe('Form', () => {
       expect.anything() // event that triggered the onSubmit call
     )
   })
-  /*
-  it('returns appropriate values for fields with emptyAs not defined and set as required', async () => {
-    const mockFn = jest.fn()
-
-    render(
-      <Form onSubmit={mockFn}>
-        <TextField name="textField" validation={{ required: true }} />
-        <TextField name="textAreaField" validation={{ required: true }} />
-        <NumberField name="numberField" validation={{ required: true }} />
-        <DateField name="dateField" validation={{ required: true }} />
-        <SelectField
-          name="selectField"
-          defaultValue=""
-          validation={{ required: true }}
-        >
-          <option value="">No option selected</option>
-          <option value={1}>Option 1</option>
-          <option value={2}>Option 2</option>
-          <option value={3}>Option 3</option>
-        </SelectField>
-        <CheckboxField
-          name="checkboxField0"
-          defaultChecked={false}
-          validation={{ required: true }}
-        />
-        <CheckboxField
-          name="checkboxField1"
-          defaultChecked={true}
-          validation={{ required: true }}
-        />
-        <TextAreaField
-          name="jsonField"
-          defaultValue=""
-          validation={{ valueAsJSON: true, required: true }}
-        />
-        <TextField
-          name="fieldId"
-          defaultValue=""
-          validation={{ required: true }}
-        />
-        <Submit>Save</Submit>
-      </Form>
-    )
-
-    fireEvent.click(screen.getByText('Save'))
-
-    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
-    expect(mockFn).toBeCalledWith(
-      {
-        textField: null,
-        textAreaField: null,
-        numberField: NaN,
-        dateField: null,
-        selectField: null,
-        checkboxField0: false,
-        checkboxField1: true,
-        jsonField: null,
-        fieldId: null,
-      },
-      expect.anything() // event that triggered the onSubmit call
-    )
-  })*/
 
   it(`returns appropriate values for non-empty fields with emptyAs={'undefined'}`, async () => {
     const mockFn = jest.fn()
