@@ -2026,10 +2026,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.5.0":
-  version: 2.5.0
-  resolution: "@clerk/types@npm:2.5.0"
-  checksum: 0481ab2b793043937a2610caff19a69c23faba47e7fb1e13201a34f90cd55e0990c52da59bba2f6551bbc7a1d2c0eba56cfa7dc052cc84d4de7e157788ce1253
+"@clerk/types@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@clerk/types@npm:2.6.0"
+  checksum: cc6473c6ebb2169fd0354e77b4537487f6043f432c9a9fa0f55d99d63da3403225d951901a7053b19737c287a087a24e9897c8d6a863e0d72b935909707af39a
   languageName: node
   linkType: hard
 
@@ -5914,7 +5914,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 2.17.7
     "@clerk/clerk-sdk-node": 2.10.0
-    "@clerk/types": 2.5.0
+    "@clerk/types": 2.6.0
     "@nhost/nhost-js": 1.0.11
     "@supabase/supabase-js": 1.33.3
     "@types/netlify-identity-widget": 1.9.3
