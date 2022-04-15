@@ -1,4 +1,8 @@
-# Deploy to Serverless.com
+---
+description: Deploy to AWS with Serverless Framework
+---
+
+# Deploy to AWS with Serverless Framework
 
 >The following instructions assume you have read the [General Deployment Setup](#general-deployment-setup) section above.
 

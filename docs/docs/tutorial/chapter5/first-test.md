@@ -20,11 +20,11 @@ Let's update the test so that it checks for the expected behavior instead. There
 
 ```jsx title="web/src/components/ArticlesCell.test.js"
 test('Success renders successfully', async () => {
-  const posts = standard().posts
-  render(<Success posts={posts} />)
+  const articles = standard().articles
+  render(<Success articles={articles} />)
 
   // highlight-start
-  expect(screen.getByText(posts[0].title)).toBeInTheDocument()
+  expect(screen.getByText(articles[0].title)).toBeInTheDocument()
   expect(
     screen.getByText(
       'Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Str...'
@@ -34,7 +34,7 @@ test('Success renders successfully', async () => {
 })
 ```
 
-But the truncation length could change later, so how do we encapsulate that in our test? Or should we? The number of characters to truncate to is hardcoded in the `Article` component, which this component shouldn't really care about about: it should be up to the page that's presenting the article to determine much or how little to show (based on space concerns, design constraints, etc.) don't you think? Even if we refactored the `truncate()` function into a shared place and imported it into both `Article` and this test, the test will still be knowing too much about `Article`—why should it have detailed knowledge of the internals of `Article` and that it's making use of this `truncate()` function at all? It shouldn't! One theory of testing says that the thing you're testing should be a black box: you can't see inside of it, all you can test is what data comes out when you send certain data in.
+But the truncation length could change later, so how do we encapsulate that in our test? Or should we? The number of characters to truncate to is hardcoded in the `Article` component, which this component shouldn't really care about: it should be up to the page that's presenting the article to determine much or how little to show (based on space concerns, design constraints, etc.) don't you think? Even if we refactored the `truncate()` function into a shared place and imported it into both `Article` and this test, the test will still be knowing too much about `Article`—why should it have detailed knowledge of the internals of `Article` and that it's making use of this `truncate()` function at all? It shouldn't! One theory of testing says that the thing you're testing should be a black box: you can't see inside of it, all you can test is what data comes out when you send certain data in.
 
 Let's compromise—by virtue of the fact that this functionality has a prop called "summary" we can guess that it's doing *something* to shorten the text. So what if we test three things that we can make reasonable assumptions about right now:
 
@@ -98,21 +98,25 @@ This loops through each article in our `standard()` mock and for each one:
 ```javascript
 const truncatedBody = article.body.substring(0, 10)
 ```
+
 Create a variable `truncatedBody` containing the first 10 characters of the post body
 
 ```javascript
 const matchedBody = screen.getByText(truncatedBody, { exact: false })
 ```
+
 Search through the rendered HTML on the screen and find the HTML element that contains the truncated body (note the `{ exact: false }` here, as normally the exact text, and only that text, would need to be present, but in this case there's probably more than just the 10 characters)
 
 ```javascript
 const ellipsis = within(matchedBody).getByText('...', { exact: false })
 ```
+
 Within the HTML element that was found in the previous line, find `...`, again without an exact match
 
 ```javascript
 expect(screen.getByText(article.title)).toBeInTheDocument()
 ```
+
 Find the title of the article in the page
 
 ```javascript
@@ -136,7 +140,7 @@ As soon as you saved that test file the test should have run and passed! Press `
 >
 > `getByText()` will throw an error if the text isn't found in the document, whereas `queryByText()` will  return `null` and let you continue with your testing (and is one way to test that some text is *not* present on the page). You can read more about these in the [DOM Testing Library Queries](https://testing-library.com/docs/dom-testing-library/api-queries) docs.
 
-To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and `expect(screen.queryByText(post.body)).not.toBeInTheDocument()` *is* in the document! Make sure to put the `summary={true}` back before we continue.
+To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` *is* in the document! Make sure to put the `summary={true}` back before we continue.
 
 ### What's the Deal with Mocks?
 
@@ -183,29 +187,29 @@ export const Success = ({ articles }) => {
 So we can just spread the result of `standard()` in a story or test when using the **Success** component and everything works out:
 
 ```jsx
-import { Success } from './BlogPostsCell'
-import { standard } from './BlogPostsCell.mock'
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
   return Success ? <Success {...standard()} /> : null
 }
 
-export default { title: 'Cells/BlogPostsCell' }
+export default { title: 'Cells/ArticlesCell' }
 ```
 
-Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashoined way:
+Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashioned way:
 
 ```jsx
-import { Success } from './BlogPostsCell'
-import { standard } from './BlogPostsCell.mock'
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
   return Success ? <Success article={standard().article} /> : null
 }
 
-export default { title: 'Cells/BlogPostsCell' }
+export default { title: 'Cells/ArticlesCell' }
 ```
 
 You can have as many mocks as you want, just import the names of the ones you need and send them in as props to your components.
