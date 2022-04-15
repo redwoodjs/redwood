@@ -57,7 +57,7 @@ Here's a quick taste of the technologies a standard Redwood application will
 use:
 
 - [React](https://reactjs.org/)
-- [GraphQL](https://graphql.org/) ([GraphQL Helix](https://github.com/contrawork/graphql-helix) + [Envelop](https://www.envelop.dev) + [Apollo Client](https://www.apollographql.com/docs/react))
+- [GraphQL](https://graphql.org/) ([GraphQL Yoga](https://www.graphql-yoga.com) + [Envelop](https://www.envelop.dev) + [Apollo Client](https://www.apollographql.com/docs/react))
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
@@ -164,7 +164,7 @@ for my nascent web app framework. Namely:
 And there you have it.
 
 ## Contributors
-*A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/redwoodjs.com) (docs!), and [Create-Redwood Template](https://github.com/redwoodjs/create-redwood-app). 🚀*
+*A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/sprout), [Docs](https://github.com/redwoodjs/redwood/tree/main/docs), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀*
 
 ### Core Team
 <!-- prettier-ignore-start -->

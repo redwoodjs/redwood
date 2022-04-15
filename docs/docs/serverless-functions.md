@@ -1,3 +1,7 @@
+---
+description: Create, develop, and run serverless functions
+---
+
 # Serverless Functions
 
 <!-- `redwood.toml`&mdash;`api/src/functions` by default.  -->
@@ -149,7 +153,7 @@ export const handler = async (event: APIGatewayEvent) => {
     message = `${dividend} / ${divisor} = ${quotient}`
 
     // check if the numbers could be divided
-    if (quotient === Infinity || isNaN(quotient)) {
+    if (!isFinite(quotient)) {
       statusCode = 500
       message = `Sorry. Could not divide ${dividend} by ${divisor}`
       throw Error(message)

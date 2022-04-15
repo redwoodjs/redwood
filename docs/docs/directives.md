@@ -1,9 +1,15 @@
+---
+description: Customize GraphQL execution
+---
+
 # Directives
 
 Redwood Directives are a powerful feature, supercharging your GraphQL-backed Services.
 
 You can think of directives like "middleware" that let you run reusable code during GraphQL execution to perform tasks like authentication and formatting.
+
 Redwood uses them to make it a snap to protect your API Services from unauthorized access.
+
 Here we call those types of directives **Validators**.
 
 You can also use them to transform the output of your query result to modify string values, format dates, shield sensitive data, and more!

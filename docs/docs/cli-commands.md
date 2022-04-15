@@ -1,3 +1,7 @@
+---
+description: A comprehensive reference of Redwood's CLI
+---
+
 # Command Line Interface
 
 The following is a comprehensive reference of the Redwood CLI. You can get a glimpse of all the commands by scrolling the aside to the right.
@@ -357,7 +361,7 @@ You can pass any flags to the command and use them within your script:
 - A background worker you can off-load long running tasks
 - Custom seed scripts for your application during development
 
-See [this cookbook](cookbook/background-worker.md) for an example of using exec to run a background worker.
+See [this how to](how-to/background-worker.md) for an example of using exec to run a background worker.
 
 ## generate (alias g)
 
@@ -584,7 +588,7 @@ Not to be confused with Javascript functions, Capital-F Functions are meant to b
 
 **Usage**
 
-See the [Custom Function](cookbook/custom-function.md) recipe.
+See the [Custom Function](how-to/custom-function.md) how to.
 
 **Destroying**
 
