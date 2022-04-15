@@ -35,6 +35,8 @@ module.exports = {
       logo: {
         alt: 'RedwoodJS pinecone logo',
         src: 'https://d33wubrfki0l68.cloudfront.net/72b0d56596a981835c18946d6c4f8a968b08e694/82254/images/logo.svg',
+        href: 'https://redwoodjs.com/',
+        target: '_self',
       },
       items: [
         {
@@ -114,7 +116,7 @@ module.exports = {
     {
       src: 'https://plausible.io/js/plausible.js',
       defer: true,
-      'data-domain': 'learn.redwoodjs.com',
+      'data-domain': 'redwoodjs.com',
     },
   ],
   stylesheets: [

@@ -1,3 +1,8 @@
+---
+title: Cross-Origin Resource Sharing
+description: For when you need to worry about CORS
+---
+
 # CORS
 
 CORS stands for [Cross Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). In a nutshell, by default, browsers aren't allowed to access resources outside their own domain.
@@ -37,7 +42,7 @@ export const handler = createGraphQLHandler({
 
 Note that the `origin` needs to be a complete URL including the scheme (`https`). This is the domain that requests are allowed to come *from*. In this example we assume the web side is served from `https://www.example.com`. If you have multiple servers that should be allowed to access the api, you can pass an array of them instead:
 
-```javascript
+```jsx
 cors: {
   origin: ['https://example.com', 'https://www.example.com']
 },
@@ -120,7 +125,7 @@ Just like the GraphQL config, `origin` is the domain(s) that requests come *from
 
 In order to be able accept cookies from another domain we'll need to make a change to the `SameSite` option in `api/src/functions/auth.js` and set it to `None`:
 
-```javascript {4}
+```jsx {4}
   cookie: {
     HttpOnly: true,
     Path: '/',
@@ -133,7 +138,7 @@ In order to be able accept cookies from another domain we'll need to make a chan
 
 Next we need to tell the GraphQL client to include credentials (the dbAuth cookie) in any requests. This config goes in `web/src/App.js`:
 
-```javascript {5-9}
+```jsx {5-9}
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
@@ -155,7 +160,7 @@ const App = () => (
 
 Finally, we need to tell dbAuth to include credentials in its own XHR requests:
 
-```javascript {4-7}
+```jsx {4-7}
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">

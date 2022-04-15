@@ -30,7 +30,7 @@ If you have an existing site created with a prior version, you'll need to upgrad
 
 During installation, RedwoodJS checks if your system meets version requirements for Node and Yarn:
 
-- node: ">=14.17 <=16.x"
+- node: ">=14.19 <=16.x"
 - yarn: ">=1.15"
 
 If your system versions do not meet both requirements, _the installation bootstrap will result in an ERROR._ To check, please run the following from your terminal command line:
@@ -50,14 +50,12 @@ Please do upgrade accordingly. Then proceed to the Redwood installation when you
 > We recommend following the [instructions via Yarnpkg.com](https://classic.yarnpkg.com/en/docs/install/).
 >
 > **2. Node.js**
-> Using the latest [installation from Nodejs.org](https://nodejs.org/en/) works just fine.
+> Using the recommended [LTS version from Nodejs.org](https://nodejs.org/en/) is preferred, as the latest Current version isn't supported.
 >
 > - `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm).
->
-> If you're confused about which of the two current Node versions to use, we recommend using the most recent LTS, which is currently [v16.x](https://nodejs.org/download/release/latest-gallium/).
 
 > **Windows:** Recommended Development Setup
 >
 > JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
 >
-> - [Recommended Windows Development Setup](../../cookbook/windows-development-setup.md)
+> - [Recommended Windows Development Setup](../../how-to/windows-development-setup.md)

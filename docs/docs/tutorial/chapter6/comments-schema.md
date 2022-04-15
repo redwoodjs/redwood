@@ -115,7 +115,7 @@ Next we'll create the SDL (that defines the GraphQL interface) and a service (to
 yarn rw g sdl Comment --no-crud
 ```
 
-Note the `--no-crud` flag here. This gives us bare-bones functionality to start with (read-only access to our model) that we can build on. We got all the CRUD endpoints for free when we created the Comment section of our site, so let's do the opposite here and see how to add functionality from scratch.
+Note the `--no-crud` flag here. This gives us bare-bones functionality to start with (read-only access to our model) that we can build on. We got all the CRUD endpoints for free when we created the Post section of our site, so let's do the opposite here and see how to add functionality from scratch.
 
 That command will create both the SDL and the service. One change we'll need to make to the generated code is to allow access to anonymous users to view all comments. Change the `@requireAuth` directive to `@skipAuth` instead:
 

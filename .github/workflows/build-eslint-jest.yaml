@@ -3,7 +3,6 @@ name: Lint, Build & Test
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths-ignore: ['docs/**']
 
 jobs:
   all:
