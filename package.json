@@ -68,7 +68,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
-    "core-js": "3.21.1",
+    "core-js": "3.22.0",
     "cypress": "9.5.4",
     "cypress-wait-until": "1.7.2",
     "eslint": "8.13.0",

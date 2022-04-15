@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@prisma/client": "3.12.0",
-    "core-js": "3.21.1"
+    "core-js": "3.22.0"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
