@@ -33,7 +33,7 @@
     "@supabase/supabase-js": "1.33.3",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.40",
-    "firebase": "9.6.10",
+    "firebase": "9.6.11",
     "firebase-admin": "10.0.2",
     "gotrue-js": "0.9.29",
     "jest": "27.5.1",
