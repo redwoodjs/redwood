@@ -25,9 +25,6 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
-  "resolutions": {
-    "@types/react": "17.0.40"
-  },
   "dependencies": {
     "@redwoodjs/auth": "1.0.1",
     "@redwoodjs/graphql-server": "1.0.1",
@@ -45,7 +42,7 @@
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.4.1",
     "@types/node": "16.11.26",
-    "@types/react": "17.0.40",
+    "@types/react": "17.0.44",
     "@types/react-dom": "17.0.15",
     "@types/webpack": "5.28.0",
     "babel-jest": "27.5.1",
