@@ -170,6 +170,22 @@ const x = {
 `
     expect(merge(base, ext)).toBe(merged)
   })
+  it('merges deeply nested objects', () => {
+    const base = 'const x = { foo: { bar: { baz: { bat: [1] } } } }'
+    const ext = 'const x = { foo: { bar: { baz: { bat: [2] } } } }'
+    const merged = `\
+const x = {
+  foo: {
+    bar: {
+      baz: {
+        bat: [1, 2],
+      },
+    },
+  },
+}
+`
+    expect(merge(base, ext)).toBe(merged)
+  })
 })
 
 describe('Array behavior', () => {
@@ -200,6 +216,38 @@ const x = {
   foo: 'foo',
 }
 `
+    expect(merge(base, ext)).toBe(merged)
+  })
+})
+
+describe('nop behavior', () => {
+  it('does not merge strings', () => {
+    const base = 'const x = "foo"'
+    const ext = 'const x = "bar"'
+    // TODO: File issue with babel. For the life of me I can't figure out why
+    // `stringNode.insertAfter(otherStringNode)` yields
+    // (otherStringNode, stringNode). Need a minimal reproduction.
+    const merged = "const x = ('bar', 'foo')\n"
+    expect(merge(base, ext)).toBe(merged)
+  })
+  it('does not merge nested strings', () => {
+    const base = 'const x = { foo: { bar: "baz" } }'
+    const ext = 'const x = { foo: { bar: "bat" } }'
+    // As above. Why is 'bat' first here? Perplexing.
+    const merged = `\
+const x = {
+  foo: {
+    bar: ('bat', 'baz'),
+  },
+}
+`
+    const test = merge(base, ext)
+    expect(test).toBe(merged)
+  })
+  it('does not merge functions', () => {
+    const base = 'const x = (x, y) => x + y'
+    const ext = 'const x = (x, y) => x - y'
+    const merged = 'const x = (x, y) => x + y\n\nconst x = (x, y) => x - y\n'
     expect(merge(base, ext)).toBe(merged)
   })
 })

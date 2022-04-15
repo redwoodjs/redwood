@@ -70,3 +70,19 @@ export function partition(arr, predicate) {
     [[], []]
   )
 }
+
+export function overlap(base, ext, key) {
+  const map = ext.reduce((acc, e) => {
+    acc[key(e)] = e
+    return acc
+  }, {})
+  const overlaps = base.reduce((acc, b) => {
+    const k = key(b)
+    if (k in map) {
+      acc.push([b, map[k]])
+      delete map[k]
+    }
+    return acc
+  }, [])
+  return [overlaps, Object.values(map)]
+}

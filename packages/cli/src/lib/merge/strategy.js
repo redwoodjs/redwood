@@ -1,9 +1,12 @@
 import * as t from '@babel/types'
 
-import { fillUnique, nodeIs, pushUnique, sieve } from './algorithms'
+import { fillUnique, nodeIs, overlap, pushUnique, sieve } from './algorithms'
 
 export const mergeUtility = {
   keepBoth: (base, ext) => {
+    base.insertAfter(ext.node)
+  },
+  keepBothStatementParents: (base, ext) => {
     base.getStatementParent().insertAfter(ext.getStatementParent().node)
   },
   keepBase: (_base, _ext) => {},
@@ -17,12 +20,12 @@ export const mergeUtility = {
 }
 
 export const defaultMergeStrategy = {
-  ArrowFunctionExpression: mergeUtility.keepBoth,
+  ArrowFunctionExpression: mergeUtility.keepBothStatementParents,
   FunctionDeclaration: mergeUtility.keepBoth,
   VariableDeclarator(base, ext) {
     return base.node.init.type === ext.node.init.type
       ? this.recurse('init', base, ext)
-      : this.keepBoth(base, ext)
+      : this.keepBothStatementParents(base, ext)
   },
   ImportDeclaration(baseImport, extImport) {
     const baseSpecs = baseImport.node.specifiers
@@ -43,7 +46,7 @@ export const defaultMergeStrategy = {
     // Rule 1: If there's exactly 1 import with 0 specifiers, it's a side-effect import and should
     // not be merged, because adding specifiers would change its meaning.
     if (!baseSpecs.length !== !extSpecs.length) {
-      return this.keepBoth(baseImport, extImport)
+      return this.keepBothStatementParents(baseImport, extImport)
     }
 
     // Rule 2: Default specifiers must appear first, and be unique in a statement.
@@ -84,21 +87,17 @@ export const defaultMergeStrategy = {
       : this.keepBoth(baseProperty, extProperty)
   },
   ObjectExpression(baseObject, extObject) {
-    const uniqueEProps = []
-    for (const eprop of extObject.get('properties')) {
-      let unique = true
-      for (const bprop of baseObject.get('properties')) {
-        if (eprop.node.key.name === bprop.node.key.name) {
-          this.recurse('value', bprop, eprop)
-          unique = false
-        }
-      }
-      if (unique) {
-        uniqueEProps.push(eprop)
-      }
-    }
+    const [overlaps, unique] = overlap(
+      baseObject.get('properties'),
+      extObject.get('properties'),
+      (p) => p.node.key.name
+    )
 
-    baseObject.pushContainer('properties', ...uniqueEProps.map((u) => u.node))
+    overlaps.forEach(([b, e]) => this.recurse('value', b, e))
+    baseObject.pushContainer(
+      'properties',
+      unique.map((e) => e.node)
+    )
   },
   StringLiteral(baseString, extString) {
     return baseString.node.value === extString.node.value
