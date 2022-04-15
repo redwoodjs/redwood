@@ -60,7 +60,7 @@ export default BlogLayout
 import { Link, routes } from '@redwoodjs/router'
 
 type BlogLayoutProps = {
-  children?: React.ReactNode
+  children?: React.ReactNode,
 }
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
@@ -305,7 +305,7 @@ export default BlogLayout
 import { Link, routes } from '@redwoodjs/router'
 
 type BlogLayoutProps = {
-  children?: React.ReactNode
+  children?: React.ReactNode,
 }
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
