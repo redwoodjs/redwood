@@ -5925,7 +5925,7 @@ __metadata:
     jest: 27.5.1
     magic-sdk: 8.1.0
     netlify-identity-widget: 1.9.2
-    react: 17.0.2
+    react: 18.0.0
     supertokens-auth-react: 0.20.4
     typescript: 4.6.3
   languageName: unknown
@@ -6131,13 +6131,13 @@ __metadata:
     jest: 27.5.1
     nodemon: 2.0.15
     pascalcase: 1.0.0
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.0.0
+    react-dom: 18.0.0
     react-hook-form: 7.29.0
     typescript: 4.6.3
   peerDependencies:
     graphql: 16.3.0
-    react: 17.0.2
+    react: 18.0.0
   languageName: unknown
   linkType: soft
 
@@ -6249,8 +6249,8 @@ __metadata:
     mime-types: 2.1.35
     typescript: 4.6.3
   peerDependencies:
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.0.0
+    react-dom: 18.0.0
   languageName: unknown
   linkType: soft
 
@@ -6281,8 +6281,8 @@ __metadata:
     jest: 27.5.1
     lodash.isequal: 4.5.0
     prop-types: 15.8.1
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.0.0
+    react-dom: 18.0.0
     typescript: 4.6.3
   languageName: unknown
   linkType: soft
@@ -6401,8 +6401,8 @@ __metadata:
     graphql-tag: 2.12.6
     jest: 27.5.1
     nodemon: 2.0.15
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.0.0
+    react-dom: 18.0.0
     react-helmet-async: 1.3.0
     react-hot-toast: 2.2.0
     stacktracey: 2.1.8
@@ -6410,8 +6410,8 @@ __metadata:
     typescript: 4.6.3
   peerDependencies:
     prop-types: 15.8.1
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.0.0
+    react-dom: 18.0.0
   bin:
     build-storybook: ./dist/bins/build-storybook.js
     cross-env: ./dist/bins/cross-env.js
@@ -25685,16 +25685,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:17.0.2":
-  version: 17.0.2
-  resolution: "react-dom@npm:17.0.2"
+"react-dom@npm:18.0.0":
+  version: 18.0.0
+  resolution: "react-dom@npm:18.0.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
+    scheduler: ^0.21.0
   peerDependencies:
-    react: 17.0.2
-  checksum: 51abbcb72450fe527ebf978c3bc989ba266630faaa53f47a2fae5392369729e8de62b2e4683598cbe651ea7873cd34ec7d5127e2f50bf4bfe6bd0c3ad9bddcb0
+    react: ^18.0.0
+  checksum: 78aa393ab4ae35f7266ba5cd761ebd35cab8375f63051bda2bb97a27be2622dbd661b24b32b8e55f9365aa027e732251e7d0d754c755f8efb6bd38a72ba03df8
   languageName: node
   linkType: hard
 
@@ -25992,13 +25991,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:18.0.0":
+  version: 18.0.0
+  resolution: "react@npm:18.0.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 07ae8959acf1596f0550685102fd6097d461a54a4fd46a50f88a0cd7daaa97fdd6415de1dcb4bfe0da6aa43221a6746ce380410fa848acc60f8ac41f6649c148
+  checksum: cf55bc7b4315f54321d04cb0b69241c4973a5182d679551b3e6c3f57b312a4fdeac05038ca9502d48ea4d040d7550b0b7f07b3872a19589a5995ee899cc19d2b
   languageName: node
   linkType: hard
 
@@ -27130,13 +27128,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "scheduler@npm:0.20.2"
+"scheduler@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "scheduler@npm:0.21.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b0982e4b0f34f4ffa4f2f486161c0fd9ce9b88680b045dccbf250eb1aa4fd27413570645455187a83535e2370f5c667a251045547765408492bd883cbe95fcdb
+  checksum: 083a9a0c83f4923f7f5bb28d8bcf13cff42c90f4303bc187166520fcfc576c97e946d426c707d5a9c0aa0a655819605dd0c741467c626824bbf191251c126f1b
   languageName: node
   linkType: hard
 
