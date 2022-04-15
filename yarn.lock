@@ -1976,24 +1976,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "@clerk/backend-core@npm:1.1.2"
+"@clerk/backend-core@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@clerk/backend-core@npm:1.4.0"
   dependencies:
-    "@clerk/types": ^2.2.1
+    "@clerk/types": ^2.6.0
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: 342a7ee1028489e1d658a8004b35a14d976e4f7e01902020ab6bac34a9a1b2e936f615ea1cc5fd19f0b9f9e7dc84ee1fbfb182b72e39d0c0bf8aa07b5333dbc4
+  checksum: 9b4265fd950e0875a48d7d7a53790cb70b472fe73b9f17d2a40827b99048aae7e0c63342d3f878c9b23a5028c4aa5fea26badfa7e0d85102c1ffb7444cbdfa5d
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:3.2.2":
-  version: 3.2.2
-  resolution: "@clerk/clerk-js@npm:3.2.2"
+"@clerk/clerk-js@npm:latest":
+  version: 3.6.0
+  resolution: "@clerk/clerk-js@npm:3.6.0"
   dependencies:
-    "@clerk/types": ^2.2.1
+    "@clerk/types": ^2.6.0
     "@popperjs/core": ^2.4.4
     browser-tabs-lock: ^1.2.15
     classnames: ^2.3.1
@@ -2005,16 +2005,16 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: b51826545e931a8d48df3df73d0cebd8db32941516759c645282ae0ab618d33a1d66f3d09744fb5c2b33198bcba916ba38301d44c2dffa034c3b5a37709ba96c
+  checksum: 02ad2add7c0f05b4ce9eaecc191c73fcb1d25863471732226e26e1bf6db026d45b233ff17ffb8321279f00ba563e4b54970ee96ae89682c9ac48c1c0664d9b89
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.2.4":
-  version: 3.2.4
-  resolution: "@clerk/clerk-sdk-node@npm:3.2.4"
+"@clerk/clerk-sdk-node@npm:latest":
+  version: 3.3.4
+  resolution: "@clerk/clerk-sdk-node@npm:3.3.4"
   dependencies:
-    "@clerk/backend-core": ^1.1.2
-    "@clerk/types": ^2.2.1
+    "@clerk/backend-core": ^1.4.0
+    "@clerk/types": ^2.6.0
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -2024,11 +2024,11 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 24781b56abade99809c8e41c25b6c478772308d25bcca06a4e7cad993b8e9542c25c1f811223fd3c4bed81436f57fe1a4b6ed283a2b0f04a93de834c7dcba035
+  checksum: e5e1c42b57474451b3c404ea739f178dd15a36b9f10f70c3a95170e794f7ddbfbfee2a5fdc57ea6b32c6405fd81c1a9df83c2742ce9b169f1b5485232abb43d0
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.6.0":
+"@clerk/types@npm:2.6.0, @clerk/types@npm:^2.6.0":
   version: 2.6.0
   resolution: "@clerk/types@npm:2.6.0"
   checksum: cc6473c6ebb2169fd0354e77b4537487f6043f432c9a9fa0f55d99d63da3403225d951901a7053b19737c287a087a24e9897c8d6a863e0d72b935909707af39a
@@ -5881,7 +5881,7 @@ __metadata:
     typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.2.4
+    "@clerk/clerk-sdk-node": "*"
     "@magic-sdk/admin": 1.4.0
     firebase-admin: 10.0.2
   peerDependenciesMeta:
@@ -5907,8 +5907,8 @@ __metadata:
     "@azure/msal-browser": 2.23.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 3.2.2
-    "@clerk/clerk-sdk-node": 3.2.4
+    "@clerk/clerk-js": latest
+    "@clerk/clerk-sdk-node": latest
     "@clerk/types": 2.6.0
     "@nhost/nhost-js": 1.0.11
     "@supabase/supabase-js": 1.33.3
