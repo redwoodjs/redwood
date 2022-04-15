@@ -1989,7 +1989,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:latest":
+"@clerk/clerk-js@npm:3.6.0":
   version: 3.6.0
   resolution: "@clerk/clerk-js@npm:3.6.0"
   dependencies:
@@ -2009,7 +2009,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:latest":
+"@clerk/clerk-sdk-node@npm:3.3.4":
   version: 3.3.4
   resolution: "@clerk/clerk-sdk-node@npm:3.3.4"
   dependencies:
@@ -5881,7 +5881,7 @@ __metadata:
     typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": "*"
+    "@clerk/clerk-sdk-node": 3.3.4
     "@magic-sdk/admin": 1.4.0
     firebase-admin: 10.0.2
   peerDependenciesMeta:
@@ -5907,8 +5907,8 @@ __metadata:
     "@azure/msal-browser": 2.23.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": latest
-    "@clerk/clerk-sdk-node": latest
+    "@clerk/clerk-js": 3.6.0
+    "@clerk/clerk-sdk-node": 3.3.4
     "@clerk/types": 2.6.0
     "@nhost/nhost-js": 1.0.11
     "@supabase/supabase-js": 1.33.3
