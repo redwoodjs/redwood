@@ -332,7 +332,7 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  * the emptyAs prop.
  *
  * Redwood provides specific logic to address field empty scenarios through
- * the use of the emptyAs prop.  The decision chain for behaviour on field empty
+ * the use of the emptyAs prop. The decision chain for behaviour on field empty
  * scenarios is as follows:
  *   1. if setValueAs is specified by the user, that will determine the behavior
  *   2  if emptyAs is specified, then the emptyAs prop will determine the
