@@ -339,7 +339,7 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  *      field value on an empty condition.
  *   3. if { validation.required } is set, an empty field will return null; however,
  *      r-h-f's validation should engage and prevent submission of the form.
- *   4. if the field is an Id field, that is it ends in "Id", then an empty
+ *   4. if the field is an Id field, that is its name ends in "Id", then an empty
  *      field will return null.
  *   5. In the event of none of the above cases, the field value will be set as
  *      follows for empty field scenarios:
