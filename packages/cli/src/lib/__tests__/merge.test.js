@@ -1,3 +1,7 @@
+import path from 'path'
+
+import fs from 'fs-extra'
+
 import { merge } from '../merge'
 
 describe('Import behavior', () => {
@@ -273,5 +277,17 @@ const x = {
     const ext = 'const x = (x, y) => x - y'
     const merged = 'const x = (x, y) => x + y\n\nconst x = (x, y) => x - y\n'
     expect(merge(base, ext)).toBe(merged)
+  })
+})
+
+fdescribe('Integration tests', () => {
+  const baseDir = './src/lib/__tests__/fixtures/merge'
+  const tests = fs.readdirSync(baseDir).map((caseDir) => {
+    return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>
+      fs.readFileSync(path.join(baseDir, caseDir, file), { encoding: 'utf-8' })
+    )
+  })
+  test.each(tests)('%s', (_it, base, ext, expected) => {
+    expect(merge(base, ext)).toBe(expected)
   })
 })

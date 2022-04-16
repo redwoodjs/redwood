@@ -86,8 +86,13 @@ function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
 }
 
 export function merge(base, extension, strategy) {
-  const baseAST = parse(base)
-  const extAST = parse(extension)
+  const parseReact = (code) =>
+    parse(code, {
+      presets: ['@babel/preset-react'],
+    })
+
+  const baseAST = parseReact(base)
+  const extAST = parseReact(extension)
 
   mergeAST(baseAST, extAST, strategy)
   const { code } = generate(baseAST)
