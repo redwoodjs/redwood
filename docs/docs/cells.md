@@ -192,7 +192,7 @@ export const afterQuery = (data) => ({...data})
 
 If there's no cached data and the request is in flight, a Cell renders `Loading`.
 
-For a production example, navigate to [predictcovid.com](https://predictcovid.com), the first site made with Redwood. Usually, when you first navigate there, you'll see most of the dashboard spinning. Those are `Loading` components in action!
+<!-- For a production example, navigate to [predictcovid.com](https://predictcovid.com), the first site made with Redwood. Usually, when you first navigate there, you'll see most of the dashboard spinning. Those are `Loading` components in action! -->
 
 When you're developing locally, you can catch your Cell waiting to hear back for a moment if set your speed in the Inspector's **Network** tab to something like "Slow 3G".
 
