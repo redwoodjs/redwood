@@ -447,11 +447,11 @@ Now let's add the ability to bring back the uploader if you decide you want to c
 We're borrowing the styles from the submit button and making sure that the image has both a top and bottom margin so it doesn't crash into the new button.
 
 ## Safe usage of your free plan
-Having a free plan is great, but if we just load images and never actually remove the unnecessary ones, we'll be in trouble.
+Having a free plan is great, but if you just load images and never actually remove the unnecessary ones, you'll be in trouble.
 
-To avoid this, we'd better implement the `deleteImage` mutation. It will enable us to make a call to the Filestack API to remove our resources, and on success, we will remove the row in the `Image` model.
+To avoid this, we'd better implement the `deleteImage` mutation. It will enable you to make a call to the Filestack API to remove your resources, and on success, you will remove the row in the `Image` model.
 
-We are going to need a new `.env` called `REDWOOD_ENV_FILESTACK_SECRET`, which we can find in Filestack > Security > Policy & Signature: App Secret.
+You are going to need a new `.env` called `REDWOOD_ENV_FILESTACK_SECRET`, which you can find in Filestack > Security > Policy & Signature: App Secret.
 
 Also, let's add this package to the right side of our current concern:
 
@@ -459,7 +459,7 @@ Also, let's add this package to the right side of our current concern:
 yarn workspace api add filestack-js
 ```
 
-We should be good to go. Let's modify our service accordingly:
+You should be good to go. Let's modify our service accordingly:
 
 ```js {8-18} title="api/src/services/image/image.ts"
 import * as Filestack from 'filestack-js'
@@ -488,7 +488,7 @@ export const deleteImage = async({ id }) => {
 }
 ```
 
-Great! Now when we click the button in our frontend, our service will indeed first remove the file from our Filestack store, then remove it from our model.
+Great! Now when you click the button in the frontend, the service will indeed first remove the file from our Filestack store, then remove it from the model.
 
 ## The Wrap-up
 
