@@ -304,7 +304,7 @@ Redwood provides a flexible treatment of empty input field value. Appropriate tr
 The treatment of empty field values is governed by the following:
 
  1. If `setValueAs` is specified by the user, the specified function will determine the behavior of empty fields.
- 2  If the `emptyAs` prop is set, then the emptyAs prop will determine the field value on an empty condition.  See below for `emptyAs` prop values.
+ 2.  If the `emptyAs` prop is set, then the `emptyAs` prop will determine the field value on an empty condition. See below for `emptyAs` prop values.
  3. If the `validation = { required: true }` prop is set, an empty field will return null.  However,
     the validation provided by react-hook-forms should engage and prevent submission of the form as an empty value
     would not satisfy the `required` validation.
