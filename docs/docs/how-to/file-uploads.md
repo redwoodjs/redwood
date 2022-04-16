@@ -446,6 +446,51 @@ Now let's add the ability to bring back the uploader if you decide you want to c
 
 We're borrowing the styles from the submit button and making sure that the image has both a top and bottom margin so it doesn't crash into the new button.
 
+## Safe usage of your free plan
+Having a free plan is great, but if we just load images and never actually remove the unnecessary ones, we'll be in trouble.
+
+To avoid this, we'd better implement the `deleteImage` mutation. It will enable us to make a call to the Filestack API to remove our resources, and on success, we will remove the row in the `Image` model.
+
+We are going to need a new `.env` called `REDWOOD_ENV_FILESTACK_SECRET`, which we can find in your Filestack interface.
+
+Also, let's add this package to the right side of our current concern:
+
+```shell
+yarn workspace api add filestack-js
+```
+
+We should be good to go. Let's modify our service accordingly:
+
+```javascript
+// api/src/services/image/image.ts
+import * as Filestack from 'filestack-js'
+
+export const deleteImage = async({ id }) => {
+  const client = Filestack.init(process.env.REDWOOD_ENV_FILESTACK_API_KEY)
+
+  const image = await db.image.find({ where: { id } })
+
+  /** @manual the `security.handle` is the unique part of the Filestack file's url. */
+  const handle = /\w+$/.exec(image.url).pop()
+  
+  const security = Filestack.getSecurity(
+    {
+      /** @manual We set `expiry` at `now() + 5 minutes`. */
+      expiry: new Date(new Date().getTime() + 5 * 60 * 1000),
+      handle,
+      call: ['remove'],
+    },
+    process.env.REDWOOD_ENV_FILESTACK_SECRET
+  )
+
+  return client
+    .remove(handle, security)
+    .then(async (body) => db.image.delete({ where: { id } } ))
+}
+```
+
+Great! Now when we click the button in our frontend, our service will indeed first remove the file from our Filestack store, then remove it from our model.
+
 ## The Wrap-up
 
 Files uploaded!
