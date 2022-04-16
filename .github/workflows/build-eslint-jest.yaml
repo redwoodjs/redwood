@@ -14,29 +14,29 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
       - name: Remove the tsc problem matcher if not ubuntu-node-16
         if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '16.10') == false
         run: echo "echo "::remove-matcher owner=tsc::""
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
       - name: Cache yarn
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-1235-${{ hashFiles('yarn.lock') }} # Change `yarn-{randomString}` to bust the cache
           restore-keys: |
-            yarn-
+            yarn-1234
 
       - name: Install dependencies
         run: yarn install --immutable

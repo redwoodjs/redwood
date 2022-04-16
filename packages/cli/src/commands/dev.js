@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { argv } from 'process'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
@@ -11,6 +12,7 @@ import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
+const defaultApiDebugPort = 18911
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
 export const builder = (yargs) => {
@@ -36,6 +38,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       description: 'Reload on changes to node_modules',
     })
+    .option('apiDebugPort', {
+      type: 'number',
+      description:
+        'Port on which to expose API server debugger. If you supply the flag with no value it defaults to 18911.',
+    })
     .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
@@ -50,6 +57,7 @@ export const handler = async ({
   forward = '',
   generate = true,
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
+  apiDebugPort,
 }) => {
   const rwjsPaths = getPaths()
 
@@ -93,13 +101,30 @@ export const handler = async ({
     '@redwoodjs/core/config/webpack.development.js'
   )
 
+  const getApiDebugFlag = () => {
+    // Passed in flag takes precedence
+    if (apiDebugPort) {
+      return `--debug-port ${apiDebugPort}`
+    } else if (argv.includes('--apiDebugPort')) {
+      return `--debug-port ${defaultApiDebugPort}`
+    }
+
+    const apiDebugPortInToml = getConfig().api.debugPort
+    if (apiDebugPortInToml) {
+      return `--debug-port ${apiDebugPortInToml}`
+    }
+
+    // Dont pass in debug port flag, unless configured
+    return ''
+  }
+
   const redwoodConfigPath = getConfigPath()
 
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },

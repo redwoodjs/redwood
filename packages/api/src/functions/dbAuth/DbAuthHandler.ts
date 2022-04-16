@@ -4,6 +4,14 @@ import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
+import {
+  CorsConfig,
+  CorsContext,
+  CorsHeaders,
+  createCorsContext,
+} from '../../cors'
+import { normalizeRequest } from '../../transforms'
+
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
 
@@ -29,6 +37,16 @@ interface DbAuthHandlerOptions {
     salt: string
     resetToken: string
     resetTokenExpiresAt: string
+  }
+  /**
+   * Object containing cookie config options
+   */
+  cookie?: {
+    Path?: string
+    HttpOnly?: boolean
+    Secure?: boolean
+    SameSite?: string
+    Domain?: string
   }
   /**
    * Object containing forgot password options
@@ -100,6 +118,11 @@ interface DbAuthHandlerOptions {
       usernameTaken?: string
     }
   }
+
+  /**
+   * CORS settings, same as in createGraphqlHandler
+   */
+  cors?: CorsConfig
 }
 
 interface SignupHandlerOptions {
@@ -140,6 +163,8 @@ export class DbAuthHandler {
   hasInvalidSession: boolean
   session: SessionRecord | undefined
   sessionCsrfToken: string | undefined
+  corsContext: CorsContext | undefined
+  futureExpiresDate: string
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
@@ -167,18 +192,6 @@ export class DbAuthHandler {
     }
   }
 
-  // class constant: all the attributes of the cookie other than the value itself
-  static get COOKIE_META() {
-    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict']
-
-    // set DBAUTH_COOKIE_DOMAIN if you need any subdomains to access this cookie
-    if (process.env.DBAUTH_COOKIE_DOMAIN) {
-      meta.push(`Domain=${process.env.DBAUTH_COOKIE_DOMAIN}`)
-    }
-
-    return meta
-  }
-
   // default to epoch when we want to expire
   static get PAST_EXPIRES_DATE() {
     return new Date('1970-01-01T00:00:00.000+00:00').toUTCString()
@@ -187,13 +200,6 @@ export class DbAuthHandler {
   // generate a new token (standard UUID)
   static get CSRF_TOKEN() {
     return uuidv4()
-  }
-
-  // convert to the UTC datetime string that's required for cookies
-  get _futureExpiresDate() {
-    const futureDate = new Date()
-    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
-    return futureDate.toUTCString()
   }
 
   // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
@@ -222,6 +228,13 @@ export class DbAuthHandler {
     this.dbAccessor = this.db[this.options.authModelAccessor]
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
+    const futureDate = new Date()
+    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
+    this.futureExpiresDate = futureDate.toUTCString()
+
+    if (options.cors) {
+      this.corsContext = createCorsContext(options.cors)
+    }
 
     try {
       const [session, csrfToken] = decryptSession(
@@ -243,10 +256,26 @@ export class DbAuthHandler {
   // Actual function that triggers everything else to happen: `login`, `signup`,
   // etc. is called from here, after some checks to make sure the request is good
   async invoke() {
+    const request = normalizeRequest(this.event)
+    let corsHeaders = {}
+    if (this.corsContext) {
+      corsHeaders = this.corsContext.getRequestHeaders(request)
+      // Return CORS headers for OPTIONS requests
+      if (this.corsContext.shouldHandleCors(request)) {
+        return this._buildResponseWithCorsHeaders(
+          { body: '', statusCode: 200 },
+          corsHeaders
+        )
+      }
+    }
+
     // if there was a problem decryption the session, just return the logout
     // response immediately
     if (this.hasInvalidSession) {
-      return this._ok(...this._logoutResponse())
+      return this._buildResponseWithCorsHeaders(
+        this._ok(...this._logoutResponse()),
+        corsHeaders
+      )
     }
 
     try {
@@ -254,12 +283,12 @@ export class DbAuthHandler {
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
-        return this._notFound()
+        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       }
 
       // make sure it's using the correct verb, GET vs POST
       if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
-        return this._notFound()
+        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       }
 
       // call whatever auth method was requested and return the body and headers
@@ -267,12 +296,18 @@ export class DbAuthHandler {
         method
       ]()
 
-      return this._ok(body, headers, options)
+      return this._buildResponseWithCorsHeaders(
+        this._ok(body, headers, options),
+        corsHeaders
+      )
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
-        return this._notFound()
+        return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       } else {
-        return this._badRequest(e.message || e)
+        return this._buildResponseWithCorsHeaders(
+          this._badRequest(e.message || e),
+          corsHeaders
+        )
       }
     }
   }
@@ -287,10 +322,16 @@ export class DbAuthHandler {
           `Username is required`
       )
     }
+    let user
 
-    let user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
+    try {
+      user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     if (user) {
       const tokenExpires = new Date()
@@ -303,16 +344,21 @@ export class DbAuthHandler {
       const buffer = new Buffer(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
-      // set token and expires time
-      user = await this.dbAccessor.update({
-        where: {
-          [this.options.authFields.id]: user[this.options.authFields.id],
-        },
-        data: {
-          [this.options.authFields.resetToken]: token,
-          [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
-        },
-      })
+      try {
+        // set token and expires time
+        user = await this.dbAccessor.update({
+          where: {
+            [this.options.authFields.id]: user[this.options.authFields.id],
+          },
+          data: {
+            [this.options.authFields.resetToken]: token,
+            [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
+          },
+        })
+      } catch (e) {
+        console.log(e)
+        throw new DbAuthError.GenericError()
+      }
 
       // call user-defined handler in their functions/auth.js
       const response = await this.options.forgotPassword.handler(
@@ -396,15 +442,22 @@ export class DbAuthHandler {
       )
     }
 
-    // if we got here then we can update the password in the database
-    user = await this.dbAccessor.update({
-      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
-      data: {
-        [this.options.authFields.hashedPassword]: hashedPassword,
-        [this.options.authFields.resetToken]: null,
-        [this.options.authFields.resetTokenExpiresAt]: null,
-      },
-    })
+    try {
+      // if we got here then we can update the password in the database
+      user = await this.dbAccessor.update({
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
+        data: {
+          [this.options.authFields.hashedPassword]: hashedPassword,
+          [this.options.authFields.resetToken]: null,
+          [this.options.authFields.resetTokenExpiresAt]: null,
+        },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     // call the user-defined handler so they can decide what to do with this user
     const response = await this.options.resetPassword.handler(
@@ -515,18 +568,29 @@ export class DbAuthHandler {
   // returns all the cookie attributes in an array with the proper expiration date
   //
   // pass the argument `expires` set to "now" to get the attributes needed to expire
-  // the session, or "future" (or left out completely) to set to `_futureExpiresDate`
+  // the session, or "future" (or left out completely) to set to `futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
-    const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
+    const cookieOptions = this.options.cookie || {}
+    const meta = Object.keys(cookieOptions)
+      .map((key) => {
+        const optionValue =
+          cookieOptions[key as keyof DbAuthHandlerOptions['cookie']]
 
-    if (process.env.NODE_ENV !== 'development') {
-      meta.push('Secure')
-    }
+        // Convert the options to valid cookie string
+        if (optionValue === true) {
+          return key
+        } else if (optionValue === false) {
+          return null
+        } else {
+          return `${key}=${optionValue}`
+        }
+      })
+      .filter((v) => v)
 
     const expiresAt =
       expires === 'now'
         ? DbAuthHandler.PAST_EXPIRES_DATE
-        : this._futureExpiresDate
+        : this.futureExpiresDate
     meta.push(`Expires=${expiresAt}`)
 
     return meta
@@ -591,13 +655,20 @@ export class DbAuthHandler {
   }
 
   async _clearResetToken(user: Record<string, unknown>) {
-    await this.dbAccessor.update({
-      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
-      data: {
-        [this.options.authFields.resetToken]: null,
-        [this.options.authFields.resetTokenExpiresAt]: null,
-      },
-    })
+    try {
+      await this.dbAccessor.update({
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
+        data: {
+          [this.options.authFields.resetToken]: null,
+          [this.options.authFields.resetTokenExpiresAt]: null,
+        },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
   }
 
   // verifies that a username and password are correct, and returns the user if so
@@ -617,10 +688,16 @@ export class DbAuthHandler {
       )
     }
 
-    // does user exist?
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
+    let user
+    try {
+      // does user exist?
+      user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     if (!user) {
       throw new DbAuthError.UserNotFoundError(
@@ -650,10 +727,16 @@ export class DbAuthHandler {
       throw new DbAuthError.NotLoggedInError()
     }
 
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.id]: this.session?.id },
-      select: { [this.options.authFields.id]: true },
-    })
+    let user
+    try {
+      user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.id]: this.session?.id },
+        select: { [this.options.authFields.id]: true },
+      })
+    } catch (e) {
+      console.log(e)
+      throw new DbAuthError.GenericError()
+    }
 
     if (!user) {
       throw new DbAuthError.UserNotFoundError()
@@ -785,6 +868,23 @@ export class DbAuthHandler {
       statusCode: 400,
       body: JSON.stringify({ error: message }),
       headers: { 'Content-Type': 'application/json' },
+    }
+  }
+
+  _buildResponseWithCorsHeaders(
+    response: {
+      body?: string
+      statusCode: number
+      headers?: Record<string, string>
+    },
+    corsHeaders: CorsHeaders
+  ) {
+    return {
+      ...response,
+      headers: {
+        ...(response.headers || {}),
+        ...corsHeaders,
+      },
     }
   }
 }

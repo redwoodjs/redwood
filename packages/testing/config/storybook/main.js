@@ -9,7 +9,6 @@ const {
   getConfig,
   getPaths,
 } = require('@redwoodjs/internal')
-const { getProject } = require('@redwoodjs/structure')
 
 const config = getConfig()
 
@@ -47,8 +46,11 @@ const baseConfig = {
   stories: [
     `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
   ],
-  addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
-  // Storybook's UI uses a seperate Webpack configuration
+  addons: [
+    '@storybook/addon-essentials',
+    config.web.a11y && '@storybook/addon-a11y',
+  ].filter(Boolean),
+  // Storybook's UI uses a separate Webpack configuration
   managerWebpack: (sbConfig) => {
     const userManagerPath = fs.existsSync(rwjsPaths.web.storybookManagerConfig)
       ? rwjsPaths.web.storybookManagerConfig
@@ -76,6 +78,10 @@ const baseConfig = {
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] = rwjsPaths.web.src
 
     // Determine the default storybook style file to use.
+    // If one isn't provided, set the alias to `false` to tell webpack to ignore it.
+    // See https://webpack.js.org/configuration/resolve/#resolvealias.
+    sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = false
+
     const supportedStyleIndexFiles = ['index.scss', 'index.sass', 'index.css']
     for (let file of supportedStyleIndexFiles) {
       const filePath = path.join(rwjsPaths.web.src, file)
@@ -136,15 +142,6 @@ const baseConfig = {
   // only set staticDirs when running Storybook process; will fail if set for SB --build
   ...(process.env.NODE_ENV !== 'production' && {
     staticDirs: [`${staticAssetsFolder}`],
-  }),
-  // only set up type checking for typescript projects
-  ...(getProject().isTypeScriptProject && {
-    // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
-    typescript: {
-      check: true,
-      // By default, the checker runs asynchronously in dev mode. Force it to run synchronously.
-      checkOptions: { async: false },
-    },
   }),
 }
 

@@ -407,38 +407,41 @@ const VALIDATORS = {
       if (options.integer && !Number.isInteger(value)) {
         validationError('integerNumericality', name, options)
       }
-      if (options.lessThan && (value as number) >= options.lessThan) {
+      if (options.lessThan != null && (value as number) >= options.lessThan) {
         validationError('lessThanNumericality', name, options, {
           lessThan: options.lessThan,
         })
       }
       if (
-        options.lessThanOrEqual &&
+        options.lessThanOrEqual != null &&
         (value as number) > options.lessThanOrEqual
       ) {
         validationError('lessThanOrEqualNumericality', name, options, {
           lessThanOrEqual: options.lessThanOrEqual,
         })
       }
-      if (options.greaterThan && (value as number) <= options.greaterThan) {
+      if (
+        options.greaterThan != null &&
+        (value as number) <= options.greaterThan
+      ) {
         validationError('greaterThanNumericality', name, options, {
           greaterThan: options.greaterThan,
         })
       }
       if (
-        options.greaterThanOrEqual &&
+        options.greaterThanOrEqual != null &&
         (value as number) < options.greaterThanOrEqual
       ) {
         validationError('greaterThanOrEqualNumericality', name, options, {
           greaterThanOrEqual: options.greaterThanOrEqual,
         })
       }
-      if (options.equal && value !== options.equal) {
+      if (options.equal != null && value !== options.equal) {
         validationError('equalNumericality', name, options, {
           equal: options.equal,
         })
       }
-      if (options.otherThan && value === options.otherThan) {
+      if (options.otherThan != null && value === options.otherThan) {
         validationError('otherThanNumericality', name, options, {
           otherThan: options.otherThan,
         })
@@ -584,7 +587,7 @@ export const validateWith = (func: () => void) => {
 // There is an optional `$scope` key which contains additional the `where`
 // clauses to include when checking whether the field is unique. So rather than
 // a product name having to be unique across the entire database, you could
-// check that it is only unique amoung a subset of records with the same
+// check that it is only unique among a subset of records with the same
 // `companyId`.
 //
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be

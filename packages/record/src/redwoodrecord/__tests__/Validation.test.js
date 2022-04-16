@@ -132,7 +132,7 @@ describe.only('validate', () => {
     record.email = null
     record.validate()
 
-    expect(record.errors.email).toEqual(['email must be present'])
+    expect(record.errors.email).toEqual(['Email must be present'])
   })
 
   it('returns false if any one of multiple validations on single field fails', () => {
@@ -168,9 +168,9 @@ describe.only('validate', () => {
     record.validate()
 
     expect(record.errors.email).toEqual([
-      'email must be formatted like an email address',
+      'Email must be formatted like an email address',
     ])
-    expect(record.errors.name).toEqual(['name must be present'])
+    expect(record.errors.name).toEqual(['Name must be present'])
   })
 
   it('throws error on validation if option provided', () => {

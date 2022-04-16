@@ -6,6 +6,7 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
   SupportedVerifierTypes,
+  DEFAULT_TOLERANCE,
 } from '../auth/verifiers'
 
 export {
@@ -86,11 +87,25 @@ export const verifyEvent = (
     body = eventBody(event)
   }
 
-  const signature = signatureFromEvent({
+  let signature = signatureFromEvent({
     event,
     signatureHeader:
       options?.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
+
+  if (options?.signatureTransformer) {
+    signature = options.signatureTransformer(signature)
+  }
+
+  if (options?.eventTimestamp) {
+    const timestamp = options?.currentTimestampOverride ?? Date.now()
+    const difference = Math.abs(timestamp - options?.eventTimestamp)
+    const tolerance = options?.tolerance ?? DEFAULT_TOLERANCE
+
+    if (difference > tolerance) {
+      throw new WebhookVerificationError()
+    }
+  }
 
   const { verify } = createVerifier(type, options)
 

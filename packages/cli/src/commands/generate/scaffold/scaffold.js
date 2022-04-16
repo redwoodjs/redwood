@@ -158,7 +158,6 @@ export const files = async ({
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
       name,
-      crud: true,
       typescript,
     })),
     ...(await serviceFiles({

@@ -24,7 +24,7 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
-async function webTasks(outputPath, { link, verbose }) {
+async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -84,6 +84,46 @@ async function webTasks(outputPath, { link, verbose }) {
           return applyCodemod(
             'blogPostPage.js',
             fullPath('web/src/pages/BlogPostPage/BlogPostPage')
+          )
+        },
+      },
+      {
+        title: 'Creating profile page',
+        task: async () => {
+          await createPage('profile /profile')
+
+          // Update the profile page test
+          const testFileContent = `import { render, waitFor, screen } from '@redwoodjs/testing/web'
+
+          import ProfilePage from './ProfilePage'
+
+          describe('ProfilePage', () => {
+            it('renders successfully', async () => {
+              mockCurrentUser({
+                email: 'danny@bazinga.com',
+                id: 84849020,
+                roles: 'BAZINGA',
+              })
+
+              await waitFor(async () => {
+                expect(() => {
+                  render(<ProfilePage />)
+                }).not.toThrow()
+              })
+
+              expect(await screen.findByText('danny@bazinga.com')).toBeInTheDocument()
+            })
+          })
+          `
+
+          fs.writeFileSync(
+            fullPath('web/src/pages/ProfilePage/ProfilePage.test'),
+            testFileContent
+          )
+
+          return applyCodemod(
+            'profilePage.js',
+            fullPath('web/src/pages/ProfilePage/ProfilePage')
           )
         },
       },
@@ -207,14 +247,14 @@ async function webTasks(outputPath, { link, verbose }) {
             [],
             getExecaOptions(outputPath)
           ),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       {
         title: '[link] Copy local framework files again',
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa('yarn rwfw project:copy', [], getExecaOptions(outputPath)),
-        enabled: () => link,
+        enabled: () => linkWithLatestFwBuild,
       },
       // =========
       {
@@ -222,7 +262,9 @@ async function webTasks(outputPath, { link, verbose }) {
         task: () => {
           return execa(
             'yarn rw setup ui tailwindcss',
-            ['--force', link && '--no-install'].filter(Boolean),
+            ['--force', linkWithLatestFwBuild && '--no-install'].filter(
+              Boolean
+            ),
             execaOptions
           )
         },
@@ -243,7 +285,7 @@ async function addModel(schema) {
   fs.writeFileSync(path, `${current}\n\n${schema}`)
 }
 
-async function apiTasks(outputPath, { verbose }) {
+async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptionsForProject = getExecaOptions(outputPath)
@@ -255,6 +297,10 @@ async function apiTasks(outputPath, { verbose }) {
       getExecaOptions(outputPath)
     )
 
+    if (linkWithLatestFwBuild) {
+      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+    }
+
     await execa('yarn rw g dbAuth', [], getExecaOptions(outputPath))
 
     // add dbAuth User model
@@ -264,22 +310,43 @@ async function apiTasks(outputPath, { verbose }) {
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
-    const contentContactsSdl = fs.readFileSync(pathContactsSdl).toString()
-    const resultsContactsSdl = contentContactsSdl.replace(
-      /createContact([^}]*)@requireAuth/,
-      `createContact(input: CreateContactInput!): Contact @skipAuth`
-    )
+    const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
+    const resultsContactsSdl = contentContactsSdl
+      .replace(
+        'createContact(input: CreateContactInput!): Contact! @requireAuth',
+        `createContact(input: CreateContactInput!): Contact @skipAuth`
+      )
+      .replace(
+        'deleteContact(id: Int!): Contact! @requireAuth',
+        'deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])'
+      ) // make deleting contacts admin only
     fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
 
-    // update directive in contacts.sdl.ts
+    // update directive in posts.sdl.ts
     const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
-    const contentPostsSdl = fs.readFileSync(pathPostsSdl).toString()
+    const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
     const resultsPostsSdl = contentPostsSdl.replace(
       /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
       `posts: [Post!]! @skipAuth
       post(id: Int!): Post @skipAuth`
-    )
+    ) // make posts accessible to all
+
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
+
+    // Update src/lib/auth to return roles, so tsc doesn't complain
+    const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
+    const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
+
+    const newLibAuthContent = libAuthContent
+      .replace(
+        'select: { id: true }',
+        'select: { id: true, roles: true, email: true}'
+      )
+      .replace(
+        'const currentUserRoles = context.currentUser?.roles',
+        'const currentUserRoles = context.currentUser?.roles as string | string[]'
+      )
+    fs.writeFileSync(libAuthPath, newLibAuthContent)
 
     // update requireAuth test
     const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.ts`
@@ -287,7 +354,7 @@ async function apiTasks(outputPath, { verbose }) {
     const resultsRequireAuth = contentRequireAuth.replace(
       /const mockExecution([^}]*){} }\)/,
       `const mockExecution = mockRedwoodDirective(requireAuth, {
-        context: { currentUser: { id: 1 } },
+        context: { currentUser: { id: 1, roles: 'ADMIN', email: 'b@zinga.com' } },
       })`
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
@@ -299,6 +366,7 @@ async function apiTasks(outputPath, { verbose }) {
       /handler: \({ username,([^}]*)userAttributes }\) => {/,
       `handler: ({ username, hashedPassword, salt }) => {`
     )
+
     fs.writeFileSync(pathAuthJs, resultsAuthJs)
 
     await execa(
@@ -352,21 +420,7 @@ async function apiTasks(outputPath, { verbose }) {
             execaOptionsForProject
           )
 
-          await execa(`yarn rw g sdl contact`, [], execaOptionsForProject)
-
-          await applyCodemod(
-            'contactsSdl.js',
-            fullPath('api/src/graphql/contacts.sdl')
-          )
-        },
-      },
-      {
-        title: 'Adding createContact to contacts service',
-        task: async () => {
-          await applyCodemod(
-            'contactsService.js',
-            fullPath('api/src/services/contacts/contacts')
-          )
+          await execa(`yarn rw g scaffold contacts`, [], execaOptionsForProject)
         },
       },
       {
