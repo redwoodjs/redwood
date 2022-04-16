@@ -1,14 +1,13 @@
-import fs from 'fs'
-import path from 'path'
-
-import execa from 'execa'
-import { outputFileSync } from 'fs-extra'
-import Listr from 'listr'
-
 import { errorTelemetry } from '@redwoodjs/telemetry'
-
+import execa from 'execa'
+import fs from 'fs'
+import Listr from 'listr'
+import path from 'path'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
+
+
+
 
 export const command = 'windicss'
 export const aliases = ['windi']
@@ -122,16 +121,16 @@ export const handler = async ({ force, install }) => {
       },
     },
     {
-      title: 'Adding import to App.tsx...',
+      title: `Adding import to ${rwPaths.web.app}...`,
       task: (_ctx, task) => {
-        const APP_TSX_PATH = path.join(rwPaths.web.src, 'App.tsx')
-        const appTsx = fs.readFileSync(APP_TSX_PATH, 'utf-8')
+        const APP_FILE_PATH = rwPaths.web.app
+        const appFile = fs.readFileSync(APP_FILE_PATH, 'utf-8')
 
-        if (windiImportsExist(appTsx)) {
-          task.skip('Imports already exist in App.tsx')
+        if (windiImportsExist(appFile)) {
+          task.skip('Imports already exist in ' + APP_FILE_PATH)
         } else {
-          const newAppTsx = `import 'windi.css'\n` + appTsx
-          fs.writeFileSync(APP_TSX_PATH, newAppTsx)
+          const newAppFile = appFile.replace(/^import 'index\.css'$/m, 'import \'index.css\'\nimport \'windi.css\'');
+          fs.writeFileSync(APP_FILE_PATH, newAppTsx)
         }
       },
     },
