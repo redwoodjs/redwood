@@ -451,7 +451,7 @@ Having a free plan is great, but if we just load images and never actually remov
 
 To avoid this, we'd better implement the `deleteImage` mutation. It will enable us to make a call to the Filestack API to remove our resources, and on success, we will remove the row in the `Image` model.
 
-We are going to need a new `.env` called `REDWOOD_ENV_FILESTACK_SECRET`, which we can find in your Filestack interface.
+We are going to need a new `.env` called `REDWOOD_ENV_FILESTACK_SECRET`, which we can find in Filestack > Security > Policy & Signature: App Secret.
 
 Also, let's add this package to the right side of our current concern:
 
