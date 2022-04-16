@@ -171,17 +171,17 @@ type ValueAsType =
   | 'valueAsNumber'
   | 'valueAsString'
 
-type SetValueAsFcn = (val: string) => any
+type SetValueAsFn = (val: string) => any
 /*
- * One of the functions in the SET_VALUE_AS_FCNS object is
- * passed to the react-hook-forms setValueAs prop by the getSetValueAsFcn
+ * One of the functions in the SET_VALUE_AS_FUNCTIONS object is
+ * passed to the react-hook-forms setValueAs prop by the getSetValueAsFn
  * function which is used by the setCoercion function
  * There may be an alternate solution using closures that is less explicit, but
  * would likely be more troublesome to debug.
  */
 const SET_VALUE_AS_FUNCTIONS: Record<
   ValueAsType,
-  Record<string, SetValueAsFcn>
+  Record<string, SetValueAsFn>
 > = {
   // valueAsBoolean is commented out as r-h-f does not currently support
   // setValueAs functionality for checkboxes.  May investigate future
@@ -265,9 +265,11 @@ const SET_VALUE_AS_FUNCTIONS: Record<
   },
 }
 
-const getSetValueAsFcn = (
+// Note that the emptyAs parameter takes precedence over the type, required,
+// and isId parameters
+const getSetValueAsFn = (
   type: ValueAsType,
-  emptyAs: EmptyAsValue | undefined, // Note that emptyAs takes precidence
+  emptyAs: EmptyAsValue | undefined,
   required: boolean,
   isId: boolean
 ) => {
@@ -275,45 +277,45 @@ const getSetValueAsFcn = (
   if (typeObj === undefined) {
     throw Error(`Type ${type} is unsupported.`)
   }
-  let fcn
+  let fn
   switch (emptyAs) {
     case null:
-      fcn = typeObj['emptyAsNull']
+      fn = typeObj['emptyAsNull']
       break
     case 'undefined':
-      fcn = typeObj['emptyAsUndefined']
+      fn = typeObj['emptyAsUndefined']
       break
     case 0:
-      fcn = typeObj['emptyAsZero']
+      fn = typeObj['emptyAsZero']
       break
     case '':
-      fcn = typeObj['emptyAsString']
+      fn = typeObj['emptyAsString']
       break
     case undefined:
     default:
       if (required || isId) {
-        fcn = typeObj.emptyAsNull
+        fn = typeObj.emptyAsNull
       } else {
-        // set the default SetValueAsFcn
+        // set the default SetValueAsFn
         switch (type) {
           case 'valueAsNumber':
-            fcn = typeObj.emptyAsNaN
+            fn = typeObj.emptyAsNaN
             break
           case 'valueAsDate':
           case 'valueAsJSON':
-            fcn = typeObj.emptyAsNull
+            fn = typeObj.emptyAsNull
             break
           case 'valueAsString':
-            fcn = typeObj.emptyAsString
+            fn = typeObj.emptyAsString
             break
         }
       }
       break
   }
-  if (fcn === undefined) {
+  if (fn === undefined) {
     console.error(`emptyAs prop of ${emptyAs} is unsupported for this type.`)
   }
-  return fcn
+  return fn
 }
 
 // This function is passed into r-h-f's validate function if valueAsJSON is set
@@ -389,7 +391,7 @@ const setCoercion = (
     valueAs = 'valueAsString'
   }
 
-  validation.setValueAs = getSetValueAsFcn(
+  validation.setValueAs = getSetValueAsFn(
     valueAs, // type
     emptyAs, // emptyAs
     validation.required !== undefined && validation.required !== false, // required

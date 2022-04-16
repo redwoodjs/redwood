@@ -269,14 +269,15 @@ describe('Form', () => {
           defaultValue=""
           validation={{ required: true }}
         />
+        <FieldError name="userId2" data-testid="fieldError" />
         <Submit>Save</Submit>
       </Form>
     )
 
-    await act(async () => {
-      fireEvent.submit(screen.getByText('Save'))
-    })
-
+    fireEvent.submit(screen.getByText('Save'))
+    await waitFor(() =>
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+    )
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
   })
@@ -295,13 +296,15 @@ describe('Form', () => {
           <option value={1}>Group 1</option>
           <option value={2}>Group 2</option>
         </SelectField>
+        <FieldError name="groupId2" data-testid="fieldError" />{' '}
         <Submit>Save</Submit>
       </Form>
     )
 
-    await act(async () => {
-      fireEvent.submit(screen.getByText('Save'))
-    })
+    fireEvent.submit(screen.getByText('Save'))
+    await waitFor(() =>
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+    )
 
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
@@ -345,12 +348,14 @@ describe('Form', () => {
           defaultValue="{bad-json}"
           validation={{ valueAsJSON: true }}
         />
+        <FieldError name="jsonField" data-testid="fieldError" />
         <Submit>Save</Submit>
       </Form>
     )
-    await act(async () => {
-      fireEvent.submit(screen.getByText('Save'))
-    })
+    fireEvent.submit(screen.getByText('Save'))
+    await waitFor(() =>
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+    )
 
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
@@ -366,15 +371,13 @@ describe('Form', () => {
           defaultValue="{bad-json}"
           validation={{ valueAsJSON: true }}
         />
-        <FieldError name="jsonField" data-testid="FieldError" />
+        <FieldError name="jsonField" data-testid="fieldError" />
         <Submit>Save</Submit>
       </Form>
     )
-    //    await act(async () => {
     fireEvent.submit(screen.getByText('Save'))
-    //    })
     await waitFor(() =>
-      expect(screen.getByTestId('FieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -403,9 +406,7 @@ describe('Form', () => {
         <Submit>Save</Submit>
       </Form>
     )
-    //    await act(async () => {
     fireEvent.submit(screen.getByText('Save'))
-    //    })
 
     await waitFor(() =>
       expect(screen.getByTestId('phoneFieldError')).toBeInTheDocument()
@@ -724,6 +725,7 @@ describe('Form', () => {
           emptyAs={null}
           validation={{ min: 10 }}
         />
+        <FieldError name="numberField" data-testid="numberFieldError" />
         <DateField name="dateField" emptyAs={null} />
         <Submit>Save</Submit>
       </Form>
@@ -731,9 +733,10 @@ describe('Form', () => {
     fireEvent.change(screen.getByTestId('numberField'), {
       target: { value: 2 },
     })
-    await act(async () => {
-      fireEvent.submit(screen.getByText('Save'))
-    })
+    fireEvent.submit(screen.getByText('Save'))
+    await waitFor(() =>
+      expect(screen.getByTestId('numberFieldError')).toBeInTheDocument()
+    )
 
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
