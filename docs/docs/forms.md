@@ -299,7 +299,7 @@ Instead of forcing users to make heavy-use of `setValueAs` for custom coercion, 
 
 ### Default treatment of empty input values
 
-Redwood provides a flexible treatment of empty input field value.  Appropriate treatment of empty fields can make working with fields for database relations easier.
+Redwood provides a flexible treatment of empty input field value. Appropriate treatment of empty fields can make working with fields for database relations easier.
 
 The treatment of empty field values is governed by the following:
 
