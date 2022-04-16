@@ -330,7 +330,8 @@ The possible values for `emptyAs` are:
 
 For example:
 ```
-        <NumberField name="quantity" emptyAs={'undefined'} />
+<NumberField name="quantity" emptyAs="undefined" />
+<NumberField name="score" emptyAs={null} />
 ```
 will return `undefined` if the field is empty.
 
