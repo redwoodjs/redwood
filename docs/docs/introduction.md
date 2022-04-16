@@ -22,7 +22,7 @@ To get the most out of Redwood, do two things:
 - [Join the community](https://redwoodjs.com/community)
 
 The tutorial is the best way to start your Redwood adventure.
-It's readable, feature-full, and fun.
+It's readable, feature-ful, and fun.
 You'll go all the way from `git clone` to Netlify deploy!
 And by the end, you should feel comfortable enough to start that side project.
 
