@@ -1,4 +1,4 @@
-name: Publish canaray packages to npm
+name: Publish canary packages
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - 'docs/**'
 
 jobs:
-  build:
+  publish-canary:
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
@@ -70,3 +70,61 @@ jobs:
           yarn publish:canary
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Update Publish Job Status
+        if: always()
+        run: |
+          echo ${{ job.status }} > status_publish.txt
+
+      - name: Upload file status_publish.txt as an artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pass_status_publish_job
+          path: status_publish.txt
+
+# Slack Notifications for publish success/fail
+# https://github.com/marketplace/actions/slack-send
+  slack-notification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    needs: publish-canary
+    if: always()
+
+    steps:
+      - name: Download publish status artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pass_status_publish_job
+
+      - name: Set the publish status as output
+        id: publish-status
+        run: |
+          echo "::set-output name=publish-result::$(<status_publish.txt)"
+
+      - name: Overwrite publish status env if failure
+        if: ${{ steps.publish-status.outputs.publish-result == 'failure' }}
+        run: |
+          echo "PUBLISH_STATUS=Canary Publishing FAILED 🚨" >> $GITHUB_ENV
+
+      - name: Overwrite publish status env if success
+        if: ${{ steps.publish-status.outputs.publish-result == 'success' }}
+        run: |
+          echo "PUBLISH_STATUS=Canary Publishing SUCCESS ✅" >> $GITHUB_ENV
+
+      - name: Overwrite publish status env if something else
+        if: ${{ (steps.publish-status.outputs.publish-result != 'failure') &&  (steps.publish-status.outputs.publish-result != 'success') }}
+        run: |
+          echo "PUBLISH_STATUS=Canary Publishing Cancelled ⏹" >> $GITHUB_ENV
+
+      - name: Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "publish_label": "Canary Packages 🦜",
+              "publish_status": "${{ env.PUBLISH_STATUS }}",
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}
