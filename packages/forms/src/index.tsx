@@ -159,7 +159,7 @@ const isValueEmpty = (val: string): boolean => val === ''
  * EmptyAsValue defines the values that can be used for the field emptyAs prop
  * It sets the value to be returned from the field if the field is empty.
  * If the valueOf prop is truly undefined (not 'undefined'), it will return
- * a default value corresponding to the type of field.  (See
+ * a default value corresponding to the type of field. (See
  * the comments above the setCoercion function for more details)
  */
 
@@ -328,20 +328,20 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  * Also implements Redwood's extensions to `react-hook-form`'s `valueAs` props.
  *
  * To provide Redwood specific functionality, we need to override part of
- * react-hook-form`'s functionality in some cases.  This is accomplished
+ * react-hook-form`'s functionality in some cases. This is accomplished
  * through the use of the setValueAs function supported by r-h-f.
  * If a setValueAs function is provided by the user, it takes precedence over
  * the emptyAs prop.
  *
  * Redwood provides specific logic to address field empty scenarios through
- * the use of the emptyAs prop.  The decision chain for behaviour on field empty
+ * the use of the emptyAs prop. The decision chain for behaviour on field empty
  * scenarios is as follows:
  *   1. if setValueAs is specified by the user, that will determine the behavior
  *   2  if emptyAs is specified, then the emptyAs prop will determine the
  *      field value on an empty condition.
  *   3. if { validation.required } is set, an empty field will return null; however,
  *      r-h-f's validation should engage and prevent submission of the form.
- *   4. if the field is an Id field, that is it ends in "Id", then an empty
+ *   4. if the field is an Id field, that is its name ends in "Id", then an empty
  *      field will return null.
  *   5. In the event of none of the above cases, the field value will be set as
  *      follows for empty field scenarios:
@@ -349,9 +349,9 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  *       NumberFields => NaN
  *       TextFields with valueAsNumber set => NaN
  *       SelectFields with valueAsNumber set => NaN
- *       SelectFields without valueAsNumber set => ''  (empty string)
+ *       SelectFields without valueAsNumber set => '' (empty string)
  *       TextFields with valueAsJSON set => null
- *       TextFields and comparable => ''  (empty string)
+ *       TextFields and comparable => '' (empty string)
  */
 
 interface SetCoersionProps {

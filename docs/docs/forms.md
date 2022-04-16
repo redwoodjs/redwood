@@ -299,16 +299,16 @@ Instead of forcing users to make heavy-use of `setValueAs` for custom coercion, 
 
 ### Default treatment of empty input values
 
-Redwood provides a flexible treatment of empty input field value.  Appropriate treatment of empty fields can make working with fields for database relations easier.
+Redwood provides a flexible treatment of empty input field value. Appropriate treatment of empty fields can make working with fields for database relations easier.
 
 The treatment of empty field values is governed by the following:
 
  1. If `setValueAs` is specified by the user, the specified function will determine the behavior of empty fields.
- 2  If the `emptyAs` prop is set, then the emptyAs prop will determine the field value on an empty condition.  See below for `emptyAs` prop values.
+ 2.  If the `emptyAs` prop is set, then the `emptyAs` prop will determine the field value on an empty condition. See below for `emptyAs` prop values.
  3. If the `validation = { required: true }` prop is set, an empty field will return null.  However,
     the validation provided by react-hook-forms should engage and prevent submission of the form as an empty value
     would not satisfy the `required` validation.
- 4. If the field is an `Id` field, that is it ends in "Id", then an empty field will return `null`.  A `null` value is the most appropriate value for most database relation fields.
+ 4. If the field is an `Id` field, that is its name ends in "Id", then an empty field will return `null`. A `null` value is the most appropriate value for most database relation fields.
     For scenarios where another value is required for empty cases, utilize the `emptyAs` prop.
  5. If none of the above cases apply, the field value will be set as follows for empty field scenarios:
      - DateFields &rarr; null
@@ -317,11 +317,11 @@ The treatment of empty field values is governed by the following:
      - SelectFields with valueAsNumber set &rarr; NaN
      - SelectFields without valueAsNumber set &rarr; '' (empty string)
      - TextFields with valueAsJSON set &rarr; null
-     - TextFields and comparable &rarr; ''  (empty string)
+     - TextFields and comparable &rarr; '' (empty string)
 
 ### emptyAs prop
 
-The `emptyAs` prop allows the user to overide the default value for an input field if the field is empty.  Provided that a `setValueAs` prop is not specified, Redwood will allow you to override the default empty value returned.
+The `emptyAs` prop allows the user to overide the default value for an input field if the field is empty. Provided that a `setValueAs` prop is not specified, Redwood will allow you to override the default empty value returned.
 The possible values for `emptyAs` are:
 - `null`
 - `'undefined'`
@@ -330,7 +330,8 @@ The possible values for `emptyAs` are:
 
 For example:
 ```
-        <NumberField name="quantity" emptyAs={'undefined'} />
+<NumberField name="quantity" emptyAs="undefined" />
+<NumberField name="score" emptyAs={null} />
 ```
 will return `undefined` if the field is empty.
 
