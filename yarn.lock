@@ -5867,7 +5867,7 @@ __metadata:
     "@types/md5": 2.3.2
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
-    cross-undici-fetch: 0.2.5
+    cross-undici-fetch: 0.3.0
     crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 27.5.1
@@ -5882,7 +5882,7 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     "@clerk/clerk-sdk-node": 3.3.4
-    "@magic-sdk/admin": 1.4.0
+    "@magic-sdk/admin": 1.4.1
     firebase-admin: 10.0.2
   peerDependenciesMeta:
     "@clerk/clerk-sdk-node":
@@ -5990,7 +5990,7 @@ __metadata:
     "@types/prettier": 2.4.4
     "@vscode/ripgrep": 1.14.2
     core-js: 3.22.0
-    cross-undici-fetch: 0.2.5
+    cross-undici-fetch: 0.3.0
     deepmerge: 4.2.2
     fast-glob: 3.2.11
     findup-sync: 5.0.0
@@ -6161,7 +6161,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.22.0
-    cross-undici-fetch: 0.2.5
+    cross-undici-fetch: 0.3.0
     graphql: 16.3.0
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
@@ -6239,7 +6239,7 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
-    cross-undici-fetch: 0.2.5
+    cross-undici-fetch: 0.3.0
     jest: 27.5.1
     mime-types: 2.1.35
     typescript: 4.6.3
@@ -6332,7 +6332,7 @@ __metadata:
     "@types/uuid": 8.3.4
     "@types/yargs": 16.0.4
     ci-info: 3.3.0
-    cross-undici-fetch: 0.2.5
+    cross-undici-fetch: 0.3.0
     envinfo: 7.8.1
     jest: 27.5.1
     systeminformation: 5.11.9
@@ -13258,9 +13258,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.2.5, cross-undici-fetch@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "cross-undici-fetch@npm:0.2.5"
+"cross-undici-fetch@npm:0.3.0":
+  version: 0.3.0
+  resolution: "cross-undici-fetch@npm:0.3.0"
   dependencies:
     abort-controller: ^3.0.0
     form-data-encoder: ^1.7.1
@@ -13268,7 +13268,7 @@ __metadata:
     node-fetch: ^2.6.7
     undici: ^5.0.0
     web-streams-polyfill: ^3.2.0
-  checksum: b009abcdbe637c36255de7a9d9d0a0038287fcc307a8767648d9100a1c36dc2a1f419b1dc9cf2cd8aaa0c61a52506b01d06d02cef5a2f9b959b7e97c9599d587
+  checksum: e2c6b9740023fe24caa7baf07a7a16d81667fe40bf4532d5a57075ae6f3de0633f7dcfed1a55e4f7b89d4560f2a04506a4f333206fc51b32ef71ddaca3bdb76c
   languageName: node
   linkType: hard
 
@@ -13283,6 +13283,20 @@ __metadata:
     undici: ^5.0.0
     web-streams-polyfill: ^3.2.0
   checksum: 121d4ce6dd0fdba0c1b6dbf5504020e28fa6cde16fe870f560df1a55558ae0b5a0709e061f54bc1411399ec17135c51b3a2505e13a8f6ff80187d2b48fbdf34c
+  languageName: node
+  linkType: hard
+
+"cross-undici-fetch@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "cross-undici-fetch@npm:0.2.5"
+  dependencies:
+    abort-controller: ^3.0.0
+    form-data-encoder: ^1.7.1
+    formdata-node: ^4.3.1
+    node-fetch: ^2.6.7
+    undici: ^5.0.0
+    web-streams-polyfill: ^3.2.0
+  checksum: b009abcdbe637c36255de7a9d9d0a0038287fcc307a8767648d9100a1c36dc2a1f419b1dc9cf2cd8aaa0c61a52506b01d06d02cef5a2f9b959b7e97c9599d587
   languageName: node
   linkType: hard
 
