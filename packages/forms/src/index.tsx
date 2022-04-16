@@ -349,7 +349,7 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  *       SelectFields with valueAsNumber set => NaN
  *       SelectFields without valueAsNumber set => '' (empty string)
  *       TextFields with valueAsJSON set => null
- *       TextFields and comparable => ''  (empty string)
+ *       TextFields and comparable => '' (empty string)
  */
 
 interface SetCoersionProps {
