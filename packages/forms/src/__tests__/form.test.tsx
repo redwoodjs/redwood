@@ -13,7 +13,6 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { act } from 'react-dom/test-utils'
 expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 import {
