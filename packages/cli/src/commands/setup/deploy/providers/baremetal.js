@@ -39,7 +39,7 @@ const notes = [
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     addPackagesTask({
-      packages: ['node-ssh'],
+      packages: ['node-ssh', 'pm2'],
       devDependency: true,
     }),
     addFilesTask({
