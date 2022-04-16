@@ -1,30 +1,30 @@
-name: Publish canaray packages to npm
+name: 🚢 Publish Canary
 
 on:
   push:
     branches: [main]
     tags-ignore:
-      - v** # We don't want this to run on release
+      # We don't want this to run on release
+      - v**
     paths-ignore:
+      # We don't want this to run on changes to docs
       - 'docs/**'
 
 jobs:
-  build:
+  publish-canary:
+    name: 🚢 Publish Release Candidate
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Required because lerna uses tags to determine the version.
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
+          # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
+          #  This is required because lerna uses tags to determine the version.
+          fetch-depth: 0
 
-      - name: Print node and yarn versions
-        run: |
-          node --version
-          yarn --version
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -35,34 +35,34 @@ jobs:
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
+          # Change yarn-{randomString} to bust the cache.
+          key: yarn-1234-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             yarn-1234
 
-      - name: Install dependencies
-        run: yarn install --immutable
+      - run: yarn install
 
-      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
+      - name: '✅ Check Yarn constraints (fix with `yarn constraints --fix`)'
         run: yarn constraints
 
-      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
+      - name: '✅ Check for duplicate dependencies (fix with `yarn dedupe`)'
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn dedupe --check
 
-      - name: Build
+      - name: 🏗 Build
         run: yarn build
 
-      - name: Run ESLint
+      - name: 🔬 Lint
         run: yarn lint
         env:
           CI: true
 
-      - name: Run tests
+      - name: 🧪 Test
         run: yarn test
         env:
           CI: true
 
-      - name: Publish to npm
+      - name: 🚢 Publish
         run: |
           git describe
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
