@@ -23,9 +23,7 @@ jobs:
         with:
           node-version: '16'
 
-      - run: echo ${{ github.ref }}
       - run: echo ${{ github.ref_name }}
-      - run: echo ${{ github.action_ref }}
       - run: echo ${{ github.ref_type }}
       - run: echo ${{ toJSON(github) }}
 
