@@ -159,7 +159,7 @@ const isValueEmpty = (val: string): boolean => val === ''
  * EmptyAsValue defines the values that can be used for the field emptyAs prop
  * It sets the value to be returned from the field if the field is empty.
  * If the valueOf prop is truly undefined (not 'undefined'), it will return
- * a default value corresponding to the type of field.  (See
+ * a default value corresponding to the type of field. (See
  * the comments above the setCoercion function for more details)
  */
 
