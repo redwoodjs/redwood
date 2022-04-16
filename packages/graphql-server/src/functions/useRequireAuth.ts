@@ -40,8 +40,8 @@ export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
           globalContext.currentUser = currentUser
         }
       } catch (e) {
-        return {
-          statusCode: 401,
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(e)
         }
       }
 
