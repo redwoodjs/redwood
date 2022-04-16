@@ -308,7 +308,7 @@ The treatment of empty field values is governed by the following:
  3. If the `validation = { required: true }` prop is set, an empty field will return null.  However,
     the validation provided by react-hook-forms should engage and prevent submission of the form as an empty value
     would not satisfy the `required` validation.
- 4. If the field is an `Id` field, that is it ends in "Id", then an empty field will return `null`.  A `null` value is the most appropriate value for most database relation fields.
+ 4. If the field is an `Id` field, that is its name ends in "Id", then an empty field will return `null`. A `null` value is the most appropriate value for most database relation fields.
     For scenarios where another value is required for empty cases, utilize the `emptyAs` prop.
  5. If none of the above cases apply, the field value will be set as follows for empty field scenarios:
      - DateFields &rarr; null
