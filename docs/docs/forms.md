@@ -317,7 +317,7 @@ The treatment of empty field values is governed by the following:
      - SelectFields with valueAsNumber set &rarr; NaN
      - SelectFields without valueAsNumber set &rarr; '' (empty string)
      - TextFields with valueAsJSON set &rarr; null
-     - TextFields and comparable &rarr; ''  (empty string)
+     - TextFields and comparable &rarr; '' (empty string)
 
 ### emptyAs prop
 
