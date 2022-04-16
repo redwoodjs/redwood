@@ -326,7 +326,7 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  * Also implements Redwood's extensions to `react-hook-form`'s `valueAs` props.
  *
  * To provide Redwood specific functionality, we need to override part of
- * react-hook-form`'s functionality in some cases.  This is accomplished
+ * react-hook-form`'s functionality in some cases. This is accomplished
  * through the use of the setValueAs function supported by r-h-f.
  * If a setValueAs function is provided by the user, it takes precedence over
  * the emptyAs prop.
