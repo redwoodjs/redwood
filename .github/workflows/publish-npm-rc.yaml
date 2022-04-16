@@ -5,9 +5,11 @@ on:
     branches: ['release/**']
     tags-ignore:
       - v** # We don't want this to run on release
+    paths-ignore:
+      - 'docs/**' # No need to run on docs-only changes
 
 jobs:
-  build:
+  git-tag-check:
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +57,33 @@ jobs:
         with:
           node-version: '16'
 
-      - run: yarn install
+      - name: Print node and yarn versions
+        run: |
+          node --version
+          yarn --version
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Cache yarn
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
+          restore-keys: |
+            yarn-1234
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
+        run: yarn constraints
+
+      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn dedupe --check
 
       - name: 🏗 Build
         run: yarn build

@@ -16,10 +16,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Required because lerna uses tags to determine the version.
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Print node and yarn versions
         run: |
