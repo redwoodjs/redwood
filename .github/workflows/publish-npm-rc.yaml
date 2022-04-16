@@ -23,6 +23,13 @@ jobs:
         with:
           node-version: '16'
 
+      - run: echo {{ github.action_ref }}
+      - run: echo {{ github.actor }}
+      - run: echo {{ github.base_ref }}
+      - run: echo {{ github.ref }}
+      - run: echo {{ github.ref_name }}
+      - run: echo {{ github }}
+
       - run: yarn install
 
       - name: 🏗 Build
