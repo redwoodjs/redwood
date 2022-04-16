@@ -48,27 +48,29 @@ function semanticIdentity(path) {
 function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
   const strategy = { ...defaultMergeStrategy, ...callerMergeStrategy }
   const strategyWithUtility = { ...mergeUtility, ...strategy }
-  const locations = {}
+  const identities = {}
 
   const baseVisitor = {}
   const extVisitor = {}
 
   forEachFunctionOn(strategy, (name, _func) => {
-    // TODO: If ext has two+ imports from the same source, we'll handle it poorly.
-    // This is another special-casing for the degenerate problem of uniquely identifying imports.
-    // I think our best bet is to make the merge functions take f(base, [...ext], {loc}) in the
-    // special case of imports... but it would be gross to have a different signature for imports.
     extVisitor[name] = (path) => {
       const semanticId = semanticIdentity(path)
-      semanticId && (locations[semanticId] = path)
+      semanticId && (identities[semanticId] ||= []).push(path)
     }
     baseVisitor[name] = (path) => {
-      const loc = semanticIdentity(path)
-      if (loc && loc in locations) {
-        strategyWithUtility[name](path, locations[loc], {
-          semanticLocation: loc,
-        })
-        delete locations[loc]
+      const id = semanticIdentity(path)
+      if (id && id in identities) {
+        // In rare cases (e.g. multiple imports from the same source), we may have multiple
+        // declarations with the same identity. In this case, we perform a left-associative
+        // operation, merging each declaration as ((base <=> extPath1) <=> extPath2),
+        // where <=> is merge.
+        identities[id].forEach((path) =>
+          strategyWithUtility[name](path, path, {
+            semanticLocation: id,
+          })
+        )
+        delete identities[id]
       }
     }
   })
@@ -76,18 +78,18 @@ function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
   traverse(extAST, extVisitor)
   traverse(baseAST, baseVisitor)
 
-  const extras = Object.values(locations).map(
-    (path) => path.getStatementParent().node
+  baseAST.program.body.push(
+    ...Object.values(identities)
+      .flat()
+      .map((path) => path.getStatementParent().node)
   )
-
-  baseAST.program.body.push(...extras)
 }
 
-export function merge(base, extension) {
+export function merge(base, extension, strategy) {
   const baseAST = parse(base)
   const extAST = parse(extension)
 
-  mergeAST(baseAST, extAST)
+  mergeAST(baseAST, extAST, strategy)
   const { code } = generate(baseAST)
 
   // https://github.com/babel/babel/issues/5139

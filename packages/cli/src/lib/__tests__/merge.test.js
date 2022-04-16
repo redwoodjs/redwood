@@ -106,6 +106,30 @@ describe('Import behavior', () => {
     const merged = "import src, * as Source from 'source'\n"
     expect(merge(base, ext)).toBe(merged)
   })
+
+  it('merges multiple imports with the same source', () => {
+    const base = "import { foo } from 'source'"
+    const ext = "import { bar } from 'source'\nimport { baz } from 'source'"
+    const merged = "import { foo, bar, baz } from 'source'\n"
+    expect(merge(base, ext)).toBe(merged)
+  })
+
+  it('merges multiple default imports with the same source', () => {
+    const base = "import default1 from 'source'"
+    const ext = "import default2 from 'source'\nimport { foo } from 'source'"
+    const merged =
+      "import default1, { foo } from 'source'\nimport default2 from 'source'\n"
+    expect(merge(base, ext)).toBe(merged)
+  })
+
+  it('merges multiple types of imports with the same source', () => {
+    const base =
+      "import default1 from 'source'\nimport * as namespace from 'source'"
+    const ext = "import default2 from 'source'\nimport { foo } from 'source'"
+    const merged =
+      "import default1, { foo } from 'source'\nimport default2 from 'source'\nimport * as namespace from 'source'\n"
+    expect(merge(base, ext)).toBe(merged)
+  })
 })
 
 describe('Object behavior', () => {
