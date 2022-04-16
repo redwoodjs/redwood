@@ -124,7 +124,7 @@ jobs:
           payload: |
             {
               "publish_label": "Canary Packages 🦜",
-              "publish_status": "${{ env.PUBLISH_STATUS }}",
+              "publish_status": "${{ env.PUBLISH_STATUS }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}
