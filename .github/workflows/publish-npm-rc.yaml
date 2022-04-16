@@ -20,26 +20,60 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies
-        run: yarn install --immutable --check-files
+      - name: 🏷 Check tags
+        run: |
+          CURRENT_TAG=$(git describe --abbrev=0)
 
-      - name: Build
+          # `github.ref_name` is something like `release/minor/v1.1.0`.
+          # `basename` gets us `v1.1.0`, then parameter expansion strips the `v`.
+          # See https://stackoverflow.com/questions/6594085/remove-first-character-of-a-string-in-bash.
+          BRANCH_TAG=$(basename ${{ github.ref_name }})
+          BRANCH_TAG=${BRANCH_TAG:1}
+
+          echo
+          echo "Current tag is $CURRENT_TAG"
+          echo "Branch tag is $BRANCH_TAG"
+          echo "Comparing tags with \"yarn dlx semver-compare-cli $CURRENT_TAG lt $BRANCH_TAG\""
+          echo
+
+          # See if the current tag is less than the branch's tag.
+          # If it is, we're good to keep going.
+          yarn dlx semver-compare-cli $CURRENT_TAG lt $BRANCH_TAG
+
+  publish-release-candidate:
+    name: 🚢 Publish Release Candidate
+    needs: check-tags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
+          #  This is required because lerna uses tags to determine the version.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - run: yarn install
+
+      - name: 🏗 Build
         run: yarn build
 
-      - name: Run ESLint
+      - name: 🔎 Lint
         run: yarn lint
         env:
           CI: true
 
-      - name: Run tests
+      - name: 🧪 Test
         run: yarn test
         env:
           CI: true
 
-      - name: Publish
+      - name: 🚢 Publish
         run: |
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          ./tasks/publish-rc
+          SEMVER=$(basename $(dirname ${{ github.ref_name }}))
+          yarn lerna publish pre$SEMVER --include-merged-tags --canary --preid rc --dist-tag rc --force-publish --loglevel verbose --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
