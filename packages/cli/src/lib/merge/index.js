@@ -65,8 +65,8 @@ function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
         // declarations with the same identity. In this case, we perform a left-associative
         // operation, merging each declaration as ((base <=> extPath1) <=> extPath2),
         // where <=> is merge.
-        identities[id].forEach((path) =>
-          strategyWithUtility[name](path, path, {
+        identities[id].forEach((extPath) =>
+          strategyWithUtility[name](path, extPath, {
             semanticLocation: id,
           })
         )
