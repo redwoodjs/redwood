@@ -461,7 +461,7 @@ yarn workspace api add filestack-js
 
 You should be good to go. Let's modify our service accordingly:
 
-```js {8-18} title="api/src/services/image/image.ts"
+```js {4-23} title="api/src/services/image/image.ts"
 import * as Filestack from 'filestack-js'
 
 export const deleteImage = async({ id }) => {
