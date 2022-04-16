@@ -347,7 +347,7 @@ const JSONValidation = (val: Record<string, unknown> | null | number) =>
  *       NumberFields => NaN
  *       TextFields with valueAsNumber set => NaN
  *       SelectFields with valueAsNumber set => NaN
- *       SelectFields without valueAsNumber set => ''  (empty string)
+ *       SelectFields without valueAsNumber set => '' (empty string)
  *       TextFields with valueAsJSON set => null
  *       TextFields and comparable => ''  (empty string)
  */
