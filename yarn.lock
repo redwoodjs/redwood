@@ -6052,7 +6052,7 @@ __metadata:
     mini-css-extract-plugin: 2.6.0
     nodemon: 2.0.15
     null-loader: 4.0.1
-    react-refresh: 0.11.0
+    react-refresh: 0.12.0
     rimraf: 3.0.2
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
@@ -6101,7 +6101,7 @@ __metadata:
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
     eslint-plugin-react: 7.29.4
-    eslint-plugin-react-hooks: 4.3.0
+    eslint-plugin-react-hooks: 4.4.0
     jest: 27.5.1
     prettier: 2.5.1
     typescript: 4.6.3
@@ -15294,12 +15294,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.3.0":
-  version: 4.3.0
-  resolution: "eslint-plugin-react-hooks@npm:4.3.0"
+"eslint-plugin-react-hooks@npm:4.4.0":
+  version: 4.4.0
+  resolution: "eslint-plugin-react-hooks@npm:4.4.0"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
-  checksum: fdf491b182fd0815c95af6b5a9ef9de0640cbf0e446b2886899769470276c9a69be35a2aac42b2ada3e26b73cefee23b1eb4a93f27ee984b5763ee4718509629
+  checksum: 4944bebb7fc611386e8fb12e94c7d187a5f18d8f84bd9e4b82baebb632bb0e0dc3071e320516b141217ba9369df685186d773f4cd42717b423aa46803b199898
   languageName: node
   linkType: hard
 
@@ -25834,7 +25834,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-refresh@npm:0.11.0, react-refresh@npm:^0.11.0":
+"react-refresh@npm:0.12.0":
+  version: 0.12.0
+  resolution: "react-refresh@npm:0.12.0"
+  checksum: d060c018298aace6a98907f55c5d2a337197eb4f6501616eca81a156be1a34658f87c81970951d29dece27b5e1959f04706f5a6a1312a7b5eee36816dc2e7e9e
+  languageName: node
+  linkType: hard
+
+"react-refresh@npm:^0.11.0":
   version: 0.11.0
   resolution: "react-refresh@npm:0.11.0"
   checksum: cbb5616c7ba670bbd2f37ddadcdfefa66e727ea188e89733ccb8184d3b874631104b0bc016d5676a7ade4d9c79100b99b46b6ed10cd117ab5d1ddcbf8653a9f2
