@@ -6,9 +6,6 @@ import path from 'path'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 
-
-
-
 export const command = 'windicss'
 export const aliases = ['windi']
 export const description = 'Set up WindiCSS'
