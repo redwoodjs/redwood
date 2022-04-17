@@ -1,0 +1,28 @@
+var _context;
+
+import _Symbol from "@babel/runtime-corejs3/core-js/symbol";
+import _Promise from "@babel/runtime-corejs3/core-js/promise";
+import _includesInstanceProperty from "@babel/runtime-corejs3/core-js/instance/includes";
+import _getIterator from "@babel/runtime-corejs3/core-js/get-iterator";
+import _atInstanceProperty from "@babel/runtime-corejs3/core-js/instance/at";
+
+var sym = _Symbol();
+
+var promise = _Promise.resolve();
+
+var check = _includesInstanceProperty(arr).call(arr, 'yeah!');
+
+console.log(_getIterator(arr));
+
+_Promise.allSettled();
+
+console.log(_includesInstanceProperty(_context = []).call(_context, 'bazinga'));
+
+_Promise.any();
+
+Object.hasOwn({
+  x: 2
+}, "x");
+var arr = [1, 2, 3];
+_atInstanceProperty(arr).call(arr, 0) === 1;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL2FwaS9zcmMvbGliL3RyYW5zZm9ybS5qcyJdLCJuYW1lcyI6WyJzeW0iLCJwcm9taXNlIiwicmVzb2x2ZSIsImNoZWNrIiwiYXJyIiwiY29uc29sZSIsImxvZyIsImFsbFNldHRsZWQiLCJhbnkiLCJPYmplY3QiLCJoYXNPd24iLCJ4Il0sIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUFBLElBQUlBLEdBQUcsR0FBRyxTQUFWOztBQUVBLElBQUlDLE9BQU8sR0FBRyxTQUFRQyxPQUFSLEVBQWQ7O0FBRUEsSUFBSUMsS0FBSyxHQUFHLDBCQUFBQyxHQUFHLE1BQUgsQ0FBQUEsR0FBRyxFQUFVLE9BQVYsQ0FBZjs7QUFFQUMsT0FBTyxDQUFDQyxHQUFSLGNBQVlGLEdBQVo7O0FBRUEsU0FBUUcsVUFBUjs7QUFFQUYsT0FBTyxDQUFDQyxHQUFSLENBQVksd0RBQVksU0FBWixDQUFaOztBQUVBLFNBQVFFLEdBQVI7O0FBR0FDLE1BQU0sQ0FBQ0MsTUFBUCxDQUFjO0FBQUVDLEVBQUFBLENBQUMsRUFBRTtBQUFMLENBQWQsRUFBd0IsR0FBeEI7QUFFQSxJQUFJUCxHQUFHLEdBQUcsQ0FBQyxDQUFELEVBQUksQ0FBSixFQUFPLENBQVAsQ0FBVjtBQUNBLG9CQUFBQSxHQUFHLE1BQUgsQ0FBQUEsR0FBRyxFQUFJLENBQUosQ0FBSCxLQUFjLENBQWQiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgc3ltID0gU3ltYm9sKClcblxudmFyIHByb21pc2UgPSBQcm9taXNlLnJlc29sdmUoKVxuXG52YXIgY2hlY2sgPSBhcnIuaW5jbHVkZXMoJ3llYWghJylcblxuY29uc29sZS5sb2coYXJyW1N5bWJvbC5pdGVyYXRvcl0oKSlcblxuUHJvbWlzZS5hbGxTZXR0bGVkKClcblxuY29uc29sZS5sb2coW10uaW5jbHVkZXMoJ2JhemluZ2EnKSlcblxuUHJvbWlzZS5hbnkoKVxuXG5cbk9iamVjdC5oYXNPd24oeyB4OiAyIH0sIFwieFwiKVxuXG52YXIgYXJyID0gWzEsIDIsIDNdO1xuYXJyLmF0KDApID09PSAxXG4iXX0=

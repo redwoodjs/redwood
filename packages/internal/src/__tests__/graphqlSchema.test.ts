@@ -36,3 +36,34 @@ test('Generates GraphQL schema', async () => {
 
   expect(schemaPath).toMatch(expectedPath)
 })
+
+test('Prints error message when schema loading fails', async () => {
+  const fixturePath = path.resolve(
+    __dirname,
+    './fixtures/graphqlCodeGen/bookshelf'
+  )
+  process.env.RWJS_CWD = fixturePath
+  const oldConsoleError = console.error
+  console.error = jest.fn()
+
+  try {
+    await generateGraphQLSchema()
+
+    expect(console.error).toHaveBeenNthCalledWith(
+      1,
+      'Schema loading failed.',
+      'Unknown type: "Shelf".'
+    )
+    expect(console.error).toHaveBeenNthCalledWith(
+      3,
+      'It looks like you have a Shelf model in your database schema.'
+    )
+    expect(console.error).toHaveBeenNthCalledWith(
+      4,
+      'Try running the generator you just used for that model first instead'
+    )
+  } finally {
+    console.error = oldConsoleError
+    delete process.env.RWJS_CWD
+  }
+})

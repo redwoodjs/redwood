@@ -48,7 +48,34 @@ export const generateGraphQLSchema = async () => {
     loaders: [new CodeFileLoader()],
   }
 
-  const loadedSchema = await loadSchema(schemaPointerMap, loadSchemaConfig)
+  let loadedSchema
+
+  try {
+    loadedSchema = await loadSchema(schemaPointerMap, loadSchemaConfig)
+  } catch (e) {
+    if (e instanceof Error) {
+      const match = e.message.match(/Unknown type: "(\w+)"/)
+      const name = match?.[1]
+      const schemaPrisma = fs.readFileSync(getPaths().api.dbSchema)
+
+      console.error('Schema loading failed.', e.message)
+
+      if (name && schemaPrisma.includes(`model ${name}`)) {
+        // Not all SDLs need to be backed by a DB model, but if they are we can
+        // provide a more helpful error message
+
+        console.error('')
+        console.error(
+          `It looks like you have a ${name} model in your database schema.`
+        )
+        console.error(
+          'Try running the generator you just used for that model first instead'
+        )
+      }
+    }
+
+    console.error('Schema loading failed', e)
+  }
 
   const options: CodegenTypes.GenerateOptions = {
     config,
@@ -60,9 +87,16 @@ export const generateGraphQLSchema = async () => {
     documents: [],
   }
 
-  const schema = await codegen(options)
+  if (loadedSchema) {
+    try {
+      const schema = await codegen(options)
+      fs.writeFileSync(getPaths().generated.schema, schema)
+      return getPaths().generated.schema
+    } catch (e) {
+      console.error('GraphQL Schema codegen failed.')
+      console.error(e)
+    }
+  }
 
-  fs.writeFileSync(getPaths().generated.schema, schema)
-
-  return getPaths().generated.schema
+  return ''
 }
