@@ -22,7 +22,9 @@ export type GetCurrentUser = (
 
 export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
-export type RedwoodGraphQLContext = {
+
+/** This is an interface so you can extend it inside your application when needed */
+export interface RedwoodGraphQLContext {
   event: APIGatewayProxyEvent
   requestContext: LambdaContext
   currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null

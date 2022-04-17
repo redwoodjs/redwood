@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+// import * as add from '@graphql-codegen/add'
 import { loadCodegenConfig } from '@graphql-codegen/cli'
 import { codegen } from '@graphql-codegen/core'
 import type {
@@ -116,7 +117,26 @@ function getLoadDocumentsOptions(filename: string) {
 }
 
 function getPluginConfig() {
-  const pluginConfig: CodegenTypes.PluginConfig = {
+  let prismaModels: Record<string, string> = {}
+  try {
+    // Extract the models from the prisma client and use those to
+    // set up internal redirects for the return values in resolvers.
+    const localPrisma = require('@prisma/client')
+    prismaModels = localPrisma.ModelName
+    Object.keys(prismaModels).forEach((key) => {
+      prismaModels[key] = `.prisma/client#${key} as Prisma${key}`
+    })
+    // This isn't really something you'd put in the GraphQL API, so
+    // we can skip the model.
+    if (prismaModels.RW_DataMigration) {
+      delete prismaModels.RW_DataMigration
+    }
+  } catch (error) {
+    // This means they've not set up prisma types yet
+  }
+
+  const pluginConfig: CodegenTypes.PluginConfig &
+    typescriptResolvers.TypeScriptResolversPluginConfig = {
     namingConvention: 'keep', // to allow camelCased query names
     scalars: {
       // We need these, otherwise these scalars are mapped to any
@@ -132,6 +152,13 @@ function getPluginConfig() {
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,
+
+    customResolverFn: `(
+      args: TArgs,
+      obj: { root: TParent; context: TContext & RedwoodGraphQLContext; info: GraphQLResolveInfo }
+    ) => Promise<Partial<TResult>> | Partial<TResult>;`,
+    mappers: prismaModels,
+    contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig
