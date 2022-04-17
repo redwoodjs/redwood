@@ -120,8 +120,8 @@ export const handler = async ({ force, install }) => {
           task.skip('Imports already exist in ' + APP_FILE_PATH)
         } else {
           const newAppFile = appFile.replace(
-            /^import 'index\.css'$/m,
-            "import 'index.css'\nimport 'windi.css'"
+            "import Routes from 'src/Routes'",
+            "import Routes from 'src/Routes'\n\nimport 'windi.css'"
           )
           fs.writeFileSync(APP_FILE_PATH, newAppFile)
         }
