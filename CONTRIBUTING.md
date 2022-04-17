@@ -207,7 +207,7 @@ Within your Framework directory, use the following tools and commands to test yo
 
 ### E2E Integration Tests
 
-We use Cypress to test the steps in the [tutorial](/docs/tutorial/foreword/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
+We use Cypress to test the steps in the [tutorial](https://redwoodjs.com/tutorial). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
 yarn e2e
