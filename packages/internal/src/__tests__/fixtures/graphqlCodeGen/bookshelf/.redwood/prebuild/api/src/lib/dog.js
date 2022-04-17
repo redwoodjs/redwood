@@ -1,3 +1,0 @@
-import dog from "dog-bless";
-console.log(dog);
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL2FwaS9zcmMvbGliL2RvZy50cyJdLCJuYW1lcyI6WyJkb2ciLCJjb25zb2xlIiwibG9nIl0sIm1hcHBpbmdzIjoiT0FBWUEsRztBQUFaQyxPQUFPLENBQUNDLEdBQVIsQ0FBWUYsR0FBWiIsInNvdXJjZXNDb250ZW50IjpbImNvbnNvbGUubG9nKGRvZykiXX0=
