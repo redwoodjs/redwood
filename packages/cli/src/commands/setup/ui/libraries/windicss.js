@@ -105,7 +105,8 @@ export const handler = async ({ force, install }) => {
           "    include: ['**/*.{js,jsx,tsx,css}'],",
           "    exclude: ['node_modules', '.git', 'dist'],",
           '  },',
-          '})'.join('\n'),
+          '})'
+        ].join('\n')
         fs.writeFileSync(windiConfigPath, windiConfig)
       },
     },
