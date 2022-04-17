@@ -28,6 +28,8 @@ export interface RedwoodGraphQLContext {
   event: APIGatewayProxyEvent
   requestContext: LambdaContext
   currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null
+
+  [index: string]: unknown
 }
 
 /**
