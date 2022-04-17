@@ -155,7 +155,7 @@ function getPluginConfig() {
 
     customResolverFn: `(
       args: TArgs,
-      obj: { root: TParent; context: TContext & RedwoodGraphQLContext; info: GraphQLResolveInfo }
+      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => Promise<Partial<TResult>> | Partial<TResult>;`,
     mappers: prismaModels,
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
