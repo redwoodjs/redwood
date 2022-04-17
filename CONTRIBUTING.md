@@ -86,7 +86,7 @@ You can create a Redwood Project that contains a lot of functionality in just a 
 1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
-4. then applies code mods from the [Redwood tutorial](/docs/tutorial/foreword/) to add functionality and styling
+4. then applies code mods from the [Redwood tutorial](https://redwoodjs.com/tutorial) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
 Run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project.
