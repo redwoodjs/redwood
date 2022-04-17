@@ -28,7 +28,7 @@ export const builder = (yargs) => {
   })
 }
 
-const windiImportsExist = (appTsx) => appTsx.match(/^import 'windi\.css'$/m)
+const windiImportsExist = (appFile) => appFile.match(/^import 'windi\.css'$/m)
 
 export const handler = async ({ force, install }) => {
   const rwPaths = getPaths()
