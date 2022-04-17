@@ -55,11 +55,16 @@ This will create a couple of files and add a dependency or two to your `package.
 1. `deploy.toml` contains server config for knowing which machines to connect to and which commands to run
 2. `ecosystem.config.js` for [PM2](https://pm2.keymetrics.io/) to know what service(s) to monitor
 
+If you see an error from `gyp` you may need to add some additional dependencies before `yarn install` will be able to complete. See the README for `node-type` for more info: https://github.com/nodejs/node-gyp#installation
+
+### Important Notes About PM2
 > **A Note about PM2 Licensing**
 >
 > PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not lawyers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
 
-If you see an error from `gyp` you may need to add some additional dependencies before `yarn install` will be able to complete. See the README for `node-type` for more info: https://github.com/nodejs/node-gyp#installation
+Since pm2 is not added by default, you will need to take some additional action to include this into your project.  For 'local' mode (the default) you will run the command `yarn add pm2` to add this as a project dependency in your `packages.json`.  From here everything else is automated.
+
+If you choose to run pm2 'globally' you would need to follow the pm2 projects instructions for setting this up.  https://pm2.keymetrics.io/docs/usage/quick-start/
 
 ## Configuration
 
