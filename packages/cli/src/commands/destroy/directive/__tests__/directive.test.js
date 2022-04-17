@@ -29,8 +29,9 @@ afterEach(() => {
 test('destroys directive files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({
+    componentName: 'directive',
+    filesFn: (args) => files({ ...args, type: 'validator' }),
     name: 'require-admin',
-    type: 'validator',
   })
   t.setRenderer('silent')
 
