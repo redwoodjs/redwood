@@ -1,13 +1,13 @@
-import { errorTelemetry } from '@redwoodjs/telemetry'
-import execa from 'execa'
 import fs from 'fs'
-import Listr from 'listr'
 import path from 'path'
+
+import execa from 'execa'
+import Listr from 'listr'
+
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
-
-
-
 
 export const command = 'windicss'
 export const aliases = ['windi']
@@ -63,11 +63,7 @@ export const handler = async ({ force, install }) => {
           {
             title: 'Setup Webpack',
             task: async () => {
-              await execa('yarn', [
-                'redwood',
-                'setup',
-                'webpack'
-              ])
+              await execa('yarn', ['redwood', 'setup', 'webpack'])
             },
           },
           {
@@ -78,8 +74,9 @@ export const handler = async ({ force, install }) => {
                 'webpack.config.js'
               )
               const webpackConfig = fs.readFileSync(webpackConfigPath, 'utf-8')
-              const newWebpackConfig = `const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')\n`
-                + webpackConfig.replace(
+              const newWebpackConfig =
+                `const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')\n` +
+                webpackConfig.replace(
                   '// config.plugins.push(YOUR_PLUGIN)',
                   '// config.plugins.push(YOUR_PLUGIN)\n  config.plugins.push(new WindiCSSWebpackPlugin())'
                 )
@@ -92,10 +89,7 @@ export const handler = async ({ force, install }) => {
     {
       title: 'Initializing WindiCSS...',
       task: async () => {
-        const windiConfigPath = path.join(
-          rwPaths.web.config,
-          'windi.config.js'
-        )
+        const windiConfigPath = path.join(rwPaths.web.config, 'windi.config.js')
 
         if (fs.existsSync(windiConfigPath)) {
           if (force) {
@@ -116,7 +110,10 @@ export const handler = async ({ force, install }) => {
               exclude: ['node_modules', '.git'],
             },
           })
-        `.split('\n').map((line) => line.trim()).join('\n')
+        `
+          .split('\n')
+          .map((line) => line.trim())
+          .join('\n')
         fs.writeFileSync(windiConfigPath, windiConfig)
       },
     },
@@ -129,7 +126,10 @@ export const handler = async ({ force, install }) => {
         if (windiImportsExist(appFile)) {
           task.skip('Imports already exist in ' + APP_FILE_PATH)
         } else {
-          const newAppFile = appFile.replace(/^import 'index\.css'$/m, 'import \'index.css\'\nimport \'windi.css\'');
+          const newAppFile = appFile.replace(
+            /^import 'index\.css'$/m,
+            "import 'index.css'\nimport 'windi.css'"
+          )
           fs.writeFileSync(APP_FILE_PATH, newAppTsx)
         }
       },
