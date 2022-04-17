@@ -3,11 +3,11 @@
 import { getPaths } from '../paths'
 
 import { generateGraphQLSchema } from './graphqlSchema'
-// import { generateTypeDefs } from './typeDefinitions'
+import { generateTypeDefs } from './typeDefinitions'
 
 export const generate = async () => {
   const schemaPath = await generateGraphQLSchema()
-  const typeDefsPaths: string[] = [] //await generateTypeDefs()
+  const typeDefsPaths: string[] = await generateTypeDefs()
   return [schemaPath, ...typeDefsPaths].filter(
     (x) => typeof x === 'string'
   ) as string[]
