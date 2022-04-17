@@ -206,7 +206,7 @@ import { standard } from './ArticlesCell.mock'
 
 export const success = () => {
   // highlight-next-line
-  return Success ? <Success article={standard().article} /> : null
+  return Success ? <Success articles={standard().articles} /> : null
 }
 
 export default { title: 'Cells/ArticlesCell' }
