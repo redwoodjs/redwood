@@ -102,7 +102,7 @@ export const handler = async ({ force, install }) => {
 
           export default defineConfig({
             extract: {
-              include: ['**/*.{jsx,tsx,css}'],
+              include: ['**/*.{js,jsx,tsx,css}'],
               exclude: ['node_modules', '.git'],
             },
           })
