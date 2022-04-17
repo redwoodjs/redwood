@@ -69,18 +69,14 @@ export const handler = async ({ force, install }) => {
           {
             title: 'Configure WindiCSS',
             task: async () => {
-              const webpackConfigPath = path.join(
-                rwPaths.web.config,
-                'webpack.config.js'
-              )
-              const webpackConfig = fs.readFileSync(webpackConfigPath, 'utf-8')
+              const webpackConfig = fs.readFileSync(rwPaths.web.webpack, 'utf-8')
               const newWebpackConfig =
                 `const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')\n` +
                 webpackConfig.replace(
                   '// config.plugins.push(YOUR_PLUGIN)',
                   '// config.plugins.push(YOUR_PLUGIN)\n  config.plugins.push(new WindiCSSWebpackPlugin())'
                 )
-              fs.writeFileSync(webpackConfigPath, newWebpackConfig)
+              fs.writeFileSync(rwPaths.web.webpack, newWebpackConfig)
             },
           },
         ])
