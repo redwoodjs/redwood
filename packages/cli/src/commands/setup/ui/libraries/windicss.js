@@ -1,13 +1,13 @@
-import fs from 'fs'
-import path from 'path'
-
-import execa from 'execa'
-import Listr from 'listr'
-
 import { errorTelemetry } from '@redwoodjs/telemetry'
-
+import execa from 'execa'
+import fs from 'fs'
+import Listr from 'listr'
+import path from 'path'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
+
+
+
 
 export const command = 'windicss'
 export const aliases = ['windi']
@@ -97,19 +97,15 @@ export const handler = async ({ force, install }) => {
           }
         }
 
-        const windiConfig = `
-          import { defineConfig } from 'windicss/helpers'
-
-          export default defineConfig({
-            extract: {
-              include: ['**/*.{js,jsx,tsx,css}'],
-              exclude: ['node_modules', '.git', 'dist'],
-            },
-          })
-        `
-          .split('\n')
-          .map((line) => line.trim())
-          .join('\n')
+        const windiConfig = [
+          "import { defineConfig } from 'windicss/helpers'",
+          '',
+          'export default defineConfig({',
+          '  extract: {',
+          "    include: ['**/*.{js,jsx,tsx,css}'],",
+          "    exclude: ['node_modules', '.git', 'dist'],",
+          '  },',
+          '})'.join('\n'),
         fs.writeFileSync(windiConfigPath, windiConfig)
       },
     },
