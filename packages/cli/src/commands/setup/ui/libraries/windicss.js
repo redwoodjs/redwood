@@ -126,7 +126,7 @@ export const handler = async ({ force, install }) => {
             /^import 'index\.css'$/m,
             "import 'index.css'\nimport 'windi.css'"
           )
-          fs.writeFileSync(APP_FILE_PATH, newAppTsx)
+          fs.writeFileSync(APP_FILE_PATH, newAppFile)
         }
       },
     },
