@@ -4,16 +4,11 @@ description: How Prisma relations work with scaffolds
 
 # Prisma Relations and Redwood's Generators
 
-These docs apply to Redwood v0.25 and greater. Previous versions of Redwood had limitations when creating scaffolds for any one-to-many or many-to-many relationships. Most of those have been resolved so you should definitely [upgrade to 0.25](https://community.redwoodjs.com/t/upgrading-to-redwoodjs-v0-25-and-prisma-v2-16-db-upgrades-and-project-code-mods/1811) if at all possible!
-
 ## Many-to-many Relationships
 
-[Here](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#many-to-many-relations)
-are Prisma's docs for creating many-to-many [relationships](https://www.prisma.io/docs/concepts/components/prisma-schema/relations) - A many-to-many
-relationship is accomplished by creating a "join" or "lookup" table between two
-other tables. For example, if a **Product** can have many **Tag**s, any given
-**Tag** can also have many **Product**s that it is attached to. A database
-diagram for this relationship could look like:
+A many-to-many relationship is accomplished by creating a "join" or "lookup" table between two other tables.
+For example, if a **Product** can have many **Tag**s, any given **Tag** can also have many **Product**s that it is attached to.
+A database diagram for this relationship could look like:
 
 ```
 ┌───────────┐     ┌─────────────────┐      ┌───────────┐
@@ -25,6 +20,8 @@ diagram for this relationship could look like:
 └───────────┘
 ```
 
+[Here](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#many-to-many-relations)
+are Prisma's docs for creating many-to-many relationships.
 The `schema.prisma` syntax to create this relationship looks like:
 
 ```jsx
@@ -101,6 +98,7 @@ Which creates a table structure like:
 Almost identical! But now there's an `id` and the SDL/scaffold generators will work as expected. The explicit syntax gives you a couple additional benefits—you can customize the table name and even add more fields. Maybe you want to track which user tagged a product—add a `userId` column to `ProductsOnTags` and now you know.
 
 ## Troubleshooting Generators
+
 ### Errors when Generating SDL or Scaffolds for Relations
 
 There is a known issue in the RedwoodJS 1.0 GraphQL type generation that happens while using the Schema Definition Language (SDL) and Scaffold generators with a Prisma schema that contains related models **before both models** exist.
@@ -115,7 +113,7 @@ For example, consider this simple model for a Bookshelf:
 
 Here is a Book that is on a Shelf. And a Shelf has many Books.
 
-```
+```js
 model Book {
   id      Int    @id @default(autoincrement())
   title   String @unique
@@ -172,7 +170,7 @@ The easiest way to solve this error is to:
 
 1. First, **remove all** the relations
 
-```
+```js
 model Book {
   id      Int    @id @default(autoincrement())
   title   String @unique
@@ -195,7 +193,7 @@ model Shelf {
 
 4. After that, setup the relationships a you had originally:
 
-```
+```js
 model Book {
   id      Int    @id @default(autoincrement())
   title   String @unique
@@ -232,7 +230,7 @@ For example, in a business everyone is an "Employee" with some defined role and 
 * Manager - reports to a Director
 * Employee - reports to a Manager, but has no direct reports
 
-```
+```js
 model Employee {
   id            Int       @id @default(autoincrement())
   name          String
