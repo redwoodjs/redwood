@@ -11,11 +11,29 @@ export const globalTypes = {
     toolbar: {
       icon: 'globe',
       items: [
-        { value: 'en', right: '🇺🇸', title: 'English' },
-        { value: 'fr', right: '🇫🇷', title: 'Français' },
+        {
+          value: 'en',
+          right: '🇺🇸',
+          title: 'English',
+        },
+        {
+          value: 'fr',
+          right: '🇫🇷',
+          title: 'Français',
+        },
       ],
     },
   },
+}
+
+/**
+ * An example, no-op storybook decorator. Use a function like this to create decorators.
+ * @param { import("@storybook/addons").StoryFn} StoryFn
+ * @param { import("@storybook/addons").StoryContext} context
+ * @returns StoryFn, unmodified.
+ */
+const _exampleDecorator = (StoryFn, _context) => {
+  return <StoryFn />
 }
 
 /**

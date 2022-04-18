@@ -86,3 +86,11 @@ export function overlap(base, ext, key) {
   }, [])
   return [overlaps, Object.values(map)]
 }
+
+export function deletePropertyIf(object, predicate) {
+  Object.entries(object)
+    .filter(predicate)
+    .forEach(([k, _v]) => {
+      delete object[k]
+    })
+}

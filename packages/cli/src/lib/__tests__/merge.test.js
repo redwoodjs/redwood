@@ -280,7 +280,60 @@ const x = {
   })
 })
 
-fdescribe('Integration tests', () => {
+describe('Comment behavior', () => {
+  it('deduplicates comments on identical declarations', () => {
+    const base = `\
+// This is a test
+const x = [1, 2, 3]
+`
+    const ext = `\
+// This is a test
+const x = [4, 5, 6]
+`
+    const merged = `\
+// This is a test
+const x = [1, 2, 3, 4, 5, 6]
+`
+    expect(merge(base, ext)).toBe(merged)
+  })
+
+  it('deduplicates comments on identical declarations, even if they have different types', () => {
+    const base = `\
+// This is a test
+const x = [1, 2, 3]
+`
+    const ext = `\
+/* This is a test */
+const x = [4, 5, 6]
+`
+    const merged = `\
+// This is a test
+const x = [1, 2, 3, 4, 5, 6]
+`
+    expect(merge(base, ext)).toBe(merged)
+  })
+
+  it('Assumes comments pertain to the subsequent expression; trailing comments are disregarded', () => {
+    const base = `\
+import { foo } from 'source'
+// This is a test
+const x = [1, 2, 3]
+`
+    const ext = `\
+import { bar } from 'source'
+// This is a test
+const x = [4, 5, 6]
+`
+    const merged = `\
+import { foo, bar } from 'source'
+// This is a test
+const x = [1, 2, 3, 4, 5, 6]
+`
+    expect(merge(base, ext)).toBe(merged)
+  })
+})
+
+describe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
     return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>
@@ -288,6 +341,10 @@ fdescribe('Integration tests', () => {
     )
   })
   test.each(tests)('%s', (_it, base, ext, expected) => {
-    expect(merge(base, ext)).toBe(expected)
+    const merged = merge(base, ext)
+    if (merged !== expected) {
+      console.log(merged)
+    }
+    expect(merged).toBe(expected)
   })
 })

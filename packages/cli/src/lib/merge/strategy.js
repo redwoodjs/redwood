@@ -3,19 +3,51 @@ import * as t from '@babel/types'
 import { fillUnique, nodeIs, overlap, pushUnique, sieve } from './algorithms'
 
 export const mergeUtility = {
+  _insertAfter: (base, ...exts) => {
+    // When merging, trailing comments are kind of nasty, since a comment can simultaneously be
+    // parsed as a trailing comment of one expression, and a leading comment of the subsequent
+    // expression. There's apparently no way in babel to say, "assume all comments are leading",
+    // so I'm trying this as a workaround.
+    base.node.trailingComments = []
+    base.insertAfter(...exts)
+  },
   keepBoth: (base, ext) => {
-    base.insertAfter(ext.node)
+    mergeUtility._insertAfter(base, ext.node)
+    base.skip()
   },
   keepBothStatementParents: (base, ext) => {
-    base.getStatementParent().insertAfter(ext.getStatementParent().node)
+    mergeUtility._insertAfter(
+      base.getStatementParent(),
+      ext.getStatementParent().node
+    )
+    base.skip()
   },
   keepBase: (_base, _ext) => {},
   keepExtension: (base, ext) => {
     base.replaceWith(ext)
+    base.skip()
+  },
+  mergeComments: (base, ext) => {
+    // Disregard comment type (CommentBlock or CommentLine) and only consider content.
+    const commentEquality = (lhs, rhs) => lhs.value === rhs.value
+
+    // A comment can be parsed as both a leading comment for one expression and a trailing comment
+    // for another. So, we basically ignore trailing comments and assume comments "belong" to the
+    // expression they precede.
+    if (base.node.leadingComments?.length && ext.node.leadingComments?.length) {
+      pushUnique(
+        commentEquality,
+        base.node.leadingComments,
+        ...ext.node.leadingComments
+      )
+    }
   },
   recurse: function (on, base, ext) {
     const baseOn = base.get(on)
     this[baseOn.node.type](baseOn, ext.get(on))
+    if (baseOn.shouldSkip) {
+      base.skip()
+    }
   },
 }
 
@@ -27,7 +59,12 @@ export const defaultMergeStrategy = {
       ? this.recurse('init', base, ext)
       : this.keepBothStatementParents(base, ext)
   },
+  ExportNamedDeclaration(baseExport, extExport) {
+    mergeUtility.mergeComments(baseExport, extExport)
+  },
   ImportDeclaration(baseImport, extImport) {
+    mergeUtility.mergeComments(baseImport, extImport)
+
     const baseSpecs = baseImport.node.specifiers
     const extSpecs = extImport.node.specifiers
 
@@ -70,8 +107,9 @@ export const defaultMergeStrategy = {
     )
 
     baseImport.node.specifiers = firstSpecifierList
-    baseImport.insertAfter(
-      rest.map((s) => t.importDeclaration(s, baseImport.node.source))
+    mergeUtility._insertAfter(
+      baseImport,
+      rest.map((specs) => t.importDeclaration(specs, baseImport.node.source))
     )
   },
   ArrayExpression(baseArray, extArray) {
