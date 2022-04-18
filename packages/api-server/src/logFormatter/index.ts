@@ -31,6 +31,24 @@ const isWideEmoji = (character: any) => {
 }
 
 export const LogFormatter = () => {
+  /**
+   * Example inputData:
+   *   {
+   *     "level": 20,
+   *     "time": 1650298442951,
+   *     "pid": 80980,
+   *     "hostname": "Tobbes-MacBook-Pro.local",
+   *     "foo": "foo",
+   *     "nested": {
+   *       "arr": [
+   *         "one",
+   *         "two",
+   *         "three"
+   *       ]
+   *     },
+   *     "msg": "Example debug log"
+   *   }
+   */
   const parse = (inputData: any) => {
     let logData
     if (typeof inputData === 'string') {
@@ -83,6 +101,16 @@ export const LogFormatter = () => {
 
   const output = (logData: any) => {
     const output = []
+    const {
+      level: _level,
+      time: _time,
+      pid: _pid,
+      hostname: _hostname,
+      msg: _msg,
+      name: _name,
+      ns: _ns,
+      ...metadata
+    } = logData
 
     if (!logData.level) {
       logData.level = 'customlevel'
@@ -101,7 +129,7 @@ export const LogFormatter = () => {
     output.push(formatNs(logData.ns))
     output.push(formatName(logData.name))
     output.push(formatRequestId(logData.requestId))
-    output.push(formatMessage(logData))
+    output.push(formatMessage(logData, metadata))
 
     const req = logData.req
     const res = logData.res
@@ -238,8 +266,12 @@ export const LogFormatter = () => {
     return chalk.gray(time)
   }
 
-  const formatMessage = (logData: any) => {
-    const msg = formatMessageName(logData.message)
+  const formatMessage = (logData: any, metadata: Record<string, unknown>) => {
+    const msg =
+      formatMessageName(logData.message) +
+      '\n' +
+      JSON.stringify(metadata, null, 2)
+
     let pretty
     if (logData.level === 'error') {
       pretty = chalk.red(msg)
