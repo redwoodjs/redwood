@@ -321,7 +321,7 @@ yarn redwood deploy vercel --no-data-migrate
 Rollback changes made by the generate command.
 
 ```
-yarn redwood d <type>
+yarn redwood destroy <type>
 ```
 
 | Command              | Description                                                                     |
@@ -396,7 +396,7 @@ If your project is configured for TypeScript (see [TypeScript docs](typescript.m
 
 **Undoing a Generator with a Destroyer**
 
-Most generate commands (i.e., everything but `yarn redwood generate dataMigration`) can be undone by their corresponding destroy command. For example, `yarn redwood generate cell` can be undone with `yarn redwood d cell`.
+Most generate commands (i.e., everything but `yarn redwood generate dataMigration`) can be undone by their corresponding destroy command. For example, `yarn redwood generate cell` can be undone with `yarn redwood destroy cell`.
 
 ### generate cell
 
@@ -426,7 +426,7 @@ See the [Cells](tutorial/chapter2/cells.md) section of the Tutorial for usage ex
 **Destroying**
 
 ```
-yarn redwood d cell <name>
+yarn redwood destroy cell <name>
 ```
 
 **Example**
@@ -486,7 +486,7 @@ Redwood loves function components and makes extensive use of React Hooks, which 
 **Destroying**
 
 ```
-yarn redwood d component <name>
+yarn redwood destroy component <name>
 ```
 
 **Example**
@@ -562,7 +562,7 @@ See [Redwood Directives](directives.md).
 **Destroying**
 
 ```
-yarn redwood d directive <name>
+yarn redwood destroy directive <name>
 ```
 
 **Example**
@@ -600,7 +600,7 @@ See the [Custom Function](how-to/custom-function.md) how to.
 **Destroying**
 
 ```
-yarn redwood d function <name>
+yarn redwood destroy function <name>
 ```
 
 **Example**
@@ -669,7 +669,7 @@ See the [Layouts](tutorial/chapter1/layouts.md) section of the tutorial.
 **Destroying**
 
 ```
-yarn redwood d layout <name>
+yarn redwood destroy layout <name>
 ```
 
 **Example**
@@ -759,7 +759,7 @@ This also updates `Routes.js` in `./web/src`.
 **Destroying**
 
 ```
-yarn redwood d page <name> [path]
+yarn redwood destroy page <name> [path]
 ```
 
 **Examples**
@@ -985,7 +985,7 @@ Notes:
 **Destroying**
 
 ```
-yarn redwood d scaffold <model>
+yarn redwood destroy scaffold <model>
 ```
 
 Notes:
@@ -1049,7 +1049,7 @@ Done in 1.04s.
 **Destroying**
 
 ```
-yarn redwood d sdl <model>
+yarn redwood destroy sdl <model>
 ```
 
 **Example**
@@ -1200,7 +1200,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 **Destroying**
 
 ```
-yarn redwood d service <name>
+yarn redwood destroy service <name>
 ```
 
 **Example**
