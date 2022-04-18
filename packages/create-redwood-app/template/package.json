@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "1.0.0"
+    "@redwoodjs/core": "1.0.1"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -21,8 +21,5 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.2.0",
-  "resolutions": {
-    "@types/react": "17.0.40"
-  }
+  "packageManager": "yarn@3.2.0"
 }

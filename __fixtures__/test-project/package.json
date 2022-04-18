@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "1.0.0",
+    "@redwoodjs/core": "1.0.1",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",
     "postcss-loader": "^6.2.1",
@@ -28,8 +28,5 @@
   "scripts": {
     "postinstall": ""
   },
-  "packageManager": "yarn@3.2.0",
-  "resolutions": {
-    "@types/react": "17.0.40"
-  }
+  "packageManager": "yarn@3.2.0"
 }

@@ -160,7 +160,7 @@
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
 }
 .rw-table-wrapper-responsive {
-  @apply overflow-x-scroll;
+  @apply overflow-x-auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;

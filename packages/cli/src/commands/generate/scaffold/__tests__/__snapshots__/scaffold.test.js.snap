@@ -687,6 +687,24 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -890,7 +908,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -1305,43 +1323,43 @@ const formatDatetime = (value) => {
 const PostForm = (props) => {
   const onSubmit = (data) => {
 
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     props.onSave(data, props?.post?.id)
   }
 
@@ -1354,7 +1372,7 @@ const PostForm = (props) => {
           titleClassName=\\"rw-form-error-title\\"
           listClassName=\\"rw-form-error-list\\"
         />
-      
+
         <Label
           name=\\"title\\"
           className=\\"rw-label\\"
@@ -1362,7 +1380,7 @@ const PostForm = (props) => {
         >
           Title
         </Label>
-        
+
           <TextField
             name=\\"title\\"
             defaultValue={props.post?.title}
@@ -1370,7 +1388,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ required: true }}
           />
-        
+
 
         <FieldError name=\\"title\\" className=\\"rw-field-error\\" />
 
@@ -1381,7 +1399,7 @@ const PostForm = (props) => {
         >
           Slug
         </Label>
-        
+
           <TextField
             name=\\"slug\\"
             defaultValue={props.post?.slug}
@@ -1389,7 +1407,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ required: true }}
           />
-        
+
 
         <FieldError name=\\"slug\\" className=\\"rw-field-error\\" />
 
@@ -1400,7 +1418,7 @@ const PostForm = (props) => {
         >
           Author
         </Label>
-        
+
           <TextField
             name=\\"author\\"
             defaultValue={props.post?.author}
@@ -1408,7 +1426,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ required: true }}
           />
-        
+
 
         <FieldError name=\\"author\\" className=\\"rw-field-error\\" />
 
@@ -1419,7 +1437,7 @@ const PostForm = (props) => {
         >
           Body
         </Label>
-        
+
           <TextField
             name=\\"body\\"
             defaultValue={props.post?.body}
@@ -1427,7 +1445,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ required: true }}
           />
-        
+
 
         <FieldError name=\\"body\\" className=\\"rw-field-error\\" />
 
@@ -1438,14 +1456,14 @@ const PostForm = (props) => {
         >
           Image
         </Label>
-        
+
           <TextField
             name=\\"image\\"
             defaultValue={props.post?.image}
             className=\\"rw-input\\"
             errorClassName=\\"rw-input rw-input-error\\"
           />
-        
+
 
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
 
@@ -1456,14 +1474,14 @@ const PostForm = (props) => {
         >
           Posted at
         </Label>
-        
+
           <DatetimeLocalField
             name=\\"postedAt\\"
             defaultValue={formatDatetime(props.post?.postedAt)}
             className=\\"rw-input\\"
             errorClassName=\\"rw-input rw-input-error\\"
           />
-        
+
 
         <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
 
@@ -1474,14 +1492,14 @@ const PostForm = (props) => {
         >
           Is pinned
         </Label>
-        
+
           <CheckboxField
             name=\\"isPinned\\"
             defaultChecked={props.post?.isPinned}
             className=\\"rw-input\\"
             errorClassName=\\"rw-input rw-input-error\\"
           />
-        
+
 
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
@@ -1492,7 +1510,7 @@ const PostForm = (props) => {
         >
           Read time
         </Label>
-        
+
           <TextField
             name=\\"readTime\\"
             defaultValue={props.post?.readTime}
@@ -1500,7 +1518,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ valueAsNumber: true, required: true }}
           />
-        
+
 
         <FieldError name=\\"readTime\\" className=\\"rw-field-error\\" />
 
@@ -1511,7 +1529,7 @@ const PostForm = (props) => {
         >
           Rating
         </Label>
-        
+
           <TextField
             name=\\"rating\\"
             defaultValue={props.post?.rating}
@@ -1519,7 +1537,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ valueAsNumber: true }}
           />
-        
+
 
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
@@ -1530,7 +1548,7 @@ const PostForm = (props) => {
         >
           Upvotes
         </Label>
-        
+
           <NumberField
             name=\\"upvotes\\"
             defaultValue={props.post?.upvotes}
@@ -1538,7 +1556,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ required: true }}
           />
-        
+
 
         <FieldError name=\\"upvotes\\" className=\\"rw-field-error\\" />
 
@@ -1549,7 +1567,7 @@ const PostForm = (props) => {
         >
           Metadata
         </Label>
-        
+
           <TextAreaField
             name=\\"metadata\\"
             defaultValue={JSON.stringify(props.post?.metadata)}
@@ -1557,7 +1575,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ valueAsJSON: true, required: true }}
           />
-        
+
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
@@ -1568,7 +1586,7 @@ const PostForm = (props) => {
         >
           Huge number
         </Label>
-        
+
           <TextField
             name=\\"hugeNumber\\"
             defaultValue={props.post?.hugeNumber}
@@ -1576,7 +1594,7 @@ const PostForm = (props) => {
             errorClassName=\\"rw-input rw-input-error\\"
             validation={{ required: true }}
           />
-        
+
 
         <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
 
@@ -2011,6 +2029,24 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2214,7 +2250,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -2737,6 +2773,24 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2940,7 +2994,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -3069,6 +3123,16 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 }
 .rw-segment {
   @apply rounded-lg overflow-hidden w-full border border-gray-200;
+  scrollbar-color: theme('colors.zinc.400') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-200 bg-transparent border-solid rounded-t-none rounded-b-[10px] border-0 border-t p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 bg-clip-content border-[3px] border-solid border-transparent rounded-full;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
@@ -3191,7 +3255,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
 }
 .rw-table-wrapper-responsive {
-  @apply overflow-x-scroll;
+  @apply overflow-x-auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
