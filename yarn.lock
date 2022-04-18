@@ -5464,9 +5464,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.21.0":
-  version: 1.21.0
-  resolution: "@playwright/test@npm:1.21.0"
+"@playwright/test@npm:1.21.1":
+  version: 1.21.1
+  resolution: "@playwright/test@npm:1.21.1"
   dependencies:
     "@babel/code-frame": 7.16.7
     "@babel/core": 7.16.12
@@ -5497,14 +5497,14 @@ __metadata:
     ms: 2.1.3
     open: 8.4.0
     pirates: 4.0.4
-    playwright-core: 1.21.0
+    playwright-core: 1.21.1
     rimraf: 3.0.2
     source-map-support: 0.4.18
     stack-utils: 2.0.5
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: f0f54908b7d7357572e23a29dfbc75aa72d8ad05d4546305f41007da69e5fea1c20c4b2636fd085bf9b82707aadfd997fda4d8c71ea996183ec97c930db5bb23
+  checksum: c088828b61fb004bcb558bdde1496aa64dafd1a824ea6e917a3f95816a2c4910fe434709cc3d3f244ac0380511bcd1e50594c65d57a955441b430f46f083dd4f
   languageName: node
   linkType: hard
 
@@ -24414,9 +24414,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.21.0":
-  version: 1.21.0
-  resolution: "playwright-core@npm:1.21.0"
+"playwright-core@npm:1.21.1":
+  version: 1.21.1
+  resolution: "playwright-core@npm:1.21.1"
   dependencies:
     colors: 1.4.0
     commander: 8.3.0
@@ -24438,7 +24438,7 @@ __metadata:
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: 6bfc6168fa16101f973e23596573e2761744da6d5f13eddb675740e3cacf59ddeba469980fdf6f4018d80efd09538b3ba6a1397f448abd248fabe5356c757e5b
+  checksum: bdc614f6f255aef31b68bb2839978f7c6ed48b41a32b39f04beaddb4db045953512c98c700f674bcad78edc9ef2b658139c4ae586e2bd56687fc350d85af1cfb
   languageName: node
   linkType: hard
 
@@ -26941,7 +26941,7 @@ __metadata:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@playwright/test": 1.21.0
+    "@playwright/test": 1.21.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.1.1
