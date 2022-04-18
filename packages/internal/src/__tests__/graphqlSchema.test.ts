@@ -49,19 +49,17 @@ test('Prints error message when schema loading fails', async () => {
   try {
     await generateGraphQLSchema()
 
-    expect(console.error).toHaveBeenNthCalledWith(
-      1,
-      'Schema loading failed.',
-      'Unknown type: "Shelf".'
-    )
-    expect(console.error).toHaveBeenNthCalledWith(
-      3,
-      'It looks like you have a Shelf model in your database schema.'
-    )
-    expect(console.error).toHaveBeenNthCalledWith(
-      4,
-      'Try running the generator you just used for that model first instead'
-    )
+    const invocation1to4 = (console.error as jest.Mock).mock.calls.slice(0, 4)
+    const invocation5 = (console.error as jest.Mock).mock.calls[4]
+
+    expect(invocation1to4).toEqual([
+      ['Schema loading failed.', 'Unknown type: "Shelf".'],
+      [''],
+      ['It looks like you have a Shelf model in your database schema.'],
+      ['Try running the generator you just used for that model first instead'],
+    ])
+    expect(invocation5[0]).toMatch('Schema loading failed')
+    expect(invocation5[1].toString()).toMatch('Error: Unknown type: "Shelf".')
   } finally {
     console.error = oldConsoleError
     delete process.env.RWJS_CWD
