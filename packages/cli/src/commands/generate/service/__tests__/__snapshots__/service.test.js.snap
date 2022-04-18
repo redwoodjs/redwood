@@ -473,7 +473,7 @@ export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
 }
 
 export const User = {
-  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
+  identity: (_obj: unknown, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
 "
@@ -496,8 +496,10 @@ export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+  userProfiles: (
+    _obj: unknown,
+    { root }: ResolverArgs<ReturnType<typeof user>>
+  ) => db.user.findUnique({ where: { id: root.id } }).userProfiles(),
 }
 "
 `;
@@ -519,9 +521,11 @@ export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
+  userProfiles: (
+    _obj: unknown,
+    { root }: ResolverArgs<ReturnType<typeof user>>
+  ) => db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+  identity: (_obj: unknown, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
 "

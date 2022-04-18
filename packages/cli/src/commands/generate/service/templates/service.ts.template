@@ -41,5 +41,5 @@ export const delete${singularPascalName} = ({ id }: Prisma.${singularPascalName}
 }<% } %><% if (relations.length) { %>
 
 export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
+  ${relation}: (_obj: unknown, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>
