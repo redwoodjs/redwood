@@ -1,13 +1,15 @@
-name: Publish release candidate
+name: Publish release candidate packages
 
 on:
   push:
     branches: ['release/**']
     tags-ignore:
       - v** # We don't want this to run on release
+    paths-ignore:
+      - 'docs/**' # No need to run on docs-only changes
 
 jobs:
-  build:
+  git-tag-check:
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
@@ -18,28 +20,146 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
+
+      - name: 🏷 Check tags
+        run: |
+          CURRENT_TAG=$(git describe --abbrev=0)
+
+          # `github.ref_name` is something like `release/minor/v1.1.0`.
+          # `basename` gets us `v1.1.0`, then parameter expansion strips the `v`.
+          # See https://stackoverflow.com/questions/6594085/remove-first-character-of-a-string-in-bash.
+          BRANCH_TAG=$(basename ${{ github.ref_name }})
+          BRANCH_TAG=${BRANCH_TAG:1}
+
+          echo
+          echo "Current tag is $CURRENT_TAG"
+          echo "Branch tag is $BRANCH_TAG"
+          echo "Comparing tags with \"yarn dlx semver-compare-cli $CURRENT_TAG lt $BRANCH_TAG\""
+          echo
+
+          # See if the current tag is less than the branch's tag.
+          # If it is, we're good to keep going.
+          yarn dlx semver-compare-cli $CURRENT_TAG lt $BRANCH_TAG
+
+  publish-release-candidate:
+    name: 🚢 Publish Release Candidate
+    needs: check-tags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
+          #  This is required because lerna uses tags to determine the version.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Print node and yarn versions
+        run: |
+          node --version
+          yarn --version
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Cache yarn
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
+          restore-keys: |
+            yarn-1234
 
       - name: Install dependencies
-        run: yarn install --immutable --check-files
+        run: yarn install --immutable
 
-      - name: Build
+      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
+        run: yarn constraints
+
+      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn dedupe --check
+
+      - name: 🏗 Build
         run: yarn build
 
-      - name: Run ESLint
+      - name: 🔎 Lint
         run: yarn lint
         env:
           CI: true
 
-      - name: Run tests
+      - name: 🧪 Test
         run: yarn test
         env:
           CI: true
 
-      - name: Publish
+      - name: 🚢 Publish
         run: |
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          ./tasks/publish-rc
+          SEMVER=$(basename $(dirname ${{ github.ref_name }}))
+          yarn lerna publish pre$SEMVER --include-merged-tags --canary --preid rc --dist-tag rc --force-publish --loglevel verbose --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Update Publish Job Status
+        if: always()
+        run: |
+          echo ${{ job.status }} > status_publish.txt
+
+      - name: Upload file status_publish.txt as an artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pass_status_publish_job
+          path: status_publish.txt
+
+# Slack Notifications for publish success/fail
+# https://github.com/marketplace/actions/slack-send
+  slack-notification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    needs: publish-release-candidate
+    if: always()
+
+    steps:
+      - name: Download publish status artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pass_status_publish_job
+
+      - name: Set the publish status as output
+        id: publish-status
+        run: |
+          echo "::set-output name=publish-result::$(<status_publish.txt)"
+
+      - name: Overwrite publish status env if failure
+        if: ${{ steps.publish-status.outputs.publish-result == 'failure' }}
+        run: |
+          echo "PUBLISH_STATUS=RC Publishing FAILED 🚨" >> $GITHUB_ENV
+
+      - name: Overwrite publish status env if success
+        if: ${{ steps.publish-status.outputs.publish-result == 'success' }}
+        run: |
+          echo "PUBLISH_STATUS=RC Publishing SUCCESS ✅" >> $GITHUB_ENV
+
+      - name: Overwrite publish status env if something else
+        if: ${{ (steps.publish-status.outputs.publish-result != 'failure') &&  (steps.publish-status.outputs.publish-result != 'success') }}
+        run: |
+          echo "PUBLISH_STATUS=RC Publishing Cancelled ⏹" >> $GITHUB_ENV
+
+      - name: Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "publish_label": "RC Packages 🦜",
+              "publish_status": "${{ env.PUBLISH_STATUS }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}
