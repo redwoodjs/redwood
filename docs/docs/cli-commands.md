@@ -334,6 +334,7 @@ yarn redwood d <type>
 | `scaffold <model>`   | Destroy pages, SDL, and Services files based on a given DB schema Model         |
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
+| `directive <name>`   | Destroy a directive                                                             |
 
 ## exec
 
@@ -557,6 +558,12 @@ yarn redwood generate directive <name>
 **Usage**
 
 See [Redwood Directives](directives.md).
+
+**Destroying**
+
+```
+yarn redwood d directive <name>
+```
 
 **Example**
 
