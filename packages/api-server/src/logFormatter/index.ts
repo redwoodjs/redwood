@@ -267,10 +267,7 @@ export const LogFormatter = () => {
   }
 
   const formatMessage = (logData: any, metadata: Record<string, unknown>) => {
-    const msg =
-      formatMessageName(logData.message) +
-      '\n' +
-      JSON.stringify(metadata, null, 2)
+    const msg = formatMessageName(logData.message)
 
     let pretty
     if (logData.level === 'error') {
@@ -291,7 +288,7 @@ export const LogFormatter = () => {
     if (logData.level === 'fatal') {
       pretty = chalk.white.bgRed(msg)
     }
-    return pretty
+    return pretty + '\n' + JSON.stringify(metadata, null, 2)
   }
 
   const formatMethod = (method: any) => {
