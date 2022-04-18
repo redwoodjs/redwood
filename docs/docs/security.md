@@ -1,13 +1,17 @@
+---
+description: Build and deploy secure applications
+---
+
 # Security
 
 RedwoodJS wants you to be able build and deploy secure applications and takes the topic of security seriously.
 
 * [RedwoodJS Security](https://github.com/redwoodjs/redwood/security) on GitHub
 * [CodeQL code scanning](https://github.com/features/security)
-* [Authentication](/docs/authentication)
-* [Webhook signature verification](/docs/webhooks)
-* [Ways to keep your serverless functions secure](/docs/serverless-functions#security-considerations)
-* [Environment variables for secure keys and tokens](/docs/environment-variables)
+* [Authentication](authentication.md)
+* [Webhook signature verification](webhooks.md)
+* [Ways to keep your serverless functions secure](serverless-functions.md#security-considerations)
+* [Environment variables for secure keys and tokens](environment-variables.md)
 
 > ⚠️ **Security is Your Responsibility**
 > While Redwood offers the tools, practices, and information to keep your application secure, it remains your responsibility to put these in place. Proper password, token, and key protection using disciplined communication, password management systems, and environment management services like [Doppler](https://www.doppler.com) are strongly encouraged.
@@ -19,7 +23,7 @@ RedwoodJS wants you to be able build and deploy secure applications and takes th
 
 ## Authentication
 
-`@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We [currently support](https://redwoodjs.com/docs/authentication) the following authentication providers:
+`@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We [currently support](authentication.md) the following authentication providers:
 
 * Netlify Identity Widget
 * Auth0
@@ -47,13 +51,13 @@ The RedwoodJS GraphQL handler sets [reasonable defaults](graphql.md#query-depth-
 Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to [disable these in production](graphql.md#introspection-and-playground-disabled-in-production), RedwoodJS **only enables introspection and the playground when running in development**.
 ## Functions
 
-When deployed, a [serverless function](/docs/serverless-functions) is an open API endpoint. That means anyone can access it and perform any tasks it's asked to do. In many cases, this is completely appropriate and desired behavior. But there are often times you need to restrict access to a function, and Redwood can help you do that using a [variety of methods and approaches](/docs/serverless-functions#security-considerations).
+When deployed, a [serverless function](serverless-functions.md) is an open API endpoint. That means anyone can access it and perform any tasks it's asked to do. In many cases, this is completely appropriate and desired behavior. But there are often times you need to restrict access to a function, and Redwood can help you do that using a [variety of methods and approaches](serverless-functions.md#security-considerations).
 
-For details on how to keep your functions secure, please see the [Serverless functions & Security considerations](/docs/serverless-functions#security-considerations) section in the RedwoodJS documentation.
+For details on how to keep your functions secure, please see the [Serverless functions & Security considerations](serverless-functions.md#security-considerations) section in the RedwoodJS documentation.
 
 ## Webhooks
 
-[Webhooks](/docs/webhooks) are a common way that third-party services notify your RedwoodJS application when an event of interest happens.
+[Webhooks](webhooks.md) are a common way that third-party services notify your RedwoodJS application when an event of interest happens.
 
 They are a form of messaging or automation and allows web applications to communicate with each other and send real-time data from one application to another whenever a given event occurs.
 
@@ -64,4 +68,4 @@ Since each of these webhooks will call a function endpoint in your RedwoodJS api
 * Know the payload sent in the hook hasn't been tampered with
 * Ensure that the hook isn't reprocessed or replayed
 
-For details on how to keep your incoming webhooks secure and how to sign your outgoing webhooks, please see [Webhooks](/docs/webhooks).
+For details on how to keep your incoming webhooks secure and how to sign your outgoing webhooks, please see [Webhooks](webhooks.md).

@@ -14,10 +14,10 @@ yarn start
 
 #### Internal linking
 
-For links to other docs inside the `tutorials` directory, USE RELATIVE LINKS!
+For links to other docs inside the `tutorials` directory you need to use *relative* links.
 
 ```
-In [previous section](./our-first-page) we....
+In [previous section](./first-page) we....
 ```
 
 ## Contributing

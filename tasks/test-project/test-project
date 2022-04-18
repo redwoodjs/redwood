@@ -5,12 +5,10 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
-const rimraf = require('rimraf')
 const yargs = require('yargs')
 
 const {
@@ -23,6 +21,9 @@ const {
   updatePkgJsonScripts,
   confirmNoFixtureNoLink,
 } = require('./util')
+
+const chalk = require('chalk')
+const rimraf = require('rimraf')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
@@ -64,6 +65,11 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .option('yarn1', {
+    default: false,
+    type: 'boolean',
+    describe: 'Use yarn 1 instead of yarn 3',
+  })
   .help()
   .strict().argv
 
@@ -75,16 +81,17 @@ const {
   clean,
   copyFromFixture,
   rebuildFixture,
+  yarn1,
 } = args
 
-// Do not use demandCommand becuase rebuildFixture doesn't require <project directory>
+// Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
 if (!rebuildFixture && args._.length > 1) {
   console.log(
-    chalk.red.bold(
+    chalk.default.red.bold(
       `
       Multiple <project directory> arguments
-      Secify ONE project directory outside the framework directory (no spaces allowed)
+      Specify ONE project directory outside the framework directory (no spaces allowed)
       EXAMPLE: 'yarn build:test-project ../test-project'
       `
     )
@@ -92,7 +99,7 @@ if (!rebuildFixture && args._.length > 1) {
   process.exit(1)
 } else if (!rebuildFixture && args._.length < 1) {
   console.log(
-    chalk.red.bold(
+    chalk.default.red.bold(
       `
       Missing <project directory> argument
       Specify a project directory outside the framework directory
@@ -122,7 +129,7 @@ if (
   !path.isAbsolute(relativePathCheck)
 ) {
   console.log(
-    chalk.red.bold(
+    chalk.default.red.bold(
       `
       Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'
       Specify a project directory outside the framework directory
@@ -216,33 +223,23 @@ const globalTasks = () =>
         enabled: () => link && !rebuildFixture,
       },
       {
-        title: 'Set yarn v1 version in test-project directory',
+        title: 'Setting yarn version to 1',
         task: async () => {
           await execa(
             'yarn set version classic',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
-
-          // remove "packageManager": "yarn@3.2.0" from package.json
-          const packageJsonPath = path.join(OUTPUT_PROJECT_PATH, 'package.json')
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, 'utf-8')
-          )
-          delete packageJson.packageManager
-          fs.writeFileSync(
-            packageJsonPath,
-            JSON.stringify(packageJson, undefined, 2)
-          )
         },
-        skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture, but copyFromFixture is default
+        enabled: () => yarn1,
       },
       {
         title: 'Installing node_modules',
         task: async () => {
           return execa(
             'yarn install',
-            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            yarn1 &&
+              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
@@ -326,8 +323,8 @@ const globalTasks = () =>
         title: 'Generate dbAuth Secret',
         task: async () => {
           const { stdout: dbAuthSecret } = await execa(
-            `yarn --silent rw g secret --raw`,
-            [],
+            'yarn',
+            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
             {
               ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',

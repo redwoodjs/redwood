@@ -1,11 +1,10 @@
 module.exports = {
   customFields: {
-    defaultDocsLandingPage: 'tutorial/welcome-to-redwood', // redirects here when hitting /docs/
+    defaultDocsLandingPage: 'index', // redirects here when hitting /docs/
     defaultSectionLandingPages: {
       // map of what is considered the first article in each section
       // section: id
-      tutorial: 'welcome-to-redwood',
-      tutorial2: 'welcome-to-redwood-part-ii-redwoods-revenge',
+      tutorial: 'forward',
     },
   },
   // ?
@@ -18,34 +17,39 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'https://redwoodjs.com/favicon.png',
   organizationName: 'redwoodjs', // Usually your GitHub org/user name.
   // ?
   projectName: 'redwood', // Usually your repo name.,
   themeConfig: {
     algolia: {
-      appId: 'FK1BZ27LVA',
-      apiKey: 'cfc36f6fc808745d1d2c7725fd0720a5',
-      indexName: 'docs',
+      appId: '37B3LHULK0',
+      apiKey: '1d7f2f299d9a38c157501c301425f090',
+      indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
+      externalUrlRegex: 'https://learn-redwood.netlify.app',
     },
     navbar: {
       title: 'RedwoodJS',
       logo: {
         alt: 'RedwoodJS pinecone logo',
         src: 'https://d33wubrfki0l68.cloudfront.net/72b0d56596a981835c18946d6c4f8a968b08e694/82254/images/logo.svg',
+        href: 'https://redwoodjs.com/',
+        target: '_self',
       },
       items: [
         {
-          href: 'https://github.com/redwoodjs/learn.redwoodjs.com',
+          href: 'https://github.com/redwoodjs/redwood',
           position: 'right',
           className: 'github-logo',
           'aria-label': 'GitHub repository',
         },
       ],
     },
-    // ?
+    prism: {
+      additionalLanguages: ['toml'],
+    },
     footer: {
       style: 'dark',
       links: [
@@ -54,11 +58,7 @@ module.exports = {
           items: [
             {
               label: 'Tutorial',
-              to: 'docs/tutorial/welcome-to-redwood',
-            },
-            {
-              label: 'Tutorial II',
-              to: 'docs/tutorial2/welcome-to-redwood-part-ii-redwoods-revenge',
+              to: 'docs/tutorial/foreword',
             },
           ],
         },
@@ -116,11 +116,11 @@ module.exports = {
     {
       src: 'https://plausible.io/js/plausible.js',
       defer: true,
-      'data-domain': 'learn.redwoodjs.com',
+      'data-domain': 'redwoodjs.com',
     },
   ],
   stylesheets: [
     'https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap',
   ],
 }

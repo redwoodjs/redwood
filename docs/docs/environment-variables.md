@@ -1,3 +1,7 @@
+---
+description: How to use environment variables on the api and web sides
+---
+
 # Environment Variables
 
 You can provide environment variables to each side of your Redwood app in different ways, depending on each Side's target, and whether you're in development or production.
@@ -33,9 +37,7 @@ Just like for the API Side, you'll also have to set them up with your provider.
 
 For Example:
 
-```toml
-// redwood.toml
-
+```toml title="redwood.toml"
 [web]
   includeEnvironmentVariables = ['SECRET_API_KEY', 'ANOTHER_ONE']
 ```
@@ -53,8 +55,8 @@ Like the option above, these are also removed and replaced with the _actual valu
 
 ### Accessing API URLs
 
-Redwood automatically makes your API URL configurations from the web section of your `redwood.toml` available globally. 
-They're accessible via the `window` or `global` objects. 
+Redwood automatically makes your API URL configurations from the web section of your `redwood.toml` available globally.
+They're accessible via the `window` or `global` objects.
 For example, `global.RWJS_API_GRAPHQL_URL` gives you the URL for your graphql endpoint.
 
 The toml values are mapped as follows:
@@ -65,7 +67,20 @@ The toml values are mapped as follows:
 | `apiGraphQLUrl`    | `global.RWJS_API_GRAPHQL_URL` | URL or absolute path to GraphQL function |
 | `apiDbAuthUrl`     | `global.RWJS_API_DBAUTH_URL`  | URL or absolute path to DbAuth function  |
 
-See the [redwood.toml reference](https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths) for more details. 
+See the [redwood.toml reference](app-configuration-redwood-toml.md#api-paths) for more details.
+
+## Development Fatal Error Page
+
+```text title=".env"
+REDWOOD_ENV_EDITOR=vscode
+```
+
+Redwood comes with a `FatalErrorPage` that displays helpful information—like the stack trace and the request—when something breaks.
+
+> `FatalErrorPage` isn't bundled when deploying to production
+
+As part of the stack trace, there are links to the original source files so that they can be quickly opened in your editor.
+The page defaults to VSCode, but you can override the editor by setting the environment variable `REDWOOD_ENV_EDITOR`.
 
 ## API
 
@@ -79,9 +94,7 @@ HELLO_ENV=hello world
 
 and make a hello Function (`yarn rw generate function hello`) and reference `HELLO_ENV` in the body of our response:
 
-```javascript{6}
-// ./api/src/functions/hello.js
-
+```jsx {6} title="./api/src/functions/hello.js"
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
@@ -108,7 +121,7 @@ Whichever platform you deploy to, they'll have some specific way of making envir
 
 Since it usually contains sensitive information, you should [never commit your `.env` file](https://github.com/motdotla/dotenv#should-i-commit-my-env-file). Note that you'd actually have to go out of your way to do this as, by default, a Redwood app's `.gitignore` explicitly ignores `.env`:
 
-```plaintext{2}
+```plaintext {2}
 .DS_Store
 .env
 .netlify
@@ -125,9 +138,7 @@ For all the variables in your `.env` and `.env.defaults` files to make their way
 
 It's in [the CLI](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/index.js#L6-L12)&mdash;every time you run a `yarn rw` command:
 
-```javascript
-// packages/cli/src/index.js
-
+```jsx title="packages/cli/src/index.js"
 import { config } from 'dotenv-defaults'
 
 config({

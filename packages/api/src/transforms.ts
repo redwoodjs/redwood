@@ -1,7 +1,7 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
-import { Headers } from 'node-fetch'
+import { Headers } from 'cross-undici-fetch'
 
-// This is the same interface used by graphql-helix
+// This is the same interface used by GraphQL Yoga
 // But not importing here to avoid adding a dependency
 export interface Request {
   body?: any

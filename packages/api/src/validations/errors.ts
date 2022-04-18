@@ -24,7 +24,7 @@ export class ServiceValidationError extends RedwoodError {
         code: 'BAD_USER_INPUT',
         properties: {
           messages: {
-            [String(value)]: errorMessage,
+            [String(value)]: [errorMessage],
           },
         },
       }
