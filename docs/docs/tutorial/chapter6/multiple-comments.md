@@ -284,7 +284,7 @@ describe('CommentsCell', () => {
 
 ```
 
-We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find youself writing a test and saying "just test that there are 3 comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this into your test when you can derive it from your mocked data!
+We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find yourself writing a test and saying "just test that there are 3 comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this into your test when you can derive it from your mocked data!
 
 #### Testing Article
 

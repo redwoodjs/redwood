@@ -69,7 +69,9 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
     // Allow both long and short form commands, e.g. --name and -n
     args.push(name.length > 1 ? `--${name}` : `-${name}`)
     if (typeof value !== 'boolean') {
-      args.push(value)
+      // Make sure options that take multiple quoted words
+      // like `-n "create user"` are passed to prisma with quotes.
+      value.split(' ').length > 1 ? args.push(`"${value}"`) : args.push(value)
     }
   }
 
