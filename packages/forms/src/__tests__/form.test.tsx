@@ -767,7 +767,7 @@ describe('Form', () => {
           name="tf4"
           validation={{ valueAsNumber: true }}
           defaultValue="42"
-          emptyAs={'NaN'}
+          emptyAs={0}
         />
         <Submit>Save</Submit>
       </Form>
@@ -814,7 +814,7 @@ describe('Form', () => {
           name="tf4"
           validation={{ valueAsDate: true }}
           defaultValue="2022-02-01"
-          emptyAs={'NaN'}
+          emptyAs={0}
         />
         <Submit>Save</Submit>
       </Form>
