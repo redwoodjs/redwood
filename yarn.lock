@@ -5824,7 +5824,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
     "@types/aws-lambda": 8.10.93
-    "@types/lodash.escape": 4.0.6
+    "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
     "@types/yargs": 16.0.4
@@ -8458,12 +8458,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.escape@npm:4.0.6":
-  version: 4.0.6
-  resolution: "@types/lodash.escape@npm:4.0.6"
+"@types/lodash.escape@npm:4.0.7":
+  version: 4.0.7
+  resolution: "@types/lodash.escape@npm:4.0.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: 18f4b0efcf18d45e5b8e680396752f649bafecea31a12649f169efd333a550ddbc2181b060c6309438eda4d951a5710a2f938cc43dbf5815799551ecf7bf9e16
+  checksum: cc980619559a3e67f40d078e76da67d110eecec7f774987bf595349e4642ce3110ec61a787a98ab89ea6d5c9dc5b1b16b47ceb878e678e3b7dc30e5d6b22fc97
   languageName: node
   linkType: hard
 
