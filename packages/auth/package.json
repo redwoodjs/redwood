@@ -21,6 +21,18 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "peerDependencies": {
+    "@clerk/clerk-react": "3.2.8",
+    "@clerk/clerk-sdk-node": "3.3.6"
+  },
+  "peerDependenciesMeta": {
+    "@clerk/clerk-react": {
+      "optional": true
+    },
+    "@clerk/clerk-sdk-node": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.21.0",
     "@azure/msal-browser": "2.23.0",
@@ -28,7 +40,7 @@
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.7.1",
     "@clerk/clerk-react": "3.2.8",
-    "@clerk/clerk-sdk-node": "3.3.5",
+    "@clerk/clerk-sdk-node": "3.3.6",
     "@clerk/types": "2.7.0",
     "@nhost/nhost-js": "1.0.11",
     "@supabase/supabase-js": "1.34.1",
