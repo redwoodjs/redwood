@@ -15,6 +15,7 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
+import fs from 'fs'
 import path from 'path'
 
 import * as index from '../index'
@@ -81,4 +82,21 @@ test('generateTemplate returns prettified JS code', () => {
   expect(output).toEqual(
     `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`
   )
+})
+
+describe('usingVSCode', () => {
+  test('return false when .vscode folder does not exist', () => {
+    const output = index.usingVSCode()
+
+    expect(output).toEqual(false)
+  })
+
+  test('return true when .vscode folder does exist', () => {
+    const BASE_PATH = path.join(global.__dirname, 'fixtures')
+    fs.mkdirSync(path.join(BASE_PATH, '.vscode'))
+
+    const output = index.usingVSCode()
+
+    expect(output).toEqual(true)
+  })
 })
