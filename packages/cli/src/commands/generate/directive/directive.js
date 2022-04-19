@@ -155,7 +155,6 @@ export const handler = async (args) => {
           return execa('yarn rw-gen', [], {
             stdio: 'pipe',
             shell: true,
-            cwd: getPaths().web.base,
           })
         },
       },
