@@ -48,7 +48,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/aws-lambda": "8.10.93",
-    "@types/lodash.escape": "4.0.6",
+    "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
     "@types/split2": "3.2.1",
     "@types/yargs": "16.0.4",
