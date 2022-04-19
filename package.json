@@ -59,7 +59,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.4.1",
     "@types/jscodeshift": "0.11.4",
-    "@types/lodash.template": "4.5.0",
+    "@types/lodash.template": "4.5.1",
     "@types/ncp": "2.0.5",
     "@types/prompts": "2.4.0",
     "all-contributors-cli": "6.20.0",
