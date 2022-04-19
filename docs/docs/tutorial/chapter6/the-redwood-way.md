@@ -32,7 +32,7 @@ const Comment = ({ comment }) => {
     <div>
       // highlight-start
       <h2>{comment.name}</h2>
-      <time datetime={comment.createdAt}>{comment.createdAt}</time>
+      <time dateTime={comment.createdAt}>{comment.createdAt}</time>
       <p>{comment.body}</p>
       // highlight-end
     </div>

@@ -3,6 +3,7 @@ import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
+  useMaskedErrors,
 } from '@graphql-yoga/common'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
@@ -197,23 +198,21 @@ export const createGraphQLHandler = ({
     baseYogaCORSOptions.maxAge = cors.maxAge
   }
 
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
   const yoga = createServer({
     schema,
     plugins,
-    maskedErrors: {
-      formatError,
-      errorMessage: defaultError,
-    },
+    maskedErrors: false,
     logging: logger,
     graphiql: isDevEnv
       ? {
-          title: 'Redwood GraphQL playground',
+          title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
           defaultQuery: `query Redwood {
-        redwood {
-          version
-        }
-      }`,
+  redwood {
+    version
+  }
+}`,
           headerEditorEnabled: true,
         }
       : false,
@@ -268,10 +267,27 @@ export const createGraphQLHandler = ({
 
     const requestUrl = new URL(
       event.path,
-      protocol + '://' + event.requestContext?.domainName || 'localhost'
+      protocol + '://' + (event.requestContext?.domainName || 'localhost')
     )
 
-    if (event.queryStringParameters) {
+    if (event.multiValueQueryStringParameters) {
+      for (const queryStringParam in event.multiValueQueryStringParameters) {
+        const queryStringValues =
+          event.multiValueQueryStringParameters[queryStringParam]
+        if (queryStringValues) {
+          if (Array.isArray(queryStringValues)) {
+            for (const queryStringValue of queryStringValues) {
+              requestUrl.searchParams.append(queryStringParam, queryStringValue)
+            }
+          } else {
+            requestUrl.searchParams.append(
+              queryStringParam,
+              String(queryStringValues)
+            )
+          }
+        }
+      }
+    } else if (event.queryStringParameters) {
       for (const queryStringParam in event.queryStringParameters) {
         const queryStringValue = event.queryStringParameters[queryStringParam]
         if (queryStringValue) {
@@ -280,28 +296,23 @@ export const createGraphQLHandler = ({
       }
     }
 
-    if (event.multiValueQueryStringParameters) {
-      for (const queryStringParam in event.multiValueQueryStringParameters) {
-        const queryStringValues =
-          event.multiValueQueryStringParameters[queryStringParam]
-        if (queryStringValues) {
-          for (const queryStringValue of queryStringValues) {
-            requestUrl.searchParams.append(queryStringParam, queryStringValue)
-          }
-        }
-      }
-    }
-
-    if (event.httpMethod === 'GET' || event.httpMethod === 'HEAD') {
+    if (
+      event.httpMethod === 'GET' ||
+      event.httpMethod === 'HEAD' ||
+      event.body == null
+    ) {
       return new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
       })
     } else {
+      const body = event.isBase64Encoded
+        ? Buffer.from(event.body, 'base64').toString('utf-8')
+        : event.body
       return new Request(requestUrl.toString(), {
         method: event.httpMethod,
         headers: requestHeaders,
-        body: event.body,
+        body,
       })
     }
   }

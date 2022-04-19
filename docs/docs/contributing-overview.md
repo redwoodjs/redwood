@@ -1,3 +1,9 @@
+---
+title: Contributing
+description: There's several ways to contribute to Redwood
+slug: contributing
+---
+
 # Contributing: Overview and Orientation
 
 Love Redwood and want to get involved? You’re in the right place and in good company! As of this writing, there are more than [250 contributors](https://github.com/redwoodjs/redwood/blob/main/README.md#contributors) who have helped make Redwood awesome by contributing code and documentation. This doesn't include all those who participate in the vibrant, helpful, and encouraging Forums and Discord, which are both great places to get started if you have any questions.
@@ -113,22 +119,22 @@ Before we get into the how-to, a little explanation. When thinking about docs, w
 
 ### Docs for Developing Redwood Apps
 
-redwoodjs.com has three kinds of Developing docs: Docs, Cookbook Recipes, and The Tutorial.
-You can find Docs and Cookbook Recipes within their respective directories on the redwood/redwoodjs.com repo: [docs/](https://github.com/redwoodjs/redwoodjs.com/tree/main/docs) and [cookbook/](https://github.com/redwoodjs/redwoodjs.com/tree/main/cookbook). The Tutorial is actually all in [one file](https://github.com/redwoodjs/redwoodjs.com/blob/main/TUTORIAL.md).
+redwoodjs.com has three kinds of Developing docs: References, How To's, and The Tutorial.
+You can find References and How To's within their respective directories on the redwood/redwood repo: [docs/](https://github.com/redwoodjs/redwood/tree/main/docs) and [how-to/](https://github.com/redwoodjs/redwood/tree/main/docs/how-to).
 
-The Tutorial is a standalone document that serves a specific purpose as an introduction to Redwood, an aspirational roadmap, and an example of developer experience. As such, it's distinct from the categories mentioned, although it's most similar to Cookbook Recipes.
+The Tutorial is a standalone document that serves a specific purpose as an introduction to Redwood, an aspirational roadmap, and an example of developer experience. As such, it's distinct from the categories mentioned, although it's most similar to How To's.
 
-#### Docs
+#### References
 
-Docs are explanation-driven how-to content. They're more direct and to-the-point than The Tutorial and Cookbook Recipes. The idea is much more about finding something or getting something done than any kind of learning journey.
+References are explanation-driven how-to content. They're more direct and to-the-point than The Tutorial and How To's. The idea is much more about finding something or getting something done than any kind of learning journey.
 
 Before you take on a doc, you should read [Forms](forms.md) and [Router](router.md); they have the kind of content you should be striving for. They're comprehensive yet conversational.
 
 In general, don't be afraid to go into too much detail. We'd rather you err on the side of too much than too little. One tip for finding good content is searching the forum and repo for "prior art"&mdash;what are people talking about where this comes up?
 
-#### Cookbook Recipes
+#### How To's
 
-Cookbook Recipes are tutorial-style content focused on a specific problem-solution. They usually have a beginner in mind (if not, they should indicate that they don't&mdash;put 'Advanced' or 'Deep-Dive', etc., in the title or introduction). Cookbook Recipes may include some explanatory text as asides, but they shouldn't be the majority of the content.
+How To's are tutorial-style content focused on a specific problem-solution. They usually have a beginner in mind (if not, they should indicate that they don't&mdash;put 'Advanced' or 'Deep-Dive', etc., in the title or introduction). How To's may include some explanatory text as asides, but they shouldn't be the majority of the content.
 
 #### Making a Doc Findable
 

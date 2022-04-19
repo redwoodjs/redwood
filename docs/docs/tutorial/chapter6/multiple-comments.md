@@ -162,17 +162,17 @@ Adding the comments to the article display has exposed another design issue: the
 
 Let's add a gap between the two:
 
-```jsx title="web/src/components/BlogPost/BlogPost.js"
-const BlogPost = ({ post, summary = false }) => {
+```jsx title="web/src/components/Article/Article.js"
+const Article = ({ article, summary = false }) => {
   return (
-    <article className="mt-10">
+    <article>
       <header>
         <h2 className="text-xl text-blue-700 font-semibold">
-          <Link to={routes.blogPost({ id: post.id })}>{post.title}</Link>
+          <Link to={routes.article({ id: article.id })}>{article.title}</Link>
         </h2>
       </header>
       <div className="mt-2 text-gray-900 font-light">
-        {summary ? truncate(post.body, 100) : post.body}
+        {summary ? truncate(article.body, 100) : article.body}
       </div>
       {!summary && (
         // highlight-start
@@ -284,7 +284,7 @@ describe('CommentsCell', () => {
 
 ```
 
-We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find youself writing a test and saying "just test that there are 3 comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this into your test when you can derive it from your mocked data!
+We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find yourself writing a test and saying "just test that there are 3 comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this into your test when you can derive it from your mocked data!
 
 #### Testing Article
 

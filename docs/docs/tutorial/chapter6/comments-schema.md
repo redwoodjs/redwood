@@ -112,8 +112,10 @@ When prompted, give this one a name something like "create comment".
 Next we'll create the SDL (that defines the GraphQL interface) and a service (to get the records out of the database) with a generator call:
 
 ```bash
-yarn rw g sdl Comment
+yarn rw g sdl Comment --no-crud
 ```
+
+Note the `--no-crud` flag here. This gives us bare-bones functionality to start with (read-only access to our model) that we can build on. We got all the CRUD endpoints for free when we created the Post section of our site, so let's do the opposite here and see how to add functionality from scratch.
 
 That command will create both the SDL and the service. One change we'll need to make to the generated code is to allow access to anonymous users to view all comments. Change the `@requireAuth` directive to `@skipAuth` instead:
 
@@ -322,7 +324,7 @@ What is this `scenario()` function? That's made available by Redwood that mostly
 >
 > Not to mention that Prisma itself is currently under development and implementations could change at any time. Trying to keep pace with those changes and constantly keep mocks in sync would be a nightmare!
 >
-> That being said, if you really wanted to you could use Jest's [mocking utilities](https://jestjs.io/docs/en/mock-functions) and completely mock the Prisma interface abstract the database away completely. But don't say we didn't warn you!
+> That being said, if you really wanted to you could use Jest's [mocking utilities](https://jestjs.io/docs/en/mock-functions) and completely mock the Prisma interface to abstract the database away completely. But don't say we didn't warn you!
 
 Where does that data come from? Take a look at the `comments.scenarios.js` file which is next door:
 

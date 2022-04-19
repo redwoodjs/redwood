@@ -15,18 +15,22 @@ import { Link, routes } from '@redwoodjs/router'
 // QUERY, Loading, Empty and Failure definitions...
 
 export const Success = ({ articles }) => {
-  return articles.map((article) => (
-    <article key={article.id}>
-      <header>
-        <h2>
-          // highlight-next-line
-          <Link to={routes.article()}>{article.title}</Link>
-        </h2>
-      </header>
-      <p>{article.body}</p>
-      <div>Posted at: {article.createdAt}</div>
-    </article>
-  ))
+  return (
+    <>
+      {articles.map((article) => (
+        <article key={article.id}>
+          <header>
+            <h2>
+              // highlight-next-line
+              <Link to={routes.article()}>{article.title}</Link>
+            </h2>
+          </header>
+          <p>{article.body}</p>
+          <div>Posted at: {article.createdAt}</div>
+        </article>
+      ))}
+    </>
+  )
 }
 ```
 
@@ -40,7 +44,7 @@ But what we really need is to specify _which_ post we want to view on this page.
 <Route path="/article/{id}" page={ArticlePage} name="article" />
 ```
 
-Notice the `{id}`. Redwood calls these _route parameters_. They say "whatever value is in this position in the path, let me reference it by the name inside the curly braces". And while we're in the routes file, lets move the route inside the `Set` with the `BlogLayout`.
+Notice the `{id}`. Redwood calls these _route parameters_. They say "whatever value is in this position in the path, let me reference it by the name inside the curly braces". And while we're in the routes file, let's move the route inside the `Set` with the `BlogLayout`.
 
 ```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
@@ -306,10 +310,14 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ articles }) => {
-  return articles.map((article) => (
-    // highlight-next-line
-    <Article key={article.id} article={article} />
-  ))
+  return (
+    <>
+      {articles.map((article) => (
+        // highlight-next-line
+        <Article key={article.id} article={article} />
+      ))}
+    </>
+  )
 }
 ```
 

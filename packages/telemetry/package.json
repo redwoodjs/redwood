@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/telemetry",
-  "version": "0.49.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -27,12 +27,12 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@redwoodjs/internal": "0.49.1",
-    "@redwoodjs/structure": "0.49.1",
+    "@redwoodjs/internal": "1.0.2",
+    "@redwoodjs/structure": "1.0.2",
     "ci-info": "3.3.0",
-    "cross-undici-fetch": "0.1.27",
+    "cross-undici-fetch": "0.3.0",
     "envinfo": "7.8.1",
-    "systeminformation": "5.11.9",
+    "systeminformation": "5.11.10",
     "uuid": "8.3.2",
     "yargs": "16.2.0"
   },

@@ -1,6 +1,10 @@
 # Building a Form
 
-Wait, don't close your browser! You had to know this was coming eventually, didn't you? And you've probably realized by now we wouldn't even have this section in the tutorial unless Redwood had figured out a way to make forms less soul-sucking than usual. In fact Redwood might even make you _love_ building forms.
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/b0x8an_UZ98?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+</div>
+
+Wait, don't close your browser! You had to know this was coming eventually, didn't you? And you've probably realized by now we wouldn't even have this section in the tutorial unless Redwood had figured out a way to make forms less soul-sucking than usual. In fact, Redwood might even make you _love_ building forms.
 
 Well, love is a strong word. _Like_ building forms?
 
@@ -52,7 +56,7 @@ const BlogLayout = ({ children }) => {
 export default BlogLayout
 ```
 
-And then use the `BlogLayout` for the `ContactPage` by making sure its wrapped by the same `<Set>` as the other pages in the routes file:
+And then use the `BlogLayout` for the `ContactPage` by making sure it's wrapped by the same `<Set>` as the other pages in the routes file:
 
 ```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
@@ -171,7 +175,6 @@ Similar to a plain HTML form we'll give `<Form>` an `onSubmit` handler. That han
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
-// highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -232,7 +235,7 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
-See the new `<TextAreaField>` component here which generates an HTML `<textarea>` but that contains Redwood's form goodness:
+See the new `<TextAreaField>` component here which generates an HTML `<textarea>` but contains Redwood's form goodness:
 
 <img src="https://user-images.githubusercontent.com/300/146103219-c8dc958d-ea2b-4bea-8cb8-62dcd0be6783.png" />
 

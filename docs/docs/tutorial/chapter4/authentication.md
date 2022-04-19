@@ -84,8 +84,6 @@ As for our blog, we're going to use self-hosted authentication (named *dbAuth* i
 
 As you probably have guessed, Redwood has a couple of generators to get you going. One installs the backend components needed for dbAuth, the other creates login, signup and forgot password pages.
 
-### Setup
-
 Run this setup command to get the internals of dbAuth added to our app:
 
 ```bash
@@ -96,7 +94,7 @@ When asked if you want to override the existing file `/api/src/lib/auth.js` say 
 
 You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
 
-#### The Database
+### Create a User Model
 
 First we'll need to add a couple of fields to our `User` model. We don't even have a `User` model yet, so we'll create one along with the required fields at the same time.
 
@@ -155,6 +153,8 @@ yarn rw prisma migrate dev
 ```
 
 That's it for the database setup!
+
+## Private Routes
 
 Try reloading the Posts admin and we'll see something that's 50% correct:
 
@@ -297,11 +297,11 @@ Now that our pages are behind login, let's actually create a login page so that 
 >
 > It would be more future-proof to create a *new* endpoint for public display of posts, something like `publicPosts` and `publicPost` that will have built-in logic to only ever return a minimal amount of data and leave the default `posts` and `post` queries returning all the data for a post, something that only the admin will have access to. (Or do the opposite: keep `posts` and `post` as public and create new `adminPosts` and `adminPost` endpoints that can contain sensitive information.)
 
-#### The Login & Signup Pages
+## Login & Signup Pages
 
 Yet another generator is here for you, this time one that will create pages for login, signup and forgot password pages:
 
-```terminal
+```bash
 yarn rw g dbAuth
 ```
 
@@ -323,7 +323,7 @@ And after clicking "Signup" you should end up back on the homepage, where everyt
 
 Awesome! Signing up will automatically log you in (although this behavior [can be changed](../../authentication.md#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
 
-#### Add a Logout Link
+## Add a Logout Link
 
 Now that we're logged in, how do we log out? Let's add a link to the `BlogLayout` so that it's present on all pages, and also include an indicator of who you're actually logged in as.
 
@@ -488,6 +488,12 @@ Now our email should be present at the upper right on the homepage:
 ![image](https://user-images.githubusercontent.com/300/146467129-c0446c1a-3648-4787-9675-d66eb80b8ab6.png)
 
 Before we leave this file, take a look at `requireAuth()`. Remember when we talked about the `@requireAuth` directive and how when we first installed authentication we saw the message "You don't have permission to do that."? This is where that came from!
+
+## Session Secret
+
+After the initial `setup` command, which installed dbAuth, you may have noticed that an edit was made to the `.env` file in the root of your project. The `setup` script appened a new ENV var called `SESSION_SECRET` along with a big random string of numbers and letters. This is the encryption key for the cookies that are stored in the user's browser when they log in. This secret should never be shared, never checked into your repo, and should be re-generated for each environment you deploy to.
+
+You can generate a new value with the `yarn rw g secret` command. It only outputs it to the terminal, you'll need to copy/paste to your `.env` file. Note that if you change this secret in a production environment, all users will be logged out on their next request because the cookie they currently have cannot be decrypted with the new key! They'll need to log in again to a new cookie encrypted with the new key.
 
 ## Wrapping Up
 
