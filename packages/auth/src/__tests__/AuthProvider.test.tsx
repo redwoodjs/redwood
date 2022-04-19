@@ -799,8 +799,13 @@ test('proxies forgotPassword() calls to client', async () => {
   }
 
   const TestAuthConsumer = () => {
-    const { forgotPassword } = useAuth()
-    forgotPassword('username')
+    const { loading, forgotPassword } = useAuth()
+
+    useEffect(() => {
+      if (!loading) {
+        forgotPassword('username')
+      }
+    }, [loading, forgotPassword])
 
     return null
   }
@@ -811,8 +816,7 @@ test('proxies forgotPassword() calls to client', async () => {
     </AuthProvider>
   )
 
-  // for whatever reason, forgotPassword is invoked twice
-  expect.assertions(2)
+  expect.assertions(1)
 })
 
 test('proxies resetPassword() calls to client', async () => {
@@ -825,8 +829,13 @@ test('proxies resetPassword() calls to client', async () => {
   }
 
   const TestAuthConsumer = () => {
-    const { resetPassword } = useAuth()
-    resetPassword('password')
+    const { loading, resetPassword } = useAuth()
+
+    useEffect(() => {
+      if (!loading) {
+        resetPassword('password')
+      }
+    }, [loading, resetPassword])
 
     return null
   }
@@ -837,8 +846,7 @@ test('proxies resetPassword() calls to client', async () => {
     </AuthProvider>
   )
 
-  // for whatever reason, forgotPassword is invoked twice
-  expect.assertions(2)
+  expect.assertions(1)
 })
 
 test('proxies validateResetToken() calls to client', async () => {
@@ -851,8 +859,13 @@ test('proxies validateResetToken() calls to client', async () => {
   }
 
   const TestAuthConsumer = () => {
-    const { validateResetToken } = useAuth()
-    validateResetToken('12345')
+    const { loading, validateResetToken } = useAuth()
+
+    useEffect(() => {
+      if (!loading) {
+        validateResetToken('12345')
+      }
+    }, [loading, validateResetToken])
 
     return null
   }
@@ -863,8 +876,7 @@ test('proxies validateResetToken() calls to client', async () => {
     </AuthProvider>
   )
 
-  // for whatever reason, validateResetToken is invoked twice
-  expect.assertions(2)
+  expect.assertions(1)
 })
 
 test('getToken doesnt fail if client throws an error', async () => {
