@@ -27,7 +27,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.7.1",
-    "@clerk/clerk-sdk-node": "3.3.5",
+    "@clerk/clerk-sdk-node": "3.3.6",
     "@clerk/types": "2.7.0",
     "@nhost/nhost-js": "1.0.11",
     "@supabase/supabase-js": "1.34.1",
