@@ -8494,12 +8494,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.template@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@types/lodash.template@npm:4.5.0"
+"@types/lodash.template@npm:4.5.1":
+  version: 4.5.1
+  resolution: "@types/lodash.template@npm:4.5.1"
   dependencies:
     "@types/lodash": "*"
-  checksum: caed088fc38b570b003bd2078da060f2fad697cdd48c62a185c78f2c4129ae6af5f696068a5c3ae407d1039be970ee4e4dfd3258850e8f7918f6f5df890c69c8
+  checksum: b9f094d9620b8c3a711810c72668962693b89313405474dac0067f90be4b003b34b3768318f02f20ad0c55bbff023c370e5b59462f0e0aa00e2dde586f1a92c1
   languageName: node
   linkType: hard
 
@@ -26941,7 +26941,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.4.1
     "@types/jscodeshift": 0.11.4
-    "@types/lodash.template": 4.5.0
+    "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.0
     all-contributors-cli: 6.20.0
