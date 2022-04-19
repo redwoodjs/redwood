@@ -6156,7 +6156,7 @@ __metadata:
     "@prisma/client": 3.12.0
     "@redwoodjs/api": 1.0.2
     "@redwoodjs/auth": 1.0.2
-    "@types/lodash.merge": 4.6.6
+    "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
@@ -8476,12 +8476,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.merge@npm:4.6.6":
-  version: 4.6.6
-  resolution: "@types/lodash.merge@npm:4.6.6"
+"@types/lodash.merge@npm:4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.merge@npm:4.6.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: 4c6ffc266bd88505a5c60417536c06ab5059c4da4fedcab5fe4477a11aee3f43897cee7e17ef272e13b1a8e1a71f17e5662d7597f896f0091e886dc3a7f00e20
+  checksum: 38e7bb0926e3be19dc27bb62118519d3a10d1e890e83c5916418b16fb390d892c75c36b5cb434c51835d88425475b02fc3b46111d01c85fcc4340d7c84d4e8c9
   languageName: node
   linkType: hard
 

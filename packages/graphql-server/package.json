@@ -48,7 +48,7 @@
     "@envelop/testing": "4.3.1",
     "@envelop/types": "2.0.0",
     "@redwoodjs/auth": "1.0.2",
-    "@types/lodash.merge": "4.6.6",
+    "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
