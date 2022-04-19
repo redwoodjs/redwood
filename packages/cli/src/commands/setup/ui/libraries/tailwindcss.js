@@ -182,7 +182,10 @@ export const handler = async ({ force, install }) => {
               ...recommendedVSCodeExtensions,
             ],
           }
-          fs.writeFileSync(VS_CODE_EXTENSIONS_PATH, newExtensionsJson)
+          fs.writeFileSync(
+            VS_CODE_EXTENSIONS_PATH,
+            JSON.stringify(newExtensionsJson, null, 2)
+          )
         }
       },
     },
