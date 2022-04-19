@@ -1976,16 +1976,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@clerk/backend-core@npm:1.5.0"
+"@clerk/backend-core@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@clerk/backend-core@npm:1.5.1"
   dependencies:
-    "@clerk/types": ^2.7.0
+    "@clerk/types": ^2.7.1
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: cf86f074a9904122ceb9c5a0ae995978027ab3c6d397b00e59047faccc7819b551bd6226de51f8ef23321859c9aa6a0012a2505baf04a88f0165d0ebad3bca06
+  checksum: 180663681dacc793852bedf9d43001f09192a9f82c59bd0483efdcf6837900d81ff9fa8f35a58cdc03ddfc0c5ec2b0f5b389768f1d98cb5674c0759e73a2f7e5
   languageName: node
   linkType: hard
 
@@ -2021,12 +2021,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.3.5":
-  version: 3.3.5
-  resolution: "@clerk/clerk-sdk-node@npm:3.3.5"
+"@clerk/clerk-sdk-node@npm:3.3.6":
+  version: 3.3.6
+  resolution: "@clerk/clerk-sdk-node@npm:3.3.6"
   dependencies:
-    "@clerk/backend-core": ^1.5.0
-    "@clerk/types": ^2.7.0
+    "@clerk/backend-core": ^1.5.1
+    "@clerk/types": ^2.7.1
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -2036,18 +2036,11 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 9940c4f8a3c923ecc7aa93c68fa3425b8e4be2bacab05c568168bc8b9dbecad24a6bba6f5260cf223331ad5570343c594eb8de74b63f560d2c54d3537be2e245
+  checksum: 126c6e823bf90f3ca070e414f029f8009dc9b5cd56b14c8ea7a9044004adfcd91ec03eb920ca6758c474fb378e917ff64e3b26d688738d641a4d1197b097abfc
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.7.0":
-  version: 2.7.0
-  resolution: "@clerk/types@npm:2.7.0"
-  checksum: a437523d0681354d009a827009ddb235a64ce1df198b3648b71e7319527d2dba9df26ba58f1e07820a1c6c6330a412936c92be3511c55cbeceabbf69971c1c0b
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^2.7.0, @clerk/types@npm:^2.7.1":
+"@clerk/types@npm:2.7.1, @clerk/types@npm:^2.7.1":
   version: 2.7.1
   resolution: "@clerk/types@npm:2.7.1"
   checksum: db5c4573bfda18391d375f2f8e683071d94f2baa6a050269d864536b15579f0feba60edc08b8dd700ed42362b143a626c8819452fab15863f0c07875522d23fc
@@ -5842,7 +5835,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
-    "@types/aws-lambda": 8.10.93
+    "@types/aws-lambda": 8.10.94
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -5900,7 +5893,7 @@ __metadata:
     typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.3.5
+    "@clerk/clerk-sdk-node": 3.3.6
     "@magic-sdk/admin": 1.4.1
     firebase-admin: 10.0.2
   peerDependenciesMeta:
@@ -5928,8 +5921,8 @@ __metadata:
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 3.7.1
     "@clerk/clerk-react": 3.2.8
-    "@clerk/clerk-sdk-node": 3.3.5
-    "@clerk/types": 2.7.0
+    "@clerk/clerk-sdk-node": 3.3.6
+    "@clerk/types": 2.7.1
     "@nhost/nhost-js": 1.0.11
     "@supabase/supabase-js": 1.34.1
     "@types/netlify-identity-widget": 1.9.3
@@ -5943,6 +5936,14 @@ __metadata:
     react: 17.0.2
     supertokens-auth-react: 0.20.4
     typescript: 4.6.3
+  peerDependencies:
+    "@clerk/clerk-react": 3.2.8
+    "@clerk/clerk-sdk-node": 3.3.6
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -6235,7 +6236,7 @@ __metadata:
     prettier: 2.5.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.10
+    systeminformation: 5.11.12
     toml: 3.0.0
     typescript: 4.6.3
   bin:
@@ -6355,7 +6356,7 @@ __metadata:
     cross-undici-fetch: 0.3.0
     envinfo: 7.8.1
     jest: 27.5.1
-    systeminformation: 5.11.10
+    systeminformation: 5.11.12
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -6380,7 +6381,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.1.1
-    "@types/aws-lambda": 8.10.93
+    "@types/aws-lambda": 8.10.94
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.1
     "@types/node": 16.11.27
@@ -7952,10 +7953,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.93, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.93
-  resolution: "@types/aws-lambda@npm:8.10.93"
-  checksum: a4f4892eda175b586393d7f142a37a3fff27fc7e16b345e4bd8f8f78c00c4f3be97591d0f620d66fb2b67aad00a37939f4e5130f196973bab4b57ff2b2fac768
+"@types/aws-lambda@npm:8.10.94, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.94
+  resolution: "@types/aws-lambda@npm:8.10.94"
+  checksum: f93d8b16a41b80153594e9d127985bd81b9427a95ae9346549659202fc9effe55c6d8c17a82a5dc5fc4b364d3b11c18c754143aea5614a1a5d855a0e5455b3e5
   languageName: node
   linkType: hard
 
@@ -28882,12 +28883,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.10":
-  version: 5.11.10
-  resolution: "systeminformation@npm:5.11.10"
+"systeminformation@npm:5.11.12":
+  version: 5.11.12
+  resolution: "systeminformation@npm:5.11.12"
   bin:
     systeminformation: lib/cli.js
-  checksum: 23c69e35155afe9ddacae6ef6dbc4b02bad64b3da9992c422a0c006e9f374ba355a2655a9e3cbe1eaae43719ae2e496fb56f67049a8218599e1ad5f18a86959b
+  checksum: 8409d4494c6fee19ad8db5e046117315ebc91292cf37c3f3f6f409efed23c0521457b7e653f45963efbec7c925b954f89f033c903e1e67dc085e9f1f89556d6f
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
