@@ -23,9 +23,9 @@ export type { Clerk }
 
 export type ClerkUser = ClerkUserResource & { roles: string[] | null }
 
-// In production, there is an issue where the AuthProvider sometimes captures
-// Clerk as null. This intercepts that
-// issue and falls back to `window.Clerk` to access the client.
+// Because Clerk's client is nulled out while it is loading, there is a race
+// condition under normal usage on a clean load of the app. This falls back
+// to the window.Clerk property when necessary to circumvent that.
 function clerkClient(propsClient: Clerk | null): Clerk | null {
   if (!propsClient && typeof window !== undefined) {
     return (window as any).Clerk ?? null
@@ -50,12 +50,12 @@ export const clerk = (client: Clerk): AuthClientClerk => {
       const clerk = clerkClient(client)
       if (!clerk) {
         // If the client is null, we can't restore state or listen for it to happen.
-        // This behavior is somewhat undefined but it should be handled by `useIsWaitingForClient.
+        // This behavior is somewhat undefined but it should be handled by `useIsWaitingForClient`.
         // For now we'll just return.
         return
       }
 
-      // NOTE(zack): Clerk's API docs say session will be undefined if loading (null if loaded and confirmed unset).
+      // NOTE: Clerk's API docs say session will be undefined if loading (null if loaded and confirmed unset).
       if (!clerk.client || clerk.session !== undefined) {
         return new Promise<void>((res) => {
           clerk.addListener((msg: Resources) => {
