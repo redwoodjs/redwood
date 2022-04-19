@@ -6157,7 +6157,7 @@ __metadata:
     "@redwoodjs/api": 1.0.2
     "@redwoodjs/auth": 1.0.2
     "@types/lodash.merge": 4.6.6
-    "@types/lodash.omitby": 4.6.6
+    "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.22.0
@@ -8485,12 +8485,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.omitby@npm:4.6.6":
-  version: 4.6.6
-  resolution: "@types/lodash.omitby@npm:4.6.6"
+"@types/lodash.omitby@npm:4.6.7":
+  version: 4.6.7
+  resolution: "@types/lodash.omitby@npm:4.6.7"
   dependencies:
     "@types/lodash": "*"
-  checksum: bca27b32f460275625d7e8c02f658ffe734eafa178935f7218af325779b84d512b412fbab74a8a24b0d5f5b6f9eb585b3332b5389af9ea747b4cf1a2b78b81f1
+  checksum: 18d7f820b529f62def3bec2fb979b59ad2f390a20f4268131b4a045a2f1c3b7b3b4b4ba8eb3c2bdb0df881193b39756368eedac33081b39a88597e938808dbac
   languageName: node
   linkType: hard
 
