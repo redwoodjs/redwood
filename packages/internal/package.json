@@ -56,7 +56,7 @@
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.11.10",
+    "systeminformation": "5.11.12",
     "toml": "3.0.0"
   },
   "devDependencies": {
