@@ -741,6 +741,61 @@ describe('Form', () => {
     expect(mockFn).not.toHaveBeenCalled()
   })
 
+  it(`handles invalid emptyAs values with default values`, async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <TextField name="textField" emptyAs={'badEmptyAsValue'} />
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <TextAreaField name="textAreaField" emptyAs={'badEmptyAsValue'} />
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <NumberField name="numberField" emptyAs={'badEmptyAsValue'} />
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <DateField name="dateField" emptyAs={'badEmptyAsValue'} />
+        <SelectField
+          name="selectField"
+          defaultValue=""
+          /* @ts-expect-error - pretend this is a .js file */
+          emptyAs={'badEmptyAsValue'}
+        >
+          <option value="">No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
+        <TextAreaField
+          name="jsonField"
+          defaultValue=""
+          validation={{ valueAsJSON: true }}
+          /* @ts-expect-error - pretend this is a .js file */
+          emptyAs={'badEmptyAsValue'}
+        />
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <TextField name="fieldId" defaultValue="" emptyAs={'badEmptyAsValue'} />
+
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      {
+        textField: '',
+        textAreaField: '',
+        numberField: NaN,
+        dateField: null,
+        selectField: '',
+        jsonField: null,
+        fieldId: null,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
   it('should return a number for a textfield with valueAsNumber, regardless of emptyAs', async () => {
     const mockFn = jest.fn()
 
