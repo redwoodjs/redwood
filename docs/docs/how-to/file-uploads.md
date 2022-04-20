@@ -454,13 +454,15 @@ To avoid this, we'd better implement the `deleteImage` mutation. It will enable 
 
 You are going to need a new `.env` called `REDWOOD_ENV_FILESTACK_SECRET`, which you can find in Filestack > Security > Policy & Signature: App Secret.
 
-Also, let's add this package to the right side of our current concern:
+Filestack's library will provide a `getSecurity` method that will allow us to delete a resource, but only if executed on a **nodejs** environment. Hence, we need to execute the `delete` operation on the `api` side.
+
+Let's add the proper package:
 
 ```shell
 yarn workspace api add filestack-js
 ```
 
-You should be good to go. Let's modify our service accordingly:
+Great. Now we can modify our service accordingly:
 
 ```js {4-23} title="api/src/services/image/image.ts"
 import * as Filestack from 'filestack-js'
@@ -470,12 +472,12 @@ export const deleteImage = async({ id }) => {
 
   const image = await db.image.find({ where: { id } })
 
-  /** @manual the `security.handle` is the unique part of the Filestack file's url. */
+  // The `security.handle` is the unique part of the Filestack file's url.
   const handle = image.url.split('/').pop()
   
   const security = Filestack.getSecurity(
     {
-      /** @manual We set `expiry` at `now() + 5 minutes`. */
+      // We set `expiry` at `now() + 5 minutes`.
       expiry: new Date(new Date().getTime() + 5 * 60 * 1000),
       handle,
       call: ['remove'],
