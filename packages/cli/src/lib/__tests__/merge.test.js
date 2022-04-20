@@ -1,10 +1,8 @@
 import path from 'path'
 
-import { parse, traverse } from '@babel/core'
 import fs from 'fs-extra'
 
 import { merge } from '../merge'
-import { semanticIdentity } from '../merge/semantics'
 
 // Unindent the provided (maybe multiline) string such that the first line has an indent of 0
 // and all subsequent lines maintain their relative indentation level to the first line.
@@ -16,67 +14,6 @@ const unindented = (code) => {
 const expectMerged = (base, ext, merged) => {
   expect(merge(unindented(base), unindented(ext))).toBe(unindented(merged))
 }
-
-describe('Semantic behavior', () => {
-  const code = `\
-import { foo } from 'src'
-
-export const globalTypes = {
-  locale: {
-    name: 'Locale',
-    description: 'Internationalization locale',
-    defaultValue: 'en',
-    toolbar: {
-      icon: 'globe',
-      items: [
-        { value: 'en', right: '🇺🇸', title: 'English' },
-        { value: 'fr', right: '🇫🇷', title: 'Français' },
-      ],
-    },
-  },
-}
-
-const func = (param1, param2) => {
-    return param1 + param2
-}`
-  const programNode = (() => {
-    let _result = undefined
-    traverse(parse(code), {
-      Program(path) {
-        _result = path
-      },
-    })
-    expect(_result !== undefined)
-    return _result
-  })()
-
-  const tests = [
-    [
-      'identifies import declarations by source',
-      'body.0',
-      'Program.ImportDeclaration.source.src',
-    ],
-    [
-      'identifies export declarations',
-      'body.1.declaration.declarations.0',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes',
-    ],
-    [
-      'identifies top level object properties',
-      'body.1.declaration.declarations.0.init.properties.0',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale',
-    ],
-    [
-      'identifies nested object properties',
-      'body.1.declaration.declarations.0.init.properties.0.value.properties.3.value.properties.1',
-      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale.ObjectExpression.toolbar.ObjectExpression.items',
-    ],
-  ]
-  test.each(tests)('%s', (_it, key, semanticName) => {
-    const node = programNode.get(key)
-    expect(semanticIdentity(node)).toBe(semanticName)
-  })
-})
 
 describe('Import behavior', () => {
   it('deduplicates identical import namespace identifiers', () => {
