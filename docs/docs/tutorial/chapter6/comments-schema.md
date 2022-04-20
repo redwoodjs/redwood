@@ -105,7 +105,11 @@ yarn rw prisma migrate dev
 
 When prompted, give this one a name something like "create comment".
 
-> You'll need to restart the test suite runner at this point if it's still running. You can do a Ctrl-C or just press `q`. Redwood creates a second, test database for you to run your tests against (it is at `.redwood/test.db` by default). The database migrations are run against that test database whenever the test suite is *started*, not while it's running, so you'll need to restart it to test against the new database structure.
+:::tip
+
+You'll need to restart the test suite runner at this point if it's still running. You can do a Ctrl-C or just press `q`. Redwood creates a second, test database for you to run your tests against (it is at `.redwood/test.db` by default). The database migrations are run against that test database whenever the test suite is *started*, not while it's running, so you'll need to restart it to test against the new database structure.
+
+:::
 
 ### Creating the SDL and Service
 
@@ -219,9 +223,13 @@ query CommentsQuery {
 }
 ```
 
-> Have you noticed that something may be amiss? The `comments()` function returns *all* comments, and all comments only. Could this come back to bite us?
->
-> Hmmm...
+:::info
+
+Have you noticed that something may be amiss? The `comments()` function returns *all* comments, and all comments only. Could this come back to bite us?
+
+Hmmm...
+
+:::
 
 We need to be able to create a comment as well. We'll use the same convention that's used in Redwood's generated scaffolds: the create endpoint will accept a single parameter `input` which is an object with the individual model fields:
 
@@ -270,7 +278,11 @@ export const schema = gql`
 `
 ```
 
-> The `CreateCommentInput` type was already created for us by the SDL generator.
+:::tip
+
+The `CreateCommentInput` type was already created for us by the SDL generator.
+
+:::
 
 That's all we need on the api-side to create a comment! But let's think for a moment: is there anything else we need to do with a comment? Let's make the decision that users won't be able to update an existing comment. And we don't need to select individual comments (remember earlier we talked about the possibility of each comment being responsible for its own API request and display, but we decided against it).
 

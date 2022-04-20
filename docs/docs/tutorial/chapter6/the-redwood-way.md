@@ -68,7 +68,11 @@ export const generated = () => {
 export default { title: 'Components/Comment' }
 ```
 
-> Note that Datetimes will come from GraphQL in [ISO8601 format](https://en.wikipedia.org/wiki/ISO_8601#Times) so we need to return one in that format here.
+:::info
+
+Datetimes will come from GraphQL in [ISO8601 format](https://en.wikipedia.org/wiki/ISO_8601#Times) so we need to return one in that format here.
+
+:::
 
 Storybook will reload and be much happier:
 

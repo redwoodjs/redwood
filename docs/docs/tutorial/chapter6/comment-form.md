@@ -679,21 +679,25 @@ Calls to `db` return a Promise, which you would normally need to add an `await` 
 
 Try running the test suite (or if it's already running take a peek at that terminal window) and make sure all of our tests still pass. The "lowest level" of the api-side is the services, so let's start there.
 
-> One way to think about your codebase is a "top to bottom" view where the top is what's "closest" to the user and what they interact with (React components) and the bottom is the "farthest" thing from them, in the case of a web application that would usually be a database or other data store (behind a third party API, perhaps). One level above the database are the services, which directly communicate to the database:
->
-> ```
->    Browser
->       |
->     React    ─┐
->       |       │
->    Graph QL   ├─ Redwood
->       |       │
->    Services  ─┘
->       |
->    Database
-> ```
->
-> There are no hard and fast rules here, but generally the farther down you put your business logic (the code that deals with moving and manipulating data) the easier it will be to build and maintain your application. Redwood encourages you to put your business logic in services since they're "closest" to the data and behind the GraphQL interface.
+:::tip
+
+One way to think about your codebase is a "top to bottom" view where the top is what's "closest" to the user and what they interact with (React components) and the bottom is the "farthest" thing from them, in the case of a web application that would usually be a database or other data store (behind a third party API, perhaps). One level above the database are the services, which directly communicate to the database:
+
+```
+   Browser
+      |
+    React    ─┐
+      |       │
+   Graph QL   ├─ Redwood
+      |       │
+   Services  ─┘
+      |
+   Database
+```
+
+There are no hard and fast rules here, but generally the farther down you put your business logic (the code that deals with moving and manipulating data) the easier it will be to build and maintain your application. Redwood encourages you to put your business logic in services since they're "closest" to the data and behind the GraphQL interface.
+
+:::
 
 Open up the **comments** service test and let's update it to pass the `postId` argument to the `comments()` function like we tested out in the console:
 

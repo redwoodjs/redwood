@@ -12,9 +12,11 @@ Let's create a layout to hold that `<header>`:
 yarn redwood g layout blog
 ```
 
-> **`generate` shorthand**
->
-> From now on we'll use the shorter `g` alias instead of `generate`
+:::tip
+
+From now on we'll use the shorter `g` alias instead of `generate`
+
+:::
 
 That created `web/src/layouts/BlogLayout/BlogLayout.js` and an associated test file. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
 
@@ -111,9 +113,11 @@ const Routes = () => {
 export default Routes
 ```
 
-> **The `src` alias**
->
-> Notice that the import statement uses `src/layouts/BlogLayout` and not `../src/layouts/BlogLayout` or `./src/layouts/BlogLayout`. Being able to use just `src` is a convenience feature provided by Redwood: `src` is an alias to the `src` path in the current workspace. So if you're working in `web` then `src` points to `web/src` and in `api` it points to `api/src`.
+:::info
+
+Notice that the import statement uses `src/layouts/BlogLayout` and not `../src/layouts/BlogLayout` or `./src/layouts/BlogLayout`. Being able to use just `src` is a convenience feature provided by Redwood: `src` is an alias to the `src` path in the current workspace. So if you're working in `web` then `src` points to `web/src` and in `api` it points to `api/src`.
+
+:::
 
 Back to the browser (you may need to manually refresh) and you should see...nothing different. But that's good, it means our layout is working!
 

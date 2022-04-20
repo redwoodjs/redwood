@@ -185,38 +185,42 @@ The browser should actually show the `id` and a GraphQL-specific `__typename` pr
 
 <img src="https://user-images.githubusercontent.com/300/145910525-6a9814d1-0808-4f7e-aeab-303bd5dbac5e.png" alt="Showing articles in the database" />
 
-> **In the `Success` component, where did `posts` come from?**
->
-> In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data.
-> ```javascript
-> export const QUERY = gql`
->   query ArticlesQuery {
->     // highlight-next-line
->     posts {
->       id
->     }
->   }
-> `
-> ```
->
-> You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
->
-> ```javascript
-> export const QUERY = gql`
->   query ArticlesQuery {
->     // highlight-next-line
->     articles: posts {
->       id
->     }
->   }
-> `
-> ```
->
-> Now `articles` will be available in `Success` instead of `posts`:
->
-> ```javascript
-> export const Success = ({ articles }) => { ... }
-> ```
+:::info
+
+**In the `Success` component, where did `posts` come from?**
+
+In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data.
+```javascript
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    posts {
+      id
+    }
+  }
+`
+```
+
+You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
+
+```javascript
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    articles: posts {
+      id
+    }
+  }
+`
+```
+
+Now `articles` will be available in `Success` instead of `posts`:
+
+```javascript
+export const Success = ({ articles }) => { ... }
+```
+
+:::
 
 In fact, let's use the aforementioned alias so that the name of our cell, and the data we're iterating over, is consistent:
 

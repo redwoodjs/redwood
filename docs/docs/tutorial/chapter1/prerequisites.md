@@ -17,7 +17,7 @@ You could definitely learn them all at once, but it will be harder to determine 
 
 ### Redwood Versions
 
-You will want to be on at least version 0.50.0, or 1.0.0-final.1, to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
+You will want to be on at least version 1.0.0 to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
 
 If you have an existing site created with a prior version, you'll need to upgrade and (most likely) apply code modifications. Follow this two step process:
 

@@ -69,9 +69,11 @@ Now we'll want to snapshot the schema changes as a migration:
 yarn rw prisma migrate dev
 ```
 
-> **`redwood` Shorthand**
->
-> From now on we'll use the shorter `rw` alias instead of the full `redwood` argument.
+:::tip
+
+From now on we'll use the shorter `rw` alias instead of the full `redwood` argument.
+
+:::
 
 You'll be prompted to give this migration a name. Something that describes what it does is ideal, so how about "create post" (without the quotes, of course). This is for your own benefit—neither Redwood nor Prisma care about the migration's name, it's just a reference when looking through old migrations and trying to find when you created or modified something specific.
 
@@ -133,10 +135,14 @@ Okay but what if we click "Delete"?
 
 So, Redwood just created all the pages, components and services necessary to perform all CRUD actions on our posts table. No need to even open Prisma Studio or login through a terminal window and write SQL from scratch. Redwood calls these _scaffolds_.
 
-> If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
->
-> 1. Run `yarn rw g types` in a terminal
-> 2. Reload the GraphQL engine in VSCode: open the Command Palette (Cmd+Shift+P for Mac, Ctrl+Shift+P for Windows) and find "VSCode GraphQL: Manual Restart"
+:::caution
+
+If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
+
+1. Run `yarn rw g types` in a terminal
+2. Reload the GraphQL engine in VSCode: open the Command Palette (Cmd+Shift+P for Mac, Ctrl+Shift+P for Windows) and find "VSCode GraphQL: Manual Restart"
+
+:::
 
 Here's what happened when we ran that `yarn rw g scaffold post` command:
 

@@ -97,7 +97,11 @@ export const standard = () => ({
 })
 ```
 
-> What's this `standard` thing? Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
+:::info
+
+What's this `standard` thing? Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
+
+:::
 
 Storybook refreshes and we've got comments! It's a little hard to distinguish between the two separate comments because they're right next to each other:
 
@@ -119,7 +123,11 @@ export const Success = ({ comments }) => {
 }
 ```
 
-> `space-y-8` is a handy Tailwind class that puts a space *between* elements, but not above or below the entire stack (which is what would happen if you gave each `<Comment>` its own top/bottom margin).
+:::tip
+
+`space-y-8` is a handy Tailwind class that puts a space *between* elements, but not above or below the entire stack (which is what would happen if you gave each `<Comment>` its own top/bottom margin).
+
+:::
 
 Looking good! Let's add our CommentsCell to the actual blog post display page:
 
@@ -355,6 +363,10 @@ Notice we're importing the mock from a completely different component—nothing 
 
 We're introducing a new test function here, `waitFor()`, which will wait for things like GraphQL queries to finish running before checking for what's been rendered. Since `Article` renders `CommentsCell` we need to wait for the `Success` component of `CommentsCell` to be rendered.
 
-> The summary version of `Article` does *not* render the `CommentsCell`, but we should still wait. Why? If we did mistakenly start including `CommentsCell`, but didn't wait for the render, we would get a falsely passing test—indeed the text isn't on the page but that's because it's still showing the `Loading` component! If we had waited we would have seen the actual comment body get rendered, and the test would (correctly) fail.
+:::info
+
+The summary version of `Article` does *not* render the `CommentsCell`, but we should still wait. Why? If we did mistakenly start including `CommentsCell`, but didn't wait for the render, we would get a falsely passing test—indeed the text isn't on the page but that's because it's still showing the `Loading` component! If we had waited we would have seen the actual comment body get rendered, and the test would (correctly) fail.
+
+:::
 
 Okay we're finally ready to let users create their comments.

@@ -103,7 +103,11 @@ Let's use the Redwood console again to quickly update our admin user to actually
 yarn rw c
 ```
 
-> You can use the `c` shortcut instead of `console`
+:::tip
+
+You can use the `c` shortcut instead of `console`
+
+:::
 
 Now we can update our user with a single command:
 
@@ -126,7 +130,11 @@ Which should return the new content of the user:
 }
 ```
 
-> If that doesn't work for you maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
+:::caution
+
+If that doesn't work for you maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
+
+:::
 
 Now head back to [http://localhost:8910/admin/posts](http://localhost:8910/admin/posts) and we should have access again. As the British say: brilliant!
 
@@ -149,13 +157,18 @@ Note that not all providers support this plus-based syntax, but the major ones (
 
 In our case we're not sending emails anywhere, and don't require them to be verified, so you can just use a made-up email for now. `moderator@moderator.com` has a nice ring to it.
 
-> If you disabled the new user signup as suggested at the end of the first part of the tutorial then you'll have a slightly harder time creating a new user (the Signup page is still enabled in the example repo for convenience). You could create one with the Redwood console, but you'll need to be clever—remember that we don't store the original password, just the hashed result when combined with a salt. Here's the commands to enter at the console for creating a new user (replace 'password' with your password of choice):
->
-> ```javascript
-> const CryptoJS = require('crypto-js')
-> const salt = CryptoJS.lib.WordArray.random(128 / 8).toString()
-> const hashedPassword = CryptoJS.PBKDF2('password', salt, { keySize: 256 / 32 }).toString()
-> db.user.create({ data: { email: 'moderator@moderator.com', hashedPassword, salt } })
+:::info
+
+If you disabled the new user signup as suggested at the end of the first part of the tutorial then you'll have a slightly harder time creating a new user (the Signup page is still enabled in the example repo for convenience). You could create one with the Redwood console, but you'll need to be clever—remember that we don't store the original password, just the hashed result when combined with a salt. Here's the commands to enter at the console for creating a new user (replace 'password' with your password of choice):
+
+```javascript
+const CryptoJS = require('crypto-js')
+const salt = CryptoJS.lib.WordArray.random(128 / 8).toString()
+const hashedPassword = CryptoJS.PBKDF2('password', salt, { keySize: 256 / 32 }).toString()
+db.user.create({ data: { email: 'moderator@moderator.com', hashedPassword, salt } })
+```
+
+:::
 
 Now if you log out as the admin and log in as the moderator you should *not* have access to the posts admin.
 
@@ -459,11 +472,15 @@ yarn rw test
 
 The suite should automatically run the tests for `Comment` and `CommentCell` at the very least, and maybe a few more if you haven't committed your code to git in a while.
 
-> This isn't the most robust test that's ever been written: what if the sample text of the comment itself had the word "Delete" in it? Whoops! But you get the idea—find some meaningful difference in each possible render state of a component and write a test that verifies its presence (or lack of presence).
->
-> Think of each conditional in your component as another branch you need to have a test for. In the worst case, each conditional adds ^2 possible render states. If you have three conditionals that's eight possible combinations of output and to be safe you'll want to test them all. When you get yourself into this scenario it's a good sign that it's time to refactor and simplify your component. Maybe into subcomponents where each is responsible for just one of those conditional outputs? You'll still need the same number of total tests, but each component and its test is now operating in isolation and making sure it does one thing, and does it well. This has benefits for your mental model of the codebase as well.
->
-> It's like finally organizing that junk drawer in the kitchen—you still have the same number of things when you're done, but each thing is in its own space and therefore easier to remember where it lives and makes it easier to find next time.
+:::info
+
+This isn't the most robust test that's ever been written: what if the sample text of the comment itself had the word "Delete" in it? Whoops! But you get the idea—find some meaningful difference in each possible render state of a component and write a test that verifies its presence (or lack of presence).
+
+Think of each conditional in your component as another branch you need to have a test for. In the worst case, each conditional adds ^2 possible render states. If you have three conditionals that's eight possible combinations of output and to be safe you'll want to test them all. When you get yourself into this scenario it's a good sign that it's time to refactor and simplify your component. Maybe into subcomponents where each is responsible for just one of those conditional outputs? You'll still need the same number of total tests, but each component and its test is now operating in isolation and making sure it does one thing, and does it well. This has benefits for your mental model of the codebase as well.
+
+It's like finally organizing that junk drawer in the kitchen—you still have the same number of things when you're done, but each thing is in its own space and therefore easier to remember where it lives and makes it easier to find next time.
+
+:::
 
 You may see the following message output during the test run:
 

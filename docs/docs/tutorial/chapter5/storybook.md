@@ -16,7 +16,11 @@ If you poke around at the file tree on the left you'll see all of the components
 * `Article.stories.js`
 * `Article.test.js`
 
-> If you generated a cell then you also got a `.mock.js` file (more on those later).
+:::info
+
+If you generated a cell then you also got a `.mock.js` file (more on those later).
+
+:::
 
 Those `.stories.js` files are what makes the tree on the left side of the Storybook browser possible! From their [homepage](https://storybook.js.org/), Storybook describes itself as:
 
