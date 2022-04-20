@@ -53,9 +53,13 @@ A guideline for when to use cells is if your component needs some data from the 
 
 Usually in a blog the homepage will display a list of recent posts. This list is a perfect candidate for our first cell.
 
-> **Wait, don't we already have a home page?**
->
-> We do, but you will generally want to use a *cell* when you need data from the database. A best practice for Redwood is to create a Page for each unique URL your app has, but that you fetch and display data in Cells. So the existing HomePage will render this new cell as a child.
+:::info
+
+**Wait, don't we already have a home page?**
+
+We do, but you will generally want to use a *cell* when you need data from the database. A best practice for Redwood is to create a Page for each unique URL your app has, but that you fetch and display data in Cells. So the existing HomePage will render this new cell as a child.
+
+:::
 
 As you'll see repeatedly going forward, Redwood has a generator for this feature! Let's call this the "Articles" cell, since "Posts" was already used by our scaffold generator, and although the names won't clash (the scaffold files were created in the `Post` directory), it will be easier to keep them straight in our heads if the names are fairly different from each other. We're going to be showing multiple things, so we'll use the plural version "Articles," rather than "Article":
 
@@ -93,20 +97,24 @@ export const Success = ({ articles }) => {
 }
 ```
 
-> **Indicating Multiplicity to the Cell Generator**
->
-> When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
->
-> ```bash
-> yarn rw g cell blog_articles
-> yarn rw g cell blog-articles
-> yarn rw g cell blogArticles
-> yarn rw g cell BlogArticles
-> ```
->
-> You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
->
-> Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.js`.
+:::info
+
+**Indicating Multiplicity to the Cell Generator**
+
+When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
+
+```bash
+yarn rw g cell blog_articles
+yarn rw g cell blog-articles
+yarn rw g cell blogArticles
+yarn rw g cell BlogArticles
+```
+
+You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
+
+Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.js`.
+
+:::
 
 To get you off and running as quickly as possible the generator assumes you've got a root GraphQL query named the same thing as your cell and gives you the minimum query needed to get something out of the database. In this case the query is named `articles`:
 
@@ -181,38 +189,42 @@ The browser should actually show the `id` and a GraphQL-specific `__typename` pr
 
 <img src="https://user-images.githubusercontent.com/300/145910525-6a9814d1-0808-4f7e-aeab-303bd5dbac5e.png" alt="Showing articles in the database" />
 
-> **In the `Success` component, where did `posts` come from?**
->
-> In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data.
-> ```javascript
-> export const QUERY = gql`
->   query ArticlesQuery {
->     // highlight-next-line
->     posts {
->       id
->     }
->   }
-> `
-> ```
->
-> You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
->
-> ```javascript
-> export const QUERY = gql`
->   query ArticlesQuery {
->     // highlight-next-line
->     articles: posts {
->       id
->     }
->   }
-> `
-> ```
->
-> Now `articles` will be available in `Success` instead of `posts`:
->
-> ```javascript
-> export const Success = ({ articles }) => { ... }
-> ```
+:::info
+
+**In the `Success` component, where did `posts` come from?**
+
+In the `QUERY` statement, the query we're calling is `posts`. Whatever the name of this query is, that's the name of the prop that will be available in `Success` with your data.
+```javascript
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    posts {
+      id
+    }
+  }
+`
+```
+
+You can also alias the name of the variable containing the result of the GraphQL query, and that will be the name of the prop:
+
+```javascript
+export const QUERY = gql`
+  query ArticlesQuery {
+    // highlight-next-line
+    articles: posts {
+      id
+    }
+  }
+`
+```
+
+Now `articles` will be available in `Success` instead of `posts`:
+
+```javascript
+export const Success = ({ articles }) => { ... }
+```
+
+:::
 
 In fact, let's use the aforementioned alias so that the name of our cell, and the data we're iterating over, is consistent:
 
