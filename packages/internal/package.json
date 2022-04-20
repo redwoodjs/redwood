@@ -53,7 +53,7 @@
     "glob": "7.2.0",
     "graphql": "16.3.0",
     "kill-port": "1.6.1",
-    "prettier": "2.5.1",
+    "prettier": "2.6.2",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.11.12",
