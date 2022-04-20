@@ -446,7 +446,8 @@ Now let's add the ability to bring back the uploader if you decide you want to c
 
 We're borrowing the styles from the submit button and making sure that the image has both a top and bottom margin so it doesn't crash into the new button.
 
-## Safe usage of your free plan
+## The Delete
+
 Having a free plan is great, but if you just load images and never actually remove the unnecessary ones, you'll be in trouble.
 
 To avoid this, we'd better implement the `deleteImage` mutation. It will enable you to make a call to the Filestack API to remove your resources, and on success, you will remove the row in the `Image` model.
