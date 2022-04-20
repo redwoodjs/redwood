@@ -1,8 +1,11 @@
-import { errorTelemetry } from '@redwoodjs/telemetry'
-import execa from 'execa'
 import fs from 'fs'
-import Listr from 'listr'
 import path from 'path'
+
+import execa from 'execa'
+import Listr from 'listr'
+
+import { errorTelemetry } from '@redwoodjs/telemetry'
+
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 
@@ -66,7 +69,10 @@ export const handler = async ({ force, install }) => {
           {
             title: 'Configure WindiCSS',
             task: async () => {
-              const webpackConfig = fs.readFileSync(rwPaths.web.webpack, 'utf-8')
+              const webpackConfig = fs.readFileSync(
+                rwPaths.web.webpack,
+                'utf-8'
+              )
               const newWebpackConfig =
                 `const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')\n\n` +
                 webpackConfig.replace(
@@ -102,7 +108,7 @@ export const handler = async ({ force, install }) => {
           "    include: ['**/*.{js,jsx,tsx,css}'],",
           "    exclude: ['node_modules', '.git', 'dist'],",
           '  },',
-          '})'
+          '})',
         ].join('\n')
         fs.writeFileSync(windiConfigPath, windiConfig)
       },
