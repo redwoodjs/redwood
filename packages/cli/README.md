@@ -306,7 +306,7 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-alias-g'
+        'https://redwoodjs.com/docs/cli-commands#generate-alias-g'
       )}`
     )
 ```
@@ -490,7 +490,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-sdl'
+        'https://redwoodjs.com/docs/cli-commands#generate-sdl'
       )}`
     )
   Object.entries(defaults).forEach(([option, config]) => {
