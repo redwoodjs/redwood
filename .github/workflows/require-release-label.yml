@@ -1,4 +1,4 @@
-name: 🏷 Require "release:*" label
+name: 🏷 Require release label
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   require-release-label:
+    name: 🏷 Require release label
     runs-on: ubuntu-latest
     steps:
       - uses: mheap/github-action-required-labels@v1
