@@ -12,9 +12,11 @@ Let's create a layout to hold that `<header>`:
 yarn redwood g layout blog
 ```
 
-> **`generate` shorthand**
->
-> From now on we'll use the shorter `g` alias instead of `generate`
+:::tip
+
+From now on we'll use the shorter `g` alias instead of `generate`
+
+:::
 
 That created `web/src/layouts/BlogLayout/BlogLayout.js` and an associated test file. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
 
@@ -111,21 +113,27 @@ const Routes = () => {
 export default Routes
 ```
 
-> **The `src` alias**
->
-> Notice that the import statement uses `src/layouts/BlogLayout` and not `../src/layouts/BlogLayout` or `./src/layouts/BlogLayout`. Being able to use just `src` is a convenience feature provided by Redwood: `src` is an alias to the `src` path in the current workspace. So if you're working in `web` then `src` points to `web/src` and in `api` it points to `api/src`.
+:::info
+
+Notice that the import statement uses `src/layouts/BlogLayout` and not `../src/layouts/BlogLayout` or `./src/layouts/BlogLayout`. Being able to use just `src` is a convenience feature provided by Redwood: `src` is an alias to the `src` path in the current workspace. So if you're working in `web` then `src` points to `web/src` and in `api` it points to `api/src`.
+
+:::
 
 Back to the browser (you may need to manually refresh) and you should see...nothing different. But that's good, it means our layout is working!
 
-> **Why are things named the way they are?**
->
-> You may have noticed some duplication in Redwood's file names. Pages live in a directory called `/pages` and also contain `Page` in their name. Same with Layouts. What's the deal?
->
-> When you have dozens of files open in your editor it's easy to get lost, especially when you have several files with names that are similar or even the same (they happen to be in different directories). Imagine a dozen files named `index.js` and then trying to find the one you're looking for in your open tabs! We've found that the extra duplication in the names of files is worth the productivity benefit when scanning for a specific open file.
->
-> If you're using the [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) plugin this also helps disambiguate when browsing through your component stack:
->
-> <img src="https://user-images.githubusercontent.com/300/145901282-e4b6ec92-8cee-42d0-97ea-1ffe99328e53.png" width="400"/>
+:::info
+
+**Why are things named the way they are?**
+
+You may have noticed some duplication in Redwood's file names. Pages live in a directory called `/pages` and also contain `Page` in their name. Same with Layouts. What's the deal?
+
+When you have dozens of files open in your editor it's easy to get lost, especially when you have several files with names that are similar or even the same (they happen to be in different directories). Imagine a dozen files named `index.js` and then trying to find the one you're looking for in your open tabs! We've found that the extra duplication in the names of files is worth the productivity benefit when scanning for a specific open file.
+
+If you're using the [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) plugin this also helps disambiguate when browsing through your component stack:
+
+<img src="https://user-images.githubusercontent.com/300/145901282-e4b6ec92-8cee-42d0-97ea-1ffe99328e53.png" width="400"/>
+
+:::
 
 ### Back Home Again
 

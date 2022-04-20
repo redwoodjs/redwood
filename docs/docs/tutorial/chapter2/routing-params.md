@@ -197,7 +197,11 @@ We can prove it! Try going to the detail page for a post in the browser and—uh
 
 ![Article error message](https://user-images.githubusercontent.com/300/146100555-cea8806a-70aa-43e5-b2b4-d49d84014c4e.png)
 
-> By the way, this error message you're seeing is thanks to the `Failure` section of our Cell!
+:::tip
+
+This error message you're seeing is thanks to the `Failure` section of our Cell!
+
+:::
 
 ```
 Error: Variable "$id" got invalid value "1"; Int cannot represent non-integer value: "1"
@@ -215,23 +219,27 @@ What if you could request the conversion right in the route's path? Introducing 
 
 Voilà! Not only will this convert the `id` param to a number before passing it to your Page, it will prevent the route from matching unless the `id` path segment consists entirely of digits. If any non-digits are found, the router will keep trying other routes, eventually showing the `NotFoundPage` if no routes match.
 
-> **What if I want to pass some other prop to the cell that I don't need in the query, but do need in the Success/Loader/etc. components?**
->
-> All of the props you give to the cell will be automatically available as props in the render components. Only the ones that match the GraphQL variables list will be given to the query. You get the best of both worlds! In our post display above, if you wanted to display some random number along with the post (for some contrived, tutorial-like reason), just pass that prop:
->
-> ```jsx
-> <ArticleCell id={id} rand={Math.random()} />
-> ```
->
-> And get it, along with the query result (and even the original `id` if you want) in the component:
->
-> ```javascript
-> export const Success = ({ article, id, rand }) => {
->   //...
-> }
-> ```
->
-> Thanks again, Redwood!
+:::info
+
+**What if I want to pass some other prop to the cell that I don't need in the query, but do need in the Success/Loader/etc. components?**
+
+All of the props you give to the cell will be automatically available as props in the render components. Only the ones that match the GraphQL variables list will be given to the query. You get the best of both worlds! In our post display above, if you wanted to display some random number along with the post (for some contrived, tutorial-like reason), just pass that prop:
+
+```jsx
+<ArticleCell id={id} rand={Math.random()} />
+```
+
+And get it, along with the query result (and even the original `id` if you want) in the component:
+
+```javascript
+export const Success = ({ article, id, rand }) => {
+  //...
+}
+```
+
+Thanks again, Redwood!
+
+:::
 
 ### Displaying a Blog Post
 
@@ -256,7 +264,11 @@ const Article = () => {
 export default Article
 ```
 
-> You may notice we don't have any explicit `import` statements for `React` itself. We (the Redwood dev team) got tired of constantly importing it over and over again in every file so we automatically import it for you!
+:::info
+
+You may notice we don't have any explicit `import` statements for `React` itself. We (the Redwood dev team) got tired of constantly importing it over and over again in every file so we automatically import it for you!
+
+:::
 
 Let's copy the `<article>` section from `ArticlesCell` and put it here instead, taking the `article` itself in as a prop:
 
@@ -354,7 +366,11 @@ And there we go! We should be able to move back and forth between the homepage a
 
 ![Article page showing an article](https://user-images.githubusercontent.com/300/146101296-f1d43812-45df-4f1e-a3da-4f6a085bfc08.png)
 
-> If you like what you've been seeing from the router, you can dive deeper into the [Redwood Router](../../router.md) guide.
+:::info
+
+If you like what you've been seeing from the router, you can dive deeper into the [Redwood Router](../../router.md) guide.
+
+:::
 
 ### Summary
 

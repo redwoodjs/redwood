@@ -103,7 +103,11 @@ Let's use the Redwood console again to quickly update our admin user to actually
 yarn rw c
 ```
 
-> You can use the `c` shortcut instead of `console`
+:::tip
+
+You can use the `c` shortcut instead of `console`
+
+:::
 
 Now we can update our user with a single command:
 
@@ -126,7 +130,11 @@ Which should return the new content of the user:
 }
 ```
 
-> If that doesn't work for you maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
+:::caution
+
+If that doesn't work for you maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
+
+:::
 
 Now head back to [http://localhost:8910/admin/posts](http://localhost:8910/admin/posts) and we should have access again. As the British say: brilliant!
 
@@ -134,24 +142,33 @@ Now head back to [http://localhost:8910/admin/posts](http://localhost:8910/admin
 
 Let's create a new user that will represent the comment moderator. Since this is in development you can just make up an email address, but if you needed to this in a real system that verified email addresses you could use **The Plus Trick** to create a new, unique email address that is actually the same as your original email address!
 
-> The Plus Trick is a very handy feature of the email standard known as a "boxname", the idea being that you may have other incoming boxes besides one just named "Inbox" and by adding `+something` to your email address you can specify which box the mail should be sorted into. They don't appear to be in common use these days, but they are ridiculously helpful for us developers when we're constantly needing new email addresses for testing: it gives us an infinite number of *valid* email addresses—they all come to your regular inbox!
->
-> Just append +something to your email address before the @:
->
-> * `jane.doe+testing@example.com` will go to `jane.doe@example.com`
-> * `dom+20210909@example.com` will go to `dom@example.com`
->
-> Note that not all providers support this plus-based syntax, but the major ones (Gmail, Yahoo, Microsoft, Apple) do. If you find that you're not receiving emails at your own domain, you may want to create a free account at one of these providers just to use for testing.
+:::tip
+
+The Plus Trick is a very handy feature of the email standard known as a "boxname", the idea being that you may have other incoming boxes besides one just named "Inbox" and by adding `+something` to your email address you can specify which box the mail should be sorted into. They don't appear to be in common use these days, but they are ridiculously helpful for us developers when we're constantly needing new email addresses for testing: it gives us an infinite number of *valid* email addresses—they all come to your regular inbox!
+
+Just append +something to your email address before the @:
+
+* `jane.doe+testing@example.com` will go to `jane.doe@example.com`
+* `dom+20210909@example.com` will go to `dom@example.com`
+
+Note that not all providers support this plus-based syntax, but the major ones (Gmail, Yahoo, Microsoft, Apple) do. If you find that you're not receiving emails at your own domain, you may want to create a free account at one of these providers just to use for testing.
+
+:::
 
 In our case we're not sending emails anywhere, and don't require them to be verified, so you can just use a made-up email for now. `moderator@moderator.com` has a nice ring to it.
 
-> If you disabled the new user signup as suggested at the end of the first part of the tutorial then you'll have a slightly harder time creating a new user (the Signup page is still enabled in the example repo for convenience). You could create one with the Redwood console, but you'll need to be clever—remember that we don't store the original password, just the hashed result when combined with a salt. Here's the commands to enter at the console for creating a new user (replace 'password' with your password of choice):
->
-> ```javascript
-> const CryptoJS = require('crypto-js')
-> const salt = CryptoJS.lib.WordArray.random(128 / 8).toString()
-> const hashedPassword = CryptoJS.PBKDF2('password', salt, { keySize: 256 / 32 }).toString()
-> db.user.create({ data: { email: 'moderator@moderator.com', hashedPassword, salt } })
+:::info
+
+If you disabled the new user signup as suggested at the end of the first part of the tutorial then you'll have a slightly harder time creating a new user (the Signup page is still enabled in the example repo for convenience). You could create one with the Redwood console, but you'll need to be clever—remember that we don't store the original password, just the hashed result when combined with a salt. Here's the commands to enter at the console for creating a new user (replace 'password' with your password of choice):
+
+```javascript
+const CryptoJS = require('crypto-js')
+const salt = CryptoJS.lib.WordArray.random(128 / 8).toString()
+const hashedPassword = CryptoJS.PBKDF2('password', salt, { keySize: 256 / 32 }).toString()
+db.user.create({ data: { email: 'moderator@moderator.com', hashedPassword, salt } })
+```
+
+:::
 
 Now if you log out as the admin and log in as the moderator you should *not* have access to the posts admin.
 
@@ -381,9 +398,13 @@ export const moderatorView = () => {
 }
 ```
 
-> **Where did `mockCurrentUser()` come from?**
->
-> Similar to `mockGraphQLQuery()` and `mockGraphQLMutation()`, `mockCurrentUser()` is a global available in Storybook automatically, no need to import.
+:::info
+
+**Where did `mockCurrentUser()` come from?**
+
+Similar to `mockGraphQLQuery()` and `mockGraphQLMutation()`, `mockCurrentUser()` is a global available in Storybook automatically, no need to import.
+
+:::
 
 `mockCurrentUser()` accepts an object and you can put whatever you want in there (it should be similar to what you return in `getCurrentUser()` in `api/src/lib/auth.js`). But since we want `hasRole()` to work properly then the object must have a `roles` key that is a string or an array of strings.
 
@@ -453,11 +474,15 @@ yarn rw test
 
 The suite should automatically run the tests for `Comment` and `CommentCell` at the very least, and maybe a few more if you haven't committed your code to git in a while.
 
-> This isn't the most robust test that's ever been written: what if the sample text of the comment itself had the word "Delete" in it? Whoops! But you get the idea—find some meaningful difference in each possible render state of a component and write a test that verifies its presence (or lack of presence).
->
-> Think of each conditional in your component as another branch you need to have a test for. In the worst case, each conditional adds ^2 possible render states. If you have three conditionals that's eight possible combinations of output and to be safe you'll want to test them all. When you get yourself into this scenario it's a good sign that it's time to refactor and simplify your component. Maybe into subcomponents where each is responsible for just one of those conditional outputs? You'll still need the same number of total tests, but each component and its test is now operating in isolation and making sure it does one thing, and does it well. This has benefits for your mental model of the codebase as well.
->
-> It's like finally organizing that junk drawer in the kitchen—you still have the same number of things when you're done, but each thing is in its own space and therefore easier to remember where it lives and makes it easier to find next time.
+:::info
+
+This isn't the most robust test that's ever been written: what if the sample text of the comment itself had the word "Delete" in it? Whoops! But you get the idea—find some meaningful difference in each possible render state of a component and write a test that verifies its presence (or lack of presence).
+
+Think of each conditional in your component as another branch you need to have a test for. In the worst case, each conditional adds ^2 possible render states. If you have three conditionals that's eight possible combinations of output and to be safe you'll want to test them all. When you get yourself into this scenario it's a good sign that it's time to refactor and simplify your component. Maybe into subcomponents where each is responsible for just one of those conditional outputs? You'll still need the same number of total tests, but each component and its test is now operating in isolation and making sure it does one thing, and does it well. This has benefits for your mental model of the codebase as well.
+
+It's like finally organizing that junk drawer in the kitchen—you still have the same number of things when you're done, but each thing is in its own space and therefore easier to remember where it lives and makes it easier to find next time.
+
+:::
 
 You may see the following message output during the test run:
 
