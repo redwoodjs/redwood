@@ -44,7 +44,7 @@ jobs:
 
   publish-release-candidate:
     name: 🚢 Publish Release Candidate
-    needs: check-tags
+    needs: git-tag-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
