@@ -69,6 +69,14 @@ function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
       },
     }
     baseVisitor[typename] = {
+      enter(path) {
+        if (mergeUtility.isOpaque(strategy[path.type])) {
+          path.skip()
+          // https://github.com/babel/babel/issues/14480
+          // Yuck. Remove this when Babel provides an alternative.
+          baseVisitor[typename]['exit'][0](path)
+        }
+      },
       exit(path) {
         saveNextInsertPosition(path)
         const id = semanticIdentity(path)

@@ -2,19 +2,22 @@ import * as t from '@babel/types'
 
 import { fillUnique, nodeIs, overlap, pushUnique, sieve } from './algorithms'
 
+const OPAQUE_UID = 'RW_MERGE_OPAQUE_UID'
+
 export const mergeUtility = {
-  _insertAfter: (base, ...exts) => {
-    base.insertAfter(...exts)
+  opaquely: (strategy) => {
+    strategy[OPAQUE_UID] = true
+    return strategy
+  },
+  isOpaque: (strategy) => {
+    return strategy[OPAQUE_UID] === true
   },
   keepBoth: (base, ext) => {
-    mergeUtility._insertAfter(base, ext.node)
+    base.insertAfter(ext.node)
     base.skip()
   },
   keepBothStatementParents: (base, ext) => {
-    mergeUtility._insertAfter(
-      base.getStatementParent(),
-      ext.getStatementParent().node
-    )
+    base.getStatementParent().insertAfter(ext.getStatementParent().node)
     base.skip()
   },
   keepBase: (_base, _ext) => {},
@@ -25,8 +28,10 @@ export const mergeUtility = {
 }
 
 export const defaultMergeStrategy = {
-  ArrowFunctionExpression: mergeUtility.keepBothStatementParents,
-  FunctionDeclaration: mergeUtility.keepBoth,
+  ArrowFunctionExpression: mergeUtility.opaquely(
+    mergeUtility.keepBothStatementParents
+  ),
+  FunctionDeclaration: mergeUtility.opaquely(mergeUtility.keepBoth),
   ImportDeclaration(baseImport, extImport) {
     const baseSpecs = baseImport.node.specifiers
     const extSpecs = extImport.node.specifiers
@@ -71,8 +76,7 @@ export const defaultMergeStrategy = {
 
     baseImport.node.specifiers = firstSpecifierList
     if (rest.length) {
-      mergeUtility._insertAfter(
-        baseImport,
+      baseImport.insertAfter(
         rest.map((specs) => t.importDeclaration(specs, baseImport.node.source))
       )
     }

@@ -6,6 +6,17 @@ import fs from 'fs-extra'
 import { merge } from '../merge'
 import { semanticIdentity } from '../merge/semantics'
 
+// Unindent the provided (maybe multiline) string such that the first line has an indent of 0
+// and all subsequent lines maintain their relative indentation level to the first line.
+const unindented = (code) => {
+  const firstLineIndent = code.length - code.trimLeft().length
+  return code.replace(new RegExp(`^( {${firstLineIndent}})`, 'gm'), '')
+}
+
+const expectMerged = (base, ext, merged) => {
+  expect(merge(unindented(base), unindented(ext))).toBe(unindented(merged))
+}
+
 describe('Semantic behavior', () => {
   const code = `\
 import { foo } from 'src'
@@ -69,332 +80,453 @@ const func = (param1, param2) => {
 
 describe('Import behavior', () => {
   it('deduplicates identical import namespace identifiers', () => {
-    const base = "import * as React from 'react'"
-    const ext = "import * as React from 'react'"
-    const merged = "import * as React from 'react'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import * as React from 'react'",
+      "import * as React from 'react'",
+      "import * as React from 'react'\n"
+    )
   })
 
   it('deduplicates identical import specifiers', () => {
-    const base = "import { foo } from 'source'"
-    const ext = "import { foo } from 'source'"
-    const merged = "import { foo } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import { foo } from 'source'",
+      "import { foo } from 'source'",
+      "import { foo } from 'source'\n"
+    )
   })
 
   it('merges import specifiers from the same source into one import', () => {
-    const base = "import { bar } from 'source'"
-    const ext = "import { foo } from 'source'"
-    const merged = "import { bar, foo } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import { bar } from 'source'",
+      "import { foo } from 'source'",
+      "import { bar, foo } from 'source'\n"
+    )
   })
 
   it('deduplicates identical import specifiers from the same source', () => {
-    const base = "import { bar, baz } from 'source'"
-    const ext = "import { foo, bar } from 'source'"
-    const merged = "import { bar, baz, foo } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import { foo, bar } from 'source'",
+      "import { bar, baz } from 'source'",
+      "import { foo, bar, baz } from 'source'\n"
+    )
   })
 
   it('merges import default specifiers and import specifiers', () => {
-    const base = "import def from 'source'"
-    const ext = "import { foo } from 'source'"
-    const merged = "import def, { foo } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import def from 'source'",
+      "import { foo } from 'source'",
+      "import def, { foo } from 'source'\n"
+    )
   })
 
   it('merges import default specifiers alongisde import specifiers with import specifiers', () => {
-    const base = "import def, { foo } from 'source'"
-    const ext = "import { bar } from 'source'"
-    const merged = "import def, { foo, bar } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import def, { foo } from 'source'",
+      "import { bar } from 'source'",
+      "import def, { foo, bar } from 'source'\n"
+    )
   })
 
   it('merges import default specifiers and import specifiers, even if it must reorder them', () => {
-    const base = "import { foo } from 'source'"
-    const ext = "import def from 'source'"
-    const merged = "import def, { foo } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import { foo } from 'source'",
+      "import def from 'source'",
+      "import def, { foo } from 'source'\n"
+    )
   })
 
   it('does not merge import namespace identifiers with conflicting local names', () => {
-    const base = "import * as One from 'source'"
-    const ext = "import * as Two from 'source'"
-    const merged =
+    expectMerged(
+      "import * as One from 'source'",
+      "import * as Two from 'source'",
       "import * as One from 'source'\nimport * as Two from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    )
   })
 
   it('does not merge default specifiers with conflicting local names', () => {
-    const base = "import One from 'source'"
-    const ext = "import Two from 'source'"
-    const merged = "import One from 'source'\nimport Two from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import One from 'source'",
+      "import Two from 'source'",
+      "import One from 'source'\nimport Two from 'source'\n"
+    )
   })
 
   it('does not merge side-effect imports and default imports', () => {
-    const base = "import 'source'"
-    const ext = "import Def from 'source'"
-    const merged = "import 'source'\nimport Def from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import 'source'",
+      "import Def from 'source'",
+      `\
+      import 'source'
+      import Def from 'source'
+      `
+    )
   })
 
   it('does not merge side-effect imports and namespace imports', () => {
-    const base = "import 'source'"
-    const ext = "import * as Name from 'source'"
-    const merged = "import 'source'\nimport * as Name from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import 'source'",
+      "import * as Name from 'source'",
+      `\
+      import 'source'
+      import * as Name from 'source'
+      `
+    )
   })
 
   it('does not merge side-effect imports import specifiers', () => {
-    const base = "import 'source'"
-    const ext = "import { foo, bar } from 'source'"
-    const merged = "import 'source'\nimport { foo, bar } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import 'source'",
+      "import { foo, bar } from 'source'",
+      `\
+      import 'source'
+      import { foo, bar } from 'source'
+      `
+    )
   })
 
   it('adds extension side-effect imports', () => {
-    const base = "import def, { foo, bar } from 'source'"
-    const ext = "import 'source'"
-    const merged = "import def, { foo, bar } from 'source'\nimport 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import def, { foo, bar } from 'source'",
+      "import 'source'",
+      `\
+      import def, { foo, bar } from 'source'
+      import 'source'
+      `
+    )
   })
 
   it('merges import default specifiers and import namespace identifiers', () => {
-    const base = "import src from 'source'"
-    const ext = "import * as Source from 'source'"
-    const merged = "import src, * as Source from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import src from 'source'",
+      "import * as Source from 'source'",
+      "import src, * as Source from 'source'\n"
+    )
   })
 
   it('merges import default specifiers and import namespace identifiers, even if it must reorder them', () => {
-    const base = "import * as Source from 'source'"
-    const ext = "import src from 'source'"
-    const merged = "import src, * as Source from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import * as Source from 'source'",
+      "import src from 'source'",
+      "import src, * as Source from 'source'\n"
+    )
   })
 
   it('merges multiple imports with the same source', () => {
-    const base = "import { foo } from 'source'"
-    const ext = "import { bar } from 'source'\nimport { baz } from 'source'"
-    const merged = "import { foo, bar, baz } from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import { foo } from 'source'",
+      `\
+      import { bar } from 'source'
+      import { baz } from 'source'
+      `,
+      "import { foo, bar, baz } from 'source'\n"
+    )
   })
 
   it('merges multiple default imports with the same source', () => {
-    const base = "import default1 from 'source'"
-    const ext = "import default2 from 'source'\nimport { foo } from 'source'"
-    const merged =
-      "import default1, { foo } from 'source'\nimport default2 from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "import default1 from 'source'",
+      `\
+      import default2 from 'source'
+      import { foo } from 'source'
+      `,
+      `\
+      import default1, { foo } from 'source'
+      import default2 from 'source'
+      `
+    )
   })
 
   it('merges multiple types of imports with the same source', () => {
-    const base =
-      "import default1 from 'source'\nimport * as namespace from 'source'"
-    const ext = "import default2 from 'source'\nimport { foo } from 'source'"
-    const merged =
-      "import default1, { foo } from 'source'\nimport default2 from 'source'\nimport * as namespace from 'source'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      `\
+      import default1 from 'source'
+      import * as namespace from 'source'
+      `,
+      `\
+      import default2 from 'source'
+      import { foo } from 'source'
+      `,
+      `\
+      import default1, { foo } from 'source'
+      import default2 from 'source'
+      import * as namespace from 'source'
+      `
+    )
   })
 })
 
 describe('Object behavior', () => {
   it('merges basic objects without conflicts', () => {
-    const base = 'const x = { foo: "foo" }'
-    const ext = 'const x = { bar: "bar" }'
-    const merged = `\
-const x = {
-  foo: 'foo',
-  bar: 'bar',
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = { foo: "foo" }',
+      'const x = { bar: "bar" }',
+      `\
+      const x = {
+        foo: 'foo',
+        bar: 'bar',
+      }
+      `
+    )
   })
+
   it('deduplicates object properties', () => {
-    const base = 'const x = { foo: "foo", bar: "bar" }'
-    const ext = 'const x = { bar: "bar", baz: "baz" }'
-    const merged = `\
-const x = {
-  foo: 'foo',
-  bar: 'bar',
-  baz: 'baz',
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = { foo: "foo", bar: "bar" }',
+      'const x = { bar: "bar", baz: "baz" }',
+      `\
+      const x = {
+        foo: 'foo',
+        bar: 'bar',
+        baz: 'baz',
+      }
+      `
+    )
   })
+
   it('merges nested object properties', () => {
-    const base = 'const x = { foo: { nest: "nest" } }'
-    const ext = 'const x = { foo: { bird: "bird" } }'
-    const merged = `\
-const x = {
-  foo: {
-    nest: 'nest',
-    bird: 'bird',
-  },
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = { foo: { nest: "nest" } }',
+      'const x = { foo: { bird: "bird" } }',
+      `\
+      const x = {
+        foo: {
+          nest: 'nest',
+          bird: 'bird',
+        },
+      }
+      `
+    )
   })
+
   it('deduplicates nested object properties', () => {
-    const base = 'const x = { foo: { nest: "nest", bird: "bird" } }'
-    const ext = 'const x = { foo: { bird: "bird" } }'
-    const merged = `\
-const x = {
-  foo: {
-    nest: 'nest',
-    bird: 'bird',
-  },
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = { foo: { nest: "nest", bird: "bird" } }',
+      'const x = { foo: { bird: "bird" } }',
+      `\
+      const x = {
+        foo: {
+          nest: 'nest',
+          bird: 'bird',
+        },
+      }
+      `
+    )
   })
+
   it('merges nested arrays', () => {
-    const base = 'const x = { foo: { arr: [1, 2, 3] } }'
-    const ext = 'const x = { foo: { arr: [3, 4, 5] } }'
-    const merged = `\
-const x = {
-  foo: {
-    arr: [1, 2, 3, 4, 5],
-  },
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = { foo: { arr: [1, 2, 3] } }',
+      'const x = { foo: { arr: [3, 4, 5] } }',
+      `\
+      const x = {
+        foo: {
+          arr: [1, 2, 3, 4, 5],
+        },
+      }
+      `
+    )
   })
   it('merges deeply nested objects', () => {
-    const base = 'const x = { foo: { bar: { baz: { bat: [1] } } } }'
-    const ext = 'const x = { foo: { bar: { baz: { bat: [2] } } } }'
-    const merged = `\
-const x = {
-  foo: {
-    bar: {
-      baz: {
-        bat: [1, 2],
-      },
-    },
-  },
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = { foo: { bar: { baz: { bat: [1] } } } }',
+      'const x = { foo: { bar: { baz: { bat: [2] } } } }',
+      `\
+      const x = {
+        foo: {
+          bar: {
+            baz: {
+              bat: [1, 2],
+            },
+          },
+        },
+      }
+      `
+    )
   })
 })
 
 describe('Array behavior', () => {
   it('merges arrays without duplicates', () => {
-    const base = 'const x = [1, 2, 3]'
-    const ext = 'const x = [4, 5, 6]'
-    const merged = 'const x = [1, 2, 3, 4, 5, 6]\n'
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = [1, 2, 3]',
+      'const x = [4, 5, 6]',
+      'const x = [1, 2, 3, 4, 5, 6]\n'
+    )
   })
+
   it('does not merge arrays with different identities', () => {
-    const base = 'const x = [1, 2, 3]'
-    const ext = 'const y = [4, 5, 6]'
-    const merged = 'const x = [1, 2, 3]\nconst y = [4, 5, 6]\n'
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = [1, 2, 3]',
+      'const y = [4, 5, 6]',
+      `\
+      const x = [1, 2, 3]
+      const y = [4, 5, 6]
+      `
+    )
   })
+
   it('deduplicates values of arrays with the same identity', () => {
-    const base = 'const x = [1, 2, 3]'
-    const ext = 'const x = [3, 4, 5]'
-    const merged = 'const x = [1, 2, 3, 4, 5]\n'
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = [1, 2, 3]',
+      'const x = [3, 4, 5]',
+      'const x = [1, 2, 3, 4, 5]\n'
+    )
   })
+
   it('Does not merge variable declarations with different types of initalizers', () => {
-    const base = 'const x = [1, 2, 3]'
-    const ext = 'const x = { foo: "foo" }'
-    const merged = `\
-const x = [1, 2, 3]
-const x = {
-  foo: 'foo',
-}
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = [1, 2, 3]',
+      'const x = { foo: "foo" }',
+      `\
+      const x = [1, 2, 3]
+      const x = {
+        foo: 'foo',
+      }
+      `
+    )
   })
+
   it('merges nested arrays', () => {
-    const base = "const x = [1, 2, 3, ['a', 'b', 'c']]"
-    const ext = "const x = [1, 5, ['c', 'd', 'e']]"
-    const merged = "const x = [1, 2, 3, ['a', 'b', 'c', 'd', 'e'], 5]\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      "const x = [1, 2, 3, ['a', 'b', 'c']]",
+      "const x = [1, 5, ['c', 'd', 'e']]",
+      // We might also want [1, 2, 3, 5, ['a', 'b', 'c', 'd', 'e']], but that seems tricky to implement.
+      "const x = [1, 2, 3, ['a', 'b', 'c', 'd', 'e'], 5]\n"
+    )
+  })
+})
+
+describe('opaque function behavior', () => {
+  // Default behavior is to treat all functions as opaque objects, the contents of which cannot be
+  // merged. To attempt anything else requires a definition of the "semantics" of a function, which
+  // is Hard in the general case, and best left to callers of merge() to specify on a case-by-case
+  // basis.
+  it('does not merge semantically equivalent nodes in function bodies', () => {
+    expectMerged(
+      "const x = (a) => ['a', 'b', 'c'].contains(a)",
+      "const x = (a) => ['d', 'e', 'f'].contains(a)",
+      `\
+      const x = (a) => ['a', 'b', 'c'].contains(a)
+
+      const x = (a) => ['d', 'e', 'f'].contains(a)
+      `
+    )
+  })
+
+  it('does not merge semantically unequal nodes in function bodies', () => {
+    expectMerged(
+      `\
+      const x = (a) => {
+        const arr = ['a', 'b', 'c']
+        return arr.contains(a)
+      }
+      `,
+      `\
+      const x = (a) => {
+        const array = ['a', 'b', 'c']
+        return array.contains(a)
+      }
+      `,
+      `\
+      const x = (a) => {
+        const arr = ['a', 'b', 'c']
+        return arr.contains(a)
+      }
+
+      const x = (a) => {
+        const array = ['a', 'b', 'c']
+        return array.contains(a)
+      }
+      `
+    )
   })
 })
 
 describe('nop behavior', () => {
   it('does not merge strings', () => {
-    const base = 'const x = "foo"'
-    const ext = 'const x = "bar"'
-    const merged = "const x = 'foo'\n"
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged('const x = "foo"', 'const x = "bar"', "const x = 'foo'\n")
   })
+
   it('does not merge nested strings', () => {
-    const base = 'const x = { foo: { bar: "baz" } }'
-    const ext = 'const x = { foo: { bar: "bat" } }'
-    const merged = `\
-const x = {
-  foo: {
-    bar: 'baz',
-  },
-}
-`
-    const test = merge(base, ext)
-    expect(test).toBe(merged)
+    expectMerged(
+      'const x = { foo: { bar: "baz" } }',
+      'const x = { foo: { bar: "bat" } }',
+      `\
+      const x = {
+        foo: {
+          bar: 'baz',
+        },
+      }
+      `
+    )
   })
+
   it('does not merge functions', () => {
-    const base = 'const x = (x, y) => x + y'
-    const ext = 'const x = (x, y) => x - y'
-    const merged = 'const x = (x, y) => x + y\n\nconst x = (x, y) => x - y\n'
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      'const x = (x, y) => x + y',
+      'const x = (x, y) => x - y',
+      `\
+      const x = (x, y) => x + y
+
+      const x = (x, y) => x - y
+      `
+    )
   })
 })
 
 describe('Comment behavior', () => {
   it('deduplicates comments on identical declarations', () => {
-    const base = `\
-// This is a test
-const x = [1, 2, 3]
-`
-    const ext = `\
-// This is a test
-const x = [4, 5, 6]
-`
-    const merged = `\
-// This is a test
-const x = [1, 2, 3, 4, 5, 6]
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      `\
+      // This is a test
+      const x = [1, 2, 3]
+      `,
+      `\
+      // This is a test
+      const x = [4, 5, 6]
+      `,
+      `\
+      // This is a test
+      const x = [1, 2, 3, 4, 5, 6]
+      `
+    )
   })
 
   it('deduplicates comments on identical declarations, even if they have different types', () => {
-    const base = `\
-// This is a test
-const x = [1, 2, 3]
-`
-    const ext = `\
-/* This is a test */
-const x = [4, 5, 6]
-`
-    const merged = `\
-// This is a test
-const x = [1, 2, 3, 4, 5, 6]
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      `\
+      // This is a test
+      const x = [1, 2, 3]
+      `,
+      `\
+      /* This is a test */
+      const x = [4, 5, 6]
+      `,
+      `\
+      // This is a test
+      const x = [1, 2, 3, 4, 5, 6]
+      `
+    )
   })
 
   it('Assumes comments pertain to the subsequent expression; trailing comments are disregarded', () => {
-    const base = `\
-import { foo } from 'source'
-// This is a test
-const x = [1, 2, 3]
-`
-    const ext = `\
-import { bar } from 'source'
-// This is a test
-const x = [4, 5, 6]
-`
-    const merged = `\
-import { foo, bar } from 'source'
-// This is a test
-const x = [1, 2, 3, 4, 5, 6]
-`
-    expect(merge(base, ext)).toBe(merged)
+    expectMerged(
+      `\
+      import { foo } from 'source'
+      // This is a test
+      const x = [1, 2, 3]
+      `,
+      `\
+      import { bar } from 'source'
+      // This is a test
+      const x = [4, 5, 6]
+      `,
+      `\
+      import { foo, bar } from 'source'
+      // This is a test
+      const x = [1, 2, 3, 4, 5, 6]
+      `
+    )
   })
 })
 
