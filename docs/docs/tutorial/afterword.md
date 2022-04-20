@@ -7,9 +7,7 @@ Will there be a chapters 8+ of the tutorial? We've spent a lot of time getting o
 
 So until next time, a bit of wisdom to help combat that next bout of every developer's nemesis, imposter syndrome:
 
-> "There is nothing noble in being superior to your fellow man; true nobility is being superior to your former self."
->
-> — Ernest Hemingway
+> _"There is nothing noble in being superior to your fellow man; true nobility is being superior to your former self."_ — Ernest Hemingway
 
 ## What's Next
 
