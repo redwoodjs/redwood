@@ -601,6 +601,25 @@ You could just write your own function and throw whatever you like, without usin
 
 This validation guarantees that the field(s) given in the first argument are unique in the database before executing the callback given in the last argument. If a record is found with the given fields then an error is thrown and the callback is not invoked.
 
+> **Enable Prisma Preview Feature**
+>
+> Being able to use transactions with the syntax used internally by `validateUniqueness()` is experimental for Prisma as of v2.29.0. You'll need to enable it as a preview feature. In your `api/db/schema.prisma` file:
+>
+> ```text {4}
+> generator client {
+>   provider        = "prisma-client-js"
+>   binaryTargets   = "native"
+>   previewFeatures = ["interactiveTransactions"]
+> }
+> ```
+>
+> You'll need to regenerate the prisma client and restart your dev server for changes to take effect:
+>
+> ```bash
+> yarn rw prisma generate
+> yarn rw dev
+>```
+
 The uniqueness guarantee is handled through Prisma's [transaction API](https://www.prisma.io/docs/concepts/components/prisma-client/transactions). Given this example validation:
 
 ```jsx
@@ -625,26 +644,9 @@ So `validateUniqueness()` first tries to find a record with the given fields, an
 
 > **Why use this when the database can verify uniqueness with a UNIQUE INDEX database constraint?**
 >
-> The error raised by Prisma when this happens is swallowed by GraphQL and so you can't report it to the user. This one will make it back to the browser. Also you may be in a situation where you can't have a unique index, but still want to make sure the data is unique before proceeding.
-
-#### Enable Prisma Preview Feature
-
-Being able to use transactions with the above syntax is experimental for Prisma as of v2.29.0, so you need to enable it as a preview feature. In your `api/db/schema.prisma` file:
-
-```text {4}
-generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = "native"
-  previewFeatures = ["interactiveTransactions"]
-}
-```
-
-You'll need to regenerate the prisma client and restart your dev server for changes to take effect:
-
-```bash
-yarn rw prisma generate
-yarn rw dev
-```
+> You may be in a situation where you can't have a unique index (supporting a legacy schema, perhaps), but still want to make sure the data is unique before proceeding. There is also the belief that you shouldn't have to count on the database to validate your data—that's a core concern of your business logic, and your business logic should live in your Services in a Redwood app.
+> 
+> Another issue is that the error raised by Prisma when a record validates a unique index is swallowed by GraphQL and so you can't report it to the user (there are still ways around this, but it involves catching and re-throwing a different error). The error raised by `validateUniqueness()` is already safe-listed and allowed to be sent to the browser. 
 
 #### Arguments
 
