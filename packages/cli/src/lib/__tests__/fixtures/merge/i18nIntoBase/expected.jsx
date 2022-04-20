@@ -51,7 +51,6 @@ const withI18n = (StoryFn, context) => {
   React.useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
-
   return (
     <I18nextProvider i18n={i18n}>
       <StoryFn />

@@ -398,7 +398,7 @@ const x = [1, 2, 3, 4, 5, 6]
   })
 })
 
-fdescribe('Integration tests', () => {
+describe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
     return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>
