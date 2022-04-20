@@ -53,9 +53,11 @@ A guideline for when to use cells is if your component needs some data from the 
 
 Usually in a blog the homepage will display a list of recent posts. This list is a perfect candidate for our first cell.
 
-> **Wait, don't we already have a home page?**
->
-> We do, but you will generally want to use a *cell* when you need data from the database. A best practice for Redwood is to create a Page for each unique URL your app has, but that you fetch and display data in Cells. So the existing HomePage will render this new cell as a child.
+:::info Wait, don't we already have a home page?
+
+We do, but you will generally want to use a *cell* when you need data from the database. A best practice for Redwood is to create a Page for each unique URL your app has, but that you fetch and display data in Cells. So the existing HomePage will render this new cell as a child.
+
+:::
 
 As you'll see repeatedly going forward, Redwood has a generator for this feature! Let's call this the "Articles" cell, since "Posts" was already used by our scaffold generator, and although the names won't clash (the scaffold files were created in the `Post` directory), it will be easier to keep them straight in our heads if the names are fairly different from each other. We're going to be showing multiple things, so we'll use the plural version "Articles," rather than "Article":
 
@@ -93,20 +95,22 @@ export const Success = ({ articles }) => {
 }
 ```
 
-> **Indicating Multiplicity to the Cell Generator**
->
-> When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
->
-> ```bash
-> yarn rw g cell blog_articles
-> yarn rw g cell blog-articles
-> yarn rw g cell blogArticles
-> yarn rw g cell BlogArticles
-> ```
->
-> You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
->
-> Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.js`.
+:::info Indicating Multiplicity to the Cell Generator
+
+When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.js`):
+
+```bash
+yarn rw g cell blog_articles
+yarn rw g cell blog-articles
+yarn rw g cell blogArticles
+yarn rw g cell BlogArticles
+```
+
+You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
+
+Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.js`.
+
+:::
 
 To get you off and running as quickly as possible the generator assumes you've got a root GraphQL query named the same thing as your cell and gives you the minimum query needed to get something out of the database. In this case the query is named `articles`:
 

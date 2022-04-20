@@ -64,20 +64,22 @@ Components
 
 This makes it easy to create variants of your component and have them all displayed together.
 
-> **Where did that sample blog post data come from?**
->
-> In your actual app you'd use this component like so:
->
-> ```jsx
-> <Article article={article} />
-> ```
->
-> Where the `article` in that prop comes from somewhere outside of this component. Here in Storybook there is no "outside" of this component, so we just send the article object into the prop directly.
->
-> **But where did the pre-filled article data come from?**
->
-> We (the Redwood team) added that to the story in the `redwood-tutorial` repo to show you what a story might look like after you hook up some sample data. Several of the stories need data like this, some inline and some in those `.mock.js` files. The rest of the tutorial will be showing you how to do this yourself with new components as you create them.
->
-> **Where did the *actual* text in the body come from?**
->
-> [Hipster Ipsum](https://hipsum.co/), a fun alternative to Lorem Ipsum filler text!
+:::info Where did that sample blog post data come from?
+
+In your actual app you'd use this component like so:
+
+```jsx
+<Article article={article} />
+```
+
+Where the `article` in that prop comes from somewhere outside of this component. Here in Storybook there is no "outside" of this component, so we just send the article object into the prop directly.
+
+**But where did the pre-filled article data come from?**
+
+We (the Redwood team) added that to the story in the `redwood-tutorial` repo to show you what a story might look like after you hook up some sample data. Several of the stories need data like this, some inline and some in those `.mock.js` files. The rest of the tutorial will be showing you how to do this yourself with new components as you create them.
+
+**Where did the *actual* text in the body come from?**
+
+[Hipster Ipsum](https://hipsum.co/), a fun alternative to Lorem Ipsum filler text!
+
+:::

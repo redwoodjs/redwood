@@ -215,23 +215,25 @@ What if you could request the conversion right in the route's path? Introducing 
 
 Voilà! Not only will this convert the `id` param to a number before passing it to your Page, it will prevent the route from matching unless the `id` path segment consists entirely of digits. If any non-digits are found, the router will keep trying other routes, eventually showing the `NotFoundPage` if no routes match.
 
-> **What if I want to pass some other prop to the cell that I don't need in the query, but do need in the Success/Loader/etc. components?**
->
-> All of the props you give to the cell will be automatically available as props in the render components. Only the ones that match the GraphQL variables list will be given to the query. You get the best of both worlds! In our post display above, if you wanted to display some random number along with the post (for some contrived, tutorial-like reason), just pass that prop:
->
-> ```jsx
-> <ArticleCell id={id} rand={Math.random()} />
-> ```
->
-> And get it, along with the query result (and even the original `id` if you want) in the component:
->
-> ```javascript
-> export const Success = ({ article, id, rand }) => {
->   //...
-> }
-> ```
->
-> Thanks again, Redwood!
+:::info What if I want to pass some other prop to the cell that I don't need in the query, but do need in the Success/Loader/etc. components?
+
+All of the props you give to the cell will be automatically available as props in the render components. Only the ones that match the GraphQL variables list will be given to the query. You get the best of both worlds! In our post display above, if you wanted to display some random number along with the post (for some contrived, tutorial-like reason), just pass that prop:
+
+```jsx
+<ArticleCell id={id} rand={Math.random()} />
+```
+
+And get it, along with the query result (and even the original `id` if you want) in the component:
+
+```javascript
+export const Success = ({ article, id, rand }) => {
+  //...
+}
+```
+
+Thanks again, Redwood!
+
+:::
 
 ### Displaying a Blog Post
 

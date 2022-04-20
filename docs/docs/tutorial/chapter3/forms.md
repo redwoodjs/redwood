@@ -566,9 +566,11 @@ export default ContactPage
 
 <img src="https://user-images.githubusercontent.com/300/146104647-25f1b2cf-a3cd-4737-aa2d-9aa984c08e39.png" />
 
-> **Error styling**
->
-> In addition to `className` and `errorClassName` you can also use `style` and `errorStyle`. Check out the [Form docs](../../forms.md) for more details on error styling.
+:::info Error styling
+
+In addition to `className` and `errorClassName` you can also use `style` and `errorStyle`. Check out the [Form docs](../../forms.md) for more details on error styling.
+
+:::
 
 And notice that if you fill in something in a field that's marked as an error, the error instantly goes away! This is great feedback for our users that they're doing what we want, and they don't have to wait to click the "Save" button again just to see if what they changed is now correct.
 

@@ -261,13 +261,15 @@ Now comes the ultimate test: creating a comment! LET'S DO IT:
 
 What happened here? Notice towards the end of the error message: `Field "postId" of required type "Int!" was not provided`. When we created our data schema we said that a post belongs to a comment via the `postId` field. And that field is required, so the GraphQL server is rejecting the request because we're not including that field. We're only sending `name` and `body`. Luckily we have access to the ID of the post we're commenting on thanks to the `article` object that's being passed into `Article` itself!
 
-> **Why didn't the Storybook story we wrote earlier expose this problem?**
->
-> We manually mocked the GraphQL response in the story, and our mock always returns a correct response, regardless of the input!
->
-> There's always a tradeoff when creating mock data—it greatly simplifies testing by not having to rely on the entire GraphQL stack, but that means if you want it to be as accurate as the real thing you basically need to *re-write the real thing in your mock*. In this case, leaving out the `postId` was a one-time fix so it's probably not worth going through the work of creating a story/mock/test that simulates what would happen if we left it off.
->
-> But, if `CommentForm` ended up being a component that was re-used throughout your application, or the code itself will go through a lot of churn because other developers will constantly be making changes to it, it might be worth investing the time to make sure the interface (the props passed to it and the expected return) are exactly what you want them to be.
+:::info Why didn't the Storybook story we wrote earlier expose this problem?
+
+We manually mocked the GraphQL response in the story, and our mock always returns a correct response, regardless of the input!
+
+There's always a tradeoff when creating mock data—it greatly simplifies testing by not having to rely on the entire GraphQL stack, but that means if you want it to be as accurate as the real thing you basically need to *re-write the real thing in your mock*. In this case, leaving out the `postId` was a one-time fix so it's probably not worth going through the work of creating a story/mock/test that simulates what would happen if we left it off.
+
+But, if `CommentForm` ended up being a component that was re-used throughout your application, or the code itself will go through a lot of churn because other developers will constantly be making changes to it, it might be worth investing the time to make sure the interface (the props passed to it and the expected return) are exactly what you want them to be.
+
+:::
 
 First let's pass the post's ID as a prop to `CommentForm`:
 
@@ -667,9 +669,11 @@ Now we'll try our comment query again, once with each `postId`:
 
 Great! Now that we've tested out the syntax let's use that in the service. You can exit the console by pressing Ctrl-C twice or typing `.exit`
 
-> **Where's the `await`?**
->
-> Calls to `db` return a Promise, which you would normally need to add an `await` to in order to get the results right away. Having to add `await` every time is pretty annoying though, so the Redwood console does it for you—Redwood `await`s so you don't have to!
+:::info Where's the `await`?
+
+Calls to `db` return a Promise, which you would normally need to add an `await` to in order to get the results right away. Having to add `await` every time is pretty annoying though, so the Redwood console does it for you—Redwood `await`s so you don't have to!
+
+:::
 
 #### Updating the Service
 

@@ -134,14 +134,18 @@ Now head back to [http://localhost:8910/admin/posts](http://localhost:8910/admin
 
 Let's create a new user that will represent the comment moderator. Since this is in development you can just make up an email address, but if you needed to this in a real system that verified email addresses you could use **The Plus Trick** to create a new, unique email address that is actually the same as your original email address!
 
-> The Plus Trick is a very handy feature of the email standard known as a "boxname", the idea being that you may have other incoming boxes besides one just named "Inbox" and by adding `+something` to your email address you can specify which box the mail should be sorted into. They don't appear to be in common use these days, but they are ridiculously helpful for us developers when we're constantly needing new email addresses for testing: it gives us an infinite number of *valid* email addresses—they all come to your regular inbox!
->
-> Just append +something to your email address before the @:
->
-> * `jane.doe+testing@example.com` will go to `jane.doe@example.com`
-> * `dom+20210909@example.com` will go to `dom@example.com`
->
-> Note that not all providers support this plus-based syntax, but the major ones (Gmail, Yahoo, Microsoft, Apple) do. If you find that you're not receiving emails at your own domain, you may want to create a free account at one of these providers just to use for testing.
+:::tip The Plus Trick
+
+The Plus Trick is a very handy feature of the email standard known as a "boxname", the idea being that you may have other incoming boxes besides one just named "Inbox" and by adding `+something` to your email address you can specify which box the mail should be sorted into. They don't appear to be in common use these days, but they are ridiculously helpful for us developers when we're constantly needing new email addresses for testing: it gives us an infinite number of *valid* email addresses—they all come to your regular inbox!
+
+Just append +something to your email address before the @:
+
+* `jane.doe+testing@example.com` will go to `jane.doe@example.com`
+* `dom+20210909@example.com` will go to `dom@example.com`
+
+Note that not all providers support this plus-based syntax, but the major ones (Gmail, Yahoo, Microsoft, Apple) do. If you find that you're not receiving emails at your own domain, you may want to create a free account at one of these providers just to use for testing.
+
+:::
 
 In our case we're not sending emails anywhere, and don't require them to be verified, so you can just use a made-up email for now. `moderator@moderator.com` has a nice ring to it.
 
@@ -381,9 +385,11 @@ export const moderatorView = () => {
 }
 ```
 
-> **Where did `mockCurrentUser()` come from?**
->
-> Similar to `mockGraphQLQuery()` and `mockGraphQLMutation()`, `mockCurrentUser()` is a global available in Storybook automatically, no need to import.
+:::info Where did `mockCurrentUser()` come from?
+
+Similar to `mockGraphQLQuery()` and `mockGraphQLMutation()`, `mockCurrentUser()` is a global available in Storybook automatically, no need to import.
+
+:::
 
 `mockCurrentUser()` accepts an object and you can put whatever you want in there (it should be similar to what you return in `getCurrentUser()` in `api/src/lib/auth.js`). But since we want `hasRole()` to work properly then the object must have a `roles` key that is a string or an array of strings.
 
