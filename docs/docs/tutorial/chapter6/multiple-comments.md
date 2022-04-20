@@ -4,21 +4,25 @@ Our amazing blog posts will obviously garner a huge and passionate fanbase and w
 
 Let's think about where our comments are being displayed. Probably not on the homepage, since that only shows a summary of each post. A user would need to go to the full page to show the comments for that blog post. But that page is only fetching the data for the single blog post itself, nothing else. We'll need to get the comments and since we'll be fetching *and* displaying them, that sounds like a job for a Cell.
 
-> **Couldn't the query for the blog post page also fetch the comments?**
->
-> Yes, it could! But the idea behind Cells is to make components even more [composable](https://en.wikipedia.org/wiki/Composability) by having them be responsible for their own data fetching *and* display. If we rely on a blog post to fetch the comments then the new Comments component we're about to create now requires something *else* to fetch the comments and pass them in. If we re-use the Comments component somewhere, now we're fetching comments in two different places.
->
-> **But what about the Comment component we just made, why doesn't that fetch its own data?**
->
-> There aren't any instances I (the author) could think of where we would ever want to display only a single comment in isolation—it would always be a list of all comments on a post. If displaying a single comment was common for your use case then it could definitely be converted to a **CommentCell** and have it responsible for pulling the data for that single comment itself. But keep in mind that if you have 50 comments on a blog post, that's now 50 GraphQL calls that need to go out, one for each comment. There's always a trade-off!
->
-> **Then why make a standalone Comment component at all? Why not just do all the display in the CommentsCell?**
->
-> We're trying to start in small chunks to make the tutorial more digestible for a new audience so we're starting simple and getting more complex as we go. But it also just feels *nice* to build up a UI from these smaller chunks that are easier to reason about and keep separate in your head.
->
-> **But what about—**
->
-> Look, we gotta end this sidebar and get back to building this thing. You can ask more questions later, promise!
+:::info
+
+**Couldn't the query for the blog post page also fetch the comments?**
+
+Yes, it could! But the idea behind Cells is to make components even more [composable](https://en.wikipedia.org/wiki/Composability) by having them be responsible for their own data fetching *and* display. If we rely on a blog post to fetch the comments then the new Comments component we're about to create now requires something *else* to fetch the comments and pass them in. If we re-use the Comments component somewhere, now we're fetching comments in two different places.
+
+**But what about the Comment component we just made, why doesn't that fetch its own data?**
+
+There aren't any instances I (the author) could think of where we would ever want to display only a single comment in isolation—it would always be a list of all comments on a post. If displaying a single comment was common for your use case then it could definitely be converted to a **CommentCell** and have it responsible for pulling the data for that single comment itself. But keep in mind that if you have 50 comments on a blog post, that's now 50 GraphQL calls that need to go out, one for each comment. There's always a trade-off!
+
+**Then why make a standalone Comment component at all? Why not just do all the display in the CommentsCell?**
+
+We're trying to start in small chunks to make the tutorial more digestible for a new audience so we're starting simple and getting more complex as we go. But it also just feels *nice* to build up a UI from these smaller chunks that are easier to reason about and keep separate in your head.
+
+**But what about—**
+
+Look, we gotta end this sidebar and get back to building this thing. You can ask more questions later, promise!
+
+:::
 
 ### Storybook
 
@@ -95,7 +99,11 @@ export const standard = () => ({
 })
 ```
 
-> What's this `standard` thing? Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
+:::info
+
+What's this `standard` thing? Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
+
+:::
 
 Storybook refreshes and we've got comments! It's a little hard to distinguish between the two separate comments because they're right next to each other:
 
@@ -117,7 +125,11 @@ export const Success = ({ comments }) => {
 }
 ```
 
-> `space-y-8` is a handy Tailwind class that puts a space *between* elements, but not above or below the entire stack (which is what would happen if you gave each `<Comment>` its own top/bottom margin).
+:::tip
+
+`space-y-8` is a handy Tailwind class that puts a space *between* elements, but not above or below the entire stack (which is what would happen if you gave each `<Comment>` its own top/bottom margin).
+
+:::
 
 Looking good! Let's add our CommentsCell to the actual blog post display page:
 
@@ -152,9 +164,13 @@ export default Article
 
 If we are *not* showing the summary, then we'll show the comments. Take a look at the **Full** and **Summary** stories in Storybook and you should see comments on one and not on the other.
 
-> **Shouldn't the CommentsCell cause an actual GraphQL request? How does this work?**
->
-> Redwood has added some functionality around Storybook so that if you're testing a component that itself isn't a Cell (like the `Article` component) but that renders a cell (like `CommentsCell`), then it will mock the GraphQL and use the `standard` mock that goes along with that Cell. Pretty cool, huh?
+:::info
+
+**Shouldn't the CommentsCell cause an actual GraphQL request? How does this work?**
+
+Redwood has added some functionality around Storybook so that if you're testing a component that itself isn't a Cell (like the `Article` component) but that renders a cell (like `CommentsCell`), then it will mock the GraphQL and use the `standard` mock that goes along with that Cell. Pretty cool, huh?
+
+:::
 
 Adding the comments to the article display has exposed another design issue: the comments are sitting right up underneath the article text:
 
@@ -351,6 +367,10 @@ Notice we're importing the mock from a completely different component—nothing 
 
 We're introducing a new test function here, `waitFor()`, which will wait for things like GraphQL queries to finish running before checking for what's been rendered. Since `Article` renders `CommentsCell` we need to wait for the `Success` component of `CommentsCell` to be rendered.
 
-> The summary version of `Article` does *not* render the `CommentsCell`, but we should still wait. Why? If we did mistakenly start including `CommentsCell`, but didn't wait for the render, we would get a falsely passing test—indeed the text isn't on the page but that's because it's still showing the `Loading` component! If we had waited we would have seen the actual comment body get rendered, and the test would (correctly) fail.
+:::info
+
+The summary version of `Article` does *not* render the `CommentsCell`, but we should still wait. Why? If we did mistakenly start including `CommentsCell`, but didn't wait for the render, we would get a falsely passing test—indeed the text isn't on the page but that's because it's still showing the `Loading` component! If we had waited we would have seen the actual comment body get rendered, and the test would (correctly) fail.
+
+:::
 
 Okay we're finally ready to let users create their comments.
