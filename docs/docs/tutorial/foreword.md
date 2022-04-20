@@ -8,7 +8,7 @@ If you went through an earlier version of this tutorial you may remember it bein
 
 ## Callouts
 
-You'll find some callouts throughout the text to draw your attention to some additional info or things to watch out for:
+You'll find some callouts throughout the text to draw your attention:
 
 :::note
 
@@ -32,7 +32,7 @@ It's usually something that goes into more detail about a specific point, refers
 
 :::info
 
-This tutorial assumes you are using version >= 0.50.0 (or v1.0 release candidate final.1) of RedwoodJS.
+This tutorial assumes you are using version 1.0.0 or greater of RedwoodJS.
 
 :::
 
