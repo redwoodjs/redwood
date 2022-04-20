@@ -454,7 +454,7 @@ To avoid this, we'd better implement the `deleteImage` mutation. It will enable 
 
 You are going to need a new ENV var called `REDWOOD_ENV_FILESTACK_SECRET`, which you can find in **Filestack > Security > Policy & Signature:** App Secret. Put this into your `.env` file (don't use this one of course, paste your own in there):
 
-```.dotenv
+```.dotenv title=".env"
 REDWOOD_ENV_FILESTACK_SECRET= PWRWGEKFZ2HJMXWSBP3YYI5ERZ
 ```
 
