@@ -136,9 +136,13 @@ Assert that the ellipsis is present
 
 As soon as you saved that test file the test should have run and passed! Press `a` to run the whole suite if you want to make sure nothing else broke. Remember to press `o` to go back to only testing changes again. (There's nothing wrong with running the full test suite each time, but it will take longer than only testing the things that have changed since the last time you committed your code.)
 
-> **What's the difference between `getByText()` and `queryByText()`?**
->
-> `getByText()` will throw an error if the text isn't found in the document, whereas `queryByText()` will  return `null` and let you continue with your testing (and is one way to test that some text is *not* present on the page). You can read more about these in the [DOM Testing Library Queries](https://testing-library.com/docs/dom-testing-library/api-queries) docs.
+:::info
+
+**What's the difference between `getByText()` and `queryByText()`?**
+
+`getByText()` will throw an error if the text isn't found in the document, whereas `queryByText()` will  return `null` and let you continue with your testing (and is one way to test that some text is *not* present on the page). You can read more about these in the [DOM Testing Library Queries](https://testing-library.com/docs/dom-testing-library/api-queries) docs.
+
+:::
 
 To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` *is* in the document! Make sure to put the `summary={true}` back before we continue.
 
@@ -146,9 +150,13 @@ To double check that we're testing what we think we're testing, open up `Article
 
 Mocks are used when you want to define the data that would normally be returned by GraphQL. In cells, a GraphQL call goes out (the query defined by **QUERY**) and returned to the **Success** component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
 
-> **If the server is being mocked, how do we test the api-side code?**
->
-> We'll get to that next when we create a new feature for our blog from scratch!
+:::info
+
+**If the server is being mocked, how do we test the api-side code?**
+
+We'll get to that next when we create a new feature for our blog from scratch!
+
+:::
 
 The names you give your mocks are then available in your tests and stories files. Just import the one you want to use (`standard` is imported for you in generated test files) and you can use the spread syntax to pass it through to your **Success** component.
 
