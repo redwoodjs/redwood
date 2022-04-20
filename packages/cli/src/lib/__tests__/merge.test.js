@@ -1,8 +1,71 @@
 import path from 'path'
 
+import { parse, traverse } from '@babel/core'
 import fs from 'fs-extra'
 
 import { merge } from '../merge'
+import { semanticIdentity } from '../merge/semantics'
+
+describe('Semantic behavior', () => {
+  const code = `\
+import { foo } from 'src'
+
+export const globalTypes = {
+  locale: {
+    name: 'Locale',
+    description: 'Internationalization locale',
+    defaultValue: 'en',
+    toolbar: {
+      icon: 'globe',
+      items: [
+        { value: 'en', right: '🇺🇸', title: 'English' },
+        { value: 'fr', right: '🇫🇷', title: 'Français' },
+      ],
+    },
+  },
+}
+
+const func = (param1, param2) => {
+    return param1 + param2
+}`
+  const programNode = (() => {
+    let _result = undefined
+    traverse(parse(code), {
+      Program(path) {
+        _result = path
+      },
+    })
+    expect(_result !== undefined)
+    return _result
+  })()
+
+  const tests = [
+    [
+      'identifies import declarations by source',
+      'body.0',
+      'Program.ImportDeclaration.source.src',
+    ],
+    [
+      'identifies export declarations',
+      'body.1.declaration.declarations.0',
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes',
+    ],
+    [
+      'identifies top level object properties',
+      'body.1.declaration.declarations.0.init.properties.0',
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale',
+    ],
+    [
+      'identifies nested object properties',
+      'body.1.declaration.declarations.0.init.properties.0.value.properties.3.value.properties.1',
+      'Program.ExportNamedDeclaration.VariableDeclaration.globalTypes.ObjectExpression.locale.ObjectExpression.toolbar.ObjectExpression.items',
+    ],
+  ]
+  test.each(tests)('%s', (_it, key, semanticName) => {
+    const node = programNode.get(key)
+    expect(semanticIdentity(node)).toBe(semanticName)
+  })
+})
 
 describe('Import behavior', () => {
   it('deduplicates identical import namespace identifiers', () => {
@@ -246,26 +309,28 @@ const x = {
 `
     expect(merge(base, ext)).toBe(merged)
   })
+  it('merges nested arrays', () => {
+    const base = "const x = [1, 2, 3, ['a', 'b', 'c']]"
+    const ext = "const x = [1, 5, ['c', 'd', 'e']]"
+    const merged = "const x = [1, 2, 3, ['a', 'b', 'c', 'd', 'e'], 5]\n"
+    expect(merge(base, ext)).toBe(merged)
+  })
 })
 
 describe('nop behavior', () => {
   it('does not merge strings', () => {
     const base = 'const x = "foo"'
     const ext = 'const x = "bar"'
-    // TODO: File issue with babel. For the life of me I can't figure out why
-    // `stringNode.insertAfter(otherStringNode)` yields
-    // (otherStringNode, stringNode). Need a minimal reproduction.
-    const merged = "const x = ('bar', 'foo')\n"
+    const merged = "const x = 'foo'\n"
     expect(merge(base, ext)).toBe(merged)
   })
   it('does not merge nested strings', () => {
     const base = 'const x = { foo: { bar: "baz" } }'
     const ext = 'const x = { foo: { bar: "bat" } }'
-    // As above. Why is 'bat' first here? Perplexing.
     const merged = `\
 const x = {
   foo: {
-    bar: ('bat', 'baz'),
+    bar: 'baz',
   },
 }
 `
@@ -333,7 +398,7 @@ const x = [1, 2, 3, 4, 5, 6]
   })
 })
 
-describe('Integration tests', () => {
+fdescribe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
     return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>

@@ -1,109 +1,101 @@
-import { parse, traverse, NodePath } from '@babel/core'
+import path from 'path'
+
+import { parse, traverse } from '@babel/core'
 import generate from '@babel/generator'
 import prettier from 'prettier'
 
+import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+
 import { forEachFunctionOn, deletePropertyIf } from './algorithms'
+import { isSemanticAncestor, semanticIdentity } from './semantics'
 import { defaultMergeStrategy, mergeUtility } from './strategy'
 
-// INFO: "Semantics"
-// For this merge approach, we need to uniquely identify declarations across multiple JS files,
-// regardless of physical position. I.e, if two files both contain "export const foo = 1", it doesn't
-// matter where in the files they appear. The two exports should be considered identical for merging
-// purposes. So, a declaration's "semantic identity", roughly speaking, is an identifier such that
-// two declarations with the same semantic identity would produce a name collision. This is handled
-// slightly differently for ImportDeclarations, which are uniquely identified by their import source.
-
-// e.g. ['program', 'body', 'ExportNamedDeclaration', 'declaration', 'declarations', 'VariableDeclarator']
-function semanticAncestry(nodePath) {
-  const semanticLocation = (path) =>
-    path.inList ? [path.listKey, path.type] : [path.key]
-
-  return nodePath
-    .getAncestry()
-    .reduce((acc, i) => [...semanticLocation(i), ...acc], [])
-}
-
-function semanticName(path) {
-  switch (path.type) {
-    case 'ImportDeclaration':
-      return ['source', path.node.source.value]
-    default:
-      return Object.keys(path.getBindingIdentifiers())
+// This feels like a weird way to achieve something so simple in Babel,
+// but I can't find a better alternative.
+function getProgramPath(ast) {
+  let programPath = undefined
+  traverse(ast, {
+    Program(path) {
+      programPath = path
+    },
+  })
+  if (programPath === undefined) {
+    throw new Error('Unable to find Program node in AST')
   }
+  return programPath
 }
 
-function semanticIdentity(path) {
-  const identifiers = semanticName(path)
-  return (
-    // If a path has no semantic name, it cannot be merged directly. It must be merged as a child
-    // of a parent node which has an identity. I.e, given `const x = {foo:'foo'}`, we can only merge
-    // the initialization expression `{foo:'foo'}` as a recursive merge of the parent
-    // VariableDeclaration expression, `const x = {foo:'foo'}`
-    identifiers.length && [...semanticAncestry(path), ...identifiers].join('.')
-  )
+// When merging, trailing comments are a bit nasty. A comment can be parsed as a leading comment
+// of one expression, and a trailing comment of a subsequent expression. This is an open issue for
+// Babel: https://github.com/babel/babel/issues/7002, but we can work around it pretty easily with
+// the following.
+function stripTrailingComments(...asts) {
+  for (const ast of asts) {
+    traverse(ast, {
+      enter(path) {
+        path.node.trailingComments = []
+      },
+    })
+  }
 }
 
 function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
-  if (callerMergeStrategy['Program'] !== undefined) {
-    throw new Error('You may not specify a merge strategy for a Program node.')
-    // because we need to visit that node as part of our implementation details.
-  }
-
-  const identities = {}
-  const lastSeenOfType = {}
   const strategy = { ...defaultMergeStrategy, ...callerMergeStrategy }
   const strategyWithUtility = { ...mergeUtility, ...strategy }
 
-  const baseVisitor = {
-    Program: (path) => {
-      lastSeenOfType['Program'] = path
-    },
+  const baseProgramPath = getProgramPath(baseAST)
+  const nextInsertPositionForType = {}
+  const saveNextInsertPosition = (path) => {
+    const pos = path.getStatementParent()
+    nextInsertPositionForType[pos.type] = pos
   }
+  const insertAtNextPosition = (path) => {
+    const { node, type } = path.getStatementParent()
+    nextInsertPositionForType[type] =
+      type in nextInsertPositionForType
+        ? nextInsertPositionForType[type].insertAfter(node).pop()
+        : baseProgramPath.pushContainer('body', node).pop()
+  }
+
+  const identities = {}
+  const baseVisitor = {}
   const extVisitor = {}
 
   forEachFunctionOn(strategy, (typename, _func) => {
-    extVisitor[typename] = (path) => {
-      const semanticId = semanticIdentity(path)
-      semanticId && (identities[semanticId] ||= []).push(path)
+    extVisitor[typename] = {
+      enter(path) {
+        const semanticId = semanticIdentity(path)
+        semanticId && (identities[semanticId] ||= []).push(path)
+      },
     }
     baseVisitor[typename] = {
-      enter: (path) => {
-        lastSeenOfType[typename] = path
+      exit(path) {
+        saveNextInsertPosition(path)
         const id = semanticIdentity(path)
         if (id && id in identities) {
-          // In rare cases (e.g. multiple imports from the same source), we may have multiple
-          // declarations with the same identity. In this case, we perform a left-associative
-          // operation, merging each declaration as ((base <=> extPath1) <=> extPath2),
-          // where <=> is merge.
           identities[id].forEach((extPath) =>
             strategyWithUtility[typename](path, extPath, {
               semanticLocation: id,
             })
           )
-
-          if (path.shouldSkip) {
-            const ancestry = semanticAncestry(path).join('.')
-            deletePropertyIf(identities, ([k, _]) => k.startsWith(ancestry))
-          } else {
-            delete identities[id]
-          }
+          deletePropertyIf(identities, ([k, _]) => isSemanticAncestor(id, k))
         }
       },
     }
   })
 
+  stripTrailingComments(baseAST, extAST)
   traverse(extAST, extVisitor)
   traverse(baseAST, baseVisitor)
 
-  Object.values(identities)
-    .flat()
-    .forEach((path) => {
-      const { node, type } = path.getStatementParent()
-      lastSeenOfType[type] =
-        type in lastSeenOfType
-          ? lastSeenOfType[type].insertAfter(node).pop()
-          : lastSeenOfType['Program'].pushContainer('body', node).pop()
-    })
+  const handled = []
+  for (const [k, v] of Object.entries(identities)) {
+    if (handled.some((h) => isSemanticAncestor(h, k))) {
+      continue
+    }
+    v.forEach(insertAtNextPosition)
+    handled.push(k)
+  }
 }
 
 export function merge(base, extension, strategy) {
@@ -123,13 +115,17 @@ export function merge(base, extension, strategy) {
   // It is no longer possible to configure babel's generator to produce consistent single/double
   // quotes. So, we run `prettier` here to yield predictable and clean code.
 
-  // TODO: point this at prettier.config.js at the project root instead of copying the values.
-  // Note that you can pass { filename: ... } to the prettier options.
-  return prettier.format(code, {
-    parser: 'babel',
-    bracketSpacing: true,
-    tabWidth: 2,
-    semi: false,
-    singleQuote: true,
-  })
+  if (process.env.JEST_WORKER_ID) {
+    return prettier.format(code, {
+      parser: 'babel',
+      bracketSpacing: true,
+      tabWidth: 2,
+      semi: false,
+      singleQuote: true,
+    })
+  } else {
+    return prettier.format(code, {
+      filepath: path.join(getRedwoodPaths().base, 'prettier.config.js'),
+    })
+  }
 }

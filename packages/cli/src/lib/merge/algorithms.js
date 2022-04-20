@@ -39,7 +39,7 @@ export function sieve(...listRulePairs) {
 export function pushUnique(eq, arr, ...items) {
   itemloop: for (const i of items) {
     for (const j of arr) {
-      if (eq(i, j)) {
+      if (eq(j, i)) {
         continue itemloop
       }
     }
