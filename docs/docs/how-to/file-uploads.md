@@ -471,7 +471,7 @@ export const deleteImage = async({ id }) => {
   const image = await db.image.find({ where: { id } })
 
   /** @manual the `security.handle` is the unique part of the Filestack file's url. */
-  const handle = /\w+$/.exec(image.url).pop()
+  const handle = image.url.split('/').pop()
   
   const security = Filestack.getSecurity(
     {
