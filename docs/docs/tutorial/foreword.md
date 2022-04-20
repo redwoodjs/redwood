@@ -10,19 +10,19 @@ If you went through an earlier version of this tutorial you may remember it bein
 
 You'll find some callouts throughout the text to draw your attention:
 
-:::note
+:::tip
 
 They might look like this...
 
 :::
 
-:::tip
+:::caution
 
 or sometimes like this...
 
 :::
 
-:::caution
+:::danger
 
 or maybe even like this!
 
