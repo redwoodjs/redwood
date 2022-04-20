@@ -66,19 +66,23 @@ Redwood includes [integrations](../../authentication.md) for several of the most
 
 As for our blog, we're going to use self-hosted authentication (named *dbAuth* in Redwood) since it's the simplest to get started with and doesn't involve any third party signups.
 
-> **Authentication vs. Authorization**
->
-> There are two terms which contain a lot of letters, starting with an "A" and ending in "ation" (which means you could rhyme them if you wanted to) that become involved in most discussions about login:
->
-> * Authentication
-> * Authorization
->
-> Here is how Redwood uses these terms:
->
-> * **Authentication** deals with determining whether someone is who they say they are, generally by "logging in" with an email and password, or a third party provider like Auth0.
-> * **Authorization** is whether a user (who has usually already been authenticated) is allowed to do something they want to do. This generally involves some combination of roles and permission checking before allowing access to a URL or feature of your site.
->
-> This section of the tutorial focuses on **Authentication** only. See [chapter 7 of the tutorial](../chapter7/rbac.md) to learn about Authorization in Redwood.
+:::info
+
+**Authentication vs. Authorization**
+
+There are two terms which contain a lot of letters, starting with an "A" and ending in "ation" (which means you could rhyme them if you wanted to) that become involved in most discussions about login:
+
+* Authentication
+* Authorization
+
+Here is how Redwood uses these terms:
+
+* **Authentication** deals with determining whether someone is who they say they are, generally by "logging in" with an email and password, or a third party provider like Auth0.
+* **Authorization** is whether a user (who has usually already been authenticated) is allowed to do something they want to do. This generally involves some combination of roles and permission checking before allowing access to a URL or feature of your site.
+
+This section of the tutorial focuses on **Authentication** only. See [chapter 7 of the tutorial](../chapter7/rbac.md) to learn about Authorization in Redwood.
+
+:::
 
 ## Auth Setup
 
@@ -291,11 +295,15 @@ We're back in business! Once you add authentication into your app you'll probabl
 
 Now that our pages are behind login, let's actually create a login page so that we can see them again.
 
-> **Skipping auth altogether for `posts` and `post` feels bad somehow...**
->
-> Ahh, good eye. While posts don't currently expose any particularly secret information, what if we eventually add a field like `publishStatus` where you could mark a post as `draft` so that it doesn't show on the homepage. But, if you knew enough about GraphQL, you could easily request all posts in the database and be able to read all the drafts!
->
-> It would be more future-proof to create a *new* endpoint for public display of posts, something like `publicPosts` and `publicPost` that will have built-in logic to only ever return a minimal amount of data and leave the default `posts` and `post` queries returning all the data for a post, something that only the admin will have access to. (Or do the opposite: keep `posts` and `post` as public and create new `adminPosts` and `adminPost` endpoints that can contain sensitive information.)
+:::info
+
+**Skipping auth altogether for `posts` and `post` feels bad somehow...**
+
+Ahh, good eye. While posts don't currently expose any particularly secret information, what if we eventually add a field like `publishStatus` where you could mark a post as `draft` so that it doesn't show on the homepage. But, if you knew enough about GraphQL, you could easily request all posts in the database and be able to read all the drafts!
+
+It would be more future-proof to create a *new* endpoint for public display of posts, something like `publicPosts` and `publicPost` that will have built-in logic to only ever return a minimal amount of data and leave the default `posts` and `post` queries returning all the data for a post, something that only the admin will have access to. (Or do the opposite: keep `posts` and `post` as public and create new `adminPosts` and `adminPost` endpoints that can contain sensitive information.)
+
+:::
 
 ## Login & Signup Pages
 
