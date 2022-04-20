@@ -348,7 +348,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-service'
+        'https://redwoodjs.com/docs/cli-commands#generate-service'
       )}`
     )
   Object.entries(defaults).forEach(([option, config]) => {

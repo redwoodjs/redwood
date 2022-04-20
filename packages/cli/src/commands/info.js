@@ -9,7 +9,7 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/reference/command-line-interface#info'
+      'https://redwoodjs.com/docs/cli-commands#info'
     )}`
   )
 }
