@@ -76,7 +76,7 @@ You can even try submitting the form right in Storybook! If you leave "name" or 
 
 ### Submitting
 
-Submitting the form should use the `createComment` function we added to our services and GraphQL. We'll need to add a mutation to the form component and an `onSubmit` hander to the form so that the create can be called with the data in the form. And since `createComment` could return an error we'll add the **FormError** component to display it:
+Submitting the form should use the `createComment` function we added to our services and GraphQL. We'll need to add a mutation to the form component and an `onSubmit` handler to the form so that the create can be called with the data in the form. And since `createComment` could return an error we'll add the **FormError** component to display it:
 
 ```jsx title="web/src/components/CommentForm/CommentForm.js"
 import {
@@ -736,7 +736,7 @@ export const standard = defineScenario({
 })
 ```
 
-Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting commnents for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
+Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting comments for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
 
 ```jsx title="api/src/services/comments/comments.test.js"
 import { comments, createComment } from './comments'

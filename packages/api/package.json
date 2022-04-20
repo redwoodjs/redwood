@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -31,22 +31,22 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/client": "3.11.1",
-    "cross-undici-fetch": "0.1.28",
+    "@prisma/client": "3.12.0",
+    "cross-undici-fetch": "0.3.0",
     "crypto-js": "4.1.1",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "7.9.2",
+    "pino": "7.10.0",
     "title-case": "3.0.3",
     "uuid": "8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@redwoodjs/auth": "1.0.0",
+    "@redwoodjs/auth": "1.1.0",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.2",
@@ -57,8 +57,8 @@
     "typescript": "4.6.3"
   },
   "peerDependencies": {
-    "@clerk/clerk-sdk-node": "2.10.0",
-    "@magic-sdk/admin": "1.4.0",
+    "@clerk/clerk-sdk-node": "3.3.6",
+    "@magic-sdk/admin": "1.4.1",
     "firebase-admin": "10.0.2"
   },
   "peerDependenciesMeta": {
