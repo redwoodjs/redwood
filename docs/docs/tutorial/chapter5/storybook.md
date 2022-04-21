@@ -130,7 +130,7 @@ Where the `article` in that prop comes from somewhere outside of this component.
 
 **But where did the pre-filled article data come from?**
 
-We (the Redwood team) added that to the story in the `redwood-tutorial` repo to show you what a story might look like after you hook up some sample data. Several of the stories need data like this, some inline and some in those `.mock.js` files. The rest of the tutorial will be showing you how to do this yourself with new components as you create them.
+We (the Redwood team) added that to the story in the `redwood-tutorial` repo to show you what a story might look like after you hook up some sample data. Several of the stories need data like this, some inline and some in those `.mock.{js,ts}` files. The rest of the tutorial will be showing you how to do this yourself with new components as you create them.
 
 **Where did the *actual* text in the body come from?**
 
