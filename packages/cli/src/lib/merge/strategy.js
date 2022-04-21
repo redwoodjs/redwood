@@ -1,37 +1,56 @@
 import * as t from '@babel/types'
 
-import { fillUnique, nodeIs, overlap, pushUnique, sieve } from './algorithms'
+import { fillUnique, nodeIs, pushUnique, sieve } from './algorithms'
 
-const OPAQUE_UID = 'RW_MERGE_OPAQUE_UID'
+const OPAQUE_UID_TAG =
+  'RW_MERGE_OPAQUE_UID_Q2xldmVyIHlvdSEgSGF2ZSBhIGNvb2tpZS4='
 
-export const mergeUtility = {
-  opaquely: (strategy) => {
-    strategy[OPAQUE_UID] = true
-    return strategy
-  },
-  isOpaque: (strategy) => {
-    return strategy[OPAQUE_UID] === true
-  },
-  keepBoth: (base, ext) => {
-    base.insertAfter(ext.node)
-    base.skip()
-  },
-  keepBothStatementParents: (base, ext) => {
-    base.getStatementParent().insertAfter(ext.getStatementParent().node)
-    base.skip()
-  },
-  keepBase: (_base, _ext) => {},
-  keepExtension: (base, ext) => {
-    base.replaceWith(ext)
-    base.skip()
-  },
+function requireSameType(base, ext) {
+  if (base.type !== ext.type) {
+    throw new Error(
+      'Attempting to merge nodes with different types. This is not yet supported.'
+    )
+  }
 }
 
-export const defaultMergeStrategy = {
-  ArrowFunctionExpression: mergeUtility.opaquely(
-    mergeUtility.keepBothStatementParents
-  ),
-  FunctionDeclaration: mergeUtility.opaquely(mergeUtility.keepBoth),
+function requireStrategyExists(base, _ext, strategy, strategyName) {
+  if (!(base.type in strategy)) {
+    throw new Error(
+      `Attempting to ${strategyName} nodes that do not have an ${strategyName} strategy.`
+    )
+  }
+}
+
+export function opaquely(strategy) {
+  strategy[OPAQUE_UID_TAG] = true
+  return strategy
+}
+
+export function isOpaque(strategy) {
+  return strategy[OPAQUE_UID_TAG] === true
+}
+
+export const keepBase = opaquely(() => {})
+
+export const keepBoth = opaquely((base, ext) => {
+  base.insertAfter(ext.node)
+})
+
+export const keepExtension = opaquely((base, ext) => {
+  base.replaceWith(ext)
+})
+
+export const keepBothStatementParents = opaquely((base, ext) => {
+  // This creates an ambiguity. How do we treat nodes "between" base and its statement parent? Do we
+  // recursively merge those, or not? In other words, are we opaque starting from base, or starting
+  // from base.getStatementParent()? If it's the former, this currently works - the node reducer of
+  // keepBothStatementParents marks the node as opaque. If it's the latter, this is wrong - again,
+  // the node marked is opaque, but nodes which are children of base.getStatementParent(), but
+  // parents of base will still be recursively merged by other strategies. I'm not sure what to do.
+  base.getStatementParent().insertAfter(ext.getStatementParent().node)
+})
+
+const interleaveStrategy = {
   ImportDeclaration(baseImport, extImport) {
     const baseSpecs = baseImport.node.specifiers
     const extSpecs = extImport.node.specifiers
@@ -51,7 +70,7 @@ export const defaultMergeStrategy = {
     // Rule 1: If there's exactly 1 import with 0 specifiers, it's a side-effect import and should
     // not be merged, because adding specifiers would change its meaning.
     if (!baseSpecs.length !== !extSpecs.length) {
-      return this.keepBothStatementParents(baseImport, extImport)
+      return keepBothStatementParents(baseImport, extImport)
     }
 
     // Rule 2: Default specifiers must appear first, and be unique in a statement.
@@ -81,18 +100,42 @@ export const defaultMergeStrategy = {
       )
     }
   },
-  ArrayExpression(baseArray, extArray) {
-    pushUnique(
-      (lhs, rhs) => lhs.type === rhs.type && lhs.value === rhs.value,
-      baseArray.node.elements,
-      ...extArray.node.elements
-    )
+}
+export function interleave(base, ext) {
+  requireSameType(base, ext)
+  requireStrategyExists(base, ext, interleaveStrategy, 'interleave')
+  return interleaveStrategy[base.type](base, ext)
+}
+
+const concatStrategy = {
+  ArrayExpression(base, ext) {
+    base.node.elements = [...base.node.elements, ...ext.node.elements]
   },
-  ObjectExpression(baseObject, extObject) {
-    pushUnique(
-      (lhs, rhs) => lhs.key.name === rhs.key.name,
-      baseObject.node.properties,
-      ...extObject.node.properties
-    )
+  ObjectExpression(base, ext) {
+    base.node.properties = [...base.node.properties, ...ext.node.properties]
   },
+  StringLiteral(base, ext) {
+    base.node.value = base.node.value.concat(ext.node.value)
+  },
+}
+export function concat(base, ext) {
+  requireSameType(base, ext)
+  requireStrategyExists(base, ext, concatStrategy, 'concat')
+  return concatStrategy[base.type](base, ext)
+}
+
+const concatUniqueStrategy = {
+  ArrayExpression(base, ext, eq) {
+    pushUnique(eq, base.node.elements, ...ext.node.elements)
+  },
+  ObjectExpression(base, ext, eq) {
+    pushUnique(eq, base.node.properties, ...ext.node.properties)
+  },
+}
+export function concatUnique(equality) {
+  return (base, ext) => {
+    requireSameType(base, ext)
+    requireStrategyExists(base, ext, concatUniqueStrategy, 'concatUnique')
+    return concatUniqueStrategy[base.type](base, ext, equality)
+  }
 }

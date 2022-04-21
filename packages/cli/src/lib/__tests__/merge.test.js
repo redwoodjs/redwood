@@ -3,6 +3,22 @@ import path from 'path'
 import fs from 'fs-extra'
 
 import { merge } from '../merge'
+import {
+  concatUnique,
+  interleave,
+  keepBoth,
+  keepBothStatementParents,
+} from '../merge/strategy'
+
+function mergeConfig(base, ext) {
+  return merge(base, ext, {
+    ImportDeclaration: interleave,
+    ArrayExpression: concatUnique((lhs, rhs) => lhs.value === rhs.value),
+    ObjectExpression: concatUnique((lhs, rhs) => lhs.key.name === rhs.key.name),
+    ArrowFunctionExpression: keepBothStatementParents,
+    FunctionDeclaration: keepBoth,
+  })
+}
 
 // Unindent the provided (maybe multiline) string such that the first line has an indent of 0
 // and all subsequent lines maintain their relative indentation level to the first line.
@@ -12,7 +28,9 @@ const unindented = (code) => {
 }
 
 const expectMerged = (base, ext, merged) => {
-  expect(merge(unindented(base), unindented(ext))).toBe(unindented(merged))
+  expect(mergeConfig(unindented(base), unindented(ext))).toBe(
+    unindented(merged)
+  )
 }
 
 describe('Import behavior', () => {
@@ -409,6 +427,14 @@ describe('nop behavior', () => {
       `
     )
   })
+
+  it('Does not merge identifiers that differ by exported-ness.', () => {
+    expectMerged(
+      'export const x = [1, 2, 3]',
+      'const x = [3, 4, 5]',
+      'export const x = [1, 2, 3]\nconst x = [3, 4, 5]\n'
+    )
+  })
 })
 
 describe('Comment behavior', () => {
@@ -467,6 +493,12 @@ describe('Comment behavior', () => {
   })
 })
 
+describe('Base precedence', () => {
+  it('Preferrs the declaration form of the base', () => {
+    expectMerged('const x = [1]', 'let x = [2]', 'const x = [1, 2]\n')
+  })
+})
+
 describe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
@@ -475,10 +507,6 @@ describe('Integration tests', () => {
     )
   })
   test.each(tests)('%s', (_it, base, ext, expected) => {
-    const merged = merge(base, ext)
-    if (merged !== expected) {
-      console.log(merged)
-    }
-    expect(merged).toBe(expected)
+    expect(mergeConfig(base, ext)).toBe(expected)
   })
 })
