@@ -132,9 +132,11 @@ const buildScenario =
     return it(testName, async () => {
       const path = require('path')
       const testFileDir = path.parse(global.testPath)
-      const testFilePath = `${testFileDir.dir}/${
-        testFileDir.name.split('.')[0]
-      }.scenarios`
+      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
+      const testFileNameParts = testFileDir.name.split('.')
+      const testFilePath = `${testFileDir.dir}/${testFileNameParts
+        .slice(0, testFileNameParts.length - 1)
+        .join('.')}.scenarios`
       let allScenarios, scenario, result
 
       try {
