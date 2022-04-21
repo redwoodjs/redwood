@@ -33,9 +33,11 @@ model Contact {
 // highlight-end
 ```
 
-> **Prisma syntax for optional fields**
->
-> To mark a field as optional (that is, allowing `NULL` as a value) you can suffix the datatype with a question mark, e.g. `name String?`. This will allow `name`'s value to be either a `String` or `NULL`.
+:::tip
+
+To mark a field as optional (that is, allowing `NULL` as a value) you can suffix the datatype with a question mark, e.g. `name String?`. This will allow `name`'s value to be either a `String` or `NULL`.
+
+:::
 
 Next we create and apply a migration:
 
@@ -101,25 +103,39 @@ The `@requireAuth` string you see after the `Query` and `Mutation` types is a [s
 
 What's `CreateContactInput` and `UpdateContactInput`? Redwood follows the GraphQL recommendation of using [Input Types](https://graphql.org/graphql-js/mutations-and-input-types/) in mutations rather than listing out each and every field that can be set. Any fields required in `schema.prisma` are also required in `CreateContactInput` (you can't create a valid record without them) but nothing is explicitly required in `UpdateContactInput`. This is because you could want to update only a single field, or two fields, or all fields. The alternative would be to create separate Input types for every permutation of fields you would want to update. We felt that only having one update input type was a good compromise for optimal developer experience.
 
-> Redwood assumes your code won't try to set a value on any field named `id` or `createdAt` so it left those out of the Input types, but if your database allowed either of those to be set manually you can update `CreateContactInput` or `UpdateContactInput` and add them.
+:::info
+
+Redwood assumes your code won't try to set a value on any field named `id` or `createdAt` so it left those out of the Input types, but if your database allowed either of those to be set manually you can update `CreateContactInput` or `UpdateContactInput` and add them.
+
+:::
 
 Since all of the DB columns were required in the `schema.prisma` file they are marked as required in the GraphQL Types with the `!` suffix on the datatype (e.g. `name: String!`).
 
-> **GraphQL syntax for required fields**
->
-> GraphQL's SDL syntax requires an extra `!` when a field _is_ required. Remember: `schema.prisma` syntax requires an extra `?` character when a field is _not_ required.
+:::tip
+
+GraphQL's SDL syntax requires an extra `!` when a field _is_ required. Remember: `schema.prisma` syntax requires an extra `?` character when a field is _not_ required.
+
+:::
 
 As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.js`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.js`).
 
-> *Psssstttt* I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
->
->    `yarn rw g sdl Contact --no-crud`
->
-> You'd only get a single `contacts` type to return them all.
+:::tip
+
+*Psssstttt* I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
+
+`yarn rw g sdl Contact --no-crud`
+
+You'd only get a single `contacts` type to return them all.
+
+:::
 
 We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need want to change `@requireAuth` to `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
 
-> Serendipitously, the default schema directive of `@requireAuth` is exactly what we want for the `contacts` query that returns ALL contacts—only we, the owners of the blog, should have access to read them all.
+:::info
+
+Serendipitously, the default schema directive of `@requireAuth` is exactly what we want for the `contacts` query that returns ALL contacts—only we, the owners of the blog, should have access to read them all.
+
+:::
 
 We're not going to let anyone update or delete a comment, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
 
@@ -478,9 +494,11 @@ Try filling out the form and submitting—you should have a new Contact in the d
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488540-a7ad1a57-7432-4171-bd75-500eeaa17bcb.png" />
 
-> **Wait, I thought you said this was secure by default and someone couldn't view all contacts without being logged in?**
->
-> Remember: we haven't added authentication yet, so the concept of someone being logged in is meaningless right now. In order to prevent frustrating errors in a new application, the `@requireAuth` directive simply returns `true` until you setup an authentication system. At that point the directive will use real logic for determining if the user is logged in or not and behave accordingly.
+:::info Wait, I thought you said this was secure by default and someone couldn't view all contacts without being logged in?
+
+Remember: we haven't added authentication yet, so the concept of someone being logged in is meaningless right now. In order to prevent frustrating errors in a new application, the `@requireAuth` directive simply returns `true` until you setup an authentication system. At that point the directive will use real logic for determining if the user is logged in or not and behave accordingly.
+
+:::
 
 ### Improving the Contact Form
 
@@ -635,11 +653,15 @@ Next we'll inform the user of any server errors. So far we've only notified the 
 
 We have email validation on the client, but any developer worth their silicon knows [never trust the client](https://www.codebyamir.com/blog/never-trust-data-from-the-browser). Let's add the email validation into the api side as well to be sure no bad data gets into our database, even if someone somehow bypassed our client-side validation (l33t hackers do this all the time).
 
-> **No server-side validation for some fields?**
->
-> Why don't we need server-side validation for the existence of name, email and message? Because GraphQL is already doing that for us! You may remember the `String!` declaration in our SDL file for the `Contact` type: that adds a constraint that those fields cannot be `null` as soon as it arrives on the api side. If it is, GraphQL would reject the request and throw an error back to us on the client.
->
-> We've even got another layer of validation: because name, email and message were set as required in our schema.prisma file, the database itself will prevent any `null`s from being recorded. It's like if you decided to run out onto the field in the middle of a sporting event wearing your favorite [Redwood t-shirt](https://shop.redwoodjs.com/): even if you somehow made it past the security guard (GraphQL), once you get out there you're going to have to deal with actual professional athletes (the database). They've spent their whole life training to run faster and pick up heavier things than you. You won't make it very far if they decide to stop you!
+:::info No server-side validation for some fields?
+
+Why don't we need server-side validation for the existence of name, email and message? Because GraphQL is already doing that for us! You may remember the `String!` declaration in our SDL file for the `Contact` type: that adds a constraint that those fields cannot be `null` as soon as it arrives on the api side. If it is, GraphQL would reject the request and throw an error back to us on the client.
+
+However, if you start using one service from within another, there would be no validation! GraphQL is only involved if an "outside" party is making a request (like a browser). If you really want to make sure that a field is present or formatted correctly, you'll need to add validation inside the Service itself. Then, no matter who is calling that service function (GraphQL or another Service) your data is guaranteed to be checked.
+
+We do have an additional layer of validation for free: because name, email and message were set as required in our `schema.prisma` file, the database itself will prevent any `null`s from being recorded. It's usually recommended to not rely solely on the database for input validation: what format your data should be in is a concern of your business logic, and in a Redwood app the business logic lives in the Services!
+
+:::
 
 We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with  [Service Validations](../../services.md#service-validations).
 
@@ -783,14 +805,16 @@ Now submit a message with an invalid email address:
 
 We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't *have* to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
 
-> **`<FormError>` styling options**
->
-> `<FormError>` has several styling options which are attached to different parts of the message:
->
-> - `wrapperStyle` / `wrapperClassName`: the container for the entire message
-> - `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
-> - `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
-> - `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
+:::info
+
+`<FormError>` has several styling options which are attached to different parts of the message:
+
+* `wrapperStyle` / `wrapperClassName`: the container for the entire message
+* `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
+* `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
+* `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
+
+:::
 
 This just scratches the surface of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Service validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
@@ -895,7 +919,11 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 // ...
 ```
 
-> You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
+:::caution
+
+You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
+
+:::
 
 Here's the entire page:
 
@@ -995,12 +1023,17 @@ export default ContactPage
 
 That's it! [React Hook Form](https://react-hook-form.com/) provides a bunch of [functionality](https://react-hook-form.com/api) that `<Form>` doesn't expose. When you want to get to that functionality you can call `useForm()` yourself, but make sure to pass the returned object (we called it `formMethods`) as a prop to `<Form>` so that the validation and other functionality keeps working.
 
-> You may have noticed that the onBlur form config stopped working once you started calling `useForm()` yourself. That's because Redwood calls `useForm()` behind the scenes and automatically passes it the `config` prop that you gave to `<Form>`. Redwood is no longer calling `useForm()` for you so if you need some options passed you need to do it manually:
->
-> ```js title="web/src/pages/ContactPage/ContactPage.js"
-> const ContactPage = () => {
->   const formMethods = useForm({ mode: 'onBlur' })
->   //...
-> ```
+:::info
+
+You may have noticed that the onBlur form config stopped working once you started calling `useForm()` yourself. That's because Redwood calls `useForm()` behind the scenes and automatically passes it the `config` prop that you gave to `<Form>`. Redwood is no longer calling `useForm()` for you so if you need some options passed you need to do it manually:
+
+```js title="web/src/pages/ContactPage/ContactPage.js"
+const ContactPage = () => {
+  const formMethods = useForm({ mode: 'onBlur' })
+  //...
+}
+```
+
+:::
 
 The public site is looking pretty good. How about the administrative features that let us create and edit posts? We should move them to some kind of admin section and put them behind a login so that random users poking around at URLs can't create ads for discount pharmaceuticals.
