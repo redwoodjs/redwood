@@ -22,6 +22,30 @@ function requireStrategyExists(base, _ext, strategy, strategyName) {
   }
 }
 
+const strictEquality = (lhs, rhs) => lhs === rhs
+const byName = (lhs, rhs) => lhs.name === rhs.name
+const byKeyName = (lhs, rhs) => lhs.key.name === rhs.key.name
+const byValue = (lhs, rhs) => lhs.value === rhs.value
+
+function defaultEquality(baseContainer, extContainer) {
+  const sample =
+    (baseContainer.length && baseContainer[0]) ||
+    (extContainer.length && extContainer[0])
+
+  const defaults = {
+    BigIntLiteral: byValue,
+    BooleanLiteral: byValue,
+    Identifier: byName,
+    NumericLiteral: byValue,
+    ObjectProperty: byKeyName,
+    StringLiteral: byValue,
+  }
+
+  return sample && sample.type in defaults
+    ? defaults[sample.type]
+    : strictEquality
+}
+
 export function opaquely(strategy) {
   strategy[OPAQUE_UID_TAG] = true
   return strategy
@@ -126,16 +150,41 @@ export function concat(base, ext) {
 
 const concatUniqueStrategy = {
   ArrayExpression(base, ext, eq) {
+    eq ||= defaultEquality(base.elements, ext.elements)
     base.elements = _.uniqWith([...base.elements, ...ext.elements], eq)
   },
   ObjectExpression(base, ext, eq) {
+    eq ||= defaultEquality(base.properties, ext.properties)
     base.properties = _.uniqWith([...base.properties, ...ext.properties], eq)
   },
 }
-export function concatUnique(equality) {
-  return (base, ext) => {
-    requireSameType(base, ext)
-    requireStrategyExists(base, ext, concatUniqueStrategy, 'concatUnique')
-    return concatUniqueStrategy[base.path.type](base, ext, equality)
+export function concatUnique(baseOrEq, ext) {
+  // There's a little bit of black magic in here. Please bear with me:
+  // This function can be used directly as a node reducer, or to return a node reducer.
+  // If it's used as a node reducer, it will receive two arguments like any other node reducer.
+  //    1) the base to merge into
+  //    2) the extention to merge into the base
+  // If it's used to return a node reducer, it will receive one argument:
+  //    1) the equality operator to use in the returned node reducer
+  // So, we call the first argument baseOrEq to represent this duality.
+
+  // If we call concatUnique(someEqualityFunction), i.e. with a single argument, we want to return
+  // a node reducer which uses concatUniqueStrategy given the provided equality operator.
+  if (arguments.length === 1) {
+    return (base, ext) => {
+      requireSameType(base, ext)
+      requireStrategyExists(base, ext, concatUniqueStrategy, 'concatUnique')
+      return concatUniqueStrategy[base.path.type](base, ext, baseOrEq)
+    }
+  }
+
+  // On the other hand, if we call concatUnique with two arguments, we assume concatUnique itself is
+  // being used as a node reducer, and we should instead provide a default equality operator, and
+  // then directly invoke the concatUniqueStrategy.
+  if (arguments.length === 2) {
+    requireSameType(baseOrEq, ext)
+    requireStrategyExists(baseOrEq, ext, concatUniqueStrategy, 'concatUnique')
+    // The type-specific concatUnique implementations will provide an appropriate equality operator.
+    return concatUniqueStrategy[baseOrEq.path.type](baseOrEq, ext)
   }
 }

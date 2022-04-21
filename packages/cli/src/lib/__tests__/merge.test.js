@@ -10,11 +10,13 @@ import {
   keepBothStatementParents,
 } from '../merge/strategy'
 
+// A particular merge strategy for combining JS-config-style files.
+// This is the only strategy tested in this file.
 function mergeConfig(base, ext) {
   return merge(base, ext, {
     ImportDeclaration: interleave,
-    ArrayExpression: concatUnique((lhs, rhs) => lhs.value === rhs.value),
-    ObjectExpression: concatUnique((lhs, rhs) => lhs.key.name === rhs.key.name),
+    ArrayExpression: concatUnique,
+    ObjectExpression: concatUnique,
     ArrowFunctionExpression: keepBothStatementParents,
     FunctionDeclaration: keepBoth,
   })
@@ -499,7 +501,7 @@ describe('Base precedence', () => {
   })
 })
 
-describe('Integration tests', () => {
+fdescribe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
     return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>
