@@ -89,7 +89,11 @@ export const deletePost = ({ id }) => {
 }
 ```
 
-> Helix/Envelop assumes these functions return promises, which `db` (an instance of `PrismaClient`) does. Helix/Envelop waits for them to resolve before responding with your query results, so you don't need to worry about `async`/`await` or mess with callbacks yourself.
+:::info
+
+Helix/Envelop assumes these functions return promises, which `db` (an instance of `PrismaClient`) does. Helix/Envelop waits for them to resolve before responding with your query results, so you don't need to worry about `async`/`await` or mess with callbacks yourself.
+
+:::
 
 You may be wondering why we call these implementation files "services". While this example blog doesn't get complex enough to show it off, services are intended to be an abstraction **above** single database tables. For example, a more complex app may have a "billing" service that uses both a `transactions` table and a `subscriptions` table. Some of the functionality of this service may be exposed via GraphQL, but only as much as you like.
 

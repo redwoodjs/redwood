@@ -17,7 +17,11 @@ A browser should automatically open to [http://localhost:8910](http://localhost:
 
 ![Redwood Welcome Page](https://user-images.githubusercontent.com/300/145314717-431cdb7a-1c45-4aca-9bbc-74df4f05cc3b.png)
 
-> Remembering the port number is as easy as counting: 8-9-10!
+:::tip
+
+Remembering the port number is as easy as counting: 8-9-10!
+
+:::
 
 The splash page gives you links to a ton of good resources, but don't get distracted: we've got a job to do!
 
