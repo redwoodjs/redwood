@@ -34,7 +34,7 @@
     "findup-sync": "5.0.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
-    "prettier": "2.5.1",
+    "prettier": "2.6.2",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
     "yargs": "16.2.0"
@@ -43,7 +43,7 @@
     "@types/babel__core": "7.1.19",
     "@types/fs-extra": "9.0.13",
     "@types/jscodeshift": "0.11.4",
-    "@types/prettier": "2.4.4",
+    "@types/prettier": "2.6.0",
     "fs-extra": "10.1.0",
     "tempy": "1.0.1"
   },
