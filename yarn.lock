@@ -4808,33 +4808,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-sdk/commons@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@magic-sdk/commons@npm:4.1.0"
+"@magic-sdk/commons@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@magic-sdk/commons@npm:4.1.1"
   peerDependencies:
     "@magic-sdk/provider": ">=4.3.0"
     "@magic-sdk/types": ">=3.1.1"
-  checksum: a2ed86ef7ea415b59dbf5a2663cce5590b75eb2a417fcae1f86f14c307e9f68db5f474a06cb0d294c819bb20885b96d8e8e63b346d7cbd6befc206cabfe8e382
+  checksum: 59ecefbe4166929f69671d40031cfb16220d5f6e429655809d053028f5922d8a7cbd5b1c4bbe6bbfaecce12f35449dd6e2bfb837157336a512b670afae6a5d06
   languageName: node
   linkType: hard
 
-"@magic-sdk/provider@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "@magic-sdk/provider@npm:8.1.0"
+"@magic-sdk/provider@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "@magic-sdk/provider@npm:8.1.1"
   dependencies:
-    "@magic-sdk/types": ^7.1.0
+    "@magic-sdk/types": ^7.1.1
     eventemitter3: ^4.0.4
     web3-core: 1.5.2
   peerDependencies:
     localforage: ^1.7.4
-  checksum: b814cfaea2ab810114062f14c0f1ce54931219246fe582493c0a47b9ade17c62b7a7105eae6462739e9e036a8dc34ccba1743c0a26396f5e0127aba898216f07
+  checksum: ab308235e3fa3d6e095d4396249383d080234e93d0dd5c13b78e57ab5751519fa306324f06232e7829a057062ea667831eee2c7bc18c7a05d1caa997721ae069
   languageName: node
   linkType: hard
 
-"@magic-sdk/types@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "@magic-sdk/types@npm:7.1.0"
-  checksum: c3c8c683b2dd1df201be36af03bab24a669f231ebd3f2a15796604adf5c994f175e75378f5ccde926dfb097e4b427f52d482e0794a079da3ae120dcc3ddb5b79
+"@magic-sdk/types@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "@magic-sdk/types@npm:7.1.1"
+  checksum: fd27b0198c46421682e08c243c284a2b890c4d440c81349d1d0ac5dc5af21a1b71fde68b5994fead78c5a4d418b307aa29cf43fb4c2466a61004faa2f4069d2d
   languageName: node
   linkType: hard
 
@@ -5911,14 +5911,14 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.3.6
     "@clerk/types": 2.7.1
     "@nhost/nhost-js": 1.0.11
-    "@supabase/supabase-js": 1.34.1
+    "@supabase/supabase-js": 1.35.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.44
     firebase: 9.6.11
     firebase-admin: 10.0.2
     gotrue-js: 0.9.29
     jest: 27.5.1
-    magic-sdk: 8.1.0
+    magic-sdk: 8.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
     supertokens-auth-react: 0.20.4
@@ -5961,7 +5961,7 @@ __metadata:
     param-case: 3.0.4
     pascalcase: 1.0.0
     pluralize: 8.0.0
-    prettier: 2.5.1
+    prettier: 2.6.2
     prisma: 3.12.0
     prompts: 2.4.2
     rimraf: 3.0.2
@@ -5987,7 +5987,7 @@ __metadata:
     "@types/babel__core": 7.1.19
     "@types/fs-extra": 9.0.13
     "@types/jscodeshift": 0.11.4
-    "@types/prettier": 2.4.4
+    "@types/prettier": 2.6.0
     "@vscode/ripgrep": 1.14.2
     core-js: 3.22.1
     cross-undici-fetch: 0.3.0
@@ -5997,7 +5997,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 27.5.1
     jscodeshift: 0.13.1
-    prettier: 2.5.1
+    prettier: 2.6.2
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
@@ -6041,7 +6041,7 @@ __metadata:
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.1.0
-    esbuild: 0.14.36
+    esbuild: 0.14.37
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
     file-loader: 6.2.0
@@ -6103,7 +6103,7 @@ __metadata:
     eslint-plugin-react: 7.29.4
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
-    prettier: 2.5.1
+    prettier: 2.6.2
     typescript: 4.6.3
   languageName: unknown
   linkType: soft
@@ -6203,7 +6203,7 @@ __metadata:
     chalk: 4.1.2
     core-js: 3.22.1
     deepmerge: 4.2.2
-    esbuild: 0.14.36
+    esbuild: 0.14.37
     fast-glob: 3.2.11
     findup-sync: 5.0.0
     fs-extra: 10.1.0
@@ -6212,7 +6212,7 @@ __metadata:
     graphql-tag: 2.12.6
     jest: 27.5.1
     kill-port: 1.6.1
-    prettier: 2.5.1
+    prettier: 2.6.2
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
     systeminformation: 5.11.12
@@ -6258,7 +6258,7 @@ __metadata:
     "@prisma/client": 3.12.0
     "@prisma/sdk": 3.12.0
     core-js: 3.22.1
-    esbuild: 0.14.36
+    esbuild: 0.14.37
     jest: 27.5.1
   languageName: unknown
   linkType: soft
@@ -7740,12 +7740,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/gotrue-js@npm:^1.22.12":
-  version: 1.22.12
-  resolution: "@supabase/gotrue-js@npm:1.22.12"
+"@supabase/gotrue-js@npm:^1.22.13":
+  version: 1.22.13
+  resolution: "@supabase/gotrue-js@npm:1.22.13"
   dependencies:
     cross-fetch: ^3.0.6
-  checksum: b2d005aa37a99c36f78fbf60e55ec51ef591e93e3833fdf4ceed092d7d929e453bb32de7da4d9e4003ab32d67f180940fc4880a0244efe66e0276cab35ccada9
+  checksum: c285f79cdbc1e787bb37e8e006e1c92fa7a3707fcbb257abf684d11cdcc0a1899b943346eeed8ef8bc791f42cdb6b389ba8f2a36b0435ec2fa5f4c252bc7a81e
   languageName: node
   linkType: hard
 
@@ -7777,16 +7777,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.34.1":
-  version: 1.34.1
-  resolution: "@supabase/supabase-js@npm:1.34.1"
+"@supabase/supabase-js@npm:1.35.1":
+  version: 1.35.1
+  resolution: "@supabase/supabase-js@npm:1.35.1"
   dependencies:
     "@supabase/functions-js": ^1.3.3
-    "@supabase/gotrue-js": ^1.22.12
+    "@supabase/gotrue-js": ^1.22.13
     "@supabase/postgrest-js": ^0.37.2
     "@supabase/realtime-js": ^1.7.1
     "@supabase/storage-js": ^1.7.0
-  checksum: 4268ba9bba2b36ce2ac42d1fc5a8e4c546167500f02194ae8f227e038148733baff448c86aa32a6f3035c7488edcf69f4080e2a65797b28ecbee3eb8776cb049
+  checksum: 225be63794453d07aad14b9cf0b21993363d8ce2a9a7ded294002f6a2668dcb6753d9a52a286c0616976bacab3bf7da6f8120dd3b0c522fee5510a899603dc95
   languageName: node
   linkType: hard
 
@@ -8696,10 +8696,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:2.4.4, @types/prettier@npm:^2.1.5":
-  version: 2.4.4
-  resolution: "@types/prettier@npm:2.4.4"
-  checksum: 4f6a05f1579a24d47eb5e0c3a8a47e0baf37121e7ebce2e20a31891fac8f0148f4c19c27ad59f5bcb473e90c3221acbb67963be1b64a32f5e24e2b29bfe32253
+"@types/prettier@npm:*, @types/prettier@npm:2.6.0, @types/prettier@npm:^2.1.5":
+  version: 2.6.0
+  resolution: "@types/prettier@npm:2.6.0"
+  checksum: ade0fc6fc0340dfe48a1e5b6c60c536f5439c0c2dde42e8178d768fe19d48525fd40bacf2f29dccc11075b376fcfa3daa75f64373143889f9fb9509609aec627
   languageName: node
   linkType: hard
 
@@ -14892,100 +14892,100 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-android-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-android-64@npm:0.14.36"
+"esbuild-android-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-android-64@npm:0.14.37"
   conditions: os=android & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-android-arm64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-android-arm64@npm:0.14.36"
+"esbuild-android-arm64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-android-arm64@npm:0.14.37"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-darwin-64@npm:0.14.36"
+"esbuild-darwin-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-darwin-64@npm:0.14.37"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-darwin-arm64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-darwin-arm64@npm:0.14.36"
+"esbuild-darwin-arm64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-darwin-arm64@npm:0.14.37"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-freebsd-64@npm:0.14.36"
+"esbuild-freebsd-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-freebsd-64@npm:0.14.37"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-freebsd-arm64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-freebsd-arm64@npm:0.14.36"
+"esbuild-freebsd-arm64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-freebsd-arm64@npm:0.14.37"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-32@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-32@npm:0.14.36"
+"esbuild-linux-32@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-32@npm:0.14.37"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-linux-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-64@npm:0.14.36"
+"esbuild-linux-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-64@npm:0.14.37"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-arm64@npm:0.14.36"
+"esbuild-linux-arm64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-arm64@npm:0.14.37"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild-linux-arm@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-arm@npm:0.14.36"
+"esbuild-linux-arm@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-arm@npm:0.14.37"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"esbuild-linux-mips64le@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-mips64le@npm:0.14.36"
+"esbuild-linux-mips64le@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-mips64le@npm:0.14.37"
   conditions: os=linux & cpu=mips64el
   languageName: node
   linkType: hard
 
-"esbuild-linux-ppc64le@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-ppc64le@npm:0.14.36"
+"esbuild-linux-ppc64le@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-ppc64le@npm:0.14.37"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
 
-"esbuild-linux-riscv64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-riscv64@npm:0.14.36"
+"esbuild-linux-riscv64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-riscv64@npm:0.14.37"
   conditions: os=linux & cpu=riscv64
   languageName: node
   linkType: hard
 
-"esbuild-linux-s390x@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-linux-s390x@npm:0.14.36"
+"esbuild-linux-s390x@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-linux-s390x@npm:0.14.37"
   conditions: os=linux & cpu=s390x
   languageName: node
   linkType: hard
@@ -15006,72 +15006,72 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-netbsd-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-netbsd-64@npm:0.14.36"
+"esbuild-netbsd-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-netbsd-64@npm:0.14.37"
   conditions: os=netbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-openbsd-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-openbsd-64@npm:0.14.36"
+"esbuild-openbsd-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-openbsd-64@npm:0.14.37"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-sunos-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-sunos-64@npm:0.14.36"
+"esbuild-sunos-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-sunos-64@npm:0.14.37"
   conditions: os=sunos & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-32@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-windows-32@npm:0.14.36"
+"esbuild-windows-32@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-windows-32@npm:0.14.37"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"esbuild-windows-64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-windows-64@npm:0.14.36"
+"esbuild-windows-64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-windows-64@npm:0.14.37"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"esbuild-windows-arm64@npm:0.14.36":
-  version: 0.14.36
-  resolution: "esbuild-windows-arm64@npm:0.14.36"
+"esbuild-windows-arm64@npm:0.14.37":
+  version: 0.14.37
+  resolution: "esbuild-windows-arm64@npm:0.14.37"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.14.36, esbuild@npm:^0.14.6":
-  version: 0.14.36
-  resolution: "esbuild@npm:0.14.36"
+"esbuild@npm:0.14.37, esbuild@npm:^0.14.6":
+  version: 0.14.37
+  resolution: "esbuild@npm:0.14.37"
   dependencies:
-    esbuild-android-64: 0.14.36
-    esbuild-android-arm64: 0.14.36
-    esbuild-darwin-64: 0.14.36
-    esbuild-darwin-arm64: 0.14.36
-    esbuild-freebsd-64: 0.14.36
-    esbuild-freebsd-arm64: 0.14.36
-    esbuild-linux-32: 0.14.36
-    esbuild-linux-64: 0.14.36
-    esbuild-linux-arm: 0.14.36
-    esbuild-linux-arm64: 0.14.36
-    esbuild-linux-mips64le: 0.14.36
-    esbuild-linux-ppc64le: 0.14.36
-    esbuild-linux-riscv64: 0.14.36
-    esbuild-linux-s390x: 0.14.36
-    esbuild-netbsd-64: 0.14.36
-    esbuild-openbsd-64: 0.14.36
-    esbuild-sunos-64: 0.14.36
-    esbuild-windows-32: 0.14.36
-    esbuild-windows-64: 0.14.36
-    esbuild-windows-arm64: 0.14.36
+    esbuild-android-64: 0.14.37
+    esbuild-android-arm64: 0.14.37
+    esbuild-darwin-64: 0.14.37
+    esbuild-darwin-arm64: 0.14.37
+    esbuild-freebsd-64: 0.14.37
+    esbuild-freebsd-arm64: 0.14.37
+    esbuild-linux-32: 0.14.37
+    esbuild-linux-64: 0.14.37
+    esbuild-linux-arm: 0.14.37
+    esbuild-linux-arm64: 0.14.37
+    esbuild-linux-mips64le: 0.14.37
+    esbuild-linux-ppc64le: 0.14.37
+    esbuild-linux-riscv64: 0.14.37
+    esbuild-linux-s390x: 0.14.37
+    esbuild-netbsd-64: 0.14.37
+    esbuild-openbsd-64: 0.14.37
+    esbuild-sunos-64: 0.14.37
+    esbuild-windows-32: 0.14.37
+    esbuild-windows-64: 0.14.37
+    esbuild-windows-arm64: 0.14.37
   dependenciesMeta:
     esbuild-android-64:
       optional: true
@@ -15115,7 +15115,7 @@ __metadata:
       optional: true
   bin:
     esbuild: bin/esbuild
-  checksum: cd25d0a2f774a542f187fed4616a5c199d843c4af06080226471e2365ca889d39d01554e9afdd110e5dfefa84d548ed58a4b60cd848f124441fa4116ade4c626
+  checksum: 499711b0f52273c2a4172ec25266a230d70b52e9217170e2cdbce2f6a11f271bf04df8cea092642f4044f2a21867a67b033d8394f2e892caf1dea066ab8c8a86
   languageName: node
   linkType: hard
 
@@ -21596,15 +21596,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-sdk@npm:8.1.0":
-  version: 8.1.0
-  resolution: "magic-sdk@npm:8.1.0"
+"magic-sdk@npm:8.1.1":
+  version: 8.1.1
+  resolution: "magic-sdk@npm:8.1.1"
   dependencies:
-    "@magic-sdk/commons": ^4.1.0
-    "@magic-sdk/provider": ^8.1.0
-    "@magic-sdk/types": ^7.1.0
+    "@magic-sdk/commons": ^4.1.1
+    "@magic-sdk/provider": ^8.1.1
+    "@magic-sdk/types": ^7.1.1
     localforage: ^1.7.4
-  checksum: a00345f563202ee0d8dda28bc28e659c693218d6ea191e22557877a9952216239ac5dcc95a63f68b204fb4e74b29ffa378b1161d54294aa9811ee4129710c10a
+  checksum: a87c1fd099e4682392089aa71b805f3007f56d37876e201a1e229bc136b40079a94b39779e642fe9d769be98745a127bc6da95f3827da51a7bb0921393dbbbe8
   languageName: node
   linkType: hard
 
@@ -24974,12 +24974,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.5.1":
-  version: 2.5.1
-  resolution: "prettier@npm:2.5.1"
+"prettier@npm:2.6.2, prettier@npm:^2.0.1, prettier@npm:^2.2.1":
+  version: 2.6.2
+  resolution: "prettier@npm:2.6.2"
   bin:
     prettier: bin-prettier.js
-  checksum: fa9750193b3fcdb4bd54ba4e57996d335de4cd492d277539b6ffb6d146c8b6d3c3dc264b75021914c99c91574643637f607da08ef4588ef30a7b78d14326f470
+  checksum: 4a2717d0aca6b5b5c24570854fdf119c4184ff7422a1aa283364bdfe5394ecff4f6ac375663840dc2680ea09b1d5370329b83ac06579588db6f8bc71620e1267
   languageName: node
   linkType: hard
 
@@ -24989,15 +24989,6 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: b9f434af2f25a37aad0b133894827e980885eb8bf317444c9dde0401ed2c7f463f9996d691f5ee5a0a4450ab46a894cd6557516b561e2522821522ce1f4c6668
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^2.0.1, prettier@npm:^2.2.1":
-  version: 2.6.0
-  resolution: "prettier@npm:2.6.0"
-  bin:
-    prettier: bin-prettier.js
-  checksum: aa29412e52be673e1e63ceb17eb6bbbec5a2d6fd126f66c31a935a2d35463f8ba28bc54b20cb1e89712cb3928ef60d27f53174e99a5222fbd414ba654929d693
   languageName: node
   linkType: hard
 
