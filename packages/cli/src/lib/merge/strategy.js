@@ -1,12 +1,14 @@
 import * as t from '@babel/types'
 
-import { fillUnique, nodeIs, pushUnique, sieve } from './algorithms'
+import { fillUnique, pushUnique, sieve } from './algorithms'
+
+const nodeIs = (type) => (node) => node.type === type
 
 const OPAQUE_UID_TAG =
   'RW_MERGE_OPAQUE_UID_Q2xldmVyIHlvdSEgSGF2ZSBhIGNvb2tpZS4='
 
 function requireSameType(base, ext) {
-  if (base.type !== ext.type) {
+  if (base.path.type !== ext.path.type) {
     throw new Error(
       'Attempting to merge nodes with different types. This is not yet supported.'
     )
@@ -14,7 +16,7 @@ function requireSameType(base, ext) {
 }
 
 function requireStrategyExists(base, _ext, strategy, strategyName) {
-  if (!(base.type in strategy)) {
+  if (!(base.path.type in strategy)) {
     throw new Error(
       `Attempting to ${strategyName} nodes that do not have an ${strategyName} strategy.`
     )
@@ -33,11 +35,11 @@ export function isOpaque(strategy) {
 export const keepBase = opaquely(() => {})
 
 export const keepBoth = opaquely((base, ext) => {
-  base.insertAfter(ext.node)
+  base.path.insertAfter(ext.path.node)
 })
 
 export const keepExtension = opaquely((base, ext) => {
-  base.replaceWith(ext)
+  base.path.replaceWith(ext.path)
 })
 
 export const keepBothStatementParents = opaquely((base, ext) => {
@@ -47,13 +49,13 @@ export const keepBothStatementParents = opaquely((base, ext) => {
   // keepBothStatementParents marks the node as opaque. If it's the latter, this is wrong - again,
   // the node marked is opaque, but nodes which are children of base.getStatementParent(), but
   // parents of base will still be recursively merged by other strategies. I'm not sure what to do.
-  base.getStatementParent().insertAfter(ext.getStatementParent().node)
+  base.path.getStatementParent().insertAfter(ext.path.getStatementParent().node)
 })
 
 const interleaveStrategy = {
   ImportDeclaration(baseImport, extImport) {
-    const baseSpecs = baseImport.node.specifiers
-    const extSpecs = extImport.node.specifiers
+    const baseSpecs = baseImport.specifiers
+    const extSpecs = extImport.specifiers
 
     const importSpecifierEquality = (lhs, rhs) =>
       lhs.type === rhs.type &&
@@ -93,10 +95,10 @@ const interleaveStrategy = {
       [uniqueSpecifiersOfType('ImportSpecifier'), importPosition]
     )
 
-    baseImport.node.specifiers = firstSpecifierList
+    baseImport.specifiers = firstSpecifierList
     if (rest.length) {
-      baseImport.insertAfter(
-        rest.map((specs) => t.importDeclaration(specs, baseImport.node.source))
+      baseImport.path.insertAfter(
+        rest.map((specs) => t.importDeclaration(specs, baseImport.source))
       )
     }
   },
@@ -104,38 +106,38 @@ const interleaveStrategy = {
 export function interleave(base, ext) {
   requireSameType(base, ext)
   requireStrategyExists(base, ext, interleaveStrategy, 'interleave')
-  return interleaveStrategy[base.type](base, ext)
+  return interleaveStrategy[base.path.type](base, ext)
 }
 
 const concatStrategy = {
   ArrayExpression(base, ext) {
-    base.node.elements = [...base.node.elements, ...ext.node.elements]
+    base.elements = [...base.elements, ...ext.elements]
   },
   ObjectExpression(base, ext) {
-    base.node.properties = [...base.node.properties, ...ext.node.properties]
+    base.properties = [...base.properties, ...ext.properties]
   },
   StringLiteral(base, ext) {
-    base.node.value = base.node.value.concat(ext.node.value)
+    base.value = base.value.concat(ext.value)
   },
 }
 export function concat(base, ext) {
   requireSameType(base, ext)
   requireStrategyExists(base, ext, concatStrategy, 'concat')
-  return concatStrategy[base.type](base, ext)
+  return concatStrategy[base.path.type](base, ext)
 }
 
 const concatUniqueStrategy = {
   ArrayExpression(base, ext, eq) {
-    pushUnique(eq, base.node.elements, ...ext.node.elements)
+    pushUnique(eq, base.elements, ...ext.elements)
   },
   ObjectExpression(base, ext, eq) {
-    pushUnique(eq, base.node.properties, ...ext.node.properties)
+    pushUnique(eq, base.properties, ...ext.properties)
   },
 }
 export function concatUnique(equality) {
   return (base, ext) => {
     requireSameType(base, ext)
     requireStrategyExists(base, ext, concatUniqueStrategy, 'concatUnique')
-    return concatUniqueStrategy[base.type](base, ext, equality)
+    return concatUniqueStrategy[base.path.type](base, ext, equality)
   }
 }

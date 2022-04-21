@@ -1,14 +1,17 @@
-import path from 'path'
-
 import { parse, traverse } from '@babel/core'
 import generate from '@babel/generator'
+import { VISITOR_KEYS } from '@babel/types'
 import prettier from 'prettier'
 
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
-
 import { forEachFunctionOn, deletePropertyIf } from './algorithms'
-import { isSemanticAncestor, semanticIdentity } from './semantics'
-import { defaultMergeStrategy, mergeUtility } from './strategy'
+import { semanticIdentifier } from './semanticIdentity'
+import { isOpaque } from './strategy'
+
+function extractProperty(property, fromObject) {
+  const tmp = fromObject[property]
+  delete fromObject[property]
+  return tmp
+}
 
 // This feels like a weird way to achieve something so simple in Babel,
 // but I can't find a better alternative.
@@ -26,22 +29,59 @@ function getProgramPath(ast) {
 }
 
 // When merging, trailing comments are a bit nasty. A comment can be parsed as a leading comment
-// of one expression, and a trailing comment of a subsequent expression. This is an open issue for
-// Babel: https://github.com/babel/babel/issues/7002, but we can work around it pretty easily with
-// the following.
-function stripTrailingComments(...asts) {
-  for (const ast of asts) {
-    traverse(ast, {
-      enter(path) {
-        path.node.trailingComments = []
-      },
-    })
+// of one expression, and a trailing comment of a subsequent expression. This is sort of an open
+// issue for Babel: https://github.com/babel/babel/issues/7002, but we can work around it pretty
+// easily with the following:
+function stripTrailingCommentsStrategy() {
+  return {
+    enter(path) {
+      path.node.trailingComments = []
+    },
   }
 }
 
-function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
-  const strategy = { ...defaultMergeStrategy, ...callerMergeStrategy }
-  const strategyWithUtility = { ...mergeUtility, ...strategy }
+// See https://github.com/babel/babel/issues/14480
+function skipChildren(path) {
+  for (const key of VISITOR_KEYS[path.type]) {
+    path.skipKey(key)
+  }
+}
+
+// To make merge strategies more terse, we'd like to pass the AST node directly to the reducer, so
+// we don't have to constantly write "node", as in:
+// (lhs, rhs) => { lhs.node.thing + rhs.node.thing }
+// We could just pass NodePath.node directly to the reducer, but there are reasonable (though rare)
+// cases where we'd want to give our reducers access to the NodePath. To solve this, we create a
+// proxy object that appears like a Babel Node with an additional 'path' property, which points back
+// to the path object. This makes uses of the path more verbose, but for our purposes, this is
+// preferable; accessing path to determine a merge strategy likely indicates an anti-pattern.
+function makeProxy(path) {
+  return new Proxy(path, {
+    get(target, property) {
+      if (property === 'path') {
+        return target
+      } else {
+        return target.node[property]
+      }
+    },
+    set(target, property, value) {
+      if (property === 'path') {
+        throw new Error("You can't set a path on a proxy!")
+      } else {
+        target.node[property] = value
+        return true
+      }
+    },
+    has(target, property) {
+      return property in target.node
+    },
+  })
+}
+
+function mergeAST(baseAST, extAST, strategy = {}) {
+  const identifier =
+    extractProperty('identifier', strategy) || semanticIdentifier
+  const identities = {}
 
   const baseProgramPath = getProgramPath(baseAST)
   const nextInsertPositionForType = {}
@@ -57,48 +97,45 @@ function mergeAST(baseAST, extAST, callerMergeStrategy = {}) {
         : baseProgramPath.pushContainer('body', node).pop()
   }
 
-  const identities = {}
-  const baseVisitor = {}
-  const extVisitor = {}
+  const baseVisitor = { ...stripTrailingCommentsStrategy() }
+  const extVisitor = { ...stripTrailingCommentsStrategy() }
 
   forEachFunctionOn(strategy, (typename, _func) => {
     extVisitor[typename] = {
       enter(path) {
-        const semanticId = semanticIdentity(path)
-        semanticId && (identities[semanticId] ||= []).push(path)
+        const id = identifier.getId(path)
+        id && (identities[id] ||= []).push(path)
       },
     }
     baseVisitor[typename] = {
       enter(path) {
-        if (mergeUtility.isOpaque(strategy[path.type])) {
-          path.skip()
-          // https://github.com/babel/babel/issues/14480
-          // Yuck. Remove this when Babel provides an alternative.
-          baseVisitor[typename]['exit'][0](path)
+        if (isOpaque(strategy[path.type])) {
+          skipChildren(path)
         }
       },
       exit(path) {
         saveNextInsertPosition(path)
-        const id = semanticIdentity(path)
+        const id = identifier.getId(path)
         if (id && id in identities) {
-          identities[id].forEach((extPath) =>
-            strategyWithUtility[typename](path, extPath, {
-              semanticLocation: id,
-            })
+          // Like Array.reduce with reference semantics for the accumulator, which is `path` here.
+          // Goal is (((path <=> a) <=> b) <=> c), where  <=> is the merge strategy, and we're
+          // merging extensions [a, b, c].
+          const proxyPath = makeProxy(path)
+          identities[id].forEach((ext) =>
+            strategy[typename](proxyPath, makeProxy(ext))
           )
-          deletePropertyIf(identities, ([k, _]) => isSemanticAncestor(id, k))
+          deletePropertyIf(identities, ([k, _]) => identifier.isAncestor(id, k))
         }
       },
     }
   })
 
-  stripTrailingComments(baseAST, extAST)
   traverse(extAST, extVisitor)
   traverse(baseAST, baseVisitor)
 
   const handled = []
   for (const [k, v] of Object.entries(identities)) {
-    if (handled.some((h) => isSemanticAncestor(h, k))) {
+    if (handled.some((h) => identifier.isAncestor(h, k))) {
       continue
     }
     v.forEach(insertAtNextPosition)
@@ -118,22 +155,15 @@ export function merge(base, extension, strategy) {
   mergeAST(baseAST, extAST, strategy)
   const { code } = generate(baseAST)
 
-  // https://github.com/babel/babel/issues/5139
-  // https://github.com/babel/babel/discussions/13989
-  // It is no longer possible to configure babel's generator to produce consistent single/double
-  // quotes. So, we run `prettier` here to yield predictable and clean code.
-
-  if (process.env.JEST_WORKER_ID) {
-    return prettier.format(code, {
-      parser: 'babel',
-      bracketSpacing: true,
-      tabWidth: 2,
-      semi: false,
-      singleQuote: true,
-    })
-  } else {
-    return prettier.format(code, {
-      filepath: path.join(getRedwoodPaths().base, 'prettier.config.js'),
-    })
-  }
+  // When testing, use prettier here to produce predictable outputs.
+  // Otherwise, leave formatting to the caller.
+  return process.env.JEST_WORKER_ID
+    ? prettier.format(code, {
+        parser: 'babel',
+        bracketSpacing: true,
+        tabWidth: 2,
+        semi: false,
+        singleQuote: true,
+      })
+    : code
 }
