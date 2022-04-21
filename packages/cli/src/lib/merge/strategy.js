@@ -1,8 +1,7 @@
 import * as t from '@babel/types'
+import _ from 'lodash'
 
-import { fillUnique, pushUnique, sieve } from './algorithms'
-
-const nodeIs = (type) => (node) => node.type === type
+import { nodeIs, sieve } from './algorithms'
 
 const OPAQUE_UID_TAG =
   'RW_MERGE_OPAQUE_UID_Q2xldmVyIHlvdSEgSGF2ZSBhIGNvb2tpZS4='
@@ -63,10 +62,9 @@ const interleaveStrategy = {
       lhs.local?.name == rhs.local?.name
 
     const uniqueSpecifiersOfType = (type) =>
-      fillUnique(
-        importSpecifierEquality,
-        ...baseSpecs.filter(nodeIs(type)),
-        ...extSpecs.filter(nodeIs(type))
+      _.uniqWith(
+        [...baseSpecs.filter(nodeIs(type)), ...extSpecs.filter(nodeIs(type))],
+        importSpecifierEquality
       )
 
     // Rule 1: If there's exactly 1 import with 0 specifiers, it's a side-effect import and should
@@ -128,10 +126,10 @@ export function concat(base, ext) {
 
 const concatUniqueStrategy = {
   ArrayExpression(base, ext, eq) {
-    pushUnique(eq, base.elements, ...ext.elements)
+    base.elements = _.uniqWith([...base.elements, ...ext.elements], eq)
   },
   ObjectExpression(base, ext, eq) {
-    pushUnique(eq, base.properties, ...ext.properties)
+    base.properties = _.uniqWith([...base.properties, ...ext.properties], eq)
   },
 }
 export function concatUnique(equality) {
