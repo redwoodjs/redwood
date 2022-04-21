@@ -6271,7 +6271,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 1.1.0
-    "@types/lodash.isequal": 4.5.5
+    "@types/lodash.isequal": 4.5.6
     core-js: 3.22.1
     jest: 27.5.1
     lodash.isequal: 4.5.0
@@ -8467,12 +8467,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.isequal@npm:4.5.5":
-  version: 4.5.5
-  resolution: "@types/lodash.isequal@npm:4.5.5"
+"@types/lodash.isequal@npm:4.5.6":
+  version: 4.5.6
+  resolution: "@types/lodash.isequal@npm:4.5.6"
   dependencies:
     "@types/lodash": "*"
-  checksum: d96129dbc3ffd8da6a9aa754978c013f96decccae77c8b5ee3e7d6deb26c92c102b08ab06577cbf5de30e5871c2d4ce99644093ec525585e91a0920dafe0c1c2
+  checksum: d14cb561e3db36b80bde1d6eea5b012c46c8bb7a7dadb2844bd80b209d7c324eb54ad5ca7b6e57c253593662d8fc676da430f2216aaca1c04b087d38030151ae
   languageName: node
   linkType: hard
 
