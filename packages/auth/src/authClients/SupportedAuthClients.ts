@@ -1,5 +1,6 @@
 import { auth0 } from './auth0'
 import type { Auth0, Auth0User } from './auth0'
+import { AuthClient } from './AuthClient'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import type {
   AzureActiveDirectory,
@@ -28,7 +29,16 @@ import type { Supabase, SupabaseUser } from './supabase'
 import { supertokens } from './supertokens'
 import type { SuperTokensUser, SuperTokens } from './supertokens'
 
-export const typesToClients = {
+export type AuthFactory<
+  ClientType,
+  ConfigType,
+  AuthClientType extends AuthClient
+> = (
+  client: ClientType,
+  config: ConfigType
+) => AuthClientType | Promise<AuthClientType>
+
+export const typesToClients: Record<string, AuthFactory<any, any, any>> = {
   netlify,
   auth0,
   azureActiveDirectory,

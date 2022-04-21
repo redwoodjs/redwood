@@ -1,6 +1,9 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [`import { ClerkProvider } from '@clerk/clerk-react'`],
+  imports: [
+    `import { ClerkLoaded, ClerkProvider } from '@clerk/clerk-react'`,
+    `import { navigate } from '@redwoodjs/router'`,
+  ],
   init: `
 // Wrap Redwood's <AuthProvider> with the <ClerkAuthProvider>.
 //
@@ -21,7 +24,9 @@ const ClerkAuthProvider = ({ children }) => {
 
   return (
     <ClerkProvider frontendApi={frontendApi} navigate={(to) => navigate(to)}>
-      {children}
+      <ClerkLoaded>
+        {children}
+      </ClerkLoaded>
     </ClerkProvider>
   )
 }`,

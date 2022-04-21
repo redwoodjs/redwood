@@ -20,8 +20,6 @@ export interface AuthClient {
   getUserMetadata(): Promise<null | SupportedUserMetadata>
 
   /** Hooks for managing the hosting AuthProvider's life-cycle */
-  /** An optional hook to hold off the restoration of state until the underlying client is ready */
-  useIsWaitingForClient?(): boolean
   /** An optional hook to listen for updates from the 3rd party provider */
   useListenForUpdates?(handlers: { reauthenticate: () => Promise<void> }): void
 
@@ -33,7 +31,7 @@ export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes,
   config?: SupportedAuthConfig
-): AuthClient => {
+): Promise<AuthClient> => {
   if (!typesToClients[type]) {
     throw new Error(
       `Your client ${type} is not supported, we only support ${Object.keys(
@@ -42,5 +40,5 @@ export const createAuthClient = (
     )
   }
 
-  return typesToClients[type](client, config)
+  return Promise.resolve(typesToClients[type](client, config))
 }

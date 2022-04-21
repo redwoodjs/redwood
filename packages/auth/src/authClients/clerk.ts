@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import { useClerk, useUser as useClerkUser } from '@clerk/clerk-react'
 import {
   UserResource as ClerkUserResource,
   SignInProps,
@@ -34,7 +33,10 @@ function clerkClient(propsClient: Clerk | null): Clerk | null {
   }
 }
 
-export const clerk = (client: Clerk): AuthClientClerk => {
+export const clerk = async (client: Clerk): Promise<AuthClientClerk> => {
+  // We use the typescript dynamic import feature to pull in the react library only if clerk is needed.
+  const { useUser: useClerkUser } = await import('@clerk/clerk-react')
+
   return {
     type: 'clerk',
     client,
@@ -50,8 +52,8 @@ export const clerk = (client: Clerk): AuthClientClerk => {
       const clerk = clerkClient(client)
       if (!clerk) {
         // If the client is null, we can't restore state or listen for it to happen.
-        // This behavior is somewhat undefined but it should be handled by `useIsWaitingForClient`.
-        // For now we'll just return.
+        // This behavior is somewhat undefined, which is why we instruct the user to wrap
+        // the auth provider in <ClerkLoaded> to prevent it. For now we'll just return.
         return
       }
 
@@ -69,11 +71,7 @@ export const clerk = (client: Clerk): AuthClientClerk => {
         return
       }
     },
-    // Hooks to inform AuthProvider of Clerk's life-cycle
-    useIsWaitingForClient: () => {
-      const clerk = useClerk()
-      return !clerk?.client
-    },
+    // Hook to inform AuthProvider of Clerk's life-cycle
     useListenForUpdates: ({ reauthenticate }) => {
       const { isSignedIn, user, isLoaded } = useClerkUser()
       useEffect(() => {
