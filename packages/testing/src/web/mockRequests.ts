@@ -67,8 +67,11 @@ export const registerHandler = (handler: RequestHandler) => {
   }
 }
 
-export type DataFunction = (
-  variables: Record<string, any>,
+export type DataFunction<
+  Query = Record<string, unknown>,
+  QueryVariables = Record<string, any>
+> = (
+  variables: QueryVariables,
   {
     req,
     ctx,
@@ -76,7 +79,7 @@ export type DataFunction = (
     req: GraphQLRequest<any>
     ctx: GraphQLContext<Record<string, any>>
   }
-) => Record<string, unknown> | void
+) => Query | void
 
 // These should get exported from MSW
 type ResponseFunction<BodyType = any> = (
@@ -144,17 +147,23 @@ const mockGraphQL = (
   return data
 }
 
-export const mockGraphQLQuery = (
+export const mockGraphQLQuery = <
+  Query = Record<string, unknown>,
+  QueryVariables = Record<string, any>
+>(
   operation: string,
-  data: DataFunction | Record<string, unknown>,
+  data: DataFunction<Query, QueryVariables> | Query,
   responseEnhancer?: ResponseEnhancer
 ) => {
   return mockGraphQL('query', operation, data, responseEnhancer)
 }
 
-export const mockGraphQLMutation = (
+export const mockGraphQLMutation = <
+  Query = Record<string, unknown>,
+  QueryVariables = Record<string, any>
+>(
   operation: string,
-  data: DataFunction | Record<string, unknown>,
+  data: DataFunction<Query, QueryVariables> | Query,
   responseEnhancer?: ResponseEnhancer
 ) => {
   return mockGraphQL('mutation', operation, data, responseEnhancer)
