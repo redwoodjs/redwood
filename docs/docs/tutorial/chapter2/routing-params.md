@@ -491,7 +491,7 @@ And get it, along with the query result (and even the original `id` if you want)
 
 ```javascript
 export const Success = ({ article, id, rand }) => {
-  //...
+  // ...
 }
 ```
 
@@ -504,6 +504,9 @@ interface Props extends CellSuccessProps<FindArticleQuery> {
 }
 
 export const Success = ({ article, id, rand }: Props) => {
+  // ...
+}
+```
 
 </TabItem>
 </Tabs>
