@@ -33,6 +33,7 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
+deployVia = "clone"
 
 # If you have separate api and web servers:
 #
