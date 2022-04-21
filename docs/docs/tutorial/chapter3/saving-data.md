@@ -646,6 +646,13 @@ import {
   SubmitHandler,
 } from '@redwoodjs/forms'
 
+// highlight-start
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+// highlight-end
+
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
@@ -661,8 +668,12 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  // highlight-next-line
-  const [create] = useMutation(CREATE_CONTACT)
+  // highlight-start
+  const [create] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT)
+  // highlight-end
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data)
@@ -840,6 +851,11 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
@@ -849,7 +865,10 @@ const CREATE_CONTACT = gql`
 `
 
 const ContactPage = () => {
-  const [create] = useMutation(CREATE_CONTACT)
+  const [create] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT)
 
   const onSubmit = (data) => {
     // highlight-next-line
@@ -961,7 +980,10 @@ const ContactPage = () => {
 
 const ContactPage = () => {
   // highlight-next-line
-  const [create, { loading, error }] = useMutation(CREATE_CONTACT)
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT)
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     create({ variables: { input: data } })
@@ -1125,6 +1147,11 @@ import {
   SubmitHandler,
 } from '@redwoodjs/forms'
 
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
@@ -1141,7 +1168,10 @@ interface FormValues {
 
 const ContactPage = () => {
   // highlight-start
-  const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
     onCompleted: () => {
       toast.success('Thank you for your submission!')
     },
@@ -1428,6 +1458,11 @@ import {
   SubmitHandler,
 } from '@redwoodjs/forms'
 
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
@@ -1443,7 +1478,10 @@ interface FormValues {
 }
 
 const ContactPage = () => {
-  const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
     onCompleted: () => {
       toast.success('Thank you for your submission!')
     },
@@ -1747,7 +1785,10 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 // ...
 
-const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
+const [create, { loading, error }] = useMutation<
+  CreateContactMutation,
+  CreateContactMutationVariables
+>(CREATE_CONTACT, {
   onCompleted: () => {
     toast.success('Thank you for your submission!')
     // highlight-next-line
@@ -1884,6 +1925,11 @@ import {
   useForm,
 } from '@redwoodjs/forms'
 
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
     createContact(input: $input) {
@@ -1901,7 +1947,10 @@ interface FormValues {
 const ContactPage = () => {
   const formMethods = useForm()
 
-  const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
     onCompleted: () => {
       toast.success('Thank you for your submission!')
       formMethods.reset()
