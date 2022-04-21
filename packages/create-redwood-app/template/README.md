@@ -1,26 +1,22 @@
-# Redwood
+# README
 
-> **NOTICE:** RedwoodJS is very close to a stable version 1.0. In the last two years,
-> the project has matured significantly and is already used in production by a number
-> of startups. We intend to have a 1.0 release candidate before the end of 2021 and
-> to release a truly production-ready 1.0 in early 2022.
+Welcome to [RedwoodJS](https://redwoodjs.com)!
 
-## Getting Started
-- [Tutorial](https://redwoodjs.com/docs/tutorial): getting started and complete overview guide.
-- [Docs](https://redwoodjs.com/docs/introduction): using the Redwood Router, handling assets and files, list of command-line tools, and more.
-- [Redwood Community](https://community.redwoodjs.com): get help, share tips and tricks, and collaborate on everything about RedwoodJS.
+> **Prerequisites**
+>
+> - Redwood requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+> - Are you on Windows? For best results, follow our [Windows development setup](https://redwoodjs.com/docs/how-to/windows-development-setup) guide
 
-### Setup
+Start by installing dependencies:
 
-We use Yarn as our package manager. To get the dependencies installed, just do this in the root directory:
-
-```terminal
+```
 yarn install
 ```
 
-### Fire it up
+Then change into that directory and start the development server:
 
-```terminal
+```
+cd my-redwood-project
 yarn redwood dev
 ```
 

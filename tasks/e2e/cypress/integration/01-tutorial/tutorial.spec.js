@@ -45,7 +45,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // reset redwood toml to use standard apollo server aka not envelop
     // cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
 
-    // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
+    // needed because can run integration tests out of order and the GraphQL Yoga + envelop tests will overwrite the graphql function
     // cy.writeFile(
     //   path.join(BASE_DIR, 'api/src/functions/graphql.js'),
     //   Step0_2_GraphQL

@@ -47,7 +47,7 @@ export function getOutline(project: RWProject): TreeItem2 {
         menu: {
           kind: 'withDoc',
           doc: Command_open(
-            'https://redwoodjs.com/cookbook/mocking-graph-ql-in-storybook'
+            'https://redwoodjs.com/how-to/mocking-graph-ql-in-storybook'
           ),
         },
       } as TreeItem2,

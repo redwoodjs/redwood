@@ -1,3 +1,7 @@
+---
+description: Use meta tags to set page info for SEO
+---
+
 # SEO & Meta tags
 
 ## Add app title
@@ -29,7 +33,7 @@ In _web/src/App.{tsx,js}_
 You can write the format you like.
 
 _Examples  :_
-```js
+```jsx
 "%PageTitle | %AppTitle" => "Home Page | Redwood App"
 
 "%AppTitle · %PageTitle" => "Redwood App · Home Page"
@@ -79,7 +83,7 @@ Often we want to set more than just the title - most commonly to set "og" header
 Redwood provides a convenience component `<MetaTags>` to help you get all the relevant tags with one go (but you can totally choose to do them yourself)
 
 Here's an example setting some common headers, including how to set an `og:image`
-```js
+```jsx
 import { MetaTags } from '@redwoodjs/web'
 
 const AboutPage = () => {
@@ -111,11 +115,11 @@ Great - so far we can see the changes, and bots will pick up our tags if we've p
 _Just keep in mind, that Cells are currently not prerendered_ - so it'll be visible to your users, but not to link scrapers and bots.
 
 > **<Head\>s up**<br/>
-> For dynamic tags to appear to bots and link scrapers you have to setup an external prerendering service. If you're on Netlify you can use their [built-in one](https://docs.netlify.com/site-deploys/post-processing/prerendering/). Otherwise you can follow [this great cookbook](https://community.redwoodjs.com/t/cookbook-getting-og-and-meta-tags-working-with-nginx-pre-render-io-and-docker/2014) from the Redwood community
+> For dynamic tags to appear to bots and link scrapers you have to setup an external prerendering service. If you're on Netlify you can use their [built-in one](https://docs.netlify.com/site-deploys/post-processing/prerendering/). Otherwise you can follow [this great how to](https://community.redwoodjs.com/t/cookbook-getting-og-and-meta-tags-working-with-nginx-pre-render-io-and-docker/2014) from the Redwood community
 
 
 Let's say in our PostCell, we want to set the title to match the Post.
-```js
+```jsx
 import Post from 'src/components/Post/Post'
 
 export const QUERY = gql`

@@ -10,6 +10,7 @@ describe('getConfig', () => {
     expect(config).toMatchInlineSnapshot(`
       Object {
         "api": Object {
+          "debugPort": 18911,
           "host": "localhost",
           "path": "./api",
           "port": 8911,

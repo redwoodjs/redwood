@@ -7,13 +7,13 @@ import path from 'node:path'
 import { waitForServer } from '../util'
 
 // Declare worker fixtures.
-type DevServerFixtures = {
+export type ServeFixture = {
   port: number
   server: any
 }
 
 // Note that we did not provide an test-scoped fixtures, so we pass {}.
-const test = base.extend<any, DevServerFixtures>({
+const test = base.extend<any, ServeFixture>({
   port: [
     async ({}, use, workerInfo) => {
       // "port" fixture uses a unique value of the worker process index.

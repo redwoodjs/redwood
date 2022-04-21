@@ -34,10 +34,9 @@ export default HomePage
 */
 
 i18n
-  .use(initReactI18next)
-  // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
   .use(LanguageDetector)
+  .use(initReactI18next)
   .init({
     interpolation: { escapeValue: false }, // React already does escaping
     fallbackLng: 'en',

@@ -37,7 +37,7 @@ yarn redwood dev
 
 - The [Redwood Tutorial](https://redwoodjs.com/docs/tutorial): The best way to learn Redwood
 - The [Redwood CLI](https://redwoodjs.com/docs/cli-commands): code generators, DB helpers, setup commands, and more
-- [Documentation](https://redwoodjs.com/docs) and [Cookbooks](https://redwoodjs.com/cookbook/custom-function)
+- [Documentation](https://redwoodjs.com/docs) and [How To's](https://redwoodjs.com/how-to/custom-function)
 - Join the Community [Forums](https://community.redwoodjs.com) and [Chat](https://discord.gg/redwoodjs)
 
 <br>

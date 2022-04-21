@@ -1,3 +1,7 @@
+---
+description: Securely integrate third-party services
+---
+
 # Webhooks
 
 If you've used [Automate](https://automate.io/), [IFTTT](https://ifttt.com/maker_webhooks), [Pipedream](https://pipedream.com/docs/api/rest/webhooks/), or [Zapier](https://zapier.com/apps/webhook/integrations) then you're familiar with how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps. RedwoodJS helps you work with webhooks by giving you the tools to both receive and verify incoming webhooks and sign outgoing ones with ease.
@@ -57,7 +61,7 @@ RedwoodJS adds a way to do no verification as well of testing or in the case you
 
 RedwoodJS implements [signatureVerifiers](https://github.com/dthyresson/redwood/tree/dt-secure-handler/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
 
-```js
+```jsx
 export type SupportedVerifiers =
   | SkipVerifier
   | SecretKeyVerifier
@@ -74,14 +78,14 @@ Each `SupportedVerifier` implements a method to `sign` and `verify` a payload wi
 
 When the webhook needs [creates a verifier](https://github.com/dthyresson/redwood/blob/b3b21a4a2c7a96ac8d1fd8b078a9869d3f2f1cec/packages/api/src/auth/verifiers/index.ts#L12) in order to `verifyEvent`, `verifySignature` or `signPayload` it does so via:
 
-```js
+```jsx
 createVerifier(type, options)
 ```
 
 where type is one of the supported verifiers and `VerifyOptions` sets the
 options the verifier needs to sign or verify.
 
-```js
+```jsx
 /**
  * VerifyOptions
  *
@@ -137,7 +141,7 @@ When your secret token is set, GitHub uses it to create a hash signature with ea
 
 For Discourse, when an event is triggered, it `POST`s a webhook with `X-Discourse-Event-Signature` in the HTTP header to your endpoint. It’s computed by SHA256.
 
-```js
+```jsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import {
   verifyEvent,
@@ -211,7 +215,7 @@ This is a variation on the SHA256 HMAC verification that works with binary buffe
 
 Svix (and by extension, Clerk) gives you a secret token that it uses to create a hash signature with each payload. This hash signature is included with the headers of each request as `svix-signature`.
 
-```ts
+```tsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import {
   verifyEvent,
@@ -304,7 +308,7 @@ Vercel signs its webhooks with SHA also base64 encodes the event.
 
 RedwoodJS `verifyEvent` will detect is the event is base64 encoded, decode and then validate the payload with the signature.
 
-```js
+```jsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import {
   verifyEvent,
@@ -387,7 +391,7 @@ Also, if for some reason you need to adjust the timestamp used to compare the to
 
 The TimestampScheme is particularly useful when used with cron jobs because if for some reason the webhook is delayed between when it is created and sent/received your app can discard it and thus old information would not risk overwriting newer data.
 
-```js
+```jsx
 import type { APIGatewayEvent } from 'aws-lambda'
 
 import {
@@ -476,7 +480,7 @@ The JSON Web Token (JWT) Verifier not only cryptographically compares the signat
 
 Here, the `VerifyOptions` not only specify the expected signature header, but allow will check that the `iss` claim is netlify.
 
-```js
+```jsx
     const options = {
       signatureHeader: 'X-Webhook-Signature',
       issuer: 'netlify',
@@ -485,7 +489,7 @@ Here, the `VerifyOptions` not only specify the expected signature header, but al
 
 See: [Introduction to JSON Web Tokens](https://jwt.io/introduction) for more information.
 
-```js
+```jsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import {
   verifyEvent,
@@ -568,7 +572,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
 The Secret Key verifiers used by [Orbit](https://docs.orbit.love/docs/webhooks) acts very much like a password. It doesn't perform some cryptographic comparison of the signature with the payload received, but rather simple checks if the expected key or token is present.
 
-```js
+```jsx
 //import type { APIGatewayEvent, Context } from 'aws-lambda'
 import {
   verifyEvent,
@@ -690,7 +694,7 @@ You can also use the `skipVerifier` in testing or in `dev` so that you needn't s
 
 In that case, you might set `WEBHOOK_VERIFICATION=skipVerifier` and use the envar in `verifyEvent(process.env.WEBHOOK_VERIFICATION, { event })`.
 
-```js
+```jsx
 import type { APIGatewayEvent } from 'aws-lambda'
 import { verifyEvent, WebhookVerificationError } from '@redwoodjs/api/webhooks'
 
@@ -761,7 +765,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
 To sign a payload for an outgoing webhook, the `api/webhooks` package exports [signPayload](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/webhooks/index.ts), a function that signs a payload using a [verification method](https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth/verifiers), creating your "webhook signature". Once you have the signature, you can add it to your request's http headers with a name of your choosing, and then post the request to the endpoint:
 
-```js
+```jsx
 import got from 'got'
 import { signPayload } from '@redwoodjs/api/webhooks'
 

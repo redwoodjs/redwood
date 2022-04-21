@@ -133,10 +133,11 @@ describe("Doesn't swallow legit errors", () => {
     const oldConsoleError = console.error
     console.error = jest.fn()
 
-    await generateTypeDefGraphQLWeb({ logErrors: true })
+    await generateTypeDefGraphQLWeb()
 
     try {
-      expect(console.error).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenNthCalledWith(
+        3,
         expect.objectContaining({
           message: expect.stringMatching(/field.*softKitten.*Query/),
         })
@@ -156,10 +157,11 @@ describe("Doesn't swallow legit errors", () => {
     const oldConsoleError = console.error
     console.error = jest.fn()
 
-    await generateTypeDefGraphQLWeb({ logErrors: true })
+    await generateTypeDefGraphQLWeb()
 
     try {
-      expect(console.error).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenNthCalledWith(
+        3,
         expect.objectContaining({
           message: expect.stringMatching(/Unknown type.*Todo/),
         })
@@ -179,10 +181,11 @@ describe("Doesn't swallow legit errors", () => {
     const oldConsoleError = console.error
     console.error = jest.fn()
 
-    await generateTypeDefGraphQLWeb({ logErrors: true })
+    await generateTypeDefGraphQLWeb()
 
     try {
-      expect(console.error).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenNthCalledWith(
+        3,
         expect.objectContaining({
           message: expect.stringMatching(/field.*done.*Todo/),
         })

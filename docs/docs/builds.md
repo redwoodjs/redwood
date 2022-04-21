@@ -1,3 +1,6 @@
+---
+description: What happens when you build your app
+---
 # Builds
 
 > ⚠ **Work in Progress** ⚠️
@@ -13,7 +16,7 @@
 
 The api side of Redwood is transpiled by Babel into the `./api/dist` folder.
 
-### steps on Netlify
+### Steps on Netlify
 
 To emulate Netlify's build steps locally:
 
@@ -27,7 +30,7 @@ Each lambda function in `./api/dist/functions` is parsed by zip-it-and-ship-it r
 
 >Note: The `@netlify/zip-it-and-ship-it` package needs to be installed as a dev dependency in `api/`. Use the command `yarn workspace api add -D @netlify/zip-it-and-ship-it`.
 >- You can learn more about the package [here](https://www.npmjs.com/package/@netlify/zip-it-and-ship-it).
->- For more information on AWS Serverless Deploy see these [docs](deploy.md#serverless-deploy).
+>- For more information on AWS Serverless Deploy see these [docs](/docs/deploy/serverless).
 
 ## Web
 

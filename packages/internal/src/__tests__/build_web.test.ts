@@ -60,6 +60,7 @@ test('Check routes are imported with require when staticImports flag is enabled'
 
   const withStaticImports = prebuildWebFile(routesFile, {
     staticImports: true,
+    forJest: true,
   }).code
 
   /* Check that imports have the form
@@ -85,7 +86,9 @@ test('Check routes are imported with require when staticImports flag is enabled'
 test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
   const routesFile = getPaths().web.routes
 
-  const withoutStaticImports = prebuildWebFile(routesFile).code
+  const withoutStaticImports = prebuildWebFile(routesFile, {
+    forJest: true,
+  }).code
 
   /* Check that imports have the form
    `const HomePage = {

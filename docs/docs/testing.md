@@ -1,3 +1,7 @@
+---
+description: A comprehensive reference for testing your app
+---
+
 # Testing
 
 Testing. For some it's an essential part of their development workflow. For others it's something they know they *should* do, but for whatever reason it hasn't struck their fancy yet. For others still it's something they ignore completely, hoping the whole concept will go away. But tests are here to stay, and maybe Redwood can change some opinions about testing being awesome and fun.
@@ -12,7 +16,7 @@ The idea of testing is pretty simple: for each "unit" of code you write, you wri
 
 Let's say we write a function that adds two numbers together:
 
-```javascript
+```jsx
 const add = (a, b) => {
   return a + b
 }
@@ -20,7 +24,7 @@ const add = (a, b) => {
 
 You test this code by writing another piece of code (which usually lives in a separate file and can be run in isolation), just including the functionality from the real codebase that you need for the test to run. For our examples here we'll put the code and its test side-by-side so that everything can be run at once. Our first test will call the `add()` function and make sure that it does indeed add two numbers together:
 
-```javascript{5-9}
+```jsx {5-9}
 const add = (a, b) => {
   return a + b
 }
@@ -66,7 +70,7 @@ Tests can also help drive new development. For example, what happens to our `add
 
 So, what does happen if we leave off an argument when calling `add()`? Well, what do we *want* to happen? We'll answer that question by writing a test for what we expect. For this example let's have it throw an error. We'll write the test first that expects the error:
 
-```javascript
+```jsx
 try {
   add(1)
 } catch (e) {
@@ -90,7 +94,7 @@ Where did *that* come from? Well, our subject `add()` didn't raise any errors (J
 
 To respond properly to this case we'll make one slight modification: add another "fail" log message if the code somehow gets past the call to `add(1)` *without* throwing an error:
 
-```javascript{3,8}
+```jsx {3,8}
 try {
   add(1)
   console.error('fail: no error thrown')
@@ -109,7 +113,7 @@ We also added a little more information to the "fail" messages so we know which 
 
 Now we'll actually update `add()` to behave as we expect: by throwing an error if less than two arguments are passed.
 
-```javascript
+```jsx
 const add = (...nums) => {
   if (nums.length !== 2) {
     throw 'add() requires two arguments'
@@ -128,7 +132,7 @@ We've covered passing too few arguments, what if we pass too many? We'll leave w
 
 Our tests are a little verbose (10 lines of code to test that the right number of arguments were passed). Luckily, the test runner that Redwood uses, Jest, provides a simpler syntax for the same assertions. Here's the complete test file, but using Jest's provided helpers:
 
-```javascript
+```jsx
 describe('add()', () => {
   it('adds two numbers', () => {
     expect(add(1, 1)).toEqual(2)
@@ -188,7 +192,7 @@ Redwood's generators will include test files for basic functionality automatical
 
 You can use a single command to run your entire suite :
 
-```terminal
+```bash
 yarn rw test
 ```
 
@@ -196,7 +200,7 @@ This will start Jest in "watch" mode which will continually run and monitor the 
 
 To start the process without watching, add the `--no-watch` flag:
 
-```terminal
+```bash
 yarn rw test --no-watch
 ```
 
@@ -207,20 +211,20 @@ This one is handy before committing some changes to be sure you didn't inadverte
 
 You can run only the web- or api-side test suites by including the side as another argument to the command:
 
-```terminal
+```bash
 yarn rw test web
 yarn rw test api
 ```
 
 Let's say you have a test file called `CommentForm.test.js`. In order to only watch and run tests in this file you can run
 
-```terminal
+```bash
 yarn rw test CommentForm
 ```
 
 If you need to be more specific, you can combine side filters, with other filters
 
-```terminal
+```bash
 yarn rw test api Comment
 ```
 which will only run test specs matching "Comment" in the API side
@@ -229,9 +233,7 @@ which will only run test specs matching "Comment" in the API side
 
 Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
 
-```javascript
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 const Article = ({ article }) => {
   return <article>{ article.title }</article>
 }
@@ -372,9 +374,7 @@ In most cases you will want to exclude the design elements and structure of your
 
 In our **&lt;Article&gt;** component it seems like we really just want to test that the title of the product is rendered. *How* and *what it looks like* aren't really a concern for this test. Let's update the test to just check for the presence of the title itself:
 
-```javascript{3,7-9}
-// web/src/components/Article/Article.test.js
-
+```jsx {3,7-9} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 
 describe('Article', () => {
@@ -398,9 +398,7 @@ Why not use `getByText()` for everything? Because it will raise an error if the 
 
 Consider an update to our **&lt;Article&gt;** component:
 
-```javascript
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
 
 const Article = ({ article, summary }) => {
@@ -420,9 +418,7 @@ export default Article
 
 If we're only displaying the summary of an article then we'll only show the first 100 characters with an ellipsis on the end ("...") and include a link to "Read more" to see the full article. A reasonable test for this component would be that when the `summary` prop is `true` then the "Read more" text should be present. If `summary` is `false` then it should *not* be present. That's where `queryByText()` comes in (relevant test lines are highlighted):
 
-```javascript{18,24}
-// web/src/components/Article/Article.test.js
-
+```jsx {18,24} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -455,7 +451,7 @@ describe('Article', () => {
 
 Sometimes it may not be enough to say "this text must be on the page." You may want to test that an actual *link* is present on the page. Maybe you have a list of users' names and each name should be a link to a detail page. We could test that like so:
 
-```javascript
+```jsx
 it('renders a link with a name', () => {
   render(<List data={[{ name: 'Rob' }, { name: 'Tom' }]} />)
 
@@ -468,7 +464,7 @@ it('renders a link with a name', () => {
 
 If we wanted to eliminate some duplication (and make it easy to expand or change the names in the future):
 
-```javascript
+```jsx
 it('renders a link with a name', () => {
   const data = [{ name: 'Rob' }, { name: 'Tom' }]
 
@@ -482,7 +478,7 @@ it('renders a link with a name', () => {
 
 But what if we wanted to check the `href` of the link itself to be sure it's correct? In that case we can capture the `screen.getByRole()` return and run expectations on that as well (the `forEach()` loop has been removed here for simplicity):
 
-```javascript{2,6-8}
+```jsx {2,6-8}
 import { routes } from '@redwoodjs/router'
 
 it('renders a link with a name', () => {
@@ -514,7 +510,7 @@ Due to this, there are some exceptions that can occur while testing your API and
 Prisma recommends using `Decimal` instead of `Float` because of accuracy in precision. Float is inaccurate in the number of digits after decimal whereas Prisma returns a string for Decimal value which preserves all the digits after the decimal point.
 
 e.g., using `Float` type
-```javascript{4}
+```jsx {4}
 Expected: 1498892.0256940164
 Received: 1498892.025694016
 
@@ -522,7 +518,7 @@ expect(result.floatingNumber).toEqual(1498892.0256940164)
 ```
 
 e.g., using `Decimal` type
-```javascript{4}
+```jsx {4}
 Expected: 7420440.088194787
 Received: "7420440.088194787"
 
@@ -536,7 +532,7 @@ In the above examples, we can see expect doesn't preserve the floating numbers. 
 #### DateTime
 Prisma returns [DateTime](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datetime) as ISO 8601-formatted strings. So, you can convert the date to ISO String in JavaScript:
 
-```javascript{1}
+```jsx {1}
 //  Output: '2021-10-15T19:40:33.000Z'
 const isoString = new Date("2021-10-15T19:40:33Z").toISOString()
 ```
@@ -566,9 +562,7 @@ If you're using GraphQL inside your components, you can mock them to return the 
 
 > Normally we recommend using a cell for exactly this functionality, but for the sake of completeness we're showing how to test when doing GraphQL queries the manual way!
 
-```javascript
-// web/src/components/Article/Article.js
-
+```jsx title="web/src/components/Article/Article.js"
 import { useQuery } from '@redwoodjs/web'
 
 const GET_ARTICLE = gql`
@@ -603,9 +597,7 @@ export default Article
 
 Redwood provides the test function `mockGraphQLQuery()` for providing the result of a given named GraphQL. In this case our query is named `getArticle` and we can mock that in our test as follows:
 
-```javascript{8-16,20}
-// web/src/components/Article/Article.test.js
-
+```jsx {8-16,20} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -634,7 +626,7 @@ Note that you need to make the test function `async` and put an `await` before t
 
 The function that's given as the second argument to `mockGraphQLQuery` will be sent a couple of arguments. The first&mdash;and only one we're using here&mdash;is `variables` which will contain the variables given to the query when `useQuery` was called. In this test we passed an `id` of `1` to the **&lt;Article&gt;** component when test rendering, so `variables` will contain `{id: 1}`. Using this variable in the callback function to `mockGraphQLQuery` allows us to reference those same variables in the body of our response. Here we're making sure that the returned article's `id` is the same as the one that was requested:
 
-```javascript{3}
+```jsx {3}
 return {
   article: {
     id: variables.id,
@@ -646,7 +638,7 @@ return {
 
 Along with `variables` there is a second argument: an object which you can destructure a couple of properties from. One of them is `ctx` which is the context around the GraphQL response. One thing you can do with `ctx` is simulate your GraphQL call returning an error:
 
-```javascript
+```jsx
 mockGraphQLQuery('getArticle', (variables, { ctx }) => {
   ctx.errors([{ message: 'Error' }])
 })
@@ -654,9 +646,7 @@ mockGraphQLQuery('getArticle', (variables, { ctx }) => {
 
 You could then test that you show a proper error message in your component:
 
-```javascript{4,8-10,21,27}
-// web/src/components/Article/Article.js
-
+```jsx {4,8-10,21,27} title="web/src/components/Article/Article.js"
 const Article = ({ id }) => {
   const { data, error } = useQuery(GET_ARTICLE, {
     variables: { id },
@@ -694,9 +684,7 @@ Most applications will eventually add [Authentication/Authorization](authenticat
 
 Consider the following component (that happens to be a page) which displays a "welcome" message if the user is logged in, and a button to log in if they aren't:
 
-```javascript
-// web/src/pages/HomePage/HomePage.js
-
+```jsx title="web/src/pages/HomePage/HomePage.js"
 import { useAuth } from '@redwoodjs/auth'
 
 const HomePage = () => {
@@ -717,9 +705,7 @@ const HomePage = () => {
 
 If we didn't do anything special, there would be no user logged in and we could only ever test the not-logged-in state:
 
-```javascript
-// web/src/pages/HomePage/HomePage.test.js
-
+```jsx title="web/src/pages/HomePage/HomePage.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import HomePage from './HomePage'
 
@@ -738,9 +724,7 @@ This test is a little more explicit in that it expects an actual `<button>` elem
 
 How do we test that when a user *is* logged in, it outputs a message welcoming them, and that the button is *not* present? Similar to `mockGraphQLQuery()` Redwood also provides a `mockCurrentUser()` which tells Redwood what to return when the `getCurrentUser()` function of `api/src/lib/auth.js` is invoked:
 
-```javascript
-// web/src/pages/HomePage/HomePage.test.js
-
+```jsx title="web/src/pages/HomePage/HomePage.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 import HomePage from './HomePage'
 
@@ -791,7 +775,7 @@ By including a list of `roles` in the object returned from `mockCurrentUser()` y
 
 Given a component that does something like this:
 
-```javascript
+```jsx
 const { currentUser, hasRole } = useAuth()
 
 return (
@@ -801,7 +785,7 @@ return (
 
 You can test both cases (user does and does not have the "admin" role) with two separate mocks:
 
-```javascript
+```jsx
 mockCurrentUser({ roles: ['admin'] })
 mockCurrentUser({ roles: [] })
 ```
@@ -812,7 +796,7 @@ That's it!
 
 We had to duplicate the `mockCurrentUser()` call and duplication is usually another sign that things can be refactored. In Jest you can nest `describe` blocks and include setup that is shared by the members of that block:
 
-```javascript
+```jsx
 describe('HomePage', () => {
   describe('logged out', () => {
     it('renders a login button when logged out', () => {
@@ -865,9 +849,7 @@ Two situations make testing Cells unique:
 
 The first situation is really no different from regular component testing: you just test more than one component in your test. For example:
 
-```javascript
-// web/src/components/ArticleCell/ArticleCell.js
-
+```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
@@ -893,9 +875,7 @@ export const Success = ({ article }) => {
 
 Here we're exporting four components and if you created this Cell with the [Cell generator](cli-commands.md#generate-cell) then you'll already have four tests that make sure that each component renders without errors:
 
-```javascript
-// web/src/components/ArticleCell/ArticleCell.test.js
-
+```jsx title="web/src/components/ArticleCell/ArticleCell.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './ArticleCell'
 import { standard } from './ArticleCell.mock'
@@ -937,9 +917,7 @@ When the **&lt;Success&gt;** component is tested, what's this `standard()` funct
 
 If you used the Cell generator, you'll get a `mocks.js` file along with the cell component and the test file:
 
-```javascript
-// web/src/components/ArticleCell.mocks.js
-
+```jsx title="web/src/components/ArticleCell.mocks.js"
 export const standard = () => ({
   article: {
     id: 42,
@@ -955,9 +933,7 @@ Why not just include this data inline in the test? We're about to reveal the ans
 
 Once you start testing more scenarios you can add custom mocks with different names for use in your tests. For example, maybe you have a case where an article has no body, only a title, and you want to be sure that your component still renders correctly. You could create an additional mock that simulates this condition:
 
-```javascript
-// web/src/components/ArticleCell.mocks.js
-
+```jsx title="web/src/components/ArticleCell.mocks.js"
 export const standard = () => ({
   article: {
     id: 1,
@@ -977,9 +953,7 @@ export const missingBody = {
 
 And then you just reference that new mock in your test:
 
-```javascript
-// web/src/components/ArticleCell/ArticleCell.test.js
-
+```jsx title="web/src/components/ArticleCell/ArticleCell.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './ArticleCell'
 import { standard, missingBody } from './ArticleCell.mock'
@@ -1016,9 +990,7 @@ So, all of that is to say that when `standard()` is called it will receive the v
 
 Perhaps you have a products page that renders either in stock or out of stock products. You could inspect the `status` that's passed into via `variables.status` and return a different inventory count depending on whether the calling code wants in-stock or out-of-stock items:
 
-```javascript
-// web/src/components/ProductCell/ProductCell.mock.js
-
+```jsx title="web/src/components/ProductCell/ProductCell.mock.js"
 export const standard = (variables) => {
   return {
     products: [
@@ -1034,9 +1006,7 @@ export const standard = (variables) => {
 
 Assuming you had a **&lt;ProductPage&gt;** component:
 
-```javascript
-// web/src/components/ProductCell/ProductCell.mock.js
-
+```jsx title="web/src/components/ProductCell/ProductCell.mock.js"
 import ProductCell from 'src/components/ProductCell'
 
 const ProductPage = ({ status }) => {
@@ -1051,9 +1021,7 @@ const ProductPage = ({ status }) => {
 
 Which, in your page test, would let you do something like:
 
-```javascript
-// web/src/pages/ProductPage/ProductPage.test.js
-
+```jsx title="web/src/pages/ProductPage/ProductPage.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import ArticleCell from 'src/components/ArticleCell'
 
@@ -1074,9 +1042,7 @@ describe('ProductPage', () => {
 
 Be aware that if you do this, and continue to use the `standard()` mock in your regular cell tests, you'll either need to start passing in `variables` yourself:
 
-```javascript{8}
-// web/src/components/ArticleCell/ArticleCell.test.js
-
+```jsx {8} title="web/src/components/ArticleCell/ArticleCell.test.js"
 describe('ArticleCell', () => {
   /// other tests...
   test('Success renders successfully', async () => {
@@ -1089,9 +1055,7 @@ describe('ArticleCell', () => {
 
 Or conditionally check that `variables` exists at all before basing any logic on them:
 
-```javascript{4,15}
-// web/src/components/ArticleCell/ArticleCell.mock.js
-
+```jsx {4,15} title="web/src/components/ArticleCell/ArticleCell.mock.js"
 export const standard = (variables) => {
   return {
     product: {
@@ -1121,8 +1085,7 @@ yarn workspace web add -D @testing-library/user-event
 
 Let's assume you've already created a component using `yarn rw g component`. This component is built using the `@redwoodjs/forms` package and provides a simple interface for using the form: we subscribe to changes via an `onSubmit` callback-prop.
 
-```javascript
-// NameForm.js
+```jsx title="NameForm.js"
 import { Form, Submit, TextField } from '@redwoodjs/forms'
 
 const NameForm = ({ onSubmit }) => {
@@ -1158,8 +1121,7 @@ Now, we can extend the `test` file which Redwood generated. We're going to want 
 2) Add an import to `@testing-library/user-event` for its `default`.
 3) Provide an `onSubmit` prop to our "renders successfully" test.
 
-```javascript
-// NameForm.test.js
+```jsx title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 import userEvent from '@testing-library/user-event'
 
@@ -1188,8 +1150,7 @@ The important takeaways are:
 * We use `waitFor` because `user-event`'s methods are synchronous, which contradicts the above.
   * `waitFor` acts as our declaration of [`act`](https://reactjs.org/docs/test-utils.html#act), required when updating the state of a React component from a test.
 
-```javascript
-// NameForm.test.js
+```jsx title="NameForm.test.js"
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 import userEvent from '@testing-library/user-event'
 
@@ -1304,8 +1265,7 @@ Set the variable to `push`, or remove it completely, and it will use the default
 
 A Service test can be just as simple as a component test:
 
-```javascript
-// api/src/services/users/users.js
+```jsx title="api/src/services/users/users.js"
 export const createUser = ({ input }) => {
   return db.user.create({ data: input })
 }
@@ -1335,7 +1295,7 @@ What about testing code that retrieves a record from the database? Easy, just pr
 
 In the following code, the "David" user is the seed. What we're actually testing is the `users()` and `user()` functions. We verify that the data returned by them matches the structure and content of the seed:
 
-```javascript
+```jsx
 it('retrieves all users', async () => {
   const data = await createUser({ name: 'David' })
 
@@ -1364,7 +1324,7 @@ Redwood created the concept of "scenarios" to cover this common case. A scenario
 
 When you use any of the generators that create a service (scaffold, sdl or service) you'll get a `scenarios.js` file alongside the service and test files:
 
-```javascript
+```jsx
 export const standard = defineScenario({
   user: {
     one: {
@@ -1387,7 +1347,7 @@ The `data` key is one of Prisma's [create options](https://www.prisma.io/docs/re
 
 Let's look at a better example. We'll update the scenario with some additional data and give them a more distinctive name:
 
-```javascript
+```jsx
 export const standard = defineScenario({
   user: {
     anthony: {
@@ -1410,7 +1370,7 @@ Note that even though we are creating two users we don't use array syntax and in
 
 Now in our test we replace the `it()` function with `scenario()`:
 
-```javascript
+```jsx
 scenario('retrieves all users', async (scenario) => {
   const list = await users()
 
@@ -1430,7 +1390,7 @@ The `scenario` argument passed to the function contains the scenario data *after
 
 You may have noticed that the scenario we used was once again named `standard`. This means it's the "default" scenario if you don't specify a different name. This implies that you can create more than one scenario and somehow use it in your tests. And you can:
 
-```javascript
+```jsx
 export const standard = defineScenario({
   user: {
     anthony: {
@@ -1466,7 +1426,7 @@ export const incomplete = defineScenario({
 })
 ```
 
-```javascript
+```jsx
 scenario('incomplete', 'retrieves only incomplete users', async (scenario) => {
   const list = await users({ complete: false })
   expect(list).toMatchObject([scenario.user.forrest])
@@ -1479,7 +1439,7 @@ The name of the scenario you want to use is passed as the *first* argument to `s
 
 You're not limited to only creating a single model type in your scenario, you can populate every table in the database if you want.
 
-```javascript
+```jsx
 export const standard = defineScenario({
   product: {
     shirt: {
@@ -1509,7 +1469,7 @@ export const standard = defineScenario({
 
 And you reference all of these on your `scenario` object as you would expect
 
-```javascript
+```jsx
 scenario.product.shirt
 scenario.order.first
 scenario.paymentMethod.credit
@@ -1519,7 +1479,7 @@ scenario.paymentMethod.credit
 
 What if your models have relationships to each other? For example, a blog **Comment** has a parent **Post**. Scenarios are passed off to Prisma's [create](https://www.prisma.io/docs/concepts/components/prisma-client/crud#create) function, which includes the ability to create nested relationship records simultaneously:
 
-```javascript
+```jsx
 export const standard = defineScenario({
   comment: {
     first: {
@@ -1540,7 +1500,7 @@ export const standard = defineScenario({
 
 Now you'll have both the comment and the post it's associated to in the database and available to your tests. For example, to test that you are able to create a second comment on this post:
 
-```javascript
+```jsx
 scenario('creates a second comment', async (scenario) => {
   const comment = await createComment({
     input: {
@@ -1586,7 +1546,7 @@ export const standard = defineScenario({
 
 Then you’ll have both the `comment` and its `post`:
 
-```javascript
+```jsx
 scenario('retrieves a comment with post', async (scenario) => {
   const comment = await commentWithPost({ id: scenario.comment.first.id })
 
@@ -1600,7 +1560,7 @@ If your models have relationships and you need to connect new records to existin
 
 Consider a `Comment`: it has a parent `Post`, and both of them have an `Author`. Using the object syntax, there's no way of accessing the `authorId` of the `Author` we just created. We could potentially hardcode it, but that's bad practice.
 
-```javascript
+```jsx
 export const standard = defineScenario({
   post: {
     first: {
@@ -1629,7 +1589,7 @@ export const standard = defineScenario({
 
 When you run into this, you can access an existing `scenario` record using the distinctive name key as a function that returns an object:
 
-```javascript
+```jsx
 export const standard = defineScenario({
   author: {
     kris: {
@@ -1666,7 +1626,7 @@ export const standard = defineScenario({
 
 Since [ES2015](https://tc39.es/ecma262/#sec-ordinaryownpropertykeys), object property keys are in ascending order of creation. This means that a key in `defineScenario` has access to key(s) created before it. We can leverage this like so:
 
-```javascript
+```jsx
 export const standard = defineScenario({
   user: {
     kris: {
@@ -1705,9 +1665,7 @@ Just like when testing the web-side, we can use `mockCurrentUser()` to mock out 
 
 Let's say our blog, when commenting, would attach a comment to a user record if that user was logged in while commenting. Otherwise the comment would be anonymous:
 
-```javascript
-// api/src/services/comments/comments.js
-
+```jsx title="api/src/services/comments/comments.js"
 export const createComment = ({ input }) => {
   if (context.currentUser) {
     return db.comment.create({ data: { userId: context.currentUser.id, ...input }})
@@ -1719,9 +1677,7 @@ export const createComment = ({ input }) => {
 
 We could include a couple of tests that verify this functionality like so:
 
-```javascript
-// api/src/services/comments/comments.test.js
-
+```jsx title="api/src/services/comments/comments.test.js"
 scenario('attaches a comment to a logged in user', async (scenario) => {
   mockCurrentUser({ id: 123, name: 'Rob' })
 

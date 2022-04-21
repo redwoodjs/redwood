@@ -470,7 +470,7 @@ It would be more future-proof to create a *new* endpoint for public display of p
 
 Yet another generator is here for you, this time one that will create pages for login, signup and forgot password pages:
 
-```terminal
+```bash
 yarn rw g dbAuth
 ```
 

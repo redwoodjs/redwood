@@ -67,8 +67,7 @@ export const preRequisiteCheckTask = (preRequisites) => {
               try {
                 await execa(...preReq.command)
               } catch (error) {
-                error.message =
-                  error.message + '\n' + preReq.errorMessage.join(' ')
+                error.message = error.message + '\n' + preReq.errorMessage
                 throw error
               }
             },
