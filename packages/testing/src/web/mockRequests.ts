@@ -68,7 +68,7 @@ export const registerHandler = (handler: RequestHandler) => {
 }
 
 export type DataFunction<
-  Query = Record<string, unknown>,
+  Query extends Record<string, unknown> = Record<string, unknown>,
   QueryVariables = Record<string, any>
 > = (
   variables: QueryVariables,
@@ -148,7 +148,7 @@ const mockGraphQL = (
 }
 
 export const mockGraphQLQuery = <
-  Query = Record<string, unknown>,
+  Query extends Record<string, unknown> = Record<string, unknown>,
   QueryVariables = Record<string, any>
 >(
   operation: string,
@@ -159,7 +159,7 @@ export const mockGraphQLQuery = <
 }
 
 export const mockGraphQLMutation = <
-  Query = Record<string, unknown>,
+  Query extends Record<string, unknown> = Record<string, unknown>,
   QueryVariables = Record<string, any>
 >(
   operation: string,
