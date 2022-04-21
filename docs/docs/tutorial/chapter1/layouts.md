@@ -60,7 +60,7 @@ export default BlogLayout
 import { Link, routes } from '@redwoodjs/router'
 
 type BlogLayoutProps = {
-  children?: React.ReactNode,
+  children?: React.ReactNode
 }
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
@@ -250,7 +250,7 @@ Back to the browser (you may need to manually refresh) and you should see...noth
 
 You may have noticed some duplication in Redwood's file names. Pages live in a directory called `/pages` and also contain `Page` in their name. Same with Layouts. What's the deal?
 
-When you have dozens of files open in your editor it's easy to get lost, especially when you have several files with names that are similar or even the same (they happen to be in different directories). Imagine a dozen files named `index.js` and then trying to find the one you're looking for in your open tabs! We've found that the extra duplication in the names of files is worth the productivity benefit when scanning for a specific open file.
+When you have dozens of files open in your editor it's easy to get lost, especially when you have several files with names that are similar or even the same (they happen to be in different directories). Imagine a dozen files named `index.{js,ts}` and then trying to find the one you're looking for in your open tabs! We've found that the extra duplication in the names of files is worth the productivity benefit when scanning for a specific open file.
 
 If you're using the [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) plugin this also helps disambiguate when browsing through your component stack:
 
@@ -305,7 +305,7 @@ export default BlogLayout
 import { Link, routes } from '@redwoodjs/router'
 
 type BlogLayoutProps = {
-  children?: React.ReactNode,
+  children?: React.ReactNode
 }
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {

@@ -1268,11 +1268,7 @@ We'll make a call to a new `validate` function to our `contacts` service, which 
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
-import { db } from 'src/lib/db'
-
-export const contacts = () => {
-  return db.contact.findMany()
-}
+// ...
 
 export const createContact = ({ input }) => {
   // highlight-next-line

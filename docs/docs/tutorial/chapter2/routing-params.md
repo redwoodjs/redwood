@@ -336,7 +336,10 @@ export const Success = ({ article }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticleCell/ArticleCell.tsx"
+```tsx title="web/src/components/ArticleCell/ArticleCell.tsx"
+import type { FindArticleQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 export const QUERY = gql`
   query ArticleQuery($id: Int!) {
     // highlight-next-line

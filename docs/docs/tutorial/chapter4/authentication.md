@@ -201,7 +201,7 @@ Try reloading the Posts admin and we'll see something that's 50% correct:
 
 ![image](https://user-images.githubusercontent.com/300/146462761-d21c93f0-289a-4e11-bccf-8e4e68f21438.png)
 
-Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<Private>`:
+Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl.{js,ts}`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<Private>`:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -286,7 +286,7 @@ Try going back to [http://localhost:8910/admin/posts](http://localhost:8910/admi
 
 Well, we couldn't get to the admin pages, but we also can't see our blog posts any more. Do you know why we're seeing the same message here that we saw in the posts admin page?
 
-It's because the `posts` query in `posts.sdl` is used by both the homepage *and* the posts admin page. Since it has the `@requireAuth` directive, it's locked down and can only be accessed when logged in. But we *do* want people that aren't logged in to be able to view the posts on the homepage!
+It's because the `posts` query in `posts.sdl.{js,ts}` is used by both the homepage *and* the posts admin page. Since it has the `@requireAuth` directive, it's locked down and can only be accessed when logged in. But we *do* want people that aren't logged in to be able to view the posts on the homepage!
 
 Now that our admin pages are behind a `<Private>` route, what if we set the `posts` query to be `@skipAuth` instead? Let's try:
 
