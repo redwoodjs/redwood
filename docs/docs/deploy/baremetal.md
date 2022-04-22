@@ -233,7 +233,7 @@ You'll want to create an `.env` file in this directory containing any environmen
 
 The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' ssh session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path. A quick fix for this on some distros is to edit the deployment user's `~/.bashrc` file and comment out the lines that stop non-interactive processing.
 
-```diff title=".bashrc"
+```diff title="~/.bashrc"
 # If not running interactively, don't do anything
 - case $- in
 -     *i*) ;;
@@ -249,7 +249,7 @@ The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/i
 
 This may also be a one-liner like:
 
-```diff title=".bashrc"
+```diff title="~/.bashrc"
 - [ -z "$PS1" ] && return
 + # [ -z "$PS1" ] && return
 ```
@@ -380,7 +380,7 @@ The default configuration, which requires the least amount of manual configurati
 
 ### Redwood Serves Web and Api Sides, Bind to Port 80
 
-This is almost as easy as the default configuration, you just need to tell Redwood to bind to port 80. However, most *nix distributions will not allow a process to bind to ports lower than 1024 without root/sudo permissions. There is a command you can run to allow access to a specific binary (node, in this case) to bind to one of those ports anyway.
+This is almost as easy as the default configuration, you just need to tell Redwood to bind to port 80. However, most *nix distributions will not allow a process to bind to ports lower than 1024 without root/sudo permissions. There is a command you can run to allow access to a specific binary (`node` in this case) to bind to one of those ports anyway.
 
 #### redwood.toml
 
