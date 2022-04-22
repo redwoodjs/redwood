@@ -10,13 +10,13 @@ With Redwood's Baremetal deployment option, the source (like your dev machine) w
 
 Deploying from a client (like your own development machine) consists of running a single command:
 
-First time deploy
+First time deploy:
 
 ```bash
-yarn rw deploy baremetal --first run
+yarn rw deploy baremetal --first-run
 ```
 
-Subsequent deploys
+Subsequent deploys:
 
 ```bash
 yarn rw deploy baremetal
@@ -26,21 +26,41 @@ yarn rw deploy baremetal
 
 The baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
-1. `git pull` - gets latest code
+1. `git clone` - gets latest code
 2. `yarn install` - installs dependencies
 3. `yarn rw prisma migrate deploy` - runs db migrations
 3. `yarn rw prisma generate` - generates latest Prisma Client libs
 4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
 5. `yarn rw build` - builds the web and/or api sides
-6. `yarn pm2 restart [service]` - restarts the serving process(es)
+6. `pm2 restart [service]` - restarts the serving process(es)
 
 ### First Run Lifecycle
 
 If the `--first-run` flag is specified step 6. above will be skipped and the following commands will run instead:
-  - `yarn pm2 start [service]` - starts the serving process(es)
-  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
+  - `pm2 start [service]` - starts the serving process(es)
+  - `pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
 
-> We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
+## Directory Structure
+
+Once you're deployed and running, you'll find a directory structure that looks like this:
+
+```
+└── var
+    └── www
+        └── myapp
+            ├── .env <────────────────┐
+            ├── current ────────────┐ │
+            └── releases            │ │
+                └── 20220420120000 <┘ │
+                    ├── .env ─────────┘
+                    ├── api
+                    ├── web
+                    ├── ...
+```
+
+There's a symlink `current` pointing to directory named for a timestamp (the timestamp of the last deploy) and within that is your codebase. The `.env` file in that directory is then symlinked back out to the one in the root of your app path, so that it can be shared across deployments.
+
+So a reference to `/var/www/myapp/current` will always be the latest deployed version of your codebase. If you wanted to [setup nginx to serve your web side](#redwood-serves-api-nginx-serves-web-side), you would point it to `/var/www/myapp/current/web/dist` as the `root` and it will always be serving the latest code: a new deploy will change the `current` symlink and nginx will start serving the new files instantaneously.
 
 ## Setup
 
@@ -55,11 +75,14 @@ This will create a couple of files and add a dependency or two to your `package.
 1. `deploy.toml` contains server config for knowing which machines to connect to and which commands to run
 2. `ecosystem.config.js` for [PM2](https://pm2.keymetrics.io/) to know what service(s) to monitor
 
-> **A Note about PM2 Licensing**
->
-> PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not lawyers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
-
 If you see an error from `gyp` you may need to add some additional dependencies before `yarn install` will be able to complete. See the README for `node-type` for more info: https://github.com/nodejs/node-gyp#installation
+
+:::info PM2 Licensing
+
+PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not lawyers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
+
+:::
+
 
 ## Configuration
 
@@ -74,6 +97,7 @@ module.exports = {
   apps: [
     {
       name: 'serve',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve',
       instances: 'max',
@@ -92,6 +116,7 @@ module.exports = {
   apps: [
     {
       name: 'api',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve api',
       instances: 'max',
@@ -167,6 +192,7 @@ module.exports = {
   apps: [
     {
       name: 'api',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve api',
       instances: 'max',
@@ -176,6 +202,7 @@ module.exports = {
     },
     {
       name: 'web',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve web',
       instances: 'max',
@@ -187,7 +214,7 @@ module.exports = {
 }
 ```
 
-Note the inclusion of `migrate = false` so that migrations are not run again on this server (they only need to run once and it makes sense to keep them with the api side).
+Note the inclusion of `migrate = false` so that migrations are not run again on the web server (they only need to run once and it makes sense to keep them with the api side).
 
 You can add as many `[[servers]]` blocks as you need.
 
