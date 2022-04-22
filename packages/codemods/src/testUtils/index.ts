@@ -1,11 +1,18 @@
 import fs from 'fs'
+import { createRequire } from 'module'
 import path from 'path'
 
 import { format } from 'prettier'
 import tempy from 'tempy'
 
+const requireFromPrettier = createRequire(require.resolve('prettier'))
+const babelParser = requireFromPrettier('./parser-babel.js')
+
 export const formatCode = (code: string) => {
-  return format(code, { parser: 'babel-ts' })
+  return format(code, {
+    parser: 'babel-ts',
+    plugins: [babelParser],
+  })
 }
 
 export const createProjectMock = () => {
