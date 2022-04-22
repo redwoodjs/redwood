@@ -115,7 +115,7 @@ const sshExec = async (ssh, sshOptions, task, path, command, args) => {
   }
 }
 
-export const verifyServerConfig = (config, yargs) => {
+export const verifyServerConfig = (config) => {
   // is the repo's url set
   if (!config.repo) {
     throw new Error(
@@ -148,7 +148,7 @@ const commands = (yargs, ssh) => {
       yargs.branch || serverConfig.branch || DEFAULT_BRANCH_NAME
     const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
 
-    verifyServerConfig(serverConfig, yargs)
+    verifyServerConfig(serverConfig)
 
     tasks.push({
       title: 'Connecting...',
