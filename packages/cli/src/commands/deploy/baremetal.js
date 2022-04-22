@@ -12,6 +12,7 @@ import c from '../../lib/colors'
 import { configFilename } from '../setup/deploy/providers/baremetal'
 
 const DEFAULT_BRANCH_NAME = ['main']
+const SYMLINK_FLAGS = '-nsf'
 
 export const command = 'baremetal'
 export const description = 'Deploy to baremetal server(s)'
@@ -32,7 +33,7 @@ export const builder = (yargs) => {
   })
 
   yargs.option('update', {
-    describe: 'Update code to latest',
+    describe: 'Update code to latest revision',
     default: true,
     type: 'boolean',
   })
@@ -51,12 +52,6 @@ export const builder = (yargs) => {
 
   yargs.option('build', {
     describe: 'Run build process for the deployed `sides`',
-    default: true,
-    type: 'boolean',
-  })
-
-  yargs.option('symlink', {
-    describe: 'Symlink web/dist to web/serve/current for zero-downtime deploys',
     default: true,
     type: 'boolean',
   })
@@ -176,7 +171,7 @@ const commands = (yargs, ssh) => {
       title: `Symlink .env...`,
       task: async (_ctx, task) => {
         await sshExec(ssh, sshOptions, task, cmdPath, 'ln', [
-          '-nsf',
+          SYMLINK_FLAGS,
           '../.env',
           '.env',
         ])
@@ -232,9 +227,8 @@ const commands = (yargs, ssh) => {
     tasks.push({
       title: `Symlinking current release...`,
       task: async (_ctx, task) => {
-        // symlink /current dir
         await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
-          '-nsf',
+          SYMLINK_FLAGS,
           yargs.releaseDir,
           'current',
         ])
