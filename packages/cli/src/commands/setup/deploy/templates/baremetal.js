@@ -2,7 +2,7 @@ export const ECOSYSTEM = `module.exports = {
   apps: [
     {
       name: 'serve',
-      script: 'node_modules/.bin/rw',
+      script: 'current/node_modules/.bin/rw',
       args: 'serve',
       instances: 'max',
       exec_mode: 'cluster',
@@ -33,7 +33,8 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
-deployVia = "clone"
+repo = "git@github.com:redwoodjs/redwood.git"
+branch = "main"
 
 # If you have separate api and web servers:
 #
@@ -43,6 +44,8 @@ deployVia = "clone"
 # agentForward = true
 # sides = ["api"]
 # path = "/var/www/app"
+# repo = "git@github.com:redwoodjs/redwood.git"
+# branch = "main"
 # processNames = ["api"]
 #
 # [[servers]]
@@ -51,6 +54,8 @@ deployVia = "clone"
 # agentForward = true
 # sides = ["web"]
 # path = "/var/www/app"
+# repo = "git@github.com:redwoodjs/redwood.git"
+# branch = "main"
 # migrate = false # only one server in a cluster needs to migrate
 # processNames = ["web"]
 `
