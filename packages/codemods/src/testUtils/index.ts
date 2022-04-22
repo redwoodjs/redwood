@@ -5,7 +5,7 @@ import { format } from 'prettier'
 import tempy from 'tempy'
 
 export const formatCode = (code: string) => {
-  return format(code, { parser: 'babel-ts' })
+  return format(code, { parser: 'typescript' })
 }
 
 export const createProjectMock = () => {
