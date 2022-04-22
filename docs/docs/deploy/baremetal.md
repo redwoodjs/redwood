@@ -296,7 +296,7 @@ sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/
 
 In this example, you would copy `sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy` and run it.
 
-### Customizing the Deploy
+## Customizing the Deploy
 
 If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip those steps completely:
 
@@ -305,6 +305,20 @@ yarn rw deploy baremetal --no-migrate
 ```
 
 Run `yarn rw deploy baremetal --help` for the full list of flags. You can set them as `--migrate=false` or use the `--no-migrate` variant.
+
+## Monitoring
+
+PM2 has a nice terminal-based dashboard for monitoring your services:
+
+```bash
+pm2 monit
+```
+
+![pm2 dashboard](https://user-images.githubusercontent.com/300/164799386-84442fa3-8e68-4cc6-9e64-928b8e32731a.png)
+
+And even a web-based UI with paid upgrades if you need even more insights:
+
+![pm2 web dashboard](https://user-images.githubusercontent.com/300/164799541-6fe321fa-4d7c-44f7-93c6-3c202638da4f.png)
 
 ## Example Configurations
 
