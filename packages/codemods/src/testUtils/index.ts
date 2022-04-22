@@ -7,8 +7,7 @@ import tempy from 'tempy'
 
 export const formatCode = (code: string) => {
   return format(code, {
-    parser: 'babel-ts',
-    plugins: [parserBabel],
+    parser: parserBabel.parsers['babel-ts'],
   })
 }
 
