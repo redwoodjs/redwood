@@ -85,7 +85,7 @@ export const builder = (yargs) => {
         'yarn jest --help'
       )}\n\nAlso see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#test'
+        'https://redwoodjs.com/docs/cli-commands#test'
       )}\n`
     )
 }
