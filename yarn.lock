@@ -5948,7 +5948,7 @@ __metadata:
     param-case: 3.0.4
     pascalcase: 1.0.0
     pluralize: 8.0.0
-    prettier: 2.6.1
+    prettier: 2.6.2
     prisma: 3.12.0
     prompts: 2.4.2
     rimraf: 3.0.2
@@ -5984,7 +5984,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 27.5.1
     jscodeshift: 0.13.1
-    prettier: 2.6.1
+    prettier: 2.6.2
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
@@ -6090,7 +6090,7 @@ __metadata:
     eslint-plugin-react: 7.29.4
     eslint-plugin-react-hooks: 4.3.0
     jest: 27.5.1
-    prettier: 2.6.1
+    prettier: 2.6.2
     typescript: 4.6.3
   languageName: unknown
   linkType: soft
@@ -6199,7 +6199,7 @@ __metadata:
     graphql-tag: 2.12.6
     jest: 27.5.1
     kill-port: 1.6.1
-    prettier: 2.6.1
+    prettier: 2.6.2
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
     systeminformation: 5.11.13
@@ -24922,12 +24922,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.6.1":
-  version: 2.6.1
-  resolution: "prettier@npm:2.6.1"
+"prettier@npm:2.6.2, prettier@npm:^2.0.1, prettier@npm:^2.2.1":
+  version: 2.6.2
+  resolution: "prettier@npm:2.6.2"
   bin:
     prettier: bin-prettier.js
-  checksum: f2ff00a8e075089fd07f5b45af29f26cd280c01f5bb2973369b9e1326588ec0d9a35c81f37a7e1e780f418d3e5cbf6d586b41a161d06eeb6fa76e554c2ba7f4b
+  checksum: 4a2717d0aca6b5b5c24570854fdf119c4184ff7422a1aa283364bdfe5394ecff4f6ac375663840dc2680ea09b1d5370329b83ac06579588db6f8bc71620e1267
   languageName: node
   linkType: hard
 
@@ -24937,15 +24937,6 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: b9f434af2f25a37aad0b133894827e980885eb8bf317444c9dde0401ed2c7f463f9996d691f5ee5a0a4450ab46a894cd6557516b561e2522821522ce1f4c6668
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^2.0.1, prettier@npm:^2.2.1":
-  version: 2.6.2
-  resolution: "prettier@npm:2.6.2"
-  bin:
-    prettier: bin-prettier.js
-  checksum: 4a2717d0aca6b5b5c24570854fdf119c4184ff7422a1aa283364bdfe5394ecff4f6ac375663840dc2680ea09b1d5370329b83ac06579588db6f8bc71620e1267
   languageName: node
   linkType: hard
 

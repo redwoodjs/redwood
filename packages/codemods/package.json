@@ -34,7 +34,7 @@
     "findup-sync": "5.0.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
-    "prettier": "2.6.1",
+    "prettier": "2.6.2",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
     "yargs": "16.2.0"
