@@ -1976,16 +1976,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@clerk/backend-core@npm:1.5.1"
+"@clerk/backend-core@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "@clerk/backend-core@npm:1.5.2"
   dependencies:
     "@clerk/types": ^2.7.1
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: 180663681dacc793852bedf9d43001f09192a9f82c59bd0483efdcf6837900d81ff9fa8f35a58cdc03ddfc0c5ec2b0f5b389768f1d98cb5674c0759e73a2f7e5
+  checksum: ddf4932db6f583d1fb643985a38ef2746c0c9e2ef469c4a56adb004e7038a20704389f1d6c177fe7b0a0daa74db63861f7f36dae2e49a5638e382eba70945379
   languageName: node
   linkType: hard
 
@@ -2009,11 +2009,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.3.6":
-  version: 3.3.6
-  resolution: "@clerk/clerk-sdk-node@npm:3.3.6"
+"@clerk/clerk-sdk-node@npm:3.3.7":
+  version: 3.3.7
+  resolution: "@clerk/clerk-sdk-node@npm:3.3.7"
   dependencies:
-    "@clerk/backend-core": ^1.5.1
+    "@clerk/backend-core": ^1.5.2
     "@clerk/types": ^2.7.1
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
@@ -2024,7 +2024,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 126c6e823bf90f3ca070e414f029f8009dc9b5cd56b14c8ea7a9044004adfcd91ec03eb920ca6758c474fb378e917ff64e3b26d688738d641a4d1197b097abfc
+  checksum: 9dcdd5148f1ad3664f77f882ffcea33fbcd87990be9181c7b0a9c6ec10cf2b4f2908b863b8d172cd247494d83ec672a81f0b2863275c40dfd6b132786010e7af
   languageName: node
   linkType: hard
 
@@ -5868,7 +5868,7 @@ __metadata:
     typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.3.6
+    "@clerk/clerk-sdk-node": 3.3.7
     "@magic-sdk/admin": 1.4.1
     firebase-admin: 10.1.0
   peerDependenciesMeta:
@@ -5895,7 +5895,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@clerk/clerk-js": 3.7.1
-    "@clerk/clerk-sdk-node": 3.3.6
+    "@clerk/clerk-sdk-node": 3.3.7
     "@clerk/types": 2.7.1
     "@nhost/nhost-js": 1.1.2
     "@supabase/supabase-js": 1.35.1
