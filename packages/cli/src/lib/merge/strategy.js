@@ -87,7 +87,7 @@ const interleaveStrategy = {
 
     const uniqueSpecifiersOfType = (type) =>
       _.uniqWith(
-        [...baseSpecs.filter(nodeIs(type)), ...extSpecs.filter(nodeIs(type))],
+        [...baseSpecs, ...extSpecs].filter(nodeIs(type)),
         importSpecifierEquality
       )
 
@@ -159,7 +159,6 @@ const concatUniqueStrategy = {
   },
 }
 export function concatUnique(baseOrEq, ext) {
-  // There's a little bit of black magic in here. Please bear with me:
   // This function can be used directly as a node reducer, or to return a node reducer.
   // If it's used as a node reducer, it will receive two arguments like any other node reducer.
   //    1) the base to merge into
@@ -168,8 +167,6 @@ export function concatUnique(baseOrEq, ext) {
   //    1) the equality operator to use in the returned node reducer
   // So, we call the first argument baseOrEq to represent this duality.
 
-  // If we call concatUnique(someEqualityFunction), i.e. with a single argument, we want to return
-  // a node reducer which uses concatUniqueStrategy given the provided equality operator.
   if (arguments.length === 1) {
     return (base, ext) => {
       requireSameType(base, ext)
@@ -178,9 +175,6 @@ export function concatUnique(baseOrEq, ext) {
     }
   }
 
-  // On the other hand, if we call concatUnique with two arguments, we assume concatUnique itself is
-  // being used as a node reducer, and we should instead provide a default equality operator, and
-  // then directly invoke the concatUniqueStrategy.
   if (arguments.length === 2) {
     requireSameType(baseOrEq, ext)
     requireStrategyExists(baseOrEq, ext, concatUniqueStrategy, 'concatUnique')

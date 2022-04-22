@@ -354,10 +354,6 @@ describe('Array behavior', () => {
 })
 
 describe('opaque function behavior', () => {
-  // Default behavior is to treat all functions as opaque objects, the contents of which cannot be
-  // merged. To attempt anything else requires a definition of the "semantics" of a function, which
-  // is Hard in the general case, and best left to callers of merge() to specify on a case-by-case
-  // basis.
   it('does not merge semantically equivalent nodes in function bodies', () => {
     expectMerged(
       "const x = (a) => ['a', 'b', 'c'].contains(a)",
@@ -501,7 +497,7 @@ describe('Base precedence', () => {
   })
 })
 
-fdescribe('Integration tests', () => {
+describe('Integration tests', () => {
   const baseDir = './src/lib/__tests__/fixtures/merge'
   const tests = fs.readdirSync(baseDir).map((caseDir) => {
     return ['it.txt', 'base.jsx', 'ext.jsx', 'expected.jsx'].map((file) =>
