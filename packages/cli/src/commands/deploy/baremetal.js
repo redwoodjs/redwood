@@ -11,7 +11,6 @@ import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 import { configFilename } from '../setup/deploy/providers/baremetal'
 
-const DEPLOY_VIA_OPTIONS = ['clone', 'pull']
 const DEFAULT_BRANCH_NAME = ['main']
 
 export const command = 'baremetal'
@@ -145,7 +144,8 @@ const commands = (yargs, ssh) => {
       agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
       agentForward: serverConfig.agentForward,
     }
-    const deployBranch = yargs.branch || serverConfig.branch || 'main'
+    const deployBranch =
+      yargs.branch || serverConfig.branch || DEFAULT_BRANCH_NAME
     const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
 
     verifyServerConfig(serverConfig, yargs)
