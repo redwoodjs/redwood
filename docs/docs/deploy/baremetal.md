@@ -133,21 +133,10 @@ This lists a single server, providing the hostname and connection details (`user
 * `path` - The absolute path to the root of the application on the server
 * `migrate` - [optional] Whether or not to run migration processes on this server, defaults to `true`
 * `processNames` - An array of service names from `ecosystem.config.js` which will be (re)started on a successful deploy
-* `symlinkWeb` - [optional] If using nginx or another server to serve the web side, you can have the compiled `web/dist` files symlinked in a new directory so that they are not overwritten on the next deploy. See the [Redwood Serves Api, Nginx Serves Web Side](#redwood-serves-api-nginx-serves-web-side) section for more info.
+* `repo` - The path to the git repo to clone
+* `branch` - The branch to deploy (defaults to `main` if not set)
 
 The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` file, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
-
-> **SSH and non-interactive sessions - Possible Issues**
->
-> The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' ssh session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path. A quick fix for this on Ubuntu is to edit the deployment users `.bashrc` and comment out the lines that stop non-interactive processing.
-
-```shell title=".bashrc"
-# If not running interactively, don't do anything
-#case $- in
-#    *i*) ;;
-#      *) return;;
-#esac
-```
 
 #### Multiple Servers
 
@@ -204,13 +193,43 @@ You can add as many `[[servers]]` blocks as you need.
 
 ## Server Setup
 
-You will need to create the directory in which your app code will live. This path will be the `path` var in `deploy.toml`. Make sure the username you will connect as in `deploy.toml` has permission to read/write/execute files in this directory. This might look something like:
+You will need to create the directory in which your app code will live. This path will be the `path` var in `deploy.toml`. Make sure the username you will connect as in `deploy.toml` has permission to read/write/execute files in this directory. For example, if your `/var` dir is owned by `root`, but you're going to deploy with a user named `deploy`:
 
 ```bash
 sudo mkdir -p /var/www/myapp
+sudo chown deploy:deploy /var/www/myapp
 ```
 
-You'll want to create an `.env` file in this directory containing any environment variables that are needed by your by your app. This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
+You'll want to create an `.env` file in this directory containing any environment variables that are needed by your by your app (like `DATABASE_URL` at a minimum). This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
+
+:::caution SSH and Non-interactive Sessions
+
+The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' ssh session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path. A quick fix for this on some distros is to edit the deployment user's `~/.bashrc` file and comment out the lines that stop non-interactive processing.
+
+```diff title=".bashrc"
+# If not running interactively, don't do anything
+- case $- in
+-     *i*) ;;
+-       *) return;;
+- esac
+
+# If not running interactively, don't do anything
++ # case $- in
++ #    *i*) ;;
++ #      *) return;;
++ # esac
+```
+
+This may also be a one-liner like:
+
+```diff title=".bashrc"
+- [ -z "$PS1" ] && return
++ # [ -z "$PS1" ] && return
+```
+
+There are techniques for getting `node`, `npm` and `yarn` to be availble without loading everything in `.bashrc`. See [this comment](https://github.com/nvm-sh/nvm/issues/1290#issuecomment-427557733) for some ideas.
+
+:::
 
 ## First Deploy
 
@@ -226,14 +245,18 @@ If there are any issues the deploy should stop and you'll see the error message 
 
 On the server you should see a new directory inside the `path` you defined in `deploy.toml`. It should be a timestamp of the deploy, like:
 
-```
-var
-  www
-    app
-      20220421120000
+```bash
+drwxrwxr-x  7 ubuntu ubuntu 4096 Apr 22 23:00 ./
+drwxr-xr-x  7 ubuntu ubuntu 4096 Apr 22 22:46 ../
+-rw-rw-r--  1 ubuntu ubuntu 1167 Apr 22 20:49 .env
+drwxrwxr-x 10 ubuntu ubuntu 4096 Apr 22 21:43 20220422214218/
 ```
 
-`cd` into that directory and try performing all of the steps yourself that would happen during a deploy:
+You may or may not also have a `current` symlink in the app directory pointing to that timestamp directory (it depends how far the deploy script got before it failed as to whether you'll have the symlink or not).
+
+`cd` into that timestamped directory and check that you have a `.env` symlink pointing back to the app directory's `.env` file.
+
+Next, try performing all of the steps yourself that would happen during a deploy:
 
 ```
 yarn install
@@ -245,7 +268,7 @@ yarn rw build
 
 If they worked for you, the deploy process should have no problem as it runs the same commands (after all, it connects via ssh and runs the same commands you just did!)
 
-Next we can check that the site is being served correct. Run `yarn rw serve` and make sure your processes start and are accessible (by default on port 8910):
+Next we can check that the site is being served correctly. Run `yarn rw serve` and make sure your processes start and are accessible (by default on port 8910):
 
 ```bash
 curl http://localhost:8910
@@ -275,7 +298,7 @@ You should see something like:
 
 If so then your API side is up and running! The only thing left to test is that the api side has access to the database. This call would be pretty specific to your app, but assuming you have port 8910 open to the world you could simply open a browser to click around to find a page that makes a database request.
 
-Was the problem with starting your PM2 process? That will be harder to debug here in this doc, but visit us in the [forums](https://community.redwoodjs.com) or [Discord](https://discord.gg/redwoodjs) and we'll help!
+Was the problem with starting your PM2 process? That will be harder to debug here in this doc, but visit us in the [forums](https://community.redwoodjs.com) or [Discord](https://discord.gg/redwoodjs) and we'll try to help!
 
 ## Starting Processes on Server Restart
 
@@ -284,21 +307,25 @@ The `pm2` service requires some system "hooks" to be installed so it can boot up
 1. SSH into your server as you did for the "Server Setup"
 2. Run the command `pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
-> The below text is an *example* output.  Yours will be different
+:::caution
+
+The below text is *example* output, yours will be different, don't copy and paste ours!
+
+:::
 
 ```bash
-deploy@redwood:/var/www/my-app$ yarn pm2 startup
+$ pm2 startup
 [PM2] Init System found: systemd
 [PM2] To setup the Startup Script, copy/paste the following command:
 // highlight-next-line
-sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+sudo env PATH=$PATH:/home/ubuntu/.nvm/versions/node/v16.13.2/bin /home/ubuntu/.nvm/versions/node/v16.13.2/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu
 ```
 
-In this example, you would copy `sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy` and run it.
+In this example, you would copy `sudo env PATH=$PATH:/home/ubuntu/.nvm/versions/node/v16.13.2/bin /home/ubuntu/.nvm/versions/node/v16.13.2/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu` and run it. You should get a bunch of output along with `[PM2] [v] Command successfully executed.` near the end. Now if your server restarts for whatever reason, your PM2 processes will be restarted once the server is back up.
 
 ## Customizing the Deploy
 
-If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip those steps completely:
+If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip them completely and save some time:
 
 ```bash
 yarn rw deploy baremetal --no-migrate
@@ -332,12 +359,11 @@ This is almost as easy as the default configuration, you just need to tell Redwo
 
 Update the `[web]` port:
 
-```toml title="redwood.toml"
+```diff title="redwood.toml"
 [web]
   title = "My Application"
-  // highlight-next-line
-  port = 80
   apiUrl = "/.netlify/functions"
++ port = 80
 [api]
   port = 8911
 [browser]
@@ -355,8 +381,10 @@ sudo setcap CAP_NET_BIND_SERVICE=+eip $(which node)
 Now restart your service and it should be available on port 80:
 
 ```bash
-yarn pm2 restart serve
+pm2 restart serve
 ```
+
+This should get your site available on port 80 (for HTTP), but you really want it available on port 443 (for HTTPS). See the next recipe for a solution.
 
 ### Redwood Serves Api, Nginx Serves Web Side
 
