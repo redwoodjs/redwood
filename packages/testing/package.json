@@ -39,7 +39,7 @@
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.1.1",
-    "@types/aws-lambda": "8.10.94",
+    "@types/aws-lambda": "8.10.95",
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.4.1",
     "@types/node": "16.11.27",

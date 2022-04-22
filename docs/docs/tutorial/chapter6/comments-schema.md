@@ -105,7 +105,11 @@ yarn rw prisma migrate dev
 
 When prompted, give this one a name something like "create comment".
 
-> You'll need to restart the test suite runner at this point if it's still running. You can do a Ctrl-C or just press `q`. Redwood creates a second, test database for you to run your tests against (it is at `.redwood/test.db` by default). The database migrations are run against that test database whenever the test suite is *started*, not while it's running, so you'll need to restart it to test against the new database structure.
+:::tip
+
+You'll need to restart the test suite runner at this point if it's still running. You can do a Ctrl-C or just press `q`. Redwood creates a second, test database for you to run your tests against (it is at `.redwood/test.db` by default). The database migrations are run against that test database whenever the test suite is *started*, not while it's running, so you'll need to restart it to test against the new database structure.
+
+:::
 
 ### Creating the SDL and Service
 
@@ -219,9 +223,13 @@ query CommentsQuery {
 }
 ```
 
-> Have you noticed that something may be amiss? The `comments()` function returns *all* comments, and all comments only. Could this come back to bite us?
->
-> Hmmm...
+:::info
+
+Have you noticed that something may be amiss? The `comments()` function returns *all* comments, and all comments only. Could this come back to bite us?
+
+Hmmm...
+
+:::
 
 We need to be able to create a comment as well. We'll use the same convention that's used in Redwood's generated scaffolds: the create endpoint will accept a single parameter `input` which is an object with the individual model fields:
 
@@ -270,7 +278,11 @@ export const schema = gql`
 `
 ```
 
-> The `CreateCommentInput` type was already created for us by the SDL generator.
+:::tip
+
+The `CreateCommentInput` type was already created for us by the SDL generator.
+
+:::
 
 That's all we need on the api-side to create a comment! But let's think for a moment: is there anything else we need to do with a comment? Let's make the decision that users won't be able to update an existing comment. And we don't need to select individual comments (remember earlier we talked about the possibility of each comment being responsible for its own API request and display, but we decided against it).
 
@@ -316,15 +328,17 @@ describe('comments', () => {
 
 What is this `scenario()` function? That's made available by Redwood that mostly acts like Jest's built-in `it()` and `test()` functions, but with one important difference: it pre-seeds a test database with data that is then passed to you in the `scenario` argument. You can count on this data existing in the database and being reset between tests in case you make changes to it.
 
-> **In the section on mocks you said relying on data in the database for testing was dumb?**
->
-> Yes, all things being equal it would be great to not have these tests depend on a piece of software outside of our control.
->
-> However, the difference here is that in a service almost all of the logic you write will depend on moving data in and out of a database and it's much simpler to just let that code run and *really* access the database, rather than trying to mock and intercept each and every possible call that Prisma could make.
->
-> Not to mention that Prisma itself is currently under development and implementations could change at any time. Trying to keep pace with those changes and constantly keep mocks in sync would be a nightmare!
->
-> That being said, if you really wanted to you could use Jest's [mocking utilities](https://jestjs.io/docs/en/mock-functions) and completely mock the Prisma interface to abstract the database away completely. But don't say we didn't warn you!
+:::info In the section on mocks you said relying on data in the database for testing was dumb?
+
+Yes, all things being equal it would be great to not have these tests depend on a piece of software outside of our control.
+
+However, the difference here is that in a service almost all of the logic you write will depend on moving data in and out of a database and it's much simpler to just let that code run and *really* access the database, rather than trying to mock and intercept each and every possible call that Prisma could make.
+
+Not to mention that Prisma itself is currently under development and implementations could change at any time. Trying to keep pace with those changes and constantly keep mocks in sync would be a nightmare!
+
+That being said, if you really wanted to you could use Jest's [mocking utilities](https://jestjs.io/docs/en/mock-functions) and completely mock the Prisma interface to abstract the database away completely. But don't say we didn't warn you!
+
+:::
 
 Where does that data come from? Take a look at the `comments.scenarios.js` file which is next door:
 
@@ -351,9 +365,11 @@ export const standard = defineScenario({
 
 This calls a `defineScenario()` function which checks that your data structure matches what's defined in Prisma. Each scenario data object (for example, `scenario.comment.one`) is passed as-is to Prisma's [`create`](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create). That way you can customize the scenario object using any of Prisma's supported options.
 
-> **The "standard" scenario**
->
-> The exported scenario here is named "standard." Remember when we worked on component tests and mocks, there was a special mock named `standard` which Redwood would use by default if you didn't specify a name? The same rule applies here! When we add a test for `createComment()` we'll see an example of using a different scenario with a unique name.
+:::info The "standard" scenario
+
+The exported scenario here is named "standard." Remember when we worked on component tests and mocks, there was a special mock named `standard` which Redwood would use by default if you didn't specify a name? The same rule applies here! When we add a test for `createComment()` we'll see an example of using a different scenario with a unique name.
+
+:::
 
 The nested structure of a scenario is defined like this:
 
@@ -365,9 +381,11 @@ The nested structure of a scenario is defined like this:
 
 When you receive the `scenario` argument in your test, the `data` key gets unwrapped so that you can reference fields like `scenario.comment.one.name`.
 
-> **Why does every field just contain the string "String"?**
->
-> When generating the service (and the test and scenarios) all we (Redwood) knows about your data is the types for each field as defined in `schema.prisma`, namely `String`, `Integer` or `DateTime`. So we add the simplest data possible that fulfills the type requirement by Prisma to get the data into the database. You should definitely replace this data with something that looks more like the real data your app will be expecting. In fact...
+:::info Why does every field just contain the string "String"?
+
+When generating the service (and the test and scenarios) all we (Redwood) knows about your data is the types for each field as defined in `schema.prisma`, namely `String`, `Integer` or `DateTime`. So we add the simplest data possible that fulfills the type requirement by Prisma to get the data into the database. You should definitely replace this data with something that looks more like the real data your app will be expecting. In fact...
+
+:::
 
 Let's replace that scenario data with something more like the real data our app will be expecting:
 
@@ -469,28 +487,32 @@ We were able to use the `id` of the post that we created in our scenario because
 
 We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the Javascript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
 
-> **What's up with the names for scenario data? posts.bark? Really?**
->
-> This makes reasoning about your tests much nicer! Which of these would you rather work with:
->
->   "`claire` paid for an `ebook` using her `visa` credit card."
->
-> or:
->
->   "`user[3]` paid for `product[0]` using their `cards[2]` credit card?
->
-> If you said the second one, remember: you're not writing your code for the computer, you're writing it for other humans! It's the compiler's job to make code understandable to a computer, it's our job to make code understandable to our fellow developers.
+:::info What's up with the names for scenario data? posts.bark? Really?
+
+This makes reasoning about your tests much nicer! Which of these would you rather work with:
+
+**"`claire` paid for an `ebook` using her `visa` credit card."**
+
+or:
+
+**"`user[3]` paid for `product[0]` using their `cards[2]` credit card?**
+
+If you said the second one, remember: you're not writing your code for the computer, you're writing it for other humans! It's the compiler's job to make code understandable to a computer, it's our job to make code understandable to our fellow developers.
+
+:::
 
 Okay, our comments service is feeling pretty solid now that we have our tests in place. The last step is add a form so that users can actually leave a comment on a blog post.
 
-> **Mocks vs. Scenarios**
->
-> Mocks are used on the web site and scenarios are used on the api side. It might be helpful to remember that "mock" is a synonym for "fake", as in this-is-fake-data-not-really-in-the-database (so that we can create stories and tests in isolation without the api side getting involved). Whereas a scenario is real data in the database, it's just pre-set to some known state that we can rely on.
->
-> Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would help? **M**ocks **W**eb **S**cenarios **A**PI:
->
-> * Mothers Worshipped Slimy Aprons
-> * Minesweepers Wrecked Subliminal Attorneys
-> * Masked Widows Squeezed Apricots
->
-> Maybe not...
+:::info Mocks vs. Scenarios
+
+Mocks are used on the web site and scenarios are used on the api side. It might be helpful to remember that "mock" is a synonym for "fake", as in this-is-fake-data-not-really-in-the-database (so that we can create stories and tests in isolation without the api side getting involved). Whereas a scenario is real data in the database, it's just pre-set to some known state that we can rely on.
+
+Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would help? **M**ocks **W**eb **S**cenarios **A**PI:
+
+* Mothers Worshipped Slimy Aprons
+* Minesweepers Wrecked Subliminal Attorneys
+* Masked Widows Squeezed Apricots
+
+Maybe not...
+
+:::
