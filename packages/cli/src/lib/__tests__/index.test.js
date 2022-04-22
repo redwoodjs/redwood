@@ -98,5 +98,7 @@ describe('usingVSCode', () => {
     const output = index.usingVSCode()
 
     expect(output).toEqual(true)
+
+    fs.rmdirSync(path.join(BASE_PATH, '.vscode'))
   })
 })
