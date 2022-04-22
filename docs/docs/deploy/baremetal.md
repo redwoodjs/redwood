@@ -376,7 +376,7 @@ And even a web-based UI with paid upgrades if you need even more insights:
 
 ## Example Configurations
 
-The default configuration, which requires the least amount of manual configuration, is to serve both the web and api sides, with the web side being bound to port 8910. This isn't really feasible for a general web app which should be available on port 80 (for HTTP) and/or port 443 (for HTTPS). Here are some custom configs that would enable
+The default configuration, which requires the least amount of manual configuration, is to serve both the web and api sides, with the web side being bound to port 8910. This isn't really feasible for a general web app which should be available on port 80 (for HTTP) and/or port 443 (for HTTPS). Here are some custom configs to help.
 
 ### Redwood Serves Web and Api Sides, Bind to Port 80
 
