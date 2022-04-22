@@ -2,7 +2,7 @@
   "recommendations": [
     "EditorConfig.EditorConfig",
     "dbaeumer.vscode-eslint",
-    "mgmcdermott.vscode-language-babel"
+    "mgmcdermott.vscode-language-babel",
   ],
   "unwantedRecommendations": [
     "johnpapa.vscode-peacock" // not used, still tries to apply it's settings
