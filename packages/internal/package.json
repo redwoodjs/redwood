@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -40,13 +40,13 @@
     "@graphql-codegen/typescript-operations": "2.3.5",
     "@graphql-codegen/typescript-react-apollo": "3.2.11",
     "@graphql-codegen/typescript-resolvers": "2.6.1",
-    "@redwoodjs/graphql-server": "1.1.0",
+    "@redwoodjs/graphql-server": "1.1.1",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.5.0",
     "chalk": "4.1.2",
-    "core-js": "3.22.1",
+    "core-js": "3.22.2",
     "deepmerge": "4.2.2",
-    "esbuild": "0.14.37",
+    "esbuild": "0.14.38",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",
     "fs-extra": "10.1.0",
@@ -56,7 +56,7 @@
     "prettier": "2.6.2",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.11.12",
+    "systeminformation": "5.11.13",
     "toml": "3.0.0"
   },
   "devDependencies": {

@@ -1,7 +1,8 @@
 /* eslint-env node, es2021 */
-import template from 'lodash.template'
 import fs from 'node:fs'
 import url from 'node:url'
+
+import template from 'lodash.template'
 
 import octokit from './octokit.mjs'
 
@@ -185,6 +186,7 @@ function sortPRs(prs) {
   const features = []
   const fixed = []
   const chore = []
+  const docs = []
   const packageDependencies = []
   const manual = []
 
@@ -217,6 +219,11 @@ function sortPRs(prs) {
       continue
     }
 
+    if (labels.includes('release:docs')) {
+      chore.push(`- ${formatPR(pr)}`)
+      continue
+    }
+
     /**
      * Those that can't be sorted.
      */
@@ -227,6 +234,7 @@ function sortPRs(prs) {
     features: features.join('\n'),
     fixed: fixed.join('\n'),
     chore: chore.join('\n'),
+    docs: docs.join('\n'),
     packageDependencies: packageDependencies.join('\n'),
     manual: manual.join('\n'),
   }
@@ -263,6 +271,10 @@ const interpolate = template(
     '## Chore',
     '',
     '${chore}',
+    '',
+    '## Docs',
+    '',
+    '${docs}',
     '',
     '### Package Dependencies',
     '',
