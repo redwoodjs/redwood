@@ -71,7 +71,10 @@ export const builder = (yargs) => {
   yargs.option('releaseDir', {
     describe:
       'Directory to create for the latest release, defaults to timestamp',
-    default: new Date().toISOString().replace(/[:\-T.Z]/g, ''),
+    default: new Date()
+      .toISOString()
+      .replace(/[:\-TZ]/g, '')
+      .replace(/\.\d+$/, ''),
     type: 'string',
   })
 
@@ -143,7 +146,7 @@ const commands = (yargs, ssh) => {
       agentForward: serverConfig.agentForward,
     }
     const deployBranch = yargs.branch || serverConfig.branch || 'main'
-    const cmdPath = path.join(cmdPath, yargs.releaseDir)
+    const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
 
     verifyServerConfig(serverConfig, yargs)
 
@@ -164,6 +167,18 @@ const commands = (yargs, ssh) => {
           `--depth=1`,
           serverConfig.repo,
           yargs.releaseDir,
+        ])
+      },
+      skip: () => !yargs.update,
+    })
+
+    tasks.push({
+      title: `Symlink .env...`,
+      task: async (_ctx, task) => {
+        await sshExec(ssh, sshOptions, task, cmdPath, 'ln', [
+          '-nsf',
+          '../.env',
+          '.env',
         ])
       },
       skip: () => !yargs.update,
@@ -214,26 +229,18 @@ const commands = (yargs, ssh) => {
       })
     }
 
-    if (serverConfig.symlinkWeb) {
-      tasks.push({
-        title: `Symlinking latest release...`,
-        task: async (_ctx, task) => {
-          // symlink /current dir
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
-            '-nsf',
-            yargs.releaseDir,
-            'current',
-          ])
-          // symlink .env
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
-            '-nsf',
-            '.env',
-            path.join(yargs.releaseDir, '.env'),
-          ])
-        },
-        skip: () => !yargs.symlink,
-      })
-    }
+    tasks.push({
+      title: `Symlinking current release...`,
+      task: async (_ctx, task) => {
+        // symlink /current dir
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
+          '-nsf',
+          yargs.releaseDir,
+          'current',
+        ])
+      },
+      skip: () => !yargs.update,
+    })
 
     // start/restart monitoring processes
     for (const process of serverConfig.processNames) {
