@@ -124,6 +124,7 @@ const commands = (yargs, ssh) => {
       passphrase: serverConfig.passphrase,
       agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
       agentForward: serverConfig.agentForward,
+      pm2Global: serverConfig.pm2Global,
     }
 
     tasks.push({
@@ -215,41 +216,81 @@ const commands = (yargs, ssh) => {
     // start/restart monitoring processes
     for (const process of serverConfig.processNames) {
       if (yargs.firstRun) {
-        tasks.push({
-          title: `Starting ${process} process for the first time...`,
-          task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-              'pm2',
-              'start',
-              'ecosystem.config.js',
-              '--only',
-              process,
-            ])
-          },
-          skip: () => !yargs.restart,
-        })
-        tasks.push({
-          title: `Saving ${process} state for future startup...`,
-          task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-              'pm2',
-              'save',
-            ])
-          },
-          skip: () => !yargs.restart,
-        })
+        if (serverConfig.pm2Global) {
+          tasks.push({
+            title: `Starting ${process} process for the first time...`,
+            task: async (_ctx, task) => {
+              await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+                'start',
+                'ecosystem.config.js',
+                '--only',
+                process,
+              ])
+            },
+            skip: () => !yargs.restart,
+          })
+        } else {
+          tasks.push({
+            title: `Starting ${process} process for the first time...`,
+            task: async (_ctx, task) => {
+              await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+                'pm2',
+                'start',
+                'ecosystem.config.js',
+                '--only',
+                process,
+              ])
+            },
+            skip: () => !yargs.restart,
+          })
+        }
+        if (serverConfig.pm2Global) {
+          tasks.push({
+            title: `Saving ${process} state for future startup...`,
+            task: async (_ctx, task) => {
+              await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+                'save',
+              ])
+            },
+            skip: () => !yargs.restart,
+          })
+        } else {
+          tasks.push({
+            title: `Saving ${process} state for future startup...`,
+            task: async (_ctx, task) => {
+              await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+                'pm2',
+                'save',
+              ])
+            },
+            skip: () => !yargs.restart,
+          })
+        }
       } else {
-        tasks.push({
-          title: `Restarting ${process} process...`,
-          task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-              'pm2',
-              'restart',
-              process,
-            ])
-          },
-          skip: () => !yargs.restart,
-        })
+        if (serverConfig.pm2Global) {
+          tasks.push({
+            title: `Restarting ${process} process...`,
+            task: async (_ctx, task) => {
+              await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+                'restart',
+                process,
+              ])
+            },
+            skip: () => !yargs.restart,
+          })
+        } else {
+          tasks.push({
+            title: `Restarting ${process} process...`,
+            task: async (_ctx, task) => {
+              await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+                'pm2',
+                'restart',
+                process,
+              ])
+            },
+            skip: () => !yargs.restart,
+          })
+        }
       }
     }
 
