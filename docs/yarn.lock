@@ -1769,7 +1769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/module-type-aliases@npm:2.0.0-beta.18, @docusaurus/module-type-aliases@npm:^2.0.0-beta.18":
+"@docusaurus/module-type-aliases@npm:2.0.0-beta.18":
   version: 2.0.0-beta.18
   resolution: "@docusaurus/module-type-aliases@npm:2.0.0-beta.18"
   dependencies:
@@ -2459,7 +2459,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/docusaurus@npm:^1.0.5":
+"@tsconfig/docusaurus@npm:1.0.5":
   version: 1.0.5
   resolution: "@tsconfig/docusaurus@npm:1.0.5"
   checksum: c837f2acb4ff08760c57d8561174f130f287e2a6908778ab635f829ba581fe94f23378d53aac94f93f44f97baa03559946063c71f8f0e0f4931a4d67a389ad6e
@@ -4643,16 +4643,16 @@ __metadata:
   resolution: "docs@workspace:."
   dependencies:
     "@docusaurus/core": 2.0.0-beta.18
-    "@docusaurus/module-type-aliases": ^2.0.0-beta.18
+    "@docusaurus/module-type-aliases": 2.0.0-beta.18
     "@docusaurus/plugin-content-docs": 2.0.0-beta.18
     "@docusaurus/preset-classic": 2.0.0-beta.18
     "@mdx-js/react": 1.6.22
-    "@tsconfig/docusaurus": ^1.0.5
+    "@tsconfig/docusaurus": 1.0.5
     clsx: 1.1.1
     react: 17.0.2
     react-dom: 17.0.2
     react-player: 2.10.0
-    typescript: ^4.6.3
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -10168,7 +10168,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.6.3":
+"typescript@npm:4.6.3":
   version: 4.6.3
   resolution: "typescript@npm:4.6.3"
   bin:
@@ -10178,7 +10178,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>":
+"typescript@patch:typescript@4.6.3#~builtin<compat/typescript>":
   version: 4.6.3
   resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
   bin:
