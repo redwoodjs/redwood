@@ -115,6 +115,8 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
+repo = "git@github.com:myorg/myapp.git"
+branch = "main"
 ```
 
 This lists a single server, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
@@ -202,19 +204,48 @@ You can add as many `[[servers]]` blocks as you need.
 
 ## Server Setup
 
-You will need to log into your server and `git clone` your codebase somewhere. The path to the root of your app will be set as the `path` var in `deploy.toml`. Make sure the username you will connect as in `deploy.toml` has permission to read/write/execute files in this directory. This might look something like:
+You will need to create the directory in which your app code will live. This path will be the `path` var in `deploy.toml`. Make sure the username you will connect as in `deploy.toml` has permission to read/write/execute files in this directory. This might look something like:
 
 ```bash
-sudo mkdir -p /var/www
-sudo chown myuser:myuser /var/www
-git clone git@github.com:johndoe/example.git /var/www/example
+sudo mkdir -p /var/www/myapp
 ```
 
-You'll want to create an `.env` file containing any environment variables that are needed by the server.
+You'll want to create an `.env` file in this directory containing any environment variables that are needed by your by your app. This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
 
-### Verification
+## First Deploy
 
-You should do a `yarn install` and `yarn rw build` and finally `yarn rw serve` to make sure everything works before getting the deploy process involved. If they worked for you, the deploy process should have no problem as it runs the same commands. Once `yarn rw serve` is running, make sure your processes start and are accessible (by default on port 8910):
+Back on your development machine, enter your details in `deploy.toml` and then try a first deploy:
+
+```bash
+yarn rw deploy baremetal --first-run
+```
+
+If there are any issues the deploy should stop and you'll see the error message printed to the console. If it worked, hooray! You're deployed to BAREMETAL. If not, read on...
+
+### Troubleshooting
+
+On the server you should see a new directory inside the `path` you defined in `deploy.toml`. It should be a timestamp of the deploy, like:
+
+```
+var
+  www
+    app
+      20220421120000
+```
+
+`cd` into that directory and try performing all of the steps yourself that would happen during a deploy:
+
+```
+yarn install
+yarn rw prisma migrate deploy
+yarn rw prisma generate
+yarn rw dataMigrate up
+yarn rw build
+```
+
+If they worked for you, the deploy process should have no problem as it runs the same commands (after all, it connects via ssh and runs the same commands you just did!)
+
+Next we can check that the site is being served correct. Run `yarn rw serve` and make sure your processes start and are accessible (by default on port 8910):
 
 ```bash
 curl http://localhost:8910
@@ -244,22 +275,14 @@ You should see something like:
 
 If so then your API side is up and running! The only thing left to test is that the api side has access to the database. This call would be pretty specific to your app, but assuming you have port 8910 open to the world you could simply open a browser to click around to find a page that makes a database request.
 
-## First Deploy
+Was the problem with starting your PM2 process? That will be harder to debug here in this doc, but visit us in the [forums](https://community.redwoodjs.com) or [Discord](https://discord.gg/redwoodjs) and we'll help!
 
-Back on your development machine, enter your details in `deploy.toml` and then try a first deploy:
+## Starting Processes on Server Restart
 
-```bash
-yarn rw deploy baremetal --first-run
-```
+The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your PM2 services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
 
-If there are any issues the deploy should stop and you'll see the error message printed to the console. Assume it worked, hooray! You're deployed to BAREMETAL.
-
-### Starting on Reboot
-
-The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
-
-1. SSH into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
-2. Run the command `yarn pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
+1. SSH into your server as you did for the "Server Setup"
+2. Run the command `pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
 > The below text is an *example* output.  Yours will be different
 
@@ -267,9 +290,9 @@ The `pm2` service requires some system "hooks" to be installed so it can boot up
 deploy@redwood:/var/www/my-app$ yarn pm2 startup
 [PM2] Init System found: systemd
 [PM2] To setup the Startup Script, copy/paste the following command:
+// highlight-next-line
 sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
 ```
-
 
 In this example, you would copy `sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy` and run it.
 
