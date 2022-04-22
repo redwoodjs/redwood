@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import yargs from 'yargs'
-// @ts-expect-error is actually exported, just not in types
 import { decamelize } from 'yargs-parser'
 
 export const command = 'list <rwVersion>'
