@@ -2,7 +2,8 @@ export const ECOSYSTEM = `module.exports = {
   apps: [
     {
       name: 'serve',
-      script: 'current/node_modules/.bin/rw',
+      cwd: 'current',
+      script: 'node_modules/.bin/rw',
       args: 'serve',
       instances: 'max',
       exec_mode: 'cluster',
