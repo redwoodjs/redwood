@@ -19,8 +19,6 @@ To self-host, you'll have to do a bit of configuration both to your Redwood app 
 
 ### Adding Dependencies
 
-<!-- TODO update here for pm2 global -->
-
 First you will need to add PM2.  This needs to be done manually due to license restrictions. [Important Notes About PM2](../deploy/baremetal#important-notes-about-pm2)
 
 You have two options to install pm2.  The default is to add PM2 "locally" as a dev dependency.
@@ -99,8 +97,6 @@ server {
 Please note that the trailing slash in `proxy_pass` is essential to correctly map the API functions.
 
 ### PM2
-
-<!-- TODO update here for pm2 global -->
 
 Let's configure PM2 with the `pm2.config.js` file we made earlier. The most important variables are at the top. Note that the port is only used locally on the server and should match the port in the Nginx config:
 
