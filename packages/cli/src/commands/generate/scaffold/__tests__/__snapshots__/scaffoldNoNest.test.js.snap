@@ -883,8 +883,8 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
-.rw-table tbody tr:nth-child(odd) td,
-.rw-table tbody tr:nth-child(odd) th {
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
   background-color: #f7fafc;
 }
 .rw-table thead tr {
@@ -2183,8 +2183,8 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
-.rw-table tbody tr:nth-child(odd) td,
-.rw-table tbody tr:nth-child(odd) th {
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
   background-color: #f7fafc;
 }
 .rw-table thead tr {
