@@ -142,6 +142,8 @@ const commands = (yargs, ssh) => {
       agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
       agentForward: serverConfig.agentForward,
     }
+    const deployBranch = yargs.branch || serverConfig.branch || 'main'
+    const cmdPath = path.join(cmdPath, yargs.releaseDir)
 
     verifyServerConfig(serverConfig, yargs)
 
@@ -150,10 +152,9 @@ const commands = (yargs, ssh) => {
       task: () => ssh.connect(sshOptions),
     })
 
-    // TODO: Add before/after lifecycle hooks for running custom code
-    // before/after each built-in task
+    // TODO: Add lifecycle hooks for running custom code before/after each
+    // built-in task
 
-    // setup directory structure
     if (yargs.firstRun) {
       tasks.push({
         title: `Creating directories...`,
@@ -168,11 +169,11 @@ const commands = (yargs, ssh) => {
     }
 
     tasks.push({
-      title: `Updating codebase...`,
+      title: `Cloning \`${deployBranch}\` branch...`,
       task: async (_ctx, task) => {
         await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', [
           'clone',
-          `--branch=${yargs.branch || serverConfig.branch || 'main'}`,
+          `--branch=${deployBranch}`,
           `--depth=1`,
           serverConfig.repo,
           yargs.releaseDir,
@@ -180,8 +181,6 @@ const commands = (yargs, ssh) => {
       },
       skip: () => !yargs.update,
     })
-
-    const cmdPath = path.join(cmdPath, yargs.releaseDir)
 
     tasks.push({
       title: `Installing dependencies...`,
@@ -214,7 +213,6 @@ const commands = (yargs, ssh) => {
       skip: () => !yargs.migrate || serverConfig?.migrate === false,
     })
 
-    // build sides
     for (const side of serverConfig.sides) {
       tasks.push({
         title: `Building ${side}...`,
@@ -229,10 +227,9 @@ const commands = (yargs, ssh) => {
       })
     }
 
-    // if deploying via clone, symlink /var/www/myapp/current to the new deploy dir
     if (serverConfig.symlinkWeb) {
       tasks.push({
-        title: `Symlinking dirs...`,
+        title: `Symlinking latest release...`,
         task: async (_ctx, task) => {
           // symlink /current dir
           await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
