@@ -109,6 +109,8 @@ Let's generate everything we need to perform all the CRUD (Create, Retrieve, Upd
 yarn rw g scaffold post
 ```
 
+At this point it is good to notice that a new `web/src/scaffold.css` has been created. To update the styling import this into `web/src/App.tsx` using `import './scaffold.css'`.
+
 Let's point the browser to [http://localhost:8910/posts](http://localhost:8910/posts) and see what we have:
 
 <img src="https://user-images.githubusercontent.com/300/73027952-53c03080-3de9-11ea-8f5b-d62a3676bbef.png" />
