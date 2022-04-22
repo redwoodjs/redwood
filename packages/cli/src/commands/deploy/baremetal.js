@@ -155,19 +155,6 @@ const commands = (yargs, ssh) => {
     // TODO: Add lifecycle hooks for running custom code before/after each
     // built-in task
 
-    if (yargs.firstRun) {
-      tasks.push({
-        title: `Creating directories...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'mkdir', [
-            '-p',
-            path,
-          ])
-        },
-        skip: () => !yargs.update,
-      })
-    }
-
     tasks.push({
       title: `Cloning \`${deployBranch}\` branch...`,
       task: async (_ctx, task) => {
@@ -236,6 +223,12 @@ const commands = (yargs, ssh) => {
             '-nsf',
             yargs.releaseDir,
             'current',
+          ])
+          // symlink .env
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
+            '-nsf',
+            '.env',
+            path.join(yargs.releaseDir, '.env'),
           ])
         },
         skip: () => !yargs.symlink,
