@@ -5931,7 +5931,7 @@ __metadata:
     chalk: 4.1.2
     concurrently: 7.1.0
     configstore: 3.1.5
-    core-js: 3.22.2
+    core-js: 3.22.1
     cross-env: 7.0.3
     decamelize: 5.0.0
     dotenv-defaults: 5.0.0
@@ -5976,7 +5976,7 @@ __metadata:
     "@types/jscodeshift": 0.11.4
     "@types/prettier": 2.4.4
     "@vscode/ripgrep": 1.14.2
-    core-js: 3.22.2
+    core-js: 3.22.1
     cross-undici-fetch: 0.3.0
     deepmerge: 4.2.2
     fast-glob: 3.2.11
@@ -6024,7 +6024,7 @@ __metadata:
     babel-plugin-module-resolver: 4.1.0
     babel-timing: 0.9.1
     copy-webpack-plugin: 10.2.4
-    core-js: 3.22.2
+    core-js: 3.22.1
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
     dotenv-webpack: 7.1.0
@@ -6147,7 +6147,7 @@ __metadata:
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
-    core-js: 3.22.2
+    core-js: 3.22.1
     cross-undici-fetch: 0.3.0
     graphql: 16.3.0
     graphql-scalars: 1.17.0
@@ -6188,7 +6188,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: 0.5.0
     babel-plugin-tester: 10.1.0
     chalk: 4.1.2
-    core-js: 3.22.2
+    core-js: 3.22.1
     deepmerge: 4.2.2
     esbuild: 0.14.38
     fast-glob: 3.2.11
@@ -6244,7 +6244,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@prisma/client": 3.12.0
     "@prisma/sdk": 3.12.0
-    core-js: 3.22.2
+    core-js: 3.22.1
     esbuild: 0.14.38
     jest: 27.5.1
   languageName: unknown
@@ -6259,7 +6259,7 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 1.1.1
     "@types/lodash.isequal": 4.5.6
-    core-js: 3.22.2
+    core-js: 3.22.1
     jest: 27.5.1
     lodash.isequal: 4.5.0
     prop-types: 15.8.1
@@ -12992,10 +12992,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.22.2, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.20.3, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
-  version: 3.22.2
-  resolution: "core-js@npm:3.22.2"
-  checksum: fe251c248874d0ad09f2aae155060fcf1b63d0c9ca3257259e6696af812377149bbd06bcde8044a5579c85223f9cce36f5116fbbb295aff685d0b86312c4ce4c
+"core-js@npm:3.22.1":
+  version: 3.22.1
+  resolution: "core-js@npm:3.22.1"
+  checksum: 8a5be3d3d3274109e9e92d53d16c5f147b37fabf6ef61a8e17a867c5d2d8735cb4cfe97df2fea507ccb5ccc30bbafc3663e0bcfdace76feee7c0b26f0660df34
   languageName: node
   linkType: hard
 
@@ -13003,6 +13003,13 @@ __metadata:
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
   checksum: ab5f869adda3d4dfa8e8753f5b6e6990196f585e701c5fdb2bfd780bdc57235ceefdcd156f557faf9c2d3ed6010383870d3082318f8eda3218b1908413477a04
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.20.3, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.22.2
+  resolution: "core-js@npm:3.22.2"
+  checksum: fe251c248874d0ad09f2aae155060fcf1b63d0c9ca3257259e6696af812377149bbd06bcde8044a5579c85223f9cce36f5116fbbb295aff685d0b86312c4ce4c
   languageName: node
   linkType: hard
 
@@ -26905,7 +26912,7 @@ __metadata:
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
-    core-js: 3.22.2
+    core-js: 3.22.1
     cypress: 9.5.4
     cypress-wait-until: 1.7.2
     eslint: 8.13.0
