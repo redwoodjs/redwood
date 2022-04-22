@@ -32,13 +32,13 @@ The baremetal deploy runs several commands in sequence. These can be customized,
 3. `yarn rw prisma generate` - generates latest Prisma Client libs
 4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
 5. `yarn rw build` - builds the web and/or api sides
-6. `yarn pm2 restart [service]` - restarts the serving process(es)
+6. `yarn pm2 restart [service]` (`pm2 restart [service]` for global pm2) - restarts the serving process(es)
 
 ### First Run Lifecycle
 
 If the `--first-run` flag is specified step 6. above will be skipped and the following commands will run instead:
-  - `yarn pm2 start [service]` - starts the serving process(es)
-  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
+  - `yarn pm2 start [service]` (`pm2 start [service]` for global pm2) - starts the serving process(es)
+  - `yarn pm2 save` (`pm2 save` for globa pm2) - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
 
 > We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
 
@@ -64,7 +64,7 @@ If you see an error from `gyp` you may need to add some additional dependencies 
 
 Since pm2 is not added by default, you will need to take some additional action to include this into your project.  For 'local' mode (the default) you will run the command `yarn add pm2` to add this as a project dependency in your `packages.json`.  From here everything else is automated.
 
-If you choose to run pm2 'globally' you would need to follow the pm2 projects instructions for setting this up.  https://pm2.keymetrics.io/docs/usage/quick-start/
+If you choose to run pm2 'globally' you would need to follow the pm2 projects instructions for setting this up.  https://pm2.keymetrics.io/docs/usage/quick-start/.  Typically this is `npm install pm2@latest -g` as root
 
 ## Configuration
 
@@ -120,7 +120,10 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
+# pm2Global = true
 ```
+
+If you want to use pm2 globally, uncomment the `pm2Global = true` line
 
 This lists a single server, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
 
@@ -136,6 +139,7 @@ This lists a single server, providing the hostname and connection details (`user
 * `path` - The absolute path to the root of the application on the server
 * `migrate` - [optional] Whether or not to run migration processes on this server, defaults to `true`
 * `processNames` - An array of service names from `ecosystem.config.js` which will be (re)started on a successful deploy
+* `pm2Global` - If set to true this will use the global `pm2` command instead of the local dev dependency
 * `symlinkWeb` - [optional] If using nginx or another server to serve the web side, you can have the compiled `web/dist` files symlinked in a new directory so that they are not overwritten on the next deploy. See the [Redwood Serves Api, Nginx Serves Web Side](#redwood-serves-api-nginx-serves-web-side) section for more info.
 
 The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` file, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
@@ -264,7 +268,7 @@ If there are any issues the deploy should stop and you'll see the error message 
 The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
 
 1. SSH into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
-2. Run the command `yarn pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
+2. Run the command `yarn pm2 startup` (or `pm2 startup` if you are using the global option).  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
 > The below text is an *example* output.  Yours will be different
 
