@@ -2,14 +2,10 @@ import fs from 'fs'
 import path from 'path'
 
 import { format } from 'prettier'
-import parserBabel from 'prettier/parser-babel'
 import tempy from 'tempy'
 
 export const formatCode = (code: string) => {
-  return format(code, {
-    parser: 'babel-ts',
-    plugins: [parserBabel],
-  })
+  return format(code, { parser: 'babel-ts' })
 }
 
 export const createProjectMock = () => {
