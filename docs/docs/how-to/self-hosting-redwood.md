@@ -19,16 +19,33 @@ To self-host, you'll have to do a bit of configuration both to your Redwood app 
 
 ### Adding Dependencies
 
-First add PM2 as a dev dependency to your project root:
+<!-- TODO update here for pm2 global -->
+
+First you will need to add PM2.  This needs to be done manually due to license restrictions. [Important Notes About PM2](../deploy/baremetal#important-notes-about-pm2)
+
+You have two options to install pm2.  The default is to add PM2 "locally" as a dev dependency.
+
+To do this add pm2 ad a dev dependency to your project root:
 
 ```termninal
 yarn add -DW pm2
 ```
 
+Alternatively, you can use pm2 "globally".  This method allows you to have the pm2 command available for other projects outside of redwood.  For additional details see https://pm2.keymetrics.io/
+
+To install pm2 globally, run the following as root.
+```terminal
+npm install pm2 -g
+```
 Then create a PM2 ecosystem configuration file. For clarity, it's recommended to rename `ecosystem.config.js` to something like `pm2.config.js`:
 
 ```bash
 yarn pm2 init
+mv ecosystem.config.js pm2.config.js
+```
+or if you are using pm2 globally
+```bash
+pm2 init
 mv ecosystem.config.js pm2.config.js
 ```
 
@@ -82,6 +99,8 @@ server {
 Please note that the trailing slash in `proxy_pass` is essential to correctly map the API functions.
 
 ### PM2
+
+<!-- TODO update here for pm2 global -->
 
 Let's configure PM2 with the `pm2.config.js` file we made earlier. The most important variables are at the top. Note that the port is only used locally on the server and should match the port in the Nginx config:
 
