@@ -33,7 +33,7 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
-repo = "git@github.com:redwoodjs/redwood.git"
+repo = "git@github.com:myorg/myapp.git"
 branch = "main"
 
 # If you have separate api and web servers:
