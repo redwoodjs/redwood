@@ -34,7 +34,7 @@ export const okta = (client: Okta): AuthClientOkta => {
     logout: () => client.signOut(),
     signup: async (options?) => client.signInWithRedirect(options),
     getToken: async () =>
-      client.tokenManager.get('accessToken').then((res) => {
+      client.tokenManager.get('accessToken').then((res: any) => {
         return res.accessToken
       }),
     getUserMetadata: async () => {
