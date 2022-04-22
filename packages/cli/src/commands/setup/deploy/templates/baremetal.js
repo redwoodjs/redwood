@@ -33,6 +33,7 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
+# pm2Global = true # defaults to false
 
 # If you have separate api and web servers:
 #
