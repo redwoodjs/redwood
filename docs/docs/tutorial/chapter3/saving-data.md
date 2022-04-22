@@ -773,16 +773,10 @@ const CREATE_CONTACT = gql`
   }
 `
 
-interface FormValues {
-  name: string
-  email: string
-  message: string
-}
-
 const ContactPage = () => {
   const [create] = useMutation(CREATE_CONTACT)
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit = (data) => {
     // highlight-next-line
     create({ variables: { input: data } })
   }
@@ -864,13 +858,19 @@ const CREATE_CONTACT = gql`
   }
 `
 
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
 const ContactPage = () => {
   const [create] = useMutation<
     CreateContactMutation,
     CreateContactMutationVariables
   >(CREATE_CONTACT)
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     // highlight-next-line
     create({ variables: { input: data } })
   }
