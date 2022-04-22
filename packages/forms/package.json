@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -20,13 +20,10 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
-  "resolutions": {
-    "@types/react": "17.0.40"
-  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.29.0"
+    "react-hook-form": "7.30.0"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
@@ -34,9 +31,9 @@
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
-    "@testing-library/user-event": "14.1.0",
+    "@testing-library/user-event": "14.1.1",
     "@types/pascalcase": "1.0.1",
-    "@types/react": "17.0.40",
+    "@types/react": "17.0.44",
     "@types/react-dom": "17.0.15",
     "@types/testing-library__jest-dom": "5.14.3",
     "jest": "27.5.1",

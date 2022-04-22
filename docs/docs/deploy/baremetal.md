@@ -63,7 +63,7 @@ If you see an error from `gyp` you may need to add some additional dependencies 
 
 ## Configuration
 
-Before your first deply you'll need to add some configuration.
+Before your first deploy you'll need to add some configuration.
 
 ### ecosystem.config.js
 

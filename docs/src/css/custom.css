@@ -238,7 +238,7 @@ blockquote {
   Details
   ------------------------
 */
-.alert {
+/* .alert {
   --ifm-alert-background-color: var(--green-lightest) !important;
   --ifm-alert-border-color: transparent !important;
   --docusaurus-details-decoration-color: var(--black) !important;
@@ -247,7 +247,7 @@ blockquote {
 [data-theme="dark"] .alert {
   --ifm-alert-background-color: hsl(210deg 3% 15%) !important;
   --docusaurus-details-decoration-color: hsl(210deg 11% 96%) !important;
-}
+} */
 
 /*
   ------------------------
@@ -269,4 +269,13 @@ blockquote {
 */
 .navbar-sidebar__back {
   display: none !important;
+}
+
+/*
+  ------------------------
+  Fix code tab text alignment
+  ------------------------
+*/
+.tabs__item li + li {
+  margin-top: 0;
 }

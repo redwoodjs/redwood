@@ -446,6 +446,59 @@ Now let's add the ability to bring back the uploader if you decide you want to c
 
 We're borrowing the styles from the submit button and making sure that the image has both a top and bottom margin so it doesn't crash into the new button.
 
+## The Delete
+
+Having a free plan is great, but if you just load images and never actually remove the unnecessary ones, you'll be in trouble.
+
+To avoid this, we'd better implement the `deleteImage` mutation. It will enable you to make a call to the Filestack API to remove your resources and, on success, remove the row in the `Image` model.
+
+You are going to need a new ENV var called `REDWOOD_ENV_FILESTACK_SECRET`, which you can find in **Filestack > Security > Policy & Signature:** App Secret. Put this into your `.env` file (don't use this one of course, paste your own in there):
+
+```dotenv title=".env"
+REDWOOD_ENV_FILESTACK_SECRET= PWRWGEKFZ2HJMXWSBP3YYI5ERZ
+```
+
+Filestack's library will provide a `getSecurity` method that will allow us to delete a resource, but only if executed on a **nodejs** environment. Hence, we need to execute the `delete` operation on the `api` side.
+
+Let's add the proper package:
+
+```shell
+yarn workspace api add filestack-js
+```
+
+Great. Now we can modify our service accordingly:
+
+```js {4-23} title="api/src/services/image/image.ts"
+import * as Filestack from 'filestack-js'
+
+export const deleteImage = async({ id }) => {
+  const client = Filestack.init(process.env.REDWOOD_ENV_FILESTACK_API_KEY)
+
+  const image = await db.image.find({ where: { id } })
+
+  // The `security.handle` is the unique part of the Filestack file's url.
+  const handle = image.url.split('/').pop()
+  
+  const security = Filestack.getSecurity(
+    {
+      // We set `expiry` at `now() + 5 minutes`.
+      expiry: new Date(new Date().getTime() + 20 * 1000),
+      handle,
+      call: ['remove'],
+    },
+    process.env.REDWOOD_ENV_FILESTACK_SECRET
+  )
+
+  await client.remove(handle, security)
+  
+  return db.image.delete({ where: { id } } )
+}
+```
+
+Great! Now when you click the button in the frontend, the service will make a call to Filestack to remove the image from the service first. We set `expiry` to 20 seconds so that our policy expires 20 seconds after its generation, this is more than enough to protect your access while executing such operation.
+
+Assuming the request to `remove()` the image succeeded, we then delete it locally. If you wanted to be extra safe you could surround the `remove()` call with a try/catch block and then throw your own error if Filestack ends up throwing an error.
+
 ## The Wrap-up
 
 Files uploaded!
