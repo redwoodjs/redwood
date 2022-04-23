@@ -214,7 +214,7 @@ model Shelf {
 
  `yarn rw prisma migrate dev`
 
- 6. Last, regenerate your SDL (but you will need to `force` to overwrite existing files and use the `no-tests` to preserve your tests and scenario files if needed)
+ 6. Last, regenerate your SDL (but you will need to `force` to overwrite existing files and use the `--no-tests` flag to preserve your tests and scenario files if needed)
 
 `yarn rw g sdl Book --force --no-tests`
 `yarn rw g sdl Shelf --force --no-tests`
