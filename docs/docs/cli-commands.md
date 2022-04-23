@@ -1159,12 +1159,12 @@ export const User = {
 }
 ```
 
-#### Troubleshooting
+**Troubleshooting**
 
-If you see a `Error: Unknown type:` when generating SDLs, there is a known issue in the RedwoodJS 1.0 GraphQL type generation that happens while using the Schema Definition Language (SDL) generator with a Prisma schema that contains related models **before both models** exist.
-
+If you see `Error: Unknown type: ...`, don't panic!
+It's a known issue with GraphQL type generation.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model** exists.
 Please see [How to Fix Type Generation Error with Relations​](./schema-relations#errors-when-generating-sdl-or-scaffolds-for-relations) for help.
-
 
 ### generate secret
 
