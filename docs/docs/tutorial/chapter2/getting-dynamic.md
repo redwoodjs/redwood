@@ -49,15 +49,17 @@ This says that we want a table called `Post` and it should have:
 - A `body` field that will contain a `String`
 - A `createdAt` field that will be a `DateTime` and will `@default` to `now()` when we create a new record (so we don't have to set the time manually in our app, the database will do it for us)
 
-> **Integer vs. String IDs**
->
-> For the tutorial we're keeping things simple and using an integer for our ID column. Some apps may want to use a CUID or a UUID, which Prisma supports. In that case you would use `String` for the datatype instead of `Int` and use `cuid()` or `uuid()` instead of `autoincrement()`:
->
-> `id String @id @default(cuid())`
->
-> Integers make for nicer URLs like https://redwoodblog.com/posts/123 instead of https://redwoodblog.com/posts/eebb026c-b661-42fe-93bf-f1a373421a13.
->
-> Take a look at the [official Prisma documentation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/data-model#defining-an-id-field) for more on ID fields.
+:::info Integer vs. String IDs
+
+For the tutorial we're keeping things simple and using an integer for our ID column. Some apps may want to use a CUID or a UUID, which Prisma supports. In that case you would use `String` for the datatype instead of `Int` and use `cuid()` or `uuid()` instead of `autoincrement()`:
+
+`id String @id @default(cuid())`
+
+Integers make for nicer URLs like https://redwoodblog.com/posts/123 instead of https://redwoodblog.com/posts/eebb026c-b661-42fe-93bf-f1a373421a13.
+
+Take a look at the [official Prisma documentation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/data-model#defining-an-id-field) for more on ID fields.
+
+:::
 
 ### Migrations
 
@@ -67,9 +69,11 @@ Now we'll want to snapshot the schema changes as a migration:
 yarn rw prisma migrate dev
 ```
 
-> **`redwood` Shorthand**
->
-> From now on we'll use the shorter `rw` alias instead of the full `redwood` argument.
+:::tip
+
+From now on we'll use the shorter `rw` alias instead of the full `redwood` argument.
+
+:::
 
 You'll be prompted to give this migration a name. Something that describes what it does is ideal, so how about "create post" (without the quotes, of course). This is for your own benefit—neither Redwood nor Prisma care about the migration's name, it's just a reference when looking through old migrations and trying to find when you created or modified something specific.
 
@@ -131,10 +135,14 @@ Okay but what if we click "Delete"?
 
 So, Redwood just created all the pages, components and services necessary to perform all CRUD actions on our posts table. No need to even open Prisma Studio or login through a terminal window and write SQL from scratch. Redwood calls these _scaffolds_.
 
-> If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
->
-> 1. Run `yarn rw g types` in a terminal
-> 2. Reload the GraphQL engine in VSCode: open the Command Palette (Cmd+Shift+P for Mac, Ctrl+Shift+P for Windows) and find "VSCode GraphQL: Manual Restart"
+:::caution
+
+If you head back to VSCode at some point and get a notice in one of the generated Post cells about `Cannot query "posts" on type "Query"` don't worry: we've seen this from time to time on some systems. There are two easy fixes:
+
+1. Run `yarn rw g types` in a terminal
+2. Reload the GraphQL engine in VSCode: open the Command Palette (Cmd+Shift+P for Mac, Ctrl+Shift+P for Windows) and find "VSCode GraphQL: Manual Restart"
+
+:::
 
 Here's what happened when we ran that `yarn rw g scaffold post` command:
 
@@ -143,8 +151,8 @@ Here's what happened when we ran that `yarn rw g scaffold post` command:
   - `NewPostPage` for creating a new post
   - `PostPage` for showing the detail of a post
   - `PostsPage` for listing all the posts
-- Created a _layouts_ file in `web/src/layouts/PostsLayout/PostsLayout.js` that serves as a container for pages with common elements like page heading and "New Posts" button
-- Created routes wrapped in the `Set` component with the layout as `PostsLayout` for those pages in `web/src/Routes.js`
+- Created a _layouts_ file in `web/src/layouts/PostsLayout/PostsLayout.{js,tsx}` that serves as a container for pages with common elements like page heading and "New Posts" button
+- Created routes wrapped in the `Set` component with the layout as `PostsLayout` for those pages in `web/src/Routes.{js,tsx}`
 - Created three _cells_ in `web/src/components/Post`:
   - `EditPostCell` gets the post to edit in the database
   - `PostCell` gets the post to display
@@ -154,30 +162,32 @@ Here's what happened when we ran that `yarn rw g scaffold post` command:
   - `Post` displays a single post
   - `PostForm` the actual form used by both the New and Edit components
   - `Posts` displays the table of all posts
-- Added an _SDL_ file to define several GraphQL queries and mutations in `api/src/graphql/posts.sdl.js`
-- Added a _services_ file in `api/src/services/posts/posts.js` that makes the Prisma client calls to get data in and out of the database
+- Added an _SDL_ file to define several GraphQL queries and mutations in `api/src/graphql/posts.sdl.{js,ts}`
+- Added a _services_ file in `api/src/services/posts/posts.{js,ts}` that makes the Prisma client calls to get data in and out of the database
 
 Pages and components/cells are nicely contained in `Post` directories to keep them organized while the layout is at the top level since there's only one of them.
 
 Whew! That may seem like a lot of stuff but we wanted to follow best-practices and separate out common functionality into individual components, just like you'd do in a real app. Sure we could have crammed all of this functionality into a single component, but we wanted these scaffolds to set an example of good development habits: we have to practice what we preach!
 
-> **Generator Naming Conventions**
->
-> You'll notice that some of the generated parts have plural names and some have singular. This convention is borrowed from Ruby on Rails which uses a more "human" naming convention: if you're dealing with multiple of something (like the list of all posts) it will be plural. If you're only dealing with a single something (like creating a new post) it will be singular. It sounds natural when speaking, too: "show me a list of all the posts" and "I'm going to create a new post."
->
-> As far as the generators are concerned:
->
-> - Services filenames are always plural.
-> - The methods in the services will be singular or plural depending on if they are expected to return multiple posts or a single post (`posts` vs. `createPost`).
-> - SDL filenames are plural.
-> - Pages that come with the scaffolds are plural or singular depending on whether they deal with many or one post. When using the `page` generator it will stick with whatever name you give on the command line.
-> - Layouts use the name you give them on the command line.
-> - Components and cells, like pages, will be plural or singular depending on context when created by the scaffold generator, otherwise they'll use the given name on the command line.
-> - Route names for scaffolded pages are singular or plural, the same as the pages they're routing to, otherwise they are identical the name of the page you generated.
->
-> Also note that it's the model name part that's singular or plural, not the whole word. So it's `PostsCell` and `PostsPage`, not `PostCells` or `PostPages`.
->
-> You don't have to follow this convention once you start creating your own parts but we recommend doing so. The Ruby on Rails community has come to love this nomenclature even though many people complained when first exposed to it!
+:::info Generator Naming Conventions
+
+You'll notice that some of the generated parts have plural names and some have singular. This convention is borrowed from Ruby on Rails which uses a more "human" naming convention: if you're dealing with multiple of something (like the list of all posts) it will be plural. If you're only dealing with a single something (like creating a new post) it will be singular. It sounds natural when speaking, too: "show me a list of all the posts" and "I'm going to create a new post."
+
+As far as the generators are concerned:
+
+- Services filenames are always plural.
+- The methods in the services will be singular or plural depending on if they are expected to return multiple posts or a single post (`posts` vs. `createPost`).
+- SDL filenames are plural.
+- Pages that come with the scaffolds are plural or singular depending on whether they deal with many or one post. When using the `page` generator it will stick with whatever name you give on the command line.
+- Layouts use the name you give them on the command line.
+- Components and cells, like pages, will be plural or singular depending on context when created by the scaffold generator, otherwise they'll use the given name on the command line.
+- Route names for scaffolded pages are singular or plural, the same as the pages they're routing to, otherwise they are identical the name of the page you generated.
+
+Also note that it's the model name part that's singular or plural, not the whole word. So it's `PostsCell` and `PostsPage`, not `PostCells` or `PostPages`.
+
+You don't have to follow this convention once you start creating your own parts but we recommend doing so. The Ruby on Rails community has come to love this nomenclature even though many people complained when first exposed to it!
+
+:::
 
 ### Creating a Blog Homepage
 
