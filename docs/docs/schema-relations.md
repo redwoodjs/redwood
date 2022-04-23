@@ -243,7 +243,7 @@ model Employee {
 }
 ```
 
-What is important here for the RedwoodJS generators is that the related models **be optional**. That is, the `reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that the item is not required.
+What is important here for the RedwoodJS generators is that the related models **are optional**. That is, the `reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that the item is not required.
 
 That's because if you are at the top, say you are the President, then you don't have a `reportsTo` and if you are simply an Employee, then you do not have anyone that directly reports to you.
 
