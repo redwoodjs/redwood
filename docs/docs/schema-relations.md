@@ -99,42 +99,37 @@ Almost identical! But now there's an `id` and the SDL/scaffold generators will w
 
 ## Troubleshooting Generators
 
-### Errors when Generating SDL or Scaffolds for Relations
+Are you getting errors when generating SDLs or scaffolds for your Prisma models?
+There's a known issue in Redwood's GraphQL type generation that happens when using the SDL or Scaffold generators on a Prisma model that has relations before SDLs for both models exist.
+This is to get yourself into if you start by modeling your entire schema from the start, or if you [introspect your database](https://www.prisma.io/docs/concepts/components/introspection).
 
-There is a known issue in the RedwoodJS 1.0 GraphQL type generation that happens while using the Schema Definition Language (SDL) and Scaffold generators with a Prisma schema that contains related models **before both models** exist.
-
-This can be an easy situation to get into if you begin to model out your entire schema (with relations) from the start -- or you [introspect](https://www.prisma.io/docs/concepts/components/introspection) an existing schema.
-
-#### Example of Type Generation Error with Relations
-
-For example, consider this simple model for a Bookshelf:
-
-1. Create both the `Book` and `Shelf` models with relation (at the same time in a single migration).
-
-Here is a Book that is on a Shelf. And a Shelf has many Books.
+This may sound a little abstract, so let's look at an example. Let's say that you're modeling bookshelves. Your prisma schema has two data models, `Book` and `Shelf`. This is a one to many relationship: a shelf has many books, but a book can only be on one shelf:
 
 ```js
 model Book {
   id      Int    @id @default(autoincrement())
   title   String @unique
-  Shelf   Shelf? @relation(fields: [shelfId], references: [id])
+  // highlight-start
+  shelf   Shelf? @relation(fields: [shelfId], references: [id])
   shelfId Int?
+  // highlight-end
 }
 
 model Shelf {
   id    Int    @id @default(autoincrement())
   name  String @unique
+  // highlight-next-line
   books Book[]
 }
 ```
 
-2. `yarn rw prisma migrate dev`
+The data model looks great. Let's make it real with SDLs and services:
 
-3. Now, I want sdls and services (or perhaps you scaffold a `Book`).
+```
+yarn rw g sdl Book
+```
 
-`yarn rw g sdl Book`
-
-4. The sdl and service files **do generate**:
+Here's how the output from the command starts:
 
 ```bash
  ✔ Generating SDL files...
@@ -144,9 +139,8 @@ model Shelf {
     ✔ Successfully wrote file `./api/src/services/books/books.js`
 ```
 
-5. **But**, when generating types, the schema fails to load **because** `Book` needs `Shelf` to exist, be we haven't yet created a `Shelf`. A book needs a shelf and vice versa, but here type generation doesn't yet know a shelf exists.
-
-See: `Error: Unknown type:` below for an example of what this error looks like.
+Looks like it's working so far. The SDL and service generated!
+But, when the command starts generating types... 💥
 
 ```
   ⠙ Generating types ...
@@ -162,7 +156,10 @@ type Query {
         Error: Unknown type: "Shelf".
 ```
 
-6. Even if you now generate a `Shelf`, you'll still have that error because `Book` depends on `Shelf`.
+What happened?
+Remember the first thing to do when you get an error: _read the message_.
+The key is `Unknown type: "Shelf"`.
+The type of `Book`'s `shelf` field is `Shelf`. But we didn't generate the SDL for `Shelf` yet, so it doesn't exist.
 
 #### How to Fix Type Generation Error with Relations
 
