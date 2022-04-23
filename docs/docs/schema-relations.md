@@ -184,7 +184,7 @@ model Shelf {
 }
 ```
 
-2. Then, **migrate** so that both `Book` and `Shelf` exist as separate models -- but are as yet do not have a relation.
+2. Then, **migrate** so that both `Book` and `Shelf` exist as separate models -- just without relations for now.
 
  `yarn rw prisma migrate dev`
 
