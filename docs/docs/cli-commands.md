@@ -996,8 +996,8 @@ Notes:
 
 If you see `Error: Unknown type: ...`, don't panic!
 It's a known issue with GraphQL type generation.
-It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model** exists.
-Please see [How to Fix Type Generation Error with Relations​](./schema-relations#errors-when-generating-sdl-or-scaffolds-for-relations) for help.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
+Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
 ### generate sdl
 
@@ -1163,8 +1163,8 @@ export const User = {
 
 If you see `Error: Unknown type: ...`, don't panic!
 It's a known issue with GraphQL type generation.
-It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model** exists.
-Please see [How to Fix Type Generation Error with Relations​](./schema-relations#errors-when-generating-sdl-or-scaffolds-for-relations) for help.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
+Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
 ### generate secret
 
