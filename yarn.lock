@@ -1989,9 +1989,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:3.7.1":
-  version: 3.7.1
-  resolution: "@clerk/clerk-js@npm:3.7.1"
+"@clerk/clerk-js@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@clerk/clerk-js@npm:3.8.0"
   dependencies:
     "@clerk/types": ^2.7.1
     "@popperjs/core": ^2.4.4
@@ -2005,7 +2005,7 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 43c44aff06d988ed8585fab5cd479c6d1ba9765d53a5d5a43f54077ae08c6527ca63009da99e9e4ac5e67b4b51108feae0989597dc4a1b0c9d450b56e4bfcb68
+  checksum: ffe37f5a6e9a359834b51ae7620a69798a7a763a529d47700567669f4c526b9e4f50da7672b9afe51ac354a1764f7edd2f0369130be9b8a47c177011b4ec40ad
   languageName: node
   linkType: hard
 
@@ -5894,7 +5894,7 @@ __metadata:
     "@azure/msal-browser": 2.23.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 3.7.1
+    "@clerk/clerk-js": 3.8.0
     "@clerk/clerk-sdk-node": 3.3.7
     "@clerk/types": 2.7.1
     "@nhost/nhost-js": 1.1.4
