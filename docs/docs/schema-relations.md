@@ -170,7 +170,7 @@ type Query {
 
 The easiest way to solve this error is to:
 
-1. First, **remove the all** the relations
+1. First, **remove all** the relations
 
 ```
 model Book {
