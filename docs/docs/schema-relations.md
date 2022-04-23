@@ -219,7 +219,7 @@ model Shelf {
 `yarn rw g sdl Book --force --no-tests`
 `yarn rw g sdl Shelf --force --no-tests`
 
-Now you have a schema, SDL, service that correctly represents your models and relationships.
+Now you have a schema, SDL and service that correctly represents your models and relationships.
 
 ### Self-Relation Tips
 
