@@ -100,8 +100,7 @@ Almost identical! But now there's an `id` and the SDL/scaffold generators will w
 ## Troubleshooting Generators
 
 Are you getting errors when generating SDLs or scaffolds for your Prisma models?
-There's a known issue in Redwood's GraphQL type generation that happens when using the SDL or Scaffold generators on a Prisma model that has relations before SDLs for both models exist.
-This is to get yourself into if you start by modeling your entire schema from the start, or if you [introspect your database](https://www.prisma.io/docs/concepts/components/introspection).
+There's a known issue in Redwood's GraphQL type generation that happens when generating SDL for or scaffolding out a Prisma model that has relations before SDLs for both models in the relation exist.
 
 This may sound a little abstract, so let's look at an example. Let's say that you're modeling bookshelves. Your prisma schema has two data models, `Book` and `Shelf`. This is a one to many relationship: a shelf has many books, but a book can only be on one shelf:
 
@@ -139,14 +138,14 @@ Here's how the output from the command starts:
     ✔ Successfully wrote file `./api/src/services/books/books.js`
 ```
 
-Looks like it's working so far. The SDL and service generated!
+Looks like it's working so far. The SDL and service files generated!
 But, when the command starts generating types... 💥
 
 ```
   ⠙ Generating types ...
 Failed to load schema
 
-//...
+# ...
 
 type Query {
   redwood: Redwood
@@ -157,64 +156,55 @@ type Query {
 ```
 
 What happened?
-Remember the first thing to do when you get an error: _read the message_.
+Remember the first thing to do when you get an error: _read the error message_.
 The key is `Unknown type: "Shelf"`.
-The type of `Book`'s `shelf` field is `Shelf`. But we didn't generate the SDL for `Shelf` yet, so it doesn't exist.
+The type of `Book`'s `shelf` field is `Shelf`.
+But we didn't generate the SDL for `Shelf` yet, so it doesn't exist.
+And naturally, types can't be generated for it.
 
 #### How to Fix Type Generation Error with Relations
 
-The easiest way to solve this error is to:
+There's two ways you can solve this:
 
-1. First, **remove all** the relations
+- just generate the types for all the models, ignoring the errors and just run `yarn rw g types` at thend
+- remove
 
-```js
-model Book {
-  id      Int    @id @default(autoincrement())
-  title   String @unique
-}
-
-model Shelf {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-}
-```
-
-2. Then, **migrate** so that both `Book` and `Shelf` exist as separate models -- just without relations for now.
-
- `yarn rw prisma migrate dev`
-
- 3. Next, generate the SDL (or scaffold) for each model separately
-
- `yarn rw g sdl Book`
- `yarn rw g sdl Shelf`
-
-4. After that, setup the relationships a you had originally:
+First, remove or comment out the relations:
 
 ```js
 model Book {
   id      Int    @id @default(autoincrement())
   title   String @unique
-  Shelf   Shelf? @relation(fields: [shelfId], references: [id])
-  shelfId Int?
+  // Shelf   Shelf? @relation(fields: [shelfId], references: [id])
+  // shelfId Int?
 }
 
 model Shelf {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  books Book[]
+  // books Book[]
 }
 ```
 
-5. Then **migrate** again to create the relationships in the database
+Then, generate the SDL for or scaffold out each model separately:
 
- `yarn rw prisma migrate dev`
+```
+yarn rw g sdl Book
+# ...
 
- 6. Last, regenerate your SDL (but you will need to `force` to overwrite existing files and use the `--no-tests` flag to preserve your tests and scenario files if needed)
+yarn rw g sdl Shelf
+# ...
+```
 
-`yarn rw g sdl Book --force --no-tests`
-`yarn rw g sdl Shelf --force --no-tests`
+Then, add or comment in the relationships and regenerate their SDLs, but you'll need to use the `--force` flag to overwrite the existing files (and the `--no-tests` flag to preserve your tests and scenario files if needed):
 
-Now you have a schema, SDL and service that correctly represents your models and relationships.
+```
+yarn rw g sdl Book --force --no-tests
+# ...
+
+yarn rw g sdl Shelf --force --no-tests
+# ...
+```
 
 ### Self-Relations
 
