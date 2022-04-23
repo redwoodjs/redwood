@@ -219,33 +219,35 @@ model Shelf {
 
 Now you have a schema, SDL and service that correctly represents your models and relationships.
 
-### Self-Relation Tips
+### Self-Relations
 
-[Self-relations](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations) are useful when you need to have a recursive relationship of the same model. You can see this often in business/academic organizational charts, building structures, or family trees where the "parent" and the "children" are the "same type of thing".
+[Self-relations](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations) are useful for modeling parent-child relationships where the parent and child are the "same type of thing".
+For example, in a business, everyone is an employee with a role and possibly someone to directly report to:
 
-For example, in a business everyone is an "Employee" with some defined role and some possible direct reports.
+* President—no direct report (for the purposes of this example)
+* Director—reports to the President
+* Manager—reports to a Director
+* Employee—reports to a Manager, but has no direct reports
 
-* President - each business has one President
-* Director - reports to the President
-* Manager - reports to a Director
-* Employee - reports to a Manager, but has no direct reports
+Let's use a self-relation to models this in PSL:
 
 ```js
 model Employee {
   id            Int       @id @default(autoincrement())
   name          String
   jobTitle      String
+  // highlight-start
   reportsToId   Int?      @unique
   reportsTo     Employee? @relation("OrgChart", fields: [reportsToId], references: [id])
   directReports Employee? @relation("OrgChart")
+  // highlight-end
 }
 ```
 
-What is important here for the RedwoodJS generators is that the related models **are optional**. That is, the `reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that the item is not required.
+For the generators, what's important here is that the related models are optional.
+`reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that they're optional, not required.
 
-That's because if you are at the top, say you are the President, then you don't have a `reportsTo` and if you are simply an Employee, then you do not have anyone that directly reports to you.
+It's important because if you're at the top—say you're the President—then you don't have a `reportsTo`, and if you're just an Employee, then you don't have anyone that directly reports to you.
 
-> The Redwood generators may complain or fail if you try to force a requirement here. If that happens, please set these to be optional.
-
-You can find more information about self-relations in the [Prisma documentation](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations).
-
+The Redwood generators may complain or fail if you try to force a requirement here.
+If that happens, please set these to be optional.
