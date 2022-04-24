@@ -11,7 +11,7 @@ inputs:
     description: version
     required: true
   slack-webhook-url:
-    description: endpoint
+    description: 'Slack webhook URL'
     required: true
 runs:
   using: composite
