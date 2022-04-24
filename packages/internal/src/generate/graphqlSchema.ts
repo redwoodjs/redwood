@@ -86,7 +86,9 @@ export const generateGraphQLSchema = async () => {
     }
 
     console.error(e)
-    console.error('')
+    // Had to do this, or the full stacktrace wouldn't come through, and I
+    // couldn't add a blank line after the stacktrace :( :shrug:
+    console.error('\n\n\n\n\n\n')
   }
 
   const options: CodegenTypes.GenerateOptions = {
