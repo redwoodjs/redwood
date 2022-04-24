@@ -16,17 +16,11 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Get emoji
-      id: get-emoji
-      if: inputs.status == 'failure'
-      run: echo "::set-output name=value::🚨"
-      shell: bash
-
-    - name: Get emoji
-      id: get-emoji
-      if: inputs.status == 'success'
-      run: echo "::set-output name=value::✅"
-      shell: bash
+    - name: Get status emoji
+      id: get-status-emoji
+      uses: sergeysova/jq-action@v2.1.0
+      with:
+        cmd: echo "{ \"success\": \"✅\", \"failure\": \"🚨\" }" | jq .${{ inputs.status }} -r
 
     - name: 💬 Message Slack
       uses: slackapi/slack-github-action@v1
@@ -34,7 +28,7 @@ runs:
         payload: |
           {
             "title": "${{ inputs.title }}",
-            "status": "${{ steps.get-emoji.outputs.value }} ${{ inputs.status }}",
+            "status": "${{ steps.get-status-emoji.outputs.value }} ${{ inputs.status }}",
             "version": "${{ inputs.version }}"
           }
       env:
