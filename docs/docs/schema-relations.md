@@ -100,7 +100,7 @@ Almost identical! But now there's an `id` and the SDL/scaffold generators will w
 ## Troubleshooting Generators
 
 Are you getting errors when generating SDLs or scaffolds for your Prisma models?
-There's a known issue in Redwood's GraphQL type generation that happens when generating SDL for or scaffolding out a Prisma model that has relations before SDLs for both models in the relation exist.
+There's a known issue in Redwood's GraphQL type generation that happens when generating SDL for or scaffolding out a Prisma model that has relations before the SDL for the related model exists.
 
 This may sound a little abstract, so let's look at an example. Let's say that you're modeling bookshelves. Your prisma schema has two data models, `Book` and `Shelf`. This is a one to many relationship: a shelf has many books, but a book can only be on one shelf:
 
@@ -162,26 +162,28 @@ The type of `Book`'s `shelf` field is `Shelf`.
 But we didn't generate the SDL for `Shelf` yet, so it doesn't exist.
 And naturally, types can't be generated for it.
 
-#### How to Fix Type Generation Error with Relations
+But fear not.
+This should be an easy fix.
+There's two ways you can go about it.
 
-There's two ways you can solve this:
+You can generate the SDLs for all the models in the relation, ignoring the errors. This way the last model in the relation should generate cleanly.
 
-- just generate the types for all the models, ignoring the errors and just run `yarn rw g types` at thend
-- remove
-
-First, remove or comment out the relations:
+Or, you can remove or comment out the relations:
 
 ```js
 model Book {
   id      Int    @id @default(autoincrement())
   title   String @unique
+  // highlight-start
   // Shelf   Shelf? @relation(fields: [shelfId], references: [id])
   // shelfId Int?
+  // highlight-end
 }
 
 model Shelf {
   id    Int    @id @default(autoincrement())
   name  String @unique
+  // highlight-next-line
   // books Book[]
 }
 ```
@@ -196,7 +198,7 @@ yarn rw g sdl Shelf
 # ...
 ```
 
-Then, add or comment in the relationships and regenerate their SDLs, but you'll need to use the `--force` flag to overwrite the existing files (and the `--no-tests` flag to preserve your tests and scenario files if needed):
+And lastly, add or comment in the relationships and regenerate their SDLs or scaffolds using the `--force` flag to overwrite the existing files, adding the `--no-tests` flag to preserve your tests and scenario files (if needed):
 
 ```
 yarn rw g sdl Book --force --no-tests
@@ -216,7 +218,7 @@ For example, in a business, everyone is an employee with a role and possibly som
 * Manager—reports to a Director
 * Employee—reports to a Manager, but has no direct reports
 
-Let's use a self-relation to models this in PSL:
+Let's use a self-relation to models this in our Prisma schema:
 
 ```js
 model Employee {
@@ -232,9 +234,7 @@ model Employee {
 ```
 
 For the generators, what's important here is that the related models are optional.
-`reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that they're optional, not required.
+`reportsToId`, `reportsTo`, and `directReports` use Prisma's `?` syntax to indicate that they're optional—not required.
+The Redwood generators may complain or fail if you try to force a requirement here.
 
 It's important because if you're at the top—say you're the President—then you don't have a `reportsTo`, and if you're just an Employee, then you don't have anyone that directly reports to you.
-
-The Redwood generators may complain or fail if you try to force a requirement here.
-If that happens, please set these to be optional.
