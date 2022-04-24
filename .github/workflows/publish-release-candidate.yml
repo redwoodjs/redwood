@@ -100,3 +100,4 @@ jobs:
           title: "🏎 RC Packages"
           status: ${{ needs.publish-release-candidate.result }}
           version: ${{ needs.publish-release-candidate.outputs.version }}
+          slack-webhook-url: ${{ secrets.SLACK_PUBLISHING_WORKFLOWS_WEBHOOK }}
