@@ -86,6 +86,7 @@ export const generateGraphQLSchema = async () => {
     }
 
     console.error(e)
+    console.error('')
   }
 
   const options: CodegenTypes.GenerateOptions = {

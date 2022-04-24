@@ -51,6 +51,7 @@ test('Prints error message when schema loading fails', async () => {
 
     const invocation1to8 = (console.error as jest.Mock).mock.calls.slice(0, 8)
     const invocation9 = (console.error as jest.Mock).mock.calls[8]
+    const invocation10 = (console.error as jest.Mock).mock.calls[9]
 
     expect(invocation1to8).toEqual([
       [''],
@@ -67,6 +68,7 @@ test('Prints error message when schema loading fails', async () => {
       [''],
     ])
     expect(invocation9[0].toString()).toMatch('Error: Unknown type: "Shelf".')
+    expect(invocation10[0]).toMatch('')
   } finally {
     console.error = oldConsoleError
     delete process.env.RWJS_CWD
