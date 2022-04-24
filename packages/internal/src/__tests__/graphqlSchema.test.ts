@@ -66,8 +66,7 @@ test('Prints error message when schema loading fails', async () => {
       ],
       [''],
     ])
-    expect(invocation9[0]).toMatch('Schema loading failed')
-    expect(invocation9[1].toString()).toMatch('Error: Unknown type: "Shelf".')
+    expect(invocation9[0].toString()).toMatch('Error: Unknown type: "Shelf".')
   } finally {
     console.error = oldConsoleError
     delete process.env.RWJS_CWD
