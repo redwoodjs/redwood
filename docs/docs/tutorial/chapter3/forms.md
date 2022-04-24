@@ -352,7 +352,6 @@ Similar to a plain HTML form we'll give `<Form>` an `onSubmit` handler. That han
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
-// highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
