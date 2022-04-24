@@ -181,7 +181,7 @@ Serendipitously, the default schema directive of `@requireAuth` is exactly what 
 
 :::
 
-We're not going to let anyone update or delete a comment, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
+We're not going to let anyone update or delete a message, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -205,12 +205,6 @@ export const schema = gql`
     name: String!
     email: String!
     message: String!
-  }
-
-  input UpdateContactInput {
-    name: String
-    email: String
-    message: String
   }
 
   // highlight-start
