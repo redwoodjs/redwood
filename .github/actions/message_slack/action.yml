@@ -1,14 +1,14 @@
-name: '💬 Message Slack'
-description: 'Send a message to slack'
+name: 💬 Message Slack
+description: Send a message to slack
 inputs:
   title:
-    description: 'title'
+    description: title
     required: true
   status:
-    description: 'status'
+    description: status
     required: true
   version:
-    description: 'version'
+    description: version
     required: true
 runs:
   using: composite

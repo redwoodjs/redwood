@@ -9,7 +9,7 @@ on:
     paths-ignore: ['docs/**']
 
 jobs:
-  git-tag-check:
+  check-git-tags:
     name: 🏷 Check git tags
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
 
   publish-release-candidate:
     name: 🚢 Publish Release Candidate
-    needs: git-tag-check
+    needs: check-git-tags
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get-version.outputs.value }}
