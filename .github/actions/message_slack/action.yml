@@ -20,11 +20,13 @@ runs:
       id: get-emoji
       if: inputs.status == 'failure'
       run: echo "::set-output name=value::🚨"
+      shell: bash
 
     - name: Get emoji
       id: get-emoji
       if: inputs.status == 'success'
       run: echo "::set-output name=value::✅"
+      shell: bash
 
     - name: 💬 Message Slack
       uses: slackapi/slack-github-action@v1
