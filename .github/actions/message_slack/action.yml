@@ -20,7 +20,7 @@ runs:
       id: get-status-emoji
       uses: sergeysova/jq-action@v2.1.0
       with:
-        cmd: echo "{ \"success\": \"✅\", \"failure\": \"🚨\" }" | jq .${{ inputs.status }} -r
+        cmd: 'echo "{ \"success\": \"✅\", \"failure\": \"🚨\" }" | jq .${{ inputs.status }} -r'
 
     - name: 💬 Message Slack
       uses: slackapi/slack-github-action@v1
