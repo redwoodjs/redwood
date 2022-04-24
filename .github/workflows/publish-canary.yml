@@ -22,7 +22,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/checkout@v3
       - name: 🧶 Setup job
         uses: ./.github/actions/setup_job
 
