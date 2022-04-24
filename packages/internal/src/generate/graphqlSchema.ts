@@ -59,13 +59,14 @@ export const generateGraphQLSchema = async () => {
       const name = match?.[1]
       const schemaPrisma = fs.readFileSync(getPaths().api.dbSchema)
 
+      console.error('')
       console.error('Schema loading failed.', e.message)
+      console.error('')
 
       if (name && schemaPrisma.includes(`model ${name}`)) {
         // Not all SDLs need to be backed by a DB model, but if they are we can
         // provide a more helpful error message
 
-        console.error('')
         console.error(
           `It looks like you have a ${name} model in your database schema.`
         )
@@ -81,6 +82,7 @@ export const generateGraphQLSchema = async () => {
           'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
         )} in our docs for more help`
       )
+      console.error('')
     }
 
     console.error('Schema loading failed', e)
