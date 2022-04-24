@@ -100,7 +100,7 @@ Almost identical! But now there's an `id` and the SDL/scaffold generators will w
 ## Troubleshooting Generators
 
 Are you getting errors when generating SDLs or scaffolds for your Prisma models?
-There's a known limitation in Redwood's GraphQL type generation that happens when generating SDL for, or scaffolding out, a Prisma model that has relations, before the SDL for the related model exists.
+There's a known limitation in Redwood's GraphQL type generation that happens when generating SDL for, or scaffolding out, a Prisma model that has relations before the SDL for the related model exists.
 
 This may sound a little abstract, so let's look at an example. Let's say that you're modeling bookshelves. Your prisma schema has two data models, `Book` and `Shelf`. This is a one to many relationship: a shelf has many books, but a book can only be on one shelf:
 
