@@ -19,11 +19,12 @@ describe('editable columns', () => {
       tests: true,
       nestScaffoldByModel: true,
     })
-    form = files[
-      path.normalize(
-        '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.js'
-      )
-    ]
+    form =
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.js'
+        )
+      ]
   })
 
   test('includes String fields with a default string', async () => {

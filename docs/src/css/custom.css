@@ -270,3 +270,12 @@ blockquote {
 .navbar-sidebar__back {
   display: none !important;
 }
+
+/*
+  ------------------------
+  Fix code tab text alignment
+  ------------------------
+*/
+.tabs__item li + li {
+  margin-top: 0;
+}

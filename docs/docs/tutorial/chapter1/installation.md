@@ -2,9 +2,23 @@
 
 We'll use yarn ([yarn](https://yarnpkg.com/en/docs/install) is a requirement) to create the basic structure of our app:
 
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```bash
 yarn create redwood-app ./redwoodblog
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```bash
+yarn create redwood-app --ts ./redwoodblog
+```
+
+</TabItem>
+</Tabs>
 
 You'll have a new directory `redwoodblog` containing several directories and files. Change to that directory and we'll start the development server:
 
