@@ -2047,5 +2047,7 @@ const ContactPage = () => {
 
 </TabItem>
 </Tabs>
+  
+:::
 
 The public site is looking pretty good. How about the administrative features that let us create and edit posts? We should move them to some kind of admin section and put them behind a login so that random users poking around at URLs can't create ads for discount pharmaceuticals.
