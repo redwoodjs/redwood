@@ -1,0 +1,26 @@
+name: '💬 Message Slack'
+description: 'Send a message to slack'
+inputs:
+  title:
+    description: 'title'
+    required: true
+  status:
+    description: 'status'
+    required: true
+  version:
+    description: 'version'
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: 💬 Message Slack
+      uses: slackapi/slack-github-action@v1
+      with:
+        payload: |
+          {
+            "title": "${{ inputs.title }}",
+            "status": "${{ inputs.status }}",
+            "version": "${{ inputs.version }}"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_PUBLISHING_WORKFLOWS_WEBHOOK }}

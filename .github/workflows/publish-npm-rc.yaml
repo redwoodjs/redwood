@@ -1,28 +1,30 @@
-name: Publish release candidate packages
+name: 🏎 Publish Release Candidate
 
 on:
   push:
     branches: ['release/**']
-    tags-ignore:
-      - v** # We don't want this to run on release
-    paths-ignore:
-      - 'docs/**' # No need to run on docs-only changes
+    # We don't want this to run on release
+    tags-ignore: ['v**']
+    # No need to run on docs-only changes
+    paths-ignore: ['docs/**']
 
 jobs:
   git-tag-check:
+    name: 🏷 Check git tags
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        # Required because lerna uses tags to determine the version.
         with:
-          fetch-depth: 0 # Required because lerna uses tags to determine the version.
+          fetch-depth: 0
 
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 16
 
-      - name: 🏷 Check tags
+      - name: 🏷 Check git tags
         run: |
           CURRENT_TAG=$(git describe --abbrev=0)
 
@@ -30,7 +32,6 @@ jobs:
           # `basename` gets us `v1.1.0`, then parameter expansion strips the `v`.
           # See https://stackoverflow.com/questions/6594085/remove-first-character-of-a-string-in-bash.
           BRANCH_TAG=$(basename ${{ github.ref_name }})
-          BRANCH_TAG=${BRANCH_TAG:1}
 
           echo
           echo "Current tag is $CURRENT_TAG"
@@ -46,6 +47,8 @@ jobs:
     name: 🚢 Publish Release Candidate
     needs: git-tag-check
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.value }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -53,50 +56,21 @@ jobs:
           #  This is required because lerna uses tags to determine the version.
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+      - uses: actions/checkout@v3
+      - name: 🧶 Setup job
+        uses: ./.github/actions/setup_job
 
-      - name: Print node and yarn versions
-        run: |
-          node --version
-          yarn --version
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Cache yarn
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-1234-${{ hashFiles('yarn.lock') }} #change yarn-{randomString} to bust the cache
-          restore-keys: |
-            yarn-1234
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: 'Check Yarn constraints (fix w/ "yarn constraints --fix")'
-        run: yarn constraints
-
-      - name: 'Check for duplicate dependencies (fix w/ "yarn dedupe")'
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn dedupe --check
+      - name: ✅ Check constraints, dependencies, and package.json's
+        uses: ./tasks/check
 
       - name: 🏗 Build
         run: yarn build
 
       - name: 🔎 Lint
         run: yarn lint
-        env:
-          CI: true
 
       - name: 🧪 Test
         run: yarn test
-        env:
-          CI: true
 
       - name: 🚢 Publish
         run: |
@@ -106,60 +80,22 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
-      - name: Update Publish Job Status
-        if: always()
-        run: |
-          echo ${{ job.status }} > status_publish.txt
-
-      - name: Upload file status_publish.txt as an artifact
-        if: always()
-        uses: actions/upload-artifact@v3
+      - name: 🏷 Get version
+        id: get-version
+        uses: sergeysova/jq-action@v2.1.0
         with:
-          name: pass_status_publish_job
-          path: status_publish.txt
+          cmd: 'jq .version packages/core/package.json -r'
 
-# Slack Notifications for publish success/fail
-# https://github.com/marketplace/actions/slack-send
-  slack-notification:
-    name: Slack Notification
-    runs-on: ubuntu-latest
+  message-slack:
+    name: 💬 Message Slack
     needs: publish-release-candidate
     if: always()
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Download publish status artifact
-        uses: actions/download-artifact@v3
+      - name: 💬 Message Slack
+        uses: ./.github/actions/message_slack
         with:
-          name: pass_status_publish_job
-
-      - name: Set the publish status as output
-        id: publish-status
-        run: |
-          echo "::set-output name=publish-result::$(<status_publish.txt)"
-
-      - name: Overwrite publish status env if failure
-        if: ${{ steps.publish-status.outputs.publish-result == 'failure' }}
-        run: |
-          echo "PUBLISH_STATUS=RC Publishing FAILED 🚨" >> $GITHUB_ENV
-
-      - name: Overwrite publish status env if success
-        if: ${{ steps.publish-status.outputs.publish-result == 'success' }}
-        run: |
-          echo "PUBLISH_STATUS=RC Publishing SUCCESS ✅" >> $GITHUB_ENV
-
-      - name: Overwrite publish status env if something else
-        if: ${{ (steps.publish-status.outputs.publish-result != 'failure') &&  (steps.publish-status.outputs.publish-result != 'success') }}
-        run: |
-          echo "PUBLISH_STATUS=RC Publishing Cancelled ⏹" >> $GITHUB_ENV
-
-      - name: Slack
-        id: slack
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {
-              "publish_label": "RC Packages 🦜",
-              "publish_status": "${{ env.PUBLISH_STATUS }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}
+          title: "🏎 RC Packages"
+          status: ${{ needs.publish-release-candidate.result }}
+          version: ${{ needs.publish-release-candidate.outputs.version }}
