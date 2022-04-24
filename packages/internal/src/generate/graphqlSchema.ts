@@ -6,6 +6,7 @@ import * as schemaAstPlugin from '@graphql-codegen/schema-ast'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadSchema, LoadSchemaOptions } from '@graphql-tools/load'
 import { DocumentNode, print } from 'graphql'
+import terminalLink from 'terminal-link'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
 
@@ -69,9 +70,17 @@ export const generateGraphQLSchema = async () => {
           `It looks like you have a ${name} model in your database schema.`
         )
         console.error(
-          'Try running the generator you just used for that model first instead'
+          `Maybe you need to generate SDL or scaffolding for ${name} first.`
         )
+        console.error('')
       }
+
+      console.error(
+        `See the section on ${terminalLink(
+          'troubleshooting generators',
+          'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
+        )} in our docs for more help`
+      )
     }
 
     console.error('Schema loading failed', e)
