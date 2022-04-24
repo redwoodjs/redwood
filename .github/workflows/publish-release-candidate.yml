@@ -76,7 +76,13 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
-          yarn lerna publish pre$SEMVER --include-merged-tags --canary --preid rc --dist-tag rc --force-publish --loglevel verbose --yes
+          yarn lerna publish pre$SEMVER --include-merged-tags \
+                                        --canary \
+                                        --preid rc \
+                                        --dist-tag rc \
+                                        --force-publish \
+                                        --loglevel verbose \
+                                        --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
