@@ -32,7 +32,7 @@ runs:
         payload: |
           {
             "title": "${{ inputs.title }}",
-            "status": "${{ steps.get-emoji.outputs.value }} ${{ inputs.status == }}",
+            "status": "${{ steps.get-emoji.outputs.value }} ${{ inputs.status }}",
             "version": "${{ inputs.version }}"
           }
       env:
