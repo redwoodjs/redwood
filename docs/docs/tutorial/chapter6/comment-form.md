@@ -253,6 +253,11 @@ const CREATE = gql`
     }
   }
 `
+
+interface FormValues {
+  name: string
+  comment: string
+}
 // highlight-end
 
 const CommentForm = () => {
