@@ -5,7 +5,7 @@ import storybookTest, {
 } from '../playwright-fixtures/storybook.fixture'
 
 storybookTest(
-  'Smoke test storybook',
+  'Loads Cell Stories',
   async ({ port, page }: PlaywrightTestArgs & StorybookFixture) => {
     const STORYBOOK_URL = `http://localhost:${port}/`
 
@@ -16,49 +16,45 @@ storybookTest(
     // Click text=Empty
     await page.locator('text=Empty').click()
     await expect(page).toHaveURL(
-      'http://localhost:7910/?path=/story/cells-blogpostcell--empty'
+      `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
     )
 
-    expect(page.frameLocator('#storybook-preview-iframe')).toHaveTextContent(
-      'Bazinga'
-    )
+    expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Empty')
 
     // Click text=Failure
     await page.locator('text=Failure').click()
     await expect(page).toHaveURL(
-      'http://localhost:7910/?path=/story/cells-blogpostcell--failure'
+      `http://localhost:${port}/?path=/story/cells-blogpostcell--failure`
     )
-    // Click text=Error: Oh no
-    await page
-      .frameLocator('#storybook-preview-iframe')
-      .locator('text=Error: Oh no')
-      .click()
 
-    expect(page.frameLocator('#storybook-preview-iframe')).toHaveTextContent(
-      'Error: Oh no'
-    )
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Error: Oh no')
 
     // Check Loading
     await page.locator('text=Loading').click()
     await expect(page).toHaveURL(
-      'http://localhost:7910/?path=/story/cells-blogpostcell--loading'
+      `http://localhost:${port}/?path=/story/cells-blogpostcell--loading`
     )
 
-    expect(page.frameLocator('#storybook-preview-iframe')).toHaveTextContent(
-      'Loading...'
-    )
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Loading...')
 
     // Check Success
+    // And make sure MSW Cell mocks are loaded as expected
     await page.locator('text=Success').click()
     await expect(page).toHaveURL(
-      'http://localhost:7910/?path=/story/cells-blogpostcell--success'
+      `http://localhost:${port}/?path=/story/cells-blogpostcell--success`
     )
 
-    expect(page.frameLocator('#storybook-preview-iframe')).toHaveTextContent(
-      'Mocked title'
-    )
-    expect(page.frameLocator('#storybook-preview-iframe')).toHaveTextContent(
-      'Mocked body'
-    )
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Mocked title')
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Mocked body')
   }
 )

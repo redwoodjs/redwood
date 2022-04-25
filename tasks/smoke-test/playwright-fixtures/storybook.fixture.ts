@@ -1,6 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 import execa from 'execa'
+import isPortReachable from 'is-port-reachable'
 
 // Declare worker fixtures.
 export type StorybookFixture = {
@@ -33,47 +34,52 @@ const test = base.extend<any, StorybookFixture>({
 
       console.log(`Running rw storybook at ${projectPath}`)
 
-      // Don't wait for this to finish, because it doens't
-      const serverHandler = execa(
-        `yarn rw storybook`,
-        ['--port', port, '--no-open', '--ci'],
-        {
-          cwd: projectPath,
-          shell: true,
-          cleanup: true,
-          detached: true,
-        }
-      )
-
-      let serverReadyPromiseHandle
-
-      const waitForSbServer = new Promise<boolean>((resolve, reject) => {
-        serverReadyPromiseHandle = { resolve, reject }
+      const isServerAlreadyUp = await isPortReachable(port, {
+        timeout: 5000,
       })
 
-      // Pipe out logs so we can debug, when required
-      serverHandler.stdout.on('data', (data) => {
-        const outputAsString = Buffer.from(data, 'utf-8').toString()
-        console.log('[rw-storybook-fixture]')
+      if (isServerAlreadyUp) {
+        console.log('Reusing existing SB server....')
+        console.log({
+          port,
+        })
+      } else {
+        // Don't wait for this to finish, because it doens't
+        const serverHandler = execa(
+          `yarn rw storybook`,
+          ['--port', port, '--no-open', '--ci'],
+          {
+            cwd: projectPath,
+            shell: true,
+            cleanup: true,
+            detached: true,
+          }
+        )
 
-        if (outputAsString.includes('Local')) {
-          serverReadyPromiseHandle.resolve()
-        }
-      })
+        let serverReadyPromiseHandle
 
-      serverHandler.stdout.pipe(process.stdout)
-      serverHandler.stderr.pipe(process.stderr)
+        const waitForSbServer = new Promise<boolean>((resolve, reject) => {
+          serverReadyPromiseHandle = { resolve, reject }
+        })
 
-      // serverHandler.stderr.on('data', (data) => {
-      //   serverReadyPromiseHandle.reject()
+        // Pipe out logs so we can debug, when required
+        serverHandler.stdout.on('data', (data) => {
+          const outputAsString = Buffer.from(data, 'utf-8').toString()
+          console.log('[rw-storybook-fixture]')
 
-      //   const outputAsString = Buffer.from(data, 'utf-8').toString()
-      //   console.log('[rw-storybook-fixture] ', outputAsString)
-      //   throw new Error('🚨 [ERR] Failed to start storybook server')
-      // })
+          if (outputAsString.includes('Local')) {
+            serverReadyPromiseHandle.resolve()
+          }
+        })
 
-      console.log('Waiting for server.....')
-      await waitForSbServer
+        // @NOTE: For some reason we need to do this
+        // Because otherwise the server doesn't launch correctly
+        serverHandler.stdout.pipe(process.stdout)
+        serverHandler.stderr.pipe(process.stderr)
+
+        console.log('Waiting for server.....')
+        await waitForSbServer
+      }
 
       console.log('Starting tests!')
       await use()
