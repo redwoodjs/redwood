@@ -1,3 +1,6 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 import { PlaywrightTestArgs, expect } from '@playwright/test'
 
 import storybookTest, {
@@ -13,13 +16,12 @@ storybookTest(
 
     // Click text=BlogPostCell
     await page.locator('text=BlogPostCell').click()
-    // Click text=Empty
-    await page.locator('text=Empty').click()
+
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
     )
 
-    expect(
+    await expect(
       page.frameLocator('#storybook-preview-iframe').locator('body')
     ).toContainText('Empty')
 
@@ -53,8 +55,88 @@ storybookTest(
     await expect(
       page.frameLocator('#storybook-preview-iframe').locator('body')
     ).toContainText('Mocked title')
+
     await expect(
       page.frameLocator('#storybook-preview-iframe').locator('body')
     ).toContainText('Mocked body')
+  }
+)
+
+storybookTest(
+  'Loads Cell mocks when Cell is nested in another story',
+  async ({ port, page }: PlaywrightTestArgs & StorybookFixture) => {
+    const STORYBOOK_URL = `http://localhost:${port}/`
+
+    await page.goto(STORYBOOK_URL)
+
+    // Click text=BlogPostCell
+    await page.locator('text=BlogPostPage').click()
+
+    // Click text=Empty
+    await expect(page).toHaveURL(
+      `http://localhost:${port}/?path=/story/pages-blogpostpage--generated`
+    )
+
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Mocked title')
+
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText('Mocked body')
+  }
+)
+
+storybookTest(
+  'Mocks current user, and updates UI while dev server is running',
+  async ({ port, page }: PlaywrightTestArgs & StorybookFixture) => {
+    const STORYBOOK_URL = `http://localhost:${port}/`
+
+    await page.goto(STORYBOOK_URL)
+
+    const profileStoryPath = path.join(
+      process.env.PROJECT_PATH,
+      'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
+    )
+
+    // Modify profile page stories to mockCurrentUser
+    const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
+
+    fs.writeFileSync(
+      profileStoryPath,
+      profilePageStoryContent.replace(
+        'export const generated = () => {',
+        `export const generated = () => {
+      mockCurrentUser({
+      email: 'ba@zinga.com',
+      id: 55,
+      roles: 'ADMIN',
+    })
+  `
+      )
+    )
+
+    await page.locator('text=ProfilePage').click()
+
+    const usernameRow = await page
+      .frameLocator('#storybook-preview-iframe')
+      .locator('*css=tr >> text=EMAIL')
+    await expect(await usernameRow.innerHTML()).toBe(
+      '<td>EMAIL</td><td>ba@zinga.com</td>'
+    )
+
+    const isAuthenticatedRow = await page
+      .frameLocator('#storybook-preview-iframe')
+      .locator('*css=tr >> text=isAuthenticated')
+    await expect(await isAuthenticatedRow.innerHTML()).toBe(
+      '<td>isAuthenticated</td><td>true</td>'
+    )
+
+    const isAdminRow = await page
+      .frameLocator('#storybook-preview-iframe')
+      .locator('*css=tr >> text=Is Admin')
+    await expect(await isAdminRow.innerHTML()).toBe(
+      '<td>Is Admin</td><td>true</td>'
+    )
   }
 )
