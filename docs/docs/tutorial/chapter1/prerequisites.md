@@ -1,5 +1,9 @@
 # Prerequisites
 
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/HJOzmp8oCIQ?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+</div>
+
 Redwood is composed of several popular libraries to make full-stack web development easier. Unfortunately, we can't teach all of those technologies from scratch during this tutorial, so we're going to assume you are already familiar with a few core concepts:
 
 - [React](https://reactjs.org/)
@@ -13,7 +17,7 @@ You could definitely learn them all at once, but it will be harder to determine 
 
 ### Redwood Versions
 
-You will want to be on the latest release candidate of v1.0 or greater of Redwood to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
+You will want to be on at least version 1.0.0 to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
 
 If you have an existing site created with a prior version, you'll need to upgrade and (most likely) apply code modifications. Follow this two step process:
 
@@ -26,7 +30,7 @@ If you have an existing site created with a prior version, you'll need to upgrad
 
 During installation, RedwoodJS checks if your system meets version requirements for Node and Yarn:
 
-- node: ">=14.17 <=16.x"
+- node: ">=14.19 <=16.x"
 - yarn: ">=1.15"
 
 If your system versions do not meet both requirements, _the installation bootstrap will result in an ERROR._ To check, please run the following from your terminal command line:
@@ -38,22 +42,21 @@ yarn --version
 
 Please do upgrade accordingly. Then proceed to the Redwood installation when you're ready!
 
-> **Installing Node and Yarn**
->
-> There are many ways to install and manage both Node.js and Yarn. If you're installing for the first time, we recommend the following:
->
-> **1. Yarn**
-> We recommend following the [instructions via Yarnpkg.com](https://classic.yarnpkg.com/en/docs/install/).
->
-> **2. Node.js**
-> Using the latest [installation from Nodejs.org](https://nodejs.org/en/) works just fine.
->
-> - `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm).
->
-> If you're confused about which of the two current Node versions to use, we recommend using the most recent LTS, which is currently [v16.x](https://nodejs.org/download/release/latest-gallium/).
+:::info Installing Node and Yarn
 
-> **Windows:** Recommended Development Setup
->
-> JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
->
-> - [Recommended Windows Development Setup](/docs/cookbook/windows-development-setup)
+There are many ways to install and manage both Node.js and Yarn. If you're installing for the first time, we recommend the following:
+
+**1. Yarn**
+We recommend following the [instructions via Yarnpkg.com](https://classic.yarnpkg.com/en/docs/install/).
+
+**2. Node.js**
+Using the recommended [LTS version from Nodejs.org](https://nodejs.org/en/) is preferred, as the latest Current version isn't supported.
+
+- `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm).
+ **Windows:** Recommended Development Setup
+
+JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
+
+- [Recommended Windows Development Setup](../../how-to/windows-development-setup.md)
+
+:::

@@ -1,3 +1,7 @@
+---
+description: Scale your serverless functions
+---
+
 # Connection Pooling
 
 > ⚠ **Work in Progress** ⚠️
@@ -57,8 +61,8 @@ Connection Pooling for MySQL is not yet supported.
 ## AWS
 Use [Amazon RDS Proxy](https://aws.amazon.com/rds/proxy) for MySQL or PostgreSQL.
 
-From the [AWS Docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html#rds-proxy.limitations): 
->Your RDS Proxy must be in the same VPC as the database. The proxy can't be publicly accessible. 
+From the [AWS Docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html#rds-proxy.limitations):
+>Your RDS Proxy must be in the same VPC as the database. The proxy can't be publicly accessible.
 
 Because of this limitation, with out-of-the-box configuration, you can only use RDS Proxy if you're deploying your Lambda Functions to the same AWS account. Alternatively, you can use RDS directly, but you might require larger instances to handle your production traffic and the number of concurrent connections.
 

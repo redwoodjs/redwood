@@ -1,17 +1,21 @@
+---
+description: Redwood makes building forms easier with helper components
+---
+
 # Forms
 
 Redwood provides several helpers to make building forms easier.
-All of Redwood's helpers are simple wrappers around [React Hook Form](https://react-hook-form.com/) (RHF) that make it even easier to use in most cases. 
+All of Redwood's helpers are simple wrappers around [React Hook Form](https://react-hook-form.com/) (RHF) that make it even easier to use in most cases.
 
 If Redwood's helpers aren't flexible enough for you, you can use React Hook Form directly. `@redwoodjs/forms` exports everything it does:
 
-```javascript
-import { 
-  useForm, 
-  useFormContext, 
+```jsx
+import {
+  useForm,
+  useFormContext,
   /**
    * Or anything else React Hook Form exports!
-   * 
+   *
    * @see {@link https://react-hook-form.com/api}
    */
 } from '@redwoodjs/forms'
@@ -62,12 +66,12 @@ The full list is:
 ### Validation and Error-styling Props
 
 All components ending in `Field` (i.e. all input fields, along with `<SelectField>` and `<TextAreaField>`) accept validation and error-styling props.
-By validation and error-styling props, we mean three props specifically: 
+By validation and error-styling props, we mean three props specifically:
 
-- `validation`, which accepts all of React Hook Form's [`register` options](https://react-hook-form.com/api/useform/register), plus the Redwood-exclusive coercion helpers `valueAsBoolean`, `valueAsJSON` 
+- `validation`, which accepts all of React Hook Form's [`register` options](https://react-hook-form.com/api/useform/register), plus the Redwood-exclusive coercion helpers `valueAsBoolean`, `valueAsJSON`
 - `errorClassName` and `errorStyle`, which are the classes and styles to apply if there's an error
 
-Besides `name`, all other props passed to these components are forwarded to the tag they render. 
+Besides `name`, all other props passed to these components are forwarded to the tag they render.
 Here's a table for reference:
 
 | Prop             | Description                                                                                                                                                                                                     |
@@ -81,7 +85,7 @@ Here's a table for reference:
 
 A typical React component using these helpers would look something like this:
 
-```javascript
+```jsx
 import {
   Form,
   Label,
@@ -138,7 +142,7 @@ const ContactPage = () => {
 
 ## `<Form>`
 
-Any form you want Redwood to validate and style in the presence errors should be surrounded by this tag. 
+Any form you want Redwood to validate and style in the presence errors should be surrounded by this tag.
 
 | Prop          | Description                                                                                                                                                    |
 |:--------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -154,19 +158,19 @@ All other props are forwarded to the `<form>` tag that it renders.
 It's hard to talk about this component without getting into the nitty-gritty of React Hook Forms.
 
 `useForm` is React Hook Form's major hook.
-It returns a bunch of functions, one of which is `register`, which you use to quite literally "register" fields into React Hook Form so it can validate them. 
+It returns a bunch of functions, one of which is `register`, which you use to quite literally "register" fields into React Hook Form so it can validate them.
 (This has to do with [controlled vs. uncontrolled components](https://reactjs.org/docs/uncontrolled-components.html). React Hook Form takes the latter approach.)
 
-All of Redwood's form helpers need the `register` function to do what they do. But they don't get it straight from `<Form>` because they could be nested arbitrarily deep. That's where `<FormProvider>` comes in: by passing the functions returned from `useForm` to `<FormProvider>`, Redwood's helpers can just use `useFormContext` to get what they need. 
+All of Redwood's form helpers need the `register` function to do what they do. But they don't get it straight from `<Form>` because they could be nested arbitrarily deep. That's where `<FormProvider>` comes in: by passing the functions returned from `useForm` to `<FormProvider>`, Redwood's helpers can just use `useFormContext` to get what they need.
 
 ### Using `formMethods`
 
-There's some functions that `useForm` returns that it'd be nice to have access to. 
+There's some functions that `useForm` returns that it'd be nice to have access to.
 For example, `useForm` returns a function `reset`, which resets the form's fields.
-To access it, you have to call `useForm` yourself. 
+To access it, you have to call `useForm` yourself.
 But you still need to pass `useForm`'s return to the `<FormProvider>` so that Redwood's helpers can register themselves:
 
-```javascript
+```jsx
 import { useForm } from 'react-hook-form'
 
 const ContactPage = () => {
@@ -194,7 +198,7 @@ This helper renders a `<div>` containing a "title" message and a `<ul>` enumerat
 
 For example, let's say you have a form with a `<TextField>` for a user's email address, but you didn't specify any validation on it:
 
-```javascript{22}
+```jsx {22}
 import { useMutation } from '@redwoodjs/web'
 
 const CREATE_CONTACT = gql`
@@ -287,13 +291,49 @@ The input fields that coerce automatically are:
 | `<DatetimeLocalField>` | `valueAsDate`    |
 
 `valueAsDate` and `valueAsNumber` are built into React Hook Form and are based on the HTML standard.
-But because Redwood uses GraphQL on the backend, it's important that the types submitted by the form be what the GraphQL server expects. 
+But because Redwood uses GraphQL on the backend, it's important that the types submitted by the form be what the GraphQL server expects.
 Instead of forcing users to make heavy-use of `setValueAs` for custom coercion, Redwood extends react hook form's `valueAs` properties with two more for convenience:
 
 - `valueAsBoolean`
 - `valueAsJSON`
 
-Another nice thing Redwood does for you is automatically treat empty strings (`''`) as `undefined` for text input fields whose name ends in `Id` to make it easier to work with fields for optional database relations. You can disable this by marking the field required, by supplying your own `setValueAs` function, or by simply renaming the field.
+### Default treatment of empty input values
+
+Redwood provides a flexible treatment of empty input field value. Appropriate treatment of empty fields can make working with fields for database relations easier.
+
+The treatment of empty field values is governed by the following:
+
+ 1. If `setValueAs` is specified by the user, the specified function will determine the behavior of empty fields.
+ 2.  If the `emptyAs` prop is set, then the `emptyAs` prop will determine the field value on an empty condition. See below for `emptyAs` prop values.
+ 3. If the `validation = { required: true }` prop is set, an empty field will return null.  However,
+    the validation provided by react-hook-forms should engage and prevent submission of the form as an empty value
+    would not satisfy the `required` validation.
+ 4. If the field is an `Id` field, that is its name ends in "Id", then an empty field will return `null`. A `null` value is the most appropriate value for most database relation fields.
+    For scenarios where another value is required for empty cases, utilize the `emptyAs` prop.
+ 5. If none of the above cases apply, the field value will be set as follows for empty field scenarios:
+     - DateFields &rarr; null
+     - NumberFields &rarr; NaN
+     - TextFields with valueAsNumber set &rarr; NaN
+     - SelectFields with valueAsNumber set &rarr; NaN
+     - SelectFields without valueAsNumber set &rarr; '' (empty string)
+     - TextFields with valueAsJSON set &rarr; null
+     - TextFields and comparable &rarr; '' (empty string)
+
+### emptyAs prop
+
+The `emptyAs` prop allows the user to overide the default value for an input field if the field is empty. Provided that a `setValueAs` prop is not specified, Redwood will allow you to override the default empty value returned.
+The possible values for `emptyAs` are:
+- `null`
+- `'undefined'`
+- `0`
+- `''` (empty string)
+
+For example:
+```
+<NumberField name="quantity" emptyAs="undefined" />
+<NumberField name="score" emptyAs={null} />
+```
+will return `undefined` if the field is empty.
 
 ## `<SelectField>`
 
@@ -301,26 +341,26 @@ Renders an HTML `<select>` tag.
 It's possible to select multiple values using the `multiple` prop.
 When `multiple` is `true`, this field returns an array of values in the same order as the list of options, not in the order they were selected.
 
-```js
+```jsx
 <SelectField name="toppings" multiple={true}>
   <option>'lettuce'</option>
   <option>'tomato'</option>
   <option>'pickle'</option>
   <option>'cheese'</option>
-</SelectField>  
+</SelectField>
 
-// If the user chooses lettuce, tomato, and cheese, 
-// the onSubmit handler receives: 
-// 
+// If the user chooses lettuce, tomato, and cheese,
+// the onSubmit handler receives:
+//
 // { toppings: ["lettuce", "tomato", "cheese"] }
-// 
+//
 ```
 
 ### Validation
 
 In these two examples, one with multiple-field selection, validation requires that a field be selected and that the user doesn't select the first value in the dropdown menu:
 
-```js
+```jsx
 <SelectField
   name="selectSingle"
   validation={{
@@ -342,7 +382,7 @@ In these two examples, one with multiple-field selection, validation requires th
 <FieldError name="selectSingle" style={{ color: 'red' }} />
 ```
 
-```js{2}
+```jsx {2}
 <SelectField
   multiple={true}
   name="selectMultiple"
@@ -371,10 +411,10 @@ In these two examples, one with multiple-field selection, validation requires th
 
 Typically, a `<SelectField>` returns a string, but you can use one of the `valueAs` properties to return another type.
 An example use-case is when `<SelectField>` is being used to select a numeric identifier.
-Without the `valueAsNumber` property, `<SelectField>` returns a string. 
+Without the `valueAsNumber` property, `<SelectField>` returns a string.
 But, as per the example below, the `valueAsNumber` can be used to return an `Int`:
 
-```js
+```jsx
 <SelectField name="select" validation={{ valueAsNumber: true }}>
   <option value={1}>Option 1</option>
   <option value={2}>Option 2</option>
@@ -384,13 +424,11 @@ But, as per the example below, the `valueAsNumber` can be used to return an `Int
 
 If `Option 3` is selected, the `<Form>`'s `onSubmit` function is passed data as follows:
 
-```js
+```jsx
 {
   select: 3,
 }
 ```
-
-As with input fields, Redwood will automatically treat empty strings (`''`) as `undefined` for select fields whose name ends in `Id`. See the previous section about this for more info.
 
 ## `<FieldError>`
 

@@ -1,81 +1,132 @@
 ---
-sidebar_position: 2
+description: Redwood quick start
 ---
 
 # Quick Start
 
-> RedwoodJS requires [Node.js](https://nodejs.org/en/) (>=14.x <=16.x) and [Yarn](https://classic.yarnpkg.com/en/docs/install/) (>=1.15).
+> **Prerequisites**
+>
+> - Redwood requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+> - Are you on Windows? For best results, follow our [Windows development setup](how-to/windows-development-setup.md) guide
 
-Run the following command to create a new Redwood project in a "my-redwood-app" project directory.
-
-```
-yarn create redwood-app my-redwood-app
-```
-
-Start the development server:
+Create a Redwood project with `yarn create redwood-app`:
 
 ```
-cd my-redwood-app
+yarn create redwood-app my-redwood-project
+```
+
+> **Prefer TypeScript?**
+>
+> Redwood comes with full TypeScript support from the get-go:
+>
+> ```
+> yarn create redwood-app my-redwood-project --typescript
+> ```
+
+Then change into that directory and start the development server:
+
+```
+cd my-redwood-project
 yarn redwood dev
 ```
 
-A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
+Your browser should automatically open to [http://localhost:8910](http://localhost:8910) where you'll see the Welcome Page, which links out to a ton of great resources:
 
-## The Redwood CLI
+<img data-mode="light" src="https://user-images.githubusercontent.com/300/145314717-431cdb7a-1c45-4aca-9bbc-74df4f05cc3b.png" alt="Redwood Welcome Page" style={{ marginBottom: 20 }} />
 
-The Redwood developer experience relies heavily on the Redwood CLI. It's installed as a dependency when you create a new redwood-app, and is run locally in your app.
+<img data-mode="dark" src="https://user-images.githubusercontent.com/32992335/161387013-2fc6702c-dfd8-4afe-aa2f-9b06d575ba82.png" alt="Redwood Welcome Page" style={{ marginBottom: 20 }} />
 
-The following will show all the available commands in the Redwood CLI (note: rw is alias of redwood):
+> **The Redwood CLI**
+>
+> Congratulations on running your first Redwood CLI command!
+> From dev to deploy, the CLI is with you the whole way.
+> And there's quite a few commands at your disposal:
+> ```
+> yarn redwood --help
+> ```
+> For all the details, see the [CLI reference](cli-commands.md).
 
-```
-yarn rw --help
-```
+## Prisma and the database
 
-Some commands, like [prisma](https://redwoodjs.com/docs/cli-commands#db), have a lot of options. You can dig further into a specific command by adding `--help` to the command like so:
+Redwood wouldn't be a full-stack framework without a database. It all starts with the schema. Open the `schema.prisma` file in `api/db` and replace the `UserExample` model with the following `Post` model:
 
-```
-yarn rw prisma --help
-```
-
-Take a visit to the [CLI Doc](https://redwoodjs.com/docs/cli-commands.html) to see detailed information on all commands and options.
-
-## Generators
-
-Redwood generators make monotonous developer tasks a breeze. Creating all the boilerplate code required for CRUD operations on a model can be accomplished with a few commands. Three to be exact.
-
-Every new Redwood project comes with a default Model called UserExample in `api/db/schema.prisma` (ignore the rest of the file for now, it's for more advanced configuration data).
-
-```
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+```js title="api/db/schema.prisma"
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
 }
 ```
 
-With only two commands, Redwood will create everything we need for our CRUD operations:
+Redwood uses [Prisma](https://www.prisma.io/), a next-gen Node.js and TypeScript ORM, to talk to the database. Prisma's schema offers a declarative way of defining your app's data models. And Prisma [Migrate](https://www.prisma.io/migrate) uses that schema to make database migrations hassle-free:
 
 ```
 yarn rw prisma migrate dev
-yarn rw generate scaffold UserExample
+
+# ...
+
+? Enter a name for the new migration: › create posts
 ```
 
-What exactly just happened? Glad you asked.
+> `rw` is short for `redwood`
 
-- `yarn rw prisma migrate dev` creates and applies a snapshot of our UserExample model for our migration, creating a new table in our database called `UserExample`
-- `yarn rw generate scaffold UserExample` tells Redwood to create the necessary Pages, SDL, and Services for the given Model
+You'll be prompted for the name of your migration. `create posts` will do.
 
-Just like that, we are done. No seriously. Visit http://localhost:8910/user-examples to see for yourself.
+Now let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on our `Post` model:
 
-<img width="463" alt="Screen Shot 2020-10-21 at 6 28 08 PM" src="https://user-images.githubusercontent.com/2951/96807389-3eede900-13cb-11eb-828a-52210cd67e3e.png" />
+```
+yarn redwood g scaffold post
+```
 
-Redwood has created everything we need to create, edit, delete and view a User. And you didn't have to write one line of boilerplate code.
+Navigate to [http://localhost:8910/posts/new](http://localhost:8910/posts/new), fill in the title and body, and click "Save":
 
-We have some other [generators](https://redwoodjs.com/docs/cli-commands#generate-alias-g) that are just as awesome, don't forget to check them out as well.
+<img src="https://user-images.githubusercontent.com/300/73028004-72262c00-3de9-11ea-8924-66d1cc1fceb6.png" alt="Create a new post" />
+
+Did we just create a post in the database? Yup! With `yarn rw g scaffold <model>`, Redwood created all the pages, components, and services necessary to perform all CRUD actions on our posts table.
+
+## Frontend first with Storybook
+
+Don't know what your data models look like?
+That's more than ok—Redwood integrates Storybook so that you can work on design without worrying about data.
+Mockup, build, and verify your React components, even in complete isolation from the backend:
+
+```
+yarn rw storybook
+```
+
+Before you start, see if the CLI's `setup ui` command has your favorite styling library:
+
+```
+yarn rw setup ui --help
+```
+
+## Testing with Jest
+
+It'd be hard to scale from side project to startup without a few tests.
+Redwood fully integrates Jest with the front and the backends and makes it easy to keep your whole app covered by generating test files with all your components and services:
+
+```
+yarn rw test
+```
+
+To make the integration even more seamless, Redwood augments Jest with database [scenarios](testing.md#scenarios)  and [GraphQL mocking](testing.md#mocking-graphql-calls).
+
+## Ship it
+
+Redwood is designed for both serverless deploy targets like Netlify and Vercel and serverful deploy targets like Render and AWS:
+
+```
+yarn rw setup deploy --help
+```
+
+Don't go live without auth!
+Lock down your front and backends with Redwood's built-in, database-backed authentication system ([dbAuth](authentication.md#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third party auth providers:
+
+```
+yarn rw setup auth --help
+```
 
 ## Next Steps
 
-Need more? The best way to get to know Redwood is by going through the extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial).
-
-- Join our [Discord Server](https://discord.gg/redwoodjs)
-- Join our [Discourse Community](https://community.redwoodjs.com)
+The best way to learn Redwood is by going through the comprehensive [tutorial](tutorial/foreword.md) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).

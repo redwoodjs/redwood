@@ -8,14 +8,16 @@ yarn redwood generate page home /
 
 The command above does four things:
 
-- Creates `web/src/pages/HomePage/HomePage.js`. Redwood takes the name you specified as the first argument after `page` and [PascalCases](https://techterms.com/definition/pascalcase) it, then appends "Page" to construct your new page component. So "home" becomes "HomePage".
-- Creates a test file to go along with this new page component at `web/src/pages/HomePage/HomePage.test.js` with a single, passing test. You _do_ write tests for your components, _don't you??_
-- Creates a Storybook file for this component at `web/src/pages/HomePage/HomePage.stories.js`. Storybook is a wonderful tool for efficiently developing and organizing UI components. (If you want to take a peek ahead, we learn about Storybook in [chapter 5 of the tutorial](/docs/tutorial/chapter5/storybook)).
-- Adds a `<Route>` in `web/src/Routes.js` that maps the path `/` to the new _HomePage_ page.
+- Creates `web/src/pages/HomePage/HomePage.{js,tsx}`. Redwood takes the name you specified as the first argument after `page` and [PascalCases](https://techterms.com/definition/pascalcase) it, then appends "Page" to construct your new page component. So "home" becomes "HomePage".
+- Creates a test file to go along with this new page component at `web/src/pages/HomePage/HomePage.test.{js,tsx}` with a single, passing test. You _do_ write tests for your components, _don't you??_
+- Creates a Storybook file for this component at `web/src/pages/HomePage/HomePage.stories.{js,tsx}`. Storybook is a wonderful tool for efficiently developing and organizing UI components. (If you want to take a peek ahead, we learn about Storybook in [chapter 5 of the tutorial](../chapter5/storybook.md)).
+- Adds a `<Route>` in `web/src/Routes.{js,tsx}` that maps the path `/` to the new _HomePage_ page.
 
-> **Automatic import of pages in Routes file**
->
-> If you look in Routes you'll notice that we're referencing a component, `HomePage`, that isn't imported anywhere. Redwood automatically imports all pages in the Routes file since we're going to need to reference them all anyway. It saves a potentially huge `import` declaration from cluttering up the routes file.
+:::info Automatic import of pages in the Routes file
+
+If you look in Routes you'll notice that we're referencing a component, `HomePage`, that isn't imported anywhere. Redwood automatically imports all pages in the Routes file since we're going to need to reference them all anyway. It saves a potentially huge `import` declaration from cluttering up the routes file.
+
+:::
 
 In case you didn't notice, this page is already live (your browser automatically reloaded):
 
@@ -25,7 +27,10 @@ It's not pretty, but it's a start! Open the page in your editor, change some tex
 
 ### Routing
 
-Open up `web/src/Routes.js` and take a look at the route that was created:
+Open up `web/src/Routes.{js,tsx}` and take a look at the route that was created:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/Routes.js"
 import { Router, Route } from '@redwoodjs/router'
@@ -43,13 +48,56 @@ const Routes = () => {
 export default Routes
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/Routes.tsx"
+import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      // highlight-next-line
+      <Route path="/" page={HomePage} name="home" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+</TabItem>
+</Tabs>
+
+As long as you have a route with path `/`, you'll never see the initial Redwood splash screen again.
+
+When no route can be found that matches the requested URL, Redwood will render the `NotFoundPage`.
+
 Try changing the route to something like:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx
 <Route path="/hello" page={HomePage} name="home" />
 ```
 
-As soon as you add your first route, you'll never see the initial Redwood splash screen again. From now on, when no route can be found that matches the requested URL, Redwood will render the `NotFoundPage`. Change your URL to [http://localhost:8910/hello](http://localhost:8910/hello) and you should see the homepage again.
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx
+<Route path="/hello" page={HomePage} name="home" />
+```
+
+</TabItem>
+</Tabs>
+
+The splash screen is available again at [http://localhost:8910/](http://localhost:8910/), giving you a list of all the available URLs in your app.
+
+![Redwood Splash Screen](https://user-images.githubusercontent.com/17789536/160120107-1157af8e-4cbd-4ec8-b3aa-8adb28ea6eaf.png)
+
+Go to `/hello` and you should see the homepage again.
 
 Change the route path back to `/` before continuing!
 

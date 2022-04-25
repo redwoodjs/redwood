@@ -1,23 +1,27 @@
+---
+description: Set up an authentication provider
+---
+
 # Authentication
 
 `@redwoodjs/auth` contains both a built-in database-backed authentication system (dbAuth), as well as lightweight wrappers around popular SPA authentication libraries.
 
 We currently support the following third-party authentication providers:
 
-- [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
-- [Auth0](https://github.com/auth0/auth0-spa-js)
-- [Azure Active Directory](https://github.com/AzureAD/microsoft-authentication-library-for-js)
-- [Clerk](https://clerk.dev)
-- [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
-- [Magic Links - Magic.js](https://github.com/MagicHQ/magic-js)
-- [Firebase](https://firebase.google.com/docs/auth)
-- [Ethereum](https://github.com/oneclickdapp/ethereum-auth)
-- [Supabase](https://supabase.io/docs/guides/auth)
-- [Nhost](https://docs.nhost.io/platform/authentication)
+- Netlify Identity _([Repo on GitHub](https://github.com/netlify/netlify-identity-widget))_
+- Netlify GoTrue-JS _([Repo on GitHub](https://github.com/netlify/gotrue-js))_
+- Auth0 _([Repo on GitHub](https://github.com/auth0/auth0-spa-js))_
+- Clerk _([Website](https://clerk.dev))_
+- Azure Active Directory _([Repo on GitHub](https://github.com/AzureAD/microsoft-authentication-library-for-js))_
+- Magic Links - Magic.js _([Repo on GitHub](https://github.com/MagicHQ/magic-js))_
+- Firebase _([Documentation Website](https://firebase.google.com/docs/auth))_
+- Supabase _([Documentation Website](https://supabase.io/docs/guides/auth))_
+- Ethereum _([Repo on GitHub](https://github.com/oneclickdapp/ethereum-auth))_
+- Nhost _([Documentation Website](https://docs.nhost.io/platform/authentication))_
 - Custom
 - [Contribute one](https://github.com/redwoodjs/redwood/tree/main/packages/auth), it's SuperEasy™!
 
-Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
+> 👉 Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 
 ## Self-hosted Auth Installation and Setup
 
@@ -98,7 +102,7 @@ Read the post-install instructions carefully as they contain instructions for ad
 >
 > yarn rw generate dbAuth
 
-Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](/docs/logger#redaction) docs for info.
+Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](logger.md#redaction) docs for info.
 
 ### Scaffolding Login/Signup/Forgot Password Pages
 
@@ -118,7 +122,7 @@ Almost all config for dbAuth lives in `api/src/functions/auth.js` in the object 
 
 If you want to do something other than immediately let a user log in if their username/password is correct, you can add additional logic in `login.handler()`. For example, if a user's credentials are correct, but they haven't verified their email address yet, you can throw an error in this function with the appropriate message and then display it to the user. If the login should proceed, simply return the user that was passed as the only argument to the function:
 
-```javascript
+```jsx
 login: {
   handler: (user) => {
     if (!user.verified) {
@@ -134,7 +138,7 @@ login: {
 
 This function should contain the code needed to actually create a user in your database. You will receive a single argument which is an object with all of the fields necessary to create the user (`username`, `hashedPassword` and `salt`) as well as any additional fields you included in your signup form in an object called `userAttributes`:
 
-```javascript
+```jsx
 signup: {
   handler: ({ username, hashedPassword, salt, userAttributes }) => {
     return db.user.create({
@@ -159,7 +163,7 @@ There are three things you can do within this function depending on how you want
 
 You can deal with case #2 by doing something like the following in a signup component/page:
 
-```javascript
+```jsx
 const { signUp } = useAuth()
 
 const onSubmit = async (data) => {
@@ -192,7 +196,7 @@ This handler is invoked after the password has been successfully changed in the 
 
 These options determine how the cookie that tracks whether the client is authorized is stored in the browser. The default configuration should work for most use cases. If you serve your web and api sides from different domains you'll need to make some changes: set `SameSite` to `None` and then add [CORS configuration](#cors-config).
 
-```javascript
+```jsx
 cookie: {
   HttpOnly: true,
   Path: '/',
@@ -204,7 +208,7 @@ cookie: {
 
 #### CORS config
 
-If you're using dbAuth and your api and web sides are deployed to different domains then you'll need to configure CORS for both GraphQL in general and dbAuth. You'll also need to enable a couple of options to be sure and send/accept credentials in XHR requests. For more info, see the complete [CORS doc](/docs/cors#cors-and-authentication).
+If you're using dbAuth and your api and web sides are deployed to different domains then you'll need to configure CORS for both GraphQL in general and dbAuth. You'll also need to enable a couple of options to be sure and send/accept credentials in XHR requests. For more info, see the complete [CORS doc](cors.md#cors-and-authentication).
 
 #### Error Messages
 
@@ -248,7 +252,7 @@ You will need to instantiate your authentication client and pass it to the `<Aut
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth netlify
 ```
 
@@ -261,10 +265,10 @@ yarn add @redwoodjs/auth netlify-identity-widget
 
 #### Setup
 
-You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/docs/tutorial/chapter4/authentication#netlify-identity-setup).
+You will need to enable Identity on your Netlify site.
+<!-- See [Netlify Identity Setup](tutorial/chapter4/authentication.md#netlify-identity-setup). -->
 
-```js
-// web/src/App.js
+```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import netlifyIdentity from 'netlify-identity-widget'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
@@ -293,7 +297,7 @@ export default App
 
 #### Netlify Identity Auth Provider Specific Setup
 
-See the Netlify Identity information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Netlify Identity information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 
 +++
 
@@ -305,7 +309,7 @@ See the Netlify Identity information within this doc's [Auth Provider Specific I
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth goTrue
 ```
 
@@ -318,18 +322,18 @@ yarn add @redwoodjs/auth gotrue-js
 
 #### Setup
 
-You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/docs/tutorial/chapter4/authentication#netlify-identity-setup).
+You will need to enable Identity on your Netlify site.
+<!-- See [Netlify Identity Setup](tutorial/chapter4/authentication.md#netlify-identity-setup). -->
 
 Add the GoTrue-JS package to the web side:
 
-```terminal
+```bash
 yarn workspace web add gotrue-js
 ```
 
 Instantiate GoTrue and pass in your configuration. Be sure to set APIUrl to the API endpoint found in your Netlify site's Identity tab:
 
-```js
-// web/src/App.js
+```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import GoTrue from 'gotrue-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -368,7 +372,7 @@ export default App
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth auth0
 ```
 
@@ -393,10 +397,9 @@ You can increase security by using refresh token rotation which issues a new ref
 
 Rotating the refresh token reduces the risk of a compromised refresh token. For more information, see: [https://auth0.com/docs/tokens/refresh-tokens/refresh-token-rotation](https://auth0.com/docs/tokens/refresh-tokens/refresh-token-rotation).
 
-> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
+> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](environment-variables.md) to include them in your `redwood.toml`.
 
-```js
-// web/src/App.js
+```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -448,7 +451,7 @@ When using the Auth0 client, `login` and `logout` take `options` that can be use
 
 The latter is helpful when an unauthenticated user visits a Private route, but then is redirected to the `unauthenticated` route. The Redwood router will place the previous requested path in the pathname as a `redirectTo` parameter which can be extracted and set in the Auth0 `appState`. That way, after successfully logging in, the user will be directed to this `targetUrl` rather than the config's callback.
 
-```js
+```jsx
 const UserAuthTools = () => {
   const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
@@ -478,7 +481,7 @@ const UserAuthTools = () => {
 
 #### Auth0 Auth Provider Specific Setup
 
-See the Auth0 information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Auth0 information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 
 +++
 
@@ -490,7 +493,7 @@ See the Auth0 information within this doc's [Auth Provider Specific Integration]
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth clerk
 ```
 
@@ -500,9 +503,7 @@ To get started with Clerk, sign up on [their website](https://clerk.dev/) and cr
 
 It's important that the `ClerkAuthProvider` added to your `App.{js|ts}` file during setup is within the `RedwoodProvider` and around Redwood's `AuthProvider`:
 
-```ts{6,12}
-// web/src/App.{js|ts}
-
+```tsx {4,10} title="web/src/App.{js|ts}"
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
@@ -520,7 +521,7 @@ const App = () => (
 
 The [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) also explains how to use `@clerk/clerk-react` components with Redwood's `useAuth()` hook:
 
-```ts
+```tsx
 import { UserButton, SignInButton } from '@clerk/clerk-react'
 
 // ...
@@ -536,15 +537,15 @@ import { UserButton, SignInButton } from '@clerk/clerk-react'
 }
 ```
 
-Applications in Clerk have different instances. By default, there's one for development, one for staging, and one for production. You'll need to pull two values from one of these instances. We recommend storing the development values in your local `.env` file and using the staging and production values in the appropriate env setups for your hosting platform when you deploy.
+Applications in Clerk have different instances. By default, there's one for development, one for staging, and one for production. You'll need to pull three values from one of these instances. We recommend storing the development values in your local `.env` file and using the staging and production values in the appropriate env setups for your hosting platform when you deploy.
 
-The two values you'll need from Clerk are your instance's "Frontend API" url and an API key from your instance's settings. The Frontend API url should be stored in an env variable named `CLERK_FRONTEND_API_URL`. The API key should be named `CLERK_API_KEY`.
+The three values you'll need from Clerk are your instance's "Frontend API Key" url, a "Backend API key" and a "JWT verification key", all from your instance's settings under "API Keys". The Frontend API url should be stored in an env variable named `CLERK_FRONTEND_API_URL`. The Backend API key should be named `CLERK_API_KEY`. Finally, the JWT key should be named `CLERK_JWT_KEY`
 
 Otherwise, feel free to configure your instances however you wish with regards to their appearance and functionality.
 
 > **Including Environment Variables in Serverless Deploys**
 >
-> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables). You should expose the `CLERK_FRONTEND_API_URL` only to the `web` workspace and expose `CLERK_API_KEY` **only** to the `api` workspace.
+> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](environment-variables.md). You need to expose the `CLERK_FRONTEND_API_URL` variable to the `web` side.
 
 #### Login and Logout Options
 
@@ -568,7 +569,7 @@ Redwood's integration of Clerk is based on [Clerk's React SDK](https://docs.cler
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth azureActiveDirectory
 ```
 
@@ -593,8 +594,7 @@ Enter allowed redirect urls for the integrations, e.g. `http://localhost:8910/lo
 
 The Authority is a URL that indicates a directory that MSAL can request tokens from which you can read about [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority). However, you most likely want to have e.g. `https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>` is the Azure Active Directory tenant id. This will be the `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
-```js
-// web/src/App.js
+```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import { PublicClientApplication } from '@azure/msal-browser'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -635,7 +635,7 @@ To setup your App Registration with custom roles and have them exposed via the `
 
 Options in method `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized. By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In example below we explicit include `User.Read.All` to the login scope.
 
-```js
+```jsx
 await logIn({
   scopes: ['User.Read.All'], // becomes ['openid', 'profile', 'User.Read.All']
 })
@@ -647,7 +647,7 @@ See [loginRedirect](https://azuread.github.io/microsoft-authentication-library-f
 
 Options in method `getToken(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest). By default, `getToken` will be called with scope `['openid', 'profile']`. As Azure Active Directory apply [incremental consent](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#dynamic-scopes-and-incremental-consent), we can extend the permissions from the login example by including another scope, for example `Mail.Read`.
 
-```js
+```jsx
 await getToken({
   scopes: ['Mail.Read'], // becomes ['openid', 'profile', 'User.Read.All', 'Mail.Read']
 })
@@ -665,7 +665,7 @@ See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-libr
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth magicLink
 ```
 
@@ -680,10 +680,9 @@ yarn add @redwoodjs/auth magic-sdk
 
 To get your application keys, go to [dashboard.magic.link](https://dashboard.magic.link/) then navigate to the API keys add them to your `.env`.
 
-> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
+> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](environment-variables.md) to "Whitelist them in your `redwood.toml`".
 
-```js
-// web/src/App.js|tsx
+```jsx title="web/src/App.js|tsx"
 import { useAuth, AuthProvider } from '@redwoodjs/auth'
 import { Magic } from 'magic-sdk'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -709,8 +708,7 @@ const App = () => (
 export default App
 ```
 
-```js
-// web/src/Routes.js|tsx
+```jsx title="web/src/Routes.js|tsx"
 import { useAuth } from '@redwoodjs/auth'
 import { Router, Route } from '@redwoodjs/router'
 
@@ -728,7 +726,7 @@ export default Routes
 
 #### Magic.Link Auth Provider Specific Integration
 
-See the Magic.Link information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Magic.Link information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 +++
 
 ### Firebase
@@ -739,7 +737,7 @@ See the Magic.Link information within this doc's [Auth Provider Specific Integra
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth firebase
 ```
 
@@ -749,8 +747,7 @@ We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/
 
 > **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
 
-```js
-// web/src/App.js
+```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 import { initializeApp, getApps, getApp } from '@firebase/app'
 import * as firebaseAuth from '@firebase/auth'
@@ -800,7 +797,7 @@ export default App
 
 #### Usage
 
-```js
+```jsx
 const UserAuthTools = () => {
   const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
@@ -838,7 +835,7 @@ See the Firebase information within this doc's [Auth Provider Specific Integrati
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth supabase
 ```
 
@@ -899,7 +896,7 @@ For Supabase Authentication documentation, see: <https://supabase.io/docs/guides
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth ethereum
 ```
 
@@ -917,7 +914,7 @@ To complete setup, you'll also need to update your `api` server manually. See ht
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth nhost
 ```
 
@@ -947,7 +944,7 @@ For the docs on Authentication, see: <https://docs.nhost.io/platform/authenticat
 
 If you are also **using Nhost as your GraphQL API server**, you will need to pass `skipFetchCurrentUser` as a prop to `AuthProvider` , as follows:
 
-```js
+```jsx
 <AuthProvider client={nhost} type="nhost" skipFetchCurrentUser>
 ```
 
@@ -964,7 +961,7 @@ Important: The `skipFetchCurrentUser` attribute is **only** needed if you are **
 
 The following CLI command (not implemented, see https://github.com/redwoodjs/redwood/issues/1585) will install required packages and generate boilerplate code and files for Redwood Projects:
 
-```terminal
+```bash
 yarn rw setup auth custom
 ```
 
@@ -1007,7 +1004,7 @@ GraphQL requests automatically receive an `Authorization` JWT header when a user
 
 If a user is signed in, the `Authorization` token is verified, decoded and available in `context.currentUser`
 
-```js
+```jsx
 import { context } from '@redwoodjs/api'
 
 console.log(context.currentUser)
@@ -1018,11 +1015,11 @@ console.log(context.currentUser)
 // }
 ```
 
-You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createCreateGraphQLHandler`
+You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createGraphQLHandler`
 
 Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser`. (Note: You may already have stub functions.)
 
-```js
+```jsx
 import { getCurrentUser } from 'src/lib/auth'
 // Example:
 //  export const getCurrentUser = async (decoded) => {
@@ -1045,7 +1042,7 @@ Use `requireAuth` in your services to check that a user is logged in,
 whether or not they are assigned a role, and optionally raise an
 error if they're not.
 
-```js
+```jsx
 export const requireAuth = ({ roles }) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
@@ -1102,7 +1099,7 @@ To accomplish these tasks, you can use [Auth0 Rules](https://auth0.com/docs/rule
 
 Your first rule will `Add Authorization Roles to App Metadata`.
 
-```js
+```jsx
 /// Add Authorization Roles to App Metadata
 function (user, context, callback) {
     auth0.users.updateAppMetadata(user.user_id, context.authorization)
@@ -1143,7 +1140,7 @@ To keep your custom claims from colliding with any reserved claims or claims fro
 
 Therefore, with a namespace of "https://example.com", the `app_metadata` on your token should look like:
 
-```js
+```jsx
 "https://example.com/app_metadata": {
   "authorization": {
     "roles": [
@@ -1155,7 +1152,7 @@ Therefore, with a namespace of "https://example.com", the `app_metadata` on your
 
 To set this namespace information, use the following function in your rule:
 
-```js
+```jsx
 function (user, context, callback) {
   var namespace = 'https://example.com/';
 
@@ -1191,8 +1188,7 @@ If you intend to support, RBAC then in your `api/src/lib/auth.js` you need to ex
 
 If your roles are on a namespaced `app_metadata` claim, then `parseJWT` provides an option to provide this value.
 
-```js
-// api/src/lib/auth.js`
+```jsx title="api/src/lib/auth.js"
 const NAMESPACE = 'https://example.com'
 
 const currentUserWithRoles = async (decoded) => {
@@ -1225,7 +1221,7 @@ The Redwood API does not include the functionality to decode Magic.link authenti
 
 First, you must manually install the **Magic Admin SDK** in your project's `api/package.json`.
 
-```terminal
+```bash
 yarn workspace api add @magic-sdk/admin
 ```
 
@@ -1233,8 +1229,7 @@ yarn workspace api add @magic-sdk/admin
 
 To get your application running _without setting up_ `Prisma`, get your `SECRET KEY` from [dashboard.magic.link](https://dashboard.magic.link/). Then add `MAGICLINK_SECRET` to your `.env`.
 
-```js
-// redwood/api/src/lib/auth.js|ts
+```jsx title="redwood/api/src/lib/auth.js|ts"
 import { Magic } from '@magic-sdk/admin'
 
 export const getCurrentUser = async (_decoded, { token }) => {
@@ -1246,8 +1241,7 @@ export const getCurrentUser = async (_decoded, { token }) => {
 
 Magic.link recommends using the issuer as the userID to retrieve user metadata via `Prisma`
 
-```js
-// redwood/api/src/lib/auth.ts
+```jsx title="redwood/api/src/lib/auth.ts"
 import { Magic } from '@magic-sdk/admin'
 
 export const getCurrentUser = async (_decoded, { token }) => {
@@ -1304,7 +1298,7 @@ In Firebase Console, you must enable "Email link (passwordless sign-in)" with th
 
 For example, users could be redirected to a dedicated route/page to complete authentication:
 
-```js
+```jsx
 import { useEffect } from 'react'
 import { Redirect, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
@@ -1345,7 +1339,7 @@ export default EmailSigninPage
 
 If you want to [integrate firebase auth with another authentication system](https://firebase.google.com/docs/auth/web/custom-auth), you can use a custom token provider:
 
-```js
+```jsx
 logIn({
   providerId: 'customToken',
   customToken,
@@ -1410,8 +1404,7 @@ Netlify will store the user's roles on the `app_metadata` claim and the `parseJW
 
 For example:
 
-```js
-// api/src/lib/auth.js`
+```jsx title="api/src/lib/auth.js"
 export const getCurrentUser = async (decoded) => {
   return context.currentUser || { ...decoded, roles: parseJWT({ decoded }).roles }
 }
@@ -1425,7 +1418,7 @@ Now your `currentUser.roles` info will be available to both `requireAuth()` on t
 
 You can protect content by role in pages or components via the `useAuth()` hook:
 
-```js
+```jsx
 const { isAuthenticated, hasRole } = useAuth()
 
 ...
@@ -1443,7 +1436,7 @@ const { isAuthenticated, hasRole } = useAuth()
 
 Routes can require authentication by wrapping them in a `<Private>` component. An unauthenticated user will be redirected to the page specified in `unauthenticated`.
 
-```js
+```jsx
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -1463,7 +1456,7 @@ const Routes = () => {
 
 Routes and Sets can also be restricted by role by specifying `hasRole="role"` or `hasRole={['role', 'another_role']})` in the `<Private>` component. A user not assigned the role will be redirected to the page specified in `unauthenticated`.
 
-```js
+```jsx
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {

@@ -2,9 +2,23 @@
 
 We'll use yarn ([yarn](https://yarnpkg.com/en/docs/install) is a requirement) to create the basic structure of our app:
 
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```bash
 yarn create redwood-app ./redwoodblog
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```bash
+yarn create redwood-app --ts ./redwoodblog
+```
+
+</TabItem>
+</Tabs>
 
 You'll have a new directory `redwoodblog` containing several directories and files. Change to that directory and we'll start the development server:
 
@@ -17,7 +31,11 @@ A browser should automatically open to [http://localhost:8910](http://localhost:
 
 ![Redwood Welcome Page](https://user-images.githubusercontent.com/300/145314717-431cdb7a-1c45-4aca-9bbc-74df4f05cc3b.png)
 
-> Remembering the port number is as easy as counting: 8-9-10!
+:::tip
+
+Remembering the port number is as easy as counting: 8-9-10!
+
+:::
 
 The splash page gives you links to a ton of good resources, but don't get distracted: we've got a job to do!
 

@@ -1,3 +1,7 @@
+---
+description: About the built-in router for Redwood apps
+---
+
 # Router
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.
@@ -10,8 +14,7 @@ The first thing you need is a `Router`. It will contain all of your routes. The 
 
 Each route is specified with a `Route`. Our first route will tell the router what to render when no other route matches:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 import { Router, Route } from '@redwoodjs/router'
 
 const Routes = () => (
@@ -27,8 +30,7 @@ The router expects a single `Route` with a `notfound` prop. When no other route 
 
 To create a route to a normal Page, you'll pass three props: `path`, `page`, and `name`:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/" page={HomePage} name="home" />
 ```
 
@@ -44,9 +46,7 @@ We support this using private `<Set>`s or the `<Private>` component. Read more [
 
 You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
 
-```js
-// Routes.js
-
+```jsx title="Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -69,7 +69,7 @@ export default Routes
 
 The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the example above, Set expands to:
 
-```js
+```jsx
 <BlogContext>
   <BlogLayout>
     <Route path="/" page={HomePage} name="home" />
@@ -82,9 +82,7 @@ Conceptually, this fits with how we think about Context and Layouts as things th
 
 There's a lot of flexibility here. You can even nest `Sets` to great effect:
 
-```js
-// Routes.js
-
+```jsx title="Routes.js"
 import { Router, Route, Set, Private } from '@redwoodjs/router'
 import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -112,7 +110,7 @@ All props you give to `<Set>` (except for `wrap`) will be passed to the wrapper 
 
 So this...
 
-```js
+```jsx
 <Set wrap={MainLayout} theme="dark">
   <Route path="/" page={HomePage} name="home" />
 </Set>
@@ -120,7 +118,7 @@ So this...
 
 becomes...
 
-```js
+```jsx
 <MainLayout theme="dark">
   <Route path="/" page={HomePage} name="home" />
 </MainLayout>
@@ -130,12 +128,11 @@ becomes...
 
 Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
-For more fine-grained control, you can specify `role` (which takes an array of roles), and the router will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
+For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
 
 Here's an example of how you'd use a private set:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Set private unauthenticated="home">
@@ -148,8 +145,7 @@ Private routes are important and should be easy to spot in your Routes file. The
 
 Here's the same example again, but now using `<Private>`
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Private unauthenticated="home">
@@ -158,14 +154,13 @@ Here's the same example again, but now using `<Private>`
 </Router>
 ```
 
-Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](https://redwoodjs.com/docs/tutorial/chapter4/authentication).
+Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](tutorial/chapter4/authentication.md).
 
 ## Link and named route functions
 
 When it comes to routing, matching URLs to Pages is only half the equation. The other half is generating links to your pages. The router makes this really simple without having to hardcode URL paths. In a Page component, you can do this (only relevant bits are shown in code samples from now on):
 
-```js
-// SomePage.js
+```jsx title="SomePage.js"
 import { Link, routes } from '@redwoodjs/router'
 
 // Given the route in the last section, this produces: <a href="/">
@@ -180,8 +175,7 @@ Named route functions simply return a string, so you can still pass in hardcoded
 
 `NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches **exactly** the current URL.
 
-```js
-// MainMenu.js
+```jsx title="MainMenu.js"
 import { NavLink, routes } from '@redwoodjs/router'
 
 // Will render <a className="link activeLink" {...rest}> respectively when on the page
@@ -210,7 +204,7 @@ const MainMenu = () =>
 
 Alternatively, you can add the `activeMatchParams` prop to your `NavLink` to match the current URL **partially**
 
-```js
+```jsx
 import { NavLink, routes } from '@redwoodjs/router'
 
 // Will render <a href="/?tab=tutorial&page=2" className="link activeLink"> when on any of Home tutorial pages
@@ -232,7 +226,7 @@ const MainMenu = () => (
 
 More granular match, `page` key only and `tab=tutorial`
 
-```js
+```jsx
 // Match /?tab=tutorial&page=*
 activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
 ```
@@ -241,7 +235,7 @@ You can `useMatch` to create your own component with active styles.
 
 > `NavLink` uses it internally!
 
-```js
+```jsx
 import { Link, routes, useMatch } from '@redwoodjs/router'
 
 const CustomLink = ({ to, ...rest }) => {
@@ -257,7 +251,7 @@ const MainMenu = () => {
 
 `useMatch` accepts `searchParams` in the `options` for matching granularity which is exactly the same as `activeMatchParams` of `NavLink`
 
-```js
+```jsx
 import { Link, routes, useMatch } from '@redwoodjs/router'
 
 const CustomLink = ({ to, ...rest }) => {
@@ -271,22 +265,19 @@ const CustomLink = ({ to, ...rest }) => {
 
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/user/{id}>" page={UserPage} name="user" />
 ```
 
 This route will match URLs like `/user/7` or `/user/mojombo`. You can have as many route parameters as you like:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/blog/{year}/{month}/{day}/{slug}" page={PostPage} name="post" />
 ```
 
 By default, route parameters will match up to the next slash or end-of-string. Once extracted, the route parameters are sent as props to the Page component. In the 2nd example above, you can receive them like so:
 
-```js
-// PostPage.js
+```jsx title="PostPage.js"
 const PostPage = ({ year, month, day, slug }) => { ... }
 ```
 
@@ -294,8 +285,7 @@ const PostPage = ({ year, month, day, slug }) => { ... }
 
 If a route has route parameters, then its named route function will take an object of those same parameters as an argument:
 
-```js
-// SomePage.js
+```jsx title="SomePage.js"
 <Link to={routes.user({ id: 7 })}>...</Link>
 ```
 
@@ -303,8 +293,7 @@ All parameters will be converted to strings before being inserted into the gener
 
 If you specify parameters to the named route function that do not correspond to parameters defined on the route, they will be appended to the end of the generated URL as search params in `key=val` format:
 
-```js
-// SomePage.js
+```jsx title="SomePage.js"
 <Link to={routes.users({ sort: 'desc', filter: 'all' })}>...</Link>
 // => "/users?sort=desc&filter=all"
 ```
@@ -313,15 +302,13 @@ If you specify parameters to the named route function that do not correspond to 
 
 Route parameters are extracted as strings by default, but they will often represent typed data. The router offers a convenient way to auto-convert certain types right in the `path` specification:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/user/{id:Int}" page={UserPage} name="user" />
 ```
 
 By adding `:Int` onto the route parameter, you are telling the router to only match `/\d+/` and then use `Number()` to convert the parameter into a number. Now, instead of a string being sent to the Page, a number will be sent! This means you could have both a route that matches numeric user IDs **and** a route that matches string IDs:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/user/{id:Int}" page={UserIntPage} name="userInt" />
 <Route path="/user/{id}" page={UserStringPage} name="userString" />
 ```
@@ -343,8 +330,7 @@ We call built-in parameter types _core parameter types_. All core parameter type
 
 There is one more core type that is a bit different: the glob type. Instead of matching to the next `/` or the end of the string, it will greedily match as much as possible (including `/` characters) and capture the match as a string.
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/file/{filePath...}" page={FilePage} name="file" />
 ```
 
@@ -352,8 +338,7 @@ In this example, we want to take everything after `/file/` and have it sent to t
 
 You can use multiple globs in your paths:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 <Route path="/from/{fromDate...}/to/{toDate...}" page={DatePage} name="dateRange" />
 ```
 
@@ -363,8 +348,7 @@ This will match a path like `/from/2021/11/03/to/2021/11/17`. Note that for this
 
 The router goes even further, allowing you to define your own route parameter types. Your custom types must begin with a lowercase letter. You can specify them like so:
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 const userRouteParamTypes = {
   slug: {
     match: /\w+-\w+/,
@@ -396,7 +380,7 @@ There are 3 values that can be used with the `trailingSlashes` prop
 If you need to match trailing slashes exactly, use the `preserve` value.
 In the following example, `/about/` will _not_ match `/about` and you will be sent to the `NotFoundPage`
 
-```js
+```jsx
 <Router trailingSlashes={'preserve'}>
   <Route path="/" page={HomePage} name="home" />
   <Route path="/about" page={AboutPage} name="about" />
@@ -408,8 +392,7 @@ In the following example, `/about/` will _not_ match `/about` and you will be se
 
 Sometimes it's convenient to receive route parameters as the props to the Page, but in the case where a deeply nested component needs access to the route parameters, it quickly becomes tedious to pass those props through every intervening component. The router solves this with the `useParams` hook:
 
-```js
-// SomeDeeplyNestedComponent.js
+```jsx title="SomeDeeplyNestedComponent.js"
 import { useParams } from '@redwoodjs/router'
 
 const SomeDeeplyNestedComponent = () => {
@@ -424,7 +407,7 @@ In the above example, we've pulled in the `id` route parameter without needing t
 
 If you'd like to get access to the current URL, `useLocation` returns a read-only location object representing it. The location object has three properties, [pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname), [search](https://developer.mozilla.org/en-US/docs/Web/API/Location/search), and [hash](https://developer.mozilla.org/en-US/docs/Web/API/Location/hash), that update when the URL changes. This makes it easy to fire off navigation side effects or use the URL as if it were state:
 
-```js
+```jsx
 import { useLocation } from '@redwoodjs/router'
 
 const App = () => {
@@ -453,8 +436,7 @@ const App = () => {
 
 If you'd like to programmatically navigate to a different page, you can simply use the `navigate` function:
 
-```js
-// SomePage.js
+```jsx title="SomePage.js"
 import { navigate, routes } from '@redwoodjs/router'
 
 const SomePage = () => {
@@ -471,8 +453,7 @@ The browser keeps track of the browsing history in a stack. By default when you 
 
 Going back is as easy as using the `back()` function that's exported from the router.
 
-```js
-// SomePage.js
+```jsx title="SomePage.js"
 import { back } from '@redwoodjs/router'
 
 const SomePage = () => {
@@ -489,8 +470,7 @@ If you want to declaratively redirect to a different page, use the `<Redirect>` 
 
 In the example below, SomePage will redirect to the home page.
 
-```js
-// SomePage.js
+```jsx title="SomePage.js"
 import { Redirect, routes } from '@redwoodjs/router'
 
 const SomePage = () => {
@@ -498,7 +478,7 @@ const SomePage = () => {
 }
 ```
 
-In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](https://redwoodjs.com/docs/router#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
+In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
 
 ## Code-splitting
 
@@ -508,9 +488,7 @@ By default, the router will code-split on every Page, creating a separate lazy-l
 
 If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, you can simply add the import statement to the `Routes.js` file:
 
-```js
-// Routes.js
-
+```jsx title="Routes.js"
 import HomePage from 'src/pages/HomePage'
 ```
 
@@ -524,8 +502,7 @@ Because lazily-loaded pages can take a non-negligible amount of time to load (de
 
 In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
 
-```js
-// Routes.js
+```jsx title="Routes.js"
 import SkeletonLoader from 'src/components/SkeletonLoader'
 <Router>
   <Set whileLoadingPage={SkeletonLoader}>
@@ -537,9 +514,7 @@ import SkeletonLoader from 'src/components/SkeletonLoader'
 
 After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! The router takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
 
-```js
-// Routes.js
-
+```jsx title="Routes.js"
 <Router pageLoadingDelay={500}>...</Router>
 ```
 
@@ -551,9 +526,7 @@ An alternative way to implement whileLoadingPage is to use `usePageLoadingContex
 
 > **VIDEO:** If you'd prefer to watch a video, there's one accompanying this section: https://www.youtube.com/watch?v=BVkyXjUQADs&feature=youtu.be
 
-```js
-// SomeLayout.js
-
+```jsx title="SomeLayout.js"
 import { usePageLoadingContext } from '@redwoodjs/router'
 
 const SomeLayout = (props) => {
@@ -575,7 +548,7 @@ Let's say you have a dashboard area on your Redwood app, which can only be acces
 
 In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<Private>` component:
 
-```js
+```jsx
 //Routes.js
 
 <Router>

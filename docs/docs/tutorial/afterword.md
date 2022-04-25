@@ -7,13 +7,11 @@ Will there be a chapters 8+ of the tutorial? We've spent a lot of time getting o
 
 So until next time, a bit of wisdom to help combat that next bout of every developer's nemesis, imposter syndrome:
 
-> "There is nothing noble in being superior to your fellow man; true nobility is being superior to your former self."
->
-> — Ernest Hemingway
+> _"There is nothing noble in being superior to your fellow man; true nobility is being superior to your former self."_ — Ernest Hemingway
 
 ## What's Next
 
-Want to add some more features to your app? Check out some of our Cookbook recipes like [calling to a third party API](../cookbook/using-a-third-party-api.md) and [deploying an app without an API at all](../cookbook/disable-api-database.md). We've also got lots of [guides](https://redwoodjs.com/docs/introduction) for more info on Redwood's internals.
+Want to add some more features to your app? Check out some of our how to's like [calling to a third party API](../how-to/using-a-third-party-api.md) and [deploying an app without an API at all](../how-to/disable-api-database.md). We've also got lots of [guides](https://redwoodjs.com/docs/index) for more info on Redwood's internals.
 
 ## Roadmap
 
