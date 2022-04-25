@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "Foundational packages and config required to build RedwoodJS.",
   "repository": {
     "type": "git",
@@ -31,9 +31,6 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
-  "resolutions": {
-    "@types/react": "17.0.44"
-  },
   "dependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
@@ -49,10 +46,10 @@
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.5",
-    "@redwoodjs/cli": "1.0.2",
-    "@redwoodjs/eslint-config": "1.0.2",
-    "@redwoodjs/internal": "1.0.2",
-    "@redwoodjs/testing": "1.0.2",
+    "@redwoodjs/cli": "1.1.1",
+    "@redwoodjs/eslint-config": "1.1.1",
+    "@redwoodjs/internal": "1.1.1",
+    "@redwoodjs/testing": "1.1.1",
     "babel-loader": "8.2.3",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -60,11 +57,11 @@
     "babel-plugin-module-resolver": "4.1.0",
     "babel-timing": "0.9.1",
     "copy-webpack-plugin": "10.2.4",
-    "core-js": "3.22.0",
+    "core-js": "3.22.2",
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "3.4.1",
     "dotenv-webpack": "7.1.0",
-    "esbuild": "0.14.36",
+    "esbuild": "0.14.38",
     "esbuild-loader": "2.18.0",
     "fast-glob": "3.2.11",
     "file-loader": "6.2.0",

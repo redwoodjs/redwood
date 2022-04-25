@@ -2459,6 +2459,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tsconfig/docusaurus@npm:1.0.5":
+  version: 1.0.5
+  resolution: "@tsconfig/docusaurus@npm:1.0.5"
+  checksum: c837f2acb4ff08760c57d8561174f130f287e2a6908778ab635f829ba581fe94f23378d53aac94f93f44f97baa03559946063c71f8f0e0f4931a4d67a389ad6e
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.2
   resolution: "@types/body-parser@npm:1.19.2"
@@ -4636,13 +4643,16 @@ __metadata:
   resolution: "docs@workspace:."
   dependencies:
     "@docusaurus/core": 2.0.0-beta.18
+    "@docusaurus/module-type-aliases": 2.0.0-beta.18
     "@docusaurus/plugin-content-docs": 2.0.0-beta.18
     "@docusaurus/preset-classic": 2.0.0-beta.18
     "@mdx-js/react": 1.6.22
+    "@tsconfig/docusaurus": 1.0.5
     clsx: 1.1.1
     react: 17.0.2
     react-dom: 17.0.2
     react-player: 2.10.0
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -10155,6 +10165,26 @@ __metadata:
   dependencies:
     is-typedarray: ^1.0.0
   checksum: 4ac5b7a93d604edabf3ac58d3a2f7e07487e9f6e98195a080e81dbffdc4127817f470f219d794a843b87052cedef102b53ac9b539855380b8c2172054b7d5027
+  languageName: node
+  linkType: hard
+
+"typescript@npm:4.6.3":
+  version: 4.6.3
+  resolution: "typescript@npm:4.6.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 53e8bcf00abde8ecb2002d1f1e15160b21cb62b2dd0ff71bad2ef55fa96141f76316fce649a415758d3f17bd8e0c5676d8f017c34ec3e38b585812d4717a712c
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@4.6.3#~builtin<compat/typescript>":
+  version: 4.6.3
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 8d62a37d9f238d83b6cdc738be90bb476a61c7e05d5924ecfb894eb63f39406b0660bd931876546a2be6895cd2678ddcb7f6793ceaab1454bc4e39f3cd9eb889
   languageName: node
   linkType: hard
 
