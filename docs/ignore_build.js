@@ -5,10 +5,18 @@
 const { execSync } = require('child_process')
 
 console.group('Ignore script')
-console.log('Adding remote and fetching origin/main')
-execSync(
-  'git remote add origin https://github.com/redwoodjs/redwood.git && git fetch origin main'
-)
+
+try {
+  console.log('Adding remote')
+  execSync('git remote add origin https://github.com/redwoodjs/redwood.git')
+} catch (e) {
+  if (e.error !== 'remote origin already exists') {
+    throw e
+  }
+  console.log('Remote already exists')
+}
+
+execSync('git fetch origin main')
 
 console.log('Diffing changed files against main (name only)')
 const changedFiles = execSync('git diff origin/main --name-only')
