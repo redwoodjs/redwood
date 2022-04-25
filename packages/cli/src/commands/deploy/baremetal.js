@@ -14,7 +14,7 @@ import { configFilename } from '../setup/deploy/providers/baremetal'
 const DEFAULT_BRANCH_NAME = ['main']
 const SYMLINK_FLAGS = '-nsf'
 
-export const command = 'baremetal'
+export const command = 'baremetal [environment]'
 export const description = 'Deploy to baremetal server(s)'
 
 export const execaOptions = {
@@ -25,6 +25,12 @@ export const execaOptions = {
 }
 
 export const builder = (yargs) => {
+  yargs.positional('environment', {
+    describe: 'The environment to deploy to',
+    default: 'production',
+    type: 'string',
+  })
+
   yargs.option('first-run', {
     describe:
       'Set this flag the first time you deploy: starts server processes from scratch',
@@ -124,12 +130,26 @@ const commands = (yargs, ssh) => {
   const deployConfig = toml.parse(
     fs.readFileSync(path.join(getPaths().base, configFilename))
   )
+  let envConfig
+
+  if (deployConfig.servers[yargs.environment]) {
+    envConfig = deployConfig.servers[yargs.environment]
+  } else if (
+    yargs.environment === 'production' &&
+    Array.isArray(deployConfig.servers)
+  ) {
+    envConfig = deployConfig.servers
+  } else {
+    throw new Error(
+      `No deploy servers found for environment "${yargs.environment}"`
+    )
+  }
 
   let servers = []
   let tasks = []
 
   // loop through each server in deploy.toml
-  for (const serverConfig of deployConfig.servers) {
+  for (const serverConfig of envConfig) {
     const sshOptions = {
       host: serverConfig.host,
       username: serverConfig.username,

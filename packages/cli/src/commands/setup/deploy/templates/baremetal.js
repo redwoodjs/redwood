@@ -27,7 +27,7 @@ export const DEPLOY = `# This file contains config for a baremetal deployment
 #
 # See https://redwoodjs.com/docs/deploy/baremetal for more info
 
-[[servers]]
+[[servers.production]]
 host = "server.com"
 username = "user"
 agentForward = true
@@ -39,7 +39,7 @@ branch = "main"
 
 # If you have separate api and web servers:
 #
-# [[servers]]
+# [[servers.production]]
 # host = "api.server.com"
 # user = "user"
 # agentForward = true
@@ -49,7 +49,7 @@ branch = "main"
 # branch = "main"
 # processNames = ["api"]
 #
-# [[servers]]
+# [[servers.production]]
 # host = "web.server.com"
 # user = "user"
 # agentForward = true
