@@ -129,7 +129,7 @@ export const handler = ({
         }
       )
     } else {
-      execa.sync(
+      execa(
         `yarn start-storybook`,
         [
           `--config-dir "${storybookConfig}"`,
