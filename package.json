@@ -95,8 +95,5 @@
     "zx": "6.1.0"
   },
   "packageManager": "yarn@3.2.0",
-  "npmClient": "yarn",
-  "dependencies": {
-    "@okta/okta-auth-js": "^6.4.3"
-  }
+  "npmClient": "yarn"
 }
