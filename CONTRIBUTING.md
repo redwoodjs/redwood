@@ -119,7 +119,11 @@ As you make changes to the Redwood Framework, you'll want to see your changes re
 
 > `rwfw` is short for Redwood Framework.
 
-Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`:
+The command requires an env var `RWFW_PATH`. Unless you add the env var and value to your shell, the command structure will be `RWFW_PATH=<framework directory> yarn rwfw [option]`.
+
+> Note: On Windows, use `yarn cross-env RWFW_PATH=<framework directory> rwfw [option]`
+
+Navigate to your Redwood Project and run the following, replacing `~/redwood` to match your local path:
 
 ```terminal
 cd redwood-project
