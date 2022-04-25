@@ -67,7 +67,7 @@ const test = base.extend<any, StorybookFixture>({
           const outputAsString = Buffer.from(data, 'utf-8').toString()
           console.log('[rw-storybook-fixture]')
 
-          if (outputAsString.includes('Local')) {
+          if (outputAsString.includes(`http://localhost:${port}/`)) {
             serverReadyPromiseHandle.resolve()
           }
         })
