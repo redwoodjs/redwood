@@ -126,7 +126,7 @@ module.exports = {
 This file contains your server configuration: which servers to connect to and which commands to run on them.
 
 ```toml title="deploy.toml"
-[[servers]]
+[[servers.production]]
 host = "server.com"
 username = "user"
 agentForward = true
@@ -137,7 +137,7 @@ repo = "git@github.com:myorg/myapp.git"
 branch = "main"
 ```
 
-This lists a single server, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
+This lists a single server, in the `production` environment, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
 
 #### Config Options
 
@@ -161,7 +161,7 @@ The easiest connection method is generally to include your own public key in the
 If you start horizontally scaling your application you may find it necessary to have the web and api sides served from different servers. The configuration files can accommodate this:
 
 ```toml title="deploy.toml"
-[[servers]]
+[[servers.production]]
 host = "api.server.com"
 username = "user"
 agentForward = true
@@ -169,7 +169,7 @@ sides = ["api"]
 path = "/var/www/app"
 processNames = ["api"]
 
-[[servers]]
+[[servers.production]]
 host = "web.server.com"
 username = "user"
 agentForward = true
@@ -209,6 +209,38 @@ module.exports = {
 Note the inclusion of `migrate = false` so that migrations are not run again on the web server (they only need to run once and it makes sense to keep them with the api side).
 
 You can add as many `[[servers]]` blocks as you need.
+
+#### Multiple Environments
+
+You can deploy to multiple environments from a single `deploy.toml` by including servers grouped by environment name:
+
+```toml title="deploy.toml"
+[[servers.production]]
+host = "prod.server.com"
+username = "user"
+agentForward = true
+sides = ["api", "web"]
+path = "/var/www/app"
+processNames = ["serve"]
+
+[[servers.staging]]
+host = "staging.server.com"
+username = "user"
+agentForward = true
+sides = ["api", "web"]
+path = "/var/www/app"
+processNames = ["serve", "stage-logging"]
+```
+
+At deploy time, include the environment in the command:
+
+```bash
+yarn rw deploy baremetal staging
+```
+
+Leaving off the environment from the command assumes `production`. If your server list does not include the environment name in the key, as in `[[servers]]` instead of `[[servers.production]]`, it is assumed that all servers listed are in the `production` environment.
+
+Note that the codebase shares a single `ecosystem.config.js` file. If you need a different set of services running in different environments you'll need to simply give them a unique name and reference them in the `processNames` option of `deploy.toml` (see the additional `stage-logging` process in the above example).
 
 ## Server Setup
 
