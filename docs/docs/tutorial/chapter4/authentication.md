@@ -829,7 +829,7 @@ export const hasRole = ({ roles }): boolean => {
   return false
 }
 
-export const requireAuth = ({ roles }: { roles?: AllowedRoles }) => {
+export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
