@@ -6032,7 +6032,7 @@ __metadata:
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
     file-loader: 6.2.0
-    graphql: 16.3.0
+    graphql: 16.4.0
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     lodash.escaperegexp: 4.1.2
@@ -6118,7 +6118,7 @@ __metadata:
     react-hook-form: 7.30.0
     typescript: 4.6.3
   peerDependencies:
-    graphql: 16.3.0
+    graphql: 16.4.0
     react: 17.0.2
   languageName: unknown
   linkType: soft
@@ -6149,7 +6149,7 @@ __metadata:
     aws-lambda: 1.0.7
     core-js: 3.22.2
     cross-undici-fetch: 0.3.0
-    graphql: 16.3.0
+    graphql: 16.4.0
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
     jest: 27.5.1
@@ -6195,7 +6195,7 @@ __metadata:
     findup-sync: 5.0.0
     fs-extra: 10.1.0
     glob: 7.2.0
-    graphql: 16.3.0
+    graphql: 16.4.0
     graphql-tag: 2.12.6
     jest: 27.5.1
     kill-port: 1.6.1
@@ -6288,7 +6288,7 @@ __metadata:
     dotenv-defaults: 5.0.0
     enquirer: 2.3.6
     findup-sync: 5.0.0
-    graphql: 16.3.0
+    graphql: 16.4.0
     jest: 27.5.1
     lazy-get-decorator: 2.2.0
     line-column: 1.0.2
@@ -6379,7 +6379,7 @@ __metadata:
     "@types/react": 17.0.44
     "@types/react-dom": 17.0.15
     "@types/testing-library__jest-dom": 5.14.3
-    graphql: 16.3.0
+    graphql: 16.4.0
     graphql-tag: 2.12.6
     jest: 27.5.1
     nodemon: 2.0.15
@@ -17598,10 +17598,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.3.0, graphql@npm:^16.3.0":
-  version: 16.3.0
-  resolution: "graphql@npm:16.3.0"
-  checksum: 71f205c16c93a5085c8a5dc3f9a1a27c022140208042d5be1dfacf04c1d3063ec2f62e3d08b0ed2cfb536c59cca65dd027556a22c47082fc348a5050c5535c71
+"graphql@npm:16.4.0, graphql@npm:^16.3.0":
+  version: 16.4.0
+  resolution: "graphql@npm:16.4.0"
+  checksum: e93fbba004a6c121cbd618e060ea8bc672c4e324ee8b7e490245eb8c8a06e06a6806d196c19ce80522a4cf83031ed4bd837de5c2d9fcb5d39e24a586abed6d1e
   languageName: node
   linkType: hard
 
