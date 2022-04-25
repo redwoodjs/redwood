@@ -1976,22 +1976,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@clerk/backend-core@npm:1.5.1"
+"@clerk/backend-core@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "@clerk/backend-core@npm:1.5.2"
   dependencies:
     "@clerk/types": ^2.7.1
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: 180663681dacc793852bedf9d43001f09192a9f82c59bd0483efdcf6837900d81ff9fa8f35a58cdc03ddfc0c5ec2b0f5b389768f1d98cb5674c0759e73a2f7e5
+  checksum: ddf4932db6f583d1fb643985a38ef2746c0c9e2ef469c4a56adb004e7038a20704389f1d6c177fe7b0a0daa74db63861f7f36dae2e49a5638e382eba70945379
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:3.7.1":
-  version: 3.7.1
-  resolution: "@clerk/clerk-js@npm:3.7.1"
+"@clerk/clerk-js@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@clerk/clerk-js@npm:3.8.0"
   dependencies:
     "@clerk/types": ^2.7.1
     "@popperjs/core": ^2.4.4
@@ -2005,15 +2005,15 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: 43c44aff06d988ed8585fab5cd479c6d1ba9765d53a5d5a43f54077ae08c6527ca63009da99e9e4ac5e67b4b51108feae0989597dc4a1b0c9d450b56e4bfcb68
+  checksum: ffe37f5a6e9a359834b51ae7620a69798a7a763a529d47700567669f4c526b9e4f50da7672b9afe51ac354a1764f7edd2f0369130be9b8a47c177011b4ec40ad
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.3.6":
-  version: 3.3.6
-  resolution: "@clerk/clerk-sdk-node@npm:3.3.6"
+"@clerk/clerk-sdk-node@npm:3.3.7":
+  version: 3.3.7
+  resolution: "@clerk/clerk-sdk-node@npm:3.3.7"
   dependencies:
-    "@clerk/backend-core": ^1.5.1
+    "@clerk/backend-core": ^1.5.2
     "@clerk/types": ^2.7.1
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
@@ -2024,7 +2024,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 126c6e823bf90f3ca070e414f029f8009dc9b5cd56b14c8ea7a9044004adfcd91ec03eb920ca6758c474fb378e917ff64e3b26d688738d641a4d1197b097abfc
+  checksum: 9dcdd5148f1ad3664f77f882ffcea33fbcd87990be9181c7b0a9c6ec10cf2b4f2908b863b8d172cd247494d83ec672a81f0b2863275c40dfd6b132786010e7af
   languageName: node
   linkType: hard
 
@@ -2401,9 +2401,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@eslint/eslintrc@npm:1.2.1"
+"@eslint/eslintrc@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@eslint/eslintrc@npm:1.2.2"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
@@ -2414,7 +2414,7 @@ __metadata:
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: 58b5d7469550e8d96c387c53e79719162f59e0e3ea1f3da65827a454f6c468f172aa7a2d99a99c8c19c35a8bd0b770c9a0f79a130c6ca0b5b05b5943f62b8542
+  checksum: 0dadf35c2c27e9f36faeaed23a9d234a4326f4b32047a7b27dfddba62304a21eac50a232bc444745acff57505bbc02684ea133955c1647eab8ee6d36c39803e4
   languageName: node
   linkType: hard
 
@@ -4921,23 +4921,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:^0.3.12":
-  version: 0.3.12
-  resolution: "@nhost/core@npm:0.3.12"
+"@nhost/core@npm:^0.3.13":
+  version: 0.3.13
+  resolution: "@nhost/core@npm:0.3.13"
   dependencies:
     axios: ^0.25.0
     js-cookie: ^3.0.1
     xstate: ^4.30.5
-  checksum: 8fcec8b5814e06d769ac875727f95752e097c8bf59498066b6cd5be56c8f0a1212f95ed915c74ab840a70fc84365434bb978c7d9156c7402986b2f91c0348292
+  checksum: d8199574bf3032aaf1c6404700be2e991177be83f3f18ca1aee71ed5c1d220192594bad9736fbfcd85e6b681c77dcbfc4b238ec9bf1bc661f226aed138992926
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:^1.0.13":
-  version: 1.0.13
-  resolution: "@nhost/hasura-auth-js@npm:1.0.13"
+"@nhost/hasura-auth-js@npm:^1.0.15":
+  version: 1.0.15
+  resolution: "@nhost/hasura-auth-js@npm:1.0.15"
   dependencies:
-    "@nhost/core": ^0.3.12
-  checksum: 7008b12fc326e910fd6e2cca910376fb961b98057a55f1d1fc051091327df07d8f1f044a5229859b3f5f1c6483bae3c2febd2bca86af335fac9daf775e38246b
+    "@nhost/core": ^0.3.13
+  checksum: 1f539e88dc606e962b3d0006302f890bb9941f678a62baf72ba1d6a76a5c2a2cee50780cf56934757a63a96e1d27c82e44c29e6e158890fa7bff76cb55c7ef64
   languageName: node
   linkType: hard
 
@@ -4950,18 +4950,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.1.2":
-  version: 1.1.2
-  resolution: "@nhost/nhost-js@npm:1.1.2"
+"@nhost/nhost-js@npm:1.1.4":
+  version: 1.1.4
+  resolution: "@nhost/nhost-js@npm:1.1.4"
   dependencies:
-    "@nhost/hasura-auth-js": ^1.0.13
+    "@nhost/hasura-auth-js": ^1.0.15
     "@nhost/hasura-storage-js": ^0.2.0
     axios: ^0.23.0
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 04bb0cdb3287322601082b725f43061c8526ef1a4ebedf63ec3287946478f4f0687b9d45ea31eafa39a1435b52df017ebf6a0e9b30f80691d40b34b18bb37685
+  checksum: 05b9caac20c583e20f3a00bd6f9f5db9b70fc5eaae78306abf06058128088f053ac017fe118e9cf93dde7ccc8420157507c7c434b17668695b30e191120720d1
   languageName: node
   linkType: hard
 
@@ -5868,7 +5868,7 @@ __metadata:
     typescript: 4.6.3
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.3.6
+    "@clerk/clerk-sdk-node": 3.3.7
     "@magic-sdk/admin": 1.4.1
     firebase-admin: 10.1.0
   peerDependenciesMeta:
@@ -5894,11 +5894,11 @@ __metadata:
     "@azure/msal-browser": 2.23.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@clerk/clerk-js": 3.7.1
-    "@clerk/clerk-sdk-node": 3.3.6
+    "@clerk/clerk-js": 3.8.0
+    "@clerk/clerk-sdk-node": 3.3.7
     "@clerk/types": 2.7.1
-    "@nhost/nhost-js": 1.1.2
-    "@supabase/supabase-js": 1.35.1
+    "@nhost/nhost-js": 1.1.4
+    "@supabase/supabase-js": 1.35.2
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.44
     firebase: 9.6.11
@@ -6079,7 +6079,7 @@ __metadata:
     "@redwoodjs/internal": 1.1.1
     "@typescript-eslint/eslint-plugin": 5.20.0
     "@typescript-eslint/parser": 5.20.0
-    eslint: 8.13.0
+    eslint: 8.14.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -6202,7 +6202,7 @@ __metadata:
     prettier: 2.6.2
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.11.13
+    systeminformation: 5.11.14
     toml: 3.0.0
     typescript: 4.6.3
   bin:
@@ -6322,7 +6322,7 @@ __metadata:
     cross-undici-fetch: 0.3.0
     envinfo: 7.8.1
     jest: 27.5.1
-    systeminformation: 5.11.13
+    systeminformation: 5.11.14
     uuid: 8.3.2
     yargs: 16.2.0
   languageName: unknown
@@ -7745,13 +7745,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^1.7.1":
-  version: 1.7.1
-  resolution: "@supabase/realtime-js@npm:1.7.1"
+"@supabase/realtime-js@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@supabase/realtime-js@npm:1.7.2"
   dependencies:
     "@types/phoenix": ^1.5.4
     websocket: ^1.0.34
-  checksum: 7880226bbf4a8fc6cc4209e7afd911d7fb2f4d25f8f7b8b0914df065e908fcb7d54faed1d7d08df4e2701322479ce0ddebc80016c98de7e5c7630eb6d7c66831
+  checksum: 53faf158f344d568d296ac50eea172bb11b75585c3c8300b85b9f8bfca7fd231e0200a6a0daac8ff11d04145693af561d212faafe40c7eee2fa242f80e972469
   languageName: node
   linkType: hard
 
@@ -7764,16 +7764,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.35.1":
-  version: 1.35.1
-  resolution: "@supabase/supabase-js@npm:1.35.1"
+"@supabase/supabase-js@npm:1.35.2":
+  version: 1.35.2
+  resolution: "@supabase/supabase-js@npm:1.35.2"
   dependencies:
     "@supabase/functions-js": ^1.3.3
     "@supabase/gotrue-js": ^1.22.13
     "@supabase/postgrest-js": ^0.37.2
-    "@supabase/realtime-js": ^1.7.1
+    "@supabase/realtime-js": ^1.7.2
     "@supabase/storage-js": ^1.7.0
-  checksum: 225be63794453d07aad14b9cf0b21993363d8ce2a9a7ded294002f6a2668dcb6753d9a52a286c0616976bacab3bf7da6f8120dd3b0c522fee5510a899603dc95
+  checksum: 1150c3db8d473d1def5d4a77701d54951dbc9aca2c81debc25e584e53638d130770d8ad136a8bd0d1d636007932a6e593f33b8f4b08ca168658e2ce79a7a7547
   languageName: node
   linkType: hard
 
@@ -15375,11 +15375,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.13.0":
-  version: 8.13.0
-  resolution: "eslint@npm:8.13.0"
+"eslint@npm:8.14.0":
+  version: 8.14.0
+  resolution: "eslint@npm:8.14.0"
   dependencies:
-    "@eslint/eslintrc": ^1.2.1
+    "@eslint/eslintrc": ^1.2.2
     "@humanwhocodes/config-array": ^0.9.2
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -15416,7 +15416,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 6213839a3e645e7a15e814c7cd838ed7c90d63e333e1faa0cfaa6308f711c4f79402071e592cdc49cab8d8e8fcf003eb5055e3cfb6792ebe7e851bdb644d34c0
+  checksum: 0b3739d7118ae4b80e8adcc1bbccf2a02287ef437714c7dee6c5b5f297b54fafe77324c7bbb19fd0fa91b0984cf3b2923d7b34d61f69fc984a9150547819dcdf
   languageName: node
   linkType: hard
 
@@ -26878,7 +26878,7 @@ __metadata:
     core-js: 3.22.2
     cypress: 9.5.4
     cypress-wait-until: 1.7.2
-    eslint: 8.13.0
+    eslint: 8.14.0
     fast-glob: 3.2.11
     fs-extra: 10.1.0
     is-port-reachable: 3.1.0
@@ -28787,12 +28787,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.11.13":
-  version: 5.11.13
-  resolution: "systeminformation@npm:5.11.13"
+"systeminformation@npm:5.11.14":
+  version: 5.11.14
+  resolution: "systeminformation@npm:5.11.14"
   bin:
     systeminformation: lib/cli.js
-  checksum: e11cd732333ff9832229e9ace828913997f9c3d25236c27eaf5b2ef5c9f2e94249b0ad9d979f8a93544ee9e2d2f1a8a6d1da279f84761a7187fcb9809424ad97
+  checksum: 443c38978d05dd041c7201e19628bcd879df4eb402ea8cef10e667428e62d4b57215f794d5f5dbed4145c5325a83a51a2b52ed736a2432e949cdc80850c1e502
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
