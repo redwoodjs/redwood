@@ -5,7 +5,7 @@
 const { execSync } = require('child_process')
 
 console.log('------------------------')
-console.log('Ignore build script')
+console.log("Running 'docs/ignore_build.js'")
 
 const remoteExists = execSync('git remote -v').toString().includes('origin')
 
@@ -39,9 +39,9 @@ console.log({
 // We've done all the logic based on whether we should build the site,
 // but since this is an ignore script, we have to flip the logic here.
 if (shouldBuild) {
-  console.log(`${process.env.HEAD} has doc changes. Proceeding`)
+  console.log(`PR '${process.env.HEAD}' has doc changes. Proceeding`)
   process.exitCode = 1
 } else {
-  console.log(`${process.env.HEAD} doesn't have doc changes. Ignoring`)
+  console.log(`PR '${process.env.HEAD}' doesn't have doc changes. Ignoring`)
 }
 console.log('------------------------')
