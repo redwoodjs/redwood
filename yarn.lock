@@ -5,12 +5,12 @@ __metadata:
   version: 6
   cacheKey: 8c0
 
-"@actions/core@npm:1.6.0":
-  version: 1.6.0
-  resolution: "@actions/core@npm:1.6.0"
+"@actions/core@npm:1.7.0":
+  version: 1.7.0
+  resolution: "@actions/core@npm:1.7.0"
   dependencies:
     "@actions/http-client": ^1.0.11
-  checksum: c508f429bf814b8fdbb5f7de5accc63ca278ebc1ebde0b98b0c3c31657998b3861abf6c37afccb3b3724fc60efdf06692026d77e506069679f607aad278e6dc3
+  checksum: f5232fa231181dce518c8563f7d0570c5ea8b876e5797a908571e6d0641c6e75bb6f3c58056964e0ce31761da8ceedc34aa40766c0ed5571e0da94dbbeef2abe
   languageName: node
   linkType: hard
 
@@ -26847,7 +26847,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@actions/core": 1.6.0
+    "@actions/core": 1.7.0
     "@actions/exec": 1.1.1
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
