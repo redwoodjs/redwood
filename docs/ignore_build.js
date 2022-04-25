@@ -4,25 +4,18 @@
 
 const { execSync } = require('child_process')
 
-console.group('Ignore script')
+console.group('Ignore build')
 
 const remoteExists = execSync('git remote -v').toString().includes('origin')
 
-console.log('Remote exists:', remoteExists)
-
-try {
+if (remoteExists) {
+  console.log('Remote exists')
+} else {
   console.log('Adding remote')
   execSync('git remote add origin https://github.com/redwoodjs/redwood.git')
-} catch (e) {
-  console.log(e.error)
-  console.log(e.error !== 'remote origin already exists')
-
-  if (e.error !== 'remote origin already exists') {
-    throw e
-  }
-  console.log('Remote already exists')
 }
 
+console.log('Fetching main')
 execSync('git fetch origin main')
 
 console.log('Diffing changed files against main (name only)')
