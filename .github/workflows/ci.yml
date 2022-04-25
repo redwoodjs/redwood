@@ -79,13 +79,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 🔨 Build
-        run: echo "yarn build"
+        run: yarn build
 
       - name: 🔎 Lint
-        run: echo "yarn lint"
+        run: yarn lint
 
       - name: 🧪 Test
-        run: echo "yarn test"
+        run: yarn test
 
   build-lint-test-docs:
     needs: only-doc-changes

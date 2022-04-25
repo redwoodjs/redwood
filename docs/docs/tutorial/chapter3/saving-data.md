@@ -24,7 +24,7 @@ model Post {
 
 // highlight-start
 model Contact {
-  id        Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   email     String
   message   String
@@ -55,14 +55,17 @@ Now we'll create the GraphQL interface to access this table. We haven't used thi
 yarn rw g sdl Contact
 ```
 
-Just like the `scaffold` command, this will create two new files under the `api` directory:
+Just like the `scaffold` command, this will create a few new files under the `api` directory:
 
-1. `api/src/graphql/contacts.sdl.js`: defines the GraphQL schema in GraphQL's schema definition language
-2. `api/src/services/contacts/contacts.js`: contains your app's business logic (also creates associated test files)
+1. `api/src/graphql/contacts.sdl.{js,ts}`: defines the GraphQL schema in GraphQL's schema definition language
+2. `api/src/services/contacts/contacts.{js,ts}`: contains your app's business logic (also creates associated test files)
 
 If you remember our discussion in [how Redwood works with data](../chapter2/side-quest.md) you'll recall that queries and mutations in an SDL file are automatically mapped to resolvers defined in a service, so when you generate an SDL file you'll get a service file as well, since one requires the other.
 
-Open up `api/src/graphql/contacts.sdl.js` and you'll see the same Query and Mutation types defined for Contact that were created for the Post scaffold. `Contact`, `CreateContactInput` and `UpdateContactInput` types, as well as a `Query` type with `contacts` and `contact`, and a `Mutation` type with `createContact`, `updateContact` and `deleteContact`.
+Open up `api/src/graphql/contacts.sdl.{js,ts}` and you'll see the same Query and Mutation types defined for Contact that were created for the Post scaffold. `Contact`, `CreateContactInput` and `UpdateContactInput` types, as well as a `Query` type with `contacts` and `contact`, and a `Mutation` type with `createContact`, `updateContact` and `deleteContact`.
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```graphql title="api/src/graphql/contacts.sdl.js"
 export const schema = gql`
@@ -99,6 +102,47 @@ export const schema = gql`
 `
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```graphql title="api/src/graphql/contacts.sdl.ts"
+export const schema = gql`
+  type Contact {
+    id: Int!
+    name: String!
+    email: String!
+    message: String!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    contacts: [Contact!]! @requireAuth
+    contact(id: Int!): Contact @requireAuth
+  }
+
+  input CreateContactInput {
+    name: String!
+    email: String!
+    message: String!
+  }
+
+  input UpdateContactInput {
+    name: String
+    email: String
+    message: String
+  }
+
+  type Mutation {
+    createContact(input: CreateContactInput!): Contact! @requireAuth
+    updateContact(id: Int!, input: UpdateContactInput!): Contact! @requireAuth
+    deleteContact(id: Int!): Contact! @requireAuth
+  }
+`
+```
+
+</TabItem>
+</Tabs>
+
 The `@requireAuth` string you see after the `Query` and `Mutation` types is a [schema directive](https://www.graphql-tools.com/docs/schema-directives) which says that in order to access this GraphQL query the user is required to be authenticated. We haven't added authentication yet, so this won't have any effect—anyone will be able to query it, logged in or not, because until you add authentication the function behind `@requireAuth` always returns `true`.
 
 What's `CreateContactInput` and `UpdateContactInput`? Redwood follows the GraphQL recommendation of using [Input Types](https://graphql.org/graphql-js/mutations-and-input-types/) in mutations rather than listing out each and every field that can be set. Any fields required in `schema.prisma` are also required in `CreateContactInput` (you can't create a valid record without them) but nothing is explicitly required in `UpdateContactInput`. This is because you could want to update only a single field, or two fields, or all fields. The alternative would be to create separate Input types for every permutation of fields you would want to update. We felt that only having one update input type was a good compromise for optimal developer experience.
@@ -117,7 +161,7 @@ GraphQL's SDL syntax requires an extra `!` when a field _is_ required. Remember:
 
 :::
 
-As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.js`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.js`).
+As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.{js,ts}`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.{js,ts}`).
 
 :::tip
 
@@ -137,9 +181,44 @@ Serendipitously, the default schema directive of `@requireAuth` is exactly what 
 
 :::
 
-We're not going to let anyone update or delete a comment, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
+We're not going to let anyone update or delete a message, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```graphql title="api/src/graphql/contacts.sdl.js"
+export const schema = gql`
+  type Contact {
+    id: Int!
+    name: String!
+    email: String!
+    message: String!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    contacts: [Contact!]! @requireAuth
+    contact(id: Int!): Contact @requireAuth
+  }
+
+  input CreateContactInput {
+    name: String!
+    email: String!
+    message: String!
+  }
+
+  // highlight-start
+  type Mutation {
+    createContact(input: CreateContactInput!): Contact! @skipAuth
+  }
+  // highlight-end
+`
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```graphql title="api/src/graphql/contacts.sdl.ts"
 export const schema = gql`
   type Contact {
     id: Int!
@@ -174,7 +253,13 @@ export const schema = gql`
 `
 ```
 
+</TabItem>
+</Tabs>
+
 That's it for the SDL file, let's take a look at the service:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```js title="api/src/services/contacts/contacts.js"
 import { db } from 'src/lib/db'
@@ -209,6 +294,55 @@ export const deleteContact = ({ id }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```js title="api/src/services/contacts/contacts.ts"
+import type { Prisma } from '@prisma/client'
+
+import { db } from 'src/lib/db'
+
+export const contacts = () => {
+  return db.contact.findMany()
+}
+
+export const contact = ({ id }: Prisma.ContactWhereUniqueInput) => {
+  return db.contact.findUnique({
+    where: { id },
+  })
+}
+
+interface CreateContactArgs {
+  input: Prisma.ContactCreateInput
+}
+
+export const createContact = ({ input }: CreateContactArgs) => {
+  return db.contact.create({
+    data: input,
+  })
+}
+
+interface UpdateContactArgs extends Prisma.ContactWhereUniqueInput {
+  input: Prisma.ContactUpdateInput
+}
+
+export const updateContact = ({ id, input }: UpdateContactArgs) => {
+  return db.contact.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteContact = ({ id }: Prisma.ContactWhereUniqueInput) => {
+  return db.contact.delete({
+    where: { id },
+  })
+}
+```
+
+</TabItem>
+</Tabs>
+
 Pretty simple. You can see here how the `createContact()` function expects the `input` argument and just passes that on to Prisma in the `create()` call.
 
 You can delete `updateContact` and `deleteContact` here if you want, but since there's no longer an accessible GraphQL field for them they can't be used by the client anyway.
@@ -236,6 +370,9 @@ The GraphQL Playground is a great way to experiment with your API or troubleshoo
 ### Creating a Contact
 
 Our GraphQL mutation is ready to go on the backend so all that's left is to invoke it on the frontend. Everything related to our form is in `ContactPage` so that's where we'll put the mutation call. First we define the mutation as a constant that we call later (this can be defined outside of the component itself, right after the `import` statements):
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags } from '@redwoodjs/web'
@@ -313,9 +450,101 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+import { MetaTags } from '@redwoodjs/web'
+import {
+  FieldError,
+  Form,
+  Label,
+  TextField,
+  TextAreaField,
+  Submit,
+  SubmitHandler,
+} from '@redwoodjs/forms'
+
+// highlight-start
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
+// highlight-end
+
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+const ContactPage = () => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(data)
+  }
+
+  return (
+    <>
+      <MetaTags title="Contact" description="Contact page" />
+
+      <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+        <Label name="name" errorClassName="error">
+          Name
+        </Label>
+        <TextField
+          name="name"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="name" className="error" />
+
+        <Label name="email" errorClassName="error">
+          Email
+        </Label>
+        <TextField
+          name="email"
+          validation={{
+            required: true,
+            pattern: {
+              value: /^[^@]+@[^.]+\..+$/,
+              message: 'Please enter a valid email address',
+            },
+          }}
+          errorClassName="error"
+        />
+        <FieldError name="email" className="error" />
+
+        <Label name="message" errorClassName="error">
+          Message
+        </Label>
+        <TextAreaField
+          name="message"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="message" className="error" />
+
+        <Submit>Save</Submit>
+      </Form>
+    </>
+  )
+}
+
+export default ContactPage
+```
+
+</TabItem>
+</Tabs>
+
 We reference the `createContact` mutation we defined in the Contacts SDL passing it an `input` object which will contain the actual name, email and message values.
 
 Next we'll call the `useMutation` hook provided by Redwood which will allow us to execute the mutation when we're ready (don't forget to `import` it):
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // highlight-next-line
@@ -395,6 +624,108 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+// highlight-next-line
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import {
+  FieldError,
+  Form,
+  Label,
+  TextField,
+  TextAreaField,
+  Submit,
+  SubmitHandler,
+} from '@redwoodjs/forms'
+
+// highlight-start
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+// highlight-end
+
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
+
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+const ContactPage = () => {
+  // highlight-start
+  const [create] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT)
+  // highlight-end
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(data)
+  }
+
+  return (
+    <>
+      <MetaTags title="Contact" description="Contact page" />
+
+      <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+        <Label name="name" errorClassName="error">
+          Name
+        </Label>
+        <TextField
+          name="name"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="name" className="error" />
+
+        <Label name="email" errorClassName="error">
+          Email
+        </Label>
+        <TextField
+          name="email"
+          validation={{
+            required: true,
+            pattern: {
+              value: /^[^@]+@[^.]+\..+$/,
+              message: 'Please enter a valid email address',
+            },
+          }}
+          errorClassName="error"
+        />
+        <FieldError name="email" className="error" />
+
+        <Label name="message" errorClassName="error">
+          Message
+        </Label>
+        <TextAreaField
+          name="message"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="message" className="error" />
+
+        <Submit>Save</Submit>
+      </Form>
+    </>
+  )
+}
+
+export default ContactPage
+```
+
+</TabItem>
+</Tabs>
+
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
 
 ```js
@@ -413,6 +744,9 @@ If you'll recall `<Form>` gives us all of the fields in a nice object where the 
 
 That means we can update the `onSubmit` function to invoke the mutation with the data it receives:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
@@ -422,6 +756,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -490,6 +825,103 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import {
+  FieldError,
+  Form,
+  Label,
+  TextField,
+  TextAreaField,
+  Submit,
+} from '@redwoodjs/forms'
+
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
+
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+const ContactPage = () => {
+  const [create] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT)
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    // highlight-next-line
+    create({ variables: { input: data } })
+  }
+
+  return (
+    <>
+      <MetaTags title="Contact" description="Contact page" />
+
+      <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+        <Label name="name" errorClassName="error">
+          Name
+        </Label>
+        <TextField
+          name="name"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="name" className="error" />
+
+        <Label name="email" errorClassName="error">
+          Email
+        </Label>
+        <TextField
+          name="email"
+          validation={{
+            required: true,
+            pattern: {
+              value: /^[^@]+@[^.]+\..+$/,
+              message: 'Please enter a valid email address',
+            },
+          }}
+          errorClassName="error"
+        />
+        <FieldError name="email" className="error" />
+
+        <Label name="message" errorClassName="error">
+          Message
+        </Label>
+        <TextAreaField
+          name="message"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="message" className="error" />
+
+        <Submit>Save</Submit>
+      </Form>
+    </>
+  )
+}
+
+export default ContactPage
+```
+
+</TabItem>
+</Tabs>
+
 Try filling out the form and submitting—you should have a new Contact in the database! You can verify that with [Prisma Studio](/docs/tutorial/chapter2/getting-dynamic#prisma-studio) or [GraphQL Playground](#graphql-playground) if you were so inclined:
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488540-a7ad1a57-7432-4171-bd75-500eeaa17bcb.png" />
@@ -514,6 +946,9 @@ Let's address these issues.
 
 The `useMutation` hook returns a couple more elements along with the function to invoke it. We can destructure these as the second element in the array that's returned. The two we care about are `loading` and `error`:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // ...
 
@@ -523,7 +958,6 @@ const ContactPage = () => {
 
   const onSubmit = (data) => {
     create({ variables: { input: data } })
-    console.log(data)
   }
 
   return (...)
@@ -532,7 +966,36 @@ const ContactPage = () => {
 // ...
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+// ...
+
+const ContactPage = () => {
+  // highlight-next-line
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT)
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    create({ variables: { input: data } })
+  }
+
+  return (...)
+}
+
+// ...
+```
+
+</TabItem>
+</Tabs>
+
 Now we know if the database call is still in progress by looking at `loading`. An easy fix for our multiple submit issue would be to disable the submit button if the response is still in progress. We can set the `disabled` attribute on the "Save" button to the value of `loading`:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 return (
@@ -542,6 +1005,21 @@ return (
   // ...
 )
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+return (
+  // ...
+  // highlight-next-line
+  <Submit disabled={loading}>Save</Submit>
+  // ...
+)
+```
+
+</TabItem>
+</Tabs>
 
 It may be hard to see a difference in development because the submit is so fast, but you could enable network throttling via the Network tab Chrome's Web Inspector to simulate a slow connection:
 
@@ -556,6 +1034,9 @@ Next, let's show a notification to let the user know their submission was succes
 `useMutation` accepts an options object as a second argument. One of the options is a callback function, `onCompleted`, that will be invoked when the mutation successfully completes. We'll use that callback to invoke a `toast()` function which will add a message to be displayed in a **&lt;Toaster&gt;** component.
 
 Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt;** component in our `return`, just before the **&lt;Form&gt;**:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -643,6 +1124,113 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+import { MetaTags, useMutation } from '@redwoodjs/web'
+// highlight-next-line
+import { toast, Toaster } from '@redwoodjs/web/toast'
+import {
+  FieldError,
+  Form,
+  Label,
+  TextField,
+  TextAreaField,
+  Submit,
+  SubmitHandler,
+} from '@redwoodjs/forms'
+
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
+
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+const ContactPage = () => {
+  // highlight-start
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
+    onCompleted: () => {
+      toast.success('Thank you for your submission!')
+    },
+  })
+  // highlight-end
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    create({ variables: { input: data } })
+  }
+
+  return (
+    <>
+      <MetaTags title="Contact" description="Contact page" />
+
+      // highlight-next-line
+      <Toaster />
+      <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+        <Label name="name" errorClassName="error">
+          Name
+        </Label>
+        <TextField
+          name="name"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="name" className="error" />
+
+        <Label name="email" errorClassName="error">
+          Email
+        </Label>
+        <TextField
+          name="email"
+          validation={{
+            required: true,
+            pattern: {
+              value: /^[^@]+@[^.]+\..+$/,
+              message: 'Please enter a valid email address',
+            },
+          }}
+          errorClassName="error"
+        />
+        <FieldError name="email" className="error" />
+
+        <Label name="message" errorClassName="error">
+          Message
+        </Label>
+        <TextAreaField
+          name="message"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="message" className="error" />
+
+        <Submit disabled={loading}>Save</Submit>
+      </Form>
+    </>
+  )
+}
+
+export default ContactPage
+```
+
+</TabItem>
+</Tabs>
+
 ![Toast notification on successful submission](https://user-images.githubusercontent.com/300/146271487-f6b77e76-99c1-43e8-bcda-5ba3c9b03137.png)
 
 You can read the full documentation for Toast [here](../../toast-notifications.md).
@@ -667,15 +1255,14 @@ We talked about business logic belonging in our services files and this is a per
 
 We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```js title="api/src/services/contacts/contacts.js"
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
-import { db } from 'src/lib/db'
-
-export const contacts = () => {
-  return db.contact.findMany()
-}
+// ...
 
 export const createContact = ({ input }) => {
   // highlight-next-line
@@ -684,15 +1271,39 @@ export const createContact = ({ input }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts title="api/src/services/contacts/contacts.ts"
+import type { Prisma } from '@prisma/client'
+
+// highlight-next-line
+import { validate } from '@redwoodjs/api'
+
+// ...
+
+export const createContact = ({ input }: CreateContactArgs) => {
+  // highlight-next-line
+  validate(input.email, 'email', { email: true })
+  return db.contact.create({ data: input })
+}
+```
+
+</TabItem>
+</Tabs>
+
 That's a lot of references to `email` so let's break them down:
 
-1. The first argument is the value that we want to check, in this case `input` contains all our contact data and the value of `email` is the one we want to check
+1. The first argument is the value that we want to check. In this case `input` contains all our contact data and the value of `email` is the one we want to check
 2. The second argument is the `name` prop from the `<TextField>`, so that we know which input field on the page has an error
 3. The third argument is an object containing the **validation directives** we want to invoke. In this case it's just one, and `email: true` means we want to use the built-in email validator
 
 So when `createContact` is called it will first validate the inputs and only if no errors are thrown will it continue to actually create the record in the database.
 
 Right now we won't even be able to test our validation on the server because we're already checking that the input is formatted like an email address with the `validation` prop in `<TextField>`. Let's temporarily remove it so that the bad data will be sent up to the server:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```diff title="web/src/pages/ContactPage/ContactPage.js"
  <TextField
@@ -708,9 +1319,32 @@ Right now we won't even be able to test our validation on the server because we'
  />
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```diff title="web/src/pages/ContactPage/ContactPage.tsx"
+ <TextField
+   name="email"
+   validation={{
+     required: true,
+-    pattern: {
+-      value: /^[^@]+@[^.]+\..+$/,
+-      message: 'Please enter a valid email address',
+-    },
+   }}
+   errorClassName="error"
+ />
+```
+
+</TabItem>
+</Tabs>
+
 Remember when we said that `<Form>` had one more trick up its sleeve? Here it comes!
 
 Add a `<FormError>` component, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -749,13 +1383,10 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
-      <Toaster toastOptions={{ duration: 100000 }} />
+      <Toaster />
       // highlight-start
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
-        <FormError
-          error={error}
-          wrapperClassName="form-error"
-        />
+        <FormError error={error} wrapperClassName="form-error" />
         // highlight-end
 
         <Label name="name" errorClassName="error">
@@ -799,6 +1430,111 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
+import {
+  FieldError,
+  Form,
+  // highlight-next-line
+  FormError,
+  Label,
+  TextField,
+  TextAreaField,
+  Submit,
+  SubmitHandler,
+} from '@redwoodjs/forms'
+
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
+
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+const ContactPage = () => {
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
+    onCompleted: () => {
+      toast.success('Thank you for your submission!')
+    },
+  })
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    create({ variables: { input: data } })
+  }
+
+  return (
+    <>
+      <MetaTags title="Contact" description="Contact page" />
+
+      <Toaster />
+      // highlight-start
+      <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
+        <FormError error={error} wrapperClassName="form-error" />
+        // highlight-end
+
+        <Label name="name" errorClassName="error">
+          Name
+        </Label>
+        <TextField
+          name="name"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="name" className="error" />
+
+        <Label name="email" errorClassName="error">
+          Email
+        </Label>
+        <TextField
+          name="email"
+          validation={{
+            required: true,
+          }}
+          errorClassName="error"
+        />
+        <FieldError name="email" className="error" />
+
+        <Label name="message" errorClassName="error">
+          Message
+        </Label>
+        <TextAreaField
+          name="message"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="message" className="error" />
+
+        <Submit disabled={loading}>Save</Submit>
+      </Form>
+    </>
+  )
+}
+
+export default ContactPage
+```
+
+</TabItem>
+</Tabs>
+
 Now submit a message with an invalid email address:
 
 ![Email error from the server side](https://user-images.githubusercontent.com/300/158897801-8a3f7ae8-6e67-4fc0-b828-3095c264507e.png)
@@ -817,6 +1553,9 @@ We get that error message at the top saying something went wrong in plain Englis
 :::
 
 This just scratches the surface of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Service validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
+
+<Tabs>
+<TabItem value="js" label="JavaScript">
 
 ```js
 export const createCar = ({ input }) => {
@@ -841,7 +1580,39 @@ export const createCar = ({ input }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts
+export const createCar = ({ input }: Car) => {
+  validate(input.make, 'make', {
+    inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
+  })
+  validate(input.color, 'color', {
+    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+  })
+  validate(input.hasDamage, 'hasDamage', {
+    absence: true
+  })
+  validate(input.vin, 'vin', {
+    format: /[A-Z0-9]+/,
+    length: { equal: 17 }
+  })
+  validate(input.odometer, 'odometer', {
+    numericality: { positive: true, lessThanOrEqual: 10000 }
+  })
+
+  return db.car.create({ data: input })
+}
+```
+
+</TabItem>
+</Tabs>
+
 You can still include your own custom validation logic and have the errors handled in the same manner as the built-in validations:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```js
 validateWith(() => {
@@ -854,6 +1625,23 @@ validateWith(() => {
 })
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```js
+validateWith(() => {
+  const oneWeekAgo = new Date()
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+
+  if (input.lastCarWashDate < oneWeekAgo) {
+    throw new Error("We don't accept dirty cars")
+  }
+})
+```
+
+</TabItem>
+</Tabs>
+
 Now you can be sure you won't be getting some old jalopy!
 
 ### One more thing...
@@ -864,21 +1652,47 @@ Redwood includes a hook called `useForm()` (from React Hook Form) which is norma
 
 First we'll import `useForm`:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import {
   FieldError,
   Form,
   FormError,
   Label,
-  TextField,
-  TextAreaField,
   Submit,
+  TextAreaField,
+  TextField,
   // highlight-next-line
   useForm,
 } from '@redwoodjs/forms'
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+import {
+  FieldError,
+  Form,
+  FormError,
+  Label,
+  Submit,
+  TextAreaField,
+  TextField,
+  // highlight-next-line
+  useForm,
+} from '@redwoodjs/forms'
+```
+
+</TabItem>
+</Tabs>
+
 And now call it inside of our component:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 const ContactPage = () => {
@@ -887,7 +1701,23 @@ const ContactPage = () => {
   //...
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/pages/ContactPage/ContactPage.tsx"
+const ContactPage = () => {
+  // highlight-next-line
+  const formMethods = useForm()
+  //...
+```
+
+</TabItem>
+</Tabs>
+
 Finally we'll tell `<Form>` to use the `formMethods` we just got from `useForm()` instead of doing it itself:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 return (
@@ -903,7 +1733,30 @@ return (
     // ...
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+return (
+  <>
+    <Toaster />
+    <Form
+      onSubmit={onSubmit}
+      config={{ mode: 'onBlur' }}
+      error={error}
+      // highlight-next-line
+      formMethods={formMethods}
+    >
+    // ...
+```
+
+</TabItem>
+</Tabs>
+
 Now we can call `reset()` on `formMethods` after we call `toast()`:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 // ...
@@ -919,6 +1772,29 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
 // ...
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+// ...
+
+const [create, { loading, error }] = useMutation<
+  CreateContactMutation,
+  CreateContactMutationVariables
+>(CREATE_CONTACT, {
+  onCompleted: () => {
+    toast.success('Thank you for your submission!')
+    // highlight-next-line
+    formMethods.reset()
+  },
+})
+
+// ...
+```
+
+</TabItem>
+</Tabs>
+
 :::caution
 
 You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
@@ -926,6 +1802,9 @@ You can put the email validation back into the `<TextField>` now, but you should
 :::
 
 Here's the entire page:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/ContactPage/ContactPage.js"
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -935,9 +1814,9 @@ import {
   Form,
   FormError,
   Label,
-  TextField,
-  TextAreaField,
   Submit,
+  TextAreaField,
+  TextField,
   useForm,
 } from '@redwoodjs/forms'
 
@@ -967,7 +1846,7 @@ const ContactPage = () => {
     <>
       <MetaTags title="Contact" description="Contact page" />
 
-      <Toaster toastOptions={{ duration: 100000 }} />
+      <Toaster />
       <Form
         onSubmit={onSubmit}
         config={{ mode: 'onBlur' }}
@@ -1021,18 +1900,147 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
+import {
+  FieldError,
+  Form,
+  FormError,
+  Label,
+  Submit,
+  SubmitHandler,
+  TextAreaField,
+  TextField,
+  useForm,
+} from '@redwoodjs/forms'
+
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql'
+
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
+
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
+
+const ContactPage = () => {
+  const formMethods = useForm()
+
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
+    onCompleted: () => {
+      toast.success('Thank you for your submission!')
+      formMethods.reset()
+    },
+  })
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    create({ variables: { input: data } })
+  }
+
+  return (
+    <>
+      <MetaTags title="Contact" description="Contact page" />
+
+      <Toaster />
+      <Form
+        onSubmit={onSubmit}
+        config={{ mode: 'onBlur' }}
+        error={error}
+        formMethods={formMethods}
+      >
+        <FormError error={error} wrapperClassName="form-error" />
+
+        <Label name="name" errorClassName="error">
+          Name
+        </Label>
+        <TextField
+          name="name"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="name" className="error" />
+
+        <Label name="email" errorClassName="error">
+          Email
+        </Label>
+        <TextField
+          name="email"
+          validation={{
+            required: true,
+            pattern: {
+              value: /^[^@]+@[^.]+\..+$/,
+              message: 'Please enter a valid email address',
+            },
+          }}
+          errorClassName="error"
+        />
+        <FieldError name="email" className="error" />
+
+        <Label name="message" errorClassName="error">
+          Message
+        </Label>
+        <TextAreaField
+          name="message"
+          validation={{ required: true }}
+          errorClassName="error"
+        />
+        <FieldError name="message" className="error" />
+
+        <Submit disabled={loading}>Save</Submit>
+      </Form>
+    </>
+  )
+}
+
+export default ContactPage
+```
+
+</TabItem>
+</Tabs>
+
 That's it! [React Hook Form](https://react-hook-form.com/) provides a bunch of [functionality](https://react-hook-form.com/api) that `<Form>` doesn't expose. When you want to get to that functionality you can call `useForm()` yourself, but make sure to pass the returned object (we called it `formMethods`) as a prop to `<Form>` so that the validation and other functionality keeps working.
 
 :::info
 
 You may have noticed that the onBlur form config stopped working once you started calling `useForm()` yourself. That's because Redwood calls `useForm()` behind the scenes and automatically passes it the `config` prop that you gave to `<Form>`. Redwood is no longer calling `useForm()` for you so if you need some options passed you need to do it manually:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```js title="web/src/pages/ContactPage/ContactPage.js"
 const ContactPage = () => {
   const formMethods = useForm({ mode: 'onBlur' })
   //...
-}
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
+const ContactPage = () => {
+  const formMethods = useForm({ mode: 'onBlur' })
+  //...
+```
+
+</TabItem>
+</Tabs>
 
 :::
 

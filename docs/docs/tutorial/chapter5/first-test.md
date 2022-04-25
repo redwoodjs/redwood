@@ -18,6 +18,9 @@ The test was looking for the full text of the blog post, but remember that in `A
 
 Let's update the test so that it checks for the expected behavior instead. There are entire books written on the best way to test, so no matter what we decide on testing in this code there will be someone out there to tell us we're doing it wrong. As just one example, the simplest test would be to just copy what's output and use that for the text in the test:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```jsx title="web/src/components/ArticlesCell.test.js"
 test('Success renders successfully', async () => {
   const articles = standard().articles
@@ -34,7 +37,29 @@ test('Success renders successfully', async () => {
 })
 ```
 
-But the truncation length could change later, so how do we encapsulate that in our test? Or should we? The number of characters to truncate to is hardcoded in the `Article` component, which this component shouldn't really care about: it should be up to the page that's presenting the article to determine much or how little to show (based on space concerns, design constraints, etc.) don't you think? Even if we refactored the `truncate()` function into a shared place and imported it into both `Article` and this test, the test will still be knowing too much about `Article`—why should it have detailed knowledge of the internals of `Article` and that it's making use of this `truncate()` function at all? It shouldn't! One theory of testing says that the thing you're testing should be a black box: you can't see inside of it, all you can test is what data comes out when you send certain data in.
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/components/ArticlesCell.test.tsx"
+test('Success renders successfully', async () => {
+  const articles = standard().articles
+  render(<Success articles={articles} />)
+
+  // highlight-start
+  expect(screen.getByText(articles[0].title)).toBeInTheDocument()
+  expect(
+    screen.getByText(
+      'Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Str...'
+    )
+  ).toBeInTheDocument()
+  // highlight-end
+})
+```
+
+</TabItem>
+</Tabs>
+
+But the truncation length could change later, so how do we encapsulate that in our test? Or should we? The number of characters to truncate to is hardcoded in the `Article` component, which this component shouldn't really care about about: it should be up to the page that's presenting the article to determine much or how little to show (based on space concerns, design constraints, etc.) don't you think? Even if we refactored the `truncate()` function into a shared place and imported it into both `Article` and this test, the test will still be knowing too much about `Article`—why should it have detailed knowledge of the internals of `Article` and that it's making use of this `truncate()` function at all? It shouldn't! One theory of testing says that the thing you're testing should be a black box: you can't see inside of it, all you can test is what data comes out when you send certain data in.
 
 Let's compromise—by virtue of the fact that this functionality has a prop called "summary" we can guess that it's doing *something* to shorten the text. So what if we test three things that we can make reasonable assumptions about right now:
 
@@ -47,6 +72,9 @@ This gives us a buffer if we decide to truncate to something like 25 words, or e
 ### Adding the Test
 
 Okay, let's do this:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/ArticlesCell.test.js"
 // highlight-next-line
@@ -92,6 +120,57 @@ describe('ArticlesCell', () => {
   })
 })
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="web/src/components/ArticlesCell.test.tsx"
+// highlight-next-line
+import { render, screen, within } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
+
+describe('ArticlesCell', () => {
+  test('Loading renders successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  test('Empty renders successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  test('Failure renders successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  test('Success renders successfully', async () => {
+    const articles = standard().articles
+    render(<Success articles={articles} />)
+
+    // highlight-start
+    articles.forEach((article) => {
+      const truncatedBody = article.body.substring(0, 10)
+      const matchedBody = screen.getByText(truncatedBody, { exact: false })
+      const ellipsis = within(matchedBody).getByText('...', { exact: false })
+
+      expect(screen.getByText(article.title)).toBeInTheDocument()
+      expect(screen.queryByText(article.body)).not.toBeInTheDocument()
+      expect(matchedBody).toBeInTheDocument()
+      expect(ellipsis).toBeInTheDocument()
+    })
+    // highlight-end
+  })
+})
+```
+
+</TabItem>
+</Tabs>
 
 This loops through each article in our `standard()` mock and for each one:
 
@@ -158,6 +237,9 @@ The names you give your mocks are then available in your tests and stories files
 
 Let's say our mock looks like this:
 
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
 ```javascript
 export const standard = () => ({
   articles: [
@@ -177,7 +259,35 @@ export const standard = () => ({
 })
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```javascript
+export const standard = () => ({
+  articles: [
+    {
+      id: 1,
+      title: 'First Post',
+      body: `Neutra tacos hot chicken prism raw denim...`,
+      createdAt: '2020-01-01T12:34:56Z',
+    },
+    {
+      id: 2,
+      title: 'Second Post',
+      body: `Master cleanse gentrify irony put a bird on it...`,
+      createdAt: '2020-01-01T12:34:56Z',
+    },
+  ],
+})
+```
+
+</TabItem>
+</Tabs>
+
 The first key in the object that's returned is named `articles`. That's also the name of the prop that's expected to be sent into **Success** in the cell:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx
 // highlight-next-line
@@ -188,9 +298,27 @@ export const Success = ({ articles }) => {
 }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx
+// highlight-next-line
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+  return (
+    { articles.map((article) => <Article article={article} />) }
+  )
+}
+```
+
+</TabItem>
+</Tabs>
+
 So we can just spread the result of `standard()` in a story or test when using the **Success** component and everything works out:
 
-```jsx
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -202,9 +330,30 @@ export const success = () => {
 export default { title: 'Cells/ArticlesCell' }
 ```
 
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
+
+export const success = () => {
+  // highlight-next-line
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/ArticlesCell' }
+```
+
+</TabItem>
+</Tabs>
+
 Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashioned way:
 
-```jsx
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -215,6 +364,24 @@ export const success = () => {
 
 export default { title: 'Cells/ArticlesCell' }
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+import { Success } from './ArticlesCell'
+import { standard } from './ArticlesCell.mock'
+
+export const success = () => {
+  // highlight-next-line
+  return Success ? <Success articles={standard().articles} /> : null
+}
+
+export default { title: 'Cells/ArticlesCell' }
+```
+
+</TabItem>
+</Tabs>
 
 You can have as many mocks as you want, just import the names of the ones you need and send them in as props to your components.
 
@@ -234,6 +401,9 @@ In this case `truncate()` "belongs to" `Article` and the outside world really sh
 In this case let's just test that the output matches an exact string. You could spin yourself in circles trying to refactor the code to make it absolutely bulletproof to code changes breaking the tests, but will you ever actually need that level of flexibility? It's always a trade-off!
 
 We'll move the sample post data to a constant and then use it in both the existing test (which tests that not passing the `summary` prop at all results in the full body being rendered) and our new test that checks for the summary version being rendered:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing'
@@ -273,6 +443,51 @@ describe('Article', () => {
   // highlight-end
 })
 ```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/Article/Article.test.tsx"
+import { render, screen } from '@redwoodjs/testing'
+import Article from './Article'
+
+// highlight-start
+const ARTICLE = {
+  id: 1,
+  title: 'First post',
+  body: `Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Street art next level umami squid. Hammock hexagon glossier 8-bit banjo. Neutra la croix mixtape echo park four loko semiotics kitsch forage chambray. Semiotics salvia selfies jianbing hella shaman. Letterpress helvetica vaporware cronut, shaman butcher YOLO poke fixie hoodie gentrify woke heirloom.`,
+  createdAt: new Date().toISOString(),
+}
+// highlight-end
+
+describe('Article', () => {
+  it('renders a blog post', () => {
+    // highlight-next-line
+    render(<Article article={ARTICLE} />)
+
+    // highlight-start
+    expect(screen.getByText(ARTICLE.title)).toBeInTheDocument()
+    expect(screen.getByText(ARTICLE.body)).toBeInTheDocument()
+    // highlight-end
+  })
+
+  // highlight-start
+  it('renders a summary of a blog post', () => {
+    render(<Article article={ARTICLE} summary={true} />)
+
+    expect(screen.getByText(ARTICLE.title)).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Neutra tacos hot chicken prism raw denim, put a bird on it enamel pin post-ironic vape cred DIY. Str...'
+      )
+    ).toBeInTheDocument()
+  })
+  // highlight-end
+})
+```
+
+</TabItem>
+</Tabs>
 
 Saving that change should run the tests and we'll see that our suite is still happy!
 

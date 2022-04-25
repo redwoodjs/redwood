@@ -2,7 +2,8 @@
   base = "docs"
   publish = "build"
   command = "yarn build"
-  
+  ignore = "node ignore_build.js"
+
 [[redirects]]
   from = "/docs"
   to = "/docs/introduction"
