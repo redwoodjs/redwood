@@ -4,12 +4,10 @@
 
 const { execSync } = require('child_process')
 
-console.log(process.env)
+execSync(
+  'git remote add origin https://github.com/redwoodjs/redwood.git && git fetch origin main'
+)
 
-console.log('fetching origin main')
-execSync('git fetch origin main')
-
-console.log('dffing origin main')
 const changedFiles = execSync('git diff origin/main --name-only')
   .toString()
   .trim()
