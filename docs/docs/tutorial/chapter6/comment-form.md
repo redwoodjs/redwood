@@ -255,6 +255,13 @@ const CREATE = gql`
 `
 // highlight-end
 
+// highlight-start
+interface FormValues {
+  name: string
+  comment: string
+}
+// highlight-end
+
 const CommentForm = () => {
   // highlight-next-line
   const [createComment, { loading, error }] = useMutation(CREATE)
