@@ -6281,7 +6281,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.182
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.11.27
+    "@types/node": 16.11.28
     "@types/vscode": 1.66.0
     camelcase: 6.3.0
     deepmerge: 4.2.2
@@ -6350,7 +6350,7 @@ __metadata:
     "@types/aws-lambda": 8.10.95
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.1
-    "@types/node": 16.11.27
+    "@types/node": 16.11.28
     "@types/react": 17.0.44
     "@types/react-dom": 17.0.15
     "@types/webpack": 5.28.0
@@ -8604,10 +8604,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.27":
-  version: 16.11.27
-  resolution: "@types/node@npm:16.11.27"
-  checksum: 97f632f8a3f6d68081e1deec5808204477e237d1916e8fc68f1ac1ccb4fc7c5267990987801437224b36a4141f190f809f9083c207fd3d58a82442bd470a9c52
+"@types/node@npm:16.11.28":
+  version: 16.11.28
+  resolution: "@types/node@npm:16.11.28"
+  checksum: 55f5c2e8913e48f5ceffd8ebe4be50eb3c9d29c8d9aef7f10f1d383a1d583f5d676befa6184bb2a14d779ff419970b603342615346c27d55ee6487bb2e7caba6
   languageName: node
   linkType: hard
 
