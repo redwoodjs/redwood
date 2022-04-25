@@ -82,6 +82,7 @@ jobs:
                                         --dist-tag rc \
                                         --force-publish \
                                         --loglevel verbose \
+                                        --no-git-reset \                                        
                                         --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
