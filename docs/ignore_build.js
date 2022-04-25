@@ -16,6 +16,8 @@ const shouldBuild = changedFiles.some((changedFile) =>
   changedFile.startsWith('docs')
 )
 
-if (!shouldBuild) {
+// We've done all the logic based on whether we should build the site,
+// but since this is an ignore script, we have to flip the logic here.
+if (shouldBuild) {
   process.exitCode = 1
 }
