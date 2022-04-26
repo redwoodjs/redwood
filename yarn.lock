@@ -6108,7 +6108,7 @@ __metadata:
     "@testing-library/user-event": 14.1.1
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.44
-    "@types/react-dom": 17.0.15
+    "@types/react-dom": 17.0.16
     "@types/testing-library__jest-dom": 5.14.3
     jest: 27.5.1
     nodemon: 2.0.15
@@ -6352,7 +6352,7 @@ __metadata:
     "@types/jest": 27.4.1
     "@types/node": 16.11.27
     "@types/react": 17.0.44
-    "@types/react-dom": 17.0.15
+    "@types/react-dom": 17.0.16
     "@types/webpack": 5.28.0
     babel-jest: 27.5.1
     babel-plugin-inline-react-svg: 2.0.1
@@ -6377,7 +6377,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@types/react": 17.0.44
-    "@types/react-dom": 17.0.15
+    "@types/react-dom": 17.0.16
     "@types/testing-library__jest-dom": 5.14.3
     graphql: 16.4.0
     graphql-tag: 2.12.6
@@ -8725,12 +8725,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:17.0.15, @types/react-dom@npm:<18.0.0":
-  version: 17.0.15
-  resolution: "@types/react-dom@npm:17.0.15"
+"@types/react-dom@npm:17.0.16, @types/react-dom@npm:<18.0.0":
+  version: 17.0.16
+  resolution: "@types/react-dom@npm:17.0.16"
   dependencies:
     "@types/react": ^17
-  checksum: f6faa3b12c5301817f37a19a7b54beace8f35dee3480401a165cf9e9e4bcf2775496b7f37f3262ced9f44b0ee8e863b991efcce3b8588aec9a45a85268bdfb89
+  checksum: 57d3d12d4dcde5019ac282d178e58dc8fa82926337272eb2cb5dc492545883d4eef5fac6156d94c0ac76f0c1f1f8d0bf91d455d56184bad5365b759efa3e04f2
   languageName: node
   linkType: hard
 
