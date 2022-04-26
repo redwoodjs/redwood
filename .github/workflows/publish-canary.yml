@@ -40,7 +40,14 @@ jobs:
       - name: 🚢 Publish
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          yarn publish:canary
+          yarn lerna publish --include-merged-tags \
+                             --canary \
+                             --preid canary \
+                             --dist-tag canary \
+                             --force-publish \
+                             --loglevel verbose \
+                             --no-git-reset \
+                             --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
