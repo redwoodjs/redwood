@@ -5,6 +5,7 @@ import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'
 import * as schemaAstPlugin from '@graphql-codegen/schema-ast'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadSchema, LoadSchemaOptions } from '@graphql-tools/load'
+import chalk from 'chalk'
 import { DocumentNode, print } from 'graphql'
 import terminalLink from 'terminal-link'
 
@@ -68,21 +69,30 @@ export const generateGraphQLSchema = async () => {
         // provide a more helpful error message
 
         console.error(
-          `It looks like you have a ${name} model in your database schema.`
+          [
+            `  ${chalk.bgYellow(` ${chalk.black.bold('Heads up')} `)}`,
+            '',
+            chalk.yellow(
+              `  It looks like you have a ${name} model in your Prisma schema.`
+            ),
+            chalk.yellow(
+              // how to get "Book"?
+              `  If Book and ${name} have a relation, you may have to generate SDL or scaffolding for ${name} too.`
+            ),
+            chalk.yellow(
+              `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator now.`
+            ),
+            '',
+            chalk.yellow(
+              `  See the ${terminalLink(
+                'Troubleshooting Generators',
+                'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
+              )} section in our docs for more help.`
+            ),
+            '',
+          ].join('\n')
         )
-        console.error(
-          `Maybe you need to generate SDL or scaffolding for ${name} first.`
-        )
-        console.error('')
       }
-
-      console.error(
-        `See the section on ${terminalLink(
-          'troubleshooting generators',
-          'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
-        )} in our docs for more help`
-      )
-      console.error('')
     }
 
     console.error(e)
