@@ -1354,7 +1354,7 @@ export const standard = defineScenario({
 </TabItem>
 </Tabs>
 
-Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting commnents for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
+Each scenario here is associated with its own post, so rather than counting all the comments in the database (like the test does now) let's only count the number of comments attached to the single post we're getting comments for (we're passing the postId into the `comments()` call now). Let's see what it looks like in test form:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
