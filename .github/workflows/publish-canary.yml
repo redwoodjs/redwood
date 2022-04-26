@@ -66,9 +66,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 💬 Message Slack
-        uses: ./.github/actions/message_slack
+        uses: ./.github/actions/message_slack_publishing
         with:
           title: "🦜 Canary Packages"
           status: ${{ needs.publish-canary.result }}
           version: ${{ needs.publish-canary.outputs.version }}
-          slack-webhook-url: ${{ secrets.SLACK_PUBLISHING_WORKFLOWS_WEBHOOK }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}
