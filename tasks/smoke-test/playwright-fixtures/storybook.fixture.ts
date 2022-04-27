@@ -22,7 +22,7 @@ const test = base.extend<any, StorybookFixture>({
   // "server" fixture starts automatically for every worker - we pass "auto" for that.
   server: [
     async ({ port }, use) => {
-      console.log('Starting rw server.....')
+      console.log('Starting storybook server.....')
 
       const projectPath = process.env.PROJECT_PATH
 
@@ -52,7 +52,7 @@ const test = base.extend<any, StorybookFixture>({
             cwd: projectPath,
             shell: true,
             cleanup: true,
-            detached: true,
+            detached: false,
           }
         )
 
@@ -65,7 +65,7 @@ const test = base.extend<any, StorybookFixture>({
         // Pipe out logs so we can debug, when required
         serverHandler.stdout.on('data', (data) => {
           const outputAsString = Buffer.from(data, 'utf-8').toString()
-          console.log('[rw-storybook-fixture]')
+          console.log('[rw-storybook-fixture]', outputAsString)
 
           if (outputAsString.includes(`http://localhost:${port}/`)) {
             serverReadyPromiseHandle.resolve()
