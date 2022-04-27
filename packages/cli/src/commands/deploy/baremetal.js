@@ -13,6 +13,7 @@ import { configFilename } from '../setup/deploy/providers/baremetal'
 
 const DEFAULT_BRANCH_NAME = ['main']
 const SYMLINK_FLAGS = '-nsf'
+const CURRENT_RELEASE_SYMLINK_NAME = 'current'
 
 export const command = 'baremetal [environment]'
 export const description = 'Deploy to baremetal server(s)'
@@ -83,6 +84,12 @@ export const builder = (yargs) => {
     type: 'string',
   })
 
+  yargs.option('maintenance', {
+    describe: 'Add/remove the maintenance page',
+    choices: ['up', 'down'],
+    help: 'Put up a maintenance page by replacing the content of web/dist/index.html with the content of web/src/maintenance.html',
+  })
+
   // TODO: Allow option to pass --sides and only deploy select sides instead of all, always
 
   yargs.epilogue(
@@ -125,6 +132,179 @@ export const verifyServerConfig = (config) => {
   }
 }
 
+const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
+  const deployPath = path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
+
+  if (status === 'up') {
+    return [
+      {
+        title: `Enabling maintenance page...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, deployPath, 'mv', [
+            path.join('web', 'dist', 'index.html'),
+            path.join('web', 'dist', 'index.html.orig'),
+          ])
+          await sshExec(ssh, sshOptions, task, deployPath, 'ln', [
+            SYMLINK_FLAGS,
+            path.join('..', 'src', 'maintenance.html'),
+            path.join('web', 'dist', 'index.html'),
+          ])
+        },
+      },
+    ]
+  } else if (status === 'down') {
+    return [
+      {
+        title: `Disabling maintenance page...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, deployPath, 'rm', [
+            path.join('web', 'dist', 'index.html'),
+          ])
+          await sshExec(ssh, sshOptions, task, deployPath, 'mv', [
+            path.join('web', 'dist', 'index.html.orig'),
+            path.join('web', 'dist', 'index.html'),
+          ])
+        },
+      },
+    ]
+  }
+}
+
+const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
+  const deployBranch =
+    yargs.branch || serverConfig.branch || DEFAULT_BRANCH_NAME
+  const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
+  const tasks = []
+
+  // TODO: Add lifecycle hooks for running custom code before/after each
+  // built-in task
+
+  tasks.push({
+    title: `Cloning \`${deployBranch}\` branch...`,
+    task: async (_ctx, task) => {
+      await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', [
+        'clone',
+        `--branch=${deployBranch}`,
+        `--depth=1`,
+        serverConfig.repo,
+        yargs.releaseDir,
+      ])
+    },
+    skip: () => !yargs.update,
+  })
+
+  tasks.push({
+    title: `Symlink .env...`,
+    task: async (_ctx, task) => {
+      await sshExec(ssh, sshOptions, task, cmdPath, 'ln', [
+        SYMLINK_FLAGS,
+        '../.env',
+        '.env',
+      ])
+    },
+    skip: () => !yargs.update,
+  })
+
+  tasks.push({
+    title: `Installing dependencies...`,
+    task: async (_ctx, task) => {
+      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', ['install'])
+    },
+    skip: () => !yargs.install,
+  })
+
+  tasks.push({
+    title: `DB Migrations...`,
+    task: async (_ctx, task) => {
+      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+        'rw',
+        'prisma',
+        'migrate',
+        'deploy',
+      ])
+      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+        'rw',
+        'prisma',
+        'generate',
+      ])
+      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+        'rw',
+        'dataMigrate',
+        'up',
+      ])
+    },
+    skip: () => !yargs.migrate || serverConfig?.migrate === false,
+  })
+
+  for (const side of serverConfig.sides) {
+    tasks.push({
+      title: `Building ${side}...`,
+      task: async (_ctx, task) => {
+        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+          'rw',
+          'build',
+          side,
+        ])
+      },
+      skip: () => !yargs.build,
+    })
+  }
+
+  tasks.push({
+    title: `Symlinking current release...`,
+    task: async (_ctx, task) => {
+      await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
+        SYMLINK_FLAGS,
+        yargs.releaseDir,
+        CURRENT_RELEASE_SYMLINK_NAME,
+      ])
+    },
+    skip: () => !yargs.update,
+  })
+
+  // start/restart monitoring processes
+  for (const process of serverConfig.processNames) {
+    if (yargs.firstRun) {
+      tasks.push({
+        title: `Starting ${process} process for the first time...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+            'start',
+            path.join(CURRENT_RELEASE_SYMLINK_NAME, 'ecosystem.config.js'),
+            '--only',
+            process,
+          ])
+        },
+        skip: () => !yargs.restart,
+      })
+      tasks.push({
+        title: `Saving ${process} state for future startup...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+            'save',
+          ])
+        },
+        skip: () => !yargs.restart,
+      })
+    } else {
+      tasks.push({
+        title: `Restarting ${process} process...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+            'restart',
+            process,
+          ])
+        },
+        skip: () => !yargs.restart,
+      })
+    }
+  }
+
+  // TODO: Add a process for cleaning up old deploys
+
+  return tasks
+}
+
 const commands = (yargs, ssh) => {
   // parse config and get server list
   const deployConfig = toml.parse(
@@ -159,9 +339,6 @@ const commands = (yargs, ssh) => {
       agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
       agentForward: serverConfig.agentForward,
     }
-    const deployBranch =
-      yargs.branch || serverConfig.branch || DEFAULT_BRANCH_NAME
-    const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
 
     verifyServerConfig(serverConfig)
 
@@ -170,131 +347,13 @@ const commands = (yargs, ssh) => {
       task: () => ssh.connect(sshOptions),
     })
 
-    // TODO: Add lifecycle hooks for running custom code before/after each
-    // built-in task
-
-    tasks.push({
-      title: `Cloning \`${deployBranch}\` branch...`,
-      task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', [
-          'clone',
-          `--branch=${deployBranch}`,
-          `--depth=1`,
-          serverConfig.repo,
-          yargs.releaseDir,
-        ])
-      },
-      skip: () => !yargs.update,
-    })
-
-    tasks.push({
-      title: `Symlink .env...`,
-      task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, cmdPath, 'ln', [
-          SYMLINK_FLAGS,
-          '../.env',
-          '.env',
-        ])
-      },
-      skip: () => !yargs.update,
-    })
-
-    tasks.push({
-      title: `Installing dependencies...`,
-      task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', ['install'])
-      },
-      skip: () => !yargs.install,
-    })
-
-    tasks.push({
-      title: `DB Migrations...`,
-      task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
-          'rw',
-          'prisma',
-          'migrate',
-          'deploy',
-        ])
-        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
-          'rw',
-          'prisma',
-          'generate',
-        ])
-        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
-          'rw',
-          'dataMigrate',
-          'up',
-        ])
-      },
-      skip: () => !yargs.migrate || serverConfig?.migrate === false,
-    })
-
-    for (const side of serverConfig.sides) {
-      tasks.push({
-        title: `Building ${side}...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
-            'rw',
-            'build',
-            side,
-          ])
-        },
-        skip: () => !yargs.build,
-      })
+    if (yargs.maintenance) {
+      tasks = tasks.concat(
+        maintenanceTasks(yargs.maintenance, ssh, sshOptions, serverConfig)
+      )
+    } else {
+      tasks = tasks.concat(deployTasks(yargs, ssh, sshOptions, serverConfig))
     }
-
-    tasks.push({
-      title: `Symlinking current release...`,
-      task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
-          SYMLINK_FLAGS,
-          yargs.releaseDir,
-          'current',
-        ])
-      },
-      skip: () => !yargs.update,
-    })
-
-    // start/restart monitoring processes
-    for (const process of serverConfig.processNames) {
-      if (yargs.firstRun) {
-        tasks.push({
-          title: `Starting ${process} process for the first time...`,
-          task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
-              'start',
-              path.join('current', 'ecosystem.config.js'),
-              '--only',
-              process,
-            ])
-          },
-          skip: () => !yargs.restart,
-        })
-        tasks.push({
-          title: `Saving ${process} state for future startup...`,
-          task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
-              'save',
-            ])
-          },
-          skip: () => !yargs.restart,
-        })
-      } else {
-        tasks.push({
-          title: `Restarting ${process} process...`,
-          task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
-              'restart',
-              process,
-            ])
-          },
-          skip: () => !yargs.restart,
-        })
-      }
-    }
-
-    // TODO: Add a process for cleaning up old deploys
 
     tasks.push({
       title: 'Disconnecting...',
