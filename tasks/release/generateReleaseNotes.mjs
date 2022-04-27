@@ -266,7 +266,7 @@ function sortPRs(prs) {
     }
 
     if (labels.includes('release:docs')) {
-      chore.push(`- ${formatPR(pr)}`)
+      docs.push(`- ${formatPR(pr)}`)
       continue
     }
 
