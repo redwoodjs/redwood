@@ -62,7 +62,6 @@ branch = "main"
 `
 
 export const MAINTENANCE = `<!--
-<!--
 Put up this maintenance page on your deployed service with:
 
   yarn rw baremetal deploy --maintenance up
