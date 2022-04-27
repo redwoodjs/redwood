@@ -141,13 +141,13 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
         title: `Enabling maintenance page...`,
         task: async (_ctx, task) => {
           await sshExec(ssh, sshOptions, task, deployPath, 'mv', [
-            path.join('web', 'dist', 'index.html'),
-            path.join('web', 'dist', 'index.html.orig'),
+            path.join('web', 'dist', '200.html'),
+            path.join('web', 'dist', '200.html.orig'),
           ])
           await sshExec(ssh, sshOptions, task, deployPath, 'ln', [
             SYMLINK_FLAGS,
             path.join('..', 'src', 'maintenance.html'),
-            path.join('web', 'dist', 'index.html'),
+            path.join('web', 'dist', '200.html'),
           ])
         },
       },
@@ -157,12 +157,9 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
       {
         title: `Disabling maintenance page...`,
         task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, deployPath, 'rm', [
-            path.join('web', 'dist', 'index.html'),
-          ])
           await sshExec(ssh, sshOptions, task, deployPath, 'mv', [
-            path.join('web', 'dist', 'index.html.orig'),
-            path.join('web', 'dist', 'index.html'),
+            path.join('web', 'dist', '200.html.orig'),
+            path.join('web', 'dist', '200.html'),
           ])
         },
       },
