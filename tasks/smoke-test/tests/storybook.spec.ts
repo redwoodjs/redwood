@@ -116,6 +116,8 @@ storybookTest(
       )
     )
 
+    await page.reload()
+
     await page.locator('text=ProfilePage').click()
 
     const usernameRow = await page
