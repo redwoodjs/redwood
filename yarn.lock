@@ -5973,7 +5973,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@types/babel__core": 7.1.19
     "@types/fs-extra": 9.0.13
-    "@types/jscodeshift": 0.11.4
+    "@types/jscodeshift": 0.11.5
     "@types/prettier": 2.6.0
     "@vscode/ripgrep": 1.14.2
     core-js: 3.22.2
@@ -8379,13 +8379,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:0.11.4":
-  version: 0.11.4
-  resolution: "@types/jscodeshift@npm:0.11.4"
+"@types/jscodeshift@npm:0.11.5":
+  version: 0.11.5
+  resolution: "@types/jscodeshift@npm:0.11.5"
   dependencies:
     ast-types: ^0.14.1
     recast: ^0.20.3
-  checksum: 5f9d9bbea58610131300d464da75bfc7dcc585c65653c6727b62412b3031c853201c4341edf4d4effd48bf28cb6b8e9a3b850c588300e7f78f4854dec25eedbb
+  checksum: 9cb9d1fea1b8f2716836c9075dbe0a401fb3528d4ac00848a92f1289136149b98a25579de495377dcd1ee110f24f82e8ffbe222059d5bd30f488798a8ddc73c4
   languageName: node
   linkType: hard
 
@@ -26865,7 +26865,7 @@ __metadata:
     "@testing-library/user-event": 14.1.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.4.1
-    "@types/jscodeshift": 0.11.4
+    "@types/jscodeshift": 0.11.5
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.0
