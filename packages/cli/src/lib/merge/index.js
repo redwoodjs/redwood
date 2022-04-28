@@ -141,9 +141,9 @@ function stripTrailingCommentsStrategy() {
 }
 
 /**
- * 1. Traverse extAST's body and track the semantic IDs of all of the nodes for which we have a
+ * 1. Traverse extAST and track the semantic IDs of all of the nodes for which we have a
  *    merge strategy.
- * 2. Traverse baseAST's body. On node exit, attempt to merge semantically-equivalent ext nodes.
+ * 2. Traverse baseAST. On node exit, attempt to merge semantically-equivalent ext nodes.
  *     a. When a semantically equivalent ext node is merged, it is pruned from ext.
  * 3. Traverse extAST's body (if any nodes remain) and attempt to put top-level declarations
  *    at their latest-possible positions.
@@ -186,20 +186,21 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   traverse(baseAST, baseVisitor)
 
   const baseProgram = getProgramPath(baseAST)
-  const [imports, other] = _.partition(
+  const [imports, others] = _.partition(
     getProgramPath(extAST).get('body'),
     nodeIs('ImportDeclaration')
   )
 
   imports.forEach((exp) => insertAfterLastImport(exp, baseProgram))
-  _.forEachRight(other, (exp) => insertBeforeFirstUsage(exp, baseProgram))
+  _.forEachRight(others, (exp) => insertBeforeFirstUsage(exp, baseProgram))
 }
 
 export function merge(base, extension, strategy) {
-  const parseReact = (code) =>
-    parse(code, {
+  function parseReact(code) {
+    return parse(code, {
       presets: ['@babel/preset-react'],
     })
+  }
 
   const baseAST = parseReact(base)
   const extAST = parseReact(extension)

@@ -9,7 +9,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
-import createOrExtendStorybookConfiguration from '../../../lib/configureStorybook.js'
+import extendStorybookConfiguration from '../../../lib/configureStorybook.js'
 
 export const command = 'i18n'
 export const description = 'Set up i18n'
@@ -47,31 +47,6 @@ const localesExists = (lng) => {
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
-    {
-      title: 'Installing packages...',
-      task: async () => {
-        return new Listr([
-          {
-            title:
-              'Install i18n, i18next, react-i18next and i18next-browser-languagedetector',
-            task: async () => {
-              /**
-               * Install i18n, i18next, react-i18next and i18next-browser-languagedetector
-               */
-              await execa('yarn', [
-                'workspace',
-                'web',
-                'add',
-                'i18n',
-                'i18next',
-                'react-i18next',
-                'i18next-browser-languagedetector',
-              ])
-            },
-          },
-        ])
-      },
-    },
     {
       title: 'Configure i18n...',
       task: () => {
@@ -173,7 +148,7 @@ export const handler = async ({ force }) => {
     {
       title: 'Configuring Storybook...',
       task: async () =>
-        createOrExtendStorybookConfiguration(
+        extendStorybookConfiguration(
           path.join(__dirname, 'templates', 'storybook.preview.js.template')
         ),
     },

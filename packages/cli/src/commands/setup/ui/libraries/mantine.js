@@ -6,7 +6,7 @@ import Listr from 'listr'
 import { extendJSXFile, fileContains } from '../../../..//lib/extendFile'
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
-import createOrExtendStorybookConfiguration from '../../../../lib/configureStorybook.js'
+import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -109,7 +109,7 @@ export async function handler({ force, install, packages }) {
     {
       title: 'Configure Storybook...',
       task: async () =>
-        createOrExtendStorybookConfiguration(
+        extendStorybookConfiguration(
           path.join(
             __dirname,
             '..',
