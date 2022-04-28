@@ -17,7 +17,7 @@ export const create${singularPascalName}: MutationResolvers['create${singularPas
   })
 }
 
-export const update${singularPascalName}: MutationResolvers['create${singularPascalName}'] = ({ id, input }) => {
+export const update${singularPascalName}: MutationResolvers['update${singularPascalName}'] = ({ id, input }) => {
   return db.${singularCamelName}.update({
     data: input,
     where: { id },
