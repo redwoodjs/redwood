@@ -1,43 +1,36 @@
 import { parse, traverse } from '@babel/core'
 import generate from '@babel/generator'
 import { VISITOR_KEYS } from '@babel/types'
+import { _ } from 'lodash'
 import prettier from 'prettier'
 
-import { forEachFunctionOn, deletePropertyIf } from './algorithms'
+import { forEachFunctionOn, nodeIs } from './algorithms'
 import { semanticIdentifier } from './semanticIdentity'
 import { isOpaque } from './strategy'
 
 function extractProperty(property, fromObject) {
+  if (property === undefined) {
+    return undefined
+  }
   const tmp = fromObject[property]
   delete fromObject[property]
   return tmp
 }
 
-// This feels like a weird way to achieve something so simple in Babel,
-// but I can't find a better alternative.
+// This feels like a weird way to achieve something so simple in Babel, but I can't find a better
+// alternative.
 function getProgramPath(ast) {
   let programPath = undefined
   traverse(ast, {
     Program(path) {
       programPath = path
+      return
     },
   })
   if (programPath === undefined) {
     throw new Error('Unable to find Program node in AST')
   }
   return programPath
-}
-
-// When merging, trailing comments are a bit nasty. A comment can be parsed as a leading comment
-// of one expression, and a trailing comment of a subsequent expression. This is sort of an open
-// issue for Babel: https://github.com/babel/babel/issues/7002, but we can work around it pretty
-// easily with the following:
-function stripTrailingCommentsStrategy() {
-  return {
-    enter(path) {
-      path.node.trailingComments = []
-    },
-  }
 }
 
 // See https://github.com/babel/babel/issues/14480
@@ -47,14 +40,21 @@ function skipChildren(path) {
   }
 }
 
-// To make merge strategies more terse, we'd like to pass the AST node directly to the reducer, so
-// we don't have to constantly write "node", as in:
-// (lhs, rhs) => { lhs.node.thing + rhs.node.thing }
-// We could just pass NodePath.node directly to the reducer, but there are reasonable (though rare)
-// cases where we'd want to give our reducers access to the NodePath. To solve this, we create a
-// proxy object that appears like a Babel Node with an additional 'path' property, which points back
-// to the path object. This makes uses of the path more verbose, but for our purposes, this is
-// preferable; accessing path to determine a merge strategy likely indicates an anti-pattern.
+/**
+ * We can make merge strategies more terse and intuitive if we pass a Babel Node, rather than a
+ * NodePath, to the reducer. This would allow us to write:
+ *
+ * ArrayExpression: (lhs, rhs) => { [...lhs.elements, ...rhs.elements] }
+ * instead of
+ * ArrayExpression: (lhs, rhs) => { [...lhs.node.elements, ...rhs.node.elements] }
+ *
+ * It may seem like a small difference, but the code is much more intuitive if you don't have to
+ * think about Babel nodes vs paths when writing reducers.
+ *
+ * We could just pass the node directly to the reducer, but there are reasonable (though rare) cases
+ * where you do want access to the NodePath. To solve this, we create a proxy object that appears as
+ * a Babel Node with an additional `path` property that points back to the NodePath.
+ */
 function makeProxy(path) {
   return new Proxy(path, {
     get(target, property) {
@@ -78,29 +78,85 @@ function makeProxy(path) {
   })
 }
 
+function expressionUses(exp, ...ids) {
+  let result = false
+  exp.traverse({
+    Identifier(path) {
+      if (
+        !path.parentPath.isNodeType('VariableDeclarator') &&
+        ids.includes(path.node.name)
+      ) {
+        result = true
+        return
+      }
+    },
+  })
+  return result
+}
+
+// Insert the given expression before the first usage of its name in 'path', or at the end of the
+// program body if no such usage exists.
+function insertBeforeFirstUsage(expression, program) {
+  const body = program.get('body')
+  const pos = body.findIndex((exp) =>
+    expressionUses(exp, ...Object.keys(expression.getBindingIdentifiers()))
+  )
+  return pos !== -1
+    ? body[pos].insertBefore(expression.node)
+    : program.pushContainer('body', expression.node)
+}
+
+function insertAfterLastImport(expression, program) {
+  const body = program.get('body')
+  return body[
+    body.findLastIndex((bodyExpr) => bodyExpr.isNodeType('ImportDeclaration'))
+  ].insertAfter(expression.node)
+}
+
+function prune(path) {
+  switch (path.parentPath.type) {
+    // If pruning 'path' would yield an ill-formed parent (e.g, '{foo:}' or 'const x;'), prune it.
+    case 'ObjectProperty':
+    case 'VariableDeclarator':
+      return path.parentPath.remove()
+    default:
+      console.log(`Warning: default prune strategy for ${path.parentPath.type}`)
+    // eslint-disable-next-line no-fallthrough
+    case 'Program':
+    case 'ArrayExpression':
+      return path.remove()
+  }
+}
+
+// When merging, trailing comments are a bit nasty. A comment can be parsed as a leading comment
+// of one expression, and a trailing comment of a subsequent expression. This is sort of an open
+// issue for Babel: https://github.com/babel/babel/issues/7002, but we can work around it pretty
+// easily with the following:
+function stripTrailingCommentsStrategy() {
+  return {
+    enter(path) {
+      path.node.trailingComments = []
+    },
+  }
+}
+
+/**
+ * 1. Traverse extAST's body and track the semantic IDs of all of the nodes for which we have a merge strategy.
+ * 2. Traverse baseAST's body. On node exit, attempt to merge semantically-equivalent ext nodes.
+ *  a. When a semantically equivalent ext node is merged, it is pruned from ext.
+ * 3. Traverse extAST's body (if any nodes remain) and attempt to put top-level declarations
+ *    at their latest-possible positions.
+ *  a. Latest-possible is defined as the position immediately preceeding the first use of the
+ *     node's binding, if it exists.
+ */
 function mergeAST(baseAST, extAST, strategy = {}) {
   const identifier =
     extractProperty('identifier', strategy) || semanticIdentifier
   const identities = {}
-
-  const baseProgramPath = getProgramPath(baseAST)
-  const nextInsertPositionForType = {}
-  const saveNextInsertPosition = (path) => {
-    const pos = path.getStatementParent()
-    nextInsertPositionForType[pos.type] = pos
-  }
-  const insertAtNextPosition = (path) => {
-    const { node, type } = path.getStatementParent()
-    nextInsertPositionForType[type] =
-      type in nextInsertPositionForType
-        ? nextInsertPositionForType[type].insertAfter(node).pop()
-        : baseProgramPath.pushContainer('body', node).pop()
-  }
-
   const baseVisitor = { ...stripTrailingCommentsStrategy() }
   const extVisitor = { ...stripTrailingCommentsStrategy() }
 
-  forEachFunctionOn(strategy, (typename, _func) => {
+  forEachFunctionOn(strategy, (typename, strat) => {
     extVisitor[typename] = {
       enter(path) {
         const id = identifier.getId(path)
@@ -109,22 +165,18 @@ function mergeAST(baseAST, extAST, strategy = {}) {
     }
     baseVisitor[typename] = {
       enter(path) {
-        if (isOpaque(strategy[path.type])) {
+        if (isOpaque(strat)) {
           skipChildren(path)
         }
       },
       exit(path) {
-        saveNextInsertPosition(path)
-        const id = identifier.getId(path)
-        if (id && id in identities) {
-          // Like Array.reduce with reference semantics for the accumulator, which is `path` here.
-          // Goal is (((path <=> a) <=> b) <=> c), where  <=> is the merge strategy, and we're
-          // merging extensions [a, b, c].
+        const exts = extractProperty(identifier.getId(path), identities)
+        if (exts) {
           const proxyPath = makeProxy(path)
-          identities[id].forEach((ext) =>
-            strategy[typename](proxyPath, makeProxy(ext))
-          )
-          deletePropertyIf(identities, ([k, _]) => identifier.isAncestor(id, k))
+          exts.map(makeProxy).forEach((ext) => {
+            strat(proxyPath, ext)
+            prune(ext.path)
+          })
         }
       },
     }
@@ -133,14 +185,14 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   traverse(extAST, extVisitor)
   traverse(baseAST, baseVisitor)
 
-  const handled = []
-  for (const [k, v] of Object.entries(identities)) {
-    if (handled.some((h) => identifier.isAncestor(h, k))) {
-      continue
-    }
-    v.forEach(insertAtNextPosition)
-    handled.push(k)
-  }
+  const baseProgram = getProgramPath(baseAST)
+  const [imports, other] = _.partition(
+    getProgramPath(extAST).get('body'),
+    nodeIs('ImportDeclaration')
+  )
+
+  imports.forEach((exp) => insertAfterLastImport(exp, baseProgram))
+  _.forEachRight(other, (exp) => insertBeforeFirstUsage(exp, baseProgram))
 }
 
 export function merge(base, extension, strategy) {

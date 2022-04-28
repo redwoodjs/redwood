@@ -18,6 +18,7 @@ export const semanticIdentifier = {
       .reduce((acc, i) => [...identity.get(i), ...acc], [])
       .join('.')
   },
+
   // A node is its own ancestor.
   isAncestor(potentialAncestorId, potentialDescendantId) {
     // Note the difference between this and maybeChildId.startsWith(parentId)

@@ -39,11 +39,3 @@ export function forEachFunctionOn(object, callback) {
     }
   })
 }
-
-export function deletePropertyIf(object, predicate) {
-  Object.entries(object)
-    .filter(predicate)
-    .forEach(([k, _v]) => {
-      delete object[k]
-    })
-}

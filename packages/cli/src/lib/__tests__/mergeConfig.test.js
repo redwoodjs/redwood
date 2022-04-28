@@ -10,6 +10,8 @@ import {
   keepBothStatementParents,
 } from '../merge/strategy'
 
+import { unindented } from './fixtures/unindented'
+
 // A particular merge strategy for combining JS-config-style files.
 // This is the only strategy tested in this file.
 function mergeConfig(base, ext) {
@@ -20,13 +22,6 @@ function mergeConfig(base, ext) {
     ArrowFunctionExpression: keepBothStatementParents,
     FunctionDeclaration: keepBoth,
   })
-}
-
-// Unindent the provided (maybe multiline) string such that the first line has an indent of 0
-// and all subsequent lines maintain their relative indentation level to the first line.
-const unindented = (code) => {
-  const firstLineIndent = code.length - code.trimLeft().length
-  return code.replace(new RegExp(`^( {${firstLineIndent}})`, 'gm'), '')
 }
 
 const expectMerged = (base, ext, merged) => {
@@ -397,7 +392,11 @@ describe('opaque function behavior', () => {
 
 describe('nop behavior', () => {
   it('does not merge strings', () => {
-    expectMerged('const x = "foo"', 'const x = "bar"', "const x = 'foo'\n")
+    expectMerged(
+      'const x = "foo"',
+      'const x = "bar"',
+      "const x = 'foo'\nconst x = 'bar'\n"
+    )
   })
 
   it('does not merge nested strings', () => {
