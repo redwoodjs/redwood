@@ -90,6 +90,7 @@ datasource db {
   url = env("DATABASE_URL")
 }
 ```
+> Note: If you run into a "PrismaClientInitializationError" then you may need to regenerate the prisma client using: `yarn rw prisma generate`
 
 ## Connect to Postgres
 
