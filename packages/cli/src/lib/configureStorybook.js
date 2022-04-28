@@ -25,7 +25,6 @@ export default async function extendStorybookConfiguration(
   }
 
   if (newConfigPath) {
-    console.log(`newConfigPath: ${newConfigPath}`)
     const read = (path) => fs.readFileSync(path, { encoding: 'utf-8' })
     const write = (path, data) => fs.writeFileSync(path, data)
     const baseFile = read(sbPreviewConfigPath)
@@ -38,9 +37,6 @@ export default async function extendStorybookConfiguration(
       ArrowFunctionExpression: keepBothStatementParents,
       FunctionDeclaration: keepBoth,
     })
-
-    console.log(extensionFile)
-    console.log(merged)
 
     write(sbPreviewConfigPath, merged)
   }
