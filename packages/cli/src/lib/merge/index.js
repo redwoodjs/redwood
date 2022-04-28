@@ -5,7 +5,7 @@ import { _ } from 'lodash'
 import prettier from 'prettier'
 
 import { forEachFunctionOn, nodeIs } from './algorithms'
-import { semanticIdentifier } from './semanticIdentity'
+import { semanticIdentity } from './semanticIdentity'
 import { isOpaque } from './strategy'
 
 function extractProperty(property, fromObject) {
@@ -141,17 +141,17 @@ function stripTrailingCommentsStrategy() {
 }
 
 /**
- * 1. Traverse extAST's body and track the semantic IDs of all of the nodes for which we have a merge strategy.
+ * 1. Traverse extAST's body and track the semantic IDs of all of the nodes for which we have a
+ *    merge strategy.
  * 2. Traverse baseAST's body. On node exit, attempt to merge semantically-equivalent ext nodes.
- *  a. When a semantically equivalent ext node is merged, it is pruned from ext.
+ *     a. When a semantically equivalent ext node is merged, it is pruned from ext.
  * 3. Traverse extAST's body (if any nodes remain) and attempt to put top-level declarations
  *    at their latest-possible positions.
  *  a. Latest-possible is defined as the position immediately preceeding the first use of the
  *     node's binding, if it exists.
  */
 function mergeAST(baseAST, extAST, strategy = {}) {
-  const identifier =
-    extractProperty('identifier', strategy) || semanticIdentifier
+  const identify = extractProperty('identifier', strategy) || semanticIdentity
   const identities = {}
   const baseVisitor = { ...stripTrailingCommentsStrategy() }
   const extVisitor = { ...stripTrailingCommentsStrategy() }
@@ -159,7 +159,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   forEachFunctionOn(strategy, (typename, strat) => {
     extVisitor[typename] = {
       enter(path) {
-        const id = identifier.getId(path)
+        const id = identify(path)
         id && (identities[id] ||= []).push(path)
       },
     }
@@ -170,7 +170,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
         }
       },
       exit(path) {
-        const exts = extractProperty(identifier.getId(path), identities)
+        const exts = extractProperty(identify(path), identities)
         if (exts) {
           const proxyPath = makeProxy(path)
           exts.map(makeProxy).forEach((ext) => {

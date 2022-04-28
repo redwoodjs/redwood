@@ -1,6 +1,6 @@
 import { parse, traverse } from '@babel/core'
 
-import { semanticIdentifier } from '../merge/semanticIdentity'
+import { semanticIdentity } from '../merge/semanticIdentity'
 
 function expectSemanticId(rootPath, type, predicate, expectedIdentity) {
   const state = { result: undefined }
@@ -13,7 +13,7 @@ function expectSemanticId(rootPath, type, predicate, expectedIdentity) {
   }
   traverse(rootPath, visitor, undefined, state)
   expect(state.result).toBeDefined()
-  expect(semanticIdentifier.getId(state.result)).toBe(expectedIdentity)
+  expect(semanticIdentity(state.result)).toBe(expectedIdentity)
 }
 
 function expectSemanticIdForRoot(root) {

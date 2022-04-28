@@ -6,9 +6,7 @@ The contents of this directory are designed to enable the merging of Javascript 
 
 This library provides single entry point, `merge()`, which takes three arguments: the "base" source code as a string, the "extension" source code as a string, and a merge strategy. It returns the result of merging the base and extension code using the merge strategy. A merge strategy is an object with 1) an optional `identifier` object, and 2) Any number of node-reducers, with names corresponding to Babel's AST node types.
 
-`identifier` is an object used to label AST nodes in both files. If two AST nodes have the same label, they will be merged by the corresponding node-reducer, if it exists in your strategy. If `identifier` is not defined for your strategy, `semanticIdentifier` is used by default. It is explicitly named in the following examples for clarity.
-
-A valid `identifier` has two functions - `getId`, and `isAncestor`. The former takes a Babel NodePath and returns a string that identifies the given NodePath in a particular way. `isAncestor` takes two of these such strings, and returns true iff the first identifier represents an ancestor of the latter. We use `isAncestor` to skip nodes which should not be merged, because we've just merged their ancestor.
+`identifier` is a function used to label AST nodes in both files. If two AST nodes have the same label, they will be merged by the corresponding node-reducer, if it exists in your strategy. `identifer` takes a Babel NodePath and returns a string that identifies the given NodePath in a particular way. If `identifier` is not defined for your strategy, `semanticIdentity` is used by default. It is explicitly named in the following examples for clarity.
 
 Let's take a look at a sample invocation of `merge`.
 
@@ -50,7 +48,7 @@ You can find a complete summary of all available merge strategy convenience func
 
 ## Design Summary
 
-Broadly speaking, `merge()` requires the caller to answer two questions about the merge (but provides defaults for the first)
+Broadly speaking, `merge()` requires the caller to answer two questions about the merge (but provides a default for the first)
 
 1. How do we choose which AST nodes to merge?
 2. How do we merge AST nodes?
@@ -296,46 +294,41 @@ Yes, you've produced a naming collision on `func`, but that's precisely what you
 
 ### Algorithm Design
 
-This merge algorithm runs in one traversal of the base AST, and one traversal of the extension AST. First, it traverses the extension AST and generates an identifier for each node named by the merge strategy. Next, it traverses the base AST, and attempts to merge AST nodes **from the leaves, up**. That is, the inner-most expressions are merged first. If, however, a node reducer is marked as "opaque" (described above), that node is considered a leaf for the purpose of merging, and its children are not merged.
+This algorithm runs in one full traversal of the base AST, one full traversal of the extension AST, and one O(logn) traversal of the extension AST. First, it traverses the extension AST and generates an identifier for each node considered by the node reducers. Next, it traverses the base AST, and attempts to merge AST nodes **from the leaves, up**. That is, the inner-most expressions are merged first. If, however, a node reducer is marked as "opaque" (described above), that node is considered a leaf for the purpose of merging, and its children are not merged. Then, any remaining module-scope expressions in the extension AST are copied into the base AST, at positions such that variable usages appear after variable definitions.
 
 ```js
-// a.js
-const x = [1, [3, [5]]]
-// b.js
-const x = [2, [4, [6]]]
-// strategy
-const strategy = {
-  ArrayExpression: (lhs, rhs) => { lhs.elements = [...lhs.elements, ...rhs.elements] },
-}
-// merged
-const x = [1, 2, [3, 4, [5, 6]]]
+// base.js
+const x = 1
+const list = [x]
+// ext.js
+const y = 2
+const list = [y]
+// merged.js
+const x = 1
+const y = 2
+const list = [x, y]
 ```
+
+Note: to prevent the possibility of cyclic dependencies, e.g.:
 
 ```js
-// a.js
-function f() {
-  return [1, [3, [5]]]
-}
-// b.js
-function f() {
-  return [2, [4, [6]]]
-}
-// strategy
-const strategy = {
-  ArrayExpression: (lhs, rhs) => { lhs.elements = [...lhs.elements, ...rhs.elements] },
-  FunctionDeclaration: opaquely(keepBoth())
-}
-// merged
-function f() {
-  return [1, [3, [5]]]
-}
-function f() {
-  return [2, [4, [6]]]
-}
+// base.js
+const y = [...x, 1, 2, 3]
+// ext.js
+const x = [...y, 4, 5, 6]
 ```
 
-Importantly, if the merge strategy given is empty - if does not provide any node reducers - `merge` will be a no-op, and simply yield the base source code, unmodified.
+we require that the contents of base are well-formed Javascript. Note that this constraint does not apply to the extension - code merged from the extension file may refer to bindings only declared in the base code:
 
+```js
+// base.js
+const x = [1, 2, 3]
+// ext.js
+const y = [...x, 4, 5, 6]
+// merged
+const x = [1, 2, 3]
+const y = [...x, 4, 5, 6]
+```
 ## Merge Strategies
 
 ### concat
