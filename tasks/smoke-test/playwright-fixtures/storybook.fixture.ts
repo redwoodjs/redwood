@@ -12,9 +12,8 @@ export type StorybookFixture = {
 // Note that we did not provide an test-scoped fixtures, so we pass {}.
 const test = base.extend<any, StorybookFixture>({
   port: [
-    async ({}, use, workerInfo) => {
-      // "port" fixture uses a unique value of the worker process index.
-      await use(7910 + workerInfo.workerIndex)
+    async ({}, use) => {
+      await use(7980)
     },
     { scope: 'worker' },
   ],
