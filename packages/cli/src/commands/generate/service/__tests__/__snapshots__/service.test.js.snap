@@ -441,7 +441,7 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
 "import { db } from 'src/lib/db'
-import type { QueryResolvers, userResolvers } from 'types/graphql'
+import type { QueryResolvers, UserResolvers } from 'types/graphql'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -453,7 +453,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: userResolvers = {
+export const User: UserResolvers = {
   identity: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
@@ -462,7 +462,7 @@ export const User: userResolvers = {
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
 "import { db } from 'src/lib/db'
-import type { QueryResolvers, userResolvers } from 'types/graphql'
+import type { QueryResolvers, UserResolvers } from 'types/graphql'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -474,7 +474,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: userResolvers = {
+export const User: UserResolvers = {
   userProfiles: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
 }
@@ -483,7 +483,7 @@ export const User: userResolvers = {
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
 "import { db } from 'src/lib/db'
-import type { QueryResolvers, userResolvers } from 'types/graphql'
+import type { QueryResolvers, UserResolvers } from 'types/graphql'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -495,7 +495,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: userResolvers = {
+export const User: UserResolvers = {
   userProfiles: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
   identity: (_obj, { root }) =>
