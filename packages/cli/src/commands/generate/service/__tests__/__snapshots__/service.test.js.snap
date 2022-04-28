@@ -389,7 +389,7 @@ export const createUser: MutationResolvers['createUser'] = ({ input }) => {
   })
 }
 
-export const updateUser: MutationResolvers['createUser'] = ({ id, input }) => {
+export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
   return db.user.update({
     data: input,
     where: { id },
@@ -424,7 +424,7 @@ export const createPost: MutationResolvers['createPost'] = ({ input }) => {
   })
 }
 
-export const updatePost: MutationResolvers['createPost'] = ({ id, input }) => {
+export const updatePost: MutationResolvers['updatePost'] = ({ id, input }) => {
   return db.post.update({
     data: input,
     where: { id },
