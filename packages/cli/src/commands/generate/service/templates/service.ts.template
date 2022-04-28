@@ -1,5 +1,5 @@
 import { db } from 'src/lib/db'
-import type { QueryResolvers<% if (crud) { %>, MutationResolvers<% } %><% if (relations.length) { %>, ${singularCamelName}Resolvers<% } %> } from 'types/graphql'
+import type { QueryResolvers<% if (crud) { %>, MutationResolvers<% } %><% if (relations.length) { %>, ${singularPascalName}Resolvers<% } %> } from 'types/graphql'
 
 export const ${pluralCamelName}: QueryResolvers['${pluralCamelName}'] = () => {
   return db.${singularCamelName}.findMany()
@@ -30,6 +30,6 @@ export const delete${singularPascalName}: MutationResolvers['delete${singularPas
   })
 }<% } %><% if (relations.length) { %>
 
-export const ${singularPascalName}: ${singularCamelName}Resolvers  = {<% relations.forEach(relation => { %>
+export const ${singularPascalName}: ${singularPascalName}Resolvers  = {<% relations.forEach(relation => { %>
   ${relation}: (_obj, { root }) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>
