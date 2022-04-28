@@ -8,12 +8,32 @@ If you went through an earlier version of this tutorial you may remember it bein
 
 ## Callouts
 
-When you see a callout like this:
+You'll find some callouts throughout the text to draw your attention:
 
-> Hello, world!
+:::tip
+
+They might look like this...
+
+:::
+
+:::caution
+
+or sometimes like this...
+
+:::
+
+:::danger
+
+or maybe even like this!
+
+:::
 
 It's usually something that goes into more detail about a specific point, refers you to further reading, or calls out something important you should know. Here comes one now:
 
-> This tutorial assumes you are using version >= 0.50.0 (or v1.0 release candidate final.1) of RedwoodJS.
+:::info
+
+This tutorial assumes you are using version 1.0.0 or greater of RedwoodJS.
+
+:::
 
 Let's get started!

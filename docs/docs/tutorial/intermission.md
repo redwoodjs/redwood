@@ -22,7 +22,7 @@ yarn rw setup ui tailwindcss
 
 However, none of the screenshots that follow will come anywhere close to what you're seeing in your browser (except for those isolated components you build in Storybook) so you may want to just start with the [example repo](https://github.com/redwoodjs/redwood-tutorial). You'll also be missing out on a good starting test suite that we've added!
 
-If you're *still* set on continuting with your own repo, and you deployed to a service like Netlify, you would have changed the database provider in `schema.prisma` to `postgresql`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead good ol' SQLite (what we were using locally to build everything in the first half).
+If you're *still* set on continuing with your own repo, and you deployed to a service like Netlify, you would have changed the database provider in `schema.prisma` to `postgresql`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead good ol' SQLite (what we were using locally to build everything in the first half).
 
 Once you're ready, start up the dev server:
 
@@ -40,12 +40,18 @@ cd redwood-tutorial
 yarn install
 yarn rw prisma migrate dev
 yarn rw prisma db seed
-yarn rw dev
+yarn rw g secret
 ```
 
-That'll check out the repo, install all the dependencies, create your local database (SQLite) and fill it with a few blog posts, and finally start up the dev server.
+That'll check out the repo, install all the dependencies, create your local database (SQLite) and fill it with a few blog posts. After that last command (`yarn rw g secret`) you'll need to copy the string that's output and add it to a file `.env` in the root of your project:
 
-Your browser should open to a fresh new blog app:
+```bash title=".env"
+SESSION_SECRET=JV2kA48ZU4FnLHwqaydy9beJ99qy4VgWXPkvsaw3xE2LGyuSur2dVq2PsPkPfygr
+```
+
+This is the encryption key for the secure cookies used in [dbAuth](/docs/tutorial/chapter4/authentication#session-secret).
+
+Now just run `yarn rw dev` to start your development server. Your browser should open to a fresh new blog app:
 
 ![image](https://user-images.githubusercontent.com/300/101423176-54e93780-38ad-11eb-9230-ba8557764eb4.png)
 

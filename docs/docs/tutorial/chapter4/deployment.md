@@ -14,9 +14,11 @@ But instead of just `git add README.md` use `git add .` since you've got an enti
 
 We'll need a database somewhere on the internet to store our data. We've been using SQLite locally, but the kind of deployment we're going to do doesn't have a persistent disk store that we can put SQLite's file-based database on. So, for this part of this tutorial, we will use Postgres. (Prisma currently supports SQLite, Postgres and MySQL.) Don't worry if you aren't familiar with Postgres, Prisma will do all the heavy lifting. We just need to get a database available to the outside world so it can be accessed by our app.
 
-> **!!! Extremely Important Notice You Should Read !!!**
->
-> Prisma only supports one database provider at a time, and since we can't use SQLite in production and *must* switch to Postgres or MySQL, that means we need to use the same database on our local development system after making this change. See our [Local Postgres Setup](../../local-postgres-setup.md) guide to get you started.
+:::danger
+
+Prisma only supports one database provider at a time, and since we can't use SQLite in production and *must* switch to Postgres or MySQL, that means we need to use the same database on our local development system after making this change. See our [Local Postgres Setup](../../local-postgres-setup.md) guide to get you started.
+
+:::
 
 There are several hosting providers where you can quickly start up a Postgres instance:
 
@@ -51,9 +53,13 @@ provider = "postgresql"
 
 We will need to re-create our database migrations in a Postgres-compatible format. First, we need to tell Prisma where our new database lives so that it can access it from our dev environment. Open up `.env` and uncomment the `DATABASE_URL` var and update it to be the URL you copied from Railway, and save.
 
-> Note that `.env` is not checked into git by default, and should not be checked in under any circumstances! This file will be used to contain any secrets that your codebase needs (like database URLs and API keys) that should never been seen publicly. If you were to check this file in your repo, and your repo was public, anyone on the internet can see your secret stuff!
->
-> The `.env.defaults` file is meant for other environment variables (like non-sensitive config options for libraries, log levels, etc.) that are safe to be seen by the public and is meant to be checked into your repo and shared with other devs.
+:::info
+
+Note that `.env` is not checked into git by default, and should not be checked in under any circumstances! This file will be used to contain any secrets that your codebase needs (like database URLs and API keys) that should never been seen publicly. If you were to check this file in your repo, and your repo was public, anyone on the internet can see your secret stuff!
+
+The `.env.defaults` file is meant for other environment variables (like non-sensitive config options for libraries, log levels, etc.) that are safe to be seen by the public and is meant to be checked into your repo and shared with other devs.
+
+:::
 
 Next, delete the `api/db/migrations` folder completely.
 
@@ -95,9 +101,10 @@ Netlify will start building your app and it will eventually say "Site is live", 
 
 Go back to the main site page and then to **Site settings** at the top, and then **Build & Deploy** > **Environment**. Click **Edit Variables** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`.
 
-> **Why the connection limit?**
->
-> This is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
+:::tip
+
+This connection limit setting is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
+:::
 
 We'll need to add one more environment variable, `SESSION_SECRET` which contains a big long string that's used to encrypt the session cookies for dbAuth. This was included in development when you installed dbAuth, but now we need to tell Netlify about it. If you look in your `.env` file you'll see it at the bottom, but we want to create a unique one for every environment we deploy to (each developer should have a unique one as well). We've got a CLI command to create a new one:
 
@@ -121,7 +128,11 @@ With a little luck (and SCIENCE) it will complete successfully! You can click th
 
 ![Netlify URL](https://user-images.githubusercontent.com/300/83187909-bef57880-a0e3-11ea-97dc-e557248acd3a.png)
 
-> If you view a deploy via the **Preview** button notice that the URL contains a hash of the latest commit. Netlify will create one of these for every push to `main` but it will only ever show this exact commit, so if you deploy again and refresh you won't see any changes. The real URL for your site (the one you get from your site's homepage in Netlify) will always show the latest successful deploy. See [Branch Deploys](#branch-deploys) below for more info.
+:::info
+
+If you view a deploy via the **Preview** button notice that the URL contains a hash of the latest commit. Netlify will create one of these for every push to `main` but it will only ever show this exact commit, so if you deploy again and refresh you won't see any changes. The real URL for your site (the one you get from your site's homepage in Netlify) will always show the latest successful deploy. See [Branch Deploys](#branch-deploys) below for more info.
+
+:::
 
 Did it work? If you see "Empty" under the About and Contact links then it did! Yay! You're seeing "Empty" because you don't have any posts in your brand new production database so head to `/admin/posts` and create a couple, then go back to the homepage to see them.
 
@@ -141,7 +152,11 @@ Another neat feature of Netlify is _Branch Deploys_. When you create a branch an
 
 ![Netlify settings screenshot](https://user-images.githubusercontent.com/30793/90886476-c1016780-e3b2-11ea-851a-3014257484fd.png)
 
-> You also have the ability to "lock" the `main` branch so that deploys do not automatically occur on every push—you need to manually tell Netlify to deploy the latest, either by going to the site or using the [Netlify CLI](https://cli.netlify.com/).
+:::tip
+
+You also have the ability to "lock" the `main` branch so that deploys do not automatically occur on every push—you need to manually tell Netlify to deploy the latest, either by going to the site or using the [Netlify CLI](https://cli.netlify.com/).
+
+:::
 
 ### Database Concerns
 
