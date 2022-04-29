@@ -96,6 +96,11 @@ export const builder = (yargs) => {
     help: 'Put up a maintenance page by replacing the content of web/dist/index.html with the content of web/src/maintenance.html',
   })
 
+  yargs.option('rollback', {
+    describe: 'Add/remove the maintenance page',
+    help: 'Rollback [count] number of releases',
+  })
+
   // TODO: Allow option to pass --sides and only deploy select sides instead of all, always
 
   yargs.epilogue(
@@ -133,6 +138,8 @@ const sshExec = async (ssh, sshOptions, task, path, command, args) => {
     )
     process.exit(1)
   }
+
+  return result
 }
 
 export const verifyServerConfig = (config) => {
@@ -177,6 +184,93 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
       },
     ]
   }
+}
+
+const rollbackTasks = (count, ssh, sshOptions, serverConfig) => {
+  let rollbackCount = 1
+
+  if (parseInt(count) === count) {
+    rollbackCount = count
+  }
+
+  const tasks = [
+    {
+      title: `Rolling back ${rollbackCount} release(s)...`,
+      task: async (_ctx, task) => {
+        const currentLink = (
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'readlink', [
+            '-f',
+            'current',
+          ])
+        ).stdout
+          .split('/')
+          .pop()
+        const dirs = (
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ls', ['-t'])
+        ).stdout
+          .split('\n')
+          .filter((dirs) => !dirs.match(/current/))
+
+        const deployedIndex = dirs.indexOf(currentLink)
+        const rollbackIndex = deployedIndex + rollbackCount
+
+        if (dirs[rollbackIndex]) {
+          console.info('Setting symlink')
+          await symlinkCurrentCommand(
+            dirs[rollbackIndex],
+            ssh,
+            sshOptions,
+            task,
+            serverConfig.path
+          )
+        } else {
+          throw new Error(
+            `Cannot rollback ${rollbackCount} release(s): ${
+              dirs.length - dirs.indexOf(currentLink) - 1
+            } previous release(s) available`
+          )
+        }
+      },
+    },
+  ]
+
+  for (const processName of serverConfig.processNames) {
+    tasks.push({
+      title: `Restarting ${processName} process...`,
+      task: async (_ctx, task) => {
+        await restartProcessCommand(
+          processName,
+          ssh,
+          sshOptions,
+          task,
+          serverConfig.path
+        )
+      },
+    })
+  }
+
+  return tasks
+}
+
+const symlinkCurrentCommand = async (dir, ssh, sshOptions, task, path) => {
+  return await sshExec(ssh, sshOptions, task, path, 'ln', [
+    SYMLINK_FLAGS,
+    dir,
+    CURRENT_RELEASE_SYMLINK_NAME,
+  ])
+}
+
+const restartProcessCommand = async (
+  processName,
+  ssh,
+  sshOptions,
+  task,
+  path
+) => {
+  return await sshExec(ssh, sshOptions, task, path, 'pm2', [
+    'restart',
+    processName,
+  ])
 }
 
 const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
@@ -262,32 +356,33 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
   tasks.push({
     title: `Symlinking current release...`,
     task: async (_ctx, task) => {
-      await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
-        SYMLINK_FLAGS,
+      await symlinkCurrentCommand(
         yargs.releaseDir,
-        CURRENT_RELEASE_SYMLINK_NAME,
-      ])
+        ssh,
+        sshOptions,
+        task,
+        serverConfig.path
+      )
     },
     skip: () => !yargs.update,
   })
 
-  // start/restart monitoring processes
-  for (const process of serverConfig.processNames) {
+  for (const processName of serverConfig.processNames) {
     if (yargs.firstRun) {
       tasks.push({
-        title: `Starting ${process} process for the first time...`,
+        title: `Starting ${processName} process for the first time...`,
         task: async (_ctx, task) => {
           await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
             'start',
             path.join(CURRENT_RELEASE_SYMLINK_NAME, 'ecosystem.config.js'),
             '--only',
-            process,
+            processName,
           ])
         },
         skip: () => !yargs.restart,
       })
       tasks.push({
-        title: `Saving ${process} state for future startup...`,
+        title: `Saving ${processName} state for future startup...`,
         task: async (_ctx, task) => {
           await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
             'save',
@@ -297,12 +392,15 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
       })
     } else {
       tasks.push({
-        title: `Restarting ${process} process...`,
+        title: `Restarting ${processName} process...`,
         task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
-            'restart',
-            process,
-          ])
+          await restartProcessCommand(
+            processName,
+            ssh,
+            sshOptions,
+            task,
+            serverConfig.path
+          )
         },
         skip: () => !yargs.restart,
       })
@@ -374,6 +472,10 @@ const commands = (yargs, ssh) => {
     if (yargs.maintenance) {
       tasks = tasks.concat(
         maintenanceTasks(yargs.maintenance, ssh, sshOptions, serverConfig)
+      )
+    } else if (yargs.rollback) {
+      tasks = tasks.concat(
+        rollbackTasks(yargs.rollback, ssh, sshOptions, serverConfig)
       )
     } else {
       tasks = tasks.concat(deployTasks(yargs, ssh, sshOptions, serverConfig))
