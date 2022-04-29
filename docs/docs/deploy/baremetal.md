@@ -412,6 +412,24 @@ Note that this will *not* rollback your database—if you had a release that cha
 
 Make sure to thoroughly test releases that change the database before doing it for real!
 
+## Maintenance Page
+
+If you find that you have a particular complex deploy, one that may involve incompatible database changes with the current codebase, or want to make sure that database changes don't occur while in the middle of a deploy, you can put up a maintenance page:
+
+```bash
+yarn rw deploy baremetal --maintenance up
+```
+
+It does this by replacing `web/dist/200.html` with `web/src/maintenance.html`. This means any new web requests, at any URL, will show the maintenance page. This process also stops any services listed in the `processNames` option of `deploy.toml`—this is important for the api server as it will otherwise keep serving requests to users currently running the app, even though no *new* users can get the Javascript packages required to start a new session in their browser.
+
+You can remove the maintenance page with:
+
+```bash
+yarn rw deploy baremetal --maintenance down
+```
+
+Note that the maintenance page will automatically come down as the result of a new deploy as it checks out a new copy of the codebase (with a brand new copy of `web/dist/200.html` and will automatically restart services (bring them all back online).
+
 ## Monitoring
 
 PM2 has a nice terminal-based dashboard for monitoring your services:
