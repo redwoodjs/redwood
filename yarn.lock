@@ -6330,7 +6330,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.182
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.11.27
+    "@types/node": 16.11.28
     "@types/vscode": 1.66.0
     camelcase: 6.3.0
     deepmerge: 4.2.2
@@ -6399,7 +6399,7 @@ __metadata:
     "@types/aws-lambda": 8.10.95
     "@types/babel-core": 6.25.7
     "@types/jest": 27.4.1
-    "@types/node": 16.11.27
+    "@types/node": 16.11.28
     "@types/react": 17.0.44
     "@types/react-dom": 17.0.16
     "@types/webpack": 5.28.0
@@ -8660,10 +8660,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.27":
-  version: 16.11.27
-  resolution: "@types/node@npm:16.11.27"
-  checksum: 97f632f8a3f6d68081e1deec5808204477e237d1916e8fc68f1ac1ccb4fc7c5267990987801437224b36a4141f190f809f9083c207fd3d58a82442bd470a9c52
+"@types/node@npm:16.11.28":
+  version: 16.11.28
+  resolution: "@types/node@npm:16.11.28"
+  checksum: 55f5c2e8913e48f5ceffd8ebe4be50eb3c9d29c8d9aef7f10f1d383a1d583f5d676befa6184bb2a14d779ff419970b603342615346c27d55ee6487bb2e7caba6
   languageName: node
   linkType: hard
 
@@ -9927,6 +9927,26 @@ __metadata:
   bin:
     all-contributors: dist/cli.js
   checksum: 804b371f74ef34137e8d9099f325f9cd4a15b4bb5833bd90d86b65284f54543338952304fa94e07bb6171a0a9d6a6dd49ba6ba5ebd80deaf881dd2b09726eca4
+  languageName: node
+  linkType: hard
+
+"all-contributors-cli@patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 6.20.0
+  resolution: "all-contributors-cli@patch:all-contributors-cli@npm%3A6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch::version=6.20.0&hash=6b460a&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@babel/runtime": ^7.7.6
+    async: ^3.0.1
+    chalk: ^4.0.0
+    didyoumean: ^1.2.1
+    inquirer: ^7.0.4
+    json-fixer: ^1.5.1
+    lodash: ^4.11.2
+    node-fetch: ^2.6.0
+    pify: ^5.0.0
+    yargs: ^15.0.1
+  bin:
+    all-contributors: dist/cli.js
+  checksum: e52c5355836a35ed65a1c9a7699922e2d6afea9053d17304bad5f3b35bd2f8f67e3e93091f46b05e2e723e848f2ae9995f8aed3f4ba3f9f427c29c7c71323498
   languageName: node
   linkType: hard
 
