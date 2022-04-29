@@ -219,6 +219,7 @@ jobs:
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: smoke-test-results
           path: test-results/
