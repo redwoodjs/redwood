@@ -50,6 +50,31 @@ export const handler = async ({ force }) => {
   const rwPaths = getPaths()
   const tasks = new Listr([
     {
+      title: 'Installing packages...',
+      task: async () => {
+        return new Listr([
+          {
+            title:
+              'Install i18n, i18next, react-i18next and i18next-browser-languagedetector',
+            task: async () => {
+              /**
+               * Install i18n, i18next, react-i18next and i18next-browser-languagedetector
+               */
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                'i18n',
+                'i18next',
+                'react-i18next',
+                'i18next-browser-languagedetector',
+              ])
+            },
+          },
+        ])
+      },
+    },
+    {
       title: 'Configure i18n...',
       task: () => {
         /**
