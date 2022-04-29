@@ -6,7 +6,7 @@ import isPortReachable from 'is-port-reachable'
 // Declare worker fixtures.
 export type StorybookFixture = {
   port: number
-  server: any
+  server: string
 }
 
 // Note that we did not provide an test-scoped fixtures, so we pass {}.
@@ -81,10 +81,12 @@ const test = base.extend<any, StorybookFixture>({
       }
 
       console.log('Starting tests!')
-      await use()
+      await use(`Server ready at ${port}`)
     },
     { scope: 'worker', auto: true },
   ],
 })
+
+test.use({ video: 'retain-on-failure' })
 
 export default test

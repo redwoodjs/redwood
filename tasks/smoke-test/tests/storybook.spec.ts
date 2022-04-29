@@ -9,7 +9,9 @@ import storybookTest, {
 
 storybookTest(
   'Loads Cell Stories',
-  async ({ port, page }: PlaywrightTestArgs & StorybookFixture) => {
+  async ({ port, page, server }: PlaywrightTestArgs & StorybookFixture) => {
+    // We do this to make sure playwright doesn't bring the server down
+    console.log(server)
     const STORYBOOK_URL = `http://localhost:${port}/`
 
     await page.goto(STORYBOOK_URL)
@@ -64,7 +66,9 @@ storybookTest(
 
 storybookTest(
   'Loads Cell mocks when Cell is nested in another story',
-  async ({ port, page }: PlaywrightTestArgs & StorybookFixture) => {
+  async ({ port, page, server }: PlaywrightTestArgs & StorybookFixture) => {
+    // We do this to make sure playwright doesn't bring the server down
+    console.log(server)
     const STORYBOOK_URL = `http://localhost:${port}/`
 
     await page.goto(STORYBOOK_URL)
@@ -89,7 +93,9 @@ storybookTest(
 
 storybookTest(
   'Mocks current user, and updates UI while dev server is running',
-  async ({ port, page }: PlaywrightTestArgs & StorybookFixture) => {
+  async ({ port, page, server }: PlaywrightTestArgs & StorybookFixture) => {
+    // We do this to make sure playwright doesn't bring the server down
+    console.log(server)
     const STORYBOOK_URL = `http://localhost:${port}/`
 
     await page.goto(STORYBOOK_URL)
