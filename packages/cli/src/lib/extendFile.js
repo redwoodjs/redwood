@@ -1,14 +1,13 @@
 import fs from 'fs'
 
 /**
- * Convenience function to check if a file contains a particular string.
+ * Convenience function to check if a file includes a particular string.
  * @param {string} path File to read and search for str.
  * @param {string} str The value to search for.
- * @returns true if the contents of the file at path contains the given string, false otherwise.
+ * @returns true if the file exists and the contents thereof include the given string, else false.
  */
-export function fileContains(path, str) {
-  const content = fs.readFileSync(path).toString()
-  return content.includes(str)
+export function fileIncludes(path, str) {
+  return fs.existsSync(path) && fs.readFileSync(path).toString().includes(str)
 }
 
 /**

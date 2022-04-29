@@ -10,6 +10,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import extendStorybookConfiguration from '../../../lib/configureStorybook.js'
+import { fileIncludes } from '../../../lib/extendFile'
 
 export const command = 'i18n'
 export const description = 'Set up i18n'
@@ -46,6 +47,7 @@ const localesExists = (lng) => {
 }
 
 export const handler = async ({ force }) => {
+  const rwPaths = getPaths()
   const tasks = new Listr([
     {
       title: 'Configure i18n...',
@@ -147,6 +149,7 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Configuring Storybook...',
+      skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
       task: async () =>
         extendStorybookConfiguration(
           path.join(__dirname, 'templates', 'storybook.preview.js.template')

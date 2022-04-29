@@ -1,12 +1,13 @@
+import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
 
-import { extendJSXFile, fileContains } from '../../../..//lib/extendFile'
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
+import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'
@@ -54,6 +55,7 @@ export function builder(yargs) {
 
 export async function handler({ force, install, packages }) {
   const rwPaths = getPaths()
+  const configFilePath = path.join(rwPaths.web.config, 'mantine.config.js')
 
   const installPackages = (
     packages.includes(ALL_KEYWORD) ? ALL_MANTINE_PACKAGES : packages
@@ -82,7 +84,7 @@ export async function handler({ force, install, packages }) {
     },
     {
       title: 'Setting up Mantine...',
-      skip: () => fileContains(rwPaths.web.app, 'MantineProvider'),
+      skip: () => fileIncludes(rwPaths.web.app, 'MantineProvider'),
       task: () =>
         extendJSXFile(rwPaths.web.app, {
           insertComponent: {
@@ -99,15 +101,14 @@ export async function handler({ force, install, packages }) {
     {
       title: `Creating Theme File...`,
       task: () => {
-        writeFile(
-          path.join(rwPaths.web.config, 'mantine.config.js'),
-          MANTINE_THEME_AND_COMMENTS,
-          { overwriteExisting: force }
-        )
+        writeFile(configFilePath, MANTINE_THEME_AND_COMMENTS, {
+          overwriteExisting: force,
+        })
       },
     },
     {
       title: 'Configure Storybook...',
+      skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withMantine'),
       task: async () =>
         extendStorybookConfiguration(
           path.join(

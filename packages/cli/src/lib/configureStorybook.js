@@ -2,6 +2,7 @@ import path from 'path'
 import util from 'util'
 
 import fs from 'fs-extra'
+import prettier from 'prettier'
 
 import { merge } from './merge'
 import {
@@ -38,6 +39,11 @@ export default async function extendStorybookConfiguration(
       FunctionDeclaration: keepBoth,
     })
 
-    write(sbPreviewConfigPath, merged)
+    const formatted = prettier.format(merged, {
+      parser: 'babel',
+      ...(await prettier.resolveConfig(sbPreviewConfigPath)),
+    })
+
+    write(sbPreviewConfigPath, formatted)
   }
 }

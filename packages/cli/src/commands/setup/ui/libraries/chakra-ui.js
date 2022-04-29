@@ -6,7 +6,7 @@ import Listr from 'listr'
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
-import { appJSContains, extendAppJS } from '../tasks/setup-component-library'
+import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile'
 
 export const command = 'chakra-ui'
 export const description = 'Set up Chakra UI'
@@ -65,9 +65,9 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Setting up Chakra UI...',
-      skip: () => appJSContains('ChakraProvider'),
+      skip: () => fileIncludes(rwPaths.web.app, 'ChakraProvider'),
       task: () =>
-        extendAppJS({
+        extendJSXFile({
           insertComponent: {
             name: 'ChakraProvider',
             props: { theme: 'extendedTheme' },
@@ -93,6 +93,7 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Configure Storybook...',
+      skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withChakra'),
       task: async () =>
         extendStorybookConfiguration(
           path.join(
