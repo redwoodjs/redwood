@@ -151,7 +151,7 @@ function stripTrailingCommentsStrategy() {
  *     node's binding, if it exists.
  */
 function mergeAST(baseAST, extAST, strategy = {}) {
-  const identify = extractProperty('identifier', strategy) || semanticIdentity
+  const identity = extractProperty('identity', strategy) || semanticIdentity
   const identities = {}
   const baseVisitor = { ...stripTrailingCommentsStrategy() }
   const extVisitor = { ...stripTrailingCommentsStrategy() }
@@ -159,7 +159,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   forEachFunctionOn(strategy, (typename, strat) => {
     extVisitor[typename] = {
       enter(path) {
-        const id = identify(path)
+        const id = identity(path)
         id && (identities[id] ||= []).push(path)
       },
     }
@@ -170,7 +170,7 @@ function mergeAST(baseAST, extAST, strategy = {}) {
         }
       },
       exit(path) {
-        const exts = extractProperty(identify(path), identities)
+        const exts = extractProperty(identity(path), identities)
         if (exts) {
           const proxyPath = makeProxy(path)
           exts.map(makeProxy).forEach((ext) => {
