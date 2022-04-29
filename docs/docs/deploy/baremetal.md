@@ -410,7 +410,7 @@ yarn rw deploy baremetal --rollback 3
 
 Note that this will *not* rollback your database—if you had a release that changed the database, that updated database will still be in effect, but with the previous version of the web and api sides. Trying to undo database migrations is a very difficult proposition and isn't even possible in many cases.
 
-Make sure to extensively test releases that change the database before doing it for real!
+Make sure to thoroughly test releases that change the database before doing it for real!
 
 ## Monitoring
 
