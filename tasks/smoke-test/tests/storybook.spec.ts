@@ -116,8 +116,10 @@ storybookTest(
       )
     )
 
-    await page.waitForLoadState()
-    await page.reload()
+    await Promise.all([
+      page.waitForLoadState(),
+      page.waitForSelector('text=ProfilePage'),
+    ])
 
     await page.locator('text=ProfilePage').click()
 
