@@ -69,6 +69,12 @@ export const builder = (yargs) => {
     type: 'boolean',
   })
 
+  yargs.option('cleanup', {
+    describe: 'Remove old deploy directories',
+    default: true,
+    type: 'boolean',
+  })
+
   yargs.option('releaseDir', {
     describe:
       'Directory to create for the latest release, defaults to timestamp',
@@ -103,7 +109,13 @@ export const builder = (yargs) => {
 // Executes a single command via SSH connection, capturing the exit code of the
 // process. Displays an error and will exit(1) if code is non-zero
 const sshExec = async (ssh, sshOptions, task, path, command, args) => {
-  const result = await ssh.execCommand(`${command} ${args.join(' ')}`, {
+  let sshCommand = command
+
+  if (args) {
+    sshCommand += ` ${args.join(' ')}`
+  }
+
+  const result = await ssh.execCommand(sshCommand, {
     cwd: path,
   })
 
@@ -297,7 +309,22 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
     }
   }
 
-  // TODO: Add a process for cleaning up old deploys
+  tasks.push({
+    title: `Cleaning up old deploys...`,
+    task: async (_ctx, task) => {
+      // add 2 to skip `current` and start on the 6th release
+      const fileStartIndex = (serverConfig.keepReleases || 5) + 2
+
+      await sshExec(
+        ssh,
+        sshOptions,
+        task,
+        serverConfig.path,
+        `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`
+      )
+    },
+    skip: () => !yargs.cleanup,
+  })
 
   return tasks
 }
