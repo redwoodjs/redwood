@@ -50,18 +50,28 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    'generate-release-notes [milestone]',
+    ['generate-release-notes [milestone]', 'notes'],
     'Generates release notes for a given milestone',
     (yargs) => {
       yargs.positional('milestone', {
         describe: 'The milestone to generate release notes for',
         type: 'string',
       })
+
+      yargs.option('release-candidate', {
+        alias: 'rc',
+        default: false,
+        describe: 'Generate release notes for a release candidate',
+        type: 'boolean',
+      })
     },
-    (argv) => generateReleaseNotes(argv.milestone)
+    (argv) =>
+      generateReleaseNotes(argv.milestone, {
+        releaseCandidate: argv.releaseCandidate,
+      })
   )
   .command(
-    'update-prs-milestone',
+    ['update-prs-milestone', 'prs'],
     "Update PRs' milestone from something to something",
     (yargs) => {
       yargs.option('from', {
