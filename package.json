@@ -36,7 +36,8 @@
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-textdocument": "1.0.4",
-    "vscode-languageserver-types": "3.16.0"
+    "vscode-languageserver-types": "3.16.0",
+    "all-contributors-cli@6.20.0": "patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch"
   },
   "devDependencies": {
     "@actions/core": "1.7.0",

@@ -9930,6 +9930,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"all-contributors-cli@patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 6.20.0
+  resolution: "all-contributors-cli@patch:all-contributors-cli@npm%3A6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch::version=6.20.0&hash=6b460a&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@babel/runtime": ^7.7.6
+    async: ^3.0.1
+    chalk: ^4.0.0
+    didyoumean: ^1.2.1
+    inquirer: ^7.0.4
+    json-fixer: ^1.5.1
+    lodash: ^4.11.2
+    node-fetch: ^2.6.0
+    pify: ^5.0.0
+    yargs: ^15.0.1
+  bin:
+    all-contributors: dist/cli.js
+  checksum: e52c5355836a35ed65a1c9a7699922e2d6afea9053d17304bad5f3b35bd2f8f67e3e93091f46b05e2e723e848f2ae9995f8aed3f4ba3f9f427c29c7c71323498
+  languageName: node
+  linkType: hard
+
 "ansi-align@npm:^3.0.0":
   version: 3.0.1
   resolution: "ansi-align@npm:3.0.1"
