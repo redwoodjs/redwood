@@ -228,6 +228,16 @@ const commands = (yargs, ssh) => {
           },
           skip: () => !yargs.restart,
         })
+        tasks.push({
+          title: `Saving ${process} state for future startup...`,
+          task: async (_ctx, task) => {
+            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+              'pm2',
+              'save',
+            ])
+          },
+          skip: () => !yargs.restart,
+        })
       } else {
         tasks.push({
           title: `Restarting ${process} process...`,

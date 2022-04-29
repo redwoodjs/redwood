@@ -149,7 +149,7 @@ export const createYargsForComponentGeneration = ({
         .epilogue(
           `Also see the ${terminalLink(
             'Redwood CLI Reference',
-            `https://redwoodjs.com/reference/command-line-interface#generate-${componentName}`
+            `https://redwoodjs.com/docs/cli-commands#generate-${componentName}`
           )}`
         )
         .option('tests', {

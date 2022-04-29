@@ -466,3 +466,14 @@ export const getDefaultArgs = (builder) => {
     {}
   )
 }
+
+/**
+ * Check if user is using VS Code
+ *
+ * i.e. check for the existance of .vscode folder in root project directory
+ */
+export const usingVSCode = () => {
+  const redwoodPaths = getPaths()
+  const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
+  return fs.existsSync(VS_CODE_PATH)
+}
