@@ -116,7 +116,7 @@ storybookTest(
       )
     )
 
-    await page.reload()
+    await page.waitForLoadState()
 
     await page.locator('text=ProfilePage').click()
 
