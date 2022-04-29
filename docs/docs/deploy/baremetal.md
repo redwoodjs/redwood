@@ -394,6 +394,24 @@ yarn rw deploy baremetal --no-migrate
 
 Run `yarn rw deploy baremetal --help` for the full list of flags. You can set them as `--migrate=false` or use the `--no-migrate` variant.
 
+## Rollback
+
+If you deploy and find something has gone horribly wrong, you can rollback your deploy to the previous release:
+
+```bash
+yarn rw deploy baremetal --rollback
+```
+
+You can even rollback multiple deploys, up to the total number you still have denoted with the `keepReleases` option:
+
+```bash
+yarn rw deploy baremetal --rollback 3
+```
+
+Note that this will *not* rollback your database—if you had a release that changed the database, that updated database will still be in effect, but with the previous version of the web and api sides. Trying to undo database migrations is a very difficult proposition and isn't even possible in many cases.
+
+Make sure to extensively test releases that change the database before doing it for real!
+
 ## Monitoring
 
 PM2 has a nice terminal-based dashboard for monitoring your services:
