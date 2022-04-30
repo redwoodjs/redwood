@@ -76,11 +76,10 @@ export const generateGraphQLSchema = async () => {
               `  It looks like you have a ${name} model in your Prisma schema.`
             ),
             chalk.yellow(
-              // how to get "Book"?
-              `  If Book and ${name} have a relation, you may have to generate SDL or scaffolding for ${name} too.`
+              `  If it's part of a relation, you may have to generate SDL or scaffolding for ${name} too.`
             ),
             chalk.yellow(
-              `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator now.`
+              `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator for ${name} now.`
             ),
             '',
             chalk.yellow(
