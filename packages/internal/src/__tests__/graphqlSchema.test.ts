@@ -1,6 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
+import terminalLink from 'terminal-link'
+
 import { generateGraphQLSchema } from '../generate/graphqlSchema'
 
 const FIXTURE_PATH = path.resolve(
@@ -49,26 +52,40 @@ test('Prints error message when schema loading fails', async () => {
   try {
     await generateGraphQLSchema()
 
-    const invocation1to8 = (console.error as jest.Mock).mock.calls.slice(0, 8)
-    const invocation9 = (console.error as jest.Mock).mock.calls[8]
-    const invocation10 = (console.error as jest.Mock).mock.calls[9]
+    const invocation1to4 = (console.error as jest.Mock).mock.calls.slice(0, 4)
+    const invocation5 = (console.error as jest.Mock).mock.calls[4]
+    const invocation6 = (console.error as jest.Mock).mock.calls[5]
 
-    expect(invocation1to8).toEqual([
+    expect(invocation1to4).toEqual([
       [''],
       ['Schema loading failed.', 'Unknown type: "Shelf".'],
       [''],
-      ['It looks like you have a Shelf model in your database schema.'],
-      ['Maybe you need to generate SDL or scaffolding for Shelf first.'],
-      [''],
       [
-        'See the section on troubleshooting generators ' +
-          '(​https://redwoodjs.com/docs/schema-relations#troubleshooting-generators​) ' +
-          'in our docs for more help',
+        [
+          `  ${chalk.bgYellow(` ${chalk.black.bold('Heads up')} `)}`,
+          '',
+          chalk.yellow(
+            `  It looks like you have a Shelf model in your Prisma schema.`
+          ),
+          chalk.yellow(
+            `  If it's part of a relation, you may have to generate SDL or scaffolding for Shelf too.`
+          ),
+          chalk.yellow(
+            `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator for Shelf now.`
+          ),
+          '',
+          chalk.yellow(
+            `  See the ${terminalLink(
+              'Troubleshooting Generators',
+              'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
+            )} section in our docs for more help.`
+          ),
+          '',
+        ].join('\n'),
       ],
-      [''],
     ])
-    expect(invocation9[0].toString()).toMatch('Error: Unknown type: "Shelf".')
-    expect(invocation10[0]).toMatch('')
+    expect(invocation5[0].toString()).toMatch('Error: Unknown type: "Shelf".')
+    expect(invocation6[0].trim()).toEqual('')
   } finally {
     console.error = oldConsoleError
     delete process.env.RWJS_CWD
