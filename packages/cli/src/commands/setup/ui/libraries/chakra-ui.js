@@ -61,7 +61,7 @@ export async function handler({ force, install }) {
       title: 'Setting up Chakra UI...',
       skip: () => fileIncludes(rwPaths.web.app, 'ChakraProvider'),
       task: () =>
-        extendJSXFile({
+        extendJSXFile(rwPaths.web.app, {
           insertComponent: {
             name: 'ChakraProvider',
             props: { theme: 'extendedTheme' },
