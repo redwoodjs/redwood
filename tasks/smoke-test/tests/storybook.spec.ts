@@ -7,7 +7,7 @@ import storybookTest, {
   StorybookFixture,
 } from '../playwright-fixtures/storybook.fixture'
 
-beforeAll(() => {
+storybookTest.beforeAll(() => {
   const profileStoryPath = path.join(
     process.env.PROJECT_PATH,
     'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
