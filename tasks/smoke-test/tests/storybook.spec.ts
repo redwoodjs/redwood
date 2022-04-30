@@ -7,6 +7,30 @@ import storybookTest, {
   StorybookFixture,
 } from '../playwright-fixtures/storybook.fixture'
 
+beforeAll(() => {
+  const profileStoryPath = path.join(
+    process.env.PROJECT_PATH,
+    'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
+  )
+
+  // Modify profile page stories to mockCurrentUser
+  const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
+
+  fs.writeFileSync(
+    profileStoryPath,
+    profilePageStoryContent.replace(
+      'export const generated = () => {',
+      `export const generated = () => {
+    mockCurrentUser({
+    email: 'ba@zinga.com',
+    id: 55,
+    roles: 'ADMIN',
+  })
+`
+    )
+  )
+})
+
 storybookTest(
   'Loads Cell Stories',
   async ({ port, page, server }: PlaywrightTestArgs & StorybookFixture) => {
@@ -99,28 +123,6 @@ storybookTest(
     const STORYBOOK_URL = `http://localhost:${port}/`
 
     await page.goto(STORYBOOK_URL)
-
-    const profileStoryPath = path.join(
-      process.env.PROJECT_PATH,
-      'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
-    )
-
-    // Modify profile page stories to mockCurrentUser
-    const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
-
-    fs.writeFileSync(
-      profileStoryPath,
-      profilePageStoryContent.replace(
-        'export const generated = () => {',
-        `export const generated = () => {
-      mockCurrentUser({
-      email: 'ba@zinga.com',
-      id: 55,
-      roles: 'ADMIN',
-    })
-  `
-      )
-    )
 
     await Promise.all([
       page.waitForLoadState(),
