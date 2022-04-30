@@ -218,12 +218,6 @@ jobs:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: smoke-test-results
-          path: test-results/
-
       - name: Run `rw info`
         run: |
           yarn rw info
@@ -314,3 +308,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
+
+  upload-video-on-failure:
+    needs: smoke-test
+    if: failure()
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [14, 16]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: upload videos
+      - uses: actions/upload-artifact@v3
+        with:
+          name: smoke-test-results
+          path: test-results/
+
