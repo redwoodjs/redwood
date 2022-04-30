@@ -44,9 +44,9 @@ function skipChildren(path) {
  * We can make merge strategies more terse and intuitive if we pass a Babel Node, rather than a
  * NodePath, to the reducer. This would allow us to write:
  *
- * ArrayExpression: (lhs, rhs) => { [...lhs.elements, ...rhs.elements] }
+ * ArrayExpression: (lhs, rhs) => { lhs.elements.push(...rhs.elements) }
  * instead of
- * ArrayExpression: (lhs, rhs) => { [...lhs.node.elements, ...rhs.node.elements] }
+ * ArrayExpression: (lhs, rhs) => { lhs.node.elements.push(...rhs.node.elements) }
  *
  * It may seem like a small difference, but the code is much more intuitive if you don't have to
  * think about Babel nodes vs paths when writing reducers.
@@ -141,13 +141,19 @@ function stripTrailingCommentsStrategy() {
 }
 
 /**
- * 1. Traverse extAST and track the semantic IDs of all of the nodes for which we have a
- *    merge strategy.
+ * The node types specified in the strategy are copied from extAST into baseAST.
+ *
+ * @param { import("@babel/core").ParseResult } baseAST
+ * @param { import("@babel/core").ParseResult } extAST
+ * @param { Object } strategy
+ *
+ * 1. Traverse extAST and track the semantic IDs of all of the nodes for which we have a merge
+ *    strategy.
  * 2. Traverse baseAST. On node exit, attempt to merge semantically-equivalent ext nodes.
  *     a. When a semantically equivalent ext node is merged, it is pruned from ext.
- * 3. Traverse extAST's body (if any nodes remain) and attempt to put top-level declarations
- *    at their latest-possible positions.
- *  a. Latest-possible is defined as the position immediately preceeding the first use of the
+ * 3. Traverse extAST's body (if any nodes remain) and attempt to put top-level declarations at
+ *    their latest-possible positions.
+ *     a. Latest-possible is defined as the position immediately preceeding the first use of the
  *     node's binding, if it exists.
  */
 function mergeAST(baseAST, extAST, strategy = {}) {
@@ -195,6 +201,14 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   _.forEachRight(others, (exp) => insertBeforeFirstUsage(exp, baseProgram))
 }
 
+/**
+ * Copy specified AST nodes from extension into base. Use reducer functions specified in strategy to
+ * recursively merge from leaf to root.
+ * @param {string} base - a string of Javascript code. Must be well-formed.
+ * @param {string} extension - a string of Javascript code. May refer to bindings only defined in base.
+ * @param {Object} strategy - Mapping of AST node name to reducer functions.
+ * @returns
+ */
 export function merge(base, extension, strategy) {
   function parseReact(code) {
     return parse(code, {
