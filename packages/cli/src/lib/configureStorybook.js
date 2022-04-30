@@ -28,10 +28,7 @@ export default async function extendStorybookConfiguration(
   if (newConfigPath) {
     const read = (path) => fs.readFileSync(path, { encoding: 'utf-8' })
     const write = (path, data) => fs.writeFileSync(path, data)
-    const baseFile = read(sbPreviewConfigPath)
-    const extensionFile = read(newConfigPath)
-
-    const merged = merge(baseFile, extensionFile, {
+    const merged = merge(read(sbPreviewConfigPath), read(newConfigPath), {
       ImportDeclaration: interleave,
       ArrayExpression: concatUnique,
       ObjectExpression: concatUnique,
