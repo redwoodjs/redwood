@@ -1,5 +1,5 @@
-name: 💬 Message Slack
-description: Send a message to slack
+name: 💬 Message Slack Package Publishing
+description: Send an npm publishing message to Slack
 inputs:
   title:
     description: title

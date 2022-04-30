@@ -131,7 +131,7 @@ Run this setup command to get the internals of dbAuth added to our app:
 yarn rw setup auth dbAuth
 ```
 
-When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app make sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
+When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app makes sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
 
 You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
 
@@ -882,7 +882,7 @@ Before we leave this file, take a look at `requireAuth()`. Remember when we talk
 
 ## Session Secret
 
-After the initial `setup` command, which installed dbAuth, you may have noticed that an edit was made to the `.env` file in the root of your project. The `setup` script appened a new ENV var called `SESSION_SECRET` along with a big random string of numbers and letters. This is the encryption key for the cookies that are stored in the user's browser when they log in. This secret should never be shared, never checked into your repo, and should be re-generated for each environment you deploy to.
+After the initial `setup` command, which installed dbAuth, you may have noticed that an edit was made to the `.env` file in the root of your project. The `setup` script appended a new ENV var called `SESSION_SECRET` along with a big random string of numbers and letters. This is the encryption key for the cookies that are stored in the user's browser when they log in. This secret should never be shared, never checked into your repo, and should be re-generated for each environment you deploy to.
 
 You can generate a new value with the `yarn rw g secret` command. It only outputs it to the terminal, you'll need to copy/paste to your `.env` file. Note that if you change this secret in a production environment, all users will be logged out on their next request because the cookie they currently have cannot be decrypted with the new key! They'll need to log in again to a new cookie encrypted with the new key.
 

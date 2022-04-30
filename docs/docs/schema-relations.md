@@ -100,7 +100,7 @@ Almost identical! But now there's an `id` and the SDL/scaffold generators will w
 ## Troubleshooting Generators
 
 Are you getting errors when generating SDLs or scaffolds for your Prisma models?
-There's a known issue in Redwood's GraphQL type generation that happens when generating SDL for or scaffolding out a Prisma model that has relations before the SDL for the related model exists.
+There's a known limitation in Redwood's GraphQL type generation that happens when generating SDL for, or scaffolding out, a Prisma model that has relations before the SDL for the related model exists.
 
 This may sound a little abstract, so let's look at an example. Let's say that you're modeling bookshelves. Your prisma schema has two data models, `Book` and `Shelf`. This is a one to many relationship: a shelf has many books, but a book can only be on one shelf:
 
@@ -156,7 +156,7 @@ type Query {
 ```
 
 What happened?
-Remember the first thing to do when you get an error: _read the error message_.
+Remember, the first thing to do when you get an error: _read the error message_.
 The key is `Unknown type: "Shelf"`.
 The type of `Book`'s `shelf` field is `Shelf`.
 But we didn't generate the SDL for `Shelf` yet, so it doesn't exist.
@@ -164,7 +164,7 @@ And naturally, types can't be generated for it.
 
 But fear not.
 This should be an easy fix.
-There's two ways you can go about it.
+There are two ways you can go about it.
 
 You can generate the SDLs for all the models in the relation, ignoring the errors. This way the last model in the relation should generate cleanly.
 
@@ -188,7 +188,7 @@ model Shelf {
 }
 ```
 
-Then, generate the SDL for or scaffold out each model separately:
+Then, generate the SDL for, or scaffold out, each model separately:
 
 ```
 yarn rw g sdl Book
@@ -218,7 +218,7 @@ For example, in a business, everyone is an employee with a role and possibly som
 * Manager—reports to a Director
 * Employee—reports to a Manager, but has no direct reports
 
-Let's use a self-relation to models this in our Prisma schema:
+Let's use a self-relation to model this in our Prisma schema:
 
 ```js
 model Employee {

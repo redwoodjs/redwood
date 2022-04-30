@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -27,7 +27,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.8.0",
-    "@clerk/clerk-sdk-node": "3.3.7",
+    "@clerk/clerk-sdk-node": "3.3.10",
     "@clerk/types": "2.7.1",
     "@nhost/nhost-js": "1.1.4",
     "@supabase/supabase-js": "1.35.2",
