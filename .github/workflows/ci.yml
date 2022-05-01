@@ -218,11 +218,11 @@ jobs:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
-      - name: upload videos
+      - name: Upload videos if tests failed
         uses: actions/upload-artifact@v3
         with:
           name: smoke-test-results
-          path: test-results/
+          path: /home/runner/work/redwood/redwood/test-results/
 
       - name: Run `rw info`
         run: |
