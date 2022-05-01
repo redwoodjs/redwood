@@ -83,7 +83,7 @@
     "msw": "0.39.2",
     "ncp": "2.0.0",
     "node-notifier": "10.0.1",
-    "nodemon": "2.0.15",
+    "nodemon": "2.0.16",
     "npm-packlist": "4.0.0",
     "octokit": "1.7.1",
     "ora": "5.4.1",
