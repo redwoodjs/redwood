@@ -120,6 +120,16 @@ export function copyFrameworkFilesToProject(
       rimraf.sync(entry)
     }
 
+    const nestedRwfwNodeModulesPath = path.join(
+      packageDstPath,
+      'node_modules',
+      '@redwoodjs'
+    )
+
+    if (fs.existsSync(nestedRwfwNodeModulesPath)) {
+      rimraf.sync(nestedRwfwNodeModulesPath)
+    }
+
     for (const file of files) {
       const src = path.join(
         REDWOOD_PACKAGES_PATH,
