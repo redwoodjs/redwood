@@ -176,7 +176,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [14, 16]
-      fail-fast: true
+      fail-fast: false
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     env:
@@ -217,6 +217,12 @@ jobs:
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+
+      - name: upload videos
+        uses: actions/upload-artifact@v3
+        with:
+          name: smoke-test-results
+          path: test-results/
 
       - name: Run `rw info`
         run: |
@@ -308,19 +314,3 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
-
-  upload-video-on-failure:
-    needs: smoke-test
-    if: failure()
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: upload videos
-        uses: actions/upload-artifact@v3
-        with:
-          name: smoke-test-results
-          path: test-results/
-
