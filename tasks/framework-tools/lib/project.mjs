@@ -106,7 +106,7 @@ export function copyFrameworkFilesToProject(
       files.length,
       'files'
     )
-    rimraf.sync(packageDstPath)
+    rimraf.sync(`${packageDstPath}/**/!node_modules`)
 
     for (const file of files) {
       const src = path.join(
