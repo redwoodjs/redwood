@@ -1,8 +1,10 @@
 /* eslint-env node */
 
-import execa from 'execa'
 import fs from 'node:fs'
 import path from 'node:path'
+
+import execa from 'execa'
+import fg from 'fast-glob'
 import ora from 'ora'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
@@ -106,7 +108,17 @@ export function copyFrameworkFilesToProject(
       files.length,
       'files'
     )
-    rimraf.sync(`${packageDstPath}/**/!node_modules`)
+
+    const entries = fg.sync('*', {
+      absolute: true,
+      cwd: packageDstPath,
+      ignore: ['node_modules'],
+      onlyFiles: false,
+    })
+
+    for (const entry of entries) {
+      rimraf.sync(entry)
+    }
 
     for (const file of files) {
       const src = path.join(
