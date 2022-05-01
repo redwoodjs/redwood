@@ -319,7 +319,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: upload videos
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: smoke-test-results
           path: test-results/
