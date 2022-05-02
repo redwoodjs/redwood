@@ -16221,7 +16221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-static@npm:4.6.1":
+"fastify-static-deprecated@npm:fastify-static@4.6.1":
   version: 4.6.1
   resolution: "fastify-static@npm:4.6.1"
   dependencies:
