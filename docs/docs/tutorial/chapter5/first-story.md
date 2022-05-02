@@ -58,7 +58,7 @@ interface Props {
 }
 
 // highlight-next-line
-const Article = ({ article, summary = false }) => {
+const Article = ({ article, summary = false }: Props) => {
   return (
     <article className="mt-10">
       <header>
@@ -195,7 +195,7 @@ export const Success = ({ articles }) => {
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 import Article from 'src/components/Article'
 
-import type { FindArticleQuery } from 'types/graphql'
+import type { ArticlesQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
