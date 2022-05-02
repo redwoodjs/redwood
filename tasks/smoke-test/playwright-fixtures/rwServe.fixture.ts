@@ -7,13 +7,13 @@ import path from 'node:path'
 import { waitForServer } from '../util'
 
 // Declare worker fixtures.
-type DevServerFixtures = {
+export type ServeFixture = {
   port: number
   server: any
 }
 
 // Note that we did not provide an test-scoped fixtures, so we pass {}.
-const test = base.extend<any, DevServerFixtures>({
+const test = base.extend<any, ServeFixture>({
   port: [
     async ({}, use, workerInfo) => {
       // "port" fixture uses a unique value of the worker process index.
@@ -38,21 +38,24 @@ const test = base.extend<any, DevServerFixtures>({
       console.log(`Running rw serve at ${projectPath}`)
 
       if (projectNeedsBuilding(projectPath)) {
+        console.log('Building project...')
         // skip rw build if its already done
         execa.sync(`yarn rw build`, {
           cwd: projectPath,
           shell: true,
+          stdio: 'inherit',
         })
       }
 
       // Don't wait for this to finish, because it doens't
-      const rwServeHandler = execa.command(`yarn rw serve -p ${port}`, {
+      const serverHandler = execa.command(`yarn rw serve -p ${port}`, {
         cwd: projectPath,
         shell: true,
+        detached: false,
       })
 
       // Pipe out logs so we can debug, when required
-      rwServeHandler.stdout.on('data', (data) => {
+      serverHandler.stdout.on('data', (data) => {
         console.log(
           '[rw-serve-fixture] ',
           Buffer.from(data, 'utf-8').toString()

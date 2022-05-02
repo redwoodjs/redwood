@@ -38,7 +38,7 @@ const BASE_DIR = Cypress.env('RW_PATH')
 export function waitForApiSide() {
   // Pause because chokidar `ignoreInitial` and debounce add at least 1000ms delay
   // to restarting the api-server in the e2e environment.
-  cy.wait(1_000)
+  cy.wait(10_000)
   cy.waitUntil(
     () =>
       cy
@@ -62,7 +62,7 @@ export function waitForApiSide() {
 
 export const test_first_page = () =>
   it('1. Our First Page', () => {
-    //redwoodjs.com/tutorial/our-first-page
+    //redwoodjs.com/docs/tutorial/chapter1/first-page
     cy.visit('http://localhost:8910')
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page home / --force`)
     cy.get('h1').should('contain', 'HomePage')
@@ -70,7 +70,7 @@ export const test_first_page = () =>
 
 export const test_pages = () =>
   it('2. A Second Page and a Link', () => {
-    // https://redwoodjs.com/tutorial/a-second-page-and-a-link
+    // https://redwoodjs.com/docs/tutorial/chapter1/second-page
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
@@ -114,7 +114,7 @@ export const test_layouts = () =>
 
 export const test_dynamic = () =>
   it('4. Getting Dynamic', () => {
-    // https://redwoodjs.com/tutorial/getting-dynamic
+    // https://redwoodjs.com/docs/tutorial/chapter2/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     // need to also handle case where Prisma Client be out of sync
@@ -208,7 +208,7 @@ export const test_cells = () =>
 
 export const test_routing_params = () =>
   it('6. Routing Params', () => {
-    // https://redwoodjs.com/tutorial/routing-params
+    // https://redwoodjs.com/docs/tutorial/chapter2/routing-params
     cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
@@ -273,7 +273,7 @@ export const test_routing_params = () =>
 
 export const test_forms = () =>
   it("7. Everyone's Favorite Thing to Build: Forms", () => {
-    // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
+    // https://redwoodjs.com/docs/tutorial/everyone-s-favorite-thing-to-build-forms
     cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),

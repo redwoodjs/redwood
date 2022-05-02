@@ -1,7 +1,9 @@
 /* eslint-env node, es2021 */
-import template from 'lodash.template'
 import fs from 'node:fs'
 import url from 'node:url'
+
+import template from 'lodash.template'
+import { $ } from 'zx'
 
 import octokit from './octokit.mjs'
 
@@ -13,10 +15,20 @@ import octokit from './octokit.mjs'
  * If no milestone's given, just fetch the latest version milestone (e.g. `v0.42.0`).
  *
  * @param {string} [milestone]
+ * @param {{ releaseCandidate: boolean }} [options]
  */
-export default async function generateReleaseNotes(milestone) {
+export default async function generateReleaseNotes(
+  milestone,
+  { releaseCandidate }
+) {
   // Get the milestone's title, id, and PRs.
   const { title, id } = await getMilestoneId(milestone)
+
+  if (releaseCandidate) {
+    await generateReleaseCandidateReleaseNotes(title)
+    return
+  }
+
   const prs = await getPRsWithMilestone({ milestoneId: id })
 
   const filename = new URL(`${title}ReleaseNotes.md`, import.meta.url)
@@ -27,6 +39,41 @@ export default async function generateReleaseNotes(milestone) {
   })
   fs.writeFileSync(filename, filedata)
   console.log(`Written to ${url.fileURLToPath(filename)}`)
+}
+
+async function generateReleaseCandidateReleaseNotes(milestone) {
+  let { stdout: latestVersion } =
+    await $`yarn npm info @redwoodjs/core@latest --fields version --json`
+
+  latestVersion = 'v' + JSON.parse(latestVersion.trim()).version
+
+  const {
+    repository: {
+      refs: { nodes },
+    },
+  } = await octokit.graphql(
+    `
+        query GetReleaseBranch($milestone: String!) {
+          repository(owner: "redwoodjs", name: "redwood") {
+            refs(first: 1, refPrefix:"refs/heads/", query: $milestone) {
+              nodes {
+                name
+              }
+            }
+          }
+        }
+      `,
+    {
+      milestone,
+    }
+  )
+
+  const [{ name: releaseBranch }] = nodes
+
+  console.log({
+    compare: `https://github.com/redwoodjs/redwood/compare/${latestVersion}...${releaseBranch}`,
+    mergedPrs: `https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${milestone}`,
+  })
 }
 
 // Helpers
@@ -185,6 +232,7 @@ function sortPRs(prs) {
   const features = []
   const fixed = []
   const chore = []
+  const docs = []
   const packageDependencies = []
   const manual = []
 
@@ -217,6 +265,11 @@ function sortPRs(prs) {
       continue
     }
 
+    if (labels.includes('release:docs')) {
+      docs.push(`- ${formatPR(pr)}`)
+      continue
+    }
+
     /**
      * Those that can't be sorted.
      */
@@ -227,6 +280,7 @@ function sortPRs(prs) {
     features: features.join('\n'),
     fixed: fixed.join('\n'),
     chore: chore.join('\n'),
+    docs: docs.join('\n'),
     packageDependencies: packageDependencies.join('\n'),
     manual: manual.join('\n'),
   }
@@ -263,6 +317,10 @@ const interpolate = template(
     '## Chore',
     '',
     '${chore}',
+    '',
+    '## Docs',
+    '',
+    '${docs}',
     '',
     '### Package Dependencies',
     '',

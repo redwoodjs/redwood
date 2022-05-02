@@ -2,7 +2,7 @@
 
 <!-- prettier-ignore-start -->
 <p align="center">
-  <a aria-label="Start the Tutorial" href="https://redwoodjs.com/tutorial">
+  <a aria-label="Start the Tutorial" href="https://redwoodjs.com/docs/tutorial">
     <img alt="" src="https://img.shields.io/badge/Start%20the%20Tutorial-%23BF4722?style=for-the-badge&labelColor=000000&logoWidth=20&logo=RedwoodJS">
   </a>
   <a aria-label="Join the Forums" href="https://community.redwoodjs.com">
@@ -35,9 +35,9 @@ yarn redwood dev
 
 <h3>Resources</h3>
 
-- The [Redwood Tutorial](https://redwoodjs.com/tutorial): The best way to learn Redwood
+- The [Redwood Tutorial](https://redwoodjs.com/docs/tutorial): The best way to learn Redwood
 - The [Redwood CLI](https://redwoodjs.com/docs/cli-commands): code generators, DB helpers, setup commands, and more
-- [Documentation](https://redwoodjs.com/docs) and [Cookbooks](https://redwoodjs.com/cookbook/custom-function)
+- [Documentation](https://redwoodjs.com/docs) and [How To's](https://redwoodjs.com/how-to/custom-function)
 - Join the Community [Forums](https://community.redwoodjs.com) and [Chat](https://discord.gg/redwoodjs)
 
 <br>

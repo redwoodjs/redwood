@@ -1,15 +1,14 @@
-import type { PluginOrDisabledPlugin } from '@envelop/core'
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from '@redwoodjs/api'
+import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
-import { CorsConfig } from '../cors'
-import { OnHealthcheckFn } from '../healthcheck'
 import { LoggerConfig } from '../plugins/useRedwoodLogger'
 import { SdlGlobImports, ServicesGlobImports } from '../types'
 
@@ -23,10 +22,14 @@ export type GetCurrentUser = (
 
 export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
-export type RedwoodGraphQLContext = {
+
+/** This is an interface so you can extend it inside your application when needed */
+export interface RedwoodGraphQLContext {
   event: APIGatewayProxyEvent
   requestContext: LambdaContext
   currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null
+
+  [index: string]: unknown
 }
 
 /**
@@ -42,18 +45,20 @@ export interface GraphQLHandlerOptions {
   loggerConfig: LoggerConfig
 
   /**
-   * @description  Modify the resolver and global context.
+   * @description Modify the resolver and global context.
    */
   context?: Context | ContextFunction
 
   /**
-   * A @description n async function that maps the auth token retrieved from the request headers to an object.
-   * Is it executed when the `auth-provider` contains one of the supported providers.
+   * @description An async function that maps the auth token retrieved from the
+   * request headers to an object.
+   * Is it executed when the `auth-provider` contains one of the supported
+   * providers.
    */
   getCurrentUser?: GetCurrentUser
 
   /**
-   *  @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   * @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
 
@@ -82,14 +87,9 @@ export interface GraphQLHandlerOptions {
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 
   /**
-   *  @description CORS configuration
+   * @description CORS configuration
    */
   cors?: CorsConfig
-
-  /**
-   *  @description Healthcheck
-   */
-  onHealthCheck?: OnHealthcheckFn
 
   /**
    *  @description Limit the complexity of the queries solely by their depth.
@@ -122,15 +122,14 @@ export interface GraphQLHandlerOptions {
   allowedOperations?: AllowedOperations
 
   /**
-   * @description  Custom Envelop plugins
+   * @description Custom Envelop plugins
    */
   extraPlugins?: PluginOrDisabledPlugin[]
 
   /**
-   * @description  Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
    *
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
-   *
    */
   graphiQLEndpoint?: string
 }

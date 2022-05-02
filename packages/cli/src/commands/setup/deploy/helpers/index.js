@@ -1,3 +1,4 @@
+import { spawnSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -66,8 +67,7 @@ export const preRequisiteCheckTask = (preRequisites) => {
               try {
                 await execa(...preReq.command)
               } catch (error) {
-                error.message =
-                  error.message + '\n' + preReq.errorMessage.join(' ')
+                error.message = error.message + '\n' + preReq.errorMessage
                 throw error
               }
             },
@@ -114,10 +114,14 @@ export const addPackagesTask = ({
       ].filter(Boolean),
     ]
   } else {
+    const { stdout } = spawnSync('yarn', ['--version'])
+
+    const yarnVersion = stdout.toString()
+
     installCommand = [
       'yarn',
       [
-        '-W',
+        yarnVersion.startsWith('1') && '-W',
         'add',
         devDependency && '--dev',
         ...packagesWithSameRWVersion,

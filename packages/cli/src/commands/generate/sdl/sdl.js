@@ -137,7 +137,7 @@ const sdlFromSchemaModel = async (name, crud) => {
   }
 }
 
-export const files = async ({ name, crud, tests, typescript }) => {
+export const files = async ({ name, crud = true, tests, typescript }) => {
   const { query, createInput, updateInput, idType, relations, enums } =
     await sdlFromSchemaModel(name, crud)
 
@@ -182,7 +182,7 @@ export const files = async ({ name, crud, tests, typescript }) => {
 export const defaults = {
   ...yargsDefaults,
   crud: {
-    default: false,
+    default: true,
     description: 'Also generate mutations',
     type: 'boolean',
   },
@@ -204,7 +204,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-sdl'
+        'https://redwoodjs.com/docs/cli-commands#generate-sdl'
       )}`
     )
 

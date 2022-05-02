@@ -18,6 +18,10 @@ import type { HttpServerParams } from './server'
  * Also used in index.ts for the api server
  */
 
+const sendProcessReady = () => {
+  return process.send && process.send('ready')
+}
+
 export const commonOptions = {
   port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
   socket: { type: 'string' },
@@ -74,6 +78,7 @@ export const apiServerHandler = async ({
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    sendProcessReady()
   })
   process.on('exit', () => {
     http?.close()
@@ -110,6 +115,7 @@ export const bothServerHandler = async ({
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    sendProcessReady()
   })
 }
 
@@ -151,6 +157,7 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     const webServer = c.green(`http://localhost:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
+    sendProcessReady()
   })
 }
 
