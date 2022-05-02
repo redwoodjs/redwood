@@ -5910,7 +5910,7 @@ __metadata:
     chokidar: 3.5.3
     fast-json-parse: 1.0.3
     fastify: 3.29.0
-    fastify-http-proxy: 6.2.2
+    fastify-http-proxy: 6.3.0
     fastify-raw-body: 3.2.0
     jest: 27.5.1
     lodash.escape: 4.0.1
@@ -16184,13 +16184,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-http-proxy@npm:6.2.2":
+"fastify-http-proxy-deprecated@npm:fastify-http-proxy@6.2.2":
   version: 6.2.2
   resolution: "fastify-http-proxy@npm:6.2.2"
   dependencies:
     fastify-reply-from: ^6.4.1
     ws: ^8.4.2
   checksum: 0361c46cf6ce4c6fe385623e9a450350444226ae828f41052f0c0802a6d3166a4c85096d2720106cc2d2829d7a314bf531d932f16b6e1da86f57154aaed2376d
+  languageName: node
+  linkType: hard
+
+"fastify-http-proxy@npm:6.3.0":
+  version: 6.3.0
+  resolution: "fastify-http-proxy@npm:6.3.0"
+  dependencies:
+    fastify-http-proxy-deprecated: "npm:fastify-http-proxy@6.2.2"
+    process-warning: ^1.0.0
+  checksum: 2253dec433667a537189b6242e7f0db73c66bea566248f85828cd2d0cbf86bc3b734d362ac10adb98d6ac3540520c89a4d70da1d5031e5332c9c860247526677
   languageName: node
   linkType: hard
 
