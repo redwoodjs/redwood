@@ -26,30 +26,6 @@ const test = base.extend<any, StorybookFixture>({
     async ({ port }, use) => {
       console.log('Starting storybook server.....')
 
-      const profileStoryPath = path.join(
-        process.env.PROJECT_PATH,
-        'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
-      )
-
-      // Modify profile page stories to mockCurrentUser
-      const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
-
-      if (!profilePageStoryContent.includes('mockCurrentUser')) {
-        fs.writeFileSync(
-          profileStoryPath,
-          profilePageStoryContent.replace(
-            'export const generated = () => {',
-            `export const generated = () => {
-          mockCurrentUser({
-          email: 'ba@zinga.com',
-          id: 55,
-          roles: 'ADMIN',
-        })
-      `
-          )
-        )
-      }
-
       const projectPath = process.env.PROJECT_PATH
 
       if (!projectPath) {

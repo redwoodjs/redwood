@@ -186,6 +186,34 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     )
   }
 
+  const updateProfilePageStory = async () => {
+    const profileStoryPath = fullPath(
+      'web/src/pages/ProfilePage/ProfilePage.stories.tsx',
+      {
+        addExtension: false,
+      }
+    )
+
+    // Modify profile page stories to mockCurrentUser
+    const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
+
+    if (!profilePageStoryContent.includes('mockCurrentUser')) {
+      fs.writeFileSync(
+        profileStoryPath,
+        profilePageStoryContent.replace(
+          'export const generated = () => {',
+          `export const generated = () => {
+        mockCurrentUser({
+        email: 'ba@zinga.com',
+        id: 55,
+        roles: 'ADMIN',
+      })
+    `
+        )
+      )
+    }
+  }
+
   // add prerender to 3 routes
   const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
   const addPrerender = async () => {
@@ -226,6 +254,10 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       {
         title: 'Updating cell mocks',
         task: () => updateCellMocks(),
+      },
+      {
+        title: 'Update ProfilePage story',
+        task: () => updateProfilePageStory(),
       },
       {
         title: 'Changing routes',
