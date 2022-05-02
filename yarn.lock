@@ -5839,29 +5839,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reach/skip-nav@npm:0.16.0":
-  version: 0.16.0
-  resolution: "@reach/skip-nav@npm:0.16.0"
+"@reach/skip-nav@npm:0.17.0":
+  version: 0.17.0
+  resolution: "@reach/skip-nav@npm:0.17.0"
   dependencies:
-    "@reach/utils": 0.16.0
+    "@reach/utils": 0.17.0
     tslib: ^2.3.0
   peerDependencies:
     react: ^16.8.0 || 17.x
     react-dom: ^16.8.0 || 17.x
-  checksum: 7b4d7ba9f77b7310fb8e70169cb9a5d36c2b9dd62de2c18753b53a09cdd89d14097822c24ae446c0e51d12943ee95718ad9cfe6cf1ec54477671689273852e91
+  checksum: 3f2903ea9e62a9c2475d2f59bcbb338325baf57c2a5ea677a0b4913eca6920072c8f9fff62618f0d68cb46a0665bdf787727674871df465ecbc2aca7571c7723
   languageName: node
   linkType: hard
 
-"@reach/utils@npm:0.16.0":
-  version: 0.16.0
-  resolution: "@reach/utils@npm:0.16.0"
+"@reach/utils@npm:0.17.0":
+  version: 0.17.0
+  resolution: "@reach/utils@npm:0.17.0"
   dependencies:
     tiny-warning: ^1.0.3
     tslib: ^2.3.0
   peerDependencies:
     react: ^16.8.0 || 17.x
     react-dom: ^16.8.0 || 17.x
-  checksum: c12305c63097370871f5faf34916e50a3b8047a31381d6a46caac0399007de024eaecf268c400fd97bba70d207221c5fd15c1e996625ac18c3602ccce39f88c0
+  checksum: 80e2ebaba02d561ef2cc9d295e5bca5904a0fd7641f3b90050eb49a083e1b312547ce6a7b399a2f67b48afaaf8cde946d27c37b438939f87dda8fb9e4bbb70d4
   languageName: node
   linkType: hard
 
@@ -6318,7 +6318,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
-    "@reach/skip-nav": 0.16.0
+    "@reach/skip-nav": 0.17.0
     "@redwoodjs/auth": 1.2.0
     "@types/lodash.isequal": 4.5.6
     core-js: 3.22.3
