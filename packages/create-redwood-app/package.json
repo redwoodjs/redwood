@@ -21,9 +21,9 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/core": "7.16.7",
-    "@babel/node": "7.16.7",
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/core": "7.17.10",
+    "@babel/node": "7.17.10",
+    "@babel/runtime-corejs3": "7.17.9",
     "@redwoodjs/internal": "1.2.0",
     "@redwoodjs/telemetry": "1.2.0",
     "chalk": "4.1.2",
@@ -34,7 +34,7 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
+    "@babel/cli": "7.17.10",
     "jest": "27.5.1",
     "typescript": "4.6.4"
   },

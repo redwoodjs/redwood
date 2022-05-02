@@ -35,8 +35,8 @@
     "mime-types": "2.1.35"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.17.10",
+    "@babel/core": "7.17.10",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "10.1.0",
     "jest": "27.5.1",

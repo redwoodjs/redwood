@@ -43,8 +43,8 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.17.10",
+    "@babel/core": "7.17.10",
     "@envelop/testing": "4.3.1",
     "@envelop/types": "2.0.0",
     "@redwoodjs/auth": "1.2.0",
