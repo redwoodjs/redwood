@@ -756,7 +756,6 @@ import {
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -837,6 +836,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 import {

@@ -30,7 +30,7 @@
     ]
   },
   "dependencies": {
-    "@prisma/sdk": "3.12.0",
+    "@prisma/sdk": "3.13.0",
     "@redwoodjs/internal": "1.2.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
@@ -58,10 +58,10 @@
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.182",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.11.27",
+    "@types/node": "16.11.32",
     "@types/vscode": "1.66.0",
     "jest": "27.5.1",
-    "typescript": "4.6.3"
+    "typescript": "4.6.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
