@@ -87,6 +87,4 @@ const test = base.extend<any, StorybookFixture>({
   ],
 })
 
-test.use({ video: 'retain-on-failure' })
-
 export default test
