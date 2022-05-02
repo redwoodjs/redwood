@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import { fetch } from 'cross-undici-fetch'
-import fg from 'fast-glob'
 
 import getRWPaths from '../../../lib/getRWPaths'
 
@@ -28,16 +27,16 @@ export const updateDevFatalErrorPage = async () => {
    * Now we just fetch and replace files
    */
   for (const [_dir, filenamesToUrls] of Object.entries(dirs)) {
-    const isTSProject =
-      fg.sync('api/tsconfig.json').length > 0 ||
-      fg.sync('web/tsconfig.json').length > 0
+    const isTSPage = fs.existsSync(
+      path.join(webFatalErrorPagesDir, 'FatalErrorPage.tsx')
+    )
 
     for (const [filename, url] of Object.entries(filenamesToUrls)) {
       const res = await fetch(url)
 
       const text = await res.text()
 
-      const newFatalErrorPage = `${filename}.${isTSProject ? 'tsx' : 'js'}`
+      const newFatalErrorPage = `${filename}.${isTSPage ? 'tsx' : 'js'}`
 
       fs.writeFileSync(newFatalErrorPage, text)
     }
