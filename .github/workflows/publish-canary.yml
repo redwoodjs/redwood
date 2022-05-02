@@ -40,7 +40,14 @@ jobs:
       - name: 🚢 Publish
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          yarn publish:canary
+          yarn lerna publish --include-merged-tags \
+                             --canary \
+                             --preid canary \
+                             --dist-tag canary \
+                             --force-publish \
+                             --loglevel verbose \
+                             --no-git-reset \
+                             --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
@@ -59,9 +66,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 💬 Message Slack
-        uses: ./.github/actions/message_slack
+        uses: ./.github/actions/message_slack_publishing
         with:
           title: "🦜 Canary Packages"
           status: ${{ needs.publish-canary.result }}
           version: ${{ needs.publish-canary.outputs.version }}
-          slack-webhook-url: ${{ secrets.SLACK_PUBLISHING_WORKFLOWS_WEBHOOK }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

@@ -74,9 +74,17 @@ jobs:
 
       - name: 🚢 Publish
         run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
-          yarn lerna publish pre$SEMVER --include-merged-tags --canary --preid rc --dist-tag rc --force-publish --loglevel verbose --yes
+          yarn lerna publish pre$SEMVER --include-merged-tags \
+                                        --canary \
+                                        --preid rc \
+                                        --dist-tag rc \
+                                        --force-publish \
+                                        --loglevel verbose \
+                                        --no-git-reset \
+                                        --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
@@ -95,9 +103,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 💬 Message Slack
-        uses: ./.github/actions/message_slack
+        uses: ./.github/actions/message_slack_publishing
         with:
           title: "🏎 RC Packages"
           status: ${{ needs.publish-release-candidate.result }}
           version: ${{ needs.publish-release-candidate.outputs.version }}
-          slack-webhook-url: ${{ secrets.SLACK_PUBLISHING_WORKFLOWS_WEBHOOK }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}
