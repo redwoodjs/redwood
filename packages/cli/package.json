@@ -64,8 +64,8 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.17.10",
+    "@babel/core": "7.17.10",
     "@types/listr": "0.14.4",
     "jest": "27.5.1",
     "typescript": "4.6.4"

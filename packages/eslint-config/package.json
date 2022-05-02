@@ -12,9 +12,9 @@
     "build": "echo 'Nothing to build..'"
   },
   "dependencies": {
-    "@babel/core": "7.16.7",
-    "@babel/eslint-parser": "7.16.5",
-    "@babel/eslint-plugin": "7.16.5",
+    "@babel/core": "7.17.10",
+    "@babel/eslint-parser": "7.17.0",
+    "@babel/eslint-plugin": "7.17.7",
     "@redwoodjs/internal": "1.2.0",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
@@ -31,7 +31,7 @@
     "prettier": "2.6.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
+    "@babel/cli": "7.17.10",
     "jest": "27.5.1",
     "typescript": "4.6.4"
   },
