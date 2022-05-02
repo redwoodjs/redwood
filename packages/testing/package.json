@@ -42,7 +42,7 @@
     "@types/aws-lambda": "8.10.95",
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.4.1",
-    "@types/node": "16.11.28",
+    "@types/node": "16.11.33",
     "@types/react": "17.0.44",
     "@types/react-dom": "17.0.16",
     "@types/webpack": "5.28.0",
@@ -57,7 +57,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "typescript": "4.6.3"
+    "typescript": "4.6.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
