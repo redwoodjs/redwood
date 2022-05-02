@@ -7897,6 +7897,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/react-hooks@npm:8.0.0":
+  version: 8.0.0
+  resolution: "@testing-library/react-hooks@npm:8.0.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    react-error-boundary: ^3.1.0
+  peerDependencies:
+    "@types/react": ^16.9.0 || ^17.0.0
+    react: ^16.9.0 || ^17.0.0
+    react-dom: ^16.9.0 || ^17.0.0
+    react-test-renderer: ^16.9.0 || ^17.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    react-dom:
+      optional: true
+    react-test-renderer:
+      optional: true
+  checksum: 0ebcaa93e94fdaf464b978ec28af063ee1394905350344df8e42cef489af9d372e095e7b11ab988998780c085e9fe657a9900d304d49b835051d0737239de77e
+  languageName: node
+  linkType: hard
+
 "@testing-library/react@npm:12.1.5":
   version: 12.1.5
   resolution: "@testing-library/react@npm:12.1.5"
@@ -25841,6 +25863,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-error-boundary@npm:^3.1.0":
+  version: 3.1.4
+  resolution: "react-error-boundary@npm:3.1.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: f977ca61823e43de2381d53dd7aa8b4d79ff6a984c9afdc88dc44f9973b99de7fd382d2f0f91f2688e24bb987c0185bf45d0b004f22afaaab0f990a830253bfb
+  languageName: node
+  linkType: hard
+
 "react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.2.0":
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
@@ -27051,6 +27084,7 @@ __metadata:
     "@playwright/test": 1.21.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
+    "@testing-library/react-hooks": 8.0.0
     "@testing-library/user-event": 14.1.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.4.1
