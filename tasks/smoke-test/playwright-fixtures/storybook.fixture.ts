@@ -1,4 +1,7 @@
 /* eslint-disable no-empty-pattern */
+import fs from 'fs'
+import path from 'path'
+
 import { test as base } from '@playwright/test'
 import execa from 'execa'
 import isPortReachable from 'is-port-reachable'
@@ -23,6 +26,30 @@ const test = base.extend<any, StorybookFixture>({
     async ({ port }, use) => {
       console.log('Starting storybook server.....')
 
+      const profileStoryPath = path.join(
+        process.env.PROJECT_PATH,
+        'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
+      )
+
+      // Modify profile page stories to mockCurrentUser
+      const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
+
+      if (!profilePageStoryContent.includes('mockCurrentUser')) {
+        fs.writeFileSync(
+          profileStoryPath,
+          profilePageStoryContent.replace(
+            'export const generated = () => {',
+            `export const generated = () => {
+          mockCurrentUser({
+          email: 'ba@zinga.com',
+          id: 55,
+          roles: 'ADMIN',
+        })
+      `
+          )
+        )
+      }
+
       const projectPath = process.env.PROJECT_PATH
 
       if (!projectPath) {
@@ -46,7 +73,7 @@ const test = base.extend<any, StorybookFixture>({
         // Don't wait for this to finish, because it doens't
         const serverHandler = execa(
           `yarn rw storybook`,
-          ['--port', port, '--no-open', '--ci'],
+          ['--port', `${port}`, '--no-open', '--ci'],
           {
             cwd: projectPath,
             shell: true,

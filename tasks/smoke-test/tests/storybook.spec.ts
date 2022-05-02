@@ -92,32 +92,8 @@ storybookTest(
 )
 
 storybookTest(
-  'Mocks current user, and updates UI while dev server is running',
+  'Mocks current user, and displays within story',
   async ({ port, page, server }: PlaywrightTestArgs & StorybookFixture) => {
-    const profileStoryPath = path.join(
-      process.env.PROJECT_PATH,
-      'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
-    )
-
-    // Modify profile page stories to mockCurrentUser
-    const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
-
-    if (!profilePageStoryContent.includes('mockCurrentUser')) {
-      fs.writeFileSync(
-        profileStoryPath,
-        profilePageStoryContent.replace(
-          'export const generated = () => {',
-          `export const generated = () => {
-        mockCurrentUser({
-        email: 'ba@zinga.com',
-        id: 55,
-        roles: 'ADMIN',
-      })
-    `
-        )
-      )
-    }
-
     // We do this to make sure playwright doesn't bring the server down
     console.log(server)
     const STORYBOOK_URL = `http://localhost:${port}/`
