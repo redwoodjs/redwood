@@ -74,6 +74,7 @@ jobs:
 
       - name: 🚢 Publish
         run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
           yarn lerna publish pre$SEMVER --include-merged-tags \

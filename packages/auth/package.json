@@ -27,9 +27,9 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.8.0",
-    "@clerk/clerk-sdk-node": "3.3.8",
+    "@clerk/clerk-sdk-node": "3.3.10",
     "@clerk/types": "2.7.1",
-    "@nhost/nhost-js": "1.1.4",
+    "@nhost/nhost-js": "1.1.6",
     "@supabase/supabase-js": "1.35.2",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.44",
@@ -41,7 +41,7 @@
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
     "supertokens-auth-react": "0.20.4",
-    "typescript": "4.6.3"
+    "typescript": "4.6.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
