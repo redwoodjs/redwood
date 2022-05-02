@@ -2553,6 +2553,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/error@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@fastify/error@npm:2.0.0"
+  checksum: 32b98cb663e462e3d60a31a46306481f7b84657cfdd301dcd7fa9f77389f180e51c641dc4c6900d423daa264e70172bf23493fae031b6af4844b6cc7f17fe77d
+  languageName: node
+  linkType: hard
+
 "@firebase/analytics-compat@npm:0.1.9":
   version: 0.1.9
   resolution: "@firebase/analytics-compat@npm:0.1.9"
@@ -5882,7 +5889,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     fast-json-parse: 1.0.3
-    fastify: 3.28.0
+    fastify: 3.29.0
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
     fastify-static: 4.6.1
@@ -16134,13 +16141,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-error@npm:^0.3.0":
-  version: 0.3.1
-  resolution: "fastify-error@npm:0.3.1"
-  checksum: 291af851cf0b0e44f9229e4292127466921d393eed0e7ea8e40d6a3c428e48808955e1a6fb989184d11d4d65188b69d11b7a4faf536844dccff16d4a51bc7119
-  languageName: node
-  linkType: hard
-
 "fastify-http-proxy@npm:6.2.2":
   version: 6.2.2
   resolution: "fastify-http-proxy@npm:6.2.2"
@@ -16225,15 +16225,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:3.28.0":
-  version: 3.28.0
-  resolution: "fastify@npm:3.28.0"
+"fastify@npm:3.29.0":
+  version: 3.29.0
+  resolution: "fastify@npm:3.29.0"
   dependencies:
     "@fastify/ajv-compiler": ^1.0.0
+    "@fastify/error": ^2.0.0
     abstract-logging: ^2.0.0
     avvio: ^7.1.2
     fast-json-stringify: ^2.5.2
-    fastify-error: ^0.3.0
     find-my-way: ^4.5.0
     flatstr: ^1.0.12
     light-my-request: ^4.2.0
@@ -16244,7 +16244,7 @@ __metadata:
     secure-json-parse: ^2.0.0
     semver: ^7.3.2
     tiny-lru: ^8.0.1
-  checksum: 57057882188aa6669814f2fbeec2f5450e11b5bd89afd6e73743870ebe8718163e15416fe4a351ac90e2be6938a67d47697bc272f85162b08f693a079df5d553
+  checksum: 9e2727908348671052d8eda3a95e6db666951a8fac0b6364ff9dca4d9f31f16a78b4c10a65c182b61db7429101593cde59526d2b5ab7f2fde8223af5a54cd8ee
   languageName: node
   linkType: hard
 
