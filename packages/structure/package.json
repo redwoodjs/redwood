@@ -53,8 +53,8 @@
     "yargs-parser": "21.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.17.10",
+    "@babel/core": "7.17.10",
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.182",
     "@types/lru-cache": "5.1.1",

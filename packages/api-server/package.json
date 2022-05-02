@@ -27,7 +27,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "7.16.7",
+    "@babel/plugin-transform-runtime": "7.17.10",
     "ansi-colors": "4.1.1",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
@@ -45,8 +45,8 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.17.10",
+    "@babel/core": "7.17.10",
     "@types/aws-lambda": "8.10.95",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",

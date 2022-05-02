@@ -28,11 +28,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.16.7",
-    "@babel/plugin-transform-typescript": "7.16.7",
-    "@babel/register": "7.16.7",
-    "@babel/runtime-corejs3": "7.16.7",
-    "@babel/traverse": "7.16.7",
+    "@babel/parser": "7.17.10",
+    "@babel/plugin-transform-typescript": "7.16.8",
+    "@babel/register": "7.17.7",
+    "@babel/runtime-corejs3": "7.17.9",
+    "@babel/traverse": "7.17.10",
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/core": "2.5.1",
     "@graphql-codegen/schema-ast": "2.4.1",
@@ -42,7 +42,7 @@
     "@graphql-codegen/typescript-resolvers": "2.6.1",
     "@redwoodjs/graphql-server": "1.2.0",
     "babel-plugin-graphql-tag": "3.3.0",
-    "babel-plugin-polyfill-corejs3": "0.5.0",
+    "babel-plugin-polyfill-corejs3": "0.5.2",
     "chalk": "4.1.2",
     "core-js": "3.22.3",
     "deepmerge": "4.2.2",
@@ -60,8 +60,8 @@
     "toml": "3.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.17.10",
+    "@babel/core": "7.17.10",
     "@types/babel-plugin-tester": "9.0.4",
     "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
