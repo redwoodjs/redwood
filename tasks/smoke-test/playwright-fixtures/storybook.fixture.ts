@@ -1,7 +1,4 @@
 /* eslint-disable no-empty-pattern */
-import fs from 'fs'
-import path from 'path'
-
 import { test as base } from '@playwright/test'
 import execa from 'execa'
 import isPortReachable from 'is-port-reachable'
@@ -49,7 +46,7 @@ const test = base.extend<any, StorybookFixture>({
         // Don't wait for this to finish, because it doens't
         const serverHandler = execa(
           `yarn rw storybook`,
-          ['--port', `${port}`, '--no-open', '--ci'],
+          ['--port', port, '--no-open', '--ci'],
           {
             cwd: projectPath,
             shell: true,
