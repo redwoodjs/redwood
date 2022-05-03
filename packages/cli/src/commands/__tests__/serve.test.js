@@ -24,7 +24,7 @@ jest.mock('@redwoodjs/internal', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    readFileSync: () => 'File content',
+    // readFileSync: () => 'File content',
     existsSync: () => true,
   }
 })
