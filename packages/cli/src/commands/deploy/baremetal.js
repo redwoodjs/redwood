@@ -140,7 +140,7 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
       {
         title: `Enabling maintenance page...`,
         task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, deployPath, 'mv', [
+          await sshExec(ssh, sshOptions, task, deployPath, 'cp', [
             path.join('web', 'dist', '200.html'),
             path.join('web', 'dist', '200.html.orig'),
           ])
@@ -151,13 +151,34 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
           ])
         },
       },
+      {
+        title: `Stopping ${serverConfig.processNames.join(', ')} processes...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+            'stop',
+            serverConfig.processNames.join(' '),
+          ])
+        },
+      },
     ]
   } else if (status === 'down') {
     return [
       {
+        title: `Starting ${serverConfig.processNames.join(', ')} processes...`,
+        task: async (_ctx, task) => {
+          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+            'start',
+            serverConfig.processNames.join(' '),
+          ])
+        },
+      },
+      {
         title: `Disabling maintenance page...`,
         task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, deployPath, 'mv', [
+          await sshExec(ssh, sshOptions, task, deployPath, 'rm', [
+            path.join('web', 'dist', '200.html'),
+          ])
+          await sshExec(ssh, sshOptions, task, deployPath, 'cp', [
             path.join('web', 'dist', '200.html.orig'),
             path.join('web', 'dist', '200.html'),
           ])
