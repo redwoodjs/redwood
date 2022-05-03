@@ -231,7 +231,11 @@ which will only run test specs matching "Comment" in the API side
 
 ## Testing Components
 
-Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
+Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. To test components, we will utilize the `render` function from `@redwoodjs/testing/web`.
+
+> Please note that RedwoodJS' `render` function is based upon React Testing Library's `render` function and provides a wrapper for mocking the various Redwoodjs providers such as auth, graphQL client, router and location. If you were to utilize React Testing Library's `render` function, you would need to provide your own wrapper function for the appropriate providers.
+
+The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
 
 ```jsx title="web/src/components/Article/Article.js"
 const Article = ({ article }) => {
@@ -254,6 +258,79 @@ describe('Article', () => {
 This test (if it worked) would prove that you are indeed rendering an article. But it's also extremely brittle: any change to the component, even adding a `className` attribute for styling, will cause the test to break. That's not ideal, especially when you're just starting out building your components and will constantly be making changes as you improve them.
 
 > Why do we keep saying this test won't work? Because as far as we can tell there's no easy way to simply render to a string. `render` actually returns an object that has several functions for testing different parts of the output. Those are what we'll look into in the next section.
+
+## Testing Custom  Hooks
+
+Custom hooks are a very useful React tool to encapsulate non-presentational code.  To test custom react hooks, we will utilize the `renderHook` function from `@redwoodjs/testing/web`.
+
+> Please note that RedwoodJS' `renderHook` function is based upon React Testing Library's `renderHook` function and provides a wrapper for mocking the various Redwoodjs providers such as auth, graphQL client, router and location. If you were to utilize React Testing Library's `renderHook` function, you would need to provide your own wrapper function for the appropriate providers. See https://testing-library.com/docs/react-testing-library/api/ for more details.
+
+Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
+
+To use `renderHook`:
+1. call your custom hook from an inline function passed to `renderHook`.  For example:
+```
+const { result } = renderHook(() => useAccumulator(0))
+```
+2. `renderHook` will return an object with the following properties:
+- `result`: The return value of the hook is held in `result.current`.  Think of `result` as a `ref` for the most recent returned value.
+- `rerender`: A function to render the the previously rendered hook with new variables / props.
+
+Let's go through an example.  Given the following custom hook:
+```ts title="web/src/hooks/useAccumulator/useAccumulator.ts"
+const useAccumulator = (initialValue: number) => {
+  const [total, setTotal] = useState(initialValue)
+
+  const add = (value: number) => {
+    const newTotal = total + value
+    setTotal(newTotal)
+    return newTotal
+  }
+
+  return { total, add }
+}
+```
+
+The testing file could look as follows:
+
+```ts title="web/src/hooks/useAccumulator/useAccumulator.test.ts"
+import { renderHook, act } from '@redwoodjs/testing/web'
+import { useAccumulator } from './useAccumulator'
+
+describe('useAccumulator hook', () => {
+  it('has the correct initial state', () => {
+    const { result } = renderHook(() => useAccumulator(0))
+    expect(result.current.total).toBe(0)
+  })
+  it('adds a value', () => {
+    const { result } = renderHook(() => useAccumulator(0))
+    act(() => {
+     result.current.add(5)
+    })
+    expect(result.current.total).toBe(5)
+  })
+  it('adds multiple values', () => {
+    const { result } = renderHook(() => useAccumulator(0))
+    act(() => {
+     result.current.add(5)
+     result.current.add(10)
+    })
+    expect(result.current.total).toBe(15)
+  })
+  it('re-initializes the accumulator if passed a new initilizing value', () => {
+    const { result, rerender } = renderHook(() => useAccumulator(0))
+    act(() => {
+     result.current.add(5)
+      rerender(99)
+    })
+    expect(result.current.total).toBe(99)
+  })
+}
+```
+
+> Note that the `act` is required to make your test run closer to how React woorks in the browser.  It ....
+
+The use of `renderHook` allows you to directly test your custom hooks without first building a component around your custom hook.  However, note that there are cases where encapsulating the hook within a component is a useful way to test.  For more information on the subject see https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
 ### Queries
 

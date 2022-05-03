@@ -20,12 +20,12 @@ export const customRender = (
   })
 }
 
-export const customRenderHook = <Result, Props>(
+export const customRenderHook = <Props, Result>(
   render: (props: Props) => Result,
   options?: RenderHookOptions<Props>
-): RenderHookResult<Result, Props> => {
+): RenderHookResult<Props, Result> => {
   return renderHook(render, {
-    wrapper: (props) => <MockProviders {...props} />,
+    wrapper: (props: any) => <MockProviders {...props} />,
     ...options,
   })
 }
