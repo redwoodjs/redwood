@@ -200,8 +200,6 @@ const maintenanceTasks = (status, ssh, serverConfig) => {
         },
       },
     ]
-  } else {
-    throw new Error(`No known maintenance task called "${status}"`)
   }
 }
 
@@ -258,7 +256,6 @@ const rollbackTasks = (count, ssh, serverConfig) => {
           processName,
           ssh,
           serverConfig,
-          task,
           serverConfig.path
         )
       },
@@ -276,13 +273,7 @@ const symlinkCurrentCommand = async (dir, ssh, path) => {
   ])
 }
 
-const restartProcessCommand = async (
-  processName,
-  ssh,
-  serverConfig,
-  task,
-  path
-) => {
+const restartProcessCommand = async (processName, ssh, serverConfig, path) => {
   return await sshExec(ssh, path, serverConfig.monitorCommand, [
     'restart',
     processName,
@@ -404,7 +395,6 @@ const deployTasks = (yargs, ssh, serverConfig) => {
             processName,
             ssh,
             serverConfig,
-            task,
             serverConfig.path
           )
         },
@@ -431,7 +421,7 @@ const deployTasks = (yargs, ssh, serverConfig) => {
   return tasks
 }
 
-export const serverConfigWithDefaults = (yargs, serverConfig) => {
+export const serverConfigWithDefaults = (serverConfig, yargs) => {
   return {
     ...DEFAULT_SERVER_CONFIG,
     ...serverConfig,
