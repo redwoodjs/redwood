@@ -52,7 +52,7 @@ describe('yarn rw serve', () => {
     jest.clearAllMocks()
   })
 
-  it.only('Should proxy serve api with params to api-server handler', async () => {
+  it('Should proxy serve api with params to api-server handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
     parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
