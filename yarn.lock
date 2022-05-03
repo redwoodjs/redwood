@@ -18520,12 +18520,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore-walk@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "ignore-walk@npm:4.0.1"
+"ignore-walk@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "ignore-walk@npm:5.0.1"
   dependencies:
-    minimatch: ^3.0.4
-  checksum: bda7e6a8fd6eeab83e41bff9e9582f30225bff64e1a58063888f24c8e788d599d937be688afa0190665b9ffb33c071163d622fe4a2798d82dcb388e1de59889c
+    minimatch: ^5.0.1
+  checksum: 0d157a54d6d11af0c3059fdc7679eef3b074e9a663d110a76c72788e2fb5b22087e08b21ab767718187ac3396aca4d0aa6c6473f925b19a74d9a00480ca7a76e
   languageName: node
   linkType: hard
 
@@ -23161,17 +23161,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-packlist@npm:4.0.0":
-  version: 4.0.0
-  resolution: "npm-packlist@npm:4.0.0"
+"npm-packlist@npm:5.0.0":
+  version: 5.0.0
+  resolution: "npm-packlist@npm:5.0.0"
   dependencies:
     glob: ^7.2.0
-    ignore-walk: ^4.0.1
+    ignore-walk: ^5.0.1
     npm-bundled: ^1.1.2
     npm-normalize-package-bin: ^1.0.1
   bin:
     npm-packlist: bin/index.js
-  checksum: 5110dc0b9cc06e72769804de4f1e8b552984fd6bd6a2cdd3011cf62c68b29e488918b836071b22fa6841ef8094701dbee050bff2edb86de7e1572600eb3fc8bb
+  checksum: 455b9a0dcfc5e7dbec33c315e231f5048e87680ab01607604d02f1bbe15d7d20b330de91e282f99a9af48f50fc1ef6e23d2adc29c366b171254a8978d5d6c694
   languageName: node
   linkType: hard
 
@@ -27066,7 +27066,7 @@ __metadata:
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.16
-    npm-packlist: 4.0.0
+    npm-packlist: 5.0.0
     octokit: 1.7.1
     ora: 5.4.1
     prompts: 2.4.2
