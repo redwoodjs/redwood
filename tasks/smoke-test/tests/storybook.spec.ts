@@ -109,6 +109,12 @@ storybookTest(
 
     await page.locator('text=ProfilePage').click()
 
+    try {
+      await page.waitForSelector('text=ba@zinga.com', { timeout: 5_500 })
+    } catch {
+      await page.reload()
+    }
+
     const usernameRow = await page
       .frameLocator('#storybook-preview-iframe')
       .locator('*css=tr >> text=EMAIL')
