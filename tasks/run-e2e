@@ -7,7 +7,8 @@ const path = require('path')
 const execa = require('execa')
 const fg = require('fast-glob')
 const fs = require('fs-extra')
-const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
 
 // This script sets up a blank RedwoodJS app into a directory.
 // It uses the packages from the RedwoodJS framework (../packages).
@@ -179,7 +180,7 @@ const initGit = () => {
   })
 }
 
-const args = yargs
+const args = yargs(hideBin(process.argv))
   .option('create-project', { default: true, type: 'boolean', alias: 'create' })
   .option('build-framework', { default: true, type: 'boolean', alias: 'build' })
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
@@ -190,7 +191,7 @@ const args = yargs
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
   .help()
-  .strict().argv
+  .parse()
 
 const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
 let REDWOOD_PROJECT_DIRECTORY =
