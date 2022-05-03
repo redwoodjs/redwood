@@ -132,7 +132,10 @@ storybookTest(
     await page.locator('text=ProfilePage').click()
 
     try {
-      await page.waitForSelector('text=ba@zinga.com', { timeout: 5_500 })
+      await page
+        .frameLocator('#storybook-preview-iframe')
+        .locator('css=h1 >> text=Profile')
+        .waitFor({ timeout: 5_000 })
     } catch {
       await page.reload()
     }
