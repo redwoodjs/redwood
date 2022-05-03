@@ -28,7 +28,7 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@vscode/ripgrep": "1.14.2",
     "core-js": "3.22.4",
-    "cross-undici-fetch": "0.3.6",
+    "cross-undici-fetch": "0.4.1",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.11",
     "findup-sync": "5.0.0",
