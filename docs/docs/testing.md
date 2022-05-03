@@ -261,14 +261,14 @@ This test (if it worked) would prove that you are indeed rendering an article. B
 
 ## Testing Custom  Hooks
 
-Custom hooks are a very useful React tool to encapsulate non-presentational code.  To test custom react hooks, we will utilize the `renderHook` function from `@redwoodjs/testing/web`.
+Custom hooks are a very useful React tool to encapsulate non-presentational code. To test custom react hooks, we will utilize the `renderHook` function from `@redwoodjs/testing/web`.
 
 > Please note that RedwoodJS' `renderHook` function is based upon React Testing Library's `renderHook` function and provides a wrapper for mocking the various Redwoodjs providers such as auth, graphQL client, router and location. If you were to utilize React Testing Library's `renderHook` function, you would need to provide your own wrapper function for the appropriate providers. See https://testing-library.com/docs/react-testing-library/api/ for more details.
 
 Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
 
 To use `renderHook`:
-1. call your custom hook from an inline function passed to `renderHook`.  For example:
+1. call your custom hook from an inline function passed to `renderHook`. For example:
 ```
 const { result } = renderHook(() => useAccumulator(0))
 ```
@@ -276,7 +276,7 @@ const { result } = renderHook(() => useAccumulator(0))
 - `result`: The return value of the hook is held in `result.current`.  Think of `result` as a `ref` for the most recent returned value.
 - `rerender`: A function to render the the previously rendered hook with new variables / props.
 
-Let's go through an example.  Given the following custom hook:
+Let's go through an example. Given the following custom hook:
 ```ts title="web/src/hooks/useAccumulator/useAccumulator.ts"
 const useAccumulator = (initialValue: number) => {
   const [total, setTotal] = useState(initialValue)
@@ -328,9 +328,9 @@ describe('useAccumulator hook', () => {
 }
 ```
 
-> Note that the `act` is required to make your test run closer to how React woorks in the browser.  It ....
+> Note that the `act` is required to make your test run closer to how React woorks in the browser. It ....
 
-The use of `renderHook` allows you to directly test your custom hooks without first building a component around your custom hook.  However, note that there are cases where encapsulating the hook within a component is a useful way to test.  For more information on the subject see https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
+The use of `renderHook` allows you to directly test your custom hooks without first building a component around your custom hook. However, note that there are cases where encapsulating the hook within a component is a useful way to test. For more information on the subject see https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
 ### Queries
 
