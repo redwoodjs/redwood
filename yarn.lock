@@ -2553,6 +2553,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/static@npm:5.0.1":
+  version: 5.0.1
+  resolution: "@fastify/static@npm:5.0.1"
+  dependencies:
+    content-disposition: ^0.5.3
+    encoding-negotiator: ^2.0.1
+    fastify-plugin: ^3.0.0
+    glob: ^7.1.4
+    p-limit: ^3.1.0
+    readable-stream: ^3.4.0
+    send: ^0.17.1
+  checksum: 683e1a705d3ebfb40d18c72490ea050bb61e1778a00e15a40c8476f2e29bc3ade32cc6e3082221962312d5b4d67214fd4ba066bb7cdae39b54849121cb27a6d3
+  languageName: node
+  linkType: hard
+
 "@fastify/url-data@npm:4.0.0":
   version: 4.0.0
   resolution: "@fastify/url-data@npm:4.0.0"
@@ -5882,6 +5897,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
+    "@fastify/static": 5.0.1
     "@fastify/url-data": 4.0.0
     "@types/aws-lambda": 8.10.95
     "@types/lodash.escape": 4.0.7
@@ -5896,7 +5912,6 @@ __metadata:
     fastify: 3.29.0
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
-    fastify-static: 4.6.1
     jest: 27.5.1
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
@@ -16218,21 +16233,6 @@ __metadata:
     tiny-lru: ^8.0.1
     undici: ^4.0.0
   checksum: ef750fd6381943a5d79fa3ccfe16bf5e0a5a6123a0539234125bf6a8f4617e3163cddb67e54fe3d3830f40190416116b2072ea033dd54e566dcdcfef3db31f0f
-  languageName: node
-  linkType: hard
-
-"fastify-static-deprecated@npm:fastify-static@4.6.1":
-  version: 4.6.1
-  resolution: "fastify-static@npm:4.6.1"
-  dependencies:
-    content-disposition: ^0.5.3
-    encoding-negotiator: ^2.0.1
-    fastify-plugin: ^3.0.0
-    glob: ^7.1.4
-    p-limit: ^3.1.0
-    readable-stream: ^3.4.0
-    send: ^0.17.1
-  checksum: 59ac784b90d0da8f09461b9810dbce601fb207e6aa7783c5069ca381b2d1fbc254e3e9f9e61b4b6d02345431de812ec01fe1da346e542b99944f7a6933eb2bb4
   languageName: node
   linkType: hard
 
