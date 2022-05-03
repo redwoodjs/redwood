@@ -6047,7 +6047,7 @@ __metadata:
     jest: 27.5.1
     jscodeshift: 0.13.1
     prettier: 2.6.2
-    tasuku: 1.0.2
+    tasuku: 2.0.0
     tempy: 1.0.1
     toml: 3.0.0
     yargs: 16.2.0
@@ -29028,12 +29028,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tasuku@npm:1.0.2":
-  version: 1.0.2
-  resolution: "tasuku@npm:1.0.2"
+"tasuku@npm:2.0.0":
+  version: 2.0.0
+  resolution: "tasuku@npm:2.0.0"
   dependencies:
     yoga-layout-prebuilt: 1.10.0
-  checksum: c143b7f2b2797b9c279910858fe14cef27aa613bbc5676cfa08cb51e2c191bbe956d8121ba9de85f266d67e2b0b6a5ffd3d71f4e82293fa74ad762aae2eda407
+  checksum: 0c79080b093832e2084532ba62ab6454a6fd3871575bc4881e5e1545a40c63061b3d23f8e33609391e30b593b102b9e81ec8fae2a013306fb7296a99e65b24b2
   languageName: node
   linkType: hard
 
