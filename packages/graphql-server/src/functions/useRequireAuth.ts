@@ -40,6 +40,8 @@ export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
           globalContext.currentUser = currentUser
         }
       } catch (e) {
+        globalContext.currentUser = null
+
         if (process.env.NODE_ENV === 'development') {
           console.warn('This warning is only printed in development mode.')
           console.warn(
