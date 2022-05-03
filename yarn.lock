@@ -3686,9 +3686,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@graphql-yoga/common@npm:2.4.0"
+"@graphql-yoga/common@npm:2.4.1":
+  version: 2.4.1
+  resolution: "@graphql-yoga/common@npm:2.4.1"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3703,7 +3703,7 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: d2adede9444c3d175b28d7290a7fd0548a06aed30df67ea6906479c70cd84dfde3aed5fa6edfb4b395b945ea2228b6ad13b16c959d887918268a98d39c023ce9
+  checksum: d706ec41e5aff452fceb332eb279b02f12a2a0d688b8e9ca952d953441cbc5fa4e4ad74d01f73d73855e312e18601526b351f9ebc77d42d07392eb4831261744
   languageName: node
   linkType: hard
 
@@ -6252,7 +6252,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.10
     "@graphql-tools/schema": 8.3.10
     "@graphql-tools/utils": 8.6.9
-    "@graphql-yoga/common": 2.4.0
+    "@graphql-yoga/common": 2.4.1
     "@prisma/client": 3.13.0
     "@redwoodjs/api": 1.2.1
     "@redwoodjs/auth": 1.2.1
