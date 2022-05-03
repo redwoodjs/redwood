@@ -74,4 +74,5 @@ module.exports = {
       },
     ],
   },
+  resolver: path.resolve(__dirname, './resolver.js'),
 }
