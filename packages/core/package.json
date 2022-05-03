@@ -29,7 +29,9 @@
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "prepublishOnly": "NODE_ENV=production yarn build"
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
   },
   "dependencies": {
     "@babel/cli": "7.16.7",
@@ -87,7 +89,8 @@
     "webpack-retry-chunk-load-plugin": "3.0.0"
   },
   "devDependencies": {
-    "@types/rimraf": "3.0.2"
+    "@types/rimraf": "3.0.2",
+    "jest": "27.5.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
