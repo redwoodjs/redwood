@@ -2553,6 +2553,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/url-data@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@fastify/url-data@npm:4.0.0"
+  dependencies:
+    fastify-plugin: ^3.0.0
+    uri-js: ^4.2.1
+  checksum: 20adcf110698616cab9c612ab71cac91d7f4b3818be8abbbb6814610fc22729563797170b2df92548b589a71bfd3339eec408dea2e161f92c1876b86811bc735
+  languageName: node
+  linkType: hard
+
 "@firebase/analytics-compat@npm:0.1.9":
   version: 0.1.9
   resolution: "@firebase/analytics-compat@npm:0.1.9"
@@ -5872,6 +5882,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
+    "@fastify/url-data": 4.0.0
     "@types/aws-lambda": 8.10.95
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
@@ -5886,7 +5897,6 @@ __metadata:
     fastify-http-proxy: 6.2.2
     fastify-raw-body: 3.2.0
     fastify-static: 4.6.1
-    fastify-url-data: 3.1.0
     jest: 27.5.1
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
@@ -16198,26 +16208,6 @@ __metadata:
     readable-stream: ^3.4.0
     send: ^0.17.1
   checksum: 59ac784b90d0da8f09461b9810dbce601fb207e6aa7783c5069ca381b2d1fbc254e3e9f9e61b4b6d02345431de812ec01fe1da346e542b99944f7a6933eb2bb4
-  languageName: node
-  linkType: hard
-
-"fastify-url-data-deprecated@npm:fastify-url-data@3.0.3":
-  version: 3.0.3
-  resolution: "fastify-url-data@npm:3.0.3"
-  dependencies:
-    fastify-plugin: ^2.0.0
-    uri-js: ^4.2.1
-  checksum: a62200a34387422689dff99dd86a5da8763385cb0238b5ebff91c4db0c4d18938beae136c9d170b1fe7ee6bf712bf2dd71c7eae52e9ae26f0a92ff72d2b7ef67
-  languageName: node
-  linkType: hard
-
-"fastify-url-data@npm:3.1.0":
-  version: 3.1.0
-  resolution: "fastify-url-data@npm:3.1.0"
-  dependencies:
-    fastify-url-data-deprecated: "npm:fastify-url-data@3.0.3"
-    process-warning: ^1.0.0
-  checksum: 0879959d663051d736c6bf1f6873ee0f2d4b35955ed6611e50cdd9bf64d52ec6a9dea80e7798102bb5af77adee1fa5e130ddc55395faf1bde7d73788b6d8f47c
   languageName: node
   linkType: hard
 
