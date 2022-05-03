@@ -190,11 +190,13 @@ function wrapAffectedResolvers(
   })
 }
 
+export type useRedwoodDirectiveReturn = Plugin<{
+  onResolverCalled: ValidatorDirectiveFunc | TransformerDirectiveFunc
+}>
+
 export const useRedwoodDirective = (
   options: DirectivePluginOptions
-): Plugin<{
-  onResolverCalled: ValidatorDirectiveFunc | TransformerDirectiveFunc
-}> => {
+): useRedwoodDirectiveReturn => {
   /**
    * This symbol is added to the schema extensions for checking whether the transform got already applied.
    */

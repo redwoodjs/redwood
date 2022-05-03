@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
+
 import {
   EnvelopError,
   FormatErrorHandler,
@@ -103,9 +105,10 @@ export const createGraphQLHandler = ({
     const projectDirectives = makeDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
-      redwoodDirectivePlugins = projectDirectives.map((directive) =>
-        useRedwoodDirective(directive as DirectivePluginOptions)
-      )
+      ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
+        projectDirectives.map((directive) =>
+          useRedwoodDirective(directive as DirectivePluginOptions)
+        )
     }
 
     schema = makeMergedSchema({
