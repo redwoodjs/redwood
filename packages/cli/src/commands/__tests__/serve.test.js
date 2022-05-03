@@ -24,7 +24,6 @@ jest.mock('@redwoodjs/internal', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    // readFileSync: () => 'File content',
     existsSync: () => true,
   }
 })
@@ -53,7 +52,7 @@ describe('yarn rw serve', () => {
     jest.clearAllMocks()
   })
 
-  it('Should proxy serve api with params to api-server handler', async () => {
+  it.only('Should proxy serve api with params to api-server handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
     parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
