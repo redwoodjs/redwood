@@ -29,7 +29,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.16.7",
     "@fastify/http-proxy": "7.1.0",
-    "@fastify/static": "5.0.1",
+    "@fastify/static": "5.0.2",
     "@fastify/url-data": "4.0.0",
     "ansi-colors": "4.1.1",
     "chalk": "4.1.2",
