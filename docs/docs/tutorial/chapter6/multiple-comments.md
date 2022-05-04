@@ -483,6 +483,7 @@ But in this case we can do a little more to make sure `CommentsCell` is doing wh
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
+// highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
