@@ -22,7 +22,7 @@ yarn rw setup ui tailwindcss
 
 However, none of the screenshots that follow will come anywhere close to what you're seeing in your browser (except for those isolated components you build in Storybook) so you may want to just start with the [example repo](https://github.com/redwoodjs/redwood-tutorial). You'll also be missing out on a good starting test suite that we've added!
 
-If you're *still* set on continuting with your own repo, and you deployed to a service like Netlify, you would have changed the database provider in `schema.prisma` to `postgresql`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead good ol' SQLite (what we were using locally to build everything in the first half).
+If you're *still* set on continuing with your own repo, and you deployed to a service like Netlify, you would have changed the database provider in `schema.prisma` to `postgresql`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead good ol' SQLite (what we were using locally to build everything in the first half).
 
 Once you're ready, start up the dev server:
 
