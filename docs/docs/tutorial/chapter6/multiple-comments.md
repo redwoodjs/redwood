@@ -401,7 +401,7 @@ The default `CommentsCell.test.{js,tsx}` actually tests every state for us, albe
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
 import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
@@ -436,7 +436,7 @@ describe('CommentsCell', () => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+```tsx title="web/src/components/CommentsCell/CommentsCell.test.tsx"
 import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
