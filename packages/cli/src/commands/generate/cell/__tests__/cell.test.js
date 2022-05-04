@@ -26,7 +26,9 @@ let singleWordFiles,
   modelPluralMatchesSingularWithList,
   modelPluralMatchesSingularWithoutList,
   modelWithStringId,
-  modelWithStringIdList
+  modelWithStringIdList,
+  findDataByIdTypeScript,
+  listInferredFromNameTypeScript
 
 beforeAll(async () => {
   singleWordFiles = await cell.files({
@@ -117,6 +119,20 @@ beforeAll(async () => {
     tests: true,
     stories: true,
     list: true,
+  })
+
+  findDataByIdTypeScript = await cell.files({
+    name: 'Bazinga',
+    tests: true,
+    stories: true,
+    typescript: true,
+  })
+
+  listInferredFromNameTypeScript = await cell.files({
+    name: 'Members',
+    tests: true,
+    stories: true,
+    typescript: true,
   })
 })
 
@@ -436,6 +452,67 @@ test('generates list cells if name is plural', () => {
 
   // Check the contents
   expect(listInferredFromName[CELL_PATH]).toMatchSnapshot()
+})
+
+test('TypeScript: generates list cells if list flag passed in', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.tsx'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.test.tsx'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.stories.tsx'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.mock.ts'
+  )
+
+  // Check the file names
+  expect(Object.keys(findDataByIdTypeScript)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(findDataByIdTypeScript[CELL_PATH]).toMatchSnapshot()
+  expect(findDataByIdTypeScript[TEST_PATH]).toMatchSnapshot()
+  expect(findDataByIdTypeScript[STORY_PATH]).toMatchSnapshot()
+  expect(findDataByIdTypeScript[MOCK_PATH]).toMatchSnapshot()
+})
+
+test('TypeScript: generates list cells if name is plural', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.tsx'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.tsx'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.tsx'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.ts'
+  )
+
+  // Check the file names
+  expect(Object.keys(listInferredFromNameTypeScript)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(listInferredFromNameTypeScript[CELL_PATH]).toMatchSnapshot()
 })
 
 test('"equipment" with list flag', () => {

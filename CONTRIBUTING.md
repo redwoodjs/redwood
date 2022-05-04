@@ -86,7 +86,7 @@ You can create a Redwood Project that contains a lot of functionality in just a 
 1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
-4. then applies code mods from the [Redwood tutorial](/docs/tutorial/foreward/) to add functionality and styling
+4. then applies code mods from the [Redwood tutorial](https://redwoodjs.com/tutorial) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
 Run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project.
@@ -119,7 +119,11 @@ As you make changes to the Redwood Framework, you'll want to see your changes re
 
 > `rwfw` is short for Redwood Framework.
 
-Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`:
+The command requires an env var `RWFW_PATH`. Unless you add the env var and value to your shell, the command structure will be `RWFW_PATH=<framework directory> yarn rwfw [option]`.
+
+> Note: On Windows, use `yarn cross-env RWFW_PATH=<framework directory> rwfw [option]`
+
+Navigate to your Redwood Project and run the following, replacing `~/redwood` to match your local path:
 
 ```terminal
 cd redwood-project
@@ -207,7 +211,7 @@ Within your Framework directory, use the following tools and commands to test yo
 
 ### E2E Integration Tests
 
-We use Cypress to test the steps in the [tutorial](/docs/tutorial/foreward/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
+We use Cypress to test the steps in the [tutorial](https://redwoodjs.com/tutorial). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
 yarn e2e

@@ -321,7 +321,7 @@ yarn redwood deploy vercel --no-data-migrate
 Rollback changes made by the generate command.
 
 ```
-yarn redwood d <type>
+yarn redwood destroy <type>
 ```
 
 | Command              | Description                                                                     |
@@ -334,6 +334,7 @@ yarn redwood d <type>
 | `scaffold <model>`   | Destroy pages, SDL, and Services files based on a given DB schema Model         |
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
+| `directive <name>`   | Destroy a directive                                                             |
 
 ## exec
 
@@ -395,7 +396,7 @@ If your project is configured for TypeScript (see [TypeScript docs](typescript.m
 
 **Undoing a Generator with a Destroyer**
 
-Most generate commands (i.e., everything but `yarn redwood generate dataMigration`) can be undone by their corresponding destroy command. For example, `yarn redwood generate cell` can be undone with `yarn redwood d cell`.
+Most generate commands (i.e., everything but `yarn redwood generate dataMigration`) can be undone by their corresponding destroy command. For example, `yarn redwood generate cell` can be undone with `yarn redwood destroy cell`.
 
 ### generate cell
 
@@ -425,7 +426,7 @@ See the [Cells](tutorial/chapter2/cells.md) section of the Tutorial for usage ex
 **Destroying**
 
 ```
-yarn redwood d cell <name>
+yarn redwood destroy cell <name>
 ```
 
 **Example**
@@ -485,7 +486,7 @@ Redwood loves function components and makes extensive use of React Hooks, which 
 **Destroying**
 
 ```
-yarn redwood d component <name>
+yarn redwood destroy component <name>
 ```
 
 **Example**
@@ -558,6 +559,12 @@ yarn redwood generate directive <name>
 
 See [Redwood Directives](directives.md).
 
+**Destroying**
+
+```
+yarn redwood destroy directive <name>
+```
+
 **Example**
 
 Generating a `myDirective` directive using the interactive command:
@@ -593,7 +600,7 @@ See the [Custom Function](how-to/custom-function.md) how to.
 **Destroying**
 
 ```
-yarn redwood d function <name>
+yarn redwood destroy function <name>
 ```
 
 **Example**
@@ -662,7 +669,7 @@ See the [Layouts](tutorial/chapter1/layouts.md) section of the tutorial.
 **Destroying**
 
 ```
-yarn redwood d layout <name>
+yarn redwood destroy layout <name>
 ```
 
 **Example**
@@ -752,7 +759,7 @@ This also updates `Routes.js` in `./web/src`.
 **Destroying**
 
 ```
-yarn redwood d page <name> [path]
+yarn redwood destroy page <name> [path]
 ```
 
 **Examples**
@@ -978,7 +985,7 @@ Notes:
 **Destroying**
 
 ```
-yarn redwood d scaffold <model>
+yarn redwood destroy scaffold <model>
 ```
 
 Notes:
@@ -991,6 +998,13 @@ Notes:
 [generate]
   nestScaffoldByModel = false
 ```
+
+**Troubleshooting**
+
+If you see `Error: Unknown type: ...`, don't panic!
+It's a known limitation with GraphQL type generation.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
+Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
 ### generate sdl
 
@@ -1042,7 +1056,7 @@ Done in 1.04s.
 **Destroying**
 
 ```
-yarn redwood d sdl <model>
+yarn redwood destroy sdl <model>
 ```
 
 **Example**
@@ -1152,6 +1166,13 @@ export const User = {
 }
 ```
 
+**Troubleshooting**
+
+If you see `Error: Unknown type: ...`, don't panic!
+It's a known limitation with GraphQL type generation.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
+Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
+
 ### generate secret
 
 Generate a secret key using a cryptographically-secure source of entropy. Commonly used when setting up dbAuth.
@@ -1193,7 +1214,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 **Destroying**
 
 ```
-yarn redwood d service <name>
+yarn redwood destroy service <name>
 ```
 
 **Example**
@@ -1760,7 +1781,7 @@ yarn redwood setup tsconfig
 
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [Chakra UI](https://chakra-ui.com/) and [TailwindCSS](https://tailwindcss.com/).
+Set up a UI design or style library. Right now the choices are [Chakra UI](https://chakra-ui.com/), [TailwindCSS](https://tailwindcss.com/) and [WindiCSS](https://windicss.org/).
 
 ```
 yarn rw setup ui <library>

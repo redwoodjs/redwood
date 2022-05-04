@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
 import {
   apiCliOptions,
@@ -10,7 +11,7 @@ import {
   bothServerHandler,
 } from './cliHandlers'
 
-const positionalArgs = yargs.argv._
+const positionalArgs = yargs(hideBin(process.argv)).parseSync()._
 
 // "bin": {
 //   "rw-api-server-watch": "./dist/watch.js",
@@ -20,13 +21,19 @@ const positionalArgs = yargs.argv._
 
 if (require.main === module) {
   if (positionalArgs.includes('api') && !positionalArgs.includes('web')) {
-    apiServerHandler(yargs.options(apiCliOptions).argv)
+    apiServerHandler(
+      yargs(hideBin(process.argv)).options(apiCliOptions).parseSync()
+    )
   } else if (
     positionalArgs.includes('web') &&
     !positionalArgs.includes('api')
   ) {
-    webServerHandler(yargs.options(webCliOptions).argv)
+    webServerHandler(
+      yargs(hideBin(process.argv)).options(webCliOptions).parseSync()
+    )
   } else {
-    bothServerHandler(yargs.options(commonOptions).argv)
+    bothServerHandler(
+      yargs(hideBin(process.argv)).options(commonOptions).parseSync()
+    )
   }
 }

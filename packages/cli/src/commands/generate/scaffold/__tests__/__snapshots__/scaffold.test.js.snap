@@ -683,8 +683,28 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -888,7 +908,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -906,8 +926,11 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -915,6 +938,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -926,11 +950,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -2006,8 +2026,28 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2211,7 +2251,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -2229,8 +2269,11 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2238,6 +2281,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2249,11 +2293,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -2731,8 +2771,28 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2936,7 +2996,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -2954,8 +3014,11 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2963,6 +3026,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2974,11 +3038,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -3065,7 +3125,17 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply mx-4 pb-4;
 }
 .rw-segment {
-  @apply rounded-lg overflow-hidden w-full;
+  @apply rounded-lg overflow-hidden w-full border border-gray-200;
+  scrollbar-color: theme('colors.zinc.400') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-200 bg-transparent border-solid rounded-t-none rounded-b-[10px] border-0 border-t p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 bg-clip-content border-[3px] border-solid border-transparent rounded-full;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
@@ -3188,7 +3258,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
 }
 .rw-table-wrapper-responsive {
-  @apply overflow-x-scroll;
+  @apply overflow-x-auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -3202,6 +3272,10 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 }
 .rw-table td {
   @apply bg-white text-gray-900;
+}
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  @apply bg-gray-50;
 }
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
@@ -3221,7 +3295,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   }
 }
 .rw-table tbody tr {
-  @apply bg-gray-50 border-t border-gray-200;
+  @apply border-t border-gray-200;
 }
 .rw-table input {
   @apply ml-0;
