@@ -48,26 +48,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.5.10":
-  version: 3.5.10
-  resolution: "@apollo/client@npm:3.5.10"
+"@apollo/client@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@apollo/client@npm:3.6.2"
   dependencies:
-    "@graphql-typed-document-node/core": ^3.0.0
+    "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.6.0
     "@wry/equality": ^0.5.0
     "@wry/trie": ^0.3.0
-    graphql-tag: ^2.12.3
+    graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
     optimism: ^0.16.1
     prop-types: ^15.7.2
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.9.4
+    ts-invariant: ^0.10.0
     tslib: ^2.3.0
+    use-sync-external-store: ^1.0.0
     zen-observable-ts: ^1.2.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-ws: ^5.5.5
-    react: ^16.8.0 || ^17.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
     subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
     graphql-ws:
@@ -76,7 +77,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 0e75bc04fb36a1f173c22841e2182f8a9443cdd56bccf12434309ec7fe279cfaee183ed3265fe4c0a4cb8ec9746defed72beb51ced28d890c32286bd5fdf9202
+  checksum: b720071649459361b2e80ab13ee1db7bc4afc95672f664e493714dc8a018ca932cbeb9d55e1322ab0d47044a626a2cfe93f76ee21766f5728ae121a80c68a103
   languageName: node
   linkType: hard
 
@@ -3677,7 +3678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-typed-document-node/core@npm:^3.0.0, @graphql-typed-document-node/core@npm:^3.1.1":
+"@graphql-typed-document-node/core@npm:^3.1.1":
   version: 3.1.1
   resolution: "@graphql-typed-document-node/core@npm:3.1.1"
   peerDependencies:
@@ -5966,7 +5967,7 @@ __metadata:
     "@types/md5": 2.3.2
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 27.5.1
@@ -6089,7 +6090,7 @@ __metadata:
     "@types/prettier": 2.6.0
     "@vscode/ripgrep": 1.14.2
     core-js: 3.22.4
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     deepmerge: 4.2.2
     fast-glob: 3.2.11
     findup-sync: 5.0.0
@@ -6261,7 +6262,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.22.4
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     graphql: 16.4.0
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
@@ -6339,7 +6340,7 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     jest: 27.5.1
     mime-types: 2.1.35
     typescript: 4.6.4
@@ -6432,7 +6433,7 @@ __metadata:
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
     ci-info: 3.3.0
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     envinfo: 7.8.1
     jest: 27.5.1
     systeminformation: 5.11.14
@@ -6482,7 +6483,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.5.10
+    "@apollo/client": 3.6.2
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
@@ -13388,9 +13389,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.4.1":
-  version: 0.4.1
-  resolution: "cross-undici-fetch@npm:0.4.1"
+"cross-undici-fetch@npm:0.4.2":
+  version: 0.4.2
+  resolution: "cross-undici-fetch@npm:0.4.2"
   dependencies:
     abort-controller: ^3.0.0
     busboy: ^1.6.0
@@ -13399,7 +13400,7 @@ __metadata:
     node-fetch: ^2.6.7
     undici: ^5.1.0
     web-streams-polyfill: ^3.2.0
-  checksum: aac06dcb787a18e3499f712410522b7351ccc8b36f970c3fefcfaddcf086731e0f3d9e13c2d887704489c70b98c1a349578e27f152ddbfb8cd0c48191ba3a921
+  checksum: a17237830a949fe193e0c105e02ee976cbd5d69878a4be6e511b76e4482dc662ef4ca535383474b01f405b74974b804a8abf04435ed0b6fb9f85c877c3ad70f6
   languageName: node
   linkType: hard
 
@@ -17701,7 +17702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:2.12.6, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3":
+"graphql-tag@npm:2.12.6, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.6":
   version: 2.12.6
   resolution: "graphql-tag@npm:2.12.6"
   dependencies:
@@ -29655,12 +29656,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.9.4":
-  version: 0.9.4
-  resolution: "ts-invariant@npm:0.9.4"
+"ts-invariant@npm:^0.10.0":
+  version: 0.10.1
+  resolution: "ts-invariant@npm:0.10.1"
   dependencies:
     tslib: ^2.1.0
-  checksum: 67cb364f535f40312e72d317bdc24c34fc09a43b63ecb1eab7285d6dc909f1f9b2dd73906104e510031cf3b1493636c7f0120f211c8f92783ada3be4c57f0f58
+  checksum: f8c542d7bf6423e85feae19b49c4ca0190991b9a591d3cc261fd8914491c33d7401084cd16abb28efbb37be934546ad260431289d57bc0b5eadc3e43b275dcbc
   languageName: node
   linkType: hard
 
@@ -30434,6 +30435,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: c2e60f8efa4ea90972b7879e3d6acebef23695f7eeb0d7ca82c1e44f142d701d8b71580f742555ddde2af1b90d071c407c02cc7175529beed137cc138b6e793c
+  languageName: node
+  linkType: hard
+
+"use-sync-external-store@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "use-sync-external-store@npm:1.1.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 4f522e7f10c85a705358640f3d487f261e34cef4dd80c8f167d246a79fb8768c4fffde2f1155f44406e0ee5eb6703eb487539738d7eb7a0bbd6195fe01e5dbae
   languageName: node
   linkType: hard
 
