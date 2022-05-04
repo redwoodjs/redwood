@@ -3687,9 +3687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.4.1":
-  version: 2.4.1
-  resolution: "@graphql-yoga/common@npm:2.4.1"
+"@graphql-yoga/common@npm:2.5.0":
+  version: 2.5.0
+  resolution: "@graphql-yoga/common@npm:2.5.0"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3699,12 +3699,12 @@ __metadata:
     "@graphql-tools/utils": ^8.6.0
     "@graphql-typed-document-node/core": ^3.1.1
     "@graphql-yoga/subscription": 2.0.0
-    cross-undici-fetch: ^0.3.0
+    cross-undici-fetch: ^0.4.2
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: d706ec41e5aff452fceb332eb279b02f12a2a0d688b8e9ca952d953441cbc5fa4e4ad74d01f73d73855e312e18601526b351f9ebc77d42d07392eb4831261744
+  checksum: 9996185dc73c09397b380db5f97c4b2627f068fa7bec0e6793268f8442b4e79a4f2ef61d4bee902aa555c203a4d3e15e411d62f42683e695f288e0c95877a034
   languageName: node
   linkType: hard
 
@@ -6253,7 +6253,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.10
     "@graphql-tools/schema": 8.3.10
     "@graphql-tools/utils": 8.6.9
-    "@graphql-yoga/common": 2.4.1
+    "@graphql-yoga/common": 2.5.0
     "@prisma/client": 3.13.0
     "@redwoodjs/api": 1.3.0
     "@redwoodjs/auth": 1.3.0
@@ -13389,7 +13389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.4.2":
+"cross-undici-fetch@npm:0.4.2, cross-undici-fetch@npm:^0.4.2":
   version: 0.4.2
   resolution: "cross-undici-fetch@npm:0.4.2"
   dependencies:
@@ -13415,20 +13415,6 @@ __metadata:
     undici: ^5.0.0
     web-streams-polyfill: ^3.2.0
   checksum: 121d4ce6dd0fdba0c1b6dbf5504020e28fa6cde16fe870f560df1a55558ae0b5a0709e061f54bc1411399ec17135c51b3a2505e13a8f6ff80187d2b48fbdf34c
-  languageName: node
-  linkType: hard
-
-"cross-undici-fetch@npm:^0.3.0":
-  version: 0.3.6
-  resolution: "cross-undici-fetch@npm:0.3.6"
-  dependencies:
-    abort-controller: ^3.0.0
-    form-data-encoder: ^1.7.1
-    formdata-node: ^4.3.1
-    node-fetch: ^2.6.7
-    undici: ^5.1.0
-    web-streams-polyfill: ^3.2.0
-  checksum: 092d4f4f6d7aa541a53cf3edd4eb32c9a1ab137431b5ef6b7305c2725b2825e5d70099707e19c1f85b48ea28df3701df2d751cddc0e6479044e81eab62bca169
   languageName: node
   linkType: hard
 
