@@ -33,9 +33,11 @@ export const handler = async (event, context) => {
   }
 }
 ```
+:::info
 
-> Just a note here, we call them 'serverless' but they can also be used on 'serverful' hosted environments too, such as Render or Heroku.
+We call them 'serverless' but they can also be used on 'serverful' hosted environments too, such as Render or Heroku.
 
+:::
 ## The handler
 
 For a lambda function to be a lambda function, it must export a handler that returns a status code. The handler receives two arguments: `event` and `context`. Whatever it returns is the `response`, which should include a `statusCode` at the very least.
@@ -362,19 +364,25 @@ You can then define multiple fixtures to define all the cases in a central place
 
 [Webhooks](webhooks.md) are specialized serverless functions that will verify a signature header to ensure you can trust the incoming request and use the payload with confidence.
 
-> **Note:** Want to learn more about webhooks? See a [Detailed discussion of webhooks](webhooks.md) to find out how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps.
+:::note
+
+Want to learn more about webhooks? See a [Detailed discussion of webhooks](webhooks.md) to find out how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps.
+
+:::
 
 In the following example, we'll have the webhook interact with our app's database, so we can see how we can use **scenario testing** to create data that the handler can access and modify.
 
-> **Why testing webhooks is hard**
->
-> Because your webhook is typically sent from a third-party's system, manually testing webhooks can be difficult. For one thing, you often have to create some kind of event in their system that will trigger the event -- and you'll often have to do that in a production environment with real data. Second, for each case you'll have to find data that represents each case and issue a hook for each -- which can take a lot of time and is tedious.
->
-> Also, you'll be using production secrets to sign the payload. And finally, since your third-party needs to send you the incoming webhook you'll most likely have to launch a local tunnel to expose your development machine publicly in order to receive them.
->
-> Instead, we can automate and mock the webhook to contain a signed payload that we can use to test the handler.
->
-> By writing these tests, you can iterate and implement the webhook logic much faster and easier without having to rely on a third party to send you data, or setting up tunneling, or triggering events on the external system.
+:::tip **Why testing webhooks is hard**
+
+Because your webhook is typically sent from a third-party's system, manually testing webhooks can be difficult. For one thing, you often have to create some kind of event in their system that will trigger the event -- and you'll often have to do that in a production environment with real data. Second, for each case you'll have to find data that represents each case and issue a hook for each -- which can take a lot of time and is tedious.
+
+Also, you'll be using production secrets to sign the payload. And finally, since your third-party needs to send you the incoming webhook you'll most likely have to launch a local tunnel to expose your development machine publicly in order to receive them.
+
+Instead, we can automate and mock the webhook to contain a signed payload that we can use to test the handler.
+
+By writing these tests, you can iterate and implement the webhook logic much faster and easier without having to rely on a third party to send you data, or setting up tunneling, or triggering events on the external system.
+
+:::
 
 For our webhook test example, we'll create a webhook that updates a Order's Status by looking up the order by its Tracking Number and then updating the status to by Delivered (if our rules allow it).
 
@@ -569,7 +577,11 @@ But, we also want to test what happens if the webhook receives an invalid signat
 
 Because the header isn't what the webhook expects (it wants to see a header named `X-Webhook-Signature`), this request is not verified and will return a 401 Unauthorized and not try to update the order at all.
 
-> Note: For brevity we didn't test that the order's status wasn't changed, but that could be checked as well
+:::note
+
+For brevity we didn't test that the order's status wasn't changed, but that could be checked as well
+
+:::
 
 ```jsx
 scenario('with an invalid signature header, the webhook is unauthorized', async (scenario) => {
@@ -638,7 +650,11 @@ Last, we want to test a business rule that says you cannot update an order to be
 
 Therefore our scenario uses the `scenario.order.delivered` data where the order has a placed status.
 
-> Note: you'll have additional tests here to check that if the order is placed you cannot update it to be delivered and if the order is shipped you cannot update to be placed, etc
+:::tip
+
+You'll have additional tests here to check that if the order is placed you cannot update it to be delivered and if the order is shipped you cannot update to be placed, etc
+
+:::
 
 ```jsx
   scenario('when the order has already been delivered, returns an error',
@@ -712,37 +728,52 @@ If your function receives an incoming Webhook from a third party, see [Webhooks]
 
 Serverless functions can use the same user-authentication strategy used by GraphQL Directives to [secure your services](graphql.md#secure-services) via the `useRequireAuth` wrapper.
 
-> If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
+:::tip
 
+ If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
+
+:::
 #### How to Secure a Function with Redwood Auth
 
 The `useRequireAuth` wrapper configures your handler's `context` so that you can use any of the `requireAuth`-related authentication helpers in your serverless function:
 
 - import `useRequireAuth` from `@redwoodjs/graphql-server`
-- import your app's custom `getCurrentUser` from `src/lib/auth`
+- import your app's custom `getCurrentUser` and the `isAuthenticated` check from `src/lib/auth`
 - implement your serverless function as you would, but do not `export` it (see `myHandler` below).
 - pass your implementation and `getCurrentUser` to the `useRequireAuth` wrapper and export its return
+- check if the user `isAuthenticated()` and, if not, handle the unauthenticated case by returning a `401` status code (for example)
 
-```tsx {3,5,22-25}
+```tsx {3,5,11,24-28}
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { useRequireAuth } from '@redwoodjs/graphql-server'
 
-import { getCurrentUser } from 'src/lib/auth'
+import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
 import { logger } from 'src/lib/logger'
 
 const myHandler = async (event: APIGatewayEvent, context: Context) => {
-  logger.info('Invoked ${name} function')
+  logger.info('Invoked myHandler')
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      data: 'myHandler function',
-    }),
+  if (isAuthenticated()) {
+    logger.info('Access myHandler as authenticated user')
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: 'myHandler function',
+      }),
+    }
+  } else {
+    logger.error('Access to myHandler was denied')
+
+    return {
+      statusCode: 401,
+    }
   }
+
 }
 
 export const handler = useRequireAuth({
@@ -755,8 +786,11 @@ Now anywhere `context` is used, such as in services or when using `hasRole()` or
 
 In short, you can now use the any of your auth functions like `isAuthenticated()`, `hasRole()`, or `requireAuth()` in your serverless function.
 
-> It's important to note that if you intend to implement a feature that requires user authentication, then using GraphQL, auth directives, and services is the preferred approach.
+:::note
 
+If you intend to implement a feature that requires user authentication, then using GraphQL, auth directives, and services is the preferred approach.
+
+:::
 #### Using your Authenticated Serverless Function
 
 As there is no login flow when using functions, the `useRequireAuth` check assumes that your user is already authenticated and you have access to their JWT access token.
@@ -782,7 +816,51 @@ auth-provider: supabase
 Content-Type: application/json
 ```
 
-### Returning Binary Data
+
+### Other security considerations
+
+In addition to securing your serverless functions, you may consider logging, rate limiting and whitelisting as ways to protect your functions from abuse or misuse.
+
+#### Visibility via Logging
+
+Logging in production — and monitoring for suspicious activity, unknown IP addresses, errors, etc. — can be a critical part of keeping your serverless functions and your application safe.
+
+Third-party log services like [logFlare](https://logflare.app/), [Datadog](https://www.datadoghq.com/) and [LogDNA](https://www.logdna.com/) all have features that store logs for inspection, but also can trigger alerts and notifications if something you deem untoward occurs.
+
+See [Logger](logger.md) in the RedwoodJS docs for more information about how to setup and use logging services.
+
+#### Rate Limiting
+
+Rate limiting (or throttling) how often a function executes by a particular IP addresses or user account is a common way of stemming api abuse (for example, a distributed Denial-of-Service, or DDoS, attack).
+
+As LogRocket [says](https://blog.logrocket.com/rate-limiting-node-js/):
+
+:::info
+
+Rate limiting is a very powerful feature for securing backend APIs from malicious attacks and for handling unwanted streams of requests from users. In general terms, it allows us to control the rate at which user requests are processed by our server.
+:::
+
+API Gateways like [Kong](https://docs.konghq.com/hub/kong-inc/rate-limiting/) offer plugins to configure how many HTTP requests can be made in a given period of seconds, minutes, hours, days, months, or years.
+
+Currently, RedwoodJS does not offer rate limiting in the framework, but your deployment target infrastructure may. This is a feature RedwoodJS will investigate for future releases.
+
+For more information about Rate Limiting in Node.js, consider:
+
+- [Understanding and implementing rate limiting in Node.js](https://blog.logrocket.com/rate-limiting-node-js/) on LogRocket
+
+#### IP Address Whitelisting
+
+Because the `event` passed to the function handler contains the request's IP address, you could decide to whitelist only certain known and trusted IP addresses.
+
+```jsx
+const ipAddress = ({ event }) => {
+  return event?.headers?.['client-ip'] || event?.requestContext?.identity?.sourceIp || 'localhost'
+}
+```
+
+If the IP address in the event does not match, then you can raise an error and return `401 Unauthorized` status.
+
+## Returning Binary Data
 
 By default, RedwoodJS functions return strings or JSON. If you need to return binary data, your function will need to encode it as Base64 and then set the `isBase64Encoded` response parameter to `true`. Note that this is best suited to relatively small responses. The entire response body will be loaded into memory as a string, and many serverless hosting environments will limit your function to eg. 10 seconds, so if your file takes longer than that to process and download it may get cut off. For larger or static files, it may be better to upload files to an object store like S3 and generate a [pre-signed URL](https://stackoverflow.com/questions/38831829/nodejs-aws-sdk-s3-generate-presigned-url) that the client can use to download the file directly.
 
@@ -806,43 +884,3 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
   }
 }
 ```
-
-### Other considerations
-
-In addition to securing your serverless functions, you may consider logging, rate limiting and whitelisting as ways to protect your functions from abuse or misuse.
-
-#### Visibility via Logging
-
-Logging in production — and monitoring for suspicious activity, unknown IP addresses, errors, etc. — can be a critical part of keeping your serverless functions and your application safe.
-
-Third-party log services like [logFlare](https://logflare.app/), [Datadog](https://www.datadoghq.com/) and [LogDNA](https://www.logdna.com/) all have features that store logs for inspection, but also can trigger alerts and notifications if something you deem untoward occurs.
-
-See [Logger](logger.md) in the RedwoodJS docs for more information about how to setup and use logging services.
-
-#### Rate Limiting
-
-Rate limiting (or throttling) how often a function executes by a particular IP addresses or user account is a common way of stemming api abuse (for example, a distributed Denial-of-Service, or DDoS, attack).
-
-As LogRocket [says](https://blog.logrocket.com/rate-limiting-node-js/):
-
-> Rate limiting is a very powerful feature for securing backend APIs from malicious attacks and for handling unwanted streams of requests from users. In general terms, it allows us to control the rate at which user requests are processed by our server.
-
-API Gateways like [Kong](https://docs.konghq.com/hub/kong-inc/rate-limiting/) offer plugins to configure how many HTTP requests can be made in a given period of seconds, minutes, hours, days, months, or years.
-
-Currently, RedwoodJS does not offer rate limiting in the framework, but your deployment target infrastructure may. This is a feature RedwoodJS will investigate for future releases.
-
-For more information about Rate Limiting in Node.js, consider:
-
-- [Understanding and implementing rate limiting in Node.js](https://blog.logrocket.com/rate-limiting-node-js/) on LogRocket
-
-#### IP Address Whitelisting
-
-Because the `event` passed to the function handler contains the request's IP address, you could decide to whitelist only certain known and trusted IP addresses.
-
-```jsx
-const ipAddress = ({ event }) => {
-  return event?.headers?.['client-ip'] || event?.requestContext?.identity?.sourceIp || 'localhost'
-}
-```
-
-If the IP address in the event does not match, then you can raise an error and return `401 Unauthorized` status.
