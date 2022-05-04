@@ -52,6 +52,29 @@ jest.mock('../directives/makeDirectives', () => {
   }
 })
 
+const mockLambdaEvent = ({
+  headers,
+  body = null,
+  httpMethod,
+  ...others
+}): APIGatewayProxyEvent => {
+  return {
+    headers,
+    body,
+    httpMethod,
+    multiValueQueryStringParameters: null,
+    isBase64Encoded: false,
+    multiValueHeaders: {},
+    path: '',
+    pathParameters: null,
+    stageVariables: null,
+    queryStringParameters: null,
+    requestContext: null,
+    resource: null,
+    ...others,
+  }
+}
+
 describe('CORS', () => {
   it('Returns the origin correctly when configured in handler', async () => {
     const handler = createGraphQLHandler({
@@ -65,16 +88,14 @@ describe('CORS', () => {
       onException: () => {},
     })
 
-    // We don't need to fully mock out a lambda event for these tests
-    const mockedEvent = {
+    const mockedEvent = mockLambdaEvent({
       headers: {
         origin: 'https://redwoodjs.com',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query: '{ me { id, name } }' }),
       httpMethod: 'POST',
-      multiValueQueryStringParameters: null,
-    } as unknown as APIGatewayProxyEvent
+    })
 
     const response = await handler(mockedEvent, {} as Context)
 
@@ -96,16 +117,14 @@ describe('CORS', () => {
       onException: () => {},
     })
 
-    // We don't need to fully mock out a lambda event for these tests
-    const mockedEvent = {
+    const mockedEvent = mockLambdaEvent({
       headers: {
         origin: 'https://someothersite.newjsframework.com',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query: '{ me { id, name } }' }),
       httpMethod: 'POST',
-      multiValueQueryStringParameters: null,
-    } as unknown as APIGatewayProxyEvent
+    })
 
     const response = await handler(mockedEvent, {} as Context)
 
@@ -127,15 +146,13 @@ describe('CORS', () => {
       onException: () => {},
     })
 
-    // We don't need to fully mock out a lambda event for these tests
-    const mockedEvent = {
+    const mockedEvent = mockLambdaEvent({
       headers: {
         origin: 'https://someothersite.newjsframework.com',
         'Content-Type': 'application/json',
       },
       httpMethod: 'OPTIONS',
-      multiValueQueryStringParameters: null,
-    } as unknown as APIGatewayProxyEvent
+    })
 
     const response = await handler(mockedEvent, {} as Context)
 
@@ -157,18 +174,16 @@ describe('CORS', () => {
       onException: () => {},
     })
 
-    // We don't need to fully mock out a lambda event for these tests
-    const mockedEvent = {
+    const mockedEvent: APIGatewayProxyEvent = mockLambdaEvent({
       headers: {
         origin: 'https://site2.two',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query: '{ me { id, name } }' }),
       httpMethod: 'POST',
-      multiValueQueryStringParameters: null,
-    } as unknown as APIGatewayProxyEvent
+    })
 
-    const response = await handler(mockedEvent, {} as Context) //?
+    const response = await handler(mockedEvent, {} as Context)
 
     expect(response.statusCode).toBe(200)
     expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
