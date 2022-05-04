@@ -6162,7 +6162,7 @@ __metadata:
     webpack: 5.72.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.2
-    webpack-dev-server: 4.8.1
+    webpack-dev-server: 4.9.0
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.0.0
@@ -10576,15 +10576,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^2.6.2":
-  version: 2.6.3
-  resolution: "async@npm:2.6.3"
-  dependencies:
-    lodash: ^4.17.14
-  checksum: 06c917c74a55f9036ff79dedfc51dfc9c52c2dee2f80866b600495d2fd3037251dbcfde6592f23fc47398c44d844174004e0ee532f94c32a888bb89fd1cf0f25
-  languageName: node
-  linkType: hard
-
 "async@npm:^3.0.1, async@npm:^3.2.0, async@npm:^3.2.3":
   version: 3.2.3
   resolution: "async@npm:3.2.3"
@@ -13968,7 +13959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^3.0.0, debug@npm:^3.1.0, debug@npm:^3.1.1, debug@npm:^3.2.7":
+"debug@npm:^3.0.0, debug@npm:^3.1.0, debug@npm:^3.2.7":
   version: 3.2.7
   resolution: "debug@npm:3.2.7"
   dependencies:
@@ -21593,7 +21584,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:>=4.17.21, lodash@npm:^4.0.0, lodash@npm:^4.11.2, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0, lodash@npm:~4.17.0":
+"lodash@npm:4.17.21, lodash@npm:>=4.17.21, lodash@npm:^4.0.0, lodash@npm:^4.11.2, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0, lodash@npm:~4.17.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -24593,17 +24584,6 @@ __metadata:
   dependencies:
     "@babel/runtime": ^7.16.7
   checksum: d29cb70e21a30e91a57c50cc28b2fc775e86d8694ae20dc27a6f943d5b735642bee2df3f9db7f5c58ff3e9b92afc08810bc313bab41370d12d828861c30df2a9
-  languageName: node
-  linkType: hard
-
-"portfinder@npm:^1.0.28":
-  version: 1.0.28
-  resolution: "portfinder@npm:1.0.28"
-  dependencies:
-    async: ^2.6.2
-    debug: ^3.1.1
-    mkdirp: ^0.5.5
-  checksum: fefd3d65a6464b498e0e9b4a4b82f29489441bb1892a3350403cfdf6e591e583d9e75bac1c6ae8ca2cdf1a942ae18890831a0a855bb1bb977678acdf9e5a560f
   languageName: node
   linkType: hard
 
@@ -31117,9 +31097,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.8.1":
-  version: 4.8.1
-  resolution: "webpack-dev-server@npm:4.8.1"
+"webpack-dev-server@npm:4.9.0":
+  version: 4.9.0
+  resolution: "webpack-dev-server@npm:4.9.0"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -31141,7 +31121,6 @@ __metadata:
     ipaddr.js: ^2.0.1
     open: ^8.0.9
     p-retry: ^4.5.0
-    portfinder: ^1.0.28
     rimraf: ^3.0.2
     schema-utils: ^4.0.0
     selfsigned: ^2.0.1
@@ -31157,7 +31136,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 9ba5b127e3ef51f9a24df35563042b61f60473d319b895fa5877a1c1b4d5e03214605423db7c6a9ddb5c70616933e4a62eb5038acfe0beee2341c3bf792eeccf
+  checksum: 2ad46d4ad4b3ee70d3a44686c04376419603eef77d00f7c09d423ee3c67fad96d7ea283425bd9bdbae99753d9deef8a948799925cc2eb233381c236308c3ce77
   languageName: node
   linkType: hard
 
