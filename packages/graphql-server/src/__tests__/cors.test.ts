@@ -1,5 +1,17 @@
 import { mapRwCorsOptionsToYoga } from '../cors'
 
+/** Yoga CORS Options looks like
+ *
+ * export interface CORSOptions {
+    origin?: string[];
+    methods?: string[];
+    allowedHeaders?: string[];
+    exposedHeaders?: string[];
+    credentials?: boolean;
+    maxAge?: number;
+}
+ *
+ */
 describe('mapRwCorsOptionsToYoga', () => {
   it('Handles single endpoint, headers and method', () => {
     const output = mapRwCorsOptionsToYoga({
@@ -7,12 +19,12 @@ describe('mapRwCorsOptionsToYoga', () => {
       allowedHeaders: 'X-Bazinga',
       methods: 'PATCH',
       credentials: true,
-    }) //?
+    })
 
     expect(output).toEqual({
-      credetials: true,
+      credentials: true,
       allowedHeaders: ['X-Bazinga'],
-      allowedMethods: ['PATCH'],
+      methods: ['PATCH'],
       origin: ['http://localhost:8910'],
     })
   })
@@ -23,12 +35,11 @@ describe('mapRwCorsOptionsToYoga', () => {
       credentials: false,
       allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
       methods: ['PATCH', 'PUT', 'POST'],
-    }) //?
+    })
 
     expect(output).toEqual({
-      credetials: false,
       origin: ['http://localhost:8910'],
-      allowedMethods: ['PATCH', 'PUT', 'POST'],
+      methods: ['PATCH', 'PUT', 'POST'],
       allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
     })
   })
@@ -42,10 +53,48 @@ describe('mapRwCorsOptionsToYoga', () => {
     })
 
     expect(output).toEqual({
-      credetials: true,
+      credentials: true,
       origin: ['https://bazinga.com', 'https://softkitty.mew'],
-      allowedMethods: ['PATCH', 'PUT', 'POST'],
+      methods: ['PATCH', 'PUT', 'POST'],
       allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
+    })
+  })
+
+  it('Returns the request origin, if cors origin is set to true', () => {
+    const output = mapRwCorsOptionsToYoga(
+      {
+        origin: true,
+        credentials: true,
+        allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
+        methods: ['DELETE'],
+      },
+      'https://myapiside.redwood.com' // <-- this is the Request.headers.origin
+    )
+
+    expect(output).toEqual({
+      credentials: true,
+      origin: ['https://myapiside.redwood.com'],
+      methods: ['DELETE'],
+      allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
+    })
+  })
+
+  it('Returns the *, if cors origin is set to true AND no request origin supplied', () => {
+    const output = mapRwCorsOptionsToYoga(
+      {
+        origin: true,
+        credentials: true,
+        allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
+        methods: ['DELETE'],
+      },
+      undefined
+    )
+
+    expect(output).toEqual({
+      credentials: true,
+      origin: ['*'],
+      methods: ['DELETE'],
+      allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
     })
   })
 })

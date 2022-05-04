@@ -184,7 +184,10 @@ export const createGraphQLHandler = ({
           headerEditorEnabled: true,
         }
       : false,
-    cors: mapRwCorsOptionsToYoga(cors),
+    cors: (request: Request) => {
+      const requestOrigin = request.headers.get('origin')
+      return mapRwCorsOptionsToYoga(cors, requestOrigin)
+    },
   })
 
   function buildRequestObject(event: APIGatewayProxyEvent) {

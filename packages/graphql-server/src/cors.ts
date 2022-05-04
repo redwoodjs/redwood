@@ -2,7 +2,10 @@ import { CORSOptions } from '@graphql-yoga/common'
 
 import { CorsConfig } from '@redwoodjs/api'
 
-export const mapRwCorsOptionsToYoga = (rwCorsConfig?: CorsConfig) => {
+export const mapRwCorsOptionsToYoga = (
+  rwCorsConfig?: CorsConfig,
+  requestOrigin?: string | null
+) => {
   const yogaCORSOptions: CORSOptions = {}
 
   if (rwCorsConfig?.methods) {
@@ -34,6 +37,17 @@ export const mapRwCorsOptionsToYoga = (rwCorsConfig?: CorsConfig) => {
 
   if (rwCorsConfig?.maxAge) {
     yogaCORSOptions.maxAge = rwCorsConfig.maxAge
+  }
+
+  if (rwCorsConfig?.origin) {
+    if (typeof rwCorsConfig.origin === 'string') {
+      yogaCORSOptions.origin = [rwCorsConfig.origin]
+    } else if (rwCorsConfig.origin === true) {
+      yogaCORSOptions.origin = [requestOrigin || '*']
+    } else {
+      // Array of origins
+      yogaCORSOptions.origin = rwCorsConfig.origin
+    }
   }
 
   return yogaCORSOptions
