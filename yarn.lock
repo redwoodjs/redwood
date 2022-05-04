@@ -5966,7 +5966,7 @@ __metadata:
     "@types/md5": 2.3.2
     "@types/split2": 3.2.1
     aws-lambda: 1.0.7
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 27.5.1
@@ -6089,7 +6089,7 @@ __metadata:
     "@types/prettier": 2.6.0
     "@vscode/ripgrep": 1.14.2
     core-js: 3.22.4
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     deepmerge: 4.2.2
     fast-glob: 3.2.11
     findup-sync: 5.0.0
@@ -6261,7 +6261,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.22.4
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     graphql: 16.4.0
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
@@ -6339,7 +6339,7 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     jest: 27.5.1
     mime-types: 2.1.35
     typescript: 4.6.4
@@ -6432,7 +6432,7 @@ __metadata:
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
     ci-info: 3.3.0
-    cross-undici-fetch: 0.4.1
+    cross-undici-fetch: 0.4.2
     envinfo: 7.8.1
     jest: 27.5.1
     systeminformation: 5.11.14
@@ -13388,9 +13388,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.4.1":
-  version: 0.4.1
-  resolution: "cross-undici-fetch@npm:0.4.1"
+"cross-undici-fetch@npm:0.4.2":
+  version: 0.4.2
+  resolution: "cross-undici-fetch@npm:0.4.2"
   dependencies:
     abort-controller: ^3.0.0
     busboy: ^1.6.0
@@ -13399,7 +13399,7 @@ __metadata:
     node-fetch: ^2.6.7
     undici: ^5.1.0
     web-streams-polyfill: ^3.2.0
-  checksum: aac06dcb787a18e3499f712410522b7351ccc8b36f970c3fefcfaddcf086731e0f3d9e13c2d887704489c70b98c1a349578e27f152ddbfb8cd0c48191ba3a921
+  checksum: a17237830a949fe193e0c105e02ee976cbd5d69878a4be6e511b76e4482dc662ef4ca535383474b01f405b74974b804a8abf04435ed0b6fb9f85c877c3ad70f6
   languageName: node
   linkType: hard
 
