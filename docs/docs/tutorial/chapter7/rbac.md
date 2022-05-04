@@ -705,7 +705,7 @@ export const moderatorView = () => {
 </TabItem>
 </Tabs>
 
-:::info here did `mockCurrentUser()` come from?
+:::info Where did `mockCurrentUser()` come from?
 
 Similar to `mockGraphQLQuery()` and `mockGraphQLMutation()`, `mockCurrentUser()` is a global available in Storybook automatically, no need to import.
 

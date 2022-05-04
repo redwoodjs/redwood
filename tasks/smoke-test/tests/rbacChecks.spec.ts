@@ -1,11 +1,12 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 import {
   expect,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
 import execa from 'execa'
-import fs from 'node:fs'
-import path from 'node:path'
 
 import devServerTest, {
   DevServerFixtures,
