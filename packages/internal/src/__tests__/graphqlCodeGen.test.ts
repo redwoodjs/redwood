@@ -1,20 +1,3 @@
-// jest.mock('fs', () => {
-//   const actual = jest.requireActual('fs')
-
-//   return {
-//     ...actual,
-//     mkdirSync: () => {},
-//     writeFileSync: (target, contents) => {
-//       // if (!global.mockFs) {
-//       //   return actual.writeFileSync.call(null, target, contents)
-//       // }
-//     },
-//     writeFileSyncActual: (target, contents) => {
-//       return actual.writeFileSync.call(null, target, contents)
-//     },
-//   }
-// })
-
 import fs from 'fs'
 import path from 'path'
 

@@ -56,7 +56,6 @@ jobs:
           #  This is required because lerna uses tags to determine the version.
           fetch-depth: 0
 
-      - uses: actions/checkout@v3
       - name: 🧶 Setup job
         uses: ./.github/actions/setup_job
 
@@ -76,7 +75,14 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
-          yarn lerna publish pre$SEMVER --include-merged-tags --canary --preid rc --dist-tag rc --force-publish --loglevel verbose --yes
+          yarn lerna publish pre$SEMVER --include-merged-tags \
+                                        --canary \
+                                        --preid rc \
+                                        --dist-tag rc \
+                                        --force-publish \
+                                        --loglevel verbose \
+                                        --no-git-reset \
+                                        --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
@@ -95,8 +101,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 💬 Message Slack
-        uses: ./.github/actions/message_slack
+        uses: ./.github/actions/message_slack_publishing
         with:
           title: "🏎 RC Packages"
           status: ${{ needs.publish-release-candidate.result }}
           version: ${{ needs.publish-release-candidate.outputs.version }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

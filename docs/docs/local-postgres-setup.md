@@ -90,6 +90,7 @@ datasource db {
   url = env("DATABASE_URL")
 }
 ```
+> Note: If you run into a "PrismaClientInitializationError" then you may need to regenerate the prisma client using: `yarn rw prisma generate`
 
 ## Connect to Postgres
 
@@ -119,6 +120,7 @@ Here is an example of the structure of the base URL and the path using placehold
 postgresql://USER:PASSWORD@HOST:PORT/DATABASE
 ```
 The following components make up the base URL of your database, they are always required:
+
 | Name | Placeholder | Description |
 | ------ | ------ | ------|
 | Host | `HOST`| IP address/domain of your database server, e.g. `localhost` |

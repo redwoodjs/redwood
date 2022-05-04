@@ -2,6 +2,7 @@ import path from 'path'
 
 import fg from 'fast-glob'
 import task from 'tasuku'
+import { TaskInnerAPI } from 'tasuku'
 
 import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
@@ -31,7 +32,7 @@ export const description =
 export const handler = () => {
   task(
     'Rename timestamp to currentTimestampOverride',
-    async ({ setError }: task.TaskInnerApi) => {
+    async ({ setError }: TaskInnerAPI) => {
       try {
         await runTransform({
           transformPath: path.join(__dirname, 'renameVerifierTimestamp.js'),
