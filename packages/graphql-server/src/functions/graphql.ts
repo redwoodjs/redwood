@@ -35,6 +35,7 @@ import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
 import { Headers, Request } from 'cross-undici-fetch'
+import { mapRwCorsOptionsToYoga } from 'src/cors'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -165,39 +166,6 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  const baseYogaCORSOptions: CORSOptions = {}
-
-  if (cors?.methods) {
-    if (typeof cors.methods === 'string') {
-      baseYogaCORSOptions.methods = [cors.methods]
-    } else if (Array.isArray(cors.methods)) {
-      baseYogaCORSOptions.methods = cors.methods
-    }
-  }
-  if (cors?.allowedHeaders) {
-    if (typeof cors.allowedHeaders === 'string') {
-      baseYogaCORSOptions.allowedHeaders = [cors.allowedHeaders]
-    } else if (Array.isArray(cors.allowedHeaders)) {
-      baseYogaCORSOptions.allowedHeaders = cors.allowedHeaders
-    }
-  }
-
-  if (cors?.exposedHeaders) {
-    if (typeof cors.exposedHeaders === 'string') {
-      baseYogaCORSOptions.exposedHeaders = [cors.exposedHeaders]
-    } else if (Array.isArray(cors.exposedHeaders)) {
-      baseYogaCORSOptions.exposedHeaders = cors.exposedHeaders
-    }
-  }
-
-  if (cors?.credentials) {
-    baseYogaCORSOptions.credentials = cors.credentials
-  }
-
-  if (cors?.maxAge) {
-    baseYogaCORSOptions.maxAge = cors.maxAge
-  }
-
   plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
   const yoga = createServer({
     schema,
@@ -217,9 +185,7 @@ export const createGraphQLHandler = ({
         }
       : false,
     cors: (request: Request) => {
-      const yogaCORSOptions: CORSOptions = {
-        ...baseYogaCORSOptions,
-      }
+      const yogaCORSOptions: CORSOptions = mapRwCorsOptionsToYoga(cors)
 
       if (cors?.origin) {
         const requestOrigin = request.headers.get('origin')
