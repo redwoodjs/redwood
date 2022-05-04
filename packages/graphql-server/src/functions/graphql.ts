@@ -17,7 +17,7 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { CORSOptions, createServer } from '@graphql-yoga/common'
+import { createServer } from '@graphql-yoga/common'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -184,32 +184,7 @@ export const createGraphQLHandler = ({
           headerEditorEnabled: true,
         }
       : false,
-    cors: (request: Request) => {
-      const yogaCORSOptions: CORSOptions = mapRwCorsOptionsToYoga(cors)
-
-      if (cors?.origin) {
-        const requestOrigin = request.headers.get('origin')
-        if (typeof cors.origin === 'string') {
-          yogaCORSOptions.origin = [cors.origin]
-        } else if (
-          requestOrigin &&
-          (typeof cors.origin === 'boolean' ||
-            (Array.isArray(cors.origin) &&
-              requestOrigin &&
-              cors.origin.includes(requestOrigin)))
-        ) {
-          yogaCORSOptions.origin = [requestOrigin]
-        }
-
-        const requestAccessControlRequestHeaders = request.headers.get(
-          'access-control-request-headers'
-        )
-        if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
-          yogaCORSOptions.allowedHeaders = [requestAccessControlRequestHeaders]
-        }
-      }
-      return yogaCORSOptions
-    },
+    cors: mapRwCorsOptionsToYoga(cors),
   })
 
   function buildRequestObject(event: APIGatewayProxyEvent) {
