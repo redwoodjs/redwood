@@ -35,7 +35,7 @@ import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
 import { Headers, Request } from 'cross-undici-fetch'
-import { mapRwCorsOptionsToYoga } from 'src/cors'
+import { mapRwCorsOptionsToYoga } from '../cors'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
