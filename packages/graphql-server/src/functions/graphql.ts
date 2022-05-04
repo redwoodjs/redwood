@@ -17,7 +17,7 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { CORSOptions, createServer } from '@graphql-yoga/common'
+import { createServer } from '@graphql-yoga/common'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -35,6 +35,7 @@ import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
 import { Headers, Request } from 'cross-undici-fetch'
+import { mapRwCorsOptionsToYoga } from '../cors'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -165,39 +166,6 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  const baseYogaCORSOptions: CORSOptions = {}
-
-  if (cors?.methods) {
-    if (typeof cors.methods === 'string') {
-      baseYogaCORSOptions.methods = [cors.methods]
-    } else if (Array.isArray(cors.methods)) {
-      baseYogaCORSOptions.methods = cors.methods
-    }
-  }
-  if (cors?.allowedHeaders) {
-    if (typeof cors.allowedHeaders === 'string') {
-      baseYogaCORSOptions.allowedHeaders = [cors.allowedHeaders]
-    } else if (Array.isArray(cors.allowedHeaders)) {
-      baseYogaCORSOptions.allowedHeaders = cors.allowedHeaders
-    }
-  }
-
-  if (cors?.exposedHeaders) {
-    if (typeof cors.exposedHeaders === 'string') {
-      baseYogaCORSOptions.exposedHeaders = [cors.exposedHeaders]
-    } else if (Array.isArray(cors.exposedHeaders)) {
-      baseYogaCORSOptions.exposedHeaders = cors.exposedHeaders
-    }
-  }
-
-  if (cors?.credentials) {
-    baseYogaCORSOptions.credentials = cors.credentials
-  }
-
-  if (cors?.maxAge) {
-    baseYogaCORSOptions.maxAge = cors.maxAge
-  }
-
   plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
   const yoga = createServer({
     schema,
@@ -217,32 +185,8 @@ export const createGraphQLHandler = ({
         }
       : false,
     cors: (request: Request) => {
-      const yogaCORSOptions: CORSOptions = {
-        ...baseYogaCORSOptions,
-      }
-
-      if (cors?.origin) {
-        const requestOrigin = request.headers.get('origin')
-        if (typeof cors.origin === 'string') {
-          yogaCORSOptions.origin = [cors.origin]
-        } else if (
-          requestOrigin &&
-          (typeof cors.origin === 'boolean' ||
-            (Array.isArray(cors.origin) &&
-              requestOrigin &&
-              cors.origin.includes(requestOrigin)))
-        ) {
-          yogaCORSOptions.origin = [requestOrigin]
-        }
-
-        const requestAccessControlRequestHeaders = request.headers.get(
-          'access-control-request-headers'
-        )
-        if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
-          yogaCORSOptions.allowedHeaders = [requestAccessControlRequestHeaders]
-        }
-      }
-      return yogaCORSOptions
+      const requestOrigin = request.headers.get('origin')
+      return mapRwCorsOptionsToYoga(cors, requestOrigin)
     },
   })
 
