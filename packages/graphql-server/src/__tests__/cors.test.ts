@@ -1,100 +1,84 @@
-import { mapRwCorsOptionsToYoga } from '../cors'
+import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
-/** Yoga CORS Options looks like
- *
- * export interface CORSOptions {
-    origin?: string[];
-    methods?: string[];
-    allowedHeaders?: string[];
-    exposedHeaders?: string[];
-    credentials?: boolean;
-    maxAge?: number;
-}
- *
- */
-describe('mapRwCorsOptionsToYoga', () => {
-  it('Handles single endpoint, headers and method', () => {
-    const output = mapRwCorsOptionsToYoga({
-      origin: 'http://localhost:8910',
-      allowedHeaders: 'X-Bazinga',
-      methods: 'PATCH',
-      credentials: true,
-    })
+import { createLogger } from '@redwoodjs/api/logger'
 
-    expect(output).toEqual({
-      credentials: true,
-      allowedHeaders: ['X-Bazinga'],
-      methods: ['PATCH'],
-      origin: ['http://localhost:8910'],
-    })
-  })
+import { createGraphQLHandler } from '../functions/graphql'
 
-  it('Handles options as an array', () => {
-    const output = mapRwCorsOptionsToYoga({
-      origin: ['http://localhost:8910'],
-      credentials: false,
-      allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
-      methods: ['PATCH', 'PUT', 'POST'],
-    })
+jest.mock('../makeMergedSchema/makeMergedSchema', () => {
+  const { makeExecutableSchema } = require('@graphql-tools/schema')
+  // Return executable schema
+  return {
+    makeMergedSchema: () =>
+      makeExecutableSchema({
+        typeDefs: /* GraphQL */ `
+          type Query {
+            me: User!
+          }
 
-    expect(output).toEqual({
-      origin: ['http://localhost:8910'],
-      methods: ['PATCH', 'PUT', 'POST'],
-      allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
-    })
-  })
+          type Query {
+            forbiddenUser: User!
+            getUser(id: Int!): User!
+          }
 
-  it('Handles multiple endpoints', () => {
-    const output = mapRwCorsOptionsToYoga({
-      origin: ['https://bazinga.com', 'https://softkitty.mew'],
-      credentials: true,
-      allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
-      methods: ['PATCH', 'PUT', 'POST'],
-    })
+          type User {
+            id: ID!
+            name: String!
+          }
+        `,
+        resolvers: {
+          Query: {
+            me: () => {
+              return { _id: 1, firstName: 'Ba', lastName: 'Zinga' }
+            },
+            forbiddenUser: () => {
+              throw Error('You are forbidden')
+            },
+            getUser: (id) => {
+              return { id, firstName: 'Ba', lastName: 'Zinga' }
+            },
+          },
+          User: {
+            id: (u) => u._id,
+            name: (u) => `${u.firstName} ${u.lastName}`,
+          },
+        },
+      }),
+  }
+})
 
-    expect(output).toEqual({
-      credentials: true,
-      origin: ['https://bazinga.com', 'https://softkitty.mew'],
-      methods: ['PATCH', 'PUT', 'POST'],
-      allowedHeaders: ['X-Bazinga', 'X-Kittens', 'Authorization'],
-    })
-  })
+jest.mock('../directives/makeDirectives', () => {
+  return {
+    makeDirectivesForPlugin: () => [],
+  }
+})
 
-  it('Returns the request origin, if cors origin is set to true', () => {
-    const output = mapRwCorsOptionsToYoga(
-      {
-        origin: true,
-        credentials: true,
-        allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
-        methods: ['DELETE'],
+describe('CORS', () => {
+  it('does stuff', async () => {
+    const handler = createGraphQLHandler({
+      loggerConfig: { logger: createLogger({}), options: {} },
+      sdls: {},
+      directives: {},
+      services: {},
+      cors: {
+        origin: 'https://redwoodjs.com',
       },
-      'https://myapiside.redwood.com' // <-- this is the Request.headers.origin
-    )
-
-    expect(output).toEqual({
-      credentials: true,
-      origin: ['https://myapiside.redwood.com'],
-      methods: ['DELETE'],
-      allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
+      onException: () => {},
     })
-  })
 
-  it('Returns the *, if cors origin is set to true AND no request origin supplied', () => {
-    const output = mapRwCorsOptionsToYoga(
-      {
-        origin: true,
-        credentials: true,
-        allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
-        methods: ['DELETE'],
+    // We don't need to fully mock out a lambda event for these tests
+    const mockedEvent = {
+      headers: {
+        origin: 'https://redwoodjs.com',
+        'Content-Type': 'application/json',
       },
-      undefined
-    )
+      body: JSON.stringify({ query: '{ me { id, name } }' }),
+      httpMethod: 'POST',
+      multiValueQueryStringParameters: null,
+    } as unknown as APIGatewayProxyEvent
 
-    expect(output).toEqual({
-      credentials: true,
-      origin: ['*'],
-      methods: ['DELETE'],
-      allowedHeaders: ['Auth-Provider', 'X-Kittens', 'Authorization'],
-    })
+    const response = await handler(mockedEvent, {} as Context) //?
+
+    expect(response.statusCode).toBe(200)
+    expect(response.multiValueHeaders['access-control-allow-origin']).toBe(null)
   })
 })
