@@ -1,8 +1,9 @@
-import jwt, { JsonWebTokenError } from 'jsonwebtoken'
-import jwksClient from 'jwks-rsa'
+import jwt from 'jsonwebtoken'
+import jwksClient, { JwksError, SigningKeyNotFoundError } from 'jwks-rsa'
 
 export const auth0Config = () => {
-  const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
+  const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env // ?
+
   if (!AUTH0_DOMAIN || !AUTH0_AUDIENCE) {
     throw new Error('`AUTH0_DOMAIN` or `AUTH0_AUDIENCE` env vars are not set.')
   }
@@ -19,20 +20,24 @@ const auth0Client = () => {
   })
 }
 
-export const getSigningKey = async (header: any) => {
-  const client = auth0Client() // ?
-
+export const getAuth0SigningKey = async (header: any) => {
   const kid = header.kid as string // ?
-  const key = await client.getSigningKey(kid) //?
-  return key // ?
+
+  try {
+    return await auth0Client().getSigningKey(kid)
+  } catch (error) {
+    console.error(error)
+    throw new SigningKeyNotFoundError(kid)
+  }
 }
 
-export const getPublicKey = async (header: any) => {
-  const key = await getSigningKey(header)
+export const getAuth0PublicKey = async (header: any) => {
+  const key = await getAuth0SigningKey(header)
+
   if (key) {
-    return key.getPublicKey()
+    return await key.getPublicKey()
   } else {
-    throw new JsonWebTokenError('JWT Error')
+    throw new JwksError('JWT Error')
   }
 }
 
@@ -63,9 +68,9 @@ export const verifyAuth0Token = async (
 ): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
     jwt.verify(
-      bearerToken,
+      bearerToken, // ?
       async (header) => {
-        return getPublicKey(header)
+        return getAuth0PublicKey(header) // ?
       },
       {
         audience: auth0Config().audience,
@@ -74,7 +79,7 @@ export const verifyAuth0Token = async (
       },
       (verifyError, decoded) => {
         if (verifyError) {
-          return reject(verifyError)
+          return reject(verifyError) // ?
         }
         resolve(
           typeof decoded === 'undefined'
