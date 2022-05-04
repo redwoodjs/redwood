@@ -8,6 +8,11 @@ export const mapRwCorsOptionsToYoga = (
 ) => {
   const yogaCORSOptions: CORSOptions = {}
 
+  if (!rwCorsConfig) {
+    // Disable all CORS headers on Yoga
+    return false
+  }
+
   if (rwCorsConfig?.methods) {
     if (typeof rwCorsConfig.methods === 'string') {
       yogaCORSOptions.methods = [rwCorsConfig.methods]

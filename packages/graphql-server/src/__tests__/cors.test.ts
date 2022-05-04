@@ -162,6 +162,32 @@ describe('CORS', () => {
     ])
   })
 
+  it('Does not return cross origin headers if option not specified', async () => {
+    const handler = createGraphQLHandler({
+      loggerConfig: { logger: createLogger({}), options: {} },
+      sdls: {},
+      directives: {},
+      services: {},
+      onException: () => {},
+    })
+
+    const mockedEvent = mockLambdaEvent({
+      headers: {
+        origin: 'https://someothersite.newjsframework.com',
+        'Content-Type': 'application/json',
+      },
+      httpMethod: 'OPTIONS',
+    })
+
+    const response = await handler(mockedEvent, {} as Context)
+
+    expect(response.statusCode).toBe(204)
+    const responeHeaderKeys = Object.keys(response.multiValueHeaders)
+
+    expect(responeHeaderKeys).not.toContain('access-control-allow-origin')
+    expect(responeHeaderKeys).not.toContain('access-control-allow-credentials')
+  })
+
   it('Returns the requestOrigin when moore than one origin supplied in config', async () => {
     const handler = createGraphQLHandler({
       loggerConfig: { logger: createLogger({}), options: {} },
