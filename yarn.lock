@@ -3687,9 +3687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.4.2-canary-21038a0.0":
-  version: 2.4.2-canary-21038a0.0
-  resolution: "@graphql-yoga/common@npm:2.4.2-canary-21038a0.0"
+"@graphql-yoga/common@npm:2.5.0":
+  version: 2.5.0
+  resolution: "@graphql-yoga/common@npm:2.5.0"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/disable-introspection": ^3.0.0
@@ -3699,12 +3699,12 @@ __metadata:
     "@graphql-tools/utils": ^8.6.0
     "@graphql-typed-document-node/core": ^3.1.1
     "@graphql-yoga/subscription": 2.0.0
-    cross-undici-fetch: ^0.3.0
+    cross-undici-fetch: ^0.4.2
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 752b43716d4766fe2e2c62b06f064f980959572756e586d25affc4e8176ad9cb9b9fef1acc16a6f9de8740d7927291f9d3ec01cc2213cfc76a54f9c766c5df3b
+  checksum: 9996185dc73c09397b380db5f97c4b2627f068fa7bec0e6793268f8442b4e79a4f2ef61d4bee902aa555c203a4d3e15e411d62f42683e695f288e0c95877a034
   languageName: node
   linkType: hard
 
@@ -6253,7 +6253,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.10
     "@graphql-tools/schema": 8.3.10
     "@graphql-tools/utils": 8.6.9
-    "@graphql-yoga/common": 2.4.2-canary-21038a0.0
+    "@graphql-yoga/common": 2.5.0
     "@prisma/client": 3.13.0
     "@redwoodjs/api": 1.3.0
     "@redwoodjs/auth": 1.3.0
@@ -11713,6 +11713,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"busboy@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "busboy@npm:1.6.0"
+  dependencies:
+    streamsearch: ^1.1.0
+  checksum: fa7e836a2b82699b6e074393428b91ae579d4f9e21f5ac468e1b459a244341d722d2d22d10920cdd849743dbece6dca11d72de939fb75a7448825cf2babfba1f
+  languageName: node
+  linkType: hard
+
 "byline@npm:^5.0.0":
   version: 5.0.0
   resolution: "byline@npm:5.0.0"
@@ -13408,17 +13417,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:^0.3.0":
-  version: 0.3.6
-  resolution: "cross-undici-fetch@npm:0.3.6"
+"cross-undici-fetch@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "cross-undici-fetch@npm:0.4.2"
   dependencies:
     abort-controller: ^3.0.0
+    busboy: ^1.6.0
     form-data-encoder: ^1.7.1
     formdata-node: ^4.3.1
     node-fetch: ^2.6.7
     undici: ^5.1.0
     web-streams-polyfill: ^3.2.0
-  checksum: 092d4f4f6d7aa541a53cf3edd4eb32c9a1ab137431b5ef6b7305c2725b2825e5d70099707e19c1f85b48ea28df3701df2d751cddc0e6479044e81eab62bca169
+  checksum: a17237830a949fe193e0c105e02ee976cbd5d69878a4be6e511b76e4482dc662ef4ca535383474b01f405b74974b804a8abf04435ed0b6fb9f85c877c3ad70f6
   languageName: node
   linkType: hard
 
