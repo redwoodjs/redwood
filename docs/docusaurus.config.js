@@ -48,8 +48,6 @@ const config = {
           {
             type: 'docsVersionDropdown',
             position: 'left',
-            dropdownItemsAfter: [{ to: '/versions', label: 'All versions' }],
-            dropdownActiveClassDisabled: true,
           },
           {
             href: 'https://github.com/redwoodjs/redwood',
@@ -118,6 +116,13 @@ const config = {
           // ? — blob? tree?
           editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs', // base path for repo edit pages
           remarkPlugins: [autoImportTabs, fileExtSwitcher],
+          versions: {
+            current: {
+              label: 'rc',
+              path: 'rc',
+              banner: 'unreleased',
+            },
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
