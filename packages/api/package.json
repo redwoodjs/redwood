@@ -59,7 +59,7 @@
   "peerDependencies": {
     "@clerk/clerk-sdk-node": "3.3.10",
     "@magic-sdk/admin": "1.4.1",
-    "firebase-admin": "10.1.0"
+    "firebase-admin": "10.2.0"
   },
   "peerDependenciesMeta": {
     "@clerk/clerk-sdk-node": {
