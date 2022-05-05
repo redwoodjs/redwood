@@ -8,7 +8,8 @@ import c from 'ansi-colors'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
-import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
 import {
   getPaths,
@@ -18,14 +19,15 @@ import {
   loadAndValidateSdls,
 } from '@redwoodjs/internal'
 
-const argv = yargs
+const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
     alias: 'dp',
     description: 'Debugging port',
     type: 'number',
   })
   .help()
-  .alias('help', 'h').argv
+  .alias('help', 'h')
+  .parseSync()
 
 const rwjsPaths = getPaths()
 

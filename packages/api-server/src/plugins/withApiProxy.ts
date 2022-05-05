@@ -1,5 +1,5 @@
+import httpProxy, { FastifyHttpProxyOptions } from '@fastify/http-proxy'
 import { FastifyInstance } from 'fastify'
-import httpProxy, { FastifyHttpProxyOptions } from 'fastify-http-proxy'
 
 interface ApiProxyOptions {
   apiUrl: string

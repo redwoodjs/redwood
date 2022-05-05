@@ -999,6 +999,13 @@ Notes:
   nestScaffoldByModel = false
 ```
 
+**Troubleshooting**
+
+If you see `Error: Unknown type: ...`, don't panic!
+It's a known limitation with GraphQL type generation.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
+Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
+
 ### generate sdl
 
 Generate a GraphQL schema and service object.
@@ -1158,6 +1165,13 @@ export const User = {
   }
 }
 ```
+
+**Troubleshooting**
+
+If you see `Error: Unknown type: ...`, don't panic!
+It's a known limitation with GraphQL type generation.
+It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
+Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
 ### generate secret
 
@@ -1767,7 +1781,7 @@ yarn redwood setup tsconfig
 
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [Chakra UI](https://chakra-ui.com/) and [TailwindCSS](https://tailwindcss.com/).
+Set up a UI design or style library. Right now the choices are [Chakra UI](https://chakra-ui.com/), [TailwindCSS](https://tailwindcss.com/) and [WindiCSS](https://windicss.org/).
 
 ```
 yarn rw setup ui <library>
