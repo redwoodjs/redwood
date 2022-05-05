@@ -152,6 +152,8 @@ function getPluginConfig() {
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,
+    // Allows you to call resolvers internally, or write tests which call them
+    makeResolverTypeCallable: true,
 
     customResolverFn: `(
       args: TArgs,
