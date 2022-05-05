@@ -1,5 +1,4 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
-import { takeRight } from 'lodash'
 
 import { AuthenticationError } from '../../errors'
 
