@@ -14,7 +14,8 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
-import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
 import { name, version } from '../package'
 
@@ -51,7 +52,7 @@ const {
   overwrite,
   telemetry: telemetry,
   yarn1,
-} = yargs
+} = yargs(hideBin(process.argv))
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
@@ -84,7 +85,7 @@ const {
     describe: 'Use yarn 1. yarn 3 by default',
   })
   .version(version)
-  .strict().argv
+  .parse()
 
 const targetDir = String(args).replace(/,/g, '-')
 if (!targetDir) {

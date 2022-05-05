@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import fastifyStatic from '@fastify/static'
 import { FastifyInstance, FastifyReply } from 'fastify'
-import fastifyStatic from 'fastify-static'
 
 import { findPrerenderedHtml, getPaths } from '@redwoodjs/internal'
 

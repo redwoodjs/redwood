@@ -131,7 +131,7 @@ Run this setup command to get the internals of dbAuth added to our app:
 yarn rw setup auth dbAuth
 ```
 
-When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app make sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
+When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app makes sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
 
 You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
 
@@ -829,7 +829,7 @@ export const hasRole = ({ roles }): boolean => {
   return false
 }
 
-export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
+export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
