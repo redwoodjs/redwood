@@ -46,6 +46,12 @@ const config = {
         },
         items: [
           {
+            type: 'docsVersionDropdown',
+            position: 'left',
+            dropdownItemsAfter: [{ to: '/versions', label: 'All versions' }],
+            dropdownActiveClassDisabled: true,
+          },
+          {
             href: 'https://github.com/redwoodjs/redwood',
             position: 'right',
             className: 'github-logo',
