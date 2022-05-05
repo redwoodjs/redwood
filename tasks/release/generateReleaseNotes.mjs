@@ -19,7 +19,7 @@ import octokit from './octokit.mjs'
  */
 export default async function generateReleaseNotes(
   milestone,
-  { releaseCandidate }
+  { releaseCandidate = false }
 ) {
   // Get the milestone's title, id, and PRs.
   const { title, id } = await getMilestoneId(milestone)
