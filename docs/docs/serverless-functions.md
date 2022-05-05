@@ -33,11 +33,13 @@ export const handler = async (event, context) => {
   }
 }
 ```
+
 :::info
 
 We call them 'serverless' but they can also be used on 'serverful' hosted environments too, such as Render or Heroku.
 
 :::
+
 ## The handler
 
 For a lambda function to be a lambda function, it must export a handler that returns a status code. The handler receives two arguments: `event` and `context`. Whatever it returns is the `response`, which should include a `statusCode` at the very least.
@@ -733,6 +735,7 @@ Serverless functions can use the same user-authentication strategy used by Graph
  If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
 
 :::
+
 #### How to Secure a Function with Redwood Auth
 
 The `useRequireAuth` wrapper configures your handler's `context` so that you can use any of the `requireAuth`-related authentication helpers in your serverless function:
@@ -743,17 +746,20 @@ The `useRequireAuth` wrapper configures your handler's `context` so that you can
 - pass your implementation and `getCurrentUser` to the `useRequireAuth` wrapper and export its return
 - check if the user `isAuthenticated()` and, if not, handle the unauthenticated case by returning a `401` status code (for example)
 
-```tsx {3,5,11,24-28}
+```tsx
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
+// highlight-next-line
 import { useRequireAuth } from '@redwoodjs/graphql-server'
 
+// highlight-next-line
 import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
 import { logger } from 'src/lib/logger'
 
 const myHandler = async (event: APIGatewayEvent, context: Context) => {
   logger.info('Invoked myHandler')
 
+  // highlight-next-line
   if (isAuthenticated()) {
     logger.info('Access myHandler as authenticated user')
 
@@ -767,13 +773,14 @@ const myHandler = async (event: APIGatewayEvent, context: Context) => {
       }),
     }
   } else {
+    // highlight-start
     logger.error('Access to myHandler was denied')
 
     return {
       statusCode: 401,
     }
+    // highlight-end
   }
-
 }
 
 export const handler = useRequireAuth({
@@ -791,6 +798,7 @@ In short, you can now use the any of your auth functions like `isAuthenticated()
 If you intend to implement a feature that requires user authentication, then using GraphQL, auth directives, and services is the preferred approach.
 
 :::
+
 #### Using your Authenticated Serverless Function
 
 As there is no login flow when using functions, the `useRequireAuth` check assumes that your user is already authenticated and you have access to their JWT access token.
@@ -838,6 +846,7 @@ As LogRocket [says](https://blog.logrocket.com/rate-limiting-node-js/):
 :::info
 
 Rate limiting is a very powerful feature for securing backend APIs from malicious attacks and for handling unwanted streams of requests from users. In general terms, it allows us to control the rate at which user requests are processed by our server.
+
 :::
 
 API Gateways like [Kong](https://docs.konghq.com/hub/kong-inc/rate-limiting/) offer plugins to configure how many HTTP requests can be made in a given period of seconds, minutes, hours, days, months, or years.
