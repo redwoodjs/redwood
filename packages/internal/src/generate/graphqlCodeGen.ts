@@ -153,7 +153,7 @@ function getPluginConfig() {
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,
-
+    showUnusedMappers: false,
     customResolverFn: `(
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
