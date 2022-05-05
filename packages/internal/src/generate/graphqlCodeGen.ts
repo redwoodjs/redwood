@@ -155,7 +155,7 @@ function getPluginConfig() {
     omitOperationSuffix: true,
 
     customResolverFn: `(
-      args: TArgs,
+      args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => Promise<Partial<TResult>> | Partial<TResult>;`,
     mappers: prismaModels,
