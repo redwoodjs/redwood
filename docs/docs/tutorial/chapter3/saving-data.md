@@ -57,8 +57,8 @@ yarn rw g sdl Contact
 
 Just like the `scaffold` command, this will create a few new files under the `api` directory:
 
-1. `api/src/graphql/contacts.sdl.{js,tsx}`: defines the GraphQL schema in GraphQL's schema definition language
-2. `api/src/services/contacts/contacts.{js,tsx}`: contains your app's business logic (also creates associated test files)
+1. `api/src/graphql/contacts.sdl.{js,ts}`: defines the GraphQL schema in GraphQL's schema definition language
+2. `api/src/services/contacts/contacts.{js,ts}`: contains your app's business logic (also creates associated test files)
 
 If you remember our discussion in [how Redwood works with data](../chapter2/side-quest.md) you'll recall that queries and mutations in an SDL file are automatically mapped to resolvers defined in a service, so when you generate an SDL file you'll get a service file as well, since one requires the other.
 
@@ -161,7 +161,7 @@ GraphQL's SDL syntax requires an extra `!` when a field _is_ required. Remember:
 
 :::
 
-As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.{js,tsx}`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.{js,tsx}`).
+As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest.md), there are no explicit resolvers defined in the SDL file. Redwood follows a simple naming convention: each field listed in the `Query` and `Mutation` types in the `sdl` file (`api/src/graphql/contacts.sdl.{js,ts}`) maps to a function with the same name in the `services` file (`api/src/services/contacts/contacts.{js,ts}`).
 
 :::tip
 
@@ -181,7 +181,7 @@ Serendipitously, the default schema directive of `@requireAuth` is exactly what 
 
 :::
 
-We're not going to let anyone update or delete a comment, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
+We're not going to let anyone update or delete a message, so we can remove those fields completely. Here's what the SDL file looks like after the changes:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -205,12 +205,6 @@ export const schema = gql`
     name: String!
     email: String!
     message: String!
-  }
-
-  input UpdateContactInput {
-    name: String
-    email: String
-    message: String
   }
 
   // highlight-start
@@ -762,7 +756,6 @@ import {
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler,
 } from '@redwoodjs/forms'
 
 const CREATE_CONTACT = gql`
@@ -843,6 +836,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 import {
@@ -2047,5 +2041,7 @@ const ContactPage = () => {
 
 </TabItem>
 </Tabs>
+
+:::
 
 The public site is looking pretty good. How about the administrative features that let us create and edit posts? We should move them to some kind of admin section and put them behind a login so that random users poking around at URLs can't create ads for discount pharmaceuticals.

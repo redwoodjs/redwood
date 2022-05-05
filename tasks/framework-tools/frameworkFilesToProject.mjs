@@ -12,7 +12,7 @@ if (!projectPath) {
 }
 
 try {
-  copyFrameworkFilesToProject(projectPath)
+  await copyFrameworkFilesToProject(projectPath)
 } catch (e) {
   console.error('Error:', e.message)
   process.exit(1)
