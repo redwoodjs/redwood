@@ -292,6 +292,7 @@ module.exports = (webpackEnv) => {
                   loader: require.resolve('babel-loader'),
                   options: {
                     ...webBabelOptions,
+                    // https://github.com/babel/babel-loader
                     cacheDirectory: true,
                     cwd: redwoodPaths.base,
                     plugins: [
