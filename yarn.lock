@@ -5028,24 +5028,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@nhost/core@npm:0.4.1"
+"@nhost/core@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@nhost/core@npm:0.5.0"
   dependencies:
     axios: ^0.25.0
     js-cookie: ^3.0.1
     xstate: ^4.31.0
-  checksum: d97485b3d55400682d25b02ccf993765449a6162ad2b97611d449841d16fafb9c8ea303ba491bf6f6e8b4b5247c7ac53ff3bf5cd74bc7349147c6a4de660b841
+  checksum: 5736fa990b29531221df1f05547448e2504ebee89f839efaa2c82e924be424fb48ac1a81c0336f6491c2eeed5a79ea0635adda8f616de416897c597e0f4105ae
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@nhost/hasura-auth-js@npm:1.1.1"
+"@nhost/hasura-auth-js@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@nhost/hasura-auth-js@npm:1.1.2"
   dependencies:
-    "@nhost/core": ^0.4.1
+    "@nhost/core": ^0.5.0
     jwt-decode: ^3.1.2
-  checksum: 8a123c1b28d5c1047ca31c55dde39cb5b143f3ee9bfc12e13084aebe93a92056d8620fbc06abb3b3ab6781f780109c385c7f3f99635eb7f7a3ad7507e490e000
+  checksum: 51fc8b5cb4bac844fd85d3d0e99d80f0957f9331d8aeddd1a6edc952c0eb3edd53fef06cd619d4eadfe284f48b3ce5d18272c5f97e0fc42330f3d24f83e0c604
   languageName: node
   linkType: hard
 
@@ -5058,18 +5058,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.1.6":
-  version: 1.1.6
-  resolution: "@nhost/nhost-js@npm:1.1.6"
+"@nhost/nhost-js@npm:1.1.7":
+  version: 1.1.7
+  resolution: "@nhost/nhost-js@npm:1.1.7"
   dependencies:
-    "@nhost/hasura-auth-js": ^1.1.1
+    "@nhost/hasura-auth-js": ^1.1.2
     "@nhost/hasura-storage-js": ^0.2.0
     axios: ^0.23.0
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 449f7d0424fa3c857d39f8d53b7cc776adad23b5539bf96c32244dddaa27c6483c762788aaf66fd9133772d1065f323a3f34d2de55221c90d7751b9852851736
+  checksum: 3eb165035b8ff592d5699d59e3c63369766284acfdcf1ebbb0a0dbc85b96cd7fb76c018ef8f6a0c73835598c7b4997aee6b58fbb7f559f10168822f833553653
   languageName: node
   linkType: hard
 
@@ -6010,7 +6010,7 @@ __metadata:
     "@clerk/clerk-js": 3.9.0
     "@clerk/clerk-sdk-node": 3.3.10
     "@clerk/types": 2.8.0
-    "@nhost/nhost-js": 1.1.6
+    "@nhost/nhost-js": 1.1.7
     "@supabase/supabase-js": 1.35.2
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.44
