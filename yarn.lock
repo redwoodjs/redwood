@@ -2780,7 +2780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-compat@npm:0.1.8, @firebase/database-compat@npm:^0.1.1":
+"@firebase/database-compat@npm:0.1.8, @firebase/database-compat@npm:^0.1.8":
   version: 0.1.8
   resolution: "@firebase/database-compat@npm:0.1.8"
   dependencies:
@@ -2796,7 +2796,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-types@npm:0.9.7, @firebase/database-types@npm:^0.9.3":
+"@firebase/database-types@npm:0.9.7, @firebase/database-types@npm:^0.9.7":
   version: 0.9.7
   resolution: "@firebase/database-types@npm:0.9.7"
   dependencies:
@@ -5983,7 +5983,7 @@ __metadata:
   peerDependencies:
     "@clerk/clerk-sdk-node": 3.3.10
     "@magic-sdk/admin": 1.4.1
-    firebase-admin: 10.1.0
+    firebase-admin: 10.2.0
   peerDependenciesMeta:
     "@clerk/clerk-sdk-node":
       optional: true
@@ -6015,7 +6015,7 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.44
     firebase: 9.7.0
-    firebase-admin: 10.1.0
+    firebase-admin: 10.2.0
     gotrue-js: 0.9.29
     jest: 27.5.1
     magic-sdk: 8.1.1
@@ -16562,12 +16562,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:10.1.0":
-  version: 10.1.0
-  resolution: "firebase-admin@npm:10.1.0"
+"firebase-admin@npm:10.2.0":
+  version: 10.2.0
+  resolution: "firebase-admin@npm:10.2.0"
   dependencies:
-    "@firebase/database-compat": ^0.1.1
-    "@firebase/database-types": ^0.9.3
+    "@firebase/database-compat": ^0.1.8
+    "@firebase/database-types": ^0.9.7
     "@google-cloud/firestore": ^4.15.1
     "@google-cloud/storage": ^5.18.3
     "@types/node": ">=12.12.47"
@@ -16575,12 +16575,13 @@ __metadata:
     jsonwebtoken: ^8.5.1
     jwks-rsa: ^2.0.2
     node-forge: ^1.3.1
+    uuid: ^8.3.2
   dependenciesMeta:
     "@google-cloud/firestore":
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: ec1dfd18f88c7a0d224b83ebbe00be66967b049330723ca5fc898249afcdcd14d5edf42f404071319bd936f614fb27e744c33177931a67cf4ad0e049fe27f479
+  checksum: 51dc30a762f13e18e195769b3adfa3d586bb4c05cbcdd514d638f586bca3e4e471bf491c62b155b9ac3a4d7ce10199ca00bce26012c3e64d854f6e4d0b5c96ec
   languageName: node
   linkType: hard
 
