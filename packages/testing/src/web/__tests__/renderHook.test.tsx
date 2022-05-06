@@ -3,13 +3,17 @@
  * renderHook example provided in the docs.  It does not currently test the
  * wrapper functionality of RedwoodJS providers
  */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { renderHook, act } from '../index'
+import { renderHook } from '../index'
 
 // Define a custom hook for testing
 const useAccumulator = (initialValue: number) => {
   const [total, setTotal] = useState(initialValue)
+
+  useEffect(() => {
+    setTotal(initialValue)
+  }, [initialValue])
 
   const add = (value: number) => {
     const newTotal = total + value
@@ -22,30 +26,29 @@ const useAccumulator = (initialValue: number) => {
 
 describe('useAccumulator hook example in docs', () => {
   it('has the correct initial state', () => {
-    const { result } = renderHook(() => useAccumulator(0))
-    expect(result.current.total).toBe(0)
+    const { result } = renderHook(() => useAccumulator(42))
+    expect(result.current.total).toBe(42)
   })
   it('adds a value', () => {
-    const { result } = renderHook(() => useAccumulator(0))
-    act(() => {
-      result.current.add(5)
-    })
-    expect(result.current.total).toBe(5)
+    const { result } = renderHook(() => useAccumulator(1))
+    result.current.add(5)
+    expect(result.current.total).toBe(6)
   })
   it('adds multiple values', () => {
     const { result } = renderHook(() => useAccumulator(0))
-    act(() => {
-      result.current.add(5)
-      result.current.add(10)
-    })
+    result.current.add(5)
+    result.current.add(10)
     expect(result.current.total).toBe(15)
   })
   it('re-initializes the accumulator if passed a new initilizing value', () => {
-    const { result, rerender } = renderHook(() => useAccumulator(0))
-    act(() => {
-      result.current.add(5)
-      rerender(99)
-    })
+    const { result, rerender } = renderHook(
+      (initialValue) => useAccumulator(initialValue),
+      {
+        initialProps: 0,
+      }
+    )
+    result.current.add(5)
+    rerender(99)
     expect(result.current.total).toBe(99)
   })
 })

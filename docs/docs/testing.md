@@ -259,22 +259,20 @@ This test (if it worked) would prove that you are indeed rendering an article. B
 
 > Why do we keep saying this test won't work? Because as far as we can tell there's no easy way to simply render to a string. `render` actually returns an object that has several functions for testing different parts of the output. Those are what we'll look into in the next section.
 
-## Testing Custom  Hooks
+## Testing Custom Hooks
 
-Custom hooks are a very useful React tool to encapsulate non-presentational code. To test custom react hooks, we will utilize the `renderHook` function from `@redwoodjs/testing/web`.
+Custom hooks are a handy React tool to encapsulate non-presentational code. To test custom react hooks, we will utilize the `renderHook` function from `@redwoodjs/testing/web`.
 
-> Please note that RedwoodJS' `renderHook` function is based upon React Testing Library's `renderHook` function and provides a wrapper for mocking the various Redwoodjs providers such as auth, graphQL client, router and location. If you were to utilize React Testing Library's `renderHook` function, you would need to provide your own wrapper function for the appropriate providers. See https://testing-library.com/docs/react-testing-library/api/ for more details.
-
-Let's start with the things you're probably most familiar with if you've done any React work (with or without Redwood): components. The simplest test for a component would be matching against the exact HTML that's rendered by React (this doesn't actually work so don't bother trying):
+> Please note that RedwoodJS' `renderHook` function is based upon React Testing Library's `renderHook` function and provides a wrapper for mocking the various Redwoodjs providers such as auth, graphQL client, router, and location. If you were to directly utilize React Testing Library's `renderHook` function, you would need to provide your own wrapper function for the appropriate providers. See https://testing-library.com/docs/react-testing-library/api/ for more details.
 
 To use `renderHook`:
-1. call your custom hook from an inline function passed to `renderHook`. For example:
+1. Call your custom hook from an inline function passed to `renderHook`. For example:
 ```
 const { result } = renderHook(() => useAccumulator(0))
 ```
 2. `renderHook` will return an object with the following properties:
-- `result`: The return value of the hook is held in `result.current`.  Think of `result` as a `ref` for the most recent returned value.
-- `rerender`: A function to render the the previously rendered hook with new variables / props.
+- `result`: The return value of the hook is held in `result.current`. Think of `result` as a `ref` for the most recent returned value.
+- `rerender`: A function to render the previously rendered hook with new parameters / props.
 
 Let's go through an example. Given the following custom hook:
 ```ts title="web/src/hooks/useAccumulator/useAccumulator.ts"
@@ -294,43 +292,57 @@ const useAccumulator = (initialValue: number) => {
 The testing file could look as follows:
 
 ```ts title="web/src/hooks/useAccumulator/useAccumulator.test.ts"
-import { renderHook, act } from '@redwoodjs/testing/web'
+import { renderHook } from '@redwoodjs/testing/web'
 import { useAccumulator } from './useAccumulator'
 
-describe('useAccumulator hook', () => {
+describe('useAccumulator hook example in docs', () => {
   it('has the correct initial state', () => {
-    const { result } = renderHook(() => useAccumulator(0))
-    expect(result.current.total).toBe(0)
+    const { result } = renderHook(() => useAccumulator(42))
+    expect(result.current.total).toBe(42)
   })
   it('adds a value', () => {
-    const { result } = renderHook(() => useAccumulator(0))
-    act(() => {
-     result.current.add(5)
-    })
-    expect(result.current.total).toBe(5)
+    const { result } = renderHook(() => useAccumulator(1))
+    result.current.add(5)
+    expect(result.current.total).toBe(6)
   })
   it('adds multiple values', () => {
     const { result } = renderHook(() => useAccumulator(0))
-    act(() => {
-     result.current.add(5)
-     result.current.add(10)
-    })
+    result.current.add(5)
+    result.current.add(10)
     expect(result.current.total).toBe(15)
   })
   it('re-initializes the accumulator if passed a new initilizing value', () => {
-    const { result, rerender } = renderHook(() => useAccumulator(0))
-    act(() => {
-     result.current.add(5)
-      rerender(99)
-    })
+    const { result, rerender } = renderHook(
+      (initialValue) => useAccumulator(initialValue),
+      {
+        initialProps: 0,
+      }
+    )
+    result.current.add(5)
+    rerender(99)
     expect(result.current.total).toBe(99)
   })
-}
+})
 ```
 
-> Note that the `act` is required to make your test run closer to how React woorks in the browser. It ....
+The use of `renderHook` allows you to directly test your custom hooks without first building a component around your custom hook. However, there are cases where encapsulating the hook within a test component is a useful methodology. For more information on the subject, see https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
-The use of `renderHook` allows you to directly test your custom hooks without first building a component around your custom hook. However, note that there are cases where encapsulating the hook within a component is a useful way to test. For more information on the subject see https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
+When using the `rerender` function, you must pass in the parameters appropriately. The parameters must be passed in via an `initialProps` property in the optional second parameter. See the final test in the example above. The `initialProps` property can also take an object as per the example below (assuming a slightly different useAccumulator hook compared to the example above).
+
+```
+const { result, rerender } = renderHook(
+  ({initialValue}) => useAccumulator({ initialValue }),
+  {
+    initialProps: {
+      initialValue: 0
+    },
+  }
+)
+result.current.add(5)
+rerender({
+  initialValue: 99
+})
+```
 
 ### Queries
 
