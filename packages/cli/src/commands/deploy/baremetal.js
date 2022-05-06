@@ -454,6 +454,8 @@ export const serverConfigWithDefaults = (serverConfig, yargs) => {
 const mergeLifecycleEvents = (lifecycle, other) => {
   let lifecycleCopy = JSON.parse(JSON.stringify(lifecycle))
 
+  console.info(lifecycle, other)
+
   for (const key in other.before) {
     lifecycleCopy.before[key] = (lifecycleCopy.before[key] || []).concat(
       other.before[key]
@@ -479,7 +481,9 @@ export const parseConfig = (yargs, configToml) => {
     envConfig = config.servers[yargs.environment]
 
     // environment-specific lifecycle config
-    envLifecycle = mergeLifecycleEvents(lifecycle, envConfig)
+    if (config[yargs.environment]) {
+      envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
+    }
   } else if (
     yargs.environment === 'production' &&
     Array.isArray(config.servers)
