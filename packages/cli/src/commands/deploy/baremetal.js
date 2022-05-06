@@ -13,6 +13,7 @@ import c from '../../lib/colors'
 const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
+const LIFECYCLE_HOOKS = ['before', 'after']
 const DEFAULT_SERVER_CONFIG = {
   branch: 'main',
   packageManagerCommand: 'yarn',
@@ -454,42 +455,41 @@ export const serverConfigWithDefaults = (serverConfig, yargs) => {
 const mergeLifecycleEvents = (lifecycle, other) => {
   let lifecycleCopy = JSON.parse(JSON.stringify(lifecycle))
 
-  console.info(lifecycle, other)
+  for (const hook of LIFECYCLE_HOOKS) {
+    for (const key in other[hook]) {
+      lifecycleCopy[hook][key] = (lifecycleCopy[hook][key] || []).concat(
+        other[hook][key]
+      )
+    }
+  }
 
-  for (const key in other.before) {
-    lifecycleCopy.before[key] = (lifecycleCopy.before[key] || []).concat(
-      other.before[key]
-    )
-  }
-  for (const key in other.after) {
-    lifecycleCopy.after[key] = (lifecycleCopy.after[key] || []).concat(
-      other.after[key]
-    )
-  }
   return lifecycleCopy
 }
 
 export const parseConfig = (yargs, configToml) => {
   const config = toml.parse(configToml)
   let envConfig
+  const emptyLifecycle = {}
+
+  // start with an emtpy set of hooks, { before: {}, after: {} }
+  for (const hook of LIFECYCLE_HOOKS) {
+    emptyLifecycle[hook] = {}
+  }
 
   // global lifecycle config
-  console.info('global parse')
-  let envLifecycle = mergeLifecycleEvents({ before: {}, after: {} }, config)
+  let envLifecycle = mergeLifecycleEvents(emptyLifecycle, config)
 
   // get config for given environment
   if (config[yargs.environment]) {
     envConfig = config[yargs.environment]
     // environment-specific lifecycle config
-    console.info('env parse')
     envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
   } else if (
     yargs.environment === 'production' &&
     Array.isArray(config.servers)
   ) {
+    // if no explicit environment in config, assume servers listed are prod
     envConfig = config
-    // no reason to have environment-specific lifecycle config if config file
-    // has no explicit environment (assumes production)
   } else {
     throw new Error(
       `No deploy servers found for environment "${yargs.environment}"`
@@ -510,15 +510,12 @@ export const commands = (yargs, ssh) => {
 
   // loop through each server in deploy.toml
   for (const config of envConfig.servers) {
-    console.info('config', config)
-
     // merge in defaults
     const serverConfig = serverConfigWithDefaults(config, yargs)
 
     verifyServerConfig(serverConfig)
 
     // server-specific lifecycle
-    console.info('server parse')
     const serverLifecycle = mergeLifecycleEvents(envLifecycle, serverConfig)
 
     tasks.push({
