@@ -9,8 +9,8 @@ import terminalLink from 'terminal-link'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
-import { configFilename } from '../setup/deploy/providers/baremetal'
 
+const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
 const DEFAULT_SERVER_CONFIG = {
@@ -450,27 +450,55 @@ export const serverConfigWithDefaults = (serverConfig, yargs) => {
   }
 }
 
-export const commands = (yargs, ssh) => {
-  // parse config and get server list
-  const deployConfig = toml.parse(
-    fs.readFileSync(path.join(getPaths().base, configFilename))
-  )
+// merges additional lifecycle events into an existing object
+const mergeLifecycleEvents = (lifecycle, other) => {
+  let lifecycleCopy = JSON.parse(JSON.stringify(lifecycle))
+
+  for (const key in other.before) {
+    lifecycleCopy.before[key] = (lifecycleCopy.before[key] || []).concat(
+      other.before[key]
+    )
+  }
+  for (const key in other.after) {
+    lifecycleCopy.after[key] = (lifecycleCopy.after[key] || []).concat(
+      other.after[key]
+    )
+  }
+  return lifecycleCopy
+}
+
+export const parseConfig = (yargs, configToml) => {
+  const config = toml.parse(configToml)
   let envConfig
 
+  // global lifecycle config
+  let envLifecycle = mergeLifecycleEvents({ before: {}, after: {} }, config)
+
   // get config for given environment
-  if (deployConfig.servers[yargs.environment]) {
-    envConfig = deployConfig.servers[yargs.environment]
+  if (config.servers[yargs.environment]) {
+    envConfig = config.servers[yargs.environment]
+
+    // environment-specific lifecycle config
+    envLifecycle = mergeLifecycleEvents(lifecycle, envConfig)
   } else if (
     yargs.environment === 'production' &&
-    Array.isArray(deployConfig.servers)
+    Array.isArray(config.servers)
   ) {
-    envConfig = deployConfig.servers
+    envConfig = config.servers
   } else {
     throw new Error(
       `No deploy servers found for environment "${yargs.environment}"`
     )
   }
 
+  return { envConfig, envLifecycle }
+}
+
+export const commands = (yargs, ssh) => {
+  const deployConfig = fs.readFileSync(
+    path.join(getPaths().base, CONFIG_FILENAME)
+  )
+  let { envConfig, envLifecycle } = parseConfig(yargs, deployConfig)
   let servers = []
   let tasks = []
 
@@ -480,6 +508,9 @@ export const commands = (yargs, ssh) => {
     const serverConfig = serverConfigWithDefaults(config, yargs)
 
     verifyServerConfig(serverConfig)
+
+    // server-specific lifecycle
+    const serverLifecycle = mergeLifecycleEvents(envLifecycle, serverConfig)
 
     tasks.push({
       title: 'Connecting...',
