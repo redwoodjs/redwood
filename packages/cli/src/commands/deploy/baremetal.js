@@ -474,21 +474,22 @@ export const parseConfig = (yargs, configToml) => {
   let envConfig
 
   // global lifecycle config
+  console.info('global parse')
   let envLifecycle = mergeLifecycleEvents({ before: {}, after: {} }, config)
 
   // get config for given environment
-  if (config.servers[yargs.environment]) {
-    envConfig = config.servers[yargs.environment]
-
+  if (config[yargs.environment]) {
+    envConfig = config[yargs.environment]
     // environment-specific lifecycle config
-    if (config[yargs.environment]) {
-      envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
-    }
+    console.info('env parse')
+    envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
   } else if (
     yargs.environment === 'production' &&
     Array.isArray(config.servers)
   ) {
-    envConfig = config.servers
+    envConfig = config
+    // no reason to have environment-specific lifecycle config if config file
+    // has no explicit environment (assumes production)
   } else {
     throw new Error(
       `No deploy servers found for environment "${yargs.environment}"`
@@ -502,18 +503,22 @@ export const commands = (yargs, ssh) => {
   const deployConfig = fs.readFileSync(
     path.join(getPaths().base, CONFIG_FILENAME)
   )
+
   let { envConfig, envLifecycle } = parseConfig(yargs, deployConfig)
   let servers = []
   let tasks = []
 
   // loop through each server in deploy.toml
-  for (const config of envConfig) {
+  for (const config of envConfig.servers) {
+    console.info('config', config)
+
     // merge in defaults
     const serverConfig = serverConfigWithDefaults(config, yargs)
 
     verifyServerConfig(serverConfig)
 
     // server-specific lifecycle
+    console.info('server parse')
     const serverLifecycle = mergeLifecycleEvents(envLifecycle, serverConfig)
 
     tasks.push({

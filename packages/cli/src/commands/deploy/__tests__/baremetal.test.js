@@ -18,15 +18,15 @@ describe('parseConfig', () => {
     const { _envConfig, envLifecycle } = baremetal.parseConfig(
       { environment: 'production' },
       `
+        [before]
+        install = 'yarn global'
+
         [[servers]]
         host = 'server.com'
-
-        [before]
-        install = 'yarn clean'
       `
     )
 
-    expect(envLifecycle.before).toEqual({ install: ['yarn clean'] })
+    expect(envLifecycle.before).toEqual({ install: ['yarn global'] })
     expect(envLifecycle.after).toEqual({})
   })
 
@@ -34,18 +34,18 @@ describe('parseConfig', () => {
     const { _envConfig, envLifecycle } = baremetal.parseConfig(
       { environment: 'production' },
       `
+        [before]
+        install = 'yarn global one'
+        update = 'yarn global two'
+
         [[servers]]
         host = 'server.com'
-
-        [before]
-        install = 'yarn clean'
-        update = 'ls -la'
       `
     )
 
     expect(envLifecycle.before).toEqual({
-      install: ['yarn clean'],
-      update: ['ls -la'],
+      install: ['yarn global one'],
+      update: ['yarn global two'],
     })
     expect(envLifecycle.after).toEqual({})
   })
@@ -54,33 +54,56 @@ describe('parseConfig', () => {
     const { _envConfig, envLifecycle } = baremetal.parseConfig(
       { environment: 'production' },
       `
+        [before]
+        install = ['yarn global one', 'yarn global two']
+
         [[servers]]
         host = 'server.com'
-
-        [before]
-        install = ['yarn clean', 'rm -rf *']
       `
     )
 
     expect(envLifecycle.before).toEqual({
-      install: ['yarn clean', 'rm -rf *'],
+      install: ['yarn global one', 'yarn global two'],
     })
     expect(envLifecycle.after).toEqual({})
   })
 
-  it.only('parses a environment lifecycle event', () => {
+  it('parses an env lifecycle event', () => {
     const { _envConfig, envLifecycle } = baremetal.parseConfig(
       { environment: 'production' },
       `
-        [[servers.production]]
+        [[production.servers]]
         host = 'server.com'
 
         [production.before]
-        install = 'yarn clean'
+        install = 'yarn env'
       `
     )
 
-    expect(envLifecycle.before).toEqual({ install: ['yarn clean'] })
+    expect(envLifecycle.before).toEqual({ install: ['yarn env'] })
+    expect(envLifecycle.after).toEqual({})
+  })
+
+  it('parses combined global and env lifecycle events', () => {
+    const { _envConfig, envLifecycle } = baremetal.parseConfig(
+      { environment: 'production' },
+      `
+        [before]
+        install = 'yarn global one'
+
+        [[production.servers]]
+        host = 'server.com'
+
+        [production.before]
+        install = 'yarn env one'
+        update = 'yarn env two'
+      `
+    )
+
+    expect(envLifecycle.before).toEqual({
+      install: ['yarn global one', 'yarn env one'],
+      update: ['yarn env two'],
+    })
     expect(envLifecycle.after).toEqual({})
   })
 })
