@@ -363,7 +363,7 @@ const commands = (yargs, ssh) => {
     yargs.environment === 'production' &&
     Array.isArray(deployConfig.servers)
   ) {
-    envConfig = deployConfig.servers
+    envConfig = deployConfig
   } else {
     throw new Error(
       `No deploy servers found for environment "${yargs.environment}"`
