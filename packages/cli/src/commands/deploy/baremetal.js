@@ -330,8 +330,8 @@ const commands = (yargs, ssh) => {
   )
   let envConfig
 
-  if (deployConfig.servers[yargs.environment]) {
-    envConfig = deployConfig.servers[yargs.environment]
+  if (deployConfig[yargs.environment]) {
+    envConfig = deployConfig[yargs.environment]
   } else if (
     yargs.environment === 'production' &&
     Array.isArray(deployConfig.servers)
@@ -347,7 +347,7 @@ const commands = (yargs, ssh) => {
   let tasks = []
 
   // loop through each server in deploy.toml
-  for (const serverConfig of envConfig) {
+  for (const serverConfig of envConfig.servers) {
     const sshOptions = {
       host: serverConfig.host,
       username: serverConfig.username,
