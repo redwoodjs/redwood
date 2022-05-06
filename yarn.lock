@@ -6395,7 +6395,7 @@ __metadata:
     "@types/lodash": 4.14.182
     "@types/lru-cache": 5.1.1
     "@types/node": 16.11.33
-    "@types/vscode": 1.66.0
+    "@types/vscode": 1.67.0
     camelcase: 6.3.0
     deepmerge: 4.2.2
     dotenv-defaults: 5.0.0
@@ -9038,10 +9038,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:1.66.0":
-  version: 1.66.0
-  resolution: "@types/vscode@npm:1.66.0"
-  checksum: 978af9032114f76e6d484fca52336154f8831f9681ae7fb18d29830a184e1219f5a517d377032345985325daefe5b1f62603ffccb858ead9ceb9f24629e234ae
+"@types/vscode@npm:1.67.0":
+  version: 1.67.0
+  resolution: "@types/vscode@npm:1.67.0"
+  checksum: 80e3f35b0a974d617b55ed78d36c40016e483fcfb712f2f9675f7f0270bf32ddc40d3297659c9974becbb55ce7f3fa7d94ebffecf1f44d69274778fcc94f3ab2
   languageName: node
   linkType: hard
 
