@@ -57,7 +57,7 @@
     "typescript": "4.6.4"
   },
   "peerDependencies": {
-    "@clerk/clerk-sdk-node": "3.3.10",
+    "@clerk/clerk-sdk-node": "3.4.0",
     "@magic-sdk/admin": "1.4.1",
     "firebase-admin": "10.2.0"
   },
