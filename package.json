@@ -28,7 +28,7 @@
     "test:release-script": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
   },
   "resolutions": {
-    "@types/react": "17.0.44",
+    "@types/react": "17.0.45",
     "all-contributors-cli@6.20.0": "patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch",
     "prop-types": "15.8.1",
     "react": "17.0.2",
