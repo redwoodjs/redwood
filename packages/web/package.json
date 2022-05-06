@@ -51,11 +51,13 @@
     "@babel/core": "7.16.7",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
+    "@types/prop-types": "15.7.4",
     "@types/react": "17.0.44",
     "@types/react-dom": "17.0.16",
     "@types/testing-library__jest-dom": "5.14.3",
     "jest": "27.5.1",
     "nodemon": "2.0.16",
+    "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "typescript": "4.6.4"
