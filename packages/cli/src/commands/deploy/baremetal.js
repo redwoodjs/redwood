@@ -302,12 +302,9 @@ const restartProcessCommand = async (processName, ssh, serverConfig, path) => {
   ])
 }
 
-const deployTasks = (yargs, ssh, serverConfig) => {
+const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
   const tasks = []
-
-  // TODO: Add lifecycle hooks for running custom code before/after each
-  // built-in task
 
   tasks.push({
     title: `Cloning \`${serverConfig.branch}\` branch...`,
@@ -539,7 +536,9 @@ export const commands = (yargs, ssh) => {
     } else if (yargs.rollback) {
       tasks = tasks.concat(rollbackTasks(yargs.rollback, ssh, serverConfig))
     } else {
-      tasks = tasks.concat(deployTasks(yargs, ssh, serverConfig))
+      tasks = tasks.concat(
+        deployTasks(yargs, ssh, serverConfig, serverLifecycle)
+      )
     }
 
     tasks.push({
