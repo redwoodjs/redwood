@@ -457,14 +457,13 @@ export const commands = (yargs, ssh) => {
   )
   let envConfig
 
-  // get config for given environment
-  if (deployConfig.servers[yargs.environment]) {
-    envConfig = deployConfig.servers[yargs.environment]
+  if (deployConfig[yargs.environment]) {
+    envConfig = deployConfig[yargs.environment]
   } else if (
     yargs.environment === 'production' &&
     Array.isArray(deployConfig.servers)
   ) {
-    envConfig = deployConfig.servers
+    envConfig = deployConfig
   } else {
     throw new Error(
       `No deploy servers found for environment "${yargs.environment}"`
@@ -475,7 +474,7 @@ export const commands = (yargs, ssh) => {
   let tasks = []
 
   // loop through each server in deploy.toml
-  for (const config of envConfig) {
+  for (const config of envConfig.servers) {
     // merge in defaults
     const serverConfig = serverConfigWithDefaults(config, yargs)
 
