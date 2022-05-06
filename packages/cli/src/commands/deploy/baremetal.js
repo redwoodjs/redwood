@@ -169,7 +169,7 @@ export const verifyServerConfig = (config) => {
   }
 }
 
-const maintenanceTasks = (status, ssh, serverConfig) => {
+export const maintenanceTasks = (status, ssh, serverConfig) => {
   const deployPath = path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
 
   if (status === 'up') {

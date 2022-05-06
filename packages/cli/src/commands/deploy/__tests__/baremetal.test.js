@@ -1,5 +1,31 @@
 import * as baremetal from '../baremetal'
 
+describe('maintenanceTasks', () => {
+  it('returns tasks to put maintenance page up', () => {
+    const tasks = baremetal.maintenanceTasks(
+      'up',
+      {},
+      { path: '/var/www/app', processNames: ['api'] }
+    )
+
+    expect(tasks.length).toEqual(2)
+    expect(tasks[0].title).toMatch('Enabling')
+    expect(tasks[1].title).toMatch('Stopping')
+  })
+
+  it('returns tasks to take maintenance page down', () => {
+    const tasks = baremetal.maintenanceTasks(
+      'down',
+      {},
+      { path: '/var/www/app', processNames: ['api'] }
+    )
+
+    expect(tasks.length).toEqual(2)
+    expect(tasks[0].title).toMatch('Starting')
+    expect(tasks[1].title).toMatch('Disabling')
+  })
+})
+
 describe('parseConfig', () => {
   it('returns empty objects if no lifecycle defined', () => {
     const { _envConfig, envLifecycle } = baremetal.parseConfig(
