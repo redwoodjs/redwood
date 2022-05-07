@@ -3,11 +3,11 @@ import jsonParse from 'fast-json-parse'
 import prettyBytes from 'pretty-bytes'
 import prettyMs from 'pretty-ms'
 
-import { DEFAULT_API_SERVER_LOGGER_NAME } from 'src/app'
+import { DEFAULT_API_SERVER_LOGGER_NAME } from '../app'
 
 const newline = '\n'
 
-const emojiLog: any = {
+const emojiLog: Record<string, string> = {
   warn: '🚦',
   info: '🌲',
   error: '🚨',
@@ -16,19 +16,19 @@ const emojiLog: any = {
   trace: '🧵',
 }
 
-const isObject = (input: any) => {
+const isObject = (input?: unknown) => {
   return Object.prototype.toString.apply(input) === '[object Object]'
 }
 
-const isEmptyObject = (object: any) => {
-  return object && !Object.keys(object).length
+const isObjectWithData = (object?: Record<string, unknown>) => {
+  return object && Object.keys(object).length > 0
 }
 
-const isPinoLog = (log: any) => {
+const isPinoLog = (log?: unknown) => {
   return log && Object.prototype.hasOwnProperty.call(log, 'level')
 }
 
-const isWideEmoji = (character: any) => {
+const isWideEmoji = (character: string) => {
   return character !== '🚦'
 }
 
@@ -50,14 +50,61 @@ export const LogFormatter = () => {
    *     },
    *     "msg": "Example debug log"
    *   }
+   *
+   *   {
+   *     "level": 20,
+   *     "time": 1651913678887,
+   *     "pid": 83106,
+   *     "hostname": "Tobbes-MacBook-Pro.local",
+   *     "name": "graphql-server",
+   *     "operationName": "BlogPostsQuery",
+   *     "query": {},
+   *     "requestId": "req-4",
+   *     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.147 Safari/537.36",
+   *     "data": {
+   *       "blogPosts": [
+   *         {
+   *           "id": 1,
+   *           "title": "A little more about me",
+   *           "body": "Raclette shoreditch ...",
+   *           "createdAt": "2022-05-07T07:41:21.150Z",
+   *           "__typename": "Post"
+   *         },
+   *         {
+   *           "id": 2,
+   *           "title": "What is the meaning of life?",
+   *           "body": "Meh waistcoat succulents ...",
+   *           "createdAt": "2022-05-07T07:41:21.150Z",
+   *           "__typename": "Post"
+   *         },
+   *         {
+   *           "id": 3,
+   *           "title": "Welcome to the blog!",
+   *           "body": "I'm baby single- origin ...",
+   *           "createdAt": "2022-05-07T07:41:21.150Z",
+   *           "__typename": "Post"
+   *         }
+   *       ]
+   *     },
+   *     "responseCache": {
+   *       "hit": false,
+   *       "didCache": true,
+   *       "ttl": null
+   *     },
+   *     "msg": "GraphQL execution completed: BlogPostsQuery"
+   *   }
    */
   const parse = (inputData: any) => {
     let logData
+
     if (typeof inputData === 'string') {
       const parsedData = jsonParse(inputData)
+
+      // TODO: Write testcase that tries to run logger.debug({ err: 'my error' }, 'Uh-ohh')
       if (!parsedData.value || parsedData.err || !isPinoLog(parsedData.value)) {
         return inputData + newline
       }
+
       logData = parsedData.value
     } else if (isObject(inputData) && isPinoLog(inputData)) {
       logData = inputData
@@ -69,75 +116,100 @@ export const LogFormatter = () => {
       return inputData + newline
     }
 
-    if (!logData.message) {
-      logData.message = logData.msg
-    }
-
     if (typeof logData.level === 'number') {
-      convertLogNumber(logData)
+      logData.level = convertLogNumber(logData)
     }
 
     return output(logData) + newline
   }
 
-  const convertLogNumber = (logData: any) => {
-    if (logData.level === 10) {
-      logData.level = 'trace'
+  const convertLogNumber = (logData: { level: number }) => {
+    const levelMap: Record<number, string> = {
+      10: 'trace',
+      20: 'debug',
+      30: 'info',
+      40: 'warn',
+      50: 'error',
+      60: 'fatal',
     }
-    if (logData.level === 20) {
-      logData.level = 'debug'
-    }
-    if (logData.level === 30) {
-      logData.level = 'info'
-    }
-    if (logData.level === 40) {
-      logData.level = 'warn'
-    }
-    if (logData.level === 50) {
-      logData.level = 'error'
-    }
-    if (logData.level === 60) {
-      logData.level = 'fatal'
-    }
+
+    return levelMap[logData.level] || 'customLevel'
   }
 
-  const outputGraphqlServer = (logData: Record<string, string>) => {
+  interface GraphqlServerLogs {
+    level: string
+    name: string
+    msg: string
+    operationName?: string
+    query?: Record<string, unknown>
+    requestId?: string
+    userAgent?: string
+    data?: Record<string, unknown>
+    responseCache?: Record<string, unknown>
+    tracing?: Record<string, unknown>
+  }
+
+  function isGraphqlServerLogs(
+    logData: Record<string, unknown> | GraphqlServerLogs
+  ): logData is GraphqlServerLogs {
+    return (logData as unknown as GraphqlServerLogs).name === 'graphql-server'
+  }
+
+  /**
+   * Example logData
+   * {
+   *   level: 'debug',
+   *   time: 1651911200534,
+   *   pid: 81356,
+   *   hostname: 'Tobbes-MacBook-Pro.local',
+   *   name: 'graphql-server',
+   *   msg: 'GraphQL execution started: BlogPostsQuery',
+   * }
+   *
+   * {
+   *   level: 'debug',
+   *   time: 1651911200547,
+   *   pid: 81356,
+   *   hostname: 'Tobbes-MacBook-Pro.local',
+   *   name: 'graphql-server',
+   *   msg: 'GraphQL execution completed: BlogPostsQuery',
+   * }
+   *
+   * With more logging options enabled in graphql.ts
+   * {
+   *   level: 'debug',
+   *   time: 1651911945301,
+   *   pid: 82077,
+   *   hostname: 'Tobbes-MacBook-Pro.local',
+   *   name: 'graphql-server',
+   *   operationName: 'BlogPostsQuery',
+   *   query: {},
+   *   requestId: 'req-8',
+   *   userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.147 Safari/537.36',
+   *   data: { blogPosts: [ [Object], [Object], [Object] ] },
+   *   responseCache: { hit: false, didCache: true, ttl: null },
+   *   msg: 'GraphQL execution completed: BlogPostsQuery',
+   * }
+   */
+  const outputGraphqlServer = (logData: GraphqlServerLogs) => {
     const output: (string | undefined)[] = []
 
-    const operationName = logData.operationName
-    const query = logData.query
-    const graphQLData = logData.data
-    const responseCache = logData.responseCache
-    const tracing = logData.tracing
-    const userAgent = logData.userAgent
-
-    if (userAgent) {
-      output.push(formatUserAgent(userAgent))
-    }
-
-    if (operationName) {
-      output.push(formatOperationName(operationName))
-    }
-
-    if (query) {
-      output.push(formatQuery(query))
-    }
-
-    if (graphQLData) {
-      output.push(formatData(graphQLData))
-    }
-
-    if (responseCache) {
-      output.push(formatResponseCache(responseCache))
-    }
-
-    if (tracing) {
-      output.push(formatTracing(tracing))
-    }
+    output.push(formatName(logData.name))
+    output.push(formatRequestId(logData.requestId))
+    output.push(formatMessage(logData))
+    output.push(formatOperationName(logData.operationName))
+    output.push(formatQuery(logData.query))
+    output.push(formatData(logData.data))
+    output.push(formatResponseCache(logData.responseCache))
+    output.push(formatTracing(logData.tracing))
+    output.push(formatUserAgent(logData.userAgent))
 
     return output
   }
+
   interface ApiServerLogs {
+    level: string
+    name: string
     req?: Record<string, string>
     res?: Record<string, string>
     statusCode?: string
@@ -146,41 +218,71 @@ export const LogFormatter = () => {
     method?: string
     contentLength?: string
     url?: string
+    msg: string
   }
 
+  function isApiServerLogs(
+    logData: Record<string, unknown> | ApiServerLogs
+  ): logData is ApiServerLogs {
+    return (
+      (logData as unknown as ApiServerLogs).name ===
+      DEFAULT_API_SERVER_LOGGER_NAME
+    )
+  }
+
+  /**
+   * Example logData
+   *
+   * {
+   *   level: 'info',
+   *   time: 1651910010935,
+   *   pid: 80419,
+   *   hostname: 'Tobbes-MacBook-Pro.local',
+   *   name: 'api-server',
+   *   reqId: 'req-7',
+   *   res: { statusCode: 200 },
+   *   responseTime: 4.725124835968018,
+   *   msg: 'request completed',
+   * }
+   *
+   * {
+   *   level: 'info',
+   *   time: 1651910010930,
+   *   pid: 80419,
+   *   hostname: 'Tobbes-MacBook-Pro.local',
+   *   name: 'api-server',
+   *   reqId: 'req-7',
+   *   req: {
+   *     method: 'POST',
+   *     url: '/graphql',
+   *     hostname: 'localhost:8910',
+   *     remoteAddress: '::1',
+   *     remotePort: 64980
+   *   },
+   *   msg: 'incoming request',
+   * }
+   */
   const outputApiServer = (logData: ApiServerLogs) => {
     const output: (string | undefined)[] = []
 
-    const req = logData.req
-    const res = logData.res
+    output.push(formatName(logData.name))
 
-    const statusCode = res ? res.statusCode : logData.statusCode
-    const responseTime = logData.responseTime || logData.elapsed
-    const method = req ? req.method : logData.method
-    const contentLength = logData.contentLength
-    const url = req ? req.url : logData.url
-
-    if (method) {
-      output.push(formatMethod(method))
-      output.push(formatStatusCode(statusCode))
+    if (logData.req) {
+      output.push(formatMethod(logData.req.method))
+      output.push(formatUrl(logData.req.url))
     }
 
-    if (url) {
-      output.push(formatUrl(url))
+    if (logData.res) {
+      output.push(formatStatusCode(logData.res.statusCode))
+      output.push(formatLoadTime(logData.responseTime))
     }
 
-    if (contentLength) {
-      output.push(formatBundleSize(contentLength))
-    }
-
-    if (responseTime) {
-      output.push(formatLoadTime(responseTime))
-    }
+    output.push(formatMessage(logData))
 
     return output
   }
 
-  const outputUser = (logData: Record<string, any>) => {
+  const outputMetadata = (logData: Record<string, unknown>) => {
     const {
       time: _time,
       level: _level,
@@ -194,39 +296,53 @@ export const LogFormatter = () => {
     return [formatMetadata(metadata)]
   }
 
-  const output = (logData: any) => {
+  interface LogData {
+    time: number
+    msg: string
+    level?: string
+    elapsed?: string
+    contentLength?: string
+    ns?: string
+    err?: { stack: string }
+    stack?: string
+  }
+
+  const output = (logData: LogData & GraphqlServerLogs & ApiServerLogs) => {
     let output: (string | undefined)[] = []
-
-    output.push(formatDate(logData.time || Date.now()))
-    output.push(formatLevel(logData.level))
-
-    if (logData.name === 'graphql-server') {
-      output = output.concat(outputGraphqlServer(logData))
-    } else if (logData.name === DEFAULT_API_SERVER_LOGGER_NAME) {
-      output = output.concat(outputApiServer(logData))
-    } else {
-      // Log message from user
-      output = output.concat(outputUser(logData))
-    }
 
     if (!logData.level) {
       logData.level = 'customlevel'
     }
 
-    if (!logData.name) {
-      logData.name = ''
+    output.push(formatDate(logData.time || Date.now()))
+    output.push(formatLevel(logData.level))
+
+    if (isGraphqlServerLogs(logData)) {
+      output = output.concat(outputGraphqlServer(logData))
+    } else if (isApiServerLogs(logData)) {
+      output = output.concat(outputApiServer(logData))
     }
 
+    // TODO: When is this used?
+    const elapsed = logData.elapsed
+    if (elapsed) {
+      output.push(formatLoadTime(elapsed))
+    }
+
+    // TODO: When is this used?
+    const contentLength = logData.contentLength
+    if (contentLength) {
+      output.push(formatBundleSize(contentLength))
+    }
+
+    // TODO: When is this used?
     output.push(formatNs(logData.ns))
-    output.push(formatName(logData.name))
-    output.push(formatRequestId(logData.requestId))
-    output.push(formatMessage(logData))
 
     // error + graphql
     const stack =
       logData.level === 'fatal' || logData.level === 'error'
         ? logData.stack || (logData.err && logData.err.stack)
-        : null
+        : undefined
 
     // Output err if it has more keys than 'stack'
     const err =
@@ -234,46 +350,44 @@ export const LogFormatter = () => {
       logData.err &&
       Object.keys(logData.err).find((key) => key !== 'stack')
         ? logData.err
-        : null
+        : undefined
 
-    if (stack != null) {
-      output.push(formatStack(stack))
-    }
+    output.push(formatStack(stack))
+    output.push(formatErrorProp(err))
 
-    if (err != null) {
-      output.push(formatErrorProp(err))
+    if (!isGraphqlServerLogs(logData) && !isApiServerLogs(logData)) {
+      output.push(formatMessage(logData))
+      // Metadata can for example come from user logs, like
+      // logger.debug({ user }, `User ${user.id}`)
+      output = output.concat(outputMetadata(logData))
     }
 
     return output.filter(noEmpty).join(' ')
   }
 
-  const formatBundleSize = (bundle: any) => {
-    const bytes = parseInt(bundle, 10)
+  const formatBundleSize = (bundleSize: string) => {
+    const bytes = parseInt(bundleSize, 10)
     const size = prettyBytes(bytes).replace(/ /, '')
     return chalk.gray(size)
   }
 
-  const formatMetadata = (query: unknown) => {
-    if (!isEmptyObject(query)) {
-      return chalk.white(
-        newline + '🗒 Metadata' + newline + JSON.stringify(query, null, 2)
-      )
-    }
-
-    return
+  const formatMetadata = (metadata?: Record<string, unknown>) => {
+    return isObjectWithData(metadata)
+      ? chalk.white(
+          newline + '🗒  Metadata' + newline + JSON.stringify(metadata, null, 2)
+        )
+      : undefined
   }
 
-  const formatData = (data: any) => {
-    if (!isEmptyObject(data)) {
-      return chalk.white(
-        newline + '📦 Result Data' + newline + JSON.stringify(data, null, 2)
-      )
-    }
-
-    return
+  const formatData = (data?: Record<string, unknown>) => {
+    return isObjectWithData(data)
+      ? chalk.white(
+          newline + '📦 Result Data' + newline + JSON.stringify(data, null, 2)
+        )
+      : undefined
   }
 
-  const formatDate = (instant: Date) => {
+  const formatDate = (instant: number) => {
     const date = new Date(instant)
     const hours = date.getHours().toString().padStart(2, '0')
     const minutes = date.getMinutes().toString().padStart(2, '0')
@@ -282,125 +396,121 @@ export const LogFormatter = () => {
     return chalk.gray(prettyDate)
   }
 
-  const formatErrorProp = (errorPropValue: any) => {
-    return newline + JSON.stringify({ err: errorPropValue }, null, 2)
+  const formatErrorProp = (err?: Record<string, unknown>) => {
+    return err ? newline + JSON.stringify({ err }, null, 2) : undefined
   }
 
-  const formatLevel = (level: any) => {
+  const formatLevel = (level: string) => {
     const emoji = emojiLog[level]
     const padding = isWideEmoji(emoji) ? '' : ' '
     return emoji + padding
   }
 
-  const formatLoadTime = (elapsedTime: any) => {
-    const elapsed = parseInt(elapsedTime, 10)
+  const formatLoadTime = (elapsedTime?: string) => {
+    if (!elapsedTime) {
+      return
+    }
+
+    const elapsed = Math.round(parseFloat(elapsedTime))
     const time = prettyMs(elapsed)
+
     return chalk.gray(time)
   }
 
-  const formatMessage = (logData: any) => {
-    const msg = formatMessageName(logData.message)
+  const formatMessage = (logData: { msg: string; level: string }) => {
+    const msg = formatMessageName(logData.msg)
 
-    let pretty
-    if (logData.level === 'error') {
-      pretty = chalk.red(msg)
+    switch (logData.level) {
+      case 'error':
+        return chalk.red(msg)
+      case 'trace':
+        return chalk.white(msg)
+      case 'warn':
+        return chalk.magenta(msg)
+      case 'debug':
+        return chalk.yellow(msg)
+      case 'info':
+      case 'customLevel':
+        return chalk.green(msg)
+      case 'fatal':
+        return chalk.white.bgRed(msg)
     }
-    if (logData.level === 'trace') {
-      pretty = chalk.white(msg)
-    }
-    if (logData.level === 'warn') {
-      pretty = chalk.magenta(msg)
-    }
-    if (logData.level === 'debug') {
-      pretty = chalk.yellow(msg)
-    }
-    if (logData.level === 'info' || logData.level === 'customlevel') {
-      pretty = chalk.green(msg)
-    }
-    if (logData.level === 'fatal') {
-      pretty = chalk.white.bgRed(msg)
-    }
-    return pretty
+
+    return msg
   }
 
-  const formatMethod = (method: any) => {
+  const formatMethod = (method: string) => {
     return chalk.white(method)
   }
 
-  const formatRequestId = (requestId: any) => {
+  const formatRequestId = (requestId?: string) => {
     return requestId && chalk.cyan(requestId)
   }
 
   const formatNs = (name?: string) => {
-    return chalk.cyan(name || '')
+    return name && chalk.cyan(name || '')
   }
 
-  const formatName = (name: any) => {
+  const formatName = (name: string) => {
     return chalk.blue(name)
   }
 
-  const formatMessageName = (message: any) => {
-    if (message === 'request') {
+  const formatMessageName = (msg: string) => {
+    if (msg === 'request') {
       return '<--'
-    }
-    if (message === 'response') {
+    } else if (msg === 'response') {
       return '-->'
     }
-    return message
+
+    return msg
   }
 
-  const formatOperationName = (operationName: any) => {
-    return chalk.white(newline + '🏷  ' + operationName)
+  const formatOperationName = (operationName?: string) => {
+    return operationName && chalk.white(newline + '🏷  ' + operationName)
   }
 
-  const formatQuery = (query: any) => {
-    if (!isEmptyObject(query)) {
-      return chalk.white(
-        newline + '🔭 Query' + newline + JSON.stringify(query, null, 2)
-      )
-    }
-
-    return
+  const formatQuery = (query?: Record<string, unknown>) => {
+    return isObjectWithData(query)
+      ? chalk.white(
+          newline + '🔭 Query' + newline + JSON.stringify(query, null, 2)
+        )
+      : undefined
   }
 
-  const formatResponseCache = (responseCache: any) => {
-    if (!isEmptyObject(responseCache)) {
-      return chalk.white(
-        newline +
-          '💾 Response Cache' +
+  const formatResponseCache = (responseCache?: Record<string, unknown>) => {
+    return isObjectWithData(responseCache)
+      ? chalk.white(
           newline +
-          JSON.stringify(responseCache, null, 2)
-      )
-    }
-
-    return
+            '💾 Response Cache' +
+            newline +
+            JSON.stringify(responseCache, null, 2)
+        )
+      : undefined
   }
 
-  const formatStatusCode = (statusCode: any) => {
+  const formatStatusCode = (statusCode?: string) => {
     statusCode = statusCode || 'xxx'
     return chalk.white(statusCode)
   }
 
-  const formatStack = (stack: any) => {
-    return stack ? newline + stack : ''
+  const formatStack = (stack?: string) => {
+    return stack ? newline + stack : undefined
   }
 
-  const formatTracing = (data: any) => {
-    if (!isEmptyObject(data)) {
-      return chalk.white(
-        newline + '⏰ Timing' + newline + JSON.stringify(data, null, 2)
-      )
-    }
-
-    return
+  const formatTracing = (data?: Record<string, unknown>) => {
+    return isObjectWithData(data)
+      ? chalk.white(
+          newline + '⏰ Timing' + newline + JSON.stringify(data, null, 2)
+        )
+      : undefined
   }
 
-  const formatUrl = (url: any) => {
-    return chalk.white(url)
+  const formatUrl = (url?: string) => {
+    return url && chalk.white(url)
   }
 
-  const formatUserAgent = (userAgent: any) => {
-    return chalk.grey(newline + '🕵️‍♀️ ' + userAgent)
+  const formatUserAgent = (userAgent?: string) => {
+    return userAgent && chalk.grey(newline + '🕵️‍♀️ ' + userAgent)
   }
 
   const noEmpty = (value: string | undefined) => {
