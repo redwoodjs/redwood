@@ -1977,7 +1977,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.5.5, @clerk/backend-core@npm:^1.6.0":
+"@clerk/backend-core@npm:^1.6.0":
   version: 1.6.0
   resolution: "@clerk/backend-core@npm:1.6.0"
   dependencies:
@@ -2010,25 +2010,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.3.10":
-  version: 3.3.10
-  resolution: "@clerk/clerk-sdk-node@npm:3.3.10"
-  dependencies:
-    "@clerk/backend-core": ^1.5.5
-    "@clerk/types": ^2.8.0
-    "@peculiar/webcrypto": ^1.2.3
-    camelcase-keys: ^6.2.2
-    cookies: ^0.8.0
-    deepmerge: ^4.2.2
-    got: ^11.8.2
-    jsonwebtoken: ^8.5.1
-    jwks-rsa: ^2.0.4
-    snakecase-keys: ^3.2.1
-    tslib: ^2.3.1
-  checksum: dd3cb661c3f949afdab8e4dc736b8eba7ee5c746757f7ecda0f3a8083f065e5edc4854571811e47133eb1dc174abd7f1784d7bd6e8bce4e41829160336912bad
-  languageName: node
-  linkType: hard
-
 "@clerk/clerk-sdk-node@npm:3.4.0":
   version: 3.4.0
   resolution: "@clerk/clerk-sdk-node@npm:3.4.0"
@@ -2048,7 +2029,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.10.0, @clerk/types@npm:^2.10.0, @clerk/types@npm:^2.8.0":
+"@clerk/types@npm:2.10.0, @clerk/types@npm:^2.10.0":
   version: 2.10.0
   resolution: "@clerk/types@npm:2.10.0"
   checksum: 94f1845ca91a773b391666fb57e2b0b8242c372b61dac4ec2b2079794a432a81c5914038cb98cb01977fba8d0a4e51b38f4626e5e3cc8d3b5ada80fdf20e09ca
@@ -2842,7 +2823,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-types@npm:0.9.7, @firebase/database-types@npm:^0.9.7":
+"@firebase/database-types@npm:0.9.7":
   version: 0.9.7
   resolution: "@firebase/database-types@npm:0.9.7"
   dependencies:
@@ -2852,7 +2833,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-types@npm:0.9.8":
+"@firebase/database-types@npm:0.9.8, @firebase/database-types@npm:^0.9.7":
   version: 0.9.8
   resolution: "@firebase/database-types@npm:0.9.8"
   dependencies:
@@ -5109,18 +5090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@nhost/core@npm:0.5.0"
-  dependencies:
-    axios: ^0.25.0
-    js-cookie: ^3.0.1
-    xstate: ^4.31.0
-  checksum: 5736fa990b29531221df1f05547448e2504ebee89f839efaa2c82e924be424fb48ac1a81c0336f6491c2eeed5a79ea0635adda8f616de416897c597e0f4105ae
-  languageName: node
-  linkType: hard
-
-"@nhost/core@npm:^0.5.2":
+"@nhost/core@npm:^0.5.0, @nhost/core@npm:^0.5.2":
   version: 0.5.2
   resolution: "@nhost/core@npm:0.5.2"
   dependencies:
@@ -6062,7 +6032,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@clerk/clerk-sdk-node": 3.3.10
+    "@clerk/clerk-sdk-node": 3.4.0
     "@prisma/client": 3.13.0
     "@redwoodjs/auth": 1.3.1
     "@types/aws-lambda": 8.10.95
@@ -6484,7 +6454,7 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 1.3.1
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.44
+    "@types/react": 17.0.45
     "@types/react-dom": 17.0.16
     core-js: 3.22.4
     jest: 27.5.1
