@@ -2,11 +2,10 @@ import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
-import { FastifyServerOptions } from 'fastify'
 
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
-import createApp from './app'
+import createApp, { ServerOptionsWithPino } from './app'
 import withApiProxy from './plugins/withApiProxy'
 import withFunctions from './plugins/withFunctions'
 import withWebServer from './plugins/withWebServer'
@@ -183,5 +182,5 @@ function loadServerConfig() {
 
   console.log(`Loading server config from ${serverConfigPath} \n`)
 
-  return require(serverConfigPath) as FastifyServerOptions
+  return require(serverConfigPath) as ServerOptionsWithPino
 }

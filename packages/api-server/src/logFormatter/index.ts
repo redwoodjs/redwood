@@ -3,6 +3,8 @@ import jsonParse from 'fast-json-parse'
 import prettyBytes from 'pretty-bytes'
 import prettyMs from 'pretty-ms'
 
+import { DEFAULT_API_SERVER_LOGGER_NAME } from 'src/app'
+
 const newline = '\n'
 
 const emojiLog: any = {
@@ -99,18 +101,113 @@ export const LogFormatter = () => {
     }
   }
 
-  const output = (logData: any) => {
-    const output = []
+  const outputGraphqlServer = (logData: Record<string, string>) => {
+    const output: (string | undefined)[] = []
+
+    const operationName = logData.operationName
+    const query = logData.query
+    const graphQLData = logData.data
+    const responseCache = logData.responseCache
+    const tracing = logData.tracing
+    const userAgent = logData.userAgent
+
+    if (userAgent) {
+      output.push(formatUserAgent(userAgent))
+    }
+
+    if (operationName) {
+      output.push(formatOperationName(operationName))
+    }
+
+    if (query) {
+      output.push(formatQuery(query))
+    }
+
+    if (graphQLData) {
+      output.push(formatData(graphQLData))
+    }
+
+    if (responseCache) {
+      output.push(formatResponseCache(responseCache))
+    }
+
+    if (tracing) {
+      output.push(formatTracing(tracing))
+    }
+
+    return output
+  }
+  interface ApiServerLogs {
+    req?: Record<string, string>
+    res?: Record<string, string>
+    statusCode?: string
+    responseTime?: string
+    elapsed?: string
+    method?: string
+    contentLength?: string
+    url?: string
+  }
+
+  const outputApiServer = (logData: ApiServerLogs) => {
+    const output: (string | undefined)[] = []
+
+    const req = logData.req
+    const res = logData.res
+
+    const statusCode = res ? res.statusCode : logData.statusCode
+    const responseTime = logData.responseTime || logData.elapsed
+    const method = req ? req.method : logData.method
+    const contentLength = logData.contentLength
+    const url = req ? req.url : logData.url
+
+    if (method) {
+      output.push(formatMethod(method))
+      output.push(formatStatusCode(statusCode))
+    }
+
+    if (url) {
+      output.push(formatUrl(url))
+    }
+
+    if (contentLength) {
+      output.push(formatBundleSize(contentLength))
+    }
+
+    if (responseTime) {
+      output.push(formatLoadTime(responseTime))
+    }
+
+    return output
+  }
+
+  const outputUser = (logData: Record<string, any>) => {
     const {
-      level: _level,
       time: _time,
+      level: _level,
       pid: _pid,
       hostname: _hostname,
       msg: _msg,
-      name: _name,
       ns: _ns,
       ...metadata
     } = logData
+
+    return [formatMetadata(metadata)]
+  }
+
+  const output = (logData: any) => {
+    let output: (string | undefined)[] = []
+
+    output.push(formatDate(logData.time || Date.now()))
+    output.push(formatLevel(logData.level))
+
+    if (logData.name === 'graphql-server') {
+      output = output.concat(outputGraphqlServer(logData))
+    } else if (logData.name === DEFAULT_API_SERVER_LOGGER_NAME) {
+      output = output.concat(outputApiServer(logData))
+    } else {
+      // Log message from user
+      output = output.concat(outputUser(logData))
+    }
 
     if (!logData.level) {
       logData.level = 'customlevel'
@@ -120,32 +217,12 @@ export const LogFormatter = () => {
       logData.name = ''
     }
 
-    if (!logData.ns) {
-      logData.ns = ''
-    }
-
-    output.push(formatDate(logData.time || Date.now()))
-    output.push(formatLevel(logData.level))
     output.push(formatNs(logData.ns))
     output.push(formatName(logData.name))
     output.push(formatRequestId(logData.requestId))
-    output.push(formatMessage(logData, metadata))
+    output.push(formatMessage(logData))
 
-    const req = logData.req
-    const res = logData.res
-
-    const statusCode = res ? res.statusCode : logData.statusCode
-    const responseTime = logData.responseTime || logData.elapsed
-    const method = req ? req.method : logData.method
-    const custom = logData.custom
-    const contentLength = logData.contentLength
-    const operationName = logData.operationName
-    const query = logData.query
-    const graphQLData = logData.data
-    const responseCache = logData.responseCache
-    const tracing = logData.tracing
-    const url = req ? req.url : logData.url
-    const userAgent = logData.userAgent
+    // error + graphql
     const stack =
       logData.level === 'fatal' || logData.level === 'error'
         ? logData.stack || (logData.err && logData.err.stack)
@@ -158,51 +235,6 @@ export const LogFormatter = () => {
       Object.keys(logData.err).find((key) => key !== 'stack')
         ? logData.err
         : null
-
-    if (method != null) {
-      output.push(formatMethod(method))
-      output.push(formatStatusCode(statusCode))
-    }
-
-    if (url != null) {
-      output.push(formatUrl(url))
-    }
-
-    if (contentLength != null) {
-      output.push(formatBundleSize(contentLength))
-    }
-
-    if (custom) {
-      output.push(formatCustom(custom))
-    }
-
-    if (responseTime != null) {
-      output.push(formatLoadTime(responseTime))
-    }
-
-    if (userAgent != null) {
-      output.push(formatUserAgent(userAgent))
-    }
-
-    if (operationName != null) {
-      output.push(formatOperationName(operationName))
-    }
-
-    if (query != null) {
-      output.push(formatQuery(query))
-    }
-
-    if (graphQLData != null) {
-      output.push(formatData(graphQLData))
-    }
-
-    if (responseCache != null) {
-      output.push(formatResponseCache(responseCache))
-    }
-
-    if (tracing != null) {
-      output.push(formatTracing(tracing))
-    }
 
     if (stack != null) {
       output.push(formatStack(stack))
@@ -221,10 +253,10 @@ export const LogFormatter = () => {
     return chalk.gray(size)
   }
 
-  const formatCustom = (query: any) => {
+  const formatMetadata = (query: unknown) => {
     if (!isEmptyObject(query)) {
       return chalk.white(
-        newline + '🗒 Custom' + newline + JSON.stringify(query, null, 2)
+        newline + '🗒 Metadata' + newline + JSON.stringify(query, null, 2)
       )
     }
 
@@ -266,7 +298,7 @@ export const LogFormatter = () => {
     return chalk.gray(time)
   }
 
-  const formatMessage = (logData: any, metadata: Record<string, unknown>) => {
+  const formatMessage = (logData: any) => {
     const msg = formatMessageName(logData.message)
 
     let pretty
@@ -288,7 +320,7 @@ export const LogFormatter = () => {
     if (logData.level === 'fatal') {
       pretty = chalk.white.bgRed(msg)
     }
-    return pretty + '\n' + JSON.stringify(metadata, null, 2)
+    return pretty
   }
 
   const formatMethod = (method: any) => {
@@ -299,8 +331,8 @@ export const LogFormatter = () => {
     return requestId && chalk.cyan(requestId)
   }
 
-  const formatNs = (name: any) => {
-    return chalk.cyan(name)
+  const formatNs = (name?: string) => {
+    return chalk.cyan(name || '')
   }
 
   const formatName = (name: any) => {
@@ -371,7 +403,7 @@ export const LogFormatter = () => {
     return chalk.grey(newline + '🕵️‍♀️ ' + userAgent)
   }
 
-  const noEmpty = (value: any) => {
+  const noEmpty = (value: string | undefined) => {
     return !!value
   }
 
