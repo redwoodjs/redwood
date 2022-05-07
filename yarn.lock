@@ -1977,7 +1977,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.6.0":
+"@clerk/backend-core@npm:^1.5.5, @clerk/backend-core@npm:^1.6.0":
   version: 1.6.0
   resolution: "@clerk/backend-core@npm:1.6.0"
   dependencies:
@@ -2010,6 +2010,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/clerk-sdk-node@npm:3.3.10":
+  version: 3.3.10
+  resolution: "@clerk/clerk-sdk-node@npm:3.3.10"
+  dependencies:
+    "@clerk/backend-core": ^1.5.5
+    "@clerk/types": ^2.8.0
+    "@peculiar/webcrypto": ^1.2.3
+    camelcase-keys: ^6.2.2
+    cookies: ^0.8.0
+    deepmerge: ^4.2.2
+    got: ^11.8.2
+    jsonwebtoken: ^8.5.1
+    jwks-rsa: ^2.0.4
+    snakecase-keys: ^3.2.1
+    tslib: ^2.3.1
+  checksum: dd3cb661c3f949afdab8e4dc736b8eba7ee5c746757f7ecda0f3a8083f065e5edc4854571811e47133eb1dc174abd7f1784d7bd6e8bce4e41829160336912bad
+  languageName: node
+  linkType: hard
+
 "@clerk/clerk-sdk-node@npm:3.4.0":
   version: 3.4.0
   resolution: "@clerk/clerk-sdk-node@npm:3.4.0"
@@ -2036,7 +2055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:^2.10.0":
+"@clerk/types@npm:^2.10.0, @clerk/types@npm:^2.8.0":
   version: 2.10.0
   resolution: "@clerk/types@npm:2.10.0"
   checksum: 94f1845ca91a773b391666fb57e2b0b8242c372b61dac4ec2b2079794a432a81c5914038cb98cb01977fba8d0a4e51b38f4626e5e3cc8d3b5ada80fdf20e09ca
