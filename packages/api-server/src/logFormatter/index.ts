@@ -100,7 +100,7 @@ export const LogFormatter = () => {
     if (typeof inputData === 'string') {
       const parsedData = jsonParse(inputData)
 
-      // TODO: Write testcase that tries to run logger.debug({ err: 'my error' }, 'Uh-ohh')
+      // TODO: Write test case that tries to run logger.debug({ err: 'my error' }, 'Uh-ohh')
       if (!parsedData.value || parsedData.err || !isPinoLog(parsedData.value)) {
         return inputData + newline
       }
@@ -311,7 +311,7 @@ export const LogFormatter = () => {
     let output: (string | undefined)[] = []
 
     if (!logData.level) {
-      logData.level = 'customlevel'
+      logData.level = 'customLevel'
     }
 
     output.push(formatDate(logData.time || Date.now()))
