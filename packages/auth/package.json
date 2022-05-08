@@ -44,5 +44,8 @@
     "supertokens-auth-react": "0.20.4",
     "typescript": "4.6.4"
   },
-  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1",
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.16.7"
+  }
 }
