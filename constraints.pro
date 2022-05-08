@@ -18,11 +18,15 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, TargetDependencyRange, De
   workspace_has_dependency(WorkspaceCwd, DependencyIdent, CurrentDependencyRange, DependencyType),
   atom_concat('^', TargetDependencyRange, CurrentDependencyRange).
 
-% Enforce that all workspaces building with Babel depend on '@babel/runtime-corejs3'
-gen_enforced_dependency(WorkspaceCwd, '@babel/runtime-corejs3', DependencyRange, 'dependencies') :-
+% Enforce that all workspaces building with Babel depend on '@babel/runtime-corejs3' and 'core-js'.
+gen_enforced_dependency(WorkspaceCwd, DependencyIdent, DependencyRange, 'dependencies') :-
+  member(DependencyIdent, [
+    '@babel/runtime-corejs3',
+    'core-js'
+  ]),
   % Exclude the root workspace
   WorkspaceCwd \= '.',
   % Only target workspaces with a build:js script
   workspace_field(WorkspaceCwd, 'scripts.build:js', _),
   % Get the range from the root workspace
-  workspace_has_dependency('.', '@babel/runtime-corejs3', DependencyRange, _).
+  workspace_has_dependency('.', DependencyIdent, DependencyRange, _).

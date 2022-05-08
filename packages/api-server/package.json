@@ -35,6 +35,7 @@
     "ansi-colors": "4.1.1",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
+    "core-js": "3.22.4",
     "fast-json-parse": "1.0.3",
     "fastify": "3.29.0",
     "fastify-raw-body": "3.2.0",
