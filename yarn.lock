@@ -5090,7 +5090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:^0.5.0, @nhost/core@npm:^0.5.2":
+"@nhost/core@npm:^0.5.2":
   version: 0.5.2
   resolution: "@nhost/core@npm:0.5.2"
   dependencies:
@@ -5101,17 +5101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.1.2":
-  version: 1.1.2
-  resolution: "@nhost/hasura-auth-js@npm:1.1.2"
-  dependencies:
-    "@nhost/core": ^0.5.0
-    jwt-decode: ^3.1.2
-  checksum: 51fc8b5cb4bac844fd85d3d0e99d80f0957f9331d8aeddd1a6edc952c0eb3edd53fef06cd619d4eadfe284f48b3ce5d18272c5f97e0fc42330f3d24f83e0c604
-  languageName: node
-  linkType: hard
-
-"@nhost/hasura-auth-js@npm:^1.1.4":
+"@nhost/hasura-auth-js@npm:1.1.4, @nhost/hasura-auth-js@npm:^1.1.4":
   version: 1.1.4
   resolution: "@nhost/hasura-auth-js@npm:1.1.4"
   dependencies:
@@ -6086,7 +6076,7 @@ __metadata:
     "@clerk/clerk-js": 3.10.1
     "@clerk/clerk-sdk-node": 3.4.0
     "@clerk/types": 2.10.0
-    "@nhost/hasura-auth-js": 1.1.2
+    "@nhost/hasura-auth-js": 1.1.4
     "@nhost/nhost-js": 1.1.9
     "@supabase/supabase-js": 1.35.2
     "@types/netlify-identity-widget": 1.9.3
