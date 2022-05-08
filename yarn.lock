@@ -6563,7 +6563,7 @@ __metadata:
     "@redwoodjs/auth": 1.3.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@types/prop-types": 15.7.4
+    "@types/prop-types": 15.7.5
     "@types/react": 17.0.45
     "@types/react-dom": 17.0.16
     "@types/testing-library__jest-dom": 5.14.3
@@ -8900,10 +8900,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*, @types/prop-types@npm:15.7.4":
-  version: 15.7.4
-  resolution: "@types/prop-types@npm:15.7.4"
-  checksum: 014bb826592fab01499931259969aafc21d5a8ff4ece3e3fb8e2b5186bed17656f7dcdccf9a98c27fee74d7d0697aa3f53ea971a72679597f0ca0c3d5ca585d3
+"@types/prop-types@npm:*, @types/prop-types@npm:15.7.5":
+  version: 15.7.5
+  resolution: "@types/prop-types@npm:15.7.5"
+  checksum: 648aae41423821c61c83823ae36116c8d0f68258f8b609bdbc257752dcd616438d6343d554262aa9a7edaee5a19aca2e028a74fa2d0f40fffaf2816bc7056857
   languageName: node
   linkType: hard
 
