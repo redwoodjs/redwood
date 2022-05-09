@@ -238,7 +238,7 @@ export class DbAuthHandler {
 
     try {
       const [session, csrfToken] = decryptSession(
-        getSession(this.event.headers['cookie'])
+        getSession(this.event.headers['cookie'] || this.event.headers['Cookie'])
       )
       this.session = session
       this.sessionCsrfToken = csrfToken
