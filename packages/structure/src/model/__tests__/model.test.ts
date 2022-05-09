@@ -23,29 +23,29 @@ describe('Redwood Project Model', () => {
       ])
     )
     for (const page of project.pages) {
-      page.basenameNoExt //?
-      page.route?.id //?
+      page.basenameNoExt
+      page.route?.id
     }
-    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos']) //?
+    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos'])
 
     for (const c of project.components) {
-      c.basenameNoExt //?
+      c.basenameNoExt
     }
-    project.components.length //?
-    project.components.map((c) => c.basenameNoExt) //?
-    project.functions.length //?
-    project.services.length //?
-    project.sdls.length //?
+    project.components.length
+    project.components.map((c) => c.basenameNoExt)
+    project.functions.length
+    project.services.length
+    project.sdls.length
     const ds = await project.collectDiagnostics()
-    ds.length //?
-    const uri = URL_file(projectRoot, 'api/src/graphql/todos.sdl.js') //?
+    ds.length
+    const uri = URL_file(projectRoot, 'api/src/graphql/todos.sdl.js')
     const node = await project.findNode(uri)
     expect(node).toBeDefined()
     expect(node.id).toEqual(uri)
     if (node) {
       const info = await node.collectIDEInfo()
-      info.length //?
-      info //?
+      info.length
+      info
     }
   })
 
@@ -93,16 +93,51 @@ describe('Cells', () => {
   })
 })
 
+describe('Retrieves TSConfig settings', () => {
+  beforeAll(() => {
+  })
+  afterAll(() => {
+    delete process.env.RWJS_CWD
+  })
+
+  it('Gets config for a TS Project', () => {
+    const TS_FIXTURE_PATH =getFixtureDir('test-project')
+
+    process.env.RWJS_CWD = TS_FIXTURE_PATH
+
+    const project = new RWProject({ projectRoot: TS_FIXTURE_PATH, host: new DefaultHost() }) //?
+
+    expect(project.getTsConfigs.web).not.toBe(null)
+    expect(project.getTsConfigs.api).not.toBe(null)
+
+    // Check some of the values
+    expect(project.getTsConfigs.web.compilerOptions.noEmit).toBe(true)
+    expect(project.getTsConfigs.api.compilerOptions.rootDirs).toEqual([ './src', '../.redwood/types/mirror/api/src' ])
+
+  })
+
+  it('Returns null for JS projects', () => {
+    const JS_FIXTURE_PATH =getFixtureDir('example-todo-main-with-errors')
+
+    process.env.RWJS_CWD = JS_FIXTURE_PATH
+
+    const project = new RWProject({ projectRoot: JS_FIXTURE_PATH, host: new DefaultHost() }) //?
+
+    expect(project.getTsConfigs.web).toBe(null)
+    expect(project.getTsConfigs.api).toBe(null)
+  })
+})
+
 describe.skip('env vars', () => {
   it('Warns if env vars are not ok', async () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
-    project.envHelper.process_env_expressions.length //?
+    project.envHelper.process_env_expressions.length
     const env = project.envHelper
-    env.env //?
-    env.env_defaults //?
-    project.redwoodTOML.web_includeEnvironmentVariables //?
-    env.process_env_expressions //?
+    env.env
+    env.env_defaults
+    project.redwoodTOML.web_includeEnvironmentVariables
+    env.process_env_expressions
   })
 })
 
@@ -135,7 +170,7 @@ describe('Redwood Route detection', () => {
 })
 
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name: 'example-todo-main-with-errors' | 'example-todo-main' | 'empty-project' | 'test-project'
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

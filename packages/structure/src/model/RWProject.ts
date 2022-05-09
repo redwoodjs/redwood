@@ -2,6 +2,7 @@ import { join } from 'path'
 
 import { getDMMF } from '@prisma/sdk'
 import { DMMF } from '@prisma/generator-helper'
+import * as ts from 'typescript'
 
 import { getPaths, processPagesDir } from '@redwoodjs/internal'
 
@@ -126,6 +127,32 @@ export class RWProject extends BaseNode {
     // name = blog,posts
     const ext = this.isTypeScriptProject ? '.ts' : '.js'
     return join(this.pathHelper.api.services, name, name + ext)
+  }
+
+  @lazy() get getTsConfigs() {
+    const apiTsConfigPath = join(this.host.paths.api.base, 'tsconfig.json')
+    const webTsConfigPath = join(this.host.paths.web.base, 'tsconfig.json')
+
+
+    const apiTsConfig = this.host.existsSync(apiTsConfigPath)
+    ? ts.parseConfigFileTextToJson(
+        apiTsConfigPath,
+        this.host.readFileSync(apiTsConfigPath)
+      )
+    : null
+
+    const webTsConfig =  this.host.existsSync(webTsConfigPath)
+    ? ts.parseConfigFileTextToJson(
+        webTsConfigPath,
+        this.host.readFileSync(webTsConfigPath)
+      )
+    : null
+
+
+    return {
+      api: apiTsConfig?.config ?? null,
+      web: webTsConfig?.config ?? null,
+    }
   }
 
   // TODO: move to path helper
