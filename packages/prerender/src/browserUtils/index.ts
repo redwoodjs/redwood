@@ -15,12 +15,8 @@ export const useIsBrowser = () => {
   }, [])
 }
 
-export const BrowserOnly = ({
-  children,
-}: {
-  children: ReactElement
-}) => {
+export const BrowserOnly = ({ children }: { children: ReactElement }) => {
   const isBrowser = useIsBrowser()
 
-  return isBrowser && children
+  return isBrowser ? children : null
 }
