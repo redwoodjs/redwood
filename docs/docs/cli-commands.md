@@ -46,6 +46,7 @@ yarn create redwood-app <project directory> [option]
 
 | Options & Arguments | Description                                                                                                                                 |
 |:--------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
+| `project directory`            | Specify the project directory [Required]
 | `--no-yarn-install`            | Skip yarn install and also skips version requirements check.                                                                       |
 | `--typescript`           | Generate a TypeScript project. JavaScript by default.        |
 | `--overwrite`       | Create even if target directory isn't empty                                                                                                       |
