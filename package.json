@@ -28,7 +28,7 @@
     "test:release-script": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
   },
   "resolutions": {
-    "@types/react": "17.0.44",
+    "@types/react": "17.0.45",
     "all-contributors-cli@6.20.0": "patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch",
     "prop-types": "15.8.1",
     "react": "17.0.2",
@@ -47,6 +47,9 @@
     "@babel/node": "7.16.7",
     "@babel/plugin-proposal-class-properties": "7.16.7",
     "@babel/plugin-proposal-decorators": "7.16.7",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.16.7",
+    "@babel/plugin-proposal-private-methods": "7.16.7",
+    "@babel/plugin-proposal-private-property-in-object": "7.16.7",
     "@babel/plugin-transform-runtime": "7.16.7",
     "@babel/preset-env": "7.16.7",
     "@babel/preset-react": "7.16.7",
@@ -71,7 +74,7 @@
     "core-js": "3.22.4",
     "cypress": "9.6.0",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.14.0",
+    "eslint": "8.15.0",
     "fast-glob": "3.2.11",
     "fs-extra": "10.1.0",
     "is-port-reachable": "3.1.0",

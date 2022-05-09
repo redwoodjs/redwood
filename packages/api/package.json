@@ -32,6 +32,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
     "@prisma/client": "3.13.0",
+    "core-js": "3.22.4",
     "cross-undici-fetch": "0.1.27",
     "crypto-js": "4.1.1",
     "humanize-string": "2.1.0",
@@ -46,11 +47,15 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
+    "@clerk/clerk-sdk-node": "3.4.0",
     "@redwoodjs/auth": "1.3.1",
+    "@types/aws-lambda": "8.10.96",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/md5": "2.3.2",
+    "@types/pascalcase": "1.0.1",
     "@types/split2": "3.2.1",
+    "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
     "split2": "4.1.0",
