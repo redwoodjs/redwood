@@ -50,7 +50,7 @@ yarn create redwood-app <project directory> [option]
 | `--typescript`           | Generate a TypeScript project. JavaScript by default.        |
 | `--overwrite`       | Create even if target directory isn't empty                                                                                                       |
 | `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com |
-| `--yarn1`       | Use yarn 1. yarn 3 by default |
+| `--yarn1`       | Use yarn 1 (fix errors on external or network drives). yarn 3 by default  |
 
 
 ## build
