@@ -5101,7 +5101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.1.5, @nhost/hasura-auth-js@npm:^1.1.4":
+"@nhost/hasura-auth-js@npm:1.1.5":
   version: 1.1.5
   resolution: "@nhost/hasura-auth-js@npm:1.1.5"
   dependencies:
@@ -5112,27 +5112,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-storage-js@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@nhost/hasura-storage-js@npm:0.2.0"
+"@nhost/hasura-storage-js@npm:0.2.1":
+  version: 0.2.1
+  resolution: "@nhost/hasura-storage-js@npm:0.2.1"
   dependencies:
-    axios: ^0.21.1
-  checksum: 4a28fa72322f6b000e2fb79fe8212638526d7cc252bbad2c7cd42b2e5b9243cb2292ce96677aeb8c077d793836981add598cbc080bd18eaf2e39982dd79769a5
+    axios: ^0.26.0
+  checksum: a193a30cfdf2cda6ad0c47fe9ed8253decd2b8ca9712db61ec4776bb3e953669b3175c1da9e69e307b2b0d06fce188940be4829be69cd7176fdbf3698de67c62
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.1.9":
-  version: 1.1.9
-  resolution: "@nhost/nhost-js@npm:1.1.9"
+"@nhost/nhost-js@npm:1.1.10":
+  version: 1.1.10
+  resolution: "@nhost/nhost-js@npm:1.1.10"
   dependencies:
-    "@nhost/hasura-auth-js": ^1.1.4
-    "@nhost/hasura-storage-js": ^0.2.0
-    axios: ^0.23.0
+    "@nhost/hasura-auth-js": 1.1.5
+    "@nhost/hasura-storage-js": 0.2.1
+    axios: ^0.26.0
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 2465ece64e1e55f7b32123797414ae04f682031a581215284dd5cc1fe0b4c8c5f694d8b0bae823bf16b69d255c5bb1eb330dec18e527a84b19a65c04077b47ec
+  checksum: 5781409d7b70e92f82697e4654af4c5d7d0aa2613b7093c70e5516526524b83b997b1b2d0c3b20f24297424de40b8e4c7ba07701c0defcfbeb7f7eb9d8d2304f
   languageName: node
   linkType: hard
 
@@ -6082,7 +6082,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.4.0
     "@clerk/types": 2.10.0
     "@nhost/hasura-auth-js": 1.1.5
-    "@nhost/nhost-js": 1.1.9
+    "@nhost/nhost-js": 1.1.10
     "@supabase/supabase-js": 1.35.3
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.45
@@ -10799,24 +10799,6 @@ __metadata:
   version: 4.4.1
   resolution: "axe-core@npm:4.4.1"
   checksum: 97790fd0a2d10e123b02c7cc82b83696b3e8cf5a09fd15a2bc7eb8e4a0a3a5b41970853f435aae576b42dcd75412282d4344fa7b7bd018a2e8d855eee89194cd
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.21.1":
-  version: 0.21.4
-  resolution: "axios@npm:0.21.4"
-  dependencies:
-    follow-redirects: ^1.14.0
-  checksum: fbcff55ec68f71f02d3773d467db2fcecdf04e749826c82c2427a232f9eba63242150a05f15af9ef15818352b814257541155de0281f8fb2b7e8a5b79f7f2142
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "axios@npm:0.23.0"
-  dependencies:
-    follow-redirects: ^1.14.4
-  checksum: cbc30b027003c0a2695911ac2617a2869f954a442b3e95a0a8017677e6246e2b8c69126c57683a5124ff8fbcf434a4e8832b450c0ba650f85e1c6389bd055d84
   languageName: node
   linkType: hard
 
@@ -16756,7 +16738,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.4, follow-redirects@npm:^1.14.8":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.8":
   version: 1.15.0
   resolution: "follow-redirects@npm:1.15.0"
   peerDependenciesMeta:
