@@ -791,8 +791,7 @@ export class DbAuthHandler {
   // figure out which auth method we're trying to call
   _getAuthMethod() {
     // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    let methodName = this.event.queryStringParameters!.method as AuthMethodNames
+    let methodName = this.event.queryStringParameters?.method as AuthMethodNames
 
     if (!DbAuthHandler.METHODS.includes(methodName) && this.params) {
       // try getting it from the body in JSON: { method: [methodName] }
