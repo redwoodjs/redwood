@@ -238,11 +238,6 @@ jobs:
           yarn rw test web --no-watch
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      - name: Run "rw type-check"
-        run: |
-          yarn rw type-check
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
       - name: Run "rw check"
         run: |
           yarn rw check
@@ -289,6 +284,16 @@ jobs:
       - name: Run "g page"
         run: |
           yarn rw g page ciTest
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "g sdl"
+        run: |
+          yarn rw g sdl userExample
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "rw type-check"
+        run: |
+          yarn rw type-check
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Throw Error | Run `rw g sdl <model>`
