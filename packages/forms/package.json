@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
+    "core-js": "3.22.4",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.30.0"
   },
@@ -33,9 +34,10 @@
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.1.1",
     "@types/pascalcase": "1.0.1",
-    "@types/react": "17.0.44",
+    "@types/react": "17.0.45",
     "@types/react-dom": "17.0.16",
     "@types/testing-library__jest-dom": "5.14.3",
+    "graphql": "16.4.0",
     "jest": "27.5.1",
     "nodemon": "2.0.16",
     "react": "17.0.2",
