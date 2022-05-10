@@ -93,41 +93,6 @@ describe('Cells', () => {
   })
 })
 
-describe('Retrieves TSConfig settings', () => {
-  beforeAll(() => {
-  })
-  afterAll(() => {
-    delete process.env.RWJS_CWD
-  })
-
-  it('Gets config for a TS Project', () => {
-    const TS_FIXTURE_PATH =getFixtureDir('test-project')
-
-    process.env.RWJS_CWD = TS_FIXTURE_PATH
-
-    const project = new RWProject({ projectRoot: TS_FIXTURE_PATH, host: new DefaultHost() }) //?
-
-    expect(project.getTsConfigs.web).not.toBe(null)
-    expect(project.getTsConfigs.api).not.toBe(null)
-
-    // Check some of the values
-    expect(project.getTsConfigs.web.compilerOptions.noEmit).toBe(true)
-    expect(project.getTsConfigs.api.compilerOptions.rootDirs).toEqual([ './src', '../.redwood/types/mirror/api/src' ])
-
-  })
-
-  it('Returns null for JS projects', () => {
-    const JS_FIXTURE_PATH =getFixtureDir('example-todo-main-with-errors')
-
-    process.env.RWJS_CWD = JS_FIXTURE_PATH
-
-    const project = new RWProject({ projectRoot: JS_FIXTURE_PATH, host: new DefaultHost() }) //?
-
-    expect(project.getTsConfigs.web).toBe(null)
-    expect(project.getTsConfigs.api).toBe(null)
-  })
-})
-
 describe.skip('env vars', () => {
   it('Warns if env vars are not ok', async () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
