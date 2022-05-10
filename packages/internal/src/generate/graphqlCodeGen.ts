@@ -18,6 +18,7 @@ import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
+import { getTsConfigs } from '../project'
 
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
@@ -154,15 +155,29 @@ function getPluginConfig() {
     // Query/Mutation/etc
     omitOperationSuffix: true,
     showUnusedMappers: false,
-    customResolverFn: `(
-      args?: TArgs,
-      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => Promise<Partial<TResult>> | Partial<TResult>;`,
+    customResolverFn: getResolverFnType(),
     mappers: prismaModels,
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig
+}
+
+export const getResolverFnType = () => {
+  const tsConfig = getTsConfigs()
+
+  if (tsConfig.api?.compilerOptions?.strict) {
+    // In strict mode, bring a world of pain to the tests
+    return `(
+      args: TArgs,
+      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => Promise<Partial<TResult>> | Partial<TResult>;`
+  } else {
+    return `(
+      args?: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => Promise<Partial<TResult>> | Partial<TResult>;`
+  }
 }
 
 interface CombinedPluginConfig {
