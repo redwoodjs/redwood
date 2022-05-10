@@ -36,6 +36,7 @@ path = "/var/www/app"
 processNames = ["serve"]
 repo = "git@github.com:myorg/myapp.git"
 branch = "main"
+keepReleases = 5
 
 # If you have separate api and web servers:
 #
