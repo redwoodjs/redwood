@@ -140,9 +140,7 @@ const defaultAuthProviderState: AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
-export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
-  props: PropsWithChildren<AuthProviderProps>
-) => {
+export const AuthProvider = (props: PropsWithChildren<AuthProviderProps>) => {
   const skipFetchCurrentUser = props.skipFetchCurrentUser || false
 
   const [hasRestoredState, setHasRestoredState] = useState(false)
@@ -151,7 +149,7 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderProps>> = (
     defaultAuthProviderState
   )
 
-  const [rwClient, setRwClient] = useState<AuthClient | null>(null)
+  const [rwClient, setRwClient] = useState<AuthClient>()
 
   const rwClientPromise: Promise<AuthClient> = useMemo(async () => {
     // If ever we rebuild the rwClient, we need to re-restore the state.
