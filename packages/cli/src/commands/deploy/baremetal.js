@@ -6,6 +6,7 @@ import boxen from 'boxen'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
+import { titleCase } from 'title-case'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
@@ -14,7 +15,7 @@ const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
 const LIFECYCLE_HOOKS = ['before', 'after']
-const DEFAULT_SERVER_CONFIG = {
+export const DEFAULT_SERVER_CONFIG = {
   branch: 'main',
   packageManagerCommand: 'yarn',
   monitorCommand: 'pm2',
@@ -151,7 +152,7 @@ const sshExec = async (ssh, path, command, args) => {
 
 export const throwMissingConfig = (name) => {
   throw new Error(
-    '`host` config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
+    `"${name}" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml`
   )
 }
 
@@ -166,6 +167,31 @@ export const verifyServerConfig = (config) => {
 
   if (!config.repo) {
     throwMissingConfig('repo')
+  }
+
+  return true
+}
+
+const symlinkCurrentCommand = async (dir, ssh, path) => {
+  return await sshExec(ssh, path, 'ln', [
+    SYMLINK_FLAGS,
+    dir,
+    CURRENT_RELEASE_SYMLINK_NAME,
+  ])
+}
+
+const restartProcessCommand = async (processName, ssh, serverConfig, path) => {
+  return await sshExec(ssh, path, serverConfig.monitorCommand, [
+    'restart',
+    processName,
+  ])
+}
+
+export const serverConfigWithDefaults = (serverConfig, yargs) => {
+  return {
+    ...DEFAULT_SERVER_CONFIG,
+    ...serverConfig,
+    branch: yargs.branch || serverConfig.branch || DEFAULT_SERVER_CONFIG.branch,
   }
 }
 
@@ -225,7 +251,7 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
   }
 }
 
-const rollbackTasks = (count, ssh, serverConfig) => {
+export const rollbackTasks = (count, ssh, serverConfig) => {
   let rollbackCount = 1
 
   if (parseInt(count) === count) {
@@ -287,24 +313,40 @@ const rollbackTasks = (count, ssh, serverConfig) => {
   return tasks
 }
 
-const symlinkCurrentCommand = async (dir, ssh, path) => {
-  return await sshExec(ssh, path, 'ln', [
-    SYMLINK_FLAGS,
-    dir,
-    CURRENT_RELEASE_SYMLINK_NAME,
-  ])
+export const lifecycleTask = (
+  lifecycle,
+  task,
+  lifecycleConfig,
+  { yargs, ssh, cmdPath, serverConfig = {} }
+) => {
+  // extra check for the migrate task since that can be disabled in the config
+  if (task === 'migrate' && serverConfig.migrate === false) {
+    return
+  }
+
+  if (yargs[task] && lifecycleConfig[lifecycle]?.[task]) {
+    const tasks = []
+
+    for (const command of lifecycleConfig[lifecycle][task]) {
+      tasks.push({
+        title: `${titleCase(lifecycle)} ${task}: \`${command}\``,
+        task: async () => {
+          await sshExec(ssh, cmdPath, command)
+        },
+      })
+    }
+
+    return tasks
+  }
 }
 
-const restartProcessCommand = async (processName, ssh, serverConfig, path) => {
-  return await sshExec(ssh, path, serverConfig.monitorCommand, [
-    'restart',
-    processName,
-  ])
-}
-
-const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
+export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
   const tasks = []
+
+  tasks.push(
+    lifecycleTask('before', 'update', serverLifecycle, { yargs, ssh, cmdPath })
+  )
 
   tasks.push({
     title: `Cloning \`${serverConfig.branch}\` branch...`,
@@ -320,6 +362,17 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     skip: () => !yargs.update,
   })
 
+  tasks.push(
+    lifecycleTask('after', 'update', serverLifecycle, { yargs, ssh, cmdPath })
+  )
+  tasks.push(
+    lifecycleTask('before', 'symlinkEnv', serverLifecycle, {
+      yargs,
+      ssh,
+      cmdPath,
+    })
+  )
+
   tasks.push({
     title: `Symlink .env...`,
     task: async () => {
@@ -327,6 +380,17 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     },
     skip: () => !yargs.update,
   })
+
+  tasks.push(
+    lifecycleTask('after', 'symlinkEnv', serverLifecycle, {
+      yargs,
+      ssh,
+      cmdPath,
+    })
+  )
+  tasks.push(
+    lifecycleTask('before', 'install', serverLifecycle, { yargs, ssh, cmdPath })
+  )
 
   tasks.push({
     title: `Installing dependencies...`,
@@ -337,6 +401,18 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     },
     skip: () => !yargs.install,
   })
+
+  tasks.push(
+    lifecycleTask('after', 'install', serverLifecycle, { yargs, ssh, cmdPath })
+  )
+  tasks.push(
+    lifecycleTask('before', 'migrate', serverLifecycle, {
+      yargs,
+      ssh,
+      cmdPath,
+      serverConfig,
+    })
+  )
 
   tasks.push({
     title: `DB Migrations...`,
@@ -361,6 +437,18 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     skip: () => !yargs.migrate || serverConfig?.migrate === false,
   })
 
+  tasks.push(
+    lifecycleTask('after', 'migrate', serverLifecycle, {
+      yargs,
+      ssh,
+      cmdPath,
+      serverConfig,
+    })
+  )
+  tasks.push(
+    lifecycleTask('before', 'build', serverLifecycle, { yargs, ssh, cmdPath })
+  )
+
   for (const side of serverConfig.sides) {
     tasks.push({
       title: `Building ${side}...`,
@@ -375,6 +463,17 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     })
   }
 
+  tasks.push(
+    lifecycleTask('after', 'build', serverLifecycle, { yargs, ssh, cmdPath })
+  )
+  tasks.push(
+    lifecycleTask('before', 'symlinkCurrent', serverLifecycle, {
+      yargs,
+      ssh,
+      cmdPath,
+    })
+  )
+
   tasks.push({
     title: `Symlinking current release...`,
     task: async () => {
@@ -382,6 +481,17 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     },
     skip: () => !yargs.update,
   })
+
+  tasks.push(
+    lifecycleTask('after', 'symlinkCurrent', serverLifecycle, {
+      yargs,
+      ssh,
+      cmdPath,
+    })
+  )
+  tasks.push(
+    lifecycleTask('before', 'restart', serverLifecycle, { yargs, ssh, cmdPath })
+  )
 
   for (const processName of serverConfig.processNames) {
     if (yargs.firstRun) {
@@ -422,10 +532,17 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     }
   }
 
+  tasks.push(
+    lifecycleTask('after', 'restart', serverLifecycle, { yargs, ssh, cmdPath })
+  )
+  tasks.push(
+    lifecycleTask('before', 'cleanup', serverLifecycle, { yargs, ssh, cmdPath })
+  )
+
   tasks.push({
     title: `Cleaning up old deploys...`,
     task: async () => {
-      // add 2 to skip `current` and start on the 6th release
+      // add 2 to skip `current` and start on the keepReleases + 1th release
       const fileStartIndex = serverConfig.keepReleases + 2
 
       await sshExec(
@@ -437,15 +554,11 @@ const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     skip: () => !yargs.cleanup,
   })
 
-  return tasks
-}
+  tasks.push(
+    lifecycleTask('after', 'cleanup', serverLifecycle, { yargs, ssh, cmdPath })
+  )
 
-export const serverConfigWithDefaults = (serverConfig, yargs) => {
-  return {
-    ...DEFAULT_SERVER_CONFIG,
-    ...serverConfig,
-    branch: yargs.branch || serverConfig.branch || DEFAULT_SERVER_CONFIG.branch,
-  }
+  return tasks.flat().filter((e) => e)
 }
 
 // merges additional lifecycle events into an existing object
