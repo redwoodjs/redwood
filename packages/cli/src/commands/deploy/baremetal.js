@@ -313,18 +313,15 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
   return tasks
 }
 
+// TODO: Add way to pass in whether this task should be skipped (yargs.whatever = false)
+
 export const lifecycleTask = (
   lifecycle,
   task,
   lifecycleConfig,
-  { yargs, ssh, cmdPath, serverConfig = {} }
+  { skip, ssh, cmdPath }
 ) => {
-  // extra check for the migrate task since that can be disabled in the config
-  if (task === 'migrate' && serverConfig.migrate === false) {
-    return
-  }
-
-  if (yargs[task] && lifecycleConfig[lifecycle]?.[task]) {
+  if (lifecycleConfig[lifecycle]?.[task]) {
     const tasks = []
 
     for (const command of lifecycleConfig[lifecycle][task]) {
@@ -333,6 +330,7 @@ export const lifecycleTask = (
         task: async () => {
           await sshExec(ssh, cmdPath, command)
         },
+        skip,
       })
     }
 
@@ -345,7 +343,11 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   const tasks = []
 
   tasks.push(
-    lifecycleTask('before', 'update', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('before', 'update', serverLifecycle, {
+      skip: !yargs.update,
+      ssh,
+      cmdPath,
+    })
   )
 
   tasks.push({
@@ -363,11 +365,15 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   })
 
   tasks.push(
-    lifecycleTask('after', 'update', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('after', 'update', serverLifecycle, {
+      skip: !yargs.update,
+      ssh,
+      cmdPath,
+    })
   )
   tasks.push(
     lifecycleTask('before', 'symlinkEnv', serverLifecycle, {
-      yargs,
+      skip: !yargs.update,
       ssh,
       cmdPath,
     })
@@ -383,13 +389,17 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
 
   tasks.push(
     lifecycleTask('after', 'symlinkEnv', serverLifecycle, {
-      yargs,
+      skip: !yargs.update,
       ssh,
       cmdPath,
     })
   )
   tasks.push(
-    lifecycleTask('before', 'install', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('before', 'install', serverLifecycle, {
+      skip: !yargs.install,
+      ssh,
+      cmdPath,
+    })
   )
 
   tasks.push({
@@ -403,14 +413,17 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   })
 
   tasks.push(
-    lifecycleTask('after', 'install', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('after', 'install', serverLifecycle, {
+      skip: !yargs.install,
+      ssh,
+      cmdPath,
+    })
   )
   tasks.push(
     lifecycleTask('before', 'migrate', serverLifecycle, {
-      yargs,
+      skip: !yargs.migrate || serverConfig?.migrate === false,
       ssh,
       cmdPath,
-      serverConfig,
     })
   )
 
@@ -439,14 +452,17 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
 
   tasks.push(
     lifecycleTask('after', 'migrate', serverLifecycle, {
-      yargs,
+      skip: !yargs.migrate || serverConfig?.migrate === false,
       ssh,
       cmdPath,
-      serverConfig,
     })
   )
   tasks.push(
-    lifecycleTask('before', 'build', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('before', 'build', serverLifecycle, {
+      skip: !yargs.build,
+      ssh,
+      cmdPath,
+    })
   )
 
   for (const side of serverConfig.sides) {
@@ -464,11 +480,15 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   }
 
   tasks.push(
-    lifecycleTask('after', 'build', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('after', 'build', serverLifecycle, {
+      skip: !yargs.build,
+      ssh,
+      cmdPath,
+    })
   )
   tasks.push(
     lifecycleTask('before', 'symlinkCurrent', serverLifecycle, {
-      yargs,
+      skip: !yargs.update,
       ssh,
       cmdPath,
     })
@@ -484,13 +504,17 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
 
   tasks.push(
     lifecycleTask('after', 'symlinkCurrent', serverLifecycle, {
-      yargs,
+      skip: !yargs.update,
       ssh,
       cmdPath,
     })
   )
   tasks.push(
-    lifecycleTask('before', 'restart', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('before', 'restart', serverLifecycle, {
+      skip: !yargs.restart,
+      ssh,
+      cmdPath,
+    })
   )
 
   for (const processName of serverConfig.processNames) {
@@ -533,10 +557,18 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   }
 
   tasks.push(
-    lifecycleTask('after', 'restart', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('after', 'restart', serverLifecycle, {
+      skip: !yargs.restart,
+      ssh,
+      cmdPath,
+    })
   )
   tasks.push(
-    lifecycleTask('before', 'cleanup', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('before', 'cleanup', serverLifecycle, {
+      skip: !yargs.cleanup,
+      ssh,
+      cmdPath,
+    })
   )
 
   tasks.push({
@@ -555,7 +587,11 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   })
 
   tasks.push(
-    lifecycleTask('after', 'cleanup', serverLifecycle, { yargs, ssh, cmdPath })
+    lifecycleTask('after', 'cleanup', serverLifecycle, {
+      skip: !yargs.cleanup,
+      ssh,
+      cmdPath,
+    })
   )
 
   return tasks.flat().filter((e) => e)
