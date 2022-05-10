@@ -11,6 +11,9 @@ import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 import { configFilename } from '../setup/deploy/providers/baremetal'
 
+const DEFAULT_BRANCH_NAME = ['main']
+const SYMLINK_FLAGS = '-nsf'
+
 export const command = 'baremetal'
 export const description = 'Deploy to baremetal server(s)'
 
@@ -29,8 +32,8 @@ export const builder = (yargs) => {
     type: 'boolean',
   })
 
-  yargs.option('pull', {
-    describe: 'Pull latest code',
+  yargs.option('update', {
+    describe: 'Update code to latest revision',
     default: true,
     type: 'boolean',
   })
@@ -53,12 +56,6 @@ export const builder = (yargs) => {
     type: 'boolean',
   })
 
-  yargs.option('symlink', {
-    describe: 'Symlink web/dist to web/serve/current for zero-downtime deploys',
-    default: true,
-    type: 'boolean',
-  })
-
   yargs.option('restart', {
     describe: 'Restart server processes',
     default: true,
@@ -68,7 +65,15 @@ export const builder = (yargs) => {
   yargs.option('releaseDir', {
     describe:
       'Directory to create for the latest release, defaults to timestamp',
-    default: new Date().toISOString().replace(/[:\-T.Z]/g, ''),
+    default: new Date()
+      .toISOString()
+      .replace(/[:\-TZ]/g, '')
+      .replace(/\.\d+$/, ''),
+    type: 'string',
+  })
+
+  yargs.option('branch', {
+    describe: 'The branch to deploy',
     type: 'string',
   })
 
@@ -105,6 +110,15 @@ const sshExec = async (ssh, sshOptions, task, path, command, args) => {
   }
 }
 
+export const verifyServerConfig = (config) => {
+  // is the repo's url set
+  if (!config.repo) {
+    throw new Error(
+      '`repo` config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
+    )
+  }
+}
+
 const commands = (yargs, ssh) => {
   // parse config and get server list
   const deployConfig = toml.parse(
@@ -125,29 +139,50 @@ const commands = (yargs, ssh) => {
       agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
       agentForward: serverConfig.agentForward,
     }
+    const deployBranch =
+      yargs.branch || serverConfig.branch || DEFAULT_BRANCH_NAME
+    const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
+
+    verifyServerConfig(serverConfig)
 
     tasks.push({
       title: 'Connecting...',
       task: () => ssh.connect(sshOptions),
     })
 
-    // TODO: Add a `preInstall` step for executing arbitrary scripts after everything else
+    // TODO: Add lifecycle hooks for running custom code before/after each
+    // built-in task
 
-    // TODO: add ability to have a different strategy, like a full clone
     tasks.push({
-      title: `Updating codebase...`,
+      title: `Cloning \`${deployBranch}\` branch...`,
       task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', ['pull'])
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', [
+          'clone',
+          `--branch=${deployBranch}`,
+          `--depth=1`,
+          serverConfig.repo,
+          yargs.releaseDir,
+        ])
       },
-      skip: () => !yargs.pull,
+      skip: () => !yargs.update,
+    })
+
+    tasks.push({
+      title: `Symlink .env...`,
+      task: async (_ctx, task) => {
+        await sshExec(ssh, sshOptions, task, cmdPath, 'ln', [
+          SYMLINK_FLAGS,
+          '../.env',
+          '.env',
+        ])
+      },
+      skip: () => !yargs.update,
     })
 
     tasks.push({
       title: `Installing dependencies...`,
       task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-          'install',
-        ])
+        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', ['install'])
       },
       skip: () => !yargs.install,
     })
@@ -155,18 +190,18 @@ const commands = (yargs, ssh) => {
     tasks.push({
       title: `DB Migrations...`,
       task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
           'rw',
           'prisma',
           'migrate',
           'deploy',
         ])
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
           'rw',
           'prisma',
           'generate',
         ])
-        await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
           'rw',
           'dataMigrate',
           'up',
@@ -175,12 +210,11 @@ const commands = (yargs, ssh) => {
       skip: () => !yargs.migrate || serverConfig?.migrate === false,
     })
 
-    // build sides
     for (const side of serverConfig.sides) {
       tasks.push({
         title: `Building ${side}...`,
         task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
+          await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
             'rw',
             'build',
             side,
@@ -190,27 +224,17 @@ const commands = (yargs, ssh) => {
       })
     }
 
-    // symlink web dist dir
-    if (serverConfig.symlinkWeb) {
-      tasks.push({
-        title: `Symlinking web/serve/current...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'cp', [
-            '-r',
-            'web/dist',
-            `web/serve/${yargs.releaseDir}`,
-          ])
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
-            '-nsf',
-            yargs.releaseDir,
-            'web/serve/current',
-          ])
-        },
-        skip: () => !yargs.symlink,
-      })
-
-      // TODO: add process for cleaning up old deploys
-    }
+    tasks.push({
+      title: `Symlinking current release...`,
+      task: async (_ctx, task) => {
+        await sshExec(ssh, sshOptions, task, serverConfig.path, 'ln', [
+          SYMLINK_FLAGS,
+          yargs.releaseDir,
+          'current',
+        ])
+      },
+      skip: () => !yargs.update,
+    })
 
     // start/restart monitoring processes
     for (const process of serverConfig.processNames) {
@@ -218,10 +242,9 @@ const commands = (yargs, ssh) => {
         tasks.push({
           title: `Starting ${process} process for the first time...`,
           task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-              'pm2',
+            await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
               'start',
-              'ecosystem.config.js',
+              path.join('current', 'ecosystem.config.js'),
               '--only',
               process,
             ])
@@ -231,8 +254,7 @@ const commands = (yargs, ssh) => {
         tasks.push({
           title: `Saving ${process} state for future startup...`,
           task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-              'pm2',
+            await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
               'save',
             ])
           },
@@ -242,8 +264,7 @@ const commands = (yargs, ssh) => {
         tasks.push({
           title: `Restarting ${process} process...`,
           task: async (_ctx, task) => {
-            await sshExec(ssh, sshOptions, task, serverConfig.path, 'yarn', [
-              'pm2',
+            await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
               'restart',
               process,
             ])
@@ -253,7 +274,7 @@ const commands = (yargs, ssh) => {
       }
     }
 
-    // TODO: Add a `postInstall` step for executing arbitrary scripts after everything else
+    // TODO: Add a process for cleaning up old deploys
 
     tasks.push({
       title: 'Disconnecting...',

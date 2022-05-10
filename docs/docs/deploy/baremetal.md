@@ -10,13 +10,13 @@ With Redwood's Baremetal deployment option, the source (like your dev machine) w
 
 Deploying from a client (like your own development machine) consists of running a single command:
 
-First time deploy
+First time deploy:
 
 ```bash
-yarn rw deploy baremetal --first run
+yarn rw deploy baremetal --first-run
 ```
 
-Subsequent deploys
+Subsequent deploys:
 
 ```bash
 yarn rw deploy baremetal
@@ -26,46 +26,62 @@ yarn rw deploy baremetal
 
 The baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
-1. `git pull` - gets latest code
+1. `git clone` - gets latest code
 2. `yarn install` - installs dependencies
 3. `yarn rw prisma migrate deploy` - runs db migrations
 3. `yarn rw prisma generate` - generates latest Prisma Client libs
 4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
 5. `yarn rw build` - builds the web and/or api sides
-6. `yarn pm2 restart [service]` - restarts the serving process(es)
+6. `pm2 restart [service]` - restarts the serving process(es)
 
 ### First Run Lifecycle
 
-If the `--first-run` flag is specified step 6. above will be skipped and the following commands will run instead:
-  - `yarn pm2 start [service]` - starts the serving process(es)
-  - `yarn pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
+If the `--first-run` flag is specified then step 6 above will execute the following commands instead:
+  - `pm2 start [service]` - starts the serving process(es)
+  - `pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
 
-> We're working on making the commands in this stack more customizable, for example `clone`ing your code instead of doing a `git pull` to avoid issues like not being able to pull because your `yarn.lock` file has changes that would be overwritten.
+## Directory Structure
 
-## Setup
+Once you're deployed and running, you'll find a directory structure that looks like this:
 
-Run the following to add the required config files:
+```
+└── var
+    └── www
+        └── myapp
+            ├── .env <────────────────┐
+            ├── current ───symlink──┐ │
+            └── releases            │ │
+                └── 20220420120000 <┘ │
+                    ├── .env ─symlink─┘
+                    ├── api
+                    ├── web
+                    ├── ...
+```
+
+There's a symlink `current` pointing to directory named for a timestamp (the timestamp of the last deploy) and within that is your codebase, the latest revision having been `clone`d. The `.env` file in that directory is then symlinked back out to the one in the root of your app path, so that it can be shared across deployments.
+
+So a reference to `/var/www/myapp/current` will always be the latest deployed version of your codebase. If you wanted to [setup nginx to serve your web side](#redwood-serves-api-nginx-serves-web-side), you would point it to `/var/www/myapp/current/web/dist` as the `root` and it will always be serving the latest code: a new deploy will change the `current` symlink and nginx will start serving the new files instantaneously.
+
+## App Setup
+
+Run the following to add the required config files to your codebase:
 
 ```bash
 yarn rw setup deploy baremetal
 ```
 
-This will create a couple of files and add a dependency or two to your `package.json`:
+This will add dependencies to your `package.json` and create two files:
 
 1. `deploy.toml` contains server config for knowing which machines to connect to and which commands to run
 2. `ecosystem.config.js` for [PM2](https://pm2.keymetrics.io/) to know what service(s) to monitor
 
-> **A Note about PM2 Licensing**
->
-> PM2 is licensed under [AGPL v3.0](https://opensource.org/licenses/AGPL-3.0) ([here's a plain english interpretation](https://snyk.io/learn/agpl-license/)) which may have implications for your codebase. We are not lawyers, but some interpretations of the license say that if you include any software that is AGPL v3.0 then your own codebase must be released under AGPL v3.0 as well. In the case of baremetal deploys, we not including any PM2 code in your app, just counting on the PM2 daemon to monitor your web/api services to be sure they continue running.
-
 If you see an error from `gyp` you may need to add some additional dependencies before `yarn install` will be able to complete. See the README for `node-type` for more info: https://github.com/nodejs/node-gyp#installation
 
-## Configuration
+### Configuration
 
 Before your first deploy you'll need to add some configuration.
 
-### ecosystem.config.js
+#### ecosystem.config.js
 
 By default, baremetal assumes you want to run the `yarn rw serve` command, which provides both the web and api sides. The web side will be available on port 8910 unless you update your `redwood.toml` file to make it available on another port. The default generated `ecosystem.config.js` will contain this config only, within a service called "serve":
 
@@ -74,6 +90,7 @@ module.exports = {
   apps: [
     {
       name: 'serve',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve',
       instances: 'max',
@@ -92,6 +109,7 @@ module.exports = {
   apps: [
     {
       name: 'api',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve api',
       instances: 'max',
@@ -103,7 +121,7 @@ module.exports = {
 }
 ```
 
-### deploy.toml
+#### deploy.toml
 
 This file contains your server configuration: which servers to connect to and which commands to run on them.
 
@@ -115,6 +133,8 @@ agentForward = true
 sides = ["api","web"]
 path = "/var/www/app"
 processNames = ["serve"]
+repo = "git@github.com:myorg/myapp.git"
+branch = "main"
 ```
 
 This lists a single server, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
@@ -126,26 +146,15 @@ This lists a single server, providing the hostname and connection details (`user
 * `password` - [optional] if you are using password authentication, include that here
 * `privateKey` - [optional] if you connect with a private key, include the path to the key here
 * `passphrase` - [optional] if your private key contains a passphrase, enter it here
-* `agentForward` - [optional] if you have [agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding) enabled, set this to `true` and your own credentials will be used for further ssh connections from the server (like when connecting to GitHub)
+* `agentForward` - [optional] if you have [agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding) enabled, set this to `true` and your own credentials will be used for further SSH connections from the server (like when connecting to GitHub)
 * `sides` - An array of sides that will be built on this server
 * `path` - The absolute path to the root of the application on the server
 * `migrate` - [optional] Whether or not to run migration processes on this server, defaults to `true`
 * `processNames` - An array of service names from `ecosystem.config.js` which will be (re)started on a successful deploy
-* `symlinkWeb` - [optional] If using nginx or another server to serve the web side, you can have the compiled `web/dist` files symlinked in a new directory so that they are not overwritten on the next deploy. See the [Redwood Serves Api, Nginx Serves Web Side](#redwood-serves-api-nginx-serves-web-side) section for more info.
+* `repo` - The path to the git repo to clone
+* `branch` - The branch to deploy (defaults to `main` if not set)
 
 The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` file, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
-
-> **SSH and non-interactive sessions - Possible Issues**
->
-> The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' ssh session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path. A quick fix for this on Ubuntu is to edit the deployment users `.bashrc` and comment out the lines that stop non-interactive processing.
-
-```shell title=".bashrc"
-# If not running interactively, don't do anything
-#case $- in
-#    *i*) ;;
-#      *) return;;
-#esac
-```
 
 #### Multiple Servers
 
@@ -170,12 +179,12 @@ migrate = false
 processNames = ["web"]
 ```
 
-
 ```jsx title="ecosystem.config.js"
 module.exports = {
   apps: [
     {
       name: 'api',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve api',
       instances: 'max',
@@ -185,6 +194,7 @@ module.exports = {
     },
     {
       name: 'web',
+      cwd: 'current',
       script: 'node_modules/.bin/rw',
       args: 'serve web',
       instances: 'max',
@@ -196,25 +206,92 @@ module.exports = {
 }
 ```
 
-Note the inclusion of `migrate = false` so that migrations are not run again on this server (they only need to run once and it makes sense to keep them with the api side).
+Note the inclusion of `migrate = false` so that migrations are not run again on the web server (they only need to run once and it makes sense to keep them with the api side).
 
 You can add as many `[[servers]]` blocks as you need.
 
 ## Server Setup
 
-You will need to log into your server and `git clone` your codebase somewhere. The path to the root of your app will be set as the `path` var in `deploy.toml`. Make sure the username you will connect as in `deploy.toml` has permission to read/write/execute files in this directory. This might look something like:
+You will need to create the directory in which your app code will live. This path will be the `path` var in `deploy.toml`. Make sure the username you will connect as in `deploy.toml` has permission to read/write/execute files in this directory. For example, if your `/var` dir is owned by `root`, but you're going to deploy with a user named `deploy`:
 
 ```bash
-sudo mkdir -p /var/www
-sudo chown myuser:myuser /var/www
-git clone git@github.com:johndoe/example.git /var/www/example
+sudo mkdir -p /var/www/myapp
+sudo chown deploy:deploy /var/www/myapp
 ```
 
-You'll want to create an `.env` file containing any environment variables that are needed by the server.
+You'll want to create an `.env` file in this directory containing any environment variables that are needed by your by your app (like `DATABASE_URL` at a minimum). This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
 
-### Verification
+:::caution SSH and Non-interactive Sessions
 
-You should do a `yarn install` and `yarn rw build` and finally `yarn rw serve` to make sure everything works before getting the deploy process involved. If they worked for you, the deploy process should have no problem as it runs the same commands. Once `yarn rw serve` is running, make sure your processes start and are accessible (by default on port 8910):
+The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' SSH session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path, because additional ENV vars are set in `~/.bashrc` which provide things like NPM paths and setup.
+
+A quick fix on some distros is to edit the deployment user's `~/.bashrc` file and comment out the lines that *stop* non-interactive processing.
+
+```diff title="~/.bashrc"
+# If not running interactively, don't do anything
+- case $- in
+-     *i*) ;;
+-       *) return;;
+- esac
+
+# If not running interactively, don't do anything
++ # case $- in
++ #    *i*) ;;
++ #      *) return;;
++ # esac
+```
+
+This may also be a one-liner like:
+
+```diff title="~/.bashrc"
+- [ -z "$PS1" ] && return
++ # [ -z "$PS1" ] && return
+```
+
+There are techniques for getting `node`, `npm` and `yarn` to be availble without loading everything in `.bashrc`. See [this comment](https://github.com/nvm-sh/nvm/issues/1290#issuecomment-427557733) for some ideas.
+
+:::
+
+## First Deploy
+
+Back on your development machine, enter your details in `deploy.toml`, commit it and push it up, and then try a first deploy:
+
+```bash
+yarn rw deploy baremetal --first-run
+```
+
+If there are any issues the deploy should stop and you'll see the error message printed to the console.
+
+If it worked, hooray! You're deployed to BAREMETAL. If not, read on...
+
+### Troubleshooting
+
+On the server you should see a new directory inside the `path` you defined in `deploy.toml`. It should be a timestamp of the deploy, like:
+
+```bash
+drwxrwxr-x  7 ubuntu ubuntu 4096 Apr 22 23:00 ./
+drwxr-xr-x  7 ubuntu ubuntu 4096 Apr 22 22:46 ../
+-rw-rw-r--  1 ubuntu ubuntu 1167 Apr 22 20:49 .env
+drwxrwxr-x 10 ubuntu ubuntu 4096 Apr 22 21:43 20220422214218/
+```
+
+You may or may not also have a `current` symlink in the app directory pointing to that timestamp directory (it depends how far the deploy script got before it failed as to whether you'll have the symlink or not).
+
+`cd` into that timestamped directory and check that you have a `.env` symlink pointing back to the app directory's `.env` file.
+
+Next, try performing all of the steps yourself that would happen during a deploy:
+
+```
+yarn install
+yarn rw prisma migrate deploy
+yarn rw prisma generate
+yarn rw dataMigrate up
+yarn rw build
+```
+
+If they worked for you, the deploy process should have no problem as it runs the same commands (after all, it connects via SSH and runs the same commands you just did!)
+
+Next we can check that the site is being served correctly. Run `yarn rw serve` and make sure your processes start and are accessible (by default on port 8910):
 
 ```bash
 curl http://localhost:8910
@@ -244,38 +321,39 @@ You should see something like:
 
 If so then your API side is up and running! The only thing left to test is that the api side has access to the database. This call would be pretty specific to your app, but assuming you have port 8910 open to the world you could simply open a browser to click around to find a page that makes a database request.
 
-## First Deploy
+Was the problem with starting your PM2 process? That will be harder to debug here in this doc, but visit us in the [forums](https://community.redwoodjs.com) or [Discord](https://discord.gg/redwoodjs) and we'll try to help!
 
-Back on your development machine, enter your details in `deploy.toml` and then try a first deploy:
+## Starting Processes on Server Restart
+
+The `pm2` service requires some system "hooks" to be installed so it can boot up using your system's service manager.  Otherwise, your PM2 services will need to be manually started again on a server restart.  These steps only need to be run the first time you install PM2.
+
+SSH into your server and then run:
 
 ```bash
-yarn rw deploy baremetal --first-run
+pm2 startup
 ```
 
-If there are any issues the deploy should stop and you'll see the error message printed to the console. Assume it worked, hooray! You're deployed to BAREMETAL.
+You will see some output similar to the output below. We care about the output after "copy/paste the following command:" You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
-### Starting on Reboot
+:::caution
 
-The `pm2` service requires some system "hooks" to be installed so it can boot up using your systems service manager.  Otherwise, your services will need to be manually started again on reboot.  These steps only need to be run the first time you deploy to a machine.
+The below text is *example* output, yours will be different, don't copy and paste ours!
 
-1. SSH into your server as you did for the "Server Setup".  Navigate to your source folder.  For example `cd /var/www/example`
-2. Run the command `yarn pm2 startup`.  You will see some output similar to the output below. See the output after "copy/paste the following command:"? You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
-
-> The below text is an *example* output.  Yours will be different
+:::
 
 ```bash
-deploy@redwood:/var/www/my-app$ yarn pm2 startup
+$ pm2 startup
 [PM2] Init System found: systemd
 [PM2] To setup the Startup Script, copy/paste the following command:
-sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+// highlight-next-line
+sudo env PATH=$PATH:/home/ubuntu/.nvm/versions/node/v16.13.2/bin /home/ubuntu/.nvm/versions/node/v16.13.2/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu
 ```
 
+In this example, you would copy `sudo env PATH=$PATH:/home/ubuntu/.nvm/versions/node/v16.13.2/bin /home/ubuntu/.nvm/versions/node/v16.13.2/lib/node_modules/pm2/bin/pm2 startup systemd -u ubuntu --hp /home/ubuntu` and run it. You should get a bunch of output along with `[PM2] [v] Command successfully executed.` near the end. Now if your server restarts for whatever reason, your PM2 processes will be restarted once the server is back up.
 
-In this example, you would copy `sudo env PATH=$PATH:/home/deploy/.nvm/versions/node/v17.8.0/bin /var/www/my-app/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy` and run it.
+## Customizing the Deploy
 
-### Customizing the Deploy
-
-If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip those steps completely:
+If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip them completely and save some time:
 
 ```bash
 yarn rw deploy baremetal --no-migrate
@@ -283,31 +361,44 @@ yarn rw deploy baremetal --no-migrate
 
 Run `yarn rw deploy baremetal --help` for the full list of flags. You can set them as `--migrate=false` or use the `--no-migrate` variant.
 
-## Example Configurations
+## Monitoring
 
-The default configuration, which requires the least amount of manual configuration, is to serve both the web and api sides, with the web side being bound to port 8910. This isn't really feasible for a general web app which should be available on port 80 (for HTTP) and/or port 443 (for HTTPS). Here are some custom configs that would enable
+PM2 has a nice terminal-based dashboard for monitoring your services:
+
+```bash
+pm2 monit
+```
+
+![pm2 dashboard](https://user-images.githubusercontent.com/300/164799386-84442fa3-8e68-4cc6-9e64-928b8e32731a.png)
+
+And even a web-based UI with paid upgrades if you need to give normies access to your monitoring data:
+
+![pm2 web dashboard](https://user-images.githubusercontent.com/300/164799541-6fe321fa-4d7c-44f7-93c6-3c202638da4f.png)
+
+## Example Server Configurations
+
+The default configuration, which requires the least amount of manual configuration, is to serve both the web and api sides, with the web side being bound to port 8910. This isn't really feasible for a general web app which should be available on port 80 (for HTTP) and/or port 443 (for HTTPS). Here are some custom configs to help.
 
 ### Redwood Serves Web and Api Sides, Bind to Port 80
 
-This is almost as easy as the default configuration, you just need to tell Redwood to bind to port 80. However, most *nix distributions will not allow a process to bind to ports lower than 1024 without root/sudo permissions. There is a command you can run to allow access to a specific binary (node, in this case) to bind to one of those ports anyway.
+This is almost as easy as the default configuration, you just need to tell Redwood to bind to port 80. However, most *nix distributions will not allow a process to bind to ports lower than 1024 without root/sudo permissions. There is a command you can run to allow access to a specific binary (`node` in this case) to bind to one of those ports anyway.
 
-#### redwood.toml
+#### Tell Redwood to Bind to Port 80
 
 Update the `[web]` port:
 
-```toml title="redwood.toml"
+```diff title="redwood.toml"
 [web]
   title = "My Application"
-  // highlight-next-line
-  port = 80
   apiUrl = "/.netlify/functions"
++ port = 80
 [api]
   port = 8911
 [browser]
   open = true
 ```
 
-#### Allow Binding to Port 80
+#### Allow Node to Bind to Port 80
 
 Use the [setcap](https://man7.org/linux/man-pages/man7/capabilities.7.html) utility to provide access to lower ports by a given process:
 
@@ -318,8 +409,10 @@ sudo setcap CAP_NET_BIND_SERVICE=+eip $(which node)
 Now restart your service and it should be available on port 80:
 
 ```bash
-yarn pm2 restart serve
+pm2 restart serve
 ```
+
+This should get your site available on port 80 (for HTTP), but you really want it available on port 443 (for HTTPS). That won't be easy if you continue to use Redwood's internal web server. See the next recipe for a solution.
 
 ### Redwood Serves Api, Nginx Serves Web Side
 
