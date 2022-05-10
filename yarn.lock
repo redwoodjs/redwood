@@ -6094,7 +6094,7 @@ __metadata:
     magic-sdk: 8.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.20.4
+    supertokens-auth-react: 0.20.5
     typescript: 4.6.4
   languageName: unknown
   linkType: soft
@@ -28880,9 +28880,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.20.4":
-  version: 0.20.4
-  resolution: "supertokens-auth-react@npm:0.20.4"
+"supertokens-auth-react@npm:0.20.5":
+  version: 0.20.5
+  resolution: "supertokens-auth-react@npm:0.20.5"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: 2.1.2
@@ -28893,10 +28893,10 @@ __metadata:
     react-select: 5.2.1
     react-shadow: 19.0.2
     supertokens-js-override: ^0.0.4
-    supertokens-website: ^10.0.8
+    supertokens-website: ^10.1.0
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 90d314ab5a8558935b05e1c78a805446015e573bbc794c1b7aa02a6a6731afe51365625791009077e6626fa3b4c57e7967ff791e053bf3376ae893ca94d74d62
+  checksum: d184973d64f7c439ed0f7fe621cd4d85b05a87e9d093b9649e29c73d742c6a5fe35a8a47c649e6fb7c0e39329521ef64b86ca1a03e5f703a06dba88251b64ee3
   languageName: node
   linkType: hard
 
@@ -28907,13 +28907,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-website@npm:^10.0.8":
-  version: 10.0.8
-  resolution: "supertokens-website@npm:10.0.8"
+"supertokens-website@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "supertokens-website@npm:10.1.0"
   dependencies:
     browser-tabs-lock: ^1.2.14
     supertokens-js-override: ^0.0.4
-  checksum: c84f3d23aacd74f60ede7d2a375642e6ee2de8aa7f01012763bf57200096c3a2c92eaa9ab34b7212fc71ed5ae4f685bbc7da360b3eb47b63b1f903ae2436c55c
+  checksum: 019fa2f96723782fd16d35631d223e9f87fbe4669ee68d875a19a5e4ddadc430fe52ed82f055bf2fed638486e6c340ceca9a2a10eea8f74194e3bf5ffc0aa48f
   languageName: node
   linkType: hard
 
