@@ -21,18 +21,6 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
-  "peerDependencies": {
-    "@clerk/clerk-react": "3.2.8",
-    "@clerk/clerk-sdk-node": "3.3.6"
-  },
-  "peerDependenciesMeta": {
-    "@clerk/clerk-react": {
-      "optional": true
-    },
-    "@clerk/clerk-sdk-node": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
     "core-js": "3.22.4"
@@ -59,6 +47,18 @@
     "react": "17.0.2",
     "supertokens-auth-react": "0.20.4",
     "typescript": "4.6.4"
+  },
+  "peerDependencies": {
+    "@clerk/clerk-react": "3.2.8",
+    "@clerk/clerk-sdk-node": "3.3.6"
+  },
+  "peerDependenciesMeta": {
+    "@clerk/clerk-react": {
+      "optional": true
+    },
+    "@clerk/clerk-sdk-node": {
+      "optional": true
+    }
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
