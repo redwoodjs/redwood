@@ -26,7 +26,7 @@
     "core-js": "3.22.4"
   },
   "devDependencies": {
-    "@auth0/auth0-spa-js": "1.21.0",
+    "@auth0/auth0-spa-js": "1.21.1",
     "@azure/msal-browser": "2.24.0",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",

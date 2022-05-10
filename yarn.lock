@@ -81,18 +81,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.21.0":
-  version: 1.21.0
-  resolution: "@auth0/auth0-spa-js@npm:1.21.0"
+"@auth0/auth0-spa-js@npm:1.21.1":
+  version: 1.21.1
+  resolution: "@auth0/auth0-spa-js@npm:1.21.1"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.20.3
+    core-js: ^3.22.0
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
-    promise-polyfill: ^8.2.1
+    promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: c33c29b541bc30aa7176cddf8d81fa1bab5e87fb5b3b83333bb33c8ff1b9a8764c4bbd02d4bafc76b76e1a3de9db1a5e84d33804296925ee4eada3edf72573b0
+  checksum: 32ae80374b0ccfeb3bec04ca94867c46a2bde858f98fae9b1d86992c386908e0d59d8011fdd3518dd3badb02ba23d72b65e256cffbce521e9e9bdc4471758a41
   languageName: node
   linkType: hard
 
@@ -6073,7 +6073,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.21.0
+    "@auth0/auth0-spa-js": 1.21.1
     "@azure/msal-browser": 2.24.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
@@ -13211,7 +13211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.22.4, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.20.3, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.22.4":
   version: 3.22.4
   resolution: "core-js@npm:3.22.4"
   checksum: 2f4bcce914fb0798e68fe8f6a2122398fd2f7a6d7085924b6b05795d8eead1c1a759c2cde92c4868c9800d682c22d3fc6348bc06017b46100ac6567922d8125d
@@ -13222,6 +13222,13 @@ __metadata:
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
   checksum: ab5f869adda3d4dfa8e8753f5b6e6990196f585e701c5fdb2bfd780bdc57235ceefdcd156f557faf9c2d3ed6010383870d3082318f8eda3218b1908413477a04
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.22.5
+  resolution: "core-js@npm:3.22.5"
+  checksum: edabca2183444c36e3fb66aabeab42a59468628af45a6926ec7b254723a0ef0ae22da683849f48a9a59d72d4ff04ead953ee8dff919d233e1773a3fded7fbd34
   languageName: node
   linkType: hard
 
@@ -25337,10 +25344,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise-polyfill@npm:^8.2.1":
-  version: 8.2.1
-  resolution: "promise-polyfill@npm:8.2.1"
-  checksum: 59cae0d74a76f28b55014ec43377a155d768fbbde711aa631f5d99ca39c4c5223aa85a5ad335ea3fe1507be30496d39fff3b442a2669dc0d267c76fdb7e34948
+"promise-polyfill@npm:^8.2.3":
+  version: 8.2.3
+  resolution: "promise-polyfill@npm:8.2.3"
+  checksum: 8d0418ef94d92ff53b3d8a42f47596bd354f4dfadcf21a5d52682f3addba05b05c02d88d4674e4909c069c8e14128a6d0d5e646392fb088b5300f99982a11a6c
   languageName: node
   linkType: hard
 
