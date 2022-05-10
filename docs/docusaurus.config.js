@@ -118,8 +118,8 @@ const config = {
           remarkPlugins: [autoImportTabs, fileExtSwitcher],
           versions: {
             current: {
-              label: 'rc',
-              path: 'rc',
+              label: 'Canary',
+              path: 'canary',
               banner: 'unreleased',
             },
           },
