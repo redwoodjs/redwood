@@ -119,6 +119,8 @@ config:
     typeNames: change-case-all#upperCase
 ```
 
+Remember you can configure graphql-codegen in a number of different ways - codegen.yml, codegen.json or codegen.js - or even a key called codegen in your root package.json. Codegen uses [cosmiconfig](https://github.com/davidtheclark/cosmiconfig#cosmiconfig) under the hood, so take a peek at their docs for all the possible ways to configure.
+
 For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator. Note that we currently only support the root level `config` option.
 
 ## Debugger configuration
