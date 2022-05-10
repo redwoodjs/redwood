@@ -6223,7 +6223,7 @@ __metadata:
     esbuild-loader: 2.18.0
     fast-glob: 3.2.11
     file-loader: 6.2.0
-    graphql: 16.4.0
+    graphql: 16.5.0
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.0
     jest: 27.5.1
@@ -6303,7 +6303,7 @@ __metadata:
     "@types/react-dom": 17.0.16
     "@types/testing-library__jest-dom": 5.14.3
     core-js: 3.22.4
-    graphql: 16.4.0
+    graphql: 16.5.0
     jest: 27.5.1
     nodemon: 2.0.16
     pascalcase: 1.0.0
@@ -6312,7 +6312,7 @@ __metadata:
     react-hook-form: 7.30.0
     typescript: 4.6.4
   peerDependencies:
-    graphql: 16.4.0
+    graphql: 16.5.0
     react: 17.0.2
   languageName: unknown
   linkType: soft
@@ -6344,7 +6344,7 @@ __metadata:
     aws-lambda: 1.0.7
     core-js: 3.22.4
     cross-undici-fetch: 0.1.27
-    graphql: 16.4.0
+    graphql: 16.5.0
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
     jest: 27.5.1
@@ -6389,7 +6389,7 @@ __metadata:
     fast-glob: 3.2.11
     findup-sync: 5.0.0
     fs-extra: 10.1.0
-    graphql: 16.4.0
+    graphql: 16.5.0
     graphql-tag: 2.12.6
     jest: 27.5.1
     kill-port: 1.6.1
@@ -6490,7 +6490,7 @@ __metadata:
     dotenv-defaults: 5.0.0
     enquirer: 2.3.6
     findup-sync: 5.0.0
-    graphql: 16.4.0
+    graphql: 16.5.0
     jest: 27.5.1
     lazy-get-decorator: 2.2.0
     line-column: 1.0.2
@@ -6586,7 +6586,7 @@ __metadata:
     "@types/react-dom": 17.0.16
     "@types/testing-library__jest-dom": 5.14.3
     core-js: 3.22.4
-    graphql: 16.4.0
+    graphql: 16.5.0
     graphql-tag: 2.12.6
     jest: 27.5.1
     nodemon: 2.0.16
@@ -17791,10 +17791,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.4.0, graphql@npm:^16.3.0":
-  version: 16.4.0
-  resolution: "graphql@npm:16.4.0"
-  checksum: e93fbba004a6c121cbd618e060ea8bc672c4e324ee8b7e490245eb8c8a06e06a6806d196c19ce80522a4cf83031ed4bd837de5c2d9fcb5d39e24a586abed6d1e
+"graphql@npm:16.5.0, graphql@npm:^16.3.0":
+  version: 16.5.0
+  resolution: "graphql@npm:16.5.0"
+  checksum: 082bad733549a032fe313dd94b780c0e2a46a6a362183e02e2050f6e083fb49722afb1413b069314d5ba1bc3fa14e22817820a9e61e2bbcba8d35f925d0de60e
   languageName: node
   linkType: hard
 
