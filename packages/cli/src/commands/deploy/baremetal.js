@@ -11,9 +11,15 @@ import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 import { configFilename } from '../setup/deploy/providers/baremetal'
 
-const DEFAULT_BRANCH_NAME = ['main']
 const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
+const DEFAULT_SERVER_CONFIG = {
+  branch: 'main',
+  packageManagerCommand: 'yarn',
+  monitorCommand: 'pm2',
+  sides: ['api', 'web'],
+  keepReleases: 5,
+}
 
 export const command = 'baremetal [environment]'
 export const description = 'Deploy to baremetal server(s)'
@@ -111,9 +117,9 @@ export const builder = (yargs) => {
   )
 }
 
-// Executes a single command via SSH connection, capturing the exit code of the
-// process. Displays an error and will exit(1) if code is non-zero
-const sshExec = async (ssh, sshOptions, task, path, command, args) => {
+// Executes a single command via SSH connection. Displays an error and will
+// exit() with the same code returned from the SSH command.
+const sshExec = async (ssh, path, command, args) => {
   let sshCommand = command
 
   if (args) {
@@ -136,34 +142,45 @@ const sshExec = async (ssh, sshOptions, task, path, command, args) => {
         borderColor: 'red',
       })
     )
-    process.exit(1)
+    process.exit(result.code)
   }
 
   return result
 }
 
+export const throwMissingConfig = (name) => {
+  throw new Error(
+    '`host` config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
+  )
+}
+
 export const verifyServerConfig = (config) => {
-  // is the repo's url set
+  if (!config.host) {
+    throwMissingConfig('host')
+  }
+
+  if (!config.path) {
+    throwMissingConfig('path')
+  }
+
   if (!config.repo) {
-    throw new Error(
-      '`repo` config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
-    )
+    throwMissingConfig('repo')
   }
 }
 
-const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
+const maintenanceTasks = (status, ssh, serverConfig) => {
   const deployPath = path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
 
   if (status === 'up') {
     return [
       {
         title: `Enabling maintenance page...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, deployPath, 'cp', [
+        task: async () => {
+          await sshExec(ssh, deployPath, 'cp', [
             path.join('web', 'dist', '200.html'),
             path.join('web', 'dist', '200.html.orig'),
           ])
-          await sshExec(ssh, sshOptions, task, deployPath, 'ln', [
+          await sshExec(ssh, deployPath, 'ln', [
             SYMLINK_FLAGS,
             path.join('..', 'src', 'maintenance.html'),
             path.join('web', 'dist', '200.html'),
@@ -172,8 +189,8 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
       },
       {
         title: `Stopping ${serverConfig.processNames.join(', ')} processes...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+        task: async () => {
+          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
             'stop',
             serverConfig.processNames.join(' '),
           ])
@@ -184,8 +201,8 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
     return [
       {
         title: `Starting ${serverConfig.processNames.join(', ')} processes...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+        task: async () => {
+          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
             'start',
             serverConfig.processNames.join(' '),
           ])
@@ -193,11 +210,11 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
       },
       {
         title: `Disabling maintenance page...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, deployPath, 'rm', [
+        task: async () => {
+          await sshExec(ssh, deployPath, 'rm', [
             path.join('web', 'dist', '200.html'),
           ])
-          await sshExec(ssh, sshOptions, task, deployPath, 'cp', [
+          await sshExec(ssh, deployPath, 'cp', [
             path.join('web', 'dist', '200.html.orig'),
             path.join('web', 'dist', '200.html'),
           ])
@@ -207,7 +224,7 @@ const maintenanceTasks = (status, ssh, sshOptions, serverConfig) => {
   }
 }
 
-const rollbackTasks = (count, ssh, sshOptions, serverConfig) => {
+const rollbackTasks = (count, ssh, serverConfig) => {
   let rollbackCount = 1
 
   if (parseInt(count) === count) {
@@ -217,17 +234,14 @@ const rollbackTasks = (count, ssh, sshOptions, serverConfig) => {
   const tasks = [
     {
       title: `Rolling back ${rollbackCount} release(s)...`,
-      task: async (_ctx, task) => {
+      task: async () => {
         const currentLink = (
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'readlink', [
-            '-f',
-            'current',
-          ])
+          await sshExec(ssh, serverConfig.path, 'readlink', ['-f', 'current'])
         ).stdout
           .split('/')
           .pop()
         const dirs = (
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'ls', ['-t'])
+          await sshExec(ssh, serverConfig.path, 'ls', ['-t'])
         ).stdout
           .split('\n')
           .filter((dirs) => !dirs.match(/current/))
@@ -240,7 +254,7 @@ const rollbackTasks = (count, ssh, sshOptions, serverConfig) => {
           await symlinkCurrentCommand(
             dirs[rollbackIndex],
             ssh,
-            sshOptions,
+            serverConfig,
             task,
             serverConfig.path
           )
@@ -258,12 +272,11 @@ const rollbackTasks = (count, ssh, sshOptions, serverConfig) => {
   for (const processName of serverConfig.processNames) {
     tasks.push({
       title: `Restarting ${processName} process...`,
-      task: async (_ctx, task) => {
+      task: async () => {
         await restartProcessCommand(
           processName,
           ssh,
-          sshOptions,
-          task,
+          serverConfig,
           serverConfig.path
         )
       },
@@ -273,30 +286,22 @@ const rollbackTasks = (count, ssh, sshOptions, serverConfig) => {
   return tasks
 }
 
-const symlinkCurrentCommand = async (dir, ssh, sshOptions, task, path) => {
-  return await sshExec(ssh, sshOptions, task, path, 'ln', [
+const symlinkCurrentCommand = async (dir, ssh, path) => {
+  return await sshExec(ssh, path, 'ln', [
     SYMLINK_FLAGS,
     dir,
     CURRENT_RELEASE_SYMLINK_NAME,
   ])
 }
 
-const restartProcessCommand = async (
-  processName,
-  ssh,
-  sshOptions,
-  task,
-  path
-) => {
-  return await sshExec(ssh, sshOptions, task, path, 'pm2', [
+const restartProcessCommand = async (processName, ssh, serverConfig, path) => {
+  return await sshExec(ssh, path, serverConfig.monitorCommand, [
     'restart',
     processName,
   ])
 }
 
-const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
-  const deployBranch =
-    yargs.branch || serverConfig.branch || DEFAULT_BRANCH_NAME
+const deployTasks = (yargs, ssh, serverConfig) => {
   const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
   const tasks = []
 
@@ -304,11 +309,11 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
   // built-in task
 
   tasks.push({
-    title: `Cloning \`${deployBranch}\` branch...`,
-    task: async (_ctx, task) => {
-      await sshExec(ssh, sshOptions, task, serverConfig.path, 'git', [
+    title: `Cloning \`${serverConfig.branch}\` branch...`,
+    task: async () => {
+      await sshExec(ssh, serverConfig.path, 'git', [
         'clone',
-        `--branch=${deployBranch}`,
+        `--branch=${serverConfig.branch}`,
         `--depth=1`,
         serverConfig.repo,
         yargs.releaseDir,
@@ -319,39 +324,37 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
 
   tasks.push({
     title: `Symlink .env...`,
-    task: async (_ctx, task) => {
-      await sshExec(ssh, sshOptions, task, cmdPath, 'ln', [
-        SYMLINK_FLAGS,
-        '../.env',
-        '.env',
-      ])
+    task: async () => {
+      await sshExec(ssh, cmdPath, 'ln', [SYMLINK_FLAGS, '../.env', '.env'])
     },
     skip: () => !yargs.update,
   })
 
   tasks.push({
     title: `Installing dependencies...`,
-    task: async (_ctx, task) => {
-      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', ['install'])
+    task: async () => {
+      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+        'install',
+      ])
     },
     skip: () => !yargs.install,
   })
 
   tasks.push({
     title: `DB Migrations...`,
-    task: async (_ctx, task) => {
-      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+    task: async () => {
+      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
         'rw',
         'prisma',
         'migrate',
         'deploy',
       ])
-      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
         'rw',
         'prisma',
         'generate',
       ])
-      await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
         'rw',
         'dataMigrate',
         'up',
@@ -363,8 +366,8 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
   for (const side of serverConfig.sides) {
     tasks.push({
       title: `Building ${side}...`,
-      task: async (_ctx, task) => {
-        await sshExec(ssh, sshOptions, task, cmdPath, 'yarn', [
+      task: async () => {
+        await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
           'rw',
           'build',
           side,
@@ -376,14 +379,8 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
 
   tasks.push({
     title: `Symlinking current release...`,
-    task: async (_ctx, task) => {
-      await symlinkCurrentCommand(
-        yargs.releaseDir,
-        ssh,
-        sshOptions,
-        task,
-        serverConfig.path
-      )
+    task: async () => {
+      await symlinkCurrentCommand(yargs.releaseDir, ssh, serverConfig.path)
     },
     skip: () => !yargs.update,
   })
@@ -392,8 +389,8 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
     if (yargs.firstRun) {
       tasks.push({
         title: `Starting ${processName} process for the first time...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+        task: async () => {
+          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
             'start',
             path.join(CURRENT_RELEASE_SYMLINK_NAME, 'ecosystem.config.js'),
             '--only',
@@ -404,8 +401,8 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
       })
       tasks.push({
         title: `Saving ${processName} state for future startup...`,
-        task: async (_ctx, task) => {
-          await sshExec(ssh, sshOptions, task, serverConfig.path, 'pm2', [
+        task: async () => {
+          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
             'save',
           ])
         },
@@ -414,12 +411,11 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
     } else {
       tasks.push({
         title: `Restarting ${processName} process...`,
-        task: async (_ctx, task) => {
+        task: async () => {
           await restartProcessCommand(
             processName,
             ssh,
-            sshOptions,
-            task,
+            serverConfig,
             serverConfig.path
           )
         },
@@ -430,14 +426,12 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
 
   tasks.push({
     title: `Cleaning up old deploys...`,
-    task: async (_ctx, task) => {
+    task: async () => {
       // add 2 to skip `current` and start on the 6th release
-      const fileStartIndex = (serverConfig.keepReleases || 5) + 2
+      const fileStartIndex = serverConfig.keepReleases + 2
 
       await sshExec(
         ssh,
-        sshOptions,
-        task,
         serverConfig.path,
         `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`
       )
@@ -448,7 +442,15 @@ const deployTasks = (yargs, ssh, sshOptions, serverConfig) => {
   return tasks
 }
 
-const commands = (yargs, ssh) => {
+export const serverConfigWithDefaults = (serverConfig, yargs) => {
+  return {
+    ...DEFAULT_SERVER_CONFIG,
+    ...serverConfig,
+    branch: yargs.branch || serverConfig.branch || DEFAULT_SERVER_CONFIG.branch,
+  }
+}
+
+export const commands = (yargs, ssh) => {
   // parse config and get server list
   const deployConfig = toml.parse(
     fs.readFileSync(path.join(getPaths().base, configFilename))
@@ -472,34 +474,34 @@ const commands = (yargs, ssh) => {
   let tasks = []
 
   // loop through each server in deploy.toml
-  for (const serverConfig of envConfig.servers) {
-    const sshOptions = {
-      host: serverConfig.host,
-      username: serverConfig.username,
-      password: serverConfig.password,
-      privateKey: serverConfig.privateKey,
-      passphrase: serverConfig.passphrase,
-      agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
-      agentForward: serverConfig.agentForward,
-    }
+  for (const config of envConfig.servers) {
+    // merge in defaults
+    const serverConfig = serverConfigWithDefaults(config, yargs)
 
     verifyServerConfig(serverConfig)
 
     tasks.push({
       title: 'Connecting...',
-      task: () => ssh.connect(sshOptions),
+      task: () =>
+        ssh.connect({
+          host: serverConfig.host,
+          username: serverConfig.username,
+          password: serverConfig.password,
+          privateKey: serverConfig.privateKey,
+          passphrase: serverConfig.passphrase,
+          agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
+          agentForward: serverConfig.agentForward,
+        }),
     })
 
     if (yargs.maintenance) {
       tasks = tasks.concat(
-        maintenanceTasks(yargs.maintenance, ssh, sshOptions, serverConfig)
+        maintenanceTasks(yargs.maintenance, ssh, serverConfig)
       )
     } else if (yargs.rollback) {
-      tasks = tasks.concat(
-        rollbackTasks(yargs.rollback, ssh, sshOptions, serverConfig)
-      )
+      tasks = tasks.concat(rollbackTasks(yargs.rollback, ssh, serverConfig))
     } else {
-      tasks = tasks.concat(deployTasks(yargs, ssh, sshOptions, serverConfig))
+      tasks = tasks.concat(deployTasks(yargs, ssh, serverConfig))
     }
 
     tasks.push({

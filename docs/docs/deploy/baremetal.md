@@ -131,10 +131,13 @@ host = "server.com"
 username = "user"
 agentForward = true
 sides = ["api","web"]
+packageManagerCommand = "yarn"
+monitorCommand = "pm2"
 path = "/var/www/app"
 processNames = ["serve"]
 repo = "git@github.com:myorg/myapp.git"
 branch = "main"
+
 ```
 
 This lists a single server, in the `production` environment, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
@@ -148,6 +151,8 @@ This lists a single server, in the `production` environment, providing the hostn
 * `passphrase` - [optional] if your private key contains a passphrase, enter it here
 * `agentForward` - [optional] if you have [agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding) enabled, set this to `true` and your own credentials will be used for further SSH connections from the server (like when connecting to GitHub)
 * `sides` - An array of sides that will be built on this server
+* `packageManagerCommand` - The package manager bin to call, defaults to `yarn` but could be updated to be prefixed with another command first, for example: `doppler run -- yarn`
+* `monitorCommand` - The monitor bin to call, defaults to `pm2` but could be updated to be prefixed with another command first, for example: `doppler run -- pm2`
 * `path` - The absolute path to the root of the application on the server
 * `migrate` - [optional] Whether or not to run migration processes on this server, defaults to `true`
 * `processNames` - An array of service names from `ecosystem.config.js` which will be (re)started on a successful deploy
