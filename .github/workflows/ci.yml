@@ -79,13 +79,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 🔨 Build
-        run: echo "yarn build"
+        run: yarn build
 
       - name: 🔎 Lint
-        run: echo "yarn lint"
+        run: yarn lint
 
       - name: 🧪 Test
-        run: echo "yarn test"
+        run: yarn test
 
   build-lint-test-docs:
     needs: only-doc-changes
@@ -211,7 +211,7 @@ jobs:
           yarn rw prerender --verbose
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      - name: Run smoke tests on 'rw dev' and 'rw serve'
+      - name: Run smoke tests on 'rw dev', 'rw serve', 'rw storybook'
         working-directory: ./tasks/smoke-test
         run: npx playwright test
         env:
@@ -236,11 +236,6 @@ jobs:
       - name: Run "rw test web"
         run: |
           yarn rw test web --no-watch
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
-      - name: Run "rw type-check"
-        run: |
-          yarn rw type-check
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Run "rw check"
@@ -289,6 +284,16 @@ jobs:
       - name: Run "g page"
         run: |
           yarn rw g page ciTest
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "g sdl"
+        run: |
+          yarn rw g sdl userExample
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "rw type-check"
+        run: |
+          yarn rw type-check
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Throw Error | Run `rw g sdl <model>`

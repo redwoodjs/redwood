@@ -1,4 +1,5 @@
 import task from 'tasuku'
+import { TaskInnerAPI } from 'tasuku'
 
 import upgradeYarn from './upgradeYarn'
 
@@ -7,7 +8,7 @@ export const description =
   '(v0.48.x->v0.48.x) Changes the structure of your Redwood Project'
 
 export const handler = () => {
-  task('Upgrade Yarn', async ({ setError }: task.TaskInnerApi) => {
+  task('Upgrade Yarn', async ({ setError }: TaskInnerAPI) => {
     try {
       await upgradeYarn()
     } catch (e: any) {

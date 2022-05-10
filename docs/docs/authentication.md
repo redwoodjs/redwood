@@ -824,7 +824,7 @@ const UserAuthTools = () => {
 
 #### Firebase Auth Provider Specific Integration
 
-See the Firebase information within this doc's [Auth Provider Specific Integration](https://redwoodjs.com/docs/authentication.html#auth-provider-specific-integration) section.
+See the Firebase information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
 +++
 
 ### Supabase

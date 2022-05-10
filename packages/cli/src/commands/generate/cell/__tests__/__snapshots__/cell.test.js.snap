@@ -52,6 +52,148 @@ export const Success = ({ equipment }) => {
 "
 `;
 
+exports[`TypeScript: generates list cells if list flag passed in 1`] = `
+"import type { FindBazingaQuery, FindBazingaQueryVariables } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
+export const QUERY = gql\`
+  query FindBazingaQuery($id: Int!) {
+    bazinga: bazinga(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({
+  error,
+}: CellFailureProps<FindBazingaQueryVariables>) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({
+  bazinga,
+}: CellSuccessProps<FindBazingaQuery, FindBazingaQueryVariables>) => {
+  return <div>{JSON.stringify(bazinga)}</div>
+}
+"
+`;
+
+exports[`TypeScript: generates list cells if list flag passed in 2`] = `
+"import { render, screen } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './BazingaCell'
+import { standard } from './BazingaCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('BazingaCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success bazinga={standard().bazinga} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`TypeScript: generates list cells if list flag passed in 3`] = `
+"import { Loading, Empty, Failure, Success } from './BazingaCell'
+import { standard } from './BazingaCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/BazingaCell' }
+"
+`;
+
+exports[`TypeScript: generates list cells if list flag passed in 4`] = `
+"// Define your own mock data here:
+export const standard = (/* vars, { ctx, req } */) => ({
+  bazinga: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`TypeScript: generates list cells if name is plural 1`] = `
+"import type { MembersQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
+
+export const QUERY = gql\`
+  query MembersQuery {
+    members {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }: CellFailureProps) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ members }: CellSuccessProps<MembersQuery>) => {
+  return (
+    <ul>
+      {members.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+"
+`;
+
 exports[`creates a cell component with a camelCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
