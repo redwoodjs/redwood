@@ -14,6 +14,10 @@ import type {
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
+import {
+  AuthClientWithUpdateHook,
+  isAuthClientWithUpdateHook,
+} from './authClients/AuthClient'
 
 export interface CurrentUser {
   roles?: Array<string> | string
@@ -86,7 +90,7 @@ const AuthUpdateListener = ({
   rwClient,
   reauthenticate,
 }: {
-  rwClient: Required<Pick<AuthClient, 'useListenForUpdates'>>
+  rwClient: AuthClientWithUpdateHook
   reauthenticate: () => Promise<void>
 }) => {
   rwClient.useListenForUpdates({ reauthenticate })
@@ -427,11 +431,9 @@ export const AuthProvider = (props: PropsWithChildren<AuthProviderProps>) => {
       }}
     >
       {children}
-      {rwClient?.useListenForUpdates !== undefined && (
+      {rwClient && isAuthClientWithUpdateHook(rwClient) && (
         <AuthUpdateListener
-          // NOTE: Typescript doesn't recognize that we've just validated that this client is defined
-          // and has a defined listner function, so we have to do the cast to any to force it to accept.
-          rwClient={rwClient as any}
+          rwClient={rwClient}
           reauthenticate={reauthenticate}
         />
       )}

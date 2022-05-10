@@ -27,6 +27,15 @@ export interface AuthClient {
   type: SupportedAuthTypes
 }
 
+export type AuthClientWithUpdateHook = AuthClient &
+  Required<Pick<AuthClient, 'useListenForUpdates'>>
+
+export function isAuthClientWithUpdateHook(
+  client: AuthClient
+): client is AuthClientWithUpdateHook {
+  return !!client.useListenForUpdates
+}
+
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes,
