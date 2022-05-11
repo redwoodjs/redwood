@@ -6503,7 +6503,7 @@ __metadata:
     typescript: 4.6.4
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.4
-    vscode-languageserver-types: 3.16.0
+    vscode-languageserver-types: 3.17.0
     yargs-parser: 21.0.1
   languageName: unknown
   linkType: soft
@@ -30785,10 +30785,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-languageserver-types@npm:3.16.0":
-  version: 3.16.0
-  resolution: "vscode-languageserver-types@npm:3.16.0"
-  checksum: cc1bd68a7fe94152849e434cfc6fd8471f5c17198057fc6c95814d4b1655ab2b76d577b5fcd0f1f2a5df0285f054c96b9698e6d33e8183846f152d6e7d3ecc97
+"vscode-languageserver-types@npm:3.17.0":
+  version: 3.17.0
+  resolution: "vscode-languageserver-types@npm:3.17.0"
+  checksum: f58fdc08b8abab89166f7ee9fb8029ed2ca4f22bdc38b7491b0e932c0ab6e9cddc41f46fccd7f224fbb79302413afb771244198f3e92e8cb6995beaf66db8628
   languageName: node
   linkType: hard
 
