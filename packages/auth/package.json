@@ -32,7 +32,7 @@
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.10.2",
     "@clerk/clerk-sdk-node": "3.4.1",
-    "@clerk/types": "2.10.0",
+    "@clerk/types": "2.10.1",
     "@nhost/hasura-auth-js": "1.1.6",
     "@nhost/nhost-js": "1.1.10",
     "@supabase/supabase-js": "1.35.3",
