@@ -155,6 +155,20 @@ export const throwMissingConfig = (name) => {
   )
 }
 
+export const verifyConfig = (config, yargs) => {
+  if (!yargs.environment) {
+    throw new Error(
+      'Must specify an environment to deploy to, ex: `yarn rw deploy baremetal production`'
+    )
+  }
+
+  if (!config[yargs.environment]) {
+    throw new Error(`No servers found for environment "${yargs.environment}"`)
+  }
+
+  return true
+}
+
 export const verifyServerConfig = (config) => {
   if (!config.host) {
     throwMissingConfig('host')
@@ -616,9 +630,7 @@ export const parseConfig = (yargs, configToml) => {
   let envConfig
   const emptyLifecycle = {}
 
-  if (yargs.environment === undefined) {
-    throw new Error('Must specify an environment to deploy to')
-  }
+  verifyConfig(config, yargs)
 
   // start with an emtpy set of hooks, { before: {}, after: {} }
   for (const hook of LIFECYCLE_HOOKS) {
@@ -629,14 +641,8 @@ export const parseConfig = (yargs, configToml) => {
   let envLifecycle = mergeLifecycleEvents(emptyLifecycle, config)
 
   // get config for given environment
-  if (config[yargs.environment]) {
-    envConfig = config[yargs.environment]
-    envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
-  } else {
-    throw new Error(
-      `No deploy servers found for environment "${yargs.environment}"`
-    )
-  }
+  envConfig = config[yargs.environment]
+  envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
 
   return { envConfig, envLifecycle }
 }

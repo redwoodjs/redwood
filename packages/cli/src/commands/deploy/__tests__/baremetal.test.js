@@ -1,5 +1,25 @@
 import * as baremetal from '../baremetal'
 
+describe('verifyConfig', () => {
+  it('throws an error if no environment specified', () => {
+    expect(() =>
+      baremetal.verifyConfig(
+        { production: { servers: [{ host: 'prod.server.com' }] } },
+        {}
+      )
+    ).toThrow('Must specify an environment to deploy to')
+  })
+
+  it('throws an error if environment is not found', () => {
+    expect(() =>
+      baremetal.verifyConfig(
+        { production: { servers: [{ host: 'prod.server.com' }] } },
+        { environment: 'staging' }
+      )
+    ).toThrow('No servers found for environment "staging"')
+  })
+})
+
 describe('verifyServerConfig', () => {
   it('throws an error if host is missing', () => {
     expect(() =>
@@ -156,30 +176,6 @@ describe('parseConfig', () => {
     )
 
     expect(envConfig).toEqual({ servers: [{ host: 'staging.server.com' }] })
-  })
-
-  it('throws an error if no environment specified', () => {
-    expect(() =>
-      baremetal.parseConfig(
-        {},
-        `
-          [[production.servers]]
-          host = 'prod.server.com'
-        `
-      )
-    ).toThrow('Must specify an environment to deploy to')
-  })
-
-  it('throws an error if environment is not found', () => {
-    expect(() =>
-      baremetal.parseConfig(
-        { environment: 'staging' },
-        `
-          [[production.servers]]
-          host = 'prod.server.com'
-        `
-      )
-    ).toThrow('No deploy servers found for environment "staging"')
   })
 
   it('returns empty objects if no lifecycle defined', () => {
