@@ -26,13 +26,16 @@ yarn rw deploy baremetal
 
 The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
-1. `git clone` - gets latest code
-2. `yarn install` - installs dependencies
-3. `yarn rw prisma migrate deploy` - runs db migrations
-3. `yarn rw prisma generate` - generates latest Prisma Client libs
-4. `yarn rw dataMigrate up` - runs data migrations, ignoring them if not installed
-5. `yarn rw build` - builds the web and/or api sides
-6. `pm2 restart [service]` - restarts the serving process(es)
+1. `git clone --depth=1` to retieve the latest code
+2. Symlink the latest deploy `.env` to the shared `.env` in the app dir
+3. `yarn install` - installs dependencies
+4. Runs prisma DB migrations
+5. Generate Prisma client libs
+6. Runs [data migrations](/docs/data-migrations)
+7. Builds the web and/or api sides
+8. Symlink the latest deploy dir to `current` in the app dir
+9. Restart the serving process(es)
+10. Remove older deploy directories
 
 ### First Run Lifecycle
 
@@ -407,12 +410,14 @@ Run `yarn rw deploy baremetal --help` for the full list of flags. You can set th
 
 Baremetal supports running your own custom commands before or after the regular deploy commands. You can run commands **before** and/or **after** the built-in commands. Your custom commands are defined in the `deploy.toml` config file. The existing commands that you can hook into are:
 
-* `update` - cloning the codebase
-* `install` - `yarn install` 
-* `migrate` - database migrations
-* `build` - `yarn build` (your custom before/after command is run only once, no matter how many sides are being built)
-* `restart` - (re)starting any pm2 processes (a before/after command is run only once no matter how many processes need to be (re)started)
-* `cleanup` - cleaning up any old releases
+1. `update` - cloning the codebase
+2. `symlinkEnv` - symlink the new deploy's `.env` to shared one in the app dir
+3. `install` - `yarn install` 
+4. `migrate` - database migrations
+5. `build` - `yarn build` (your custom before/after command is run for each side being built)
+6. `symlinkCurrent` - symlink the new deploy dir to `current` in the app dir
+7. `restart` - (re)starting any pm2 processes (your custom command will run before/after each process is restarted)
+8. `cleanup` - cleaning up any old releases
 
 You can define your before/after commands in three different places:
 
@@ -455,13 +460,13 @@ host = 'server.com'
 Environment specific commands are defined in a `[[environment.before]]` and `[[environment.after]]` block:
 
 ```toml
-[[production.before]]
+[production.before]
 install = "touch prod-install.lock"
 
-[[production.after]]
+[production.after]
 install = "rm prod-install.lock"
 
-[[production.servers]]
+[production.servers]
 host = 'server.com'
 # ...
 ```
@@ -496,8 +501,8 @@ host = 'server.com'
 # ...
 before.install = 'touch server-install.lock'
 
-[[production.before]]
-install = 'touch prod-install.lock'
+[production.before]
+install = ['touch prod-install1.lock', 'touch prod-install2.lock']
 
 [before]
 install = 'touch install.lock'
@@ -506,8 +511,9 @@ install = 'touch install.lock'
 Would result in the commands running in this order, all before running `yarn install`:
 
 1. `touch install.lock`
-2. `touch prod-install.lock`
-3. `touch server-install.lock`
+2. `touch prod-install1.lock`
+3. `touch prod-install2.lock`
+4. `touch server-install.lock`
 
 ## Rollback
 
