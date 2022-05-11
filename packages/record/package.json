@@ -28,13 +28,13 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/client": "3.13.0",
+    "@prisma/client": "3.14.0",
     "core-js": "3.22.5"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@prisma/sdk": "3.13.0",
+    "@prisma/sdk": "3.14.0",
     "esbuild": "0.14.38",
     "jest": "27.5.1"
   },
