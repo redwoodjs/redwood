@@ -36,7 +36,6 @@ export const execaOptions = {
 export const builder = (yargs) => {
   yargs.positional('environment', {
     describe: 'The environment to deploy to',
-    default: 'production',
     type: 'string',
   })
 
@@ -617,6 +616,10 @@ export const parseConfig = (yargs, configToml) => {
   let envConfig
   const emptyLifecycle = {}
 
+  if (yargs.environment === undefined) {
+    throw new Error('Must specify an environment to deploy to')
+  }
+
   // start with an emtpy set of hooks, { before: {}, after: {} }
   for (const hook of LIFECYCLE_HOOKS) {
     emptyLifecycle[hook] = {}
@@ -628,14 +631,7 @@ export const parseConfig = (yargs, configToml) => {
   // get config for given environment
   if (config[yargs.environment]) {
     envConfig = config[yargs.environment]
-    // environment-specific lifecycle config
     envLifecycle = mergeLifecycleEvents(envLifecycle, envConfig)
-  } else if (
-    yargs.environment === 'production' &&
-    Array.isArray(config.servers)
-  ) {
-    // if no explicit environment in config, assume servers listed are prod
-    envConfig = config
   } else {
     throw new Error(
       `No deploy servers found for environment "${yargs.environment}"`

@@ -131,11 +131,62 @@ describe('serverConfigWithDefaults', () => {
 })
 
 describe('parseConfig', () => {
+  it('returns the config for an environment', () => {
+    const { envConfig } = baremetal.parseConfig(
+      { environment: 'production' },
+      `
+        [[production.servers]]
+        host = 'server.com'
+      `
+    )
+
+    expect(envConfig).toEqual({ servers: [{ host: 'server.com' }] })
+  })
+
+  it('returns the proper config from multiple environments', () => {
+    const { envConfig } = baremetal.parseConfig(
+      { environment: 'staging' },
+      `
+        [[production.servers]]
+        host = 'prod.server.com'
+
+        [[staging.servers]]
+        host = 'staging.server.com'
+      `
+    )
+
+    expect(envConfig).toEqual({ servers: [{ host: 'staging.server.com' }] })
+  })
+
+  it('throws an error if no environment specified', () => {
+    expect(() =>
+      baremetal.parseConfig(
+        {},
+        `
+          [[production.servers]]
+          host = 'prod.server.com'
+        `
+      )
+    ).toThrow('Must specify an environment to deploy to')
+  })
+
+  it('throws an error if environment is not found', () => {
+    expect(() =>
+      baremetal.parseConfig(
+        { environment: 'staging' },
+        `
+          [[production.servers]]
+          host = 'prod.server.com'
+        `
+      )
+    ).toThrow('No deploy servers found for environment "staging"')
+  })
+
   it('returns empty objects if no lifecycle defined', () => {
     const { _envConfig, envLifecycle } = baremetal.parseConfig(
       { environment: 'production' },
       `
-        [[servers]]
+        [[production.servers]]
         host = 'server.com'
       `
     )
@@ -151,7 +202,7 @@ describe('parseConfig', () => {
         [before]
         install = 'yarn global'
 
-        [[servers]]
+        [[production.servers]]
         host = 'server.com'
       `
     )
@@ -168,7 +219,7 @@ describe('parseConfig', () => {
         install = 'yarn global one'
         update = 'yarn global two'
 
-        [[servers]]
+        [[production.servers]]
         host = 'server.com'
       `
     )
@@ -187,7 +238,7 @@ describe('parseConfig', () => {
         [before]
         install = ['yarn global one', 'yarn global two']
 
-        [[servers]]
+        [[production.servers]]
         host = 'server.com'
       `
     )
