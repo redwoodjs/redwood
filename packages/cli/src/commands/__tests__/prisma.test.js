@@ -9,7 +9,6 @@ jest.mock('@redwoodjs/internal', () => {
         base: '/Users/bazinga/My Projects/rwprj/rwprj',
       }
     },
-    getConfig: () => {},
   }
 })
 
