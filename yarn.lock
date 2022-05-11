@@ -6309,7 +6309,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.30.0
+    react-hook-form: 7.31.1
     typescript: 4.6.4
   peerDependencies:
     graphql: 16.5.0
@@ -25948,12 +25948,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.30.0":
-  version: 7.30.0
-  resolution: "react-hook-form@npm:7.30.0"
+"react-hook-form@npm:7.31.1":
+  version: 7.31.1
+  resolution: "react-hook-form@npm:7.31.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: c76c705bfc02c8e4beecdf20b0ff624997d86385982269231d5b7ae953c47abfd936af317c55448ffc4eeb85bde82b582629108e4e63d199f7176d7bfa6fb470
+  checksum: 1fcb23378e116c5cd7fbbd6d335a87c654512a7dd029cff84bc713fb9a2c9b47fb40d54f41a6a29bbdb844dc8842cb8aa7efbddae91d619db0643e624bd08070
   languageName: node
   linkType: hard
 
