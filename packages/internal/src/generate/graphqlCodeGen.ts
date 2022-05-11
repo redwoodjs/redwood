@@ -137,6 +137,7 @@ function getPluginConfig() {
 
   const pluginConfig: CodegenTypes.PluginConfig &
     typescriptResolvers.TypeScriptResolversPluginConfig = {
+    makeResolverTypeCallable: true,
     namingConvention: 'keep', // to allow camelCased query names
     scalars: {
       // We need these, otherwise these scalars are mapped to any
@@ -152,10 +153,10 @@ function getPluginConfig() {
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,
-
+    showUnusedMappers: false,
     customResolverFn: `(
-      args: TArgs,
-      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+      args?: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => Promise<Partial<TResult>> | Partial<TResult>;`,
     mappers: prismaModels,
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
