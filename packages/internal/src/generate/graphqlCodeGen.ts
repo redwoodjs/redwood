@@ -125,7 +125,7 @@ function getPluginConfig() {
     const localPrisma = require('@prisma/client')
     prismaModels = localPrisma.ModelName
     Object.keys(prismaModels).forEach((key) => {
-      prismaModels[key] = `.prisma/client#${key} as Prisma${key}`
+      prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
     })
     // This isn't really something you'd put in the GraphQL API, so
     // we can skip the model.
@@ -170,7 +170,7 @@ export const getResolverFnType = () => {
     // In strict mode, bring a world of pain to the tests
     return `(
       args: TArgs,
-      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => Promise<Partial<TResult>> | Partial<TResult>;`
   } else {
     return `(
