@@ -4,9 +4,9 @@ import {
   FormatErrorHandler,
   GraphQLYogaError,
   useMaskedErrors,
+  createServer,
+  PluginOrDisabledPlugin,
 } from '@graphql-yoga/common'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
-
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -17,7 +17,6 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { createServer } from '@graphql-yoga/common'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -84,6 +83,7 @@ export const createGraphQLHandler = ({
   context,
   getCurrentUser,
   onException,
+  generateGraphiQLHeaders,
   extraPlugins,
   cors,
   services,
@@ -176,6 +176,7 @@ export const createGraphQLHandler = ({
       ? {
           title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
+          headers: generateGraphiQLHeaders ? generateGraphiQLHeaders() : `"{}"`,
           defaultQuery: `query Redwood {
   redwood {
     version
