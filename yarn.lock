@@ -6243,7 +6243,7 @@ __metadata:
     webpack-dev-server: 4.9.0
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
-    webpack-retry-chunk-load-plugin: 3.0.0
+    webpack-retry-chunk-load-plugin: 3.1.0
   bin:
     cross-env: ./dist/bins/cross-env.js
     eslint: ./dist/bins/eslint.js
@@ -25161,7 +25161,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.6.2, prettier@npm:^2.0.1, prettier@npm:^2.2.1":
+"prettier@npm:2.6.2, prettier@npm:^2.0.1, prettier@npm:^2.6.2":
   version: 2.6.2
   resolution: "prettier@npm:2.6.2"
   bin:
@@ -31269,14 +31269,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-retry-chunk-load-plugin@npm:3.0.0":
-  version: 3.0.0
-  resolution: "webpack-retry-chunk-load-plugin@npm:3.0.0"
+"webpack-retry-chunk-load-plugin@npm:3.1.0":
+  version: 3.1.0
+  resolution: "webpack-retry-chunk-load-plugin@npm:3.1.0"
   dependencies:
-    prettier: ^2.2.1
+    prettier: ^2.6.2
   peerDependencies:
     webpack: ">=5.0.0"
-  checksum: fa07410029323722b8c2c7938cfd959fe68f3d1cf2c03bd833ed01115429a7fa43bd0ed2bd6f6f82d11879589fa01d5e4127a1d5dfece60a59ec7115ad65efba
+  checksum: c3a165173f5ba709d98e1f097cfd751693bf43f63c6fc3adce4ff542a32b8a5d007ee7b746352062c478237ce770dfb7e6afe58d1a0ab5e70b74daa8c3f54ac8
   languageName: node
   linkType: hard
 
