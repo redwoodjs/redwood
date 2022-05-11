@@ -24,7 +24,7 @@ yarn rw deploy baremetal
 
 ## Deployment Lifecycle
 
-The baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
+The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
 1. `git clone` - gets latest code
 2. `yarn install` - installs dependencies
@@ -405,14 +405,14 @@ Run `yarn rw deploy baremetal --help` for the full list of flags. You can set th
 
 ### Inserting Custom Commands
 
-Baremetal supports running your own custom commands before or after the regular deploy commands. This is accomplished by adding some additional configuration options to `deploy.toml`. The existing commands that you can hook into are:
+Baremetal supports running your own custom commands before or after the regular deploy commands. You can run commands **before** and/or **after** the built-in commands. Your custom commands are defined in the `deploy.toml` config file. The existing commands that you can hook into are:
 
-* `update` - before/after your codebase is cloned
-* `install` - before/after `yarn install` is executed
-* `migrate` - before/after database migrations are invoked
-* `build` - before/after `yarn build` is executed (your custom before/after command is run only once, no matter how many sides are being built)
-* `restart` - before/after (re)starting any pm2 processes (a before/after command is run only once no matter how many processes need to be (re)started)
-* `cleanup` - before/after cleaning up any old releases
+* `update` - cloning the codebase
+* `install` - `yarn install` 
+* `migrate` - database migrations
+* `build` - `yarn build` (your custom before/after command is run only once, no matter how many sides are being built)
+* `restart` - (re)starting any pm2 processes (a before/after command is run only once no matter how many processes need to be (re)started)
+* `cleanup` - cleaning up any old releases
 
 You can define your before/after commands in three different places:
 
