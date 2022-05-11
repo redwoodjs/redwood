@@ -5101,6 +5101,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nhost/core@npm:0.5.4":
+  version: 0.5.4
+  resolution: "@nhost/core@npm:0.5.4"
+  dependencies:
+    axios: ^0.27.2
+    js-cookie: ^3.0.1
+    xstate: ^4.31.0
+  checksum: 9500d3b37b61e94607434b269b1994837e9f9a469d16bce5f6f5d306daa51dca200dc722be2988dac132bcfb2fdc39e60b2deaa0633d9ff7c68e194e8be8cdd5
+  languageName: node
+  linkType: hard
+
 "@nhost/hasura-auth-js@npm:1.1.5":
   version: 1.1.5
   resolution: "@nhost/hasura-auth-js@npm:1.1.5"
@@ -5109,6 +5120,17 @@ __metadata:
     jwt-decode: ^3.1.2
     xstate: ^4.31.0
   checksum: 6a3867f0b0a5d44a8ee5c1aaf2594860b839186977683bfd58f939a2b1ca4054308429ee980b890d5a3237d94066fe65732b638242aa2da04d0bc16e86bb257f
+  languageName: node
+  linkType: hard
+
+"@nhost/hasura-auth-js@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@nhost/hasura-auth-js@npm:1.1.6"
+  dependencies:
+    "@nhost/core": 0.5.4
+    jwt-decode: ^3.1.2
+    xstate: ^4.31.0
+  checksum: fad26c554ef643ff9f99353ef033d095f8c079260e646ec4fe81742b428b9612cc6a7ee03771c3c7daffa14e68b80443cd2f6ff272ead8591337d790ea977151
   languageName: node
   linkType: hard
 
@@ -6080,7 +6102,7 @@ __metadata:
     "@clerk/clerk-js": 3.10.1
     "@clerk/clerk-sdk-node": 3.4.0
     "@clerk/types": 2.10.0
-    "@nhost/hasura-auth-js": 1.1.5
+    "@nhost/hasura-auth-js": 1.1.6
     "@nhost/nhost-js": 1.1.10
     "@supabase/supabase-js": 1.35.3
     "@types/netlify-identity-widget": 1.9.3
@@ -10807,6 +10829,16 @@ __metadata:
   dependencies:
     follow-redirects: ^1.14.8
   checksum: 77ad7f1e6ca04fcd3fa8af1795b09d8b7c005b71a31f28d99ba40cda0bdcc12a4627801d7fac5efa62b9f667a8402bd54c669039694373bc8d44f6be611f785c
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.27.2":
+  version: 0.27.2
+  resolution: "axios@npm:0.27.2"
+  dependencies:
+    follow-redirects: ^1.14.9
+    form-data: ^4.0.0
+  checksum: 76d673d2a90629944b44d6f345f01e58e9174690f635115d5ffd4aca495d99bcd8f95c590d5ccb473513f5ebc1d1a6e8934580d0c57cdd0498c3a101313ef771
   languageName: node
   linkType: hard
 
@@ -16737,7 +16769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.8":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.8, follow-redirects@npm:^1.14.9":
   version: 1.15.0
   resolution: "follow-redirects@npm:1.15.0"
   peerDependenciesMeta:
@@ -16839,6 +16871,17 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: 1ccc3ae064a080a799923f754d49fcebdd90515a8924f0f54de557540b50e7f1fe48ba5f2bd0435a5664aa2d49729107e6aaf2155a9abf52339474c5638b4485
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: cb6f3ac49180be03ff07ba3ff125f9eba2ff0b277fb33c7fc47569fc5e616882c5b1c69b9904c4c4187e97dd0419dd03b134174756f296dec62041e6527e2c6e
   languageName: node
   linkType: hard
 
