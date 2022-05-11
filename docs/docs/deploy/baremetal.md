@@ -126,7 +126,7 @@ module.exports = {
 This file contains your server configuration: which servers to connect to and which commands to run on them.
 
 ```toml title="deploy.toml"
-[[servers.production]]
+[[production.servers]]
 host = "server.com"
 username = "user"
 agentForward = true
@@ -167,7 +167,7 @@ The easiest connection method is generally to include your own public key in the
 If you start horizontally scaling your application you may find it necessary to have the web and api sides served from different servers. The configuration files can accommodate this:
 
 ```toml title="deploy.toml"
-[[servers.production]]
+[[production.servers]]
 host = "api.server.com"
 username = "user"
 agentForward = true
@@ -175,7 +175,7 @@ sides = ["api"]
 path = "/var/www/app"
 processNames = ["api"]
 
-[[servers.production]]
+[[production.servers]]
 host = "web.server.com"
 username = "user"
 agentForward = true
@@ -221,7 +221,7 @@ You can add as many `[[servers]]` blocks as you need.
 You can deploy to multiple environments from a single `deploy.toml` by including servers grouped by environment name:
 
 ```toml title="deploy.toml"
-[[servers.production]]
+[[production.servers]]
 host = "prod.server.com"
 username = "user"
 agentForward = true
@@ -229,7 +229,7 @@ sides = ["api", "web"]
 path = "/var/www/app"
 processNames = ["serve"]
 
-[[servers.staging]]
+[[staging.servers]]
 host = "staging.server.com"
 username = "user"
 agentForward = true
@@ -391,6 +391,10 @@ In this example, you would copy `sudo env PATH=$PATH:/home/ubuntu/.nvm/versions/
 
 ## Customizing the Deploy
 
+There are several ways you can customize the deploys steps, whether that's skipping steps completely, or inserting your own commands before or after the default ones.
+
+### Skipping Steps
+
 If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip them completely and save some time:
 
 ```bash
@@ -398,6 +402,112 @@ yarn rw deploy baremetal --no-migrate
 ```
 
 Run `yarn rw deploy baremetal --help` for the full list of flags. You can set them as `--migrate=false` or use the `--no-migrate` variant.
+
+### Inserting Custom Commands
+
+Baremetal supports running your own custom commands before or after the regular deploy commands. This is accomplished by adding some additional configuration options to `deploy.toml`. The existing commands that you can hook into are:
+
+* `update` - before/after your codebase is cloned
+* `install` - before/after `yarn install` is executed
+* `migrate` - before/after database migrations are invoked
+* `build` - before/after `yarn build` is executed (your custom before/after command is run only once, no matter how many sides are being built)
+* `restart` - before/after (re)starting any pm2 processes (a before/after command is run only once no matter how many processes need to be (re)started)
+* `cleanup` - before/after cleaning up any old releases
+
+You can define your before/after commands in three different places:
+
+* Globally - runs for any environment
+* Environment specific - runs for only a single environment
+* Server specific - runs for only a single server in a single environment
+
+:::caution
+
+Custom commands are run in the new **deploy** directory, not the root of your application directory. During a deploy the `current` symlink will point to the previous directory while your code is executed in the new one, before the `current` symlink location is updated. 
+
+```bash
+drwxrwxr-x  5 ubuntu ubuntu 4096 May 10 18:20 ./
+drwxr-xr-x  7 ubuntu ubuntu 4096 Apr 27 17:43 ../
+drwxrwxr-x  2 ubuntu ubuntu 4096 May  9 22:59 20220503211428/
+drwxrwxr-x  2 ubuntu ubuntu 4096 May  9 22:59 20220503211429/
+drwxrwxr-x 10 ubuntu ubuntu 4096 May 10 18:18 20220510181730/ <-- commands are run in here
+lrwxrwxrwx  1 ubuntu ubuntu   14 May 10 18:19 current -> 20220503211429/
+-rw-rw-r--  1 ubuntu ubuntu 1167 Apr 22 20:49 .env
+```
+
+:::
+
+#### Syntax
+
+Global events are defined in a `[before]` and/or `[after]` block in your `deploy.toml` file:
+
+```toml
+[before]
+install = "touch install.lock"
+
+[after]
+install = "rm install.lock"
+
+[[production.servers]]
+host = 'server.com'
+# ...
+```
+
+Environment specific commands are defined in a `[[environment.before]]` and `[[environment.after]]` block:
+
+```toml
+[[production.before]]
+install = "touch prod-install.lock"
+
+[[production.after]]
+install = "rm prod-install.lock"
+
+[[production.servers]]
+host = 'server.com'
+# ...
+```
+
+Server specific commands are defined with a `before.command` and `after.commmand` key directly in your server config:
+
+```toml
+[[production.servers]]
+host = 'server.com'
+# ...
+before.install = 'touch server-install.lock'
+after.install = 'rm server-install.lock'
+```
+
+You can define commands as a string, or an array of strings if you want to run multiple commands:
+
+```toml
+[before]
+install = ["echo 'started at $(date)' > install.lock", "cp -R . ../backup"]
+
+[[production.servers]]
+host = 'server.com'
+# ...
+```
+
+You can include commands in any/all of the three configurations (global, env and server) and they will all be stacked up and run in that order: `global -> environment -> server`. For example:
+
+
+```toml
+[[production.servers]]
+host = 'server.com'
+# ...
+before.install = 'touch server-install.lock'
+
+[[production.before]]
+install = 'touch prod-install.lock'
+
+[before]
+install = 'touch install.lock'
+```
+
+Would result in the commands running in this order, all before running `yarn install`:
+
+1. `touch install.lock`
+2. `touch prod-install.lock`
+3. `touch server-install.lock`
 
 ## Rollback
 
