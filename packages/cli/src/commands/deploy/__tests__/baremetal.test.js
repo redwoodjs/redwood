@@ -1,3 +1,15 @@
+import path from 'path'
+
+import Listr from 'listr'
+
+jest.mock('@redwoodjs/internal', () => {
+  return {
+    getPaths: () => ({
+      base: `${__dirname}/fixtures`,
+    }),
+  }
+})
+
 import * as baremetal from '../baremetal'
 
 describe('verifyConfig', () => {
@@ -285,23 +297,198 @@ describe('parseConfig', () => {
   })
 })
 
-const defaultYargs = {
-  update: true,
-  install: true,
-  migrate: true,
-  build: true,
-  restart: true,
-  cleanup: true,
-  releaseDir: '20220409120000',
-}
-const defaultServerConfig = {
-  branch: 'main',
-  path: '/var/www/app',
-  processNames: ['serve'],
-  sides: ['api'],
-}
+describe('commandWithLifecycleEvents', () => {
+  it('returns just the command if no lifecycle defined', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: { serverLifecycle: {} },
+      skip: false,
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks.length).toEqual(1)
+    expect(tasks[0].title).toEqual('Some command')
+    expect(tasks[0].skip()).toEqual(false)
+  })
+
+  it('copies `skip` output into task function', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: { serverLifecycle: {} },
+      skip: 'foobar',
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks[0].skip()).toEqual('foobar')
+  })
+
+  it('includes a `before` lifecycle event', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: { before: { update: ['touch'] } },
+      },
+      skip: false,
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks.length).toEqual(2)
+    expect(tasks[0].title).toEqual('Before update: `touch`')
+    expect(tasks[0].skip()).toEqual(false)
+    expect(tasks[1].title).toEqual('Some command')
+    expect(tasks[1].skip()).toEqual(false)
+  })
+
+  it('includes multiple `before` lifecycle events', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: { before: { update: ['touch1', 'touch2'] } },
+      },
+      skip: false,
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks.length).toEqual(3)
+    expect(tasks[0].title).toEqual('Before update: `touch1`')
+    expect(tasks[0].skip()).toEqual(false)
+    expect(tasks[1].title).toEqual('Before update: `touch2`')
+    expect(tasks[1].skip()).toEqual(false)
+    expect(tasks[2].title).toEqual('Some command')
+    expect(tasks[2].skip()).toEqual(false)
+  })
+
+  it('copies `skip` output into `before` lifecycle event task function', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: { before: { update: ['touch'] } },
+      },
+      skip: 'foobar',
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks[0].skip()).toEqual('foobar')
+    expect(tasks[1].skip()).toEqual('foobar')
+  })
+
+  it('includes an `after` lifecycle event', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: { after: { update: ['touch'] } },
+      },
+      skip: false,
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks.length).toEqual(2)
+    expect(tasks[0].title).toEqual('Some command')
+    expect(tasks[0].skip()).toEqual(false)
+    expect(tasks[1].title).toEqual('After update: `touch`')
+    expect(tasks[1].skip()).toEqual(false)
+  })
+
+  it('includes multiple `after` lifecycle events', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: { after: { update: ['touch1', 'touch2'] } },
+      },
+      skip: false,
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks.length).toEqual(3)
+    expect(tasks[0].title).toEqual('Some command')
+    expect(tasks[0].skip()).toEqual(false)
+    expect(tasks[1].title).toEqual('After update: `touch1`')
+    expect(tasks[1].skip()).toEqual(false)
+    expect(tasks[2].title).toEqual('After update: `touch2`')
+    expect(tasks[2].skip()).toEqual(false)
+  })
+
+  it('copies `skip` output into `after` lifecycle event task function', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: { after: { update: ['touch'] } },
+      },
+      skip: 'foobar',
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks[0].skip()).toEqual('foobar')
+    expect(tasks[1].skip()).toEqual('foobar')
+  })
+
+  it('includes both `before` and `after` lifecycle events', () => {
+    const tasks = baremetal.commandWithLifecycleEvents({
+      name: 'update',
+      config: {
+        serverLifecycle: {
+          before: { update: ['touch1'] },
+          after: { update: ['touch2'] },
+        },
+      },
+      skip: false,
+      command: {
+        title: 'Some command',
+        task: () => {},
+      },
+    })
+
+    expect(tasks.length).toEqual(3)
+    expect(tasks[0].title).toEqual('Before update: `touch1`')
+    expect(tasks[0].skip()).toEqual(false)
+    expect(tasks[1].title).toEqual('Some command')
+    expect(tasks[1].skip()).toEqual(false)
+    expect(tasks[2].title).toEqual('After update: `touch2`')
+    expect(tasks[2].skip()).toEqual(false)
+  })
+})
 
 describe('deployTasks', () => {
+  const defaultYargs = {
+    update: true,
+    install: true,
+    migrate: true,
+    build: true,
+    restart: true,
+    cleanup: true,
+    releaseDir: '20220409120000',
+  }
+  const defaultServerConfig = {
+    branch: 'main',
+    path: '/var/www/app',
+    processNames: ['serve'],
+    sides: ['api'],
+  }
+
   it('provides a default list of tasks', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
@@ -435,7 +622,7 @@ describe('deployTasks', () => {
     expect(tasks[7].skip()).toEqual(true)
   })
 
-  it('injects a before update event', () => {
+  it('injects lifecycle events for update', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
       {}, // ssh
@@ -445,88 +632,10 @@ describe('deployTasks', () => {
 
     expect(Object.keys(tasks).length).toEqual(9)
     expect(tasks[0].title).toMatch('Before update: `touch before-update.txt`')
-    expect(tasks[0].skip).toEqual(false)
-    expect(tasks[1].title).toMatch('Cloning')
-    expect(tasks[2].title).toMatch('Symlink .env')
-  })
-
-  it('injects an after update event', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      { after: { update: ['touch after-update.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[0].title).toMatch('Cloning')
-    expect(tasks[1].title).toMatch('After update: `touch after-update.txt`')
-    expect(tasks[1].skip).toEqual(false)
-    expect(tasks[2].title).toMatch('Symlink .env')
-  })
-
-  it('injects multiple before update events', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      {
-        before: {
-          update: ['touch before-update1.txt', 'touch before-update2.txt'],
-        },
-      }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(10)
-    expect(tasks[0].title).toMatch('Before update: `touch before-update1.txt`')
-    expect(tasks[0].skip).toEqual(false)
-    expect(tasks[1].title).toMatch('Before update: `touch before-update2.txt`')
-    expect(tasks[1].skip).toEqual(false)
-    expect(tasks[2].title).toMatch('Cloning')
-  })
-
-  it('injects both before and after update events', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      {
-        before: {
-          update: ['touch before-update.txt'],
-        },
-        after: {
-          update: ['touch after-update.txt'],
-        },
-      }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(10)
-    expect(tasks[0].title).toMatch('Before update: `touch before-update.txt`')
-    expect(tasks[0].skip).toEqual(false)
-    expect(tasks[1].title).toMatch('Cloning')
-    expect(tasks[2].title).toMatch('After update: `touch after-update.txt`')
-    expect(tasks[2].skip).toEqual(false)
-  })
-
-  it('skips lifecycle event if update is skipped', () => {
-    const tasks = baremetal.deployTasks(
-      { ...defaultYargs, update: false },
-      {}, // ssh
-      defaultServerConfig,
-      {
-        before: {
-          update: ['touch before-update.txt'],
-        },
-      }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[0].title).toMatch('Before update: `touch before-update.txt`')
-    expect(tasks[0].skip).toEqual(true)
     expect(tasks[1].title).toMatch('Cloning')
   })
 
-  it('injects a before install event', () => {
+  it('injects lifecycle events for install', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
       {}, // ssh
@@ -536,25 +645,10 @@ describe('deployTasks', () => {
 
     expect(Object.keys(tasks).length).toEqual(9)
     expect(tasks[2].title).toMatch('Before install: `touch before-install.txt`')
-    expect(tasks[2].skip).toEqual(false)
     expect(tasks[3].title).toMatch('Install')
   })
 
-  it('injects an after install event', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      { after: { install: ['touch after-install.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[2].title).toMatch('Install')
-    expect(tasks[3].title).toMatch('After install: `touch after-install.txt`')
-    expect(tasks[3].skip).toEqual(false)
-  })
-
-  it('injects a before migrate event', () => {
+  it('injects lifecycle events for migrate', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
       {}, // ssh
@@ -567,63 +661,7 @@ describe('deployTasks', () => {
     expect(tasks[4].title).toMatch('DB Migrations')
   })
 
-  it('skips lifecycle event if install is skipped in server config', () => {
-    const tasks = baremetal.deployTasks(
-      { ...defaultYargs, install: false },
-      {}, // ssh
-      defaultServerConfig,
-      { after: { install: ['touch after-install.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[2].title).toMatch('Install')
-    expect(tasks[3].title).toMatch('After install: `touch after-install.txt`')
-    expect(tasks[3].skip).toEqual(true)
-  })
-
-  it('injects an after migrate event', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      { after: { migrate: ['touch after-migrate.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[3].title).toMatch('DB Migrations')
-    expect(tasks[4].title).toMatch('After migrate: `touch after-migrate.txt`')
-    expect(tasks[4].skip).toEqual(false)
-  })
-
-  it('skips lifecycle event if migrations are skipped in server config', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      { ...defaultServerConfig, migrate: false },
-      { before: { migrate: ['touch before-migrate.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[3].title).toMatch('Before migrate: `touch before-migrate.txt`')
-    expect(tasks[3].skip).toEqual(true)
-    expect(tasks[4].title).toMatch('DB Migrations')
-  })
-
-  it('skips lifecycle event if migrations are skipped in yargs', () => {
-    const tasks = baremetal.deployTasks(
-      { ...defaultYargs, migrate: false },
-      {}, // ssh
-      defaultServerConfig,
-      { before: { migrate: ['touch before-migrate.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[3].title).toMatch('Before migrate: `touch before-migrate.txt`')
-    expect(tasks[3].skip).toEqual(true)
-    expect(tasks[4].title).toMatch('DB Migrations')
-  })
-
-  it('injects a before build event', () => {
+  it('injects lifecycle events for build', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
       {}, // ssh
@@ -633,39 +671,10 @@ describe('deployTasks', () => {
 
     expect(Object.keys(tasks).length).toEqual(9)
     expect(tasks[4].title).toMatch('Before build: `touch before-build.txt`')
-    expect(tasks[4].skip).toEqual(false)
     expect(tasks[5].title).toMatch('Building api')
   })
 
-  it('injects an after build event', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      { after: { build: ['touch after-build.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[4].title).toMatch('Building api')
-    expect(tasks[5].title).toMatch('After build: `touch after-build.txt`')
-    expect(tasks[5].skip).toEqual(false)
-  })
-
-  it('skips lifecycle event if build is skipped in yargs', () => {
-    const tasks = baremetal.deployTasks(
-      { ...defaultYargs, build: false },
-      {}, // ssh
-      defaultServerConfig,
-      { before: { build: ['touch before-build.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[4].title).toMatch('Before build: `touch before-build.txt`')
-    expect(tasks[4].skip).toEqual(true)
-    expect(tasks[5].title).toMatch('Building api')
-  })
-
-  it('injects a before restart event', () => {
+  it('injects lifecycle events for restart', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
       {}, // ssh
@@ -675,39 +684,10 @@ describe('deployTasks', () => {
 
     expect(Object.keys(tasks).length).toEqual(9)
     expect(tasks[6].title).toMatch('Before restart: `touch before-restart.txt`')
-    expect(tasks[6].skip).toEqual(false)
     expect(tasks[7].title).toMatch('Restarting')
   })
 
-  it('injects an after restart event', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      { after: { restart: ['touch after-restart.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[6].title).toMatch('Restarting')
-    expect(tasks[7].title).toMatch('After restart: `touch after-restart.txt`')
-    expect(tasks[7].skip).toEqual(false)
-  })
-
-  it('skips lifecycle event if restart is skipped in yargs', () => {
-    const tasks = baremetal.deployTasks(
-      { ...defaultYargs, restart: false },
-      {}, // ssh
-      defaultServerConfig,
-      { before: { restart: ['touch before-restart.txt'] } }
-    )
-
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[6].title).toMatch('Before restart: `touch before-restart.txt`')
-    expect(tasks[6].skip).toEqual(true)
-    expect(tasks[7].title).toMatch('Restarting')
-  })
-
-  it('injects a before cleanup event', () => {
+  it('injects lifecycle events for cleanup', () => {
     const tasks = baremetal.deployTasks(
       defaultYargs,
       {}, // ssh
@@ -717,35 +697,100 @@ describe('deployTasks', () => {
 
     expect(Object.keys(tasks).length).toEqual(9)
     expect(tasks[7].title).toMatch('Before cleanup: `touch before-cleanup.txt`')
-    expect(tasks[7].skip).toEqual(false)
     expect(tasks[8].title).toMatch('Cleaning up')
   })
+})
 
-  it('injects an after cleanup event', () => {
-    const tasks = baremetal.deployTasks(
-      defaultYargs,
-      {}, // ssh
-      defaultServerConfig,
-      { after: { cleanup: ['touch after-cleanup.txt'] } }
+describe.only('commands', () => {
+  it('contains a top-level task for each server in an environment', () => {
+    const prodServers = baremetal.commands(
+      { environment: 'production', releaseDir: '2022051120000' },
+      {}
+    )
+    const stagingServers = baremetal.commands(
+      { environment: 'staging', releaseDir: '2022051120000' },
+      {}
     )
 
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[7].title).toMatch('Cleaning up')
-    expect(tasks[8].title).toMatch('After cleanup: `touch after-cleanup.txt`')
-    expect(tasks[8].skip).toEqual(false)
+    expect(prodServers.length).toEqual(2)
+    expect(prodServers[0].title).toEqual('prod1.server.com')
+    expect(prodServers[1].title).toEqual('prod2.server.com')
+
+    expect(stagingServers.length).toEqual(1)
+    expect(stagingServers[0].title).toEqual('staging.server.com')
   })
 
-  it('skips lifecycle event if cleanup is skipped in yargs', () => {
-    const tasks = baremetal.deployTasks(
-      { ...defaultYargs, cleanup: false },
-      {}, // ssh
-      defaultServerConfig,
-      { before: { cleanup: ['touch before-cleanup.txt'] } }
+  it('a single server contains nested deploy tasks', () => {
+    const servers = baremetal.commands(
+      { environment: 'staging', releaseDir: '2022051120000' },
+      {}
     )
 
-    expect(Object.keys(tasks).length).toEqual(9)
-    expect(tasks[7].title).toMatch('Before cleanup: `touch before-cleanup.txt`')
-    expect(tasks[7].skip).toEqual(true)
-    expect(tasks[8].title).toMatch('Cleaning up')
+    expect(servers[0].task()).toBeInstanceOf(Listr)
+  })
+
+  it('contains connection and disconnection tasks', () => {
+    const servers = baremetal.commands(
+      { environment: 'staging', releaseDir: '2022051120000' },
+      {}
+    )
+    const tasks = servers[0].task()._tasks
+
+    expect(tasks[0].title).toMatch('Connecting')
+    expect(tasks[9].title).toMatch('Disconnecting')
+  })
+
+  it('contains deploy tasks by default', () => {
+    const servers = baremetal.commands(
+      { environment: 'staging', releaseDir: '2022051120000' },
+      {}
+    )
+    const tasks = servers[0].task()._tasks
+
+    expect(tasks[1].title).toMatch('Cloning')
+  })
+
+  it('contains maintenance tasks if yargs are set', () => {
+    const servers = baremetal.commands(
+      {
+        environment: 'staging',
+        releaseDir: '2022051120000',
+        maintenance: 'up',
+      },
+      {}
+    )
+    const tasks = servers[0].task()._tasks
+
+    expect(tasks.length).toEqual(3)
+    expect(tasks[1].title).toMatch('Enabling maintenance')
+  })
+
+  it('contains rollback tasks if yargs are set', () => {
+    const servers = baremetal.commands(
+      {
+        environment: 'staging',
+        releaseDir: '2022051120000',
+        rollback: 2,
+      },
+      {}
+    )
+    const tasks = servers[0].task()._tasks
+
+    expect(tasks.length).toEqual(3)
+    expect(tasks[1].title).toMatch('Rolling back 2 release(s)')
+  })
+
+  it('includes server-specific lifecycle events', () => {
+    const servers = baremetal.commands(
+      {
+        environment: 'test',
+        releaseDir: '2022051120000',
+      },
+      {}
+    )
+    const tasks = servers[0].task()._tasks
+
+    expect(tasks[1].title).toEqual('Before update: `touch update`')
+    expect(tasks[5].title).toEqual('After install: `touch install`')
   })
 })

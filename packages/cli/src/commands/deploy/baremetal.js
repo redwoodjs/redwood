@@ -210,24 +210,26 @@ export const serverConfigWithDefaults = (serverConfig, yargs) => {
 
 export const maintenanceTasks = (status, ssh, serverConfig) => {
   const deployPath = path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
+  const tasks = []
 
   if (status === 'up') {
-    return [
-      {
-        title: `Enabling maintenance page...`,
-        task: async () => {
-          await sshExec(ssh, deployPath, 'cp', [
-            path.join('web', 'dist', '200.html'),
-            path.join('web', 'dist', '200.html.orig'),
-          ])
-          await sshExec(ssh, deployPath, 'ln', [
-            SYMLINK_FLAGS,
-            path.join('..', 'src', 'maintenance.html'),
-            path.join('web', 'dist', '200.html'),
-          ])
-        },
+    tasks.push({
+      title: `Enabling maintenance page...`,
+      task: async () => {
+        await sshExec(ssh, deployPath, 'cp', [
+          path.join('web', 'dist', '200.html'),
+          path.join('web', 'dist', '200.html.orig'),
+        ])
+        await sshExec(ssh, deployPath, 'ln', [
+          SYMLINK_FLAGS,
+          path.join('..', 'src', 'maintenance.html'),
+          path.join('web', 'dist', '200.html'),
+        ])
       },
-      {
+    })
+
+    if (serverConfig.processNames) {
+      tasks.push({
         title: `Stopping ${serverConfig.processNames.join(', ')} processes...`,
         task: async () => {
           await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
@@ -235,20 +237,21 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
             serverConfig.processNames.join(' '),
           ])
         },
-      },
-    ]
+      })
+    }
   } else if (status === 'down') {
-    return [
-      {
-        title: `Starting ${serverConfig.processNames.join(', ')} processes...`,
-        task: async () => {
-          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
-            'start',
-            serverConfig.processNames.join(' '),
-          ])
-        },
+    tasks.push({
+      title: `Starting ${serverConfig.processNames.join(', ')} processes...`,
+      task: async () => {
+        await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
+          'start',
+          serverConfig.processNames.join(' '),
+        ])
       },
-      {
+    })
+
+    if (serverConfig.processNames) {
+      tasks.push({
         title: `Disabling maintenance page...`,
         task: async () => {
           await sshExec(ssh, deployPath, 'rm', [
@@ -259,9 +262,11 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
             path.join('web', 'dist', '200.html'),
           ])
         },
-      },
-    ]
+      })
+    }
   }
+
+  return tasks
 }
 
 export const rollbackTasks = (count, ssh, serverConfig) => {
@@ -309,251 +314,8 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
     },
   ]
 
-  for (const processName of serverConfig.processNames) {
-    tasks.push({
-      title: `Restarting ${processName} process...`,
-      task: async () => {
-        await restartProcessCommand(
-          processName,
-          ssh,
-          serverConfig,
-          serverConfig.path
-        )
-      },
-    })
-  }
-
-  return tasks
-}
-
-// TODO: Add way to pass in whether this task should be skipped (yargs.whatever = false)
-
-export const lifecycleTask = (
-  lifecycle,
-  task,
-  lifecycleConfig,
-  { skip, ssh, cmdPath }
-) => {
-  if (lifecycleConfig[lifecycle]?.[task]) {
-    const tasks = []
-
-    for (const command of lifecycleConfig[lifecycle][task]) {
-      tasks.push({
-        title: `${titleCase(lifecycle)} ${task}: \`${command}\``,
-        task: async () => {
-          await sshExec(ssh, cmdPath, command)
-        },
-        skip,
-      })
-    }
-
-    return tasks
-  }
-}
-
-export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
-  const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
-  const tasks = []
-
-  tasks.push(
-    lifecycleTask('before', 'update', serverLifecycle, {
-      skip: !yargs.update,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  tasks.push({
-    title: `Cloning \`${serverConfig.branch}\` branch...`,
-    task: async () => {
-      await sshExec(ssh, serverConfig.path, 'git', [
-        'clone',
-        `--branch=${serverConfig.branch}`,
-        `--depth=1`,
-        serverConfig.repo,
-        yargs.releaseDir,
-      ])
-    },
-    skip: () => !yargs.update,
-  })
-
-  tasks.push(
-    lifecycleTask('after', 'update', serverLifecycle, {
-      skip: !yargs.update,
-      ssh,
-      cmdPath,
-    })
-  )
-  tasks.push(
-    lifecycleTask('before', 'symlinkEnv', serverLifecycle, {
-      skip: !yargs.update,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  tasks.push({
-    title: `Symlink .env...`,
-    task: async () => {
-      await sshExec(ssh, cmdPath, 'ln', [SYMLINK_FLAGS, '../.env', '.env'])
-    },
-    skip: () => !yargs.update,
-  })
-
-  tasks.push(
-    lifecycleTask('after', 'symlinkEnv', serverLifecycle, {
-      skip: !yargs.update,
-      ssh,
-      cmdPath,
-    })
-  )
-  tasks.push(
-    lifecycleTask('before', 'install', serverLifecycle, {
-      skip: !yargs.install,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  tasks.push({
-    title: `Installing dependencies...`,
-    task: async () => {
-      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
-        'install',
-      ])
-    },
-    skip: () => !yargs.install,
-  })
-
-  tasks.push(
-    lifecycleTask('after', 'install', serverLifecycle, {
-      skip: !yargs.install,
-      ssh,
-      cmdPath,
-    })
-  )
-  tasks.push(
-    lifecycleTask('before', 'migrate', serverLifecycle, {
-      skip: !yargs.migrate || serverConfig?.migrate === false,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  tasks.push({
-    title: `DB Migrations...`,
-    task: async () => {
-      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
-        'rw',
-        'prisma',
-        'migrate',
-        'deploy',
-      ])
-      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
-        'rw',
-        'prisma',
-        'generate',
-      ])
-      await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
-        'rw',
-        'dataMigrate',
-        'up',
-      ])
-    },
-    skip: () => !yargs.migrate || serverConfig?.migrate === false,
-  })
-
-  tasks.push(
-    lifecycleTask('after', 'migrate', serverLifecycle, {
-      skip: !yargs.migrate || serverConfig?.migrate === false,
-      ssh,
-      cmdPath,
-    })
-  )
-  tasks.push(
-    lifecycleTask('before', 'build', serverLifecycle, {
-      skip: !yargs.build,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  for (const side of serverConfig.sides) {
-    tasks.push({
-      title: `Building ${side}...`,
-      task: async () => {
-        await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
-          'rw',
-          'build',
-          side,
-        ])
-      },
-      skip: () => !yargs.build,
-    })
-  }
-
-  tasks.push(
-    lifecycleTask('after', 'build', serverLifecycle, {
-      skip: !yargs.build,
-      ssh,
-      cmdPath,
-    })
-  )
-  tasks.push(
-    lifecycleTask('before', 'symlinkCurrent', serverLifecycle, {
-      skip: !yargs.update,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  tasks.push({
-    title: `Symlinking current release...`,
-    task: async () => {
-      await symlinkCurrentCommand(yargs.releaseDir, ssh, serverConfig.path)
-    },
-    skip: () => !yargs.update,
-  })
-
-  tasks.push(
-    lifecycleTask('after', 'symlinkCurrent', serverLifecycle, {
-      skip: !yargs.update,
-      ssh,
-      cmdPath,
-    })
-  )
-  tasks.push(
-    lifecycleTask('before', 'restart', serverLifecycle, {
-      skip: !yargs.restart,
-      ssh,
-      cmdPath,
-    })
-  )
-
-  for (const processName of serverConfig.processNames) {
-    if (yargs.firstRun) {
-      tasks.push({
-        title: `Starting ${processName} process for the first time...`,
-        task: async () => {
-          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
-            'start',
-            path.join(CURRENT_RELEASE_SYMLINK_NAME, 'ecosystem.config.js'),
-            '--only',
-            processName,
-          ])
-        },
-        skip: () => !yargs.restart,
-      })
-      tasks.push({
-        title: `Saving ${processName} state for future startup...`,
-        task: async () => {
-          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
-            'save',
-          ])
-        },
-        skip: () => !yargs.restart,
-      })
-    } else {
+  if (serverConfig.processNames) {
+    for (const processName of serverConfig.processNames) {
       tasks.push({
         title: `Restarting ${processName} process...`,
         task: async () => {
@@ -564,46 +326,245 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
             serverConfig.path
           )
         },
-        skip: () => !yargs.restart,
       })
     }
   }
 
+  return tasks
+}
+
+export const lifecycleTask = (
+  lifecycle,
+  task,
+  skip,
+  { serverLifecycle, ssh, cmdPath }
+) => {
+  if (serverLifecycle[lifecycle]?.[task]) {
+    const tasks = []
+
+    for (const command of serverLifecycle[lifecycle][task]) {
+      tasks.push({
+        title: `${titleCase(lifecycle)} ${task}: \`${command}\``,
+        task: async () => {
+          await sshExec(ssh, cmdPath, command)
+        },
+        skip: () => skip,
+      })
+    }
+
+    return tasks
+  }
+}
+
+// wraps a given command with any defined before/after lifecycle commands
+export const commandWithLifecycleEvents = ({ name, config, skip, command }) => {
+  const tasks = []
+
+  tasks.push(lifecycleTask('before', name, skip, config))
+  tasks.push({ ...command, skip: () => skip })
+  tasks.push(lifecycleTask('after', name, skip, config))
+
+  return tasks.flat().filter((t) => t)
+}
+
+export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
+  const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
+  const config = { yargs, ssh, serverConfig, serverLifecycle, cmdPath }
+  const tasks = []
+
   tasks.push(
-    lifecycleTask('after', 'restart', serverLifecycle, {
-      skip: !yargs.restart,
-      ssh,
-      cmdPath,
+    commandWithLifecycleEvents({
+      name: 'update',
+      config,
+      skip: !yargs.update,
+      command: {
+        title: `Cloning \`${serverConfig.branch}\` branch...`,
+        task: async () => {
+          await sshExec(ssh, serverConfig.path, 'git', [
+            'clone',
+            `--branch=${serverConfig.branch}`,
+            `--depth=1`,
+            serverConfig.repo,
+            yargs.releaseDir,
+          ])
+        },
+      },
     })
   )
+
   tasks.push(
-    lifecycleTask('before', 'cleanup', serverLifecycle, {
-      skip: !yargs.cleanup,
-      ssh,
-      cmdPath,
+    commandWithLifecycleEvents({
+      name: 'symlinkEnv',
+      config,
+      skip: !yargs.update,
+      command: {
+        title: `Symlink .env...`,
+        task: async () => {
+          await sshExec(ssh, cmdPath, 'ln', [SYMLINK_FLAGS, '../.env', '.env'])
+        },
+      },
     })
   )
 
-  tasks.push({
-    title: `Cleaning up old deploys...`,
-    task: async () => {
-      // add 2 to skip `current` and start on the keepReleases + 1th release
-      const fileStartIndex = serverConfig.keepReleases + 2
-
-      await sshExec(
-        ssh,
-        serverConfig.path,
-        `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`
-      )
-    },
-    skip: () => !yargs.cleanup,
-  })
+  tasks.push(
+    commandWithLifecycleEvents({
+      name: 'install',
+      config,
+      skip: !yargs.install,
+      command: {
+        title: `Installing dependencies...`,
+        task: async () => {
+          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+            'install',
+          ])
+        },
+      },
+    })
+  )
 
   tasks.push(
-    lifecycleTask('after', 'cleanup', serverLifecycle, {
+    commandWithLifecycleEvents({
+      name: 'migrate',
+      config,
+      skip: !yargs.migrate || serverConfig?.migrate === false,
+      command: {
+        title: `DB Migrations...`,
+        task: async () => {
+          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+            'rw',
+            'prisma',
+            'migrate',
+            'deploy',
+          ])
+          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+            'rw',
+            'prisma',
+            'generate',
+          ])
+          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+            'rw',
+            'dataMigrate',
+            'up',
+          ])
+        },
+      },
+    })
+  )
+
+  for (const side of serverConfig.sides) {
+    tasks.push(
+      commandWithLifecycleEvents({
+        name: 'build',
+        config,
+        skip: !yargs.build,
+        command: {
+          title: `Building ${side}...`,
+          task: async () => {
+            await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+              'rw',
+              'build',
+              side,
+            ])
+          },
+        },
+      })
+    )
+  }
+
+  tasks.push(
+    commandWithLifecycleEvents({
+      name: 'symlinkCurrent',
+      config,
+      skip: !yargs.update,
+      command: {
+        title: `Symlinking current release...`,
+        task: async () => {
+          await symlinkCurrentCommand(yargs.releaseDir, ssh, serverConfig.path)
+        },
+        skip: () => !yargs.update,
+      },
+    })
+  )
+
+  if (serverConfig.processNames) {
+    for (const processName of serverConfig.processNames) {
+      if (yargs.firstRun) {
+        tasks.push(
+          commandWithLifecycleEvents({
+            name: 'restart',
+            config,
+            skip: !yargs.restart,
+            command: {
+              title: `Starting ${processName} process for the first time...`,
+              task: async () => {
+                await sshExec(
+                  ssh,
+                  serverConfig.path,
+                  serverConfig.monitorCommand,
+                  [
+                    'start',
+                    path.join(
+                      CURRENT_RELEASE_SYMLINK_NAME,
+                      'ecosystem.config.js'
+                    ),
+                    '--only',
+                    processName,
+                  ]
+                )
+              },
+            },
+          })
+        )
+        tasks.push({
+          title: `Saving ${processName} state for future startup...`,
+          task: async () => {
+            await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
+              'save',
+            ])
+          },
+          skip: () => !yargs.restart,
+        })
+      } else {
+        tasks.push(
+          commandWithLifecycleEvents({
+            name: 'restart',
+            config,
+            skip: !yargs.restart,
+            command: {
+              title: `Restarting ${processName} process...`,
+              task: async () => {
+                await restartProcessCommand(
+                  processName,
+                  ssh,
+                  serverConfig,
+                  serverConfig.path
+                )
+              },
+            },
+          })
+        )
+      }
+    }
+  }
+
+  tasks.push(
+    commandWithLifecycleEvents({
+      name: 'cleanup',
+      config,
       skip: !yargs.cleanup,
-      ssh,
-      cmdPath,
+      command: {
+        title: `Cleaning up old deploys...`,
+        task: async () => {
+          // add 2 to skip `current` and start on the keepReleases + 1th release
+          const fileStartIndex = serverConfig.keepReleases + 2
+
+          await sshExec(
+            ssh,
+            serverConfig.path,
+            `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`
+          )
+        },
+      },
     })
   )
 
@@ -648,9 +609,9 @@ export const parseConfig = (yargs, configToml) => {
 }
 
 export const commands = (yargs, ssh) => {
-  const deployConfig = fs.readFileSync(
-    path.join(getPaths().base, CONFIG_FILENAME)
-  )
+  const deployConfig = fs
+    .readFileSync(path.join(getPaths().base, CONFIG_FILENAME))
+    .toString()
 
   let { envConfig, envLifecycle } = parseConfig(yargs, deployConfig)
   let servers = []
