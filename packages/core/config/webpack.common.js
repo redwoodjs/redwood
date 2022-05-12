@@ -280,7 +280,7 @@ module.exports = (webpackEnv) => {
                 },
               },
               generator: {
-                filename: 'static/media/[name].[contenthash:8].[ext]',
+                filename: 'static/media/[name].[contenthash:8][ext]',
               },
             },
             // (1)
@@ -315,7 +315,7 @@ module.exports = (webpackEnv) => {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               type: 'asset/resource',
               generator: {
-                filename: 'static/media/[name].[contenthash:8].[ext]',
+                filename: 'static/media/[name].[contenthash:8][ext]',
               },
             },
           ].filter(Boolean),
