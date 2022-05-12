@@ -7,6 +7,8 @@ const { execSync } = require('child_process')
 console.log('------------------------')
 console.log("Running 'docs/ignore_build.js'")
 
+console.log(process.env)
+
 const remoteExists = execSync('git remote -v').toString().includes('origin')
 
 if (remoteExists) {
