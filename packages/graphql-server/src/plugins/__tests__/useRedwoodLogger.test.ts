@@ -97,7 +97,7 @@ describe('Populates context', () => {
     expect(executionStarted).toHaveProperty('msg')
     expect(executionStarted).toHaveProperty('query')
 
-    expect(executionStarted.name).toEqual('graphql-server')
+    expect(executionStarted.name).toEqual('rw-graphql-server')
     expect(executionStarted.level).toEqual(20)
     expect(executionStarted.msg).toEqual('GraphQL execution started: meQuery')
 
@@ -164,7 +164,7 @@ describe('Populates context', () => {
     expect(lastStatement.level).toEqual(50)
 
     expect(lastStatement).toHaveProperty('level')
-    expect(lastStatement.name).toEqual('graphql-server')
+    expect(lastStatement.name).toEqual('rw-graphql-server')
     expect(lastStatement).toHaveProperty('time')
 
     expect(lastStatement).toHaveProperty('msg')
@@ -201,7 +201,7 @@ describe('Populates context', () => {
     expect(errorLogStatement).toHaveProperty('msg')
     expect(errorLogStatement).toHaveProperty('error')
 
-    expect(errorLogStatement.name).toEqual('graphql-server')
+    expect(errorLogStatement.name).toEqual('rw-graphql-server')
     expect(errorLogStatement.level).toEqual(50)
     expect(errorLogStatement.msg).toEqual('You are forbidden')
   })
