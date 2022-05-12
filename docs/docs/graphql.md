@@ -585,6 +585,46 @@ type Mutation {
 }
 ```
 
+## Unions
+
+Unions are abstract GraphQL types that enable a schema field to return one of multiple object types.
+
+`union FavoriteTree = Redwood | Ginkgo | Oak`
+
+A field can have a union as its return type.
+
+```tsx
+type Query {
+  searchTrees: [FavoriteTree] # This list can include Redwood, Gingko or Oak objects
+}
+```
+
+All of a union's included types must be object types and do not need to share any fields.
+
+To query a union, you can take advantage on [inline fragments](https://graphql.org/learn/queries/#inline-fragments) to include subfields of multiple possible types.
+
+```tsx
+query GetFavoriteTrees {
+  searchTrees {
+    ... on Redwood {
+      name
+      height
+    }
+    ... on Ginkgo {
+      name
+      medicalUse
+    }
+    ... on Oak {
+      name
+      acornType
+    }
+  }
+}
+```
+
+Redwood will automatically detect your union types in your `sdl` files and resolve *which* of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
+
+
 ### GraphQL Handler Setup
 
 Redwood makes it easy to code, organize, and map your directives into the GraphQL schema.
