@@ -45,14 +45,14 @@ Create a Redwood project using the yarn create command:
 yarn create redwood-app <project directory> [option]
 ```
 
-| Arguments & Options | Description                                                                                                                                 |
-|:--------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
-| `project directory`            | Specify the project directory [Required]
-| `--yarn-install`            | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior                                                                       |
-| `--typescript`, `--ts`           | Generate a TypeScript project. JavaScript by default        |
-| `--overwrite`       | Create the project even if the specified project directory isn't empty                                                                                                       |
-| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com |
-| `--yarn1`       | Use yarn 1 instead of yarn 3 |
+| Arguments & Options    | Description                                                                                                             |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| `project directory`    | Specify the project directory [Required]                                                                                |
+| `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior |
+| `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                    |
+| `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
+| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
+| `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
 
 If you run into trouble during the yarn install step, which may happen if you're developing on an external drive and in other miscellaneous scenarios, try the `--yarn1` flag:
 
