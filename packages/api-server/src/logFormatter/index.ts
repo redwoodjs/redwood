@@ -1,35 +1,32 @@
-import chalk from 'chalk'
 import jsonParse from 'fast-json-parse'
-import prettyBytes from 'pretty-bytes'
-import prettyMs from 'pretty-ms'
 
 import { DEFAULT_API_SERVER_LOGGER_NAME } from '../app'
 
+import {
+  formatOperationName,
+  formatQuery,
+  formatData,
+  formatResponseCache,
+  formatLoadTime,
+  formatDate,
+  formatNs,
+  formatName,
+  formatRequestId,
+  formatMessage,
+  formatTracing,
+  formatUserAgent,
+  formatMethod,
+  formatUrl,
+  formatStatusCode,
+  formatMetadata,
+  formatLevel,
+  formatBundleSize,
+} from './formatters'
+
 const newline = '\n'
-
-const emojiLog: Record<string, string> = {
-  warn: '🚦',
-  info: '🌲',
-  error: '🚨',
-  debug: '🐛',
-  fatal: '💀',
-  trace: '🧵',
-}
-
-const isObject = (input?: unknown) => {
-  return Object.prototype.toString.apply(input) === '[object Object]'
-}
-
-const isObjectWithData = (object?: Record<string, unknown>) => {
-  return object && Object.keys(object).length > 0
-}
 
 const isPinoLog = (log?: unknown) => {
   return log && Object.prototype.hasOwnProperty.call(log, 'level')
-}
-
-const isWideEmoji = (character: string) => {
-  return character !== '🚦'
 }
 
 export const LogFormatter = () => {
@@ -56,7 +53,7 @@ export const LogFormatter = () => {
    *     "time": 1651913678887,
    *     "pid": 83106,
    *     "hostname": "Tobbes-MacBook-Pro.local",
-   *     "name": "graphql-server",
+   *     "name": "rw-graphql-server",
    *     "operationName": "BlogPostsQuery",
    *     "query": {},
    *     "requestId": "req-4",
@@ -94,19 +91,20 @@ export const LogFormatter = () => {
    *     "msg": "GraphQL execution completed: BlogPostsQuery"
    *   }
    */
-  const parse = (inputData: any) => {
+  const parse = (inputData: string | Record<string, unknown>) => {
     let logData
 
     if (typeof inputData === 'string') {
       const parsedData = jsonParse(inputData)
 
-      // TODO: Write test case that tries to run logger.debug({ err: 'my error' }, 'Uh-ohh')
+      // `value` and `err` here comes from jsonParse above
       if (!parsedData.value || parsedData.err || !isPinoLog(parsedData.value)) {
         return inputData + newline
       }
 
       logData = parsedData.value
-    } else if (isObject(inputData) && isPinoLog(inputData)) {
+    } else if (isPinoLog(inputData)) {
+      // We only end up in here in our tests
       logData = inputData
     } else {
       return inputData + newline
@@ -136,6 +134,10 @@ export const LogFormatter = () => {
     return levelMap[logData.level] || 'customLevel'
   }
 
+  const noEmpty = (value: string | undefined) => {
+    return !!value
+  }
+
   interface GraphqlServerLogs {
     level: string
     name: string
@@ -152,7 +154,9 @@ export const LogFormatter = () => {
   function isGraphqlServerLogs(
     logData: Record<string, unknown> | GraphqlServerLogs
   ): logData is GraphqlServerLogs {
-    return (logData as unknown as GraphqlServerLogs).name === 'graphql-server'
+    return (
+      (logData as unknown as GraphqlServerLogs).name === 'rw-graphql-server'
+    )
   }
 
   /**
@@ -162,7 +166,7 @@ export const LogFormatter = () => {
    *   time: 1651911200534,
    *   pid: 81356,
    *   hostname: 'Tobbes-MacBook-Pro.local',
-   *   name: 'graphql-server',
+   *   name: 'rw-graphql-server',
    *   msg: 'GraphQL execution started: BlogPostsQuery',
    * }
    *
@@ -171,7 +175,7 @@ export const LogFormatter = () => {
    *   time: 1651911200547,
    *   pid: 81356,
    *   hostname: 'Tobbes-MacBook-Pro.local',
-   *   name: 'graphql-server',
+   *   name: 'rw-graphql-server',
    *   msg: 'GraphQL execution completed: BlogPostsQuery',
    * }
    *
@@ -181,7 +185,7 @@ export const LogFormatter = () => {
    *   time: 1651911945301,
    *   pid: 82077,
    *   hostname: 'Tobbes-MacBook-Pro.local',
-   *   name: 'graphql-server',
+   *   name: 'rw-graphql-server',
    *   operationName: 'BlogPostsQuery',
    *   query: {},
    *   requestId: 'req-8',
@@ -298,7 +302,7 @@ export const LogFormatter = () => {
 
   interface LogData {
     time: number
-    msg: string
+    msg?: string
     level?: string
     elapsed?: string
     contentLength?: string
@@ -338,23 +342,6 @@ export const LogFormatter = () => {
     // TODO: When is this used?
     output.push(formatNs(logData.ns))
 
-    // error + graphql
-    const stack =
-      logData.level === 'fatal' || logData.level === 'error'
-        ? logData.stack || (logData.err && logData.err.stack)
-        : undefined
-
-    // Output err if it has more keys than 'stack'
-    const err =
-      (logData.level === 'fatal' || logData.level === 'error') &&
-      logData.err &&
-      Object.keys(logData.err).find((key) => key !== 'stack')
-        ? logData.err
-        : undefined
-
-    output.push(formatStack(stack))
-    output.push(formatErrorProp(err))
-
     if (!isGraphqlServerLogs(logData) && !isApiServerLogs(logData)) {
       output.push(formatMessage(logData))
       // Metadata can for example come from user logs, like
@@ -363,158 +350,6 @@ export const LogFormatter = () => {
     }
 
     return output.filter(noEmpty).join(' ')
-  }
-
-  const formatBundleSize = (bundleSize: string) => {
-    const bytes = parseInt(bundleSize, 10)
-    const size = prettyBytes(bytes).replace(/ /, '')
-    return chalk.gray(size)
-  }
-
-  const formatMetadata = (metadata?: Record<string, unknown>) => {
-    return isObjectWithData(metadata)
-      ? chalk.white(
-          newline + '🗒  Metadata' + newline + JSON.stringify(metadata, null, 2)
-        )
-      : undefined
-  }
-
-  const formatData = (data?: Record<string, unknown>) => {
-    return isObjectWithData(data)
-      ? chalk.white(
-          newline + '📦 Result Data' + newline + JSON.stringify(data, null, 2)
-        )
-      : undefined
-  }
-
-  const formatDate = (instant: number) => {
-    const date = new Date(instant)
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    const seconds = date.getSeconds().toString().padStart(2, '0')
-    const prettyDate = hours + ':' + minutes + ':' + seconds
-    return chalk.gray(prettyDate)
-  }
-
-  const formatErrorProp = (err?: Record<string, unknown>) => {
-    return err ? newline + JSON.stringify({ err }, null, 2) : undefined
-  }
-
-  const formatLevel = (level: string) => {
-    const emoji = emojiLog[level]
-    const padding = isWideEmoji(emoji) ? '' : ' '
-    return emoji + padding
-  }
-
-  const formatLoadTime = (elapsedTime?: string) => {
-    if (!elapsedTime) {
-      return
-    }
-
-    const elapsed = Math.round(parseFloat(elapsedTime))
-    const time = prettyMs(elapsed)
-
-    return chalk.gray(time)
-  }
-
-  const formatMessage = (logData: { msg: string; level: string }) => {
-    const msg = formatMessageName(logData.msg)
-
-    switch (logData.level) {
-      case 'error':
-        return chalk.red(msg)
-      case 'trace':
-        return chalk.white(msg)
-      case 'warn':
-        return chalk.magenta(msg)
-      case 'debug':
-        return chalk.yellow(msg)
-      case 'info':
-      case 'customLevel':
-        return chalk.green(msg)
-      case 'fatal':
-        return chalk.white.bgRed(msg)
-    }
-
-    return msg
-  }
-
-  const formatMethod = (method: string) => {
-    return chalk.white(method)
-  }
-
-  const formatRequestId = (requestId?: string) => {
-    return requestId && chalk.cyan(requestId)
-  }
-
-  const formatNs = (name?: string) => {
-    return name && chalk.cyan(name || '')
-  }
-
-  const formatName = (name: string) => {
-    return chalk.blue(name)
-  }
-
-  const formatMessageName = (msg: string) => {
-    if (msg === 'request') {
-      return '<--'
-    } else if (msg === 'response') {
-      return '-->'
-    }
-
-    return msg
-  }
-
-  const formatOperationName = (operationName?: string) => {
-    return operationName && chalk.white(newline + '🏷  ' + operationName)
-  }
-
-  const formatQuery = (query?: Record<string, unknown>) => {
-    return isObjectWithData(query)
-      ? chalk.white(
-          newline + '🔭 Query' + newline + JSON.stringify(query, null, 2)
-        )
-      : undefined
-  }
-
-  const formatResponseCache = (responseCache?: Record<string, unknown>) => {
-    return isObjectWithData(responseCache)
-      ? chalk.white(
-          newline +
-            '💾 Response Cache' +
-            newline +
-            JSON.stringify(responseCache, null, 2)
-        )
-      : undefined
-  }
-
-  const formatStatusCode = (statusCode?: string) => {
-    statusCode = statusCode || 'xxx'
-    return chalk.white(statusCode)
-  }
-
-  const formatStack = (stack?: string) => {
-    return stack ? newline + stack : undefined
-  }
-
-  const formatTracing = (data?: Record<string, unknown>) => {
-    return isObjectWithData(data)
-      ? chalk.white(
-          newline + '⏰ Timing' + newline + JSON.stringify(data, null, 2)
-        )
-      : undefined
-  }
-
-  const formatUrl = (url?: string) => {
-    return url && chalk.white(url)
-  }
-
-  const formatUserAgent = (userAgent?: string) => {
-    return userAgent && chalk.grey(newline + '🕵️‍♀️ ' + userAgent)
-  }
-
-  const noEmpty = (value: string | undefined) => {
-    return !!value
   }
 
   return parse

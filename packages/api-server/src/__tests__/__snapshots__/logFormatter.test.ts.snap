@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogFormatter text input Should format api server request logs 1`] = `
+"[90m20:32:06[39m 🌲 [32mincoming request[39m [37m[39m
+[37m🗒  Metadata[39m
+[37m{[39m
+[37m  \\"name\\": \\"api-server\\",[39m
+[37m  \\"reqId\\": \\"req-5\\",[39m
+[37m  \\"req\\": {[39m
+[37m    \\"method\\": \\"POST\\",[39m
+[37m    \\"url\\": \\"/graphql\\",[39m
+[37m    \\"hostname\\": \\"localhost:8910\\",[39m
+[37m    \\"remoteAddress\\": \\"::1\\",[39m
+[37m    \\"remotePort\\": 64671[39m
+[37m  }[39m
+[37m}[39m
+"
+`;
+
+exports[`LogFormatter text input Should format api server response logs 1`] = `
+"[90m20:32:06[39m 🌲 [32mrequest completed[39m [37m[39m
+[37m🗒  Metadata[39m
+[37m{[39m
+[37m  \\"name\\": \\"api-server\\",[39m
+[37m  \\"reqId\\": \\"req-4\\",[39m
+[37m  \\"res\\": {[39m
+[37m    \\"statusCode\\": 200[39m
+[37m  },[39m
+[37m  \\"responseTime\\": 48.36454105377197[39m
+[37m}[39m
+"
+`;
+
+exports[`LogFormatter text input Should format basic graphql logs 1`] = `
+"[90m20:32:06[39m 🐛 [34mrw-graphql-server[39m [33mGraphQL execution completed: BlogPostsQuery[39m
+"
+`;
+
+exports[`LogFormatter text input Should format regular user logs that has metadata 1`] = `
+"[90m20:51:49[39m 🐛 [33mupdatePost input[39m [37m[39m
+[37m🗒  Metadata[39m
+[37m{[39m
+[37m  \\"input\\": {[39m
+[37m    \\"title\\": \\"A little more about me\\",[39m
+[37m    \\"body\\": \\"Raclette shoreditch before they sold out lyft.\\"[39m
+[37m  }[39m
+[37m}[39m
+"
+`;

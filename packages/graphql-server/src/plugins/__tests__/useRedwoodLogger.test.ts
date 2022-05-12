@@ -137,7 +137,8 @@ describe('Populates context', () => {
     expect(lastStatement).toHaveProperty('level')
     expect(lastStatement).toHaveProperty('time')
     expect(lastStatement).toHaveProperty('msg')
-    expect(lastStatement.name).toEqual('graphql-server')
+    // rw-log-formatter depends on this value being exactly 'rw-graphql-server'
+    expect(lastStatement.name).toEqual('rw-graphql-server')
 
     expect(lastStatement.msg).toEqual(
       'Cannot query field "unknown_field" on type "User".'

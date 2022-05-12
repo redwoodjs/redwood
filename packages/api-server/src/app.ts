@@ -8,7 +8,7 @@ export type ServerOptionsWithPino = Omit<
   'logger'
 > & { logger?: boolean | pino.LoggerOptions }
 
-export const DEFAULT_API_SERVER_LOGGER_NAME = 'api-server'
+export const DEFAULT_API_SERVER_LOGGER_NAME = 'rw-api-server'
 
 const DEFAULT_OPTIONS: ServerOptionsWithPino = {
   logger: {

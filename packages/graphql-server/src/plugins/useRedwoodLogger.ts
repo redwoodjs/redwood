@@ -196,7 +196,7 @@ export const useRedwoodLogger = (
   const level = loggerConfig.options?.level || logger.level || 'warn'
 
   const childLogger = logger.child({
-    name: 'graphql-server',
+    name: 'rw-graphql-server',
   })
 
   childLogger.level = level
