@@ -21,7 +21,10 @@ We use [Prisma](https://www.prisma.io/) to talk to the database. Prisma has anot
 
 First let's define the data structure for a post in the database. Open up `api/db/schema.prisma` and add the definition of our Post table (remove any "sample" models that are present in the file, like the `UserExample` model). Once you're done, the entire schema file should look like:
 
-```javascript title="api/db/schema.prisma"
+<Tabs groupId="sql-mongo">
+<TabItem value="sql" label="SQLite">
+
+```Javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -42,6 +45,31 @@ model Post {
 // highlight-end
 ```
 
+</TabItem>
+<TabItem value="mongo" label="MongoDB">
+
+```Javascript
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+model Post {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+}
+```
+
+</TabItem>
+</Tabs>
+
 This says that we want a table called `Post` and it should have:
 
 - An `id` column of type `Int` lets Prisma know this is the column it should use as the `@id` (for it to create relationships to other tables) and that the `@default` value should be Prisma's special `autoincrement()` method letting it know that the DB should set it automatically when new records are created
@@ -57,6 +85,8 @@ For the tutorial we're keeping things simple and using an integer for our ID col
 
 Integers make for nicer URLs like https://redwoodblog.com/posts/123 instead of https://redwoodblog.com/posts/eebb026c-b661-42fe-93bf-f1a373421a13.
 
+The MongoDB is using strings as `id` which is mapping to the mongo built-in object id(`_id`)
+
 Take a look at the [official Prisma documentation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/data-model#defining-an-id-field) for more on ID fields.
 
 :::
@@ -68,6 +98,12 @@ Now we'll want to snapshot the schema changes as a migration:
 ```bash
 yarn rw prisma migrate dev
 ```
+
+:::warning
+
+If you are using a MongoDB database you shall not run any migrations as this is not possible with a document database as MongoDB. You want to run `npx prisma generate` instead at this point. To apply the schema to your database you can run `npx prisma db push` which will make collections of your models.
+
+:::
 
 :::tip
 
