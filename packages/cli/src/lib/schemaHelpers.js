@@ -138,7 +138,7 @@ export async function verifyModelName(options) {
 
   await ensureUniquePlural({
     model: modelName,
-    inDestroyer: options.isDestroyer,
+    isDestroyer: options.isDestroyer,
     forcePrompt: isPlural(modelName),
   })
 
