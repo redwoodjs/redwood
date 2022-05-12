@@ -25,8 +25,16 @@ describe('makeMergedSchema', () => {
           inTypeServices: String
         }
 
+        type MySecondType {
+          id: Int
+          name: String
+        }
+
+        union TypeResult = MyOwnType | MySecondType
+
         type Query {
           myOwnType: MyOwnType @foo
+          searchType(hasId: Boolean): TypeResult @foo
           inResolverAndServices: String @foo
           inResolver: String @foo
           inServices: String @foo
@@ -56,6 +64,16 @@ describe('makeMergedSchema', () => {
       },
       inResolverAndServices: () => 'I should NOT be called.',
       inServices: () => "I'm defined in the service.",
+      searchType: (args) => {
+        if (args.hasId) {
+          return { id: 1, name: 'test' }
+        }
+        return {
+          inTypeResolverAndServices: 'test-value',
+          inTypeResolver: 'test-value',
+          inTypeServices: 'test-value',
+        }
+      },
     },
   } as unknown as ServicesGlobImports
 
@@ -132,6 +150,32 @@ describe('makeMergedSchema', () => {
             {} as GraphQLResolveInfo
           )
       ).toEqual("I'm defined in the service.")
+    })
+
+    it('Functions with Union types are mapped correctly', () => {
+      expect(
+        queryFields.searchType.resolve &&
+          queryFields.searchType.resolve(
+            null,
+            { hasId: true },
+            null,
+            {} as GraphQLResolveInfo
+          )
+      ).toEqual({ id: 1, name: 'test' })
+
+      expect(
+        queryFields.searchType.resolve &&
+          queryFields.searchType.resolve(
+            null,
+            {},
+            null,
+            {} as GraphQLResolveInfo
+          )
+      ).toEqual({
+        inTypeResolverAndServices: 'test-value',
+        inTypeResolver: 'test-value',
+        inTypeServices: 'test-value',
+      })
     })
   })
 

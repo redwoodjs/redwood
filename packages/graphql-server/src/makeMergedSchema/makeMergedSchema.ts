@@ -65,7 +65,7 @@ const mapFieldsToService = ({
   }, unmappedResolvers)
 /**
  *
- * @param param0 types on Union type: i.e for union Media =  Book | Movie, parameter = [Book, Movie]
+ * @param types on Union type: i.e for union Media =  Book | Movie, parameter = [Book, Movie]
  * @returns null | string: Type name of the union's type that is returned.
  * If null or invalid value is returned, will trigger a GQL error
  */
@@ -277,6 +277,15 @@ export const makeMergedSchema = ({
 
   const { resolverValidationOptions, inheritResolversFromInterfaces } =
     schemaOptions || {}
+
+  console.log(
+    addResolversToSchema({
+      schema,
+      resolvers,
+      resolverValidationOptions,
+      inheritResolversFromInterfaces,
+    })
+  )
 
   return addResolversToSchema({
     schema,
