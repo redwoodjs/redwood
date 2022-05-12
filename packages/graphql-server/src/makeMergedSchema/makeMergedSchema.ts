@@ -278,15 +278,6 @@ export const makeMergedSchema = ({
   const { resolverValidationOptions, inheritResolversFromInterfaces } =
     schemaOptions || {}
 
-  console.log(
-    addResolversToSchema({
-      schema,
-      resolvers,
-      resolverValidationOptions,
-      inheritResolversFromInterfaces,
-    })
-  )
-
   return addResolversToSchema({
     schema,
     resolvers,
