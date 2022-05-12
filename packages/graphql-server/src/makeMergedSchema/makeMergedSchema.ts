@@ -5,7 +5,13 @@ import {
   IExecutableSchemaDefinition,
 } from '@graphql-tools/schema'
 import { IResolvers } from '@graphql-tools/utils'
-import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
+import type {
+  GraphQLSchema,
+  GraphQLFieldMap,
+  DocumentNode,
+  GraphQLUnionType,
+  GraphQLObjectType,
+} from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
@@ -57,6 +63,32 @@ const mapFieldsToService = ({
 
     return resolvers
   }, unmappedResolvers)
+/**
+ *
+ * @param param0 types on Union type: i.e for union Media =  Book | Movie, parameter = [Book, Movie]
+ * @returns null | string: Type name of the union's type that is returned.
+ * If null or invalid value is returned, will trigger a GQL error
+ */
+const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
+  __resolveType(obj: GraphQLObjectType) {
+    // resolves type of object by looking for the largest intersection of common fields
+    let maxIntersectionType
+    let maxIntersectionFields = 0
+
+    for (const type of types) {
+      const fieldIntersection = Object.keys(type.getFields()).filter(
+        (field) => field in obj
+      )
+
+      if (fieldIntersection.length > maxIntersectionFields) {
+        maxIntersectionFields = fieldIntersection.length
+        maxIntersectionType = type
+      }
+    }
+
+    return maxIntersectionType?.name ?? null
+  },
+})
 
 /**
  * This iterates over all the schemas definitions and figures out which resolvers
@@ -93,6 +125,19 @@ const mergeResolversWithServices = ({
       (type): type is GraphQLTypeWithFields =>
         type !== undefined && type !== null
     )
+  // gets union types, which does not have fields but has types. i.e union Media = Book | Movie
+  const unionTypes = Object.keys(schema.getTypeMap())
+    .filter(
+      (name) =>
+        typeof (schema.getType(name) as GraphQLUnionType).getTypes !==
+        'undefined'
+    )
+    .map((name) => {
+      return schema.getType(name)
+    })
+    .filter(
+      (type): type is GraphQLUnionType => type !== undefined && type !== null
+    )
 
   const mappedResolvers = typesWithFields.reduce((acc, type) => {
     // Services export Query and Mutation field resolvers as named exports,
@@ -114,10 +159,18 @@ const mergeResolversWithServices = ({
     }
   }, {})
 
+  const mappedUnionResolvers = unionTypes.reduce((acc, type) => {
+    return {
+      ...acc,
+      [type.name]: resolveUnionType(type.getTypes()),
+    }
+  }, {})
+
   return omitBy(
     {
       ...resolvers,
       ...mappedResolvers,
+      ...mappedUnionResolvers,
     },
     (v) => typeof v === 'undefined'
   )
