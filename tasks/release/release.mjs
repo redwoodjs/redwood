@@ -514,7 +514,11 @@ async function cleanUpTasks(semver, nextVersion) {
     )
   }
 
-  await confirm(check`Did you delete the release branch?`)
+  await confirmRuns(
+    check`Did you delete the release branch?`,
+    () => $`open https://github.com/redwoodjs/redwood/branches`
+  )
+
   await confirm(check`Did you merge the release branch into main?`)
   await confirm(check`Did you update yarn.lock?`)
 
