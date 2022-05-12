@@ -49,7 +49,8 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
         )
       ),
     () =>
-      $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
+      $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${toTitle}
+      `
   )
   if (!updateRes) {
     return
