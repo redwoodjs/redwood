@@ -20,9 +20,6 @@
  * - consider writing an e2e test using verdaccio
  */
 
-/**
- * @todo would be nice to have some consistency in the colors package we use
- */
 import c from 'ansi-colors'
 import boxen from 'boxen'
 import notifier from 'node-notifier'
@@ -142,11 +139,12 @@ export default async function release() {
   }
 
   /**
-   * Check that there's no merged PRs without a milestone
+   * Check that there's no merged PRs without a milestone.
    *
    * @remarks
    *
-   * If we're not releasing a patch, check that there's no merged PRs with next-release-patch
+   * If we're not releasing a patch,
+   * check that there's no merged PRs with "next-release-patch".
    */
   const {
     search: { nodes: pullRequests },
@@ -155,7 +153,7 @@ export default async function release() {
   if (pullRequests.length) {
     console.log(
       c.bold(
-        fix`There shouldn't be any merged PRs without a milestone. You must resolve this before proceeding`
+        fix`There shouldn't be any merged PRs without a milestone. You have to resolve this before proceeding`
       )
     )
     await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+no%3Amilestone`
@@ -164,7 +162,7 @@ export default async function release() {
     return
   }
 
-  console.log(c.bold(ok`No PRs without a milestone`))
+  console.log(c.bold(ok`No merged PRs without a milestone`))
 
   /**
    * If we're releasing a patch, we're done.
@@ -172,7 +170,7 @@ export default async function release() {
    */
   if (semver === 'patch') {
     await confirm(
-      check`Did you update the milestone of the PRs you plan to include in the patch to "next-release-patch"?`,
+      check`Did you update the milestone of the merged PRs you plan to include in the patch to "next-release-patch"?`,
       { exitIfNo: true }
     )
   } else {
@@ -181,14 +179,16 @@ export default async function release() {
     } = await octokit.graphql(MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE)
 
     if (!nextReleasePatchPullRequests.length) {
-      console.log(c.bold(ok`No PRs with the ${'next-release-patch'} milestone`))
+      console.log(
+        c.bold(ok`No merged PRs with the ${'next-release-patch'} milestone`)
+      )
     } else {
       console.log(
         c.bold(
-          fix`If you're not releasing a patch, there shouldn't be any merged PRs with the next-release-patch milestone. You must resolve this before proceeding`
+          fix`If you're not releasing a patch, there shouldn't be any merged PRs with the "next-release-patch" milestone. You have to resolve this before proceeding`
         )
       )
-      await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3Anext-release-patch`
+      await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3Anext-release-patch+`
 
       process.exitCode = 1
       return
@@ -222,7 +222,7 @@ export default async function release() {
  * Take the output from `git describe --abbrev=0` (which is something like `'v0.42.1'`),
  * and return an array of numbers ([0, 42, 1]).
  *
- * @param {string} version the version string (obtain by running `git describe --abbrev=0`)
+ * @param {string} version
  * @returns [string, string, string]
  */
 function parseGitTag(version) {
@@ -257,18 +257,8 @@ export const MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE = `
   }
 `
 
-// ------------------------
-
-/**
- * @param {string} nextVersion
- */
 const releaseMajor = (nextVersion) => releaseMajorOrMinor('major', nextVersion)
-
-/**
- * @param {string} nextVersion
- */
 const releaseMinor = (nextVersion) => releaseMajorOrMinor('minor', nextVersion)
-
 /**
  * Right now releasing a major is the same as releasing a minor.
  *
@@ -387,7 +377,7 @@ async function releasePatch(currentVersion, nextVersion) {
   notifier.notify('done')
 
   await confirmRuns(
-    ask`Everything passed local QA. Are you ready to push your branch and tag to GitHub and publish to NPM?`,
+    ask`Everything passed local QA. Ok to push your branch and tag to GitHub and publish to NPM?`,
     [
       () => $`git push`,
       () => $`git push --tags`,
@@ -443,7 +433,7 @@ function cleanInstallUpdate(nextVersion) {
 
 function confirmPackageVersions() {
   return confirm(
-    check`The package versions have been updated. Does everything look ok?`,
+    check`The package versions have been updated. Everything look ok?`,
     { exitIfNo: true }
   )
 }
