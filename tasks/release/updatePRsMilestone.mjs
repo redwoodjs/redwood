@@ -1,4 +1,5 @@
 /* eslint-env node, es2021 */
+
 import { $ } from 'zx'
 
 import octokit from './octokit.mjs'
@@ -12,21 +13,25 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
   let milestone = await getMilestone(toTitle)
 
   if (!milestone) {
-    const createOk = await confirm(
-      ask`Milestone ${toTitle} doesn't exist. Ok to create it?`
+    const createRes = await confirmRuns(
+      ask`Milestone ${toTitle} doesn't exist. Ok to create it?`,
+      async () => {
+        const {
+          data: { node_id: id, number },
+        } = await createMilestone(toTitle)
+
+        return { id, number }
+      }
     )
-    if (!createOk) {
+
+    if (!createRes) {
       return
     }
 
-    const {
-      data: { node_id: id, number },
-    } = await createMilestone(toTitle)
-
-    milestone = { title: toTitle, id, number }
+    milestone = { title: toTitle, id: createRes.id, number: createRes.number }
   }
 
-  const fromMilestoneId = (await getMilestone(fromTitle)).id
+  const { id: fromMilestoneId } = await getMilestone(fromTitle)
 
   const pullRequestIds = await getPullRequestIdsWithMilestone(fromMilestoneId)
 
@@ -35,48 +40,42 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
     return
   }
 
-  const updateOk = await confirm(
-    ask`Ok to update the milestone of ${pullRequestIds.length} PRs from ${fromTitle} to ${toTitle}?`
+  const updateRes = await confirmRuns(
+    ask`Ok to update the milestone of ${pullRequestIds.length} PRs from ${fromTitle} to ${toTitle}?`,
+    () =>
+      Promise.all(
+        pullRequestIds.map((pullRequestId) =>
+          updatePullRequestMilestone(pullRequestId, milestone.id)
+        )
+      ),
+    () =>
+      $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
   )
-  if (!updateOk) {
+  if (!updateRes) {
     return
   }
 
-  await Promise.all(
-    pullRequestIds.map((pullRequestId) =>
-      updatePullRequestMilestone(pullRequestId, milestone.id)
-    )
-  )
-
-  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
-
   const looksOk = await confirm(
-    check`Updated the milestone of ${pullRequestIds.length} PRs\nDoes everything look ok?`
+    check`Updated the milestone of ${pullRequestIds.length} PRs\Everything look ok?`
   )
   if (looksOk) {
     return milestone
   }
 
-  const undoPRs = await confirm(
-    ask`Do you want to undo the changes to the PRs?`
-  )
-  if (undoPRs) {
-    await Promise.all(
+  await confirmRuns(ask`Ok to undo the changes to the PRs?`, () =>
+    Promise.all(
       pullRequestIds.map((pullRequestId) =>
         updatePullRequestMilestone(pullRequestId, fromMilestoneId)
       )
     )
-  }
+  )
 
-  const undoMilestone = await confirm(ask`Do you want to delete the milestone`)
-  if (undoMilestone) {
-    await deleteMilestone(milestone.number)
-  }
+  await confirmRuns(ask`Ok to delete the milestone`, () =>
+    deleteMilestone(milestone.number)
+  )
 
   return
 }
-
-// Helpers
 
 /**
  * @typedef {{
