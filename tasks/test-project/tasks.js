@@ -135,7 +135,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           )
 
           fs.writeFileSync(
-            'web/src/Redwood.stories.mdx',
+            fullPath('web/src/Redwood.stories.mdx', { addExtension: false }),
             redwoodMdxStoryContent
           )
 
