@@ -103,7 +103,7 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe('slow imports', () => {
+describe.only('slow imports', () => {
   const HomePagePlaceholder = () => <>HomePagePlaceholder</>
   const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
   const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
@@ -226,7 +226,7 @@ describe('slow imports', () => {
   )
 
   beforeAll(() => {
-    mockDelay = 300
+    mockDelay = 600
   })
 
   afterAll(() => {
@@ -397,7 +397,7 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('About Page'))
   })
 
-  test('usePageLoadingContext', async () => {
+  test.only('usePageLoadingContext', async () => {
     const screen = render(<TestRouter />)
 
     const n = Date.now()
