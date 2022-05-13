@@ -226,7 +226,7 @@ describe('slow imports', () => {
   )
 
   beforeAll(() => {
-    mockDelay = 200
+    mockDelay = 300
   })
 
   afterAll(() => {
@@ -399,14 +399,28 @@ describe('slow imports', () => {
 
   test('usePageLoadingContext', async () => {
     const screen = render(<TestRouter />)
+
+    const n = Date.now()
+
     act(() => navigate('/page-loading-context'))
 
     await waitFor(() => screen.getByText('Page Loading Context Layout'))
+
+    console.log('it took', Date.now() - n, 'ms to load the layout')
+
     await waitFor(() =>
       screen.getByText('usePageLoadingContext loading in layout...')
     )
 
+    console.log(
+      'it took',
+      Date.now() - n,
+      'ms to find the loading text in the layout'
+    )
+
     await waitFor(() => screen.getByText('Page Loading Context Page'))
+
+    console.log('it took', Date.now() - n, 'ms to find the page header')
 
     // This shouldn't show up, because the page shouldn't render before it's
     // fully loaded
@@ -417,8 +431,14 @@ describe('slow imports', () => {
     await waitFor(() =>
       screen.getByText('usePageLoadingContext done loading in page')
     )
+    console.log('it took', Date.now() - n, 'ms to detect page finished loading')
     await waitFor(() =>
       screen.getByText('usePageLoadingContext done loading in layout')
+    )
+    console.log(
+      'it took',
+      Date.now() - n,
+      'ms to detect layout finished loading'
     )
   })
 })
