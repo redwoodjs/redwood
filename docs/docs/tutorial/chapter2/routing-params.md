@@ -337,7 +337,7 @@ export const Success = ({ article }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticleCell/ArticleCell.tsx"
-import type { FindArticleQuery } from 'types/graphql'
+import type { ArticleQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
@@ -362,7 +362,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }: CellSuccessProps<FindArticleQuery>) => {
+export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => {
   return JSON.stringify(article)
 }
 ```
@@ -502,7 +502,7 @@ export const Success = ({ article, id, rand }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-interface Props extends CellSuccessProps<FindArticleQuery> {
+interface Props extends CellSuccessProps<ArticleQuery> {
   rand: number
 }
 
