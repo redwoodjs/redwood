@@ -637,7 +637,7 @@ export default Article
 </TabItem>
 </Tabs>
 
-And update `ArticlesCell` and `ArticleCell` (note the plural and singular naming) to use this new component instead:
+And update `ArticlesCell` to use this new component instead:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -716,6 +716,78 @@ export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
     </>
   )
 }
+```
+
+</TabItem>
+</Tabs>
+
+Last but not least we can update the `ArticleCell` to properly display our blog posts as well:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+// highlight-next-line
+import Article from 'src/components/Article'
+
+export const QUERY = gql`
+  query ArticleQuery {
+    article: post(id: $id) {
+      id
+      title
+      body
+      createdAt
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ articles }) => (
+  // highlight-next-line
+  <Article article={article} />
+)
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```jsx title="web/src/components/ArticleCell/ArticleCell.tsx"
+// highlight-next-line
+import Article from 'src/components/Article'
+
+import type { ArticleQuery } from 'types/graphql'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
+export const QUERY = gql`
+  query ArticleQuery {
+    article: post(id: $id) {
+      id
+      title
+      body
+      createdAt
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }: CellFailureProps) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ articles }: CellSuccessProps<ArticleQuery>) => (
+  // highlight-next-line
+  <Article article={article} />
+)
 ```
 
 </TabItem>
