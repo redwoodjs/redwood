@@ -23,9 +23,9 @@
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "release": "node ./tasks/release/cli.mjs",
+    "release:test": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs",
     "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test",
-    "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "test:release-script": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
+    "test": "lerna run test --stream -- --colors --maxWorkers=4"
   },
   "resolutions": {
     "@types/react": "17.0.45",
