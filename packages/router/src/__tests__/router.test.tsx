@@ -30,6 +30,7 @@ import {
   Link,
   navigate,
   back,
+  usePageLoadingContext,
 } from '../'
 import { useLocation } from '../location'
 import { useParams } from '../params'
@@ -121,6 +122,31 @@ describe('slow imports', () => {
     )
   }
 
+  const PageLoadingContextLayout = ({ children }) => {
+    const { loading } = usePageLoadingContext()
+
+    return (
+      <>
+        <h1>Page Loading Context Layout</h1>
+        {loading && <p>usePageLoadingContext loading in layout...</p>}
+        {!loading && <p>usePageLoadingContext done loading in layout</p>}
+        {children}
+      </>
+    )
+  }
+
+  const PageLoadingContextPage = () => {
+    const { loading } = usePageLoadingContext()
+
+    return (
+      <>
+        <h1>Page Loading Context Page</h1>
+        {loading && <p>usePageLoadingContext loading in page...</p>}
+        {!loading && <p>usePageLoadingContext done loading in page</p>}
+      </>
+    )
+  }
+
   const TestRouter = ({
     authenticated,
     hasRole,
@@ -188,6 +214,13 @@ describe('slow imports', () => {
         whileLoadingPage={ParamPagePlaceholder}
       />
       <Route path="/location" page={LocationPage} name="home" />
+      <Set wrap={PageLoadingContextLayout}>
+        <Route
+          path="/page-loading-context"
+          page={PageLoadingContextPage}
+          name="pageLoadingContext"
+        />
+      </Set>
       <Route notfound page={NotFoundPage} />
     </Router>
   )
@@ -362,6 +395,31 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
     // ...followed by the actual page
     await waitFor(() => screen.getByText('About Page'))
+  })
+
+  test('usePageLoadingContext', async () => {
+    const screen = render(<TestRouter />)
+    act(() => navigate('/page-loading-context'))
+
+    await waitFor(() => screen.getByText('Page Loading Context Layout'))
+    await waitFor(() =>
+      screen.getByText('usePageLoadingContext loading in layout...')
+    )
+
+    await waitFor(() => screen.getByText('Page Loading Context Page'))
+
+    // This shouldn't show up, because the page shouldn't render before it's
+    // fully loaded
+    expect(
+      screen.queryByText('usePageLoadingContext loading in page...')
+    ).not.toBeInTheDocument()
+
+    await waitFor(() =>
+      screen.getByText('usePageLoadingContext done loading in page')
+    )
+    await waitFor(() =>
+      screen.getByText('usePageLoadingContext done  loading inlayout')
+    )
   })
 })
 
