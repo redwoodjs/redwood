@@ -418,7 +418,7 @@ describe('slow imports', () => {
       screen.getByText('usePageLoadingContext done loading in page')
     )
     await waitFor(() =>
-      screen.getByText('usePageLoadingContext done  loading inlayout')
+      screen.getByText('usePageLoadingContext done loading in layout')
     )
   })
 })
