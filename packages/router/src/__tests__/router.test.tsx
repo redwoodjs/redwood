@@ -103,7 +103,7 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-describe.only('slow imports', () => {
+describe('slow imports', () => {
   const HomePagePlaceholder = () => <>HomePagePlaceholder</>
   const AboutPagePlaceholder = () => <>AboutPagePlaceholder</>
   const ParamPagePlaceholder = () => <>ParamPagePlaceholder</>
@@ -128,8 +128,8 @@ describe.only('slow imports', () => {
     return (
       <>
         <h1>Page Loading Context Layout</h1>
-        {loading && <p>usePageLoadingContext loading in layout...</p>}
-        {!loading && <p>usePageLoadingContext done loading in layout</p>}
+        {loading && <p>loading in layout...</p>}
+        {!loading && <p>done loading in layout</p>}
         {children}
       </>
     )
@@ -141,8 +141,8 @@ describe.only('slow imports', () => {
     return (
       <>
         <h1>Page Loading Context Page</h1>
-        {loading && <p>usePageLoadingContext loading in page...</p>}
-        {!loading && <p>usePageLoadingContext done loading in page</p>}
+        {loading && <p>loading in page...</p>}
+        {!loading && <p>done loading in page</p>}
       </>
     )
   }
@@ -226,7 +226,7 @@ describe.only('slow imports', () => {
   )
 
   beforeAll(() => {
-    mockDelay = 600
+    mockDelay = 200
   })
 
   afterAll(() => {
@@ -397,49 +397,24 @@ describe.only('slow imports', () => {
     await waitFor(() => screen.getByText('About Page'))
   })
 
-  test.only('usePageLoadingContext', async () => {
-    const screen = render(<TestRouter />)
+  test('usePageLoadingContext', async () => {
+    // Had to increase this to make the test pass on Windows
+    mockDelay = 500
 
-    const n = Date.now()
+    const screen = render(<TestRouter />)
 
     act(() => navigate('/page-loading-context'))
 
     await waitFor(() => screen.getByText('Page Loading Context Layout'))
-
-    console.log('it took', Date.now() - n, 'ms to load the layout')
-
-    await waitFor(() =>
-      screen.getByText('usePageLoadingContext loading in layout...')
-    )
-
-    console.log(
-      'it took',
-      Date.now() - n,
-      'ms to find the loading text in the layout'
-    )
-
+    await waitFor(() => screen.getByText('loading in layout...'))
     await waitFor(() => screen.getByText('Page Loading Context Page'))
-
-    console.log('it took', Date.now() - n, 'ms to find the page header')
 
     // This shouldn't show up, because the page shouldn't render before it's
     // fully loaded
-    expect(
-      screen.queryByText('usePageLoadingContext loading in page...')
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText('loading in page...')).not.toBeInTheDocument()
 
-    await waitFor(() =>
-      screen.getByText('usePageLoadingContext done loading in page')
-    )
-    console.log('it took', Date.now() - n, 'ms to detect page finished loading')
-    await waitFor(() =>
-      screen.getByText('usePageLoadingContext done loading in layout')
-    )
-    console.log(
-      'it took',
-      Date.now() - n,
-      'ms to detect layout finished loading'
-    )
+    await waitFor(() => screen.getByText('done loading in page'))
+    await waitFor(() => screen.getByText('done loading in layout'))
   })
 })
 
