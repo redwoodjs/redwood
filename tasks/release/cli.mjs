@@ -61,7 +61,8 @@ yargs(hideBin(process.argv))
     'Version docs',
     (yargs) => {
       yargs.positional('next-version', {
-        description: 'The next version to version the docs to',
+        description:
+          'The next version to version the docs to. Should be something like "1.5"—without the v, without the last 0',
         type: 'string',
       })
     },
