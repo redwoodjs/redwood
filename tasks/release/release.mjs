@@ -497,57 +497,48 @@ async function cleanUpTasks(semver, nextVersion) {
   await confirmRuns(ask`Ok to generate release notes?`, () =>
     generateReleaseNotes(nextVersion)
   )
-
   if (milestone) {
     await confirmRuns(ask`Ok to close milestone ${nextVersion}?`, () =>
       closeMilestone(milestone.number)
     )
   }
-
-  await confirmRuns(
-    check`Did you delete the release branch?`,
-    () => $`open https://github.com/redwoodjs/redwood/branches`
-  )
-
   await confirm(check`Did you merge the release branch into main?`)
   await confirm(check`Did you update yarn.lock?`)
-
-  await confirmRuns(ask`Ok to run all contributors?`, [
-    () => cd('./tasks/all-contributors'),
-    async () => {
-      const allContributorsCheckPO =
-        await $`yarn all-contributors check --config .all-contributorsrc`
-
-      const contributors = allContributorsCheckPO.stdout
-        .trim()
-        .split('\n')[1]
-        .split(',')
-        .map((contributor) => contributor.trim())
-        .filter(
-          (contributor) => !ALL_CONTRIBUTORS_IGNORE_LIST.includes(contributor)
-        )
-
-      for (const contributor of contributors) {
-        await $`yarn all-contributors add --config .all-contributorsrc ${contributor} code`
-      }
-
-      await $`yarn all-contributors generate --contributorsPerLine 5 --config .all-contributorsrc`
-    },
-    () => $`git commit -am "Update all contributors"`,
-    () => cd('../..'),
-  ])
-
+  await confirmRuns(ask`Ok to update all contributors?`, updateAllContributors)
   if (semver === 'major' || semver === 'minor') {
-    await confirmRuns(ask`Ok to version the docs?`, [
-      () => cd('./docs'),
-      () => $`yarn`,
-      () => $`yarn clear`,
-      () => $`yarn docusaurus docs:version ${nextVersion}`,
-      () => $`git add .`,
-      () => $`git commit -m "Version docs"`,
-      () => cd('../'),
-    ])
+    await confirmRuns(ask`Ok to version the docs?`, () =>
+      versionDocs(nextVersion)
+    )
   }
+  await $`open https://github.com/redwoodjs/redwood/branches`
+  await confirm(check`Did you delete the release branch?`)
+  await confirm(check`Did you tweet about it`)
+  await confirm(check`Did you post in Discord announcements?`)
+}
+
+export async function updateAllContributors() {
+  await cd('./tasks/all-contributors')
+
+  const allContributorsCheckPO =
+    await $`yarn all-contributors check --config .all-contributorsrc`
+
+  const contributors = allContributorsCheckPO.stdout
+    .trim()
+    .split('\n')[1]
+    .split(',')
+    .map((contributor) => contributor.trim())
+    .filter(
+      (contributor) => !ALL_CONTRIBUTORS_IGNORE_LIST.includes(contributor)
+    )
+
+  for (const contributor of contributors) {
+    await $`yarn all-contributors add --config .all-contributorsrc ${contributor} code`
+  }
+
+  await $`yarn all-contributors generate --contributorsPerLine 5 --config .all-contributorsrc`
+
+  await $`git commit -am "Update all contributors"`
+  await cd('../..')
 }
 
 const ALL_CONTRIBUTORS_IGNORE_LIST = [
@@ -576,3 +567,25 @@ const ALL_CONTRIBUTORS_IGNORE_LIST = [
   'agiannelli',
   'codesee-maps[bot]',
 ]
+
+/**
+ *
+ * @param {string} nextVersion
+ */
+export async function versionDocs(nextVersion) {
+  if (nextVersion.startsWith('v')) {
+    nextVersion = nextVersion.slice(1)
+  }
+
+  if (nextVersion.split('.').length === 3) {
+    nextVersion = nextVersion.slice(0, -2)
+  }
+
+  await cd('./docs')
+  await $`yarn`
+  await $`yarn clear`
+  await $`yarn docusaurus docs:version ${nextVersion}`
+  await $`git add .`
+  await $`git commit -m "Version docs to ${nextVersion}"`
+  await cd('../')
+}

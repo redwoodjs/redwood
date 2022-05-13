@@ -40,7 +40,7 @@
     "vscode-languageserver-types": "3.17.0"
   },
   "devDependencies": {
-    "@actions/core": "1.8.0",
+    "@actions/core": "1.8.2",
     "@actions/exec": "1.1.1",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
@@ -97,6 +97,6 @@
     "typescript-transform-paths": "3.3.1",
     "zx": "6.1.0"
   },
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.2.1",
   "npmClient": "yarn"
 }

@@ -68,6 +68,7 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
     return
   }
 
+  await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+milestone%3A${toTitle}`
   const looksOk = await confirm(
     check`Updated the milestone of ${pullRequestIds.length} PRs. Everything look ok?`
   )

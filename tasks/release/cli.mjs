@@ -5,7 +5,7 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import generateReleaseNotes from './generateReleaseNotes.mjs'
-import release from './release.mjs'
+import release, { updateAllContributors, versionDocs } from './release.mjs'
 import updatePRsMilestone from './updatePRsMilestone.mjs'
 
 yargs(hideBin(process.argv))
@@ -50,6 +50,23 @@ yargs(hideBin(process.argv))
       })
     },
     ({ from, to }) => updatePRsMilestone(from, to)
+  )
+  .command(
+    ['update-all-contributors', 'contributors'],
+    'Update all contributors',
+    updateAllContributors
+  )
+  .command(
+    ['version-docs <next-version>', 'docs'],
+    'Version docs',
+    (yargs) => {
+      yargs.positional('next-version', {
+        description:
+          'The next version to version the docs to. Should be something like "1.5"—without the v, without the last 0',
+        type: 'string',
+      })
+    },
+    ({ nextVersion }) => versionDocs(nextVersion)
   )
   .help()
   .parse()
