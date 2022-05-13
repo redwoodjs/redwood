@@ -18,8 +18,6 @@ export function exitOnCancelPrompts(promptsObject, promptsOptions) {
 }
 
 /**
- * Wrapper around confirm-type `prompts`.
- *
  * @typedef {{ name: string, exitIfNo: boolean, exitCode: string }} ConfirmOptions
  * @param {string} message
  * @param {ConfirmOptions} options
@@ -63,7 +61,8 @@ export async function confirmRuns(
   }
 
   if (!Array.isArray(runs)) {
-    return runs()
+    const res = await runs()
+    return res ?? true
   }
 
   const runResults = []
@@ -82,13 +81,14 @@ export const ASK = c.bgBlue(c.black('  ASK  '))
 export const CHECK = c.bgYellow(c.black(' CHECK '))
 export const FIX = c.bgRed(c.black('  FIX  '))
 export const OK = c.bgGreen(c.black('  O K  '))
-// https://stackoverflow.com/questions/38760554/how-to-print-cross-mark-or-check-mark-in-tcl
+/**
+ * See {@link https://stackoverflow.com/questions/38760554/how-to-print-cross-mark-or-check-mark-in-tcl}
+ */
 export const HEAVY_X = c.red('\u2716')
 export const HEAVY_CHECK = c.green('\u2714')
 
 /**
  * @param {string} prefix
- * @returns (string, ...values) => string
  */
 function makeStringFormatter(prefix) {
   return function formatter(strings, ...values) {

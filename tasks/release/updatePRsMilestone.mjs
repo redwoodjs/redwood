@@ -23,7 +23,6 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
         return { id, number }
       }
     )
-
     if (!createRes) {
       return
     }
@@ -42,12 +41,25 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
 
   const updateRes = await confirmRuns(
     ask`Ok to update the milestone of ${pullRequestIds.length} PRs from ${fromTitle} to ${toTitle}?`,
-    () =>
-      Promise.all(
-        pullRequestIds.map((pullRequestId) =>
-          updatePullRequestMilestone(pullRequestId, milestone.id)
+    async () => {
+      try {
+        await Promise.all(
+          pullRequestIds.map(async (pullRequestId) => {
+            await updatePullRequestMilestone(pullRequestId, milestone.id)
+            process.stdout.write(`Updated ${pullRequestId}\n`)
+          })
         )
-      ),
+      } catch (e) {
+        console.log([
+          "Something went wrong; we're most likely being rate limited",
+          'Try again later by running',
+          '',
+          `  yarn release prs --from ${fromTitle} --to ${toTitle}`,
+          '',
+        ])
+        console.error(e)
+      }
+    },
     () =>
       $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${toTitle}
       `
@@ -57,21 +69,33 @@ export default async function updatePRsMilestone(fromTitle, toTitle) {
   }
 
   const looksOk = await confirm(
-    check`Updated the milestone of ${pullRequestIds.length} PRs\Everything look ok?`
+    check`Updated the milestone of ${pullRequestIds.length} PRs. Everything look ok?`
   )
   if (looksOk) {
     return milestone
   }
 
-  await confirmRuns(ask`Ok to undo the changes to the PRs?`, () =>
-    Promise.all(
-      pullRequestIds.map((pullRequestId) =>
-        updatePullRequestMilestone(pullRequestId, fromMilestoneId)
+  await confirmRuns(ask`Ok to undo the changes to the PRs?`, async () => {
+    try {
+      await Promise.all(
+        pullRequestIds.map(async (pullRequestId) => {
+          await updatePullRequestMilestone(pullRequestId, fromMilestoneId)
+          process.stdout.write(`Updated ${pullRequestId}\n`)
+        })
       )
-    )
-  )
+    } catch (e) {
+      console.log([
+        "Something went wrong; we're most likely being rate limited",
+        'Try again later by running',
+        '',
+        `  yarn release prs --from ${fromTitle} --to ${toTitle}`,
+        '',
+      ])
+      console.error(e)
+    }
+  })
 
-  await confirmRuns(ask`Ok to delete the milestone`, () =>
+  await confirmRuns(ask`Ok to delete the ${milestone.title} milestone`, () =>
     deleteMilestone(milestone.number)
   )
 
@@ -146,9 +170,6 @@ function createMilestone(title) {
  * @param {string} milestoneId
  */
 export async function getPullRequestIdsWithMilestone(milestoneId) {
-  /**
-   * Right now we're not handling the case that we merge more than 100 PRs.
-   */
   const {
     node: {
       pullRequests: { nodes: pullRequests },
