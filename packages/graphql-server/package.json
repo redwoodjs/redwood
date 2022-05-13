@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
     "@envelop/depth-limit": "1.5.2",
-    "@envelop/disable-introspection": "3.3.1",
+    "@envelop/disable-introspection": "3.3.2",
     "@envelop/filter-operation-type": "3.3.1",
     "@envelop/parser-cache": "4.3.1",
     "@envelop/validation-cache": "4.3.1",
