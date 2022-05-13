@@ -126,7 +126,7 @@ export const ActiveRouteLoader = ({
               location,
             },
           }))
-          setRenderedChildren(children)
+          setRenderedChildren(children ?? module.default)
           setRenderedPath(path)
           setPageName(name)
         })
