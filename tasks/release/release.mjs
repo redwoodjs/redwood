@@ -504,15 +504,18 @@ async function cleanUpTasks(semver, nextVersion) {
     )
   }
 
-  await confirmRuns(
-    check`Did you delete the release branch?`,
-    () => $`open https://github.com/redwoodjs/redwood/branches`
-  )
-
   await confirm(check`Did you merge the release branch into main?`)
   await confirm(check`Did you update yarn.lock?`)
+  await updateAllContributors()
+  if (semver === 'major' || semver === 'minor') {
+    await versionDocs()
+  }
+  await $`open https://github.com/redwoodjs/redwood/branches`
+  await confirm(check`Did you delete the release branch?`)
+}
 
-  await confirmRuns(ask`Ok to run all contributors?`, [
+export async function updateAllContributors() {
+  await confirmRuns(ask`Ok to update all contributors?`, [
     () => cd('./tasks/all-contributors'),
     async () => {
       const allContributorsCheckPO =
@@ -536,18 +539,6 @@ async function cleanUpTasks(semver, nextVersion) {
     () => $`git commit -am "Update all contributors"`,
     () => cd('../..'),
   ])
-
-  if (semver === 'major' || semver === 'minor') {
-    await confirmRuns(ask`Ok to version the docs?`, [
-      () => cd('./docs'),
-      () => $`yarn`,
-      () => $`yarn clear`,
-      () => $`yarn docusaurus docs:version ${nextVersion}`,
-      () => $`git add .`,
-      () => $`git commit -m "Version docs"`,
-      () => cd('../'),
-    ])
-  }
 }
 
 const ALL_CONTRIBUTORS_IGNORE_LIST = [
@@ -576,3 +567,19 @@ const ALL_CONTRIBUTORS_IGNORE_LIST = [
   'agiannelli',
   'codesee-maps[bot]',
 ]
+
+/**
+ *
+ * @param {string} nextVersion
+ */
+export async function versionDocs(nextVersion) {
+  await confirmRuns(ask`Ok to version the docs?`, [
+    () => cd('./docs'),
+    () => $`yarn`,
+    () => $`yarn clear`,
+    () => $`yarn docusaurus docs:version ${nextVersion}`,
+    () => $`git add .`,
+    () => $`git commit -m "Version docs"`,
+    () => cd('../'),
+  ])
+}
