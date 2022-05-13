@@ -595,7 +595,7 @@ A field can have a union as its return type.
 
 ```tsx
 type Query {
-  searchTrees: [FavoriteTree] # This list can include Redwood, Gingko or Oak objects
+  searchTrees: [FavoriteTree] // This list can include Redwood, Gingko or Oak objects
 }
 ```
 
@@ -605,6 +605,7 @@ To query a union, you can take advantage on [inline fragments](https://graphql.o
 
 ```tsx
 query GetFavoriteTrees {
+  __typename // typename is helpful when querying a field that might return one of multiple types
   searchTrees {
     ... on Redwood {
       name
