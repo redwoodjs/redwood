@@ -6407,7 +6407,7 @@ __metadata:
     "@storybook/manager-webpack5": 6.4.22
     "@storybook/react": 6.4.22
     "@testing-library/jest-dom": 5.16.4
-    "@testing-library/react": 13.2.0
+    "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.0
     "@testing-library/user-event": 14.1.1
     "@types/aws-lambda": 8.10.95
@@ -7865,7 +7865,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.13.0, @testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1, @testing-library/dom@npm:^8.5.0":
+"@testing-library/dom@npm:8.13.0, @testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1":
   version: 8.13.0
   resolution: "@testing-library/dom@npm:8.13.0"
   dependencies:
@@ -7931,20 +7931,6 @@ __metadata:
     react: <18.0.0
     react-dom: <18.0.0
   checksum: 3c2433d2fdb6535261f62cd85d79657989cebd96f9072da03c098a1cfa56dec4dfec83d7c2e93633a3ccebdb178ea8578261533d11551600966edab77af00c8b
-  languageName: node
-  linkType: hard
-
-"@testing-library/react@npm:13.2.0":
-  version: 13.2.0
-  resolution: "@testing-library/react@npm:13.2.0"
-  dependencies:
-    "@babel/runtime": ^7.12.5
-    "@testing-library/dom": ^8.5.0
-    "@types/react-dom": ^18.0.0
-  peerDependencies:
-    react: ^18.0.0
-    react-dom: ^18.0.0
-  checksum: 9d5531ff108aad76febac89fe9b639fc77672fbcfc062904ad40fcd5199ec8be0924de229c85d0567c404b68a81dc3d39586e18695fe63239389dbbb13a27e62
   languageName: node
   linkType: hard
 
@@ -8837,15 +8823,6 @@ __metadata:
   dependencies:
     "@types/react": ^17
   checksum: 57d3d12d4dcde5019ac282d178e58dc8fa82926337272eb2cb5dc492545883d4eef5fac6156d94c0ac76f0c1f1f8d0bf91d455d56184bad5365b759efa3e04f2
-  languageName: node
-  linkType: hard
-
-"@types/react-dom@npm:^18.0.0":
-  version: 18.0.3
-  resolution: "@types/react-dom@npm:18.0.3"
-  dependencies:
-    "@types/react": "*"
-  checksum: ec5a9329cd658e08ca84545e79d5f6cbb81a9feb79ce79acc23b4bd1bd4805fc7cf29011ceeb1f6b3738c5fbd1a590ed4c3458254849256ca925880c76f1b960
   languageName: node
   linkType: hard
 
