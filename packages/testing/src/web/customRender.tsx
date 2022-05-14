@@ -2,11 +2,11 @@ import React from 'react'
 
 import { render } from '@testing-library/react'
 import type { RenderResult } from '@testing-library/react'
-// the @testing-library/react-hooks library is being depreciated as the
-// functionality is moving into version 13 of the @testing-library / react
-// However, version 13 of @testing-library/react depreciates support of
-// React 17.  Thus, we can remove the @testing-library / react-hooks after
-// moving Redwood to React 18
+// `@testing-library/react-hooks` is being deprecated
+// since the functionality is moving into v13 of `@testing-library/react`.
+// But v13 of `@testing-library/react` stops supporting React 17,
+// so we can't upgrade just yet.
+// We can remove `@testing-library/react-hooks` after upgrading Redwood to React 18.
 import { renderHook } from '@testing-library/react-hooks'
 import type {
   RenderHookOptions,
