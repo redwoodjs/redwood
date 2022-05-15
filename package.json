@@ -35,7 +35,7 @@
     "react-dom": "17.0.2",
     "typescript": "4.6.4",
     "vscode-languageserver": "6.1.1",
-    "vscode-languageserver-protocol": "3.15.3",
+    "vscode-languageserver-protocol": "3.17.1",
     "vscode-languageserver-textdocument": "1.0.4",
     "vscode-languageserver-types": "3.17.0"
   },
