@@ -6295,7 +6295,7 @@ __metadata:
     "@testing-library/dom": 8.13.0
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 14.1.1
+    "@testing-library/user-event": 14.2.0
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.45
     "@types/react-dom": 17.0.16
@@ -6548,7 +6548,7 @@ __metadata:
     "@storybook/react": 6.4.22
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 14.1.1
+    "@testing-library/user-event": 14.2.0
     "@types/aws-lambda": 8.10.97
     "@types/babel-core": 6.25.7
     "@types/jest": 27.5.0
@@ -8055,12 +8055,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:14.1.1":
-  version: 14.1.1
-  resolution: "@testing-library/user-event@npm:14.1.1"
+"@testing-library/user-event@npm:14.2.0":
+  version: 14.2.0
+  resolution: "@testing-library/user-event@npm:14.2.0"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 96968b3e43b5a5b77d065318b20d1fa6c3753326f571bc56affe42ee00324353bccc411d384c7dd0f32ffb92ee4737ee39aa37acaa2d8a5ce9627b760658edff
+  checksum: 1011c63521685bfb758d6c8d4fed5f16de6ebc28f5817d017364302d7b69f00acacb9dea1a1bf4a5efdf6e166f66541a42b6c6e8e08914310cd23a1b1af98e98
   languageName: node
   linkType: hard
 
@@ -27155,7 +27155,7 @@ __metadata:
     "@playwright/test": 1.21.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 14.1.1
+    "@testing-library/user-event": 14.2.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.5.0
     "@types/jscodeshift": 0.11.5
