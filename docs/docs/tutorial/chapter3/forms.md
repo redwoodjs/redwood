@@ -1236,7 +1236,9 @@ And notice that if you fill in something in a field that's marked as an error, t
 
 ### Validating Input Format
 
-We should make sure the email field actually contains an email:
+We should make sure the email field actually contains an email, by providing a `pattern`.
+This is definitely not the end-all-be-all for email address validation, but for now let us pretend it's bulletproof.
+Let's also change the message on the email validation to be a little more friendly:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -1249,6 +1251,7 @@ We should make sure the email field actually contains an email:
     // highlight-start
     pattern: {
       value: /^[^@]+@[^.]+\..+$/,
+      message: 'Please enter a valid email address',
     },
     // highlight-end
   }}
@@ -1267,49 +1270,9 @@ We should make sure the email field actually contains an email:
     // highlight-start
     pattern: {
       value: /^[^@]+@[^.]+\..+$/,
+      message: 'Please enter a valid email address',
     },
     // highlight-end
-  }}
-  errorClassName="error"
-/>
-```
-
-</TabItem>
-</Tabs>
-
-That is definitely not the end-all-be-all for email address validation, but pretend it's bulletproof. Let's also change the message on the email validation to be a little more friendly:
-
-<Tabs groupId="js-ts">
-<TabItem value="js" label="JavaScript">
-
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-<TextField
-  name="email"
-  validation={{
-    required: true,
-    pattern: {
-      value: /^[^@]+@[^.]+\..+$/,
-      // highlight-next-line
-      message: 'Please enter a valid email address',
-    },
-  }}
-  errorClassName="error"
-/>
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
-
-```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-<TextField
-  name="email"
-  validation={{
-    required: true,
-    pattern: {
-      value: /^[^@]+@[^.]+\..+$/,
-      // highlight-next-line
-      message: 'Please enter a valid email address',
-    },
   }}
   errorClassName="error"
 />
