@@ -38,7 +38,7 @@
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
-    "concurrently": "7.1.0",
+    "concurrently": "7.2.0",
     "configstore": "3.1.5",
     "core-js": "3.22.5",
     "cross-env": "7.0.3",
@@ -62,7 +62,7 @@
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
-    "yargs": "17.4.1"
+    "yargs": "17.5.0"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
