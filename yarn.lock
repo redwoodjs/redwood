@@ -6114,7 +6114,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 7.1.0
+    concurrently: 7.2.0
     configstore: 3.1.5
     core-js: 3.22.5
     cross-env: 7.0.3
@@ -12894,21 +12894,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:7.1.0":
-  version: 7.1.0
-  resolution: "concurrently@npm:7.1.0"
+"concurrently@npm:7.2.0":
+  version: 7.2.0
+  resolution: "concurrently@npm:7.2.0"
   dependencies:
     chalk: ^4.1.0
     date-fns: ^2.16.1
     lodash: ^4.17.21
     rxjs: ^6.6.3
+    shell-quote: ^1.7.3
     spawn-command: ^0.0.2-1
     supports-color: ^8.1.0
     tree-kill: ^1.2.2
-    yargs: ^16.2.0
+    yargs: ^17.3.1
   bin:
     concurrently: dist/bin/concurrently.js
-  checksum: e12b061f0afc2a411dbadec7218a0b112cd12e08a7760a3a38cc70fb51835fbb15f76a725d2aeefa7fe70c4354a398a9e1bab2189c7278176cd5e3b55885df9f
+  checksum: c3981d4e3ffdd4980f49203152168945015758bdd3111fb3fcab8eb08c13daffd793d32ddb74cd58866eb937cd2913cc067bbbf9848a35104ccebe446bd6332f
   languageName: node
   linkType: hard
 
@@ -27786,7 +27787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shell-quote@npm:1.7.3":
+"shell-quote@npm:1.7.3, shell-quote@npm:^1.7.3":
   version: 1.7.3
   resolution: "shell-quote@npm:1.7.3"
   checksum: cf997c325f49c4393a859074f1ee9ca3da7d9e1940225bab24a86f0266504c7d7e356b83f13c74932cb243d53125b5c8c57b714017c53490bf1fe10540422014
