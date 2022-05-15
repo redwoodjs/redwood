@@ -6372,7 +6372,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": 3.2.14
     "@graphql-codegen/typescript-resolvers": 2.6.4
     "@redwoodjs/graphql-server": 1.4.0
-    "@types/babel-plugin-tester": 9.0.4
+    "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.1.19
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
@@ -8161,13 +8161,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel-plugin-tester@npm:9.0.4, @types/babel-plugin-tester@npm:^9.0.0":
-  version: 9.0.4
-  resolution: "@types/babel-plugin-tester@npm:9.0.4"
+"@types/babel-plugin-tester@npm:9.0.5, @types/babel-plugin-tester@npm:^9.0.0":
+  version: 9.0.5
+  resolution: "@types/babel-plugin-tester@npm:9.0.5"
   dependencies:
     "@types/babel__core": "*"
     "@types/prettier": "*"
-  checksum: 08538412f2bea2b60a8425e41cb10a7193a2c16168ad9925c5239ef31225409b3af172bcf5126f904c02f55a869390ad4099b82e259a3f11f896fabb56986c26
+  checksum: 716bd9e5e7996c13ff2f1d15c5b47d59ce925ab617f4b218cc8c627257af71ebfe62eec058a66c380a59030f56ad838e2930cd9ab39c6a95e334642d8ca504ec
   languageName: node
   linkType: hard
 
