@@ -15,7 +15,7 @@ import { normalizeRequest } from '../../transforms'
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
 
-interface DbAuthHandlerOptions {
+export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * Provide prisma db client
    */
@@ -52,7 +52,7 @@ interface DbAuthHandlerOptions {
    * Object containing forgot password options
    */
   forgotPassword: {
-    handler: (user: Record<string, unknown>) => Promise<any>
+    handler: (user: TUser) => Promise<Partial<TUser>> | Partial<TUser>
     errors?: {
       usernameNotFound?: string
       usernameRequired?: string
@@ -70,7 +70,7 @@ interface DbAuthHandlerOptions {
      * in, containing at least an `id` field (whatever named field was provided
      * for `authFields.id`). For example: `return { id: user.id }`
      */
-    handler: (user: Record<string, unknown>) => Promise<any>
+    handler: (user: TUser) => Promise<Partial<TUser>> | Partial<TUser>
     /**
      * Object containing error strings
      */
@@ -88,7 +88,7 @@ interface DbAuthHandlerOptions {
    * Object containing reset password options
    */
   resetPassword: {
-    handler: (user: Record<string, unknown>) => Promise<any>
+    handler: (user: TUser) => Promise<Partial<TUser>> | Partial<TUser>
     allowReusedPassword: boolean
     errors?: {
       resetTokenExpired?: string
@@ -109,7 +109,9 @@ interface DbAuthHandlerOptions {
      * were included in the object given to the `signUp()` function you got
      * from `useAuth()`
      */
-    handler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+    handler: (
+      signupHandlerOptions: SignupHandlerArgs
+    ) => Promise<Partial<TUser>> | Partial<TUser>
     /**
      * Object containing error strings
      */
@@ -124,19 +126,30 @@ interface DbAuthHandlerOptions {
    */
   cors?: CorsConfig
 }
-
-interface SignupHandlerOptions {
+interface SignupHandlerArgs {
   username: string
   hashedPassword: string
   salt: string
-  userAttributes?: any
+  userAttributes?: Record<string, string>
 }
 
-interface SessionRecord {
-  id: string | number
+/**
+ * To use in src/lib/auth#getCurrentUser
+ *
+ * Use this type to tell the getCurrentUser function what the type of session is
+ * @example
+ * import {User} from '@prisma/client'
+ *
+ * //    key being used in dbAccessor in src/functions/auth.ts 👇
+ *  const getCurrentUser = async (session: DbAuthSession<User['id']>)
+ *
+ *
+ */
+export interface DbAuthSession<TIdType = unknown> {
+  id: TIdType
 }
 
-type AuthMethodNames =
+export type AuthMethodNames =
   | 'forgotPassword'
   | 'getToken'
   | 'login'
@@ -149,19 +162,19 @@ type Params = {
   username?: string
   password?: string
   method: AuthMethodNames
-  [key: string]: unknown
+  [key: string]: any
 }
 
-export class DbAuthHandler {
+export class DbAuthHandler<TUser extends Record<string | number, any>> {
   event: APIGatewayProxyEvent
   context: LambdaContext
-  options: DbAuthHandlerOptions
+  options: DbAuthHandlerOptions<TUser>
   params: Params
   db: PrismaClient
   dbAccessor: any
   headerCsrfToken: string | undefined
   hasInvalidSession: boolean
-  session: SessionRecord | undefined
+  session: DbAuthSession | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
   futureExpiresDate: string
@@ -215,7 +228,7 @@ export class DbAuthHandler {
   constructor(
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    options: DbAuthHandlerOptions
+    options: DbAuthHandlerOptions<TUser>
   ) {
     this.event = event
     this.context = context
@@ -399,6 +412,7 @@ export class DbAuthHandler {
   async login() {
     const { username, password } = this.params
     const dbUser = await this._verifyUser(username, password)
+
     const handlerUser = await this.options.login.handler(dbUser)
 
     if (
@@ -602,7 +616,7 @@ export class DbAuthHandler {
 
   // returns the Set-Cookie header to be returned in the request (effectively creates the session)
   _createSessionHeader(
-    data: SessionRecord,
+    data: DbAuthSession,
     csrfToken: string
   ): Record<'Set-Cookie', string> {
     const session = JSON.stringify(data) + ';' + csrfToken
@@ -747,7 +761,7 @@ export class DbAuthHandler {
 
   // creates and returns a user, first checking that the username/password
   // values pass validation
-  async _createUser() {
+  async _createUser(): Promise<Partial<TUser> | undefined> {
     const { username, password, ...userAttributes } = this.params
     if (
       this._validateField('username', username) &&
@@ -775,6 +789,9 @@ export class DbAuthHandler {
 
       return newUser
     }
+
+    // Handled internally when createUser is invoked
+    return undefined
   }
 
   // hashes a password using either the given `salt` argument, or creates a new
