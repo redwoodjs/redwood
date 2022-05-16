@@ -1977,16 +1977,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@clerk/backend-core@npm:1.7.0"
+"@clerk/backend-core@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@clerk/backend-core@npm:1.8.0"
   dependencies:
-    "@clerk/types": ^2.10.1
+    "@clerk/types": ^2.13.0
     camelcase-keys: ^7.0.1
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: 1abcfa25afb59e34c272c014feb363d39d4ec56d091a6de25528105e98fe6480f5c85416f33a68a8f14dc1369cd1a6a6f18de783c8630ea53d5ca723de338f4f
+  checksum: c4fe5fc9548b734d66d3217f1bae1baaa6862652aa6f3c2c9e6406f1be42e374c11f13b2bf91ebc20544063c2dd1088d7d0c6f20ca23620dff73c65469042251
   languageName: node
   linkType: hard
 
@@ -2010,12 +2010,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@clerk/clerk-sdk-node@npm:3.4.1"
+"@clerk/clerk-sdk-node@npm:3.5.0":
+  version: 3.5.0
+  resolution: "@clerk/clerk-sdk-node@npm:3.5.0"
   dependencies:
-    "@clerk/backend-core": ^1.7.0
-    "@clerk/types": ^2.10.1
+    "@clerk/backend-core": ^1.8.0
+    "@clerk/types": ^2.13.0
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -2025,14 +2025,21 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 0472318cb616efb634c0cba6114fe4be97842443da821f702214071e163694e5be6f35b4e5a94fab90c9b600a104b5e3b04b3ae430cac8d771467da8907e7516
+  checksum: 920ce94930c6a88e4050db63acd219df6e77170a7a192b1ebe89ca2b8321dc1e6bb7498b342b6947218282ee2cad8f1754cd744590841c95113970728990a428
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.10.1, @clerk/types@npm:^2.10.1":
+"@clerk/types@npm:2.10.1":
   version: 2.10.1
   resolution: "@clerk/types@npm:2.10.1"
   checksum: f7bc6737325f379099b485aa148ddf2ad550e2355e22f53921c6af338e9a44ed9b65cb4aeea80fd37ab2def00369237113799bf2945eec6b84e359c84e700d7a
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^2.10.1, @clerk/types@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "@clerk/types@npm:2.13.0"
+  checksum: fb568825325d6433a58508f04eb74d159d435e2fa5881ffa7e482bc07f69541684d4779b8af49416092c1526a36b2d7e31616cc15567d6ef3cae358328b85a3d
   languageName: node
   linkType: hard
 
@@ -6023,7 +6030,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@clerk/clerk-sdk-node": 3.4.1
+    "@clerk/clerk-sdk-node": 3.5.0
     "@prisma/client": 3.14.0
     "@redwoodjs/auth": 1.4.0
     "@types/aws-lambda": 8.10.97
@@ -6049,7 +6056,7 @@ __metadata:
     typescript: 4.6.4
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.4.1
+    "@clerk/clerk-sdk-node": 3.5.0
     "@magic-sdk/admin": 1.4.1
     firebase-admin: 10.2.0
   peerDependenciesMeta:
@@ -6077,7 +6084,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@clerk/clerk-js": 3.10.2
-    "@clerk/clerk-sdk-node": 3.4.1
+    "@clerk/clerk-sdk-node": 3.5.0
     "@clerk/types": 2.10.1
     "@nhost/hasura-auth-js": 1.1.6
     "@nhost/nhost-js": 1.1.11
