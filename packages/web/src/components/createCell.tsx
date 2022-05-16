@@ -23,12 +23,12 @@ export type CellProps<
     (GQLVariables extends { [key: string]: never } ? unknown : GQLVariables)
 >
 
-export type CellLoadingProps = Partial<
-  Omit<QueryOperationResult, 'loading' | 'error' | 'data'>
+export type CellLoadingProps<TVariables = any> = Partial<
+  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
 >
 
-export type CellFailureProps = Partial<
-  Omit<QueryOperationResult, 'loading' | 'error' | 'data'> & {
+export type CellFailureProps<TVariables = any> = Partial<
+  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'> & {
     error: QueryOperationResult['error'] | Error // for tests and storybook
     /**
      * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
@@ -44,8 +44,11 @@ export type CellFailureProps = Partial<
  * `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
  * this prop lets users render something like a spinner to show that a request is in-flight.
  */
-export type CellSuccessProps<TData = any> = Partial<
-  Omit<QueryOperationResult<TData>, 'loading' | 'error' | 'data'> & {
+export type CellSuccessProps<TData = any, TVariables = any> = Partial<
+  Omit<
+    QueryOperationResult<TData, TVariables>,
+    'loading' | 'error' | 'data'
+  > & {
     updating: boolean
   }
 > &

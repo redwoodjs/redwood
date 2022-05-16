@@ -1,9 +1,10 @@
 /* eslint-env node, es2021 */
+
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import url from 'node:url'
 
 import template from 'lodash.template'
-import { $ } from 'zx'
 
 import octokit from './octokit.mjs'
 
@@ -19,9 +20,8 @@ import octokit from './octokit.mjs'
  */
 export default async function generateReleaseNotes(
   milestone,
-  { releaseCandidate }
+  { releaseCandidate = false } = {}
 ) {
-  // Get the milestone's title, id, and PRs.
   const { title, id } = await getMilestoneId(milestone)
 
   if (releaseCandidate) {
@@ -41,11 +41,18 @@ export default async function generateReleaseNotes(
   console.log(`Written to ${url.fileURLToPath(filename)}`)
 }
 
+/**
+ * @param {string} milestone
+ */
 async function generateReleaseCandidateReleaseNotes(milestone) {
-  let { stdout: latestVersion } =
-    await $`yarn npm info @redwoodjs/core@latest --fields version --json`
+  const stdout = execSync(
+    'yarn npm info @redwoodjs/core@latest --fields version --json',
+    {
+      shell: true,
+    }
+  )
 
-  latestVersion = 'v' + JSON.parse(latestVersion.trim()).version
+  const latestVersion = 'v' + JSON.parse(stdout.toString().trim()).version
 
   const {
     repository: {
@@ -68,6 +75,11 @@ async function generateReleaseCandidateReleaseNotes(milestone) {
     }
   )
 
+  if (nodes.length === 0) {
+    console.log(`No release branch found for ${latestVersion}`)
+    return
+  }
+
   const [{ name: releaseBranch }] = nodes
 
   console.log({
@@ -75,8 +87,6 @@ async function generateReleaseCandidateReleaseNotes(milestone) {
     mergedPrs: `https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${milestone}`,
   })
 }
-
-// Helpers
 
 /**
  * @typedef {{
@@ -222,13 +232,12 @@ function getNoOfUniqueContributors(prs) {
 }
 
 /**
- * @remarks
- *
- * This could be a little better.
+ * @todo this could be a little better.
  *
  * @param {Array<PR>} prs
  */
 function sortPRs(prs) {
+  const breaking = []
   const features = []
   const fixed = []
   const chore = []
@@ -249,6 +258,11 @@ function sortPRs(prs) {
      * Sort the rest by label.
      */
     const labels = pr.labels.nodes.map((label) => label.name)
+
+    if (labels.includes('release:feature-breaking')) {
+      breaking.push(`- ${formatPR(pr)}`)
+      continue
+    }
 
     if (labels.includes('release:feature')) {
       features.push(`- ${formatPR(pr)}`)
@@ -277,6 +291,7 @@ function sortPRs(prs) {
   }
 
   return {
+    breaking: breaking.join('\n'),
     features: features.join('\n'),
     fixed: fixed.join('\n'),
     chore: chore.join('\n'),
@@ -305,6 +320,10 @@ const interpolate = template(
     'Unique contributors: ${uniqueContributors}',
     '',
     'PRs merged: ${prsMerged}',
+    '',
+    '## Breaking',
+    '',
+    '${breaking}',
     '',
     '## Features',
     '',

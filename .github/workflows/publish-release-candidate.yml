@@ -56,7 +56,6 @@ jobs:
           #  This is required because lerna uses tags to determine the version.
           fetch-depth: 0
 
-      - uses: actions/checkout@v3
       - name: 🧶 Setup job
         uses: ./.github/actions/setup_job
 
@@ -74,7 +73,6 @@ jobs:
 
       - name: 🚢 Publish
         run: |
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
           yarn lerna publish pre$SEMVER --include-merged-tags \
