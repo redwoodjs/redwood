@@ -48,9 +48,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.6.2":
-  version: 3.6.2
-  resolution: "@apollo/client@npm:3.6.2"
+"@apollo/client@npm:3.6.4":
+  version: 3.6.4
+  resolution: "@apollo/client@npm:3.6.4"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.6.0
@@ -61,10 +61,9 @@ __metadata:
     optimism: ^0.16.1
     prop-types: ^15.7.2
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.10.0
+    ts-invariant: ^0.10.3
     tslib: ^2.3.0
-    use-sync-external-store: ^1.0.0
-    zen-observable-ts: ^1.2.0
+    zen-observable-ts: ^1.2.5
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-ws: ^5.5.5
@@ -77,7 +76,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: b720071649459361b2e80ab13ee1db7bc4afc95672f664e493714dc8a018ca932cbeb9d55e1322ab0d47044a626a2cfe93f76ee21766f5728ae121a80c68a103
+  checksum: b1a2994ac804dd9f72733ab0bcc2f3d30b14dcb70c387e2215e5035ea25f32cd1c1f09c25ecbc45a92b69718fa4f5feb7aa6ae90bd219f1bda05a60404fb87b7
   languageName: node
   linkType: hard
 
@@ -6516,7 +6515,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.6.2
+    "@apollo/client": 3.6.4
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
@@ -29547,12 +29546,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.10.0":
-  version: 0.10.1
-  resolution: "ts-invariant@npm:0.10.1"
+"ts-invariant@npm:^0.10.3":
+  version: 0.10.3
+  resolution: "ts-invariant@npm:0.10.3"
   dependencies:
     tslib: ^2.1.0
-  checksum: f8c542d7bf6423e85feae19b49c4ca0190991b9a591d3cc261fd8914491c33d7401084cd16abb28efbb37be934546ad260431289d57bc0b5eadc3e43b275dcbc
+  checksum: 2fbc178d5903d325ee0b87fad38827eac11888b6e86979b06754fd4bcdcf44c2a99b8bcd5d59d149c0464ede55ae810b02a2aee6835ad10efe4dd0e22efd68c0
   languageName: node
   linkType: hard
 
@@ -30340,15 +30339,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: c2e60f8efa4ea90972b7879e3d6acebef23695f7eeb0d7ca82c1e44f142d701d8b71580f742555ddde2af1b90d071c407c02cc7175529beed137cc138b6e793c
-  languageName: node
-  linkType: hard
-
-"use-sync-external-store@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "use-sync-external-store@npm:1.1.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 4f522e7f10c85a705358640f3d487f261e34cef4dd80c8f167d246a79fb8768c4fffde2f1155f44406e0ee5eb6703eb487539738d7eb7a0bbd6195fe01e5dbae
   languageName: node
   linkType: hard
 
@@ -31866,12 +31856,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zen-observable-ts@npm:^1.2.0":
-  version: 1.2.3
-  resolution: "zen-observable-ts@npm:1.2.3"
+"zen-observable-ts@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "zen-observable-ts@npm:1.2.5"
   dependencies:
     zen-observable: 0.8.15
-  checksum: fa4c1ebbbbc3e7d41dca6d9dc74cb96440ee4767c50d8f9a3b3f84f823d9832d148f76187cd65c30d9ab4008f88c7248fe8774f7cedf98fbfc2e0a6429ce08f5
+  checksum: 21d586f3d0543e1d6f05d9333a137b407dbf337907c1ee1c2fa7a7da044f7e1262e4baf4ef8902f230c6f5acb561047659eb7df73df33307233cc451efe46db1
   languageName: node
   linkType: hard
 
