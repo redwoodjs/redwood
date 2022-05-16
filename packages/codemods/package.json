@@ -46,7 +46,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.5.1",
     "@types/jscodeshift": "0.11.5",
-    "@types/prettier": "2.6.0",
+    "@types/prettier": "2.6.1",
     "@types/yargs": "17.0.10",
     "fs-extra": "10.1.0",
     "tempy": "1.0.1"
