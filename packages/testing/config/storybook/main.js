@@ -24,21 +24,6 @@ function isPackageInstalled(alias) {
   }
 }
 
-function withEmotionVersionFallback(config) {
-  const alias = Object.entries({
-    '@emotion/core': '@emotion/core',
-    '@emotion/styled': '@emotion/styled',
-    'emotion-theming': '@emotion/react',
-  }).reduce((acc, [packageName, alias]) => {
-    if (isPackageInstalled(alias)) {
-      acc[packageName] = require.resolve(alias)
-    }
-    return acc
-  }, {})
-
-  return merge(config, { resolve: { alias } })
-}
-
 const baseConfig = {
   core: {
     builder: 'webpack5',
@@ -135,10 +120,13 @@ const baseConfig = {
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
 
-    sbConfig = withEmotionVersionFallback(sbConfig)
-
     return sbConfig
   },
+  ...(isPackageInstalled('@emotion/core') && {
+    features: {
+      emotionAlias: false,
+    },
+  }),
   // only set staticDirs when running Storybook process; will fail if set for SB --build
   ...(process.env.NODE_ENV !== 'production' && {
     staticDirs: [`${staticAssetsFolder}`],
