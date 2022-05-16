@@ -43,7 +43,7 @@
     "@types/aws-lambda": "8.10.97",
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.5.1",
-    "@types/node": "16.11.34",
+    "@types/node": "16.11.35",
     "@types/react": "17.0.45",
     "@types/react-dom": "17.0.17",
     "@types/webpack": "5.28.0",
