@@ -2006,14 +2006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.10.1":
-  version: 2.10.1
-  resolution: "@clerk/types@npm:2.10.1"
-  checksum: f7bc6737325f379099b485aa148ddf2ad550e2355e22f53921c6af338e9a44ed9b65cb4aeea80fd37ab2def00369237113799bf2945eec6b84e359c84e700d7a
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^2.13.0":
+"@clerk/types@npm:2.13.0, @clerk/types@npm:^2.13.0":
   version: 2.13.0
   resolution: "@clerk/types@npm:2.13.0"
   checksum: fb568825325d6433a58508f04eb74d159d435e2fa5881ffa7e482bc07f69541684d4779b8af49416092c1526a36b2d7e31616cc15567d6ef3cae358328b85a3d
@@ -6029,7 +6022,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@clerk/clerk-js": 3.11.0
     "@clerk/clerk-sdk-node": 3.5.0
-    "@clerk/types": 2.10.1
+    "@clerk/types": 2.13.0
     "@nhost/hasura-auth-js": 1.1.6
     "@nhost/nhost-js": 1.1.11
     "@supabase/supabase-js": 1.35.3
@@ -6452,7 +6445,7 @@ __metadata:
     typescript: 4.6.4
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.4
-    vscode-languageserver-types: 3.17.0
+    vscode-languageserver-types: 3.17.1
     yargs-parser: 21.0.1
   languageName: unknown
   linkType: soft
@@ -30627,10 +30620,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-languageserver-types@npm:3.17.0":
-  version: 3.17.0
-  resolution: "vscode-languageserver-types@npm:3.17.0"
-  checksum: f58fdc08b8abab89166f7ee9fb8029ed2ca4f22bdc38b7491b0e932c0ab6e9cddc41f46fccd7f224fbb79302413afb771244198f3e92e8cb6995beaf66db8628
+"vscode-languageserver-types@npm:3.17.1":
+  version: 3.17.1
+  resolution: "vscode-languageserver-types@npm:3.17.1"
+  checksum: 677bbed9280c207411303128b563bb0ba17aebc3fc0fa7166b480b6ac91c87f03a1971fec398a972a3a1013381804b6db795ce0f8e14e6fed6d1ab31583b2bbe
   languageName: node
   linkType: hard
 
