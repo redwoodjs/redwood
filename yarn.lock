@@ -6298,7 +6298,7 @@ __metadata:
     "@testing-library/user-event": 14.2.0
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.45
-    "@types/react-dom": 17.0.16
+    "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.3
     core-js: 3.22.5
     graphql: 16.5.0
@@ -6456,7 +6456,7 @@ __metadata:
     "@redwoodjs/auth": 1.4.0
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.45
-    "@types/react-dom": 17.0.16
+    "@types/react-dom": 17.0.17
     core-js: 3.22.5
     jest: 27.5.1
     lodash.isequal: 4.5.0
@@ -6554,7 +6554,7 @@ __metadata:
     "@types/jest": 27.5.1
     "@types/node": 16.11.34
     "@types/react": 17.0.45
-    "@types/react-dom": 17.0.16
+    "@types/react-dom": 17.0.17
     "@types/webpack": 5.28.0
     babel-jest: 27.5.1
     babel-plugin-inline-react-svg: 2.0.1
@@ -6581,7 +6581,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
     "@types/react": 17.0.45
-    "@types/react-dom": 17.0.16
+    "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.3
     core-js: 3.22.5
     graphql: 16.5.0
@@ -8938,12 +8938,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:17.0.16, @types/react-dom@npm:<18.0.0":
-  version: 17.0.16
-  resolution: "@types/react-dom@npm:17.0.16"
+"@types/react-dom@npm:17.0.17, @types/react-dom@npm:<18.0.0":
+  version: 17.0.17
+  resolution: "@types/react-dom@npm:17.0.17"
   dependencies:
     "@types/react": ^17
-  checksum: 57d3d12d4dcde5019ac282d178e58dc8fa82926337272eb2cb5dc492545883d4eef5fac6156d94c0ac76f0c1f1f8d0bf91d455d56184bad5365b759efa3e04f2
+  checksum: 1e330f6e1c0794562a8d3459357b5b401b6f23185991bdaf9e5025cad7ccace502662b071db765b07b0d79f313be1a7584c5ef775b1062d76585b6b9aec0693c
   languageName: node
   linkType: hard
 
