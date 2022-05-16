@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import jwksClient, { JwksError, SigningKeyNotFoundError } from 'jwks-rsa'
 
 export const auth0Config = () => {
-  const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env // ?
+  const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
 
   if (!AUTH0_DOMAIN || !AUTH0_AUDIENCE) {
     throw new Error('`AUTH0_DOMAIN` or `AUTH0_AUDIENCE` env vars are not set.')
@@ -21,7 +21,7 @@ const auth0Client = () => {
 }
 
 export const getAuth0SigningKey = async (header: any) => {
-  const kid = header.kid as string // ?
+  const kid = header.kid as string
 
   try {
     return await auth0Client().getSigningKey(kid)
@@ -68,9 +68,9 @@ export const verifyAuth0Token = async (
 ): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
     jwt.verify(
-      bearerToken, // ?
+      bearerToken,
       async (header) => {
-        return getAuth0PublicKey(header) // ?
+        return getAuth0PublicKey(header)
       },
       {
         audience: auth0Config().audience,
@@ -79,7 +79,7 @@ export const verifyAuth0Token = async (
       },
       (verifyError, decoded) => {
         if (verifyError) {
-          return reject(verifyError) // ?
+          return reject(verifyError)
         }
         resolve(
           typeof decoded === 'undefined'

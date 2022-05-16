@@ -104,27 +104,6 @@ describe('Auth0 Decoder', () => {
 
     const kid = keys[1].kid
 
-    test('verify handles error when signing key not found', async () => {
-      const { NODE_ENV } = process.env
-
-      process.env.NODE_ENV = 'production'
-      process.env.AUTH0_DOMAIN = 'redwoodjs.com'
-      process.env.AUTH0_AUDIENCE = 'web-app'
-
-      nock(auth0Config().issuer)
-        .persist()
-        .get('/.well-known/jwks.json')
-        .reply(200, jwksResponse)
-
-      expect(
-        await verifyAuth0Token(
-          'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5rRkNORUUxTkRGRE5UUTVSVFE1T1RFMVF6UkJNall5TXpZME5FSkNRVEpCTWpKQlFrWkNNQSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.DuDR1y8J7mAKr26AokDbL1XqyWzIHoeKJWTr9CIyWVWjqjGg39PCDpLMLRIejLUXAqSoOgsAc2on5YPFpTOiiZrcJlJmZI3c8MLEvCfRHsX1zLjp8WM9DrRi4UDLcGAnAbhV_4JU5kfEenDFk7aGeWYnT33zIZrVSW3-qFLXKwEKRBP5U6gpySW1D4DDir9tC5-YuU1cD5PuFBMJByu-dwiwfbf_yWEeb1jrdDg1_wFkCcF07UOQ1n_V9o_2U2VRmig0U-s4M-aB0ITN7tLSDQHljjWCfb8bOpP0DWqC4cHfVzffCAntlYbLbrsrk29uu1t98u0G8gFh1ARHJ8UuEw'
-        )
-      ).rejects.toThrow(SigningKeyNotFoundError)
-
-      process.env.NODE_ENV = NODE_ENV
-    })
-
     test('when signingKey is found', async () => {
       const { NODE_ENV } = process.env
 
