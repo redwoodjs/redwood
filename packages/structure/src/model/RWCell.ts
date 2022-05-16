@@ -43,7 +43,14 @@ export class RWCell extends RWComponent {
     if (!qs) {
       return undefined
     }
-    return parseGraphQL(qs)
+
+    try {
+      return parseGraphQL(qs)
+    } catch (e) {
+      console.error("Can't parse the graphql query string in", this.filePath)
+      console.error(e)
+      return undefined
+    }
   }
 
   // TODO: Move to RWCellQuery
