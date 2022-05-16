@@ -2356,15 +2356,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:4.3.1, @envelop/parser-cache@npm:^4.0.0":
-  version: 4.3.1
-  resolution: "@envelop/parser-cache@npm:4.3.1"
+"@envelop/parser-cache@npm:4.3.2, @envelop/parser-cache@npm:^4.0.0":
+  version: 4.3.2
+  resolution: "@envelop/parser-cache@npm:4.3.2"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
-    "@envelop/core": ^2.3.1
+    "@envelop/core": ^2.3.2
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 8f3f0169737c20e340d3c48df4ebf76ae7e89fb292e542df2fe115736f70d5ec9836e371bdfadad2ff25c522e5f1928f5d070551df5cd5c5cbcebe21d1d4052e
+  checksum: c699572a7089e24237dfabb87e03cb55190c1bd24787badb6c2b58cbc589df88d60b4f0c23bb6177f18f93300afe3c717117be0bc8d415277dee0577bfb47257
   languageName: node
   linkType: hard
 
@@ -6325,7 +6325,7 @@ __metadata:
     "@envelop/depth-limit": 1.5.2
     "@envelop/disable-introspection": 3.3.2
     "@envelop/filter-operation-type": 3.3.2
-    "@envelop/parser-cache": 4.3.1
+    "@envelop/parser-cache": 4.3.2
     "@envelop/testing": 4.3.2
     "@envelop/types": 2.0.0
     "@envelop/validation-cache": 4.3.1
