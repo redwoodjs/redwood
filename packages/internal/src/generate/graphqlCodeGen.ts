@@ -157,6 +157,9 @@ function getPluginConfig() {
     showUnusedMappers: false,
     customResolverFn: getResolverFnType(),
     mappers: prismaModels,
+    avoidOptionals: {
+      resolvers: true,
+    },
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
   }
 
@@ -171,12 +174,16 @@ export const getResolverFnType = () => {
     return `(
       args: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => Promise<Partial<TResult>> | Partial<TResult>;`
+    ) => TResult extends PromiseLike<infer TResult>
+      ? Promise<Partial<Awaited<TResult>>>
+      : Promise<Partial<TResult>> | Partial<TResult>;`
   } else {
     return `(
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => Promise<Partial<TResult>> | Partial<TResult>;`
+    ) => TResult extends PromiseLike<TResult>
+    ? Promise<Partial<Awaited<TResult>>>
+    : Promise<Partial<TResult>> | Partial<TResult>;`
   }
 }
 

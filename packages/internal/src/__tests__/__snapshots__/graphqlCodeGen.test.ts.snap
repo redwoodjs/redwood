@@ -11,7 +11,9 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => Promise<Partial<TResult>> | Partial<TResult>;
+    ) => TResult extends PromiseLike<TResult>
+    ? Promise<Partial<Awaited<TResult>>>
+    : Promise<Partial<TResult>> | Partial<TResult>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -195,22 +197,22 @@ export interface JSONObjectScalarConfig extends GraphQLScalarTypeConfig<Resolver
 }
 
 export type MutationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationcreateTodoArgs, 'body'>>;
-  renameTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationrenameTodoArgs, 'body' | 'id'>>;
-  updateTodoStatus?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationupdateTodoStatusArgs, 'id' | 'status'>>;
+  createTodo: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationcreateTodoArgs, 'body'>>;
+  renameTodo: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationrenameTodoArgs, 'body' | 'id'>>;
+  updateTodoStatus: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationupdateTodoStatusArgs, 'id' | 'status'>>;
 };
 
 export type QueryResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  currentUser?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  redwood?: Resolver<Maybe<ResolversTypes['Redwood']>, ParentType, ContextType>;
-  todos?: Resolver<Maybe<Array<Maybe<ResolversTypes['Todo']>>>, ParentType, ContextType>;
-  todosCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currentUser: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  redwood: Resolver<Maybe<ResolversTypes['Redwood']>, ParentType, ContextType>;
+  todos: Resolver<Maybe<Array<Maybe<ResolversTypes['Todo']>>>, ParentType, ContextType>;
+  todosCount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type RedwoodResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Redwood'] = ResolversParentTypes['Redwood']> = {
-  currentUser?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  prismaVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  currentUser: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  prismaVersion: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  version: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -219,28 +221,28 @@ export interface TimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type TodoResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Todo'] = ResolversParentTypes['Todo']> = {
-  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  body: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  status: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = RedwoodGraphQLContext> = {
-  BigInt?: GraphQLScalarType;
-  Date?: GraphQLScalarType;
-  DateTime?: GraphQLScalarType;
-  JSON?: GraphQLScalarType;
-  JSONObject?: GraphQLScalarType;
-  Mutation?: MutationResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  Redwood?: RedwoodResolvers<ContextType>;
-  Time?: GraphQLScalarType;
-  Todo?: TodoResolvers<ContextType>;
+  BigInt: GraphQLScalarType;
+  Date: GraphQLScalarType;
+  DateTime: GraphQLScalarType;
+  JSON: GraphQLScalarType;
+  JSONObject: GraphQLScalarType;
+  Mutation: MutationResolvers<ContextType>;
+  Query: QueryResolvers<ContextType>;
+  Redwood: RedwoodResolvers<ContextType>;
+  Time: GraphQLScalarType;
+  Todo: TodoResolvers<ContextType>;
 };
 
 export type DirectiveResolvers<ContextType = RedwoodGraphQLContext> = {
-  requireAuth?: requireAuthDirectiveResolver<any, any, ContextType>;
-  skipAuth?: skipAuthDirectiveResolver<any, any, ContextType>;
+  requireAuth: requireAuthDirectiveResolver<any, any, ContextType>;
+  skipAuth: skipAuthDirectiveResolver<any, any, ContextType>;
 };
 "
 `;
