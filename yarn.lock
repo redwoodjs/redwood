@@ -5993,7 +5993,7 @@ __metadata:
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
     "@types/yargs": 17.0.10
-    ansi-colors: 4.1.1
+    ansi-colors: 4.1.2
     aws-lambda: 1.0.7
     chalk: 4.1.2
     chokidar: 3.5.3
@@ -10116,10 +10116,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-colors@npm:4.1.1, ansi-colors@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "ansi-colors@npm:4.1.1"
-  checksum: 6086ade4336b4250b6b25e144b83e5623bcaf654d3df0c3546ce09c9c5ff999cb6a6f00c87e802d05cf98aef79d92dc76ade2670a2493b8dcb80220bec457838
+"ansi-colors@npm:4.1.2, ansi-colors@npm:^4.1.1":
+  version: 4.1.2
+  resolution: "ansi-colors@npm:4.1.2"
+  checksum: 316601c91cd158687b05e72caaabee6f7e53f4b9464b245efa480de88416cdf401c22dd5df9bfc0b7b9850495c5bc2a8876735491f0acf5ce19167f22df17205
   languageName: node
   linkType: hard
 
@@ -27170,7 +27170,7 @@ __metadata:
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.0
     all-contributors-cli: 6.20.0
-    ansi-colors: 4.1.1
+    ansi-colors: 4.1.2
     babel-jest: 27.5.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
