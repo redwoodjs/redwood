@@ -6518,7 +6518,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
-    ci-info: 3.3.0
+    ci-info: 3.3.1
     core-js: 3.22.5
     cross-undici-fetch: 0.1.27
     envinfo: 7.8.1
@@ -12379,10 +12379,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.3.0, ci-info@npm:^3.2.0":
+"ci-info@npm:3.3.0":
   version: 3.3.0
   resolution: "ci-info@npm:3.3.0"
   checksum: f23ec1b3c4717abb5fb9934fe0ab6db621cf767abd3832f07af2803e4809d21908d8b87321de4b79861dfe8105c08dba1803a9fb6346d5586b0c57db2bfbce3b
+  languageName: node
+  linkType: hard
+
+"ci-info@npm:3.3.1, ci-info@npm:^3.2.0":
+  version: 3.3.1
+  resolution: "ci-info@npm:3.3.1"
+  checksum: be82f632a323fb0be5cf8d45703fe0d21e6d7cef8e86c9c22eca42874468fbe6556b3eee9b9c7275072af2fdb6d03f0bd85e1aa5b617054873a4e1b4524ae354
   languageName: node
   linkType: hard
 
