@@ -63,10 +63,10 @@ export interface DefineScenario {
  * export StandardScenario = ScenarioSeed<Product, 'product', 'shirt'>
  *
  */
-export type ScenarioData<
-  TName extends string | number, // name of the prisma model
-  TModel, // the prisma model, imported from @prisma/client
-  TKeys extends string | number = string // (optional) each of the keys in your defineScenario e.g. shirt
+export declare type ScenarioData<
+  TModel, // the prisma model, imported from @prisma/client e.g. "Product"
+  TName extends string | number = string | number, // (optional) name of the prisma model e.g. "product"
+  TKeys extends string | number = string | number // (optional) name of each of the seeded scenarios e.g. "shirt"
 > = Record<TName, Record<TKeys, TModel>>
 
 interface TestFunctionWithScenario<TData> {
