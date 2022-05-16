@@ -60,7 +60,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.182",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.11.34",
+    "@types/node": "16.11.35",
     "@types/vscode": "1.67.0",
     "jest": "27.5.1",
     "typescript": "4.6.4"
