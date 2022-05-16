@@ -6008,7 +6008,7 @@ __metadata:
     qs: 6.10.3
     split2: 4.1.0
     typescript: 4.6.4
-    yargs: 17.5.0
+    yargs: 17.5.1
   bin:
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
@@ -6140,7 +6140,7 @@ __metadata:
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     typescript: 4.6.4
-    yargs: 17.5.0
+    yargs: 17.5.1
   bin:
     redwood: ./dist/index.js
     rw: ./dist/index.js
@@ -6177,7 +6177,7 @@ __metadata:
     tasuku: 2.0.0
     tempy: 1.0.1
     toml: 3.0.0
-    yargs: 17.5.0
+    yargs: 17.5.1
   bin:
     codemods: ./dist/codemods.js
   languageName: unknown
@@ -6525,7 +6525,7 @@ __metadata:
     jest: 27.5.1
     systeminformation: 5.11.14
     uuid: 8.3.2
-    yargs: 17.5.0
+    yargs: 17.5.1
   languageName: unknown
   linkType: soft
 
@@ -13394,7 +13394,7 @@ __metadata:
     jest: 27.5.1
     listr: 0.14.3
     typescript: 4.6.4
-    yargs: 17.5.0
+    yargs: 17.5.1
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
   languageName: unknown
@@ -31981,9 +31981,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.5.0, yargs@npm:^17.0.0, yargs@npm:^17.3.1":
-  version: 17.5.0
-  resolution: "yargs@npm:17.5.0"
+"yargs@npm:17.5.1, yargs@npm:^17.0.0, yargs@npm:^17.3.1":
+  version: 17.5.1
+  resolution: "yargs@npm:17.5.1"
   dependencies:
     cliui: ^7.0.2
     escalade: ^3.1.1
@@ -31992,7 +31992,7 @@ __metadata:
     string-width: ^4.2.3
     y18n: ^5.0.5
     yargs-parser: ^21.0.0
-  checksum: 5be7427351aedbccdc68b673651d91915fb62a17d932d8c7dff46f49ae1a691711a0d3a570de37c29311450e797956c122b87140fb807395e367abdd63cc6335
+  checksum: 349c823b772bc5383d56684bca8615020ae5cc0b81bacafe1ef268b281ade93528da1982b0f2dd898e0c678932d9147b8a2e93e341733622773caf7048196de4
   languageName: node
   linkType: hard
 
