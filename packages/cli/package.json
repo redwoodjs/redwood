@@ -62,7 +62,7 @@
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
-    "yargs": "17.5.0"
+    "yargs": "17.5.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
