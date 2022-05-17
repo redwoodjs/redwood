@@ -23,9 +23,9 @@
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "release": "node ./tasks/release/cli.mjs",
+    "release:test": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs",
     "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test",
-    "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "test:release-script": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs"
+    "test": "lerna run test --stream -- --colors --maxWorkers=4"
   },
   "resolutions": {
     "@types/react": "17.0.45",
@@ -37,10 +37,10 @@
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-textdocument": "1.0.4",
-    "vscode-languageserver-types": "3.17.0"
+    "vscode-languageserver-types": "3.17.1"
   },
   "devDependencies": {
-    "@actions/core": "1.8.0",
+    "@actions/core": "1.8.2",
     "@actions/exec": "1.1.1",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
@@ -55,18 +55,19 @@
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
-    "@playwright/test": "1.21.1",
+    "@playwright/test": "1.22.1",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
-    "@testing-library/user-event": "14.1.1",
+    "@testing-library/react-hooks": "8.0.0",
+    "@testing-library/user-event": "14.2.0",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "27.5.0",
+    "@types/jest": "27.5.1",
     "@types/jscodeshift": "0.11.5",
     "@types/lodash.template": "4.5.1",
     "@types/ncp": "2.0.5",
     "@types/prompts": "2.4.0",
     "all-contributors-cli": "6.20.0",
-    "ansi-colors": "4.1.1",
+    "ansi-colors": "4.1.3",
     "babel-jest": "27.5.1",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
@@ -97,6 +98,6 @@
     "typescript-transform-paths": "3.3.1",
     "zx": "6.1.0"
   },
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.2.1",
   "npmClient": "yarn"
 }

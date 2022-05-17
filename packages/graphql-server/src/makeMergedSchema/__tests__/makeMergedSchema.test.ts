@@ -1,4 +1,4 @@
-import { parse, GraphQLResolveInfo } from 'graphql'
+import { parse, GraphQLResolveInfo, graphql } from 'graphql'
 import gql from 'graphql-tag'
 
 import {
@@ -25,8 +25,16 @@ describe('makeMergedSchema', () => {
           inTypeServices: String
         }
 
+        type MySecondType {
+          name: String
+          inTypeResolver: String
+        }
+
+        union MyUnionType = MyOwnType | MySecondType
+
         type Query {
           myOwnType: MyOwnType @foo
+          searchType: MyUnionType @foo
           inResolverAndServices: String @foo
           inResolver: String @foo
           inServices: String @foo
@@ -39,10 +47,17 @@ describe('makeMergedSchema', () => {
             "MyOwnType: I'm defined in the resolver.",
           inTypeResolver: () => "MyOwnType: I'm defined in the resolver.",
         },
+        MySecondType: {
+          inTypeResolver: () => "MySecondType: I'm defined in the resolver.",
+        },
         Query: {
           inResolverAndServices: () => "I'm defined in the resolver.",
           inResolver: () => "I'm defined in the resolver.",
           foo: () => "I'm using @foo directive",
+          searchType: () => ({
+            name: 'MySecondType',
+            inTypeResolver: "MySecondType: I'm defined in the resolver.",
+          }),
         },
       },
     },
@@ -173,6 +188,21 @@ describe('makeMergedSchema', () => {
             {} as GraphQLResolveInfo
           )
       ).toEqual("MyOwnType: I'm defined in the services.")
+    })
+  })
+
+  describe('MyUnionType', () => {
+    it('supports querying a union and having __resolveType correctly created to decide what member it is', async () => {
+      const query = `query {
+        searchType {
+          ... on MySecondType {
+            name
+          }
+        }
+      }`
+      const res = await graphql({ schema, source: query })
+      expect(res.errors).toBeUndefined()
+      expect((res.data as any).searchType.name).toBe('MySecondType')
     })
   })
 
