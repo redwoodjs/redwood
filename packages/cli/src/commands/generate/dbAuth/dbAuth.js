@@ -13,7 +13,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
 const ROUTES = [
@@ -56,7 +56,7 @@ export const builder = (yargs) => {
     )
 
   // Merge generator defaults in
-  Object.entries(yargsDefaults).forEach(([option, config]) => {
+  Object.entries(getYargsDefaults()).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }

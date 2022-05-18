@@ -3,9 +3,9 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import {
-  apiCliOptions,
-  webCliOptions,
-  commonOptions,
+  getApiCliOptions,
+  getWebCliOptions,
+  getCommonOptions,
   apiServerHandler,
   webServerHandler,
   bothServerHandler,
@@ -22,18 +22,18 @@ const positionalArgs = yargs(hideBin(process.argv)).parseSync()._
 if (require.main === module) {
   if (positionalArgs.includes('api') && !positionalArgs.includes('web')) {
     apiServerHandler(
-      yargs(hideBin(process.argv)).options(apiCliOptions).parseSync()
+      yargs(hideBin(process.argv)).options(getApiCliOptions()).parseSync()
     )
   } else if (
     positionalArgs.includes('web') &&
     !positionalArgs.includes('api')
   ) {
     webServerHandler(
-      yargs(hideBin(process.argv)).options(webCliOptions).parseSync()
+      yargs(hideBin(process.argv)).options(getWebCliOptions()).parseSync()
     )
   } else {
     bothServerHandler(
-      yargs(hideBin(process.argv)).options(commonOptions).parseSync()
+      yargs(hideBin(process.argv)).options(getCommonOptions()).parseSync()
     )
   }
 }

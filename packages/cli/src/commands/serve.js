@@ -4,9 +4,9 @@ import path from 'path'
 import terminalLink from 'terminal-link'
 
 import {
-  apiCliOptions,
-  webCliOptions,
-  commonOptions,
+  getApiCliOptions,
+  getWebCliOptions,
+  getCommonOptions,
   apiServerHandler,
   webServerHandler,
   bothServerHandler,
@@ -25,19 +25,19 @@ export const builder = (yargs) => {
       command: '$0',
       descriptions: 'Run both api and web servers',
       handler: bothServerHandler,
-      builder: (yargs) => yargs.options(commonOptions),
+      builder: (yargs) => yargs.options(getCommonOptions()),
     })
     .command({
       command: 'api',
       description: 'start server for serving only the api',
       handler: apiServerHandler,
-      builder: (yargs) => yargs.options(apiCliOptions),
+      builder: (yargs) => yargs.options(getApiCliOptions()),
     })
     .command({
       command: 'web',
       description: 'start server for serving only the web side',
       handler: webServerHandler,
-      builder: (yargs) => yargs.options(webCliOptions),
+      builder: (yargs) => yargs.options(getWebCliOptions()),
     })
     .middleware((argv) => {
       // Make sure the relevant side has been built, before serving

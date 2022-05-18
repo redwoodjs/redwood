@@ -5,7 +5,7 @@ import path from 'path'
 import '../../../../lib/test'
 
 import { getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate'
+import { getYargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
 describe('editable columns', () => {
@@ -14,7 +14,7 @@ describe('editable columns', () => {
 
   beforeAll(async () => {
     files = await scaffold.files({
-      ...getDefaultArgs(defaults),
+      ...getDefaultArgs(defaults()),
       model: 'ExcludeDefault',
       tests: true,
       nestScaffoldByModel: true,

@@ -7,7 +7,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:'
@@ -50,7 +50,7 @@ export const builder = (yargs) => {
     )
 
   // Merge generator defaults in
-  Object.entries(yargsDefaults).forEach(([option, config]) => {
+  Object.entries(getYargsDefaults()).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }

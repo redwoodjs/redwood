@@ -22,7 +22,7 @@ export const builder = (yargs) =>
     )
 
 /** @type {Record<string, import('yargs').Options>} */
-export const yargsDefaults = {
+export const getYargsDefaults = () => ({
   force: {
     alias: 'f',
     default: false,
@@ -35,4 +35,4 @@ export const yargsDefaults = {
     description: 'Generate TypeScript files',
     type: 'boolean',
   },
-}
+})

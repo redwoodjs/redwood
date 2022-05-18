@@ -5,7 +5,7 @@ import path from 'path'
 import '../../../../lib/test'
 
 import { getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate'
+import { getYargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
 describe('in javascript (default) mode', () => {
@@ -13,7 +13,7 @@ describe('in javascript (default) mode', () => {
 
   beforeAll(async () => {
     files = await scaffold.files({
-      ...getDefaultArgs(defaults),
+      ...getDefaultArgs(defaults()),
       model: 'Post',
       tests: true,
       nestScaffoldByModel: true,

@@ -8,7 +8,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
 export const files = ({
@@ -92,7 +92,7 @@ export const description = 'Generate a Function'
 
 // This could be built using createYargsForComponentGeneration;
 // however, functions shouldn't have a `stories` option. createYargs...
-// should be reversed to provide `yargsDefaults` as the default configuration
+// should be reversed to provide `getYargsDefaults` as the default configuration
 // and accept a configuration such as its CURRENT default to append onto a command.
 export const builder = (yargs) => {
   yargs
@@ -108,7 +108,7 @@ export const builder = (yargs) => {
     )
 
   // Add default options, includes '--typescript', '--javascript', '--force', ...
-  Object.entries(yargsDefaults).forEach(([option, config]) => {
+  Object.entries(getYargsDefaults()).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }

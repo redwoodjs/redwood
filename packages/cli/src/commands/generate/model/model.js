@@ -6,7 +6,7 @@ import terminalLink from 'terminal-link'
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
 import { verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
@@ -34,7 +34,7 @@ export const builder = (yargs) => {
       )}`
     )
 
-  Object.entries(yargsDefaults).forEach(([option, config]) => {
+  Object.entries(getYargsDefaults()).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }

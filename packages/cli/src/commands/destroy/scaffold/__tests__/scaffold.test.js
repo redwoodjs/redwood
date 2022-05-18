@@ -5,7 +5,7 @@ import fs from 'fs'
 import '../../../../lib/test'
 
 import { getPaths, getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate'
+import { getYargsDefaults as defaults } from '../../../generate'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
@@ -32,7 +32,7 @@ describe('rw destroy scaffold', () => {
     beforeEach(async () => {
       fs.__setMockFiles({
         ...(await files({
-          ...getDefaultArgs(defaults),
+          ...getDefaultArgs(defaults()),
           model: 'Post',
           tests: false,
           nestScaffoldByModel: true,

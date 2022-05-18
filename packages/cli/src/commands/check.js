@@ -1,25 +1,27 @@
-import { getPaths } from '../lib'
-import c from '../lib/colors'
-
 export const command = 'check'
+
 export const aliases = ['diagnostics']
+
 export const description =
   'Get structural diagnostics for a Redwood project (experimental)'
 
-export const handler = async () => {
+export async function handler(argv) {
   const { printDiagnostics, DiagnosticSeverity } = await import(
     '@redwoodjs/structure'
   )
+  const { redwoodProject, colors } = argv
 
-  printDiagnostics(getPaths().base, {
+  printDiagnostics(redwoodProject.paths.base, {
     getSeverityLabel: (severity) => {
       if (severity === DiagnosticSeverity.Error) {
-        return c.error('error')
+        return colors.error('error')
       }
+
       if (severity === DiagnosticSeverity.Warning) {
-        return c.warning('warning')
+        return colors.warning('warning')
       }
-      return c.info('info')
+
+      return colors.info('info')
     },
   })
 }

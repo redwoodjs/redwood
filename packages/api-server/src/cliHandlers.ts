@@ -22,32 +22,47 @@ const sendProcessReady = () => {
   return process.send && process.send('ready')
 }
 
-export const commonOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
-  socket: { type: 'string' },
-} as const
+export const getCommonOptions = () =>
+  ({
+    port: {
+      default: getConfig().web?.port || 8910,
+      type: 'number',
+      alias: 'p',
+    },
+    socket: { type: 'string' },
+  } as const)
 
-export const apiCliOptions = {
-  port: { default: getConfig().api?.port || 8911, type: 'number', alias: 'p' },
-  socket: { type: 'string' },
-  apiRootPath: {
-    alias: ['rootPath', 'root-path'],
-    default: '/',
-    type: 'string',
-    desc: 'Root path where your api functions are served',
-    coerce: coerceRootPath,
-  },
-} as const
+export const getApiCliOptions = () =>
+  ({
+    port: {
+      default: getConfig().api?.port || 8911,
+      type: 'number',
+      alias: 'p',
+    },
+    socket: { type: 'string' },
+    apiRootPath: {
+      alias: ['rootPath', 'root-path'],
+      default: '/',
+      type: 'string',
+      desc: 'Root path where your api functions are served',
+      coerce: coerceRootPath,
+    },
+  } as const)
 
-export const webCliOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
-  socket: { type: 'string' },
-  apiHost: {
-    alias: 'api-host',
-    type: 'string',
-    desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
-  },
-} as const
+export const getWebCliOptions = () =>
+  ({
+    port: {
+      default: getConfig().web?.port || 8910,
+      type: 'number',
+      alias: 'p',
+    },
+    socket: { type: 'string' },
+    apiHost: {
+      alias: 'api-host',
+      type: 'string',
+      desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
+    },
+  } as const)
 
 interface ApiServerArgs extends Omit<HttpServerParams, 'app'> {
   apiRootPath: string // either user supplied or '/'

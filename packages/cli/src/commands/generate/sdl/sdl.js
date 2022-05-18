@@ -18,7 +18,7 @@ import {
 import c from '../../../lib/colors'
 import { pluralize } from '../../../lib/rwPluralize'
 import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
@@ -180,7 +180,7 @@ export const files = async ({ name, crud = true, tests, typescript }) => {
 }
 
 export const defaults = {
-  ...yargsDefaults,
+  ...getYargsDefaults(),
   crud: {
     default: true,
     description: 'Also generate mutations',

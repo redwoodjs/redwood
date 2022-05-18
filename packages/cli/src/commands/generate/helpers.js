@@ -12,7 +12,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
-import { yargsDefaults } from '../generate'
+import { getYargsDefaults } from '../generate'
 
 /**
  * Returns the path to a custom generator template, if found in the app.
@@ -132,7 +132,7 @@ export const createYargsForComponentGeneration = ({
   preTasksFn = (options) => options,
   /** filesFn is not used if generator implements its own `handler` */
   filesFn = () => ({}),
-  optionsObj = yargsDefaults,
+  optionsObj = getYargsDefaults(),
   positionalsObj = {},
   /** function that takes the options object and returns an array of listr tasks */
   includeAdditionalTasks = () => [],

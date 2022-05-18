@@ -9,7 +9,7 @@ import { getConfig } from '@redwoodjs/internal'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
@@ -87,7 +87,7 @@ export const { command, description, builder } =
     filesFn: files,
     positionalsObj,
     optionsObj: {
-      ...yargsDefaults,
+      ...getYargsDefaults(),
       type: {
         type: 'string',
         choices: ['validator', 'transformer'],

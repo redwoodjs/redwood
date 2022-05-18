@@ -1,16 +1,12 @@
-import fs from 'fs'
+export const command = 'lint [files..]'
 
-import execa from 'execa'
-import terminalLink from 'terminal-link'
+export const description = 'Lint files'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
+export async function builder(yargs) {
+  const { default: terminalLink } = await import('terminal-link')
 
-export const command = 'lint [path..]'
-export const description = 'Lint your files'
-export const builder = (yargs) => {
   yargs
-    .positional('path', {
+    .positional('files', {
       description:
         'Specify file(s) or directory(ies) to lint relative to project root',
       type: 'array',
@@ -28,26 +24,35 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ path, fix }) => {
+export async function handler(argv) {
+  const { default: execa } = await import('execa')
+  const { fix, files, redwoodProject } = argv
+
+  let command = ['yarn', 'eslint', fix && '--fix'].filter(Boolean)
+
+  /**
+   * If the user passed files, we lint those.
+   * Otherwise we lint both sides (if they're there).
+   */
+  if (files.length) {
+    command.push(...files)
+  } else {
+    const sidesToLint = [
+      redwoodProject.hasApiSide && 'api/src',
+      redwoodProject.hasWebSide && 'web/src',
+    ].filter(Boolean)
+
+    command.push(...sidesToLint)
+  }
+
   try {
-    const pathString = path?.join(' ')
-    const result = await execa(
-      'yarn eslint',
-      [
-        fix && '--fix',
-        !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
-        !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
-        pathString,
-      ].filter(Boolean),
-      {
-        cwd: getPaths().base,
-        shell: true,
-        stdio: 'inherit',
-      }
-    )
-    process.exit(result.exitCode)
+    const execaChildProcess = await execa.command(command.join(' '), {
+      cwd: redwoodProject.paths.base,
+      stdio: 'inherit',
+    })
+
+    process.exitCode = execaChildProcess.exitCode
   } catch (e) {
-    console.log(c.error(e.message))
-    process.exit(e?.exitCode || 1)
+    process.exitCode = e.exitCode
   }
 }

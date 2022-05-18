@@ -25,7 +25,7 @@ import {
 import c from '../../../lib/colors'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
@@ -656,7 +656,7 @@ export const builder = (yargs) => {
     )
 
   // Merge generator defaults in
-  Object.entries(yargsDefaults).forEach(([option, config]) => {
+  Object.entries(getYargsDefaults()).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }

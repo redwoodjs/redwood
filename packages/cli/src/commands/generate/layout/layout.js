@@ -1,5 +1,5 @@
 import { transformTSToJS } from '../../../lib'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -69,7 +69,7 @@ const optionsObj = {
     description: 'Generate with skip link',
     type: 'boolean',
   },
-  ...yargsDefaults,
+  ...getYargsDefaults(),
 }
 
 export const { command, description, builder, handler } =

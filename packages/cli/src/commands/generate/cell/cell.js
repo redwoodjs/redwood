@@ -6,7 +6,7 @@ import { transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { getSchema } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -171,7 +171,7 @@ export const { command, description, builder, handler } =
     componentName: 'cell',
     filesFn: files,
     optionsObj: {
-      ...yargsDefaults,
+      ...getYargsDefaults(),
       list: {
         alias: 'l',
         default: false,

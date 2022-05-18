@@ -6,10 +6,10 @@ import { fetch } from 'cross-undici-fetch'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
-const INDEX_FILE = path.join(getPaths().web.dist, 'index.html')
-const DEFAULT_INDEX = path.join(getPaths().web.dist, '200.html')
-
 export const getRootHtmlPath = () => {
+  const INDEX_FILE = path.join(getPaths().web.dist, 'index.html')
+  const DEFAULT_INDEX = path.join(getPaths().web.dist, '200.html')
+
   if (fs.existsSync(DEFAULT_INDEX)) {
     return DEFAULT_INDEX
   } else {

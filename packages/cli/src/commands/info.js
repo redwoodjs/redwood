@@ -1,11 +1,17 @@
-// inspired by gatsby/packages/gatsby-cli/src/create-cli.js and
-// and gridsome/packages/cli/lib/commands/info.js
-import envinfo from 'envinfo'
-import terminalLink from 'terminal-link'
+/**
+ * Inspired by:
+ *
+ * - https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-cli/src/create-cli.ts
+ * - https://github.com/gridsome/gridsome/blob/master/packages/cli/lib/commands/info.js
+ */
 
 export const command = 'info'
-export const description = 'Print your system environment information'
-export const builder = (yargs) => {
+
+export const description = 'Print environment information'
+
+export async function builder(yargs) {
+  const { default: terminalLink } = await import('terminal-link')
+
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
@@ -13,9 +19,12 @@ export const builder = (yargs) => {
     )}`
   )
 }
-export const handler = async () => {
+
+export async function handler() {
+  const { run } = await import('envinfo')
+
   try {
-    const output = await envinfo.run({
+    const output = await run({
       System: ['OS', 'Shell'],
       Binaries: ['Node', 'Yarn'],
       Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
@@ -27,6 +36,6 @@ export const handler = async () => {
   } catch (e) {
     console.log('Error: Cannot access environment info')
     console.log(e)
-    process.exit(1)
+    process.exitCode = 1
   }
 }

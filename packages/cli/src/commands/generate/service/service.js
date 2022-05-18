@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link'
 import { transformTSToJS } from '../../../lib'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { getYargsDefaults } from '../../generate'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
@@ -327,7 +327,7 @@ export const files = async ({
 }
 
 export const defaults = {
-  ...yargsDefaults,
+  ...getYargsDefaults(),
   tests: {
     description: 'Generate test files',
     type: 'boolean',

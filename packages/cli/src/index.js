@@ -1,31 +1,58 @@
 #!/usr/bin/env node
-import fs from 'fs'
-import path from 'path'
+
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { config } from 'dotenv-defaults'
-import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
 import { getPaths, getConfigPath } from '@redwoodjs/internal'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
+import colors from './lib/colors'
+
+yargs(hideBin(process.argv))
+  .scriptName('rw')
+  .middleware([
+    getCwdMiddleware,
+    getRedwoodProjectMiddleware,
+    getColorsMiddleware,
+    loadDotEnvDefaultsMiddleware,
+    telemetryMiddleware,
+  ])
+  .option('cwd', {
+    describe: 'Working directory to use (where `redwood.toml` is located.)',
+  })
+  .commandDir('./commands')
+  .example(
+    'yarn rw g page home /',
+    "\"Create a page component named 'Home' at path '/'\""
+  )
+  .demandCommand()
+  .strict()
+  .parse()
+
 /**
  * The current working directory can be set via:
- * 1. A `--cwd` option
- * 2. The `RWJS_CWD` env-var
- * 3. Found by traversing directories upwards for the first `redwood.toml`
  *
- * This middleware parses, validates, and sets current working directory
+ * 1. the `cwd` option
+ * 2. the `RWJS_CWD` env var
+ * 3. found by traversing directories upwards for the first `redwood.toml`
+ *
+ * This middleware parses, validates, and sets the current working directory
  * in the order above.
  */
-const getCwdMiddleware = (argv) => {
+function getCwdMiddleware(argv) {
   let configPath
 
   try {
     let cwd
+
     if (argv.cwd) {
       cwd = argv.cwd
-      // We delete the argument because it's not actually referenced in CLI,
-      // we use the `RWJS_CWD` env-var,
+      // We delete the property because it's not actually referenced in the CLI—
+      // (we use the `RWJS_CWD` env-var)—
       // and it conflicts with "forwarding" commands such as test and prisma.
       delete argv.cwd
     } else if (process.env.RWJS_CWD) {
@@ -41,40 +68,38 @@ const getCwdMiddleware = (argv) => {
 
     process.env.RWJS_CWD = cwd
   } catch (e) {
-    console.error()
-    console.error('Error: Redwood CLI could not find your config file.')
-    console.error(`Expected '${configPath}'`)
-    console.error()
-    console.error(`Did you run Redwood CLI in a RedwoodJS project?`)
-    console.error(`Or specify an incorrect '--cwd' option?`)
-    console.error()
+    console.error([
+      '',
+      'Error: Redwood CLI could not find your config file.',
+      `Expected '${configPath}'`,
+      '',
+      `Did you run Redwood CLI in a RedwoodJS project?`,
+      `Or specify an incorrect '--cwd' option?`,
+      '',
+    ])
+
     process.exit(1)
   }
 }
 
-const loadDotEnvDefaultsMiddleware = () => {
+function getRedwoodProjectMiddleware(argv) {
+  const paths = getPaths()
+
+  argv.redwoodProject = {
+    paths: paths,
+    hasApiSide: fs.existsSync(paths.api.src),
+    hasWebSide: fs.existsSync(paths.web.src),
+  }
+}
+
+function getColorsMiddleware(argv) {
+  argv.colors = colors
+}
+
+function loadDotEnvDefaultsMiddleware(argv) {
   config({
-    path: path.join(getPaths().base, '.env'),
-    defaults: path.join(getPaths().base, '.env.defaults'),
+    path: path.join(argv.redwoodProject.paths.base, '.env'),
+    defaults: path.join(argv.redwoodProject.paths.base, '.env.defaults'),
     encoding: 'utf8',
   })
 }
-
-// eslint-disable-next-line no-unused-expressions
-yargs
-  .scriptName('rw')
-  .middleware([
-    getCwdMiddleware,
-    loadDotEnvDefaultsMiddleware,
-    telemetryMiddleware,
-  ])
-  .option('cwd', {
-    describe: 'Working directory to use (where `redwood.toml` is located.)',
-  })
-  .commandDir('./commands')
-  .example(
-    'yarn rw g page home /',
-    "\"Create a page component named 'Home' at path '/'\""
-  )
-  .demandCommand()
-  .strict().argv
