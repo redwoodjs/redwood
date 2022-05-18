@@ -13,13 +13,13 @@ Deploying from a client (like your own development machine) consists of running 
 First time deploy:
 
 ```bash
-yarn rw deploy baremetal --first-run
+yarn rw deploy baremetal production --first-run
 ```
 
 Subsequent deploys:
 
 ```bash
-yarn rw deploy baremetal
+yarn rw deploy baremetal production
 ```
 
 ## Deployment Lifecycle
@@ -140,7 +140,7 @@ path = "/var/www/app"
 processNames = ["serve"]
 repo = "git@github.com:myorg/myapp.git"
 branch = "main"
-
+keepReleases = 5
 ```
 
 This lists a single server, in the `production` environment, providing the hostname and connection details (`username` and `agentForward`), which `sides` are hosted on this server (by default it's both web and api sides), the `path` to the app code and then which PM2 service names should be (re)started on this server.
@@ -247,8 +247,6 @@ At deploy time, include the environment in the command:
 yarn rw deploy baremetal staging
 ```
 
-Leaving off the environment from the command assumes `production`. If your server list does not include the environment name in the key, as in `[[servers]]` instead of `[[servers.production]]`, it is assumed that all servers listed are in the `production` environment.
-
 Note that the codebase shares a single `ecosystem.config.js` file. If you need a different set of services running in different environments you'll need to simply give them a unique name and reference them in the `processNames` option of `deploy.toml` (see the additional `stage-logging` process in the above example).
 
 ## Server Setup
@@ -298,7 +296,7 @@ There are techniques for getting `node`, `npm` and `yarn` to be availble without
 Back on your development machine, enter your details in `deploy.toml`, commit it and push it up, and then try a first deploy:
 
 ```bash
-yarn rw deploy baremetal --first-run
+yarn rw deploy baremetal production --first-run
 ```
 
 If there are any issues the deploy should stop and you'll see the error message printed to the console.
@@ -328,6 +326,7 @@ yarn rw prisma migrate deploy
 yarn rw prisma generate
 yarn rw dataMigrate up
 yarn rw build
+ln -nsf "$(pwd)" ../current
 ```
 
 If they worked for you, the deploy process should have no problem as it runs the same commands (after all, it connects via SSH and runs the same commands you just did!)
@@ -401,7 +400,7 @@ There are several ways you can customize the deploys steps, whether that's skipp
 If you want to speed things up you can skip one or more steps during the deploy. For example, if you have no database migrations, you can skip them completely and save some time:
 
 ```bash
-yarn rw deploy baremetal --no-migrate
+yarn rw deploy baremetal production --no-migrate
 ```
 
 Run `yarn rw deploy baremetal --help` for the full list of flags. You can set them as `--migrate=false` or use the `--no-migrate` variant.
@@ -412,7 +411,7 @@ Baremetal supports running your own custom commands before or after the regular 
 
 1. `update` - cloning the codebase
 2. `symlinkEnv` - symlink the new deploy's `.env` to shared one in the app dir
-3. `install` - `yarn install` 
+3. `install` - `yarn install`
 4. `migrate` - database migrations
 5. `build` - `yarn build` (your custom before/after command is run for each side being built)
 6. `symlinkCurrent` - symlink the new deploy dir to `current` in the app dir
@@ -427,7 +426,7 @@ You can define your before/after commands in three different places:
 
 :::caution
 
-Custom commands are run in the new **deploy** directory, not the root of your application directory. During a deploy the `current` symlink will point to the previous directory while your code is executed in the new one, before the `current` symlink location is updated. 
+Custom commands are run in the new **deploy** directory, not the root of your application directory. During a deploy the `current` symlink will point to the previous directory while your code is executed in the new one, before the `current` symlink location is updated.
 
 ```bash
 drwxrwxr-x  5 ubuntu ubuntu 4096 May 10 18:20 ./
@@ -520,13 +519,13 @@ Would result in the commands running in this order, all before running `yarn ins
 If you deploy and find something has gone horribly wrong, you can rollback your deploy to the previous release:
 
 ```bash
-yarn rw deploy baremetal --rollback
+yarn rw deploy baremetal production --rollback
 ```
 
 You can even rollback multiple deploys, up to the total number you still have denoted with the `keepReleases` option:
 
 ```bash
-yarn rw deploy baremetal --rollback 3
+yarn rw deploy baremetal production --rollback 3
 ```
 
 Note that this will *not* rollback your database—if you had a release that changed the database, that updated database will still be in effect, but with the previous version of the web and api sides. Trying to undo database migrations is a very difficult proposition and isn't even possible in many cases.
@@ -538,7 +537,7 @@ Make sure to thoroughly test releases that change the database before doing it f
 If you find that you have a particular complex deploy, one that may involve incompatible database changes with the current codebase, or want to make sure that database changes don't occur while in the middle of a deploy, you can put up a maintenance page:
 
 ```bash
-yarn rw deploy baremetal --maintenance up
+yarn rw deploy baremetal production --maintenance up
 ```
 
 It does this by replacing `web/dist/200.html` with `web/src/maintenance.html`. This means any new web requests, at any URL, will show the maintenance page. This process also stops any services listed in the `processNames` option of `deploy.toml`—this is important for the api server as it will otherwise keep serving requests to users currently running the app, even though no *new* users can get the Javascript packages required to start a new session in their browser.
@@ -546,7 +545,7 @@ It does this by replacing `web/dist/200.html` with `web/src/maintenance.html`. T
 You can remove the maintenance page with:
 
 ```bash
-yarn rw deploy baremetal --maintenance down
+yarn rw deploy baremetal production --maintenance down
 ```
 
 Note that the maintenance page will automatically come down as the result of a new deploy as it checks out a new copy of the codebase (with a brand new copy of `web/dist/200.html` and will automatically restart services (bring them all back online).
