@@ -299,8 +299,6 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
           await symlinkCurrentCommand(
             dirs[rollbackIndex],
             ssh,
-            serverConfig,
-            task,
             serverConfig.path
           )
         } else {

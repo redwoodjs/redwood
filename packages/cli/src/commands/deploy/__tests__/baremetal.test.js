@@ -1,5 +1,3 @@
-import path from 'path'
-
 import Listr from 'listr'
 
 jest.mock('@redwoodjs/internal', () => {
@@ -701,7 +699,7 @@ describe('deployTasks', () => {
   })
 })
 
-describe.only('commands', () => {
+describe('commands', () => {
   it('contains a top-level task for each server in an environment', () => {
     const prodServers = baremetal.commands(
       { environment: 'production', releaseDir: '2022051120000' },
