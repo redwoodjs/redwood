@@ -38,6 +38,28 @@ export type CellFailureProps<TVariables = any> = Partial<
   }
 >
 
+// aka guarantee that all properties in T exist
+// This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
+type Guaranteed<T> = {
+  [K in keyof T]-?: NonNullable<T[K]>
+}
+
+/**
+ * Use this type, if you are forwarding on the data from your Cell's Success component
+ * Because Cells automatically checks for "empty", or "errors" - if you receive the data type in your
+ * Success component, it means the data is guaranteed (and non-optional)
+ *
+ * @params TData = Type of data based on your graphql query. This can be imported from 'types/graphql'
+ * @example
+ * import type {FindPosts} from 'types/graphql'
+ *
+ * const { post } = CellSuccessData<FindPosts>
+ *
+ * post.id // post is non optional, so no need to do post?.id
+ *
+ */
+export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
+
 /**
  * @MARK not sure about this partial, but we need to do this for tests and storybook.
  *
@@ -52,7 +74,7 @@ export type CellSuccessProps<TData = any, TVariables = any> = Partial<
     updating: boolean
   }
 > &
-  A.Compute<TData> // pre-computing makes the types more readable on hover
+  A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
 /**
  * A coarse type for the `data` prop returned by `useQuery`.

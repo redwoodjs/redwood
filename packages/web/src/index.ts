@@ -19,6 +19,7 @@ export {
   CellFailureProps,
   CellLoadingProps,
   CellSuccessProps,
+  CellSuccessData,
 } from './components/createCell'
 
 export * from './components/RedwoodProvider'

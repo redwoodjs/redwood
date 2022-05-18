@@ -4,6 +4,14 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
+import type { CellSuccessData } from '@redwoodjs/web'
+
+
+import type {
+  Find${singularPascalName}ById,
+  Delete${singularPascalName}MutationVariables
+} from 'types/graphql'
+
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
     delete${singularPascalName}(id: $id) {
@@ -23,7 +31,7 @@ const formatEnum = (values: string | string[] | null | undefined) => {
   }
 }
 
-const jsonDisplay = (obj) => {
+const jsonDisplay = (obj: unknown) => {
   return (
     <pre>
       <code>{JSON.stringify(obj, null, 2)}</code>
@@ -31,7 +39,7 @@ const jsonDisplay = (obj) => {
   )
 }
 
-const timeTag = (datetime) => {
+const timeTag = (datetime?: string) => {
   return (
     datetime && (
       <time dateTime={datetime} title={datetime}>
@@ -41,11 +49,13 @@ const timeTag = (datetime) => {
   )
 }
 
-const checkboxInputTag = (checked) => {
+const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const ${singularPascalName} = ({ ${singularCamelName} }) => {
+interface ${singularPascalName}Props extends CellSuccessData<Find${singularPascalName}ById> {}
+
+const ${singularPascalName} = ({ ${singularCamelName} }: ${singularPascalName}Props) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')
@@ -56,7 +66,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
     },
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: Delete${singularPascalName}MutationVariables['id']) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
       delete${singularPascalName}({ variables: { id } })
     }
@@ -66,7 +76,9 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">${singularPascalName} {${singularCamelName}.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            ${singularPascalName} {${singularCamelName}?.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
@@ -83,7 +95,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
+          to={routes.${editRouteName}({ id: ${singularCamelName}?.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -91,7 +103,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(${singularCamelName}.id)}
+          onClick={() => onDeleteClick(${singularCamelName}?.id)}
         >
           Delete
         </button>
