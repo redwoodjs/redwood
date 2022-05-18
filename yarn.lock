@@ -6082,6 +6082,7 @@ __metadata:
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
+    title-case: 3.0.3
     typescript: 4.6.4
     yargs: 17.5.1
   bin:
