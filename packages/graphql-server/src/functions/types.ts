@@ -20,7 +20,7 @@ export type GetCurrentUser = (
   req?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
-export type GenerateGraphiQLHeaders = () => string
+export type GenerateGraphiQLHeader = () => Record<string, unknown>
 
 export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
@@ -135,9 +135,9 @@ export interface GraphQLHandlerOptions {
    */
   graphiQLEndpoint?: string
   /**
-   * @description Function that returns custom headers (as a string) for the GraphQL playground.
+   * @description Function that returns custom headers or mock payload to be signed as JWT token for GraphiQL.
    *
-   * These headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
+   * Headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
    */
-  generateGraphiQLHeaders?: GenerateGraphiQLHeaders
+  generateGraphiQLHeader?: GenerateGraphiQLHeader
 }

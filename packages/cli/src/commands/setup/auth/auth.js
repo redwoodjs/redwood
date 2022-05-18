@@ -26,7 +26,7 @@ const OUTPUT_PATHS = {
   ),
 }
 
-const getGraphqlPath = () =>
+export const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
 const getWebAppPath = () => getPaths().web.app

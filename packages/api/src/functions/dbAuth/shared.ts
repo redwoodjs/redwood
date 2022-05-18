@@ -44,9 +44,20 @@ export const getSession = (text?: string) => {
 // Convenience function to get session, decrypt, and return session data all
 // at once. Accepts the `event` argument from a Lambda function call.
 export const dbAuthSession = (event: APIGatewayProxyEvent) => {
-  if (event.headers.cookie) {
+  if (
+    event.headers.cookie ||
+    JSON.parse(event.body ?? '{}').extensions.headers.cookie
+  ) {
+    console.log(
+      'dbAuthSession',
+      event.headers.cookie,
+      JSON.parse(event.body ?? '{}').extensions.headers.cookie
+    )
     const [session, _csrfToken] = decryptSession(
-      getSession(event.headers.cookie)
+      getSession(
+        event.headers.cookie ??
+          JSON.parse(event.body ?? '{}').extensions.headers.cookie
+      )
     )
     return session
   } else {

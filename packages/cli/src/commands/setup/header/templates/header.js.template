@@ -1,0 +1,5 @@
+const generateGraphiQLHeader = () => {
+  return ${header}
+}
+
+export default generateGraphiQLHeader
