@@ -653,6 +653,17 @@ And there you have it.
     <td align="center"><a href="https://github.com/zzyyxxww"><img src="https://avatars.githubusercontent.com/u/4072352?v=4" width="100px;" alt=""/><br /><sub><b>hello there</b></sub></a></td>
     <td align="center"><a href="https://github.com/llmaboi"><img src="https://avatars.githubusercontent.com/u/34942041?v=4" width="100px;" alt=""/><br /><sub><b>llmaboi</b></sub></a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://www.finesoft.net/"><img src="https://avatars.githubusercontent.com/u/3767680?v=4" width="100px;" alt=""/><br /><sub><b>Changsoon Bok</b></sub></a></td>
+    <td align="center"><a href="https://github.com/merceyz"><img src="https://avatars.githubusercontent.com/u/3842800?v=4" width="100px;" alt=""/><br /><sub><b>Kristoffer K.</b></sub></a></td>
+    <td align="center"><a href="http://www.creativesoapbox.com/"><img src="https://avatars.githubusercontent.com/u/940266?v=4" width="100px;" alt=""/><br /><sub><b>Justin Kuntz</b></sub></a></td>
+    <td align="center"><a href="https://github.com/paineleffler"><img src="https://avatars.githubusercontent.com/u/9116535?v=4" width="100px;" alt=""/><br /><sub><b>Paine Leffler</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pvenable"><img src="https://avatars.githubusercontent.com/u/590685?v=4" width="100px;" alt=""/><br /><sub><b>Paul Venable</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/PeterChen1997/MyBlog/issues"><img src="https://avatars.githubusercontent.com/u/21072589?v=4" width="100px;" alt=""/><br /><sub><b>Peter Chen</b></sub></a></td>
+    <td align="center"><a href="https://github.com/YannBirba"><img src="https://avatars.githubusercontent.com/u/66469030?v=4" width="100px;" alt=""/><br /><sub><b>Yann</b></sub></a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
