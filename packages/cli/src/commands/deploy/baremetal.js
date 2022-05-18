@@ -373,7 +373,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   tasks.push(
     commandWithLifecycleEvents({
       name: 'update',
-      config,
+      config: { ...config, cmdPath: serverConfig.path },
       skip: !yargs.update,
       command: {
         title: `Cloning \`${serverConfig.branch}\` branch...`,
@@ -548,7 +548,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   tasks.push(
     commandWithLifecycleEvents({
       name: 'cleanup',
-      config,
+      config: { ...config, cmdPath: serverConfig.path },
       skip: !yargs.cleanup,
       command: {
         title: `Cleaning up old deploys...`,
