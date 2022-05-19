@@ -102,7 +102,7 @@ interface FieldProps<
   onChange?: React.ChangeEventHandler<Element>
 }
 
-type UseErrorStylesProps = Pick<
+export type UseErrorStylesProps = Pick<
   FieldProps,
   'name' | 'errorClassName' | 'errorStyle' | 'className' | 'style'
 >
@@ -399,7 +399,7 @@ const setCoercion = (
   )
 }
 
-type UseRegisterProps<
+export type UseRegisterProps<
   Element extends
     | HTMLTextAreaElement
     | HTMLSelectElement
@@ -1008,6 +1008,8 @@ export {
   TextAreaField,
   SelectField,
   Submit,
+  useErrorStyles,
+  useRegister,
 }
 
 export * from 'react-hook-form'
