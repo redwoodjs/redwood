@@ -28,8 +28,5 @@
   "scripts": {
     "postinstall": ""
   },
-  "packageManager": "yarn@3.2.1",
-  "resolutions": {
-    "glob": "7.2.3"
-  }
+  "packageManager": "yarn@3.2.1"
 }
