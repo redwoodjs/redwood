@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { merge } = require('webpack-merge')
+const { merge, mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const {
@@ -154,7 +154,14 @@ const mergeUserStorybookConfig = (baseConfig) => {
   }
 
   const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
-  return merge(baseConfig, userStorybookConfig)
+
+  return mergeWithCustomize({
+    customizeArray(rwConfig, userConfig, key) {
+      if (key === 'addons') {
+        return [...new Set([...rwConfig, ...userConfig])]
+      }
+    },
+  })(baseConfig, userStorybookConfig)
 }
 
 /** @returns {import('webpack').Configuration} Webpack Configuration with storybook config */
