@@ -6,7 +6,7 @@ import * as DbAuthError from './errors'
 // Extracts the cookie from an event, handling lower and upper case header
 // names.
 export const extractCookie = (event: APIGatewayProxyEvent) => {
-  return event.headers.cookie || event.headers.Cookie;
+  return event.headers.cookie || event.headers.Cookie
 }
 
 // decrypts the session cookie and returns an array: [data, csrf]
