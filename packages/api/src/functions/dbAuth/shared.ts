@@ -3,6 +3,12 @@ import CryptoJS from 'crypto-js'
 
 import * as DbAuthError from './errors'
 
+// Extracts the cookie from an event, handling lower and upper case header
+// names.
+export const extractCookie = (event: APIGatewayProxyEvent) => {
+  return event.headers.cookie || event.headers.Cookie;
+}
+
 // decrypts the session cookie and returns an array: [data, csrf]
 export const decryptSession = (text: string | null) => {
   if (!text || text.trim() === '') {
@@ -46,7 +52,7 @@ export const getSession = (text?: string) => {
 export const dbAuthSession = (event: APIGatewayProxyEvent) => {
   if (event.headers.cookie || event.headers.Cookie) {
     const [session, _csrfToken] = decryptSession(
-      getSession(event.headers.cookie || event.headers.Cookie)
+      getSession(extractCookie(event))
     )
     return session
   } else {

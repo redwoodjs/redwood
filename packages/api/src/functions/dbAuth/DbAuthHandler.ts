@@ -13,7 +13,7 @@ import {
 import { normalizeRequest } from '../../transforms'
 
 import * as DbAuthError from './errors'
-import { decryptSession, getSession } from './shared'
+import { decryptSession, extractCookie, getSession } from './shared'
 
 interface DbAuthHandlerOptions {
   /**
@@ -221,7 +221,7 @@ export class DbAuthHandler {
     this.event = event
     this.context = context
     this.options = options
-    this.cookie = this.event.headers.cookie || this.event.headers.Cookie;
+    this.cookie = extractCookie(this.event)
 
     this._validateOptions()
 
