@@ -312,7 +312,7 @@ export {
 
 /**
  * gets the announcement for the new page.
- * called in page-loader's `componentDidUpdate`.
+ * called in one of active-route-loader's `useEffect`.
  *
  * the order of priority is:
  * 1. RouteAnnouncement (the most specific one)
