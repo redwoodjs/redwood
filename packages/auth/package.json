@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -45,7 +45,7 @@
     "magic-sdk": "8.1.1",
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
-    "supertokens-auth-react": "0.20.5",
+    "supertokens-auth-react": "0.21.3",
     "typescript": "4.6.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
