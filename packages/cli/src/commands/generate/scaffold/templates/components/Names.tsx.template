@@ -6,8 +6,7 @@ import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from '${importComponentNamesCell}'
 
-import type { Find${pluralPascalName} } from 'types/graphql'
-import type { CellSuccessData } from '@redwoodjs/web'
+import type { ${singularPascalName}, Delete${singularPascalName}MutationVariables } from 'types/graphql'
 
 
 const DELETE_${singularConstantName}_MUTATION = gql`
@@ -58,9 +57,11 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface ${pluralPascalName}ListProps extends CellSuccessData<Find${pluralPascalName}> {}
+interface ${pluralPascalName}ListProps {
+  ${pluralCamelName}: ${singularPascalName}[]
+}
 
-const ${pluralPascalName}List = ({ ${pluralCamelName} }: ${pluralPascalName}ListProps ) => {
+const ${pluralPascalName}List = ({ ${pluralCamelName} }: ${pluralPascalName}ListProps) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')
