@@ -4,7 +4,7 @@ description: An ORM with a natural interface
 
 # RedwoodRecord
 
-> RedwoodRecord is currently considered to be **Experimental**. We are hoping folks will start using it and give us feedback to help shape it's development and developer experience.
+> RedwoodRecord is currently considered to be **Experimental**. We are hoping folks will start using it and give us feedback to help shape its development and developer experience.
 
 RedwoodRecord is an ORM ([Object-relational Mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)) built on top of Prisma. It may be extended in the future to wrap other database-access packages.
 
