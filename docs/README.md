@@ -13,10 +13,10 @@ yarn start
 ```
 
 #### Making Changes
-Changes should be made in the `./docs` directory and not in the generated `versioned_docs` or `versioned_sidebars` directories directly.
 
-After the ```yarn start``` command ran successfully you should be able to see your changes in the local [Canary Version](http://localhost:3000/docs/canary/index)
+Changes should be made in the `./docs` directory and not in the generated `./versioned_docs` or `./versioned_sidebars` directories directly.
 
+After running `yarn start`, you should be able to see your changes in the local [Canary Version](http://localhost:3000/docs/canary/index).
 
 #### Internal linking
 
