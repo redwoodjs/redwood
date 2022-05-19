@@ -156,9 +156,9 @@ const mergeUserStorybookConfig = (baseConfig) => {
   const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
 
   return mergeWithCustomize({
-    customizeArray(rwConfig, userConfig, key) {
+    customizeArray(baseConfig, userStorybookConfig, key) {
       if (key === 'addons') {
-        return [...new Set([...rwConfig, ...userConfig])]
+        return [...new Set([...baseConfig, ...userStorybookConfig])]
       }
     },
   })(baseConfig, userStorybookConfig)
