@@ -7,6 +7,10 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+import type { ${singularPascalName}, Update${singularPascalName}Input } from 'types/graphql'
+import type { RwGqlError } from '@redwoodjs/forms'
+
+
 <% if (fieldsToImport.includes('DatetimeLocalField')) { %>
 const formatDatetime = (value) => {
   if (value) {
@@ -15,8 +19,15 @@ const formatDatetime = (value) => {
 }
 <% } %>
 
-const ${singularPascalName}Form = (props) => {
-  const onSubmit = (data) => {
+interface ${singularPascalName}FormProps {
+  ${singularCamelName}: ${singularPascalName}
+  onSave: (data: Update${singularPascalName}Input, id: ${singularPascalName}['id']) => void
+  error: RwGqlError
+  loading: boolean
+}
+
+const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
+  const onSubmit = (data: Record<string, any>) => {
 
   <% editableColumns.forEach(column => { %>
     <% if (column.isEnum && !column.isList && !column.isRequired) { %>
@@ -30,7 +41,7 @@ const ${singularPascalName}Form = (props) => {
       }
     <% } %>
   <% }) %>
-    props.onSave(data, props?.${singularCamelName}?.id)
+    props.onSave(data as ${singularPascalName}, props.${singularCamelName}.id)
   }
 
   return (

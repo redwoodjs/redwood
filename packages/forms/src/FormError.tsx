@@ -1,27 +1,27 @@
 import { GraphQLError } from 'graphql'
 
-interface ServerParseError extends Error {
+export interface ServerParseError extends Error {
   response: Response
   statusCode: number
   bodyText: string
 }
 
-interface ServerError extends Error {
+export interface ServerError extends Error {
   response: Response
   statusCode: number
   result: Record<string, any>
 }
 
-interface RWGqlError {
+export interface RwGqlError {
   message: string
   graphQLErrors: ReadonlyArray<GraphQLError>
   networkError: Error | ServerParseError | ServerError | null
 }
 
-type RWGqlErrorProperties = Record<string, Record<string, string[]>>
+export type RwGqlErrorProperties = Record<string, Record<string, string[]>>
 
 interface FormErrorProps {
-  error?: RWGqlError
+  error?: RwGqlError
   wrapperClassName?: string
   wrapperStyle?: React.CSSProperties
   titleClassName?: string
@@ -67,7 +67,7 @@ const FormError = ({
 
     const properties = error.graphQLErrors[0].extensions?.[
       'properties'
-    ] as RWGqlErrorProperties
+    ] as RwGqlErrorProperties
 
     const propertyMessages = properties && properties['messages']
 

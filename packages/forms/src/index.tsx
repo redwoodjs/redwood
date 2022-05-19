@@ -484,7 +484,7 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-export interface FormProps
+export interface FormProps<TData = Record<string, any>>
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
@@ -519,10 +519,7 @@ export interface FormProps
    * @see {@link https://react-hook-form.com/api/useform}
    */
   config?: UseFormProps
-  onSubmit?: (
-    value: Record<string, any>,
-    event?: React.BaseSyntheticEvent
-  ) => void
+  onSubmit?: (value: TData, event?: React.BaseSyntheticEvent) => void
 }
 
 /**
@@ -1009,5 +1006,7 @@ export {
   SelectField,
   Submit,
 }
+
+export type { ServerError, RwGqlError, ServerParseError } from './FormError'
 
 export * from 'react-hook-form'
