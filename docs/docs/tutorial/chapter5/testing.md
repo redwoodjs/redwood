@@ -18,13 +18,11 @@ If you cloned the example repo during the intermission and followed along with t
 
 :::info
 
-If you decided to keep your codebase from the first part of the tutorial, then you will get the following error after running
+If you decided to keep your codebase from the first part of the tutorial, then you'll get the following error after running
 
 ```bash
 yarn rw test
-```
 
-```bash
 Error: Get config: Schema Parsing P1012
 
 error: Error validating datasource `db`: the URL must start with the protocol `postgresql://` or `postgres://`.
@@ -39,7 +37,7 @@ Validation Error Count: 1
 error Command failed with exit code 1.
 ```
 
-To clear the error and to proceed with running the test suite head over to your `.env` file and add the following line:
+To clear the error and to proceed with running the test suite, head over to your `.env` file and add the following line:
 
 ```bash
 TEST_DATABASE_URL=<the same url as DATABASE_URL>
