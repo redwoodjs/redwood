@@ -33,7 +33,7 @@
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.10",
     "core-js": "3.22.5",
-    "cross-undici-fetch": "0.1.27",
+    "cross-undici-fetch": "0.4.3",
     "mime-types": "2.1.35"
   },
   "devDependencies": {

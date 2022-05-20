@@ -35,7 +35,7 @@
     "@prisma/client": "3.14.0",
     "@redwoodjs/api": "1.4.2",
     "core-js": "3.22.5",
-    "cross-undici-fetch": "0.1.27",
+    "cross-undici-fetch": "0.4.3",
     "graphql": "16.5.0",
     "graphql-scalars": "1.17.0",
     "graphql-tag": "2.12.6",
