@@ -3443,15 +3443,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.2.11, @graphql-tools/merge@npm:^8.2.1":
-  version: 8.2.11
-  resolution: "@graphql-tools/merge@npm:8.2.11"
+"@graphql-tools/merge@npm:8.2.12, @graphql-tools/merge@npm:^8.2.1":
+  version: 8.2.12
+  resolution: "@graphql-tools/merge@npm:8.2.12"
   dependencies:
-    "@graphql-tools/utils": 8.6.10
+    "@graphql-tools/utils": 8.6.11
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3a7d8b9d72032805859bdbce4c4d59b7103e268e25b54ed5e92dd4ef00ac72a4c1b44ba7390d3145caf400348640e703a33625d834c30e164684ed6de9b15a63
+  checksum: 98388df471a91262c8f49d3953f0d26210a7a657705793985c1f5f5db382a23b1aa912a89544a2d24fc0e2ecfb9c70c43bfe2f473fd71ba4f15c58301534e9f2
   languageName: node
   linkType: hard
 
@@ -3523,17 +3523,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.11, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
-  version: 8.3.11
-  resolution: "@graphql-tools/schema@npm:8.3.11"
+"@graphql-tools/schema@npm:8.3.12, @graphql-tools/schema@npm:^8.1.2, @graphql-tools/schema@npm:^8.3.1":
+  version: 8.3.12
+  resolution: "@graphql-tools/schema@npm:8.3.12"
   dependencies:
-    "@graphql-tools/merge": 8.2.11
-    "@graphql-tools/utils": 8.6.10
+    "@graphql-tools/merge": 8.2.12
+    "@graphql-tools/utils": 8.6.11
     tslib: ~2.4.0
     value-or-promise: 1.0.11
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 12865ff65d51c3f08fc395524f2591df0b3601c6318ae3a594649c9daea1e8e75866036b98397ed7068bdc62b6dd72e5c22d8939f74528473c62d9267f5c18d5
+  checksum: e9f9bf183d23eaffd40ebee8e11149adf438cc9578f0460d6e519a3a0e5526ed865d00fddcfa3f8b59afbb997f36d42ba408e9f26d37e2b61442597bddd3688d
   languageName: node
   linkType: hard
 
@@ -3577,14 +3577,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.10, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
-  version: 8.6.10
-  resolution: "@graphql-tools/utils@npm:8.6.10"
+"@graphql-tools/utils@npm:8.6.11, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.5.4, @graphql-tools/utils@npm:^8.6.0, @graphql-tools/utils@npm:^8.6.1":
+  version: 8.6.11
+  resolution: "@graphql-tools/utils@npm:8.6.11"
   dependencies:
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: a36dfa166b56e95b9dc217936881617c40f15345dda3864a1118027dbb8c15aca13e3c1a3b53fa2344978bac9807b4a6e603e6746b61ca7975b0ee145f8c9a3a
+  checksum: b32934c7c06341b5b7bfdd7d50e74043b6cb7ada35476759152e006ebce87a5ba774725465e74a7c22112a4e79d98ce19adaf3443d166ef9176d2d1f2c4f343b
   languageName: node
   linkType: hard
 
@@ -6171,9 +6171,9 @@ __metadata:
     "@envelop/testing": 4.3.2
     "@envelop/types": 2.0.0
     "@envelop/validation-cache": 4.3.2
-    "@graphql-tools/merge": 8.2.11
-    "@graphql-tools/schema": 8.3.11
-    "@graphql-tools/utils": 8.6.10
+    "@graphql-tools/merge": 8.2.12
+    "@graphql-tools/schema": 8.3.12
+    "@graphql-tools/utils": 8.6.11
     "@graphql-yoga/common": 2.6.0
     "@prisma/client": 3.14.0
     "@redwoodjs/api": 1.4.2
