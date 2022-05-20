@@ -33,7 +33,7 @@ const formatDatetime = (value) => {
 
 const PostForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props.post.id)
+    props.onSave(data, props?.post?.id)
   }
 
   return (
@@ -1326,8 +1326,8 @@ const formatDatetime = (value) => {
 
 
 interface PostFormProps {
-  post: Post
-  onSave: (data: UpdatePostInput, id: Post['id']) => void
+  post?: Post
+  onSave: (data: UpdatePostInput, id?: Post['id']) => void
   error: RwGqlError
   loading: boolean
 }
@@ -1372,7 +1372,7 @@ const PostForm = (props: PostFormProps) => {
     
     
   
-    props.onSave(data as Post, props.post.id)
+    props.onSave(data as Post, props?.post?.id)
   }
 
   return (

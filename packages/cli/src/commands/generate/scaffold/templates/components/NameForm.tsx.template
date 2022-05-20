@@ -20,8 +20,8 @@ const formatDatetime = (value) => {
 <% } %>
 
 interface ${singularPascalName}FormProps {
-  ${singularCamelName}: ${singularPascalName}
-  onSave: (data: Update${singularPascalName}Input, id: ${singularPascalName}['id']) => void
+  ${singularCamelName}?: ${singularPascalName}
+  onSave: (data: Update${singularPascalName}Input, id?: ${singularPascalName}['id']) => void
   error: RwGqlError
   loading: boolean
 }
@@ -41,7 +41,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
       }
     <% } %>
   <% }) %>
-    props.onSave(data as ${singularPascalName}, props.${singularCamelName}.id)
+    props.onSave(data as ${singularPascalName}, props?.${singularCamelName}?.id)
   }
 
   return (
