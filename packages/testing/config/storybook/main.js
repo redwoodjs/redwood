@@ -16,14 +16,6 @@ const rwjsPaths = getPaths()
 
 const staticAssetsFolder = path.join(getPaths().web.base, 'public')
 
-function isPackageInstalled(alias) {
-  try {
-    return Boolean(require(alias))
-  } catch (e) {
-    return false
-  }
-}
-
 const baseConfig = {
   core: {
     builder: 'webpack5',
@@ -122,11 +114,6 @@ const baseConfig = {
 
     return sbConfig
   },
-  ...(isPackageInstalled('@emotion/core') && {
-    features: {
-      emotionAlias: false,
-    },
-  }),
   // only set staticDirs when running Storybook process; will fail if set for SB --build
   ...(process.env.NODE_ENV !== 'production' && {
     staticDirs: [`${staticAssetsFolder}`],
