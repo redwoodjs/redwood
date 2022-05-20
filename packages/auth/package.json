@@ -31,7 +31,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.11.0",
-    "@clerk/clerk-sdk-node": "3.5.0",
+    "@clerk/clerk-sdk-node": "3.6.0",
     "@clerk/types": "2.13.0",
     "@nhost/hasura-auth-js": "1.1.6",
     "@nhost/nhost-js": "1.1.14",
