@@ -6083,7 +6083,7 @@ __metadata:
     webpack-dev-server: 4.9.0
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
-    webpack-retry-chunk-load-plugin: 3.1.0
+    webpack-retry-chunk-load-plugin: 3.1.1
   bin:
     cross-env: ./dist/bins/cross-env.js
     eslint: ./dist/bins/eslint.js
@@ -30999,14 +30999,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-retry-chunk-load-plugin@npm:3.1.0":
-  version: 3.1.0
-  resolution: "webpack-retry-chunk-load-plugin@npm:3.1.0"
+"webpack-retry-chunk-load-plugin@npm:3.1.1":
+  version: 3.1.1
+  resolution: "webpack-retry-chunk-load-plugin@npm:3.1.1"
   dependencies:
     prettier: ^2.6.2
   peerDependencies:
     webpack: ">=5.0.0"
-  checksum: c3a165173f5ba709d98e1f097cfd751693bf43f63c6fc3adce4ff542a32b8a5d007ee7b746352062c478237ce770dfb7e6afe58d1a0ab5e70b74daa8c3f54ac8
+  checksum: 62a4eda6a8d4c3a1169d41fd7d69902f06b4c39c76019f897ac3cb6958ecba5591c37386e303e7495859602386a61ac597fa970937099bcfc4f4b9a1027cece8
   languageName: node
   linkType: hard
 
