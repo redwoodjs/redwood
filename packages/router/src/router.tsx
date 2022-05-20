@@ -4,7 +4,6 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { useActivePageContext } from './ActivePageContext'
 import { Redirect } from './links'
 import { useLocation, LocationProvider } from './location'
-import { PageLoader } from './page-loader'
 import { ParamsProvider } from './params'
 import {
   RouterContextProvider,
@@ -212,9 +211,10 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       return (
         <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
           <ParamsProvider>
-            <PageLoader
+            <ActiveRouteLoader
               spec={normalizePage(NotFoundPage)}
               delay={pageLoadingDelay}
+              path={location.pathname}
             />
           </ParamsProvider>
         </RouterContextProvider>
