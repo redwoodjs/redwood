@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { merge, mergeWithCustomize } = require('webpack-merge')
+const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const {
