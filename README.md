@@ -663,6 +663,9 @@ And there you have it.
   <tr>
     <td align="center"><a href="https://github.com/PeterChen1997/MyBlog/issues"><img src="https://avatars.githubusercontent.com/u/21072589?v=4" width="100px;" alt=""/><br /><sub><b>Peter Chen</b></sub></a></td>
     <td align="center"><a href="https://github.com/YannBirba"><img src="https://avatars.githubusercontent.com/u/66469030?v=4" width="100px;" alt=""/><br /><sub><b>Yann</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Avataw"><img src="https://avatars.githubusercontent.com/u/60570041?v=4" width="100px;" alt=""/><br /><sub><b>Andre Wruszczak</b></sub></a></td>
+    <td align="center"><a href="https://github.com/antonmihaylov"><img src="https://avatars.githubusercontent.com/u/57956282?v=4" width="100px;" alt=""/><br /><sub><b>Anton Mihaylov</b></sub></a></td>
+    <td align="center"><a href="https://github.com/mparramont"><img src="https://avatars.githubusercontent.com/u/636075?v=4" width="100px;" alt=""/><br /><sub><b>Miguel Parramón</b></sub></a></td>
   </tr>
 </table>
 

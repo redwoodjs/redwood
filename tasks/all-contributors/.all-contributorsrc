@@ -2990,6 +2990,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Avataw",
+      "name": "Andre Wruszczak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60570041?v=4",
+      "profile": "https://github.com/Avataw",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "antonmihaylov",
+      "name": "Anton Mihaylov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57956282?v=4",
+      "profile": "https://github.com/antonmihaylov",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mparramont",
+      "name": "Miguel Parramón",
+      "avatar_url": "https://avatars.githubusercontent.com/u/636075?v=4",
+      "profile": "https://github.com/mparramont",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
