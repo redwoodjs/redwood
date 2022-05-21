@@ -1,5 +1,6 @@
 import path from 'path'
 
+import fastifyUrlData from '@fastify/url-data'
 import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'
 import {
@@ -9,7 +10,6 @@ import {
   RequestGenericInterface,
 } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
-import fastifyUrlData from 'fastify-url-data'
 import escape from 'lodash.escape'
 
 import { findApiDistFunctions } from '@redwoodjs/internal'

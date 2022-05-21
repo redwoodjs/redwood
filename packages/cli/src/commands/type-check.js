@@ -43,7 +43,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#type-check'
+        'https://redwoodjs.com/docs/cli-commands#type-check'
       )}`
     )
 }

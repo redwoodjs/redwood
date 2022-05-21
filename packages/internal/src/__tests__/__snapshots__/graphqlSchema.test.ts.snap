@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Generates GraphQL schema 1`] = `
+"directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+
+directive @skipAuth on FIELD_DEFINITION
+
+scalar BigInt
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON
+
+scalar JSONObject
+
+type Mutation {
+  createTodo(body: String!): Todo
+  renameTodo(body: String!, id: Int!): Todo
+  updateTodoStatus(id: Int!, status: String!): Todo
+}
+
+type Query {
+  currentUser: JSON
+  redwood: Redwood
+  todos: [Todo]
+  todosCount: Int!
+}
+
+type Redwood {
+  currentUser: JSON
+  prismaVersion: String
+  version: String
+}
+
+scalar Time
+
+type Todo {
+  body: String!
+  id: Int!
+  status: String!
+}"
+`;

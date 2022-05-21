@@ -4,7 +4,6 @@ import { getAuthenticationContext } from '@redwoodjs/api'
 
 import {
   getAsyncStoreInstance,
-  setContext,
   context as globalContext,
 } from '../globalContext'
 
@@ -39,11 +38,17 @@ export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
             : null
 
           globalContext.currentUser = currentUser
-          setContext(globalContext)
         }
       } catch (e) {
-        return {
-          statusCode: 401,
+        globalContext.currentUser = null
+
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('This warning is only printed in development mode.')
+          console.warn(
+            "Always make sure to have `requireAuth('role')` inside your own handler function."
+          )
+          console.warn('')
+          console.warn(e)
         }
       }
 

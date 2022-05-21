@@ -25,6 +25,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('ci', {
+      describe: 'Start server in CI mode, with no interactive prompts',
+      type: 'boolean',
+      default: false,
+    })
     .option('port', {
       describe: 'Which port to run storybooks on',
       type: 'integer',
@@ -63,7 +68,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#storybook'
+        'https://redwoodjs.com/docs/cli-commands#storybook'
       )}`
     )
 }
@@ -72,6 +77,7 @@ export const handler = ({
   open,
   port,
   build,
+  ci,
   buildDirectory,
   managerCache,
   smokeTest,
@@ -130,6 +136,7 @@ export const handler = ({
           `--port ${port}`,
           !managerCache && `--no-manager-cache`,
           `--no-version-updates`,
+          ci && '--ci',
           !open && `--no-open`,
         ].filter(Boolean),
         {

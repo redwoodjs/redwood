@@ -4,7 +4,7 @@ description: An ORM with a natural interface
 
 # RedwoodRecord
 
-> RedwoodRecord is currently considered to be **Experimental**. We are hoping folks will start using it and give us feedback to help shape it's development and developer experience.
+> RedwoodRecord is currently considered to be **Experimental**. We are hoping folks will start using it and give us feedback to help shape its development and developer experience.
 
 RedwoodRecord is an ORM ([Object-relational Mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)) built on top of Prisma. It may be extended in the future to wrap other database-access packages.
 
@@ -77,7 +77,7 @@ So: I use the User model to find a given user in the database, and, assuming the
 You'll want to add RedwoodRecord's package to the api side:
 
 ```
-yarn add -W api @redwoodjs/record
+yarn workspace api add @redwoodjs/record
 ```
 
 First you'll need to create a model to represent the database table you want to access. In our blog example, let's create a User model:
@@ -94,7 +94,7 @@ Now we need to parse the Prisma schema, store it as a cached JSON file, and crea
 yarn rw record init
 ```
 
-You'll see that this created `.redwood/datamodel.json` and `api/src/models/index.js`.
+You'll see that this created `api/src/models/datamodel.js` and `api/src/models/index.js`.
 
 Believe it or not, that's enough to get started! Let's try using the Redwood console to make some quick queries without worrying about starting up any servers:
 

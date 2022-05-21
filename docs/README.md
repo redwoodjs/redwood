@@ -12,9 +12,15 @@ yarn install
 yarn start
 ```
 
+#### Making Changes
+
+Changes should be made in the `./docs` directory and not in the generated `./versioned_docs` or `./versioned_sidebars` directories directly.
+
+After running `yarn start`, you should be able to see your changes in the local [Canary Version](http://localhost:3000/docs/canary/index).
+
 #### Internal linking
 
-For links to other docs inside the `tutorials` directory, USE RELATIVE LINKS!
+For links to other docs inside the `tutorials` directory you need to use *relative* links.
 
 ```
 In [previous section](./first-page) we....

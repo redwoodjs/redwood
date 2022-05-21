@@ -8,11 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "0.50.0",
-    "autoprefixer": "^10.4.4",
-    "postcss": "^8.4.12",
-    "postcss-loader": "^6.2.1",
-    "tailwindcss": "^3.0.23"
+    "@redwoodjs/core": "1.4.2"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -25,8 +21,8 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
+  "packageManager": "yarn@3.2.1",
   "scripts": {
     "postinstall": ""
-  },
-  "packageManager": "yarn@3.2.0"
+  }
 }

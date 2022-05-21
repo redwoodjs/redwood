@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { merge } = require('webpack-merge')
+const { merge, mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const {
@@ -78,6 +78,10 @@ const baseConfig = {
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] = rwjsPaths.web.src
 
     // Determine the default storybook style file to use.
+    // If one isn't provided, set the alias to `false` to tell webpack to ignore it.
+    // See https://webpack.js.org/configuration/resolve/#resolvealias.
+    sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = false
+
     const supportedStyleIndexFiles = ['index.scss', 'index.sass', 'index.css']
     for (let file of supportedStyleIndexFiles) {
       const filePath = path.join(rwjsPaths.web.src, file)
@@ -150,7 +154,14 @@ const mergeUserStorybookConfig = (baseConfig) => {
   }
 
   const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
-  return merge(baseConfig, userStorybookConfig)
+
+  return mergeWithCustomize({
+    customizeArray(baseConfig, userStorybookConfig, key) {
+      if (key === 'addons') {
+        return [...new Set([...baseConfig, ...userStorybookConfig])]
+      }
+    },
+  })(baseConfig, userStorybookConfig)
 }
 
 /** @returns {import('webpack').Configuration} Webpack Configuration with storybook config */

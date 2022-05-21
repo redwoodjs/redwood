@@ -311,7 +311,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-auth'
+        'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
     )
 }
