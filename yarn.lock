@@ -6411,7 +6411,7 @@ __metadata:
     core-js: 3.22.5
     jest: 27.5.1
     jest-watch-typeahead: 1.1.0
-    msw: 0.40.1
+    msw: 0.40.2
     ts-toolbelt: 9.6.0
     typescript: 4.6.4
     whatwg-fetch: 3.6.2
@@ -22505,9 +22505,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.40.1":
-  version: 0.40.1
-  resolution: "msw@npm:0.40.1"
+"msw@npm:0.40.2":
+  version: 0.40.2
+  resolution: "msw@npm:0.40.2"
   dependencies:
     "@mswjs/cookies": ^0.2.0
     "@mswjs/interceptors": ^0.15.1
@@ -22529,13 +22529,13 @@ __metadata:
     type-fest: ^1.2.2
     yargs: ^17.3.1
   peerDependencies:
-    typescript: 4.2.x || 4.3.x
+    typescript: ">= 4.2.x <= 4.6.x"
   peerDependenciesMeta:
     typescript:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: fb5f80fad647f6c9461d05ced2b89323e573ebe5c46bdc87df27ab870c837872135937a089e320f23a0d8b6f52aceb66d3426109c352ccf8987d0204c17e8575
+  checksum: 74faccb399c0b98835d909b1be4f08e135181266b665b2859de62057ac4e1c7bdc939bf77aac1403ccfc9e44d87df0e00651d8e7d588c90859bfac008218525d
   languageName: node
   linkType: hard
 
@@ -26928,7 +26928,7 @@ __metadata:
     lerna: 4.0.0
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.40.1
+    msw: 0.40.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.16
