@@ -25,6 +25,9 @@
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
+  "resolutions": {
+    "@mswjs/interceptors": "0.15.1"
+  },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
     "@redwoodjs/auth": "1.4.2",
