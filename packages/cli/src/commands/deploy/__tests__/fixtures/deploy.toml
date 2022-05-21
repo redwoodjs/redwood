@@ -1,0 +1,21 @@
+[[production.servers]]
+host = 'prod1.server.com'
+repo = 'git://github.com'
+path = '/var/www/app'
+
+[[production.servers]]
+host = 'prod2.server.com'
+repo = 'git://github.com'
+path = '/var/www/app'
+
+[[staging.servers]]
+host = 'staging.server.com'
+repo = 'git://github.com'
+path = '/var/www/app'
+
+[[test.servers]]
+host = 'staging.server.com'
+repo = 'git://github.com'
+path = '/var/www/app'
+before.update = 'touch update'
+after.install = 'touch install'

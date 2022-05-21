@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -31,10 +31,10 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.11.0",
-    "@clerk/clerk-sdk-node": "3.5.0",
+    "@clerk/clerk-sdk-node": "3.6.0",
     "@clerk/types": "2.13.0",
     "@nhost/hasura-auth-js": "1.1.6",
-    "@nhost/nhost-js": "1.1.11",
+    "@nhost/nhost-js": "1.1.14",
     "@supabase/supabase-js": "1.35.3",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.45",

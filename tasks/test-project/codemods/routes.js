@@ -10,6 +10,11 @@ export default (file, api) => {
     j.stringLiteral('src/layouts/BlogLayout')
   )
 
+  const homePageImport = j.importDeclaration(
+    [j.importDefaultSpecifier(j.identifier('HomePage'))],
+    j.stringLiteral('src/pages/HomePage')
+  )
+
   root
     .find(j.ImportSpecifier, {
       imported: {
@@ -20,14 +25,10 @@ export default (file, api) => {
     .insertAfter(setImport)
     .insertAfter(privateImport)
 
-  root.find(j.ImportDeclaration).insertAfter(blogImport)
-
-  const homePageImport = j.importDeclaration(
-    [j.importDefaultSpecifier(j.identifier('HomePage'))],
-    j.stringLiteral('src/pages/HomePage')
-  )
-
-  root.find(j.ImportDeclaration).insertAfter(homePageImport)
+  root
+    .find(j.ImportDeclaration)
+    .insertAfter(blogImport)
+    .insertAfter(homePageImport)
 
   root
     .find(j.JSXElement)
