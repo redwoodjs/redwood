@@ -8,7 +8,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import { addFilesTask, addPackagesTask, printSetupNotes } from '../helpers'
-import { DEPLOY, ECOSYSTEM } from '../templates/baremetal'
+import { DEPLOY, ECOSYSTEM, MAINTENANCE } from '../templates/baremetal'
 
 export const command = 'baremetal'
 export const description = 'Setup Baremetal deploy'
@@ -24,8 +24,8 @@ const files = [
     content: ECOSYSTEM,
   },
   {
-    path: path.join(getPaths().web.base, 'serve', '.keep'),
-    content: '',
+    path: path.join(getPaths().web.src, 'maintenance.html'),
+    content: MAINTENANCE,
   },
 ]
 
