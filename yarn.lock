@@ -2271,20 +2271,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.2.3":
-  version: 1.2.3
-  resolution: "@eslint/eslintrc@npm:1.2.3"
+"@eslint/eslintrc@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@eslint/eslintrc@npm:1.3.0"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
     espree: ^9.3.2
-    globals: ^13.9.0
+    globals: ^13.15.0
     ignore: ^5.2.0
     import-fresh: ^3.2.1
     js-yaml: ^4.1.0
     minimatch: ^3.1.2
     strip-json-comments: ^3.1.1
-  checksum: 5d61cf812c6089e0d92c824dcb327117d80ca3fbb4d4fa8c4b96533330965979883dbae9969dff806985da04c2e662cf8b71dd608e1c1fa5ab993e2acac01ea9
+  checksum: 9fae71dc1f49a92d64061a94c3c49ee9420ab386fbb5855edd18ee60186a1d72f0c0fde172f14987ffa6a6ab0313b24b2d491c9a337cc7a095bbe3d1c0b7b30f
   languageName: node
   linkType: hard
 
@@ -6096,7 +6096,7 @@ __metadata:
     "@redwoodjs/internal": 1.4.3
     "@typescript-eslint/eslint-plugin": 5.25.0
     "@typescript-eslint/parser": 5.25.0
-    eslint: 8.15.0
+    eslint: 8.16.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -15436,11 +15436,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.15.0":
-  version: 8.15.0
-  resolution: "eslint@npm:8.15.0"
+"eslint@npm:8.16.0":
+  version: 8.16.0
+  resolution: "eslint@npm:8.16.0"
   dependencies:
-    "@eslint/eslintrc": ^1.2.3
+    "@eslint/eslintrc": ^1.3.0
     "@humanwhocodes/config-array": ^0.9.2
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -15458,7 +15458,7 @@ __metadata:
     file-entry-cache: ^6.0.1
     functional-red-black-tree: ^1.0.1
     glob-parent: ^6.0.1
-    globals: ^13.6.0
+    globals: ^13.15.0
     ignore: ^5.2.0
     import-fresh: ^3.0.0
     imurmurhash: ^0.1.4
@@ -15477,7 +15477,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 4e4ba06c9891053eabb4351a0b5c4506fa1418fa8a191e858ebfa667a6c56c748f5463c036a643670e1e6c67328aa13a8a2dbe706fc4560bed76f924d7153711
+  checksum: 175ed470440835a9b5fc01f3458b6fbcc58119647019a21672bab4907a407c0bf38b9401828fceeea0f724be94ac04e81cf454b1e5cab7565ffcfcb9fc9f148c
   languageName: node
   linkType: hard
 
@@ -17350,12 +17350,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^13.6.0, globals@npm:^13.9.0":
-  version: 13.12.1
-  resolution: "globals@npm:13.12.1"
+"globals@npm:^13.15.0":
+  version: 13.15.0
+  resolution: "globals@npm:13.15.0"
   dependencies:
     type-fest: ^0.20.2
-  checksum: e4b7fe3a66c2d05b67b57fc14ed1bfaa29fd09a5faad192b27e27c338e0fd69fda8b43d0b0dd36b429ef7d7adf2e97b4a960c2d4bdc2d5e1b04dde977978c2dd
+  checksum: d83d7abccb93d9b0f3d711f1a7ea3ac8554d8cece9abacbc5432b6ab97f1d7af3c348bc40835344e7dd8c5c8e0ff94d5ad60e7ad45098a364a7a86da7c935b59
   languageName: node
   linkType: hard
 
@@ -26980,7 +26980,7 @@ __metadata:
     core-js: 3.22.5
     cypress: 9.6.1
     cypress-wait-until: 1.7.2
-    eslint: 8.15.0
+    eslint: 8.16.0
     fast-glob: 3.2.11
     fs-extra: 10.1.0
     is-port-reachable: 3.1.0
