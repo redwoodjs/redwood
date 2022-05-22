@@ -2008,14 +2008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:2.13.0":
-  version: 2.13.0
-  resolution: "@clerk/types@npm:2.13.0"
-  checksum: fb568825325d6433a58508f04eb74d159d435e2fa5881ffa7e482bc07f69541684d4779b8af49416092c1526a36b2d7e31616cc15567d6ef3cae358328b85a3d
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^2.13.0, @clerk/types@npm:^2.14.0":
+"@clerk/types@npm:2.14.0, @clerk/types@npm:^2.13.0, @clerk/types@npm:^2.14.0":
   version: 2.14.0
   resolution: "@clerk/types@npm:2.14.0"
   checksum: 37b9fb4c6412c2cbaffcbb5740087efc0ba5817a8c1e7b37007e8ab9b0d83f48427e278ce9e16cd5b72c6f92ec4053885ee5a15602f6856b9a2b23377f7d5444
@@ -5904,7 +5897,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@clerk/clerk-js": 3.11.0
     "@clerk/clerk-sdk-node": 3.6.0
-    "@clerk/types": 2.13.0
+    "@clerk/types": 2.14.0
     "@nhost/hasura-auth-js": 1.1.9
     "@nhost/nhost-js": 1.1.14
     "@supabase/supabase-js": 1.35.3
