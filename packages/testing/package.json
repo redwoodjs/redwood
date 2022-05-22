@@ -31,7 +31,7 @@
     "@redwoodjs/graphql-server": "1.4.3",
     "@redwoodjs/internal": "1.4.3",
     "@redwoodjs/router": "1.4.3",
-    "@redwoodjs/web": "1.4.2",
+    "@redwoodjs/web": "1.4.3",
     "@storybook/addon-a11y": "6.5.3",
     "@storybook/addon-essentials": "6.5.3",
     "@storybook/builder-webpack5": "6.5.3",
