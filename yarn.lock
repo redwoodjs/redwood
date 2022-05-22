@@ -6101,7 +6101,7 @@ __metadata:
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.26.0
-    eslint-plugin-jest-dom: 4.0.1
+    eslint-plugin-jest-dom: 4.0.2
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
     eslint-plugin-react: 7.30.0
@@ -15291,16 +15291,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest-dom@npm:4.0.1":
-  version: 4.0.1
-  resolution: "eslint-plugin-jest-dom@npm:4.0.1"
+"eslint-plugin-jest-dom@npm:4.0.2":
+  version: 4.0.2
+  resolution: "eslint-plugin-jest-dom@npm:4.0.2"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@testing-library/dom": ^8.11.1
     requireindex: ^1.2.0
   peerDependencies:
-    eslint: ">=6.8"
-  checksum: 4708d44d64ed7ef84475324445a56e816d3aba557205a5d18b9eb8e65d6d701b3a0008f579c303c7de81652f610f31ed8e4d48634de4a8aba6a364d4ff45b1da
+    eslint: ^6.8.0 || ^7.0.0 || ^8.0.0
+  checksum: b7e7588199f1fa7430b522fc26dcb24ef2269ac1deef17b7d6ec430af4c7660ec39a5918351033d21c8ce29193891cfcdd5ebc1773cbd01c46b86229721f0c86
   languageName: node
   linkType: hard
 
