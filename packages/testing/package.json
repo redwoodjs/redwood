@@ -53,7 +53,7 @@
     "core-js": "3.22.5",
     "jest": "27.5.1",
     "jest-watch-typeahead": "1.1.0",
-    "msw": "0.40.1",
+    "msw": "0.40.2",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
