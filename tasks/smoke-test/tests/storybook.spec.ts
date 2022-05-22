@@ -162,3 +162,27 @@ storybookTest(
     )
   }
 )
+
+storybookTest(
+  'Loads MDX Stories',
+  async ({ port, page, server }: PlaywrightTestArgs & StorybookFixture) => {
+    // We do this to make sure playwright doesn't bring the server down
+    console.log(server)
+    const STORYBOOK_URL = `http://localhost:${port}/`
+
+    await page.goto(STORYBOOK_URL)
+
+    // Click text=Redwood
+    await page.locator('text=Redwood').click()
+
+    await expect(page).toHaveURL(
+      `http://localhost:${port}/?path=/story/redwood--page`
+    )
+
+    await expect(
+      page.frameLocator('#storybook-preview-iframe').locator('body')
+    ).toContainText(
+      'Redwood is an opinionated, full-stack, JavaScript/TypeScript web application framework designed to keep you moving fast as your app grows from side project to startup.'
+    )
+  }
+)
