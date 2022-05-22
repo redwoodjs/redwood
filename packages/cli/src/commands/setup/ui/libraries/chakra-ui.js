@@ -28,7 +28,7 @@ export function builder(yargs) {
 
 export async function handler({ force, install }) {
   const packages = [
-    '@chakra-ui/react',
+    '@chakra-ui/react@^1',
     '@emotion/react@^11',
     '@emotion/styled@^11',
     'framer-motion@^4',
