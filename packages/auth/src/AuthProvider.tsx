@@ -1,5 +1,5 @@
 import React, {
-  PropsWithChildren,
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -103,18 +103,21 @@ type AuthProviderProps =
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: ReactNode | undefined
     }
   | {
       client?: never
       type: 'clerk'
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: ReactNode | undefined
     }
   | {
       client?: never
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
+      children?: ReactNode | undefined
     }
 
 type AuthProviderState = {
@@ -144,7 +147,7 @@ const defaultAuthProviderState: AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
-export const AuthProvider = (props: PropsWithChildren<AuthProviderProps>) => {
+export const AuthProvider = (props: AuthProviderProps) => {
   const skipFetchCurrentUser = props.skipFetchCurrentUser || false
 
   const [hasRestoredState, setHasRestoredState] = useState(false)
