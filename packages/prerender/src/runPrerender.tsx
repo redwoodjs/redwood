@@ -101,13 +101,13 @@ async function getCellData(pathParams: Record<string, unknown>) {
 }
 
 interface PrerenderParams {
-  routerPath: string // e.g. /about, /dashboard/me, /blog-post/3
-  paramPath: string // e.g. /blog-post/{id:Int}
+  renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
+  routePath: string // The path from a <Route> e.g. /blog-post/{id:Int}
 }
 
 export const runPrerender = async ({
-  routerPath,
-  paramPath,
+  renderPath,
+  routePath,
 }: PrerenderParams): Promise<string | void> => {
   registerApiSideBabelHook({
     plugins: [
@@ -159,19 +159,14 @@ export const runPrerender = async ({
   })
 
   console.log('')
-  console.log('prerender', routerPath)
-  console.log('prerender paramPath', paramPath)
+  console.log('prerender renderPath', renderPath)
+  console.log('prerender routePath', routePath)
   console.log('')
 
   let pathParams: Record<string, unknown> = {}
 
-  if (paramPath) {
-    console.log('paramPath', paramPath)
-    pathParams.id = 1
-  }
-
-  if (paramPath) {
-    const { params } = matchPath(paramPath, routerPath)
+  if (routePath) {
+    const { params } = matchPath(routePath, renderPath)
     pathParams = params || {}
 
     console.log('params from matchPath', params)
@@ -194,7 +189,7 @@ export const runPrerender = async ({
     ],
   })
 
-  registerShims(routerPath)
+  registerShims(renderPath)
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
@@ -202,7 +197,7 @@ export const runPrerender = async ({
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider
       location={{
-        pathname: routerPath,
+        pathname: renderPath,
       }}
     >
       <App />

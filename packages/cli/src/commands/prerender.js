@@ -80,7 +80,7 @@ function expandRouteParameters(route) {
         )
       })
 
-      return { ...route, paramPath: route.path, path: newPath }
+      return { ...route, routePath: route.path, path: newPath }
     })
   }
 
@@ -130,8 +130,8 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
           task: async () => {
             try {
               const prerenderedHtml = await runPrerender({
-                routerPath: routeToPrerender.path,
-                paramPath: routeToPrerender.paramPath,
+                renderPath: routeToPrerender.path,
+                routePath: routeToPrerender.routePath,
               })
 
               if (!dryrun) {
