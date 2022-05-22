@@ -7,8 +7,12 @@ import cheerio from 'cheerio'
 import { Kind } from 'graphql'
 import ReactDOMServer from 'react-dom/server'
 
-import { getPaths, registerWebSideBabelHook } from '@redwoodjs/internal'
-import { LocationProvider } from '@redwoodjs/router'
+import {
+  getPaths,
+  registerApiSideBabelHook,
+  registerWebSideBabelHook,
+} from '@redwoodjs/internal'
+import { LocationProvider, matchPath } from '@redwoodjs/router'
 import { getProject } from '@redwoodjs/structure'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
@@ -16,9 +20,8 @@ import { graphqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 function getCellQueries() {
-  const cellQueries = getProject(
-    '/Users/tobbe/tmp/rw-pageloadingcontext/'
-  ).cells.map((cell) => {
+  // TODO: remove `undefined as any`
+  const cellQueries = getProject(undefined as any).cells.map((cell) => {
     const ast = cell.queryAst
 
     let vars
@@ -60,26 +63,37 @@ function getCellQueries() {
   return cellQueries
 }
 
-async function getCellData() {
+async function getCellData(pathParams: Record<string, unknown>) {
   const cellQueries = getCellQueries()
+  // console.log('cellQueries', cellQueries)
 
   const gqlHandler = await graphqlHandler()
 
-  console.log('gqlHandler', gqlHandler)
-
   const cellData = await Promise.all(
     cellQueries.map(async (cellQuery) => {
+      const variables: Record<string, unknown> = {}
+
+      if (cellQuery.vars?.length) {
+        cellQuery.vars.forEach((cellVar) => {
+          if (cellVar && pathParams[cellVar.name] !== undefined) {
+            variables[cellVar.name] = pathParams[cellVar.name]
+          }
+        })
+      }
+
       const operation = {
         operationName: cellQuery.operationName,
         query: cellQuery.query,
-        variables: cellQuery.vars || {},
+        variables,
       }
 
-      console.log('operation', operation)
+      // console.log('operation', operation)
 
       const handlerResult = await gqlHandler(operation)
 
-      console.log('handlerResult', handlerResult)
+      // console.log('handlerResult', handlerResult)
+
+      return { ...cellQuery, data: handlerResult.body }
     })
   )
 
@@ -87,14 +101,85 @@ async function getCellData() {
 }
 
 interface PrerenderParams {
-  routerPath: string // e.g. /about, /dashboard/me
+  routerPath: string // e.g. /about, /dashboard/me, /blog-post/3
+  paramPath: string // e.g. /blog-post/{id:Int}
 }
 
 export const runPrerender = async ({
   routerPath,
+  paramPath,
 }: PrerenderParams): Promise<string | void> => {
-  const cellData = await getCellData()
-  console.log('cellData', cellData)
+  registerApiSideBabelHook({
+    plugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          alias: {
+            api: getPaths().api.base,
+            web: getPaths().web.base,
+          },
+          loglevel: 'silent', // to silence the unnecessary warnings
+        },
+      ],
+    ],
+    overrides: [
+      {
+        test: ['./api/'],
+        plugins: [
+          [
+            'babel-plugin-module-resolver',
+            {
+              alias: {
+                src: getPaths().api.src,
+              },
+              loglevel: 'silent',
+            },
+            'exec-api-src-module-resolver',
+          ],
+        ],
+      },
+      // {
+      //   test: ['./web/'],
+      //   plugins: [
+      //     ...webPlugins,
+      //     [
+      //       'babel-plugin-module-resolver',
+      //       {
+      //         alias: {
+      //           src: getPaths().web.src,
+      //         },
+      //         loglevel: 'silent',
+      //       },
+      //       'exec-web-src-module-resolver',
+      //     ],
+      //   ],
+      //   ...otherWebConfig,
+      // },
+    ],
+  })
+
+  console.log('')
+  console.log('prerender', routerPath)
+  console.log('prerender paramPath', paramPath)
+  console.log('')
+
+  let pathParams: Record<string, unknown> = {}
+
+  if (paramPath) {
+    console.log('paramPath', paramPath)
+    pathParams.id = 1
+  }
+
+  if (paramPath) {
+    const { params } = matchPath(paramPath, routerPath)
+    pathParams = params || {}
+
+    console.log('params from matchPath', params)
+  }
+
+  const cellData = await getCellData(pathParams)
+  console.log('cellData', JSON.stringify(cellData, null, 2))
+  global.__REDWOOD__CELL_DATA = cellData
 
   // Prerender specific configuration
   // extends projects web/babelConfig

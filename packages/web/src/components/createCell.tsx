@@ -233,6 +233,30 @@ export function createCell<CellProps = any>({
     /**
      * Apollo Client's props aren't available here, so 'any'.
      */
+    // @ts-expect-error - I'm lazy
+    const cellData = global.__REDWOOD__CELL_DATA
+
+    const dataString = cellData.find((cd: any) =>
+      new RegExp(`/${displayName}.(tsx|js)`).test(cd?.path)
+    )?.data
+
+    if (dataString) {
+      const { data, ...queryRest } = JSON.parse(dataString)
+
+      const afterQueryData = afterQuery(data)
+
+      return (props) => {
+        return (
+          <Success
+            {...props}
+            {...afterQueryData}
+            updating={false}
+            {...queryRest}
+          />
+        )
+      }
+    }
+
     return (props) => <Loading {...(props as any)} />
   }
 

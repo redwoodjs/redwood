@@ -47,6 +47,46 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
+/**
+ * Takes a route with a path like /blog-post/{id:Int}
+ * Reads path parameters from some file (TODO: specify file name(s)) and returns
+ * a list of routes with the path parameter placeholders (like {id:Int})
+ * replaced by actual values
+ *
+ * So for values like [{ id: 1 }, { id: 2 }, { id: 3 }] (and, again, a route
+ * path like /blog-post/{id:Int}) it will return three routes with the paths
+ * /blog-post/1
+ * /blog-post/2
+ * /blog-post/3
+ *
+ * The paths will be strings. Parsing those path parameters to the correct
+ * datatype according to the type notation ("Int" in the example above) will
+ * be done later, in another function
+ */
+function expandRouteParameters(route) {
+  // TODO: Read from some file in the RW project
+  const parameters = {
+    blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }],
+  }
+
+  if (parameters[route.name]) {
+    return parameters[route.name].map((pathParamValues) => {
+      let newPath = route.path
+
+      Object.entries(pathParamValues).forEach(([paramName, paramValue]) => {
+        newPath = newPath.replace(
+          new RegExp(`{${paramName}:?[^}]*}`),
+          paramValue
+        )
+      })
+
+      return { ...route, paramPath: route.path, path: newPath }
+    })
+  }
+
+  return [route]
+}
+
 // This is used directly in build.js for nested ListrTasks
 export const getTasks = async (dryrun, routerPathFilter = null) => {
   const prerenderRoutes = detectPrerenderRoutes()
@@ -73,11 +113,14 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)
+    .flatMap(expandRouteParameters)
     .flatMap((routeToPrerender) => {
       // Filter out routes that don't match the supplied routePathFilter
       if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {
         return []
       }
+
+      console.log('routeToPrerender', routeToPrerender)
 
       const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
@@ -88,6 +131,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
             try {
               const prerenderedHtml = await runPrerender({
                 routerPath: routeToPrerender.path,
+                paramPath: routeToPrerender.paramPath,
               })
 
               if (!dryrun) {

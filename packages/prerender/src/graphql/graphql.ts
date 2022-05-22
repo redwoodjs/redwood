@@ -110,8 +110,8 @@ export async function graphqlHandler() {
     },
   })
 
-  return (operation: Record<string, unknown>) => {
-    handler(buildApiEvent(operation), buildContext())
+  return async (operation: Record<string, unknown>) => {
+    return await handler(buildApiEvent(operation), buildContext())
   }
 }
 
