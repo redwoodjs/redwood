@@ -50,7 +50,7 @@
     "@types/webpack": "5.28.0",
     "babel-jest": "27.5.1",
     "babel-plugin-inline-react-svg": "2.0.1",
-    "core-js": "3.22.5",
+    "core-js": "3.22.6",
     "jest": "27.5.1",
     "jest-watch-typeahead": "1.1.0",
     "msw": "0.40.2",
