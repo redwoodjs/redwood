@@ -27,7 +27,7 @@ export const getAuth0SigningKey = async (header: any) => {
     return await auth0Client().getSigningKey(kid)
   } catch (error) {
     console.error(error)
-    throw new SigningKeyNotFoundError(kid)
+    throw error
   }
 }
 
