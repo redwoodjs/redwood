@@ -156,7 +156,7 @@ export class DbAuthHandler {
   event: APIGatewayProxyEvent
   context: LambdaContext
   options: DbAuthHandlerOptions
-  cookie: string | undefined;
+  cookie: string | undefined
   params: Params
   db: PrismaClient
   dbAccessor: any
@@ -239,9 +239,7 @@ export class DbAuthHandler {
     }
 
     try {
-      const [session, csrfToken] = decryptSession(
-        getSession(this.cookie)
-      )
+      const [session, csrfToken] = decryptSession(getSession(this.cookie))
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
