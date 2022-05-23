@@ -1,0 +1,21 @@
+import jwt from 'jsonwebtoken'
+
+const generateGraphiQLHeader = (): string => {
+   // token expires at ${expireTime}
+   const jwtPayload = ${payload}
+
+   const token = jwt.sign(
+        jwtPayload as object,
+        ${env} as string
+      )
+
+   const jwtHeader = {
+     'auth-provider': "${provider}",
+     authorization: "Bearer " + token
+   }
+
+  return JSON.stringify(jwtHeader, null, 2)
+}
+
+export default generateGraphiQLHeader
+

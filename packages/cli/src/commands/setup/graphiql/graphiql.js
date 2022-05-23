@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import CryptoJS from 'crypto-js'
+import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,6 +15,7 @@ import {
   writeFilesTask,
   readFile,
   getPaths,
+  transformTSToJS,
 } from '../../../lib'
 import c from '../../../lib/colors'
 import { graphFunctionDoesExist, getGraphqlPath } from '../auth/auth'
@@ -21,6 +23,10 @@ import { graphFunctionDoesExist, getGraphqlPath } from '../auth/auth'
 // tests if id, which is always a string from cli, is actually a number or uuid
 const isNumeric = (id) => {
   return /^\d+$/.test(parseInt(id))
+}
+
+const getExpiryTime = (expiry) => {
+  return expiry ? Date.now() + expiry * 60 * 1000 : Date.now() + 3600 * 1000
 }
 
 const getDBAuthHeader = (userId) => {
@@ -46,16 +52,15 @@ const getDBAuthHeader = (userId) => {
   }
 }
 
-const getSupabasePayload = () => {
+const getSupabasePayload = (id, expiry) => {
   if (!process.env.SUPABASE_JWT_SECRET) {
     throw new Error('SUPABASE_JWT_SECRET env var is not set.')
   }
-  // set expiry 1 hour from now
-  const exp = Date.now() + 3600 * 1000
+
   const payload = {
     aud: 'authenticated',
-    exp,
-    sub: 'test-user-id',
+    exp: getExpiryTime(expiry),
+    sub: id ?? 'test-user-id',
     email: 'user@example.com',
     app_metadata: {
       provider: 'email',
@@ -65,19 +70,37 @@ const getSupabasePayload = () => {
     roles: [],
   }
 
-  const mock = {
-    payload,
-    'auth-provider': 'supabase',
+  return payload
+}
+
+const getNetlifyPayload = (id, expiry) => {
+  const payload = {
+    exp: getExpiryTime(expiry),
+    sub: id ?? 'test-user-id',
+    email: 'user@example.com',
+    app_metadata: {
+      provider: 'email',
+      authorization: {
+        roles: [],
+      },
+    },
+    user_metadata: {},
   }
-  return mock
+
+  return payload
 }
 
 const supportedProviders = {
-  dbAuth: getDBAuthHeader,
-  supabase: getSupabasePayload,
+  dbAuth: { getPayload: getDBAuthHeader, env: '' },
+  supabase: {
+    getPayload: getSupabasePayload,
+    env: process.env.SUPABASE_JWT_SECRET,
+  },
+  // no access to netlify JWT private key in dev.
+  netlify: { getPayload: getNetlifyPayload, env: '"secret-123"' },
 }
 
-const generateHeaderOrMock = (provider, id, token) => {
+const generatePayload = (provider, id, token, expiry) => {
   if (token) {
     return {
       'auth-provider': provider,
@@ -85,7 +108,7 @@ const generateHeaderOrMock = (provider, id, token) => {
     }
   }
 
-  return supportedProviders[provider](id)
+  return supportedProviders[provider].getPayload(id, expiry)
 }
 
 const addHeaderOption = () => {
@@ -112,7 +135,7 @@ const addHeaderOption = () => {
   }
 }
 
-export const command = 'header <provider>'
+export const command = 'graphiql <provider>'
 export const description = 'Generate GraphiQL headers'
 export const builder = (yargs) => {
   yargs
@@ -134,6 +157,12 @@ export const builder = (yargs) => {
         'Generated JWT token. If not provided, mock JWT payload is provided that can be modified and tured into a token',
       type: 'string',
     })
+    .option('expiry', {
+      alias: 'e',
+      default: false,
+      description: 'Token expiry in minutes. Default is 60',
+      type: 'number',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -142,26 +171,38 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, id, token }) => {
-  let header
+export const handler = async ({ provider, id, token, expiry }) => {
+  let payload
+
   const tasks = new Listr(
     [
       {
-        title: 'Generating header...',
+        title: 'Generating graphiql header...',
         task: () => {
-          header = generateHeaderOrMock(provider, id, token)
+          payload = generatePayload(provider, id, token, expiry)
         },
       },
       {
-        title: 'Generating file in src/lib/generateGraphiQLHeader.js...',
+        title: 'Generating file in src/lib/generateGraphiQLHeader.{js,ts}...',
         task: () => {
+          const fileName =
+            token || provider === 'dbAuth'
+              ? 'graphiql-token.ts.template'
+              : 'graphiql-mock.ts.template'
+
           const content = generateTemplate(
-            path.join(__dirname, 'templates', 'header.js.template'),
+            path.join(__dirname, 'templates', fileName),
             {
-              name: 'header',
-              header: JSON.stringify(header),
+              name: 'graphiql',
+              payload: JSON.stringify(payload),
+              env: supportedProviders[provider].env,
+              provider,
+              expireTime: expiry
+                ? new Date(Date.now() + expiry * 60 * 1000)
+                : new Date(Date.now() + 3600 * 1000),
             }
           )
+
           const outputPath = path.join(
             getPaths().api.lib,
             getProject().isTypeScriptProject
@@ -169,7 +210,11 @@ export const handler = async ({ provider, id, token }) => {
               : 'generateGraphiQLHeader.js'
           )
           return writeFilesTask(
-            { [outputPath]: content },
+            {
+              [outputPath]: getProject().isTypeScriptProject
+                ? content
+                : transformTSToJS(outputPath, content),
+            },
             { overwriteExisting: true }
           )
         },
@@ -181,6 +226,14 @@ export const handler = async ({ provider, id, token }) => {
             addHeaderOption()
           } else {
             task.skip('GraphQL function not found, skipping')
+          }
+        },
+      },
+      {
+        title: 'Installing packages...',
+        task: async () => {
+          if (!token && provider !== 'dbAuth') {
+            await execa('yarn', ['workspace', 'api', 'add', 'jsonwebtoken'])
           }
         },
       },

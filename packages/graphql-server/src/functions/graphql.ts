@@ -17,7 +17,6 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import jwt from 'jsonwebtoken'
 
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -169,24 +168,6 @@ export const createGraphQLHandler = ({
 
   plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
 
-  let headers = `"{}"`
-  if (generateGraphiQLHeader) {
-    const headerOrMock = generateGraphiQLHeader()
-    if (headerOrMock.payload) {
-      const token = jwt.sign(
-        headerOrMock.payload as object,
-        process.env.SUPABASE_JWT_SECRET as string
-      )
-
-      headers = JSON.stringify({
-        'auth-provider': headerOrMock['auth-provider'],
-        authorization: `Bearer ${token}`,
-      })
-    } else {
-      headers = JSON.stringify(headerOrMock)
-    }
-  }
-
   const yoga = createServer({
     schema,
     plugins,
@@ -196,7 +177,7 @@ export const createGraphQLHandler = ({
       ? {
           title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
-          headers,
+          headers: generateGraphiQLHeader ? generateGraphiQLHeader() : `"{}"`,
           defaultQuery: `query Redwood {
   redwood {
     version

@@ -1,5 +1,5 @@
 const generateGraphiQLHeader = () => {
-  return ${header}
+  return JSON.stringify(${payload}, null, 2)
 }
 
 export default generateGraphiQLHeader
