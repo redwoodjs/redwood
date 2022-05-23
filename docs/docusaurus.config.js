@@ -46,6 +46,10 @@ const config = {
         },
         items: [
           {
+            type: 'docsVersionDropdown',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/redwoodjs/redwood',
             position: 'right',
             className: 'github-logo',
@@ -112,6 +116,13 @@ const config = {
           // ? — blob? tree?
           editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs', // base path for repo edit pages
           remarkPlugins: [autoImportTabs, fileExtSwitcher],
+          versions: {
+            current: {
+              label: 'Canary',
+              path: 'canary',
+              banner: 'unreleased',
+            },
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
