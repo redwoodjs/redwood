@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import jwksClient, { JwksError, SigningKeyNotFoundError } from 'jwks-rsa'
+import jwksClient, { JwksError } from 'jwks-rsa'
 
 export const auth0Config = () => {
   const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
