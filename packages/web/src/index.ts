@@ -13,6 +13,8 @@ export {
   useMutation,
 } from './components/GraphQLHooksProvider'
 
+export * from './components/CellCacheContext'
+
 export {
   createCell,
   CellProps,

@@ -4,7 +4,7 @@ import path from 'path'
 import React from 'react'
 
 import cheerio from 'cheerio'
-import { Kind } from 'graphql'
+import { Kind, DocumentNode } from 'graphql'
 import ReactDOMServer from 'react-dom/server'
 
 import {
@@ -14,6 +14,7 @@ import {
 } from '@redwoodjs/internal'
 import { LocationProvider, matchPath } from '@redwoodjs/router'
 import { getProject } from '@redwoodjs/structure'
+import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { graphqlHandler } from './graphql/graphql'
@@ -100,6 +101,30 @@ async function getCellData(pathParams: Record<string, unknown>) {
   return cellData
 }
 
+async function executeQuery(
+  query: DocumentNode,
+  variables?: Record<string, unknown>
+) {
+  const gqlHandler = await graphqlHandler()
+
+  let operationName = ''
+  for (const definition of query.definitions) {
+    if (definition.kind === 'OperationDefinition' && definition.name?.value) {
+      operationName = definition.name.value
+    }
+  }
+
+  const operation = {
+    operationName: operationName,
+    query,
+    variables,
+  }
+
+  const handlerResult = await gqlHandler(operation)
+
+  return handlerResult.body
+}
+
 interface PrerenderParams {
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
   routePath: string // The path from a <Route> e.g. /blog-post/{id:Int}
@@ -165,6 +190,7 @@ export const runPrerender = async ({
 
   let pathParams: Record<string, unknown> = {}
 
+  // routePath will be undefined for NotFoundPage
   if (routePath) {
     const { params } = matchPath(routePath, renderPath)
     pathParams = params || {}
@@ -173,7 +199,7 @@ export const runPrerender = async ({
   }
 
   const cellData = await getCellData(pathParams)
-  console.log('cellData', JSON.stringify(cellData, null, 2))
+  // console.log('cellData', JSON.stringify(cellData, null, 2))
   global.__REDWOOD__CELL_DATA = cellData
 
   // Prerender specific configuration
@@ -194,13 +220,49 @@ export const runPrerender = async ({
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
 
+  // TODO: Create this further up. We can potentially reuse some data between
+  // different pages
+  const queryInfo: Record<string, QueryInfo> = {}
+
+  // Render once to collect all queries
+  ReactDOMServer.renderToString(
+    <LocationProvider location={{ pathname: renderPath }}>
+      <CellCacheContextProvider queryInfo={queryInfo}>
+        <App />
+      </CellCacheContextProvider>
+    </LocationProvider>
+  )
+
+  console.log('')
+  console.log('queryInfo', Object.values(queryInfo))
+  console.log('')
+
+  await Promise.all(
+    Object.entries(queryInfo).map(async ([cacheKey, value]) => {
+      console.log('cacheKey', cacheKey)
+      console.log('value', value)
+
+      const data = await executeQuery(value.query, value.variables)
+
+      console.log('typeof data', typeof data)
+
+      console.log('data', JSON.parse(data))
+
+      queryInfo[cacheKey] = {
+        ...value,
+        data: JSON.parse(data).data,
+        hasFetched: true,
+      }
+
+      return data
+    })
+  )
+
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider
-      location={{
-        pathname: renderPath,
-      }}
-    >
-      <App />
+    <LocationProvider location={{ pathname: renderPath }}>
+      <CellCacheContextProvider queryInfo={queryInfo}>
+        <App />
+      </CellCacheContextProvider>
     </LocationProvider>
   )
 
