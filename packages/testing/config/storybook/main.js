@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { merge, mergeWithCustomize } = require('webpack-merge')
+const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const {
@@ -15,29 +15,6 @@ const config = getConfig()
 const rwjsPaths = getPaths()
 
 const staticAssetsFolder = path.join(getPaths().web.base, 'public')
-
-function isPackageInstalled(alias) {
-  try {
-    return Boolean(require(alias))
-  } catch (e) {
-    return false
-  }
-}
-
-function withEmotionVersionFallback(config) {
-  const alias = Object.entries({
-    '@emotion/core': '@emotion/core',
-    '@emotion/styled': '@emotion/styled',
-    'emotion-theming': '@emotion/react',
-  }).reduce((acc, [packageName, alias]) => {
-    if (isPackageInstalled(alias)) {
-      acc[packageName] = require.resolve(alias)
-    }
-    return acc
-  }, {})
-
-  return merge(config, { resolve: { alias } })
-}
 
 const baseConfig = {
   core: {
@@ -134,8 +111,6 @@ const baseConfig = {
     }
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
-
-    sbConfig = withEmotionVersionFallback(sbConfig)
 
     return sbConfig
   },
