@@ -8,7 +8,7 @@ export const schema = gql`
 
   type Query {
     posts: [Post!]! @skipAuth
-    post(id: Int!): Post @skipAuth
+      post(id: Int!): Post @skipAuth
   }
 
   input CreatePostInput {
