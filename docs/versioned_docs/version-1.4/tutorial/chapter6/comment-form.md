@@ -1386,7 +1386,7 @@ describe('comments', () => {
 ```tsx title="api/src/services/comments/comments.test.ts"
 import { comments, createComment } from './comments'
 // highlight-next-line
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 
 import type { StandardScenario } from './comments.scenarios'
 
