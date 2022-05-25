@@ -34,7 +34,7 @@
     "@graphql-yoga/common": "2.6.1",
     "@prisma/client": "3.14.0",
     "@redwoodjs/api": "1.5.0",
-    "core-js": "3.22.6",
+    "core-js": "3.22.7",
     "cross-undici-fetch": "0.1.27",
     "graphql": "16.5.0",
     "graphql-scalars": "1.17.0",
