@@ -80,18 +80,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.21.1":
-  version: 1.21.1
-  resolution: "@auth0/auth0-spa-js@npm:1.21.1"
+"@auth0/auth0-spa-js@npm:1.22.0":
+  version: 1.22.0
+  resolution: "@auth0/auth0-spa-js@npm:1.22.0"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.22.0
+    core-js: ^3.22.4
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 32ae80374b0ccfeb3bec04ca94867c46a2bde858f98fae9b1d86992c386908e0d59d8011fdd3518dd3badb02ba23d72b65e256cffbce521e9e9bdc4471758a41
+  checksum: 7bcef7b59f6e804edb81c07fee03a7a4e9ce90126d4d47ac5c518a0f7057bbf5b2302c2002c7972155b3670ea44efba837445acd1be9b64ad1688e109eaa3b08
   languageName: node
   linkType: hard
 
@@ -5890,7 +5890,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.21.1
+    "@auth0/auth0-spa-js": 1.22.0
     "@azure/msal-browser": 2.24.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
@@ -12986,7 +12986,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.22.7, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.22.7, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.4, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.22.7
   resolution: "core-js@npm:3.22.7"
   checksum: 0f9daff33656f4b9a1664c35f2ce151746e8a198ae9f32d81465a0a63b5b5f15e81cc0e43f073f2733f23d842d75b946d02c1ee05ba4e805c90417e1c7ee7d82
