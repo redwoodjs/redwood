@@ -4,7 +4,7 @@ import path from 'path'
 import React from 'react'
 
 import cheerio from 'cheerio'
-import { Kind, DocumentNode } from 'graphql'
+import { DocumentNode } from 'graphql'
 import ReactDOMServer from 'react-dom/server'
 
 import {
@@ -12,94 +12,12 @@ import {
   registerApiSideBabelHook,
   registerWebSideBabelHook,
 } from '@redwoodjs/internal'
-import { LocationProvider, matchPath } from '@redwoodjs/router'
-import { getProject } from '@redwoodjs/structure'
+import { LocationProvider } from '@redwoodjs/router'
 import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { graphqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
-
-function getCellQueries() {
-  // TODO: remove `undefined as any`
-  const cellQueries = getProject(undefined as any).cells.map((cell) => {
-    const ast = cell.queryAst
-
-    let vars
-
-    if (!ast) {
-      console.log('No ast for', cell)
-    } else {
-      for (const def of ast.definitions) {
-        if (def.kind === Kind.OPERATION_DEFINITION) {
-          vars = def.variableDefinitions
-            ?.map((varDef) => {
-              if (
-                varDef.type.kind === Kind.NON_NULL_TYPE &&
-                varDef.type.type.kind === Kind.NAMED_TYPE
-              ) {
-                return {
-                  name: varDef.variable.name.value,
-                  type: varDef.type.type.name.value,
-                }
-              } else {
-                console.log('Unhandled varDef', varDef)
-              }
-
-              return undefined
-            })
-            ?.filter(Boolean)
-        }
-      }
-    }
-
-    return {
-      path: cell.filePath,
-      operationName: cell.queryOperationName,
-      query: cell.queryString,
-      vars,
-    }
-  })
-
-  return cellQueries
-}
-
-async function getCellData(pathParams: Record<string, unknown>) {
-  const cellQueries = getCellQueries()
-  // console.log('cellQueries', cellQueries)
-
-  const gqlHandler = await graphqlHandler()
-
-  const cellData = await Promise.all(
-    cellQueries.map(async (cellQuery) => {
-      const variables: Record<string, unknown> = {}
-
-      if (cellQuery.vars?.length) {
-        cellQuery.vars.forEach((cellVar) => {
-          if (cellVar && pathParams[cellVar.name] !== undefined) {
-            variables[cellVar.name] = pathParams[cellVar.name]
-          }
-        })
-      }
-
-      const operation = {
-        operationName: cellQuery.operationName,
-        query: cellQuery.query,
-        variables,
-      }
-
-      // console.log('operation', operation)
-
-      const handlerResult = await gqlHandler(operation)
-
-      // console.log('handlerResult', handlerResult)
-
-      return { ...cellQuery, data: handlerResult.body }
-    })
-  )
-
-  return cellData
-}
 
 async function executeQuery(
   query: DocumentNode,
@@ -188,20 +106,6 @@ export const runPrerender = async ({
   console.log('prerender routePath', routePath)
   console.log('')
 
-  let pathParams: Record<string, unknown> = {}
-
-  // routePath will be undefined for NotFoundPage
-  if (routePath) {
-    const { params } = matchPath(routePath, renderPath)
-    pathParams = params || {}
-
-    console.log('params from matchPath', params)
-  }
-
-  const cellData = await getCellData(pathParams)
-  // console.log('cellData', JSON.stringify(cellData, null, 2))
-  global.__REDWOOD__CELL_DATA = cellData
-
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
@@ -221,7 +125,9 @@ export const runPrerender = async ({
   const { default: App } = await import(getPaths().web.app)
 
   // TODO: Create this further up. We can potentially reuse some data between
-  // different pages
+  // different pages. I.e. if the same query, with the same variables is
+  // executed twice, we'd only have to execute it once and then just reuse
+  // the cached result the second time.
   const queryInfo: Record<string, QueryInfo> = {}
 
   // Render once to collect all queries

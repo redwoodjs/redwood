@@ -10,6 +10,7 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
+import { configureBabel, runScript } from '../lib/exec'
 
 export const command = 'prerender'
 export const aliases = ['render']
@@ -47,6 +48,29 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
+async function getAllRouteParameters() {
+  configureBabel()
+
+  const prerenderScriptPathJs = path.join(getPaths().scripts, 'prerender.js')
+  const prerenderScriptPathTs = path.join(getPaths().scripts, 'prerender.ts')
+  const prerenderScriptPath = fs.existsSync(prerenderScriptPathTs)
+    ? prerenderScriptPathTs
+    : prerenderScriptPathJs
+
+  if (!fs.existsSync(prerenderScriptPath)) {
+    // No prerender.{js,ts} file exists. Which is fine. Just means we can't
+    // prerender any routes with path parameters
+
+    return {}
+  }
+
+  const parameters = await runScript(prerenderScriptPath)
+
+  console.log('parameters', parameters)
+
+  return parameters
+}
+
 /**
  * Takes a route with a path like /blog-post/{id:Int}
  * Reads path parameters from some file (TODO: specify file name(s)) and returns
@@ -63,11 +87,11 @@ const mapRouterPathToHtml = (routerPath) => {
  * datatype according to the type notation ("Int" in the example above) will
  * be done later, in another function
  */
-function expandRouteParameters(route) {
+function expandRouteParameters(route, parameters) {
   // TODO: Read from some file in the RW project
-  const parameters = {
-    blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }],
-  }
+  // const parameters = {
+  //   blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }],
+  // }
 
   if (parameters[route.name]) {
     return parameters[route.name].map((pathParamValues) => {
@@ -111,9 +135,12 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     // TODO: Run this automatically at this point.
   }
 
+  const parameters = await getAllRouteParameters()
+
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)
-    .flatMap(expandRouteParameters)
+    .flatMap((route) => expandRouteParameters(route, parameters))
+    // TODO: .filter(noUnexpandedParameters)
     .flatMap((routeToPrerender) => {
       // Filter out routes that don't match the supplied routePathFilter
       if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {

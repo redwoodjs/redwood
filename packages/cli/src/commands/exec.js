@@ -4,29 +4,12 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import {
-  findScripts,
-  getWebSideDefaultBabelConfig,
-  registerApiSideBabelHook,
-} from '@redwoodjs/internal'
+import { findScripts } from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { configureBabel, runScript } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
-
-const runScript = async (scriptPath, scriptArgs) => {
-  const script = await import(scriptPath)
-  await script.default({ args: scriptArgs })
-
-  try {
-    const { db } = await import(path.join(getPaths().api.lib, 'db'))
-    db.$disconnect()
-  } catch (e) {
-    // silence
-  }
-
-  return
-}
 
 export const command = 'exec [name]'
 export const description = 'Run scripts generated with yarn generate script'
@@ -74,64 +57,7 @@ export const handler = async (args) => {
 
   const scriptPath = path.join(getPaths().scripts, name)
 
-  const {
-    overrides: _overrides,
-    plugins: webPlugins,
-    ...otherWebConfig
-  } = getWebSideDefaultBabelConfig()
-
-  // Import babel config for running script
-  registerApiSideBabelHook({
-    plugins: [
-      [
-        'babel-plugin-module-resolver',
-        {
-          alias: {
-            $api: getPaths().api.base,
-            $web: getPaths().web.base,
-            api: getPaths().api.base,
-            web: getPaths().web.base,
-          },
-          loglevel: 'silent', // to silence the unnecessary warnings
-        },
-        'exec-$side-module-resolver',
-      ],
-    ],
-    overrides: [
-      {
-        test: ['./api/'],
-        plugins: [
-          [
-            'babel-plugin-module-resolver',
-            {
-              alias: {
-                src: getPaths().api.src,
-              },
-              loglevel: 'silent',
-            },
-            'exec-api-src-module-resolver',
-          ],
-        ],
-      },
-      {
-        test: ['./web/'],
-        plugins: [
-          ...webPlugins,
-          [
-            'babel-plugin-module-resolver',
-            {
-              alias: {
-                src: getPaths().web.src,
-              },
-              loglevel: 'silent',
-            },
-            'exec-web-src-module-resolver',
-          ],
-        ],
-        ...otherWebConfig,
-      },
-    ],
-  })
+  configureBabel()
 
   try {
     require.resolve(scriptPath)
