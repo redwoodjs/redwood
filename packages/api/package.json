@@ -59,7 +59,7 @@
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
     "split2": "4.1.0",
-    "typescript": "4.6.4"
+    "typescript": "4.7.2"
   },
   "peerDependencies": {
     "@clerk/clerk-sdk-node": "3.6.0",
