@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import glob from 'glob'
 
@@ -8,6 +9,18 @@ import {
 } from '@redwoodjs/graphql-server'
 
 import { getPaths } from '@redwoodjs/internal'
+
+export async function getGqlHandler() {
+  const gqlPathTs = path.join(getPaths().api.functions, 'graphql.ts')
+  const gqlPathJs = path.join(getPaths().api.functions, 'graphql.js')
+  const gqlPath = fs.existsSync(gqlPathTs) ? gqlPathTs : gqlPathJs
+
+  const { handler } = await import(gqlPath)
+
+  return async (operation: Record<string, unknown>) => {
+    return await handler(buildApiEvent(operation), buildContext())
+  }
+}
 
 async function getDirectives() {
   const paths = getPaths()

@@ -11,20 +11,20 @@ import {
   getPaths,
   registerApiSideBabelHook,
   registerWebSideBabelHook,
+  // babelPluginRedwoodImportDir,
 } from '@redwoodjs/internal'
 import { LocationProvider } from '@redwoodjs/router'
 import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
-import { graphqlHandler } from './graphql/graphql'
+import { getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 async function executeQuery(
+  gqlHandler: (args: any) => Promise<any>,
   query: DocumentNode,
   variables?: Record<string, unknown>
 ) {
-  const gqlHandler = await graphqlHandler()
-
   let operationName = ''
   for (const definition of query.definitions) {
     if (definition.kind === 'OperationDefinition' && definition.name?.value) {
@@ -52,6 +52,7 @@ export const runPrerender = async ({
   renderPath,
   routePath,
 }: PrerenderParams): Promise<string | void> => {
+  // registerApiSideBabelHook already includes the default api side babel config
   registerApiSideBabelHook({
     plugins: [
       [
@@ -81,23 +82,6 @@ export const runPrerender = async ({
           ],
         ],
       },
-      // {
-      //   test: ['./web/'],
-      //   plugins: [
-      //     ...webPlugins,
-      //     [
-      //       'babel-plugin-module-resolver',
-      //       {
-      //         alias: {
-      //           src: getPaths().web.src,
-      //         },
-      //         loglevel: 'silent',
-      //       },
-      //       'exec-web-src-module-resolver',
-      //     ],
-      //   ],
-      //   ...otherWebConfig,
-      // },
     ],
   })
 
@@ -105,6 +89,7 @@ export const runPrerender = async ({
   console.log('prerender renderPath', renderPath)
   console.log('prerender routePath', routePath)
   console.log('')
+  const gqlHandler = await getGqlHandler()
 
   // Prerender specific configuration
   // extends projects web/babelConfig
@@ -148,7 +133,7 @@ export const runPrerender = async ({
       console.log('cacheKey', cacheKey)
       console.log('value', value)
 
-      const data = await executeQuery(value.query, value.variables)
+      const data = await executeQuery(gqlHandler, value.query, value.variables)
 
       console.log('typeof data', typeof data)
 
@@ -163,6 +148,8 @@ export const runPrerender = async ({
       return data
     })
   )
+
+  console.log('all queries executed')
 
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider location={{ pathname: renderPath }}>
