@@ -80,18 +80,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.21.1":
-  version: 1.21.1
-  resolution: "@auth0/auth0-spa-js@npm:1.21.1"
+"@auth0/auth0-spa-js@npm:1.22.0":
+  version: 1.22.0
+  resolution: "@auth0/auth0-spa-js@npm:1.22.0"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.22.0
+    core-js: ^3.22.4
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 32ae80374b0ccfeb3bec04ca94867c46a2bde858f98fae9b1d86992c386908e0d59d8011fdd3518dd3badb02ba23d72b65e256cffbce521e9e9bdc4471758a41
+  checksum: 7bcef7b59f6e804edb81c07fee03a7a4e9ce90126d4d47ac5c518a0f7057bbf5b2302c2002c7972155b3670ea44efba837445acd1be9b64ad1688e109eaa3b08
   languageName: node
   linkType: hard
 
@@ -3611,9 +3611,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.6.1":
-  version: 2.6.1
-  resolution: "@graphql-yoga/common@npm:2.6.1"
+"@graphql-yoga/common@npm:2.7.0":
+  version: 2.7.0
+  resolution: "@graphql-yoga/common@npm:2.7.0"
   dependencies:
     "@envelop/core": ^2.0.0
     "@envelop/parser-cache": ^4.0.0
@@ -3627,7 +3627,7 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 5a3a81a08ecca2da78c3539b72f4d340a2269742432aefc90642be55db34891ed71df30d18a0403f5d5c4d325b32cffb16b981f4073521d7acf89daaf70a18a4
+  checksum: 1ccbf9933cc4ce6870fda8c7f7fa58ca192ea96917059c19bac9a7ff9f608c13fa7a5759e252823ed2f652f8529f5865fc9e4c4eee32b77eda16c9eba5a9e99f
   languageName: node
   linkType: hard
 
@@ -5826,7 +5826,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.10.3
     split2: 4.1.0
-    typescript: 4.6.4
+    typescript: 4.7.2
     yargs: 17.5.1
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -5865,7 +5865,7 @@ __metadata:
     pino: 7.11.0
     split2: 4.1.0
     title-case: 3.0.3
-    typescript: 4.6.4
+    typescript: 4.7.2
     uuid: 8.3.2
   peerDependencies:
     "@clerk/clerk-sdk-node": 3.6.0
@@ -5890,7 +5890,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.21.1
+    "@auth0/auth0-spa-js": 1.22.0
     "@azure/msal-browser": 2.24.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
@@ -5912,7 +5912,7 @@ __metadata:
     netlify-identity-widget: 1.9.2
     react: 17.0.2
     supertokens-auth-react: 0.21.3
-    typescript: 4.6.4
+    typescript: 4.7.2
   languageName: unknown
   linkType: soft
 
@@ -5959,7 +5959,7 @@ __metadata:
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     title-case: 3.0.3
-    typescript: 4.6.4
+    typescript: 4.7.2
     yargs: 17.5.1
   bin:
     redwood: ./dist/index.js
@@ -6053,7 +6053,7 @@ __metadata:
     rimraf: 3.0.2
     style-loader: 3.3.1
     svg-react-loader: 0.4.6
-    typescript: 4.6.4
+    typescript: 4.7.2
     url-loader: 4.1.1
     webpack: 5.72.1
     webpack-bundle-analyzer: 4.5.0
@@ -6101,7 +6101,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.5.0
     jest: 27.5.1
     prettier: 2.6.2
-    typescript: 4.6.4
+    typescript: 4.7.2
   languageName: unknown
   linkType: soft
 
@@ -6128,7 +6128,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-hook-form: 7.31.2
-    typescript: 4.6.4
+    typescript: 4.7.2
   peerDependencies:
     graphql: 16.5.0
     react: 17.0.2
@@ -6152,7 +6152,7 @@ __metadata:
     "@graphql-tools/merge": 8.2.13
     "@graphql-tools/schema": 8.3.13
     "@graphql-tools/utils": 8.6.12
-    "@graphql-yoga/common": 2.6.1
+    "@graphql-yoga/common": 2.7.0
     "@prisma/client": 3.14.0
     "@redwoodjs/api": 1.5.0
     "@redwoodjs/auth": 1.5.0
@@ -6168,7 +6168,7 @@ __metadata:
     jest: 27.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    typescript: 4.6.4
+    typescript: 4.7.2
     uuid: 8.3.2
   languageName: unknown
   linkType: soft
@@ -6217,7 +6217,7 @@ __metadata:
     systeminformation: 5.11.15
     terminal-link: 2.1.1
     toml: 3.0.0
-    typescript: 4.6.4
+    typescript: 4.7.2
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -6244,7 +6244,7 @@ __metadata:
     cross-undici-fetch: 0.1.27
     jest: 27.5.1
     mime-types: 2.1.35
-    typescript: 4.6.4
+    typescript: 4.7.2
   peerDependencies:
     react: 17.0.2
     react-dom: 17.0.2
@@ -6284,7 +6284,7 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
-    typescript: 4.6.4
+    typescript: 4.7.2
   languageName: unknown
   linkType: soft
 
@@ -6319,7 +6319,7 @@ __metadata:
     proxyquire: 2.1.3
     toml: 3.0.0
     ts-morph: 14.0.0
-    typescript: 4.6.4
+    typescript: 4.7.2
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.4
     vscode-languageserver-types: 3.17.1
@@ -6386,7 +6386,7 @@ __metadata:
     jest-watch-typeahead: 1.1.0
     msw: 0.40.2
     ts-toolbelt: 9.6.0
-    typescript: 4.6.4
+    typescript: 4.7.2
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -6418,7 +6418,7 @@ __metadata:
     react-hot-toast: 2.2.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 4.6.4
+    typescript: 4.7.2
   peerDependencies:
     prop-types: 15.8.1
     react: 17.0.2
@@ -12986,7 +12986,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.22.7, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.22.7, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.4, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.22.7
   resolution: "core-js@npm:3.22.7"
   checksum: 0f9daff33656f4b9a1664c35f2ce151746e8a198ae9f32d81465a0a63b5b5f15e81cc0e43f073f2733f23d842d75b946d02c1ee05ba4e805c90417e1c7ee7d82
@@ -13161,7 +13161,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 27.5.1
     listr: 0.14.3
-    typescript: 4.6.4
+    typescript: 4.7.2
     yargs: 17.5.1
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -26993,7 +26993,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.6.4
+    typescript: 4.7.2
     typescript-transform-paths: 3.3.1
     zx: 6.1.0
   languageName: unknown
@@ -29829,23 +29829,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.6.4":
-  version: 4.6.4
-  resolution: "typescript@npm:4.6.4"
+"typescript@npm:4.7.2":
+  version: 4.7.2
+  resolution: "typescript@npm:4.7.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 92e2c0328485a4f7bd7435f5b105f03addff32f867e241dc3be8c372ed801a138c732d9a55697696d2f82a80dd6ad4bddff1ad6b0d1884bf4a24b92e71094c44
+  checksum: c458df58a52f1cb1c954109dbc3477abfeb632644bc6552a9ac2152bce86e377afe11bf661466926bc4dcdc945f1e053d492c347ae377f1cba7051226b930ea3
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>":
-  version: 4.6.4
-  resolution: "typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=7ad353"
+"typescript@patch:typescript@npm%3A4.7.2#~builtin<compat/typescript>":
+  version: 4.7.2
+  resolution: "typescript@patch:typescript@npm%3A4.7.2#~builtin<compat/typescript>::version=4.7.2&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 0e3fa814d454942a689daf4c00f82328d323e7ecd4077e3265d45375e64642611631f4c882a71be87774468ba03793e9b8ff4bccfac3018194a9e36d8f72c251
+  checksum: f454730aef4a8cef2ad5650ce769f38ed4460583fe5867d4f93592282afdbd9b5142b75d448b647e4984edf23575ac1f2adafb2db8614f253f700721d3eb439a
   languageName: node
   linkType: hard
 
