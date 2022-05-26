@@ -6210,7 +6210,7 @@ __metadata:
     graphql: 16.5.0
     graphql-tag: 2.12.6
     jest: 27.5.1
-    kill-port: 2.0.0
+    kill-port: 1.6.1
     prettier: 2.6.2
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
@@ -20777,15 +20777,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kill-port@npm:2.0.0":
-  version: 2.0.0
-  resolution: "kill-port@npm:2.0.0"
+"kill-port@npm:1.6.1":
+  version: 1.6.1
+  resolution: "kill-port@npm:1.6.1"
   dependencies:
     get-them-args: 1.3.2
     shell-exec: 1.0.2
   bin:
     kill-port: cli.js
-  checksum: 3a4b547e4a500336f7cdd26eb1f96feaa4828ff483aa80644836d039473d3fb68471fda8fce7aa386d711de7a3400f5c87253bfe8bf5ec5859f2ec2196301269
+  checksum: f9d51a43f8349f162f4f004bd6e68e54d615f9a8f994c780b09771962becb4458cd7ba3a043948ecb18405a7e0d9c31d7264924d0b7f6e24a6f2a01cc474de21
   languageName: node
   linkType: hard
 
