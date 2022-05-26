@@ -4,7 +4,6 @@ import path from 'path'
 import React from 'react'
 
 import cheerio from 'cheerio'
-import { DocumentNode } from 'graphql'
 import ReactDOMServer from 'react-dom/server'
 
 import {
@@ -16,26 +15,8 @@ import { LocationProvider } from '@redwoodjs/router'
 import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
-import { getGqlHandler } from './graphql/graphql'
+import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
-
-async function executeQuery(
-  gqlHandler: (args: any) => Promise<any>,
-  query: DocumentNode,
-  variables?: Record<string, unknown>
-) {
-  let operationName = ''
-  for (const definition of query.definitions) {
-    if (definition.kind === 'OperationDefinition' && definition.name?.value) {
-      operationName = definition.name.value
-    }
-  }
-
-  const operation = { operationName, query, variables }
-  const handlerResult = await gqlHandler(operation)
-
-  return handlerResult.body
-}
 
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>

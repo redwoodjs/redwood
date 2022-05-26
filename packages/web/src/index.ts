@@ -23,6 +23,8 @@ export {
   CellSuccessProps,
 } from './components/createCell'
 
+export * from './graphql'
+
 export * from './components/RedwoodProvider'
 
 export * from './components/MetaTags'

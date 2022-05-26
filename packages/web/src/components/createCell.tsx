@@ -3,6 +3,8 @@ import type { ComponentProps, JSXElementConstructor } from 'react'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
+import { getOperationName } from '../graphql'
+
 import { useCellCacheContext } from './CellCacheContext'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
@@ -246,16 +248,7 @@ export function createCell<CellProps = any>({
       /* eslint-disable-next-line react-hooks/rules-of-hooks */
       const cellCacheContext = useCellCacheContext()
 
-      // TODO: Extract this so we can use it both here and in runPrerender.tsx
-      let operationName = ''
-      for (const definition of query.definitions) {
-        if (
-          definition.kind === 'OperationDefinition' &&
-          definition.name?.value
-        ) {
-          operationName = definition.name.value
-        }
-      }
+      const operationName = getOperationName(query)
 
       let cacheKey
 

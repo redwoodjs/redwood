@@ -1,14 +1,21 @@
 import fs from 'fs'
 import path from 'path'
-import glob from 'glob'
-
-import {
-  createGraphQLHandler,
-  SdlGlobImports,
-  ServicesGlobImports,
-} from '@redwoodjs/graphql-server'
+import { DocumentNode } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal'
+import { getOperationName } from '@redwoodjs/web'
+
+export async function executeQuery(
+  gqlHandler: (args: any) => Promise<any>,
+  query: DocumentNode,
+  variables?: Record<string, unknown>
+) {
+  const operationName = getOperationName(query)
+  const operation = { operationName, query, variables }
+  const handlerResult = await gqlHandler(operation)
+
+  return handlerResult.body
+}
 
 export async function getGqlHandler() {
   const gqlPathTs = path.join(getPaths().api.functions, 'graphql.ts')
@@ -16,112 +23,6 @@ export async function getGqlHandler() {
   const gqlPath = fs.existsSync(gqlPathTs) ? gqlPathTs : gqlPathJs
 
   const { handler } = await import(gqlPath)
-
-  return async (operation: Record<string, unknown>) => {
-    return await handler(buildApiEvent(operation), buildContext())
-  }
-}
-
-async function getDirectives() {
-  const paths = getPaths()
-  const directivePaths = glob
-    .sync(paths.api.directives + '/**/*.{js,ts}')
-    .filter((directivePath) =>
-      // Keep only files that have just one dot (.) in the filename
-      /^[^.]+\.(js|ts)$/.test(directivePath.split(path.sep).slice(-1)[0])
-    )
-
-  const directives = await directivePaths.reduce<
-    Promise<Record<string, unknown>>
-  >(async (prev, cur) => {
-    // `name` is just the filename without path, and without extension
-    const { name } = path.parse(cur)
-
-    return {
-      ...(await prev),
-      [name + '_' + name]: await import(cur),
-    }
-  }, Promise.resolve({}))
-
-  return directives
-}
-
-async function getSdls() {
-  const paths = getPaths()
-  const sdlPaths = glob.sync(paths.api.graphql + '/**/*.sdl.{js,ts}')
-
-  const sdls = await sdlPaths.reduce<Promise<SdlGlobImports>>(
-    async (prev, cur) => {
-      // `name` is just the filename without path, and without extension
-      const { name } = path.parse(cur)
-
-      return {
-        ...(await prev),
-        [name.replace('.', '_')]: await import(cur),
-      }
-    },
-    Promise.resolve({})
-  )
-
-  return sdls
-}
-
-async function getServices() {
-  const paths = getPaths()
-  const servicesPaths = glob
-    .sync(paths.api.services + '/**/*.{js,ts}')
-    .filter((servicePath) =>
-      // Keep only files that have just one dot (.) in the filename
-      /^[^.]+\.(js|ts)$/.test(servicePath.split(path.sep).slice(-1)[0])
-    )
-
-  const services = await servicesPaths.reduce<Promise<ServicesGlobImports>>(
-    async (prev, cur) => {
-      // `name` is just the filename without path, and without extension
-      const { name } = path.parse(cur)
-
-      return {
-        ...(await prev),
-        [name + '_' + name]: await import(cur),
-      }
-    },
-    Promise.resolve({})
-  )
-
-  return services
-}
-
-export async function graphqlHandler() {
-  const directives = await getDirectives()
-  const sdls = await getSdls()
-  const services = await getServices()
-
-  const logger = {
-    level: 'debug',
-    fatal: () => {},
-    error: () => {},
-    info: () => {},
-    debug: () => {},
-    trace: () => {},
-    warn: () => {},
-    silent: () => {},
-    child: () => {
-      return logger
-    },
-  }
-
-  const handler = createGraphQLHandler({
-    getCurrentUser: () => {
-      return Promise.resolve({})
-    },
-    loggerConfig: { logger: logger as any, options: {} },
-    directives,
-    sdls,
-    services,
-    onException: () => {
-      console.log('got an exception')
-    },
-  })
 
   return async (operation: Record<string, unknown>) => {
     return await handler(buildApiEvent(operation), buildContext())
