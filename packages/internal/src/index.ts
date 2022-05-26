@@ -13,5 +13,3 @@ export * from './validateSchema'
 export * from './build/babel/api'
 export * from './build/babel/web'
 export * from './build/babel/common'
-
-export { default as babelPluginRedwoodImportDir } from './build/babelPlugins/babel-plugin-redwood-import-dir'

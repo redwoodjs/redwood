@@ -12,6 +12,8 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import c from '../lib/colors'
 import { configureBabel, runScript } from '../lib/exec'
 
+class PathParamError extends Error {}
+
 export const command = 'prerender'
 export const aliases = ['render']
 export const description = 'Prerender pages of your Redwood app at build time'
@@ -73,9 +75,8 @@ async function getAllRouteParameters() {
 
 /**
  * Takes a route with a path like /blog-post/{id:Int}
- * Reads path parameters from some file (TODO: specify file name(s)) and returns
- * a list of routes with the path parameter placeholders (like {id:Int})
- * replaced by actual values
+ * Reads path parameters from /scripts/prerender.js and returns a list of routes
+ * with the path parameter placeholders (like {id:Int}) replaced by actual values
  *
  * So for values like [{ id: 1 }, { id: 2 }, { id: 3 }] (and, again, a route
  * path like /blog-post/{id:Int}) it will return three routes with the paths
@@ -85,14 +86,10 @@ async function getAllRouteParameters() {
  *
  * The paths will be strings. Parsing those path parameters to the correct
  * datatype according to the type notation ("Int" in the example above) will
- * be done later, in another function
+ * be handled by the normal router functions, just like when rendering in a
+ * client browser
  */
 function expandRouteParameters(route, parameters) {
-  // TODO: Read from some file in the RW project
-  // const parameters = {
-  //   blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }],
-  // }
-
   if (parameters[route.name]) {
     return parameters[route.name].map((pathParamValues) => {
       let newPath = route.path
@@ -104,7 +101,7 @@ function expandRouteParameters(route, parameters) {
         )
       })
 
-      return { ...route, routePath: route.path, path: newPath }
+      return { ...route, path: newPath }
     })
   }
 
@@ -140,7 +137,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)
     .flatMap((route) => expandRouteParameters(route, parameters))
-    // TODO: .filter(noUnexpandedParameters)
     .flatMap((routeToPrerender) => {
       // Filter out routes that don't match the supplied routePathFilter
       if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {
@@ -148,15 +144,34 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
       }
 
       console.log('routeToPrerender', routeToPrerender)
+      console.log('')
+      console.log('')
 
       const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
+
+      // queryCache will be filled with the queries from all the Cells we
+      // encounter while prerendering, and the result from executing those
+      // queries.
+      // We have this cache here because we can potentially reuse result data
+      // between different pages. I.e. if the same query, with the same
+      // variables is encountered twice, we'd only have to execute it once and
+      // then just reuse the cached result the second time.
+      const queryCache = {}
 
       return [
         {
           title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
           task: async () => {
+            if (/\{.*}/.test(routeToPrerender.path)) {
+              throw new PathParamError(
+                'You did not provide values for all of the route ' +
+                  "parameters, so we can't prerender"
+              )
+            }
+
             try {
               const prerenderedHtml = await runPrerender({
+                queryCache,
                 renderPath: routeToPrerender.path,
                 routePath: routeToPrerender.routePath,
               })
@@ -271,16 +286,25 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     await diagnosticCheck()
 
     console.log(c.warning('Tips:'))
-    console.log(
-      c.info(
-        `- This could mean that a library you're using does not support SSR.`
+
+    if (e instanceof PathParamError) {
+      console.log(
+        c.info(
+          '- You most likely need to add or update /scripts/prerender.{js,ts}'
+        )
       )
-    )
-    console.log(
-      c.info(
-        '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
+    } else {
+      console.log(
+        c.info(
+          `- This could mean that a library you're using does not support SSR.`
+        )
       )
-    )
+      console.log(
+        c.info(
+          '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
+        )
+      )
+    }
 
     console.log()
 

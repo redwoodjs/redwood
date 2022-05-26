@@ -11,19 +11,19 @@ export interface QueryInfo {
 }
 
 export interface CellCacheState {
-  queryInfo: Record<string, QueryInfo | undefined>
+  queryCache: Record<string, QueryInfo | undefined>
 }
 
 const CellCacheContext = createContext<CellCacheState | undefined>(undefined)
 
 interface Props {
-  queryInfo: Record<string, QueryInfo | undefined>
+  queryCache: Record<string, QueryInfo | undefined>
   children?: React.ReactNode
 }
 
-export const CellCacheContextProvider = ({ queryInfo, children }: Props) => {
+export const CellCacheContextProvider = ({ queryCache, children }: Props) => {
   return (
-    <CellCacheContext.Provider value={{ queryInfo }}>
+    <CellCacheContext.Provider value={{ queryCache }}>
       {children}
     </CellCacheContext.Provider>
   )

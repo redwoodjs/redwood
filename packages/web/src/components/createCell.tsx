@@ -270,7 +270,7 @@ export function createCell<CellProps = any>({
 
       console.log('cacheKey', cacheKey)
 
-      const queryInfo = cellCacheContext.queryInfo[cacheKey]
+      const queryInfo = cellCacheContext.queryCache[cacheKey]
 
       if (queryInfo?.hasFetched) {
         loading = false
@@ -278,7 +278,7 @@ export function createCell<CellProps = any>({
         error = queryInfo.error
         queryRest = { variables } as any // TODO: Fix type
       } else {
-        cellCacheContext.queryInfo[cacheKey] ||= {
+        cellCacheContext.queryCache[cacheKey] ||= {
           query,
           variables: options.variables,
           hasFetched: false,

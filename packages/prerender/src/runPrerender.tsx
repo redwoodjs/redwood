@@ -11,7 +11,6 @@ import {
   getPaths,
   registerApiSideBabelHook,
   registerWebSideBabelHook,
-  // babelPluginRedwoodImportDir,
 } from '@redwoodjs/internal'
 import { LocationProvider } from '@redwoodjs/router'
 import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
@@ -44,15 +43,18 @@ async function executeQuery(
 }
 
 interface PrerenderParams {
+  queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
   routePath: string // The path from a <Route> e.g. /blog-post/{id:Int}
 }
 
 export const runPrerender = async ({
+  queryCache,
   renderPath,
   routePath,
 }: PrerenderParams): Promise<string | void> => {
-  // registerApiSideBabelHook already includes the default api side babel config
+  // registerApiSideBabelHook already includes the default api side babel
+  // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
     plugins: [
       [
@@ -109,37 +111,24 @@ export const runPrerender = async ({
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
 
-  // TODO: Create this further up. We can potentially reuse some data between
-  // different pages. I.e. if the same query, with the same variables is
-  // executed twice, we'd only have to execute it once and then just reuse
-  // the cached result the second time.
-  const queryInfo: Record<string, QueryInfo> = {}
-
   // Render once to collect all queries
   ReactDOMServer.renderToString(
     <LocationProvider location={{ pathname: renderPath }}>
-      <CellCacheContextProvider queryInfo={queryInfo}>
+      <CellCacheContextProvider queryCache={queryCache}>
         <App />
       </CellCacheContextProvider>
     </LocationProvider>
   )
 
   console.log('')
-  console.log('queryInfo', Object.values(queryInfo))
+  console.log('queryCache', Object.values(queryCache))
   console.log('')
 
   await Promise.all(
-    Object.entries(queryInfo).map(async ([cacheKey, value]) => {
-      console.log('cacheKey', cacheKey)
-      console.log('value', value)
-
+    Object.entries(queryCache).map(async ([cacheKey, value]) => {
       const data = await executeQuery(gqlHandler, value.query, value.variables)
 
-      console.log('typeof data', typeof data)
-
-      console.log('data', JSON.parse(data))
-
-      queryInfo[cacheKey] = {
+      queryCache[cacheKey] = {
         ...value,
         data: JSON.parse(data).data,
         hasFetched: true,
@@ -149,11 +138,9 @@ export const runPrerender = async ({
     })
   )
 
-  console.log('all queries executed')
-
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider location={{ pathname: renderPath }}>
-      <CellCacheContextProvider queryInfo={queryInfo}>
+      <CellCacheContextProvider queryCache={queryCache}>
         <App />
       </CellCacheContextProvider>
     </LocationProvider>
