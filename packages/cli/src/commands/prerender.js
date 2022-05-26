@@ -68,8 +68,6 @@ async function getAllRouteParameters() {
 
   const parameters = await runScript(prerenderScriptPath)
 
-  console.log('parameters', parameters)
-
   return parameters
 }
 
@@ -143,10 +141,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
         return []
       }
 
-      console.log('routeToPrerender', routeToPrerender)
-      console.log('')
-      console.log('')
-
       const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
       // queryCache will be filled with the queries from all the Cells we
@@ -173,7 +167,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
               const prerenderedHtml = await runPrerender({
                 queryCache,
                 renderPath: routeToPrerender.path,
-                routePath: routeToPrerender.routePath,
               })
 
               if (!dryrun) {

@@ -31,12 +31,7 @@ async function executeQuery(
     }
   }
 
-  const operation = {
-    operationName: operationName,
-    query,
-    variables,
-  }
-
+  const operation = { operationName, query, variables }
   const handlerResult = await gqlHandler(operation)
 
   return handlerResult.body
@@ -45,13 +40,11 @@ async function executeQuery(
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
-  routePath: string // The path from a <Route> e.g. /blog-post/{id:Int}
 }
 
 export const runPrerender = async ({
   queryCache,
   renderPath,
-  routePath,
 }: PrerenderParams): Promise<string | void> => {
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
@@ -87,10 +80,6 @@ export const runPrerender = async ({
     ],
   })
 
-  console.log('')
-  console.log('prerender renderPath', renderPath)
-  console.log('prerender routePath', routePath)
-  console.log('')
   const gqlHandler = await getGqlHandler()
 
   // Prerender specific configuration
@@ -119,10 +108,6 @@ export const runPrerender = async ({
       </CellCacheContextProvider>
     </LocationProvider>
   )
-
-  console.log('')
-  console.log('queryCache', Object.values(queryCache))
-  console.log('')
 
   await Promise.all(
     Object.entries(queryCache).map(async ([cacheKey, value]) => {

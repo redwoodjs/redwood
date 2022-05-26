@@ -32,7 +32,6 @@ declare global {
       __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
       __REDWOOD__APP_TITLE: string
       __REDWOOD__USE_AUTH: () => AuthContextInterface
-
       /** URL or absolute path to the GraphQL serverless function */
       RWJS_API_GRAPHQL_URL: string
       /** URL or absolute path to the DbAuth serverless function */
