@@ -268,8 +268,6 @@ export function createCell<CellProps = any>({
           JSON.stringify(query, null, 2) + '_' + JSON.stringify(variables)
       }
 
-      console.log('cacheKey', cacheKey)
-
       const queryInfo = cellCacheContext.queryCache[cacheKey]
 
       if (queryInfo?.hasFetched) {
@@ -285,11 +283,6 @@ export function createCell<CellProps = any>({
         }
       }
     }
-
-    console.log('')
-    console.log('NamedCell loading', loading)
-    console.log('NamedCell data', data)
-    console.log('')
 
     if (error) {
       if (Failure) {
