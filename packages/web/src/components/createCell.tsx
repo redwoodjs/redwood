@@ -254,10 +254,13 @@ export function createCell<CellProps = any>({
       if (operationName) {
         cacheKey = operationName + '_' + JSON.stringify(variables)
       } else {
-        // TODO: This isn't very nice. Maybe we should just error out if the
-        // query doesn't have a name?
-        cacheKey =
-          JSON.stringify(query, null, 2) + '_' + JSON.stringify(variables)
+        const cellName = displayName === 'Cell' ? 'the cell' : displayName
+
+        throw new Error(
+          `The gql query in ${cellName} is missing an operation name. ` +
+            'Something like FindBlogPostQuery in ' +
+            '`query FindBlogPostQuery($id: Int!)`'
+        )
       }
 
       const queryInfo = cellCacheContext.queryCache[cacheKey]
