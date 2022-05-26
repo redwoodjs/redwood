@@ -247,7 +247,6 @@ export function createCell<CellProps = any>({
       // statement
       /* eslint-disable-next-line react-hooks/rules-of-hooks */
       const cellCacheContext = useCellCacheContext()
-
       const operationName = getOperationName(query)
 
       let cacheKey
@@ -267,7 +266,9 @@ export function createCell<CellProps = any>({
         loading = false
         data = queryInfo.data
         error = queryInfo.error
-        queryRest = { variables } as any // TODO: Fix type
+        // All of the gql client's props aren't available when pre-rendering,
+        // so using `any` here
+        queryRest = { variables } as any
       } else {
         cellCacheContext.queryCache[cacheKey] ||= {
           query,
