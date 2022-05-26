@@ -6,7 +6,6 @@ export const detectPrerenderRoutes = () => {
   const routes = rwProject.getRouter().routes
 
   const prerenderRoutes = routes
-    // .filter((route: any) => !route.hasParameters) // ignore routes that take params
     .filter((route: any) => route.prerender) // only select routes with prerender prop
     .map((route: any) => ({
       name: route.isNotFound ? '404' : route.name,
