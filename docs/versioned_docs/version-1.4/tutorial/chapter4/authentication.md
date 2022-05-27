@@ -859,9 +859,9 @@ export const getCurrentUser = async (session) => {
 ```
 
 </TabItem>
-<TabItem value="ts" label="TypeScript">
+<TabItem value="ts" label="TyepScript">
 
-```ts title="api/src/lib/auth.ts"
+```javascript title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
