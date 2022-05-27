@@ -59,7 +59,7 @@ If your 🏠 could enforce RBAC, it needs to know the rules.
 | -------- | :-----: | :------: | :----: | :------: | :-----: | :-----: |
 | Neighbor |    ✅    |          |   ✅    |    ✅     |         |         |
 | Plumber  |    ✅    |    ✅     |        |    ✅     |    ✅    |         |
-| Owner    |    ✅    |    ✅     |   ✅    |    ✅     |    ✅    |         |
+| Owner    |    ✅    |    ✅     |   ✅    |    ✅     |    ✅    |    ✅    |
 
 #### RBAC Example: Blog
 
