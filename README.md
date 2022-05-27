@@ -667,6 +667,9 @@ And there you have it.
     <td align="center"><a href="https://github.com/antonmihaylov"><img src="https://avatars.githubusercontent.com/u/57956282?v=4" width="100px;" alt=""/><br /><sub><b>Anton Mihaylov</b></sub></a></td>
     <td align="center"><a href="https://github.com/mparramont"><img src="https://avatars.githubusercontent.com/u/636075?v=4" width="100px;" alt=""/><br /><sub><b>Miguel Parramón</b></sub></a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://fabiolazzaroni.dev/"><img src="https://avatars.githubusercontent.com/u/15056746?v=4" width="100px;" alt=""/><br /><sub><b>Fabio Lazzaroni</b></sub></a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
