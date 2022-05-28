@@ -66,7 +66,7 @@ describe('Detecting routes', () => {
     expect(output[0].path).toBe('/404')
   })
 
-  it('Should ignore routes with params', () => {
+  it('Should also allow routes with params', () => {
     mockedRoutes = [
       {
         name: 'taskDetail',
@@ -77,7 +77,7 @@ describe('Detecting routes', () => {
     ]
 
     const output = detectPrerenderRoutes()
-    expect(output.length).toBe(0)
+    expect(output.length).toBe(1)
   })
 
   it('Should return required keys', () => {
