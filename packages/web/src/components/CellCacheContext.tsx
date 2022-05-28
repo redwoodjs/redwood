@@ -7,7 +7,6 @@ export interface QueryInfo {
   variables?: Record<string, unknown>
   hasFetched: boolean
   data?: unknown
-  error?: any // TODO: ApolloError
 }
 
 export interface CellCacheState {

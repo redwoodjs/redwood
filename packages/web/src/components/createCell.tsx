@@ -239,6 +239,7 @@ export function createCell<CellProps = any>({
 
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
+    // eslint-disable-next-line prefer-const
     let { error, loading, data, ...queryRest } = useQuery(query, options)
 
     if (global.__REDWOOD__PRERENDERING) {
@@ -268,7 +269,6 @@ export function createCell<CellProps = any>({
       if (queryInfo?.hasFetched) {
         loading = false
         data = queryInfo.data
-        error = queryInfo.error
         // All of the gql client's props aren't available when pre-rendering,
         // so using `any` here
         queryRest = { variables } as any
