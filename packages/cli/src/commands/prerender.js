@@ -5,11 +5,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
 import { getPaths } from '@redwoodjs/internal'
-import {
-  runPrerender,
-  writePrerenderedHtmlFile,
-  PrerenderGqlError,
-} from '@redwoodjs/prerender'
+import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 

@@ -144,7 +144,6 @@ test('prerender with broken gql query', async () => {
   fs.writeFileSync(cellPath, blogPostsCell.replace('createdAt', 'timestamp'))
 
   try {
-    // TODO: cleanup
     await execa(`yarn rw prerender`, {
       cwd: projectPath,
       shell: true,
@@ -158,12 +157,9 @@ test('prerender with broken gql query', async () => {
   // Restore cell
   fs.writeFileSync(cellPath, blogPostsCell)
 
-  const indexHtml = fs.readFileSync(
-    path.join(projectPath, 'web', 'dist', 'index.html'),
-    'utf-8'
-  )
-
-  expect(indexHtml).toMatch('A little more about me')
-  expect(indexHtml).toMatch('Welcome to the blog!')
-  expect(indexHtml).toMatch('What is the meaning of life?')
+  // Make sure to restore any potentially broken/missing prerendered pages
+  await execa(`yarn rw prerender`, {
+    cwd: projectPath,
+    shell: true,
+  })
 })
