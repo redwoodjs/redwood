@@ -4,7 +4,7 @@ description: Render pages ahead of time
 
 # Prerender
 
-Some of your pages don't have dynamic content; it'd be great if you could render them ahead of time, making for a faster experience for your end users.
+Prerendering is great for providing a faster expericne for your end users. Your pages will be rendered at build-time, saving your user's browser from having to do that job.
 
 We thought a lot about what the developer experience should be for route-based prerendering. The result is one of the smallest APIs imaginable!
 
@@ -31,7 +31,7 @@ Then run `yarn rw build` and enjoy the performance boost!
 
 Just add the `prerender` prop to the Set that wraps all Pages you want to prerender:
 
-```jsx {3} title="Routes.js"
+```jsx {1} title="Routes.js"
 <Set prerender>
   <Route path="/" page={HomePage} name="home" />
   <Route path="/about" page={AboutPage} name="hello" />
@@ -49,22 +49,36 @@ You can also prerender your not found page (a.k.a your 404 page). Just add—you
 
 This will prerender your NotFoundPage to `404.html` in your dist folder. Note that there's no need to specify a path.
 
-## Cells, Private Routes, and Dynamic URLs
+## Private Routes
 
-How does Prerendering handle dynamic data? For Cells, Redwood prerenders your Cells' `<Loading/>` component. Similarly, for Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
+For Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
 
-```jsx {1,2}
+```jsx
 <Private >
   // Loading is shown while we're checking to see if the user's logged in
   <Route path="/super-secret-admin-dashboard" page={SuperSecretAdminDashboard} name="ssad" whileLoadingAuth={() => <Loading />} prerender/>
 </Private>
 ```
 
-Right now prerendering won't work for dynamic URLs. We're working on this. If you try to prerender one of them, nothing will break, but nothing happens.
+## Dynamic routes
 
-```jsx title="web/src/Routes.js"
+Let's say you have a route like this
+
+```jsx
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
+
+To be able to prerender this route you need to let Redwood know what `id`s to use. You do this by updating the `scripts/prerender.js` file. It should return an object with keys for all the dynamic routes you wish to prerender. And the values to those keys should be an array of objects with the path param name as the key, and the value for the parameter as the object value. An example will hopefully make this clearer.
+
+For the example route above, all you need is this:
+
+```js title="scripts/prerender.js"
+return {
+  blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }]
+}
+```
+
+Because this is a regular RW script you have full access to your database using prisma, and all your services.
 
 ## Prerender Utils
 
