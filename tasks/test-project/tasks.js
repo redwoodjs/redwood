@@ -230,7 +230,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           blogPost: (await db.post.findMany()).map((post) => ({ id: post.id })),
         }
       }
-      `.replaceAll(/^ {6}/, '')
+      `.replaceAll(/ {6}/g, '')
     const prerenderTsPath = `${OUTPUT_PATH}/scripts/prerender.ts`
     fs.writeFileSync(prerenderTsPath, prerenderTs)
   }
