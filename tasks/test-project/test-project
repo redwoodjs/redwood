@@ -5,12 +5,10 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
-const rimraf = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
@@ -24,6 +22,9 @@ const {
   updatePkgJsonScripts,
   confirmNoFixtureNoLink,
 } = require('./util')
+
+const chalk = require('chalk')
+const rimraf = require('rimraf')
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')

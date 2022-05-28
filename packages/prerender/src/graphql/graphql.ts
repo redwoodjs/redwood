@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { DocumentNode } from 'graphql'
+import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal'
 import { getOperationName } from '@redwoodjs/web'
@@ -11,7 +11,7 @@ export async function executeQuery(
   variables?: Record<string, unknown>
 ) {
   const operationName = getOperationName(query)
-  const operation = { operationName, query, variables }
+  const operation = { operationName, query: print(query), variables }
   const handlerResult = await gqlHandler(operation)
 
   return handlerResult.body

@@ -201,7 +201,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     )
   }
 
-  // add prerender to 3 routes
+  // add prerender to some routes
   const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
   const addPrerender = async () => {
     const contentRoutes = fs.readFileSync(pathRoutes).toString()
@@ -213,11 +213,26 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       /name="home"/,
       `name="home" prerender`
     )
-    const resultsRoutesNotFound = resultsRoutesHome.replace(
+    const resultsRoutesBlogPost = resultsRoutesHome.replace(
+      /name="blogPost"/,
+      `name="blogPost" prerender`
+    )
+    const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
       /page={NotFoundPage}/,
       `page={NotFoundPage} prerender`
     )
     fs.writeFileSync(pathRoutes, resultsRoutesNotFound)
+
+    const prerenderTs = `import { db } from '$api/src/lib/db'
+
+      export default async function pathParameterValues() {
+        return {
+          blogPost: (await db.post.findMany()).map((post) => ({ id: post.id })),
+        }
+      }
+      `.replaceAll(/^ {6}/, '')
+    const prerenderTsPath = `${OUTPUT_PATH}/scripts/prerender.ts`
+    fs.writeFileSync(prerenderTsPath, prerenderTs)
   }
 
   return new Listr(

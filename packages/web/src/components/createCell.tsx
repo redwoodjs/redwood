@@ -246,7 +246,7 @@ export function createCell<CellProps = any>({
       // rules-of-hooks are still respected, even though we wrap this in an if
       // statement
       /* eslint-disable-next-line react-hooks/rules-of-hooks */
-      const cellCacheContext = useCellCacheContext()
+      const { queryCache } = useCellCacheContext()
       const operationName = getOperationName(query)
 
       let cacheKey
@@ -263,7 +263,7 @@ export function createCell<CellProps = any>({
         )
       }
 
-      const queryInfo = cellCacheContext.queryCache[cacheKey]
+      const queryInfo = queryCache[cacheKey]
 
       if (queryInfo?.hasFetched) {
         loading = false
@@ -273,7 +273,7 @@ export function createCell<CellProps = any>({
         // so using `any` here
         queryRest = { variables } as any
       } else {
-        cellCacheContext.queryCache[cacheKey] ||= {
+        queryCache[cacheKey] ||= {
           query,
           variables: options.variables,
           hasFetched: false,

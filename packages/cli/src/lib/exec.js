@@ -8,7 +8,9 @@ import {
 
 export async function runScript(scriptPath, scriptArgs) {
   const script = await import(scriptPath)
+  console.log('script', script)
   const returnValue = await script.default({ args: scriptArgs })
+  console.log('returnValue', returnValue)
 
   try {
     const { db } = await import(path.join(getPaths().api.lib, 'db'))

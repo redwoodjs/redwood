@@ -21,8 +21,34 @@ rwServeTest(
     const pageWithoutJs = await noJsBrowser.newPage()
     await pageWithoutJs.goto(`http://localhost:${port}/`)
 
-    const cellLoadingState = await pageWithoutJs.locator('main').innerHTML()
-    expect(cellLoadingState).toBe('<div>Loading...</div>')
+    const cellSuccessState = await pageWithoutJs.locator('main').innerHTML()
+    expect(cellSuccessState).toMatch('Welcome to the blog!')
+    expect(cellSuccessState).toMatch('A little more about me')
+    expect(cellSuccessState).toMatch('What is the meaning of life?')
+
+    const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
+    expect(navTitle).toBe('Redwood Blog')
+
+    const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
+    expect(navLinks.split('\n')).toEqual([
+      'About',
+      'Contact',
+      'Admin',
+      'Log In',
+    ])
+
+    pageWithoutJs.close()
+  }
+)
+
+rwServeTest(
+  'Check that a specific blog post is prerendered',
+  async ({ port }: ServeFixture & PlaywrightTestArgs) => {
+    const pageWithoutJs = await noJsBrowser.newPage()
+    await pageWithoutJs.goto(`http://localhost:${port}/blog-post/3`)
+
+    const mainContent = await pageWithoutJs.locator('main').innerHTML()
+    expect(mainContent).toMatch('What is the meaning of life? 42')
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')

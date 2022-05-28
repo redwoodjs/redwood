@@ -66,7 +66,11 @@ async function getAllRouteParameters() {
     return {}
   }
 
+  console.log('prerenderScriptPath', prerenderScriptPath)
+
   const parameters = await runScript(prerenderScriptPath)
+
+  console.log('parameters', parameters)
 
   return parameters
 }
