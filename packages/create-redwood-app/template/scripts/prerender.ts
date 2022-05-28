@@ -13,6 +13,6 @@ export default async function prerenderPathParameterValues(): Promise<
     // In a real app you'd probably fetch a subset of your entries in your db
     // (using the commented db import above, or by accessing a service) and
     // return those ids here.
-    userExample: [{ id: 1 }, { id: 2 }, { id: 3 }]
+    userExample: [{ id: 1 }, { id: 2 }, { id: 3 }],
   }
 }

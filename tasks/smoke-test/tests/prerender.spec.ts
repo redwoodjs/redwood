@@ -45,7 +45,16 @@ rwServeTest(
   'Check that a specific blog post is prerendered',
   async ({ port }: ServeFixture & PlaywrightTestArgs) => {
     const pageWithoutJs = await noJsBrowser.newPage()
-    await pageWithoutJs.goto(`http://localhost:${port}/blog-post/3`)
+
+    // It's non-deterministic what id the posts get, so we have to first find
+    // the url of a given post, and then navigate to that
+
+    await pageWithoutJs.goto(`http://localhost:${port}/`)
+    const meaningOfLifeHref = await pageWithoutJs
+      .locator('a:has-text("What is the meaning of life?")')
+      .getAttribute('href')
+
+    await pageWithoutJs.goto(`http://localhost:${port}${meaningOfLifeHref}`)
 
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch('What is the meaning of life?')
@@ -78,13 +87,20 @@ rwServeTest(
     expect(mainContent).toMatch('A little more about me')
     expect(mainContent).toMatch('What is the meaning of life?')
 
-    await pageWithoutJs.click('text=A little more about me')
+    await pageWithoutJs.goto(`http://localhost:${port}/`)
+    const aboutMeAnchor = await pageWithoutJs.locator(
+      'a:has-text("A little more about me")'
+    )
+
+    await aboutMeAnchor.click()
 
     mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch('A little more about me')
     expect(mainContent).not.toMatch('Welcome to the blog!')
     expect(mainContent).not.toMatch('What is the meaning of life?')
-    expect(pageWithoutJs.url()).toMatch('/blog-post/2')
+    expect(pageWithoutJs.url()).toMatch(
+      await aboutMeAnchor.getAttribute('href')
+    )
 
     pageWithoutJs.close()
   }
