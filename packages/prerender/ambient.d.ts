@@ -8,7 +8,6 @@ declare global {
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
   var __REDWOOD__USE_AUTH: () => AuthContextInterface
-
   /**
    * URL or absolute path to the GraphQL serverless function, without the trailing slash.
    * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
@@ -32,6 +31,7 @@ declare global {
       __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
       __REDWOOD__APP_TITLE: string
       __REDWOOD__USE_AUTH: () => AuthContextInterface
+
       /** URL or absolute path to the GraphQL serverless function */
       RWJS_API_GRAPHQL_URL: string
       /** URL or absolute path to the DbAuth serverless function */
