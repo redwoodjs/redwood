@@ -78,7 +78,9 @@ return {
 }
 ```
 
-Because this is a regular RW script you have full access to your database using prisma, and all your services.
+Because this is a regular RW script you have full access to your database using prisma and all your services, should you need it.
+
+With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. If it's just three pages like this, it's not problem. But this easily and quickly explodes to thousand of pages, which will make your build process really slow, so be careful with how many pages you prerender.
 
 ## Prerender Utils
 
