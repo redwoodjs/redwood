@@ -145,14 +145,10 @@ test('prerender with broken gql query', async () => {
 
   try {
     // TODO: cleanup
-    const prerender = await execa(`yarn rw prerender`, {
+    await execa(`yarn rw prerender`, {
       cwd: projectPath,
       shell: true,
     })
-
-    // TODO: cleanup
-    console.log('prerender.stdout', prerender.stdout)
-    console.log('prerender.stderr', prerender.stderr)
   } catch (e) {
     expect(e.message).toMatch(
       'GQL error: Cannot query field "timestamp" on type "Post".'
