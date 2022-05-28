@@ -1,9 +1,14 @@
+import fs from 'fs'
+import path from 'path'
+
 import {
+  test,
   BrowserContext,
   expect,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
+import execa from 'execa'
 
 import rwServeTest from '../playwright-fixtures/rwServe.fixture'
 import type { ServeFixture } from '../playwright-fixtures/rwServe.fixture'
@@ -119,3 +124,50 @@ rwServeTest(
     pageWithoutJs.close()
   }
 )
+
+test('prerender with broken gql query', async () => {
+  const projectPath = process.env.PROJECT_PATH
+
+  const cellBasePath = path.join(
+    projectPath,
+    'web',
+    'src',
+    'components',
+    'BlogPostsCell'
+  )
+
+  const cellPathJs = path.join(cellBasePath, 'BlogPostsCell.js')
+  const cellPathTs = path.join(cellBasePath, 'BlogPostsCell.tsx')
+  const cellPath = fs.existsSync(cellPathTs) ? cellPathTs : cellPathJs
+
+  const blogPostsCell = fs.readFileSync(cellPath, 'utf-8')
+  fs.writeFileSync(cellPath, blogPostsCell.replace('createdAt', 'timestamp'))
+
+  try {
+    // TODO: cleanup
+    const prerender = await execa(`yarn rw prerender`, {
+      cwd: projectPath,
+      shell: true,
+    })
+
+    // TODO: cleanup
+    console.log('prerender.stdout', prerender.stdout)
+    console.log('prerender.stderr', prerender.stderr)
+  } catch (e) {
+    expect(e.message).toMatch(
+      'GQL error: Cannot query field "timestamp" on type "Post".'
+    )
+  }
+
+  // Restore cell
+  fs.writeFileSync(cellPath, blogPostsCell)
+
+  const indexHtml = fs.readFileSync(
+    path.join(projectPath, 'web', 'dist', 'index.html'),
+    'utf-8'
+  )
+
+  expect(indexHtml).toMatch('A little more about me')
+  expect(indexHtml).toMatch('Welcome to the blog!')
+  expect(indexHtml).toMatch('What is the meaning of life?')
+})

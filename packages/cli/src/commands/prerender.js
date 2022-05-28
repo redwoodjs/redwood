@@ -5,7 +5,11 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
 import { getPaths } from '@redwoodjs/internal'
-import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
+import {
+  runPrerender,
+  writePrerenderedHtmlFile,
+  PrerenderGqlError,
+} from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -66,11 +70,7 @@ async function getAllRouteParameters() {
     return {}
   }
 
-  console.log('prerenderScriptPath', prerenderScriptPath)
-
   const parameters = await runScript(prerenderScriptPath)
-
-  console.log('parameters', parameters)
 
   return parameters
 }

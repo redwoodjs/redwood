@@ -18,6 +18,19 @@ import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-me
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
+export class PrerenderGqlError {
+  message: string
+  stack: string
+
+  constructor(message: string) {
+    this.message = 'GQL error: ' + message
+    // The stacktrace would just point to this file, which isn't helpful,
+    // because that's not where the error is. So we're just putting the
+    // message there as well
+    this.stack = this.message
+  }
+}
+
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
@@ -92,15 +105,26 @@ export const runPrerender = async ({
 
   await Promise.all(
     Object.entries(queryCache).map(async ([cacheKey, value]) => {
-      const data = await executeQuery(gqlHandler, value.query, value.variables)
+      const resultString = await executeQuery(
+        gqlHandler,
+        value.query,
+        value.variables
+      )
+      const result = JSON.parse(resultString)
+
+      if (result.errors) {
+        const message =
+          result.errors[0].message ?? JSON.stringify(result.errors)
+        throw new PrerenderGqlError(message)
+      }
 
       queryCache[cacheKey] = {
         ...value,
-        data: JSON.parse(data).data,
+        data: result.data,
         hasFetched: true,
       }
 
-      return data
+      return result
     })
   )
 
