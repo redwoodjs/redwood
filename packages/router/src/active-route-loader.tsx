@@ -2,14 +2,13 @@ import React, { useRef, useState, useEffect } from 'react'
 
 import { unstable_batchedUpdates } from 'react-dom'
 
-import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
 import {
   ActivePageContextProvider,
   LoadingStateRecord,
 } from './ActivePageContext'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { useIsMounted } from './useIsMounted'
-import { Spec } from './util'
+import { Spec, getAnnouncement, getFocus, resetFocus } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 

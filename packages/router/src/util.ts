@@ -1,7 +1,7 @@
 import React, { Children, ReactElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
-export const createNamedContext = <T>(name: string, defaultValue?: T) => {
+const createNamedContext = <T>(name: string, defaultValue?: T) => {
   const Ctx = React.createContext<T | undefined>(defaultValue)
   Ctx.displayName = name
   return Ctx
@@ -17,8 +17,6 @@ export const createNamedContext = <T>(name: string, defaultValue?: T) => {
  *        ['day',      'Int',    '{day:Int}'],
  *        ['filePath', 'Glob',   '{filePath...}']
  *      ]
- *
- * Only exported to be able to test it
  */
 export const paramsForRoute = (route: string) => {
   // Match the strings between `{` and `}`.
@@ -97,7 +95,7 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  */
-export const matchPath = (
+const matchPath = (
   route: string,
   pathname: string,
   paramTypes?: Record<string, ParamType>
@@ -163,7 +161,7 @@ export const matchPath = (
  * @fixme
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
-export const parseSearch = (
+const parseSearch = (
   search:
     | string
     | string[][]
@@ -187,7 +185,7 @@ export const parseSearch = (
  * are found, a descriptive Error will be thrown, as problems with routes are
  * critical enough to be considered fatal.
  */
-export const validatePath = (path: string) => {
+const validatePath = (path: string) => {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
     throw new Error(`Route path does not begin with a slash: "${path}"`)
@@ -221,10 +219,7 @@ export const validatePath = (path: string) => {
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
  *   => '/tags/code?extra=foo
  */
-export const replaceParams = (
-  route: string,
-  args: Record<string, unknown> = {}
-) => {
+const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
   const params = paramsForRoute(route)
   let path = route
 
@@ -256,7 +251,7 @@ export const replaceParams = (
   return path
 }
 
-export function isReactElement(node: ReactNode): node is ReactElement {
+function isReactElement(node: ReactNode): node is ReactElement {
   return (
     node !== undefined &&
     node !== null &&
@@ -264,7 +259,7 @@ export function isReactElement(node: ReactNode): node is ReactElement {
   )
 }
 
-export function flattenAll(children: ReactNode): ReactNode[] {
+function flattenAll(children: ReactNode): ReactNode[] {
   const childrenArray = Children.toArray(children)
 
   return childrenArray.flatMap((child) => {
@@ -292,7 +287,7 @@ export function flattenAll(children: ReactNode): ReactNode[] {
  * => [ { key1: 'val1' }, { key2: 'val2' } ]
  *
  */
-export function flattenSearchParams(
+function flattenSearchParams(
   queryString: string
 ): Array<string | Record<string, any>> {
   const searchParams = []
@@ -302,6 +297,70 @@ export function flattenSearchParams(
   }
 
   return searchParams
+}
+
+export {
+  createNamedContext,
+  matchPath,
+  parseSearch,
+  validatePath,
+  replaceParams,
+  isReactElement,
+  flattenAll,
+  flattenSearchParams,
+}
+
+/**
+ * gets the announcement for the new page.
+ * called in one of active-route-loader's `useEffect`.
+ *
+ * the order of priority is:
+ * 1. RouteAnnouncement (the most specific one)
+ * 2. h1
+ * 3. document.title
+ * 4. location.pathname
+ */
+export const getAnnouncement = () => {
+  const routeAnnouncement = global?.document.querySelectorAll(
+    '[data-redwood-route-announcement]'
+  )?.[0]
+  if (routeAnnouncement?.textContent) {
+    return routeAnnouncement.textContent
+  }
+
+  const pageHeading = global?.document.querySelector(`h1`)
+  if (pageHeading?.textContent) {
+    return pageHeading.textContent
+  }
+
+  if (global?.document.title) {
+    return document.title
+  }
+
+  return `new page at ${global?.location.pathname}`
+}
+
+export const getFocus = () => {
+  const routeFocus = global?.document.querySelectorAll(
+    '[data-redwood-route-focus]'
+  )?.[0]
+
+  if (
+    !routeFocus ||
+    !routeFocus.children.length ||
+    (routeFocus.children[0] as HTMLElement).tabIndex < 0
+  ) {
+    return null
+  }
+
+  return routeFocus.children[0] as HTMLElement
+}
+
+// note: tried document.activeElement.blur(), but that didn't reset the focus flow
+export const resetFocus = () => {
+  global?.document.body.setAttribute('tabindex', '-1')
+  global?.document.body.focus()
+  global?.document.body.removeAttribute('tabindex')
 }
 
 export interface Spec {
