@@ -25,7 +25,6 @@ rwServeTest(
     expect(cellSuccessState).toMatch('Welcome to the blog!')
     expect(cellSuccessState).toMatch('A little more about me')
     expect(cellSuccessState).toMatch('What is the meaning of life?')
-    expect(cellSuccessState).toMatch('Hello world! Soft kittens are the best.')
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')
@@ -52,7 +51,6 @@ rwServeTest(
     expect(mainContent).toMatch('What is the meaning of life?')
     expect(mainContent).not.toMatch('Welcome to the blog!')
     expect(mainContent).not.toMatch('A little more about me')
-    expect(mainContent).not.toMatch('Hello world! Soft kittens are the best.')
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')
@@ -79,7 +77,6 @@ rwServeTest(
     expect(mainContent).toMatch('Welcome to the blog!')
     expect(mainContent).toMatch('A little more about me')
     expect(mainContent).toMatch('What is the meaning of life?')
-    expect(mainContent).toMatch('Hello world! Soft kittens are the best.')
 
     await pageWithoutJs.click('text=A little more about me')
 
@@ -87,7 +84,6 @@ rwServeTest(
     expect(mainContent).toMatch('A little more about me')
     expect(mainContent).not.toMatch('Welcome to the blog!')
     expect(mainContent).not.toMatch('What is the meaning of life?')
-    expect(mainContent).not.toMatch('Hello world! Soft kittens are the best.')
     expect(pageWithoutJs.url()).toMatch('/blog-post/2')
 
     pageWithoutJs.close()
