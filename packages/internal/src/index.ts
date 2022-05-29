@@ -5,7 +5,7 @@ export * from './dev'
 
 export * from './files'
 export { generate } from './generate/generate'
-export { buildApi } from './build/api'
+export { buildApi, prebuildApiFiles, transpileApi } from './build/api'
 
 export * from './validateSchema'
 

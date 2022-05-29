@@ -6,11 +6,16 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
+import {
+  getPaths,
+  writeFilesTask,
+  transformTSToJS,
+  getGraphqlPath,
+  graphFunctionDoesExist,
+} from '../../../lib'
 import c from '../../../lib/colors'
 
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
@@ -25,9 +30,6 @@ const OUTPUT_PATHS = {
     getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
   ),
 }
-
-export const getGraphqlPath = () =>
-  resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
 const getWebAppPath = () => getPaths().web.app
 
@@ -287,10 +289,6 @@ export const apiSrcDoesExist = () => {
 
 export const webIndexDoesExist = () => {
   return fs.existsSync(getWebAppPath())
-}
-
-export const graphFunctionDoesExist = () => {
-  return fs.existsSync(getGraphqlPath())
 }
 
 export const command = 'auth <provider>'

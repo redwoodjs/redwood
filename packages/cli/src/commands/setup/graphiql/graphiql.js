@@ -7,6 +7,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
+import { buildApi } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -16,9 +17,11 @@ import {
   readFile,
   getPaths,
   transformTSToJS,
+  existsAnyExtensionSync,
+  getGraphqlPath,
+  graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { graphFunctionDoesExist, getGraphqlPath } from '../auth/auth'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
 const isNumeric = (id) => {
@@ -94,7 +97,7 @@ const supportedProviders = {
   dbAuth: { getPayload: getDBAuthHeader, env: '' },
   supabase: {
     getPayload: getSupabasePayload,
-    env: process.env.SUPABASE_JWT_SECRET,
+    env: 'process.env.SUPABASE_JWT_SECRET',
   },
   // no access to netlify JWT private key in dev.
   netlify: { getPayload: getNetlifyPayload, env: '"secret-123"' },
@@ -135,6 +138,40 @@ const addHeaderOption = () => {
   }
 }
 
+export const getOutputPath = () => {
+  return path.join(
+    // getPaths().generated.types.mirror,
+    // 'api/src/lib',
+    getPaths().api.lib,
+    getProject().isTypeScriptProject
+      ? 'generateGraphiQLHeader.ts'
+      : 'generateGraphiQLHeader.js'
+  )
+}
+
+const printHeaders = async () => {
+  const srcPath = getOutputPath()
+  if (!existsAnyExtensionSync(srcPath) && `File doesn't exist`) {
+    throw new Error(
+      'Must run yarn rw setup graphiql <provider> to generate headers before viewing'
+    )
+  }
+
+  // const prebuiltFile = prebuildApiFiles([srcPath])
+  // transpileApi(prebuiltFile)
+
+  buildApi()
+  const dstPath = path
+    .join(
+      getPaths().generated.prebuild,
+      'api/src/lib/generateGraphiQLHeader.js'
+    )
+    .replace(/\.(ts)$/, '.js')
+
+  const header = await execa('node', ['-e', dstPath])
+  console.log('\nYour mock graphiql header:\n', c.green(header.stdout))
+}
+
 export const command = 'graphiql <provider>'
 export const description = 'Generate GraphiQL headers'
 export const builder = (yargs) => {
@@ -146,22 +183,26 @@ export const builder = (yargs) => {
     })
     .option('id', {
       alias: 'i',
-      default: false,
       description: 'Unique id to identify current user',
       type: 'string',
     })
     .option('token', {
       alias: 't',
-      default: false,
       description:
-        'Generated JWT token. If not provided, mock JWT payload is provided that can be modified and tured into a token',
+        'Generated JWT token. If not provided, mock JWT payload is provided that can be modified and turned into a token',
       type: 'string',
     })
     .option('expiry', {
       alias: 'e',
-      default: false,
+      default: 60,
       description: 'Token expiry in minutes. Default is 60',
       type: 'number',
+    })
+    .option('view', {
+      alias: 'v',
+      default: false,
+      description: 'Print out generated headers',
+      type: 'boolean',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -171,7 +212,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, id, token, expiry }) => {
+export const handler = async ({ provider, id, token, expiry, view }) => {
   let payload
 
   const tasks = new Listr(
@@ -203,12 +244,8 @@ export const handler = async ({ provider, id, token, expiry }) => {
             }
           )
 
-          const outputPath = path.join(
-            getPaths().api.lib,
-            getProject().isTypeScriptProject
-              ? 'generateGraphiQLHeader.ts'
-              : 'generateGraphiQLHeader.js'
-          )
+          const outputPath = getOutputPath()
+
           return writeFilesTask(
             {
               [outputPath]: getProject().isTypeScriptProject
@@ -242,6 +279,9 @@ export const handler = async ({ provider, id, token, expiry }) => {
   )
 
   try {
+    if (view) {
+      return printHeaders()
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

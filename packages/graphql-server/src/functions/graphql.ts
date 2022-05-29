@@ -176,8 +176,21 @@ export const createGraphQLHandler = ({
     graphiql: isDevEnv
       ? {
           title: 'Redwood GraphQL Playground',
+          credentials: 'include',
+          // additionalHeaders: generateGraphiQLHeader
+          //   ? generateGraphiQLHeader()
+          //   : '{'x-auth-comment': 'See documentation for how to auto generate auth headers'}',
+          // additionalHeaders: {
+          //   'auth-provider': 'dbAuth',
+          //   'test-header': 'aliceisawesome',
+          //   cookie:
+          //     'session=U2FsdGVkX1/+XEvtKF8UfRzkXKFa6U+MSJUGlswV3eUCYNX7emt4gteXSfjSiyJqi4wI6S5I6vwEDhD/3CEBlQ==',
+          //   authorization: 'Bearer 2',
+          // },
           endpoint: graphiQLEndpoint,
-          headers: generateGraphiQLHeader ? generateGraphiQLHeader() : `"{}"`,
+          headers: generateGraphiQLHeader
+            ? generateGraphiQLHeader()
+            : `{"x-auth-comment": "See documentation for how to auto generate auth headers"}`,
           defaultQuery: `query Redwood {
   redwood {
     version

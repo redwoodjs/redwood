@@ -9,13 +9,13 @@ const generateGraphiQLHeader = (): string => {
         ${env} as string
       )
 
-   const jwtHeader = {
+  return JSON.stringify({
      'auth-provider': "${provider}",
      authorization: "Bearer " + token
-   }
-
-  return JSON.stringify(jwtHeader, null, 2)
+   }, null, 2)
 }
+
+console.log(generateGraphiQLHeader())
 
 export default generateGraphiQLHeader
 

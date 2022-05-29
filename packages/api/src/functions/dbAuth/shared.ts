@@ -48,11 +48,6 @@ export const dbAuthSession = (event: APIGatewayProxyEvent) => {
     event.headers.cookie ||
     JSON.parse(event.body ?? '{}').extensions.headers.cookie
   ) {
-    console.log(
-      'dbAuthSession',
-      event.headers.cookie,
-      JSON.parse(event.body ?? '{}').extensions.headers.cookie
-    )
     const [session, _csrfToken] = decryptSession(
       getSession(
         event.headers.cookie ??
