@@ -1,28 +1,23 @@
 const query = `
-  query BlogPostsQuery {
-    blogPosts: posts {
-      id
-      title
-      body
-      authorId
-      createdAt
+  query FindAuthorQuery($id: Int!) {
+    author: user(id: $id) {
+      email
+      fullName
     }
   }
 `
-const successBody = `<div className="divide-y divide-grey-700">
-{blogPosts.map((post) => <BlogPost key={post.id} blogPost={post} />)}
-</div>`
+const successBody = '<span>{author.fullName} ({author.email})</span>'
 
 export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  const importComponent = j.importDeclaration(
+  const componentImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('BlogPost'))],
     j.stringLiteral('src/components/BlogPost')
   )
 
-  root.find(j.ExportNamedDeclaration).at(0).insertBefore(importComponent)
+  root.find(j.ExportNamedDeclaration).at(0).insertBefore(componentImport)
 
   root
     .find(j.VariableDeclarator, {

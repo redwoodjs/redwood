@@ -13,6 +13,7 @@ export const QUERY = gql`
       id
       title
       body
+      authorId
       createdAt
     }
   }
@@ -23,6 +24,7 @@ const UPDATE_POST_MUTATION = gql`
       id
       title
       body
+      authorId
       createdAt
     }
   }
@@ -46,7 +48,8 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
   })
 
   const onSave = (input, id) => {
-    updatePost({ variables: { id, input } })
+    const castInput = Object.assign(input, { authorId: parseInt(input.authorId), })
+    updatePost({ variables: { id, input: castInput } })
   }
 
   return (

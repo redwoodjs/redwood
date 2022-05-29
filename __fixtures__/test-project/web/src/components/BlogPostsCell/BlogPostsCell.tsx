@@ -6,14 +6,15 @@ import BlogPost from "src/components/BlogPost";
 
 
 export const QUERY = gql`
-    query BlogPostsQuery {
-        blogPosts: posts {
-            id
-            title
-            body
-            createdAt
-        }
+  query BlogPostsQuery {
+    blogPosts: posts {
+      id
+      title
+      body
+      authorId
+      createdAt
     }
+  }
 `
 
 export const Loading = () => <div>Loading...</div>

@@ -1,5 +1,6 @@
 import { Link, routes } from "@redwoodjs/router";
 import { FindBlogPostQuery } from 'types/graphql'
+import AuthorCell from 'src/components/AuthorCell'
 
 
 interface Props extends FindBlogPostQuery {}
@@ -17,7 +18,8 @@ const BlogPost = ({ blogPost }: Props) => {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
-            }).format(new Date(blogPost.createdAt))}
+            }).format(new Date(blogPost.createdAt))} - By:{' '}
+            <AuthorCell id={blogPost.authorId} />
           </p>
           <h2 className="text-xl mt-2 font-semibold">
             <Link

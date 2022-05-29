@@ -3,6 +3,7 @@ CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "email" TEXT NOT NULL,
     "hashedPassword" TEXT NOT NULL,
+    "fullName" TEXT NOT NULL,
     "salt" TEXT NOT NULL,
     "resetToken" TEXT,
     "resetTokenExpiresAt" DATETIME,

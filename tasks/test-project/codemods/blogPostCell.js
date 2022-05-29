@@ -4,6 +4,7 @@ const query = `
       id
       title
       body
+      authorId
       createdAt
     }
   }
@@ -36,17 +37,6 @@ export default (file, api) => {
       )
       return node
     })
-
-  // root
-  //   .find(j.Identifier, {
-  //     type: 'Identifier',
-  //     name: 'blogPost',
-  //   })
-  //   .replaceWith((nodePath) => {
-  //     const { node } = nodePath
-  //     node.name = 'post'
-  //     return node
-  //   })
 
   return root
     .find(j.VariableDeclarator, {

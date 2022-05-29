@@ -179,9 +179,16 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await createCell('blogPost')
 
-    return applyCodemod(
+    await applyCodemod(
       'blogPostCell.js',
       fullPath('web/src/components/BlogPostCell/BlogPostCell')
+    )
+
+    await createCell('author')
+
+    return applyCodemod(
+      'authorCell.js',
+      fullPath('web/src/components/AuthorCell/AuthorCell')
     )
   }
 
@@ -320,6 +327,16 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
   const execaOptionsForProject = getExecaOptions(outputPath)
 
+  const createBuilder = (cmd) => {
+    return async function createItem(positionals) {
+      await execa(
+        cmd,
+        Array.isArray(positionals) ? positionals : [positionals],
+        execaOptionsForProject
+      )
+    }
+  }
+
   const addDbAuth = async () => {
     await execa(
       'yarn rw setup auth dbAuth --force',
@@ -423,7 +440,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         },
       },
       {
-        title: 'Scaffoding post',
+        title: 'Scaffolding post',
         task: async () => {
           return execa('yarn rw g scaffold post', [], execaOptionsForProject)
         },
@@ -456,6 +473,26 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       {
         title: 'Add dbAuth',
         task: async () => addDbAuth(),
+      },
+      {
+        title: 'Add users service',
+        task: async () => {
+          const generateSdl = createBuilder('yarn redwood g sdl --no-crud')
+
+          await generateSdl('user')
+
+          await applyCodemod(
+            'usersSdl.js',
+            fullPath('api/src/graphql/users.sdl')
+          )
+
+          await applyCodemod(
+            'usersService.js',
+            fullPath('api/src/services/users/users')
+          )
+
+          return createBuilder('yarn redwood g types')()
+        },
       },
     ],
     {
