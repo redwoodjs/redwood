@@ -21,6 +21,9 @@ export default (file, api) => {
         j.literal('2022-01-17T13:57:51.607Z')
       )
     )
+    node.properties.push(
+      j.property('init', j.identifier('authorId'), j.literal(5))
+    )
   })
 
   return root.toSource()

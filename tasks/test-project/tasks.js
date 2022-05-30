@@ -200,9 +200,16 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       })
     )
 
-    return applyCodemod(
+    await applyCodemod(
       'updateBlogPostMocks.js',
       fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock.ts', {
+        addExtension: false,
+      })
+    )
+
+    return applyCodemod(
+      'updateAuthorMock.js',
+      fullPath('web/src/components/AuthorCell/AuthorCell.mock.ts', {
         addExtension: false,
       })
     )

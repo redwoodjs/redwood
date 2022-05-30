@@ -4,6 +4,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
     id: 42,
     title: "Mocked title",
     body: "Mocked body",
-    createdAt: "2022-01-17T13:57:51.607Z"
+    createdAt: "2022-01-17T13:57:51.607Z",
+    authorId: 5
   },
 })
