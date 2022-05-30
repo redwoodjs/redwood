@@ -731,7 +731,7 @@ Last but not least we can update the `ArticleCell` to properly display our blog 
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
-  query ArticleQuery {
+  query ArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title
@@ -766,7 +766,7 @@ import type { ArticleQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ArticleQuery {
+  query ArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title
