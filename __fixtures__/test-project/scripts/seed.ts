@@ -7,14 +7,14 @@ export default async () => {
       const users = [
         {
           id: 1,
-          email: 'user_one@example.com',
+          email: 'user.one@example.com',
           hashedPassword: 'fake_hash',
           fullName: 'User One',
           salt: 'fake_salt',
         },
         {
           id: 2,
-          email: 'user_two@example.com',
+          email: 'user.two@example.com',
           hashedPassword: 'fake_hash',
           fullName: 'User Two',
           salt: 'fake_salt',
@@ -23,7 +23,7 @@ export default async () => {
 
       await Promise.all(
         users.map(async (user) => {
-          const newUser = await db.user.create({ data: { ...user } })
+          const newUser = await db.user.create({ data: user })
         })
       )
     } catch (error) {
@@ -51,9 +51,7 @@ export default async () => {
 
       await Promise.all(
         posts.map(async (post) => {
-          const newPost = await db.post.create({
-            data: { ...post },
-          })
+          const newPost = await db.post.create({ data: post })
 
           console.log(newPost)
         })

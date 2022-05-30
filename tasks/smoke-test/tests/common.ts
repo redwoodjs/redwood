@@ -33,6 +33,7 @@ interface AuthUtilsParams {
   webUrl: string
   email?: string
   password?: string
+  fullName?: string
   page: PlaywrightTestArgs['page']
 }
 
@@ -41,6 +42,7 @@ export const signUpTestUser = async ({
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
+  fullName = 'Test User'
 }: AuthUtilsParams) => {
   await page.goto(`${webUrl}/signup`)
 
@@ -51,6 +53,8 @@ export const signUpTestUser = async ({
   await page.locator('input[name="username"]').press('Tab')
   // Fill input[name="password"]
   await page.locator('input[name="password"]').fill(password)
+  await page.locator('input[name="full-name"]').click()
+  await page.locator('input[name="full-name"]').fill(fullName)
 
   const alreadyRegisteredErr = page.locator(
     `text=Username \`${email}\` already in use`

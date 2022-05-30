@@ -325,30 +325,26 @@ async function addModel(schema) {
 async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
-  const execaOptionsForProject = getExecaOptions(outputPath)
+  const execaOptions = getExecaOptions(outputPath)
 
   const createBuilder = (cmd) => {
     return async function createItem(positionals) {
       await execa(
         cmd,
         Array.isArray(positionals) ? positionals : [positionals],
-        execaOptionsForProject
+        execaOptions
       )
     }
   }
 
   const addDbAuth = async () => {
-    await execa(
-      'yarn rw setup auth dbAuth --force',
-      [],
-      getExecaOptions(outputPath)
-    )
+    await execa('yarn rw setup auth dbAuth --force', [], execaOptions)
 
     if (linkWithLatestFwBuild) {
-      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+      await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa('yarn rw g dbAuth', [], getExecaOptions(outputPath))
+    await execa('yarn rw g dbAuth', [], execaOptions)
 
     // add dbAuth User model
     const { user } = await import('./codemods/models.js')
@@ -406,22 +402,39 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
 
-    // remove unused userAttributes
-    const pathAuthJs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
-    const contentAuthJs = fs.readFileSync(pathAuthJs).toString()
-    const resultsAuthJs = contentAuthJs.replace(
-      /handler: \({ username,([^}]*)userAttributes }\) => {/,
-      `handler: ({ username, hashedPassword, salt }) => {`
+    // add fullName input to signup form
+    const pathSignupPageTs = `${OUTPUT_PATH}/web/src/pages/SignupPage/SignupPage.tsx`
+    const contentSignupPageTs = fs.readFileSync(pathSignupPageTs, 'utf-8')
+    const usernameFields = contentSignupPageTs.match(
+      /\s*<Label[\s\S]*?name="username"[\s\S]*?"rw-field-error" \/>/
+    )[0]
+    const fullNameFields = usernameFields
+      .replace(/\s*ref=\{usernameRef}/, '')
+      .replaceAll('username', 'full-name')
+      .replaceAll('Username', 'Full Name')
+
+    const newContentSignupPageTs = contentSignupPageTs.replace(
+      '<FieldError name="password" className="rw-field-error" />',
+      '<FieldError name="password" className="rw-field-error" />\n' +
+        fullNameFields
     )
 
-    fs.writeFileSync(pathAuthJs, resultsAuthJs)
+    fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 
-    await execa(
-      'yarn rw prisma migrate dev --name dbAuth',
-      [],
-      getExecaOptions(outputPath)
+    // set fullName when signing up
+    const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
+    const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
+    const resultsAuthTs = contentAuthTs.replace(
+      '// name: userAttributes.name',
+      "fullName: userAttributes['full-name']"
     )
+
+    fs.writeFileSync(pathAuthTs, resultsAuthTs)
+
+    await execa('yarn rw prisma migrate dev --name dbAuth', [], execaOptions)
   }
+
+  const generateScaffold = createBuilder('yarn rw g scaffold')
 
   return new Listr(
     [
@@ -435,14 +448,14 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           return execa(
             `yarn rw prisma migrate dev --name create_product`,
             [],
-            execaOptionsForProject
+            execaOptions
           )
         },
       },
       {
         title: 'Scaffolding post',
         task: async () => {
-          return execa('yarn rw g scaffold post', [], execaOptionsForProject)
+          return generateScaffold('post')
         },
       },
       {
@@ -464,10 +477,10 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           await execa(
             `yarn rw prisma migrate dev --name create_contact`,
             [],
-            execaOptionsForProject
+            execaOptions
           )
 
-          await execa(`yarn rw g scaffold contacts`, [], execaOptionsForProject)
+          return generateScaffold('contacts')
         },
       },
       {

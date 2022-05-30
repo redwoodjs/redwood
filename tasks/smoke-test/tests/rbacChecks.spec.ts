@@ -39,6 +39,7 @@ devServerTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
       page: adminSignupPage,
       email: adminEmail,
       password,
+      fullName: 'Admin User'
     }),
     // Signup non-admin user
     signUpTestUser({

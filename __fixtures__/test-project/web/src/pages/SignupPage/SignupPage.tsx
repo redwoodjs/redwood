@@ -98,6 +98,26 @@ const SignupPage = () => {
                   />
                   <FieldError name="password" className="rw-field-error" />
 
+                  <Label
+                    name="full-name"
+                    className="rw-label"
+                    errorClassName="rw-label rw-label-error"
+                  >
+                    Full Name
+                  </Label>
+                  <TextField
+                    name="full-name"
+                    className="rw-input"
+                    errorClassName="rw-input rw-input-error"
+                    validation={{
+                      required: {
+                        value: true,
+                        message: 'Full Name is required',
+                      },
+                    }}
+                  />
+                  <FieldError name="full-name" className="rw-field-error" />
+
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Sign Up</Submit>
                   </div>

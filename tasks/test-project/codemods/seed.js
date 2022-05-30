@@ -19,7 +19,7 @@ const createPosts = `
 
     await Promise.all(
       users.map(async (user) => {
-        const newUser = await db.user.create({ data: { ...user } })
+        const newUser = await db.user.create({ data: user })
       })
     )
   } catch (error) {
@@ -47,9 +47,7 @@ const createPosts = `
 
     await Promise.all(
       posts.map(async (post) => {
-        const newPost = await db.post.create({
-          data: { ...post },
-        })
+        const newPost = await db.post.create({ data: post })
 
         console.log(newPost)
       })

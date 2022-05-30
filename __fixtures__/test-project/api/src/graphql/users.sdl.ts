@@ -3,7 +3,6 @@ export const schema = gql`
     id: Int!
     email: String!
     fullName: String!
-    resetTokenExpiresAt: DateTime
     roles: String
   }
 
@@ -14,14 +13,12 @@ export const schema = gql`
   input CreateUserInput {
     email: String!
     fullName: String!
-    resetTokenExpiresAt: DateTime
     roles: String
   }
 
   input UpdateUserInput {
     email: String
     fullName: String
-    resetTokenExpiresAt: DateTime
     roles: String
   }
 `
