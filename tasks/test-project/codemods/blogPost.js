@@ -9,7 +9,7 @@ const body = `
           month: 'long',
           day: 'numeric',
         }).format(new Date(blogPost.createdAt))} - By:{' '}
-        <AuthorCell id={blogPost.authorId} />
+        <Author author={blogPost.author} />
       </p>
       <h2 className="text-xl mt-2 font-semibold">
         <Link
@@ -33,7 +33,7 @@ interface Props extends FindBlogPostQuery {}
 `
 
 const typeImport = `import { FindBlogPostQuery } from 'types/graphql'`
-const authorCellImport = `import AuthorCell from 'src/components/AuthorCell'`
+const authorCellImport = `import Author from 'src/components/Author'`
 
 export default (file, api) => {
   const j = api.jscodeshift

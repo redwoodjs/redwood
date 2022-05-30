@@ -4,6 +4,7 @@ export const schema = gql`
     title: String!
     body: String!
     authorId: Int!
+    author: User!
     createdAt: DateTime!
   }
 

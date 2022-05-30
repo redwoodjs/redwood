@@ -9,10 +9,10 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  const property = j.property('init', j.identifier('id'), j.identifier('id'))
-  property.shorthand = true
+  // const property = j.property('init', j.identifier('id'), j.identifier('id'))
+  // property.shorthand = true
 
-  const params = j.objectPattern([property])
+  // const params = j.objectPattern([property])
 
   return root
     .find(j.VariableDeclarator, {
@@ -21,13 +21,14 @@ export default (file, api) => {
         name: 'users',
       },
     })
-    .replaceWith((nodePath) => {
-      const { node } = nodePath
-      node.id.name = 'user'
-      node.id.typeAnnotation.typeAnnotation.indexType.literal.value = 'user'
-      node.init.params[0] = params
-      node.init.body.body[0] = body
-      return node
-    })
+    // .replaceWith((nodePath) => {
+    //   const { node } = nodePath
+    //   node.id.name = 'user'
+    //   node.id.typeAnnotation.typeAnnotation.indexType.literal.value = 'user'
+    //   node.init.params[0] = params
+    //   node.init.body.body[0] = body
+    //   return node
+    // })
+    .remove()
     .toSource()
 }

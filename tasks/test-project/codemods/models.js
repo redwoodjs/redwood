@@ -5,6 +5,7 @@ const post = `model Post {
   title     String
   body      String
   authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
 }`
 
@@ -25,6 +26,7 @@ const user = `model User {
   resetToken          String?
   resetTokenExpiresAt DateTime?
   roles               String?
+  posts               Post[]
 }`
 
 module.exports = { post, contact, user }

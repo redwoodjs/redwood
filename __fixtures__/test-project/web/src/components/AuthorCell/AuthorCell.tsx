@@ -1,7 +1,7 @@
 import type { FindAuthorQuery, FindAuthorQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import BlogPost from "src/components/BlogPost";
+import Author from "src/components/Author";
 
 export const QUERY = gql`
   query FindAuthorQuery($id: Int!) {
@@ -26,4 +26,6 @@ export const Success = (
   {
     author,
   }: CellSuccessProps<FindAuthorQuery, FindAuthorQueryVariables>
-) => <span>{author.fullName} ({author.email})</span>
+) => <span className="author-cell">
+  <Author author={author} />
+</span>

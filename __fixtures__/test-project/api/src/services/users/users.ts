@@ -1,12 +1,15 @@
 import { db } from 'src/lib/db'
-import type { QueryResolvers } from 'types/graphql'
+import type { QueryResolvers, UserResolvers } from 'types/graphql'
 
-export const user: QueryResolvers["user"] = (
-  {
-    id
-  }
-) => {
+export {};
 
-    return db.user.findUnique({ where: { id }})
+export const user: QueryResolvers['user'] = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
 
+export const User: UserResolvers = {
+  posts: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).posts(),
 }

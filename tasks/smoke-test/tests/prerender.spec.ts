@@ -165,3 +165,23 @@ test('prerender with broken gql query', async () => {
     shell: true,
   })
 })
+
+rwServeTest(
+  'Waterfall prerendering (nested cells)',
+  async ({ port }: ServeFixture & PlaywrightTestArgs) => {
+    const pageWithoutJs = await noJsBrowser.newPage()
+
+    // It's non-deterministic what id the posts get, so we're pretty generic
+    // with what we're matching in this test case
+
+    await pageWithoutJs.goto(`http://localhost:${port}/waterfall/2`)
+
+    const mainContent = await pageWithoutJs.locator('main').innerHTML()
+    expect(mainContent).toMatch('<h2 className="text-xl')
+    // Test that nested cell content is also rendered
+    expect(mainContent).toMatch('className="author-cell"')
+    expect(mainContent).toMatch(/user.(one|two)@example.com/)
+
+    pageWithoutJs.close()
+  }
+)

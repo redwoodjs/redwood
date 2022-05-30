@@ -6,15 +6,17 @@ const query = `
     }
   }
 `
-const successBody = '<span>{author.fullName} ({author.email})</span>'
+const successBody = `<span className="author-cell">
+  <Author author={author} />
+</span>`
 
 export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
   const componentImport = j.importDeclaration(
-    [j.importDefaultSpecifier(j.identifier('BlogPost'))],
-    j.stringLiteral('src/components/BlogPost')
+    [j.importDefaultSpecifier(j.identifier('Author'))],
+    j.stringLiteral('src/components/Author')
   )
 
   root.find(j.ExportNamedDeclaration).at(0).insertBefore(componentImport)

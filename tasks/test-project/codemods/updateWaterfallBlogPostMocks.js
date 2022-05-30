@@ -10,8 +10,8 @@ export default (file, api) => {
     }
 
     const author = j.objectPattern([
-      j.property('init', j.identifier('email'), j.literal('five@5.com')),
-      j.property('init', j.identifier('fullName'), j.literal('Five Lastname')),
+      j.property('init', j.identifier('email'), j.literal('se7en@7.com')),
+      j.property('init', j.identifier('fullName'), j.literal('Se7en Lastname')),
     ])
 
     node.properties.push(
@@ -28,7 +28,7 @@ export default (file, api) => {
       )
     )
     node.properties.push(
-      j.property('init', j.identifier('authorId'), j.literal(5))
+      j.property('init', j.identifier('authorId'), j.literal(7))
     )
     node.properties.push(
       j.property('init', j.identifier('author'), author)

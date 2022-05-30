@@ -4,7 +4,10 @@ const query = `
       id
       title
       body
-      authorId
+      author {
+        email
+        fullName
+      }
       createdAt
     }
   }

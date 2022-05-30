@@ -142,6 +142,17 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           return
         },
       },
+      {
+        title: 'Creating nested cells test page',
+        task: async () => {
+          await createPage('waterfall {id:Int}')
+
+          await applyCodemod(
+            'waterfallPage.js',
+            fullPath('web/src/pages/WaterfallPage/WaterfallPage')
+          )
+        },
+      },
     ])
   }
 
@@ -161,9 +172,26 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await createComponent('blogPost')
 
-    return applyCodemod(
+    await applyCodemod(
       'blogPost.js',
       fullPath('web/src/components/BlogPost/BlogPost')
+    )
+
+    await createComponent('author')
+
+    await applyCodemod(
+      'author.js',
+      fullPath('web/src/components/Author/Author')
+    )
+
+    await applyCodemod(
+      'updateAuthorStories.js',
+      fullPath('web/src/components/Author/Author.stories')
+    )
+
+    await applyCodemod(
+      'updateAuthorTest.js',
+      fullPath('web/src/components/Author/Author.test')
     )
   }
 
@@ -186,9 +214,16 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await createCell('author')
 
-    return applyCodemod(
+    await applyCodemod(
       'authorCell.js',
       fullPath('web/src/components/AuthorCell/AuthorCell')
+    )
+
+    await createCell('waterfallBlogPost')
+
+    return applyCodemod(
+      'waterfallBlogPostCell.js',
+      fullPath('web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell')
     )
   }
 
@@ -207,9 +242,16 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       })
     )
 
-    return applyCodemod(
-      'updateAuthorMock.js',
+    await applyCodemod(
+      'updateAuthorCellMock.js',
       fullPath('web/src/components/AuthorCell/AuthorCell.mock.ts', {
+        addExtension: false,
+      })
+    )
+
+    return applyCodemod(
+      'updateWaterfallBlogPostMocks.js',
+      fullPath('web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.ts', {
         addExtension: false,
       })
     )
@@ -235,13 +277,18 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       /page={NotFoundPage}/,
       `page={NotFoundPage} prerender`
     )
-    fs.writeFileSync(pathRoutes, resultsRoutesNotFound)
+    const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
+      /page={WaterfallPage}/,
+      `page={WaterfallPage} prerender`
+    )
+    fs.writeFileSync(pathRoutes, resultsRoutesWaterfall)
 
     const prerenderTs = `import { db } from '$api/src/lib/db'
 
       export default async function pathParameterValues() {
         return {
           blogPost: (await db.post.findMany()).map((post) => ({ id: post.id })),
+          waterfall: [{ id: 2 }],
         }
       }
       `.replaceAll(/ {6}/g, '')
@@ -353,11 +400,6 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
     await execa('yarn rw g dbAuth', [], execaOptions)
 
-    // add dbAuth User model
-    const { user } = await import('./codemods/models.js')
-
-    addModel(user)
-
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
     const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
@@ -437,8 +479,6 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
-
-    await execa('yarn rw prisma migrate dev --name dbAuth', [], execaOptions)
   }
 
   const generateScaffold = createBuilder('yarn rw g scaffold')
@@ -448,12 +488,14 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       {
         title: 'Adding post model to prisma',
         task: async () => {
-          const { post } = await import('./codemods/models.js')
+          // Need both here since they have a relation
+          const { post, user } = await import('./codemods/models.js')
 
           addModel(post)
+          addModel(user)
 
           return execa(
-            `yarn rw prisma migrate dev --name create_product`,
+            `yarn rw prisma migrate dev --name create_post_user`,
             [],
             execaOptions
           )
