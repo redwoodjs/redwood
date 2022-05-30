@@ -31,6 +31,60 @@ export class PrerenderGqlError {
   }
 }
 
+async function recursivelyRender(
+  App: React.ElementType,
+  renderPath: string,
+  gqlHandler: any,
+  queryCache: Record<string, QueryInfo>
+): Promise<string> {
+  // Execute all gql queries we haven't already fetched
+  await Promise.all(
+    Object.entries(queryCache).map(async ([cacheKey, value]) => {
+      if (value.hasFetched) {
+        // Already fetched this one; skip it!
+        return Promise.resolve('')
+      }
+
+      const resultString = await executeQuery(
+        gqlHandler,
+        value.query,
+        value.variables
+      )
+      const result = JSON.parse(resultString)
+
+      if (result.errors) {
+        const message =
+          result.errors[0].message ?? JSON.stringify(result.errors)
+        throw new PrerenderGqlError(message)
+      }
+
+      queryCache[cacheKey] = {
+        ...value,
+        data: result.data,
+        hasFetched: true,
+      }
+
+      return result
+    })
+  )
+
+  const componentAsHtml = ReactDOMServer.renderToString(
+    <LocationProvider location={{ pathname: renderPath }}>
+      <CellCacheContextProvider queryCache={queryCache}>
+        <App />
+      </CellCacheContextProvider>
+    </LocationProvider>
+  )
+
+  if (Object.values(queryCache).some((value) => !value.hasFetched)) {
+    // We found new queries that we haven't fetched yet. Execute all new
+    // queries and render again
+    return recursivelyRender(App, renderPath, gqlHandler, queryCache)
+  } else {
+    return Promise.resolve(componentAsHtml)
+  }
+}
+
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
@@ -94,46 +148,11 @@ export const runPrerender = async ({
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
 
-  // Render once to collect all queries
-  ReactDOMServer.renderToString(
-    <LocationProvider location={{ pathname: renderPath }}>
-      <CellCacheContextProvider queryCache={queryCache}>
-        <App />
-      </CellCacheContextProvider>
-    </LocationProvider>
-  )
-
-  await Promise.all(
-    Object.entries(queryCache).map(async ([cacheKey, value]) => {
-      const resultString = await executeQuery(
-        gqlHandler,
-        value.query,
-        value.variables
-      )
-      const result = JSON.parse(resultString)
-
-      if (result.errors) {
-        const message =
-          result.errors[0].message ?? JSON.stringify(result.errors)
-        throw new PrerenderGqlError(message)
-      }
-
-      queryCache[cacheKey] = {
-        ...value,
-        data: result.data,
-        hasFetched: true,
-      }
-
-      return result
-    })
-  )
-
-  const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider location={{ pathname: renderPath }}>
-      <CellCacheContextProvider queryCache={queryCache}>
-        <App />
-      </CellCacheContextProvider>
-    </LocationProvider>
+  const componentAsHtml = await recursivelyRender(
+    App,
+    renderPath,
+    gqlHandler,
+    queryCache
   )
 
   const { helmet } = global.__REDWOOD__HELMET_CONTEXT

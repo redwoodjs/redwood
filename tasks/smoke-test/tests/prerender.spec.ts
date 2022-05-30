@@ -63,6 +63,8 @@ rwServeTest(
 
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch('What is the meaning of life?')
+    // Test that nested cell content is also rendered
+    expect(mainContent).toMatch('user.two@example.com')
     expect(mainContent).not.toMatch('Welcome to the blog!')
     expect(mainContent).not.toMatch('A little more about me')
 
