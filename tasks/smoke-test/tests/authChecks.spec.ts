@@ -100,16 +100,13 @@ devServerTest(
 async function createNewPost({ webUrl, page }) {
   await page.goto(`${webUrl}/posts/new`)
 
-  // Click input[name="title"]
   await page.locator('input[name="title"]').click()
-  // Fill input[name="title"]
   await page
     .locator('input[name="title"]')
     .fill('Hello world! Soft kittens are the best.')
-  // Press Tab
   await page.locator('input[name="title"]').press('Tab')
-  // Fill input[name="body"]
   await page.locator('input[name="body"]').fill('Bazinga, bazinga, bazinga')
+  await page.locator('input[name="authorId"]').fill('2')
 
   const permissionError = page
     .locator('.rw-form-error-title')
