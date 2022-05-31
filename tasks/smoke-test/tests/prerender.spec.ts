@@ -179,7 +179,7 @@ rwServeTest(
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch('<h2 class="text-xl')
     // Test that nested cell content is also rendered
-    expect(mainContent).toMatch('className="author-cell"')
+    expect(mainContent).toMatch('class="author-cell"')
     expect(mainContent).toMatch(/user.(one|two)@example.com/)
 
     pageWithoutJs.close()
