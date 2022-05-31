@@ -2547,16 +2547,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app-compat@npm:0.1.25":
-  version: 0.1.25
-  resolution: "@firebase/app-compat@npm:0.1.25"
+"@firebase/app-compat@npm:0.1.26":
+  version: 0.1.26
+  resolution: "@firebase/app-compat@npm:0.1.26"
   dependencies:
-    "@firebase/app": 0.7.24
+    "@firebase/app": 0.7.25
     "@firebase/component": 0.5.14
     "@firebase/logger": 0.3.2
     "@firebase/util": 1.6.0
     tslib: ^2.1.0
-  checksum: 2309ac6b5fc3abd87bb510f631e587a44225fc2996ff5f29c89fdc1d225dbd713d1716ba3200706df62033ce3f3ec139b1f92ca091fe91e4b749aea9ef432755
+  checksum: 7f7e1019978d832f9612700b4c5e25c243b1c09e2da254556a314b0277dc1fc77b45d32e3a3376fa8c833d8005275fb5be2a43150d03bce1704081af3dcf24e9
   languageName: node
   linkType: hard
 
@@ -2567,33 +2567,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app@npm:0.7.24":
-  version: 0.7.24
-  resolution: "@firebase/app@npm:0.7.24"
+"@firebase/app@npm:0.7.25":
+  version: 0.7.25
+  resolution: "@firebase/app@npm:0.7.25"
   dependencies:
     "@firebase/component": 0.5.14
     "@firebase/logger": 0.3.2
     "@firebase/util": 1.6.0
     idb: 7.0.1
     tslib: ^2.1.0
-  checksum: 3d9cbb1d5a11c42db4319b43f737f337c8ca698736e0c0ccbe40fb7f9951d3882feddc37667e30c70c39536f95c6ac0afa9734b07c93bae6892b1e87b02ca602
+  checksum: b78b7e9a808d96f0878a1d3ef9b6621c479f3c9c3ae9f1b02b647e1245b21afbf03ded967cd2d2ebd812d9b51a2aff165cd75aca72d81a0b1a8ff479ab488f41
   languageName: node
   linkType: hard
 
-"@firebase/auth-compat@npm:0.2.14":
-  version: 0.2.14
-  resolution: "@firebase/auth-compat@npm:0.2.14"
+"@firebase/auth-compat@npm:0.2.15":
+  version: 0.2.15
+  resolution: "@firebase/auth-compat@npm:0.2.15"
   dependencies:
-    "@firebase/auth": 0.20.1
+    "@firebase/auth": 0.20.2
     "@firebase/auth-types": 0.11.0
     "@firebase/component": 0.5.14
     "@firebase/util": 1.6.0
     node-fetch: 2.6.7
-    selenium-webdriver: " 4.1.1"
+    selenium-webdriver: 4.1.2
     tslib: ^2.1.0
   peerDependencies:
     "@firebase/app-compat": 0.x
-  checksum: fccd19203db65abc5dbda1cf6c5184ab9497dbe2520fa8cec02da096fcffc0e86e85e1052a353b446a4342e96f09b6addd8474644d980e47dab2786ac3816f42
+  checksum: 4a88759db77cc6ae7dd9cc0f396942b35209de2f7a9a76b37dac887d0b098c7d96988aca6a07a9cd3b2ebdaf39234757c6f147187448a5a8546eb97fe5f6b42e
   languageName: node
   linkType: hard
 
@@ -2617,19 +2617,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/auth@npm:0.20.1":
-  version: 0.20.1
-  resolution: "@firebase/auth@npm:0.20.1"
+"@firebase/auth@npm:0.20.2":
+  version: 0.20.2
+  resolution: "@firebase/auth@npm:0.20.2"
   dependencies:
     "@firebase/component": 0.5.14
     "@firebase/logger": 0.3.2
     "@firebase/util": 1.6.0
     node-fetch: 2.6.7
-    selenium-webdriver: " 4.1.1"
+    selenium-webdriver: 4.1.2
     tslib: ^2.1.0
   peerDependencies:
     "@firebase/app": 0.x
-  checksum: 3d21b97f38fbb5b84a427a4d93ebb0cd5e3e18190500a06326817a57fc9cb3e3873879034c94152bdef8d7803c3bc1f3687ca6651a9dc6da1498a99fb14010ae
+  checksum: ade5243b1e8dde83591b16473c0a4184c13ff3d7d9a87023e1d0d7be0bc242c79a4600382458237528ecb8247d9932bb6a633a4213f5b0d9f501c3810a0093da
   languageName: node
   linkType: hard
 
@@ -5904,7 +5904,7 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.45
     core-js: 3.22.7
-    firebase: 9.8.1
+    firebase: 9.8.2
     firebase-admin: 10.2.0
     gotrue-js: 0.9.29
     jest: 27.5.1
@@ -16479,19 +16479,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:9.8.1":
-  version: 9.8.1
-  resolution: "firebase@npm:9.8.1"
+"firebase@npm:9.8.2":
+  version: 9.8.2
+  resolution: "firebase@npm:9.8.2"
   dependencies:
     "@firebase/analytics": 0.7.9
     "@firebase/analytics-compat": 0.1.10
-    "@firebase/app": 0.7.24
+    "@firebase/app": 0.7.25
     "@firebase/app-check": 0.5.8
     "@firebase/app-check-compat": 0.2.8
-    "@firebase/app-compat": 0.1.25
+    "@firebase/app-compat": 0.1.26
     "@firebase/app-types": 0.7.0
-    "@firebase/auth": 0.20.1
-    "@firebase/auth-compat": 0.2.14
+    "@firebase/auth": 0.20.2
+    "@firebase/auth-compat": 0.2.15
     "@firebase/database": 0.13.0
     "@firebase/database-compat": 0.2.0
     "@firebase/firestore": 3.4.9
@@ -16509,7 +16509,7 @@ __metadata:
     "@firebase/storage": 0.9.6
     "@firebase/storage-compat": 0.1.14
     "@firebase/util": 1.6.0
-  checksum: fd2d2f7ede78993d568f3669c2b2f574757c197204ae03591b35560173eaacede9e6bc85663c3767681778c1c8c683d5171c742f836b8e8833a92b3e20bf5966
+  checksum: 233162a03b0c896a8b8992262d6094fbee4ec0442fa35d4967d5722c552fbb46ddf48ee95bcf269fd9f4476b2526738777e21a6b0017ece9f4c8ad6f654c3055
   languageName: node
   linkType: hard
 
@@ -27289,14 +27289,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selenium-webdriver@npm: 4.1.1":
-  version: 4.1.1
-  resolution: "selenium-webdriver@npm:4.1.1"
+"selenium-webdriver@npm:4.1.2":
+  version: 4.1.2
+  resolution: "selenium-webdriver@npm:4.1.2"
   dependencies:
     jszip: ^3.6.0
     tmp: ^0.2.1
     ws: ">=7.4.6"
-  checksum: b28fd12950a78876092c12b3aa8b9208c746d0e08cbb5e7ff76a7901a848edf7200dd499b8ff5713fc9508b38cdc5280ca3dba91942c396c7fb8ec59767f9290
+  checksum: ecde11ff1206aae848e463b3066bfed6bf7430b17f9970a5a4d6706fe3ff5f16f9c8303afa657e3b6d535a93955465cee769b6d1c7a82b4f738e4a2b9aa77cc6
   languageName: node
   linkType: hard
 
