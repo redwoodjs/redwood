@@ -17,7 +17,7 @@ storybookTest(
     await page.goto(STORYBOOK_URL)
 
     // Click text=BlogPostCell
-    await page.locator('text=/\bBlogPostCell\b/').click()
+    await page.locator('text=/\\bBlogPostCell\\b/').click()
 
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
