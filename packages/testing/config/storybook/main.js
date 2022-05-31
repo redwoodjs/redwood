@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { merge, mergeWithCustomize } = require('webpack-merge')
+const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const {
@@ -16,35 +16,14 @@ const rwjsPaths = getPaths()
 
 const staticAssetsFolder = path.join(getPaths().web.base, 'public')
 
-function isPackageInstalled(alias) {
-  try {
-    return Boolean(require(alias))
-  } catch (e) {
-    return false
-  }
-}
-
-function withEmotionVersionFallback(config) {
-  const alias = Object.entries({
-    '@emotion/core': '@emotion/core',
-    '@emotion/styled': '@emotion/styled',
-    'emotion-theming': '@emotion/react',
-  }).reduce((acc, [packageName, alias]) => {
-    if (isPackageInstalled(alias)) {
-      acc[packageName] = require.resolve(alias)
-    }
-    return acc
-  }, {})
-
-  return merge(config, { resolve: { alias } })
-}
-
 const baseConfig = {
   core: {
     builder: 'webpack5',
   },
   stories: [
-    `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
+    `${importStatementPath(
+      rwjsPaths.web.src
+    )}/**/*.stories.@(js|jsx|ts|tsx|mdx)`,
   ],
   addons: [
     '@storybook/addon-essentials',
@@ -120,7 +99,13 @@ const baseConfig = {
     ]
 
     // ** LOADERS **
-    sbConfig.module.rules = rwConfig.module.rules
+    const sbMdxRule = sbConfig.module.rules.find(
+      (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString()
+    )
+    console.assert(sbMdxRule, 'Storybook MDX rule not found')
+    sbConfig.module.rules = [...rwConfig.module.rules, sbMdxRule].filter(
+      Boolean
+    )
 
     // ** NODE **
     sbConfig.node = rwConfig.node
@@ -134,8 +119,6 @@ const baseConfig = {
     }
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
-
-    sbConfig = withEmotionVersionFallback(sbConfig)
 
     return sbConfig
   },
