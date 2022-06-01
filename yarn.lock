@@ -5453,6 +5453,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@peculiar/asn1-android@npm:^2.1.7":
+  version: 2.1.8
+  resolution: "@peculiar/asn1-android@npm:2.1.8"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.1.8
+    asn1js: ^3.0.4
+    tslib: ^2.4.0
+  checksum: 7850d4a1d41058743953ff2c4736936fc253a90472b2e807f9d2cbab50b3172ccff927b69546aecf9b1784901a6d635fae8220ea030aa71123a6fa5774eae2ad
+  languageName: node
+  linkType: hard
+
 "@peculiar/asn1-schema@npm:^2.0.44":
   version: 2.0.44
   resolution: "@peculiar/asn1-schema@npm:2.0.44"
@@ -5462,6 +5473,30 @@ __metadata:
     pvtsutils: ^1.2.1
     tslib: ^2.3.0
   checksum: e0365e2c405f51aa7816956095a80d28d705157b5c50921737e197e8d4501a75d5caabece6cd4d0e4aef3ebae66b4e51655dbf4c43a146ac9ac8285bd07c43ba
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "@peculiar/asn1-schema@npm:2.1.8"
+  dependencies:
+    asn1js: ^3.0.4
+    pvtsutils: ^1.3.2
+    tslib: ^2.4.0
+  checksum: 0362a0e3e12fb0bff763992623f7512c521056d84db621e4b16553f19b33a632b7b3b009e848fbac016e512c1183b4fa94ce633cbc0b37c8a5f980c70ab32ca5
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-x509@npm:^2.1.7":
+  version: 2.1.8
+  resolution: "@peculiar/asn1-x509@npm:2.1.8"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.1.8
+    asn1js: ^3.0.4
+    ipaddr.js: ^2.0.1
+    pvtsutils: ^1.3.2
+    tslib: ^2.4.0
+  checksum: 0ffe556d89defe115ccba67c03be6860a74c34fec5bf6df5c34bf6e42d2e06f7e4c9403d3ef02c39d21c4b7eac0f17dde7440050bb5f9228b5f0a216681be44b
   languageName: node
   linkType: hard
 
@@ -5867,6 +5902,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.6.0
     "@prisma/client": 3.14.0
     "@redwoodjs/auth": 1.5.1
+    "@simplewebauthn/server": ^5.2.1
     "@types/aws-lambda": 8.10.97
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
@@ -6422,6 +6458,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": 1.5.1
+    "@simplewebauthn/browser": ^5.2.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
@@ -6476,6 +6513,40 @@ __metadata:
     zen-observable:
       optional: true
   checksum: 0d874453f6bc2460d71783292291f52feb36c2a75314b1072a6ffe6206562f33e9d664a554348d565a6b54da9041d75070371052545bc329caaa52f64216987f
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/browser@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@simplewebauthn/browser@npm:5.2.1"
+  checksum: 7279ecec4ee93256b510c18e2a8636296bf5114638804d402b371308aa6ffe43545239fe0e79c02880961ec978f375fdc585b763a2052237e047fdc28fd5c7c3
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/server@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@simplewebauthn/server@npm:5.2.1"
+  dependencies:
+    "@peculiar/asn1-android": ^2.1.7
+    "@peculiar/asn1-schema": ^2.1.7
+    "@peculiar/asn1-x509": ^2.1.7
+    "@simplewebauthn/typescript-types": ^5.2.1
+    base64url: ^3.0.1
+    cbor: ^5.1.0
+    debug: ^4.3.2
+    elliptic: ^6.5.3
+    jsrsasign: ^10.4.0
+    jwk-to-pem: ^2.0.4
+    node-fetch: ^2.6.0
+    node-rsa: ^1.1.1
+  checksum: 4071cb6912908c6f14dbc80b57adeb604cb0b37566abb991faff647ee9c2ba6fa3d46e6e2ea7e4ca9ca4054f8dac0f7f622e9b403ff84bfe29b0a5e4cb0fcb89
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/typescript-types@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@simplewebauthn/typescript-types@npm:5.2.1"
+  checksum: aa14895068ee2f9b66b7f1d25d2bb477413e4b1d5b4792b6822ccda767de779f9b6fd2b7d1543c39ff68786ea3b13e0598e785202579ac4675835124d63fc8bb
   languageName: node
   linkType: hard
 
@@ -10375,7 +10446,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1.js@npm:^5.2.0":
+"asn1.js@npm:^5.2.0, asn1.js@npm:^5.3.0":
   version: 5.4.1
   resolution: "asn1.js@npm:5.4.1"
   dependencies:
@@ -10387,7 +10458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:~0.2.3":
+"asn1@npm:^0.2.4, asn1@npm:~0.2.3":
   version: 0.2.6
   resolution: "asn1@npm:0.2.6"
   dependencies:
@@ -10402,6 +10473,17 @@ __metadata:
   dependencies:
     pvutils: latest
   checksum: 3ef8524b287609b9959b5a05da32a28b7edbf370dca2c66d78b92d3bb33a0b8f727df6d6dd06a8f4e0d9a64cc55da2361e0f4b421091a109c97981f2f2375323
+  languageName: node
+  linkType: hard
+
+"asn1js@npm:^3.0.4":
+  version: 3.0.5
+  resolution: "asn1js@npm:3.0.5"
+  dependencies:
+    pvtsutils: ^1.3.2
+    pvutils: ^1.1.3
+    tslib: ^2.4.0
+  checksum: bb8eaf4040c8f49dd475566874986f5976b81bae65a6b5526e2208a13cdca323e69ce297bcd435fdda3eb6933defe888e71974d705b6fcb14f2734a907f8aed4
   languageName: node
   linkType: hard
 
@@ -11057,6 +11139,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64url@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "base64url@npm:3.0.1"
+  checksum: 5ca9d6064e9440a2a45749558dddd2549ca439a305793d4f14a900b7256b5f4438ef1b7a494e1addc66ced5d20f5c010716d353ed267e4b769e6c78074991241
+  languageName: node
+  linkType: hard
+
 "base@npm:^0.11.1":
   version: 0.11.2
   resolution: "base@npm:0.11.2"
@@ -11132,7 +11221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bignumber.js@npm:^9.0.0":
+"bignumber.js@npm:^9.0.0, bignumber.js@npm:^9.0.1":
   version: 9.0.2
   resolution: "bignumber.js@npm:9.0.2"
   checksum: b5c598ede49c3e391e53de6f992ee53960c45c96bb26e3933bd252890e77e3c703b88897a2148703f90f693d538396f8bed7c118a84a32fd54e24932bd16c04f
@@ -11878,6 +11967,16 @@ __metadata:
   version: 0.12.0
   resolution: "caseless@npm:0.12.0"
   checksum: ccf64bcb6c0232cdc5b7bd91ddd06e23a4b541f138336d4725233ac538041fb2f29c2e86c3c4a7a61ef990b665348db23a047060b9414c3a6603e9fa61ad4626
+  languageName: node
+  linkType: hard
+
+"cbor@npm:^5.1.0":
+  version: 5.2.0
+  resolution: "cbor@npm:5.2.0"
+  dependencies:
+    bignumber.js: ^9.0.1
+    nofilter: ^1.0.4
+  checksum: d39e14a05930648c6446b107aee3653e1b1ce8195dd121cb65790d9091202d8d98af0e4c17787f38bbc33fadc969ca99c94b40c144b84ce1e406a7f411c3ccf4
   languageName: node
   linkType: hard
 
@@ -20669,6 +20768,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsrsasign@npm:^10.4.0":
+  version: 10.5.23
+  resolution: "jsrsasign@npm:10.5.23"
+  checksum: 247480355c3fd716b5739d76f756585b67e05f56e0b99b10599c7468da1facc05045cb3b88a35db22df86e0679cf0964e5705e83f32c784ad9daf92ce39d4881
+  languageName: node
+  linkType: hard
+
 "jsx-ast-utils@npm:^2.4.1 || ^3.0.0, jsx-ast-utils@npm:^3.2.1":
   version: 3.2.1
   resolution: "jsx-ast-utils@npm:3.2.1"
@@ -20717,6 +20823,17 @@ __metadata:
     ecdsa-sig-formatter: 1.0.11
     safe-buffer: ^5.0.1
   checksum: 6baab823b93c038ba1d2a9e531984dcadbc04e9eb98d171f4901b7a40d2be15961a359335de1671d78cb6d987f07cbe5d350d8143255977a889160c4d90fcc3c
+  languageName: node
+  linkType: hard
+
+"jwk-to-pem@npm:^2.0.4":
+  version: 2.0.5
+  resolution: "jwk-to-pem@npm:2.0.5"
+  dependencies:
+    asn1.js: ^5.3.0
+    elliptic: ^6.5.4
+    safe-buffer: ^5.0.1
+  checksum: 307cacfbf4f38b4c4c77bcf3e578ef0d1d9536a9323e4f5be7e55e777d9df4fb5e89abbbfaf7c080b9f9da1241217f10391e4114c7a72cac66411d374427eeb9
   languageName: node
   linkType: hard
 
@@ -22980,6 +23097,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-rsa@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "node-rsa@npm:1.1.1"
+  dependencies:
+    asn1: ^0.2.4
+  checksum: af3b6534844dfeaa8290a7bc20d5e4d1a134f05d456725e56d75b7661d4d63cd63914ce335ee8889adc2458112b996d4ba8a83ba105bde744a26e61d9160f639
+  languageName: node
+  linkType: hard
+
 "nodemon@npm:2.0.16":
   version: 2.0.16
   resolution: "nodemon@npm:2.0.16"
@@ -22997,6 +23123,13 @@ __metadata:
   bin:
     nodemon: bin/nodemon.js
   checksum: e3b6d9813500c9dd810026e27264c1a306167f6c5e5bf2a3d3b2d7d1c7cefbd9466238f5d4b1d9c8a397d0839cf9670048b3d410b950bba7557eb2f528894099
+  languageName: node
+  linkType: hard
+
+"nofilter@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "nofilter@npm:1.0.4"
+  checksum: fcee4ed627e18c8d66dda5afca79607e569e6997c08bd12dfb8a1578fe2674a1de7761b36ae207d6a10c545f27e236aae18f0c2b33e0ef8971507bda419793b7
   languageName: node
   linkType: hard
 
@@ -25507,6 +25640,22 @@ __metadata:
   dependencies:
     tslib: ^2.3.1
   checksum: 94dd43c7b26c616bb14863c815b98546b146f2a1be06f069e89e5c3f426bb1460b2f449b9679ad6b13e9bf242efb2314580162c52480d29697a17ebafc45d2f7
+  languageName: node
+  linkType: hard
+
+"pvtsutils@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "pvtsutils@npm:1.3.2"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: bb10fd980841134835878eac56acbc082d05371c8cd9a1c3f7fc8831a22022fc34fa60e3a1a0bc3bdcb5c26f42fa4f9723be1b7bb7077a74fcb350444cf5e883
+  languageName: node
+  linkType: hard
+
+"pvutils@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "pvutils@npm:1.1.3"
+  checksum: 23489e6b3c76b6afb6964a20f891d6bef092939f401c78bba186b2bfcdc7a13904a0af0a78f7933346510f8c1228d5ab02d3c80e968fd84d3c76ff98d8ec9aac
   languageName: node
   linkType: hard
 
