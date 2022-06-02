@@ -852,7 +852,7 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
 
 :::caution
 
-At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the  following error:
+At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the following error:
 
 `Property 'roles' does not exist on type '{ id: number; email: string; }'.`
 
