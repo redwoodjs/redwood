@@ -7,17 +7,17 @@ import base64url from 'base64url'
 import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
-  // generateAuthenticationOptions,
-  // verifyAuthenticationResponse,
-} from '@simplewebauthn/server';
+  generateAuthenticationOptions,
+  verifyAuthenticationResponse,
+} from '@simplewebauthn/server'
 import type {
   GenerateRegistrationOptionsOpts,
-  // GenerateAuthenticationOptionsOpts,
+  GenerateAuthenticationOptionsOpts,
   VerifyRegistrationResponseOpts,
-  // VerifyAuthenticationResponseOpts,
+  VerifyAuthenticationResponseOpts,
   VerifiedRegistrationResponse,
-  // VerifiedAuthenticationResponse,
-} from '@simplewebauthn/server';
+  VerifiedAuthenticationResponse,
+} from '@simplewebauthn/server'
 
 import {
   CorsConfig,
@@ -28,7 +28,7 @@ import {
 import { normalizeRequest } from '../../transforms'
 
 import * as DbAuthError from './errors'
-import { decryptSession, getSession } from './shared'
+import { decryptSession, getSession, webauthnSession } from './shared'
 
 interface DbAuthHandlerOptions {
   /**
@@ -224,7 +224,7 @@ export class DbAuthHandler {
       'regOptions',
       'register',
       'authOptions',
-      'authenticate'
+      'authenticate',
     ]
   }
 
@@ -241,7 +241,7 @@ export class DbAuthHandler {
       regOptions: 'GET',
       register: 'POST',
       authOptions: 'GET',
-      authenticate: 'POST'
+      authenticate: 'POST',
     }
   }
 
@@ -368,12 +368,119 @@ export class DbAuthHandler {
 
   // browser submits Webauthn credentials
   async authenticate() {
-    return ['', {}]
+    if (this.options.webauthn === undefined || !this.options.webauthn.enabled) {
+      throw new DbAuthError.WebauthnError('Webauthn is not enabled')
+    }
+
+    const jsonBody = JSON.parse(this.event.body as string)
+    const credential = await this.dbCredentialAccessor.findFirst({
+      where: { id: jsonBody.rawId },
+    })
+
+    console.info('credential', credential)
+
+    if (!credential) {
+      throw new DbAuthError.WebauthnError('Credentials not found')
+    }
+
+    const user = await this.dbAccessor.findFirst({
+      where: {
+        [this.options.authFields.id]:
+          credential[this.options.webauthn.credentialFields.userId],
+      },
+    })
+
+    let verification: VerifiedAuthenticationResponse
+    try {
+      const opts: VerifyAuthenticationResponseOpts = {
+        credential: jsonBody,
+        expectedChallenge: user[this.options.authFields.challenge],
+        expectedOrigin: this.options.webauthn.origin,
+        expectedRPID: this.options.webauthn.domain,
+        authenticator: {
+          credentialID: base64url.toBuffer(
+            credential[this.options.webauthn.credentialFields.id]
+          ),
+          credentialPublicKey:
+            credential[this.options.webauthn.credentialFields.publicKey],
+          counter: credential[this.options.webauthn.credentialFields.counter],
+          transports: JSON.parse(
+            credential[this.options.webauthn.credentialFields.transports]
+          ),
+        },
+        requireUserVerification: true,
+      }
+      verification = verifyAuthenticationResponse(opts)
+      console.log('verify-authentication', verification)
+    } catch (error: any) {
+      console.error(error)
+      throw error
+    }
+
+    const { verified, authenticationInfo } = verification
+
+    if (verified) {
+      // Update the authenticator's counter in the DB to the newest count in the authentication
+      await this.dbCredentialAccessor.update({
+        where: {
+          [this.options.webauthn.credentialFields.id]:
+            credential[this.options.webauthn.credentialFields.id],
+        },
+        data: {
+          [this.options.webauthn.credentialFields.counter]:
+            authenticationInfo.newCounter,
+        },
+      })
+    }
+
+    await this._saveChallenge(user[this.options.authFields.id], null)
+
+    return [verified]
   }
 
   // get options for a Webauthn authentication
   async authOptions() {
-    return [, {}]
+    if (this.options.webauthn === undefined || !this.options.webauthn.enabled) {
+      throw new DbAuthError.WebauthnError('Webauthn is not enabled')
+    }
+
+    const credentialId = webauthnSession(this.event)
+
+    if (!credentialId) {
+      throw new DbAuthError.WebauthnError('Webauthn session not present')
+    }
+
+    const user = await this.dbCredentialAccessor
+      .findFirst({ where: { id: credentialId } })
+      .user()
+    const credentials = await this.dbCredentialAccessor.findMany({
+      where: {
+        [this.options.webauthn.credentialFields.userId]:
+          user[this.options.authFields.id],
+      },
+    })
+
+    const options: GenerateAuthenticationOptionsOpts = {
+      timeout: this.options.webauthn.timeout || 60000,
+      allowCredentials: credentials.map((cred: any) => ({
+        id: base64url.toBuffer(cred.id),
+        type: 'public-key',
+        transports: JSON.parse(cred.transports),
+      })),
+      userVerification: 'required',
+      rpID: this.options.webauthn.domain,
+    }
+
+    const authOptions = generateAuthenticationOptions(options)
+
+    console.info('authOptions', authOptions)
+
+    await this._saveChallenge(
+      user[this.options.authFields.id],
+      authOptions.challenge
+    )
+
+    return [authOptions]
   }
 
   async forgotPassword() {
@@ -487,7 +594,9 @@ export class DbAuthHandler {
 
     const user = await this._getCurrentUser()
 
-    const existingCredentials = await this.dbCredentialAccessor.findMany({ where: { userId: user.id }})
+    const existingCredentials = await this.dbCredentialAccessor.findMany({
+      where: { userId: user.id },
+    })
     const exclude = existingCredentials.map((cred: any) => ({
       id: base64url.toBuffer(cred.id),
       type: 'public-key',
@@ -507,19 +616,15 @@ export class DbAuthHandler {
       },
       // Support the two most common algorithms: ES256, and RS256
       supportedAlgorithmIDs: [-7, -257],
-    };
+    }
 
-    const regOptions = generateRegistrationOptions(options);
+    const regOptions = generateRegistrationOptions(options)
 
     // save challenge to user record
-    await this.dbAccessor.update({
-      where: {
-        [this.options.authFields.id]: user[this.options.authFields.id],
-      },
-      data: {
-        [this.options.authFields.challenge]: regOptions.challenge,
-      },
-    })
+    await this._saveChallenge(
+      user[this.options.authFields.id],
+      regOptions.challenge
+    )
 
     return [regOptions]
   }
@@ -533,7 +638,7 @@ export class DbAuthHandler {
     const user = await this._getCurrentUser()
     const jsonBody = JSON.parse(this.event.body as string)
 
-    let verification: VerifiedRegistrationResponse;
+    let verification: VerifiedRegistrationResponse
     try {
       const opts: VerifyRegistrationResponseOpts = {
         credential: jsonBody,
@@ -541,22 +646,22 @@ export class DbAuthHandler {
         expectedOrigin: this.options.webauthn.origin,
         expectedRPID: this.options.webauthn.domain,
         requireUserVerification: true,
-      };
-      verification = await verifyRegistrationResponse(opts);
+      }
+      verification = await verifyRegistrationResponse(opts)
     } catch (e: any) {
       console.error(e)
       throw new DbAuthError.WebauthnError(e.message)
     }
 
-    const { verified, registrationInfo } = verification;
+    const { verified, registrationInfo } = verification
     let plainCredentialId
 
     if (verified && registrationInfo) {
-      const { credentialPublicKey, credentialID, counter } = registrationInfo;
+      const { credentialPublicKey, credentialID, counter } = registrationInfo
       plainCredentialId = base64url.encode(credentialID)
 
       const existingDevice = await this.dbCredentialAccessor.findFirst({
-        where: { id: plainCredentialId, userId: user.id, }
+        where: { id: plainCredentialId, userId: user.id },
       })
 
       if (!existingDevice) {
@@ -566,11 +671,15 @@ export class DbAuthHandler {
             userId: user.id,
             publicKey: credentialPublicKey,
             transports: JSON.stringify(jsonBody.transports),
-            counter
-          }
+            counter,
+          },
         })
       }
+    } else {
+      throw new DbAuthError.WebauthnError('Registration failed')
     }
+
+    await this._saveChallenge(user[this.options.authFields.id], null)
 
     const cookie = [
       `webauthn=${plainCredentialId}`,
@@ -707,11 +816,23 @@ export class DbAuthHandler {
 
     // must have webauthn config if credentialModelAccessor present and vice versa
     if (
-      this.options?.credentialModelAccessor && !this.options?.webauthn ||
-      this.options?.webauthn && !this.options?.credentialModelAccessor
+      (this.options?.credentialModelAccessor && !this.options?.webauthn) ||
+      (this.options?.webauthn && !this.options?.credentialModelAccessor)
     ) {
       throw new DbAuthError.NoWebauthnConfigError()
     }
+  }
+
+  // Save challenge string for Webauthn
+  async _saveChallenge(userId: string | number, value: string | null) {
+    await this.dbAccessor.update({
+      where: {
+        [this.options.authFields.id]: userId,
+      },
+      data: {
+        [this.options.authFields.challenge]: value,
+      },
+    })
   }
 
   // removes sensitive fields from user before sending over the wire
@@ -907,7 +1028,7 @@ export class DbAuthHandler {
         select: {
           [this.options.authFields.id]: true,
           [this.options.authFields.username]: true,
-          [this.options.authFields.challenge]: true
+          [this.options.authFields.challenge]: true,
         },
       })
     } catch (e) {
