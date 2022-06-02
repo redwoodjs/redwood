@@ -3,6 +3,21 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
+import base64url from 'base64url'
+import {
+  generateRegistrationOptions,
+  verifyRegistrationResponse,
+  // generateAuthenticationOptions,
+  // verifyAuthenticationResponse,
+} from '@simplewebauthn/server';
+import type {
+  GenerateRegistrationOptionsOpts,
+  // GenerateAuthenticationOptionsOpts,
+  VerifyRegistrationResponseOpts,
+  // VerifyAuthenticationResponseOpts,
+  VerifiedRegistrationResponse,
+  // VerifiedAuthenticationResponse,
+} from '@simplewebauthn/server';
 
 import {
   CorsConfig,
@@ -26,6 +41,11 @@ interface DbAuthHandlerOptions {
    */
   authModelAccessor: keyof PrismaClient
   /**
+   * The name of the property you'd call on `db` to access your user credentials table.
+   * ie. if your Prisma model is named `UserCredential` this value would be `userCredential`, as in `db.userCredential`
+   */
+  credentialModelAccessor: keyof PrismaClient
+  /**
    *  A map of what dbAuth calls a field to what your database calls it.
    * `id` is whatever column you use to uniquely identify a user (probably
    * something like `id` or `userId` or even `email`)
@@ -37,6 +57,7 @@ interface DbAuthHandlerOptions {
     salt: string
     resetToken: string
     resetTokenExpiresAt: string
+    challenge: string
   }
   /**
    * Object containing cookie config options
@@ -120,6 +141,25 @@ interface DbAuthHandlerOptions {
   }
 
   /**
+   * Object containing Webauthn options
+   */
+  webauthn?: {
+    enabled: boolean
+    name: string
+    domain: string
+    origin: string
+    timeout?: number
+    type?: 'platform' | 'cross-platform'
+    credentialFields: {
+      id: string
+      userId: string
+      publicKey: string
+      transports: string
+      counter: string
+    }
+  }
+
+  /**
    * CORS settings, same as in createGraphqlHandler
    */
   cors?: CorsConfig
@@ -144,6 +184,10 @@ type AuthMethodNames =
   | 'resetPassword'
   | 'signup'
   | 'validateResetToken'
+  | 'regOptions'
+  | 'register'
+  | 'authOptions'
+  | 'authenticate'
 
 type Params = {
   username?: string
@@ -159,6 +203,7 @@ export class DbAuthHandler {
   params: Params
   db: PrismaClient
   dbAccessor: any
+  dbCredentialAccessor: any
   headerCsrfToken: string | undefined
   hasInvalidSession: boolean
   session: SessionRecord | undefined
@@ -176,6 +221,10 @@ export class DbAuthHandler {
       'resetPassword',
       'signup',
       'validateResetToken',
+      'regOptions',
+      'register',
+      'authOptions',
+      'authenticate'
     ]
   }
 
@@ -189,6 +238,10 @@ export class DbAuthHandler {
       resetPassword: 'POST',
       signup: 'POST',
       validateResetToken: 'POST',
+      regOptions: 'GET',
+      register: 'POST',
+      authOptions: 'GET',
+      authenticate: 'POST'
     }
   }
 
@@ -226,6 +279,7 @@ export class DbAuthHandler {
     this.params = this._parseBody()
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
+    this.dbCredentialAccessor = this.db[this.options.credentialModelAccessor]
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
     const futureDate = new Date()
@@ -312,6 +366,16 @@ export class DbAuthHandler {
     }
   }
 
+  // browser submits Webauthn credentials
+  async authenticate() {
+    return ['', {}]
+  }
+
+  // get options for a Webauthn authentication
+  async authOptions() {
+    return [, {}]
+  }
+
   async forgotPassword() {
     const { username } = this.params
 
@@ -329,7 +393,7 @@ export class DbAuthHandler {
         where: { [this.options.authFields.username]: username },
       })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
@@ -356,7 +420,7 @@ export class DbAuthHandler {
           },
         })
       } catch (e) {
-        console.log(e)
+        console.error(e)
         throw new DbAuthError.GenericError()
       }
 
@@ -415,6 +479,107 @@ export class DbAuthHandler {
     return this._logoutResponse()
   }
 
+  // get options for Webauthn registration
+  async regOptions() {
+    if (this.options.webauthn === undefined || !this.options.webauthn.enabled) {
+      throw new DbAuthError.WebauthnError('Webauthn is not enabled')
+    }
+
+    const user = await this._getCurrentUser()
+
+    const existingCredentials = await this.dbCredentialAccessor.findMany({ where: { userId: user.id }})
+    const exclude = existingCredentials.map((cred: any) => ({
+      id: base64url.toBuffer(cred.id),
+      type: 'public-key',
+      transports: JSON.parse(cred.transports),
+    }))
+
+    const options: GenerateRegistrationOptionsOpts = {
+      rpName: this.options.webauthn.name,
+      rpID: this.options.webauthn.domain,
+      userID: user.id,
+      userName: user[this.options.authFields.username],
+      timeout: this.options.webauthn?.timeout || 60000,
+      excludeCredentials: exclude,
+      authenticatorSelection: {
+        authenticatorAttachment: this.options.webauthn.type || 'platform',
+        userVerification: 'required',
+      },
+      // Support the two most common algorithms: ES256, and RS256
+      supportedAlgorithmIDs: [-7, -257],
+    };
+
+    const regOptions = generateRegistrationOptions(options);
+
+    // save challenge to user record
+    await this.dbAccessor.update({
+      where: {
+        [this.options.authFields.id]: user[this.options.authFields.id],
+      },
+      data: {
+        [this.options.authFields.challenge]: regOptions.challenge,
+      },
+    })
+
+    return [regOptions]
+  }
+
+  // browser submits Webauthn credentials for the first time on a new device
+  async register() {
+    if (this.options.webauthn === undefined || !this.options.webauthn.enabled) {
+      throw new DbAuthError.WebauthnError('Webauthn is not enabled')
+    }
+
+    const user = await this._getCurrentUser()
+    const jsonBody = JSON.parse(this.event.body as string)
+
+    let verification: VerifiedRegistrationResponse;
+    try {
+      const opts: VerifyRegistrationResponseOpts = {
+        credential: jsonBody,
+        expectedChallenge: user[this.options.authFields.challenge],
+        expectedOrigin: this.options.webauthn.origin,
+        expectedRPID: this.options.webauthn.domain,
+        requireUserVerification: true,
+      };
+      verification = await verifyRegistrationResponse(opts);
+    } catch (e: any) {
+      console.error(e)
+      throw new DbAuthError.WebauthnError(e.message)
+    }
+
+    const { verified, registrationInfo } = verification;
+    let plainCredentialId
+
+    if (verified && registrationInfo) {
+      const { credentialPublicKey, credentialID, counter } = registrationInfo;
+      plainCredentialId = base64url.encode(credentialID)
+
+      const existingDevice = await this.dbCredentialAccessor.findFirst({
+        where: { id: plainCredentialId, userId: user.id, }
+      })
+
+      if (!existingDevice) {
+        await this.dbCredentialAccessor.create({
+          data: {
+            id: plainCredentialId,
+            userId: user.id,
+            publicKey: credentialPublicKey,
+            transports: JSON.stringify(jsonBody.transports),
+            counter
+          }
+        })
+      }
+    }
+
+    const cookie = [
+      `webauthn=${plainCredentialId}`,
+      ...this._cookieAttributes({ expires: 'future' }),
+    ].join(';')
+
+    return [verified, { 'Set-Cookie': cookie }]
+  }
+
   async resetPassword() {
     const { password, resetToken } = this.params
 
@@ -455,7 +620,7 @@ export class DbAuthHandler {
         },
       })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
@@ -539,9 +704,17 @@ export class DbAuthHandler {
     if (!this.options?.resetPassword?.handler) {
       throw new DbAuthError.NoResetPasswordHandlerError()
     }
+
+    // must have webauthn config if credentialModelAccessor present and vice versa
+    if (
+      this.options?.credentialModelAccessor && !this.options?.webauthn ||
+      this.options?.webauthn && !this.options?.credentialModelAccessor
+    ) {
+      throw new DbAuthError.NoWebauthnConfigError()
+    }
   }
 
-  // removes sensative fields from user before sending over the wire
+  // removes sensitive fields from user before sending over the wire
   _sanitizeUser(user: Record<string, unknown>) {
     const sanitized = JSON.parse(JSON.stringify(user))
     delete sanitized[this.options.authFields.hashedPassword]
@@ -666,7 +839,7 @@ export class DbAuthHandler {
         },
       })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw new DbAuthError.GenericError()
     }
   }
@@ -695,7 +868,7 @@ export class DbAuthHandler {
         where: { [this.options.authFields.username]: username },
       })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
@@ -731,10 +904,14 @@ export class DbAuthHandler {
     try {
       user = await this.dbAccessor.findUnique({
         where: { [this.options.authFields.id]: this.session?.id },
-        select: { [this.options.authFields.id]: true },
+        select: {
+          [this.options.authFields.id]: true,
+          [this.options.authFields.username]: true,
+          [this.options.authFields.challenge]: true
+        },
       })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
