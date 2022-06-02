@@ -5911,6 +5911,7 @@ __metadata:
     "@types/split2": 3.2.1
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
+    base64url: ^3.0.1
     core-js: 3.22.7
     cross-undici-fetch: 0.1.27
     crypto-js: 4.1.1

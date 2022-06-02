@@ -33,6 +33,7 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@prisma/client": "3.14.0",
     "@simplewebauthn/server": "^5.2.1",
+    "base64url": "^3.0.1",
     "core-js": "3.22.7",
     "cross-undici-fetch": "0.1.27",
     "crypto-js": "4.1.1",
