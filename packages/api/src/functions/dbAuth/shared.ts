@@ -54,18 +54,18 @@ export const dbAuthSession = (event: APIGatewayProxyEvent) => {
   }
 }
 
-export const webauthnSession = (event: APIGatewayProxyEvent) => {
+export const webAuthnSession = (event: APIGatewayProxyEvent) => {
   if (!event.headers.cookie) {
     return null
   }
 
-  const webauthnCookie = event.headers.cookie.split(';').find((cook) => {
-    return cook.split('=')[0].trim() === 'webauthn'
+  const webAuthnCookie = event.headers.cookie.split(';').find((cook) => {
+    return cook.split('=')[0].trim() === 'webAuthn'
   })
 
-  if (!webauthnCookie || webauthnCookie === 'webauthn=') {
+  if (!webAuthnCookie || webAuthnCookie === 'webAuthn=') {
     return null
   }
 
-  return webauthnCookie.split('=')[1].trim()
+  return webAuthnCookie.split('=')[1].trim()
 }

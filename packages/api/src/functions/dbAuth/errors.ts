@@ -42,10 +42,21 @@ export class NoResetPasswordHandlerError extends Error {
   }
 }
 
-export class NoWebauthnConfigError extends Error {
+export class NoWebAuthnConfigError extends Error {
   constructor() {
-    super('To use Webauthn you need both `webauthn` and `credentialModelAccessor` config options')
-    this.name = 'NoWebauthnConfigError'
+    super(
+      'To use Webauthn you need both `webauthn` and `credentialModelAccessor` config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn'
+    )
+    this.name = 'NoWebAuthnConfigError'
+  }
+}
+
+export class MissingWebAuthnConfigError extends Error {
+  constructor() {
+    super(
+      'You are missing one or more WebAuthn config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn'
+    )
+    this.name = 'MissingWebAuthnConfigError'
   }
 }
 
@@ -203,9 +214,9 @@ export class GenericError extends Error {
   }
 }
 
-export class WebauthnError extends Error {
-  constructor(message = 'Webauthn Error') {
+export class WebAuthnError extends Error {
+  constructor(message = 'WebAuthn Error') {
     super(message)
-    this.name = 'WebauthnError'
+    this.name = 'WebAuthnError'
   }
 }
