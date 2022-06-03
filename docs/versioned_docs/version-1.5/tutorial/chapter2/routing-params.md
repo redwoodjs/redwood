@@ -644,7 +644,7 @@ And update `ArticlesCell` to use this new component instead:
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
 // highlight-next-line
-import Article from 'src/components/Article'
+import Article from 'src/components/Article/Article'
 
 export const QUERY = gql`
   query ArticlesQuery {
@@ -682,7 +682,7 @@ export const Success = ({ articles }) => {
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 // highlight-next-line
-import Article from 'src/components/Article'
+import Article from 'src/components/Article/Article'
 
 import type { ArticlesQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
@@ -728,7 +728,7 @@ Last but not least we can update the `ArticleCell` to properly display our blog 
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 // highlight-next-line
-import Article from 'src/components/Article'
+import Article from 'src/components/Article/Article'
 
 export const QUERY = gql`
   query ArticleQuery {
@@ -760,7 +760,7 @@ export const Success = ({ articles }) => (
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.tsx"
 // highlight-next-line
-import Article from 'src/components/Article'
+import Article from 'src/components/Article/Article'
 
 import type { ArticleQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
