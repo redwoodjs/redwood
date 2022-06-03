@@ -27,7 +27,7 @@
     "@babel/plugin-transform-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@vscode/ripgrep": "1.14.2",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "cross-undici-fetch": "0.1.27",
     "deepmerge": "4.2.2",
     "execa": "5.1.1",
