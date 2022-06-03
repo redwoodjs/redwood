@@ -88,8 +88,8 @@ What you want to do not on the roadmap? Well, still go for it! We love spikes an
 ### RedwoodJS Framework Packages
 |Package|Description|
 |:-|:-|
-|[`@redwoodjs/api-server`](https://github.com/redwoodjs/redwood/blob/main/packages/api-server/README.md)|Run a Redwood app using Express server (alternative to serverless API)|
-|[`@redwoodjs/api`](https://github.com/redwoodjs/redwood/blob/main/packages/api/README.md)|Infrastruction components for your applications UI including logging, webhooks, authentication decoders and parsers, as well as tools to test custom serverless functions and webhooks|
+|[`@redwoodjs/api-server`](https://github.com/redwoodjs/redwood/blob/main/packages/api-server/README.md)|Run a Redwood app using Fastify server (alternative to serverless API)|
+|[`@redwoodjs/api`](https://github.com/redwoodjs/redwood/blob/main/packages/api/README.md)|Infrastructure components for your applications UI including logging, webhooks, authentication decoders and parsers, as well as tools to test custom serverless functions and webhooks|
 |[`@redwoodjs/auth`](https://github.com/redwoodjs/redwood/blob/main/packages/auth/README.md#contributing)|A lightweight wrapper around popular SPA authentication libraries|
 |[`@redwoodjs/cli`](https://github.com/redwoodjs/redwood/blob/main/packages/cli/README.md)|All the commands for Redwood's built-in CLI|
 |[`@redwoodjs/core`](https://github.com/redwoodjs/redwood/blob/main/packages/core/README.md)|Defines babel plugins and config files|
