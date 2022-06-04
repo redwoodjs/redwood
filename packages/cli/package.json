@@ -40,7 +40,7 @@
     "chalk": "4.1.2",
     "concurrently": "7.2.1",
     "configstore": "3.1.5",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "cross-env": "7.0.3",
     "decamelize": "5.0.0",
     "dotenv-defaults": "5.0.0",

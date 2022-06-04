@@ -30,7 +30,7 @@
     "@redwoodjs/internal": "1.5.1",
     "@redwoodjs/structure": "1.5.1",
     "ci-info": "3.3.1",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "cross-undici-fetch": "0.1.27",
     "envinfo": "7.8.1",
     "systeminformation": "5.11.16",

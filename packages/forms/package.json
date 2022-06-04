@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.31.3"
   },
