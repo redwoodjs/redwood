@@ -99,7 +99,7 @@ What you want to do not on the roadmap? Well, still go for it! We love spikes an
 |[`@redwoodjs/forms`](https://github.com/redwoodjs/redwood/blob/main/packages/forms/README.md)|Provides Form helpers|
 |[`@redwoodjs/graphql-server`](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/README.md)|Exposes functions to build the GraphQL API, provides services with `context`, and a set of envelop plugins to supercharge your GraphQL API with logging, authentication, error handling, directives and more|
 |[`@redwoodjs/internal`](https://github.com/redwoodjs/redwood/blob/main/packages/internal/README.md)|Provides tooling to parse Redwood configs and get a project's paths|
-|[`@redwoodjs/prerender`](https://github.com/redwoodjs/redwood/blob/main/packages/prerender)|...|
+|[`@redwoodjs/prerender`](https://github.com/redwoodjs/redwood/blob/main/packages/prerender/README.md)|...|
 |[`@redwoodjs/record`](https://github.com/redwoodjs/redwood/blob/main/packages/record/README.md)|ORM bult on top of Prisma. It may be extended in the future to wrap other database access packages|
 |[`@redwoodjs/router`](https://github.com/redwoodjs/redwood/blob/main/packages/router/README.md)|The built-in router for Redwood|
 |[`@redwoodjs/structure`](https://github.com/redwoodjs/redwood/blob/main/packages/structure/README.md)|Provides a way to build, validate and inspect an object graph that represents a complete Redwood project|
