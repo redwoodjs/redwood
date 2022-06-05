@@ -593,7 +593,7 @@ Lastly, `notes` is an array of strings to output after the generator has finishe
 Most of the commands in `dbCommands` are just wrappers around [Prisma commands](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-cli/command-reference),
 the exception being `seed`, which runs a Redwood app's [./api/prisma/seed.js](https://github.com/redwoodjs/create-redwood-app/blob/master/api/prisma/seeds.js).
 
-Adding or modifying a command here's no different&mdash;there's still a `command`, `descripton`, `builder`, and `handler`. But there's a pattern to `handler`: it usually uses [runCommandTask](https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/cli/src/lib/index.js#L349-L377), a Redwood-defined function.
+Adding or modifying a command here's no different&mdash;there's still a `command`, `description`, `builder`, and `handler`. But there's a pattern to `handler`: it usually uses [runCommandTask](https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/cli/src/lib/index.js#L349-L377), a Redwood-defined function.
 
 This is because most `dbCommands` are really just running prisma commands, so they really just have to output something like `yarn prisma ...`.
 
