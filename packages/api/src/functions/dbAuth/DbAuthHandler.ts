@@ -454,7 +454,7 @@ export class DbAuthHandler {
     const credentialId = webAuthnSession(this.event)
 
     if (!credentialId) {
-      throw new DbAuthError.WebAuthnError('WebAuthn session not present')
+      throw new DbAuthError.NoWebAuthnSessionError()
     }
 
     const user = await this.dbCredentialAccessor

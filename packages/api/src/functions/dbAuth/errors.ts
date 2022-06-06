@@ -220,3 +220,12 @@ export class WebAuthnError extends Error {
     this.name = 'WebAuthnError'
   }
 }
+
+export class NoWebAuthnSessionError extends WebAuthnError {
+  constructor(
+    message = 'Log in with username and password to enable WebAuthn'
+  ) {
+    super(message)
+    this.name = 'NoWebAuthnSessionError'
+  }
+}
