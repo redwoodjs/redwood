@@ -442,7 +442,18 @@ export class DbAuthHandler {
 
     await this._saveChallenge(user[this.options.authFields.id], null)
 
-    return [verified, { 'Set-Cookie': this._webAuthnCookie(jsonBody.rawId) }]
+    const [, loginHeaders] = this._loginResponse(user)
+
+    return [
+      verified,
+      {
+        'Set-Cookie': [
+          this._webAuthnCookie(jsonBody.rawId),
+          // @ts-ignore
+          loginHeaders['Set-Cookie'],
+        ],
+      },
+    ]
   }
 
   // get options for a WebAuthn authentication
