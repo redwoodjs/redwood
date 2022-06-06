@@ -442,7 +442,7 @@ export class DbAuthHandler {
 
     await this._saveChallenge(user[this.options.authFields.id], null)
 
-    return [verified]
+    return [verified, { 'Set-Cookie': this._webAuthnCookie(jsonBody.rawId) }]
   }
 
   // get options for a WebAuthn authentication
@@ -453,13 +453,24 @@ export class DbAuthHandler {
 
     const credentialId = webAuthnSession(this.event)
 
-    if (!credentialId) {
+    let user
+
+    if (credentialId) {
+      user = await this.dbCredentialAccessor
+        .findFirst({ where: { id: credentialId } })
+        .user()
+    } else {
+      // webauthn session not present, fallback to getting user from regular
+      // session cookie (user probably deleted webauthn cookie)
+      user = await this._getCurrentUser()
+    }
+
+    // webauthn cookie has been tampered with or UserCredential has been deleted
+    // from the DB
+    if (!user) {
       throw new DbAuthError.NoWebAuthnSessionError()
     }
 
-    const user = await this.dbCredentialAccessor
-      .findFirst({ where: { id: credentialId } })
-      .user()
     const credentials = await this.dbCredentialAccessor.findMany({
       where: {
         [this.options.webAuthn.credentialFields.userId]:
@@ -708,12 +719,7 @@ export class DbAuthHandler {
 
     await this._saveChallenge(user[this.options.authFields.id], null)
 
-    const cookie = [
-      `webAuthn=${plainCredentialId}`,
-      ...this._cookieAttributes({ expires: 'future' }),
-    ].join(';')
-
-    return [verified, { 'Set-Cookie': cookie }]
+    return [verified, { 'Set-Cookie': this._webAuthnCookie(plainCredentialId) }]
   }
 
   async resetPassword() {
@@ -870,6 +876,13 @@ export class DbAuthHandler {
         [this.options.authFields.challenge]: value,
       },
     })
+  }
+
+  _webAuthnCookie(id: string) {
+    return [
+      `webAuthn=${id}`,
+      ...this._cookieAttributes({ expires: 'future' }),
+    ].join(';')
   }
 
   // removes sensitive fields from user before sending over the wire
