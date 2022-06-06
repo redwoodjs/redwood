@@ -472,8 +472,15 @@ export class DbAuthHandler {
       allowCredentials: credentials.map((cred: any) => ({
         id: base64url.toBuffer(cred.id),
         type: 'public-key',
-        transports: cred.transports
-          ? JSON.parse(cred.transports)
+        transports: cred[
+          this.options.webAuthn?.credentialFields?.transports || 'transports'
+        ]
+          ? JSON.parse(
+              cred[
+                this.options.webAuthn?.credentialFields?.transports ||
+                  'transports'
+              ]
+            )
           : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
       })),
       userVerification: 'required',
@@ -607,7 +614,16 @@ export class DbAuthHandler {
     const exclude = existingCredentials.map((cred: any) => ({
       id: base64url.toBuffer(cred.id),
       type: 'public-key',
-      transports: JSON.parse(cred.transports),
+      transports: cred[
+        this.options.webAuthn?.credentialFields?.transports || 'transports'
+      ]
+        ? JSON.parse(
+            cred[
+              this.options.webAuthn?.credentialFields?.transports ||
+                'transports'
+            ]
+          )
+        : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
     }))
 
     const options: GenerateRegistrationOptionsOpts = {
