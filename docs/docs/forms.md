@@ -343,35 +343,45 @@ You can create a custom field that integrates with Redwood through the use of `u
 
 `useErrorStyles` sets up error styling for your custom input field.
 
-Using these two together you can create custom input fields that replicate a redwood input field while also allowing for custom domain logic.
+Using these two together you can create custom input fields that replicate a Redwood input field while also allowing for custom domain logic.
 
 In the following example we have an all-in-one custom required input field with label, input, and error display.
 
 ```jsx
 import { FieldError, useErrorStyles, useRegister } from '@redwoodjs/forms'
 
-const RequiredField = ({label, name, validation}) => {
-  const register = useRegister({
+const RequiredField = ({ label, name, validation }) => {
+  const { onBlur, onChange, ref } = useRegister({
     name,
     validation: {...validation, required: true}
   })
 
-  const labelStyles = useErrorStyles({
+  const { className: labelClassName, style: labelStyle } = useErrorStyles({
     className: `my-label-class`,
     errorClassName: `my-label-error-class`,
     name,
   })
 
-  const inputStyles = useErrorStyles({
+  const { className: inputClassName, style: inputStyle } = useErrorStyles({
     className: `my-input-class`,
     errorClassName: `my-input-error-class`,
     name,
   })
 
   return (
-    <label {...labelStyles}>{label}</label>
-    <input type="text" {...inputStyles} {...register} />
-    <FieldError name={name}>
+    <>
+      <label className={labelClassName} style={labelStyle}>{label}</label>
+      <input
+        className={inputClassName}
+        name={name}
+        onBlur={onBlur}
+        onChange={onChange}
+        ref={ref}
+        style={inputStyle}
+        type="text"
+      />
+      <FieldError name={name}>
+    </>
   )
 }
 ```
