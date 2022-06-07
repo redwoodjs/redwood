@@ -442,18 +442,15 @@ export class DbAuthHandler {
 
     await this._saveChallenge(user[this.options.authFields.id], null)
 
+    // get the regular `login` cookies
     const [, loginHeaders] = this._loginResponse(user)
+    const cookies = [
+      this._webAuthnCookie(jsonBody.rawId),
+      // @ts-ignore
+      loginHeaders['Set-Cookie'],
+    ].flat()
 
-    return [
-      verified,
-      {
-        'Set-Cookie': [
-          this._webAuthnCookie(jsonBody.rawId),
-          // @ts-ignore
-          loginHeaders['Set-Cookie'],
-        ],
-      },
-    ]
+    return [verified, { 'Set-Cookie': cookies }]
   }
 
   // get options for a WebAuthn authentication
@@ -892,7 +889,10 @@ export class DbAuthHandler {
   _webAuthnCookie(id: string) {
     return [
       `webAuthn=${id}`,
-      ...this._cookieAttributes({ expires: 'future' }),
+      ...this._cookieAttributes({
+        expires: 'future',
+        options: { HttpOnly: false },
+      }),
     ].join(';')
   }
 
@@ -924,8 +924,16 @@ export class DbAuthHandler {
   //
   // pass the argument `expires` set to "now" to get the attributes needed to expire
   // the session, or "future" (or left out completely) to set to `futureExpiresDate`
-  _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
-    const cookieOptions = this.options.cookie || {}
+  _cookieAttributes({
+    expires = 'future',
+    options = {},
+  }: {
+    expires?: 'now' | 'future'
+    options?: DbAuthHandlerOptions['cookie']
+  }) {
+    const cookieOptions = { ...this.options.cookie, ...options } || {
+      ...options,
+    }
     const meta = Object.keys(cookieOptions)
       .map((key) => {
         const optionValue =
