@@ -12,18 +12,15 @@ const CREATE_CONTACT_MUTATION = gql`
 `
 
 const NewContact = () => {
-  const [createContact, { loading, error }] = useMutation(
-    CREATE_CONTACT_MUTATION,
-    {
-      onCompleted: () => {
-        toast.success('Contact created')
-        navigate(routes.contacts())
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      },
-    }
-  )
+  const [createContact, { loading, error }] = useMutation(CREATE_CONTACT_MUTATION, {
+    onCompleted: () => {
+      toast.success('Contact created')
+      navigate(routes.contacts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   const onSave = (input) => {
     createContact({ variables: { input } })

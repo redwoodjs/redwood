@@ -704,7 +704,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #a1a1aa;
   background-clip: content-box;
   border: 3px solid transparent;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2079,7 +2079,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #a1a1aa;
   background-clip: content-box;
   border: 3px solid transparent;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2853,7 +2853,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   background-color: #a1a1aa;
   background-clip: content-box;
   border: 3px solid transparent;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;

@@ -23,7 +23,10 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No contacts yet. '}
-      <Link to={routes.newContact()} className="rw-link">
+      <Link
+        to={routes.newContact()}
+        className="rw-link"
+      >
         {'Create one?'}
       </Link>
     </div>

@@ -13,7 +13,7 @@ import {
 import { normalizeRequest } from '../../transforms'
 
 import * as DbAuthError from './errors'
-import { decryptSession, getSession } from './shared'
+import { decryptSession, extractCookie, getSession } from './shared'
 
 export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
@@ -169,6 +169,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   event: APIGatewayProxyEvent
   context: LambdaContext
   options: DbAuthHandlerOptions<TUser>
+  cookie: string | undefined
   params: Params
   db: PrismaClient
   dbAccessor: any
@@ -233,6 +234,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     this.event = event
     this.context = context
     this.options = options
+    this.cookie = extractCookie(this.event)
 
     this._validateOptions()
 
@@ -250,9 +252,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     try {
-      const [session, csrfToken] = decryptSession(
-        getSession(this.event.headers['cookie'])
-      )
+      const [session, csrfToken] = decryptSession(getSession(this.cookie))
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
@@ -808,8 +808,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   // figure out which auth method we're trying to call
   _getAuthMethod() {
     // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    let methodName = this.event.queryStringParameters!.method as AuthMethodNames
+    let methodName = this.event.queryStringParameters?.method as AuthMethodNames
 
     if (!DbAuthHandler.METHODS.includes(methodName) && this.params) {
       // try getting it from the body in JSON: { method: [methodName] }
