@@ -766,7 +766,7 @@ import type { ArticleQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ArticleQuery {
+  query ArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title

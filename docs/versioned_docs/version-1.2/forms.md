@@ -321,7 +321,7 @@ The treatment of empty field values is governed by the following:
 
 ### emptyAs prop
 
-The `emptyAs` prop allows the user to overide the default value for an input field if the field is empty. Provided that a `setValueAs` prop is not specified, Redwood will allow you to override the default empty value returned.
+The `emptyAs` prop allows the user to override the default value for an input field if the field is empty. Provided that a `setValueAs` prop is not specified, Redwood will allow you to override the default empty value returned.
 The possible values for `emptyAs` are:
 - `null`
 - `'undefined'`
