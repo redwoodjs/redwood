@@ -198,7 +198,7 @@ describe('Populates context', () => {
     expect(errorLogStatement).toHaveProperty('level')
     expect(errorLogStatement).toHaveProperty('time')
     expect(errorLogStatement).toHaveProperty('msg')
-    expect(errorLogStatement).toHaveProperty('error')
+    expect(errorLogStatement).toHaveProperty('err')
 
     expect(errorLogStatement.name).toEqual('graphql-server')
     expect(errorLogStatement.level).toEqual(50)
