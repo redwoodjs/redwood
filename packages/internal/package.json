@@ -70,7 +70,7 @@
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
     "jest": "27.5.1",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
