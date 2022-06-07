@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
+    "@simplewebauthn/browser": "^5.2.1",
     "core-js": "3.22.7"
   },
   "devDependencies": {
