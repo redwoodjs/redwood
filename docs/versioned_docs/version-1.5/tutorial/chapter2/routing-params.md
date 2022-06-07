@@ -731,7 +731,7 @@ Last but not least we can update the `ArticleCell` to properly display our blog 
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
-  query ArticleQuery {
+  query ArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title
@@ -749,7 +749,7 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }) => (
+export const Success = ({ article }) => (
   // highlight-next-line
   <Article article={article} />
 )
@@ -784,7 +784,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }: CellSuccessProps<ArticleQuery>) => (
+export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => (
   // highlight-next-line
   <Article article={article} />
 )
