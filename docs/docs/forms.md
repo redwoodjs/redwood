@@ -337,7 +337,7 @@ will return `undefined` if the field is empty.
 
 ### Custom Input Fields
 
-You can create a custom field that integrates with Redwood through the use of `useRegister` and `useErrorStyles`. Each of these serving a different purpose depending on what you are trying to build.
+You can create a custom field that integrates with Redwood through the use of Redwood's `useRegister` and `useErrorStyles` hooks. Each of these serving a different purpose depending on what you are trying to build.
 
 `useRegister` registers the field with react-hook-form and is a wrapper for [`register`](https://react-hook-form.com/api/useform/register).
 
@@ -351,7 +351,7 @@ In the following example we have an all-in-one custom required input field with 
 import { FieldError, useErrorStyles, useRegister } from '@redwoodjs/forms'
 
 const RequiredField = ({ label, name, validation }) => {
-  const { onBlur, onChange, ref } = useRegister({
+  const register = useRegister({
     name,
     validation: {...validation, required: true}
   })
@@ -373,12 +373,9 @@ const RequiredField = ({ label, name, validation }) => {
       <label className={labelClassName} style={labelStyle}>{label}</label>
       <input
         className={inputClassName}
-        name={name}
-        onBlur={onBlur}
-        onChange={onChange}
-        ref={ref}
         style={inputStyle}
         type="text"
+        {...register}
       />
       <FieldError name={name}>
     </>
