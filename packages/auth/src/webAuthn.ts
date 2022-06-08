@@ -1,41 +1,50 @@
 import {
-  browserSupportsWebauthn,
   platformAuthenticatorIsAvailable,
   startRegistration,
   startAuthentication,
-} from '@simplewebauthn/browser'
+} from './simplewebauthn'
+
+export class WebAuthnAlreadyRegisteredError extends Error {
+  constructor() {
+    super('This device is already registered')
+    this.name = 'WebAuthnAlreadyRegisteredError'
+  }
+}
 
 export const isWebAuthnSupported = async () => {
-  return browserSupportsWebauthn() && (await platformAuthenticatorIsAvailable())
+  return await platformAuthenticatorIsAvailable()
 }
+
+export const isWebAuthnEnabled = () => !!document.cookie.match(/webAuthn/)
 
 export const webAuthnAuthenticate = async () => {
   try {
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
-      credentials: 'same-origin',
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'authOptions' }),
-    })
-    const options = await response.json()
+    const optionsResponse = await fetch(
+      `${global.RWJS_API_DBAUTH_URL}?method=authOptions`,
+      {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+    const options = await optionsResponse.json()
 
-    if (response.status !== 200) {
+    if (optionsResponse.status !== 200) {
       return { error: `Could not start authentication: ${options.error}` }
     }
 
     const browserResponse = await startAuthentication(options)
 
-    const verifyResponse = await fetch(global.RWJS_API_DBAUTH_URL, {
-      credentials: 'same-origin',
+    const authResponse = await fetch(global.RWJS_API_DBAUTH_URL, {
+      credentials: 'include',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'authOptions', ...browserResponse }),
+      body: JSON.stringify({ method: 'authenticate', ...browserResponse }),
     })
 
-    if (verifyResponse.status !== 200) {
+    if (authResponse.status !== 200) {
       throw new Error(
         `Could not complete authentication: ${
-          (await verifyResponse.json()).error
+          (await authResponse.json()).error
         }`
       )
     } else {
@@ -48,25 +57,26 @@ export const webAuthnAuthenticate = async () => {
 
 export const webAuthnRegister = async () => {
   try {
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
-      credentials: 'same-origin',
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'regOptions' }),
-    })
-    const options = await response.json()
+    const optionsResponse = await fetch(
+      `${global.RWJS_API_DBAUTH_URL}?method=regOptions`,
+      {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+    const options = await optionsResponse.json()
 
-    if (response.status !== 200) {
+    if (optionsResponse.status !== 200) {
       return { error: `Could not start registration: ${options.error}` }
     }
 
-    const browserResponse = await startRegistration(options)
+    const regResponse = await startRegistration(options)
 
     const verifyResponse = await fetch(global.RWJS_API_DBAUTH_URL, {
-      credentials: 'same-origin',
+      credentials: 'include',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'register', ...browserResponse }),
+      body: JSON.stringify({ method: 'register', ...regResponse }),
     })
 
     if (verifyResponse.status !== 200) {
@@ -76,7 +86,7 @@ export const webAuthnRegister = async () => {
     }
   } catch (e: any) {
     if (e.name === 'InvalidStateError') {
-      throw new Error(`This device is already registered`)
+      throw new WebAuthnAlreadyRegisteredError()
     } else {
       throw new Error(`Error while registering: ${e.message}`)
     }
