@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@simplewebauthn/browser": "^5.2.1",
     "core-js": "3.22.7"
   },
   "devDependencies": {
@@ -36,6 +35,7 @@
     "@clerk/types": "2.14.0",
     "@nhost/hasura-auth-js": "1.1.11",
     "@nhost/nhost-js": "1.1.14",
+    "@simplewebauthn/typescript-types": "^5.2.1",
     "@supabase/supabase-js": "1.35.3",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.45",

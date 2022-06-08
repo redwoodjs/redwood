@@ -5959,7 +5959,7 @@ __metadata:
     "@clerk/types": 2.14.0
     "@nhost/hasura-auth-js": 1.1.11
     "@nhost/nhost-js": 1.1.14
-    "@simplewebauthn/browser": ^5.2.1
+    "@simplewebauthn/typescript-types": ^5.2.1
     "@supabase/supabase-js": 1.35.3
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.45
@@ -6460,7 +6460,6 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@redwoodjs/auth": 1.5.1
-    "@simplewebauthn/browser": ^5.2.1
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
@@ -6515,13 +6514,6 @@ __metadata:
     zen-observable:
       optional: true
   checksum: 0d874453f6bc2460d71783292291f52feb36c2a75314b1072a6ffe6206562f33e9d664a554348d565a6b54da9041d75070371052545bc329caaa52f64216987f
-  languageName: node
-  linkType: hard
-
-"@simplewebauthn/browser@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "@simplewebauthn/browser@npm:5.2.1"
-  checksum: 7279ecec4ee93256b510c18e2a8636296bf5114638804d402b371308aa6ffe43545239fe0e79c02880961ec978f375fdc585b763a2052237e047fdc28fd5c7c3
   languageName: node
   linkType: hard
 

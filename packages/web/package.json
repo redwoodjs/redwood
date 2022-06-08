@@ -39,7 +39,6 @@
     "@apollo/client": "3.6.6",
     "@babel/runtime-corejs3": "7.16.7",
     "@redwoodjs/auth": "1.5.1",
-    "@simplewebauthn/browser": "^5.2.1",
     "core-js": "3.22.7",
     "graphql": "16.5.0",
     "graphql-tag": "2.12.6",
