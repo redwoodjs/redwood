@@ -3,6 +3,12 @@ import CryptoJS from 'crypto-js'
 
 import * as DbAuthError from './errors'
 
+// Extracts the cookie from an event, handling lower and upper case header
+// names.
+export const extractCookie = (event: APIGatewayProxyEvent) => {
+  return event.headers.cookie || event.headers.Cookie
+}
+
 // decrypts the session cookie and returns an array: [data, csrf]
 export const decryptSession = (text: string | null) => {
   if (!text || text.trim() === '') {
@@ -44,9 +50,9 @@ export const getSession = (text?: string) => {
 // Convenience function to get session, decrypt, and return session data all
 // at once. Accepts the `event` argument from a Lambda function call.
 export const dbAuthSession = (event: APIGatewayProxyEvent) => {
-  if (event.headers.cookie) {
+  if (extractCookie(event)) {
     const [session, _csrfToken] = decryptSession(
-      getSession(event.headers.cookie)
+      getSession(extractCookie(event))
     )
     return session
   } else {
