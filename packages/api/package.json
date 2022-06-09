@@ -47,7 +47,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@clerk/clerk-sdk-node": "3.6.0",
+    "@clerk/clerk-sdk-node": "3.6.1",
     "@redwoodjs/auth": "1.5.1",
     "@types/aws-lambda": "8.10.97",
     "@types/crypto-js": "4.1.1",
@@ -59,10 +59,10 @@
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
     "split2": "4.1.0",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "peerDependencies": {
-    "@clerk/clerk-sdk-node": "3.6.0",
+    "@clerk/clerk-sdk-node": "3.6.1",
     "@magic-sdk/admin": "1.4.1",
     "firebase-admin": "10.2.0"
   },
