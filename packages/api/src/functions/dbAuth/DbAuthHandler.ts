@@ -627,23 +627,25 @@ export class DbAuthHandler {
 
     const user = await this._getCurrentUser()
 
-    const existingCredentials = await this.dbCredentialAccessor.findMany({
-      where: { userId: user.id },
-    })
-    const exclude = existingCredentials.map((cred: any) => ({
-      id: base64url.toBuffer(cred.id),
-      type: 'public-key',
-      transports: cred[
-        this.options.webAuthn?.credentialFields?.transports || 'transports'
-      ]
-        ? JSON.parse(
-            cred[
-              this.options.webAuthn?.credentialFields?.transports ||
-                'transports'
-            ]
-          )
-        : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
-    }))
+    // const existingCredentials = await this.dbCredentialAccessor.findMany({
+    //   where: { userId: user.id },
+    // })
+    // const exclude = existingCredentials.map((cred: any) => ({
+    //   id: base64url.toBuffer(cred.id),
+    //   type: 'public-key',
+    //   transports: cred[
+    //     this.options.webAuthn?.credentialFields?.transports || 'transports'
+    //   ]
+    //     ? JSON.parse(
+    //         cred[
+    //           this.options.webAuthn?.credentialFields?.transports ||
+    //             'transports'
+    //         ]
+    //       )
+    //     : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
+    // }))
+
+    const exclude: any = []
 
     const options: GenerateRegistrationOptionsOpts = {
       rpName: this.options.webAuthn.name,
