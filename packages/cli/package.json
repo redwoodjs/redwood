@@ -70,7 +70,7 @@
     "@babel/core": "7.16.7",
     "@types/listr": "0.14.4",
     "jest": "27.5.1",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

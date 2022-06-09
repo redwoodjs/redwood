@@ -56,7 +56,7 @@
     "@types/yargs": "17.0.10",
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
