@@ -335,6 +335,54 @@ For example:
 ```
 will return `undefined` if the field is empty.
 
+### Custom Input Fields
+
+You can create a custom field that integrates with Redwood through the use of Redwood's `useRegister` and `useErrorStyles` hooks. Each of these serving a different purpose depending on what you are trying to build.
+
+`useRegister` registers the field with react-hook-form and is a wrapper for [`register`](https://react-hook-form.com/api/useform/register).
+
+`useErrorStyles` sets up error styling for your custom input field.
+
+Using these two together you can create custom input fields that replicate a Redwood input field while also allowing for custom domain logic.
+
+In the following example we have an all-in-one custom required input field with label, input, and error display.
+
+```jsx
+import { FieldError, useErrorStyles, useRegister } from '@redwoodjs/forms'
+
+const RequiredField = ({ label, name, validation }) => {
+  const register = useRegister({
+    name,
+    validation: {...validation, required: true}
+  })
+
+  const { className: labelClassName, style: labelStyle } = useErrorStyles({
+    className: `my-label-class`,
+    errorClassName: `my-label-error-class`,
+    name,
+  })
+
+  const { className: inputClassName, style: inputStyle } = useErrorStyles({
+    className: `my-input-class`,
+    errorClassName: `my-input-error-class`,
+    name,
+  })
+
+  return (
+    <>
+      <label className={labelClassName} style={labelStyle}>{label}</label>
+      <input
+        className={inputClassName}
+        style={inputStyle}
+        type="text"
+        {...register}
+      />
+      <FieldError name={name}>
+    </>
+  )
+}
+```
+
 ## `<SelectField>`
 
 Renders an HTML `<select>` tag.
