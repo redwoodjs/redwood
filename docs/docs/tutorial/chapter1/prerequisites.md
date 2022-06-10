@@ -23,7 +23,7 @@ If you have an existing site created with a prior version, you'll need to upgrad
 
 1. For _each_ version included in your upgrade, follow the "Code Modifications" section of the specific version's Release Notes:
    - [Redwood Releases](https://github.com/redwoodjs/redwood/releases)
-2. The upgrade to the latest version. Run the command:
+2. Then upgrade to the latest version. Run the command:
    - `yarn redwood upgrade`
 
 ### Node.js and Yarn Versions
