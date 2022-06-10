@@ -446,7 +446,7 @@ export class DbAuthHandler {
       // need to return *something* for our existing Authorization header stuff
       // to work, so return the user's ID in case we can use it for something
       // in the future
-      return [user.id]
+      return [user[this.options.authFields.id]]
     } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
@@ -661,20 +661,19 @@ export class DbAuthHandler {
 
     if (credentialId) {
       user = await this.dbCredentialAccessor
-        .findFirst({ where: { id: credentialId } })
+        .findFirst({
+          where: { [this.options.webAuthn.credentialFields.id]: credentialId },
+        })
         .user()
     } else {
       // webauthn session not present, fallback to getting user from regular
-      // session cookie (user probably deleted webauthn cookie)
+      // session cookie
       user = await this._getCurrentUser()
     }
 
     // webauthn cookie has been tampered with or UserCredential has been deleted
     // from the DB, remove their cookie so it doesn't happen again
     if (!user) {
-      console.info('removing cookie', {
-        'Set-Cookie': this._webAuthnCookie('', 'now'),
-      })
       return [
         { error: 'Log in with username and password to enable WebAuthn' },
         { 'Set-Cookie': this._webAuthnCookie('', 'now') },
@@ -692,16 +691,14 @@ export class DbAuthHandler {
     const options: GenerateAuthenticationOptionsOpts = {
       timeout: this.options.webAuthn.timeout || 60000,
       allowCredentials: credentials.map((cred: any) => ({
-        id: base64url.toBuffer(cred.id),
+        // @ts-ignore
+        id: base64url.toBuffer(cred[this.options.webAuthn.credentialFields.id]),
         type: 'public-key',
-        transports: cred[
-          this.options.webAuthn?.credentialFields?.transports || 'transports'
-        ]
+        // @ts-ignore
+        transports: cred[this.options.webAuthn.credentialFields.transports]
           ? JSON.parse(
-              cred[
-                this.options.webAuthn?.credentialFields?.transports ||
-                  'transports'
-              ]
+              // @ts-ignore
+              cred[this.options.webAuthn.credentialFields.transports]
             )
           : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
       })),
@@ -726,34 +723,13 @@ export class DbAuthHandler {
     }
 
     const user = await this._getCurrentUser()
-
-    // const existingCredentials = await this.dbCredentialAccessor.findMany({
-    //   where: { userId: user.id },
-    // })
-    // const exclude = existingCredentials.map((cred: any) => ({
-    //   id: base64url.toBuffer(cred.id),
-    //   type: 'public-key',
-    //   transports: cred[
-    //     this.options.webAuthn?.credentialFields?.transports || 'transports'
-    //   ]
-    //     ? JSON.parse(
-    //         cred[
-    //           this.options.webAuthn?.credentialFields?.transports ||
-    //             'transports'
-    //         ]
-    //       )
-    //     : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
-    // }))
-
-    const exclude: any = []
-
     const options: GenerateRegistrationOptionsOpts = {
       rpName: this.options.webAuthn.name,
       rpID: this.options.webAuthn.domain,
-      userID: user.id,
+      userID: user[this.options.authFields.id],
       userName: user[this.options.authFields.username],
       timeout: this.options.webAuthn?.timeout || 60000,
-      excludeCredentials: exclude,
+      excludeCredentials: [],
       authenticatorSelection: {
         authenticatorAttachment: this.options.webAuthn.type || 'platform',
         userVerification: 'required',
@@ -782,18 +758,16 @@ export class DbAuthHandler {
     const user = await this._getCurrentUser()
     const jsonBody = JSON.parse(this.event.body as string)
 
-    console.info('jsonBody', jsonBody)
-
     let verification: VerifiedRegistrationResponse
     try {
-      const opts: VerifyRegistrationResponseOpts = {
+      const options: VerifyRegistrationResponseOpts = {
         credential: jsonBody,
         expectedChallenge: user[this.options.authFields.challenge],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
         requireUserVerification: true,
       }
-      verification = await verifyRegistrationResponse(opts)
+      verification = await verifyRegistrationResponse(options)
     } catch (e: any) {
       console.error(e)
       throw new DbAuthError.WebAuthnError(e.message)
@@ -807,19 +781,23 @@ export class DbAuthHandler {
       plainCredentialId = base64url.encode(credentialID)
 
       const existingDevice = await this.dbCredentialAccessor.findFirst({
-        where: { id: plainCredentialId, userId: user.id },
+        where: {
+          id: plainCredentialId,
+          userId: user[this.options.authFields.id],
+        },
       })
 
       if (!existingDevice) {
         await this.dbCredentialAccessor.create({
           data: {
-            id: plainCredentialId,
-            userId: user.id,
-            publicKey: credentialPublicKey,
-            transports: jsonBody.transports
-              ? JSON.stringify(jsonBody.transports)
-              : null,
-            counter,
+            [this.options.webAuthn.credentialFields.id]: plainCredentialId,
+            [this.options.webAuthn.credentialFields.userId]:
+              user[this.options.authFields.id],
+            [this.options.webAuthn.credentialFields.publicKey]:
+              credentialPublicKey,
+            [this.options.webAuthn.credentialFields.transports]:
+              jsonBody.transports ? JSON.stringify(jsonBody.transports) : null,
+            [this.options.webAuthn.credentialFields.counter]: counter,
           },
         })
       }
