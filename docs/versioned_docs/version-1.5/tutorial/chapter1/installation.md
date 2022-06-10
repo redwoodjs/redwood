@@ -47,6 +47,7 @@ Now that we have the skeleton of our Redwood app in place, it's a good idea to s
 git init
 git add .
 git commit -m 'First commit'
+git branch -m master main
 ```
 
 [git](https://git-scm.com/) is another of those concepts we assume you know, but you *can* complete the tutorial without it. Well, almost: you won't be able to deploy! At the end we'll be deploying to a provider that requires your codebase to be hosted in either [GitHub](https://github.com) or [GitLab](https://gitlab.com).
