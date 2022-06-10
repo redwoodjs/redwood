@@ -5859,7 +5859,7 @@ __metadata:
     core-js: 3.22.8
     fast-json-parse: 1.0.3
     fastify: 4.0.0
-    fastify-raw-body: 3.2.0
+    fastify-raw-body: 4.0.0
     jest: 27.5.1
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
@@ -16133,30 +16133,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^2.0.0":
-  version: 2.3.4
-  resolution: "fastify-plugin@npm:2.3.4"
-  dependencies:
-    semver: ^7.3.2
-  checksum: 8264ff11fdeac1fd2a93e2c7ece20f859c3748a9aeb90abf6616d123958309b63906bf6cdb491335b9238e9bf2ae061bb1894c95edf6f4d696657900c61f6160
-  languageName: node
-  linkType: hard
-
-"fastify-plugin@npm:^3.0.0":
+"fastify-plugin@npm:^3.0.0, fastify-plugin@npm:^3.0.1":
   version: 3.0.1
   resolution: "fastify-plugin@npm:3.0.1"
   checksum: 045a107d2e1962d0967ec21e4417fb31e4f49059cf45d28a612025bdc841092fc897d4ab29eded5a977ad8fdd602c0b30c1a08ae5508f8bff97ece4a30d96032
   languageName: node
   linkType: hard
 
-"fastify-raw-body@npm:3.2.0":
-  version: 3.2.0
-  resolution: "fastify-raw-body@npm:3.2.0"
+"fastify-raw-body@npm:4.0.0":
+  version: 4.0.0
+  resolution: "fastify-raw-body@npm:4.0.0"
   dependencies:
-    fastify-plugin: ^2.0.0
-    raw-body: ^2.4.1
-    secure-json-parse: ^2.1.0
-  checksum: 47d2ae02fe1d2648e63b97506c742f684e800ec6789d616cc6c1590b00b52cfea2a39d14ef2f14295290a3fd238b950db4c2f6b768773791ce869117a7052b81
+    fastify-plugin: ^3.0.1
+    raw-body: ^2.5.1
+    secure-json-parse: ^2.4.0
+  checksum: d5a5cc9aade5197b9d2f3cd3285f5fbef3cf1d9ef2724fc62d08fc324e4dc193b454284e650445049e834089ffeac0ae7a42413ab39695bbe34cd0464b716811
   languageName: node
   linkType: hard
 
@@ -18209,7 +18200,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-errors@npm:^2.0.0":
+"http-errors@npm:2.0.0, http-errors@npm:^2.0.0":
   version: 2.0.0
   resolution: "http-errors@npm:2.0.0"
   dependencies:
@@ -25692,7 +25683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raw-body@npm:2.4.3, raw-body@npm:^2.4.1":
+"raw-body@npm:2.4.3":
   version: 2.4.3
   resolution: "raw-body@npm:2.4.3"
   dependencies:
@@ -25701,6 +25692,18 @@ __metadata:
     iconv-lite: 0.4.24
     unpipe: 1.0.0
   checksum: e25ac143c0638dac75b7228de378f60d9438dd1a9b83ffcc6935d5a1e2d599ad3cdc9d24e80eb8cf07a7ec4f5d57a692d243abdcb2449cf11605ef9e5fe6af06
+  languageName: node
+  linkType: hard
+
+"raw-body@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "raw-body@npm:2.5.1"
+  dependencies:
+    bytes: 3.1.2
+    http-errors: 2.0.0
+    iconv-lite: 0.4.24
+    unpipe: 1.0.0
+  checksum: 5dad5a3a64a023b894ad7ab4e5c7c1ce34d3497fc7138d02f8c88a3781e68d8a55aa7d4fd3a458616fa8647cc228be314a1c03fb430a07521de78b32c4dd09d2
   languageName: node
   linkType: hard
 
@@ -27309,7 +27312,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"secure-json-parse@npm:^2.1.0, secure-json-parse@npm:^2.4.0":
+"secure-json-parse@npm:^2.4.0":
   version: 2.4.0
   resolution: "secure-json-parse@npm:2.4.0"
   checksum: c6a5dd90aa41c6110ac7c6e67c12e9a5cdd4465263a012ac6682460a1f9ce907b867c1829e3948a4e2771fa3b08dbfbd9b507c6524a61b5225e6b32dc7e6b830
