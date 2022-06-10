@@ -128,6 +128,7 @@ const mockGraphQL = (
         data: captureTransform(ctx.data),
         extensions: captureTransform(ctx.extensions),
         cookie: captureTransform(ctx.cookie),
+        field: captureTransform(ctx.field),
       }
 
       d = data(req.variables, {
