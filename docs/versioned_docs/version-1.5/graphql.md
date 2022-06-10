@@ -148,7 +148,7 @@ model User {
 }
 ```
 
-If you create your Services for this model using Redwood's generator (`yarn rw g services user`), your Services will look like this:
+If you create your Services for this model using Redwood's generator (`yarn rw g service user`), your Services will look like this:
 
 ```jsx title="api/src/services/user/user.js"
 import { db } from 'src/lib/db'
