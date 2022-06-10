@@ -4924,17 +4924,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.15.1":
-  version: 0.15.1
-  resolution: "@mswjs/interceptors@npm:0.15.1"
+"@mswjs/interceptors@npm:^0.16.3":
+  version: 0.16.5
+  resolution: "@mswjs/interceptors@npm:0.16.5"
   dependencies:
     "@open-draft/until": ^1.0.3
     "@xmldom/xmldom": ^0.7.5
     debug: ^4.3.3
     headers-polyfill: ^3.0.4
     outvariant: ^1.2.1
-    strict-event-emitter: ^0.2.0
-  checksum: 054c9f0b05b71a6924565d241c635eb8fdc62b47d20238978a5baa0be076ff859218d3d78efa4199efd209b0c4e33758d8de8f09cbed48585f977549271cc623
+    strict-event-emitter: ^0.2.4
+  checksum: 6e9522eca3e924929ffc3c34a95a54b657656eb7c52b13ad87d2568eb127229bae5a3a94a6b35604a73edb9bba95ae94952e6e53cbef88ed84768d0e689bf599
   languageName: node
   linkType: hard
 
@@ -6416,7 +6416,7 @@ __metadata:
     core-js: 3.22.8
     jest: 27.5.1
     jest-watch-typeahead: 1.1.0
-    msw: 0.40.2
+    msw: 0.42.1
     ts-toolbelt: 9.6.0
     typescript: 4.7.3
     whatwg-fetch: 3.6.2
@@ -22589,12 +22589,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.40.2":
-  version: 0.40.2
-  resolution: "msw@npm:0.40.2"
+"msw@npm:0.42.1":
+  version: 0.42.1
+  resolution: "msw@npm:0.42.1"
   dependencies:
     "@mswjs/cookies": ^0.2.0
-    "@mswjs/interceptors": ^0.15.1
+    "@mswjs/interceptors": ^0.16.3
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
     "@types/js-levenshtein": ^1.1.1
@@ -22607,19 +22607,20 @@ __metadata:
     is-node-process: ^1.0.1
     js-levenshtein: ^1.1.6
     node-fetch: ^2.6.7
+    outvariant: ^1.3.0
     path-to-regexp: ^6.2.0
     statuses: ^2.0.0
     strict-event-emitter: ^0.2.0
     type-fest: ^1.2.2
     yargs: ^17.3.1
   peerDependencies:
-    typescript: ">= 4.2.x <= 4.6.x"
+    typescript: ">= 4.2.x <= 4.7.x"
   peerDependenciesMeta:
     typescript:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 74faccb399c0b98835d909b1be4f08e135181266b665b2859de62057ac4e1c7bdc939bf77aac1403ccfc9e44d87df0e00651d8e7d588c90859bfac008218525d
+  checksum: 596ca185aac40e13696c77a846104a26a59a2ea52edf9edd31ff08dd54c60ca6e0a039e43bdc11e73ace604007f8835c2b39771dedae0f73fd770c020d379834
   languageName: node
   linkType: hard
 
@@ -23696,10 +23697,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"outvariant@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "outvariant@npm:1.2.1"
-  checksum: 68a7cc9749e9fdb716454c52da0234cf9e15ae2d002997cf057928d5a2d10ca7876e690e2038371220e7d5d969f4920e30293e81d163417f6bfd2828226ef6bc
+"outvariant@npm:^1.2.1, outvariant@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "outvariant@npm:1.3.0"
+  checksum: 567c639e0fd41c2da5d9298b365ca99c6ba614703317b2a5bbbf7ca1df457f36afe29ce1e7fce6fddf6942f6a8304c57e400b8ff559bf5f5d2c9556c05d63553
   languageName: node
   linkType: hard
 
@@ -27022,7 +27023,7 @@ __metadata:
     lerna: 4.0.0
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.40.2
+    msw: 0.42.1
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.16
@@ -28357,12 +28358,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strict-event-emitter@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "strict-event-emitter@npm:0.2.0"
+"strict-event-emitter@npm:^0.2.0, strict-event-emitter@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "strict-event-emitter@npm:0.2.4"
   dependencies:
     events: ^3.3.0
-  checksum: 7a8aa7563a4957841b5b9963634ca77d718006d3f58d1b4e6fa7f96fecb145fbbe58a44e7610b56ff87885c2bab9539a47f239bd8d13fa947e62f621f46cbf72
+  checksum: 82d89f88fb7cee70695c3ee575d1d486f97ffc8f1e06d53aa3c54ea6595711dae4ea631a00340118e8307674016fcd8a11cf9bc38852694467ce7766586ab839
   languageName: node
   linkType: hard
 
