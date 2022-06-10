@@ -859,7 +859,7 @@ export const getCurrentUser = async (session) => {
 ```
 
 </TabItem>
-<TabItem value="ts" label="TypeScript">
+<TabItem value="ts" label="TyepScript">
 
 ```javascript title="api/src/lib/auth.js"
 export const getCurrentUser = async (session) => {
