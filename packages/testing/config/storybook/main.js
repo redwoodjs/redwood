@@ -21,7 +21,9 @@ const baseConfig = {
     builder: 'webpack5',
   },
   stories: [
-    `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
+    `${importStatementPath(
+      rwjsPaths.web.src
+    )}/**/*.stories.@(js|jsx|ts|tsx|mdx)`,
   ],
   addons: [
     '@storybook/addon-essentials',
@@ -97,7 +99,13 @@ const baseConfig = {
     ]
 
     // ** LOADERS **
-    sbConfig.module.rules = rwConfig.module.rules
+    const sbMdxRule = sbConfig.module.rules.find(
+      (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString()
+    )
+    console.assert(sbMdxRule, 'Storybook MDX rule not found')
+    sbConfig.module.rules = [...rwConfig.module.rules, sbMdxRule].filter(
+      Boolean
+    )
 
     // ** NODE **
     sbConfig.node = rwConfig.node
