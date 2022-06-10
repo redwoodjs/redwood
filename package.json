@@ -89,7 +89,7 @@
     "node-notifier": "10.0.1",
     "nodemon": "2.0.16",
     "npm-packlist": "5.1.0",
-    "octokit": "1.7.1",
+    "octokit": "1.7.2",
     "ora": "5.4.1",
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
