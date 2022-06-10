@@ -12,7 +12,7 @@ But instead of just `git add README.md` use `git add .` since you've got an enti
 
 ### The Database
 
-We'll need a database somewhere on the internet to store our data. We've been using SQLite locally, but the kind of deployment we're going to do doesn't have a persistent disk store that we can put SQLite's file-based database on. So, for this part of this tutorial, we will use Postgres. (Prisma currently supports SQLite, Postgres and MySQL.) Don't worry if you aren't familiar with Postgres, Prisma will do all the heavy lifting. We just need to get a database available to the outside world so it can be accessed by our app.
+We'll need a database somewhere on the internet to store our data. We've been using SQLite locally, but the kind of deployment we're going to do doesn't have a persistent disk store that we can put SQLite's file-based database on. So, for this part of this tutorial, we will use Postgres. (Prisma currently supports SQLite, Postgres, MySQL and SQL Server.) Don't worry if you aren't familiar with Postgres, Prisma will do all the heavy lifting. We just need to get a database available to the outside world so it can be accessed by our app.
 
 :::danger
 
@@ -27,7 +27,7 @@ There are several hosting providers where you can quickly start up a Postgres in
 - [Digital Ocean](https://www.digitalocean.com/products/managed-databases)
 - [AWS](https://aws.amazon.com/rds/postgresql/)
 
-We're going to go with Railway for now because it's a) free and b) ridiculously easy to get started, by far the easiest we've found. You don't even need to create a login! The only limitation is that if you *don't* create an account, your database will be removed after seven days. But unless you *really* procrastinate that should be plenty of time to get through the rest of the tutorial!
+We're going to go with Railway for now because it's a) free and b) ridiculously easy to get started, by far the easiest we've found. You don't even need to create a login! The only limitation is that if you *don't* create an account, your database will be removed after one day.
 
 Head over to Railway and click **Start a New Project**:
 
