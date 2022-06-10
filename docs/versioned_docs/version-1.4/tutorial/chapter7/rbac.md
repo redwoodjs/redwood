@@ -1063,7 +1063,7 @@ We'll need a test to go along with that functionality. How do we test `requireAu
 ```javascript title="api/src/services/comments/comments.test.js"
 // highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 // highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -1143,7 +1143,7 @@ describe('comments', () => {
 ```ts title="api/src/services/comments/comments.test.ts"
 // highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 // highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
