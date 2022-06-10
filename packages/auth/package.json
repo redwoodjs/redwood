@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "@clerk/clerk-react": "3.2.8",
-    "@clerk/clerk-sdk-node": "3.6.0"
+    "@clerk/clerk-sdk-node": "3.6.1"
   },
   "peerDependenciesMeta": {
     "@clerk/clerk-react": {

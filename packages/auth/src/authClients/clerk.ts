@@ -54,6 +54,11 @@ export const clerk = async (client: Clerk): Promise<AuthClientClerk> => {
         // If the client is null, we can't restore state or listen for it to happen.
         // This behavior is somewhat undefined, which is why we instruct the user to wrap
         // the auth provider in <ClerkLoaded> to prevent it. For now we'll just return.
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Please wrap your auth provider with `<ClerkLoaded>`')
+        }
+
         return
       }
 

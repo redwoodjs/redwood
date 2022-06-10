@@ -14,10 +14,6 @@ import type {
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
-import {
-  AuthClientWithUpdateHook,
-  isAuthClientWithUpdateHook,
-} from './authClients/AuthClient'
 
 export interface CurrentUser {
   roles?: Array<string> | string
@@ -90,10 +86,11 @@ const AuthUpdateListener = ({
   rwClient,
   reauthenticate,
 }: {
-  rwClient: AuthClientWithUpdateHook
+  rwClient?: AuthClient
   reauthenticate: () => Promise<void>
 }) => {
-  rwClient.useListenForUpdates({ reauthenticate })
+  rwClient?.useListenForUpdates?.({ reauthenticate })
+
   return null
 }
 
@@ -175,10 +172,6 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return client
   }, [props.client, props.type, props.config])
 
-  const getApiGraphQLUrl = useCallback(() => {
-    return global.RWJS_API_GRAPHQL_URL
-  }, [])
-
   /**
    * Clients should always return null or token string.
    * It is expected that they catch any errors internally.
@@ -199,7 +192,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     const client = await rwClientPromise
     // Always get a fresh token, rather than use the one in state
     const token = await getToken()
-    const response = await global.fetch(getApiGraphQLUrl(), {
+    const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
       method: 'POST',
       // TODO: how can user configure this? inherit same `config` options given to auth client?
       credentials: 'include',
@@ -222,7 +215,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
         `Could not fetch current user: ${response.statusText} (${response.status})`
       )
     }
-  }, [rwClientPromise, getToken, getApiGraphQLUrl])
+  }, [rwClientPromise, getToken])
 
   const reauthenticate = useCallback(async () => {
     const client = await rwClientPromise
@@ -434,12 +427,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
       }}
     >
       {children}
-      {rwClient && isAuthClientWithUpdateHook(rwClient) && (
-        <AuthUpdateListener
-          rwClient={rwClient}
-          reauthenticate={reauthenticate}
-        />
-      )}
+      <AuthUpdateListener rwClient={rwClient} reauthenticate={reauthenticate} />
     </AuthContext.Provider>
   )
 }

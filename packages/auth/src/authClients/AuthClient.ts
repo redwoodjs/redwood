@@ -27,25 +27,16 @@ export interface AuthClient {
   type: SupportedAuthTypes
 }
 
-export type AuthClientWithUpdateHook = AuthClient &
-  Required<Pick<AuthClient, 'useListenForUpdates'>>
-
-export function isAuthClientWithUpdateHook(
-  client: AuthClient
-): client is AuthClientWithUpdateHook {
-  return !!client.useListenForUpdates
-}
-
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes,
   config?: SupportedAuthConfig
 ): Promise<AuthClient> => {
   if (!typesToClients[type]) {
+    const supportedClients = Object.keys(typesToClients).join(', ')
+
     throw new Error(
-      `Your client ${type} is not supported, we only support ${Object.keys(
-        typesToClients
-      ).join(', ')}`
+      `Your client ${type} is not supported, we only support ${supportedClients}`
     )
   }
 
