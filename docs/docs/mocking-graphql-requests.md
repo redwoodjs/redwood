@@ -83,6 +83,25 @@ mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
 })
 ```
 
+## TypeScript
+You can get stricter types by passing types when mocking the query, mutation and its variables:
+
+```tsx
+import type { UserProfileQuery, UserProfileQueryVariables } from 'types/graphql'
+
+mockGraphQLQuery<UserProfileQuery, UserProfileQueryVariables>('UserProfileQuery', { /*... */ })
+```
+or, you can manually pass your own types:
+
+```tsx
+mockGraphQLQuery<{
+  userProfile: {
+    id: number,
+    name: string,
+  }
+}>('UserProfileQuery', { /*... */ })
+```
+
 ## Global mock-requests vs local mock-requests
 
 Placing your mock-requests in `"<name>.mock.js"` will cause them to be globally scoped in Storybook, making them available to all stories.

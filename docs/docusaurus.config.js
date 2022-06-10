@@ -115,6 +115,7 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // ? — blob? tree?
           editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs', // base path for repo edit pages
+          editCurrentVersion: true,
           remarkPlugins: [autoImportTabs, fileExtSwitcher],
           versions: {
             current: {
