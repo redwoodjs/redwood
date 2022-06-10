@@ -141,7 +141,7 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: 🌲 Run cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -155,8 +155,8 @@ jobs:
           wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
           spec: |
-             cypress/integration/01-tutorial/*.spec.js
-             cypress/integration/04-logger/*.spec.js
+             cypress/e2e/01-tutorial/*.spec.js
+             cypress/e2e/04-logger/*.spec.js
 
   tutorial-e2e-docs:
     needs: only-doc-changes
