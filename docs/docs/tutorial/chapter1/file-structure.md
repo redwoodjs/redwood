@@ -14,7 +14,7 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 ```
 ├── api
 │   ├── db
-│   │   ├── schema.prisma
+│   │   └── schema.prisma
 │   ├── dist
 │   ├── src
 │   │   ├── directives
