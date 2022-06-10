@@ -6347,7 +6347,7 @@ __metadata:
     lru-cache: 6.0.0
     proxyquire: 2.1.3
     toml: 3.0.0
-    ts-morph: 14.0.0
+    ts-morph: 15.1.0
     typescript: 4.7.3
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.5
@@ -7935,15 +7935,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.13.0":
-  version: 0.13.0
-  resolution: "@ts-morph/common@npm:0.13.0"
+"@ts-morph/common@npm:~0.16.0":
+  version: 0.16.0
+  resolution: "@ts-morph/common@npm:0.16.0"
   dependencies:
     fast-glob: ^3.2.11
-    minimatch: ^5.0.1
+    minimatch: ^5.1.0
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 18e6e08f7fcbf8c972e91a3ffdc280277dff8bb93ae7964b5ed88e56dc1fee254dc0f12b29df817f1b2f112af0226aa9b3ab039068ccef3f6170a370dfd522f3
+  checksum: a9f306dd5c0c022b805400a1e54f18ec3fd1d80cc62e41f5f6964755d4b2538c10584b2fd040f9184121269dfebbe20ac7ffeb9965e74c3d6cb5b8891e29e5cb
   languageName: node
   linkType: hard
 
@@ -22316,12 +22316,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "minimatch@npm:5.0.1"
+"minimatch@npm:^5.0.1, minimatch@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "minimatch@npm:5.1.0"
   dependencies:
     brace-expansion: ^2.0.1
-  checksum: baa60fc5839205f13d6c266d8ad4d160ae37c33f66b130b5640acac66deff84b934ac6307f5dc5e4b30362c51284817c12df7c9746ffb600b9009c581e0b1634
+  checksum: 21c4877438068da0728eeb678107ea716fd3c76fcde713c9d11b01d7d15c276071aa2fecfcd353b970a290cffd572c3ed43e0a64804470ab9ae97717ed13fb18
   languageName: node
   linkType: hard
 
@@ -29583,13 +29583,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:14.0.0":
-  version: 14.0.0
-  resolution: "ts-morph@npm:14.0.0"
+"ts-morph@npm:15.1.0":
+  version: 15.1.0
+  resolution: "ts-morph@npm:15.1.0"
   dependencies:
-    "@ts-morph/common": ~0.13.0
+    "@ts-morph/common": ~0.16.0
     code-block-writer: ^11.0.0
-  checksum: df329fc1e2d06b854cdc1caa5de6b75e6b31ab997a896bbc0dd0b760057dfa653fe6d1598696d795e68ba063b5cc0247a957a97da618bb983b4fd7a7d9981e54
+  checksum: ef72fe65e5837afb49f11a67f98922687c92653a3391a258448d36b2d2a16d82487a8de93c0e61f7f79151539f2b6e46fa1ef8cb17f1e1bc9317f3d6819c0655
   languageName: node
   linkType: hard
 
