@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/sdk": "3.14.0",
+    "@prisma/sdk": "3.15.1",
     "@redwoodjs/api-server": "1.5.1",
     "@redwoodjs/internal": "1.5.1",
     "@redwoodjs/prerender": "1.5.1",
@@ -57,7 +57,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.6.2",
-    "prisma": "3.14.0",
+    "prisma": "3.15.1",
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
