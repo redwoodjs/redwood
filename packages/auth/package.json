@@ -31,9 +31,9 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.12.0",
-    "@clerk/clerk-sdk-node": "3.6.0",
+    "@clerk/clerk-sdk-node": "3.6.1",
     "@clerk/types": "2.14.0",
-    "@nhost/hasura-auth-js": "1.1.12",
+    "@nhost/hasura-auth-js": "1.1.14",
     "@nhost/nhost-js": "1.1.14",
     "@supabase/supabase-js": "1.35.3",
     "@types/netlify-identity-widget": "1.9.3",
@@ -46,7 +46,7 @@
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
     "supertokens-auth-react": "0.21.3",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
