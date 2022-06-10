@@ -470,7 +470,7 @@ host = 'server.com'
 # ...
 ```
 
-Server specific commands are defined with a `before.command` and `after.commmand` key directly in your server config:
+Server specific commands are defined with a `before.command` and `after.command` key directly in your server config:
 
 ```toml
 [[production.servers]]
