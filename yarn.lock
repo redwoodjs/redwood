@@ -23497,9 +23497,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:1.7.1":
-  version: 1.7.1
-  resolution: "octokit@npm:1.7.1"
+"octokit@npm:1.7.2":
+  version: 1.7.2
+  resolution: "octokit@npm:1.7.2"
   dependencies:
     "@octokit/app": ^12.0.4
     "@octokit/core": ^3.5.1
@@ -23509,7 +23509,7 @@ __metadata:
     "@octokit/plugin-retry": ^3.0.9
     "@octokit/plugin-throttling": ^3.5.1
     "@octokit/types": ^6.26.0
-  checksum: e1ce2d583a0795cf10999d2452f15fb02b5efce31044a7827d5efc34419c2909dd56c6c8f79347907f827e5646e35e63ec65d4327db4f999b278269eced33e2b
+  checksum: b9b2877ba919dda31f521a732caef7fb0a93a284f9f8cb4314320c978c55769fc654ec428cd1618bd8307b12d7bed04198a7a0253e82b40bfffef2a4081c3ee4
   languageName: node
   linkType: hard
 
@@ -27017,7 +27017,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.16
     npm-packlist: 5.1.0
-    octokit: 1.7.1
+    octokit: 1.7.2
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
