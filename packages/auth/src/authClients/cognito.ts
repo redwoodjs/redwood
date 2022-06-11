@@ -2,7 +2,6 @@ import {
   CognitoUserPool,
   CognitoUser,
   AuthenticationDetails,
-  IAuthenticationDetailsData,
   ICognitoUserData,
   CognitoUserAttribute,
   ISignUpResult,
@@ -24,9 +23,13 @@ type CognitoSignupOptions = {
   clientMetadata?: ClientMetadata
 }
 
-type CognitoLogoutOptions = {
+type CognitoLoginOptions = {
   username: string
-  callback?: () => void
+  password: string
+}
+
+type CognitoLogoutOptions = {
+  onSuccess?: () => void
 }
 
 function getCognitoUser(
@@ -44,11 +47,14 @@ export const cognito = (client: CognitoUserPool): AuthClient => {
   return {
     type: 'cognito',
     client,
-    login: async (options: IAuthenticationDetailsData) => {
+    login: async (options: CognitoLoginOptions) => {
       return new Promise((resolve, reject) => {
-        const authenticationDetails = new AuthenticationDetails(options)
+        const authenticationDetails = new AuthenticationDetails({
+          Username: options.username,
+          Password: options.password,
+        })
 
-        const user = getCognitoUser(options.Username, client)
+        const user = getCognitoUser(options.username, client)
 
         user.authenticateUser(authenticationDetails, {
           onSuccess: (result) => {
@@ -60,10 +66,12 @@ export const cognito = (client: CognitoUserPool): AuthClient => {
         })
       })
     },
-    logout: async (options: CognitoLogoutOptions) => {
-      const { username, callback } = options
+    logout: async (options?: CognitoLogoutOptions) => {
+      const username = client.getCurrentUser()?.getUsername()
 
-      getCognitoUser(username, client).signOut(callback)
+      if (username) {
+        getCognitoUser(username, client).signOut(options?.onSuccess)
+      }
     },
     signup: async (options: CognitoSignupOptions) => {
       client.signUp(
@@ -93,6 +101,14 @@ export const cognito = (client: CognitoUserPool): AuthClient => {
     },
     getUserMetadata: async () => {
       return Promise.resolve(client.getCurrentUser())
+    },
+    forgotPassword(username) {
+      // TODO: Implement
+      console.log(username)
+    },
+    resetPassword(options?) {
+      // TODO: Implement
+      console.log(options)
     },
   }
 }
