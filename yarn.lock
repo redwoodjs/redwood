@@ -5935,7 +5935,7 @@ __metadata:
     "@supabase/supabase-js": 1.35.3
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.45
-    amazon-cognito-identity-js: ^5.2.9
+    amazon-cognito-identity-js: 5.2.9
     core-js: 3.22.8
     firebase: 9.8.2
     firebase-admin: 10.2.0
@@ -9917,7 +9917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"amazon-cognito-identity-js@npm:^5.2.9":
+"amazon-cognito-identity-js@npm:5.2.9":
   version: 5.2.9
   resolution: "amazon-cognito-identity-js@npm:5.2.9"
   dependencies:
