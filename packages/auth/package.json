@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
+    "amazon-cognito-identity-js": "^5.2.9",
     "core-js": "3.22.8"
   },
   "devDependencies": {

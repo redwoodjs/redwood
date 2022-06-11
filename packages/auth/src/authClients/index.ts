@@ -7,6 +7,8 @@ import type {
 } from './azureActiveDirectory'
 import { clerk } from './clerk'
 import type { Clerk, ClerkUser } from './clerk'
+import { cognito } from './cognito'
+import type { CognitoUserPool, CognitoUser } from './cognito'
 import { custom } from './custom'
 import type { Custom } from './custom'
 import { dbAuth } from './dbAuth'
@@ -32,6 +34,7 @@ const typesToClients = {
   netlify,
   auth0,
   azureActiveDirectory,
+  cognito,
   dbAuth,
   goTrue,
   magicLink,
@@ -48,6 +51,7 @@ const typesToClients = {
 export type SupportedAuthClients =
   | Auth0
   | AzureActiveDirectory
+  | CognitoUserPool
   | DbAuth
   | GoTrue
   | NetlifyIdentity
@@ -68,6 +72,7 @@ export type { Auth0User }
 export type { AzureActiveDirectoryUser }
 export type { DbAuth }
 export type { ClerkUser }
+export type { CognitoUser }
 export type { FirebaseUser }
 export type { GoTrueUser }
 export type { MagicUser }
@@ -79,6 +84,7 @@ export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
   | ClerkUser
+  | CognitoUser
   | FirebaseUser
   | GoTrueUser
   | MagicUser
