@@ -32,6 +32,12 @@ type CognitoLogoutOptions = {
   onSuccess?: () => void
 }
 
+type CognitoResetPasswordOptions = {
+  username: string
+  confirmationCode: string
+  newPassword: string
+}
+
 function getCognitoUser(
   username: string,
   client: CognitoUserPool
@@ -103,12 +109,32 @@ export const cognito = (client: CognitoUserPool): AuthClient => {
       return Promise.resolve(client.getCurrentUser())
     },
     forgotPassword(username) {
-      // TODO: Implement
-      console.log(username)
+      return new Promise((resolve, reject) => {
+        const cognitoUser = getCognitoUser(username, client)
+        cognitoUser.forgotPassword({
+          onSuccess: (data) => {
+            resolve(data)
+          },
+          onFailure: (err) => {
+            reject(err)
+          },
+        })
+      })
     },
-    resetPassword(options?) {
-      // TODO: Implement
-      console.log(options)
+    resetPassword(options: CognitoResetPasswordOptions) {
+      const { username, confirmationCode, newPassword } = options
+
+      return new Promise((resolve, reject) => {
+        const cognitoUser = getCognitoUser(username, client)
+        cognitoUser.confirmPassword(confirmationCode, newPassword, {
+          onSuccess: (success) => {
+            resolve(success)
+          },
+          onFailure: (err) => {
+            reject(err)
+          },
+        })
+      })
     },
   }
 }
