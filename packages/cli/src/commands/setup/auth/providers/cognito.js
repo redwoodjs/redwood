@@ -1,8 +1,8 @@
 export const config = {
   imports: [`import { CognitoUserPool } from 'amazon-cognito-identity-js'`],
   init: `const cognitoClient = new CognitoUserPool({
-    UserPoolId: process.env.COGNITO_USERPOOL_ID',
-    ClientId: process.env.COGNITO_CLIENT_ID',
+    UserPoolId: process.env.COGNITO_USERPOOL_ID,
+    ClientId: process.env.COGNITO_CLIENT_ID,
   })`,
   authProvider: {
     client: 'cognitoClient',
