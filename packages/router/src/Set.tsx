@@ -65,7 +65,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 
   if (privateSet && unauthorized()) {
     if (loading) {
-      if (React.isValidElement(WhileLoadingAuth)) {
+      if (WhileLoadingAuth) {
         return <WhileLoadingAuth />
       } else {
         return null
