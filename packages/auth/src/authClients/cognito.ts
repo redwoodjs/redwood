@@ -73,11 +73,7 @@ export const cognito = (client: CognitoUserPool): AuthClient => {
       })
     },
     logout: async (options?: CognitoLogoutOptions) => {
-      const username = client.getCurrentUser()?.getUsername()
-
-      if (username) {
-        getCognitoUser(username, client).signOut(options?.onSuccess)
-      }
+      client.getCurrentUser()?.signOut(options?.onSuccess)
     },
     signup: async (options: CognitoSignupOptions) => {
       client.signUp(
