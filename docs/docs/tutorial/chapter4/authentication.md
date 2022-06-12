@@ -11,7 +11,8 @@ Having the admin screens at `/admin` is a reasonable thing to do. Let's update t
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
-
+import ArticlePage from './pages/ArticlePage/ArticlePage'
+  
 const Routes = () => {
   return (
     <Router>
