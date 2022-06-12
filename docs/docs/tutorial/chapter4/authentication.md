@@ -11,7 +11,7 @@ Having the admin screens at `/admin` is a reasonable thing to do. Let's update t
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
-import ArticlePage from 'src/pages/ArticlePage/ArticlePage'
+import ArticlePage from 'src/pages/ArticlePage'
   
 const Routes = () => {
   return (
@@ -45,7 +45,7 @@ export default Routes
 import { Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
-import ArticlePage from 'src/pages/ArticlePage/ArticlePage'
+import ArticlePage from 'src/pages/ArticlePage'
 
 const Routes = () => {
   return (
@@ -213,7 +213,7 @@ Going to the admin section now prevents a non-logged in user from seeing posts, 
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
-import ArticlePage from 'src/pages/ArticlePage/ArticlePage'
+import ArticlePage from 'src/pages/ArticlePage'
 
 const Routes = () => {
   return (
@@ -250,7 +250,7 @@ export default Routes
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 import PostsLayout from 'src/layouts/PostsLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
-import ArticlePage from 'src/pages/ArticlePage/ArticlePage'
+import ArticlePage from 'src/pages/ArticlePage'
 
 const Routes = () => {
   return (
