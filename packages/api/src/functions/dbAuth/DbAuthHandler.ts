@@ -1,9 +1,4 @@
 import type { PrismaClient } from '@prisma/client'
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import CryptoJS from 'crypto-js'
-import md5 from 'md5'
-import { v4 as uuidv4 } from 'uuid'
-import base64url from 'base64url'
 import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
@@ -18,6 +13,11 @@ import type {
   VerifiedRegistrationResponse,
   VerifiedAuthenticationResponse,
 } from '@simplewebauthn/server'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import base64url from 'base64url'
+import CryptoJS from 'crypto-js'
+import md5 from 'md5'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   CorsConfig,
