@@ -95,7 +95,7 @@ In this example, Redwood will look in `api/src/services/posts/posts.{js,ts}` for
 - `updatePost({ id, input })`
 - `deletePost({ id })`
 
-To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that Apollo expects based on what you defined in `posts.sdl.{js,ts}`.
+To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that GraphQL Yoga expects based on what you defined in `posts.sdl.{js,ts}`.
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">

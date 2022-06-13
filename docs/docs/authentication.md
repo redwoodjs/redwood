@@ -100,7 +100,7 @@ Read the post-install instructions carefully as they contain instructions for ad
 >
 > Need simple Login, Signup and Forgot Password pages? Of course we have a generator for those:
 >
-> yarn rw generate dbAuth
+>     yarn rw generate dbAuth
 
 Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](logger.md#redaction) docs for info.
 

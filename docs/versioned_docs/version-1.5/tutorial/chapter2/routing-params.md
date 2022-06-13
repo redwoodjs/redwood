@@ -766,7 +766,7 @@ import type { ArticleQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ArticleQuery {
+  query ArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title
@@ -784,7 +784,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }: CellSuccessProps<ArticleQuery>) => (
+export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => (
   // highlight-next-line
   <Article article={article} />
 )

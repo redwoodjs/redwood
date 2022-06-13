@@ -35,7 +35,7 @@
     "ansi-colors": "4.1.3",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "fast-json-parse": "1.0.3",
     "fastify": "3.29.0",
     "fastify-raw-body": "3.2.0",
@@ -56,7 +56,7 @@
     "@types/yargs": "17.0.10",
     "aws-lambda": "1.0.7",
     "jest": "27.5.1",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -41,7 +41,7 @@ export const verifyAuth0Token = (
       bearerToken,
       (header, callback) => {
         client.getSigningKey(header.kid as string, (error, key) => {
-          callback(error, key.getPublicKey())
+          callback(error, key?.getPublicKey())
         })
       },
       {
