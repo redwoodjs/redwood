@@ -143,7 +143,9 @@ interface PresenceValidatorOptions extends WithOptionalMessage {
   allowEmptyString?: boolean
 }
 
-interface UniquenessValidatorOptions extends WithRequiredMessage {}
+interface UniquenessValidatorOptions extends WithOptionalMessage {
+  prismaClient?: PrismaClient
+}
 type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
 
 interface ValidationRecipe {
@@ -632,16 +634,24 @@ export async function validateUniqueness(
     | ((tx: PrismaClient) => Promise<any>),
   callback?: (tx: PrismaClient) => Promise<any>
 ): Promise<any> {
-  const db = new PrismaClient()
   const { $self, $scope, ...rest } = fields
-  let options = {}
+  let options: UniquenessValidatorOptions = {}
   let validCallback: (tx: PrismaClient) => Promise<any>
+  let db = null
 
   if (typeof optionsOrCallback === 'function') {
     validCallback = optionsOrCallback
   } else {
     options = optionsOrCallback
     validCallback = callback as (tx: PrismaClient) => Promise<any>
+  }
+
+  if (options.prismaClient) {
+    const { prismaClient, ...restOptions } = options
+    options = restOptions
+    db = prismaClient
+  } else {
+    db = new PrismaClient()
   }
 
   const where: UniquenessWhere = {

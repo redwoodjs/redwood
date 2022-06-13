@@ -1144,4 +1144,29 @@ describe('validateUniqueness', () => {
     }
     expect.assertions(1)
   })
+
+  it('uses the given prisma client', async () => {
+    const mockFindFirstOther = jest.fn()
+    const mockPrismaClient = {
+      $transaction: async (func) =>
+        func({
+          user: {
+            findFirst: mockFindFirstOther,
+          },
+        }),
+    }
+    mockFindFirstOther.mockImplementation(() => null)
+
+    expect(mockFindFirstOther).not.toBeCalled()
+    await validateUniqueness(
+      'user',
+      { email: 'rob@redwoodjs.com' },
+      { prismaClient: mockPrismaClient },
+      () => {
+        expect(true).toEqual(true)
+      }
+    )
+    expect(mockFindFirstOther).toBeCalled()
+    expect(mockFindFirst).not.toBeCalled()
+  })
 })
