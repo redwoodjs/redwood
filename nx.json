@@ -1,0 +1,26 @@
+{
+  "implicitDependencies": {
+    "package.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "test",
+          "build"
+        ],
+        "parallel": 5
+      }
+    }
+  },
+  "targetDependencies": {
+    "test": [],
+    "build": []
+  },
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": false
+    }
+  }
+}

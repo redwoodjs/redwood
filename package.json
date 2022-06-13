@@ -5,12 +5,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
+    "build": "lerna run build",
     "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\"",
-    "build:js": "lerna run build:js",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
-    "build:types": "tsc --build --verbose",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
     "check": "yarn node ./tasks/check/check.mjs",
     "check:deps": "yarn node ./tasks/checkDeps.mjs $INIT_CWD",
@@ -25,7 +23,7 @@
     "release": "node ./tasks/release/cli.mjs",
     "release:test": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs",
     "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test",
-    "test": "lerna run test --stream -- --colors --maxWorkers=4"
+    "test": "lerna run test -- --colors --maxWorkers=4"
   },
   "resolutions": {
     "@types/react": "17.0.47",
@@ -81,7 +79,7 @@
     "is-port-reachable": "3.1.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
-    "lerna": "4.0.0",
+    "lerna": "5.1.2",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
     "msw": "0.40.2",
@@ -89,6 +87,7 @@
     "node-notifier": "10.0.1",
     "nodemon": "2.0.19",
     "npm-packlist": "5.1.1",
+    "nx": "14.3.1",
     "octokit": "1.7.2",
     "ora": "5.4.1",
     "prompts": "2.4.2",

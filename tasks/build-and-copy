@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /* eslint-env node, es6*/
 //@ts-check
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
 
 /**
  * This file builds the framework packages and copies them to a specific directory.
@@ -18,71 +18,63 @@ const path = require('path')
 
 // @NOTE: not all of these modules are defined as dependencies in core
 // This is because some of them are transitive dependencies through redwood/cli for example
-const chalk = require('chalk')
-const chokidar = require('chokidar')
-const execa = require('execa')
-const { glob } = require('glob')
-const _ = require('lodash')
-const packlist = require('npm-packlist')
-const yargs = require('yargs')
+const chalk = require("chalk");
+const chokidar = require("chokidar");
+const execa = require("execa");
+const { glob } = require("glob");
+const _ = require("lodash");
+const packlist = require("npm-packlist");
+const yargs = require("yargs");
 
 const args = yargs
-  .option('watch', { default: false, type: 'boolean', alias: 'w' })
-  .option('dest', { required: true, type: 'string', alias: 'd' })
-  .option('only', { required: false, type: 'string', alias: 'o' })
+  .option("watch", { default: false, type: "boolean", alias: "w" })
+  .option("dest", { required: true, type: "string", alias: "d" })
+  .option("only", { required: false, type: "string", alias: "o" })
   // .command('build-link')
   // .example('build-link --dest /tmp/redwood-app/packages')
   .help()
-  .strict().argv
+  .strict().argv;
 
-const { dest, watch, only } = args
+const { dest, watch, only } = args;
 
 /** The framework base path */
-const RW_BASEPATH = path.join(__dirname, '../')
+const RW_BASEPATH = path.join(__dirname, "../");
 
 const packagePaths = glob
-  .sync('packages/*', {
-    cwd: RW_BASEPATH,
+  .sync("packages/*", {
+    cwd: RW_BASEPATH
   })
   .filter((packagePath) => (only ? packagePath.includes(only) : true))
-  .filter((packageName) => !packageName.includes('create-redwood-app'))
+  .filter((packageName) => !packageName.includes("create-redwood-app"));
 
-const buildAllTypes = () =>
-  execa('yarn build:types', {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-    cwd: RW_BASEPATH,
-  })
-
-const build = async ({ packageFolderName, types }) => {
+const build = async ({ packageFolderName }) => {
   const execaOptionsForBase = {
     shell: true,
-    stdio: 'inherit',
+    stdio: "inherit",
     cleanup: true,
-    cwd: RW_BASEPATH,
-  }
+    cwd: RW_BASEPATH
+  };
 
   await execa(
-    'yarn framework lerna run',
+    "yarn framework lerna run",
     [
-      types ? 'build' : 'build:js',
-      '--parallel',
-      packageFolderName && `--scope @redwoodjs/${packageFolderName}`,
+      "build",
+      "--parallel",
+      packageFolderName && `--scope @redwoodjs/${packageFolderName}`
     ],
     execaOptionsForBase
-  )
+  );
 
   return execa(
-    'yarn framework lerna run',
+    "yarn framework lerna run",
     [
-      'fix:permissions',
-      '--parallel',
-      packageFolderName && `--scope @redwoodjs/${packageFolderName}`,
+      "fix:permissions",
+      "--parallel",
+      packageFolderName && `--scope @redwoodjs/${packageFolderName}`
     ],
     execaOptionsForBase
-  )
-}
+  );
+};
 
 const copyDistFiles = ({ packageFolderName }) => {
   return Promise.all(
@@ -96,99 +88,93 @@ const copyDistFiles = ({ packageFolderName }) => {
         const pkgJson = require(path.join(
           RW_BASEPATH,
           packagePath,
-          'package.json'
-        ))
+          "package.json"
+        ));
 
         return packlist({ path: packagePath }).then((files) => {
           const destinationDir = path.join(
             dest,
-            `/${pkgJson.name.replace('@redwoodjs/', '')}`
-          )
+            `/${pkgJson.name.replace("@redwoodjs/", "")}`
+          );
 
           files.forEach((file) => {
-            copyPackageFileToDest(packagePath, file, destinationDir)
-          })
-          return files
-        })
+            copyPackageFileToDest(packagePath, file, destinationDir);
+          });
+          return files;
+        });
       })
-  )
-}
+  );
+};
 
 // Creates folders where required, before copying
 const copyPackageFileToDest = (packagePath, relativeSrc, dest) => {
-  const dirName = path.dirname(path.join(dest, `/${relativeSrc}`))
-  const fileName = path.basename(relativeSrc)
+  const dirName = path.dirname(path.join(dest, `/${relativeSrc}`));
+  const fileName = path.basename(relativeSrc);
 
-  const exist = fs.existsSync(dirName)
+  const exist = fs.existsSync(dirName);
   if (!exist) {
-    fs.mkdirSync(dirName, { recursive: true })
+    fs.mkdirSync(dirName, { recursive: true });
   }
 
   fs.copyFileSync(
     path.join(RW_BASEPATH, packagePath, relativeSrc),
     path.join(dirName, fileName)
-  )
-}
+  );
+};
 
 // Assigned if watch is true
-let watchHandle
+let watchHandle;
 
-process.on('SIGINT', () => {
-  watchHandle?.close()
-})
+process.on("SIGINT", () => {
+  watchHandle?.close();
+});
 
 const runAsync = async () => {
-  // STEP 1: Run build:types from root of framework
   try {
-    if (!only) {
-      await buildAllTypes()
-    }
-    // STEP 2: Run yarn lerna run build --parallel, ignore types as they've just been built
     await build({
-      packageFolderName: only,
-      types: only ? true : false,
-    })
+      packageFolderName: only
+    });
 
     await copyDistFiles({
-      packageFolderName: only,
-    })
+      packageFolderName: only
+    });
   } catch (e) {
     console.error(
       `\n [rwt link] ${chalk.red.bold(
-        'error'
+        "error"
       )} - Could not build your redwood framework.`
-    )
+    );
 
-    console.log()
+    console.log();
 
-    console.error(e)
-    process.exit(1)
+    console.error(e);
+    process.exit(1);
   }
-}
+};
 
 const onChange = _.debounce(async (packageFolderName) => {
-  console.log('[rwt link] Building 📦...', packageFolderName)
+  console.log("[rwt link] Building 📦...", packageFolderName);
   try {
-    await build({ packageFolderName, types: true })
-    await copyDistFiles({ packageFolderName })
+    await build({ packageFolderName });
+    await copyDistFiles({ packageFolderName });
     console.log(
       `\n [rwt link] ${chalk.greenBright.bold(
-        'success'
+        "success"
       )} - @redwoodjs/${packageFolderName} ready to use`
-    )
+    );
   } catch (e) {
     console.error(
       `\n [rwt link] ${chalk.red.bold(
-        'error'
+        "error"
       )} - Could not link @redwoodjs/${packageFolderName}. Build failed.`
-    )
+    );
   }
-  console.log()
-}, 200)
+  console.log();
+}, 200);
 
 // @Note:
 // --watch flag starts the watcher, but won't build until change detected
-const packageNameRegex = /^^packages\/(\w+-?\w*)\/?/
+const packageNameRegex = /^^packages\/(\w+-?\w*)\/?/;
 
 if (watch) {
   // Start watcher for packages/*, ignore dist
@@ -198,18 +184,18 @@ if (watch) {
     .watch(packagePaths, {
       persistent: true,
       ignored: [
-        '**/*.test.ts',
-        '**/*.test.js',
-        '**/__fixtures__/**',
-        '**/__tests__/**',
-        '**/dist/**',
-      ],
+        "**/*.test.ts",
+        "**/*.test.js",
+        "**/__fixtures__/**",
+        "**/__tests__/**",
+        "**/dist/**"
+      ]
     })
-    .on('change', (fileName) => {
-      const dirName = path.dirname(fileName)
-      const packageFolderName = packageNameRegex.exec(dirName)[1]
-      onChange(packageFolderName)
-    })
+    .on("change", (fileName) => {
+      const dirName = path.dirname(fileName);
+      const packageFolderName = packageNameRegex.exec(dirName)[1];
+      onChange(packageFolderName);
+    });
 } else {
-  runAsync()
+  runAsync();
 }
