@@ -129,4 +129,4 @@ yarn rw setup auth --help
 
 ## Next Steps
 
-The best way to learn Redwood is by going through the comprehensive [tutorial](tutorial/foreword.mdx) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
+The best way to learn Redwood is by going through the comprehensive [tutorial](tutorial/foreword.md) and joining the community (via the [Discourse forum](https://community.redwoodjs.com) or the [Discord server](https://discord.gg/redwoodjs)).
