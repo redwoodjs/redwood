@@ -176,7 +176,6 @@ export const createGraphQLHandler = ({
     graphiql: isDevEnv
       ? {
           title: 'Redwood GraphQL Playground',
-          credentials: 'include',
           endpoint: graphiQLEndpoint,
           headers: generateGraphiQLHeader
             ? generateGraphiQLHeader()
