@@ -180,7 +180,7 @@ export const createGraphQLHandler = ({
           endpoint: graphiQLEndpoint,
           headers: generateGraphiQLHeader
             ? generateGraphiQLHeader()
-            : `{"x-auth-comment": "See documentation for how to auto generate auth headers"}`,
+            : `{"x-auth-comment": "See documentation on how to auto generate auth headers"}`,
           defaultQuery: `query Redwood {
   redwood {
     version

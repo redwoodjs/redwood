@@ -7,7 +7,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
-import { buildApi } from '@redwoodjs/internal'
+import { registerApiSideBabelHook } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -140,8 +140,6 @@ const addHeaderOption = () => {
 
 export const getOutputPath = () => {
   return path.join(
-    // getPaths().generated.types.mirror,
-    // 'api/src/lib',
     getPaths().api.lib,
     getProject().isTypeScriptProject
       ? 'generateGraphiQLHeader.ts'
@@ -150,26 +148,19 @@ export const getOutputPath = () => {
 }
 
 const printHeaders = async () => {
+  // Import babel settings so we can write es6 scripts
+  registerApiSideBabelHook()
+
   const srcPath = getOutputPath()
+
   if (!existsAnyExtensionSync(srcPath) && `File doesn't exist`) {
     throw new Error(
       'Must run yarn rw setup graphiql <provider> to generate headers before viewing'
     )
   }
 
-  // const prebuiltFile = prebuildApiFiles([srcPath])
-  // transpileApi(prebuiltFile)
-
-  buildApi()
-  const dstPath = path
-    .join(
-      getPaths().generated.prebuild,
-      'api/src/lib/generateGraphiQLHeader.js'
-    )
-    .replace(/\.(ts)$/, '.js')
-
-  const header = await execa('node', ['-e', dstPath])
-  console.log('\nYour mock graphiql header:\n', c.green(header.stdout))
+  const script = await import(srcPath)
+  await script.default()
 }
 
 export const command = 'graphiql <provider>'
