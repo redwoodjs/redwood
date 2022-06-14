@@ -17,7 +17,7 @@ export const config = {
 
 // required packages to install
 export const webPackages = ['@okta/okta-auth-js']
-export const apiPackages = ['@okta/jwt-verifier']
+export const apiPackages = []
 
 // any notes to print out when the job is done
 export const notes = []
