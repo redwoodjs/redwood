@@ -148,3 +148,16 @@ test('jest mock statements also handle', () => {
   // Step 3: check that output has correct jest.mock path
   expect(outputForJest).toContain('jest.mock("../../lib/dog"')
 })
+
+test('Transforms subclasses correctly', () => {
+  const p = prebuiltFiles
+    .filter((x) => typeof x !== 'undefined')
+    .filter((p) => p.endsWith('classFind.js'))
+    .pop()
+
+  const transpiledContent = fs.readFileSync(p, 'utf-8') //?
+
+  expect(transpiledContent).not.toContain(
+    '@babel/runtime-corejs3/core-js/instance/find'
+  )
+})
