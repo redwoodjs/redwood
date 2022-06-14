@@ -1,7 +1,7 @@
 # Building a Form
 
 <div class="video-container">
-  <iframe src="https://www.youtube.com/embed/b0x8an_UZ98?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/b0x8an_UZ98?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0; fullscreen"></iframe>
 </div>
 
 Wait, don't close your browser! You had to know this was coming eventually, didn't you? And you've probably realized by now we wouldn't even have this section in the tutorial unless Redwood had figured out a way to make forms less soul-sucking than usual. In fact, Redwood might even make you _love_ building forms.
