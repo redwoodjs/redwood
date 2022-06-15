@@ -278,8 +278,9 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers } from 'types/graphql'
+"import type { QueryResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const userProfiles: QueryResolvers['userProfiles'] = () => {
   return db.userProfile.findMany()
@@ -370,8 +371,9 @@ describe('transactions', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -405,8 +407,9 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
 `;
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
@@ -440,8 +443,9 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
 `;
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -461,8 +465,9 @@ export const User: UserResolvers = {
 `;
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -482,8 +487,9 @@ export const User: UserResolvers = {
 `;
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
