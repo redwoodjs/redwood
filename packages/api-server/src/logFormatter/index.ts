@@ -336,13 +336,7 @@ export const LogFormatter = () => {
   const formatStack = (stack: any) => {
     return chalk.redBright(
       stack
-        ? newline +
-            newline +
-            '🥞 Error Stack' +
-            newline +
-            newline +
-            stack +
-            newline
+        ? newline + '🥞 Error Stack' + newline + newline + stack + newline
         : ''
     )
   }
