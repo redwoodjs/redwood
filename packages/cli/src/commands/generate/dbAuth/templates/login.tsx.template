@@ -59,7 +59,7 @@ const LoginPage = ({ type }) => {
     const webAuthnSupported = await isWebAuthnSupported()
 
     if (USE_WEBAUTHN && webAuthnSupported) {
-      setShouldShowWebAuthn(USE_WEBAUTHN && true)
+      setShouldShowWebAuthn(true)
     }
     const response = await logIn({ ...data })
 
