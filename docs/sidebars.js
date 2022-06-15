@@ -124,7 +124,27 @@ module.exports = {
         'storybook',
         'testing',
         'toast-notifications',
-        'typescript',
+        {
+          type: 'category',
+          label: 'TypeScript',
+          link: {
+            type: 'generated-index',
+            title: 'TypeScript',
+            slug: 'typescript/index',
+          },
+          items: [
+            {
+              type: 'doc',
+              label: 'Introduction',
+              id: 'typescript/introduction',
+            },
+            {
+              type: 'doc',
+              label: 'Strict Mode',
+              id: 'typescript/strictmode',
+            },
+          ],
+        },
         'webhooks',
         'webpack-configuration',
       ],
