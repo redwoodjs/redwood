@@ -359,8 +359,6 @@ export class DbAuthHandler {
         corsHeaders
       )
     } catch (e: any) {
-      console.error(e)
-
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._buildResponseWithCorsHeaders(this._notFound(), corsHeaders)
       } else {
@@ -389,7 +387,6 @@ export class DbAuthHandler {
         where: { [this.options.authFields.username]: username },
       })
     } catch (e) {
-      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
@@ -416,7 +413,6 @@ export class DbAuthHandler {
           },
         })
       } catch (e) {
-        console.error(e)
         throw new DbAuthError.GenericError()
       }
 
@@ -515,7 +511,6 @@ export class DbAuthHandler {
         },
       })
     } catch (e) {
-      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
@@ -616,7 +611,6 @@ export class DbAuthHandler {
       }
       verification = verifyAuthenticationResponse(opts)
     } catch (e: any) {
-      console.error(e)
       throw new DbAuthError.WebAuthnError(e.message)
     }
 
@@ -769,7 +763,6 @@ export class DbAuthHandler {
       }
       verification = await verifyRegistrationResponse(options)
     } catch (e: any) {
-      console.error(e)
       throw new DbAuthError.WebAuthnError(e.message)
     }
 
@@ -1019,7 +1012,6 @@ export class DbAuthHandler {
         },
       })
     } catch (e) {
-      console.error(e)
       throw new DbAuthError.GenericError()
     }
   }
@@ -1048,7 +1040,6 @@ export class DbAuthHandler {
         where: { [this.options.authFields.username]: username },
       })
     } catch (e) {
-      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
@@ -1091,7 +1082,6 @@ export class DbAuthHandler {
         },
       })
     } catch (e) {
-      console.error(e)
       throw new DbAuthError.GenericError()
     }
 
