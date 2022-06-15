@@ -27,7 +27,7 @@ import { RedwoodGraphQLContext } from '../functions/types'
 type GraphQLLoggerOptions = {
   /**
    * Sets log level for GraphQL logging.
-   * This level setting can be different than the one used in api side logging.
+   * This level setting can be different from the one used in api side logging.
    * Defaults to the same level as the logger unless set here.
    *
    * Available log levels:
