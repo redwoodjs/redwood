@@ -398,7 +398,7 @@ export class DbAuthHandler {
 
       // generate a token
       let token = md5(uuidv4())
-      const buffer = new Buffer(token)
+      const buffer = Buffer.from(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
       try {
