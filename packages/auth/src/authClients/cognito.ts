@@ -75,8 +75,6 @@ export const cognito = (client: CognitoUserPool): CognitoAuthClient => {
             resolve(res)
           }
         })
-      }).catch((err) => {
-        throw err
       })
     },
     getToken: (): Promise<string | null> => {
@@ -90,17 +88,12 @@ export const cognito = (client: CognitoUserPool): CognitoAuthClient => {
             resolve(jwtToken)
           }
         })
-      }).catch((err) => {
-        throw err
       })
     },
     getUserMetadata: () => {
       return new Promise<CognitoUser | null>((resolve) => {
         const currentUser = client.getCurrentUser()
-        console.error({ currentUser })
         resolve(currentUser)
-      }).catch((err) => {
-        throw err
       })
     },
     forgotPassword: (email: string) => {
@@ -114,9 +107,6 @@ export const cognito = (client: CognitoUserPool): CognitoAuthClient => {
             resolve(result)
           },
           onFailure: (err: Error) => {
-            console.error(
-              `Error getting validation token for user ${email}. ${err.message}`
-            )
             reject(err)
           },
         })
