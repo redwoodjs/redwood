@@ -7,6 +7,7 @@ import type {
 } from './azureActiveDirectory'
 import { clerk } from './clerk'
 import type { Clerk, ClerkUser } from './clerk'
+import { Cognito, cognito, CognitoUserData as CognitoUser } from './cognito'
 import { custom } from './custom'
 import type { Custom } from './custom'
 import { dbAuth } from './dbAuth'
@@ -32,6 +33,7 @@ const typesToClients = {
   netlify,
   auth0,
   azureActiveDirectory,
+  cognito,
   dbAuth,
   goTrue,
   magicLink,
@@ -55,6 +57,7 @@ export type SupportedAuthClients =
   | FirebaseClient
   | Supabase
   | Clerk
+  | Cognito
   | Ethereum
   | Nhost
   | SuperTokens
@@ -86,7 +89,7 @@ export type SupportedUserMetadata =
   | EthereumUser
   | NhostUser
   | SuperTokensUser
-
+  | CognitoUser
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
