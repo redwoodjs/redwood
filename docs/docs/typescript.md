@@ -17,7 +17,7 @@ yarn create redwood-app my-redwood-app --typescript
 ## Converting a JavaScript Project to TypeScript
 
 Started your project in JavaScript but want to switch to TypeScript?
-Start by using the tsconfig setup command:
+Start by using the `tsconfig` setup command:
 
 ```
 yarn rw setup tsconfig

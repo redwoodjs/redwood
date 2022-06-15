@@ -314,9 +314,10 @@ export default PostsLayout
 exports[`in javascript (default) mode creates a new component 1`] = `undefined`;
 
 exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import UserProfileForm from 'src/components/UserProfileForm'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
@@ -413,9 +414,9 @@ export const Success = ({ post }) => {
 exports[`in javascript (default) mode creates a show component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -967,9 +968,10 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 exports[`in javascript (default) mode creates an edit cell 1`] = `undefined`;
 
 exports[`in javascript (default) mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import UserProfileForm from 'src/components/UserProfileForm'
 
@@ -1092,9 +1094,9 @@ export const Success = ({ posts }) => {
 exports[`in javascript (default) mode creates an index component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/PostsCell'
 
@@ -1624,9 +1626,10 @@ export default PostsLayout
 exports[`in typescript mode creates a new component 1`] = `undefined`;
 
 exports[`in typescript mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import UserProfileForm from 'src/components/UserProfileForm'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
@@ -1682,6 +1685,7 @@ export default NewPostPage
 
 exports[`in typescript mode creates a show cell 1`] = `
 "import type { FindPostById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Post from 'src/components/Post'
@@ -1723,9 +1727,9 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 exports[`in typescript mode creates a show component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -2267,10 +2271,10 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 exports[`in typescript mode creates an edit cell 1`] = `
 "import type { EditPostById } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import PostForm from 'src/components/PostForm'
 
@@ -2351,10 +2355,10 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
 "import type { EditUserProfileById } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import UserProfileForm from 'src/components/UserProfileForm'
 
@@ -2415,9 +2419,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
 
 exports[`in typescript mode creates an index cell 1`] = `
 "import type { FindPosts } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Posts from 'src/components/Posts'
 
@@ -2470,9 +2474,9 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 exports[`in typescript mode creates an index component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/PostsCell'
 
