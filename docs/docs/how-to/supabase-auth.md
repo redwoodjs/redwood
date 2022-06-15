@@ -36,7 +36,7 @@ So, just this once, I hereby give you permission to fire-up Create React App as 
 >
 > If you're like me—and I'm pretty sure I'm just human—you may find yourself spinning in jumbled auth jargon. Hang in there, you'll get your auth ducks lined up eventually.
 >
-> I'm proud to tell you that I now know that the Redwood Supabase auth client wraps the Supabase GoTrueJS client, which is a fork of Netlify’s GoTrueJS client (which is different than Netlify Identity). And dbAuth is a totally separate auth option. Plus, I'll keep it simple and not use RBAC at the moment.
+> I'm proud to tell you that I now know that the Redwood Supabase auth client wraps the Supabase GoTrueJS client, which is a fork of Netlify’s GoTrueJS client (which is different from Netlify Identity). And dbAuth is a totally separate auth option. Plus, I'll keep it simple and not use RBAC at the moment.
 >
 > Ahhh! It took me a few weeks to figure this out.
 

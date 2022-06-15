@@ -5828,7 +5828,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/api-server@1.5.1, @redwoodjs/api-server@workspace:packages/api-server":
+"@redwoodjs/api-server@1.5.2, @redwoodjs/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
@@ -5867,7 +5867,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/api@1.5.1, @redwoodjs/api@workspace:packages/api":
+"@redwoodjs/api@1.5.2, @redwoodjs/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
@@ -5876,7 +5876,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@clerk/clerk-sdk-node": 3.6.1
     "@prisma/client": 3.15.1
-    "@redwoodjs/auth": 1.5.1
+    "@redwoodjs/auth": 1.5.2
     "@types/aws-lambda": 8.10.97
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
@@ -5918,7 +5918,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth@1.5.1, @redwoodjs/auth@workspace:packages/auth":
+"@redwoodjs/auth@1.5.2, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
@@ -5949,7 +5949,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli@1.5.1, @redwoodjs/cli@workspace:packages/cli":
+"@redwoodjs/cli@1.5.2, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
@@ -5957,11 +5957,11 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@prisma/sdk": 3.15.1
-    "@redwoodjs/api-server": 1.5.1
-    "@redwoodjs/internal": 1.5.1
-    "@redwoodjs/prerender": 1.5.1
-    "@redwoodjs/structure": 1.5.1
-    "@redwoodjs/telemetry": 1.5.1
+    "@redwoodjs/api-server": 1.5.2
+    "@redwoodjs/internal": 1.5.2
+    "@redwoodjs/prerender": 1.5.2
+    "@redwoodjs/structure": 1.5.2
+    "@redwoodjs/telemetry": 1.5.2
     "@types/listr": 0.14.4
     boxen: 5.1.2
     camelcase: 6.3.0
@@ -6054,10 +6054,10 @@ __metadata:
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.7
-    "@redwoodjs/cli": 1.5.1
-    "@redwoodjs/eslint-config": 1.5.1
-    "@redwoodjs/internal": 1.5.1
-    "@redwoodjs/testing": 1.5.1
+    "@redwoodjs/cli": 1.5.2
+    "@redwoodjs/eslint-config": 1.5.2
+    "@redwoodjs/internal": 1.5.2
+    "@redwoodjs/testing": 1.5.2
     "@types/rimraf": 3.0.2
     babel-loader: 8.2.3
     babel-plugin-auto-import: 1.1.0
@@ -6090,8 +6090,8 @@ __metadata:
     url-loader: 4.1.1
     webpack: 5.72.1
     webpack-bundle-analyzer: 4.5.0
-    webpack-cli: 4.9.2
-    webpack-dev-server: 4.9.1
+    webpack-cli: 4.10.0
+    webpack-dev-server: 4.9.2
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.1.1
@@ -6111,7 +6111,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-config@1.5.1, @redwoodjs/eslint-config@workspace:packages/eslint-config":
+"@redwoodjs/eslint-config@1.5.2, @redwoodjs/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
@@ -6119,7 +6119,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/eslint-parser": 7.16.5
     "@babel/eslint-plugin": 7.16.5
-    "@redwoodjs/internal": 1.5.1
+    "@redwoodjs/internal": 1.5.2
     "@typescript-eslint/eslint-plugin": 5.26.0
     "@typescript-eslint/parser": 5.26.0
     eslint: 8.16.0
@@ -6168,7 +6168,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/graphql-server@1.5.1, @redwoodjs/graphql-server@workspace:packages/graphql-server":
+"@redwoodjs/graphql-server@1.5.2, @redwoodjs/graphql-server@workspace:packages/graphql-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
@@ -6187,8 +6187,8 @@ __metadata:
     "@graphql-tools/utils": 8.6.12
     "@graphql-yoga/common": 2.7.0
     "@prisma/client": 3.15.1
-    "@redwoodjs/api": 1.5.1
-    "@redwoodjs/auth": 1.5.1
+    "@redwoodjs/api": 1.5.2
+    "@redwoodjs/auth": 1.5.2
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
@@ -6206,7 +6206,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/internal@1.5.1, @redwoodjs/internal@workspace:packages/internal":
+"@redwoodjs/internal@1.5.2, @redwoodjs/internal@workspace:packages/internal":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
@@ -6224,7 +6224,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": 2.4.0
     "@graphql-codegen/typescript-react-apollo": 3.2.14
     "@graphql-codegen/typescript-resolvers": 2.6.4
-    "@redwoodjs/graphql-server": 1.5.1
+    "@redwoodjs/graphql-server": 1.5.2
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.1.19
     "@types/findup-sync": 4.0.2
@@ -6257,18 +6257,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/prerender@1.5.1, @redwoodjs/prerender@workspace:packages/prerender":
+"@redwoodjs/prerender@1.5.2, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@redwoodjs/auth": 1.5.1
-    "@redwoodjs/internal": 1.5.1
-    "@redwoodjs/router": 1.5.1
-    "@redwoodjs/structure": 1.5.1
-    "@redwoodjs/web": 1.5.1
+    "@redwoodjs/auth": 1.5.2
+    "@redwoodjs/internal": 1.5.2
+    "@redwoodjs/router": 1.5.2
+    "@redwoodjs/structure": 1.5.2
+    "@redwoodjs/web": 1.5.2
     "@types/mime-types": 2.1.1
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
@@ -6299,7 +6299,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/router@1.5.1, @redwoodjs/router@workspace:packages/router":
+"@redwoodjs/router@1.5.2, @redwoodjs/router@workspace:packages/router":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
@@ -6307,7 +6307,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@reach/skip-nav": 0.16.0
-    "@redwoodjs/auth": 1.5.1
+    "@redwoodjs/auth": 1.5.2
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.45
     "@types/react-dom": 17.0.17
@@ -6321,7 +6321,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/structure@1.5.1, @redwoodjs/structure@workspace:packages/structure":
+"@redwoodjs/structure@1.5.2, @redwoodjs/structure@workspace:packages/structure":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
@@ -6329,7 +6329,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@prisma/sdk": 3.15.1
-    "@redwoodjs/internal": 1.5.1
+    "@redwoodjs/internal": 1.5.2
     "@types/fs-extra": 9.0.13
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.182
@@ -6360,15 +6360,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/telemetry@1.5.1, @redwoodjs/telemetry@workspace:packages/telemetry":
+"@redwoodjs/telemetry@1.5.2, @redwoodjs/telemetry@workspace:packages/telemetry":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@redwoodjs/internal": 1.5.1
-    "@redwoodjs/structure": 1.5.1
+    "@redwoodjs/internal": 1.5.2
+    "@redwoodjs/structure": 1.5.2
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
@@ -6383,18 +6383,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/testing@1.5.1, @redwoodjs/testing@workspace:packages/testing":
+"@redwoodjs/testing@1.5.2, @redwoodjs/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@redwoodjs/auth": 1.5.1
-    "@redwoodjs/graphql-server": 1.5.1
-    "@redwoodjs/internal": 1.5.1
-    "@redwoodjs/router": 1.5.1
-    "@redwoodjs/web": 1.5.1
+    "@redwoodjs/auth": 1.5.2
+    "@redwoodjs/graphql-server": 1.5.2
+    "@redwoodjs/internal": 1.5.2
+    "@redwoodjs/router": 1.5.2
+    "@redwoodjs/web": 1.5.2
     "@storybook/addon-a11y": 6.5.8
     "@storybook/addon-docs": 6.5.8
     "@storybook/addon-essentials": 6.5.8
@@ -6424,7 +6424,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/web@1.5.1, @redwoodjs/web@workspace:packages/web":
+"@redwoodjs/web@1.5.2, @redwoodjs/web@workspace:packages/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
@@ -6432,7 +6432,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@redwoodjs/auth": 1.5.1
+    "@redwoodjs/auth": 1.5.2
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
@@ -8837,7 +8837,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serve-static@npm:*":
+"@types/serve-static@npm:*, @types/serve-static@npm:^1.13.10":
   version: 1.13.10
   resolution: "@types/serve-static@npm:1.13.10"
   dependencies:
@@ -9525,36 +9525,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/configtest@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@webpack-cli/configtest@npm:1.1.1"
+"@webpack-cli/configtest@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@webpack-cli/configtest@npm:1.2.0"
   peerDependencies:
     webpack: 4.x.x || 5.x.x
     webpack-cli: 4.x.x
-  checksum: 905e86d4075ac93411e1e7673060373b4a9770426a6d476aa99842399d4b6cc1a0cc3380a811a5285c012fd48ba2ee9d2153a650d842c0f3085e997e3608412d
+  checksum: 560e4dbd92fc6e4f574654fb1325b90d02c634bcdf8564c22b0e44c1ecf8db828fbea9f20d0546fa809002bd27b1b6f544f74b13bd5ccdee64e8e9368df46cc2
   languageName: node
   linkType: hard
 
-"@webpack-cli/info@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@webpack-cli/info@npm:1.4.1"
+"@webpack-cli/info@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@webpack-cli/info@npm:1.5.0"
   dependencies:
     envinfo: ^7.7.3
   peerDependencies:
     webpack-cli: 4.x.x
-  checksum: 1381c7f8ffacc80414648a5fe38f222a27501d31f5463042ff5e9ffb24100330ea736d307502d5fcad7fecf1019691e5b4a417cda18b329d4b4327500bc6c4af
+  checksum: 3e7c7ceb30b15fecdf5b5492494fbc76accee27748445c04f2bf66d0c036793b59ae7c27f5f4f6013a500aeae82762244c51f49c1de3d046e0b2dcfe163b642b
   languageName: node
   linkType: hard
 
-"@webpack-cli/serve@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "@webpack-cli/serve@npm:1.6.1"
+"@webpack-cli/serve@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@webpack-cli/serve@npm:1.7.0"
   peerDependencies:
     webpack-cli: 4.x.x
   peerDependenciesMeta:
     webpack-dev-server:
       optional: true
-  checksum: 0aca33a1a590d580a1bda87d6b9794db8725fbf5a7731997733a221e57d25bb70499429e8837755ff7c578674665fd970dde124c8e26fba41c398ad200deb816
+  checksum: a2045c6ada073c517820424f97264a99c809e8bfdef866f5af7ceaefff44580351e9713b06d68e326469bd170111e370942825adcdac7eb242b2ee4343458a81
   languageName: node
   linkType: hard
 
@@ -13198,8 +13198,8 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/node": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@redwoodjs/internal": 1.5.1
-    "@redwoodjs/telemetry": 1.5.1
+    "@redwoodjs/internal": 1.5.2
+    "@redwoodjs/telemetry": 1.5.2
     chalk: 4.1.2
     check-node-version: 4.2.1
     core-js: 3.22.8
@@ -30945,17 +30945,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:4.9.2":
-  version: 4.9.2
-  resolution: "webpack-cli@npm:4.9.2"
+"webpack-cli@npm:4.10.0":
+  version: 4.10.0
+  resolution: "webpack-cli@npm:4.10.0"
   dependencies:
     "@discoveryjs/json-ext": ^0.5.0
-    "@webpack-cli/configtest": ^1.1.1
-    "@webpack-cli/info": ^1.4.1
-    "@webpack-cli/serve": ^1.6.1
+    "@webpack-cli/configtest": ^1.2.0
+    "@webpack-cli/info": ^1.5.0
+    "@webpack-cli/serve": ^1.7.0
     colorette: ^2.0.14
     commander: ^7.0.0
-    execa: ^5.0.0
+    cross-spawn: ^7.0.3
     fastest-levenshtein: ^1.0.12
     import-local: ^3.0.2
     interpret: ^2.2.0
@@ -30974,7 +30974,7 @@ __metadata:
       optional: true
   bin:
     webpack-cli: bin/cli.js
-  checksum: 42666e258bd44f0f0374de0bff696ee7d87dbc31fb7c17fd24aab44d99ab278aafb888a3f62953362436c2d8c37274dc19e2ef36cfac00d3887ac77f92e72656
+  checksum: e144821a3eaf8c2598e80d6bc8b1b4035e6f5cb0046b3090ad0f858f87480f007127d5c5efa83c79436df3f31e0c0d6033fd9ea93526395984ef986ba5d72aa3
   languageName: node
   linkType: hard
 
@@ -31024,14 +31024,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.9.1":
-  version: 4.9.1
-  resolution: "webpack-dev-server@npm:4.9.1"
+"webpack-dev-server@npm:4.9.2":
+  version: 4.9.2
+  resolution: "webpack-dev-server@npm:4.9.2"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
     "@types/express": ^4.17.13
     "@types/serve-index": ^1.9.1
+    "@types/serve-static": ^1.13.10
     "@types/sockjs": ^0.3.33
     "@types/ws": ^8.5.1
     ansi-html-community: ^0.0.8
@@ -31063,7 +31064,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: d994159eccfd8e190a821cac9df764ed62faf01f9d7ff2144281023ab9d232ccecd653c66a90c4b355a27720d368cedf3dadcd9786109a7abf33cbbed5cbb546
+  checksum: 51ad103395224c69df338a48de29687c188d5cbfd2f60fad8ddb816c1d26218eca003bf5c3ce25b871f4f7c29db5f9a0f1daef8f3700a33b924158c747c9e2b7
   languageName: node
   linkType: hard
 

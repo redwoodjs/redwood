@@ -30,6 +30,14 @@ Let's generate a **CommentsCell**:
 yarn rw g cell Comments
 ```
 
+:::caution What's with these errors and warnings after generating this cell?
+
+Redwood will try to generate types to go along with your cell. However, we haven't generated an SDL file for the Comment model yet, so types can't be created. This is safe to ignore for now as we're building out our UI in Storybook. 
+
+You may also see some red squiggles in your IDE: same thing, types couldn't be generated.
+
+:::
+
 Storybook updates with a new **CommentsCell** under the **Cells** folder, and it's actually showing something:
 
 ![image](https://user-images.githubusercontent.com/300/153477642-0d5a15a5-f96f-485a-b8b0-dbc1c4515279.png)
