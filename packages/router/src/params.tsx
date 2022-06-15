@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { PropsWithChildren, useContext } from 'react'
 
 import { LocationContextType, useLocation } from './location'
 import { useRouterState } from './router-context'
@@ -15,7 +15,7 @@ interface Props {
   location?: LocationContextType
 }
 
-export const ParamsProvider: React.FC<Props> = ({
+export const ParamsProvider: React.FC<PropsWithChildren<Props>> = ({
   path,
   location,
   children,

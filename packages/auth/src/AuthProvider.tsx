@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { createAuthClient } from './authClients'
 import type {
@@ -115,7 +115,7 @@ type AuthProviderState = {
  * ```
  */
 export class AuthProvider extends React.Component<
-  AuthProviderProps,
+  PropsWithChildren<AuthProviderProps>,
   AuthProviderState
 > {
   static defaultProps = {

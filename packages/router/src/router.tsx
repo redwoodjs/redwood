@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { useActivePageContext } from './ActivePageContext'
@@ -136,7 +136,7 @@ interface RouterProps extends RouterContextProviderProps {
   pageLoadingDelay?: number
 }
 
-const Router: React.FC<RouterProps> = ({
+const Router: React.FC<PropsWithChildren<RouterProps>> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
@@ -155,7 +155,7 @@ const Router: React.FC<RouterProps> = ({
   </LocationProvider>
 )
 
-const LocationAwareRouter: React.FC<RouterProps> = ({
+const LocationAwareRouter: React.FC<PropsWithChildren<RouterProps>> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,

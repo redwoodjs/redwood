@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { gHistory } from './history'
 import { createNamedContext, TrailingSlashesTypes } from './util'
@@ -20,7 +20,9 @@ interface LocationProviderProps {
   trailingSlashes?: TrailingSlashesTypes
 }
 
-class LocationProvider extends React.Component<LocationProviderProps> {
+class LocationProvider extends React.Component<
+  PropsWithChildren<LocationProviderProps>
+> {
   // When prerendering, there might be more than one level of location
   // providers. Use the values from the one above.
   static contextType = LocationContext

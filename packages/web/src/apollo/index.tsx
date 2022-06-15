@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react'
+
 import type {
   ApolloClientOptions,
   setLogVerbosity,
@@ -91,13 +93,15 @@ export type GraphQLClientConfigProp = Omit<
 
 export type UseAuthProp = () => AuthContextInterface
 
-const ApolloProviderWithFetchConfig: React.FunctionComponent<{
-  config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
-    cache: ApolloCache<unknown>
-  }
-  useAuth: UseAuthProp
-  logLevel: F.Return<typeof setLogVerbosity>
-}> = ({ config, children, useAuth, logLevel }) => {
+const ApolloProviderWithFetchConfig: React.FunctionComponent<
+  PropsWithChildren<{
+    config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
+      cache: ApolloCache<unknown>
+    }
+    useAuth: UseAuthProp
+    logLevel: F.Return<typeof setLogVerbosity>
+  }>
+> = ({ config, children, useAuth, logLevel }) => {
   /**
    * Should they run into it,
    * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
@@ -257,7 +261,9 @@ interface ErrorBoundaryProps {
   onError: NonNullable<ComponentDidCatch>
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
+class ErrorBoundary extends React.Component<
+  PropsWithChildren<ErrorBoundaryProps>
+> {
   componentDidCatch(...args: Parameters<NonNullable<ComponentDidCatch>>) {
     this.setState({})
     this.props.onError(...args)
@@ -268,11 +274,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
   }
 }
 
-export const RedwoodApolloProvider: React.FunctionComponent<{
-  graphQLClientConfig?: GraphQLClientConfigProp
-  useAuth?: UseAuthProp
-  logLevel?: F.Return<typeof setLogVerbosity>
-}> = ({
+export const RedwoodApolloProvider: React.FunctionComponent<
+  PropsWithChildren<{
+    graphQLClientConfig?: GraphQLClientConfigProp
+    useAuth?: UseAuthProp
+    logLevel?: F.Return<typeof setLogVerbosity>
+  }>
+> = ({
   graphQLClientConfig,
   useAuth = useRWAuth,
   logLevel = 'debug',

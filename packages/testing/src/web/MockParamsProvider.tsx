@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { useLocation, ParamsContext, parseSearch } from '@redwoodjs/router'
 
@@ -6,7 +6,9 @@ interface Props {
   path?: string
 }
 
-export const MockParamsProvider: React.FC<Props> = ({ children }) => {
+export const MockParamsProvider: React.FC<PropsWithChildren<Props>> = ({
+  children,
+}) => {
   const location = useLocation()
 
   const searchParams = parseSearch(location.search)

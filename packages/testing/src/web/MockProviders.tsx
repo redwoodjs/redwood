@@ -2,7 +2,7 @@
  * NOTE: This module should not contain any nodejs functionality,
  * because it's also used by Storybook in the browser.
  */
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { AuthProvider } from '@redwoodjs/auth'
@@ -60,7 +60,9 @@ export const mockAuthClient: AuthClient = {
   type: 'custom',
 }
 
-export const MockProviders: React.FunctionComponent = ({ children }) => {
+export const MockProviders: React.FunctionComponent<PropsWithChildren> = ({
+  children,
+}) => {
   return (
     <AuthProvider client={mockAuthClient} type="custom">
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
