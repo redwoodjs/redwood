@@ -144,7 +144,7 @@ interface PresenceValidatorOptions extends WithOptionalMessage {
 }
 
 interface UniquenessValidatorOptions extends WithOptionalMessage {
-  prismaClient?: PrismaClient
+  db?: PrismaClient
 }
 type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
 
@@ -658,10 +658,10 @@ export async function validateUniqueness(
     validCallback = callback as (tx: PrismaClient) => Promise<any>
   }
 
-  if (options.prismaClient) {
-    const { prismaClient, ...restOptions } = options
+  if (options.db) {
+    const { db: customDb, ...restOptions } = options
     options = restOptions
-    db = prismaClient
+    db = customDb
   } else {
     db = new PrismaClient()
   }

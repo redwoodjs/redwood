@@ -1161,7 +1161,7 @@ describe('validateUniqueness', () => {
     await validateUniqueness(
       'user',
       { email: 'rob@redwoodjs.com' },
-      { prismaClient: mockPrismaClient },
+      { db: mockPrismaClient },
       () => {
         expect(true).toEqual(true)
       }

@@ -652,7 +652,7 @@ So `validateUniqueness()` first tries to find a record with the given fields, an
 
 1. The name of the db table accessor that will be checked (what you would call on `db` in a normal Prisma call). If you'd call `db.user` then this value is `"user"`.
 2. An object, containing the db fields/values to check for uniqueness, like `{ email: 'rob@redwoodjs.com' }`. Can also include additional options explained below that provide for a narrower scope for uniqueness requirements, and a way for the record to identify itself and not create a false positive for an existing record.
-3. [Optional] An object with options. `message` - custom error message. `prismaClient` - custom instance of the PrismaClient to use
+3. [Optional] An object with options. `message` - custom error message. `db` - custom instance of the PrismaClient to use
 4. Callback to be invoked if record is found to be unique.
 
 In its most basic usage, say you want to make sure that a user's email address is unique before creating the record. `input` is an object containing all the user fields to save to the database, including `email` which must be unique:
