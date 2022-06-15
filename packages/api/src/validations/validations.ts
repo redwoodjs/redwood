@@ -614,6 +614,18 @@ export const validateWith = (func: () => void) => {
 // }, (db) => {
 //   return db.create(data: { email })
 // })
+//
+// const myCustomDb = new PrismaClient({
+//   log: emitLogLevels(['info', 'warn', 'error']),
+//   datasources: {
+//     db: {
+//       url: process.env.DATABASE_URL,
+//     },
+//   },
+// })
+// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { prismaClient: myCustomDb}, (db) => {
+//   return db.create(data: { email })
+// })
 export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
