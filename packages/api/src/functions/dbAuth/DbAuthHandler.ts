@@ -712,7 +712,7 @@ export class DbAuthHandler {
 
   // get options for WebAuthn registration
   async webAuthnRegOptions() {
-    if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
+    if (!this.options?.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
