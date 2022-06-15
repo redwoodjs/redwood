@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js'
+import base64url from 'base64url'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
@@ -59,6 +60,13 @@ const TableMock = class {
     })
   }
 
+  findMany({ where }) {
+    return this.records.filter((record) => {
+      const key = Object.keys(where)[0]
+      return record[key] === where[key]
+    })
+  }
+
   deleteMany() {
     const count = this.records.length
     this.records = []
@@ -67,7 +75,7 @@ const TableMock = class {
 }
 
 // create a mock `db` provider that simulates prisma creating/finding/deleting records
-const db = new DbMock(['user'])
+const db = new DbMock(['user', 'userCredential'])
 
 const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
@@ -118,6 +126,7 @@ describe('dbAuth', () => {
 
     options = {
       authModelAccessor: 'user',
+      credentialModelAccessor: 'userCredential',
       authFields: {
         id: 'id',
         username: 'email',
@@ -125,6 +134,7 @@ describe('dbAuth', () => {
         salt: 'salt',
         resetToken: 'resetToken',
         resetTokenExpiresAt: 'resetTokenExpiresAt',
+        challenge: 'webauthnChallenge',
       },
       db: db,
       excludeUserFields: [],
@@ -159,6 +169,25 @@ describe('dbAuth', () => {
         errors: {
           fieldMissing: '${field} is required',
           usernameTaken: 'Username `${username}` already in use',
+        },
+      },
+      webAuthn: {
+        enabled: true,
+        name: 'Webauthn Test',
+        domain:
+          process.env.NODE_ENV === 'development' ? 'localhost' : 'server.com',
+        origin:
+          process.env.NODE_ENV === 'development'
+            ? 'http://localhost:8910'
+            : 'https://server.com',
+        type: 'platform',
+        timeout: 30000,
+        credentialFields: {
+          id: 'id',
+          userId: 'userId',
+          publicKey: 'publicKey',
+          transports: 'transports',
+          counter: 'counter',
         },
       },
     }
@@ -196,6 +225,13 @@ describe('dbAuth', () => {
     it('returns the prisma db accessor for a model', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       expect(dbAuth.dbAccessor).toEqual(db.user)
+    })
+  })
+
+  describe('dbCredentialAccessor', () => {
+    it('returns the prisma db accessor for a UserCredential model', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      expect(dbAuth.dbCredentialAccessor).toEqual(db.userCredential)
     })
   })
 
@@ -1180,6 +1216,217 @@ describe('dbAuth', () => {
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
+    })
+  })
+
+  describe('webAuthnAuthenticate', () => {})
+
+  describe('webAuthnAuthOptions', () => {
+    it('throws an error if user is not logged in', async () => {
+      event = {
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnAuthOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.NotLoggedInError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if WebAuthn is disabled', async () => {
+      event = {
+        headers: {},
+      }
+      options.webAuthn.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnAuthOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.WebAuthnError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('returns options needed for webAuthn registration', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnAuthOptions()
+      const regOptions = response[0]
+
+      expect(regOptions.allowCredentials).toEqual([])
+      expect(regOptions.challenge).not.toBeUndefined()
+      expect(regOptions.rpId).toEqual(options.webAuthn.domain)
+      expect(regOptions.timeout).toEqual(options.webAuthn.timeout)
+    })
+
+    it('includes existing devices', async () => {
+      const user = await createDbUser()
+      const credential = await db.userCredential.create({
+        data: {
+          id: 'qwertyuiog',
+          userId: user.id,
+          transports: null,
+        },
+      })
+
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnAuthOptions()
+      const regOptions = response[0]
+
+      expect(regOptions.allowCredentials[0].id).toEqual(credential.id)
+      expect(regOptions.allowCredentials[0].transports).toEqual([
+        'usb',
+        'ble',
+        'nfc',
+        'internal',
+      ])
+      expect(regOptions.allowCredentials[0].type).toEqual('public-key')
+    })
+  })
+
+  describe('webAuthnRegOptions', () => {
+    it('throws an error if user is not logged in', async () => {
+      event = {
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnRegOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.NotLoggedInError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if WebAuthn is disabled', async () => {
+      event = {
+        headers: {},
+      }
+      options.webAuthn.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnRegOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.WebAuthnError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('returns options needed for webAuthn registration', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnRegOptions()
+      const regOptions = response[0]
+
+      expect(regOptions.attestation).toEqual('none')
+      expect(regOptions.authenticatorSelection.authenticatorAttachment).toEqual(
+        options.webAuthn.type
+      )
+      expect(regOptions.excludeCredentials).toEqual([])
+      expect(regOptions.rp.name).toEqual(options.webAuthn.name)
+      expect(regOptions.rp.id).toEqual(options.webAuthn.domain)
+      expect(regOptions.timeout).toEqual(options.webAuthn.timeout)
+      expect(regOptions.user.id).toEqual(user.id)
+      expect(regOptions.user.displayName).toEqual(user.email)
+      expect(regOptions.user.name).toEqual(user.email)
+    })
+
+    it('defaults timeout if not set', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      options.webAuthn.timeout = null
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnRegOptions()
+
+      expect(response[0].timeout).toEqual(60000)
+    })
+
+    it('saves the generated challenge to the user record', async () => {
+      let user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnRegOptions()
+      user = db.user.findFirst({ where: { id: user.id } })
+      expect(user.webauthnChallenge).toEqual(response[0].challenge)
+    })
+  })
+
+  describe('webAuthnRegister', () => {})
+
+  describe('_validateOptions', () => {
+    it('throws an error if credentialModelAccessor is defined but not webAuthn options', () => {
+      delete options.webAuthn
+      try {
+        const _instance = new DbAuthHandler({ headers: {} }, context, options)
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if credentialModelAccessor is undefined but webAuthn options exist', () => {
+      delete options.credentialModelAccessor
+      try {
+        const _instance = new DbAuthHandler({ headers: {} }, context, options)
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
+      }
+      expect.assertions(1)
+    })
+  })
+
+  describe('_webAuthnCookie', () => {
+    it('returns the parts needed for the webAuthn cookie, defaulted to future expire', () => {
+      const dbAuth = new DbAuthHandler({ headers: {} }, context, options)
+
+      expect(dbAuth._webAuthnCookie('1234')).toMatch('webAuthn=1234;Expires=')
+    })
+
+    it('returns the parts needed for the expire the webAuthn cookie', () => {
+      const dbAuth = new DbAuthHandler({ headers: {} }, context, options)
+
+      expect(dbAuth._webAuthnCookie('1234', 'now')).toMatch(
+        'webAuthn=1234;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      )
     })
   })
 
