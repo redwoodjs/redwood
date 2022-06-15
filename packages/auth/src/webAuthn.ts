@@ -32,6 +32,15 @@ export class WebAuthnDeviceNotFoundError extends WebAuthnAuthenticationError {
   }
 }
 
+export class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
+  constructor() {
+    super(
+      "This device was not recognized. Use username/password login, or if you're using iOS you can try reloading this page"
+    )
+    this.name = 'WebAuthnNoAuthenticatorError'
+  }
+}
+
 export const isWebAuthnSupported = async () => {
   return await platformAuthenticatorIsAvailable()
 }
@@ -100,9 +109,17 @@ export const webAuthnAuthenticate = async () => {
       return true
     }
   } catch (e: any) {
-    throw new WebAuthnAuthenticationError(
-      `Error while authenticating: ${e.message}`
-    )
+    if (
+      e.message.match(
+        /No available authenticator recognized any of the allowed credentials/
+      )
+    ) {
+      throw new WebAuthnNoAuthenticatorError()
+    } else {
+      throw new WebAuthnAuthenticationError(
+        `Error while authenticating: ${e.message}`
+      )
+    }
   }
 }
 
