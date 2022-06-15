@@ -774,6 +774,16 @@ export const requireAuth = ({ roles }) => {
 }
 ```
 
+:::caution
+
+At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the `hasRole` method in `api/src/lib/auth.js` for now.
+
+If this bothers you, feel free to peek into [the tutorial chapter about Authorization](../chapter7/rbac.md) and add the missing field as described there.
+:::
+
+
+
+
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
@@ -840,8 +850,21 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
 }
 ```
 
+:::caution
+
+At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the following error:
+
+`Property 'roles' does not exist on type '{ id: number; email: string; }'.`
+
+in the `hasRole` method in `api/src/lib/auth.ts` for now.
+
+If this bothers you, feel free to peek into [the tutorial chapter about Authorization](../chapter7/rbac.md) and add the missing field as described there.
+:::
+
 </TabItem>
 </Tabs>
+
+
 
 The `getCurrentUser()` function is where the magic happens: whatever is returned by this function is the content of `currentUser`, in both the web and api sides! In the case of dbAuth, the single argument passed in, `session`, contains the `id` of the user that's logged in. It then looks up the user in the database with Prisma, selecting just the `id`. Let's add `email` to this list:
 
@@ -859,9 +882,9 @@ export const getCurrentUser = async (session) => {
 ```
 
 </TabItem>
-<TabItem value="ts" label="TyepScript">
+<TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/lib/auth.js"
+```ts title="api/src/lib/auth.ts"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },

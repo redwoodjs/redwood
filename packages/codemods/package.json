@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "@babel/plugin-transform-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@vscode/ripgrep": "1.14.2",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "cross-undici-fetch": "0.1.27",
     "deepmerge": "4.2.2",
     "execa": "5.1.1",
@@ -44,7 +44,7 @@
     "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "27.5.1",
+    "@types/jest": "27.5.2",
     "@types/jscodeshift": "0.11.5",
     "@types/prettier": "2.6.3",
     "@types/yargs": "17.0.10",

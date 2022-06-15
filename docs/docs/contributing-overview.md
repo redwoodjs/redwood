@@ -88,20 +88,22 @@ What you want to do not on the roadmap? Well, still go for it! We love spikes an
 ### RedwoodJS Framework Packages
 |Package|Description|
 |:-|:-|
-|[`@redwoodjs/api-server`](https://github.com/redwoodjs/redwood/blob/main/packages/api-server/README.md)|Run a Redwood app using Express server (alternative to serverless API)|
-|[`@redwoodjs/api`](https://github.com/redwoodjs/redwood/blob/main/packages/api/README.md)|Infrastruction components for your applications UI including logging, webhooks, authentication decoders and parsers, as well as tools to test custom serverless functions and webhooks|
+|[`@redwoodjs/api-server`](https://github.com/redwoodjs/redwood/blob/main/packages/api-server/README.md)|Run a Redwood app using Fastify server (alternative to serverless API)|
+|[`@redwoodjs/api`](https://github.com/redwoodjs/redwood/blob/main/packages/api/README.md)|Infrastructure components for your applications UI including logging, webhooks, authentication decoders and parsers, as well as tools to test custom serverless functions and webhooks|
 |[`@redwoodjs/auth`](https://github.com/redwoodjs/redwood/blob/main/packages/auth/README.md#contributing)|A lightweight wrapper around popular SPA authentication libraries|
 |[`@redwoodjs/cli`](https://github.com/redwoodjs/redwood/blob/main/packages/cli/README.md)|All the commands for Redwood's built-in CLI|
+|[`@redwoodjs/codemods`](https://github.com/redwoodjs/redwood/blob/main/packages/codemods/README.md)|Codemods that automate upgrading a Redwood project|
 |[`@redwoodjs/core`](https://github.com/redwoodjs/redwood/blob/main/packages/core/README.md)|Defines babel plugins and config files|
 |[`@redwoodjs/create-redwood-app`](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/README.md)|Enables `yarn create redwood-app`&mdash;downloads the latest release of Redwood and extracts it into the supplied directory|
-|[`@redwoodjs/dev-server`](https://github.com/redwoodjs/redwood/blob/main/packages/dev-server/README.md)|Configuration for the local development server|
 |[`@redwoodjs/eslint-config`](https://github.com/redwoodjs/redwood/blob/main/packages/eslint-config/README.md)|Defines Redwood's eslint config|
-|[`@redwoodjs/eslint-plugin-redwood`](https://github.com/redwoodjs/redwood/blob/main/packages/eslint-plugin-redwood/README.md)|Defines eslint plugins; currently just prohibits the use of non-existent pages in `Routes.js`|
 |[`@redwoodjs/forms`](https://github.com/redwoodjs/redwood/blob/main/packages/forms/README.md)|Provides Form helpers|
 |[`@redwoodjs/graphql-server`](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/README.md)|Exposes functions to build the GraphQL API, provides services with `context`, and a set of envelop plugins to supercharge your GraphQL API with logging, authentication, error handling, directives and more|
 |[`@redwoodjs/internal`](https://github.com/redwoodjs/redwood/blob/main/packages/internal/README.md)|Provides tooling to parse Redwood configs and get a project's paths|
+|[`@redwoodjs/prerender`](https://github.com/redwoodjs/redwood/blob/main/packages/prerender/README.md)|Defines functionality for prerendering static content|
+|[`@redwoodjs/record`](https://github.com/redwoodjs/redwood/blob/main/packages/record/README.md)|ORM built on top of Prisma. It may be extended in the future to wrap other database access packages|
 |[`@redwoodjs/router`](https://github.com/redwoodjs/redwood/blob/main/packages/router/README.md)|The built-in router for Redwood|
 |[`@redwoodjs/structure`](https://github.com/redwoodjs/redwood/blob/main/packages/structure/README.md)|Provides a way to build, validate and inspect an object graph that represents a complete Redwood project|
+|[`@redwoodjs/telemetry`](https://github.com/redwoodjs/redwood/blob/main/packages/telemetry/README.md)|Provides functionality for anonymous data collection|
 |[`@redwoodjs/testing`](https://github.com/redwoodjs/redwood/blob/main/packages/testing/README.md)|Provides helpful defaults when testing a Redwood project's web side|
 |[`@redwoodjs/web`](https://github.com/redwoodjs/redwood/blob/main/packages/web/README.md)|Configures a Redwood's app web side: wraps the Apollo Client in `RedwoodApolloProvider`; defines the Cell HOC|
 

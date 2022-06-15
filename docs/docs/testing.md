@@ -350,7 +350,7 @@ describe('useAccumulator hook example in docs', () => {
     expect(result.current.total).toBe(15)
   })
 
-  it('re-initializes the accumulator if passed a new initilizing value', () => {
+  it('re-initializes the accumulator if passed a new initializing value', () => {
     const { result, rerender } = renderHook(
       (initialValue) => useAccumulator(initialValue),
       {
@@ -847,7 +847,7 @@ Two situations make testing Cells unique:
 1. A single Cell can export up to four separate components
 2. There's a GraphQL query taking place
 
-The first situation is really no different than regular component testing: you just test more than one component in your test. For example:
+The first situation is really no different from regular component testing: you just test more than one component in your test. For example:
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 import Article from 'src/components/Article'

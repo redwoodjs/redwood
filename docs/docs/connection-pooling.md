@@ -24,7 +24,7 @@ To use Prisma Client with PgBouncer from a serverless function, add the `?pgboun
 postgresql://USER:PASSWORD@HOST:PORT/DATABASE?pgbouncer=true
 ```
 
-Typically, your PgBouncer port will be 6543 which is different than the Postgres default of 5432.
+Typically, your PgBouncer port will be 6543 which is different from the Postgres default of 5432.
 
 > Note that since Prisma Migrate uses database transactions to check out the current state of the database and the migrations table, if you attempt to run Prisma Migrate commands in any environment that uses PgBouncer for connection pooling, you might see an error.
 >
