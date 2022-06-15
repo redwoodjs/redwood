@@ -40,9 +40,47 @@ module.exports = {
       },
     ],
     '@babel/preset-react',
+    /**
+     *  TODO(pc): w/ '@babel/plugin-transform-typescript' in plugins now, is '@babel/typescript' preset still needed?
+     *
+     * - Plugins run before Presets.
+     * - Plugin ordering is first to last.
+     * - Preset ordering is reversed (last to first).
+     *
+     * https://babeljs.io/docs/en/plugins/#plugin-ordering
+     */
     '@babel/typescript',
   ],
   plugins: [
+    /**
+     * NOTE
+     * Needed for react@18
+     *
+     * ```
+     * ✖  @redwoodjs/router:build
+     *  SyntaxError: /code/redwood/packages/router/src/location.tsx: TypeScript 'declare' fields must first be transformed by @babel/plugin-transform-typescript.
+     *  If you have already enabled that plugin (or '@babel/preset-typescript'), make sure that it runs before any plugin related to additional class features:
+     *   - @babel/plugin-proposal-class-properties
+     *   - @babel/plugin-proposal-private-methods
+     *   - @babel/plugin-proposal-decorators
+     *    25 |   // When prerendering, there might be more than one level of location
+     *    26 |   // providers. Use the values from the one above.
+     *  > 27 |   declare context: React.ContextType<typeof LocationContext>
+     *       |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     *    28 |   HISTORY_LISTENER_ID: string | undefined = undefined
+     *    29 |
+     *    30 |   state = {
+     * ```
+     */
+    [
+      '@babel/plugin-transform-typescript',
+      {
+        allowDeclareFields: true,
+        /** needed in order build `packages/web/dist/entry/index.js` */
+        isTSX: true,
+        allExtensions: true,
+      },
+    ],
     /**
      * NOTE
      * Experimental decorators are used in `@redwoodjs/structure`.

@@ -25,6 +25,7 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   // When prerendering, there might be more than one level of location
   // providers. Use the values from the one above.
   static contextType = LocationContext
+  declare context: React.ContextType<typeof LocationContext>
   HISTORY_LISTENER_ID: string | undefined = undefined
 
   state = {
