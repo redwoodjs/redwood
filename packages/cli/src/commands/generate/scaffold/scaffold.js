@@ -585,7 +585,7 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   if (!routesContent.match(importLayout)) {
     const newRoutesContent = routesContent.replace(
       /['"]@redwoodjs\/router['"](\s*)/,
-      `'@redwoodjs/router'\n${importLayout}$1`
+      `'@redwoodjs/router'\n\n${importLayout}$1`
     )
     writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
