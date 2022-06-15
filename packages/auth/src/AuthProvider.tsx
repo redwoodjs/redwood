@@ -179,9 +179,13 @@ export const AuthProvider = (props: AuthProviderProps) => {
    * missed or slip through.
    */
   const getToken = useCallback(async () => {
+    const client = await rwClientPromise
+
     try {
-      return (await rwClientPromise).getToken()
-    } catch {
+      const token = await client.getToken()
+      return token
+    } catch (e) {
+      console.error('Caught internal:', e)
       return null
     }
   }, [rwClientPromise])

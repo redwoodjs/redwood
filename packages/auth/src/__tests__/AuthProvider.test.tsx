@@ -2,7 +2,7 @@ require('whatwg-fetch')
 
 import { useEffect, useState } from 'react'
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
@@ -63,7 +63,7 @@ const AuthConsumer = () => {
     error,
   } = useAuth()
 
-  const [authToken, setAuthToken] = useState(null)
+  const [authToken, setAuthToken] = useState<string | null>(null)
 
   useEffect(() => {
     const retrieveToken = async () => {
@@ -78,7 +78,7 @@ const AuthConsumer = () => {
   }
 
   if (hasError) {
-    return <>{error.message}</>
+    return <>{error?.message}</>
   }
 
   return (
@@ -133,14 +133,15 @@ test('Authentication flow (logged out -> login -> logged in -> logout) works as 
     type: 'custom',
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
-
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -189,14 +190,17 @@ test('Fetching the current user can be skipped', async () => {
     client: () => {},
     type: 'custom',
   }
-  render(
-    <AuthProvider client={mockAuthClient} type="custom" skipFetchCurrentUser>
-      <AuthConsumer />
-    </AuthProvider>
-  )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom" skipFetchCurrentUser>
+        <AuthConsumer />
+      </AuthProvider>
+    )
+
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -238,11 +242,14 @@ test('A user can be reauthenticated to update the "auth state"', async () => {
     client: () => {},
     type: 'custom',
   }
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -301,14 +308,16 @@ test('When the current user cannot be fetched the user is not authenticated', as
     client: () => {},
     type: 'custom',
   }
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   await waitFor(() =>
     screen.getByText('Could not fetch current user: Not Found (404)')
@@ -340,14 +349,16 @@ test('Authenticated user has assigned role access as expected', async () => {
     roles: [],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -400,14 +411,16 @@ test('Authenticated user has not been assigned role access as expected', async (
     roles: ['admin', 'superuser'],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -460,14 +473,16 @@ test('Authenticated user has not been assigned some role access but not others a
     roles: ['admin'],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -520,14 +535,16 @@ test('Authenticated user has assigned role access as expected', async () => {
     roles: ['admin'],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -579,14 +596,16 @@ test('Authenticated user has assigned role access as expected', async () => {
     roles: ['admin'],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -635,14 +654,16 @@ test('Checks roles successfully when roles in currentUser is a string', async ()
     roles: 'admin',
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -691,14 +712,16 @@ test('Authenticated user has assigned role access as expected', async () => {
     roles: ['editor'],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -750,14 +773,16 @@ test('Authenticated user has assigned role access as expected', async () => {
     roles: ['admin'],
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <AuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <AuthConsumer />
+      </AuthProvider>
+    )
 
-  // We're booting up!
-  expect(screen.getByText('Loading...')).toBeInTheDocument()
+    // We're booting up!
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  })
 
   // The user is not authenticated
   await waitFor(() => screen.getByText('Log In'))
@@ -810,11 +835,13 @@ test('proxies forgotPassword() calls to client', async () => {
     return null
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <TestAuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <TestAuthConsumer />
+      </AuthProvider>
+    )
+  })
 
   expect.assertions(1)
 })
@@ -840,11 +867,13 @@ test('proxies resetPassword() calls to client', async () => {
     return null
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <TestAuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <TestAuthConsumer />
+      </AuthProvider>
+    )
+  })
 
   expect.assertions(1)
 })
@@ -870,11 +899,13 @@ test('proxies validateResetToken() calls to client', async () => {
     return null
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <TestAuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <TestAuthConsumer />
+      </AuthProvider>
+    )
+  })
 
   expect.assertions(1)
 })
@@ -889,7 +920,10 @@ test('getToken doesnt fail if client throws an error', async () => {
 
   const TestAuthConsumer = () => {
     const { getToken } = useAuth()
-    const [authTokenResult, setAuthTokenResult] = useState(null)
+    const [authTokenResult, setAuthTokenResult] = useState<{
+      success: boolean
+      token: string
+    } | null>(null)
 
     useEffect(() => {
       const getTokenAsync = async () => {
@@ -901,6 +935,7 @@ test('getToken doesnt fail if client throws an error', async () => {
           token = await getToken()
           setAuthTokenResult({ success: true, token })
         } catch (error) {
+          console.error('Caught unexpected:', error)
           setAuthTokenResult({ success: false, token: 'FAIL' })
         }
       }
@@ -911,11 +946,13 @@ test('getToken doesnt fail if client throws an error', async () => {
     return <div>Token: {`${authTokenResult?.token}`}</div>
   }
 
-  render(
-    <AuthProvider client={mockAuthClient} type="custom">
-      <TestAuthConsumer />
-    </AuthProvider>
-  )
+  await act(async () => {
+    render(
+      <AuthProvider client={mockAuthClient} type="custom">
+        <TestAuthConsumer />
+      </AuthProvider>
+    )
+  })
 
   await waitFor(() => screen.getByText('Token: null'))
 })

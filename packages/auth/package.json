@@ -31,6 +31,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.12.0",
+    "@clerk/clerk-react": "3.3.0",
     "@clerk/clerk-sdk-node": "3.6.1",
     "@clerk/types": "2.14.0",
     "@nhost/hasura-auth-js": "1.1.14",
@@ -49,7 +50,7 @@
     "typescript": "4.7.3"
   },
   "peerDependencies": {
-    "@clerk/clerk-react": "3.2.8",
+    "@clerk/clerk-react": "3.3.0",
     "@clerk/clerk-sdk-node": "3.6.1"
   },
   "peerDependenciesMeta": {
