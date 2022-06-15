@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  SetStateAction,
+  ReactNode,
+} from 'react'
 
 import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
 import {
@@ -113,24 +119,25 @@ export const ActiveRouteLoader = ({
       // Only update all state if we're still interested (i.e. we're still
       // waiting for the page that just finished loading)
       if (isMounted() && name === waitingFor.current) {
-          setLoadingState((loadingState) => ({
-            ...loadingState,
-            [path]: {
-              page: module.default,
-              specName: name,
-              state: 'DONE',
-              location,
-            },
-          }))
-          // `children` could for example be a Set or a Route. Either way the
-          // just-loaded page will be somewhere in the children tree. But
-          // children could also be undefined, in which case we'll just render
-          // the just-loaded page itself. For example, when we render the
-          // NotFoundPage children will be undefined and the default export in
-          // `module` will be the NotFoundPage itself.
-          setRenderedChildren(children ?? module.default)
-          setRenderedPath(path)
-          setPageName(name)
+        setLoadingState((loadingState) => ({
+          ...loadingState,
+          [path]: {
+            page: module.default,
+            specName: name,
+            state: 'DONE',
+            location,
+          },
+        }))
+        // `children` could for example be a Set or a Route. Either way the
+        // just-loaded page will be somewhere in the children tree. But
+        // children could also be undefined, in which case we'll just render
+        // the just-loaded page itself. For example, when we render the
+        // NotFoundPage children will be undefined and the default export in
+        // `module` will be the NotFoundPage itself.
+        const renderedChildren = children ?? module.default
+        setRenderedChildren(renderedChildren as SetStateAction<ReactNode>) //FIXME: test this?
+        setRenderedPath(path)
+        setPageName(name)
       }
     }
 
