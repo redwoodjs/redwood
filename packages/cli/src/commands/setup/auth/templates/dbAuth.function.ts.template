@@ -138,6 +138,7 @@ export const handler = async (event, context) => {
       salt: 'salt',
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
+      challenge: 'webauthnChallenge',
     },
 
     // Specifies attributes on the cookie that dbAuth sets in order to remember
@@ -157,6 +158,29 @@ export const handler = async (event, context) => {
     login: loginOptions,
     resetPassword: resetPasswordOptions,
     signup: signupOptions,
+
+    // WebAuthn enables login with TouchID, FaceID, Windows Hello and more. It
+    // is disabled by default, but is pretty easy to use. For more info, see:
+    // https://redwoodjs.com/docs/authentication/dbauth#webauthn-setup
+    webAuthn: {
+      enabled: false,
+      name: 'My App',
+      domain:
+        process.env.NODE_ENV === 'development' ? 'localhost' : 'server.com',
+      origin:
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:8910'
+          : 'https://server.com',
+      type: 'platform',
+      timeout: 60000,
+      credentialFields: {
+        id: 'id',
+        userId: 'userId',
+        publicKey: 'publicKey',
+        transports: 'transports',
+        counter: 'counter',
+      },
+    },
   })
 
   return await authHandler.invoke()
