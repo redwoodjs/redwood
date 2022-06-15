@@ -135,19 +135,19 @@ const logResult =
             error.originalError instanceof ForbiddenError)
         ) {
           envelopLogger.warn(
-            {
-              error,
-            },
+            error,
+
             `'${error?.extensions?.code || 'authentication'}' error '${
               error.message
             }' occurred in ${operationName}`
           )
         } else {
           envelopLogger.error(
-            {
-              error,
-            },
-            error.message || `Error in GraphQL execution: ${operationName}`
+            error,
+
+            error?.originalError?.message ||
+              error.message ||
+              `Error in GraphQL execution: ${operationName}`
           )
         }
       })
