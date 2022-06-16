@@ -26,8 +26,7 @@ The following recording is from a Contributing Workshop, following through the e
   style={{ height: '24rem' }}
   src="https://www.youtube.com/embed/aZs_9g-5Ms8"
   frameborder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0"
-  allowfullscreen
+  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0; fullscreen"
 ></iframe>
 
 ## Prologue: Getting Started with Redwood and GitHub (and git)
@@ -71,11 +70,11 @@ This has quickly become the de facto editor for JavaScript and TypeScript. Addit
 
 **GitHub Desktop**
 [Download GitHub Desktop](https://desktop.github.com)
-You’ll need to be comfortable using Git at the command line. But the thing ew like best about GitHub Desktop is how easy it makes workflow across GitHub -- GitHub Desktop -- VS Code. You don’t have to worry about syncing permissions or finding things. You can start from a repo on GitHub.com and use Desktop to do everything from “clone and open on your computer” to returning back to the site to “open a PR on GitHub”.
+You’ll need to be comfortable using Git at the command line. But the thing we like best about GitHub Desktop is how easy it makes workflow across GitHub -- GitHub Desktop -- VS Code. You don’t have to worry about syncing permissions or finding things. You can start from a repo on GitHub.com and use Desktop to do everything from “clone and open on your computer” to returning back to the site to “open a PR on GitHub”.
 
 **[Mac OS] iTerm and Oh-My-Zsh**
-There’s nothing wrong with Terminal (on Mac) and bash. (If you’re on Windows, we highly recommend using Git for Windows and Git bash.) But we enjoy using iTerm ([download](https://iterm2.com)) and Zsh much more (use [Oh My Zsh](https://ohmyz.sh)). Heads up, you can get lost in the world of theming and adding plugins. We recommend keeping it simple for awhile before taking the customization deep dive
-😉
+There’s nothing wrong with Terminal (on Mac) and plain zsh or bash. (If you’re on Windows, we highly recommend using Git for Windows and Git bash.) But we enjoy using iTerm2 ([download](https://iterm2.com)) and zsh much more (combined with [Oh My Zsh](https://ohmyz.sh)). Heads up, you can get lost in the world of theming and adding plugins. We recommend keeping it simple for awhile before taking the customization deep dive
+😉.
 
 **[Windows] Git for Windows with Git Bash or WSL(2)**
 Unfortunately, there are a lot of “gotchas” when it comes to working with Javascript-based frameworks on Windows. We do our best to point out (and resolve) issues, but our priority focus is on developing a Redwood app vs contributing to the Framework. (If you’re interested, there’s a lengthy Forum conversation about this with many suggestions.)

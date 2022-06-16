@@ -118,9 +118,9 @@ Note that if you don't import `RedwoodApolloProvider`, it won't be included in y
 
 ### Understanding Default Resolvers
 
-According to the spec, for every field in your sdl, there has to be a resolver in your Services. But you'll usually see fewer resolvers in your Services than you technically should. And that's because if you don't define a resolver, [Apollo Server will](https://www.apollographql.com/docs/apollo-server/data/resolvers/#default-resolvers).
+According to the spec, for every field in your sdl, there has to be a resolver in your Services. But you'll usually see fewer resolvers in your Services than you technically should. And that's because if you don't define a resolver, GraphQL Yoga server will.
 
-The key question Apollo Server asks is: "Does the parent argument (in Redwood apps, the `parent` argument is named `root`&mdash;see [Redwood's Resolver Args](#redwoods-resolver-args)) have a property with this resolver's exact name?" Most of the time, especially with Prisma Client's ergonomic returns, the answer is yes.
+The key question the Yoga server asks is: "Does the parent argument (in Redwood apps, the `parent` argument is named `root`&mdash;see [Redwood's Resolver Args](#redwoods-resolver-args)) have a property with this resolver's exact name?" Most of the time, especially with Prisma Client's ergonomic returns, the answer is yes.
 
 Let's walk through an example. Say our sdl looks like this:
 
@@ -161,7 +161,7 @@ export const users = () => {
 Which begs the question: where are the resolvers for the User fields&mdash;`id`, `email`, and `name`?
 All we have is the resolver for the Query field, `users`.
 
-As we just mentioned, Apollo defines them for you. And since the `root` argument for `id`, `email`, and `name` has a property with each resolvers' exact name (i.e. `root.id`, `root.email`, `root.name`), it'll return the property's value (instead of returning `undefined`, which is what Apollo would do if that weren't the case).
+As we just mentioned, GraphQL Yoga defines them for you. And since the `root` argument for `id`, `email`, and `name` has a property with each resolvers' exact name (i.e. `root.id`, `root.email`, `root.name`), it'll return the property's value (instead of returning `undefined`, which is what Yoga would do if that weren't the case).
 
 But, if you wanted to be explicit about it, this is what it would look like:
 
@@ -221,7 +221,7 @@ Of the four, you'll see `args` and `root` being used a lot.
 
 > **There's so many terms!**
 >
-> Half the battle here is really just coming to terms. To keep your head from spinning, keep in mind that everybody tends to rename `obj` to something else: Redwood calls it `root`, Apollo calls it `parent`. `obj` isn't exactly the most descriptive name in the world.
+> Half the battle here is really just coming to terms. To keep your head from spinning, keep in mind that everybody tends to rename `obj` to something else: Redwood calls it `root`, GraphQL Yoga calls it `parent`. `obj` isn't exactly the most descriptive name in the world.
 
 ### Context
 
@@ -292,7 +292,7 @@ Now that you've seen the sdl, be sure to check out [the resolvers](https://githu
 The GraphQL Playground's nice, but if you're a power user, you'll want to be using something a little more dedicated and always on; where you can save things like environments...
 
 <div class="relative pb-9/16">
-  <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/watch?v=SU4g9_K0H1c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+  <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/watch?v=SU4g9_K0H1c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0; fullscreen"></iframe>
 </div>
 
 - todo
@@ -1017,7 +1017,7 @@ export const handler = createGraphQLHandler({
 
 #### Redwood Errors
 
-Redwood Errors are derived from [Apollo Server Error codes](https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes) for common use cases:
+Redwood Errors are inspired from [Apollo Server Error codes](https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes) for common use cases:
 
 To use a Redwood Error, import each from `@redwoodjs/graphql-server`.
 
