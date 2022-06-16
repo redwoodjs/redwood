@@ -29,6 +29,9 @@ import {
   webAuthnSession,
 } from './shared'
 
+type SetCookieHeader = { 'Set-Cookie': string }
+type CsrfTokenHeader = { 'csrf-token': string }
+
 interface DbAuthHandlerOptions {
   /**
    * Provide prisma db client
@@ -637,7 +640,6 @@ export class DbAuthHandler {
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
       this._webAuthnCookie(jsonBody.rawId, 'future'),
-      // @ts-ignore
       loginHeaders['Set-Cookie'],
     ].flat()
 
@@ -651,6 +653,7 @@ export class DbAuthHandler {
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
+    const webAuthnOptions = this.options.webAuthn
 
     const credentialId = webAuthnSession(this.event)
 
@@ -659,7 +662,7 @@ export class DbAuthHandler {
     if (credentialId) {
       user = await this.dbCredentialAccessor
         .findFirst({
-          where: { [this.options.webAuthn.credentialFields.id]: credentialId },
+          where: { [webAuthnOptions.credentialFields.id]: credentialId },
         })
         .user()
     } else {
@@ -680,30 +683,25 @@ export class DbAuthHandler {
 
     const credentials = await this.dbCredentialAccessor.findMany({
       where: {
-        [this.options.webAuthn.credentialFields.userId]:
+        [webAuthnOptions.credentialFields.userId]:
           user[this.options.authFields.id],
       },
     })
 
-    const options: GenerateAuthenticationOptionsOpts = {
-      timeout: this.options.webAuthn.timeout || 60000,
-      allowCredentials: credentials.map((cred: any) => ({
-        // @ts-ignore
-        id: base64url.toBuffer(cred[this.options.webAuthn.credentialFields.id]),
+    const someOptions: GenerateAuthenticationOptionsOpts = {
+      timeout: webAuthnOptions.timeout || 60000,
+      allowCredentials: credentials.map((cred: Record<string, string>) => ({
+        id: base64url.toBuffer(cred[webAuthnOptions.credentialFields.id]),
         type: 'public-key',
-        // @ts-ignore
-        transports: cred[this.options.webAuthn.credentialFields.transports]
-          ? JSON.parse(
-              // @ts-ignore
-              cred[this.options.webAuthn.credentialFields.transports]
-            )
+        transports: cred[webAuthnOptions.credentialFields.transports]
+          ? JSON.parse(cred[webAuthnOptions.credentialFields.transports])
           : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
       })),
       userVerification: 'required',
-      rpID: this.options.webAuthn.domain,
+      rpID: webAuthnOptions.domain,
     }
 
-    const authOptions = generateAuthenticationOptions(options)
+    const authOptions = generateAuthenticationOptions(someOptions)
 
     await this._saveChallenge(
       user[this.options.authFields.id],
@@ -957,7 +955,7 @@ export class DbAuthHandler {
   _createSessionHeader(
     data: SessionRecord,
     csrfToken: string
-  ): Record<'Set-Cookie', string> {
+  ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = this._encrypt(session)
     const cookie = [
@@ -1173,7 +1171,14 @@ export class DbAuthHandler {
     }
   }
 
-  _loginResponse(user: Record<string, any>, statusCode = 200) {
+  _loginResponse(
+    user: Record<string, any>,
+    statusCode = 200
+  ): [
+    { id: string },
+    SetCookieHeader & CsrfTokenHeader,
+    { statusCode: number }
+  ] {
     const sessionData = { id: user[this.options.authFields.id] }
 
     // TODO: this needs to go into graphql somewhere so that each request makes
@@ -1193,7 +1198,7 @@ export class DbAuthHandler {
 
   _logoutResponse(
     response?: Record<string, unknown>
-  ): [string, Record<'Set-Cookie', string>] {
+  ): [string, SetCookieHeader] {
     return [
       response ? JSON.stringify(response) : '',
       {
