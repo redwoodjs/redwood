@@ -140,8 +140,13 @@ module.exports = {
             },
             {
               type: 'doc',
+              label: 'Generated Types',
+              id: 'typescript/generated-types',
+            },
+            {
+              type: 'doc',
               label: 'Strict Mode',
-              id: 'typescript/strictmode',
+              id: 'typescript/strict-mode',
             },
           ],
         },

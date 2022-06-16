@@ -52,16 +52,3 @@ yarn rw type-check
 ```
 
 This runs `tsc` on your project and ensures that all the necessary generated types are generated first, including Prisma.
-
-## Auto-generated Types
-
-The CLI automatically generates types for you.
-These generated types not only include your GraphQL queries, but also your named routes, Cells, scenarios, and tests.
-
-When you run `yarn rw dev`, the CLI watches for file changes and triggers the type generator, but you can also trigger it manually:
-
-```
-yarn rw g types
-```
-
-> If you're curious, you can find the generated types in the `.redwood/types`, `web/types/graphql.d.ts`, and `api/types/graphql.d.ts` directories.
