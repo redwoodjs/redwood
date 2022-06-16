@@ -1,10 +1,4 @@
 import type { PrismaClient } from '@prisma/client'
-import {
-  generateRegistrationOptions,
-  verifyRegistrationResponse,
-  generateAuthenticationOptions,
-  verifyAuthenticationResponse,
-} from '@simplewebauthn/server'
 import type {
   GenerateRegistrationOptionsOpts,
   GenerateAuthenticationOptionsOpts,
@@ -570,6 +564,8 @@ export class DbAuthHandler {
 
   // browser submits WebAuthn credentials
   async webAuthnAuthenticate() {
+    const { verifyAuthenticationResponse } = require('@simplewebauthn/server')
+
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
@@ -650,6 +646,8 @@ export class DbAuthHandler {
 
   // get options for a WebAuthn authentication
   async webAuthnAuthOptions() {
+    const { generateAuthenticationOptions } = require('@simplewebauthn/server')
+
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
@@ -717,6 +715,8 @@ export class DbAuthHandler {
 
   // get options for WebAuthn registration
   async webAuthnRegOptions() {
+    const { generateRegistrationOptions } = require('@simplewebauthn/server')
+
     if (!this.options?.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
@@ -750,6 +750,8 @@ export class DbAuthHandler {
 
   // browser submits WebAuthn credentials for the first time on a new device
   async webAuthnRegister() {
+    const { verifyRegistrationResponse } = require('@simplewebauthn/server')
+
     if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
