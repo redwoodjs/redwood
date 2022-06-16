@@ -1207,6 +1207,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-transform-classes@npm:7.18.4":
+  version: 7.18.4
+  resolution: "@babel/plugin-transform-classes@npm:7.18.4"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.16.7
+    "@babel/helper-environment-visitor": ^7.18.2
+    "@babel/helper-function-name": ^7.17.9
+    "@babel/helper-optimise-call-expression": ^7.16.7
+    "@babel/helper-plugin-utils": ^7.17.12
+    "@babel/helper-replace-supers": ^7.18.2
+    "@babel/helper-split-export-declaration": ^7.16.7
+    globals: ^11.1.0
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 931a9f7682b95f02e0dd30358d7dee1dae00ca4f2017f3bd77123f02d420241e403601f66f4cbe729791f4b22b24310e1d56f9fc033e8ee9665b1f2eeaef38de
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-classes@npm:^7.0.0, @babel/plugin-transform-classes@npm:^7.12.1, @babel/plugin-transform-classes@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/plugin-transform-classes@npm:7.16.7"
@@ -1222,24 +1240,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 61b13fd9308711fbf364674c5931fa50619ee98e9e26b44c081e43e8074e7aec96c470b42ddeeda287bab065005229079b39c20074a8cd592f5194b3c7434f74
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-transform-classes@npm:^7.18.4":
-  version: 7.18.4
-  resolution: "@babel/plugin-transform-classes@npm:7.18.4"
-  dependencies:
-    "@babel/helper-annotate-as-pure": ^7.16.7
-    "@babel/helper-environment-visitor": ^7.18.2
-    "@babel/helper-function-name": ^7.17.9
-    "@babel/helper-optimise-call-expression": ^7.16.7
-    "@babel/helper-plugin-utils": ^7.17.12
-    "@babel/helper-replace-supers": ^7.18.2
-    "@babel/helper-split-export-declaration": ^7.16.7
-    globals: ^11.1.0
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 931a9f7682b95f02e0dd30358d7dee1dae00ca4f2017f3bd77123f02d420241e403601f66f4cbe729791f4b22b24310e1d56f9fc033e8ee9665b1f2eeaef38de
   languageName: node
   linkType: hard
 
@@ -6326,7 +6326,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/parser": 7.16.7
-    "@babel/plugin-transform-classes": ^7.18.4
+    "@babel/plugin-transform-classes": 7.18.4
     "@babel/plugin-transform-typescript": 7.16.7
     "@babel/register": 7.16.7
     "@babel/runtime-corejs3": 7.16.7

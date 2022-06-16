@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/parser": "7.16.7",
-    "@babel/plugin-transform-classes": "^7.18.4",
+    "@babel/plugin-transform-classes": "7.18.4",
     "@babel/plugin-transform-typescript": "7.16.7",
     "@babel/register": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
