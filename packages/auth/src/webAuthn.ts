@@ -2,7 +2,7 @@ import {
   platformAuthenticatorIsAvailable,
   startRegistration,
   startAuthentication,
-} from './simplewebauthn'
+} from '@simplewebauthn/browser'
 
 export class WebAuthnRegistrationError extends Error {
   constructor(message: string) {
