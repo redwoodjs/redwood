@@ -16,8 +16,8 @@ export const config = {
 }
 
 // required packages to install
-export const webPackages = []
-export const apiPackages = []
+export const webPackages = ['@simplewebauthn/browser']
+export const apiPackages = ['@simplewebauthn/server']
 
 const functionsPath = getPaths().api.functions.replace(getPaths().base, '')
 const libPath = getPaths().api.lib.replace(getPaths().base, '')
