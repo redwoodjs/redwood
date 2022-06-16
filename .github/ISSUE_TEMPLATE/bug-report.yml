@@ -1,0 +1,139 @@
+name: "🐛 Bug report"
+description: "Is something not working the way it should be?"
+
+title: "[Bug?]: "
+labels: bug/needs-info
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        > **Whoa, what is this?**
+
+        >
+
+        > This is an issue form, a new type of issue template.
+        We're trying it out because we want...
+
+        > 1. issues to be more structured, (specifically, bug reports)
+
+        > 2. to be more upfront about our process—i.e., what happens after you open an issue (see the paragraph below)
+
+        >
+
+        > We want the process of opening an issue to be smooth for you as a contributor,
+        so please do let us know what you think [over on the forums](https://community.redwoodjs.com/t/what-do-you-think-of-the-new-github-issue-forms/3463).
+
+
+        Thanks for taking the time to open an issue!
+        Here's a bit of background on what you can expect about the process:
+
+        - Expect a response from us (the core team) within three to seven days.
+          - Usually we'll respond sooner than that, but sometimes we have a lot on our plate. Thanks for your patience!
+
+        > **But what if this is critical?**
+
+        >
+
+        > We're aware of issues as soon as they're opened,
+        but just don't always respond straightaway.
+        Too much task switching is a productivity killer.
+        So don't worry, we're pretty good about escalating critical issues.
+        But if you think we're taking too long,
+        feel free to ping us (after you open this) on the thread here on GitHub
+        or DM one of us on the [forums](https://community.redwoodjs.com/g/Core-Team) or [Discord](https://discord.gg/redwoodjs)
+
+        - After you open this, the Redwood bot will assign a core team member to it. They'll triage it.
+          - If they don't within three to seven days, the Redwood bot will ping them. You should feel free to ping them too!
+
+  - type: textarea
+    attributes:
+      label: What's not working?
+      description: >
+        Describe the bug here.
+        The more detail you provide, the better,
+        but try to start with a summary to frame the issue.
+        See the placeholder below for an example.
+      placeholder: >
+        The dev server doesn't seem to be working.
+        When I run `yarn rw dev`,
+        the web side doesn't start and throws `TypeError: cli.isMultipleCompiler is not a function`.
+        I was just following the tutorial when I ran into this,
+        so nothing fancy going on here.
+
+
+        I think this probably has to do with [webpack-cli](https://github.com/webpack/webpack-cli).
+        I skimmed the issues on their repo and it looks like they just released a new version.
+        If we bump the version Redwood is using, it may resolve this.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: How do we reproduce the bug?
+      description: >
+        What commands do we need to run?
+        What packages do we need to install?
+        What does the `schema.prisma` need to look like?
+        Again, the more detail, the better!
+
+
+        Have a repo on GitHub with the reproduction? Amazing—include the link here.
+
+
+        Can't provide a reproduction?
+        We understand that you can't always provide one,
+        but it'll be much harder for us to debug without one.
+        Any information is invaluable.
+      placeholder: |
+        1. create a new redwood app
+        2. start the dev server
+
+        ```shell
+        yarn create redwood-app redwood-app
+        # ...
+        cd redwood-app
+        yarn rw dev
+        # ...
+        web | [webpack-cli] TypeError: cli.isMultipleCompiler is not a function
+        ```
+    validations:
+        required: true
+
+  - type: textarea
+    attributes:
+      label: What's your environment?
+      render: shell
+      description: |
+        Run `yarn rw info` and paste the output here.
+      placeholder: |
+        System:
+          OS: macOS 12.3.1
+          Shell: 5.8 - /bin/zsh
+        Binaries:
+          Node: 16.15.1 - /private/var/folders/dt/yks4v5m53k114qxgz6jh4pgw0000gn/T/xfs-0cbbe6f7/node
+          Yarn: 3.2.1 - /private/var/folders/dt/yks4v5m53k114qxgz6jh4pgw0000gn/T/xfs-0cbbe6f7/yarn
+        Databases:
+          SQLite: 3.37.0 - /usr/bin/sqlite3
+        Browsers:
+          Chrome: 102.0.5005.115
+          Safari: 15.4
+        npmPackages:
+          @redwoodjs/core: 1.5.2 => 1.5.2
+    validations:
+        required: true
+
+  - type: checkboxes
+    attributes:
+      label: Are you interested in working on this?
+      description: >
+        No pressure—this is totally optional!
+        We just want to invite you to contribute to Redwood.
+        If you choose to contribute, the core team will be there to help you the whole way.
+
+
+        In some cases, if this issue is triaged as being lower priority,
+        your willing- and ableness to work on this will land it faster than waiting for a core team member to pick it up.
+        But if this is critical, it'll of course be escalated.
+      options:
+        - label: I'm interested in working on this
