@@ -21,7 +21,7 @@ export type DbAuthConfig = {
 }
 
 export const dbAuth = (
-  _client: DbAuth,
+  client: any,
   config: DbAuthConfig = { fetchConfig: { credentials: 'same-origin' } }
 ): AuthClient => {
   const { credentials } = config.fetchConfig
@@ -102,7 +102,7 @@ export const dbAuth = (
 
   return {
     type: 'dbAuth',
-    client: () => null,
+    client,
     login,
     logout,
     signup,

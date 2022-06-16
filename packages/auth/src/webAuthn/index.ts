@@ -41,13 +41,13 @@ export class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
   }
 }
 
-export const isWebAuthnSupported = async () => {
+export const isSupported = async () => {
   return await platformAuthenticatorIsAvailable()
 }
 
-export const isWebAuthnEnabled = () => !!document.cookie.match(/webAuthn/)
+export const isEnabled = () => !!document.cookie.match(/webAuthn/)
 
-export const getWebAuthnAuthOptions = async () => {
+export const authenticationOptions = async () => {
   let response
 
   try {
@@ -83,8 +83,8 @@ export const getWebAuthnAuthOptions = async () => {
   return options
 }
 
-export const webAuthnAuthenticate = async () => {
-  const options = await getWebAuthnAuthOptions()
+export const authenticate = async () => {
+  const options = await authenticationOptions()
 
   try {
     const browserResponse = await startAuthentication(options)
@@ -123,7 +123,7 @@ export const webAuthnAuthenticate = async () => {
   }
 }
 
-export const getWebAuthnRegOptions = async () => {
+export const registrationOptions = async () => {
   let optionsResponse
 
   try {
@@ -152,8 +152,8 @@ export const getWebAuthnRegOptions = async () => {
   return options
 }
 
-export const webAuthnRegister = async () => {
-  const options = await getWebAuthnRegOptions()
+export const register = async () => {
+  const options = await registrationOptions()
   let regResponse
 
   try {
