@@ -8,6 +8,7 @@ import type {
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
+import type { WebAuthnClientType } from './webAuthn'
 
 export interface CurrentUser {
   roles?: Array<string> | string
@@ -89,7 +90,7 @@ type AuthProviderProps =
       skipFetchCurrentUser?: boolean
     }
   | {
-      client?: Pick<SupportedAuthClients, 'dbAuth'>
+      client?: WebAuthnClientType
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
