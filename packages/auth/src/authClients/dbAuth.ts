@@ -13,7 +13,7 @@ export interface ResetPasswordAttributes {
 
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
-export type DbAuth = () => null | WebAuthnClientType
+export type DbAuth = undefined | WebAuthnClientType
 
 export type DbAuthConfig = {
   fetchConfig: {
