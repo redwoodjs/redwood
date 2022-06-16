@@ -94,7 +94,7 @@ export const cognito = (client: CognitoUserPool): AuthClient => {
                 reject(err)
               }
 
-              resolve(session.getIdToken().getJwtToken())
+              resolve(session.getAccessToken().getJwtToken())
             })
         } catch (error) {
           reject(error)
