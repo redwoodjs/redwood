@@ -6302,6 +6302,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
+    "@redwoodjs/auth": 1.5.2
     "@redwoodjs/internal": 1.5.2
     "@redwoodjs/router": 1.5.2
     "@redwoodjs/structure": 1.5.2
