@@ -35,6 +35,7 @@
     "@clerk/types": "2.14.0",
     "@nhost/hasura-auth-js": "1.1.14",
     "@nhost/nhost-js": "1.1.14",
+    "@simplewebauthn/browser": "^5.2.1",
     "@simplewebauthn/typescript-types": "^5.2.1",
     "@supabase/supabase-js": "1.35.3",
     "@types/netlify-identity-widget": "1.9.3",
