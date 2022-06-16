@@ -690,7 +690,7 @@ const createUser = (input) => {
 }
 ```
 
-:::caution If you are overwriting the DATABASE_URL in your `src/lib/db` instantiation of the PrismaClient, you need to use this option. If not provided, a vanilla `new PrismaClient()` is used to run the callback.
+> If you are overwriting the DATABASE_URL in your `src/lib/db` instantiation of the PrismaClient, you need to use this option. If not provided, a vanilla `new PrismaClient()` is used to run the callback.
 
 Be sure that both your callback and the surrounding `validateUniqueness()` function are `return`ed or else your service function will have nothing to return to its consumers, like GraphQL.
 
