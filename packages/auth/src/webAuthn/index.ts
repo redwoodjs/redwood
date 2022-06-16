@@ -4,35 +4,35 @@ import {
   startAuthentication,
 } from '@simplewebauthn/browser'
 
-export class WebAuthnRegistrationError extends Error {
+class WebAuthnRegistrationError extends Error {
   constructor(message: string) {
     super(message)
     this.name = 'WebAuthnRegistrationError'
   }
 }
 
-export class WebAuthnAuthenticationError extends Error {
+class WebAuthnAuthenticationError extends Error {
   constructor(message: string) {
     super(message)
     this.name = 'WebAuthnAuthenticationError'
   }
 }
 
-export class WebAuthnAlreadyRegisteredError extends WebAuthnRegistrationError {
+class WebAuthnAlreadyRegisteredError extends WebAuthnRegistrationError {
   constructor() {
     super('This device is already registered')
     this.name = 'WebAuthnAlreadyRegisteredError'
   }
 }
 
-export class WebAuthnDeviceNotFoundError extends WebAuthnAuthenticationError {
+class WebAuthnDeviceNotFoundError extends WebAuthnAuthenticationError {
   constructor() {
     super('WebAuthn device not found')
     this.name = 'WebAuthnDeviceNotFoundError'
   }
 }
 
-export class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
+class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
   constructor() {
     super(
       "This device was not recognized. Use username/password login, or if you're using iOS you can try reloading this page"
@@ -41,13 +41,13 @@ export class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
   }
 }
 
-export const isSupported = async () => {
+const isSupported = async () => {
   return await platformAuthenticatorIsAvailable()
 }
 
-export const isEnabled = () => !!document.cookie.match(/webAuthn/)
+const isEnabled = () => !!document.cookie.match(/webAuthn/)
 
-export const authenticationOptions = async () => {
+const authenticationOptions = async () => {
   let response
 
   try {
@@ -83,7 +83,7 @@ export const authenticationOptions = async () => {
   return options
 }
 
-export const authenticate = async () => {
+const authenticate = async () => {
   const options = await authenticationOptions()
 
   try {
@@ -123,7 +123,7 @@ export const authenticate = async () => {
   }
 }
 
-export const registrationOptions = async () => {
+const registrationOptions = async () => {
   let optionsResponse
 
   try {
@@ -152,7 +152,7 @@ export const registrationOptions = async () => {
   return options
 }
 
-export const register = async () => {
+const register = async () => {
   const options = await registrationOptions()
   let regResponse
 
@@ -189,3 +189,9 @@ export const register = async () => {
     return true
   }
 }
+
+const WebAuthnClient = { isSupported, isEnabled, authenticate, register }
+
+export default WebAuthnClient
+
+export type WebAuthnClientType = typeof WebAuthnClient
