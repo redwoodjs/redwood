@@ -291,10 +291,10 @@ export const userProfiles: QueryResolvers['userProfiles'] = () => {
 `;
 
 exports[`in typescript mode creates a multi word service test file 1`] = `
-"import { userProfiles } from './userProfiles'
+"import type { UserProfile } from '@prisma/client'
 
+import { userProfiles } from './userProfiles'
 import type { StandardScenario } from './userProfiles.scenarios'
-import type { UserProfile } from '@prisma/client'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -313,16 +313,16 @@ describe('userProfiles', () => {
 `;
 
 exports[`in typescript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
-"import {
+"import type { Transaction } from '@prisma/client'
+
+import {
   transactions,
   transaction,
   createTransaction,
   updateTransaction,
   deleteTransaction,
 } from './transactions'
-
 import type { StandardScenario } from './transactions.scenarios'
-import type { Transaction } from '@prisma/client'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -529,10 +529,10 @@ export type StandardScenario = ScenarioData<User, 'user'>
 `;
 
 exports[`in typescript mode creates a single word service test file 1`] = `
-"import { users, user, createUser, updateUser, deleteUser } from './users'
+"import type { User } from '@prisma/client'
 
+import { users, user, createUser, updateUser, deleteUser } from './users'
 import type { StandardScenario } from './users.scenarios'
-import type { User } from '@prisma/client'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
