@@ -1,4 +1,5 @@
 import { AuthClient } from './index'
+import type { WebAuthnClientType } from '../webAuthn'
 
 export interface LoginAttributes {
   username: string
@@ -12,7 +13,7 @@ export interface ResetPasswordAttributes {
 
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
-export type DbAuth = () => null
+export type DbAuth = () => null | WebAuthnClientType
 
 export type DbAuthConfig = {
   fetchConfig: {

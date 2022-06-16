@@ -78,7 +78,7 @@ export const AuthContext = React.createContext<AuthContextInterface>({
 type AuthProviderProps =
   | {
       client: SupportedAuthClients
-      type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
+      type: Omit<SupportedAuthTypes, 'clerk' | 'dbAuth'>
       config?: never
       skipFetchCurrentUser?: boolean
     }
@@ -89,7 +89,7 @@ type AuthProviderProps =
       skipFetchCurrentUser?: boolean
     }
   | {
-      client?: never
+      client?: Pick<SupportedAuthClients, 'dbAuth'>
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
