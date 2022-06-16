@@ -54,6 +54,7 @@ if (!RUNTIME_CORE_JS_VERSION) {
 
 export const getCommonPlugins = () => {
   return [
+    ['@babel/plugin-transform-classes'],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the
     // same as @babel/plugin-proposal class-properties.
