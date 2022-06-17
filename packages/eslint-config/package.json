@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "1.5.2",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -15,7 +15,7 @@
     "@babel/core": "7.16.7",
     "@babel/eslint-parser": "7.16.5",
     "@babel/eslint-plugin": "7.16.5",
-    "@redwoodjs/internal": "1.5.2",
+    "@redwoodjs/internal": "2.0.0",
     "@typescript-eslint/eslint-plugin": "5.26.0",
     "@typescript-eslint/parser": "5.26.0",
     "eslint": "8.16.0",
