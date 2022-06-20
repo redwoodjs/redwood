@@ -52,7 +52,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    * Object containing forgot password options
    */
   forgotPassword: {
-    handler: (user: TUser) => Promise<Partial<TUser>> | Partial<TUser>
+    handler: (user: TUser) => any
     errors?: {
       usernameNotFound?: string
       usernameRequired?: string
@@ -88,7 +88,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
    * Object containing reset password options
    */
   resetPassword: {
-    handler: (user: TUser) => Promise<Partial<TUser>> | Partial<TUser>
+    handler: (user: TUser) => boolean
     allowReusedPassword: boolean
     errors?: {
       resetTokenExpired?: string
@@ -109,9 +109,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
      * were included in the object given to the `signUp()` function you got
      * from `useAuth()`
      */
-    handler: (
-      signupHandlerOptions: SignupHandlerArgs
-    ) => Promise<Partial<TUser>> | Partial<TUser>
+    handler: (signupHandlerOptions: SignupHandlerArgs) => any
     /**
      * Object containing error strings
      */
