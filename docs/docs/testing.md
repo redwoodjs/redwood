@@ -1639,7 +1639,7 @@ Only the scenarios named for your test are included at the time the test is run.
 
 Only the posts scenarios will be present in the database when running the `posts.test.js` and only comments scenarios will be present when running `comments.test.js`. And within those scenarios, only the `standard` scenario will be loaded for each test unless you specify a differently named scenario to use instead.
 
-During the run of any single test, there is only every one scenario's worth of data present in the database: users.standard *or* users.incomplete.
+During the run of any single test, there is only ever one scenario's worth of data present in the database: users.standard *or* users.incomplete.
 
 ### mockCurrentUser() on the API-side
 
