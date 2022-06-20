@@ -565,6 +565,10 @@ Redwood's integration of Clerk is based on [Clerk's React SDK](https://docs.cler
 
 +++ View Installation and Setup
 
+> **Azure AD B2C Compatibility Note**
+>
+>  Microsoft [Azure AD B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview) auth product *is* compatible with this auth provider. See below for additional configuration details.
+
 #### Installation
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
@@ -654,6 +658,45 @@ await getToken({
 ```
 
 See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.publicclientapplication.html#acquiretokensilent), [Resources and Scopes](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#resources-and-scopes) or [full class documentation](https://pub.dev/documentation/msal_js/latest/msal_js/PublicClientApplication-class.html#constructors) for more documentation.
+
+### Azure AD B2C specific configuration
+
+Using Azure AD B2C with [hosted user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/add-sign-up-and-sign-in-policy?pivots=b2c-user-flow) requires 2 extra settings
+
+#### Update the .env file:
+
+- [MS Documentation about B2C JWT Issuer](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview)
+
+- [MS Documentation about MSAL, Azure B2C (authority|known authorities) parameters](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/working-with-b2c.md
+)
+
+``` bash title="./.env"
+
+AZURE_ACTIVE_DIRECTORY_AUTHORITY=https://{your-microsoft-tenant-name}.b2clogin.com/{{your-microsoft-tenant-name}}.onmicrosoft.com/{{your-microsoft-user-flow-id}}
+
+AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://{{your_microsoft_tenant_name}}.b2clogin.com/{{your_microsoft_tenant_id}}/v2.0/
+
+AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://{{ms_tenant_name}}.b2clogin.com
+
+```
+
+#### Update const activeDirectoryClient instance
+ This lets the MSAL (Microsoft Authenication Library) web side client know about our new B2C allowed authority that we defined in the .env file
+``` jsx title="./web/App.jsx|.tsx
+
+const azureActiveDirectoryClient = new PublicClientApplication({
+    auth: {
+      clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
+      authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
+      redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
+      postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
+      // highlight-next-line
+      knownAuthorities:[process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
+    },
+  })
+```
+
+Now you can call the login and logout functions from useAuth(), and everything should just work®
 
 +++
 
