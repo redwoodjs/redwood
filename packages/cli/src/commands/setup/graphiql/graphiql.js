@@ -34,7 +34,7 @@ const getExpiryTime = (expiry) => {
 
 const getDBAuthHeader = (userId) => {
   if (!userId) {
-    throw new Error('Require unique id to generate session cookie')
+    throw new Error('Require an unique id to generate session cookie')
   }
 
   if (!process.env.SESSION_SECRET) {
@@ -103,7 +103,7 @@ const supportedProviders = {
   netlify: { getPayload: getNetlifyPayload, env: '"secret-123"' },
 }
 
-const generatePayload = (provider, id, token, expiry) => {
+export const generatePayload = (provider, id, token, expiry) => {
   if (token) {
     return {
       'auth-provider': provider,
@@ -147,12 +147,11 @@ export const getOutputPath = () => {
   )
 }
 
-const printHeaders = async () => {
+export const printHeaders = async () => {
   // Import babel settings so we can write es6 scripts
   registerApiSideBabelHook()
 
   const srcPath = getOutputPath()
-
   if (!existsAnyExtensionSync(srcPath) && `File doesn't exist`) {
     throw new Error(
       'Must run yarn rw setup graphiql <provider> to generate headers before viewing'
@@ -271,7 +270,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
 
   try {
     if (view) {
-      return printHeaders()
+      return await printHeaders()
     }
     await tasks.run()
   } catch (e) {
