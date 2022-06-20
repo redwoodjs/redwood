@@ -10,7 +10,7 @@ import type { AuthClient } from './'
 export type { AzureActiveDirectory }
 
 export type AzureActiveDirectoryClient = AzureActiveDirectory
-export interface AzureActiveDirectoryUser { }
+export interface AzureActiveDirectoryUser {}
 
 export const azureActiveDirectory = (
   client: AzureActiveDirectoryClient
@@ -69,8 +69,7 @@ export const azureActiveDirectory = (
               client.loginRedirect()
           }
         }
-      }
-      )
+      })
     },
   }
 }
