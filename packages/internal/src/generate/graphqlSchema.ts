@@ -89,7 +89,7 @@ export const generateGraphQLSchema = async () => {
   }
 
   const options: CodegenTypes.GenerateOptions = {
-    config: {},
+    config: {}, // no extra config needed for merged schema file generation
     plugins: [{ 'schema-ast': {} }],
     pluginMap: { 'schema-ast': schemaAstPlugin },
     schema: {} as unknown as DocumentNode,

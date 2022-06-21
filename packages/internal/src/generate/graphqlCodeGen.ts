@@ -134,8 +134,8 @@ function getPluginConfig() {
 
     // Include Prisma's JSON field types as these types exist to match the types supported by JSON.parse()
     // see: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields
-    prismaModels['JsonObject'] = `.prisma/client#Prisma`
-    prismaModels['JsonValue'] = `.prisma/client#Prisma`
+    // We're doing this to avoid adding an extra import statement just for the Prisma namespace
+    prismaModels['JSON'] = `.prisma/client#Prisma`
   } catch (error) {
     // This means they've not set up prisma types yet
   }
@@ -146,8 +146,6 @@ function getPluginConfig() {
     namingConvention: 'keep', // to allow camelCased query names
     scalars: {
       // We need these, otherwise these scalars are mapped to any
-      // @TODO is there a way we can use scalars defined in
-      // packages/graphql-server/src/rootSchema.ts
       BigInt: 'number',
       DateTime: 'string',
       Date: 'string',
