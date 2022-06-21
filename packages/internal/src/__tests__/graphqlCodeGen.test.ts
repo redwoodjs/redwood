@@ -52,10 +52,9 @@ test('Generate gql typedefs api', async () => {
         expect(file).toMatch(path.join('api', 'types', 'graphql.d.ts'))
         expect(data).toMatchSnapshot()
 
-          // Check that JSON types are imported from prisma
+        // Check that JSON types are imported from prisma
         expect(data).toContain('JSON: Prisma.JsonValue;')
         expect(data).toContain('JSONObject: Prisma.JsonObject;')
-
       }
     )
 
@@ -63,8 +62,6 @@ test('Generate gql typedefs api', async () => {
 
   expect(apiPaths).toHaveLength(1)
   expect(apiPaths[0]).toMatch(path.join('api', 'types', 'graphql.d.ts'))
-
-  
 })
 
 test('respects user provided codegen config', async () => {
