@@ -874,6 +874,7 @@ export class DbAuthHandler {
     })
   }
 
+  // returns the string for the webAuthn set-cookie header
   _webAuthnCookie(id: string, expires: any) {
     return [
       `webAuthn=${id}`,
@@ -947,11 +948,13 @@ export class DbAuthHandler {
     return meta
   }
 
+  // encrypts a string with the SESSION_SECRET
   _encrypt(data: string) {
     return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
   }
 
-  // returns the Set-Cookie header to be returned in the request (effectively creates the session)
+  // returns the Set-Cookie header to be returned in the request (effectively
+  // creates the session)
   _createSessionHeader(
     data: SessionRecord,
     csrfToken: string
@@ -966,8 +969,8 @@ export class DbAuthHandler {
     return { 'Set-Cookie': cookie }
   }
 
-  // checks the CSRF token in the header against the CSRF token in the session and
-  // throw an error if they are not the same (not used yet)
+  // checks the CSRF token in the header against the CSRF token in the session
+  // and throw an error if they are not the same (not used yet)
   _validateCsrf() {
     if (this.sessionCsrfToken !== this.headerCsrfToken) {
       throw new DbAuthError.CsrfTokenMismatchError()
@@ -1005,6 +1008,7 @@ export class DbAuthHandler {
     return user
   }
 
+  // removes the resetToken from the database
   async _clearResetToken(user: Record<string, unknown>) {
     try {
       await this.dbAccessor.update({
