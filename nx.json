@@ -14,9 +14,12 @@
       }
     }
   },
-  "targetDependencies": {
-    "test": [],
-    "build": []
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
   },
   "pluginsConfig": {
     "@nrwl/js": {
