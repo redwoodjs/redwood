@@ -3,8 +3,6 @@ title: TypeScript Strict Mode
 description: TS Strict mode, tips and tricks
 ---
 
-import CodeBlock from '@theme/CodeBlock';
-
 Wow, looks like you're ready to level up your TypeScript game! Redwood does support strict mode, but does not enable it by default. While strict mode does indeed give you a lot more safety, it does make your code a bit more verbose - and will require you to make small manual changes if you use the CLI to generate your services and components.
 
 ## Enabling strict mode
@@ -24,18 +22,26 @@ Redwood's type generators will tweak the generated types too, so make sure you r
 ## Manual tweaks to generated code
 This section will cover the various changes you'll need to make, once in strict mode, to remove those pesky red underlines!
 
-### Service tests on the API side
+### Service functions & tests on the API side
 By default Redwood's generators assume that service functions don't require any function parameters.
 
 While this is true, in the strictest sense, all GraphQL resolvers take some sort of input, so you'll need to modify the test, and usages of your service functions that have been typed with `QueryResolvers` or `MutationResolvers`
 
-```js
+```ts
 // api/src/services/posts/posts.test.ts
 
 scenario('returns all posts', async (scenario: StandardScenario) => {
   const result = await posts() // 🛑 error
   const result = await posts({}) // ✅
 ```
+
+If you're calling your service functions from elsewhere, you will get errors if you don't pass any arguments.
+
+:::info **Why this happens in strict mode**
+Under strict mode, Redwood will generate different types for `QueryResolvers` and `MutationResolvers`, where the first argument - args is no longer non-optional.
+
+We realise this isn't a perfect solution - but the tension here comes from the fact that we can't define different types for when a service is called from inside a graphql (as a resolver), versus when it is called from anywhere else (where the first argument does not _have_ to exist)
+:::
 
 ### Returning `Prisma.findUnique` operations in services
 In strict mode, TypeScript will become a lot more pedantic about null checks, in particular whenever you use Prisma's `findUnique` in the resolvers.
@@ -177,18 +183,32 @@ export const hasRole = (roles: AllowedRoles): boolean => {
 
 
 
-
 ### `getCurrentUser` in `src/lib/auth`
 Depending on the auth provider you have setup - i.e. anything but dbAuth - at the time of setup, we cannot know the shape of your decoded token, because it could change based on your account settings. For example, you may choose to include roles or other metadata.
 
-You'll have to make sure your getCurrentUser function is typed. For example:
+You'll have to make sure your getCurrentUser function is typed. The comments above the getCurrentUser function describe their types, to help you get started. It is recommended that you type `decoded` without using imported types from Redwood, as this may be a little too generic!
 
-TODO add generic for GetCurrentUser
+<details>
+<summary>Example of typing the getCurrentUser function</summary>
+
+```ts
+import type { AuthContextPayload } from '@redwoodjs/api'
+
+
+// Example 1: Directly typing
+export const getCurrentUser: CurrentUserFunc = async (
+  decoded: {id: string, name: string},
+  { token, type }: {token: string, type: string},
+) => {
+    //...
+
+// Example 2: Using the AuthContextPayload type
+export const getCurrentUser: CurrentUserFunc = async (
+  decoded: {id: string, name: string},
+  { token, type }: AuthContextPayload[1],
+  { event, context }: AuthContextPayload[2]
+) => {
+  //....
 
 ```
-// ./api/src/lib/auth.ts
-
-
-```
-
-### Calling service functions
+</details>
