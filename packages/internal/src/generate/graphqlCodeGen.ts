@@ -131,6 +131,11 @@ function getPluginConfig() {
     if (prismaModels.RW_DataMigration) {
       delete prismaModels.RW_DataMigration
     }
+
+    // Include Prisma's JSON field types as these types exist to match the types supported by JSON.parse()
+    // see: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields
+    prismaModels['JsonObject'] = `.prisma/client#Prisma`
+    prismaModels['JsonValue'] = `.prisma/client#Prisma`
   } catch (error) {
     // This means they've not set up prisma types yet
   }
@@ -146,8 +151,8 @@ function getPluginConfig() {
       BigInt: 'number',
       DateTime: 'string',
       Date: 'string',
-      JSON: 'Record<string, unknown>',
-      JSONObject: 'Record<string, unknown>',
+      JSON: 'Prisma.JsonValue',
+      JSONObject: 'Prisma.JsonObject',
       Time: 'string',
     },
     // prevent type names being PetQueryQuery, RW generators already append

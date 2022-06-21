@@ -20,17 +20,6 @@ export const generateGraphQLSchema = async () => {
     'directives/**/*.{js,ts}': {},
   }
 
-  const config = {
-    scalars: {
-      BigInt: 'number',
-      DateTime: 'string',
-      Date: 'string',
-      JSON: 'Record<string, unknown>',
-      JSONObject: 'Record<string, unknown>',
-      Time: 'string',
-    },
-  }
-
   const loadSchemaConfig: LoadSchemaOptions = {
     assumeValidSDL: true,
     sort: true,
@@ -38,7 +27,6 @@ export const generateGraphQLSchema = async () => {
     includeSources: true,
     cwd: getPaths().api.src,
     schema: Object.keys(schemaPointerMap),
-    config,
     generates: {
       [getPaths().generated.schema]: {
         plugins: ['schema-ast'],
@@ -101,7 +89,7 @@ export const generateGraphQLSchema = async () => {
   }
 
   const options: CodegenTypes.GenerateOptions = {
-    config,
+    config: {},
     plugins: [{ 'schema-ast': {} }],
     pluginMap: { 'schema-ast': schemaAstPlugin },
     schema: {} as unknown as DocumentNode,
