@@ -199,7 +199,7 @@ const checkAuthProviderExists = async () => {
 }
 
 // the files to create to support auth
-export const files = (provider, { webAuthn }) => {
+export const files = ({ provider, webAuthn }) => {
   const templates = getTemplates()
   let files = {}
 
@@ -330,7 +330,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (yargs) => {
-  const { provider, force, rwVersion, webAuthn } = yargs
+  const { provider, rwVersion, webAuthn } = yargs
+  let force = yargs.force
   let providerData
 
   if (webAuthn) {
@@ -361,7 +362,7 @@ export const handler = async (yargs) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files(provider), {
+            return writeFilesTask(files(yargs), {
               overwriteExisting: force,
             })
           } else {
