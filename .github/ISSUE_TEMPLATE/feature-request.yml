@@ -4,34 +4,6 @@ description: "Have an idea for a new feature?"
 title: "[Feature request]: "
 
 body:
-  - type: markdown
-    attributes:
-      value: >
-        > **Whoa, what is this?**
-
-        >
-
-        > This is an issue form, a new type of issue template.
-        We're trying it out because we want...
-
-        > 1. issues to be more structured, (specifically, bug reports)
-
-        > 2. to be more upfront about our process—i.e., what happens after you open an issue (see the paragraph below)
-
-        >
-
-        > We want the process of opening an issue to be smooth for you as a contributor,
-        so please do let us know what you think [over on the forums](https://community.redwoodjs.com/t/what-do-you-think-of-the-new-github-issue-forms/3463).
-
-
-        Thanks for taking the time to open an issue!
-        Here's a bit of background on what you can expect about the process:
-
-        - Expect a response from us (the core team) within three to seven days.
-          - Usually we'll respond sooner than that, but sometimes we have a lot on our plate. Thanks for your patience!
-        - After you open this, the Redwood bot will assign a core team member to it. They'll triage it.
-          - If they don't within three to seven days, the Redwood bot will ping them. You should feel free to ping them too!
-
   - type: textarea
     attributes:
       label: Summary and description
@@ -39,16 +11,13 @@ body:
         The body of the issue, just like a regular GitHub issue.
         The more detail you provide, the better,
         but try to start with a summary to frame the issue.
-        See the placeholder below for an example.
+
 
         Here's a few questions to guide your writing:
 
         - What is this feature about? The CLI? The web side? The api side? Both?
-          - This'll help us figure out whether it's a minor feature request or a major one
-        - Why does Redwood need this feature?
-          - I.e., what's the problem you're running up against?
+        - Why does Redwood need this feature? I.e., what's the problem you're running up against?
         - What would this feature's API look like?
-          - For example, if it's a new CLI command, what options does it take?
       placeholder: >
         This feature request is about the generators.
         I'd like for them to support writing to arbitrary locations on the file system.
@@ -106,8 +75,7 @@ body:
         If you choose to contribute, the core team will be there to help you the whole way.
 
 
-        In some cases, if this issue is triaged as being lower priority,
-        your willing- and ableness to work on this will land it faster than waiting for a core team member to pick it up.
-        But if this is critical, it'll of course be escalated.
+        If this issue is triaged as being lower priority,
+        your willing and ableness to work on this will land it faster than waiting for a core team member to pick it up.
       options:
         - label: I'm interested in working on this
