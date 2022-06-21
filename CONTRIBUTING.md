@@ -16,34 +16,6 @@ Love Redwood and want to get involved? You’re in the right place!
 
 _Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md)._
 
-**Table of Contents**
-
-- [Contributing to the Framework Packages (Reference Doc)](#contributing-to-the-framework-packages-reference-doc)
-  - [Code Organization: Project and Framework](#code-organization-project-and-framework)
-  - [Local Development Setup](#local-development-setup)
-    - [Redwood Framework](#redwood-framework)
-    - [Redwood Project: Setup Options](#redwood-project-setup-options)
-      - [Redwood Functional Test Project](#redwood-functional-test-project)
-    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
-    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-  - [Cloud Developer Environment](#cloud-developer-environment)
-  - [Local QA and Integration Tests](#local-qa-and-integration-tests)
-    - [Build, Lint, Test, and Check](#build-lint-test-and-check)
-    - [E2E Integration Tests](#e2e-integration-tests)
-  - [Troubleshooting Dependencies](#troubleshooting-dependencies)
-  - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
-    - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
-    - [New Yarn Commands and Utilities](#new-yarn-commands-and-utilities)
-    - [Added to CI: dedupe and constraints](#added-to-ci-dedupe-and-constraints)
-    - [About Yarn v3](#about-yarn-v3)
-      - [Benefits](#benefits)
-      - [New Files](#new-files)
-      - [Advanced Cases](#advanced-cases)
-- [Release Publishing](#release-publishing)
-  - [Canary publishing](#canary-publishing)
-  - [Release Candidate publishing](#release-candidate-publishing)
-  - [Publishing New Versions: `@latest`](#publishing-new-versions-latest)
-
 ## Code Organization: Project and Framework
 
 As a Redwood developer, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a **Redwood Project**.
@@ -55,6 +27,23 @@ Here we'll assume your local copy of the Redwood Framework is in a directory cal
 Chances are that you'll have more than a few VS Codes open when you're contributing—one with the Redwood Framework and one with a Redwood Project at least. An easy way to tell which-is-which is by looking for a red bar at the bottom. The one with a red bar is the Redwood Framework:
 
 ![image](https://user-images.githubusercontent.com/32992335/130697522-313317f8-21e5-4f71-8b8e-9690dbad412a.png)
+
+
+## Creating a reproduction to include with issues
+Including a reproduction, either as a series of steps, a public Github repo with the problem you are facing or a Gitpod snapshot will definitely let us help you faster!
+
+### Option 1: Create a Gitpod snapshot
+This is a great option, when the issue you are reporting is cross-platform - so for example, isn't a a Windows specific issue. Here's a video walkthrough on how to create a snapshot link, from the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter)
+
+https://user-images.githubusercontent.com/1521877/174895237-ea00e1a6-fe45-49bb-b69b-491ed82c115e.mp4
+
+### Option 2: Fork a starter repo
+You can always fork the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter) - which is a brand new project with the latest stable version of Redwood.
+
+Once you make your changes in your fork, you can include the link to your repo. This makes its much easier for us to see and understand whats going on.
+
+
+
 
 ## Local Development Setup
 
