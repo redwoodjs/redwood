@@ -151,7 +151,7 @@ interface DbAuthHandlerOptions {
     domain: string
     origin: string
     timeout?: number
-    type?: 'platform' | 'cross-platform'
+    type: 'any' | 'platform' | 'cross-platform'
     credentialFields: {
       id: string
       userId: string
@@ -719,20 +719,30 @@ export class DbAuthHandler {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
+    const webAuthnOptions = this.options.webAuthn
+
     const user = await this._getCurrentUser()
     const options: GenerateRegistrationOptionsOpts = {
-      rpName: this.options.webAuthn.name,
-      rpID: this.options.webAuthn.domain,
+      rpName: webAuthnOptions.name,
+      rpID: webAuthnOptions.domain,
       userID: user[this.options.authFields.id],
       userName: user[this.options.authFields.username],
-      timeout: this.options.webAuthn?.timeout || 60000,
+      timeout: webAuthnOptions?.timeout || 60000,
       excludeCredentials: [],
       authenticatorSelection: {
-        authenticatorAttachment: this.options.webAuthn.type || 'platform',
         userVerification: 'required',
       },
       // Support the two most common algorithms: ES256, and RS256
       supportedAlgorithmIDs: [-7, -257],
+    }
+
+    // if a type is specified other than `any` assign it (the default behavior
+    // of this prop if `undefined` means to allow any authenticator)
+    if (webAuthnOptions.type && webAuthnOptions.type !== 'any') {
+      options.authenticatorSelection = Object.assign(
+        options.authenticatorSelection || {},
+        { authenticatorAttachment: webAuthnOptions.type }
+      )
     }
 
     const regOptions = generateRegistrationOptions(options)
