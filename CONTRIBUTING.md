@@ -40,7 +40,7 @@ https://user-images.githubusercontent.com/1521877/174895237-ea00e1a6-fe45-49bb-b
 ### Option 2: Fork a starter repo
 You can always fork the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter) - which is a brand new project with the latest stable version of Redwood.
 
-Once you make your changes in your fork, you can include the link to your repo. This makes its much easier for us to see and understand whats going on.
+Once you make your changes in your fork, you can include the link to your repo. This makes its much easier for us to see and understand what's going on.
 
 
 
