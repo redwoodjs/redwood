@@ -7,60 +7,50 @@ import { getPaths } from '@redwoodjs/internal'
 
 import c from '../../../../lib/colors'
 
+import { functionsPath, libPath } from './dbAuth'
+
+// copy some identical values from dbAuth provider
+export { task } from './dbAuth'
+
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [],
+  imports: [`import WebAuthnClient from '@redwoodjs/auth/webAuthn'`],
   authProvider: {
     type: 'dbAuth',
+    client: 'WebAuthnClient',
   },
 }
 
 // required packages to install
-export const webPackages = []
-export const apiPackages = []
-
-export const libPath = getPaths().api.lib.replace(getPaths().base, '')
-export const functionsPath = getPaths().api.functions.replace(
-  getPaths().base,
-  ''
-)
-
-export const task = {
-  title: 'Adding SESSION_SECRET...',
-  task: () => {
-    const envPath = path.join(getPaths().base, '.env')
-    const secret = password.randomPassword({
-      length: 64,
-      characters: [password.lower, password.upper, password.digits],
-    })
-    const content = [
-      '# Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.',
-      `SESSION_SECRET=${secret}`,
-      '',
-    ]
-    let envFile = ''
-
-    if (fs.existsSync(envPath)) {
-      envFile = fs.readFileSync(envPath).toString() + '\n'
-    }
-
-    fs.writeFileSync(envPath, envFile + content.join('\n'))
-  },
-}
+export const webPackages = ['@simplewebauthn/browser']
+export const apiPackages = ['@simplewebauthn/server']
 
 // any notes to print out when the job is done
 export const notes = [
   `${c.warning('Done! But you have a little more work to do:')}\n`,
   'You will need to add a couple of fields to your User table in order',
-  'to store a hashed password and salt:',
+  'to store a hashed password, salt, reset token, and to connect it to',
+  'a new UserCredential model to keep track of any devices used with',
+  'WebAuthn authentication:',
   '',
   '  model User {',
   '    id                  Int @id @default(autoincrement())',
   '    email               String  @unique',
-  '    hashedPassword      String    // <─┐',
-  '    salt                String    // <─┼─ add these lines',
-  '    resetToken          String?   // <─┤',
-  '    resetTokenExpiresAt DateTime? // <─┘',
+  '    hashedPassword      String',
+  '    salt                String',
+  '    resetToken          String?',
+  '    resetTokenExpiresAt DateTime?',
+  '    webAuthnChallenge   String? @unique',
+  '    credentials         UserCredential[]',
+  '  }',
+  '',
+  '  model UserCredential {',
+  '    id         String  @id',
+  '    userId     Int',
+  '    user       User    @relation(fields: [userId], references: [id])',
+  '    publicKey  Bytes',
+  '    transports String?',
+  '    counter    BigInt',
   '  }',
   '',
   'If you already have existing user records you will need to provide',
@@ -88,6 +78,7 @@ export const notes = [
   "    salt: 'salt',",
   "    resetToken: 'resetToken',",
   "    resetTokenExpiresAt: 'resetTokenExpiresAt',",
+  "    challenge: 'webAuthnChallenge'",
   '  },',
   '',
   "To get the actual user that's logged in, take a look at `getCurrentUser()`",
@@ -103,8 +94,8 @@ export const notes = [
   '',
   '  yarn rw generate secret',
   '',
-  "Need simple Login, Signup and Forgot Password pages? We've got a generator",
-  'for those as well:',
+  'Need simple Login, Signup, Forgot Password pages and WebAuthn prompts?',
+  "We've got a generator for those as well:",
   '',
-  '  yarn rw generate dbAuth',
+  '  yarn rw generate dbAuth --webAuthn',
 ]

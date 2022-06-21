@@ -199,7 +199,7 @@ const checkAuthProviderExists = async () => {
 }
 
 // the files to create to support auth
-export const files = (provider) => {
+export const files = (provider, { webAuthn }) => {
   const templates = getTemplates()
   let files = {}
 
@@ -207,14 +207,20 @@ export const files = (provider) => {
   for (const [templateProvider, templateFiles] of Object.entries(templates)) {
     if (provider === templateProvider) {
       templateFiles.forEach((templateFile) => {
-        const outputPath =
-          OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
-        const content = fs.readFileSync(templateFile).toString()
-        files = Object.assign(files, {
-          [outputPath]: getProject().isTypeScriptProject
-            ? content
-            : transformTSToJS(outputPath, content),
-        })
+        const shouldUseTemplate =
+          (webAuthn && templateFile.match(/\.webAuthn\./)) ||
+          (!webAuthn && !templateFile.match(/\.webAuthn\./))
+
+        if (shouldUseTemplate) {
+          const outputPath =
+            OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
+          const content = fs.readFileSync(templateFile).toString()
+          files = Object.assign(files, {
+            [outputPath]: getProject().isTypeScriptProject
+              ? content
+              : transformTSToJS(outputPath, content),
+          })
+        }
       })
     }
   }
@@ -228,6 +234,7 @@ export const files = (provider) => {
         : transformTSToJS(templates.base[0], content),
     }
   }
+
   return files
 }
 
@@ -308,6 +315,12 @@ export const builder = (yargs) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
+    .option('webAuthn', {
+      default: false,
+      description:
+        'Include configuration for WebAuthn authentication (only supported by dbAuth)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -316,12 +329,19 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force, rwVersion }) => {
-  const providerData = await import(`./providers/${provider}`)
+export const handler = async (yargs) => {
+  const { provider, force, rwVersion, webAuthn } = yargs
+  let providerData
+
+  if (webAuthn) {
+    providerData = await import(`./providers/${provider}.webAuthn`)
+  } else {
+    providerData = await import(`./providers/${provider}`)
+  }
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
   if (force === false) {
-    if (fs.existsSync(Object.keys(files(provider))[0])) {
+    if (fs.existsSync(Object.keys(files(provider, yargs))[0])) {
       const response = await prompts({
         type: 'confirm',
         name: 'answer',
