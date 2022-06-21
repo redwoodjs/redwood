@@ -5868,6 +5868,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-keycloak/keycloak-ts@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@react-keycloak/keycloak-ts@npm:0.2.4"
+  dependencies:
+    base64-js: ^1.3.1
+    js-sha256: ^0.9.0
+    jwt-decode: ^3.1.2
+  checksum: ce3abeb8946ecb2415279fcb0f9c6095e50278030d8a8a515a4e2e99585b59bbcca2b54a804d42c8d00fe142e8822ec8c855a886c3e84f906d5413a5fd97be75
+  languageName: node
+  linkType: hard
+
 "@redwoodjs/api-server@2.0.0, @redwoodjs/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
@@ -5972,6 +5983,7 @@ __metadata:
     "@clerk/types": 2.14.0
     "@nhost/hasura-auth-js": 1.1.14
     "@nhost/nhost-js": 1.1.14
+    "@react-keycloak/keycloak-ts": ^0.2.4
     "@supabase/supabase-js": 1.35.3
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.45
@@ -20384,6 +20396,13 @@ __metadata:
   version: 1.1.6
   resolution: "js-levenshtein@npm:1.1.6"
   checksum: 14045735325ea1fd87f434a74b11d8a14380f090f154747e613529c7cff68b5ee607f5230fa40665d5fb6125a3791f4c223f73b9feca754f989b059f5c05864f
+  languageName: node
+  linkType: hard
+
+"js-sha256@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "js-sha256@npm:0.9.0"
+  checksum: f20b9245f6ebe666f42ca05536f777301132fb1aa7fbc22f10578fa302717a6cca507344894efdeaf40a011256eb2f7d517b94ac7105bd5cf087fa61551ad634
   languageName: node
   linkType: hard
 

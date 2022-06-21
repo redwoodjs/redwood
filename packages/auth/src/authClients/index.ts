@@ -17,6 +17,8 @@ import { firebase } from './firebase'
 import type { FirebaseClient, FirebaseUser } from './firebase'
 import { goTrue } from './goTrue'
 import type { GoTrue, GoTrueUser } from './goTrue'
+import { keycloak } from './keycloak'
+import type { Keycloak, KeycloakUser } from './keycloak'
 import { magicLink } from './magicLink'
 import type { MagicLink, MagicUser } from './magicLink'
 import { netlify } from './netlify'
@@ -34,6 +36,7 @@ const typesToClients = {
   azureActiveDirectory,
   dbAuth,
   goTrue,
+  keycloak,
   magicLink,
   firebase,
   supabase,
@@ -58,6 +61,7 @@ export type SupportedAuthClients =
   | Ethereum
   | Nhost
   | SuperTokens
+  | Keycloak
   | Custom
 
 export type SupportedAuthTypes = keyof typeof typesToClients
@@ -69,6 +73,7 @@ export type { AzureActiveDirectoryUser }
 export type { DbAuth }
 export type { ClerkUser }
 export type { FirebaseUser }
+export type { KeycloakUser }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
@@ -81,6 +86,7 @@ export type SupportedUserMetadata =
   | ClerkUser
   | FirebaseUser
   | GoTrueUser
+  | KeycloakUser
   | MagicUser
   | SupabaseUser
   | EthereumUser

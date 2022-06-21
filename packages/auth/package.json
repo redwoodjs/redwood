@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
+    "@react-keycloak/keycloak-ts": "^0.2.4",
     "core-js": "3.23.2"
   },
   "devDependencies": {
