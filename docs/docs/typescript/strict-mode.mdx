@@ -55,7 +55,7 @@ You will need to change this in all the services that return directly from a `fi
 
 
 ### Handling null vs undefined in Service functions
-One of the challenges in the Graphql-Prisma world is the difference in the way it treats optionals.
+One of the challenges in the GraphQL-Prisma world is the difference in the way it treats optionals.
 
 - For GraphQL - optional fields can be `null`
 - But... For Prisma - `null` is a value, `undefined` means "do nothing"
@@ -78,7 +78,7 @@ export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
 ### Roles checks for CurrentUser in `src/lib/auth`
 When you setup auth in your project using `yarn rw setup auth <provider>` - we include some template code for handling roles with the `hasRole` function.
 
-While we do runtime checks here to make sure we don't access roles if it doesn't exist, TypeScript in strict mode does not allow it.
+While we do runtime checks here to make sure we don't access roles if it doesn't exist, TypeScript in strict mode will highlight errors, depending on
 
 
 ```typescript
@@ -92,7 +92,10 @@ export const hasRole = (roles: AllowedRoles): boolean => {
   // Error: Property 'roles' does not exist on type '{ id: number; }'.ts(2339)
 ```
 
-You have three options here:
+You will have to adjust the generated code, depending on how your user model is setup.
+
+<details>
+<summary>Example code diffs</summary>
 
 #### A. If your project does not use roles
 If you CurrentUser does not return `roles`, and you do not use this functionality, you can safely remove the `hasRoles` function.
@@ -134,13 +137,11 @@ export const hasRole = (roles: AllowedRoles): boolean => {
 ```
 
 
- #### C. Roles on current user is an Array of strings
+#### C. Roles on current user is an Array of strings
 If in your User model, roles are an array of strings, and can never be just a string, you can safely remove the code
 
-<details>
-<summary>Expand for Example diff</summary>
-<CodeBlock language="diff">
-{`export const hasRole = (roles: AllowedRoles): boolean => {
+```diff
+export const hasRole = (roles: AllowedRoles): boolean => {
   if (!isAuthenticated()) {
     return false
   }
@@ -170,8 +171,8 @@ If in your User model, roles are an array of strings, and can never be just a st
 
   // roles not found
   return false
-}`}
-</CodeBlock>
+}
+```
 </details>
 
 
