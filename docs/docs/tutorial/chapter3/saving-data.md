@@ -344,7 +344,7 @@ Before we plug this into the UI, let's take a look at a nifty GUI you get just b
 
 Often it's nice to experiment and call your API in a more "raw" form before you get too far down the path of implementation only to find out something is missing. Is there a typo in the API layer or the web layer? Let's find out by accessing just the API layer.
 
-When you started development with `yarn redwood dev` (or `yarn rw dev`) you actually started a second process running at the same time. Open a new browser tab and head to [http://localhost:8911/graphql](http://localhost:8911/graphql) This is Apollo Server's [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/), a web-based GUI for GraphQL APIs:
+When you started development with `yarn redwood dev` (or `yarn rw dev`) you actually started a second process running at the same time. Open a new browser tab and head to [http://localhost:8911/graphql](http://localhost:8911/graphql) This is GraphQL Yoga's [GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql), a web-based GUI for GraphQL APIs:
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488164-37663b8a-0bfa-4d52-8312-8cfaac7c2915.png" />
 

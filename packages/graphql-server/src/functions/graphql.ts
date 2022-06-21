@@ -3,7 +3,6 @@ import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
-  useMaskedErrors,
 } from '@graphql-yoga/common'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
@@ -163,14 +162,17 @@ export const createGraphQLHandler = ({
     plugins.push(...extraPlugins)
   }
 
-  // Must be "last" in plugin chain so can process any data added to results and extensions
+  // Must be "last" in plugin chain, but before error masking
+  // so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
   const yoga = createServer({
     schema,
     plugins,
-    maskedErrors: false,
+    maskedErrors: {
+      formatError,
+      errorMessage: defaultError,
+    },
     logging: logger,
     graphiql: isDevEnv
       ? {
