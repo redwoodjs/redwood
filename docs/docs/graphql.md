@@ -9,9 +9,9 @@ GraphQL is a fundamental part of Redwood. Having said that, you can get going wi
 
 ## GraphQL 101
 
-GraphQL is a language that enhance the exchange of data between clients (ex: Redwood React app) and servers (ex: Redwood API).
+GraphQL is a language that enhances the exchange of data between clients (ex: Redwood React app) and servers (ex: Redwood API).
 
-Unlike REST API, a GraphQL Client is performing operations that allows gathering rich data-set.
+Unlike with REST API, a GraphQL Client is performing operations that allow gathering rich data-set.
 GraphQL operations are divided in 2 groups: Queries (to read data) and Mutations (to update/create/delete data).
 
 
@@ -56,11 +56,11 @@ will return the following JSON response:
 }
 ```
 
-As showcased above, GraphQL make fetching data descriptive and predictable (the response is matching the query structure).
+As showcased above, GraphQL makes fetching data descriptive and predictable (the response is matching the query structure).
 
 Again, unlike REST API, a GraphQL API is built upon a Schema that defines which queries and mutations can be performed.
 
-The following schema describes a the Types and Query required to perform the previously showcased `GetProject` query:
+The following schema describes the Types and Query required to perform the previously showcased `GetProject` query:
 
 ```graphql
 type Project {
@@ -79,7 +79,7 @@ type Query {
 ```
 _More information on GraphQL types can be found [on the official GraphQL documentation](https://graphql.org/learn/schema/)_
 
-Finally, the GraphQL Schema is associated to a resolvers map that help resolving each requested fields, for example: `Project.owner`:
+Finally, the GraphQL Schema is associated with a resolvers map that helps resolve each requested field, for example: `Project.owner`:
 
 ```ts
 export const Project = {
@@ -91,7 +91,7 @@ export const Project = {
 _More information on resolvers in the [dedidacted "Understanding Default Resolvers" section](#understanding-default-resolvers._
 
 
-To sum-up, when a GraphQL query reaches a GraphQL API, the following flow is followed:
+To sum up, when a GraphQL query reaches a GraphQL API, the following flow is followed:
 
 ```
 +--------------------+                  +--------------------+
