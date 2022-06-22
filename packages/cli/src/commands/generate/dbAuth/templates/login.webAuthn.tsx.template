@@ -1,12 +1,6 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { useRef, useState } from 'react'
-import {
-  useAuth,
-  isWebAuthnSupported,
-  isWebAuthnEnabled,
-  webAuthnAuthenticate,
-  webAuthnRegister,
-} from '@redwoodjs/auth'
+import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -21,30 +15,30 @@ import { useEffect } from 'react'
 
 const WELCOME_MESSAGE = 'Welcome back!'
 const REDIRECT = routes.home()
-// set to `true` in order to enable TouchID/FaceID/Windows Hello support
-// (see options in api/src/functions/auth.js)
-const USE_WEBAUTHN = true
 
 const LoginPage = ({ type }) => {
-  const { isAuthenticated, loading, logIn, reauthenticate } = useAuth()
+  const {
+    isAuthenticated,
+    client: webAuthn,
+    loading,
+    logIn,
+    reauthenticate,
+  } = useAuth()
   const [shouldShowWebAuthn, setShouldShowWebAuthn] = useState(false)
   const [showWebAuthn, setShowWebAuthn] = useState(
-    USE_WEBAUTHN && isWebAuthnEnabled() && type !== 'password'
+    webAuthn.isEnabled() && type !== 'password'
   )
 
   // should redirect right after login or wait to show the webAuthn prompts?
   useEffect(() => {
-    if (
-      isAuthenticated &&
-      (!USE_WEBAUTHN || !shouldShowWebAuthn || isWebAuthnEnabled())
-    ) {
+    if (isAuthenticated && (!shouldShowWebAuthn || webAuthn.isEnabled())) {
       navigate(REDIRECT)
     }
   }, [isAuthenticated, shouldShowWebAuthn])
 
   // if WebAuthn is enabled, show the prompt as soon as the page loads
   useEffect(() => {
-    if (USE_WEBAUTHN && !loading && !isAuthenticated && showWebAuthn) {
+    if (!loading && !isAuthenticated && showWebAuthn) {
       onAuthenticate()
     }
   }, [loading, isAuthenticated])
@@ -56,20 +50,23 @@ const LoginPage = ({ type }) => {
   }, [])
 
   const onSubmit = async (data) => {
-    const webAuthnSupported = await isWebAuthnSupported()
+    const webAuthnSupported = await webAuthn.isSupported()
 
-    if (USE_WEBAUTHN && webAuthnSupported) {
+    if (webAuthnSupported) {
       setShouldShowWebAuthn(true)
     }
     const response = await logIn({ ...data })
 
     if (response.message) {
+      // auth details good, but user not logged in
       toast(response.message)
     } else if (response.error) {
+      // error while authenticating
       toast.error(response.error)
     } else {
+      // user logged in
       if (webAuthnSupported) {
-        setShowWebAuthn(USE_WEBAUTHN && true)
+        setShowWebAuthn(true)
       } else {
         toast.success(WELCOME_MESSAGE)
       }
@@ -78,7 +75,7 @@ const LoginPage = ({ type }) => {
 
   const onAuthenticate = async () => {
     try {
-      await webAuthnAuthenticate()
+      await webAuthn.authenticate()
       await reauthenticate()
       toast.success(WELCOME_MESSAGE)
       navigate(REDIRECT)
@@ -96,7 +93,7 @@ const LoginPage = ({ type }) => {
 
   const onRegister = async () => {
     try {
-      await webAuthnRegister()
+      await webAuthn.register()
       toast.success(WELCOME_MESSAGE)
       navigate(REDIRECT)
     } catch (e) {
@@ -202,7 +199,7 @@ const LoginPage = ({ type }) => {
 
   const formToRender = () => {
     if (showWebAuthn) {
-      if (isWebAuthnEnabled()) {
+      if (webAuthn.isEnabled()) {
         return <AuthWebAuthnPrompt />
       } else {
         return <RegisterWebAuthnPrompt />
@@ -214,7 +211,7 @@ const LoginPage = ({ type }) => {
 
   const linkToRender = () => {
     if (showWebAuthn) {
-      if (isWebAuthnEnabled()) {
+      if (webAuthn.isEnabled()) {
         return (
           <div className="rw-login-link">
             <span>or login with </span>{' '}

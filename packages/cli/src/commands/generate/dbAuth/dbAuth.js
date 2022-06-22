@@ -48,6 +48,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('webAuthn', {
+      description: 'Generates WebAuthn-enabled login page',
+      type: 'boolean',
+      default: false,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -68,6 +73,7 @@ export const files = ({
   skipLogin,
   skipReset,
   skipSignup,
+  webAuthn,
 }) => {
   const files = []
 
@@ -92,7 +98,9 @@ export const files = ({
         extension: typescript ? '.tsx' : '.js',
         webPathSection: 'pages',
         generator: 'dbAuth',
-        templatePath: 'login.tsx.template',
+        templatePath: webAuthn
+          ? 'login.webAuthn.tsx.template'
+          : 'login.tsx.template',
       })
     )
   }
