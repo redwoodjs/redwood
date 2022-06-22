@@ -40,7 +40,7 @@ import { useAuth } from '@redwoodjs/auth'
 
 export const MyComponent = () => {
   const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
-  
+
   return (
     <ul>
       <li>The current user is: {currentUser}</li>
@@ -79,7 +79,7 @@ export const MyComponent = () => {
       {hasRole('admin') && (
         <Link to={routes.admin()}>Admin</Link>
       )}
-      
+
       {hasRole(['author', 'editor']) && (
         <Link to={routes.posts()}>Admin</Link>
       )}
