@@ -12,7 +12,7 @@ GraphQL is a fundamental part of Redwood. Having said that, you can get going wi
 GraphQL is a language that enhance the exchange of data between clients (ex: Redwood React app) and servers (ex: Redwood API).
 
 Unlike REST API, a GraphQL Client is performing operations that allows gathering rich data-set.
-GraphQL operations are divided in 2 groupes: Queries (to read data) and Mutations (to update/create/delete data).
+GraphQL operations are divided in 2 groups: Queries (to read data) and Mutations (to update/create/delete data).
 
 
 The following GraphQL query:
