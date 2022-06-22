@@ -200,13 +200,13 @@ export const Users = {
 
 - `args` is passed as the first argument
 - `obj` is named `root` (all the rest keep their names)
-- `root`, `context`, and `info` are wrapped into an object; this object is passed as the second argument
+- `root`, `context`, and `info` are wrapped into an object - `gqlArgs`; this object is passed as the second argument
 
 Here's an example to make things clear:
 
-```jsx
+```js
 export const Post = {
-  user: (args, { root, context, info }) => db.post.findUnique({ where: { id: root.id } }).user(),
+  user: (args, gqlArgs) => db.post.findUnique({ where: { id: gqlArgs?.root.id } }).user(),
 }
 ```
 
