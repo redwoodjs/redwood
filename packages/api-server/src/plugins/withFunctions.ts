@@ -105,7 +105,10 @@ const lambdaRequestHandler = async (
 const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
   // Add extra fastify plugins
   app.register(fastifyUrlData)
-  app.register(fastifyRawBody)
+
+  // In Fastify v4 must await the plugin registration to
+  // make sure the plugin is ready to use
+  await app.register(fastifyRawBody)
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
