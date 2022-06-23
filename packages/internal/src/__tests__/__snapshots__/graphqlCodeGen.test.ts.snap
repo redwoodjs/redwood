@@ -25,8 +25,8 @@ export type Scalars = {
   BigInt: number;
   Date: string;
   DateTime: string;
-  JSON: Record<string, unknown>;
-  JSONObject: Record<string, unknown>;
+  JSON: Prisma.JsonValue;
+  JSONObject: Prisma.JsonObject;
   Time: string;
 };
 
@@ -263,8 +263,8 @@ export type Scalars = {
   BigInt: number;
   Date: string;
   DateTime: string;
-  JSON: Record<string, unknown>;
-  JSONObject: Record<string, unknown>;
+  JSON: Prisma.JsonValue;
+  JSONObject: Prisma.JsonObject;
   Time: string;
 };
 
