@@ -217,6 +217,10 @@ There are several error messages that can be displayed, including:
 
 We've got some default error messages that sound nice, but may not fit the tone of your site. You can customize these error messages in `api/src/functions/auth.js` in the `errors` prop of each of the `login`, `signup`, `forgotPassword` and `resetPassword` config objects. The generated file contains tons of comments explaining when each particular error message may be shown.
 
+### WebAuthn Config
+
+See [WebAuthn Configuration](#function-config) section below.
+
 ## Environment Variables
 
 ### Cookie Domain
@@ -276,7 +280,7 @@ If they skip, they just proceed into the site as usual. If they log out and back
 
 **Authentication**
 
-When a devices is already registered then it can be used to skip username/password login. The user is immediately shown the prompt to scan when they land on the login page (if the prompt doesn't show, or they mistakenly cancel it, they can click "Open Authenticator" to show the prompt again)
+When a device is already registered then it can be used to skip username/password login. The user is immediately shown the prompt to scan when they land on the login page (if the prompt doesn't show, or they mistakenly cancel it, they can click "Open Authenticator" to show the prompt again)
 
 <img width="701" alt="image" src="https://user-images.githubusercontent.com/300/174904236-ccf6eba4-35ce-46e7-ad04-42eee43d3bba.png" />
 
@@ -289,9 +293,9 @@ The back and forth between the web and api sides works like this:
 **Registration**
 
 1. If the user selects to enable their device, a request is made to the server for "registration options" which is a JSON object containing details about the server and user (domain, username).
-2. The site receives that data and then makes a browser API call that says to start the biometric reader with the received options
-3. The user scans their fingerprint/face and the browser API returns an ID representing this device and an associated public key
-4. The ID, public key, and user details are sent to the server to be saved to the database. The server responds by placing a cookie on the user's browser with the device ID (a random string of letters and numbers)
+2. Your app receives that data and then makes a browser API call that says to start the biometric reader with the received options
+3. The user scans their fingerprint/face and the browser API returns an ID representing this device, a public key and a few other fields for validation on the server
+4. The ID, public key, and additional details are sent to the server to be verified. Assuming the are, the device is saved to the database in a `UserCredential` table (you can change the name if you want). The server responds by placing a cookie on the user's browser with the device ID (a random string of letters and numbers)
 
 A similar process takes place when authenticating:
 
@@ -299,14 +303,26 @@ A similar process takes place when authenticating:
 
 1. If the cookie from the previous process is present, the web side knows that the user has a registered device so a request is made to the server to get "authentication options"
 2. The server looks up user who's credential ID is in the cookie and gets a list of all of the devices they have registered in the past. This is included along with the domain and username
-3. The web side receives the options from the server and a browser API call is made. The browser first checks to see if the list of devices from the server includes the current device. If so, it prompts the user to scan their fingerprint/face
+3. The web side receives the options from the server and a browser API call is made. The browser first checks to see if the list of devices from the server includes the current device. If so, it prompts the user to scan their fingerprint/face (if the device is not in the list, the user will directed back to username/password signup)
 4. The ID, public key, user details and a signature are sent to the server and checked to make sure the signature contains the expected data encrypted with the public key. If so, the regular login cookie is set (the same as if the user had used username/password login)
 
-In both cases actual scanning and matching of devices is handled by the operating system: all we care about is that we are given a credential ID and a public key back from the device.
+In both cases, actual scanning and matching of devices is handled by the operating system: all we care about is that we are given a credential ID and a public key back from the device.
 
-### Caveats
+### Support
 
-iOS Safari currently has a limitation where only a single `async` event can occur before asking to prompt the user for a WebAuthn interaction. In React, there are lots of `async` events floating around as you browse a site, which means the chances that the WebAuthn request is the first one is pretty slim. 
+WebAuthn is supported in the following browsers (as of June 2022):
+
+| OS      |	Browser	| Authenticator |
+| ------- | ------- | ------------- |
+| macOS   |	Firefox |	Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
+| macOS   |	Chrome  |	Touch ID, Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
+| iOS     |	All     |	Face ID, Touch ID, Yubikey Security Key NFC (NFC), Yubikey 5Ci |
+| Android |	Chrome  |	Fingerprint Scanner, caBLE |
+| Android |	Firefox |	Screen PIN |
+
+#### iOS WebKit Browsers
+
+iOS Safari (and other iOS WebKit-based browsers) currently has a limitation where only a single `async` event can occur before asking to prompt the user for a WebAuthn interaction. In React, there are lots of `async` events floating around as you browse a site, which means the chances that the WebAuthn request is the first one is pretty slim. 
 
 This means that if the login page is not the first page you land on, trying to authenticate will raise an error. Redwood catches this error and responds with the following prompt (which we know is not ideal, but better than the default message of "No available authenticator recognized any of the available credentials"):
 
@@ -318,7 +334,7 @@ So the workaround is to simply reload the page (guaranteeing that the WebAuthn r
 
 :::caution Will it be fixed?
 
-Safari (and other browsers based on WebKit on iOS) have had this limitation for quite a while (and it used to be even [more harsh](https://groups.google.com/a/fidoalliance.org/g/fido-dev/c/pIs0DIajWVs/m/xeg0WjFkAQAJ) to the point that WebAuthn was functionally unusable) so it may never be rectified. Our best bet may be to just come up with a more friendly message that makes it clear this isn't the user's problem, but just a current limitation of the browser ecosystem.
+Safari (and other browsers based on WebKit on iOS) have had this limitation for quite a while (and it used to be even [more harsh](https://groups.google.com/a/fidoalliance.org/g/fido-dev/c/pIs0DIajWVs/m/xeg0WjFkAQAJ) to the point that WebAuthn was functionally unusable) so it may never be rectified. Your best bet may be to just come up with a friendly message that makes it clear this isn't the user's problem, but just a current limitation of the browser ecosystem.
 
 :::
 
@@ -334,7 +350,7 @@ WebAuthn support requires a few updates to your codebase:
 :::info
 If you setup dbAuth and generated login/signup pages with the `--webAuthn` key then all of these steps have already been done for you! As described in the post-setup instructions you just need to add the required fields to your `User` model, create a `UserCredential` model, and you're ready to go!
 
-If you didn't use the `--webAuthn` flag, but decided you now want WebAuthn, you could run the setup and genrator commands again with the `--force` flag to overwrite your existing files. Any changes you made will be overwritten, but if you do a quick diff in git you should be able to port over most of your changes.
+If you didn't use the `--webAuthn` flag, but decided you now want WebAuthn, you could run the setup and generator commands again with the `--force` flag to overwrite your existing files. Any changes you made will be overwritten, but if you do a quick diff in git you should be able to port over most of your changes.
 :::
 
 ### Schema Updates
@@ -381,73 +397,16 @@ Run `yarn rw prisma migrate dev` to apply the changes to your database.
 
 ### Function Config 
 
-Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave:
+Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave (see the highlighted section)
 
 ```javascript title=api/src/functions/auth.js
 import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
-  const forgotPasswordOptions = {
-    handler: (user) => {
-      return user
-    },
-
-    expires: 60 * 60 * 24,
-
-    errors: {
-      usernameNotFound: 'Username not found',
-      usernameRequired: 'Username is required',
-    },
-  }
-
-  const loginOptions = {
-    handler: (user) => {
-      return user
-    },
-
-    errors: {
-      usernameOrPasswordMissing: 'Both username and password are required',
-      usernameNotFound: 'Username ${username} not found',
-      incorrectPassword: 'Incorrect password for ${username}',
-    },
-
-    expires: 60 * 60 * 24 * 365 * 10,
-  }
-
-  const resetPasswordOptions = {
-    handler: (user) => {
-      return user
-    },
-
-    allowReusedPassword: true,
-
-    errors: {
-      resetTokenExpired: 'resetToken is expired',
-      resetTokenInvalid: 'resetToken is invalid',
-      resetTokenRequired: 'resetToken is required',
-      reusedPassword: 'Must choose a new password',
-    },
-  }
-
-  const signupOptions = {
-    handler: ({ username, hashedPassword, salt, userAttributes }) => {
-      return db.user.create({
-        data: {
-          email: username,
-          hashedPassword: hashedPassword,
-          salt: salt,
-          // name: userAttributes.name
-        },
-      })
-    },
-
-    errors: {
-      fieldMissing: '${field} is required',
-      usernameTaken: 'Username `${username}` already in use',
-    },
-  }
-
+  
+  // assorted handler config here...
+  
   const authHandler = new DbAuthHandler(event, context, {
     db: db,
     authModelAccessor: 'user',
@@ -461,7 +420,9 @@ export const handler = async (event, context) => {
       salt: 'salt',
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
+      // highlight-start
       challenge: 'webAuthnChallenge',
+      // highlight-end
     },
 
     cookie: {
@@ -503,22 +464,23 @@ export const handler = async (event, context) => {
 }
 ```
 
-* `credentialModelAccessor` specifies the name of the model that's going to hold the credentials.
-* `webAuthn.enabled` is a boolean, denoting whether the server should respond to webAuthn requests
+* `credentialModelAccessor` specifies the name of the accessor that you call to access the model you created to store credentials. If your model name is `UserCredential` then this field would be `userCredential` as that's how Prisma's naming conventions work.
+* `authFields.challenge` specifies the name of the field in the user model that will hold the WebAuthn challenge string. This string is generated automatically whenever a WebAuthn registration or authentication request starts and is one more verification that the browser request came from this user. A user can only have one WebAuthn request/response cycle going at a time, meaning that they can't open a desktop browser, get the TouchID prompt, then switch to iOS Safari to use FaceID, then return to the desktop to scan their fingerprint. The most recent WebAuthn request will clobber any previous one that's in progress.
+* `webAuthn.enabled` is a boolean, denoting whether the server should respond to webAuthn requests. If you decide to stop using WebAuthn, you'll want to turn it off here as well as update the LoginPage to stop prompting.
 * `webAuthn.name` is the name of the app that will show in some browser's prompts to use the device
-* `webAuthn.domain` is the name of domain making the request (this is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`)
-* `webAuthn.origin` is the domain plus the protocol and port, that the request is coming from, ex: https://app.server.com In development mode, this would be `http://localhost:8910`
-* `webAuthn.type`: the type of device that's allowed to be used (see next section below)
+* `webAuthn.domain` is the name of domain making the request. This is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`
+* `webAuthn.origin` is the domain *including* the protocol and port that the request is coming from, ex: https://app.server.com In development mode, this would be `http://localhost:8910`
+* `webAuthn.type`: the type of device that's allowed to be used (see [next section below](#webauthn-type-option))
 * `webAuthn.timeout`: how long to wait for a device to be used in milliseconds (defaults to 60 seconds)
-* `webAuthn.credentialFields`: lists the expected field names in the database table that contains user credentials to what they're actually called in your `UserCredential` model. This includes 5 fields total: `id`, `userId`, `publicKey`, `transports`, `counter`
+* `webAuthn.credentialFields`: lists the expected field names that dbAuth uses internally mapped to what they're actually called in your model. This includes 5 fields total: `id`, `userId`, `publicKey`, `transports`, `counter`.
 
 ### WebAuthn `type` Option
 
 The config option `webAuthn.type` can be set to `any`, `platform` or `cross-platform`:
 
-* `any` means to allow either platform or cross-platform devices
-* `platform` means to only allow embedded devices (TouchID, FaceID, Windows Hello) to be used
-* `cross-platform` means to allow only third party devices (like a Yubikey USB fingerprint reader)
+* `platform` means to *only* allow embedded devices (TouchID, FaceID, Windows Hello) to be used
+* `cross-platform` means to *only* allow third party devices (like a Yubikey USB fingerprint reader)
+* `any` means to allow both platform and cross-platform devices
 
 In some browsers this can lead to a pretty drastic UX difference. For example, here is the interface in Chrome on macOS with the included TouchID sensor on a Macbook Pro:
 
@@ -613,9 +575,7 @@ const { isAuthenticated, client, logIn } = useAuth()
 
 `client` gives you access to four functions for working with WebAuthn:
 
-* `client.isSupported()`: return sa Promise which returns a boolean for whether or not WebAuthn is supported in the browser
+* `client.isSupported()`: returns a Promise which resolves to a boolean—whether or not WebAuthn is supported in the current browser browser
 * `client.isEnabled()`: returns a boolean for whether the user currently has a `webAuthn` cookie, which means this device has been registered already and can be used for login
-* `client.register()`: returns a Promise which gets options from the server, presents the prompt to scan your fingerprint/face, and then sends the result up to the server. It will either return successfully or throw an error. This is used when the user has not registered this device yet (`client.isEnabled()` returns `false`)
-* `client.authenticate()`: returns a Promise which gets options from the server, presents the prompt to scan the user's fingerprint/face, and then sends the result up to the server. It will either return successfully or throw an error. This should be used when the user has already registered this device (`client.isEnabled()` returns `true`)
-
-
+* `client.register()`: returns a Promise which gets options from the server, presents the prompt to scan your fingerprint/face, and then sends the result up to the server. It will either resolve successfully with an object `{ verified: true }` or throw an error. This function is used when the user has not registered this device yet (`client.isEnabled()` returns `false`).
+* `client.authenticate()`: returns a Promise which gets options from the server, presents the prompt to scan the user's fingerprint/face, and then sends the result up to the server. It will either resolve successfully with an object `{ verified: true }` or throw an error. This should be used when the user has already registered this device (`client.isEnabled()` returns `true`)
