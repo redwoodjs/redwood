@@ -102,7 +102,7 @@ type AuthProviderState = {
   currentUser: null | CurrentUser
   hasError: boolean
   error?: Error
-  token: null | string
+  token: null | string | Promise<null | string>
 }
 /**
  * @example
@@ -236,14 +236,18 @@ export class AuthProvider extends React.Component<
 
     if (!this.state.loading) {
       console.info('really getting token')
-      this.setState({ ...this.state, loading: true })
-      try {
-        this.setState({ ...this.state, token: await this.rwClient.getToken() })
-      } catch {
-        this.setState({ ...this.state, token: null })
-      } finally {
-        this.setState({ ...this.state, loading: false })
-      }
+      this.setState({ 
+        ...this.state, 
+        loading: true,
+        token: this.rwClient.getToken()
+          .then(result => {
+            this.setState({ ...this.state, loading: false, token: result as string })
+            return result
+          }).catch(() => {
+            this.setState({ ...this.state, loading: false, token: null }) 
+            return null
+          })
+      })
     }
 
     return this.state.token
