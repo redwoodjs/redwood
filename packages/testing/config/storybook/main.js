@@ -142,7 +142,9 @@ const mergeUserStorybookConfig = (baseConfig) => {
     // https://github.com/survivejs/webpack-merge#mergewithcustomize-customizearray-customizeobject-configuration--configuration
     customizeArray(baseConfig, userStorybookConfig, key) {
       if (key === 'addons' || key === 'stories') {
-        // allows userStorybookConfig to override baseConfig
+        // Allows userStorybookConfig to override baseConfig.
+        // Since this is an array, we spread the user config first (so that it comes first)
+        // Also, arrays don't dedupe the way objects do when spreading, so we do a conversion to and from a Set in order to remove duplicates.
         let combinedArrays = [
           ...new Set([...userStorybookConfig, ...baseConfig]),
         ]
