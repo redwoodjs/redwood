@@ -148,6 +148,11 @@ module.exports = {
               label: 'Strict Mode',
               id: 'typescript/strict-mode',
             },
+            {
+              type: 'doc',
+              label: 'Utility Types',
+              id: 'typescript/utility-types',
+            },
           ],
         },
         'webhooks',
