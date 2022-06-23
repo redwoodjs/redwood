@@ -102,6 +102,7 @@ type AuthProviderState = {
   currentUser: null | CurrentUser
   hasError: boolean
   error?: Error
+  token: null | string
 }
 /**
  * @example
@@ -127,6 +128,7 @@ export class AuthProvider extends React.Component<
     userMetadata: null,
     currentUser: null,
     hasError: false,
+    token: null,
   }
 
   rwClient: AuthClient
@@ -150,8 +152,9 @@ export class AuthProvider extends React.Component<
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    console.info('getCurrentUser')
     // Always get a fresh token, rather than use the one in state
-    const token = await this.getToken()
+    // const token = await this.getToken()
     const response = await global.fetch(this.getApiGraphQLUrl(), {
       method: 'POST',
       // TODO: how can user configure this? inherit same `config` options given to auth client?
@@ -159,7 +162,7 @@ export class AuthProvider extends React.Component<
       headers: {
         'content-type': 'application/json',
         'auth-provider': this.rwClient.type,
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this.state.token}`,
       },
       body: JSON.stringify({
         query:
@@ -229,24 +232,32 @@ export class AuthProvider extends React.Component<
    * missed or slip through.
    */
   getToken = async () => {
-    let token
+    console.info('getToken')
 
-    try {
-      token = await this.rwClient.getToken()
-    } catch {
-      token = null
+    if (!this.state.loading) {
+      console.info('really getting token')
+      this.setState({ ...this.state, loading: true })
+      try {
+        this.setState({ ...this.state, token: await this.rwClient.getToken() })
+      } catch {
+        this.setState({ ...this.state, token: null })
+      } finally {
+        this.setState({ ...this.state, loading: false })
+      }
     }
 
-    return token
+    return this.state.token
   }
 
   reauthenticate = async () => {
+    console.info('reauthenticate')
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
       currentUser: null,
       userMetadata: null,
       loading: false,
       hasError: false,
+      token: null,
     }
 
     try {
@@ -278,6 +289,7 @@ export class AuthProvider extends React.Component<
   }
 
   logIn = async (options?: any) => {
+    console.info('logIn')
     this.setState({ loading: true })
     const loginOutput = await this.rwClient.login(options)
     await this.reauthenticate()
