@@ -33,7 +33,7 @@
     "core-js": "3.23.2",
     "cross-undici-fetch": "0.1.27",
     "envinfo": "7.8.1",
-    "systeminformation": "5.11.16",
+    "systeminformation": "5.11.21",
     "uuid": "8.3.2",
     "yargs": "17.5.1"
   },
