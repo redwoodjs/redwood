@@ -9928,19 +9928,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.0, ajv@npm:^8.1.0, ajv@npm:^8.8.0":
-  version: 8.10.0
-  resolution: "ajv@npm:8.10.0"
-  dependencies:
-    fast-deep-equal: ^3.1.1
-    json-schema-traverse: ^1.0.0
-    require-from-string: ^2.0.2
-    uri-js: ^4.2.2
-  checksum: cc2c02a89289420ea96720f728d39d4d19dbcb2c1d0363481d0a9973282b69d94c8c1a02f4c424a89a1bd888e6049f87d0f82d21b5d056546cdbb364dd043f23
-  languageName: node
-  linkType: hard
-
-"ajv@npm:^8.10.0":
+"ajv@npm:^8.0.0, ajv@npm:^8.1.0, ajv@npm:^8.10.0, ajv@npm:^8.8.0":
   version: 8.11.0
   resolution: "ajv@npm:8.11.0"
   dependencies:
@@ -16152,14 +16140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-redact@npm:^3.0.0":
-  version: 3.1.0
-  resolution: "fast-redact@npm:3.1.0"
-  checksum: 56fdadff4fae8ea7f4d834e14183cc5aeb3e41bdf522dae1f1276d19ca54107f2082aef0b47a615c04c6c2ef62d6e99ae287fb39dbaad28513d34c91fbf58502
-  languageName: node
-  linkType: hard
-
-"fast-redact@npm:^3.1.1":
+"fast-redact@npm:^3.0.0, fast-redact@npm:^3.1.1":
   version: 3.1.1
   resolution: "fast-redact@npm:3.1.1"
   checksum: 0e9751385e93a11bfa634a7a5e3a1dc2ed410ceb6c1b70168768c7abc03744b2093b59afdc580e5d21f9406445923fa4ac3aaee5fd16bbb6b0ca83e60a57e1b4
@@ -29426,14 +29407,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-lru@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "tiny-lru@npm:8.0.1"
-  checksum: 72faaf105c19d174a4e6739fc1260506ca85e06ac92162e45bf3a8785bc39abcf627e216fe5386c69bf613a272acff123d71554af5ab2aeceda40699ec7aa914
-  languageName: node
-  linkType: hard
-
-"tiny-lru@npm:^8.0.2":
+"tiny-lru@npm:^8.0.1, tiny-lru@npm:^8.0.2":
   version: 8.0.2
   resolution: "tiny-lru@npm:8.0.2"
   checksum: 32dc73db748ae50bf43498f81150ed23922c924d7a3665ea240c7041abbbd5e8667c05328fd520ca923b4d10b89e69a4ba671365eaac221c6f7eb8b898530506
