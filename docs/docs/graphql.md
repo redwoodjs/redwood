@@ -112,7 +112,12 @@ To sum up, when a GraphQL query reaches a GraphQL API, the following flow is fol
                                         +--------------------+
 ```
 
-For more information, [complete GraphQL guides and tutorials are available on graphql.org](https://graphql.org/learn/).
+For more info on a pure GraphQL implementation, [complete GraphQL guides and tutorials are available on graphql.org](https://graphql.org/learn/).
+
+Redwood in comparison provides a "deconstructed" way of creating your GraphQL API. 
+- You define your SDLs (schema) in `*.sdl.js` files, which defines what queries and mutations are available, and what fields can be returned
+- For each query or mutation, you write a service function with the same name. This is the resolver
+- We then take all your SDLs, Services (resolvers) and other config - combine it to a GraphQL server and expose it as an endpoint
 
 ## Redwood and GraphQL
 
