@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.22.8"
+    "core-js": "3.23.2"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.0",
@@ -38,7 +38,7 @@
     "@supabase/supabase-js": "1.35.3",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.45",
-    "firebase": "9.8.2",
+    "firebase": "9.8.3",
     "firebase-admin": "10.2.0",
     "gotrue-js": "0.9.29",
     "jest": "27.5.1",
