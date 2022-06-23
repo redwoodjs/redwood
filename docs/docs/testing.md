@@ -1628,6 +1628,10 @@ export const standard = defineScenario({
 })
 ```
 
+:::tip
+Looking for info on how TypeScript works with Scenarios? Check out the [Utility types](typescript/utility-types.md#scenarios--testing) doc
+:::
+
 #### Which Scenarios Are Seeded?
 
 Only the scenarios named for your test are included at the time the test is run. This means that if you have:

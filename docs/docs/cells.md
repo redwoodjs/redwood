@@ -285,6 +285,11 @@ export const Success = ({ posts, authors }) => {
 
 Note that you can still pass any other props to `Success`. After all, it's still just a React component.
 
+
+:::tip
+Looking for info on how TypeScript works with Cells? Check out the [Utility types](typescript/utility-types.md#cell) doc
+:::
+
 ### When should I use a Cell?
 
 Whenever you want to fetch data. Let Redwood juggle what's displayed when. You just focus on what those things should look like.
