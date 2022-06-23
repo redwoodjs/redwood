@@ -1792,7 +1792,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup tsconfig
 
-Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript.md).
+Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript/index).
 
 ```
 yarn redwood setup tsconfig
