@@ -58,6 +58,7 @@ export type SupportedAuthClients =
   | Ethereum
   | Nhost
   | SuperTokens
+  | Custom
 
 export type SupportedAuthTypes = keyof typeof typesToClients
 
