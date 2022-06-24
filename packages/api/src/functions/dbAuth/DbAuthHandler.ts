@@ -568,8 +568,9 @@ export class DbAuthHandler {
   // browser submits WebAuthn credentials
   async webAuthnAuthenticate() {
     const { verifyAuthenticationResponse } = require('@simplewebauthn/server')
+    const webAuthnOptions = this.options.webAuthn
 
-    if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
+    if (!webAuthnOptions || !webAuthnOptions.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
@@ -585,7 +586,7 @@ export class DbAuthHandler {
     const user = await this.dbAccessor.findFirst({
       where: {
         [this.options.authFields.id]:
-          credential[this.options.webAuthn.credentialFields.userId],
+          credential[webAuthnOptions.credentialFields.userId],
       },
     })
 
@@ -594,28 +595,29 @@ export class DbAuthHandler {
       const opts: VerifyAuthenticationResponseOpts = {
         credential: jsonBody,
         expectedChallenge: user[this.options.authFields.challenge],
-        expectedOrigin: this.options.webAuthn.origin,
-        expectedRPID: this.options.webAuthn.domain,
+        expectedOrigin: webAuthnOptions.origin,
+        expectedRPID: webAuthnOptions.domain,
         authenticator: {
           credentialID: base64url.toBuffer(
-            credential[this.options.webAuthn.credentialFields.id]
+            credential[webAuthnOptions.credentialFields.id]
           ),
           credentialPublicKey:
-            credential[this.options.webAuthn.credentialFields.publicKey],
-          counter: credential[this.options.webAuthn.credentialFields.counter],
-          transports: credential[
-            this.options.webAuthn.credentialFields.transports
-          ]
+            credential[webAuthnOptions.credentialFields.publicKey],
+          counter: credential[webAuthnOptions.credentialFields.counter],
+          transports: credential[webAuthnOptions.credentialFields.transports]
             ? JSON.parse(
-                credential[this.options.webAuthn.credentialFields.transports]
+                credential[webAuthnOptions.credentialFields.transports]
               )
             : DbAuthHandler.AVAILABLE_WEBAUTHN_TRANSPORTS,
         },
         requireUserVerification: true,
       }
+
       verification = verifyAuthenticationResponse(opts)
     } catch (e: any) {
       throw new DbAuthError.WebAuthnError(e.message)
+    } finally {
+      await this._saveChallenge(user[this.options.authFields.id], null)
     }
 
     const { verified, authenticationInfo } = verification
@@ -624,17 +626,15 @@ export class DbAuthHandler {
       // update counter in credentials
       await this.dbCredentialAccessor.update({
         where: {
-          [this.options.webAuthn.credentialFields.id]:
-            credential[this.options.webAuthn.credentialFields.id],
+          [webAuthnOptions.credentialFields.id]:
+            credential[webAuthnOptions.credentialFields.id],
         },
         data: {
-          [this.options.webAuthn.credentialFields.counter]:
+          [webAuthnOptions.credentialFields.counter]:
             authenticationInfo.newCounter,
         },
       })
     }
-
-    await this._saveChallenge(user[this.options.authFields.id], null)
 
     // get the regular `login` cookies
     const [, loginHeaders] = this._loginResponse(user)
