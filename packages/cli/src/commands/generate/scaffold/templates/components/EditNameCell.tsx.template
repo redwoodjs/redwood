@@ -1,4 +1,5 @@
 import type {
+  ${singularPascalName},
   Edit${singularPascalName}ById,
   Update${singularPascalName}Input,
   Update${singularPascalName}MutationVariables
@@ -48,7 +49,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
 
   const onSave = (
     input: Update${singularPascalName}Input,
-    id: Update${singularPascalName}MutationVariables
+    id: ${singularPascalName}['id']
   ) => {
     <% if (intForeignKeys.length) { %>const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
     update${singularPascalName}({ variables: { id, <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
