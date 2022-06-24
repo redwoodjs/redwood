@@ -173,7 +173,7 @@ storybookTest(
     await page.goto(STORYBOOK_URL)
 
     // Click text=Redwood
-    await page.locator('text=Redwood').click()
+    await page.locator('data-item-id=redwood--page').click()
 
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/redwood--page`
