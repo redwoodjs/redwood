@@ -21,10 +21,11 @@ export type DbAuthConfig = {
 }
 
 // ms to wait before calling getToken() again
-const NEXT_TOKEN_CHECK: number = 5000
+// const NEXT_TOKEN_CHECK: number = 5000
 
-let lastTokenCheckAt: Date = new Date('1970-01-01T00:00:00')
-let token: string
+// let lastTokenCheckAt: Date = new Date('1970-01-01T00:00:00')
+// let token: string
+let getTokenResponse: null | Promise<string | null>
 
 export const dbAuth = (
   _client: DbAuth,
@@ -43,20 +44,17 @@ export const dbAuth = (
   }
 
   const getToken = async () => {
-    // only fetch a new token if we haven't got one in the last few seconds
-    // this is a tradeoff between not hitting the server for a new token for
-    // every query, and making sure that if the server decides to invalidate
-    // the user that the web-side finds out realtively quickly
-    const now = new Date()
-
-    if (!lastTokenCheckAt || now.getTime() - lastTokenCheckAt.getTime() > NEXT_TOKEN_CHECK) {
-      const response = await fetch(
-        `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
-        { credentials }
-      )
-      token = await response.text()
-      lastTokenCheckAt = new Date()
+    if (getTokenResponse) {
+      return getTokenResponse
     }
+
+    // @ts-ignore
+    getTokenResponse = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, { credentials })
+    // @ts-ignore
+    const response = await getTokenResponse
+    // @ts-ignore
+    const token = await response.text()
+    getTokenResponse = null
 
     if (token.length === 0) {
       return null
@@ -122,7 +120,10 @@ export const dbAuth = (
     logout,
     signup,
     getToken,
-    getUserMetadata: getToken,
+    getUserMetadata: () => {
+      console.info('client getUserMetadata()')
+      return getToken()
+    },
     forgotPassword,
     resetPassword,
     validateResetToken,
