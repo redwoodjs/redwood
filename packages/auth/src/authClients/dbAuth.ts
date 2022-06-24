@@ -1,5 +1,6 @@
-import { AuthClient } from './index'
 import type { WebAuthnClientType } from '../webAuthn'
+
+import { AuthClient } from './index'
 
 export interface LoginAttributes {
   username: string

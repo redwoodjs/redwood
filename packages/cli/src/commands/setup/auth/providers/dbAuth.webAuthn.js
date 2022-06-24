@@ -1,7 +1,4 @@
-import fs from 'fs'
 import path from 'path'
-
-import password from 'secure-random-password'
 
 import { getPaths } from '@redwoodjs/internal'
 

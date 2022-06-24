@@ -1,5 +1,4 @@
 import CryptoJS from 'crypto-js'
-import base64url from 'base64url'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
@@ -1220,7 +1219,7 @@ describe('dbAuth', () => {
       options.webAuthn = undefined
 
       try {
-        new DbAuthHandler(event, context, options)
+        const _dbAuth = new DbAuthHandler(event, context, options)
       } catch (e) {
         expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
       }
@@ -1257,7 +1256,7 @@ describe('dbAuth', () => {
       const user = await createDbUser({
         webAuthnChallenge: 'QGdAFmPB711UDnEelZm-OHkLs1UwX6yebPI_jLoSVo',
       })
-      const credential = await db.userCredential.create({
+      await db.userCredential.create({
         data: {
           id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
           userId: user.id,
@@ -1281,7 +1280,7 @@ describe('dbAuth', () => {
       const user = await createDbUser({
         webAuthnChallenge: 'GdAFmPB711UDnEelZm-OHkLs1UwX6yebPI_jLoSVo',
       })
-      const credential = await db.userCredential.create({
+      await db.userCredential.create({
         data: {
           id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
           userId: user.id,
@@ -1308,7 +1307,7 @@ describe('dbAuth', () => {
       const user = await createDbUser({
         webAuthnChallenge: 'LtgWphYK_eN5rXc_HdvULvOqpPWyoRvbml2Po00UHag',
       })
-      const credential = await db.userCredential.create({
+      await db.userCredential.create({
         data: {
           id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
           userId: user.id,
