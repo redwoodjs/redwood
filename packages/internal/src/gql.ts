@@ -1,3 +1,7 @@
+import fs from 'fs'
+
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
+import { loadSchema } from '@graphql-tools/load'
 import {
   visit,
   DocumentNode,
@@ -7,6 +11,8 @@ import {
   parse,
   InlineFragmentNode,
 } from 'graphql'
+
+import { getPaths } from './paths'
 
 interface Operation {
   operation: OperationTypeNode
@@ -73,4 +79,23 @@ const getFields = (field: FieldNode): any => {
 
     return obj
   }
+}
+
+export const listQueryTypeFieldsFromGeneratedSchema = async () => {
+  const schemaPath = getPaths().generated.schema
+
+  if (fs.existsSync(schemaPath)) {
+    const schema = await loadSchema(schemaPath, {
+      loaders: [new GraphQLFileLoader()],
+    })
+
+    const queryTypeFields = schema.getQueryType()?.getFields()
+
+    if (queryTypeFields) {
+      return Object.keys(queryTypeFields)
+    }
+  }
+
+  // Return empty array if no schema found
+  return []
 }
