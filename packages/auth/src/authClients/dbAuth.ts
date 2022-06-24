@@ -115,10 +115,7 @@ export const dbAuth = (
     logout,
     signup,
     getToken,
-    getUserMetadata: () => {
-      console.info('client getUserMetadata()')
-      return getToken()
-    },
+    getUserMetadata: getToken,
     forgotPassword,
     resetPassword,
     validateResetToken,
