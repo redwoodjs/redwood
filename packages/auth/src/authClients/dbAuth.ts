@@ -20,11 +20,6 @@ export type DbAuthConfig = {
   }
 }
 
-// ms to wait before calling getToken() again
-// const NEXT_TOKEN_CHECK: number = 5000
-
-// let lastTokenCheckAt: Date = new Date('1970-01-01T00:00:00')
-// let token: string
 let getTokenResponse: null | Promise<string | null>
 
 export const dbAuth = (
