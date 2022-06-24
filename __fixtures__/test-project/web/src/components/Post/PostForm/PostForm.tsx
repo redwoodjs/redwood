@@ -7,10 +7,21 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+import type { Post, UpdatePostInput } from 'types/graphql'
+import type { RwGqlError } from '@redwoodjs/forms'
 
 
-const PostForm = (props) => {
-  const onSubmit = (data) => {
+
+
+interface PostFormProps {
+  post?: Post
+  onSave: (data: UpdatePostInput, id?: Post['id']) => void
+  error: RwGqlError
+  loading: boolean
+}
+
+const PostForm = (props: PostFormProps) => {
+  const onSubmit = (data: Record<string, any>) => {
 
   
     
@@ -19,7 +30,7 @@ const PostForm = (props) => {
     
     
   
-    props.onSave(data, props?.post?.id)
+    props.onSave(data as Post, props?.post?.id)
   }
 
   return (

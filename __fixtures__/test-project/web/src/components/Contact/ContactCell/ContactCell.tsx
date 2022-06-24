@@ -1,4 +1,5 @@
 import type { FindContactById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Contact from 'src/components/Contact/Contact'
@@ -20,7 +21,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Contact not found</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ contact }: CellSuccessProps<FindContactById>) => {

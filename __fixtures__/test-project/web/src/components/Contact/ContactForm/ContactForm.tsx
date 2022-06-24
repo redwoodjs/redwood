@@ -7,10 +7,21 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+import type { Contact, UpdateContactInput } from 'types/graphql'
+import type { RwGqlError } from '@redwoodjs/forms'
 
 
-const ContactForm = (props) => {
-  const onSubmit = (data) => {
+
+
+interface ContactFormProps {
+  contact?: Contact
+  onSave: (data: UpdateContactInput, id?: Contact['id']) => void
+  error: RwGqlError
+  loading: boolean
+}
+
+const ContactForm = (props: ContactFormProps) => {
+  const onSubmit = (data: Record<string, any>) => {
 
   
     
@@ -22,7 +33,7 @@ const ContactForm = (props) => {
     
     
   
-    props.onSave(data, props?.contact?.id)
+    props.onSave(data as Contact, props?.contact?.id)
   }
 
   return (

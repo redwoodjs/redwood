@@ -1,4 +1,5 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma, Post } from '@prisma/client'
+import type { ScenarioData } from '@redwoodjs/testing/api'
 
 export const standard = defineScenario<Prisma.PostCreateArgs>({
   post: {
@@ -7,4 +8,4 @@ export const standard = defineScenario<Prisma.PostCreateArgs>({
   },
 })
 
-export type StandardScenario = typeof standard
+export type StandardScenario = ScenarioData<Post, 'post'>

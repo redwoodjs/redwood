@@ -1,8 +1,13 @@
 import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
+
+import type {
+  Post as PostType,
+  DeletePostMutationVariables
+} from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
@@ -23,7 +28,7 @@ const formatEnum = (values: string | string[] | null | undefined) => {
   }
 }
 
-const jsonDisplay = (obj) => {
+const jsonDisplay = (obj: unknown) => {
   return (
     <pre>
       <code>{JSON.stringify(obj, null, 2)}</code>
@@ -31,7 +36,7 @@ const jsonDisplay = (obj) => {
   )
 }
 
-const timeTag = (datetime) => {
+const timeTag = (datetime?: string) => {
   return (
     datetime && (
       <time dateTime={datetime} title={datetime}>
@@ -41,11 +46,15 @@ const timeTag = (datetime) => {
   )
 }
 
-const checkboxInputTag = (checked) => {
+const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const Post = ({ post }) => {
+interface PostProps {
+  post: PostType
+}
+
+const Post = ({ post }: PostProps) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -56,7 +65,7 @@ const Post = ({ post }) => {
     },
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeletePostMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
       deletePost({ variables: { id } })
     }
@@ -66,7 +75,9 @@ const Post = ({ post }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Post {post.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Post {post?.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
@@ -88,7 +99,7 @@ const Post = ({ post }) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editPost({ id: post.id })}
+          to={routes.editPost({ id: post?.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -96,7 +107,7 @@ const Post = ({ post }) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(post.id)}
+          onClick={() => onDeleteClick(post?.id)}
         >
           Delete
         </button>

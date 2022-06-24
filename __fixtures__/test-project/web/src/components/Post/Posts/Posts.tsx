@@ -1,10 +1,13 @@
 import humanize from 'humanize-string'
 
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/Post/PostsCell'
+
+import type { Post, DeletePostMutationVariables } from 'types/graphql'
+
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
@@ -27,19 +30,20 @@ const formatEnum = (values: string | string[] | null | undefined) => {
   }
 }
 
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
+const truncate = (value: string | number) => {
+  let output = value.toString()
+  if (value && output?.length > MAX_STRING_LENGTH) {
     output = output.substring(0, MAX_STRING_LENGTH) + '...'
   }
   return output
 }
 
-const jsonTruncate = (obj) => {
+
+const jsonTruncate = (obj: unknown) => {
   return truncate(JSON.stringify(obj, null, 2))
 }
 
-const timeTag = (datetime) => {
+const timeTag = (datetime?: string) => {
   return (
     datetime && (
       <time dateTime={datetime} title={datetime}>
@@ -49,11 +53,15 @@ const timeTag = (datetime) => {
   )
 }
 
-const checkboxInputTag = (checked) => {
+const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const PostsList = ({ posts }) => {
+interface PostsListProps {
+  posts: Post[]
+}
+
+const PostsList = ({ posts }: PostsListProps) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -68,7 +76,7 @@ const PostsList = ({ posts }) => {
     awaitRefetchQueries: true,
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeletePostMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
       deletePost({ variables: { id } })
     }
