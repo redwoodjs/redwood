@@ -5518,19 +5518,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-schema@npm:^2.0.44":
-  version: 2.0.44
-  resolution: "@peculiar/asn1-schema@npm:2.0.44"
-  dependencies:
-    "@types/asn1js": ^2.0.2
-    asn1js: ^2.1.1
-    pvtsutils: ^1.2.1
-    tslib: ^2.3.0
-  checksum: e0365e2c405f51aa7816956095a80d28d705157b5c50921737e197e8d4501a75d5caabece6cd4d0e4aef3ebae66b4e51655dbf4c43a146ac9ac8285bd07c43ba
-  languageName: node
-  linkType: hard
-
-"@peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.1.9":
+"@peculiar/asn1-schema@npm:^2.0.44, @peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.1.9":
   version: 2.1.9
   resolution: "@peculiar/asn1-schema@npm:2.1.9"
   dependencies:
@@ -5959,7 +5947,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.6.1
     "@prisma/client": 3.15.2
     "@redwoodjs/auth": 2.0.0
-    "@simplewebauthn/server": ^5.2.1
+    "@simplewebauthn/server": 5.2.1
     "@types/aws-lambda": 8.10.97
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
@@ -5968,7 +5956,7 @@ __metadata:
     "@types/split2": 3.2.1
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
-    base64url: ^3.0.1
+    base64url: 3.0.1
     core-js: 3.23.2
     cross-undici-fetch: 0.1.27
     crypto-js: 4.1.1
@@ -6016,8 +6004,8 @@ __metadata:
     "@clerk/types": 2.14.0
     "@nhost/hasura-auth-js": 1.1.14
     "@nhost/nhost-js": 1.1.14
-    "@simplewebauthn/browser": ^5.2.1
-    "@simplewebauthn/typescript-types": ^5.2.1
+    "@simplewebauthn/browser": 5.2.1
+    "@simplewebauthn/typescript-types": 5.2.1
     "@supabase/supabase-js": 1.35.3
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.45
@@ -6575,14 +6563,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:^5.2.1":
+"@simplewebauthn/browser@npm:5.2.1":
   version: 5.2.1
   resolution: "@simplewebauthn/browser@npm:5.2.1"
   checksum: 7279ecec4ee93256b510c18e2a8636296bf5114638804d402b371308aa6ffe43545239fe0e79c02880961ec978f375fdc585b763a2052237e047fdc28fd5c7c3
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:^5.2.1":
+"@simplewebauthn/server@npm:5.2.1":
   version: 5.2.1
   resolution: "@simplewebauthn/server@npm:5.2.1"
   dependencies:
@@ -6602,7 +6590,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:^5.2.1":
+"@simplewebauthn/typescript-types@npm:5.2.1, @simplewebauthn/typescript-types@npm:^5.2.1":
   version: 5.2.1
   resolution: "@simplewebauthn/typescript-types@npm:5.2.1"
   checksum: aa14895068ee2f9b66b7f1d25d2bb477413e4b1d5b4792b6822ccda767de779f9b6fd2b7d1543c39ff68786ea3b13e0598e785202579ac4675835124d63fc8bb
@@ -8080,13 +8068,6 @@ __metadata:
   version: 4.2.2
   resolution: "@types/aria-query@npm:4.2.2"
   checksum: 6dc0d94890c2c7c2e347148ea32215b73bf480e0f0888a9bbfb7b531285a3daf0b95e600db5be1c03d6e5f825d63cf8c2aabc5db93d8d1fd47ce3211f73e8d66
-  languageName: node
-  linkType: hard
-
-"@types/asn1js@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@types/asn1js@npm:2.0.2"
-  checksum: dd7047e7654c6095334ed085ca1da8c2444342091572c89552da81d63081fd4c192f3d083a7f69be197d1c62c87a4d140e6a10f4da05022dae190f735196ef49
   languageName: node
   linkType: hard
 
@@ -11204,7 +11185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64url@npm:^3.0.1":
+"base64url@npm:3.0.1, base64url@npm:^3.0.1":
   version: 3.0.1
   resolution: "base64url@npm:3.0.1"
   checksum: 5ca9d6064e9440a2a45749558dddd2549ca439a305793d4f14a900b7256b5f4438ef1b7a494e1addc66ced5d20f5c010716d353ed267e4b769e6c78074991241
@@ -25713,16 +25694,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pvtsutils@npm:^1.2.0, pvtsutils@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "pvtsutils@npm:1.2.1"
-  dependencies:
-    tslib: ^2.3.1
-  checksum: 94dd43c7b26c616bb14863c815b98546b146f2a1be06f069e89e5c3f426bb1460b2f449b9679ad6b13e9bf242efb2314580162c52480d29697a17ebafc45d2f7
-  languageName: node
-  linkType: hard
-
-"pvtsutils@npm:^1.3.2":
+"pvtsutils@npm:^1.2.0, pvtsutils@npm:^1.2.1, pvtsutils@npm:^1.3.2":
   version: 1.3.2
   resolution: "pvtsutils@npm:1.3.2"
   dependencies:
