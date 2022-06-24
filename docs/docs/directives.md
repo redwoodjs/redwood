@@ -591,6 +591,26 @@ describe('isSubscriber directive', () => {
 })
 ```
 
+:::tip
+If your Validator Directive is asynchronous, you can use `MockAsyncRedwoodDirective` instead.
+
+```ts
+import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'
+
+// ...
+
+describe('isSubscriber directive', () => {
+  it('has a isSubscriber throws an error if validation does not pass', async () => {
+    const mockExecution = mockAsyncRedwoodDirective(isSubscriber, {})
+    await expect(mockExecution()).rejects.toThrowError(
+      'Implementation missing for isSubscriber'
+    )
+  })
+})
+```
+
+:::
+
 ### Transformer
 
 Let's create a `@maskedEmail` directive that checks roles to see if the user should see the complete email address or if it should be obfuscated from prying eyes:
@@ -654,3 +674,25 @@ describe('maskedEmail directive', () => {
   })
 })
 ```
+
+:::tip
+If your Transformer Directive is asynchronous, you can use `MockAsyncRedwoodDirective` instead.
+
+```ts
+import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'
+
+// ...
+
+import maskedEmail from './maskedEmail'
+
+describe('maskedEmail directive', () => {
+  it('has a maskedEmail implementation transforms the value', () => {
+    const mockExecution = mockAsyncRedwoodDirective(maskedEmail, {
+      mockedResolvedValue: 'foo',
+    })
+
+    expect(mockExecution()).resolves.toBe('bar')
+  })
+})
+```
+:::
