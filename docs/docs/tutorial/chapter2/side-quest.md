@@ -95,7 +95,7 @@ In this example, Redwood will look in `api/src/services/posts/posts.{js,ts}` for
 - `updatePost({ id, input })`
 - `deletePost({ id })`
 
-To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that Apollo expects based on what you defined in `posts.sdl.{js,ts}`.
+To implement these, simply export them from the services file. They will usually get your data from a database, but they can do anything you want, as long as they return the proper types that GraphQL Yoga expects based on what you defined in `posts.sdl.{js,ts}`.
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -137,42 +137,33 @@ export const deletePost = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```javascript title="api/src/services/posts/posts.ts"
-import type { Prisma } from '@prisma/client'
-
 import { db } from 'src/lib/db'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
-export const posts = () => {
+export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
 }
 
-export const post = ({ id }: Prisma.PostWhereUniqueInput) => {
+export const post: QueryResolvers['post'] = ({ id }) => {
   return db.post.findUnique({
     where: { id },
   })
 }
 
-interface CreatePostArgs {
-  input: Prisma.PostCreateInput
-}
-
-export const createPost = ({ input }: CreatePostArgs) => {
+export const createPost: MutationResolvers['createPost'] = ({ input }) => {
   return db.post.create({
     data: input,
   })
 }
 
-interface UpdatePostArgs extends Prisma.PostWhereUniqueInput {
-  input: Prisma.PostUpdateInput
-}
-
-export const updatePost = ({ id, input }: UpdatePostArgs) => {
+export const updatePost: MutationResolvers['updatePost'] = ({ id, input }) => {
   return db.post.update({
     data: input,
     where: { id },
   })
 }
 
-export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
+export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
   return db.post.delete({
     where: { id },
   })

@@ -2,13 +2,14 @@ import React, { useRef, useState, useEffect } from 'react'
 
 import { unstable_batchedUpdates } from 'react-dom'
 
+import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
 import {
   ActivePageContextProvider,
   LoadingStateRecord,
 } from './ActivePageContext'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { useIsMounted } from './useIsMounted'
-import { Spec, getAnnouncement, getFocus, resetFocus } from './util'
+import { Spec } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 
@@ -126,7 +127,13 @@ export const ActiveRouteLoader = ({
               location,
             },
           }))
-          setRenderedChildren(children)
+          // `children` could for example be a Set or a Route. Either way the
+          // just-loaded page will be somewhere in the children tree. But
+          // children could also be undefined, in which case we'll just render
+          // the just-loaded page itself. For example, when we render the
+          // NotFoundPage children will be undefined and the default export in
+          // `module` will be the NotFoundPage itself.
+          setRenderedChildren(children ?? module.default)
           setRenderedPath(path)
           setPageName(name)
         })

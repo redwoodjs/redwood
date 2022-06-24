@@ -1063,7 +1063,7 @@ We'll need a test to go along with that functionality. How do we test `requireAu
 ```javascript title="api/src/services/comments/comments.test.js"
 // highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 // highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -1143,7 +1143,7 @@ describe('comments', () => {
 ```ts title="api/src/services/comments/comments.test.ts"
 // highlight-next-line
 import { comments, createComment, deleteComment } from './comments'
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 // highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -1184,7 +1184,7 @@ describe('comments', () => {
   // highlight-start
   scenario(
     'allows a moderator to delete a comment',
-    async (scenario, StandardScenario) => {
+    async (scenario: StandardScenario) => {
       mockCurrentUser({
         roles: 'moderator',
         id: 1,
@@ -1244,7 +1244,7 @@ Having a role like "admin" implies that they can do everything...shouldn't they 
 1. Add "admin" to the list of roles in the `hasRole()` checks in components, `@requireAuth` directive, and `requireAuth()` check in services
 2. Don't make any changes in the code, just give the user in the database additional roles—so admins will also have the "moderator" role in addition to "admin"
 
-By virtue of the name "admin" it really feels like someone should only have that one single roll and be able to do everything. So in this case it might feel better to add "admin" to `hasRole()` and `requireAuth()`.
+By virtue of the name "admin" it really feels like someone should only have that one single role and be able to do everything. So in this case it might feel better to add "admin" to `hasRole()` and `requireAuth()`.
 
 But, if you wanted to be more fine-grained with your roles then maybe the "admin" role should really be called "author". That way it makes it clear they only author posts, and if you want someone to be able to do both actions you can explicitly give them the "moderator" role in addition to "author."
 

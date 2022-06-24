@@ -131,31 +131,35 @@ function getPluginConfig() {
     if (prismaModels.RW_DataMigration) {
       delete prismaModels.RW_DataMigration
     }
+
+    // Include Prisma's JSON field types as these types exist to match the types supported by JSON.parse()
+    // see: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields
+    // We're doing this to avoid adding an extra import statement just for the Prisma namespace
+    prismaModels['JSON'] = `.prisma/client#Prisma`
   } catch (error) {
     // This means they've not set up prisma types yet
   }
 
   const pluginConfig: CodegenTypes.PluginConfig &
     typescriptResolvers.TypeScriptResolversPluginConfig = {
+    makeResolverTypeCallable: true,
     namingConvention: 'keep', // to allow camelCased query names
     scalars: {
       // We need these, otherwise these scalars are mapped to any
-      // @TODO is there a way we can use scalars defined in
-      // packages/graphql-server/src/rootSchema.ts
       BigInt: 'number',
       DateTime: 'string',
       Date: 'string',
-      JSON: 'Record<string, unknown>',
-      JSONObject: 'Record<string, unknown>',
+      JSON: 'Prisma.JsonValue',
+      JSONObject: 'Prisma.JsonObject',
       Time: 'string',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,
-
+    showUnusedMappers: false,
     customResolverFn: `(
-      args: TArgs,
-      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+      args?: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => Promise<Partial<TResult>> | Partial<TResult>;`,
     mappers: prismaModels,
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,

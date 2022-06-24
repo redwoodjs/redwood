@@ -253,7 +253,118 @@ describe('Article', () => {
 
 This test (if it worked) would prove that you are indeed rendering an article. But it's also extremely brittle: any change to the component, even adding a `className` attribute for styling, will cause the test to break. That's not ideal, especially when you're just starting out building your components and will constantly be making changes as you improve them.
 
-> Why do we keep saying this test won't work? Because as far as we can tell there's no easy way to simply render to a string. `render` actually returns an object that has several functions for testing different parts of the output. Those are what we'll look into in the next section.
+:::info Why do we keep saying this test won't work?
+Because as far as we can tell there's no easy way to simply render to a string. `render` actually returns an object that has several functions for testing different parts of the output. Those are what we'll look into in the next section.
+
+Note that Redwood's `render` function is based on React Testing Library's. The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
+
+If you were to use React Testing Library's `render` function, you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+
+```jsx
+import { render, MockProviders } from '@redwoodjs/testing/web'
+
+// ...
+
+render(<Article article={ title: 'Foobar' } />, {
+  wrapper: ({ children }) => (
+    <MockProviders>
+      <MyCustomProvider>{children}</MyCustomProvider>
+    </MockProviders>
+  )
+})
+```
+:::
+
+## Testing Custom Hooks
+
+Custom hooks are a great way to encapsulate non-presentational code.
+To test custom hooks, we'll use the `renderHook` function from `@redwoodjs/testing/web`.
+
+:::info
+Note that Redwood's `renderHook` function is based on React Testing Library's. The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
+
+If you were to use React Testing Library's `renderHook` function, you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+
+```jsx
+import { renderHook, MockProviders } from '@redwoodjs/testing/web'
+
+// ...
+
+renderHook(() => myCustomHook(), {
+  wrapper: ({ children }) => (
+    <MockProviders>
+      <MyCustomProvider>{children}</MyCustomProvider>
+    </MockProviders>
+  )
+})
+```
+:::
+
+To use `renderHook`:
+1. Call your custom hook from an inline function passed to `renderHook`. For example:
+```js
+const { result } = renderHook(() => useAccumulator(0))
+```
+2. `renderHook` will return an object with the following properties:
+- `result`: holds the return value of the hook in its `current` property (so `result.current`). Think of `result` as a `ref` for the most recently returned value
+- `rerender`: a function to render the previously rendered hook with new props
+
+Let's go through an example. Given the following custom hook:
+
+```js title="web/src/hooks/useAccumulator/useAccumulator.js"
+const useAccumulator = (initialValue) => {
+  const [total, setTotal] = useState(initialValue)
+
+  const add = (value) => {
+    const newTotal = total + value
+    setTotal(newTotal)
+    return newTotal
+  }
+
+  return { total, add }
+}
+```
+
+The test could look as follows:
+
+```js title="web/src/hooks/useAccumulator/useAccumulator.test.js"
+import { renderHook } from '@redwoodjs/testing/web'
+import { useAccumulator } from './useAccumulator'
+
+describe('useAccumulator hook example in docs', () => {
+  it('has the correct initial state', () => {
+    const { result } = renderHook(() => useAccumulator(42))
+    expect(result.current.total).toBe(42)
+  })
+
+  it('adds a value', () => {
+    const { result } = renderHook(() => useAccumulator(1))
+    result.current.add(5)
+    expect(result.current.total).toBe(6)
+  })
+
+  it('adds multiple values', () => {
+    const { result } = renderHook(() => useAccumulator(0))
+    result.current.add(5)
+    result.current.add(10)
+    expect(result.current.total).toBe(15)
+  })
+
+  it('re-initializes the accumulator if passed a new initializing value', () => {
+    const { result, rerender } = renderHook(
+      (initialValue) => useAccumulator(initialValue),
+      {
+        initialProps: 0,
+      }
+    )
+    result.current.add(5)
+    rerender(99)
+    expect(result.current.total).toBe(99)
+  })
+})
+```
+
+While `renderHook` lets you test a custom hook directly, there are cases where encapsulating the custom hook in a component is more robust. See https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
 ### Queries
 
@@ -736,7 +847,7 @@ Two situations make testing Cells unique:
 1. A single Cell can export up to four separate components
 2. There's a GraphQL query taking place
 
-The first situation is really no different than regular component testing: you just test more than one component in your test. For example:
+The first situation is really no different from regular component testing: you just test more than one component in your test. For example:
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 import Article from 'src/components/Article'
@@ -1528,7 +1639,7 @@ Only the scenarios named for your test are included at the time the test is run.
 
 Only the posts scenarios will be present in the database when running the `posts.test.js` and only comments scenarios will be present when running `comments.test.js`. And within those scenarios, only the `standard` scenario will be loaded for each test unless you specify a differently named scenario to use instead.
 
-During the run of any single test, there is only every one scenario's worth of data present in the database: users.standard *or* users.incomplete.
+During the run of any single test, there is only ever one scenario's worth of data present in the database: users.standard *or* users.incomplete.
 
 ### mockCurrentUser() on the API-side
 
