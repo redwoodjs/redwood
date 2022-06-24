@@ -1,6 +1,6 @@
 import pascalcase from 'pascalcase'
 
-import { listQueryTypeFieldsFromGeneratedSchema } from '@redwoodjs/internal'
+import { listQueryTypeFieldsInProject } from '@redwoodjs/internal'
 
 export const getCellOperationNames = async () => {
   const { getProject } = await import('@redwoodjs/structure')
@@ -48,7 +48,7 @@ export const getIdType = (model) => {
  *
  **/
 export const checkProjectForQueryField = async (queryFieldName) => {
-  const queryFields = await listQueryTypeFieldsFromGeneratedSchema()
+  const queryFields = await listQueryTypeFieldsInProject()
 
   return queryFields.includes(queryFieldName)
 }

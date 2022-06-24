@@ -1,6 +1,4 @@
-import fs from 'fs'
-
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
+import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadSchema } from '@graphql-tools/load'
 import {
   visit,
@@ -81,19 +79,26 @@ const getFields = (field: FieldNode): any => {
   }
 }
 
-export const listQueryTypeFieldsFromGeneratedSchema = async () => {
-  const schemaPath = getPaths().generated.schema
-
-  if (fs.existsSync(schemaPath)) {
-    const schema = await loadSchema(schemaPath, {
-      loaders: [new GraphQLFileLoader()],
-    })
-
-    const queryTypeFields = schema.getQueryType()?.getFields()
-
-    if (queryTypeFields) {
-      return Object.keys(queryTypeFields)
+export const listQueryTypeFieldsInProject = async () => {
+  const schema = await loadSchema(
+    ['graphql/**/*.sdl.{js,ts}', 'directives/**/*.{js,ts}'],
+    {
+      loaders: [
+        new CodeFileLoader({
+          noRequire: true,
+          pluckConfig: {
+            globalGqlIdentifierName: 'gql',
+          },
+        }),
+      ],
+      cwd: getPaths().api.src,
     }
+  )
+
+  const queryTypeFields = schema.getQueryType()?.getFields()
+
+  if (queryTypeFields) {
+    return Object.keys(queryTypeFields)
   }
 
   // Return empty array if no schema found
