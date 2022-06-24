@@ -1304,7 +1304,7 @@ describe('dbAuth', () => {
       }
     })
 
-    it('returns a response if valid authentication', async () => {
+    it('sets a webAuthn cookie if valid authentication', async () => {
       const user = await createDbUser({
         webAuthnChallenge: 'LtgWphYK_eN5rXc_HdvULvOqpPWyoRvbml2Po00UHag',
       })
@@ -1511,31 +1511,33 @@ describe('dbAuth', () => {
   })
 
   describe('webAuthnRegister', () => {
-    //     it('does something', async () => {
-    //       const user = await createDbUser({
-    //         webAuthnChallenge: 'HuGPrQqK7f53NLwMZMst_DL9Dig2BBivDYWWpawIPVM',
-    //       })
-    //       const credential = await db.userCredential.create({
-    //         data: {
-    //           id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
-    //           userId: user.id,
-    //           transports: null,
-    //           publicKey: 'foobar',
-    //         },
-    //       })
-    //       event = {
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //           cookie: encryptToCookie(
-    //             JSON.stringify({ id: user.id }) + ';' + 'token'
-    //           ),
-    //         },
-    //         body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
-    //       }
-    //       const dbAuth = new DbAuthHandler(event, context, options)
-    //
-    //       await dbAuth.webAuthnRegister()
-    //     })
+    it('saves a credential record to the database', async () => {
+      const user = await createDbUser({
+        webAuthnChallenge: 'HuGPrQqK7f53NLwMZMst_DL9Dig2BBivDYWWpawIPVM',
+      })
+      event = {
+        headers: {
+          'Content-Type': 'application/json',
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+        body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth.webAuthnRegister()
+
+      const credential = db.userCredential.findFirst({
+        where: { userId: user.id },
+      })
+
+      expect(credential.id).toEqual(
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
+      )
+      expect(credential.transports).toEqual('["internal"]')
+      expect(credential.counter).toEqual(0)
+    })
   })
 
   describe('_validateOptions', () => {
