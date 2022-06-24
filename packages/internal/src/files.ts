@@ -99,15 +99,15 @@ export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
   fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
 
 export const isCellFile = (p: string) => {
-  const { dir, name } = path.parse(p)
+  const { name } = path.parse(p)
 
   // If the path isn't on the web side it cannot be a cell
   if (!isFileInsideFolder(p, getPaths().web.src)) {
     return false
   }
 
-  // A Cell must be a directory named module.
-  if (!dir.endsWith(name)) {
+  // A cell must end with "Cell.{jsx,js,tsx}".
+  if (!name.endsWith('Cell')) {
     return false
   }
 

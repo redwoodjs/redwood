@@ -1,6 +1,15 @@
 import fs from 'fs'
 import path from 'path'
 
+jest.mock('fs', () => {
+  return {
+    ...jest.requireActual('fs'),
+    // Don't actually remove any files, because if we do, we can't run the same
+    // test twice
+    rmSync: () => {},
+  }
+})
+
 import { findCells, findDirectoryNamedModules } from '../files'
 import {
   generateMirrorCells,
@@ -24,11 +33,13 @@ const FIXTURE_PATH = path.resolve(
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
 })
+
 afterAll(() => {
   delete process.env.RWJS_CWD
+  jest.clearAllMocks()
 })
 
-const cleanPaths = (p) => {
+const cleanPaths = (p: string) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
 }
 

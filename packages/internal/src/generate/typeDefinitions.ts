@@ -94,7 +94,9 @@ export const generateMirrorDirectoryNamedModule = (
 
 export const generateMirrorCells = () => {
   const rwjsPaths = getPaths()
-  return findCells().map((p) => generateMirrorCell(p, rwjsPaths))
+  const paths = findCells().map((p) => generateMirrorCell(p, rwjsPaths))
+
+  return paths
 }
 
 export const mirrorPathForCell = (p: string, rwjsPaths = getPaths()) => {
