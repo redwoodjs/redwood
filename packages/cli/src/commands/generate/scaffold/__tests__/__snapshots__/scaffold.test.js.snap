@@ -2390,6 +2390,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 
 exports[`in typescript mode creates an edit cell 1`] = `
 "import type {
+  Post,
   EditPostById,
   UpdatePostInput,
   UpdatePostMutationVariables
@@ -2463,7 +2464,7 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 
   const onSave = (
     input: UpdatePostInput,
-    id: UpdatePostMutationVariables
+    id: Post['id']
   ) => {
     
     updatePost({ variables: { id, input } })
@@ -2485,6 +2486,7 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 
 exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
 "import type {
+  UserProfile,
   EditUserProfileById,
   UpdateUserProfileInput,
   UpdateUserProfileMutationVariables
@@ -2538,7 +2540,7 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
 
   const onSave = (
     input: UpdateUserProfileInput,
-    id: UpdateUserProfileMutationVariables
+    id: UserProfile['id']
   ) => {
     const castInput = Object.assign(input, { userId: parseInt(input.userId), })
     updateUserProfile({ variables: { id, input: castInput } })
