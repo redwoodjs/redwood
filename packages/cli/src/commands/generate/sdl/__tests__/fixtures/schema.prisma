@@ -36,9 +36,11 @@ model UserProfile {
   user     User   @relation(fields: [userId], references: [id])
 }
 
-/// A show worn by a user.
+/// A shoe worn by a user.
 model Shoe {
+  /// The underlaying ID
   id    Int   @id @default(autoincrement())
+  // Shoe color
   color Color
 }
 
