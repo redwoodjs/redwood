@@ -32,13 +32,39 @@ export const schema = gql`
   scalar JSON
   scalar JSONObject
 
+  """
+  Represents Redwood internal data.
+  """
   type Redwood {
+    """
+    version
+
+    The version of Redwood.
+    """
     version: String
+    """
+    currentUser
+
+    The current user.
+    """
     currentUser: JSON
+    """
+    prismaVersion
+
+    The version of Prisma.
+    """
     prismaVersion: String
   }
 
+  """
+  Represents Redwood internal data.
+  """
   type Query {
+    """
+    redwood
+
+    Info for redwood
+    """
     redwood: Redwood
   }
 `
