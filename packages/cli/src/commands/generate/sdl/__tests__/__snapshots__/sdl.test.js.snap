@@ -10,31 +10,31 @@ Object {
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
     \\"\\"\\"
     profiles
 
-    Description for profiles
+    Description for profiles.
     \\"\\"\\"
     profiles: [UserProfile]!
   }
@@ -60,19 +60,19 @@ Object {
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
   }
@@ -84,19 +84,19 @@ Object {
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean
   }
@@ -242,13 +242,13 @@ Object {
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     data
 
-    Description for data
+    Description for data.
     \\"\\"\\"
     data: String!
   }
@@ -274,7 +274,7 @@ Object {
     \\"\\"\\"
     data
 
-    Description for data
+    Description for data.
     \\"\\"\\"
     data: String!
   }
@@ -286,7 +286,7 @@ Object {
     \\"\\"\\"
     data
 
-    Description for data
+    Description for data.
     \\"\\"\\"
     data: String
   }
@@ -434,31 +434,31 @@ Object {
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
     \\"\\"\\"
     profiles
 
-    Description for profiles
+    Description for profiles.
     \\"\\"\\"
     profiles: [UserProfile]!
   }
@@ -484,19 +484,19 @@ Object {
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
   }
@@ -508,19 +508,19 @@ Object {
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean
   }
@@ -666,13 +666,13 @@ Object {
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     data
 
-    Description for data
+    Description for data.
     \\"\\"\\"
     data: String!
   }
@@ -698,7 +698,7 @@ Object {
     \\"\\"\\"
     data
 
-    Description for data
+    Description for data.
     \\"\\"\\"
     data: String!
   }
@@ -710,7 +710,7 @@ Object {
     \\"\\"\\"
     data
 
-    Description for data
+    Description for data.
     \\"\\"\\"
     data: String
   }
@@ -857,25 +857,25 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
     \\"\\"\\"
     user
 
-    Description for user
+    Description for user.
     \\"\\"\\"
     user: User!
   }
@@ -901,13 +901,13 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
   }
@@ -919,13 +919,13 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int
   }
@@ -961,25 +961,25 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
     \\"\\"\\"
     user
 
-    Description for user
+    Description for user.
     \\"\\"\\"
     user: User!
   }
@@ -1005,13 +1005,13 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
   }
@@ -1023,13 +1023,13 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int
   }
@@ -1065,13 +1065,13 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     color
 
-    Description for color
+    Description for color.
     \\"\\"\\"
     color: Color!
   }
@@ -1108,7 +1108,7 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
     \\"\\"\\"
     color
 
-    Description for color
+    Description for color.
     \\"\\"\\"
     color: Color!
   }
@@ -1120,7 +1120,7 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
     \\"\\"\\"
     color
 
-    Description for color
+    Description for color.
     \\"\\"\\"
     color: Color
   }
@@ -1155,19 +1155,19 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    The underlaying ID
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     name
 
-    Description for name
+    The name of the Photo
     \\"\\"\\"
     name: String!
     \\"\\"\\"
     metadata
 
-    Description for metadata
+    Description for metadata.
     \\"\\"\\"
     metadata: JSON!
   }
@@ -1193,13 +1193,13 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    The name of the Photo
     \\"\\"\\"
     name: String!
     \\"\\"\\"
     metadata
 
-    Description for metadata
+    Description for metadata.
     \\"\\"\\"
     metadata: JSON!
   }
@@ -1211,13 +1211,13 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    The name of the Photo
     \\"\\"\\"
     name: String
     \\"\\"\\"
     metadata
 
-    Description for metadata
+    Description for metadata.
     \\"\\"\\"
     metadata: JSON
   }
@@ -1252,31 +1252,31 @@ exports[`in javascript mode creates a single word sdl file 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
     \\"\\"\\"
     profiles
 
-    Description for profiles
+    Description for profiles.
     \\"\\"\\"
     profiles: [UserProfile]!
   }
@@ -1298,19 +1298,19 @@ exports[`in javascript mode creates a single word sdl file 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
   }
@@ -1322,19 +1322,19 @@ exports[`in javascript mode creates a single word sdl file 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean
   }
@@ -1351,43 +1351,43 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     title
 
-    Description for title
+    Description for title.
     \\"\\"\\"
     title: String!
     \\"\\"\\"
     slug
 
-    Description for slug
+    Description for slug.
     \\"\\"\\"
     slug: String!
     \\"\\"\\"
     author
 
-    Description for author
+    Description for author.
     \\"\\"\\"
     author: String!
     \\"\\"\\"
     body
 
-    Description for body
+    Description for body.
     \\"\\"\\"
     body: String!
     \\"\\"\\"
     image
 
-    Description for image
+    Description for image.
     \\"\\"\\"
     image: String
     \\"\\"\\"
     postedAt
 
-    Description for postedAt
+    Description for postedAt.
     \\"\\"\\"
     postedAt: DateTime
   }
@@ -1413,37 +1413,37 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
     \\"\\"\\"
     title
 
-    Description for title
+    Description for title.
     \\"\\"\\"
     title: String!
     \\"\\"\\"
     slug
 
-    Description for slug
+    Description for slug.
     \\"\\"\\"
     slug: String!
     \\"\\"\\"
     author
 
-    Description for author
+    Description for author.
     \\"\\"\\"
     author: String!
     \\"\\"\\"
     body
 
-    Description for body
+    Description for body.
     \\"\\"\\"
     body: String!
     \\"\\"\\"
     image
 
-    Description for image
+    Description for image.
     \\"\\"\\"
     image: String
     \\"\\"\\"
     postedAt
 
-    Description for postedAt
+    Description for postedAt.
     \\"\\"\\"
     postedAt: DateTime
   }
@@ -1455,37 +1455,37 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
     \\"\\"\\"
     title
 
-    Description for title
+    Description for title.
     \\"\\"\\"
     title: String
     \\"\\"\\"
     slug
 
-    Description for slug
+    Description for slug.
     \\"\\"\\"
     slug: String
     \\"\\"\\"
     author
 
-    Description for author
+    Description for author.
     \\"\\"\\"
     author: String
     \\"\\"\\"
     body
 
-    Description for body
+    Description for body.
     \\"\\"\\"
     body: String
     \\"\\"\\"
     image
 
-    Description for image
+    Description for image.
     \\"\\"\\"
     image: String
     \\"\\"\\"
     postedAt
 
-    Description for postedAt
+    Description for postedAt.
     \\"\\"\\"
     postedAt: DateTime
   }
@@ -1520,25 +1520,25 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
     \\"\\"\\"
     user
 
-    Description for user
+    Description for user.
     \\"\\"\\"
     user: User!
   }
@@ -1564,13 +1564,13 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
   }
@@ -1582,13 +1582,13 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int
   }
@@ -1624,25 +1624,25 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
     \\"\\"\\"
     user
 
-    Description for user
+    Description for user.
     \\"\\"\\"
     user: User!
   }
@@ -1668,13 +1668,13 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String!
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int!
   }
@@ -1686,13 +1686,13 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
     \\"\\"\\"
     username
 
-    Description for username
+    Description for username.
     \\"\\"\\"
     username: String
     \\"\\"\\"
     userId
 
-    Description for userId
+    Description for userId.
     \\"\\"\\"
     userId: Int
   }
@@ -1728,13 +1728,13 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     color
 
-    Description for color
+    Description for color.
     \\"\\"\\"
     color: Color!
   }
@@ -1771,7 +1771,7 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
     \\"\\"\\"
     color
 
-    Description for color
+    Description for color.
     \\"\\"\\"
     color: Color!
   }
@@ -1783,7 +1783,7 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
     \\"\\"\\"
     color
 
-    Description for color
+    Description for color.
     \\"\\"\\"
     color: Color
   }
@@ -1818,19 +1818,19 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    The underlaying ID
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     name
 
-    Description for name
+    The name of the Photo
     \\"\\"\\"
     name: String!
     \\"\\"\\"
     metadata
 
-    Description for metadata
+    Description for metadata.
     \\"\\"\\"
     metadata: JSON!
   }
@@ -1856,13 +1856,13 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    The name of the Photo
     \\"\\"\\"
     name: String!
     \\"\\"\\"
     metadata
 
-    Description for metadata
+    Description for metadata.
     \\"\\"\\"
     metadata: JSON!
   }
@@ -1874,13 +1874,13 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    The name of the Photo
     \\"\\"\\"
     name: String
     \\"\\"\\"
     metadata
 
-    Description for metadata
+    Description for metadata.
     \\"\\"\\"
     metadata: JSON
   }
@@ -1915,31 +1915,31 @@ exports[`in typescript mode creates a single word sdl file 1`] = `
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
     \\"\\"\\"
     profiles
 
-    Description for profiles
+    Description for profiles.
     \\"\\"\\"
     profiles: [UserProfile]!
   }
@@ -1961,19 +1961,19 @@ exports[`in typescript mode creates a single word sdl file 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String!
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean!
   }
@@ -1985,19 +1985,19 @@ exports[`in typescript mode creates a single word sdl file 1`] = `
     \\"\\"\\"
     name
 
-    Description for name
+    Description for name.
     \\"\\"\\"
     name: String
     \\"\\"\\"
     email
 
-    Description for email
+    Description for email.
     \\"\\"\\"
     email: String
     \\"\\"\\"
     isAdmin
 
-    Description for isAdmin
+    Description for isAdmin.
     \\"\\"\\"
     isAdmin: Boolean
   }
@@ -2014,43 +2014,43 @@ exports[`in typescript mode creates a single word sdl file with CRUD actions 1`]
     \\"\\"\\"
     id
 
-    Description for id
+    Description for id.
     \\"\\"\\"
     id: Int!
     \\"\\"\\"
     title
 
-    Description for title
+    Description for title.
     \\"\\"\\"
     title: String!
     \\"\\"\\"
     slug
 
-    Description for slug
+    Description for slug.
     \\"\\"\\"
     slug: String!
     \\"\\"\\"
     author
 
-    Description for author
+    Description for author.
     \\"\\"\\"
     author: String!
     \\"\\"\\"
     body
 
-    Description for body
+    Description for body.
     \\"\\"\\"
     body: String!
     \\"\\"\\"
     image
 
-    Description for image
+    Description for image.
     \\"\\"\\"
     image: String
     \\"\\"\\"
     postedAt
 
-    Description for postedAt
+    Description for postedAt.
     \\"\\"\\"
     postedAt: DateTime
   }
@@ -2076,37 +2076,37 @@ exports[`in typescript mode creates a single word sdl file with CRUD actions 1`]
     \\"\\"\\"
     title
 
-    Description for title
+    Description for title.
     \\"\\"\\"
     title: String!
     \\"\\"\\"
     slug
 
-    Description for slug
+    Description for slug.
     \\"\\"\\"
     slug: String!
     \\"\\"\\"
     author
 
-    Description for author
+    Description for author.
     \\"\\"\\"
     author: String!
     \\"\\"\\"
     body
 
-    Description for body
+    Description for body.
     \\"\\"\\"
     body: String!
     \\"\\"\\"
     image
 
-    Description for image
+    Description for image.
     \\"\\"\\"
     image: String
     \\"\\"\\"
     postedAt
 
-    Description for postedAt
+    Description for postedAt.
     \\"\\"\\"
     postedAt: DateTime
   }
@@ -2118,37 +2118,37 @@ exports[`in typescript mode creates a single word sdl file with CRUD actions 1`]
     \\"\\"\\"
     title
 
-    Description for title
+    Description for title.
     \\"\\"\\"
     title: String
     \\"\\"\\"
     slug
 
-    Description for slug
+    Description for slug.
     \\"\\"\\"
     slug: String
     \\"\\"\\"
     author
 
-    Description for author
+    Description for author.
     \\"\\"\\"
     author: String
     \\"\\"\\"
     body
 
-    Description for body
+    Description for body.
     \\"\\"\\"
     body: String
     \\"\\"\\"
     image
 
-    Description for image
+    Description for image.
     \\"\\"\\"
     image: String
     \\"\\"\\"
     postedAt
 
-    Description for postedAt
+    Description for postedAt.
     \\"\\"\\"
     postedAt: DateTime
   }

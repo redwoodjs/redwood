@@ -42,7 +42,9 @@ model Shoe {
 }
 
 model Photo {
+  /// The underlaying ID
   id       Int    @id @default(autoincrement())
+  /// The name of the Photo
   name     String
   metadata Json
 }

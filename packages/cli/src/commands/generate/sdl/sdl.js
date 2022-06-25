@@ -45,10 +45,12 @@ const missingIdConsoleMessage = () => {
 }
 
 const addFieldGraphQLComment = (field, str) => {
+  const description = field.documentation || `Description for ${field.name}.`
+
   return `"""
   ${field.name}
 
-  Description for ${field.name}.
+  ${description}
   """
   ${str}`
 }
