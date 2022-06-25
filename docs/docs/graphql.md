@@ -1081,7 +1081,7 @@ export const getWeather = async ({ input }: WeatherInput) {
 
 RedwoodJS helps you document your GraphQL API by auto-generating commented SDL that will be incorporated into the `graphql.schema` file when generating types and that will be used for GraphiQL and the GraphQL Playground explorer.
 
-If you comment your Prisma schema models, its fields, or enums, the SDL generator will use the comment as th documentation.
+If you comment your Prisma schema models, its fields, or enums, the SDL generator will use the comment as the documentation.
 
 If there is no Prisma comment, then the SDL generator will default a comment that you can then edit.
 
