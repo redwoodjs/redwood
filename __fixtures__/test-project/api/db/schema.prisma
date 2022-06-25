@@ -17,24 +17,36 @@ model UserExample {
   name  String?
 }
 
-
+/// A blog post.
 model Post {
+  /// The unique identifier of a post.
   id        Int      @id @default(autoincrement())
+  /// The title of a post.
   title     String
+  /// The content of a post.
   body      String
+  /// When the post was created.
   createdAt DateTime @default(now())
 }
 
 model Contact {
+  /// The unique identifier of a contact.
   id        Int @id @default(autoincrement())
+  /// The name of the contact.
   name      String
+  /// The email of the contact.
   email     String
+  /// The message of the contact.
   message   String
+  /// When the contact was created.
   createdAt DateTime @default(now())
 }
 
+/// A User.
 model User {
+  /// The unique identifier of a user.
   id                  Int       @id @default(autoincrement())
+  /// The user's email address.
   email               String    @unique
   hashedPassword      String
   salt                String
