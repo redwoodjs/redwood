@@ -1,17 +1,22 @@
 export const schema = gql`
   """
-  Representation of ${singularPascalName}.
+  ${modelName}
+
+  ${modelDescription}
   """
   type ${singularPascalName} {
     ${query}
   }
 
 <% if (enums.length > 0) {%>
-<% enums.forEach((enumDef, idx)=> {%>
+<% enums.forEach((enumDef, idx)=> {
+  const enumName = enums[idx].name
+  const enumDescription = enums[idx].documentation || `Possible values for ${enums[idx].name}`
+  %>
   """
-  ${enums[idx].name}
+  ${enumName}
 
-  Possible values for ${enums[idx].name}
+  ${enumDescription}
   """
   enum ${enums[idx].name} {<% enums[idx].values.forEach((enumDefValue, idk)=> { %>
     ${enums[idx].values[idk].name}<% }) %>

@@ -141,7 +141,13 @@ const sdlFromSchemaModel = async (name, crud) => {
     )
   ).reduce((acc, curr) => acc.concat(curr), [])
 
+  const modelName = model.name
+  const modelDescription =
+    model.documentation || `Representation of ${modelName}.`
+
   return {
+    modelName,
+    modelDescription,
     query: querySDL(model).join('\n    '),
     createInput: createInputSDL(model, types).join('\n    '),
     updateInput: updateInputSDL(model, types).join('\n    '),
@@ -152,8 +158,16 @@ const sdlFromSchemaModel = async (name, crud) => {
 }
 
 export const files = async ({ name, crud = true, tests, typescript }) => {
-  const { query, createInput, updateInput, idType, relations, enums } =
-    await sdlFromSchemaModel(name, crud)
+  const {
+    modelName,
+    modelDescription,
+    query,
+    createInput,
+    updateInput,
+    idType,
+    relations,
+    enums,
+  } = await sdlFromSchemaModel(name, crud)
 
   const templatePath = customOrDefaultTemplatePath({
     side: 'api',
@@ -162,6 +176,8 @@ export const files = async ({ name, crud = true, tests, typescript }) => {
   })
 
   let template = generateTemplate(templatePath, {
+    modelName,
+    modelDescription,
     name,
     crud,
     query,
