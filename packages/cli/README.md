@@ -399,7 +399,7 @@ For the actual writing of files to disk, generators call on a function from [src
 More complicated generators, like auth, will have a little more logic in their directories:
 
 ```terminal
-src/commands/generate/auth
+src/commands/setup/auth
 ├── auth.js
 ├── providers
 ├── templates
@@ -549,16 +549,16 @@ And just like generators, destroyers have tests. Right now, the way we test dest
 
 ### Adding a Provider to the Auth Generator
 
-Adding a provider to the auth generator is as easy as adding a file in [./src/commands/generate/auth/providers](https://github.com/redwoodjs/redwood/tree/main/packages/cli/src/commands/generate/auth/providers) that exports the three constants: `config`, `packages`, and `notes`.
+Adding a provider to the auth generator is as easy as adding a file in [./src/commands/setup/auth/providers](https://github.com/redwoodjs/redwood/tree/main/packages/cli/src/commands/setup/auth/providers) that exports the three constants: `config`, `packages`, and `notes`.
 
 > Note that the provider you are about to add has to have already been implemented in `@redwoodjs/auth`. For example, the provider in the example below, Netlify Identity, is implemented [here](https://github.com/redwoodjs/redwood/blob/main/packages/auth/src/authClients/netlify.ts).
 >
 > So if you haven't done that yet, start with [this doc](https://github.com/redwoodjs/redwood/blob/main/packages/auth/README.md#contributing), then come back to this section afterwards.
 
-We'll use the [Netlify Identity](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/commands/generate/auth/providers/netlify.js) provider as an example to discuss these requirements:
+We'll use the [Netlify Identity](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/commands/setup/auth/providers/netlify.js) provider as an example to discuss these requirements:
 
 ```javascript
-// ./src/commands/generate/auth/providers/netlify.js
+// ./src/commands/setup/auth/providers/netlify.js
 
 export const config = {
   imports: [`import netlifyIdentity from 'netlify-identity-widget'`],
