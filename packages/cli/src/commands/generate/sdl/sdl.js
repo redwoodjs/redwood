@@ -55,11 +55,23 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
     Decimal: 'Float',
   }
 
-  return `${field.name}: ${field.isList ? '[' : ''}${
-    dictionary[field.type] || field.type
-  }${field.isList ? ']' : ''}${
-    (field.isRequired && required) | field.isList ? '!' : ''
-  }`
+  return addFieldGraphQLComment(
+    field,
+    `${field.name}: ${field.isList ? '[' : ''}${
+      dictionary[field.type] || field.type
+    }${field.isList ? ']' : ''}${
+      (field.isRequired && required) | field.isList ? '!' : ''
+    }`
+  )
+}
+
+const addFieldGraphQLComment = (field, str) => {
+  return `"""
+  ${field.name}
+
+  Description for ${field.name}
+  """
+  ${str}`
 }
 
 const querySDL = (model) => {
