@@ -4,6 +4,8 @@ exports[`handler can be called with PascalCase model name 1`] = `
 Object {
   "fileContent": "export const schema = gql\`
   \\"\\"\\"
+  User
+
   Representation of User.
   \\"\\"\\"
   type User {
@@ -236,6 +238,8 @@ exports[`handler can be called with PascalCase model name 5`] = `
 Object {
   "fileContent": "export const schema = gql\`
   \\"\\"\\"
+  CustomData
+
   Representation of CustomData.
   \\"\\"\\"
   type CustomData {
@@ -428,6 +432,8 @@ exports[`handler can be called with camelCase model name 1`] = `
 Object {
   "fileContent": "export const schema = gql\`
   \\"\\"\\"
+  User
+
   Representation of User.
   \\"\\"\\"
   type User {
@@ -660,6 +666,8 @@ exports[`handler can be called with camelCase model name 5`] = `
 Object {
   "fileContent": "export const schema = gql\`
   \\"\\"\\"
+  CustomData
+
   Representation of CustomData.
   \\"\\"\\"
   type CustomData {
@@ -851,6 +859,8 @@ export const deleteCustomData = ({ id }) => {
 exports[`in javascript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  UserProfile
+
   Representation of UserProfile.
   \\"\\"\\"
   type UserProfile {
@@ -955,6 +965,8 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
 exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  UserProfile
+
   Representation of UserProfile.
   \\"\\"\\"
   type UserProfile {
@@ -1059,7 +1071,9 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
 exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
-  Representation of Shoe.
+  Shoe
+
+  A show worn by a user.
   \\"\\"\\"
   type Shoe {
     \\"\\"\\"
@@ -1079,7 +1093,7 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
   \\"\\"\\"
   Color
 
-  Possible values for Color
+  A list of allowed colors.
   \\"\\"\\"
   enum Color {
     RED
@@ -1149,7 +1163,9 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
 exports[`in javascript mode creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
-  Representation of Photo.
+  Photo
+
+  A photograph taken by a user.
   \\"\\"\\"
   type Photo {
     \\"\\"\\"
@@ -1246,6 +1262,8 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
 exports[`in javascript mode creates a single word sdl file 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  User
+
   Representation of User.
   \\"\\"\\"
   type User {
@@ -1345,6 +1363,8 @@ exports[`in javascript mode creates a single word sdl file 1`] = `
 exports[`in javascript mode creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  Post
+
   Representation of Post.
   \\"\\"\\"
   type Post {
@@ -1514,6 +1534,8 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
 exports[`in typescript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  UserProfile
+
   Representation of UserProfile.
   \\"\\"\\"
   type UserProfile {
@@ -1618,6 +1640,8 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
 exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  UserProfile
+
   Representation of UserProfile.
   \\"\\"\\"
   type UserProfile {
@@ -1722,7 +1746,9 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
 exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
-  Representation of Shoe.
+  Shoe
+
+  A show worn by a user.
   \\"\\"\\"
   type Shoe {
     \\"\\"\\"
@@ -1742,7 +1768,7 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
   \\"\\"\\"
   Color
 
-  Possible values for Color
+  A list of allowed colors.
   \\"\\"\\"
   enum Color {
     RED
@@ -1812,7 +1838,9 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
 exports[`in typescript mode creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
-  Representation of Photo.
+  Photo
+
+  A photograph taken by a user.
   \\"\\"\\"
   type Photo {
     \\"\\"\\"
@@ -1909,6 +1937,8 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
 exports[`in typescript mode creates a single word sdl file 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  User
+
   Representation of User.
   \\"\\"\\"
   type User {
@@ -2008,6 +2038,8 @@ exports[`in typescript mode creates a single word sdl file 1`] = `
 exports[`in typescript mode creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   \\"\\"\\"
+  Post
+
   Representation of Post.
   \\"\\"\\"
   type Post {
