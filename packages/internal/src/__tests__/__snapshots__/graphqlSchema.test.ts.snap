@@ -21,16 +21,41 @@ type Mutation {
   updateTodoStatus(id: Int!, status: String!): Todo
 }
 
+\\"\\"\\"Represents Redwood internal data.\\"\\"\\"
 type Query {
   currentUser: JSON
+
+  \\"\\"\\"
+  redwood
+  
+  Info for redwood
+  \\"\\"\\"
   redwood: Redwood
   todos: [Todo]
   todosCount: Int!
 }
 
+\\"\\"\\"Represents Redwood internal data.\\"\\"\\"
 type Redwood {
+  \\"\\"\\"
+  currentUser
+  
+  The current user.
+  \\"\\"\\"
   currentUser: JSON
+
+  \\"\\"\\"
+  prismaVersion
+  
+  The version of Prisma.
+  \\"\\"\\"
   prismaVersion: String
+
+  \\"\\"\\"
+  version
+  
+  The version of Redwood.
+  \\"\\"\\"
   version: String
 }
 

@@ -52,18 +52,40 @@ export type MutationupdateTodoStatusArgs = {
   status: Scalars['String'];
 };
 
+/** Represents Redwood internal data. */
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
+  /**
+   * redwood
+   *
+   * Info for redwood
+   */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
+/** Represents Redwood internal data. */
 export type Redwood = {
   __typename?: 'Redwood';
+  /**
+   * currentUser
+   *
+   * The current user.
+   */
   currentUser?: Maybe<Scalars['JSON']>;
+  /**
+   * prismaVersion
+   *
+   * The version of Prisma.
+   */
   prismaVersion?: Maybe<Scalars['String']>;
+  /**
+   * version
+   *
+   * The version of Redwood.
+   */
   version?: Maybe<Scalars['String']>;
 };
 
@@ -290,18 +312,40 @@ export type MutationupdateTodoStatusArgs = {
   status: Scalars['String'];
 };
 
+/** Represents Redwood internal data. */
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
+  /**
+   * redwood
+   *
+   * Info for redwood
+   */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
+/** Represents Redwood internal data. */
 export type Redwood = {
   __typename?: 'Redwood';
+  /**
+   * currentUser
+   *
+   * The current user.
+   */
   currentUser?: Maybe<Scalars['JSON']>;
+  /**
+   * prismaVersion
+   *
+   * The version of Prisma.
+   */
   prismaVersion?: Maybe<Scalars['String']>;
+  /**
+   * version
+   *
+   * The version of Redwood.
+   */
   version?: Maybe<Scalars['String']>;
 };
 
