@@ -33,7 +33,9 @@ export const schema = gql`
   scalar JSONObject
 
   """
-  Represents Redwood internal data.
+  The Redwood Root Schema
+
+  Defines details about Redwood such as the current user and version information.
   """
   type Redwood {
     """
@@ -57,13 +59,13 @@ export const schema = gql`
   }
 
   """
-  Represents Redwood internal data.
+  About the Redwood queries.
   """
   type Query {
     """
     redwood
 
-    Info for redwood
+    Fetches the Redwood root schema.
     """
     redwood: Redwood
   }
