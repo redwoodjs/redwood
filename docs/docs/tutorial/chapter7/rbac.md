@@ -1184,7 +1184,7 @@ describe('comments', () => {
   // highlight-start
   scenario(
     'allows a moderator to delete a comment',
-    async (scenario, StandardScenario) => {
+    async (scenario: StandardScenario) => {
       mockCurrentUser({
         roles: 'moderator',
         id: 1,
