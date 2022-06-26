@@ -42,11 +42,11 @@ interface DirectiveMocker {
  * @example
  *  const mockExecution = mockAsyncRedwoodDirective(myTransformer, {
  *    context: currentUser,
- *    resolvedValue: 'Original Value',
+ *    mockedResolvedValue: 'Original Value',
  *  })
  *
- *  expect(mockExecution).not.toThrow()
- *  expect(mockExecution()).toEqual('Transformed Value')
+ *  await expect(mockExecution).resolves.not.toThrow()
+ *  await expect(mockExecution()).resolves.toEqual('Transformed Value')
  */
 export const mockAsyncRedwoodDirective: DirectiveMocker = (
   directive,
