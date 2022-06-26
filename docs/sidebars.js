@@ -84,6 +84,7 @@ module.exports = {
             { type: 'doc', id: 'auth/auth0' },
             { type: 'doc', id: 'auth/azure' },
             { type: 'doc', id: 'auth/clerk' },
+            { type: 'doc', id: 'auth/cognito' },
             { type: 'doc', id: 'auth/custom' },
             { type: 'doc', id: 'auth/firebase' },
             { type: 'doc', id: 'auth/gotrue' },
