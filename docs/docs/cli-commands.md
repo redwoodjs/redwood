@@ -1674,7 +1674,7 @@ See [Authentication](authentication.md).
 
 ### setup graphiQL headers
 
-Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase,dbAuth, and Netlify.
+Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase, dbAuth, and Netlify.
 
 A `generateGraphiQLHeader` file will be created in your `api/lib` folder and included in your gitignore. You can edit this file to customize your header. The function in the file is passed into your `createGraphQLHandler` and only called in dev.
 
