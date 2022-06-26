@@ -82,33 +82,15 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
 
     let maxIntersectionType
     let maxIntersectionFields = 0
-    let maxIntersectionIdx = 0
-    const fieldIntersections = new Array(types.length).fill(0)
 
-    for (let i = 0; i < types.length; i++) {
-      const type = types[i]
+    for (const type of types) {
       const fieldIntersection = Object.keys(type.getFields()).filter(
         (field) => field in obj
       )
-
-      fieldIntersections[i] = fieldIntersection.length
-
       if (fieldIntersection.length > maxIntersectionFields) {
         maxIntersectionFields = fieldIntersection.length
         maxIntersectionType = type
-        maxIntersectionIdx = i
       }
-    }
-    // If the maxIntersection fields is not unique, we are unable to determine type
-    if (
-      fieldIntersections.indexOf(
-        maxIntersectionFields,
-        maxIntersectionIdx + 1
-      ) !== -1
-    ) {
-      throw Error(
-        'Unable to resolve correct type for union. Try adding unique fields or __typename to each type'
-      )
     }
     return maxIntersectionType?.name ?? null
   },
