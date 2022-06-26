@@ -2,9 +2,9 @@
 sidebar_label: Cognito
 ---
 
-### Cognito
+# Cognito
 
-#### Installation
+## Installation
 
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
@@ -12,7 +12,7 @@ The following CLI command will install required packages and generate boilerplat
 yarn rw setup auth cognito
 ```
 
-#### Setup
+## Setup
 
 Update your .env file with the following setting which can be found on your Cognito user pool's dashboard.
 
@@ -20,7 +20,7 @@ Update your .env file with the following setting which can be found on your Cogn
 - `COGNITO_USERPOOL_ID` with the User pool ID. It can be found on the main dashboard of the User pool
 - `COGNITO_CLIENT_ID` with the Client ID that you have created for your Redwood app. If you don't have one you can create a new Client ID in the App Integration > App client list section.
 
-#### Usage
+## Usage
 
 Cognito supports the following methods:
 
