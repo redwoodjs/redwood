@@ -2452,19 +2452,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:7.1.0":
-  version: 7.1.0
-  resolution: "@fastify/http-proxy@npm:7.1.0"
+"@fastify/http-proxy@npm:8.0.2":
+  version: 8.0.2
+  resolution: "@fastify/http-proxy@npm:8.0.2"
   dependencies:
-    "@fastify/reply-from": ^7.0.0
+    "@fastify/reply-from": ^8.0.0
     ws: ^8.4.2
-  checksum: a36b51115e44e46b699fc35a3155c5dc811fd0a4a9e7f0958ca2830b39a185321eee31ad86c2757ee55f7f833d269bbe943b08ee45a57fa3f074e34f7dc721d6
+  checksum: a8530b1d2a27dbb01cf4ebc68b65cd0e15449a112dc62a66edc5b17f5389ba7d9884781f454b84fd7b017aaf62fbbcb07553fded9e74993c9d1a5ca13fd8f952
   languageName: node
   linkType: hard
 
-"@fastify/reply-from@npm:^7.0.0":
-  version: 7.0.1
-  resolution: "@fastify/reply-from@npm:7.0.1"
+"@fastify/reply-from@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@fastify/reply-from@npm:8.0.0"
   dependencies:
     end-of-stream: ^1.4.4
     fastify-plugin: ^3.0.0
@@ -2473,7 +2473,7 @@ __metadata:
     semver: ^7.3.5
     tiny-lru: ^8.0.1
     undici: ^5.0.0
-  checksum: 2f1dfac6265faba8c4ccd6f69bba93d8b7d1a3fd84ccc9c3e54dc7365995177fbdd612525efc983e26b9e4344594960932ff666c612cc291dac7deb05db260df
+  checksum: b94ea17b687c490dbdfbc917fb6ef21ce4ef21f425a9f6c9a0b4235c852a75e61525db3996a51c8cf22a616c69d99705374cb28422d22faeed745a53ff5a2bd3
   languageName: node
   linkType: hard
 
@@ -5883,7 +5883,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/plugin-transform-runtime": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@fastify/http-proxy": 7.1.0
+    "@fastify/http-proxy": 8.0.2
     "@fastify/static": 5.0.2
     "@fastify/url-data": 4.0.0
     "@types/aws-lambda": 8.10.97
