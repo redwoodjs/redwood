@@ -149,12 +149,12 @@ const mergeUserStorybookConfig = (baseConfig) => {
           ...new Set([...userStorybookConfig, ...baseConfig]),
         ]
         // To avoid `WARN Expected '@storybook/addon-actions' (or '@storybook/addon-essentials') to be listed before '@storybook/addon-interactions' in main Storybook config.`
-      if (key === 'addons') {
+        if (key === 'addons') {
           let key = '@storybook/addon-actions'
           combinedArrays = moveKeyToFrontOfArray(combinedArrays, key)
           key = '@storybook/addon-essentials'
           combinedArrays = moveKeyToFrontOfArray(combinedArrays, key)
-      }
+        }
         return combinedArrays
       }
       // Fall back to default merging
