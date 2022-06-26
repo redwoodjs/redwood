@@ -6012,7 +6012,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 7.2.1
+    concurrently: 7.2.2
     configstore: 3.1.5
     core-js: 3.23.2
     cross-env: 7.0.3
@@ -12754,14 +12754,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:7.2.1":
-  version: 7.2.1
-  resolution: "concurrently@npm:7.2.1"
+"concurrently@npm:7.2.2":
+  version: 7.2.2
+  resolution: "concurrently@npm:7.2.2"
   dependencies:
     chalk: ^4.1.0
     date-fns: ^2.16.1
     lodash: ^4.17.21
-    rxjs: ^6.6.3
+    rxjs: ^7.0.0
     shell-quote: ^1.7.3
     spawn-command: ^0.0.2-1
     supports-color: ^8.1.0
@@ -12769,7 +12769,7 @@ __metadata:
     yargs: ^17.3.1
   bin:
     concurrently: dist/bin/concurrently.js
-  checksum: 6103022d38f418178c7b5b14e1b38e81a3e2879d99c714794f62023812fa3dfd851cbbcd50728d30677aa03b886d9ca5e2ba30694a4c67c753de0ddddbb2c739
+  checksum: e5fa40a74732b839132d1bc4b8d45e0b1c27a52f877fd04ad6ea175b996d3e4966ff8fa941137af6e20ef1e52a9b4b94b0577fe9f8f44aa1c3a042e86624dfd6
   languageName: node
   linkType: hard
 
@@ -27117,7 +27117,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.5.1, rxjs@npm:^6.6.0, rxjs@npm:^6.6.3":
+"rxjs@npm:^6.3.3, rxjs@npm:^6.5.1, rxjs@npm:^6.6.0":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
@@ -27126,12 +27126,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.2.0, rxjs@npm:^7.5.1":
-  version: 7.5.4
-  resolution: "rxjs@npm:7.5.4"
+"rxjs@npm:^7.0.0, rxjs@npm:^7.2.0, rxjs@npm:^7.5.1":
+  version: 7.5.5
+  resolution: "rxjs@npm:7.5.5"
   dependencies:
     tslib: ^2.1.0
-  checksum: 7d40fcfac255e9aa9eaf4175910f27954a4b5cbd53f2031f8babb6e12f09431d8a9147b2d7461b0d0f263e68d68a7160d6c55af26e68d738c05eeb421ee5b2d3
+  checksum: bc84ba51aa1fffb03a2622a406d8a5d5074a543054a60a813302e39b6d3cb485d6738c4aad567e8f2f0c58839a3c3c272a336487951b44013b99eb731a0453bf
   languageName: node
   linkType: hard
 
