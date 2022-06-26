@@ -12,6 +12,7 @@ const spawnProcess = (...args: Array<string>) => {
     {
       detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
       stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
+      windowsHide: true,
     }
   ).unref()
 }

@@ -847,7 +847,7 @@ Two situations make testing Cells unique:
 1. A single Cell can export up to four separate components
 2. There's a GraphQL query taking place
 
-The first situation is really no different than regular component testing: you just test more than one component in your test. For example:
+The first situation is really no different from regular component testing: you just test more than one component in your test. For example:
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 import Article from 'src/components/Article'
@@ -1639,7 +1639,7 @@ Only the scenarios named for your test are included at the time the test is run.
 
 Only the posts scenarios will be present in the database when running the `posts.test.js` and only comments scenarios will be present when running `comments.test.js`. And within those scenarios, only the `standard` scenario will be loaded for each test unless you specify a differently named scenario to use instead.
 
-During the run of any single test, there is only every one scenario's worth of data present in the database: users.standard *or* users.incomplete.
+During the run of any single test, there is only ever one scenario's worth of data present in the database: users.standard *or* users.incomplete.
 
 ### mockCurrentUser() on the API-side
 
