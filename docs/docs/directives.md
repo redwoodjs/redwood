@@ -686,12 +686,12 @@ import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'
 import maskedEmail from './maskedEmail'
 
 describe('maskedEmail directive', () => {
-  it('has a maskedEmail implementation transforms the value', () => {
+  it('has a maskedEmail implementation transforms the value', async () => {
     const mockExecution = mockAsyncRedwoodDirective(maskedEmail, {
       mockedResolvedValue: 'foo',
     })
 
-    expect(mockExecution()).resolves.toBe('bar')
+    await expect(mockExecution()).resolves.toBe('bar')
   })
 })
 ```
