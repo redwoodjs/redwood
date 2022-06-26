@@ -5903,7 +5903,7 @@ __metadata:
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
-    qs: 6.10.3
+    qs: 6.10.5
     split2: 4.1.0
     typescript: 4.7.3
     yargs: 17.5.1
@@ -6206,7 +6206,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.31.3
+    react-hook-form: 7.33.0
     typescript: 4.7.3
   peerDependencies:
     graphql: 16.5.0
@@ -6418,7 +6418,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
-    ci-info: 3.3.1
+    ci-info: 3.3.2
     core-js: 3.23.2
     cross-undici-fetch: 0.1.27
     envinfo: 7.8.1
@@ -12253,10 +12253,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.3.1, ci-info@npm:^3.2.0":
-  version: 3.3.1
-  resolution: "ci-info@npm:3.3.1"
-  checksum: be82f632a323fb0be5cf8d45703fe0d21e6d7cef8e86c9c22eca42874468fbe6556b3eee9b9c7275072af2fdb6d03f0bd85e1aa5b617054873a4e1b4524ae354
+"ci-info@npm:3.3.2, ci-info@npm:^3.2.0":
+  version: 3.3.2
+  resolution: "ci-info@npm:3.3.2"
+  checksum: ef9dfd222dc76f923a98076d4d1db2b634109c8a0dbf8d66fa3c399edf0b230054edef3604abc6751d5ffc40b9563745a66ac8758f8e5e16636e7707d6f21dce
   languageName: node
   linkType: hard
 
@@ -25601,12 +25601,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.10.3, qs@npm:^6.10.0, qs@npm:^6.9.4":
-  version: 6.10.3
-  resolution: "qs@npm:6.10.3"
+"qs@npm:6.10.5, qs@npm:^6.10.0, qs@npm:^6.9.4":
+  version: 6.10.5
+  resolution: "qs@npm:6.10.5"
   dependencies:
     side-channel: ^1.0.4
-  checksum: c6684df925fd2c6f0940b8fbfe5d8b5a8634dc96c0908309655cbe61a3fbf94cedc6b11e669fca1971b53459b6f732cccd4eeb6484b5b77b405ad0cfb936e6fe
+  checksum: 37480ff889e02b14a3a5e8639c44bbf66b28e202e26ce49e0cec7e092e5f2d058c6e508db367b7a9f79d98a37cd92b8bed46fc53c2ac961d42e6f9cc48f32d82
   languageName: node
   linkType: hard
 
@@ -25869,12 +25869,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.31.3":
-  version: 7.31.3
-  resolution: "react-hook-form@npm:7.31.3"
+"react-hook-form@npm:7.33.0":
+  version: 7.33.0
+  resolution: "react-hook-form@npm:7.33.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 41875aad648dbb9f9f0b297fc6e4601656ceae502ec4d77a7644cc66eb54f1ba0c645bac6bce7d5e099d4e52f5870c2dd9d48d6760220453412c1d5865b72738
+  checksum: 86555a461186e3c03116c215229fa8a7831f28e1238184f12b5fc840c429c56e2a2976be06f68506d30759438622ebbfc6498c91556e1633b1ae4d500b0bc3f1
   languageName: node
   linkType: hard
 
