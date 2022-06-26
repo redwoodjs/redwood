@@ -35,7 +35,7 @@ interface DirectiveMocker {
 /**
  *
  * @description
- * Used for writing directive tests for asynchronous directives e.g.
+ * Used for writing tests for asynchronous directives e.g.
  * - Transformer directives can be passed resolvedValue
  * - Validator directives should check for errors thrown in certain situtations
  *
