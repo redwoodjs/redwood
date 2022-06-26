@@ -592,7 +592,7 @@ describe('isSubscriber directive', () => {
 ```
 
 :::tip
-If your Validator Directive is asynchronous, you can use `MockAsyncRedwoodDirective` instead.
+If your Validator Directive is asynchronous, you can use `mockAsyncRedwoodDirective` instead.
 
 ```ts
 import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'
@@ -676,7 +676,7 @@ describe('maskedEmail directive', () => {
 ```
 
 :::tip
-If your Transformer Directive is asynchronous, you can use `MockAsyncRedwoodDirective` instead.
+If your Transformer Directive is asynchronous, you can use `mockAsyncRedwoodDirective` instead.
 
 ```ts
 import { mockAsyncRedwoodDirective } from '@redwoodjs/testing/api'

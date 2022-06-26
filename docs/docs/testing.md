@@ -1703,7 +1703,7 @@ Luckily, RedwoodJS has several api testing utilities to make [testing functions 
 >
 > We have an entire testing section in the [Serverless Functions documentation](serverless-functions.md) that will walk your through an example of a function and a webhook.
 
-## Testing Redwood GraphQL Directives
+## Testing GraphQL Directives
 
 Please refer to the [Directives documentation](./directives.md) for details on how to write Redwood [Validator](./directives.md#writing-validator-tests) or [Transformer](./directives.md#writing-transformer-tests) Directives tests.
 ## Wrapping Up
