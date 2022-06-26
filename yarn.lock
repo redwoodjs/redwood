@@ -5903,7 +5903,7 @@ __metadata:
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
-    qs: 6.10.3
+    qs: 6.10.5
     split2: 4.1.0
     typescript: 4.7.3
     yargs: 17.5.1
@@ -25601,12 +25601,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.10.3, qs@npm:^6.10.0, qs@npm:^6.9.4":
-  version: 6.10.3
-  resolution: "qs@npm:6.10.3"
+"qs@npm:6.10.5, qs@npm:^6.10.0, qs@npm:^6.9.4":
+  version: 6.10.5
+  resolution: "qs@npm:6.10.5"
   dependencies:
     side-channel: ^1.0.4
-  checksum: c6684df925fd2c6f0940b8fbfe5d8b5a8634dc96c0908309655cbe61a3fbf94cedc6b11e669fca1971b53459b6f732cccd4eeb6484b5b77b405ad0cfb936e6fe
+  checksum: 37480ff889e02b14a3a5e8639c44bbf66b28e202e26ce49e0cec7e092e5f2d058c6e508db367b7a9f79d98a37cd92b8bed46fc53c2ac961d42e6f9cc48f32d82
   languageName: node
   linkType: hard
 
