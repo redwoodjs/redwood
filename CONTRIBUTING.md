@@ -29,18 +29,18 @@ Chances are that you'll have more than a few VS Codes open when you're contribut
 ![image](https://user-images.githubusercontent.com/32992335/130697522-313317f8-21e5-4f71-8b8e-9690dbad412a.png)
 
 
-## Creating a reproduction to include with issues
-Including a reproduction, either as a series of steps, a public Github repo with the problem you are facing or a Gitpod snapshot will definitely let us help you faster!
+## Creating a Reproduction to Include with Issues
+Are you about to open an issue? Including a reproduction, either as a series of steps, as a public GitHub repo, or as a Gitpod snapshot, will definitely let us help you faster!
 
-### Option 1: Create a Gitpod snapshot
-This is a great option, when the issue you are reporting is cross-platform - so for example, isn't a a Windows specific issue. Here's a video walkthrough on how to create a snapshot link, from the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter)
+### Option 1: Create a Gitpod Snapshot
+This is a great option when the issue you're reporting is cross-platform. I.e., it isn't a Windows-specific issue. Here's a video walkthrough on how to create a snapshot of the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter):
 
 https://user-images.githubusercontent.com/1521877/174895237-ea00e1a6-fe45-49bb-b69b-491ed82c115e.mp4
 
-### Option 2: Fork a starter repo
-You can always fork the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter) - which is a brand new project with the latest stable version of Redwood.
+### Option 2: Fork the Starter Repo
+You can always fork the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter) which is a brand new project with the latest stable version of Redwood.
 
-Once you make your changes in your fork, you can include the link to your repo. This makes its much easier for us to see and understand what's going on.
+Once you make your changes in your fork, include the link to your repo in your issue. This'll make it much easier for us to understand what's going on.
 
 
 
