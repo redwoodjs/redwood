@@ -311,7 +311,7 @@ Are you about to open an issue? Including a reproduction, either as a series of 
 
 This is a great option when the issue you're reporting is cross-platform. I.e., it isn't a Windows-specific issue. Here's a video walkthrough on how to create a snapshot of the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter):
 
-https://user-images.githubusercontent.com/1521877/174895237-ea00e1a6-fe45-49bb-b69b-491ed82c115e.mp4
+https://user-images.githubusercontent.com/1521877/176033049-d3c57b92-3ee6-4c60-918b-fdbcfa83fd0f.mp4
 
 ## Option 2: Fork the Starter Repo
 
