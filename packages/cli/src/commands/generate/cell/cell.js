@@ -161,15 +161,15 @@ export const { command, description, builder, handler } =
             const queryFieldName = nameVariants(
               removeGeneratorName(cellName, 'cell')
             ).camelName
-            const doesProjectHaveSdl = await checkProjectForQueryField(
+            const projectHasSdl = await checkProjectForQueryField(
               queryFieldName
             )
 
-            if (doesProjectHaveSdl) {
+            if (projectHasSdl) {
               await generateTypes()
             } else {
               task.skip(
-                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'`
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
               )
             }
           },
