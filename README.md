@@ -669,6 +669,37 @@ And there you have it.
   </tr>
   <tr>
     <td align="center"><a href="https://fabiolazzaroni.dev/"><img src="https://avatars.githubusercontent.com/u/15056746?v=4" width="100px;" alt=""/><br /><sub><b>Fabio Lazzaroni</b></sub></a></td>
+    <td align="center"><a href="https://github.com/rushabhhere"><img src="https://avatars.githubusercontent.com/u/73743535?v=4" width="100px;" alt=""/><br /><sub><b>Rushabh Javeri</b></sub></a></td>
+    <td align="center"><a href="https://github.com/andershagbard"><img src="https://avatars.githubusercontent.com/u/9662430?v=4" width="100px;" alt=""/><br /><sub><b>Anders Søgaard</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kunalarya"><img src="https://avatars.githubusercontent.com/u/1680103?v=4" width="100px;" alt=""/><br /><sub><b>kunalarya</b></sub></a></td>
+    <td align="center"><a href="https://github.com/alephao"><img src="https://avatars.githubusercontent.com/u/7674479?v=4" width="100px;" alt=""/><br /><sub><b>Aleph Retamal</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/AlonHor"><img src="https://avatars.githubusercontent.com/u/57628667?v=4" width="100px;" alt=""/><br /><sub><b>Alon</b></sub></a></td>
+    <td align="center"><a href="https://ionoid.io/"><img src="https://avatars.githubusercontent.com/u/1108370?v=4" width="100px;" alt=""/><br /><sub><b>Bouzid Badreddine</b></sub></a></td>
+    <td align="center"><a href="https://charlypoly.com/"><img src="https://avatars.githubusercontent.com/u/1252066?v=4" width="100px;" alt=""/><br /><sub><b>Charly POLY</b></sub></a></td>
+    <td align="center"><a href="https://github.com/MrGuiMan"><img src="https://avatars.githubusercontent.com/u/3082385?v=4" width="100px;" alt=""/><br /><sub><b>Guillaume Mantopoulos</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jaaneh"><img src="https://avatars.githubusercontent.com/u/27323317?v=4" width="100px;" alt=""/><br /><sub><b>Jan Henning</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://oberschweiber.com/"><img src="https://avatars.githubusercontent.com/u/19388?v=4" width="100px;" alt=""/><br /><sub><b>Jonas Oberschweiber</b></sub></a></td>
+    <td align="center"><a href="https://jordanrolph.com/"><img src="https://avatars.githubusercontent.com/u/28222941?v=4" width="100px;" alt=""/><br /><sub><b>Jordan Rolph</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jorgepvenegas"><img src="https://avatars.githubusercontent.com/u/2190603?v=4" width="100px;" alt=""/><br /><sub><b>Jorge Venegas</b></sub></a></td>
+    <td align="center"><a href="https://github.com/razzeee"><img src="https://avatars.githubusercontent.com/u/5943908?v=4" width="100px;" alt=""/><br /><sub><b>Kolja Lampe</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Leon-Sam"><img src="https://avatars.githubusercontent.com/u/18523441?v=4" width="100px;" alt=""/><br /><sub><b>Leon</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Masvoras"><img src="https://avatars.githubusercontent.com/u/58081001?v=4" width="100px;" alt=""/><br /><sub><b>Masvoras</b></sub></a></td>
+    <td align="center"><a href="https://minho42.com/"><img src="https://avatars.githubusercontent.com/u/15278512?v=4" width="100px;" alt=""/><br /><sub><b>Min ho Kim</b></sub></a></td>
+    <td align="center"><a href="https://github.com/fangpinsern"><img src="https://avatars.githubusercontent.com/u/52379442?v=4" width="100px;" alt=""/><br /><sub><b>Pin Sern</b></sub></a></td>
+    <td align="center"><a href="https://click.ecc.ac.jp/ecc/rokazaki/"><img src="https://avatars.githubusercontent.com/u/70571576?v=4" width="100px;" alt=""/><br /><sub><b>RUI OKAZAKI</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Gombeng"><img src="https://avatars.githubusercontent.com/u/57914770?v=4" width="100px;" alt=""/><br /><sub><b>Syahrizal Ardana</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/craineum"><img src="https://avatars.githubusercontent.com/u/2641685?v=4" width="100px;" alt=""/><br /><sub><b>craineum</b></sub></a></td>
+    <td align="center"><a href="https://github.com/gtarsia"><img src="https://avatars.githubusercontent.com/u/4072352?v=4" width="100px;" alt=""/><br /><sub><b>hello there</b></sub></a></td>
+    <td align="center"><a href="https://github.com/mattdriscoll"><img src="https://avatars.githubusercontent.com/u/16880374?v=4" width="100px;" alt=""/><br /><sub><b>Matt Driscoll</b></sub></a></td>
+    <td align="center"><a href="http://paikwiki.github.io/"><img src="https://avatars.githubusercontent.com/u/4120850?v=4" width="100px;" alt=""/><br /><sub><b>paikwiki</b></sub></a></td>
   </tr>
 </table>
 

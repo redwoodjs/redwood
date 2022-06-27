@@ -2489,10 +2489,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/docusaurus@npm:1.0.5":
-  version: 1.0.5
-  resolution: "@tsconfig/docusaurus@npm:1.0.5"
-  checksum: c837f2acb4ff08760c57d8561174f130f287e2a6908778ab635f829ba581fe94f23378d53aac94f93f44f97baa03559946063c71f8f0e0f4931a4d67a389ad6e
+"@tsconfig/docusaurus@npm:1.0.6":
+  version: 1.0.6
+  resolution: "@tsconfig/docusaurus@npm:1.0.6"
+  checksum: 7a5d84549b6506d6ed9281a6f3fd60418e1c7a764a165f5f25441be3a78829380980682a86cb3cf50ca45f6a30557a8354df7abd39880a4012ad814ed136e053
   languageName: node
   linkType: hard
 
@@ -4632,7 +4632,7 @@ __metadata:
     "@docusaurus/plugin-content-docs": 2.0.0-beta.21
     "@docusaurus/preset-classic": 2.0.0-beta.21
     "@mdx-js/react": 1.6.22
-    "@tsconfig/docusaurus": 1.0.5
+    "@tsconfig/docusaurus": 1.0.6
     clsx: 1.1.1
     react: 17.0.2
     react-dom: 17.0.2
