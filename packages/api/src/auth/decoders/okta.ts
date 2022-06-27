@@ -1,4 +1,4 @@
-const OktaJwtVerifier = require('@okta/jwt-verifier')
+import OktaJwtVerifier from '@okta/jwt-verifier'
 
 export const okta = async (
   token: string
