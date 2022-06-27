@@ -114,7 +114,7 @@ To sum up, when a GraphQL query reaches a GraphQL API, the following flow is fol
 
 For more info on a pure GraphQL implementation, [complete GraphQL guides and tutorials are available on graphql.org](https://graphql.org/learn/).
 
-Redwood in comparison provides a "deconstructed" way of creating your GraphQL API. 
+Redwood in comparison provides a "deconstructed" way of creating your GraphQL API.
 - You define your SDLs (schema) in `*.sdl.js` files, which defines what queries and mutations are available, and what fields can be returned
 - For each query or mutation, you write a service function with the same name. This is the resolver
 - We then take all your SDLs, Services (resolvers) and other config - combine it to a GraphQL server and expose it as an endpoint
@@ -1202,3 +1202,11 @@ This might be one of our most frequently asked questions of all time. Here's [To
 
 <!-- TODO -->
 <!-- This https://community.redwoodjs.com/t/how-to-add-resolvetype-resolver-for-interfaces/432/7 -->
+
+## Futher Reading
+
+Eager to learn more about GraphQL? You will find some recommend resources below:
+
+- [GraphQL.wtf](https://graphql.wtf) publishes one short video per week, covering most aspects of GraphQL!
+- [howtographql.com] is aimed to people looking to learn GraphQL in a practical way, through a set of complete full-stack tutorials.
+- [The official GraphQL documentation](https://graphql.org/learn/) is also a great place to deep dive into the GraphQL language.
