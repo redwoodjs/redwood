@@ -150,6 +150,7 @@ export class AuthProvider extends React.Component<
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    console.info('AuthProvider getCurrentUser()')
     // Always get a fresh token, rather than use the one in state
     const token = await this.getToken()
     const response = await global.fetch(this.getApiGraphQLUrl(), {
@@ -229,6 +230,7 @@ export class AuthProvider extends React.Component<
    * missed or slip through.
    */
   getToken = async () => {
+    console.info('AuthProvider getToken()')
     let token
 
     try {
@@ -241,6 +243,7 @@ export class AuthProvider extends React.Component<
   }
 
   reauthenticate = async () => {
+    console.info('AuthProvider reauthenticate()')
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
       currentUser: null,

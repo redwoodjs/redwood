@@ -39,10 +39,13 @@ export const dbAuth = (
   }
 
   const getToken = async () => {
+    console.info('  client getToken()')
     if (getTokenResponse) {
+      console.info('    return promise')
       return getTokenResponse
     }
 
+    console.info('    fetch')
     // @ts-ignore
     getTokenResponse = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, { credentials })
     // @ts-ignore
