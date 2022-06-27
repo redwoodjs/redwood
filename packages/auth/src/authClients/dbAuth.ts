@@ -19,8 +19,11 @@ export type DbAuthConfig = {
     credentials: 'include' | 'same-origin'
   }
 }
+const NEXT_TOKEN_CHECK: number = 5000
 
 let getTokenResponse: null | Promise<string | null>
+let lastTokenCheckAt: Date = new Date('1970-01-01T00:00:00')
+let token: string
 
 export const dbAuth = (
   _client: DbAuth,
@@ -39,20 +42,37 @@ export const dbAuth = (
   }
 
   const getToken = async () => {
-    console.info('  client getToken()')
     if (getTokenResponse) {
-      console.info('    return promise')
       return getTokenResponse
     }
+    
+    const now = new Date()
 
-    console.info('    fetch')
-    // @ts-ignore
-    getTokenResponse = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, { credentials })
-    // @ts-ignore
-    const response = await getTokenResponse
-    // @ts-ignore
-    const token = await response.text()
-    getTokenResponse = null
+    if (!lastTokenCheckAt || now.getTime() - lastTokenCheckAt.getTime() > NEXT_TOKEN_CHECK) {
+      console.info('  client getToken()')
+      if (getTokenResponse) {
+        console.info('    return promise')
+        return getTokenResponse
+      }
+
+      console.info('    fetch')
+
+      getTokenResponse = new Promise(async (resolve) => {
+        const fetchy = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
+          credentials,
+        })
+        const response = await fetchy
+        token = await response.text()
+        lastTokenCheckAt = new Date()
+        getTokenResponse = null
+
+        if (token.length === 0) {
+          resolve(null)
+        } else {
+          resolve(token)
+        }
+      })
+    }
 
     if (token.length === 0) {
       return null
