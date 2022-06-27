@@ -169,7 +169,7 @@ export const { command, description, builder, handler } =
               await generateTypes()
             } else {
               task.skip(
-                `Skipping type generation: No SDL defined for "${queryFieldName}", run 'yarn rw g sdl ${queryFieldName}'`
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'`
               )
             }
           },
