@@ -52,7 +52,7 @@
     "fs-extra": "10.1.0",
     "graphql": "16.5.0",
     "kill-port": "1.6.1",
-    "prettier": "2.6.2",
+    "prettier": "2.7.1",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.11.21",

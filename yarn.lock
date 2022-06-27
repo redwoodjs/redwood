@@ -109,18 +109,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.0":
-  version: 1.22.0
-  resolution: "@auth0/auth0-spa-js@npm:1.22.0"
+"@auth0/auth0-spa-js@npm:1.22.1":
+  version: 1.22.1
+  resolution: "@auth0/auth0-spa-js@npm:1.22.1"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.22.4
+    core-js: ^3.22.6
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 7bcef7b59f6e804edb81c07fee03a7a4e9ce90126d4d47ac5c518a0f7057bbf5b2302c2002c7972155b3670ea44efba837445acd1be9b64ad1688e109eaa3b08
+  checksum: c7c94e3d666b3f9d72f9566e32a58522827791adc6789bd4115415c454aa037ea8c6eabfcf481ce71260084c12df3767a6dfb6a37d05d0da05356c405ea73021
   languageName: node
   linkType: hard
 
@@ -5903,7 +5903,7 @@ __metadata:
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
-    qs: 6.10.3
+    qs: 6.10.5
     split2: 4.1.0
     typescript: 4.7.3
     yargs: 17.5.1
@@ -5969,7 +5969,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.0
+    "@auth0/auth0-spa-js": 1.22.1
     "@azure/msal-browser": 2.24.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
@@ -6012,7 +6012,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 7.2.1
+    concurrently: 7.2.2
     configstore: 3.1.5
     core-js: 3.23.2
     cross-env: 7.0.3
@@ -6031,7 +6031,7 @@ __metadata:
     param-case: 3.0.4
     pascalcase: 1.0.0
     pluralize: 8.0.0
-    prettier: 2.6.2
+    prettier: 2.7.1
     prisma: 3.15.2
     prompts: 2.4.2
     rimraf: 3.0.2
@@ -6072,7 +6072,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 27.5.1
     jscodeshift: 0.13.1
-    prettier: 2.6.2
+    prettier: 2.7.1
     tasuku: 2.0.0
     tempy: 1.0.1
     toml: 3.0.0
@@ -6168,7 +6168,7 @@ __metadata:
     "@redwoodjs/internal": 2.0.0
     "@typescript-eslint/eslint-plugin": 5.26.0
     "@typescript-eslint/parser": 5.26.0
-    eslint: 8.16.0
+    eslint: 8.18.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -6179,7 +6179,7 @@ __metadata:
     eslint-plugin-react: 7.30.0
     eslint-plugin-react-hooks: 4.5.0
     jest: 27.5.1
-    prettier: 2.6.2
+    prettier: 2.7.1
     typescript: 4.7.3
   languageName: unknown
   linkType: soft
@@ -6206,7 +6206,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.31.3
+    react-hook-form: 7.33.0
     typescript: 4.7.3
   peerDependencies:
     graphql: 16.5.0
@@ -6290,7 +6290,7 @@ __metadata:
     graphql-tag: 2.12.6
     jest: 27.5.1
     kill-port: 1.6.1
-    prettier: 2.6.2
+    prettier: 2.7.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
     systeminformation: 5.11.21
@@ -6418,7 +6418,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
-    ci-info: 3.3.1
+    ci-info: 3.3.2
     core-js: 3.23.2
     cross-undici-fetch: 0.1.27
     envinfo: 7.8.1
@@ -12253,10 +12253,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.3.1, ci-info@npm:^3.2.0":
-  version: 3.3.1
-  resolution: "ci-info@npm:3.3.1"
-  checksum: be82f632a323fb0be5cf8d45703fe0d21e6d7cef8e86c9c22eca42874468fbe6556b3eee9b9c7275072af2fdb6d03f0bd85e1aa5b617054873a4e1b4524ae354
+"ci-info@npm:3.3.2, ci-info@npm:^3.2.0":
+  version: 3.3.2
+  resolution: "ci-info@npm:3.3.2"
+  checksum: ef9dfd222dc76f923a98076d4d1db2b634109c8a0dbf8d66fa3c399edf0b230054edef3604abc6751d5ffc40b9563745a66ac8758f8e5e16636e7707d6f21dce
   languageName: node
   linkType: hard
 
@@ -12754,14 +12754,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:7.2.1":
-  version: 7.2.1
-  resolution: "concurrently@npm:7.2.1"
+"concurrently@npm:7.2.2":
+  version: 7.2.2
+  resolution: "concurrently@npm:7.2.2"
   dependencies:
     chalk: ^4.1.0
     date-fns: ^2.16.1
     lodash: ^4.17.21
-    rxjs: ^6.6.3
+    rxjs: ^7.0.0
     shell-quote: ^1.7.3
     spawn-command: ^0.0.2-1
     supports-color: ^8.1.0
@@ -12769,7 +12769,7 @@ __metadata:
     yargs: ^17.3.1
   bin:
     concurrently: dist/bin/concurrently.js
-  checksum: 6103022d38f418178c7b5b14e1b38e81a3e2879d99c714794f62023812fa3dfd851cbbcd50728d30677aa03b886d9ca5e2ba30694a4c67c753de0ddddbb2c739
+  checksum: e5fa40a74732b839132d1bc4b8d45e0b1c27a52f877fd04ad6ea175b996d3e4966ff8fa941137af6e20ef1e52a9b4b94b0577fe9f8f44aa1c3a042e86624dfd6
   languageName: node
   linkType: hard
 
@@ -13071,7 +13071,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.23.2, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.4, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.23.2":
   version: 3.23.2
   resolution: "core-js@npm:3.23.2"
   checksum: f6d1039dd5b7d8d7a886bafad6c34233c8fa62f0df61d110ccde5f37dde3e29ff57354c3ff87c1546c417fac0038265637166dce5588a05c48ac91ec6590e4bb
@@ -13082,6 +13082,13 @@ __metadata:
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
   checksum: ab5f869adda3d4dfa8e8753f5b6e6990196f585e701c5fdb2bfd780bdc57235ceefdcd156f557faf9c2d3ed6010383870d3082318f8eda3218b1908413477a04
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.6, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.23.3
+  resolution: "core-js@npm:3.23.3"
+  checksum: de994a19bccca7e661a0c826be6d9c5c2fb9a7ada037ff075cd5a866ca6ca50803a3984d5b9150e3739f9cfd03f5d7d4c0c151f1c87ab34b0d3c010171a6b562
   languageName: node
   linkType: hard
 
@@ -15515,9 +15522,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.16.0":
-  version: 8.16.0
-  resolution: "eslint@npm:8.16.0"
+"eslint@npm:8.18.0":
+  version: 8.18.0
+  resolution: "eslint@npm:8.18.0"
   dependencies:
     "@eslint/eslintrc": ^1.3.0
     "@humanwhocodes/config-array": ^0.9.2
@@ -15556,7 +15563,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 175ed470440835a9b5fc01f3458b6fbcc58119647019a21672bab4907a407c0bf38b9401828fceeea0f724be94ac04e81cf454b1e5cab7565ffcfcb9fc9f148c
+  checksum: e35639453e5aeffaba8dcf5c304563f360fc599a12ebd2c01e9f33994a846bfa5263921455aecbcfbc2c2d01dba35fd0174d3cca3b3cb1a258aec2657c769bca
   languageName: node
   linkType: hard
 
@@ -25106,12 +25113,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.6.2, prettier@npm:^2.0.1, prettier@npm:^2.6.2":
-  version: 2.6.2
-  resolution: "prettier@npm:2.6.2"
+"prettier@npm:2.7.1, prettier@npm:^2.0.1, prettier@npm:^2.6.2":
+  version: 2.7.1
+  resolution: "prettier@npm:2.7.1"
   bin:
     prettier: bin-prettier.js
-  checksum: 4a2717d0aca6b5b5c24570854fdf119c4184ff7422a1aa283364bdfe5394ecff4f6ac375663840dc2680ea09b1d5370329b83ac06579588db6f8bc71620e1267
+  checksum: 359d2b7ecf36bd52924a48331cae506d335f18637fde6c686212f952b9ce678ce9f554a80571049b36ec2897a8a6c40094b776dea371cc5c04c481cf5b78504b
   languageName: node
   linkType: hard
 
@@ -25601,12 +25608,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.10.3, qs@npm:^6.10.0, qs@npm:^6.9.4":
-  version: 6.10.3
-  resolution: "qs@npm:6.10.3"
+"qs@npm:6.10.5, qs@npm:^6.10.0, qs@npm:^6.9.4":
+  version: 6.10.5
+  resolution: "qs@npm:6.10.5"
   dependencies:
     side-channel: ^1.0.4
-  checksum: c6684df925fd2c6f0940b8fbfe5d8b5a8634dc96c0908309655cbe61a3fbf94cedc6b11e669fca1971b53459b6f732cccd4eeb6484b5b77b405ad0cfb936e6fe
+  checksum: 37480ff889e02b14a3a5e8639c44bbf66b28e202e26ce49e0cec7e092e5f2d058c6e508db367b7a9f79d98a37cd92b8bed46fc53c2ac961d42e6f9cc48f32d82
   languageName: node
   linkType: hard
 
@@ -25869,12 +25876,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.31.3":
-  version: 7.31.3
-  resolution: "react-hook-form@npm:7.31.3"
+"react-hook-form@npm:7.33.0":
+  version: 7.33.0
+  resolution: "react-hook-form@npm:7.33.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 41875aad648dbb9f9f0b297fc6e4601656ceae502ec4d77a7644cc66eb54f1ba0c645bac6bce7d5e099d4e52f5870c2dd9d48d6760220453412c1d5865b72738
+  checksum: 86555a461186e3c03116c215229fa8a7831f28e1238184f12b5fc840c429c56e2a2976be06f68506d30759438622ebbfc6498c91556e1633b1ae4d500b0bc3f1
   languageName: node
   linkType: hard
 
@@ -27044,7 +27051,7 @@ __metadata:
     core-js: 3.23.2
     cypress: 9.7.0
     cypress-wait-until: 1.7.2
-    eslint: 8.16.0
+    eslint: 8.18.0
     fast-glob: 3.2.11
     fs-extra: 10.1.0
     is-port-reachable: 3.1.0
@@ -27117,7 +27124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.5.1, rxjs@npm:^6.6.0, rxjs@npm:^6.6.3":
+"rxjs@npm:^6.3.3, rxjs@npm:^6.5.1, rxjs@npm:^6.6.0":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
@@ -27126,12 +27133,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.2.0, rxjs@npm:^7.5.1":
-  version: 7.5.4
-  resolution: "rxjs@npm:7.5.4"
+"rxjs@npm:^7.0.0, rxjs@npm:^7.2.0, rxjs@npm:^7.5.1":
+  version: 7.5.5
+  resolution: "rxjs@npm:7.5.5"
   dependencies:
     tslib: ^2.1.0
-  checksum: 7d40fcfac255e9aa9eaf4175910f27954a4b5cbd53f2031f8babb6e12f09431d8a9147b2d7461b0d0f263e68d68a7160d6c55af26e68d738c05eeb421ee5b2d3
+  checksum: bc84ba51aa1fffb03a2622a406d8a5d5074a543054a60a813302e39b6d3cb485d6738c4aad567e8f2f0c58839a3c3c272a336487951b44013b99eb731a0453bf
   languageName: node
   linkType: hard
 
