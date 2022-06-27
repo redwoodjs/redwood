@@ -10,7 +10,7 @@ export const builder = (yargs) =>
       /*
       @NOTE This regex will ignore all double nested commands
       e.g. /destroy/hi.js & destroy/hi/hi.js are picked up,
-      but destroy/hi/__tests__/whatever.test.js will be ignored
+      but destroy/hi/utils/whatever.test.js will be ignored
       The [\/\\] bit is for supporting both windows and unix style paths
       */
       exclude: /destroy[\/\\]+.*[\/\\]+.*[\/\\]/,
