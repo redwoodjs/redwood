@@ -99,7 +99,7 @@ export const listQueryTypeFieldsInProject = async () => {
     const queryTypeFields = schema.getQueryType()?.getFields()
 
     // Return empty array if no schema found
-    return Object.keys(queryTypeFields || {})
+    return Object.keys(queryTypeFields ?? {})
   } catch (e) {
     console.error(e)
     return []
