@@ -16,7 +16,9 @@ body:
         Here's a few questions to guide your writing:
 
         - What is this feature about? The CLI? The web side? The api side? Both?
+
         - Why does Redwood need this feature? I.e., what's the problem you're running up against?
+
         - What would this feature's API look like?
     validations:
       required: true
