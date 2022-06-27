@@ -109,18 +109,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.0":
-  version: 1.22.0
-  resolution: "@auth0/auth0-spa-js@npm:1.22.0"
+"@auth0/auth0-spa-js@npm:1.22.1":
+  version: 1.22.1
+  resolution: "@auth0/auth0-spa-js@npm:1.22.1"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.22.4
+    core-js: ^3.22.6
     es-cookie: ^1.3.2
     fast-text-encoding: ^1.0.3
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 7bcef7b59f6e804edb81c07fee03a7a4e9ce90126d4d47ac5c518a0f7057bbf5b2302c2002c7972155b3670ea44efba837445acd1be9b64ad1688e109eaa3b08
+  checksum: c7c94e3d666b3f9d72f9566e32a58522827791adc6789bd4115415c454aa037ea8c6eabfcf481ce71260084c12df3767a6dfb6a37d05d0da05356c405ea73021
   languageName: node
   linkType: hard
 
@@ -5969,7 +5969,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.0
+    "@auth0/auth0-spa-js": 1.22.1
     "@azure/msal-browser": 2.24.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
@@ -6012,7 +6012,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 7.2.1
+    concurrently: 7.2.2
     configstore: 3.1.5
     core-js: 3.23.2
     cross-env: 7.0.3
@@ -12754,14 +12754,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:7.2.1":
-  version: 7.2.1
-  resolution: "concurrently@npm:7.2.1"
+"concurrently@npm:7.2.2":
+  version: 7.2.2
+  resolution: "concurrently@npm:7.2.2"
   dependencies:
     chalk: ^4.1.0
     date-fns: ^2.16.1
     lodash: ^4.17.21
-    rxjs: ^6.6.3
+    rxjs: ^7.0.0
     shell-quote: ^1.7.3
     spawn-command: ^0.0.2-1
     supports-color: ^8.1.0
@@ -12769,7 +12769,7 @@ __metadata:
     yargs: ^17.3.1
   bin:
     concurrently: dist/bin/concurrently.js
-  checksum: 6103022d38f418178c7b5b14e1b38e81a3e2879d99c714794f62023812fa3dfd851cbbcd50728d30677aa03b886d9ca5e2ba30694a4c67c753de0ddddbb2c739
+  checksum: e5fa40a74732b839132d1bc4b8d45e0b1c27a52f877fd04ad6ea175b996d3e4966ff8fa941137af6e20ef1e52a9b4b94b0577fe9f8f44aa1c3a042e86624dfd6
   languageName: node
   linkType: hard
 
@@ -13071,7 +13071,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.23.2, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.4, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.23.2":
   version: 3.23.2
   resolution: "core-js@npm:3.23.2"
   checksum: f6d1039dd5b7d8d7a886bafad6c34233c8fa62f0df61d110ccde5f37dde3e29ff57354c3ff87c1546c417fac0038265637166dce5588a05c48ac91ec6590e4bb
@@ -13082,6 +13082,13 @@ __metadata:
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
   checksum: ab5f869adda3d4dfa8e8753f5b6e6990196f585e701c5fdb2bfd780bdc57235ceefdcd156f557faf9c2d3ed6010383870d3082318f8eda3218b1908413477a04
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.6, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.23.3
+  resolution: "core-js@npm:3.23.3"
+  checksum: de994a19bccca7e661a0c826be6d9c5c2fb9a7ada037ff075cd5a866ca6ca50803a3984d5b9150e3739f9cfd03f5d7d4c0c151f1c87ab34b0d3c010171a6b562
   languageName: node
   linkType: hard
 
@@ -27117,7 +27124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.5.1, rxjs@npm:^6.6.0, rxjs@npm:^6.6.3":
+"rxjs@npm:^6.3.3, rxjs@npm:^6.5.1, rxjs@npm:^6.6.0":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
@@ -27126,12 +27133,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.2.0, rxjs@npm:^7.5.1":
-  version: 7.5.4
-  resolution: "rxjs@npm:7.5.4"
+"rxjs@npm:^7.0.0, rxjs@npm:^7.2.0, rxjs@npm:^7.5.1":
+  version: 7.5.5
+  resolution: "rxjs@npm:7.5.5"
   dependencies:
     tslib: ^2.1.0
-  checksum: 7d40fcfac255e9aa9eaf4175910f27954a4b5cbd53f2031f8babb6e12f09431d8a9147b2d7461b0d0f263e68d68a7160d6c55af26e68d738c05eeb421ee5b2d3
+  checksum: bc84ba51aa1fffb03a2622a406d8a5d5074a543054a60a813302e39b6d3cb485d6738c4aad567e8f2f0c58839a3c3c272a336487951b44013b99eb731a0453bf
   languageName: node
   linkType: hard
 
