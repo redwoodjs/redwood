@@ -52,10 +52,6 @@ export const dbAuth = (
       !lastTokenCheckAt ||
       now.getTime() - lastTokenCheckAt.getTime() > NEXT_TOKEN_CHECK
     ) {
-      if (getTokenResponse) {
-        return getTokenResponse
-      }
-
       getTokenResponse = new Promise(async (resolve) => {
         const result = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
           credentials,
