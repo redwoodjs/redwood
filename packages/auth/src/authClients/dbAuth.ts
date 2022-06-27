@@ -45,23 +45,22 @@ export const dbAuth = (
     if (getTokenResponse) {
       return getTokenResponse
     }
-    
+
     const now = new Date()
 
-    if (!lastTokenCheckAt || now.getTime() - lastTokenCheckAt.getTime() > NEXT_TOKEN_CHECK) {
-      console.info('  client getToken()')
+    if (
+      !lastTokenCheckAt ||
+      now.getTime() - lastTokenCheckAt.getTime() > NEXT_TOKEN_CHECK
+    ) {
       if (getTokenResponse) {
-        console.info('    return promise')
         return getTokenResponse
       }
 
-      console.info('    fetch')
-
       getTokenResponse = new Promise(async (resolve) => {
-        const fetchy = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
+        const result = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
           credentials,
         })
-        const response = await fetchy
+        const response = await result
         token = await response.text()
         lastTokenCheckAt = new Date()
         getTokenResponse = null
