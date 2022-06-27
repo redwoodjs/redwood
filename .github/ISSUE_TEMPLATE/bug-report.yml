@@ -31,7 +31,7 @@ body:
       label: How do we reproduce the bug?
       description: >
         What commands do we need to run?
-        Any packages do we need to install?
+        Are there any packages that we need to install?
         What does the `schema.prisma` need to look like?
         Maybe include a reproduction ([instructions here](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#Creating-a-reproduction-to-include-with-issues))?
 
