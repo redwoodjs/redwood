@@ -12,17 +12,6 @@ body:
         Describe the bug here.
         The more detail you provide, the better,
         but try to start with a summary to frame the issue.
-      placeholder: >
-        The dev server doesn't seem to be working.
-        When I run `yarn rw dev`,
-        the web side doesn't start and throws `TypeError: cli.isMultipleCompiler is not a function`.
-        I was just following the tutorial when I ran into this,
-        so nothing fancy going on here.
-
-
-        I think this probably has to do with [webpack-cli](https://github.com/webpack/webpack-cli).
-        I skimmed the issues on their repo and it looks like they just released a new version.
-        If we bump the version Redwood is using, it may resolve this.
     validations:
       required: true
 
@@ -39,18 +28,6 @@ body:
         While this field is optional,
         you're much more likely to get a timely response and fix from us if you provide one.
         Issues without them are much harder for us to debug.
-      placeholder: |
-        1. create a new redwood app
-        2. start the dev server
-
-        ```shell
-        yarn create redwood-app redwood-app
-        # ...
-        cd redwood-app
-        yarn rw dev
-        # ...
-        web | [webpack-cli] TypeError: cli.isMultipleCompiler is not a function
-        ```
     validations:
         required: false
 

@@ -12,13 +12,6 @@ body:
         The body of the issue, just like a regular GitHub issue.
         The more detail you provide, the better,
         but try to start with a summary to frame the issue.
-      placeholder: >
-        In #5658, we changed the link to edit a page in the docs to always point to the docs in `/docs` instead of `/docs/versioned_docs`.
-        While this was the right move, it's still not exactly clear what that links points to.
-        We should tweak the text to be a little more explicit about what version (i.e. Canary) that it'll take users to.
-
-
-        The text could be "Edit the most recent version of this page", "Edit the latest version of this page" or "Edit the Canary version of this page"—something along those lines.
     validations:
       required: true
 
