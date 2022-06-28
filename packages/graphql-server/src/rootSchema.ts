@@ -33,26 +33,20 @@ export const schema = gql`
   scalar JSONObject
 
   """
-  The Redwood Root Schema
+  The RedwoodJS Root Schema
 
-  Defines details about Redwood such as the current user and version information.
+  Defines details about RedwoodJS such as the current user and version information.
   """
   type Redwood {
     """
-    version
-
     The version of Redwood.
     """
     version: String
     """
-    currentUser
-
     The current user.
     """
     currentUser: JSON
     """
-    prismaVersion
-
     The version of Prisma.
     """
     prismaVersion: String
@@ -63,8 +57,6 @@ export const schema = gql`
   """
   type Query {
     """
-    redwood
-
     Fetches the Redwood root schema.
     """
     redwood: Redwood

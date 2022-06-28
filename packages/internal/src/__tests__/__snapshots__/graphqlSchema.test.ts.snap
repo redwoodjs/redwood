@@ -25,41 +25,25 @@ type Mutation {
 type Query {
   currentUser: JSON
 
-  \\"\\"\\"
-  redwood
-  
-  Fetches the Redwood root schema.
-  \\"\\"\\"
+  \\"\\"\\"Fetches the Redwood root schema.\\"\\"\\"
   redwood: Redwood
   todos: [Todo]
   todosCount: Int!
 }
 
 \\"\\"\\"
-The Redwood Root Schema
+The RedwoodJS Root Schema
 
-Defines details about Redwood such as the current user and version information.
+Defines details about RedwoodJS such as the current user and version information.
 \\"\\"\\"
 type Redwood {
-  \\"\\"\\"
-  currentUser
-  
-  The current user.
-  \\"\\"\\"
+  \\"\\"\\"The current user.\\"\\"\\"
   currentUser: JSON
 
-  \\"\\"\\"
-  prismaVersion
-  
-  The version of Prisma.
-  \\"\\"\\"
+  \\"\\"\\"The version of Prisma.\\"\\"\\"
   prismaVersion: String
 
-  \\"\\"\\"
-  version
-  
-  The version of Redwood.
-  \\"\\"\\"
+  \\"\\"\\"The version of Redwood.\\"\\"\\"
   version: String
 }
 

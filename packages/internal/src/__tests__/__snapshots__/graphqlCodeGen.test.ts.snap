@@ -56,40 +56,24 @@ export type MutationupdateTodoStatusArgs = {
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
-  /**
-   * redwood
-   *
-   * Fetches the Redwood root schema.
-   */
+  /** Fetches the Redwood root schema. */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
 /**
- * The Redwood Root Schema
+ * The RedwoodJS Root Schema
  *
- * Defines details about Redwood such as the current user and version information.
+ * Defines details about RedwoodJS such as the current user and version information.
  */
 export type Redwood = {
   __typename?: 'Redwood';
-  /**
-   * currentUser
-   *
-   * The current user.
-   */
+  /** The current user. */
   currentUser?: Maybe<Scalars['JSON']>;
-  /**
-   * prismaVersion
-   *
-   * The version of Prisma.
-   */
+  /** The version of Prisma. */
   prismaVersion?: Maybe<Scalars['String']>;
-  /**
-   * version
-   *
-   * The version of Redwood.
-   */
+  /** The version of Redwood. */
   version?: Maybe<Scalars['String']>;
 };
 
@@ -320,40 +304,24 @@ export type MutationupdateTodoStatusArgs = {
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
-  /**
-   * redwood
-   *
-   * Fetches the Redwood root schema.
-   */
+  /** Fetches the Redwood root schema. */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
 /**
- * The Redwood Root Schema
+ * The RedwoodJS Root Schema
  *
- * Defines details about Redwood such as the current user and version information.
+ * Defines details about RedwoodJS such as the current user and version information.
  */
 export type Redwood = {
   __typename?: 'Redwood';
-  /**
-   * currentUser
-   *
-   * The current user.
-   */
+  /** The current user. */
   currentUser?: Maybe<Scalars['JSON']>;
-  /**
-   * prismaVersion
-   *
-   * The version of Prisma.
-   */
+  /** The version of Prisma. */
   prismaVersion?: Maybe<Scalars['String']>;
-  /**
-   * version
-   *
-   * The version of Redwood.
-   */
+  /** The version of Redwood. */
   version?: Maybe<Scalars['String']>;
 };
 
