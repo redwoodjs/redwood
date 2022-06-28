@@ -23,7 +23,7 @@ const NEXT_TOKEN_CHECK: number = 5000
 
 let getTokenResponse: null | Promise<string | null>
 let lastTokenCheckAt: Date = new Date('1970-01-01T00:00:00')
-let token: string
+let token: string | null
 
 export const dbAuth = (
   _client: DbAuth,
@@ -57,23 +57,21 @@ export const dbAuth = (
           credentials,
         })
         const response = await result
-        token = await response.text()
+        const tokenText = await response.text()
         lastTokenCheckAt = new Date()
         getTokenResponse = null
 
-        if (token.length === 0) {
-          resolve(null)
+        if (tokenText.length === 0) {
+          token = null
         } else {
-          resolve(token)
+          token = tokenText
         }
+
+        resolve(token)
       })
     }
 
-    if (token.length === 0) {
-      return null
-    } else {
-      return token
-    }
+    return token
   }
 
   const login = async (attributes: LoginAttributes) => {
