@@ -131,9 +131,9 @@ Run this setup command to get the internals of dbAuth added to our app:
 yarn rw setup auth dbAuth
 ```
 
-:::caution
+:::info
 
-Internet is required to install additional packages .
+Internet connection is required to install additional packages .
 
 :::
 
