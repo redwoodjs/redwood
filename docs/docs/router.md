@@ -464,6 +464,18 @@ const SomePage = () => {
 }
 ```
 
+To add a link to a previous page, you can use it as an action on a button.
+
+```jsx title="BackButton.js"
+import { back } from '@redwoodjs/router'
+
+const BackButton = () => {
+  return (
+    <button type="button" onClick={back}>Back</button>
+  )
+}
+```
+
 ## Redirect
 
 If you want to declaratively redirect to a different page, use the `<Redirect>` component.
