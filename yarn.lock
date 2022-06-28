@@ -2454,12 +2454,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/fast-json-stringify-compiler@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@fastify/fast-json-stringify-compiler@npm:3.0.1"
+"@fastify/fast-json-stringify-compiler@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@fastify/fast-json-stringify-compiler@npm:4.0.0"
   dependencies:
-    fast-json-stringify: ^4.2.0
-  checksum: dc6c11bb7404556d5897630e92179b20f67dee7f7701b51bbe9902622757001ab1200171be63628ac4dc6d3ae2665f98e2afaca5e5fe9724ba675ea7595f047b
+    fast-json-stringify: ^5.0.0
+  checksum: 9a54631a0191f1f0ec7b094ddd673e86f8f712261995d99ec31b9f9b6b9bff5b92c82b027d69228abef1873ac003e1327435c1ac2afbf8bb82c82dcc50e4d03c
   languageName: node
   linkType: hard
 
@@ -5908,7 +5908,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.23.3
     fast-json-parse: 1.0.3
-    fastify: 4.1.0
+    fastify: 4.2.0
     fastify-raw-body: 4.0.0
     jest: 27.5.1
     lodash.escape: 4.0.1
@@ -16119,17 +16119,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-json-stringify@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "fast-json-stringify@npm:4.2.0"
+"fast-json-stringify@npm:^5.0.0":
+  version: 5.0.3
+  resolution: "fast-json-stringify@npm:5.0.3"
   dependencies:
     ajv: ^8.10.0
     ajv-formats: ^2.1.1
     deepmerge: ^4.2.2
-    fast-uri: ^2.0.0
+    fast-uri: ^2.1.0
     rfdc: ^1.2.0
-    string-similarity: ^4.0.1
-  checksum: 38ee02c95e4f60ee5509d2eac350c5146a453178d9a286c707e74bd264a76697000f66d9cd0f6ebddfe4a5106131f0edcc29a7332866302ce013f9109cb79c94
+  checksum: dcf3bc1b715e375fce7cba7a5411fa29478502b1c4623b050201ded65fe45e75d605bd898d3cd01d5cfaeef02d627488cf161d8aae50d59719ef66a036b6df79
   languageName: node
   linkType: hard
 
@@ -16168,7 +16167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-uri@npm:^2.0.0":
+"fast-uri@npm:^2.1.0":
   version: 2.1.0
   resolution: "fast-uri@npm:2.1.0"
   checksum: 4b6fa1a606e538b0daf1115f8d511980105d1552c9d534c26141928d9d2e974660f2d7d5be864b6f1e2862c090d829d546d350fe50c2925f90471c1529eb66b6
@@ -16214,16 +16213,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.1.0":
-  version: 4.1.0
-  resolution: "fastify@npm:4.1.0"
+"fastify@npm:4.2.0":
+  version: 4.2.0
+  resolution: "fastify@npm:4.2.0"
   dependencies:
     "@fastify/ajv-compiler": ^3.1.0
     "@fastify/error": ^3.0.0
-    "@fastify/fast-json-stringify-compiler": ^3.0.1
+    "@fastify/fast-json-stringify-compiler": ^4.0.0
     abstract-logging: ^2.0.1
     avvio: ^8.1.3
-    find-my-way: ^6.3.0
+    find-my-way: ^7.0.0
     light-my-request: ^5.0.0
     pino: ^8.0.0
     process-warning: ^2.0.0
@@ -16232,7 +16231,7 @@ __metadata:
     secure-json-parse: ^2.4.0
     semver: ^7.3.7
     tiny-lru: ^8.0.2
-  checksum: be717d00b5c13d574552db47bf3e6eb0ccd0473655d53714f0f04a8f00570f2aae70fbc20b87c6d078ce2f5dcafff57f6f0b9ec59e0001eb999a9591e87b6783
+  checksum: 3cdcf0c4f77be27293f8f50bf6788c6c1849532120ee6e80ea7a96e2ae03c65ad2c3f48660926d935016c7410248526f1e3444d0c7eaf52723b405c94422f45e
   languageName: node
   linkType: hard
 
@@ -16479,13 +16478,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-my-way@npm:^6.3.0":
-  version: 6.4.0
-  resolution: "find-my-way@npm:6.4.0"
+"find-my-way@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "find-my-way@npm:7.0.0"
   dependencies:
     fast-deep-equal: ^3.1.3
     safe-regex2: ^2.0.0
-  checksum: e4e1a8eb2ffde0bab522a735b736f771c4374bbf2ac857e9e18de2872747ad14ddaece46057dcf2bde50433c5f4570e5b936e4d7aa5b62e189547c4321458e4c
+  checksum: 0f24fc4f8bc1d3f15f3e88a45566d8adc11d2510b1c3a8c1d0fe7a83752395e6f1e066d895a68d9809b3a577646ce7b0914d07c3d9fed3a166e010845e9f0a18
   languageName: node
   linkType: hard
 
@@ -28507,13 +28506,6 @@ __metadata:
     char-regex: ^2.0.0
     strip-ansi: ^7.0.1
   checksum: 311fa5758d397bd616be17150dfefaab4755ed292a3112237924d10ba5122f606064ad4880a293387401c1d7aa20d79f7936728bac2abed17a5e48f5b317cbc8
-  languageName: node
-  linkType: hard
-
-"string-similarity@npm:^4.0.1":
-  version: 4.0.4
-  resolution: "string-similarity@npm:4.0.4"
-  checksum: fce331b818efafa701f692ddc2e170bd3ceaf6e7ca56a445b36b139981effe0884d8edc794a65005e54304da55ba054edfcff16a339bd301c9b94983fbc62047
   languageName: node
   linkType: hard
 
