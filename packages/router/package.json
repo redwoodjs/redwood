@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@reach/skip-nav": "0.16.0",
     "@redwoodjs/auth": "2.0.0",
-    "core-js": "3.23.2",
+    "core-js": "3.23.3",
     "lodash.isequal": "4.5.0"
   },
   "devDependencies": {
