@@ -1,3 +1,4 @@
+import { reject } from 'lodash'
 import { AuthClient } from './index'
 
 export interface LoginAttributes {
@@ -60,22 +61,26 @@ export const dbAuth = (
 
     if (isTokenCacheExpired()) {
       console.info('cache expired', cachedToken)
+
       getTokenPromise = new Promise(async (resolve) => {
-        const result = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
-          credentials,
-        })
-        const response = await result
-        const tokenText = await response.text()
-        lastTokenCheckAt = new Date()
-        getTokenPromise = null
+        try {
+          const response = await fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
+            credentials,
+          })
+          const tokenText = await response.text()
+          lastTokenCheckAt = new Date()
+          getTokenPromise = null
 
-        if (tokenText.length === 0) {
-          cachedToken = null
-        } else {
-          cachedToken = tokenText
+          if (tokenText.length === 0) {
+            cachedToken = null
+          } else {
+            cachedToken = tokenText
+          }
+
+          resolve(cachedToken)
+        } catch (e:any) {
+          reject(e)
         }
-
-        resolve(cachedToken)
       })
       
       return getTokenPromise
