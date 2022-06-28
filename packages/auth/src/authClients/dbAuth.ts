@@ -19,17 +19,27 @@ export type DbAuthConfig = {
     credentials: 'include' | 'same-origin'
   }
 }
-const NEXT_TOKEN_CHECK: number = 5000
+const TOKEN_CACHE_TIME = 5000
 
-let getTokenResponse: null | Promise<string | null>
-let lastTokenCheckAt: Date = new Date('1970-01-01T00:00:00')
-let token: string | null
+let getTokenPromise: null | Promise<string | null>
+let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
+let cachedToken: string | null
 
 export const dbAuth = (
   _client: DbAuth,
   config: DbAuthConfig = { fetchConfig: { credentials: 'same-origin' } }
 ): AuthClient => {
   const { credentials } = config.fetchConfig
+
+  const isTokenCacheExpired = () => {
+    const now = new Date()
+    return now.getTime() - lastTokenCheckAt.getTime() > TOKEN_CACHE_TIME
+  }
+
+  const resetTokenCache = () => {
+    lastTokenCheckAt = new Date('1970-01-01T00:00:00')
+    cachedToken = null
+  }
 
   const forgotPassword = async (username: string) => {
     const response = await fetch(global.RWJS_API_DBAUTH_URL, {
@@ -38,40 +48,42 @@ export const dbAuth = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, method: 'forgotPassword' }),
     })
+    resetTokenCache()
     return await response.json()
   }
 
   const getToken = async () => {
-    if (getTokenResponse) {
-      return getTokenResponse
+    if (getTokenPromise) {
+      console.info('promise', cachedToken)
+      return getTokenPromise
     }
 
-    const now = new Date()
-
-    if (
-      !lastTokenCheckAt ||
-      now.getTime() - lastTokenCheckAt.getTime() > NEXT_TOKEN_CHECK
-    ) {
-      getTokenResponse = new Promise(async (resolve) => {
+    if (isTokenCacheExpired()) {
+      console.info('cache expired', cachedToken)
+      getTokenPromise = new Promise(async (resolve) => {
         const result = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
           credentials,
         })
         const response = await result
         const tokenText = await response.text()
         lastTokenCheckAt = new Date()
-        getTokenResponse = null
+        getTokenPromise = null
 
         if (tokenText.length === 0) {
-          token = null
+          cachedToken = null
         } else {
-          token = tokenText
+          cachedToken = tokenText
         }
 
-        resolve(token)
+        resolve(cachedToken)
       })
+      
+      return getTokenPromise
+    } else {
+      console.info('cache hit', cachedToken)
     }
 
-    return token
+    return cachedToken
   }
 
   const login = async (attributes: LoginAttributes) => {
@@ -82,6 +94,7 @@ export const dbAuth = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, method: 'login' }),
     })
+    resetTokenCache()
     return await response.json()
   }
 
@@ -91,6 +104,7 @@ export const dbAuth = (
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
     })
+    resetTokenCache()
     return true
   }
 
@@ -101,6 +115,7 @@ export const dbAuth = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'resetPassword' }),
     })
+    resetTokenCache()
     return await response.json()
   }
 
@@ -111,6 +126,7 @@ export const dbAuth = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'signup' }),
     })
+    resetTokenCache()
     return await response.json()
   }
 
@@ -121,6 +137,7 @@ export const dbAuth = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ resetToken, method: 'validateResetToken' }),
     })
+    resetTokenCache()
     return await response.json()
   }
 
