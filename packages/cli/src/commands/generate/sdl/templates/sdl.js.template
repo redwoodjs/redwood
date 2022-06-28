@@ -1,7 +1,5 @@
 export const schema = gql`
   """
-  ${modelName}
-
   ${modelDescription}
   """
   type ${singularPascalName} {
@@ -14,8 +12,6 @@ export const schema = gql`
   const enumDescription = enums[idx].documentation || `Possible values for ${enums[idx].name}`
   %>
   """
-  ${enumName}
-
   ${enumDescription}
   """
   enum ${enums[idx].name} {<% enums[idx].values.forEach((enumDefValue, idk)=> { %>
