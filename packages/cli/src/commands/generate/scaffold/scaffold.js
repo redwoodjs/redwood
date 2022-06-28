@@ -135,6 +135,7 @@ export const shouldUseTailwindCSS = (flag) => {
 }
 
 export const files = async ({
+  docs,
   model: name,
   path: scaffoldPath = '',
   tests = true,
@@ -166,6 +167,7 @@ export const files = async ({
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
+      docs,
       name,
       typescript,
     })),
@@ -639,6 +641,10 @@ export const builder = (yargs) => {
       description:
         "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'",
     })
+    .option('docs', {
+      description: 'Generate SDL and GraphQL comments to use in documentation',
+      type: 'boolean',
+    })
     .option('tests', {
       description: 'Generate test files',
       type: 'boolean',
@@ -660,7 +666,9 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
+
 export const tasks = ({
+  docs,
   model,
   path,
   force,
@@ -675,6 +683,7 @@ export const tasks = ({
         title: 'Generating scaffold files...',
         task: async () => {
           const f = await files({
+            docs,
             model,
             path,
             tests,
@@ -716,6 +725,7 @@ export const handler = async ({
   tests,
   typescript,
   tailwind,
+  docs = false,
 }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
@@ -727,6 +737,7 @@ export const handler = async ({
   try {
     const { name } = await verifyModelName({ name: model })
     const t = tasks({
+      docs,
       model: name,
       path,
       force,
