@@ -21,6 +21,28 @@ If you're curious, you can find the generated types in the `.redwood/types`, `we
 1. Generate "mirror" types for your components, Cells and layouts on the web side
 2. Generate types based on your queries and mutations on the web side (in ./web/types/graphql.d.ts)
 3. Generate types for resolvers based on your SDLs on the api side (in ./api/types/graphql.d.ts)
+4. Generate types for testing, `currentUser`, etc.
+
+
+## CurrentUser
+On both the api and web sides, if you've configured auth, the types for current user will be automatically "inferred" from your `getCurrentUser` function in `./api/src/lib/auth.ts`.
+
+So for example, if you specify the return type on this function
+
+```ts title=src/lib/auth.ts
+
+interface MyCurrentUser {
+  id: string,
+  roles: string[],
+  email: string,
+  projectId: number
+}
+
+const getCurrentUser = ({decoded}): MyCurrentUser => {
+  //..
+}
+```
+Your current user type will be populated on both `context.currentUser` on the api side, and in `userAuth().currentUser` on the web side.
 
 ## Query and Mutation types
 On the web side, let's say you have a query in a Cell that looks like this:
