@@ -82,8 +82,8 @@ export const buildCommands = ({ sides }) => {
       enabled: () => sides.includes('api'),
       task: async () => {
         // Dynamically import this function
-        // becuase its dependencies are only installed when `rw setup deploy serverless` is run
-        const { nftPack } = await (await import('./packing/nft')).default
+        // because its dependencies are only installed when `rw setup deploy serverless` is run
+        const { nftPack } = (await import('./packing/nft')).default
 
         await nftPack()
       },

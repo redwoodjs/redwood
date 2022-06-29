@@ -23,7 +23,7 @@ function zipDirectory(source, out) {
   })
 }
 
-// returns a tuple of [filename, fileContent]
+// returns a tuple of [filePath, fileContent]
 function generateEntryFile(functionAbsolutePath, name) {
   const relativeImport = path.relative(getPaths().base, functionAbsolutePath)
   return [
