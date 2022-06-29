@@ -147,6 +147,7 @@ interface DbAuthHandlerOptions {
    */
   webAuthn?: {
     enabled: boolean
+    expires: number
     name: string
     domain: string
     origin: string
@@ -212,7 +213,8 @@ export class DbAuthHandler {
   session: SessionRecord | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
-  futureExpiresDate: string
+  sessionExpiresDate: string
+  webAuthnExpiresDate: string
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
@@ -290,9 +292,18 @@ export class DbAuthHandler {
     this.dbCredentialAccessor = this.db[this.options.credentialModelAccessor]
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
-    const futureDate = new Date()
-    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
-    this.futureExpiresDate = futureDate.toUTCString()
+
+    const sessionExpiresAt = new Date()
+    sessionExpiresAt.setSeconds(
+      sessionExpiresAt.getSeconds() + this.options.login.expires
+    )
+    this.sessionExpiresDate = sessionExpiresAt.toUTCString()
+
+    const webAuthnExpiresAt = new Date()
+    webAuthnExpiresAt.setSeconds(
+      webAuthnExpiresAt.getSeconds() + (this.options?.webAuthn?.expires || 0)
+    )
+    this.webAuthnExpiresDate = webAuthnExpiresAt.toUTCString()
 
     if (options.cors) {
       this.corsContext = createCorsContext(options.cors)
@@ -617,6 +628,8 @@ export class DbAuthHandler {
     } catch (e: any) {
       throw new DbAuthError.WebAuthnError(e.message)
     } finally {
+      // whether it worked or errored, clear the challenge in the user record
+      // and user can get a new one next time they try to authenticate
       await this._saveChallenge(user[this.options.authFields.id], null)
     }
 
@@ -639,7 +652,7 @@ export class DbAuthHandler {
     // get the regular `login` cookies
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
-      this._webAuthnCookie(jsonBody.rawId, 'future'),
+      this._webAuthnCookie(jsonBody.rawId, this.webAuthnExpiresDate),
       loginHeaders['Set-Cookie'],
     ].flat()
 
@@ -747,7 +760,6 @@ export class DbAuthHandler {
 
     const regOptions = generateRegistrationOptions(options)
 
-    // save challenge to user record
     await this._saveChallenge(
       user[this.options.authFields.id],
       regOptions.challenge
@@ -813,11 +825,17 @@ export class DbAuthHandler {
       throw new DbAuthError.WebAuthnError('Registration failed')
     }
 
+    // clear challenge
     await this._saveChallenge(user[this.options.authFields.id], null)
 
     return [
       verified,
-      { 'Set-Cookie': this._webAuthnCookie(plainCredentialId, 'future') },
+      {
+        'Set-Cookie': this._webAuthnCookie(
+          plainCredentialId,
+          this.webAuthnExpiresDate
+        ),
+      },
     ]
   }
 
@@ -885,7 +903,7 @@ export class DbAuthHandler {
   }
 
   // returns the string for the webAuthn set-cookie header
-  _webAuthnCookie(id: string, expires: any) {
+  _webAuthnCookie(id: string, expires: string) {
     return [
       `webAuthn=${id}`,
       ...this._cookieAttributes({
@@ -924,10 +942,10 @@ export class DbAuthHandler {
   // pass the argument `expires` set to "now" to get the attributes needed to expire
   // the session, or "future" (or left out completely) to set to `futureExpiresDate`
   _cookieAttributes({
-    expires = 'future',
+    expires = 'now',
     options = {},
   }: {
-    expires?: 'now' | 'future'
+    expires?: 'now' | string
     options?: DbAuthHandlerOptions['cookie']
   }) {
     const cookieOptions = { ...this.options.cookie, ...options } || {
@@ -950,9 +968,7 @@ export class DbAuthHandler {
       .filter((v) => v)
 
     const expiresAt =
-      expires === 'now'
-        ? DbAuthHandler.PAST_EXPIRES_DATE
-        : this.futureExpiresDate
+      expires === 'now' ? DbAuthHandler.PAST_EXPIRES_DATE : expires
     meta.push(`Expires=${expiresAt}`)
 
     return meta
@@ -973,7 +989,7 @@ export class DbAuthHandler {
     const encrypted = this._encrypt(session)
     const cookie = [
       `session=${encrypted.toString()}`,
-      ...this._cookieAttributes({ expires: 'future' }),
+      ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 
     return { 'Set-Cookie': cookie }

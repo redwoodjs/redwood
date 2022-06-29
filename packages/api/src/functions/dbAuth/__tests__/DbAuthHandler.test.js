@@ -172,6 +172,7 @@ describe('dbAuth', () => {
       },
       webAuthn: {
         enabled: true,
+        expires: 60 * 30,
         name: 'Webauthn Test',
         domain: 'localhost',
         origin: 'http://localhost:8910',
@@ -231,11 +232,23 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('futureExpiresDate', () => {
+  describe('sessionExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
+      const expiresAt = new Date()
+      expiresAt.setSeconds(expiresAt.getSeconds() + options.login.expires)
 
-      expect(dbAuth.futureExpiresDate).toMatch(UTC_DATE_REGEX)
+      expect(dbAuth.sessionExpiresDate).toEqual(expiresAt.toUTCString())
+    })
+  })
+
+  describe('webAuthnExpiresDate', () => {
+    it('returns a date in the future as a UTCString', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const expiresAt = new Date()
+      expiresAt.setSeconds(expiresAt.getSeconds() + options.webAuthn.expires)
+
+      expect(dbAuth.webAuthnExpiresDate).toEqual(expiresAt.toUTCString())
     })
   })
 
@@ -1662,7 +1675,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `Expires=${dbAuth.futureExpiresDate}`
+        `Expires=${dbAuth.sessionExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
