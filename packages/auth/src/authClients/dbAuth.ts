@@ -54,13 +54,10 @@ export const dbAuth = (
 
   const getToken = async () => {
     if (getTokenPromise) {
-      console.info('promise', cachedToken)
       return getTokenPromise
     }
 
     if (isTokenCacheExpired()) {
-      console.info('cache expired', cachedToken)
-
       getTokenPromise = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, { credentials }
         ).then((response) => response.text()
         ).then((tokenText) => {
@@ -77,8 +74,6 @@ export const dbAuth = (
         })
       
       return getTokenPromise
-    } else {
-      console.info('cache hit', cachedToken)
     }
 
     return cachedToken
