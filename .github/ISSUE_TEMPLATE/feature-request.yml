@@ -1,27 +1,39 @@
-name: "⭐️ Feature request"
-description: "Have an idea for a new feature?"
+name: "💬 RFC"
+description: "Want feedback on a detailed writeup"
 
 title: "[Feature request]: "
 
 body:
   - type: textarea
     attributes:
-      label: Summary and description
+      label: Summary
       description: >
-        The body of the issue, just like a regular GitHub issue.
-        The more detail you provide, the better,
-        but try to start with a summary to frame the issue.
-
-
-        Here's a few questions to guide your writing:
-
-        - What is this feature about? The CLI? The web side? The api side? Both?
-
-        - Why does Redwood need this feature? I.e., what's the problem you're running up against?
-
-        - What would this feature's API look like?
     validations:
       required: true
+
+  - type: textarea
+    attributes:
+      label: Basic example
+      description: >
+
+  - type: textarea
+    attributes:
+      label: Motivation
+      description: >
+    validations:
+      required: true
+
+  - type: Detailed design
+    attributes:
+      label: Unresolved
+      description: >
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Unresolved
+      description: >
 
   - type: checkboxes
     attributes:
@@ -32,7 +44,21 @@ body:
         If you choose to contribute, the core team will be there to help you the whole way.
 
 
-        If this issue is triaged as being lower priority,
-        your willing and ableness to work on this will land it faster than waiting for a core team member to pick it up.
+        If this issue is triaged as lower priority,
+        your willing and ableness to work on it will land it faster than waiting for a core team member to pick it up.
       options:
         - label: I'm interested in working on this
+
+  - type: markdown
+    attributes:
+      value: >
+        ---
+
+        **About to submit this? Wait!**
+
+
+        Nice work! 👏 Now that you're all done,
+        take a moment to reread your issue's title.
+        Is it descriptive enough?
+        Does it still ring true? 🤔
+        If not, take a moment to rewrite it.

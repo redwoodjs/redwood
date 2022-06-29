@@ -63,7 +63,21 @@ body:
         If you choose to contribute, the core team will be there to help you the whole way.
 
 
-        If this issue is triaged as being lower priority,
-        your willing and ableness to work on this will land it faster than waiting for one of us to pick it up.
+        If this issue is triaged as lower priority,
+        your willing and ableness to work on it will land it faster than waiting for one of us to pick it up.
       options:
         - label: I'm interested in working on this
+
+  - type: markdown
+    attributes:
+      value: >
+        ---
+
+        **About to submit this? Wait!**
+
+
+        Nice work! 👏 Now that you're all done,
+        take a moment to reread your issue's title.
+        Is it descriptive enough?
+        Does it still ring true? 🤔
+        If not, take a moment to rewrite it.
