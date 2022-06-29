@@ -1,7 +1,7 @@
 name: "📖 Documentation"
 description: "A catch-all template for issues about documentation"
 
-title: "[Documentation]: "
+title: "[Docs]: "
 labels: topic/docs
 
 body:
@@ -17,7 +17,7 @@ body:
 
   - type: checkboxes
     attributes:
-      label: Are you interested in working on this? (If it applies)
+      label: Are you interested in working on this?
       description: >
         No pressure—this is totally optional!
         We just want to invite you to contribute to Redwood.
@@ -25,7 +25,7 @@ body:
 
 
         If this issue is triaged as lower priority,
-        your willing and ableness to work on it will land it faster than waiting for a core team member to pick it up.
+        your willing and ableness to work on it will land it faster than waiting for one of us to pick it up.
       options:
         - label: I'm interested in working on this
 
