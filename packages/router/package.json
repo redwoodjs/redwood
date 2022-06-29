@@ -25,14 +25,14 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@reach/skip-nav": "0.16.0",
     "@redwoodjs/auth": "2.0.0",
-    "core-js": "3.23.2",
+    "core-js": "3.23.3",
     "lodash.isequal": "4.5.0"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@types/lodash.isequal": "4.5.6",
-    "@types/react": "17.0.45",
+    "@types/react": "17.0.47",
     "@types/react-dom": "17.0.17",
     "jest": "27.5.1",
     "prop-types": "15.8.1",

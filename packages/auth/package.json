@@ -23,10 +23,10 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.23.2"
+    "core-js": "3.23.3"
   },
   "devDependencies": {
-    "@auth0/auth0-spa-js": "1.22.0",
+    "@auth0/auth0-spa-js": "1.22.1",
     "@azure/msal-browser": "2.24.0",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
@@ -35,9 +35,9 @@
     "@clerk/types": "2.14.0",
     "@nhost/hasura-auth-js": "1.1.14",
     "@nhost/nhost-js": "1.1.14",
-    "@supabase/supabase-js": "1.35.3",
+    "@supabase/supabase-js": "1.35.4",
     "@types/netlify-identity-widget": "1.9.3",
-    "@types/react": "17.0.45",
+    "@types/react": "17.0.47",
     "amazon-cognito-identity-js": "5.2.9",
     "firebase": "9.8.3",
     "firebase-admin": "10.2.0",
