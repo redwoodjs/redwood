@@ -227,9 +227,17 @@ See [WebAuthn Configuration](#function-config) section below.
 
 By default, the session cookie will not have the `Domain` property set, which a browser will default to be the [current domain only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent). If your site is spread across multiple domains (for example, your site is at `example.com` but your api-side is deployed to `api.example.com`) you'll need to explicitly set a Domain so that the cookie is accessible to both.
 
-To do this, create an environment variable named `DBAUTH_COOKIE_DOMAIN` set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
+To do this, set the `cookie.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
 
-    DBAUTH_COOKIE_DOMAIN=example.com
+```json title=api/src/functions/auth.js
+cookie: {
+  HttpOnly: true,
+  Path: '/',
+  SameSite: 'Strict',
+  Secure: process.env.NODE_ENV !== 'development' ? true : false,
+  Domain: 'example.com'
+}
+```
 
 ### Session Secret Key
 
@@ -440,6 +448,7 @@ export const handler = async (event, context) => {
     // highlight-start
     webAuthn: {
       enabled: true,
+      expires: 60 * 60 * 14,
       name: 'Webauthn Test',
       domain:
         process.env.NODE_ENV === 'development' ? 'localhost' : 'server.com',
@@ -467,6 +476,7 @@ export const handler = async (event, context) => {
 * `credentialModelAccessor` specifies the name of the accessor that you call to access the model you created to store credentials. If your model name is `UserCredential` then this field would be `userCredential` as that's how Prisma's naming conventions work.
 * `authFields.challenge` specifies the name of the field in the user model that will hold the WebAuthn challenge string. This string is generated automatically whenever a WebAuthn registration or authentication request starts and is one more verification that the browser request came from this user. A user can only have one WebAuthn request/response cycle going at a time, meaning that they can't open a desktop browser, get the TouchID prompt, then switch to iOS Safari to use FaceID, then return to the desktop to scan their fingerprint. The most recent WebAuthn request will clobber any previous one that's in progress.
 * `webAuthn.enabled` is a boolean, denoting whether the server should respond to webAuthn requests. If you decide to stop using WebAuthn, you'll want to turn it off here as well as update the LoginPage to stop prompting.
+* `webAuthn.expires` is the number of seconds that a user will be allowed to keep using their fingerprint/face scan to re-authenticate into your site. Once this value expires, the user *must* use their username/password to authenticate the next time, and then WebAuthn will be re-enabled (again, for this length of time). For security, you may want to log users out of your app after an hour of inactivity, but allow them to easily use their fingerprint/face to re-authenticate for the next two weeks. In that case you would set `login.expires` to `60 * 60` and `webAuthn.expires` to `60 * 60 * 24 * 14`.
 * `webAuthn.name` is the name of the app that will show in some browser's prompts to use the device
 * `webAuthn.domain` is the name of domain making the request. This is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`
 * `webAuthn.origin` is the domain *including* the protocol and port that the request is coming from, ex: https://app.server.com In development mode, this would be `http://localhost:8910`
