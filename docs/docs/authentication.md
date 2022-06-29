@@ -120,7 +120,7 @@ const Routes = () => {
     <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
-      <Route path="/forbidden" page={ForbiddenPage} name="login" />
+      <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 
       <Private unauthenticated="login">
         <Route path="/secret-page" page={SecretPage} name="secret" />

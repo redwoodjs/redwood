@@ -14,7 +14,7 @@ jest.mock('../util', () => {
   }
 })
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { render, waitFor, act, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
@@ -61,24 +61,46 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   return { ...authContextValues, ...partial }
 }
 
+interface MockAuth {
+  isAuthenticated?: boolean
+  loading?: boolean
+  hasRole?: boolean
+  loadingTimeMs?: number
+}
+
 const mockUseAuth =
   (
     {
       isAuthenticated = false,
       loading = false,
       hasRole = false,
-    }: { isAuthenticated?: boolean; loading?: boolean; hasRole?: boolean } = {
+      loadingTimeMs,
+    }: MockAuth = {
       isAuthenticated: false,
       loading: false,
       hasRole: false,
     }
   ) =>
-  () =>
-    createDummyAuthContextValues({
-      loading,
-      isAuthenticated,
+  () => {
+    const [authLoading, setAuthLoading] = useState(loading)
+    const [authIsAuthenticated, setAuthIsAuthenticated] =
+      useState(isAuthenticated)
+
+    useEffect(() => {
+      if (loadingTimeMs) {
+        setTimeout(() => {
+          setAuthLoading(false)
+          setAuthIsAuthenticated(true)
+        }, loadingTimeMs)
+      }
+    }, [])
+
+    return createDummyAuthContextValues({
+      loading: authLoading,
+      isAuthenticated: authIsAuthenticated,
       hasRole: () => hasRole,
     })
+  }
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -733,6 +755,51 @@ test('can display a loading screen whilst waiting for auth', async () => {
   await waitFor(() => {
     expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
+  })
+})
+
+test('can display a loading screen with a hook', async () => {
+  const HookLoader = () => {
+    const [showStill, setShowStill] = useState(false)
+
+    useEffect(() => {
+      setTimeout(() => setShowStill(true), 100)
+    }, [])
+
+    return <>{showStill ? 'Still authenticating...' : 'Authenticating...'}</>
+  }
+
+  const TestRouter = () => (
+    <Router
+      useAuth={mockUseAuth({
+        isAuthenticated: false,
+        loading: true,
+        loadingTimeMs: 700,
+      })}
+    >
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="home" whileLoadingAuth={HookLoader}>
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should not redirect
+  act(() => navigate(routes.private()))
+  await waitFor(() => {
+    expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
+    expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Private Page/)).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(screen.getByText(/Still authenticating.../)).toBeInTheDocument()
+    expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Private Page/)).not.toBeInTheDocument()
   })
 })
 
