@@ -4,7 +4,11 @@ import { nodeFileTrace } from '@vercel/nft'
 import archiver from 'archiver'
 import fse from 'fs-extra'
 
-import { findApiDistFunctions, getPaths } from '@redwoodjs/internal'
+import {
+  ensurePosixPath,
+  findApiDistFunctions,
+  getPaths,
+} from '@redwoodjs/internal'
 
 const ZIPBALL_DIR = './api/dist/zipball'
 
@@ -25,7 +29,9 @@ function zipDirectory(source, out) {
 
 // returns a tuple of [filePath, fileContent]
 function generateEntryFile(functionAbsolutePath, name) {
-  const relativeImport = path.relative(getPaths().base, functionAbsolutePath)
+  const relativeImport = ensurePosixPath(
+    path.relative(getPaths().base, functionAbsolutePath)
+  )
   return [
     `${ZIPBALL_DIR}/${name}/${name}.js`,
     `module.exports = require('./${relativeImport}')`,
