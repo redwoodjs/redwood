@@ -28,7 +28,7 @@
     "test": "lerna run test --stream -- --colors --maxWorkers=4"
   },
   "resolutions": {
-    "@types/react": "17.0.45",
+    "@types/react": "17.0.47",
     "all-contributors-cli@6.20.0": "patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch",
     "prop-types": "15.8.1",
     "react": "17.0.2",
@@ -72,7 +72,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
-    "core-js": "3.23.2",
+    "core-js": "3.23.3",
     "cypress": "9.7.0",
     "cypress-wait-until": "1.7.2",
     "eslint": "8.18.0",
