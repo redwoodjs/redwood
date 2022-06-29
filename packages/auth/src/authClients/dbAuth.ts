@@ -1,4 +1,3 @@
-import { reject } from 'lodash'
 import { AuthClient } from './index'
 
 export interface LoginAttributes {
@@ -62,12 +61,9 @@ export const dbAuth = (
     if (isTokenCacheExpired()) {
       console.info('cache expired', cachedToken)
 
-      getTokenPromise = new Promise(async (resolve) => {
-        try {
-          const response = await fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
-            credentials,
-          })
-          const tokenText = await response.text()
+      getTokenPromise = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, { credentials }
+        ).then((response) => response.text()
+        ).then((tokenText) => {
           lastTokenCheckAt = new Date()
           getTokenPromise = null
 
@@ -77,11 +73,8 @@ export const dbAuth = (
             cachedToken = tokenText
           }
 
-          resolve(cachedToken)
-        } catch (e:any) {
-          reject(e)
-        }
-      })
+          return cachedToken
+        })
       
       return getTokenPromise
     } else {
