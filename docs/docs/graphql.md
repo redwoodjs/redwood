@@ -1087,7 +1087,7 @@ If there is no Prisma comment, then the SDL generator will default a comment tha
 
 :::note
 If you re-generate the SDL, any custom comments will be overwritten.
-However, if you make those edits in your Prisma schema, the those will be used.
+However, if you make those edits in your Prisma schema, then those will be used.
 :::
 
 ### Prisma Schema Comments
