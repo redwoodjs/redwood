@@ -7,7 +7,7 @@ labels: topic/docs
 body:
   - type: textarea
     attributes:
-      label: ''
+      label:
       description: >
         The body of the issue, just like a regular GitHub issue.
         The more detail you provide, the better,
