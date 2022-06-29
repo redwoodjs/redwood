@@ -35,16 +35,16 @@ body:
 
   - type: textarea
     attributes:
-      label: Proposal
+      label: Detailed proposal
       description: |
-        Write your proposal here. You're welcome to structure it however you like, but the more detail, the better. Get into the specifics, the corner-cases, and include examples. As you write, keep these questions in mind:
+        Write your proposal here. You're welcome to structure it however you like, but the more detail, the better. Get into the specifics and include examples. Keep this non-exhaustive list of questions in mind as you write:
 
         - What's this about? (The CLI? The web side? The api side? Both?)
         - What's the design in detail?
         - Is this a breaking change? How easy will it be for existing Redwood apps to adopt? Can we write a codemod for it?
         - What parts of the design are still TBD?
 
-        Here are some examples of great RFCs:
+        Lastly, consider reading some great examples:
 
         - [Prerender proposal](https://community.redwoodjs.com/t/prerender-proposal/849)
         - [Optional path parameters](https://github.com/redwoodjs/redwood/issues/2429)
