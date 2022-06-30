@@ -84,22 +84,6 @@ const getFields = (field: FieldNode): any => {
 
 export const listQueryTypeFieldsInProject = async () => {
   try {
-    // const projectTypeDefs = await loadTypedefs(
-    //   ['graphql/**/*.sdl.{js,ts}', 'directives/**/*.{js,ts}'],
-    //   {
-    //     loaders: [
-    //       new CodeFileLoader({
-    //         noRequire: true,
-    //         pluckConfig: {
-    //           globalGqlIdentifierName: 'gql',
-    //         },
-    //       }),
-    //     ],
-    //     cwd: getPaths().api.src,
-    //     assumeValidSDL: true,
-    //   }
-    // ) //?
-
     const schemaPointerMap = {
       [print(rootSchema.schema)]: {},
       'graphql/**/*.sdl.{js,ts}': {},
