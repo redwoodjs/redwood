@@ -8,10 +8,9 @@ export type InferredCurrentUser = ThenArg<ReturnType<typeof getCurrentUser>>
 
 type UndefinedRoles = {
   /**
-   * ⚠️ Heads-Up: This is undefined unless `roles: true` is added to the `select: {…}`
-   * object in {@link getCurrentUser()}.
+   * ⚠️ Heads-Up: This is undefined unless roles key is returned from {@link getCurrentUser()}
    *
-   * You may look into to https://redwoodjs.com/docs/tutorial/chapter7/rbac for a tutorial on
+   * You may take a look at https://redwoodjs.com/docs/tutorial/chapter7/rbac for a tutorial on
    * how to add fully-fledged RBAC (Role-based Access Control) to your database model.
    */
   roles?: unknown | unknown[]
