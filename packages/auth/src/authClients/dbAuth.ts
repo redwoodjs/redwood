@@ -53,6 +53,8 @@ export const dbAuth = (
   }
 
   const getToken = async () => {
+    // Return the existing to promise, so that parallel calls
+    // to getToken only cause a single fetch
     if (getTokenPromise) {
       return getTokenPromise
     }
