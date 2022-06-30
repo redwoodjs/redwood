@@ -1363,7 +1363,7 @@ If your project uses [Docusaurus](https://docusaurus.io), the generated commente
 
 The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
 
-1. Add `docs` to your `workspaces' in the project's `package.json`:
+1. Add `docs` to your `workspaces` in the project's `package.json`:
 
 ```
   "workspaces": {
