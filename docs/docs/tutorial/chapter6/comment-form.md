@@ -932,7 +932,7 @@ export default CommentForm
 
 ![image](https://user-images.githubusercontent.com/300/153932278-6e504b6b-9e8e-400e-98fb-8bfeefbe3812.png)
 
-We used `hidden` to just hide the form and "Leave a comment" title completely from the page, but keeps the component itself mounted. But where's our "Thank you for your comment" notification? We still need to add the `Toaster` component (from react-host-toast) somewhere in our app so that the message can actually be displayed. We could just add it here, in `CommentForm`, but what if we want other code to be able to post notifications, even when `CommentForm` isn't mounted? Where's the one place we put UI elements that should be visible everywhere? The `BlogLayout`!
+We used `hidden` to just hide the form and "Leave a comment" title completely from the page, but keeps the component itself mounted. But where's our "Thank you for your comment" notification? We still need to add the `Toaster` component (from react-hot-toast) somewhere in our app so that the message can actually be displayed. We could just add it here, in `CommentForm`, but what if we want other code to be able to post notifications, even when `CommentForm` isn't mounted? Where's the one place we put UI elements that should be visible everywhere? The `BlogLayout`!
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
