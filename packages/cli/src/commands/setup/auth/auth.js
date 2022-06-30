@@ -315,12 +315,6 @@ export const builder = (yargs) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
-    .option('webAuthn', {
-      default: false,
-      description:
-        'Include configuration for WebAuthn authentication (only supported by dbAuth)',
-      type: 'boolean',
-    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -330,20 +324,15 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (yargs) => {
-  const { provider, rwVersion, webAuthn } = yargs
+  const { provider, rwVersion } = yargs
   let force = yargs.force
+  let webAuthn = false
   let providerData
-
-  if (webAuthn) {
-    providerData = await import(`./providers/${provider}.webAuthn`)
-  } else {
-    providerData = await import(`./providers/${provider}`)
-  }
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
   if (force === false) {
     if (fs.existsSync(Object.keys(files(provider, yargs))[0])) {
-      const response = await prompts({
+      const forceResponse = await prompts({
         type: 'confirm',
         name: 'answer',
         message: `Overwrite existing ${getPaths().api.lib.replace(
@@ -352,8 +341,26 @@ export const handler = async (yargs) => {
         )}/auth.[jt]s?`,
         initial: false,
       })
-      force = response.answer
+      force = forceResponse.answer
     }
+  }
+
+  // only dbAuth supports WebAuthn right now, but in theory it could work with
+  // any provider
+  if (provider === 'dbAuth') {
+    const webAuthnResponse = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: `Enable WebAuthn support (TouchID/FaceID)? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+      initial: false,
+    })
+    webAuthn = webAuthnResponse.answer
+  }
+
+  if (webAuthn) {
+    providerData = await import(`./providers/${provider}.webAuthn`)
+  } else {
+    providerData = await import(`./providers/${provider}`)
   }
 
   const tasks = new Listr(
@@ -362,7 +369,7 @@ export const handler = async (yargs) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files(yargs), {
+            return writeFilesTask(files({ ...yargs, webAuthn }), {
               overwriteExisting: force,
             })
           } else {

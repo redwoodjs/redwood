@@ -94,5 +94,5 @@ export const notes = [
   'Need simple Login, Signup, Forgot Password pages and WebAuthn prompts?',
   "We've got a generator for those as well:",
   '',
-  '  yarn rw generate dbAuth --webAuthn',
+  '  yarn rw generate dbAuth',
 ]
