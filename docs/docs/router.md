@@ -12,6 +12,12 @@ The router is designed to list all routes in a single file, with limited nesting
 
 The first thing you need is a `Router`. It will contain all of your routes. The router will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
+:::note
+
+The `notfound` route cannot be nested in a `Set`. If you want to wrap your custom page in a `Layout` then you should add the `Layout` in your page instead. See [customizing the NotFoundPage](#customizing-the-notfoundpage).
+
+:::
+
 Each route is specified with a `Route`. Our first route will tell the router what to render when no other route matches:
 
 ```jsx title="Routes.js"
@@ -565,3 +571,208 @@ In order to display a loader while auth details are being retrieved you can add 
   </Private>
 </Router>
 ```
+
+## Fatal Error Page
+
+Every RedwoodJS project ships with a default `FatalErrorPage` located in `/web/pages/FatalErrorPage`.
+
+This page behaves differently in `development` than in other environments, like `production`.
+
+
+This page will be rendered when an error makes it all the way to the top of the
+application without being handled by a Javascript catch statement or React error
+boundary.
+
+#### Development Page
+
+In `development`, the `DevFatalErrorPage` provides helpful debug information about the error and any GraphQL request that is involved.
+
+```
+// Ensures that production builds do not include the error page
+let RedwoodDevFatalErrorPage = undefined
+if (process.env.NODE_ENV === 'development') {
+  RedwoodDevFatalErrorPage =
+    require('@redwoodjs/web/dist/components/DevFatalErrorPage').DevFatalErrorPage
+}
+```
+
+When an error occurs, the following information can help you pinpoint the issues and correct.
+
+Here, there's a missing component that causes an error:
+
+![fatal_error_message](/img/router/fatal_error_message.png)
+
+In this example, the variable passed to a component cannot be found.
+
+
+![fatal_error_message_query](/img/router/fatal_error_message_query.png)
+
+And, when your page has a cell with requests from cells, you will see the associated request whose data may have contributed to the error.
+
+![fatal_error_message_request](/img/router/fatal_error_request.png)
+
+#### Production Page
+
+By default, the Fatal error Page is barebones.
+
+![fatal_something_went_wrong](/img/router/fatal_something_went_wrong.png)
+
+
+### Customizing the FatalErrorPage
+
+:::note
+You cannot customize the development version of the FatalErrorPage -- it is part of the RedwoodJS framework.
+:::
+
+You can modify this page as you wish, but it is important to keep things simple to
+avoid the possibility that it will cause its own error. If it does, Redwood will
+still render a generic error page, but your users will prefer something a bit more
+thoughtful.
+
+![fatal_something_went_wrong_custom](/img/router/fatal_something_went_wrong_custom.png)
+
+```tsx
+import { Link, routes } from '@redwoodjs/router'
+
+export default RedwoodDevFatalErrorPage ||
+  (() => (
+    <div className="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+      <div className="max-w-max mx-auto">
+        <main className="sm:flex">
+          <p className="text-4xl font-extrabold text-blue-600 sm:text-5xl">
+            🤦‍♂️ Oops.
+          </p>
+          <div className="sm:ml-6">
+            <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
+                Something went wrong
+              </h1>
+              <p className="mt-1 text-base text-gray-500">
+                Sorry about that. Please contact support for help.
+              </p>
+            </div>
+            <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+              <Link
+                to={routes.home()}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Home
+              </Link>
+              <Link
+                to={routes.support()}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Contact Support
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  ))
+  ```
+
+
+## Not Found Page
+
+Every RedwoodJS project ships with a default `NotFoundPage` located in `/web/pages/NotFoundPage`.
+
+It is defined in the `Routes` file using the `notfound` attribute and will tell the router what to render when no other route matches:
+
+```jsx title="Routes.js"
+import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => (
+  <Router>
+    <Route notfound page={NotFoundPage} />
+  </Router>
+)
+
+export default Routes
+```
+
+### Customizing the NotFoundPage
+
+The `notfound` route and its `Page` cannot be nested in a `Set`. If you want to wrap your custom page in a `Layout` then you should add the `Layout` in your page instead.
+
+By default, the `NotFoundPage` is basic HTML page with internal styles:
+
+```ts
+export default () => (
+  <main>
+    // ... some custom css
+    <section>
+      <h1>
+        <span>404 Page Not Found</span>
+      </h1>
+    </section>
+  </main>
+)
+```
+
+However, you can customize this [`Page`](./tutorial/chapter1/first-page). to change the markup and even use [TailwindCSS](./cli-commands#setup-ui) to style.
+
+
+### Example Code
+
+![custom_not_found](/img/router/custom_not_found_page.png)
+
+```tsx
+// web/src/pages/NotFoundPage/NotFoundPage.tsx
+
+import { Link, routes } from '@redwoodjs/router'
+
+export default () => (
+  <div className="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+    <div className="max-w-max mx-auto">
+      <main className="sm:flex">
+        <p className="text-4xl font-extrabold text-red-600 sm:text-5xl">404</p>
+        <div className="sm:ml-6">
+          <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
+              Page not found
+            </h1>
+            <p className="mt-1 text-base text-gray-500">
+              Check the URL in the address bar and please try again.
+            </p>
+          </div>
+          <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+            <Link
+              to={routes.home()}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Home
+            </Link>
+            <Link
+              to={routes.support()}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Get Help
+            </Link>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+)
+```
+
+Or, if you want to include a [`Layout`](./tutorial/chapter1/layouts), simply use it like you would in any other [`Page`](./tutorial/chapter1/first-page).
+
+```tsx
+import MainLayout from 'src/layouts/MainLayout/MainLayout'
+
+export default () => (
+  <MainLayout>
+    <main>
+      <section>
+        <h1>
+          <span>404 Page Not Found</span>
+        </h1>
+      </section>
+    </main>
+  </MainLayout>
+)
+```
+
+This means that a `NotFoundPage` can use even use Cells or Authentication to help construct navigation options and detailed header or footer content to help your user find their way back to the main application.
