@@ -58,21 +58,18 @@ export const dbAuth = (
     }
 
     if (isTokenCacheExpired()) {
-      getTokenPromise = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, { credentials }
-        ).then((response) => response.text()
-        ).then((tokenText) => {
+      getTokenPromise = fetch(`${global.RWJS_API_DBAUTH_URL}?method=getToken`, {
+        credentials,
+      })
+        .then((response) => response.text())
+        .then((tokenText) => {
           lastTokenCheckAt = new Date()
           getTokenPromise = null
-
-          if (tokenText.length === 0) {
-            cachedToken = null
-          } else {
-            cachedToken = tokenText
-          }
+          cachedToken = tokenText.length === 0 ? null : tokenText
 
           return cachedToken
         })
-      
+
       return getTokenPromise
     }
 
