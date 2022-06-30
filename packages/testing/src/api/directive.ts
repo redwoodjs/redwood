@@ -64,6 +64,7 @@ export const mockRedwoodDirective: DirectiveMocker = (
       return directive.onResolverCalled({
         resolvedValue: mockedResolvedValue,
         context: globalContext,
+        directiveArgs,
         ...others,
       } as DirectiveParams)
     } else {

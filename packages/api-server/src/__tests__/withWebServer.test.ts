@@ -13,7 +13,6 @@ const FIXTURE_PATH = path.resolve(
 // because its gitignored
 jest.mock('@redwoodjs/internal', () => {
   return {
-    // @ts-expect-error spread error unnecessarily
     ...jest.requireActual('@redwoodjs/internal'),
     findPrerenderedHtml: () => {
       return ['about.html', 'mocked.html', 'posts/new.html', 'index.html']
