@@ -672,6 +672,9 @@ export default RedwoodDevFatalErrorPage ||
   ))
   ```
 
+:::note
+This example use [TailwindCSS](https://tailwindcss.com). See the [setup ui](./cli-commands.md#setup-ui) cli command to add TailwindCSS to your project.
+:::
 
 ## Not Found Page
 
@@ -756,6 +759,11 @@ export default () => (
   </div>
 )
 ```
+
+:::note
+These examples use [TailwindCSS](https://tailwindcss.com). See the [setup ui](./cli-commands.md#setup-ui) cli command to add TailwindCSS to your project.
+:::
+
 
 Or, if you want to include a [`Layout`](./tutorial/chapter1/layouts), simply use it like you would in any other [`Page`](./tutorial/chapter1/first-page).
 
