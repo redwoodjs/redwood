@@ -27,7 +27,7 @@
     "@babel/plugin-transform-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
     "@vscode/ripgrep": "1.14.2",
-    "core-js": "3.23.1",
+    "core-js": "3.23.3",
     "cross-undici-fetch": "0.1.27",
     "deepmerge": "4.2.2",
     "execa": "5.1.1",
@@ -35,7 +35,7 @@
     "findup-sync": "5.0.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
-    "prettier": "2.6.2",
+    "prettier": "2.7.1",
     "tasuku": "2.0.0",
     "toml": "3.0.0",
     "yargs": "17.5.1"

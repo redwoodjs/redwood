@@ -139,12 +139,43 @@ const mergeUserStorybookConfig = (baseConfig) => {
   const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
 
   return mergeWithCustomize({
+    // https://github.com/survivejs/webpack-merge#mergewithcustomize-customizearray-customizeobject-configuration--configuration
     customizeArray(baseConfig, userStorybookConfig, key) {
-      if (key === 'addons') {
-        return [...new Set([...baseConfig, ...userStorybookConfig])]
+      if (key === 'addons' || key === 'stories') {
+        // Allows userStorybookConfig to override baseConfig.
+        // Since this is an array, we spread the user config first (so that it comes first)
+        // Also, arrays don't dedupe the way objects do when spreading, so we do a conversion to and from a Set in order to remove duplicates.
+        let combinedArrays = [
+          ...new Set([...userStorybookConfig, ...baseConfig]),
+        ]
+        // To avoid `WARN Expected '@storybook/addon-actions' (or '@storybook/addon-essentials') to be listed before '@storybook/addon-interactions' in main Storybook config.`
+        if (key === 'addons') {
+          let key = '@storybook/addon-actions'
+          combinedArrays = moveKeyToFrontOfArray(combinedArrays, key)
+          key = '@storybook/addon-essentials'
+          combinedArrays = moveKeyToFrontOfArray(combinedArrays, key)
+        }
+        return combinedArrays
       }
+      // Fall back to default merging
+      return undefined
     },
   })(baseConfig, userStorybookConfig)
+}
+
+/**
+ *
+ * @param {string[]} configs
+ * @param {string} key
+ * @returns modified configs with key moved to front of array if it exists in original
+ */
+function moveKeyToFrontOfArray(configs, key) {
+  if (configs.includes(key)) {
+    const filteredArrayOfConfigs = configs.filter((c) => c !== key)
+    return [key, ...filteredArrayOfConfigs]
+  } else {
+    return configs
+  }
 }
 
 /** @returns {import('webpack').Configuration} Webpack Configuration with storybook config */
