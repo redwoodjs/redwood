@@ -31,6 +31,11 @@ export const dbAuth = (
 ): AuthClient => {
   const { credentials } = config.fetchConfig
 
+  const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
+    resetTokenCache()
+    return fetch(...params)
+  }
+
   const isTokenCacheExpired = () => {
     const now = new Date()
     return now.getTime() - lastTokenCheckAt.getTime() > TOKEN_CACHE_TIME
@@ -42,18 +47,18 @@ export const dbAuth = (
   }
 
   const forgotPassword = async (username: string) => {
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, method: 'forgotPassword' }),
     })
-    resetTokenCache()
+
     return await response.json()
   }
 
   const getToken = async () => {
-    // Return the existing to promise, so that parallel calls
+    // Return the existing fetch promise, so that parallel calls
     // to getToken only cause a single fetch
     if (getTokenPromise) {
       return getTokenPromise
@@ -80,56 +85,55 @@ export const dbAuth = (
 
   const login = async (attributes: LoginAttributes) => {
     const { username, password } = attributes
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, method: 'login' }),
     })
-    resetTokenCache()
+
     return await response.json()
   }
 
   const logout = async () => {
-    await fetch(global.RWJS_API_DBAUTH_URL, {
+    await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
     })
-    resetTokenCache()
+
     return true
   }
 
   const resetPassword = async (attributes: ResetPasswordAttributes) => {
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'resetPassword' }),
     })
-    resetTokenCache()
     return await response.json()
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'signup' }),
     })
-    resetTokenCache()
+
     return await response.json()
   }
 
   const validateResetToken = async (resetToken: string | null) => {
-    const response = await fetch(global.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ resetToken, method: 'validateResetToken' }),
     })
-    resetTokenCache()
+
     return await response.json()
   }
 
