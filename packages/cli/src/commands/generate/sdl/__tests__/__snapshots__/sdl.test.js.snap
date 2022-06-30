@@ -4,10 +4,10 @@ exports[`handler can be called with PascalCase model name 1`] = `
 Object {
   "fileContent": "export const schema = gql\`
   type User {
-    id: Int
+    id: Int!
     name: String
-    email: String
-    isAdmin: Boolean
+    email: String!
+    isAdmin: Boolean!
     profiles: [UserProfile]!
   }
 
@@ -151,8 +151,8 @@ exports[`handler can be called with PascalCase model name 5`] = `
 Object {
   "fileContent": "export const schema = gql\`
   type CustomData {
-    id: Int
-    data: String
+    id: Int!
+    data: String!
   }
 
   type Query {
@@ -293,10 +293,10 @@ exports[`handler can be called with camelCase model name 1`] = `
 Object {
   "fileContent": "export const schema = gql\`
   type User {
-    id: Int
+    id: Int!
     name: String
-    email: String
-    isAdmin: Boolean
+    email: String!
+    isAdmin: Boolean!
     profiles: [UserProfile]!
   }
 
@@ -440,8 +440,8 @@ exports[`handler can be called with camelCase model name 5`] = `
 Object {
   "fileContent": "export const schema = gql\`
   type CustomData {
-    id: Int
-    data: String
+    id: Int!
+    data: String!
   }
 
   type Query {
@@ -581,10 +581,10 @@ export const deleteCustomData = ({ id }) => {
 exports[`in javascript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   type UserProfile {
-    id: Int
-    username: String
-    userId: Int
-    user: User
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
   }
 
   type Query {
@@ -615,10 +615,10 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
 exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type UserProfile {
-    id: Int
-    username: String
-    userId: Int
-    user: User
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
   }
 
   type Query {
@@ -649,8 +649,8 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
 exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   type Shoe {
-    id: Int
-    color: Color
+    id: Int!
+    color: Color!
   }
 
   enum Color {
@@ -684,9 +684,9 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
 exports[`in javascript mode creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   type Photo {
-    id: Int
-    name: String
-    metadata: JSON
+    id: Int!
+    name: String!
+    metadata: JSON!
   }
 
   type Query {
@@ -716,10 +716,10 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
 exports[`in javascript mode creates a single word sdl file 1`] = `
 "export const schema = gql\`
   type User {
-    id: Int
+    id: Int!
     name: String
-    email: String
-    isAdmin: Boolean
+    email: String!
+    isAdmin: Boolean!
     profiles: [UserProfile]!
   }
 
@@ -745,11 +745,11 @@ exports[`in javascript mode creates a single word sdl file 1`] = `
 exports[`in javascript mode creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type Post {
-    id: Int
-    title: String
-    slug: String
-    author: String
-    body: String
+    id: Int!
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
     image: String
     postedAt: DateTime
   }
@@ -789,10 +789,10 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
 exports[`in typescript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   type UserProfile {
-    id: Int
-    username: String
-    userId: Int
-    user: User
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
   }
 
   type Query {
@@ -823,10 +823,10 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
 exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type UserProfile {
-    id: Int
-    username: String
-    userId: Int
-    user: User
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
   }
 
   type Query {
@@ -857,8 +857,8 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
 exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   type Shoe {
-    id: Int
-    color: Color
+    id: Int!
+    color: Color!
   }
 
   enum Color {
@@ -892,9 +892,9 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
 exports[`in typescript mode creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   type Photo {
-    id: Int
-    name: String
-    metadata: JSON
+    id: Int!
+    name: String!
+    metadata: JSON!
   }
 
   type Query {
@@ -924,10 +924,10 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
 exports[`in typescript mode creates a single word sdl file 1`] = `
 "export const schema = gql\`
   type User {
-    id: Int
+    id: Int!
     name: String
-    email: String
-    isAdmin: Boolean
+    email: String!
+    isAdmin: Boolean!
     profiles: [UserProfile]!
   }
 
@@ -953,11 +953,11 @@ exports[`in typescript mode creates a single word sdl file 1`] = `
 exports[`in typescript mode creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type Post {
-    id: Int
-    title: String
-    slug: String
-    author: String
-    body: String
+    id: Int!
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
     image: String
     postedAt: DateTime
   }

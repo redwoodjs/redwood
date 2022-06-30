@@ -47,13 +47,17 @@ const missingIdConsoleMessage = () => {
 const addFieldGraphQLComment = (field, str) => {
   const description = field.documentation || `Description for ${field.name}.`
 
-  return `"""
-  ${description}
-  """
+  return `
+  """${description}"""
   ${str}`
 }
 
-const modelFieldToSDL = (field, required = true, types = {}, docs = false) => {
+const modelFieldToSDL = ({
+  field,
+  required = true,
+  types = {},
+  docs = false,
+}) => {
   if (Object.entries(types).length) {
     field.type =
       field.kind === 'object' ? idType(types[field.type]) : field.type
@@ -82,7 +86,9 @@ const modelFieldToSDL = (field, required = true, types = {}, docs = false) => {
 }
 
 const querySDL = (model, docs = false) => {
-  return model.fields.map((field) => modelFieldToSDL(field, docs))
+  const result = model.fields.map((field) => modelFieldToSDL({ field, docs }))
+
+  return result
 }
 
 const inputSDL = (model, required, types = {}, docs = false) => {
@@ -93,7 +99,7 @@ const inputSDL = (model, required, types = {}, docs = false) => {
         field.kind !== 'object'
       )
     })
-    .map((field) => modelFieldToSDL(field, required, types, docs))
+    .map((field) => modelFieldToSDL({ field, required, types, docs }))
 }
 
 // creates the CreateInput type (all fields are required)
@@ -153,7 +159,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
   return {
     modelName,
     modelDescription,
-    query: querySDL(model).join('\n    ', docs),
+    query: querySDL(model, docs).join('\n    '),
     createInput: createInputSDL(model, types, docs).join('\n    '),
     updateInput: updateInputSDL(model, types, docs).join('\n    '),
     idType: idType(model, crud),
