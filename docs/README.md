@@ -4,7 +4,7 @@ Deployment URL: https://redwoodjs.com/docs
 
 ## Getting started
 
-Checkout this repo (redwoodjs/redwood), `cd` into this directory (`docs`)
+Checkout this repo [(redwoodjs/redwood)](https://github.com/redwoodjs/redwood), `cd` into this directory (`docs`)
 
 ```
 yarn install
