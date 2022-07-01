@@ -59,7 +59,7 @@ interface DbAuthHandlerOptions {
     salt: string
     resetToken: string
     resetTokenExpiresAt: string
-    challenge: string
+    challenge?: string
   }
   /**
    * Object containing cookie config options
@@ -605,7 +605,7 @@ export class DbAuthHandler {
     try {
       const opts: VerifyAuthenticationResponseOpts = {
         credential: jsonBody,
-        expectedChallenge: user[this.options.authFields.challenge],
+        expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: webAuthnOptions.origin,
         expectedRPID: webAuthnOptions.domain,
         authenticator: {
@@ -783,7 +783,7 @@ export class DbAuthHandler {
     try {
       const options: VerifyRegistrationResponseOpts = {
         credential: jsonBody,
-        expectedChallenge: user[this.options.authFields.challenge],
+        expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
         requireUserVerification: true,
@@ -897,7 +897,7 @@ export class DbAuthHandler {
         [this.options.authFields.id]: userId,
       },
       data: {
-        [this.options.authFields.challenge]: value,
+        [this.options.authFields.challenge as string]: value,
       },
     })
   }
