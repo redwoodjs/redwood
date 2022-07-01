@@ -1,12 +1,19 @@
+import { CodeFileLoader } from '@graphql-tools/code-file-loader'
+import { loadSchema } from '@graphql-tools/load'
 import {
-  visit,
   DocumentNode,
-  OperationTypeNode,
-  OperationDefinitionNode,
   FieldNode,
-  parse,
   InlineFragmentNode,
+  OperationDefinitionNode,
+  OperationTypeNode,
+  parse,
+  print,
+  visit,
 } from 'graphql'
+
+import { rootSchema } from '@redwoodjs/graphql-server'
+
+import { getPaths } from './paths'
 
 interface Operation {
   operation: OperationTypeNode
@@ -72,5 +79,36 @@ const getFields = (field: FieldNode): any => {
     lookAtFieldNode(field)
 
     return obj
+  }
+}
+
+export const listQueryTypeFieldsInProject = async () => {
+  try {
+    const schemaPointerMap = {
+      [print(rootSchema.schema)]: {},
+      'graphql/**/*.sdl.{js,ts}': {},
+      'directives/**/*.{js,ts}': {},
+    }
+
+    const mergedSchema = await loadSchema(schemaPointerMap, {
+      loaders: [
+        new CodeFileLoader({
+          noRequire: true,
+          pluckConfig: {
+            globalGqlIdentifierName: 'gql',
+          },
+        }),
+      ],
+      cwd: getPaths().api.src,
+      assumeValidSDL: true,
+    })
+
+    const queryTypeFields = mergedSchema.getQueryType()?.getFields()
+
+    // Return empty array if no schema found
+    return Object.keys(queryTypeFields ?? {})
+  } catch (e) {
+    console.error(e)
+    return []
   }
 }
