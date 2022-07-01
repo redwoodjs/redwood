@@ -1106,18 +1106,24 @@ export class DbAuthHandler {
       throw new DbAuthError.NotLoggedInError()
     }
 
+    const select = {
+      [this.options.authFields.id]: true,
+      [this.options.authFields.username]: true,
+    }
+
+    if (this.options.webAuthn?.enabled && this.options.authFields.challenge) {
+      select[this.options.authFields.challenge] = true
+    }
+
     let user
+
     try {
       user = await this.dbAccessor.findUnique({
         where: { [this.options.authFields.id]: this.session?.id },
-        select: {
-          [this.options.authFields.id]: true,
-          [this.options.authFields.username]: true,
-          [this.options.authFields.challenge]: true,
-        },
+        select,
       })
-    } catch (e) {
-      throw new DbAuthError.GenericError()
+    } catch (e: any) {
+      throw new DbAuthError.GenericError(e.message)
     }
 
     if (!user) {
