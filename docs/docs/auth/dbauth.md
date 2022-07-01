@@ -44,15 +44,11 @@ A single CLI command will get you everything you need to get dbAuth working, min
 yarn rw setup auth dbAuth
 ```
     
-An optional add-on to dbAuth enables **WebAuthn** authentication (TouchID, FaceID, etc.). If you think you want to use WebAuthn, you can generate the necessary fields right from the start by adding a `--webAuthn` flag to the above command:
-
-```bash
-yarn rw setup auth dbAuth --webAuthn
-```
+You will be prompted to ask if you want to enable **WebAuthn** support. WebAuthn is an open standard for allowing authentication from devides like TouchID, FaceID, USB fingerprint scanners, ane more. If you think you want to use WebAuthn, enter `y` at this prompt and read on configuration options.
 
 You can also add WebAuthn to an existing dbAuth install.  [Read more about WebAuthn usage and config below](#webauthn).
 
-Read the post-install instructions carefully as they contain instructions for adding database fields for the hashed password and salt, as well as how to configure the auth serverless function based on the name of the table that stores your user data. Here they are, but could change in future releases:
+Read the post-install instructions carefully as they contain instructions for adding database fields for the hashed password and salt, as well as how to configure the auth serverless function based on the name of the table that stores your user data. Here they are, but could change in future releases (these do not include the additional WebAuthn required options, make sure you get those from the output of the `setup` command):
 
 > You will need to add a couple of fields to your User table in order to store a hashed password and salt:
 >
@@ -101,11 +97,7 @@ If you don't want to create your own login, signup and forgot password pages fro
 yarn rw g dbAuth
 ```
 
-Just like for `setup` you can have Redwood generate [WebAuthn-enabled](#webauthn) pages for you:
-
-```bash
-yarn rw g dbAuth --webAuthn
-```
+Once again you will be asked if you want to create a WebAuthn-enabled version of the LoginPage. If so, enter `y` and follow the setup instructions.
 
 The default routes will make them available at `/login`, `/signup`, `/forgot-password`, and `/reset-password` but that's easy enough to change. Again, check the post-install instructions for one change you need to make to those pages: where to redirect the user to once their login/signup is successful.
 
@@ -316,7 +308,7 @@ A similar process takes place when authenticating:
 
 In both cases, actual scanning and matching of devices is handled by the operating system: all we care about is that we are given a credential ID and a public key back from the device.
 
-### Support
+### Browser Support
 
 WebAuthn is supported in the following browsers (as of June 2022):
 
@@ -356,9 +348,9 @@ WebAuthn support requires a few updates to your codebase:
 4. Adding an interface during the login process that prompts the user to enable their device
 
 :::info
-If you setup dbAuth and generated login/signup pages with the `--webAuthn` key then all of these steps have already been done for you! As described in the post-setup instructions you just need to add the required fields to your `User` model, create a `UserCredential` model, and you're ready to go!
+If you setup dbAuth and generated the LoginPage with WebAuthn support then all of these steps have already been done for you! As described in the post-setup instructions you just need to add the required fields to your `User` model, create a `UserCredential` model, and you're ready to go!
 
-If you didn't use the `--webAuthn` flag, but decided you now want WebAuthn, you could run the setup and generator commands again with the `--force` flag to overwrite your existing files. Any changes you made will be overwritten, but if you do a quick diff in git you should be able to port over most of your changes.
+If you didn't setup WebAuthn at first, but decided you now want WebAuthn, you could run the setup and generator commands again with the `--force` flag to overwrite your existing files. Any changes you made will be overwritten, but if you do a quick diff in git you should be able to port over most of your changes.
 :::
 
 ### Schema Updates
