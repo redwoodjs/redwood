@@ -310,7 +310,7 @@ In both cases, actual scanning and matching of devices is handled by the operati
 
 ### Browser Support
 
-WebAuthn is supported in the following browsers (as of June 2022):
+WebAuthn is supported in the following browsers (as of July 2022):
 
 | OS      |	Browser	| Authenticator |
 | ------- | ------- | ------------- |
@@ -468,7 +468,7 @@ export const handler = async (event, context) => {
 * `credentialModelAccessor` specifies the name of the accessor that you call to access the model you created to store credentials. If your model name is `UserCredential` then this field would be `userCredential` as that's how Prisma's naming conventions work.
 * `authFields.challenge` specifies the name of the field in the user model that will hold the WebAuthn challenge string. This string is generated automatically whenever a WebAuthn registration or authentication request starts and is one more verification that the browser request came from this user. A user can only have one WebAuthn request/response cycle going at a time, meaning that they can't open a desktop browser, get the TouchID prompt, then switch to iOS Safari to use FaceID, then return to the desktop to scan their fingerprint. The most recent WebAuthn request will clobber any previous one that's in progress.
 * `webAuthn.enabled` is a boolean, denoting whether the server should respond to webAuthn requests. If you decide to stop using WebAuthn, you'll want to turn it off here as well as update the LoginPage to stop prompting.
-* `webAuthn.expires` is the number of seconds that a user will be allowed to keep using their fingerprint/face scan to re-authenticate into your site. Once this value expires, the user *must* use their username/password to authenticate the next time, and then WebAuthn will be re-enabled (again, for this length of time). For security, you may want to log users out of your app after an hour of inactivity, but allow them to easily use their fingerprint/face to re-authenticate for the next two weeks. In that case you would set `login.expires` to `60 * 60` and `webAuthn.expires` to `60 * 60 * 24 * 14`.
+* `webAuthn.expires` is the number of seconds that a user will be allowed to keep using their fingerprint/face scan to re-authenticate into your site. Once this value expires, the user *must* use their username/password to authenticate the next time, and then WebAuthn will be re-enabled (again, for this length of time). For security, you may want to log users out of your app after an hour of inactivity, but allow them to easily use their fingerprint/face to re-authenticate for the next two weeks (this is similar to login on macOS where your TouchID session expires after a couple of days of inactivity). In this example you would set `login.expires` to `60 * 60` and `webAuthn.expires` to `60 * 60 * 24 * 14`.
 * `webAuthn.name` is the name of the app that will show in some browser's prompts to use the device
 * `webAuthn.domain` is the name of domain making the request. This is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`
 * `webAuthn.origin` is the domain *including* the protocol and port that the request is coming from, ex: https://app.server.com In development mode, this would be `http://localhost:8910`
