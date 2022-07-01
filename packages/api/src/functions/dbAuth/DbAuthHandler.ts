@@ -46,7 +46,7 @@ interface DbAuthHandlerOptions {
    * The name of the property you'd call on `db` to access your user credentials table.
    * ie. if your Prisma model is named `UserCredential` this value would be `userCredential`, as in `db.userCredential`
    */
-  credentialModelAccessor: keyof PrismaClient
+  credentialModelAccessor?: keyof PrismaClient
   /**
    *  A map of what dbAuth calls a field to what your database calls it.
    * `id` is whatever column you use to uniquely identify a user (probably
@@ -289,7 +289,9 @@ export class DbAuthHandler {
     this.params = this._parseBody()
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
-    this.dbCredentialAccessor = this.db[this.options.credentialModelAccessor]
+    this.dbCredentialAccessor = this.options.credentialModelAccessor
+      ? this.db[this.options.credentialModelAccessor]
+      : null
     this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
 
