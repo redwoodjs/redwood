@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import Listr from 'listr'
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import {
@@ -82,11 +83,6 @@ export const builder = (yargs) => {
     })
     .option('skip-signup', {
       description: 'Skip generating the signup page',
-      type: 'boolean',
-      default: false,
-    })
-    .option('webAuthn', {
-      description: 'Generates WebAuthn-enabled login page',
       type: 'boolean',
       default: false,
     })
@@ -254,7 +250,15 @@ const tasks = ({
 }
 
 export const handler = async (options) => {
-  const t = tasks(options)
+  const response = await prompts({
+    type: 'confirm',
+    name: 'answer',
+    message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+    initial: false,
+  })
+  const webAuthn = response.answer
+
+  const t = tasks({ ...options, webAuthn })
 
   try {
     await t.run()
