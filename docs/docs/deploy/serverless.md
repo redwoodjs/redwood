@@ -55,6 +55,13 @@ Once that command completes you should see a message including the URL of your s
 
 From now on you can simply run `yarn rw deploy serverless` when you're ready to deploy (which will also be much faster).
 
+
+:::info
+Remember, if you add or generate new serverless functions (or endpoints), you'll need to update the configuration in your serverless.yml in `./api/serverless.yml`.
+
+By default we only configure the `auth` and `graphql` functions for you.
+:::
+
 ## Environment Variables
 
 For local deployment (meaning you're deploying from your own machine, or another that you're in control of) you can put any ENV vars that are production-only into `.env.production`. They will override any same-named vars in `.env`. Make sure neither of these files is checked into your code repository!
@@ -99,6 +106,6 @@ Note that `production` is the default stage when you deploy with `yarn rw server
 
 This will take several minutes, so grab your favorite beverage and enjoy your new $0 monthly bill!
 
-> Pro tip: if you get tired of typing `serverless` each time, you can use the much shorter `sls` alias:
->
->   `yarn rw deploy sls`
+:::tip Pro tip
+If you get tired of typing `serverless` each time, you can use the much shorter `sls` alias: `yarn rw deploy sls`
+:::

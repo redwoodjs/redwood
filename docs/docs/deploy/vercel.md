@@ -37,7 +37,7 @@ This updates your `redwood.toml` file, setting `apiUrl = "/api"`:
 
 ### Step 2. Database Settings
 
-Follow the steps in the [Prisma and Database](#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
+Follow the steps in the [Prisma and Database](./introduction#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
 
 ### Vercel Initial Setup and Configuration
 Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
