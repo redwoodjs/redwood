@@ -26,9 +26,7 @@ export const schema = gql`
     """Fetch ${pluralPascalName}."""
     <% } %>${pluralCamelName}: [${singularPascalName}!]! @requireAuth<% if (crud) { %>
     <% if (docs) { %>
-    """
-    Fetch a ${singularPascalName} by id.
-    """
+    """Fetch a ${singularPascalName} by id."""
     <% } %>${singularCamelName}(id: ${idType}!): ${singularPascalName} @requireAuth<% } %>
   }
 
