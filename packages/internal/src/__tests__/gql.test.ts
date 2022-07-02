@@ -1,6 +1,8 @@
+import path from 'path'
+
 import gql from 'graphql-tag'
 
-import { parseDocumentAST } from '../gql'
+import { listQueryTypeFieldsInProject, parseDocumentAST } from '../gql'
 
 test('parses a document AST', () => {
   const QUERY = gql`
@@ -93,4 +95,24 @@ test('handles fragments', () => {
       },
     ]
   `)
+})
+
+test('listQueryTypeFieldsInProject', async () => {
+  const FIXTURE_PATH = path.resolve(
+    __dirname,
+    '../../../../__fixtures__/example-todo-main'
+  )
+  // Set fixture path so it reads the sdls from example-todo-main
+  process.env.RWJS_CWD = FIXTURE_PATH
+
+  // Reimport, because rwjs/internal already calculates the paths
+  const result = await listQueryTypeFieldsInProject()
+
+  expect(result).toContain('redwood')
+  expect(result).toContain('currentUser')
+  expect(result).toContain('todos')
+  expect(result).toContain('todosCount')
+
+  // Restore RWJS config
+  delete process.env.RWJS_CWD
 })

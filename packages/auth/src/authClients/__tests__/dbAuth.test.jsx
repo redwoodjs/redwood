@@ -7,7 +7,7 @@ jest.mock('cross-undici-fetch', () => {
 })
 
 beforeAll(() => {
-  global.fetch = jest.fn().mockImplementation(() => {
+  global.fetch = jest.fn().mockImplementation(async () => {
     return { text: () => '', json: () => ({}) }
   })
 })
