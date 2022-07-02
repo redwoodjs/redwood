@@ -113,7 +113,7 @@ export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
 ### Roles checks for CurrentUser in `src/lib/auth`
 
 When you setup auth, Redwood includes some template code for handling roles with the `hasRole` function.
-While Redwood does runtime checks to make sure it doesn't access roles if it doesn't exist, TypeScript in strict mode will highlight errors, depending on
+While Redwood does runtime checks to make sure it doesn't access roles if it doesn't exist, TypeScript in strict mode will highlight errors, depending on whether you are returning `roles`, and whether those roles are `string` or `string[]`
 
 ```typescript
 export const hasRole = (roles: AllowedRoles): boolean => {
