@@ -563,7 +563,16 @@ function FormInner<TFieldValues, TContext = any>(
   )
 }
 
-// Sorry about the `as` type assertion (type cast) here. Normally I'd ...
+// Sorry about the `as` type assertion (type cast) here. Normally I'd redeclare
+// forwardRef to only return a plain function, allowing us to use TypeScript's
+// Higher-order Function Type Inference. But that gives us problems with the
+// ForwardRefExoticComponent type we use for our InputComponents. So instead
+// of changing that type (because it's correct) I use a type assertion here.
+// forwardRef is notoriously difficult to use with UI component libs.
+// Chakra-ui also says:
+// > To be honest, the forwardRef type is quite complex [...] I'd recommend
+// > that you cast the type
+// https://github.com/chakra-ui/chakra-ui/issues/4528#issuecomment-902566185
 const Form = forwardRef(FormInner) as <TFieldValues, TContext = any>(
   props: FormProps<TFieldValues, TContext> &
     React.RefAttributes<HTMLFormElement>
