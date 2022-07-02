@@ -1313,9 +1313,7 @@ The Redwood Root Schema
 Defines details about Redwood such as the current user and version information.
 """
 type Redwood {
-  """
-  The current user.
-  """
+  """The current user."""
   currentUser: JSON
 
   """
