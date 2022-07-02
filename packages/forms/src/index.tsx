@@ -56,9 +56,10 @@ import {
   RegisterOptions,
   UseFormReturn,
   UseFormProps,
+  UnpackNestedValue,
 } from 'react-hook-form'
 
-import FormError from './FormError'
+import FormError, { RWGqlError } from './FormError'
 
 /**
  * We slightly extend `react-hook-form`'s `RegisterOptions` to make working with GraphQL easier.
@@ -484,19 +485,20 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-export interface FormProps
+export interface FormProps<TFieldValues, TContext = any>
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
    * The methods returned by `useForm`.
-   * This props's only necessary if you've called `useForm` yourself to get access to one of it's functions, like `reset`.
+   * This prop is only necessary if you've called `useForm` yourself to get
+   * access to one of its functions, like `reset`.
    *
    * @example
    *
-   * ```javascript
-   * const formMethods = useForm()
+   * ```typescript
+   * const formMethods = useForm<FormData>()
    *
-   * const onSubmit = (data) => {
+   * const onSubmit = (data: FormData) => {
    *  sendDataToServer(data)
    *  formMethods.reset()
    * }
@@ -506,7 +508,7 @@ export interface FormProps
    * )
    * ```
    */
-  formMethods?: UseFormReturn
+  formMethods?: UseFormReturn<TFieldValues, TContext>
   /**
    * Configures how React Hook Form performs validation, among other things.
    *
@@ -518,9 +520,9 @@ export interface FormProps
    *
    * @see {@link https://react-hook-form.com/api/useform}
    */
-  config?: UseFormProps
+  config?: UseFormProps<TFieldValues, TContext>
   onSubmit?: (
-    value: Record<string, any>,
+    value: UnpackNestedValue<TFieldValues>,
     event?: React.BaseSyntheticEvent
   ) => void
 }
@@ -528,40 +530,44 @@ export interface FormProps
 /**
  * Renders a `<form>` with the required context.
  */
-const Form = forwardRef(
-  (
-    {
-      config,
-      error: errorProps,
-      formMethods: propFormMethods,
-      onSubmit,
-      children,
-      ...rest
-    }: FormProps,
-    ref: ForwardedRef<HTMLFormElement>
-  ) => {
-    const hookFormMethods = useForm(config)
-    const formMethods = propFormMethods || hookFormMethods
+function FormInner<TFieldValues, TContext = any>(
+  {
+    config,
+    error: errorProps,
+    formMethods: propFormMethods,
+    onSubmit,
+    children,
+    ...rest
+  }: FormProps<TFieldValues, TContext>,
+  ref: ForwardedRef<HTMLFormElement>
+) {
+  const hookFormMethods = useForm<TFieldValues, TContext>(config)
+  const formMethods = propFormMethods || hookFormMethods
 
-    return (
-      <form
-        ref={ref}
-        {...rest}
-        onSubmit={formMethods.handleSubmit((data, event) =>
-          onSubmit?.(data, event)
-        )}
+  return (
+    <form
+      ref={ref}
+      {...rest}
+      onSubmit={formMethods.handleSubmit<TFieldValues>((data, event) =>
+        onSubmit?.(data, event)
+      )}
+    >
+      <ServerErrorsContext.Provider
+        value={
+          errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
+        }
       >
-        <ServerErrorsContext.Provider
-          value={
-            errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
-          }
-        >
-          <FormProvider {...formMethods}>{children}</FormProvider>
-        </ServerErrorsContext.Provider>
-      </form>
-    )
-  }
-)
+        <FormProvider {...formMethods}>{children}</FormProvider>
+      </ServerErrorsContext.Provider>
+    </form>
+  )
+}
+
+// Sorry about the `as` type assertion (type cast) here. Normally I'd ...
+const Form = forwardRef(FormInner) as <TFieldValues, TContext = any>(
+  props: FormProps<TFieldValues, TContext> &
+    React.RefAttributes<HTMLFormElement>
+) => React.ReactElement | null
 
 export interface LabelProps
   extends Pick<FieldProps, 'errorClassName' | 'errorStyle'>,
@@ -1002,6 +1008,7 @@ export {
   Form,
   ServerErrorsContext,
   FormError,
+  RWGqlError,
   FieldError,
   InputField,
   Label,
