@@ -17,7 +17,7 @@ This is used to type the props of your Cell's `Success` component.
 It takes two arguments as generics:
 
 | Generic      | Description                                                                              |
-| :----------- | :--------------------------------------------------------------------------------------- |
+|:-------------|:-----------------------------------------------------------------------------------------|
 | `TData`      | The type of data you're expecting to receive (usually the type generated from the query) |
 | `TVariables` | An optional second parameter for the type of the query's variables                       |
 
@@ -96,11 +96,11 @@ This is actually a function, not a type, but it takes a lot of generics. Use as 
 defineScenario<PrismaCreateType, TName, TKey>
 ```
 
-| Generic            | Description                                                                                         |
-| :----------------- | :-------------------------------------------------------------------------------------------------- |
-| `PrismaCreateType` | (Optional) the type imported from Prisma's create operation that goes into the "data" key           |
-| `TName`            | (Optional) the name or names of the models in your scenario                                         |
-| `TKey`             | (Optional) the keys in your scenario. These are really only useful while you write out the scenario |
+| Generic            | Description                                                                                           |
+|:-------------------|:------------------------------------------------------------------------------------------------------|
+| `PrismaCreateType` | (Optional) the type imported from Prisma's create operation that goes into the "data" key             |
+| `TName`            | (Optional) the name or names of the models in your scenario                                           |
+| `TKeys`            | (Optional) the key(s) in your scenario. These are really only useful while you write out the scenario |
 
 An example:
 
@@ -130,11 +130,11 @@ defineScenario<Prisma.PostCreateArgs | Prisma.UserCreateArgs, 'post' | 'user'>
 This utility type makes it easy for you to access data created by your scenarios in your tests.
 It takes three generic parameters:
 
-| Generic | Description                                                       |
-| :------ | :---------------------------------------------------------------- |
-| `TData` | The Prisma model that'll be returned                              |
-| `TName` | (Optional) the name of the model. ("post" in the example below)   |
-| `TKey`  | (optional) the name of the scenario. ("one" in the example below) |
+| Generic | Description                                                                      |
+|:--------|:---------------------------------------------------------------------------------|
+| `TData` | The Prisma model that'll be returned                                             |
+| `TName` | (Optional) the name of the model. ("post" in the example below)                  |
+| `TKeys` | (optional) the keys(s) used to define the scenario. ("one" in the example below) |
 
 We know this is a lot of generics, but that's so you get to choose how specific you want to be with the types!
 

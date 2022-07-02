@@ -35,10 +35,10 @@ export interface DefineScenario {
   <
     PrismaCreateType extends { data: any },
     ModelName extends string | number | symbol = string | number | symbol,
-    KeyName extends string | number | symbol = string | number | symbol
+    TKeys extends string | number | symbol = string | number | symbol
   >(
-    scenario: Record<ModelName, Record<KeyName, A.Compute<PrismaCreateType>>>
-  ): Record<ModelName, Record<KeyName, A.Compute<PrismaCreateType['data']>>>
+    scenario: Record<ModelName, Record<TKeys, A.Compute<PrismaCreateType>>>
+  ): Record<ModelName, Record<TKeys, A.Compute<PrismaCreateType['data']>>>
 }
 
 /**
