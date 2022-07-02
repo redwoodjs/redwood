@@ -22,7 +22,7 @@ Make sure that they're syntactically valid, and that every query and mutation on
 
 If you're curious, you can find the generated types in the `.redwood/types`, `web/types/graphql.d.ts`, and `api/types/graphql.d.ts` directories. Broadly speaking, Redwood generates the following types:
 
-1. ["mirror" types](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs) for your components, Cells, and layouts on the web side
+1. ["mirror" types](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs) for your components, Cells, and layouts on the web side - and services, libs, etc. on the api side
 2. types based on your queries and mutations on the web side (in `web/types/graphql.d.ts`)
 3. types for resolvers based on your SDLs on the api side (in `api/types/graphql.d.ts`)
 4. types for testing, `currentUser`, etc.
