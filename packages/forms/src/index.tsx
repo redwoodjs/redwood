@@ -548,8 +548,8 @@ function FormInner<TFieldValues, TContext = any>(
     <form
       ref={ref}
       {...rest}
-      onSubmit={formMethods.handleSubmit((data, event) =>
-        onSubmit?.(data, event)
+      onSubmit={formMethods.handleSubmit<UnpackNestedValue<TFieldValues>>(
+        (data, event) => onSubmit?.(data, event)
       )}
     >
       <ServerErrorsContext.Provider
