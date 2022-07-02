@@ -161,18 +161,17 @@ module.exports = {
             },
             {
               type: 'doc',
-              label: 'Generated Types',
               id: 'typescript/generated-types',
-            },
-            {
-              type: 'doc',
-              label: 'Strict Mode',
-              id: 'typescript/strict-mode',
             },
             {
               type: 'doc',
               label: 'Utility Types',
               id: 'typescript/utility-types',
+            },
+            {
+              type: 'doc',
+              label: 'Strict Mode',
+              id: 'typescript/strict-mode',
             },
           ],
         },

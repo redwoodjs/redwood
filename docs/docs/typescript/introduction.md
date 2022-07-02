@@ -2,13 +2,13 @@
 description: Redwood comes with full TypeScript support
 ---
 
-# TypeScript
+# TypeScript in Redwood
 
 Redwood comes with full TypeScript support, and you don't have to give up any of the conveniences that Redwood offers to enjoy all the benefits of a type-safe codebase.
 
 ## Starting a Redwood Project in TypeScript
 
-You can use the `--typescript` option on `yarn create redwood-app` to use TypeScript from the get-go:
+You can use the `--typescript` option on `yarn create redwood-app` to use TypeScript from the start:
 
 ```
 yarn create redwood-app my-redwood-app --typescript
@@ -24,21 +24,19 @@ yarn rw setup tsconfig
 ```
 
 This adds `tsconfig.json` files to both the web and the api side, telling VSCode that this's a TypeScript project.
-(You can go ahead and remove the `jsconfig.json` files in both sides now.)
+(You can go ahead and remove the `jsconfig.json` files from both sides now.)
 
 You don't need to convert all your JavaScript files to TypeScript right away.
 In fact, you probably shouldn't.
 Do it incrementally.
-Start by renaming your files from `.js` to `.ts`, or, if they have a React component, `.tsx`.
+Start by renaming your files from `.js` to `.ts`. (Or, if they have a React component, `.tsx`.)
 
 ## Sharing Types between Sides
 
 To share types between sides:
 
-1. Put them in a directory called `types` at the root of your project (note that you may have to create this directory)
-   - Redwood's `tsconfig.json` is already configured to pick up types from this directory
-2. Restart your editor's TypeScript server
-   - In VSCode, you can do this by searching for "TypeScript: Restart TS server" using the command palette (make sure you're in a `.js` or `.ts` file)
+1. Put them in a directory called `types` at the root of your project (you may have to create this directory)
+2. Restart your editor's TypeScript server. In VSCode, you can do this by running the "TypeScript: Restart TS server" command via the command palette (make sure you're in a `.js` or `.ts` file)
 
 ## Running Type Checks
 

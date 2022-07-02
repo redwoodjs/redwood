@@ -287,7 +287,9 @@ Note that you can still pass any other props to `Success`. After all, it's still
 
 
 :::tip
-Looking for info on how TypeScript works with Cells? Check out the [Utility types](typescript/utility-types.md#cell) doc
+
+Looking for info on how TypeScript works with Cells? Check out the [Utility Types](typescript/utility-types.md#cell) doc
+
 :::
 
 ### When should I use a Cell?

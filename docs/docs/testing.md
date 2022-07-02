@@ -1629,7 +1629,9 @@ export const standard = defineScenario({
 ```
 
 :::tip
-Looking for info on how TypeScript works with Scenarios? Check out the [Utility types](typescript/utility-types.md#scenarios--testing) doc
+
+Looking for info on how TypeScript works with Scenarios? Check out the [Utility Types](typescript/utility-types.md#scenarios--testing) doc
+
 :::
 
 #### Which Scenarios Are Seeded?

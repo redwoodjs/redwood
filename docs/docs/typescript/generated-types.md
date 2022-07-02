@@ -1,36 +1,39 @@
 ---
-title: Generated Types
-description: A deeper look at automatic type generation in Redwood
+description: A look at automatic type generation in Redwood
 ---
 
-## Auto-generated Types
+# Generated Types
 
-The CLI automatically generates types for you.
-These generated types not only include your GraphQL queries, but also your named routes, Cells, scenarios, and tests.
+To add to the TypeScript (and JavaScript!) experience, Redwood generates types for you.
+These generated types not only include your GraphQL operations, but also your named routes, Cells, scenarios, and tests.
 
-When you run `yarn rw dev`, the CLI watches for file changes and triggers the type generator, but you can also trigger it manually:
+When you run `yarn rw dev`, the CLI watches files for changes and triggers type generation automatically, but you can trigger it manually too:
 
 ```
 yarn rw g types
 ```
 
-If you get errors trying to generate types, its worth checking your queries in your Cells and SDLs, to make sure every query and mutation on the web side is also defined in the *.sdl.{js/ts} files in the api side.
+:::tip Getting errors trying to generate types?
 
-If you're curious, you can find the generated types in the `.redwood/types`, `web/types/graphql.d.ts`, and `api/types/graphql.d.ts` directories. Broadly speaking Redwood generates the following:
+If you're getting errors trying to generate types, it's worth checking the GraphQL operations in your Cells and SDLs.
+Make sure that they're syntactically valid, and that every query and mutation on the web side is defined in an `*.sdl.js` file on the api side.
 
-1. Generate "mirror" types for your components, Cells and layouts on the web side
-2. Generate types based on your queries and mutations on the web side (in ./web/types/graphql.d.ts)
-3. Generate types for resolvers based on your SDLs on the api side (in ./api/types/graphql.d.ts)
-4. Generate types for testing, `currentUser`, etc.
+:::
 
+If you're curious, you can find the generated types in the `.redwood/types`, `web/types/graphql.d.ts`, and `api/types/graphql.d.ts` directories. Broadly speaking, Redwood generates the following types:
+
+1. ["mirror" types](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs) for your components, Cells, and layouts on the web side
+2. types based on your queries and mutations on the web side (in `web/types/graphql.d.ts`)
+3. types for resolvers based on your SDLs on the api side (in `api/types/graphql.d.ts`)
+4. types for testing, `currentUser`, etc.
 
 ## CurrentUser
-On both the api and web sides, if you've configured auth, the types for current user will be automatically "inferred" from your `getCurrentUser` function in `./api/src/lib/auth.ts`.
 
-So for example, if you specify the return type on this function
+If you've setup auth, the type for the current user on both the web and the api side gets automatically "inferred" from the `getCurrentUser` function in `api/src/lib/auth.ts`.
 
-```ts title=src/lib/auth.ts
+For example, if you specify the return type on `getCurrentUser` as...
 
+```ts title="api/src/lib/auth.ts"
 interface MyCurrentUser {
   id: string,
   roles: string[],
@@ -42,15 +45,16 @@ const getCurrentUser = ({decoded}): MyCurrentUser => {
   //..
 }
 ```
-Your current user type will be populated on both `context.currentUser` on the api side, and in `userAuth().currentUser` on the web side.
+
+The types for both `useAuth().currentUser` on the web side and `context.currentUser` on the api side will be the same—the `MyCurrentUser` interface.
 
 ## Query and Mutation types
-On the web side, let's say you have a query in a Cell that looks like this:
 
-```js
+Let's say you have a query in a Cell that looks like this:
+
+```js title="web/src/components/BlogPostCell.tsx"
 export const QUERY = gql`
- /* 👇 query/mutation should be named */
- // highlight-next-line
+  # 👇 Make sure to name your GraphQL operations
   query FindBlogPostQuery($id: Int!) {
     blogPost: post(id: $id) {
       title
@@ -60,87 +64,94 @@ export const QUERY = gql`
 `
 ```
 
-The type will use the query name, in this case `FindBlogPostQuery`. So can import these generated types:
+Redwood generates types for both the data returned from the query and the query's variables.
+These generated types will use the query's name—in this case, `FindBlogPostQuery`—so you can import them like this:
 
-```js
-import { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
+```ts title="web/src/components/BlogPostCell.tsx"
+import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 ```
 
-- `FindBlogPostQuery` is the type for the returned data in this case `{title: string, body: string}`
-- `FindBlogPostQueryVariables` is the type of the inputs - in this case `{id: number}`
+`FindBlogPostQuery` is the type of the data returned from the query (`{ title: string, body: string }`) and `FindBlogPostQueryVariables` is the type of the query's variables (`{ id: number }`).
 
-But don't worry too much, if you use Redwood's CLI - we template all of this for you!
+The import statement's specifier, `'types/graphql'`, is a [mapped path](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping). First, TypeScript will look for the types in `web/types/graphql.d.ts`; if they're not there, it'll check `types/graphql.d.ts`. Redwood only automatically generates the former. For the latter, see [sharing types between sides](./introduction.md#sharing-types-between-sides).
 
+But don't worry too much. If you use the generators, they template all of this for you!
 
 ## Resolver Types
-On the API side, generated services include types for query and mutation resolvers.
 
-```js
+Generated Services include types for query and mutation resolvers:
+
+```ts title="api/src/services/posts.ts"
+// highlight-next-line
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 // highlight-next-line
 export const posts: QueryResolvers['posts'] = () => {
+  return db.post.findMany()
 }
 
 // highlight-next-line
-export const createPost: MutationResolvers['createPost'] = ({ input }) => {
-   //..
+export const post: QueryResolvers['post'] = ({ id }) => {
+  return db.post.findUnique({
+    where: { id },
+  })
 }
 ```
 
-These types help you by making sure you're returning the object you've defined in your SDL. Note that these types expect you to return the _complete_ type that you've defined in your SDL. You can just return the result of the Prisma query, and not have to worry about how, for example, a DateTime in Prisma maps to a String in GraphQL.
+These types help you by making sure you're returning an object in the shape of what you've defined in your SDL. Note that these types expect you to return the _complete_ type that you've defined in your SDL. You can just return the result of the Prisma query, and not have to worry about how, for example, a DateTime in Prisma maps to a String in GraphQL.
 
-:::note
-A note on union types - lets say in your SDL you return a union type
+:::note A note on union types
+
+Lets say that in one of your SDLs, you define a union type
 
 ```graphql
-  type OutOfStock {
-    message: String!
-  }
+type OutOfStock {
+  message: String!
+}
 
 // highlight-next-line
- union CandyResult = Candy | OutOfStock
+union CandyResult = Candy | OutOfStock
 
 type Query {
   candy(id: String!): CandyResult @skipAuth
- ```
+}
+```
 
-These types will also be handled automatically. But if you are returning a different Prisma model, you may need to write your own resolver type, as the type generator will not know how to map the Prisma type to the GraphQL return type.
+These types will also be handled automatically. But if you're returning a different Prisma model, you may need to write your own resolver type, as the type generator won't know how to map the Prisma type to the GraphQL return type.
+
 :::
 
+## Under the Hood
 
-## What's happening under the hood
+Redwood uses [GraphQL Code Generator](https://www.graphql-code-generator.com) (aka graphql-codegen) to generate types for your GraphQL operations and SDLs. It's even configured to use the types from your generated Prisma Client, to make sure that your resolvers are strongly typed!
 
-Redwood uses [GraphQL Code Generator](https://www.graphql-code-generator.com) to generate types for your GraphQL queries, mutations and SDLs. We configure it to use the types from your generated prisma client too on the API side, to make sure your resolvers are strongly typed.
+### Customizing GraphQL Code Generation
 
+While the default settings are configured so that things just work️, you can customize them to your liking by adding a `./codegen.yml` file to the root of your project.
 
+:::info Curious about the defaults?
 
-### Customising codegen config
-While the defaults are configured so that things JustWork™️, you can customize them by adding a `./codegen.yml` file to the root of your project. Your custom settings will be merged with the built-in ones.
+You can find them [here](https://github.com/redwoodjs/redwood/blob/main/packages/internal/src/generate/graphqlCodeGen.ts) in Redwood's source. Look for the `generateTypeDefGraphQLWeb` and `generateTypeDefGraphQLApi` functions.
 
-:::info
-If you're curious about the built-in settings, they can be found [here](https://github.com/redwoodjs/redwood/blob/main/packages/internal/src/generate/graphqlCodeGen.ts) in the Redwood source. Look for the `generateTypeDefGraphQLWeb` and `generateTypeDefGraphQLApi` functions.
 :::
 
+For example, adding this `codegen.yml` to the root of your project will transform the names of the generated types to UPPERCASE:
 
-For example, adding this `codegen.yml` to the root of your project will transform all the generated types to UPPERCASE:
-
-```yml
-# ./codegen.yml
-
+```yml title="codegen.yml"
 config:
   namingConvention:
     typeNames: change-case-all#upperCase
 ```
 
-Remember you can configure graphql-codegen in a number of different ways - codegen.yml, codegen.json or codegen.js - or even a key called codegen in your root package.json. Codegen uses [cosmiconfig](https://github.com/davidtheclark/cosmiconfig#cosmiconfig) under the hood, so take a peek at their docs for all the possible ways to configure.
+You can configure graphql-codegen in a number of different ways: `codegen.yml`, `codegen.json`, or `codegen.js`. Even a `codegen` key in your root `package.json` will do. graphql-codegen uses [cosmiconfig](https://github.com/davidtheclark/cosmiconfig#cosmiconfig) under the hood—take a look at their docs if you want to know more.
 
-For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator. Note that we currently only support the root level `config` option.
+For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator. Currently, Redwood only supports the root level `config` option.
 
+:::tip Using VSCode?
 
+As a part of type generation, the [VSCode GraphQL extension](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) configures itself based on the merged schema Redwood generates in `.redwood/schema.graphql`.
+You can configure it further in `graphql.config.js` at the root of your project.
 
-:::tip
-If you're using VSCode, the GraphQL extension will also configure itself based on the merged schema Redwood generates in `.redwood/schema.graphql` as part of type generation.
-
-You can configure it further in `graphql.config.js` at the root of your project
 :::
