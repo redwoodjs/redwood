@@ -548,7 +548,7 @@ function FormInner<TFieldValues, TContext = any>(
     <form
       ref={ref}
       {...rest}
-      onSubmit={formMethods.handleSubmit<TFieldValues>((data, event) =>
+      onSubmit={formMethods.handleSubmit((data, event) =>
         onSubmit?.(data, event)
       )}
     >
@@ -636,7 +636,7 @@ const DEFAULT_MESSAGES = {
  *
  * @example Displaying a validation error message with `<FieldError>`
  *
- * `<FieldError>` doesnt render (i.e. returns `null`) when there's no error on `<TextField>`.
+ * `<FieldError>` doesn't render (i.e. returns `null`) when there's no error on `<TextField>`.
  *
  * ```jsx
  * <Label name="name" errorClassName="error">
