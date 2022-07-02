@@ -10,9 +10,9 @@ While strict mode gives you a lot more safety, it makes your code a bit more ver
 
 ## Enabling strict mode
 
-Enable strict mode by setting `strict` to true in `web/tsconfig.json` and `api/tsconfig.json`:
+Enable strict mode by setting `strict` to true in `web/tsconfig.json` and `api/tsconfig.json`, and if you're using scripts in `scripts/tsconfig.json`:
 
-```json title="web/tsconfig.json, api/tsconfig.json"
+```json title="web/tsconfig.json, api/tsconfig.json, scripts/tsconfig.json"
 {
   "compilerOptions": {
     "noEmit": true,
