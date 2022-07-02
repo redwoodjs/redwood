@@ -1319,9 +1319,7 @@ type Redwood {
   """The version of Prisma."""
   prismaVersion: String
 
-  """
-  The version of Redwood.
-  """
+  """The version of Redwood."""
   version: String
 }
 
