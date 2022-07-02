@@ -1316,9 +1316,7 @@ type Redwood {
   """The current user."""
   currentUser: JSON
 
-  """
-  The version of Prisma.
-  """
+  """The version of Prisma."""
   prismaVersion: String
 
   """
