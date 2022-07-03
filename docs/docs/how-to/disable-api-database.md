@@ -18,6 +18,16 @@ rm -rf api
 
 You can also run `yarn install` to cleanup those packages that aren't used any more.
 
+## Disable Prisma functionality
+The `--prisma` and `--dm` flags are set to `true` by default and need to be set to `false` in the build command.
+
+```toml {4}
+[build]
+  command = "yarn rw deploy netlify --prisma=false --dm=false"
+```
+
+While omitting these flags won't prevent you from developing the site in a local environment, not setting them to `false` will lead to a `'No Prisma Schema found'` error when you attempt to deploy your site to a production environment, at least when Netlify is the deployment target.
+
 ## Turn off the API build process
 
 When it comes time to deploy, we need to let Netlify know that it shouldn't bother trying to look for any code to turn into AWS Lambda functions.
@@ -26,7 +36,7 @@ Open up `netlify.toml`. We're going to comment out one line:
 
 ```toml {4}
 [build]
-  command = "yarn rw build"
+  command = "yarn rw deploy netlify --prisma=false --dm=false"
   publish = "web/dist"
   # functions = "api/dist/functions"
 

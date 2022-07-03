@@ -645,14 +645,14 @@ So `validateUniqueness()` first tries to find a record with the given fields, an
 > **Why use this when the database can verify uniqueness with a UNIQUE INDEX database constraint?**
 >
 > You may be in a situation where you can't have a unique index (supporting a legacy schema, perhaps), but still want to make sure the data is unique before proceeding. There is also the belief that you shouldn't have to count on the database to validate your data—that's a core concern of your business logic, and your business logic should live in your Services in a Redwood app.
-> 
-> Another issue is that the error raised by Prisma when a record validates a unique index is swallowed by GraphQL and so you can't report it to the user (there are still ways around this, but it involves catching and re-throwing a different error). The error raised by `validateUniqueness()` is already safe-listed and allowed to be sent to the browser. 
+>
+> Another issue is that the error raised by Prisma when a record validates a unique index is swallowed by GraphQL and so you can't report it to the user (there are still ways around this, but it involves catching and re-throwing a different error). The error raised by `validateUniqueness()` is already safe-listed and allowed to be sent to the browser.
 
 #### Arguments
 
 1. The name of the db table accessor that will be checked (what you would call on `db` in a normal Prisma call). If you'd call `db.user` then this value is `"user"`.
 2. An object, containing the db fields/values to check for uniqueness, like `{ email: 'rob@redwoodjs.com' }`. Can also include additional options explained below that provide for a narrower scope for uniqueness requirements, and a way for the record to identify itself and not create a false positive for an existing record.
-3. [Optional] An object with options.
+3. [Optional] An object with options. `message` - custom error message. `db` - custom instance of the PrismaClient to use
 4. Callback to be invoked if record is found to be unique.
 
 In its most basic usage, say you want to make sure that a user's email address is unique before creating the record. `input` is an object containing all the user fields to save to the database, including `email` which must be unique:
@@ -676,6 +676,21 @@ const createUser = (input) => {
   )
 }
 ```
+
+You can provide the PrismaClient to be used for the transaction and callback.
+```jsx
+import { db } from 'src/lib/db'
+
+const createUser = (input) => {
+  return validateUniqueness('user',
+    { email: input.email },
+    { db },
+    (db) => db.user.create({ data: input })
+  )
+}
+```
+
+> If you are overwriting the DATABASE_URL in your `src/lib/db` instantiation of the PrismaClient, you need to use this option. If not provided, a vanilla `new PrismaClient()` is used to run the callback that will not respect any custom configurations not represented in your `prisma.schema`
 
 Be sure that both your callback and the surrounding `validateUniqueness()` function are `return`ed or else your service function will have nothing to return to its consumers, like GraphQL.
 

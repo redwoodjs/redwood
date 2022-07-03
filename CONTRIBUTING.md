@@ -16,34 +16,6 @@ Love Redwood and want to get involved? You’re in the right place!
 
 _Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md)._
 
-**Table of Contents**
-
-- [Contributing to the Framework Packages (Reference Doc)](#contributing-to-the-framework-packages-reference-doc)
-  - [Code Organization: Project and Framework](#code-organization-project-and-framework)
-  - [Local Development Setup](#local-development-setup)
-    - [Redwood Framework](#redwood-framework)
-    - [Redwood Project: Setup Options](#redwood-project-setup-options)
-      - [Redwood Functional Test Project](#redwood-functional-test-project)
-    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
-    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-  - [Cloud Developer Environment](#cloud-developer-environment)
-  - [Local QA and Integration Tests](#local-qa-and-integration-tests)
-    - [Build, Lint, Test, and Check](#build-lint-test-and-check)
-    - [E2E Integration Tests](#e2e-integration-tests)
-  - [Troubleshooting Dependencies](#troubleshooting-dependencies)
-  - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
-    - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
-    - [New Yarn Commands and Utilities](#new-yarn-commands-and-utilities)
-    - [Added to CI: dedupe and constraints](#added-to-ci-dedupe-and-constraints)
-    - [About Yarn v3](#about-yarn-v3)
-      - [Benefits](#benefits)
-      - [New Files](#new-files)
-      - [Advanced Cases](#advanced-cases)
-- [Release Publishing](#release-publishing)
-  - [Canary publishing](#canary-publishing)
-  - [Release Candidate publishing](#release-candidate-publishing)
-  - [Publishing New Versions: `@latest`](#publishing-new-versions-latest)
-
 ## Code Organization: Project and Framework
 
 As a Redwood developer, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a **Redwood Project**.
@@ -330,6 +302,21 @@ If needed, there's more information in [this PR #3154 comment](https://github.co
 - `yarn dlx`
 - Set `YARN_IGNORE_PATH=1` to ignore local yarn version settings.
 - how "postinstall" script works
+
+# Creating a Reproduction to Include with Issues
+
+Are you about to open an issue? Including a reproduction, either as a series of steps, as a public GitHub repo, or as a Gitpod snapshot, will definitely let us help you faster!
+
+## Option 1: Create a Gitpod Snapshot
+
+This is a great option when the issue you're reporting is cross-platform. I.e., it isn't a Windows-specific issue. Here's a video walkthrough on how to create a snapshot of the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter):
+
+https://user-images.githubusercontent.com/1521877/176033049-d3c57b92-3ee6-4c60-918b-fdbcfa83fd0f.mp4
+
+## Option 2: Fork the Starter Repo
+
+You can always fork the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter) which is a brand new project with the latest stable version of Redwood.
+Once you make your changes in your fork, include the link to your repo in your issue. This'll make it much easier for us to understand what's going on.
 
 # Release Publishing
 
