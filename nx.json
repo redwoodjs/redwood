@@ -10,7 +10,7 @@
           "test",
           "build"
         ],
-        "parallel": 5
+        "parallel": 1
       }
     }
   },
