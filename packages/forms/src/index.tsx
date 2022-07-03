@@ -56,7 +56,6 @@ import {
   RegisterOptions,
   UseFormReturn,
   UseFormProps,
-  UnpackNestedValue,
 } from 'react-hook-form'
 
 import FormError, { RWGqlError } from './FormError'
@@ -485,7 +484,7 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-export interface FormProps<TFieldValues, TContext = any>
+export interface FormProps<TFieldValues>
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
@@ -508,7 +507,7 @@ export interface FormProps<TFieldValues, TContext = any>
    * )
    * ```
    */
-  formMethods?: UseFormReturn<TFieldValues, TContext>
+  formMethods?: UseFormReturn<TFieldValues>
   /**
    * Configures how React Hook Form performs validation, among other things.
    *
@@ -520,17 +519,14 @@ export interface FormProps<TFieldValues, TContext = any>
    *
    * @see {@link https://react-hook-form.com/api/useform}
    */
-  config?: UseFormProps<TFieldValues, TContext>
-  onSubmit?: (
-    value: UnpackNestedValue<TFieldValues>,
-    event?: React.BaseSyntheticEvent
-  ) => void
+  config?: UseFormProps<TFieldValues>
+  onSubmit?: (value: TFieldValues, event?: React.BaseSyntheticEvent) => void
 }
 
 /**
  * Renders a `<form>` with the required context.
  */
-function FormInner<TFieldValues, TContext = any>(
+function FormInner<TFieldValues>(
   {
     config,
     error: errorProps,
@@ -538,18 +534,18 @@ function FormInner<TFieldValues, TContext = any>(
     onSubmit,
     children,
     ...rest
-  }: FormProps<TFieldValues, TContext>,
+  }: FormProps<TFieldValues>,
   ref: ForwardedRef<HTMLFormElement>
 ) {
-  const hookFormMethods = useForm<TFieldValues, TContext>(config)
+  const hookFormMethods = useForm<TFieldValues>(config)
   const formMethods = propFormMethods || hookFormMethods
 
   return (
     <form
       ref={ref}
       {...rest}
-      onSubmit={formMethods.handleSubmit<UnpackNestedValue<TFieldValues>>(
-        (data, event) => onSubmit?.(data, event)
+      onSubmit={formMethods.handleSubmit((data, event) =>
+        onSubmit?.(data, event)
       )}
     >
       <ServerErrorsContext.Provider
@@ -573,9 +569,8 @@ function FormInner<TFieldValues, TContext = any>(
 // > To be honest, the forwardRef type is quite complex [...] I'd recommend
 // > that you cast the type
 // https://github.com/chakra-ui/chakra-ui/issues/4528#issuecomment-902566185
-const Form = forwardRef(FormInner) as <TFieldValues, TContext = any>(
-  props: FormProps<TFieldValues, TContext> &
-    React.RefAttributes<HTMLFormElement>
+const Form = forwardRef(FormInner) as <TFieldValues>(
+  props: FormProps<TFieldValues> & React.RefAttributes<HTMLFormElement>
 ) => React.ReactElement | null
 
 export interface LabelProps
