@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
+  createServer,
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
-  useMaskedErrors,
-  createServer,
-  PluginOrDisabledPlugin,
 } from '@graphql-yoga/common'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -166,12 +165,13 @@ export const createGraphQLHandler = ({
   // Must be "last" in plugin chain so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
-
   const yoga = createServer({
     schema,
     plugins,
-    maskedErrors: false,
+    maskedErrors: {
+      formatError,
+      errorMessage: defaultError,
+    },
     logging: logger,
     graphiql: isDevEnv
       ? {
