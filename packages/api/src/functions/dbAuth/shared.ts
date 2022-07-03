@@ -10,7 +10,7 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
   const cookieFromGraphiqlHeader =
     process.env.NODE_ENV === 'development'
       ? JSON.parse(event.body ?? '{}').extensions.headers.cookie
-      : null
+      : undefined
   return (
     event.headers.cookie || event.headers.Cookie || cookieFromGraphiqlHeader
   )
@@ -38,7 +38,7 @@ export const decryptSession = (text: string | null) => {
 
 // returns the actual value of the session cookie
 export const getSession = (text?: string) => {
-  if (typeof text === 'undefined' || text === null) {
+  if (typeof text === 'undefined') {
     return null
   }
 
