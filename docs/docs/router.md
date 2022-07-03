@@ -12,9 +12,9 @@ The router is designed to list all routes in a single file, with limited nesting
 
 The first thing you need is a `Router`. It will contain all of your routes. The router will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
-:::note
+:::note The `notfound` route can't be nested in a `Set`
 
-The `notfound` route cannot be nested in a `Set`. If you want to wrap your custom page in a `Layout` then you should add the `Layout` in your page instead. See [customizing the NotFoundPage](#customizing-the-notfoundpage).
+If you want to wrap your custom notfound page in a `Layout`, then you should add the `Layout` to the page instead. See [customizing the NotFoundPage](#customizing-the-notfoundpage).
 
 :::
 
@@ -572,67 +572,46 @@ In order to display a loader while auth details are being retrieved you can add 
 </Router>
 ```
 
-## Fatal Error Page
+## `FatalErrorPage`
 
-Every RedwoodJS project ships with a default `FatalErrorPage` located in `/web/pages/FatalErrorPage`.
+Every Redwood project ships with a default `FatalErrorPage` located in `web/src/pages/FatalErrorPage`.
+This page gets rendered when an error makes its way all the way to the top of your app without being handled by a catch block or a React error boundary.
 
-This page behaves differently in `development` than in other environments, like `production`.
+Note that this page behaves differently in development than in production.
 
+### In Development
 
-This page will be rendered when an error makes it all the way to the top of the
-application without being handled by a Javascript catch statement or React error
-boundary.
+In development, the `FatalErrorPage` provides helpful debugging information about the error and any GraphQL request that's involved.
 
-#### Development Page
-
-In `development`, the `DevFatalErrorPage` provides helpful debug information about the error and any GraphQL request that is involved.
-
-```
-// Ensures that production builds do not include the error page
-let RedwoodDevFatalErrorPage = undefined
-if (process.env.NODE_ENV === 'development') {
-  RedwoodDevFatalErrorPage =
-    require('@redwoodjs/web/dist/components/DevFatalErrorPage').DevFatalErrorPage
-}
-```
-
-When an error occurs, the following information can help you pinpoint the issues and correct.
-
-Here, there's a missing component that causes an error:
+For example, if there's a missing component that's causing an error, this is what you'll see:
 
 ![fatal_error_message](/img/router/fatal_error_message.png)
 
-In this example, the variable passed to a component cannot be found.
-
+Or if the variable passed as a prop to a component can't be found:
 
 ![fatal_error_message_query](/img/router/fatal_error_message_query.png)
 
-And, when your page has a cell with requests from cells, you will see the associated request whose data may have contributed to the error.
+And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
 
 ![fatal_error_message_request](/img/router/fatal_error_request.png)
 
-#### Production Page
+### In Production
 
-By default, the Fatal error Page is barebones.
+By default, the `FatalErrorPage` in production is barebones:
 
 ![fatal_something_went_wrong](/img/router/fatal_something_went_wrong.png)
 
+### Customizing the `FatalErrorPage`
 
-### Customizing the FatalErrorPage
-
-:::note
-You cannot customize the development version of the FatalErrorPage -- it is part of the RedwoodJS framework.
-:::
-
-You can modify this page as you wish, but it is important to keep things simple to
-avoid the possibility that it will cause its own error. If it does, Redwood will
-still render a generic error page, but your users will prefer something a bit more
-thoughtful.
+You can customize the production `FatalErrorPage`, but it's important to keep things simple to avoid the possibility that it'll cause its own error.
+If it does, the router still renders a generic error page, but your users will appreciate something a bit more thoughtful:
 
 ![fatal_something_went_wrong_custom](/img/router/fatal_something_went_wrong_custom.png)
 
-```tsx
+```jsx title="web/src/pages/FatalErrorPage/FatalErrorPage.js"
 import { Link, routes } from '@redwoodjs/router'
+
+// ...
 
 export default RedwoodDevFatalErrorPage ||
   (() => (
@@ -672,21 +651,26 @@ export default RedwoodDevFatalErrorPage ||
   ))
   ```
 
-:::note
-This example use [TailwindCSS](https://tailwindcss.com). See the [setup ui](./cli-commands.md#setup-ui) cli command to add TailwindCSS to your project.
+Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://tailwindcss.com), so you'll have to set that up first. See the [setup ui](./cli-commands.md#setup-ui) CLI command to add it to your project.
+
+:::note Can I customize the development one?
+
+As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add to it, let us know on the [forums](https://community.redwoodjs.com/).
+
 :::
 
-## Not Found Page
+## `NotFoundPage`
 
-Every RedwoodJS project ships with a default `NotFoundPage` located in `/web/pages/NotFoundPage`.
+Every Redwood project ships with a default `NotFoundPage` located in `web/src/pages/NotFoundPage`.
 
-It is defined in the `Routes` file using the `notfound` attribute and will tell the router what to render when no other route matches:
+But just because it's called `NotFoundPage` doesn't mean the router knows that. The only way the router knows which page is the `NotFoundPage` is via the `notfound` attribute, which tells the router what to render when no routes match:
 
-```jsx title="Routes.js"
+```jsx title="web/src/Routes.js"
 import { Router, Route } from '@redwoodjs/router'
 
 const Routes = () => (
   <Router>
+    // highlight-next-line
     <Route notfound page={NotFoundPage} />
   </Router>
 )
@@ -694,13 +678,11 @@ const Routes = () => (
 export default Routes
 ```
 
-### Customizing the NotFoundPage
+### Customizing the `NotFoundPage`
 
-The `notfound` route and its `Page` cannot be nested in a `Set`. If you want to wrap your custom page in a `Layout` then you should add the `Layout` in your page instead.
+By default, the `NotFoundPage` is a basic HTML page with internal styles:
 
-By default, the `NotFoundPage` is basic HTML page with internal styles:
-
-```ts
+```jsx title="web/src/NotFoundPage/NotFoundPage.js"
 export default () => (
   <main>
     // ... some custom css
@@ -713,16 +695,13 @@ export default () => (
 )
 ```
 
-However, you can customize this [`Page`](./tutorial/chapter1/first-page). to change the markup and even use [TailwindCSS](./cli-commands#setup-ui) to style.
-
-
-### Example Code
+You're free to customize it however you like. You can change the markup and even use CSS or UI libraries to style it.
+Here's an example using [Tailwind CSS](https://tailwindcss.com).
+(See the [setup ui](./cli-commands.md#setup-ui) CLI command to add it to your project.)
 
 ![custom_not_found](/img/router/custom_not_found_page.png)
 
-```tsx
-// web/src/pages/NotFoundPage/NotFoundPage.tsx
-
+```jsx title="web/src/pages/NotFoundPage/NotFoundPage.js"
 import { Link, routes } from '@redwoodjs/router'
 
 export default () => (
@@ -760,17 +739,14 @@ export default () => (
 )
 ```
 
-:::note
-These examples use [TailwindCSS](https://tailwindcss.com). See the [setup ui](./cli-commands.md#setup-ui) cli command to add TailwindCSS to your project.
-:::
+While the `notfound` route can't be nested in a `Set` like other routes, you can still wrap it in Layouts by importing them into the page:
 
-
-Or, if you want to include a [`Layout`](./tutorial/chapter1/layouts), simply use it like you would in any other [`Page`](./tutorial/chapter1/first-page).
-
-```tsx
+```jsx title="web/src/pages/NotFoundPage/NotFoundPage.js"
+// highlight-next-line
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
 
 export default () => (
+  // highlight-next-line
   <MainLayout>
     <main>
       <section>
@@ -779,8 +755,9 @@ export default () => (
         </h1>
       </section>
     </main>
+  // highlight-next-line
   </MainLayout>
 )
 ```
 
-This means that a `NotFoundPage` can use even use Cells or Authentication to help construct navigation options and detailed header or footer content to help your user find their way back to the main application.
+This means that the `NotFoundPage` can use Redwood features like Cells or auth to construct navigation options or detailed header and footer content to help your users find their way back to the main application.
