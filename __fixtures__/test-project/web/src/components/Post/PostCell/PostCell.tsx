@@ -1,4 +1,5 @@
 import type { FindPostById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Post from 'src/components/Post/Post'
