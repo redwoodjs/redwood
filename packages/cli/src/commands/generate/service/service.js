@@ -44,6 +44,7 @@ export const parseSchema = async (model) => {
 export const scenarioFieldValue = (field) => {
   const randFloat = Math.random() * 10000000
   const randInt = parseInt(Math.random() * 10000000)
+  const randByte = Buffer.from([1, 2, 3, 4]);
 
   switch (field.type) {
     case 'BigInt':
@@ -56,6 +57,8 @@ export const scenarioFieldValue = (field) => {
     case 'Decimal':
     case 'Float':
       return randFloat
+    case 'Bytes':
+      return randByte
     case 'Int':
       return randInt
     case 'Json':
@@ -222,6 +225,10 @@ export const fieldsToUpdate = async (model) => {
       case 'Decimal':
       case 'Float': {
         newValue = newValue + 1.1
+        break
+      }
+      case 'Bytes': {
+        newValue = newValue + 1
         break
       }
       case 'Int': {

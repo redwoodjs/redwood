@@ -2,7 +2,10 @@ global.__dirname = __dirname
 // Load mocks
 import '../../../../lib/test'
 
+import { GraphQLByte } from 'graphql-scalars'
+
 import * as service from '../service'
+import { exit } from 'yargs'
 
 describe('the scenario generator', () => {
   test('parseSchema returns an object with required scalar fields', async () => {
@@ -139,6 +142,21 @@ describe('the scenario generator', () => {
 
     expect(value).toEqual(parseFloat(value))
     expect(typeof value).toBe('number')
+  })
+
+  test('scenarioFieldValue returns a byte for Byte types NodeJS Buffer type', () => {
+    const field = { type: 'Bytes' }
+    const value = service.scenarioFieldValue(field)
+    // GraphQLByte.parseValue(encodedValue) examples https://github.com/Urigo/graphql-scalars/blob/aeb8aebc9738d533e0cac4cf6ddbad7d1555814e/tests/Byte.test.ts
+    // we have to add a new test to check if tis a Buffer
+    if(Buffer.isBuffer(value)) {
+      expect(typeof value).toBe('object')
+    } else {
+      console.log("Value failed isBuffer")
+      process.exit(1)
+    }
+    expect(value).toEqual(GraphQLByte.parseValue(value))
+    expect(typeof value).toBe('object')
   })
 
   test('scenarioFieldValue returns a number for Int types', () => {

@@ -17656,7 +17656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:1.17.0":
+"graphql-scalars@npm:1.17.0, graphql-scalars@npm:^1.17.0":
   version: 1.17.0
   resolution: "graphql-scalars@npm:1.17.0"
   dependencies:
@@ -27047,6 +27047,7 @@ __metadata:
     eslint: 8.18.0
     fast-glob: 3.2.11
     fs-extra: 10.1.0
+    graphql-scalars: ^1.17.0
     is-port-reachable: 3.1.0
     jest: 27.5.1
     jscodeshift: 0.13.1
