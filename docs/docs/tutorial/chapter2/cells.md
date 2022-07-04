@@ -43,7 +43,7 @@ export const Success = ({ posts }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-import type { ArticlesQuery } from 'types/graphql'
+import type { FindPosts } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
@@ -90,6 +90,20 @@ There are also some lifecycle helpers like `beforeQuery` (for manipulating any p
 The minimum you need for a cell are the `QUERY` and `Success` exports. If you don't export an `Empty` component, empty results will be sent to your `Success` component. If you don't provide a `Failure` component, you'll get error output sent to the console.
 
 A guideline for when to use cells is if your component needs some data from the database or other service that may be delayed in responding. Let Redwood worry about juggling what is displayed when and you can focus on the happy path of the final, rendered component populated with data.
+
+
+<ShowForTs>
+
+:::tip Wait.... what are those types?
+
+
+Redwood comes with some built-in utlity types in this example `CellSuccessProps` and `CellFailureProps`. Read more about them [here](typescript.md)
+
+Notice also the `FindPosts` type imported from `types/graphql`. These types are generated for you automatically - when you have the dev server running - based on the GraphQL query in your Cell. More about generated types [here](typescript.md), and
+
+:::
+
+</ShowForTs>
 
 ### Our First Cell
 
