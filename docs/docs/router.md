@@ -583,7 +583,7 @@ Note that this page behaves differently in development than in production.
 
 In development, the `FatalErrorPage` provides helpful debugging information about the error and any GraphQL request that's involved.
 
-For example, if there's a missing component that's causing an error, this is what you'll see:
+For example, if there's a missing component that's causing an error, this's what you'll see:
 
 ![fatal_error_message](/img/router/fatal_error_message.png)
 
@@ -655,7 +655,7 @@ Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://ta
 
 :::note Can I customize the development one?
 
-As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add to it, let us know on the [forums](https://community.redwoodjs.com/).
+As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add, let us know on the [forums](https://community.redwoodjs.com/).
 
 :::
 
@@ -663,7 +663,7 @@ As it's part of the RedwoodJS framework, you can't. But if there's a feature you
 
 Every Redwood project ships with a default `NotFoundPage` located in `web/src/pages/NotFoundPage`.
 
-But just because it's called `NotFoundPage` doesn't mean the router knows that. The only way the router knows which page is the `NotFoundPage` is via the `notfound` attribute, which tells the router what to render when no routes match:
+But just because it's called `NotFoundPage` doesn't mean the router knows that. The only way the router knows which page is the `NotFoundPage` is via the `notfound` prop, which tells the router what to render when no routes match:
 
 ```jsx title="web/src/Routes.js"
 import { Router, Route } from '@redwoodjs/router'
@@ -682,7 +682,7 @@ export default Routes
 
 By default, the `NotFoundPage` is a basic HTML page with internal styles:
 
-```jsx title="web/src/NotFoundPage/NotFoundPage.js"
+```jsx title="web/src/pages/NotFoundPage/NotFoundPage.js"
 export default () => (
   <main>
     // ... some custom css
