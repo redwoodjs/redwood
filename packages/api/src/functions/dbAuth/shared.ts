@@ -9,7 +9,7 @@ import * as DbAuthError from './errors'
 export const extractCookie = (event: APIGatewayProxyEvent) => {
   const cookieFromGraphiqlHeader =
     process.env.NODE_ENV === 'development'
-      ? JSON.parse(event.body ?? '{}').extensions.headers.cookie
+      ? JSON.parse(event.body ?? '{}').extensions?.headers?.cookie
       : undefined
   return (
     event.headers.cookie || event.headers.Cookie || cookieFromGraphiqlHeader
