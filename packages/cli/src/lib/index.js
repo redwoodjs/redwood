@@ -16,6 +16,7 @@ import { format } from 'prettier'
 import {
   getPaths as getRedwoodPaths,
   getConfig as getRedwoodConfig,
+  resolveFile,
 } from '@redwoodjs/internal'
 
 import c from './colors'
@@ -112,7 +113,7 @@ export const deleteFile = (file) => {
 
 const getBaseFile = (file) => file.replace(/\.\w*$/, '')
 
-const existsAnyExtensionSync = (file) => {
+export const existsAnyExtensionSync = (file) => {
   const extension = path.extname(file)
   if (SUPPORTED_EXTENSIONS.includes(extension)) {
     const baseFile = getBaseFile(file)
@@ -189,6 +190,13 @@ export const getPaths = () => {
     console.error(c.error(e.message))
     process.exit(1)
   }
+}
+
+export const getGraphqlPath = () =>
+  resolveFile(path.join(getPaths().api.functions, 'graphql'))
+
+export const graphFunctionDoesExist = () => {
+  return fs.existsSync(getGraphqlPath())
 }
 
 export const getConfig = () => {

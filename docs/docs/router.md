@@ -12,6 +12,12 @@ The router is designed to list all routes in a single file, with limited nesting
 
 The first thing you need is a `Router`. It will contain all of your routes. The router will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
+:::note The `notfound` route can't be nested in a `Set`
+
+If you want to wrap your custom notfound page in a `Layout`, then you should add the `Layout` to the page instead. See [customizing the NotFoundPage](#customizing-the-notfoundpage).
+
+:::
+
 Each route is specified with a `Route`. Our first route will tell the router what to render when no other route matches:
 
 ```jsx title="Routes.js"
@@ -565,3 +571,193 @@ In order to display a loader while auth details are being retrieved you can add 
   </Private>
 </Router>
 ```
+
+## `FatalErrorPage`
+
+Every Redwood project ships with a default `FatalErrorPage` located in `web/src/pages/FatalErrorPage`.
+This page gets rendered when an error makes its way all the way to the top of your app without being handled by a catch block or a React error boundary.
+
+Note that this page behaves differently in development than in production.
+
+### In Development
+
+In development, the `FatalErrorPage` provides helpful debugging information about the error and any GraphQL request that's involved.
+
+For example, if there's a missing component that's causing an error, this's what you'll see:
+
+![fatal_error_message](/img/router/fatal_error_message.png)
+
+Or if the variable passed as a prop to a component can't be found:
+
+![fatal_error_message_query](/img/router/fatal_error_message_query.png)
+
+And if the page has a Cell, you'll see the Cell's request and response which may have contributed to the error:
+
+![fatal_error_message_request](/img/router/fatal_error_request.png)
+
+### In Production
+
+By default, the `FatalErrorPage` in production is barebones:
+
+![fatal_something_went_wrong](/img/router/fatal_something_went_wrong.png)
+
+### Customizing the `FatalErrorPage`
+
+You can customize the production `FatalErrorPage`, but it's important to keep things simple to avoid the possibility that it'll cause its own error.
+If it does, the router still renders a generic error page, but your users will appreciate something a bit more thoughtful:
+
+![fatal_something_went_wrong_custom](/img/router/fatal_something_went_wrong_custom.png)
+
+```jsx title="web/src/pages/FatalErrorPage/FatalErrorPage.js"
+import { Link, routes } from '@redwoodjs/router'
+
+// ...
+
+export default RedwoodDevFatalErrorPage ||
+  (() => (
+    <div className="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+      <div className="max-w-max mx-auto">
+        <main className="sm:flex">
+          <p className="text-4xl font-extrabold text-blue-600 sm:text-5xl">
+            🤦‍♂️ Oops.
+          </p>
+          <div className="sm:ml-6">
+            <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
+                Something went wrong
+              </h1>
+              <p className="mt-1 text-base text-gray-500">
+                Sorry about that. Please contact support for help.
+              </p>
+            </div>
+            <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+              <Link
+                to={routes.home()}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Home
+              </Link>
+              <Link
+                to={routes.support()}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Contact Support
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  ))
+  ```
+
+Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://tailwindcss.com), so you'll have to set that up first. See the [setup ui](./cli-commands.md#setup-ui) CLI command to add it to your project.
+
+:::note Can I customize the development one?
+
+As it's part of the RedwoodJS framework, you can't. But if there's a feature you want to add, let us know on the [forums](https://community.redwoodjs.com/).
+
+:::
+
+## `NotFoundPage`
+
+Every Redwood project ships with a default `NotFoundPage` located in `web/src/pages/NotFoundPage`.
+
+But just because it's called `NotFoundPage` doesn't mean the router knows that. The only way the router knows which page is the `NotFoundPage` is via the `notfound` prop, which tells the router what to render when no routes match:
+
+```jsx title="web/src/Routes.js"
+import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => (
+  <Router>
+    // highlight-next-line
+    <Route notfound page={NotFoundPage} />
+  </Router>
+)
+
+export default Routes
+```
+
+### Customizing the `NotFoundPage`
+
+By default, the `NotFoundPage` is a basic HTML page with internal styles:
+
+```jsx title="web/src/pages/NotFoundPage/NotFoundPage.js"
+export default () => (
+  <main>
+    // ... some custom css
+    <section>
+      <h1>
+        <span>404 Page Not Found</span>
+      </h1>
+    </section>
+  </main>
+)
+```
+
+You're free to customize it however you like. You can change the markup and even use CSS or UI libraries to style it.
+Here's an example using [Tailwind CSS](https://tailwindcss.com).
+(See the [setup ui](./cli-commands.md#setup-ui) CLI command to add it to your project.)
+
+![custom_not_found](/img/router/custom_not_found_page.png)
+
+```jsx title="web/src/pages/NotFoundPage/NotFoundPage.js"
+import { Link, routes } from '@redwoodjs/router'
+
+export default () => (
+  <div className="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+    <div className="max-w-max mx-auto">
+      <main className="sm:flex">
+        <p className="text-4xl font-extrabold text-red-600 sm:text-5xl">404</p>
+        <div className="sm:ml-6">
+          <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
+              Page not found
+            </h1>
+            <p className="mt-1 text-base text-gray-500">
+              Check the URL in the address bar and please try again.
+            </p>
+          </div>
+          <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+            <Link
+              to={routes.home()}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Home
+            </Link>
+            <Link
+              to={routes.support()}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Get Help
+            </Link>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+)
+```
+
+While the `notfound` route can't be nested in a `Set` like other routes, you can still wrap it in Layouts by importing them into the page:
+
+```jsx title="web/src/pages/NotFoundPage/NotFoundPage.js"
+// highlight-next-line
+import MainLayout from 'src/layouts/MainLayout/MainLayout'
+
+export default () => (
+  // highlight-next-line
+  <MainLayout>
+    <main>
+      <section>
+        <h1>
+          <span>404 Page Not Found</span>
+        </h1>
+      </section>
+    </main>
+  // highlight-next-line
+  </MainLayout>
+)
+```
+
+This means that the `NotFoundPage` can use Redwood features like Cells or auth to construct navigation options or detailed header and footer content to help your users find their way back to the main application.
