@@ -726,8 +726,6 @@ Once you define the `CreateContactMutation`- Redwood will look at your mutation,
 
 Take a look at our [TypeScript](typescript.md) docs for a deeper dive!
 :::
-
-
 </ShowForTs>
 
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
