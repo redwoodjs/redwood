@@ -1,4 +1,4 @@
-import { parse, GraphQLResolveInfo, graphql } from 'graphql'
+import { parse, GraphQLResolveInfo, graphql, GraphQLError } from 'graphql'
 import gql from 'graphql-tag'
 
 import {
@@ -30,11 +30,20 @@ describe('makeMergedSchema', () => {
           inTypeResolver: String
         }
 
+        type MyDuplicateType {
+          name: String
+          inTypeResolver: String
+        }
+
         union MyUnionType = MyOwnType | MySecondType
+
+        union MyUnionTypeWithSameFields = MySecondType |  MyDuplicateType
 
         type Query {
           myOwnType: MyOwnType @foo
           searchType: MyUnionType @foo
+          searchTypeSameFields: MyUnionTypeWithSameFields @foo
+          searchTypeSameFieldsWithTypename: MyUnionTypeWithSameFields @foo
           inResolverAndServices: String @foo
           inResolver: String @foo
           inServices: String @foo
@@ -55,6 +64,15 @@ describe('makeMergedSchema', () => {
           inResolver: () => "I'm defined in the resolver.",
           foo: () => "I'm using @foo directive",
           searchType: () => ({
+            name: 'MySecondType',
+            inTypeResolver: "MySecondType: I'm defined in the resolver.",
+          }),
+          searchTypeSameFields: () => ({
+            name: 'MySecondType',
+            inTypeResolver: "MySecondType: I'm defined in the resolver.",
+          }),
+          searchTypeSameFieldsWithTypename: () => ({
+            __typename: 'MySecondType',
             name: 'MySecondType',
             inTypeResolver: "MySecondType: I'm defined in the resolver.",
           }),
@@ -203,6 +221,42 @@ describe('makeMergedSchema', () => {
       const res = await graphql({ schema, source: query })
       expect(res.errors).toBeUndefined()
       expect((res.data as any).searchType.name).toBe('MySecondType')
+    })
+  })
+
+  describe('MyUnionTypeSameFields', () => {
+    it('throws an error if union types have same fields and resolver cannot resolve the correct type', async () => {
+      const query = `query {
+        searchTypeSameFields {
+          ... on MySecondType {
+            name
+          }
+        }
+      }`
+      const res = await graphql({ schema, source: query })
+      expect(res.errors).toEqual([
+        new GraphQLError(
+          'Unable to resolve correct type for union. Try adding unique fields or __typename to each type'
+        ),
+      ])
+      expect((res.data as any).searchTypeSameFields).toBeNull()
+    })
+  })
+
+  describe('MyUnionTypeWithTypename', () => {
+    it('supports querying a union and having __resolveType correctly created to decide what member it is', async () => {
+      const query = `query {
+        searchTypeSameFieldsWithTypename {
+          ... on MySecondType {
+            name
+          }
+        }
+      }`
+      const res = await graphql({ schema, source: query })
+      expect(res.errors).toBeUndefined()
+      expect((res.data as any).searchTypeSameFieldsWithTypename.name).toBe(
+        'MySecondType'
+      )
     })
   })
 
