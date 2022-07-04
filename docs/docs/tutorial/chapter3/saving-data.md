@@ -720,11 +720,11 @@ export default ContactPage
 <ShowForTs>
 
 :::tip Reminder about generated types
-Just a quick reminder that Redwood will automatically generate types for your GraphQL queries and mutations -  if you have your dev server running (or run `yarn rw generate types`) 
+Just a quick reminder that Redwood will automatically generate types for your GraphQL queries and mutations -  if you have your dev server running (or run `yarn rw generate types`)
 
 Once you define the `CreateContactMutation`- Redwood will look at your mutation, and generate the `CreateContactMutation` and `CreateContactMutationVariables` for you
 
-Take a look at our [TypeScript](typescript.md) docs for a deeper look!
+Take a look at our [TypeScript](typescript.md) docs for a deeper dive!
 :::
 
 
