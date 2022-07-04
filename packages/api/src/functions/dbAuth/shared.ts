@@ -5,12 +5,17 @@ import * as DbAuthError from './errors'
 
 // Extracts the cookie from an event, handling lower and upper case header
 // names.
-// Checks for cookie in headers only in dev when user has generated graphiql headers
+// Checks for cookie in headers in dev when user has generated graphiql headers
 export const extractCookie = (event: APIGatewayProxyEvent) => {
-  const cookieFromGraphiqlHeader =
-    process.env.NODE_ENV === 'development'
-      ? JSON.parse(event.body ?? '{}').extensions?.headers?.cookie
-      : undefined
+  let cookieFromGraphiqlHeader
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      cookieFromGraphiqlHeader = JSON.parse(event.body ?? '{}').extensions
+        ?.headers?.cookie
+    } catch (e) {
+      return event.headers.cookie || event.headers.Cookie
+    }
+  }
   return (
     event.headers.cookie || event.headers.Cookie || cookieFromGraphiqlHeader
   )
