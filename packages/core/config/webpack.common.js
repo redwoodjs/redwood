@@ -352,6 +352,9 @@ module.exports = (webpackEnv) => {
               .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
+    externals: {
+      '@clerk/clerk-react': 'commonjs @clerk/clerk-react',
+    },
   }
 }
 
