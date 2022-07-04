@@ -340,9 +340,11 @@ For more in-depth discussion and configuration of CORS when it comes to using a 
 
 ## Health Checks
 
-Health checks are used determine if a server is available and ready to start serving traffic.
+You can use health checks to determine if a server is available and ready to start serving traffic.
 
-Redwood's GraphQLHandler provides a health check endpoint at `/graphql/health`.
+Often, services like [Pingdom](https://www.pingdom.com) or similar offerings will use health checks to determine server uptime and notify you if for some reason it becomes unavailable.
+
+Redwood's GraphQL Server provides a health check endpoint at `/graphql/health` as part of its GraphQLHandler.
 
 If the server is healthy and can accept requests, the response will contain the following headers:
 
@@ -383,6 +385,8 @@ export const handler = createGraphQLHandler({
   },
 })
 ```
+
+If an error response occurs and the health check fails, then the GraphQL server is unavailable and you should investigate what might be causing the downtime.
 
 #### Perform a Health Check
 
