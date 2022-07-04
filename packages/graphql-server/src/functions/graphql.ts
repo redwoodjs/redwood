@@ -79,6 +79,7 @@ export const formatError: FormatErrorHandler = (err: any, message: string) => {
  * ```
  */
 export const createGraphQLHandler = ({
+  healthCheckId,
   loggerConfig,
   context,
   getCurrentUser,
@@ -168,6 +169,7 @@ export const createGraphQLHandler = ({
   plugins.push(useRedwoodLogger(loggerConfig))
 
   const yoga = createServer({
+    id: healthCheckId,
     schema,
     plugins,
     maskedErrors: {
