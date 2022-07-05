@@ -175,7 +175,7 @@ Cool, cool, cool. Now we need to construct a link that has the ID of a post in i
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 <h2>
-  <Link to={routes.article({ id: article.id })}>{article.title}</Link>
+  <Link to={routes.article({ id: article.id.toString() })}>{article.title}</Link>
 </h2>
 ```
 
