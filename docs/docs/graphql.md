@@ -1134,12 +1134,16 @@ enum Color {
 
 ### SDL Comments
 
-The SDL generator adds comments for:
+When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) adds comments for:
 
 * Directives
 * Queries
 * Mutations
 * Input Types
+
+:::note
+By default, the `--docs` option to the SDL generator is false and comments are not created.
+:::
 
 Comments in GraphQL schema are enclosed in `"""` and will be included in the generate4d `.redwood/schema.graphql` at the root of your project.
 
