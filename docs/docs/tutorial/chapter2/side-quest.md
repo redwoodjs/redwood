@@ -4,7 +4,7 @@ Redwood likes GraphQL. We think it's the API of the future. Our GraphQL implemen
 
 ![Redwood Data Flow](https://user-images.githubusercontent.com/300/75402679-50bdd180-58ba-11ea-92c9-bb5a5f4da659.png)
 
-The front-end uses [Apollo Client](https://www.apollographql.com/docs/react/) to create a GraphQL payload sent to [GraphQL Yoga](https://www.graphql-yoga.com) and [Envelop](https://www.envelop.dev/docs), for which that `graphql.{js,ts}` file acts as the entry-point to.
+The front-end uses [Apollo Client](https://www.apollographql.com/docs/react/) to create a GraphQL payload sent to [GraphQL Yoga](https://www.graphql-yoga.com) and [Envelop](https://www.envelop.dev/docs), for which that `graphql.{js,ts}` file acts as the entry-point.
 
 The `*.sdl.{js,ts}` files in `api/src/graphql` define the GraphQL [Object](https://www.apollographql.com/docs/tutorial/schema/#object-types), [Query](https://www.apollographql.com/docs/tutorial/schema/#the-query-type) and [Mutation](https://www.apollographql.com/docs/tutorial/schema/#the-mutation-type) types and thus the interface of your API.
 
