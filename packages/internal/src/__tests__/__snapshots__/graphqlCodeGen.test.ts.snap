@@ -12,8 +12,8 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => TResult extends PromiseLike<TResult>
-    ? TResult
-    : Promise<TResult>
+      ? Promise<Partial<Awaited<TResult>>>
+      : Promise<Partial<TResult>> | Partial<TResult>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
