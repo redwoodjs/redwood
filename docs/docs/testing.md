@@ -1709,6 +1709,9 @@ Luckily, RedwoodJS has several api testing utilities to make [testing functions 
 >
 > We have an entire testing section in the [Serverless Functions documentation](serverless-functions.md) that will walk your through an example of a function and a webhook.
 
+## Testing GraphQL Directives
+
+Please refer to the [Directives documentation](./directives.md) for details on how to write Redwood [Validator](./directives.md#writing-validator-tests) or [Transformer](./directives.md#writing-transformer-tests) Directives tests.
 ## Wrapping Up
 
 So that's the world of testing according to Redwood. Did we miss anything? Can we make it even more awesome? Stop by [the community](https://community.redwoodjs.com) and ask questions, or if you've thought of a way to make this doc even better then [open a PR](https://github.com/redwoodjs/redwoodjs.com/pulls).

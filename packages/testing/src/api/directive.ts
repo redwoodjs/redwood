@@ -33,20 +33,40 @@ interface DirectiveMocker {
 }
 
 /**
- *
  * @description
- * Used for writing directive tests e.g.
- * - Transformer directives can be passed resolvedValue
- * - Validator directives should check for errors thrown in certain situtations
+ *
+ * Used for writing both synchronous and asynchronous directive tests e.g.
+ *
+ * - Transformer directives can be passed mockedResolvedValue
+ * - Validator directives should check for errors thrown in certain situations
  *
  * @example
- *  const mockExecution = mockRedwoodDirective(myTransformer, {
- *    context: currentUser,
- *    resolvedValue: 'Original Value',
- *  })
  *
- *  expect(mockExecution).not.toThrow()
- *  expect(mockExecution()).toEqual('Transformed Value')
+ * Synchronous transformer directive:
+ *
+ * ```ts
+ * const mockExecution = mockRedwoodDirective(myTransformer, {
+ *   context: currentUser,
+ *   mockedResolvedValue: 'Original Value',
+ * })
+ *
+ * expect(mockExecution).not.toThrow()
+ * expect(mockExecution()).toEqual('Transformed Value')
+ * ```ts
+ *
+ * @example
+ *
+ * Asynchronous transformer directive:
+ *
+ * ```ts
+ * const mockExecution = mockRedwoodDirective(myTransformer, {
+ *   context: currentUser,
+ *   mockedResolvedValue: 'Original Value',
+ * })
+ *
+ * await expect(mockExecution).resolves.not.toThrow()
+ * await expect(mockExecution()).resolves.toEqual('Transformed Value')
+ * ```
  */
 export const mockRedwoodDirective: DirectiveMocker = (
   directive,
@@ -56,6 +76,25 @@ export const mockRedwoodDirective: DirectiveMocker = (
 
   if (context) {
     setContext(context || {})
+  }
+
+  if (directive.onResolverCalled.constructor.name === 'AsyncFunction') {
+    return async () => {
+      if (directive.type === DirectiveType.TRANSFORMER) {
+        const { mockedResolvedValue } = others as TransformerMock
+        return directive.onResolverCalled({
+          resolvedValue: mockedResolvedValue,
+          context: globalContext,
+          ...others,
+        } as DirectiveParams)
+      } else {
+        await directive.onResolverCalled({
+          context: globalContext,
+          directiveArgs,
+          ...others,
+        } as DirectiveParams)
+      }
+    }
   }
 
   return () => {
