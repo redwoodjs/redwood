@@ -61,7 +61,9 @@ export const apiServerHandler = async ({
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
-  let app = createApp(loadServerConfig())
+  const { config } = loadServerConfig()
+  let app = createApp(config as FastifyServerOptions)
+
   // Import Server Functions.
   app = await withFunctions(app, apiRootPath)
 
@@ -93,11 +95,12 @@ export const bothServerHandler = async ({
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
-  let app = createApp(loadServerConfig())
+  const { config } = loadServerConfig()
+  let app = createApp(config as FastifyServerOptions)
 
   // Attach plugins
-  app = await withFunctions(app, apiRootPath)
   app = withWebServer(app)
+  app = await withFunctions(app, apiRootPath)
 
   startFastifyServer({
     port,
@@ -133,7 +136,8 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  const fastifyInstance = createApp(loadServerConfig())
+  const { config } = loadServerConfig()
+  const fastifyInstance = createApp(config as FastifyServerOptions)
 
   // serve static files from "web/dist"
   let app = withWebServer(fastifyInstance)
@@ -169,7 +173,9 @@ function coerceRootPath(path: string) {
   return `${prefix}${path}${suffix}`
 }
 
-function loadServerConfig() {
+let config: any = undefined
+
+export function loadServerConfig() {
   const serverConfigPath = path.join(
     getPaths().base,
     getConfig().api.serverConfig
@@ -181,7 +187,10 @@ function loadServerConfig() {
     return
   }
 
-  console.log(`Loading server config from ${serverConfigPath} \n`)
+  if (config === undefined) {
+    console.log(`Loading server config from ${serverConfigPath} \n`)
+    config = require(serverConfigPath)
+  }
 
-  return require(serverConfigPath) as FastifyServerOptions
+  return config
 }

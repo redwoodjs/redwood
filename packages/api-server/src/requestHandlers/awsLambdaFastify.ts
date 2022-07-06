@@ -52,15 +52,19 @@ const fastifyResponseForLambdaResult = (
 
   if (headers) {
     Object.keys(headers).forEach((headerName) => {
-      const headerValue: any = headers[headerName]
+      const headerValue: string | number | boolean = headers[
+        headerName
+      ] as string
       reply.header(headerName, headerValue)
     })
   }
 
   if (multiValueHeaders) {
     Object.keys(multiValueHeaders).forEach((headerName) => {
-      const headerValue: Array<any> = multiValueHeaders[headerName]
-      reply.header(headerName, headerValue)
+      const headerValue: Array<string | number | boolean> =
+        multiValueHeaders[headerName]
+      // @see: https://github.com/fastify/aws-lambda-fastify/blob/44a9540ca46426f73d09c83539223b8f1967dc52/index.js#L101
+      reply.header(headerName, headerValue.join(', ').toString())
     })
   }
 

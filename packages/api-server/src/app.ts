@@ -9,6 +9,10 @@ const DEFAULT_OPTIONS = {
 export const createApp = (options?: FastifyServerOptions): FastifyInstance => {
   const app = Fastify(options || DEFAULT_OPTIONS)
 
+  app.ready(() => {
+    app.log.info(`Registered plugins \n${app.printPlugins()}`)
+  })
+
   return app
 }
 

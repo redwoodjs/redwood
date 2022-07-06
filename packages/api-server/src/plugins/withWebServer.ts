@@ -6,6 +6,8 @@ import { FastifyInstance, FastifyReply } from 'fastify'
 
 import { findPrerenderedHtml, getPaths } from '@redwoodjs/internal'
 
+import { registerWebPlugins } from './utils'
+
 export const getFallbackIndexPath = () => {
   const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
 
@@ -32,6 +34,8 @@ const withWebServer = (app: FastifyInstance) => {
         reply.sendFile(filePath)
       })
     })
+
+  registerWebPlugins(app)
 
   // Serve other non-html assets
   app.register(fastifyStatic, {

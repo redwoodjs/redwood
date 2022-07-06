@@ -16,6 +16,8 @@ import { findApiDistFunctions } from '@redwoodjs/internal'
 
 import { requestHandler } from '../requestHandlers/awsLambdaFastify'
 
+import { registerFunctionPlugins } from './utils'
+
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
 
@@ -106,6 +108,8 @@ const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
   // Add extra fastify plugins
   app.register(fastifyUrlData)
   app.register(fastifyRawBody)
+
+  registerFunctionPlugins(app)
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)

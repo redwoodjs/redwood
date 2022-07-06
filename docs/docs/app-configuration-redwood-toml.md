@@ -113,6 +113,7 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 You can configure the Fastify Server used by the dev server in `api/server.config.js`.
 For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
+
 > This configuration doesn't apply in a serverless deploy
 
 Using [redwood.toml's env var interpolation](#using-environment-variables-in-redwoodtoml), you can configure a different `server.config.js` based on your deployment environment:
@@ -120,6 +121,53 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
 ```toml title="redwood.toml"
 [api]
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
+```
+
+### Register Custom Fastify Plug-ins
+
+
+```js
+module.exports = {
+  /** @type {import('fastify').FastifyServerOptions} */
+  config: {
+    requestTimeout: 15_000,
+    logger: {
+      level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    },
+  },
+web: {
+    plugins: [
+      {
+        name: '@fastify/multipart',
+        options: {},
+      },
+    ],
+  },
+  functions: {
+    plugins: [
+      {
+        name: '@fastify/compress',
+        options: { threshold: 128, encodings: ['deflate'] },
+        async: true,
+      },
+      {
+        name: '@fastify/rate-limit',
+        options: {
+          max: 20,
+          timeWindow: '1 minute',
+        },
+      },
+    ],
+  },
+  proxy: {
+    plugins: [
+      {
+        name: '@fastify/csrf-protection',
+        options: {},
+      },
+    ],
+  },
+}
 ```
 
 ## [browser]
