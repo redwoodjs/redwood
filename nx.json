@@ -1,7 +1,4 @@
 {
-  "implicitDependencies": {
-    "package.json": "*"
-  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
@@ -10,20 +7,33 @@
           "test",
           "build"
         ],
-        "parallel": 1
+        "parallel": 5
       }
     }
   },
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*"
+    ],
+    "prod": [
+      "!{projectRoot}/**/*.test.tsx"
+    ]
+  },
   "targetDefaults": {
     "build": {
+      "inputs": [
+        "prod",
+        "^prod"
+      ],
       "dependsOn": [
         "^build"
       ]
-    }
-  },
-  "pluginsConfig": {
-    "@nrwl/js": {
-      "analyzeSourceFiles": false
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^prod"
+      ]
     }
   }
 }

@@ -5310,23 +5310,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:14.3.6":
-  version: 14.3.6
-  resolution: "@nrwl/cli@npm:14.3.6"
+"@nrwl/cli@npm:14.4.2":
+  version: 14.4.2
+  resolution: "@nrwl/cli@npm:14.4.2"
   dependencies:
-    nx: 14.3.6
-  checksum: e3a97d7e87e83e5e4a098e57af5f6b67e54f399160fe8acf3883d5a3484acf879a6786b4d83cf2631b6a0ac945c0b1cb2ea20530691ed88fdb0a1935ec70d692
+    nx: 14.4.2
+  checksum: 67262d24386e77647c12808895289cf76f513cdcdda49936ac0410560c0b816a931147ed8eaadfbcfc72dd0bf6c81cc72961f2cf8821aa48d52322c782e0b623
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:14.3.6":
-  version: 14.3.6
-  resolution: "@nrwl/tao@npm:14.3.6"
+"@nrwl/tao@npm:14.4.2":
+  version: 14.4.2
+  resolution: "@nrwl/tao@npm:14.4.2"
   dependencies:
-    nx: 14.3.6
+    nx: 14.4.2
   bin:
     tao: index.js
-  checksum: 461848e6b2fdab50813d332ccd3ba89e7a195c5d8c075c799054ad227d1832ccaaac9b3a4407d22d287c7b2cc70b573ad7fb58f0d118ef46e52b09da1c92d9b8
+  checksum: 37c045d34f43d019e00fc177b46223e4672ddbf747f1d970423a1d2993f1fed92a3cb56ec2b4d0c9217e692547e2d4bf1835dc7d90b5619fcf080794eca887ee
   languageName: node
   linkType: hard
 
@@ -23551,12 +23551,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:14.3.6":
-  version: 14.3.6
-  resolution: "nx@npm:14.3.6"
+"nx@npm:14.4.2":
+  version: 14.4.2
+  resolution: "nx@npm:14.4.2"
   dependencies:
-    "@nrwl/cli": 14.3.6
-    "@nrwl/tao": 14.3.6
+    "@nrwl/cli": 14.4.2
+    "@nrwl/tao": 14.4.2
     "@parcel/watcher": 2.0.4
     chalk: 4.1.0
     chokidar: ^3.5.1
@@ -23595,7 +23595,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 8d7ac60ce7000e5c64cc6ac5da349e9c48f4a9b9791234b45a6e32eff6244e480e47f1db6ca74611ddc77335312aff8d222b27faf3c177514796b0fccd2aefdb
+  checksum: f33d50bcd5ae2bff01d0ce0fe0035b47d02cef1cd8cbf913b259b7cb769636247f6713bb5885b8c6ac195eacb4d39f17ced00bbf16fb60c0301766ad96bd7059
   languageName: node
   linkType: hard
 

@@ -23,7 +23,7 @@
     "release": "node ./tasks/release/cli.mjs",
     "release:test": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --config ./tasks/release/jest.config.mjs",
     "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test",
-    "test": "lerna run test -- --colors --maxWorkers=4"
+    "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4"
   },
   "resolutions": {
     "@types/react": "17.0.47",
@@ -87,7 +87,7 @@
     "node-notifier": "10.0.1",
     "nodemon": "2.0.19",
     "npm-packlist": "5.1.1",
-    "nx": "14.3.6",
+    "nx": "14.4.2",
     "octokit": "1.7.2",
     "ora": "5.4.1",
     "prompts": "2.4.2",
