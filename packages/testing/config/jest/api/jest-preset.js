@@ -22,7 +22,7 @@ if (process.env.SKIP_DB_PUSH !== '1') {
   const command =
     process.env.TEST_DATABASE_STRATEGY === 'reset'
       ? ['prisma', 'migrate', 'reset', '--force', '--skip-seed']
-      : ['prisma db push', '--force-reset', '--accept-data-loss']
+      : ['prisma', 'db', 'push', '--force-reset', '--accept-data-loss']
 
   const execa = require('execa')
   execa.sync(`yarn rw`, command, {
