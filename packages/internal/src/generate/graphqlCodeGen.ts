@@ -178,15 +178,15 @@ export const getResolverFnType = () => {
       args: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => TResult extends PromiseLike<TResult>
-      ? TResult
-      : Promise<TResult>`
+      ? Promise<Partial<Awaited<TResult>>>
+      : Promise<Partial<TResult>> | Partial<TResult>;`
   } else {
     return `(
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => TResult extends PromiseLike<TResult>
-    ? TResult
-    : Promise<TResult>`
+      ? Promise<Partial<Awaited<TResult>>>
+      : Promise<Partial<TResult>> | Partial<TResult>;`
   }
 }
 
