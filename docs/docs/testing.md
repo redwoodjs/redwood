@@ -1239,9 +1239,27 @@ To simplify Service testing, rather than mess with your development database, Re
 
 If you're using Postgres or MySQL locally you'll want to set that env var to your connection string for a test database in those services.
 
-> Does anyone else find it confusing that the software itself is called a "database", but the container that actually holds your data is also called a "database," and you can have multiple databases (containers) within one instance of a database (software)?
+:::info
 
-When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma migrate dev` against your test database to make sure it's up-to-date.
+Does anyone else find it confusing that the software itself is called a "database", but the container that actually holds your data is also called a "database," and you can have multiple databases (containers) within one instance of a database (software)?
+
+:::
+
+When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma db push` against your test database to make sure it's up-to-date.
+
+:::caution What if I have custom migration SQL?
+
+The `prisma db push` command only restores a snapshot of the current database schema (so that it runs as fast as possible). **It does not actually run migrations in sequence.** This can cause a [problem](https://github.com/redwoodjs/redwood/issues/5818) if you have certain database configuration that *must* occur as a result of the SQL statements inside the migration files.
+
+In order to preserve those statements in your test database, you can set an additional ENV var which will use the command `yarn rw prisma migrate reset` instead. This will run each migration in sequence against your test database. The tradeoff is that starting your test suite will take a little longer depending on how many migrations you have:
+
+```.env title=/.env
+TEST_DATABASE_STRATEGY=reset
+```
+
+Set the variable to `push`, or remove it completely, and it will use the default behavior of running `yarn rw prisma db push`.
+
+:::
 
 ### Writing Service Tests
 
@@ -1703,6 +1721,9 @@ Luckily, RedwoodJS has several api testing utilities to make [testing functions 
 >
 > We have an entire testing section in the [Serverless Functions documentation](serverless-functions.md) that will walk your through an example of a function and a webhook.
 
+## Testing GraphQL Directives
+
+Please refer to the [Directives documentation](./directives.md) for details on how to write Redwood [Validator](./directives.md#writing-validator-tests) or [Transformer](./directives.md#writing-transformer-tests) Directives tests.
 ## Wrapping Up
 
 So that's the world of testing according to Redwood. Did we miss anything? Can we make it even more awesome? Stop by [the community](https://community.redwoodjs.com) and ask questions, or if you've thought of a way to make this doc even better then [open a PR](https://github.com/redwoodjs/redwoodjs.com/pulls).
