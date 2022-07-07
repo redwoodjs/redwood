@@ -23182,9 +23182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-packlist@npm:5.1.0":
-  version: 5.1.0
-  resolution: "npm-packlist@npm:5.1.0"
+"npm-packlist@npm:5.1.1":
+  version: 5.1.1
+  resolution: "npm-packlist@npm:5.1.1"
   dependencies:
     glob: ^8.0.1
     ignore-walk: ^5.0.1
@@ -23192,7 +23192,7 @@ __metadata:
     npm-normalize-package-bin: ^1.0.1
   bin:
     npm-packlist: bin/index.js
-  checksum: cdf2355280e46b523f78e59ab394572dfe38f1772c4d366ee17a1658cee34a581c2e7d325baa74f3528e0d63914446d0542b3b3aeb2cfe12588c91117c74e97b
+  checksum: 8d9845883722931576e8eb10ef779407ecfe7d3aec696af76fb3ccbee776560c214ef87bad3615f98bdf0bab759a3a0e5667932cd2c29e14d2a37de22ddf601c
   languageName: node
   linkType: hard
 
@@ -27006,7 +27006,7 @@ __metadata:
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.19
-    npm-packlist: 5.1.0
+    npm-packlist: 5.1.1
     octokit: 1.7.2
     ora: 5.4.1
     prompts: 2.4.2
