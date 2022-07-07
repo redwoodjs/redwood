@@ -138,10 +138,8 @@ interface SignupHandlerArgs {
  * @example
  * import {User} from '@prisma/client'
  *
- * //    key being used in dbAccessor in src/functions/auth.ts 👇
- *  const getCurrentUser = async (session: DbAuthSession<User['id']>)
- *
- *
+ * //  key being used in dbAccessor in src/functions/auth.ts 👇
+ * const getCurrentUser = async (session: DbAuthSession<User['id']>)
  */
 export interface DbAuthSession<TIdType = unknown> {
   id: TIdType
