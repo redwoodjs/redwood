@@ -107,7 +107,7 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter5](../chapter5/storybook.md) of the tutorial!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter 5 of the tutorial](../chapter5/storybook.md)!). This file will contain some boilerplate to get you started:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
