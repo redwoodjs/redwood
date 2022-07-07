@@ -565,7 +565,7 @@ function FormInner<TFieldValues>(
 // ForwardRefExoticComponent type we use for our InputComponents. So instead
 // of changing that type (because it's correct) I use a type assertion here.
 // forwardRef is notoriously difficult to use with UI component libs.
-// Chakra-ui also says:
+// Chakra-UI also says:
 // > To be honest, the forwardRef type is quite complex [...] I'd recommend
 // > that you cast the type
 // https://github.com/chakra-ui/chakra-ui/issues/4528#issuecomment-902566185
