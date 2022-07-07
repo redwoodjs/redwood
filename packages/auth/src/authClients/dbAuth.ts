@@ -114,7 +114,7 @@ export const dbAuth = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'resetPassword' }),
     })
-    
+
     return await response.json()
   }
 
