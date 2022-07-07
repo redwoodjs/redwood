@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import type FirebaseAuthNamespace from 'firebase/auth'
 import { User, OperationType, OAuthProvider, Auth } from 'firebase/auth'
 

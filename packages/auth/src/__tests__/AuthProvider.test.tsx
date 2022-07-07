@@ -9,7 +9,7 @@ import {
   waitFor,
   configure,
 } from '@testing-library/react'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'

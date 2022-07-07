@@ -281,9 +281,9 @@ Custom hooks are a great way to encapsulate non-presentational code.
 To test custom hooks, we'll use the `renderHook` function from `@redwoodjs/testing/web`.
 
 :::info
-Note that Redwood's `renderHook` function is based on React Testing Library's. The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
+Note that Redwood's `renderHook` function is based on [React Testing Library's](https://testing-library.com/docs/react-testing-library/api/#renderhook). The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
 
-If you were to use React Testing Library's `renderHook` function, you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+If you were to use [React Testing Library's `renderHook` function](https://testing-library.com/docs/react-testing-library/api/#renderhook), you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
 
 ```jsx
 import { renderHook, MockProviders } from '@redwoodjs/testing/web'

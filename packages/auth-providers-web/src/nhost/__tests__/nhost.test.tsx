@@ -1,6 +1,6 @@
 import type { User } from '@nhost/hasura-auth-js'
 import type { NhostClient } from '@nhost/nhost-js'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 

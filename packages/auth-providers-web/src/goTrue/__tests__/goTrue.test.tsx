@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import type { default as GoTrue } from 'gotrue-js'
 import type { User } from 'gotrue-js'
 
