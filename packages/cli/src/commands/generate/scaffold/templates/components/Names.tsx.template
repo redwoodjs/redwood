@@ -31,11 +31,11 @@ const formatEnum = (values: string | string[] | null | undefined) => {
 }
 
 const truncate = (value: string | number) => {
-  let output = value?.toString() ?? ''
-  if (value && output?.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
+  let output = value?.toString()
+  if (output?.length > MAX_STRING_LENGTH) {
+    return output.substring(0, MAX_STRING_LENGTH) + '...'
   }
-  return output
+  return output ?? ''
 }
 
 
