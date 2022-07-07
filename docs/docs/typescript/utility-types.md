@@ -90,7 +90,7 @@ Over on the api side, when you generate SDLs and Services, Redwood generates tes
 
 ### `defineScenario`
 
-This is actually a function, not a type, but it takes a lot of generics. Use as many or as little as you find helpful.
+This is actually a function, not a type, but it takes a lot of generics. Use as many or as few as you find helpful.
 
 ```
 defineScenario<PrismaCreateType, TName, TKey>
