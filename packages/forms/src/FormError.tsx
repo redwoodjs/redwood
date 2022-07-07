@@ -12,7 +12,7 @@ interface ServerError extends Error {
   result: Record<string, any>
 }
 
-interface RWGqlError {
+export interface RWGqlError {
   message: string
   graphQLErrors: ReadonlyArray<GraphQLError>
   networkError: Error | ServerParseError | ServerError | null
