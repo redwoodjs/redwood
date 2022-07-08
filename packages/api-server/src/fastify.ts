@@ -13,7 +13,7 @@ export type FastifySideConfigFn = (
 ) => Promise<FastifyInstance>
 const DEFAULT_OPTIONS = {
   logger: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
   },
 }
 
@@ -45,9 +45,8 @@ export function loadFastifyConfig() {
     console.log(`Loading server config from ${serverConfigPath} \n`)
     serverConfigFile = { ...require(serverConfigPath) }
     isServerConfigLoaded = true
-
-    console.log(serverConfigFile, `Loaded ... \n`)
   }
+
   return serverConfigFile
 }
 

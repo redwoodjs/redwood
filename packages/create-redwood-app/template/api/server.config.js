@@ -16,21 +16,21 @@
 const config = {
   requestTimeout: 15_000,
   logger: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'trace',
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
   },
 }
 
 const configureFastifyForSide = async (fastify, side) => {
   if (side === 'api') {
-    fastify.log.debug(`Configuring ${side}`)
+    fastify.log.info(`Configuring ${side}`)
   }
 
   if (side === 'web') {
-    fastify.log.debug(`Configuring ${side}`)
+    fastify.log.info(`Configuring ${side}`)
   }
 
   if (side === 'proxy') {
-    fastify.log.debug(`Configuring ${side}`)
+    fastify.log.info(`Configuring ${side}`)
   }
 
   return fastify

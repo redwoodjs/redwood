@@ -16,7 +16,6 @@ export const startServer = ({
   fastify.listen(socket || port, host)
 
   fastify.ready(() => {
-    console.info(`Registered plugins \n${fastify.printPlugins()}`)
     fastify.log.info(`Registered plugins \n${fastify.printPlugins()}`)
   })
 
