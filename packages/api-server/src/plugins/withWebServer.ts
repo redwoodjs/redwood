@@ -6,7 +6,7 @@ import { FastifyInstance, FastifyReply } from 'fastify'
 
 import { findPrerenderedHtml, getPaths } from '@redwoodjs/internal'
 
-import { registerWebPlugins } from './utils'
+import { loadFastifyConfig } from '../fastify'
 
 export const getFallbackIndexPath = () => {
   const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
@@ -20,7 +20,7 @@ export const getFallbackIndexPath = () => {
   }
 }
 
-const withWebServer = (app: FastifyInstance) => {
+const withWebServer = async (fastify: FastifyInstance) => {
   const prerenderedFiles = findPrerenderedHtml()
   const indexPath = getFallbackIndexPath()
 
@@ -29,27 +29,28 @@ const withWebServer = (app: FastifyInstance) => {
     .filter((filePath) => filePath !== 'index.html') // remove index.html
     .forEach((filePath) => {
       const pathName = filePath.split('.html')[0]
-      app.get(`/${pathName}`, (_, reply: FastifyReply) => {
+      fastify.get(`/${pathName}`, (_, reply: FastifyReply) => {
         reply.header('Content-Type', 'text/html; charset=UTF-8')
         reply.sendFile(filePath)
       })
     })
 
-  registerWebPlugins(app)
+  const { configureFastifyForSide } = loadFastifyConfig()
+  fastify = await configureFastifyForSide(fastify, 'web')
 
   // Serve other non-html assets
-  app.register(fastifyStatic, {
+  fastify.register(fastifyStatic, {
     root: getPaths().web.dist,
   })
 
   // For SPA routing fallback on unmatched routes
   // And let JS routing take over
-  app.setNotFoundHandler({}, function (_, reply: FastifyReply) {
+  fastify.setNotFoundHandler({}, function (_, reply: FastifyReply) {
     reply.header('Content-Type', 'text/html; charset=UTF-8')
     reply.sendFile(indexPath)
   })
 
-  return app
+  return fastify
 }
 
 export default withWebServer

@@ -16,16 +16,27 @@
 const config = {
   requestTimeout: 15_000,
   logger: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'trace',
   },
 }
 
-/* _Important note! If you are using @fastify/compress plugin together with @fastify/static plugin,_ you must register the @fastify/compress (with global hook) before registering @fastify/static. */
- const registerPreStaticPlugins = async (fastify) => { fastify.logger.debug('Registering pre-static plugin')
- await fastify.register(import('@fastify/compress'), { global: false })}
+const configureFastifyForSide = async (fastify, side) => {
+  if (side === 'api') {
+    fastify.log.debug(`Configuring ${side}`)
+  }
 
-     const registerApiProxyPlugins = async (fastify) => { fastify.logger.debug('Registering api proxy plugin')}
-     const registerFunctionPlugins = async (fastify) => { fastify.logger.debug('Registering function plugin')}
-     const registerWebServerPlugins = async (fastify) => { fastify.logger.debug('Registering web server plugin')}
+  if (side === 'web') {
+    fastify.log.debug(`Configuring ${side}`)
+  }
 
-module.exports = config
+  if (side === 'proxy') {
+    fastify.log.debug(`Configuring ${side}`)
+  }
+
+  return fastify
+}
+
+module.exports = {
+  config,
+  configureFastifyForSide,
+}

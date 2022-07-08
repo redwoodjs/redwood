@@ -1,15 +1,14 @@
 import httpProxy, { FastifyHttpProxyOptions } from '@fastify/http-proxy'
 import { FastifyInstance } from 'fastify'
 
-import { registerProxyPlugins } from './utils'
-
+import { loadFastifyConfig } from '../fastify'
 interface ApiProxyOptions {
   apiUrl: string
   apiHost: string
 }
 
-const withApiProxy = (
-  app: FastifyInstance,
+const withApiProxy = async (
+  fastify: FastifyInstance,
   { apiUrl, apiHost }: ApiProxyOptions
 ) => {
   const proxyOpts: FastifyHttpProxyOptions = {
@@ -18,11 +17,12 @@ const withApiProxy = (
     disableCache: true,
   }
 
-  app.register(httpProxy, proxyOpts)
+  fastify.register(httpProxy, proxyOpts)
 
-  registerProxyPlugins(app)
+  const { configureFastifyForSide } = loadFastifyConfig()
+  fastify = await configureFastifyForSide(fastify, 'proxy')
 
-  return app
+  return fastify
 }
 
 export default withApiProxy

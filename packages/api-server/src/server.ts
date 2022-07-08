@@ -3,13 +3,22 @@ import { FastifyInstance } from 'fastify'
 export interface HttpServerParams {
   port: number
   socket?: string
-  app: FastifyInstance
+  fastify: FastifyInstance
 }
 
-export const startServer = ({ port = 8911, socket, app }: HttpServerParams) => {
+export const startServer = ({
+  port = 8911,
+  socket,
+  fastify,
+}: HttpServerParams) => {
   const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
 
-  app.listen(socket || port, host)
+  fastify.listen(socket || port, host)
 
-  return app
+  fastify.ready(() => {
+    console.info(`Registered plugins \n${fastify.printPlugins()}`)
+    fastify.log.info(`Registered plugins \n${fastify.printPlugins()}`)
+  })
+
+  return fastify
 }

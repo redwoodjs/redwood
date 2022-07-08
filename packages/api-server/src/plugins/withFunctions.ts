@@ -14,9 +14,8 @@ import escape from 'lodash.escape'
 
 import { findApiDistFunctions } from '@redwoodjs/internal'
 
+import { loadFastifyConfig } from '../fastify'
 import { requestHandler } from '../requestHandlers/awsLambdaFastify'
-
-import { registerFunctionPlugins } from './utils'
 
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
@@ -104,25 +103,26 @@ const lambdaRequestHandler = async (
   return requestHandler(req, reply, LAMBDA_FUNCTIONS[routeName])
 }
 
-const withFunctions = async (app: FastifyInstance, apiRootPath: string) => {
+const withFunctions = async (fastify: FastifyInstance, apiRootPath: string) => {
   // Add extra fastify plugins
-  app.register(fastifyUrlData)
-  app.register(fastifyRawBody)
+  fastify.register(fastifyUrlData)
+  fastify.register(fastifyRawBody)
 
-  registerFunctionPlugins(app)
+  const { configureFastifyForSide } = loadFastifyConfig()
+  fastify = await configureFastifyForSide(fastify, 'api')
 
-  app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
-  app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
+  fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
+  fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
 
-  app.addContentTypeParser(
+  fastify.addContentTypeParser(
     ['application/x-www-form-urlencoded', 'multipart/form-data'],
     { parseAs: 'string' },
-    app.defaultTextParser
+    fastify.defaultTextParser
   )
 
   await loadFunctionsFromDist()
 
-  return app
+  return fastify
 }
 
 export default withFunctions
