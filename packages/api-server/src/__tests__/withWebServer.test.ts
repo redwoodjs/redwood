@@ -27,14 +27,15 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-test('Attach handlers for prerendered files', () => {
+test('Attach handlers for prerendered files', async () => {
   const mockedApp = {
     register: jest.fn(),
     get: jest.fn(),
     setNotFoundHandler: jest.fn(),
+    log: console,
   } as unknown as FastifyInstance
 
-  withWebServer(mockedApp)
+  await withWebServer(mockedApp)
 
   expect(mockedApp.get).toHaveBeenCalledWith('/about', expect.anything())
   expect(mockedApp.get).toHaveBeenCalledWith('/mocked', expect.anything())
@@ -44,14 +45,15 @@ test('Attach handlers for prerendered files', () => {
   expect(mockedApp.get).not.toHaveBeenCalledWith('/index', expect.anything())
 })
 
-test('Adds SPA fallback', () => {
+test('Adds SPA fallback', async () => {
   const mockedApp = {
     register: jest.fn(),
     get: jest.fn(),
     setNotFoundHandler: jest.fn(),
+    log: console,
   } as unknown as FastifyInstance
 
-  withWebServer(mockedApp)
+  await withWebServer(mockedApp)
 
   expect(mockedApp.setNotFoundHandler).toHaveBeenCalled()
 })
