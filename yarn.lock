@@ -6449,7 +6449,7 @@ __metadata:
     "@storybook/react": 6.5.9
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.0
+    "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.2.0
     "@types/aws-lambda": 8.10.97
     "@types/babel-core": 6.25.7
@@ -7904,9 +7904,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-hooks@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@testing-library/react-hooks@npm:8.0.0"
+"@testing-library/react-hooks@npm:8.0.1":
+  version: 8.0.1
+  resolution: "@testing-library/react-hooks@npm:8.0.1"
   dependencies:
     "@babel/runtime": ^7.12.5
     react-error-boundary: ^3.1.0
@@ -7922,7 +7922,7 @@ __metadata:
       optional: true
     react-test-renderer:
       optional: true
-  checksum: 0ebcaa93e94fdaf464b978ec28af063ee1394905350344df8e42cef489af9d372e095e7b11ab988998780c085e9fe657a9900d304d49b835051d0737239de77e
+  checksum: 83bef2d4c437b84143213b5275ef00ef14e5bcd344f9ded12b162d253dc3c799138ead4428026b9c725e5a38dbebf611f2898aa43f3e43432bcaccbd7bf413e5
   languageName: node
   linkType: hard
 
@@ -26976,7 +26976,7 @@ __metadata:
     "@playwright/test": 1.22.2
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.0
+    "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.2.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.5.2
