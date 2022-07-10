@@ -16,7 +16,7 @@
     "**/__fixtures__": true,
     ".yarn-packages-cache": true
   },
-  "[markdown]": {
+  "[markdown][html][mjml]": {
     "files.trimTrailingWhitespace": false
   },
   "typescript.tsdk": "node_modules/typescript/lib",
