@@ -114,12 +114,12 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // ? — blob? tree?
-          editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs', // base path for repo edit pages
+          editUrl: 'https://github.com/redwoodjs/redwood/blob/main/docs/versioned_docs', // base path for repo edit pages
           editCurrentVersion: true,
           remarkPlugins: [autoImportTabs, fileExtSwitcher],
           versions: {
             current: {
-              label: 'Canary',
+              label: 'Edit the Canary version of this page',
               path: 'canary',
               banner: 'unreleased',
             },
