@@ -16,6 +16,9 @@
     "**/__fixtures__": true,
     ".yarn-packages-cache": true
   },
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "peacock.color": "#b85833"
 }
