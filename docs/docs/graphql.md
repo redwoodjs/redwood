@@ -407,9 +407,9 @@ query {
 }
 ```
 
-How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/makeMergedSchema/rootSchema.ts#L22-L38). The root schema is where things like currentUser are defined.
+How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L27-L44). The root schema is where things like currentUser are defined.
 
-Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/34a6444432b409774d54be17789a7109add9709a/packages/api/src/makeMergedSchema/rootSchema.ts#L31-L45).
+Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L56-L72).
 
 <!-- ### The query workflow
 
