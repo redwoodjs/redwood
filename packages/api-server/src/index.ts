@@ -11,11 +11,7 @@ import {
   bothServerHandler,
 } from './cliHandlers'
 
-export type {
-  FastifySideConfigFn,
-  FastifySideConfigFnOptions,
-  SupportedSides,
-} from './fastify'
+export * from './types'
 
 const positionalArgs = yargs(hideBin(process.argv)).parseSync()._
 

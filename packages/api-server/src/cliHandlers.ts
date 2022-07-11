@@ -7,7 +7,7 @@ import withApiProxy from './plugins/withApiProxy'
 import withFunctions from './plugins/withFunctions'
 import withWebServer from './plugins/withWebServer'
 import { startServer as startFastifyServer } from './server'
-import type { HttpServerParams } from './server'
+import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 /*
  * This file has defines CLI handlers used by the redwood cli, for `rw serve`
@@ -45,22 +45,15 @@ export const webCliOptions = {
   },
 } as const
 
-interface ApiServerArgs extends Omit<HttpServerParams, 'fastify'> {
-  apiRootPath: string // either user supplied or '/'
-}
-
-export const apiServerHandler = async ({
-  port,
-  socket,
-  apiRootPath,
-}: ApiServerArgs) => {
+export const apiServerHandler = async (options: ApiServerArgs) => {
+  const { port, socket, apiRootPath } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
   let fastify = createFastifyInstance()
 
   // Import Server Functions.
-  fastify = await withFunctions(fastify, apiRootPath)
+  fastify = await withFunctions(fastify, options)
 
   const http = startFastifyServer({
     port,
@@ -82,10 +75,8 @@ export const apiServerHandler = async ({
   })
 }
 
-export const bothServerHandler = async ({
-  port,
-  socket,
-}: Omit<HttpServerParams, 'fastify'>) => {
+export const bothServerHandler = async (options: BothServerArgs) => {
+  const { port, socket } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
@@ -93,8 +84,8 @@ export const bothServerHandler = async ({
   let fastify = createFastifyInstance()
 
   // Attach plugins
-  fastify = await withWebServer(fastify)
-  fastify = await withFunctions(fastify, apiRootPath)
+  fastify = await withWebServer(fastify, options)
+  fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
   startFastifyServer({
     port,
@@ -116,15 +107,8 @@ export const bothServerHandler = async ({
   })
 }
 
-interface WebServerArgs extends Omit<HttpServerParams, 'fastify'> {
-  apiHost?: string
-}
-
-export const webServerHandler = async ({
-  port,
-  socket,
-  apiHost,
-}: WebServerArgs) => {
+export const webServerHandler = async (options: WebServerArgs) => {
+  const { port, socket, apiHost } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
   const apiUrl = getConfig().web.apiUrl
@@ -137,7 +121,7 @@ export const webServerHandler = async ({
   let fastify = createFastifyInstance()
 
   // serve static files from "web/dist"
-  fastify = await withWebServer(fastify)
+  fastify = await withWebServer(fastify, options)
 
   // If apiHost is supplied, it means the functions are running elsewhere
   // So we should just proxy requests

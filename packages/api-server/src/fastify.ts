@@ -1,23 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import Fastify from 'fastify'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
+import Fastify from 'fastify'
 
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
-export type FastifySideConfigFnOptions = {
-  side: SupportedSides
-  apiRootPath?: string
-  apiUrl?: string
-  apiHost?: string
-} & Record<string, any>
+import { FastifySideConfigFn } from './types'
 
-export type SupportedSides = 'api' | 'web' | 'proxy'
-export type FastifySideConfigFn = (
-  fastify: FastifyInstance,
-  options?: FastifySideConfigFnOptions
-) => Promise<FastifyInstance>
 const DEFAULT_OPTIONS = {
   logger: {
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',

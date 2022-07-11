@@ -7,6 +7,7 @@ import { FastifyInstance, FastifyReply } from 'fastify'
 import { findPrerenderedHtml, getPaths } from '@redwoodjs/internal'
 
 import { loadFastifyConfig } from '../fastify'
+import { WebServerArgs } from '../types'
 
 export const getFallbackIndexPath = () => {
   const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
@@ -20,7 +21,10 @@ export const getFallbackIndexPath = () => {
   }
 }
 
-const withWebServer = async (fastify: FastifyInstance) => {
+const withWebServer = async (
+  fastify: FastifyInstance,
+  options: WebServerArgs
+) => {
   const prerenderedFiles = findPrerenderedHtml()
   const indexPath = getFallbackIndexPath()
 
@@ -36,7 +40,7 @@ const withWebServer = async (fastify: FastifyInstance) => {
     })
 
   const { configureFastifyForSide } = loadFastifyConfig()
-  fastify = await configureFastifyForSide(fastify, { side: 'web' })
+  fastify = await configureFastifyForSide(fastify, { side: 'web', ...options })
 
   // Serve other non-html assets
   fastify.register(fastifyStatic, {

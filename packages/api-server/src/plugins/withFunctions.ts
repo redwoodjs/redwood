@@ -14,6 +14,8 @@ import escape from 'lodash.escape'
 
 import { findApiDistFunctions } from '@redwoodjs/internal'
 
+import { ApiServerArgs } from 'src/types'
+
 import { loadFastifyConfig } from '../fastify'
 import { requestHandler } from '../requestHandlers/awsLambdaFastify'
 
@@ -103,14 +105,18 @@ const lambdaRequestHandler = async (
   return requestHandler(req, reply, LAMBDA_FUNCTIONS[routeName])
 }
 
-const withFunctions = async (fastify: FastifyInstance, apiRootPath: string) => {
+const withFunctions = async (
+  fastify: FastifyInstance,
+  options: ApiServerArgs
+) => {
+  const { apiRootPath } = options
   // Add extra fastify plugins
   fastify.register(fastifyUrlData)
   fastify.register(fastifyRawBody)
 
   const { configureFastifyForSide } = loadFastifyConfig()
 
-  fastify = await configureFastifyForSide(fastify, { side: 'api', apiRootPath })
+  fastify = await configureFastifyForSide(fastify, { side: 'api', ...options })
 
   fastify.log.info('apiRootPath')
   fastify.log.info(apiRootPath)
