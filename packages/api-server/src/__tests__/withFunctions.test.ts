@@ -1,8 +1,9 @@
 import path from 'path'
 
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyPluginCallback } from 'fastify'
 
-import withFunctions from '../plugins/withFunctions'
+import { loadFastifyConfig } from '../fastify'
+import * as withFunctionsPlugin from '../plugins/withFunctions'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -17,11 +18,32 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
+jest.mock('../fastify', () => {
+  return {
+    ...jest.requireActual('../fastify'),
+    loadFastifyConfig: jest.fn().mockReturnValue({
+      config: {},
+      configureFastifyForSide: jest.fn((fastify) => fastify),
+    }),
+  }
+})
+
+jest.mock('../plugins/lambdaLoader', () => {
+  return {
+    loadFunctionsFromDist: jest.fn(),
+    lambdaRequestHandler: jest.fn(),
+  }
+})
+
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
 })
 afterAll(() => {
   delete process.env.RWJS_CWD
+})
+
+beforeEach(() => {
+  jest.clearAllMocks()
 })
 
 test('Checks that a default configureFastifyForSide hook is called for the api side', async () => {
@@ -30,18 +52,43 @@ test('Checks that a default configureFastifyForSide hook is called for the api s
     get: jest.fn(),
     all: jest.fn(),
     addContentTypeParser: jest.fn(),
-    log: console,
+    setNotFoundHandler: jest.fn(),
+    log: jest.fn(),
   } as unknown as FastifyInstance
 
-  await withFunctions(mockedFastifyInstance, '.redwood/functions') // ?
+  // We're mocking a fake plugin, so don't worry about the type
+  const fakeFastifyPlugin =
+    'Fake bazinga plugin' as unknown as FastifyPluginCallback
 
-  const log = mockedFastifyInstance['log']['_buffer']
+  const userFastifyConfig = loadFastifyConfig()
 
-  const messages = log.map((item) => item['message'])
+  const configureSpy = jest.spyOn(userFastifyConfig, 'configureFastifyForSide')
+  configureSpy.mockImplementation(async (fastify) => {
+    fastify.register(fakeFastifyPlugin)
+    fastify.version = 'bazinga'
+    return fastify
+  })
 
-  expect(messages).toContain(
-    "{ side: 'api' } In configureFastifyForSide hook for side: api"
+  const { default: withFunctions } = withFunctionsPlugin
+
+  await withFunctions(mockedFastifyInstance, {
+    apiRootPath: '/kittens',
+    port: 5555,
+  })
+
+  expect(configureSpy).toHaveBeenCalledTimes(1)
+
+  const secondArgument = configureSpy.mock.calls[0][1]
+  expect(secondArgument).toStrictEqual({
+    side: 'api',
+    apiRootPath: '/kittens',
+    port: 5555,
+  })
+
+  expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
+    'Fake bazinga plugin'
   )
-})
 
-// TODO: test with a fixture app that has an actual custom config
+  // Check that the same instance is returned, and not a new one
+  expect(mockedFastifyInstance.version).toBe('bazinga')
+})
