@@ -114,7 +114,9 @@ You can configure the Fastify Server used by the dev server in `api/server.confi
 For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
 
-> This configuration doesn't apply in a serverless deploy
+ :::note
+ This configuration does not apply in a serverless deploy.
+ :::
 
 Using [redwood.toml's env var interpolation](#using-environment-variables-in-redwoodtoml), you can configure a different `server.config.js` based on your deployment environment:
 
@@ -123,53 +125,137 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
-### Register Custom Fastify Plug-ins
+### Register Custom Fastify Plug-ins and Routes
 
+You can also register Fastify plugins and additional routes for the API and Web sides in the `configureFastifyForSide` function.
+
+This function has access to the Fastify instance and options, such as the sid (web, api, or proxy) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
+
+ :::note
+ This configuration does not apply in a serverless deploy.
+ :::
 
 ```js
-module.exports = {
-  /** @type {import('fastify').FastifyServerOptions} */
-  config: {
-    requestTimeout: 15_000,
-    logger: {
-      level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
-    },
-  },
-web: {
-    plugins: [
-      {
-        name: '@fastify/multipart',
-        options: {},
-      },
-    ],
-  },
-  functions: {
-    plugins: [
-      {
-        name: '@fastify/compress',
-        options: { threshold: 128, encodings: ['deflate'] },
-        async: true,
-      },
-      {
-        name: '@fastify/rate-limit',
-        options: {
-          max: 20,
-          timeWindow: '1 minute',
-        },
-      },
-    ],
-  },
-  proxy: {
-    plugins: [
-      {
-        name: '@fastify/csrf-protection',
-        options: {},
-      },
-    ],
-  },
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastifyForSide = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+  }
+
+  if (options.side === 'proxy') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side proxy')
+  }
+
+  if (options.side === 'web') {
+    fastify.log.info({ custom: { options } }, 'Configuring web side')
+  }
+
+  return fastify
 }
 ```
 
+#### How to Configure a Fastify Plug-in for the API Side
+
+Suppose you want to compress payloads and also rate limit your RedwoodJS api.
+
+You can leverage the Fastify ecosystem plug-ins:
+
+* [@fastify/compress](https://github.com/fastify/fastify-compress)
+* [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit)
+
+And then configure them in your API side.
+
+Here, we setup compression to handle all requests (global), compress responses only if larger than 1K, and to prefer the `deflate` method over `gzip`.
+only allow one IP address to make 100 requests in a five minute window.
+
+Of course, these are just examples and please see the plugin documentaiton for the settings that best meet your needs.
+
+:::important
+You will need to install any custom plug-in packages to your project's `api` workspace.
+:::
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastifyForSide = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+
+    await fastify.register(import('@fastify/compress'), {
+      global: true,
+      threshold: 1_024,
+      encodings: ['deflate', 'gzip'],
+    })
+
+    await fastify.register(import('@fastify/rate-limit'), {
+      max: 100,
+      timeWindow: '5 minutes',
+    })
+  }
+
+
+  return fastify
+}
+```
+
+#### How to Configure a Fastify Route for the API Side
+
+Perhaps you want a custom api route?
+
+Since you have access to the `fastify` instance, you can quickly add a `get` route.
+
+If you need access to the `apiRootPath` (e.g., `.redwood/functions`), it is available in `options.apiRootPath`.
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastifyForSide = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+
+
+    fastify.get(`/rest/v1/users/get`, async function (request, reply) {
+      return reply.send('Get user ...')
+    })
+  }
+
+  return fastify
+}
+```
+
+#### How to Configure a Fastify Plug-in for the Web Side
+
+If you are running your web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
+
+* [@fastify/etag](https://github.com/fastify/fastify-etag)
+
+:::note
+If you run `yarn rw serve` because the same Fastify instance handles the api and web side, this plugin will apply to the API side as well.
+:::
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastifyForSide = async (fastify, options) => {
+  if (options.side === 'web') {
+    fastify.log.info({ custom: { options } }, 'Configuring web side')
+
+    fastify.register(import('@fastify/etag'))
+  }
+
+  return fastify
+}
+```
+
+:::important
+You will need to install any custom plug-in packages to your project's `api` workspace.
+:::
+
+
+#### Troubleshooting Custom Fastify Configuration
+
+
+:::todo
+ How handle same plugin registered in web and api since same server?
+
+:::
 ## [browser]
 
 ```toml title="redwood.toml"
