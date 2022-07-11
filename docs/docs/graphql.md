@@ -9,10 +9,10 @@ GraphQL is a fundamental part of Redwood. Having said that, you can get going wi
 
 ## GraphQL 101
 
-GraphQL is a language that enhances the exchange of data between clients (ex: Redwood React app) and servers (ex: Redwood API).
+GraphQL is a query language that enhances the exchange of data between clients (in this case, a Redwood React app) and servers (a Redwood API).
 
-Unlike with REST API, a GraphQL Client is performing operations that allow gathering rich data-set.
-GraphQL operations are divided in 2 groups: Queries (to read data) and Mutations (to update/create/delete data).
+Unlike with a REST API, a GraphQL Client performs operations that allow gathering a rich dataset in a single request.
+There's three types of GraphQL operations, but here we'll only focus on two: Queries (to read data) and Mutations (to create, update, or delete data).
 
 
 The following GraphQL query:
@@ -34,7 +34,7 @@ query GetProject {
 }
 ```
 
-will return the following JSON response:
+returns the following JSON response:
 
 ```json
 {
@@ -56,11 +56,10 @@ will return the following JSON response:
 }
 ```
 
-As showcased above, GraphQL makes fetching data descriptive and predictable (the response is matching the query structure).
+Notice that the response's structure mirrors the query's. In this way, GraphQL makes fetching data descriptive and predictable.
 
-Again, unlike REST API, a GraphQL API is built upon a Schema that defines which queries and mutations can be performed.
-
-The following schema describes the Types and Query required to perform the previously showcased `GetProject` query:
+Again, unlike a REST API, a GraphQL API is built on a schema that specifies exactly which queries and mutations can be performed.
+For the `GetProject` query above, here's the schema backing it:
 
 ```graphql
 type Project {
@@ -71,7 +70,7 @@ type Project {
   tags: [Tag]
 }
 
-# ... `User` and `Tag` type definition
+# ... `User` and `Tag` type definitions
 
 type Query {
   project(name: String!): Project
@@ -79,7 +78,7 @@ type Query {
 ```
 _More information on GraphQL types can be found [on the official GraphQL documentation](https://graphql.org/learn/schema/)_
 
-Finally, the GraphQL Schema is associated with a resolvers map that helps resolve each requested field, for example: `Project.owner`:
+Finally, the GraphQL schema is associated with a resolvers map that helps resolve each requested field, for example: `Project.owner`:
 
 ```ts
 export const Project = {
@@ -88,10 +87,10 @@ export const Project = {
   // ...
 }
 ```
-_More information on resolvers in the [dedidacted "Understanding Default Resolvers" section](#understanding-default-resolvers._
+_More information on resolvers in the [dedicated "Understanding Default Resolvers" section](#understanding-default-resolvers)._
 
 
-To sum up, when a GraphQL query reaches a GraphQL API, the following flow is followed:
+To summarize, when a GraphQL query reaches a GraphQL API, here's what happens:
 
 ```
 +--------------------+                  +--------------------+
@@ -114,10 +113,10 @@ To sum up, when a GraphQL query reaches a GraphQL API, the following flow is fol
 
 For more info on a pure GraphQL implementation, [complete GraphQL guides and tutorials are available on graphql.org](https://graphql.org/learn/).
 
-Redwood in comparison provides a "deconstructed" way of creating your GraphQL API.
-- You define your SDLs (schema) in `*.sdl.js` files, which defines what queries and mutations are available, and what fields can be returned
+Redwood in comparison provides a "deconstructed" way of creating your GraphQL API:
+- You define your SDLs (schema) in `*.sdl.js` files, which define what queries and mutations are available, and what fields can be returned
 - For each query or mutation, you write a service function with the same name. This is the resolver
-- We then take all your SDLs, Services (resolvers) and other config - combine it to a GraphQL server and expose it as an endpoint
+- Redwood then takes all your SDLs and Services (resolvers), combines them into a GraphQL server, and expose it as an endpoint
 
 ## Redwood and GraphQL
 
@@ -1205,8 +1204,8 @@ This might be one of our most frequently asked questions of all time. Here's [To
 
 ## Futher Reading
 
-Eager to learn more about GraphQL? You will find some recommend resources below:
+Eager to learn more about GraphQL? Check out some of the resources below:
 
-- [GraphQL.wtf](https://graphql.wtf) publishes one short video per week, covering most aspects of GraphQL!
-- [howtographql.com] is aimed to people looking to learn GraphQL in a practical way, through a set of complete full-stack tutorials.
-- [The official GraphQL documentation](https://graphql.org/learn/) is also a great place to deep dive into the GraphQL language.
+- [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week 
+- [howtographql.com] is aimed at people looking to learn GraphQL in a practical way, through a set of complete full-stack tutorials
+- And of course, [the official GraphQL docs](https://graphql.org/learn/) are great place to do a deep dive into exactly how GraphQL works
