@@ -30,6 +30,8 @@ let serverConfigFile: {
 }
 
 export function loadFastifyConfig() {
+  // @TODO use require.resolve to find the config file
+  // do we need to babel first?
   const serverConfigPath = path.join(
     getPaths().base,
     getConfig().api.serverConfig
