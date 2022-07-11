@@ -2,7 +2,7 @@
  * This file allows you to configure the Fastify Server settings
  * used by the RedwoodJS dev server.
  *
- * It also applies when running the api server with `yarn rw serve`.
+ * It also applies when running RedwoodJS with `yarn rw serve`.
  *
  * For the Fastify server options that you can set, see:
  * https://www.fastify.io/docs/latest/Reference/Server/#factory
@@ -16,21 +16,35 @@
 const config = {
   requestTimeout: 15_000,
   logger: {
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+    // Note: If running locally using `yarn rw serve` you may want to adust
+    // the default non-development level to `info`
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
   },
 }
 
-const configureFastifyForSide = async (fastify, side) => {
-  if (side === 'api') {
-    fastify.log.info(`Configuring ${side}`)
+/**
+ * You can also register Fastify plugins and additional routes for the API and Web sides
+ * in the configureFastifyForSide function.
+ *
+ * This function has access to the Fastify instance and options, such as the side
+ * (web, api, or proxy) that is being configured and other settings like the apiRootPath
+ * of the functions endpoint.
+ *
+ * Note: This configuration does not apply in a serverless deploy.
+ */
+
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastifyForSide = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
   }
 
-  if (side === 'web') {
-    fastify.log.info(`Configuring ${side}`)
+  if (options.side === 'proxy') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side proxy')
   }
 
-  if (side === 'proxy') {
-    fastify.log.info(`Configuring ${side}`)
+  if (options.side === 'web') {
+    fastify.log.info({ custom: { options } }, 'Configuring web side')
   }
 
   return fastify

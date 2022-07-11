@@ -36,7 +36,7 @@ const withWebServer = async (fastify: FastifyInstance) => {
     })
 
   const { configureFastifyForSide } = loadFastifyConfig()
-  fastify = await configureFastifyForSide(fastify, 'web')
+  fastify = await configureFastifyForSide(fastify, { side: 'web' })
 
   // Serve other non-html assets
   fastify.register(fastifyStatic, {

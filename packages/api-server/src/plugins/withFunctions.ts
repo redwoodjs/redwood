@@ -109,7 +109,11 @@ const withFunctions = async (fastify: FastifyInstance, apiRootPath: string) => {
   fastify.register(fastifyRawBody)
 
   const { configureFastifyForSide } = loadFastifyConfig()
-  fastify = await configureFastifyForSide(fastify, 'api')
+
+  fastify = await configureFastifyForSide(fastify, { side: 'api', apiRootPath })
+
+  fastify.log.info('apiRootPath')
+  fastify.log.info(apiRootPath)
 
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)

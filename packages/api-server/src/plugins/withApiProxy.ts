@@ -20,7 +20,7 @@ const withApiProxy = async (
   fastify.register(httpProxy, proxyOpts)
 
   const { configureFastifyForSide } = loadFastifyConfig()
-  fastify = await configureFastifyForSide(fastify, 'proxy')
+  fastify = await configureFastifyForSide(fastify, { side: 'proxy' })
 
   return fastify
 }

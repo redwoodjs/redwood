@@ -6,10 +6,15 @@ import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
+export type FastifySideConfigFnOptions = {
+  side: SupportedSides
+  apiRootPath?: string
+} & Record<string, any>
+
 export type SupportedSides = 'api' | 'web' | 'proxy'
 export type FastifySideConfigFn = (
   fastify: FastifyInstance,
-  side: SupportedSides
+  options?: FastifySideConfigFnOptions
 ) => Promise<FastifyInstance>
 const DEFAULT_OPTIONS = {
   logger: {
@@ -23,8 +28,11 @@ let serverConfigFile: {
   configureFastifyForSide: FastifySideConfigFn
 } = {
   config: DEFAULT_OPTIONS,
-  configureFastifyForSide: async (fastify: FastifyInstance, side: string) => {
-    fastify.log.info('In configureFastifyForSide hook for side:', side)
+  configureFastifyForSide: async (fastify, options) => {
+    fastify.log.info(
+      options,
+      `In configureFastifyForSide hook for side: ${options?.side}`
+    )
     return fastify
   },
 }
