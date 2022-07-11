@@ -212,15 +212,16 @@ const configureFastifyForSide = async (fastify, options) => {
     fastify.log.info({ custom: { options } }, 'Configuring api side')
 
 
-    fastify.get(`/rest/v1/users/get`, async function (request, reply) {
-      return reply.send('Get user ...')
+    fastify.get(`/rest/v1/users/get/:userId`, async function (request, reply) {
+      const { userId } = request.params
+
+      return reply.send(`Get User ${userId}!`)
     })
   }
 
   return fastify
 }
 ```
-
 #### How to Configure a Fastify Plug-in for the Web Side
 
 If you are running your web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
