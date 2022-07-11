@@ -235,7 +235,9 @@ export const replaceParams = (
     if (value !== undefined) {
       path = path.replace(match, value as string)
     } else {
-      throw new Error(`Missing parameter '${name}' for route '${route}'.`)
+      throw new Error(
+        `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`
+      )
     }
   })
 
