@@ -5886,7 +5886,7 @@ __metadata:
     "@fastify/http-proxy": 7.1.0
     "@fastify/static": 5.0.2
     "@fastify/url-data": 4.0.0
-    "@types/aws-lambda": 8.10.97
+    "@types/aws-lambda": 8.10.101
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -5924,7 +5924,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.6.1
     "@prisma/client": 3.15.2
     "@redwoodjs/auth": 2.0.0
-    "@types/aws-lambda": 8.10.97
+    "@types/aws-lambda": 8.10.101
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
     "@types/md5": 2.3.2
@@ -6194,7 +6194,7 @@ __metadata:
     "@testing-library/dom": 8.13.0
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 14.2.0
+    "@testing-library/user-event": 14.2.1
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.47
     "@types/react-dom": 17.0.17
@@ -6449,9 +6449,9 @@ __metadata:
     "@storybook/react": 6.5.9
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.0
-    "@testing-library/user-event": 14.2.0
-    "@types/aws-lambda": 8.10.97
+    "@testing-library/react-hooks": 8.0.1
+    "@testing-library/user-event": 14.2.1
+    "@types/aws-lambda": 8.10.101
     "@types/babel-core": 6.25.7
     "@types/jest": 27.5.2
     "@types/node": 16.11.38
@@ -7904,9 +7904,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-hooks@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@testing-library/react-hooks@npm:8.0.0"
+"@testing-library/react-hooks@npm:8.0.1":
+  version: 8.0.1
+  resolution: "@testing-library/react-hooks@npm:8.0.1"
   dependencies:
     "@babel/runtime": ^7.12.5
     react-error-boundary: ^3.1.0
@@ -7922,7 +7922,7 @@ __metadata:
       optional: true
     react-test-renderer:
       optional: true
-  checksum: 0ebcaa93e94fdaf464b978ec28af063ee1394905350344df8e42cef489af9d372e095e7b11ab988998780c085e9fe657a9900d304d49b835051d0737239de77e
+  checksum: 83bef2d4c437b84143213b5275ef00ef14e5bcd344f9ded12b162d253dc3c799138ead4428026b9c725e5a38dbebf611f2898aa43f3e43432bcaccbd7bf413e5
   languageName: node
   linkType: hard
 
@@ -7940,12 +7940,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:14.2.0":
-  version: 14.2.0
-  resolution: "@testing-library/user-event@npm:14.2.0"
+"@testing-library/user-event@npm:14.2.1":
+  version: 14.2.1
+  resolution: "@testing-library/user-event@npm:14.2.1"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 1011c63521685bfb758d6c8d4fed5f16de6ebc28f5817d017364302d7b69f00acacb9dea1a1bf4a5efdf6e166f66541a42b6c6e8e08914310cd23a1b1af98e98
+  checksum: 0212ae021599ddc4ab4b6db84efb028ddab45999b4254717dbfb0416fe901c06095bd900ab3ed45f7fb8dae6348f0e936e14ac7c0f2b4239e1f9e96617cc8984
   languageName: node
   linkType: hard
 
@@ -8017,10 +8017,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.97, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.97
-  resolution: "@types/aws-lambda@npm:8.10.97"
-  checksum: c9eb880f21444868605a283d4637f4b213b03752432ef5eed4212e65c7ec1317de188c0416dfd5b5c6ce4eebaa4266766a1fbc665045402d35ffb8da8ab27fe8
+"@types/aws-lambda@npm:8.10.101, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.101
+  resolution: "@types/aws-lambda@npm:8.10.101"
+  checksum: 6938645f0ab755be50e1fc4c3ef082b33c005a31fbb9c2ffbd17e6f52656b529eee29d653bb5e33973f1223433ba088f4fa6298e128e10eb879f483cf9ae4976
   languageName: node
   linkType: hard
 
@@ -26976,8 +26976,8 @@ __metadata:
     "@playwright/test": 1.22.2
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.0
-    "@testing-library/user-event": 14.2.0
+    "@testing-library/react-hooks": 8.0.1
+    "@testing-library/user-event": 14.2.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.5.2
     "@types/jscodeshift": 0.11.5
