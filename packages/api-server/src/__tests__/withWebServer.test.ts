@@ -28,32 +28,64 @@ afterAll(() => {
 })
 
 test('Attach handlers for prerendered files', async () => {
-  const mockedApp = {
+  const mockedFastifyInstance = {
     register: jest.fn(),
     get: jest.fn(),
     setNotFoundHandler: jest.fn(),
     log: console,
   } as unknown as FastifyInstance
 
-  await withWebServer(mockedApp)
+  await withWebServer(mockedFastifyInstance)
 
-  expect(mockedApp.get).toHaveBeenCalledWith('/about', expect.anything())
-  expect(mockedApp.get).toHaveBeenCalledWith('/mocked', expect.anything())
-  expect(mockedApp.get).toHaveBeenCalledWith('/posts/new', expect.anything())
+  expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
+    '/about',
+    expect.anything()
+  )
+  expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
+    '/mocked',
+    expect.anything()
+  )
+  expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
+    '/posts/new',
+    expect.anything()
+  )
 
   // Ignore index.html
-  expect(mockedApp.get).not.toHaveBeenCalledWith('/index', expect.anything())
+  expect(mockedFastifyInstance.get).not.toHaveBeenCalledWith(
+    '/index',
+    expect.anything()
+  )
 })
 
 test('Adds SPA fallback', async () => {
-  const mockedApp = {
+  const mockedFastifyInstance = {
     register: jest.fn(),
     get: jest.fn(),
     setNotFoundHandler: jest.fn(),
     log: console,
   } as unknown as FastifyInstance
 
-  await withWebServer(mockedApp)
+  await withWebServer(mockedFastifyInstance)
 
-  expect(mockedApp.setNotFoundHandler).toHaveBeenCalled()
+  expect(mockedFastifyInstance.setNotFoundHandler).toHaveBeenCalled()
 })
+
+test('Checks that a default configureFastifyForSide hook is called for the web side', async () => {
+  const mockedFastifyInstance = {
+    register: jest.fn(),
+    get: jest.fn(),
+    setNotFoundHandler: jest.fn(),
+    log: console,
+  } as unknown as FastifyInstance
+
+  await withWebServer(mockedFastifyInstance) // ?
+  const log = mockedFastifyInstance['log']['_buffer']
+
+  const messages = log.map((item) => item['message'])
+
+  expect(messages).toContain(
+    "{ side: 'web' } In configureFastifyForSide hook for side: web"
+  )
+})
+
+// TODO: test with a fixture app that has an actual custom config

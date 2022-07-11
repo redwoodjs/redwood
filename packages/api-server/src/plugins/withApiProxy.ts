@@ -2,7 +2,7 @@ import httpProxy, { FastifyHttpProxyOptions } from '@fastify/http-proxy'
 import { FastifyInstance } from 'fastify'
 
 import { loadFastifyConfig } from '../fastify'
-interface ApiProxyOptions {
+export interface ApiProxyOptions {
   apiUrl: string
   apiHost: string
 }
@@ -20,7 +20,11 @@ const withApiProxy = async (
   fastify.register(httpProxy, proxyOpts)
 
   const { configureFastifyForSide } = loadFastifyConfig()
-  fastify = await configureFastifyForSide(fastify, { side: 'proxy' })
+  fastify = await configureFastifyForSide(fastify, {
+    side: 'proxy',
+    apiUrl,
+    apiHost,
+  })
 
   return fastify
 }

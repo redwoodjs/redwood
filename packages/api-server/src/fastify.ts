@@ -9,6 +9,8 @@ import { getConfig, getPaths } from '@redwoodjs/internal'
 export type FastifySideConfigFnOptions = {
   side: SupportedSides
   apiRootPath?: string
+  apiUrl?: string
+  apiHost?: string
 } & Record<string, any>
 
 export type SupportedSides = 'api' | 'web' | 'proxy'
