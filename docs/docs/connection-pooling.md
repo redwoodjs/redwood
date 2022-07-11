@@ -13,6 +13,15 @@ description: Scale your serverless functions
 > If you have any questions, just ask for help! We're active on the [forums](https://community.redwoodjs.com/c/contributing/9) and on [discord](https://discord.com/channels/679514959968993311/747258086569541703).
 
 Production Redwood apps should enable connection pooling in order to properly scale with your Serverless functions.
+
+## Connection pooling with the Prisma Data Platform
+
+The Prisma Data Proxy provides database connection management and pooling for Redwood apps using Prisma. It supports MySQL and Postgres databases in either the U.S. or EU regions. 
+
+To set up a Prisma Data Proxy, sign up for the Prisma Data Platform for free. In your onboarding workflow, plug in the connection URL for your database and choose your region. This will generate a connection string for your app. Then follow the instructions in [Prisma's documentation](https://www.prisma.io/docs/concepts/data-platform/data-proxy). 
+
+> Note that the example uses npm. Rather than using npm, You can access the Prisma CLI using `yarn redwood prisma` inside a Redwood app.
+
 ## Prisma Pooling with PgBouncer
 
 PgBouncer holds a connection pool to the database and proxies incoming client connections by sitting between Prisma Client and the database. This reduces the number of processes a database has to handle at any given time. PgBouncer passes on a limited number of connections to the database and queues additional connections for delivery when space becomes available.

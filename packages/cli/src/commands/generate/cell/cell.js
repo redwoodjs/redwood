@@ -2,7 +2,7 @@ import pascalcase from 'pascalcase'
 
 import { generate as generateTypes } from '@redwoodjs/internal'
 
-import { transformTSToJS } from '../../../lib'
+import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { getSchema } from '../../../lib/schemaHelpers'
@@ -14,41 +14,14 @@ import {
   removeGeneratorName,
 } from '../helpers'
 
+import {
+  checkProjectForQueryField,
+  getIdType,
+  uniqueOperationName,
+} from './utils/utils'
+
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
-
-const getCellOperationNames = async () => {
-  const { getProject } = await import('@redwoodjs/structure')
-
-  return getProject()
-    .cells.map((x) => {
-      return x.queryOperationName
-    })
-    .filter(Boolean)
-}
-
-const uniqueOperationName = async (name, { index = 1, list = false }) => {
-  let operationName = pascalcase(
-    index <= 1 ? `find_${name}_query` : `find_${name}_query_${index}`
-  )
-
-  if (list) {
-    operationName =
-      index <= 1
-        ? `${pascalcase(name)}Query`
-        : `${pascalcase(name)}Query_${index}`
-  }
-
-  const cellOperationNames = await getCellOperationNames()
-  if (!cellOperationNames.includes(operationName)) {
-    return operationName
-  }
-  return uniqueOperationName(name, { index: index + 1 })
-}
-
-const getIdType = (model) => {
-  return model.fields.find((field) => field.isId)?.type
-}
 
 export const files = async ({
   name,
@@ -180,11 +153,26 @@ export const { command, description, builder, handler } =
         type: 'boolean',
       },
     },
-    includeAdditionalTasks: () => {
+    includeAdditionalTasks: ({ name: cellName }) => {
       return [
         {
           title: `Generating types ...`,
-          task: generateTypes,
+          task: async (_ctx, task) => {
+            const queryFieldName = nameVariants(
+              removeGeneratorName(cellName, 'cell')
+            ).camelName
+            const projectHasSdl = await checkProjectForQueryField(
+              queryFieldName
+            )
+
+            if (projectHasSdl) {
+              await generateTypes()
+            } else {
+              task.skip(
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
+              )
+            }
+          },
         },
       ]
     },
