@@ -17,6 +17,16 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
+jest.mock('../fastify', () => {
+  return {
+    ...jest.requireActual('../fastify'),
+    loadFastifyConfig: jest.fn().mockReturnValue({
+      config: {},
+      configureFastifyForSide: jest.fn((fastify) => fastify),
+    }),
+  }
+})
+
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
 })
@@ -24,27 +34,29 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-test('Checks that a default configureFastifyForSide hook is called for the api proxy', async () => {
+beforeEach(() => {
+  jest.clearAllMocks()
+})
+
+test('Configures fastify http-proxy plugin correctly', async () => {
   const mockedFastifyInstance = {
     register: jest.fn(),
     get: jest.fn(),
     all: jest.fn(),
     addContentTypeParser: jest.fn(),
     log: console,
-  } as unknown as FastifyInstance
+  }
 
-  await withApiProxy(mockedFastifyInstance, {
+  await withApiProxy(mockedFastifyInstance as unknown as FastifyInstance, {
     apiUrl: 'http://localhost',
-    apiHost: 'host ',
+    apiHost: 'my-api-host',
   })
 
-  const log = mockedFastifyInstance['log']['_buffer']
+  const secondArgument = mockedFastifyInstance.register.mock.calls[0][1]
 
-  const messages = log.map((item) => item['message'])
-
-  expect(messages).toContain(
-    "{ side: 'proxy' } In configureFastifyForSide hook for side: proxy"
-  )
+  expect(secondArgument).toEqual({
+    disableCache: true,
+    prefix: 'http://localhost',
+    upstream: 'my-api-host',
+  })
 })
-
-// TODO: test with a fixture app that has an actual custom config
