@@ -115,13 +115,14 @@ You can configure the Fastify Server used by Redwood, in `api/server.config.js`.
 For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
 
-
 :::info Where do these configurations apply?
  This configuration does **not** apply in a serverless deploy. Typically when you deploy to serverless providers like Netlify or Vercel, your web side is served from a CDN - and your functions are invoked directly - so none of these settings will be applied.
 
  But they do, when you run:
  - `yarn rw dev` (the dev server) - the configuration will be picked up and used for the API side. Note that the web side is served by the Webpack dev server, in development.
  - `yarn rw serve` (serving api and web sides in production mode) - the configuration will be applied to the fastify instance serving static files from `./web/dist` and your api functions in `./api/dist/functions`
+
+ Or if you're running them separately:
  - `yarn rw serve api` (serving just the api side) - configuration will only apply to the fastify instance serving your api side
  - `yarn rw serve web` (serving just the web side) - configuration will only apply to the fastify instance that serves your static files in `./web/dist/`
 :::
