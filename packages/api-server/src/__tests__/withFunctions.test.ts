@@ -3,7 +3,7 @@ import path from 'path'
 import { FastifyInstance, FastifyPluginCallback } from 'fastify'
 
 import { loadFastifyConfig } from '../fastify'
-import * as withFunctionsPlugin from '../plugins/withFunctions'
+import withFunctions from '../plugins/withFunctions'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -21,10 +21,7 @@ jest.mock('@redwoodjs/internal', () => {
 jest.mock('../fastify', () => {
   return {
     ...jest.requireActual('../fastify'),
-    loadFastifyConfig: jest.fn().mockReturnValue({
-      config: {},
-      configureFastifyForSide: jest.fn((fastify) => fastify),
-    }),
+    loadFastifyConfig: jest.fn(),
   }
 })
 
@@ -35,18 +32,18 @@ jest.mock('../plugins/lambdaLoader', () => {
   }
 })
 
-beforeAll(() => {
-  process.env.RWJS_CWD = FIXTURE_PATH
-})
-afterAll(() => {
-  delete process.env.RWJS_CWD
-})
+describe('Checks that configureFastify is called for the api side', () => {
+  beforeAll(() => {
+    process.env.RWJS_CWD = FIXTURE_PATH
+  })
+  afterAll(() => {
+    delete process.env.RWJS_CWD
+  })
 
-beforeEach(() => {
-  jest.clearAllMocks()
-})
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
-describe('Checks that configureFastifyForSide is called for the api side', () => {
   const mockedFastifyInstance = {
     register: jest.fn(),
     get: jest.fn((routeName) => routeName),
@@ -58,57 +55,55 @@ describe('Checks that configureFastifyForSide is called for the api side', () =>
 
   // We're mocking a fake plugin, so don't worry about the type
   const registerCustomPlugin =
-    'I was registered by the custom configureFastifyForSide function' as unknown as FastifyPluginCallback
+    'I was registered by the custom configureFastify function' as unknown as FastifyPluginCallback
 
-  const userFastifyConfig = loadFastifyConfig()
+  // Mock the load fastify config function
+  ;(loadFastifyConfig as jest.Mock).mockReturnValue({
+    config: {},
+    configureFastify: jest.fn((fastify) => {
+      fastify.register(registerCustomPlugin)
 
-  const configureSpy = jest.spyOn(userFastifyConfig, 'configureFastifyForSide')
-  configureSpy.mockImplementation(async (fastify) => {
-    fastify.register(registerCustomPlugin)
-    fastify.get(`/rest/v1/users/get/:userId`, async function (request, reply) {
-      const { userId } = request.params as any
+      fastify.get(
+        `/rest/v1/users/get/:userId`,
+        async function (request, reply) {
+          const { userId } = request.params as any
 
-      return reply.send(`Get User ${userId}!`)
-    })
-    fastify.version = 'bazinga'
-    return fastify
+          return reply.send(`Get User ${userId}!`)
+        }
+      )
+      fastify.version = 'bazinga'
+      return fastify
+    }),
   })
 
-  test('Verify that configureFastifyForSide is called with the expected side and options', async () => {
-    const { default: withFunctions } = withFunctionsPlugin
-
+  it('Verify that configureFastify is called with the expected side and options', async () => {
+    const { configureFastify } = loadFastifyConfig()
     await withFunctions(mockedFastifyInstance, {
       apiRootPath: '/kittens',
       port: 5555,
     })
 
-    expect(configureSpy).toHaveBeenCalledTimes(1)
+    expect(configureFastify).toHaveBeenCalledTimes(1)
 
-    const mockedFastifyInstanceOptions = configureSpy.mock.calls[0][1]
-
-    expect(mockedFastifyInstanceOptions).toStrictEqual({
+    expect(configureFastify).toHaveBeenCalledWith(expect.anything(), {
       side: 'api',
       apiRootPath: '/kittens',
       port: 5555,
     })
   })
 
-  test('Check that configureFastifyForSide registers a plugin', async () => {
-    const { default: withFunctions } = withFunctionsPlugin
-
+  it('Check that configureFastify registers a plugin', async () => {
     await withFunctions(mockedFastifyInstance, {
       apiRootPath: '/kittens',
       port: 5555,
     })
 
     expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
-      'I was registered by the custom configureFastifyForSide function'
+      'I was registered by the custom configureFastify function'
     )
   })
 
-  test('Check that configureFastifyForSide registers a route', async () => {
-    const { default: withFunctions } = withFunctionsPlugin
-
+  it('Check that configureFastify registers a route', async () => {
     await withFunctions(mockedFastifyInstance, {
       apiRootPath: '/boots',
       port: 5554,
@@ -120,14 +115,26 @@ describe('Checks that configureFastifyForSide is called for the api side', () =>
     )
   })
 
-  test('Check that withFunctions returns the same Fastify instance, and not a new one', async () => {
-    const { default: withFunctions } = withFunctionsPlugin
-
+  it('Check that withFunctions returns the same Fastify instance, and not a new one', async () => {
     await withFunctions(mockedFastifyInstance, {
       apiRootPath: '/bazinga',
       port: 5556,
     })
 
     expect(mockedFastifyInstance.version).toBe('bazinga')
+  })
+
+  it('Does not throw when configureFastify is missing from server config', () => {
+    ;(loadFastifyConfig as jest.Mock).mockReturnValue({
+      config: {},
+      configureFastify: null,
+    })
+
+    expect(
+      withFunctions(mockedFastifyInstance, {
+        apiRootPath: '/bazinga',
+        port: 5556,
+      })
+    ).resolves.not.toThrowError()
   })
 })

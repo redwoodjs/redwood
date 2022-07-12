@@ -17,13 +17,13 @@ const DEFAULT_OPTIONS = {
 let isServerConfigLoaded = false
 let serverConfigFile: {
   config: FastifyServerOptions
-  configureFastifyForSide: FastifySideConfigFn
+  configureFastify: FastifySideConfigFn
 } = {
   config: DEFAULT_OPTIONS,
-  configureFastifyForSide: async (fastify, options) => {
+  configureFastify: async (fastify, options) => {
     fastify.log.info(
       options,
-      `In configureFastifyForSide hook for side: ${options?.side}`
+      `In configureFastify hook for side: ${options?.side}`
     )
     return fastify
   },

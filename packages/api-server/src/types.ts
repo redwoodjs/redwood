@@ -21,4 +21,4 @@ export type SupportedSides = 'api' | 'web'
 export type FastifySideConfigFn = (
   fastify: FastifyInstance,
   options?: FastifySideConfigFnOptions
-) => Promise<FastifyInstance>
+) => Promise<FastifyInstance> | void

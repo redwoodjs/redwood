@@ -78,7 +78,7 @@ test('Adds SPA fallback', async () => {
   expect(mockedFastifyInstance.setNotFoundHandler).toHaveBeenCalled()
 })
 
-describe('Checks that configureFastifyForSide is called for the web side', () => {
+describe('Checks that configureFastify is called for the web side', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -97,43 +97,43 @@ describe('Checks that configureFastifyForSide is called for the web side', () =>
   // Mock the load fastify config function
   ;(loadFastifyConfig as jest.Mock).mockReturnValue({
     config: {},
-    configureFastifyForSide: jest.fn((fastify) => {
+    configureFastify: jest.fn((fastify) => {
       fastify.register(fakeFastifyPlugin)
       fastify.version = 'bazinga'
       return fastify
     }),
   })
 
-  test('Check that configureFastifyForSide is called with the expected side and options', async () => {
+  it('Check that configureFastify is called with the expected side and options', async () => {
     await withWebServer(mockedFastifyInstance, { port: 3001 })
 
-    const { configureFastifyForSide } = loadFastifyConfig()
+    const { configureFastify } = loadFastifyConfig()
 
-    expect(configureFastifyForSide).toHaveBeenCalledTimes(1)
+    expect(configureFastify).toHaveBeenCalledTimes(1)
 
     // We don't care about the first argument
-    expect(configureFastifyForSide).toHaveBeenCalledWith(expect.anything(), {
+    expect(configureFastify).toHaveBeenCalledWith(expect.anything(), {
       side: 'web',
       port: 3001,
     })
   })
 
-  test('Check that configureFastifyForSide will register in Fastify a plugin', async () => {
+  it('Check that configureFastify will register in Fastify a plugin', async () => {
     await withWebServer(mockedFastifyInstance, { port: 3001 })
     expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
       'Fake bazinga plugin'
     )
   })
 
-  test('Check that withWebServer returns the same Fastify instance, and not a new one', async () => {
+  it('Check that withWebServer returns the same Fastify instance, and not a new one', async () => {
     await withWebServer(mockedFastifyInstance, { port: 3001 })
     expect(mockedFastifyInstance.version).toBe('bazinga')
   })
 
-  test('When configureFastify is missing from server config, it does not throw', () => {
+  it('When configureFastify is missing from server config, it does not throw', () => {
     ;(loadFastifyConfig as jest.Mock).mockReturnValue({
       config: {},
-      configureFastifyForSide: null,
+      configureFastify: null,
     })
 
     expect(

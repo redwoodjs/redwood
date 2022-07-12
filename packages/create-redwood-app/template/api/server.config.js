@@ -24,7 +24,7 @@ const config = {
 
 /**
  * You can also register Fastify plugins and additional routes for the API and Web sides
- * in the configureFastifyForSide function.
+ * in the configureFastify function.
  *
  * This function has access to the Fastify instance and options, such as the side
  * (web, api, or proxy) that is being configured and other settings like the apiRootPath
@@ -34,7 +34,7 @@ const config = {
  */
 
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
-const configureFastifyForSide = async (fastify, options) => {
+const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
     fastify.log.info({ custom: { options } }, 'Configuring api side')
   }
@@ -52,5 +52,5 @@ const configureFastifyForSide = async (fastify, options) => {
 
 module.exports = {
   config,
-  configureFastifyForSide,
+  configureFastify,
 }

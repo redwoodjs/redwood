@@ -22,22 +22,23 @@ jest.mock('../fastify', () => {
     ...jest.requireActual('../fastify'),
     loadFastifyConfig: jest.fn().mockReturnValue({
       config: {},
-      configureFastifyForSide: jest.fn((fastify) => fastify),
+      configureFastify: jest.fn((fastify) => fastify),
     }),
   }
 })
 
-beforeAll(() => {
-  process.env.RWJS_CWD = FIXTURE_PATH
-})
-afterAll(() => {
-  delete process.env.RWJS_CWD
-})
-
-beforeEach(() => {
-  jest.clearAllMocks()
-})
 describe('Configures the ApiProxy', () => {
+  beforeAll(() => {
+    process.env.RWJS_CWD = FIXTURE_PATH
+  })
+  afterAll(() => {
+    delete process.env.RWJS_CWD
+  })
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   test('Checks that the fastify http-proxy plugin is configured correctly', async () => {
     const mockedFastifyInstance = {
       register: jest.fn(),

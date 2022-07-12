@@ -16,9 +16,11 @@ const withFunctions = async (
   fastify.register(fastifyUrlData)
   fastify.register(fastifyRawBody)
 
-  const { configureFastifyForSide } = loadFastifyConfig()
+  const { configureFastify } = loadFastifyConfig()
 
-  fastify = await configureFastifyForSide(fastify, { side: 'api', ...options })
+  if (configureFastify) {
+    await configureFastify(fastify, { side: 'api', ...options })
+  }
 
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
