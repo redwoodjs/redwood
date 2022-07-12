@@ -177,6 +177,8 @@ Of course, these are just examples and please see the plugin documentaiton for t
 
 :::important
 You will need to install any custom plug-in packages to your project's `api` workspace.
+
+To do this you run `yarn workspace api add @fastify/rate-limit @fastify/compress`
 :::
 
 ```js
