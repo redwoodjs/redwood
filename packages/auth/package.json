@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.23.3"
+    "core-js": "3.23.4"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.1",
@@ -38,7 +38,7 @@
     "@supabase/supabase-js": "1.35.4",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.47",
-    "firebase": "9.8.3",
+    "firebase": "9.8.4",
     "firebase-admin": "10.2.0",
     "gotrue-js": "0.9.29",
     "jest": "27.5.1",
@@ -46,7 +46,7 @@
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
     "supertokens-auth-react": "0.21.3",
-    "typescript": "4.7.3"
+    "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
