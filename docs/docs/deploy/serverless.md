@@ -8,7 +8,7 @@ description: Deploy to AWS with Serverless Framework
 
 Yes, the name is confusing, but Serverless provides a very interesting option—deploy to your own cloud service account and skip the middleman entirely! By default, Serverless just orchestrates starting up services in your cloud provider of choice and pushing your code up to them. Any bill you receive is from your hosting provider (although many offer a generous free tier). You can optionally use the [Serverless Dashboard](https://www.serverless.com/dashboard/) to monitor your deploys and setup CI/CD to automatically deploy when pushing to your repo of choice. If you don't setup CI/CD you actually deploy from your development machine (or another designated machine you've setup to do the deployment).
 
-Currently we default to deploying to AWS. We'd like to add more providers in the future but need help from the community in figuring our what services are equivalent to the ones we're using in AWS (Lambda for the api-side and S3/CloudFront for the web-side).
+Currently we default to deploying to AWS. We'd like to add more providers in the future but need help from the community in figuring out what services are equivalent to the ones we're using in AWS (Lambda for the api-side and S3/CloudFront for the web-side).
 
 We'll handle most of the deployment commands for you, you just need an [AWS account](https://www.serverless.com/framework/docs/providers/aws/guide/credentials#sign-up-for-an-aws-account) and your [access/secret keys](https://www.serverless.com/framework/docs/providers/aws/guide/credentials#create-an-iam-user-and-access-key) before we begin.
 
