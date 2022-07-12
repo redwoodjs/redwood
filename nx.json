@@ -16,7 +16,7 @@
       "{projectRoot}/**/*"
     ],
     "prod": [
-      "!{projectRoot}/**/*.test.tsx"
+      "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}"
     ]
   },
   "targetDefaults": {
