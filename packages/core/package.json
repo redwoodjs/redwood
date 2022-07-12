@@ -62,7 +62,7 @@
     "core-js": "3.23.4",
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "4.0.0",
-    "dotenv-webpack": "7.1.0",
+    "dotenv-webpack": "7.1.1",
     "esbuild": "0.14.49",
     "esbuild-loader": "2.19.0",
     "fast-glob": "3.2.11",

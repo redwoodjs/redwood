@@ -6115,7 +6115,7 @@ __metadata:
     core-js: 3.23.4
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 4.0.0
-    dotenv-webpack: 7.1.0
+    dotenv-webpack: 7.1.1
     esbuild: 0.14.49
     esbuild-loader: 2.19.0
     fast-glob: 3.2.11
@@ -14520,14 +14520,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-webpack@npm:7.1.0":
-  version: 7.1.0
-  resolution: "dotenv-webpack@npm:7.1.0"
+"dotenv-webpack@npm:7.1.1":
+  version: 7.1.1
+  resolution: "dotenv-webpack@npm:7.1.1"
   dependencies:
     dotenv-defaults: ^2.0.2
   peerDependencies:
     webpack: ^4 || ^5
-  checksum: 780bb44aaa400ccad12c47afdab5e2e4c1cba26c92d5092bacbf5233d2d81a578489b5533af9f2dc12dd311b027649ec9ba78317d445650111bdadcd66bd0d23
+  checksum: 49ffff039369c3192acfdf4a5c2d2fce5cef908e7ba56b5eb0dbc2e634eb3541ddba6242df2ed57ca42ab83a71bffd159e0352c8b26f017a8c44d41863995439
   languageName: node
   linkType: hard
 
