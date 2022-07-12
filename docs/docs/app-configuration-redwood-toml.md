@@ -108,7 +108,7 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 | `serverConfig` | Path to the `server.config.js` file | `"./api/server.config.js"` |
 | `target`       | Target for the api side             | `"node"`                   |
 
-## Fastify Server Configuration
+### Configure Fastify
 
 You can configure the Fastify Server used by Redwood, in `api/server.config.js`.
 
@@ -134,9 +134,9 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
-### Register Custom Fastify Plug-ins and Routes
+### Register Custom Fastify Plug-ins
 
-You can also register Fastify plugins and additional routes for the API and Web sides in the `configureFastify` function.
+You can also register Fastify plugins for the API and Web sides in the `configureFastify` function.
 
 This function has access to the Fastify instance and options, such as the side (web or api) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
 
@@ -159,7 +159,7 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
-### How to Configure a Fastify Plug-in for the API Side
+##### How to Configure a Fastify Plug-in for the API Side
 
 Suppose you want to compress payloads and also rate limit your RedwoodJS api.
 
@@ -208,7 +208,7 @@ const configureFastify = async (fastify, options) => {
 You will need to install any custom plug-in packages to your project's `api` workspace.
 :::
 
-### How to Configure a Fastify Plug-in for the Web Side
+##### How to Configure a Fastify Plug-in for the Web Side
 
 If you are running your web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
 
@@ -238,7 +238,7 @@ This may seem counter-intuitive, since you are configuring the `web` side, but t
 :::
 
 
-### Troubleshooting Custom Fastify Configuration
+#### Troubleshooting Custom Fastify Configuration
 
 There are a few important considerations to be made when configuring Fastify.
 
