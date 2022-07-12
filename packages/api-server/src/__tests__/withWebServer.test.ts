@@ -24,10 +24,7 @@ jest.mock('@redwoodjs/internal', () => {
 jest.mock('../fastify', () => {
   return {
     ...jest.requireActual('../fastify'),
-    loadFastifyConfig: jest.fn().mockReturnValue({
-      config: {},
-      configureFastifyForSide: jest.fn((fastify) => fastify),
-    }),
+    loadFastifyConfig: jest.fn(),
   }
 })
 
@@ -36,10 +33,6 @@ beforeAll(() => {
 })
 afterAll(() => {
   delete process.env.RWJS_CWD
-})
-
-beforeEach(() => {
-  jest.clearAllMocks()
 })
 
 test('Attach handlers for prerendered files', async () => {
@@ -86,6 +79,10 @@ test('Adds SPA fallback', async () => {
 })
 
 describe('Checks that configureFastifyForSide is called for the web side', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   const mockedFastifyInstance = {
     register: jest.fn(),
     get: jest.fn(),
@@ -97,22 +94,25 @@ describe('Checks that configureFastifyForSide is called for the web side', () =>
   const fakeFastifyPlugin =
     'Fake bazinga plugin' as unknown as FastifyPluginCallback
 
-  const userFastifyConfig = loadFastifyConfig()
-
-  const configureSpy = jest.spyOn(userFastifyConfig, 'configureFastifyForSide')
-  configureSpy.mockImplementation(async (fastify) => {
-    fastify.register(fakeFastifyPlugin)
-    fastify.version = 'bazinga'
-    return fastify
+  // Mock the load fastify config function
+  ;(loadFastifyConfig as jest.Mock).mockReturnValue({
+    config: {},
+    configureFastifyForSide: jest.fn((fastify) => {
+      fastify.register(fakeFastifyPlugin)
+      fastify.version = 'bazinga'
+      return fastify
+    }),
   })
 
   test('Check that configureFastifyForSide is called with the expected side and options', async () => {
     await withWebServer(mockedFastifyInstance, { port: 3001 })
-    expect(configureSpy).toHaveBeenCalledTimes(1)
 
-    const mockedFastifyInstanceOptions = configureSpy.mock.calls[0][1]
+    const { configureFastifyForSide } = loadFastifyConfig()
 
-    expect(mockedFastifyInstanceOptions).toStrictEqual({
+    expect(configureFastifyForSide).toHaveBeenCalledTimes(1)
+
+    // We don't care about the first argument
+    expect(configureFastifyForSide).toHaveBeenCalledWith(expect.anything(), {
       side: 'web',
       port: 3001,
     })
@@ -128,5 +128,16 @@ describe('Checks that configureFastifyForSide is called for the web side', () =>
   test('Check that withWebServer returns the same Fastify instance, and not a new one', async () => {
     await withWebServer(mockedFastifyInstance, { port: 3001 })
     expect(mockedFastifyInstance.version).toBe('bazinga')
+  })
+
+  test('When configureFastify is missing from server config, it does not throw', () => {
+    ;(loadFastifyConfig as jest.Mock).mockReturnValue({
+      config: {},
+      configureFastifyForSide: null,
+    })
+
+    expect(
+      withWebServer(mockedFastifyInstance, { port: 3001 })
+    ).resolves.not.toThrowError()
   })
 })
