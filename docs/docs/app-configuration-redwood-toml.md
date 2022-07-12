@@ -136,7 +136,7 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
 
 ### Register Custom Fastify Plug-ins and Routes
 
-You can also register Fastify plugins and additional routes for the API and Web sides in the `configureFastifyForSide` function.
+You can also register Fastify plugins and additional routes for the API and Web sides in the `configureFastify` function.
 
 This function has access to the Fastify instance and options, such as the sid (web, api, or proxy) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
 
@@ -146,7 +146,7 @@ This function has access to the Fastify instance and options, such as the sid (w
 
 ```js
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
-const configureFastifyForSide = async (fastify, options) => {
+const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
     fastify.log.info({ custom: { options } }, 'Configuring api side')
   }
@@ -181,7 +181,7 @@ You will need to install any custom plug-in packages to your project's `api` wor
 
 ```js
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
-const configureFastifyForSide = async (fastify, options) => {
+const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
     fastify.log.info({ custom: { options } }, 'Configuring api side')
 
@@ -197,32 +197,6 @@ const configureFastifyForSide = async (fastify, options) => {
     })
   }
 
-
-  return fastify
-}
-```
-
-### How to Configure a Fastify Route for the API Side
-
-Perhaps you want a custom api route?
-
-Since you have access to the `fastify` instance, you can quickly add a `get` route.
-
-If you need access to the `apiRootPath` (e.g., `.redwood/functions`), it is available in `options.apiRootPath`.
-
-```js
-/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
-const configureFastifyForSide = async (fastify, options) => {
-  if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
-
-
-    fastify.get(`/rest/v1/users/get/:userId`, async function (request, reply) {
-      const { userId } = request.params
-
-      return reply.send(`Get User ${userId}!`)
-    })
-  }
 
   return fastify
 }
@@ -244,7 +218,7 @@ If you run `yarn rw serve` because the same Fastify instance handles the api and
 
 ```js
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
-const configureFastifyForSide = async (fastify, options) => {
+const configureFastify = async (fastify, options) => {
   if (options.side === 'web') {
     fastify.log.info({ custom: { options } }, 'Configuring web side')
 
