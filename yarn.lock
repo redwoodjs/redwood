@@ -6017,7 +6017,7 @@ __metadata:
     core-js: 3.23.4
     cross-env: 7.0.3
     decamelize: 5.0.0
-    dotenv-defaults: 5.0.0
+    dotenv-defaults: 5.0.2
     envinfo: 7.8.1
     execa: 5.1.1
     fast-glob: 3.2.11
@@ -6385,7 +6385,7 @@ __metadata:
     camelcase: 6.3.0
     core-js: 3.23.4
     deepmerge: 4.2.2
-    dotenv-defaults: 5.0.0
+    dotenv-defaults: 5.0.2
     enquirer: 2.3.6
     findup-sync: 5.0.0
     graphql: 16.5.0
@@ -14495,12 +14495,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-defaults@npm:5.0.0":
-  version: 5.0.0
-  resolution: "dotenv-defaults@npm:5.0.0"
+"dotenv-defaults@npm:5.0.2":
+  version: 5.0.2
+  resolution: "dotenv-defaults@npm:5.0.2"
   dependencies:
     dotenv: ^14.0.0
-  checksum: 4029be6d1623753b3209040d96a49faf5b750587b658c151545a318e763489e2d3cfade4b5f6c5240f5ea01facae50af01cb5fe721ed470b5e99afe5fc934652
+  checksum: 89fe77f8d97a183c701307dde7d328a973271b8ce04af3a48928250cd707a9f324b04a672a2ceb770db117a7724995c48e93edc438b3c9ce1207a67adee77098
   languageName: node
   linkType: hard
 
