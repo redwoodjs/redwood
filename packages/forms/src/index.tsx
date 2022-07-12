@@ -58,7 +58,7 @@ import {
   UseFormProps,
 } from 'react-hook-form'
 
-import FormError, { RWGqlError } from './FormError'
+import FormError from './FormError'
 
 /**
  * We slightly extend `react-hook-form`'s `RegisterOptions` to make working with GraphQL easier.
