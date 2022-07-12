@@ -46,10 +46,10 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-test('Checks that a default configureFastifyForSide hook is called for the api side', async () => {
+describe('Checks that configureFastifyForSide is called for the api side', () => {
   const mockedFastifyInstance = {
     register: jest.fn(),
-    get: jest.fn(),
+    get: jest.fn((routeName) => routeName),
     all: jest.fn(),
     addContentTypeParser: jest.fn(),
     setNotFoundHandler: jest.fn(),
@@ -57,38 +57,77 @@ test('Checks that a default configureFastifyForSide hook is called for the api s
   } as unknown as FastifyInstance
 
   // We're mocking a fake plugin, so don't worry about the type
-  const fakeFastifyPlugin =
-    'Fake bazinga plugin' as unknown as FastifyPluginCallback
+  const registerCustomPlugin =
+    'I was registered by the custom configureFastifyForSide function' as unknown as FastifyPluginCallback
 
   const userFastifyConfig = loadFastifyConfig()
 
   const configureSpy = jest.spyOn(userFastifyConfig, 'configureFastifyForSide')
   configureSpy.mockImplementation(async (fastify) => {
-    fastify.register(fakeFastifyPlugin)
+    fastify.register(registerCustomPlugin)
+    fastify.get(`/rest/v1/users/get/:userId`, async function (request, reply) {
+      const { userId } = request.params as any
+
+      return reply.send(`Get User ${userId}!`)
+    })
     fastify.version = 'bazinga'
     return fastify
   })
 
-  const { default: withFunctions } = withFunctionsPlugin
+  test('Verify that configureFastifyForSide is called with the expected side and options', async () => {
+    const { default: withFunctions } = withFunctionsPlugin
 
-  await withFunctions(mockedFastifyInstance, {
-    apiRootPath: '/kittens',
-    port: 5555,
+    await withFunctions(mockedFastifyInstance, {
+      apiRootPath: '/kittens',
+      port: 5555,
+    })
+
+    expect(configureSpy).toHaveBeenCalledTimes(1)
+
+    const mockedFastifyInstanceOptions = configureSpy.mock.calls[0][1]
+
+    expect(mockedFastifyInstanceOptions).toStrictEqual({
+      side: 'api',
+      apiRootPath: '/kittens',
+      port: 5555,
+    })
   })
 
-  expect(configureSpy).toHaveBeenCalledTimes(1)
+  test('Check that configureFastifyForSide registers a plugin', async () => {
+    const { default: withFunctions } = withFunctionsPlugin
 
-  const secondArgument = configureSpy.mock.calls[0][1]
-  expect(secondArgument).toStrictEqual({
-    side: 'api',
-    apiRootPath: '/kittens',
-    port: 5555,
+    await withFunctions(mockedFastifyInstance, {
+      apiRootPath: '/kittens',
+      port: 5555,
+    })
+
+    expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
+      'I was registered by the custom configureFastifyForSide function'
+    )
   })
 
-  expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
-    'Fake bazinga plugin'
-  )
+  test('Check that configureFastifyForSide registers a route', async () => {
+    const { default: withFunctions } = withFunctionsPlugin
 
-  // Check that the same instance is returned, and not a new one
-  expect(mockedFastifyInstance.version).toBe('bazinga')
+    await withFunctions(mockedFastifyInstance, {
+      apiRootPath: '/boots',
+      port: 5554,
+    })
+
+    expect(mockedFastifyInstance.get).toHaveBeenCalledWith(
+      `/rest/v1/users/get/:userId`,
+      expect.any(Function)
+    )
+  })
+
+  test('Check that withFunctions returns the same Fastify instance, and not a new one', async () => {
+    const { default: withFunctions } = withFunctionsPlugin
+
+    await withFunctions(mockedFastifyInstance, {
+      apiRootPath: '/bazinga',
+      port: 5556,
+    })
+
+    expect(mockedFastifyInstance.version).toBe('bazinga')
+  })
 })

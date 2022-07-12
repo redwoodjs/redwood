@@ -37,26 +37,28 @@ afterAll(() => {
 beforeEach(() => {
   jest.clearAllMocks()
 })
+describe('Configures the ApiProxy', () => {
+  test('Checks that the fastify http-proxy plugin is configured correctly', async () => {
+    const mockedFastifyInstance = {
+      register: jest.fn(),
+      get: jest.fn(),
+      all: jest.fn(),
+      addContentTypeParser: jest.fn(),
+      log: console,
+    }
 
-test('Configures fastify http-proxy plugin correctly', async () => {
-  const mockedFastifyInstance = {
-    register: jest.fn(),
-    get: jest.fn(),
-    all: jest.fn(),
-    addContentTypeParser: jest.fn(),
-    log: console,
-  }
+    await withApiProxy(mockedFastifyInstance as unknown as FastifyInstance, {
+      apiUrl: 'http://localhost',
+      apiHost: 'my-api-host',
+    })
 
-  await withApiProxy(mockedFastifyInstance as unknown as FastifyInstance, {
-    apiUrl: 'http://localhost',
-    apiHost: 'my-api-host',
-  })
+    const mockedFastifyInstanceOptions =
+      mockedFastifyInstance.register.mock.calls[0][1]
 
-  const secondArgument = mockedFastifyInstance.register.mock.calls[0][1]
-
-  expect(secondArgument).toEqual({
-    disableCache: true,
-    prefix: 'http://localhost',
-    upstream: 'my-api-host',
+    expect(mockedFastifyInstanceOptions).toEqual({
+      disableCache: true,
+      prefix: 'http://localhost',
+      upstream: 'my-api-host',
+    })
   })
 })

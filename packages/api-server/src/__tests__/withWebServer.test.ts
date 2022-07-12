@@ -85,7 +85,7 @@ test('Adds SPA fallback', async () => {
   expect(mockedFastifyInstance.setNotFoundHandler).toHaveBeenCalled()
 })
 
-test('Checks that a default configureFastifyForSide hook is called for the web side', async () => {
+describe('Checks that configureFastifyForSide is called for the web side', () => {
   const mockedFastifyInstance = {
     register: jest.fn(),
     get: jest.fn(),
@@ -106,20 +106,27 @@ test('Checks that a default configureFastifyForSide hook is called for the web s
     return fastify
   })
 
-  await withWebServer(mockedFastifyInstance, { port: 3000 })
+  test('Check that configureFastifyForSide is called with the expected side and options', async () => {
+    await withWebServer(mockedFastifyInstance, { port: 3001 })
+    expect(configureSpy).toHaveBeenCalledTimes(1)
 
-  expect(configureSpy).toHaveBeenCalledTimes(1)
+    const mockedFastifyInstanceOptions = configureSpy.mock.calls[0][1]
 
-  const secondArgument = configureSpy.mock.calls[0][1]
-  expect(secondArgument).toStrictEqual({
-    side: 'web',
-    port: 3000,
+    expect(mockedFastifyInstanceOptions).toStrictEqual({
+      side: 'web',
+      port: 3001,
+    })
   })
 
-  expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
-    'Fake bazinga plugin'
-  )
+  test('Check that configureFastifyForSide will register in Fastify a plugin', async () => {
+    await withWebServer(mockedFastifyInstance, { port: 3001 })
+    expect(mockedFastifyInstance.register).toHaveBeenCalledWith(
+      'Fake bazinga plugin'
+    )
+  })
 
-  // Check that the same instance is returned, and not a new one
-  expect(mockedFastifyInstance.version).toBe('bazinga')
+  test('Check that withWebServer returns the same Fastify instance, and not a new one', async () => {
+    await withWebServer(mockedFastifyInstance, { port: 3001 })
+    expect(mockedFastifyInstance.version).toBe('bazinga')
+  })
 })
