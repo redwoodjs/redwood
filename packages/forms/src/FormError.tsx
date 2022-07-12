@@ -12,7 +12,7 @@ export interface ServerError extends Error {
   result: Record<string, any>
 }
 
-export interface RwGqlError {
+export interface RWGqlError {
   message: string
   graphQLErrors: ReadonlyArray<GraphQLError>
   networkError: Error | ServerParseError | ServerError | null
@@ -21,7 +21,7 @@ export interface RwGqlError {
 export type RwGqlErrorProperties = Record<string, Record<string, string[]>>
 
 interface FormErrorProps {
-  error?: RwGqlError
+  error?: RWGqlError
   wrapperClassName?: string
   wrapperStyle?: React.CSSProperties
   titleClassName?: string

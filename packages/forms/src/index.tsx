@@ -58,7 +58,7 @@ import {
   UseFormProps,
 } from 'react-hook-form'
 
-import FormError from './FormError'
+import FormError, { RWGqlError } from './FormError'
 
 /**
  * We slightly extend `react-hook-form`'s `RegisterOptions` to make working with GraphQL easier.
@@ -484,19 +484,20 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-export interface FormProps<TData = Record<string, any>>
+export interface FormProps<TFieldValues>
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
    * The methods returned by `useForm`.
-   * This props's only necessary if you've called `useForm` yourself to get access to one of it's functions, like `reset`.
+   * This prop is only necessary if you've called `useForm` yourself to get
+   * access to one of its functions, like `reset`.
    *
    * @example
    *
-   * ```javascript
-   * const formMethods = useForm()
+   * ```typescript
+   * const formMethods = useForm<FormData>()
    *
-   * const onSubmit = (data) => {
+   * const onSubmit = (data: FormData) => {
    *  sendDataToServer(data)
    *  formMethods.reset()
    * }
@@ -506,7 +507,7 @@ export interface FormProps<TData = Record<string, any>>
    * )
    * ```
    */
-  formMethods?: UseFormReturn
+  formMethods?: UseFormReturn<TFieldValues>
   /**
    * Configures how React Hook Form performs validation, among other things.
    *
@@ -518,47 +519,59 @@ export interface FormProps<TData = Record<string, any>>
    *
    * @see {@link https://react-hook-form.com/api/useform}
    */
-  config?: UseFormProps
-  onSubmit?: (value: TData, event?: React.BaseSyntheticEvent) => void
+  config?: UseFormProps<TFieldValues>
+  onSubmit?: (value: TFieldValues, event?: React.BaseSyntheticEvent) => void
 }
 
 /**
  * Renders a `<form>` with the required context.
  */
-const Form = forwardRef(
-  (
-    {
-      config,
-      error: errorProps,
-      formMethods: propFormMethods,
-      onSubmit,
-      children,
-      ...rest
-    }: FormProps,
-    ref: ForwardedRef<HTMLFormElement>
-  ) => {
-    const hookFormMethods = useForm(config)
-    const formMethods = propFormMethods || hookFormMethods
+function FormInner<TFieldValues>(
+  {
+    config,
+    error: errorProps,
+    formMethods: propFormMethods,
+    onSubmit,
+    children,
+    ...rest
+  }: FormProps<TFieldValues>,
+  ref: ForwardedRef<HTMLFormElement>
+) {
+  const hookFormMethods = useForm<TFieldValues>(config)
+  const formMethods = propFormMethods || hookFormMethods
 
-    return (
-      <form
-        ref={ref}
-        {...rest}
-        onSubmit={formMethods.handleSubmit((data, event) =>
-          onSubmit?.(data, event)
-        )}
+  return (
+    <form
+      ref={ref}
+      {...rest}
+      onSubmit={formMethods.handleSubmit((data, event) =>
+        onSubmit?.(data, event)
+      )}
+    >
+      <ServerErrorsContext.Provider
+        value={
+          errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
+        }
       >
-        <ServerErrorsContext.Provider
-          value={
-            errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
-          }
-        >
-          <FormProvider {...formMethods}>{children}</FormProvider>
-        </ServerErrorsContext.Provider>
-      </form>
-    )
-  }
-)
+        <FormProvider {...formMethods}>{children}</FormProvider>
+      </ServerErrorsContext.Provider>
+    </form>
+  )
+}
+
+// Sorry about the `as` type assertion (type cast) here. Normally I'd redeclare
+// forwardRef to only return a plain function, allowing us to use TypeScript's
+// Higher-order Function Type Inference. But that gives us problems with the
+// ForwardRefExoticComponent type we use for our InputComponents. So instead
+// of changing that type (because it's correct) I use a type assertion here.
+// forwardRef is notoriously difficult to use with UI component libs.
+// Chakra-UI also says:
+// > To be honest, the forwardRef type is quite complex [...] I'd recommend
+// > that you cast the type
+// https://github.com/chakra-ui/chakra-ui/issues/4528#issuecomment-902566185
+const Form = forwardRef(FormInner) as <TFieldValues>(
+  props: FormProps<TFieldValues> & React.RefAttributes<HTMLFormElement>
+) => React.ReactElement | null
 
 export interface LabelProps
   extends Pick<FieldProps, 'errorClassName' | 'errorStyle'>,
@@ -618,7 +631,7 @@ const DEFAULT_MESSAGES = {
  *
  * @example Displaying a validation error message with `<FieldError>`
  *
- * `<FieldError>` doesnt render (i.e. returns `null`) when there's no error on `<TextField>`.
+ * `<FieldError>` doesn't render (i.e. returns `null`) when there's no error on `<TextField>`.
  *
  * ```jsx
  * <Label name="name" errorClassName="error">
@@ -1009,6 +1022,6 @@ export {
   useRegister,
 }
 
-export type { ServerError, RwGqlError, ServerParseError } from './FormError'
+export type { ServerError, RWGqlError, ServerParseError } from './FormError'
 
 export * from 'react-hook-form'
