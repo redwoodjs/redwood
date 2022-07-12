@@ -138,7 +138,7 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
 
 You can also register Fastify plugins and additional routes for the API and Web sides in the `configureFastify` function.
 
-This function has access to the Fastify instance and options, such as the sid (web, api, or proxy) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
+This function has access to the Fastify instance and options, such as the side (web or api) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
 
 :::warning Reminder
  This configuration does not apply in a serverless deploy.
