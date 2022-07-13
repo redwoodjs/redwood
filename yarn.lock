@@ -6175,7 +6175,7 @@ __metadata:
     eslint-plugin-jest-dom: 4.0.2
     eslint-plugin-jsx-a11y: 6.5.1
     eslint-plugin-prettier: 4.0.0
-    eslint-plugin-react: 7.30.0
+    eslint-plugin-react: 7.30.1
     eslint-plugin-react-hooks: 4.5.0
     jest: 27.5.1
     prettier: 2.7.1
@@ -15391,9 +15391,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.30.0":
-  version: 7.30.0
-  resolution: "eslint-plugin-react@npm:7.30.0"
+"eslint-plugin-react@npm:7.30.1":
+  version: 7.30.1
+  resolution: "eslint-plugin-react@npm:7.30.1"
   dependencies:
     array-includes: ^3.1.5
     array.prototype.flatmap: ^1.3.0
@@ -15411,7 +15411,7 @@ __metadata:
     string.prototype.matchall: ^4.0.7
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: c87f17135815a61d7216d5d235549dc334783174aab3296c568a00ccba3b1d1ad9ce000ec630099f8225c27b0eec21433b209063df498351f5ccb72dad53d312
+  checksum: da8189b16723fca914756bc24f76c158fc24c19ba02574081e67d2349db19285747700ec7f6110c2d2f4b427b800f5eef78167f633354fde7895b45179075653
   languageName: node
   linkType: hard
 
