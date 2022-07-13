@@ -103,6 +103,7 @@ describe('Checks that configureFastify is called for the api side', () => {
     )
   })
 
+  // Note: This tests an undocumented use of configureFastify to register a route
   it('Check that configureFastify registers a route', async () => {
     await withFunctions(mockedFastifyInstance, {
       apiRootPath: '/boots',
