@@ -717,6 +717,20 @@ export default ContactPage
 </TabItem>
 </Tabs>
 
+<ShowForTs>
+
+:::tip Reminder about generated types
+
+Just a quick reminder that Redwood will automatically generate types for your GraphQL queries and mutations if you have the dev server running (or if you run `yarn rw generate types`).
+
+Once you define the `CreateContactMutation` (the GraphQL one), Redwood will generate the `CreateContactMutation` and `CreateContactMutationVariables` types from it for you.
+
+Take a look at our [TypeScript](typescript.md) docs for a deeper dive!
+
+:::
+
+</ShowForTs>
+
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
 
 ```js
