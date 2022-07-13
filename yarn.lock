@@ -23365,7 +23365,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-packlist@npm:5.1.1":
+"npm-package-arg@npm:^9.0.0, npm-package-arg@npm:^9.0.1":
+  version: 9.1.0
+  resolution: "npm-package-arg@npm:9.1.0"
+  dependencies:
+    hosted-git-info: ^5.0.0
+    proc-log: ^2.0.1
+    semver: ^7.3.5
+    validate-npm-package-name: ^4.0.0
+  checksum: 1b93350242eaa2cfc9f30ae25a1eb9caf5e2c8436ea3d5e91e322acf354aa6a36168da9cf19c774516e1bce933c2a2fe7902a4cefc2b63b05db6b8f8d6f728e1
+  languageName: node
+  linkType: hard
+
+"npm-packlist@npm:5.1.1, npm-packlist@npm:^5.1.0":
   version: 5.1.1
   resolution: "npm-packlist@npm:5.1.1"
   dependencies:
@@ -25427,7 +25439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proc-log@npm:^2.0.0":
+"proc-log@npm:^2.0.0, proc-log@npm:^2.0.1":
   version: 2.0.1
   resolution: "proc-log@npm:2.0.1"
   checksum: 701c501429775ce34cec28ef6a1c976537274b42917212fb8a5975ebcecb0a85612907fd7f99ff28ff4c2112bb84a0f4322fc9b9e1e52a8562fcbb1d5b3ce608
@@ -27226,6 +27238,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.19
     npm-packlist: 5.1.1
+    nx: 14.4.2
     octokit: 1.7.2
     ora: 5.4.1
     prompts: 2.4.2
