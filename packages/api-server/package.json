@@ -37,7 +37,7 @@
     "chokidar": "3.5.3",
     "core-js": "3.23.4",
     "fast-json-parse": "1.0.3",
-    "fastify": "3.29.0",
+    "fastify": "3.29.1",
     "fastify-raw-body": "3.2.0",
     "lodash.escape": "4.0.1",
     "pretty-bytes": "5.6.0",
