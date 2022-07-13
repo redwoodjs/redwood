@@ -120,9 +120,17 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
       return await client.auth.user()
     },
     restoreAuthState: async () => {
-      await client.auth.getSessionFromUrl()
+      const { data: session } = await client.auth.getSessionFromUrl()
 
-      window.history.replaceState({}, document.title, window.location.pathname)
+      // Modify URL state only if there is a session.
+      // Prevents resetting URL state (like query params) for all other cases.
+      if (session) {
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        )
+      }
 
       return
     },

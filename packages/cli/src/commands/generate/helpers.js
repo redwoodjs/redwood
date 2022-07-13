@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -160,6 +161,11 @@ export const createYargsForComponentGeneration = ({
           description: 'Generate storybook files',
           type: 'boolean',
         })
+        .option('verbose', {
+          description: 'Print all logs',
+          type: 'boolean',
+          default: false,
+        })
 
       // Add in passed in positionals
       Object.entries(positionalsObj).forEach(([option, config]) => {
@@ -192,7 +198,11 @@ export const createYargsForComponentGeneration = ({
             },
             ...includeAdditionalTasks(options),
           ],
-          { collapse: false, exitOnError: true }
+          {
+            collapse: false,
+            exitOnError: true,
+            renderer: options.verbose && VerboseRenderer,
+          }
         )
 
         await tasks.run()

@@ -40,18 +40,18 @@
     "@storybook/react": "6.5.9",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
-    "@testing-library/react-hooks": "8.0.0",
-    "@testing-library/user-event": "14.2.0",
-    "@types/aws-lambda": "8.10.97",
+    "@testing-library/react-hooks": "8.0.1",
+    "@testing-library/user-event": "14.2.1",
+    "@types/aws-lambda": "8.10.101",
     "@types/babel-core": "6.25.7",
     "@types/jest": "27.5.2",
     "@types/node": "16.11.38",
-    "@types/react": "17.0.45",
+    "@types/react": "17.0.47",
     "@types/react-dom": "17.0.17",
     "@types/webpack": "5.28.0",
     "babel-jest": "27.5.1",
     "babel-plugin-inline-react-svg": "2.0.1",
-    "core-js": "3.23.2",
+    "core-js": "3.23.3",
     "jest": "27.5.1",
     "jest-watch-typeahead": "1.1.0",
     "msw": "0.40.2",
@@ -61,7 +61,7 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "typescript": "4.7.3"
+    "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
