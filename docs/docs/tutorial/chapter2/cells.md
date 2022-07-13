@@ -95,9 +95,10 @@ A guideline for when to use cells is if your component needs some data from the 
 <ShowForTs>
 
 :::tip Wait... what are those types?
-Redwood comes with some built-in utility types. In this example we see `CellSuccessProps` and `CellFailureProps`. Read more about them [here](typescript.md)
 
-Notice also the `FindPosts` type imported from `types/graphql`. These types are generated for you automatically - when you have the dev server running - based on the GraphQL query in your Cell. More about generated types [here](typescript.md), and
+Redwood comes with some built-in utility types. You can see two of them in the example above: `CellSuccessProps` and `CellFailureProps`. Read more about them [here](typescript.md).
+
+Also notice the `FindPosts` type imported from `types/graphql`. This and other types are generated for you automatically—when you have the dev server running—based on the GraphQL query in your Cell. More about generated types [here](typescript.md).
 
 :::
 
