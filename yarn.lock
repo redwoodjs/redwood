@@ -6010,7 +6010,7 @@ __metadata:
     "@redwoodjs/telemetry": 2.1.0
     "@types/listr": 0.14.4
     boxen: 5.1.2
-    camelcase: 6.3.0
+    camelcase: 7.0.0
     chalk: 4.1.2
     concurrently: 7.2.2
     configstore: 3.1.5
@@ -6381,7 +6381,7 @@ __metadata:
     "@types/lru-cache": 5.1.1
     "@types/node": 16.11.38
     "@types/vscode": 1.67.0
-    camelcase: 6.3.0
+    camelcase: 7.0.0
     core-js: 3.23.4
     deepmerge: 4.2.2
     dotenv-defaults: 5.0.2
@@ -11869,10 +11869,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase@npm:6.3.0, camelcase@npm:^6.2.0, camelcase@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "camelcase@npm:6.3.0"
-  checksum: 0d701658219bd3116d12da3eab31acddb3f9440790c0792e0d398f0a520a6a4058018e546862b6fba89d7ae990efaeb97da71e1913e9ebf5a8b5621a3d55c710
+"camelcase@npm:7.0.0":
+  version: 7.0.0
+  resolution: "camelcase@npm:7.0.0"
+  checksum: 45dc70f27d99e5e539a483bc7e9d7d37af31067ff8d762e155c56863e8b731dddaab3bbbe89b5db3bafdc0d9efc953a8f24527da9b1e3820650ed6e92e263597
   languageName: node
   linkType: hard
 
@@ -11887,6 +11887,13 @@ __metadata:
   version: 5.3.1
   resolution: "camelcase@npm:5.3.1"
   checksum: 92ff9b443bfe8abb15f2b1513ca182d16126359ad4f955ebc83dc4ddcc4ef3fdd2c078bc223f2673dc223488e75c99b16cc4d056624374b799e6a1555cf61b23
+  languageName: node
+  linkType: hard
+
+"camelcase@npm:^6.2.0, camelcase@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "camelcase@npm:6.3.0"
+  checksum: 0d701658219bd3116d12da3eab31acddb3f9440790c0792e0d398f0a520a6a4058018e546862b6fba89d7ae990efaeb97da71e1913e9ebf5a8b5621a3d55c710
   languageName: node
   linkType: hard
 

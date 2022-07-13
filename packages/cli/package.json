@@ -36,7 +36,7 @@
     "@redwoodjs/structure": "2.1.0",
     "@redwoodjs/telemetry": "2.1.0",
     "boxen": "5.1.2",
-    "camelcase": "6.3.0",
+    "camelcase": "7.0.0",
     "chalk": "4.1.2",
     "concurrently": "7.2.2",
     "configstore": "3.1.5",

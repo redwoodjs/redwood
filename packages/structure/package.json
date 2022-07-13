@@ -34,7 +34,7 @@
     "@prisma/sdk": "3.15.2",
     "@redwoodjs/internal": "2.1.0",
     "@types/line-column": "1.0.0",
-    "camelcase": "6.3.0",
+    "camelcase": "7.0.0",
     "core-js": "3.23.4",
     "deepmerge": "4.2.2",
     "dotenv-defaults": "5.0.2",
