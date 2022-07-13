@@ -1208,5 +1208,5 @@ This might be one of our most frequently asked questions of all time. Here's [To
 Eager to learn more about GraphQL? You will find some recommend resources below:
 
 - [GraphQL.wtf](https://graphql.wtf) publishes one short video per week, covering most aspects of GraphQL!
-- [howtographql.com] is aimed to people looking to learn GraphQL in a practical way, through a set of complete full-stack tutorials.
+- The official GraphQL Yoga (the GraphQL server powering Redwood) [tutorial](https://www.graphql-yoga.com/tutorial/basic/00-introduction) is the best place to get your hands on GraphQL basics.
 - [The official GraphQL documentation](https://graphql.org/learn/) is also a great place to deep dive into the GraphQL language.
