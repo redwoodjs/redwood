@@ -2,7 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { getConfig, getDMMF } = require('@prisma/sdk')
+const { getConfig, getDMMF } = require('@prisma/internals')
 
 const { setContext } = require('@redwoodjs/graphql-server')
 const { getPaths } = require('@redwoodjs/internal/dist/paths')
