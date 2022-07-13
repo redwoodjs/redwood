@@ -6317,7 +6317,7 @@ __metadata:
     "@types/mime-types": 2.1.1
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
-    cheerio: 1.0.0-rc.11
+    cheerio: 1.0.0-rc.12
     core-js: 3.23.4
     cross-undici-fetch: 0.4.11
     jest: 27.5.1
@@ -12157,9 +12157,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cheerio@npm:1.0.0-rc.11":
-  version: 1.0.0-rc.11
-  resolution: "cheerio@npm:1.0.0-rc.11"
+"cheerio@npm:1.0.0-rc.12":
+  version: 1.0.0-rc.12
+  resolution: "cheerio@npm:1.0.0-rc.12"
   dependencies:
     cheerio-select: ^2.1.0
     dom-serializer: ^2.0.0
@@ -12168,8 +12168,7 @@ __metadata:
     htmlparser2: ^8.0.1
     parse5: ^7.0.0
     parse5-htmlparser2-tree-adapter: ^7.0.0
-    tslib: ^2.4.0
-  checksum: ecd160fe0abdffab0d6ad3d1dece3133a193773e6afae5bc3addc3ae28fe1750c40f0042c5d32648b449e03c57ab9d35bafee41d9c4b0a1322117ae8ce556767
+  checksum: c85d2f2461e3f024345b78e0bb16ad8e41492356210470dd1e7d5a91391da9fcf6c0a7cb48a9ba8820330153f0cedb4d0a60c7af15d96ecdb3092299b9d9c0cc
   languageName: node
   linkType: hard
 
