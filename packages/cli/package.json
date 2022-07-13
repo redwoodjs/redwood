@@ -57,7 +57,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.7.1",
-    "prisma": "3.15.2",
+    "prisma": "4.0.0",
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
