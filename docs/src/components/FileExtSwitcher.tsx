@@ -13,6 +13,7 @@ interface Props {
  */
 export default function FileExtSwitcher({ path }: Props) {
   const { tabGroupChoices } = useTabGroupChoice()
+
   const extensionStart = path.lastIndexOf('{')
   const extensions = path.slice(extensionStart + 1, path.length - 1)
   const ts = extensions.split(',')[1]
