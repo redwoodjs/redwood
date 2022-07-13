@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -48,7 +48,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-sdk-node": "3.6.1",
-    "@redwoodjs/auth": "2.0.0",
+    "@redwoodjs/auth": "2.1.0",
     "@types/aws-lambda": "8.10.101",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "8.5.8",
