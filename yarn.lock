@@ -1986,15 +1986,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.9.1":
-  version: 1.9.1
-  resolution: "@clerk/backend-core@npm:1.9.1"
+"@clerk/backend-core@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "@clerk/backend-core@npm:1.13.0"
   dependencies:
-    "@clerk/types": ^2.15.0
+    "@clerk/types": ^2.20.0
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: b31413b54e7edc917d8a1b39b775bf95a57c4dfcce6b60f64f1a1e58a3f87c733d1f5e989f01ce44f57dcbd538eaca1fd4dd77ad39e54bdd4e77a7fa464c6dfb
+  checksum: f01caaa2fcd3c8a7720c6be68d94a1a736ebc1ce4a9e9d4515115baa7f4666e82ecbc47b215c0df7259fdb077b3037ee7fdb823e8fd65a8b58a6bb93ecac3735
   languageName: node
   linkType: hard
 
@@ -2020,12 +2020,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@clerk/clerk-sdk-node@npm:3.6.1"
+"@clerk/clerk-sdk-node@npm:3.8.6":
+  version: 3.8.6
+  resolution: "@clerk/clerk-sdk-node@npm:3.8.6"
   dependencies:
-    "@clerk/backend-core": ^1.9.1
-    "@clerk/types": ^2.15.0
+    "@clerk/backend-core": ^1.13.0
+    "@clerk/types": ^2.20.0
     "@peculiar/webcrypto": ^1.2.3
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
@@ -2035,7 +2035,7 @@ __metadata:
     jwks-rsa: ^2.0.4
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 38d868db10a147d7d5effdb929830d1874dcac7d43015bc56f9868263e917e942e3ab5ef960174c3a92bc998504b0cd9ea807deb11a640aa17f28583e71c08a0
+  checksum: 635685b95f0e82c69afc1871dd5e1ea92fd454d01f09c22d77a071a6bf1760a651e6e048597e549fcbc380ae9a7d7d7604b6365196ccadaf048ad85df635e2c2
   languageName: node
   linkType: hard
 
@@ -2046,7 +2046,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:^2.15.0, @clerk/types@npm:^2.20.0":
+"@clerk/types@npm:^2.20.0":
   version: 2.20.0
   resolution: "@clerk/types@npm:2.20.0"
   checksum: e2c963745d040a5e57a8e2c3bb1e0c5b9f1a34e1a50ce8a0468f51f92a8e9b443e80881a0050a89ca049d9d4869d50dd87526c4c9479c5d378667292d9f565ea
@@ -6100,7 +6100,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@clerk/clerk-sdk-node": 3.6.1
+    "@clerk/clerk-sdk-node": 3.8.6
     "@prisma/client": 3.15.2
     "@redwoodjs/auth": 2.1.0
     "@types/aws-lambda": 8.10.101
@@ -6126,7 +6126,7 @@ __metadata:
     typescript: 4.7.4
     uuid: 8.3.2
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.6.1
+    "@clerk/clerk-sdk-node": 3.8.6
     "@magic-sdk/admin": 1.4.1
     firebase-admin: 10.2.0
   peerDependenciesMeta:
@@ -6154,7 +6154,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@clerk/clerk-js": 3.16.4
-    "@clerk/clerk-sdk-node": 3.6.1
+    "@clerk/clerk-sdk-node": 3.8.6
     "@clerk/types": 2.14.0
     "@nhost/hasura-auth-js": 1.1.14
     "@nhost/nhost-js": 1.1.14
