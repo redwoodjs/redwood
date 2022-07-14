@@ -6633,7 +6633,7 @@ __metadata:
     babel-plugin-inline-react-svg: 2.0.1
     core-js: 3.23.4
     jest: 27.5.1
-    jest-watch-typeahead: 1.1.0
+    jest-watch-typeahead: 2.0.0
     msw: 0.40.2
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
@@ -10189,6 +10189,15 @@ __metadata:
   dependencies:
     type-fest: ^0.21.3
   checksum: da917be01871525a3dfcf925ae2977bc59e8c513d4423368645634bf5d4ceba5401574eb705c1e92b79f7292af5a656f78c5725a4b0e1cec97c4b413705c1d50
+  languageName: node
+  linkType: hard
+
+"ansi-escapes@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "ansi-escapes@npm:5.0.0"
+  dependencies:
+    type-fest: ^1.0.2
+  checksum: f705cc7fbabb981ddf51562cd950792807bccd7260cc3d9478a619dda62bff6634c87ca100f2545ac7aade9b72652c4edad8c7f0d31a0b949b5fa58f33eaf0d0
   languageName: node
   linkType: hard
 
@@ -20441,11 +20450,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-watch-typeahead@npm:1.1.0":
-  version: 1.1.0
-  resolution: "jest-watch-typeahead@npm:1.1.0"
+"jest-watch-typeahead@npm:2.0.0":
+  version: 2.0.0
+  resolution: "jest-watch-typeahead@npm:2.0.0"
   dependencies:
-    ansi-escapes: ^4.3.1
+    ansi-escapes: ^5.0.0
     chalk: ^4.0.0
     jest-regex-util: ^28.0.0
     jest-watcher: ^28.0.0
@@ -20454,7 +20463,7 @@ __metadata:
     strip-ansi: ^7.0.1
   peerDependencies:
     jest: ^27.0.0 || ^28.0.0
-  checksum: d7929332dc43ab76a84d4f90edc589c108e1357d5570bd095563f02e0ec59ae5a9daf555dda94cde010cff7e1e82bcc37f1d54a3b3df87dafd333a664bbc0cef
+  checksum: 53f5278acbb787a80e1392a7319799d63f13670b80d8e150df91b8661b21895d6ccc5b45a1342d69a260441cf203980c7abf4b4c8a9fab750dc0bb1871435ad2
   languageName: node
   linkType: hard
 
@@ -30092,7 +30101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^1.0.1, type-fest@npm:^1.2.1, type-fest@npm:^1.2.2":
+"type-fest@npm:^1.0.1, type-fest@npm:^1.0.2, type-fest@npm:^1.2.1, type-fest@npm:^1.2.2":
   version: 1.4.0
   resolution: "type-fest@npm:1.4.0"
   checksum: a3c0f4ee28ff6ddf800d769eafafcdeab32efa38763c1a1b8daeae681920f6e345d7920bf277245235561d8117dab765cb5f829c76b713b4c9de0998a5397141
