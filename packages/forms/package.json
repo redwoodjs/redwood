@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "1.5.1",
+  "version": "2.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -13,8 +13,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js",
+    "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
@@ -22,9 +23,9 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.22.8",
+    "core-js": "3.23.4",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.31.3"
+    "react-hook-form": "7.33.1"
   },
   "devDependencies": {
     "@babel/cli": "7.16.7",
@@ -32,17 +33,17 @@
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
-    "@testing-library/user-event": "14.2.0",
+    "@testing-library/user-event": "14.2.1",
     "@types/pascalcase": "1.0.1",
-    "@types/react": "17.0.45",
+    "@types/react": "17.0.47",
     "@types/react-dom": "17.0.17",
-    "@types/testing-library__jest-dom": "5.14.3",
+    "@types/testing-library__jest-dom": "5.14.5",
     "graphql": "16.5.0",
     "jest": "27.5.1",
-    "nodemon": "2.0.16",
+    "nodemon": "2.0.19",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "typescript": "4.7.3"
+    "typescript": "4.7.4"
   },
   "peerDependencies": {
     "graphql": "16.5.0",

@@ -72,7 +72,7 @@ type AllowedRoles = string | string[] | undefined
 /**
  * Checks if the currentUser is authenticated (and assigned one of the given roles)
  *
- * @param roles: AllowedRoles - Checks if the currentUser is assigned one of these roles
+ * @param roles: {@link AllowedRoles} - Checks if the currentUser is assigned one of these roles
  *
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
@@ -121,8 +121,8 @@ export const hasRole = (roles: AllowedRoles): boolean => {
  *
  * @returns - If the currentUser is authenticated (and assigned one of the given roles)
  *
- * @throws {AuthenticationError} - If the currentUser is not authenticated
- * @throws {ForbiddenError} - If the currentUser is not allowed due to role permissions
+ * @throws {@link AuthenticationError} - If the currentUser is not authenticated
+ * @throws {@link ForbiddenError} - If the currentUser is not allowed due to role permissions
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */

@@ -9,7 +9,7 @@ export default class Core {
 
   // Set in child class to override DB accessor name. This is the name of the
   // property you would call on an instance of Prisma Client in order the query
-  // a model in your schema. ie. For the call `db.user` the accessorName is
+  // a model in your schema. i.e. For the call `db.user` the accessorName is
   // "user". Not setting this property will use the default camelCase version of
   // the class name itself as the accessor.
   //

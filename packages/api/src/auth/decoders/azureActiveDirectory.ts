@@ -5,7 +5,10 @@ export const azureActiveDirectory = async (
   token: string
 ): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
-    const { AZURE_ACTIVE_DIRECTORY_AUTHORITY } = process.env
+    const {
+      AZURE_ACTIVE_DIRECTORY_AUTHORITY,
+      AZURE_ACTIVE_DIRECTORY_JWT_ISSUER,
+    } = process.env
 
     // Make sure we have required environment variables
     if (!AZURE_ACTIVE_DIRECTORY_AUTHORITY) {
@@ -43,7 +46,10 @@ export const azureActiveDirectory = async (
         })
       },
       {
-        issuer: `${AZURE_ACTIVE_DIRECTORY_AUTHORITY}/v2.0`,
+        //Set via .env variable (Azure AD B2C use case) or assumes using normal AZURE AD issuer
+        issuer: AZURE_ACTIVE_DIRECTORY_JWT_ISSUER
+          ? AZURE_ACTIVE_DIRECTORY_JWT_ISSUER
+          : `${AZURE_ACTIVE_DIRECTORY_AUTHORITY}/v2.0`,
         algorithms: ['RS256'],
       },
       (verifyError, decoded) => {
