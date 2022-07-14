@@ -27,10 +27,10 @@
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.1",
-    "@azure/msal-browser": "2.24.0",
+    "@azure/msal-browser": "2.27.0",
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@clerk/clerk-js": "3.12.0",
+    "@clerk/clerk-js": "3.16.4",
     "@clerk/clerk-sdk-node": "3.6.1",
     "@clerk/types": "2.14.0",
     "@nhost/hasura-auth-js": "1.1.14",
