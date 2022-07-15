@@ -8,8 +8,6 @@ export default function transform(file: FileInfo, api: API) {
   ast
     .find(j.ImportDeclaration, { source: { value: '@clerk/clerk-react' } })
     .forEach((importDeclaration) => {
-      console.log('importDeclaration', importDeclaration)
-
       importDeclaration?.value.specifiers?.forEach((specifier) => {
         if (
           j.ImportSpecifier.check(specifier) &&
@@ -24,7 +22,6 @@ export default function transform(file: FileInfo, api: API) {
 
   // Remove old RW Clerk components
   ast.find(j.VariableDeclaration).forEach((variableDeclaration) => {
-    console.log('variableDeclaration', variableDeclaration)
     if (
       variableDeclaration.value.declarations.find((declaration) => {
         return (
@@ -35,7 +32,6 @@ export default function transform(file: FileInfo, api: API) {
         )
       })
     ) {
-      console.log('found ClerkAuthProvider', variableDeclaration)
       j(variableDeclaration).remove()
     }
   })

@@ -13,8 +13,6 @@ export const handler = () => {
   task('Updating App.{js,tsx}', async () => {
     const rwPaths = getRWPaths()
 
-    console.log('targetPaths', [rwPaths.web.app])
-
     await runTransform({
       transformPath: path.join(__dirname, 'updateForms.js'),
       targetPaths: [rwPaths.web.app],
