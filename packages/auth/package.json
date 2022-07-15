@@ -50,8 +50,8 @@
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "@clerk/clerk-react": "^3.5.0",
-    "@clerk/clerk-sdk-node": "^3.8.0"
+    "@clerk/clerk-react": "3.5.0",
+    "@clerk/clerk-sdk-node": "3.8.6"
   },
   "peerDependenciesMeta": {
     "@clerk/clerk-react": {
