@@ -5030,17 +5030,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:0.6.0":
-  version: 0.6.0
-  resolution: "@nhost/core@npm:0.6.0"
-  dependencies:
-    axios: ^0.27.2
-    js-cookie: ^3.0.1
-    xstate: ^4.31.0
-  checksum: 6e07b98a94856539ec86b3f5889b8c6f7978d89d71996e94da523147cf512dd8cc914faa7a40c26c31fb3da57f9803191036bd735a38d7f19e8dc7cd2edee666
-  languageName: node
-  linkType: hard
-
 "@nhost/core@npm:0.6.5":
   version: 0.6.5
   resolution: "@nhost/core@npm:0.6.5"
@@ -5049,6 +5038,17 @@ __metadata:
     js-cookie: ^3.0.1
     xstate: ^4.31.0
   checksum: b6cfb1e2b7ba3ba1f12b2cf93461d1a6dcb4222099cc948ba9899b47f311577227d2ac4b95aac1cd90331c1920fb0a4a7c156c780f0073c8440d41d86e972ea1
+  languageName: node
+  linkType: hard
+
+"@nhost/core@npm:0.7.4":
+  version: 0.7.4
+  resolution: "@nhost/core@npm:0.7.4"
+  dependencies:
+    axios: ^0.27.2
+    js-cookie: ^3.0.1
+    xstate: ^4.32.1
+  checksum: 7f143c9936d51dce8e0da1f925983cc6094035e8d6c613b3cf5481457dd845abbace7c9d121955345bbba8e2794d4a1d66d73fc78811ac345053263543f2fb0e
   languageName: node
   linkType: hard
 
@@ -5063,38 +5063,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.1.9":
-  version: 1.1.9
-  resolution: "@nhost/hasura-auth-js@npm:1.1.9"
+"@nhost/hasura-auth-js@npm:1.3.3":
+  version: 1.3.3
+  resolution: "@nhost/hasura-auth-js@npm:1.3.3"
   dependencies:
-    "@nhost/core": 0.6.0
+    "@nhost/core": 0.7.4
     jwt-decode: ^3.1.2
-    xstate: ^4.31.0
-  checksum: 2d536cedb1dc400111980f7e93a88917d6ee645b499e970e3c8aaa70c2e4929cc3fcec561aa7d2b7cb0668e74c06d75a5fb56407dec56f63a7fd69a001dda368
+    xstate: ^4.32.1
+  checksum: b726e65733bba4fa7448f81dc7d3b5684c00cdcfcd1e2bca1b1b10b90e40f91284f6ca0f34fb47a42535afb9fb479c98367593932a7730830fdc536fb2267da4
   languageName: node
   linkType: hard
 
-"@nhost/hasura-storage-js@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@nhost/hasura-storage-js@npm:0.2.2"
+"@nhost/hasura-storage-js@npm:0.5.1":
+  version: 0.5.1
+  resolution: "@nhost/hasura-storage-js@npm:0.5.1"
   dependencies:
     axios: ^0.27.2
-  checksum: 1008f311e705027ea1c782915ff126b4b0333f5b8345478e3f35cf0a3eb24dc2dab6fee4056f7b747bf6a48824caa5fe65fae20f0a1218560e2cbf301187ec60
+    xstate: ^4.32.1
+  peerDependencies:
+    "@nhost/core": 0.7.4
+  checksum: bf131521d00b76bef6fb6d2b6350012a2eda63ea8a021ea38e5627e373e44140be47bb6ad4a173fb88a87654c46029c8bd0f0213aeb0d14a2db22b4f806b488d
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.1.14":
-  version: 1.1.14
-  resolution: "@nhost/nhost-js@npm:1.1.14"
+"@nhost/nhost-js@npm:1.4.5":
+  version: 1.4.5
+  resolution: "@nhost/nhost-js@npm:1.4.5"
   dependencies:
-    "@nhost/hasura-auth-js": 1.1.9
-    "@nhost/hasura-storage-js": 0.2.2
+    "@nhost/hasura-auth-js": 1.3.3
+    "@nhost/hasura-storage-js": 0.5.1
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: d1d72dbdab6a18bb3c564a4546b00bcca74bc68a47106e2e7f3058be165c782e4d057fbc3795803dd49c3164b8b316bfb470b75b8a0546dd11ac019483265a16
+  checksum: 6b31e1a94dcb4d72bb2785c263ff8dae2c3204648661336cdf88a91aff196454d649b9daa39c818f1b3f442a3d7cacf58b60b50671c8ea0a02d011f4b044298d
   languageName: node
   linkType: hard
 
@@ -6150,7 +6153,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.8.6
     "@clerk/types": 2.20.0
     "@nhost/hasura-auth-js": 1.1.14
-    "@nhost/nhost-js": 1.1.14
+    "@nhost/nhost-js": 1.4.5
     "@supabase/supabase-js": 1.35.4
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.47
@@ -31943,10 +31946,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xstate@npm:^4.31.0":
-  version: 4.31.0
-  resolution: "xstate@npm:4.31.0"
-  checksum: cbc30cb73425b856d65b06e48e12b986961b6c1b3fd82aea48708786f30fc92c4a45733abcab1bfe9c106a1e041425a9b17679618813b8a48cba7e380a47ed9a
+"xstate@npm:^4.31.0, xstate@npm:^4.32.1":
+  version: 4.32.1
+  resolution: "xstate@npm:4.32.1"
+  checksum: 120ecac3e0310c43dc3a5edb87512cf8bcf81c5ca4ce0f53d50c0508e5fa9ab56ea954e600af908e1bbd1bfe0601a09efbaa0044b80113b5bad4bbb6fb2d4424
   languageName: node
   linkType: hard
 
