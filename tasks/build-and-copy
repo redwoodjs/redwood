@@ -47,15 +47,7 @@ const packagePaths = glob
   .filter((packagePath) => (only ? packagePath.includes(only) : true))
   .filter((packageName) => !packageName.includes('create-redwood-app'))
 
-const buildAllTypes = () =>
-  execa('yarn build:types', {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-    cwd: RW_BASEPATH,
-  })
-
-const build = async ({ packageFolderName, types }) => {
+const build = async ({ packageFolderName }) => {
   const execaOptionsForBase = {
     shell: true,
     stdio: 'inherit',
@@ -66,7 +58,7 @@ const build = async ({ packageFolderName, types }) => {
   await execa(
     'yarn framework lerna run',
     [
-      types ? 'build' : 'build:js',
+      'build',
       '--parallel',
       packageFolderName && `--scope @redwoodjs/${packageFolderName}`,
     ],
@@ -138,15 +130,9 @@ process.on('SIGINT', () => {
 })
 
 const runAsync = async () => {
-  // STEP 1: Run build:types from root of framework
   try {
-    if (!only) {
-      await buildAllTypes()
-    }
-    // STEP 2: Run yarn lerna run build --parallel, ignore types as they've just been built
     await build({
       packageFolderName: only,
-      types: only ? true : false,
     })
 
     await copyDistFiles({
@@ -169,7 +155,7 @@ const runAsync = async () => {
 const onChange = _.debounce(async (packageFolderName) => {
   console.log('[rwt link] Building 📦...', packageFolderName)
   try {
-    await build({ packageFolderName, types: true })
+    await build({ packageFolderName })
     await copyDistFiles({ packageFolderName })
     console.log(
       `\n [rwt link] ${chalk.greenBright.bold(
