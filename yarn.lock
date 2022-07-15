@@ -2305,15 +2305,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/validation-cache@npm:4.3.2, @envelop/validation-cache@npm:^4.0.0":
-  version: 4.3.2
-  resolution: "@envelop/validation-cache@npm:4.3.2"
+"@envelop/validation-cache@npm:4.5.0, @envelop/validation-cache@npm:^4.0.0":
+  version: 4.5.0
+  resolution: "@envelop/validation-cache@npm:4.5.0"
   dependencies:
-    tiny-lru: 7.0.6
+    lru-cache: ^6.0.0
   peerDependencies:
-    "@envelop/core": ^2.3.2
+    "@envelop/core": ^2.4.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: fee24316667e1fb53aae652a5fecce98b5507e20afd97e9609f50db63834f2b29fb24142be616f98d1a8b59ab0cb3a7413659fe3246908b50aaae98128078453
+  checksum: 9e865f227eaa0331fa924555cfbf14df17ca249a431182691cd29092df0241e0b2d2ba3e6626b2382b7de3a5970bc596a709c91c548e893b79f35be433e75b9f
   languageName: node
   linkType: hard
 
@@ -6344,7 +6344,7 @@ __metadata:
     "@envelop/parser-cache": 4.3.2
     "@envelop/testing": 4.4.0
     "@envelop/types": 2.0.0
-    "@envelop/validation-cache": 4.3.2
+    "@envelop/validation-cache": 4.5.0
     "@graphql-tools/merge": 8.3.0
     "@graphql-tools/schema": 8.5.0
     "@graphql-tools/utils": 8.8.0
