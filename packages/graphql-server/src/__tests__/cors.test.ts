@@ -52,12 +52,18 @@ jest.mock('../directives/makeDirectives', () => {
   }
 })
 
+interface MockLambdaParams {
+  headers?: { [key: string]: string }
+  body?: string | null
+  httpMethod: string
+}
+
 const mockLambdaEvent = ({
   headers,
   body = null,
   httpMethod,
   ...others
-}): APIGatewayProxyEvent => {
+}: MockLambdaParams): APIGatewayProxyEvent => {
   return {
     headers,
     body,
@@ -188,7 +194,7 @@ describe('CORS', () => {
     expect(responeHeaderKeys).not.toContain('access-control-allow-credentials')
   })
 
-  it('Returns the requestOrigin when moore than one origin supplied in config', async () => {
+  it('Returns the requestOrigin when more than one origin supplied in config', async () => {
     const handler = createGraphQLHandler({
       loggerConfig: { logger: createLogger({}), options: {} },
       sdls: {},

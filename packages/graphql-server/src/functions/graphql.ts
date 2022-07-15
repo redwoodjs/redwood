@@ -282,6 +282,8 @@ export const createGraphQLHandler = ({
         event,
         requestContext: lambdaContext,
       })
+
+      // @WARN - multivalue headers aren't supported on all deployment targets correctly
       const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
       for (const [key, value] of response.headers) {
         multiValueHeaders[key] = multiValueHeaders[key] || []
