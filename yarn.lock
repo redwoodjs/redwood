@@ -2261,13 +2261,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:3.3.2":
-  version: 3.3.2
-  resolution: "@envelop/filter-operation-type@npm:3.3.2"
+"@envelop/filter-operation-type@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@envelop/filter-operation-type@npm:3.4.0"
   peerDependencies:
-    "@envelop/core": ^2.3.2
+    "@envelop/core": ^2.4.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: b81ec400358d6d02214a93adb0b57c3e19599e9bbf7d2bdc94dfa61daa9201986c40982fb58218b811832eebaeaf3ebef22f8e821b87f54a8db4cb5cb99b0ce5
+  checksum: ae819355a671694623ec9e1d5c01676870d3b22a66236ae7e9d5724bc23683b5da0004387110658b81500e1f18356b94f70abfe34e2548e9661a7035dcacabb4
   languageName: node
   linkType: hard
 
@@ -6108,7 +6108,7 @@ __metadata:
     magic-sdk: 8.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.21.3
+    supertokens-auth-react: 0.24.1
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -6340,7 +6340,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@envelop/depth-limit": 1.6.0
     "@envelop/disable-introspection": 3.3.3
-    "@envelop/filter-operation-type": 3.3.2
+    "@envelop/filter-operation-type": 3.4.0
     "@envelop/parser-cache": 4.3.2
     "@envelop/testing": 4.4.0
     "@envelop/types": 2.0.0
@@ -19561,7 +19561,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-string@npm:^1.0.4, is-string@npm:^1.0.5, is-string@npm:^1.0.7":
+"is-string@npm:^1.0.5, is-string@npm:^1.0.7":
   version: 1.0.7
   resolution: "is-string@npm:1.0.7"
   dependencies:
@@ -22739,21 +22739,6 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 46ea0f3ffa8bc6a5bc0c7081ffc3907777f0ed6516888d40a518c5111f8366d97d2678911ad1a6882bf592fa9de6c784fea32e1687bb94e1f4944170af48a5cf
-  languageName: node
-  linkType: hard
-
-"mocha-multi@npm:1.1.6":
-  version: 1.1.6
-  resolution: "mocha-multi@npm:1.1.6"
-  dependencies:
-    debug: ^4.1.1
-    is-string: ^1.0.4
-    lodash.once: ^4.1.1
-    mkdirp: ^1.0.4
-    object-assign: ^4.1.1
-  peerDependencies:
-    mocha: ">=2.2.0 <7 || ^9"
-  checksum: 680d56fc20a974c5d54b0887935cef0cafcca1269de0bd24506f35743dada71784ee92cb947bc08d20a1b62313e03d6394870642fa40eeb4df0c5ab6a3680cdd
   languageName: node
   linkType: hard
 
@@ -26164,9 +26149,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-shadow@npm:19.0.2":
-  version: 19.0.2
-  resolution: "react-shadow@npm:19.0.2"
+"react-shadow@npm:19.0.3":
+  version: 19.0.3
+  resolution: "react-shadow@npm:19.0.3"
   dependencies:
     humps: ^2.0.1
     react-use: ^15.3.3
@@ -26174,7 +26159,7 @@ __metadata:
     prop-types: ^15.0.0
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.0.0 || ^17.0.0
-  checksum: 9ea8b2950192d992702e020dffce87d1994abc5db18d02969f010417d2452a816397e697fc0b7a20125e1a4e4373330159a2d901b1828e88687d80bb67279899
+  checksum: 96579ca61ddcd7d005be86f09d93236fdbd33a53b5980909cfb706ee8cad3c5af3ef681385d1b4e45d27c768b1406e275e6a722573e6c93191abe5a05e37ec70
   languageName: node
   linkType: hard
 
@@ -28974,40 +28959,49 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.21.3":
-  version: 0.21.3
-  resolution: "supertokens-auth-react@npm:0.21.3"
+"supertokens-auth-react@npm:0.24.1":
+  version: 0.24.1
+  resolution: "supertokens-auth-react@npm:0.24.1"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: 2.1.2
     libphonenumber-js: 1.9.43
-    mocha-multi: 1.1.6
     prop-types: "*"
     react-phone-number-input: 3.1.41
     react-select: 5.2.1
-    react-shadow: 19.0.2
+    react-shadow: 19.0.3
     supertokens-js-override: ^0.0.4
-    supertokens-website: ^11.0.1
+    supertokens-web-js: ^0.1.2
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 1bb0cfcc4ab94f67a470c25c467bdf4f9ba98efe1f9beb0760ddc91bf216cf846c6d5963814f7f7e35aa93e35e78cb5b4bff13c6081288418452139605623734
+  checksum: fd50c12b999ae06b66fe88b9e58ca414964b128550bb7a62674f2423e83e2d8bcafa666854d3bab20f2c051472c8b2c14a1d1d9845ac565eb05cc7d079d355c1
   languageName: node
   linkType: hard
 
-"supertokens-js-override@npm:^0.0.4":
+"supertokens-js-override@npm:0.0.4, supertokens-js-override@npm:^0.0.4":
   version: 0.0.4
   resolution: "supertokens-js-override@npm:0.0.4"
   checksum: 75468560e2f9fa0386e38d22f80aea705342f728db877b069623d3cfe070d85977b257508a2c8d3c6439280bfd6f1c7448ba8ac312b9abba6c8927428330028e
   languageName: node
   linkType: hard
 
-"supertokens-website@npm:^11.0.1":
-  version: 11.0.1
-  resolution: "supertokens-website@npm:11.0.1"
+"supertokens-web-js@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "supertokens-web-js@npm:0.1.2"
+  dependencies:
+    supertokens-js-override: 0.0.4
+    supertokens-website: ^13.0.0
+  checksum: 574779f2a818c7c03284661e6605526ac7bb43f11df5cd4ff4f7621805a16d21f6e9e454912579cc2aaa2e6f2f4ccb05757477eec6e6a8dc012ac3d14bca4155
+  languageName: node
+  linkType: hard
+
+"supertokens-website@npm:^13.0.0":
+  version: 13.0.1
+  resolution: "supertokens-website@npm:13.0.1"
   dependencies:
     browser-tabs-lock: ^1.2.14
     supertokens-js-override: ^0.0.4
-  checksum: e1380a6025dac37a68ac388a63418f9d80ec97026dd472582f149b0b1198a5511bb2d2e1ef764b71981170865e83a1bbd62166e9813d8c85e7adfa381b257658
+  checksum: d6f4001dec0f86d3848d0a2e050f2ab39fa5dc263abff052e901f388c6262715a1bddef00bce33791df5ef05e7e43ed9b5e6c9fc3c2f651f6282b4770d2c567e
   languageName: node
   linkType: hard
 
