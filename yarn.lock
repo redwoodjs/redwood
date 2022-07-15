@@ -1906,7 +1906,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.18.6
   resolution: "@babel/runtime@npm:7.18.6"
   dependencies:
@@ -2284,15 +2284,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:4.3.2, @envelop/parser-cache@npm:^4.0.0":
-  version: 4.3.2
-  resolution: "@envelop/parser-cache@npm:4.3.2"
+"@envelop/parser-cache@npm:4.5.0, @envelop/parser-cache@npm:^4.0.0":
+  version: 4.5.0
+  resolution: "@envelop/parser-cache@npm:4.5.0"
   dependencies:
-    tiny-lru: 7.0.6
+    lru-cache: ^6.0.0
   peerDependencies:
-    "@envelop/core": ^2.3.2
+    "@envelop/core": ^2.4.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: c699572a7089e24237dfabb87e03cb55190c1bd24787badb6c2b58cbc589df88d60b4f0c23bb6177f18f93300afe3c717117be0bc8d415277dee0577bfb47257
+  checksum: 5e66cfa4042f5924740aea92154aeef4d9113077978a94daa7d5f90f9aef263f140b74e592d610e525744f061e63370f90a8de7f9a85da517223a38ed266c27b
   languageName: node
   linkType: hard
 
@@ -2318,15 +2318,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/validation-cache@npm:4.3.2, @envelop/validation-cache@npm:^4.0.0":
-  version: 4.3.2
-  resolution: "@envelop/validation-cache@npm:4.3.2"
+"@envelop/validation-cache@npm:4.5.0, @envelop/validation-cache@npm:^4.0.0":
+  version: 4.5.0
+  resolution: "@envelop/validation-cache@npm:4.5.0"
   dependencies:
-    tiny-lru: 7.0.6
+    lru-cache: ^6.0.0
   peerDependencies:
-    "@envelop/core": ^2.3.2
+    "@envelop/core": ^2.4.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: fee24316667e1fb53aae652a5fecce98b5507e20afd97e9609f50db63834f2b29fb24142be616f98d1a8b59ab0cb3a7413659fe3246908b50aaae98128078453
+  checksum: 9e865f227eaa0331fa924555cfbf14df17ca249a431182691cd29092df0241e0b2d2ba3e6626b2382b7de3a5970bc596a709c91c548e893b79f35be433e75b9f
   languageName: node
   linkType: hard
 
@@ -5019,6 +5019,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nhost/core@npm:0.7.5":
+  version: 0.7.5
+  resolution: "@nhost/core@npm:0.7.5"
+  dependencies:
+    axios: ^0.27.2
+    js-cookie: ^3.0.1
+    xstate: ^4.32.1
+  checksum: 0be0d8f3e52a5b387b61479e5ccee4753c65b8df5d507ed8b4c859e15cc2098a5dbfbe78f2166a58966c5863b97f402c395e29fde7dfcefae583fd5b1ff4255e
+  languageName: node
+  linkType: hard
+
 "@nhost/hasura-auth-js@npm:1.3.3":
   version: 1.3.3
   resolution: "@nhost/hasura-auth-js@npm:1.3.3"
@@ -5030,30 +5041,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-storage-js@npm:0.5.1":
-  version: 0.5.1
-  resolution: "@nhost/hasura-storage-js@npm:0.5.1"
+"@nhost/hasura-auth-js@npm:1.3.4":
+  version: 1.3.4
+  resolution: "@nhost/hasura-auth-js@npm:1.3.4"
+  dependencies:
+    "@nhost/core": 0.7.5
+    jwt-decode: ^3.1.2
+    xstate: ^4.32.1
+  checksum: 9dcadcb65662f5ab15e904fe66683ada5baf19733b56e9531b5dda4f79d19cfcf20a0e4cb494167e902fe2cba0b0b16bc6e7f2b646b12a9f0322af3c2258698b
+  languageName: node
+  linkType: hard
+
+"@nhost/hasura-storage-js@npm:0.5.2":
+  version: 0.5.2
+  resolution: "@nhost/hasura-storage-js@npm:0.5.2"
   dependencies:
     axios: ^0.27.2
     xstate: ^4.32.1
   peerDependencies:
-    "@nhost/core": 0.7.4
-  checksum: bf131521d00b76bef6fb6d2b6350012a2eda63ea8a021ea38e5627e373e44140be47bb6ad4a173fb88a87654c46029c8bd0f0213aeb0d14a2db22b4f806b488d
+    "@nhost/core": 0.7.5
+  checksum: 7fb90e0083f24dd8b11bf566a003cd02433b3deaea64c1129b4d534bbd6e4d6c25dc23270c40f119dc86b8e6afad66605abc861c75d749a443911c1035eb65d4
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.4.5":
-  version: 1.4.5
-  resolution: "@nhost/nhost-js@npm:1.4.5"
+"@nhost/nhost-js@npm:1.4.6":
+  version: 1.4.6
+  resolution: "@nhost/nhost-js@npm:1.4.6"
   dependencies:
-    "@nhost/hasura-auth-js": 1.3.3
-    "@nhost/hasura-storage-js": 0.5.1
+    "@nhost/hasura-auth-js": 1.3.4
+    "@nhost/hasura-storage-js": 0.5.2
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 6b31e1a94dcb4d72bb2785c263ff8dae2c3204648661336cdf88a91aff196454d649b9daa39c818f1b3f442a3d7cacf58b60b50671c8ea0a02d011f4b044298d
+  checksum: e12eb23ed52edb99d3ed62641b62c370966cfd4727d1cc2e154eeb135bbceffdf7de95625bff3bd0de8b53ad7a595eaed09e28e8765ddfedb5085b5ddbbe902d
   languageName: node
   linkType: hard
 
@@ -6110,7 +6132,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.8.6
     "@clerk/types": 2.20.0
     "@nhost/hasura-auth-js": 1.3.3
-    "@nhost/nhost-js": 1.4.5
+    "@nhost/nhost-js": 1.4.6
     "@supabase/supabase-js": 1.35.4
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.47
@@ -6313,9 +6335,9 @@ __metadata:
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.26.0
     eslint-plugin-jest-dom: 4.0.2
-    eslint-plugin-jsx-a11y: 6.5.1
+    eslint-plugin-jsx-a11y: 6.6.0
     eslint-plugin-prettier: 4.0.0
-    eslint-plugin-react: 7.30.0
+    eslint-plugin-react: 7.30.1
     eslint-plugin-react-hooks: 4.5.0
     jest: 27.5.1
     prettier: 2.7.1
@@ -6333,7 +6355,7 @@ __metadata:
     "@testing-library/dom": 8.16.0
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
-    "@testing-library/user-event": 14.2.3
+    "@testing-library/user-event": 14.2.5
     "@types/pascalcase": 1.0.1
     "@types/react": 17.0.47
     "@types/react-dom": 17.0.17
@@ -6363,10 +6385,10 @@ __metadata:
     "@envelop/depth-limit": 1.6.0
     "@envelop/disable-introspection": 3.3.3
     "@envelop/filter-operation-type": 3.4.0
-    "@envelop/parser-cache": 4.3.2
+    "@envelop/parser-cache": 4.5.0
     "@envelop/testing": 4.4.0
     "@envelop/types": 2.0.0
-    "@envelop/validation-cache": 4.3.2
+    "@envelop/validation-cache": 4.5.0
     "@graphql-tools/merge": 8.3.0
     "@graphql-tools/schema": 8.5.0
     "@graphql-tools/utils": 8.8.0
@@ -6589,7 +6611,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
-    "@testing-library/user-event": 14.2.3
+    "@testing-library/user-event": 14.2.5
     "@types/aws-lambda": 8.10.101
     "@types/babel-core": 6.25.7
     "@types/jest": 27.5.2
@@ -6633,7 +6655,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-helmet-async: 1.3.0
-    react-hot-toast: 2.2.0
+    react-hot-toast: 2.3.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
@@ -8079,12 +8101,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:14.2.3":
-  version: 14.2.3
-  resolution: "@testing-library/user-event@npm:14.2.3"
+"@testing-library/user-event@npm:14.2.5":
+  version: 14.2.5
+  resolution: "@testing-library/user-event@npm:14.2.5"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 03ed7798a3f5f0174d8224a377682ef14455f1c5b834cbd68acb788e4f9f6d14763dc34bd3ca1036305fe94520c37ceaeba74e67e521e9580c2080ea9e432d7a
+  checksum: b585e1e137e4c2a1d6b11e7eb59fc8c8e49b4d7be41e24fbbdff1f01aef65096e3793fe16198f525fcbeafc5ec3605333abf518b02cac50c9a188ec06acc7009
   languageName: node
   linkType: hard
 
@@ -10467,7 +10489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"array-includes@npm:^3.0.3, array-includes@npm:^3.1.3, array-includes@npm:^3.1.4, array-includes@npm:^3.1.5":
+"array-includes@npm:^3.0.3, array-includes@npm:^3.1.4, array-includes@npm:^3.1.5":
   version: 3.1.5
   resolution: "array-includes@npm:3.1.5"
   dependencies:
@@ -10794,10 +10816,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axe-core@npm:^4.2.0, axe-core@npm:^4.3.5":
-  version: 4.4.1
-  resolution: "axe-core@npm:4.4.1"
-  checksum: 97790fd0a2d10e123b02c7cc82b83696b3e8cf5a09fd15a2bc7eb8e4a0a3a5b41970853f435aae576b42dcd75412282d4344fa7b7bd018a2e8d855eee89194cd
+"axe-core@npm:^4.2.0, axe-core@npm:^4.4.2":
+  version: 4.4.3
+  resolution: "axe-core@npm:4.4.3"
+  checksum: 01ed3d23b86f48c595e7a077ca472b35b53e6b76e93996e91d8447f0ab68d7a5318534af6cb5e60ffd575f75ac742570192dc3de7223493bbeee9acaf2f6c520
   languageName: node
   linkType: hard
 
@@ -13988,7 +14010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"damerau-levenshtein@npm:^1.0.7":
+"damerau-levenshtein@npm:^1.0.8":
   version: 1.0.8
   resolution: "damerau-levenshtein@npm:1.0.8"
   checksum: 4c2647e0f42acaee7d068756c1d396e296c3556f9c8314bac1ac63ffb236217ef0e7e58602b18bb2173deec7ec8e0cac8e27cccf8f5526666b4ff11a13ad54a3
@@ -15553,25 +15575,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsx-a11y@npm:6.5.1":
-  version: 6.5.1
-  resolution: "eslint-plugin-jsx-a11y@npm:6.5.1"
+"eslint-plugin-jsx-a11y@npm:6.6.0":
+  version: 6.6.0
+  resolution: "eslint-plugin-jsx-a11y@npm:6.6.0"
   dependencies:
-    "@babel/runtime": ^7.16.3
+    "@babel/runtime": ^7.18.3
     aria-query: ^4.2.2
-    array-includes: ^3.1.4
+    array-includes: ^3.1.5
     ast-types-flow: ^0.0.7
-    axe-core: ^4.3.5
+    axe-core: ^4.4.2
     axobject-query: ^2.2.0
-    damerau-levenshtein: ^1.0.7
+    damerau-levenshtein: ^1.0.8
     emoji-regex: ^9.2.2
     has: ^1.0.3
-    jsx-ast-utils: ^3.2.1
+    jsx-ast-utils: ^3.3.1
     language-tags: ^1.0.5
-    minimatch: ^3.0.4
+    minimatch: ^3.1.2
+    semver: ^6.3.0
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: 320bafc9d27279b72b8c25db4d188690d9b334f69cfa3bd33ff17f7c7dfe89dc31b463c57e79a932a218dba771137c541f88af93cdb36ae7552bc051cef8a591
+  checksum: 1a0482b65409d95f51e233f611233d4cab5728dac36f567f3daf70900289eccc4c638bf4794c6d123a6d637b1a501a60c93e99a7828b4ed87cd7347fc0e0b55b
   languageName: node
   linkType: hard
 
@@ -15599,9 +15622,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.30.0":
-  version: 7.30.0
-  resolution: "eslint-plugin-react@npm:7.30.0"
+"eslint-plugin-react@npm:7.30.1":
+  version: 7.30.1
+  resolution: "eslint-plugin-react@npm:7.30.1"
   dependencies:
     array-includes: ^3.1.5
     array.prototype.flatmap: ^1.3.0
@@ -15619,7 +15642,7 @@ __metadata:
     string.prototype.matchall: ^4.0.7
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: c87f17135815a61d7216d5d235549dc334783174aab3296c568a00ccba3b1d1ad9ce000ec630099f8225c27b0eec21433b209063df498351f5ccb72dad53d312
+  checksum: da8189b16723fca914756bc24f76c158fc24c19ba02574081e67d2349db19285747700ec7f6110c2d2f4b427b800f5eef78167f633354fde7895b45179075653
   languageName: node
   linkType: hard
 
@@ -17685,12 +17708,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"goober@npm:^2.1.1":
-  version: 2.1.8
-  resolution: "goober@npm:2.1.8"
+"goober@npm:^2.1.10":
+  version: 2.1.10
+  resolution: "goober@npm:2.1.10"
   peerDependencies:
     csstype: ^3.0.10
-  checksum: bcc8df7cb06921955cbd484ba47b1729de5e918cca2ea85c57613cf9faf1123823856d7d58d3f3794f7c647591c6b87c3eb93632c048e7cb947e5c68c9e0808c
+  checksum: ed6263b46d99c8579f25aaa465939a6f3ad44ab87fc1e76d8a647b2d6f6979ad5372ecf327ce0036a56c1a72729b82064ebf3ddbd5fdb34c403e2e9b8809fb69
   languageName: node
   linkType: hard
 
@@ -20889,13 +20912,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsx-ast-utils@npm:^2.4.1 || ^3.0.0, jsx-ast-utils@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "jsx-ast-utils@npm:3.2.1"
+"jsx-ast-utils@npm:^2.4.1 || ^3.0.0, jsx-ast-utils@npm:^3.3.1":
+  version: 3.3.2
+  resolution: "jsx-ast-utils@npm:3.3.2"
   dependencies:
-    array-includes: ^3.1.3
+    array-includes: ^3.1.5
     object.assign: ^4.1.2
-  checksum: 9259c93bf4f80a740efcade8e6087f28c839ebf75799c1a886e13f6b84b3b3360aee0576bccb32ce01cf838409cf7e1a8fa6f7bd4dfb301a006c42208243e5ac
+  checksum: 97aa29b544aafbf46574b63a2e27f172f88d2b4f6180034a4908efddeffaa1ac3108063f59af39bfb549ed6f0aa84ddbb81d21ad3f487b273dc1d08dc55d4e69
   languageName: node
   linkType: hard
 
@@ -26064,15 +26087,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hot-toast@npm:2.2.0":
-  version: 2.2.0
-  resolution: "react-hot-toast@npm:2.2.0"
+"react-hot-toast@npm:2.3.0":
+  version: 2.3.0
+  resolution: "react-hot-toast@npm:2.3.0"
   dependencies:
-    goober: ^2.1.1
+    goober: ^2.1.10
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: f9afcfead4cfb6bf7b5f98b2bef2b930fba94aaa656d138e014d5eab777a9737c72ed21c5eeab62cc405738aee67fc663500c1373a81a8dd1b45bf0b2dc72505
+  checksum: f6db8f0ddd5a68752f753d0924cc2174befe37e2027d0ced4ce43f6c4c74f489d1e1eeb5581c37f182b9760720a25c084ed8679279db0a74b064d56279a4923f
   languageName: node
   linkType: hard
 
@@ -27208,7 +27231,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
-    "@testing-library/user-event": 14.2.3
+    "@testing-library/user-event": 14.2.5
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.5.2
     "@types/jscodeshift": 0.11.5
@@ -29531,13 +29554,6 @@ __metadata:
   dependencies:
     setimmediate: ^1.0.4
   checksum: 98e84db1a685bc8827c117a8bc62aac811ad56a995d07938fc7ed8cdc5bf3777bfe2d4e5da868847194e771aac3749a20f6cdd22091300fe889a76fe214a4641
-  languageName: node
-  linkType: hard
-
-"tiny-lru@npm:7.0.6":
-  version: 7.0.6
-  resolution: "tiny-lru@npm:7.0.6"
-  checksum: bf155e9f8eb85b32f5bdbaad6040e152ace4611267d000fda17af3c831f950b5a77065b185da57469e45c5d8c7a7c4f54b597d2c03c9f31be6e4fa7ea574153c
   languageName: node
   linkType: hard
 

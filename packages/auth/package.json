@@ -35,7 +35,7 @@
     "@clerk/clerk-sdk-node": "3.8.6",
     "@clerk/types": "2.20.0",
     "@nhost/hasura-auth-js": "1.3.3",
-    "@nhost/nhost-js": "1.4.5",
+    "@nhost/nhost-js": "1.4.6",
     "@supabase/supabase-js": "1.35.4",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.47",
