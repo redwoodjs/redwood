@@ -6611,7 +6611,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-helmet-async: 1.3.0
-    react-hot-toast: 2.2.0
+    react-hot-toast: 2.3.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
@@ -17663,12 +17663,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"goober@npm:^2.1.1":
-  version: 2.1.8
-  resolution: "goober@npm:2.1.8"
+"goober@npm:^2.1.10":
+  version: 2.1.10
+  resolution: "goober@npm:2.1.10"
   peerDependencies:
     csstype: ^3.0.10
-  checksum: bcc8df7cb06921955cbd484ba47b1729de5e918cca2ea85c57613cf9faf1123823856d7d58d3f3794f7c647591c6b87c3eb93632c048e7cb947e5c68c9e0808c
+  checksum: ed6263b46d99c8579f25aaa465939a6f3ad44ab87fc1e76d8a647b2d6f6979ad5372ecf327ce0036a56c1a72729b82064ebf3ddbd5fdb34c403e2e9b8809fb69
   languageName: node
   linkType: hard
 
@@ -26042,15 +26042,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hot-toast@npm:2.2.0":
-  version: 2.2.0
-  resolution: "react-hot-toast@npm:2.2.0"
+"react-hot-toast@npm:2.3.0":
+  version: 2.3.0
+  resolution: "react-hot-toast@npm:2.3.0"
   dependencies:
-    goober: ^2.1.1
+    goober: ^2.1.10
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: f9afcfead4cfb6bf7b5f98b2bef2b930fba94aaa656d138e014d5eab777a9737c72ed21c5eeab62cc405738aee67fc663500c1373a81a8dd1b45bf0b2dc72505
+  checksum: f6db8f0ddd5a68752f753d0924cc2174befe37e2027d0ced4ce43f6c4c74f489d1e1eeb5581c37f182b9760720a25c084ed8679279db0a74b064d56279a4923f
   languageName: node
   linkType: hard
 
