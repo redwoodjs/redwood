@@ -31,6 +31,7 @@
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.16.4",
+    "@clerk/clerk-react": "3.5.0",
     "@clerk/clerk-sdk-node": "3.8.6",
     "@clerk/types": "2.20.0",
     "@nhost/hasura-auth-js": "1.3.4",
@@ -47,6 +48,18 @@
     "react": "17.0.2",
     "supertokens-auth-react": "0.24.1",
     "typescript": "4.7.4"
+  },
+  "peerDependencies": {
+    "@clerk/clerk-react": "3.5.0",
+    "@clerk/clerk-sdk-node": "3.8.6"
+  },
+  "peerDependenciesMeta": {
+    "@clerk/clerk-react": {
+      "optional": true
+    },
+    "@clerk/clerk-sdk-node": {
+      "optional": true
+    }
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -2020,6 +2020,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/clerk-react@npm:3.5.0":
+  version: 3.5.0
+  resolution: "@clerk/clerk-react@npm:3.5.0"
+  dependencies:
+    "@clerk/types": ^2.20.0
+    swr: ^1.3.0
+    tslib: ^2.3.1
+  peerDependencies:
+    react: ">=16"
+  checksum: 9cfe9095c5ec8f9fb935e84171ac7df506fa4090b785dd1a3b66f866b1278cc3a0cbe9ac241eb786e52e01cea29838ead5ce49944a2fb275183a827efa7d32f7
+  languageName: node
+  linkType: hard
+
 "@clerk/clerk-sdk-node@npm:3.8.6":
   version: 3.8.6
   resolution: "@clerk/clerk-sdk-node@npm:3.8.6"
@@ -6045,6 +6058,7 @@ __metadata:
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@clerk/clerk-js": 3.16.4
+    "@clerk/clerk-react": 3.5.0
     "@clerk/clerk-sdk-node": 3.8.6
     "@clerk/types": 2.20.0
     "@nhost/hasura-auth-js": 1.3.4
@@ -6062,6 +6076,14 @@ __metadata:
     react: 17.0.2
     supertokens-auth-react: 0.24.1
     typescript: 4.7.4
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.0
+    "@clerk/clerk-sdk-node": 3.8.6
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -28990,6 +29012,15 @@ __metadata:
   dependencies:
     tslib: ^2.0.3
   checksum: 6a47c1926e06395ead750905e103be388aeec8c9697f20b14bc3e1e86fcb4fc78e5033197afe6cc8bbed80f0a4ee1f184b0fa22eec7f4a767bdfd278683d52eb
+  languageName: node
+  linkType: hard
+
+"swr@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "swr@npm:1.3.0"
+  peerDependencies:
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0
+  checksum: a02b3dd621e5117320ad45788fb407f60301985edb5fa4197f1b95e28cbe8b3bd093e3cb9a6002102f8c12b40a85941ee525f2b47273366870435aecd61d0e7b
   languageName: node
   linkType: hard
 
