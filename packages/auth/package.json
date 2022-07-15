@@ -39,7 +39,7 @@
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.47",
     "firebase": "9.9.0",
-    "firebase-admin": "10.2.0",
+    "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",
     "jest": "27.5.1",
     "magic-sdk": "8.1.1",
