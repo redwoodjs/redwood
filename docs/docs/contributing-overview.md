@@ -46,28 +46,6 @@ Even if you know the mechanics, it’s hard to get started without a starting pl
 
 There are other more direct ways to get started as well, which are outlined below.
 
-### Roadmap to Redwood v1: Project Boards and GitHub Issues
-Over the next few months, our focus is to achieve a v1.0.0 release of Redwood. You can read Tom’s important announcement about the v1 release candidate process [via this forum post](https://community.redwoodjs.com/t/what-the-1-0-release-candidate-phase-means-and-when-1-0-will-drop/2604).
-
-> **What a v1 release candidate means:**
->
-> 1. all core features are complete and
-> 2. we are done making breaking changes
->
-> During the release candidate cycle, we are completing all remaining tasks necessary to publish v1.0.0 GA.
-
-The Redwood Core Team is working publicly — progress is updated daily on the [Release Project Board](https://github.com/orgs/redwoodjs/projects/6). There’s also a Triage Board, including an important tab view of Issues that are priorities but need community help.
-- 👉 **Start here**: [v1 Help Wanted tab on the Triage Project Board](https://github.com/orgs/redwoodjs/projects/4) (sorted by difficulty)
-
-
-Eventually, all this leads you back to Redwood’s GitHub Issues page. Here you’ll find open items that need help, which are organized by labels. There are four labels helpful for contributing:
-1. [Good First Issue](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22): these items are more likely to be an accessible entry point to the Framework. It’s less about skill level and more about focused scope.
-2. [Help Wanted](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22): these items especially need contribution help from the community.
-3. [v1 Priority](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Av1%2Fpriority+): to reach Redwood v1.0.0, we need to close all Issues with this label.
-4. [Bugs 🐛](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Abug%2Fconfirmed): Last but not least, we always need help with bugs. Some are technically less challenging than others. Sometimes the best way you can help is to attempt to reproduce the bug and confirm whether or not it’s still an issue.
-
-**The sweet spot is a “v1 Priority” Issue that’s either a “Good First Issue” or “Help Wanted”.** Yes, please!
-
 ### Create a New Issue
 Anyone can create a new Issue. If you’re not sure that your feature or idea is something to work on, start the discussion with an Issue. Describe the idea and problem + solution as clearly as possible, including examples or pseudo code if applicable. It’s also very helpful to `@` mention a maintainer or Core Team member that shares the area of interest.
 
