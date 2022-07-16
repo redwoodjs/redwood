@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@okta/jwt-verifier": "2.3.0",
     "@prisma/client": "3.15.2",
     "core-js": "3.23.4",
     "cross-undici-fetch": "0.4.11",
@@ -65,6 +64,7 @@
   "peerDependencies": {
     "@clerk/clerk-sdk-node": "3.8.6",
     "@magic-sdk/admin": "1.4.1",
+    "@okta/jwt-verifier": "2.3.0",
     "firebase-admin": "10.3.0"
   },
   "peerDependenciesMeta": {
@@ -72,6 +72,9 @@
       "optional": true
     },
     "@magic-sdk/admin": {
+      "optional": true
+    },
+    "@okta/jwt-verifier": {
       "optional": true
     },
     "firebase-admin": {
