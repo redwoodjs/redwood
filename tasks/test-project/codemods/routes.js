@@ -30,13 +30,6 @@ export default (file, api) => {
     .insertAfter(blogImport)
     .insertAfter(homePageImport)
 
-  const homePageImport = j.importDeclaration(
-    [j.importDefaultSpecifier(j.identifier('HomePage'))],
-    j.stringLiteral('src/pages/HomePage')
-  )
-
-  root.find(j.ImportDeclaration).insertAfter(homePageImport)
-
   root
     .find(j.JSXElement)
     .at(0)

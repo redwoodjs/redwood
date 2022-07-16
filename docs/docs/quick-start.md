@@ -116,12 +116,16 @@ To make the integration even more seamless, Redwood augments Jest with database 
 
 Redwood is designed for both serverless deploy targets like Netlify and Vercel and serverful deploy targets like Render and AWS:
 
-<img width="463" alt="Screen Shot 2020-10-21 at 6 28 08 PM" src="https://user-images.githubusercontent.com/2951/96807389-3eede900-13cb-11eb-828a-52210cd67e3e.png" />
+```
+yarn rw setup deploy --help
+```
 
 Don't go live without auth!
 Lock down your front and backends with Redwood's built-in, database-backed authentication system ([dbAuth](authentication.md#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third party auth providers:
 
-We have some other [generators](cli-commands.md#generate-alias-g) that are just as awesome, don't forget to check them out as well.
+```
+yarn rw setup auth --help
+```
 
 ## Next Steps
 

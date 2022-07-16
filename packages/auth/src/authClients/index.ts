@@ -14,6 +14,7 @@ export type {
   EthereumUser,
   NhostUser,
   SuperTokensUser,
+  OktaUser,
 } from './SupportedAuthClients'
 
 export type { AuthClient } from './AuthClient'
