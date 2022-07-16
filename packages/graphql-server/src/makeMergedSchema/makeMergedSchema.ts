@@ -71,7 +71,7 @@ const mapFieldsToService = ({
  */
 const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
   __resolveType(obj: Record<string, unknown>) {
-    // if obj has __typname, check that first to resolve type, otherwise, look for largest intersection
+    // if obj has __typename, check that first to resolve type, otherwise, look for largest intersection
     if (Object.hasOwn(obj, '__typename')) {
       for (const type of types) {
         if (type.name === obj['__typename']) {
@@ -79,10 +79,11 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
         }
       }
     }
-    let maxIntersectionType
-    let maxIntersectionFields = 0
-    let maxIntersectionIdx = 0
+
     const fieldIntersections = new Array(types.length).fill(0)
+    let maxIntersectionFields = 0
+    let maxIntersectionType
+    let maxIntersectionIdx = 0
 
     for (let i = 0; i < types.length; i++) {
       const type = types[i]
@@ -97,6 +98,7 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
         maxIntersectionIdx = i
       }
     }
+
     // If the maxIntersection fields is not unique, we are unable to determine type
     if (
       fieldIntersections.indexOf(
@@ -108,6 +110,7 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
         'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver'
       )
     }
+
     return maxIntersectionType?.name ?? null
   },
 })
