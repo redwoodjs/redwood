@@ -1,5 +1,3 @@
-import OktaJwtVerifier from '@okta/jwt-verifier'
-
 export const okta = async (
   token: string
 ): Promise<null | Record<string, unknown>> => {
@@ -8,6 +6,8 @@ export const okta = async (
   if (!OKTA_AUDIENCE || !OKTA_DOMAIN) {
     throw new Error('`OKTA_DOMAIN` or `OKTA_AUDIENCE` env vars are not set.')
   }
+
+  const { default: OktaJwtVerifier } = await import('@okta/jwt-verifier')
 
   const client = new OktaJwtVerifier({
     issuer: `https://${OKTA_DOMAIN}/oauth2/default`,
