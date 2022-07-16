@@ -5676,9 +5676,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@okta/okta-auth-js@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@okta/okta-auth-js@npm:6.7.0"
+"@okta/okta-auth-js@npm:6.7.2":
+  version: 6.7.2
+  resolution: "@okta/okta-auth-js@npm:6.7.2"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@babel/runtime-corejs3": ^7.17.0
@@ -5697,7 +5697,7 @@ __metadata:
     tiny-emitter: 1.1.0
     webcrypto-shim: ^0.1.5
     xhr2: 0.1.3
-  checksum: a033e3a05ecd4ed1a72268af197426e638175ba2ff96a5cf6cf7f475f9e12863bc68248b36032f712629ccd7b0f6ecc32d2e28c95b11a21318af9c7bc1823920
+  checksum: cd8c8b3abdb565b043ff3abf8a6e8d5e4ff5b30ba511cd78fffce8e25d8b6a6814f2703a80cfacf3f8b67d49dd62507fb46e935d52ec2ce4300a9ab1f9d59694
   languageName: node
   linkType: hard
 
@@ -6201,7 +6201,7 @@ __metadata:
     "@clerk/types": 2.20.0
     "@nhost/hasura-auth-js": 1.3.4
     "@nhost/nhost-js": 1.4.6
-    "@okta/okta-auth-js": 6.7.0
+    "@okta/okta-auth-js": 6.7.2
     "@supabase/supabase-js": 1.35.4
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.47
