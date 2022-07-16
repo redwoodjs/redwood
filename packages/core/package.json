@@ -73,7 +73,7 @@
     "mini-css-extract-plugin": "2.6.1",
     "nodemon": "2.0.19",
     "null-loader": "4.0.1",
-    "react-refresh": "0.13.0",
+    "react-refresh": "0.14.0",
     "rimraf": "3.0.2",
     "style-loader": "3.3.1",
     "svg-react-loader": "0.4.6",
