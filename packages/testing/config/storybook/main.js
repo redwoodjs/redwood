@@ -107,6 +107,9 @@ const baseConfig = {
       Boolean
     )
 
+    // ** EXTERNALS *
+    sbConfig.externals = rwConfig.externals
+
     // ** NODE **
     sbConfig.node = rwConfig.node
 
