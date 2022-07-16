@@ -7,7 +7,7 @@ export const okta = async (
     throw new Error('`OKTA_DOMAIN` or `OKTA_AUDIENCE` env vars are not set.')
   }
 
-  const { default: OktaJwtVerifier } = await import('@okta/jwt-verifier')
+  const OktaJwtVerifier = require('@okta/jwt-verifier')
 
   const client = new OktaJwtVerifier({
     issuer: `https://${OKTA_DOMAIN}/oauth2/default`,
