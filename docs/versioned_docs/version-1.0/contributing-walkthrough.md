@@ -21,8 +21,7 @@ The following recording is from a Contributing Workshop, following through the e
   style={{ height: '24rem' }}
   src="https://www.youtube.com/embed/aZs_9g-5Ms8"
   frameborder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0"
-  allowfullscreen
+  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0; fullscreen"
 ></iframe>
 
 ## Prologue: Getting Started with Redwood and GitHub (and git)

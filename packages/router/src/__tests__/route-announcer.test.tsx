@@ -1,10 +1,10 @@
 import { render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
+import { getAnnouncement } from '../a11yUtils'
 import { navigate } from '../history'
 import RouteAnnouncement from '../route-announcement'
 import { Router, Route, routes } from '../router'
-import { getAnnouncement } from '../util'
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>

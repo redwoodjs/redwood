@@ -26,7 +26,7 @@ yarn rw deploy baremetal production
 
 The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
-1. `git clone --depth=1` to retieve the latest code
+1. `git clone --depth=1` to retrieve the latest code
 2. Symlink the latest deploy `.env` to the shared `.env` in the app dir
 3. `yarn install` - installs dependencies
 4. Runs prisma DB migrations
@@ -287,7 +287,7 @@ This may also be a one-liner like:
 + # [ -z "$PS1" ] && return
 ```
 
-There are techniques for getting `node`, `npm` and `yarn` to be availble without loading everything in `.bashrc`. See [this comment](https://github.com/nvm-sh/nvm/issues/1290#issuecomment-427557733) for some ideas.
+There are techniques for getting `node`, `npm` and `yarn` to be available without loading everything in `.bashrc`. See [this comment](https://github.com/nvm-sh/nvm/issues/1290#issuecomment-427557733) for some ideas.
 
 :::
 
@@ -470,7 +470,7 @@ host = 'server.com'
 # ...
 ```
 
-Server specific commands are defined with a `before.command` and `after.commmand` key directly in your server config:
+Server specific commands are defined with a `before.command` and `after.command` key directly in your server config:
 
 ```toml
 [[production.servers]]

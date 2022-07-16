@@ -6,7 +6,7 @@ RedwoodRecord is heavily inspired by [ActiveRecord](https://guides.rubyonrails.o
 
 ## Usage
 
-Usage documentation is avilable at https://redwoodjs.com/docs/redwoodrecord
+Usage documentation is available at https://redwoodjs.com/docs/redwoodrecord
 
 ## Package Structure
 

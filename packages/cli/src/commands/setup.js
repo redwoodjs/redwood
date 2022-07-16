@@ -2,7 +2,7 @@ import terminalLink from 'terminal-link'
 
 import detectRwVersion from '../middleware/detectProjectRwVersion'
 
-export const command = 'setup <commmand>'
+export const command = 'setup <command>'
 export const description = 'Initialize project config and install packages'
 
 export const builder = (yargs) =>

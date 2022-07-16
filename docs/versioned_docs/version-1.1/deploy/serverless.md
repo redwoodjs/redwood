@@ -68,7 +68,7 @@ There are even more places you can get environment variables from, check out Ser
 > **Note:**
 > Serverless Dashboard CI/CD does not support projects structured like Redwood, although they're working on it. For CD, you'll need to use something like GitHub Actions.
 >
-> It can still be worthwhile to integrate your project with Serverless Dashboard — you'll have features like deploy logs and monitoring, analytics, secret management, and AWS account integration. You can also [authenticate into your Serverless acount within a CI context](https://www.serverless.com/framework/docs/guides/cicd/running-in-your-own-cicd). Just remember that if you do use the Dashboard to manage secrets, you'll need to use the `${param:VAR_NAME}` syntax.
+> It can still be worthwhile to integrate your project with Serverless Dashboard — you'll have features like deploy logs and monitoring, analytics, secret management, and AWS account integration. You can also [authenticate into your Serverless account within a CI context](https://www.serverless.com/framework/docs/guides/cicd/running-in-your-own-cicd). Just remember that if you do use the Dashboard to manage secrets, you'll need to use the `${param:VAR_NAME}` syntax.
 
 To integrate your site into the Serverless Dashboard, there are two ways:
 

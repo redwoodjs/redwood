@@ -1,7 +1,7 @@
 # Getting Dynamic
 
 <div class="video-container">
-  <iframe src="https://www.youtube.com/embed/cb_PseqpoG8?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/cb_PseqpoG8?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0; fullscreen"></iframe>
 </div>
 
 These two pages are great and all but where are the actual blog posts in this blog? Let's work on those next.

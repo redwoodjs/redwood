@@ -175,4 +175,31 @@ describe('LogFormatter', () => {
       })
     ).toMatch('"foo": "bar"')
   })
+
+  test('Should format error stack traces', () => {
+    expect(
+      logFormatter({
+        level: 50,
+        err: {
+          message: 'This error has a stack traces',
+          stack:
+            'A stack trace \n will have \n several lines \n at some line number \n at some code',
+        },
+      })
+    ).toMatch(/at some line number/)
+  })
+
+  test('Should format error and include the error type', () => {
+    expect(
+      logFormatter({
+        level: 50,
+        err: {
+          type: 'GraphQL Error',
+          message: 'This error has a stack traces',
+          stack:
+            'A stack trace \n will have \n several lines \n at some line number \n at some code',
+        },
+      })
+    ).toMatch(/GraphQL Error Info/)
+  })
 })

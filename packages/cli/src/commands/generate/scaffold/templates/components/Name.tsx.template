@@ -1,8 +1,8 @@
 import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {

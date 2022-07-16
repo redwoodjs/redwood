@@ -1,7 +1,7 @@
 # Getting Dynamic
 
 <div class="video-container">
-  <iframe src="https://www.youtube.com/embed/cb_PseqpoG8?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/cb_PseqpoG8?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; modestbranding; showinfo=0; fullscreen"></iframe>
 </div>
 
 These two pages are great and all but where are the actual blog posts in this blog? Let's work on those next.
@@ -181,7 +181,7 @@ As far as the generators are concerned:
 - Pages that come with the scaffolds are plural or singular depending on whether they deal with many or one post. When using the `page` generator it will stick with whatever name you give on the command line.
 - Layouts use the name you give them on the command line.
 - Components and cells, like pages, will be plural or singular depending on context when created by the scaffold generator, otherwise they'll use the given name on the command line.
-- Route names for scaffolded pages are singular or plural, the same as the pages they're routing to, otherwise they are identical the name of the page you generated.
+- Route names for scaffolded pages are singular or plural, the same as the pages they're routing to, otherwise they are identical to the name of the page you generated.
 
 Also note that it's the model name part that's singular or plural, not the whole word. So it's `PostsCell` and `PostsPage`, not `PostCells` or `PostPages`.
 

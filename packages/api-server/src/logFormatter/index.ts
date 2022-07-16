@@ -176,12 +176,12 @@ export const LogFormatter = () => {
       output.push(formatTracing(tracing))
     }
 
-    if (stack != null) {
-      output.push(formatStack(stack))
-    }
-
     if (err != null) {
       output.push(formatErrorProp(err))
+    }
+
+    if (stack != null) {
+      output.push(formatStack(stack))
     }
 
     return output.filter(noEmpty).join(' ')
@@ -223,7 +223,20 @@ export const LogFormatter = () => {
   }
 
   const formatErrorProp = (errorPropValue: any) => {
-    return newline + JSON.stringify({ err: errorPropValue }, null, 2)
+    const errorType = errorPropValue['type'] || 'Error'
+    delete errorPropValue['message']
+    delete errorPropValue['stack']
+    delete errorPropValue['type']
+
+    return chalk.redBright(
+      newline +
+        newline +
+        `🚨 ${errorType} Info` +
+        newline +
+        newline +
+        JSON.stringify(errorPropValue, null, 2) +
+        newline
+    )
   }
 
   const formatLevel = (level: any) => {
@@ -321,7 +334,11 @@ export const LogFormatter = () => {
   }
 
   const formatStack = (stack: any) => {
-    return stack ? newline + stack : ''
+    return chalk.redBright(
+      stack
+        ? newline + '🥞 Error Stack' + newline + newline + stack + newline
+        : ''
+    )
   }
 
   const formatTracing = (data: any) => {

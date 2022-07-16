@@ -64,6 +64,39 @@ module.exports = {
     ],
     'react/display-name': 'off',
     'react-hooks/exhaustive-deps': 'warn',
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        pathGroupsExcludedImportTypes: ['react'],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'builtin',
+            position: 'after',
+          },
+          {
+            pattern: '@redwoodjs/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: 'src/lib/test',
+            group: 'parent',
+            position: 'before',
+          },
+          {
+            pattern: 'src/**',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
   overrides: [
     {

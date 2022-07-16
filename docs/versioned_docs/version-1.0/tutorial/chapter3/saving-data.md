@@ -767,7 +767,7 @@ We get that error message at the top saying something went wrong in plain Englis
 > - `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
 > - `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
 
-This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Sevice validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
+This just scratches the service of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Service validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
 ```javascript
 export const createCar = ({ input }) => {
@@ -792,7 +792,7 @@ export const createCar = ({ input }) => {
 }
 ```
 
-You can still include your own custom valiation logic and have the errors handled in the same manner as the built-in validations:
+You can still include your own custom validation logic and have the errors handled in the same manner as the built-in validations:
 
 ```javascript
 validateWith(() => {
