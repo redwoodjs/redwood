@@ -8877,6 +8877,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ps-tree@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@types/ps-tree@npm:1.1.2"
+  checksum: d43d5ac375886c37b11f54254578925ff07093b07326898d34eec744bf5721b61b7f3f743b2337e7157a368bb39166e679f26d464620371a0d232509f7f9ac99
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*, @types/qs@npm:6.9.7, @types/qs@npm:^6.9.5":
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
@@ -16969,7 +16976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:10.1.0, fs-extra@npm:^10.0.1, fs-extra@npm:^10.1.0":
+"fs-extra@npm:10.1.0, fs-extra@npm:^10.1.0":
   version: 10.1.0
   resolution: "fs-extra@npm:10.1.0"
   dependencies:
@@ -17572,16 +17579,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globby@npm:^13.1.1":
-  version: 13.1.1
-  resolution: "globby@npm:13.1.1"
+"globby@npm:^13.1.1, globby@npm:^13.1.2":
+  version: 13.1.2
+  resolution: "globby@npm:13.1.2"
   dependencies:
     dir-glob: ^3.0.1
     fast-glob: ^3.2.11
     ignore: ^5.2.0
     merge2: ^1.4.1
     slash: ^4.0.0
-  checksum: 773f3391c9579995252f692f107521f11c6b376993e7aa00accc36da145113d68481e80a7a2f9eb09835e0f9b0bb4658adae5424acb2ce02644e2dab08ea35bf
+  checksum: 3366575f4de8862558bfd931cae2c7ed5192f8ce9488e4c65da5aadedcadae36f7625bd85ada77aad3ba93ca0627b424e53f07172f7d12e67eec419694357d33
   languageName: node
   linkType: hard
 
@@ -23007,14 +23014,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^3.2.3":
-  version: 3.2.3
-  resolution: "node-fetch@npm:3.2.3"
+"node-fetch@npm:^3.2.6":
+  version: 3.2.8
+  resolution: "node-fetch@npm:3.2.8"
   dependencies:
     data-uri-to-buffer: ^4.0.0
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
-  checksum: ee39de722bab67076716ce51554aec5f108c51301ab3497b78a58ca5caa6b8f4a2d15f34c28fb24e86dcbada908c54b224cb708231f0dbdd4c2ac1869292d6fd
+  checksum: 9984fc1de39d2c05bb42e5795b85a63c20069632b28f8dab97e84b4d4720b995ff87cc5f8c49691c65cbaab3d10af89590002aeecd8844e6dccd0b4be1223ec7
   languageName: node
   linkType: hard
 
@@ -27158,7 +27165,7 @@ __metadata:
     terminal-link: 2.1.1
     typescript: 4.7.4
     typescript-transform-paths: 3.3.1
-    zx: 6.1.0
+    zx: 7.0.7
   languageName: unknown
   linkType: soft
 
@@ -31866,10 +31873,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "yaml@npm:2.0.0"
-  checksum: cd876f6cfeb11f36af829f1099b292928b80961008fc7be3dfeea937ee9ee977900f38869f6393890da6f398950ab6d41e160bc78fb4cbce74be4e32890bcae0
+"yaml@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "yaml@npm:2.1.1"
+  checksum: ef67e9d3e4b83234ba85bd5dc380164017620b7f1e1589fd0343c4c0ba500fe92388d75f5aba8af6346b02dda93a3ad0929eab210c41367bc6b786c0a0dca3af
   languageName: node
   linkType: hard
 
@@ -32020,24 +32027,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:6.1.0":
-  version: 6.1.0
-  resolution: "zx@npm:6.1.0"
+"zx@npm:7.0.7":
+  version: 7.0.7
+  resolution: "zx@npm:7.0.7"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/minimist": ^1.2.2
     "@types/node": ^17.0
+    "@types/ps-tree": ^1.1.2
     "@types/which": ^2.0.1
     chalk: ^5.0.1
-    fs-extra: ^10.0.1
-    globby: ^13.1.1
+    fs-extra: ^10.1.0
+    globby: ^13.1.2
     minimist: ^1.2.6
-    node-fetch: ^3.2.3
+    node-fetch: ^3.2.6
     ps-tree: ^1.2.0
     which: ^2.0.2
-    yaml: ^2.0.0
+    yaml: ^2.1.1
   bin:
-    zx: zx.mjs
-  checksum: 1befc75ec26f0e8bd9f21998178847ad878c3f911dc87e44e69315625ad28b6ca5e4cc0451a09c618c4546fd8a277e3f5c06b57ca6d140ec945bb1e987d3090a
+    zx: build/cli.js
+  checksum: 7be44cbffce7d5a1a46321e709b3499ebdc0b015af1503b72e05d3d3a5ca5ff2f3855ba45f0761a3bc3debf7f149002b2d78584dba7c0a03efb9082a6cc0d32b
   languageName: node
   linkType: hard
