@@ -48,12 +48,12 @@ There are other more direct ways to get started as well, which are outlined belo
 
 ### Project Boards and GitHub Issues
 
-The Redwood Core Team is working publicly — progress is updated daily on the [Release Project Board](https://github.com/orgs/redwoodjs/projects/11). There’s also a Triage Board, including an important tab view of Issues that are priorities but need community help.
+The Redwood Core Team is working publicly — progress is updated daily on the [Release Project Board](https://github.com/orgs/redwoodjs/projects/11).
 
 Eventually, all this leads you back to Redwood’s GitHub Issues page. Here you’ll find open items that need help, which are organized by labels. There are four labels helpful for contributing:
 1. [Good First Issue](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22): these items are more likely to be an accessible entry point to the Framework. It’s less about skill level and more about focused scope.
 2. [Help Wanted](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22): these items especially need contribution help from the community.
-3. [Bugs 🐛](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Abug%2Fconfirmed): Last but not least, we always need help with bugs. Some are technically less challenging than others. Sometimes the best way you can help is to attempt to reproduce the bug and confirm whether or not it’s still an issue.
+3. [Bugs 🐛](https://github.com/redwoodjs/redwood/issues?q=is%3Aissue+is%3Aopen+label%3Abug%2Fconfirmed): last but not least, we always need help with bugs. Some are technically less challenging than others. Sometimes the best way you can help is to attempt to reproduce the bug and confirm whether or not it’s still an issue.
 
 ### Create a New Issue
 Anyone can create a new Issue. If you’re not sure that your feature or idea is something to work on, start the discussion with an Issue. Describe the idea and problem + solution as clearly as possible, including examples or pseudo code if applicable. It’s also very helpful to `@` mention a maintainer or Core Team member that shares the area of interest.
