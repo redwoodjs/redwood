@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import fg from 'fast-glob'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
@@ -53,20 +54,43 @@ const mapRouterPathToHtml = (routerPath) => {
 async function getAllRouteParameters() {
   configureBabel()
 
-  const prerenderScriptPathJs = path.join(getPaths().scripts, 'prerender.js')
-  const prerenderScriptPathTs = path.join(getPaths().scripts, 'prerender.ts')
-  const prerenderScriptPath = fs.existsSync(prerenderScriptPathTs)
-    ? prerenderScriptPathTs
-    : prerenderScriptPathJs
+  // Find all *.prerender.js and *.prerender.ts files
+  // We search the entire .../web/src/ folder, because components used as
+  // pages can be located anywhere and then manually imported into Routes.js
+  let prerenderParamFiles = fg.sync(
+    getPaths().web.src + '/**/*.prerender.{js,ts}'
+  )
 
-  if (!fs.existsSync(prerenderScriptPath)) {
-    // No prerender.{js,ts} file exists. Which is fine. Just means we can't
-    // prerender any routes with path parameters
+  // Filter files to make sure there's an xyz.{js.tsx}-file next to it
+  // For example, if we've found
+  // `.../web/src/pages/WaterfallPage/WaterfallPage.prerender.js`
+  // we want to make sure the actual WaterfallPage exists as well
+  // `.../web/src/pages/WaterfallPage/WaterfallPage.js` or
+  // `.../web/src/pages/WaterfallPage/WaterfallPage.tsx`
+  // We do this to limit false positives
+  prerenderParamFiles = prerenderParamFiles.filter((filePath) => {
+    const { dir, name } = path.parse(filePath)
 
-    return {}
-  }
+    const pagePathTs = path.join(dir, name.replace('prerender', 'tsx'))
+    const pagePathJs = path.join(dir, name.replace('prerender', 'js'))
 
-  const parameters = await runScript(prerenderScriptPath)
+    return fs.existsSync(pagePathTs) || fs.existsSync(pagePathJs)
+  })
+
+  let parameters = {}
+
+  // For each of the files, run the script
+  const runPromises = prerenderParamFiles.map(async (filePath) => {
+    const pageParameters = await runScript(filePath)
+
+    // Make a big object out of all the returned values
+    parameters = {
+      ...parameters,
+      ...pageParameters,
+    }
+  })
+
+  await Promise.all(runPromises)
 
   return parameters
 }

@@ -4,7 +4,7 @@ description: Render pages ahead of time
 
 # Prerender
 
-Prerendering is great for providing a faster expericne for your end users. Your pages will be rendered at build-time, saving your user's browser from having to do that job.
+Prerendering is great for providing a faster experience for your end users. Your pages will be rendered at build-time, saving your user's browser from having to do that job.
 
 We thought a lot about what the developer experience should be for route-based prerendering. The result is one of the smallest APIs imaginable!
 
@@ -68,17 +68,17 @@ Let's say you have a route like this
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
 
-To be able to prerender this route you need to let Redwood know what `id`s to use. You do this by updating the `scripts/prerender.js` file. It should return an object with keys for all the dynamic routes you wish to prerender. And the values to those keys should be an array of objects with the path param name as the key, and the value for the parameter as the object value. An example will hopefully make this clearer.
+To be able to prerender this route you need to let Redwood know what `id`s to use. You do this by creating a `BlogPostPage.prerender.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should return an object with keys for all the dynamic route names you use this page component for that you wish to prerender. And the values to those keys should be an array of objects with the path param name as the key, and the value for the parameter as the object value. An example will hopefully make this clearer.
 
 For the example route above, all you need is this:
 
-```js title="scripts/prerender.js"
+```js title="BlogPostPage.prerender.js"
 return {
   blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }]
 }
 ```
 
-Because this is a regular RW script you have full access to your database using prisma and all your services, should you need it.
+In these prerender scripts you have full access to your database using prisma and all your services, should you need it.
 
 With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. If it's just three pages like this, it's no problem. But this easily and quickly explodes to thousands of pages, which will make your build process really slow, so please be careful with how many pages you prerender.
 
