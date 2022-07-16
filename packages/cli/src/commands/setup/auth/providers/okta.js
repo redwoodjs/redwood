@@ -1,14 +1,12 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
   imports: [`import { OktaAuth } from '@okta/okta-auth-js'`],
-  init: `
-  const okta = new OktaAuth({
-    issuer: process.env.OKTA_ISSUER,
-    clientId: process.env.OKTA_CLIENT_ID,
-    redirectUri: process.env.OKTA_REDIRECT_URI,
-    pkce: true,
-  })
-  `,
+  init: `const okta = new OktaAuth({
+  issuer: process.env.OKTA_ISSUER,
+  clientId: process.env.OKTA_CLIENT_ID,
+  redirectUri: process.env.OKTA_REDIRECT_URI,
+  pkce: true,
+})`,
   authProvider: {
     client: 'okta',
     type: 'okta',
