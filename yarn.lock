@@ -22523,14 +22523,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"microtime@npm:3.0.0":
-  version: 3.0.0
-  resolution: "microtime@npm:3.0.0"
+"microtime@npm:3.1.0":
+  version: 3.1.0
+  resolution: "microtime@npm:3.1.0"
   dependencies:
-    node-addon-api: ^1.2.0
+    node-addon-api: ^5.0.0
     node-gyp: latest
-    node-gyp-build: ^3.8.0
-  checksum: 352e1b0b4cd750b7cce20b0c0fb0afa4d9311951bcb3291df3ae8b85fe892977580a583fd6308e4eb7143c428cf1d08f202ef4ea3d1e445f0bb2a8694d298ee2
+    node-gyp-build: ^4.4.0
+  checksum: e554214a94fa6d13aab87ffce6743b14c7afeeac95d855a10dce4e1a14dce9d89ad84c9000e3d3d15007641f7ba938d1040b41209ab7240be27acd2c1978c6ef
   languageName: node
   linkType: hard
 
@@ -23146,15 +23146,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^1.2.0":
-  version: 1.7.2
-  resolution: "node-addon-api@npm:1.7.2"
-  dependencies:
-    node-gyp: latest
-  checksum: bcf526f2ce788182730d3c3df5206585873d1e837a6e1378ff84abccf2f19cf3f93a8274f9c1245af0de63a0dbd1bb95ca2f767ecf5c678d6930326aaf396c4e
-  languageName: node
-  linkType: hard
-
 "node-addon-api@npm:^2.0.0":
   version: 2.0.2
   resolution: "node-addon-api@npm:2.0.2"
@@ -23170,6 +23161,15 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: 41f21c9d12318875a2c429befd06070ce367065a3ef02952cfd4ea17ef69fa14012732f510b82b226e99c254da8d671847ea018cad785f839a5366e02dd56302
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "node-addon-api@npm:5.0.0"
+  dependencies:
+    node-gyp: latest
+  checksum: d8e1e3aefd0b153273e44b38dc8ceebdd444211cf71f03e036b822e973a5c7ac784b8fb61748bbf3f4341fdff41654bf6f3f052e8f45939c153b47efd3970238
   languageName: node
   linkType: hard
 
@@ -23240,17 +23240,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp-build@npm:^3.8.0":
-  version: 3.9.0
-  resolution: "node-gyp-build@npm:3.9.0"
-  bin:
-    node-gyp-build: ./bin.js
-    node-gyp-build-optional: ./optional.js
-    node-gyp-build-test: ./build-test.js
-  checksum: 0e7e39e5746728e6adf58803d9c3c732b6107f1af3df5128c4c2a6c9c0fb99a6c981ad0a7514d707adccbcfe303b4a92da7949408f1d3ec281f70d37bec29f60
-  languageName: node
-  linkType: hard
-
 "node-gyp-build@npm:^4.2.0, node-gyp-build@npm:^4.3.0":
   version: 4.3.0
   resolution: "node-gyp-build@npm:4.3.0"
@@ -23259,6 +23248,17 @@ __metadata:
     node-gyp-build-optional: optional.js
     node-gyp-build-test: build-test.js
   checksum: 817917b256e5193c1b2f832a8e41e82cfb9915e44dfc01a9b2745ddda203344c82e27c177c1e4da39083a08d6e30859a0ce6672801ac4f0cd1df94a8c43f22b5
+  languageName: node
+  linkType: hard
+
+"node-gyp-build@npm:^4.4.0":
+  version: 4.5.0
+  resolution: "node-gyp-build@npm:4.5.0"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 4ca30ae1f7ba570cd33ae6b71c7e3eb249c3901c0b8a02014cfe2ce18f7f23df621c8d087868973e4f32c90b1c4ad753b4dff1d8bf54666a3f848f414828c14f
   languageName: node
   linkType: hard
 
