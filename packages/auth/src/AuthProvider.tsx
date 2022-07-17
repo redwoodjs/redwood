@@ -105,14 +105,14 @@ type AuthProviderProps =
     }
   | {
       client?: never
-      type: 'clerk'
+      type: Extract<SupportedAuthClients, 'clerk'>
       config?: never
       skipFetchCurrentUser?: boolean
       children?: ReactNode | undefined
     }
   | {
       client?: WebAuthnClientType
-      type: 'dbAuth'
+      type: Extract<SupportedAuthClients, 'dbAuth'>
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
       children?: ReactNode | undefined
@@ -163,9 +163,9 @@ export const AuthProvider = (props: AuthProviderProps) => {
     setHasRestoredState(false)
 
     const client = await createAuthClient(
-      props.client as SupportedAuthClients,
-      props.type as SupportedAuthTypes,
-      props.config as SupportedAuthConfig
+      props.client,
+      props.type,
+      props.config
     )
 
     setRwClient(client)
