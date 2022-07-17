@@ -64,6 +64,7 @@
   "peerDependencies": {
     "@clerk/clerk-sdk-node": "3.8.6",
     "@magic-sdk/admin": "1.4.1",
+    "@okta/jwt-verifier": "2.3.0",
     "firebase-admin": "10.3.0"
   },
   "peerDependenciesMeta": {
@@ -71,6 +72,9 @@
       "optional": true
     },
     "@magic-sdk/admin": {
+      "optional": true
+    },
+    "@okta/jwt-verifier": {
       "optional": true
     },
     "firebase-admin": {
