@@ -65,23 +65,9 @@ export interface AuthContextInterface {
   error?: Error
 }
 
-export const AuthContext = React.createContext<AuthContextInterface>({
-  loading: true,
-  isAuthenticated: false,
-  userMetadata: null,
-  currentUser: null,
-  logIn: () => Promise.resolve(),
-  logOut: () => Promise.resolve(),
-  signUp: () => Promise.resolve(),
-  getToken: () => Promise.resolve(null),
-  getCurrentUser: () => Promise.resolve(null),
-  hasRole: () => true,
-  reauthenticate: () => Promise.resolve(),
-  forgotPassword: () => Promise.resolve(),
-  resetPassword: () => Promise.resolve(),
-  validateResetToken: () => Promise.resolve(),
-  hasError: false,
-})
+export const AuthContext = React.createContext<
+  AuthContextInterface | undefined
+>(undefined)
 
 const AuthUpdateListener = ({
   rwClient,
