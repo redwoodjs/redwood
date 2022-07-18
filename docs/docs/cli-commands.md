@@ -1832,10 +1832,10 @@ Set up a UI design or style library. Right now the choices are [Chakra UI](https
 yarn rw setup ui <library>
 ```
 
-| Arguments & Options | Description                                                     |
-| :------------------ | :-------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui` and `tailwindcss` |
-| `--force, -f`       | Overwrite existing configuration                                |
+| Arguments & Options | Description                                                                 |
+| :------------------ | :-------------------------------------------------------------------------- |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss` and `windicss` |
+| `--force, -f`       | Overwrite existing configuration                                            |
 
 ## storybook
 
