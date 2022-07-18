@@ -1,5 +1,7 @@
 import type * as NetlifyIdentityNS from 'netlify-identity-widget'
 
+import { isBrowser } from '@redwoodjs/prerender/browserUtils'
+
 import { createAuthentication } from 'src/authFactory'
 // TODO:
 // In the future, when this is a separate package, we can import the full thing
@@ -10,15 +12,16 @@ import { createAuthentication } from 'src/authFactory'
 import { AuthImplementation } from './AuthImplementation'
 
 type NetlifyIdentity = typeof NetlifyIdentityNS
-type User = NetlifyIdentityNS.User
 
 export function createNetlifyAuth(netlifyIdentity: NetlifyIdentity) {
   const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
 
+  isBrowser && netlifyIdentity.init()
+
   return createAuthentication<
-    User,
-    User | null,
-    User | null,
+    NetlifyIdentityNS.User,
+    NetlifyIdentityNS.User | null,
+    NetlifyIdentityNS.User | null,
     void,
     null,
     never,
@@ -31,9 +34,9 @@ export function createNetlifyAuth(netlifyIdentity: NetlifyIdentity) {
 function createNetlifyAuthImplementation(
   netlifyIdentity: NetlifyIdentity
 ): AuthImplementation<
-  User,
-  User | null,
-  User | null,
+  NetlifyIdentityNS.User,
+  NetlifyIdentityNS.User | null,
+  NetlifyIdentityNS.User | null,
   void,
   null,
   never,

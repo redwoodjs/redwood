@@ -38,5 +38,6 @@ export function createAuthentication<
   const useAuth = createUseAuth(AuthContext)
   const AuthProvider = createAuthProvider(AuthContext, authImplementation)
 
+  // TODO: Do we really need to return AuthContext here?
   return { AuthContext, AuthProvider, useAuth }
 }
