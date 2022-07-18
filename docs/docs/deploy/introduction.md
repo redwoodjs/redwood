@@ -14,6 +14,7 @@ Redwood is designed for both serverless and traditional infrastructure deploymen
 Currently, these are the officially supported deploy targets:
 - Baremetal (physical server that you have SSH access to)
 - [Flightcontrol.dev](https://www.flightcontrol.dev?ref=redwood)
+- [Fly.io](https://fly.io)
 - [Layer0.co](https://layer0.co)
 - [Netlify.com](https://www.netlify.com/)
 - [Render.com](https://render.com)

@@ -22,10 +22,11 @@ Prisma only supports one database provider at a time, and since we can't use SQL
 
 There are several hosting providers where you can quickly start up a Postgres instance:
 
-- [Railway](https://railway.app/)
-- [Heroku](https://www.heroku.com/postgres)
-- [Digital Ocean](https://www.digitalocean.com/products/managed-databases)
 - [AWS](https://aws.amazon.com/rds/postgresql/)
+- [Digital Ocean](https://www.digitalocean.com/products/managed-databases)
+- [Fly.io](https://fly.io/docs/reference/postgres)
+- [Heroku](https://www.heroku.com/postgres)
+- [Railway](https://railway.app/)
 
 We're going to go with Railway for now because it's a) free and b) ridiculously easy to get started, by far the easiest we've found. You don't even need to create a login! The only limitation is that if you *don't* create an account, your database will be removed after one day. If you think you can finish everything you need to do in the next 24 hours, go for it! Otherwise just create an account first and it'll stick around.
 
