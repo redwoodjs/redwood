@@ -5260,6 +5260,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nrwl/nx-cloud@npm:^14.2.0":
+  version: 14.2.0
+  resolution: "@nrwl/nx-cloud@npm:14.2.0"
+  dependencies:
+    axios: ^0.21.1
+    chalk: 4.1.0
+    node-machine-id: ^1.1.12
+    strip-json-comments: ^3.1.1
+    tar: 6.1.11
+  bin:
+    nx-cloud: bin/nx-cloud.js
+  checksum: b1eadefbaea9fa412fd64f472716e6264b7b9f6698030da33351ae770d505f20841f1a29ac831cf43cb20355dee0f950fd3f2972c7df10b90e363e3902c40fed
+  languageName: node
+  linkType: hard
+
 "@nrwl/tao@npm:14.4.3":
   version: 14.4.3
   resolution: "@nrwl/tao@npm:14.4.3"
@@ -10951,6 +10966,15 @@ __metadata:
   version: 4.4.3
   resolution: "axe-core@npm:4.4.3"
   checksum: 01ed3d23b86f48c595e7a077ca472b35b53e6b76e93996e91d8447f0ab68d7a5318534af6cb5e60ffd575f75ac742570192dc3de7223493bbeee9acaf2f6c520
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.21.1":
+  version: 0.21.4
+  resolution: "axios@npm:0.21.4"
+  dependencies:
+    follow-redirects: ^1.14.0
+  checksum: fbcff55ec68f71f02d3773d467db2fcecdf04e749826c82c2427a232f9eba63242150a05f15af9ef15818352b814257541155de0281f8fb2b7e8a5b79f7f2142
   languageName: node
   linkType: hard
 
@@ -17013,7 +17037,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.9":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.9":
   version: 1.15.1
   resolution: "follow-redirects@npm:1.15.1"
   peerDependenciesMeta:
@@ -23426,6 +23450,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-machine-id@npm:^1.1.12":
+  version: 1.1.12
+  resolution: "node-machine-id@npm:1.1.12"
+  checksum: ab2fea5f75a6f1ce3c76c5e0ae3903b631230e0a99b003d176568fff8ddbdf7b2943be96cd8d220c497ca0f6149411831f8a450601929f326781cb1b59bab7f8
+  languageName: node
+  linkType: hard
+
 "node-notifier@npm:10.0.1":
   version: 10.0.1
   resolution: "node-notifier@npm:10.0.1"
@@ -27471,6 +27502,7 @@ __metadata:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
+    "@nrwl/nx-cloud": ^14.2.0
     "@playwright/test": 1.23.4
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
