@@ -42,6 +42,24 @@ export class NoResetPasswordHandlerError extends Error {
   }
 }
 
+export class NoWebAuthnConfigError extends Error {
+  constructor() {
+    super(
+      'To use Webauthn you need both `webauthn` and `credentialModelAccessor` config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn'
+    )
+    this.name = 'NoWebAuthnConfigError'
+  }
+}
+
+export class MissingWebAuthnConfigError extends Error {
+  constructor() {
+    super(
+      'You are missing one or more WebAuthn config options, see https://redwoodjs.com/docs/auth/dbAuth#webauthn'
+    )
+    this.name = 'MissingWebAuthnConfigError'
+  }
+}
+
 export class UnknownAuthMethodError extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)
@@ -193,5 +211,21 @@ export class GenericError extends Error {
   constructor(message = 'unknown error occurred') {
     super(message)
     this.name = 'GenericError'
+  }
+}
+
+export class WebAuthnError extends Error {
+  constructor(message = 'WebAuthn Error') {
+    super(message)
+    this.name = 'WebAuthnError'
+  }
+}
+
+export class NoWebAuthnSessionError extends WebAuthnError {
+  constructor(
+    message = 'Log in with username and password to enable WebAuthn'
+  ) {
+    super(message)
+    this.name = 'NoWebAuthnSessionError'
   }
 }

@@ -5726,7 +5726,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-schema@npm:^2.1.6":
+"@peculiar/asn1-android@npm:^2.1.7":
+  version: 2.1.9
+  resolution: "@peculiar/asn1-android@npm:2.1.9"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.1.9
+    asn1js: ^3.0.4
+    tslib: ^2.4.0
+  checksum: ace36645b8647e7d00fc203413a32411dd33e921bf6b24f3b1c4b0ffa3535f2c661018fc16f67b5d0c99e672d7daceb09c97f7deec8bc49228dcb5b486cd430f
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-schema@npm:^2.1.6, @peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.1.9":
   version: 2.2.0
   resolution: "@peculiar/asn1-schema@npm:2.2.0"
   dependencies:
@@ -5734,6 +5745,19 @@ __metadata:
     pvtsutils: ^1.3.2
     tslib: ^2.4.0
   checksum: 9d31e4f9d015a2ee394fba6ddc8106ced29178d8a7f32a0f79adeec0a5770965759b29259652e4e57a0a9677a46984b8048659f275f3fcaf7dd59d7b87d1cc45
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-x509@npm:^2.1.7":
+  version: 2.1.9
+  resolution: "@peculiar/asn1-x509@npm:2.1.9"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.1.9
+    asn1js: ^3.0.4
+    ipaddr.js: ^2.0.1
+    pvtsutils: ^1.3.2
+    tslib: ^2.4.0
+  checksum: 7d0d804ead82686b5fc2826951649f02299cc3a9516901c014d815a253fa7b97400a07355b6e17b3a0e9a94d60c39609a3bd49ed64f2a6b6b1d1d27054fbe91c
   languageName: node
   linkType: hard
 
@@ -6142,6 +6166,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.8.6
     "@prisma/client": 3.15.2
     "@redwoodjs/auth": 2.1.0
+    "@simplewebauthn/server": 5.2.1
     "@types/aws-lambda": 8.10.101
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
@@ -6150,6 +6175,7 @@ __metadata:
     "@types/split2": 3.2.1
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
+    base64url: 3.0.1
     core-js: 3.23.5
     cross-undici-fetch: 0.4.13
     crypto-js: 4.1.1
@@ -6202,6 +6228,8 @@ __metadata:
     "@nhost/hasura-auth-js": 1.3.4
     "@nhost/nhost-js": 1.4.6
     "@okta/okta-auth-js": 6.7.2
+    "@simplewebauthn/browser": 5.2.1
+    "@simplewebauthn/typescript-types": 5.2.1
     "@supabase/supabase-js": 1.35.4
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.47
@@ -6763,6 +6791,40 @@ __metadata:
     zen-observable:
       optional: true
   checksum: 0d874453f6bc2460d71783292291f52feb36c2a75314b1072a6ffe6206562f33e9d664a554348d565a6b54da9041d75070371052545bc329caaa52f64216987f
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/browser@npm:5.2.1":
+  version: 5.2.1
+  resolution: "@simplewebauthn/browser@npm:5.2.1"
+  checksum: 7279ecec4ee93256b510c18e2a8636296bf5114638804d402b371308aa6ffe43545239fe0e79c02880961ec978f375fdc585b763a2052237e047fdc28fd5c7c3
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/server@npm:5.2.1":
+  version: 5.2.1
+  resolution: "@simplewebauthn/server@npm:5.2.1"
+  dependencies:
+    "@peculiar/asn1-android": ^2.1.7
+    "@peculiar/asn1-schema": ^2.1.7
+    "@peculiar/asn1-x509": ^2.1.7
+    "@simplewebauthn/typescript-types": ^5.2.1
+    base64url: ^3.0.1
+    cbor: ^5.1.0
+    debug: ^4.3.2
+    elliptic: ^6.5.3
+    jsrsasign: ^10.4.0
+    jwk-to-pem: ^2.0.4
+    node-fetch: ^2.6.0
+    node-rsa: ^1.1.1
+  checksum: 4071cb6912908c6f14dbc80b57adeb604cb0b37566abb991faff647ee9c2ba6fa3d46e6e2ea7e4ca9ca4054f8dac0f7f622e9b403ff84bfe29b0a5e4cb0fcb89
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/typescript-types@npm:5.2.1, @simplewebauthn/typescript-types@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@simplewebauthn/typescript-types@npm:5.2.1"
+  checksum: aa14895068ee2f9b66b7f1d25d2bb477413e4b1d5b4792b6822ccda767de779f9b6fd2b7d1543c39ff68786ea3b13e0598e785202579ac4675835124d63fc8bb
   languageName: node
   linkType: hard
 
@@ -10665,7 +10727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1.js@npm:^5.2.0":
+"asn1.js@npm:^5.2.0, asn1.js@npm:^5.3.0":
   version: 5.4.1
   resolution: "asn1.js@npm:5.4.1"
   dependencies:
@@ -10677,7 +10739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:~0.2.3":
+"asn1@npm:^0.2.4, asn1@npm:~0.2.3":
   version: 0.2.6
   resolution: "asn1@npm:0.2.6"
   dependencies:
@@ -10686,7 +10748,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1js@npm:^3.0.1, asn1js@npm:^3.0.5":
+"asn1js@npm:^3.0.1, asn1js@npm:^3.0.4, asn1js@npm:^3.0.5":
   version: 3.0.5
   resolution: "asn1js@npm:3.0.5"
   dependencies:
@@ -11353,6 +11415,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64url@npm:3.0.1, base64url@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "base64url@npm:3.0.1"
+  checksum: 5ca9d6064e9440a2a45749558dddd2549ca439a305793d4f14a900b7256b5f4438ef1b7a494e1addc66ced5d20f5c010716d353ed267e4b769e6c78074991241
+  languageName: node
+  linkType: hard
+
 "base@npm:^0.11.1":
   version: 0.11.2
   resolution: "base@npm:0.11.2"
@@ -11428,7 +11497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bignumber.js@npm:^9.0.0":
+"bignumber.js@npm:^9.0.0, bignumber.js@npm:^9.0.1":
   version: 9.0.2
   resolution: "bignumber.js@npm:9.0.2"
   checksum: b5c598ede49c3e391e53de6f992ee53960c45c96bb26e3933bd252890e77e3c703b88897a2148703f90f693d538396f8bed7c118a84a32fd54e24932bd16c04f
@@ -12240,6 +12309,16 @@ __metadata:
   version: 0.12.0
   resolution: "caseless@npm:0.12.0"
   checksum: ccf64bcb6c0232cdc5b7bd91ddd06e23a4b541f138336d4725233ac538041fb2f29c2e86c3c4a7a61ef990b665348db23a047060b9414c3a6603e9fa61ad4626
+  languageName: node
+  linkType: hard
+
+"cbor@npm:^5.1.0":
+  version: 5.2.0
+  resolution: "cbor@npm:5.2.0"
+  dependencies:
+    bignumber.js: ^9.0.1
+    nofilter: ^1.0.4
+  checksum: d39e14a05930648c6446b107aee3653e1b1ce8195dd121cb65790d9091202d8d98af0e4c17787f38bbc33fadc969ca99c94b40c144b84ce1e406a7f411c3ccf4
   languageName: node
   linkType: hard
 
@@ -20975,6 +21054,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsrsasign@npm:^10.4.0":
+  version: 10.5.24
+  resolution: "jsrsasign@npm:10.5.24"
+  checksum: c4fa9bcae111e12895a6d6af188448ee825fb265dde3a26c607136aac72c6fc0c8d034dcc2e03695e9711eee778a3c2fc4b0a5d8af019b54b2c088bc55330b7d
+  languageName: node
+  linkType: hard
+
 "jsx-ast-utils@npm:^2.4.1 || ^3.0.0, jsx-ast-utils@npm:^3.3.1":
   version: 3.3.2
   resolution: "jsx-ast-utils@npm:3.3.2"
@@ -21037,6 +21123,17 @@ __metadata:
     ecdsa-sig-formatter: 1.0.11
     safe-buffer: ^5.0.1
   checksum: 6baab823b93c038ba1d2a9e531984dcadbc04e9eb98d171f4901b7a40d2be15961a359335de1671d78cb6d987f07cbe5d350d8143255977a889160c4d90fcc3c
+  languageName: node
+  linkType: hard
+
+"jwk-to-pem@npm:^2.0.4":
+  version: 2.0.5
+  resolution: "jwk-to-pem@npm:2.0.5"
+  dependencies:
+    asn1.js: ^5.3.0
+    elliptic: ^6.5.4
+    safe-buffer: ^5.0.1
+  checksum: 307cacfbf4f38b4c4c77bcf3e578ef0d1d9536a9323e4f5be7e55e777d9df4fb5e89abbbfaf7c080b9f9da1241217f10391e4114c7a72cac66411d374427eeb9
   languageName: node
   linkType: hard
 
@@ -23350,6 +23447,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-rsa@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "node-rsa@npm:1.1.1"
+  dependencies:
+    asn1: ^0.2.4
+  checksum: af3b6534844dfeaa8290a7bc20d5e4d1a134f05d456725e56d75b7661d4d63cd63914ce335ee8889adc2458112b996d4ba8a83ba105bde744a26e61d9160f639
+  languageName: node
+  linkType: hard
+
 "nodemon@npm:2.0.19":
   version: 2.0.19
   resolution: "nodemon@npm:2.0.19"
@@ -23367,6 +23473,13 @@ __metadata:
   bin:
     nodemon: bin/nodemon.js
   checksum: 53ccc2cf92bce69046399173b23e281a04be62d59ac6e6689cbb0f5ada83673720e52795abe74113bffabb47078632a198b877e458f7b3f8756186d26dcf729c
+  languageName: node
+  linkType: hard
+
+"nofilter@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "nofilter@npm:1.0.4"
+  checksum: fcee4ed627e18c8d66dda5afca79607e569e6997c08bd12dfb8a1578fe2674a1de7761b36ae207d6a10c545f27e236aae18f0c2b33e0ef8971507bda419793b7
   languageName: node
   linkType: hard
 
