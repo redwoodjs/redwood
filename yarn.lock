@@ -6063,7 +6063,7 @@ __metadata:
     aws-lambda: 1.0.7
     chalk: 4.1.2
     chokidar: 3.5.3
-    core-js: 3.23.4
+    core-js: 3.23.5
     fast-json-parse: 1.0.3
     fastify: 3.29.1
     fastify-raw-body: 3.2.0
@@ -6100,7 +6100,7 @@ __metadata:
     "@types/split2": 3.2.1
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
-    core-js: 3.23.4
+    core-js: 3.23.5
     cross-undici-fetch: 0.4.13
     crypto-js: 4.1.1
     humanize-string: 2.1.0
@@ -6150,7 +6150,7 @@ __metadata:
     "@supabase/supabase-js": 1.35.4
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.47
-    core-js: 3.23.4
+    core-js: 3.23.5
     firebase: 9.9.0
     firebase-admin: 10.3.0
     gotrue-js: 0.9.29
@@ -6182,7 +6182,7 @@ __metadata:
     chalk: 4.1.2
     concurrently: 7.2.2
     configstore: 3.1.5
-    core-js: 3.23.4
+    core-js: 3.23.5
     cross-env: 7.0.3
     decamelize: 5.0.0
     dotenv-defaults: 5.0.2
@@ -6231,7 +6231,7 @@ __metadata:
     "@types/prettier": 2.6.3
     "@types/yargs": 17.0.10
     "@vscode/ripgrep": 1.14.2
-    core-js: 3.23.4
+    core-js: 3.23.5
     cross-undici-fetch: 0.4.13
     deepmerge: 4.2.2
     execa: 5.1.1
@@ -6280,7 +6280,7 @@ __metadata:
     babel-plugin-module-resolver: 4.1.0
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
-    core-js: 3.23.4
+    core-js: 3.23.5
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 4.0.0
     dotenv-webpack: 8.0.0
@@ -6366,7 +6366,7 @@ __metadata:
     "@types/react": 17.0.47
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
-    core-js: 3.23.4
+    core-js: 3.23.5
     graphql: 16.5.0
     jest: 27.5.1
     nodemon: 2.0.19
@@ -6406,7 +6406,7 @@ __metadata:
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
-    core-js: 3.23.4
+    core-js: 3.23.5
     cross-undici-fetch: 0.4.13
     graphql: 16.5.0
     graphql-scalars: 1.17.0
@@ -6447,7 +6447,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: 0.5.0
     babel-plugin-tester: 10.1.0
     chalk: 4.1.2
-    core-js: 3.23.4
+    core-js: 3.23.5
     deepmerge: 4.2.2
     esbuild: 0.14.49
     fast-glob: 3.2.11
@@ -6486,7 +6486,7 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.12
-    core-js: 3.23.4
+    core-js: 3.23.5
     cross-undici-fetch: 0.4.13
     jest: 27.5.1
     mime-types: 2.1.35
@@ -6506,7 +6506,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@prisma/client": 3.15.2
     "@prisma/sdk": 3.15.2
-    core-js: 3.23.4
+    core-js: 3.23.5
     esbuild: 0.14.49
     jest: 27.5.1
   languageName: unknown
@@ -6524,7 +6524,7 @@ __metadata:
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.47
     "@types/react-dom": 17.0.17
-    core-js: 3.23.4
+    core-js: 3.23.5
     jest: 27.5.1
     lodash.isequal: 4.5.0
     prop-types: 15.8.1
@@ -6550,7 +6550,7 @@ __metadata:
     "@types/node": 16.11.38
     "@types/vscode": 1.69.0
     camelcase: 6.3.0
-    core-js: 3.23.4
+    core-js: 3.23.5
     deepmerge: 4.2.2
     dotenv-defaults: 5.0.2
     enquirer: 2.3.6
@@ -6586,7 +6586,7 @@ __metadata:
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.10
     ci-info: 3.3.2
-    core-js: 3.23.4
+    core-js: 3.23.5
     cross-undici-fetch: 0.4.13
     envinfo: 7.8.1
     jest: 27.5.1
@@ -6627,7 +6627,7 @@ __metadata:
     "@types/webpack": 5.28.0
     babel-jest: 27.5.1
     babel-plugin-inline-react-svg: 2.0.1
-    core-js: 3.23.4
+    core-js: 3.23.5
     jest: 27.5.1
     jest-watch-typeahead: 2.0.0
     msw: 0.40.2
@@ -6652,7 +6652,7 @@ __metadata:
     "@types/react": 17.0.47
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
-    core-js: 3.23.4
+    core-js: 3.23.5
     graphql: 16.5.0
     graphql-tag: 2.12.6
     jest: 27.5.1
@@ -13306,10 +13306,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.23.4, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.6, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
-  version: 3.23.4
-  resolution: "core-js@npm:3.23.4"
-  checksum: 08e85e495f4d99df899978413dfd2e5e13233e64f9918cd8baa7fb30d82992ef9e0c6d47f7d5c25f581d9d6e7446dcb878d0c167e01344ffe6c20ab62d4bdd4c
+"core-js@npm:3.23.5, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.6, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.23.5
+  resolution: "core-js@npm:3.23.5"
+  checksum: ab9b483ede285b3949e2411f9190d147ac589d111b0aa3a4b2999a1bf2755b3e930529c2a22ff550efd4fc154c7cfae700bee858dedff905a09f35ddbcc6425f
   languageName: node
   linkType: hard
 
@@ -13476,7 +13476,7 @@ __metadata:
     "@redwoodjs/telemetry": 2.1.0
     chalk: 4.1.2
     check-node-version: 4.2.1
-    core-js: 3.23.4
+    core-js: 3.23.5
     execa: 5.1.1
     fs-extra: 10.1.0
     jest: 27.5.1
@@ -27216,7 +27216,7 @@ __metadata:
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
-    core-js: 3.23.4
+    core-js: 3.23.5
     cypress: 9.7.0
     cypress-wait-until: 1.7.2
     eslint: 8.20.0
