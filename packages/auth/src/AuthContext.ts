@@ -1,0 +1,81 @@
+import React from 'react'
+
+export interface CurrentUser {
+  roles?: Array<string> | string
+}
+
+export interface AuthContextInterface<
+  TUser,
+  TLogIn,
+  TLogOut,
+  TSignUp,
+  TForgotPassword,
+  TResetPassword,
+  TValidateResetToken
+> {
+  /* Determining your current authentication state */
+  loading: boolean
+  isAuthenticated: boolean
+  /* The current user's data from the `getCurrentUser` function on the api side */
+  currentUser: null | CurrentUser
+  /* The user's metadata from the auth provider */
+  userMetadata: null | TUser
+  logIn(options?: unknown): Promise<TLogIn>
+  logOut(options?: unknown): Promise<TLogOut>
+  signUp(options?: unknown): Promise<TSignUp>
+  /**
+   * Clients should always return null or string
+   * It is expected that they catch any errors internally
+   */
+  getToken(): Promise<null | string>
+  /**
+   * Fetches the "currentUser" from the api side,
+   * but does not update the current user state.
+   **/
+  getCurrentUser(): Promise<null | CurrentUser>
+  /**
+   * Checks if the "currentUser" from the api side
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
+   **/
+  hasRole(rolesToCheck: string | string[]): boolean
+  /**
+   * Redetermine authentication state and update the state.
+   */
+  reauthenticate(): Promise<void>
+  forgotPassword(username: string): Promise<TForgotPassword>
+  resetPassword(options?: unknown): Promise<TResetPassword>
+  validateResetToken(resetToken: string | null): Promise<TValidateResetToken>
+  /**
+   * A reference to the client that you passed into the `AuthProvider`,
+   * which is useful if we do not support some specific functionality.
+   */
+  client?: any
+  type: string
+  hasError: boolean
+  error?: Error
+}
+
+export function createAuthContext<
+  TUser,
+  TLogIn,
+  TLogOut,
+  TSignUp,
+  TForgotPassword,
+  TResetPassword,
+  TValidateResetToken
+>() {
+  return React.createContext<
+    | AuthContextInterface<
+        TUser,
+        TLogIn,
+        TLogOut,
+        TSignUp,
+        TForgotPassword,
+        TResetPassword,
+        TValidateResetToken
+      >
+    | undefined
+  >(undefined)
+}
