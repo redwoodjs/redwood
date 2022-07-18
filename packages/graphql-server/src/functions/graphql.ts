@@ -292,7 +292,7 @@ export const createGraphQLHandler = ({
     let lambdaResponse: APIGatewayProxyResult
 
     // @NOTE AWS types define that multiValueHeaders always exist, even as an empty object
-    // But this isn't true on Vercel, its just undefined.
+    // But this isn't true on Vercel, it's just undefined.
     const supportsMultiValueHeaders =
       event.multiValueHeaders && Object.keys(event.multiValueHeaders).length > 0
 

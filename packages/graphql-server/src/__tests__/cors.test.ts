@@ -71,7 +71,7 @@ const mockLambdaEvent = ({
     httpMethod,
     multiValueQueryStringParameters: null,
     isBase64Encoded: false,
-    multiValueHeaders: {}, // this is stupid. but that's what they types say. It definitely can be null, e.g. on Vercel
+    multiValueHeaders: {}, // this is silly - the types require a value. It definitely can be undefined, e.g. on Vercel.
     path: '',
     pathParameters: null,
     stageVariables: null,
