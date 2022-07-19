@@ -29,6 +29,7 @@
   "resolutions": {
     "@types/react": "17.0.47",
     "all-contributors-cli@6.20.0": "patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch",
+    "microtime": "3.1.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -36,7 +37,7 @@
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-textdocument": "1.0.5",
-    "vscode-languageserver-types": "3.17.1"
+    "vscode-languageserver-types": "3.17.2"
   },
   "devDependencies": {
     "@actions/core": "1.9.0",
@@ -54,11 +55,11 @@
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
-    "@playwright/test": "1.22.2",
+    "@playwright/test": "1.23.4",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
-    "@testing-library/user-event": "14.2.1",
+    "@testing-library/user-event": "14.2.6",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "27.5.2",
     "@types/jscodeshift": "0.11.5",
@@ -71,10 +72,10 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
-    "core-js": "3.23.4",
+    "core-js": "3.23.5",
     "cypress": "9.7.0",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.18.0",
+    "eslint": "8.20.0",
     "fast-glob": "3.2.11",
     "fs-extra": "10.1.0",
     "is-port-reachable": "3.1.0",
@@ -88,15 +89,15 @@
     "node-notifier": "10.0.1",
     "nodemon": "2.0.19",
     "npm-packlist": "5.1.1",
-    "nx": "14.4.2",
-    "octokit": "1.7.2",
+    "nx": "14.4.3",
+    "octokit": "2.0.4",
     "ora": "5.4.1",
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
     "typescript": "4.7.4",
     "typescript-transform-paths": "3.3.1",
-    "zx": "6.1.0"
+    "zx": "7.0.7"
   },
   "packageManager": "yarn@3.2.1",
   "npmClient": "yarn"
