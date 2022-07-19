@@ -50,7 +50,7 @@
     "@babel/core": "7.16.7",
     "@clerk/clerk-sdk-node": "3.8.6",
     "@redwoodjs/auth": "2.1.0",
-    "@simplewebauthn/server": "5.2.1",
+    "@simplewebauthn/server": "5.3.0",
     "@types/aws-lambda": "8.10.101",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "8.5.8",
