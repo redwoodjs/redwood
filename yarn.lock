@@ -109,18 +109,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.1":
-  version: 1.22.1
-  resolution: "@auth0/auth0-spa-js@npm:1.22.1"
+"@auth0/auth0-spa-js@npm:1.22.2":
+  version: 1.22.2
+  resolution: "@auth0/auth0-spa-js@npm:1.22.2"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.22.6
+    core-js: ^3.23.2
     es-cookie: ^1.3.2
-    fast-text-encoding: ^1.0.3
+    fast-text-encoding: ^1.0.4
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: c7c94e3d666b3f9d72f9566e32a58522827791adc6789bd4115415c454aa037ea8c6eabfcf481ce71260084c12df3767a6dfb6a37d05d0da05356c405ea73021
+  checksum: 237b34063fb177bfdfe7399c00710cfffab12db06da97df7513db83f39a23222846301fb51b19db182e69130a31233e28efe87fb60e8da8e7bb2455a8942c2a4
   languageName: node
   linkType: hard
 
@@ -6216,7 +6216,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.1
+    "@auth0/auth0-spa-js": 1.22.2
     "@azure/msal-browser": 2.28.0
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
@@ -13481,7 +13481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.23.5, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.22.6, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.23.5, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.19.0, core-js@npm:^3.23.2, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.23.5
   resolution: "core-js@npm:3.23.5"
   checksum: ab9b483ede285b3949e2411f9190d147ac589d111b0aa3a4b2999a1bf2755b3e930529c2a22ff550efd4fc154c7cfae700bee858dedff905a09f35ddbcc6425f
@@ -16498,10 +16498,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-text-encoding@npm:^1.0.0, fast-text-encoding@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "fast-text-encoding@npm:1.0.3"
-  checksum: 467a49dc6a02933ed7e4f7e9120252138fff63649c3ce32fff7a7835144ccbf29a6b18fc2b5df448f4aab12f2bce6481a107281a916cea35978e974f07c953a0
+"fast-text-encoding@npm:^1.0.0, fast-text-encoding@npm:^1.0.3, fast-text-encoding@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "fast-text-encoding@npm:1.0.4"
+  checksum: 7358726685a2378562c929e4be5acba4597e3677d1f2d30be5804da5863ae0926e1725b1af6270698752aad3c3647f5b97278c2f9e73751f3d3184cd4f931d9c
   languageName: node
   linkType: hard
 
