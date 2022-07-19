@@ -234,6 +234,9 @@ export class DbAuthHandler {
     futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
     this.futureExpiresDate = futureDate.toUTCString()
 
+    // Note that we handle these headers differently in functions/graphql.ts
+    // because it's handled by graphql-yoga, so we map the cors config to yoga config
+    // See packages/graphql-server/src/__tests__/mapRwCorsToYoga.test.ts
     if (options.cors) {
       this.corsContext = createCorsContext(options.cors)
     }
