@@ -6101,7 +6101,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.23.5
-    cross-undici-fetch: 0.4.13
+    cross-undici-fetch: 0.4.14
     crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 27.5.1
@@ -6232,7 +6232,7 @@ __metadata:
     "@types/yargs": 17.0.10
     "@vscode/ripgrep": 1.14.2
     core-js: 3.23.5
-    cross-undici-fetch: 0.4.13
+    cross-undici-fetch: 0.4.14
     deepmerge: 4.2.2
     execa: 5.1.1
     fast-glob: 3.2.11
@@ -6407,7 +6407,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     core-js: 3.23.5
-    cross-undici-fetch: 0.4.13
+    cross-undici-fetch: 0.4.14
     graphql: 16.5.0
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
@@ -6487,7 +6487,7 @@ __metadata:
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.12
     core-js: 3.23.5
-    cross-undici-fetch: 0.4.13
+    cross-undici-fetch: 0.4.14
     jest: 27.5.1
     mime-types: 2.1.35
     typescript: 4.7.4
@@ -6587,7 +6587,7 @@ __metadata:
     "@types/yargs": 17.0.10
     ci-info: 3.3.2
     core-js: 3.23.5
-    cross-undici-fetch: 0.4.13
+    cross-undici-fetch: 0.4.14
     envinfo: 7.8.1
     jest: 27.5.1
     systeminformation: 5.12.1
@@ -13552,9 +13552,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-undici-fetch@npm:0.4.13, cross-undici-fetch@npm:^0.4.11, cross-undici-fetch@npm:^0.4.2":
-  version: 0.4.13
-  resolution: "cross-undici-fetch@npm:0.4.13"
+"cross-undici-fetch@npm:0.4.14, cross-undici-fetch@npm:^0.4.11, cross-undici-fetch@npm:^0.4.2":
+  version: 0.4.14
+  resolution: "cross-undici-fetch@npm:0.4.14"
   dependencies:
     abort-controller: ^3.0.0
     busboy: ^1.6.0
@@ -13563,7 +13563,7 @@ __metadata:
     node-fetch: ^2.6.7
     undici: 5.5.1
     web-streams-polyfill: ^3.2.0
-  checksum: 4d575a5e705ba8cb85e13798b3cebdcbe303dcca5eb976a2e96ff240b9053f486b4f8501881ee102e5db02d06e8e14297a4cb26c57e99278eae960ed9485cdb3
+  checksum: 4c81cf227c5fb4aac58f3da8d38d88c426745c09c6a11c03ef10317ccc61cf0b4c72edd436b0a9693c1eb0ec34427c9721f41c391cfd8e411c1e8f5e8ce1318e
   languageName: node
   linkType: hard
 
