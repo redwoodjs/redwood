@@ -59,6 +59,13 @@ const TableMock = class {
     })
   }
 
+  findMany({ where }) {
+    return this.records.filter((record) => {
+      const key = Object.keys(where)[0]
+      return record[key] === where[key]
+    })
+  }
+
   deleteMany() {
     const count = this.records.length
     this.records = []
@@ -67,7 +74,7 @@ const TableMock = class {
 }
 
 // create a mock `db` provider that simulates prisma creating/finding/deleting records
-const db = new DbMock(['user'])
+const db = new DbMock(['user', 'userCredential'])
 
 const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
@@ -118,6 +125,7 @@ describe('dbAuth', () => {
 
     options = {
       authModelAccessor: 'user',
+      credentialModelAccessor: 'userCredential',
       authFields: {
         id: 'id',
         username: 'email',
@@ -125,6 +133,7 @@ describe('dbAuth', () => {
         salt: 'salt',
         resetToken: 'resetToken',
         resetTokenExpiresAt: 'resetTokenExpiresAt',
+        challenge: 'webAuthnChallenge',
       },
       db: db,
       excludeUserFields: [],
@@ -161,6 +170,22 @@ describe('dbAuth', () => {
           usernameTaken: 'Username `${username}` already in use',
         },
       },
+      webAuthn: {
+        enabled: true,
+        expires: 60 * 30,
+        name: 'Webauthn Test',
+        domain: 'localhost',
+        origin: 'http://localhost:8910',
+        type: 'platform',
+        timeout: 30000,
+        credentialFields: {
+          id: 'id',
+          userId: 'userId',
+          publicKey: 'publicKey',
+          transports: 'transports',
+          counter: 'counter',
+        },
+      },
     }
   })
 
@@ -169,6 +194,7 @@ describe('dbAuth', () => {
     await db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
+    await db.userCredential.deleteMany()
   })
 
   describe('CSRF_TOKEN', () => {
@@ -199,11 +225,30 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('futureExpiresDate', () => {
+  describe('dbCredentialAccessor', () => {
+    it('returns the prisma db accessor for a UserCredential model', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      expect(dbAuth.dbCredentialAccessor).toEqual(db.userCredential)
+    })
+  })
+
+  describe('sessionExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
+      const expiresAt = new Date()
+      expiresAt.setSeconds(expiresAt.getSeconds() + options.login.expires)
 
-      expect(dbAuth.futureExpiresDate).toMatch(UTC_DATE_REGEX)
+      expect(dbAuth.sessionExpiresDate).toEqual(expiresAt.toUTCString())
+    })
+  })
+
+  describe('webAuthnExpiresDate', () => {
+    it('returns a date in the future as a UTCString', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const expiresAt = new Date()
+      expiresAt.setSeconds(expiresAt.getSeconds() + options.webAuthn.expires)
+
+      expect(dbAuth.webAuthnExpiresDate).toEqual(expiresAt.toUTCString())
     })
   })
 
@@ -1095,12 +1140,8 @@ describe('dbAuth', () => {
       }
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      try {
-        await dbAuth.signup()
-      } catch (e) {
-        expect(e.message).toEqual('Cannot signup')
-      }
       expect.assertions(1)
+      await expect(dbAuth.signup()).rejects.toThrow('Cannot signup')
     })
 
     it('creates a new user and logs them in', async () => {
@@ -1180,6 +1221,372 @@ describe('dbAuth', () => {
       const response = await dbAuth.getToken()
 
       expect(response[0]).toEqual('{"error":"User not found"}')
+    })
+  })
+
+  describe('webAuthnAuthenticate', () => {
+    it('throws an error if WebAuthn options are not defined', async () => {
+      event = {
+        headers: {},
+      }
+      options.webAuthn = undefined
+
+      try {
+        const _dbAuth = new DbAuthHandler(event, context, options)
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if WebAuthn is disabled', async () => {
+      event = {
+        headers: {},
+      }
+      options.webAuthn.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect.assertions(1)
+      await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
+        dbAuthError.WebAuthnError
+      )
+    })
+
+    it('throws an error if UserCredential is not found in database', async () => {
+      event = {
+        headers: { 'Content-Type': 'application/json' },
+        body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect.assertions(1)
+      await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
+        'Credentials not found'
+      )
+    })
+
+    it('throws an error if signature verification fails', async () => {
+      const user = await createDbUser({
+        webAuthnChallenge: 'QGdAFmPB711UDnEelZm-OHkLs1UwX6yebPI_jLoSVo',
+      })
+      await db.userCredential.create({
+        data: {
+          id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
+          userId: user.id,
+          transports: null,
+          publicKey: 'foobar',
+        },
+      })
+      event = {
+        headers: { 'Content-Type': 'application/json' },
+        body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect.assertions(1)
+      await expect(dbAuth.webAuthnAuthenticate()).rejects.toThrow(
+        'Unexpected authentication response challenge'
+      )
+    })
+
+    it('sets challenge in database to null', async () => {
+      const user = await createDbUser({
+        webAuthnChallenge: 'GdAFmPB711UDnEelZm-OHkLs1UwX6yebPI_jLoSVo',
+      })
+      await db.userCredential.create({
+        data: {
+          id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
+          userId: user.id,
+          transports: null,
+          publicKey: 'foobar',
+        },
+      })
+      event = {
+        headers: { 'Content-Type': 'application/json' },
+        body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect.assertions(1)
+      try {
+        await dbAuth.webAuthnAuthenticate()
+      } catch (e) {
+        const savedUser = await db.user.findFirst({ where: { id: user.id } })
+        expect(savedUser.webAuthnChallenge).toEqual(null)
+      }
+    })
+
+    it('sets a webAuthn cookie if valid authentication', async () => {
+      const user = await createDbUser({
+        webAuthnChallenge: 'LtgWphYK_eN5rXc_HdvULvOqpPWyoRvbml2Po00UHag',
+      })
+      await db.userCredential.create({
+        data: {
+          id: 'CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA',
+          userId: user.id,
+          publicKey: Buffer.from([
+            165, 1, 2, 3, 38, 32, 1, 33, 88, 32, 24, 136, 169, 77, 11, 126, 129,
+            202, 3, 60, 234, 86, 233, 152, 222, 252, 11, 253, 11, 79, 163, 89,
+            189, 145, 216, 240, 102, 92, 146, 75, 249, 207, 34, 88, 32, 187,
+            235, 12, 104, 222, 236, 198, 241, 195, 234, 111, 64, 60, 86, 40,
+            254, 118, 163, 27, 172, 76, 173, 16, 120, 238, 20, 235, 98, 67, 103,
+            109, 240,
+          ]),
+          transports: null,
+          counter: 0,
+        },
+      })
+
+      event = {
+        headers: { 'Content-Type': 'application/json' },
+        body: '{"method":"webAuthnAuthenticate","id":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","rawId":"CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA","response":{"authenticatorData":"SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MFAAAAAA","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTHRnV3BoWUtfZU41clhjX0hkdlVMdk9xcFBXeW9SdmJtbDJQbzAwVUhhZyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9","signature":"MEUCIQD3NOM7Aw0HxPw6EFGf86iwf2yd3p4NncNNLcjd-86zgwIgHuh80bLNV7EcwBi4IAcH57iueLg0X2gLtO5_Y6PMCFE","userHandle":"2"},"type":"public-key","clientExtensionResults":{}}',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const [body, headers] = await dbAuth.webAuthnAuthenticate()
+
+      expect(body).toEqual(false)
+      expect(headers['Set-Cookie'][0]).toMatch(
+        'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA'
+      )
+    })
+  })
+
+  describe('webAuthnAuthOptions', () => {
+    it('throws an error if user is not logged in', async () => {
+      event = {
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnAuthOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.NotLoggedInError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if WebAuthn is disabled', async () => {
+      event = {
+        headers: {},
+      }
+      options.webAuthn.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnAuthOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.WebAuthnError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('returns options needed for webAuthn registration', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnAuthOptions()
+      const regOptions = response[0]
+
+      expect(regOptions.allowCredentials).toEqual([])
+      expect(regOptions.challenge).not.toBeUndefined()
+      expect(regOptions.rpId).toEqual(options.webAuthn.domain)
+      expect(regOptions.timeout).toEqual(options.webAuthn.timeout)
+    })
+
+    it('includes existing devices', async () => {
+      const user = await createDbUser()
+      const credential = await db.userCredential.create({
+        data: {
+          id: 'qwertyuiog',
+          userId: user.id,
+          transports: null,
+        },
+      })
+
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnAuthOptions()
+      const regOptions = response[0]
+
+      expect(regOptions.allowCredentials[0].id).toEqual(credential.id)
+      expect(regOptions.allowCredentials[0].transports).toEqual([
+        'usb',
+        'ble',
+        'nfc',
+        'internal',
+      ])
+      expect(regOptions.allowCredentials[0].type).toEqual('public-key')
+    })
+  })
+
+  describe('webAuthnRegOptions', () => {
+    it('throws an error if user is not logged in', async () => {
+      event = {
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnRegOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.NotLoggedInError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if WebAuthn is disabled', async () => {
+      event = {
+        headers: {},
+      }
+      options.webAuthn.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.webAuthnRegOptions()
+      } catch (e) {
+        expect(e instanceof dbAuthError.WebAuthnError).toEqual(true)
+      }
+      expect.assertions(1)
+    })
+
+    it('returns options needed for webAuthn registration', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnRegOptions()
+      const regOptions = response[0]
+
+      expect(regOptions.attestation).toEqual('none')
+      expect(regOptions.authenticatorSelection.authenticatorAttachment).toEqual(
+        options.webAuthn.type
+      )
+      expect(regOptions.excludeCredentials).toEqual([])
+      expect(regOptions.rp.name).toEqual(options.webAuthn.name)
+      expect(regOptions.rp.id).toEqual(options.webAuthn.domain)
+      expect(regOptions.timeout).toEqual(options.webAuthn.timeout)
+      expect(regOptions.user.id).toEqual(user.id)
+      expect(regOptions.user.displayName).toEqual(user.email)
+      expect(regOptions.user.name).toEqual(user.email)
+    })
+
+    it('defaults timeout if not set', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      options.webAuthn.timeout = null
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnRegOptions()
+
+      expect(response[0].timeout).toEqual(60000)
+    })
+
+    it('saves the generated challenge to the user record', async () => {
+      let user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.webAuthnRegOptions()
+      user = await db.user.findFirst({ where: { id: user.id } })
+
+      expect(user.webAuthnChallenge).toEqual(response[0].challenge)
+    })
+  })
+
+  describe('webAuthnRegister', () => {
+    it('saves a credential record to the database', async () => {
+      const user = await createDbUser({
+        webAuthnChallenge: 'HuGPrQqK7f53NLwMZMst_DL9Dig2BBivDYWWpawIPVM',
+      })
+      event = {
+        headers: {
+          'Content-Type': 'application/json',
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+        body: '{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth.webAuthnRegister()
+
+      const credential = db.userCredential.findFirst({
+        where: { userId: user.id },
+      })
+
+      expect(credential.id).toEqual(
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
+      )
+      expect(credential.transports).toEqual('["internal"]')
+      expect(credential.counter).toEqual(0)
+    })
+  })
+
+  describe('_validateOptions', () => {
+    it('throws an error if credentialModelAccessor is defined but not webAuthn options', () => {
+      delete options.webAuthn
+      try {
+        const _instance = new DbAuthHandler({ headers: {} }, context, options)
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
+      }
+      expect.assertions(1)
+    })
+
+    it('throws an error if credentialModelAccessor is undefined but webAuthn options exist', () => {
+      delete options.credentialModelAccessor
+      try {
+        const _instance = new DbAuthHandler({ headers: {} }, context, options)
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.NoWebAuthnConfigError)
+      }
+      expect.assertions(1)
+    })
+  })
+
+  describe('_webAuthnCookie', () => {
+    it('returns the parts needed for the webAuthn cookie, defaulted to future expire', () => {
+      const dbAuth = new DbAuthHandler({ headers: {} }, context, options)
+
+      expect(dbAuth._webAuthnCookie('1234')).toMatch('webAuthn=1234;Expires=')
+    })
+
+    it('returns the parts needed for the expire the webAuthn cookie', () => {
+      const dbAuth = new DbAuthHandler({ headers: {} }, context, options)
+
+      expect(dbAuth._webAuthnCookie('1234', 'now')).toMatch(
+        'webAuthn=1234;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      )
     })
   })
 
@@ -1268,7 +1675,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `Expires=${dbAuth.futureExpiresDate}`
+        `Expires=${dbAuth.sessionExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
