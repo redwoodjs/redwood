@@ -550,7 +550,7 @@ function FormInner<TFieldValues>(
     >
       <ServerErrorsContext.Provider
         value={
-          errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
+          errorProps?.graphQLErrors?.[0]?.extensions?.properties?.messages || {}
         }
       >
         <FormProvider {...formMethods}>{children}</FormProvider>
