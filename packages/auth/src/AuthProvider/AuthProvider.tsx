@@ -85,7 +85,6 @@ export function createAuthProvider<
    * ```
    */
   const AuthProvider = ({
-    type,
     children,
     skipFetchCurrentUser,
   }: AuthProviderProps) => {
@@ -139,6 +138,7 @@ export function createAuthProvider<
     const forgotPassword = useForgotPassword(authImplementation)
     const resetPassword = useResetPassword(authImplementation)
     const validateResetToken = useValidateResetToken(authImplementation)
+    const type = authImplementation.type
 
     // Whenever the authImplementation is ready to go, restore auth and reauthenticate
     // TODO: We need this for Clerk. Need to figure out how to incorporate
