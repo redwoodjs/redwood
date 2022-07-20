@@ -39,10 +39,6 @@ const configureFastify = async (fastify, options) => {
     fastify.log.info({ custom: { options } }, 'Configuring api side')
   }
 
-  if (options.side === 'proxy') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side proxy')
-  }
-
   if (options.side === 'web') {
     fastify.log.info({ custom: { options } }, 'Configuring web side')
   }
