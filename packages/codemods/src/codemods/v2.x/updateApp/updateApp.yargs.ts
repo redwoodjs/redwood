@@ -7,7 +7,7 @@ import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-app'
 export const description =
-  '(v2.1.0->v2.2.0) Updates App.{js,tsx} to use new Clerk auth provider'
+  '(v2.1.0->v2.2.0) Updates App.{js,tsx} to use the new Clerk auth provider'
 
 export const handler = () => {
   task('Updating App.{js,tsx}', async () => {
