@@ -119,7 +119,7 @@ type Query {
 }
 ```
 
-These types will also be handled automatically. But if you're returning a different Prisma model, you may need to write your own resolver type, as the type generator won't know how to map the Prisma type to the GraphQL return type.
+These types will also be handled automatically. But if you're returning a different Prisma model (instead of something like the generic `OutOfStock` type we have here, which is just a message), you may need to write your own resolver type, as the type generator won't know how to map the Prisma type to the GraphQL return type.
 
 :::
 
