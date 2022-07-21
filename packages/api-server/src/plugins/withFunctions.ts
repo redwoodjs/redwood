@@ -14,8 +14,10 @@ const withFunctions = async (
   const { apiRootPath } = options
   // Add extra fastify plugins
   fastify.register(fastifyUrlData)
-  fastify.register(fastifyRawBody)
 
+  // Fastify v4 must await the fastifyRawBody plugin
+  // registration to ensure the plugin is ready
+  await fastify.register(fastifyRawBody)
   const { configureFastify } = loadFastifyConfig()
 
   if (configureFastify) {
