@@ -107,6 +107,16 @@ If you'd rather create your own, you might want to start from the generated page
 
 Almost all config for dbAuth lives in `api/src/functions/auth.js` in the object you give to the `DbAuthHandler` initialization. The comments above each key will explain what goes where. Here's an overview of the more important options:
 
+### login.enabled
+
+Allow users to call login. Defaults to true. Needs to be explicitly set to false to disable the flow.
+
+```jsx
+login: {
+  enabled: false
+}
+```
+
 ### login.handler()
 
 If you want to do something other than immediately let a user log in if their username/password is correct, you can add additional logic in `login.handler()`. For example, if a user's credentials are correct, but they haven't verified their email address yet, you can throw an error in this function with the appropriate message and then display it to the user. If the login should proceed, simply return the user that was passed as the only argument to the function:
@@ -120,6 +130,16 @@ login: {
       return user
     }
   }
+}
+```
+
+### signup.enabled
+
+Allow users to sign up. Defaults to true. Needs to be explicitly set to false to disable the flow.
+
+```jsx
+signup: {
+  enabled: false
 }
 ```
 
@@ -167,6 +187,16 @@ const onSubmit = async (data) => {
 }
 ```
 
+### forgotPassword.enabled
+
+Allow users to request a new password via a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
+When disabling this flow you probably want to disable `resetPassword` as well.
+
+```jsx
+forgotPassword: {
+  enabled: false
+}
+```
 ### forgotPassword.handler()
 
 This handler is invoked if a user is found with the username/email that they submitted on the Forgot Password page, and that user will be passed as an argument. Inside this function is where you'll send the user a link to reset their password—via an email is most common. The link will, by default, look like:
@@ -176,6 +206,17 @@ This handler is invoked if a user is found with the username/email that they sub
 If you changed the path to the Reset Password page in your routes you'll need to change it here. If you used another name for the `resetToken` database field, you'll need to change that here as well:
 
     https://example.com/reset-password?resetKey=${user.resetKey}
+
+### resetPassword.enabled
+
+Allow users to reset their password via a code from a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
+When disabling this flow you probably want to disable `forgotPassword` as well.
+
+```jsx
+resetPassword: {
+  enabled: false
+}
+```
 
 ### resetPassword.handler()
 
