@@ -1,3 +1,5 @@
+import { db } from '$api/src/lib/db'
+
 export async function routeParameters() {
-  return [{ id: 2 }]
+  return (await db.post.findMany()).map((post) => ({ id: post.id }))
 }
