@@ -22,7 +22,7 @@ Make sure that they're syntactically valid, and that every query and mutation on
 
 If you're curious, you can find the generated types in the `.redwood/types`, `web/types/graphql.d.ts`, and `api/types/graphql.d.ts` directories. Broadly speaking, Redwood generates the following types:
 
-1. ["mirror" types](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs) for your components, Cells, and layouts on the web side - and services, libs, etc. on the api side
+1. ["mirror" types](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs) for your components, pages, layouts, etc. on the web side, and for your services, lib, etc. on the api side
 2. types based on your queries and mutations on the web side (in `web/types/graphql.d.ts`)
 3. types for resolvers based on your SDLs on the api side (in `api/types/graphql.d.ts`)
 4. types for testing, `currentUser`, etc.
@@ -102,9 +102,11 @@ export const post: QueryResolvers['post'] = ({ id }) => {
 
 These types help you by making sure you're returning an object in the shape of what you've defined in your SDL. If your Prisma model name matches the SDL type name, it'll be "mapped" i.e. the resolvers will expect you to return the Prisma type.
 
-Note that these types expect you to return the _complete_ type that you've defined in your SDL. You can just return the result of the Prisma query, and not have to worry about how, for example, a DateTime in Prisma maps to a String in GraphQL.
+Note that these types expect you to return the _complete_ type that you've defined in your Prisma schema. But you can just return the result of the Prisma query, and not have to worry about how, for example, a DateTime in Prisma maps to a String in GraphQL.
 
-If the type doesn't match your Prisma models, the TypeScript type will be generated based on your definition in the SDL.
+If the type doesn't match your Prisma models (by name), the TypeScript type will be generated based only on your definition in the SDL. So if you wish to return other properties that don't exist in your Prisma model type i.e. augment the prisma type with additional fields, you can change the type to a custom one in your SDL.
+
+The resolver types help you by making sure you're returning an object in the shape of what you've defined in your SDL.
 
 :::note A note on union types
 
@@ -123,7 +125,7 @@ type Query {
 }
 ```
 
-These types will also be handled automatically. But if you're returning a different Prisma model, you may need to write your own resolver type, as the type generator won't know how to map the Prisma type to the GraphQL return type.
+These types will also be handled automatically. But if you're returning a different Prisma model (instead of something like the generic `OutOfStock` type we have here, which is just a message), you may need to write your own resolver type, as the type generator won't know how to map the Prisma type to the GraphQL return type.
 
 :::
 
