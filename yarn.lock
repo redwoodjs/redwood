@@ -3140,9 +3140,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.9.0":
-  version: 2.9.0
-  resolution: "@graphql-codegen/cli@npm:2.9.0"
+"@graphql-codegen/cli@npm:2.9.1":
+  version: 2.9.1
+  resolution: "@graphql-codegen/cli@npm:2.9.1"
   dependencies:
     "@graphql-codegen/core": 2.6.0
     "@graphql-codegen/plugin-helpers": ^2.6.0
@@ -3182,7 +3182,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 0e858c0b49c1b8470d2f1539823b94e9379a3555ef37866b8cb5d4b80bc5124660eb248b35c46f73e46e86f32cdc87488be2eb812fdc932068cbe79377f0031f
+  checksum: 1bc2cd24e4e8ae7d257d14decd931154ea98667e8eb503f76f2e38a16658ff5f594b91fb796f84bc1d10c4723f217f7a010ba70e4d20703c26069a0a83b6f2ad
   languageName: node
   linkType: hard
 
@@ -6536,7 +6536,7 @@ __metadata:
     "@babel/register": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@babel/traverse": 7.16.7
-    "@graphql-codegen/cli": 2.9.0
+    "@graphql-codegen/cli": 2.9.1
     "@graphql-codegen/core": 2.6.0
     "@graphql-codegen/schema-ast": 2.5.0
     "@graphql-codegen/typescript": 2.7.2
