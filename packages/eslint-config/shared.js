@@ -97,6 +97,7 @@ module.exports = {
         },
       },
     ],
+    'no-restricted-imports': ['error', { paths: ['$api'] }],
   },
   overrides: [
     {
@@ -150,6 +151,10 @@ module.exports = {
         commonjs: true,
         jest: true,
       },
+    },
+    {
+      files: ['web/src/**/*.renderData.{js,ts}'],
+      rules: { 'no-restricted-imports': 'off' },
     },
   ],
 }
