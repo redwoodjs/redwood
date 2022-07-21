@@ -90,6 +90,7 @@ module.exports = {
             { type: 'doc', id: 'auth/magic-link' },
             { type: 'doc', id: 'auth/netlify' },
             { type: 'doc', id: 'auth/nhost' },
+            { type: 'doc', id: 'auth/okta' },
             { type: 'doc', id: 'auth/supabase' },
             { type: 'doc', id: 'auth/wallet-connect' },
           ],

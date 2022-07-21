@@ -479,9 +479,7 @@ In the example below, SomePage will redirect to the home page.
 ```jsx title="SomePage.js"
 import { Redirect, routes } from '@redwoodjs/router'
 
-const SomePage = () => {
-  <Redirect to={routes.home()} />
-}
+const SomePage = () => <Redirect to={routes.home()} />
 ```
 
 In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.

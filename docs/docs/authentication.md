@@ -16,6 +16,7 @@ We currently support the following third-party authentication providers:
 - Netlify Identity _([Repo on GitHub](https://github.com/netlify/netlify-identity-widget))_
 - Netlify GoTrue-JS _([Repo on GitHub](https://github.com/netlify/gotrue-js))_
 - Nhost _([Documentation Website](https://docs.nhost.io/platform/authentication))_
+- Okta _([Repo on GitHub](https://github.com/okta/okta-auth-js))_
 - Supabase _([Documentation Website](https://supabase.io/docs/guides/auth))_
 - WalletConnect _([Repo on GitHub](https://github.com/oneclickdapp/ethereum-auth))_
 

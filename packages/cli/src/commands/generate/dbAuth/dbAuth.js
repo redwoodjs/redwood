@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import Listr from 'listr'
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import {
@@ -22,6 +23,43 @@ const ROUTES = [
   `<Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />`,
   `<Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />`,
 ]
+
+const POST_INSTALL =
+  `One more thing...\n\n` +
+  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
+  `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
+  `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
+  `   ForgotPasswordPage and ResetPasswordPage for these lines: \n\n` +
+  `     if (isAuthenticated) {\n` +
+  `       navigate(routes.home())\n` +
+  `     }\n\n` +
+  `   and change the route to where you want them to go if the user is already\n` +
+  `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
+  `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
+  `   those forms.\n\n` +
+  `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
+  `   app setup by running:\n\n` +
+  `     yarn rw setup auth dbAuth\n\n` +
+  `   Happy authenticating!\n`
+
+const WEBAUTHN_POST_INSTALL =
+  `One more thing...\n\n` +
+  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
+  "   You'll need to tell your pages where to redirect after a user has logged in,\n" +
+  '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`\n' +
+  `   constant and change the route if it's something other than home().\n` +
+  `   In SignupPage, ForgotPasswordPage and ResetPasswordPage look for these lines:\n\n` +
+  `     if (isAuthenticated) {\n` +
+  `       navigate(routes.home())\n` +
+  `     }\n\n` +
+  `   and change the route to where you want them to go if the user is already\n` +
+  `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
+  `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
+  `   those forms.\n\n` +
+  `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
+  `   app setup by running:\n\n` +
+  `     yarn rw setup auth dbAuth\n\n` +
+  `   Happy authenticating!\n`
 
 export const command = 'dbAuth'
 export const description =
@@ -68,6 +106,7 @@ export const files = ({
   skipLogin,
   skipReset,
   skipSignup,
+  webAuthn,
 }) => {
   const files = []
 
@@ -92,7 +131,9 @@ export const files = ({
         extension: typescript ? '.tsx' : '.js',
         webPathSection: 'pages',
         generator: 'dbAuth',
-        templatePath: 'login.tsx.template',
+        templatePath: webAuthn
+          ? 'login.webAuthn.tsx.template'
+          : 'login.tsx.template',
       })
     )
   }
@@ -164,6 +205,7 @@ const tasks = ({
   skipLogin,
   skipReset,
   skipSignup,
+  webAuthn,
 }) => {
   return new Listr(
     [
@@ -178,6 +220,7 @@ const tasks = ({
               skipLogin,
               skipReset,
               skipSignup,
+              webAuthn,
             }),
             {
               overwriteExisting: force,
@@ -198,23 +241,7 @@ const tasks = ({
       {
         title: 'One more thing...',
         task: (ctx, task) => {
-          task.title =
-            `One more thing...\n\n` +
-            `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
-            `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
-            `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
-            `   ForgotPasswordPage and ResetPasswordPage for these lines: \n\n` +
-            `     if (isAuthenticated) {\n` +
-            `       navigate(routes.home())\n` +
-            `     }\n\n` +
-            `   and change the route to where you want them to go if the user is already\n` +
-            `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
-            `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
-            `   those forms.\n\n` +
-            `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
-            `   app setup by running:\n\n` +
-            `     yarn rw setup auth dbAuth\n\n` +
-            `   Happy authenticating!\n`
+          task.title = webAuthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
         },
       },
     ],
@@ -223,7 +250,15 @@ const tasks = ({
 }
 
 export const handler = async (options) => {
-  const t = tasks(options)
+  const response = await prompts({
+    type: 'confirm',
+    name: 'answer',
+    message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+    initial: false,
+  })
+  const webAuthn = response.answer
+
+  const t = tasks({ ...options, webAuthn })
 
   try {
     await t.run()

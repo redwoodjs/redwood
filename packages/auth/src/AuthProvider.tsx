@@ -14,6 +14,7 @@ import type {
   SupportedAuthClients,
   SupportedUserMetadata,
 } from './authClients'
+import type { WebAuthnClientType } from './webAuthn'
 
 export interface CurrentUser {
   roles?: Array<string> | string
@@ -97,7 +98,7 @@ const AuthUpdateListener = ({
 type AuthProviderProps =
   | {
       client: SupportedAuthClients
-      type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
+      type: Omit<SupportedAuthTypes, 'clerk' | 'dbAuth'>
       config?: never
       skipFetchCurrentUser?: boolean
       children?: ReactNode | undefined
@@ -110,7 +111,7 @@ type AuthProviderProps =
       children?: ReactNode | undefined
     }
   | {
-      client?: never
+      client?: WebAuthnClientType
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
