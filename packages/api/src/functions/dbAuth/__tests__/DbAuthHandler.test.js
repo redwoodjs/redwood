@@ -95,11 +95,11 @@ const createDbUser = async (attributes = {}) => {
 }
 
 const expectLoggedOutResponse = (response) => {
-  expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+  expect(response[1]['set-cookie']).toEqual(LOGOUT_COOKIE)
 }
 
 const expectLoggedInResponse = (response) => {
-  expect(response[1]['Set-Cookie']).toMatch(SET_SESSION_REGEX)
+  expect(response[1]['set-cookie']).toMatch(SET_SESSION_REGEX)
 }
 
 const encryptToCookie = (data) => {
@@ -258,8 +258,8 @@ describe('dbAuth', () => {
       const headers = dbAuth._deleteSessionHeader
 
       expect(Object.keys(headers).length).toEqual(1)
-      expect(Object.keys(headers)).toContain('Set-Cookie')
-      expect(headers['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+      expect(Object.keys(headers)).toContain('set-cookie')
+      expect(headers['set-cookie']).toEqual(LOGOUT_COOKIE)
     })
   })
 
@@ -521,7 +521,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
-      expect(response.headers['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+      expect(response.headers['set-cookie']).toEqual(LOGOUT_COOKIE)
     })
 
     it('returns a 404 if using the wrong HTTP verb', async () => {
@@ -1180,7 +1180,7 @@ describe('dbAuth', () => {
       // returns message
       expect(response[0]).toEqual('{"message":"Hello, world"}')
       // does not log them in
-      expect(response[1]['Set-Cookie']).toBeUndefined()
+      expect(response[1]['set-cookie']).toBeUndefined()
       // 201 Created
       expect(response[2].statusCode).toEqual(201)
     })
@@ -1346,7 +1346,7 @@ describe('dbAuth', () => {
       const [body, headers] = await dbAuth.webAuthnAuthenticate()
 
       expect(body).toEqual(false)
-      expect(headers['Set-Cookie'][0]).toMatch(
+      expect(headers['set-cookie'][0]).toMatch(
         'webAuthn=CxMJqILwYufSaEQsJX6rKHw_LkMXAGU64PaKU55l6ejZ4FNO5kBLiA'
       )
     })
@@ -1674,15 +1674,15 @@ describe('dbAuth', () => {
       const headers = dbAuth._createSessionHeader({ foo: 'bar' }, 'abcd')
 
       expect(Object.keys(headers).length).toEqual(1)
-      expect(headers['Set-Cookie']).toMatch(
+      expect(headers['set-cookie']).toMatch(
         `Expires=${dbAuth.sessionExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
       // characters that would be returned by the hash function
-      expect(headers['Set-Cookie']).toMatch(SET_SESSION_REGEX)
+      expect(headers['set-cookie']).toMatch(SET_SESSION_REGEX)
       // and we can check that it's a certain number of characters
-      expect(headers['Set-Cookie'].split(';')[0].length).toEqual(72)
+      expect(headers['set-cookie'].split(';')[0].length).toEqual(72)
     })
   })
 
@@ -2115,7 +2115,7 @@ describe('dbAuth', () => {
       const [body, headers] = dbAuth._logoutResponse()
 
       expect(body).toEqual('')
-      expect(headers['Set-Cookie']).toMatch(/^session=;/)
+      expect(headers['set-cookie']).toMatch(/^session=;/)
     })
 
     it('can accept an object to return in the body', () => {
