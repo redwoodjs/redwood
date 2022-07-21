@@ -251,9 +251,12 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     return applyCodemod(
       'updateWaterfallBlogPostMocks.js',
-      fullPath('web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.ts', {
-        addExtension: false,
-      })
+      fullPath(
+        'web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.ts',
+        {
+          addExtension: false,
+        }
+      )
     )
   }
 
@@ -283,17 +286,21 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     )
     fs.writeFileSync(pathRoutes, resultsRoutesWaterfall)
 
-    const prerenderTs = `import { db } from '$api/src/lib/db'
+    const blogPostRenderData = `import { db } from '$api/src/lib/db'
 
-      export default async function pathParameterValues() {
-        return {
-          blogPost: (await db.post.findMany()).map((post) => ({ id: post.id })),
-          waterfall: [{ id: 2 }],
-        }
+      export async function routeParameters() {
+        return (await db.post.findMany()).map((post) => ({ id: post.id }))
       }
       `.replaceAll(/ {6}/g, '')
-    const prerenderTsPath = `${OUTPUT_PATH}/scripts/prerender.ts`
-    fs.writeFileSync(prerenderTsPath, prerenderTs)
+    const blogPostRenderDataPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.renderData.ts`
+    fs.writeFileSync(blogPostRenderDataPath, blogPostRenderData)
+
+    const waterfallRenderData = `export async function routeParameters() {
+        return [{ id: 2 }]
+      }
+      `.replaceAll(/ {6}/g, '')
+    const waterfallRenderDataPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.renderData.ts`
+    fs.writeFileSync(waterfallRenderDataPath, waterfallRenderData)
   }
 
   return new Listr(

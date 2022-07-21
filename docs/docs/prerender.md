@@ -68,17 +68,29 @@ Let's say you have a route like this
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
 
-To be able to prerender this route you need to let Redwood know what `id`s to use. You do this by creating a `BlogPostPage.prerender.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should return an object with keys for all the dynamic route names you use this page component for that you wish to prerender. And the values to those keys should be an array of objects with the path param name as the key, and the value for the parameter as the object value. An example will hopefully make this clearer.
+To be able to prerender this route you need to let Redwood know what `id`s to use. You do this by creating a `BlogPostPage.renderData.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects with the path param name as the key, and the value for the parameter as the object value. A single Page component can be used for different routes. The name of the current route will be passed as an argument to `routeParameters` so you can return different route parameters depending on what route it is, if you need to. An example will hopefully make all this clearer.
 
 For the example route above, all you need is this:
 
-```js title="BlogPostPage.prerender.js"
-return {
-  blogPost: [{ id: 1 }, { id: 2 }, { id: 3 }]
+```js title="BlogPostPage.renderData.js"
+export function routeParameters() {
+  return [{ id: 1 }, { id: 2 }, { id: 3 }]
 }
 ```
 
-In these prerender scripts you have full access to your database using prisma and all your services, should you need it.
+Of, if you wanted to get fancy
+
+```js title="BlogPostPage.renderData.js"
+export function routeParameters(routeName) {
+  if (routeName === 'odd') {
+    return [{ id: 1 }, { id: 3 }, { id: 5 }]
+  } else {
+    return [{ id: 2 }, { id: 4 }, { id: 6 }]
+  }
+}
+```
+
+In these renderData scripts you have full access to your database using prisma and all your services, should you need it. You use `import { db } from '$api/src/lib/db'` to get access to the `db` object.
 
 With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. If it's just three pages like this, it's no problem. But this easily and quickly explodes to thousands of pages, which will make your build process really slow, so please be careful with how many pages you prerender.
 
