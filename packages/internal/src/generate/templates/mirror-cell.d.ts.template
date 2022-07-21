@@ -1,11 +1,11 @@
-import { Success${inlinePropsImport} } from './${name}'
+import { Success } from './${name}'
 import type { CellProps } from '@redwoodjs/web'
-import type { ${queryResultType}, ${queryVariablesType} } from 'types/graphql'${propsImport}
+import type { ${queryResultType}, ${queryVariablesType} } from 'types/graphql'
 
 type SuccessType = typeof Success
 
 export * from './${name}'
 
-type CellInputs = CellProps<SuccessType, ${queryResultType}, ${props}>
+type CellInputs = CellProps<SuccessType, ${queryResultType}, ${queryVariablesType}>
 
 export default function (props: CellInputs): ReturnType<SuccessType>

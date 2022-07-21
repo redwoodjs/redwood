@@ -9,7 +9,7 @@ import chalk from 'chalk'
 import { isFileInsideFolder } from './files'
 import { getPaths } from './paths'
 
-export const fileToAst = (filePath: string): types.File => {
+export const fileToAst = (filePath: string): types.Node => {
   const code = fs.readFileSync(filePath, 'utf-8')
 
   // use jsx plugin for web files, because in JS, the .jsx extension is not used
@@ -25,14 +25,10 @@ export const fileToAst = (filePath: string): types.File => {
   ].filter(Boolean) as ParserPlugin[]
 
   try {
-    const ast = babelParse(code, {
+    return babelParse(code, {
       sourceType: 'module',
       plugins,
     })
-
-    ast.program.sourceFile = code
-
-    return ast
   } catch (e: any) {
     console.error(chalk.red(`Error parsing: ${filePath}`))
     console.error(e)
@@ -138,99 +134,6 @@ export const getCellGqlQuery = (ast: types.Node) => {
   })
 
   return cellQuery
-}
-
-export const getCellCustomProps = (
-  ast: types.File
-): string | undefined | [string, string] => {
-  let isTypeRef = false
-  let propsType: string | undefined = undefined
-  let typeImport: string | undefined = undefined
-
-  traverse(ast, {
-    ExportNamedDeclaration({ node }) {
-      if (
-        node.exportKind === 'value' &&
-        types.isVariableDeclaration(node.declaration)
-      ) {
-        const beforeQueryNode = node.declaration.declarations.find((d) => {
-          return types.isIdentifier(d.id) && d.id.name === 'beforeQuery'
-        })
-
-        if (
-          beforeQueryNode &&
-          types.isArrowFunctionExpression(beforeQueryNode.init)
-        ) {
-          if (beforeQueryNode.init.params.length === 0) {
-            propsType = '{}'
-          } else {
-            const param = beforeQueryNode.init.params[0]
-            if (
-              types.isObjectPattern(param) &&
-              types.isTSTypeAnnotation(param.typeAnnotation) &&
-              types.isTSType(param.typeAnnotation.typeAnnotation)
-            ) {
-              const type = param.typeAnnotation.typeAnnotation
-              if (types.isTSTypeReference(type)) {
-                if (types.isIdentifier(type.typeName)) {
-                  isTypeRef = true
-
-                  propsType = type.typeName.name
-                } else {
-                  propsType = 'any'
-                }
-              } else if (type.start && type.end) {
-                propsType = ast.program.sourceFile.slice(type.start, type.end)
-              } else {
-                propsType = 'any'
-              }
-            } else {
-              propsType = 'any'
-            }
-          }
-        }
-      }
-      return
-    },
-  })
-
-  // If it is a type reference, we need to track down the definition
-  // First we try to find an import, if we fail we try to find the type export from the cell
-  if (isTypeRef) {
-    traverse(ast, {
-      ImportDeclaration({ node }) {
-        const importedType = node.specifiers.find((s) => {
-          return (
-            types.isImportSpecifier(s) &&
-            s.importKind === 'value' &&
-            types.isIdentifier(s.imported) &&
-            s.imported.name === propsType
-          )
-        })
-
-        if (importedType && node.start && node.end) {
-          typeImport = ast.program.sourceFile.slice(node.start, node.end)
-        }
-      },
-      ExportNamedDeclaration({ node }) {
-        if (
-          (types.isTSInterfaceDeclaration(node.declaration) ||
-            types.isTSTypeAliasDeclaration(node.declaration)) &&
-          node.declaration.id.name === propsType
-        ) {
-          typeImport = propsType
-        }
-      },
-    })
-  } else {
-    return propsType
-  }
-
-  if (propsType && typeImport) {
-    return [propsType, typeImport]
-  } else {
-    return propsType
-  }
 }
 
 export const hasDefaultExport = (ast: types.Node): boolean => {

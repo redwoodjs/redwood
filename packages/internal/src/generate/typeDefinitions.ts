@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getCellGqlQuery, fileToAst, getCellCustomProps } from '../ast'
+import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
@@ -119,52 +119,18 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
 
   if (cellQuery) {
     const gqlDoc = parseGqlQueryToAst(cellQuery)[0]
-    const customPropsType = getCellCustomProps(fileContents)
 
-    if (customPropsType) {
-      let props = customPropsType
-      let propsImport = ''
-      let inlinePropsImport = ''
-
-      if (Array.isArray(customPropsType)) {
-        props = customPropsType[0]
-        propsImport = customPropsType[1]
-
-        if (props === propsImport) {
-          propsImport = ''
-          inlinePropsImport = `, ${props}`
-        } else {
-          // We add a newline so that when we do not generate an extra import, there is not an extra line of whitespace
-          propsImport = '\n' + propsImport
-        }
-      }
-
-      writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
-        name,
-        queryResultType: `${gqlDoc?.name}`,
-        queryVariablesType: `${gqlDoc?.name}Variables`,
-        props,
-        propsImport,
-        inlinePropsImport,
-      })
-    } else {
-      writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
-        name,
-        queryResultType: `${gqlDoc?.name}`,
-        queryVariablesType: `${gqlDoc?.name}Variables`,
-        props: `${gqlDoc?.name}Variables`,
-        propsImport: '',
-        inlinePropsImport: '',
-      })
-    }
+    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
+      name,
+      queryResultType: `${gqlDoc?.name}`,
+      queryVariablesType: `${gqlDoc?.name}Variables`,
+    })
   } else {
     // If for some reason we can't parse the query, generated the mirror cell anyway
     writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
       name,
       queryResultType: 'any',
       queryVariablesType: 'any',
-      propsImport: '',
-      inlinePropsImport: '',
     })
   }
 
