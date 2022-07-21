@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import { DocumentNode, print } from 'graphql'
 
@@ -18,9 +17,7 @@ export async function executeQuery(
 }
 
 export async function getGqlHandler() {
-  const gqlPathTs = path.join(getPaths().api.functions, 'graphql.ts')
-  const gqlPathJs = path.join(getPaths().api.functions, 'graphql.js')
-  const gqlPath = fs.existsSync(gqlPathTs) ? gqlPathTs : gqlPathJs
+  const gqlPath = path.join(getPaths().api.functions, 'graphql')
 
   const { handler } = await import(gqlPath)
 

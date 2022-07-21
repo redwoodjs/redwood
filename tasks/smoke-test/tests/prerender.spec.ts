@@ -101,13 +101,14 @@ rwServeTest(
 
     await aboutMeAnchor.click()
 
+    const aboutMeAnchorHref = (await aboutMeAnchor.getAttribute('href')) || ''
+    expect(aboutMeAnchorHref).not.toEqual('')
+
     mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch('A little more about me')
     expect(mainContent).not.toMatch('Welcome to the blog!')
     expect(mainContent).not.toMatch('What is the meaning of life?')
-    expect(pageWithoutJs.url()).toMatch(
-      await aboutMeAnchor.getAttribute('href')
-    )
+    expect(pageWithoutJs.url()).toMatch(aboutMeAnchorHref)
 
     pageWithoutJs.close()
   }
@@ -128,7 +129,7 @@ rwServeTest(
 )
 
 test('prerender with broken gql query', async () => {
-  const projectPath = process.env.PROJECT_PATH
+  const projectPath = process.env.PROJECT_PATH || ''
 
   const cellBasePath = path.join(
     projectPath,
