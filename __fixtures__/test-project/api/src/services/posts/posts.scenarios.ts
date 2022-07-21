@@ -8,7 +8,7 @@ export const standard = defineScenario<Prisma.PostCreateArgs>({
         body: 'String',
         author: {
           create: {
-            email: 'String1404357',
+            email: 'String9563472',
             hashedPassword: 'String',
             fullName: 'String',
             salt: 'String',
@@ -22,7 +22,7 @@ export const standard = defineScenario<Prisma.PostCreateArgs>({
         body: 'String',
         author: {
           create: {
-            email: 'String8993335',
+            email: 'String2323656',
             hashedPassword: 'String',
             fullName: 'String',
             salt: 'String',
