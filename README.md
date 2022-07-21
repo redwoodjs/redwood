@@ -714,6 +714,8 @@ And there you have it.
     <td align="center"><a href="https://github.com/michellegreer"><img src="https://avatars.githubusercontent.com/u/617901?v=4" width="100px;" alt=""/><br /><sub><b>Michelle Greer</b></sub></a></td>
     <td align="center"><a href="https://github.com/NicholasJoyChrist"><img src="https://avatars.githubusercontent.com/u/90222871?v=4" width="100px;" alt=""/><br /><sub><b>Nikola Hristov</b></sub></a></td>
     <td align="center"><a href="https://my-web.swaritchoudhari.repl.co/"><img src="https://avatars.githubusercontent.com/u/68472469?v=4" width="100px;" alt=""/><br /><sub><b>Swarit Choudhari</b></sub></a></td>
+    <td align="center"><a href="https://github.com/necropolina"><img src="https://avatars.githubusercontent.com/u/20880695?v=4" width="100px;" alt=""/><br /><sub><b>Lina</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pwellner"><img src="https://avatars.githubusercontent.com/u/413096?v=4" width="100px;" alt=""/><br /><sub><b>pwellner</b></sub></a></td>
   </tr>
 </table>
 
