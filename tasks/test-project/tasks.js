@@ -299,7 +299,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
         return [{ id: 2 }]
       }
       `.replaceAll(/ {6}/g, '')
-    const waterfallRenderDataPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.renderData.ts`
+    const waterfallRenderDataPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.renderData.ts`
     fs.writeFileSync(waterfallRenderDataPath, waterfallRenderData)
   }
 
