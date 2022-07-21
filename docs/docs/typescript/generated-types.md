@@ -100,7 +100,11 @@ export const post: QueryResolvers['post'] = ({ id }) => {
 }
 ```
 
-These types help you by making sure you're returning an object in the shape of what you've defined in your SDL. Note that these types expect you to return the _complete_ type that you've defined in your SDL. You can just return the result of the Prisma query, and not have to worry about how, for example, a DateTime in Prisma maps to a String in GraphQL.
+These types help you by making sure you're returning an object in the shape of what you've defined in your SDL. If your Prisma model name matches the SDL type name, it'll be "mapped" i.e. the resolvers will expect you to return the Prisma type.
+
+Note that these types expect you to return the _complete_ type that you've defined in your SDL. You can just return the result of the Prisma query, and not have to worry about how, for example, a DateTime in Prisma maps to a String in GraphQL.
+
+If the type doesn't match your Prisma models, the TypeScript type will be generated based on your definition in the SDL.
 
 :::note A note on union types
 
