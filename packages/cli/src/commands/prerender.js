@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import fg from 'fast-glob'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
@@ -51,54 +50,33 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
-async function getAllRouteParameters() {
-  configureBabel()
-
-  // Find all *.prerender.js and *.prerender.ts files
-  // We search the entire .../web/src/ folder, because components used as
-  // pages can be located anywhere and then manually imported into Routes.js
-  let prerenderParamFiles = fg.sync(
-    getPaths().web.src + '/**/*.prerender.{js,ts}'
+function getRenderDataFilePath(routeFilePath) {
+  const renderDataFilePathTs = routeFilePath.replace(
+    /\.(js|tsx)$/,
+    '.renderData.ts'
   )
 
-  // Filter files to make sure there's an xyz.{js.tsx}-file next to it
-  // For example, if we've found
-  // `.../web/src/pages/WaterfallPage/WaterfallPage.prerender.js`
-  // we want to make sure the actual WaterfallPage exists as well
-  // `.../web/src/pages/WaterfallPage/WaterfallPage.js` or
-  // `.../web/src/pages/WaterfallPage/WaterfallPage.tsx`
-  // We do this to limit false positives
-  prerenderParamFiles = prerenderParamFiles.filter((filePath) => {
-    const { dir, name } = path.parse(filePath)
+  if (fs.existsSync(renderDataFilePathTs)) {
+    return renderDataFilePathTs
+  }
 
-    const pagePathTs = path.join(dir, name.replace('prerender', 'tsx'))
-    const pagePathJs = path.join(dir, name.replace('prerender', 'js'))
+  const renderDataFilePathJs = routeFilePath.replace(
+    /\.(js|tsx)$/,
+    '.renderData.js'
+  )
 
-    return fs.existsSync(pagePathTs) || fs.existsSync(pagePathJs)
-  })
+  if (fs.existsSync(renderDataFilePathJs)) {
+    return renderDataFilePathJs
+  }
 
-  let parameters = {}
-
-  // For each of the files, run the script
-  const runPromises = prerenderParamFiles.map(async (filePath) => {
-    const pageParameters = await runScript(filePath)
-
-    // Make a big object out of all the returned values
-    parameters = {
-      ...parameters,
-      ...pageParameters,
-    }
-  })
-
-  await Promise.all(runPromises)
-
-  return parameters
+  return undefined
 }
 
 /**
  * Takes a route with a path like /blog-post/{id:Int}
- * Reads path parameters from /scripts/prerender.js and returns a list of routes
- * with the path parameter placeholders (like {id:Int}) replaced by actual values
+ * Reads path parameters from BlogPostPage.renderData.js and returns a list of
+ * routes with the path parameter placeholders (like {id:Int}) replaced by
+ * actual values
  *
  * So for values like [{ id: 1 }, { id: 2 }, { id: 3 }] (and, again, a route
  * path like /blog-post/{id:Int}) it will return three routes with the paths
@@ -110,21 +88,48 @@ async function getAllRouteParameters() {
  * datatype according to the type notation ("Int" in the example above) will
  * be handled by the normal router functions, just like when rendering in a
  * client browser
+ *
+ * Example `route` parameter
+ * {
+ *   name: 'blogPost',
+ *   path: '/blog-post/{id:Int}',
+ *   routePath: '/blog-post/{id:Int}',
+ *   hasParams: true,
+ *   id: 'file:///Users/tobbe/tmp/rw-prerender-cell-ts/web/src/Routes.tsx 1959',
+ *   isNotFound: false,
+ *   filePath: '/Users/tobbe/tmp/rw-prerender-cell-ts/web/src/pages/BlogPostPage/BlogPostPage.tsx'
+ * }
  */
-function expandRouteParameters(route, parameters) {
-  if (parameters[route.name]) {
-    return parameters[route.name].map((pathParamValues) => {
-      let newPath = route.path
+async function expandRouteParameters(route) {
+  const renderDataFilePath = getRenderDataFilePath(route.filePath)
 
-      Object.entries(pathParamValues).forEach(([paramName, paramValue]) => {
-        newPath = newPath.replace(
-          new RegExp(`{${paramName}:?[^}]*}`),
-          paramValue
-        )
-      })
+  if (!renderDataFilePath) {
+    return [route]
+  }
 
-      return { ...route, path: newPath }
+  try {
+    const routeParameters = await runScript({
+      path: renderDataFilePath,
+      name: 'routeParameters',
+      args: route.name,
     })
+
+    if (routeParameters) {
+      return routeParameters.map((pathParamValues) => {
+        let newPath = route.path
+
+        Object.entries(pathParamValues).forEach(([paramName, paramValue]) => {
+          newPath = newPath.replace(
+            new RegExp(`{${paramName}:?[^}]*}`),
+            paramValue
+          )
+        })
+
+        return { ...route, path: newPath }
+      })
+    }
+  } catch {
+    return [route]
   }
 
   return [route]
@@ -132,13 +137,13 @@ function expandRouteParameters(route, parameters) {
 
 // This is used directly in build.js for nested ListrTasks
 export const getTasks = async (dryrun, routerPathFilter = null) => {
-  const prerenderRoutes = detectPrerenderRoutes()
+  const prerenderRoutes = detectPrerenderRoutes().filter((route) => route.path)
   const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
   if (prerenderRoutes.length === 0) {
     console.log('\nSkipping prerender...')
     console.log(
       c.warning(
-        'You have not marked any routes as `prerender` in `Routes.{js,tsx}` \n'
+        'You have not marked any routes with a path as `prerender` in `Routes.{js,tsx}` \n'
       )
     )
 
@@ -154,11 +159,14 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     // TODO: Run this automatically at this point.
   }
 
-  const parameters = await getAllRouteParameters()
+  configureBabel()
 
-  const listrTasks = prerenderRoutes
-    .filter((route) => route.path)
-    .flatMap((route) => expandRouteParameters(route, parameters))
+  const expandedRouteParameters = await Promise.all(
+    prerenderRoutes.map((route) => expandRouteParameters(route))
+  )
+
+  const listrTasks = expandedRouteParameters
+    .flat()
     .flatMap((routeToPrerender) => {
       // Filter out routes that don't match the supplied routePathFilter
       if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {
@@ -307,7 +315,7 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     if (e instanceof PathParamError) {
       console.log(
         c.info(
-          '- You most likely need to add or update /scripts/prerender.{js,ts}'
+          "- You most likely need to add or update a *.routeData.{js,ts} file next to the Page you're trying to prerender"
         )
       )
     } else {

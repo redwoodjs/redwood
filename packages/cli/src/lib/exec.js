@@ -6,9 +6,9 @@ import {
   registerApiSideBabelHook,
 } from '@redwoodjs/internal'
 
-export async function runScript(scriptPath, scriptArgs) {
+export async function runScript({ path: scriptPath, name, args }) {
   const script = await import(scriptPath)
-  const returnValue = await script.default({ args: scriptArgs })
+  const returnValue = await script[name](args)
 
   try {
     const { db } = await import(path.join(getPaths().api.lib, 'db'))

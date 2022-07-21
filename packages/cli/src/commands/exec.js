@@ -80,7 +80,11 @@ export const handler = async (args) => {
       title: 'Running script',
       task: async () => {
         try {
-          await runScript(scriptPath, scriptArgs)
+          await runScript({
+            path: scriptPath,
+            name: 'default',
+            args: { args: scriptArgs },
+          })
         } catch (e) {
           console.error(c.error(`Error in script: ${e.message}`))
         }
