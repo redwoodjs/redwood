@@ -282,7 +282,8 @@ export const Success = ({ posts }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-import type { ArticlesQuery } from 'types/graphql'
+// highlight-next-line
+import type { FindPosts } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
@@ -303,7 +304,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 // highlight-next-line
-export const Success = ({ posts }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
   return (
     <ul>
       // highlight-next-line
