@@ -455,7 +455,7 @@ export const Success = ({ articles }) => { ... }
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => { ... }
+export const Success = ({ articles }: CellSuccessProps<FindPosts>) => { ... }
 ```
 
 </TabItem>
@@ -521,7 +521,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 // highlight-next-line
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({ articles }: CellSuccessProps<FindPosts>) => {
   return (
     <ul>
       // highlight-next-line
@@ -610,7 +610,7 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({ articles }: CellSuccessProps<FindPosts>) => {
   return (
     // highlight-start
     <>
