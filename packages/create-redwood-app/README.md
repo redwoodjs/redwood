@@ -99,7 +99,7 @@ cd packages/create-redwood-app
 yarn babel-node src/create-redwood-app.js /path/to/new/redwood-app
 ```
 
-This will create a new project using the local `template/` codebase
+This will create a new project using the local `template/` codebase.
 
 > Note: the new project will install with the most recent stable Redwood package version by default
 
@@ -114,12 +114,5 @@ cd /path/to/new/redwood-app
 yarn rw upgrade -t canary
 ```
 
-**2. Install packages specific to a PR, for example**
-
-```bash
-cd /path/to/new/redwood-app
-yarn rw upgrade --pr 1703:0.23.0-b06dd35
-```
-
-**3. Use the workflow and tools for local package development**
+**2. Use the workflow and tools for local package development**
 - [Local Development Instructions](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#local-development)
