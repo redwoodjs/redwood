@@ -8,19 +8,32 @@ import type { A } from 'ts-toolbelt'
  */
 import { useQuery } from './GraphQLHooksProvider'
 
+declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
+  beforeQuery: (...args: unknown[]) => unknown
+}
+  ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
+    ? Parameters<Cell['beforeQuery']>[0]
+    : Record<string, never>
+  : GQLVariables extends {
+      [key: string]: never
+    }
+  ? unknown
+  : GQLVariables
+
 /**
  * Cell component props which is the combination of query variables and Success props.
  */
 export type CellProps<
   CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
   GQLResult,
+  CellType,
   GQLVariables
 > = A.Compute<
   Omit<
     ComponentProps<CellSuccess>,
     keyof QueryOperationResult | keyof GQLResult | 'updating'
   > &
-    (GQLVariables extends { [key: string]: never } ? unknown : GQLVariables)
+    CustomCellProps<CellType, GQLVariables>
 >
 
 export type CellLoadingProps<TVariables = any> = Partial<
