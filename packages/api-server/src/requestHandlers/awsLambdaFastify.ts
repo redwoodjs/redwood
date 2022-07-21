@@ -6,29 +6,7 @@ import type {
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import qs from 'qs'
 
-type ParseBodyResult = {
-  body: string
-  isBase64Encoded: boolean
-}
-
-type FastifyLambdaHeaders =
-  | { [header: string]: string | number | boolean }
-  | undefined
-type FastifyLambdaMultiValueHeaders =
-  | {
-      [header: string]: (string | number | boolean)[]
-    }
-  | undefined
-
-export const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
-  if (typeof rawBody === 'string') {
-    return { body: rawBody, isBase64Encoded: false }
-  }
-  if (rawBody instanceof Buffer) {
-    return { body: rawBody.toString('base64'), isBase64Encoded: true }
-  }
-  return { body: '', isBase64Encoded: false }
-}
+import { mergeMultiValueHeaders, parseBody } from './utils'
 
 const lambdaEventForFastifyRequest = (
   request: FastifyRequest
@@ -48,57 +26,6 @@ const lambdaEventForFastifyRequest = (
   } as APIGatewayProxyEvent
 }
 
-/**
- * The header keys are case insensitive, but Fastify prefers these to be lowercase.
- * Therefore, we want to ensure that the headers are always lowercase and unique
- * for compliance with HTTP/2.
- *
- * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
- *
- * Just as in HTTP/1.x, header field names are strings of ASCII
- * characters that are compared in a case-insensitive fashion.  However,
- * header field names MUST be converted to lowercase prior to their
- * encoding in HTTP/2.  A request or response containing uppercase
- * header field names MUST be treated as malformed (Section 8.1.2.6).
- *
- * @see: https://tools.ietf.org/html/rfc2616#section-4.2
- */
-const sanitizeHeaders = (
-  headers: FastifyLambdaHeaders,
-  reply: FastifyReply
-) => {
-  const headersLowercase = {} as FastifyLambdaHeaders
-
-  if (headers && headersLowercase) {
-    reply.headers({})
-
-    Object.keys(headers).forEach((headerName) => {
-      headersLowercase[headerName.toLowerCase()] = headers[headerName]
-    })
-
-    reply.headers(headersLowercase)
-  }
-}
-
-/**
- * In case there are multi-value headers that are not in the headers object,
- * we need to add them to the headers object and ensure the header names are lowercase
- * and that if there is an array fo values, they are separated by a semi-colon.
- */
-const mergeMultiValueHeaders = (
-  multiValueHeaders: FastifyLambdaMultiValueHeaders,
-  reply: FastifyReply
-) => {
-  if (multiValueHeaders) {
-    Object.keys(multiValueHeaders).forEach((headerName) => {
-      const headerValue: Array<any> = multiValueHeaders[headerName]
-      if (!reply.getHeader(headerName.toLowerCase())) {
-        reply.header(headerName.toLowerCase(), headerValue.join(';').toString())
-      }
-    })
-  }
-}
-
 const fastifyResponseForLambdaResult = (
   reply: FastifyReply,
   lambdaResult: APIGatewayProxyResult
@@ -110,8 +37,22 @@ const fastifyResponseForLambdaResult = (
     multiValueHeaders,
   } = lambdaResult
 
-  sanitizeHeaders(headers, reply)
-  mergeMultiValueHeaders(multiValueHeaders, reply)
+  console.log(headers)
+  console.log(multiValueHeaders)
+
+  reply.headers(mergeMultiValueHeaders(headers, multiValueHeaders))
+
+  // const h = {
+  //   'Content-Type': 'application/json',
+  //   'content-type': 'application/json',
+  //   'x-foo': 'bar',
+  //   'X-FOO': 'bar2',
+  //   'X-Request-Id': '123',
+  // }
+
+  if (headers) {
+    reply.headers(headers)
+  }
 
   reply.status(statusCode)
 
