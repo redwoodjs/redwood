@@ -97,7 +97,18 @@ module.exports = {
         },
       },
     ],
-    'no-restricted-imports': ['error', { paths: ['$api'] }],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['$api/*'],
+            message:
+              'Importing from $api is only supported in *.renderData.{js,ts} files',
+          },
+        ],
+      },
+    ],
   },
   overrides: [
     {
