@@ -1,13 +1,12 @@
 import humanize from 'humanize-string'
+import type {
+  Contact as ContactType,
+  DeleteContactMutationVariables,
+} from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-
-import type {
-  Contact as ContactType,
-  DeleteContactMutationVariables
-} from 'types/graphql'
 
 const DELETE_CONTACT_MUTATION = gql`
   mutation DeleteContactMutation($id: Int!) {
@@ -84,16 +83,20 @@ const Contact = ({ contact }: ContactProps) => {
             <tr>
               <th>Id</th>
               <td>{contact.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{contact.name}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Email</th>
               <td>{contact.email}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Message</th>
               <td>{contact.message}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(contact.createdAt)}</td>
             </tr>

@@ -1,3 +1,5 @@
+import type { Post, UpdatePostInput } from 'types/graphql'
+
 import {
   Form,
   FormError,
@@ -6,12 +8,7 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { Post, UpdatePostInput } from 'types/graphql'
 import type { RwGqlError } from '@redwoodjs/forms'
-
-
-
 
 interface PostFormProps {
   post?: Post
@@ -22,14 +19,6 @@ interface PostFormProps {
 
 const PostForm = (props: PostFormProps) => {
   const onSubmit = (data: Record<string, any>) => {
-
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data as Post, props?.post?.id)
   }
 
@@ -42,7 +31,7 @@ const PostForm = (props: PostFormProps) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="title"
           className="rw-label"
@@ -50,15 +39,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Title
         </Label>
-        
-          <TextField
-            name="title"
-            defaultValue={props.post?.title}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="title"
+          defaultValue={props.post?.title}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="title" className="rw-field-error" />
 
@@ -69,23 +57,19 @@ const PostForm = (props: PostFormProps) => {
         >
           Body
         </Label>
-        
-          <TextField
-            name="body"
-            defaultValue={props.post?.body}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="body"
+          defaultValue={props.post?.body}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="body" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

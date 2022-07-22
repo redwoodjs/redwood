@@ -1,10 +1,10 @@
+import type { CreatePostInput } from 'types/graphql'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import PostForm from 'src/components/Post/PostForm'
-
-import type { CreatePostInput } from 'types/graphql'
 
 const CREATE_POST_MUTATION = gql`
   mutation CreatePostMutation($input: CreatePostInput!) {
@@ -15,18 +15,15 @@ const CREATE_POST_MUTATION = gql`
 `
 
 const NewPost = () => {
-  const [createPost, { loading, error }] = useMutation(
-    CREATE_POST_MUTATION,
-    {
-      onCompleted: () => {
-        toast.success('Post created')
-        navigate(routes.posts())
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      },
-    }
-  )
+  const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Post created')
+      navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   const onSave = (input: CreatePostInput) => {
     createPost({ variables: { input } })

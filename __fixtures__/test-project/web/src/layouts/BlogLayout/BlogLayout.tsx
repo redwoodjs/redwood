@@ -2,11 +2,10 @@ type BlogLayoutProps = {
   children?: React.ReactNode
 }
 
-import { Link, routes } from "@redwoodjs/router";
-import { useAuth } from "@redwoodjs/auth";
+import { useAuth } from '@redwoodjs/auth'
+import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
-
   const { logOut, isAuthenticated } = useAuth()
 
   return (
@@ -75,7 +74,6 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
       </main>
     </>
   )
-
 }
 
 export default BlogLayout

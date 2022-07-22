@@ -1,13 +1,11 @@
 import humanize from 'humanize-string'
+import type { Post, DeletePostMutationVariables } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Post/PostsCell'
-
-import type { Post, DeletePostMutationVariables } from 'types/graphql'
-
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
@@ -31,13 +29,12 @@ const formatEnum = (values: string | string[] | null | undefined) => {
 }
 
 const truncate = (value: string | number) => {
-  let output = value?.toString()
+  const output = value?.toString()
   if (output?.length > MAX_STRING_LENGTH) {
     return output.substring(0, MAX_STRING_LENGTH) + '...'
   }
   return output ?? ''
 }
-
 
 const jsonTruncate = (obj: unknown) => {
   return truncate(JSON.stringify(obj, null, 2))

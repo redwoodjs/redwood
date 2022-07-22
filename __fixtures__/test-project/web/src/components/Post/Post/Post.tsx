@@ -1,13 +1,12 @@
 import humanize from 'humanize-string'
+import type {
+  Post as PostType,
+  DeletePostMutationVariables,
+} from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-
-import type {
-  Post as PostType,
-  DeletePostMutationVariables
-} from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
@@ -84,13 +83,16 @@ const Post = ({ post }: PostProps) => {
             <tr>
               <th>Id</th>
               <td>{post.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Title</th>
               <td>{post.title}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Body</th>
               <td>{post.body}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(post.createdAt)}</td>
             </tr>

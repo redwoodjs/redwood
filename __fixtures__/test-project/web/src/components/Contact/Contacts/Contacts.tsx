@@ -1,13 +1,11 @@
 import humanize from 'humanize-string'
+import type { Contact, DeleteContactMutationVariables } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Contact/ContactsCell'
-
-import type { Contact, DeleteContactMutationVariables } from 'types/graphql'
-
 
 const DELETE_CONTACT_MUTATION = gql`
   mutation DeleteContactMutation($id: Int!) {
@@ -31,7 +29,7 @@ const formatEnum = (values: string | string[] | null | undefined) => {
 }
 
 const truncate = (value: string | number) => {
-  let output = value?.toString()
+  const output = value?.toString()
   if (output?.length > MAX_STRING_LENGTH) {
     return output.substring(0, MAX_STRING_LENGTH) + '...'
   }
