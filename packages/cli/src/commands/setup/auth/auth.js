@@ -31,6 +31,8 @@ const OUTPUT_PATHS = {
   ),
 }
 
+const WEBAUTHN_SUPPORTED_PROVIDERS = ['dbAuth']
+
 const getWebAppPath = () => getPaths().web.app
 
 const getSupportedProviders = () =>
@@ -313,6 +315,12 @@ export const builder = (yargs) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
+    .option('webauthn', {
+      alias: 'w',
+      default: null,
+      description: 'Include WebAuthn support (TouchID/FaceID)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -324,7 +332,7 @@ export const builder = (yargs) => {
 export const handler = async (yargs) => {
   const { provider, rwVersion } = yargs
   let force = yargs.force
-  let webAuthn = false
+  let includeWebAuthn = yargs.webauthn
   let providerData
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
@@ -344,18 +352,22 @@ export const handler = async (yargs) => {
   }
 
   // only dbAuth supports WebAuthn right now, but in theory it could work with
-  // any provider
-  if (provider === 'dbAuth') {
+  // any provider, so we'll do a check here and potentially use any other
+  // providers webAuthn version of templates
+  if (
+    includeWebAuthn === null &&
+    WEBAUTHN_SUPPORTED_PROVIDERS.includes(provider)
+  ) {
     const webAuthnResponse = await prompts({
       type: 'confirm',
       name: 'answer',
       message: `Enable WebAuthn support (TouchID/FaceID)? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
       initial: false,
     })
-    webAuthn = webAuthnResponse.answer
+    includeWebAuthn = webAuthnResponse.answer
   }
 
-  if (webAuthn) {
+  if (includeWebAuthn) {
     providerData = await import(`./providers/${provider}.webAuthn`)
   } else {
     providerData = await import(`./providers/${provider}`)
@@ -367,7 +379,7 @@ export const handler = async (yargs) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files({ ...yargs, webAuthn }), {
+            return writeFilesTask(files({ ...yargs, includeWebAuthn }), {
               overwriteExisting: force,
             })
           } else {
