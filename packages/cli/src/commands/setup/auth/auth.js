@@ -379,9 +379,12 @@ export const handler = async (yargs) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files({ ...yargs, includeWebAuthn }), {
-              overwriteExisting: force,
-            })
+            return writeFilesTask(
+              files({ ...yargs, webAuthn: includeWebAuthn }),
+              {
+                overwriteExisting: force,
+              }
+            )
           } else {
             task.skip('api/src not found, skipping')
           }
