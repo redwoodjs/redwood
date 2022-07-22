@@ -31,7 +31,7 @@ const ClerkAuthProvider = ({ children }) => {
   )
 }`,
   authProvider: {
-    render: 'ClerkAuthProvider',
+    render: ['ClerkAuthProvider'],
     type: 'clerk',
   },
 }
