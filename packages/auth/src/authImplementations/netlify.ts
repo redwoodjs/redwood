@@ -2,6 +2,7 @@ import type * as NetlifyIdentityNS from 'netlify-identity-widget'
 
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 
+import { CurrentUser } from 'src/AuthContext'
 import { createAuthentication } from 'src/authFactory'
 // TODO:
 // In the future, when this is a separate package, we can import the full thing
@@ -13,7 +14,15 @@ import { AuthImplementation } from './AuthImplementation'
 
 type NetlifyIdentity = typeof NetlifyIdentityNS
 
-export function createNetlifyAuth(netlifyIdentity: NetlifyIdentity) {
+export function createNetlifyAuth(
+  netlifyIdentity: NetlifyIdentity,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) {
   const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
 
   isBrowser && netlifyIdentity.init()
@@ -28,7 +37,7 @@ export function createNetlifyAuth(netlifyIdentity: NetlifyIdentity) {
     never,
     never,
     never
-  >(authImplementation)
+  >(authImplementation, customProviderHooks)
 }
 
 function createNetlifyAuthImplementation(

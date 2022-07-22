@@ -5,6 +5,9 @@ import type {
   GoTrueClient,
 } from '@supabase/supabase-js'
 
+import { CurrentUser } from 'src/AuthContext'
+import { createAuthentication } from 'src/authFactory'
+
 import { AuthImplementation } from './AuthImplementation'
 
 type SignInOptions = {
@@ -30,10 +33,28 @@ type VerifyOtpOptions = {
   redirectTo?: string
 }
 
-export function createSupabaseAuth(supabaseClient: SupabaseClient) {
+export function createSupabaseAuth(
+  supabaseClient: SupabaseClient,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) {
   const authImplementation = createSupabaseAuthImplementation(supabaseClient)
 
-  return authImplementation
+  return createAuthentication<
+    User,
+    void,
+    Awaited<ReturnType<GoTrueClient['signIn']>>,
+    Awaited<ReturnType<GoTrueClient['signOut']>>,
+    Awaited<ReturnType<GoTrueClient['signUp']>>,
+    never,
+    never,
+    never,
+    Awaited<ReturnType<GoTrueClient['verifyOTP']>>
+  >(authImplementation, customProviderHooks)
 }
 
 function createSupabaseAuthImplementation(

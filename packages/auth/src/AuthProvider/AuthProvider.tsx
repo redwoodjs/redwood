@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react'
 
 import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
 
-import { AuthContextInterface } from '../AuthContext'
+import { AuthContextInterface, CurrentUser } from '../AuthContext'
 
 import {
   AuthProviderState,
@@ -72,7 +72,13 @@ export function createAuthProvider<
     TResetPassword,
     TValidateResetToken,
     TVerifyOtp
-  >
+  >,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
 ) {
   /**
    * @example
@@ -117,13 +123,25 @@ export function createAuthProvider<
      * missed or slip through.
      */
     const getToken = useToken(authImplementation)
-    const getCurrentUser = useCurrentUser(authImplementation)
+
+    // We're disabling eslint here, because while yes, technically we are
+    // conditionally calling a hook, which you're not allowed to do. But in
+    // practice a customProviderHook is either always going to be supplied,
+    // or never
+    const getCurrentUser = customProviderHooks?.useCurrentUser
+      ? customProviderHooks.useCurrentUser
+      : // eslint-disable-next-line react-hooks/rules-of-hooks
+        useCurrentUser(authImplementation)
     const reauthenticate = useReauthenticate(
       authImplementation,
       setAuthProviderState,
       skipFetchCurrentUser
     )
-    const hasRole = useHasRole(authProviderState.currentUser)
+
+    const hasRole = customProviderHooks?.useHasRole
+      ? customProviderHooks.useHasRole(authProviderState.currentUser)
+      : // eslint-disable-next-line react-hooks/rules-of-hooks
+        useHasRole(authProviderState.currentUser)
     const signUp = useSignUp(
       authImplementation,
       setAuthProviderState,

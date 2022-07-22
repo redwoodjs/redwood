@@ -1,4 +1,4 @@
-import { createAuthContext } from './AuthContext'
+import { createAuthContext, CurrentUser } from './AuthContext'
 import { AuthImplementation } from './authImplementations/AuthImplementation'
 import { createAuthProvider } from './AuthProvider/AuthProvider'
 import { createUseAuth } from './useAuth'
@@ -24,7 +24,13 @@ export function createAuthentication<
     TResetPassword,
     TValidateResetToken,
     TVerifyOtp
-  >
+  >,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
 ) {
   const AuthContext = createAuthContext<
     TUser,
@@ -36,7 +42,11 @@ export function createAuthentication<
     TValidateResetToken
   >()
   const useAuth = createUseAuth(AuthContext)
-  const AuthProvider = createAuthProvider(AuthContext, authImplementation)
+  const AuthProvider = createAuthProvider(
+    AuthContext,
+    authImplementation,
+    customProviderHooks
+  )
 
   // TODO: Do we really need to return AuthContext here?
   return { AuthContext, AuthProvider, useAuth }
