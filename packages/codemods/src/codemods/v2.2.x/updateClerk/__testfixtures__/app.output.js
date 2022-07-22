@@ -1,5 +1,7 @@
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-react'
 
+import { navigate } from '@redwoodjs/router'
+
 import { AuthProvider } from '@redwoodjs/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'

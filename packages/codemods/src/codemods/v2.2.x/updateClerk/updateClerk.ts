@@ -16,6 +16,11 @@ export default function transform(file: FileInfo, api: API) {
           // Found `withClerk` import. Now I want to replace that with a
           // `ClerkLoaded` import instead
           specifier.imported.name = 'ClerkLoaded'
+
+          // And finally, for the imports, we need to add a new import to give us `navigate`
+          j(importDeclaration).insertAfter(
+            "import { navigate } from '@redwoodjs/router'"
+          )
         }
       })
     })
