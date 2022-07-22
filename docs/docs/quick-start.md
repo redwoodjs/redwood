@@ -104,7 +104,7 @@ yarn rw setup ui --help
 ## Testing with Jest
 
 It'd be hard to scale from side project to startup without a few tests.
-Redwood fully integrates Jest with the front and the backends and makes it easy to keep your whole app covered by generating test files with all your components and services:
+Redwood fully integrates Jest with both the front and backends, and makes it easy to keep your whole app covered by generating test files with all your components and services:
 
 ```
 yarn rw test
