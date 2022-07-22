@@ -16,45 +16,7 @@ import { AuthImplementation } from './AuthImplementation'
 
 type TRestoreAuth = Awaited<ReturnType<HasuraAuthClient['refreshSession']>>
 
-export function createNhostAuth(
-  nhostClient: NhostClient,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-): ReturnType<
-  typeof createAuthentication<
-    User,
-    TRestoreAuth,
-    SignInResponse,
-    ApiSignOutResponse,
-    SignUpResponse,
-    never,
-    never,
-    never,
-    never
-  >
-> {
-  const authImplementation = createNhostAuthImplementation(nhostClient)
-
-  return createAuthentication<
-    User,
-    TRestoreAuth,
-    SignInResponse,
-    ApiSignOutResponse,
-    SignUpResponse,
-    never,
-    never,
-    never,
-    never
-  >(authImplementation, customProviderHooks)
-}
-
-function createNhostAuthImplementation(
-  nhostClient: NhostClient
-): AuthImplementation<
+type NhostAuthImplementation = AuthImplementation<
   User,
   TRestoreAuth,
   SignInResponse,
@@ -64,7 +26,35 @@ function createNhostAuthImplementation(
   never,
   never,
   never
-> {
+>
+
+const nHostCreateAuthentication = (
+  authImplementation: NhostAuthImplementation,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) => createAuthentication(authImplementation, customProviderHooks)
+
+export function createNhostAuth(
+  nhostClient: NhostClient,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+): ReturnType<typeof nHostCreateAuthentication> {
+  const authImplementation = createNhostAuthImplementation(nhostClient)
+
+  return nHostCreateAuthentication(authImplementation, customProviderHooks)
+}
+
+function createNhostAuthImplementation(
+  nhostClient: NhostClient
+): NhostAuthImplementation {
   return {
     type: 'nhost',
     /**

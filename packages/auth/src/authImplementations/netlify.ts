@@ -1,7 +1,5 @@
 import type * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-import { isBrowser } from '@redwoodjs/prerender/browserUtils'
-
 import { CurrentUser } from 'src/AuthContext'
 import { createAuthentication } from 'src/authFactory'
 // TODO:
@@ -14,47 +12,7 @@ import { AuthImplementation } from './AuthImplementation'
 
 type NetlifyIdentity = typeof NetlifyIdentityNS
 
-export function createNetlifyAuth(
-  netlifyIdentity: NetlifyIdentity,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-): ReturnType<
-  typeof createAuthentication<
-    NetlifyIdentityNS.User,
-    NetlifyIdentityNS.User | null,
-    NetlifyIdentityNS.User | null,
-    void,
-    null,
-    never,
-    never,
-    never,
-    never
-  >
-> {
-  const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
-
-  isBrowser && netlifyIdentity.init()
-
-  return createAuthentication<
-    NetlifyIdentityNS.User,
-    NetlifyIdentityNS.User | null,
-    NetlifyIdentityNS.User | null,
-    void,
-    null,
-    never,
-    never,
-    never,
-    never
-  >(authImplementation, customProviderHooks)
-}
-
-function createNetlifyAuthImplementation(
-  netlifyIdentity: NetlifyIdentity
-): AuthImplementation<
+type NetlifyAuthImplementation = AuthImplementation<
   NetlifyIdentityNS.User,
   NetlifyIdentityNS.User | null,
   NetlifyIdentityNS.User | null,
@@ -64,7 +22,39 @@ function createNetlifyAuthImplementation(
   never,
   never,
   never
-> {
+>
+
+const netlifyCreateAuthentication = (
+  authImplementation: NetlifyAuthImplementation,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) => createAuthentication(authImplementation, customProviderHooks)
+
+export function createNetlifyAuth(
+  netlifyIdentity: NetlifyIdentity,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+): ReturnType<typeof netlifyCreateAuthentication> {
+  const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
+
+  // TODO: Add this when this is a separate package. For now it'll have to be
+  // done in the user's app
+  // isBrowser && netlifyIdentity.init()
+
+  return netlifyCreateAuthentication(authImplementation, customProviderHooks)
+}
+
+function createNetlifyAuthImplementation(
+  netlifyIdentity: NetlifyIdentity
+): NetlifyAuthImplementation {
   return {
     type: 'netlify',
     login: () => {

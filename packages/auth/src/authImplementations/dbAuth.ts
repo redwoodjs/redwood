@@ -16,6 +16,22 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 export type DbAuth = () => null
 
+type DbAuthAuthImplementation = AuthImplementation<
+  string,
+  never,
+  any, // TLogIn
+  boolean,
+  any, // TSignUp
+  any, // TForgotPassword
+  any, // TResetPassword
+  any, // TValidateResetToken
+  never
+>
+
+const dbAuthCreateAuthentication = (
+  authImplementation: DbAuthAuthImplementation
+) => createAuthentication(authImplementation)
+
 export type DbAuthConfig = {
   fetchConfig: {
     credentials: 'include' | 'same-origin'
@@ -27,48 +43,18 @@ let getTokenPromise: null | Promise<string | null>
 let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
 let cachedToken: string | null
 
-export function createDbAuth(config: DbAuthConfig): ReturnType<
-  typeof createAuthentication<
-    string,
-    never,
-    any, // TLogIn
-    boolean,
-    any, // TSignUp
-    any, // TForgotPassword
-    any, // TResetPassword
-    any, // TValidateResetToken
-    never
-  >
-> {
+export function createDbAuth(
+  config: DbAuthConfig
+): ReturnType<typeof dbAuthCreateAuthentication> {
   const authImplementation = createDbAuthImplementation(config)
 
-  return createAuthentication<
-    string,
-    never,
-    any, // TLogIn
-    boolean,
-    any, // TSignUp
-    any, // TForgotPassword
-    any, // TResetPassword
-    any, // TValidateResetToken
-    never
-  >(authImplementation)
+  return dbAuthCreateAuthentication(authImplementation)
 }
 
 // TODO: Better types for login, signup etc
 function createDbAuthImplementation(
   config: DbAuthConfig = { fetchConfig: { credentials: 'same-origin' } }
-): AuthImplementation<
-  string,
-  never,
-  any, // TLogIn
-  boolean,
-  any, // TSignUp
-  any, // TForgotPassword
-  any, // TResetPassword
-  any, // TValidateResetToken
-  never
-> {
+): DbAuthAuthImplementation {
   const { credentials } = config.fetchConfig
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {

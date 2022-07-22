@@ -39,6 +39,28 @@ function getClerkClient(propsClient: Clerk | null): Clerk | null {
   }
 }
 
+type ClerkAuthImplementation = AuthImplementation<
+  ClerkUser,
+  void,
+  void,
+  void,
+  void,
+  never,
+  never,
+  never,
+  never
+>
+
+const clerkCreateAuthentication = (
+  authImplementation: ClerkAuthImplementation,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) => createAuthentication(authImplementation, customProviderHooks)
+
 interface AuthProviderProps {
   children: React.ReactNode
 }
@@ -53,36 +75,14 @@ export function createClerkAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<
-  typeof createAuthentication<
-    ClerkUser,
-    void,
-    void,
-    void,
-    void,
-    never,
-    never,
-    never,
-    never
-  >
-> {
+): ReturnType<typeof clerkCreateAuthentication> {
   const authImplementation = createClerkAuthImplementation(clerk, useUser)
 
   const {
     AuthContext,
     AuthProvider: InternalAuthProvider,
     useAuth,
-  } = createAuthentication<
-    ClerkUser,
-    void,
-    void,
-    void,
-    void,
-    never,
-    never,
-    never,
-    never
-  >(authImplementation, customProviderHooks)
+  } = clerkCreateAuthentication(authImplementation, customProviderHooks)
 
   const AuthProvider = ({ children }: AuthProviderProps) => {
     return (
@@ -98,17 +98,7 @@ export function createClerkAuth(
 function createClerkAuthImplementation(
   clerk: Clerk,
   useClerkUser: () => UseUserReturn
-): AuthImplementation<
-  ClerkUser,
-  void,
-  void,
-  void,
-  void,
-  never,
-  never,
-  never,
-  never
-> {
+): ClerkAuthImplementation {
   return {
     type: 'clerk',
     login: async (options?: SignInProps) =>

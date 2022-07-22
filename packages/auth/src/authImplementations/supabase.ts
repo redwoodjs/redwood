@@ -33,45 +33,7 @@ type VerifyOtpOptions = {
   redirectTo?: string
 }
 
-export function createSupabaseAuth(
-  supabaseClient: SupabaseClient,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-): ReturnType<
-  typeof createAuthentication<
-    User,
-    void,
-    Awaited<ReturnType<GoTrueClient['signIn']>>,
-    Awaited<ReturnType<GoTrueClient['signOut']>>,
-    Awaited<ReturnType<GoTrueClient['signUp']>>,
-    never,
-    never,
-    never,
-    Awaited<ReturnType<GoTrueClient['verifyOTP']>>
-  >
-> {
-  const authImplementation = createSupabaseAuthImplementation(supabaseClient)
-
-  return createAuthentication<
-    User,
-    void,
-    Awaited<ReturnType<GoTrueClient['signIn']>>,
-    Awaited<ReturnType<GoTrueClient['signOut']>>,
-    Awaited<ReturnType<GoTrueClient['signUp']>>,
-    never,
-    never,
-    never,
-    Awaited<ReturnType<GoTrueClient['verifyOTP']>>
-  >(authImplementation, customProviderHooks)
-}
-
-function createSupabaseAuthImplementation(
-  supabaseClient: SupabaseClient
-): AuthImplementation<
+type SupabaseAuthImplementation = AuthImplementation<
   User,
   void,
   Awaited<ReturnType<GoTrueClient['signIn']>>,
@@ -81,7 +43,35 @@ function createSupabaseAuthImplementation(
   never,
   never,
   Awaited<ReturnType<GoTrueClient['verifyOTP']>>
-> {
+>
+
+const supabaseCreateAuthentication = (
+  authImplementation: SupabaseAuthImplementation,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) => createAuthentication(authImplementation, customProviderHooks)
+
+export function createSupabaseAuth(
+  supabaseClient: SupabaseClient,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+): ReturnType<typeof supabaseCreateAuthentication> {
+  const authImplementation = createSupabaseAuthImplementation(supabaseClient)
+
+  return supabaseCreateAuthentication(authImplementation, customProviderHooks)
+}
+
+function createSupabaseAuthImplementation(
+  supabaseClient: SupabaseClient
+): SupabaseAuthImplementation {
   return {
     type: 'supabase',
     /**
