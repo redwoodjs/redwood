@@ -33,7 +33,7 @@
     "@testing-library/dom": "8.16.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
-    "@testing-library/user-event": "14.2.6",
+    "@testing-library/user-event": "14.3.0",
     "@types/pascalcase": "1.0.1",
     "@types/react": "17.0.47",
     "@types/react-dom": "17.0.17",
