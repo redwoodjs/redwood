@@ -48,16 +48,32 @@ const isSupported = async () => {
 const isEnabled = () => !!document.cookie.match(/webAuthn/)
 
 const authenticationOptions = async () => {
-  let response
+  let options
 
   try {
-    response = await fetch(
+    const xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+    xhr.open(
+      'GET',
       `${global.RWJS_API_DBAUTH_URL}?method=webAuthnAuthOptions`,
-      {
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      }
+      false
     )
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(null)
+
+    options = JSON.parse(xhr.responseText)
+
+    if (xhr.status !== 200) {
+      if (options.error?.match(/username and password/)) {
+        console.info('regex match')
+        throw new WebAuthnDeviceNotFoundError()
+      } else {
+        console.info('no match')
+        throw new WebAuthnAuthenticationError(
+          `Could not start authentication: ${options.error}`
+        )
+      }
+    }
   } catch (e: any) {
     console.error(e.message)
     throw new WebAuthnAuthenticationError(
@@ -65,48 +81,32 @@ const authenticationOptions = async () => {
     )
   }
 
-  const options = await response.json()
-
-  if (response.status !== 200) {
-    console.info(options)
-    if (options.error?.match(/username and password/)) {
-      console.info('regex match')
-      throw new WebAuthnDeviceNotFoundError()
-    } else {
-      console.info('no match')
-      throw new WebAuthnAuthenticationError(
-        `Could not start authentication: ${options.error}`
-      )
-    }
-  }
-
   return options
 }
 
 const authenticate = async () => {
-  const options = await authenticationOptions()
+  const authOptions = await authenticationOptions()
 
   try {
-    const browserResponse = await startAuthentication(options)
+    const browserResponse = await startAuthentication(authOptions)
 
-    const authResponse = await fetch(global.RWJS_API_DBAUTH_URL, {
-      credentials: 'include',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    const xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+    xhr.open('POST', global.RWJS_API_DBAUTH_URL, false)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+      JSON.stringify({
         method: 'webAuthnAuthenticate',
         ...browserResponse,
-      }),
-    })
+      })
+    )
 
-    if (authResponse.status !== 200) {
+    const options = JSON.parse(xhr.responseText)
+
+    if (xhr.status !== 200) {
       throw new WebAuthnAuthenticationError(
-        `Could not complete authentication: ${
-          (await authResponse.json()).error
-        }`
+        `Could not complete authentication: ${options.error}`
       )
-    } else {
-      return true
     }
   } catch (e: any) {
     if (
@@ -121,31 +121,35 @@ const authenticate = async () => {
       )
     }
   }
+
+  return true
 }
 
-const registrationOptions = async () => {
-  let optionsResponse
+const registrationOptions = () => {
+  let options
 
   try {
-    optionsResponse = await fetch(
+    const xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+    xhr.open(
+      'GET',
       `${global.RWJS_API_DBAUTH_URL}?method=webAuthnRegOptions`,
-      {
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      }
+      false
     )
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(null)
+
+    options = JSON.parse(xhr.responseText)
+
+    if (xhr.status !== 200) {
+      throw new WebAuthnRegistrationError(
+        `Could not start registration: ${options.error}`
+      )
+    }
   } catch (e: any) {
     console.error(e)
     throw new WebAuthnRegistrationError(
       `Could not start registration: ${e.message}`
-    )
-  }
-
-  const options = await optionsResponse.json()
-
-  if (optionsResponse.status !== 200) {
-    throw new WebAuthnRegistrationError(
-      `Could not start registration: ${options.error}`
     )
   }
 
@@ -168,26 +172,25 @@ const register = async () => {
     }
   }
 
-  let verifyResponse
-
   try {
-    verifyResponse = await fetch(global.RWJS_API_DBAUTH_URL, {
-      credentials: 'include',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'webAuthnRegister', ...regResponse }),
-    })
+    const xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+    xhr.open('POST', global.RWJS_API_DBAUTH_URL, false)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(JSON.stringify({ method: 'webAuthnRegister', ...regResponse }))
+
+    const options = JSON.parse(xhr.responseText)
+
+    if (xhr.status !== 200) {
+      throw new WebAuthnRegistrationError(
+        `Could not complete registration: ${options.error}`
+      )
+    }
   } catch (e: any) {
     throw new WebAuthnRegistrationError(`Error while registering: ${e.message}`)
   }
 
-  if (verifyResponse.status !== 200) {
-    throw new WebAuthnRegistrationError(
-      `Could not complete registration: ${options.error}`
-    )
-  } else {
-    return true
-  }
+  return true
 }
 
 const WebAuthnClient = { isSupported, isEnabled, authenticate, register }
