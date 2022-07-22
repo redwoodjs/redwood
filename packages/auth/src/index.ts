@@ -1,7 +1,5 @@
-export { SupportedAuthTypes } from './authClients'
-export {
-  AuthProvider,
-  AuthContextInterface,
-  CurrentUser,
-} from './AuthProvider/AuthProvider'
-export { useAuth } from './useAuth'
+export { createClerkAuth } from './authImplementations/clerk'
+export { createDbAuth } from './authImplementations/dbAuth'
+export { createNetlifyAuth } from './authImplementations/netlify'
+export { createNhostAuth } from './authImplementations/nhost'
+export { createSupabaseAuth } from './authImplementations/supabase'
