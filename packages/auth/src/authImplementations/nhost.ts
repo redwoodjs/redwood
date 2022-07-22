@@ -9,13 +9,34 @@ import type {
 } from '@nhost/hasura-auth-js'
 import type { NhostClient } from '@nhost/nhost-js'
 
+import { CurrentUser } from 'src/AuthContext'
 import { createAuthentication } from 'src/authFactory'
 
 import { AuthImplementation } from './AuthImplementation'
 
 type TRestoreAuth = Awaited<ReturnType<HasuraAuthClient['refreshSession']>>
 
-export function createNhostAuth(nhostClient: NhostClient) {
+export function createNhostAuth(
+  nhostClient: NhostClient,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+): ReturnType<
+  typeof createAuthentication<
+    User,
+    TRestoreAuth,
+    SignInResponse,
+    ApiSignOutResponse,
+    SignUpResponse,
+    never,
+    never,
+    never,
+    never
+  >
+> {
   const authImplementation = createNhostAuthImplementation(nhostClient)
 
   return createAuthentication<
@@ -28,7 +49,7 @@ export function createNhostAuth(nhostClient: NhostClient) {
     never,
     never,
     never
-  >(authImplementation)
+  >(authImplementation, customProviderHooks)
 }
 
 function createNhostAuthImplementation(

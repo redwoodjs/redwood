@@ -12,6 +12,7 @@ import {
   UserResource,
 } from '@clerk/types'
 
+import { CurrentUser } from 'src/AuthContext'
 import { createAuthentication } from 'src/authFactory'
 
 import {
@@ -45,8 +46,26 @@ interface AuthProviderProps {
 export function createClerkAuth(
   clerk: Clerk,
   useUser: () => UseUserReturn,
-  ClerkAuthProvider: React.ComponentType
-) {
+  ClerkAuthProvider: React.ComponentType,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+): ReturnType<
+  typeof createAuthentication<
+    ClerkUser,
+    void,
+    void,
+    void,
+    void,
+    never,
+    never,
+    never,
+    never
+  >
+> {
   const authImplementation = createClerkAuthImplementation(clerk, useUser)
 
   const {
@@ -63,7 +82,7 @@ export function createClerkAuth(
     never,
     never,
     never
-  >(authImplementation)
+  >(authImplementation, customProviderHooks)
 
   const AuthProvider = ({ children }: AuthProviderProps) => {
     return (

@@ -41,7 +41,19 @@ export function createSupabaseAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-) {
+): ReturnType<
+  typeof createAuthentication<
+    User,
+    void,
+    Awaited<ReturnType<GoTrueClient['signIn']>>,
+    Awaited<ReturnType<GoTrueClient['signOut']>>,
+    Awaited<ReturnType<GoTrueClient['signUp']>>,
+    never,
+    never,
+    never,
+    Awaited<ReturnType<GoTrueClient['verifyOTP']>>
+  >
+> {
   const authImplementation = createSupabaseAuthImplementation(supabaseClient)
 
   return createAuthentication<

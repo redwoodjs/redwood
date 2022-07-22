@@ -27,7 +27,19 @@ let getTokenPromise: null | Promise<string | null>
 let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
 let cachedToken: string | null
 
-export function createDbAuth(config: DbAuthConfig) {
+export function createDbAuth(config: DbAuthConfig): ReturnType<
+  typeof createAuthentication<
+    string,
+    never,
+    any, // TLogIn
+    boolean,
+    any, // TSignUp
+    any, // TForgotPassword
+    any, // TResetPassword
+    any, // TValidateResetToken
+    never
+  >
+> {
   const authImplementation = createDbAuthImplementation(config)
 
   return createAuthentication<

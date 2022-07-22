@@ -22,7 +22,19 @@ export function createNetlifyAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-) {
+): ReturnType<
+  typeof createAuthentication<
+    NetlifyIdentityNS.User,
+    NetlifyIdentityNS.User | null,
+    NetlifyIdentityNS.User | null,
+    void,
+    null,
+    never,
+    never,
+    never,
+    never
+  >
+> {
   const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
 
   isBrowser && netlifyIdentity.init()
