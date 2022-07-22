@@ -20,7 +20,7 @@ export const config = {
 
 // required packages to install
 export const webPackages = ['@simplewebauthn/browser']
-export const apiPackages = ['@simplewebauthn/server']
+export const apiPackages = ['@simplewebauthn/server', 'base64url']
 
 // any notes to print out when the job is done
 export const notes = [

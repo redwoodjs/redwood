@@ -32,7 +32,6 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
     "@prisma/client": "3.15.2",
-    "base64url": "3.0.1",
     "core-js": "3.23.5",
     "cross-undici-fetch": "0.4.14",
     "crypto-js": "4.1.1",
@@ -59,6 +58,7 @@
     "@types/split2": "3.2.1",
     "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
+    "base64url": "3.0.1",
     "jest": "27.5.1",
     "split2": "4.1.0",
     "typescript": "4.7.4"
