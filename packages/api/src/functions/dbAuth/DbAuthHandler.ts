@@ -32,6 +32,109 @@ import {
 type SetCookieHeader = { 'Set-Cookie': string }
 type CsrfTokenHeader = { 'csrf-token': string }
 
+interface SignupFlowOptions {
+  /**
+   * Allow users to sign up. Defaults to true.
+   * Needs to be explicitly set to false to disable the flow
+   */
+  enabled?: boolean
+  /**
+   * Whatever you want to happen to your data on new user signup. Redwood will
+   * check for duplicate usernames before calling this handler. At a minimum
+   * you need to save the `username`, `hashedPassword` and `salt` to your
+   * user table. `userAttributes` contains any additional object members that
+   * were included in the object given to the `signUp()` function you got
+   * from `useAuth()`
+   */
+  handler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+  /**
+   * Object containing error strings
+   */
+  errors?: {
+    fieldMissing?: string
+    usernameTaken?: string
+    flowNotEnabled?: string
+  }
+}
+
+interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
+  /**
+   * Allow users to request a new password via a call to forgotPassword. Defaults to true.
+   * Needs to be explicitly set to false to disable the flow
+   */
+  enabled?: boolean
+  handler: (user: TUser) => any
+  errors?: {
+    usernameNotFound?: string
+    usernameRequired?: string
+    flowNotEnabled?: string
+  }
+  expires: number
+}
+
+interface LoginFlowOptions<TUser = Record<string | number, any>> {
+  /**
+   * Allow users to login. Defaults to true.
+   * Needs to be explicitly set to false to disable the flow
+   */
+  enabled?: boolean
+  /**
+   * Anything you want to happen before logging the user in. This can include
+   * throwing an error to prevent login. If you do want to allow login, this
+   * function must return an object representing the user you want to be logged
+   * in, containing at least an `id` field (whatever named field was provided
+   * for `authFields.id`). For example: `return { id: user.id }`
+   */
+  handler: (user: TUser) => Promise<any>
+  /**
+   * Object containing error strings
+   */
+  errors?: {
+    usernameOrPasswordMissing?: string
+    usernameNotFound?: string
+    incorrectPassword?: string
+    flowNotEnabled?: string
+  }
+  /**
+   * How long a user will remain logged in, in seconds
+   */
+  expires: number
+}
+
+interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
+  /**
+   * Allow users to reset their password via a code from a call to forgotPassword. Defaults to true.
+   * Needs to be explicitly set to false to disable the flow
+   */
+  enabled?: boolean
+  handler: (user: TUser) => Promise<any>
+  allowReusedPassword: boolean
+  errors?: {
+    resetTokenExpired?: string
+    resetTokenInvalid?: string
+    resetTokenRequired?: string
+    reusedPassword?: string
+    flowNotEnabled?: string
+  }
+}
+
+interface WebAuthnFlowOptions {
+  enabled: boolean
+  expires: number
+  name: string
+  domain: string
+  origin: string
+  timeout?: number
+  type: 'any' | 'platform' | 'cross-platform'
+  credentialFields: {
+    id: string
+    userId: string
+    publicKey: string
+    transports: string
+    counter: string
+  }
+}
+
 export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * Provide prisma db client
@@ -74,118 +177,36 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * Object containing forgot password options
    */
-  forgotPassword: {
-    handler: (user: TUser) => any
-    errors?: {
-      usernameNotFound?: string
-      usernameRequired?: string
-    }
-    expires: number
-  }
+  forgotPassword: ForgotPasswordFlowOptions<TUser> | { enabled: false }
   /**
    * Object containing login options
    */
-  login: {
-    /**
-     * Anything you want to happen before logging the user in. This can include
-     * throwing an error to prevent login. If you do want to allow login, this
-     * function must return an object representing the user you want to be logged
-     * in, containing at least an `id` field (whatever named field was provided
-     * for `authFields.id`). For example: `return { id: user.id }`
-     */
-    handler: (user: TUser) => Promise<Partial<TUser>> | Partial<TUser>
-    /**
-     * Object containing error strings
-     */
-    errors?: {
-      usernameOrPasswordMissing?: string
-      usernameNotFound?: string
-      incorrectPassword?: string
-    }
-    /**
-     * How long a user will remain logged in, in seconds
-     */
-    expires: number
-  }
+  login: LoginFlowOptions<TUser> | { enabled: false }
   /**
    * Object containing reset password options
    */
-  resetPassword: {
-    handler: (user: TUser) => boolean
-    allowReusedPassword: boolean
-    errors?: {
-      resetTokenExpired?: string
-      resetTokenInvalid?: string
-      resetTokenRequired?: string
-      reusedPassword?: string
-    }
-  }
+  resetPassword: ResetPasswordFlowOptions<TUser> | { enabled: false }
   /**
    * Object containing login options
    */
-  signup: {
-    /**
-     * Whatever you want to happen to your data on new user signup. Redwood will
-     * check for duplicate usernames before calling this handler. At a minimum
-     * you need to save the `username`, `hashedPassword` and `salt` to your
-     * user table. `userAttributes` contains any additional object members that
-     * were included in the object given to the `signUp()` function you got
-     * from `useAuth()`
-     */
-    handler: (signupHandlerOptions: SignupHandlerArgs) => any
-    /**
-     * Object containing error strings
-     */
-    errors?: {
-      fieldMissing?: string
-      usernameTaken?: string
-    }
-  }
+  signup: SignupFlowOptions | { enabled: false }
 
   /**
    * Object containing WebAuthn options
    */
-  webAuthn?: {
-    enabled: boolean
-    expires: number
-    name: string
-    domain: string
-    origin: string
-    timeout?: number
-    type: 'any' | 'platform' | 'cross-platform'
-    credentialFields: {
-      id: string
-      userId: string
-      publicKey: string
-      transports: string
-      counter: string
-    }
-  }
+  webAuthn?: WebAuthnFlowOptions | { enabled: false }
 
   /**
    * CORS settings, same as in createGraphqlHandler
    */
   cors?: CorsConfig
 }
-interface SignupHandlerArgs {
+
+interface SignupHandlerOptions {
   username: string
   hashedPassword: string
   salt: string
   userAttributes?: Record<string, string>
-}
-
-/**
- * To use in src/lib/auth#getCurrentUser
- *
- * Use this type to tell the getCurrentUser function what the type of session is
- * @example
- * import {User} from '@prisma/client'
- *
- * //  key being used in dbAccessor in src/functions/auth.ts 👇
- * const getCurrentUser = async (session: DbAuthSession<User['id']>)
- */
-export interface DbAuthSession<TIdType = unknown> {
-  id: TIdType
 }
 
 export type AuthMethodNames =
@@ -206,6 +227,20 @@ type Params = {
   password?: string
   method: AuthMethodNames
   [key: string]: any
+}
+
+/**
+ * To use in src/lib/auth#getCurrentUser
+ *
+ * Use this type to tell the getCurrentUser function what the type of session is
+ * @example
+ * import {User} from '@prisma/client'
+ *
+ * //  key being used in dbAccessor in src/functions/auth.ts 👇
+ * const getCurrentUser = async (session: DbAuthSession<User['id']>)
+ */
+export interface DbAuthSession<TIdType = unknown> {
+  id: TIdType
 }
 
 export class DbAuthHandler<TUser extends Record<string | number, any>> {
@@ -286,7 +321,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   constructor(
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    options: DbAuthHandlerOptions<TUser>
+    options: DbAuthHandlerOptions
   ) {
     this.event = event
     this.context = context
@@ -306,13 +341,15 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
     const sessionExpiresAt = new Date()
     sessionExpiresAt.setSeconds(
-      sessionExpiresAt.getSeconds() + this.options.login.expires
+      sessionExpiresAt.getSeconds() +
+        (this.options.login as LoginFlowOptions).expires
     )
     this.sessionExpiresDate = sessionExpiresAt.toUTCString()
 
     const webAuthnExpiresAt = new Date()
     webAuthnExpiresAt.setSeconds(
-      webAuthnExpiresAt.getSeconds() + (this.options?.webAuthn?.expires || 0)
+      webAuthnExpiresAt.getSeconds() +
+        ((this.options?.webAuthn as WebAuthnFlowOptions)?.expires || 0)
     )
     this.webAuthnExpiresDate = webAuthnExpiresAt.toUTCString()
 
@@ -398,13 +435,20 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   }
 
   async forgotPassword() {
+    const { enabled = true } = this.options.forgotPassword
+    if (!enabled) {
+      throw new DbAuthError.FlowNotEnabledError(
+        (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
+          ?.flowNotEnabled || `Forgot password flow is not enabled`
+      )
+    }
     const { username } = this.params
 
     // was the username sent in at all?
     if (!username || username.trim() === '') {
       throw new DbAuthError.UsernameRequiredError(
-        this.options.forgotPassword?.errors?.usernameRequired ||
-          `Username is required`
+        (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
+          ?.usernameRequired || `Username is required`
       )
     }
     let user
@@ -420,7 +464,8 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     if (user) {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
-        tokenExpires.getSeconds() + this.options.forgotPassword.expires
+        tokenExpires.getSeconds() +
+          (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
       )
 
       // generate a token
@@ -444,9 +489,9 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       }
 
       // call user-defined handler in their functions/auth.js
-      const response = await this.options.forgotPassword.handler(
-        this._sanitizeUser(user)
-      )
+      const response = await (
+        this.options.forgotPassword as ForgotPasswordFlowOptions
+      ).handler(this._sanitizeUser(user))
 
       return [
         response ? JSON.stringify(response) : '',
@@ -456,8 +501,8 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       ]
     } else {
       throw new DbAuthError.UsernameNotFoundError(
-        this.options.forgotPassword?.errors?.usernameNotFound ||
-          `Username '${username} not found`
+        (this.options.forgotPassword as ForgotPasswordFlowOptions)?.errors
+          ?.usernameNotFound || `Username '${username} not found`
       )
     }
   }
@@ -480,10 +525,18 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   }
 
   async login() {
+    const { enabled = true } = this.options.login
+    if (!enabled) {
+      throw new DbAuthError.FlowNotEnabledError(
+        (this.options.login as LoginFlowOptions)?.errors?.flowNotEnabled ||
+          `Login flow is not enabled`
+      )
+    }
     const { username, password } = this.params
     const dbUser = await this._verifyUser(username, password)
-
-    const handlerUser = await this.options.login.handler(dbUser)
+    const handlerUser = await (this.options.login as LoginFlowOptions).handler(
+      dbUser
+    )
 
     if (
       handlerUser == null ||
@@ -500,12 +553,21 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   }
 
   async resetPassword() {
+    const { enabled = true } = this.options.resetPassword
+    if (!enabled) {
+      throw new DbAuthError.FlowNotEnabledError(
+        (this.options.resetPassword as ResetPasswordFlowOptions)?.errors
+          ?.flowNotEnabled || `Reset password flow is not enabled`
+      )
+    }
     const { password, resetToken } = this.params
 
     // is the resetToken present?
     if (resetToken == null || String(resetToken).trim() === '') {
       throw new DbAuthError.ResetTokenRequiredError(
-        this.options.resetPassword?.errors?.resetTokenRequired
+        (
+          this.options.resetPassword as ResetPasswordFlowOptions
+        )?.errors?.resetTokenRequired
       )
     }
 
@@ -518,11 +580,14 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     const [hashedPassword] = this._hashPassword(password, user.salt)
 
     if (
-      !this.options.resetPassword.allowReusedPassword &&
+      !(this.options.resetPassword as ResetPasswordFlowOptions)
+        .allowReusedPassword &&
       user.hashedPassword === hashedPassword
     ) {
       throw new DbAuthError.ReusedPasswordError(
-        this.options.resetPassword?.errors?.reusedPassword
+        (
+          this.options.resetPassword as ResetPasswordFlowOptions
+        )?.errors?.reusedPassword
       )
     }
 
@@ -543,9 +608,9 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     // call the user-defined handler so they can decide what to do with this user
-    const response = await this.options.resetPassword.handler(
-      this._sanitizeUser(user)
-    )
+    const response = await (
+      this.options.resetPassword as ResetPasswordFlowOptions
+    ).handler(this._sanitizeUser(user))
 
     // returning the user from the handler means to log them in automatically
     if (response) {
@@ -556,6 +621,13 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   }
 
   async signup() {
+    const { enabled = true } = this.options.signup
+    if (!enabled) {
+      throw new DbAuthError.FlowNotEnabledError(
+        (this.options.signup as SignupFlowOptions)?.errors?.flowNotEnabled ||
+          `Signup flow is not enabled`
+      )
+    }
     const userOrMessage = await this._createUser()
 
     // at this point `user` is either an actual user, in which case log the
@@ -577,7 +649,9 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       String(this.params.resetToken).trim() === ''
     ) {
       throw new DbAuthError.ResetTokenRequiredError(
-        this.options.resetPassword?.errors?.resetTokenRequired
+        (
+          this.options.resetPassword as ResetPasswordFlowOptions
+        )?.errors?.resetTokenRequired
       )
     }
 
@@ -862,27 +936,42 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     // must have an expiration time set for the session cookie
-    if (!this.options?.login?.expires) {
+    if (
+      this.options?.login?.enabled !== false &&
+      !this.options?.login?.expires
+    ) {
       throw new DbAuthError.NoSessionExpirationError()
     }
 
     // must have a login handler to actually log a user in
-    if (!this.options?.login?.handler) {
+    if (
+      this.options?.login?.enabled !== false &&
+      !this.options?.login?.handler
+    ) {
       throw new DbAuthError.NoLoginHandlerError()
     }
 
     // must have a signup handler to define how to create a new user
-    if (!this.options?.signup?.handler) {
+    if (
+      this.options?.signup?.enabled !== false &&
+      !this.options?.signup?.handler
+    ) {
       throw new DbAuthError.NoSignupHandlerError()
     }
 
     // must have a forgot password handler to define how to notify user of reset token
-    if (!this.options?.forgotPassword?.handler) {
+    if (
+      this.options?.forgotPassword?.enabled !== false &&
+      !this.options?.forgotPassword?.handler
+    ) {
       throw new DbAuthError.NoForgotPasswordHandlerError()
     }
 
     // must have a reset password handler to define what to do with user once password changed
-    if (!this.options?.resetPassword?.handler) {
+    if (
+      this.options?.resetPassword?.enabled !== false &&
+      !this.options?.resetPassword?.handler
+    ) {
       throw new DbAuthError.NoResetPasswordHandlerError()
     }
 
@@ -1022,7 +1111,8 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   async _findUserByToken(token: string) {
     const tokenExpires = new Date()
     tokenExpires.setSeconds(
-      tokenExpires.getSeconds() - this.options.forgotPassword.expires
+      tokenExpires.getSeconds() -
+        (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
     )
 
     const user = await this.dbAccessor.findFirst({
@@ -1034,7 +1124,9 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     // user not found with the given token
     if (!user) {
       throw new DbAuthError.ResetTokenInvalidError(
-        this.options.resetPassword?.errors?.resetTokenInvalid
+        (
+          this.options.resetPassword as ResetPasswordFlowOptions
+        )?.errors?.resetTokenInvalid
       )
     }
 
@@ -1042,7 +1134,9 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     if (user[this.options.authFields.resetTokenExpiresAt] < tokenExpires) {
       await this._clearResetToken(user)
       throw new DbAuthError.ResetTokenExpiredError(
-        this.options.resetPassword?.errors?.resetTokenExpired
+        (
+          this.options.resetPassword as ResetPasswordFlowOptions
+        )?.errors?.resetTokenExpired
       )
     }
 
@@ -1079,7 +1173,9 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       password.toString().trim() === ''
     ) {
       throw new DbAuthError.UsernameAndPasswordRequiredError(
-        this.options.login?.errors?.usernameOrPasswordMissing
+        (
+          this.options.login as LoginFlowOptions
+        )?.errors?.usernameOrPasswordMissing
       )
     }
 
@@ -1096,7 +1192,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     if (!user) {
       throw new DbAuthError.UserNotFoundError(
         username,
-        this.options.login?.errors?.usernameNotFound
+        (this.options.login as LoginFlowOptions)?.errors?.usernameNotFound
       )
     }
 
@@ -1110,7 +1206,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     } else {
       throw new DbAuthError.IncorrectPasswordError(
         username,
-        this.options.login?.errors?.incorrectPassword
+        (this.options.login as LoginFlowOptions)?.errors?.incorrectPassword
       )
     }
   }
@@ -1150,7 +1246,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
   // creates and returns a user, first checking that the username/password
   // values pass validation
-  async _createUser(): Promise<Partial<TUser> | undefined> {
+  async _createUser() {
     const { username, password, ...userAttributes } = this.params
     if (
       this._validateField('username', username) &&
@@ -1162,14 +1258,14 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
           username,
-          this.options.signup?.errors?.usernameTaken
+          (this.options.signup as SignupFlowOptions)?.errors?.usernameTaken
         )
       }
 
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
       const [hashedPassword, salt] = this._hashPassword(password)
-      const newUser = await this.options.signup.handler({
+      const newUser = await (this.options.signup as SignupFlowOptions).handler({
         username,
         hashedPassword,
         salt,
@@ -1178,9 +1274,6 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
       return newUser
     }
-
-    // Handled internally when createUser is invoked
-    return undefined
   }
 
   // hashes a password using either the given `salt` argument, or creates a new
@@ -1218,7 +1311,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(
         name,
-        this.options.signup?.errors?.fieldMissing
+        (this.options.signup as SignupFlowOptions)?.errors?.fieldMissing
       )
     } else {
       return true
