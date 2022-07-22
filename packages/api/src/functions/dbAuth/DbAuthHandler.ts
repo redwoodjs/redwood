@@ -46,7 +46,7 @@ interface SignupFlowOptions {
    * were included in the object given to the `signUp()` function you got
    * from `useAuth()`
    */
-  handler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+  handler: (signupHandlerOptions: SignupHandlerOptions) => any
   /**
    * Object containing error strings
    */
@@ -85,7 +85,7 @@ interface LoginFlowOptions<TUser = Record<string | number, any>> {
    * in, containing at least an `id` field (whatever named field was provided
    * for `authFields.id`). For example: `return { id: user.id }`
    */
-  handler: (user: TUser) => Promise<any>
+  handler: (user: TUser) => any
   /**
    * Object containing error strings
    */
@@ -107,7 +107,7 @@ interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => Promise<any>
+  handler: (user: TUser) => boolean
   allowReusedPassword: boolean
   errors?: {
     resetTokenExpired?: string
@@ -321,7 +321,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   constructor(
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    options: DbAuthHandlerOptions
+    options: DbAuthHandlerOptions<TUser>
   ) {
     this.event = event
     this.context = context
