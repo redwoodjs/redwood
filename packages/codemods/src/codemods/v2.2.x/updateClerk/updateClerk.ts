@@ -1,3 +1,4 @@
+import type { CommentKind } from 'ast-types/gen/kinds'
 import type { FileInfo, API } from 'jscodeshift'
 
 export default function transform(file: FileInfo, api: API) {
@@ -25,6 +26,8 @@ export default function transform(file: FileInfo, api: API) {
       })
     })
 
+  let comments: CommentKind[] = []
+
   // Remove old RW Clerk components
   ast.find(j.VariableDeclaration).forEach((variableDeclaration) => {
     if (
@@ -37,12 +40,26 @@ export default function transform(file: FileInfo, api: API) {
         )
       })
     ) {
+      comments = [...comments, ...(variableDeclaration.value.comments || [])]
       j(variableDeclaration).remove()
     }
   })
 
-  ast.find(j.VariableDeclaration).insertBefore(`
-const ClerkAuthProvider = ({ children }) => {
+  const appVariableDeclaration = ast.find(j.VariableDeclaration, {
+    declarations: [
+      {
+        id: { name: 'App' },
+      },
+    ],
+  })
+
+  const clerkAuthProvider = j.variableDeclaration('const', [
+    j.variableDeclarator(
+      j.identifier('ClerkAuthProvider'),
+      j.arrowFunctionExpression(
+        [j.identifier('({ children })')],
+        j.jsxExpressionContainer(
+          j.identifier(`
   const frontendApi = process.env.CLERK_FRONTEND_API_URL
   if (!frontendApi) {
     throw new Error('Need to define env variable CLERK_FRONTEND_API_URL')
@@ -55,7 +72,14 @@ const ClerkAuthProvider = ({ children }) => {
       </ClerkLoaded>
     </ClerkProvider>
   )
-}`)
+`)
+        )
+      )
+    ),
+  ])
+  clerkAuthProvider.comments = comments
+
+  appVariableDeclaration.insertBefore([clerkAuthProvider])
 
   return ast.toSource()
 }

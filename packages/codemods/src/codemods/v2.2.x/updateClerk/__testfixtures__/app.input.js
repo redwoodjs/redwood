@@ -24,6 +24,7 @@ const ClerkAuthConsumer = withClerk(({ children, clerk }) => {
   return React.cloneElement(children as React.ReactElement, { client: clerk })
 })
 
+// This Clerk Provider should wrap Redwood's AuthProvider
 const ClerkAuthProvider = ({ children }) => {
   const frontendApi = process.env.CLERK_FRONTEND_API_URL
   if (!frontendApi) {
