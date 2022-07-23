@@ -330,9 +330,9 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (yargs) => {
-  const { provider, rwVersion } = yargs
+  const { provider, rwVersion, webauthn } = yargs
   let force = yargs.force
-  let includeWebAuthn = yargs.webauthn
+  let includeWebAuthn = webauthn
   let providerData
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
@@ -352,8 +352,8 @@ export const handler = async (yargs) => {
   }
 
   // only dbAuth supports WebAuthn right now, but in theory it could work with
-  // any provider, so we'll do a check here and potentially use any other
-  // providers webAuthn version of templates
+  // any provider, so we'll do a check here and potentially use any the webAuthn
+  // version of its provider
   if (
     includeWebAuthn === null &&
     WEBAUTHN_SUPPORTED_PROVIDERS.includes(provider)
