@@ -94,7 +94,7 @@ const firebaseCreateAuthentication = (
   }
 ) => createAuthentication(authImplementation, customProviderHooks)
 
-export function createNetlifyAuth(
+export function createFirebaseAuth(
   firebaseClient: FirebaseClient,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>

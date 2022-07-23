@@ -33,7 +33,7 @@ const oktaCreateAuthentication = (
   }
 ) => createAuthentication(authImplementation, customProviderHooks)
 
-export function createNetlifyAuth(
+export function createOktaAuth(
   oktaAuth: OktaAuth,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
