@@ -1,7 +1,5 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { SupportedAuthTypes } from '@redwoodjs/auth'
-
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import { clerk } from './clerk'
@@ -24,7 +22,7 @@ interface Req {
 type Decoded = null | string | Record<string, unknown>
 
 const typesToDecoders: Record<
-  SupportedAuthTypes,
+  string,
   | ((token: string) => Decoded | Promise<Decoded>)
   | ((token: string, req: Req) => Decoded | Promise<Decoded>)
 > = {
@@ -45,7 +43,7 @@ const typesToDecoders: Record<
 }
 
 export const decodeToken = async (
-  type: SupportedAuthTypes,
+  type: string,
   token: string,
   req: Req
 ): Promise<Decoded> => {

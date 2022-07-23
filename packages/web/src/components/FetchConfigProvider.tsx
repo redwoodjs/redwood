@@ -1,4 +1,4 @@
-import type { AuthContextInterface, SupportedAuthTypes } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
   return global.RWJS_API_GRAPHQL_URL
@@ -6,15 +6,42 @@ export const getApiGraphQLUrl = () => {
 
 export interface FetchConfig {
   uri: string
-  headers?: { 'auth-provider'?: SupportedAuthTypes; authorization?: string }
+  headers?: { 'auth-provider'?: string; authorization?: string }
 }
 
 export const FetchConfigContext = React.createContext<FetchConfig>({
   uri: getApiGraphQLUrl(),
 })
 
-const defaultAuthState = { loading: false, isAuthenticated: false }
-type UseAuthType = () => AuthContextInterface
+type UseAuthType = () => AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
+// TODO: Can we/should we move this into @redwoodjs/auth and export it so we can use it in more places?
+const defaultAuthState: ReturnType<UseAuthType> = {
+  loading: false,
+  isAuthenticated: false,
+  logIn: async () => {},
+  logOut: async () => {},
+  signUp: async () => {},
+  currentUser: null,
+  userMetadata: undefined,
+  getToken: async () => null,
+  getCurrentUser: async () => null,
+  hasRole: () => false,
+  reauthenticate: async () => {},
+  forgotPassword: async () => {},
+  resetPassword: async () => {},
+  validateResetToken: async () => {},
+  type: 'default',
+  hasError: false,
+}
 
 /**
  * The `FetchConfigProvider` understands Redwood's Auth and determines the

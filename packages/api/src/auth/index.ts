@@ -2,17 +2,13 @@ export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { SupportedAuthTypes } from '@redwoodjs/auth'
-
 import { decodeToken } from './decoders'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
-export const getAuthProviderHeader = (
-  event: APIGatewayProxyEvent
-): SupportedAuthTypes => {
-  return event?.headers[AUTH_PROVIDER_HEADER] as SupportedAuthTypes
+export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
+  return event?.headers[AUTH_PROVIDER_HEADER]
 }
 
 export interface AuthorizationHeader {
@@ -40,7 +36,7 @@ export const parseAuthorizationHeader = (
 
 export type AuthContextPayload = [
   string | Record<string, unknown> | null,
-  { type: SupportedAuthTypes } & AuthorizationHeader,
+  { type: string } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
 

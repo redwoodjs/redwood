@@ -50,6 +50,8 @@ export interface AuthContextInterface<
   /**
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
+   * TODO: Add implementation for `client`. Right now I don't think I set it
+   * anywhere
    */
   client?: any
   type: string

@@ -6,7 +6,6 @@ import type {
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { print } from 'graphql/language/printer'
-import type { F } from 'ts-toolbelt'
 
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
 const {
@@ -21,7 +20,6 @@ const {
 } = apolloClient
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
-import { useAuth as useRWAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -89,14 +87,22 @@ export type GraphQLClientConfigProp = Omit<
       ) => apolloClient.ApolloLink)
 }
 
-export type UseAuthProp = () => AuthContextInterface
+export type UseAuthProp = () => AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
     cache: ApolloCache<unknown>
   }
   useAuth: UseAuthProp
-  logLevel: F.Return<typeof setLogVerbosity>
+  logLevel: ReturnType<typeof setLogVerbosity>
 }> = ({ config, children, useAuth, logLevel }) => {
   /**
    * Should they run into it,
@@ -270,11 +276,11 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
-  useAuth?: UseAuthProp
-  logLevel?: F.Return<typeof setLogVerbosity>
+  useAuth: UseAuthProp
+  logLevel?: ReturnType<typeof setLogVerbosity>
 }> = ({
   graphQLClientConfig,
-  useAuth = useRWAuth,
+  useAuth = global.__REDWOOD__USE_AUTH,
   logLevel = 'debug',
   children,
 }) => {
@@ -290,9 +296,8 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        /**
-         * This order so that the user can still completely overwrite the cache.
-         */
+        // This order so that the user can still completely overwrite the
+        // cache.
         config={{ cache, ...config }}
         useAuth={useAuth}
         logLevel={logLevel}

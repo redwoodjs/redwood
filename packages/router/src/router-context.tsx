@@ -1,12 +1,22 @@
 import React, { useReducer, createContext, useContext } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import type { ParamType } from './util'
 
+type UseAuth = () => AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
-  useAuth: typeof useAuth
+  useAuth: UseAuth
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
@@ -21,20 +31,41 @@ const RouterSetContext = createContext<
 
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
-  useAuth?: typeof useAuth
+  useAuth?: UseAuth
 }
 
 function stateReducer(state: RouterState, newState: Partial<RouterState>) {
   return { ...state, ...newState }
 }
 
+function defaultUseAuth(): ReturnType<UseAuth> {
+  return {
+    loading: false,
+    isAuthenticated: false,
+    logIn: async () => {},
+    logOut: async () => {},
+    signUp: async () => {},
+    currentUser: null,
+    userMetadata: undefined,
+    getToken: async () => null,
+    getCurrentUser: async () => null,
+    hasRole: () => false,
+    reauthenticate: async () => {},
+    forgotPassword: async () => {},
+    resetPassword: async () => {},
+    validateResetToken: async () => {},
+    type: 'default',
+    hasError: false,
+  }
+}
+
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
-  useAuth: customUseAuth,
+  useAuth,
   paramTypes,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
-    useAuth: customUseAuth || useAuth,
+    useAuth: useAuth || defaultUseAuth,
     paramTypes,
   })
 

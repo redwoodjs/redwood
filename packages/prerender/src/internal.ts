@@ -27,7 +27,15 @@ export const registerShims = (routerPath: string) => {
     ({
       loading: true, // this should play nicely if the app waits for auth stuff to comeback first before render
       isAuthenticated: false,
-    } as AuthContextInterface) // we only need a partial AuthContextInterface for prerender
+    } as AuthContextInterface<
+      unknown,
+      unknown,
+      unknown,
+      unknown,
+      unknown,
+      unknown,
+      unknown
+    >) // we only need a partial AuthContextInterface for prerender
 
   global.__REDWOOD__PRERENDERING = true
 
