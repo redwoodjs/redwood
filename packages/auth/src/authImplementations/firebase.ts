@@ -2,8 +2,8 @@ import type { FirebaseApp } from 'firebase/app'
 import type { CustomParameters, OAuthProvider, User } from 'firebase/auth'
 import type FirebaseAuthNamespace from 'firebase/auth'
 
-import { CurrentUser } from 'src/AuthContext'
-import { createAuthentication } from 'src/authFactory'
+import { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
 
 import { AuthImplementation } from './AuthImplementation'
 

@@ -9,8 +9,8 @@ import type {
 } from '@nhost/hasura-auth-js'
 import type { NhostClient } from '@nhost/nhost-js'
 
-import { CurrentUser } from 'src/AuthContext'
-import { createAuthentication } from 'src/authFactory'
+import { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
 
 import { AuthImplementation } from './AuthImplementation'
 

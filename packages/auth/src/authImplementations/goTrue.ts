@@ -1,8 +1,8 @@
 import type { default as GoTrue } from 'gotrue-js'
 import type { User } from 'gotrue-js'
 
-import { CurrentUser } from 'src/AuthContext'
-import { createAuthentication } from 'src/authFactory'
+import { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
 
 import { AuthImplementation } from './AuthImplementation'
 

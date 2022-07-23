@@ -1,4 +1,4 @@
-import { createAuthentication } from 'src/authFactory'
+import { createAuthentication } from '../authFactory'
 
 import { AuthImplementation } from './AuthImplementation'
 

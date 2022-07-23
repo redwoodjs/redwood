@@ -4,10 +4,10 @@ import type {
   RedirectLoginOptions,
 } from '@auth0/auth0-spa-js'
 
-import { CurrentUser } from 'src/AuthContext'
-import { createAuthentication } from 'src/authFactory'
+import type { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
+import type { AuthImplementation } from './AuthImplementation'
 
 // TODO: Map out this user properly.
 export interface Auth0User {}

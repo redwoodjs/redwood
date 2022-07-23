@@ -5,8 +5,8 @@ import type {
   GoTrueClient,
 } from '@supabase/supabase-js'
 
-import { CurrentUser } from 'src/AuthContext'
-import { createAuthentication } from 'src/authFactory'
+import { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
 
 import { AuthImplementation } from './AuthImplementation'
 

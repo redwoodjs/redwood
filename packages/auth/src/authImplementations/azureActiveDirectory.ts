@@ -5,10 +5,10 @@ import type {
   SilentRequest,
 } from '@azure/msal-browser'
 
-import { CurrentUser } from 'src/AuthContext'
-import { createAuthentication } from 'src/authFactory'
+import type { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
+import type { AuthImplementation } from './AuthImplementation'
 
 type AzureActiveDirectoryClient = AzureActiveDirectory
 interface AzureActiveDirectoryUser {}
