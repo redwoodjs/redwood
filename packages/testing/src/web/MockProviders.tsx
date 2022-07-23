@@ -4,7 +4,7 @@
  */
 import React from 'react'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
@@ -18,35 +18,6 @@ import { MockParamsProvider } from './MockParamsProvider'
 const {
   default: UserRouterWithRoutes,
 } = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
-
-// TODO: make this AuthContextInterface & the below AuthClient more composable/extendable|"overwriteable"
-const fakeUseAuth = (): AuthContextInterface<
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown
-> => ({
-  loading: false,
-  isAuthenticated: false,
-  currentUser: null,
-  userMetadata: null,
-  logIn: async () => undefined,
-  logOut: async () => undefined,
-  signUp: async () => undefined,
-  getToken: async () => null,
-  getCurrentUser: async () => null,
-  hasRole: () => false,
-  reauthenticate: async () => undefined,
-  forgotPassword: async () => undefined,
-  resetPassword: async () => undefined,
-  validateResetToken: async () => undefined,
-  client: null,
-  type: 'custom',
-  hasError: false,
-})
 
 // export const mockAuthClient: AuthClient = {
 //   restoreAuthState: () => {},
@@ -70,7 +41,7 @@ export const MockProviders: React.FunctionComponent = ({ children }) => {
   return (
     // <AuthProvider client={mockAuthClient} type="custom">
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <RedwoodApolloProvider useAuth={fakeUseAuth}>
+      <RedwoodApolloProvider useAuth={useNoAuth}>
         <UserRouterWithRoutes />
         <LocationProvider>
           <MockParamsProvider>{children}</MockParamsProvider>

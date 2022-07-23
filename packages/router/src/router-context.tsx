@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import { AuthContextInterface, useNoAuth } from '@redwoodjs/auth'
 
 import type { ParamType } from './util'
 
@@ -38,34 +38,13 @@ function stateReducer(state: RouterState, newState: Partial<RouterState>) {
   return { ...state, ...newState }
 }
 
-function defaultUseAuth(): ReturnType<UseAuth> {
-  return {
-    loading: false,
-    isAuthenticated: false,
-    logIn: async () => {},
-    logOut: async () => {},
-    signUp: async () => {},
-    currentUser: null,
-    userMetadata: undefined,
-    getToken: async () => null,
-    getCurrentUser: async () => null,
-    hasRole: () => false,
-    reauthenticate: async () => {},
-    forgotPassword: async () => {},
-    resetPassword: async () => {},
-    validateResetToken: async () => {},
-    type: 'default',
-    hasError: false,
-  }
-}
-
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   useAuth,
   paramTypes,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
-    useAuth: useAuth || defaultUseAuth,
+    useAuth: useAuth || useNoAuth,
     paramTypes,
   })
 

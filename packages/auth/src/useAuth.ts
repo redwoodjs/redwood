@@ -47,3 +47,32 @@ export function createUseAuth<
 
   return useAuth
 }
+
+export function useNoAuth(): AuthContextInterface<
+  null,
+  void,
+  void,
+  void,
+  void,
+  void,
+  void
+> {
+  return {
+    loading: false,
+    isAuthenticated: false,
+    logIn: async () => {},
+    logOut: async () => {},
+    signUp: async () => {},
+    currentUser: null,
+    userMetadata: null,
+    getToken: async () => null,
+    getCurrentUser: async () => null,
+    hasRole: () => false,
+    reauthenticate: async () => {},
+    forgotPassword: async () => {},
+    resetPassword: async () => {},
+    validateResetToken: async () => {},
+    type: 'default',
+    hasError: false,
+  }
+}
