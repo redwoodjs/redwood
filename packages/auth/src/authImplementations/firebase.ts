@@ -2,10 +2,12 @@ import type { FirebaseApp } from 'firebase/app'
 import type { CustomParameters, OAuthProvider, User } from 'firebase/auth'
 import type FirebaseAuthNamespace from 'firebase/auth'
 
-import { AuthClient } from './'
+import { CurrentUser } from 'src/AuthContext'
+import { createAuthentication } from 'src/authFactory'
 
-export type FirebaseAuth = typeof FirebaseAuthNamespace
-export type FirebaseUser = User
+import { AuthImplementation } from './AuthImplementation'
+
+type FirebaseAuth = typeof FirebaseAuthNamespace
 
 // @TODO: Firebase doesn't export a list of providerIds they use
 // But I found them here: https://github.com/firebase/firebase-js-sdk/blob/a5768b0aa7d7ce732279931aa436e988c9f36487/packages/rules-unit-testing/src/api/index.ts
@@ -23,7 +25,7 @@ export type oAuthProvider =
 export type emailLinkProvider = 'emailLink'
 export type customTokenProvider = 'customToken'
 
-export type Options = {
+interface Options {
   providerId?: oAuthProvider | emailLinkProvider | customTokenProvider
   email?: string
   emailLink?: string
@@ -33,8 +35,28 @@ export type Options = {
   customParameters?: CustomParameters // parameters available at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
 }
 
-const hasPasswordCreds = (options: Options): boolean => {
+interface PasswordOptions {
+  email: string
+  password: string
+}
+
+interface EmailLinkOptions {
+  email: string
+  emailLink: string
+}
+
+const hasPasswordCredentials = (
+  options: Options
+): options is PasswordOptions => {
   return options.email !== undefined && options.password !== undefined
+}
+
+const isEmailLinkOptions = (options: Options): options is EmailLinkOptions => {
+  return (
+    options.providerId === 'emailLink' &&
+    options.email !== undefined &&
+    options.emailLink !== undefined
+  )
 }
 
 const applyProviderOptions = (
@@ -50,40 +72,72 @@ const applyProviderOptions = (
   return provider
 }
 
-export type FirebaseClient = {
+type FirebaseAuthImplementation = AuthImplementation<
+  User | null,
+  User | null,
+  FirebaseAuthNamespace.UserCredential | undefined,
+  void,
+  FirebaseAuthNamespace.UserCredential | undefined,
+  never,
+  never,
+  never,
+  never
+>
+
+const firebaseCreateAuthentication = (
+  authImplementation: FirebaseAuthImplementation,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) => createAuthentication(authImplementation, customProviderHooks)
+
+export function createNetlifyAuth(
+  firebaseClient: FirebaseClient,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+): ReturnType<typeof firebaseCreateAuthentication> {
+  const authImplementation = createFirebaseAuthImplementation(firebaseClient)
+
+  return firebaseCreateAuthentication(authImplementation, customProviderHooks)
+}
+
+interface FirebaseClient {
   firebaseAuth: FirebaseAuth
   firebaseApp?: FirebaseApp
 }
 
-export const firebase = ({
+function createFirebaseAuthImplementation({
   firebaseAuth,
   firebaseApp,
-}: FirebaseClient): AuthClient => {
+}: FirebaseClient): FirebaseAuthImplementation {
   const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
     return new firebaseAuth.OAuthProvider(providerId)
   }
 
-  const loginWithEmailLink = ({ email, emailLink }: Options) => {
-    if (
-      email !== undefined &&
-      emailLink !== undefined &&
-      firebaseAuth.isSignInWithEmailLink(auth, emailLink)
-    ) {
+  const loginWithEmailLink = ({ email, emailLink }: EmailLinkOptions) => {
+    if (firebaseAuth.isSignInWithEmailLink(auth, emailLink)) {
       return firebaseAuth.signInWithEmailLink(auth, email, emailLink)
     }
+
     return undefined
   }
 
   return {
     type: 'firebase',
-    client: auth,
     restoreAuthState: () => {
       // The first firing of onAuthStateChange indicates that firebase auth has
       // loaded and the state is ready to be read. Unsubscribe after this first firing.
-      return new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
+      return new Promise<User | null>((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
           unsubscribe()
           resolve(user)
         }, reject)
@@ -98,15 +152,15 @@ export const firebase = ({
         options = { providerId: options }
       }
 
-      if (hasPasswordCreds(options)) {
+      if (hasPasswordCredentials(options)) {
         return firebaseAuth.signInWithEmailAndPassword(
           auth,
-          options.email as string,
-          options.password as string
+          options.email,
+          options.password
         )
       }
 
-      if (options.providerId === 'emailLink') {
+      if (isEmailLinkOptions(options)) {
         return loginWithEmailLink(options)
       }
 
@@ -119,23 +173,23 @@ export const firebase = ({
 
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
-    logout: async () => auth.signOut(),
-    signup: (
+    logout: () => auth.signOut(),
+    signup: async (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {
       if (typeof options === 'string') {
         options = { providerId: options }
       }
 
-      if (hasPasswordCreds(options)) {
+      if (hasPasswordCredentials(options)) {
         return firebaseAuth.createUserWithEmailAndPassword(
           auth,
-          options.email as string,
-          options.password as string
+          options.email,
+          options.password
         )
       }
 
-      if (options.providerId === 'emailLink') {
+      if (isEmailLinkOptions(options)) {
         return loginWithEmailLink(options)
       }
 
