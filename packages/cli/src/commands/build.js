@@ -1,32 +1,18 @@
-import fs from 'fs'
-
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../lib'
+import { sides } from '../lib/project'
 import checkForBabelConfig from '../middleware/checkForBabelConfig'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
 
 export const builder = (yargs) => {
-  const apiExists = fs.existsSync(getPaths().api.src)
-  const webExists = fs.existsSync(getPaths().web.src)
-
-  const optionDefault = (apiExists, webExists) => {
-    let options = []
-    if (apiExists) {
-      options.push('api')
-    }
-    if (webExists) {
-      options.push('web')
-    }
-    return options
-  }
+  const choices = sides()
 
   yargs
     .positional('side', {
-      choices: ['api', 'web'],
-      default: optionDefault(apiExists, webExists),
+      choices,
+      default: choices,
       description: 'Which side(s) to build',
       type: 'array',
     })
