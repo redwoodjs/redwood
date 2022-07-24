@@ -5,13 +5,13 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getCmdMajorVersion } from '../commands/upgrade'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
+import sides from '../lib/project'
 
 export const command = 'type-check [sides..]'
 export const aliases = ['tsc', 'tc']
@@ -20,7 +20,7 @@ export const builder = (yargs) => {
   yargs
     .strict(false) // so that we can forward arguments to tsc
     .positional('sides', {
-      default: getProject().sides,
+      default: sides(),
       description: 'Which side(s) to run a typecheck on',
       type: 'array',
     })
