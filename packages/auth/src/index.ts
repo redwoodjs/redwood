@@ -1,3 +1,6 @@
 export { SupportedAuthTypes } from './authClients'
 export { AuthProvider, AuthContextInterface, CurrentUser } from './AuthProvider'
 export { useAuth } from './useAuth'
+export { useAuthService } from './useAuthService'
+export { dbAuth } from './authClients/dbAuth'
+export { supabase as supabaseAuthClient } from './authClients/supabase'

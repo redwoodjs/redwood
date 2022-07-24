@@ -62,7 +62,7 @@ export const mockAuthClient: AuthClient = {
 
 export const MockProviders: React.FunctionComponent = ({ children }) => {
   return (
-    <AuthProvider client={mockAuthClient} type="custom">
+    <AuthProvider service={mockAuthClient}>
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         <RedwoodApolloProvider useAuth={fakeUseAuth}>
           <UserRouterWithRoutes />
