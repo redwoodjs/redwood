@@ -5,8 +5,8 @@ import path from 'path'
 import { config } from 'dotenv-defaults'
 import yargs from 'yargs'
 
-// import { getPaths, getConfigPath } from '@redwoodjs/internal'
-// import { telemetryMiddleware } from '@redwoodjs/telemetry'
+import { getConfigPath } from '@redwoodjs/internal/dist/config'
+import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
@@ -29,6 +29,7 @@ import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
+import { getPaths } from './lib'
 
 /**
  * The current working directory can be set via:
@@ -86,9 +87,9 @@ const loadDotEnvDefaultsMiddleware = () => {
 yargs
   .scriptName('rw')
   .middleware([
-    // getCwdMiddleware,
-    // loadDotEnvDefaultsMiddleware,
-    // telemetryMiddleware,
+    getCwdMiddleware,
+    loadDotEnvDefaultsMiddleware,
+    telemetryMiddleware,
   ])
   .option('cwd', {
     describe: 'Working directory to use (where `redwood.toml` is located.)',
