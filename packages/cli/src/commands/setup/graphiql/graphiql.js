@@ -21,7 +21,7 @@ import {
   graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/isTypeScriptProject'
+import { isTypeScriptProject } from '../../../lib/project'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
 const isNumeric = (id) => {

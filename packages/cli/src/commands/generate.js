@@ -1,7 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { isTypeScriptProject } from '../lib/isTypeScriptProject'
+import { isTypeScriptProject } from '../lib/project'
 
 export const command = 'generate <type>'
 export const aliases = ['g']

@@ -16,7 +16,7 @@ import {
   graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/isTypeScriptProject'
+import { isTypeScriptProject } from '../../../lib/project'
 
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
