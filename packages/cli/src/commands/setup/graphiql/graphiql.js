@@ -8,7 +8,6 @@ import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal'
-import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -22,6 +21,7 @@ import {
   graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { isTypeScriptProject } from '../../../lib/isTypeScriptProject'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
 const isNumeric = (id) => {
@@ -141,7 +141,7 @@ const addHeaderOption = () => {
 export const getOutputPath = () => {
   return path.join(
     getPaths().api.lib,
-    getProject().isTypeScriptProject
+    isTypeScriptProject()
       ? 'generateGraphiQLHeader.ts'
       : 'generateGraphiQLHeader.js'
   )
@@ -238,7 +238,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
 
           return writeFilesTask(
             {
-              [outputPath]: getProject().isTypeScriptProject
+              [outputPath]: isTypeScriptProject()
                 ? content
                 : transformTSToJS(outputPath, content),
             },
