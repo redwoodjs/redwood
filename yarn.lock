@@ -14000,9 +14000,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.7.0":
-  version: 9.7.0
-  resolution: "cypress@npm:9.7.0"
+"cypress@npm:10.3.1":
+  version: 10.3.1
+  resolution: "cypress@npm:10.3.1"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -14048,7 +14048,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 9ebffdc463ebb4db796fa27fa11883f04e696711417f544a7d793a7a283c2f79c4f5d1e528bc3d312a16a1e1d6ae63532106feb4c70b4a42f51fd3d0487d4d38
+  checksum: 5db249c8c1bce7d21c49ad3849d68ff9358cb31ead92c018846e8a79c08ad8ff51a215754e54ccc62bd8c10bd643e9971c9722a212fa646b1137b30805e193fc
   languageName: node
   linkType: hard
 
