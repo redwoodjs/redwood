@@ -100,6 +100,6 @@
     "typescript-transform-paths": "3.3.1",
     "zx": "7.0.7"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@3.2.2",
   "npmClient": "yarn"
 }
