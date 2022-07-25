@@ -325,6 +325,28 @@ describe('dbAuth', () => {
       ).toThrow(dbAuthError.NoForgotPasswordHandler)
     })
 
+    it('does not throw an error if no forgotPassword.handler option but forgotPassword.enabled set to false', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            db: db,
+            login: {
+              handler: () => {},
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+            forgotPassword: {
+              enabled: false,
+            },
+          })
+      ).not.toThrow(dbAuthError.NoForgotPasswordHandler)
+    })
+
     it('throws an error if login expiration time is not defined', () => {
       // login object doesn't exist at all
       expect(
@@ -381,6 +403,26 @@ describe('dbAuth', () => {
       ).toThrow(dbAuthError.NoLoginHandlerError)
     })
 
+    it('does not throw an error if no login.handler option but login.enabled set to false', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            login: {
+              enabled: false,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+            forgotPassword: {
+              handler: () => {},
+            },
+          })
+      ).not.toThrow(dbAuthError.NoLoginHandlerError)
+    })
+
     it('throws an error if no signup.handler option', () => {
       expect(
         () =>
@@ -414,6 +456,28 @@ describe('dbAuth', () => {
             signup: {},
           })
       ).toThrow(dbAuthError.NoSignupHandler)
+    })
+
+    it('does not throw an error if no signup.handler option but signup.enabled set to false', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            db: db,
+            login: {
+              handler: () => {},
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              enabled: false,
+            },
+            forgotPassword: {
+              handler: () => {},
+            },
+          })
+      ).not.toThrow(dbAuthError.NoSignupHandler)
     })
 
     it('parses params from a plain text body', () => {
@@ -604,6 +668,44 @@ describe('dbAuth', () => {
   })
 
   describe('forgotPassword', () => {
+    it('throws default error when not enabled', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.forgotPassword.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.forgotPassword()
+      } catch (e) {
+        expect(e.message).toEqual('Forgot password flow is not enabled')
+      }
+      expect.assertions(1)
+    })
+
+    it('throws custom error when not enabled and message provided', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.forgotPassword.enabled = false
+      options.forgotPassword.errors = {
+        ...options.forgotPassword.errors,
+        flowNotEnabled: 'Custom flow not enabled error',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.forgotPassword()
+      } catch (e) {
+        expect(e.message).toEqual('Custom flow not enabled error')
+      }
+      expect.assertions(1)
+    })
+
     it('throws an error if username is blank', async () => {
       // missing completely
       event.body = JSON.stringify({})
@@ -708,6 +810,43 @@ describe('dbAuth', () => {
   })
 
   describe('login', () => {
+    it('throws default error when not enabled', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.login.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.login()
+      } catch (e) {
+        expect(e.message).toEqual('Login flow is not enabled')
+      }
+      expect.assertions(1)
+    })
+
+    it('throws custom error when not enabled and message provided', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.login.enabled = false
+      options.login.errors = {
+        ...options.signup.errors,
+        flowNotEnabled: 'Custom flow not enabled error',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.login()
+      } catch (e) {
+        expect(e.message).toEqual('Custom flow not enabled error')
+      }
+      expect.assertions(1)
+    })
     it('throws an error if username is not found', async () => {
       await createDbUser()
       event.body = JSON.stringify({
@@ -863,6 +1002,43 @@ describe('dbAuth', () => {
   })
 
   describe('resetPassword', () => {
+    it('throws default error when not enabled', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.resetPassword.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.resetPassword()
+      } catch (e) {
+        expect(e.message).toEqual('Reset password flow is not enabled')
+      }
+      expect.assertions(1)
+    })
+
+    it('throws custom error when not enabled and message provided', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.resetPassword.enabled = false
+      options.resetPassword.errors = {
+        ...options.signup.errors,
+        flowNotEnabled: 'Custom flow not enabled error',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.resetPassword()
+      } catch (e) {
+        expect(e.message).toEqual('Custom flow not enabled error')
+      }
+      expect.assertions(1)
+    })
     it('throws an error if resetToken is blank', async () => {
       // missing completely
       event.body = JSON.stringify({})
@@ -1142,6 +1318,44 @@ describe('dbAuth', () => {
 
       expect.assertions(1)
       await expect(dbAuth.signup()).rejects.toThrow('Cannot signup')
+    })
+
+    it('throws default error when not enabled', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.signup.enabled = false
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.signup()
+      } catch (e) {
+        expect(e.message).toEqual('Signup flow is not enabled')
+      }
+      expect.assertions(1)
+    })
+
+    it('throws custom error when not enabled and message provided', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.signup.enabled = false
+      options.signup.errors = {
+        ...options.signup.errors,
+        flowNotEnabled: 'Custom flow not enabled error',
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.signup()
+      } catch (e) {
+        expect(e.message).toEqual('Custom flow not enabled error')
+      }
+      expect.assertions(1)
     })
 
     it('creates a new user and logs them in', async () => {

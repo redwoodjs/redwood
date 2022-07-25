@@ -158,6 +158,13 @@ export class SessionDecryptionError extends Error {
   }
 }
 
+export class FlowNotEnabledError extends Error {
+  constructor(message = 'Flow is not enabled') {
+    super(message)
+    this.name = 'FlowNotEnabledError'
+  }
+}
+
 export class UsernameRequiredError extends Error {
   constructor(message = 'Username is required') {
     super(message)

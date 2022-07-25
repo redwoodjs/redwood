@@ -55,7 +55,8 @@
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime-corejs3": "7.16.7",
-    "@playwright/test": "1.23.4",
+    "@nrwl/nx-cloud": "14.2.0",
+    "@playwright/test": "1.24.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
@@ -81,7 +82,7 @@
     "is-port-reachable": "3.1.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
-    "lerna": "5.1.8",
+    "lerna": "5.2.0",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
     "msw": "0.40.2",
@@ -99,6 +100,6 @@
     "typescript-transform-paths": "3.3.1",
     "zx": "7.0.7"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@3.2.2",
   "npmClient": "yarn"
 }
