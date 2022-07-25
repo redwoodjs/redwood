@@ -71,3 +71,19 @@ export const dbAuthSession = (event: APIGatewayProxyEvent) => {
     return null
   }
 }
+
+export const webAuthnSession = (event: APIGatewayProxyEvent) => {
+  if (!event.headers.cookie) {
+    return null
+  }
+
+  const webAuthnCookie = event.headers.cookie.split(';').find((cook) => {
+    return cook.split('=')[0].trim() === 'webAuthn'
+  })
+
+  if (!webAuthnCookie || webAuthnCookie === 'webAuthn=') {
+    return null
+  }
+
+  return webAuthnCookie.split('=')[1].trim()
+}

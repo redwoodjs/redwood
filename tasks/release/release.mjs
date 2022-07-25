@@ -566,6 +566,7 @@ const ALL_CONTRIBUTORS_IGNORE_LIST = [
   'ajcwebdev',
   'agiannelli',
   'codesee-maps[bot]',
+  'noire-munich',
 ]
 
 /**

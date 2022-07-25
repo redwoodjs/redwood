@@ -12,6 +12,7 @@ import { firebase } from './firebase'
 import { magicLink } from './magicLink'
 import { netlify } from './netlify'
 import { nhost } from './nhost'
+import { okta } from './okta'
 import { supabase } from './supabase'
 import { supertokens } from './supertokens'
 
@@ -39,6 +40,7 @@ const typesToDecoders: Record<
   ethereum: ethereum,
   dbAuth: dbAuth,
   supertokens: supertokens,
+  okta: okta,
   custom: custom,
 }
 

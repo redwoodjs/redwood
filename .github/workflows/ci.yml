@@ -84,8 +84,13 @@ jobs:
       - name: 🔎 Lint
         run: yarn lint
 
+      - name: Get number of CPU cores
+        if: always()
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
       - name: 🧪 Test
-        run: yarn test
+        run: yarn test-ci ${{ steps.cpu-cores.outputs.count }}
 
   build-lint-test-docs:
     needs: only-doc-changes

@@ -90,6 +90,7 @@ module.exports = {
             { type: 'doc', id: 'auth/magic-link' },
             { type: 'doc', id: 'auth/netlify' },
             { type: 'doc', id: 'auth/nhost' },
+            { type: 'doc', id: 'auth/okta' },
             { type: 'doc', id: 'auth/supabase' },
             { type: 'doc', id: 'auth/wallet-connect' },
           ],
@@ -145,7 +146,36 @@ module.exports = {
         'storybook',
         'testing',
         'toast-notifications',
-        'typescript',
+        {
+          type: 'category',
+          label: 'TypeScript',
+          link: {
+            type: 'generated-index',
+            title: 'TypeScript',
+            slug: 'typescript/index',
+          },
+          items: [
+            {
+              type: 'doc',
+              label: 'Introduction',
+              id: 'typescript/introduction',
+            },
+            {
+              type: 'doc',
+              id: 'typescript/generated-types',
+            },
+            {
+              type: 'doc',
+              label: 'Utility Types',
+              id: 'typescript/utility-types',
+            },
+            {
+              type: 'doc',
+              label: 'Strict Mode',
+              id: 'typescript/strict-mode',
+            },
+          ],
+        },
         'webhooks',
         'webpack-configuration',
       ],

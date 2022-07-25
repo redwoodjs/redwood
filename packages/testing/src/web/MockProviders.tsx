@@ -6,6 +6,7 @@ import React from 'react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { AuthProvider } from '@redwoodjs/auth'
+import { AuthClient } from '@redwoodjs/auth/src/authClients'
 import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
@@ -20,6 +21,7 @@ const {
   default: UserRouterWithRoutes,
 } = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
 
+// TODO: make this AuthContextInterface & the below AuthClient more composable/extendable|"overwriteable"
 const fakeUseAuth = (): AuthContextInterface => ({
   loading: false,
   isAuthenticated: false,
@@ -40,17 +42,20 @@ const fakeUseAuth = (): AuthContextInterface => ({
   hasError: false,
 })
 
-export const mockAuthClient = {
+export const mockAuthClient: AuthClient = {
   restoreAuthState: () => {},
-  login: () => {},
+  login: async () => {},
   logout: () => {},
   signup: () => {},
-  getToken: () => {
+  getToken: async () => {
     return 'token'
   },
-  getUserMetadata: () => {
+  getUserMetadata: async () => {
     return mockedUserMeta.currentUser
   },
+  forgotPassword: () => {},
+  resetPassword: () => {},
+  validateResetToken: () => {},
   client: 'Custom',
   type: 'custom',
 }
