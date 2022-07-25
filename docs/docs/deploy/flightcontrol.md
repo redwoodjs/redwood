@@ -1,10 +1,10 @@
 ---
-description: Bring DX to your AWS account
+description: How to deploy a Redwood app to AWS via Flightcontrol
 ---
 
-# Deploy to Flightcontrol
+# Deploy to AWS with Flightcontrol
 
-[Flightcontrol](https://www.flightcontrol.dev?ref=redwood) is a new platform that brings world-class deployment DX natively to your AWS account. It's easy to use but lets you pop the hood and leverage the raw power of AWS when needed. It currently supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
+[Flightcontrol](https://www.flightcontrol.dev?ref=astro) enables any developer to deploy to AWS without being a wizard. It's extremely easy to use but lets you pop the hood and leverage the raw power of AWS when needed. It supports servers, static sites, and databases which makes it a perfect fit for hosting scalable Redwood apps.
 
 ## Flightcontrol Deploy Setup
 
@@ -14,8 +14,7 @@ description: Bring DX to your AWS account
 4. Create a new project at [app.flightcontrol.dev/projects/new/1](https://app.flightcontrol.dev/projects/new/1)
   1. Connect your Github account and select your repo
   2. Select "Config Type" as `flightcontrol.json`
-  3. Select the AWS region to deploy to.
-  4. Click "Create Project" and complete any required steps like linking your AWS account.
+  3. Click "Create Project" and complete any required steps like linking your AWS account.
 
 
 NOTE: If you are using yarn v1, remove the `installCommand`'s from flightcontrol.json
