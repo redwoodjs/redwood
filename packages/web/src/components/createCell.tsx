@@ -83,7 +83,7 @@ export type DataObject = { [key: string]: unknown }
 /**
  * The main interface.
  */
-export interface CreateCellProps<CellProps> {
+export interface CreateCellProps<CellProps, CellVariables> {
   /**
    * The GraphQL syntax tree to execute or function to call that returns it.
    * If `QUERY` is a function, it's called with the result of `beforeQuery`.
@@ -92,7 +92,9 @@ export interface CreateCellProps<CellProps> {
   /**
    * Parse `props` into query variables. Most of the time `props` are appropriate variables as is.
    */
-  beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
+  beforeQuery?:
+    | ((props: CellProps) => { variables: CellVariables })
+    | (() => { variables: CellVariables })
   /**
    * Sanitize the data returned from the query.
    */
@@ -218,10 +220,13 @@ const isDataEmpty = (data: DataObject) => {
 /**
  * Creates a Cell out of a GraphQL query and components that track to its lifecycle.
  */
-export function createCell<CellProps = any>({
+export function createCell<
+  CellProps extends Record<string, unknown>,
+  CellVariables extends Record<string, unknown>
+>({
   QUERY,
   beforeQuery = (props) => ({
-    variables: props,
+    variables: props as CellVariables,
     /**
      * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
      * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
@@ -238,7 +243,7 @@ export function createCell<CellProps = any>({
   Empty,
   Success,
   displayName = 'Cell',
-}: CreateCellProps<CellProps>): React.FC<CellProps> {
+}: CreateCellProps<CellProps, CellVariables>): React.FC<CellProps> {
   /**
    * If we're prerendering, render the Cell's Loading component and exit early.
    */
@@ -255,7 +260,7 @@ export function createCell<CellProps = any>({
      */
     const { children: _, ...variables } = props
 
-    const options = beforeQuery(variables)
+    const options = beforeQuery(variables as CellProps)
 
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
