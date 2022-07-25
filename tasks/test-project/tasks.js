@@ -284,6 +284,37 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           )
         },
       },
+      {
+        title: 'Mock currentUser in ProfilePage story',
+        task: () => {
+          const profileStoryPath = path.join(
+            OUTPUT_PATH,
+            'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
+          )
+
+          // Modify profile page stories to mockCurrentUser
+          const profilePageStoryContent = fs.readFileSync(
+            profileStoryPath,
+            'utf-8'
+          )
+
+          if (!profilePageStoryContent.includes('mockCurrentUser')) {
+            fs.writeFileSync(
+              profileStoryPath,
+              profilePageStoryContent.replace(
+                'export const generated = () => {',
+                `export const generated = () => {
+              mockCurrentUser({
+              email: 'ba@zinga.com',
+              id: 55,
+              roles: 'ADMIN',
+            })
+          `
+              )
+            )
+          }
+        },
+      },
     ],
     {
       exitOnError: true,
