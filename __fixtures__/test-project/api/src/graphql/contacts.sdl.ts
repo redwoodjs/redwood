@@ -29,4 +29,4 @@ export const schema = gql`
     updateContact(id: Int!, input: UpdateContactInput!): Contact! @requireAuth
     deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])
   }
-`
+`;
