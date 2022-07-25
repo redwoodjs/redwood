@@ -88,8 +88,8 @@ describe('SinglePageLayout', () => {
 exports[`creates a multi word layout test 2`] = `
 "import SinglePageLayout from './SinglePageLayout'
 
-export const generated = () => {
-  return <SinglePageLayout />
+export const generated = (args) => {
+  return <SinglePageLayout {...args} />
 }
 
 export default { title: 'Layouts/SinglePageLayout' }
@@ -108,8 +108,8 @@ export default AppLayout
 exports[`creates a single word layout stories 1`] = `
 "import AppLayout from './AppLayout'
 
-export const generated = () => {
-  return <AppLayout />
+export const generated = (args) => {
+  return <AppLayout {...args} />
 }
 
 export default { title: 'Layouts/AppLayout' }
