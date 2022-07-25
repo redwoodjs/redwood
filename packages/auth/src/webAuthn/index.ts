@@ -58,7 +58,7 @@ const authenticationOptions = async () => {
       `${global.RWJS_API_DBAUTH_URL}?method=webAuthnAuthOptions`,
       false
     )
-    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(null)
 
     options = JSON.parse(xhr.responseText)
@@ -93,7 +93,7 @@ const authenticate = async () => {
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
     xhr.open('POST', global.RWJS_API_DBAUTH_URL, false)
-    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(
       JSON.stringify({
         method: 'webAuthnAuthenticate',
@@ -136,7 +136,7 @@ const registrationOptions = () => {
       `${global.RWJS_API_DBAUTH_URL}?method=webAuthnRegOptions`,
       false
     )
-    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(null)
 
     options = JSON.parse(xhr.responseText)
@@ -176,7 +176,7 @@ const register = async () => {
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
     xhr.open('POST', global.RWJS_API_DBAUTH_URL, false)
-    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(JSON.stringify({ method: 'webAuthnRegister', ...regResponse }))
 
     const options = JSON.parse(xhr.responseText)
