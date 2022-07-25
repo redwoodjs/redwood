@@ -2,7 +2,7 @@ import type {
   Post,
   EditPostById,
   UpdatePostInput,
-  UpdatePostMutationVariables,
+  UpdatePostMutationVariables
 } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -40,26 +40,31 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
-  const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
-    onCompleted: () => {
-      toast.success('Post updated')
-      navigate(routes.posts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updatePost, { loading, error }] = useMutation(
+    UPDATE_POST_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Post updated')
+        navigate(routes.posts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input: UpdatePostInput, id: Post['id']) => {
+  const onSave = (
+    input: UpdatePostInput,
+    id: Post['id']
+  ) => {
+    
     updatePost({ variables: { id, input } })
   }
 
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">
-          Edit Post {post?.id}
-        </h2>
+        <h2 className="rw-heading rw-heading-secondary">Edit Post {post?.id}</h2>
       </header>
       <div className="rw-segment-main">
         <PostForm post={post} onSave={onSave} error={error} loading={loading} />

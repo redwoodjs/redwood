@@ -1,4 +1,4 @@
-import type { Contact } from '@prisma/client'
+import type { Contact } from "@prisma/client";
 
 import {
   contacts,
@@ -6,8 +6,8 @@ import {
   createContact,
   updateContact,
   deleteContact,
-} from './contacts'
-import type { StandardScenario } from './contacts.scenarios'
+} from "./contacts";
+import type { StandardScenario } from "./contacts.scenarios";
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -15,45 +15,47 @@ import type { StandardScenario } from './contacts.scenarios'
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('contacts', () => {
-  scenario('returns all contacts', async (scenario: StandardScenario) => {
-    const result = await contacts()
+describe("contacts", () => {
+  scenario("returns all contacts", async (scenario: StandardScenario) => {
+    const result = await contacts();
 
-    expect(result.length).toEqual(Object.keys(scenario.contact).length)
-  })
+    expect(result.length).toEqual(Object.keys(scenario.contact).length);
+  });
 
-  scenario('returns a single contact', async (scenario: StandardScenario) => {
-    const result = await contact({ id: scenario.contact.one.id })
+  scenario("returns a single contact", async (scenario: StandardScenario) => {
+    const result = await contact({ id: scenario.contact.one.id });
 
-    expect(result).toEqual(scenario.contact.one)
-  })
+    expect(result).toEqual(scenario.contact.one);
+  });
 
-  scenario('creates a contact', async () => {
+  scenario("creates a contact", async () => {
     const result = await createContact({
-      input: { name: 'String', email: 'String', message: 'String' },
-    })
+      input: { name: "String", email: "String", message: "String" },
+    });
 
-    expect(result.name).toEqual('String')
-    expect(result.email).toEqual('String')
-    expect(result.message).toEqual('String')
-  })
+    expect(result.name).toEqual("String");
+    expect(result.email).toEqual("String");
+    expect(result.message).toEqual("String");
+  });
 
-  scenario('updates a contact', async (scenario: StandardScenario) => {
-    const original = (await contact({ id: scenario.contact.one.id })) as Contact
+  scenario("updates a contact", async (scenario: StandardScenario) => {
+    const original = (await contact({
+      id: scenario.contact.one.id,
+    })) as Contact;
     const result = await updateContact({
       id: original.id,
-      input: { name: 'String2' },
-    })
+      input: { name: "String2" },
+    });
 
-    expect(result.name).toEqual('String2')
-  })
+    expect(result.name).toEqual("String2");
+  });
 
-  scenario('deletes a contact', async (scenario: StandardScenario) => {
+  scenario("deletes a contact", async (scenario: StandardScenario) => {
     const original = (await deleteContact({
       id: scenario.contact.one.id,
-    })) as Contact
-    const result = await contact({ id: original.id })
+    })) as Contact;
+    const result = await contact({ id: original.id });
 
-    expect(result).toEqual(null)
-  })
-})
+    expect(result).toEqual(null);
+  });
+});

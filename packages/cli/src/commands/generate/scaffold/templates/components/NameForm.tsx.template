@@ -8,7 +8,7 @@ import {
 } from '@redwoodjs/forms'
 
 import type { ${singularPascalName}, Update${singularPascalName}Input } from 'types/graphql'
-import type { RwGqlError } from '@redwoodjs/forms'
+import type { RWGqlError } from '@redwoodjs/forms'
 
 
 <% if (fieldsToImport.includes('DatetimeLocalField')) { %>

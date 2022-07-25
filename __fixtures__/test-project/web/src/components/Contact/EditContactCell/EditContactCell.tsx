@@ -2,7 +2,7 @@ import type {
   Contact,
   EditContactById,
   UpdateContactInput,
-  UpdateContactMutationVariables,
+  UpdateContactMutationVariables
 } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -55,24 +55,21 @@ export const Success = ({ contact }: CellSuccessProps<EditContactById>) => {
     }
   )
 
-  const onSave = (input: UpdateContactInput, id: Contact['id']) => {
+  const onSave = (
+    input: UpdateContactInput,
+    id: Contact['id']
+  ) => {
+    
     updateContact({ variables: { id, input } })
   }
 
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">
-          Edit Contact {contact?.id}
-        </h2>
+        <h2 className="rw-heading rw-heading-secondary">Edit Contact {contact?.id}</h2>
       </header>
       <div className="rw-segment-main">
-        <ContactForm
-          contact={contact}
-          onSave={onSave}
-          error={error}
-          loading={loading}
-        />
+        <ContactForm contact={contact} onSave={onSave} error={error} loading={loading} />
       </div>
     </div>
   )
