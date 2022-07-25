@@ -302,14 +302,13 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
             fs.writeFileSync(
               profileStoryPath,
               profilePageStoryContent.replace(
-                'export const generated = () => {',
-                `export const generated = () => {
-              mockCurrentUser({
-              email: 'ba@zinga.com',
-              id: 55,
-              roles: 'ADMIN',
-            })
-          `
+                'export const generated = (args) => {',
+                `export const generated = (args) => {
+                  mockCurrentUser({
+                  email: 'ba@zinga.com',
+                  id: 55,
+                  roles: 'ADMIN',
+                })`
               )
             )
           }
