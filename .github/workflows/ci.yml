@@ -149,8 +149,8 @@ jobs:
           wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
           spec: |
-             cypress/integration/01-tutorial/*.spec.js
-             cypress/integration/04-logger/*.spec.js
+             cypress/e2e/01-tutorial/*.cy.js
+             cypress/e2e/04-logger/*.cy.js
 
   tutorial-e2e-docs:
     needs: only-doc-changes
