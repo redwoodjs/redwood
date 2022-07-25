@@ -17,7 +17,7 @@ export const config = {
 
 // required packages to install
 export const webPackages = []
-export const apiPackages = ['base64url']
+export const apiPackages = []
 
 export const libPath = getPaths().api.lib.replace(getPaths().base, '')
 export const functionsPath = getPaths().api.functions.replace(
