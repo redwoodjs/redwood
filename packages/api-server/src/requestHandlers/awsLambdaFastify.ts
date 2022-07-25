@@ -36,13 +36,8 @@ const fastifyResponseForLambdaResult = (
     body = '',
     multiValueHeaders,
   } = lambdaResult
-
-  console.log(headers) // ?
-  console.log(body)
-  console.log(multiValueHeaders)
-  console.log(reply) // ?
-
-  reply.headers(mergeMultiValueHeaders(headers, multiValueHeaders))
+  const h = mergeMultiValueHeaders(headers, multiValueHeaders)
+  reply.headers(h)
   reply.status(statusCode)
 
   if (lambdaResult.isBase64Encoded) {
@@ -50,7 +45,7 @@ const fastifyResponseForLambdaResult = (
     // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
     reply.send(Buffer.from(body, 'base64'))
   } else {
-    reply.send(body) // ?
+    reply.send(body)
   }
 }
 
@@ -68,14 +63,8 @@ export const requestHandler = async (
   reply: FastifyReply,
   handler: Handler
 ) => {
-  console.log(req) // ?
-  console.log(reply) // ?
-  console.log(handler) // ?
-
   // We take the fastify request object and convert it into a lambda function event.
   const event = lambdaEventForFastifyRequest(req)
-
-  console.log(event) // ?
 
   const handlerCallback =
     (reply: FastifyReply) =>
@@ -100,9 +89,9 @@ export const requestHandler = async (
   // In this case the handlerCallback should not be called.
   if (handlerPromise && typeof handlerPromise.then === 'function') {
     try {
-      const lambdaResponse = await handlerPromise // ?
+      const lambdaResponse = await handlerPromise
 
-      return fastifyResponseForLambdaResult(reply, lambdaResponse) // ?
+      return fastifyResponseForLambdaResult(reply, lambdaResponse)
     } catch (error: any) {
       return fastifyResponseForLambdaError(req, reply, error)
     }
