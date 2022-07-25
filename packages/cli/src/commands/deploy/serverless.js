@@ -171,7 +171,7 @@ export const handler = async (yargs) => {
       const { addDotEnv } = await prompts({
         type: 'confirm',
         name: 'addDotEnv',
-        message: `Add API_URL to your .env.production? This will be used if you deploy the web side from your machine`,
+        message: `Add API_URL to your .env.${yargs.stage}? This will be used if you deploy the web side from your machine`,
       })
 
       if (addDotEnv) {
