@@ -9,13 +9,13 @@ GraphQL is a fundamental part of Redwood. Having said that, you can get going wi
 
 ## GraphQL 101
 
-GraphQL is a query language that enhances the exchange of data between clients (in this case, a Redwood React app) and servers (a Redwood API).
+GraphQL is a query language that enhances the exchange of data between clients (in Redwood's case, a React app) and servers (a Redwood API).
 
-Unlike with a REST API, a GraphQL Client performs operations that allow gathering a rich dataset in a single request.
+Unlike a REST API, a GraphQL Client performs operations that allow gathering a rich dataset in a single request.
 There's three types of GraphQL operations, but here we'll only focus on two: Queries (to read data) and Mutations (to create, update, or delete data).
 
-
 The following GraphQL query:
+
 ```graphql
 query GetProject {
   project(name: "GraphQL") {
@@ -70,25 +70,35 @@ type Project {
   tags: [Tag]
 }
 
-# ... `User` and `Tag` type definitions
+# ... User and Tag type definitions
 
 type Query {
   project(name: String!): Project
 }
 ```
-_More information on GraphQL types can be found [on the official GraphQL documentation](https://graphql.org/learn/schema/)_
 
-Finally, the GraphQL schema is associated with a resolvers map that helps resolve each requested field, for example: `Project.owner`:
+:::info
+
+More information on GraphQL types can be found in the [official GraphQL documentation](https://graphql.org/learn/schema/).
+
+:::
+
+Finally, the GraphQL schema is associated with a resolvers map that helps resolve each requested field. For example, here's what the resolver for the owner field on the Project type may look like:
 
 ```ts
 export const Project = {
-  // ...
-  owner: (args, { root, context, info }) => db.project.findUnique({ where: { id: root.id } }).user(),
+  owner: (args, { root, context, info }) => {
+    return db.project.findUnique({ where: { id: root.id } }).user()
+  },
   // ...
 }
 ```
-_More information on resolvers in the [dedicated "Understanding Default Resolvers" section](#understanding-default-resolvers)._
 
+:::info
+
+You can read more about resolvers in the dedicated [Understanding Default Resolvers](#understanding-default-resolvers) section below.
+
+:::
 
 To summarize, when a GraphQL query reaches a GraphQL API, here's what happens:
 
@@ -105,22 +115,22 @@ To summarize, when a GraphQL query reaches a GraphQL API, here's what happens:
           |                             | |    Resolvers   | |
           |                             | |                | |
           |                             | +--------+-------+ |
-          |     3. respond JSON data    |          |         |
+          |  3. respond JSON with data  |          |         |
           +-----------------------------+ <--------+         |
                                         |                    |
                                         +--------------------+
 ```
 
-For more info on a pure GraphQL implementation, [complete GraphQL guides and tutorials are available on graphql.org](https://graphql.org/learn/).
+In contrast to most GraphQL implementations, Redwood provides a "deconstructed" way of creating a GraphQL API:
 
-Redwood in comparison provides a "deconstructed" way of creating your GraphQL API:
 - You define your SDLs (schema) in `*.sdl.js` files, which define what queries and mutations are available, and what fields can be returned
 - For each query or mutation, you write a service function with the same name. This is the resolver
 - Redwood then takes all your SDLs and Services (resolvers), combines them into a GraphQL server, and expose it as an endpoint
 
 ## Redwood and GraphQL
 
-The good thing is that, besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood. GraphQL is GraphQL. The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
+Besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood.
+The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
 
 Since there's two parts to GraphQL in Redwood, the client and the server, we've divided this doc up that way.
 
@@ -1206,5 +1216,5 @@ This might be one of our most frequently asked questions of all time. Here's [To
 
 Eager to learn more about GraphQL? Check out some of the resources below:
 - [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week
-- The official GraphQL Yoga (the GraphQL server powering Redwood) [tutorial](https://www.graphql-yoga.com/tutorial/basic/00-introduction) is the best place to get your hands on GraphQL basics.
+- The official GraphQL Yoga (the GraphQL server powering Redwood) [tutorial](https://www.graphql-yoga.com/tutorial/basic/00-introduction) is the best place to get your hands on GraphQL basics
 - And of course, [the official GraphQL docs](https://graphql.org/learn/) are great place to do a deep dive into exactly how GraphQL works
