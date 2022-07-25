@@ -1,8 +1,8 @@
-import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 
-export const handler = async (event, context) => {
+import { db } from 'src/lib/db'
 
+export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     enabled: true,
     // handler() is invoked after verifying that a user was found with the given

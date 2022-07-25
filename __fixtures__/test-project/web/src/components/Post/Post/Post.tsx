@@ -66,20 +66,25 @@ const Post = ({ post }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Post {post.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Post {post.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{post.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Title</th>
               <td>{post.title}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Body</th>
               <td>{post.body}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(post.createdAt)}</td>
             </tr>
