@@ -52,25 +52,32 @@ jest.mock('../directives/makeDirectives', () => {
   }
 })
 
+interface MockLambdaParams {
+  headers?: { [key: string]: string }
+  body?: string | null
+  httpMethod: string
+  [key: string]: any
+}
+
 const mockLambdaEvent = ({
   headers,
   body = null,
   httpMethod,
   ...others
-}): APIGatewayProxyEvent => {
+}: MockLambdaParams): APIGatewayProxyEvent => {
   return {
-    headers,
+    headers: headers || {},
     body,
     httpMethod,
     multiValueQueryStringParameters: null,
     isBase64Encoded: false,
-    multiValueHeaders: {},
+    multiValueHeaders: {}, // this is silly - the types require a value. It definitely can be undefined, e.g. on Vercel.
     path: '',
     pathParameters: null,
     stageVariables: null,
     queryStringParameters: null,
-    requestContext: null,
-    resource: null,
+    requestContext: null as any,
+    resource: null as any,
     ...others,
   }
 }
@@ -103,6 +110,10 @@ describe('CORS', () => {
     expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
       'https://web.redwoodjs.com',
     ])
+
+    expect(response.headers['access-control-allow-origin']).toEqual(
+      'https://web.redwoodjs.com'
+    )
   })
 
   it('Returns requestOrigin if cors origin set to true', async () => {
@@ -132,6 +143,10 @@ describe('CORS', () => {
     expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
       'https://someothersite.newjsframework.com',
     ])
+
+    expect(response.headers['access-control-allow-origin']).toEqual(
+      'https://someothersite.newjsframework.com'
+    )
   })
 
   it('Returns the origin for OPTIONS requests', async () => {
@@ -160,6 +175,10 @@ describe('CORS', () => {
     expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
       'https://mycrossdomainsite.co.uk',
     ])
+
+    expect(response.headers['access-control-allow-origin']).toEqual(
+      'https://mycrossdomainsite.co.uk'
+    )
   })
 
   it('Does not return cross origin headers if option not specified', async () => {
@@ -182,13 +201,18 @@ describe('CORS', () => {
     const response = await handler(mockedEvent, {} as Context)
 
     expect(response.statusCode).toBe(204)
-    const responeHeaderKeys = Object.keys(response.multiValueHeaders)
+    const resHeaderKeys = Object.keys(response.headers)
 
-    expect(responeHeaderKeys).not.toContain('access-control-allow-origin')
-    expect(responeHeaderKeys).not.toContain('access-control-allow-credentials')
+    expect(resHeaderKeys).not.toContain('access-control-allow-origin')
+    expect(resHeaderKeys).not.toContain('access-control-allow-credentials')
+
+    // Also check the multiValueHeaders
+    expect(Object.keys(response.multiValueHeaders)).not.toContain(
+      'access-control-allow-origin'
+    )
   })
 
-  it('Returns the requestOrigin when moore than one origin supplied in config', async () => {
+  it('Returns the requestOrigin when more than one origin supplied in config', async () => {
     const handler = createGraphQLHandler({
       loggerConfig: { logger: createLogger({}), options: {} },
       sdls: {},
@@ -212,6 +236,46 @@ describe('CORS', () => {
     const response = await handler(mockedEvent, {} as Context)
 
     expect(response.statusCode).toBe(200)
+
+    // Note: no multiValueHeaders in request, so we expect response to be in headers too
+    expect(response.headers['access-control-allow-origin']).toEqual(
+      'https://site2.two'
+    )
+  })
+
+  it('Returns CORS headers with multiValueHeaders in request,as MVH in response', async () => {
+    const handler = createGraphQLHandler({
+      loggerConfig: { logger: createLogger({}), options: {} },
+      sdls: {},
+      directives: {},
+      services: {},
+      cors: {
+        origin: ['https://site1.one', 'https://site2.two'],
+      },
+      onException: () => {},
+    })
+
+    const mockedEvent: APIGatewayProxyEvent = mockLambdaEvent({
+      headers: {
+        origin: 'https://site2.two',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: '{ me { id, name } }' }),
+      multiValueHeaders: {
+        origin: ['https://site2.two'],
+      },
+      httpMethod: 'POST',
+    })
+
+    const response = await handler(mockedEvent, {} as Context)
+
+    expect(response.statusCode).toBe(200)
+
+    // Because original request has multiValueHeaders, we don't add it to headers
+    // to prevent unnecessary duplication in the response... This contradicts what AWS says in their docs,
+    // but it is actually how Vercel behaves
+    expect(response.headers).not.toContain('access-control-allow-origin')
+
     expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
       'https://site2.two',
     ])
