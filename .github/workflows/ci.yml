@@ -136,9 +136,8 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: 🌲 Run cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
