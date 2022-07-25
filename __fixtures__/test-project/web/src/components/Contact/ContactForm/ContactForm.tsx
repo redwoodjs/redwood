@@ -1,3 +1,5 @@
+import type { Contact, UpdateContactInput } from 'types/graphql'
+
 import {
   Form,
   FormError,
@@ -6,10 +8,18 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
+import type { RWGqlError } from '@redwoodjs/forms'
 
-const ContactForm = (props) => {
-  const onSubmit = (data) => {
-    props.onSave(data, props?.contact?.id)
+interface ContactFormProps {
+  contact?: Contact
+  onSave: (data: UpdateContactInput, id?: Contact['id']) => void
+  error: RWGqlError
+  loading: boolean
+}
+
+const ContactForm = (props: ContactFormProps) => {
+  const onSubmit = (data: Record<string, any>) => {
+    props.onSave(data as Contact, props?.contact?.id)
   }
 
   return (
