@@ -183,7 +183,7 @@ export const beforeQuery = () => {
 // The cell will take 1 prop named "word" that is a string: <Cell word="abc">
 export const beforeQuery = ({ word }: { word: string }) => {
   return {
-    variables: { magicWord: target }
+    variables: { magicWord: word }
    }
 }
 ```
