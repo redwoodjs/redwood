@@ -82,7 +82,7 @@
     "is-port-reachable": "3.1.0",
     "jest": "27.5.1",
     "jscodeshift": "0.13.1",
-    "lerna": "5.1.8",
+    "lerna": "5.2.0",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
     "msw": "0.40.2",
@@ -100,6 +100,6 @@
     "typescript-transform-paths": "3.3.1",
     "zx": "7.0.7"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@3.2.2",
   "npmClient": "yarn"
 }
