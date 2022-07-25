@@ -31,7 +31,7 @@ const buildRedwoodFramework = () => {
     })
 
     execa.sync(
-      [files.length && 'yarn build:clean', 'yarn build:js']
+      [files.length && 'yarn build:clean', 'yarn build']
         .filter(Boolean)
         .join('&&'),
       {

@@ -290,6 +290,7 @@ export const files = async ({
       relations: relations || [],
       create: await fieldsToInput(model),
       update: await fieldsToUpdate(model),
+      prismaModel: model,
       ...rest,
     },
   })
@@ -304,7 +305,7 @@ export const files = async ({
     templateVars: {
       scenario: await buildScenario(model),
       stringifiedScenario: await buildStringifiedScenario(model),
-      prismaTypeName: `${model}CreateArgs`,
+      prismaModel: model,
       ...rest,
     },
   })

@@ -70,20 +70,45 @@ const mapFieldsToService = ({
  * If null or invalid value is returned, will trigger a GQL error
  */
 const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
-  __resolveType(obj: GraphQLObjectType) {
-    // resolves type of object by looking for the largest intersection of common fields
-    let maxIntersectionType
-    let maxIntersectionFields = 0
+  __resolveType(obj: Record<string, unknown>) {
+    // if obj has __typename, check that first to resolve type, otherwise, look for largest intersection
+    if (Object.hasOwn(obj, '__typename')) {
+      for (const type of types) {
+        if (type.name === obj['__typename']) {
+          return type.name
+        }
+      }
+    }
 
-    for (const type of types) {
+    const fieldIntersections = new Array(types.length).fill(0)
+    let maxIntersectionFields = 0
+    let maxIntersectionType
+    let maxIntersectionIdx = 0
+
+    for (let i = 0; i < types.length; i++) {
+      const type = types[i]
       const fieldIntersection = Object.keys(type.getFields()).filter(
         (field) => field in obj
       )
-
+      fieldIntersections[i] = fieldIntersection.length
+      // update max intersection fields, type and index
       if (fieldIntersection.length > maxIntersectionFields) {
         maxIntersectionFields = fieldIntersection.length
         maxIntersectionType = type
+        maxIntersectionIdx = i
       }
+    }
+
+    // If the maxIntersection fields is not unique, we are unable to determine type
+    if (
+      fieldIntersections.indexOf(
+        maxIntersectionFields,
+        maxIntersectionIdx + 1
+      ) !== -1
+    ) {
+      throw Error(
+        'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver'
+      )
     }
 
     return maxIntersectionType?.name ?? null

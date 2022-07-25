@@ -358,6 +358,7 @@ yarn redwood destroy <type>
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
 | `directive <name>`   | Destroy a directive                                                             |
+| `graphiql`   | Destroy a generated graphiql file                                                             |
 
 ## exec
 
@@ -415,7 +416,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 
 ### TypeScript generators
 
-If your project is configured for TypeScript (see [TypeScript docs](typescript.md)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
+If your project is configured for TypeScript (see the [TypeScript docs](typescript/index)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
 
 **Undoing a Generator with a Destroyer**
 
@@ -1671,6 +1672,24 @@ yarn redwood setup auth <provider>
 
 See [Authentication](authentication.md).
 
+### setup graphiQL headers
+
+Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase, dbAuth, and Netlify.
+
+A `generateGraphiQLHeader` file will be created in your `api/lib` folder and included in your gitignore. You can edit this file to customize your header. The function in the file is passed into your `createGraphQLHandler` and only called in dev.
+
+```
+yarn redwood setup graphiql <provider>
+```
+
+| Arguments & Options | Description                                                                                                                                                                   |
+| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase` |
+| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                                                                     |
+| `--token, -t`   | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token                                                                                                                                       |
+| `--expiry, -e`   | Token expiry in minutes. Default is 60                                              |
+| `--view, -v`   | Print out generated headers to console                                                                                                                                        |
+
 ### setup custom-web-index
 
 Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
@@ -1792,7 +1811,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup tsconfig
 
-Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript.md).
+Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript/index).
 
 ```
 yarn redwood setup tsconfig
@@ -1810,10 +1829,10 @@ Set up a UI design or style library. Right now the choices are [Chakra UI](https
 yarn rw setup ui <library>
 ```
 
-| Arguments & Options | Description                                                     |
-| :------------------ | :-------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui` and `tailwindcss` |
-| `--force, -f`       | Overwrite existing configuration                                |
+| Arguments & Options | Description                                                                 |
+| :------------------ | :-------------------------------------------------------------------------- |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss` and `windicss` |
+| `--force, -f`       | Overwrite existing configuration                                            |
 
 ## storybook
 
@@ -1870,7 +1889,7 @@ yarn redwood type-check [side]
 
 **Usage**
 
-See [Running Type Checks](typescript.md#running-type-checks).
+See [Running Type Checks](typescript/introduction.md#running-type-checks).
 
 ## serve
 

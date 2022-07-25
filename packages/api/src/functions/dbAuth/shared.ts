@@ -5,8 +5,20 @@ import * as DbAuthError from './errors'
 
 // Extracts the cookie from an event, handling lower and upper case header
 // names.
+// Checks for cookie in headers in dev when user has generated graphiql headers
 export const extractCookie = (event: APIGatewayProxyEvent) => {
-  return event.headers.cookie || event.headers.Cookie
+  let cookieFromGraphiqlHeader
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      cookieFromGraphiqlHeader = JSON.parse(event.body ?? '{}').extensions
+        ?.headers?.cookie
+    } catch (e) {
+      return event.headers.cookie || event.headers.Cookie
+    }
+  }
+  return (
+    event.headers.cookie || event.headers.Cookie || cookieFromGraphiqlHeader
+  )
 }
 
 // decrypts the session cookie and returns an array: [data, csrf]
@@ -31,7 +43,7 @@ export const decryptSession = (text: string | null) => {
 
 // returns the actual value of the session cookie
 export const getSession = (text?: string) => {
-  if (typeof text === 'undefined') {
+  if (typeof text === 'undefined' || text === null) {
     return null
   }
 
@@ -58,4 +70,20 @@ export const dbAuthSession = (event: APIGatewayProxyEvent) => {
   } else {
     return null
   }
+}
+
+export const webAuthnSession = (event: APIGatewayProxyEvent) => {
+  if (!event.headers.cookie) {
+    return null
+  }
+
+  const webAuthnCookie = event.headers.cookie.split(';').find((cook) => {
+    return cook.split('=')[0].trim() === 'webAuthn'
+  })
+
+  if (!webAuthnCookie || webAuthnCookie === 'webAuthn=') {
+    return null
+  }
+
+  return webAuthnCookie.split('=')[1].trim()
 }

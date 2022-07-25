@@ -122,6 +122,7 @@ module.exports = {
         '@typescript-eslint/camelcase': 'off',
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/prefer-namespace-keyword': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },

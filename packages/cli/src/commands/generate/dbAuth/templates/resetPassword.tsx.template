@@ -34,12 +34,12 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef<HTMLInputElement>()
+  const passwordRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    passwordRef.current.focus()
+    passwordRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Record<string, string>) => {
     const response = await resetPassword({
       resetToken,
       password: data.password,

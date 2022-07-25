@@ -82,8 +82,8 @@ export const buildCommands = ({ sides }) => {
       enabled: () => sides.includes('api'),
       task: async () => {
         // Dynamically import this function
-        // becuase its dependencies are only installed when `rw setup deploy serverless` is run
-        const { default: nftPack } = await import('./packing/nft')
+        // because its dependencies are only installed when `rw setup deploy serverless` is run
+        const { nftPack } = (await import('./packing/nft')).default
 
         await nftPack()
       },
@@ -171,7 +171,7 @@ export const handler = async (yargs) => {
       const { addDotEnv } = await prompts({
         type: 'confirm',
         name: 'addDotEnv',
-        message: `Add API_URL to your .env.production? This will be used if you deploy the web side from your machine`,
+        message: `Add API_URL to your .env.${yargs.stage}? This will be used if you deploy the web side from your machine`,
       })
 
       if (addDotEnv) {

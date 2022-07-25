@@ -45,6 +45,8 @@
     "lru-cache",
     "@types/lru-cache",
     "pretty-bytes",
-    "is-port-reachable"
+    "is-port-reachable",
+    "pretty-ms",
+    "camelcase"
   ]
 }

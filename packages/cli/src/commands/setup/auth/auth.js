@@ -6,11 +6,16 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
+import {
+  getPaths,
+  writeFilesTask,
+  transformTSToJS,
+  getGraphqlPath,
+  graphFunctionDoesExist,
+} from '../../../lib'
 import c from '../../../lib/colors'
 
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
@@ -25,9 +30,6 @@ const OUTPUT_PATHS = {
     getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
   ),
 }
-
-const getGraphqlPath = () =>
-  resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
 const getWebAppPath = () => getPaths().web.app
 
@@ -199,7 +201,7 @@ const checkAuthProviderExists = async () => {
 }
 
 // the files to create to support auth
-export const files = (provider) => {
+export const files = ({ provider, webAuthn }) => {
   const templates = getTemplates()
   let files = {}
 
@@ -207,14 +209,20 @@ export const files = (provider) => {
   for (const [templateProvider, templateFiles] of Object.entries(templates)) {
     if (provider === templateProvider) {
       templateFiles.forEach((templateFile) => {
-        const outputPath =
-          OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
-        const content = fs.readFileSync(templateFile).toString()
-        files = Object.assign(files, {
-          [outputPath]: getProject().isTypeScriptProject
-            ? content
-            : transformTSToJS(outputPath, content),
-        })
+        const shouldUseTemplate =
+          (webAuthn && templateFile.match(/\.webAuthn\./)) ||
+          (!webAuthn && !templateFile.match(/\.webAuthn\./))
+
+        if (shouldUseTemplate) {
+          const outputPath =
+            OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
+          const content = fs.readFileSync(templateFile).toString()
+          files = Object.assign(files, {
+            [outputPath]: getProject().isTypeScriptProject
+              ? content
+              : transformTSToJS(outputPath, content),
+          })
+        }
       })
     }
   }
@@ -228,6 +236,7 @@ export const files = (provider) => {
         : transformTSToJS(templates.base[0], content),
     }
   }
+
   return files
 }
 
@@ -289,10 +298,6 @@ export const webIndexDoesExist = () => {
   return fs.existsSync(getWebAppPath())
 }
 
-export const graphFunctionDoesExist = () => {
-  return fs.existsSync(getGraphqlPath())
-}
-
 export const command = 'auth <provider>'
 export const description = 'Generate an auth configuration'
 export const builder = (yargs) => {
@@ -316,13 +321,16 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force, rwVersion }) => {
-  const providerData = await import(`./providers/${provider}`)
+export const handler = async (yargs) => {
+  const { provider, rwVersion } = yargs
+  let force = yargs.force
+  let webAuthn = false
+  let providerData
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
   if (force === false) {
-    if (fs.existsSync(Object.keys(files(provider))[0])) {
-      const response = await prompts({
+    if (fs.existsSync(Object.keys(files(provider, yargs))[0])) {
+      const forceResponse = await prompts({
         type: 'confirm',
         name: 'answer',
         message: `Overwrite existing ${getPaths().api.lib.replace(
@@ -331,8 +339,26 @@ export const handler = async ({ provider, force, rwVersion }) => {
         )}/auth.[jt]s?`,
         initial: false,
       })
-      force = response.answer
+      force = forceResponse.answer
     }
+  }
+
+  // only dbAuth supports WebAuthn right now, but in theory it could work with
+  // any provider
+  if (provider === 'dbAuth') {
+    const webAuthnResponse = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: `Enable WebAuthn support (TouchID/FaceID)? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+      initial: false,
+    })
+    webAuthn = webAuthnResponse.answer
+  }
+
+  if (webAuthn) {
+    providerData = await import(`./providers/${provider}.webAuthn`)
+  } else {
+    providerData = await import(`./providers/${provider}`)
   }
 
   const tasks = new Listr(
@@ -341,7 +367,7 @@ export const handler = async ({ provider, force, rwVersion }) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files(provider), {
+            return writeFilesTask(files({ ...yargs, webAuthn }), {
               overwriteExisting: force,
             })
           } else {
