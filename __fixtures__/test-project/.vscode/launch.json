@@ -1,0 +1,26 @@
+{
+  "version": "0.3.0",
+  "configurations": [
+    {
+      "command": "yarn redwood dev --apiDebugPort 18911",
+      "name": "Run Dev Server",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "name": "Attach API debugger",
+      "port": 18911, // you can change this port, see https://redwoodjs.com/docs/project-configuration-dev-test-build#debugger-configuration
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "protocol": "inspector",
+      "stopOnEntry": false,
+      "localRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
+      "remoteRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
+      "sourceMaps": true,
+      "restart": true
+    }
+  ]
+}
