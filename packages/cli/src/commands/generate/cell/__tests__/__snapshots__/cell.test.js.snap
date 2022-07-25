@@ -14,7 +14,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ equipmentList }) => {
@@ -43,7 +43,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ equipment }) => {
@@ -71,7 +71,7 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({
   error,
 }: CellFailureProps<FindBazingaQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({
@@ -179,7 +179,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ members }: CellSuccessProps<MembersQuery>) => {
@@ -208,7 +208,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -231,7 +231,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -254,7 +254,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -277,7 +277,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ user }) => {
@@ -300,7 +300,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -718,7 +718,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ address }) => {
@@ -820,7 +820,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ addresses }) => {
@@ -926,7 +926,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ members }) => {
@@ -1032,7 +1032,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
 export const Success = ({ members }) => {
