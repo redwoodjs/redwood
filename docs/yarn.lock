@@ -3876,10 +3876,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:1.1.1, clsx@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "clsx@npm:1.1.1"
-  checksum: 5c34e1d5623e3dce0dbf22eedd4f3cc7cd0dee6b1b1ef3ad49d042c9d86372a1dc7788c2ca3213ec08e65ad0e91572ae7cb77183a478c9977bd5327e8f43ffe5
+"clsx@npm:1.2.1, clsx@npm:^1.1.1":
+  version: 1.2.1
+  resolution: "clsx@npm:1.2.1"
+  checksum: 34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
   languageName: node
   linkType: hard
 
@@ -4633,7 +4633,7 @@ __metadata:
     "@docusaurus/preset-classic": 2.0.0-beta.21
     "@mdx-js/react": 1.6.22
     "@tsconfig/docusaurus": 1.0.6
-    clsx: 1.1.1
+    clsx: 1.2.1
     react: 17.0.2
     react-dom: 17.0.2
     react-player: 2.10.1
