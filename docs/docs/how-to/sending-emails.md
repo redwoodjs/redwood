@@ -226,6 +226,10 @@ And then in the users service we'll just create a dummy method to start with.
 ```ts title="users.ts"
 // ...
 
+import { Prisma } from '@prisma/client'
+
+// ...
+
 export const emailUser = async ({ id }: Prisma.UserWhereUniqueInput) => {
   const user = await db.user.findUnique({
     where: { id },
