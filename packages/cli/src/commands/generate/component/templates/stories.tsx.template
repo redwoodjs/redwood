@@ -1,7 +1,7 @@
 import ${pascalName} from './${pascalName}'
 
-export const generated = () => {
-  return <${pascalName} />
+export const generated = (args) => {
+  return <${pascalName} {...args} />
 }
 
 export default { title: 'Components/${pascalName}' }

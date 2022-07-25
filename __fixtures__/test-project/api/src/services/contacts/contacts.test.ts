@@ -1,3 +1,5 @@
+import type { Contact } from '@prisma/client'
+
 import {
   contacts,
   contact,
@@ -37,7 +39,7 @@ describe('contacts', () => {
   })
 
   scenario('updates a contact', async (scenario: StandardScenario) => {
-    const original = await contact({ id: scenario.contact.one.id })
+    const original = (await contact({ id: scenario.contact.one.id })) as Contact
     const result = await updateContact({
       id: original.id,
       input: { name: 'String2' },
@@ -47,7 +49,9 @@ describe('contacts', () => {
   })
 
   scenario('deletes a contact', async (scenario: StandardScenario) => {
-    const original = await deleteContact({ id: scenario.contact.one.id })
+    const original = (await deleteContact({
+      id: scenario.contact.one.id,
+    })) as Contact
     const result = await contact({ id: original.id })
 
     expect(result).toEqual(null)

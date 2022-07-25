@@ -139,8 +139,8 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).profiles(),
+  profiles: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -231,7 +231,10 @@ describe('customDatums', () => {
   })
 
   scenario('updates a customData', async (scenario) => {
-    const original = await customData({ id: scenario.customData.one.id })
+    const original = await customData({
+      id: scenario.customData.one.id,
+    })
+
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -241,7 +244,10 @@ describe('customDatums', () => {
   })
 
   scenario('deletes a customData', async (scenario) => {
-    const original = await deleteCustomData({ id: scenario.customData.one.id })
+    const original = await deleteCustomData({
+      id: scenario.customData.one.id,
+    })
+
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
@@ -428,8 +434,8 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).profiles(),
+  profiles: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -520,7 +526,10 @@ describe('customDatums', () => {
   })
 
   scenario('updates a customData', async (scenario) => {
-    const original = await customData({ id: scenario.customData.one.id })
+    const original = await customData({
+      id: scenario.customData.one.id,
+    })
+
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -530,7 +539,10 @@ describe('customDatums', () => {
   })
 
   scenario('deletes a customData', async (scenario) => {
-    const original = await deleteCustomData({ id: scenario.customData.one.id })
+    const original = await deleteCustomData({
+      id: scenario.customData.one.id,
+    })
+
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
