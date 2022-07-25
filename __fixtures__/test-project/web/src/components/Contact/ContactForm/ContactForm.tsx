@@ -13,7 +13,7 @@ import type { RWGqlError } from '@redwoodjs/forms'
 interface ContactFormProps {
   contact?: Contact
   onSave: (data: UpdateContactInput, id?: Contact['id']) => void
-  error: RwGqlError
+  error: RWGqlError
   loading: boolean
 }
 

@@ -13,7 +13,7 @@ import type { RWGqlError } from '@redwoodjs/forms'
 interface PostFormProps {
   post?: Post
   onSave: (data: UpdatePostInput, id?: Post['id']) => void
-  error: RwGqlError
+  error: RWGqlError
   loading: boolean
 }
 

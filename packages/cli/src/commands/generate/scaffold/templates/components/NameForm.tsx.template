@@ -22,7 +22,7 @@ const formatDatetime = (value) => {
 interface ${singularPascalName}FormProps {
   ${singularCamelName}?: ${singularPascalName}
   onSave: (data: Update${singularPascalName}Input, id?: ${singularPascalName}['id']) => void
-  error: RwGqlError
+  error: RWGqlError
   loading: boolean
 }
 
