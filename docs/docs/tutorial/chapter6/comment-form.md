@@ -363,12 +363,15 @@ export default { title: 'Components/CommentForm' }
 import CommentForm from './CommentForm'
 
 // highlight-start
-import { CreateCommentMutation, MutationcreateCommentArgs } from 'types/graphql'
+import {
+  CreateCommentMutation,
+  CreateCommentMutationVariables,
+} from 'types/graphql'
 // highlight-end
   
 export const generated = () => {
   // highlight-start
-  mockGraphQLMutation<CreateCommentMutation, MutationcreateCommentArgs>(
+  mockGraphQLMutation<CreateCommentMutation, CreateCommentMutationVariables>(
     'CreateCommentMutation',
     (variables, { ctx }) => {
       const id = Math.floor(Math.random() * 1000)
