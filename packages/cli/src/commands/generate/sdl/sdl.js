@@ -19,7 +19,11 @@ import c from '../../../lib/colors'
 import { pluralize } from '../../../lib/rwPluralize'
 import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
-import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
+import {
+  customOrDefaultTemplatePath,
+  idForModel,
+  relationsForModel,
+} from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
@@ -92,12 +96,7 @@ const idType = (model, crud) => {
     return undefined
   }
 
-  const compoundId = model.primaryKey
-    ? model.primaryKey.fields.join('_')
-    : undefined
-
-  const singleFieldId = model.fields.find((field) => field.isId)
-  const idField = compoundId || singleFieldId
+  const idField = idForModel(model)
 
   if (!idField) {
     missingIdConsoleMessage()
