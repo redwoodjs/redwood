@@ -166,6 +166,28 @@ export const beforeQuery = (props) => {
 }
 ```
 
+You can also use `beforeQuery` to populate variables with data not included in the Cell's props (like from React's Context API or a global state management library). If you provide a `beforeQuery` function, the Cell will automatically change the type of its props to match the first argument of the function.
+
+```jsx
+// The Cell will take no props: <Cell />
+export const beforeQuery = () => {
+  const { currentUser } = useAuth()
+
+  return {
+    variables: { userId: currentUser.id }
+   }
+}
+```
+
+```jsx
+// The cell will take 1 prop named "word" that is a string: <Cell word="abc">
+export const beforeQuery = ({ word }: { word: string }) => {
+  return {
+    variables: { magicWord: word }
+   }
+}
+```
+
 ### isEmpty
 
 `isEmpty` is an optional lifecycle hook. It returns a boolean to indicate if Cell is empty. Use it to override the [default check](#empty).
