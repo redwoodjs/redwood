@@ -5,7 +5,7 @@ import path from 'path'
 import { config } from 'dotenv-defaults'
 import yargs from 'yargs'
 
-import { getConfigPath } from '@redwoodjs/internal/dist/config'
+import { getConfigPath } from '@redwoodjs/internal'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
