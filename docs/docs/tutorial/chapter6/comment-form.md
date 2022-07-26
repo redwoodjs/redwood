@@ -363,7 +363,7 @@ export default { title: 'Components/CommentForm' }
 import CommentForm from './CommentForm'
 
 // highlight-start
-import {
+import type {
   CreateCommentMutation,
   CreateCommentMutationVariables,
 } from 'types/graphql'
