@@ -92,12 +92,12 @@ const idType = (model, crud) => {
     return undefined
   }
 
-  const primaryKey = model.primaryKey
+  const compoundId = model.primaryKey
     ? model.primaryKey.fields.join('_')
     : undefined
 
   const singleFieldId = model.fields.find((field) => field.isId)
-  const idField = primaryKey || singleFieldId
+  const idField = compoundId || singleFieldId
 
   if (!idField) {
     missingIdConsoleMessage()
