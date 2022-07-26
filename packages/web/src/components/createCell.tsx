@@ -6,7 +6,7 @@ import type { A } from 'ts-toolbelt'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import { useQuery } from './GraphQLHooksProvider'
+import { useQuery, useMutation } from './GraphQLHooksProvider'
 
 declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
   beforeQuery: (...args: unknown[]) => unknown
@@ -111,6 +111,11 @@ export interface CreateCellProps<CellProps, CellVariables> {
    * If `QUERY` is a function, it's called with the result of `beforeQuery`.
    */
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
+  /**
+   * The GraphQL syntax tree to execute or function to call that returns it.
+   * If `MUTATION` is a function, it's called with the result of `beforeQuery`.
+   */
+  MUTATION: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   /**
    * Parse `props` into query variables. Most of the time `props` are appropriate variables as is.
    */
@@ -247,6 +252,7 @@ export function createCell<
   CellVariables extends Record<string, unknown>
 >({
   QUERY,
+  MUTATION,
   beforeQuery = (props) => ({
     variables: props as CellVariables,
     /**
@@ -276,6 +282,42 @@ export function createCell<
     return (props) => <Loading {...(props as any)} />
   }
 
+  /**
+   * the goal is to return the same things for each: query & mutation
+   *
+   * queryRest includes `variables: { ... }`, with any variables returned
+   * from beforeQuery
+   */
+  function callGraphQL(isQuery: boolean, options: any) {
+    if (isQuery) {
+      const { error, loading, data, ...queryRest } = useQuery(
+        typeof QUERY === 'function' ? QUERY(options) : QUERY,
+        options
+      )
+      return { error, loading, data, queryRest }
+    }
+
+    const [mutateFunction, { data, loading, error }] = useMutation(
+      typeof MUTATION === 'function' ? MUTATION(options) : MUTATION,
+      options
+    )
+
+    const { ...queryRest } = mutateFunction({
+      variables: beforeQuery,
+    })
+
+    return { error, loading, data, queryRest }
+  }
+
+  /**
+   * the reality is that we prefer a QUERY
+   *
+   * TODO: typescript - only allow QUERY or MUTATION in a Cell, not Both
+   */
+  function isAQuery() {
+    return typeof QUERY === 'function'
+  }
+
   function NamedCell(props: React.PropsWithChildren<CellProps>) {
     /**
      * Right now, Cells don't render `children`.
@@ -284,10 +326,8 @@ export function createCell<
 
     const options = beforeQuery(variables as CellProps)
 
-    // queryRest includes `variables: { ... }`, with any variables returned
-    // from beforeQuery
-    const { error, loading, data, ...queryRest } = useQuery(
-      typeof QUERY === 'function' ? QUERY(options) : QUERY,
+    const { error, loading, data, ...queryRest } = callGraphQL(
+      isAQuery(),
       options
     )
 
