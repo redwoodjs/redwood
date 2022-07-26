@@ -805,7 +805,9 @@ describe('comments', () => {
       input: {
         name: 'Billy Bob',
         body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id,
+        post: {
+          connect: { id: scenario.post.bark.id },
+        },
       },
     })
 
@@ -844,7 +846,9 @@ describe('comments', () => {
         input: {
           name: 'Billy Bob',
           body: 'What is your favorite tree bark?',
-          postId: scenario.post.bark.id,
+          post: {
+            connect: { id: scenario.post.bark.id },
+          },
         },
       })
 
