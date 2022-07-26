@@ -39,11 +39,10 @@ export interface RedwoodGraphQLContext {
  */
 export interface GraphQLHandlerOptions {
   /**
-   * @description Customize the identifier used in the GraphQL health check response
-   * and whose value verifies readiness when sent as a header in the readiness check request.
+   * @description The identifier used in the GraphQL health check response.
+   * It verifies readiness when sent as a header in the readiness check request.
    *
-   *  By default, the identifier is `yoga` as seen in the HTTP response header `x-yoga-id: yoga`
-   *
+   * By default, the identifier is `yoga` as seen in the HTTP response header `x-yoga-id: yoga`
    */
   healthCheckId?: string
 
