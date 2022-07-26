@@ -1,0 +1,8 @@
+{
+  "name": "only_doc_changes",
+  "dependencies": {
+    "@actions/core": "1.9.0",
+    "@actions/exec": "1.1.1"
+  },
+  "packageManager": "yarn@3.2.2"
+}

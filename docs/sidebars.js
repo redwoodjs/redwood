@@ -115,7 +115,7 @@ module.exports = {
           items: [
             { type: 'doc', label: 'Introduction', id: 'deploy/introduction' },
             { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
-            { type: 'doc', label: 'Flightcontrol', id: 'deploy/flightcontrol' },
+            { type: 'doc', label: 'AWS via Flightcontrol', id: 'deploy/flightcontrol' },
             { type: 'doc', label: 'Layer0', id: 'deploy/layer0' },
             { type: 'doc', label: 'Netlify', id: 'deploy/netlify' },
             { type: 'doc', label: 'Render', id: 'deploy/render' },
