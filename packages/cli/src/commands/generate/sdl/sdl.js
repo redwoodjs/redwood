@@ -92,13 +92,18 @@ const idType = (model, crud) => {
     return undefined
   }
 
-  const idField = model.primaryKey
+  const primaryKey = model.primaryKey
     ? model.primaryKey.fields.join('_')
-    : model.fields.find((field) => field.isId) // ?
+    : undefined
+
+  const singleFieldId = model.fields.find((field) => field.isId)
+  const idField = primaryKey || singleFieldId
+
   if (!idField) {
     missingIdConsoleMessage()
     throw new Error('Failed: Could not generate SDL')
   }
+
   return idField.type || idField
 }
 
@@ -133,7 +138,7 @@ const sdlFromSchemaModel = async (name, crud) => {
     query: querySDL(model).join('\n    '),
     createInput: createInputSDL(model, types).join('\n    '),
     updateInput: updateInputSDL(model, types).join('\n    '),
-    idType: idType(model, crud), // ?
+    idType: idType(model, crud),
     relations: relationsForModel(model),
     enums,
   }
