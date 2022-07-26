@@ -8,19 +8,32 @@ import type { A } from 'ts-toolbelt'
  */
 import { useQuery } from './GraphQLHooksProvider'
 
+declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
+  beforeQuery: (...args: unknown[]) => unknown
+}
+  ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
+    ? Parameters<Cell['beforeQuery']>[0]
+    : Record<string, never>
+  : GQLVariables extends {
+      [key: string]: never
+    }
+  ? unknown
+  : GQLVariables
+
 /**
  * Cell component props which is the combination of query variables and Success props.
  */
 export type CellProps<
   CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
   GQLResult,
+  CellType,
   GQLVariables
 > = A.Compute<
   Omit<
     ComponentProps<CellSuccess>,
     keyof QueryOperationResult | keyof GQLResult | 'updating'
   > &
-    (GQLVariables extends { [key: string]: never } ? unknown : GQLVariables)
+    CustomCellProps<CellType, GQLVariables>
 >
 
 export type CellLoadingProps<TVariables = any> = Partial<
@@ -92,7 +105,7 @@ export type DataObject = { [key: string]: unknown }
 /**
  * The main interface.
  */
-export interface CreateCellProps<CellProps> {
+export interface CreateCellProps<CellProps, CellVariables> {
   /**
    * The GraphQL syntax tree to execute or function to call that returns it.
    * If `QUERY` is a function, it's called with the result of `beforeQuery`.
@@ -101,7 +114,9 @@ export interface CreateCellProps<CellProps> {
   /**
    * Parse `props` into query variables. Most of the time `props` are appropriate variables as is.
    */
-  beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
+  beforeQuery?:
+    | ((props: CellProps) => { variables: CellVariables })
+    | (() => { variables: CellVariables })
   /**
    * Sanitize the data returned from the query.
    */
@@ -227,10 +242,13 @@ const isDataEmpty = (data: DataObject) => {
 /**
  * Creates a Cell out of a GraphQL query and components that track to its lifecycle.
  */
-export function createCell<CellProps = any>({
+export function createCell<
+  CellProps extends Record<string, unknown>,
+  CellVariables extends Record<string, unknown>
+>({
   QUERY,
   beforeQuery = (props) => ({
-    variables: props,
+    variables: props as CellVariables,
     /**
      * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
      * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
@@ -247,7 +265,7 @@ export function createCell<CellProps = any>({
   Empty,
   Success,
   displayName = 'Cell',
-}: CreateCellProps<CellProps>): React.FC<CellProps> {
+}: CreateCellProps<CellProps, CellVariables>): React.FC<CellProps> {
   /**
    * If we're prerendering, render the Cell's Loading component and exit early.
    */
@@ -264,7 +282,7 @@ export function createCell<CellProps = any>({
      */
     const { children: _, ...variables } = props
 
-    const options = beforeQuery(variables)
+    const options = beforeQuery(variables as CellProps)
 
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
