@@ -119,11 +119,15 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ comments }: CellSuccessProps) => {
+  return (
   // highlight-start
-  return comments.map((comment) => (
-    <Comment key={comment.id} comment={comment} />
-  ))
+    <>
+      {comments.map((comment) => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
+    </>
   // highlight-end
+  )
 }
 ```
 

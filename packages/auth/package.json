@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.23.5"
+    "core-js": "3.24.0"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",
