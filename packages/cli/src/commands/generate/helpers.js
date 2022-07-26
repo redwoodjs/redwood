@@ -215,6 +215,20 @@ export const createYargsForComponentGeneration = ({
   }
 }
 
+// Returns the id name for a model based on its primary key, if any
+export const idForModel = (model) => {
+  return compoundIdForModel(model) || idFieldForModel(model)
+}
+
+// Returns the id name for a model based on its primary key, if any
+export const idFieldForModel = (model) => {
+  return model.fields.find((field) => field.isId)
+}
+
+// Returns the compound id field name for a model based on its primary key, if any
+export const compoundIdForModel = (model) => {
+  return model.primaryKey ? model.primaryKey.fields.join('_') : undefined
+}
 // Returns all relations to other models
 export const relationsForModel = (model) => {
   return model.fields
