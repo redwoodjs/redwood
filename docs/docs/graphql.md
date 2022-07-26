@@ -464,33 +464,48 @@ For more in-depth discussion and configuration of CORS when it comes to using a 
 
 ## Health Checks
 
-Health checks are used determine if a server is available and ready to start serving traffic. By default, Redwood's GraphQLHandler provides a health check endpoint at `/graphql/health` which returns a `200 status code` with a result of `{ status: 'pass' }` if the server is healthy and can accept requests or a `503 status code` with `{ status: fail }` if not.
+You can use health checks to determine if a server is available and ready to start serving traffic.
+For example, services like [Pingdom](https://www.pingdom.com) use health checks to determine server uptime and will notify you if it becomes unavailable.
 
-If you need more than the default basic health check, you can provide a custom implementation via an `onHealthCheck` function when creating the GraphQLHandler. If defined, this async `onHealthCheck` function should return if the server is deemed ready or throw if there is an error.
+Redwood's GraphQL server provides a health check endpoint at `/graphql/health` as part of its GraphQL handler.
+If the server is healthy and can accept requests, the response will contain the following headers:
 
-```tsx title="api/src/functions/graphql.{ts,js}"
-const myCustomHealthCheck = async () => {
-  if (ok) {
-    // Implement your custom check, such as:
-    // * invoke an api
-    // * call a service
-    // * make a db request
-    // that ensures your GraphQL endpoint is healthy
-    return
-  }
+```
+content-type: application/json
+server: GraphQL Yoga
+x-yoga-id: yoga
+```
 
-  throw Error('Health check failed')
+and will return a `HTTP/1.1 200 OK` status with the body:
+
+```json
+{
+  "message": "alive"
 }
+```
+
+Note the `x-yoga-id` header. The header's value defaults to `yoga` when `healthCheckId` isn't set in `createGraphQLHandler`. But you can customize it when configuring your GraphQL handler:
+
+```ts title="api/src/functions/graphql.ts"
+// ...
 
 export const handler = createGraphQLHandler({
-  onHealthCheck = await myCustomHealthCheck(),
-  // .. other config
+  // This will be the value of the `x-yoga-id` header
+  // highlight-next-line
+  healthCheckId: 'my-redwood-graphql-server',
   getCurrentUser,
+  loggerConfig: { logger, options: {} },
   directives,
   sdls,
   services,
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
 })
 ```
+
+If the health check fails, then the GraphQL server is unavailable and you should investigate what could be causing the downtime.
 
 #### Perform a Health Check
 
@@ -500,24 +515,61 @@ For local development,
 with the proxy using `curl` from the command line:
 
 ```bash
-curl http://localhost:8910/.redwood/functions/graphql/health
+curl "http://localhost:8910/.redwood/functions/graphql/health"
 ```
 
 or by directly invoking the graphql function:
 
 ```bash
-curl http://localhost:8911/graphql/health
+curl "http://localhost:8911/graphql/health"
 ```
 
 you should get the response:
 
 ```json
-{ "status": "pass" }
+{
+  "message": "alive"
+}
 ```
 
-For production or your deploy, make a request wherever your `/graphql` function exists.
+For production, make a request wherever your `/graphql` function exists.
 
-> Note: These examples use `curl` but you can performa a health check via any HTTP GET request.
+> These examples use `curl` but you can perform a health check via any HTTP GET request.
+
+#### Perform a Readiness Check
+
+A readiness check confirms that your GraphQL server can accept requests and serve **your server's** traffic.
+
+It forwards a request to the health check with a header that must match your `healthCheckId` in order to succeed.
+If the `healthCheckId` doesn't match or the request fails, then your GraphQL server isn't "ready".
+
+To perform a readiness check, make a HTTP GET request to the `/graphql/readiness` endpoint with the appropriate `healthCheckId` header.
+For local development, you can make a request to the proxy:
+
+```bash
+curl "http://localhost:8910/.redwood/functions/graphql/readiness" \
+     -H 'x-yoga-id: yoga'
+```
+
+or directly invoke the graphql function:
+
+```bash
+curl "http://localhost:8911/graphql/readiness" \
+     -H 'x-yoga-id: yoga'
+
+```
+
+Either way, you should get the following response:
+
+```json
+{
+  "message": "alive"
+}
+```
+
+For production, make a request wherever your `/graphql` function exists.
+
+> These examples use `curl` but you can perform a readiness check via any HTTP GET request with the proper headers.
 
 ## Verifying GraphQL Schema
 

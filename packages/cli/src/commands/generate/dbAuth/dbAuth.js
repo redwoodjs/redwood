@@ -86,6 +86,13 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('webauthn', {
+      alias: 'w',
+      default: null,
+      description: 'Include WebAuthn support (TouchID/FaceID)',
+      type: 'boolean',
+    })
+
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -249,16 +256,20 @@ const tasks = ({
   )
 }
 
-export const handler = async (options) => {
-  const response = await prompts({
-    type: 'confirm',
-    name: 'answer',
-    message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
-    initial: false,
-  })
-  const webAuthn = response.answer
+export const handler = async (yargs) => {
+  let includeWebAuthn = yargs.webauthn
 
-  const t = tasks({ ...options, webAuthn })
+  if (includeWebAuthn === null) {
+    const response = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+      initial: false,
+    })
+    includeWebAuthn = response.answer
+  }
+
+  const t = tasks({ ...yargs, webAuthn: includeWebAuthn })
 
   try {
     await t.run()
