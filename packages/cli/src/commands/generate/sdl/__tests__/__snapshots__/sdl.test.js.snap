@@ -658,6 +658,41 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
 "
 `;
 
+exports[`in javascript mode creates a sdl file with composite keys 1`] = `
+"export const schema = gql\`
+  type CompositeKey {
+    enterprise: String!
+    name: String!
+  }
+
+  type Query {
+    compositeKeys: [CompositeKey!]! @requireAuth
+    compositeKey(id: enterprise_name!): CompositeKey @requireAuth
+  }
+
+  input CreateCompositeKeyInput {
+    enterprise: String!
+    name: String!
+  }
+
+  input UpdateCompositeKeyInput {
+    enterprise: String
+    name: String
+  }
+
+  type Mutation {
+    createCompositeKey(input: CreateCompositeKeyInput!): CompositeKey!
+      @requireAuth
+    updateCompositeKey(
+      id: enterprise_name!
+      input: UpdateCompositeKeyInput!
+    ): CompositeKey! @requireAuth
+    deleteCompositeKey(id: enterprise_name!): CompositeKey! @requireAuth
+  }
+\`
+"
+`;
+
 exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   type Shoe {
@@ -861,6 +896,41 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
       @requireAuth
     deleteUserProfile(id: Int!): UserProfile! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a sdl file with composite keys 1`] = `
+"export const schema = gql\`
+  type CompositeKey {
+    enterprise: String!
+    name: String!
+  }
+
+  type Query {
+    compositeKeys: [CompositeKey!]! @requireAuth
+    compositeKey(id: enterprise_name!): CompositeKey @requireAuth
+  }
+
+  input CreateCompositeKeyInput {
+    enterprise: String!
+    name: String!
+  }
+
+  input UpdateCompositeKeyInput {
+    enterprise: String
+    name: String
+  }
+
+  type Mutation {
+    createCompositeKey(input: CreateCompositeKeyInput!): CompositeKey!
+      @requireAuth
+    updateCompositeKey(
+      id: enterprise_name!
+      input: UpdateCompositeKeyInput!
+    ): CompositeKey! @requireAuth
+    deleteCompositeKey(id: enterprise_name!): CompositeKey! @requireAuth
   }
 \`
 "

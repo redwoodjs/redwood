@@ -57,3 +57,10 @@ model CustomData {
   id       Int    @id @default(autoincrement())
   data     String
 }
+
+model CompositeKey {
+  enterprise String
+  name       String
+
+  @@id([enterprise, name])
+}

@@ -170,6 +170,25 @@ const itCreatesAnSDLFileWithJsonDefinitions = (baseArgs = {}) => {
   })
 }
 
+const itCreatesAnSDLFileWithCompositeKey = (baseArgs = {}) => {
+  test('creates a sdl file with composite keys', async () => {
+    const files = await sdl.files({
+      ...baseArgs,
+      name: 'CompositeKey',
+      crud: true,
+    })
+    const extension = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/compositeKeys.sdl.${extension}`
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+}
+
 describe('in javascript mode', () => {
   const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
 
@@ -181,6 +200,7 @@ describe('in javascript mode', () => {
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
   itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
   itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+  itCreatesAnSDLFileWithCompositeKey(baseArgs)
 })
 
 describe('in typescript mode', () => {
@@ -198,6 +218,7 @@ describe('in typescript mode', () => {
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
   itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
   itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+  itCreatesAnSDLFileWithCompositeKey(baseArgs)
 })
 
 describe('handler', () => {
