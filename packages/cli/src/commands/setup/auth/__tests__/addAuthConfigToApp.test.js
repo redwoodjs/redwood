@@ -25,6 +25,10 @@ jest.mock('../../../../lib', () => {
   }
 })
 
+jest.mock('../../../../lib/project', () => ({
+  isTypeScriptProject: () => false,
+}))
+
 // This function checks output matches
 const writeFileSyncSpy = jest.fn((_, content) => {
   // Line breaks cause an issue on windows snapshots

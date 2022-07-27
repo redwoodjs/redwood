@@ -13,6 +13,9 @@ jest.mock('../../../../lib', () => ({
   }),
   existsAnyExtensionSync: () => false,
 }))
+jest.mock('../../../../lib/project', () => ({
+  isTypeScriptProject: () => false,
+}))
 
 jest.mock('listr')
 import chalk from 'chalk'

@@ -1,3 +1,5 @@
+import '../../lib/mockTelemetry'
+
 jest.mock('concurrently', () => ({
   __esModule: true, // this property makes it work
   default: jest.fn().mockReturnValue({
@@ -18,6 +20,14 @@ jest.mock('fs', () => {
 
 jest.mock('@redwoodjs/internal', () => {
   return {
+    getConfig: jest.fn(),
+    getConfigPath: () => '/mocked/project/redwood.toml',
+    shutdownPort: jest.fn(),
+  }
+})
+
+jest.mock('@redwoodjs/internal/dist/paths', () => {
+  return {
     getPaths: () => {
       return {
         api: {
@@ -31,9 +41,6 @@ jest.mock('@redwoodjs/internal', () => {
         },
       }
     },
-    getConfig: jest.fn(),
-    getConfigPath: () => '/mocked/project/redwood.toml',
-    shutdownPort: jest.fn(),
   }
 })
 
