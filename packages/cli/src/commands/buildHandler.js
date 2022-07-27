@@ -16,7 +16,7 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
-import { getTasks as getPrerenderTasks } from './prerender'
+import { getTasks as getPrerenderTasks } from './prerenderHandler'
 
 export const handler = async ({
   side = ['api', 'web'],
