@@ -76,7 +76,7 @@ module.exports = {
         window: 'off', // Developers should use `global` instead of window. Since window is undefined in NodeJS.
       },
     },
-    // For api and graphql packages
+    // Prevent @redwoodjs/internal imports in runtime (web+api) packages
     {
       files: [
         'packages/auth/src/**',
@@ -162,7 +162,7 @@ module.exports = {
           {
             name: '@redwoodjs/internal',
             message:
-              'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<subpackage>, or await import',
+              'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>, or await import',
           },
         ],
       },
