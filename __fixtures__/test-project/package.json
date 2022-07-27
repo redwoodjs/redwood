@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "2.1.0"
+    "@redwoodjs/core": "2.1.1"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -21,7 +21,7 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@3.2.2"
   "dependencies": {
     "@apollo/client": "3.6.9",
     "@babel/cli": "7.16.7",
@@ -210,7 +210,4 @@
     "yargs": "17.5.1",
     "yargs-parser": "21.0.1"
   },
-  "scripts": {
-    "postinstall": ""
-  }
 }

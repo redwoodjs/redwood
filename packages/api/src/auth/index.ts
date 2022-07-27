@@ -2,6 +2,8 @@ export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
+import type { DbAuthSession } from '../functions/dbAuth/DbAuthHandler'
+
 import { decodeToken } from './decoders'
 
 // This is shared by `@redwoodjs/web`
@@ -35,7 +37,7 @@ export const parseAuthorizationHeader = (
 }
 
 export type AuthContextPayload = [
-  string | Record<string, unknown> | null,
+  string | Record<string, unknown> | null | DbAuthSession,
   { type: string } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]

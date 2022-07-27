@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -33,7 +33,7 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@prisma/client": "3.15.2",
     "base64url": "3.0.1",
-    "core-js": "3.23.5",
+    "core-js": "3.24.0",
     "cross-undici-fetch": "0.4.14",
     "crypto-js": "4.1.1",
     "humanize-string": "2.1.0",
@@ -48,7 +48,8 @@
   "devDependencies": {
     "@babel/cli": "7.16.7",
     "@babel/core": "7.16.7",
-    "@clerk/clerk-sdk-node": "3.8.6",
+    "@clerk/clerk-sdk-node": "3.9.0",
+    "@redwoodjs/auth": "2.1.1",
     "@simplewebauthn/server": "5.3.0",
     "@types/aws-lambda": "8.10.101",
     "@types/crypto-js": "4.1.1",
@@ -63,7 +64,7 @@
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "@clerk/clerk-sdk-node": "3.8.6",
+    "@clerk/clerk-sdk-node": "3.9.0",
     "@magic-sdk/admin": "1.4.1",
     "@okta/jwt-verifier": "2.6.0",
     "firebase-admin": "10.3.0"

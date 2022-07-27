@@ -22,12 +22,12 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef<HTMLInputElement>()
+  const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    usernameRef.current.focus()
+    usernameRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Record<string, string>) => {
     const response = await logIn({ ...data })
 
     if (response.message) {

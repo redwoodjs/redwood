@@ -1,9 +1,15 @@
-import { db } from 'src/lib/db'
+import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+
 import { DbAuthHandler } from '@redwoodjs/api'
+import type { DbAuthHandlerOptions } from '@redwoodjs/api'
 
-export const handler = async (event, context) => {
+import { db } from 'src/lib/db'
 
-  const forgotPasswordOptions = {
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+) => {
+  const forgotPasswordOptions: DbAuthHandlerOptions['forgotPassword'] = {
     enabled: true,
     // handler() is invoked after verifying that a user was found with the given
     // username. This is where you can send the user an email with a link to
@@ -34,7 +40,7 @@ export const handler = async (event, context) => {
     },
   }
 
-  const loginOptions = {
+  const loginOptions: DbAuthHandlerOptions['login'] = {
     enabled: true,
     // handler() is called after finding the user that matches the
     // username/password provided at login, but before actually considering them
@@ -64,14 +70,14 @@ export const handler = async (event, context) => {
     expires: 60 * 60 * 24 * 365 * 10,
   }
 
-  const resetPasswordOptions = {
+  const resetPasswordOptions: DbAuthHandlerOptions['resetPassword'] = {
     enabled: true,
     // handler() is invoked after the password has been successfully updated in
     // the database. Returning anything truthy will automatically log the user
     // in. Return `false` otherwise, and in the Reset Password page redirect the
     // user to the login page.
     handler: (user) => {
-      return user
+      return !!user
     },
 
     // If `false` then the new password MUST be different from the current one
@@ -89,7 +95,7 @@ export const handler = async (event, context) => {
     },
   }
 
-  const signupOptions = {
+  const signupOptions: DbAuthHandlerOptions['signup'] = {
     enabled: true,
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
