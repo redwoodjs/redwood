@@ -13,11 +13,11 @@ import { AuthImplementation } from './AuthImplementation'
 type NetlifyIdentity = typeof NetlifyIdentityNS
 
 type NetlifyAuthImplementation = AuthImplementation<
-  NetlifyIdentityNS.User,
-  NetlifyIdentityNS.User | null,
-  NetlifyIdentityNS.User | null,
-  void,
-  null,
+  NetlifyIdentityNS.User, // TUser
+  NetlifyIdentityNS.User | null, // TRestoreAuth
+  NetlifyIdentityNS.User | null, // TLogIn
+  void, // TLogOut
+  null, // TSignUp
   never,
   never,
   never,

@@ -2,6 +2,7 @@ import React from 'react'
 
 export interface CurrentUser {
   roles?: Array<string> | string
+  [key: string]: unknown
 }
 
 export interface AuthContextInterface<
@@ -13,12 +14,28 @@ export interface AuthContextInterface<
   TResetPassword,
   TValidateResetToken
 > {
-  /* Determining your current authentication state */
+  /** Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  /* The current user's data from the `getCurrentUser` function on the api side */
+  /** The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
-  /* The user's metadata from the auth provider */
+  /**
+   * The user's metadata from the auth provider
+   *
+   * Actual user metadata might look something like this
+   * {
+   *   "id": "11111111-2222-3333-4444-5555555555555",
+   *   "aud": "authenticated",
+   *   "role": "authenticated",
+   *   "email": "email@example.com",
+   *   "app_metadata": {
+   *     "provider": "email"
+   *   },
+   *   "user_metadata": null,
+   *   "created_at": "2016-05-15T19:53:12.368652374-07:00",
+   *   "updated_at": "2016-05-15T19:53:12.368652374-07:00"
+   * }
+   */
   userMetadata: null | TUser
   logIn(options?: unknown): Promise<TLogIn>
   logOut(options?: unknown): Promise<TLogOut>

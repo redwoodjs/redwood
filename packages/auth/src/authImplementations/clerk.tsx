@@ -87,7 +87,7 @@ export function createClerkAuth(
   const AuthProvider = ({ children }: AuthProviderProps) => {
     return (
       <ClerkAuthProvider>
-        <InternalAuthProvider type="clerk">{children}</InternalAuthProvider>
+        <InternalAuthProvider>{children}</InternalAuthProvider>
       </ClerkAuthProvider>
     )
   }

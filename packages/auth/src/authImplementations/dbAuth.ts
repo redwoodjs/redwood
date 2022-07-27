@@ -30,7 +30,9 @@ type DbAuthAuthImplementation = AuthImplementation<
 
 const dbAuthCreateAuthentication = (
   authImplementation: DbAuthAuthImplementation
-) => createAuthentication(authImplementation)
+) => {
+  return createAuthentication(authImplementation)
+}
 
 export type DbAuthConfig = {
   fetchConfig: {
@@ -44,7 +46,7 @@ let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
 let cachedToken: string | null
 
 export function createDbAuth(
-  config: DbAuthConfig
+  config?: DbAuthConfig
 ): ReturnType<typeof dbAuthCreateAuthentication> {
   const authImplementation = createDbAuthImplementation(config)
 

@@ -17,9 +17,11 @@ export const useCurrentUser = (
     unknown
   >
 ) => {
+  const getToken = useToken(authImplementation)
+
   return useCallback(async (): Promise<Record<string, unknown>> => {
     // Always get a fresh token, rather than use the one in state
-    const token = await useToken(authImplementation)()
+    const token = await getToken()
     const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
       method: 'POST',
       // TODO: how can user configure this? inherit same `config` options given to auth client?
@@ -43,5 +45,5 @@ export const useCurrentUser = (
         `Could not fetch current user: ${response.statusText} (${response.status})`
       )
     }
-  }, [authImplementation])
+  }, [authImplementation, getToken])
 }

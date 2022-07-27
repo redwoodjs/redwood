@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 
 import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
 
@@ -33,8 +33,7 @@ import { useValidateResetToken } from './useValidateResetToken'
 //   return null
 // }
 
-type AuthProviderProps = {
-  type: string
+export interface AuthProviderProps {
   skipFetchCurrentUser?: boolean
   children: ReactNode
 }
@@ -116,12 +115,6 @@ export function createAuthProvider<
     //   return rwClient
     // }, [client, type, config])
 
-    /**
-     * Clients should always return null or token string.
-     * It is expected that they catch any errors internally.
-     * This catch is a last resort effort in case any errors are
-     * missed or slip through.
-     */
     const getToken = useToken(authImplementation)
 
     // We're disabling eslint here, because while yes, technically we are
@@ -160,18 +153,19 @@ export function createAuthProvider<
 
     // Whenever the authImplementation is ready to go, restore auth and reauthenticate
     // TODO: We need this for Clerk. Need to figure out how to incorporate
-    // useEffect(() => {
-    //   if (authImplementation && !hasRestoredState) {
-    //     setHasRestoredState(true)
+    //       Also need this for all other auth clients that implement `restoreAuthState`
+    useEffect(() => {
+      async function doRestoreState() {
+        await authImplementation.restoreAuthState?.()
+        reauthenticate()
+      }
 
-    //     const doRestoreState = async () => {
-    //       await authImplementation.restoreAuthState?.()
-    //       reauthenticate()
-    //     }
+      if (authImplementation /* && !hasRestoredState*/) {
+        // setHasRestoredState(true)
 
-    //     doRestoreState()
-    //   }
-    // }, [authImplementation, reauthenticate, hasRestoredState])
+        doRestoreState()
+      }
+    }, [reauthenticate])
 
     return (
       <AuthContext.Provider
