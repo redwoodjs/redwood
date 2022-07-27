@@ -1,6 +1,6 @@
 require('whatwg-fetch')
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
@@ -40,12 +40,21 @@ const server = setupServer(
 beforeAll(() => server.listen())
 afterAll(() => server.close())
 
+let consoleError
+
 beforeEach(() => {
   server.resetHandlers()
   CURRENT_USER_DATA = {
     name: 'Peter Pistorius',
     email: 'nospam@example.net',
   }
+
+  consoleError = console.error
+  console.error = () => {}
+})
+
+afterEach(() => {
+  console.error = consoleError
 })
 
 const AuthConsumer = () => {
@@ -832,16 +841,16 @@ test('proxies forgotPassword() calls to client', async () => {
       }
     }, [loading, forgotPassword])
 
-    return null
+    return <>{loading ? 'Loading...' : 'TestAuthConsumer'}</>
   }
 
-  await act(async () => {
-    render(
-      <AuthProvider client={mockAuthClient} type="custom">
-        <TestAuthConsumer />
-      </AuthProvider>
-    )
-  })
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  await waitFor(() => screen.findByText('TestAuthConsumer'))
 
   expect.assertions(1)
 })
@@ -864,16 +873,16 @@ test('proxies resetPassword() calls to client', async () => {
       }
     }, [loading, resetPassword])
 
-    return null
+    return <>{loading ? 'Loading...' : 'TestAuthConsumer'}</>
   }
 
-  await act(async () => {
-    render(
-      <AuthProvider client={mockAuthClient} type="custom">
-        <TestAuthConsumer />
-      </AuthProvider>
-    )
-  })
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  await waitFor(() => screen.findByText('TestAuthConsumer'))
 
   expect.assertions(1)
 })
@@ -896,21 +905,21 @@ test('proxies validateResetToken() calls to client', async () => {
       }
     }, [loading, validateResetToken])
 
-    return null
+    return <>{loading ? 'Loading...' : 'TestAuthConsumer'}</>
   }
 
-  await act(async () => {
-    render(
-      <AuthProvider client={mockAuthClient} type="custom">
-        <TestAuthConsumer />
-      </AuthProvider>
-    )
-  })
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  await waitFor(() => screen.findByText('TestAuthConsumer'))
 
   expect.assertions(1)
 })
 
-test('getToken doesnt fail if client throws an error', async () => {
+test("getToken doesn't fail if client throws an error", async () => {
   const mockAuthClient = {
     getToken: async () => {
       throw 'Login Required'
@@ -946,13 +955,11 @@ test('getToken doesnt fail if client throws an error', async () => {
     return <div>Token: {`${authTokenResult?.token}`}</div>
   }
 
-  await act(async () => {
-    render(
-      <AuthProvider client={mockAuthClient} type="custom">
-        <TestAuthConsumer />
-      </AuthProvider>
-    )
-  })
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
 
-  await waitFor(() => screen.getByText('Token: null'))
+  await waitFor(() => screen.findByText('Token: null'))
 })

@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from 'react'
 
 import { createAuthClient } from './authClients'
@@ -127,7 +128,7 @@ type AuthProviderState = {
   error?: Error
 }
 
-const defaultAuthProviderState: AuthProviderState = {
+const defaultState: AuthProviderState = {
   loading: true,
   isAuthenticated: false,
   userMetadata: null,
@@ -149,12 +150,15 @@ export const AuthProvider = (props: AuthProviderProps) => {
   const skipFetchCurrentUser = props.skipFetchCurrentUser || false
 
   const [hasRestoredState, setHasRestoredState] = useState(false)
-
-  const [authProviderState, setAuthProviderState] = useState(
-    defaultAuthProviderState
-  )
-
+  const [authProviderState, setAuthProviderState] = useState(defaultState)
   const [rwClient, setRwClient] = useState<AuthClient>()
+  const isMounted = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const rwClientPromise: Promise<AuthClient> = useMemo(async () => {
     // If ever we rebuild the rwClient, we need to re-restore the state.
@@ -168,7 +172,13 @@ export const AuthProvider = (props: AuthProviderProps) => {
       props.config as SupportedAuthConfig
     )
 
-    setRwClient(client)
+    // This timeout lets default tests that only test that a component renders
+    // pass
+    setTimeout(() => {
+      if (isMounted.current) {
+        setRwClient(client)
+      }
+    })
 
     return client
   }, [props.client, props.type, props.config])
@@ -235,34 +245,34 @@ export const AuthProvider = (props: AuthProviderProps) => {
     try {
       const userMetadata = await client.getUserMetadata()
       if (!userMetadata) {
-        setAuthProviderState(notAuthenticatedState)
+        if (isMounted.current) {
+          setAuthProviderState(notAuthenticatedState)
+        }
       } else {
         await getToken()
 
         const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
 
-        setAuthProviderState((oldState) => ({
-          ...oldState,
-          userMetadata,
-          currentUser,
-          isAuthenticated: true,
-          loading: false,
-        }))
+        if (isMounted.current) {
+          setAuthProviderState((oldState) => ({
+            ...oldState,
+            userMetadata,
+            currentUser,
+            isAuthenticated: true,
+            loading: false,
+          }))
+        }
       }
     } catch (e: any) {
-      setAuthProviderState({
-        ...notAuthenticatedState,
-        hasError: true,
-        error: e as Error,
-      })
+      if (isMounted.current) {
+        setAuthProviderState({
+          ...notAuthenticatedState,
+          hasError: true,
+          error: e as Error,
+        })
+      }
     }
-  }, [
-    getToken,
-    rwClientPromise,
-    setAuthProviderState,
-    skipFetchCurrentUser,
-    getCurrentUser,
-  ])
+  }, [getToken, rwClientPromise, skipFetchCurrentUser, getCurrentUser])
 
   /**
    * @example
@@ -316,7 +326,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
   const logIn = useCallback(
     async (options?: any) => {
-      setAuthProviderState(defaultAuthProviderState)
+      setAuthProviderState(defaultState)
       const client = await rwClientPromise
       const loginOutput = await client.login(options)
       await reauthenticate()
