@@ -407,9 +407,48 @@ query {
 }
 ```
 
-How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L27-L44). The root schema is where things like currentUser are defined.
+How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L27-L44). The root schema is where things like currentUser are defined:
 
-Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L56-L72).
+```graphql
+  scalar BigInt
+  scalar Date
+  scalar Time
+  scalar DateTime
+  scalar JSON
+  scalar JSONObject
+
+  type Redwood {
+    version: String
+    currentUser: JSON
+    prismaVersion: String
+  }
+
+  type Query {
+    redwood: Redwood
+  }
+```
+
+Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L56-L72):
+
+```ts
+export const resolvers: Resolvers = {
+  BigInt: BigIntResolver,
+  Date: DateResolver,
+  Time: TimeResolver,
+  DateTime: DateTimeResolver,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
+  Query: {
+    redwood: () => ({
+      version: redwoodVersion,
+      prismaVersion: prismaVersion,
+      currentUser: (_args: any, context: GlobalContext) => {
+        return context?.currentUser
+      },
+    }),
+  },
+}
+```
 
 <!-- ### The query workflow
 
