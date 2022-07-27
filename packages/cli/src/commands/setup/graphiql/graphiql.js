@@ -7,7 +7,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal'
+import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {

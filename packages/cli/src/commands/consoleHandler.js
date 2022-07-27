@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import repl from 'repl'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal'
+import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 
 import { getPaths } from '../lib'
 

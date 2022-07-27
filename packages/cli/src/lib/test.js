@@ -13,9 +13,8 @@ import path from 'path'
 
 import './mockTelemetry'
 
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
   return {
-    ...jest.requireActual('@redwoodjs/internal'),
     generate: () => {},
   }
 })

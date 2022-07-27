@@ -3,11 +3,9 @@ import path from 'path'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
-import {
-  findScripts,
-  getWebSideDefaultBabelConfig,
-  registerApiSideBabelHook,
-} from '@redwoodjs/internal'
+import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import { findScripts } from '@redwoodjs/internal/dist/files'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'

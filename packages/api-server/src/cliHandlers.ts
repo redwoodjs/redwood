@@ -4,7 +4,8 @@ import path from 'path'
 import c from 'ansi-colors'
 import { FastifyServerOptions } from 'fastify'
 
-import { getConfig, getPaths } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import createApp from './app'
 import withApiProxy from './plugins/withApiProxy'

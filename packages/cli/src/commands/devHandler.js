@@ -3,7 +3,9 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
-import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
+import { shutdownPort } from '@redwoodjs/internal/dist/dev'
+import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'

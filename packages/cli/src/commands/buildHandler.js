@@ -7,7 +7,8 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
-import { buildApi, loadAndValidateSdls } from '@redwoodjs/internal'
+import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 

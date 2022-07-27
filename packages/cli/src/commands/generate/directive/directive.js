@@ -5,7 +5,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import prompts from 'prompts'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
