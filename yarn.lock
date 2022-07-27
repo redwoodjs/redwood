@@ -6277,7 +6277,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.5.2
     "@types/jscodeshift": 0.11.5
-    "@types/prettier": 2.6.3
+    "@types/prettier": 2.6.4
     "@types/yargs": 17.0.10
     "@vscode/ripgrep": 1.14.2
     core-js: 3.24.0
@@ -8966,10 +8966,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:2.6.3, @types/prettier@npm:^2.1.5":
-  version: 2.6.3
-  resolution: "@types/prettier@npm:2.6.3"
-  checksum: ac51e59ef24793d7e747483c417706d62408ef406962e077ff89d10f009e42ab7bf0452d9a406493fd5bc37b4f1b71f507b045d775083d6987526bc7a74f01ea
+"@types/prettier@npm:*, @types/prettier@npm:2.6.4, @types/prettier@npm:^2.1.5":
+  version: 2.6.4
+  resolution: "@types/prettier@npm:2.6.4"
+  checksum: ef791b0cae0ddbf3ae1ec92e1e2b721d01663874658aacfaf4719a85b20e6cb4e6373a91e7b932e4a26232e2fbe5be45593fd1b4a4d29dbd05bb995188b63b67
   languageName: node
   linkType: hard
 
