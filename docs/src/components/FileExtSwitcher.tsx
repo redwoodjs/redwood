@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useTabGroupChoice } from '@docusaurus/theme-common'
+import { useTabGroupChoice } from '@docusaurus/theme-common/internal'
 
 interface Props {
   path: string

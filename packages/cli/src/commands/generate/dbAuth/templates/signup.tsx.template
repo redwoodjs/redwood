@@ -23,12 +23,12 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef<HTMLInputElement>()
+  const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    usernameRef.current.focus()
+    usernameRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Record<string, string>) => {
     const response = await signUp({ ...data })
 
     if (response.message) {

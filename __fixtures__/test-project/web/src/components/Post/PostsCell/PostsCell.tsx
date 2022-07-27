@@ -22,10 +22,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No posts yet. '}
-      <Link
-        to={routes.newPost()}
-        className="rw-link"
-      >
+      <Link to={routes.newPost()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>
@@ -33,7 +30,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {

@@ -104,8 +104,8 @@ export default PostPage
 exports[`creates a page story 1`] = `
 "import HomePage from './HomePage'
 
-export const generated = () => {
-  return <HomePage />
+export const generated = (args) => {
+  return <HomePage {...args} />
 }
 
 export default { title: 'Pages/HomePage' }
@@ -115,8 +115,8 @@ export default { title: 'Pages/HomePage' }
 exports[`creates a page story 2`] = `
 "import ContactUsPage from './ContactUsPage'
 
-export const generated = () => {
-  return <ContactUsPage />
+export const generated = (args) => {
+  return <ContactUsPage {...args} />
 }
 
 export default { title: 'Pages/ContactUsPage' }
@@ -181,8 +181,8 @@ exports[`file generation 1`] = `
 Object {
   "fileContent": "import HomePage from './HomePage'
 
-export const generated = () => {
-  return <HomePage />
+export const generated = (args) => {
+  return <HomePage {...args} />
 }
 
 export default { title: 'Pages/HomePage' }
@@ -263,8 +263,8 @@ exports[`file generation with route params 1`] = `
 Object {
   "fileContent": "import PostPage from './PostPage'
 
-export const generated = () => {
-  return <PostPage id={'42'} />
+export const generated = (args) => {
+  return <PostPage id={'42'} {...args} />
 }
 
 export default { title: 'Pages/PostPage' }
@@ -347,8 +347,8 @@ exports[`generates typescript pages 1`] = `undefined`;
 exports[`generates typescript pages 2`] = `
 "import TsFilesPage from './TsFilesPage'
 
-export const generated = () => {
-  return <TsFilesPage />
+export const generated = (args) => {
+  return <TsFilesPage  {...args} />
 }
 
 export default { title: 'Pages/TsFilesPage' }

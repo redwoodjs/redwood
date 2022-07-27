@@ -17,21 +17,8 @@ jobs:
         with:
           node-version: 16
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-        shell: bash
-
-      - name: Restore yarn cache
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-1234-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
-          restore-keys: |
-            yarn-1234-
-
       - run: yarn install
+        working-directory: ./.github/actions/only_doc_changes
 
       - name: 📖 Only doc changes?
         id: only-doc-changes
