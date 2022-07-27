@@ -3140,9 +3140,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.9.1":
-  version: 2.9.1
-  resolution: "@graphql-codegen/cli@npm:2.9.1"
+"@graphql-codegen/cli@npm:2.10.0":
+  version: 2.10.0
+  resolution: "@graphql-codegen/cli@npm:2.10.0"
   dependencies:
     "@graphql-codegen/core": 2.6.0
     "@graphql-codegen/plugin-helpers": ^2.6.0
@@ -3156,11 +3156,11 @@ __metadata:
     "@graphql-tools/prisma-loader": ^7.2.2
     "@graphql-tools/url-loader": ^7.12.1
     "@graphql-tools/utils": ^8.8.0
+    "@whatwg-node/fetch": ^0.0.2
     ansi-escapes: ^4.3.1
     chalk: ^4.1.0
     chokidar: ^3.5.2
     cosmiconfig: ^7.0.0
-    cross-undici-fetch: ^0.4.11
     debounce: ^1.2.0
     detect-indent: ^6.0.0
     graphql-config: ^4.3.1
@@ -3182,7 +3182,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 1bc2cd24e4e8ae7d257d14decd931154ea98667e8eb503f76f2e38a16658ff5f594b91fb796f84bc1d10c4723f217f7a010ba70e4d20703c26069a0a83b6f2ad
+  checksum: fcc57e15ea9a6b7f459bb1d4a31b1a74e08572958342d82fd82d152407c5c9d80204018f79233dbf3c522354398799b62ea7d069835279a869d0b8970b2b3e35
   languageName: node
   linkType: hard
 
@@ -6479,7 +6479,7 @@ __metadata:
     "@babel/register": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@babel/traverse": 7.16.7
-    "@graphql-codegen/cli": 2.9.1
+    "@graphql-codegen/cli": 2.10.0
     "@graphql-codegen/core": 2.6.0
     "@graphql-codegen/schema-ast": 2.5.0
     "@graphql-codegen/typescript": 2.7.2
@@ -9813,6 +9813,21 @@ __metadata:
     webpack-dev-server:
       optional: true
   checksum: a2045c6ada073c517820424f97264a99c809e8bfdef866f5af7ceaefff44580351e9713b06d68e326469bd170111e370942825adcdac7eb242b2ee4343458a81
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@whatwg-node/fetch@npm:0.0.2"
+  dependencies:
+    abort-controller: ^3.0.0
+    busboy: ^1.6.0
+    form-data-encoder: ^1.7.1
+    formdata-node: ^4.3.1
+    node-fetch: ^2.6.7
+    undici: 5.5.1
+    web-streams-polyfill: ^3.2.0
+  checksum: c763748a6df5c64c01643ec8e8a4cf27ed08de2264c25a22c9a3b8500886a4d2c6636a241764b8823c1e9caf9a17fc42f48ba7c1e7922902918775dcbfc44620
   languageName: node
   linkType: hard
 
