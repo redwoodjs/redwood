@@ -12,7 +12,7 @@ import {
 import fastifyRawBody from 'fastify-raw-body'
 import escape from 'lodash.escape'
 
-import { findApiDistFunctions } from '@redwoodjs/internal'
+import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 
 import { requestHandler } from '../requestHandlers/awsLambdaFastify'
 

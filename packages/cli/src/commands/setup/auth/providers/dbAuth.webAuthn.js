@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import c from '../../../../lib/colors'
 

@@ -76,6 +76,38 @@ module.exports = {
         window: 'off', // Developers should use `global` instead of window. Since window is undefined in NodeJS.
       },
     },
+    // Prevent @redwoodjs/internal imports in runtime (web+api) packages
+    {
+      files: [
+        'packages/auth/src/**',
+        'packages/forms/src/**',
+        'packages/prerender/src/browserUtils/**',
+        'packages/router/src/**',
+        'packages/web/src/**',
+        'packages/api/src/**',
+        'packages/graphql-server/src/**',
+        'packages/record/src/**',
+      ],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['@redwoodjs/internal', '@redwoodjs/internal/*'],
+                message:
+                  'Do not import "@redwoodjs/internal" or subpackages in runtime modules, because it leads to MASSIVE bundle sizes',
+              },
+              {
+                group: ['@redwoodjs/structure', '@redwoodjs/structure/*'],
+                message:
+                  'Do not import "@redwoodjs/structure" or subpackages in runtime modules, because it leads to MASSIVE bundle sizes',
+              },
+            ],
+          },
+        ],
+      },
+    },
     // Entry.js rules
     {
       files: ['packages/web/src/entry/index.js'],
@@ -107,6 +139,32 @@ module.exports = {
       env: {
         es6: true,
         node: true,
+      },
+    },
+    // Prevent bad imports in Node packages - cli and api packages
+    {
+      files: [
+        'packages/api/src/**',
+        'packages/api-server/src/**',
+        'packages/cli/src/**',
+        'packages/internal/src/**',
+        'packages/prerender/src/**',
+        'packages/structure/src/**',
+        'packages/testing/src/**',
+        'packages/testing/config/**',
+        'packages/eslint-config/*.js',
+        'packages/record/src/**',
+        'packages/telemetry/src/**',
+      ],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            name: '@redwoodjs/internal',
+            message:
+              'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>, or await import',
+          },
+        ],
       },
     },
   ],
