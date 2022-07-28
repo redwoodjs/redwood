@@ -1,4 +1,3 @@
-
 import terminalLink from 'terminal-link'
 
 export const command = 'exec [name]'
