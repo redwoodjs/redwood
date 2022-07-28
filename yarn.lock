@@ -6190,7 +6190,7 @@ __metadata:
     "@simplewebauthn/typescript-types": 5.3.0
     "@supabase/supabase-js": 1.35.4
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.47
+    "@types/react": 17.0.48
     core-js: 3.24.0
     firebase: 9.9.1
     firebase-admin: 10.3.0
@@ -6412,7 +6412,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.3.0
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.47
+    "@types/react": 17.0.48
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.24.0
@@ -6571,7 +6571,7 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 2.2.0
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.47
+    "@types/react": 17.0.48
     "@types/react-dom": 17.0.17
     core-js: 3.24.0
     jest: 27.5.1
@@ -6671,7 +6671,7 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 27.5.2
     "@types/node": 16.11.45
-    "@types/react": 17.0.47
+    "@types/react": 17.0.48
     "@types/react-dom": 17.0.17
     "@types/webpack": 5.28.0
     babel-jest: 27.5.1
@@ -6698,7 +6698,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.47
+    "@types/react": 17.0.48
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.24.0
@@ -9042,14 +9042,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.47":
-  version: 17.0.47
-  resolution: "@types/react@npm:17.0.47"
+"@types/react@npm:17.0.48":
+  version: 17.0.48
+  resolution: "@types/react@npm:17.0.48"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 110ebdc1bc5524e4698ed653b86084cb78b338df7d23042752d13253eb3ed5a291462a4f93d8bdceb1237330b4b0c7e9c65bf9ab39c341a54d7da3d703f76010
+  checksum: 270210edbebdb31889f86d6f377cd143c76b62098b8822e9922454e21365d9039c36421c4c49d4408e65938b9f4de691a4d8239e933f16e7e35e1669488038af
   languageName: node
   linkType: hard
 
