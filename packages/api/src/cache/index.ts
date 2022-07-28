@@ -1,16 +1,104 @@
 import type { PrismaClient } from '@prisma/client'
 
+import type { MemcachedClient } from './clients/memcached'
+import type { RedisClient } from './clients/redis'
+
+export * from './clients/memcached'
+export * from './clients/redis'
+
+export type CacheClients = MemcachedClient | RedisClient
+
+export interface CacheClientOptions {
+  [key: string]: string
+}
 export interface CacheOptions {
   expires?: number
 }
-
 export interface CacheLatestOptions extends CacheOptions {
   model?: PrismaClient
 }
-
+export type CacheKey = string
 export type LatestQuery = Record<string, unknown>
-
 export type Cacheable = () => unknown
+
+export const createCache = (client: CacheClients) => {
+  const cache = new Cache(client)
+  return cache.init()
+}
+
+class Cache {
+  options: any[]
+  client: CacheClients
+
+  constructor(client: CacheClients, ...options: any[]) {
+    this.client = client
+    this.options = options
+  }
+
+  init() {
+    this.client?.init()
+
+    return this
+  }
+
+  async cache(key: CacheKey, input: Cacheable, options?: CacheOptions) {
+    console.info('this', this)
+    try {
+      const result = await this.client?.get(key)
+
+      // value will be `null` if cache MISS
+      if (result?.value) {
+        console.debug(`Cache HIT ${key}`)
+        return JSON.parse(result.value.toString())
+      }
+
+      let data
+
+      try {
+        console.debug(`Cache MISS ${key}`)
+        data = await input()
+        await this.client?.set(key, JSON.stringify(data), options || {})
+        return data
+      } catch (e) {
+        console.error('Error in cache SET', e)
+        return data || (await input())
+      }
+    } catch (e) {
+      console.error('Error in cache GET', e)
+      return await input()
+    }
+  }
+
+  async cacheLatest(
+    key: string,
+    query: LatestQuery,
+    options: CacheLatestOptions
+  ) {
+    let cacheKey = key
+    const { model, ...rest } = options
+    const queryFunction = Object.keys(query)[0]
+    const conditions = query[queryFunction] as object
+
+    // take the conditions from the query that's going to be cached, and only
+    // return the latest record (based on `updatedAt`) from that set of records
+    // and use it as the cache key
+    try {
+      const latest = await model.findFirst({
+        ...conditions,
+        orderBy: { updatedAt: 'desc' },
+        select: { id: true, updatedAt: true },
+      })
+      cacheKey = `${key}-${latest.id}-${latest.updatedAt.getTime()}`
+
+      return this.cache(cacheKey, () => model[queryFunction](conditions), {
+        ...rest,
+      })
+    } catch (e) {
+      console.error('Error in cacheLatest', e)
+      return model[queryFunction](conditions)
+    }
+  }
+}
 
 // Cache any data you want (as long as it can survive JSON.stringify -> JSON.parse)
 //
@@ -30,38 +118,42 @@ export type Cacheable = () => unknown
 //
 //   cache('posts', () => db.post.findMany(), { expires: 30 } )
 //
-export const cache = async (
-  key: string,
-  input: Cacheable,
-  options?: CacheOptions
-) => {
-  try {
-    const { Client } = await import('memjs')
-    const memjs = Client.create()
-    const result = await memjs.get(key)
+// If the cache function recieves only a single argument, and that argument is
+// an object, and the object has `id` and  `updatedAt` properties, it assumes
+// that you want to cache this object forever unless it changes, so it
+// automatically constructs a key for you based on the record itself
 
-    // value will be `null` if cache MISS
-    if (result.value) {
-      console.debug(`Cache HIT ${key}`)
-      return JSON.parse(result.value.toString())
-    }
+// export const cache = async (
+//   key: CacheKey,
+//   input: Cacheable,
+//   options?: CacheOptions
+// ) => {
+//   try {
+//     const client = await cacheClient()
+//     const result = await client.get(key)
 
-    let data
+//     // value will be `null` if cache MISS
+//     if (result.value) {
+//       console.debug(`Cache HIT ${key}`)
+//       return JSON.parse(result.value.toString())
+//     }
 
-    try {
-      console.debug(`Cache MISS ${key}`)
-      data = await input()
-      await memjs.set(key, JSON.stringify(data), options || {})
-      return data
-    } catch (e) {
-      console.error('Error in cache SET', e)
-      return data || (await input())
-    }
-  } catch (e) {
-    console.error('Error in cache GET', e)
-    return await input()
-  }
-}
+//     let data
+
+//     try {
+//       console.debug(`Cache MISS ${key}`)
+//       data = await input()
+//       await client.set(key, JSON.stringify(data), options || {})
+//       return data
+//     } catch (e) {
+//       console.error('Error in cache SET', e)
+//       return data || (await input())
+//     }
+//   } catch (e) {
+//     console.error('Error in cache GET', e)
+//     return await input()
+//   }
+// }
 
 // Cache a resultset based on latest record that matches a given where clause.
 // Instead of calling the function you want to cache directly, you need to give
@@ -90,30 +182,31 @@ export const cache = async (
 //
 //   db.user.findMany({ where: { isAdmin: true } })
 //
-export const cacheLatest = async (
-  key: string,
-  options: CacheLatestOptions,
-  query: LatestQuery
-) => {
-  let cacheKey = key
-  const { model, ...rest } = options
-  const queryFunction = Object.keys(query)[0]
-  const conditions = query[queryFunction] as object
 
-  // take the conditions from the query that's going to be cached, and only
-  // return the latest record (based on `updatedAt`) from that set of records
-  // and use it as the cache key
-  try {
-    const latest = await model.findFirst({
-      ...conditions,
-      orderBy: { updatedAt: 'desc' },
-      select: { id: true, updatedAt: true },
-    })
-    cacheKey = `${key}-${latest.id}-${latest.updatedAt.getTime()}`
+// export const cacheLatest = async (
+//   key: string,
+//   options: CacheLatestOptions,
+//   query: LatestQuery
+// ) => {
+//   let cacheKey = key
+//   const { model, ...rest } = options
+//   const queryFunction = Object.keys(query)[0]
+//   const conditions = query[queryFunction] as object
 
-    return cache(cacheKey, () => model[queryFunction](conditions), { ...rest })
-  } catch (e) {
-    console.error('Error in cacheLatest', e)
-    return model[queryFunction](conditions)
-  }
-}
+//   // take the conditions from the query that's going to be cached, and only
+//   // return the latest record (based on `updatedAt`) from that set of records
+//   // and use it as the cache key
+//   try {
+//     const latest = await model.findFirst({
+//       ...conditions,
+//       orderBy: { updatedAt: 'desc' },
+//       select: { id: true, updatedAt: true },
+//     })
+//     cacheKey = `${key}-${latest.id}-${latest.updatedAt.getTime()}`
+
+//     return cache(cacheKey, () => model[queryFunction](conditions), { ...rest })
+//   } catch (e) {
+//     console.error('Error in cacheLatest', e)
+//     return model[queryFunction](conditions)
+//   }
+// }
