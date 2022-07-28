@@ -31,8 +31,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install
+        working-directory: ./tasks/check
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
