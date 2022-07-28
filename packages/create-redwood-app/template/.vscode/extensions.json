@@ -8,8 +8,7 @@
     "pflannery.vscode-versionlens",
     "editorconfig.editorconfig",
     "prisma.prisma",
-    "graphql.vscode-graphql",
-    "firsttris.vscode-jest-runner"
+    "graphql.vscode-graphql"
   ],
   "unwantedRecommendations": []
 }

@@ -24,29 +24,15 @@
     },
     {
       "command": "yarn redwood test api",
-      "name": "test api",
+      "name": "Test api",
       "request": "launch",
       "type": "node-terminal"
     },
     {
       "command": "yarn redwood test web",
-      "name": "test web",
+      "name": "Test web",
       "request": "launch",
       "type": "node-terminal"
     },
-    {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Storybook Debug",
-      "breakOnLoad": true,
-      "url": "http://localhost:7910",
-      "sourceMaps": true,
-      "webRoot": "${workspaceFolder}",
-      "sourceMapPathOverrides": {
-          "webpack:///*": "${webRoot}/*",
-          "webpack:///./*": "${webRoot}/*",
-          "webpack:///src/*": "${webRoot}/*",
-          "webpack:///./~/*": "${webRoot}/node_modules/*"
-      },
   ]
 }
