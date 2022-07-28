@@ -65,7 +65,10 @@ describe('transactions', () => {
   })
 
   scenario('updates a transaction', async (scenario) => {
-    const original = await transaction({ id: scenario.transaction.one.id })
+    const original = await transaction({
+      id: scenario.transaction.one.id,
+    })
+
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
@@ -169,8 +172,8 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  identity: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+  identity: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
 }
 "
 `;
@@ -189,8 +192,8 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+  userProfiles: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
 }
 "
 `;
@@ -209,10 +212,10 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+  userProfiles: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
+  identity: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
 }
 "
 `;
@@ -278,8 +281,9 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers } from 'types/graphql'
+"import type { QueryResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const userProfiles: QueryResolvers['userProfiles'] = () => {
   return db.userProfile.findMany()
@@ -288,7 +292,9 @@ export const userProfiles: QueryResolvers['userProfiles'] = () => {
 `;
 
 exports[`in typescript mode creates a multi word service test file 1`] = `
-"import { userProfiles } from './userProfiles'
+"import type { UserProfile } from '@prisma/client'
+
+import { userProfiles } from './userProfiles'
 import type { StandardScenario } from './userProfiles.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -308,7 +314,9 @@ describe('userProfiles', () => {
 `;
 
 exports[`in typescript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
-"import {
+"import type { Transaction } from '@prisma/client'
+
+import {
   transactions,
   transaction,
   createTransaction,
@@ -348,7 +356,9 @@ describe('transactions', () => {
   })
 
   scenario('updates a transaction', async (scenario: StandardScenario) => {
-    const original = await transaction({ id: scenario.transaction.one.id })
+    const original = (await transaction({
+      id: scenario.transaction.one.id,
+    })) as Transaction
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
@@ -358,9 +368,9 @@ describe('transactions', () => {
   })
 
   scenario('deletes a transaction', async (scenario: StandardScenario) => {
-    const original = await deleteTransaction({
+    const original = (await deleteTransaction({
       id: scenario.transaction.one.id,
-    })
+    })) as Transaction
     const result = await transaction({ id: original.id })
 
     expect(result).toEqual(null)
@@ -370,8 +380,9 @@ describe('transactions', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -405,8 +416,9 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
 `;
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
@@ -440,8 +452,9 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
 `;
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -453,16 +466,17 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: UserResolvers = {
-  identity: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+export const User: Partial<UserResolvers> = {
+  identity: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -474,16 +488,17 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: UserResolvers = {
-  userProfiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+export const User: Partial<UserResolvers> = {
+  userProfiles: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import { db } from 'src/lib/db'
-import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
@@ -495,17 +510,18 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: UserResolvers = {
-  userProfiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+export const User: Partial<UserResolvers> = {
+  userProfiles: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
+  identity: (_obj, gqlArgs) =>
+    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service scenario file 1`] = `
-"import type { Prisma } from '@prisma/client'
+"import type { Prisma, User } from '@prisma/client'
+import type { ScenarioData } from '@redwoodjs/testing/api'
 
 export const standard = defineScenario<Prisma.UserCreateArgs>({
   user: {
@@ -514,12 +530,14 @@ export const standard = defineScenario<Prisma.UserCreateArgs>({
   },
 })
 
-export type StandardScenario = typeof standard
+export type StandardScenario = ScenarioData<User, 'user'>
 "
 `;
 
 exports[`in typescript mode creates a single word service test file 1`] = `
-"import { users, user, createUser, updateUser, deleteUser } from './users'
+"import type { User } from '@prisma/client'
+
+import { users, user, createUser, updateUser, deleteUser } from './users'
 import type { StandardScenario } from './users.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -550,7 +568,7 @@ describe('users', () => {
   })
 
   scenario('updates a user', async (scenario: StandardScenario) => {
-    const original = await user({ id: scenario.user.one.id })
+    const original = (await user({ id: scenario.user.one.id })) as User
     const result = await updateUser({
       id: original.id,
       input: { email: 'String12345672' },
@@ -560,7 +578,7 @@ describe('users', () => {
   })
 
   scenario('deletes a user', async (scenario: StandardScenario) => {
-    const original = await deleteUser({ id: scenario.user.one.id })
+    const original = (await deleteUser({ id: scenario.user.one.id })) as User
     const result = await user({ id: original.id })
 
     expect(result).toEqual(null)

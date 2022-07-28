@@ -3,7 +3,6 @@ import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
-  useMaskedErrors,
 } from '@graphql-yoga/common'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 
@@ -68,6 +67,15 @@ export const formatError: FormatErrorHandler = (err: any, message: string) => {
   return err
 }
 
+const convertToMultiValueHeaders = (headers: Headers) => {
+  const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
+  for (const [key, value] of headers) {
+    multiValueHeaders[key] = multiValueHeaders[key] || []
+    multiValueHeaders[key].push(value)
+  }
+  return multiValueHeaders
+}
+
 /**
  * Creates an Enveloped GraphQL Server, configured with default Redwood plugins
  *
@@ -80,10 +88,12 @@ export const formatError: FormatErrorHandler = (err: any, message: string) => {
  * ```
  */
 export const createGraphQLHandler = ({
+  healthCheckId,
   loggerConfig,
   context,
   getCurrentUser,
   onException,
+  generateGraphiQLHeader,
   extraPlugins,
   cors,
   services,
@@ -163,19 +173,26 @@ export const createGraphQLHandler = ({
     plugins.push(...extraPlugins)
   }
 
-  // Must be "last" in plugin chain so can process any data added to results and extensions
+  // Must be "last" in plugin chain, but before error masking
+  // so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
   const yoga = createServer({
+    id: healthCheckId,
     schema,
     plugins,
-    maskedErrors: false,
+    maskedErrors: {
+      formatError,
+      errorMessage: defaultError,
+    },
     logging: logger,
     graphiql: isDevEnv
       ? {
           title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
+          headers: generateGraphiQLHeader
+            ? generateGraphiQLHeader()
+            : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`,
           defaultQuery: `query Redwood {
   redwood {
     version
@@ -192,16 +209,22 @@ export const createGraphQLHandler = ({
 
   function buildRequestObject(event: APIGatewayProxyEvent) {
     const requestHeaders = new Headers()
-    for (const headerName in event.headers) {
-      const headerValue = event.headers[headerName]
-      if (headerValue) {
-        requestHeaders.append(headerName, headerValue)
+    const supportsMultiValueHeaders =
+      event.multiValueHeaders && Object.keys(event.multiValueHeaders).length > 0
+    // Avoid duplicating header values, because Yoga gets confused with CORS
+    if (supportsMultiValueHeaders) {
+      for (const headerName in event.multiValueHeaders) {
+        const headerValues = event.multiValueHeaders[headerName]
+        if (headerValues) {
+          for (const headerValue of headerValues) {
+            requestHeaders.append(headerName, headerValue)
+          }
+        }
       }
-    }
-    for (const headerName in event.multiValueHeaders) {
-      const headerValues = event.multiValueHeaders[headerName]
-      if (headerValues) {
-        for (const headerValue of headerValues) {
+    } else {
+      for (const headerName in event.headers) {
+        const headerValue = event.headers[headerName]
+        if (headerValue) {
           requestHeaders.append(headerName, headerValue)
         }
       }
@@ -270,21 +293,34 @@ export const createGraphQLHandler = ({
 
     let lambdaResponse: APIGatewayProxyResult
 
+    // @NOTE AWS types define that multiValueHeaders always exist, even as an empty object
+    // But this isn't true on Vercel, it's just undefined.
+    const supportsMultiValueHeaders =
+      event.multiValueHeaders && Object.keys(event.multiValueHeaders).length > 0
+
     try {
       const request = buildRequestObject(event)
+
       const response = await yoga.handleRequest(request, {
         event,
         requestContext: lambdaContext,
       })
-      const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
-      for (const [key, value] of response.headers) {
-        multiValueHeaders[key] = multiValueHeaders[key] || []
-        multiValueHeaders[key].push(value)
-      }
+
+      // @WARN - multivalue headers aren't supported on all deployment targets correctly
+      // Netlify ✅, Vercel 🛑, AWS ✅,...
+      // From https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+      // If you specify values for both headers and multiValueHeaders, API Gateway merges them into a single list.
+
       lambdaResponse = {
         body: await response.text(),
         statusCode: response.status,
-        multiValueHeaders,
+
+        // Only supply headers if MVH aren't supported, otherwise it causes duplicated headers
+        headers: supportsMultiValueHeaders
+          ? {}
+          : Object.fromEntries(response.headers),
+        // Gets ignored if MVH isn't supported
+        multiValueHeaders: convertToMultiValueHeaders(response.headers),
       }
     } catch (e: any) {
       logger.error(e)

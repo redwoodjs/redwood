@@ -12,7 +12,7 @@ const mappings = {
  */
 function lastWord(str) {
   const capitals = str.match(/[A-Z]/g)
-  const lastIndex = str.lastIndexOf(capitals?.slice(-1))
+  const lastIndex = str.lastIndexOf(capitals?.slice(-1)[0])
 
   return lastIndex >= 0 ? str.slice(lastIndex) : str
 }

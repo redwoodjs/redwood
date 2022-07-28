@@ -14,7 +14,7 @@ jest.mock('../util', () => {
   }
 })
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { render, waitFor, act, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
@@ -30,6 +30,7 @@ import {
   Link,
   navigate,
   back,
+  usePageLoadingContext,
 } from '../'
 import { useLocation } from '../location'
 import { useParams } from '../params'
@@ -60,24 +61,46 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   return { ...authContextValues, ...partial }
 }
 
+interface MockAuth {
+  isAuthenticated?: boolean
+  loading?: boolean
+  hasRole?: boolean
+  loadingTimeMs?: number
+}
+
 const mockUseAuth =
   (
     {
       isAuthenticated = false,
       loading = false,
       hasRole = false,
-    }: { isAuthenticated?: boolean; loading?: boolean; hasRole?: boolean } = {
+      loadingTimeMs,
+    }: MockAuth = {
       isAuthenticated: false,
       loading: false,
       hasRole: false,
     }
   ) =>
-  () =>
-    createDummyAuthContextValues({
-      loading,
-      isAuthenticated,
+  () => {
+    const [authLoading, setAuthLoading] = useState(loading)
+    const [authIsAuthenticated, setAuthIsAuthenticated] =
+      useState(isAuthenticated)
+
+    useEffect(() => {
+      if (loadingTimeMs) {
+        setTimeout(() => {
+          setAuthLoading(false)
+          setAuthIsAuthenticated(true)
+        }, loadingTimeMs)
+      }
+    }, [])
+
+    return createDummyAuthContextValues({
+      loading: authLoading,
+      isAuthenticated: authIsAuthenticated,
       hasRole: () => hasRole,
     })
+  }
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -117,6 +140,31 @@ describe('slow imports', () => {
       <>
         <h1>Location Page</h1>
         <p>{location.pathname}</p>
+      </>
+    )
+  }
+
+  const PageLoadingContextLayout = ({ children }) => {
+    const { loading } = usePageLoadingContext()
+
+    return (
+      <>
+        <h1>Page Loading Context Layout</h1>
+        {loading && <p>loading in layout...</p>}
+        {!loading && <p>done loading in layout</p>}
+        {children}
+      </>
+    )
+  }
+
+  const PageLoadingContextPage = () => {
+    const { loading } = usePageLoadingContext()
+
+    return (
+      <>
+        <h1>Page Loading Context Page</h1>
+        {loading && <p>loading in page...</p>}
+        {!loading && <p>done loading in page</p>}
       </>
     )
   }
@@ -188,6 +236,13 @@ describe('slow imports', () => {
         whileLoadingPage={ParamPagePlaceholder}
       />
       <Route path="/location" page={LocationPage} name="home" />
+      <Set wrap={PageLoadingContextLayout}>
+        <Route
+          path="/page-loading-context"
+          page={PageLoadingContextPage}
+          name="pageLoadingContext"
+        />
+      </Set>
       <Route notfound page={NotFoundPage} />
     </Router>
   )
@@ -362,6 +417,26 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
     // ...followed by the actual page
     await waitFor(() => screen.getByText('About Page'))
+  })
+
+  test('usePageLoadingContext', async () => {
+    // Had to increase this to make the test pass on Windows
+    mockDelay = 500
+
+    const screen = render(<TestRouter />)
+
+    act(() => navigate('/page-loading-context'))
+
+    await waitFor(() => screen.getByText('Page Loading Context Layout'))
+    await waitFor(() => screen.getByText('loading in layout...'))
+    await waitFor(() => screen.getByText('Page Loading Context Page'))
+
+    // This shouldn't show up, because the page shouldn't render before it's
+    // fully loaded
+    expect(screen.queryByText('loading in page...')).not.toBeInTheDocument()
+
+    await waitFor(() => screen.getByText('done loading in page'))
+    await waitFor(() => screen.getByText('done loading in layout'))
   })
 })
 
@@ -680,6 +755,51 @@ test('can display a loading screen whilst waiting for auth', async () => {
   await waitFor(() => {
     expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
+  })
+})
+
+test('can display a loading screen with a hook', async () => {
+  const HookLoader = () => {
+    const [showStill, setShowStill] = useState(false)
+
+    useEffect(() => {
+      setTimeout(() => setShowStill(true), 100)
+    }, [])
+
+    return <>{showStill ? 'Still authenticating...' : 'Authenticating...'}</>
+  }
+
+  const TestRouter = () => (
+    <Router
+      useAuth={mockUseAuth({
+        isAuthenticated: false,
+        loading: true,
+        loadingTimeMs: 700,
+      })}
+    >
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="home" whileLoadingAuth={HookLoader}>
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should not redirect
+  act(() => navigate(routes.private()))
+  await waitFor(() => {
+    expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
+    expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Private Page/)).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(screen.getByText(/Still authenticating.../)).toBeInTheDocument()
+    expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Private Page/)).not.toBeInTheDocument()
   })
 })
 

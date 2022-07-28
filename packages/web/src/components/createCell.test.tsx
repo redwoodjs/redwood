@@ -399,4 +399,33 @@ describe('createCell', () => {
 
     screen.getByText(/^Got nothing$/)
   })
+
+  test('Allows overriding variables in beforeQuery', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: `query Greet($name: String!) {
+        greet(name: $name) {
+          greeting
+        }
+      }`,
+      Success: ({ greeting }) => <p>{greeting}</p>,
+      beforeQuery: () => ({
+        variables: {
+          name: 'Bob',
+        },
+      }),
+    })
+
+    const myUseQueryHook = (_query: any, options: any) => {
+      return { data: { greeting: `Hello ${options.variables.name}!` } }
+    }
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+
+    screen.getByText(/^Hello Bob!$/)
+  })
 })

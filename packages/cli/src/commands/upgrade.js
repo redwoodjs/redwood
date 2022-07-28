@@ -278,24 +278,29 @@ const dedupeDeps = async (task, { verbose }) => {
   try {
     const yarnVersion = await getCmdMajorVersion('yarn')
     const npxVersion = await getCmdMajorVersion('npx')
-    if (yarnVersion > 1) {
-      task.skip('Deduplication is only required for <=1.x')
-      return
-    }
     let npxArgs = []
     if (npxVersion > 6) {
       npxArgs = ['--yes']
     }
 
-    await execa('npx', [...npxArgs, 'yarn-deduplicate'], {
+    const baseExecaArgsForDedupe = {
       shell: true,
       stdio: verbose ? 'inherit' : 'pipe',
       cwd: getPaths().base,
-    })
+    }
+    if (yarnVersion > 1) {
+      await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
+    } else {
+      await execa(
+        'npx',
+        [...npxArgs, 'yarn-deduplicate'],
+        baseExecaArgsForDedupe
+      )
+    }
   } catch (e) {
     console.log(c.error(e.message))
     throw new Error(
-      'Could not finish deduplication. If the project is using yarn 1.x, please run `npx yarn-deduplicate`, before continuing'
+      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing'
     )
   }
   await yarnInstall({ verbose })

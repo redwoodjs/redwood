@@ -4,13 +4,19 @@ Deployment URL: https://redwoodjs.com/docs
 
 ## Getting started
 
-Checkout this repo (redwoodjs/redwood), `cd` into this directory (`docs`)
+Checkout this repo [(redwoodjs/redwood)](https://github.com/redwoodjs/redwood), `cd` into this directory (`docs`)
 
 ```
 yarn install
 
 yarn start
 ```
+
+#### Making Changes
+
+Changes should be made in the `./docs` directory and not in the generated `./versioned_docs` or `./versioned_sidebars` directories directly.
+
+After running `yarn start`, you should be able to see your changes in the local [Canary Version](http://localhost:3000/docs/canary/index).
 
 #### Internal linking
 

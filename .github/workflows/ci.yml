@@ -17,21 +17,8 @@ jobs:
         with:
           node-version: 16
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-        shell: bash
-
-      - name: Restore yarn cache
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-1234-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
-          restore-keys: |
-            yarn-1234-
-
       - run: yarn install
+        working-directory: ./.github/actions/only_doc_changes
 
       - name: 📖 Only doc changes?
         id: only-doc-changes
@@ -84,8 +71,13 @@ jobs:
       - name: 🔎 Lint
         run: yarn lint
 
+      - name: Get number of CPU cores
+        if: always()
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
       - name: 🧪 Test
-        run: yarn test
+        run: yarn test-ci ${{ steps.cpu-cores.outputs.count }}
 
   build-lint-test-docs:
     needs: only-doc-changes
@@ -238,11 +230,6 @@ jobs:
           yarn rw test web --no-watch
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
-      - name: Run "rw type-check"
-        run: |
-          yarn rw type-check
-        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
-
       - name: Run "rw check"
         run: |
           yarn rw check
@@ -289,6 +276,16 @@ jobs:
       - name: Run "g page"
         run: |
           yarn rw g page ciTest
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "g sdl"
+        run: |
+          yarn rw g sdl userExample
+        working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
+
+      - name: Run "rw type-check"
+        run: |
+          yarn rw type-check
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
 
       - name: Throw Error | Run `rw g sdl <model>`

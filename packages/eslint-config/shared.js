@@ -64,6 +64,39 @@ module.exports = {
     ],
     'react/display-name': 'off',
     'react-hooks/exhaustive-deps': 'warn',
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        pathGroupsExcludedImportTypes: ['react'],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'builtin',
+            position: 'after',
+          },
+          {
+            pattern: '@redwoodjs/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: 'src/lib/test',
+            group: 'parent',
+            position: 'before',
+          },
+          {
+            pattern: 'src/**',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
   overrides: [
     {
@@ -89,6 +122,7 @@ module.exports = {
         '@typescript-eslint/camelcase': 'off',
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/prefer-namespace-keyword': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },

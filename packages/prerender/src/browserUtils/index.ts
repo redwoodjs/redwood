@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { useMemo } from 'react'
 
 /* Web side prerender utils, to be used on the browser */
@@ -14,8 +15,8 @@ export const useIsBrowser = () => {
   }, [])
 }
 
-export const BrowserOnly = ({ children }: { children: React.ReactNode }) => {
+export const BrowserOnly = ({ children }: { children: ReactElement }) => {
   const isBrowser = useIsBrowser()
 
-  return isBrowser && children
+  return isBrowser ? children : null
 }

@@ -49,8 +49,8 @@ export default UserProfile
 exports[`creates a multi word component story 1`] = `
 "import UserProfile from './UserProfile'
 
-export const generated = () => {
-  return <UserProfile />
+export const generated = (args) => {
+  return <UserProfile {...args} />
 }
 
 export default { title: 'Components/UserProfile' }
@@ -92,8 +92,8 @@ export default User
 exports[`creates a single word component story 1`] = `
 "import User from './User'
 
-export const generated = () => {
-  return <User />
+export const generated = (args) => {
+  return <User {...args} />
 }
 
 export default { title: 'Components/User' }
