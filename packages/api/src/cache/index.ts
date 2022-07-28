@@ -48,8 +48,8 @@ export const createCache = (cacheClient: CacheClient) => {
         console.error('Error in cache SET', e)
         return data || (await input())
       }
-    } catch (e) {
-      console.error('Error in cache GET', e)
+    } catch (e: any) {
+      console.error('Error in cache GET', e.message)
       return await input()
     }
   }
@@ -67,8 +67,8 @@ export const createCache = (cacheClient: CacheClient) => {
       const conditions = query[queryFunction] as object
 
       // take the conditions from the query that's going to be cached, and only
-      // return the latest record (based on `updatedAt`) from that set of records
-      // and use it as the cache key
+      // return the latest record (based on `updatedAt`) from that set of
+      // records and use it as the cache key
       try {
         const latest = await model.findFirst({
           ...conditions,
