@@ -717,6 +717,20 @@ And there you have it.
     <td align="center"><a href="https://github.com/necropolina"><img src="https://avatars.githubusercontent.com/u/20880695?v=4" width="100px;" alt=""/><br /><sub><b>Lina</b></sub></a></td>
     <td align="center"><a href="https://github.com/pwellner"><img src="https://avatars.githubusercontent.com/u/413096?v=4" width="100px;" alt=""/><br /><sub><b>pwellner</b></sub></a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/joconor"><img src="https://avatars.githubusercontent.com/u/116850?v=4" width="100px;" alt=""/><br /><sub><b>Jay O'Conor</b></sub></a></td>
+    <td align="center"><a href="https://github.com/standup75"><img src="https://avatars.githubusercontent.com/u/302860?v=4" width="100px;" alt=""/><br /><sub><b>Stan Duprey</b></sub></a></td>
+    <td align="center"><a href="http://nrwl.io/"><img src="https://avatars.githubusercontent.com/u/35996?v=4" width="100px;" alt=""/><br /><sub><b>Victor Savkin</b></sub></a></td>
+    <td align="center"><a href="https://owlsome.dev/"><img src="https://avatars.githubusercontent.com/u/11832884?v=4" width="100px;" alt=""/><br /><sub><b>Łukasz Sowa</b></sub></a></td>
+    <td align="center"><a href="https://linktr.ee/andrewlamyw"><img src="https://avatars.githubusercontent.com/u/11419166?v=4" width="100px;" alt=""/><br /><sub><b>Andrew Lam</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://bitsplitting.org/"><img src="https://avatars.githubusercontent.com/u/14606?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Jalkut</b></sub></a></td>
+    <td align="center"><a href="https://github.com/codekrafter"><img src="https://avatars.githubusercontent.com/u/11234290?v=4" width="100px;" alt=""/><br /><sub><b>Eli</b></sub></a></td>
+    <td align="center"><a href="https://github.com/NoahC5"><img src="https://avatars.githubusercontent.com/u/9502148?v=4" width="100px;" alt=""/><br /><sub><b>NoahC5</b></sub></a></td>
+    <td align="center"><a href="http://tommyjm.com/"><img src="https://avatars.githubusercontent.com/u/871454?v=4" width="100px;" alt=""/><br /><sub><b>Tommy Marshall</b></sub></a></td>
+    <td align="center"><a href="https://github.com/exzachlyvv"><img src="https://avatars.githubusercontent.com/u/46034847?v=4" width="100px;" alt=""/><br /><sub><b>Zachary Vander Velden</b></sub></a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
