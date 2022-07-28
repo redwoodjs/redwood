@@ -12,9 +12,9 @@ const FIXTURE_PATH = path.resolve(
 
 // Mock the dist folder from fixtures,
 // because its gitignored
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/files', () => {
   return {
-    ...jest.requireActual('@redwoodjs/internal'),
+    ...jest.requireActual('@redwoodjs/internal/dist/files'),
     findPrerenderedHtml: () => {
       return ['about.html', 'mocked.html', 'posts/new.html', 'index.html']
     },
