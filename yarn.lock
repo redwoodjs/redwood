@@ -3140,12 +3140,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.10.0":
-  version: 2.10.0
-  resolution: "@graphql-codegen/cli@npm:2.10.0"
+"@graphql-codegen/cli@npm:2.11.0":
+  version: 2.11.0
+  resolution: "@graphql-codegen/cli@npm:2.11.0"
   dependencies:
     "@graphql-codegen/core": 2.6.0
-    "@graphql-codegen/plugin-helpers": ^2.6.0
+    "@graphql-codegen/plugin-helpers": ^2.6.1
     "@graphql-tools/apollo-engine-loader": ^7.3.1
     "@graphql-tools/code-file-loader": ^7.3.0
     "@graphql-tools/git-loader": ^7.2.0
@@ -3182,7 +3182,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: fcc57e15ea9a6b7f459bb1d4a31b1a74e08572958342d82fd82d152407c5c9d80204018f79233dbf3c522354398799b62ea7d069835279a869d0b8970b2b3e35
+  checksum: 47a8a7afef6b06d7553bc8c6f902ad5c8f13e07dbd47e3f2e1663f04f38c69e08d3012b8c0014f003c594529b2705207f42968a6180b90d3091d080a8352adc6
   languageName: node
   linkType: hard
 
@@ -3200,9 +3200,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/plugin-helpers@npm:^2.5.0, @graphql-codegen/plugin-helpers@npm:^2.6.0":
-  version: 2.6.0
-  resolution: "@graphql-codegen/plugin-helpers@npm:2.6.0"
+"@graphql-codegen/plugin-helpers@npm:^2.5.0, @graphql-codegen/plugin-helpers@npm:^2.6.0, @graphql-codegen/plugin-helpers@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "@graphql-codegen/plugin-helpers@npm:2.6.1"
   dependencies:
     "@graphql-tools/utils": ^8.8.0
     change-case-all: 1.0.14
@@ -3212,7 +3212,7 @@ __metadata:
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: ef6e5298c8d3f53a04e5854a6dc7e44fd8bbc6799818fd73b884e07050f6130e8e56190389acb98da75ee94f35a21be628e4feb7fa34ad71082cb6d054ab2325
+  checksum: 148d78b83c62a0539d82923229f503295c755d8cbf7b1297654dda6baa2433dd5ae128ad2a75a10fec44aa1906b36eeb726e2ca822a7b10a9c6279120e71cb4c
   languageName: node
   linkType: hard
 
@@ -6479,7 +6479,7 @@ __metadata:
     "@babel/register": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@babel/traverse": 7.16.7
-    "@graphql-codegen/cli": 2.10.0
+    "@graphql-codegen/cli": 2.11.0
     "@graphql-codegen/core": 2.6.0
     "@graphql-codegen/schema-ast": 2.5.0
     "@graphql-codegen/typescript": 2.7.2
