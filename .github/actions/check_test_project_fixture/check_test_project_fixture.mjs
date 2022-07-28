@@ -5,9 +5,7 @@ const { labels } = JSON.parse(getInput('labels'))
 const hasFixtureOkLabel = labels.some(label => label.name === 'fixture-ok')
 
 if (hasFixtureOkLabel) {
-  console.log([
-    'Skipping check because of the "fixture-ok" label',
-  ].join('\n'))
+  console.log('Skipping check because of the "fixture-ok" label')
 } else {
   // Check if the PR rebuilds the fixture. If it does, that's enough.
   const { exec, getExecOutput } = await import('@actions/exec')
