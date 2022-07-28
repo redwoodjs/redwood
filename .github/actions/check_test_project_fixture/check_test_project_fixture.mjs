@@ -27,7 +27,7 @@ if (hasFixtureOkLabel) {
     const shouldRebuildFixture = changedFiles.some(file => file.startsWith('packages/cli/src/commands/generate') ||
       file.startsWith('packages/cli/src/commands/setup'))
 
-    if (shouldRebuildFixture) {
+    if (!shouldRebuildFixture) {
       console.log([
         '',
         "The fixture doesn't need to be rebuilt"
