@@ -37,7 +37,7 @@
     "@clerk/types": "2.20.0",
     "@nhost/hasura-auth-js": "1.4.0",
     "@nhost/nhost-js": "1.4.7",
-    "@okta/okta-auth-js": "6.7.2",
+    "@okta/okta-auth-js": "6.7.3",
     "@simplewebauthn/browser": "5.3.0",
     "@simplewebauthn/typescript-types": "5.3.0",
     "@supabase/supabase-js": "1.35.4",
