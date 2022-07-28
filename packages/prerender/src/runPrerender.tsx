@@ -6,7 +6,8 @@ import React from 'react'
 import cheerio from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
-import { getPaths, registerWebSideBabelHook } from '@redwoodjs/internal'
+import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
