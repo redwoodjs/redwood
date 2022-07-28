@@ -1,23 +1,31 @@
+import { createClient } from 'redis'
+import type { RedisClientOptions } from 'redis'
+
+interface SetOptions {
+  EX?: number
+}
+
 export class RedisClient {
-  constructor() {
-    // this.serversStr = serversStr
-    // this.options = options
+  client
+
+  constructor(options: RedisClientOptions) {
+    this.client = createClient(options)
+    this.client.connect()
   }
 
-  async init() {
-    // const { Client } = await import('memjs')
-    // this.client = Client.create(this.serversStr, this.options)
+  async get(key: string) {
+    const result = await this.client.get(key)
+
+    return result ? JSON.parse(result) : null
   }
 
-  get() {
-    //   return this.client?.get(key)
-  }
+  set(key: string, value: unknown, options: { expires?: number | undefined }) {
+    const setOptions: SetOptions = {}
 
-  set() {
-    //   key: string,
-    //   value: string | Buffer,
-    //   options: { expires?: number | undefined }
-    // ) {
-    //   return this.client?.set(key, value, options)
+    if (options.expires) {
+      setOptions.EX = options.expires
+    }
+
+    return this.client.set(key, JSON.stringify(value), setOptions)
   }
 }
