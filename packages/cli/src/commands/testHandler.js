@@ -33,7 +33,11 @@ function isJestConfigFile(sides) {
   for (let side of sides) {
     try {
       if (sides.includes(side)) {
-        if (!fs.existsSync(path.join(side, 'jest.config.js'))) {
+        const jestConfigExists =
+          fs.existsSync(path.join(side, 'jest.config.js')) ||
+          fs.existsSync(path.join(side, 'jest.config.ts'))
+
+        if (!jestConfigExists) {
           console.error(
             c.error(
               `\nError: Missing Jest config file ${side}/jest.config.js` +
