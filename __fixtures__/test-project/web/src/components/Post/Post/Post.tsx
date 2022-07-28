@@ -93,6 +93,10 @@ const Post = ({ post }: PostProps) => {
               <td>{post.body}</td>
             </tr>
             <tr>
+              <th>Author id</th>
+              <td>{post.authorId}</td>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(post.createdAt)}</td>
             </tr>

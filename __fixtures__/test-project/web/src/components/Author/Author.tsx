@@ -1,4 +1,3 @@
-
 interface Props {
   author: {
     email: string
@@ -6,9 +5,12 @@ interface Props {
   }
 }
 
-
 const Author = ({ author }: Props) => {
-  return <span>{author.fullName} ({author.email})</span>;
+  return (
+    <span>
+      {author.fullName} ({author.email})
+    </span>
+  )
 }
 
 export default Author

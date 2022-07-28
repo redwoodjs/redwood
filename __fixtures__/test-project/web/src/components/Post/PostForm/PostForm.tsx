@@ -21,9 +21,6 @@ interface PostFormProps {
 const PostForm = (props: PostFormProps) => {
   const onSubmit = (data: Record<string, any>) => {
     props.onSave(data as Post, props?.post?.id)
-    
-    
-  
   }
 
   return (
@@ -79,15 +76,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Author id
         </Label>
-        
-          <NumberField
-            name="authorId"
-            defaultValue={props.post?.authorId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <NumberField
+          name="authorId"
+          defaultValue={props.post?.authorId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="authorId" className="rw-field-error" />
 

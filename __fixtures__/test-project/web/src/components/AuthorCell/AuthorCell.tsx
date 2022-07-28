@@ -1,7 +1,8 @@
 import type { FindAuthorQuery, FindAuthorQueryVariables } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import Author from "src/components/Author";
+import Author from 'src/components/Author'
 
 export const QUERY = gql`
   query FindAuthorQuery($id: Int!) {
@@ -19,13 +20,13 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({
   error,
 }: CellFailureProps<FindAuthorQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = (
-  {
-    author,
-  }: CellSuccessProps<FindAuthorQuery, FindAuthorQueryVariables>
-) => <span className="author-cell">
-  <Author author={author} />
-</span>
+export const Success = ({
+  author,
+}: CellSuccessProps<FindAuthorQuery, FindAuthorQueryVariables>) => (
+  <span className="author-cell">
+    <Author author={author} />
+  </span>
+)

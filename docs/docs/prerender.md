@@ -96,7 +96,7 @@ export function routeParameters(route) {
 
 In these routeHooks scripts you have full access to your database using prisma and all your services, should you need it. You use `import { db } from '$api/src/lib/db'` to get access to the `db` object.
 
-With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. If it's just three pages like this, it's no problem. But this easily and quickly explodes to thousands of pages, which will make your build process really slow, so please be careful with how many pages you prerender.
+With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. A word of warning - if it's just a few pages like this, it's no problem - but this can easily and quickly explode to thousands of pages, which could slow down your builds and deployments significantly (and make them costly, depending on how you're billed).
 
 ## Prerender Utils
 

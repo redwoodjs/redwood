@@ -1,7 +1,8 @@
-
 import { FindBlogPostQuery } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
+
+import Author from 'src/components/Author'
 
 interface Props extends FindBlogPostQuery {}
 
@@ -16,7 +17,8 @@ const BlogPost = ({ blogPost }: Props) => {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
-              }).format(new Date(blogPost.createdAt))}
+              }).format(new Date(blogPost.createdAt))}{' '}
+              - By: <Author author={blogPost.author} />
             </p>
             <h2 className="mt-2 text-xl font-semibold">
               <Link
