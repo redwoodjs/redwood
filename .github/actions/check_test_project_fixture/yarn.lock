@@ -39,9 +39,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"should_rebuild_fixture@workspace:.":
+"check_test_project_fixture@workspace:.":
   version: 0.0.0-use.local
-  resolution: "should_rebuild_fixture@workspace:."
+  resolution: "check_test_project_fixture@workspace:."
   dependencies:
     "@actions/core": 1.9.0
     "@actions/exec": 1.1.1
