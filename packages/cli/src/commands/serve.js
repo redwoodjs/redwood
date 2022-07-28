@@ -11,8 +11,8 @@ import {
   webServerHandler,
   bothServerHandler,
 } from '@redwoodjs/api-server'
-import { getPaths } from '@redwoodjs/internal'
 
+import { getPaths } from '../lib'
 import c from '../lib/colors'
 
 export const command = 'serve [side]'
