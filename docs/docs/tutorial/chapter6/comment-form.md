@@ -362,21 +362,31 @@ export default { title: 'Components/CommentForm' }
 ```tsx title="web/src/components/CommentForm/CommentForm.stories.tsx"
 import CommentForm from './CommentForm'
 
+// highlight-start
+import type {
+  CreateCommentMutation,
+  CreateCommentMutationVariables,
+} from 'types/graphql'
+// highlight-end
+  
 export const generated = () => {
   // highlight-start
-  mockGraphQLMutation('CreateCommentMutation', (variables, { ctx }) => {
-    const id = Math.floor(Math.random() * 1000)
-    ctx.delay(1000)
+  mockGraphQLMutation<CreateCommentMutation, CreateCommentMutationVariables>(
+    'CreateCommentMutation',
+    (variables, { ctx }) => {
+      const id = Math.floor(Math.random() * 1000)
+      ctx.delay(1000)
 
-    return {
-      createComment: {
-        id,
-        name: variables.input.name,
-        body: variables.input.body,
-        createdAt: new Date().toISOString(),
-      },
+      return {
+        createComment: {
+          id,
+          name: variables.input.name,
+          body: variables.input.body,
+          createdAt: new Date().toISOString(),
+        },
+      }
     }
-  })
+  )
   // highlight-end
 
   return <CommentForm />

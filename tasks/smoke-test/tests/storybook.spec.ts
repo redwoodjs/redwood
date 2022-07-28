@@ -103,19 +103,18 @@ storybookTest(
     const profilePageStoryContent = fs.readFileSync(profileStoryPath, 'utf-8')
 
     if (!profilePageStoryContent.includes('mockCurrentUser')) {
-      fs.writeFileSync(
-        profileStoryPath,
-        profilePageStoryContent.replace(
-          'export const generated = () => {',
-          `export const generated = () => {
-        mockCurrentUser({
-        email: 'ba@zinga.com',
-        id: 55,
-        roles: 'ADMIN',
-      })
-    `
-        )
+      const contentWithMockCurrentUser = profilePageStoryContent.replace(
+        'export const generated = (args) => {',
+        `export const generated = (args) => {
+          mockCurrentUser({
+          email: 'ba@zinga.com',
+          id: 55,
+          roles: 'ADMIN',
+        })
+      `
       )
+
+      fs.writeFileSync(profileStoryPath, contentWithMockCurrentUser)
     }
 
     // We do this to make sure playwright doesn't bring the server down

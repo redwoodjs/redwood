@@ -2,7 +2,7 @@ global.__dirname = __dirname
 
 import '../../../../lib/mockTelemetry'
 
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/build/babel/api', () => {
   return {
     registerApiSideBabelHook: () => null,
   }
@@ -12,6 +12,9 @@ jest.mock('../../../../lib', () => ({
     api: { lib: '', functions: '' },
   }),
   existsAnyExtensionSync: () => false,
+}))
+jest.mock('../../../../lib/project', () => ({
+  isTypeScriptProject: () => false,
 }))
 
 jest.mock('listr')
