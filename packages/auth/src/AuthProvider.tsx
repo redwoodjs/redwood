@@ -172,13 +172,9 @@ export const AuthProvider = (props: AuthProviderProps) => {
       props.config as SupportedAuthConfig
     )
 
-    // This timeout lets default tests that only test that a component renders
-    // pass
-    setTimeout(() => {
-      if (isMounted.current) {
-        setRwClient(client)
-      }
-    })
+    if (isMounted.current) {
+      setRwClient(client)
+    }
 
     return client
   }, [props.client, props.type, props.config])
