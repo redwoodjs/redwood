@@ -33,9 +33,9 @@ __metadata:
   linkType: hard
 
 "@actions/io@npm:^1.0.1":
-  version: 1.1.1
-  resolution: "@actions/io@npm:1.1.1"
-  checksum: 592a35c8c75164fdf3621b660c78fbbd29c74d98d2a08f6f3fc663b8c533ecc0c1344bc1cd3c15fe4e5c28c896c8acb0c31e49821b63bc8ecc6e583c2893f4c5
+  version: 1.1.2
+  resolution: "@actions/io@npm:1.1.2"
+  checksum: 61c871bbee1cf58f57917d9bb2cf6bb7ea4dc40de3f65c7fb4ec619ceff57fc98f56be9cca2d476b09e7a96e1cba0d88cd125c4f690d384b9483935186f256c1
   languageName: node
   linkType: hard
 
