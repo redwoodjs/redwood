@@ -8,7 +8,7 @@ import { findScripts } from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
-import { configureBabel, runScript } from '../lib/exec'
+import { configureBabel, runScriptFunction } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'exec [name]'
@@ -80,9 +80,9 @@ export const handler = async (args) => {
       title: 'Running script',
       task: async () => {
         try {
-          await runScript({
+          await runScriptFunction({
             path: scriptPath,
-            name: 'default',
+            functionName: 'default',
             args: { args: scriptArgs },
           })
         } catch (e) {

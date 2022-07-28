@@ -10,7 +10,7 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
-import { configureBabel, runScript } from '../lib/exec'
+import { configureBabel, runScriptFunction } from '../lib/exec'
 
 class PathParamError extends Error {}
 
@@ -50,23 +50,23 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
-function getRenderDataFilePath(routeFilePath) {
-  const renderDataFilePathTs = routeFilePath.replace(
+function getRouteHooksFilePath(routeFilePath) {
+  const routeHooksFilePathTs = routeFilePath.replace(
     /\.(js|tsx)$/,
-    '.renderData.ts'
+    '.routeHooks.ts'
   )
 
-  if (fs.existsSync(renderDataFilePathTs)) {
-    return renderDataFilePathTs
+  if (fs.existsSync(routeHooksFilePathTs)) {
+    return routeHooksFilePathTs
   }
 
-  const renderDataFilePathJs = routeFilePath.replace(
+  const routeHooksFilePathJs = routeFilePath.replace(
     /\.(js|tsx)$/,
-    '.renderData.js'
+    '.routeHooks.js'
   )
 
-  if (fs.existsSync(renderDataFilePathJs)) {
-    return renderDataFilePathJs
+  if (fs.existsSync(routeHooksFilePathJs)) {
+    return routeHooksFilePathJs
   }
 
   return undefined
@@ -74,7 +74,7 @@ function getRenderDataFilePath(routeFilePath) {
 
 /**
  * Takes a route with a path like /blog-post/{id:Int}
- * Reads path parameters from BlogPostPage.renderData.js and returns a list of
+ * Reads path parameters from BlogPostPage.routeHooks.js and returns a list of
  * routes with the path parameter placeholders (like {id:Int}) replaced by
  * actual values
  *
@@ -99,19 +99,27 @@ function getRenderDataFilePath(routeFilePath) {
  *   isNotFound: false,
  *   filePath: '/Users/tobbe/tmp/rw-prerender-cell-ts/web/src/pages/BlogPostPage/BlogPostPage.tsx'
  * }
+ *
+ * When returning from this function, `path` in the above example will have
+ * been replaced by an actual url, like /blog-post/15
  */
 async function expandRouteParameters(route) {
-  const renderDataFilePath = getRenderDataFilePath(route.filePath)
+  const routeHooksFilePath = getRouteHooksFilePath(route.filePath)
 
-  if (!renderDataFilePath) {
+  if (!routeHooksFilePath) {
     return [route]
   }
 
   try {
-    const routeParameters = await runScript({
-      path: renderDataFilePath,
-      name: 'routeParameters',
-      args: route.name,
+    const routeParameters = await runScriptFunction({
+      path: routeHooksFilePath,
+      functionName: 'routeParameters',
+      args: {
+        name: route.name,
+        path: route.path,
+        routePath: route.routePath,
+        filePath: route.filePath,
+      },
     })
 
     if (routeParameters) {
@@ -315,7 +323,7 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     if (e instanceof PathParamError) {
       console.log(
         c.info(
-          "- You most likely need to add or update a *.routeData.{js,ts} file next to the Page you're trying to prerender"
+          "- You most likely need to add or update a *.routeHooks.{js,ts} file next to the Page you're trying to prerender"
         )
       )
     } else {

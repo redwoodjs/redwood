@@ -286,21 +286,21 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     )
     fs.writeFileSync(pathRoutes, resultsRoutesWaterfall)
 
-    const blogPostRenderData = `import { db } from '$api/src/lib/db'
+    const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
 
       export async function routeParameters() {
         return (await db.post.findMany()).map((post) => ({ id: post.id }))
       }
       `.replaceAll(/ {6}/g, '')
-    const blogPostRenderDataPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.renderData.ts`
-    fs.writeFileSync(blogPostRenderDataPath, blogPostRenderData)
+    const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
+    fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
 
-    const waterfallRenderData = `export async function routeParameters() {
+    const waterfallRouteHooks = `export async function routeParameters() {
         return [{ id: 2 }]
       }
       `.replaceAll(/ {6}/g, '')
-    const waterfallRenderDataPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.renderData.ts`
-    fs.writeFileSync(waterfallRenderDataPath, waterfallRenderData)
+    const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
+    fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
   }
 
   return new Listr(

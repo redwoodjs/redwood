@@ -104,7 +104,7 @@ module.exports = {
           {
             group: ['$api/*'],
             message:
-              'Importing from $api is only supported in *.renderData.{js,ts} files',
+              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
           },
         ],
       },
@@ -164,7 +164,7 @@ module.exports = {
       },
     },
     {
-      files: ['web/src/**/*.renderData.{js,ts}'],
+      files: ['web/src/**/*.routeHooks.{js,ts}'],
       rules: { 'no-restricted-imports': 'off' },
     },
   ],
