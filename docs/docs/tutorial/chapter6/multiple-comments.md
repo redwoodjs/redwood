@@ -118,7 +118,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ comments }: CellSuccessProps) => {
+export const Success = ({ comments }: CellSuccessProps<CommentsQuery>) => {
   return (
   // highlight-start
     <>
