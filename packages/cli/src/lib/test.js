@@ -13,11 +13,16 @@ import path from 'path'
 
 import './mockTelemetry'
 
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
+  return {
+    generate: () => {},
+  }
+})
+
+jest.mock('@redwoodjs/internal/dist/paths', () => {
   const path = require('path')
   return {
-    ...jest.requireActual('@redwoodjs/internal'),
-    generate: () => {},
+    ...jest.requireActual('@redwoodjs/internal/dist/paths'),
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
@@ -55,6 +60,11 @@ jest.mock('@redwoodjs/internal', () => {
     },
   }
 })
+
+jest.mock('./project', () => ({
+  isTypeScriptProject: () => false,
+  sides: () => ['web', 'api'],
+}))
 
 global.__prettierPath = path.resolve(
   __dirname,

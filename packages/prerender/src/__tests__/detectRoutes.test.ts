@@ -1,6 +1,6 @@
 import { detectPrerenderRoutes } from '../detection'
 
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/paths', () => {
   return {
     getPaths: jest.fn(() => {
       return {

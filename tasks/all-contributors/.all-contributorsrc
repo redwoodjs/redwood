@@ -3331,6 +3331,96 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "joconor",
+      "name": "Jay O'Conor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/116850?v=4",
+      "profile": "https://github.com/joconor",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "standup75",
+      "name": "Stan Duprey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/302860?v=4",
+      "profile": "https://github.com/standup75",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vsavkin",
+      "name": "Victor Savkin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35996?v=4",
+      "profile": "http://nrwl.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Morishiri",
+      "name": "Łukasz Sowa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11832884?v=4",
+      "profile": "https://owlsome.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "andrewlamyw",
+      "name": "Andrew Lam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11419166?v=4",
+      "profile": "https://linktr.ee/andrewlamyw",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "danielpunkass",
+      "name": "Daniel Jalkut",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14606?v=4",
+      "profile": "http://bitsplitting.org/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "codekrafter",
+      "name": "Eli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11234290?v=4",
+      "profile": "https://github.com/codekrafter",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "NoahC5",
+      "name": "NoahC5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9502148?v=4",
+      "profile": "https://github.com/NoahC5",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tommymarshall",
+      "name": "Tommy Marshall",
+      "avatar_url": "https://avatars.githubusercontent.com/u/871454?v=4",
+      "profile": "http://tommyjm.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "exzachlyvv",
+      "name": "Zachary Vander Velden",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46034847?v=4",
+      "profile": "https://github.com/exzachlyvv",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
