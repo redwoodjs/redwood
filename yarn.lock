@@ -16862,17 +16862,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.9":
-  version: 1.15.0
-  resolution: "follow-redirects@npm:1.15.0"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: 351dea908f3fd4492066584c52dfd2a748e7b7ff14926e3f44e1db1ef2f98d9bf778dc00808b4559bb3d4894f6613567eafdb62962577c0e1bbe3bdc1b282269
-  languageName: node
-  linkType: hard
-
-"follow-redirects@npm:^1.14.0":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.9":
   version: 1.15.1
   resolution: "follow-redirects@npm:1.15.1"
   peerDependenciesMeta:
