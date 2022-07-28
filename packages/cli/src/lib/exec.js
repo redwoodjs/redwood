@@ -1,10 +1,8 @@
 import path from 'path'
 
-import {
-  getPaths,
-  getWebSideDefaultBabelConfig,
-  registerApiSideBabelHook,
-} from '@redwoodjs/internal'
+import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 export async function runScriptFunction({
   path: scriptPath,

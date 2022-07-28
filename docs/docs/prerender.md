@@ -68,7 +68,11 @@ Let's say you have a route like this
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
 
-To be able to prerender this route you need to let Redwood know what `id`s to use. You do this by creating a `BlogPostPage.renderData.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects with the path param name as the key, and the value for the parameter as the object value. A single Page component can be used for different routes. The name of the current route will be passed as an argument to `routeParameters` so you can return different route parameters depending on what route it is, if you need to. An example will hopefully make all this clearer.
+To be able to prerender this route you need to let Redwood know what `id`s to use. Why? Because when we are prerendering your pages - at build time - we don't know the full URL i.e. `site.com/blog-post/1` vs `site.com/blog-post/3`. It's up to you to decide whether you want to prerender _all_ of the ids, or if there are too many to do that, if you want to only prerender the most popular or most likely ones.
+
+You do this by creating a `BlogPostPage.routeHooks.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects with the path param name as the key, and the value for the parameter as the object value.
+
+A single Page component can be used for different routes too! Metadata about the current route will be passed as an argument to `routeParameters` so you can return different route parameters depending on what route it is, if you need to. An example will hopefully make all this clearer.
 
 For the example route above, all you need is this:
 
@@ -78,11 +82,11 @@ export function routeParameters() {
 }
 ```
 
-Of, if you wanted to get fancy
+Or, if you wanted to get fancy
 
 ```js title="BlogPostPage.renderData.js"
-export function routeParameters(routeName) {
-  if (routeName === 'odd') {
+export function routeParameters(route) {
+  if (route.name === 'odd') {
     return [{ id: 1 }, { id: 3 }, { id: 5 }]
   } else {
     return [{ id: 2 }, { id: 4 }, { id: 6 }]
@@ -90,7 +94,7 @@ export function routeParameters(routeName) {
 }
 ```
 
-In these renderData scripts you have full access to your database using prisma and all your services, should you need it. You use `import { db } from '$api/src/lib/db'` to get access to the `db` object.
+In these routeHooks scripts you have full access to your database using prisma and all your services, should you need it. You use `import { db } from '$api/src/lib/db'` to get access to the `db` object.
 
 With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. If it's just three pages like this, it's no problem. But this easily and quickly explodes to thousands of pages, which will make your build process really slow, so please be careful with how many pages you prerender.
 
