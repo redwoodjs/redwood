@@ -9,21 +9,20 @@ export class MemcachedClient {
   constructor(serversStr?: string, options?: ClientOptions | ServerOptions) {
     this.serversStr = serversStr
     this.options = options
-  }
-
-  init() {
     this.client = Client.create(this.serversStr, this.options)
   }
 
-  get(key: string) {
-    return this.client?.get(key)
+  async get(key: string) {
+    const result = await this.client?.get(key)
+
+    if (result?.value) {
+      return JSON.parse(result.value.toString())
+    } else {
+      return result?.value
+    }
   }
 
-  set(
-    key: string,
-    value: string | Buffer,
-    options: { expires?: number | undefined }
-  ) {
-    return this.client?.set(key, value, options)
+  set(key: string, value: unknown, options: { expires?: number | undefined }) {
+    return this.client?.set(key, JSON.stringify(value), options)
   }
 }
