@@ -6,7 +6,6 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -17,17 +16,18 @@ import {
   graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { isTypeScriptProject } from '../../../lib/project'
 
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
 const OUTPUT_PATHS = {
   auth: path.join(
     getPaths().api.lib,
-    getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
+    isTypeScriptProject() ? 'auth.ts' : 'auth.js'
   ),
   function: path.join(
     getPaths().api.functions,
-    getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
+    isTypeScriptProject() ? 'auth.ts' : 'auth.js'
   ),
 }
 
@@ -220,7 +220,7 @@ export const files = ({ provider, webAuthn }) => {
             OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
           const content = fs.readFileSync(templateFile).toString()
           files = Object.assign(files, {
-            [outputPath]: getProject().isTypeScriptProject
+            [outputPath]: isTypeScriptProject()
               ? content
               : transformTSToJS(outputPath, content),
           })
@@ -233,7 +233,7 @@ export const files = ({ provider, webAuthn }) => {
   if (Object.keys(files).length === 0) {
     const content = fs.readFileSync(templates.base[0]).toString()
     files = {
-      [OUTPUT_PATHS.auth]: getProject().isTypeScriptProject
+      [OUTPUT_PATHS.auth]: isTypeScriptProject()
         ? content
         : transformTSToJS(templates.base[0], content),
     }

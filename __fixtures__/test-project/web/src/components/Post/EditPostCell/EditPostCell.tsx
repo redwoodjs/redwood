@@ -2,7 +2,6 @@ import type {
   Post,
   EditPostById,
   UpdatePostInput,
-  UpdatePostMutationVariables,
 } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -18,6 +17,7 @@ export const QUERY = gql`
       id
       title
       body
+      authorId
       createdAt
     }
   }
@@ -28,6 +28,7 @@ const UPDATE_POST_MUTATION = gql`
       id
       title
       body
+      authorId
       createdAt
     }
   }
@@ -50,7 +51,7 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
     },
   })
 
-  const onSave = (input: UpdatePostInput, id: Post['id']) => {
+  const onSave = (input: UpdatePostInput, id: EditPostById['post']['id']) => {
     updatePost({ variables: { id, input } })
   }
 

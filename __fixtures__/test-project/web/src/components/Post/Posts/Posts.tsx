@@ -1,5 +1,5 @@
 import humanize from 'humanize-string'
-import type { Post, DeletePostMutationVariables } from 'types/graphql'
+import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
@@ -54,11 +54,7 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface PostsListProps {
-  posts: Post[]
-}
-
-const PostsList = ({ posts }: PostsListProps) => {
+const PostsList = ({ posts }: FindPosts) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -87,6 +83,7 @@ const PostsList = ({ posts }: PostsListProps) => {
             <th>Id</th>
             <th>Title</th>
             <th>Body</th>
+            <th>Author id</th>
             <th>Created at</th>
             <th>&nbsp;</th>
           </tr>
@@ -97,6 +94,7 @@ const PostsList = ({ posts }: PostsListProps) => {
               <td>{truncate(post.id)}</td>
               <td>{truncate(post.title)}</td>
               <td>{truncate(post.body)}</td>
+              <td>{truncate(post.authorId)}</td>
               <td>{timeTag(post.createdAt)}</td>
               <td>
                 <nav className="rw-table-actions">
