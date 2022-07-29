@@ -60,7 +60,7 @@ yarn rw deploy vercel
 
 ```shell
 # Build command for AWS Lambdas using the https://serverless.com framework
-yarn rw deploy aws serverless --side api
+yarn rw deploy serverless --side api
 ```
 
 ```shell
