@@ -3,6 +3,9 @@ import type { ComponentProps, JSXElementConstructor } from 'react'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
+import { getOperationName } from '../graphql'
+
+import { useCellCacheContext } from './CellCacheContext'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
@@ -266,30 +269,57 @@ export function createCell<
   Success,
   displayName = 'Cell',
 }: CreateCellProps<CellProps, CellVariables>): React.FC<CellProps> {
-  /**
-   * If we're prerendering, render the Cell's Loading component and exit early.
-   */
-  if (global.__REDWOOD__PRERENDERING) {
-    /**
-     * Apollo Client's props aren't available here, so 'any'.
-     */
-    return (props) => <Loading {...(props as any)} />
-  }
-
   function NamedCell(props: React.PropsWithChildren<CellProps>) {
     /**
      * Right now, Cells don't render `children`.
      */
     const { children: _, ...variables } = props
-
     const options = beforeQuery(variables as CellProps)
+    const query = typeof QUERY === 'function' ? QUERY(options) : QUERY
 
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
-    const { error, loading, data, ...queryRest } = useQuery(
-      typeof QUERY === 'function' ? QUERY(options) : QUERY,
-      options
-    )
+    // eslint-disable-next-line prefer-const
+    let { error, loading, data, ...queryRest } = useQuery(query, options)
+
+    if (global.__REDWOOD__PRERENDERING) {
+      // __REDWOOD__PRERENDERING will always either be set, or not set. So
+      // rules-of-hooks are still respected, even though we wrap this in an if
+      // statement
+      /* eslint-disable-next-line react-hooks/rules-of-hooks */
+      const { queryCache } = useCellCacheContext()
+      const operationName = getOperationName(query)
+
+      let cacheKey
+
+      if (operationName) {
+        cacheKey = operationName + '_' + JSON.stringify(variables)
+      } else {
+        const cellName = displayName === 'Cell' ? 'the cell' : displayName
+
+        throw new Error(
+          `The gql query in ${cellName} is missing an operation name. ` +
+            'Something like FindBlogPostQuery in ' +
+            '`query FindBlogPostQuery($id: Int!)`'
+        )
+      }
+
+      const queryInfo = queryCache[cacheKey]
+
+      if (queryInfo?.hasFetched) {
+        loading = false
+        data = queryInfo.data
+        // All of the gql client's props aren't available when pre-rendering,
+        // so using `any` here
+        queryRest = { variables } as any
+      } else {
+        queryCache[cacheKey] ||= {
+          query,
+          variables: options.variables,
+          hasFetched: false,
+        }
+      }
+    }
 
     if (error) {
       if (Failure) {

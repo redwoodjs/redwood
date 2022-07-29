@@ -10,16 +10,120 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
+import { configureBabel, runScriptFunction } from '../lib/exec'
+
+class PathParamError extends Error {}
+
+const mapRouterPathToHtml = (routerPath) => {
+  if (routerPath === '/') {
+    return 'web/dist/index.html'
+  } else {
+    return `web/dist${routerPath}.html`
+  }
+}
+
+function getRouteHooksFilePath(routeFilePath) {
+  const routeHooksFilePathTs = routeFilePath.replace(
+    /\.(js|tsx)$/,
+    '.routeHooks.ts'
+  )
+
+  if (fs.existsSync(routeHooksFilePathTs)) {
+    return routeHooksFilePathTs
+  }
+
+  const routeHooksFilePathJs = routeFilePath.replace(
+    /\.(js|tsx)$/,
+    '.routeHooks.js'
+  )
+
+  if (fs.existsSync(routeHooksFilePathJs)) {
+    return routeHooksFilePathJs
+  }
+
+  return undefined
+}
+
+/**
+ * Takes a route with a path like /blog-post/{id:Int}
+ * Reads path parameters from BlogPostPage.routeHooks.js and returns a list of
+ * routes with the path parameter placeholders (like {id:Int}) replaced by
+ * actual values
+ *
+ * So for values like [{ id: 1 }, { id: 2 }, { id: 3 }] (and, again, a route
+ * path like /blog-post/{id:Int}) it will return three routes with the paths
+ * /blog-post/1
+ * /blog-post/2
+ * /blog-post/3
+ *
+ * The paths will be strings. Parsing those path parameters to the correct
+ * datatype according to the type notation ("Int" in the example above) will
+ * be handled by the normal router functions, just like when rendering in a
+ * client browser
+ *
+ * Example `route` parameter
+ * {
+ *   name: 'blogPost',
+ *   path: '/blog-post/{id:Int}',
+ *   routePath: '/blog-post/{id:Int}',
+ *   hasParams: true,
+ *   id: 'file:///Users/tobbe/tmp/rw-prerender-cell-ts/web/src/Routes.tsx 1959',
+ *   isNotFound: false,
+ *   filePath: '/Users/tobbe/tmp/rw-prerender-cell-ts/web/src/pages/BlogPostPage/BlogPostPage.tsx'
+ * }
+ *
+ * When returning from this function, `path` in the above example will have
+ * been replaced by an actual url, like /blog-post/15
+ */
+async function expandRouteParameters(route) {
+  const routeHooksFilePath = getRouteHooksFilePath(route.filePath)
+
+  if (!routeHooksFilePath) {
+    return [route]
+  }
+
+  try {
+    const routeParameters = await runScriptFunction({
+      path: routeHooksFilePath,
+      functionName: 'routeParameters',
+      args: {
+        name: route.name,
+        path: route.path,
+        routePath: route.routePath,
+        filePath: route.filePath,
+      },
+    })
+
+    if (routeParameters) {
+      return routeParameters.map((pathParamValues) => {
+        let newPath = route.path
+
+        Object.entries(pathParamValues).forEach(([paramName, paramValue]) => {
+          newPath = newPath.replace(
+            new RegExp(`{${paramName}:?[^}]*}`),
+            paramValue
+          )
+        })
+
+        return { ...route, path: newPath }
+      })
+    }
+  } catch {
+    return [route]
+  }
+
+  return [route]
+}
 
 // This is used directly in build.js for nested ListrTasks
 export const getTasks = async (dryrun, routerPathFilter = null) => {
-  const prerenderRoutes = detectPrerenderRoutes()
+  const prerenderRoutes = detectPrerenderRoutes().filter((route) => route.path)
   const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
   if (prerenderRoutes.length === 0) {
     console.log('\nSkipping prerender...')
     console.log(
       c.warning(
-        'You have not marked any routes as `prerender` in `Routes.{js,tsx}` \n'
+        'You have not marked any routes with a path as `prerender` in `Routes.{js,tsx}` \n'
       )
     )
 
@@ -35,8 +139,14 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     // TODO: Run this automatically at this point.
   }
 
-  const listrTasks = prerenderRoutes
-    .filter((route) => route.path)
+  configureBabel()
+
+  const expandedRouteParameters = await Promise.all(
+    prerenderRoutes.map((route) => expandRouteParameters(route))
+  )
+
+  const listrTasks = expandedRouteParameters
+    .flat()
     .flatMap((routeToPrerender) => {
       // Filter out routes that don't match the supplied routePathFilter
       if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {
@@ -45,13 +155,31 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
       const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
+      // queryCache will be filled with the queries from all the Cells we
+      // encounter while prerendering, and the result from executing those
+      // queries.
+      // We have this cache here because we can potentially reuse result data
+      // between different pages. I.e. if the same query, with the same
+      // variables is encountered twice, we'd only have to execute it once and
+      // then just reuse the cached result the second time.
+      const queryCache = {}
+
       return [
         {
           title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
           task: async () => {
+            if (/\{.*}/.test(routeToPrerender.path)) {
+              throw new PathParamError(
+                'You did not provide values for all of the route ' +
+                  'parameters. Please supply parameters via a ' +
+                  '*.routeHooks.{js,ts} file'
+              )
+            }
+
             try {
               const prerenderedHtml = await runPrerender({
-                routerPath: routeToPrerender.path,
+                queryCache,
+                renderPath: routeToPrerender.path,
               })
 
               if (!dryrun) {
@@ -146,14 +274,6 @@ const diagnosticCheck = () => {
   }
 }
 
-const mapRouterPathToHtml = (routerPath) => {
-  if (routerPath === '/') {
-    return 'web/dist/index.html'
-  } else {
-    return `web/dist${routerPath}.html`
-  }
-}
-
 export const handler = async ({ path: routerPath, dryRun, verbose }) => {
   const listrTasks = await getTasks(dryRun, routerPath)
 
@@ -172,16 +292,25 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     await diagnosticCheck()
 
     console.log(c.warning('Tips:'))
-    console.log(
-      c.info(
-        `- This could mean that a library you're using does not support SSR.`
+
+    if (e instanceof PathParamError) {
+      console.log(
+        c.info(
+          "- You most likely need to add or update a *.routeHooks.{js,ts} file next to the Page you're trying to prerender"
+        )
       )
-    )
-    console.log(
-      c.info(
-        '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
+    } else {
+      console.log(
+        c.info(
+          `- This could mean that a library you're using does not support SSR.`
+        )
       )
-    )
+      console.log(
+        c.info(
+          '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
+        )
+      )
+    }
 
     console.log()
 
