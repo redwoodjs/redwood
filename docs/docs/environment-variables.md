@@ -6,7 +6,7 @@ description: How to use environment variables on the api and web sides
 
 You can provide environment variables to each side of your Redwood app in different ways, depending on each Side's target, and whether you're in development or production.
 
-> Right now, Redwood apps have two fixed Sides, API and Web, that have each have a single target, nodejs and browser respectively.
+> Right now, Redwood apps have two fixed Sides, API and Web, that each have a single target, nodejs and browser respectively.
 
 ## Generally
 
