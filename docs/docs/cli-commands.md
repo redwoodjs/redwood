@@ -416,7 +416,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 
 ### TypeScript generators
 
-If your project is configured for TypeScript (see [TypeScript docs](typescript.md)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
+If your project is configured for TypeScript (see the [TypeScript docs](typescript/index)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
 
 **Undoing a Generator with a Destroyer**
 
@@ -1814,7 +1814,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup tsconfig
 
-Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript.md).
+Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript/index).
 
 ```
 yarn redwood setup tsconfig
@@ -1892,7 +1892,7 @@ yarn redwood type-check [side]
 
 **Usage**
 
-See [Running Type Checks](typescript.md#running-type-checks).
+See [Running Type Checks](typescript/introduction.md#running-type-checks).
 
 ## serve
 

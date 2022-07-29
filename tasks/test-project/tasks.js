@@ -258,7 +258,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer',
+            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss',
             [],
             getExecaOptions(outputPath)
           ),
@@ -307,7 +307,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
   const addDbAuth = async () => {
     await execa(
-      'yarn rw setup auth dbAuth --force',
+      'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       getExecaOptions(outputPath)
     )
@@ -316,7 +316,11 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
     }
 
-    await execa('yarn rw g dbAuth', [], getExecaOptions(outputPath))
+    await execa(
+      'yarn rw g dbAuth --no-webauthn',
+      [],
+      getExecaOptions(outputPath)
+    )
 
     // add dbAuth User model
     const { user } = await import('./codemods/models.js')

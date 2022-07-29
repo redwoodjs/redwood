@@ -650,8 +650,8 @@ Let's replace that scenario data with something more like the real data our app 
 
 ```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
-  // highlight-start
   comment: {
+    // highlight-start
     jane: {
       data: {
         name: 'Jane Doe',
@@ -676,8 +676,8 @@ export const standard = defineScenario({
         }
       }
     }
+    // highlight-end
   }
-  // highlight-end
 })
 ```
 
@@ -688,8 +688,8 @@ export const standard = defineScenario({
 import type { Prisma } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.CommentCreateArgs>({
-  // highlight-start
   comment: {
+    // highlight-start
     jane: {
       data: {
         name: 'Jane Doe',
@@ -714,8 +714,8 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
         }
       }
     }
+    // highlight-end
   }
-  // highlight-end
 })
 ```
 

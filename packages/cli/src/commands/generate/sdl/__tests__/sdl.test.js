@@ -32,7 +32,7 @@ import prompts from 'prompts'
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
