@@ -4,7 +4,8 @@ import path from 'path'
 import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 import Fastify from 'fastify'
 
-import { getConfig, getPaths } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { FastifySideConfigFn } from './types'
 
