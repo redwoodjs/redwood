@@ -70,7 +70,9 @@ Let's say you have a route like this
 
 To be able to prerender this route you need to let Redwood know what `id`s to use. Why? Because when we are prerendering your pages - at build time - we don't know the full URL i.e. `site.com/blog-post/1` vs `site.com/blog-post/3`. It's up to you to decide whether you want to prerender _all_ of the ids, or if there are too many to do that, if you want to only prerender the most popular or most likely ones.
 
-You do this by creating a `BlogPostPage.routeHooks.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects with the path param name as the key, and the value for the parameter as the object value.
+You do this by creating a `BlogPostPage.routeHooks.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects that specify the route parameters that should be used for prerendering. 
+
+So for example, for the route `/blogPost/{Id:Int}` - you would return `[ {id: 55}, {id: 77} ]` which would tell Redwood to prerender `/blogPost/55` and `/blogPost/77`
 
 A single Page component can be used for different routes too! Metadata about the current route will be passed as an argument to `routeParameters` so you can return different route parameters depending on what route it is, if you need to. An example will hopefully make all this clearer.
 
