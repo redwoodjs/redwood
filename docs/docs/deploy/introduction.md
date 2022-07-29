@@ -89,8 +89,9 @@ datasource db {
 The `url` setting above accesses the database connection string via an environment variable, `DATABASE_URL`. Using env vars is the recommended method for both ease of development process as well as security best practices.
 
 Whenever you make changes to your `schema.prisma`, you must run the following command:
+
 ```shell
-$ yarn rw prisma migrate dev # creates and applies a new Prisma DB migration
+yarn rw prisma migrate dev # creates and applies a new Prisma DB migration
 ```
 
 > Note: when setting your production DATABASE_URL env var, be sure to also set any connection-pooling or sslmode parameters. For example, if using Supabase Postgres with pooling, then you would use a connection string similar to `postgresql://postgres:mydb.supabase.co:6432/postgres?sslmode=require&pgbouncer=true` that uses a specific 6432 port, informs Prisma to consider pgBouncer, and also to use SSL. See: [Connection Pooling](connection-pooling.md) for more info.
