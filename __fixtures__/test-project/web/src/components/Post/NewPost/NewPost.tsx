@@ -26,10 +26,7 @@ const NewPost = () => {
   })
 
   const onSave = (input: CreatePostInput) => {
-    const castInput = Object.assign(input, {
-      authorId: parseInt(input.authorId),
-    })
-    createPost({ variables: { input: castInput } })
+    createPost({ variables: { input } })
   }
 
   return (
