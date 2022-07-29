@@ -88,6 +88,10 @@ Or, if you wanted to get fancy
 
 ```js title="BlogPostPage.renderData.js"
 export function routeParameters(route) {
+
+// If we are reusing the BlogPostPage in multiple routes, e.g. /odd/{id} and /blogPost/{id}
+// we can choose what parameters to pass to each route during prerendering
+// highlight-next-line
   if (route.name === 'odd') {
     return [{ id: 1 }, { id: 3 }, { id: 5 }]
   } else {
