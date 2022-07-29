@@ -677,7 +677,7 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```tsx {11-14} title="api/src/functions/graphql.ts"
+```tsx {10-13} title="api/src/functions/graphql.ts"
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
 // ...
