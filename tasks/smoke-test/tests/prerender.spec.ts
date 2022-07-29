@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import {
-  test,
   BrowserContext,
   expect,
   PlaywrightTestArgs,
@@ -128,7 +127,11 @@ rwServeTest(
   }
 )
 
-test('prerender with broken gql query', async () => {
+// We don't really need a server running here. So we could just use `test()`
+// straight from playwright. But we do need to have the project built. And
+// `rwServeTest()` does that. If we try to add project building to this test as
+// well we will build twice, and we don't want that. Hence we use rwServeTest.
+rwServeTest('prerender with broken gql query', async () => {
   const projectPath = process.env.PROJECT_PATH || ''
 
   const cellBasePath = path.join(
