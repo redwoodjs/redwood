@@ -646,7 +646,7 @@ mockGraphQLQuery('getArticle', (variables, { ctx }) => {
 
 You could then test that you show a proper error message in your component:
 
-```jsx {4,8-10,21,27} title="web/src/components/Article/Article.js"
+```jsx {2,6-8,18-20,24} title="web/src/components/Article/Article.js"
 const Article = ({ id }) => {
   const { data, error } = useQuery(GET_ARTICLE, {
     variables: { id },
@@ -1433,7 +1433,7 @@ scenario('incomplete', 'retrieves only incomplete users', async (scenario) => {
 })
 ```
 
-The name of the scenario you want to use is passed as the *first* argument to `scenario()` and now those will be the only records present in the database at the time the test to run. Assume that the `users()` function contains some logic to determine whether a user record is "complete" or not. If you pass `{ complete: false }` then it should return only those that it determines are not complete, which in this case includes users who have not entered their name yet. We seed the database with the scenario where one user is complete and one is not, then check that the return of `users()` only contains the user without the name.
+The name of the scenario you want to use is passed as the *first* argument to `scenario()` and now those will be the only records present in the database at the time the test is run. Assume that the `users()` function contains some logic to determine whether a user record is "complete" or not. If you pass `{ complete: false }` then it should return only those that it determines are not complete, which in this case includes users who have not entered their name yet. We seed the database with the scenario where one user is complete and one is not, then check that the return of `users()` only contains the user without the name.
 
 #### Multiple Models
 
