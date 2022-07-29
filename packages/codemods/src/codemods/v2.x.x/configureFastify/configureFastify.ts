@@ -1,4 +1,4 @@
-import type { FileInfo, API, Identifier, MemberExpression } from 'jscodeshift'
+import type { FileInfo, API } from 'jscodeshift'
 
 export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift

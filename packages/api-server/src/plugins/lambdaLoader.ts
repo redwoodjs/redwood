@@ -5,7 +5,7 @@ import type { Handler } from 'aws-lambda'
 import { FastifyReply, FastifyRequest, RequestGenericInterface } from 'fastify'
 import escape from 'lodash.escape'
 
-import { findApiDistFunctions } from '@redwoodjs/internal'
+import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 
 import { requestHandler } from '../requestHandlers/awsLambdaFastify'
 
