@@ -1,9 +1,4 @@
-import type {
-  ${singularPascalName},
-  Edit${singularPascalName}ById,
-  Update${singularPascalName}Input,
-  Update${singularPascalName}MutationVariables
-} from 'types/graphql'
+import type { Edit${singularPascalName}ById, Update${singularPascalName}Input } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
@@ -49,10 +44,9 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
 
   const onSave = (
     input: Update${singularPascalName}Input,
-    id: ${singularPascalName}['id']
+    id: Edit${singularPascalName}ById['${singularCamelName}']['id']
   ) => {
-    <% if (intForeignKeys.length) { %>const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
-    update${singularPascalName}({ variables: { id, <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
+    update${singularPascalName}({ variables: { id, input } })
   }
 
   return (
