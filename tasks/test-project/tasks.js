@@ -289,7 +289,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
 
       export async function routeParameters() {
-        return (await db.post.findMany()).map((post) => ({ id: post.id }))
+        return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
       }
       `.replaceAll(/ {6}/g, '')
     const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
@@ -399,7 +399,11 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   }
 
   const addDbAuth = async () => {
-    await execa('yarn rw setup auth dbAuth --force --no-webauthn', [], execaOptions)
+    await execa(
+      'yarn rw setup auth dbAuth --force --no-webauthn',
+      [],
+      execaOptions
+    )
 
     if (linkWithLatestFwBuild) {
       await execa('yarn rwfw project:copy', [], execaOptions)

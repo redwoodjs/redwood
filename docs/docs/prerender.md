@@ -70,7 +70,7 @@ Let's say you have a route like this
 
 To be able to prerender this route you need to let Redwood know what `id`s to use. Why? Because when we are prerendering your pages - at build time - we don't know the full URL i.e. `site.com/blog-post/1` vs `site.com/blog-post/3`. It's up to you to decide whether you want to prerender _all_ of the ids, or if there are too many to do that, if you want to only prerender the most popular or most likely ones.
 
-You do this by creating a `BlogPostPage.routeHooks.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects that specify the route parameters that should be used for prerendering. 
+You do this by creating a `BlogPostPage.routeHooks.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects that specify the route parameters that should be used for prerendering.
 
 So for example, for the route `/blogPost/{Id:Int}` - you would return `[ {id: 55}, {id: 77} ]` which would tell Redwood to prerender `/blogPost/55` and `/blogPost/77`
 
@@ -78,7 +78,7 @@ A single Page component can be used for different routes too! Metadata about the
 
 For the example route above, all you need is this:
 
-```js title="BlogPostPage.renderData.js"
+```js title="BlogPostPage.routeHooks.js"
 export function routeParameters() {
   return [{ id: 1 }, { id: 2 }, { id: 3 }]
 }
@@ -86,12 +86,13 @@ export function routeParameters() {
 
 Or, if you wanted to get fancy
 
-```js title="BlogPostPage.renderData.js"
+```js title="BlogPostPage.routeHooks.js"
 export function routeParameters(route) {
 
-// If we are reusing the BlogPostPage in multiple routes, e.g. /odd/{id} and /blogPost/{id}
-// we can choose what parameters to pass to each route during prerendering
-// highlight-next-line
+  // If we are reusing the BlogPostPage in multiple routes, e.g. /odd/{id} and
+  // /blogPost/{id} we can choose what parameters to pass to each route during
+  // prerendering
+  // highlight-next-line
   if (route.name === 'odd') {
     return [{ id: 1 }, { id: 3 }, { id: 5 }]
   } else {
@@ -100,9 +101,19 @@ export function routeParameters(route) {
 }
 ```
 
+With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. A word of warning - if it's just a few pages like this, it's no problem - but this can easily and quickly explode to thousands of pages, which could slow down your builds and deployments significantly (and make them costly, depending on how you're billed).
+
 In these routeHooks scripts you have full access to your database using prisma and all your services, should you need it. You use `import { db } from '$api/src/lib/db'` to get access to the `db` object.
 
-With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. A word of warning - if it's just a few pages like this, it's no problem - but this can easily and quickly explode to thousands of pages, which could slow down your builds and deployments significantly (and make them costly, depending on how you're billed).
+```js title="BlogPostPage.routeHooks.js"
+import { db } from '$api/src/lib/db'
+
+export async function routeParameters() {
+  return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
+}
+```
+
+Take note of the special syntax for the import, with a dollar-sign in front of api. This lets our tooling (typescript and babel) know that you want to break out of the web side the page is in to access code on the api side. This only works in the routeHook scripts (and scripts in the root /scripts directory).
 
 ## Prerender Utils
 

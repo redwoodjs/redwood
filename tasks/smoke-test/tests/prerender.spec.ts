@@ -181,7 +181,7 @@ rwServeTest(
     await pageWithoutJs.goto(`http://localhost:${port}/waterfall/2`)
 
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch(/<header>.*<h2.*>[\w\s?!]+<\/h2><\/header>/)
+    expect(mainContent).toMatch(/<header.*<h2.*>[\w\s?!]+<\/h2><\/header>/)
     // Test that nested cell content is also rendered
     expect(mainContent).toMatch('class="author-cell"')
     expect(mainContent).toMatch(/user.(one|two)@example.com/)
