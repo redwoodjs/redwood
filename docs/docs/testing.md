@@ -597,7 +597,7 @@ export default Article
 
 Redwood provides the test function `mockGraphQLQuery()` for providing the result of a given named GraphQL. In this case our query is named `getArticle` and we can mock that in our test as follows:
 
-```jsx {8-16,20} title="web/src/components/Article/Article.test.js"
+```jsx {6-14,18} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
