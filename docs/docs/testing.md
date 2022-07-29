@@ -478,7 +478,7 @@ it('renders a link with a name', () => {
 
 But what if we wanted to check the `href` of the link itself to be sure it's correct? In that case we can capture the `screen.getByRole()` return and run expectations on that as well (the `forEach()` loop has been removed here for simplicity):
 
-```jsx {2,6-8}
+```jsx {1,6-8}
 import { routes } from '@redwoodjs/router'
 
 it('renders a link with a name', () => {
