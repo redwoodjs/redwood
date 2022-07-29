@@ -46,7 +46,7 @@ By adding environment variables to this array, they'll be available to Web in pr
 
 Note: if someone inspects your site's source, _they could see your `REDWOOD_ENV_SECRET_API_KEY` in plain text._ This is a limitation of delivering static JS and HTML to the browser.
 
-#### Option 2: Prefixing with REDWOOD*ENV*
+#### Option 2: Prefixing with REDWOOD\_ENV\_
 
 In `.env`, if you prefix your environment variables with `REDWOOD_ENV_`, they'll be available via `process.env.REDWOOD_ENV_MY_VAR_NAME`, and will be dynamically replaced at built-time.
 
