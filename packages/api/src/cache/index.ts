@@ -1,10 +1,11 @@
 import type { PrismaClient } from '@prisma/client'
 
+import type { Logger } from '../logger'
+
 export * from './clients/memcached'
 export * from './clients/redis'
 
 export interface CacheClient {
-  init(): void
   get(key: string): Promise<{ value: Buffer; flags: Buffer }>
   set(key: string, value: unknown, options: object): Promise<boolean>
 }
@@ -19,7 +20,10 @@ export type CacheKey = string
 export type LatestQuery = Record<string, unknown>
 export type Cacheable = () => unknown
 
-export const createCache = (cacheClient: CacheClient) => {
+export const createCache = (
+  cacheClient: CacheClient,
+  logger: Logger | undefined
+) => {
   const client = cacheClient
 
   const cache = async (
@@ -31,13 +35,13 @@ export const createCache = (cacheClient: CacheClient) => {
       const result = await client.get(key)
 
       if (result) {
-        console.debug(`Cache HIT ${key}`)
+        logger?.debug(`[Cache] HIT key '${key}'`)
         return result
       }
     } catch (e: any) {
       // error occurred, just return the input function as if the cache didn't
       // even exist
-      console.error(`Error in cache GET for key '${key}'`, e.message)
+      logger?.error(`[Cache] Error GET '${key}': ${e.message}`)
       return await input()
     }
 
@@ -45,12 +49,14 @@ export const createCache = (cacheClient: CacheClient) => {
     let data
 
     try {
-      console.debug(`Cache MISS ${key}`)
       data = await input()
       await client.set(key, data, options || {})
+      logger?.debug(
+        `[Cache] MISS '${key}', SET ${JSON.stringify(data).length} bytes`
+      )
       return data
-    } catch (e) {
-      console.error(`Error in cache SET for key '${key}'`, e)
+    } catch (e: any) {
+      logger?.error(`[Cache] Error SET '${key}': ${e.message}`)
       return data || (await input())
     }
   }
@@ -80,7 +86,7 @@ export const createCache = (cacheClient: CacheClient) => {
         ...rest,
       })
     } catch (e) {
-      console.error('Error in cacheLatest', e)
+      logger?.error('Error in cacheLatest', e)
       return model[queryFunction](conditions)
     }
   }
