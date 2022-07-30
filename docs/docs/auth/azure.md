@@ -53,7 +53,8 @@ const azureActiveDirectoryClient = new PublicClientApplication({
     clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
     authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
     redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-    postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
+    postLogoutRedirectUri:
+      process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
   },
 })
 
@@ -131,9 +132,10 @@ const azureActiveDirectoryClient = new PublicClientApplication({
       clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
       authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
       redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-      postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
+      postLogoutRedirectUri:
+        process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
       // highlight-next-line
-      knownAuthorities:[process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
+      knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
     },
   })
 ```
