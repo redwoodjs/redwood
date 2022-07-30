@@ -2,9 +2,9 @@ import { Client } from 'memjs'
 import type { Client as ClientType, ClientOptions, ServerOptions } from 'memjs'
 
 export class MemcachedClient {
-  client: ClientType | undefined
+  client: ClientType
 
-  constructor(serversStr?: string, options?: ClientOptions | ServerOptions) {
+  constructor(serversStr: string, options?: ClientOptions & ServerOptions) {
     this.client = Client.create(serversStr, options)
   }
 
