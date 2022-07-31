@@ -14,19 +14,12 @@ import { renderHook } from '@testing-library/react-hooks/dom'
 
 import { MockProviders } from './MockProviders'
 
-interface CustomRenderOptions extends RenderOptions {
-  redwoodProviders?: boolean
-}
-
 export const customRender = (
   ui: React.ReactElement,
-  options: CustomRenderOptions = {}
+  options: RenderOptions = {}
 ): RenderResult => {
   return render(ui, {
-    wrapper:
-      options.redwoodProviders === false
-        ? options.wrapper
-        : (props) => <MockProviders {...props} />,
+    wrapper: (props) => <MockProviders {...props} />,
     ...options,
   })
 }

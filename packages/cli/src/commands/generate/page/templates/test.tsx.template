@@ -1,14 +1,12 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen, expectToRender } from '@redwoodjs/testing/web'
 
 import ${pascalName}Page from './${pascalName}Page'
 
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+// Improve this test with help from the Redwood Testing Doc:
+// https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 describe('${pascalName}Page', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<${pascalName}Page ${propValueParam}/>)
-    }).not.toThrow()
+  it('renders successfully', async () => {
+    await expectToRender(<${pascalName}Page ${propValueParam}/>)
   })
 })

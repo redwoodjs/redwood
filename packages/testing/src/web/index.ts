@@ -6,6 +6,7 @@ export {
   customRender as render,
   customRenderHook as renderHook,
 } from './customRender'
+export { expectToRender } from './customExpect'
 
 export { MockProviders } from './MockProviders'
 
