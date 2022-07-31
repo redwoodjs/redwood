@@ -16,8 +16,6 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
-import { getTasks as getPrerenderTasks } from './prerenderHandler'
-
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
@@ -52,19 +50,22 @@ export const handler = async ({
     return
   }
 
+  const prerenderRoutes = prerender ? detectPrerenderRoutes() : []
+  const shouldGeneratePrismaClient =
+    prisma && (side.includes('api') || prerenderRoutes.length > 0)
+
   const tasks = [
-    side.includes('api') &&
-      prisma && {
-        title: 'Generating Prisma Client...',
-        task: async () => {
-          const { cmd, args } = generatePrismaCommand(rwjsPaths.api.dbSchema)
-          return execa(cmd, args, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.api.base,
-          })
-        },
+    shouldGeneratePrismaClient && {
+      title: 'Generating Prisma Client...',
+      task: () => {
+        const { cmd, args } = generatePrismaCommand(rwjsPaths.api.dbSchema)
+        return execa(cmd, args, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd: rwjsPaths.api.base,
+        })
       },
+    },
     side.includes('api') && {
       title: 'Verifying graphql schema...',
       task: loadAndValidateSdls,
@@ -117,16 +118,18 @@ export const handler = async ({
       prerender && {
         title: 'Prerendering Web...',
         task: async () => {
-          const prerenderRoutes = detectPrerenderRoutes()
           if (prerenderRoutes.length === 0) {
             return `You have not marked any "prerender" in your ${terminalLink(
               'Routes',
               'file://' + rwjsPaths.web.routes
             )}.`
           }
-          return new Listr(await getPrerenderTasks(), {
-            renderer: verbose && VerboseRenderer,
-            concurrent: true, // Re-use prerender tasks, but run them in parallel to speed things up
+          // Running a separate process here, otherwise it wouldn't pick up the
+          // generated Prisma Client
+          await execa('yarn rw prerender', {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            cwd: rwjsPaths.web.base,
           })
         },
       },
