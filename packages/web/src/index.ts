@@ -13,6 +13,8 @@ export {
   useMutation,
 } from './components/GraphQLHooksProvider'
 
+export * from './components/CellCacheContext'
+
 export {
   createCell,
   CellProps,
@@ -21,6 +23,8 @@ export {
   CellSuccessProps,
   CellSuccessData,
 } from './components/createCell'
+
+export * from './graphql'
 
 export * from './components/RedwoodProvider'
 

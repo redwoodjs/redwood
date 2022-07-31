@@ -8,16 +8,17 @@ import decamelize from 'decamelize'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
+import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
   getPaths as getRedwoodPaths,
-  getConfig as getRedwoodConfig,
   resolveFile,
-} from '@redwoodjs/internal'
+} from '@redwoodjs/internal/dist/paths'
 
 import c from './colors'
 import { pluralize, singularize } from './rwPluralize'
@@ -183,7 +184,7 @@ export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
  * This wraps the core version of getPaths into something that catches the exception
  * and displays a helpful error message.
  */
-export const getPaths = () => {
+export const _getPaths = () => {
   try {
     return getRedwoodPaths()
   } catch (e) {
@@ -191,6 +192,7 @@ export const getPaths = () => {
     process.exit(1)
   }
 }
+export const getPaths = memoize(_getPaths)
 
 export const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))

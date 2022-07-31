@@ -22,13 +22,18 @@ describe('posts', () => {
     expect(result).toEqual(scenario.post.one)
   })
 
-  scenario('creates a post', async () => {
+  scenario('creates a post', async (scenario: StandardScenario) => {
     const result = await createPost({
-      input: { title: 'String', body: 'String' },
+      input: {
+        title: 'String',
+        body: 'String',
+        authorId: scenario.post.two.authorId,
+      },
     })
 
     expect(result.title).toEqual('String')
     expect(result.body).toEqual('String')
+    expect(result.authorId).toEqual(scenario.post.two.authorId)
   })
 
   scenario('updates a post', async (scenario: StandardScenario) => {

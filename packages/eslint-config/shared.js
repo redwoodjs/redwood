@@ -97,6 +97,18 @@ module.exports = {
         },
       },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['$api/*'],
+            message:
+              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
+          },
+        ],
+      },
+    ],
   },
   overrides: [
     {
@@ -151,6 +163,10 @@ module.exports = {
         commonjs: true,
         jest: true,
       },
+    },
+    {
+      files: ['web/src/**/*.routeHooks.{js,ts}'],
+      rules: { 'no-restricted-imports': 'off' },
     },
   ],
 }

@@ -2,7 +2,7 @@ import { spawn } from 'child_process'
 import os from 'os'
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const APP_ROOT = getPaths().base
 

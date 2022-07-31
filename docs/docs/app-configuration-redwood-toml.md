@@ -108,12 +108,24 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 | `serverConfig` | Path to the `server.config.js` file | `"./api/server.config.js"` |
 | `target`       | Target for the api side             | `"node"`                   |
 
-### Fastify Server Configuration
+### Configure Fastify
 
-You can configure the Fastify Server used by the dev server in `api/server.config.js`.
+You can configure the Fastify Server used by Redwood, in `api/server.config.js`.
+
 For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
-> This configuration doesn't apply in a serverless deploy
+
+:::info Where do these configurations apply?
+ This configuration does **not** apply in a serverless deploy. Typically when you deploy to serverless providers like Netlify or Vercel, your web side is served from a CDN - and your functions are invoked directly - so none of these settings will be applied.
+
+ But they do, when you run:
+ - `yarn rw dev` (the dev server) - the configuration will be picked up and used for the API side. Note that the web side is served by the Webpack dev server, in development.
+ - `yarn rw serve` (serving api and web sides in production mode) - the configuration will be applied to the Fastify instance serving static files from `./web/dist` and your api functions in `./api/dist/functions`
+
+ Or if you're running them separately:
+ - `yarn rw serve api` (serving just the api side) - configuration will only apply to the Fastify instance serving your api side
+ - `yarn rw serve web` (serving just the web side) - configuration will only apply to the Fastify instance that serves your static files in `./web/dist/`
+:::
 
 Using [redwood.toml's env var interpolation](#using-environment-variables-in-redwoodtoml), you can configure a different `server.config.js` based on your deployment environment:
 
@@ -122,6 +134,122 @@ Using [redwood.toml's env var interpolation](#using-environment-variables-in-red
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
+### Register Custom Fastify Plug-ins
+
+You can also register Fastify plugins for the API and Web sides in the `configureFastify` function.
+
+This function has access to the Fastify instance and options, such as the side (web or api) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
+
+:::warning Reminder
+ This configuration does not apply in a serverless deploy.
+:::
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastify = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+  }
+
+  if (options.side === 'web') {
+    fastify.log.info({ custom: { options } }, 'Configuring web side')
+  }
+
+  return fastify
+}
+```
+
+##### How to Configure a Fastify Plug-in for the API Side
+
+Suppose you want to compress payloads and also rate limit your RedwoodJS api.
+
+You can leverage the Fastify ecosystem plug-ins:
+
+* [@fastify/compress](https://github.com/fastify/fastify-compress)
+* [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit)
+
+And then configure them in your API side.
+
+Here, we setup compression to handle all requests (global), compress responses only if larger than 1K, and to prefer the `deflate` method over `gzip`.
+only allow one IP address to make 100 requests in a five minute window.
+
+Of course, these are just examples and please see the plugin documentaiton for the settings that best meet your needs.
+
+:::important
+You will need to install any custom plug-in packages to your project's `api` workspace.
+
+To do this you run `yarn workspace api add @fastify/rate-limit @fastify/compress`
+:::
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastify = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+
+    await fastify.register(import('@fastify/compress'), {
+      global: true,
+      threshold: 1_024,
+      encodings: ['deflate', 'gzip'],
+    })
+
+    await fastify.register(import('@fastify/rate-limit'), {
+      max: 100,
+      timeWindow: '5 minutes',
+    })
+  }
+
+
+  return fastify
+}
+```
+
+:::important
+You will need to install any custom plug-in packages to your project's `api` workspace.
+:::
+
+##### How to Configure a Fastify Plug-in for the Web Side
+
+If you are running your web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
+
+* [@fastify/etag](https://github.com/fastify/fastify-etag)
+
+:::note
+If you run `yarn rw serve` because the same Fastify instance handles the api and web side, this plugin will apply to the API side as well.
+:::
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastify = async (fastify, options) => {
+  if (options.side === 'web') {
+    fastify.log.info({ custom: { options } }, 'Configuring web side')
+
+    fastify.register(import('@fastify/etag'))
+  }
+
+  return fastify
+}
+```
+
+:::important
+You will need to install any custom plug-in packages to your project's `api` workspace.
+
+This may seem counter-intuitive, since you are configuring the `web` side, but the `api-server` gets configured in your project's `api` and that is what server web assets.
+:::
+
+
+#### Troubleshooting Custom Fastify Configuration
+
+There are a few important considerations to be made when configuring Fastify.
+
+:::important Troubleshooting
+
+ * If running `yarn rw serve`, only register the plugin once either in `web` or in `api`. Registering the same pugin in both side will raise an error saying that it has already been registered.
+
+ Remember that `yarn rw serve` is  single Fastify instance that server both functions and web assets, so registering the plugin in a single side applies it to that instance.
+
+ * TODO log level
+:::
 ## [browser]
 
 ```toml title="redwood.toml"
