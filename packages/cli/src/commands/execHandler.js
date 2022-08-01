@@ -9,21 +9,9 @@ import { findScripts } from '@redwoodjs/internal/dist/files'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { runScriptFunction } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
-const runScript = async (scriptPath, scriptArgs) => {
-  const script = await import(scriptPath)
-  await script.default({ args: scriptArgs })
-
-  try {
-    const { db } = await import(path.join(getPaths().api.lib, 'db'))
-    db.$disconnect()
-  } catch (e) {
-    // silence
-  }
-
-  return
-}
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
   findScripts().forEach((scriptPath) => {
@@ -122,7 +110,11 @@ export const handler = async (args) => {
       title: 'Running script',
       task: async () => {
         try {
-          await runScript(scriptPath, scriptArgs)
+          await runScriptFunction({
+            path: scriptPath,
+            functionName: 'default',
+            args: { args: scriptArgs },
+          })
         } catch (e) {
           console.error(c.error(`Error in script: ${e.message}`))
         }

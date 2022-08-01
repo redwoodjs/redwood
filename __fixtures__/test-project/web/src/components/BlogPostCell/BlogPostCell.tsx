@@ -13,6 +13,10 @@ export const QUERY = gql`
       id
       title
       body
+      author {
+        email
+        fullName
+      }
       createdAt
     }
   }

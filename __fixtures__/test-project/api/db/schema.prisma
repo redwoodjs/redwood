@@ -39,6 +39,8 @@ model Contact {
   /// The message of the contact.
   message   String
   /// When the contact was created.
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
 }
 
@@ -49,8 +51,10 @@ model User {
   /// The user's email address.
   email               String    @unique
   hashedPassword      String
+  fullName            String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
   roles               String?
+  posts               Post[]
 }

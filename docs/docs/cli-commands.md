@@ -1032,6 +1032,38 @@ It's a known limitation with GraphQL type generation.
 It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
 Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
+### generate script
+
+Generates an arbitrary Node.js script in `./scripts/<name>` that can be used with `redwood execute` command later.
+
+| Arguments & Options  | Description                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `name`               | Name of the service                                                                  |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+
+Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
+
+- create special database seed scripts for different scenarios
+- sync products and prices from your payment provider
+- running cleanup jobs on a regular basis e.g. delete stale/expired data
+- sync data between platforms e.g. email from your db to your email marketing platform
+
+**Usage**
+
+```
+❯ yarn rw g script syncStripeProducts
+
+  ✔ Generating script file...
+    ✔ Successfully wrote file `./scripts/syncStripeProducts.ts`
+  ✔ Next steps...
+
+    After modifying your script, you can invoke it like:
+
+      yarn rw exec syncStripeProducts
+
+      yarn rw exec syncStripeProducts --param1 true
+```
+
 ### generate sdl
 
 Generate a GraphQL schema and service object.
@@ -1303,38 +1335,6 @@ Generating...
 - web/types/graphql.d.ts
 
 ... and done.
-```
-
-### generate script
-
-Generates an arbitrary Node.js script in `./scripts/<name>` that can be used with `redwood execute` command later.
-
-| Arguments & Options  | Description                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| `name`               | Name of the service                                                                  |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-
-Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
-
-- create special database seed scripts for different scenarios
-- sync products and prices from your payment provider
-- running cleanup jobs on a regular basis e.g. delete stale/expired data
-- sync data between platforms e.g. email from your db to your email marketing platform
-
-**Usage**
-
-```
-❯ yarn rw g script syncStripeProducts
-
-  ✔ Generating script file...
-    ✔ Successfully wrote file `./scripts/syncStripeProducts.ts`
-  ✔ Next steps...
-
-    After modifying your script, you can invoke it like:
-
-      yarn rw exec syncStripeProducts
-
-      yarn rw exec syncStripeProducts --param1 true
 ```
 
 ## info
