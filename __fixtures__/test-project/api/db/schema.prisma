@@ -27,6 +27,10 @@ model Post {
   body      String
   /// When the post was created.
   createdAt DateTime @default(now())
+  /// The id of the author who wrote the post.
+  authorId  Int
+  /// Who authored the post.
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Contact {
@@ -39,8 +43,6 @@ model Contact {
   /// The message of the contact.
   message   String
   /// When the contact was created.
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
 }
 
@@ -50,11 +52,13 @@ model User {
   id                  Int       @id @default(autoincrement())
   /// The user's email address.
   email               String    @unique
-  hashedPassword      String
   fullName            String
+  hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  /// Roles to which the user belongs.
   roles               String?
+  /// Posts the user has authored.
   posts               Post[]
 }

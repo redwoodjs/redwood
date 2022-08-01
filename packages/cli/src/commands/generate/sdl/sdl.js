@@ -49,7 +49,7 @@ const addFieldGraphQLComment = (field, str) => {
   const description = field.documentation || `Description for ${field.name}.`
 
   return `
-  """${description}"""
+  "${description}"
   ${str}`
 }
 
