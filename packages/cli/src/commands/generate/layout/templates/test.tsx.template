@@ -7,6 +7,6 @@ import ${pascalName}Layout from './${pascalName}Layout'
 
 describe('${pascalName}Layout', () => {
   it('renders successfully', async () => {
-    await expectToRender(render(<${pascalName}Layout />)
+    await expectToRender(<${pascalName}Layout />)
   })
 })
