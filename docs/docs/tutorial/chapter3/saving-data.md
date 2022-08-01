@@ -725,7 +725,7 @@ Just a quick reminder that Redwood will automatically generate types for your Gr
 
 Once you define the `CreateContactMutation` (the GraphQL one), Redwood will generate the `CreateContactMutation` and `CreateContactMutationVariables` types from it for you.
 
-Take a look at our [TypeScript](typescript.md) docs for a deeper dive!
+Take a look at our [Generated Types](typescript/generated-types.md) docs for a deeper dive!
 
 :::
 
