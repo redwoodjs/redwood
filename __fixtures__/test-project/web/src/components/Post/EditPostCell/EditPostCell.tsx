@@ -1,8 +1,4 @@
-import type {
-  Post,
-  EditPostById,
-  UpdatePostInput,
-} from 'types/graphql'
+import type { Post, EditPostById, UpdatePostInput } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
