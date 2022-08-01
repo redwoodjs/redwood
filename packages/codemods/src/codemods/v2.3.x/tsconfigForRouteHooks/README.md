@@ -1,4 +1,4 @@
-# Tsconfig For Route Hooks
+# Modify TS Config For Route Hooks
 
 Updates the `web/tsconfig.json` file to include a path alias for `$api`.
 
@@ -9,4 +9,4 @@ import { db } from '$api/src/lib/db'
 import { bazinga } from '$api/src/lib/bazinga'
 ```
 
-Just like in scripts, in your *.routeHooks.ts files.
+Just like in scripts, in your *.routeHooks.ts files. This feature was enabled as part of Cell prerendering and dynamic path prerendering.
