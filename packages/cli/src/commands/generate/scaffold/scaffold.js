@@ -645,6 +645,7 @@ export const builder = (yargs) => {
     .option('docs', {
       description: 'Generate SDL and GraphQL comments to use in documentation',
       type: 'boolean',
+      default: false,
     })
     .option('tests', {
       description: 'Generate test files',

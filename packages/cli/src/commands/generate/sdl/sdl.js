@@ -68,28 +68,21 @@ const modelFieldToSDL = ({
     Json: 'JSON',
     Decimal: 'Float',
   }
+
+  const fieldContent = `${field.name}: ${field.isList ? '[' : ''}${
+    dictionary[field.type] || field.type
+  }${field.isList ? ']' : ''}${
+    (field.isRequired && required) | field.isList ? '!' : ''
+  }`
   if (docs) {
-    return addFieldGraphQLComment(
-      field,
-      `${field.name}: ${field.isList ? '[' : ''}${
-        dictionary[field.type] || field.type
-      }${field.isList ? ']' : ''}${
-        (field.isRequired && required) | field.isList ? '!' : ''
-      }`
-    )
+    return addFieldGraphQLComment(field, fieldContent)
   } else {
-    return `${field.name}: ${field.isList ? '[' : ''}${
-      dictionary[field.type] || field.type
-    }${field.isList ? ']' : ''}${
-      (field.isRequired && required) | field.isList ? '!' : ''
-    }`
+    return fieldContent
   }
 }
 
 const querySDL = (model, docs = false) => {
-  const result = model.fields.map((field) => modelFieldToSDL({ field, docs }))
-
-  return result
+  return model.fields.map((field) => modelFieldToSDL({ field, docs }))
 }
 
 const inputSDL = (model, required, types = {}, docs = false) => {
@@ -249,6 +242,7 @@ export const builder = (yargs) => {
     .option('tests', {
       description: 'Generate test files',
       type: 'boolean',
+      default: false,
     })
     .option('docs', {
       description: 'Generate SDL and GraphQL comments to use in documentation',
