@@ -26,6 +26,7 @@ If you're curious, you can find the generated types in the `.redwood/types`, `we
 2. types based on your queries and mutations on the web side (in `web/types/graphql.d.ts`)
 3. types for resolvers based on your SDLs on the api side (in `api/types/graphql.d.ts`)
 4. types for testing, `currentUser`, etc.
+5. types for certain functions like `routes.pageName()` and `useAuth()`  
 
 ## CurrentUser
 
