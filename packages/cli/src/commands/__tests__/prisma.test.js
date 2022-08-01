@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/paths', () => {
   return {
     getPaths: () => {
       return {

@@ -4,10 +4,7 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import type {
-  ${singularPascalName} as ${singularPascalName}Type,
-  Delete${singularPascalName}MutationVariables
-} from 'types/graphql'
+import type { Delete${singularPascalName}MutationVariables, Find${singularPascalName}ById } from 'types/graphql'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
@@ -50,11 +47,7 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface ${singularPascalName}Props {
-  ${singularCamelName}: ${singularPascalName}Type
-}
-
-const ${singularPascalName} = ({ ${singularCamelName} }: ${singularPascalName}Props) => {
+const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalName}ById) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')

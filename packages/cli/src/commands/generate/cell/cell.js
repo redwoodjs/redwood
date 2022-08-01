@@ -1,6 +1,6 @@
 import pascalcase from 'pascalcase'
 
-import { generate as generateTypes } from '@redwoodjs/internal'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
 import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'

@@ -1,3 +1,6 @@
+import path from 'node:path'
+
+import { pathExistsSync } from 'fs-extra'
 import isPortReachable from 'is-port-reachable'
 
 export function waitForServer(port, interval) {
@@ -11,4 +14,12 @@ export function waitForServer(port, interval) {
       }
     }, interval)
   })
+}
+
+export const projectNeedsBuilding = (
+  projectPath: string = process.env.PROJECT_PATH || ''
+) => {
+  const webDist = path.join(projectPath, 'web/dist')
+  const apiDist = path.join(projectPath, 'api/dist')
+  return !pathExistsSync(webDist) || !pathExistsSync(apiDist)
 }

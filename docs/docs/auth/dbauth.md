@@ -43,7 +43,7 @@ A single CLI command will get you everything you need to get dbAuth working, min
 ```bash
 yarn rw setup auth dbAuth
 ```
-    
+
 You will be prompted to ask if you want to enable **WebAuthn** support. WebAuthn is an open standard for allowing authentication from devides like TouchID, FaceID, USB fingerprint scanners, ane more. If you think you want to use WebAuthn, enter `y` at this prompt and read on configuration options.
 
 You can also add WebAuthn to an existing dbAuth install.  [Read more about WebAuthn usage and config below](#webauthn).
@@ -361,24 +361,6 @@ WebAuthn is supported in the following browsers (as of July 2022):
 | Android |	Chrome  |	Fingerprint Scanner, caBLE |
 | Android |	Firefox |	Screen PIN |
 
-#### iOS WebKit Browsers
-
-iOS Safari (and other iOS WebKit-based browsers) currently has a limitation where only a single `async` event can occur before asking to prompt the user for a WebAuthn interaction. In React, there are lots of `async` events floating around as you browse a site, which means the chances that the WebAuthn request is the first one is pretty slim. 
-
-This means that if the login page is not the first page you land on, trying to authenticate will raise an error. Redwood catches this error and responds with the following prompt (which we know is not ideal, but better than the default message of "No available authenticator recognized any of the available credentials"):
-
-<img width="397" alt="image" src="https://user-images.githubusercontent.com/300/174905977-6612e0dc-93b3-4572-be54-897a282d64fb.png" />
-
-You could catch this error on your login page and display your own custom error message, of course.
-
-So the workaround is to simply reload the page (guaranteeing that the WebAuthn request will be the first event fired off on the page) then the user is prompted and can login like normal. However, this reload needs to initiated by the user, it can't happen automatically in React (trust us, we already tried).
-
-:::caution Will it be fixed?
-
-Safari (and other browsers based on WebKit on iOS) have had this limitation for quite a while (and it used to be even [more harsh](https://groups.google.com/a/fidoalliance.org/g/fido-dev/c/pIs0DIajWVs/m/xeg0WjFkAQAJ) to the point that WebAuthn was functionally unusable) so it may never be rectified. Your best bet may be to just come up with a friendly message that makes it clear this isn't the user's problem, but just a current limitation of the browser ecosystem.
-
-:::
-
 ### Configuration
 
 WebAuthn support requires a few updates to your codebase:
@@ -436,7 +418,7 @@ model UserCredential {
 
 Run `yarn rw prisma migrate dev` to apply the changes to your database.
 
-### Function Config 
+### Function Config
 
 Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave (see the highlighted section)
 
@@ -445,9 +427,9 @@ import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
-  
+
   // assorted handler config here...
-  
+
   const authHandler = new DbAuthHandler(event, context, {
     db: db,
     authModelAccessor: 'user',

@@ -17,7 +17,7 @@ storybookTest(
     await page.goto(STORYBOOK_URL)
 
     // Click text=BlogPostCell
-    await page.locator('text=BlogPostCell').click()
+    await page.locator('text=/\\bBlogPostCell\\b/').click()
 
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
@@ -171,7 +171,7 @@ storybookTest(
 
     await page.goto(STORYBOOK_URL)
 
-    // Click text=Redwood
+    // Click Redwood link in left nav
     await page.locator('css=[data-item-id=redwood--page]').click()
 
     await expect(page).toHaveURL(
