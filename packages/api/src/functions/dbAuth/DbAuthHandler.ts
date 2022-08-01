@@ -29,7 +29,7 @@ import {
   webAuthnSession,
 } from './shared'
 
-type SetCookieHeader = { 'Set-Cookie': string }
+type SetCookieHeader = { 'set-cookie': string }
 type CsrfTokenHeader = { 'csrf-token': string }
 
 interface SignupFlowOptions {
@@ -308,10 +308,17 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     return ['usb', 'ble', 'nfc', 'internal']
   }
 
-  // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
+  // returns the set-cookie header to mark the cookie as expired ("deletes" the session)
+  /**
+   * The header keys are case insensitive, but Fastify prefers these to be lowercase.
+   * Therefore, we want to ensure that the headers are always lowercase and unique
+   * for compliance with HTTP/2.
+   *
+   * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
+   */
   get _deleteSessionHeader() {
     return {
-      'Set-Cookie': [
+      'set-cookie': [
         'session=',
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
@@ -742,10 +749,10 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
       this._webAuthnCookie(jsonBody.rawId, this.webAuthnExpiresDate),
-      loginHeaders['Set-Cookie'],
+      loginHeaders['set-cookie'],
     ].flat()
 
-    return [verified, { 'Set-Cookie': cookies }]
+    return [verified, { 'set-cookie': cookies }]
   }
 
   // get options for a WebAuthn authentication
@@ -778,7 +785,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     if (!user) {
       return [
         { error: 'Log in with username and password to enable WebAuthn' },
-        { 'Set-Cookie': this._webAuthnCookie('', 'now') },
+        { 'set-cookie': this._webAuthnCookie('', 'now') },
         { statusCode: 400 },
       ]
     }
@@ -920,7 +927,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     return [
       verified,
       {
-        'Set-Cookie': this._webAuthnCookie(
+        'set-cookie': this._webAuthnCookie(
           plainCredentialId,
           this.webAuthnExpiresDate
         ),
@@ -1083,7 +1090,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
   }
 
-  // returns the Set-Cookie header to be returned in the request (effectively
+  // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
   _createSessionHeader(
     data: DbAuthSession,
@@ -1096,7 +1103,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 
-    return { 'Set-Cookie': cookie }
+    return { 'set-cookie': cookie }
   }
 
   // checks the CSRF token in the header against the CSRF token in the session

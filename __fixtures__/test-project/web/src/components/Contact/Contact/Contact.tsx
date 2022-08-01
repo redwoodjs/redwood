@@ -1,7 +1,7 @@
 import humanize from 'humanize-string'
 import type {
-  Contact as ContactType,
   DeleteContactMutationVariables,
+  FindContactById,
 } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
@@ -49,11 +49,7 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface ContactProps {
-  contact: ContactType
-}
-
-const Contact = ({ contact }: ContactProps) => {
+const Contact = ({ contact }: FindContactById) => {
   const [deleteContact] = useMutation(DELETE_CONTACT_MUTATION, {
     onCompleted: () => {
       toast.success('Contact deleted')
