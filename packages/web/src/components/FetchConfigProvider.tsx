@@ -1,4 +1,4 @@
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import { UseAuth, useNoAuth } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
   return global.RWJS_API_GRAPHQL_URL
@@ -13,36 +13,6 @@ export const FetchConfigContext = React.createContext<FetchConfig>({
   uri: getApiGraphQLUrl(),
 })
 
-type UseAuthType = () => AuthContextInterface<
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown
->
-
-// TODO: Can we/should we move this into @redwoodjs/auth and export it so we can use it in more places?
-const defaultAuthState: ReturnType<UseAuthType> = {
-  loading: false,
-  isAuthenticated: false,
-  logIn: async () => {},
-  logOut: async () => {},
-  signUp: async () => {},
-  currentUser: null,
-  userMetadata: undefined,
-  getToken: async () => null,
-  getCurrentUser: async () => null,
-  hasRole: () => false,
-  reauthenticate: async () => {},
-  forgotPassword: async () => {},
-  resetPassword: async () => {},
-  validateResetToken: async () => {},
-  type: 'default',
-  hasError: false,
-}
-
 /**
  * The `FetchConfigProvider` understands Redwood's Auth and determines the
  * correct request-headers based on a user's authentication state.
@@ -50,11 +20,8 @@ const defaultAuthState: ReturnType<UseAuthType> = {
  * as the token is retrieved async
  */
 export const FetchConfigProvider: React.FunctionComponent<{
-  useAuth?: UseAuthType
-}> = ({
-  useAuth = global.__REDWOOD__USE_AUTH ?? (() => defaultAuthState),
-  ...rest
-}) => {
+  useAuth?: UseAuth
+}> = ({ useAuth = global.__REDWOOD__USE_AUTH ?? useNoAuth, ...rest }) => {
   const { isAuthenticated, type } = useAuth()
 
   if (!isAuthenticated) {

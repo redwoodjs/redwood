@@ -22,7 +22,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
-  Router as RwRouter,
+  Router,
   Route,
   Private,
   Redirect,
@@ -34,12 +34,23 @@ import {
 } from '../'
 import { useLocation } from '../location'
 import { useParams } from '../params'
-import { RouterProps } from '../router'
 import { Set } from '../Set'
 import { Spec } from '../util'
 
-function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
-  const authContextValues: AuthContextInterface = {
+function createDummyAuthContextValues(
+  partial: Partial<
+    AuthContextInterface<null, void, void, void, void, void, void>
+  >
+) {
+  const authContextValues: AuthContextInterface<
+    null,
+    void,
+    void,
+    void,
+    void,
+    void,
+    void
+  > = {
     loading: true,
     isAuthenticated: false,
     userMetadata: null,
@@ -102,14 +113,6 @@ const mockUseAuth =
       hasRole: () => hasRole,
     })
   }
-
-const Router = ({ useAuth, children, ...props }: RouterProps) => {
-  return (
-    <RwRouter useAuth={useAuth || mockUseAuth()} {...props}>
-      {children}
-    </RwRouter>
-  )
-}
 
 const HomePage = () => <h1>Home Page</h1>
 const LoginPage = () => <h1>Login Page</h1>
@@ -255,11 +258,11 @@ describe('slow imports', () => {
     </Router>
   )
 
-  beforeAll(() => {
+  beforeEach(() => {
     mockDelay = 200
   })
 
-  afterAll(() => {
+  afterEach(() => {
     mockDelay = 0
   })
 

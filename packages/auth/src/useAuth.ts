@@ -76,3 +76,32 @@ export function useNoAuth(): AuthContextInterface<
     hasError: false,
   }
 }
+
+export type UseAuth = () => AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
+// const defaultAuthState: ReturnType<UseAuth> = {
+//   loading: false,
+//   isAuthenticated: false,
+//   logIn: async () => {},
+//   logOut: async () => {},
+//   signUp: async () => {},
+//   currentUser: null,
+//   userMetadata: undefined,
+//   getToken: async () => null,
+//   getCurrentUser: async () => null,
+//   hasRole: () => false,
+//   reauthenticate: async () => {},
+//   forgotPassword: async () => {},
+//   resetPassword: async () => {},
+//   validateResetToken: async () => {},
+//   type: 'default',
+//   hasError: false,
+// }
