@@ -28,9 +28,8 @@ const New${singularPascalName} = () => {
     }
   )
 
-  const onSave = (input: Create${singularPascalName}Input) => {<% if (intForeignKeys.length) { %>
-    const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
-    create${singularPascalName}({ variables: { <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
+  const onSave = (input: Create${singularPascalName}Input) => {
+    create${singularPascalName}({ variables: { input } })
   }
 
   return (

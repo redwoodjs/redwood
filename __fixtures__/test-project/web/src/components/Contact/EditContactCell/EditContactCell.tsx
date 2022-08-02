@@ -2,7 +2,6 @@ import type {
   Contact,
   EditContactById,
   UpdateContactInput,
-  UpdateContactMutationVariables,
 } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
@@ -55,7 +54,10 @@ export const Success = ({ contact }: CellSuccessProps<EditContactById>) => {
     }
   )
 
-  const onSave = (input: UpdateContactInput, id: Contact['id']) => {
+  const onSave = (
+    input: UpdateContactInput,
+    id: EditContactById['contact']['id']
+  ) => {
     updateContact({ variables: { id, input } })
   }
 

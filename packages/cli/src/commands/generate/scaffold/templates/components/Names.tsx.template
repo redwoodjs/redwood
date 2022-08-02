@@ -6,8 +6,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from '${importComponentNamesCell}'
 
-import type { ${singularPascalName}, Delete${singularPascalName}MutationVariables } from 'types/graphql'
-
+import type { Delete${singularPascalName}MutationVariables, Find${pluralPascalName} } from 'types/graphql'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
@@ -57,11 +56,7 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface ${pluralPascalName}ListProps {
-  ${pluralCamelName}: ${singularPascalName}[]
-}
-
-const ${pluralPascalName}List = ({ ${pluralCamelName} }: ${pluralPascalName}ListProps) => {
+const ${pluralPascalName}List = ({ ${pluralCamelName} }: Find${pluralPascalName}) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')

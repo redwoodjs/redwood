@@ -39,7 +39,6 @@ git clone https://github.com/redwoodjs/redwood-tutorial
 cd redwood-tutorial
 yarn install
 yarn rw prisma migrate dev
-yarn rw prisma db seed
 yarn rw g secret
 ```
 

@@ -1,7 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getProject } from '@redwoodjs/structure'
+import { isTypeScriptProject } from '../lib/project'
 
 export const command = 'generate <type>'
 export const aliases = ['g']
@@ -40,7 +40,7 @@ export const yargsDefaults = {
   },
   typescript: {
     alias: 'ts',
-    default: getProject().isTypeScriptProject,
+    default: isTypeScriptProject(),
     description: 'Generate TypeScript files',
     type: 'boolean',
   },
