@@ -125,6 +125,9 @@ export function createAuthProvider<
       ? customProviderHooks.useCurrentUser
       : // eslint-disable-next-line react-hooks/rules-of-hooks
         useCurrentUser(authImplementation)
+
+    console.log('AuthProvider getCurrentUser', getCurrentUser)
+
     const reauthenticate = useReauthenticate(
       authImplementation,
       setAuthProviderState,

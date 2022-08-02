@@ -1,17 +1,6 @@
 /* eslint-disable no-var */
-import type { AuthContextInterface } from './src/index'
 
 declare global {
-  // For some reason, in this package, we need to declare it here too
-  var __REDWOOD__USE_AUTH: () => AuthContextInterface<
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown
-  >
   /**
    * FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
    * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
@@ -31,15 +20,6 @@ declare global {
 
   namespace NodeJS {
     interface Global {
-      __REDWOOD__USE_AUTH: () => AuthContextInterface<
-        unknown,
-        unknown,
-        unknown,
-        unknown,
-        unknown,
-        unknown,
-        unknown
-      >
       /** URL or absolute path to the GraphQL serverless function */
       RWJS_API_GRAPHQL_URL: string
       /** URL or absolute path to the DbAuth serverless function */

@@ -42,9 +42,6 @@ export function createUseAuth<
     return context
   }
 
-  // TODO: How/when is this used? Does this still work?
-  global.__REDWOOD__USE_AUTH = useAuth
-
   return useAuth
 }
 
@@ -58,7 +55,7 @@ export function useNoAuth(): AuthContextInterface<
   void
 > {
   return {
-    loading: false,
+    loading: true,
     isAuthenticated: false,
     logIn: async () => {},
     logOut: async () => {},

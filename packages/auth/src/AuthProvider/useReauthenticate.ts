@@ -35,6 +35,8 @@ export const useReauthenticate = <TUser>(
       hasError: false,
     }
 
+    console.log('useReauthenticate getCurrentUser', getCurrentUser)
+
     try {
       const userMetadata = await authImplementation.getUserMetadata()
       if (!userMetadata) {
