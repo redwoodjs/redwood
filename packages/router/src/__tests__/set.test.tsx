@@ -31,13 +31,21 @@ const BLayout = ({ children }) => (
   </div>
 )
 
+function mockUseAuth() {
+  return {
+    loading: false,
+    isAuthenticated: false,
+    hasRole: () => false,
+  }
+}
+
 test('wraps components in other components', async () => {
   const TestSet = () => (
-    <Router>
+    <Router useAuth={mockUseAuth}>
       <Set wrap={[CustomWrapper, GlobalLayout]}>
         <ChildA />
         <Set wrap={BLayout}>
-          <Route path="/" page={ChildB} name="childb" />
+          <Route path="/" page={ChildB} name="childB" />
         </Set>
       </Set>
       <ChildC />
@@ -100,9 +108,9 @@ test('passes props to wrappers', async () => {
     </div>
   )
   const TestSet = () => (
-    <Router>
+    <Router useAuth={mockUseAuth}>
       <Set wrap={[PropWrapper, GlobalLayout]} propOne="une" propTwo="deux">
-        <Route path="/" page={ChildA} name="childa" />
+        <Route path="/" page={ChildA} name="childA" />
       </Set>
     </Router>
   )

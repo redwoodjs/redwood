@@ -32,6 +32,7 @@ const RouterSetContext = createContext<
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
   useAuth?: UseAuth
+  children: React.ReactNode
 }
 
 function stateReducer(state: RouterState, newState: Partial<RouterState>) {

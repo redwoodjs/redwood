@@ -22,7 +22,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
-  Router,
+  Router as RwRouter,
   Route,
   Private,
   Redirect,
@@ -34,6 +34,7 @@ import {
 } from '../'
 import { useLocation } from '../location'
 import { useParams } from '../params'
+import { RouterProps } from '../router'
 import { Set } from '../Set'
 import { Spec } from '../util'
 
@@ -102,7 +103,14 @@ const mockUseAuth =
     })
   }
 
-// SETUP
+const Router = ({ useAuth, children, ...props }: RouterProps) => {
+  return (
+    <RwRouter useAuth={useAuth || mockUseAuth()} {...props}>
+      {children}
+    </RwRouter>
+  )
+}
+
 const HomePage = () => <h1>Home Page</h1>
 const LoginPage = () => <h1>Login Page</h1>
 const AboutPage = () => <h1>About Page</h1>
@@ -442,7 +450,7 @@ describe('slow imports', () => {
 
 describe('inits routes and navigates as expected', () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -528,7 +536,7 @@ describe('test params escaping', () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
       <Route path="/param-test/{value}" page={ParamPage} name="params" />
       <Route notfound page={NotFoundPage} />
@@ -654,7 +662,7 @@ describe('query params should not override path params', () => {
 
 test('unauthenticated user is redirected away from private page', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
@@ -682,7 +690,7 @@ test('unauthenticated user is redirected away from private page', async () => {
 
 test('unauthenticated user is redirected including search params', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Private unauthenticated="login">
@@ -805,7 +813,7 @@ test('can display a loading screen with a hook', async () => {
 
 test('inits routes two private routes with a space in between and loads as expected', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -836,7 +844,7 @@ test('supports <Set>', async () => {
   )
 
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Set wrap={GlobalLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
@@ -1064,7 +1072,7 @@ test('renders first matching route only, also with Private', async () => {
   const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
 
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
@@ -1221,7 +1229,7 @@ test('Set is not rendered for unauthenticated user.', async () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Set private wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
@@ -1254,7 +1262,7 @@ test('Set is not rendered for unauthenticated user on direct navigation', async 
   }
 
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Set private wrap={SetWithUseParams} unauthenticated="login">
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
@@ -1295,7 +1303,7 @@ test('Private is an alias for Set private', async () => {
 
 test('redirect to last page', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Private unauthenticated="login">
@@ -1394,7 +1402,7 @@ test('redirect replacing route', async () => {
 
 describe('trailing slashes', () => {
   const TSNeverRouter = () => (
-    <Router trailingSlashes={'never'}>
+    <Router trailingSlashes="never">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
@@ -1414,7 +1422,7 @@ describe('trailing slashes', () => {
   })
 
   const TSAlwaysRouter = () => (
-    <Router trailingSlashes={'always'}>
+    <Router trailingSlashes="always">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about/" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
@@ -1434,7 +1442,7 @@ describe('trailing slashes', () => {
   })
 
   const TSPreserveRouter = () => (
-    <Router trailingSlashes={'preserve'}>
+    <Router trailingSlashes="preserve">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/contact/" page={() => <h1>Contact Page</h1>} name="about" />
