@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, Fragment } from 'react'
 
 import type {
   AuthClient,
@@ -58,7 +58,14 @@ export interface AuthContextInterface {
   error?: Error
 }
 
-export const AuthContext = React.createContext<AuthContextInterface>({
+export interface AuthService extends AuthContextInterface {
+  rwClient: AuthClient
+}
+
+export const AuthContext = React.createContext<
+  | AuthContextInterface
+  | { services: Record<string, AuthService>; determineAuth: any }
+>({
   loading: true,
   isAuthenticated: false,
   userMetadata: null,
@@ -111,7 +118,12 @@ const AuthUpdateListener = ({
 //       children?: ReactNode | undefined
 //     }
 
-type AuthProviderProps = { service: any; children?: ReactNode | undefined }
+type AuthProviderProps = {
+  service: AuthService
+  services?: Record<string, AuthService>
+  determineAuth?: any
+  children?: ReactNode | undefined
+}
 
 // type AuthProviderState = {
 //   loading: boolean
@@ -140,8 +152,32 @@ type AuthProviderProps = { service: any; children?: ReactNode | undefined }
  *  </AuthProvider>
  * ```
  */
+
+// const determineAuth = (services) => {
+//   services
+
+//   return
+// }
+
 export const AuthProvider = (props: AuthProviderProps) => {
-  const { rwClient, ...rest } = props.service
+  const { service, services, determineAuth } = props
+  if (services) {
+    return (
+      <AuthContext.Provider value={{ services, determineAuth }}>
+        {props.children}
+        {Object.entries(services).map(([name, service]) => (
+          <Fragment key={name}>
+            <AuthUpdateListener
+              rwClient={service.rwClient}
+              reauthenticate={service.reauthenticate}
+            />
+          </Fragment>
+        ))}
+      </AuthContext.Provider>
+    )
+  }
+
+  const { rwClient, ...rest } = service
 
   return (
     <AuthContext.Provider
