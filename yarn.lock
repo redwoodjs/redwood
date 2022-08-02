@@ -2466,6 +2466,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/accept-negotiator@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@fastify/accept-negotiator@npm:1.0.0"
+  checksum: f204e514172a6b087805dfda09d9df1e2075ff3de3fbea172c45fff1dfd8bc96c56457e3ca9e4e69e639a2401b65a8a04ae4a7607164099065a598d216d5b44a
+  languageName: node
+  linkType: hard
+
 "@fastify/ajv-compiler@npm:^3.1.1":
   version: 3.1.2
   resolution: "@fastify/ajv-compiler@npm:3.1.2"
@@ -2534,18 +2541,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.4.0":
-  version: 6.4.0
-  resolution: "@fastify/static@npm:6.4.0"
+"@fastify/static@npm:6.5.0":
+  version: 6.5.0
+  resolution: "@fastify/static@npm:6.5.0"
   dependencies:
+    "@fastify/accept-negotiator": ^1.0.0
     content-disposition: ^0.5.3
-    encoding-negotiator: ^2.0.1
-    fastify-plugin: ^3.0.0
+    fastify-plugin: ^4.0.0
     glob: ^8.0.1
     p-limit: ^3.1.0
-    readable-stream: ^3.4.0
+    readable-stream: ^4.0.0
     send: ^0.18.0
-  checksum: be96f21a94529ef5ef4b521def49f78a6bd9149d849e05d14d3d068a800d341845115237c4933a904c5c078bb7caf5ff5e4dbf1fbcea631808c0ff1b32874bae
+  checksum: 08ec7097ad8392ad0085c9e820e87039808d9b0a3f7e8e35118b5caca3bc1e45d1c046676b59e6b4990f4d216b45d977bc37832f9fba7bba7c58158e0fa36232
   languageName: node
   linkType: hard
 
@@ -6121,7 +6128,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@fastify/http-proxy": 8.2.1
-    "@fastify/static": 6.4.0
+    "@fastify/static": 6.5.0
     "@fastify/url-data": 5.1.0
     "@types/aws-lambda": 8.10.101
     "@types/lodash.escape": 4.0.7
@@ -15054,13 +15061,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding-negotiator@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "encoding-negotiator@npm:2.0.1"
-  checksum: 9d0ee6e4de90e529fe41e4d701c8dd8fdf053704b3a7e4aec1825c395eb51c7cdee48d780cb8ee4d46558bf50268a2b1a81df39501297b90d6f828190ca19cde
-  languageName: node
-  linkType: hard
-
 "encoding@npm:^0.1.12, encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
@@ -16470,7 +16470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^3.0.0, fastify-plugin@npm:^3.0.1":
+"fastify-plugin@npm:^3.0.1":
   version: 3.0.1
   resolution: "fastify-plugin@npm:3.0.1"
   checksum: 045a107d2e1962d0967ec21e4417fb31e4f49059cf45d28a612025bdc841092fc897d4ab29eded5a977ad8fdd602c0b30c1a08ae5508f8bff97ece4a30d96032
