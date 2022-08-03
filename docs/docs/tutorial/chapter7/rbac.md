@@ -122,6 +122,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
 
 This is because, we now know that the type of your `currentUser.roles` is a `string` - based on the type being returned from Prisma. So you can safely remove the block of code where its checking if roles is an array.
 
+
 ```diff title="api/src/lib/auth.ts"
 export const hasRole = (roles: AllowedRoles): boolean => {
   if (!isAuthenticated()) {
@@ -131,28 +132,34 @@ export const hasRole = (roles: AllowedRoles): boolean => {
   const currentUserRoles = context.currentUser?.roles
 
   if (typeof roles === 'string') {
--    if (typeof currentUserRoles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roles to check is a string, currentUser.roles is a string
       return currentUserRoles === roles
--    }
+-    } else if (Array.isArray(currentUserRoles)) {
+-      // roles to check is a string, currentUser.roles is an array
+-      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
+    }
   }
 
   if (Array.isArray(roles)) {
--    if (Array.isArray(currentUserRoles)) {
--      return currentUserRoles?.some((allowedRole) =>
--        roles.includes(allowedRole)
--      )
--    } else if (typeof context?.currentUser?.roles === 'string') {
+    if (Array.isArray(currentUserRoles)) {
+      // roles to check is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof context?.currentUser?.roles === 'string') {
       // roles to check is an array, currentUser.roles is a string
       return roles.some(
         (allowedRole) => context.currentUser?.roles === allowedRole
       )
--    }
+    }
   }
 
   // roles not found
   return false
 }
 ```
+
 
 
 </ShowForTs>
