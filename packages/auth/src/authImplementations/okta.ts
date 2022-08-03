@@ -19,7 +19,6 @@ type OktaAuthImplementation = AuthImplementation<
   void,
   never,
   never,
-  never,
   never
 >
 

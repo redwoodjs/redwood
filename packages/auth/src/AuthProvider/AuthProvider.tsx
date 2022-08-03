@@ -46,8 +46,7 @@ export function createAuthProvider<
   TSignUp,
   TForgotPassword,
   TResetPassword,
-  TValidateResetToken,
-  TVerifyOtp
+  TValidateResetToken
 >(
   AuthContext: React.Context<
     | AuthContextInterface<
@@ -69,8 +68,7 @@ export function createAuthProvider<
     TSignUp,
     TForgotPassword,
     TResetPassword,
-    TValidateResetToken,
-    TVerifyOtp
+    TValidateResetToken
   >,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>

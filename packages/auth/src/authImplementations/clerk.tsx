@@ -47,7 +47,6 @@ type ClerkAuthImplementation = AuthImplementation<
   void,
   never,
   never,
-  never,
   never
 >
 

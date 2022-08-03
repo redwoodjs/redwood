@@ -22,7 +22,6 @@ type GoTrueAuthImplementation = AuthImplementation<
   User,
   never,
   never,
-  never,
   never
 >
 

@@ -2,19 +2,7 @@ import { useCallback } from 'react'
 
 import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
 
-export const useToken = (
-  authImplementation: AuthImplementation<
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown
-  >
-) => {
+export const useToken = (authImplementation: AuthImplementation) => {
   return useCallback(async () => {
     /**
      * Clients should always return null or token string.

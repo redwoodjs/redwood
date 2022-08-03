@@ -7,17 +7,7 @@ import { useCurrentUser } from './useCurrentUser'
 import { useToken } from './useToken'
 
 export const useReauthenticate = <TUser>(
-  authImplementation: AuthImplementation<
-    TUser,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown
-  >,
+  authImplementation: AuthImplementation<TUser>,
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
   >,

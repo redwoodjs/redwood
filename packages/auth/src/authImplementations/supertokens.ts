@@ -27,7 +27,6 @@ type SuperTokensAuthImplementation = AuthImplementation<
   void,
   never,
   never,
-  never,
   never
 >
 

@@ -15,7 +15,6 @@ type MagicLinkAuthImplementation = AuthImplementation<
   string | null,
   never,
   never,
-  never,
   never
 >
 

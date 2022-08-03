@@ -13,8 +13,7 @@ export const useSignUp = <
   TSignUp,
   TForgotPassword,
   TResetPassword,
-  TValidateResetToken,
-  TVerifyOtp
+  TValidateResetToken
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -24,8 +23,7 @@ export const useSignUp = <
     TSignUp,
     TForgotPassword,
     TResetPassword,
-    TValidateResetToken,
-    TVerifyOtp
+    TValidateResetToken
   >,
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>

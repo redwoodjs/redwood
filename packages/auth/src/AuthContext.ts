@@ -20,9 +20,11 @@ export interface AuthContextInterface<
   /** The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /**
-   * The user's metadata from the auth provider
+   * The user's metadata from the auth service provider
    *
-   * Actual user metadata might look something like this
+   * Exactly what this looks like will depend on the auth service provider,
+   * but one example is this
+   * ```json
    * {
    *   "id": "11111111-2222-3333-4444-5555555555555",
    *   "aud": "authenticated",
@@ -35,6 +37,7 @@ export interface AuthContextInterface<
    *   "created_at": "2016-05-15T19:53:12.368652374-07:00",
    *   "updated_at": "2016-05-15T19:53:12.368652374-07:00"
    * }
+   * ```
    */
   userMetadata: null | TUser
   logIn(options?: unknown): Promise<TLogIn>

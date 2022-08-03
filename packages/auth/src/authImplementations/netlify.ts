@@ -1,38 +1,15 @@
-import type * as NetlifyIdentityNS from 'netlify-identity-widget'
+import * as NetlifyIdentityNS from 'netlify-identity-widget'
+
+import { createAuthentication } from 'src/authFactory'
 
 import { CurrentUser } from '../AuthContext'
-import { createAuthentication } from '../authFactory'
 // TODO:
 // In the future, when this is a separate package, we can import the full thing
 // here (not just the type), and save the user from doing that in their own
 // code
 // import netlifyIdentity from 'netlify-identity-widget'
 
-import { AuthImplementation } from './AuthImplementation'
-
 type NetlifyIdentity = typeof NetlifyIdentityNS
-
-type NetlifyAuthImplementation = AuthImplementation<
-  NetlifyIdentityNS.User, // TUser
-  NetlifyIdentityNS.User | null, // TRestoreAuth
-  NetlifyIdentityNS.User | null, // TLogIn
-  void, // TLogOut
-  null, // TSignUp
-  never,
-  never,
-  never,
-  never
->
-
-const netlifyCreateAuthentication = (
-  authImplementation: NetlifyAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
 
 export function createNetlifyAuth(
   netlifyIdentity: NetlifyIdentity,
@@ -42,23 +19,21 @@ export function createNetlifyAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof netlifyCreateAuthentication> {
+) {
   const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
 
   // TODO: Add this when this is a separate package. For now it'll have to be
   // done in the user's app
   // isBrowser && netlifyIdentity.init()
 
-  return netlifyCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createNetlifyAuthImplementation(
-  netlifyIdentity: NetlifyIdentity
-): NetlifyAuthImplementation {
+function createNetlifyAuthImplementation(netlifyIdentity: NetlifyIdentity) {
   return {
     type: 'netlify',
     login: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<NetlifyIdentityNS.User | null>((resolve, reject) => {
         let autoClosedModal = false
         netlifyIdentity.open('login')
         netlifyIdentity.on('login', (user) => {
@@ -81,7 +56,7 @@ function createNetlifyAuthImplementation(
       })
     },
     signup: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<null>((resolve, reject) => {
         netlifyIdentity.open('signup')
         netlifyIdentity.on('close', () => {
           resolve(null)

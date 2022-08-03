@@ -4,19 +4,7 @@ import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
 
 import { useToken } from './useToken'
 
-export const useCurrentUser = (
-  authImplementation: AuthImplementation<
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown
-  >
-) => {
+export const useCurrentUser = (authImplementation: AuthImplementation) => {
   console.log('useCurrentUser create')
   const getToken = useToken(authImplementation)
 

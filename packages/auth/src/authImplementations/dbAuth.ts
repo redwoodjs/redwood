@@ -1,7 +1,5 @@
 import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
-
 export interface LoginAttributes {
   username: string
   password: string
@@ -16,24 +14,6 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 export type DbAuth = () => null
 
-type DbAuthAuthImplementation = AuthImplementation<
-  string,
-  never,
-  any, // TLogIn
-  boolean,
-  any, // TSignUp
-  any, // TForgotPassword
-  any, // TResetPassword
-  any, // TValidateResetToken
-  never
->
-
-const dbAuthCreateAuthentication = (
-  authImplementation: DbAuthAuthImplementation
-) => {
-  return createAuthentication(authImplementation)
-}
-
 export type DbAuthConfig = {
   fetchConfig: {
     credentials: 'include' | 'same-origin'
@@ -45,18 +25,16 @@ let getTokenPromise: null | Promise<string | null>
 let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
 let cachedToken: string | null
 
-export function createDbAuth(
-  config?: DbAuthConfig
-): ReturnType<typeof dbAuthCreateAuthentication> {
+export function createDbAuth(config?: DbAuthConfig) {
   const authImplementation = createDbAuthImplementation(config)
 
-  return dbAuthCreateAuthentication(authImplementation)
+  return createAuthentication(authImplementation)
 }
 
 // TODO: Better types for login, signup etc
 function createDbAuthImplementation(
   config: DbAuthConfig = { fetchConfig: { credentials: 'same-origin' } }
-): DbAuthAuthImplementation {
+) {
   const { credentials } = config.fetchConfig
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {

@@ -80,7 +80,6 @@ type FirebaseAuthImplementation = AuthImplementation<
   FirebaseAuthNamespace.UserCredential | undefined,
   never,
   never,
-  never,
   never
 >
 

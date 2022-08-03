@@ -22,7 +22,6 @@ type EthereumAuthImplementation = AuthImplementation<
   never,
   never,
   never,
-  never,
   never
 >
 

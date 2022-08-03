@@ -11,8 +11,7 @@ export function createAuthentication<
   TSignUp,
   TForgotPassword,
   TResetPassword,
-  TValidateResetToken,
-  TVerifyOtp
+  TValidateResetToken
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -22,8 +21,7 @@ export function createAuthentication<
     TSignUp,
     TForgotPassword,
     TResetPassword,
-    TValidateResetToken,
-    TVerifyOtp
+    TValidateResetToken
   >,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>

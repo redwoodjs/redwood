@@ -24,7 +24,6 @@ type NhostAuthImplementation = AuthImplementation<
   SignUpResponse,
   never,
   never,
-  never,
   never
 >
 

@@ -1,14 +1,7 @@
-import type {
-  SupabaseClient,
-  User,
-  Provider,
-  GoTrueClient,
-} from '@supabase/supabase-js'
+import type { SupabaseClient, Provider } from '@supabase/supabase-js'
 
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
-
-import { AuthImplementation } from './AuthImplementation'
 
 type SignInOptions = {
   email?: string | undefined
@@ -27,34 +20,6 @@ type SignUpOptions = {
   redirectTo?: string
 }
 
-type VerifyOtpOptions = {
-  phone: string
-  token: string
-  redirectTo?: string
-}
-
-type SupabaseAuthImplementation = AuthImplementation<
-  User,
-  void,
-  Awaited<ReturnType<GoTrueClient['signIn']>>,
-  Awaited<ReturnType<GoTrueClient['signOut']>>,
-  Awaited<ReturnType<GoTrueClient['signUp']>>,
-  never,
-  never,
-  never,
-  Awaited<ReturnType<GoTrueClient['verifyOTP']>>
->
-
-const supabaseCreateAuthentication = (
-  authImplementation: SupabaseAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
-
 export function createSupabaseAuth(
   supabaseClient: SupabaseClient,
   customProviderHooks?: {
@@ -63,15 +28,13 @@ export function createSupabaseAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof supabaseCreateAuthentication> {
+) {
   const authImplementation = createSupabaseAuthImplementation(supabaseClient)
 
-  return supabaseCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createSupabaseAuthImplementation(
-  supabaseClient: SupabaseClient
-): SupabaseAuthImplementation {
+function createSupabaseAuthImplementation(supabaseClient: SupabaseClient) {
   return {
     type: 'supabase',
     /**
@@ -145,15 +108,6 @@ function createSupabaseAuthImplementation(
       }
 
       return
-    },
-    /**
-     * Log in a user given a User supplied OTP received via mobile.
-     * @param phone The user's phone number.
-     * @param token The user's password.
-     * @param redirectTo A URL or mobile address to send the user to after they are confirmed.
-     */
-    verifyOtp: ({ phone, token, redirectTo }: VerifyOtpOptions) => {
-      return supabaseClient.auth.verifyOTP({ phone, token }, { redirectTo })
     },
   }
 }

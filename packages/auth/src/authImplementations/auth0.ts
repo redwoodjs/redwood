@@ -20,7 +20,6 @@ type Auth0AuthImplementation = AuthImplementation<
   void,
   never,
   never,
-  never,
   never
 >
 

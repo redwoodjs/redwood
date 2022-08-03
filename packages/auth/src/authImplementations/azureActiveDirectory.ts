@@ -21,7 +21,6 @@ type AzureActiveDirectoryAuthImplementation = AuthImplementation<
   void,
   never,
   never,
-  never,
   never
 >
 
@@ -75,7 +74,7 @@ function createAzureActiveDirectoryAuthImplementation(
       // acquireTokenSilent, and if it fails with an
       // InteractionRequiredAuthError, call acquireTokenRedirect
       // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md
-      // NOTE: We are not catching by the `InteractionRequiredAuthError`,
+      // NOTE: We are not catching the `InteractionRequiredAuthError`,
       // perhaps we can branch off `error.name` if this strategy doesn't work
       // properly.
       try {
