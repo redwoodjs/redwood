@@ -64,13 +64,13 @@ export interface TransformerDirective extends TransformerDirectiveOptions {
 }
 
 interface ValidatorDirectiveOptions {
-  onResolverCalled: ValidatorDirectiveFunc
+  onResolvedValue: ValidatorDirectiveFunc
   type: DirectiveType.VALIDATOR
   name: string
 }
 
 interface TransformerDirectiveOptions {
-  onResolverCalled: TransformerDirectiveFunc
+  onResolvedValue: TransformerDirectiveFunc
   type: DirectiveType.TRANSFORMER
   name: string
 }
@@ -131,7 +131,7 @@ function wrapAffectedResolvers(
               context,
               info
             ) {
-              const result = options.onResolverCalled({
+              const result = options.onResolvedValue({
                 root,
                 args,
                 context,
@@ -161,7 +161,7 @@ function wrapAffectedResolvers(
               const resolvedValue = originalResolve(root, args, context, info)
               if (isPromise(resolvedValue)) {
                 return resolvedValue.then((resolvedValue) =>
-                  options.onResolverCalled({
+                  options.onResolvedValue({
                     root,
                     args,
                     context,
@@ -172,7 +172,7 @@ function wrapAffectedResolvers(
                   })
                 )
               }
-              return options.onResolverCalled({
+              return options.onResolvedValue({
                 root,
                 args,
                 context,
@@ -191,7 +191,7 @@ function wrapAffectedResolvers(
 }
 
 export type useRedwoodDirectiveReturn = Plugin<{
-  onResolverCalled: ValidatorDirectiveFunc | TransformerDirectiveFunc
+  onResolvedValue: ValidatorDirectiveFunc | TransformerDirectiveFunc
 }>
 
 export const useRedwoodDirective = (
