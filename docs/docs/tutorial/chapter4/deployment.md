@@ -93,17 +93,16 @@ And with that, we're ready to setup Netlify itself.
 
 ![Netlify New Site picker](https://user-images.githubusercontent.com/300/73697486-85f84a80-4693-11ea-922f-0f134a3e9031.png)
 
-Now just authorize Netlify to connect to your git hosting provider and find your repo. When the deploy settings come up you can leave everything as the defaults and click **Deploy site**.
+Now just authorize Netlify to connect to your git hosting provider and find your repo. When the deploy settings come up, got to Advanced build settings, Click **Edit Variables** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. This will enable it find our databse. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`. and click **Deploy site**.
 
-Netlify will start building your app and it will eventually say "Site is live", but nothing will work. Why? We haven't told it where to find our database yet!
+Netlify will start building your app and it will eventually say "Site is live".
+
+This connection limit setting is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
 
 #### Environment Variables
 
-Go back to the main site page and then to **Site settings** at the top, and then **Build & Deploy** > **Environment**. Click **Edit Variables** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`.
+Go back to the main site page and then to **Site settings** at the top, and then **Build & Deploy** > **Environment**. 
 
-:::tip
-
-This connection limit setting is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
 :::
 
 We'll need to add one more environment variable, `SESSION_SECRET` which contains a big long string that's used to encrypt the session cookies for dbAuth. This was included in development when you installed dbAuth, but now we need to tell Netlify about it. If you look in your `.env` file you'll see it at the bottom, but we want to create a unique one for every environment we deploy to (each developer should have a unique one as well). We've got a CLI command to create a new one:
