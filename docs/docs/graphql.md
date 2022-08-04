@@ -1268,7 +1268,7 @@ However, if you make those edits in your Prisma schema, then those will be used.
 
 ### Prisma Schema Comments
 
-Your Prisma schema is documented with a comment `///` that precedes:
+Your Prisma schema is documented with tripple slash comments (`///`) that precedes:
 
 * the Model name
 * the Enum name
