@@ -61,7 +61,6 @@
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
-    "slash": "^4.0.0",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
     "yargs": "17.5.1"
