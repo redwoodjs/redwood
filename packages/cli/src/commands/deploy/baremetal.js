@@ -5,7 +5,6 @@ import toml from '@iarna/toml'
 import boxen from 'boxen'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-import slash from 'slash'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
@@ -28,7 +27,7 @@ export const command = 'baremetal [environment]'
 export const description = 'Deploy to baremetal server(s)'
 
 export const execaOptions = {
-  cwd: slash(path.join(getPaths().base)),
+  cwd: path.join(getPaths().base),
   stdio: 'inherit',
   shell: true,
   cleanup: true,
@@ -210,9 +209,7 @@ export const serverConfigWithDefaults = (serverConfig, yargs) => {
 }
 
 export const maintenanceTasks = (status, ssh, serverConfig) => {
-  const deployPath = slash(
-    path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
-  )
+  const deployPath = path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
   const tasks = []
 
   if (status === 'up') {
@@ -220,13 +217,13 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
       title: `Enabling maintenance page...`,
       task: async () => {
         await sshExec(ssh, deployPath, 'cp', [
-          slash(path.join('web', 'dist', '200.html')),
-          slash(path.join('web', 'dist', '200.html.orig')),
+          path.join('web', 'dist', '200.html'),
+          path.join('web', 'dist', '200.html.orig'),
         ])
         await sshExec(ssh, deployPath, 'ln', [
           SYMLINK_FLAGS,
-          slash(path.join('..', 'src', 'maintenance.html')),
-          slash(path.join('web', 'dist', '200.html')),
+          path.join('..', 'src', 'maintenance.html'),
+          path.join('web', 'dist', '200.html'),
         ])
       },
     })
@@ -258,11 +255,11 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
         title: `Disabling maintenance page...`,
         task: async () => {
           await sshExec(ssh, deployPath, 'rm', [
-            slash(path.join('web', 'dist', '200.html')),
+            path.join('web', 'dist', '200.html'),
           ])
           await sshExec(ssh, deployPath, 'cp', [
-            slash(path.join('web', 'dist', '200.html.orig')),
-            slash(path.join('web', 'dist', '200.html')),
+            path.join('web', 'dist', '200.html.orig'),
+            path.join('web', 'dist', '200.html'),
           ])
         },
       })
@@ -369,7 +366,7 @@ export const commandWithLifecycleEvents = ({ name, config, skip, command }) => {
 }
 
 export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
-  const cmdPath = slash(path.join(serverConfig.path, yargs.releaseDir))
+  const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
   const config = { yargs, ssh, serverConfig, serverLifecycle, cmdPath }
   const tasks = []
 
@@ -611,7 +608,7 @@ export const parseConfig = (yargs, configToml) => {
 
 export const commands = (yargs, ssh) => {
   const deployConfig = fs
-    .readFileSync(slash(path.join(getPaths().base, CONFIG_FILENAME)))
+    .readFileSync(path.join(getPaths().base, CONFIG_FILENAME))
     .toString()
 
   let { envConfig, envLifecycle } = parseConfig(yargs, deployConfig)
