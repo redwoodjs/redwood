@@ -1,8 +1,4 @@
-import type {
-  Contact,
-  EditContactById,
-  UpdateContactInput,
-} from 'types/graphql'
+import type { EditContactById, UpdateContactInput } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
