@@ -24,6 +24,14 @@ export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
   const extraPlugins: CombinedPluginConfig[] = [
     {
+      name: 'add',
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: 'prepend',
+      },
+      codegenPlugin: addPlugin,
+    },
+    {
       name: 'typescript-resolvers',
       options: {},
       codegenPlugin: typescriptResolvers,
@@ -140,11 +148,6 @@ function getPluginConfig() {
     if (prismaModels.RW_DataMigration) {
       delete prismaModels.RW_DataMigration
     }
-
-    // Include Prisma's JSON field types as these types exist to match the types supported by JSON.parse()
-    // see: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields
-    // We're doing this to avoid adding an extra import statement just for the Prisma namespace
-    prismaModels['JSON'] = `.prisma/client#Prisma`
   } catch (error) {
     // This means they've not set up prisma types yet
   }
