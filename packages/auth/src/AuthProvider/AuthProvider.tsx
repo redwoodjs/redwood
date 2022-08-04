@@ -19,20 +19,6 @@ import { useSignUp } from './useSignUp'
 import { useToken } from './useToken'
 import { useValidateResetToken } from './useValidateResetToken'
 
-// interface ListenerOpts {
-//   authImplementation?: AuthImplementation
-//   reauthenticate: () => Promise<void>
-// }
-
-// const AuthUpdateListener = ({
-//   authImplementation,
-//   reauthenticate,
-// }: ListenerOpts) => {
-//   authImplementation?.useListenForUpdates?.({ reauthenticate })
-
-//   return null
-// }
-
 export interface AuthProviderProps {
   skipFetchCurrentUser?: boolean
   children: ReactNode
@@ -97,22 +83,6 @@ export function createAuthProvider<
       AuthProviderState<TUser>
     >(defaultAuthProviderState)
 
-    // const [authImplementation, setAuthImplementation] =
-    //   useState<AuthImplementation>()
-
-    // const rwClientPromise: Promise<AuthClient> = useMemo(async () => {
-    //   // If ever we rebuild the rwClient, we need to re-restore the state.
-    //   // This is not desired behavior, but may happen if for some reason the host app's
-    //   // auth configuration changes mid-flight.
-    //   setHasRestoredState(false)
-
-    //   const rwClient = await createAuthClient(client, type, config)
-
-    //   setRwClient(rwClient)
-
-    //   return rwClient
-    // }, [client, type, config])
-
     const getToken = useToken(authImplementation)
 
     // We're disabling eslint here, because while yes, technically we are
@@ -168,6 +138,8 @@ export function createAuthProvider<
       }
     }, [reauthenticate])
 
+    authImplementation.useListenForUpdates?.({ reauthenticate })
+
     return (
       <AuthContext.Provider
         value={{
@@ -187,10 +159,6 @@ export function createAuthProvider<
         }}
       >
         {children}
-        {/* <AuthUpdateListener
-          authImplementation={authImplementation}
-          reauthenticate={reauthenticate}
-        /> */}
       </AuthContext.Provider>
     )
   }

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import {
-  UserResource as ClerkUserResource,
   SignInProps,
   SignUpProps,
   SignOutCallback,
@@ -15,12 +14,7 @@ import {
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import {
-  AuthImplementation,
-  ListenForUpdatesHandlers,
-} from './AuthImplementation'
-
-type ClerkUser = ClerkUserResource & { roles: string[] | null }
+import { ListenForUpdatesHandlers } from './AuthImplementation'
 
 // Copy/pasted from @clerk/clerk-react because it wasn't exported
 type UseUserReturn =
@@ -39,27 +33,6 @@ function getClerkClient(propsClient: Clerk | null): Clerk | null {
   }
 }
 
-type ClerkAuthImplementation = AuthImplementation<
-  ClerkUser,
-  void,
-  void,
-  void,
-  void,
-  never,
-  never,
-  never
->
-
-const clerkCreateAuthentication = (
-  authImplementation: ClerkAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
-
 interface AuthProviderProps {
   children: React.ReactNode
 }
@@ -74,14 +47,14 @@ export function createClerkAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof clerkCreateAuthentication> {
+) {
   const authImplementation = createClerkAuthImplementation(clerk, useUser)
 
   const {
     AuthContext,
     AuthProvider: InternalAuthProvider,
     useAuth,
-  } = clerkCreateAuthentication(authImplementation, customProviderHooks)
+  } = createAuthentication(authImplementation, customProviderHooks)
 
   const AuthProvider = ({ children }: AuthProviderProps) => {
     return (
@@ -97,7 +70,7 @@ export function createClerkAuth(
 function createClerkAuthImplementation(
   clerk: Clerk,
   useClerkUser: () => UseUserReturn
-): ClerkAuthImplementation {
+) {
   return {
     type: 'clerk',
     login: async (options?: SignInProps) =>
