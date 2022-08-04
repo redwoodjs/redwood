@@ -3181,6 +3181,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-codegen/add@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@graphql-codegen/add@npm:3.2.0"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^2.5.0
+    tslib: ~2.4.0
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 4fab2193e2172fa1d7f47ba0f81a854306582a8722b0529914c48df5c7106ac140b5282e012ef3b477bbd30b8cb2669e0a7bfbda1b0122e65f6e8164a98aad11
+  languageName: node
+  linkType: hard
+
 "@graphql-codegen/cli@npm:2.11.0":
   version: 2.11.0
   resolution: "@graphql-codegen/cli@npm:2.11.0"
@@ -6547,6 +6559,7 @@ __metadata:
     "@babel/register": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@babel/traverse": 7.16.7
+    "@graphql-codegen/add": 3.2.0
     "@graphql-codegen/cli": 2.11.0
     "@graphql-codegen/core": 2.6.0
     "@graphql-codegen/schema-ast": 2.5.0
