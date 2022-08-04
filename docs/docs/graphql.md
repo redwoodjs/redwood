@@ -1528,7 +1528,7 @@ scalar Time
 
 ### Preview in GraphiQL
 
-The [GraphQL Playground aka GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
+The [GraphQL Playground aka GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at [http://localhost:8911/graphql](http://localhost:8911/graphql) when your dev server is running.
 
 The documentation generated is present when exploring the schema.
 
