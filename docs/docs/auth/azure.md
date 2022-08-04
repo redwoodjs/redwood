@@ -4,8 +4,6 @@ sidebar_label: Azure
 
 # Azure Active Directory Authentication
 
-+++ View Installation and Setup
-
 > **Azure AD B2C Compatibility Note**
 >
 >  Microsoft [Azure AD B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview) auth product *is* compatible with this auth provider. See below for additional configuration details.
@@ -27,7 +25,7 @@ yarn add @azure/msal-browser
 
 ## Setup
 
-To get your application credentials, create an [App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration) using in your Azure Active Directory tenant and make sure you configure as a [MSAL.js 2.0 with auth code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration#redirect-uri-msaljs-20-with-auth-code-flow) registration. Take a note of your generated _Application ID_ (client), and the _Directory ID_ (tenant).
+To get your application credentials, create an [App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration) using your Azure Active Directory tenant and make sure you configure as a [MSAL.js 2.0 with auth code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration#redirect-uri-msaljs-20-with-auth-code-flow) registration. Take a note of your generated _Application ID_ (client), and the _Directory ID_ (tenant).
 
 [Learn more about authorization code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-third-party-cookies-spas).
 
@@ -39,7 +37,7 @@ Enter allowed redirect urls for the integrations, e.g. `http://localhost:8910/lo
 
 The Authority is a URL that indicates a directory that MSAL can request tokens from which you can read about [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority). However, you most likely want to have e.g. `https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>` is the Azure Active Directory tenant id. This will be the `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
-```jsx title="web/src/App.js"
+```jsx title="web/src/App.{js,tsx}"
 import { AuthProvider } from '@redwoodjs/auth'
 import { PublicClientApplication } from '@azure/msal-browser'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -55,7 +53,8 @@ const azureActiveDirectoryClient = new PublicClientApplication({
     clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
     authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
     redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-    postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
+    postLogoutRedirectUri:
+      process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
   },
 })
 
@@ -80,7 +79,7 @@ To setup your App Registration with custom roles and have them exposed via the `
 
 ### Login Options
 
-Options in method `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized. By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In example below we explicit include `User.Read.All` to the login scope.
+Options in method `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized. By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In the example below we explicit include `User.Read.All` in the login scope.
 
 ```jsx
 await logIn({
@@ -109,32 +108,34 @@ Using Azure AD B2C with [hosted user flows](https://docs.microsoft.com/en-us/azu
 #### Update the .env file:
 
 - [MS Documentation about B2C JWT Issuer](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview)
+- [MS Documentation about MSAL, Azure B2C (authority|known authorities) parameters](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/working-with-b2c.md)
 
-- [MS Documentation about MSAL, Azure B2C (authority|known authorities) parameters](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/working-with-b2c.md
-)
-
-``` bash title="./.env"
-
+```bash title="./.env"
 AZURE_ACTIVE_DIRECTORY_AUTHORITY=https://{your-microsoft-tenant-name}.b2clogin.com/{{your-microsoft-tenant-name}}.onmicrosoft.com/{{your-microsoft-user-flow-id}}
+AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://{{your-microsoft-tenant-name}}.b2clogin.com/{{your-microsoft-tenant-id}}/v2.0/
+AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://{{your-microsoft-tenant-name}}.b2clogin.com
+```
 
-AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://{{your_microsoft_tenant_name}}.b2clogin.com/{{your_microsoft_tenant_id}}/v2.0/
-
-AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://{{ms_tenant_name}}.b2clogin.com
-
+Here are some example values
+```bash title="./env.example"
+AZURE_ACTIVE_DIRECTORY_AUTHORITY=https://rwauthtestb2c.b2clogin.com/rwauthtestb2c.onmicrosoft.com/B2C_1_signupsignin1
+AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://rwauthtestb2c.b2clogin.com/775527ef-8a37-4307-8b3d-cc311f58d922/v2.0/
+AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://rwauthtestb2c.b2clogin.com
 ```
 
 #### Update const activeDirectoryClient instance
- This lets the MSAL (Microsoft Authenication Library) web side client know about our new B2C allowed authority that we defined in the .env file
-``` jsx title="./web/App.jsx|.tsx
+ This lets the MSAL (Microsoft Authentication Library) web side client know about our new B2C allowed authority that we defined in the .env file
+```jsx title="./web/App.{js,tsx}
 
 const azureActiveDirectoryClient = new PublicClientApplication({
     auth: {
       clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
       authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
       redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-      postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
+      postLogoutRedirectUri:
+        process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
       // highlight-next-line
-      knownAuthorities:[process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
+      knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
     },
   })
 ```
