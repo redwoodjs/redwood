@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-// import * as add from '@graphql-codegen/add'
+import * as addPlugin from '@graphql-codegen/add'
 import { loadCodegenConfig } from '@graphql-codegen/cli'
 import { codegen } from '@graphql-codegen/core'
 import type {
@@ -57,6 +57,14 @@ export const generateTypeDefGraphQLWeb = async () => {
   }
 
   const extraPlugins: CombinedPluginConfig[] = [
+    {
+      name: 'add',
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: 'prepend',
+      },
+      codegenPlugin: addPlugin,
+    },
     {
       name: 'typescript-operations',
       options: {},
