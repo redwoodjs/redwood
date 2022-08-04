@@ -6365,6 +6365,7 @@ __metadata:
     tasuku: 2.0.0
     tempy: 1.0.1
     toml: 3.0.0
+    typescript: 4.7.4
     yargs: 17.5.1
   bin:
     codemods: ./dist/codemods.js
