@@ -1537,6 +1537,7 @@ The documentation generated is present when exploring the schema.
 
 #### Mutations
 ![graphiql-mutations](/img/graphql-api-docs/graphiql-mutations.png)
+
 #### Model Types
 ![graphiql-type](/img/graphql-api-docs/graphiql-type.png)
 
