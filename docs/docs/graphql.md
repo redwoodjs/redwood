@@ -1270,8 +1270,8 @@ However, if you make those edits in your Prisma schema, then those will be used.
 
 Your Prisma schema is documented with tripple slash comments (`///`) that precedes:
 
-* the Model name
-* the Enum name
+* Model names
+* Enum names
 * each Model field name
 
 ```
