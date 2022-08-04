@@ -1321,7 +1321,7 @@ When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) 
 By default, the `--docs` option to the SDL generator is false and comments are not created.
 :::
 
-Comments in GraphQL schema are enclosed in `"""` and will be included in the generate4d `.redwood/schema.graphql` at the root of your project.
+Comments in GraphQL schema are enclosed in `"""` and will be included in the generated `.redwood/schema.graphql` at the root of your project.
 
 ```
 """
