@@ -1663,7 +1663,6 @@ yarn start
 #### Example Screens
 
 ##### Schema Documentation
-
 ![graphql-doc-example-main](/img/graphql-api-docs/schema-doc.png)
 
 ##### Type Example
