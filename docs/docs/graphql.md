@@ -1255,7 +1255,9 @@ export const getWeather = async ({ input }: WeatherInput) {
 
 ## Self-Documenting GraphQL API
 
-RedwoodJS helps you document your GraphQL API by auto-generating commented SDL that will be incorporated into the `graphql.schema` file when generating types and that will be used for GraphiQL and the GraphQL Playground explorer.
+RedwoodJS helps you document your GraphQL API by generating commented SDL used for GraphiQL and the GraphQL Playground explorer -- as well as can be turned into API docs using tools like [Docusaurus](#use-in-docusaurus).
+
+If you specify the SDL generator with its `--docs` option, any comments (which the [GraphQL spec](https://spec.graphql.org/October2021/#sec-Descriptions) calls "descriptions") will be incorporated into your RedwoodJS app's `graphql.schema` file when generating types.
 
 If you comment your Prisma schema models, its fields, or enums, the SDL generator will use those comments as the documentation.
 
@@ -1268,7 +1270,7 @@ However, if you make those edits in your Prisma schema, then those will be used.
 
 ### Prisma Schema Comments
 
-Your Prisma schema is documented with tripple slash comments (`///`) that precedes:
+Your Prisma schema is documented with triple slash comments (`///`) that precedes:
 
 * Model names
 * Enum names
@@ -1321,7 +1323,7 @@ When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) 
 By default, the `--docs` option to the SDL generator is false and comments are not created.
 :::
 
-Comments in GraphQL schema are enclosed in `"""` and will be included in the generated `.redwood/schema.graphql` at the root of your project.
+Comments [enclosed in `"""` or `"`]([GraphQL spec](https://spec.graphql.org/October2021/#sec-Descriptions) in your sdl files will be included in the generated GraphQL schema at the root of your project (.redwood/schema.graphql).
 
 ```
 """
@@ -1533,16 +1535,20 @@ The [GraphQL Playground aka GraphiQL](https://www.graphql-yoga.com/docs/features
 The documentation generated is present when exploring the schema.
 
 #### Queries
-![graphiql-queries](/img/graphql-api-docs/graphiql-queries.png)
+
+<img alt="graphiql-queries" src="/img/graphql-api-docs/graphiql-queries.png" width="400" />
 
 #### Mutations
-![graphiql-mutations](/img/graphql-api-docs/graphiql-mutations.png)
+
+<img alt="graphiql-mutations" src="/img/graphql-api-docs/graphiql-mutations.png" width="400" />
 
 #### Model Types
-![graphiql-type](/img/graphql-api-docs/graphiql-type.png)
+
+<img alt="graphiql-type" src="/img/graphql-api-docs/graphiql-type.png" width="400" />
 
 #### Input Types
-![graphiql-input-type](/img/graphql-api-docs/graphiql-input-type.png)
+
+<img alt="graphiql-input-type" src="/img/graphql-api-docs/graphiql-input-type.png" width="400" />
 
 ### Use in Docusaurus
 
