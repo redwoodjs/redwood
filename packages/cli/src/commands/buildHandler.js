@@ -16,6 +16,8 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
+import { getTasks as getPrerenderTasks } from './prerenderHandler'
+
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
@@ -57,13 +59,27 @@ export const handler = async ({
   const tasks = [
     shouldGeneratePrismaClient && {
       title: 'Generating Prisma Client...',
-      task: () => {
+      task: async () => {
         const { cmd, args } = generatePrismaCommand(rwjsPaths.api.dbSchema)
-        return execa(cmd, args, {
+
+        await execa(cmd, args, {
           stdio: verbose ? 'inherit' : 'pipe',
           shell: true,
           cwd: rwjsPaths.api.base,
         })
+
+        // Purge Prisma Client from node's require cache, so that the newly
+        // generated client gets picked up by any script that uses it
+        Object.keys(require.cache).forEach((key) => {
+          if (
+            key.includes('/node_modules/@prisma/client/') ||
+            key.includes('/node_modules/.prisma/client/')
+          ) {
+            delete require.cache[key]
+          }
+        })
+
+        return
       },
     },
     side.includes('api') && {
@@ -124,12 +140,9 @@ export const handler = async ({
               'file://' + rwjsPaths.web.routes
             )}.`
           }
-          // Running a separate process here, otherwise it wouldn't pick up the
-          // generated Prisma Client
-          await execa('yarn rw prerender', {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.web.base,
+          return new Listr(await getPrerenderTasks(), {
+            renderer: verbose && VerboseRenderer,
+            concurrent: true, // Re-use prerender tasks, but run them in parallel to speed things up
           })
         },
       },
