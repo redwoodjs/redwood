@@ -96,32 +96,26 @@ export const getCurrentUser = async (session) => {
 </TabItem>
 </Tabs>
 
-
-
 <ShowForTs>
 
 ### Fixing the hasRole function
 
-At this point, you might notice an error in your src/lib/auth.ts file, in the `hasRole` function. TypeScript is trying to help you here, by highlighting that roles can never be an an array of strings.
+At this point, you might notice an error in your `api/src/lib/auth.ts` file, in the `hasRole` function. TypeScript is trying to help you here, by highlighting that roles can never be an an array of strings:
 
-
-```ts
+```ts title="api/src/lib/auth.ts"
 export const hasRole = (roles: AllowedRoles): boolean => {
-  /*
-  ...
-  ...
-  */
-    } else if (Array.isArray(currentUserRoles)) {
 
-      // 👇 TypeScript will now be telling you 'some' does not exist on type never
+  // ...
+
+    } else if (Array.isArray(currentUserRoles)) {
+      // 👇 TypeScript will now be telling you 'some' doesn't exist on type never:
       // highlight-next-line
       return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
   }
  ```
 
-This is because, we now know that the type of your `currentUser.roles` is a `string` - based on the type being returned from Prisma. So you can safely remove the block of code where its checking if roles is an array.
-
+This is because we now know that the type of `currentUser.roles` is a `string` based on the type being returned from Prisma. So you can safely remove the block of code where it's checking if roles is an array:
 
 ```diff title="api/src/lib/auth.ts"
 export const hasRole = (roles: AllowedRoles): boolean => {
@@ -159,8 +153,6 @@ export const hasRole = (roles: AllowedRoles): boolean => {
   return false
 }
 ```
-
-
 
 </ShowForTs>
 

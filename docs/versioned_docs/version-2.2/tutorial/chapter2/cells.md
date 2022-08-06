@@ -318,20 +318,20 @@ export const Success = ({ posts }: CellSuccessProps<ArticlesQuery>) => {
 </TabItem>
 </Tabs>
 
-
 <ShowForTs>
 
 :::tip Using generated types
 
-At this point, you might notice another error in your Cell. "The type ArticlesQuery does not exist" while trying to import from `types/graphql`
+At this point, you might see an error in your Cell while trying to import from `types/graphql`: "The type ArticlesQuery does not exist"
 
-When you have `yarn rw dev` running, the CLI watches files for changes and triggers type generation automatically, but you can trigger it manually too by running
+When you have `yarn rw dev` running, the CLI watches files for changes and triggers type generation automatically, but you can trigger it manually too by running:
 
 ```bash
 yarn rw g types
 ```
 
-This looks at your `QUERY` - and will try to automatically create a TypeScript type for you to use in your code - as long as your query is valid.
+This looks at your Cell's `QUERY` and—as long as it's valid—tries to automatically create a TypeScript type for you to use in your code.
+
 :::
 
 </ShowForTs>
