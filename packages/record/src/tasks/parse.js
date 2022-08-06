@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getDMMF } from '@prisma/sdk'
+import { getDMMF } from '@prisma/internals'
 import * as esbuild from 'esbuild'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
