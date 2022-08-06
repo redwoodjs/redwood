@@ -37,6 +37,7 @@ export function createSupabaseAuth(
 function createSupabaseAuthImplementation(supabaseClient: SupabaseClient) {
   return {
     type: 'supabase',
+    client: supabaseClient,
     /**
      * Log in an existing user, or login via a third-party provider.
      *

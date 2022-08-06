@@ -8,31 +8,7 @@ import type {
 import type { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import type { AuthImplementation } from './AuthImplementation'
-
 type AzureActiveDirectoryClient = AzureActiveDirectory
-interface AzureActiveDirectoryUser {}
-
-type AzureActiveDirectoryAuthImplementation = AuthImplementation<
-  AzureActiveDirectoryUser,
-  void,
-  void,
-  void,
-  void,
-  never,
-  never,
-  never
->
-
-const azureActiveDirectoryCreateAuthentication = (
-  authImplementation: AzureActiveDirectoryAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
 
 export function createAzureActiveDirectoryAuth(
   azureActiveDirectoryClient: AzureActiveDirectoryClient,
@@ -42,22 +18,20 @@ export function createAzureActiveDirectoryAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof azureActiveDirectoryCreateAuthentication> {
+) {
   const authImplementation = createAzureActiveDirectoryAuthImplementation(
     azureActiveDirectoryClient
   )
 
-  return azureActiveDirectoryCreateAuthentication(
-    authImplementation,
-    customProviderHooks
-  )
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
 function createAzureActiveDirectoryAuthImplementation(
   azureActiveDirectoryClient: AzureActiveDirectoryClient
-): AzureActiveDirectoryAuthImplementation {
+) {
   return {
     type: 'azureActiveDirectory',
+    client: azureActiveDirectoryClient,
     login: async (options?: RedirectRequest) =>
       azureActiveDirectoryClient.loginRedirect(options),
     logout: (options?: EndSessionRequest) =>

@@ -12,7 +12,8 @@ export interface AuthContextInterface<
   TSignUp,
   TForgotPassword,
   TResetPassword,
-  TValidateResetToken
+  TValidateResetToken,
+  TClient
 > {
   /** Determining your current authentication state */
   loading: boolean
@@ -73,7 +74,7 @@ export interface AuthContextInterface<
    * TODO: Add implementation for `client`. Right now I don't think I set it
    * anywhere
    */
-  client?: any
+  client?: TClient
   type: string
   hasError: boolean
   error?: Error
@@ -86,7 +87,8 @@ export function createAuthContext<
   TSignUp,
   TForgotPassword,
   TResetPassword,
-  TValidateResetToken
+  TValidateResetToken,
+  TClient
 >() {
   return React.createContext<
     | AuthContextInterface<
@@ -96,7 +98,8 @@ export function createAuthContext<
         TSignUp,
         TForgotPassword,
         TResetPassword,
-        TValidateResetToken
+        TValidateResetToken,
+        TClient
       >
     | undefined
   >(undefined)

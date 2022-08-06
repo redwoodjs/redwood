@@ -5,8 +5,6 @@ import type FirebaseAuthNamespace from 'firebase/auth'
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
-
 type FirebaseAuth = typeof FirebaseAuthNamespace
 
 // @TODO: Firebase doesn't export a list of providerIds they use
@@ -72,27 +70,6 @@ const applyProviderOptions = (
   return provider
 }
 
-type FirebaseAuthImplementation = AuthImplementation<
-  User | null,
-  User | null,
-  FirebaseAuthNamespace.UserCredential | undefined,
-  void,
-  FirebaseAuthNamespace.UserCredential | undefined,
-  never,
-  never,
-  never
->
-
-const firebaseCreateAuthentication = (
-  authImplementation: FirebaseAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
-
 export function createFirebaseAuth(
   firebaseClient: FirebaseClient,
   customProviderHooks?: {
@@ -101,10 +78,10 @@ export function createFirebaseAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof firebaseCreateAuthentication> {
+) {
   const authImplementation = createFirebaseAuthImplementation(firebaseClient)
 
-  return firebaseCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
 interface FirebaseClient {
@@ -115,7 +92,7 @@ interface FirebaseClient {
 function createFirebaseAuthImplementation({
   firebaseAuth,
   firebaseApp,
-}: FirebaseClient): FirebaseAuthImplementation {
+}: FirebaseClient) {
   const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
@@ -132,6 +109,7 @@ function createFirebaseAuthImplementation({
 
   return {
     type: 'firebase',
+    client: auth,
     restoreAuthState: () => {
       // The first firing of onAuthStateChange indicates that firebase auth has
       // loaded and the state is ready to be read. Unsubscribe after this first firing.

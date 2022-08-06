@@ -7,31 +7,8 @@ import type {
 import type { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import type { AuthImplementation } from './AuthImplementation'
-
 // TODO: Map out this user properly.
 export interface Auth0User {}
-
-type Auth0AuthImplementation = AuthImplementation<
-  Auth0User,
-  void,
-  void,
-  void,
-  void,
-  never,
-  never,
-  never
->
-
-const auth0CreateAuthentication = (
-  authImplementation: Auth0AuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
 
 export function createAuth0Auth(
   auth0Client: Auth0Client,
@@ -41,17 +18,16 @@ export function createAuth0Auth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof auth0CreateAuthentication> {
+) {
   const authImplementation = createAuth0AuthImplementation(auth0Client)
 
-  return auth0CreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAuth0AuthImplementation(
-  auth0Client: Auth0Client
-): Auth0AuthImplementation {
+function createAuth0AuthImplementation(auth0Client: Auth0Client) {
   return {
     type: 'auth0',
+    client: auth0Client,
     restoreAuthState: async () => {
       if (
         global?.location?.search?.includes('code=') &&

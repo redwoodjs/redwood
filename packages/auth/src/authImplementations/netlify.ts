@@ -32,6 +32,7 @@ export function createNetlifyAuth(
 function createNetlifyAuthImplementation(netlifyIdentity: NetlifyIdentity) {
   return {
     type: 'netlify',
+    client: netlifyIdentity,
     login: () => {
       return new Promise<NetlifyIdentityNS.User | null>((resolve, reject) => {
         let autoClosedModal = false

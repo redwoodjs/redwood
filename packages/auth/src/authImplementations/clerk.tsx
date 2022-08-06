@@ -3,13 +3,15 @@ import {
   SignUpProps,
   SignOutCallback,
   Resources,
-  Clerk,
+  Clerk as ClerkClient,
   GetTokenOptions,
   SignOutOptions,
 } from '@clerk/types'
 
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
+
+type Clerk = ClerkClient | undefined | null
 
 export function createClerkAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -30,6 +32,7 @@ export function createClerkAuth(customProviderHooks?: {
 function createClerkAuthImplementation() {
   return {
     type: 'clerk',
+    client: (window as any).Clerk as Clerk,
     login: async (options?: SignInProps) => {
       const clerk = (window as any).Clerk as Clerk
       clerk?.openSignIn(options || {})

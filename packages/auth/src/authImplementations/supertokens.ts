@@ -1,8 +1,6 @@
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
-
 export interface SuperTokensUser {
   userId: string
   accessTokenPayload: any
@@ -19,27 +17,6 @@ type AuthRecipe = {
   redirectToAuth: (input: 'signin' | 'signup') => void
 }
 
-type SuperTokensAuthImplementation = AuthImplementation<
-  SuperTokensUser,
-  never,
-  void,
-  void,
-  void,
-  never,
-  never,
-  never
->
-
-const superTokensCreateAuthentication = (
-  authImplementation: SuperTokensAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
-
 export function createSuperTokensAuth(
   superTokens: {
     authRecipe: AuthRecipe
@@ -51,21 +28,19 @@ export function createSuperTokensAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof superTokensCreateAuthentication> {
+) {
   const authImplementation = createSuperTokensAuthImplementation(superTokens)
 
-  return superTokensCreateAuthentication(
-    authImplementation,
-    customProviderHooks
-  )
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
 function createSuperTokensAuthImplementation(superTokens: {
   authRecipe: AuthRecipe
   sessionRecipe: SessionRecipe
-}): SuperTokensAuthImplementation {
+}) {
   return {
     type: 'supertokens',
+    client: undefined,
     login: async () => superTokens.authRecipe.redirectToAuth('signin'),
 
     signup: async () => superTokens.authRecipe.redirectToAuth('signup'),

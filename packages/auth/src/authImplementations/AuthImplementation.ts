@@ -1,7 +1,3 @@
-export interface ListenForUpdatesHandlers {
-  reauthenticate: () => Promise<void>
-}
-
 export interface AuthImplementation<
   TUser = unknown,
   TRestoreAuth = unknown,
@@ -10,9 +6,11 @@ export interface AuthImplementation<
   TSignUp = unknown,
   TForgotPassword = unknown,
   TResetPassword = unknown,
-  TValidateResetToken = unknown
+  TValidateResetToken = unknown,
+  TClient = unknown
 > {
   type: string
+  client: TClient
 
   restoreAuthState?(): Promise<TRestoreAuth>
   login(options?: unknown): Promise<TLogIn>
@@ -44,8 +42,4 @@ export interface AuthImplementation<
    * ```
    */
   getUserMetadata(): Promise<TUser | null>
-
-  /** Hooks for managing the hosting auth provider's life-cycle */
-  /** An optional hook to listen for updates from the 3rd party auth provider */
-  useListenForUpdates?(handlers: ListenForUpdatesHandlers): void
 }

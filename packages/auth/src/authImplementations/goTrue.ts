@@ -4,8 +4,6 @@ import type { User } from 'gotrue-js'
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
-
 export type GoTrueUser = User
 
 interface LogInSignUpOptions {
@@ -13,27 +11,6 @@ interface LogInSignUpOptions {
   password: string
   remember?: boolean
 }
-
-type GoTrueAuthImplementation = AuthImplementation<
-  User,
-  never,
-  User,
-  void | undefined,
-  User,
-  never,
-  never,
-  never
->
-
-const goTrueCreateAuthentication = (
-  authImplementation: GoTrueAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
 
 export function createGoTrueAuth(
   goTrue: GoTrue,
@@ -43,17 +20,16 @@ export function createGoTrueAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof goTrueCreateAuthentication> {
+) {
   const authImplementation = createGoTrueAuthImplementation(goTrue)
 
-  return goTrueCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createGoTrueAuthImplementation(
-  goTrue: GoTrue
-): GoTrueAuthImplementation {
+function createGoTrueAuthImplementation(goTrue: GoTrue) {
   return {
     type: 'goTrue',
+    client: goTrue,
     login: ({ email, password, remember }: LogInSignUpOptions) =>
       goTrue.login(email, password, remember),
     logout: async () => {

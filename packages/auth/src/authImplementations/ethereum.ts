@@ -54,6 +54,7 @@ function createEthereumAuthImplementation(
 ): EthereumAuthImplementation {
   return {
     type: 'ethereum',
+    client: ethereum,
     login: async (options?: unknown) => await ethereum.login(options),
     signup: () => {
       throw new Error(

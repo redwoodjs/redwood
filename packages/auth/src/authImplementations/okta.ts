@@ -1,36 +1,11 @@
 import {
   AccessToken,
-  CustomUserClaims,
   OktaAuth,
   SigninWithRedirectOptions,
-  UserClaims,
 } from '@okta/okta-auth-js'
 
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
-
-import { AuthImplementation } from './AuthImplementation'
-
-type OktaAuthImplementation = AuthImplementation<
-  UserClaims<CustomUserClaims>,
-  void,
-  void,
-  void,
-  void,
-  never,
-  never,
-  never
->
-
-const oktaCreateAuthentication = (
-  authImplementation: OktaAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
 
 export function createOktaAuth(
   oktaAuth: OktaAuth,
@@ -40,17 +15,16 @@ export function createOktaAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof oktaCreateAuthentication> {
+) {
   const authImplementation = createOktaAuthImplementation(oktaAuth)
 
-  return oktaCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createOktaAuthImplementation(
-  oktaAuth: OktaAuth
-): OktaAuthImplementation {
+function createOktaAuthImplementation(oktaAuth: OktaAuth) {
   return {
     type: 'okta',
+    client: oktaAuth,
     restoreAuthState: async () => {
       const previousState = oktaAuth.authStateManager.getPreviousAuthState()
 

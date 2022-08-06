@@ -32,7 +32,8 @@ export function createAuthProvider<
   TSignUp,
   TForgotPassword,
   TResetPassword,
-  TValidateResetToken
+  TValidateResetToken,
+  TClient
 >(
   AuthContext: React.Context<
     | AuthContextInterface<
@@ -42,7 +43,8 @@ export function createAuthProvider<
         TSignUp,
         TForgotPassword,
         TResetPassword,
-        TValidateResetToken
+        TValidateResetToken,
+        TClient
       >
     | undefined
   >,
@@ -54,7 +56,8 @@ export function createAuthProvider<
     TSignUp,
     TForgotPassword,
     TResetPassword,
-    TValidateResetToken
+    TValidateResetToken,
+    TClient
   >,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -63,16 +66,6 @@ export function createAuthProvider<
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  /**
-   * @example
-   * ```js
-   *  const client = new Auth0Client(options)
-   *  // ...
-   *  <AuthProvider client={client} type="auth0" skipFetchCurrentUser={true}>
-   *    {children}
-   *  </AuthProvider>
-   * ```
-   */
   const AuthProvider = ({
     children,
     skipFetchCurrentUser,
@@ -93,8 +86,6 @@ export function createAuthProvider<
       ? customProviderHooks.useCurrentUser
       : // eslint-disable-next-line react-hooks/rules-of-hooks
         useCurrentUser(authImplementation)
-
-    console.log('AuthProvider getCurrentUser', getCurrentUser)
 
     const reauthenticate = useReauthenticate(
       authImplementation,
@@ -121,6 +112,7 @@ export function createAuthProvider<
     const resetPassword = useResetPassword(authImplementation)
     const validateResetToken = useValidateResetToken(authImplementation)
     const type = authImplementation.type
+    const client = authImplementation.client
 
     // Whenever the authImplementation is ready to go, restore auth and reauthenticate
     // TODO: We need this for Clerk. Need to figure out how to incorporate
@@ -138,8 +130,6 @@ export function createAuthProvider<
       }
     }, [reauthenticate])
 
-    authImplementation.useListenForUpdates?.({ reauthenticate })
-
     return (
       <AuthContext.Provider
         value={{
@@ -154,7 +144,7 @@ export function createAuthProvider<
           forgotPassword,
           resetPassword,
           validateResetToken,
-          // client,
+          client,
           type,
         }}
       >
