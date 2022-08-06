@@ -23,6 +23,8 @@ import { netlify } from './netlify'
 import type { NetlifyIdentity } from './netlify'
 import { nhost } from './nhost'
 import type { Nhost, NhostUser } from './nhost'
+import { okta } from './okta'
+import type { Okta, OktaUser } from './okta'
 import { supabase } from './supabase'
 import type { Supabase, SupabaseUser } from './supabase'
 import { supertokens } from './supertokens'
@@ -41,6 +43,7 @@ const typesToClients = {
   nhost,
   clerk,
   supertokens,
+  okta,
   /** Don't we support your auth client? No problem, define your own the `custom` type! */
   custom,
 }
@@ -58,6 +61,7 @@ export type SupportedAuthClients =
   | Ethereum
   | Nhost
   | SuperTokens
+  | Okta
   | Custom
 
 export type SupportedAuthTypes = keyof typeof typesToClients
@@ -75,6 +79,7 @@ export type { SupabaseUser }
 export type { EthereumUser }
 export type { NhostUser }
 export type { SuperTokensUser }
+export type { OktaUser }
 export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
@@ -86,6 +91,7 @@ export type SupportedUserMetadata =
   | EthereumUser
   | NhostUser
   | SuperTokensUser
+  | OktaUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
