@@ -226,7 +226,7 @@ And then in the users service we'll just create a dummy method to start with.
 ```ts title="users.ts"
 // ...
 
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 
 // ...
 
