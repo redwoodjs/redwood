@@ -53,17 +53,5 @@
     "supertokens-auth-react": "0.24.2",
     "typescript": "4.7.4"
   },
-  "peerDependencies": {
-    "@clerk/clerk-react": "3.5.1",
-    "@clerk/clerk-sdk-node": "3.9.2"
-  },
-  "peerDependenciesMeta": {
-    "@clerk/clerk-react": {
-      "optional": true
-    },
-    "@clerk/clerk-sdk-node": {
-      "optional": true
-    }
-  },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

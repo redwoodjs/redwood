@@ -138,23 +138,6 @@ const getSharedPlugins = (isEnvProduction) => {
         mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
       }
 
-  // If one has an optional dependency that should be included if installed but not
-  // cause a compile error if missing, then this will do that for you.
-  // Checks at *compile time* if the dependency is present and ignores ONLY if not.
-  // Caveat - this does mean you might defer a missing dependency error until runtime.
-  function ignoreOptionalDependency(dependencyName) {
-    try {
-      require(dependencyName)
-      return []
-    } catch {
-      return [
-        new webpack.IgnorePlugin({
-          resourceRegExp: new RegExp(`^${dependencyName}$`),
-        }),
-      ]
-    }
-  }
-
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
@@ -187,7 +170,6 @@ const getSharedPlugins = (isEnvProduction) => {
       ),
       ...getEnvVars(),
     }),
-    ...ignoreOptionalDependency('@clerk/clerk-react'),
     new Dotenv({
       path: path.resolve(redwoodPaths.base, '.env'),
       silent: true,
