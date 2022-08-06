@@ -109,6 +109,8 @@ function createFirebaseAuthImplementation({
 
   return {
     type: 'firebase',
+    // TODO: Should we change this to { firebaseAuth, firebaseApp } to match
+    // what's created in the user's RW App?
     client: auth,
     restoreAuthState: () => {
       // The first firing of onAuthStateChange indicates that firebase auth has

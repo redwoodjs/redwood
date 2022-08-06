@@ -29,7 +29,7 @@ export function createEthereumAuth(
 function createEthereumAuthImplementation(ethereum: Ethereum) {
   return {
     type: 'ethereum',
-    client: ethereum,
+    client: ethereum || (window as any).ethereumRwClient,
     login: async (options?: unknown) => await ethereum.login(options),
     signup: () => {
       throw new Error(
