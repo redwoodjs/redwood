@@ -1,45 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Should add auth config when app is missing RedwoodApolloProvider Matches Auth0 Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { Auth0Client } from '@auth0/auth0-spa-js'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+exports[`Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+import { AuthProvider, useAuth } from './auth'
+
 import './index.css'
-
-const queryClient = {}
-
-const auth0 = new Auth0Client({
-  domain: process.env.AUTH0_DOMAIN,
-  client_id: process.env.AUTH0_CLIENT_ID,
-  redirect_uri: process.env.AUTH0_REDIRECT_URI,
-
-  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
-  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
-  // they can retrieve the tokens stored in local storage.
-  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
-  cacheLocation: 'localstorage',
-  audience: process.env.AUTH0_AUDIENCE,
-
-  // @MARK: useRefreshTokens is required for automatically extending sessions
-  // beyond that set in the initial JWT expiration.
-  //
-  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
-  // useRefreshTokens: true,
-})
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={auth0} type=\\"auth0\\">
-        <QueryClientProvider client={queryClient}>
-          <RedwoodReactQueryProvider>
-            <Routes />
-          </RedwoodReactQueryProvider>
-        </QueryClientProvider>
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth} graphQLClientConfig={{ cache }}>
+          <Routes />
+        </RedwoodApolloProvider>
       </AuthProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>
@@ -49,36 +27,118 @@ export default App
 "
 `;
 
-exports[`Should add auth config when using explicit return Matches Auth0 Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { Auth0Client } from '@auth0/auth0-spa-js'
-import { useEffect } from 'react'
+exports[`Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 2`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}
+      pageLoadingDelay={400}
+      trailingSlashes=\\"always\\"
+      paramTypes={{
+        foo: {
+          match: /foo/,
+          parse: (value: string) => value.split('').reverse().join(''),
+        },
+      }}
+    >
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Components with props Should not add useAuth if one already exists 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth} graphQLClientConfig={{ cache }}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Components with props Should not add useAuth if one already exists 2`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}
+      pageLoadingDelay={400}
+      trailingSlashes=\\"always\\"
+      paramTypes={{
+        foo: {
+          match: /foo/,
+          parse: (value: string) => value.split('').reverse().join(''),
+        },
+      }}
+      useAuth={() => ({
+        loading: false,
+        isAuthenticated: false
+      })}
+    >
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Customized App.js Should add auth config when using explicit return 1`] = `
+"import { useEffect } from 'react'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+import { AuthProvider, useAuth } from './auth'
+
 import './index.css'
-
-const auth0 = new Auth0Client({
-  domain: process.env.AUTH0_DOMAIN,
-  client_id: process.env.AUTH0_CLIENT_ID,
-  redirect_uri: process.env.AUTH0_REDIRECT_URI,
-
-  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
-  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
-  // they can retrieve the tokens stored in local storage.
-  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
-  cacheLocation: 'localstorage',
-  audience: process.env.AUTH0_AUDIENCE,
-
-  // @MARK: useRefreshTokens is required for automatically extending sessions
-  // beyond that set in the initial JWT expiration.
-  //
-  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
-  // useRefreshTokens: true,
-})
 
 const App = (props) => {
   const { cache } = props
@@ -90,8 +150,8 @@ const App = (props) => {
   return (
     <FatalErrorBoundary page={FatalErrorPage}>
       <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-        <AuthProvider client={auth0} type=\\"auth0\\">
-          <RedwoodApolloProvider>
+        <AuthProvider>
+          <RedwoodApolloProvider useAuth={useAuth}>
             <AnotherProvider>
               <Routes />
             </AnotherProvider>
@@ -106,7 +166,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 1`] = `
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -133,7 +193,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 2`] = `
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 2`] = `
 "import { Auth0Client } from '@auth0/auth0-spa-js'
 
 import { createAuth0Auth } from '@redwoodjs/auth'
@@ -161,7 +221,7 @@ export const { AuthProvider, useAuth } = createAuth0Auth(auth0)
 "
 `;
 
-exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 3`] = `
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 3`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -187,355 +247,121 @@ export default Routes
 "
 `;
 
-exports[`Should add config lines to App.{js,tsx} Matches Firebase Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { initializeApp, getApp, getApps } from 'firebase/app'
-import * as firebaseAuth from '@firebase/auth'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+import { AuthProvider, useAuth } from './auth'
+
 import './index.css'
 
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
 
-  /** Optional config, may be needed, depending on how you use firebase
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  **/
+export default App
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 2`] = `
+"import React, { useEffect } from 'react'
+
+import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
+
+import { createClerkAuth } from '@redwoodjs/auth'
+import { navigate } from '@redwoodjs/router'
+
+export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createClerkAuth()
+
+const ClerkStatusUpdater = () => {
+  const { isSignedIn, user, isLoaded } = useUser()
+  const { reauthenticate } = useAuth()
+
+  useEffect(() => {
+    if (isLoaded) {
+      reauthenticate()
+    }
+  }, [isSignedIn, user, reauthenticate, isLoaded])
+
+  return null
 }
 
-const firebaseApp = ((config) => {
-  const apps = getApps()
-  if (!apps.length) {
-    initializeApp(config)
+export const AuthProvider = ({ children }) => {
+  const frontendApi = process.env.CLERK_FRONTEND_API_URL
+  if (!frontendApi) {
+    throw new Error('Need to define env variable CLERK_FRONTEND_API_URL')
   }
-  return getApp()
-})(firebaseConfig)
 
-export const firebaseClient = {
-  firebaseAuth,
-  firebaseApp, // optional
-}
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={firebaseClient} type=\\"firebase\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches azureActiveDirectory Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { PublicClientApplication } from '@azure/msal-browser'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-const azureActiveDirectoryClient = new PublicClientApplication({
-    auth: {
-      clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
-      authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
-      redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-      postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
-    },
-  })
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={azureActiveDirectoryClient} type=\\"azureActiveDirectory\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches ethereum Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import EthereumAuthClient from '@oneclickdapp/ethereum-auth'
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-let ethereum
-
-  const ApolloInjector = ({ children }) => {
-  const { uri, headers } = useFetchConfig()
-  try {
-    const graphQLClient = new ApolloClient({
-      cache: new InMemoryCache(),
-      uri,
-      headers,
-    })
-    // Default option using Apollo Client
-    const makeRequest = (mutation, variables) =>
-      graphQLClient.mutate({
-        mutation,
-        variables,
-      })
-
-    // Alternative option using graphql-hooks
-    // You'll also need to modify graphQLClient
-    // const makeRequest = (query, variables) =>
-    //   graphQLClient.request({
-    //     query,
-    //     variables,
-    //   })
-
-    ethereum = new EthereumAuthClient({
-      makeRequest,
-      debug: process.NODE_ENV === 'development',
-    })
-  } catch (e) {
-    console.log(e)
-  }
-  return React.cloneElement(children, { client: ethereum })
-}
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <FetchConfigProvider>
-      <ApolloInjector>
-      <AuthProvider client={ethereum} type=\\"ethereum\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-      </ApolloInjector>
-      </FetchConfigProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches goTrue Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import GoTrue from 'gotrue-js'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-const goTrueClient = new GoTrue({
-  APIUrl: 'https://MYAPP.netlify.app/.netlify/identity',
-  setCookie: true,
-})
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={goTrueClient} type=\\"goTrue\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches magicLink Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { Magic } from 'magic-sdk'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-const m = new Magic(process.env.MAGICLINK_PUBLIC)
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={m} type=\\"magicLink\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches netlify Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import netlifyIdentity from 'netlify-identity-widget'
-import { isBrowser } from '@redwoodjs/prerender/browserUtils'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-isBrowser && netlifyIdentity.init()
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={netlifyIdentity} type=\\"netlify\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches nhost Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { NhostClient } from '@nhost/nhost-js'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-const nhostClient = new NhostClient({
-  backendUrl: process.env.NHOST_BACKEND_URL,
-});
-
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={nhostClient} type=\\"nhost\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
-"
-`;
-
-exports[`Should add config lines to App.{js,tsx} Matches supabase Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { createClient } from '@supabase/supabase-js'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-
-import './index.css'
-
-const supabaseClient = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+  return (
+    <ClerkProvider frontendApi={frontendApi} navigate={(to) => navigate(to)}>
+      <ClerkRwAuthProvider>
+        <ClerkLoaded>{children}</ClerkLoaded>
+        <ClerkStatusUpdater />
+      </ClerkRwAuthProvider>
+    </ClerkProvider>
   )
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={supabaseClient} type=\\"supabase\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
+}
 "
 `;
 
-exports[`Should add config lines when RedwoodApolloProvider has props Matches Auth0 Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { Auth0Client } from '@auth0/auth0-spa-js'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 3`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}>
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Swapped out GraphQL client Should add auth config when app is missing RedwoodApolloProvider 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+import { AuthProvider, useAuth } from './auth'
+
 import './index.css'
 
-const auth0 = new Auth0Client({
-  domain: process.env.AUTH0_DOMAIN,
-  client_id: process.env.AUTH0_CLIENT_ID,
-  redirect_uri: process.env.AUTH0_REDIRECT_URI,
-
-  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
-  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
-  // they can retrieve the tokens stored in local storage.
-  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
-  cacheLocation: 'localstorage',
-  audience: process.env.AUTH0_AUDIENCE,
-
-  // @MARK: useRefreshTokens is required for automatically extending sessions
-  // beyond that set in the initial JWT expiration.
-  //
-  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
-  // useRefreshTokens: true,
-})
+const queryClient = {}
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={auth0} type=\\"auth0\\">
-        <RedwoodApolloProvider graphQLClientConfig={{ cache }}>
-          <Routes />
-        </RedwoodApolloProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <RedwoodReactQueryProvider>
+            <Routes />
+          </RedwoodReactQueryProvider>
+        </QueryClientProvider>
       </AuthProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>

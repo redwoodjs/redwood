@@ -1,5 +1,6 @@
 // Have to use `var` here to avoid "Temporal Dead Zone" issues
 var mockWebAppPath = ''
+var mockWebRoutesPath = ''
 
 import fs from 'fs'
 
@@ -29,7 +30,8 @@ jest.mock('../../../../lib', () => {
         ),
         routes: path.join(
           __dirname,
-          '../create-redwood-app/template/web/src/Routes.tsx'
+          mockWebRoutesPath ||
+            '../create-redwood-app/template/web/src/Routes.tsx'
         ),
       },
       base: path.join(__dirname, '../create-redwood-app/template'),
@@ -79,82 +81,56 @@ beforeEach(() => {
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
 })
 
-describe.only('Should add config lines to App.{js,tsx}', () => {
-  it.only('Matches Auth0 Snapshot', async () => {
-    await addConfigToApp()
-    await createWebAuthTs('auth0')
-    await addConfigToRoutes()
+describe('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts', () => {
+  it('Matches Auth0 Snapshot', () => {
+    addConfigToApp()
+    createWebAuthTs('auth0')
+    addConfigToRoutes()
   })
 
-  it('Matches Firebase Snapshot', async () => {
-    const firebaseData = await import(`../providers/firebase`)
-    await addConfigToApp(firebaseData.config, false)
-  })
-
-  it('Matches netlify Snapshot', async () => {
-    const netlifyData = await import(`../providers/netlify`)
-    await addConfigToApp(netlifyData.config, false)
-  })
-
-  it('Matches goTrue Snapshot', async () => {
-    const goTrueData = await import(`../providers/goTrue`)
-    await addConfigToApp(goTrueData.config, false)
-  })
-
-  it('Matches azureActiveDirectory Snapshot', async () => {
-    const azureActiveDirectoryData = await import(
-      `../providers/azureActiveDirectory`
-    )
-    await addConfigToApp(azureActiveDirectoryData.config, false)
-  })
-
-  it('Matches ethereum Snapshot', async () => {
-    const ethereumData = await import(`../providers/ethereum`)
-    await addConfigToApp(ethereumData.config, false)
-  })
-
-  it('Matches magicLink Snapshot', async () => {
-    const magicLinkData = await import(`../providers/magicLink`)
-    await addConfigToApp(magicLinkData.config, false)
-  })
-
-  it('Matches supabase Snapshot', async () => {
-    const supabaseData = await import(`../providers/supabase`)
-    await addConfigToApp(supabaseData.config, false)
-  })
-
-  it('Matches nhost Snapshot', async () => {
-    const nhostData = await import(`../providers/nhost`)
-    await addConfigToApp(nhostData.config, false)
+  it('Matches Clerk Snapshot', () => {
+    addConfigToApp()
+    createWebAuthTs('clerk')
+    addConfigToRoutes()
   })
 })
 
-describe('Should add config lines when RedwoodApolloProvider has props', () => {
-  it('Matches Auth0 Snapshot', async () => {
+describe('Components with props', () => {
+  it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
     mockWebAppPath =
       'src/commands/setup/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
+    mockWebRoutesPath =
+      'src/commands/setup/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
 
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
+    addConfigToApp()
+    addConfigToRoutes()
+  })
+
+  it('Should not add useAuth if one already exists', () => {
+    mockWebAppPath =
+      'src/commands/setup/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
+    mockWebRoutesPath =
+      'src/commands/setup/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
+
+    addConfigToApp()
+    addConfigToRoutes()
   })
 })
 
-describe('Should add auth config when using explicit return', () => {
-  it('Matches Auth0 Snapshot', async () => {
+describe('Customized App.js', () => {
+  it('Should add auth config when using explicit return', () => {
     mockWebAppPath =
       'src/commands/setup/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
+    addConfigToApp()
   })
 })
 
-describe('Should add auth config when app is missing RedwoodApolloProvider', () => {
-  it('Matches Auth0 Snapshot', async () => {
+describe('Swapped out GraphQL client', () => {
+  it('Should add auth config when app is missing RedwoodApolloProvider', () => {
     mockWebAppPath =
       'src/commands/setup/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
+    addConfigToApp()
   })
 })

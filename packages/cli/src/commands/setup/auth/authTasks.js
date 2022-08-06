@@ -63,7 +63,6 @@ const webIndexDoesExist = () => {
   return fs.existsSync(getWebAppPath())
 }
 
-// TODO: Potentially add specific test for this method
 const addAuthImportToApp = (content) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
@@ -135,7 +134,6 @@ const hasUseAuthHook = (componentName, content) => {
   )
 }
 
-// TODO: Potentially add specific tests for this one
 const addUseAuthHook = (componentName, content) => {
   return content.replace(
     `<${componentName}`,
