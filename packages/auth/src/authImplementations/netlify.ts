@@ -1,8 +1,8 @@
 import * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-import { createAuthentication } from 'src/authFactory'
-
 import { CurrentUser } from '../AuthContext'
+import { createAuthentication } from '../authFactory'
+
 // TODO:
 // In the future, when this is a separate package, we can import the full thing
 // here (not just the type), and save the user from doing that in their own

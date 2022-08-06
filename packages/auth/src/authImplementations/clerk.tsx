@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react'
-
 import {
   SignInProps,
   SignUpProps,
@@ -8,83 +6,49 @@ import {
   Clerk,
   GetTokenOptions,
   SignOutOptions,
-  UserResource,
 } from '@clerk/types'
 
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import { ListenForUpdatesHandlers } from './AuthImplementation'
+export function createClerkAuth(customProviderHooks?: {
+  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useHasRole?: (
+    currentUser: CurrentUser | null
+  ) => (rolesToCheck: string | string[]) => boolean
+}) {
+  const authImplementation = createClerkAuthImplementation()
 
-// Copy/pasted from @clerk/clerk-react because it wasn't exported
-type UseUserReturn =
-  | { isLoaded: false; isSignedIn: undefined; user: undefined }
-  | { isLoaded: true; isSignedIn: false; user: null }
-  | { isLoaded: true; isSignedIn: true; user: UserResource }
-
-// Because Clerk's client is nulled out while it is loading, there is a race
-// condition under normal usage on a clean load of the app. This falls back
-// to the window.Clerk property when necessary to circumvent that.
-function getClerkClient(propsClient: Clerk | null): Clerk | null {
-  if (!propsClient && typeof window !== undefined) {
-    return (window as any).Clerk ?? null
-  } else {
-    return propsClient
-  }
-}
-
-interface AuthProviderProps {
-  children: React.ReactNode
-}
-
-export function createClerkAuth(
-  clerk: Clerk,
-  useUser: () => UseUserReturn,
-  ClerkAuthProvider: React.ComponentType,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) {
-  const authImplementation = createClerkAuthImplementation(clerk, useUser)
-
-  const {
-    AuthContext,
-    AuthProvider: InternalAuthProvider,
-    useAuth,
-  } = createAuthentication(authImplementation, customProviderHooks)
-
-  const AuthProvider = ({ children }: AuthProviderProps) => {
-    return (
-      <ClerkAuthProvider>
-        <InternalAuthProvider>{children}</InternalAuthProvider>
-      </ClerkAuthProvider>
-    )
-  }
+  const { AuthContext, AuthProvider, useAuth } = createAuthentication(
+    authImplementation,
+    customProviderHooks
+  )
 
   return { AuthContext, AuthProvider, useAuth }
 }
 
-function createClerkAuthImplementation(
-  clerk: Clerk,
-  useClerkUser: () => UseUserReturn
-) {
+function createClerkAuthImplementation() {
   return {
     type: 'clerk',
-    login: async (options?: SignInProps) =>
-      getClerkClient(clerk)?.openSignIn(options || {}),
+    login: async (options?: SignInProps) => {
+      const clerk = (window as any).Clerk as Clerk
+      clerk?.openSignIn(options || {})
+    },
     logout: async (
       callbackOrOptions?: SignOutCallback | SignOutOptions,
       options?: SignOutOptions
-    ) => getClerkClient(clerk)?.signOut(callbackOrOptions as any, options),
-    signup: async (options?: SignUpProps) =>
-      getClerkClient(clerk)?.openSignUp(options || {}),
+    ) => {
+      const clerk = (window as any).Clerk as Clerk
+      clerk?.signOut(callbackOrOptions as any, options)
+    },
+    signup: async (options?: SignUpProps) => {
+      const clerk = (window as any).Clerk as Clerk
+      clerk?.openSignUp(options || {})
+    },
     restoreAuthState: async () => {
-      const clerkClient = getClerkClient(clerk)
-      if (!clerkClient) {
-        // If the client is null, we can't restore state or listen for it to
+      const clerk = (window as any).Clerk as Clerk
+      if (!clerk) {
+        // If clerk is null, we can't restore state or listen for it to
         // happen. This behavior is somewhat undefined, which is why we
         // instruct the user to wrap the auth provider in <ClerkLoaded> to
         // prevent it. For now we'll just return.
@@ -98,9 +62,9 @@ function createClerkAuthImplementation(
 
       // NOTE: Clerk's API docs says session will be undefined if loading (null
       // if loaded and confirmed unset).
-      if (!clerkClient.client || clerkClient.session !== undefined) {
+      if (!clerk || clerk.session !== undefined) {
         return new Promise<void>((res) => {
-          clerkClient.addListener((msg: Resources) => {
+          clerk.addListener((msg: Resources) => {
             if (msg.session !== undefined && msg.client) {
               res()
             }
@@ -111,20 +75,13 @@ function createClerkAuthImplementation(
         return
       }
     },
-    // Hook to inform AuthProvider of Clerk's life-cycle
-    useListenForUpdates: ({ reauthenticate }: ListenForUpdatesHandlers) => {
-      const { isSignedIn, user, isLoaded } = useClerkUser()
-      useEffect(() => {
-        if (isLoaded) {
-          reauthenticate()
-        }
-      }, [isSignedIn, user, reauthenticate, isLoaded])
-    },
     getToken: async (options?: GetTokenOptions) => {
+      const clerk = (window as any).Clerk as Clerk
+
       let token
 
       try {
-        token = await getClerkClient(clerk)?.session?.getToken(options)
+        token = await clerk?.session?.getToken(options)
       } catch {
         token = null
       }
@@ -132,7 +89,8 @@ function createClerkAuthImplementation(
       return token || null
     },
     getUserMetadata: async () => {
-      const user = getClerkClient(clerk)?.user
+      const clerk = (window as any).Clerk as Clerk
+      const user = clerk?.user
 
       if (user) {
         const userRoles = user.publicMetadata?.roles
