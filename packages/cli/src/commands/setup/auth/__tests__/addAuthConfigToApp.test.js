@@ -5,13 +5,20 @@ import fs from 'fs'
 
 import '../../../../lib/mockTelemetry'
 
-import { addConfigToApp } from '../auth'
+import {
+  addConfigToApp,
+  addConfigToRoutes,
+  createWebAuthTs,
+} from '../authTasks'
 
 jest.mock('../../../../lib', () => {
   const path = require('path')
   const __dirname = path.resolve()
+  const originalModule = jest.requireActual('../../../../lib')
 
   return {
+    transformTSToJS: originalModule.transformTSToJS,
+    resolveFile: originalModule.resolveFile,
     getPaths: () => ({
       api: { functions: '', src: '', lib: '' },
       web: {
@@ -20,7 +27,38 @@ jest.mock('../../../../lib', () => {
           __dirname,
           mockWebAppPath || '../create-redwood-app/template/web/src/App.tsx'
         ),
+        routes: path.join(
+          __dirname,
+          '../create-redwood-app/template/web/src/Routes.tsx'
+        ),
       },
+      base: path.join(__dirname, '../create-redwood-app/template'),
+    }),
+  }
+})
+
+jest.mock('@redwoodjs/internal/dist/paths', () => {
+  const path = require('path')
+  const __dirname = path.resolve()
+  const originalModule = jest.requireActual('@redwoodjs/internal/dist/paths')
+
+  return {
+    transformTSToJS: originalModule.transformTSToJS,
+    resolveFile: originalModule.resolveFile,
+    getPaths: () => ({
+      api: { functions: '', src: '', lib: '' },
+      web: {
+        src: path.join(__dirname, '../create-redwood-app/template/web/src'),
+        app: path.join(
+          __dirname,
+          mockWebAppPath || '../create-redwood-app/template/web/src/App.tsx'
+        ),
+        routes: path.join(
+          __dirname,
+          '../create-redwood-app/template/web/src/Routes.tsx'
+        ),
+      },
+      base: path.join(__dirname, '../create-redwood-app/template'),
     }),
   }
 })
@@ -41,10 +79,11 @@ beforeEach(() => {
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
 })
 
-describe('Should add config lines to App.{js,tsx}', () => {
-  it('Matches Auth0 Snapshot', async () => {
-    const auth0Data = await import(`../providers/auth0`)
-    await addConfigToApp(auth0Data.config, false)
+describe.only('Should add config lines to App.{js,tsx}', () => {
+  it.only('Matches Auth0 Snapshot', async () => {
+    await addConfigToApp()
+    await createWebAuthTs('auth0')
+    await addConfigToRoutes()
   })
 
   it('Matches Firebase Snapshot', async () => {

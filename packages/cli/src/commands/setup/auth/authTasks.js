@@ -5,15 +5,18 @@ import execa from 'execa'
 
 import {
   getPaths,
+  resolveFile,
   writeFilesTask,
   getGraphqlPath,
   graphFunctionDoesExist,
+  transformTSToJS,
 } from '../../../lib'
 import { isTypeScriptProject } from '../../../lib/project'
 
 import { files } from './authFiles'
 
-const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
+const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
+const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
@@ -23,43 +26,6 @@ export const getSupportedProviders = () =>
     .readdirSync(path.resolve(__dirname, 'providers'))
     .map((file) => path.basename(file, '.js'))
     .filter((file) => file !== 'README.md')
-
-// returns the content of App.{js,tsx} with import statements added
-const addWebImports = (content, imports) => {
-  return `${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n') + '\n' + content
-}
-
-// returns the content of App.{js,tsx} with init lines added (if there are any)
-const addWebInit = (content, init) => {
-  if (init) {
-    const regex = /const App = \(.*\) => [({]/
-    const match = content.match(regex)
-
-    if (!match) {
-      return content
-    }
-
-    return content.replace(regex, `${init}\n\n${match[0]}`)
-  }
-
-  return content
-}
-
-const objectToComponentProps = (obj, options = { exclude: [] }) => {
-  let props = []
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (!options.exclude.includes(key)) {
-      if (key === 'client') {
-        props.push(`${key}={${value}}`)
-      } else {
-        props.push(`${key}="${value}"`)
-      }
-    }
-  }
-
-  return props
-}
 
 const addApiConfig = () => {
   const graphqlPath = getGraphqlPath()
@@ -97,8 +63,41 @@ const webIndexDoesExist = () => {
   return fs.existsSync(getWebAppPath())
 }
 
-// returns the content of App.{js,tsx} with <AuthProvider> added
-const addWebRender = (content, authProvider) => {
+// TODO: Potentially add specific test for this method
+const addAuthImportToApp = (content) => {
+  const contentLines = content.split('\n')
+  // Find the last import line that's not a .css or .scss import
+  const importIndex = contentLines.findLastIndex((line) =>
+    /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
+  )
+
+  // After the import found above, insert a blank line followed by the
+  // AuthProvider and useAuth import
+  contentLines.splice(importIndex + 1, 0, '', AUTH_PROVIDER_HOOK_IMPORT)
+
+  return contentLines.join('\n')
+}
+
+const addAuthImportToRoutes = (content) => {
+  const contentLines = content.split('\n')
+  // Find the last import line that's not a .css or .scss import
+  const importIndex = contentLines.findLastIndex((line) =>
+    /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
+  )
+
+  // After the import found above, insert a blank line followed by the
+  // useAuth import
+  contentLines.splice(importIndex + 1, 0, '', AUTH_HOOK_IMPORT)
+
+  return contentLines.join('\n')
+}
+
+const hasAuthProvider = (content) => {
+  return /\s*<AuthProvider>/.test(content)
+}
+
+/** returns the content of App.{js,tsx} with <AuthProvider> added */
+const addAuthProviderToApp = (content) => {
   const [
     _,
     newlineAndIndent,
@@ -113,33 +112,14 @@ const addWebRender = (content, authProvider) => {
       return `${index === 0 ? '' : '  '}` + line
     })
 
-  // Wrap with custom components e.g.
-  // <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-  //     <FetchConfigProvider>
-  //     <ApolloInjector>
-  //     <AuthProvider client={ethereum} type="ethereum">
-  const customRenderOpen = (authProvider.render || []).reduce(
-    (acc, component) => acc + newlineAndIndent + '  ' + `<${component}>`,
-    ''
-  )
-
-  const customRenderClose = (authProvider.render || []).reduce(
-    (acc, component) => newlineAndIndent + '  ' + `</${component}>` + acc,
-    ''
-  )
-
-  const props = objectToComponentProps(authProvider, { exclude: ['render'] })
-
   const renderContent =
     newlineAndIndent +
     redwoodProviderOpen +
-    customRenderOpen +
     newlineAndIndent +
     '  ' +
-    `<AuthProvider ${props.join(' ')}>` +
+    `<AuthProvider>` +
     redwoodProviderChildrenLines.join('\n') +
     `</AuthProvider>` +
-    customRenderClose +
     newlineAndIndent +
     redwoodProviderClose
 
@@ -149,70 +129,98 @@ const addWebRender = (content, authProvider) => {
   )
 }
 
-// returns the content of App.{js,tsx} without the old auth import
-const removeOldWebImports = (content, imports) => {
-  return content.replace(`${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n'), '')
-}
-
-// returns the content of App.{js,tsx} without the old auth init
-const removeOldWebInit = (content, init) => {
-  return content.replace(init, '')
-}
-
-// returns content with old auth provider removes
-const removeOldAuthProvider = async (content) => {
-  // get the current auth provider
-  const [_, currentAuthProvider] = content.match(
-    new RegExp('<AuthProvider.*type=[\'"](.*)[\'"]', 's')
+const hasUseAuthHook = (componentName, content) => {
+  return new RegExp(`<${componentName}[^>]*useAuth={.*?}.*?>`, 's').test(
+    content
   )
-
-  let oldAuthProvider
-  try {
-    oldAuthProvider = await import(`./providers/${currentAuthProvider}`)
-  } catch (e) {
-    throw new Error('Could not replace existing auth provider init')
-  }
-
-  content = removeOldWebImports(content, oldAuthProvider.config.imports)
-  content = removeOldWebInit(content, oldAuthProvider.config.init)
-
-  return content
 }
 
-// returns the content of App.{js,tsx} with <AuthProvider> updated
-const updateWebRender = (content, authProvider) => {
-  const props = objectToComponentProps(authProvider)
-  const renderContent = `<AuthProvider ${props.join(' ')}>`
-
+// TODO: Potentially add specific tests for this one
+const addUseAuthHook = (componentName, content) => {
   return content.replace(
-    new RegExp('<AuthProvider.*type=[\'"](.*)[\'"]>', 's'),
-    renderContent
+    `<${componentName}`,
+    `<${componentName} useAuth={useAuth}`
   )
 }
 
 /**
- * actually inserts the required config lines into App.{js,tsx}
- * exported for testing. `options` only used for testing
+ * Actually inserts the required config lines into App.{js,tsx}
+ * Exported for testing
  */
-export const addConfigToApp = async (config, force, options = {}) => {
-  const { webAppPath: customWebAppPath } = options
-
-  const webAppPath = customWebAppPath || getWebAppPath()
+export const addConfigToApp = async () => {
+  const webAppPath = getWebAppPath()
 
   let content = fs.readFileSync(webAppPath).toString()
 
-  // update existing AuthProvider if --force else add new AuthProvider
-  if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
-    content = await removeOldAuthProvider(content)
-    content = updateWebRender(content, config.authProvider)
-  } else {
-    content = addWebRender(content, config.authProvider)
+  if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
+    content = addAuthImportToApp(content)
   }
 
-  content = addWebImports(content, config.imports)
-  content = addWebInit(content, config.init)
+  if (!hasAuthProvider(content)) {
+    content = addAuthProviderToApp(content)
+  }
+
+  if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
+    content = addUseAuthHook('RedwoodApolloProvider', content)
+  }
 
   fs.writeFileSync(webAppPath, content)
+}
+
+export const createWebAuthTs = (provider) => {
+  const templatesBaseDir = path.resolve(__dirname, 'templates', 'web')
+  const templates = fs.readdirSync(templatesBaseDir)
+
+  const templateFileName = templates.find((template) =>
+    template.startsWith(provider)
+  )
+
+  const templateExtension = templateFileName.split('.').at(-2)
+
+  // Find an unused filename
+  // Start with web/src/auth.{ts,tsx}
+  // Then web/src/providerAuth.{ts,tsx}
+  // Then web/src/providerAuth2.{ts,tsx}
+  // Then web/src/providerAuth3.{ts,tsx}
+  // etc
+  let authFileName = path.join(getPaths().web.src, 'auth')
+  let i = 1
+  while (resolveFile(authFileName)) {
+    const count = i > 1 ? i : ''
+
+    authFileName = path.join(getPaths().web.src, provider + 'Auth' + count)
+
+    i++
+  }
+
+  authFileName = authFileName + '.' + templateExtension
+
+  let template = fs.readFileSync(
+    path.join(templatesBaseDir, templateFileName),
+    'utf-8'
+  )
+
+  template = isTypeScriptProject()
+    ? template
+    : transformTSToJS(authFileName, template)
+
+  fs.writeFileSync(authFileName, template)
+}
+
+export const addConfigToRoutes = () => {
+  const webRoutesPath = getPaths().web.routes
+
+  let content = fs.readFileSync(webRoutesPath).toString()
+
+  if (!content.includes(AUTH_HOOK_IMPORT)) {
+    content = addAuthImportToRoutes(content)
+  }
+
+  if (!hasUseAuthHook('Router', content)) {
+    content = addUseAuthHook('Router', content)
+  }
+
+  fs.writeFileSync(webRoutesPath, content)
 }
 
 export const generateAuthLib = (provider, force, webAuthn) => ({
@@ -228,11 +236,13 @@ export const generateAuthLib = (provider, force, webAuthn) => ({
   },
 })
 
-export const addAuthConfigToWeb = (config, force) => ({
+export const addAuthConfigToWeb = (provider) => ({
   title: 'Adding auth config to web...',
   task: (_ctx, task) => {
     if (webIndexDoesExist()) {
-      addConfigToApp(config, force)
+      addConfigToApp()
+      createWebAuthTs(provider)
+      addConfigToRoutes()
     } else {
       task.skip(
         `web/src/App.${

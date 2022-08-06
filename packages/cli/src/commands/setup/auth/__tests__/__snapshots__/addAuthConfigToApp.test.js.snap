@@ -107,19 +107,40 @@ export default App
 `;
 
 exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 1`] = `
-"import { AuthProvider } from '@redwoodjs/auth'
-import { Auth0Client } from '@auth0/auth0-spa-js'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+import { AuthProvider, useAuth } from './auth'
+
 import './index.css'
 
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 2`] = `
+"import { Auth0Client } from '@auth0/auth0-spa-js'
+
+import { createAuth0Auth } from '@redwoodjs/auth'
+
 const auth0 = new Auth0Client({
-  domain: process.env.AUTH0_DOMAIN,
-  client_id: process.env.AUTH0_CLIENT_ID,
+  domain: process.env.AUTH0_DOMAIN || '',
+  client_id: process.env.AUTH0_CLIENT_ID || '',
   redirect_uri: process.env.AUTH0_REDIRECT_URI,
 
   // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
@@ -129,26 +150,40 @@ const auth0 = new Auth0Client({
   cacheLocation: 'localstorage',
   audience: process.env.AUTH0_AUDIENCE,
 
-  // @MARK: useRefreshTokens is required for automatically extending sessions
+  // @MARK useRefreshTokens is required for automatically extending sessions
   // beyond that set in the initial JWT expiration.
   //
-  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
+  // @see https://auth0.com/docs/tokens/refresh-tokens
   // useRefreshTokens: true,
 })
 
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={auth0} type=\\"auth0\\">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
+export const { AuthProvider, useAuth } = createAuth0Auth(auth0)
+"
+`;
 
-export default App
+exports[`Should add config lines to App.{js,tsx} Matches Auth0 Snapshot 3`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}>
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
 "
 `;
 

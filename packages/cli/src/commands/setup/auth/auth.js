@@ -43,9 +43,12 @@ async function handleExistingApiLibAuthFile(force, provider, webAuthn) {
         )}/auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
         initial: false,
       })
-      force = forceResponse.answer
+
+      return forceResponse.answer
     }
   }
+
+  return true
 }
 
 /**
@@ -100,10 +103,14 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, rwVersion, webauthn, force }) => {
-  await handleExistingApiLibAuthFile(force, provider, webauthn)
-
-  const includeWebAuthn = shouldIncludeWebAuthn(webauthn, provider)
+export const handler = async ({
+  provider,
+  rwVersion,
+  webauthn,
+  force: forceArg,
+}) => {
+  const force = await handleExistingApiLibAuthFile(forceArg, provider, webauthn)
+  const includeWebAuthn = await shouldIncludeWebAuthn(webauthn, provider)
   const providerData = includeWebAuthn
     ? await import(`./providers/${provider}.webAuthn`)
     : await import(`./providers/${provider}`)
@@ -111,7 +118,7 @@ export const handler = async ({ provider, rwVersion, webauthn, force }) => {
   const tasks = new Listr(
     [
       generateAuthLib(provider, force, includeWebAuthn),
-      addAuthConfigToWeb(providerData.config, force),
+      addAuthConfigToWeb(provider),
       addAuthConfigToGqlApi,
       addWebPackages(provider, providerData.webPackages, rwVersion),
       addApiPackages(provider, providerData.apiPackages),

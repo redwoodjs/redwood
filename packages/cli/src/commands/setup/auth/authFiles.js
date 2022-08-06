@@ -17,7 +17,7 @@ const OUTPUT_PATHS = {
 
 const getTemplates = () =>
   fs
-    .readdirSync(path.resolve(__dirname, 'templates'))
+    .readdirSync(path.join(path.resolve(__dirname, 'templates'), 'lib'))
     .reduce((templates, file) => {
       if (file === 'auth.ts.template') {
         return {

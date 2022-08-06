@@ -26,7 +26,7 @@ import * as auth from '../auth'
 const EXISTING_AUTH_PROVIDER_ERROR =
   'Existing auth provider found.\nUse --force to override existing provider.'
 
-describe('Auth generator tests', () => {
+describe.skip('Auth generator tests', () => {
   const processExitSpy = jest
     .spyOn(process, 'exit')
     .mockImplementation(() => {})

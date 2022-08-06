@@ -17,7 +17,7 @@ import { format } from 'prettier'
 import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
   getPaths as getRedwoodPaths,
-  resolveFile,
+  resolveFile as internalResolveFile,
 } from '@redwoodjs/internal/dist/paths'
 
 import c from './colors'
@@ -193,6 +193,7 @@ export const _getPaths = () => {
   }
 }
 export const getPaths = memoize(_getPaths)
+export const resolveFile = internalResolveFile
 
 export const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
