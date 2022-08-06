@@ -115,19 +115,13 @@ export function createAuthProvider<
     const client = authImplementation.client
 
     // Whenever the authImplementation is ready to go, restore auth and reauthenticate
-    // TODO: We need this for Clerk. Need to figure out how to incorporate
-    //       Also need this for all other auth clients that implement `restoreAuthState`
     useEffect(() => {
       async function doRestoreState() {
         await authImplementation.restoreAuthState?.()
         reauthenticate()
       }
 
-      if (authImplementation /* && !hasRestoredState*/) {
-        // setHasRestoredState(true)
-
-        doRestoreState()
-      }
+      doRestoreState()
     }, [reauthenticate])
 
     return (

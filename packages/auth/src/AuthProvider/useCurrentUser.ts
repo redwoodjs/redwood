@@ -5,16 +5,13 @@ import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
 import { useToken } from './useToken'
 
 export const useCurrentUser = (authImplementation: AuthImplementation) => {
-  console.log('useCurrentUser create')
   const getToken = useToken(authImplementation)
 
   return useCallback(async (): Promise<Record<string, unknown>> => {
-    console.log('useCurrentUser call')
     // Always get a fresh token, rather than use the one in state
     const token = await getToken()
     const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
       method: 'POST',
-      // TODO: how can user configure this? inherit same `config` options given to auth client?
       credentials: 'include',
       headers: {
         'content-type': 'application/json',

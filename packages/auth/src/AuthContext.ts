@@ -52,7 +52,7 @@ export interface AuthContextInterface<
   /**
    * Fetches the "currentUser" from the api side,
    * but does not update the current user state.
-   **/
+   */
   getCurrentUser(): Promise<null | CurrentUser>
   /**
    * Checks if the "currentUser" from the api side
@@ -69,12 +69,10 @@ export interface AuthContextInterface<
   resetPassword(options?: unknown): Promise<TResetPassword>
   validateResetToken(resetToken: string | null): Promise<TValidateResetToken>
   /**
-   * A reference to the client that you passed into the `AuthProvider`,
-   * which is useful if we do not support some specific functionality.
-   * TODO: Add implementation for `client`. Right now I don't think I set it
-   * anywhere
+   * A reference to auth service provider sdk "client", which is useful if we
+   * do not support some specific functionality.
    */
-  client?: TClient
+  client: TClient
   type: string
   hasError: boolean
   error?: Error
