@@ -344,7 +344,7 @@ export const handler = async (yargs) => {
         message: `Overwrite existing ${getPaths().api.lib.replace(
           getPaths().base,
           ''
-        )}/auth.[jt]s?`,
+        )}/auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
         initial: false,
       })
       force = forceResponse.answer
@@ -396,7 +396,11 @@ export const handler = async (yargs) => {
           if (webIndexDoesExist()) {
             addConfigToApp(providerData.config, force)
           } else {
-            task.skip('web/src/App.{js,tsx} not found, skipping')
+            task.skip(
+              `web/src/App.${
+                isTypeScriptProject() ? 'tsx' : 'js'
+              } not found, skipping`
+            )
           }
         },
       },
