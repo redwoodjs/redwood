@@ -5720,16 +5720,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@okta/okta-auth-js@npm:6.7.3":
-  version: 6.7.3
-  resolution: "@okta/okta-auth-js@npm:6.7.3"
+"@okta/okta-auth-js@npm:6.7.4":
+  version: 6.7.4
+  resolution: "@okta/okta-auth-js@npm:6.7.4"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@babel/runtime-corejs3": ^7.17.0
     "@peculiar/webcrypto": ^1.4.0
     Base64: 1.1.0
     atob: ^2.1.2
-    broadcast-channel: ^4.13.0
+    broadcast-channel: 4.13.0
     btoa: ^1.2.1
     core-js: ^3.6.5
     cross-fetch: ^3.1.5
@@ -5741,7 +5741,7 @@ __metadata:
     tiny-emitter: 1.1.0
     webcrypto-shim: ^0.1.5
     xhr2: 0.1.3
-  checksum: 6e47942fddfeff51c8551f75d3de93f388eb7159b65891e86699423f393a34d2ed33f6b0e0747fe8059c39577af7ef05d547d4db8809e86d6f9ec1a62f6c50e7
+  checksum: 57dca28c80d09a79fad27f3ab9036a4020c9112ac48fd126b31583a85d9b3d9f5c90365f09f68a110fac740365abb0733f8d88899b2a52fee25abbd4df3ab458
   languageName: node
   linkType: hard
 
@@ -6271,7 +6271,7 @@ __metadata:
     "@clerk/types": 2.20.0
     "@nhost/hasura-auth-js": 1.4.0
     "@nhost/nhost-js": 1.4.7
-    "@okta/okta-auth-js": 6.7.3
+    "@okta/okta-auth-js": 6.7.4
     "@simplewebauthn/browser": 5.4.0
     "@simplewebauthn/typescript-types": 5.4.0
     "@supabase/supabase-js": 1.35.4
@@ -11743,7 +11743,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"broadcast-channel@npm:^4.13.0":
+"broadcast-channel@npm:4.13.0":
   version: 4.13.0
   resolution: "broadcast-channel@npm:4.13.0"
   dependencies:
