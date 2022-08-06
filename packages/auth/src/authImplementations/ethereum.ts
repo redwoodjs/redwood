@@ -1,39 +1,16 @@
 import { CurrentUser } from '../AuthContext'
 import { createAuthentication } from '../authFactory'
 
-import { AuthImplementation } from './AuthImplementation'
-
-interface EthereumUser {
+export interface EthereumUser {
   address: string | null
 }
 
-interface Ethereum {
+export interface Ethereum {
   login(options: unknown): Promise<any>
   logout(): Promise<any>
   getToken(): Promise<null | string>
   getUserMetadata(): Promise<null | EthereumUser>
 }
-
-type EthereumAuthImplementation = AuthImplementation<
-  EthereumUser,
-  never,
-  any,
-  any,
-  never,
-  never,
-  never,
-  never
->
-
-const ethereumCreateAuthentication = (
-  authImplementation: EthereumAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
 
 export function createEthereumAuth(
   ethereum: Ethereum,
@@ -43,15 +20,13 @@ export function createEthereumAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof ethereumCreateAuthentication> {
+) {
   const authImplementation = createEthereumAuthImplementation(ethereum)
 
-  return ethereumCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createEthereumAuthImplementation(
-  ethereum: Ethereum
-): EthereumAuthImplementation {
+function createEthereumAuthImplementation(ethereum: Ethereum) {
   return {
     type: 'ethereum',
     client: ethereum,
