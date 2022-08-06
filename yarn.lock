@@ -6183,7 +6183,7 @@ __metadata:
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
-    "@types/yargs": 17.0.10
+    "@types/yargs": 17.0.11
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -6371,7 +6371,7 @@ __metadata:
     "@types/jest": 27.5.2
     "@types/jscodeshift": 0.11.5
     "@types/prettier": 2.6.4
-    "@types/yargs": 17.0.10
+    "@types/yargs": 17.0.11
     "@vscode/ripgrep": 1.14.2
     core-js: 3.24.0
     cross-undici-fetch: 0.4.14
@@ -6692,7 +6692,7 @@ __metadata:
     "@types/lodash": 4.14.182
     "@types/lru-cache": 5.1.1
     "@types/node": 16.11.46
-    "@types/vscode": 1.69.0
+    "@types/vscode": 1.69.1
     camelcase: 6.3.0
     core-js: 3.24.0
     deepmerge: 4.2.2
@@ -6728,7 +6728,7 @@ __metadata:
     "@redwoodjs/structure": 2.2.0
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
-    "@types/yargs": 17.0.10
+    "@types/yargs": 17.0.11
     ci-info: 3.3.2
     core-js: 3.24.0
     cross-undici-fetch: 0.4.14
@@ -9303,10 +9303,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:1.69.0":
-  version: 1.69.0
-  resolution: "@types/vscode@npm:1.69.0"
-  checksum: 218f28645b7a41d41eeb0ac09409478d578ec4348ff136c75924eac22dd1e33e41d202403624636c6ea8d8f3a309be95285b7108ecff0d6997da4c12bd4547a0
+"@types/vscode@npm:1.69.1":
+  version: 1.69.1
+  resolution: "@types/vscode@npm:1.69.1"
+  checksum: 22f23e0d10e79fe65df9f719d867042db41dddb47bdadae991c2d3c65cf628e424db268c87a1a4746f143f8cc4977936af667a64ee8fcaeaae2e4be26003f6ba
   languageName: node
   linkType: hard
 
@@ -9376,12 +9376,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.10, @types/yargs@npm:^17.0.8":
-  version: 17.0.10
-  resolution: "@types/yargs@npm:17.0.10"
+"@types/yargs@npm:17.0.11, @types/yargs@npm:^17.0.8":
+  version: 17.0.11
+  resolution: "@types/yargs@npm:17.0.11"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: eb46d2c0dc7b3e1ccbf5a06ac217dc761ec8b9817c1fe6a15474476f86e90abc29c693f33221c28b0f20fa5f3028f44a0b1f040fc9f91f0124b9a88a7d2462a7
+  checksum: 323fd7b420ddc9cb1014d11949b559bfb60c9123df882e7b84d92cc057e17e6fdd5419daa373a96c8025d82828bc05bedc72ff087aeb6a845410a0985b07e3b5
   languageName: node
   linkType: hard
 
