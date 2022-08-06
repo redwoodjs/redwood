@@ -418,7 +418,7 @@ export default Article
 
 If we're only displaying the summary of an article then we'll only show the first 100 characters with an ellipsis on the end ("...") and include a link to "Read more" to see the full article. A reasonable test for this component would be that when the `summary` prop is `true` then the "Read more" text should be present. If `summary` is `false` then it should *not* be present. That's where `queryByText()` comes in (relevant test lines are highlighted):
 
-```jsx {16,22} title="web/src/components/Article/Article.test.js"
+```jsx {22} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
