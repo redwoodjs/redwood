@@ -6210,7 +6210,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@prisma/client": 4.0.0
     "@redwoodjs/auth": 2.2.0
-    "@simplewebauthn/server": 5.4.0
+    "@simplewebauthn/server": 5.4.1
     "@types/aws-lambda": 8.10.101
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.8
@@ -6847,9 +6847,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:5.4.0":
-  version: 5.4.0
-  resolution: "@simplewebauthn/server@npm:5.4.0"
+"@simplewebauthn/server@npm:5.4.1":
+  version: 5.4.1
+  resolution: "@simplewebauthn/server@npm:5.4.1"
   dependencies:
     "@peculiar/asn1-android": ^2.1.7
     "@peculiar/asn1-schema": ^2.1.7
@@ -6863,7 +6863,7 @@ __metadata:
     jwk-to-pem: ^2.0.4
     node-fetch: ^2.6.0
     node-rsa: ^1.1.1
-  checksum: 37f0b16c34aacd161c236c45e381ba6c11e8e28b94d21c8af09490cc4ef6d744cf51fb86b64ecb72a216daa5c274d4eda0b66c3b54df8d6eca5f17f8690fa5f8
+  checksum: 8932ea49a82d29174a98785e126f9dfb95a94e0191522401ab6ad46a10916a1db7d8b33d8ff0207abbd2373e832e3a1e7d2932f66b5e8f3afe322cfc73327eba
   languageName: node
   linkType: hard
 
