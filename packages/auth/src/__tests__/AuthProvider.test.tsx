@@ -715,6 +715,10 @@ describe('Custom auth provider', () => {
 
     const auth = await getCustomTestAuth()
 
+    // act is generally frowned upon in test cases. But it's okay here, see
+    // https://egghead.io/lessons/jest-fix-the-not-wrapped-in-act-warning-when-testing-custom-hooks
+    // plus, we're note rendering anything, so there is nothing to use
+    // `screen.getByText()` etc with to wait for
     await act(async () => {
       await auth.resetPassword('password')
     })

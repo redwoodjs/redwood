@@ -1,10 +1,4 @@
-// TODO: Enable 👇
-// import { CurrentUser, createAuthentication, AuthImplementation } from '@redwoodjs/auth'
-import {
-  CurrentUser,
-  createAuthentication,
-  AuthImplementation,
-} from '../../index'
+import { CurrentUser, createAuthentication } from '../../index'
 
 interface User {
   sub: string
@@ -12,34 +6,10 @@ interface User {
   username?: string
 }
 
-// type CustomTestAuthImplementation = AuthImplementation<
-//   User, // TUser
-//   User | null, // TRestoreAuth
-//   User | null, // TLogIn
-//   boolean, // TLogOut
-//   User | null, // TSignUp
-//   never,
-//   never,
-//   never,
-//   never
-// >
-
 export interface ValidateResetTokenResponse {
   error?: string
   [key: string]: string | undefined
 }
-
-type CustomTestAuthImplementation = AuthImplementation<
-  User, // TUser
-  never, // TRestoreAuth
-  boolean, // TLogIn
-  void, // TLogOut
-  void, // TSignUp
-  void, // TForgotPassword
-  boolean, // TResetPassword
-  ValidateResetTokenResponse, // TValidateResetToken
-  never // TVerifyOtp
->
 
 export interface CustomTestAuthClient {
   login: () => boolean
@@ -52,16 +22,6 @@ export interface CustomTestAuthClient {
   validateResetToken: (resetToken: string | null) => ValidateResetTokenResponse
 }
 
-const customTestCreateAuthentication = (
-  authImplementation: CustomTestAuthImplementation,
-  customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
-    useHasRole?: (
-      currentUser: CurrentUser | null
-    ) => (rolesToCheck: string | string[]) => boolean
-  }
-) => createAuthentication(authImplementation, customProviderHooks)
-
 export function createCustomTestAuth(
   customTest: CustomTestAuthClient,
   customProviderHooks?: {
@@ -70,17 +30,18 @@ export function createCustomTestAuth(
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
   }
-): ReturnType<typeof customTestCreateAuthentication> {
+) {
   const authImplementation = createCustomTestAuthImplementation(customTest)
 
-  return customTestCreateAuthentication(authImplementation, customProviderHooks)
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
 function createCustomTestAuthImplementation(
   customTest: CustomTestAuthClient
-): CustomTestAuthImplementation {
+) {
   return {
     type: 'custom-test',
+    client: customTest,
     login: async () => customTest.login(),
     logout: async () => customTest.logout(),
     signup: async () => customTest.signup(),
