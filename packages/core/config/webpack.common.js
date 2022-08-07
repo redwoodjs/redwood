@@ -263,7 +263,12 @@ module.exports = (webpackEnv) => {
           {
             from: path.join(redwoodPaths.web.base, 'public'),
             to: '',
-            globOptions: { ignore: ['README.md'] },
+            globOptions: {
+              ignore: [
+                path.join(redwoodPaths.web.base, 'public/README.md'),
+                path.join(redwoodPaths.web.base, 'public/mockServiceWorker.js'),
+              ],
+            },
           },
         ],
       }),
