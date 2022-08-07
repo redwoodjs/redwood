@@ -843,7 +843,7 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
 </TabItem>
 </Tabs>
 
-:::caution
+:::info
 
 At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the `hasRole` method in `api/src/lib/auth.js` for now.
 
