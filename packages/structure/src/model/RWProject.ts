@@ -1,6 +1,6 @@
 import { join } from 'path'
 
-import { getDMMF } from '@prisma/sdk'
+import { getDMMF } from '@prisma/internals'
 import { DMMF } from '@prisma/generator-helper'
 
 import { getPaths, processPagesDir } from '@redwoodjs/internal'

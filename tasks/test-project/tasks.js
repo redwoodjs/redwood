@@ -142,6 +142,17 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           return
         },
       },
+      {
+        title: 'Creating nested cells test page',
+        task: async () => {
+          await createPage('waterfall {id:Int}')
+
+          await applyCodemod(
+            'waterfallPage.js',
+            fullPath('web/src/pages/WaterfallPage/WaterfallPage')
+          )
+        },
+      },
     ])
   }
 
@@ -161,9 +172,26 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await createComponent('blogPost')
 
-    return applyCodemod(
+    await applyCodemod(
       'blogPost.js',
       fullPath('web/src/components/BlogPost/BlogPost')
+    )
+
+    await createComponent('author')
+
+    await applyCodemod(
+      'author.js',
+      fullPath('web/src/components/Author/Author')
+    )
+
+    await applyCodemod(
+      'updateAuthorStories.js',
+      fullPath('web/src/components/Author/Author.stories')
+    )
+
+    await applyCodemod(
+      'updateAuthorTest.js',
+      fullPath('web/src/components/Author/Author.test')
     )
   }
 
@@ -179,9 +207,23 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await createCell('blogPost')
 
-    return applyCodemod(
+    await applyCodemod(
       'blogPostCell.js',
       fullPath('web/src/components/BlogPostCell/BlogPostCell')
+    )
+
+    await createCell('author')
+
+    await applyCodemod(
+      'authorCell.js',
+      fullPath('web/src/components/AuthorCell/AuthorCell')
+    )
+
+    await createCell('waterfallBlogPost')
+
+    return applyCodemod(
+      'waterfallBlogPostCell.js',
+      fullPath('web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell')
     )
   }
 
@@ -193,15 +235,32 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       })
     )
 
-    return applyCodemod(
+    await applyCodemod(
       'updateBlogPostMocks.js',
       fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock.ts', {
         addExtension: false,
       })
     )
+
+    await applyCodemod(
+      'updateAuthorCellMock.js',
+      fullPath('web/src/components/AuthorCell/AuthorCell.mock.ts', {
+        addExtension: false,
+      })
+    )
+
+    return applyCodemod(
+      'updateWaterfallBlogPostMocks.js',
+      fullPath(
+        'web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.ts',
+        {
+          addExtension: false,
+        }
+      )
+    )
   }
 
-  // add prerender to 3 routes
+  // add prerender to some routes
   const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
   const addPrerender = async () => {
     const contentRoutes = fs.readFileSync(pathRoutes).toString()
@@ -213,11 +272,35 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       /name="home"/,
       `name="home" prerender`
     )
-    const resultsRoutesNotFound = resultsRoutesHome.replace(
+    const resultsRoutesBlogPost = resultsRoutesHome.replace(
+      /name="blogPost"/,
+      `name="blogPost" prerender`
+    )
+    const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
       /page={NotFoundPage}/,
       `page={NotFoundPage} prerender`
     )
-    fs.writeFileSync(pathRoutes, resultsRoutesNotFound)
+    const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
+      /page={WaterfallPage}/,
+      `page={WaterfallPage} prerender`
+    )
+    fs.writeFileSync(pathRoutes, resultsRoutesWaterfall)
+
+    const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
+
+      export async function routeParameters() {
+        return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
+      }
+      `.replaceAll(/ {6}/g, '')
+    const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
+    fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
+
+    const waterfallRouteHooks = `export async function routeParameters() {
+        return [{ id: 2 }]
+      }
+      `.replaceAll(/ {6}/g, '')
+    const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
+    fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
   }
 
   return new Listr(
@@ -303,29 +386,30 @@ async function addModel(schema) {
 async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
-  const execaOptionsForProject = getExecaOptions(outputPath)
+  const execaOptions = getExecaOptions(outputPath)
+
+  const createBuilder = (cmd) => {
+    return async function createItem(positionals) {
+      await execa(
+        cmd,
+        Array.isArray(positionals) ? positionals : [positionals],
+        execaOptions
+      )
+    }
+  }
 
   const addDbAuth = async () => {
     await execa(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
-      getExecaOptions(outputPath)
+      execaOptions
     )
 
     if (linkWithLatestFwBuild) {
-      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+      await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa(
-      'yarn rw g dbAuth --no-webauthn',
-      [],
-      getExecaOptions(outputPath)
-    )
-
-    // add dbAuth User model
-    const { user } = await import('./codemods/models.js')
-
-    addModel(user)
+    await execa('yarn rw g dbAuth --no-webauthn', [], execaOptions)
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
@@ -378,43 +462,60 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     )
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
 
-    // remove unused userAttributes
-    const pathAuthJs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
-    const contentAuthJs = fs.readFileSync(pathAuthJs).toString()
-    const resultsAuthJs = contentAuthJs.replace(
-      /handler: \({ username,([^}]*)userAttributes }\) => {/,
-      `handler: ({ username, hashedPassword, salt }) => {`
+    // add fullName input to signup form
+    const pathSignupPageTs = `${OUTPUT_PATH}/web/src/pages/SignupPage/SignupPage.tsx`
+    const contentSignupPageTs = fs.readFileSync(pathSignupPageTs, 'utf-8')
+    const usernameFields = contentSignupPageTs.match(
+      /\s*<Label[\s\S]*?name="username"[\s\S]*?"rw-field-error" \/>/
+    )[0]
+    const fullNameFields = usernameFields
+      .replace(/\s*ref=\{usernameRef}/, '')
+      .replaceAll('username', 'full-name')
+      .replaceAll('Username', 'Full Name')
+
+    const newContentSignupPageTs = contentSignupPageTs.replace(
+      '<FieldError name="password" className="rw-field-error" />',
+      '<FieldError name="password" className="rw-field-error" />\n' +
+        fullNameFields
     )
 
-    fs.writeFileSync(pathAuthJs, resultsAuthJs)
+    fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 
-    await execa(
-      'yarn rw prisma migrate dev --name dbAuth',
-      [],
-      getExecaOptions(outputPath)
+    // set fullName when signing up
+    const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
+    const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
+    const resultsAuthTs = contentAuthTs.replace(
+      '// name: userAttributes.name',
+      "fullName: userAttributes['full-name']"
     )
+
+    fs.writeFileSync(pathAuthTs, resultsAuthTs)
   }
+
+  const generateScaffold = createBuilder('yarn rw g scaffold')
 
   return new Listr(
     [
       {
         title: 'Adding post model to prisma',
         task: async () => {
-          const { post } = await import('./codemods/models.js')
+          // Need both here since they have a relation
+          const { post, user } = await import('./codemods/models.js')
 
           addModel(post)
+          addModel(user)
 
           return execa(
-            `yarn rw prisma migrate dev --name create_product`,
+            `yarn rw prisma migrate dev --name create_post_user`,
             [],
-            execaOptionsForProject
+            execaOptions
           )
         },
       },
       {
-        title: 'Scaffoding post',
+        title: 'Scaffolding post',
         task: async () => {
-          return execa('yarn rw g scaffold post', [], execaOptionsForProject)
+          return generateScaffold('post')
         },
       },
       {
@@ -436,15 +537,48 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           await execa(
             `yarn rw prisma migrate dev --name create_contact`,
             [],
-            execaOptionsForProject
+            execaOptions
           )
 
-          await execa(`yarn rw g scaffold contacts`, [], execaOptionsForProject)
+          return generateScaffold('contacts')
         },
       },
       {
         title: 'Add dbAuth',
         task: async () => addDbAuth(),
+      },
+      {
+        title: 'Add users service',
+        task: async () => {
+          const generateSdl = createBuilder('yarn redwood g sdl --no-crud')
+
+          await generateSdl('user')
+
+          await applyCodemod(
+            'usersSdl.js',
+            fullPath('api/src/graphql/users.sdl')
+          )
+
+          await applyCodemod(
+            'usersService.js',
+            fullPath('api/src/services/users/users')
+          )
+
+          const test = `import { user } from './users'
+            import type { StandardScenario } from './users.scenarios'
+
+            describe('users', () => {
+              scenario('returns a single user', async (scenario: StandardScenario) => {
+                const result = await user({ id: scenario.user.one.id })
+
+                expect(result).toEqual(scenario.user.one)
+              })
+            })`.replaceAll(/ {12}/g, '')
+
+          fs.writeFileSync(fullPath('api/src/services/users/users.test'), test)
+
+          return createBuilder('yarn redwood g types')()
+        },
       },
     ],
     {

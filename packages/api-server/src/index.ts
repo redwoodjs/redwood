@@ -11,6 +11,8 @@ import {
   bothServerHandler,
 } from './cliHandlers'
 
+export * from './types'
+
 const positionalArgs = yargs(hideBin(process.argv)).parseSync()._
 
 // "bin": {
