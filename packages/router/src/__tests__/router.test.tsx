@@ -39,7 +39,7 @@ import { Spec } from '../util'
 
 function createDummyAuthContextValues(
   partial: Partial<
-    AuthContextInterface<null, void, void, void, void, void, void>
+    AuthContextInterface<null, void, void, void, void, void, void, null>
   >
 ) {
   const authContextValues: AuthContextInterface<
@@ -49,7 +49,8 @@ function createDummyAuthContextValues(
     void,
     void,
     void,
-    void
+    void,
+    null
   > = {
     loading: true,
     isAuthenticated: false,
@@ -685,9 +686,9 @@ test('unauthenticated user is redirected away from private page', async () => {
 
   await waitFor(() => {
     expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
+    screen.getByText(/Login Page/i)
     expect(window.location.pathname).toBe('/login')
     expect(window.location.search).toBe('?redirectTo=/private')
-    screen.getByText(/Login Page/i)
   })
 })
 

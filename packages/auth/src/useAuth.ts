@@ -59,7 +59,7 @@ export function useNoAuth(): AuthContextInterface<
   undefined
 > {
   return {
-    loading: true,
+    loading: false,
     isAuthenticated: false,
     logIn: async () => {},
     logOut: async () => {},
