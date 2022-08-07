@@ -6292,7 +6292,7 @@ __metadata:
     magic-sdk: 8.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.24.3
+    supertokens-auth-react: 0.24.4
     typescript: 4.7.4
   peerDependencies:
     "@clerk/clerk-react": 3.5.1
@@ -29042,9 +29042,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.24.3":
-  version: 0.24.3
-  resolution: "supertokens-auth-react@npm:0.24.3"
+"supertokens-auth-react@npm:0.24.4":
+  version: 0.24.4
+  resolution: "supertokens-auth-react@npm:0.24.4"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: 2.1.2
@@ -29057,7 +29057,7 @@ __metadata:
     supertokens-web-js: ^0.1.2
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 032af3d349c1a4e4df0faff9780f94568808303a6f6ae1c8d21ff78d082cf2a619c08385c51cfe986200ee40cb3cb2c1342b7d6e1d940f4826f0bd0d36026e8f
+  checksum: f2e4fcb94208e81e27943961dc280280903cd3b53afd4c389e8c0c1bf75b96f1d1ea34b9f7c6ae59af370502eda1595475ce47448ca24924a232180b6fdcbe67
   languageName: node
   linkType: hard
 
