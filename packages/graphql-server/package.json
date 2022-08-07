@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.16.7",
     "@envelop/depth-limit": "1.6.2",
     "@envelop/disable-introspection": "3.4.2",
-    "@envelop/filter-operation-type": "3.4.0",
+    "@envelop/filter-operation-type": "3.4.2",
     "@envelop/parser-cache": "4.5.0",
     "@envelop/validation-cache": "4.5.0",
     "@graphql-tools/merge": "8.3.1",
