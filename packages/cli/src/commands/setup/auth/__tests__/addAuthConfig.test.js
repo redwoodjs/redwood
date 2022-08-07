@@ -127,10 +127,25 @@ describe('Customized App.js', () => {
 })
 
 describe('Swapped out GraphQL client', () => {
+  let consoleWarn
+
+  beforeAll(() => {
+    consoleWarn = console.warn
+    console.warn = jest.fn()
+  })
+
+  afterAll(() => {
+    console.warn = consoleWarn
+  })
+
   it('Should add auth config when app is missing RedwoodApolloProvider', () => {
     mockWebAppPath =
       'src/commands/setup/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
     addConfigToApp()
+
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringMatching(/GraphQL.*useAuth/)
+    )
   })
 })

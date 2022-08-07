@@ -11,6 +11,7 @@ import {
   graphFunctionDoesExist,
   transformTSToJS,
 } from '../../../lib'
+import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
 import { files } from './authFiles'
@@ -158,8 +159,18 @@ export const addConfigToApp = async () => {
     content = addAuthProviderToApp(content)
   }
 
-  if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
-    content = addUseAuthHook('RedwoodApolloProvider', content)
+  if (/\s*<RedwoodApolloProvider/.test(content)) {
+    if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
+      content = addUseAuthHook('RedwoodApolloProvider', content)
+    }
+  } else {
+    console.warn(
+      c.warning(
+        'Could not find <RedwoodApolloProvider>. Are you using a custom ' +
+          'GraphQL Client? If you are, you will most likely have to pass ' +
+          '`useAuth` to it manually'
+      )
+    )
   }
 
   fs.writeFileSync(webAppPath, content)
