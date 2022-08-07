@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
+
 import {
   EnvelopError,
   FormatErrorHandler,
@@ -88,6 +90,7 @@ const convertToMultiValueHeaders = (headers: Headers) => {
  * ```
  */
 export const createGraphQLHandler = ({
+  healthCheckId,
   loggerConfig,
   context,
   getCurrentUser,
@@ -113,9 +116,10 @@ export const createGraphQLHandler = ({
     const projectDirectives = makeDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
-      redwoodDirectivePlugins = projectDirectives.map((directive) =>
-        useRedwoodDirective(directive as DirectivePluginOptions)
-      )
+      ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
+        projectDirectives.map((directive) =>
+          useRedwoodDirective(directive as DirectivePluginOptions)
+        )
     }
 
     schema = makeMergedSchema({
@@ -177,6 +181,7 @@ export const createGraphQLHandler = ({
   plugins.push(useRedwoodLogger(loggerConfig))
 
   const yoga = createServer({
+    id: healthCheckId,
     schema,
     plugins,
     maskedErrors: {
@@ -334,7 +339,14 @@ export const createGraphQLHandler = ({
       lambdaResponse.headers = {}
     }
 
-    lambdaResponse.headers['Content-Type'] = 'application/json'
+    /**
+     * The header keys are case insensitive, but Fastify prefers these to be lowercase.
+     * Therefore, we want to ensure that the headers are always lowercase and unique
+     * for compliance with HTTP/2.
+     *
+     * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
+     */
+    lambdaResponse.headers['content-type'] = 'application/json'
 
     return lambdaResponse
   }

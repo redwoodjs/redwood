@@ -6,7 +6,131 @@ description: GraphQL is a fundamental part of Redwood
 
 GraphQL is a fundamental part of Redwood. Having said that, you can get going without knowing anything about it, and can actually get quite far without ever having to read [the docs](https://graphql.org/learn/). But to master Redwood, you'll need to have more than just a vague notion of what GraphQL is. You'll have to really grok it.
 
-The good thing is that, besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood. GraphQL is GraphQL. The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
+
+## GraphQL 101
+
+GraphQL is a query language that enhances the exchange of data between clients (in Redwood's case, a React app) and servers (a Redwood API).
+
+Unlike a REST API, a GraphQL Client performs operations that allow gathering a rich dataset in a single request.
+There's three types of GraphQL operations, but here we'll only focus on two: Queries (to read data) and Mutations (to create, update, or delete data).
+
+The following GraphQL query:
+
+```graphql
+query GetProject {
+  project(name: "GraphQL") {
+    id
+    title
+    description
+    owner {
+      id
+      username
+    }
+    tags {
+      id
+      name
+    }
+  }
+}
+```
+
+returns the following JSON response:
+
+```json
+{
+  "data": {
+    "project": {
+      "id": 1,
+      "title": "My Project",
+      "description": "Lorem ipsum...",
+      "owner": {
+        "id": 11,
+        "username": "Redwood",
+      },
+      "tags": [
+        { "id": 22, "name": "graphql" }
+      ]
+    }
+  },
+  "errors": null
+}
+```
+
+Notice that the response's structure mirrors the query's. In this way, GraphQL makes fetching data descriptive and predictable.
+
+Again, unlike a REST API, a GraphQL API is built on a schema that specifies exactly which queries and mutations can be performed.
+For the `GetProject` query above, here's the schema backing it:
+
+```graphql
+type Project {
+  id: ID!
+  title: String
+  description: String
+  owner: User!
+  tags: [Tag]
+}
+
+# ... User and Tag type definitions
+
+type Query {
+  project(name: String!): Project
+}
+```
+
+:::info
+
+More information on GraphQL types can be found in the [official GraphQL documentation](https://graphql.org/learn/schema/).
+
+:::
+
+Finally, the GraphQL schema is associated with a resolvers map that helps resolve each requested field. For example, here's what the resolver for the owner field on the Project type may look like:
+
+```ts
+export const Project = {
+  owner: (args, { root, context, info }) => {
+    return db.project.findUnique({ where: { id: root.id } }).user()
+  },
+  // ...
+}
+```
+
+:::info
+
+You can read more about resolvers in the dedicated [Understanding Default Resolvers](#understanding-default-resolvers) section below.
+
+:::
+
+To summarize, when a GraphQL query reaches a GraphQL API, here's what happens:
+
+```
++--------------------+                  +--------------------+
+|                    | 1.send operation |                    |
+|                    |                  |   GraphQL Server   |
+|   GraphQL Client   +----------------->|    |               |
+|                    |                  |    |  2.resolve    |
+|                    |                  |    |     data      |
++--------------------+                  |    v               |
+          ^                             | +----------------+ |
+          |                             | |                | |
+          |                             | |    Resolvers   | |
+          |                             | |                | |
+          |                             | +--------+-------+ |
+          |  3. respond JSON with data  |          |         |
+          +-----------------------------+ <--------+         |
+                                        |                    |
+                                        +--------------------+
+```
+
+In contrast to most GraphQL implementations, Redwood provides a "deconstructed" way of creating a GraphQL API:
+
+- You define your SDLs (schema) in `*.sdl.js` files, which define what queries and mutations are available, and what fields can be returned
+- For each query or mutation, you write a service function with the same name. This is the resolver
+- Redwood then takes all your SDLs and Services (resolvers), combines them into a GraphQL server, and expose it as an endpoint
+
+## Redwood and GraphQL
+
+Besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood.
+The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
 
 Since there's two parts to GraphQL in Redwood, the client and the server, we've divided this doc up that way.
 
@@ -200,13 +324,13 @@ export const Users = {
 
 - `args` is passed as the first argument
 - `obj` is named `root` (all the rest keep their names)
-- `root`, `context`, and `info` are wrapped into an object; this object is passed as the second argument
+- `root`, `context`, and `info` are wrapped into an object, `gqlArgs`; this object is passed as the second argument
 
 Here's an example to make things clear:
 
-```jsx
+```js
 export const Post = {
-  user: (args, { root, context, info }) => db.post.findUnique({ where: { id: root.id } }).user(),
+  user: (args, gqlArgs) => db.post.findUnique({ where: { id: gqlArgs?.root.id } }).user(),
 }
 ```
 
@@ -340,33 +464,48 @@ For more in-depth discussion and configuration of CORS when it comes to using a 
 
 ## Health Checks
 
-Health checks are used determine if a server is available and ready to start serving traffic. By default, Redwood's GraphQLHandler provides a health check endpoint at `/graphql/health` which returns a `200 status code` with a result of `{ status: 'pass' }` if the server is healthy and can accept requests or a `503 status code` with `{ status: fail }` if not.
+You can use health checks to determine if a server is available and ready to start serving traffic.
+For example, services like [Pingdom](https://www.pingdom.com) use health checks to determine server uptime and will notify you if it becomes unavailable.
 
-If you need more than the default basic health check, you can provide a custom implementation via an `onHealthCheck` function when creating the GraphQLHandler. If defined, this async `onHealthCheck` function should return if the server is deemed ready or throw if there is an error.
+Redwood's GraphQL server provides a health check endpoint at `/graphql/health` as part of its GraphQL handler.
+If the server is healthy and can accept requests, the response will contain the following headers:
 
-```tsx title="api/src/functions/graphql.{ts,js}"
-const myCustomHealthCheck = async () => {
-  if (ok) {
-    // Implement your custom check, such as:
-    // * invoke an api
-    // * call a service
-    // * make a db request
-    // that ensures your GraphQL endpoint is healthy
-    return
-  }
+```
+content-type: application/json
+server: GraphQL Yoga
+x-yoga-id: yoga
+```
 
-  throw Error('Health check failed')
+and will return a `HTTP/1.1 200 OK` status with the body:
+
+```json
+{
+  "message": "alive"
 }
+```
+
+Note the `x-yoga-id` header. The header's value defaults to `yoga` when `healthCheckId` isn't set in `createGraphQLHandler`. But you can customize it when configuring your GraphQL handler:
+
+```ts title="api/src/functions/graphql.ts"
+// ...
 
 export const handler = createGraphQLHandler({
-  onHealthCheck = await myCustomHealthCheck(),
-  // .. other config
+  // This will be the value of the `x-yoga-id` header
+  // highlight-next-line
+  healthCheckId: 'my-redwood-graphql-server',
   getCurrentUser,
+  loggerConfig: { logger, options: {} },
   directives,
   sdls,
   services,
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
 })
 ```
+
+If the health check fails, then the GraphQL server is unavailable and you should investigate what could be causing the downtime.
 
 #### Perform a Health Check
 
@@ -376,24 +515,61 @@ For local development,
 with the proxy using `curl` from the command line:
 
 ```bash
-curl http://localhost:8910/.redwood/functions/graphql/health
+curl "http://localhost:8910/.redwood/functions/graphql/health"
 ```
 
 or by directly invoking the graphql function:
 
 ```bash
-curl http://localhost:8911/graphql/health
+curl "http://localhost:8911/graphql/health"
 ```
 
 you should get the response:
 
 ```json
-{ "status": "pass" }
+{
+  "message": "alive"
+}
 ```
 
-For production or your deploy, make a request wherever your `/graphql` function exists.
+For production, make a request wherever your `/graphql` function exists.
 
-> Note: These examples use `curl` but you can performa a health check via any HTTP GET request.
+> These examples use `curl` but you can perform a health check via any HTTP GET request.
+
+#### Perform a Readiness Check
+
+A readiness check confirms that your GraphQL server can accept requests and serve **your server's** traffic.
+
+It forwards a request to the health check with a header that must match your `healthCheckId` in order to succeed.
+If the `healthCheckId` doesn't match or the request fails, then your GraphQL server isn't "ready".
+
+To perform a readiness check, make a HTTP GET request to the `/graphql/readiness` endpoint with the appropriate `healthCheckId` header.
+For local development, you can make a request to the proxy:
+
+```bash
+curl "http://localhost:8910/.redwood/functions/graphql/readiness" \
+     -H 'x-yoga-id: yoga'
+```
+
+or directly invoke the graphql function:
+
+```bash
+curl "http://localhost:8911/graphql/readiness" \
+     -H 'x-yoga-id: yoga'
+
+```
+
+Either way, you should get the following response:
+
+```json
+{
+  "message": "alive"
+}
+```
+
+For production, make a request wherever your `/graphql` function exists.
+
+> These examples use `curl` but you can perform a readiness check via any HTTP GET request with the proper headers.
 
 ## Verifying GraphQL Schema
 
@@ -925,7 +1101,7 @@ Some of the biggest security improvements we'll be making revolve around Service
 
 Because it is often useful to ask a GraphQL schema for information about what queries it supports, GraphQL allows us to do so using the [introspection](https://graphql.org/learn/introspection/) system.
 
-The [GraphQL Playground](https://github.com/graphql/graphql-playground) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
+The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
@@ -1077,6 +1253,332 @@ export const getWeather = async ({ input }: WeatherInput) {
 }
 ```
 
+## Self-Documenting GraphQL API
+
+RedwoodJS helps you document your GraphQL API by generating commented SDL used for GraphiQL and the GraphQL Playground explorer -- as well as can be turned into API docs using tools like [Docusaurus](#use-in-docusaurus).
+
+If you specify the SDL generator with its `--docs` option, any comments (which the [GraphQL spec](https://spec.graphql.org/October2021/#sec-Descriptions) calls "descriptions") will be incorporated into your RedwoodJS app's `graphql.schema` file when generating types.
+
+If you comment your Prisma schema models, its fields, or enums, the SDL generator will use those comments as the documentation.
+
+If there is no Prisma comment, then the SDL generator will default a comment that you can then edit.
+
+:::note
+If you re-generate the SDL, any custom comments will be overwritten.
+However, if you make those edits in your Prisma schema, then those will be used.
+:::
+
+### Prisma Schema Comments
+
+Your Prisma schema is documented with triple slash comments (`///`) that precedes:
+
+* Model names
+* Enum names
+* each Model field name
+
+```
+/// A blog post.
+model Post {
+  /// The unique identifier of a post.
+  id        Int      @id @default(autoincrement())
+  /// The title of a post.
+  title     String
+  /// The content of a post.
+  body      String
+  /// When the post was created.
+  createdAt DateTime @default(now())
+}
+
+/// A list of allowed colors.
+enum Color {
+  RED
+  GREEN
+  BLUE
+}
+```
+
+### SDL Comments
+
+When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) adds comments for:
+
+* Directives
+* Queries
+* Mutations
+* Input Types
+
+:::note
+By default, the `--docs` option to the SDL generator is false and comments are not created.
+:::
+
+Comments [enclosed in `"""` or `"`]([GraphQL spec](https://spec.graphql.org/October2021/#sec-Descriptions) in your sdl files will be included in the generated GraphQL schema at the root of your project (.redwood/schema.graphql).
+
+```
+"""
+Use to check whether or not a user is authenticated and is associated
+with an optional set of roles.
+"""
+directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+
+"""Use to skip authentication checks and allow public access."""
+directive @skipAuth on FIELD_DEFINITION
+
+"""
+Autogenerated input type of InputPost.
+"""
+input CreatePostInput {
+  "The content of a post."
+  body: String!
+
+  "The title of a post."
+  title: String!
+}
+
+"""
+Autogenerated input type of UpdatePost.
+"""
+input UpdatePostInput {
+  "The content of a post."
+  body: String
+
+  "The title of a post."
+  title: String
+}
+
+"""
+A blog post.
+"""
+type Post {
+  "The content of a post."
+  body: String!
+
+  "Description for createdAt."
+  createdAt: DateTime!
+
+  "The unique identifier of a post."
+  id: Int!
+
+  "The title of a post."
+  title: String!
+}
+
+"""
+About mutations
+"""
+type Mutation {
+  "Creates a new Post."
+  createPost(input: CreatePostInput!): Post!
+
+  "Deletes an existing Post."
+  deletePost(id: Int!): Post!
+
+  "Updates an existing Post."
+  updatePost(id: Int!, input: UpdatePostInput!): Post!
+}
+
+"""
+About queries
+"""
+type Query {
+  "Fetch a Post by id."
+  post(id: Int!): Post
+
+  "Fetch Posts."
+  posts: [Post!]!
+}
+```
+
+#### Root Schema
+
+Documentation is also generated for the Redwood Root Schema that defines details about Redwood such as the current user and version information.
+```
+type Query {
+  "Fetches the Redwood root schema."
+  redwood: Redwood
+}
+
+"""
+The Redwood Root Schema
+
+Defines details about Redwood such as the current user and version information.
+"""
+type Redwood {
+  "The current user."
+  currentUser: JSON
+
+  "The version of Prisma."
+  prismaVersion: String
+
+  "The version of Redwood."
+  version: String
+}
+
+scalar BigInt
+scalar Date
+scalar DateTime
+scalar JSON
+scalar JSONObject
+scalar Time
+
+```
+
+### Preview in GraphiQL
+
+The [GraphQL Playground aka GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at [http://localhost:8911/graphql](http://localhost:8911/graphql) when your dev server is running.
+
+The documentation generated is present when exploring the schema.
+
+#### Queries
+
+<img alt="graphiql-queries" src="/img/graphql-api-docs/graphiql-queries.png" width="400" />
+
+#### Mutations
+
+<img alt="graphiql-mutations" src="/img/graphql-api-docs/graphiql-mutations.png" width="400" />
+
+#### Model Types
+
+<img alt="graphiql-type" src="/img/graphql-api-docs/graphiql-type.png" width="400" />
+
+#### Input Types
+
+<img alt="graphiql-input-type" src="/img/graphql-api-docs/graphiql-input-type.png" width="400" />
+
+### Use in Docusaurus
+
+If your project uses [Docusaurus](https://docusaurus.io), the generated commented SDL can be used to publish documentation using the [graphql-markdown](https://graphql-markdown.github.io) plugin.
+
+#### Basic Setup
+
+The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
+
+1. Add `docs` to your `workspaces` in the project's `package.json`:
+
+```
+  "workspaces": {
+    "packages": [
+      "docs",
+      "api",
+      "web",
+      "packages/*"
+    ]
+  },
+```
+
+2. Create a `docs` directory at the root of your project
+
+```terminal
+mcd docs
+`
+
+3. Install the plugin
+
+```terminal
+yarn add @edno/docusaurus2-graphql-doc-generator graphql
+```
+
+4. Update `docs/docusaurus.config.js` and configure the plugin and navbar
+
+```
+// docs/docusaurus.config.js
+// ...
+  plugins: [
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+      {
+        schema: '../.redwood/schema.graphql',
+        rootPath: './docs',
+        baseURL: 'graphql-api',
+        homepage: './docs/graphql-api/generated.md',
+        linkRoot: '../..',
+      },
+    ],
+  ],
+// ...
+themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      navbar: {
+        title: 'My Site',
+        logo: {
+          alt: 'My Site Logo',
+          src: 'img/logo.svg',
+        },
+        items: [
+          {
+            to: '/docs/graphql-api', // adjust the location depending on your baseURL (see configuration)
+            label: 'GraphQL API', // change the label with yours
+            position: 'left',
+          },
+//...
+```
+5. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
+
+```
+// docs/sidebars.js
+/**
+ * Creating a sidebar enables you to:
+ *  - create an ordered group of docs
+ *  - render a sidebar for each doc of that group
+ *  - provide next/previous navigation
+ *
+ * The sidebars can be generated from the filesystem, or explicitly defined here.
+ *
+ * Create as many sidebars as you want.
+ */
+
+// @ts-check
+
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+const sidebars = {
+  // By default, Docusaurus generates a sidebar from the docs folder structure
+  tutorialSidebar: [
+    {
+      type: 'autogenerated',
+      dirName: '.',
+    },
+  ],
+  ...require('./docs/graphql-api/sidebar-schema.js'),
+}
+
+module.exports = sidebars
+```
+
+6. Generate the docs
+
+`yarn docusaurus graphql-to-doc`
+
+:::tip
+You can overwrite the generated docs and bypass the plugin's diffMethod use `--force`.
+
+``yarn docusaurus graphql-to-doc --force`
+:::
+
+7. Start Docusaurus
+
+```
+yarn start
+```
+
+#### Example Screens
+
+##### Schema Documentation
+![graphql-doc-example-main](/img/graphql-api-docs/schema-doc.png)
+
+##### Type Example
+![graphql-doc-example-type](/img/graphql-api-docs/contact-type.png)
+
+##### Query Example
+![graphql-doc-example-query](/img/graphql-api-docs/contact-query.png)
+
+##### Mutation Example
+![graphql-doc-example-mutation](/img/graphql-api-docs/schema-mutation.png)
+
+##### Directive Example
+![graphql-doc-example-directive](/img/graphql-api-docs/schema-directive.png)
+
+##### Scalar Example
+![graphql-doc-example-scalar](/img/graphql-api-docs/schema-scalar.png)
+
 ## FAQ
 
 ### Why Doesn't Redwood Use Something Like Nexus?
@@ -1087,3 +1589,10 @@ This might be one of our most frequently asked questions of all time. Here's [To
 
 <!-- TODO -->
 <!-- This https://community.redwoodjs.com/t/how-to-add-resolvetype-resolver-for-interfaces/432/7 -->
+
+## Futher Reading
+
+Eager to learn more about GraphQL? Check out some of the resources below:
+- [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week
+- The official GraphQL Yoga (the GraphQL server powering Redwood) [tutorial](https://www.graphql-yoga.com/tutorial/basic/00-introduction) is the best place to get your hands on GraphQL basics
+- And of course, [the official GraphQL docs](https://graphql.org/learn/) are great place to do a deep dive into exactly how GraphQL works

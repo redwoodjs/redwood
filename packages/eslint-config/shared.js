@@ -97,6 +97,18 @@ module.exports = {
         },
       },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['$api/*'],
+            message:
+              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
+          },
+        ],
+      },
+    ],
   },
   overrides: [
     {
@@ -122,6 +134,7 @@ module.exports = {
         '@typescript-eslint/camelcase': 'off',
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/prefer-namespace-keyword': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
@@ -150,6 +163,10 @@ module.exports = {
         commonjs: true,
         jest: true,
       },
+    },
+    {
+      files: ['web/src/**/*.routeHooks.{js,ts}'],
+      rules: { 'no-restricted-imports': 'off' },
     },
   ],
 }

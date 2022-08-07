@@ -4,7 +4,7 @@ description: Render pages ahead of time
 
 # Prerender
 
-Some of your pages don't have dynamic content; it'd be great if you could render them ahead of time, making for a faster experience for your end users.
+Prerendering is great for providing a faster experience for your end users. Your pages will be rendered at build-time, saving your user's browser from having to do that job.
 
 We thought a lot about what the developer experience should be for route-based prerendering. The result is one of the smallest APIs imaginable!
 
@@ -31,7 +31,7 @@ Then run `yarn rw build` and enjoy the performance boost!
 
 Just add the `prerender` prop to the Set that wraps all Pages you want to prerender:
 
-```jsx {3} title="Routes.js"
+```jsx {1} title="Routes.js"
 <Set prerender>
   <Route path="/" page={HomePage} name="home" />
   <Route path="/about" page={AboutPage} name="hello" />
@@ -49,22 +49,71 @@ You can also prerender your not found page (a.k.a your 404 page). Just add—you
 
 This will prerender your NotFoundPage to `404.html` in your dist folder. Note that there's no need to specify a path.
 
-## Cells, Private Routes, and Dynamic URLs
+## Private Routes
 
-How does Prerendering handle dynamic data? For Cells, Redwood prerenders your Cells' `<Loading/>` component. Similarly, for Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
+For Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` prop:
 
-```jsx {1,2}
+```jsx
 <Private >
   // Loading is shown while we're checking to see if the user's logged in
   <Route path="/super-secret-admin-dashboard" page={SuperSecretAdminDashboard} name="ssad" whileLoadingAuth={() => <Loading />} prerender/>
 </Private>
 ```
 
-Right now prerendering won't work for dynamic URLs. We're working on this. If you try to prerender one of them, nothing will break, but nothing happens.
+## Dynamic routes
 
-```jsx title="web/src/Routes.js"
+Let's say you have a route like this
+
+```jsx
 <Route path="/blog-post/{id}" page={BlogPostPage} name="blogPost" prerender />
 ```
+
+To be able to prerender this route you need to let Redwood know what `id`s to use. Why? Because when we are prerendering your pages - at build time - we don't know the full URL i.e. `site.com/blog-post/1` vs `site.com/blog-post/3`. It's up to you to decide whether you want to prerender _all_ of the ids, or if there are too many to do that, if you want to only prerender the most popular or most likely ones.
+
+You do this by creating a `BlogPostPage.routeHooks.js` file next to the page file itself (so next to `BlogPostPage.js` in this case). It should export a function called `routeParameters` that returns an array of objects that specify the route parameters that should be used for prerendering.
+
+So for example, for the route `/blogPost/{Id:Int}` - you would return `[ {id: 55}, {id: 77} ]` which would tell Redwood to prerender `/blogPost/55` and `/blogPost/77`
+
+A single Page component can be used for different routes too! Metadata about the current route will be passed as an argument to `routeParameters` so you can return different route parameters depending on what route it is, if you need to. An example will hopefully make all this clearer.
+
+For the example route above, all you need is this:
+
+```js title="BlogPostPage.routeHooks.js"
+export function routeParameters() {
+  return [{ id: 1 }, { id: 2 }, { id: 3 }]
+}
+```
+
+Or, if you wanted to get fancy
+
+```js title="BlogPostPage.routeHooks.js"
+export function routeParameters(route) {
+
+  // If we are reusing the BlogPostPage in multiple routes, e.g. /odd/{id} and
+  // /blogPost/{id} we can choose what parameters to pass to each route during
+  // prerendering
+  // highlight-next-line
+  if (route.name === 'odd') {
+    return [{ id: 1 }, { id: 3 }, { id: 5 }]
+  } else {
+    return [{ id: 2 }, { id: 4 }, { id: 6 }]
+  }
+}
+```
+
+With the config above three separate pages will be written: `web/dist/blog-post/1.html`, `web/dist/blog-post/2.html`, `web/dist/blog-post/3.html`. A word of warning - if it's just a few pages like this, it's no problem - but this can easily and quickly explode to thousands of pages, which could slow down your builds and deployments significantly (and make them costly, depending on how you're billed).
+
+In these routeHooks scripts you have full access to your database using prisma and all your services, should you need it. You use `import { db } from '$api/src/lib/db'` to get access to the `db` object.
+
+```js title="BlogPostPage.routeHooks.js"
+import { db } from '$api/src/lib/db'
+
+export async function routeParameters() {
+  return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
+}
+```
+
+Take note of the special syntax for the import, with a dollar-sign in front of api. This lets our tooling (typescript and babel) know that you want to break out of the web side the page is in to access code on the api side. This only works in the routeHook scripts (and scripts in the root /scripts directory).
 
 ## Prerender Utils
 

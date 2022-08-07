@@ -29,7 +29,7 @@ import {
   webAuthnSession,
 } from './shared'
 
-type SetCookieHeader = { 'Set-Cookie': string }
+type SetCookieHeader = { 'set-cookie': string }
 type CsrfTokenHeader = { 'csrf-token': string }
 
 interface SignupFlowOptions {
@@ -46,7 +46,7 @@ interface SignupFlowOptions {
    * were included in the object given to the `signUp()` function you got
    * from `useAuth()`
    */
-  handler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+  handler: (signupHandlerOptions: SignupHandlerOptions) => any
   /**
    * Object containing error strings
    */
@@ -57,13 +57,13 @@ interface SignupFlowOptions {
   }
 }
 
-interface ForgotPasswordFlowOptions {
+interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
   /**
    * Allow users to request a new password via a call to forgotPassword. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: Record<string, unknown>) => Promise<any>
+  handler: (user: TUser) => any
   errors?: {
     usernameNotFound?: string
     usernameRequired?: string
@@ -72,7 +72,7 @@ interface ForgotPasswordFlowOptions {
   expires: number
 }
 
-interface LoginFlowOptions {
+interface LoginFlowOptions<TUser = Record<string | number, any>> {
   /**
    * Allow users to login. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -85,7 +85,7 @@ interface LoginFlowOptions {
    * in, containing at least an `id` field (whatever named field was provided
    * for `authFields.id`). For example: `return { id: user.id }`
    */
-  handler: (user: Record<string, unknown>) => Promise<any>
+  handler: (user: TUser) => any
   /**
    * Object containing error strings
    */
@@ -101,13 +101,13 @@ interface LoginFlowOptions {
   expires: number
 }
 
-interface ResetPasswordFlowOptions {
+interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
   /**
    * Allow users to reset their password via a code from a call to forgotPassword. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: Record<string, unknown>) => Promise<any>
+  handler: (user: TUser) => boolean
   allowReusedPassword: boolean
   errors?: {
     resetTokenExpired?: string
@@ -135,7 +135,7 @@ interface WebAuthnFlowOptions {
   }
 }
 
-interface DbAuthHandlerOptions {
+export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * Provide prisma db client
    */
@@ -177,15 +177,15 @@ interface DbAuthHandlerOptions {
   /**
    * Object containing forgot password options
    */
-  forgotPassword: ForgotPasswordFlowOptions | { enabled: false }
+  forgotPassword: ForgotPasswordFlowOptions<TUser> | { enabled: false }
   /**
    * Object containing login options
    */
-  login: LoginFlowOptions | { enabled: false }
+  login: LoginFlowOptions<TUser> | { enabled: false }
   /**
    * Object containing reset password options
    */
-  resetPassword: ResetPasswordFlowOptions | { enabled: false }
+  resetPassword: ResetPasswordFlowOptions<TUser> | { enabled: false }
   /**
    * Object containing login options
    */
@@ -206,14 +206,10 @@ interface SignupHandlerOptions {
   username: string
   hashedPassword: string
   salt: string
-  userAttributes?: any
+  userAttributes?: Record<string, string>
 }
 
-interface SessionRecord {
-  id: string | number
-}
-
-type AuthMethodNames =
+export type AuthMethodNames =
   | 'forgotPassword'
   | 'getToken'
   | 'login'
@@ -230,13 +226,27 @@ type Params = {
   username?: string
   password?: string
   method: AuthMethodNames
-  [key: string]: unknown
+  [key: string]: any
 }
 
-export class DbAuthHandler {
+/**
+ * To use in src/lib/auth#getCurrentUser
+ *
+ * Use this type to tell the getCurrentUser function what the type of session is
+ * @example
+ * import {User} from '@prisma/client'
+ *
+ * //  key being used in dbAccessor in src/functions/auth.ts 👇
+ * const getCurrentUser = async (session: DbAuthSession<User['id']>)
+ */
+export interface DbAuthSession<TIdType = unknown> {
+  id: TIdType
+}
+
+export class DbAuthHandler<TUser extends Record<string | number, any>> {
   event: APIGatewayProxyEvent
   context: LambdaContext
-  options: DbAuthHandlerOptions
+  options: DbAuthHandlerOptions<TUser>
   cookie: string | undefined
   params: Params
   db: PrismaClient
@@ -244,7 +254,7 @@ export class DbAuthHandler {
   dbCredentialAccessor: any
   headerCsrfToken: string | undefined
   hasInvalidSession: boolean
-  session: SessionRecord | undefined
+  session: DbAuthSession | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
   sessionExpiresDate: string
@@ -298,10 +308,17 @@ export class DbAuthHandler {
     return ['usb', 'ble', 'nfc', 'internal']
   }
 
-  // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
+  // returns the set-cookie header to mark the cookie as expired ("deletes" the session)
+  /**
+   * The header keys are case insensitive, but Fastify prefers these to be lowercase.
+   * Therefore, we want to ensure that the headers are always lowercase and unique
+   * for compliance with HTTP/2.
+   *
+   * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
+   */
   get _deleteSessionHeader() {
     return {
-      'Set-Cookie': [
+      'set-cookie': [
         'session=',
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
@@ -311,7 +328,7 @@ export class DbAuthHandler {
   constructor(
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    options: DbAuthHandlerOptions
+    options: DbAuthHandlerOptions<TUser>
   ) {
     this.event = event
     this.context = context
@@ -732,10 +749,10 @@ export class DbAuthHandler {
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
       this._webAuthnCookie(jsonBody.rawId, this.webAuthnExpiresDate),
-      loginHeaders['Set-Cookie'],
+      loginHeaders['set-cookie'],
     ].flat()
 
-    return [verified, { 'Set-Cookie': cookies }]
+    return [verified, { 'set-cookie': cookies }]
   }
 
   // get options for a WebAuthn authentication
@@ -768,7 +785,7 @@ export class DbAuthHandler {
     if (!user) {
       return [
         { error: 'Log in with username and password to enable WebAuthn' },
-        { 'Set-Cookie': this._webAuthnCookie('', 'now') },
+        { 'set-cookie': this._webAuthnCookie('', 'now') },
         { statusCode: 400 },
       ]
     }
@@ -910,7 +927,7 @@ export class DbAuthHandler {
     return [
       verified,
       {
-        'Set-Cookie': this._webAuthnCookie(
+        'set-cookie': this._webAuthnCookie(
           plainCredentialId,
           this.webAuthnExpiresDate
         ),
@@ -1073,10 +1090,10 @@ export class DbAuthHandler {
     return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
   }
 
-  // returns the Set-Cookie header to be returned in the request (effectively
+  // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
   _createSessionHeader(
-    data: SessionRecord,
+    data: DbAuthSession,
     csrfToken: string
   ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
@@ -1086,7 +1103,7 @@ export class DbAuthHandler {
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 
-    return { 'Set-Cookie': cookie }
+    return { 'set-cookie': cookie }
   }
 
   // checks the CSRF token in the header against the CSRF token in the session

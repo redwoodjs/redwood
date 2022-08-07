@@ -416,7 +416,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 
 ### TypeScript generators
 
-If your project is configured for TypeScript (see [TypeScript docs](typescript.md)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
+If your project is configured for TypeScript (see the [TypeScript docs](typescript/index)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
 
 **Undoing a Generator with a Destroyer**
 
@@ -897,11 +897,13 @@ A scaffold quickly creates a CRUD for a model by generating the following files 
 
 The content of the generated components is different from what you'd get by running them individually.
 
-| Arguments & Options  | Description                                                                                                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `model`              | Model to scaffold. You can also use `<path/model>` to nest files by type at the given path directory (or directories). For example, `redwood g scaffold admin/post` |
-| `--force, -f`        | Overwrite existing files                                                                                                                                            |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                |
+| Arguments & Options  | Description                                                                                                                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `model`              | Model to scaffold. You can also use `<path/model>` to nest files by type at the given path directory (or directories). For example, `redwood g scaffold admin/post`                                   |
+| `--docs`             | Use or set to `true` to generated comments in SDL to use in self-documentating your app's GraphQL API. See: [Self-Documenting GraphQL API](./graphql.md#self-documenting-graphql-api) [default:false] |
+| `--force, -f`        | Overwrite existing files                                                                                                                                                                              |
+| `--tailwind`         | Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)                                                                                               |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
 
 **Usage**
 
@@ -1030,6 +1032,38 @@ It's a known limitation with GraphQL type generation.
 It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
 Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
+### generate script
+
+Generates an arbitrary Node.js script in `./scripts/<name>` that can be used with `redwood execute` command later.
+
+| Arguments & Options  | Description                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `name`               | Name of the service                                                                  |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+
+Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
+
+- create special database seed scripts for different scenarios
+- sync products and prices from your payment provider
+- running cleanup jobs on a regular basis e.g. delete stale/expired data
+- sync data between platforms e.g. email from your db to your email marketing platform
+
+**Usage**
+
+```
+❯ yarn rw g script syncStripeProducts
+
+  ✔ Generating script file...
+    ✔ Successfully wrote file `./scripts/syncStripeProducts.ts`
+  ✔ Next steps...
+
+    After modifying your script, you can invoke it like:
+
+      yarn rw exec syncStripeProducts
+
+      yarn rw exec syncStripeProducts --param1 true
+```
+
 ### generate sdl
 
 Generate a GraphQL schema and service object.
@@ -1043,13 +1077,14 @@ The sdl will inspect your `schema.prisma` and will do its best with relations. S
 <!-- See limited generator support for relations
 https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-support-for-relations-with-workarounds/361 -->
 
-| Arguments & Options  | Description                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations         |
-| `--force, -f`        | Overwrite existing files                                                             |
-| `--tests`            | Generate service test and scenario [default: true]                                   |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| Arguments & Options  | Description                                                                                                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `model`              | Model to generate the sdl for                                                                                                                                                                          |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                                                                                                                           |
+| `--docs`             | Use or set to `true` to generated comments in SDL to use in self-documentating your app's GraphQL API. See: [Self-Documenting GraphQL API](./graphql.md#self-documenting-graphql-api) [default: false] |
+| `--force, -f`        | Overwrite existing files                                                                                                                                                                               |
+| `--tests`            | Generate service test and scenario [default: true]                                                                                                                                                     |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                   |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
 
@@ -1232,7 +1267,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `name`               | Name of the service                                                                  |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-| `--tests`            | Generate test and scenario files [default: true]                                                  |
+| `--tests`            | Generate test and scenario files [default: true]                                     |
 
 
 **Destroying**
@@ -1300,38 +1335,6 @@ Generating...
 - web/types/graphql.d.ts
 
 ... and done.
-```
-
-### generate script
-
-Generates an arbitrary Node.js script in `./scripts/<name>` that can be used with `redwood execute` command later.
-
-| Arguments & Options  | Description                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| `name`               | Name of the service                                                                  |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-
-Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
-
-- create special database seed scripts for different scenarios
-- sync products and prices from your payment provider
-- running cleanup jobs on a regular basis e.g. delete stale/expired data
-- sync data between platforms e.g. email from your db to your email marketing platform
-
-**Usage**
-
-```
-❯ yarn rw g script syncStripeProducts
-
-  ✔ Generating script file...
-    ✔ Successfully wrote file `./scripts/syncStripeProducts.ts`
-  ✔ Next steps...
-
-    After modifying your script, you can invoke it like:
-
-      yarn rw exec syncStripeProducts
-
-      yarn rw exec syncStripeProducts --param1 true
 ```
 
 ## info
@@ -1811,7 +1814,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup tsconfig
 
-Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript.md).
+Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript/index).
 
 ```
 yarn redwood setup tsconfig
@@ -1889,7 +1892,7 @@ yarn redwood type-check [side]
 
 **Usage**
 
-See [Running Type Checks](typescript.md#running-type-checks).
+See [Running Type Checks](typescript/introduction.md#running-type-checks).
 
 ## serve
 

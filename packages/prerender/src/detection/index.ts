@@ -1,4 +1,4 @@
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getProject } from '@redwoodjs/structure'
 
 export const detectPrerenderRoutes = () => {
@@ -6,11 +6,15 @@ export const detectPrerenderRoutes = () => {
   const routes = rwProject.getRouter().routes
 
   const prerenderRoutes = routes
-    .filter((route: any) => !route.hasParameters) // ignore routes that take params
     .filter((route: any) => route.prerender) // only select routes with prerender prop
     .map((route: any) => ({
       name: route.isNotFound ? '404' : route.name,
+      // `path` will be updated/expanded later where route parameters will be
+      // replaced with actual values
       path: route.isNotFound ? '/404' : route.path,
+      // `routePath` is always the path specified on the <Route> component
+      // (or the special /404 path)
+      routePath: route.isNotFound ? '/404' : route.path,
       hasParams: route.hasParameters,
       id: route.id,
       isNotFound: route.isNotFound,

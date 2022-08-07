@@ -1,4 +1,4 @@
-import type { EditContactById } from 'types/graphql'
+import type { EditContactById, UpdateContactInput } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
@@ -33,31 +33,44 @@ const UPDATE_CONTACT_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ contact }: CellSuccessProps<EditContactById>) => {
-  const [updateContact, { loading, error }] = useMutation(UPDATE_CONTACT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Contact updated')
-      navigate(routes.contacts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updateContact, { loading, error }] = useMutation(
+    UPDATE_CONTACT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Contact updated')
+        navigate(routes.contacts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input, id) => {
+  const onSave = (
+    input: UpdateContactInput,
+    id: EditContactById['contact']['id']
+  ) => {
     updateContact({ variables: { id, input } })
   }
 
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit Contact {contact.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Contact {contact?.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <ContactForm contact={contact} onSave={onSave} error={error} loading={loading} />
+        <ContactForm
+          contact={contact}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )
