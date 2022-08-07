@@ -32,7 +32,7 @@
     "@redwoodjs/web": "2.2.0",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.24.0",
+    "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
     "mime-types": "2.1.35"
   },

@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.24.0"
+    "core-js": "3.24.1"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",

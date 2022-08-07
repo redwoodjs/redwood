@@ -39,7 +39,7 @@
     "@apollo/client": "3.6.9",
     "@babel/runtime-corejs3": "7.16.7",
     "@redwoodjs/auth": "2.2.0",
-    "core-js": "3.24.0",
+    "core-js": "3.24.1",
     "graphql": "16.5.0",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "1.3.0",
