@@ -6,14 +6,6 @@ import password from 'secure-random-password'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 
-// the lines that need to be added to App.{js,tsx}
-export const config = {
-  imports: [],
-  authProvider: {
-    type: 'dbAuth',
-  },
-}
-
 // required packages to install
 export const webPackages = []
 export const apiPackages = []

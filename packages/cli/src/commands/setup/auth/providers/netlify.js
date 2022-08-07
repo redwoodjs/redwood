@@ -1,16 +1,3 @@
-// the lines that need to be added to App.{js,tsx}
-export const config = {
-  imports: [
-    `import netlifyIdentity from 'netlify-identity-widget'`,
-    `import { isBrowser } from '@redwoodjs/prerender/browserUtils'`,
-  ],
-  init: 'isBrowser && netlifyIdentity.init()',
-  authProvider: {
-    client: 'netlifyIdentity',
-    type: 'netlify',
-  },
-}
-
 // required packages to install
 export const webPackages = [
   'netlify-identity-widget, @types/netlify-identity-widget',

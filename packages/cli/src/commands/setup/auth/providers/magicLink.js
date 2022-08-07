@@ -1,13 +1,3 @@
-// the lines that need to be added to App.{js,tsx}
-export const config = {
-  imports: [`import { Magic } from 'magic-sdk'`],
-  init: 'const m = new Magic(process.env.MAGICLINK_PUBLIC)',
-  authProvider: {
-    client: 'm',
-    type: 'magicLink',
-  },
-}
-
 // required packages to install
 export const webPackages = ['magic-sdk']
 export const apiPackages = ['@magic-sdk/admin']

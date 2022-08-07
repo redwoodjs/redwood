@@ -1,20 +1,3 @@
-// the lines that need to be added to App.{js,tsx}
-export const config = {
-  imports: [`import { PublicClientApplication } from '@azure/msal-browser'`],
-  init: `const azureActiveDirectoryClient = new PublicClientApplication({
-    auth: {
-      clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
-      authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
-      redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-      postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
-    },
-  })`,
-  authProvider: {
-    client: 'azureActiveDirectoryClient',
-    type: 'azureActiveDirectory',
-  },
-}
-
 // required packages to install
 export const webPackages = ['@azure/msal-browser']
 export const apiPackages = []

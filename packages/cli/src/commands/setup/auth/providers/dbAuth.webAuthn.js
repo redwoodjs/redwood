@@ -9,15 +9,6 @@ import { functionsPath, libPath } from './dbAuth'
 // copy some identical values from dbAuth provider
 export { task } from './dbAuth'
 
-// the lines that need to be added to App.{js,tsx}
-export const config = {
-  imports: [`import WebAuthnClient from '@redwoodjs/auth/webAuthn'`],
-  authProvider: {
-    type: 'dbAuth',
-    client: 'WebAuthnClient',
-  },
-}
-
 // required packages to install
 export const webPackages = ['@simplewebauthn/browser']
 export const apiPackages = ['@simplewebauthn/server']

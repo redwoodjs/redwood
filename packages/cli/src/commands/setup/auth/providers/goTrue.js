@@ -1,16 +1,3 @@
-// the lines that need to be added to App.{js,tsx}
-export const config = {
-  imports: [`import GoTrue from 'gotrue-js'`],
-  init: `const goTrueClient = new GoTrue({
-  APIUrl: 'https://MYAPP.netlify.app/.netlify/identity',
-  setCookie: true,
-})`,
-  authProvider: {
-    client: 'goTrueClient',
-    type: 'goTrue',
-  },
-}
-
 // required packages to install
 export const webPackages = ['gotrue-js']
 export const apiPackages = []
