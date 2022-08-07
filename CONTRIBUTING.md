@@ -47,7 +47,7 @@ You'll almost always want to test the functionality of your changes to the Redwo
 - run `yarn create redwood-app ./redwood-project`
 - `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
 - use a project you've already created
-- create a functional test project using `yarn run build:test-project <project directory>`  👀
+- create a functional test project: go to the location of your local copy of the Redwood Framework and use `yarn run build:test-project <project directory>` 👀
 
 **Using the functional test project might be the fastest and easiest way to test your changes.**
 
@@ -102,7 +102,7 @@ cd redwood-project
 RWFW_PATH=~/redwood yarn rwfw project:sync
 ```
 
-Where <framework directory> is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
+Where `~/redwood` is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
 As `project:sync` starts up, it'll start logging to the console. In order, it:
 
