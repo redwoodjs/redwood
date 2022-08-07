@@ -15,55 +15,73 @@ const OUTPUT_PATHS = {
   ),
 }
 
+/**
+ * Example return value:
+ * ```
+ * {
+ *   base: [
+ *     '/Users/tobbe/dev/redwood/.../auth/templates/auth.ts.template'
+ *   ],
+ *   clerk: [
+ *     '/Users/tobbe/dev/redwood/.../auth/templates/clerk.auth.ts.template'
+ *   ],
+ *   dbAuth: [
+ *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.auth.ts.template',
+ *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.auth.webAuthn.ts.template',
+ *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.function.ts.template',
+ *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.function.webAuthn.ts.template'
+ *   ],
+ *   ethereum: [
+ *     '/Users/tobbe/dev/redwood/.../setup/auth/templates/ethereum.auth.ts.template'
+ *   ],
+ * }
+ * ```
+ *
+ * @returns Object where the providers are mapped to their templates
+ */
+
 const getTemplates = () =>
   fs
     .readdirSync(path.join(path.resolve(__dirname, 'templates'), 'lib'))
     .reduce((templates, file) => {
-      if (file === 'auth.ts.template') {
-        return {
-          ...templates,
-          base: [path.resolve(__dirname, 'templates', file)],
-        }
-      } else {
-        const provider = file.split('.')[0]
-        if (templates[provider]) {
-          templates[provider].push(path.resolve(__dirname, 'templates', file))
-          return { ...templates }
-        } else {
-          return {
-            ...templates,
-            [provider]: [path.resolve(__dirname, 'templates', file)],
-          }
-        }
+      // Create a fake 'base' provider for the standard auth.ts template
+      const provider = file === 'auth.ts.template' ? 'base' : file.split('.')[0]
+
+      return {
+        ...templates,
+        [provider]: [
+          ...(templates[provider] || []),
+          path.resolve(__dirname, 'templates', 'lib', file),
+        ],
       }
     }, {})
 
-// the files to create to support auth
+/**
+ * Get the auth.ts template to use
+ *
+ * @returns {
+ *   'auth.ts': <file content>
+ * }
+ */
 export const files = ({ provider, webAuthn }) => {
   const templates = getTemplates()
   let files = {}
 
-  // look for any templates for this provider
-  for (const [templateProvider, templateFiles] of Object.entries(templates)) {
-    if (provider === templateProvider) {
-      templateFiles.forEach((templateFile) => {
-        const shouldUseTemplate =
-          (webAuthn && templateFile.match(/\.webAuthn\./)) ||
-          (!webAuthn && !templateFile.match(/\.webAuthn\./))
+  templates[provider]?.forEach((templateFile) => {
+    const shouldUseTemplate =
+      (webAuthn && templateFile.match(/\.webAuthn\./)) ||
+      (!webAuthn && !templateFile.match(/\.webAuthn\./))
 
-        if (shouldUseTemplate) {
-          const outputPath =
-            OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
-          const content = fs.readFileSync(templateFile).toString()
-          files = Object.assign(files, {
-            [outputPath]: isTypeScriptProject()
-              ? content
-              : transformTSToJS(outputPath, content),
-          })
-        }
+    if (shouldUseTemplate) {
+      const outputPath = OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
+      const content = fs.readFileSync(templateFile).toString()
+      files = Object.assign(files, {
+        [outputPath]: isTypeScriptProject()
+          ? content
+          : transformTSToJS(outputPath, content),
       })
     }
-  }
+  })
 
   // if there are no provider-specific templates, just use the base auth one
   if (Object.keys(files).length === 0) {

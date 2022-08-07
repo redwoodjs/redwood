@@ -3,8 +3,7 @@ import path from 'path'
 
 import password from 'secure-random-password'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
-
+import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 
 // the lines that need to be added to App.{js,tsx}

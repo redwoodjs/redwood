@@ -25,30 +25,29 @@ import {
 const WEBAUTHN_SUPPORTED_PROVIDERS = ['dbAuth']
 
 /**
- * Check if api/src/lib/auth.{js,ts} already exists and if so, ask the user
- * to overwrite
+ * Check if one of the api side auth files already exists and if so, ask the
+ * user to overwrite
  */
-async function handleExistingApiLibAuthFile(force, provider, webAuthn) {
-  if (force === false) {
-    // TODO: This assumes the first file in the Object-turned-array is the
-    // lib/auth file. That seems brittle. Should add a test for this and
-    // probably refactor
-    if (fs.existsSync(Object.keys(files({ provider, webAuthn }))[0])) {
-      const forceResponse = await prompts({
-        type: 'confirm',
-        name: 'answer',
-        message: `Overwrite existing ${getPaths().api.lib.replace(
-          getPaths().base,
-          ''
-        )}/auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
-        initial: false,
-      })
-
-      return forceResponse.answer
-    }
+async function shouldForce(force, provider, webAuthn) {
+  if (force) {
+    return true
   }
 
-  return true
+  // Just pick the first file here. Doesn't matter which one it is. We just
+  // assume it's an all-or-nothing kind of situation here
+  if (fs.existsSync(Object.keys(files({ provider, webAuthn }))[0])) {
+    const forceResponse = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: `Overwrite existing ${getPaths().api.lib.replace(
+        getPaths().base,
+        ''
+      )}/auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
+      initial: false,
+    })
+
+    return forceResponse.answer
+  }
 }
 
 /**
@@ -109,7 +108,7 @@ export const handler = async ({
   webauthn,
   force: forceArg,
 }) => {
-  const force = await handleExistingApiLibAuthFile(forceArg, provider, webauthn)
+  const force = await shouldForce(forceArg, provider, webauthn)
   const includeWebAuthn = await shouldIncludeWebAuthn(webauthn, provider)
   const providerData = includeWebAuthn
     ? await import(`./providers/${provider}.webAuthn`)

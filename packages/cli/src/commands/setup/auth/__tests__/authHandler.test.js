@@ -2,31 +2,42 @@ global.__dirname = __dirname
 
 import '../../../../lib/mockTelemetry'
 
-jest.mock('fs')
-jest.mock('../../../../lib', () => ({
-  getPaths: () => ({
-    api: { functions: '', src: '', lib: '' },
-    web: { src: '' },
-  }),
-}))
+jest.mock('../../../../lib', () => {
+  const path = require('path')
+  const __dirname = path.resolve()
+
+  return {
+    getPaths: () => ({
+      api: {
+        src: path.join(__dirname, '../create-redwood-app/template/api/src'),
+        functions: path.join(
+          __dirname,
+          '../create-redwood-app/template/api/src/functions'
+        ),
+        lib: path.join(__dirname, '../create-redwood-app/template/api/src/lib'),
+      },
+      web: { src: '' },
+      base: path.join(__dirname, '../create-redwood-app/template'),
+    }),
+  }
+})
+
 jest.mock('../../../../lib/project', () => ({
-  isTypeScriptProject: () => false,
+  isTypeScriptProject: () => true,
 }))
 
-jest.mock('execa')
+jest.mock('execa', () => {})
 jest.mock('listr')
+jest.mock('prompts', () => jest.fn(() => ({ answer: true })))
 
 import fs from 'fs'
 
-import chalk from 'chalk'
 import listr from 'listr'
+import prompts from 'prompts'
 
 import * as auth from '../auth'
 
-const EXISTING_AUTH_PROVIDER_ERROR =
-  'Existing auth provider found.\nUse --force to override existing provider.'
-
-describe.skip('Auth generator tests', () => {
+describe('Auth generator tests', () => {
   const processExitSpy = jest
     .spyOn(process, 'exit')
     .mockImplementation(() => {})
@@ -39,48 +50,46 @@ describe.skip('Auth generator tests', () => {
     }
   })
 
+  const fsSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {})
+
   afterEach(() => {
     processExitSpy.mockReset()
+    fsSpy.mockReset()
+    prompts.mockClear()
+    mockListrRun.mockClear()
   })
 
-  it(`no error thrown when auth provider not found`, async () => {
-    const fsSpy = jest.spyOn(fs, 'readFileSync').mockImplementation(() => '')
+  it('Successfully executes the handler for Netlify', async () => {
+    await auth.handler({ provider: 'netlify', webauthn: false, force: false })
 
-    // Mock process.exit to make sure CLI quites
-    const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
-
-    await auth.handler({ provider: 'netlify' })
-    expect(console.error).not.toHaveBeenCalledWith(
-      chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
-    )
-
-    expect(mockListrRun).toHaveBeenCalled()
+    expect(mockListrRun).toHaveBeenCalledTimes(1)
     expect(processExitSpy).not.toHaveBeenCalledWith(1)
-
-    // Restore mocks
-    fsSpy.mockRestore()
-    cSpy.mockRestore()
+    expect(prompts).toHaveBeenCalledTimes(1)
+    expect(prompts).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Overwrite existing /api/src/lib/auth.ts?',
+      })
+    )
   })
 
-  it('throws an error if auth provider exists', async () => {
-    // Mock process.exit to make sure CLI quites
-    const fsSpy = jest
-      .spyOn(fs, 'readFileSync')
-      .mockImplementation(
-        () => `import { AuthProvider } from '@redwoodjs/auth'`
-      )
+  it('Successfully executes the handler for Netlify without prompting the user when --force is true', async () => {
+    await auth.handler({ provider: 'netlify', webauthn: false, force: true })
 
-    const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    expect(mockListrRun).toHaveBeenCalledTimes(1)
+    expect(processExitSpy).not.toHaveBeenCalledWith(1)
+    expect(prompts).toHaveBeenCalledTimes(0)
+  })
 
-    await auth.handler({ provider: 'netlify' })
-    expect(console.error).toHaveBeenCalledWith(
-      chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
+  it('Successfully executes the handler for dbAuth', async () => {
+    await auth.handler({ provider: 'dbAuth', webauthn: false, force: false })
+
+    expect(mockListrRun).toHaveBeenCalledTimes(1)
+    expect(processExitSpy).not.toHaveBeenCalledWith(1)
+    expect(prompts).toHaveBeenCalledTimes(1)
+    expect(prompts).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Overwrite existing /api/src/lib/auth.ts?',
+      })
     )
-
-    expect(processExitSpy).toHaveBeenCalledWith(1)
-
-    // Restore mocks
-    fsSpy.mockRestore()
-    cSpy.mockRestore()
   })
 })
