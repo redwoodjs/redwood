@@ -23,7 +23,7 @@ describe('the basics', () => {
       const x = 'x'
       const list = [x]
       `,
-       `\
+      `\
        const y = 'y'
        const list = [y]
        `,

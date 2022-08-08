@@ -18,16 +18,16 @@ export default async function extendStorybookConfiguration(
   newConfigPath = undefined
 ) {
   const sbPreviewConfigPath = getPaths().web.storybookPreviewConfig
-  if (!fs.existsSync(sbPreviewConfigPath)) {
-    await util.promisify(fs.cp)(
+  if (!fse.existsSync(sbPreviewConfigPath)) {
+    await util.promisify(fse.cp)(
       path.join(__dirname, 'templates', 'storybook.preview.js.template'),
       sbPreviewConfigPath
     )
   }
 
   if (newConfigPath) {
-    const read = (path) => fs.readFileSync(path, { encoding: 'utf-8' })
-    const write = (path, data) => fs.writeFileSync(path, data)
+    const read = (path) => fse.readFileSync(path, { encoding: 'utf-8' })
+    const write = (path, data) => fse.writeFileSync(path, data)
     const merged = merge(read(sbPreviewConfigPath), read(newConfigPath), {
       ImportDeclaration: interleave,
       ArrayExpression: concatUnique,
