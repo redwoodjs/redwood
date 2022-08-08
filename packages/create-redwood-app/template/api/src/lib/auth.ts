@@ -11,7 +11,12 @@ export const isAuthenticated = () => {
   return true
 }
 
-export const hasRole = ({ roles }) => {
+/**
+ * When checking role membership, roles can be a single value, a list, or none.
+ */
+type AllowedRoles = string | string[] | undefined
+
+export const hasRole = (roles: AllowedRoles) => {
   return roles !== undefined
 }
 
