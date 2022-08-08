@@ -19,8 +19,14 @@ describe('the basics', () => {
   it('Inserts extension declarations in the last possible position', () => {
     // Notice how 'y' is reordered above 'list' to ensure its reference in 'list' is valid.
     expectMerged(
-      "const x = 'x'\nconst list = [x]",
-      "const y = 'y'\nconst list = [y]",
+      `\
+      const x = 'x'
+      const list = [x]
+      `,
+       `\
+       const y = 'y'
+       const list = [y]
+       `,
       `\
       const x = 'x'
       const y = 'y'

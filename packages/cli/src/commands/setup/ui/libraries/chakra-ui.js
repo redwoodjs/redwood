@@ -87,6 +87,7 @@ export async function handler({ force, install }) {
     },
     {
       title: 'Configure Storybook...',
+      // skip this task if the user's storybook config already includes "withChakra"
       skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withChakra'),
       task: async () =>
         extendStorybookConfiguration(

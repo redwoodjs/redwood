@@ -29,7 +29,7 @@ export const globalTypes = {
  * @returns a story wrapped in an I18nextProvider
  */
 const withI18n = (StoryFn, context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks (explained above)
   React.useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
