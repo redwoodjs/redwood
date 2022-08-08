@@ -6,6 +6,7 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -446,6 +447,13 @@ export const handler = async (yargs) => {
         },
       },
       providerData.task,
+      {
+        title: 'Re-generating types...',
+        task: async () => {
+          await generateTypes()
+        },
+        enabled: () => isTypeScriptProject(),
+      },
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
