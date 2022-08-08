@@ -15,7 +15,7 @@ export const builder = (yargs) =>
       but setup/hi/hello/bazinga.js will be ignored
       The [\/\\] bit is for supporting both windows and unix style paths
       */
-      exclude: /setup[\/\\]+.*[\/\\]+.*[\/\\]/,
+      exclude: /.*[/\\]setup[/\\].*[/\\].*[/\\]/,
     })
     .demandCommand()
     .middleware(detectRwVersion)
