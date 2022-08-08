@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.24.0"
+    "core-js": "3.24.1"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",
@@ -33,29 +33,29 @@
     "@babel/core": "7.16.7",
     "@clerk/clerk-js": "3.16.4",
     "@clerk/clerk-react": "3.5.1",
-    "@clerk/clerk-sdk-node": "3.9.0",
+    "@clerk/clerk-sdk-node": "3.9.2",
     "@clerk/types": "2.20.0",
     "@nhost/hasura-auth-js": "1.4.0",
     "@nhost/nhost-js": "1.4.7",
-    "@okta/okta-auth-js": "6.7.3",
-    "@simplewebauthn/browser": "5.4.0",
+    "@okta/okta-auth-js": "6.7.4",
+    "@simplewebauthn/browser": "5.4.1",
     "@simplewebauthn/typescript-types": "5.4.0",
-    "@supabase/supabase-js": "1.35.4",
+    "@supabase/supabase-js": "1.35.6",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.48",
-    "firebase": "9.9.1",
+    "firebase": "9.9.2",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",
     "jest": "27.5.1",
     "magic-sdk": "8.1.1",
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
-    "supertokens-auth-react": "0.24.2",
+    "supertokens-auth-react": "0.24.4",
     "typescript": "4.7.4"
   },
   "peerDependencies": {
     "@clerk/clerk-react": "3.5.1",
-    "@clerk/clerk-sdk-node": "3.9.0"
+    "@clerk/clerk-sdk-node": "3.9.2"
   },
   "peerDependenciesMeta": {
     "@clerk/clerk-react": {

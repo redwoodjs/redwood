@@ -9,7 +9,8 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
-import configureStorybook from '../../../lib/configureStorybook.js'
+import extendStorybookConfiguration from '../../../lib/configureStorybook.js'
+import { fileIncludes } from '../../../lib/extendFile'
 
 export const command = 'i18n'
 export const description = 'Set up i18n'
@@ -46,6 +47,7 @@ const localesExists = (lng) => {
 }
 
 export const handler = async ({ force }) => {
+  const rwPaths = getPaths()
   const tasks = new Listr([
     {
       title: 'Installing packages...',
@@ -172,13 +174,11 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Configuring Storybook...',
+      // skip this task if the user's storybook config already includes "withI18n"
+      skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
       task: async () =>
-        configureStorybook(
-          { force },
-          fs.readFileSync(
-            path.join(__dirname, 'templates', 'storybook.preview.js.template'),
-            'utf-8'
-          )
+        extendStorybookConfiguration(
+          path.join(__dirname, 'templates', 'storybook.preview.js.template')
         ),
     },
     {
