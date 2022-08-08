@@ -1,6 +1,7 @@
 // required packages to install
 export const webPackages = [
-  'netlify-identity-widget, @types/netlify-identity-widget',
+  'netlify-identity-widget',
+  '@types/netlify-identity-widget',
 ]
 export const apiPackages = []
 
