@@ -2,10 +2,6 @@ import { _ } from 'lodash'
 
 export const nodeIs = (type) => (node) => node.type === type
 
-// ---
-// sieve (noun) a device with meshes or perforations through which finer particles of a mixture
-// (as of ashes, flour, or sand) of various sizes may be passed to separate them from coarser ones.
-// ---
 // In this algorithm, we take N list-rule-pairs, of the form [[...elements], rule], where `rule` is
 // a unary function accepting a result subarray and returning a position (possibly -1) indicating
 // where an element of its list may be placed in the given subarray. Each list-rule-pair can be

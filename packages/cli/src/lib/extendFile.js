@@ -12,7 +12,7 @@ export function fileIncludes(path, str) {
 
 /**
  * Inject code into the file at the given path.
- * Use of insertComponent assumes only one of (around|within) are used, and that the component
+ * Use of insertComponent assumes only one of (around|within) is used, and that the component
  * identified by (around|within) occurs exactly once in the file at the given path.
  * Imports are added after the last redwoodjs import.
  * moduleScopeLines are added after the last import.
@@ -51,7 +51,7 @@ export function extendJSXFile(
 ) {
   const content = fs.readFileSync(path).toString().split('\n')
 
-  if (moduleScopeLines && moduleScopeLines.length) {
+  if (moduleScopeLines?.length) {
     content.splice(
       content.findLastIndex((l) => l.trimStart().startsWith('import')) + 1,
       0,
@@ -60,7 +60,7 @@ export function extendJSXFile(
     )
   }
 
-  if (imports && imports.length) {
+  if (imports?.length) {
     content.splice(
       content.findLastIndex((l) => l.includes('@redwoodjs')) + 1,
       0,
@@ -108,7 +108,7 @@ function insertComponent(
     )
   }
 
-  const target = around || within
+  const target = around ?? within
   const findTagIndex = (regex) => content.findIndex((line) => regex.test(line))
 
   let open = findTagIndex(new RegExp(`([^\\S\r\n]*)<${target}\\s*(.*)\\s*>`))

@@ -1,7 +1,7 @@
 import path from 'path'
 import util from 'util'
 
-import fs from 'fs-extra'
+import fse from 'fs-extra'
 import prettier from 'prettier'
 
 import { merge } from './merge'

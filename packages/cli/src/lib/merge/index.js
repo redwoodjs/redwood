@@ -20,7 +20,7 @@ function extractProperty(property, fromObject) {
 // This feels like a weird way to achieve something so simple in Babel, but I can't find a better
 // alternative.
 function getProgramPath(ast) {
-  let programPath = undefined
+  let programPath
   traverse(ast, {
     Program(path) {
       programPath = path
@@ -157,7 +157,7 @@ function stripTrailingCommentsStrategy() {
  *     node's binding, if it exists.
  */
 function mergeAST(baseAST, extAST, strategy = {}) {
-  const identity = extractProperty('identity', strategy) || semanticIdentity
+  const identity = extractProperty('identity', strategy) ?? semanticIdentity
   const identities = {}
   const baseVisitor = { ...stripTrailingCommentsStrategy() }
   const extVisitor = { ...stripTrailingCommentsStrategy() }
@@ -204,8 +204,8 @@ function mergeAST(baseAST, extAST, strategy = {}) {
 /**
  * Copy specified AST nodes from extension into base. Use reducer functions specified in strategy to
  * recursively merge from leaf to root.
- * @param {string} base - a string of Javascript code. Must be well-formed.
- * @param {string} extension - a string of Javascript code. May refer to bindings only defined in base.
+ * @param {string} base - a string of JavaScript code. Must be well-formed.
+ * @param {string} extension - a string of JavaScript code. May refer to bindings only defined in base.
  * @param {Object} strategy - Mapping of AST node name to reducer functions.
  * @returns
  */

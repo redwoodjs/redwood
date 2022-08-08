@@ -174,6 +174,7 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Configuring Storybook...',
+      // skip this task if the user's storybook config already includes "withI18n"
       skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withI18n'),
       task: async () =>
         extendStorybookConfiguration(
