@@ -843,14 +843,6 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
 </TabItem>
 </Tabs>
 
-:::info
-
-At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the `hasRole` method in `api/src/lib/auth.js` for now.
-
-If this bothers you, feel free to peek into [the tutorial chapter about Authorization](../chapter7/rbac.md) and add the missing field as described there.
-:::
-
-
 The `getCurrentUser()` function is where the magic happens: whatever is returned by this function is the content of `currentUser`, in both the web and api sides! In the case of dbAuth, the single argument passed in, `session`, contains the `id` of the user that's logged in. It then looks up the user in the database with Prisma, selecting just the `id`. Let's add `email` to this list:
 
 <Tabs groupId="js-ts">
