@@ -37,6 +37,29 @@ yarn redwood build [side..]
 
 The `..` operator indicates that the argument accepts an array of values. See [Variadic Positional Arguments](https://github.com/yargs/yargs/blob/master/docs/advanced.md#variadic-positional-arguments).
 
+## create redwood-app
+
+Create a Redwood project using the yarn create command:
+
+```
+yarn create redwood-app <project directory> [option]
+```
+
+| Arguments & Options    | Description                                                                                                             |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| `project directory`    | Specify the project directory [Required]                                                                                |
+| `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior |
+| `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                    |
+| `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
+| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
+| `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
+
+If you run into trouble during the yarn install step, which may happen if you're developing on an external drive and in other miscellaneous scenarios, try the `--yarn1` flag:
+
+```
+yarn create redwood-app my-redwood-project --yarn1
+```
+
 ## build
 
 Build for production.
@@ -169,9 +192,9 @@ yarn redwood dev [side..]
 
 `yarn redwood dev api` starts the Redwood dev server and `yarn redwood dev web` starts the Webpack dev server with Redwood's config.
 
-| Argument           | Description                                                                                                                                                                                                         |
-| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                                              |
+| Argument           | Description                                                                                                                                                                                 |
+| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
 | `--forward, --fwd` | String of one or more Webpack Dev Server config options. See example usage below. See the [Redwood Webpack Doc](webpack-configuration.md#webpack-dev-server) for more details and examples. |
 
 **Usage**
@@ -224,7 +247,7 @@ yarn redwood deploy <target>
 ```
 
 | Commands                      | Description                              |
-|:------------------------------|:-----------------------------------------|
+| :---------------------------- | :--------------------------------------- |
 | `serverless `                 | Deploy to AWS using Serverless framework |
 | `netlify [...commands]`       | Build command for Netlify deploy         |
 | `render <side> [...commands]` | Build command for Render deploy          |
@@ -239,7 +262,7 @@ yarn redwood deploy serverless
 ```
 
 | Options & Arguments | Description                                                                                                                                 |
-|:--------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
 | `--side`            | which Side(s)to deploy [choices: "api", "web"] [default: "web","api"]                                                                       |
 | `--stage`           | serverless stage, see [serverless stage docs](https://www.serverless.com/blog/stages-and-environments) [default: "production"]              |
 | `--pack-only`       | Only package the build for deployment                                                                                                       |
@@ -335,6 +358,7 @@ yarn redwood destroy <type>
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
 | `directive <name>`   | Destroy a directive                                                             |
+| `graphiql`           | Destroy a generated graphiql file                                               |
 
 ## exec
 
@@ -392,7 +416,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 
 ### TypeScript generators
 
-If your project is configured for TypeScript (see [TypeScript docs](typescript.md)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
+If your project is configured for TypeScript (see the [TypeScript docs](typescript/index)), the generators will automatically detect and generate `.ts`/`.tsx` files for you
 
 **Undoing a Generator with a Destroyer**
 
@@ -873,11 +897,13 @@ A scaffold quickly creates a CRUD for a model by generating the following files 
 
 The content of the generated components is different from what you'd get by running them individually.
 
-| Arguments & Options  | Description                                                                                                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `model`              | Model to scaffold. You can also use `<path/model>` to nest files by type at the given path directory (or directories). For example, `redwood g scaffold admin/post` |
-| `--force, -f`        | Overwrite existing files                                                                                                                                            |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                |
+| Arguments & Options  | Description                                                                                                                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `model`              | Model to scaffold. You can also use `<path/model>` to nest files by type at the given path directory (or directories). For example, `redwood g scaffold admin/post`                                   |
+| `--docs`             | Use or set to `true` to generated comments in SDL to use in self-documentating your app's GraphQL API. See: [Self-Documenting GraphQL API](./graphql.md#self-documenting-graphql-api) [default:false] |
+| `--force, -f`        | Overwrite existing files                                                                                                                                                                              |
+| `--tailwind`         | Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)                                                                                               |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
 
 **Usage**
 
@@ -1006,6 +1032,38 @@ It's a known limitation with GraphQL type generation.
 It happens when you generate the SDL of a Prisma model that has relations **before the SDL for the related model exists**.
 Please see [Troubleshooting Generators](./schema-relations#troubleshooting-generators) for help.
 
+### generate script
+
+Generates an arbitrary Node.js script in `./scripts/<name>` that can be used with `redwood execute` command later.
+
+| Arguments & Options  | Description                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `name`               | Name of the service                                                                  |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+
+Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
+
+- create special database seed scripts for different scenarios
+- sync products and prices from your payment provider
+- running cleanup jobs on a regular basis e.g. delete stale/expired data
+- sync data between platforms e.g. email from your db to your email marketing platform
+
+**Usage**
+
+```
+❯ yarn rw g script syncStripeProducts
+
+  ✔ Generating script file...
+    ✔ Successfully wrote file `./scripts/syncStripeProducts.ts`
+  ✔ Next steps...
+
+    After modifying your script, you can invoke it like:
+
+      yarn rw exec syncStripeProducts
+
+      yarn rw exec syncStripeProducts --param1 true
+```
+
 ### generate sdl
 
 Generate a GraphQL schema and service object.
@@ -1019,13 +1077,14 @@ The sdl will inspect your `schema.prisma` and will do its best with relations. S
 <!-- See limited generator support for relations
 https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-support-for-relations-with-workarounds/361 -->
 
-| Arguments & Options  | Description                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations         |
-| `--force, -f`        | Overwrite existing files                                                             |
-| `--tests`            | Generate service test and scenario [default: true]                                   |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| Arguments & Options  | Description                                                                                                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `model`              | Model to generate the sdl for                                                                                                                                                                          |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                                                                                                                           |
+| `--docs`             | Use or set to `true` to generated comments in SDL to use in self-documentating your app's GraphQL API. See: [Self-Documenting GraphQL API](./graphql.md#self-documenting-graphql-api) [default: false] |
+| `--force, -f`        | Overwrite existing files                                                                                                                                                                               |
+| `--tests`            | Generate service test and scenario [default: true]                                                                                                                                                     |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                   |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
 
@@ -1208,7 +1267,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `name`               | Name of the service                                                                  |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-| `--tests`            | Generate test and scenario files [default: true]                                                  |
+| `--tests`            | Generate test and scenario files [default: true]                                     |
 
 
 **Destroying**
@@ -1276,38 +1335,6 @@ Generating...
 - web/types/graphql.d.ts
 
 ... and done.
-```
-
-### generate script
-
-Generates an arbitrary Node.js script in `./scripts/<name>` that can be used with `redwood execute` command later.
-
-| Arguments & Options  | Description                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| `name`               | Name of the service                                                                  |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-
-Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
-
-- create special database seed scripts for different scenarios
-- sync products and prices from your payment provider
-- running cleanup jobs on a regular basis e.g. delete stale/expired data
-- sync data between platforms e.g. email from your db to your email marketing platform
-
-**Usage**
-
-```
-❯ yarn rw g script syncStripeProducts
-
-  ✔ Generating script file...
-    ✔ Successfully wrote file `./scripts/syncStripeProducts.ts`
-  ✔ Next steps...
-
-    After modifying your script, you can invoke it like:
-
-      yarn rw exec syncStripeProducts
-
-      yarn rw exec syncStripeProducts --param1 true
 ```
 
 ## info
@@ -1648,6 +1675,24 @@ yarn redwood setup auth <provider>
 
 See [Authentication](authentication.md).
 
+### setup graphiQL headers
+
+Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase, dbAuth, and Netlify.
+
+A `generateGraphiQLHeader` file will be created in your `api/lib` folder and included in your gitignore. You can edit this file to customize your header. The function in the file is passed into your `createGraphQLHandler` and only called in dev.
+
+```
+yarn redwood setup graphiql <provider>
+```
+
+| Arguments & Options | Description                                                                                                                                           |
+| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
+| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                         |
+| `--token, -t`       | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token |
+| `--expiry, -e`      | Token expiry in minutes. Default is 60                                                                                                                |
+| `--view, -v`        | Print out generated headers to console                                                                                                                |
+
 ### setup custom-web-index
 
 Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
@@ -1691,18 +1736,18 @@ Your template will receive the provided `name` in a number of different variatio
 
 For example, given the name `fooBar` your template will receive the following _variables_ with the given _values_
 
-| Variable                  | Value         |
-| :------------------------ | :------------ |
-| `pascalName`              | `FooBar`      |
-| `camelName`               | `fooBar`      |
-| `singularPascalName`      | `FooBar`      |
-| `pluralPascalName`        | `FooBars`     |
-| `singularCamelName`       | `fooBar`      |
-| `pluralCamelName`         | `fooBars`     |
-| `singularParamName`       | `foo-bar`     |
-| `pluralParamName`         | `foo-bars`    |
-| `singularConstantName`    | `FOO_BAR`     |
-| `pluralConstantName`      | `FOO_BARS`    |
+| Variable               | Value      |
+| :--------------------- | :--------- |
+| `pascalName`           | `FooBar`   |
+| `camelName`            | `fooBar`   |
+| `singularPascalName`   | `FooBar`   |
+| `pluralPascalName`     | `FooBars`  |
+| `singularCamelName`    | `fooBar`   |
+| `pluralCamelName`      | `fooBars`  |
+| `singularParamName`    | `foo-bar`  |
+| `pluralParamName`      | `foo-bars` |
+| `singularConstantName` | `FOO_BAR`  |
+| `pluralConstantName`   | `FOO_BARS` |
 
 **Example**
 
@@ -1769,7 +1814,7 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 ### setup tsconfig
 
-Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript.md).
+Add a `tsconfig.json` to both the web and api sides so you can start using [TypeScript](typescript/index).
 
 ```
 yarn redwood setup tsconfig
@@ -1789,7 +1834,7 @@ yarn rw setup ui <library>
 
 | Arguments & Options | Description                                                                             |
 | :------------------ | :-------------------------------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `tailwindcss`, `chakra-ui`, `mantine`, and `windicss` |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
 | `--force, -f`       | Overwrite existing configuration                                                        |
 
 ## storybook
@@ -1820,15 +1865,15 @@ Run Jest tests for api and web.
 yarn redwood test [side..]
 ```
 
-| Arguments & Options | Description                                                                                                                                                                                                                                                                                        |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sides or filter`   | Which side(s) to test, and/or a regular expression to match against your test files to filter by                                                                                                                                                                                                   |
-| `--help`            | Show help                                                                                                                                                                                                                                                                                          |
-| `--version`         | Show version number                                                                                                                                                                                                                                                                                |
-| `--watch`           | Run tests related to changed files based on hg/git (uncommitted files). Specify the name or path to a file to focus on a specific set of tests [default: true]                                                                                                                                     |
-| `--watchAll`        | Run all tests                                                                                                                                                                                                                                                                                      |
-| `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                                                                |
-| `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                                                                     |
+| Arguments & Options | Description                                                                                                                                                                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sides or filter`   | Which side(s) to test, and/or a regular expression to match against your test files to filter by                                                                                                                                                           |
+| `--help`            | Show help                                                                                                                                                                                                                                                  |
+| `--version`         | Show version number                                                                                                                                                                                                                                        |
+| `--watch`           | Run tests related to changed files based on hg/git (uncommitted files). Specify the name or path to a file to focus on a specific set of tests [default: true]                                                                                             |
+| `--watchAll`        | Run all tests                                                                                                                                                                                                                                              |
+| `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                        |
+| `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                             |
 | `--db-push`         | Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist [default: true]. This flag is ignored if your project doesn't have an `api` side. [👉 More details](#prisma-db-push). |
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag
@@ -1847,7 +1892,7 @@ yarn redwood type-check [side]
 
 **Usage**
 
-See [Running Type Checks](typescript.md#running-type-checks).
+See [Running Type Checks](typescript/introduction.md#running-type-checks).
 
 ## serve
 
