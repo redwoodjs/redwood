@@ -407,7 +407,7 @@ query {
 }
 ```
 
-How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L27-L44). The root schema is where things like currentUser are defined:
+How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts). The root schema is where things like currentUser are defined:
 
 ```graphql
   scalar BigInt
@@ -428,7 +428,7 @@ How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/r
   }
 ```
 
-Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts#L56-L72):
+Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts):
 
 ```ts
 export const resolvers: Resolvers = {
