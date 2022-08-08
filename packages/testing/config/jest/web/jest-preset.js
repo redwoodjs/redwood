@@ -1,5 +1,4 @@
 const path = require('path')
-const { TextDecoder } = require('util')
 
 const { getPaths } = require('@redwoodjs/internal')
 
@@ -20,7 +19,6 @@ module.exports = {
     __REDWOOD_API_URL: '',
     __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
-    TextDecoder,
   },
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
