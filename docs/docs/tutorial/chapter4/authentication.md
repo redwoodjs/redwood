@@ -728,7 +728,7 @@ export const isAuthenticated = () => {
   return !!context.currentUser
 }
 
-export const hasRole = ({ roles }) => {
+export const hasRole = (roles) => {
   if (!isAuthenticated()) {
     return false
   }
@@ -751,7 +751,7 @@ export const hasRole = ({ roles }) => {
       return currentUserRoles?.some((allowedRole) =>
         roles.includes(allowedRole)
       )
-    } else if (typeof context.currentUser.roles === 'string') {
+    } else if (typeof context?.currentUser?.roles === 'string') {
       // roles to check is an array, currentUser.roles is a string
       return roles.some(
         (allowedRole) => context.currentUser?.roles === allowedRole
@@ -773,7 +773,6 @@ export const requireAuth = ({ roles }) => {
   }
 }
 ```
-
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
@@ -781,7 +780,9 @@ export const requireAuth = ({ roles }) => {
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
-export const getCurrentUser = async (session) => {
+import type { DbAuthSession } from '@redwoodjs/api'
+
+export const getCurrentUser = async (session: DbAuthSession<number>) => {
   return await db.user.findUnique({
     where: { id: session.id },
     select: { id: true },
@@ -794,7 +795,7 @@ export const isAuthenticated = (): boolean => {
 
 type AllowedRoles = string | string[] | undefined
 
-export const hasRole = ({ roles }): boolean => {
+export const hasRole = (roles: AllowedRoles): boolean => {
   if (!isAuthenticated()) {
     return false
   }
@@ -817,7 +818,7 @@ export const hasRole = ({ roles }): boolean => {
       return currentUserRoles?.some((allowedRole) =>
         roles.includes(allowedRole)
       )
-    } else if (typeof context.currentUser.roles === 'string') {
+    } else if (typeof context?.currentUser?.roles === 'string') {
       // roles to check is an array, currentUser.roles is a string
       return roles.some(
         (allowedRole) => context.currentUser?.roles === allowedRole
@@ -839,7 +840,6 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
   }
 }
 ```
-
 </TabItem>
 </Tabs>
 
@@ -859,9 +859,9 @@ export const getCurrentUser = async (session) => {
 ```
 
 </TabItem>
-<TabItem value="ts" label="TyepScript">
+<TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/lib/auth.js"
+```ts title="api/src/lib/auth.ts"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },

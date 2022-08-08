@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { getConfig, getDMMF } from '@prisma/sdk'
+import { getConfig, getDMMF } from '@prisma/internals'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
@@ -138,7 +138,7 @@ export async function verifyModelName(options) {
 
   await ensureUniquePlural({
     model: modelName,
-    inDestroyer: options.isDestroyer,
+    isDestroyer: options.isDestroyer,
     forcePrompt: isPlural(modelName),
   })
 

@@ -2,18 +2,18 @@ type BlogLayoutProps = {
   children?: React.ReactNode
 }
 
-import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
+import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
   const { logOut, isAuthenticated } = useAuth()
 
   return (
     <>
-      <header className="relative flex justify-between items-center py-4 px-8 bg-blue-700 text-white">
+      <header className="relative flex items-center justify-between bg-blue-700 py-4 px-8 text-white">
         <h1 className="text-3xl font-semibold tracking-tight">
           <Link
-            className="text-blue-400 hover:text-blue-100 transition duration-100"
+            className="text-blue-400 transition duration-100 hover:text-blue-100"
             to={routes.home()}
           >
             Redwood Blog
@@ -23,7 +23,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
           <ul className="relative flex items-center font-light">
             <li>
               <Link
-                className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
                 to={routes.about()}
               >
                 About
@@ -31,7 +31,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             </li>
             <li>
               <Link
-                className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
                 to={routes.contact()}
               >
                 Contact
@@ -39,7 +39,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             </li>
             <li>
               <Link
-                className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
                 to={routes.posts()}
               >
                 Admin
@@ -48,7 +48,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             {isAuthenticated && (
               <li>
                 <Link
-                  className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                  className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
                   onClick={logOut}
                   to={''}
                 >
@@ -59,7 +59,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             {!isAuthenticated && (
               <li>
                 <Link
-                  className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
+                  className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
                   to={routes.login()}
                 >
                   Log In
@@ -69,7 +69,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
           </ul>
         </nav>
       </header>
-      <main className="max-w-4xl mx-auto p-12 bg-white shadow-lg rounded-b mt-3">
+      <main className="mx-auto mt-3 max-w-4xl rounded-b bg-white p-12 shadow-lg">
         {children}
       </main>
     </>

@@ -9,6 +9,9 @@ jest.mock('../../../../lib', () => ({
     web: { src: '' },
   }),
 }))
+jest.mock('../../../../lib/project', () => ({
+  isTypeScriptProject: () => false,
+}))
 
 jest.mock('execa')
 jest.mock('listr')

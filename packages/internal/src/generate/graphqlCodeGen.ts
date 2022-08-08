@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-// import * as add from '@graphql-codegen/add'
+import * as addPlugin from '@graphql-codegen/add'
 import { loadCodegenConfig } from '@graphql-codegen/cli'
 import { codegen } from '@graphql-codegen/core'
 import type {
@@ -18,10 +18,19 @@ import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
+import { getTsConfigs } from '../project'
 
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
   const extraPlugins: CombinedPluginConfig[] = [
+    {
+      name: 'add',
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: 'prepend',
+      },
+      codegenPlugin: addPlugin,
+    },
     {
       name: 'typescript-resolvers',
       options: {},
@@ -56,6 +65,14 @@ export const generateTypeDefGraphQLWeb = async () => {
   }
 
   const extraPlugins: CombinedPluginConfig[] = [
+    {
+      name: 'add',
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: 'prepend',
+      },
+      codegenPlugin: addPlugin,
+    },
     {
       name: 'typescript-operations',
       options: {},
@@ -124,7 +141,7 @@ function getPluginConfig() {
     const localPrisma = require('@prisma/client')
     prismaModels = localPrisma.ModelName
     Object.keys(prismaModels).forEach((key) => {
-      prismaModels[key] = `.prisma/client#${key} as Prisma${key}`
+      prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
     })
     // This isn't really something you'd put in the GraphQL API, so
     // we can skip the model.
@@ -141,28 +158,47 @@ function getPluginConfig() {
     namingConvention: 'keep', // to allow camelCased query names
     scalars: {
       // We need these, otherwise these scalars are mapped to any
-      // @TODO is there a way we can use scalars defined in
-      // packages/graphql-server/src/rootSchema.ts
       BigInt: 'number',
       DateTime: 'string',
       Date: 'string',
-      JSON: 'Record<string, unknown>',
-      JSONObject: 'Record<string, unknown>',
+      JSON: 'Prisma.JsonValue',
+      JSONObject: 'Prisma.JsonObject',
       Time: 'string',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,
     showUnusedMappers: false,
-    customResolverFn: `(
-      args?: TArgs,
-      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => Promise<Partial<TResult>> | Partial<TResult>;`,
+    customResolverFn: getResolverFnType(),
     mappers: prismaModels,
+    avoidOptionals: {
+      resolvers: true,
+    },
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig
+}
+
+export const getResolverFnType = () => {
+  const tsConfig = getTsConfigs()
+
+  if (tsConfig.api?.compilerOptions?.strict) {
+    // In strict mode, bring a world of pain to the tests
+    return `(
+      args: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => TResult extends PromiseLike<infer TResultAwaited>
+      ? Promise<Partial<TResultAwaited>>
+      : Promise<Partial<TResult>> | Partial<TResult>;`
+  } else {
+    return `(
+      args?: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => TResult extends PromiseLike<infer TResultAwaited>
+      ? Promise<Partial<TResultAwaited>>
+      : Promise<Partial<TResult>> | Partial<TResult>;`
+  }
 }
 
 interface CombinedPluginConfig {

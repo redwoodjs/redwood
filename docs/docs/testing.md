@@ -253,7 +253,118 @@ describe('Article', () => {
 
 This test (if it worked) would prove that you are indeed rendering an article. But it's also extremely brittle: any change to the component, even adding a `className` attribute for styling, will cause the test to break. That's not ideal, especially when you're just starting out building your components and will constantly be making changes as you improve them.
 
-> Why do we keep saying this test won't work? Because as far as we can tell there's no easy way to simply render to a string. `render` actually returns an object that has several functions for testing different parts of the output. Those are what we'll look into in the next section.
+:::info Why do we keep saying this test won't work?
+Because as far as we can tell there's no easy way to simply render to a string. `render` actually returns an object that has several functions for testing different parts of the output. Those are what we'll look into in the next section.
+
+Note that Redwood's `render` function is based on React Testing Library's. The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
+
+If you were to use React Testing Library's `render` function, you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+
+```jsx
+import { render, MockProviders } from '@redwoodjs/testing/web'
+
+// ...
+
+render(<Article article={ title: 'Foobar' } />, {
+  wrapper: ({ children }) => (
+    <MockProviders>
+      <MyCustomProvider>{children}</MyCustomProvider>
+    </MockProviders>
+  )
+})
+```
+:::
+
+## Testing Custom Hooks
+
+Custom hooks are a great way to encapsulate non-presentational code.
+To test custom hooks, we'll use the `renderHook` function from `@redwoodjs/testing/web`.
+
+:::info
+Note that Redwood's `renderHook` function is based on React Testing Library's. The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
+
+If you were to use React Testing Library's `renderHook` function, you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+
+```jsx
+import { renderHook, MockProviders } from '@redwoodjs/testing/web'
+
+// ...
+
+renderHook(() => myCustomHook(), {
+  wrapper: ({ children }) => (
+    <MockProviders>
+      <MyCustomProvider>{children}</MyCustomProvider>
+    </MockProviders>
+  )
+})
+```
+:::
+
+To use `renderHook`:
+1. Call your custom hook from an inline function passed to `renderHook`. For example:
+```js
+const { result } = renderHook(() => useAccumulator(0))
+```
+2. `renderHook` will return an object with the following properties:
+- `result`: holds the return value of the hook in its `current` property (so `result.current`). Think of `result` as a `ref` for the most recently returned value
+- `rerender`: a function to render the previously rendered hook with new props
+
+Let's go through an example. Given the following custom hook:
+
+```js title="web/src/hooks/useAccumulator/useAccumulator.js"
+const useAccumulator = (initialValue) => {
+  const [total, setTotal] = useState(initialValue)
+
+  const add = (value) => {
+    const newTotal = total + value
+    setTotal(newTotal)
+    return newTotal
+  }
+
+  return { total, add }
+}
+```
+
+The test could look as follows:
+
+```js title="web/src/hooks/useAccumulator/useAccumulator.test.js"
+import { renderHook } from '@redwoodjs/testing/web'
+import { useAccumulator } from './useAccumulator'
+
+describe('useAccumulator hook example in docs', () => {
+  it('has the correct initial state', () => {
+    const { result } = renderHook(() => useAccumulator(42))
+    expect(result.current.total).toBe(42)
+  })
+
+  it('adds a value', () => {
+    const { result } = renderHook(() => useAccumulator(1))
+    result.current.add(5)
+    expect(result.current.total).toBe(6)
+  })
+
+  it('adds multiple values', () => {
+    const { result } = renderHook(() => useAccumulator(0))
+    result.current.add(5)
+    result.current.add(10)
+    expect(result.current.total).toBe(15)
+  })
+
+  it('re-initializes the accumulator if passed a new initializing value', () => {
+    const { result, rerender } = renderHook(
+      (initialValue) => useAccumulator(initialValue),
+      {
+        initialProps: 0,
+      }
+    )
+    result.current.add(5)
+    rerender(99)
+    expect(result.current.total).toBe(99)
+  })
+})
+```
+
+While `renderHook` lets you test a custom hook directly, there are cases where encapsulating the custom hook in a component is more robust. See https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
 ### Queries
 
@@ -307,7 +418,7 @@ export default Article
 
 If we're only displaying the summary of an article then we'll only show the first 100 characters with an ellipsis on the end ("...") and include a link to "Read more" to see the full article. A reasonable test for this component would be that when the `summary` prop is `true` then the "Read more" text should be present. If `summary` is `false` then it should *not* be present. That's where `queryByText()` comes in (relevant test lines are highlighted):
 
-```jsx {18,24} title="web/src/components/Article/Article.test.js"
+```jsx {22} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -367,7 +478,7 @@ it('renders a link with a name', () => {
 
 But what if we wanted to check the `href` of the link itself to be sure it's correct? In that case we can capture the `screen.getByRole()` return and run expectations on that as well (the `forEach()` loop has been removed here for simplicity):
 
-```jsx {2,6-8}
+```jsx {1,6-8}
 import { routes } from '@redwoodjs/router'
 
 it('renders a link with a name', () => {
@@ -486,7 +597,7 @@ export default Article
 
 Redwood provides the test function `mockGraphQLQuery()` for providing the result of a given named GraphQL. In this case our query is named `getArticle` and we can mock that in our test as follows:
 
-```jsx {8-16,20} title="web/src/components/Article/Article.test.js"
+```jsx {6-14,18} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -535,7 +646,7 @@ mockGraphQLQuery('getArticle', (variables, { ctx }) => {
 
 You could then test that you show a proper error message in your component:
 
-```jsx {4,8-10,21,27} title="web/src/components/Article/Article.js"
+```jsx {2,6-8,18-20,24} title="web/src/components/Article/Article.js"
 const Article = ({ id }) => {
   const { data, error } = useQuery(GET_ARTICLE, {
     variables: { id },
@@ -736,7 +847,7 @@ Two situations make testing Cells unique:
 1. A single Cell can export up to four separate components
 2. There's a GraphQL query taking place
 
-The first situation is really no different than regular component testing: you just test more than one component in your test. For example:
+The first situation is really no different from regular component testing: you just test more than one component in your test. For example:
 
 ```jsx title="web/src/components/ArticleCell/ArticleCell.js"
 import Article from 'src/components/Article'
@@ -1128,9 +1239,27 @@ To simplify Service testing, rather than mess with your development database, Re
 
 If you're using Postgres or MySQL locally you'll want to set that env var to your connection string for a test database in those services.
 
-> Does anyone else find it confusing that the software itself is called a "database", but the container that actually holds your data is also called a "database," and you can have multiple databases (containers) within one instance of a database (software)?
+:::info
 
-When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma migrate dev` against your test database to make sure it's up-to-date.
+Does anyone else find it confusing that the software itself is called a "database", but the container that actually holds your data is also called a "database," and you can have multiple databases (containers) within one instance of a database (software)?
+
+:::
+
+When you start your test suite you may notice some output from Prisma talking about migrating the database. Redwood will automatically run `yarn rw prisma db push` against your test database to make sure it's up-to-date.
+
+:::caution What if I have custom migration SQL?
+
+The `prisma db push` command only restores a snapshot of the current database schema (so that it runs as fast as possible). **It does not actually run migrations in sequence.** This can cause a [problem](https://github.com/redwoodjs/redwood/issues/5818) if you have certain database configuration that *must* occur as a result of the SQL statements inside the migration files.
+
+In order to preserve those statements in your test database, you can set an additional ENV var which will use the command `yarn rw prisma migrate reset` instead. This will run each migration in sequence against your test database. The tradeoff is that starting your test suite will take a little longer depending on how many migrations you have:
+
+```.env title=/.env
+TEST_DATABASE_STRATEGY=reset
+```
+
+Set the variable to `push`, or remove it completely, and it will use the default behavior of running `yarn rw prisma db push`.
+
+:::
 
 ### Writing Service Tests
 
@@ -1304,7 +1433,7 @@ scenario('incomplete', 'retrieves only incomplete users', async (scenario) => {
 })
 ```
 
-The name of the scenario you want to use is passed as the *first* argument to `scenario()` and now those will be the only records present in the database at the time the test to run. Assume that the `users()` function contains some logic to determine whether a user record is "complete" or not. If you pass `{ complete: false }` then it should return only those that it determines are not complete, which in this case includes users who have not entered their name yet. We seed the database with the scenario where one user is complete and one is not, then check that the return of `users()` only contains the user without the name.
+The name of the scenario you want to use is passed as the *first* argument to `scenario()` and now those will be the only records present in the database at the time the test is run. Assume that the `users()` function contains some logic to determine whether a user record is "complete" or not. If you pass `{ complete: false }` then it should return only those that it determines are not complete, which in this case includes users who have not entered their name yet. We seed the database with the scenario where one user is complete and one is not, then check that the return of `users()` only contains the user without the name.
 
 #### Multiple Models
 
@@ -1517,6 +1646,12 @@ export const standard = defineScenario({
 })
 ```
 
+:::tip
+
+Looking for info on how TypeScript works with Scenarios? Check out the [Utility Types](typescript/utility-types.md#scenarios--testing) doc
+
+:::
+
 #### Which Scenarios Are Seeded?
 
 Only the scenarios named for your test are included at the time the test is run. This means that if you have:
@@ -1528,7 +1663,7 @@ Only the scenarios named for your test are included at the time the test is run.
 
 Only the posts scenarios will be present in the database when running the `posts.test.js` and only comments scenarios will be present when running `comments.test.js`. And within those scenarios, only the `standard` scenario will be loaded for each test unless you specify a differently named scenario to use instead.
 
-During the run of any single test, there is only every one scenario's worth of data present in the database: users.standard *or* users.incomplete.
+During the run of any single test, there is only ever one scenario's worth of data present in the database: users.standard *or* users.incomplete.
 
 ### mockCurrentUser() on the API-side
 
@@ -1592,6 +1727,9 @@ Luckily, RedwoodJS has several api testing utilities to make [testing functions 
 >
 > We have an entire testing section in the [Serverless Functions documentation](serverless-functions.md) that will walk your through an example of a function and a webhook.
 
+## Testing GraphQL Directives
+
+Please refer to the [Directives documentation](./directives.md) for details on how to write Redwood [Validator](./directives.md#writing-validator-tests) or [Transformer](./directives.md#writing-transformer-tests) Directives tests.
 ## Wrapping Up
 
 So that's the world of testing according to Redwood. Did we miss anything? Can we make it even more awesome? Stop by [the community](https://community.redwoodjs.com) and ask questions, or if you've thought of a way to make this doc even better then [open a PR](https://github.com/redwoodjs/redwoodjs.com/pulls).

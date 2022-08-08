@@ -1,7 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getProject } from '@redwoodjs/structure'
+import { isTypeScriptProject } from '../lib/project'
 
 export const command = 'generate <type>'
 export const aliases = ['g']
@@ -12,7 +12,16 @@ export const builder = (yargs) =>
     .command('types', 'Generate supplementary code', {}, () => {
       execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
     })
-    .commandDir('./generate', { recurse: true })
+    .commandDir('./generate', {
+      recurse: true,
+      /*
+      @NOTE This regex will ignore all double nested commands
+      e.g. /generate/hi.js & generate/hi/hi.js are picked up,
+      but generate/hi/utils/whatever.js will be ignored
+      The [\/\\] bit is for supporting both windows and unix style paths
+      */
+      exclude: /generate[\/\\]+.*[\/\\]+.*[\/\\]/,
+    })
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -31,7 +40,7 @@ export const yargsDefaults = {
   },
   typescript: {
     alias: 'ts',
-    default: getProject().isTypeScriptProject,
+    default: isTypeScriptProject(),
     description: 'Generate TypeScript files',
     type: 'boolean',
   },

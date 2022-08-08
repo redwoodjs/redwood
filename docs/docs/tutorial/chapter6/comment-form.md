@@ -362,21 +362,31 @@ export default { title: 'Components/CommentForm' }
 ```tsx title="web/src/components/CommentForm/CommentForm.stories.tsx"
 import CommentForm from './CommentForm'
 
+// highlight-start
+import type {
+  CreateCommentMutation,
+  CreateCommentMutationVariables,
+} from 'types/graphql'
+// highlight-end
+  
 export const generated = () => {
   // highlight-start
-  mockGraphQLMutation('CreateCommentMutation', (variables, { ctx }) => {
-    const id = Math.floor(Math.random() * 1000)
-    ctx.delay(1000)
+  mockGraphQLMutation<CreateCommentMutation, CreateCommentMutationVariables>(
+    'CreateCommentMutation',
+    (variables, { ctx }) => {
+      const id = Math.floor(Math.random() * 1000)
+      ctx.delay(1000)
 
-    return {
-      createComment: {
-        id,
-        name: variables.input.name,
-        body: variables.input.body,
-        createdAt: new Date().toISOString(),
-      },
+      return {
+        createComment: {
+          id,
+          name: variables.input.name,
+          body: variables.input.body,
+          createdAt: new Date().toISOString(),
+        },
+      }
     }
-  })
+  )
   // highlight-end
 
   return <CommentForm />
@@ -932,7 +942,7 @@ export default CommentForm
 
 ![image](https://user-images.githubusercontent.com/300/153932278-6e504b6b-9e8e-400e-98fb-8bfeefbe3812.png)
 
-We used `hidden` to just hide the form and "Leave a comment" title completely from the page, but keeps the component itself mounted. But where's our "Thank you for your comment" notification? We still need to add the `Toaster` component (from react-host-toast) somewhere in our app so that the message can actually be displayed. We could just add it here, in `CommentForm`, but what if we want other code to be able to post notifications, even when `CommentForm` isn't mounted? Where's the one place we put UI elements that should be visible everywhere? The `BlogLayout`!
+We used `hidden` to just hide the form and "Leave a comment" title completely from the page, but keeps the component itself mounted. But where's our "Thank you for your comment" notification? We still need to add the `Toaster` component (from react-hot-toast) somewhere in our app so that the message can actually be displayed. We could just add it here, in `CommentForm`, but what if we want other code to be able to post notifications, even when `CommentForm` isn't mounted? Where's the one place we put UI elements that should be visible everywhere? The `BlogLayout`!
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -1362,7 +1372,7 @@ Each scenario here is associated with its own post, so rather than counting all 
 ```jsx title="api/src/services/comments/comments.test.js"
 import { comments, createComment } from './comments'
 // highlight-next-line
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 
 describe('comments', () => {
   scenario('returns all comments', async (scenario) => {
@@ -1386,7 +1396,7 @@ describe('comments', () => {
 ```tsx title="api/src/services/comments/comments.test.ts"
 import { comments, createComment } from './comments'
 // highlight-next-line
-import { db } from 'api/src/lib/db'
+import { db } from 'src/lib/db'
 
 import type { StandardScenario } from './comments.scenarios'
 

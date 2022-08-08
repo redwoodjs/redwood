@@ -7,41 +7,51 @@ const { execSync } = require('child_process')
 console.log('------------------------')
 console.log("Running 'docs/ignore_build.js'")
 
-const remoteExists = execSync('git remote -v').toString().includes('origin')
-
-if (remoteExists) {
-  console.log('Remote exists')
-} else {
-  console.log('Adding remote')
-  execSync('git remote add origin https://github.com/redwoodjs/redwood.git')
-}
-
-console.log('Fetching main')
-execSync('git fetch origin main')
-
-console.log('Diffing changed files against main (name only)')
-const changedFiles = execSync('git diff origin/main --name-only')
-  .toString()
-  .trim()
-  .split('\n')
-  .filter(Boolean)
 console.log({
-  changedFiles,
+  branch: process.env.BRANCH,
 })
 
-const shouldBuild = changedFiles.some((changedFile) =>
-  changedFile.startsWith('docs')
-)
-console.log({
-  shouldBuild,
-})
-
-// We've done all the logic based on whether we should build the site,
-// but since this is an ignore script, we have to flip the logic here.
-if (shouldBuild) {
-  console.log(`PR '${process.env.HEAD}' has doc changes. Proceeding`)
+if (process.env.BRANCH === 'main') {
+  console.log(`Branch is main. Proceeding`)
   process.exitCode = 1
+  console.log('------------------------')
 } else {
-  console.log(`PR '${process.env.HEAD}' doesn't have doc changes. Ignoring`)
+  const remoteExists = execSync('git remote -v').toString().includes('origin')
+
+  if (remoteExists) {
+    console.log('Remote exists')
+  } else {
+    console.log('Adding remote')
+    execSync('git remote add origin https://github.com/redwoodjs/redwood.git')
+  }
+
+  console.log('Fetching main')
+  execSync('git fetch origin main')
+
+  console.log('Diffing changed files against main (name only)')
+  const changedFiles = execSync('git diff origin/main --name-only')
+    .toString()
+    .trim()
+    .split('\n')
+    .filter(Boolean)
+  console.log({
+    changedFiles,
+  })
+
+  const shouldBuild = changedFiles.some((changedFile) =>
+    changedFile.startsWith('docs')
+  )
+  console.log({
+    shouldBuild,
+  })
+
+  // We've done all the logic based on whether we should build the site,
+  // but since this is an ignore script, we have to flip the logic here.
+  if (shouldBuild) {
+    console.log(`PR '${process.env.HEAD}' has doc changes. Proceeding`)
+    process.exitCode = 1
+  } else {
+    console.log(`PR '${process.env.HEAD}' doesn't have doc changes. Ignoring`)
+  }
+  console.log('------------------------')
 }
-console.log('------------------------')

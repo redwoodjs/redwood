@@ -1,9 +1,9 @@
-import type { EditContactById } from 'types/graphql'
+import type { EditContactById, UpdateContactInput } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import ContactForm from 'src/components/Contact/ContactForm'
 
@@ -33,7 +33,7 @@ const UPDATE_CONTACT_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ contact }: CellSuccessProps<EditContactById>) => {
@@ -50,7 +50,10 @@ export const Success = ({ contact }: CellSuccessProps<EditContactById>) => {
     }
   )
 
-  const onSave = (input, id) => {
+  const onSave = (
+    input: UpdateContactInput,
+    id: EditContactById['contact']['id']
+  ) => {
     updateContact({ variables: { id, input } })
   }
 
@@ -58,7 +61,7 @@ export const Success = ({ contact }: CellSuccessProps<EditContactById>) => {
     <div className="rw-segment">
       <header className="rw-segment-header">
         <h2 className="rw-heading rw-heading-secondary">
-          Edit Contact {contact.id}
+          Edit Contact {contact?.id}
         </h2>
       </header>
       <div className="rw-segment-main">

@@ -1,54 +1,18 @@
 #!/usr/bin/env node
 /* eslint-env node, es2021 */
-import prompts from 'prompts'
+
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import generateReleaseNotes from './generateReleaseNotes.mjs'
-import release from './release.mjs'
+import release, { updateAllContributors, versionDocs } from './release.mjs'
 import updatePRsMilestone from './updatePRsMilestone.mjs'
 
 yargs(hideBin(process.argv))
   .scriptName('release')
-  .command(
-    '$0',
-    'Release RedwoodJS',
-    (yargs) => {
-      yargs.option('semver', {
-        describe: 'Semver to release',
-        choices: ['major', 'minor', 'patch'],
-      })
-      yargs.option('update-prs-milestone', {
-        alias: 'prs',
-        describe: "Update pull requests' milestones",
-        type: 'boolean',
-      })
-      yargs.option('checkout', {
-        alias: 'b',
-        describe: 'Checkout the release branch',
-        type: 'boolean',
-      })
-      yargs.option('clean-install-update', {
-        alias: 'ciu',
-        describe: 'Clean, install, and update the package versions',
-        type: 'boolean',
-      })
-      yargs.option('commit-tag-qa', {
-        alias: 'ctq',
-        describe: 'Commit, tag, and and run through local QA',
-        type: 'boolean',
-      })
-      yargs.option('generate-release-notes', {
-        alias: 'notes',
-        describe: 'Generate release notes',
-        type: 'boolean',
-      })
-    },
-    async (argv) => {
-      prompts.override(argv)
-      await release()
-    }
-  )
+  .command('$0', 'Release RedwoodJS', async () => {
+    await release()
+  })
   .command(
     ['generate-release-notes [milestone]', 'notes'],
     'Generates release notes for a given milestone',
@@ -86,6 +50,23 @@ yargs(hideBin(process.argv))
       })
     },
     ({ from, to }) => updatePRsMilestone(from, to)
+  )
+  .command(
+    ['update-all-contributors', 'contributors'],
+    'Update all contributors',
+    updateAllContributors
+  )
+  .command(
+    ['version-docs <next-version>', 'docs'],
+    'Version docs',
+    (yargs) => {
+      yargs.positional('next-version', {
+        description:
+          'The next version to version the docs to. Should be something like "1.5"—without the v, without the last 0',
+        type: 'string',
+      })
+    },
+    ({ nextVersion }) => versionDocs(nextVersion)
   )
   .help()
   .parse()

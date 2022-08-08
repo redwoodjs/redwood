@@ -43,7 +43,7 @@ export const isAuthenticated = (): boolean => {
  *
  * @returns - If the currentUser is authenticated
  *
- * @throws {AuthenticationError} - If the currentUser is not authenticated
+ * @throws {@link AuthenticationError} - If the currentUser is not authenticated
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */

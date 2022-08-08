@@ -22,7 +22,7 @@ To self-host, you'll have to do a bit of configuration both to your Redwood app 
 First add PM2 as a dev dependency to your project root:
 
 ```termninal
-yarn add -DW pm2
+yarn add -D pm2
 ```
 
 Then create a PM2 ecosystem configuration file. For clarity, it's recommended to rename `ecosystem.config.js` to something like `pm2.config.js`:

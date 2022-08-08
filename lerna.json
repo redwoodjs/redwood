@@ -1,7 +1,8 @@
 {
-  "version": "1.3.2",
+  "version": "2.2.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
+  "useNx": true,
   "command": {
     "publish": {
       "verifyAccess": false

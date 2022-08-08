@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+
 import { useAuth } from '@redwoodjs/auth'
-import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   Form,
   Label,
@@ -10,6 +8,9 @@ import {
   Submit,
   FieldError,
 } from '@redwoodjs/forms'
+import { navigate, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -35,12 +36,12 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef<HTMLInputElement>()
+  const passwordRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    passwordRef.current.focus()
+    passwordRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Record<string, string>) => {
     const response = await resetPassword({
       resetToken,
       password: data.password,

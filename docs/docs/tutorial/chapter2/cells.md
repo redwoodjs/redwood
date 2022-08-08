@@ -43,7 +43,7 @@ export const Success = ({ posts }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-import type { ArticlesQuery } from 'types/graphql'
+import type { FindPosts } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
@@ -91,6 +91,19 @@ The minimum you need for a cell are the `QUERY` and `Success` exports. If you do
 
 A guideline for when to use cells is if your component needs some data from the database or other service that may be delayed in responding. Let Redwood worry about juggling what is displayed when and you can focus on the happy path of the final, rendered component populated with data.
 
+
+<ShowForTs>
+
+:::tip Wait... what are those types?
+
+Redwood comes with some built-in utility types. You can see two of them in the example above: `CellSuccessProps` and `CellFailureProps`. Read more about them [here](typescript/utility-types.md).
+
+Also notice the `FindPosts` type imported from `types/graphql`. This and other types are generated for you automatically—when you have the dev server running—based on the GraphQL query in your Cell. More about generated types [here](typescript/generated-types.md).
+
+:::
+
+</ShowForTs>
+
 ### Our First Cell
 
 Usually in a blog the homepage will display a list of recent posts. This list is a perfect candidate for our first cell.
@@ -107,7 +120,7 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter5](../chapter5/storybook.md) of the tutorial!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter 5 of the tutorial](../chapter5/storybook.md)!). This file will contain some boilerplate to get you started:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">

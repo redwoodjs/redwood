@@ -173,7 +173,7 @@ You'd only get a single `contacts` type to return them all.
 
 :::
 
-We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need want to change `@requireAuth` to `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
+We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need to change `@requireAuth` to `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
 
 :::info
 
@@ -298,42 +298,33 @@ export const deleteContact = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```js title="api/src/services/contacts/contacts.ts"
-import type { Prisma } from '@prisma/client'
-
 import { db } from 'src/lib/db'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
-export const contacts = () => {
+export const contacts: QueryResolvers['contacts'] = () => {
   return db.contact.findMany()
 }
 
-export const contact = ({ id }: Prisma.ContactWhereUniqueInput) => {
+export const contact: QueryResolvers['contact'] = ({ id }) => {
   return db.contact.findUnique({
     where: { id },
   })
 }
 
-interface CreateContactArgs {
-  input: Prisma.ContactCreateInput
-}
-
-export const createContact = ({ input }: CreateContactArgs) => {
+export const createContact: MutationResolvers['createContact'] = ({ input }) => {
   return db.contact.create({
     data: input,
   })
 }
 
-interface UpdateContactArgs extends Prisma.ContactWhereUniqueInput {
-  input: Prisma.ContactUpdateInput
-}
-
-export const updateContact = ({ id, input }: UpdateContactArgs) => {
+export const updateContact: MutationResolvers['updateContact'] = ({ id, input }) => {
   return db.contact.update({
     data: input,
     where: { id },
   })
 }
 
-export const deleteContact = ({ id }: Prisma.ContactWhereUniqueInput) => {
+export const deleteContact: MutationResolvers['deleteContact'] = ({ id }) => {
   return db.contact.delete({
     where: { id },
   })
@@ -353,7 +344,7 @@ Before we plug this into the UI, let's take a look at a nifty GUI you get just b
 
 Often it's nice to experiment and call your API in a more "raw" form before you get too far down the path of implementation only to find out something is missing. Is there a typo in the API layer or the web layer? Let's find out by accessing just the API layer.
 
-When you started development with `yarn redwood dev` (or `yarn rw dev`) you actually started a second process running at the same time. Open a new browser tab and head to [http://localhost:8911/graphql](http://localhost:8911/graphql) This is Apollo Server's [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/), a web-based GUI for GraphQL APIs:
+When you started development with `yarn redwood dev` (or `yarn rw dev`) you actually started a second process running at the same time. Open a new browser tab and head to [http://localhost:8911/graphql](http://localhost:8911/graphql) This is GraphQL Yoga's [GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql), a web-based GUI for GraphQL APIs:
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488164-37663b8a-0bfa-4d52-8312-8cfaac7c2915.png" />
 
@@ -725,6 +716,20 @@ export default ContactPage
 
 </TabItem>
 </Tabs>
+
+<ShowForTs>
+
+:::tip Reminder about generated types
+
+Just a quick reminder that Redwood will automatically generate types for your GraphQL queries and mutations if you have the dev server running (or if you run `yarn rw generate types`).
+
+Once you define the `CreateContactMutation` (the GraphQL one), Redwood will generate the `CreateContactMutation` and `CreateContactMutationVariables` types from it for you.
+
+Take a look at our [Generated Types](typescript/generated-types.md) docs for a deeper dive!
+
+:::
+
+</ShowForTs>
 
 `create` is a function that invokes the mutation and takes an object with a `variables` key, containing another object with an `input` key. As an example, we could call it like:
 

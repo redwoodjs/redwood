@@ -203,3 +203,13 @@
   from = "/docs/how-to"
   to = "/docs/how-to/index"
   status = 301
+
+[[redirects]]
+  from = "/baremetal"
+  to = "/docs/deploy/baremetal"
+  status = 301
+
+[[redirects]]
+  from = "/dbauth"
+  to = "/docs/authentication#self-hosted-auth-installation-and-setup"
+  status = 301

@@ -3,7 +3,7 @@ import path from 'path'
 
 import password from 'secure-random-password'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import c from '../../../../lib/colors'
 
@@ -19,8 +19,11 @@ export const config = {
 export const webPackages = []
 export const apiPackages = []
 
-const functionsPath = getPaths().api.functions.replace(getPaths().base, '')
-const libPath = getPaths().api.lib.replace(getPaths().base, '')
+export const libPath = getPaths().api.lib.replace(getPaths().base, '')
+export const functionsPath = getPaths().api.functions.replace(
+  getPaths().base,
+  ''
+)
 
 export const task = {
   title: 'Adding SESSION_SECRET...',

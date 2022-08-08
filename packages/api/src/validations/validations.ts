@@ -143,7 +143,9 @@ interface PresenceValidatorOptions extends WithOptionalMessage {
   allowEmptyString?: boolean
 }
 
-interface UniquenessValidatorOptions extends WithRequiredMessage {}
+interface UniquenessValidatorOptions extends WithOptionalMessage {
+  db?: PrismaClient
+}
 type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
 
 interface ValidationRecipe {
@@ -612,6 +614,18 @@ export const validateWith = (func: () => void) => {
 // }, (db) => {
 //   return db.create(data: { email })
 // })
+//
+// const myCustomDb = new PrismaClient({
+//   log: emitLogLevels(['info', 'warn', 'error']),
+//   datasources: {
+//     db: {
+//       url: process.env.DATABASE_URL,
+//     },
+//   },
+// })
+// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { prismaClient: myCustomDb}, (db) => {
+//   return db.create(data: { email })
+// })
 export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
@@ -632,16 +646,24 @@ export async function validateUniqueness(
     | ((tx: PrismaClient) => Promise<any>),
   callback?: (tx: PrismaClient) => Promise<any>
 ): Promise<any> {
-  const db = new PrismaClient()
   const { $self, $scope, ...rest } = fields
-  let options = {}
+  let options: UniquenessValidatorOptions = {}
   let validCallback: (tx: PrismaClient) => Promise<any>
+  let db = null
 
   if (typeof optionsOrCallback === 'function') {
     validCallback = optionsOrCallback
   } else {
     options = optionsOrCallback
     validCallback = callback as (tx: PrismaClient) => Promise<any>
+  }
+
+  if (options.db) {
+    const { db: customDb, ...restOptions } = options
+    options = restOptions
+    db = customDb
+  } else {
+    db = new PrismaClient()
   }
 
   const where: UniquenessWhere = {

@@ -312,9 +312,10 @@ export default PostsLayout
 `;
 
 exports[`in javascript (default) mode creates a new component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import PostForm from 'src/components/Post/PostForm'
 
 const CREATE_POST_MUTATION = gql\`
@@ -357,9 +358,10 @@ export default NewPost
 `;
 
 exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
@@ -385,8 +387,7 @@ const NewUserProfile = () => {
   )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    createUserProfile({ variables: { input: castInput } })
+    createUserProfile({ variables: { input } })
   }
 
   return (
@@ -444,7 +445,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ post }) => {
@@ -456,9 +457,9 @@ export const Success = ({ post }) => {
 exports[`in javascript (default) mode creates a show component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -523,7 +524,7 @@ const Post = ({ post }) => {
       <div className=\\"rw-segment\\">
         <header className=\\"rw-segment-header\\">
           <h2 className=\\"rw-heading rw-heading-secondary\\">
-            Post {post.id} Detail
+            Post {post?.id} Detail
           </h2>
         </header>
         <table className=\\"rw-table\\">
@@ -585,7 +586,7 @@ const Post = ({ post }) => {
       </div>
       <nav className=\\"rw-button-group\\">
         <Link
-          to={routes.editPost({ id: post.id })}
+          to={routes.editPost({ id: post?.id })}
           className=\\"rw-button rw-button-blue\\"
         >
           Edit
@@ -593,7 +594,7 @@ const Post = ({ post }) => {
         <button
           type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
-          onClick={() => onDeleteClick(post.id)}
+          onClick={() => onDeleteClick(post?.id)}
         >
           Delete
         </button>
@@ -704,7 +705,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #a1a1aa;
   background-clip: content-box;
   border: 3px solid transparent;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -1010,9 +1011,10 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 exports[`in javascript (default) mode creates an edit cell 1`] = `undefined`;
 
 exports[`in javascript (default) mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
@@ -1041,7 +1043,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -1059,15 +1061,14 @@ export const Success = ({ userProfile }) => {
   )
 
   const onSave = (input, id) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    updateUserProfile({ variables: { id, input: castInput } })
+    updateUserProfile({ variables: { id, input } })
   }
 
   return (
     <div className=\\"rw-segment\\">
       <header className=\\"rw-segment-header\\">
         <h2 className=\\"rw-heading rw-heading-secondary\\">
-          Edit UserProfile {userProfile.id}
+          Edit UserProfile {userProfile?.id}
         </h2>
       </header>
       <div className=\\"rw-segment-main\\">
@@ -1123,7 +1124,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ posts }) => {
@@ -1135,9 +1136,9 @@ export const Success = ({ posts }) => {
 exports[`in javascript (default) mode creates an index component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/Post/PostsCell'
 
@@ -1162,12 +1163,12 @@ const formatEnum = (values) => {
   }
 }
 
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
+const truncate = (value) => {
+  const output = value?.toString()
+  if (output?.length > MAX_STRING_LENGTH) {
+    return output.substring(0, MAX_STRING_LENGTH) + '...'
   }
-  return output
+  return output ?? ''
 }
 
 const jsonTruncate = (obj) => {
@@ -1313,6 +1314,10 @@ exports[`in typescript mode creates a form component 1`] = `
   Submit,
 } from '@redwoodjs/forms'
 
+import type { EditPostById, UpdatePostInput } from 'types/graphql'
+import type { RWGqlError } from '@redwoodjs/forms'
+
+
 
 const formatDatetime = (value) => {
   if (value) {
@@ -1321,9 +1326,15 @@ const formatDatetime = (value) => {
 }
 
 
-const PostForm = (props) => {
-  const onSubmit = (data) => {
+interface PostFormProps {
+  post?: EditPostById['post']
+  onSave: (data: UpdatePostInput, id?: EditPostById['post']['id']) => void
+  error: RWGqlError
+  loading: boolean
+}
 
+const PostForm = (props: PostFormProps) => {
+  const onSubmit = (data: EditPostById['post']) => {
   
     
     
@@ -1366,7 +1377,7 @@ const PostForm = (props) => {
 
   return (
     <div className=\\"rw-form-wrapper\\">
-      <Form onSubmit={onSubmit} error={props.error}>
+      <Form<EditPostById['post']> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName=\\"rw-form-error-wrapper\\"
@@ -1665,10 +1676,13 @@ export default PostsLayout
 `;
 
 exports[`in typescript mode creates a new component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import PostForm from 'src/components/Post/PostForm'
+
+import type { CreatePostInput } from 'types/graphql'
 
 const CREATE_POST_MUTATION = gql\`
   mutation CreatePostMutation($input: CreatePostInput!) {
@@ -1679,17 +1693,20 @@ const CREATE_POST_MUTATION = gql\`
 \`
 
 const NewPost = () => {
-  const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
-    onCompleted: () => {
-      toast.success('Post created')
-      navigate(routes.posts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createPost, { loading, error }] = useMutation(
+    CREATE_POST_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Post created')
+        navigate(routes.posts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input) => {
+  const onSave = (input: CreatePostInput) => {
     createPost({ variables: { input } })
   }
 
@@ -1710,10 +1727,13 @@ export default NewPost
 `;
 
 exports[`in typescript mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
+
+import type { CreateUserProfileInput } from 'types/graphql'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
@@ -1724,19 +1744,21 @@ const CREATE_USER_PROFILE_MUTATION = gql\`
 \`
 
 const NewUserProfile = () => {
-  const [createUserProfile, { loading, error }] = useMutation(CREATE_USER_PROFILE_MUTATION, {
-    onCompleted: () => {
-      toast.success('UserProfile created')
-      navigate(routes.userProfiles())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createUserProfile, { loading, error }] = useMutation(
+    CREATE_USER_PROFILE_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('UserProfile created')
+        navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    createUserProfile({ variables: { input: castInput } })
+  const onSave = (input: CreateUserProfileInput) => {
+    createUserProfile({ variables: { input } })
   }
 
   return (
@@ -1768,6 +1790,7 @@ export default NewPostPage
 
 exports[`in typescript mode creates a show cell 1`] = `
 "import type { FindPostById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Post from 'src/components/Post/Post'
@@ -1797,7 +1820,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
@@ -1809,9 +1832,11 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 exports[`in typescript mode creates a show component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
+
+import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -1832,7 +1857,7 @@ const formatEnum = (values: string | string[] | null | undefined) => {
   }
 }
 
-const jsonDisplay = (obj) => {
+const jsonDisplay = (obj: unknown) => {
   return (
     <pre>
       <code>{JSON.stringify(obj, null, 2)}</code>
@@ -1840,7 +1865,7 @@ const jsonDisplay = (obj) => {
   )
 }
 
-const timeTag = (datetime) => {
+const timeTag = (datetime?: string) => {
   return (
     datetime && (
       <time dateTime={datetime} title={datetime}>
@@ -1850,11 +1875,11 @@ const timeTag = (datetime) => {
   )
 }
 
-const checkboxInputTag = (checked) => {
+const checkboxInputTag = (checked: boolean) => {
   return <input type=\\"checkbox\\" checked={checked} disabled />
 }
 
-const Post = ({ post }) => {
+const Post = ({ post }: FindPostById) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -1865,7 +1890,7 @@ const Post = ({ post }) => {
     },
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeletePostMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
       deletePost({ variables: { id } })
     }
@@ -1875,7 +1900,9 @@ const Post = ({ post }) => {
     <>
       <div className=\\"rw-segment\\">
         <header className=\\"rw-segment-header\\">
-          <h2 className=\\"rw-heading rw-heading-secondary\\">Post {post.id} Detail</h2>
+          <h2 className=\\"rw-heading rw-heading-secondary\\">
+            Post {post?.id} Detail
+          </h2>
         </header>
         <table className=\\"rw-table\\">
           <tbody>
@@ -1924,7 +1951,7 @@ const Post = ({ post }) => {
       </div>
       <nav className=\\"rw-button-group\\">
         <Link
-          to={routes.editPost({ id: post.id })}
+          to={routes.editPost({ id: post?.id })}
           className=\\"rw-button rw-button-blue\\"
         >
           Edit
@@ -1932,7 +1959,7 @@ const Post = ({ post }) => {
         <button
           type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
-          onClick={() => onDeleteClick(post.id)}
+          onClick={() => onDeleteClick(post?.id)}
         >
           Delete
         </button>
@@ -2047,7 +2074,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #a1a1aa;
   background-clip: content-box;
   border: 3px solid transparent;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2351,12 +2378,12 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 `;
 
 exports[`in typescript mode creates an edit cell 1`] = `
-"import type { EditPostById } from 'types/graphql'
+"import type { EditPostById, UpdatePostInput } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import PostForm from 'src/components/Post/PostForm'
 
@@ -2402,28 +2429,34 @@ const UPDATE_POST_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
-  const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
-    onCompleted: () => {
-      toast.success('Post updated')
-      navigate(routes.posts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updatePost, { loading, error }] = useMutation(
+    UPDATE_POST_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Post updated')
+        navigate(routes.posts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input, id) => {
+  const onSave = (
+    input: UpdatePostInput,
+    id: EditPostById['post']['id']
+  ) => {
     updatePost({ variables: { id, input } })
   }
 
   return (
     <div className=\\"rw-segment\\">
       <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">Edit Post {post.id}</h2>
+        <h2 className=\\"rw-heading rw-heading-secondary\\">Edit Post {post?.id}</h2>
       </header>
       <div className=\\"rw-segment-main\\">
         <PostForm post={post} onSave={onSave} error={error} loading={loading} />
@@ -2435,12 +2468,12 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 `;
 
 exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import type { EditUserProfileById } from 'types/graphql'
+"import type { EditUserProfileById, UpdateUserProfileInput } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
@@ -2466,29 +2499,34 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) => {
-  const [updateUserProfile, { loading, error }] = useMutation(UPDATE_USER_PROFILE_MUTATION, {
-    onCompleted: () => {
-      toast.success('UserProfile updated')
-      navigate(routes.userProfiles())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updateUserProfile, { loading, error }] = useMutation(
+    UPDATE_USER_PROFILE_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('UserProfile updated')
+        navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input, id) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    updateUserProfile({ variables: { id, input: castInput } })
+  const onSave = (
+    input: UpdateUserProfileInput,
+    id: EditUserProfileById['userProfile']['id']
+  ) => {
+    updateUserProfile({ variables: { id, input } })
   }
 
   return (
     <div className=\\"rw-segment\\">
       <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">Edit UserProfile {userProfile.id}</h2>
+        <h2 className=\\"rw-heading rw-heading-secondary\\">Edit UserProfile {userProfile?.id}</h2>
       </header>
       <div className=\\"rw-segment-main\\">
         <UserProfileForm userProfile={userProfile} onSave={onSave} error={error} loading={loading} />
@@ -2501,9 +2539,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
 
 exports[`in typescript mode creates an index cell 1`] = `
 "import type { FindPosts } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Posts from 'src/components/Post/Posts'
 
@@ -2544,7 +2582,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className=\\"rw-cell-error\\">{error?.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
@@ -2556,11 +2594,13 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 exports[`in typescript mode creates an index component 1`] = `
 "import humanize from 'humanize-string'
 
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/Post/PostsCell'
+
+import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -2583,19 +2623,20 @@ const formatEnum = (values: string | string[] | null | undefined) => {
   }
 }
 
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
+const truncate = (value: string | number) => {
+  const output = value?.toString()
+  if (output?.length > MAX_STRING_LENGTH) {
+    return output.substring(0, MAX_STRING_LENGTH) + '...'
   }
-  return output
+  return output ?? ''
 }
 
-const jsonTruncate = (obj) => {
+
+const jsonTruncate = (obj: unknown) => {
   return truncate(JSON.stringify(obj, null, 2))
 }
 
-const timeTag = (datetime) => {
+const timeTag = (datetime?: string) => {
   return (
     datetime && (
       <time dateTime={datetime} title={datetime}>
@@ -2605,11 +2646,11 @@ const timeTag = (datetime) => {
   )
 }
 
-const checkboxInputTag = (checked) => {
+const checkboxInputTag = (checked: boolean) => {
   return <input type=\\"checkbox\\" checked={checked} disabled />
 }
 
-const PostsList = ({ posts }) => {
+const PostsList = ({ posts }: FindPosts) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -2624,7 +2665,7 @@ const PostsList = ({ posts }) => {
     awaitRefetchQueries: true,
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeletePostMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
       deletePost({ variables: { id } })
     }
@@ -2792,7 +2833,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   background-color: #a1a1aa;
   background-clip: content-box;
   border: 3px solid transparent;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;

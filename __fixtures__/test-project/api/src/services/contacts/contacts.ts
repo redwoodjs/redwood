@@ -1,39 +1,36 @@
-import type { Prisma } from '@prisma/client'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
-export const contacts = () => {
+export const contacts: QueryResolvers['contacts'] = () => {
   return db.contact.findMany()
 }
 
-export const contact = ({ id }: Prisma.ContactWhereUniqueInput) => {
+export const contact: QueryResolvers['contact'] = ({ id }) => {
   return db.contact.findUnique({
     where: { id },
   })
 }
 
-interface CreateContactArgs {
-  input: Prisma.ContactCreateInput
-}
-
-export const createContact = ({ input }: CreateContactArgs) => {
+export const createContact: MutationResolvers['createContact'] = ({
+  input,
+}) => {
   return db.contact.create({
     data: input,
   })
 }
 
-interface UpdateContactArgs extends Prisma.ContactWhereUniqueInput {
-  input: Prisma.ContactUpdateInput
-}
-
-export const updateContact = ({ id, input }: UpdateContactArgs) => {
+export const updateContact: MutationResolvers['updateContact'] = ({
+  id,
+  input,
+}) => {
   return db.contact.update({
     data: input,
     where: { id },
   })
 }
 
-export const deleteContact = ({ id }: Prisma.ContactWhereUniqueInput) => {
+export const deleteContact: MutationResolvers['deleteContact'] = ({ id }) => {
   return db.contact.delete({
     where: { id },
   })
