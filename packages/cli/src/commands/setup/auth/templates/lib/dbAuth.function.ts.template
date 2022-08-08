@@ -1,15 +1,14 @@
-import { db } from 'src/lib/db'
-import { DbAuthHandler } from '@redwoodjs/api'
-
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+
+import { DbAuthHandler } from '@redwoodjs/api'
 import type { DbAuthHandlerOptions } from '@redwoodjs/api'
 
+import { db } from 'src/lib/db'
 
 export const handler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ) => {
-
   const forgotPasswordOptions: DbAuthHandlerOptions['forgotPassword'] = {
     // handler() is invoked after verifying that a user was found with the given
     // username. This is where you can send the user an email with a link to
