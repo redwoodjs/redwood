@@ -448,7 +448,7 @@ export const handler = async (yargs) => {
       },
       providerData.task,
       {
-        title: 'Re-generating types...',
+        title: 'Regenerating types...',
         task: async () => {
           await generateTypes()
         },
