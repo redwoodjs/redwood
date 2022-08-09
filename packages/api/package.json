@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "@prisma/client": "4.0.0",
+    "@prisma/client": "4.1.1",
     "base64url": "3.0.1",
     "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
