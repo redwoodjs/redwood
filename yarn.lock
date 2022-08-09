@@ -2032,11 +2032,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-js@npm:3.16.4":
-  version: 3.16.4
-  resolution: "@clerk/clerk-js@npm:3.16.4"
+"@clerk/clerk-js@npm:3.17.0":
+  version: 3.17.0
+  resolution: "@clerk/clerk-js@npm:3.17.0"
   dependencies:
-    "@clerk/types": ^2.20.0
+    "@clerk/types": ^2.21.0
     "@emotion/cache": ^11.7.1
     "@emotion/react": ^11.9.0
     "@popperjs/core": ^2.4.4
@@ -2050,7 +2050,7 @@ __metadata:
     react-dom: 17.0.2
     react-popper: ^2.2.3
     regenerator-runtime: ^0.13.7
-  checksum: ab446e79f75fa4561f288f2f0c5b281740fa997126660cbc9aca44644e7d2c77fb7d8db9cd93af90d2188a8f072509f709a73bb6886b4d7fc97b2b64d13e35c3
+  checksum: 0dc49d863d31154cde1818a992aaff72437081a442b911c0b116fdb147eee23cdb802a7808447afe7c4efb5aa1ebf2254a3df83bbe44977c05711eb8f8eeba97
   languageName: node
   linkType: hard
 
@@ -2093,7 +2093,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:^2.20.0, @clerk/types@npm:^2.21.0":
+"@clerk/types@npm:^2.21.0":
   version: 2.21.0
   resolution: "@clerk/types@npm:2.21.0"
   checksum: 91c0a07459d6a11e8b79f8ebc31fa81c37a947313d67deb3a3d31519bf8b360ce8ac902d534fbd2f764cf382aa9e5a016398488da81dc72589e34daa04d3f48f
@@ -6271,7 +6271,7 @@ __metadata:
     "@babel/cli": 7.16.7
     "@babel/core": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
-    "@clerk/clerk-js": 3.16.4
+    "@clerk/clerk-js": 3.17.0
     "@clerk/clerk-react": 3.5.1
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.20.0
