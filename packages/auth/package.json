@@ -34,7 +34,7 @@
     "@clerk/clerk-js": "3.17.0",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/clerk-sdk-node": "3.9.2",
-    "@clerk/types": "2.20.0",
+    "@clerk/types": "2.21.0",
     "@nhost/hasura-auth-js": "1.4.0",
     "@nhost/nhost-js": "1.4.7",
     "@okta/okta-auth-js": "6.7.4",
