@@ -52,8 +52,8 @@ jobs:
     needs: check
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        os: [ubuntu-latest]
+        node-version: [ 16]
       fail-fast: true
     name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -99,7 +99,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [14, 16]
+        node-version: [16]
       fail-fast: true
     name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -169,8 +169,8 @@ jobs:
     needs: check
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        os: [ubuntu-latest]
+        node-version: [16]
       fail-fast: true
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -302,8 +302,8 @@ jobs:
     if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        os: [ubuntu-latest]
+        node-version: [16]
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
