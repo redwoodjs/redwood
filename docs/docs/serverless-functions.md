@@ -791,7 +791,7 @@ export const handler = useRequireAuth({
 
 Now anywhere `context` is used, such as in services or when using `hasRole()` or `isAuthenticated()` from your `auth` lib, `currentUser` will be set and `requireAuth`-related functions will be able to verify the authentication state or if the user has the required roles.
 
-In short, you can now use the any of your auth functions like `isAuthenticated()`, `hasRole()`, or `requireAuth()` in your serverless function.
+In short, you can now use any of your auth functions like `isAuthenticated()`, `hasRole()`, or `requireAuth()` in your serverless function.
 
 :::note
 

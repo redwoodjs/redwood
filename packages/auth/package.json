@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.16.7",
-    "core-js": "3.24.0"
+    "core-js": "3.24.1"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",
@@ -46,11 +46,11 @@
     "firebase": "9.9.2",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",
-    "jest": "27.5.1",
-    "magic-sdk": "8.1.1",
+    "jest": "28.1.3",
+    "magic-sdk": "9.0.0",
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
-    "supertokens-auth-react": "0.24.2",
+    "supertokens-auth-react": "0.24.4",
     "typescript": "4.7.4"
   },
   "peerDependencies": {
