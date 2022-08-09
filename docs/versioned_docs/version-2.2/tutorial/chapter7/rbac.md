@@ -100,7 +100,7 @@ export const getCurrentUser = async (session) => {
 
 ### Fixing the hasRole function
 
-At this point, you might notice an error in your `api/src/lib/auth.ts` file, in the `hasRole` function. TypeScript is trying to help you here, by highlighting that roles can never be an an array of strings:
+At this point, you might notice an error in your `api/src/lib/auth.ts` file, in the `hasRole` function. TypeScript is trying to help you here, by highlighting that roles can never be an array of strings:
 
 ```ts title="api/src/lib/auth.ts"
 export const hasRole = (roles: AllowedRoles): boolean => {
