@@ -63,7 +63,7 @@
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "4.0.0",
     "dotenv-webpack": "8.0.0",
-    "esbuild": "0.14.53",
+    "esbuild": "0.14.54",
     "fast-glob": "3.2.11",
     "file-loader": "6.2.0",
     "graphql": "16.5.0",
