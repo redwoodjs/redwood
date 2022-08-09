@@ -78,17 +78,17 @@ export const mockRedwoodDirective: DirectiveMocker = (
     setContext(context || {})
   }
 
-  if (directive.onResolverCalled.constructor.name === 'AsyncFunction') {
+  if (directive.onResolvedValue.constructor.name === 'AsyncFunction') {
     return async () => {
       if (directive.type === DirectiveType.TRANSFORMER) {
         const { mockedResolvedValue } = others as TransformerMock
-        return directive.onResolverCalled({
+        return directive.onResolvedValue({
           resolvedValue: mockedResolvedValue,
           context: globalContext,
           ...others,
         } as DirectiveParams)
       } else {
-        await directive.onResolverCalled({
+        await directive.onResolvedValue({
           context: globalContext,
           directiveArgs,
           ...others,
@@ -100,14 +100,14 @@ export const mockRedwoodDirective: DirectiveMocker = (
   return () => {
     if (directive.type === DirectiveType.TRANSFORMER) {
       const { mockedResolvedValue } = others as TransformerMock
-      return directive.onResolverCalled({
+      return directive.onResolvedValue({
         resolvedValue: mockedResolvedValue,
         context: globalContext,
         directiveArgs,
         ...others,
       } as DirectiveParams)
     } else {
-      directive.onResolverCalled({
+      directive.onResolvedValue({
         context: globalContext,
         directiveArgs,
         ...others,
