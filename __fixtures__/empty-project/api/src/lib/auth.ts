@@ -11,7 +11,12 @@ export const isAuthenticated = () => {
   return true
 }
 
-export const hasRole = ({ roles }) => {
+/**
+ * When checking role membership, roles can be a single value, a list, or none.
+ */
+type AllowedRoles = string | string[] | undefined
+
+export const hasRole = (roles: AllowedRoles) => {
   return roles !== undefined
 }
 
@@ -19,7 +24,7 @@ export const hasRole = ({ roles }) => {
 // in ./api/src/directives/requireAuth
 
 // Roles are passed in by the requireAuth directive if you have auth setup
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const requireAuth = ({ roles }) => {
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
   return isAuthenticated()
 }
