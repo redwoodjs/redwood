@@ -6815,6 +6815,62 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@replayio/cypress@npm:^0.2.13":
+  version: 0.2.13
+  resolution: "@replayio/cypress@npm:0.2.13"
+  dependencies:
+    "@replayio/replay": ^0.9.2
+    uuid: ^8.3.2
+  bin:
+    replayio-cypress: bin/replayio-cypress.js
+  checksum: 485b5095f1accef4544a5765981e7ab771886c383e72ea2e1b2258000663fd100e56e07c2c9e1cafd776c6554543ae647387e10e4a85a6861e3451d1da6028a5
+  languageName: node
+  linkType: hard
+
+"@replayio/playwright@npm:^0.2.22":
+  version: 0.2.22
+  resolution: "@replayio/playwright@npm:0.2.22"
+  dependencies:
+    "@replayio/replay": ^0.9.2
+    uuid: ^8.3.2
+  peerDependencies:
+    "@playwright/test": 1.19.x
+  bin:
+    replayio-playwright: bin/replayio-playwright.js
+  checksum: ba573c69ee09a62a9c7612feaa1764fbdc43ba4b365701da72823fad530328425394fee31e8ade52b123c8ecd7e776e56ac688cebb6f560a039840743eb1b291
+  languageName: node
+  linkType: hard
+
+"@replayio/replay@npm:^0.9.2":
+  version: 0.9.2
+  resolution: "@replayio/replay@npm:0.9.2"
+  dependencies:
+    "@replayio/sourcemap-upload": ^1.0.2
+    commander: ^7.2.0
+    is-uuid: ^1.0.2
+    jsonata: ^1.8.6
+    superstruct: ^0.15.4
+    text-table: ^0.2.0
+    ws: ^7.5.0
+  bin:
+    replay: bin/replay.js
+  checksum: c3a79c6057b3324dba7c7080b05d4255bda6f7a9af78c62e039785a21258322ed3f4984ea8c1212de9388850c08d1737f318781ea6bec956fb022a19ea37722d
+  languageName: node
+  linkType: hard
+
+"@replayio/sourcemap-upload@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@replayio/sourcemap-upload@npm:1.0.2"
+  dependencies:
+    commander: ^7.2.0
+    debug: ^4.3.1
+    glob: ^7.1.6
+    node-fetch: ^2.6.1
+    string.prototype.matchall: ^4.0.5
+  checksum: 18145077fb927195a5a4cd951912d3250a136b249ef827ca45574e75b94deb6fa5bf07aef1801a0cfc36ff9cde5e464f3ba277c981c0e6b03942faebb7b500ba
+  languageName: node
+  linkType: hard
+
 "@samverschueren/stream-to-observable@npm:^0.3.0":
   version: 0.3.1
   resolution: "@samverschueren/stream-to-observable@npm:0.3.1"
@@ -19769,6 +19825,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-uuid@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "is-uuid@npm:1.0.2"
+  checksum: 9e39508b97c724668da7011f77c2f53485784b84a7b9c54fadb6369ebff236caf1912324e3390d0a0495fcddf5f19caa7a55e6cdd0f5b528a1e3210d51d8bd54
+  languageName: node
+  linkType: hard
+
 "is-weakref@npm:^1.0.2":
   version: 1.0.2
   resolution: "is-weakref@npm:1.0.2"
@@ -20903,6 +20966,13 @@ __metadata:
   bin:
     json5: lib/cli.js
   checksum: a7174bc4e146613750a04a8a7fe2bc4ab6f4cad20486f8d7026cc4546b3ee1dc3762fc5e7377557ae99414745aac782486e409f31c363084a455e05cb495ce7a
+  languageName: node
+  linkType: hard
+
+"jsonata@npm:^1.8.6":
+  version: 1.8.6
+  resolution: "jsonata@npm:1.8.6"
+  checksum: 27577a8fbc80063a468d06f2b3cfd96685aac3cf1ad8c4aeb1d12b0c9bdcb2d9a21a39ed4f69e2ef1d3853dddd45a27bdec9173fc4efccdbb42296b3b3db890b
   languageName: node
   linkType: hard
 
@@ -27290,6 +27360,8 @@ __metadata:
     "@babel/runtime-corejs3": 7.16.7
     "@nrwl/nx-cloud": 14.3.0
     "@playwright/test": 1.24.2
+    "@replayio/cypress": ^0.2.13
+    "@replayio/playwright": ^0.2.22
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
@@ -28744,7 +28816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string.prototype.matchall@npm:^4.0.0 || ^3.0.1, string.prototype.matchall@npm:^4.0.7":
+"string.prototype.matchall@npm:^4.0.0 || ^3.0.1, string.prototype.matchall@npm:^4.0.5, string.prototype.matchall@npm:^4.0.7":
   version: 4.0.7
   resolution: "string.prototype.matchall@npm:4.0.7"
   dependencies:
@@ -29025,6 +29097,13 @@ __metadata:
   version: 4.0.13
   resolution: "stylis@npm:4.0.13"
   checksum: bd567c440b4f1acf8962b1b3aa7985c4e04d7badfe1e0f1c7ee2a60912de2718973850c524001a3d52f5fc9a0e3dcd204b8bd7e2d47d4934462e9f749fd9c7bc
+  languageName: node
+  linkType: hard
+
+"superstruct@npm:^0.15.4":
+  version: 0.15.5
+  resolution: "superstruct@npm:0.15.5"
+  checksum: 73ae2043443dcc7868da6e8b4e4895410c79a88e021b514c665161199675ee920d5eadd85bb9dee5a9f515817e62f4b65a67ccb82d29f73259d012afcbcd3ce4
   languageName: node
   linkType: hard
 
@@ -31834,6 +31913,21 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: f856382d94dfa8d722337d79117fe4f16d48ef7d7f77a58e94af7d7f32e863fce8403c00992ddddbf1efd5a334c581c2a987aea66255f7ee368680e59f78ae15
+  languageName: node
+  linkType: hard
+
+"ws@npm:^7.5.0":
+  version: 7.5.9
+  resolution: "ws@npm:7.5.9"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ^5.0.2
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: aec4ef4eb65821a7dde7b44790f8699cfafb7978c9b080f6d7a98a7f8fc0ce674c027073a78574c94786ba7112cc90fa2cc94fc224ceba4d4b1030cff9662494
   languageName: node
   linkType: hard
 
