@@ -133,7 +133,7 @@ You'll have to adjust the generated code depending on your User model.
 
 #### A. If your project does not use roles
 
-If your `getCurrentUser` doesn't return `roles`, and you don't use this functionality, you can safely remove the `hasRoles` function.
+If your `getCurrentUser` doesn't return `roles`, and you don't use this functionality, you can safely remove the `hasRole` function.
 
 #### B. Roles on current user is a string
 

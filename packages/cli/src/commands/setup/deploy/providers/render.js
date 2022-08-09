@@ -2,7 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getSchema, getConfig } from '@prisma/sdk'
+import { getSchema, getConfig } from '@prisma/internals'
 import Listr from 'listr'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'

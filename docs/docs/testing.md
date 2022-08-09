@@ -418,7 +418,7 @@ export default Article
 
 If we're only displaying the summary of an article then we'll only show the first 100 characters with an ellipsis on the end ("...") and include a link to "Read more" to see the full article. A reasonable test for this component would be that when the `summary` prop is `true` then the "Read more" text should be present. If `summary` is `false` then it should *not* be present. That's where `queryByText()` comes in (relevant test lines are highlighted):
 
-```jsx {18,24} title="web/src/components/Article/Article.test.js"
+```jsx {22} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -478,7 +478,7 @@ it('renders a link with a name', () => {
 
 But what if we wanted to check the `href` of the link itself to be sure it's correct? In that case we can capture the `screen.getByRole()` return and run expectations on that as well (the `forEach()` loop has been removed here for simplicity):
 
-```jsx {2,6-8}
+```jsx {1,6-8}
 import { routes } from '@redwoodjs/router'
 
 it('renders a link with a name', () => {
@@ -597,7 +597,7 @@ export default Article
 
 Redwood provides the test function `mockGraphQLQuery()` for providing the result of a given named GraphQL. In this case our query is named `getArticle` and we can mock that in our test as follows:
 
-```jsx {8-16,20} title="web/src/components/Article/Article.test.js"
+```jsx {6-14,18} title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing/web'
 import Article from 'src/components/Article'
 
@@ -646,7 +646,7 @@ mockGraphQLQuery('getArticle', (variables, { ctx }) => {
 
 You could then test that you show a proper error message in your component:
 
-```jsx {4,8-10,21,27} title="web/src/components/Article/Article.js"
+```jsx {2,6-8,18-20,24} title="web/src/components/Article/Article.js"
 const Article = ({ id }) => {
   const { data, error } = useQuery(GET_ARTICLE, {
     variables: { id },
@@ -1433,7 +1433,7 @@ scenario('incomplete', 'retrieves only incomplete users', async (scenario) => {
 })
 ```
 
-The name of the scenario you want to use is passed as the *first* argument to `scenario()` and now those will be the only records present in the database at the time the test to run. Assume that the `users()` function contains some logic to determine whether a user record is "complete" or not. If you pass `{ complete: false }` then it should return only those that it determines are not complete, which in this case includes users who have not entered their name yet. We seed the database with the scenario where one user is complete and one is not, then check that the return of `users()` only contains the user without the name.
+The name of the scenario you want to use is passed as the *first* argument to `scenario()` and now those will be the only records present in the database at the time the test is run. Assume that the `users()` function contains some logic to determine whether a user record is "complete" or not. If you pass `{ complete: false }` then it should return only those that it determines are not complete, which in this case includes users who have not entered their name yet. We seed the database with the scenario where one user is complete and one is not, then check that the return of `users()` only contains the user without the name.
 
 #### Multiple Models
 
