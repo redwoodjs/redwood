@@ -6746,7 +6746,7 @@ __metadata:
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.5
     vscode-languageserver-types: 3.17.2
-    yargs-parser: 21.0.1
+    yargs-parser: 21.1.1
   languageName: unknown
   linkType: soft
 
@@ -31993,10 +31993,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.0.1, yargs-parser@npm:^21.0.0":
+"yargs-parser@npm:21.0.1":
   version: 21.0.1
   resolution: "yargs-parser@npm:21.0.1"
   checksum: 384ca19e113a053bb7858cf47f891e630c10ea6ad91f9ad7cae84ea1cdfb09b155a2d0fa97b51116ee6f01e038faaa6c46964953afecd453fa64a761bb87475f
+  languageName: node
+  linkType: hard
+
+"yargs-parser@npm:21.1.1, yargs-parser@npm:^21.0.0":
+  version: 21.1.1
+  resolution: "yargs-parser@npm:21.1.1"
+  checksum: f84b5e48169479d2f402239c59f084cfd1c3acc197a05c59b98bab067452e6b3ea46d4dd8ba2985ba7b3d32a343d77df0debd6b343e5dae3da2aab2cdf5886b2
   languageName: node
   linkType: hard
 
