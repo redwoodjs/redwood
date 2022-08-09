@@ -5816,7 +5816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.24.2":
+"@playwright/test@npm:^1.18":
   version: 1.24.2
   resolution: "@playwright/test@npm:1.24.2"
   dependencies:
@@ -27359,7 +27359,7 @@ __metadata:
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime-corejs3": 7.16.7
     "@nrwl/nx-cloud": 14.3.0
-    "@playwright/test": 1.24.2
+    "@playwright/test": ^1.18
     "@replayio/cypress": ^0.2.13
     "@replayio/playwright": ^0.2.22
     "@testing-library/jest-dom": 5.16.5
