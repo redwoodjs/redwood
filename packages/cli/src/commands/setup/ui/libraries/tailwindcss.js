@@ -223,10 +223,12 @@ export const handler = async ({ force, install }) => {
         const prettierConfigPath = path.join(rwPaths.base, 'prettier.config.js')
         // Add tailwindcss ordering plugin to prettier
         const prettierConfig = fs.readFileSync(prettierConfigPath, 'utf-8')
-        const tailwindConfigPath = path.relative(
-          rwPaths.base,
-          path.join(rwPaths.web.config, 'tailwind.config.js')
-        )
+        const tailwindConfigPath = path
+          .relative(
+            rwPaths.base,
+            path.posix.join(rwPaths.web.config, 'tailwind.config.js')
+          )
+          .replace(/\\/g, '/')
 
         let newPrettierConfig = prettierConfig
         if (newPrettierConfig.includes('tailwindConfig: ')) {
