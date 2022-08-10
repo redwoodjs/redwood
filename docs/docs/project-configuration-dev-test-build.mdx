@@ -156,8 +156,8 @@ which currently is the [recommended way](https://github.com/yarnpkg/yarn/issues/
 to ensure things run smooth for everyone. From VSCode's perspective, this of course
 is just another folder containing code, so it will
 
-1. display it in the file browser
-2. include its contents in project-wide fulltext searches
+1. include its contents in project-wide fulltext searches
+2. display it in the file browser
 3. watch its contents for changes
 
 … which is something you *may* not need or want, depending on your personal preferences.
@@ -166,6 +166,7 @@ Fortunately, all these aspects are configurable via `settings.json`. You have th
 choice of making these changes to your local redwood project's configuration
 found in `.vscode/settings.json` or globally (so they apply to other projects as
 well). For global changes, hit <kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
+(that's <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> if you're on Mac)
 and search for "Preferences: Open User Settings **(JSON)**".
 
 Note that the local workspace configuration always overrules your user settings.
@@ -207,8 +208,8 @@ tab – that would be managed via `.gitignore`.
     "**/.yarn": true
   }
 ```
-This setting works independent of the ones above and would need to be added
-seperately. In is important to note that files or folders matched by this
+This setting works independent of the ones above and therefore needs to be added
+seperately. It is important to note that files or folders matched by this
 setting will, for instance, no longer immediately appear (or disappear):
 - from existing search results – but as soon as you search again or change the search term, they will be discovered
 - in your "Source Control"-tab – unless you hit the "Refresh"-button
