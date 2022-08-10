@@ -4,6 +4,15 @@ import { DocumentNode, print } from 'graphql'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getOperationName } from '@redwoodjs/web'
 
+/**
+ * Loads the graphql server, with all the user's settings
+ * And execute the query against it
+ *
+ * Note that this function does NOT throw errors, even when
+ * there is a GraphQL error. Instead, it returns the result with the graphql error.
+ *
+ * @returns {Promise<QueryResult>}
+ */
 export async function executeQuery(
   gqlHandler: (args: any) => Promise<any>,
   query: DocumentNode,
@@ -16,6 +25,10 @@ export async function executeQuery(
   return handlerResult.body
 }
 
+/**
+ * Finds the graphql handler, returns a function
+ * that can be used to execute queries against it
+ */
 export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
 

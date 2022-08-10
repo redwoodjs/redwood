@@ -10,7 +10,11 @@ import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/a
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
-import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
+import {
+  CellCacheContextProvider,
+  getOperationName,
+  QueryInfo,
+} from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
@@ -52,7 +56,20 @@ async function recursivelyRender(
 
       if (result.errors) {
         const message =
-          result.errors[0].message ?? JSON.stringify(result.errors)
+          result.errors[0].message ?? JSON.stringify(result.errors, null, 4)
+
+        if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
+          console.error(
+            `\n \n 🛑 Looks like the query ${getOperationName(
+              value.query
+            )} is trying to access a protected query.` +
+              ` To conditionally render the cell:
+
+              const { isAuthenticated } = useAuth()
+              {isAuthenticated && <MyPrivateCell />}`
+          )
+        }
+
         throw new PrerenderGqlError(message)
       }
 
