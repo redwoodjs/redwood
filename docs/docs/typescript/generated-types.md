@@ -9,7 +9,7 @@ These generated types not only include your GraphQL operations, but also your na
 
 When you run `yarn rw dev`, the CLI watches files for changes and triggers type generation automatically, but you can trigger it manually too:
 
-```bash
+```shell
 yarn rw g types
 # or
 # yarn redwood generate types
