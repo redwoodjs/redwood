@@ -306,21 +306,24 @@ export function createCell<
 
       const queryInfo = queryCache[cacheKey]
 
-      if (queryInfo?.hasFetched) {
-        if (queryInfo?.renderLoading) {
-          loading = true
-        } else {
+      // This is true when the graphql handler couldn't be loaded
+      // So we fallback to the loading state
+      if (queryInfo?.renderLoading) {
+        loading = true
+      } else {
+        if (queryInfo?.hasFetched) {
           loading = false
           data = queryInfo.data
-        }
-        // All of the gql client's props aren't available when pre-rendering,
-        // so using `any` here
-        queryRest = { variables } as any
-      } else {
-        queryCache[cacheKey] ||= {
-          query,
-          variables: options.variables,
-          hasFetched: false,
+
+          // All of the gql client's props aren't available when pre-rendering,
+          // so using `any` here
+          queryRest = { variables } as any
+        } else {
+          queryCache[cacheKey] ||= {
+            query,
+            variables: options.variables,
+            hasFetched: false,
+          }
         }
       }
     }

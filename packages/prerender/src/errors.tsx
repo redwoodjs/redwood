@@ -11,12 +11,12 @@ export class PrerenderGqlError {
   }
 }
 
-export class GqlHandlerNotFoundError {
+export class GqlHandlerImportError {
   message: string
   stack: string
 
   constructor(message: string) {
-    this.message = 'Bazinga:  ' + message
+    this.message = 'Gql Handler Import Error:  ' + message
     // The stacktrace would just point to this file, which isn't helpful,
     // because that's not where the error is. So we're just putting the
     // message there as well

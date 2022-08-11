@@ -1,10 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getOperationName } from '@redwoodjs/web'
-import { GqlHandlerNotFoundError } from '../errors'
+import { GqlHandlerImportError } from '../errors'
 
 /**
  * Loads the graphql server, with all the user's settings
@@ -30,23 +29,24 @@ export async function executeQuery(
 /**
  * Finds the graphql handler, returns a function
  * that can be used to execute queries against it
+ *
+ * Throws GqlHandlerImportError, so that we can warn the user (but not blow up)
  */
 export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
 
-  if (!fs.existsSync(gqlPath)) {
-    return () => {
-      console.warn('Could not find graphql handler')
-      console.warn('Skipping Cell prerendering, rendering the loading state')
+  try {
+    const { handler } = await import(gqlPath)
 
-      throw new GqlHandlerNotFoundError('BAZINGA ERROR')
+    return async (operation: Record<string, unknown>) => {
+      return await handler(buildApiEvent(operation), buildContext())
     }
-  }
-
-  const { handler } = await import(gqlPath)
-
-  return async (operation: Record<string, unknown>) => {
-    return await handler(buildApiEvent(operation), buildContext())
+  } catch (e) {
+    return () => {
+      throw new GqlHandlerImportError(
+        `Unable to import GraphQL handler at ${gqlPath}`
+      )
+    }
   }
 }
 

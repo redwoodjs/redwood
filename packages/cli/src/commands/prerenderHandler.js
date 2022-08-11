@@ -108,7 +108,8 @@ async function expandRouteParameters(route) {
         return { ...route, path: newPath }
       })
     }
-  } catch {
+  } catch (e) {
+    console.error(c.error(e.stack))
     return [route]
   }
 
@@ -168,11 +169,10 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
         {
           title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
           task: async () => {
+            // Check if route param templates in  e.g./path/{param1} have been replaced
             if (/\{.*}/.test(routeToPrerender.path)) {
               throw new PathParamError(
-                'You did not provide values for all of the route ' +
-                  'parameters. Please supply parameters via a ' +
-                  '*.routeHooks.{js,ts} file'
+                `Could not retrieve route parameters for ${routeToPrerender.path}`
               )
             }
 

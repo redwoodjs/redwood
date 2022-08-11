@@ -17,7 +17,7 @@ import {
 } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
-import { GqlHandlerNotFoundError, PrerenderGqlError } from './errors'
+import { GqlHandlerImportError, PrerenderGqlError } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
@@ -27,11 +27,12 @@ async function recursivelyRender(
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>
 ): Promise<string> {
+  let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
   await Promise.all(
     Object.entries(queryCache).map(async ([cacheKey, value]) => {
       if (value.hasFetched) {
-        // Already fetched this one; skip it!
+        // Already fetched, or decided that we can't render this one; skip it!
         return Promise.resolve('')
       }
 
@@ -71,15 +72,22 @@ async function recursivelyRender(
 
         return result
       } catch (e) {
-        if (e instanceof GqlHandlerNotFoundError) {
-          // If the GQL handler is located elsewhere
+        if (e instanceof GqlHandlerImportError) {
+          // We need to need to swallow the error here, so that
+          // we can continue to render the page, with cells in loading state
+          // e.g. If the GQL handler is located elsewhere
+          shouldShowGraphqlHandlerNotFoundWarn = true
+
           queryCache[cacheKey] = {
             ...value,
             renderLoading: true,
-            hasFetched: true,
+            hasFetched: true, // tried to fetch, but failed
           }
 
           return
+        } else {
+          // Otherwise forward on the error
+          throw e
         }
       }
     })
@@ -98,6 +106,12 @@ async function recursivelyRender(
     // queries and render again
     return recursivelyRender(App, renderPath, gqlHandler, queryCache)
   } else {
+    if (shouldShowGraphqlHandlerNotFoundWarn) {
+      console.warn(
+        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n'
+      )
+    }
+
     return Promise.resolve(componentAsHtml)
   }
 }
