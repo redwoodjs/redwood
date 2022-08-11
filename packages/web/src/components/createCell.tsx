@@ -307,8 +307,12 @@ export function createCell<
       const queryInfo = queryCache[cacheKey]
 
       if (queryInfo?.hasFetched) {
-        loading = false
-        data = queryInfo.data
+        if (queryInfo?.renderLoading) {
+          loading = true
+        } else {
+          loading = false
+          data = queryInfo.data
+        }
         // All of the gql client's props aren't available when pre-rendering,
         // so using `any` here
         queryRest = { variables } as any

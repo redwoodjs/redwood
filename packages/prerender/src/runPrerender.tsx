@@ -17,21 +17,9 @@ import {
 } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
+import { GqlHandlerNotFoundError, PrerenderGqlError } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
-
-export class PrerenderGqlError {
-  message: string
-  stack: string
-
-  constructor(message: string) {
-    this.message = 'GQL error: ' + message
-    // The stacktrace would just point to this file, which isn't helpful,
-    // because that's not where the error is. So we're just putting the
-    // message there as well
-    this.stack = this.message
-  }
-}
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -47,39 +35,53 @@ async function recursivelyRender(
         return Promise.resolve('')
       }
 
-      const resultString = await executeQuery(
-        gqlHandler,
-        value.query,
-        value.variables
-      )
-      const result = JSON.parse(resultString)
+      try {
+        const resultString = await executeQuery(
+          gqlHandler,
+          value.query,
+          value.variables
+        )
 
-      if (result.errors) {
-        const message =
-          result.errors[0].message ?? JSON.stringify(result.errors, null, 4)
+        const result = JSON.parse(resultString)
 
-        if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
-          console.error(
-            `\n \n 🛑 Looks like the query ${getOperationName(
-              value.query
-            )} is trying to access a protected query.` +
-              ` To conditionally render the cell:
+        if (result.errors) {
+          const message =
+            result.errors[0].message ?? JSON.stringify(result.errors, null, 4)
+
+          if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
+            console.error(
+              `\n \n 🛑 Looks like the query ${getOperationName(
+                value.query
+              )} is trying to access a protected query.` +
+                ` To conditionally render the cell:
 
               const { isAuthenticated } = useAuth()
               {isAuthenticated && <MyPrivateCell />}`
-          )
+            )
+          }
+
+          throw new PrerenderGqlError(message)
         }
 
-        throw new PrerenderGqlError(message)
-      }
+        queryCache[cacheKey] = {
+          ...value,
+          data: result.data,
+          hasFetched: true,
+        }
 
-      queryCache[cacheKey] = {
-        ...value,
-        data: result.data,
-        hasFetched: true,
-      }
+        return result
+      } catch (e) {
+        if (e instanceof GqlHandlerNotFoundError) {
+          // If the GQL handler is located elsewhere
+          queryCache[cacheKey] = {
+            ...value,
+            renderLoading: true,
+            hasFetched: true,
+          }
 
-      return result
+          return
+        }
+      }
     })
   )
 

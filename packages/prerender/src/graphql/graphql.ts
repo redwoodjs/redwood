@@ -1,8 +1,10 @@
+import fs from 'fs'
 import path from 'path'
 import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getOperationName } from '@redwoodjs/web'
+import { GqlHandlerNotFoundError } from '../errors'
 
 /**
  * Loads the graphql server, with all the user's settings
@@ -22,7 +24,7 @@ export async function executeQuery(
   const operation = { operationName, query: print(query), variables }
   const handlerResult = await gqlHandler(operation)
 
-  return handlerResult.body
+  return handlerResult?.body
 }
 
 /**
@@ -31,6 +33,15 @@ export async function executeQuery(
  */
 export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
+
+  if (!fs.existsSync(gqlPath)) {
+    return () => {
+      console.warn('Could not find graphql handler')
+      console.warn('Skipping Cell prerendering, rendering the loading state')
+
+      throw new GqlHandlerNotFoundError('BAZINGA ERROR')
+    }
+  }
 
   const { handler } = await import(gqlPath)
 
