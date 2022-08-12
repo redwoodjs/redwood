@@ -1,5 +1,4 @@
-import { CurrentUser } from '../AuthContext'
-import { createAuthentication } from '../authFactory'
+import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
 
 export interface SuperTokensUser {
   userId: string

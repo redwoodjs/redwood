@@ -8,18 +8,20 @@ jest.mock('cross-undici-fetch', () => {
   return
 })
 
+const fetchMock = jest.fn().mockImplementation(async () => {
+  return { text: () => '', json: () => ({}) }
+})
+
 beforeAll(() => {
-  global.fetch = jest.fn().mockImplementation(async () => {
-    return { text: () => '', json: () => ({}) }
-  })
+  global.fetch = fetchMock
 })
 
 beforeEach(() => {
-  global.fetch.mockClear()
+  fetchMock.mockClear()
 })
 
 async function getDbAuth() {
-  const { useAuth, AuthProvider } = createDbAuth({
+  const { useAuth, AuthProvider } = createDbAuth(undefined, {
     fetchConfig: { credentials: 'include' },
   })
   const { result } = renderHook(() => useAuth(), {
@@ -38,7 +40,9 @@ describe('dbAuth', () => {
     // https://egghead.io/lessons/jest-fix-the-not-wrapped-in-act-warning-when-testing-custom-hooks
     // plus, we're note rendering anything, so there is nothing to use
     // `screen.getByText()` etc with to wait for
-    await act(async () => await result.current.getToken())
+    await act(async () => {
+      await result.current.getToken()
+    })
 
     expect(global.fetch).toBeCalledWith(
       `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
@@ -64,7 +68,7 @@ describe('dbAuth', () => {
   it('passes through fetchOptions to getToken calls', async () => {
     const auth = await getDbAuth()
 
-    await act(async () => await auth.getToken())
+    await act(async () => void (await auth.getToken()))
 
     expect(global.fetch).toBeCalledWith(
       `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
@@ -99,7 +103,7 @@ describe('dbAuth', () => {
 
   it('passes through fetchOptions to logout calls', async () => {
     const auth = await getDbAuth()
-    await act(async () => await auth.logOut())
+    await act(async () => void (await auth.logOut()))
 
     expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,

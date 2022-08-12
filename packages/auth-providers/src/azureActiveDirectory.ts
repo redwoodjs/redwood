@@ -5,8 +5,7 @@ import type {
   SilentRequest,
 } from '@azure/msal-browser'
 
-import type { CurrentUser } from '../AuthContext'
-import { createAuthentication } from '../authFactory'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type AzureActiveDirectoryClient = AzureActiveDirectory
 

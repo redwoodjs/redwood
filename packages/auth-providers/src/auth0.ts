@@ -4,8 +4,7 @@ import type {
   RedirectLoginOptions,
 } from '@auth0/auth0-spa-js'
 
-import type { CurrentUser } from '../AuthContext'
-import { createAuthentication } from '../authFactory'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 // TODO: Map out this user properly.
 export interface Auth0User {}

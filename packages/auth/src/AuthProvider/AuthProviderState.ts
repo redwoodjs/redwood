@@ -1,4 +1,4 @@
-import { CurrentUser } from 'src/AuthContext'
+import { CurrentUser } from '../AuthContext'
 
 export type AuthProviderState<TUser> = {
   loading: boolean

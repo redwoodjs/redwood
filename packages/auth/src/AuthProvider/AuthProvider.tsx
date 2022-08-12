@@ -1,8 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 
-import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
-
 import { AuthContextInterface, CurrentUser } from '../AuthContext'
+import type { AuthImplementation } from '../AuthImplementation'
 
 import {
   AuthProviderState,

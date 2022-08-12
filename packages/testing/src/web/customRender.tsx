@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render } from '@testing-library/react'
-import type { RenderResult } from '@testing-library/react'
+import type { RenderResult, RenderOptions } from '@testing-library/react'
 import type {
   RenderHookOptions,
   RenderHookResult,
@@ -16,10 +16,22 @@ import { MockProviders } from './MockProviders'
 
 export const customRender = (
   ui: React.ReactElement,
-  options = {}
+  options: RenderOptions & { AuthProvider?: React.ComponentType } = {}
 ): RenderResult => {
   return render(ui, {
-    wrapper: (props) => <MockProviders {...props} />,
+    wrapper: (props) => {
+      if (options.AuthProvider) {
+        const AuthProvider = options.AuthProvider
+
+        return (
+          <AuthProvider>
+            <MockProviders {...props} />
+          </AuthProvider>
+        )
+      }
+
+      return <MockProviders {...props} />
+    },
     ...options,
   })
 }

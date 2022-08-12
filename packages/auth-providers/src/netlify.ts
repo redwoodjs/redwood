@@ -1,7 +1,6 @@
 import * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-import { CurrentUser } from '../AuthContext'
-import { createAuthentication } from '../authFactory'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 // TODO:
 // In the future, when this is a separate package, we can import the full thing
@@ -25,6 +24,8 @@ export function createNetlifyAuth(
   // TODO: Add this when this is a separate package. For now it'll have to be
   // done in the user's app
   // isBrowser && netlifyIdentity.init()
+
+  console.log('createAuthentication', createAuthentication)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }

@@ -1,5 +1,5 @@
 import { createAuthContext, CurrentUser } from './AuthContext'
-import { AuthImplementation } from './authImplementations/AuthImplementation'
+import { AuthImplementation } from './AuthImplementation'
 import { createAuthProvider } from './AuthProvider/AuthProvider'
 import { createUseAuth } from './useAuth'
 

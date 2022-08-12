@@ -1,7 +1,5 @@
 import type { Context as LambdaContext } from 'aws-lambda'
 
-import type { SupportedAuthTypes } from '@redwoodjs/auth'
-
 import mockedAPIGatewayProxyEvent from '../../../functions/fixtures/apiGatewayProxyEvent.fixture'
 import * as auth0Decoder from '../auth0'
 import * as clerkDecoder from '../clerk'
@@ -186,7 +184,7 @@ describe('Uses correct Auth decoder', () => {
   })
 
   it('returns null as the decoded token for an unknown decoder', async () => {
-    const output = await decodeToken('cli' as SupportedAuthTypes, MOCKED_JWT, {
+    const output = await decodeToken('cli', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })

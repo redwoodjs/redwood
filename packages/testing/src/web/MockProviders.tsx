@@ -4,13 +4,16 @@
  */
 import React from 'react'
 
-import { useNoAuth } from '@redwoodjs/auth'
+// @ts-expect-error - We inject useAuth when testing, so it will be available
+import { useAuth } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import { MockParamsProvider } from './MockParamsProvider'
 // import { mockedUserMeta } from './mockRequests'
+
+// const { AuthProvider } = require('~__REDWOOD__USER_AUTH_FOR_MOCK')
 
 // Import the user's Router from `./web/src/Router.{tsx,js}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
@@ -19,29 +22,11 @@ const {
   default: UserRouterWithRoutes,
 } = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
 
-// export const mockAuthClient: AuthClient = {
-//   restoreAuthState: () => {},
-//   login: async () => {},
-//   logout: () => {},
-//   signup: () => {},
-//   getToken: async () => {
-//     return 'token'
-//   },
-//   getUserMetadata: async () => {
-//     return mockedUserMeta.currentUser
-//   },
-//   forgotPassword: () => {},
-//   resetPassword: () => {},
-//   validateResetToken: () => {},
-//   client: 'Custom',
-//   type: 'custom',
-// }
-
 export const MockProviders: React.FunctionComponent = ({ children }) => {
   return (
-    // <AuthProvider client={mockAuthClient} type="custom">
+    // <AuthProvider>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <RedwoodApolloProvider useAuth={useNoAuth}>
+      <RedwoodApolloProvider useAuth={useAuth}>
         <UserRouterWithRoutes />
         <LocationProvider>
           <MockParamsProvider>{children}</MockParamsProvider>

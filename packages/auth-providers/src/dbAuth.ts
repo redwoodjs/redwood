@@ -1,6 +1,6 @@
-import { WebAuthnClientType } from 'src/webAuthn'
+import { createAuthentication } from '@redwoodjs/auth'
 
-import { createAuthentication } from '../authFactory'
+import { WebAuthnClientType } from './webAuthn'
 
 export interface LoginAttributes {
   username: string

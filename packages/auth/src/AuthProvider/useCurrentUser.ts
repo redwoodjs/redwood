@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation'
 
 import { useToken } from './useToken'
 

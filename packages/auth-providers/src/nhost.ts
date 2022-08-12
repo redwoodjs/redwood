@@ -1,8 +1,7 @@
 import type { SignInParams, SignUpParams } from '@nhost/hasura-auth-js'
 import type { NhostClient } from '@nhost/nhost-js'
 
-import { CurrentUser } from '../AuthContext'
-import { createAuthentication } from '../authFactory'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 export function createNhostAuth(
   nhostClient: NhostClient,

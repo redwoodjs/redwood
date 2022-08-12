@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { AuthImplementation } from 'src/authImplementations/AuthImplementation'
+import { AuthImplementation } from '../AuthImplementation'
 
 import { AuthProviderState } from './AuthProviderState'
 import { useCurrentUser } from './useCurrentUser'
@@ -25,10 +25,9 @@ export const useReauthenticate = <TUser>(
       hasError: false,
     }
 
-    console.log('useReauthenticate getCurrentUser', getCurrentUser)
-
     try {
       const userMetadata = await authImplementation.getUserMetadata()
+
       if (!userMetadata) {
         setAuthProviderState(notAuthenticatedState)
       } else {
