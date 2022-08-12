@@ -51,9 +51,9 @@ async function recursivelyRender(
 
           if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
             console.error(
-              `\n \n 🛑 The query ${getOperationName(
+              `\n \n 🛑  Cannot prerender the query ${getOperationName(
                 value.query
-              )} is trying to access a protected query. \n`
+              )} as it requires auth. \n`
             )
           }
 
