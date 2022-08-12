@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import Listr from 'listr'
 import prompts from 'prompts'
@@ -42,7 +43,7 @@ async function shouldForce(force, provider, webAuthn) {
       message: `Overwrite existing ${getPaths().api.lib.replace(
         getPaths().base,
         ''
-      )}/auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
+      )}${path.sep}auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
       initial: false,
     })
 
