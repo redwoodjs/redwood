@@ -6,6 +6,14 @@ import { AuthProviderState } from './AuthProviderState'
 import { useCurrentUser } from './useCurrentUser'
 import { useToken } from './useToken'
 
+const notAuthenticatedState = {
+  isAuthenticated: false,
+  currentUser: null,
+  userMetadata: null,
+  loading: false,
+  hasError: false,
+}
+
 export const useReauthenticate = <TUser>(
   authImplementation: AuthImplementation<TUser>,
   setAuthProviderState: React.Dispatch<
@@ -17,14 +25,6 @@ export const useReauthenticate = <TUser>(
   const getToken = useToken(authImplementation)
 
   return useCallback(async () => {
-    const notAuthenticatedState: AuthProviderState<TUser> = {
-      isAuthenticated: false,
-      currentUser: null,
-      userMetadata: null,
-      loading: false,
-      hasError: false,
-    }
-
     try {
       const userMetadata = await authImplementation.getUserMetadata()
 

@@ -3,13 +3,47 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { createDbAuth } from '../dbAuth'
 
 global.RWJS_API_DBAUTH_URL = '/.redwood/functions'
+global.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
 jest.mock('cross-undici-fetch', () => {
   return
 })
 
-const fetchMock = jest.fn().mockImplementation(async () => {
-  return { text: () => '', json: () => ({}) }
+let loggedInUser: { username: string } | undefined
+
+const fetchMock = jest.fn()
+fetchMock.mockImplementation(async (url, options) => {
+  const body = options?.body ? JSON.parse(options.body) : {}
+
+  if (url?.includes('method=getToken')) {
+    return {
+      ok: true,
+      text: () => (loggedInUser ? 'token' : null),
+      json: () => ({}),
+    }
+  }
+
+  if (body.method === 'login') {
+    loggedInUser = { username: body.username }
+    return {
+      ok: true,
+      text: () => '',
+      json: () => ({ username: body.username }),
+    }
+  }
+
+  if (
+    body.query ===
+    'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }'
+  ) {
+    return {
+      ok: true,
+      text: () => '',
+      json: () => ({ data: { redwood: { currentUser: loggedInUser } } }),
+    }
+  }
+
+  return { ok: true, text: () => '', json: () => ({}) }
 })
 
 beforeAll(() => {
@@ -18,9 +52,10 @@ beforeAll(() => {
 
 beforeEach(() => {
   fetchMock.mockClear()
+  loggedInUser = undefined
 })
 
-async function getDbAuth() {
+function getDbAuth() {
   const { useAuth, AuthProvider } = createDbAuth(undefined, {
     fetchConfig: { credentials: 'include' },
   })
@@ -28,7 +63,7 @@ async function getDbAuth() {
     wrapper: AuthProvider,
   })
 
-  return result.current
+  return result
 }
 
 describe('dbAuth', () => {
@@ -53,11 +88,11 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to forgotPassword calls', async () => {
-    const auth = await getDbAuth()
+    const auth = getDbAuth().current
 
     await act(async () => await auth.forgotPassword('username'))
 
-    expect(global.fetch).toBeCalledWith(
+    expect(fetchMock).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -66,11 +101,15 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to getToken calls', async () => {
-    const auth = await getDbAuth()
+    const auth = getDbAuth().current
 
-    await act(async () => void (await auth.getToken()))
+    await act(async () => {
+      await auth.getToken()
+    })
 
-    expect(global.fetch).toBeCalledWith(
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    expect(fetchMock).toBeCalledWith(
       `${global.RWJS_API_DBAUTH_URL}?method=getToken`,
       {
         credentials: 'include',
@@ -79,7 +118,7 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to login calls', async () => {
-    const auth = await getDbAuth()
+    const auth = (await getDbAuth()).current
 
     await act(
       async () =>
@@ -102,8 +141,10 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to logout calls', async () => {
-    const auth = await getDbAuth()
-    await act(async () => void (await auth.logOut()))
+    const auth = getDbAuth().current
+    await act(async () => {
+      await auth.logOut()
+    })
 
     expect(global.fetch).toBeCalledWith(
       global.RWJS_API_DBAUTH_URL,
@@ -114,7 +155,7 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to resetPassword calls', async () => {
-    const auth = await getDbAuth()
+    const auth = getDbAuth().current
     await act(async () => await auth.resetPassword({}))
 
     expect(global.fetch).toBeCalledWith(
@@ -126,7 +167,7 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to signup calls', async () => {
-    const auth = await getDbAuth()
+    const auth = getDbAuth().current
     await act(async () => await auth.signUp({}))
 
     expect(global.fetch).toBeCalledWith(
@@ -138,7 +179,7 @@ describe('dbAuth', () => {
   })
 
   it('passes through fetchOptions to validateResetToken calls', async () => {
-    const auth = await getDbAuth()
+    const auth = getDbAuth().current
     await act(async () => await auth.validateResetToken('token'))
 
     expect(global.fetch).toBeCalledWith(
@@ -147,5 +188,26 @@ describe('dbAuth', () => {
         credentials: 'include',
       })
     )
+  })
+
+  it('is not authenticated before logging in', async () => {
+    const auth = getDbAuth().current
+
+    await act(async () => {
+      expect(auth.isAuthenticated).toBeFalsy()
+    })
+  })
+
+  it('is authenticated after logging in', async () => {
+    const authRef = getDbAuth()
+
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'auth-test',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.isAuthenticated).toBeTruthy()
   })
 })

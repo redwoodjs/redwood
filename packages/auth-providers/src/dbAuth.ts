@@ -23,10 +23,6 @@ export type DbAuthConfig = {
 }
 const TOKEN_CACHE_TIME = 5000
 
-let getTokenPromise: null | Promise<string | null>
-let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
-let cachedToken: string | null
-
 export function createDbAuth(dbAuthClient?: DbAuth, config?: DbAuthConfig) {
   const authImplementation = createDbAuthImplementation(dbAuthClient, config)
 
@@ -39,6 +35,10 @@ function createDbAuthImplementation(
   config: DbAuthConfig = { fetchConfig: { credentials: 'same-origin' } }
 ) {
   const { credentials } = config.fetchConfig
+
+  let getTokenPromise: null | Promise<string | null>
+  let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
+  let cachedToken: string | null
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
     resetTokenCache()
@@ -92,8 +92,7 @@ function createDbAuthImplementation(
     return cachedToken
   }
 
-  const login = async (attributes: LoginAttributes) => {
-    const { username, password } = attributes
+  const login = async ({ username, password }: LoginAttributes) => {
     const response = await resetAndFetch(global.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',

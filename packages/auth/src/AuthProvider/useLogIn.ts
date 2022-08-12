@@ -42,10 +42,10 @@ export const useLogIn = <
   return useCallback(
     async (options?: unknown) => {
       setAuthProviderState(defaultAuthProviderState)
-      const loginOutput = await authImplementation.login(options)
+      const loginResult = await authImplementation.login(options)
       await reauthenticate()
 
-      return loginOutput
+      return loginResult
     },
     [authImplementation, reauthenticate, setAuthProviderState]
   )
