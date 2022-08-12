@@ -28,7 +28,7 @@
 }
 .rw-segment {
   @apply w-full overflow-hidden rounded-lg border border-gray-200;
-  scrollbar-color: theme("colors.zinc.400") transparent;
+  scrollbar-color: theme('colors.zinc.400') transparent;
 }
 .rw-segment::-webkit-scrollbar {
   height: initial;
@@ -142,8 +142,8 @@
 .rw-check-radio-item-none {
   @apply text-gray-600;
 }
-.rw-input[type="checkbox"],
-.rw-input[type="radio"] {
+.rw-input[type='checkbox'],
+.rw-input[type='radio'] {
   @apply ml-0 mr-1 mt-1 inline w-4;
 }
 .rw-input:focus {
