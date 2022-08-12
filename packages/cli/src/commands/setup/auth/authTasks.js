@@ -166,9 +166,9 @@ export const addConfigToApp = async () => {
   } else {
     console.warn(
       c.warning(
-        'Could not find <RedwoodApolloProvider>. Are you using a custom ' +
-          'GraphQL Client? If you are, you will most likely have to pass ' +
-          '`useAuth` to it manually'
+        'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
+          'GraphQL Client you will have to make sure it gets access to your ' +
+          '`useAuth`, if it needs it.'
       )
     )
   }
