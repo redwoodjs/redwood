@@ -90,7 +90,9 @@ describe('Auth generator tests', () => {
     expect(prompts).toHaveBeenCalledTimes(1)
     expect(prompts).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: 'Overwrite existing /api/src/lib/auth.ts?',
+        message: expect.stringMatching(
+          /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
+        ),
       })
     )
   })
