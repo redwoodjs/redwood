@@ -51,13 +51,9 @@ async function recursivelyRender(
 
           if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
             console.error(
-              `\n \n 🛑 Looks like the query ${getOperationName(
+              `\n \n 🛑 The query ${getOperationName(
                 value.query
-              )} is trying to access a protected query.` +
-                ` To conditionally render the cell:
-
-              const { isAuthenticated } = useAuth()
-              {isAuthenticated && <MyPrivateCell />}`
+              )} is trying to access a protected query. \n`
             )
           }
 

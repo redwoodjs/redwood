@@ -313,7 +313,9 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
       )
 
       console.log(
-        c.info('- Avoid prerendering Cells with authenticated queries\n')
+        c.info(
+          '- Avoid prerendering Cells with authenticated queries, by conditionally rendering them.\n See [INSERT_LINK_HERE]'
+        )
       )
     }
 
