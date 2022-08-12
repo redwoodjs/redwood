@@ -1,4 +1,3 @@
-
 // required packages to install
 export const webPackages = ['@clerk/clerk-react']
 export const apiPackages = ['@clerk/clerk-sdk-node']
