@@ -1,6 +1,6 @@
 import { NhostClient } from '@nhost/nhost-js'
 
-import { createNhostAuth } from '@redwoodjs/auth'
+import { createNhostAuth } from '@redwoodjs/auth-providers'
 
 const nhostClient = new NhostClient({
   backendUrl: process.env.NHOST_BACKEND_URL,

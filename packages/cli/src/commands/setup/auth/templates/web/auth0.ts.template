@@ -1,6 +1,6 @@
 import { Auth0Client } from '@auth0/auth0-spa-js'
 
-import { createAuth0Auth } from '@redwoodjs/auth'
+import { createAuth0Auth } from '@redwoodjs/auth-providers'
 
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN || '',

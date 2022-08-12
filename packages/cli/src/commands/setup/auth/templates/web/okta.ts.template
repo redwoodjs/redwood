@@ -1,6 +1,6 @@
 import { OktaAuth } from '@okta/okta-auth-js'
 
-import { createOktaAuth } from '@redwoodjs/auth'
+import { createOktaAuth } from '@redwoodjs/auth-providers'
 
 const okta = new OktaAuth({
   issuer: process.env.OKTA_ISSUER,
