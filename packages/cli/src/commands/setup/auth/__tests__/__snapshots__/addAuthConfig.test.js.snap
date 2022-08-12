@@ -196,7 +196,7 @@ export default App
 exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 2`] = `
 "import { Auth0Client } from '@auth0/auth0-spa-js'
 
-import { createAuth0Auth } from '@redwoodjs/auth'
+import { createAuth0Auth } from '@redwoodjs/auth-providers'
 
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN || '',
@@ -279,7 +279,7 @@ exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Cle
 
 import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
 
-import { createClerkAuth } from '@redwoodjs/auth'
+import { createClerkAuth } from '@redwoodjs/auth-providers'
 import { navigate } from '@redwoodjs/router'
 
 export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createClerkAuth()
