@@ -18,17 +18,28 @@ fetchMock.mockImplementation(async (url, options) => {
   if (url?.includes('method=getToken')) {
     return {
       ok: true,
-      text: () => (loggedInUser ? 'token' : null),
+      text: () => (loggedInUser ? 'token' : ''),
       json: () => ({}),
     }
   }
 
   if (body.method === 'login') {
     loggedInUser = { username: body.username }
+
     return {
       ok: true,
       text: () => '',
       json: () => ({ username: body.username }),
+    }
+  }
+
+  if (body.method === 'logout') {
+    loggedInUser = undefined
+
+    return {
+      ok: true,
+      text: () => '',
+      json: () => ({}),
     }
   }
 
@@ -209,5 +220,27 @@ describe('dbAuth', () => {
     })
 
     expect(authRef.current.isAuthenticated).toBeTruthy()
+  })
+
+  it('is not authenticated after logging out', async () => {
+    const authRef = getDbAuth()
+
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'auth-test',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.isAuthenticated).toBeTruthy()
+
+    await act(async () => {
+      authRef.current.logOut({
+        username: 'auth-test',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.isAuthenticated).toBeFalsy()
   })
 })
