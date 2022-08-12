@@ -1,6 +1,8 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 
-import { createDbAuth } from '../dbAuth'
+import { CurrentUser } from '@redwoodjs/auth'
+
+import { createDbAuth, DbAuthConfig } from '../dbAuth'
 
 global.RWJS_API_DBAUTH_URL = '/.redwood/functions'
 global.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
@@ -9,7 +11,13 @@ jest.mock('cross-undici-fetch', () => {
   return
 })
 
-let loggedInUser: { username: string } | undefined
+interface User {
+  username: string
+  email: string
+  roles?: string[]
+}
+
+let loggedInUser: User | undefined
 
 const fetchMock = jest.fn()
 fetchMock.mockImplementation(async (url, options) => {
@@ -24,12 +32,16 @@ fetchMock.mockImplementation(async (url, options) => {
   }
 
   if (body.method === 'login') {
-    loggedInUser = { username: body.username }
+    loggedInUser = {
+      username: body.username,
+      roles: ['user'],
+      email: body.username,
+    }
 
     return {
       ok: true,
       text: () => '',
-      json: () => ({ username: body.username }),
+      json: () => loggedInUser,
     }
   }
 
@@ -66,10 +78,12 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-function getDbAuth() {
-  const { useAuth, AuthProvider } = createDbAuth(undefined, {
-    fetchConfig: { credentials: 'include' },
-  })
+const defaultOptions: DbAuthConfig = {
+  fetchConfig: { credentials: 'include' },
+}
+
+function getDbAuth(options = defaultOptions) {
+  const { useAuth, AuthProvider } = createDbAuth(undefined, options)
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
@@ -79,15 +93,14 @@ function getDbAuth() {
 
 describe('dbAuth', () => {
   it('sets a default credentials value if not included', async () => {
-    const { useAuth, AuthProvider } = createDbAuth()
-    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider })
+    const authRef = getDbAuth({ fetchConfig: {} })
 
     // act is okay here
     // https://egghead.io/lessons/jest-fix-the-not-wrapped-in-act-warning-when-testing-custom-hooks
     // plus, we're note rendering anything, so there is nothing to use
     // `screen.getByText()` etc with to wait for
     await act(async () => {
-      await result.current.getToken()
+      await authRef.current.getToken()
     })
 
     expect(global.fetch).toBeCalledWith(
@@ -242,5 +255,127 @@ describe('dbAuth', () => {
     })
 
     expect(authRef.current.isAuthenticated).toBeFalsy()
+  })
+
+  it('does not affect logged in/out status when using forgotPassword', async () => {
+    const authRef = getDbAuth()
+
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'auth-test',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.isAuthenticated).toBeTruthy()
+
+    await act(async () => {
+      authRef.current.forgotPassword('auth-test')
+    })
+
+    expect(authRef.current.isAuthenticated).toBeTruthy()
+
+    await act(async () => {
+      authRef.current.logOut({
+        username: 'auth-test',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.isAuthenticated).toBeFalsy()
+
+    await act(async () => {
+      authRef.current.forgotPassword('auth-test')
+    })
+
+    expect(authRef.current.isAuthenticated).toBeFalsy()
+  })
+
+  it('has role "user"', async () => {
+    const authRef = getDbAuth()
+
+    expect(authRef.current.hasRole('user')).toBeFalsy()
+
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'auth-test',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.hasRole('user')).toBeTruthy()
+  })
+
+  it('can specify custom hasRole function', async () => {
+    function useHasRole(currentUser: CurrentUser | null) {
+      return (rolesToCheck: string | string[]) => {
+        if (!currentUser || typeof rolesToCheck !== 'string') {
+          return false
+        }
+
+        if (rolesToCheck === 'user') {
+          // Everyone has role "user"
+          return true
+        }
+
+        // For the admin role we check that their email address
+        if (
+          rolesToCheck === 'admin' &&
+          currentUser.email === 'admin@example.com'
+        ) {
+          return true
+        }
+
+        return false
+      }
+    }
+
+    const authRef = getDbAuth({ useHasRole })
+
+    expect(authRef.current.hasRole('user')).toBeFalsy()
+
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'auth-test@example.com',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.hasRole('user')).toBeTruthy()
+    expect(authRef.current.hasRole('admin')).toBeFalsy()
+
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'admin@example.com',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    expect(authRef.current.hasRole('user')).toBeTruthy()
+    expect(authRef.current.hasRole('admin')).toBeTruthy()
+  })
+
+  it('can specify custom getCurrentUser function', async () => {
+    async function useCurrentUser() {
+      return {
+        ...loggedInUser,
+        roles: ['custom-current-user'],
+      }
+    }
+
+    const authRef = getDbAuth({ useCurrentUser })
+
+    // Need to be logged in, otherwise getCurrentUser won't be invoked
+    await act(async () => {
+      authRef.current.logIn({
+        username: 'auth-test@example.com',
+        password: 'ThereIsNoSpoon',
+      })
+    })
+
+    await act(async () => {
+      expect(authRef.current.hasRole('user')).toBeFalsy()
+      expect(authRef.current.hasRole('custom-current-user')).toBeTruthy()
+    })
   })
 })

@@ -1,4 +1,4 @@
-import { createAuthentication } from '@redwoodjs/auth'
+import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
 
 import { WebAuthnClientType } from './webAuthn'
 
@@ -17,24 +17,28 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 export type DbAuth = undefined | WebAuthnClientType
 
 export type DbAuthConfig = {
-  fetchConfig: {
-    credentials: 'include' | 'same-origin'
+  fetchConfig?: {
+    credentials?: 'include' | 'same-origin'
   }
+  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useHasRole?: (
+    currentUser: CurrentUser | null
+  ) => (rolesToCheck: string | string[]) => boolean
 }
 const TOKEN_CACHE_TIME = 5000
 
 export function createDbAuth(dbAuthClient?: DbAuth, config?: DbAuthConfig) {
   const authImplementation = createDbAuthImplementation(dbAuthClient, config)
 
-  return createAuthentication(authImplementation)
+  return createAuthentication(authImplementation, {
+    useCurrentUser: config?.useCurrentUser,
+    useHasRole: config?.useHasRole,
+  })
 }
 
 // TODO: Better types for login, signup etc
-function createDbAuthImplementation(
-  dbAuth: DbAuth,
-  config: DbAuthConfig = { fetchConfig: { credentials: 'same-origin' } }
-) {
-  const { credentials } = config.fetchConfig
+function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
+  const credentials = config?.fetchConfig?.credentials || 'same-origin'
 
   let getTokenPromise: null | Promise<string | null>
   let lastTokenCheckAt = new Date('1970-01-01T00:00:00')

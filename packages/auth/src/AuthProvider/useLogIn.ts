@@ -6,6 +6,7 @@ import {
   AuthProviderState,
   defaultAuthProviderState,
 } from './AuthProviderState'
+import { useCurrentUser } from './useCurrentUser'
 import { useReauthenticate } from './useReauthenticate'
 
 export const useLogIn = <
@@ -31,11 +32,13 @@ export const useLogIn = <
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
   >,
+  getCurrentUser: ReturnType<typeof useCurrentUser>,
   skipFetchCurrentUser: boolean | undefined
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
+    getCurrentUser,
     skipFetchCurrentUser
   )
 

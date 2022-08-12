@@ -19,9 +19,9 @@ export const useReauthenticate = <TUser>(
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
   >,
+  getCurrentUser: ReturnType<typeof useCurrentUser>,
   skipFetchCurrentUser: boolean | undefined
 ) => {
-  const getCurrentUser = useCurrentUser(authImplementation)
   const getToken = useToken(authImplementation)
 
   return useCallback(async () => {

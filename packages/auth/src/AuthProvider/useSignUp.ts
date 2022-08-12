@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import type { AuthImplementation } from '../AuthImplementation'
 
 import { AuthProviderState } from './AuthProviderState'
+import { useCurrentUser } from './useCurrentUser'
 import { useReauthenticate } from './useReauthenticate'
 
 export const useSignUp = <
@@ -28,11 +29,13 @@ export const useSignUp = <
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
   >,
+  getCurrentUser: ReturnType<typeof useCurrentUser>,
   skipFetchCurrentUser: boolean | undefined
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
+    getCurrentUser,
     skipFetchCurrentUser
   )
 

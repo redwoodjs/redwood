@@ -89,6 +89,7 @@ export function createAuthProvider<
     const reauthenticate = useReauthenticate(
       authImplementation,
       setAuthProviderState,
+      getCurrentUser,
       skipFetchCurrentUser
     )
 
@@ -99,11 +100,13 @@ export function createAuthProvider<
     const signUp = useSignUp(
       authImplementation,
       setAuthProviderState,
+      getCurrentUser,
       skipFetchCurrentUser
     )
     const logIn = useLogIn(
       authImplementation,
       setAuthProviderState,
+      getCurrentUser,
       skipFetchCurrentUser
     )
     const logOut = useLogOut(authImplementation, setAuthProviderState)
