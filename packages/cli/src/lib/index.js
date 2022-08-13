@@ -428,7 +428,7 @@ export const addScaffoldImport = () => {
   return 'Added scaffold import to App.{js,tsx}'
 }
 
-const removeEmtpySet = (routesContent, layout) => {
+const removeEmptySet = (routesContent, layout) => {
   const setWithLayoutReg = new RegExp(
     `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
   )
@@ -458,7 +458,7 @@ export const removeRoutesFromRouterTask = (routes, layout) => {
   }, routesContent)
 
   const routesWithoutEmptySet = layout
-    ? removeEmtpySet(newRoutesContent, layout)
+    ? removeEmptySet(newRoutesContent, layout)
     : newRoutesContent
 
   writeFile(redwoodPaths.web.routes, routesWithoutEmptySet, {
