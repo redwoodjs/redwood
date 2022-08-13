@@ -45,4 +45,10 @@ export const yargsDefaults = {
     description: 'Generate TypeScript files',
     type: 'boolean',
   },
+  lint: {
+    alias: 'l',
+    default: true,
+    description: 'Lint generated files',
+    type: 'boolean',
+  },
 }
