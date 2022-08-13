@@ -79,7 +79,7 @@ const loadDotEnvDefaultsMiddleware = () => {
   config({
     path: path.join(getPaths().base, '.env'),
     defaults: path.join(getPaths().base, '.env.defaults'),
-    encoding: 'utf8',
+    multiline: true,
   })
 }
 
