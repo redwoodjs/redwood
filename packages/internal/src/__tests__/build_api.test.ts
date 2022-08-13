@@ -99,22 +99,22 @@ test('Pretranspile polyfills unsupported functionality', () => {
   const code = fs.readFileSync(p, 'utf-8')
 
   expect(code).toContain(
-    `import _Math$hypot from "@babel/runtime-corejs3/core-js/math/hypot";`
+    `import _Math$hypot from "@babel/runtime-corejs3/core-js/math/hypot"`
   )
 
   expect(code).toContain(
-    `import _AggregateError from "@babel/runtime-corejs3/core-js/aggregate-error";`
+    `import _AggregateError from "@babel/runtime-corejs3/core-js/aggregate-error"`
   )
 
   expect(code).toContain(
-    `import _compositeKey from "@babel/runtime-corejs3/core-js/composite-key";`
+    `import _compositeKey from "@babel/runtime-corejs3/core-js/composite-key"`
   )
   expect(code).toContain(
-    `import _compositeSymbol from "@babel/runtime-corejs3/core-js/composite-symbol";`
+    `import _compositeSymbol from "@babel/runtime-corejs3/core-js/composite-symbol"`
   )
 
   expect(code).toContain(
-    `import _Map from "@babel/runtime-corejs3/core-js/map";`
+    `import _Map from "@babel/runtime-corejs3/core-js/map"`
   )
   const _Map = require('@babel/runtime-corejs3/core-js/map')
   expect(_Map).toHaveProperty('deleteAll')
@@ -136,75 +136,75 @@ test('Pretranspile polyfills unsupported functionality', () => {
   expect(_Map).toHaveProperty('update')
 
   expect(code).toContain(
-    `import _Math$clamp from "@babel/runtime-corejs3/core-js/math/clamp";`
+    `import _Math$clamp from "@babel/runtime-corejs3/core-js/math/clamp"`
   )
   expect(code).toContain(
-    `import _Math$DEG_PER_RAD from "@babel/runtime-corejs3/core-js/math/deg-per-rad";`
+    `import _Math$DEG_PER_RAD from "@babel/runtime-corejs3/core-js/math/deg-per-rad"`
   )
   expect(code).toContain(
-    `import _Math$degrees from "@babel/runtime-corejs3/core-js/math/degrees";`
+    `import _Math$degrees from "@babel/runtime-corejs3/core-js/math/degrees"`
   )
   expect(code).toContain(
-    `import _Math$fscale from "@babel/runtime-corejs3/core-js/math/fscale";`
+    `import _Math$fscale from "@babel/runtime-corejs3/core-js/math/fscale"`
   )
   expect(code).toContain(
-    `import _Math$RAD_PER_DEG from "@babel/runtime-corejs3/core-js/math/rad-per-deg";`
+    `import _Math$RAD_PER_DEG from "@babel/runtime-corejs3/core-js/math/rad-per-deg"`
   )
   expect(code).toContain(
-    `import _Math$radians from "@babel/runtime-corejs3/core-js/math/radians";`
+    `import _Math$radians from "@babel/runtime-corejs3/core-js/math/radians"`
   )
   expect(code).toContain(
-    `import _Math$scale from "@babel/runtime-corejs3/core-js/math/scale";`
+    `import _Math$scale from "@babel/runtime-corejs3/core-js/math/scale"`
   )
   expect(code).toContain(
-    `import _Math$seededPRNG from "@babel/runtime-corejs3/core-js/math/seeded-prng";`
+    `import _Math$seededPRNG from "@babel/runtime-corejs3/core-js/math/seeded-prng"`
   )
   expect(code).toContain(
-    `import _Math$signbit from "@babel/runtime-corejs3/core-js/math/signbit";`
+    `import _Math$signbit from "@babel/runtime-corejs3/core-js/math/signbit"`
   )
   expect(code).toContain(
-    `import _Math$iaddh from "@babel/runtime-corejs3/core-js/math/iaddh";`
+    `import _Math$iaddh from "@babel/runtime-corejs3/core-js/math/iaddh"`
   )
   expect(code).toContain(
-    `import _Math$imulh from "@babel/runtime-corejs3/core-js/math/imulh";`
+    `import _Math$imulh from "@babel/runtime-corejs3/core-js/math/imulh"`
   )
   expect(code).toContain(
-    `import _Math$isubh from "@babel/runtime-corejs3/core-js/math/isubh";`
+    `import _Math$isubh from "@babel/runtime-corejs3/core-js/math/isubh"`
   )
   expect(code).toContain(
-    `import _Math$umulh from "@babel/runtime-corejs3/core-js/math/umulh";`
-  )
-
-  expect(code).toContain(
-    `import _Number$fromString from "@babel/runtime-corejs3/core-js/number/from-string";`
+    `import _Math$umulh from "@babel/runtime-corejs3/core-js/math/umulh"`
   )
 
   expect(code).toContain(
-    `import _Observable from "@babel/runtime-corejs3/core-js/observable";`
-  )
-  expect(code).toContain(
-    `import _Symbol$observable from "@babel/runtime-corejs3/core-js/symbol/observable";`
+    `import _Number$fromString from "@babel/runtime-corejs3/core-js/number/from-string"`
   )
 
   expect(code).toContain(
-    `import _Promise from "@babel/runtime-corejs3/core-js/promise";`
+    `import _Observable from "@babel/runtime-corejs3/core-js/observable"`
+  )
+  expect(code).toContain(
+    `import _Symbol$observable from "@babel/runtime-corejs3/core-js/symbol/observable"`
+  )
+
+  expect(code).toContain(
+    `import _Promise from "@babel/runtime-corejs3/core-js/promise"`
   )
   const _Promise = require('@babel/runtime-corejs3/core-js/promise')
   expect(_Promise).toHaveProperty('any')
   expect(_Promise).toHaveProperty('try')
 
   expect(code).toContain(
-    `import _Reflect$defineMetadata from "@babel/runtime-corejs3/core-js/reflect/define-metadata";`
+    `import _Reflect$defineMetadata from "@babel/runtime-corejs3/core-js/reflect/define-metadata"`
   )
   expect(code).toContain(
-    `import _Reflect$getOwnMetadataKeys from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata-keys";`
+    `import _Reflect$getOwnMetadataKeys from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata-keys"`
   )
   expect(code).toContain(
-    `import _Reflect$getOwnMetadata from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata";`
+    `import _Reflect$getOwnMetadata from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata"`
   )
 
   expect(code).toContain(
-    `import _Set from "@babel/runtime-corejs3/core-js/set";`
+    `import _Set from "@babel/runtime-corejs3/core-js/set"`
   )
   const _Set = require('@babel/runtime-corejs3/core-js/set')
   expect(_Set).toHaveProperty('addAll')
@@ -227,26 +227,26 @@ test('Pretranspile polyfills unsupported functionality', () => {
   expect(_Set).toHaveProperty('union')
 
   expect(code).toContain(
-    `import _codePointsInstanceProperty from "@babel/runtime-corejs3/core-js/instance/code-points";`
+    `import _codePointsInstanceProperty from "@babel/runtime-corejs3/core-js/instance/code-points"`
   )
   expect(code).toContain(
-    `import _matchAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/match-all";`
+    `import _matchAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/match-all"`
   )
   expect(code).toContain(
-    `import _replaceAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/replace-all";`
+    `import _replaceAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/replace-all"`
   )
   expect(code).toContain(
-    `import _atInstanceProperty from "@babel/runtime-corejs3/core-js/instance/at";`
+    `import _atInstanceProperty from "@babel/runtime-corejs3/core-js/instance/at"`
   )
   expect(code).toContain(
-    `import _Symbol$patternMatch from "@babel/runtime-corejs3/core-js/symbol/pattern-match";`
+    `import _Symbol$patternMatch from "@babel/runtime-corejs3/core-js/symbol/pattern-match"`
   )
   expect(code).toContain(
-    `import _Symbol$dispose from "@babel/runtime-corejs3/core-js/symbol/dispose";`
+    `import _Symbol$dispose from "@babel/runtime-corejs3/core-js/symbol/dispose"`
   )
 
   expect(code).toContain(
-    `import _WeakMap from "@babel/runtime-corejs3/core-js/weak-map";`
+    `import _WeakMap from "@babel/runtime-corejs3/core-js/weak-map"`
   )
   const _WeakMap = require('@babel/runtime-corejs3/core-js/weak-map')
   expect(_WeakMap).toHaveProperty('deleteAll')
@@ -254,7 +254,7 @@ test('Pretranspile polyfills unsupported functionality', () => {
   expect(_WeakMap).toHaveProperty('of')
 
   expect(code).toContain(
-    `import _WeakSet from "@babel/runtime-corejs3/core-js/weak-set";`
+    `import _WeakSet from "@babel/runtime-corejs3/core-js/weak-set"`
   )
   const _WeakSet = require('@babel/runtime-corejs3/core-js/weak-set')
   expect(_WeakSet).toHaveProperty('addAll')
@@ -273,9 +273,8 @@ test('Pretranspile polyfills unsupported functionality', () => {
 
   expect(code).toContain(
     [
-      `[1, 2, 3].lastItem // => 3`,
-      `[(1, 2, 3)].lastIndex; // => 2`,
-      '',
+      `[1, 2, 3].lastItem;`,
+      `[1, 2, 3].lastIndex;`,
       `const array = [1, 2, 3];`,
       `array.lastItem = 4;`,
       `new Array(1, 2, 3).lastItem;`,

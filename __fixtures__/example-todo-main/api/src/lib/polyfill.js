@@ -50,8 +50,8 @@ const aggregate = new AggregateError([error1, error2], 'Collected errors')
  * - https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/esnext.array.last-index.js,
  * - https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/esnext.array.last-item.js
  */
-[1, 2, 3].lastItem
-[1, 2, 3].lastIndex
+;[1, 2, 3].lastItem
+;[1, 2, 3].lastIndex
 
 const array = [1, 2, 3]
 array.lastItem = 4
