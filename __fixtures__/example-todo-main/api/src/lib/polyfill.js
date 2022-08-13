@@ -1,25 +1,15 @@
 /**
- * We target Node.js 12, but it doesn't factor into what gets polyfilled.
- * Babel only considers what's available in core-js 3.0.0,
- * but implementations are core-js 3+
+ * Redwood targets Node.js 12, but that doesn't factor into what gets polyfilled
+ * because Redwood uses the plugin-transform-runtime polyfill strategy.
  *
- * This list is based on data from core-js-compat:
+ * Also, plugin-transform-runtime is pinned to core-js v3 (no minors, no patches),
+ * so the list of available polyfill is a little outdated.
  *
- * ```js
- * import compat from 'core-js-compat'
+ * Most of these examples are taken from the core-js README, the proposal's README, or MDN.
  *
- * const { list } = compat({
- *   // our target
- *   targets: { node: '12.16' },
- *   // core-js version
- *   version: 3,
- * })
- *
- * console.log(list)
- * ```
- *
- * See http://es6.zloirock.ru/compat.
- * Sometimes this conflicts with MDN's.
+ * Key:
+ * - ✅ -> plugin-transform-runtime successfully polyfills this
+ * - ❌  -> plugin-transform-runtime fails to polyfill this
  */
 
 /**
