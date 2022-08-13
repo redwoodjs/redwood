@@ -147,10 +147,8 @@ export const lintFile = (target, contents, task = {}) => {
   const { base } = getPaths()
   task.title = `Linting \`./${path.relative(base, target)}\``
 
-  const filename = path.basename(target)
-  const targetDir = target.replace(filename, '')
-  fs.mkdirSync(targetDir, { recursive: true })
-  fs.writeFileSync(target, contents)
+  // const filename = path.basename(target)
+  // const targetDir = target.replace(filename, '')
   execa('yarn rw lint --fix --path ', [`./${path.relative(base, target)}`], {
     stdio: 'pipe',
     shell: true,
@@ -310,7 +308,6 @@ export const deleteFilesTask = (files) => {
  *
  * @param files - {[filepath]: contents}
  */
-// TODO Add lint here, if not false
 export const lintFilesTask = (files, options) => {
   const { base } = getPaths()
   return new Listr(
