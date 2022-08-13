@@ -70,6 +70,11 @@ const itCreatesAService = (baseArgs = {}) => {
         `/path/to/project/api/src/services/users/users.test.${extension}`
       ),
     ])
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/users/users.scenarios.${extension}`
+      ),
+    ])
   })
 }
 
@@ -129,6 +134,30 @@ const itCreateAMultiWordSDLFileWithCRUD = (baseArgs = {}) => {
       crud: true,
     })
     const extension = extensionForBaseArgs(baseArgs)
+
+    // Service files
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+      ),
+    ])
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+      ),
+    ])
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/userProfiles/userProfiles.scenarios.${extension}`
+      ),
+    ])
+
+    //sdl file
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+      ),
+    ])
 
     expect(
       files[
