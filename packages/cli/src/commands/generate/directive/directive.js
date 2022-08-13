@@ -7,7 +7,12 @@ import prompts from 'prompts'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
 
-import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
+import {
+  getPaths,
+  writeFilesTask,
+  transformTSToJS,
+  lintFilesTask,
+} from '../../../lib'
 import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import {
@@ -147,6 +152,16 @@ export const handler = async (args) => {
           return writeFilesTask(files({ ...args, type: directiveType }), {
             overwriteExisting: args.force,
           })
+        },
+      },
+      {
+        title: 'Linting ...',
+        task: (_ctx, task) => {
+          if (args.lint) {
+            return lintFilesTask(files({ ...args }))
+          } else {
+            task.skip('Skipping lint.')
+          }
         },
       },
       {

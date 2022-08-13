@@ -143,6 +143,22 @@ export const writeFile = (
   task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
 }
 
+export const lintFile = (target, contents, task = {}) => {
+  const { base } = getPaths()
+  task.title = `Linting \`./${path.relative(base, target)}\``
+
+  const filename = path.basename(target)
+  const targetDir = target.replace(filename, '')
+  fs.mkdirSync(targetDir, { recursive: true })
+  fs.writeFileSync(target, contents)
+  execa('yarn rw lint --fix --path ', [`./${path.relative(base, target)}`], {
+    stdio: 'pipe',
+    shell: true,
+  })
+
+  task.title = `Successfully linted file \`./${path.relative(base, target)}\``
+}
+
 export const saveRemoteFileToDisk = (
   url,
   localPath,
@@ -252,6 +268,7 @@ export const transformTSToJS = (filename, content) => {
  *
  * @param files - {[filepath]: contents}
  */
+// TODO Add lint here, if not false
 export const writeFilesTask = (files, options) => {
   const { base } = getPaths()
   return new Listr(
@@ -286,6 +303,25 @@ export const deleteFilesTask = (files) => {
       task: () => cleanupEmptyDirsTask(files),
     },
   ])
+}
+
+/**
+ * Creates a list of tasks that write files to the disk.
+ *
+ * @param files - {[filepath]: contents}
+ */
+// TODO Add lint here, if not false
+export const lintFilesTask = (files, options) => {
+  const { base } = getPaths()
+  return new Listr(
+    Object.keys(files).map((file) => {
+      const contents = files[file]
+      return {
+        title: `...waiting to lint file \`./${path.relative(base, file)}\`...`,
+        task: (ctx, task) => lintFile(file, contents, options, task),
+      }
+    })
+  )
 }
 
 /**
