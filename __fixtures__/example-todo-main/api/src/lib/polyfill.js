@@ -199,7 +199,6 @@ Promise.try(() => { throw 42; }).catch(it => console.log(`Promise, rejected as $
  */
 let object = {}
 Reflect.defineMetadata('foo', 'bar', object)
-Reflect.ownKeys(object)
 Reflect.getOwnMetadataKeys(object)
 Reflect.getOwnMetadata('foo', object)
 

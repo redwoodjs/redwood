@@ -197,9 +197,6 @@ test('Pretranspile polyfills unsupported functionality', () => {
     `import _Reflect$defineMetadata from "@babel/runtime-corejs3/core-js/reflect/define-metadata";`
   )
   expect(code).toContain(
-    `import _Reflect$ownKeys from "@babel/runtime-corejs3/core-js/reflect/own-keys";`
-  )
-  expect(code).toContain(
     `import _Reflect$getOwnMetadataKeys from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata-keys";`
   )
   expect(code).toContain(
