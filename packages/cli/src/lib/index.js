@@ -266,7 +266,6 @@ export const transformTSToJS = (filename, content) => {
  *
  * @param files - {[filepath]: contents}
  */
-// TODO Add lint here, if not false
 export const writeFilesTask = (files, options) => {
   const { base } = getPaths()
   return new Listr(
@@ -304,7 +303,7 @@ export const deleteFilesTask = (files) => {
 }
 
 /**
- * Creates a list of tasks that write files to the disk.
+ * Creates a list of files to lint after creation.
  *
  * @param files - {[filepath]: contents}
  */
@@ -315,6 +314,7 @@ export const lintFilesTask = (files, options) => {
       const contents = files[file]
       return {
         title: `...waiting to lint file \`./${path.relative(base, file)}\`...`,
+        // TODO: Is it necessary to have (ctx, task)?
         task: (ctx, task) => lintFile(file, contents, options, task),
       }
     })

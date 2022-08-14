@@ -158,7 +158,7 @@ export const handler = async (args) => {
         title: 'Linting ...',
         task: (_ctx, task) => {
           if (args.lint) {
-            return lintFilesTask(files({ ...args, type: directiveType })) // passing directiveType to prevent files() error
+            return lintFilesTask(files({ ...args, type: directiveType })) // We pass directiveType to prevent files() error
           } else {
             task.skip('Skipping lint.')
           }
