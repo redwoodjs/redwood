@@ -31,7 +31,7 @@ async function recursivelyRender(
   // Execute all gql queries we haven't already fetched
   await Promise.all(
     Object.entries(queryCache).map(async ([cacheKey, value]) => {
-      if (value.hasFetched) {
+      if (value.hasProcessed) {
         // Already fetched, or decided that we can't render this one; skip it!
         return Promise.resolve('')
       }
@@ -63,7 +63,7 @@ async function recursivelyRender(
         queryCache[cacheKey] = {
           ...value,
           data: result.data,
-          hasFetched: true,
+          hasProcessed: true,
         }
 
         return result
@@ -76,8 +76,9 @@ async function recursivelyRender(
 
           queryCache[cacheKey] = {
             ...value,
+            // tried to fetch, but failed
             renderLoading: true,
-            hasFetched: true, // tried to fetch, but failed
+            hasProcessed: true,
           }
 
           return
@@ -97,7 +98,7 @@ async function recursivelyRender(
     </LocationProvider>
   )
 
-  if (Object.values(queryCache).some((value) => !value.hasFetched)) {
+  if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
     return recursivelyRender(App, renderPath, gqlHandler, queryCache)

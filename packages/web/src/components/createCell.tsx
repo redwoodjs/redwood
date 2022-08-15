@@ -311,7 +311,7 @@ export function createCell<
       if (queryInfo?.renderLoading) {
         loading = true
       } else {
-        if (queryInfo?.hasFetched) {
+        if (queryInfo?.hasProcessed) {
           loading = false
           data = queryInfo.data
 
@@ -322,7 +322,7 @@ export function createCell<
           queryCache[cacheKey] ||= {
             query,
             variables: options.variables,
-            hasFetched: false,
+            hasProcessed: false,
           }
         }
       }
