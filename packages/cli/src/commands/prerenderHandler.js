@@ -169,7 +169,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
         {
           title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
           task: async () => {
-            // Check if route param templates in  e.g./path/{param1} have been replaced
+            // Check if route param templates in e.g. /path/{param1} have been replaced
             if (/\{.*}/.test(routeToPrerender.path)) {
               throw new PathParamError(
                 `Could not retrieve route parameters for ${routeToPrerender.path}`
