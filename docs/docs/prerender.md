@@ -354,7 +354,7 @@ You can remove the default redirect to index in your `netlify.toml`. This means 
 - status = 200
 ```
 
-This makes your app behave much more like a traditional website, where all the possible routes are defined up front. But take care to make sure you are prerendering all your pages, otherwise you will receive 404s on pages that do exist, but haven't told Netlify about.
+This makes your app behave much more like a traditional website, where all the possible routes are defined up front. But take care to make sure you are prerendering all your pages, otherwise you will receive 404s on pages that do exist, but that Netlify hasn't been told about.
 </details>
 
 <details>
@@ -370,7 +370,7 @@ You can add a 404 redirect if you want:
 + status = 404
 ```
 
-This makes your app behave much more like a traditional website, where all the possible routes are defined up front. But take care to make sure you are prerendering all your pages, otherwise you will receive 404s on pages that do existbut haven't told Netlify about.
+This makes your app behave much more like a traditional website, where all the possible routes are defined up front. But take care to make sure you are prerendering all your pages, otherwise you will receive 404s on pages that do exist, but that Netlify hasn't been told about.
 </details>
 
 
