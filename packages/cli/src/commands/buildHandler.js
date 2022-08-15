@@ -119,10 +119,12 @@ export const handler = async ({
   const triggerPrerender = async () => {
     console.log('Starting prerendering...')
     if (prerenderRoutes.length === 0) {
-      return `You have not marked any "prerender" in your ${terminalLink(
-        'Routes',
-        'file://' + rwjsPaths.web.routes
-      )}.`
+      console.log(
+        `You have not marked any routes to "prerender" in your ${terminalLink(
+          'Routes',
+          'file://' + rwjsPaths.web.routes
+        )}.`
+      )
     }
     // Running a separate process here, otherwise it wouldn't pick up the
     // generated Prisma Client due to require module caching
