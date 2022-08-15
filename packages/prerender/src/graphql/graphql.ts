@@ -1,4 +1,5 @@
 import path from 'path'
+
 import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'

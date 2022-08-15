@@ -36,6 +36,13 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    // For the import/order rule. Configures how it tells if an import is "internal" or not.
+    // An "internal" import is basically just one that's aliased.
+    //
+    // See...
+    // - https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
+    // - https://github.com/import-js/eslint-plugin-import/blob/main/README.md#importinternal-regex
+    'import/internal-regex': '^src/',
   },
   rules: {
     'prettier/prettier': 'warn',
@@ -68,33 +75,52 @@ module.exports = {
       'error',
       {
         'newlines-between': 'always',
-        pathGroupsExcludedImportTypes: ['react'],
+        // We set this to an empty array to override the default value, which is `['builtin', 'external', 'object']`.
+        // Judging by the number of issues on the repo, this option seems to be notoriously tricky to understand.
+        // From what I can tell, if the value of this is `['builtin']` that means it won't sort builtins.
+        // But we have a rule for builtins below (react), so that's not what we want.
+        //
+        // See...
+        // - https://github.com/import-js/eslint-plugin-import/pull/1570
+        // - https://github.com/import-js/eslint-plugin-import/issues/1565
+        pathGroupsExcludedImportTypes: [],
+        // Only doing this to add internal. The order here maters.
+        // See https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
+        groups: [
+          'builtin', // 0
+          'external', // 1
+          'internal', // 2
+          'parent', // 3
+          'sibling', // 4
+          'index', // 5
+        ],
         pathGroups: [
           {
             pattern: 'react',
             group: 'builtin',
-            position: 'after',
+            position: 'after', // 0.1 -> .9
           },
           {
             pattern: '@redwoodjs/**',
             group: 'external',
-            position: 'after',
+            position: 'after', // 1.1 -> 1.9
           },
           {
-            pattern: 'src/lib/test',
-            group: 'parent',
-            position: 'before',
-          },
-          {
-            pattern: 'src/**',
-            group: 'parent',
-            position: 'before',
+            // Matches src/directives/**/*.{js,ts}, src/services/**/*.{js,ts}, src/graphql/**/*.sdl.{js,ts}
+            pattern: 'src/*/\\*\\*/\\*.*\\{js,ts\\}',
+            group: 'internal',
+            position: 'before', // 1.9 -> 1.1
           },
         ],
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,
         },
+        // We need to discuss this option.
+        // If we turn it on, it'll auto fix spacing problems for side-effect imports.
+        // But then side-effect imports have to be where they're supposed to be.
+        // And if they're not where they're supposed to be, they can't be auto fixed.
+        // warnOnUnassignedImports: true
       },
     ],
     'no-restricted-imports': [
