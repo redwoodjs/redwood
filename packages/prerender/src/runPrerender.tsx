@@ -71,7 +71,7 @@ async function recursivelyRender(
         if (e instanceof GqlHandlerImportError) {
           // We need to need to swallow the error here, so that
           // we can continue to render the page, with cells in loading state
-          // e.g. If the GQL handler is located elsewhere
+          // e.g. if the GQL handler is located elsewhere
           shouldShowGraphqlHandlerNotFoundWarn = true
 
           queryCache[cacheKey] = {
