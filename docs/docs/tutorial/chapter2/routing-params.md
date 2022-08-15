@@ -798,7 +798,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => (
   // highlight-next-line
-  <Article article={article} />
+  return <Article article={article} />
 )
 ```
 
