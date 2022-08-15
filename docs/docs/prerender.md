@@ -304,10 +304,10 @@ const HomePage = () => {
   const { isAuthenticated } = useAuth
 
   return (
-    <LandingLayout>
-    // highlight-next-line
+    <>
+      // highlight-next-line
       { isAuthenticated ? <MyPrivateCell /> : <NoAccess /> }
-    </LandingLayout>
+    </>
 ```
 
 ---
