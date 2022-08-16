@@ -5,8 +5,8 @@ description: Getting started & Core Concepts
 
 Redwood comes with full TypeScript support, and you don't have to give up any of the conveniences that Redwood offers to enjoy all the benefits of a type-safe codebase.
 
-
 ## Getting Started
+
 ### Starting a Redwood Project in TypeScript
 
 You can use the `--typescript` option on `yarn create redwood-app` to use TypeScript from the start:
@@ -32,30 +32,31 @@ In fact, you probably shouldn't.
 Do it incrementally.
 Start by renaming your files from `.js` to `.ts`. (Or, if they have a React component, `.tsx`.)
 
----
-
-## Core concepts
+## Core Concepts
 
 ### 1. Automatic types
-When you are developing with TypeScript, the Redwood CLI is your trusted companion - you focus on writing your code, and we generate as many of the types as we can.
 
-When you run `yarn rw dev`, the CLI is constantly watching your source code to generate types. More on this in the [Generated types](/typescript/generated-types.md) doc.
+When you're developing in TypeScript, the Redwood CLI is your trusted companion—focus on writing code and it'll generate as many of the types as it can.
+When you run `yarn rw dev`, the CLI watches files for changes so that it can generate types.
+(More on this in the [Generated Types](/typescript/generated-types.md) doc.)
 
-But let's say you don't have the dev server running, and are just modifying your code and notice missing types - you can always run `yarn rw g types` to make sure you have all the types you need.
+But let's say that you don't have the dev server running, and are just coding and notice missing types.
+You can always run `yarn rw g types` to make sure you have all the types you need.
 
 ### 2. Use generators to learn about available utility types
-Let's say you generate a Cell using the command `yarn rw g cell Post` - if your project is TypeScript the generated files will contain a bunch of utility types (imported from `@redwoodjs/web`), as well as types specific to your project (these are imported from `types/graphql`).
 
-You don't need to learn all the utility types up front - but they are documented in detail in the [Utility Types](/typescript/utility-types.md) doc.
+Let's say you generate a Cell using the command `yarn rw g cell Post`. If your project is in TypeScript, the generated files will contain a bunch of utility types (imported from `@redwoodjs/web`), as well as types specific to your project (imported from `types/graphql`).
+You don't need to learn all the utility types up front, but they're documented in detail in the [Utility Types](/typescript/utility-types.md) doc when you're ready.
 
-### 3. We won't force you to type everything
-The Redwood philosophy is to keep things as simple as possible at first. We generate as much as possible, and avoid forcing you to type every little detail, and don't have [strict mode](https://www.typescriptlang.org/tsconfig#strict) switched on by default. Where needed you can make use of generics (e.g. [`DbAuthHandler`](/typescript/utility-types.md#dbauthhandleroptions) to be more specific with your types.
+### 3. Redwood won't force you to type everything
 
-However if you're comfortable with TypeScript, and want that extra level of safety take a look at our [Strict Mode](/typescript/strict-mode.md) doc.
+The Redwood philosophy is to keep things as simple as possible at first. Redwood generates as much as possible, avoids forcing you to type every little detail, and doesn't have [strict mode](https://www.typescriptlang.org/tsconfig#strict) on by default.
+Where needed (e.g. the [`DbAuthHandler`](/typescript/utility-types.md#dbauthhandleroptions)) you can make use of generics to be more specific with your types.
 
----
+But if you're comfortable with TypeScript and want that extra level of safety, take a look at our [Strict Mode](/typescript/strict-mode.md) doc.
 
-## A few useful tips
+## A Few Useful Tips
+
 ### Sharing Types between Sides
 
 To share types between sides:

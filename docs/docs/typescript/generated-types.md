@@ -52,9 +52,9 @@ const getCurrentUser = ({decoded}): MyCurrentUser => {
 The types for both `useAuth().currentUser` on the web side and `context.currentUser` on the api side will be the same—the `MyCurrentUser` interface.
 
 :::info Type of `context.currentUser` unknown?
-This most commonly happens when you don't have the various generated and utility types in your project.
-
-Run `yarn rw g types` and just to be sure, restart your TS server. For example on VSCode, you do this by running searching and running "TypeScript: Restart TS server" in your command pallette (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows)
+This usually happens when you don't have the various generated and utility types in your project.
+Run `yarn rw g types`, and just to be sure, restart your TS server.
+In VSCode, you can do this by running "TypeScript: Restart TS server" in the command palette (Cmd+Shift+P on Mac, Ctrl+Shift+P on Windows)
 :::
 
 ## Query and Mutation types
