@@ -14,20 +14,23 @@ interface ContactFormProps {
   contact?: EditContactById['contact']
   onSave: (
     data: UpdateContactInput,
-    id?: EditContactById['contact']['id']
+    id?: NonNullable<EditContactById['contact']>['id']
   ) => void
   error: RWGqlError
   loading: boolean
 }
 
 const ContactForm = (props: ContactFormProps) => {
-  const onSubmit = (data: EditContactById['contact']) => {
+  const onSubmit = (data: NonNullable<EditContactById['contact']>) => {
     props.onSave(data, props?.contact?.id)
   }
 
   return (
     <div className="rw-form-wrapper">
-      <Form<EditContactById['contact']> onSubmit={onSubmit} error={props.error}>
+      <Form<NonNullable<EditContactById['contact']>>
+        onSubmit={onSubmit}
+        error={props.error}
+      >
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"
