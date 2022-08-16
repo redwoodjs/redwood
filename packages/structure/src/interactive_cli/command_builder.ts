@@ -60,7 +60,7 @@ class CommandBuilder {
   }
 
   @lazy() get args() {
-    return this.opts.cmd.parsed._
+    return this.opts.cmd.parsed._ as string[]
   }
 
   private async generate(type: string) {
