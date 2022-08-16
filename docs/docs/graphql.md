@@ -407,9 +407,48 @@ query {
 }
 ```
 
-How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/makeMergedSchema/rootSchema.ts#L22-L38). The root schema is where things like currentUser are defined.
+How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts). The root schema is where things like currentUser are defined:
 
-Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/34a6444432b409774d54be17789a7109add9709a/packages/api/src/makeMergedSchema/rootSchema.ts#L31-L45).
+```graphql
+  scalar BigInt
+  scalar Date
+  scalar Time
+  scalar DateTime
+  scalar JSON
+  scalar JSONObject
+
+  type Redwood {
+    version: String
+    currentUser: JSON
+    prismaVersion: String
+  }
+
+  type Query {
+    redwood: Redwood
+  }
+```
+
+Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts):
+
+```ts
+export const resolvers: Resolvers = {
+  BigInt: BigIntResolver,
+  Date: DateResolver,
+  Time: TimeResolver,
+  DateTime: DateTimeResolver,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
+  Query: {
+    redwood: () => ({
+      version: redwoodVersion,
+      prismaVersion: prismaVersion,
+      currentUser: (_args: any, context: GlobalContext) => {
+        return context?.currentUser
+      },
+    }),
+  },
+}
+```
 
 <!-- ### The query workflow
 
@@ -677,7 +716,7 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```tsx {11-14} title="api/src/functions/graphql.ts"
+```tsx {10-13} title="api/src/functions/graphql.ts"
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
 // ...
