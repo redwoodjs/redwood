@@ -12,7 +12,7 @@
  *
  * Note that these polyfills comprise...
  *
- * - feautres that landed in more-recent versions of Node.js (ES)
+ * - features that landed in more-recent versions of Node.js (ES)
  * - proposals (ES Next)
  *
  * These examples have been taken from the core-js README, the proposal's README, or MDN.
