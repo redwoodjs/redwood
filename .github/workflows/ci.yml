@@ -4,11 +4,173 @@ on:
   pull_request
 
 jobs:
-  smoke-test:
+  only-doc-changes:
+    if: github.repository == 'redwoodjs/redwood'
+    name: 📖 Only doc changes?
+    runs-on: ubuntu-latest
+    outputs:
+      only-doc-changes: ${{ steps.only-doc-changes.outputs.only-doc-changes }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: yarn install
+        working-directory: ./.github/actions/only_doc_changes
+
+      - name: 📖 Only doc changes?
+        id: only-doc-changes
+        uses: ./.github/actions/only_doc_changes
+
+  check:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'false'
+    name: ✅ Check constraints, dependencies, and package.json's
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install
+        working-directory: ./tasks/check
+
+      - name: ✅ Check constraints, dependencies, and package.json's
+        uses: ./tasks/check
+
+  check-docs:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
+    name: ✅ Check constraints, dependencies, and package.json's
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Only doc changes"
+
+  build-lint-test:
+    needs: check
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [14, 16]
+      fail-fast: true
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Remove the tsc problem matcher if not ubuntu-latest, node 16
+        if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '16') == false
+        run: echo "echo "::remove-matcher owner=tsc::""
+
+      - uses: actions/checkout@v3
+      - name: 🧶 Setup job
+        uses: ./.github/actions/setup_job
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - name: 🔎 Lint
+        run: yarn lint
+
+      - name: Get number of CPU cores
+        if: always()
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
+      - name: 🧪 Test
+        run: yarn test-ci ${{ steps.cpu-cores.outputs.count }}
+
+  build-lint-test-docs:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [14, 16]
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "Only doc changes"
+
+  tutorial-e2e:
+    needs: check
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [16]
+        node-version: [14, 16]
+      fail-fast: true
+    name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: 🧶 Setup job
+        uses: ./.github/actions/setup_job
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 📁 Create a temporary directory
+        id: createpath
+        run: |
+          project_path=$(mktemp -d -t redwood.XXXXXX)
+          echo "::set-output name=project_path::$project_path"
+          framework_path=$(pwd)
+          echo "::set-output name=framework_path::$framework_path"
+
+      - name: 🌲 Create a Redwood App
+        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: 🐙 Git init in the Redwood App directory
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git init --initial-branch main && git add .
+          git commit -a --message=init
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Start server in background
+        run: yarn rw dev --no-generate --fwd="--no-open" &
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: 🌲 Run cypress
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+        with:
+          # We've already installed dependencies.
+          install: false
+          env: true
+          browser: chrome
+          record: false
+          wait-on: 'http://localhost:8910'
+          working-directory: ./tasks/e2e
+          spec: |
+             cypress/integration/01-tutorial/*.spec.js
+             cypress/integration/04-logger/*.spec.js
+
+  tutorial-e2e-docs:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [14, 16]
+    name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "Only doc changes"
+
+  smoke-test:
+    needs: check
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [14, 16]
       fail-fast: true
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -50,6 +212,7 @@ jobs:
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
 
       - name: Run `rw info`
         run: |
@@ -140,3 +303,15 @@ jobs:
         uses: replayio/action-upload@v0.4.3
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
+
+  smoke-test-docs:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [14, 16]
+    name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "Only doc changes"
