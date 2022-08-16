@@ -98,18 +98,18 @@ module.exports = {
           {
             pattern: 'react',
             group: 'builtin',
-            position: 'after', // 0.1 -> .9
+            position: 'after',
           },
           {
             pattern: '@redwoodjs/**',
             group: 'external',
-            position: 'after', // 1.1 -> 1.9
+            position: 'after',
           },
           {
             // Matches src/directives/**/*.{js,ts}, src/services/**/*.{js,ts}, src/graphql/**/*.sdl.{js,ts}
             pattern: 'src/*/\\*\\*/\\*\\.[^/]*\\{js,ts\\}$',
             group: 'internal',
-            position: 'before', // 1.9 -> 1.1
+            position: 'before',
           },
         ],
         alphabetize: {
