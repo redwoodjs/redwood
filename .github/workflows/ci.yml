@@ -46,7 +46,7 @@ jobs:
 
       - name: Run smoke tests on 'rw dev', 'rw serve', 'rw storybook'
         working-directory: ./tasks/smoke-test
-        run: npx playwright test --project replay-chromium
+        run: npx playwright test --project replay-chromium --reporter @replayio/playwright/reporter
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -135,3 +135,8 @@ jobs:
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
         continue-on-error: true
 
+      - name: Upload Replays
+        if: always()
+        uses: replayio/action-upload@v0.4.3
+        with:
+          api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
