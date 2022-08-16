@@ -1,5 +1,6 @@
-import { Link, navigate, routes } from '@redwoodjs/router'
 import { useRef, useState } from 'react'
+import { useEffect } from 'react'
+
 import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
@@ -9,9 +10,9 @@ import {
   Submit,
   FieldError,
 } from '@redwoodjs/forms'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-import { useEffect } from 'react'
 
 const WELCOME_MESSAGE = 'Welcome back!'
 const REDIRECT = routes.home()

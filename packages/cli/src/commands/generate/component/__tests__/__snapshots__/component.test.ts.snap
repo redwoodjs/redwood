@@ -37,6 +37,7 @@ exports[`creates a multi word component 1`] = `
   return (
     <div>
       <h2>{'UserProfile'}</h2>
+
       <p>{'Find me in ./web/src/components/UserProfile/UserProfile.js'}</p>
     </div>
   )
@@ -80,6 +81,7 @@ exports[`creates a single word component 1`] = `
   return (
     <div>
       <h2>{'User'}</h2>
+
       <p>{'Find me in ./web/src/components/User/User.js'}</p>
     </div>
   )

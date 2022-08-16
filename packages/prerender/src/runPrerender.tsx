@@ -10,24 +10,16 @@ import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/a
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
-import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
+import {
+  CellCacheContextProvider,
+  getOperationName,
+  QueryInfo,
+} from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
+import { GqlHandlerImportError, PrerenderGqlError } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
-
-export class PrerenderGqlError {
-  message: string
-  stack: string
-
-  constructor(message: string) {
-    this.message = 'GQL error: ' + message
-    // The stacktrace would just point to this file, which isn't helpful,
-    // because that's not where the error is. So we're just putting the
-    // message there as well
-    this.stack = this.message
-  }
-}
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -35,34 +27,66 @@ async function recursivelyRender(
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>
 ): Promise<string> {
+  let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
   await Promise.all(
     Object.entries(queryCache).map(async ([cacheKey, value]) => {
-      if (value.hasFetched) {
-        // Already fetched this one; skip it!
+      if (value.hasProcessed) {
+        // Already fetched, or decided that we can't render this one; skip it!
         return Promise.resolve('')
       }
 
-      const resultString = await executeQuery(
-        gqlHandler,
-        value.query,
-        value.variables
-      )
-      const result = JSON.parse(resultString)
+      try {
+        const resultString = await executeQuery(
+          gqlHandler,
+          value.query,
+          value.variables
+        )
 
-      if (result.errors) {
-        const message =
-          result.errors[0].message ?? JSON.stringify(result.errors)
-        throw new PrerenderGqlError(message)
+        const result = JSON.parse(resultString)
+
+        if (result.errors) {
+          const message =
+            result.errors[0].message ?? JSON.stringify(result.errors, null, 4)
+
+          if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
+            console.error(
+              `\n \n 🛑  Cannot prerender the query ${getOperationName(
+                value.query
+              )} as it requires auth. \n`
+            )
+          }
+
+          throw new PrerenderGqlError(message)
+        }
+
+        queryCache[cacheKey] = {
+          ...value,
+          data: result.data,
+          hasProcessed: true,
+        }
+
+        return result
+      } catch (e) {
+        if (e instanceof GqlHandlerImportError) {
+          // We need to need to swallow the error here, so that
+          // we can continue to render the page, with cells in loading state
+          // e.g. if the GQL handler is located elsewhere
+          shouldShowGraphqlHandlerNotFoundWarn = true
+
+          queryCache[cacheKey] = {
+            ...value,
+            // tried to fetch, but failed
+            renderLoading: true,
+            hasProcessed: true,
+          }
+
+          return
+        } else {
+          // Otherwise forward on the error
+          throw e
+        }
       }
-
-      queryCache[cacheKey] = {
-        ...value,
-        data: result.data,
-        hasFetched: true,
-      }
-
-      return result
     })
   )
 
@@ -74,11 +98,17 @@ async function recursivelyRender(
     </LocationProvider>
   )
 
-  if (Object.values(queryCache).some((value) => !value.hasFetched)) {
+  if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
     return recursivelyRender(App, renderPath, gqlHandler, queryCache)
   } else {
+    if (shouldShowGraphqlHandlerNotFoundWarn) {
+      console.warn(
+        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n'
+      )
+    }
+
     return Promise.resolve(componentAsHtml)
   }
 }
