@@ -21,10 +21,7 @@ const formatDatetime = (value) => {
 
 interface ${singularPascalName}FormProps {
   ${singularCamelName}?: Edit${singularPascalName}ById['${singularCamelName}']
-  onSave: (
-    data: Update${singularPascalName}Input,
-    id?: NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>['id']
-  ) => void
+  onSave: (data: Update${singularPascalName}Input, id?: NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>['id']) => void
   error: RWGqlError
   loading: boolean
 }
@@ -48,10 +45,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
 
   return (
     <div className="rw-form-wrapper">
-      <Form<NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>>
-        onSubmit={onSubmit}
-        error={props.error}
-      >
+      <Form<NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"
