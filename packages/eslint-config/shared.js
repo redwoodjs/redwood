@@ -87,12 +87,12 @@ module.exports = {
         // Only doing this to add internal. The order here maters.
         // See https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
         groups: [
-          'builtin', // 0
-          'external', // 1
-          'internal', // 2
-          'parent', // 3
-          'sibling', // 4
-          'index', // 5
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
         ],
         pathGroups: [
           {
