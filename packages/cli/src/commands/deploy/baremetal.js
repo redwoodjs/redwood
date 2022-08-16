@@ -28,9 +28,7 @@ export const description = 'Deploy to baremetal server(s)'
 
 // force all paths to have forward slashes so that you can deploy to *nix
 // systems from a Windows system
-const pathJoin = (...parts) => {
-  return path.join(...parts).replace(/\\/g, '/')
-}
+const pathJoin = path.posix.join
 
 export const execaOptions = {
   cwd: pathJoin(getPaths().base),
