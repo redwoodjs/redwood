@@ -54,7 +54,7 @@ const baseConfig = {
     )
     // This allows us to mock `createAuthentication` which is used by auth
     // clients, which in turn lets us mock `useAuth` in tests
-    sbConfig.resolve.alias['^@redwoodjs/auth$'] = require.resolve(
+    sbConfig.resolve.alias['@redwoodjs/auth$'] = require.resolve(
       '@redwoodjs/testing/dist/web/mockAuth.js'
     )
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
