@@ -1,4 +1,3 @@
-import humanize from 'humanize-string'
 import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
@@ -13,25 +12,6 @@ const DELETE_POST_MUTATION = gql`
   }
 `
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const jsonDisplay = (obj: unknown) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
 const timeTag = (datetime?: string) => {
   return (
     datetime && (
@@ -40,10 +20,6 @@ const timeTag = (datetime?: string) => {
       </time>
     )
   )
-}
-
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
 }
 
 const Post = ({ post }: FindPostById) => {
