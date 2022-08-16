@@ -114,26 +114,26 @@ export const handler = async ({
         )
       },
     },
-    side.includes('web') &&
-      prerender && {
-        title: 'Prerendering Web...',
-        task: async () => {
-          if (prerenderRoutes.length === 0) {
-            return `You have not marked any "prerender" in your ${terminalLink(
-              'Routes',
-              'file://' + rwjsPaths.web.routes
-            )}.`
-          }
-          // Running a separate process here, otherwise it wouldn't pick up the
-          // generated Prisma Client
-          await execa('yarn rw prerender', {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.web.base,
-          })
-        },
-      },
   ].filter(Boolean)
+
+  const triggerPrerender = async () => {
+    console.log('Starting prerendering...')
+    if (prerenderRoutes.length === 0) {
+      console.log(
+        `You have not marked any routes to "prerender" in your ${terminalLink(
+          'Routes',
+          'file://' + rwjsPaths.web.routes
+        )}.`
+      )
+    }
+    // Running a separate process here, otherwise it wouldn't pick up the
+    // generated Prisma Client due to require module caching
+    await execa('yarn rw prerender', {
+      stdio: 'inherit',
+      shell: true,
+      cwd: rwjsPaths.web.base,
+    })
+  }
 
   const jobs = new Listr(tasks, {
     renderer: verbose && VerboseRenderer,
@@ -142,6 +142,11 @@ export const handler = async ({
   try {
     await timedTelemetry(process.argv, { type: 'build' }, async () => {
       await jobs.run()
+
+      if (side.includes('web') && prerender) {
+        // This step is outside Listr so that it prints clearer, complete messages
+        await triggerPrerender()
+      }
     })
   } catch (e) {
     console.log(c.error(e.message))
