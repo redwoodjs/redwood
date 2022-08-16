@@ -7,9 +7,10 @@ const requireFromCli = createRequire(
 
 const bins = requireFromCli('./package.json')['bin']
 
-// Ensure we run all commands from the base of the RW project
-// even if you invoke from ./web or ./api
-const rwProjectRoot = requireFromCli('./dist/lib/index.js').getPaths().base
-process.chdir(rwProjectRoot)
+// If this is defined, we're running through yarn and need to change the cwd.
+// See https://yarnpkg.com/advanced/lifecycle-scripts/#environment-variables.
+if (process.env.PROJECT_CWD) {
+  process.chdir(process.env.PROJECT_CWD)
+}
 
 requireFromCli(bins['rwfw'])

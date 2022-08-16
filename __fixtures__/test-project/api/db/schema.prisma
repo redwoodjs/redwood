@@ -17,48 +17,32 @@ model UserExample {
   name  String?
 }
 
-/// A blog post.
+
 model Post {
-  /// The unique identifier of a post.
   id        Int      @id @default(autoincrement())
-  /// The title of a post.
   title     String
-  /// The content of a post.
   body      String
-  /// When the post was created.
-  createdAt DateTime @default(now())
-  /// The id of the author who wrote the post.
   authorId  Int
-  /// Who authored the post.
   author    User     @relation(fields: [authorId], references: [id])
-}
-
-model Contact {
-  /// The unique identifier of a contact.
-  id        Int @id @default(autoincrement())
-  /// The name of the contact.
-  name      String
-  /// The email of the contact.
-  email     String
-  /// The message of the contact.
-  message   String
-  /// When the contact was created.
   createdAt DateTime @default(now())
 }
 
-/// A User.
 model User {
-  /// The unique identifier of a user.
   id                  Int       @id @default(autoincrement())
-  /// The user's email address.
   email               String    @unique
-  fullName            String
   hashedPassword      String
+  fullName            String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
-  /// Roles to which the user belongs.
   roles               String?
-  /// Posts the user has authored.
   posts               Post[]
+}
+
+model Contact {
+  id        Int @id @default(autoincrement())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
 }

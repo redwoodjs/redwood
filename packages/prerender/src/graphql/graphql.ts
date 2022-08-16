@@ -3,7 +3,17 @@ import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getOperationName } from '@redwoodjs/web'
+import { GqlHandlerImportError } from '../errors'
 
+/**
+ * Loads the graphql server, with all the user's settings
+ * And execute the query against it
+ *
+ * Note that this function does NOT throw errors, even when
+ * there is a GraphQL error. Instead, it returns the result with the graphql error.
+ *
+ * @returns {Promise<QueryResult>}
+ */
 export async function executeQuery(
   gqlHandler: (args: any) => Promise<any>,
   query: DocumentNode,
@@ -13,16 +23,30 @@ export async function executeQuery(
   const operation = { operationName, query: print(query), variables }
   const handlerResult = await gqlHandler(operation)
 
-  return handlerResult.body
+  return handlerResult?.body
 }
 
+/**
+ * Finds the graphql handler, returns a function
+ * that can be used to execute queries against it
+ *
+ * Throws GqlHandlerImportError, so that we can warn the user (but not blow up)
+ */
 export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
 
-  const { handler } = await import(gqlPath)
+  try {
+    const { handler } = await import(gqlPath)
 
-  return async (operation: Record<string, unknown>) => {
-    return await handler(buildApiEvent(operation), buildContext())
+    return async (operation: Record<string, unknown>) => {
+      return await handler(buildApiEvent(operation), buildContext())
+    }
+  } catch (e) {
+    return () => {
+      throw new GqlHandlerImportError(
+        `Unable to import GraphQL handler at ${gqlPath}`
+      )
+    }
   }
 }
 

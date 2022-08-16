@@ -8,9 +8,11 @@ Prerendering is great for providing a faster experience for your end users. Your
 
 We thought a lot about what the developer experience should be for route-based prerendering. The result is one of the smallest APIs imaginable!
 
-> **How's Prerendering different from SSR/SSG/SWR/ISSG/...?**
->
-> As Danny said in his [Prerender demo](https://www.youtube.com/watch?v=iorKyMlASZc&t=2844s) at our Community Meetup, the thing all of these have in common is that they render your markup in a Node.js context to produce HTML. The difference is when (build or runtime) and how often.
+:::info How's Prerendering different from SSR/SSG/SWR/ISSG/...?
+As Danny said in his [Prerender demo](https://www.youtube.com/watch?v=iorKyMlASZc&t=2844s) at our Community Meetup, the thing all of these have in common is that they render your markup in a Node.js context to produce HTML. The difference is when (build or runtime) and how often.
+
+Redwood currently supports prerendering at _build_ time. So before your deploy your web side, Redwood will render your pages into HTML, and once the JavaScript has been loaded on the browser, the page becomes dynamic.
+:::
 
 <!-- [This comment](https://community.redwoodjs.com/t/prerender-proposal/849/12) on our Community forum. -->
 
@@ -60,7 +62,37 @@ For Private Routes, Redwood prerenders your Private Routes' `whileLoadingAuth` p
 </Private>
 ```
 
-## Dynamic routes
+### Rendering skeletons while authenticating
+Sometimes you want to render the shell of the page, while you wait for your authentication checks to happen. This can make the experience feel a lot snappier to the user, since they don't wait on a blank screen while their credentials are checked.
+
+To do this, make use of the `whileLoadingAuth` prop on `<Private>` or a `<Set private>` in your Routes file. For example, if we have a dashboard that you need to be logged in to access:
+
+```js ./web/src/Routes.{tsx,js}
+// This renders the layout with skeleton loaders in the content area
+// highlight-next-line
+const DashboardLoader = () => <DashboardLayout skeleton />
+
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/" page={HomePage} name="home" prerender />
+       <Set
+        private
+        wrap={DashboardLayout}
+        unauthenticated="login"
+        // 👇 tell the router to render the shell until the user has been authenticated
+        // highlight-next-line
+        whileLoadingAuth={DashboardLoader}
+        prerender
+      >
+        <Route path="/dashboard" page={DashboardPage} name="dashboard"/>
+      {/* ... */}
+```
+
+## Dynamic routes & Route Hooks
+
+
 
 Let's say you have a route like this
 
@@ -115,6 +147,8 @@ export async function routeParameters() {
 
 Take note of the special syntax for the import, with a dollar-sign in front of api. This lets our tooling (typescript and babel) know that you want to break out of the web side the page is in to access code on the api side. This only works in the routeHook scripts (and scripts in the root /scripts directory).
 
+---
+
 ## Prerender Utils
 
 Sometimes you need more fine-grained control over whether something gets prerendered. This may be because the component or library you're using needs access to browser APIs like `window` or `localStorage`. Redwood has three utils to help you handle these situations:
@@ -123,11 +157,11 @@ Sometimes you need more fine-grained control over whether something gets prerend
 - `useIsBrowser`
 - `isBrowser`
 
-> **Heads-up!**
->
-> If you're prerendering a page that uses a third-party library, make sure it's "universal". If it's not, try calling the library after doing a browser check using one of the utils above.
->
-> Look for these key words when choosing a library: _universal module, SSR compatible, server compatible_&mdash;all these indicate that the library also works in Node.js.
+:::tip Heads-up!
+If you're prerendering a page that uses a third-party library, make sure it's "universal". If it's not, try calling the library after doing a browser check using one of the utils above.
+
+Look for these key words when choosing a library: _universal module, SSR compatible, server compatible_&mdash;all these indicate that the library also works in Node.js.
+:::
 
 ### `<BrowserOnly/>` component
 
@@ -176,26 +210,6 @@ if (isBrowser) {
 }
 ```
 
-### Optimization Tip
-
-If you dynamically load third-party libraries that aren't part of your JS bundle, using these prerendering utils can help you avoid loading them at build time:
-
-```jsx
-import { useIsBrowser } from '@redwoodjs/prerender/browserUtils'
-
-const ComponentUsingAnExternalLibrary = () => {
-  const browser = useIsBrowser()
-
-  // if `browser` evaluates to false, this won't be included
-  if (browser) {
-    loadMyLargeExternalLibrary()
-  }
-
-  return (
-    // ...
-  )
-```
-
 ### Debugging
 
 If you just want to debug your app, or check for possible prerendering errors, after you've built it, you can run this command:
@@ -204,7 +218,9 @@ If you just want to debug your app, or check for possible prerendering errors, a
 yarn rw prerender --dry-run
 ```
 
-Since we just shipped this in v0.26, we're actively looking for feedback! Do let us know if: everything built ok? you encountered specific libraries that you were using that didn’t work?
+We're actively looking for feedback! Do let us know if: everything built ok? you encountered specific libraries that you were using that didn’t work?
+
+---
 
 ## Images and Assets
 
@@ -239,12 +255,94 @@ const LogoComponent = () => <Logo />
 export default LogoComponent
 ```
 
-## Configuring redirects
+---
+## Cell prerendering
+As of v3.x, Redwood supports prerendering your Cells with the data you were querying. There's no special config to do here, but a couple of things to note:
 
-Depending on what pages you're prerendering, you may want to change your redirect settings. Using Netlify as an example:
+#### 1. Prerendering always happens as an unauthenticated user
+
+Because prerendering happens at _build_ time, before any authentication is set, all your queries on a Route marked for prerender will be made as a public user
+
+#### 2. We use your graphql handler to make queries during prerendering
+
+When prerendering we look for your graphql function defined in `./api/src/functions/graphql.{ts,js}` and use it to run queries against it.
+
+
+### Common Warnings & Errors
+
+#### Could not load your GraphQL handler - the Loading fallback
+
+During builds if you encounter this warning
+```shell
+  ⚠️  Could not load your GraphQL handler.
+  Your Cells have been prerendered in the "Loading" state.
+```
+
+It could mean one of two things:
+
+a) We couldn't locate the GraphQL handler at the usual path
+
+or
+
+b) There was an error when trying to import your GraphQL handler - maybe due to missing dependencies or an error in the code
+
+
+
+If you've moved this GraphQL function, or we encounter an error executing it, it won't break your builds. All your Cells will be prerendered in their `Loading` state, and will update once the JavaScript loads on the browser. This is effectively skipping prerendering your Cells, but they'll still work!
+
+
+#### Cannot prerender the query {queryName} as it requires auth.
+This error happens during builds when you have a Cell on a page you're prerendering that makes a query marked with `@requireAuth` in your SDL.
+
+During prerender you are not logged in ([see point 1](#1-prerendering-always-happens-as-an-unauthenticated-user)), so you'll have to conditionally render the Cell - for example:
+
+```js
+import { useAuth } from '@redwoodjs/auth'
+
+const HomePage = () => {
+  // highlight-next-line
+  const { isAuthenticated } = useAuth
+
+  return (
+    <>
+      // highlight-next-line
+      { isAuthenticated ? <MyPrivateCell /> : <NoAccess /> }
+    </>
+```
+
+---
+## Optimization Tips
+
+
+### Dynamically loading large libraries
+
+If you dynamically load third-party libraries that aren't part of your JS bundle, using these prerendering utils can help you avoid loading them at build time:
+
+```jsx
+import { useIsBrowser } from '@redwoodjs/prerender/browserUtils'
+
+const ComponentUsingAnExternalLibrary = () => {
+  const browser = useIsBrowser()
+
+  // if `browser` evaluates to false, this won't be included
+  if (browser) {
+    loadMyLargeExternalLibrary()
+  }
+
+  return (
+    // ...
+  )
+```
+
+### Configuring redirects
+
+Depending on what pages you're prerendering, you may want to change your redirect settings. Keep in mind your redirect settings will vary a lot based on what routes you are prerendering, and the settings of your deployment provider.
+
+
+Using Netlify as an example:
 
 <details>
-<summary>If you prerender your `notFoundPage`
+<summary>If you prerender your `notFoundPage`, and all your other routes
 </summary>
 
 You can remove the default redirect to index in your `netlify.toml`. This means the browser will accurately receive 404 statuses when navigating to a route that doesn't exist:
@@ -256,6 +354,7 @@ You can remove the default redirect to index in your `netlify.toml`. This means 
 - status = 200
 ```
 
+This makes your app behave much more like a traditional website, where all the possible routes are defined up front. But take care to make sure you are prerendering all your pages, otherwise you will receive 404s on pages that do exist, but that Netlify hasn't been told about.
 </details>
 
 <details>
@@ -271,16 +370,21 @@ You can add a 404 redirect if you want:
 + status = 404
 ```
 
+This makes your app behave much more like a traditional website, where all the possible routes are defined up front. But take care to make sure you are prerendering all your pages, otherwise you will receive 404s on pages that do exist, but that Netlify hasn't been told about.
 </details>
 
-## Flash after page load
 
-> We're actively working preventing these flashes with upcoming changes to the Router.
 
-You might notice a flash after page load. A quick workaround for this is to make sure whatever page you're seeing the flash on isn't code split. You can do this by explicitly importing the page in `Routes.js`:
+### Flash after page load
+
+You might notice a flash after page load. Prerendering pages still has various benefits (such as SEO), but may seem jarring to users if there's a flash.
+
+A quick workaround for this is to make sure whatever page you're seeing the flash on isn't dynamically loaded i.e. prevent code splitting. You can do this by explicitly importing the page in `Routes.js`:
 
 ```jsx
 import { Router, Route } from '@redwoodjs/router'
+// We don't want HomePage to be dynamically loaded
+// highlight-next-line
 import HomePage from 'src/pages/HomePage'
 
 const Routes = () => {
