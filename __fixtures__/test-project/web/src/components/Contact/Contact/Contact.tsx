@@ -1,4 +1,3 @@
-import humanize from 'humanize-string'
 import type {
   DeleteContactMutationVariables,
   FindContactById,
@@ -16,25 +15,6 @@ const DELETE_CONTACT_MUTATION = gql`
   }
 `
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const jsonDisplay = (obj: unknown) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
 const timeTag = (datetime?: string) => {
   return (
     datetime && (
@@ -45,15 +25,7 @@ const timeTag = (datetime?: string) => {
   )
 }
 
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-interface Props {
-  contact: NonNullable<FindContactById['contact']>
-}
-
-const Contact = ({ contact }: Props) => {
+const Contact = ({ contact }: FindContactById) => {
   const [deleteContact] = useMutation(DELETE_CONTACT_MUTATION, {
     onCompleted: () => {
       toast.success('Contact deleted')
@@ -75,7 +47,7 @@ const Contact = ({ contact }: Props) => {
       <div className="rw-segment">
         <header className="rw-segment-header">
           <h2 className="rw-heading rw-heading-secondary">
-            Contact {contact.id} Detail
+            Contact {contact?.id} Detail
           </h2>
         </header>
         <table className="rw-table">
@@ -105,7 +77,7 @@ const Contact = ({ contact }: Props) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editContact({ id: contact.id })}
+          to={routes.editContact({ id: contact?.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -113,7 +85,7 @@ const Contact = ({ contact }: Props) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(contact.id)}
+          onClick={() => onDeleteClick(contact?.id)}
         >
           Delete
         </button>
