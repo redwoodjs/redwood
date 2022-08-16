@@ -14,6 +14,8 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   return <>{children}</>
 }
 
+// When running jest tests, this is what they'll get when they import `useAuth`
+// thanks to some magic we do in jest-preset.js
 export function useAuth() {
   return {
     loading: false,

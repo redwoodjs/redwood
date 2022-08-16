@@ -16,22 +16,10 @@ import { MockProviders } from './MockProviders'
 
 export const customRender = (
   ui: React.ReactElement,
-  options: RenderOptions & { AuthProvider?: React.ComponentType } = {}
+  options: RenderOptions = {}
 ): RenderResult => {
   return render(ui, {
-    wrapper: (props) => {
-      if (options.AuthProvider) {
-        const AuthProvider = options.AuthProvider
-
-        return (
-          <AuthProvider>
-            <MockProviders {...props} />
-          </AuthProvider>
-        )
-      }
-
-      return <MockProviders {...props} />
-    },
+    wrapper: (props) => <MockProviders {...props} />,
     ...options,
   })
 }
