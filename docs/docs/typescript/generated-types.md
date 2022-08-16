@@ -9,8 +9,10 @@ These generated types not only include your GraphQL operations, but also your na
 
 When you run `yarn rw dev`, the CLI watches files for changes and triggers type generation automatically, but you can trigger it manually too:
 
-```
+```shell
 yarn rw g types
+# or
+# yarn redwood generate types
 ```
 
 :::tip Getting errors trying to generate types?
@@ -26,7 +28,7 @@ If you're curious, you can find the generated types in the `.redwood/types`, `we
 2. types based on your queries and mutations on the web side (in `web/types/graphql.d.ts`)
 3. types for resolvers based on your SDLs on the api side (in `api/types/graphql.d.ts`)
 4. types for testing, `currentUser`, etc.
-5. types for certain functions like `routes.pageName()` and `useAuth()`  
+5. types for certain functions like `routes.pageName()` and `useAuth()`
 
 ## CurrentUser
 
@@ -48,6 +50,12 @@ const getCurrentUser = ({decoded}): MyCurrentUser => {
 ```
 
 The types for both `useAuth().currentUser` on the web side and `context.currentUser` on the api side will be the same—the `MyCurrentUser` interface.
+
+:::info Type of `context.currentUser` unknown?
+This usually happens when you don't have the various generated and utility types in your project.
+Run `yarn rw g types`, and just to be sure, restart your TS server.
+In VSCode, you can do this by running "TypeScript: Restart TS server" in the command palette (Cmd+Shift+P on Mac, Ctrl+Shift+P on Windows)
+:::
 
 ## Query and Mutation types
 
