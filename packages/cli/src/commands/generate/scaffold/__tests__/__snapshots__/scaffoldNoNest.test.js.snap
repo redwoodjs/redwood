@@ -415,9 +415,7 @@ export const Success = ({ post }) => {
 `;
 
 exports[`in javascript (default) mode creates a show component 1`] = `
-"import humanize from 'humanize-string'
-
-import { Link, routes, navigate } from '@redwoodjs/router'
+"import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
@@ -428,25 +426,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const formatEnum = (values) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values)
-    }
-  }
-}
-
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
 
 const timeTag = (datetime) => {
   return (
@@ -1113,9 +1092,7 @@ export const Success = ({ posts }) => {
 `;
 
 exports[`in javascript (default) mode creates an index component 1`] = `
-"import humanize from 'humanize-string'
-
-import { Link, routes } from '@redwoodjs/router'
+"import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
@@ -1130,17 +1107,6 @@ const DELETE_POST_MUTATION = gql\`
 \`
 
 const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values)
-    }
-  }
-}
 
 const truncate = (value) => {
   const output = value?.toString()
@@ -1805,24 +1771,10 @@ const DELETE_POST_MUTATION = gql\`
   }
 \`
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
 
-const jsonDisplay = (obj: unknown) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
+
+
+
 
 const timeTag = (datetime?: string) => {
   return (
@@ -1834,9 +1786,12 @@ const timeTag = (datetime?: string) => {
   )
 }
 
+
+
 const checkboxInputTag = (checked: boolean) => {
   return <input type=\\"checkbox\\" checked={checked} disabled />
 }
+
 
 const Post = ({ post }: FindPostById) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -2571,16 +2526,8 @@ const DELETE_POST_MUTATION = gql\`
 
 const MAX_STRING_LENGTH = 150
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
+
+
 
 const truncate = (value: string | number) => {
   const output = value?.toString()
@@ -2591,9 +2538,12 @@ const truncate = (value: string | number) => {
 }
 
 
+
 const jsonTruncate = (obj: unknown) => {
   return truncate(JSON.stringify(obj, null, 2))
 }
+
+
 
 const timeTag = (datetime?: string) => {
   return (
@@ -2605,9 +2555,12 @@ const timeTag = (datetime?: string) => {
   )
 }
 
+
+
 const checkboxInputTag = (checked: boolean) => {
   return <input type=\\"checkbox\\" checked={checked} disabled />
 }
+
 
 const PostsList = ({ posts }: FindPosts) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {

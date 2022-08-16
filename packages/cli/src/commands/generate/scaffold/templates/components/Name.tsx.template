@@ -1,4 +1,6 @@
+<% if (columns.some((column) => column.listDisplayFunction === 'formatEnum')) { %>
 import humanize from 'humanize-string'
+<% } %>
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
@@ -14,6 +16,7 @@ const DELETE_${singularConstantName}_MUTATION = gql`
   }
 `
 
+<% if (columns.some((column) => column.listDisplayFunction === 'formatEnum')) { %>
 const formatEnum = (values: string | string[] | null | undefined) => {
   if (values) {
     if (Array.isArray(values)) {
@@ -24,7 +27,9 @@ const formatEnum = (values: string | string[] | null | undefined) => {
     }
   }
 }
+<% } %>
 
+<% if (columns.some((column) => column.listDisplayFunction === 'jsonDisplay')) { %>
 const jsonDisplay = (obj: unknown) => {
   return (
     <pre>
@@ -32,7 +37,9 @@ const jsonDisplay = (obj: unknown) => {
     </pre>
   )
 }
+<% } %>
 
+<% if (columns.some((column) => column.listDisplayFunction === 'timeTag')) { %>
 const timeTag = (datetime?: string) => {
   return (
     datetime && (
@@ -42,10 +49,13 @@ const timeTag = (datetime?: string) => {
     )
   )
 }
+<% } %>
 
+<% if (columns.some((column) => column.listDisplayFunction === 'checkboxInputTag')) { %>
 const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
+<% } %>
 
 const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalName}ById) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
