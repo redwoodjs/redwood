@@ -1849,7 +1849,7 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 `;
 
 exports[`in typescript mode creates a show component 1`] = `
-"import humanize from 'humanize-string'
+"
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
@@ -2600,7 +2600,7 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 `;
 
 exports[`in typescript mode creates an index component 1`] = `
-"import humanize from 'humanize-string'
+"
 
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
