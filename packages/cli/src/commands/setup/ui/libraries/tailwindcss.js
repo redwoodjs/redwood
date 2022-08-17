@@ -228,7 +228,7 @@ export const handler = async ({ force, install }) => {
             rwPaths.base,
             path.posix.join(rwPaths.web.config, 'tailwind.config.js')
           )
-          .replace(/\\/g, '/')
+          .replace(/\\/g, path.posix.sep)
 
         let newPrettierConfig = prettierConfig
         if (newPrettierConfig.includes('tailwindConfig: ')) {
