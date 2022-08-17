@@ -98,7 +98,7 @@ test.skip('api prebuild transforms gql with `babel-plugin-graphql-tag`', () => {
  * ✅ -> plugin-transform-runtime polyfills this
  * ❌  -> plugin-transform-runtime doesn't polyfill this
  */
-describe.only('api prebuild polyfills unsupported functionality', () => {
+describe('api prebuild polyfills unsupported functionality', () => {
   let code
 
   beforeAll(() => {
