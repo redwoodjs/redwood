@@ -24,7 +24,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/runtime": "7.18.9",
     "@redwoodjs/auth": "2.2.0",
     "@redwoodjs/internal": "2.2.0",
     "@redwoodjs/router": "2.2.0",
@@ -32,13 +32,13 @@
     "@redwoodjs/web": "2.2.0",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.24.1",
+    "core-js-pure": "3.24.1",
     "cross-undici-fetch": "0.4.14",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.18.10",
+    "@babel/core": "7.18.10",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "10.1.0",
     "jest": "28.1.3",

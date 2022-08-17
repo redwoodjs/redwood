@@ -9,8 +9,6 @@ import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
   getApiSideDefaultBabelConfig,
-  BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS,
-  TARGETS_NODE,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
@@ -103,26 +101,10 @@ describe('api prebuild polyfills unsupported functionality', () => {
   })
 
   describe('ES features', () => {
-    describe('Node.js 13', () => {
-      it('polyfills Math.hypot', () => {
-        expect(code).toContain(
-          `import _Math$hypot from "@babel/runtime-corejs3/core-js/math/hypot"`
-        )
-      })
-    })
-
-    describe('Node.js 14', () => {
-      it('polyfills String.matchAll', () => {
-        expect(code).toContain(
-          `import _matchAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/match-all"`
-        )
-      })
-    })
-
     describe('Node.js 15', () => {
       it('polyfills AggregateError', () => {
         expect(code).toContain(
-          `import _AggregateError from "@babel/runtime-corejs3/core-js/aggregate-error"`
+          `import _AggregateError from "core-js-pure/features/aggregate-error.js"`
         )
       })
 
@@ -162,15 +144,15 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // ```
       it('polyfills Promise.any', () => {
         expect(code).toContain(
-          `import _Promise from "@babel/runtime-corejs3/core-js/promise"`
+          `import _Promise from "core-js-pure/features/promise/index.js"`
         )
-        const _Promise = require('@babel/runtime-corejs3/core-js/promise')
+        const _Promise = require('core-js-pure/features/promise/index.js')
         expect(_Promise).toHaveProperty('any')
       })
 
       it('polyfills String.replaceAll', () => {
         expect(code).toContain(
-          `import _replaceAllInstanceProperty from "@babel/runtime-corejs3/core-js/instance/replace-all"`
+          `import _replaceAllInstanceProperty from "core-js-pure/features/instance/replace-all.js"`
         )
       })
     })
@@ -195,31 +177,31 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#reflect-metadata
       it('polyfills Reflect methods', () => {
         expect(code).toContain(
-          `import _Reflect$defineMetadata from "@babel/runtime-corejs3/core-js/reflect/define-metadata"`
+          `import _Reflect$defineMetadata from "core-js-pure/features/reflect/define-metadata.js"`
         )
         expect(code).toContain(
-          `import _Reflect$deleteMetadata from "@babel/runtime-corejs3/core-js/reflect/delete-metadata"`
+          `import _Reflect$deleteMetadata from "core-js-pure/features/reflect/delete-metadata.js"`
         )
         expect(code).toContain(
-          `import _Reflect$getMetadata from "@babel/runtime-corejs3/core-js/reflect/get-metadata"`
+          `import _Reflect$getMetadata from "core-js-pure/features/reflect/get-metadata.js"`
         )
         expect(code).toContain(
-          `import _Reflect$getMetadataKeys from "@babel/runtime-corejs3/core-js/reflect/get-metadata-keys"`
+          `import _Reflect$getMetadataKeys from "core-js-pure/features/reflect/get-metadata-keys.js"`
         )
         expect(code).toContain(
-          `import _Reflect$getOwnMetadata from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata"`
+          `import _Reflect$getOwnMetadata from "core-js-pure/features/reflect/get-own-metadata.js"`
         )
         expect(code).toContain(
-          `import _Reflect$getOwnMetadataKeys from "@babel/runtime-corejs3/core-js/reflect/get-own-metadata-keys"`
+          `import _Reflect$getOwnMetadataKeys from "core-js-pure/features/reflect/get-own-metadata-keys.js"`
         )
         expect(code).toContain(
-          `import _Reflect$hasMetadata from "@babel/runtime-corejs3/core-js/reflect/has-metadata"`
+          `import _Reflect$hasMetadata from "core-js-pure/features/reflect/has-metadata.js"`
         )
         expect(code).toContain(
-          `import _Reflect$hasOwnMetadata from "@babel/runtime-corejs3/core-js/reflect/has-own-metadata"`
+          `import _Reflect$hasOwnMetadata from "core-js-pure/features/reflect/has-own-metadata.js"`
         )
         expect(code).toContain(
-          `import _Reflect$metadata from "@babel/runtime-corejs3/core-js/reflect/metadata"`
+          `import _Reflect$metadata from "core-js-pure/features/reflect/metadata.js"`
         )
       })
     })
@@ -248,10 +230,10 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#compositekey-and-compositesymbol
       it('polyfills compositeKey and compositeSymbol', () => {
         expect(code).toContain(
-          `import _compositeKey from "@babel/runtime-corejs3/core-js/composite-key"`
+          `import _compositeKey from "core-js-pure/features/composite-key.js"`
         )
         expect(code).toContain(
-          `import _compositeSymbol from "@babel/runtime-corejs3/core-js/composite-symbol"`
+          `import _compositeSymbol from "core-js-pure/features/composite-symbol.js"`
         )
       })
 
@@ -259,11 +241,11 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#new-collections-methods
       it('polyfills New collections methods', () => {
         expect(code).toContain(
-          `import _Map from "@babel/runtime-corejs3/core-js/map"`
+          `import _Map from "core-js-pure/features/map/index.js"`
         )
         // See the comments on Promise.any above for more of an explanation
         // of why we're testing for properties.
-        const _Map = require('@babel/runtime-corejs3/core-js/map')
+        const _Map = require('core-js-pure/features/map/index.js')
         expect(_Map).toHaveProperty('deleteAll')
         expect(_Map).toHaveProperty('every')
         expect(_Map).toHaveProperty('filter')
@@ -283,9 +265,9 @@ describe('api prebuild polyfills unsupported functionality', () => {
         expect(_Map).toHaveProperty('update')
 
         expect(code).toContain(
-          `import _Set from "@babel/runtime-corejs3/core-js/set"`
+          `import _Set from "core-js-pure/features/set/index.js"`
         )
-        const _Set = require('@babel/runtime-corejs3/core-js/set')
+        const _Set = require('core-js-pure/features/set/index.js')
         expect(_Set).toHaveProperty('addAll')
         expect(_Set).toHaveProperty('deleteAll')
         expect(_Set).toHaveProperty('difference')
@@ -306,17 +288,17 @@ describe('api prebuild polyfills unsupported functionality', () => {
         expect(_Set).toHaveProperty('union')
 
         expect(code).toContain(
-          `import _WeakMap from "@babel/runtime-corejs3/core-js/weak-map"`
+          `import _WeakMap from "core-js-pure/features/weak-map/index.js"`
         )
-        const _WeakMap = require('@babel/runtime-corejs3/core-js/weak-map')
+        const _WeakMap = require('core-js-pure/features/weak-map/index.js')
         expect(_WeakMap).toHaveProperty('deleteAll')
         expect(_WeakMap).toHaveProperty('from')
         expect(_WeakMap).toHaveProperty('of')
 
         expect(code).toContain(
-          `import _WeakSet from "@babel/runtime-corejs3/core-js/weak-set"`
+          `import _WeakSet from "core-js-pure/features/weak-set/index.js"`
         )
-        const _WeakSet = require('@babel/runtime-corejs3/core-js/weak-set')
+        const _WeakSet = require('core-js-pure/features/weak-set/index.js')
         expect(_WeakSet).toHaveProperty('addAll')
         expect(_WeakSet).toHaveProperty('deleteAll')
         expect(_WeakSet).toHaveProperty('from')
@@ -327,25 +309,25 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#math-extensions
       it('polyfills Math extensions', () => {
         expect(code).toContain(
-          `import _Math$clamp from "@babel/runtime-corejs3/core-js/math/clamp"`
+          `import _Math$clamp from "core-js-pure/features/math/clamp.js"`
         )
         expect(code).toContain(
-          `import _Math$DEG_PER_RAD from "@babel/runtime-corejs3/core-js/math/deg-per-rad"`
+          `import _Math$DEG_PER_RAD from "core-js-pure/features/math/deg-per-rad.js"`
         )
         expect(code).toContain(
-          `import _Math$degrees from "@babel/runtime-corejs3/core-js/math/degrees"`
+          `import _Math$degrees from "core-js-pure/features/math/degrees.js"`
         )
         expect(code).toContain(
-          `import _Math$fscale from "@babel/runtime-corejs3/core-js/math/fscale"`
+          `import _Math$fscale from "core-js-pure/features/math/fscale.js"`
         )
         expect(code).toContain(
-          `import _Math$RAD_PER_DEG from "@babel/runtime-corejs3/core-js/math/rad-per-deg"`
+          `import _Math$RAD_PER_DEG from "core-js-pure/features/math/rad-per-deg.js"`
         )
         expect(code).toContain(
-          `import _Math$radians from "@babel/runtime-corejs3/core-js/math/radians"`
+          `import _Math$radians from "core-js-pure/features/math/radians.js"`
         )
         expect(code).toContain(
-          `import _Math$scale from "@babel/runtime-corejs3/core-js/math/scale"`
+          `import _Math$scale from "core-js-pure/features/math/scale.js"`
         )
       })
 
@@ -353,7 +335,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#mathsignbit
       it('polyfills Math.signbit', () => {
         expect(code).toContain(
-          `import _Math$signbit from "@babel/runtime-corejs3/core-js/math/signbit"`
+          `import _Math$signbit from "core-js-pure/features/math/signbit.js"`
         )
       })
 
@@ -361,7 +343,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#numberfromstring
       it('polyfills Number.fromString', () => {
         expect(code).toContain(
-          `import _Number$fromString from "@babel/runtime-corejs3/core-js/number/from-string"`
+          `import _Number$fromString from "core-js-pure/features/number/from-string.js"`
         )
       })
 
@@ -369,10 +351,10 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#observable
       it('polyfills Observable', () => {
         expect(code).toContain(
-          `import _Observable from "@babel/runtime-corejs3/core-js/observable"`
+          `import _Observable from "core-js-pure/features/observable/index.js"`
         )
         expect(code).toContain(
-          `import _Symbol$observable from "@babel/runtime-corejs3/core-js/symbol/observable"`
+          `import _Symbol$observable from "core-js-pure/features/symbol/observable.js"`
         )
       })
 
@@ -380,7 +362,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#stringprototypecodepoints
       it('polyfills String.prototype.codePoints', () => {
         expect(code).toContain(
-          `import _codePointsInstanceProperty from "@babel/runtime-corejs3/core-js/instance/code-points"`
+          `import _codePointsInstanceProperty from "core-js-pure/features/instance/code-points.js"`
         )
       })
 
@@ -389,7 +371,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // This one's been renamed to Symbol.matcher since core-js v3.0.0. But Symbol.patternMatch still works
       it('polyfills Symbol.matcher', () => {
         expect(code).toContain(
-          `import _Symbol$patternMatch from "@babel/runtime-corejs3/core-js/symbol/pattern-match"`
+          `import _Symbol$patternMatch from "core-js-pure/features/symbol/pattern-match.js"`
         )
       })
     })
@@ -399,7 +381,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
       // See https://github.com/zloirock/core-js#symbol-asyncdispose-dispose--for-using-statement
       it('polyfills Symbol.{ asyncDispose, dispose } for using statement', () => {
         expect(code).toContain(
-          `import _Symbol$dispose from "@babel/runtime-corejs3/core-js/symbol/dispose"`
+          `import _Symbol$dispose from "core-js-pure/features/symbol/dispose.js"`
         )
       })
     })
@@ -410,23 +392,23 @@ describe('api prebuild polyfills unsupported functionality', () => {
     // See https://github.com/zloirock/core-js#efficient-64-bit-arithmetic
     it('polyfills efficient 64 bit arithmetic', () => {
       expect(code).toContain(
-        `import _Math$iaddh from "@babel/runtime-corejs3/core-js/math/iaddh"`
+        `import _Math$iaddh from "core-js-pure/features/math/iaddh.js"`
       )
       expect(code).toContain(
-        `import _Math$imulh from "@babel/runtime-corejs3/core-js/math/imulh"`
+        `import _Math$imulh from "core-js-pure/features/math/imulh.js"`
       )
       expect(code).toContain(
-        `import _Math$isubh from "@babel/runtime-corejs3/core-js/math/isubh"`
+        `import _Math$isubh from "core-js-pure/features/math/isubh.js"`
       )
       expect(code).toContain(
-        `import _Math$umulh from "@babel/runtime-corejs3/core-js/math/umulh"`
+        `import _Math$umulh from "core-js-pure/features/math/umulh.js"`
       )
     })
 
     // Promise.try
     // See https://github.com/zloirock/core-js#promisetry
     it('polyfills Promise.try', () => {
-      const _Promise = require('@babel/runtime-corejs3/core-js/promise')
+      const _Promise = require('core-js-pure/features/promise/index.js')
       expect(_Promise).toHaveProperty('try')
     })
 
@@ -434,7 +416,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
     // See https://github.com/zloirock/core-js#stringat
     it('polyfills String#at', () => {
       expect(code).toContain(
-        `import _atInstanceProperty from "@babel/runtime-corejs3/core-js/instance/at"`
+        `import _atInstanceProperty from "core-js-pure/features/instance/at.js"`
       )
     })
   })
@@ -444,7 +426,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
     // See https://github.com/zloirock/core-js#seeded-pseudo-random-numbers
     it('polyfills Seeded pseudo-random numbers', () => {
       expect(code).toContain(
-        `import _Math$seededPRNG from "@babel/runtime-corejs3/core-js/math/seeded-prng"`
+        `import _Math$seededPRNG from "core-js-pure/features/math/seeded-prng.js"`
       )
     })
   })
@@ -502,28 +484,83 @@ test('jest mock statements also handle', () => {
 
 test('core-js polyfill list', () => {
   const { list } = compat({
-    targets: { node: TARGETS_NODE },
-    version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version,
+    targets: { node: '14.20' },
+    version: '3.24',
   })
 
-  /**
-   * Redwood targets Node.js 12, but that doesn't factor into what gets polyfilled
-   * because Redwood uses the plugin-transform-runtime polyfill strategy.
-   *
-   * Also, plugin-transform-runtime is pinned to core-js v3.0.0,
-   * so the list of available polyfill is a little outdated.
-   * Some "ES Next" polyfills have landed in v12+ Node.js versions.
-   */
   expect(list).toMatchInlineSnapshot(`
     Array [
-      "es.math.hypot",
+      "es.error.cause",
+      "es.aggregate-error",
+      "es.aggregate-error.cause",
+      "es.array.at",
+      "es.array.find-last",
+      "es.array.find-last-index",
+      "es.array.push",
+      "es.object.has-own",
+      "es.promise.any",
+      "es.reflect.to-string-tag",
+      "es.regexp.flags",
+      "es.string.at-alternative",
+      "es.string.replace-all",
+      "es.typed-array.at",
+      "es.typed-array.find-last",
+      "es.typed-array.find-last-index",
       "es.typed-array.set",
-      "esnext.aggregate-error",
+      "esnext.array.from-async",
+      "esnext.array.filter-out",
+      "esnext.array.filter-reject",
+      "esnext.array.group",
+      "esnext.array.group-by",
+      "esnext.array.group-by-to-map",
+      "esnext.array.group-to-map",
+      "esnext.array.is-template-object",
       "esnext.array.last-index",
       "esnext.array.last-item",
+      "esnext.array.to-reversed",
+      "esnext.array.to-sorted",
+      "esnext.array.to-spliced",
+      "esnext.array.unique-by",
+      "esnext.array.with",
+      "esnext.async-iterator.constructor",
+      "esnext.async-iterator.as-indexed-pairs",
+      "esnext.async-iterator.drop",
+      "esnext.async-iterator.every",
+      "esnext.async-iterator.filter",
+      "esnext.async-iterator.find",
+      "esnext.async-iterator.flat-map",
+      "esnext.async-iterator.for-each",
+      "esnext.async-iterator.from",
+      "esnext.async-iterator.indexed",
+      "esnext.async-iterator.map",
+      "esnext.async-iterator.reduce",
+      "esnext.async-iterator.some",
+      "esnext.async-iterator.take",
+      "esnext.async-iterator.to-array",
+      "esnext.bigint.range",
       "esnext.composite-key",
       "esnext.composite-symbol",
+      "esnext.function.is-callable",
+      "esnext.function.is-constructor",
+      "esnext.function.un-this",
+      "esnext.iterator.constructor",
+      "esnext.iterator.as-indexed-pairs",
+      "esnext.iterator.drop",
+      "esnext.iterator.every",
+      "esnext.iterator.filter",
+      "esnext.iterator.find",
+      "esnext.iterator.flat-map",
+      "esnext.iterator.for-each",
+      "esnext.iterator.from",
+      "esnext.iterator.indexed",
+      "esnext.iterator.map",
+      "esnext.iterator.reduce",
+      "esnext.iterator.some",
+      "esnext.iterator.take",
+      "esnext.iterator.to-array",
+      "esnext.iterator.to-async",
       "esnext.map.delete-all",
+      "esnext.map.emplace",
       "esnext.map.every",
       "esnext.map.filter",
       "esnext.map.find",
@@ -540,6 +577,8 @@ test('core-js polyfill list', () => {
       "esnext.map.reduce",
       "esnext.map.some",
       "esnext.map.update",
+      "esnext.map.update-or-insert",
+      "esnext.map.upsert",
       "esnext.math.clamp",
       "esnext.math.deg-per-rad",
       "esnext.math.degrees",
@@ -554,8 +593,11 @@ test('core-js polyfill list', () => {
       "esnext.math.signbit",
       "esnext.math.umulh",
       "esnext.number.from-string",
+      "esnext.number.range",
+      "esnext.object.iterate-entries",
+      "esnext.object.iterate-keys",
+      "esnext.object.iterate-values",
       "esnext.observable",
-      "esnext.promise.any",
       "esnext.promise.try",
       "esnext.reflect.define-metadata",
       "esnext.reflect.delete-metadata",
@@ -585,19 +627,40 @@ test('core-js polyfill list', () => {
       "esnext.set.symmetric-difference",
       "esnext.set.union",
       "esnext.string.at",
+      "esnext.string.cooked",
       "esnext.string.code-points",
-      "esnext.string.match-all",
-      "esnext.string.replace-all",
+      "esnext.symbol.async-dispose",
       "esnext.symbol.dispose",
+      "esnext.symbol.matcher",
+      "esnext.symbol.metadata",
+      "esnext.symbol.metadata-key",
       "esnext.symbol.observable",
       "esnext.symbol.pattern-match",
+      "esnext.symbol.replace-all",
+      "esnext.typed-array.from-async",
+      "esnext.typed-array.filter-out",
+      "esnext.typed-array.filter-reject",
+      "esnext.typed-array.group-by",
+      "esnext.typed-array.to-reversed",
+      "esnext.typed-array.to-sorted",
+      "esnext.typed-array.to-spliced",
+      "esnext.typed-array.unique-by",
+      "esnext.typed-array.with",
       "esnext.weak-map.delete-all",
       "esnext.weak-map.from",
       "esnext.weak-map.of",
+      "esnext.weak-map.emplace",
+      "esnext.weak-map.upsert",
       "esnext.weak-set.add-all",
       "esnext.weak-set.delete-all",
       "esnext.weak-set.from",
       "esnext.weak-set.of",
+      "web.atob",
+      "web.btoa",
+      "web.dom-exception.constructor",
+      "web.dom-exception.stack",
+      "web.dom-exception.to-string-tag",
+      "web.structured-clone",
     ]
   `)
 })

@@ -4,7 +4,6 @@
 
 const {
   getConfig,
-  getCommonPlugins,
   getWebSideDefaultBabelConfig,
   getApiSideDefaultBabelConfig,
 } = require('@redwoodjs/internal')
@@ -19,7 +18,6 @@ const getProjectBabelOptions = () => {
     getWebSideDefaultBabelConfig()
 
   return {
-    plugins: getCommonPlugins(),
     overrides: [
       {
         test: ['./api/', './scripts/'],

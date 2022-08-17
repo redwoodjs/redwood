@@ -6,12 +6,7 @@ import type { TransformOptions } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
-import {
-  CORE_JS_VERSION,
-  getCommonPlugins,
-  registerBabel,
-  RegisterHookOptions,
-} from './common'
+import { CORE_JS_VERSION, registerBabel, RegisterHookOptions } from './common'
 
 export const getWebSideBabelPlugins = (
   { forJest }: Flags = { forJest: false }
@@ -19,14 +14,13 @@ export const getWebSideBabelPlugins = (
   const rwjsPaths = getPaths()
 
   const plugins: TransformOptions['plugins'] = [
-    ...getCommonPlugins(),
     // === Import path handling
     [
       'babel-plugin-module-resolver',
       {
         alias: {
           src:
-            // Jest monorepo and multi project runner is not correctly determining
+            // Jest monorepo and multi-project runner is not correctly determining
             // the `cwd`: https://github.com/facebook/jest/issues/7359
             forJest ? rwjsPaths.web.src : './src',
         },
@@ -36,6 +30,8 @@ export const getWebSideBabelPlugins = (
       },
       'rwjs-module-resolver',
     ],
+
+    // === Handling redwood "magic"
     [
       require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
@@ -91,8 +87,6 @@ export const getWebSideBabelPlugins = (
       },
       'rwjs-inline-svg',
     ],
-
-    // === Handling redwood "magic"
   ].filter(Boolean)
 
   return plugins
@@ -170,12 +164,6 @@ export const getWebSideBabelPresets = () => {
           version: CORE_JS_VERSION,
           proposals: true,
         },
-        exclude: [
-          // Remove class-properties from preset-env, and include separately
-          // https://github.com/webpack/webpack/issues/9708
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-private-methods',
-        ],
       },
       'rwjs-babel-preset-env',
     ],
@@ -184,6 +172,7 @@ export const getWebSideBabelPresets = () => {
 
 export const getWebSideBabelConfigPath = () => {
   const customBabelConfig = path.join(getPaths().web.base, 'babel.config.js')
+
   if (fs.existsSync(customBabelConfig)) {
     return customBabelConfig
   } else {
@@ -198,10 +187,8 @@ export interface Flags {
 }
 
 export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
-  // NOTE:
-  // Even though we specify the config file, babel will still search for .babelrc
-  // and merge them because we have specified the filename property, unless babelrc = false
-
+  // Even though we specify the config file, babel will still search for .babelrc files
+  // and merge them because we have specified the filename property, unless babelrc = false.
   return {
     presets: getWebSideBabelPresets(),
     plugins: getWebSideBabelPlugins(options),

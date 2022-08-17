@@ -1,11 +1,17 @@
 import type { TransformOptions, PluginItem } from '@babel/core'
 
-const pkgJson = require('../../../package.json')
-
 export interface RegisterHookOptions {
   /**
-   *  Be careful: plugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]].
-   *  These are in addition to the default RW plugins
+   * Plugins are a nested array:
+   *
+   * ```
+   * [
+   *   ["plugin-1", { options... }, "optional alias"],
+   *   ["plugin-2", { options... }, "optional alias"]
+   * ]
+   * ```
+   *
+   * And these are _in addition_ to the default redwood plugins.
    */
   plugins?: PluginItem[]
   overrides?: TransformOptions['overrides']
@@ -16,27 +22,34 @@ interface BabelRegisterOptions extends TransformOptions {
   cache?: boolean
 }
 
-/** NOTE:
- * We do this so we still get types, but don't import babel/register
- * Importing babel/register in typescript (instead of requiring) has dire consequences..
-
-  Lets say we use the import syntax: import babelRequireHook from '@babel/register'
-  - if your import in a JS file (like we used to in the cli project) - not a problem, and it would only invoke the register function when you called babelRequireHook
-  - if you import in a TS file, the transpile process modifies it when we build the framework -
-    so it will invoke it once as soon as you import, and another time when you use babelRequireHook...
-    BUTTT!!! you won't notice it if your project is TS because by default it ignore .ts and .tsx files, but if its a JS project, it would try to transpile twice
+/**
+ * We do this so that we still get types, but don't import `@babel/register`.
+ * Importing `@babel/register` in TypeScript (instead of requiring it) has dire consequences.
  *
+ * Lets say we use the import syntax:
  *
+ * ```
+ * import babelRequireHook from '@babel/register'
+ * ```
  *
-**/
+ * If you import in a JS file (like we used to in the CLI project), it's not a problem.
+ * It only invokes the register function when you called babelRequireHook.
+ *
+ * But if you import in a TS file, the transpile process modifies it when we build the framework.
+ * So it will invoke it once as soon as you import, and another time when you use babelRequireHook...
+ * BUTTT!!! you won't notice it if your project is TS because by default it ignore .ts and .tsx files, but if its a JS project, it would try to transpile twice
+ **/
 export const registerBabel = (options: BabelRegisterOptions) => {
   require('@babel/register')(options)
 }
 
-export const CORE_JS_VERSION = pkgJson.dependencies['core-js']
+const pkgJson = require('../../../package.json')
+
+// Produces: "3.12", instead of "3.12.1"
+export const CORE_JS_VERSION = pkgJson.dependencies['core-js-pure']
   .split('.')
   .slice(0, 2)
-  .join('.') // Produces: 3.12, instead of 3.12.1
+  .join('.')
 
 if (!CORE_JS_VERSION) {
   throw new Error(
@@ -44,21 +57,10 @@ if (!CORE_JS_VERSION) {
   )
 }
 
-export const RUNTIME_CORE_JS_VERSION =
-  pkgJson.dependencies['@babel/runtime-corejs3']
-if (!RUNTIME_CORE_JS_VERSION) {
-  throw new Error(
-    'RedwoodJS Project Babel: Could not determine core-js runtime version'
-  )
-}
+export const BABEL_RUNTIME_VERSION = pkgJson.dependencies['@babel/runtime']
 
-export const getCommonPlugins = () => {
-  return [
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-    // Note: The private method loose mode configuration setting must be the
-    // same as @babel/plugin-proposal class-properties.
-    // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
-  ]
+if (!BABEL_RUNTIME_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine @babel/runtime version'
+  )
 }
