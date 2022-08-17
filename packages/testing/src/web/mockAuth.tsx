@@ -14,6 +14,10 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   return <>{children}</>
 }
 
+function makeArray<T>(input?: T | T[]) {
+  return !input ? [] : Array.isArray(input) ? input : [input]
+}
+
 // When running jest tests, this is what they'll get when they import `useAuth`
 // thanks to some magic we do in jest-preset.js
 export function useAuth() {
@@ -27,7 +31,17 @@ export function useAuth() {
     userMetadata: mockedUserMeta.currentUser,
     getToken: async () => null,
     getCurrentUser: async () => mockedUserMeta.currentUser,
-    hasRole: () => false,
+    hasRole: (roles: string | string[]) => {
+      const currentUserRoles = makeArray(
+        mockedUserMeta.currentUser?.roles as string | string[] | undefined
+      )
+
+      if (currentUserRoles) {
+        return makeArray(roles).some((role) => currentUserRoles.includes(role))
+      }
+
+      return false
+    },
     reauthenticate: async () => {},
     forgotPassword: async () => {},
     resetPassword: async () => {},
