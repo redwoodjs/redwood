@@ -1,10 +1,8 @@
-<% if (columns.some((column) => column.listDisplayFunction === 'formatEnum')) { %>
-import humanize from 'humanize-string'
-<% } %>
-
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+
+import { ${formattingFunctionsImports} } from 'src/lib/formattingFunctions'
 
 import type { Delete${singularPascalName}MutationVariables, Find${singularPascalName}ById } from 'types/graphql'
 
@@ -15,47 +13,6 @@ const DELETE_${singularConstantName}_MUTATION = gql`
     }
   }
 `
-
-<% if (columns.some((column) => column.listDisplayFunction === 'formatEnum')) { %>
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'jsonDisplay')) { %>
-const jsonDisplay = (obj: unknown) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'timeTag')) { %>
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'checkboxInputTag')) { %>
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-<% } %>
 
 const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalName}ById) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {

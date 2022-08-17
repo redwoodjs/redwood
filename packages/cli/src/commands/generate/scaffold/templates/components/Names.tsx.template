@@ -1,12 +1,9 @@
-<% if (columns.some((column) => column.listDisplayFunction === 'formatEnum')) { %>
-import humanize from 'humanize-string'
-<% } %>
-
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from '${importComponentNamesCell}'
+import { ${listFormattingFunctionsImports} } from 'src/lib/formattingFunctions'
 
 import type { Delete${singularPascalName}MutationVariables, Find${pluralPascalName} } from 'types/graphql'
 
@@ -17,55 +14,6 @@ const DELETE_${singularConstantName}_MUTATION = gql`
     }
   }
 `
-
-const MAX_STRING_LENGTH = 150
-
-<% if (columns.some((column) => column.listDisplayFunction === 'formatEnum')) { %>
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'truncate')) { %>
-const truncate = (value: string | number) => {
-  const output = value?.toString()
-  if (output?.length > MAX_STRING_LENGTH) {
-    return output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output ?? ''
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'jsonTruncate')) { %>
-const jsonTruncate = (obj: unknown) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'timeTag')) { %>
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-<% } %>
-
-<% if (columns.some((column) => column.listDisplayFunction === 'checkboxInputTag')) { %>
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-<% } %>
 
 const ${pluralPascalName}List = ({ ${pluralCamelName} }: Find${pluralPascalName}) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {

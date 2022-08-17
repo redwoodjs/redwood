@@ -181,6 +181,7 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
+    ...formattingFunctions(name),
     ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
@@ -234,6 +235,32 @@ const assetFiles = (name, tailwind) => {
   })
 
   return fileList
+}
+
+const formattingFunctions = (name) => {
+  const outputPath = path.join(
+    getPaths().web.src,
+    'lib',
+    'formattingFunctions.tsx.template'
+  )
+
+  // skip files that already exist on disk, never worry about overwriting
+  if (fs.existsSync(outputPath)) {
+    return
+  }
+
+  const template = generateTemplate(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: path.join('lib', 'formattingFunctions.tsx.template'),
+    }),
+    {
+      name,
+    }
+  )
+
+  return { [outputPath]: template }
 }
 
 const layoutFiles = (
@@ -487,6 +514,18 @@ const componentFiles = async (
     })
   )
 
+  const formattingFunctionsImports = columns
+    .map((column) => column.displayFunction)
+    .sort()
+    .filter((v, i, a) => a.indexOf(v) === i)
+    .join(', ')
+
+  const listFormattingFunctionsImports = columns
+    .map((column) => column.listDisplayFunction)
+    .sort()
+    .filter((v, i, a) => a.indexOf(v) === i)
+    .join(', ')
+
   await asyncForEach(components, (component) => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
@@ -518,6 +557,8 @@ const componentFiles = async (
         idType,
         intForeignKeys,
         pascalScaffoldPath,
+        listFormattingFunctionsImports,
+        formattingFunctionsImports,
         ...templateStrings,
       }
     )
