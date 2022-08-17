@@ -439,7 +439,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
     })
   })
 
-  describe('Unstable', () => {
+  describe('Unstable (will be removed in core-js 4)', () => {
     // Seeded pseudo-random numbers
     // See https://github.com/zloirock/core-js#seeded-pseudo-random-numbers
     it('polyfills Seeded pseudo-random numbers', () => {
