@@ -6,4 +6,4 @@ export const generated: Story<typeof ${pascalName}> = (args) => {
   return <${pascalName} {...args} />
 }
 
-export default { title: 'Components/${pascalName}' }
+export default { title: 'Components/${pascalName}', component: ${pascalName} }
