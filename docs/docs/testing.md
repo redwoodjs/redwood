@@ -1006,7 +1006,7 @@ export const standard = (variables) => {
 
 Assuming you had a **&lt;ProductPage&gt;** component:
 
-```jsx title="web/src/components/ProductCell/ProductCell.mock.js"
+```jsx title="web/src/pages/ProductPage/ProductPage.js"
 import ProductCell from 'src/components/ProductCell'
 
 const ProductPage = ({ status }) => {
