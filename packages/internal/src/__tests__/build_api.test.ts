@@ -9,6 +9,7 @@ import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
   getApiSideDefaultBabelConfig,
+  BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS,
   TARGETS_NODE,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
@@ -588,7 +589,7 @@ test('jest mock statements also handle', () => {
 test('core-js polyfill list', () => {
   const { list } = compat({
     targets: { node: TARGETS_NODE },
-    version: 3,
+    version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version,
   })
 
   /**
