@@ -157,7 +157,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
     describe('Node.js 17', () => {
       // core-js-pure overrides this. See https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/es.typed-array.set.js.
       it('polyfills Base64 utility methods (btoa)', () => {
-         expect(code).toContain(
+        expect(code).toContain(
           `import _btoa from "core-js-pure/stable/btoa.js"`
         )
       })
