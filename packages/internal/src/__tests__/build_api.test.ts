@@ -104,7 +104,7 @@ describe('api prebuild polyfills unsupported functionality', () => {
     describe('Node.js 15', () => {
       it('polyfills AggregateError', () => {
         expect(code).toContain(
-          `import _AggregateError from "core-js-pure/features/aggregate-error.js"`
+          `import _AggregateError from "core-js-pure/stable/aggregate-error.js"`
         )
       })
 
@@ -118,9 +118,11 @@ describe('api prebuild polyfills unsupported functionality', () => {
       //   Promise.reject(2),
       //   Promise.resolve(3),
       // ]).then(console.log)
+      // ```js
       //
-      // ↓↓↓
+      // becomes this...
       //
+      // ```js
       // import _Promise from "@babel/runtime-corejs3/core-js/promise";
       //
       // _Promise.any([
@@ -129,305 +131,19 @@ describe('api prebuild polyfills unsupported functionality', () => {
       //   _Promise.resolve(3)])
       // .then(console.log);
       // ```
-      //
-      // Compared to the Reflect polyfills, which only polyfill the method used,
-      // just checking that the Promise polyfill is imported isn't enough:
-      //
-      // ```js
-      // Reflect.defineMetadata(metadataKey, metadataValue, target)
-      //
-      // ↓↓↓
-      //
-      // import _Reflect$defineMetadata from "@babel/runtime-corejs3/core-js/reflect/define-metadata";
-
-      // _Reflect$defineMetadata(metadataKey, metadataValue, target);
-      // ```
       it('polyfills Promise.any', () => {
         expect(code).toContain(
-          `import _Promise from "core-js-pure/features/promise/index.js"`
+          `import _Promise from "core-js-pure/stable/promise/index.js"`
         )
-        const _Promise = require('core-js-pure/features/promise/index.js')
+        const _Promise = require('core-js-pure/stable/promise/index.js')
         expect(_Promise).toHaveProperty('any')
       })
 
       it('polyfills String.replaceAll', () => {
         expect(code).toContain(
-          `import _replaceAllInstanceProperty from "core-js-pure/features/instance/replace-all.js"`
+          `import _replaceAllInstanceProperty from "core-js-pure/stable/instance/replace-all.js"`
         )
       })
-    })
-
-    describe('Node.js 17', () => {
-      // core-js-pure overrides this. See https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/es.typed-array.set.js.
-      it("doesn't polyfill TypedArray.set", () => {
-        expect(code).toContain(
-          [
-            `const buffer = new ArrayBuffer(8);`,
-            `const uint8 = new Uint8Array(buffer);`,
-            `uint8.set([1, 2, 3], 3);`,
-          ].join('\n')
-        )
-      })
-    })
-  })
-
-  describe('ES Next features', () => {
-    describe('Pre-stage 0 proposals', () => {
-      // Reflect metadata
-      // See https://github.com/zloirock/core-js#reflect-metadata
-      it('polyfills Reflect methods', () => {
-        expect(code).toContain(
-          `import _Reflect$defineMetadata from "core-js-pure/features/reflect/define-metadata.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$deleteMetadata from "core-js-pure/features/reflect/delete-metadata.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$getMetadata from "core-js-pure/features/reflect/get-metadata.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$getMetadataKeys from "core-js-pure/features/reflect/get-metadata-keys.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$getOwnMetadata from "core-js-pure/features/reflect/get-own-metadata.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$getOwnMetadataKeys from "core-js-pure/features/reflect/get-own-metadata-keys.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$hasMetadata from "core-js-pure/features/reflect/has-metadata.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$hasOwnMetadata from "core-js-pure/features/reflect/has-own-metadata.js"`
-        )
-        expect(code).toContain(
-          `import _Reflect$metadata from "core-js-pure/features/reflect/metadata.js"`
-        )
-      })
-    })
-
-    describe('Stage 1 proposals', () => {
-      // Getting last item from Array
-      // See https://github.com/zloirock/core-js#getting-last-item-from-array
-      //
-      // core-js-pure overrides these. See...
-      // - https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/esnext.array.last-index.js,
-      // - https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/esnext.array.last-item.js
-      it("doesn't polyfill Getting last item from Array", () => {
-        expect(code).toContain(
-          [
-            `[1, 2, 3].lastIndex;`,
-            `[1, 2, 3].lastItem;`,
-            `const array = [1, 2, 3];`,
-            `array.lastItem = 4;`,
-            `new Array(1, 2, 3).lastIndex;`,
-            `new Array(1, 2, 3).lastItem;`,
-          ].join('\n')
-        )
-      })
-
-      // compositeKey and compositeSymbol
-      // See https://github.com/zloirock/core-js#compositekey-and-compositesymbol
-      it('polyfills compositeKey and compositeSymbol', () => {
-        expect(code).toContain(
-          `import _compositeKey from "core-js-pure/features/composite-key.js"`
-        )
-        expect(code).toContain(
-          `import _compositeSymbol from "core-js-pure/features/composite-symbol.js"`
-        )
-      })
-
-      // New collections methods
-      // See https://github.com/zloirock/core-js#new-collections-methods
-      it('polyfills New collections methods', () => {
-        expect(code).toContain(
-          `import _Map from "core-js-pure/features/map/index.js"`
-        )
-        // See the comments on Promise.any above for more of an explanation
-        // of why we're testing for properties.
-        const _Map = require('core-js-pure/features/map/index.js')
-        expect(_Map).toHaveProperty('deleteAll')
-        expect(_Map).toHaveProperty('every')
-        expect(_Map).toHaveProperty('filter')
-        expect(_Map).toHaveProperty('find')
-        expect(_Map).toHaveProperty('findKey')
-        expect(_Map).toHaveProperty('from')
-        expect(_Map).toHaveProperty('groupBy')
-        expect(_Map).toHaveProperty('includes')
-        expect(_Map).toHaveProperty('keyBy')
-        expect(_Map).toHaveProperty('keyOf')
-        expect(_Map).toHaveProperty('mapKeys')
-        expect(_Map).toHaveProperty('mapValues')
-        expect(_Map).toHaveProperty('merge')
-        expect(_Map).toHaveProperty('of')
-        expect(_Map).toHaveProperty('reduce')
-        expect(_Map).toHaveProperty('some')
-        expect(_Map).toHaveProperty('update')
-
-        expect(code).toContain(
-          `import _Set from "core-js-pure/features/set/index.js"`
-        )
-        const _Set = require('core-js-pure/features/set/index.js')
-        expect(_Set).toHaveProperty('addAll')
-        expect(_Set).toHaveProperty('deleteAll')
-        expect(_Set).toHaveProperty('difference')
-        expect(_Set).toHaveProperty('every')
-        expect(_Set).toHaveProperty('filter')
-        expect(_Set).toHaveProperty('find')
-        expect(_Set).toHaveProperty('from')
-        expect(_Set).toHaveProperty('intersection')
-        expect(_Set).toHaveProperty('isDisjointFrom')
-        expect(_Set).toHaveProperty('isSubsetOf')
-        expect(_Set).toHaveProperty('isSupersetOf')
-        expect(_Set).toHaveProperty('join')
-        expect(_Set).toHaveProperty('map')
-        expect(_Set).toHaveProperty('of')
-        expect(_Set).toHaveProperty('reduce')
-        expect(_Set).toHaveProperty('some')
-        expect(_Set).toHaveProperty('symmetricDifference')
-        expect(_Set).toHaveProperty('union')
-
-        expect(code).toContain(
-          `import _WeakMap from "core-js-pure/features/weak-map/index.js"`
-        )
-        const _WeakMap = require('core-js-pure/features/weak-map/index.js')
-        expect(_WeakMap).toHaveProperty('deleteAll')
-        expect(_WeakMap).toHaveProperty('from')
-        expect(_WeakMap).toHaveProperty('of')
-
-        expect(code).toContain(
-          `import _WeakSet from "core-js-pure/features/weak-set/index.js"`
-        )
-        const _WeakSet = require('core-js-pure/features/weak-set/index.js')
-        expect(_WeakSet).toHaveProperty('addAll')
-        expect(_WeakSet).toHaveProperty('deleteAll')
-        expect(_WeakSet).toHaveProperty('from')
-        expect(_WeakSet).toHaveProperty('of')
-      })
-
-      // Math extensions
-      // See https://github.com/zloirock/core-js#math-extensions
-      it('polyfills Math extensions', () => {
-        expect(code).toContain(
-          `import _Math$clamp from "core-js-pure/features/math/clamp.js"`
-        )
-        expect(code).toContain(
-          `import _Math$DEG_PER_RAD from "core-js-pure/features/math/deg-per-rad.js"`
-        )
-        expect(code).toContain(
-          `import _Math$degrees from "core-js-pure/features/math/degrees.js"`
-        )
-        expect(code).toContain(
-          `import _Math$fscale from "core-js-pure/features/math/fscale.js"`
-        )
-        expect(code).toContain(
-          `import _Math$RAD_PER_DEG from "core-js-pure/features/math/rad-per-deg.js"`
-        )
-        expect(code).toContain(
-          `import _Math$radians from "core-js-pure/features/math/radians.js"`
-        )
-        expect(code).toContain(
-          `import _Math$scale from "core-js-pure/features/math/scale.js"`
-        )
-      })
-
-      // Math.signbit
-      // See https://github.com/zloirock/core-js#mathsignbit
-      it('polyfills Math.signbit', () => {
-        expect(code).toContain(
-          `import _Math$signbit from "core-js-pure/features/math/signbit.js"`
-        )
-      })
-
-      // Number.fromString
-      // See https://github.com/zloirock/core-js#numberfromstring
-      it('polyfills Number.fromString', () => {
-        expect(code).toContain(
-          `import _Number$fromString from "core-js-pure/features/number/from-string.js"`
-        )
-      })
-
-      // Observable
-      // See https://github.com/zloirock/core-js#observable
-      it('polyfills Observable', () => {
-        expect(code).toContain(
-          `import _Observable from "core-js-pure/features/observable/index.js"`
-        )
-        expect(code).toContain(
-          `import _Symbol$observable from "core-js-pure/features/symbol/observable.js"`
-        )
-      })
-
-      // String.prototype.codePoints
-      // See https://github.com/zloirock/core-js#stringprototypecodepoints
-      it('polyfills String.prototype.codePoints', () => {
-        expect(code).toContain(
-          `import _codePointsInstanceProperty from "core-js-pure/features/instance/code-points.js"`
-        )
-      })
-
-      // Symbol.matcher for pattern matching
-      // See https://github.com/zloirock/core-js#symbolmatcher-for-pattern-matching
-      // This one's been renamed to Symbol.matcher since core-js v3.0.0. But Symbol.patternMatch still works
-      it('polyfills Symbol.matcher', () => {
-        expect(code).toContain(
-          `import _Symbol$patternMatch from "core-js-pure/features/symbol/pattern-match.js"`
-        )
-      })
-    })
-
-    describe('Stage 2 proposals', () => {
-      // Symbol.{ asyncDispose, dispose } for using statement
-      // See https://github.com/zloirock/core-js#symbol-asyncdispose-dispose--for-using-statement
-      it('polyfills Symbol.{ asyncDispose, dispose } for using statement', () => {
-        expect(code).toContain(
-          `import _Symbol$dispose from "core-js-pure/features/symbol/dispose.js"`
-        )
-      })
-    })
-  })
-
-  describe('Withdrawn proposals (will be removed in core-js 4)', () => {
-    // Efficient 64 bit arithmetic
-    // See https://github.com/zloirock/core-js#efficient-64-bit-arithmetic
-    it('polyfills efficient 64 bit arithmetic', () => {
-      expect(code).toContain(
-        `import _Math$iaddh from "core-js-pure/features/math/iaddh.js"`
-      )
-      expect(code).toContain(
-        `import _Math$imulh from "core-js-pure/features/math/imulh.js"`
-      )
-      expect(code).toContain(
-        `import _Math$isubh from "core-js-pure/features/math/isubh.js"`
-      )
-      expect(code).toContain(
-        `import _Math$umulh from "core-js-pure/features/math/umulh.js"`
-      )
-    })
-
-    // Promise.try
-    // See https://github.com/zloirock/core-js#promisetry
-    it('polyfills Promise.try', () => {
-      const _Promise = require('core-js-pure/features/promise/index.js')
-      expect(_Promise).toHaveProperty('try')
-    })
-
-    // String#at
-    // See https://github.com/zloirock/core-js#stringat
-    it('polyfills String#at', () => {
-      expect(code).toContain(
-        `import _atInstanceProperty from "core-js-pure/features/instance/at.js"`
-      )
-    })
-  })
-
-  describe('Unstable (will be removed in core-js 4)', () => {
-    // Seeded pseudo-random numbers
-    // See https://github.com/zloirock/core-js#seeded-pseudo-random-numbers
-    it('polyfills Seeded pseudo-random numbers', () => {
-      expect(code).toContain(
-        `import _Math$seededPRNG from "core-js-pure/features/math/seeded-prng.js"`
-      )
     })
   })
 })

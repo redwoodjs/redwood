@@ -42,14 +42,9 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       {
         method: 'usage-pure',
         version: CORE_JS_VERSION,
-        proposals: true,
         // See https://github.com/babel/babel-polyfills/issues/105.
         include: [
-          'es.map',
           'es.promise',
-          'es.set',
-          'es.weak-map',
-          'es.weak-set',
         ],
       },
       'rwjs-babel-polyfill',
