@@ -516,7 +516,6 @@ test('core-js polyfill list', () => {
    */
   expect(list).toMatchInlineSnapshot(`
     Array [
-      "es.math.hypot",
       "es.typed-array.set",
       "esnext.aggregate-error",
       "esnext.array.last-index",
@@ -586,7 +585,6 @@ test('core-js polyfill list', () => {
       "esnext.set.union",
       "esnext.string.at",
       "esnext.string.code-points",
-      "esnext.string.match-all",
       "esnext.string.replace-all",
       "esnext.symbol.dispose",
       "esnext.symbol.observable",
