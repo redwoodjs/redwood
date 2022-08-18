@@ -14,7 +14,7 @@ import {
 } from './common'
 
 // When we build (`yarn rw build`), we transpile with esbuild.
-// But esbuild isn't in the picture for  jest, console, and exec,
+// But esbuild isn't in the picture for jest, console, and exec,
 // so we need Babel to transpile (and therefore, need `@babel/preset-env`).
 export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }
