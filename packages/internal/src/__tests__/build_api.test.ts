@@ -145,6 +145,58 @@ describe('api prebuild polyfills unsupported functionality', () => {
         )
       })
     })
+
+    describe('Node.js 16', () => {
+      it.skip('polyfills Array.prototype.at', () => {
+        expect(code).toContain(
+          `import _atInstanceProperty from "core-js-pure/stable/instance/at.js"`
+        )
+      })
+
+      it('polyfills Object.hasOwn', () => {
+        expect(code).toContain(
+          `import _Object$hasOwn from "core-js-pure/stable/object/has-own.js"`
+        )
+      })
+    })
+
+    describe('Node.js 17', () => {
+      // core-js-pure overrides this. See https://github.com/zloirock/core-js/blob/master/packages/core-js-pure/override/modules/es.typed-array.set.js.
+      it('polyfills Base64 utility methods (btoa)', () => {
+         expect(code).toContain(
+          `import _btoa from "core-js-pure/stable/btoa.js"`
+        )
+      })
+
+      it('polyfills DOMException', () => {
+        expect(code).toContain(
+          `import _DOMException from "core-js-pure/stable/dom-exception.js"`
+        )
+      })
+
+      it('polyfills structuredClone', () => {
+        expect(code).toContain(
+          `import _structuredClone from "core-js-pure/stable/structured-clone.js"`
+        )
+      })
+    })
+
+    describe('Node.js 18', () => {
+      it('polyfills Array.prototype.findLast, Array.prototype.findLastIndex', () => {
+        expect(code).toContain(
+          `import _findLastInstanceProperty from "core-js-pure/stable/instance/find-last.js"`
+        )
+        expect(code).toContain(
+          `import _findLastIndexInstanceProperty from "core-js-pure/stable/instance/find-last-index.js"`
+        )
+      })
+
+      it('polyfills Base64 utility methods (atob)', () => {
+        expect(code).toContain(
+          `import _atob from "core-js-pure/stable/atob.js"`
+        )
+      })
+    })
   })
 })
 

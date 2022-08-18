@@ -22,3 +22,37 @@ Promise.any([
 ]).catch(({ errors }) => console.log(errors))
 
 'Test abc test test abc test.'.replaceAll('abc', 'foo')
+
+// ## Node.js 16
+
+;[1, 2, 3].at(1)
+;[1, 2, 3].at(-1)
+
+Object.hasOwn({ foo: 42 }, 'foo')
+
+// ## Node.js 17
+
+btoa('hi, core-js')
+
+const exception = new DOMException('error', 'DataCloneError');
+console.log(exception.name)
+console.log(exception.message)
+console.log(exception.code)
+console.log(typeof exception.stack)
+console.log(exception instanceof DOMException)
+console.log(exception instanceof Error)
+console.log(exception.toString())
+console.log(Object.prototype.toString.call(exception))
+
+const structured = [{ a: 42 }]
+const sclone = structuredClone(structured)
+
+// ## Node.js 18
+
+function isOdd(value) {
+  return value % 2
+}
+;[1, 2, 3, 4].findLast(isOdd)
+;[1, 2, 3, 4].findLastIndex(isOdd)
+
+atob('aGksIGNvcmUtanM=')
