@@ -37,7 +37,7 @@ interface BabelRegisterOptions extends TransformOptions {
  *
  * But if you import in a TS file, the transpile process modifies it when we build the framework.
  * So it will invoke it once as soon as you import, and another time when you use babelRequireHook...
- * BUTTT!!! you won't notice it if your project is TS because by default it ignore .ts and .tsx files, but if its a JS project, it would try to transpile twice
+ * BUTTT!!! you won't notice it if your project is TS because by default it ignores .ts and .tsx files, but if its a JS project, it would try to transpile twice
  **/
 export const registerBabel = (options: BabelRegisterOptions) => {
   require('@babel/register')(options)
