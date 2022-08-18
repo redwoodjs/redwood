@@ -147,12 +147,6 @@ describe('api prebuild polyfills unsupported functionality', () => {
     })
 
     describe('Node.js 16', () => {
-      it.skip('polyfills Array.prototype.at', () => {
-        expect(code).toContain(
-          `import _atInstanceProperty from "core-js-pure/stable/instance/at.js"`
-        )
-      })
-
       it('polyfills Object.hasOwn', () => {
         expect(code).toContain(
           `import _Object$hasOwn from "core-js-pure/stable/object/has-own.js"`

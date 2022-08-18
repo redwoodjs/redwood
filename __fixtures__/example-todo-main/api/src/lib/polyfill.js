@@ -25,9 +25,6 @@ Promise.any([
 
 // ## Node.js 16
 
-;[1, 2, 3].at(1)
-;[1, 2, 3].at(-1)
-
 Object.hasOwn({ foo: 42 }, 'foo')
 
 // ## Node.js 17
