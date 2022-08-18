@@ -75,11 +75,11 @@ You can't *decrypt* something with the public key that was encrypted with the pr
 
 :::
 
-Before connecting, you'll want to change the file access permissions on the `.pem` file. This says that only the owner may access the file, and SSH will usually complain if anyone else access to it. This is handled with the `chmod` command. The [octal version](https://chmodcommand.com/chmod-600/) of the permissions you want to set is the number `600`. To change the permission of the file:
+Before connecting, you'll want to change the file access permissions on the `.pem` file. This says that only the owner may access the file, and SSH will usually complain if anyone else has access to it. This is handled with the `chmod` command. The [octal version](https://chmodcommand.com/chmod-600/) of the permissions you want to set is the number `600`. To change the permission of the file:
 
 `chmod 600 ~/.ssh/keyname.pem`
 
-Where `keyname` is whatever the actual name of the file is. Once you do this you're ready to use it connect. You still need the username and address of the server, but we're also going to set the `-i` flag which instructs SSH to use the private key listed:
+Where `keyname` is whatever the actual name of the file is. Once you do this you're ready to use it to connect. You still need the username and address of the server, but we're also going to set the `-i` flag which instructs SSH to use the private key listed:
 
 ```
 ssh -i ~/.ssh/keyname.pem ubuntu@137.184.224.112
@@ -87,15 +87,17 @@ ssh -i ~/.ssh/keyname.pem ubuntu@137.184.224.112
 
 ### Public Key
 
-Some providers like Digital Ocean give you the opportunity to put your public key on the server automatically when it's created. This lets you avoid password and private key authentication completely, and is actually the preferred method of connecting via SSH that we'll end up with at the end of this guide!
+Some providers, like Digital Ocean, give you the opportunity to put your public key on the server automatically when it's created. This lets you avoid password and private key authentication completely, and is actually the preferred method of connecting via SSH that we'll end up with at the end of this guide!
 
-If you don't really know what a public key, where yours is at, or what it means to put it on the server, then skip ahead to the [Creating a Public Key](#creating-a-public-key) section and then come back here.
+If you don't really know what a public key is, where yours is at, or what it means to put it on the server, then skip ahead to the [Creating a Public Key](#creating-a-public-key) section and then come back here.
 
 You'll need your username and server address and that's it:
 
 ```
 ssh ubuntu@137.184.224.112
 ```
+
+If your server doesn't let you pre-load your public key on the server, you'll need to do it manually. See [Adding Your SSH Public Key to the Server](#adding-your-ssh-public-key-to-the-server) below.
 
 ## Connected
 
@@ -109,8 +111,10 @@ It could be one of several things:
 
 * The username is wrong
 * The password is wrong
-* The public key your system is trying to connect with is not found on the server
-* The private key you passed with the `-i` flag is not found on that the server
+* The public key your system is trying to connect with is not found on the server in its `~/.ssh/authorized_keys` file
+* The private key you passed with the `-i` flag is not found on the server
+
+If you run the command again with the `-v` flag (verbose) you'll see everything that SSH is trying when it tries to log in. There are lots of resources on the internet to help you [troubleshoot](https://docs.digitalocean.com/support/how-to-troubleshoot-ssh-connectivity-issues/).
 
 Assuming you did not get an error, you should be logged in:
 
@@ -147,7 +151,7 @@ The last line is actually your prompt where you can start typing commands.
 
 ## Simplifying Access
 
-Having to type your username or include a private key each time is not fun. Luckily SSH using public/private key cryptography, and can verify your identity using your public key. You've probably uploaded your public key to GitHub in the **Settings > SSH and GPG keys** section. We'll do something similar here: put our local machine's public key on the server so that it knows it's us when we connect, and skip the password.
+Having to type your username or include a private key each time is not fun. Luckily SSH uses public/private key cryptography, and can verify your identity using your public key. You've probably uploaded your public key to GitHub in the **Settings > SSH and GPG keys** section. We'll do something similar here: put our local machine's public key on the server so that it knows it's us when we connect, and skip the password.
 
 :::info
 
@@ -157,6 +161,92 @@ If you're already using [public key auth](#public-key) then you can probably ski
 
 You can have multiple public keys from multiple development machines on the server so you can connect from multiple computers. This comes in very handy when working on a team: when someone leaves you just remove their public key from the server. Contrast this with password authentication, where you either need to share the password to a single deploy user to all of your teammates, and then change the password when someone leaves, or give everyone a copy of the server's private key and change *that* every time someone leaves. Just adding their public keys is much simpler to manage.
 
+### Public/Private Keypairs
+
+You may already have a public/private keypair! Check in `~/.ssh` and look for two files with the same name before the extension, one with `.pub` on the end (`id_rsa` and `id_rsa.pub`, for example). If you don't remember actually putting these files in the directory, then they were probably generated by a program like `ssh-keygen`, and ssh is already using them!
+
+To see which of your keys SSH is already aware of, you can run this command to list them:
+
+```
+ssh-add -L
+```
+
+You should get zero or more lines containing public SSH keys, something like this:
+
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQAB<REDACTED>3Edk1OE6BU6hK2EZchm= rob@computer.local
+```
+
+If I compare that to the content of my `~/.ssh/id_rsa.pub` file I can see that they match! Great, so SSH is already using my public key when it tries to connect. But what if I don't have a public/private keypair?
+
 ### Generating a Public/Private Keypair
 
-You may already have a public/private keypair.
+There's a simple command to generate a new keypair:
+
+```
+ssh-keygen -t rsa -r 4096
+```
+
+You will be prompted for a couple of questions:
+
+```
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/rob/.ssh/id_rsa): sample_rsa
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+```
+
+If you don't have any keys, go ahead and use the default name (`id_rsa`).
+
+A Passphrase is an additional line of security on your key. However, it also adds some inconvenience around using your public key: you'll need to enter the passpharse each time your private key is accessed. Which is great for security, but kind of defeats the purpose of sharing your public key with the server to make access easier. As long as you protect your private key, you shouldn't need to worry about adding a passphrase. Press ENTER (twice) to create your keypair without a passphrase.
+
+Your keypair is generated!
+
+```
+Your identification has been saved in id_rsa
+Your public key has been saved in id_rsa.pub
+The key fingerprint is:
+SHA256:g9tcaULSzcMLEoRREugBXEFotYdCicFZ4beRZRcTeMw rob@trion.local
+The key's randomart image is:
++---[RSA 4096]----+
+|*+OO**+o+=o      |
+|oB+ +.++.E.      |
+|.o = =o = =      |
+|  o o o= . +     |
+|     .. S =      |
+|       + =       |
+|      . o        |
+|                 |
+|                 |
++----[SHA256]-----+
+```
+
+::: info What's this randomart thing?
+
+From this [Super User answer](https://superuser.com/a/22541):
+
+> Validation is normally done by a comparison of meaningless strings (i.e. the hexadecimal representation of the key fingerprint), which humans are pretty slow and inaccurate at comparing. Randomart replaces this with structured images that are faster and easier to compare.
+
+I suppose the idea is that if humans ever needed to compare public keys they could use the randomart version and know pretty quickly whether they're the same (instead of comparing 4096 bytes by eye!)
+
+:::
+
+### Adding to ssh-agent
+
+Our key exists but does SSH know to use it yet? Let's ask `ssh-agent` (the tool that manages keys and makes them available to the actual `ssh` process):
+
+```
+ssh-add -L
+```
+
+Do you see your new public key listed? If not, we just have to let `ssh-agent` know where it is and to start using it:
+
+```
+ssh-add -T ~/.ssh/id_rsa.pub
+```
+
+Now running `ssh-add -L` should list our key.
+
+### Adding Your SSH Public Key to the Server
+
+So SSH is now presenting the key to the server, but the server doesn't know what to do with it.
