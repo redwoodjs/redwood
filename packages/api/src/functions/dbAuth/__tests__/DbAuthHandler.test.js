@@ -2238,31 +2238,6 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('hashPassword', () => {
-    it('hashes a password with a given salt and returns both', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const [hash, salt] = dbAuth._hashPassword(
-        'password',
-        '2ef27f4073c603ba8b7807c6de6d6a89'
-      )
-
-      expect(hash).toEqual(
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba'
-      )
-      expect(salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
-    })
-
-    it('hashes a password with a generated salt if none provided', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const [hash, salt] = dbAuth._hashPassword('password')
-
-      expect(hash).toMatch(/^[a-f0-9]+$/)
-      expect(hash.length).toEqual(64)
-      expect(salt).toMatch(/^[a-f0-9]+$/)
-      expect(salt.length).toEqual(32)
-    })
-  })
-
   describe('getAuthMethod', () => {
     it('gets methodName out of the query string', () => {
       event = {
