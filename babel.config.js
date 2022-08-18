@@ -66,16 +66,6 @@
  *
  * The "usage" part means Babel only polyfills what we use, not everything it possibly can.
  * See https://github.com/babel/babel-polyfills/blob/main/docs/usage.md#method.
- *
- * ## shippedProposals
- *
- * Some tc39 proposals have shipped in browsers, but haven't been included in the spec yet.
- * (Because it hasn't been published). Setting `shippedProposals` to true opts us into them.
- *
- * Note that we have to set shippedProposals in two places:
- *
- * - `@babel/preset-env` for syntax proposals (numeric separator)
- * - `babel-plugin-polyfill-corejs3` for method proposals (String.prototype.matchAll)
  */
 
 // This's used in the `babel-plugin-polyfill-corejs3` plugin below.
@@ -101,13 +91,7 @@ module.exports = {
   },
 
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        // See https://babeljs.io/docs/en/babel-preset-env#shippedproposals.
-        shippedProposals: true,
-      },
-    ],
+    '@babel/preset-env',
     '@babel/preset-react',
     '@babel/typescript',
   ],
@@ -126,8 +110,10 @@ module.exports = {
       {
         method: 'usage-pure',
         version: CORE_JS_VERSION,
-        // See https://github.com/babel/babel-polyfills/blob/main/packages/babel-plugin-polyfill-corejs3/src/shipped-proposals.ts.
-        shippedProposals: true,
+        // See https://github.com/babel/babel-polyfills/issues/105.
+        include: [
+          'es.promise',
+        ],
       },
     ],
   ],
