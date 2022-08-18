@@ -34,6 +34,8 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
     [
       '@babel/plugin-transform-runtime',
       {
+        // This plugin assumes that @babel/runtime@7.0.0 is installed. Specifying the version can result in a smaller bundle size.
+        // See https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version.
         version: BABEL_RUNTIME_VERSION,
       },
     ],
