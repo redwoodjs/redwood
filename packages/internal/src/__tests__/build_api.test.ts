@@ -9,9 +9,11 @@ import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
   getApiSideDefaultBabelConfig,
+  NODE_TARGET,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
+import { CORE_JS_VERSION } from '../build/babel/common'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -218,8 +220,8 @@ test('jest mock statements also handle', () => {
 
 test('core-js polyfill list', () => {
   const { list } = compat({
-    targets: { node: '14.20' },
-    version: '3.24',
+    targets: { node: NODE_TARGET },
+    version: CORE_JS_VERSION,
   })
 
   expect(list).toMatchInlineSnapshot(`
