@@ -128,23 +128,25 @@ describe('BazingaCell', () => {
 `;
 
 exports[`TypeScript: generates list cells if list flag passed in 3`] = `
-"import { Loading, Empty, Failure, Success } from './BazingaCell'
+"import type { Story } from '@storybook/react'
+
+import { Loading, Empty, Failure, Success } from './BazingaCell'
 import { standard } from './BazingaCell.mock'
 
-export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+export const loading: Story<typeof Loading> = (args) => {
+  return Loading ? <Loading {...args} /> : <></>
 }
 
-export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+export const empty: Story<typeof Empty> = (args) => {
+  return Empty ? <Empty {...args} /> : <></>
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+export const failure: Story<typeof Failure> = (args) => {
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+export const success: Story<typeof Success> = (args) => {
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/BazingaCell' }
@@ -364,19 +366,19 @@ exports[`creates a cell stories with a camelCase word name 1`] = `
 import { standard } from './UserProfileCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/UserProfileCell' }
@@ -388,19 +390,19 @@ exports[`creates a cell stories with a kebabCase word name 1`] = `
 import { standard } from './UserProfileCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/UserProfileCell' }
@@ -412,19 +414,19 @@ exports[`creates a cell stories with a multi word name 1`] = `
 import { standard } from './UserProfileCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/UserProfileCell' }
@@ -436,19 +438,19 @@ exports[`creates a cell stories with a single word name 1`] = `
 import { standard } from './UserCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/UserCell' }
@@ -460,19 +462,19 @@ exports[`creates a cell stories with a snakeCase word name 1`] = `
 import { standard } from './UserProfileCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/UserProfileCell' }
@@ -777,19 +779,19 @@ exports[`generates a cell with a string primary id key 3`] = `
 import { standard } from './AddressCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/AddressCell' }
@@ -885,19 +887,19 @@ exports[`generates list a cell with a string primary id keys 3`] = `
 import { standard } from './AddressesCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/AddressesCell' }
@@ -991,19 +993,19 @@ exports[`generates list cells if list flag passed in 3`] = `
 import { standard } from './MembersCell.mock'
 
 export const loading = (args) => {
-  return Loading ? <Loading {...args} /> : null
+  return Loading ? <Loading {...args} /> : <></>
 }
 
 export const empty = (args) => {
-  return Empty ? <Empty {...args} /> : null
+  return Empty ? <Empty {...args} /> : <></>
 }
 
 export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : null
+  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
 }
 
 export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : null
+  return Success ? <Success {...standard()} {...args} /> : <></>
 }
 
 export default { title: 'Cells/MembersCell' }

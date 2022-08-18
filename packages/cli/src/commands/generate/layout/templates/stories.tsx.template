@@ -1,7 +1,9 @@
+import type { Story } from '@storybook/react'
+
 import ${singularPascalName}Layout from './${pascalName}Layout'
 
-export const generated = (args) => {
+export const generated: Story<typeof ${singularPascalName}Layout> = (args) => {
   return <${singularPascalName}Layout {...args} />
 }
 
-export default { title: 'Layouts/${singularPascalName}Layout' }
+export default { title: 'Layouts/${singularPascalName}Layout', component: ${singularPascalName}Layout }

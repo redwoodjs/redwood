@@ -1,7 +1,9 @@
+import type { Story } from '@storybook/react'
+
 import ${pascalName}Page from './${pascalName}Page'
 
-export const generated = (args) => {
+export const generated: Story<typeof ${pascalName}Page> = (args) => {
   return <${pascalName}Page ${propValueParam} {...args} />
 }
 
-export default { title: 'Pages/${pascalName}Page' }
+export default { title: 'Pages/${pascalName}Page', component: ${pascalName}Page }

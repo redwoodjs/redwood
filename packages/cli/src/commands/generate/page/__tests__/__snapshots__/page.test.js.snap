@@ -125,7 +125,7 @@ export const generated = (args) => {
   return <HomePage {...args} />
 }
 
-export default { title: 'Pages/HomePage' }
+export default { title: 'Pages/HomePage', component: HomePage }
 "
 `;
 
@@ -136,7 +136,7 @@ export const generated = (args) => {
   return <ContactUsPage {...args} />
 }
 
-export default { title: 'Pages/ContactUsPage' }
+export default { title: 'Pages/ContactUsPage', component: ContactUsPage }
 "
 `;
 
@@ -202,7 +202,7 @@ export const generated = (args) => {
   return <HomePage {...args} />
 }
 
-export default { title: 'Pages/HomePage' }
+export default { title: 'Pages/HomePage', component: HomePage }
 ",
   "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.js",
 }
@@ -288,7 +288,7 @@ export const generated = (args) => {
   return <PostPage id={'42'} {...args} />
 }
 
-export default { title: 'Pages/PostPage' }
+export default { title: 'Pages/PostPage', component: PostPage }
 ",
   "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.js",
 }
@@ -371,13 +371,15 @@ export default Routes",
 exports[`generates typescript pages 1`] = `undefined`;
 
 exports[`generates typescript pages 2`] = `
-"import TsFilesPage from './TsFilesPage'
+"import type { Story } from '@storybook/react'
 
-export const generated = (args) => {
+import TsFilesPage from './TsFilesPage'
+
+export const generated: Story<typeof TsFilesPage> = (args) => {
   return <TsFilesPage  {...args} />
 }
 
-export default { title: 'Pages/TsFilesPage' }
+export default { title: 'Pages/TsFilesPage', component: TsFilesPage }
 "
 `;
 
