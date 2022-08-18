@@ -432,34 +432,6 @@ describe('api prebuild polyfills unsupported functionality', () => {
   })
 })
 
-test('Pretranspile uses corejs3 aliasing', () => {
-  // See https://babeljs.io/docs/en/babel-plugin-transform-runtime#core-js-aliasing
-  // This is because we configure the transform runtime plugin corejs
-
-  const p = prebuiltFiles.filter((p) => p.endsWith('transform.js')).pop()
-  const code = fs.readFileSync(p, 'utf-8')
-
-  // Polyfill for Symbol
-  expect(code).toContain(
-    `import _Symbol from "@babel/runtime-corejs3/core-js/symbol"`
-  )
-
-  // Polyfill for Promise
-  expect(code).toContain(
-    `import _Promise from "@babel/runtime-corejs3/core-js/promise"`
-  )
-
-  // Polyfill for .includes
-  expect(code).toContain(
-    'import _includesInstanceProperty from "@babel/runtime-corejs3/core-js/instance/includes"'
-  )
-
-  // Polyfill for .iterator
-  expect(code).toContain(
-    `import _getIterator from "@babel/runtime-corejs3/core-js/get-iterator"`
-  )
-})
-
 test('jest mock statements also handle', () => {
   const pathToTest = path.join(getPaths().api.services, 'todos/todos.test.js')
 
