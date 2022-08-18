@@ -122,7 +122,7 @@ export const NODE_TARGET = '14.20'
 export const getApiSideDefaultBabelConfig = () => {
   return {
     targets: {
-      node: NODE_TARGET
+      node: NODE_TARGET,
     },
     presets: getApiSideBabelPresets(),
     plugins: getApiSideBabelPlugins(),

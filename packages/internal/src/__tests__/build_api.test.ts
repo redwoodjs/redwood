@@ -11,9 +11,9 @@ import {
   getApiSideDefaultBabelConfig,
   NODE_TARGET,
 } from '../build/babel/api'
+import { CORE_JS_VERSION } from '../build/babel/common'
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
-import { CORE_JS_VERSION } from '../build/babel/common'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
