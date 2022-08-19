@@ -23,7 +23,7 @@ But first, a note about a yes/no prompt you'll see the first time using any of t
 Using any of the auth methods below will lead to the following prompt the first time you connect, and it's because you've never connected to that server before:
 
 ```
-The authenticity of host '137.184.224.112 (137.184.224.112)' can't be established.
+The authenticity of host '192.168.0.122 (192.168.0.122)' can't be established.
 ED25519 key fingerprint is SHA256:FHQDzxsqA68c+BhLPUkyN8aAVrznDtekhPg/99JXk8Q.
 This key is not known by any other names
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
@@ -32,7 +32,7 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])?
 This is a quick security check making sure that you're actually connecting to the computer that you think you are. You can be reasonably sure that it is, so just type "yes". You'll get a note letting you know that it's been added to the list of known hosts (and you won't be prompted when connecting to this server again):
 
 ```
-Warning: Permanently added '137.184.224.112' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.0.122' (ED25519) to the list of known hosts.
 ```
 
 You can see a list of all known servers by looking in this file:
@@ -57,10 +57,10 @@ Using username/password auth is pretty straight forward, just denote the user an
 ssh user@server.com
 ```
 
-As a real example, here's how you would connect to a Digital Ocean Droplet. The user is `root` and the IP is `137.184.224.112`:
+As a real example, here's how you would connect to a Digital Ocean Droplet. The user is `root` and the IP is `192.168.0.122`:
 
 ```
-ssh root@137.184.224.112
+ssh root@192.168.0.122
 ```
 
 ### Private Key
@@ -82,7 +82,7 @@ Before connecting, you'll want to change the file access permissions on the `.pe
 Where `keyname` is whatever the actual name of the file is. Once you do this you're ready to use it to connect. You still need the username and address of the server, but we're also going to set the `-i` flag which instructs SSH to use the private key listed:
 
 ```
-ssh -i ~/.ssh/keyname.pem ubuntu@137.184.224.112
+ssh -i ~/.ssh/keyname.pem ubuntu@192.168.0.122
 ```
 
 ### Public Key
@@ -94,7 +94,7 @@ If you don't really know what a public key is, where yours is at, or what it mea
 You'll need your username and server address and that's it:
 
 ```
-ssh ubuntu@137.184.224.112
+ssh ubuntu@192.168.0.122
 ```
 
 If your server doesn't let you pre-load your public key on the server, you'll need to do it manually. See [Adding Your SSH Public Key to the Server](#adding-your-ssh-public-key-to-the-server) below.
@@ -104,7 +104,7 @@ If your server doesn't let you pre-load your public key on the server, you'll ne
 Whatever auth method you go with, you should now be connected! If you get an error message that looks like this:
 
 ```
-ubuntu@137.184.224.112: Permission denied (publickey,password).
+ubuntu@192.168.0.122: Permission denied (publickey,password).
 ```
 
 It could be one of several things:
@@ -128,7 +128,7 @@ Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-41-generic x86_64)
   System information as of Wed Aug  3 21:09:41 UTC 2022
 
   System load:  0.25439453125     Users logged in:       0
-  Usage of /:   6.3% of 24.05GB   IPv4 address for eth0: 137.184.224.112
+  Usage of /:   6.3% of 24.05GB   IPv4 address for eth0: 192.168.0.122
   Memory usage: 22%               IPv4 address for eth0: 10.48.0.5
   Swap usage:   0%                IPv4 address for eth1: 10.124.0.2
   Processes:    97
@@ -142,12 +142,22 @@ individual files in /usr/share/doc/*/copyright.
 Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
 applicable law.
 
-root@ubuntu-s-1vcpu-1gb-sfo3-01:~#
+root@remote-server:~#
 ```
 
 This is the welcome message on an Ubuntu machine, yours may be different.
 
 The last line is actually your prompt where you can start typing commands.
+
+## Disconnecting
+
+Disconnecting from the server is just a simple `exit` command. You can also just close your terminal window and the connection will be terminated:
+
+```bash
+root@remote-server:~# exit
+
+Connection to 192.168.0.122 closed.
+```
 
 ## Simplifying Access
 
@@ -249,4 +259,129 @@ Now running `ssh-add -L` should list our key.
 
 ### Adding Your SSH Public Key to the Server
 
-So SSH is now presenting the key to the server, but the server doesn't know what to do with it.
+So SSH is now presenting the key to the server, but the server doesn't know what to do with it. We'll now copy our *public* key to the server so that it allows connections from it. Write your public key to the terminal so that you can copy it:
+
+```
+cat ~/.ssh/id_rsa.pub
+```
+
+::: info
+
+On MacOS you can copy the key into your clipboard with this two-part command:
+
+```
+cat ~/.ssh/id_rsa.pub | pbcopy
+```
+
+:::
+
+Now, connect to the server with ssh as usual (using your username/password or private key) and then open up the `~/.ssh/authorized_keys` file for editing. The `nano` editor is usually built in and is simple to use, but `vi` is another choice:
+
+```
+nano ~/.ssh/authorized_keys
+```
+
+Now just paste your key into this file. It helps to add a comment above so you know which computer this key is from, maybe with the person's name and the hostname of their system. As you upgrade computers or give coworkers access to this machine you'll quickly lose track of which keys are which if you don't label them:
+
+```
+# Rob Cameron (trion)
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQAB<REDACTED>3Edk1OE6BU6hK2EZchm= rob@computer.local
+```
+
+Save the file and exit. Now, disconnect from the ssh session with `exit` and reconnect, but this time you shouldn't need a password or private key. If you were using `-i` you can leave that off now, and simply connect with:
+
+```
+ssh root@192.168.0.122
+```
+
+And you should be in!
+
+## Customizing the Prompt
+
+When deploying an app to production it can be very helpful to get a reminder of what server you're connected to, rather that seeing an IP address or random hostname at the prompt:
+
+```
+root@remote-server:~#
+# or
+user@192.168.0.122
+```
+
+Is that production? Staging? Which server in the cluster? Luckily you can customize this prompt pretty easily. I like to use the app name, the environment, an a simple integer of which server in a cluster this one is in. So if my app is called "ruby" and it's the first server in the production environment, I like to see my prompt as:
+
+```
+root@ruby-prod1:~#
+```
+
+This prompt is usually specified in one of these files:
+
+```
+~/.bashrc
+~/.bash_profile
+~/.zshrc
+~/.zprofile
+```
+
+If you you use a shell other than `bash` or `zsh` the files are going to be named differently, but the idea is the same. Open it in `nano` or `vi` and look for a line that starts with `PS1=` (you may see a couple of lines like this):
+
+```bash
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+```
+
+Within all of that gobledy gook you should see a couple of escape characters: `\u`, `\h` and `\w`. These are the **user**, **hostname** and **working directory**. You may have all or only some of these present. The rest of the characters, like `[\033[00m\]` are color codes, which we can ignore for now.
+
+In the config snippet above, the first `PS1` is used for color prompts and the second is for black and white. You'll want to change them both.
+
+For our simple case, just replace the `\h` with the string we want to show for the hostname:
+
+```bash
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@ruby-prod1\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@ruby-prod1:\w\$
+fi
+```
+
+Now save the file, and run `source` to load up the variables into the current session:
+
+```
+source ~/.bashrc
+```
+
+You should see your prompt change to show you new custom hostname! Now whenever you connect to your server you'll be sure not to run `rm -rf *` in the wrong environment.
+
+## SSH Forwarding
+
+When connecting to a remote server, it would be nice if you could also SSH into other machines and have them identify you as *you*, on your personal computer, not as the server itself. By default this doesn't happen: making an SSH connection from your remote server uses the credentials on the server itself, meaning you'd have to go through all of the steps above to now treat the remote server as the client as whatever server *that* server wants to connect to as the host, allowing you to connect with your public key. Ugh.
+
+Luckly SSH has a mechanism that supports this: SSH Agent Forwarding.
+
+This is most useful when trying to deploy a codebase from GitHub to your remote server: you're already connected to the remote server as you, and you're already authorized to connect to GitHub, so just use those credentials. You can verify if this is already working for you:
+
+```
+git -T git@github.com
+```
+
+If you get a message like this:
+
+```
+Hi cannikin! You've successfully authenticated, but GitHub does not provide shell access.
+Connection to github.com closed.
+```
+
+Then agent forwarding is already enabled! GitHub recognized you as your username and gave you access. The remote server forwarded on your public key (the same one that was used to connect to your remote server) and everything just worked.
+
+If instead you see this message:
+
+```
+git@github.com: Permission denied (publickey).
+```
+
+Then agent forwarding is not enabled. In this case we recommend this excellent guide from GitHub which walks you through enabling it: https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding
+
+## What's Next?
+
+You should now be ready to deploy with [Baremetal](/docs/deploy/baremetal)! Baremetal does the same thing you're doing manually (SSHing into the remote server and running commands), so if you can connect to your server manually then Baremetal should be able to as well.
