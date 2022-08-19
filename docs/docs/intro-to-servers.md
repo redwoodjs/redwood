@@ -41,9 +41,9 @@ You can see a list of all known servers by looking in this file:
 ~/.ssh/known_hosts
 ```
 
-:::info title=Reusing IP addresses
+:::info Reusing IP addresses
 
-If you're connecting to cloud-based servers, turning them on and off, and potentially reusing IP addresses, you'll get an error message the next time you try to connect to that IP (because the signature of the server itself is now different and is different than what's stored in `known_hosts`. Find that line and delete it from `~/.ssh/known_hosts` and you'll be able to connect again.
+If you're connecting to cloud-based servers, turning them on and off, and potentially reusing IP addresses, you'll get an error message the next time you try to connect to that IP (because the signature of the server itself is now different than what's recorded in `known_hosts`. Find that line and delete it from `~/.ssh/known_hosts` and you'll be able to connect again.
 
 :::
 
@@ -67,7 +67,7 @@ ssh root@192.168.0.122
 
 Some providers, like AWS, will give you a private key at the time the server is created, rather than a password. This file usually ends in `.pem`. Make sure you know where you put this file on your computer because, for now, it's the only way you'll be able to connect to your server via SSH. I generally put them in the `~/.ssh` folder to keep all SSH-related stuff together.
 
-:::info
+:::info More About Public/Private Keypairs
 
 Learn more about [public/private key authentication](https://www.ssh.com/academy/ssh/public-key-authentication). But the gist is that you create two keys, one public and one private. Either one can encrypt a document, but, only the private key can *decrypt* it. This means that anyone can have the public key and it can be freely distrubted (thus the "public" name), and the owner of the private key can always verify that it was encrypted using the related public key. A related technique can happen in reverse: the private key can be used to create a signature of a document, and the public key can be used to *verify* that the signature was created by the matching private key. So you can get the original message, and after verifying the signature, trust that it was sent by the owner of the private key.
 
@@ -231,7 +231,7 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 
-::: info What's this randomart thing?
+:::info What's this randomart thing?
 
 From this [Super User answer](https://superuser.com/a/22541):
 
@@ -265,7 +265,7 @@ So SSH is now presenting the key to the server, but the server doesn't know what
 cat ~/.ssh/id_rsa.pub
 ```
 
-::: info
+:::info
 
 On MacOS you can copy the key into your clipboard with this two-part command:
 
@@ -353,7 +353,7 @@ source ~/.bashrc
 
 You should see your prompt change to show you new custom hostname! Now whenever you connect to your server you'll be sure not to run `rm -rf *` in the wrong environment.
 
-## SSH Forwarding
+## SSH Agent Forwarding
 
 When connecting to a remote server, it would be nice if you could also SSH into other machines and have them identify you as *you*, on your personal computer, not as the server itself. By default this doesn't happen: making an SSH connection from your remote server uses the credentials on the server itself, meaning you'd have to go through all of the steps above to now treat the remote server as the client as whatever server *that* server wants to connect to as the host, allowing you to connect with your public key. Ugh.
 
