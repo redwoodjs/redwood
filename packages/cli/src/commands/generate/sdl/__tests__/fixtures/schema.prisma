@@ -36,17 +36,24 @@ model UserProfile {
   user     User   @relation(fields: [userId], references: [id])
 }
 
+/// A shoe worn by a user.
 model Shoe {
+  /// The underlaying ID
   id    Int   @id @default(autoincrement())
+  /// Shoe color
   color Color
 }
 
+/// A photograph taken by a user.
 model Photo {
+  /// The underlaying ID
   id       Int    @id @default(autoincrement())
+  /// The name of the Photo
   name     String
   metadata Json
 }
 
+/// A list of allowed colors.
 enum Color {
   RED
   GREEN

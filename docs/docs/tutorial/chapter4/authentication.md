@@ -728,7 +728,7 @@ export const isAuthenticated = () => {
   return !!context.currentUser
 }
 
-export const hasRole = ({ roles }) => {
+export const hasRole = (roles) => {
   if (!isAuthenticated()) {
     return false
   }
@@ -751,11 +751,9 @@ export const hasRole = ({ roles }) => {
       return currentUserRoles?.some((allowedRole) =>
         roles.includes(allowedRole)
       )
-    } else if (typeof context.currentUser.roles === 'string') {
+    } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
-      return roles.some(
-        (allowedRole) => context.currentUser?.roles === allowedRole
-      )
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
     }
   }
 
@@ -763,7 +761,7 @@ export const hasRole = ({ roles }) => {
   return false
 }
 
-export const requireAuth = ({ roles }) => {
+export const requireAuth = ({ roles } = {}) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
@@ -773,17 +771,6 @@ export const requireAuth = ({ roles }) => {
   }
 }
 ```
-
-:::caution
-
-At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the `hasRole` method in `api/src/lib/auth.js` for now.
-
-If this bothers you, feel free to peek into [the tutorial chapter about Authorization](../chapter7/rbac.md) and add the missing field as described there.
-:::
-
-
-
-
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
@@ -791,7 +778,9 @@ If this bothers you, feel free to peek into [the tutorial chapter about Authoriz
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
-export const getCurrentUser = async (session) => {
+import type { DbAuthSession } from '@redwoodjs/api'
+
+export const getCurrentUser = async (session: DbAuthSession<number>) => {
   return await db.user.findUnique({
     where: { id: session.id },
     select: { id: true },
@@ -804,7 +793,7 @@ export const isAuthenticated = (): boolean => {
 
 type AllowedRoles = string | string[] | undefined
 
-export const hasRole = ({ roles }): boolean => {
+export const hasRole = (roles: AllowedRoles): boolean => {
   if (!isAuthenticated()) {
     return false
   }
@@ -827,11 +816,9 @@ export const hasRole = ({ roles }): boolean => {
       return currentUserRoles?.some((allowedRole) =>
         roles.includes(allowedRole)
       )
-    } else if (typeof context.currentUser.roles === 'string') {
+    } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
-      return roles.some(
-        (allowedRole) => context.currentUser?.roles === allowedRole
-      )
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
     }
   }
 
@@ -849,22 +836,8 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
   }
 }
 ```
-
-:::caution
-
-At this point of the tutorial we have **not added roles** to our user model yet, therefore you can ignore the following error:
-
-`Property 'roles' does not exist on type '{ id: number; email: string; }'.`
-
-in the `hasRole` method in `api/src/lib/auth.ts` for now.
-
-If this bothers you, feel free to peek into [the tutorial chapter about Authorization](../chapter7/rbac.md) and add the missing field as described there.
-:::
-
 </TabItem>
 </Tabs>
-
-
 
 The `getCurrentUser()` function is where the magic happens: whatever is returned by this function is the content of `currentUser`, in both the web and api sides! In the case of dbAuth, the single argument passed in, `session`, contains the `id` of the user that's logged in. It then looks up the user in the database with Prisma, selecting just the `id`. Let's add `email` to this list:
 

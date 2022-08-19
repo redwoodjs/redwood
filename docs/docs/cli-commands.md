@@ -897,11 +897,13 @@ A scaffold quickly creates a CRUD for a model by generating the following files 
 
 The content of the generated components is different from what you'd get by running them individually.
 
-| Arguments & Options  | Description                                                                                                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `model`              | Model to scaffold. You can also use `<path/model>` to nest files by type at the given path directory (or directories). For example, `redwood g scaffold admin/post` |
-| `--force, -f`        | Overwrite existing files                                                                                                                                            |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                |
+| Arguments & Options  | Description                                                                                                                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `model`              | Model to scaffold. You can also use `<path/model>` to nest files by type at the given path directory (or directories). For example, `redwood g scaffold admin/post`                                   |
+| `--docs`             | Use or set to `true` to generated comments in SDL to use in self-documentating your app's GraphQL API. See: [Self-Documenting GraphQL API](./graphql.md#self-documenting-graphql-api) [default:false] |
+| `--force, -f`        | Overwrite existing files                                                                                                                                                                              |
+| `--tailwind`         | Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)                                                                                               |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
 
 **Usage**
 
@@ -1075,13 +1077,14 @@ The sdl will inspect your `schema.prisma` and will do its best with relations. S
 <!-- See limited generator support for relations
 https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-support-for-relations-with-workarounds/361 -->
 
-| Arguments & Options  | Description                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| `model`              | Model to generate the sdl for                                                        |
-| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations         |
-| `--force, -f`        | Overwrite existing files                                                             |
-| `--tests`            | Generate service test and scenario [default: true]                                   |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| Arguments & Options  | Description                                                                                                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `model`              | Model to generate the sdl for                                                                                                                                                                          |
+| `--crud`             | Set to `false`, or use `--no-crud`, if you do not want to generate mutations                                                                                                                           |
+| `--docs`             | Use or set to `true` to generated comments in SDL to use in self-documentating your app's GraphQL API. See: [Self-Documenting GraphQL API](./graphql.md#self-documenting-graphql-api) [default: false] |
+| `--force, -f`        | Overwrite existing files                                                                                                                                                                               |
+| `--tests`            | Generate service test and scenario [default: true]                                                                                                                                                     |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                   |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
 
@@ -1264,7 +1267,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `name`               | Name of the service                                                                  |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
-| `--tests`            | Generate test and scenario files [default: true]                                                  |
+| `--tests`            | Generate test and scenario files [default: true]                                     |
 
 
 **Destroying**
@@ -1823,7 +1826,7 @@ yarn redwood setup tsconfig
 
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [Chakra UI](https://chakra-ui.com/), [TailwindCSS](https://tailwindcss.com/) and [WindiCSS](https://windicss.org/).
+Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), [Mantine UI](https://ui.mantine.dev/) and [WindiCSS](https://windicss.org/).
 
 ```
 yarn rw setup ui <library>
@@ -1831,7 +1834,7 @@ yarn rw setup ui <library>
 
 | Arguments & Options | Description                                                                 |
 | :------------------ | :-------------------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss` and `windicss` |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
 | `--force, -f`       | Overwrite existing configuration                                            |
 
 ## storybook
