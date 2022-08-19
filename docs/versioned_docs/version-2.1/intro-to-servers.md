@@ -6,7 +6,7 @@ description: How to get started connecting to and deploying to a real server
 
 ## First Connect
 
-Before we can do anything else, we want to make sure that we can remotely connect to our server via SSH manually, as *nix folks have been doing for hundreds of years. Depending on how the server is configured, you'll connect with either a username and password, a private key known to the server, or a public key known to the server. We'll look at each one below.
+Before we can do anything else, we want to make sure that we can remotely connect to our server via SSH manually, as *nix folks have been doing for hundreds of years using SSH. Depending on how the server is configured, you'll connect with either a username and password, a private key known to the server, or a public key known to the server. We'll look at each one below.
 
 A requirement of all of these authentication methods is that you know the username of the account you're connecting to. You'll need to get this from your hosting/cloud provider, and it could be pretty different depending on who your host is:
 
@@ -49,6 +49,12 @@ If you're connecting to cloud-based servers, turning them on and off, and potent
 
 Once you're past that prompt you'll then either be prompted for your password, or logged in automatically (when using a private or public key). Let's look at each one in detail.
 
+:::caution Baremetal First Deploy Woes?
+
+If you're having trouble deploying to your server with Baremetal, and you've never connected to your server manually via SSH, this could be why: Baremetal provides no interactive prompt to accept this server fingerprint. You need to connect manually at least once before Baremetal can connect.
+
+:::
+
 ### Username/Password
 
 Using username/password auth is pretty straight forward, just denote the user and server you want to connect to, either by its domain name or IP address. You will have created the password at the time you started your server, or maybe the host generated a random one.
@@ -63,9 +69,19 @@ As a real example, here's how you would connect to a Digital Ocean Droplet. The 
 ssh root@192.168.0.122
 ```
 
+You will be prompted to enter the server's password, and your keystrokes are hidden which for some reason makes typing a password exponentially harder:
+
+```
+root@192.168.0.122's password:
+```
+
+You'll get three tries to get the password correct.
+
+Skip ahead to the [Connected](#connected) section.
+
 ### Private Key
 
-Some providers, like AWS, will give you a private key at the time the server is created, rather than a password. This file usually ends in `.pem`. Make sure you know where you put this file on your computer because, for now, it's the only way you'll be able to connect to your server via SSH. I generally put them in the `~/.ssh` folder to keep all SSH-related stuff together.
+Some providers, like AWS, will give you a private key at the time the server is created, rather than a password. This file usually ends in `.pem`. Make sure you know where you put this file on your computer because, for now, it's the only way you'll be able to connect to your server via SSH. If you lose it, you'll need to terminate that instance and start a new one. I generally put them in the `~/.ssh` folder to keep all SSH-related stuff together, usually in a subdirectory. (I also move this folder to iCloud and then create a symlink back to `~/.ssh` so that it's synchronized across all of my systems.)
 
 :::info More About Public/Private Keypairs
 
@@ -75,21 +91,40 @@ You can't *decrypt* something with the public key that was encrypted with the pr
 
 :::
 
-Before connecting, you'll want to change the file access permissions on the `.pem` file. This says that only the owner may access the file, and SSH will usually complain if anyone else has access to it. This is handled with the `chmod` command. The [octal version](https://chmodcommand.com/chmod-600/) of the permissions you want to set is the number `600`. To change the permission of the file:
+If you try connecting using that private key now, you'll most likely get a big scary message:
 
-`chmod 600 ~/.ssh/keyname.pem`
+```
+ssh -i ~/.ssh/keyname.pem ubuntu@192.168.0.122
 
-Where `keyname` is whatever the actual name of the file is. Once you do this you're ready to use it to connect. You still need the username and address of the server, but we're also going to set the `-i` flag which instructs SSH to use the private key listed:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0666 for '/Users/rob/.ssh/shared/algostake.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+```
+
+This is because files downloaded from the internet are given permissions that make them readable by anyone on the system. SSH doesn't like this. It wants you, and only you, to have access to this file. So we need to make it readable and writeable by only your user.
+
+Permission changes are handled by the `chmod` command. The [octal version](https://chmodcommand.com/chmod-600/) of the permissions you want to set is the number `600` (which sets read/write permissions for the owner of file, and nothing for anyone else). To change the permission of the file:
+
+```
+chmod 600 ~/.ssh/keyname.pem
+```
+
+Where `keyname` is whatever the actual name of the file is. Once you do this you're ready to use it to connect. You still need the username and address of the server, but we're also going to set the `-i` flag which instructs SSH to use a private key at a given path:
 
 ```
 ssh -i ~/.ssh/keyname.pem ubuntu@192.168.0.122
 ```
 
+Skip ahead to the [Connected](#connected) section.
+
 ### Public Key
 
-Some providers, like Digital Ocean, give you the opportunity to put your public key on the server automatically when it's created. This lets you avoid password and private key authentication completely, and is actually the preferred method of connecting via SSH that we'll end up with at the end of this guide!
+Some providers, like Digital Ocean, give you the opportunity to put your public key on the server automatically when it's created. This lets you avoid password and private key authentication completely, and is actually the preferred method of connecting via SSH that we'll end up with at [the end](#adding-your-ssh-public-key-to-the-server) of this guide!
 
-If you don't really know what a public key is, where yours is at, or what it means to put it on the server, then skip ahead to the [Creating a Public Key](#creating-a-public-key) section and then come back here.
+If you don't really know what a public key is, where yours is at, or what it means to put it on the server, then skip ahead to the [Creating a Public Key](#creating-a-public-key) section.
 
 You'll need your username and server address and that's it:
 
@@ -97,7 +132,7 @@ You'll need your username and server address and that's it:
 ssh ubuntu@192.168.0.122
 ```
 
-If your server doesn't let you pre-load your public key on the server, you'll need to do it manually. See [Adding Your SSH Public Key to the Server](#adding-your-ssh-public-key-to-the-server) below.
+If you have a public key, but your server doesn't let you pre-load it onto the server, you'll need to do it manually. See [Adding Your SSH Public Key to the Server](#adding-your-ssh-public-key-to-the-server) below.
 
 ## Connected
 
@@ -173,7 +208,7 @@ You can have multiple public keys from multiple development machines on the serv
 
 ### Public/Private Keypairs
 
-You may already have a public/private keypair! Check in `~/.ssh` and look for two files with the same name before the extension, one with `.pub` on the end (`id_rsa` and `id_rsa.pub`, for example). If you don't remember actually putting these files in the directory, then they were probably generated by a program like `ssh-keygen`, and ssh is already using them!
+You may already have a public/private keypair! Check in `~/.ssh` and look for two files with the same name before the extension, one with `.pub` on the end (`id_rsa` and `id_rsa.pub`, for example). If you don't remember actually putting these files in the directory, then they were probably generated by a program like `ssh-keygen`, and SSH is already using them!
 
 To see which of your keys SSH is already aware of, you can run this command to list them:
 
@@ -187,7 +222,7 @@ You should get zero or more lines containing public SSH keys, something like thi
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQAB<REDACTED>3Edk1OE6BU6hK2EZchm= rob@computer.local
 ```
 
-If I compare that to the content of my `~/.ssh/id_rsa.pub` file I can see that they match! Great, so SSH is already using my public key when it tries to connect. But what if I don't have a public/private keypair?
+If I compare that to the content of my `~/.ssh/id_rsa.pub` file I can see that they match! Great, so SSH is already using our public key when it tries to connect. But what if you don't have a public/private keypair?
 
 ### Generating a Public/Private Keypair
 
@@ -197,20 +232,20 @@ There's a simple command to generate a new keypair:
 ssh-keygen -t rsa -r 4096
 ```
 
+This tells the program to generate a key using the RSA algorithm and to make it 4096 bytes long. There are [newer algorithms](https://goteleport.com/blog/comparing-ssh-keys/) available, but not all of them are supported everywhere. The linked article goes into depth into the various algorithms and their pros and cons.
+
 You will be prompted for a couple of questions:
 
 ```
 Generating public/private rsa key pair.
-Enter file in which to save the key (/Users/rob/.ssh/id_rsa): sample_rsa
+Enter file in which to save the key (/Users/rob/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
 ```
 
-If you don't have any keys, go ahead and use the default name (`id_rsa`).
+If you don't have any keys, go ahead and use the default name (`id_rsa`) by just hitting ENTER.
 
 A Passphrase is an additional line of security on your key. However, it also adds some inconvenience around using your public key: you'll need to enter the passpharse each time your private key is accessed. Which is great for security, but kind of defeats the purpose of sharing your public key with the server to make access easier. As long as you protect your private key, you shouldn't need to worry about adding a passphrase. Press ENTER (twice) to create your keypair without a passphrase.
-
-Your keypair is generated!
 
 ```
 Your identification has been saved in id_rsa
@@ -275,83 +310,26 @@ cat ~/.ssh/id_rsa.pub | pbcopy
 
 :::
 
-Now, connect to the server with ssh as usual (using your username/password or private key) and then open up the `~/.ssh/authorized_keys` file for editing. The `nano` editor is usually built in and is simple to use, but `vi` is another choice:
+Now, connect to the server with ssh as usual (using your username/password or private key) and then open up the `~/.ssh/authorized_keys` file for editing. The `nano` editor is usually built in and is simple to use, but `vi` is another choice (if you can figure out how to exit):
 
 ```
 nano ~/.ssh/authorized_keys
 ```
 
-Now just paste your key into this file. It helps to add a comment above so you know which computer this key is from, maybe with the person's name and the hostname of their system. As you upgrade computers or give coworkers access to this machine you'll quickly lose track of which keys are which if you don't label them:
+Now just paste your key into this file on a new line. It helps to add a comment above so you know which computer this key is from, maybe with the person's name and the hostname of their system. As you upgrade computers or give coworkers access to this machine you'll quickly lose track of which keys are which if you don't label them:
 
 ```
-# Rob Cameron (trion)
+# Rob Cameron (optimus-prime)
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQAB<REDACTED>3Edk1OE6BU6hK2EZchm= rob@computer.local
 ```
 
-Save the file and exit. Now, disconnect from the ssh session with `exit` and reconnect, but this time you shouldn't need a password or private key. If you were using `-i` you can leave that off now, and simply connect with:
+Save the file and exit. Now, disconnect from the SSH session with `exit` and reconnect, but this time you shouldn't need a password or private key (if you were using `-i` you can leave that off) and simply connect with:
 
 ```
 ssh root@192.168.0.122
 ```
 
 And you should be in!
-
-## Customizing the Prompt
-
-When deploying an app to production it can be very helpful to get a reminder of what server you're connected to, rather that seeing an IP address or random hostname at the prompt:
-
-```
-root@remote-server:~#
-# or
-user@192.168.0.122
-```
-
-Is that production? Staging? Which server in the cluster? Luckily you can customize this prompt pretty easily. I like to use the app name, the environment, an a simple integer of which server in a cluster this one is in. So if my app is called "ruby" and it's the first server in the production environment, I like to see my prompt as:
-
-```
-root@ruby-prod1:~#
-```
-
-This prompt is usually specified in one of these files:
-
-```
-~/.bashrc
-~/.bash_profile
-~/.zshrc
-~/.zprofile
-```
-
-If you you use a shell other than `bash` or `zsh` the files are going to be named differently, but the idea is the same. Open it in `nano` or `vi` and look for a line that starts with `PS1=` (you may see a couple of lines like this):
-
-```bash
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-```
-
-Within all of that gobledy gook you should see a couple of escape characters: `\u`, `\h` and `\w`. These are the **user**, **hostname** and **working directory**. You may have all or only some of these present. The rest of the characters, like `[\033[00m\]` are color codes, which we can ignore for now.
-
-In the config snippet above, the first `PS1` is used for color prompts and the second is for black and white. You'll want to change them both.
-
-For our simple case, just replace the `\h` with the string we want to show for the hostname:
-
-```bash
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@ruby-prod1\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@ruby-prod1:\w\$
-fi
-```
-
-Now save the file, and run `source` to load up the variables into the current session:
-
-```
-source ~/.bashrc
-```
-
-You should see your prompt change to show you new custom hostname! Now whenever you connect to your server you'll be sure not to run `rm -rf *` in the wrong environment.
 
 ## SSH Agent Forwarding
 
@@ -382,6 +360,82 @@ git@github.com: Permission denied (publickey).
 
 Then agent forwarding is not enabled. In this case we recommend this excellent guide from GitHub which walks you through enabling it: https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding
 
+## Customizing the Prompt
+
+When deploying an app to production it can be very helpful to get a reminder of what server you're connected to, rather that seeing an IP address or random hostname at the prompt:
+
+```
+root@remote-server:~#
+# or
+user@192.168.0.122
+```
+
+Is that production? Staging? Which server in the cluster? Luckily you can customize this prompt pretty easily. I like to use the app name, the environment, an a simple integer of which server ID (if its in a cluster). So if my app is called "ruby" and it's the first server in the production environment cluster, I like to see my prompt as:
+
+```
+root@ruby-prod1:~#
+```
+
+This prompt is usually specified in one of these files:
+
+```
+~/.bashrc
+~/.bash_profile
+~/.zshrc
+~/.zprofile
+```
+
+If you you use a shell other than `bash` or `zsh` the files are going to be named differently, but the idea is the same. Open the file in `nano` or `vi` and look for a line that starts with `PS1=` (you may see a couple of lines like this):
+
+```bash
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+```
+
+Within all of that gobledy gook you should see a few special escape characters: `\u`, `\h` and `\w`. These are the **user**, **hostname** and **working directory**. You may have all or only some of these present. The rest of the characters, like `[\033[00m\]` are color codes, which we can ignore for now.
+
+In the config snippet above, the first `PS1` is used for color prompts and the second is for black and white. You'll want to change them both.
+
+For our simple case, just replace the `\h` with the string we want to show for the hostname:
+
+```bash
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@ruby-prod1\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@ruby-prod1:\w\$
+fi
+```
+
+Now save the file, and run `source` to load up the variables into the current session:
+
+```
+source ~/.bashrc
+```
+
+You should see your prompt change to show you new custom hostname! Now whenever you connect to your server you'll be sure not to run `rm -rf *` in the wrong environment.
+
+If you want to get real fancy with your prompt, there are some [PS1 generators](hhttps://ezprompt.net) out there that let you create the string containing all kinds of fancy stuff, and easily customize the colors.
+
+## Aliases for Even Easier Connections
+
+Seeing `ruby-prod1` helps keep track of which server we're on, but wouldn't it be great if you could just type that as a command and connect automatically? You can!
+
+Back in your `.bashrc`/`.bash_profile` whichever file, add a line like the following:
+
+```
+alias ruby-prod1='ssh root@192.168.0.122'
+```
+
+Then run `source ~/.bashrc` to execute it. Now you should be able to connect by just using the name of the server, and skip the SSH command altogether:
+
+```
+ruby-prod1
+```
+It doesn't get much easier than that!
+
 ## What's Next?
 
-You should now be ready to deploy with [Baremetal](/docs/deploy/baremetal)! Baremetal does the same thing you're doing manually (SSHing into the remote server and running commands), so if you can connect to your server manually then Baremetal should be able to as well.
+You should now be ready to get to the next step(s) using the [Baremetal](/docs/deploy/baremetal) deploy! Baremetal does the same thing you're doing manually (SSHing into the remote server and running commands), so if you can connect to your server manually then Baremetal should be able to as well.
