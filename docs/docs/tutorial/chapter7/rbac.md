@@ -96,6 +96,64 @@ export const getCurrentUser = async (session) => {
 </TabItem>
 </Tabs>
 
+<ShowForTs>
+
+### Fixing the hasRole function
+
+At this point, you might notice an error in your `api/src/lib/auth.ts` file, in the `hasRole` function. TypeScript is trying to help you here, by highlighting that roles can never be an array of strings:
+
+```ts title="api/src/lib/auth.ts"
+export const hasRole = (roles: AllowedRoles): boolean => {
+
+  // ...
+
+    } else if (Array.isArray(currentUserRoles)) {
+      // 👇 TypeScript will now be telling you 'some' doesn't exist on type never:
+      // highlight-next-line
+      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
+    }
+  }
+ ```
+
+This is because we now know that the type of `currentUser.roles` is a `string` based on the type being returned from Prisma. So you can safely remove the block of code where it's checking if roles is an array:
+
+```diff title="api/src/lib/auth.ts"
+export const hasRole = (roles: AllowedRoles): boolean => {
+  if (!isAuthenticated()) {
+    return false
+  }
+
+  const currentUserRoles = context.currentUser?.roles
+
+  if (typeof roles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roles to check is a string, currentUser.roles is a string
+      return currentUserRoles === roles
+-    } else if (Array.isArray(currentUserRoles)) {
+-      // roles to check is a string, currentUser.roles is an array
+-      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
+    }
+  }
+
+  if (Array.isArray(roles)) {
+    if (Array.isArray(currentUserRoles)) {
+      // roles to check is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof currentUserRoles === 'string') {
+      // roles to check is an array, currentUser.roles is a string
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
+    }
+  }
+
+  // roles not found
+  return false
+}
+```
+
+</ShowForTs>
+
 ### Restricting Access via Routes
 
 The easiest way to prevent access to an entire URL is via the Router. The `<Private>` component takes a prop `roles` in which you can give a list of only those role(s) that should have access:

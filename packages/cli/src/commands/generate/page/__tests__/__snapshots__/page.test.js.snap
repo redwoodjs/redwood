@@ -10,12 +10,16 @@ const HomePage = () => {
       <MetaTags title=\\"Home\\" description=\\"Home page\\" />
 
       <h1>HomePage</h1>
+
       <p>
-        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+        Find me in
+        <code>./web/src/pages/HomePage/HomePage.js</code>
       </p>
+
       <p>
-        My default route is named <code>home</code>, link to me with \`
-        <Link to={routes.home()}>Home</Link>\`
+        My default route is named
+        <code>home</code>, link to me with \`<Link to={routes.home()}>Home</Link>
+        \`
       </p>
     </>
   )
@@ -35,11 +39,15 @@ const ContactUsPage = () => {
       <MetaTags title=\\"ContactUs\\" description=\\"ContactUs page\\" />
 
       <h1>ContactUsPage</h1>
+
       <p>
-        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
+        Find me in
+        <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
       </p>
+
       <p>
-        My default route is named <code>contactUs</code>, link to me with \`
+        My default route is named
+        <code>contactUs</code>, link to me with \`
         <Link to={routes.contactUs()}>ContactUs</Link>\`
       </p>
     </>
@@ -60,12 +68,16 @@ const CatsPage = () => {
       <MetaTags title=\\"Cats\\" description=\\"Cats page\\" />
 
       <h1>CatsPage</h1>
+
       <p>
-        Find me in <code>./web/src/pages/CatsPage/CatsPage.js</code>
+        Find me in
+        <code>./web/src/pages/CatsPage/CatsPage.js</code>
       </p>
+
       <p>
-        My default route is named <code>cats</code>, link to me with \`
-        <Link to={routes.cats()}>Cats</Link>\`
+        My default route is named
+        <code>cats</code>, link to me with \`<Link to={routes.cats()}>Cats</Link>
+        \`
       </p>
     </>
   )
@@ -85,13 +97,18 @@ const PostPage = ({ id }) => {
       <MetaTags title=\\"Post\\" description=\\"Post page\\" />
 
       <h1>PostPage</h1>
+
       <p>
-        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+        Find me in
+        <code>./web/src/pages/PostPage/PostPage.js</code>
       </p>
+
       <p>
-        My default route is named <code>post</code>, link to me with \`
+        My default route is named
+        <code>post</code>, link to me with \`
         <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
       </p>
+
       <p>The parameter passed to me is {id}</p>
     </>
   )
@@ -223,12 +240,16 @@ const HomePage = () => {
       <MetaTags title=\\"Home\\" description=\\"Home page\\" />
 
       <h1>HomePage</h1>
+
       <p>
-        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+        Find me in
+        <code>./web/src/pages/HomePage/HomePage.js</code>
       </p>
+
       <p>
-        My default route is named <code>home</code>, link to me with \`
-        <Link to={routes.home()}>Home</Link>\`
+        My default route is named
+        <code>home</code>, link to me with \`<Link to={routes.home()}>Home</Link>
+        \`
       </p>
     </>
   )
@@ -305,13 +326,18 @@ const PostPage = ({ id }) => {
       <MetaTags title=\\"Post\\" description=\\"Post page\\" />
 
       <h1>PostPage</h1>
+
       <p>
-        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+        Find me in
+        <code>./web/src/pages/PostPage/PostPage.js</code>
       </p>
+
       <p>
-        My default route is named <code>post</code>, link to me with \`
+        My default route is named
+        <code>post</code>, link to me with \`
         <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
       </p>
+
       <p>The parameter passed to me is {id}</p>
     </>
   )

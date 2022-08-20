@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-// import * as add from '@graphql-codegen/add'
+import * as addPlugin from '@graphql-codegen/add'
 import { loadCodegenConfig } from '@graphql-codegen/cli'
 import { codegen } from '@graphql-codegen/core'
 import type {
@@ -23,6 +23,14 @@ import { getTsConfigs } from '../project'
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
   const extraPlugins: CombinedPluginConfig[] = [
+    {
+      name: 'add',
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: 'prepend',
+      },
+      codegenPlugin: addPlugin,
+    },
     {
       name: 'typescript-resolvers',
       options: {},
@@ -57,6 +65,14 @@ export const generateTypeDefGraphQLWeb = async () => {
   }
 
   const extraPlugins: CombinedPluginConfig[] = [
+    {
+      name: 'add',
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: 'prepend',
+      },
+      codegenPlugin: addPlugin,
+    },
     {
       name: 'typescript-operations',
       options: {},
@@ -132,11 +148,6 @@ function getPluginConfig() {
     if (prismaModels.RW_DataMigration) {
       delete prismaModels.RW_DataMigration
     }
-
-    // Include Prisma's JSON field types as these types exist to match the types supported by JSON.parse()
-    // see: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields
-    // We're doing this to avoid adding an extra import statement just for the Prisma namespace
-    prismaModels['JSON'] = `.prisma/client#Prisma`
   } catch (error) {
     // This means they've not set up prisma types yet
   }
@@ -177,16 +188,12 @@ export const getResolverFnType = () => {
     return `(
       args: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult extends PromiseLike<infer TResultAwaited>
-      ? Promise<Partial<TResultAwaited>>
-      : Promise<Partial<TResult>> | Partial<TResult>;`
+    ) => TResult | Promise<TResult>`
   } else {
     return `(
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult extends PromiseLike<infer TResultAwaited>
-      ? Promise<Partial<TResultAwaited>>
-      : Promise<Partial<TResult>> | Partial<TResult>;`
+    ) => TResult | Promise<TResult>`
   }
 }
 

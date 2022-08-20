@@ -22,6 +22,14 @@ Subsequent deploys:
 yarn rw deploy baremetal production
 ```
 
+:::caution Deploying to baremetal is an advanced topic
+
+If you haven't done any kind of remote server work before, you may be in a little over your head to start with. But don't worry: until relatively recently (cloud computing, serverless, lambda functions) this is how all websites were deployed, so we've got a good 30 years of experience getting this working!
+
+If you're new to connecting to remote servers, check out the [Intro to Servers](/docs/intro-to-servers) guide we wrote just for you.
+
+:::
+
 ## Deployment Lifecycle
 
 The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
