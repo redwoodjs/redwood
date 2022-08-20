@@ -67,21 +67,6 @@ We realize that this isn't a perfect solution, but the tension comes from the fa
 
 :::
 
-### Returning Prisma's `findUnique` operation in Services
-
-In strict mode, TypeScript becomes a lot more pedantic about null checks. One place where you'll encounter this in particular is when returning Prisma's `findUnique` operation in Service functions.
-
-The tension here is that Prisma returns promises in the form of `Promise<Model | null>`, but the resolver types expect it in the form of `Promise<Model> | Promise<null>`. At runtime, this has no effect. But the TS compiler needs to be told that it's okay:
-
-```ts
-export const post: QueryResolvers['post'] = ({ id }) => {
-  return db.post.findUnique({
-    where: { id },
-    // highlight-next-line
-  }) as Promise<Post> | Promise<null>
-}
-```
-
 ### `null` and `undefined` in Services
 
 One of the challenges in the GraphQL-Prisma world is the difference in the way they treats optionals:
