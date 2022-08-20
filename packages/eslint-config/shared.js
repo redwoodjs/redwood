@@ -110,6 +110,9 @@ module.exports = {
             // - src/directives/**/*.{js,ts}
             // - src/services/**/*.{js,ts}
             // - src/graphql/**/*.sdl.{js,ts}
+            //
+            // Uses https://github.com/isaacs/minimatch under the hood
+            // See https://github.com/isaacs/node-glob#glob-primer for syntax
             // eslint-disable-next-line prettier/prettier
             pattern: 'src/*/**/\*.?(sdl.){js,ts}',
             patternOptions: {
