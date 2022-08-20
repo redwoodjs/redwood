@@ -124,11 +124,6 @@ module.exports = {
           order: 'asc',
           caseInsensitive: true,
         },
-        // We need to discuss this option.
-        // If we turn it on, it'll auto fix spacing problems for side-effect imports.
-        // But then side-effect imports have to be where they're supposed to be.
-        // And if they're not where they're supposed to be, they can't be auto fixed.
-        // warnOnUnassignedImports: true
       },
     ],
     'no-restricted-imports': [
