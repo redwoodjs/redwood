@@ -22194,14 +22194,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"microtime@npm:3.1.0":
-  version: 3.1.0
-  resolution: "microtime@npm:3.1.0"
+"microtime@npm:3.1.1":
+  version: 3.1.1
+  resolution: "microtime@npm:3.1.1"
   dependencies:
     node-addon-api: ^5.0.0
     node-gyp: latest
     node-gyp-build: ^4.4.0
-  checksum: e554214a94fa6d13aab87ffce6743b14c7afeeac95d855a10dce4e1a14dce9d89ad84c9000e3d3d15007641f7ba938d1040b41209ab7240be27acd2c1978c6ef
+  checksum: 02512993de914c6f71424d3b8b28ce53de44ba5895b904a213420fd4fc86a084c1d08ec0876ac60cdae6427022766e1b9b86d9b3442bf408701120bd61455e26
   languageName: node
   linkType: hard
 
