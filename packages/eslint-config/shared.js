@@ -106,8 +106,12 @@ module.exports = {
             position: 'after',
           },
           {
-            // Matches src/directives/**/*.{js,ts}, src/services/**/*.{js,ts}, src/graphql/**/*.sdl.{js,ts}
-            pattern: 'src/*/**/*.*{js,ts}',
+            // Matches...
+            // - src/directives/**/*.{js,ts}
+            // - src/services/**/*.{js,ts}
+            // - src/graphql/**/*.sdl.{js,ts}
+            // eslint-disable-next-line prettier/prettier
+            pattern: 'src/*/**/\*.?(sdl.){js,ts}',
             patternOptions: {
               nobrace: true,
               noglobstar: true,
