@@ -4870,17 +4870,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.4.0":
-  version: 1.4.0
-  resolution: "@nhost/hasura-auth-js@npm:1.4.0"
-  dependencies:
-    "@nhost/core": 0.7.6
-    jwt-decode: ^3.1.2
-    xstate: ^4.32.1
-  checksum: 557ccb289652c96a2d2106157f5f60fbc5f03705a66f79e55471c929f55bf2afec59b58a0a96e6df6b754d422a60e3b4898d1c55498821d085119339f0c3f022
-  languageName: node
-  linkType: hard
-
 "@nhost/hasura-auth-js@npm:1.4.1":
   version: 1.4.1
   resolution: "@nhost/hasura-auth-js@npm:1.4.1"
@@ -4904,18 +4893,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.4.7":
-  version: 1.4.7
-  resolution: "@nhost/nhost-js@npm:1.4.7"
+"@nhost/nhost-js@npm:1.4.8":
+  version: 1.4.8
+  resolution: "@nhost/nhost-js@npm:1.4.8"
   dependencies:
-    "@nhost/hasura-auth-js": 1.4.0
+    "@nhost/hasura-auth-js": 1.4.1
     "@nhost/hasura-storage-js": 0.5.3
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 12b6aaf447557d3d97560ea6f84ac7c187df70eecead6a4aee22b09b8adadef07d21e7c7d3c90fc59fc627122603c44e029fa1a2631c65257750641dd5928226
+  checksum: 1d7fb8b37413260791cf29336fc31c5d56b7d0c222a0f51231678ae4381e7177f04184f6cf2c6f2af2a71793e38794819f2fd543720d6d4ce377d74c1fd885da
   languageName: node
   linkType: hard
 
@@ -5524,9 +5513,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@okta/okta-auth-js@npm:6.7.4":
-  version: 6.7.4
-  resolution: "@okta/okta-auth-js@npm:6.7.4"
+"@okta/okta-auth-js@npm:6.7.6":
+  version: 6.7.6
+  resolution: "@okta/okta-auth-js@npm:6.7.6"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@babel/runtime-corejs3": ^7.17.0
@@ -5545,7 +5534,7 @@ __metadata:
     tiny-emitter: 1.1.0
     webcrypto-shim: ^0.1.5
     xhr2: 0.1.3
-  checksum: 57dca28c80d09a79fad27f3ab9036a4020c9112ac48fd126b31583a85d9b3d9f5c90365f09f68a110fac740365abb0733f8d88899b2a52fee25abbd4df3ab458
+  checksum: dba96126387a0312984cb6b086038fe5080a13d0d24ace24cd09cf2fbc2e695e8bfd0e15f89b90f5c7fb3a4565736f0928736743ad0c6582daaa1194e0484825
   languageName: node
   linkType: hard
 
@@ -6114,8 +6103,8 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.4.7
-    "@okta/okta-auth-js": 6.7.4
+    "@nhost/nhost-js": 1.4.8
+    "@okta/okta-auth-js": 6.7.6
     "@simplewebauthn/browser": 5.4.1
     "@simplewebauthn/typescript-types": 5.4.0
     "@supabase/supabase-js": 1.35.6
