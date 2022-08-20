@@ -4870,17 +4870,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.4.0":
-  version: 1.4.0
-  resolution: "@nhost/hasura-auth-js@npm:1.4.0"
-  dependencies:
-    "@nhost/core": 0.7.6
-    jwt-decode: ^3.1.2
-    xstate: ^4.32.1
-  checksum: 557ccb289652c96a2d2106157f5f60fbc5f03705a66f79e55471c929f55bf2afec59b58a0a96e6df6b754d422a60e3b4898d1c55498821d085119339f0c3f022
-  languageName: node
-  linkType: hard
-
 "@nhost/hasura-auth-js@npm:1.4.1":
   version: 1.4.1
   resolution: "@nhost/hasura-auth-js@npm:1.4.1"
@@ -4904,18 +4893,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.4.7":
-  version: 1.4.7
-  resolution: "@nhost/nhost-js@npm:1.4.7"
+"@nhost/nhost-js@npm:1.4.8":
+  version: 1.4.8
+  resolution: "@nhost/nhost-js@npm:1.4.8"
   dependencies:
-    "@nhost/hasura-auth-js": 1.4.0
+    "@nhost/hasura-auth-js": 1.4.1
     "@nhost/hasura-storage-js": 0.5.3
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 12b6aaf447557d3d97560ea6f84ac7c187df70eecead6a4aee22b09b8adadef07d21e7c7d3c90fc59fc627122603c44e029fa1a2631c65257750641dd5928226
+  checksum: 1d7fb8b37413260791cf29336fc31c5d56b7d0c222a0f51231678ae4381e7177f04184f6cf2c6f2af2a71793e38794819f2fd543720d6d4ce377d74c1fd885da
   languageName: node
   linkType: hard
 
@@ -6114,7 +6103,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.4.7
+    "@nhost/nhost-js": 1.4.8
     "@okta/okta-auth-js": 6.7.4
     "@simplewebauthn/browser": 5.4.1
     "@simplewebauthn/typescript-types": 5.4.0
