@@ -4,6 +4,7 @@ import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getOperationName } from '@redwoodjs/web'
+
 import { GqlHandlerImportError } from '../errors'
 
 /**
