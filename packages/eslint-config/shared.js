@@ -107,7 +107,11 @@ module.exports = {
           },
           {
             // Matches src/directives/**/*.{js,ts}, src/services/**/*.{js,ts}, src/graphql/**/*.sdl.{js,ts}
-            pattern: 'src/*/\\*\\*/\\*\\.[^/]*\\{js,ts\\}$',
+            pattern: 'src/*/**/*.*{js,ts}',
+            patternOptions: {
+              nobrace: true,
+              noglobstar: true,
+            },
             group: 'internal',
             position: 'before',
           },
