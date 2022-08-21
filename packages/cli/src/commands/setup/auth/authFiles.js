@@ -63,7 +63,8 @@ const getTemplates = () => {
  * Get the auth.ts template to use
  *
  * @returns {
- *   'auth.ts': <file content>
+ *   '/Users/tobbe/dev/rw-app/api/src/lib/auth.ts': <file content>
+ *   '/Users/tobbe/dev/rw-app/api/src/functions/auth.ts': <file content>
  * }
  */
 export const files = ({ provider, webAuthn }) => {
