@@ -28,8 +28,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "7.16.7",
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/plugin-transform-runtime": "7.18.10",
+    "@babel/runtime-corejs3": "7.18.9",
     "@fastify/http-proxy": "8.2.1",
     "@fastify/static": "6.5.0",
     "@fastify/url-data": "5.1.0",
@@ -38,7 +38,7 @@
     "chokidar": "3.5.3",
     "core-js": "3.24.1",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.4.0",
+    "fastify": "4.5.2",
     "fastify-raw-body": "4.0.0",
     "lodash.escape": "4.0.1",
     "pretty-bytes": "5.6.0",
@@ -48,8 +48,8 @@
     "yargs": "17.5.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.18.10",
+    "@babel/core": "7.18.10",
     "@types/aws-lambda": "8.10.101",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
