@@ -1,74 +1,60 @@
-import {
-  SignInProps,
-  SignUpProps,
-  SignOutCallback,
-  Resources,
-  Clerk as ClerkClient,
-  GetTokenOptions,
-  SignOutOptions,
-  UserResource,
-  EmailAddressIdentifier,
-  EmailAddressResource,
-  ActiveSessionResource,
-} from '@clerk/types'
-
 import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createClerkAuth } from '../clerk'
+import * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-const user: Partial<UserResource> = {
+import { createNetlifyAuth } from '../netlify'
+
+type NetlifyIdentity = typeof NetlifyIdentityNS
+type User = NetlifyIdentityNS.User
+
+const user: Partial<User> = {
   id: 'unique_user_id',
-  fullName: 'John Doe',
-  emailAddresses: [
-    {
-      id: 'email_id',
-      emailAddress: 'john.doe@example.com',
-    } as EmailAddressResource,
-  ],
-  publicMetadata: {
+  user_metadata: {
+    full_name: 'John Doe',
+  },
+  email: 'john.doe@example.com',
+  app_metadata: {
+    provider: 'netlify',
     roles: ['user'],
   },
 }
 
-const adminUser: Partial<UserResource> = {
+const adminUser: Partial<User> = {
   id: 'unique_user_id_admin',
-  fullName: 'Mr Smith',
-  emailAddresses: [
-    {
-      id: 'email_id',
-      emailAddress: 'admin@example.com',
-    } as EmailAddressResource,
-  ],
-  publicMetadata: {
+  user_metadata: {
+    full_name: 'Mr Smith',
+  },
+  email: 'admin@example.com',
+  app_metadata: {
+    provider: 'netlify',
     roles: ['user', 'admin'],
   },
 }
 
-let loggedInUser: Partial<UserResource> | undefined
+let loggedInUser: User | undefined
 
-const clerkMockClient: Partial<ClerkClient> = {
-  openSignIn: () => {
-    loggedInUser ||= user
+function on(event: 'init', cb: (user: User | null) => void): void
+function on(event: 'login', cb: (user: User) => void): void
+function on(event: 'logout' | 'open' | 'close', cb: () => void): void
+function on(event: 'error', cb: (err: Error) => void): void
+function on(_event: unknown, cb: (arg?: any) => void) {
+  cb()
+}
+
+const netlifyIdentityMockClient: Partial<NetlifyIdentity> = {
+  open: () => {
+    loggedInUser ||= user as User
+    return loggedInUser
   },
-  openSignUp: () => {
-    loggedInUser = user
-  },
-  signOut: async () => {
+  on,
+  close: () => {},
+  logout: async () => {
     loggedInUser = undefined
-    return undefined
   },
-  session: {
-    getToken: async () => 'token',
-  } as ActiveSessionResource,
-  addListener: () => {
-    // Unsubscribe callback
-    return () => {}
-  },
-  get user() {
-    return loggedInUser as UserResource | undefined
-  },
+  refresh: async () => 'token',
+  currentUser: () => loggedInUser || null,
 }
 
 const fetchMock = jest.fn()
@@ -87,7 +73,7 @@ fetchMock.mockImplementation(async (_url, options) => {
           redwood: {
             currentUser: {
               ...loggedInUser,
-              roles: loggedInUser?.publicMetadata?.roles,
+              roles: loggedInUser?.app_metadata?.roles,
             },
           },
         },
@@ -100,7 +86,6 @@ fetchMock.mockImplementation(async (_url, options) => {
 
 beforeAll(() => {
   global.fetch = fetchMock
-  global.Clerk = clerkMockClient
 })
 
 beforeEach(() => {
@@ -108,13 +93,16 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-function getClerkAuth(customProviderHooks?: {
+function getNetlifyAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<Record<string, unknown>>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createClerkAuth(customProviderHooks)
+  const { useAuth, AuthProvider } = createNetlifyAuth(
+    netlifyIdentityMockClient as NetlifyIdentity,
+    customProviderHooks
+  )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
@@ -122,9 +110,9 @@ function getClerkAuth(customProviderHooks?: {
   return result
 }
 
-describe('Clerk', () => {
+describe('Netlify', () => {
   it('is not authenticated before logging in', async () => {
-    const auth = getClerkAuth().current
+    const auth = getNetlifyAuth().current
 
     await act(async () => {
       expect(auth.isAuthenticated).toBeFalsy()
@@ -132,7 +120,7 @@ describe('Clerk', () => {
   })
 
   it('is authenticated after logging in', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getNetlifyAuth()
 
     await act(async () => {
       authRef.current.logIn()
@@ -142,7 +130,7 @@ describe('Clerk', () => {
   })
 
   it('is not authenticated after logging out', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getNetlifyAuth()
 
     await act(async () => {
       authRef.current.logIn()
@@ -151,14 +139,14 @@ describe('Clerk', () => {
     expect(authRef.current.isAuthenticated).toBeTruthy()
 
     await act(async () => {
-      authRef.current.logOut()
+      await authRef.current.logOut()
     })
 
     expect(authRef.current.isAuthenticated).toBeFalsy()
   })
 
   it('has role "user"', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getNetlifyAuth()
 
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
@@ -170,12 +158,12 @@ describe('Clerk', () => {
   })
 
   it('has role "admin"', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getNetlifyAuth()
 
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      loggedInUser = adminUser
+      loggedInUser = adminUser as User
       authRef.current.logIn()
     })
 
@@ -197,9 +185,7 @@ describe('Clerk', () => {
         // For the admin role we check their email address
         if (
           rolesToCheck === 'admin' &&
-          (currentUser.emailAddresses as any).some(
-            (email) => email.emailAddress === 'admin@example.com'
-          )
+          currentUser.email === 'admin@example.com'
         ) {
           return true
         }
@@ -208,7 +194,7 @@ describe('Clerk', () => {
       }
     }
 
-    const authRef = getClerkAuth({ useHasRole })
+    const authRef = getNetlifyAuth({ useHasRole })
 
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
@@ -220,7 +206,7 @@ describe('Clerk', () => {
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      loggedInUser = adminUser
+      loggedInUser = adminUser as User
       authRef.current.logIn()
     })
 
@@ -236,7 +222,7 @@ describe('Clerk', () => {
       }
     }
 
-    const authRef = getClerkAuth({ useCurrentUser })
+    const authRef = getNetlifyAuth({ useCurrentUser })
 
     // Need to be logged in, otherwise getCurrentUser won't be invoked
     await act(async () => {

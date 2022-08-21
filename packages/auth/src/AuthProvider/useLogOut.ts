@@ -31,6 +31,7 @@ export const useLogOut = <
   return useCallback(
     async (options?: unknown) => {
       const logoutOutput = await authImplementation.logout(options)
+
       setAuthProviderState({
         userMetadata: null,
         currentUser: null,

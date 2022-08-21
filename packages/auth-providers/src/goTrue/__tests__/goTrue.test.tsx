@@ -1,74 +1,56 @@
-import {
-  SignInProps,
-  SignUpProps,
-  SignOutCallback,
-  Resources,
-  Clerk as ClerkClient,
-  GetTokenOptions,
-  SignOutOptions,
-  UserResource,
-  EmailAddressIdentifier,
-  EmailAddressResource,
-  ActiveSessionResource,
-} from '@clerk/types'
-
 import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createClerkAuth } from '../clerk'
+import type { default as GoTrue } from 'gotrue-js'
+import type { User } from 'gotrue-js'
 
-const user: Partial<UserResource> = {
+import { createGoTrueAuth } from '../goTrue'
+
+const user: Partial<User> = {
   id: 'unique_user_id',
-  fullName: 'John Doe',
-  emailAddresses: [
-    {
-      id: 'email_id',
-      emailAddress: 'john.doe@example.com',
-    } as EmailAddressResource,
-  ],
-  publicMetadata: {
+  user_metadata: {
+    full_name: 'John Doe',
+  },
+  email: 'john.doe@example.com',
+  app_metadata: {
+    provider: 'netlify',
     roles: ['user'],
   },
+  logout: async () => {
+    loggedInUser = undefined
+  }
 }
 
-const adminUser: Partial<UserResource> = {
+const adminUser: Partial<User> = {
   id: 'unique_user_id_admin',
-  fullName: 'Mr Smith',
-  emailAddresses: [
-    {
-      id: 'email_id',
-      emailAddress: 'admin@example.com',
-    } as EmailAddressResource,
-  ],
-  publicMetadata: {
+  user_metadata: {
+    full_name: 'Mr Smith',
+  },
+  email: 'admin@example.com',
+  app_metadata: {
+    provider: 'netlify',
     roles: ['user', 'admin'],
   },
+  logout: async () => {
+    loggedInUser = undefined
+  }
 }
 
-let loggedInUser: Partial<UserResource> | undefined
+let loggedInUser: User | undefined
 
-const clerkMockClient: Partial<ClerkClient> = {
-  openSignIn: () => {
-    loggedInUser ||= user
+const goTrueMockClient: Partial<GoTrue> = {
+  login: async (email: string) => {
+    loggedInUser = email === 'admin@example.com' ? adminUser as User : user as User
+
+    return loggedInUser
   },
-  openSignUp: () => {
-    loggedInUser = user
+  signup: async (email: string) => {
+    loggedInUser = email === 'admin@example.com' ? adminUser as User : user as User
+
+    return loggedInUser
   },
-  signOut: async () => {
-    loggedInUser = undefined
-    return undefined
-  },
-  session: {
-    getToken: async () => 'token',
-  } as ActiveSessionResource,
-  addListener: () => {
-    // Unsubscribe callback
-    return () => {}
-  },
-  get user() {
-    return loggedInUser as UserResource | undefined
-  },
+  currentUser: () => loggedInUser || null,
 }
 
 const fetchMock = jest.fn()
@@ -87,7 +69,7 @@ fetchMock.mockImplementation(async (_url, options) => {
           redwood: {
             currentUser: {
               ...loggedInUser,
-              roles: loggedInUser?.publicMetadata?.roles,
+              roles: loggedInUser?.app_metadata?.roles,
             },
           },
         },
@@ -100,7 +82,6 @@ fetchMock.mockImplementation(async (_url, options) => {
 
 beforeAll(() => {
   global.fetch = fetchMock
-  global.Clerk = clerkMockClient
 })
 
 beforeEach(() => {
@@ -108,13 +89,16 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-function getClerkAuth(customProviderHooks?: {
+function getGoTrueAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<Record<string, unknown>>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createClerkAuth(customProviderHooks)
+  const { useAuth, AuthProvider } = createGoTrueAuth(
+    goTrueMockClient as GoTrue,
+    customProviderHooks
+  )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
@@ -122,9 +106,9 @@ function getClerkAuth(customProviderHooks?: {
   return result
 }
 
-describe('Clerk', () => {
+describe('GoTrue', () => {
   it('is not authenticated before logging in', async () => {
-    const auth = getClerkAuth().current
+    const auth = getGoTrueAuth().current
 
     await act(async () => {
       expect(auth.isAuthenticated).toBeFalsy()
@@ -132,51 +116,63 @@ describe('Clerk', () => {
   })
 
   it('is authenticated after logging in', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getGoTrueAuth()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'ThereIsNoSpoon',
+      })
     })
 
     expect(authRef.current.isAuthenticated).toBeTruthy()
   })
 
   it('is not authenticated after logging out', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getGoTrueAuth()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'ThereIsNoSpoon',
+      })
     })
 
     expect(authRef.current.isAuthenticated).toBeTruthy()
 
     await act(async () => {
-      authRef.current.logOut()
+      await authRef.current.logOut()
     })
 
     expect(authRef.current.isAuthenticated).toBeFalsy()
   })
 
   it('has role "user"', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getGoTrueAuth()
 
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'ThereIsNoSpoon',
+      })
     })
 
     expect(authRef.current.hasRole('user')).toBeTruthy()
   })
 
   it('has role "admin"', async () => {
-    const authRef = getClerkAuth()
+    const authRef = getGoTrueAuth()
 
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      loggedInUser = adminUser
-      authRef.current.logIn()
+      loggedInUser = adminUser as User
+      authRef.current.logIn({
+        email: 'admin@example.com',
+        password: 'RedPill',
+      })
     })
 
     expect(authRef.current.hasRole('admin')).toBeTruthy()
@@ -197,9 +193,7 @@ describe('Clerk', () => {
         // For the admin role we check their email address
         if (
           rolesToCheck === 'admin' &&
-          (currentUser.emailAddresses as any).some(
-            (email) => email.emailAddress === 'admin@example.com'
-          )
+          currentUser.email === 'admin@example.com'
         ) {
           return true
         }
@@ -208,20 +202,26 @@ describe('Clerk', () => {
       }
     }
 
-    const authRef = getClerkAuth({ useHasRole })
+    const authRef = getGoTrueAuth({ useHasRole })
 
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'ThereIsNoSpoon',
+      })
     })
 
     expect(authRef.current.hasRole('user')).toBeTruthy()
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      loggedInUser = adminUser
-      authRef.current.logIn()
+      loggedInUser = adminUser as User
+      authRef.current.logIn({
+        email: 'admin@example.com',
+        password: 'RedPill',
+      })
     })
 
     expect(authRef.current.hasRole('user')).toBeTruthy()
@@ -236,11 +236,14 @@ describe('Clerk', () => {
       }
     }
 
-    const authRef = getClerkAuth({ useCurrentUser })
+    const authRef = getGoTrueAuth({ useCurrentUser })
 
     // Need to be logged in, otherwise getCurrentUser won't be invoked
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'ThereIsNoSpoon',
+      })
     })
 
     await act(async () => {

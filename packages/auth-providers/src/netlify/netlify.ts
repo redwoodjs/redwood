@@ -25,8 +25,6 @@ export function createNetlifyAuth(
   // done in the user's app
   // isBrowser && netlifyIdentity.init()
 
-  console.log('createAuthentication', createAuthentication)
-
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
