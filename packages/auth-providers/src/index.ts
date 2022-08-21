@@ -1,6 +1,6 @@
 export { createAuth0Auth } from './auth0/auth0'
 export { createAzureActiveDirectoryAuth } from './azureActiveDirectory/azureActiveDirectory'
-export { createClerkAuth } from './clerk'
+export { createClerkAuth } from './clerk/clerk'
 export { createDbAuth } from './dbAuth/dbAuth'
 export { createEthereumAuth } from './ethereum'
 export { createFirebaseAuth } from './firebase'

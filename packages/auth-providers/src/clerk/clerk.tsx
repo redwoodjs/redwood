@@ -42,7 +42,7 @@ function createClerkAuthImplementation() {
       options?: SignOutOptions
     ) => {
       const clerk = (window as any).Clerk as Clerk
-      clerk?.signOut(callbackOrOptions as any, options)
+      return clerk?.signOut(callbackOrOptions as any, options)
     },
     signup: async (options?: SignUpProps) => {
       const clerk = (window as any).Clerk as Clerk
@@ -66,10 +66,10 @@ function createClerkAuthImplementation() {
       // NOTE: Clerk's API docs says session will be undefined if loading (null
       // if loaded and confirmed unset).
       if (!clerk || clerk.session !== undefined) {
-        return new Promise<void>((res) => {
+        return new Promise<void>((resolve) => {
           clerk.addListener((msg: Resources) => {
             if (msg.session !== undefined && msg.client) {
-              res()
+              resolve()
             }
           })
         })
@@ -93,25 +93,7 @@ function createClerkAuthImplementation() {
     },
     getUserMetadata: async () => {
       const clerk = (window as any).Clerk as Clerk
-      const user = clerk?.user
-
-      if (user) {
-        const userRoles = user.publicMetadata?.roles
-        let roles: string[] = []
-
-        if (typeof userRoles === 'string') {
-          roles = [userRoles]
-        } else if (
-          Array.isArray(userRoles) &&
-          typeof userRoles[0] === 'string'
-        ) {
-          roles = userRoles
-        }
-
-        return { ...user, roles }
-      }
-
-      return null
+      return clerk?.user
     },
   }
 }
