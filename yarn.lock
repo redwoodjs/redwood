@@ -13416,17 +13416,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.19.0":
+"core-js-pure@npm:^3.19.0, core-js-pure@npm:^3.20.2, core-js-pure@npm:^3.8.1":
   version: 3.24.1
   resolution: "core-js-pure@npm:3.24.1"
   checksum: ca967226169f5ca54ee56d3be90d4f3384f9d4b80af70e679134d8e662097a3f499fe6a546e4ea4cc9546d023878dd3bd9e67586ac77144a841e3a26ad28b58b
-  languageName: node
-  linkType: hard
-
-"core-js-pure@npm:^3.20.2, core-js-pure@npm:^3.8.1":
-  version: 3.21.0
-  resolution: "core-js-pure@npm:3.21.0"
-  checksum: 90c39a0f4561e56de17bdffb9edb4cf754e341f4d5cba7580b676436bec170cd1954d0f0870c8e97c96e151c14a112975f2574bc601f08559e044061eaca0d1a
   languageName: node
   linkType: hard
 
