@@ -1,4 +1,4 @@
-import { isTypeScriptProject } from '../../../../lib/project'
+import { isTypeScriptProject } from '../../../../../lib/project'
 
 // required packages to install
 export const webPackages = []

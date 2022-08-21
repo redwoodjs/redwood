@@ -176,13 +176,19 @@ export const addConfigToApp = async () => {
   fs.writeFileSync(webAppPath, content)
 }
 
-export const createWebAuthTs = (provider) => {
-  const templatesBaseDir = path.resolve(__dirname, 'templates', 'web')
+export const createWebAuthTs = (provider, webAuthn) => {
+  const templatesBaseDir = path.resolve(
+    __dirname,
+    'providers',
+    provider,
+    'templates',
+    'web'
+  )
   const templates = fs.readdirSync(templatesBaseDir)
 
-  const templateFileName = templates.find((template) =>
-    template.startsWith(provider)
-  )
+  const templateFileName = templates.find((template) => {
+    return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
+  })
 
   const templateExtension = templateFileName.split('.').at(-2)
 
@@ -232,16 +238,16 @@ export const addConfigToRoutes = () => {
   fs.writeFileSync(webRoutesPath, content)
 }
 
-export const generateAuthLib = (provider, force, webAuthn) => ({
-  title: 'Generating auth lib...',
+export const generateAuthApi = (provider, force, webAuthn) => ({
+  title: 'Generating auth api side files...',
   task: (_ctx, task) => {
-    if (apiSrcDoesExist()) {
-      return writeFilesTask(files({ provider, webAuthn }), {
-        overwriteExisting: force,
-      })
-    } else {
-      task.skip('api/src not found, skipping')
+    if (!apiSrcDoesExist()) {
+      return task.skip('api/src not found, skipping')
     }
+
+    return writeFilesTask(files({ provider, webAuthn }), {
+      overwriteExisting: force,
+    })
   },
 })
 

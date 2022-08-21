@@ -13,7 +13,7 @@ import { isTypeScriptProject } from '../../../lib/project'
 
 import { files } from './authFiles'
 import {
-  generateAuthLib,
+  generateAuthApi,
   addAuthConfigToWeb,
   addAuthConfigToGqlApi,
   addWebPackages,
@@ -112,12 +112,12 @@ export const handler = async ({
   const force = await shouldForce(forceArg, provider, webauthn)
   const includeWebAuthn = await shouldIncludeWebAuthn(webauthn, provider)
   const providerData = includeWebAuthn
-    ? await import(`./providers/${provider}.webAuthn`)
-    : await import(`./providers/${provider}`)
+    ? await import(`./providers/${provider}/${provider}.webAuthn`)
+    : await import(`./providers/${provider}/${provider}`)
 
   const tasks = new Listr(
     [
-      generateAuthLib(provider, force, includeWebAuthn),
+      generateAuthApi(provider, force, includeWebAuthn),
       addAuthConfigToWeb(provider),
       addAuthConfigToGqlApi,
       addWebPackages(provider, providerData.webPackages, rwVersion),
