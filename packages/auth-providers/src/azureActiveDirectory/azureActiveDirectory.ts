@@ -1,13 +1,11 @@
 import type {
   EndSessionRequest,
-  PublicClientApplication as AzureActiveDirectory,
+  PublicClientApplication as AzureActiveDirectoryClient,
   RedirectRequest,
   SilentRequest,
 } from '@azure/msal-browser'
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
-
-type AzureActiveDirectoryClient = AzureActiveDirectory
 
 export function createAzureActiveDirectoryAuth(
   azureActiveDirectoryClient: AzureActiveDirectoryClient,
