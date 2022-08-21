@@ -49,7 +49,7 @@ function createAuth0AuthImplementation(auth0Client: Auth0Client) {
         screen_hint: 'signup',
         prompt: 'login',
       }),
-    getToken: async () => auth0Client.getTokenSilently(),
+    getToken: () => auth0Client.getTokenSilently(),
     getUserMetadata: async () => {
       const user = await auth0Client.getUser()
       return user || null

@@ -248,10 +248,7 @@ describe('dbAuth', () => {
     expect(authRef.current.isAuthenticated).toBeTruthy()
 
     await act(async () => {
-      authRef.current.logOut({
-        username: 'auth-test',
-        password: 'ThereIsNoSpoon',
-      })
+      authRef.current.logOut()
     })
 
     expect(authRef.current.isAuthenticated).toBeFalsy()
@@ -276,10 +273,7 @@ describe('dbAuth', () => {
     expect(authRef.current.isAuthenticated).toBeTruthy()
 
     await act(async () => {
-      authRef.current.logOut({
-        username: 'auth-test',
-        password: 'ThereIsNoSpoon',
-      })
+      authRef.current.logOut()
     })
 
     expect(authRef.current.isAuthenticated).toBeFalsy()
@@ -318,7 +312,7 @@ describe('dbAuth', () => {
           return true
         }
 
-        // For the admin role we check that their email address
+        // For the admin role we check their email address
         if (
           rolesToCheck === 'admin' &&
           currentUser.email === 'admin@example.com'
