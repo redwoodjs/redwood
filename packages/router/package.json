@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.18.9",
+    "@babel/runtime-corejs3": "7.16.7",
     "@reach/skip-nav": "0.16.0",
     "@redwoodjs/auth": "2.2.0",
     "core-js": "3.24.1",
