@@ -20,19 +20,19 @@ const OUTPUT_PATHS = {
  * ```
  * {
  *   base: [
- *     '/Users/tobbe/dev/redwood/.../auth/templates/auth.ts.template'
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../auth/templates/api/auth.ts.template'
  *   ],
  *   clerk: [
- *     '/Users/tobbe/dev/redwood/.../auth/templates/clerk.auth.ts.template'
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../auth/templates/api/clerk.auth.ts.template'
  *   ],
  *   dbAuth: [
- *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.auth.ts.template',
- *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.auth.webAuthn.ts.template',
- *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.function.ts.template',
- *     '/Users/tobbe/dev/redwood/.../auth/templates/dbAuth.function.webAuthn.ts.template'
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../auth/templates/api/dbAuth.auth.ts.template',
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../auth/templates/api/dbAuth.auth.webAuthn.ts.template',
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../auth/templates/api/dbAuth.function.ts.template',
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../auth/templates/api/dbAuth.function.webAuthn.ts.template'
  *   ],
  *   ethereum: [
- *     '/Users/tobbe/dev/redwood/.../setup/auth/templates/ethereum.auth.ts.template'
+ *     '/Users/tobbe/dev/rw-app/node_modules/.../setup/auth/templates/api/ethereum.auth.ts.template'
  *   ],
  * }
  * ```
@@ -40,9 +40,9 @@ const OUTPUT_PATHS = {
  * @returns Object where the providers are mapped to their templates
  */
 
-const getTemplates = () =>
-  fs
-    .readdirSync(path.join(path.resolve(__dirname, 'templates'), 'lib'))
+const getTemplates = () => {
+  const templates = fs
+    .readdirSync(path.join(path.resolve(__dirname, 'templates'), 'api'))
     .reduce((templates, file) => {
       // Create a fake 'base' provider for the standard auth.ts template
       const provider = file === 'auth.ts.template' ? 'base' : file.split('.')[0]
@@ -51,10 +51,13 @@ const getTemplates = () =>
         ...templates,
         [provider]: [
           ...(templates[provider] || []),
-          path.resolve(__dirname, 'templates', 'lib', file),
+          path.resolve(__dirname, 'templates', 'api', file),
         ],
       }
     }, {})
+
+  return templates
+}
 
 /**
  * Get the auth.ts template to use
