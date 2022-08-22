@@ -93,11 +93,11 @@ export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
 ```
 
 ### Relation resolvers in services
-Let's say you have a `Book` model, and `Book.author` is a relation to the `Author` model, and is a required field.
+Let's say you have a `Post` model, and `Post.author` is a relation to the `Author` model, and is a required field.
 
-```graphql Book.sdl.ts
+```graphql Post.sdl.ts
 export const schema = gql`
-  type Book {
+  type Post {
     id: Int!
     title: String!
     // highlight-next-line
@@ -108,23 +108,26 @@ export const schema = gql`
 
 ```
 
-When you generate your services or SDLs, you'll notice that the resolvers for `Author` are generated at the bottom of the Book.service.ts
+When you generate your services or SDLs, you'll notice that the resolvers for `Author` are generated at the bottom of the Post.service.ts
 
-Because `Book.author` cannot be null, under strict-mode you'll have to tweak these resolvers to throw an error if the `findUnique` returns a null.
+Because `Post.author` cannot be null - and findUnique always returns a nullable value, under strict-mode you'll have to tweak these resolvers
 
-```ts Book.service.ts
-// TS will highlight an error here! 🔴
-export const Book: Partial<BookResolvers> = {
+```ts Post.service.ts
+// Option 1: Override the type
+// The typecasting here is OK - remember the "gqlArgs.root" is the post
+// that was already found in your serivce function, so findUnique would always find it!
+export const Post: Partial<PostResolvers> = {
   author: (_obj, gqlArgs) =>
-    db.book.findUnique({ where: { id: gqlArgs?.root?.id } }).author(),
+    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Author,  // 👈
 }
 
 
-// With null checks ✅
-export const Book: Partial<BookResolvers> = {
+
+// Option 2: With null checks ✅
+export const Post: Partial<PostResolvers> = {
   author: async (_obj, gqlArgs) => {
     // Find unique can return a null
-    const maybeAuthor = await db.book
+    const maybeAuthor = await db.post
       .findUnique({ where: { id: gqlArgs?.root?.id } })
       .author()
 
@@ -138,6 +141,37 @@ export const Book: Partial<BookResolvers> = {
   },
 }
 ```
+
+
+:::tip An optimisation tip
+If the relation is _truly_ required, it might make more sense to include `author` in your other services' Prisma query, where it seems appropriate, and modify the `Post.author` resolver:
+
+```ts
+export const post: QueryResolvers['post'] = ({ id }) => {
+  return db.post.findUnique({
+    // highlight-start
+    include: {
+      author: true,
+    },
+    // highlight-end
+    where: { id },
+  })
+}
+
+export const Post: Partial<PostResolvers> = {
+  author: async (_obj, gqlArgs) => {
+   // highlight-start
+    if (gqlArgs?.root.author) {
+      return gqlArgs.root.author
+    }
+  // highlight-end
+
+
+  const maybeAuthor = await db.post.findUnique(/*...
+```
+
+This will also help Prisma make a more optimised query to the database, since every time a Post is requested, the Author is too! The tradeoff here is that any query to post (even if the author isn't in the GraphQL query) will mean an unnecessary database query to include the author.
+:::
 
 ### Roles checks for CurrentUser in `src/lib/auth`
 
