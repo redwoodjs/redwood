@@ -239,7 +239,7 @@ type Params = {
  * //  key being used in dbAccessor in src/functions/auth.ts 👇
  * const getCurrentUser = async (session: DbAuthSession<User['id']>)
  */
-export interface DbAuthSession<TIdType = unknown> {
+export interface DbAuthSession<TIdType = any> {
   id: TIdType
 }
 
