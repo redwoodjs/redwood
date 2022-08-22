@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -22,10 +22,10 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
-    "@babel/plugin-transform-typescript": "7.16.7",
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/cli": "7.18.10",
+    "@babel/core": "7.18.10",
+    "@babel/plugin-transform-typescript": "7.18.12",
+    "@babel/runtime-corejs3": "7.18.9",
     "@vscode/ripgrep": "1.14.2",
     "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
