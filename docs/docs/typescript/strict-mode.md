@@ -92,6 +92,53 @@ export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
 }
 ```
 
+### Relation resolvers in services
+Let's say you have a `Book` model, and `Book.author` is a relation to the `Author` model, and is a required field.
+
+```graphql Book.sdl.ts
+export const schema = gql`
+  type Book {
+    id: Int!
+    title: String!
+    // highlight-next-line
+    author: Author! # 👈 this is a relation, the ! makes it a required field
+    authorId: Int!
+    # ...
+  }
+
+```
+
+When you generate your services or SDLs, you'll notice that the resolvers for `Author` are generated at the bottom of the Book.service.ts
+
+Because `Book.author` cannot be null, under strict-mode you'll have to tweak these resolvers to throw an error if the `findUnique` returns a null.
+
+```ts Book.service.ts
+// TS will highlight an error here! 🔴
+export const Book: Partial<BookResolvers> = {
+  author: (_obj, gqlArgs) =>
+    db.book.findUnique({ where: { id: gqlArgs?.root?.id } }).author(),
+}
+
+
+// With null checks ✅
+export const Book: Partial<BookResolvers> = {
+  author: async (_obj, gqlArgs) => {
+    // Find unique can return a null
+    const maybeAuthor = await db.book
+      .findUnique({ where: { id: gqlArgs?.root?.id } })
+      .author()
+
+// highlight-start
+    if (!maybeAuthor) {
+      throw new Error('Could not resolve author')
+    }
+// highlight-end
+
+    return maybeAuthor
+  },
+}
+```
+
 ### Roles checks for CurrentUser in `src/lib/auth`
 
 When you setup auth, Redwood includes some template code for handling roles with the `hasRole` function.
