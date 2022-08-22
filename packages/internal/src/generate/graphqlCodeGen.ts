@@ -35,7 +35,6 @@ export const generateTypeDefGraphQLApi = async () => {
           'import { Prisma } from "@prisma/client"',
           "import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'",
           `import { ${prismaImports.join(', ')}} from '@prisma/client'`,
-          `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];`,
         ],
         placement: 'prepend',
       },
