@@ -20,6 +20,11 @@ import { DocumentNode } from 'graphql'
 import { getPaths } from '../paths'
 import { getTsConfigs } from '../project'
 
+enum CodegenSide {
+  API,
+  WEB,
+}
+
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
   const prismaModels = getPrismaModels()
@@ -53,7 +58,7 @@ export const generateTypeDefGraphQLApi = async () => {
   ]
 
   try {
-    return await runCodegenGraphQL([], extraPlugins, filename)
+    return await runCodegenGraphQL([], extraPlugins, filename, CodegenSide.API)
   } catch (e) {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (api)')
@@ -95,7 +100,12 @@ export const generateTypeDefGraphQLWeb = async () => {
   ]
 
   try {
-    return await runCodegenGraphQL(documents, extraPlugins, filename)
+    return await runCodegenGraphQL(
+      documents,
+      extraPlugins,
+      filename,
+      CodegenSide.WEB
+    )
   } catch (e) {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (web)')
@@ -115,7 +125,8 @@ export const generateTypeDefGraphQLWeb = async () => {
 async function runCodegenGraphQL(
   documents: CodegenTypes.DocumentFile[],
   extraPlugins: CombinedPluginConfig[],
-  filename: string
+  filename: string,
+  side: CodegenSide
 ) {
   const userCodegenConfig = await loadCodegenConfig({
     configFilePath: getPaths().base,
@@ -123,7 +134,7 @@ async function runCodegenGraphQL(
 
   // Merge in user codegen config with the rw built-in one
   const mergedConfig = {
-    ...getPluginConfig(),
+    ...getPluginConfig(side),
     ...userCodegenConfig?.config?.config,
   }
 
@@ -164,7 +175,7 @@ function getPrismaModels() {
   return prismaModels
 }
 
-function getPluginConfig() {
+function getPluginConfig(side: CodegenSide) {
   const prismaModels: Record<string, string> = getPrismaModels()
   try {
     Object.keys(prismaModels).forEach((key) => {
@@ -184,11 +195,12 @@ function getPluginConfig() {
     scalars: {
       // We need these, otherwise these scalars are mapped to any
       BigInt: 'number',
-      DateTime: 'Date | string', // @Note: because DateTime fields can be valid Date-strings too
-      Date: 'Date | string',
+      // @Note: because DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
+      DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
+      Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
       JSON: 'Prisma.JsonValue',
       JSONObject: 'Prisma.JsonObject',
-      Time: 'Date | string',
+      Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
