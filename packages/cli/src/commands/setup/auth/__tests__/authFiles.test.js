@@ -36,17 +36,17 @@ it('generates a record of files', () => {
   expect(Object.keys(filesRecord)).toHaveLength(3)
   expect(
     Object.keys(filesRecord).some((filePath) =>
-      filePath.endsWith('lib' + path.sep + 'auth.ts')
+      filePath.endsWith(path.join('api', 'src', 'lib', 'auth.ts'))
     )
   ).toBeTruthy()
   expect(
     Object.keys(filesRecord).some((filePath) =>
-      filePath.endsWith('lib' + path.sep + 'supertokens.ts')
+      filePath.endsWith(path.join('api', 'src', 'lib', 'supertokens.ts'))
     )
   ).toBeTruthy()
   expect(
     Object.keys(filesRecord).some((filePath) =>
-      filePath.endsWith('functions' + path.sep + 'auth.ts')
+      filePath.endsWith(path.join('api', 'src', 'functions', 'auth.ts'))
     )
   ).toBeTruthy()
 })
@@ -61,8 +61,8 @@ it('generates a record of webAuthn files', () => {
     )
   ).toBeTruthy()
   expect(
-    Object.values(filesRecord).some((content) =>
-      !content.toLowerCase().includes('webauthn')
+    Object.values(filesRecord).some(
+      (content) => !content.toLowerCase().includes('webauthn')
     )
   ).toBeTruthy()
 })

@@ -14,7 +14,7 @@ import { isTypeScriptProject } from '../../../lib/project'
  * }
  */
 export const files = ({ provider, webAuthn }) => {
-  const apiBasePath = getPaths().api.base
+  const apiSrcPath = getPaths().api.src
 
   const apiBaseTemplatePath = path.join(
     path.resolve(__dirname, 'providers'),
@@ -63,7 +63,7 @@ export const files = ({ provider, webAuthn }) => {
           dir,
           f.templateFileName
         )
-        const outputFilePath = path.join(apiBasePath, dir, f.outputFileName)
+        const outputFilePath = path.join(apiSrcPath, dir, f.outputFileName)
 
         return { templateFilePath, outputFilePath }
       })
