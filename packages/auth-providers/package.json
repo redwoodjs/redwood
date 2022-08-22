@@ -22,21 +22,21 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/runtime-corejs3": "7.18.9",
     "core-js": "3.24.1"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",
     "@azure/msal-browser": "2.28.1",
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.18.10",
+    "@babel/core": "7.18.10",
     "@clerk/clerk-js": "3.17.0",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/clerk-sdk-node": "3.9.2",
     "@clerk/types": "2.21.0",
-    "@nhost/hasura-auth-js": "1.4.0",
-    "@nhost/nhost-js": "1.4.7",
-    "@okta/okta-auth-js": "6.7.4",
+    "@nhost/hasura-auth-js": "1.4.1",
+    "@nhost/nhost-js": "1.4.8",
+    "@okta/okta-auth-js": "6.7.6",
     "@redwoodjs/auth": "2.2.0",
     "@simplewebauthn/browser": "5.4.1",
     "@simplewebauthn/typescript-types": "5.4.0",
