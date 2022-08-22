@@ -39,9 +39,7 @@ describe('ResovlerFn types', () => {
       "(
             args?: TArgs,
             obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-          ) => TResult extends PromiseLike<infer TResultAwaited>
-            ? Promise<Partial<TResultAwaited>>
-            : Promise<Partial<TResult>> | Partial<TResult>;"
+          ) => TResult | Promise<TResult>"
     `)
   })
 
@@ -60,9 +58,7 @@ describe('ResovlerFn types', () => {
       "(
             args?: TArgs,
             obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-          ) => TResult extends PromiseLike<infer TResultAwaited>
-            ? Promise<Partial<TResultAwaited>>
-            : Promise<Partial<TResult>> | Partial<TResult>;"
+          ) => TResult | Promise<TResult>"
     `)
   })
 
@@ -82,9 +78,7 @@ describe('ResovlerFn types', () => {
       "(
             args: TArgs,
             obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-          ) => TResult extends PromiseLike<infer TResultAwaited>
-            ? Promise<Partial<TResultAwaited>>
-            : Promise<Partial<TResult>> | Partial<TResult>;"
+          ) => TResult | Promise<TResult>"
     `)
   })
 })
