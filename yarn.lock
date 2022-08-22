@@ -2189,6 +2189,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@envelop/validation-cache@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "@envelop/validation-cache@npm:4.6.0"
+  dependencies:
+    lru-cache: ^6.0.0
+  peerDependencies:
+    "@envelop/core": ^2.5.0
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 7877ecb7460c7fcf1f5215e1cb259270792bbc895ddb9c2b81fc555632694ef8d0b572fa4e4aa9980a4fd9cf777ed5249dfbc99808b889ad0ebe155892eb2b16
+  languageName: node
+  linkType: hard
+
 "@eslint/eslintrc@npm:^1.3.0":
   version: 1.3.0
   resolution: "@eslint/eslintrc@npm:1.3.0"
@@ -3377,6 +3389,18 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: dce29916fa6bd134947f584080ab18908b23537ec8dff74d838bf6c7be34b3e14c527d4ffd18b8f91efe6bb967f170f7393a2383035ed952f88010b60536a106
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/merge@npm:8.3.3, @graphql-tools/merge@npm:^8.2.6":
+  version: 8.3.3
+  resolution: "@graphql-tools/merge@npm:8.3.3"
+  dependencies:
+    "@graphql-tools/utils": 8.10.0
+    tslib: ^2.4.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 64ddc13e1c7fe07c3e1562f708a2a044d42887ad0f8c32a7fc4e15cd3b709a8f1329117b1d2f2c6aae4a94e5da50d167596a61b60f643488f0ca85d98a8ee146
   languageName: node
   linkType: hard
 
