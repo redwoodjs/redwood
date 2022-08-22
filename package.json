@@ -27,7 +27,7 @@
   "resolutions": {
     "@types/react": "17.0.48",
     "all-contributors-cli@6.20.0": "patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch",
-    "microtime": "3.1.0",
+    "microtime": "3.1.1",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -55,7 +55,7 @@
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime-corejs3": "7.18.9",
     "@nrwl/nx-cloud": "14.3.0",
-    "@playwright/test": "1.24.2",
+    "@playwright/test": "1.25.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
