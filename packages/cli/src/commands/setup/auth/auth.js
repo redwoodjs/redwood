@@ -34,21 +34,25 @@ async function shouldForce(force, provider, webAuthn) {
     return true
   }
 
-  // Just pick the first file here. Doesn't matter which one it is. We just
-  // assume it's an all-or-nothing kind of situation here
-  if (fs.existsSync(Object.keys(files({ provider, webAuthn }))[0])) {
+  const existingFiles = Object.keys(files({ provider, webAuthn })).filter(
+    (filePath) => fs.existsSync(filePath)
+  )
+
+  if (existingFiles.length > 0) {
+    const shortPaths = existingFiles.map((filePath) =>
+      filePath.replace(getPaths().base, '')
+    )
     const forceResponse = await prompts({
       type: 'confirm',
       name: 'answer',
-      message: `Overwrite existing ${getPaths().api.lib.replace(
-        getPaths().base,
-        ''
-      )}${path.sep}auth.${isTypeScriptProject() ? 'ts' : 'js'}?`,
+      message: `Overwrite existing ${shortPaths.join(', ')}?`,
       initial: false,
     })
 
     return forceResponse.answer
   }
+
+  return false
 }
 
 /**

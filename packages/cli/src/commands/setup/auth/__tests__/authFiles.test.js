@@ -1,54 +1,72 @@
+var mockIsTypeScriptProject = true
 global.__dirname = __dirname
 
 import '../../../../lib/mockTelemetry'
 
 jest.mock('../../../../lib', () => {
   const path = require('path')
-  const __dirname = path.resolve()
+  const originalModule = jest.requireActual('../../../../lib')
+
+  const base = path.join(path.resolve(), '../create-redwood-app/template')
+
+  return {
+    transformTSToJS: originalModule.transformTSToJS,
+    resolveFile: originalModule.resolveFile,
+    getPaths: () => ({
+      api: {
+        base: path.join(base, 'api'),
+        src: path.join(base, 'api', 'src'),
+        functions: path.join(base, 'api', 'src', 'functions'),
+        lib: path.join(base, 'api', 'src', 'lib'),
+      },
+      web: { src: '' },
+      base,
+    }),
+  }
+})
+
+jest.mock('@redwoodjs/internal/dist/paths', () => {
+  const path = require('path')
 
   return {
     getPaths: () => ({
-      api: {
-        base: path.join(__dirname, '../create-redwood-app/template/api'),
-        src: path.join(__dirname, '../create-redwood-app/template/api/src'),
-        functions: path.join(
-          __dirname,
-          '../create-redwood-app/template/api/src/functions'
-        ),
-        lib: path.join(__dirname, '../create-redwood-app/template/api/src/lib'),
-      },
-      web: { src: '' },
-      base: path.join(__dirname, '../create-redwood-app/template'),
+      base: path.join(path.resolve(), '../create-redwood-app/template'),
     }),
   }
 })
 
 jest.mock('../../../../lib/project', () => ({
-  isTypeScriptProject: () => true,
+  isTypeScriptProject: () => mockIsTypeScriptProject,
 }))
 
 import path from 'path'
 import { files } from '../authFiles'
+import { getPaths } from '../../../../lib'
 
-it('generates a record of files', () => {
-  const filesRecord = files({ provider: 'supertokens' })
+beforeEach(() => {
+  mockIsTypeScriptProject = true
+})
 
-  expect(Object.keys(filesRecord)).toHaveLength(3)
-  expect(
-    Object.keys(filesRecord).some((filePath) =>
-      filePath.endsWith(path.join('api', 'src', 'lib', 'auth.ts'))
-    )
-  ).toBeTruthy()
-  expect(
-    Object.keys(filesRecord).some((filePath) =>
-      filePath.endsWith(path.join('api', 'src', 'lib', 'supertokens.ts'))
-    )
-  ).toBeTruthy()
-  expect(
-    Object.keys(filesRecord).some((filePath) =>
-      filePath.endsWith(path.join('api', 'src', 'functions', 'auth.ts'))
-    )
-  ).toBeTruthy()
+it('generates a record of TS files', () => {
+  const filePaths = Object.keys(files({ provider: 'supertokens' })).sort()
+
+  expect(filePaths).toEqual([
+    path.join(getPaths().api.functions, 'auth.ts'),
+    path.join(getPaths().api.lib, 'auth.ts'),
+    path.join(getPaths().api.lib, 'supertokens.ts'),
+  ])
+})
+
+it('generates a record of JS files', () => {
+  mockIsTypeScriptProject = false
+
+  const filePaths = Object.keys(files({ provider: 'supertokens' })).sort()
+
+  expect(filePaths).toEqual([
+    path.join(getPaths().api.functions, 'auth.js'),
+    path.join(getPaths().api.lib, 'auth.js'),
+    path.join(getPaths().api.lib, 'supertokens.js'),
+  ])
 })
 
 it('generates a record of webAuthn files', () => {

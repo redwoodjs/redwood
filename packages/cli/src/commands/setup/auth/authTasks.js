@@ -247,6 +247,7 @@ export const generateAuthApi = (provider, force, webAuthn) => ({
 
     return writeFilesTask(files({ provider, webAuthn }), {
       overwriteExisting: force,
+      throwOnExisting: false,
     })
   },
 })

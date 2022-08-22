@@ -127,13 +127,17 @@ export const existsAnyExtensionSync = (file) => {
 export const writeFile = (
   target,
   contents,
-  { overwriteExisting = false } = {},
+  { overwriteExisting = false, throwOnExisting = true } = {},
   task = {}
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
   if (!overwriteExisting && fs.existsSync(target)) {
-    throw new Error(`${target} already exists.`)
+    if (throwOnExisting) {
+      throw new Error(`${target} already exists.`)
+    }
+
+    return task.skip()
   }
 
   const filename = path.basename(target)

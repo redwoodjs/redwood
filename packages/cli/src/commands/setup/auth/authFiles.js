@@ -7,11 +7,14 @@ import { isTypeScriptProject } from '../../../lib/project'
 /**
  * Get the file paths and file contents to write
  *
- * @returns {
- *   '/Users/tobbe/dev/rw-app/api/src/lib/auth.ts': <file content>
- *   '/Users/tobbe/dev/rw-app/api/src/lib/helperFunctions.ts': <file content>
- *   '/Users/tobbe/dev/rw-app/api/src/functions/auth.ts': <file content>
+ * Example return value:
+ * ```json
+ * {
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/auth.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/helperFunctions.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/functions/auth.ts": "<file content>"
  * }
+ * ```
  */
 export const files = ({ provider, webAuthn }) => {
   const apiSrcPath = getPaths().api.src
@@ -34,8 +37,13 @@ export const files = ({ provider, webAuthn }) => {
         return fileNameParts.length <= 3 || fileNameParts.at(-3) !== 'webAuthn'
       })
       .map((fileName) => {
-        // remove "template" from the end
-        const outputFileName = fileName.replace(/\.template$/, '')
+        // remove "template" from the end, and change from {ts,tsx} to js for
+        // JavaScript projects
+        const fileNameParts = fileName.split('.')
+        const outputFileName = [
+          ...fileNameParts.slice(0, -2),
+          isTypeScriptProject() ? fileNameParts.at(-2) : 'js',
+        ].join('.')
 
         if (!webAuthn) {
           return { templateFileName: fileName, outputFileName }
