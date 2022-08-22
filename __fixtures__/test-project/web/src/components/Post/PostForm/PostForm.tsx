@@ -13,19 +13,25 @@ import type { RWGqlError } from '@redwoodjs/forms'
 
 interface PostFormProps {
   post?: EditPostById['post']
-  onSave: (data: UpdatePostInput, id?: EditPostById['post']['id']) => void
+  onSave: (
+    data: UpdatePostInput,
+    id?: NonNullable<EditPostById['post']>['id']
+  ) => void
   error: RWGqlError
   loading: boolean
 }
 
 const PostForm = (props: PostFormProps) => {
-  const onSubmit = (data: EditPostById['post']) => {
+  const onSubmit = (data: NonNullable<EditPostById['post']>) => {
     props.onSave(data, props?.post?.id)
   }
 
   return (
     <div className="rw-form-wrapper">
-      <Form<EditPostById['post']> onSubmit={onSubmit} error={props.error}>
+      <Form<NonNullable<EditPostById['post']>>
+        onSubmit={onSubmit}
+        error={props.error}
+      >
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"
