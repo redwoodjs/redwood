@@ -2,6 +2,8 @@
 
 exports[`Generate gql typedefs api 1`] = `
 "import { Prisma } from \\"@prisma/client\\"
+import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
+import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost} from '@prisma/client'
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
 export type Maybe<T> = T | null;
@@ -9,12 +11,11 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult extends PromiseLike<infer TResultAwaited>
-      ? Promise<Partial<TResultAwaited>>
-      : Promise<Partial<TResult>> | Partial<TResult>;
+    ) => TResult | Promise<TResult>
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -24,11 +25,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
-  Date: string;
-  DateTime: string;
+  Date: Date | string;
+  DateTime: Date | string;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
-  Time: string;
+  Time: Date | string;
 };
 
 export type Mutation = {
@@ -87,6 +88,8 @@ export type Todo = {
   status: Scalars['String'];
 };
 
+type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
+type AllMappedModels = MaybeOrArrayOfMaybe<>
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -273,11 +276,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
-  Date: string;
-  DateTime: string;
+  Date: Date | string;
+  DateTime: Date | string;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
-  Time: string;
+  Time: Date | string;
 };
 
 export type Mutation = {

@@ -22,14 +22,29 @@ import { getTsConfigs } from '../project'
 
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
+  const prismaModels = getPrismaModels()
+  const prismaImports = Object.keys(prismaModels).map((key) => {
+    return `${key} as Prisma${key}`
+  })
+
   const extraPlugins: CombinedPluginConfig[] = [
     {
       name: 'add',
       options: {
-        content: 'import { Prisma } from "@prisma/client"',
+        content: [
+          'import { Prisma } from "@prisma/client"',
+          "import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'",
+          `import { ${prismaImports.join(', ')}} from '@prisma/client'`,
+          `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];`,
+        ],
         placement: 'prepend',
       },
       codegenPlugin: addPlugin,
+    },
+    {
+      name: 'print-mapped-moddels',
+      options: {},
+      codegenPlugin: printMappedModelsPlugin,
     },
     {
       name: 'typescript-resolvers',
@@ -133,21 +148,32 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPluginConfig() {
+function getPrismaModels() {
   let prismaModels: Record<string, string> = {}
+
+  // Extract the models from the prisma client and use those to
+  // set up internal redirects for the return values in resolvers.
+  const localPrisma = require('@prisma/client')
+  prismaModels = localPrisma.ModelName
+
+  // This isn't really something you'd put in the GraphQL API, so
+  // we can skip the model.
+  if (prismaModels.RW_DataMigration) {
+    delete prismaModels.RW_DataMigration
+  }
+
+  return prismaModels
+}
+
+function getPluginConfig() {
+  const prismaModels: Record<string, string> = getPrismaModels()
   try {
-    // Extract the models from the prisma client and use those to
-    // set up internal redirects for the return values in resolvers.
-    const localPrisma = require('@prisma/client')
-    prismaModels = localPrisma.ModelName
     Object.keys(prismaModels).forEach((key) => {
-      prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
+      // Post = `@prisma/client#Post as PrismaPost`
+      prismaModels[
+        key
+      ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
     })
-    // This isn't really something you'd put in the GraphQL API, so
-    // we can skip the model.
-    if (prismaModels.RW_DataMigration) {
-      delete prismaModels.RW_DataMigration
-    }
   } catch (error) {
     // This means they've not set up prisma types yet
   }
@@ -159,11 +185,11 @@ function getPluginConfig() {
     scalars: {
       // We need these, otherwise these scalars are mapped to any
       BigInt: 'number',
-      DateTime: 'string',
-      Date: 'string',
+      DateTime: 'Date | string', // @Note: because DateTime fields can be valid Date-strings too
+      Date: 'Date | string',
       JSON: 'Prisma.JsonValue',
       JSONObject: 'Prisma.JsonObject',
-      Time: 'string',
+      Time: 'Date | string',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
@@ -188,16 +214,12 @@ export const getResolverFnType = () => {
     return `(
       args: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult extends PromiseLike<infer TResultAwaited>
-      ? Promise<Partial<TResultAwaited>>
-      : Promise<Partial<TResult>> | Partial<TResult>;`
+    ) => TResult | Promise<TResult>`
   } else {
     return `(
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult extends PromiseLike<infer TResultAwaited>
-      ? Promise<Partial<TResultAwaited>>
-      : Promise<Partial<TResult>> | Partial<TResult>;`
+    ) => TResult | Promise<TResult>`
   }
 }
 
@@ -205,6 +227,45 @@ interface CombinedPluginConfig {
   name: string
   options: CodegenTypes.PluginConfig
   codegenPlugin: CodegenPlugin
+}
+
+/**
+ *
+ * Codgen plugin just lists all the SDL models that are also mapped Prisma models
+ * We use a plugin, because its possible to have Prisma models that do not have an SDL model
+ * so we can't just list all the Prisma models, even if they're included in the mappers object.
+ *
+ * Example:
+ * type AllMappedModels = MaybeOrArrayOfMaybe<Post | User>
+ *
+ * Note that the types are SDL types, not Prisma types.
+ * We do not include SDL-only types in this list.
+ */
+const printMappedModelsPlugin: CodegenPlugin = {
+  plugin: (schema, _documents, config) => {
+    Object.values(schema.getTypeMap()).filter((type) => {
+      return (
+        type.astNode?.kind === 'ObjectTypeDefinition' &&
+        type.astNode.name.value === 'Query'
+      )
+    })
+
+    // this way we can make sure relation types are not required
+    const sdlTypesWhichAreMapped = Object.values(schema.getTypeMap())
+      .filter((type) => {
+        return type.astNode?.kind === 'ObjectTypeDefinition'
+      })
+      .filter((objectDefType) => {
+        const modelName = objectDefType.astNode?.name.value
+        return (
+          modelName && modelName in config.mappers // Only keep the mapped Prisma models
+        )
+      })
+
+    return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];\ntype AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(
+      ' | '
+    )}>`
+  },
 }
 
 function getCodegenOptions(
