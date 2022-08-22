@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.16.7",
+    "@babel/runtime-corejs3": "7.18.9",
     "@envelop/depth-limit": "1.6.2",
     "@envelop/disable-introspection": "3.4.2",
     "@envelop/filter-operation-type": "3.4.2",
@@ -31,9 +31,9 @@
     "@graphql-tools/merge": "8.3.1",
     "@graphql-tools/schema": "8.5.1",
     "@graphql-tools/utils": "8.9.0",
-    "@graphql-yoga/common": "2.7.0",
-    "@prisma/client": "4.1.1",
-    "@redwoodjs/api": "2.2.0",
+    "@graphql-yoga/common": "2.12.7",
+    "@prisma/client": "4.2.1",
+    "@redwoodjs/api": "2.2.1",
     "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
     "graphql": "16.5.0",
@@ -44,11 +44,11 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
+    "@babel/cli": "7.18.10",
+    "@babel/core": "7.18.10",
     "@envelop/testing": "4.4.2",
     "@envelop/types": "2.3.1",
-    "@redwoodjs/auth": "2.2.0",
+    "@redwoodjs/auth": "2.2.1",
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "8.3.4",
