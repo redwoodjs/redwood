@@ -297,7 +297,7 @@ The main reason for this is that these Netlify CLI commands simply build and dep
 
 Therefore, please follow the [instructions in the Tutorial](tutorial/chapter4/deployment.md#netlify) to sync your GitHub (or other compatible source control service) repository with Netlify and allow their build and deploy system to manage deployments.
 
-The [Netlify CLI](https://cli.netlify.com) still works well for [linking your project to your site](https://cli.netlify.com/commands/link), testing local builds and also using their [dev](https://cli.netlify.com/commands/dev) or [dev --live](https://cli.netlify.com/commands/dev) to share your local via a tunnel.
+The [Netlify CLI](https://cli.netlify.com) still works well for [linking your project to your site](https://cli.netlify.com/commands/link), testing local builds and also using their [dev](https://cli.netlify.com/commands/dev) or [dev --live](https://cli.netlify.com/commands/dev) to share your local dev server via a tunnel.
 :::
 
 ### deploy render
