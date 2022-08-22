@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import pascalcase from 'pascalcase'
+
 import { getPaths, transformTSToJS } from '../../../lib'
 import { isTypeScriptProject } from '../../../lib/project'
 
@@ -91,4 +93,69 @@ export const files = ({ provider, webAuthn }) => {
   }, {})
 
   return filesRecord
+}
+
+/**
+ * Loops through the keys in `filesRecord` and generates unique file paths if
+ * they conflict with existing files
+ *
+ * Given this input:
+ * ```json
+ * {
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/auth.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/helperFunctions.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/supertokens.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/functions/auth.ts": "<file content>"
+ * }
+ * ```
+ *
+ * You could get this output, depending on what existing files there are
+ * ```json
+ * {
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/supertokensAuth3.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/supertokensHelperFunctions.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/lib/supertokens2.ts": "<file content>",
+ *   "/Users/tobbe/dev/rw-app/api/src/functions/auth.ts": "<file content>"
+ * }
+ * ```
+ */
+export function generateUniqueFileNames(filesRecord, provider) {
+  const newFilesRecord = {}
+
+  Object.keys(filesRecord).forEach((fullPath) => {
+    let newFullPath = fullPath
+    let i = 1
+    while (fs.existsSync(newFullPath)) {
+      const nameParts = path.basename(fullPath).split('.')
+
+      if (nameParts[0] === provider) {
+        // api/lib/supertokens.ts -> api/lib/supertokens2.ts
+
+        const newFileName =
+          provider + (i + 1) + '.' + nameParts.slice(1).join('.')
+
+        newFullPath = path.join(path.dirname(fullPath), newFileName)
+      } else {
+        // api/lib/auth.ts -> api/lib/supertokensAuth.ts
+        // (potentially) -> api/lib/supertokensAuth2.ts depending on what
+        // files already exists
+        const count = i > 1 ? i : ''
+
+        const newFileName =
+          provider +
+          pascalcase(nameParts[0]) +
+          count +
+          '.' +
+          nameParts.slice(1).join('.')
+
+        newFullPath = path.join(path.dirname(fullPath), newFileName)
+      }
+
+      i++
+    }
+
+    newFilesRecord[newFullPath] = filesRecord[fullPath]
+  })
+
+  return newFilesRecord
 }

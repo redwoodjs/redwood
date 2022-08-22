@@ -15,6 +15,7 @@ import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
 import { files } from './authFiles'
+import pascalcase from 'pascalcase'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
@@ -245,10 +246,29 @@ export const generateAuthApi = (provider, force, webAuthn) => ({
       return task.skip('api/src not found, skipping')
     }
 
-    return writeFilesTask(files({ provider, webAuthn }), {
-      overwriteExisting: force,
-      throwOnExisting: false,
-    })
+    // The keys in `filesRecord` are the full paths to where the file contents,
+    // which is the values in `filesRecord`, will be written.
+    let filesRecord = files({ provider, webAuthn })
+
+    if (!force) {
+      const uniqueFilesRecord = generateUniqueFileNames(filesRecord)
+      if (
+        Object.keys(filesRecord).join(',') !==
+        Object.keys(uniqueFilesRecord.join(','))
+      ) {
+        console.warn(
+          c.warning(
+            'To avoid overwriting existing files we\'ve generated new file ' +
+            'names for the newly generated files. This probably means ' +
+            `${provider} auth doesn't work out of the box. You'll most ` +
+            'likely have to manually merge some of the generated files ' +
+            'with your existing auth files'
+          )
+        )
+      }
+    }
+
+    return writeFilesTask(filesRecord, { overwriteExisting: force })
   },
 })
 
