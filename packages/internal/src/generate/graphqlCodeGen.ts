@@ -34,7 +34,7 @@ export const generateTypeDefGraphQLApi = async () => {
         content: [
           'import { Prisma } from "@prisma/client"',
           "import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'",
-          `import { ${prismaImports.join(', ')}} from '@prisma/client'`,
+          `import { ${prismaImports.join(', ')} } from '@prisma/client'`,
         ],
         placement: 'prepend',
       },
@@ -242,13 +242,6 @@ interface CombinedPluginConfig {
  */
 const printMappedModelsPlugin: CodegenPlugin = {
   plugin: (schema, _documents, config) => {
-    Object.values(schema.getTypeMap()).filter((type) => {
-      return (
-        type.astNode?.kind === 'ObjectTypeDefinition' &&
-        type.astNode.name.value === 'Query'
-      )
-    })
-
     // this way we can make sure relation types are not required
     const sdlTypesWhichAreMapped = Object.values(schema.getTypeMap())
       .filter((type) => {
@@ -260,6 +253,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
           modelName && modelName in config.mappers // Only keep the mapped Prisma models
         )
       })
+      .map((objectDefType) => objectDefType.astNode?.name.value)
 
     return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];\ntype AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(
       ' | '
