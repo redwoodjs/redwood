@@ -17,7 +17,11 @@ import {
 } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
-import { GqlHandlerImportError, PrerenderGqlError } from './errors'
+import {
+  GqlHandlerImportError,
+  JSONParseError,
+  PrerenderGqlError,
+} from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
@@ -43,7 +47,19 @@ async function recursivelyRender(
           value.variables
         )
 
-        const result = JSON.parse(resultString)
+        let result
+
+        try {
+          result = JSON.parse(resultString)
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            throw new JSONParseError({
+              query: value.query,
+              variables: value.variables,
+              result: resultString,
+            })
+          }
+        }
 
         if (result.errors) {
           const message =
