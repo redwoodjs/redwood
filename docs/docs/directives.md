@@ -191,7 +191,7 @@ and if the `currentUser` is an `ADMIN`, then skip the masking transform and simp
 import { createTransformerDirective, TransformerDirectiveFunc } from '@redwoodjs/graphql-server'
 
 export const schema = gql`
-  directive @maskedEmail on FIELD_DEFINITION
+  directive @maskedEmail(permittedRoles: [String]) on FIELD_DEFINITION
 `
 
 const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
