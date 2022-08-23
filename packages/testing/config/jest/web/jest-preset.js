@@ -11,7 +11,9 @@ module.exports = {
   rootDir: rwjsPaths.base,
   roots: [path.join(rwjsPaths.web.src)],
   testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
-  testURL: 'https://redwoodjs.com',
+  testEnvironmentOptions: {
+    url: 'https://redwoodjs.com',
+ },
   displayName: {
     color: 'blueBright',
     name: 'web',
