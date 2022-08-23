@@ -208,8 +208,25 @@ function getCodegenOptions(
   config: CodegenTypes.PluginConfig,
   extraPlugins: CombinedPluginConfig[]
 ) {
+
+  // Because we want to generate enums as types we configure the typescript plugin
+  // to treat enums as types using the `enumsAsTypes` option set to true by default.
+  //
+  // However, since we allow the project to override the codegen configuration,
+  // (see: https://redwoodjs.com/docs/project-configuration-dev-test-build#graphql-codegen)
+  // we need to check if the project's custom codegen.yml has set this option.
+  //
+  // If not, set it to true otherwise set it to the config value, so it can be set to false
+  // so codegen generates an enum rather than a type.
+  //
+  // Note: If any additional typescript plugin configuration settings
+  // (see: https://www.graphql-code-generator.com/plugins/typescript/typescript)
+  // are defaulted, then they will need to be added here as well.
+
+  const enumsAsTypes = config.enumsAsTypes ?? true
+
   const plugins = [
-    { typescript: { enumsAsTypes: true } },
+    { typescript: { enumsAsTypes } },
     ...extraPlugins.map((plugin) => ({ [plugin.name]: plugin.options })),
   ]
 
