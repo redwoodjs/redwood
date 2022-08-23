@@ -1,3 +1,5 @@
+import type { ComponentStory } from '@storybook/react'
+
 import Author from './Author'
 
 const author = {
@@ -5,8 +7,8 @@ const author = {
   fullName: 'Story User',
 }
 
-export const generated = (args) => {
+export const generated: ComponentStory<typeof Author> = (args) => {
   return <Author {...args} author={author} />
 }
 
-export default { title: 'Components/Author' }
+export default { title: 'Components/Author', component: Author }

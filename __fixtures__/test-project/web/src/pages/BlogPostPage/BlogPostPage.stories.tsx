@@ -1,7 +1,9 @@
+import type { ComponentStory } from '@storybook/react'
+
 import BlogPostPage from './BlogPostPage'
 
-export const generated = (args) => {
+export const generated: ComponentStory<typeof BlogPostPage> = (args) => {
   return <BlogPostPage id={42} {...args} />
 }
 
-export default { title: 'Pages/BlogPostPage' }
+export default { title: 'Pages/BlogPostPage', component: BlogPostPage }
