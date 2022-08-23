@@ -196,3 +196,68 @@ describe("Doesn't swallow legit errors", () => {
     }
   })
 })
+
+describe("Generates Enums", () => {
+  test('By default, enums are exported as types when there is no codegen.yml override', async () => {
+    const fixturePath = path.resolve(
+      __dirname,
+      './fixtures/graphqlCodeGen/enumsAsDefaultType'
+    )
+    process.env.RWJS_CWD = fixturePath
+
+    await generateTypeDefGraphQLApi()
+
+    const [outputPath] = await generateTypeDefGraphQLApi()
+
+    const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
+
+    // Should export a type
+    expect(gqlTypesOutput).toContain('export type NameStatus')
+    expect(gqlTypesOutput).toContain("| 'NAME_APPROVED'")
+    expect(gqlTypesOutput).toContain("| 'NAME_CHANGING'")
+    expect(gqlTypesOutput).toContain("| 'NAME_DENIED'")
+    expect(gqlTypesOutput).toContain("| 'NAME_REQUESTED'")
+  })
+
+  test('Configure codegen.yml to export enums as types', async () => {
+    const fixturePath = path.resolve(
+      __dirname,
+      './fixtures/graphqlCodeGen/enumsAsExportedType'
+    )
+    process.env.RWJS_CWD = fixturePath
+
+    await generateTypeDefGraphQLApi()
+
+    const [outputPath] = await generateTypeDefGraphQLApi()
+
+    const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
+
+    // Should export a type
+    expect(gqlTypesOutput).toContain('export type NameStatus')
+    expect(gqlTypesOutput).toContain("| 'NAME_APPROVED'")
+    expect(gqlTypesOutput).toContain("| 'NAME_CHANGING'")
+    expect(gqlTypesOutput).toContain("| 'NAME_DENIED'")
+    expect(gqlTypesOutput).toContain("| 'NAME_REQUESTED'")
+  })
+
+  test('Configure codegen.yml to export enums as enum', async () => {
+    const fixturePath = path.resolve(
+      __dirname,
+      './fixtures/graphqlCodeGen/enumsAsExportedEnum'
+    )
+    process.env.RWJS_CWD = fixturePath
+
+    await generateTypeDefGraphQLApi()
+
+    const [outputPath] = await generateTypeDefGraphQLApi()
+
+    const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
+
+    // Should export an enum
+    expect(gqlTypesOutput).toContain('export enum NameStatus')
+    expect(gqlTypesOutput).toContain("NAME_APPROVED = 'NAME_APPROVED'")
+    expect(gqlTypesOutput).toContain("NAME_CHANGING = 'NAME_CHANGING'")
+    expect(gqlTypesOutput).toContain("NAME_DENIED = 'NAME_DENIED'")
+    expect(gqlTypesOutput).toContain("NAME_REQUESTED = 'NAME_REQUESTED'")
+  })
+})

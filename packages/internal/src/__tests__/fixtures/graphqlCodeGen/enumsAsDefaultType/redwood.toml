@@ -1,0 +1,6 @@
+[web]
+  port = 8910
+  apiProxyPath = "/api/functions"
+
+[api]
+  port = 8911

@@ -1,0 +1,24 @@
+scalar BigInt
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON
+
+scalar JSONObject
+
+scalar Time
+
+enum NameStatus {
+  NAME_APPROVED
+  NAME_CHANGING
+  NAME_DENIED
+  NAME_REQUESTED
+}
+
+type Project {
+  id: Int!
+  name: String!
+  status: NameStatus!
+}
