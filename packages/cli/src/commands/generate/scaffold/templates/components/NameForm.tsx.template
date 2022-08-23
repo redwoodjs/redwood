@@ -23,7 +23,7 @@ type NonNullable${singularPascalName} = NonNullable<Edit${singularPascalName}ByI
 
 interface ${singularPascalName}FormProps {
   ${singularCamelName}?: Edit${singularPascalName}ById['${singularCamelName}']
-  onSave: (data: Update${singularPascalName}Input, id?: NonNullable${singularPascalCase}['id']) => void
+  onSave: (data: Update${singularPascalName}Input, id?: NonNullable${singularPascalName}['id']) => void
   error: RWGqlError
   loading: boolean
 }
