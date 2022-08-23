@@ -13,7 +13,7 @@ module.exports = {
   testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
   testEnvironmentOptions: {
     url: 'https://redwoodjs.com',
- },
+  },
   displayName: {
     color: 'blueBright',
     name: 'web',
