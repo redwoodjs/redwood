@@ -26,6 +26,7 @@ import {
   decryptSession,
   extractCookie,
   getSession,
+  hashPassword,
   webAuthnSession,
 } from './shared'
 
@@ -584,7 +585,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     let user = await this._findUserByToken(resetToken as string)
-    const [hashedPassword] = this._hashPassword(password, user.salt)
+    const [hashedPassword] = hashPassword(password, user.salt)
 
     if (
       !(this.options.resetPassword as ResetPasswordFlowOptions)
@@ -1204,7 +1205,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     // is password correct?
-    const [hashedPassword, _salt] = this._hashPassword(
+    const [hashedPassword, _salt] = hashPassword(
       password,
       user[this.options.authFields.salt]
     )
@@ -1271,7 +1272,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
-      const [hashedPassword, salt] = this._hashPassword(password)
+      const [hashedPassword, salt] = hashPassword(password)
       const newUser = await (this.options.signup as SignupFlowOptions).handler({
         username,
         hashedPassword,
@@ -1281,17 +1282,6 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
       return newUser
     }
-  }
-
-  // hashes a password using either the given `salt` argument, or creates a new
-  // salt and hashes using that. Either way, returns an array with [hash, salt]
-  _hashPassword(text: string, salt?: string) {
-    const useSalt = salt || CryptoJS.lib.WordArray.random(128 / 8).toString()
-
-    return [
-      CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
-      useSalt,
-    ]
   }
 
   // figure out which auth method we're trying to call
