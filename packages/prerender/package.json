@@ -34,6 +34,7 @@
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
+    "graphql": "16.5.0",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
