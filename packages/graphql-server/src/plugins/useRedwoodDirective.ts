@@ -49,8 +49,8 @@ export declare type ValidateArgs<DirectiveArgs = Record<string, any>> = Omit<
  * @example ValidatorDirectiveFunc<{ roles?: string[] }>
  *
  */
-export type ValidatorDirectiveFunc<DirectiveArgs = Record<string, any>> = (
-  args: ValidateArgs<DirectiveArgs>
+export type ValidatorDirectiveFunc<TDirectiveArgs = Record<string, any>> = (
+  args: ValidateArgs<TDirectiveArgs>
 ) => Promise<void> | void
 
 
@@ -61,9 +61,9 @@ export type ValidatorDirectiveFunc<DirectiveArgs = Record<string, any>> = (
  * @example TransformArgs<Post, { allowedRoles: string[] }>
  */
 export declare type TransformArgs<
-  FieldType = any,
-  DirectiveArgs = Record<string, any>
-> = DirectiveParams<FieldType, DirectiveArgs>
+  TField = any,
+  TDirectiveArgs = Record<string, any>
+> = DirectiveParams<TField, TDirectiveArgs>
 
 /**
  * Write your transformation logic inside this function.
@@ -77,9 +77,9 @@ export declare type TransformArgs<
  *
  */
 export type TransformerDirectiveFunc<
-  FieldType = any,
-  DirectiveArgs = Record<string, any>
-> = (args: TransformArgs<FieldType, DirectiveArgs>) => FieldType
+  TField = any,
+  TDirectiveArgs = Record<string, any>
+> = (args: TransformArgs<TField, TDirectiveArgs>) => TField
 
 // @NOTE don't use unspecified enums, because !type would === true
 export enum DirectiveType {
