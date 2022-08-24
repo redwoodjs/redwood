@@ -1,5 +1,4 @@
 // MSW is shared by Jest (NodeJS) and Storybook (Webpack)
-import fg from 'fast-glob'
 import {
   setupWorker,
   graphql,
@@ -186,17 +185,5 @@ export const mockCurrentUser = (user: Record<string, unknown> | null) => {
         currentUser: user,
       },
     }
-  })
-}
-
-export const loadWebMocks = (webBasePath: string) => {
-  return fg.sync('**/*.mock.{js,ts,jsx,tsx}', {
-    cwd: webBasePath,
-    absolute: true,
-    ignore: [
-      '**/*.test.{js,ts,tsx,jsx}',
-      '**/*.fixtures.{js,ts,tsx,jsx}',
-      '**/*.d.ts',
-    ],
   })
 }
