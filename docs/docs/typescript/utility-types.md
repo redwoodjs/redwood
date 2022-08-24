@@ -273,7 +273,7 @@ const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
 
 This type takes a two generics - the type of the field you are transforming, and the type of your `directiveArgs`.
 
-So for example, let's say you have a transformer directive `@maskedEmail(permittedRoles: ['ADMIN']` that you apply to `String` fields. You would pass in the following types
+So for example, let's say you have a transformer directive `@maskedEmail(permittedRoles: ['ADMIN'])` that you apply to `String` fields. You would pass in the following types
 
 ```ts
 type MaskedEmailTransform = TransformerDirectiveFunc<string, {permittedRoles?: string[]}>
