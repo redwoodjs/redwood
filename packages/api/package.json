@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.18.13",
     "@clerk/clerk-sdk-node": "3.9.2",
     "@redwoodjs/auth": "2.2.2",
     "@simplewebauthn/server": "5.4.5",

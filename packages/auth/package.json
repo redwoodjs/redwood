@@ -30,7 +30,7 @@
     "@auth0/auth0-spa-js": "1.22.2",
     "@azure/msal-browser": "2.28.1",
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.18.13",
     "@clerk/clerk-js": "3.17.0",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/clerk-sdk-node": "3.9.2",
