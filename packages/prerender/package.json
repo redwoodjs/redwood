@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.18.13",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "10.1.0",
     "jest": "28.1.3",
