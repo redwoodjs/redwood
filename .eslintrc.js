@@ -165,6 +165,14 @@ module.exports = {
               'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>, or await import',
           },
         ],
+        'no-restricted-modules': [
+          'error',
+          {
+            name: '@redwoodjs/internal',
+            message:
+              'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>',
+          },
+        ],
       },
     },
   ],
