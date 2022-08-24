@@ -1,0 +1,18 @@
+import { createCache, MemcachedClient } from '@redwoodjs/api/cache'
+
+import { logger } from './logger'
+
+const memJsFormattedLogger = {
+  log: (msg) => logger.error(msg),
+}
+
+let client
+try {
+  client = new MemcachedClient('localhost:11211', {
+    logger: memJsFormattedLogger,
+  })
+} catch (e) {
+  console.error(`Could not connect to cache: ${e.message}`)
+}
+
+export const { cache, cacheLatest } = createCache(client, logger)

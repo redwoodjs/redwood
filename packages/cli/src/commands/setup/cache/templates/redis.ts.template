@@ -1,0 +1,12 @@
+import { createCache, RedisClient } from '@redwoodjs/api/cache'
+
+import { logger } from './logger'
+
+let client
+try {
+  client = new RedisClient({ url: 'redis://localhost:6379' })
+} catch (e) {
+  console.error(`Could not connect to cache: ${e.message}`)
+}
+
+export const { cache, cacheLatest } = createCache(client, logger)
