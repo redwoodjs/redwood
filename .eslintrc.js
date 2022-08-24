@@ -158,6 +158,7 @@ module.exports = {
       ],
       rules: {
         'no-restricted-imports': [
+          // for import x from ('@redwoodjs/internal')
           'error',
           {
             name: '@redwoodjs/internal',
@@ -166,11 +167,12 @@ module.exports = {
           },
         ],
         'no-restricted-modules': [
+          // for require('@redwoodjs/internal')
           'error',
           {
             name: '@redwoodjs/internal',
             message:
-              'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>',
+              'To prevent bloat in CLI, do not require "@redwoodjs/internal" directly. Instead require like @redwoodjs/internal/dist/<file>',
           },
         ],
       },
