@@ -14,6 +14,7 @@ describe('removeNulls utility', () => {
           i: [1, 2, null, 4],
         },
       },
+      myDate: new Date('2020-01-01'),
     }
 
     const result = removeNulls(input)
@@ -30,6 +31,7 @@ describe('removeNulls utility', () => {
           i: [1, 2, undefined, 4],
         },
       },
+      myDate: new Date('2020-01-01'),
     })
   })
 })

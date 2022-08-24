@@ -40,18 +40,21 @@ export function normalizeRequest(event: APIGatewayProxyEvent): Request {
 
 /**
  * Useful for removing nulls from an object, such as an input from a GraphQL mutation used directly in a Prisma query
- * @param obj - Object to remove nulls from
+ * @param input - Object to remove nulls from
  * See {@link https://www.prisma.io/docs/concepts/components/prisma-client/null-and-undefined Prisma docs: null vs undefined}
  */
-export const removeNulls = (obj: Record<number | symbol | string, any>) => {
-  for (const key in obj) {
-    if (obj[key] === null) {
-      obj[key] = undefined
-    } else if (typeof obj[key] === 'object') {
+export const removeNulls = (input: Record<number | symbol | string, any>) => {
+  for (const key in input) {
+    if (input[key] === null) {
+      input[key] = undefined
+    } else if (
+      typeof input[key] === 'object' &&
+      !(input[key] instanceof Date) // dates are objects too
+    ) {
       // Note arrays are also typeof object!
-      obj[key] = removeNulls(obj[key])
+      input[key] = removeNulls(input[key])
     }
   }
 
-  return obj
+  return input
 }
