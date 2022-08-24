@@ -243,7 +243,7 @@ describe('CORS', () => {
     )
   })
 
-  it('Returns CORS headers with multiValueHeaders in request,as MVH in response', async () => {
+  it('Returns CORS headers with multiValueHeaders in request, as MVH in response', async () => {
     const handler = createGraphQLHandler({
       loggerConfig: { logger: createLogger({}), options: {} },
       sdls: {},
@@ -263,6 +263,7 @@ describe('CORS', () => {
       body: JSON.stringify({ query: '{ me { id, name } }' }),
       multiValueHeaders: {
         origin: ['https://site2.two'],
+        'Content-Type': ['application/json'],
       },
       httpMethod: 'POST',
     })

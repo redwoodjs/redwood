@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React from 'react'
 
 import { createAuthClient } from './authClients'
 import type {
@@ -19,7 +13,6 @@ import type { WebAuthnClientType } from './webAuthn'
 export interface CurrentUser {
   roles?: Array<string> | string
 }
-
 export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
@@ -83,39 +76,24 @@ export const AuthContext = React.createContext<AuthContextInterface>({
   hasError: false,
 })
 
-const AuthUpdateListener = ({
-  rwClient,
-  reauthenticate,
-}: {
-  rwClient?: AuthClient
-  reauthenticate: () => Promise<void>
-}) => {
-  rwClient?.useListenForUpdates?.({ reauthenticate })
-
-  return null
-}
-
 type AuthProviderProps =
   | {
       client: SupportedAuthClients
-      type: Omit<SupportedAuthTypes, 'clerk' | 'dbAuth'>
+      type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
       config?: never
       skipFetchCurrentUser?: boolean
-      children?: ReactNode | undefined
     }
   | {
       client?: never
       type: 'clerk'
       config?: never
       skipFetchCurrentUser?: boolean
-      children?: ReactNode | undefined
     }
   | {
       client?: WebAuthnClientType
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
-      children?: ReactNode | undefined
     }
 
 type AuthProviderState = {
@@ -126,15 +104,6 @@ type AuthProviderState = {
   hasError: boolean
   error?: Error
 }
-
-const defaultAuthProviderState: AuthProviderState = {
-  loading: true,
-  isAuthenticated: false,
-  userMetadata: null,
-  currentUser: null,
-  hasError: false,
-}
-
 /**
  * @example
  * ```js
@@ -145,65 +114,52 @@ const defaultAuthProviderState: AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
-export const AuthProvider = (props: AuthProviderProps) => {
-  const skipFetchCurrentUser = props.skipFetchCurrentUser || false
+export class AuthProvider extends React.Component<
+  AuthProviderProps,
+  AuthProviderState
+> {
+  static defaultProps = {
+    skipFetchCurrentUser: false,
+  }
 
-  const [hasRestoredState, setHasRestoredState] = useState(false)
+  state: AuthProviderState = {
+    loading: true,
+    isAuthenticated: false,
+    userMetadata: null,
+    currentUser: null,
+    hasError: false,
+  }
 
-  const [authProviderState, setAuthProviderState] = useState(
-    defaultAuthProviderState
-  )
+  rwClient: AuthClient
 
-  const [rwClient, setRwClient] = useState<AuthClient>()
-
-  const rwClientPromise: Promise<AuthClient> = useMemo(async () => {
-    // If ever we rebuild the rwClient, we need to re-restore the state.
-    // This is not desired behavior, but may happen if for some reason the host app's
-    // auth configuration changes mid-flight.
-    setHasRestoredState(false)
-
-    const client = await createAuthClient(
+  constructor(props: AuthProviderProps) {
+    super(props)
+    this.rwClient = createAuthClient(
       props.client as SupportedAuthClients,
       props.type as SupportedAuthTypes,
       props.config as SupportedAuthConfig
     )
+  }
 
-    setRwClient(client)
+  async componentDidMount() {
+    await this.rwClient.restoreAuthState?.()
+    return this.reauthenticate()
+  }
 
-    return client
-  }, [props.client, props.type, props.config])
+  getApiGraphQLUrl = () => {
+    return global.RWJS_API_GRAPHQL_URL
+  }
 
-  /**
-   * Clients should always return null or token string.
-   * It is expected that they catch any errors internally.
-   * This catch is a last resort effort in case any errors are
-   * missed or slip through.
-   */
-  const getToken = useCallback(async () => {
-    const client = await rwClientPromise
-
-    try {
-      const token = await client.getToken()
-      return token
-    } catch (e) {
-      console.error('Caught internal:', e)
-      return null
-    }
-  }, [rwClientPromise])
-
-  const getCurrentUser = useCallback(async (): Promise<
-    Record<string, unknown>
-  > => {
-    const client = await rwClientPromise
+  getCurrentUser = async (): Promise<Record<string, unknown>> => {
     // Always get a fresh token, rather than use the one in state
-    const token = await getToken()
-    const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
+    const token = await this.getToken()
+    const response = await global.fetch(this.getApiGraphQLUrl(), {
       method: 'POST',
       // TODO: how can user configure this? inherit same `config` options given to auth client?
       credentials: 'include',
       headers: {
         'content-type': 'application/json',
-        'auth-provider': client.type,
+        'auth-provider': this.rwClient.type,
         authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
@@ -220,49 +176,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
         `Could not fetch current user: ${response.statusText} (${response.status})`
       )
     }
-  }, [rwClientPromise, getToken])
-
-  const reauthenticate = useCallback(async () => {
-    const client = await rwClientPromise
-    const notAuthenticatedState: AuthProviderState = {
-      isAuthenticated: false,
-      currentUser: null,
-      userMetadata: null,
-      loading: false,
-      hasError: false,
-    }
-
-    try {
-      const userMetadata = await client.getUserMetadata()
-      if (!userMetadata) {
-        setAuthProviderState(notAuthenticatedState)
-      } else {
-        await getToken()
-
-        const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
-
-        setAuthProviderState((oldState) => ({
-          ...oldState,
-          userMetadata,
-          currentUser,
-          isAuthenticated: true,
-          loading: false,
-        }))
-      }
-    } catch (e: any) {
-      setAuthProviderState({
-        ...notAuthenticatedState,
-        hasError: true,
-        error: e as Error,
-      })
-    }
-  }, [
-    getToken,
-    rwClientPromise,
-    setAuthProviderState,
-    skipFetchCurrentUser,
-    getCurrentUser,
-  ])
+  }
 
   /**
    * @example
@@ -277,162 +191,171 @@ export const AuthProvider = (props: AuthProviderProps) => {
    * If the user is assigned any of the provided list of roles,
    * the hasRole is considered to be true.
    */
-  const hasRole = useCallback(
-    (rolesToCheck: string | string[]): boolean => {
-      const currentUser = authProviderState.currentUser
-
-      if (currentUser?.roles) {
-        if (typeof rolesToCheck === 'string') {
-          if (typeof currentUser.roles === 'string') {
-            // rolesToCheck is a string, currentUser.roles is a string
-            return currentUser.roles === rolesToCheck
-          } else if (Array.isArray(currentUser.roles)) {
-            // rolesToCheck is a string, currentUser.roles is an array
-            return currentUser.roles?.some(
-              (allowedRole) => rolesToCheck === allowedRole
-            )
-          }
-        }
-
-        if (Array.isArray(rolesToCheck)) {
-          if (Array.isArray(currentUser.roles)) {
-            // rolesToCheck is an array, currentUser.roles is an array
-            return currentUser.roles?.some((allowedRole) =>
-              rolesToCheck.includes(allowedRole)
-            )
-          } else if (typeof currentUser.roles === 'string') {
-            // rolesToCheck is an array, currentUser.roles is a string
-            return rolesToCheck.some(
-              (allowedRole) => currentUser?.roles === allowedRole
-            )
-          }
+  hasRole = (rolesToCheck: string | string[]): boolean => {
+    if (this.state.currentUser?.roles) {
+      if (typeof rolesToCheck === 'string') {
+        if (typeof this.state.currentUser.roles === 'string') {
+          // rolesToCheck is a string, currentUser.roles is a string
+          return this.state.currentUser.roles === rolesToCheck
+        } else if (Array.isArray(this.state.currentUser.roles)) {
+          // rolesToCheck is a string, currentUser.roles is an array
+          return this.state.currentUser.roles?.some(
+            (allowedRole) => rolesToCheck === allowedRole
+          )
         }
       }
 
-      return false
-    },
-    [authProviderState.currentUser]
-  )
-
-  const logIn = useCallback(
-    async (options?: any) => {
-      setAuthProviderState(defaultAuthProviderState)
-      const client = await rwClientPromise
-      const loginOutput = await client.login(options)
-      await reauthenticate()
-
-      return loginOutput
-    },
-    [rwClientPromise, reauthenticate]
-  )
-
-  const logOut = useCallback(
-    async (options?: any) => {
-      const client = await rwClientPromise
-      await client.logout(options)
-      setAuthProviderState({
-        userMetadata: null,
-        currentUser: null,
-        isAuthenticated: false,
-        hasError: false,
-        error: undefined,
-        loading: false,
-      })
-    },
-    [rwClientPromise]
-  )
-
-  const signUp = useCallback(
-    async (options?: any) => {
-      const client = await rwClientPromise
-      const signupOutput = await client.signup(options)
-      await reauthenticate()
-      return signupOutput
-    },
-    [rwClientPromise, reauthenticate]
-  )
-
-  const forgotPassword = useCallback(
-    async (username: string) => {
-      const client = await rwClientPromise
-
-      if (client.forgotPassword) {
-        return await client.forgotPassword(username)
-      } else {
-        throw new Error(
-          `Auth client ${client.type} does not implement this function`
-        )
+      if (Array.isArray(rolesToCheck)) {
+        if (Array.isArray(this.state.currentUser.roles)) {
+          // rolesToCheck is an array, currentUser.roles is an array
+          return this.state.currentUser.roles?.some((allowedRole) =>
+            rolesToCheck.includes(allowedRole)
+          )
+        } else if (typeof this.state.currentUser.roles === 'string') {
+          // rolesToCheck is an array, currentUser.roles is a string
+          return rolesToCheck.some(
+            (allowedRole) => this.state.currentUser?.roles === allowedRole
+          )
+        }
       }
-    },
-    [rwClientPromise]
-  )
-
-  const resetPassword = useCallback(
-    async (options?: any) => {
-      const client = await rwClientPromise
-
-      if (client.resetPassword) {
-        return await client.resetPassword(options)
-      } else {
-        throw new Error(
-          `Auth client ${client.type} does not implement this function`
-        )
-      }
-    },
-    [rwClientPromise]
-  )
-
-  const validateResetToken = useCallback(
-    async (resetToken: string | null) => {
-      const client = await rwClientPromise
-
-      if (client.validateResetToken) {
-        return await client.validateResetToken(resetToken)
-      } else {
-        throw new Error(
-          `Auth client ${client.type} does not implement this function`
-        )
-      }
-    },
-    [rwClientPromise]
-  )
-
-  /** Whenever the rwClient is ready to go, restore auth and reauthenticate */
-  useEffect(() => {
-    if (rwClient && !hasRestoredState) {
-      setHasRestoredState(true)
-
-      const doRestoreState = async () => {
-        await rwClient.restoreAuthState?.()
-        reauthenticate()
-      }
-
-      doRestoreState()
     }
-  }, [rwClient, reauthenticate, hasRestoredState])
 
-  const { client, type, children } = props
+    return false
+  }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        ...authProviderState,
-        logIn,
-        logOut,
-        signUp,
-        getToken,
-        getCurrentUser,
-        hasRole,
-        reauthenticate,
-        forgotPassword,
-        resetPassword,
-        validateResetToken,
-        client,
-        type: type as SupportedAuthTypes,
-      }}
-    >
-      {children}
-      <AuthUpdateListener rwClient={rwClient} reauthenticate={reauthenticate} />
-    </AuthContext.Provider>
-  )
+  /**
+   * Clients should always return null or token string.
+   * It is expected that they catch any errors internally.
+   * This catch is a last resort effort in case any errors are
+   * missed or slip through.
+   */
+  getToken = async () => {
+    let token
+
+    try {
+      token = await this.rwClient.getToken()
+    } catch {
+      token = null
+    }
+
+    return token
+  }
+
+  reauthenticate = async () => {
+    const notAuthenticatedState: AuthProviderState = {
+      isAuthenticated: false,
+      currentUser: null,
+      userMetadata: null,
+      loading: false,
+      hasError: false,
+    }
+
+    try {
+      const userMetadata = await this.rwClient.getUserMetadata()
+      if (!userMetadata) {
+        this.setState(notAuthenticatedState)
+      } else {
+        await this.getToken()
+
+        const currentUser = this.props.skipFetchCurrentUser
+          ? null
+          : await this.getCurrentUser()
+
+        this.setState({
+          ...this.state,
+          userMetadata,
+          currentUser,
+          isAuthenticated: true,
+          loading: false,
+        })
+      }
+    } catch (e: any) {
+      this.setState({
+        ...notAuthenticatedState,
+        hasError: true,
+        error: e as Error,
+      })
+    }
+  }
+
+  logIn = async (options?: any) => {
+    this.setState({ loading: true })
+    const loginOutput = await this.rwClient.login(options)
+    await this.reauthenticate()
+
+    return loginOutput
+  }
+
+  logOut = async (options?: any) => {
+    await this.rwClient.logout(options)
+    this.setState({
+      userMetadata: null,
+      currentUser: null,
+      isAuthenticated: false,
+      hasError: false,
+      error: undefined,
+    })
+  }
+
+  signUp = async (options?: any) => {
+    const signupOutput = await this.rwClient.signup(options)
+    await this.reauthenticate()
+    return signupOutput
+  }
+
+  forgotPassword = async (username: string) => {
+    if (this.rwClient.forgotPassword) {
+      return await this.rwClient.forgotPassword(username)
+    } else {
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
+    }
+  }
+
+  resetPassword = async (options?: any) => {
+    if (this.rwClient.resetPassword) {
+      return await this.rwClient.resetPassword(options)
+    } else {
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
+    }
+  }
+
+  validateResetToken = async (resetToken: string | null) => {
+    if (this.rwClient.validateResetToken) {
+      return await this.rwClient.validateResetToken(resetToken)
+    } else {
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
+    }
+  }
+
+  render() {
+    const { client, type, children } = this.props
+
+    return (
+      <AuthContext.Provider
+        value={{
+          ...this.state,
+          logIn: this.logIn,
+          logOut: this.logOut,
+          signUp: this.signUp,
+          getToken: this.getToken,
+          getCurrentUser: this.getCurrentUser,
+          hasRole: this.hasRole,
+          reauthenticate: this.reauthenticate,
+          forgotPassword: this.forgotPassword,
+          resetPassword: this.resetPassword,
+          validateResetToken: this.validateResetToken,
+          client,
+          type: type as SupportedAuthTypes,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    )
+  }
 }

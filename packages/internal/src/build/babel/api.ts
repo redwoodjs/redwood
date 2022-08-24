@@ -14,7 +14,7 @@ import {
   getCommonPlugins,
 } from './common'
 
-const TARGETS_NODE = '12.16'
+export const TARGETS_NODE = '14.20'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -48,6 +48,16 @@ export const getApiSideBabelPresets = (
       },
     ],
   ].filter(Boolean) as TransformOptions['presets']
+}
+
+export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
+  // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
+  // Setting the version here also requires `@babel/runtime-corejs3`
+  corejs: { version: 3, proposals: true },
+  // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
+  // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
+  // Specifying the version can result in a smaller bundle size.
+  version: RUNTIME_CORE_JS_VERSION,
 }
 
 export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
@@ -88,18 +98,7 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
      *  See table on https://babeljs.io/docs/en/babel-plugin-transform-runtime#corejs
      *
      */
-    [
-      '@babel/plugin-transform-runtime',
-      {
-        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
-        // Setting the version here also requires `@babel/runtime-corejs3`
-        corejs: { version: 3, proposals: true },
-        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
-        // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
-        // Specifying the version can result in a smaller bundle size.
-        version: RUNTIME_CORE_JS_VERSION,
-      },
-    ],
+    ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
     // // still needed for jest.mock
     forJest && [
       'babel-plugin-module-resolver',

@@ -148,3 +148,74 @@ yarn rw dev --debugPort 75028
 The flag passed in the CLI will always take precedence over your setting in the `redwood.toml`
 
 Just remember to also change the port you are attaching to in your `./vscode/launch.json`
+
+## Ignoring the `.yarn` folder
+
+The `.yarn` folder contains the most recent Yarn executable that Redwood supports
+which is the [recommended way](https://github.com/yarnpkg/yarn/issues/7741)
+to ensure things run smoothly for everyone. From VSCode's perspective, this of course
+is just another folder containing code, so it will
+
+1. include its contents in project-wide, full-text searches
+2. display it in the file browser
+3. watch its contents for changes
+
+… which, depending on your personal preference, is something you may not need or want.
+
+Fortunately, all these aspects are configurable via VSCode's `settings.json`. You have the
+choice of making these changes to your local Redwood project's configuration
+found in `.vscode/settings.json` or globally (so they apply to other projects as
+well). For global changes, hit <kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
+(that's <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> if you're on Mac)
+and search for "Preferences: Open User Settings (JSON)".
+
+Note that the local workspace configuration always overrules your user settings.
+The VSCode website [provides an extensive explanation](https://code.visualstudio.com/docs/getstarted/settings#_settings-precedence)
+on how its config inheritance works. It also has a complete reference of
+[all available settings and their defaults](https://code.visualstudio.com/docs/getstarted/settings#_default-settings).
+
+### Excluding a folder from search results only
+
+Adding the following would exclude any `.yarn` folder encountered anywhere in
+the project (that's what the
+`**` [glob pattern](https://code.visualstudio.com/docs/editor/codebasics#_advanced-search-options)
+does) from search results:
+
+```json
+  "search.exclude": {
+    "**/.yarn": true
+  }
+```
+
+### Excluding a folder from the file browser and searching
+
+```json
+  "files.exclude": {
+    "**/.yarn": true
+  }
+```
+
+This setting also excludes all matching folders and files from search results,
+so there's no point in adding a `search.exclude` setting seperately.
+
+Don't worry: this setting won't influence change detection in your "Source Control"
+tab—that would be managed via `.gitignore`.
+
+### Excluding a folder from watching
+
+```json
+  "files.watcherExclude": {
+    "**/.yarn": true
+  }
+```
+
+This setting works independently of the ones above and so it needs to be added
+seperately. It's important to note that files or folders matched by this
+setting will no longer immediately appear (or disappear):
+- from existing search results (but as soon as you search again or change the search term, they'll be discovered)
+- in your "Source Control" tab, unless you hit the "Refresh" button
+
+Admittedly, the `.yarn` folder won't change that often, so this may not be
+the best example. But we thought we'd share this technique with you
+so that you'd know how to apply it to any folders that you know change very often,
+and how to tell VSCode not to bother wasting any CPU cycles on them.

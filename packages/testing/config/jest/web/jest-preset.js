@@ -1,5 +1,4 @@
 const path = require('path')
-const { TextDecoder } = require('util')
 
 const { getPaths } = require('@redwoodjs/internal')
 
@@ -12,6 +11,9 @@ module.exports = {
   rootDir: rwjsPaths.base,
   roots: [path.join(rwjsPaths.web.src)],
   testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
+  testEnvironmentOptions: {
+    url: 'https://redwoodjs.com',
+  },
   displayName: {
     color: 'blueBright',
     name: 'web',
@@ -20,7 +22,6 @@ module.exports = {
     __REDWOOD_API_URL: '',
     __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
-    TextDecoder,
   },
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
@@ -73,5 +74,13 @@ module.exports = {
         configFile: path.resolve(__dirname, './webBabelConfig.js'),
       },
     ],
+  },
+  resolver: path.resolve(__dirname, './resolver.js'),
+  // Jest plans to only have one breaking change in v29, and that's making this the default.
+  // See https://jestjs.io/blog/2022/04/25/jest-28#future.
+  // So we may as well do it now so that upgrading to v29 won't be breaking.
+  snapshotFormat: {
+    escapeString: false,
+    printBasicPrototype: false,
   },
 }

@@ -82,7 +82,14 @@ export const handler = async ({ force, install }) => {
           {
             title: `Install ${projectPackages.join(', ')}`,
             task: async () => {
-              await execa('yarn', ['add', '-D', ...projectPackages])
+              const yarnVersion = await execa('yarn', ['--version'])
+              const isYarnV1 = yarnVersion.stdout.trim().startsWith('1')
+              await execa('yarn', [
+                'add',
+                '-D',
+                ...(isYarnV1 ? ['-W'] : []),
+                ...projectPackages,
+              ])
             },
           },
         ])

@@ -343,8 +343,7 @@ const NewUserProfile = () => {
   )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    createUserProfile({ variables: { input: castInput } })
+    createUserProfile({ variables: { input } })
   }
 
   return (
@@ -481,7 +480,7 @@ const Post = ({ post }) => {
       <div className=\\"rw-segment\\">
         <header className=\\"rw-segment-header\\">
           <h2 className=\\"rw-heading rw-heading-secondary\\">
-            Post {post?.id} Detail
+            Post {post.id} Detail
           </h2>
         </header>
         <table className=\\"rw-table\\">
@@ -543,7 +542,7 @@ const Post = ({ post }) => {
       </div>
       <nav className=\\"rw-button-group\\">
         <Link
-          to={routes.editPost({ id: post?.id })}
+          to={routes.editPost({ id: post.id })}
           className=\\"rw-button rw-button-blue\\"
         >
           Edit
@@ -551,7 +550,7 @@ const Post = ({ post }) => {
         <button
           type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
-          onClick={() => onDeleteClick(post?.id)}
+          onClick={() => onDeleteClick(post.id)}
         >
           Delete
         </button>
@@ -1018,8 +1017,7 @@ export const Success = ({ userProfile }) => {
   )
 
   const onSave = (input, id) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    updateUserProfile({ variables: { id, input: castInput } })
+    updateUserProfile({ variables: { id, input } })
   }
 
   return (
@@ -1272,7 +1270,7 @@ exports[`in typescript mode creates a form component 1`] = `
   Submit,
 } from '@redwoodjs/forms'
 
-import type { Post, UpdatePostInput } from 'types/graphql'
+import type { EditPostById, UpdatePostInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 
 
@@ -1284,16 +1282,17 @@ const formatDatetime = (value) => {
 }
 
 
+type FormPost = NonNullable<EditPostById['post']>
+
 interface PostFormProps {
-  post?: Post
-  onSave: (data: UpdatePostInput, id?: Post['id']) => void
+  post?: EditPostById['post']
+  onSave: (data: UpdatePostInput, id?: FormPost['id']) => void
   error: RWGqlError
   loading: boolean
 }
 
 const PostForm = (props: PostFormProps) => {
-  const onSubmit = (data: Record<string, any>) => {
-
+  const onSubmit = (data: FormPost) => {
   
     
     
@@ -1331,12 +1330,12 @@ const PostForm = (props: PostFormProps) => {
     
     
   
-    props.onSave(data as Post, props?.post?.id)
+    props.onSave(data, props?.post?.id)
   }
 
   return (
     <div className=\\"rw-form-wrapper\\">
-      <Form onSubmit={onSubmit} error={props.error}>
+      <Form<FormPost> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName=\\"rw-form-error-wrapper\\"
@@ -1668,8 +1667,7 @@ const NewUserProfile = () => {
   )
 
   const onSave = (input: CreateUserProfileInput) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    createUserProfile({ variables: { input: castInput } })
+    createUserProfile({ variables: { input } })
   }
 
   return (
@@ -1747,10 +1745,7 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import type {
-  Post as PostType,
-  DeletePostMutationVariables
-} from 'types/graphql'
+import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -1793,11 +1788,11 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type=\\"checkbox\\" checked={checked} disabled />
 }
 
-interface PostProps {
-  post: PostType
+interface Props {
+  post: NonNullable<FindPostById['post']>
 }
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post }: Props) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -1819,7 +1814,7 @@ const Post = ({ post }: PostProps) => {
       <div className=\\"rw-segment\\">
         <header className=\\"rw-segment-header\\">
           <h2 className=\\"rw-heading rw-heading-secondary\\">
-            Post {post?.id} Detail
+            Post {post.id} Detail
           </h2>
         </header>
         <table className=\\"rw-table\\">
@@ -1869,7 +1864,7 @@ const Post = ({ post }: PostProps) => {
       </div>
       <nav className=\\"rw-button-group\\">
         <Link
-          to={routes.editPost({ id: post?.id })}
+          to={routes.editPost({ id: post.id })}
           className=\\"rw-button rw-button-blue\\"
         >
           Edit
@@ -1877,7 +1872,7 @@ const Post = ({ post }: PostProps) => {
         <button
           type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
-          onClick={() => onDeleteClick(post?.id)}
+          onClick={() => onDeleteClick(post.id)}
         >
           Delete
         </button>
@@ -2296,12 +2291,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 `;
 
 exports[`in typescript mode creates an edit cell 1`] = `
-"import type {
-  Post,
-  EditPostById,
-  UpdatePostInput,
-  UpdatePostMutationVariables
-} from 'types/graphql'
+"import type { EditPostById, UpdatePostInput } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
@@ -2371,9 +2361,8 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 
   const onSave = (
     input: UpdatePostInput,
-    id: Post['id']
+    id: EditPostById['post']['id']
   ) => {
-    
     updatePost({ variables: { id, input } })
   }
 
@@ -2392,12 +2381,7 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 `;
 
 exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import type {
-  UserProfile,
-  EditUserProfileById,
-  UpdateUserProfileInput,
-  UpdateUserProfileMutationVariables
-} from 'types/graphql'
+"import type { EditUserProfileById, UpdateUserProfileInput } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
@@ -2447,10 +2431,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
 
   const onSave = (
     input: UpdateUserProfileInput,
-    id: UserProfile['id']
+    id: EditUserProfileById['userProfile']['id']
   ) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    updateUserProfile({ variables: { id, input: castInput } })
+    updateUserProfile({ variables: { id, input } })
   }
 
   return (
@@ -2530,8 +2513,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/PostsCell'
 
-import type { Post, DeletePostMutationVariables } from 'types/graphql'
-
+import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -2581,11 +2563,7 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type=\\"checkbox\\" checked={checked} disabled />
 }
 
-interface PostsListProps {
-  posts: Post[]
-}
-
-const PostsList = ({ posts }: PostsListProps) => {
+const PostsList = ({ posts }: FindPosts) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')

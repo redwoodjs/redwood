@@ -1,6 +1,11 @@
 import { assertSingleExecutionValue, createTestkit } from '@envelop/testing'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import { getDirectiveValues } from 'graphql'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
+import {
+  FieldDefinitionNode,
+  getDirectiveValues,
+  GraphQLDirective,
+} from 'graphql'
 
 import { GraphQLTypeWithFields } from '../../index'
 import { useRedwoodDirective, DirectiveType } from '../useRedwoodDirective'
@@ -58,12 +63,13 @@ const schemaWithDirectiveQueries = makeExecutableSchema({
       protected: (_root, _args, _context) => 'protected',
       public: (_root, _args, _context) => 'public',
       noDirectiveSpecified: () => 'i should not be returned',
-      posts: () => [
-        {
-          title: 'Five ways to test Redwood directives',
-          description: 'Read this to learn about directive testing',
-        },
-      ],
+      posts: () =>
+        [
+          {
+            title: 'Five ways to test Redwood directives',
+            description: 'Read this to learn about directive testing',
+          },
+        ] as Record<string, any>,
       userProfiles: () => [
         {
           name: 'John Doe',
@@ -95,20 +101,20 @@ const schemaWithDirectiveQueries = makeExecutableSchema({
 const testInstance = createTestkit(
   [
     useRedwoodDirective({
-      onResolverCalled: () => {
+      onResolvedValue: () => {
         throw new Error(AUTH_ERROR_MESSAGE)
       },
       type: DirectiveType.VALIDATOR,
       name: 'requireAuth',
     }),
     useRedwoodDirective({
-      onResolverCalled: () => {
+      onResolvedValue: () => {
         return
       },
       type: DirectiveType.VALIDATOR,
       name: 'skipAuth',
     }),
-  ],
+  ] as PluginOrDisabledPlugin[],
   schemaWithDirectiveQueries
 )
 
@@ -121,7 +127,7 @@ describe('Directives on Queries', () => {
     assertSingleExecutionValue(result)
 
     expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toBe(AUTH_ERROR_MESSAGE)
+    expect(result.errors?.[0].message).toBe(AUTH_ERROR_MESSAGE)
 
     expect(result.data?.protected).toBeNull()
   })
@@ -142,11 +148,11 @@ describe('Directives on Queries', () => {
 
     expect(result.errors).toBeFalsy()
 
-    expect(result.data.posts).toBeTruthy()
-    expect(result.data.posts[0]).toHaveProperty('title')
-    expect(result.data.posts[0].title).toEqual(
-      'Five ways to test Redwood directives'
-    )
+    const posts = result.data?.posts as Record<string, any>[]
+
+    expect(posts).toBeTruthy()
+    expect(posts[0]).toHaveProperty('title')
+    expect(posts[0].title).toEqual('Five ways to test Redwood directives')
   })
 
   it('Should enforce a requireAuth() directive if a Type field declares that directive', async () => {
@@ -157,7 +163,7 @@ describe('Directives on Queries', () => {
     assertSingleExecutionValue(result)
 
     expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toBe(AUTH_ERROR_MESSAGE)
+    expect(result.errors?.[0].message).toBe(AUTH_ERROR_MESSAGE)
 
     expect(result.data).toBeFalsy()
     expect(result.data?.name).toBeUndefined()
@@ -169,13 +175,15 @@ describe('Directives on Queries', () => {
 
     assertSingleExecutionValue(result)
 
+    const userProfiles = result.data?.userProfiles as Record<string, any>[]
+
     expect(result.errors).toBeFalsy()
 
     expect(result.data).toBeTruthy()
-    expect(result.data.userProfiles).toBeTruthy()
-    expect(result.data.userProfiles[0]).toHaveProperty('name')
-    expect(result.data.userProfiles[0]).not.toHaveProperty('email')
-    expect(result.data.userProfiles[0].name).toEqual('John Doe')
+    expect(userProfiles).toBeTruthy()
+    expect(userProfiles[0]).toHaveProperty('name')
+    expect(userProfiles[0]).not.toHaveProperty('email')
+    expect(userProfiles[0].name).toEqual('John Doe')
   })
 
   it('Should disallow execution of a Query with requireAuth() even if another directive says to skip', async () => {
@@ -183,7 +191,7 @@ describe('Directives on Queries', () => {
 
     assertSingleExecutionValue(result)
     expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toBe(AUTH_ERROR_MESSAGE)
+    expect(result.errors?.[0].message).toBe(AUTH_ERROR_MESSAGE)
 
     expect(result.data?.ambiguousAuthQuery).toBeNull()
   })
@@ -196,7 +204,8 @@ describe('Directives on Queries', () => {
     assertSingleExecutionValue(result)
     expect(result.errors).toBeFalsy()
 
-    expect(result.data.withoutDirective.id).toBe(42)
+    expect(result.data?.withoutDirective).not.toBeNull()
+    expect(result.data?.withoutDirective).toEqual({ id: 42 })
   })
 })
 
@@ -210,9 +219,9 @@ describe('Directives on Mutations', () => {
     expect(result.errors).toBeFalsy()
 
     expect(result.data).toBeTruthy()
-    expect(result.data.createPost).toBeTruthy()
-    expect(result.data.createPost).toHaveProperty('title')
-    expect(result.data?.createPost.title).toEqual('Post Created')
+    expect(result.data?.createPost).toBeTruthy()
+    expect(result.data?.createPost).toHaveProperty('title')
+    expect(result.data?.createPost).toEqual({ title: 'Post Created' })
   })
 
   it('Should disallow mutation on requireAuth', async () => {
@@ -222,7 +231,7 @@ describe('Directives on Mutations', () => {
     assertSingleExecutionValue(result)
 
     expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toBe(AUTH_ERROR_MESSAGE)
+    expect(result.errors?.[0].message).toBe(AUTH_ERROR_MESSAGE)
 
     expect(result.data).toBeFalsy()
   })
@@ -236,7 +245,7 @@ describe('Directives on Mutations', () => {
     assertSingleExecutionValue(result)
 
     expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toBe(AUTH_ERROR_MESSAGE)
+    expect(result.errors?.[0].message).toBe(AUTH_ERROR_MESSAGE)
 
     expect(result.data).toBeFalsy()
   })
@@ -247,11 +256,19 @@ describe('Directives on Mutations', () => {
     ) as GraphQLTypeWithFields
 
     const deletePost = mutationType.getFields()['deletePost']
-    const directive = schemaWithDirectiveQueries.getDirective('requireAuth')
 
-    const { roles } = getDirectiveValues(directive, deletePost.astNode, {
-      args: 'roles',
-    })
+    //getFields()['deletePost']
+    const directive = schemaWithDirectiveQueries.getDirective(
+      'requireAuth'
+    ) as GraphQLDirective
+
+    const { roles } = getDirectiveValues(
+      directive,
+      deletePost.astNode as FieldDefinitionNode,
+      {
+        args: 'roles',
+      }
+    ) as { roles: string[] }
 
     expect(roles).toContain('admin')
     expect(roles).toContain('publisher')
@@ -265,15 +282,20 @@ describe('Directives on Mutations', () => {
 
     const description = postType.getFields()['description']
 
-    const directive = schemaWithDirectiveQueries.getDirective('truncate')
+    const directive = schemaWithDirectiveQueries.getDirective(
+      'truncate'
+    ) as GraphQLDirective
 
-    const directiveArgs = getDirectiveValues(directive, description.astNode)
+    const directiveArgs = getDirectiveValues(
+      directive,
+      description.astNode as FieldDefinitionNode
+    )
 
     expect(directiveArgs).toHaveProperty('maxLength')
-    expect(directiveArgs.maxLength).toEqual(5)
+    expect(directiveArgs?.maxLength).toEqual(5)
 
     expect(directiveArgs).toHaveProperty('separator')
-    expect(directiveArgs.separator).toEqual('.')
+    expect(directiveArgs?.separator).toEqual('.')
   })
 
   it('Should get the specified argument value for a directive', async () => {
@@ -283,9 +305,14 @@ describe('Directives on Mutations', () => {
 
     const description = postType.getFields()['description']
 
-    const directive = schemaWithDirectiveQueries.getDirective('truncate')
+    const directive = schemaWithDirectiveQueries.getDirective(
+      'truncate'
+    ) as GraphQLDirective
 
-    const { maxLength } = getDirectiveValues(directive, description.astNode)
+    const { maxLength } = getDirectiveValues(
+      directive,
+      description.astNode as FieldDefinitionNode
+    ) as { maxLength: number }
 
     expect(maxLength).toEqual(5)
   })

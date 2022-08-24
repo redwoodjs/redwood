@@ -182,6 +182,18 @@ Cool, cool, cool. Now we need to construct a link that has the ID of a post in i
 </TabItem>
 </Tabs>
 
+<ShowForTs>
+
+:::info Wait... why am I getting a TypeScript error?
+
+When you have your dev server running, the Redwood CLI will watch your project and generate types. You can regenerate these types manually too, by running `yarn rw g types`.
+
+In this case, the path `/article/{id}` doesn't specify the type of `id` - so it defaults to `string` - where as our article id is actually a `number`. We'll tackle this in in the next few sections - so you can ignore the red squiggle for now, and power through!
+:::
+
+</ShowForTs>
+
+
 For routes with route parameters, the named route function expects an object where you specify a value for each parameter. If you click on the link now, it will indeed take you to `/article/1` (or `/article/2`, etc, depending on the ID of the post).
 
 You may have noticed that when trying to view the new single-article page that you're getting an error. This is because the boilerplate code included with the page when it was generated includes a link to the page itself—a link which now requires an `id`. Remove the link and your page should be working again:
@@ -784,10 +796,10 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => (
+export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => {
   // highlight-next-line
-  <Article article={article} />
-)
+  return <Article article={article} />
+}
 ```
 
 </TabItem>
