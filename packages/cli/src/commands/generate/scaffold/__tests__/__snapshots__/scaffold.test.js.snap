@@ -292,16 +292,19 @@ const PostsLayout = ({ children }) => {
   return (
     <div className=\\"rw-scaffold\\">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
+
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link to={routes.posts()} className=\\"rw-link\\">
             Posts
           </Link>
         </h1>
+
         <Link to={routes.newPost()} className=\\"rw-button rw-button-green\\">
           <div className=\\"rw-button-icon\\">+</div> New Post
         </Link>
       </header>
+
       <main className=\\"rw-main\\">{children}</main>
     </div>
   )
@@ -346,6 +349,7 @@ const NewPost = () => {
       <header className=\\"rw-segment-header\\">
         <h2 className=\\"rw-heading rw-heading-secondary\\">New Post</h2>
       </header>
+
       <div className=\\"rw-segment-main\\">
         <PostForm onSave={onSave} loading={loading} error={error} />
       </div>
@@ -395,6 +399,7 @@ const NewUserProfile = () => {
       <header className=\\"rw-segment-header\\">
         <h2 className=\\"rw-heading rw-heading-secondary\\">New UserProfile</h2>
       </header>
+
       <div className=\\"rw-segment-main\\">
         <UserProfileForm onSave={onSave} loading={loading} error={error} />
       </div>
@@ -524,66 +529,82 @@ const Post = ({ post }) => {
       <div className=\\"rw-segment\\">
         <header className=\\"rw-segment-header\\">
           <h2 className=\\"rw-heading rw-heading-secondary\\">
-            Post {post.id} Detail
+            Post
+            {post.id} Detail
           </h2>
         </header>
+
         <table className=\\"rw-table\\">
           <tbody>
             <tr>
               <th>Id</th>
+
               <td>{post.id}</td>
             </tr>
             <tr>
               <th>Title</th>
+
               <td>{post.title}</td>
             </tr>
             <tr>
               <th>Slug</th>
+
               <td>{post.slug}</td>
             </tr>
             <tr>
               <th>Author</th>
+
               <td>{post.author}</td>
             </tr>
             <tr>
               <th>Body</th>
+
               <td>{post.body}</td>
             </tr>
             <tr>
               <th>Image</th>
+
               <td>{post.image}</td>
             </tr>
             <tr>
               <th>Posted at</th>
+
               <td>{timeTag(post.postedAt)}</td>
             </tr>
             <tr>
               <th>Is pinned</th>
+
               <td>{checkboxInputTag(post.isPinned)}</td>
             </tr>
             <tr>
               <th>Read time</th>
+
               <td>{post.readTime}</td>
             </tr>
             <tr>
               <th>Rating</th>
+
               <td>{post.rating}</td>
             </tr>
             <tr>
               <th>Upvotes</th>
+
               <td>{post.upvotes}</td>
             </tr>
             <tr>
               <th>Metadata</th>
+
               <td>{jsonDisplay(post.metadata)}</td>
             </tr>
             <tr>
               <th>Huge number</th>
+
               <td>{post.hugeNumber}</td>
             </tr>
           </tbody>
         </table>
       </div>
+
       <nav className=\\"rw-button-group\\">
         <Link
           to={routes.editPost({ id: post.id })}
@@ -591,6 +612,7 @@ const Post = ({ post }) => {
         >
           Edit
         </Link>
+
         <button
           type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
@@ -1071,6 +1093,7 @@ export const Success = ({ userProfile }) => {
           Edit UserProfile {userProfile?.id}
         </h2>
       </header>
+
       <div className=\\"rw-segment-main\\">
         <UserProfileForm
           userProfile={userProfile}
@@ -1116,6 +1139,7 @@ export const Empty = () => {
   return (
     <div className=\\"rw-text-center\\">
       {'No posts yet. '}
+
       <Link to={routes.newPost()} className=\\"rw-link\\">
         {'Create one?'}
       </Link>
@@ -1216,37 +1240,64 @@ const PostsList = ({ posts }) => {
         <thead>
           <tr>
             <th>Id</th>
+
             <th>Title</th>
+
             <th>Slug</th>
+
             <th>Author</th>
+
             <th>Body</th>
+
             <th>Image</th>
+
             <th>Posted at</th>
+
             <th>Is pinned</th>
+
             <th>Read time</th>
+
             <th>Rating</th>
+
             <th>Upvotes</th>
+
             <th>Metadata</th>
+
             <th>Huge number</th>
+
             <th>&nbsp;</th>
           </tr>
         </thead>
+
         <tbody>
           {posts.map((post) => (
             <tr key={post.id}>
               <td>{truncate(post.id)}</td>
+
               <td>{truncate(post.title)}</td>
+
               <td>{truncate(post.slug)}</td>
+
               <td>{truncate(post.author)}</td>
+
               <td>{truncate(post.body)}</td>
+
               <td>{truncate(post.image)}</td>
+
               <td>{timeTag(post.postedAt)}</td>
+
               <td>{checkboxInputTag(post.isPinned)}</td>
+
               <td>{truncate(post.readTime)}</td>
+
               <td>{truncate(post.rating)}</td>
+
               <td>{truncate(post.upvotes)}</td>
+
               <td>{jsonTruncate(post.metadata)}</td>
+
               <td>{truncate(post.hugeNumber)}</td>
+
               <td>
                 <nav className=\\"rw-table-actions\\">
                   <Link
@@ -1256,6 +1307,7 @@ const PostsList = ({ posts }) => {
                   >
                     Show
                   </Link>
+
                   <Link
                     to={routes.editPost({ id: post.id })}
                     title={'Edit post ' + post.id}
@@ -1263,6 +1315,7 @@ const PostsList = ({ posts }) => {
                   >
                     Edit
                   </Link>
+
                   <button
                     type=\\"button\\"
                     title={'Delete post ' + post.id}
@@ -1326,17 +1379,17 @@ const formatDatetime = (value) => {
 }
 
 
-type NonNullablePost = NonNullable<EditPostById['post']>
+type FormPost = NonNullable<EditPostById['post']>
 
 interface PostFormProps {
   post?: EditPostById['post']
-  onSave: (data: UpdatePostInput, id?: NonNullablePost['id']) => void
+  onSave: (data: UpdatePostInput, id?: FormPost['id']) => void
   error: RWGqlError
   loading: boolean
 }
 
 const PostForm = (props: PostFormProps) => {
-  const onSubmit = (data: NonNullablePost) => {
+  const onSubmit = (data: FormPost) => {
   
     
     
@@ -1379,7 +1432,7 @@ const PostForm = (props: PostFormProps) => {
 
   return (
     <div className=\\"rw-form-wrapper\\">
-      <Form<NonNullablePost> onSubmit={onSubmit} error={props.error}>
+      <Form<FormPost> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName=\\"rw-form-error-wrapper\\"

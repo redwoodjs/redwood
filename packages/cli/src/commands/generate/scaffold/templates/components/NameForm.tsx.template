@@ -19,17 +19,17 @@ const formatDatetime = (value) => {
 }
 <% } %>
 
-type NonNullable${singularPascalName} = NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>
+type Form${singularPascalName} = NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>
 
 interface ${singularPascalName}FormProps {
   ${singularCamelName}?: Edit${singularPascalName}ById['${singularCamelName}']
-  onSave: (data: Update${singularPascalName}Input, id?: NonNullable${singularPascalName}['id']) => void
+  onSave: (data: Update${singularPascalName}Input, id?: Form${singularPascalName}['id']) => void
   error: RWGqlError
   loading: boolean
 }
 
 const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
-  const onSubmit = (data: NonNullable${singularPascalName}) => {
+  const onSubmit = (data: Form${singularPascalName}) => {
   <% editableColumns.forEach(column => { %>
     <% if (column.isEnum && !column.isList && !column.isRequired) { %>
       if (data.${column.name} === '') {
@@ -47,7 +47,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
 
   return (
     <div className="rw-form-wrapper">
-      <Form<NonNullable${singularPascalName}> onSubmit={onSubmit} error={props.error}>
+      <Form<Form${singularPascalName}> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"
