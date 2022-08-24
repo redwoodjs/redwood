@@ -108,14 +108,14 @@ export const schema = gql`
 
 ```
 
-When you generate your services or SDLs, you'll notice that the resolvers for `Author` are generated at the bottom of the Post.service.ts
+When you generate your services or SDLs, you'll notice that the resolvers for `Author` are generated at the bottom of Post.service.ts
 
 Because `Post.author` cannot be null - and findUnique always returns a nullable value, under strict-mode you'll have to tweak these resolvers
 
 ```ts Post.service.ts
 // Option 1: Override the type
 // The typecasting here is OK - remember the "gqlArgs.root" is the post
-// that was already found in your serivce function, so findUnique would always find it!
+// that was already found in your service function, so findUnique would always find it!
 export const Post: Partial<PostResolvers> = {
   author: (_obj, gqlArgs) =>
     db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Author,  // 👈
@@ -167,7 +167,7 @@ export const Post: Partial<PostResolvers> = {
   // highlight-end
 
 
-  const maybeAuthor = await db.post.findUnique(/*...
+  const maybeAuthor = await db.post.findUnique(// ...
 ```
 
 This will also help Prisma make a more optimised query to the database, since every time a Post is requested, the Author is too! The tradeoff here is that any query to post (even if the author isn't in the GraphQL query) will mean an unnecessary database query to include the author.

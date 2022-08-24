@@ -27,7 +27,7 @@ type PrismaTypeWithOptionalKeysAndNullableValues<
 > = {
   [k in keyof PrismaTypeWithOptionalKeysFromSdl<TPrisma, TSdl>]?:
     | PrismaTypeWithOptionalKeysFromSdl<TPrisma, TSdl>[k]
-    | null // Note: if we every change the type of Maybe in codegen, it might be worth changing this to Maybe<T>
+    | null // Note: if we ever change the type of Maybe in codegen, it might be worth changing this to Maybe<T>
 }
 
 // Object with all the required keys

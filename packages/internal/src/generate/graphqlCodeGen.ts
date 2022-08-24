@@ -195,7 +195,7 @@ function getPluginConfig(side: CodegenSide) {
     scalars: {
       // We need these, otherwise these scalars are mapped to any
       BigInt: 'number',
-      // @Note: because DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
+      // @Note: DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
       DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
       Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
       JSON: 'Prisma.JsonValue',
@@ -241,8 +241,7 @@ interface CombinedPluginConfig {
 }
 
 /**
- *
- * Codgen plugin just lists all the SDL models that are also mapped Prisma models
+ * Codgen plugin that just lists all the SDL models that are also mapped Prisma models
  * We use a plugin, because its possible to have Prisma models that do not have an SDL model
  * so we can't just list all the Prisma models, even if they're included in the mappers object.
  *
