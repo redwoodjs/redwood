@@ -36,7 +36,7 @@
     "@redwoodjs/api": "2.2.2",
     "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
-    "graphql": "16.5.0",
+    "graphql": "16.6.0",
     "graphql-scalars": "1.17.0",
     "graphql-tag": "2.12.6",
     "lodash.merge": "4.6.2",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.18.13",
     "@envelop/testing": "4.4.2",
     "@envelop/types": "2.3.1",
     "@redwoodjs/auth": "2.2.2",
