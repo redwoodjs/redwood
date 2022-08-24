@@ -725,3 +725,212 @@ const createPost = (input) => {
 ```
 
 This makes sure that the user that's logged in and creating the post cannot reuse the same blog post title as one of their own posts.
+
+## Caching
+
+Redwood provides a simple [LRU cache](https://www.baeldung.com/java-lru-cache) for your services. With an LRU cache you need to worry about manually expiring or updating cache items. You either read an existing item (if it's **key** is found) or create a new cached item if it isn't. This means that over time the cache will get bigger and bigger until it hits a memory or disk usage limit, but you don't care: the cache software is responsible for removing the oldest/least used members to make more room. For many applications, its entire database resultset may fit in cache!
+
+How does a cache work? At its simplist, a cache is just a big chunk of memory or disk that stores key/value pairs. A unique key is used to lookup a value, the value being what you wanted to cache. The trick with a cache is selecting a key that makes the data unique among all the other data being cached, but that it itself (the key) contains enough uniqueness that you can safely discard it when something in the value changes, and you want to save a new value instead. More on that in [Choosing a Good Key](#choosing-a-good-key) below.
+
+Why use a cache? If you have an expensive or time-consuming process in your service that doesn't change on every request, this is a great candidate. For example, for a store front, you may want to show the most popular products. This may be computed by a combination of purchases, views, time spent on the product page, social media posts, or a whole host of additional information. Aggregating this data may take seconds or more, but the list of popular products probably doesn't change that often. There's no reason to make every user wait all that time just to see the same list of products. With service caching, just wrap this computation in the `cache()` function, and give it an expiration time of 24 hours, and now the result is returned in milliseconds for every user (except the first one in a 24 hour period). You can even remove this first user's wait by "warming" the cache: trigging the service function by a process you run on the server, rather than by a user's first visit.
+
+:::info What about GraphQL caching?
+
+You could also cache data at the [GraphQL layer](https://community.redwoodjs.com/t/guide-power-of-graphql-caching/2624) which has some of the same benefits. However, by placing the cache one level "lower," at the service level, you get the benefit of caching even when one service calls another internally, or when a service is called via another serverless function.
+
+In our example above you cache the GraphQL query for the most popular products. But if you had an internal admin function which was a different query, augmenting the popular products with additional information, you now need to cache that query as well. With service caching, that admin service function can call the same popular product function that's already cached and get the speed benefit automatically.
+
+:::
+
+### Clients
+
+As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it!
+
+### What Can Be Cached
+
+The service cache mechanism can only store strings, so whatever data you want to cache needs to be able to survive a round trip through `JSON.stringify()` and `JSON.parse()`. That means that if you have a real `Date` instance, you'd need to re-initialize it as a `Date`, because it's going to return from the cache as a string like `"2022-08-24T17:50:05.679Z"`.
+
+A function will not survive being serialized as a string so those are right out.
+
+Most Prisma datasets can be serialized just fine, as long as you're mindful of dates and things like BLOBs, which may contain binary data and could get mangled.
+
+We have an [outstanding issue](https://github.com/redwoodjs/redwood/issues/6282) which will add support for caching instances of custom classes and getting them back out of the cache as that instance, rather than a generic object which you would normally get after a `JSON.stringify`!
+
+### Expiration
+
+You can set a number of seconds after which to automatically expire the key. After this time the call to `cache()` will set the key/value in the store again. See the function descriptions below for usage examples.
+
+### Choosing a Good Key
+
+As the old saying goes "there are only two hard problems in computer science: cache, and naming things." The reason cache is included in this list is, funnily enough, usually because of naming something—the key for the cache.
+
+Consider a product that you want to cache. At first thought you may think "I'll use the name of the product as its key" and so your key is `led light strip`. One problem is that you must make absolutely sure that your product name is unique. This may not be a viable solution for your store: you could have two manufacturers with the same product name.
+
+Okay, let's use the product's database ID as the key: `41443`. It's definitely going to be unique now, but what if you later add a cache for users? Could a user record in the database have that same ID? Probably, so now you may think you're retrieving a cached user, but you'll get the product instead.
+
+What if we add a "type" into the cache key, so we know what type of thing we're caching: `product-41442`. Now we're getting somewhere. Users will have a cache key `user-41442` and the two won't clash. But what happens if you change some data about that product, like the description? Remember that we can only get an existing key/value, or create a key/value in the cache, we can't update an existing key. How we can encapsulate the "knowledge" that a product's data has changed into the cache key?
+
+One solution would be to put all of the data that we care about changing into the key, like: `product-41442-${description}`. The problem here is that keys can only be so long (in Memcached it's 250 bytes). Another option could be to hash the entire product object and use that as the key (this can encompass the `product` part of the key as well as the ID itself, since *any* data in the object being different will result in a new hash):
+
+```js
+import { md5 } from "blueimp-md5"
+
+cache(md5(JSON.stringify(product)), () => {
+  // ...
+})
+```
+
+This works, but it's the nicest to look at in the code, and computing a hash isn't free (it's fast, but not 0 seconds).
+
+For this reason we always recommend that you add an `updatedAt` column to all of your models. This will automatically be set by Prisma to a timestamp whenever it updates that row in the database. This means we can count on this value being different whenever a record changes, regardless of what column actually changed. Now our key can look like `product-${id}-${updatedAt}`.
+
+:::info
+
+If you're using [Redwood Record]() pretty soon you'll be able to cache a record by just passing the instance as the key, and it will automatically create the same key behind the scenes for you:
+
+```js
+cache(product, () => {
+  // ...
+})
+```
+:::
+
+One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes. This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
+
+#### Expiration-based Keys
+
+You can skirt these issues about what data is changing and what to include or not include in the key by just using the expiration time on this cache entry. You may decide that if a change is made to a product, it's okay if users don't see the change for, say, an hour. In this case just set the expiration time to 3600 seconds and it will automatically be re-built, whether something changed in the record or not:
+
+```js
+cache(`product-${id}`, () => {
+  // ...
+}, { expires: 3600 })
+```
+
+This leads to your product cache being rebuilt every hour, even though you haven't made any changes that are of consequence to the user, but that may be we worth the tradeoff versus rebuilding the cache when *no* useful data has changed.
+
+#### Caching User-specific Data
+
+Sometimes you want to cache data unique to a user. Imagine a Recommended Products feature on our store: it should recommend products based on the user's previous purchase history, views, etc. In this case we'd way to include something unique about the user itself in the key:
+
+```js
+cache(`recommended-${context.currentUser.id}`, () => {
+  // ...
+})
+```
+
+If every page the user visits has a different list of recommended products then creating this cache may not be worth it: how often does the user revisit the same product page more than once? Conversely, if you show the *same* recommended products on every page then this cache would definitely improve the user's experience.
+
+The *key* to writing a good key (!) is just to think about the circumstances in which the key needs to expire, and include that bit of information into the string.
+
+### Setup
+
+We have a setup command which creates a file `api/src/lib/cache.js` and include basic initialization for Memcached or Redis:
+
+```bash
+yarn rw setup cache memcached
+yarn rw setup cache redis
+```
+
+You'll need to modify the script with the location of your server(s), potentially including an ENV var that can be set to the proper value whether you're in development or production:
+
+```js title=api/src/lib/cache.js
+mport { createCache, MemcachedClient } from '@redwoodjs/api/cache'
+
+import { logger } from './logger'
+
+const memJsFormattedLogger = {
+  log: (msg) => logger.error(msg),
+}
+
+let client
+try {
+  client = new MemcachedClient(process.env.CACHE_SERVER, {
+    logger: memJsFormattedLogger,
+  })
+} catch (e) {
+  console.error(`Could not connect to cache: ${e.message}`)
+}
+
+export const { cache, cacheLatest } = createCache(client, logger)
+```
+
+```bash title=.env
+CACHE_SERVER=localhost:11211
+```
+
+You'll see two different instances of passing `logger` as arguments here. The first:
+
+```js
+client = new MemcachedClient(process.env.CACHE_SERVER, {
+  logger: memJsFormattedLogger,
+})
+```
+
+passes it to the Memcached client library, wrapping the Redwood logger call in another function, which is the format expected by the MemJS library. This is used to report errors from that lib.
+
+The second usage of the logger arugment:
+
+```js
+export const { cache, cacheLatest } = createCache(client, logger)
+```
+
+is passing it to Redwood's own service cache code, so that it can log cache hit and misses.
+
+### `cache()`
+
+Use this function when you want to cache some data, optionally including a number of seconds before it expires:
+
+```js
+// cache forever
+const post = ({ id }) => {
+  return cache(`posts`, () => {
+    db.post.findMany()
+  })
+}
+
+// cache for 1 hour
+const post = ({ id }) => {
+  return cache(`posts`, () => {
+    db.post.findMany()
+  }, { expires: 3600 })
+}
+```
+
+### `cacheLatest()`
+
+Use this function if you want to cache an array of results from Prisma, but only until one or more of them is updated. This is sort of a best of both worlds cache scenario where you can cache as much data as possible, but re-cache as soon as any of it changes, without first going through every record to see if it's changed: whenever *any* record changes the cache will be expired. This function will first do a `findFirst()` query to get the latest record that's changed, then use its `id` and `updatedAt` timestamp as the cache key for the full query. Note you still need to include a cache key prefix.
+
+You need to effectively destructure the Prisma call into its constituent parts so that we can make the `findFirst()` call using the same arguments:
+
+```js
+const post = ({ id }) => {
+  return cacheLatest(
+    `users`,
+    { findMany: { where: { roles: 'admin' } } },
+    { model: db.user }
+  )
+}
+```
+
+This is functionally equivalent to the following:
+
+```
+const latest = db.user.findFirst({
+  where: { roles: 'admin' } },
+  orderBy: { updatedAt: 'desc' },
+  select: { id: true, updatedAt: true
+})
+
+return cache(`posts-${id}-${updatedAt}`, () => {
+  db.post.findMany({ where: { roles: 'admin' } })
+})
+```
+
+### Creating Your Own Client
+
+If Memcached or Redis don't serve your needs, you can create your own client adapter. In the Redwood codebase take a look at `packages/api/src/cache/clients` as a reference for writing your own. The interface is extremely simple:
+
+* A constructor that takes whatever arguments you want, passing them through to the client's initialization code
+* An async `get()` function that accepts a `key` argument and returns the data from the cache if found (and run through `JSON.parse()`), otherwise `null`
+* An async `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be real Javascript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library.
