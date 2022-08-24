@@ -10,23 +10,23 @@ import {
 } from '@redwoodjs/forms'
 import type { RWGqlError } from '@redwoodjs/forms'
 
-type NonNullableContact = NonNullable<EditContactById['contact']>
+type FormContact = NonNullable<EditContactById['contact']>
 
 interface ContactFormProps {
   contact?: EditContactById['contact']
-  onSave: (data: UpdateContactInput, id?: NonNullableContact['id']) => void
+  onSave: (data: UpdateContactInput, id?: FormContact['id']) => void
   error: RWGqlError
   loading: boolean
 }
 
 const ContactForm = (props: ContactFormProps) => {
-  const onSubmit = (data: NonNullableContact) => {
+  const onSubmit = (data: FormContact) => {
     props.onSave(data, props?.contact?.id)
   }
 
   return (
     <div className="rw-form-wrapper">
-      <Form<NonNullableContact> onSubmit={onSubmit} error={props.error}>
+      <Form<FormContact> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"
