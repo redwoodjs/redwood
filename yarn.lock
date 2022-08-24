@@ -6327,7 +6327,7 @@ __metadata:
     webpack: 5.74.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.10.0
-    webpack-dev-server: 4.9.3
+    webpack-dev-server: 4.10.0
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
     webpack-retry-chunk-load-plugin: 3.1.1
@@ -31006,9 +31006,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.9.3":
-  version: 4.9.3
-  resolution: "webpack-dev-server@npm:4.9.3"
+"webpack-dev-server@npm:4.10.0":
+  version: 4.10.0
+  resolution: "webpack-dev-server@npm:4.10.0"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -31046,7 +31046,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 2fdc02b3f6cd44b13f8a062da56f999decd2df596c05dd212248c808f310ee77d5809919e5846a4f28fb02d062abfbef1b984f48260ed2a6e493ff2b9cb75231
+  checksum: cf3bbcb875c24553018a84389d454f2e9d991923ec774ed20f0ae34ddbfa5a3226c265058aa687984e4410769f08d60a5de851203cebe32677d5594edbb2efd5
   languageName: node
   linkType: hard
 
