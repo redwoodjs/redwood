@@ -5,26 +5,46 @@ import type { Logger } from '../logger'
 export * from './clients/memcached'
 export * from './clients/redis'
 
+export class CacheTimeoutError extends Error {
+  constructor() {
+    super('Timed out waiting for response from the cache server')
+    this.name = 'CacheTimeoutError'
+  }
+}
+
 export interface CacheClient {
   get(key: string): Promise<{ value: Buffer; flags: Buffer }>
   set(key: string, value: unknown, options: object): Promise<boolean>
 }
 
-export interface CacheOptions {
-  expires?: number
+export interface CreateCacheOptions {
+  logger?: Logger
+  timeout?: number
 }
+
+export interface CacheOptions {
+  expires?: number,
+}
+
 export interface CacheLatestOptions extends CacheOptions {
   model?: PrismaClient
 }
+
 export type CacheKey = string
 export type LatestQuery = Record<string, unknown>
 export type Cacheable = () => unknown
 
+const wait = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export const createCache = (
   cacheClient: CacheClient,
-  logger: Logger | undefined
+  options: CreateCacheOptions | undefined
 ) => {
   const client = cacheClient
+  const logger = options?.logger
+  const timeout = options?.timeout || 1000
 
   const cache = async (
     key: CacheKey,
@@ -32,7 +52,14 @@ export const createCache = (
     options?: CacheOptions
   ) => {
     try {
-      const result = await client.get(key)
+      // some client timeouts are flaky if the server actually goes away, so we'll
+      // implement our own here just in case
+      const result = await Promise.race([
+        client.get(key),
+        wait(timeout).then(() => {
+          throw new CacheTimeoutError
+        })
+      ])
 
       if (result) {
         logger?.debug(`[Cache] HIT key '${key}'`)
@@ -50,7 +77,14 @@ export const createCache = (
 
     try {
       data = await input()
-      await client.set(key, data, options || {})
+
+      await Promise.race([
+        client.set(key, data, options || {}),
+        wait(timeout).then(() => {
+          throw new CacheTimeoutError()
+        }),
+      ])
+
       logger?.debug(
         `[Cache] MISS '${key}', SET ${JSON.stringify(data).length} bytes`
       )
@@ -85,8 +119,8 @@ export const createCache = (
       return cache(cacheKey, () => model[queryFunction](conditions), {
         ...rest,
       })
-    } catch (e) {
-      logger?.error('Error in cacheLatest', e)
+    } catch (e: any) {
+      logger?.error('Error in cacheLatest', e.message)
       return model[queryFunction](conditions)
     }
   }
