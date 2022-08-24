@@ -53,7 +53,6 @@ export type ValidatorDirectiveFunc<TDirectiveArgs = Record<string, any>> = (
   args: ValidateArgs<TDirectiveArgs>
 ) => Promise<void> | void
 
-
 /**
  * Generic Type for the arguments/parameters passed to the transform function for transformer directives
  *
