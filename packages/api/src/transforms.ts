@@ -47,6 +47,9 @@ export const removeNulls = (obj: Record<number | symbol | string, any>) => {
   for (const key in obj) {
     if (obj[key] === null) {
       obj[key] = undefined
+    } else if (typeof obj[key] === 'object') {
+      // Note arrays are also typeof object!
+      obj[key] = removeNulls(obj[key])
     }
   }
 
