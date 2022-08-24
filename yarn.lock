@@ -6248,7 +6248,7 @@ __metadata:
     "@types/babel__core": 7.1.19
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
-    "@types/jest": 28.1.6
+    "@types/jest": 28.1.7
     "@types/jscodeshift": 0.11.5
     "@types/prettier": 2.7.0
     "@types/yargs": 17.0.11
@@ -6645,7 +6645,7 @@ __metadata:
     "@testing-library/user-event": 14.4.2
     "@types/aws-lambda": 8.10.101
     "@types/babel-core": 6.25.7
-    "@types/jest": 28.1.6
+    "@types/jest": 28.1.7
     "@types/node": 16.11.47
     "@types/react": 17.0.48
     "@types/react-dom": 17.0.17
@@ -8592,13 +8592,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:28.1.6":
-  version: 28.1.6
-  resolution: "@types/jest@npm:28.1.6"
+"@types/jest@npm:*, @types/jest@npm:28.1.7":
+  version: 28.1.7
+  resolution: "@types/jest@npm:28.1.7"
   dependencies:
-    jest-matcher-utils: ^28.0.0
+    expect: ^28.0.0
     pretty-format: ^28.0.0
-  checksum: d9af6da4b25f4a62c8f0d92feecdb62fc673308e0bfad63fefb3212693e9e6c6af8641b94fbdc90a7957b8eced3146cafa5a16dc613705890690874cc5300dd9
+  checksum: 5bf9341f0c6bd9a85fd63fbe40308a87162f741f1836dd9e9fbdbc566df1d4f2fc27ee3ec1f2130981353a277d23184a66782f39d244c95bd05c8bedb29ea248
   languageName: node
   linkType: hard
 
@@ -16058,7 +16058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expect@npm:^28.1.3":
+"expect@npm:^28.0.0, expect@npm:^28.1.3":
   version: 28.1.3
   resolution: "expect@npm:28.1.3"
   dependencies:
@@ -20024,7 +20024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-matcher-utils@npm:^28.0.0, jest-matcher-utils@npm:^28.1.3":
+"jest-matcher-utils@npm:^28.1.3":
   version: 28.1.3
   resolution: "jest-matcher-utils@npm:28.1.3"
   dependencies:
@@ -26984,7 +26984,7 @@ __metadata:
     "@testing-library/user-event": 14.4.2
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 9.0.13
-    "@types/jest": 28.1.6
+    "@types/jest": 28.1.7
     "@types/jscodeshift": 0.11.5
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
