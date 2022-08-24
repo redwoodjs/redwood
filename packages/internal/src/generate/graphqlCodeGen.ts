@@ -179,7 +179,12 @@ function getPluginConfig(side: CodegenSide) {
   const prismaModels: Record<string, string> = getPrismaModels()
   try {
     Object.keys(prismaModels).forEach((key) => {
-      // Post = `@prisma/client#Post as PrismaPost`
+      /** creates an object like this
+       * {
+       *  Post: MergePrismaWithSdlTypes<PrismaPost, MakeRelationsOptional<Post, AllMappedModels>, AllMappedModels>>
+       *  ...
+       * }
+       */
       prismaModels[
         key
       ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
