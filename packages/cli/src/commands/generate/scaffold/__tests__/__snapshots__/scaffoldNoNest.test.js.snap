@@ -1282,17 +1282,17 @@ const formatDatetime = (value) => {
 }
 
 
-type NonNullablePost = NonNullable<EditPostById['post']>
+type FormPost = NonNullable<EditPostById['post']>
 
 interface PostFormProps {
   post?: EditPostById['post']
-  onSave: (data: UpdatePostInput, id?: NonNullablePost['id']) => void
+  onSave: (data: UpdatePostInput, id?: FormPost['id']) => void
   error: RWGqlError
   loading: boolean
 }
 
 const PostForm = (props: PostFormProps) => {
-  const onSubmit = (data: NonNullablePost) => {
+  const onSubmit = (data: FormPost) => {
   
     
     
@@ -1335,7 +1335,7 @@ const PostForm = (props: PostFormProps) => {
 
   return (
     <div className=\\"rw-form-wrapper\\">
-      <Form<NonNullablePost> onSubmit={onSubmit} error={props.error}>
+      <Form<FormPost> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName=\\"rw-form-error-wrapper\\"
