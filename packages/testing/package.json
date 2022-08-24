@@ -41,10 +41,10 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
-    "@testing-library/user-event": "14.4.2",
+    "@testing-library/user-event": "14.4.3",
     "@types/aws-lambda": "8.10.101",
     "@types/babel-core": "6.25.7",
-    "@types/jest": "28.1.6",
+    "@types/jest": "28.1.7",
     "@types/node": "16.11.47",
     "@types/react": "17.0.48",
     "@types/react-dom": "17.0.17",
@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.18.13",
     "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

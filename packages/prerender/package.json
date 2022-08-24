@@ -34,12 +34,12 @@
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
-    "graphql": "16.5.0",
+    "graphql": "16.6.0",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.18.13",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "10.1.0",
     "jest": "28.1.3",
