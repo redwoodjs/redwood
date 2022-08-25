@@ -377,7 +377,7 @@ exports[`generates typescript pages 4`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-type TsParamFilesPageProps = {
+interface TsParamFilesPageProps {
   id: string
 }
 
@@ -407,7 +407,7 @@ exports[`generates typescript pages 5`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-type TsParamTypeFilesPageProps = {
+interface TsParamTypeFilesPageProps {
   id: number
 }
 
