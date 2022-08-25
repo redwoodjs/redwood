@@ -33,7 +33,7 @@
     "@babel/runtime-corejs3": "7.18.9",
     "@prisma/client": "4.2.1",
     "base64url": "3.0.1",
-    "core-js": "3.24.1",
+    "core-js": "3.25.0",
     "cross-undici-fetch": "0.4.14",
     "crypto-js": "4.1.1",
     "humanize-string": "2.1.0",
