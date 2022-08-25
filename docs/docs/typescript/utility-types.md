@@ -220,3 +220,68 @@ export const handler = async (
 ```
 
 Note that in strict mode, you'll likely see errors where the handlers expect "truthy" values. All you have to do is make sure you return a boolean. For example, `return !!user` instead of `return user`.
+
+## Directives
+
+
+### `ValidatorDirectiveFunc`
+When you generate a [validator directive](directives.md#validators) you will see your `validate` function typed already with `ValidatorDirectiveFunc<TDirectiveArgs>`
+
+```ts
+import {
+  createValidatorDirective,
+  // highlight-next-line
+  ValidatorDirectiveFunc,
+} from '@redwoodjs/graphql-server'
+
+export const schema = gql`
+  directive @myValidator on FIELD_DEFINITION
+`
+// 👇 makes sure "context" and directive args are typed
+// highlight-next-line
+const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
+```
+
+This type takes a single generic - the type of your `directiveArgs`.
+
+Let's take a look at the built-in `@requireAuth(roles: ["ADMIN"])` directive, for example - which we ship with your Redwood app by default in `./api/src/directives/requireAuth/requireAuth.ts`
+
+```ts
+// highlight-next-line
+type RequireAuthValidate = ValidatorDirectiveFunc<{ roles?: string[] }>
+
+const validate: RequireAuthValidate = ({ directiveArgs }) => {
+  // roles 👇 will be typed correctly as string[] | undefined
+  // highlight-next-line
+  const { roles } = directiveArgs
+  // ....
+}
+```
+
+| Generic          | Description                                               |
+|:-----------------|:----------------------------------------------------------|
+| `TDirectiveArgs` | The type of arguments passed to your directive in the SDL |
+
+### `TransformerDirectiveFunc`
+When you generate a [transformer directive](directives.md#transformers) you will see your `transform` function typed with `TransformDirectiveFunc<TField, TDirectiveArgs>`.
+
+```ts
+// 👇 makes sure the functions' arguments are typed
+// highlight-next-line
+const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
+```
+
+This type takes two generics - the type of the field you are transforming, and the type of your `directiveArgs`.
+
+So for example, let's say you have a transformer directive `@maskedEmail(permittedRoles: ['ADMIN'])` that you apply to `String` fields. You would pass in the following types
+
+```ts
+type MaskedEmailTransform = TransformerDirectiveFunc<string, {permittedRoles?: string[]}>
+```
+
+| Generic          | Description                                                                    |
+|:-----------------|:-------------------------------------------------------------------------------|
+| `TField`         | This will type `resolvedValue` i.e. the type of the field you are transforming |
+| `TDirectiveArgs` | The type of arguments passed to your directive in the SDL                      |
+
+

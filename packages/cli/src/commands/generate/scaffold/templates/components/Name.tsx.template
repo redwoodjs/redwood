@@ -47,7 +47,11 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalName}ById) => {
+interface Props {
+  ${singularCamelName}: NonNullable<Find${singularPascalName}ById['${singularCamelName}']>
+}
+
+const ${singularPascalName} = ({ ${singularCamelName} }: Props) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')
@@ -69,7 +73,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalNam
       <div className="rw-segment">
         <header className="rw-segment-header">
           <h2 className="rw-heading rw-heading-secondary">
-            ${singularPascalName} {${singularCamelName}?.id} Detail
+            ${singularPascalName} {${singularCamelName}.id} Detail
           </h2>
         </header>
         <table className="rw-table">
@@ -87,7 +91,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalNam
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.${editRouteName}({ id: ${singularCamelName}?.id })}
+          to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -95,7 +99,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalNam
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(${singularCamelName}?.id)}
+          onClick={() => onDeleteClick(${singularCamelName}.id)}
         >
           Delete
         </button>
