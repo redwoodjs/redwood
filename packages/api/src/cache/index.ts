@@ -52,8 +52,8 @@ export const createCache = (
     options?: CacheOptions
   ) => {
     try {
-      // some client timeouts are flaky if the server actually goes away, so we'll
-      // implement our own here just in case
+      // some client lib timeouts are flaky if the server actually goes away
+      // (MemJS) so we'll implement our own here just in case
       const result = await Promise.race([
         client.get(key),
         wait(timeout).then(() => {
