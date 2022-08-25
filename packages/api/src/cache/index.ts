@@ -15,6 +15,7 @@ export interface CacheClient {
 export interface CreateCacheOptions {
   logger?: Logger
   timeout?: number
+  prefix?: string
   fields?: {
     id: string
     updatedAt: string
@@ -46,6 +47,7 @@ export const createCache = (
   const client = cacheClient
   const logger = options?.logger
   const timeout = options?.timeout || 1000
+  const prefix = options?.prefix
   const fields = options?.fields || DEFAULT_LATEST_FIELDS
 
   const cache = async (
@@ -53,22 +55,24 @@ export const createCache = (
     input: Cacheable,
     options?: CacheOptions
   ) => {
+    const cacheKey = prefix ? `${prefix}-${key}` : key
+
     try {
       // some client lib timeouts are flaky if the server actually goes away
       // (MemJS) so we'll implement our own here just in case
       const result = await Promise.race([
-        client.get(key),
+        client.get(cacheKey),
         wait(timeout).then(() => {
           throw new CacheTimeoutError
         })
       ])
 
       if (result) {
-        logger?.debug(`[Cache] HIT key '${key}'`)
+        logger?.debug(`[Cache] HIT key '${cacheKey}'`)
         return result
       }
     } catch (e: any) {
-      logger?.error(`[Cache] Error GET '${key}': ${e.message}`)
+      logger?.error(`[Cache] Error GET '${cacheKey}': ${e.message}`)
       return await input()
     }
 
@@ -79,18 +83,18 @@ export const createCache = (
       data = await input()
 
       await Promise.race([
-        client.set(key, data, options || {}),
+        client.set(cacheKey, data, options || {}),
         wait(timeout).then(() => {
           throw new CacheTimeoutError()
         }),
       ])
 
       logger?.debug(
-        `[Cache] MISS '${key}', SET ${JSON.stringify(data).length} bytes`
+        `[Cache] MISS '${cacheKey}', SET ${JSON.stringify(data).length} bytes`
       )
       return data
     } catch (e: any) {
-      logger?.error(`[Cache] Error SET '${key}': ${e.message}`)
+      logger?.error(`[Cache] Error SET '${cacheKey}': ${e.message}`)
       return data || (await input())
     }
   }
@@ -103,8 +107,8 @@ export const createCache = (
     const { model, ...rest } = options
     const queryFunction = Object.keys(query)[0]
     const conditions = query[queryFunction] as object
+    let cacheKey = prefix ? `${prefix}-${key}` : key
     let latest
-    let cacheKey = key
 
     const Prisma = await import('@prisma/client')
 
@@ -132,7 +136,7 @@ export const createCache = (
     // there may not have been any records returned, in which case we can't
     // create the key so just return the query
     if (latest) {
-      cacheKey = `${key}-${latest.id}-${latest.updatedAt.getTime()}`
+      cacheKey = `${cacheKey}-${latest.id}-${latest.updatedAt.getTime()}`
     } else {
       logger?.debug(
         `[Cache] cacheLatest: ${JSON.stringify(query)} no data to cache, skipping`
