@@ -1,7 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 <% if (paramName !== '') { %>
-type ${pascalName}PageProps = {
+interface ${pascalName}PageProps {
   ${paramName}: ${paramType}
 }
 <% } %>
