@@ -37,7 +37,7 @@ export default (file, api) => {
       return node
     })
 
-  return root
+  const rootSource = root
     .find(j.VariableDeclarator, {
       id: {
         type: 'Identifier',
@@ -50,4 +50,10 @@ export default (file, api) => {
       return node
     })
     .toSource()
+
+  const rootSourceSpan = rootSource
+    .replaceAll('<div', '<span')
+    .replaceAll('</div', '</span')
+
+  return rootSourceSpan
 }
