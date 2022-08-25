@@ -13,15 +13,29 @@ import {
 
 import { GlobalContext } from '../index'
 
-export interface DirectiveParams<FieldType = any> {
+export interface DirectiveParams<
+  FieldType = any,
+  DirectiveArgs = Record<string, any>
+> {
   root: unknown
   args: Record<string, unknown>
   context: GlobalContext
   info: GraphQLResolveInfo
   directiveNode?: DirectiveNode
-  directiveArgs: Record<string, any>
+  directiveArgs: DirectiveArgs
   resolvedValue: FieldType
 }
+
+/**
+ * Generic Type for the arguments/parameters passed to the validate function for validator directives
+ *
+ * You have to pass in the type of directiveArgs
+ * @example ValidateArgs<{ roles?: string[] }>
+ */
+export declare type ValidateArgs<DirectiveArgs = Record<string, any>> = Omit<
+  DirectiveParams<never, DirectiveArgs>, // we remove resolvedValue anyway in this type
+  'resolvedValue'
+>
 
 /**
  * Write your validation logic inside this function.
@@ -30,10 +44,25 @@ export interface DirectiveParams<FieldType = any> {
  * - Throw an error, if you want to stop executing e.g. not sufficient permissions
  * - Validator directives can be async or sync
  * - Returned value will be ignored
+ *
+ * You have to pass in the type of directiveArgs
+ * @example ValidatorDirectiveFunc<{ roles?: string[] }>
+ *
  */
-export type ValidatorDirectiveFunc<FieldType = any> = (
-  args: Omit<DirectiveParams<FieldType>, 'resolvedValue'>
+export type ValidatorDirectiveFunc<TDirectiveArgs = Record<string, any>> = (
+  args: ValidateArgs<TDirectiveArgs>
 ) => Promise<void> | void
+
+/**
+ * Generic Type for the arguments/parameters passed to the transform function for transformer directives
+ *
+ * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
+ * @example TransformArgs<Post, { allowedRoles: string[] }>
+ */
+export declare type TransformArgs<
+  TField = any,
+  TDirectiveArgs = Record<string, any>
+> = DirectiveParams<TField, TDirectiveArgs>
 
 /**
  * Write your transformation logic inside this function.
@@ -42,10 +71,14 @@ export type ValidatorDirectiveFunc<FieldType = any> = (
  * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
  * - Transformer directives **must** be synchonous, and return a value
  *
+ * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
+ * @example TransformerDirectiveFunc<Post, { allowedRoles: string[] }>
+ *
  */
-export type TransformerDirectiveFunc<FieldType = any> = (
-  args: DirectiveParams<FieldType>
-) => FieldType
+export type TransformerDirectiveFunc<
+  TField = any,
+  TDirectiveArgs = Record<string, any>
+> = (args: TransformArgs<TField, TDirectiveArgs>) => TField
 
 // @NOTE don't use unspecified enums, because !type would === true
 export enum DirectiveType {
