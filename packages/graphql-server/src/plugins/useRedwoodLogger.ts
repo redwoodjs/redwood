@@ -1,7 +1,4 @@
-import {
-  Plugin,
-  handleStreamOrSingleExecutionResult,
-} from '@graphql-yoga/node'
+import { Plugin, handleStreamOrSingleExecutionResult } from '@graphql-yoga/node'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
 import { v4 as uuidv4 } from 'uuid'
 

@@ -7,8 +7,9 @@ import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
+  createServer,
 } from '@graphql-yoga/node'
-import { createServer } from '@graphql-yoga/node'
+import { configure } from '@vendia/serverless-express'
 import type {
   APIGatewayProxyCallback,
   APIGatewayProxyEvent,
@@ -32,7 +33,6 @@ import {
 import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
 import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
-import { configure } from '@vendia/serverless-express'
 
 import type { GraphQLHandlerOptions } from './types'
 
