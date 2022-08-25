@@ -345,11 +345,11 @@ export default Routes",
 exports[`generates typescript pages 1`] = `undefined`;
 
 exports[`generates typescript pages 2`] = `
-"import type { Story } from '@storybook/react'
+"import type { ComponentStory } from '@storybook/react'
 
 import TsFilesPage from './TsFilesPage'
 
-export const generated: Story<typeof TsFilesPage> = (args) => {
+export const generated: ComponentStory<typeof TsFilesPage> = (args) => {
   return <TsFilesPage  {...args} />
 }
 
