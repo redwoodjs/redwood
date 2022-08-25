@@ -835,7 +835,7 @@ yarn rw setup cache redis
 You'll need to modify the script with the location of your server(s), potentially including an ENV var that can be set to the proper value whether you're in development or production:
 
 ```js title=api/src/lib/cache.js
-mport { createCache, MemcachedClient } from '@redwoodjs/api/cache'
+import { createCache, MemcachedClient } from '@redwoodjs/api/cache'
 
 import { logger } from './logger'
 
@@ -845,14 +845,17 @@ const memJsFormattedLogger = {
 
 let client
 try {
-  client = new MemcachedClient(process.env.CACHE_SERVER, {
+  client = new MemcachedClient('localhost:11211', {
     logger: memJsFormattedLogger,
   })
 } catch (e) {
   console.error(`Could not connect to cache: ${e.message}`)
 }
 
-export const { cache, cacheLatest } = createCache(client, logger)
+export const { cache, cacheLatest } = createCache(client, {
+  logger,
+  timeout: 500
+})
 ```
 
 ```bash title=.env
@@ -867,15 +870,18 @@ client = new MemcachedClient(process.env.CACHE_SERVER, {
 })
 ```
 
-passes it to the Memcached client library, wrapping the Redwood logger call in another function, which is the format expected by the MemJS library. This is used to report errors from that lib.
+passes it to the Memcached client library, wrapping the Redwood logger call in another function, which is the format expected by the MemJS library. This is used to report errors from MemJS.
 
 The second usage of the logger arugment:
 
 ```js
-export const { cache, cacheLatest } = createCache(client, logger)
+export const { cache, cacheLatest } = createCache(client, {
+  logger,
+  timeout: 500
+})
 ```
 
-is passing it to Redwood's own service cache code, so that it can log cache hit and misses.
+is passing it to Redwood's own service cache code, so that it can log cache hit, misses, or errors.
 
 ### `cache()`
 
