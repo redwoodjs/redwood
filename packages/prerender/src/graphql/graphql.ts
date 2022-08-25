@@ -57,6 +57,7 @@ function buildApiEvent(body: Record<string, unknown>) {
     body: JSON.stringify(body),
     headers: {
       origin: 'http://localhost:8910',
+      'content-type': 'application/json',
       accept: '*/*',
       host: 'localhost:8910',
     },

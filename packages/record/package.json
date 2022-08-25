@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/record",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -28,14 +28,14 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.18.9",
-    "@prisma/client": "4.1.1",
+    "@prisma/client": "4.2.1",
     "core-js": "3.24.1"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
-    "@prisma/internals": "4.1.1",
-    "esbuild": "0.14.54",
+    "@babel/core": "7.18.13",
+    "@prisma/internals": "4.2.1",
+    "esbuild": "0.15.5",
     "jest": "28.1.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
