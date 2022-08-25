@@ -1,4 +1,4 @@
-type ${singularPascalName}LayoutProps = {
+interface ${singularPascalName}LayoutProps {
   children?: React.ReactNode
 }
 
