@@ -115,7 +115,10 @@ export const generated = (args) => {
   return <AppLayout {...args} />
 }
 
-export default { title: 'Layouts/AppLayout', component: AppLayout }
+export default {
+  title: 'Layouts/AppLayout',
+  component: AppLayout,
+}
 "
 `;
 

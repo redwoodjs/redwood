@@ -27,7 +27,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
-    templatePath: 'stories.tsx.template',
+    templatePath: typescript ? 'stories.tsx.template' : 'stories.js.template',
   })
 
   const files = [componentFile]

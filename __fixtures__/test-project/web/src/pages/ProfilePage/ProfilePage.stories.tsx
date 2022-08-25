@@ -1,9 +1,12 @@
-import type { ComponentStory } from '@storybook/react'
+import type { ComponentMeta } from '@storybook/react'
 
 import ProfilePage from './ProfilePage'
 
-export const generated: ComponentStory<typeof ProfilePage> = (args) => {
-  return <ProfilePage {...args} />
+export const generated = () => {
+  return <ProfilePage />
 }
 
-export default { title: 'Pages/ProfilePage', component: ProfilePage }
+export default {
+  title: 'Pages/ProfilePage',
+  component: ProfilePage,
+} as ComponentMeta<typeof ProfilePage>
