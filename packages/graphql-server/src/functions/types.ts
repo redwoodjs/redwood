@@ -1,7 +1,7 @@
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/node'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from '@redwoodjs/api'

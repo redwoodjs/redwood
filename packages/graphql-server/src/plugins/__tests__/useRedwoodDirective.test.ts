@@ -1,6 +1,6 @@
 import { assertSingleExecutionValue, createTestkit } from '@envelop/testing'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/node'
 import {
   FieldDefinitionNode,
   getDirectiveValues,

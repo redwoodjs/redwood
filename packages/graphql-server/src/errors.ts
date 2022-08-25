@@ -1,5 +1,5 @@
 // based on ApolloError https://github.com/apollographql/apollo-server/blob/main/packages/apollo-server-errors/src/index.ts
-import { GraphQLYogaError } from '@graphql-yoga/common'
+import { GraphQLYogaError } from '@graphql-yoga/node'
 
 export class RedwoodGraphQLError extends GraphQLYogaError {
   constructor(message: string, extensions?: Record<string, any>) {

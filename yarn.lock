@@ -3544,9 +3544,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.12.7":
-  version: 2.12.7
-  resolution: "@graphql-yoga/common@npm:2.12.7"
+"@graphql-yoga/common@npm:^2.12.8":
+  version: 2.12.8
+  resolution: "@graphql-yoga/common@npm:2.12.8"
   dependencies:
     "@envelop/core": ^2.5.0
     "@envelop/parser-cache": ^4.6.0
@@ -3560,7 +3560,23 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 3ae685d591ecdbc8df909f20475c0046300fc4bb757ed763620c31f31d837a07a21b0f5e5125ae85f32b15c9d37653c4776ef8290bb3dd5ef43ea7ae842c0a29
+  checksum: b9f621225682242a3e5b4b1094797fb7b3f5e313bc7ee27383b3fd25baecdaa0e71fead1f16fc9ced68a52cfd5821959378e41a4d0cf8f58e8c6f391bfb3639f
+  languageName: node
+  linkType: hard
+
+"@graphql-yoga/node@npm:2.13.9":
+  version: 2.13.9
+  resolution: "@graphql-yoga/node@npm:2.13.9"
+  dependencies:
+    "@envelop/core": ^2.5.0
+    "@graphql-tools/utils": ^8.8.0
+    "@graphql-yoga/common": ^2.12.8
+    "@graphql-yoga/subscription": ^2.2.3
+    "@whatwg-node/fetch": ^0.2.6
+    tslib: ^2.3.1
+  peerDependencies:
+    graphql: ^15.2.0 || ^16.0.0
+  checksum: 7cd3a19976334b5a910d122f0c887be4ecf16c900314a37f8f6850dbcbd2b792ac08de7b8bb8594b030b3e330db0eef5ade0ff51935603fa65e75fd3fe24464f
   languageName: node
   linkType: hard
 
@@ -6410,13 +6426,14 @@ __metadata:
     "@graphql-tools/merge": 8.3.3
     "@graphql-tools/schema": 8.5.1
     "@graphql-tools/utils": 8.10.0
-    "@graphql-yoga/common": 2.12.7
+    "@graphql-yoga/node": 2.13.9
     "@prisma/client": 4.2.1
     "@redwoodjs/api": 2.2.2
     "@redwoodjs/auth": 2.2.2
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
+    "@vendia/serverless-express": 4.10.1
     aws-lambda: 1.0.7
     core-js: 3.25.0
     cross-undici-fetch: 0.4.14
@@ -9388,6 +9405,13 @@ __metadata:
     "@typescript-eslint/types": 5.33.0
     eslint-visitor-keys: ^3.3.0
   checksum: 67f66ea35b74797e452d6516bf724614fbf1fc660161a39e30cc9109a423aa77395bab3e0bb8148fb7c4a0cb824963117324d408228fb382b7bc33400461f7e2
+  languageName: node
+  linkType: hard
+
+"@vendia/serverless-express@npm:4.10.1":
+  version: 4.10.1
+  resolution: "@vendia/serverless-express@npm:4.10.1"
+  checksum: 06da21fde81a5f45afd0cdacbef63399d6e87adcf54bcda2214640755fcc352d5edc1745c844ab9e947b94a00bd3a662290c4f91284bfa2104da8783fc145930
   languageName: node
   linkType: hard
 
