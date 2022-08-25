@@ -1,35 +1,35 @@
 import fs from 'fs'
-import path from 'path'
 
 import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+import yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../lib'
 import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
 
 import { files } from './authFiles'
 import {
-  generateAuthApi,
-  addAuthConfigToWeb,
-  addAuthConfigToGqlApi,
-  addWebPackages,
   addApiPackages,
+  addAuthConfigToGqlApi,
+  addAuthConfigToWeb,
+  addWebPackages,
+  generateAuthApi,
   installPackages,
   printNotes,
-  getSupportedProviders,
 } from './authTasks'
-
-const WEBAUTHN_SUPPORTED_PROVIDERS = ['dbAuth']
 
 /**
  * Check if one of the api side auth files already exists and if so, ask the
  * user to overwrite
  */
-async function shouldForce(force, provider, webAuthn) {
+async function shouldForce(
+  force: boolean,
+  provider: string,
+  webAuthn: boolean
+) {
   if (force) {
     return true
   }
@@ -55,25 +55,12 @@ async function shouldForce(force, provider, webAuthn) {
   return false
 }
 
-export const command = 'auth <provider>'
-export const description = 'Generate an auth configuration'
-export const builder = (yargs) => {
+export const standardAuthBuilder = (yargs: yargs.Argv) => {
   yargs
-    .positional('provider', {
-      choices: getSupportedProviders(),
-      description: 'Auth provider to configure',
-      type: 'string',
-    })
     .option('force', {
       alias: 'f',
       default: false,
       description: 'Overwrite existing configuration',
-      type: 'boolean',
-    })
-    .option('webauthn', {
-      alias: 'w',
-      default: null,
-      description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
     })
     .epilogue(
@@ -84,21 +71,27 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({
-  provider,
+interface Args {
+  rwVersion: string
+  forceArg: boolean
+  provider: string
+  webAuthn: boolean
+}
+
+export const standardAuthHandler = async ({
   rwVersion,
-  webauthn,
-  force: forceArg,
-}) => {
-  const force = await shouldForce(forceArg, provider, webauthn)
-  const includeWebAuthn = await shouldIncludeWebAuthn(webauthn, provider)
-  const providerData = includeWebAuthn
+  forceArg,
+  provider,
+  webAuthn,
+}: Args) => {
+  const force = await shouldForce(forceArg, provider, webAuthn)
+  const providerData = webAuthn
     ? await import(`./providers/${provider}/${provider}.webAuthn`)
     : await import(`./providers/${provider}/${provider}`)
 
   const tasks = new Listr(
     [
-      generateAuthApi(provider, force, includeWebAuthn),
+      generateAuthApi(provider, force, webAuthn),
       addAuthConfigToWeb(provider),
       addAuthConfigToGqlApi,
       addWebPackages(provider, providerData.webPackages, rwVersion),
@@ -107,14 +100,30 @@ export const handler = async ({
       providerData.task,
       printNotes(providerData.notes),
     ].filter(Boolean),
+    // @ts-expect-error: This option is widely used, so I guess it works...
     { collapse: false }
   )
 
   try {
     await tasks.run()
   } catch (e) {
-    errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
-    process.exit(e?.exitCode || 1)
+    if (isErrorWithMessage(e)) {
+      errorTelemetry(process.argv, e.message)
+      console.error(c.error(e.message))
+    }
+
+    if (isErrorWithErrorCode(e)) {
+      process.exit(e.exitCode || 1)
+    } else {
+      process.exit(1)
+    }
   }
+}
+
+function isErrorWithMessage(e: any): e is { message: string } {
+  return !!e.message
+}
+
+function isErrorWithErrorCode(e: any): e is { exitCode: number } {
+  return !isNaN(e.exitCode)
 }

@@ -224,6 +224,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/core@npm:7.18.10":
+  version: 7.18.10
+  resolution: "@babel/core@npm:7.18.10"
+  dependencies:
+    "@ampproject/remapping": ^2.1.0
+    "@babel/code-frame": ^7.18.6
+    "@babel/generator": ^7.18.10
+    "@babel/helper-compilation-targets": ^7.18.9
+    "@babel/helper-module-transforms": ^7.18.9
+    "@babel/helpers": ^7.18.9
+    "@babel/parser": ^7.18.10
+    "@babel/template": ^7.18.10
+    "@babel/traverse": ^7.18.10
+    "@babel/types": ^7.18.10
+    convert-source-map: ^1.7.0
+    debug: ^4.1.0
+    gensync: ^1.0.0-beta.2
+    json5: ^2.2.1
+    semver: ^6.3.0
+  checksum: 94f749fb8bb844f5c5324513cac23edf781e24c15645a513eb54afc0e2f71d8c15c02e61f216a79f0f997deafc062b7c54bf2ebf31a2f62d0dd12bcbbc15dc97
+  languageName: node
+  linkType: hard
+
 "@babel/core@npm:7.18.13, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.7.5":
   version: 7.18.13
   resolution: "@babel/core@npm:7.18.13"
@@ -273,7 +296,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:7.18.13, @babel/generator@npm:^7.12.11, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:7.18.13, @babel/generator@npm:^7.12.11, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.10, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.7.2":
   version: 7.18.13
   resolution: "@babel/generator@npm:7.18.13"
   dependencies:
@@ -1741,6 +1764,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime-corejs3@npm:7.16.7":
+  version: 7.16.7
+  resolution: "@babel/runtime-corejs3@npm:7.16.7"
+  dependencies:
+    core-js-pure: ^3.19.0
+    regenerator-runtime: ^0.13.4
+  checksum: ad94f88efd914e97ec02dd9071e518b07814c88b5e1a196b81aa5f09b79b64f5eb7de359039580388cf85ddd2efcf2f7487fe84ae97957da319a9a50220a45c6
+  languageName: node
+  linkType: hard
+
 "@babel/runtime-corejs3@npm:7.18.9, @babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.17.0":
   version: 7.18.9
   resolution: "@babel/runtime-corejs3@npm:7.18.9"
@@ -1771,7 +1804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:7.18.13, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.11, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.18.11, @babel/traverse@npm:^7.18.13, @babel/traverse@npm:^7.18.9, @babel/traverse@npm:^7.7.2":
+"@babel/traverse@npm:7.18.13, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.11, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.18.10, @babel/traverse@npm:^7.18.11, @babel/traverse@npm:^7.18.13, @babel/traverse@npm:^7.18.9, @babel/traverse@npm:^7.7.2":
   version: 7.18.13
   resolution: "@babel/traverse@npm:7.18.13"
   dependencies:
@@ -6151,6 +6184,49 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/auth-providers@workspace:packages/auth-providers":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers@workspace:packages/auth-providers"
+  dependencies:
+    "@auth0/auth0-spa-js": 1.22.2
+    "@azure/msal-browser": 2.28.1
+    "@babel/cli": 7.18.10
+    "@babel/core": 7.18.10
+    "@babel/runtime-corejs3": 7.18.9
+    "@clerk/clerk-js": 3.17.0
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/types": 2.21.0
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/nhost-js": 1.4.8
+    "@okta/okta-auth-js": 6.7.6
+    "@redwoodjs/auth": 2.2.0
+    "@simplewebauthn/browser": 5.4.1
+    "@simplewebauthn/typescript-types": 5.4.0
+    "@supabase/supabase-js": 1.35.6
+    "@types/netlify-identity-widget": 1.9.3
+    "@types/react": 17.0.48
+    core-js: 3.24.1
+    firebase: 9.9.2
+    firebase-admin: 10.3.0
+    gotrue-js: 0.9.29
+    jest: 28.1.3
+    magic-sdk: 9.0.0
+    netlify-identity-widget: 1.9.2
+    react: 17.0.2
+    supertokens-auth-react: 0.24.4
+    typescript: 4.7.4
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/auth@2.2.2, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
@@ -6184,6 +6260,16 @@ __metadata:
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
+
+"@redwoodjs/auth@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@redwoodjs/auth@npm:2.2.0"
+  dependencies:
+    "@babel/runtime-corejs3": 7.16.7
+    core-js: 3.23.5
+  checksum: d6b8ca81b25c0dc28045f7f86a597ec36c7748cab8d7fcfd7beecc833e4d102231bea7a7b06056f2d449dd4d6f07d4bb49c0073690e31ba6e4a50f12426f8c22
+  languageName: node
+  linkType: hard
 
 "@redwoodjs/cli@2.2.2, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
@@ -13326,10 +13412,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js-pure@npm:^3.19.0":
+  version: 3.25.0
+  resolution: "core-js-pure@npm:3.25.0"
+  checksum: 987639f66d06ca514fa33a0691231d31bf834dd4521c659be20dea7d4c23edb4b4e5305d78f3b45c3221c3041ea770e80f14cfddde191e4bc5ef18a87cae90a0
+  languageName: node
+  linkType: hard
+
 "core-js-pure@npm:^3.20.2, core-js-pure@npm:^3.8.1":
   version: 3.21.0
   resolution: "core-js-pure@npm:3.21.0"
   checksum: 90c39a0f4561e56de17bdffb9edb4cf754e341f4d5cba7580b676436bec170cd1954d0f0870c8e97c96e151c14a112975f2574bc601f08559e044061eaca0d1a
+  languageName: node
+  linkType: hard
+
+"core-js@npm:3.23.5":
+  version: 3.23.5
+  resolution: "core-js@npm:3.23.5"
+  checksum: ab9b483ede285b3949e2411f9190d147ac589d111b0aa3a4b2999a1bf2755b3e930529c2a22ff550efd4fc154c7cfae700bee858dedff905a09f35ddbcc6425f
   languageName: node
   linkType: hard
 
