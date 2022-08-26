@@ -3544,9 +3544,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.12.7":
-  version: 2.12.7
-  resolution: "@graphql-yoga/common@npm:2.12.7"
+"@graphql-yoga/common@npm:2.12.8":
+  version: 2.12.8
+  resolution: "@graphql-yoga/common@npm:2.12.8"
   dependencies:
     "@envelop/core": ^2.5.0
     "@envelop/parser-cache": ^4.6.0
@@ -3560,7 +3560,7 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 3ae685d591ecdbc8df909f20475c0046300fc4bb757ed763620c31f31d837a07a21b0f5e5125ae85f32b15c9d37653c4776ef8290bb3dd5ef43ea7ae842c0a29
+  checksum: b9f621225682242a3e5b4b1094797fb7b3f5e313bc7ee27383b3fd25baecdaa0e71fead1f16fc9ced68a52cfd5821959378e41a4d0cf8f58e8c6f391bfb3639f
   languageName: node
   linkType: hard
 
@@ -6495,7 +6495,7 @@ __metadata:
     "@graphql-tools/merge": 8.3.3
     "@graphql-tools/schema": 8.5.1
     "@graphql-tools/utils": 8.10.0
-    "@graphql-yoga/common": 2.12.7
+    "@graphql-yoga/common": 2.12.8
     "@prisma/client": 4.2.1
     "@redwoodjs/api": 2.2.2
     "@redwoodjs/auth": 2.2.2
@@ -30046,7 +30046,7 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>":
   version: 4.7.4
-  resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"
+  resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=a1c5e5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
