@@ -30,15 +30,36 @@ export interface CacheLatestOptions extends CacheOptions {
   model?: PrismaClient
 }
 
-export type CacheKey = string
+export type CacheKey = string | Array<string>
 export type LatestQuery = Record<string, unknown>
 export type Cacheable = () => unknown
+
+const DEFAULT_LATEST_FIELDS = { id: 'id', updatedAt: 'updatedAt' }
+const KEY_SEPARATOR = '-'
 
 const wait = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-const DEFAULT_LATEST_FIELDS = { id: 'id', updatedAt: 'updatedAt' }
+const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
+  let output
+
+  if (Array.isArray(key)) {
+    output = key.join(KEY_SEPARATOR)
+  } else {
+    output = key
+  }
+
+  // don't prefix if already prefixed
+  if (
+    prefix &&
+    !output.toString().match(new RegExp('^' + prefix + KEY_SEPARATOR))
+  ) {
+    output = `${prefix}-${output}`
+  }
+
+  return output
+}
 
 export const createCache = (
   cacheClient: CacheClient,
@@ -55,7 +76,7 @@ export const createCache = (
     input: Cacheable,
     options?: CacheOptions
   ) => {
-    const cacheKey = prefix ? `${prefix}-${key}` : key
+    const cacheKey = formatCacheKey(key, prefix)
 
     try {
       // some client lib timeouts are flaky if the server actually goes away
@@ -107,10 +128,11 @@ export const createCache = (
     const { model, ...rest } = options
     const queryFunction = Object.keys(query)[0]
     const conditions = query[queryFunction] as object
-    let cacheKey = prefix ? `${prefix}-${key}` : key
-    let latest
+    const cacheKey = formatCacheKey(key, prefix)
+    let latest, latestCacheKey
 
-    const Prisma = await import('@prisma/client')
+    // @ts-expect-error - Error object is not exported until `prisma generate`
+    const { PrismaClientValidationError } = await import('@prisma/client')
 
     // take the conditions from the query that's going to be cached, and only
     // return the latest record (based on `updatedAt`) from that set of
@@ -122,8 +144,7 @@ export const createCache = (
         select: { [fields.id]: true, [fields.updatedAt]: true },
       })
     } catch (e: any) {
-      // @ts-expect-error - Prisma object is not exported until `prisma generate`
-      if (e instanceof Prisma.PrismaClientValidationError) {
+      if (e instanceof PrismaClientValidationError) {
         logger?.error(
           `[Cache] cacheLatest error: model does not contain \`id\` or \`updatedAt\` fields`
         )
@@ -136,16 +157,18 @@ export const createCache = (
     // there may not have been any records returned, in which case we can't
     // create the key so just return the query
     if (latest) {
-      cacheKey = `${cacheKey}-${latest.id}-${latest.updatedAt.getTime()}`
+      latestCacheKey = `${cacheKey}-${latest.id}-${latest.updatedAt.getTime()}`
     } else {
       logger?.debug(
-        `[Cache] cacheLatest: ${JSON.stringify(query)} no data to cache, skipping`
+        `[Cache] cacheLatest: ${JSON.stringify(
+          query
+        )} no data to cache, skipping`
       )
       return model[queryFunction](conditions)
     }
 
     // everything looks good, cache() this with the computed key
-    return cache(cacheKey, () => model[queryFunction](conditions), {
+    return cache(latestCacheKey, () => model[queryFunction](conditions), {
       ...rest,
     })
   }
