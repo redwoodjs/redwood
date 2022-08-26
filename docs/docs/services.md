@@ -951,19 +951,15 @@ const post = ({ id }) => {
 }
 ```
 
-### `cacheLatest()`
+### `cacheFindMany()`
 
-Use this function if you want to cache an array of results from Prisma, but only until one or more of them is updated. This is sort of a best of both worlds cache scenario where you can cache as much data as possible, but re-cache as soon as any of it changes, without first going through every record to see if it's changed: whenever *any* record changes the cache will be expired. This function will first do a `findFirst()` query to get the latest record that's changed, then use its `id` and `updatedAt` timestamp as the cache key for the full query. Note you still need to include a cache key prefix.
-
-You need to effectively destructure the Prisma call into its constituent parts so that we can make the `findFirst()` call using the same arguments:
+Use this function if you want to cache the results of a `findMany()` call from Prisma, but only until one or more of the records in the set is is updated. This is sort of a best of both worlds cache scenario where you can cache as much data as possible, but also expire and re-cache as soon as any piece of it changes, without going through every record manually to see if it's changed: whenever *any* record changes the cache will be discarded. This function will do a `findFirst()` query to get the latest record that's changed, then use its `id` and `updatedAt` timestamp as the cache key for the full query. Note you still need to include a cache key prefix:
 
 ```js
 const post = ({ id }) => {
-  return cacheLatest(
-    `users`,
-    { findMany: { where: { roles: 'admin' } } },
-    { model: db.user }
-  )
+  return cacheFindMany(`users`, db.user, {
+    conditions: { where: { roles: 'admin' } }
+  })
 }
 ```
 
@@ -976,9 +972,22 @@ const latest = db.user.findFirst({
   select: { id: true, updatedAt: true
 })
 
-return cache(`posts-${id}-${updatedAt}`, () => {
+return cache(`posts-${latest.id}-${latest.updatedAt}`, () => {
   db.post.findMany({ where: { roles: 'admin' } })
 })
+```
+
+If you also want to pass an `expires` option, do it in the same object as `conditions`:
+
+```js
+const post = ({ id }) => {
+  return cacheLatest(
+    `users`, db.user, {
+      conditions: { where: { roles: 'admin' } },
+      expires: 86400
+    }
+  )
+}
 ```
 
 ### Creating Your Own Client

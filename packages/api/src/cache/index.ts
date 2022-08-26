@@ -26,8 +26,8 @@ export interface CacheOptions {
   expires?: number,
 }
 
-export interface CacheLatestOptions extends CacheOptions {
-  model?: PrismaClient
+export interface CacheFindManyOptions extends CacheOptions {
+  conditions?: Record<string, unknown>
 }
 
 export type CacheKey = string | Array<string>
@@ -35,17 +35,18 @@ export type LatestQuery = Record<string, unknown>
 export type Cacheable = () => unknown
 
 const DEFAULT_LATEST_FIELDS = { id: 'id', updatedAt: 'updatedAt' }
-const KEY_SEPARATOR = '-'
 
 const wait = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
+export const cacheKeySeparator = '-'
+
+export const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
   let output
 
   if (Array.isArray(key)) {
-    output = key.join(KEY_SEPARATOR)
+    output = key.join(cacheKeySeparator)
   } else {
     output = key
   }
@@ -53,9 +54,9 @@ const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
   // don't prefix if already prefixed
   if (
     prefix &&
-    !output.toString().match(new RegExp('^' + prefix + KEY_SEPARATOR))
+    !output.toString().match(new RegExp('^' + prefix + cacheKeySeparator))
   ) {
-    output = `${prefix}-${output}`
+    output = `${prefix}${cacheKeySeparator}${output}`
   }
 
   return output
@@ -120,14 +121,12 @@ export const createCache = (
     }
   }
 
-  const cacheLatest = async (
-    key: string,
-    query: LatestQuery,
-    options: CacheLatestOptions
+  const cacheFindMany = async (
+    key: CacheKey,
+    model: PrismaClient,
+    options: CacheFindManyOptions = {}
   ) => {
-    const { model, ...rest } = options
-    const queryFunction = Object.keys(query)[0]
-    const conditions = query[queryFunction] as object
+    const { conditions, ...rest } = options
     const cacheKey = formatCacheKey(key, prefix)
     let latest, latestCacheKey
 
@@ -140,41 +139,44 @@ export const createCache = (
     try {
       latest = await model.findFirst({
         ...conditions,
-        orderBy: { updatedAt: 'desc' },
+        orderBy: { [fields.updatedAt]: 'desc' },
         select: { [fields.id]: true, [fields.updatedAt]: true },
       })
+
+      console.info('latest', latest)
+
     } catch (e: any) {
       if (e instanceof PrismaClientValidationError) {
         logger?.error(
-          `[Cache] cacheLatest error: model does not contain \`id\` or \`updatedAt\` fields`
+          `[Cache] cacheFindMany error: model does not contain \`${fields.id}\` or \`${fields.updatedAt}\` fields`
         )
       } else {
-        logger?.error(`[Cache] cacheLatest error: ${e.message}`)
+        logger?.error(`[Cache] cacheFindMany error: ${e.message}`)
       }
-      return model[queryFunction](conditions)
+
+      return model.findMany(conditions)
     }
 
     // there may not have been any records returned, in which case we can't
     // create the key so just return the query
     if (latest) {
-      latestCacheKey = `${cacheKey}-${latest.id}-${latest.updatedAt.getTime()}`
+      latestCacheKey = `${cacheKey}${cacheKeySeparator}${
+        latest.id
+      }${cacheKeySeparator}${latest[fields.updatedAt].getTime()}`
     } else {
       logger?.debug(
-        `[Cache] cacheLatest: ${JSON.stringify(
-          query
-        )} no data to cache, skipping`
+        `[Cache] cacheFindMany: No data to cache for key \`${key}\`, skipping`
       )
-      return model[queryFunction](conditions)
+
+      return model.findMany(conditions)
     }
 
     // everything looks good, cache() this with the computed key
-    return cache(latestCacheKey, () => model[queryFunction](conditions), {
-      ...rest,
-    })
+    return cache(latestCacheKey, () => model.findMany(conditions), rest)
   }
 
   return {
     cache,
-    cacheLatest,
+    cacheFindMany,
   }
 }
