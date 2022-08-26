@@ -104,22 +104,28 @@ export default PostPage
 exports[`creates a page story 1`] = `
 "import HomePage from './HomePage'
 
-export const generated = (args) => {
-  return <HomePage {...args} />
+export const generated = () => {
+  return <HomePage />
 }
 
-export default { title: 'Pages/HomePage' }
+export default {
+  title: 'Pages/HomePage',
+  component: HomePage,
+}
 "
 `;
 
 exports[`creates a page story 2`] = `
 "import ContactUsPage from './ContactUsPage'
 
-export const generated = (args) => {
-  return <ContactUsPage {...args} />
+export const generated = () => {
+  return <ContactUsPage />
 }
 
-export default { title: 'Pages/ContactUsPage' }
+export default {
+  title: 'Pages/ContactUsPage',
+  component: ContactUsPage,
+}
 "
 `;
 
@@ -181,11 +187,14 @@ exports[`file generation 1`] = `
 {
   "fileContent": "import HomePage from './HomePage'
 
-export const generated = (args) => {
-  return <HomePage {...args} />
+export const generated = () => {
+  return <HomePage />
 }
 
-export default { title: 'Pages/HomePage' }
+export default {
+  title: 'Pages/HomePage',
+  component: HomePage,
+}
 ",
   "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.js",
 }
@@ -267,7 +276,10 @@ export const generated = (args) => {
   return <PostPage id={'42'} {...args} />
 }
 
-export default { title: 'Pages/PostPage' }
+export default {
+  title: 'Pages/PostPage',
+  component: PostPage,
+}
 ",
   "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.js",
 }
@@ -345,13 +357,18 @@ export default Routes",
 exports[`generates typescript pages 1`] = `undefined`;
 
 exports[`generates typescript pages 2`] = `
-"import TsFilesPage from './TsFilesPage'
+"import type { ComponentMeta } from '@storybook/react'
 
-export const generated = (args) => {
-  return <TsFilesPage  {...args} />
+import TsFilesPage from './TsFilesPage'
+
+export const generated = () => {
+  return <TsFilesPage />
 }
 
-export default { title: 'Pages/TsFilesPage' }
+export default {
+  title: 'Pages/TsFilesPage',
+  component: TsFilesPage,
+} as ComponentMeta<typeof TsFilesPage>
 "
 `;
 
