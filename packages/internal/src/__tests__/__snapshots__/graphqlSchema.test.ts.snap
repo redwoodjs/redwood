@@ -21,29 +21,29 @@ type Mutation {
   updateTodoStatus(id: Int!, status: String!): Todo
 }
 
-\\"\\"\\"About the Redwood queries.\\"\\"\\"
+"""About the Redwood queries."""
 type Query {
   currentUser: JSON
 
-  \\"\\"\\"Fetches the Redwood root schema.\\"\\"\\"
+  """Fetches the Redwood root schema."""
   redwood: Redwood
   todos: [Todo]
   todosCount: Int!
 }
 
-\\"\\"\\"
+"""
 The RedwoodJS Root Schema
 
 Defines details about RedwoodJS such as the current user and version information.
-\\"\\"\\"
+"""
 type Redwood {
-  \\"\\"\\"The current user.\\"\\"\\"
+  """The current user."""
   currentUser: JSON
 
-  \\"\\"\\"The version of Prisma.\\"\\"\\"
+  """The version of Prisma."""
   prismaVersion: String
 
-  \\"\\"\\"The version of Redwood.\\"\\"\\"
+  """The version of Redwood."""
   version: String
 }
 

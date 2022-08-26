@@ -35,33 +35,33 @@ test('extracts named exports', () => {
   const fakeCode = fileToAst(getFixturePath('/web/src/exports.ts'))
   const n = getNamedExports(fakeCode)
   expect(n).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "name": "exportA",
-    "type": "re-export",
-  },
-  Object {
-    "name": "exportB",
-    "type": "re-export",
-  },
-  Object {
-    "name": "myVariableExport",
-    "type": "variable",
-  },
-  Object {
-    "name": "myArrowFunctionExport",
-    "type": "variable",
-  },
-  Object {
-    "name": "myFunctionExport",
-    "type": "function",
-  },
-  Object {
-    "name": "MyClassExport",
-    "type": "class",
-  },
-]
-`)
+    [
+      {
+        "name": "exportA",
+        "type": "re-export",
+      },
+      {
+        "name": "exportB",
+        "type": "re-export",
+      },
+      {
+        "name": "myVariableExport",
+        "type": "variable",
+      },
+      {
+        "name": "myArrowFunctionExport",
+        "type": "variable",
+      },
+      {
+        "name": "myFunctionExport",
+        "type": "function",
+      },
+      {
+        "name": "MyClassExport",
+        "type": "class",
+      },
+    ]
+  `)
 })
 
 test('tests default exports', () => {
@@ -98,7 +98,7 @@ test('Returns the all quries from a file using getGqlQueries', () => {
 
   const cellQuery = getGqlQueries(cellFileAst)
   expect(cellQuery).toMatchInlineSnapshot(`
-    Array [
+    [
       "
       query BazingaQuery($id: String!) {
         member: member(id: $id) {
