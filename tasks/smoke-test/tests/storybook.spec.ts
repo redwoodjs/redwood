@@ -104,8 +104,8 @@ storybookTest(
 
     if (!profilePageStoryContent.includes('mockCurrentUser')) {
       const contentWithMockCurrentUser = profilePageStoryContent.replace(
-        'export const generated = (args) => {',
-        `export const generated = (args) => {
+        'export const generated = () => {',
+        `export const generated = () => {
           mockCurrentUser({
           email: 'ba@zinga.com',
           id: 55,
