@@ -3025,9 +3025,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.11.6":
-  version: 2.11.6
-  resolution: "@graphql-codegen/cli@npm:2.11.6"
+"@graphql-codegen/cli@npm:2.11.7":
+  version: 2.11.7
+  resolution: "@graphql-codegen/cli@npm:2.11.7"
   dependencies:
     "@graphql-codegen/core": 2.6.2
     "@graphql-codegen/plugin-helpers": ^2.6.2
@@ -3041,7 +3041,7 @@ __metadata:
     "@graphql-tools/prisma-loader": ^7.2.7
     "@graphql-tools/url-loader": ^7.13.2
     "@graphql-tools/utils": ^8.9.0
-    "@whatwg-node/fetch": ^0.2.3
+    "@whatwg-node/fetch": ^0.3.0
     ansi-escapes: ^4.3.1
     chalk: ^4.1.0
     chokidar: ^3.5.2
@@ -3067,7 +3067,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 0ea299d881fac4b52e2a24369863f4362a246bcb16828438f926f963d52acd835974e73ab17786afcc5a88b27160bec59ab03fbbe24f8202fab6ac4bab174f64
+  checksum: 22cfda6873506cabff0e1710f4c1394cf9ba4bf8c0f09d49dd6b76c9cb2dd2496b363e5601cd033093096ad2f9e0d12e2462be2fc58f89d34d6289add86beb34
   languageName: node
   linkType: hard
 
@@ -6528,7 +6528,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.18.9
     "@babel/traverse": 7.18.13
     "@graphql-codegen/add": 3.2.1
-    "@graphql-codegen/cli": 2.11.6
+    "@graphql-codegen/cli": 2.11.7
     "@graphql-codegen/core": 2.6.2
     "@graphql-codegen/schema-ast": 2.5.1
     "@graphql-codegen/typescript": 2.7.3
@@ -9844,7 +9844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:^0.2.3, @whatwg-node/fetch@npm:^0.2.4, @whatwg-node/fetch@npm:^0.2.6":
+"@whatwg-node/fetch@npm:^0.2.4, @whatwg-node/fetch@npm:^0.2.6":
   version: 0.2.9
   resolution: "@whatwg-node/fetch@npm:0.2.9"
   dependencies:
@@ -9858,6 +9858,23 @@ __metadata:
     undici: ^5.8.0
     web-streams-polyfill: ^3.2.0
   checksum: 5f35a306265a3cb257df221f343ae76fe4cc7f453f8b189e1cc793af8a3832597e443ebbe1f44e31c788ee41f252074a1c27ace33fee19bd34fda5ac9f208364
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@whatwg-node/fetch@npm:0.3.2"
+  dependencies:
+    "@peculiar/webcrypto": ^1.4.0
+    abort-controller: ^3.0.0
+    busboy: ^1.6.0
+    event-target-polyfill: ^0.0.3
+    form-data-encoder: ^1.7.1
+    formdata-node: ^4.3.1
+    node-fetch: ^2.6.7
+    undici: ^5.8.0
+    web-streams-polyfill: ^3.2.0
+  checksum: 9acb9e1c598c3917256b44ce820dd5196d5e430f214eebcf9f9930e56a7ff7e764dcd9ebc9310a324f2759b5fcde65eb4bc6494b7d1dd7a8c32fc90f7bf528b8
   languageName: node
   linkType: hard
 
