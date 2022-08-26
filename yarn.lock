@@ -6671,7 +6671,7 @@ __metadata:
     core-js: 3.25.0
     jest: 28.1.3
     jest-environment-jsdom: 28.1.3
-    jest-watch-typeahead: 2.0.0
+    jest-watch-typeahead: 2.1.1
     msw: 0.40.2
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
@@ -20266,9 +20266,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-watch-typeahead@npm:2.0.0":
-  version: 2.0.0
-  resolution: "jest-watch-typeahead@npm:2.0.0"
+"jest-watch-typeahead@npm:2.1.1":
+  version: 2.1.1
+  resolution: "jest-watch-typeahead@npm:2.1.1"
   dependencies:
     ansi-escapes: ^5.0.0
     chalk: ^4.0.0
@@ -20278,8 +20278,8 @@ __metadata:
     string-length: ^5.0.1
     strip-ansi: ^7.0.1
   peerDependencies:
-    jest: ^27.0.0 || ^28.0.0
-  checksum: 53f5278acbb787a80e1392a7319799d63f13670b80d8e150df91b8661b21895d6ccc5b45a1342d69a260441cf203980c7abf4b4c8a9fab750dc0bb1871435ad2
+    jest: ^27.0.0 || ^28.0.0 || ^29.0.0
+  checksum: b7edf4f322f488ea8b26be0981df8b5db4fef0e5bf8e96adf40ead79a832d84f7fca79df5a7914d240c38074fd027b8918637323a681e60d8f26c0f19fea43dd
   languageName: node
   linkType: hard
 

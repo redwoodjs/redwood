@@ -54,7 +54,7 @@
     "core-js": "3.25.0",
     "jest": "28.1.3",
     "jest-environment-jsdom": "28.1.3",
-    "jest-watch-typeahead": "2.0.0",
+    "jest-watch-typeahead": "2.1.1",
     "msw": "0.40.2",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
