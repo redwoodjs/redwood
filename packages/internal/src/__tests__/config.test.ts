@@ -8,8 +8,8 @@ describe('getConfig', () => {
       path.join(__dirname, './fixtures/redwood.empty.toml')
     )
     expect(config).toMatchInlineSnapshot(`
-      Object {
-        "api": Object {
+      {
+        "api": {
           "debugPort": 18911,
           "host": "localhost",
           "path": "./api",
@@ -19,15 +19,15 @@ describe('getConfig', () => {
           "target": "node",
           "title": "Redwood App",
         },
-        "browser": Object {
+        "browser": {
           "open": false,
         },
-        "generate": Object {
+        "generate": {
           "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
         },
-        "web": Object {
+        "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
           "fastRefresh": true,
