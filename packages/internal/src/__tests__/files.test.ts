@@ -32,7 +32,7 @@ test('finds all the cells', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
+    [
       "web/src/components/NumTodosCell/NumTodosCell.js",
       "web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
       "web/src/components/TodoListCell/TodoListCell.tsx",
@@ -45,7 +45,7 @@ test('finds directory named modules', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
+    [
       "api/src/directives/requireAuth/requireAuth.js",
       "api/src/directives/skipAuth/skipAuth.js",
       "api/src/functions/healthz/healthz.js",
@@ -74,7 +74,7 @@ test('finds all the page files', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
+    [
       "web/src/pages/BarPage/BarPage.tsx",
       "web/src/pages/FatalErrorPage/FatalErrorPage.js",
       "web/src/pages/FooPage/FooPage.tsx",
@@ -100,7 +100,7 @@ test('find api functions', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
+    [
       "api/src/functions/graphql.js",
       "api/src/functions/healthz/healthz.js",
       "api/src/functions/nested/nested.ts",

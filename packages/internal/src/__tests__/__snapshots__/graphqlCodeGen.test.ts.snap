@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Generate gql typedefs api 1`] = `
-"import { Prisma } from \\"@prisma/client\\"
+"import { Prisma } from "@prisma/client"
 import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
 import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
@@ -261,7 +261,7 @@ export type DirectiveResolvers<ContextType = RedwoodGraphQLContext> = {
 `;
 
 exports[`Generate gql typedefs web 1`] = `
-"import { Prisma } from \\"@prisma/client\\"
+"import { Prisma } from "@prisma/client"
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
