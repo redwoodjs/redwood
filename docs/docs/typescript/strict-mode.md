@@ -75,9 +75,9 @@ One of the challenges in the GraphQL-Prisma world is the difference in the way t
 - but For Prisma, `null` is a value, and `undefined` means "do nothing"
 
 This is covered in detail in [Prisma's docs](https://www.prisma.io/docs/concepts/components/prisma-client/null-and-undefined), which we strongly recommend reading.
-But the gist of it is that, for Prisma's create and update operations, you have to make sure `null`s are converted to `undefined` from your GraphQL mutation inputs - unless the field is nullable in your Prisma schema.
+But the gist of it is that, for Prisma's create and update operations, you have to make sure `null`s are converted to `undefined` from your GraphQL mutation inputs (unless the field is nullable in your Prisma schema).
 
-One way to do this is to use the `removeNulls` utility function from `@redwoodjs/api`
+One way to do this is to use the `removeNulls` utility function from `@redwoodjs/api`:
 
 ```ts title=api/src/services/users.ts
 // highlight-next-line
@@ -93,49 +93,47 @@ export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
 ```
 
 ### Relation resolvers in services
-Let's say you have a `Post` model, and `Post.author` is a relation to the `Author` model, and is a required field.
 
-```graphql Post.sdl.ts
+Let's say you have a `Post` model in your `schema.prisma` that has an `author` field which is a relation to the `Author` model. It's a required field.
+This is what the `Post` model's SDL would probably look like:
+
+```graphql post.sdl.ts
 export const schema = gql`
   type Post {
     id: Int!
     title: String!
     // highlight-next-line
-    author: Author! # 👈 this is a relation, the ! makes it a required field
+    author: Author! # 👈 This is a relation; the `!` makes it a required field
     authorId: Int!
     # ...
   }
-
 ```
 
-When you generate your services or SDLs, you'll notice that the resolvers for `Author` are generated at the bottom of Post.service.ts
-
-Because `Post.author` cannot be null - and findUnique always returns a nullable value, under strict-mode you'll have to tweak these resolvers
+When you generate SDLs or Services, the resolver for `author` is generated at the bottom of `post.service.ts` on the `Post` object.
+Because `Post.author` can't be null (we said it's required in the Prisma schema)—and because `findUnique` always returns a nullable value—in strict mode, you'll have to tweak this resolver:
 
 ```ts Post.service.ts
 // Option 1: Override the type
-// The typecasting here is OK - remember the "gqlArgs.root" is the post
-// that was already found in your service function, so findUnique would always find it!
+// The typecasting here is OK. `gqlArgs.root` is the post that was _already found_
+// by the `post` function in your Services, so `findUnique` will always find it!
 export const Post: Partial<PostResolvers> = {
   author: (_obj, gqlArgs) =>
-    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Author,  // 👈
+    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Author, // 👈
 }
 
-
-
-// Option 2: With null checks ✅
+// Option 2: Check for null
 export const Post: Partial<PostResolvers> = {
   author: async (_obj, gqlArgs) => {
-    // Find unique can return a null
+    // Here, `findUnique` can return `null`, so we have to handle it:
     const maybeAuthor = await db.post
       .findUnique({ where: { id: gqlArgs?.root?.id } })
       .author()
 
-// highlight-start
+    // highlight-start
     if (!maybeAuthor) {
       throw new Error('Could not resolve author')
     }
-// highlight-end
+    // highlight-end
 
     return maybeAuthor
   },
@@ -143,8 +141,9 @@ export const Post: Partial<PostResolvers> = {
 ```
 
 
-:::tip An optimisation tip
-If the relation is _truly_ required, it might make more sense to include `author` in your other services' Prisma query, where it seems appropriate, and modify the `Post.author` resolver:
+:::tip An optimization tip
+
+If the relation truly is required, it may make more sense to include `author` in your `post` Service's Prisma query and modify the `Post.author` resolver accordingly:
 
 ```ts
 export const post: QueryResolvers['post'] = ({ id }) => {
@@ -166,11 +165,11 @@ export const Post: Partial<PostResolvers> = {
     }
   // highlight-end
 
-
   const maybeAuthor = await db.post.findUnique(// ...
 ```
 
-This will also help Prisma make a more optimised query to the database, since every time a Post is requested, the Author is too! The tradeoff here is that any query to post (even if the author isn't in the GraphQL query) will mean an unnecessary database query to include the author.
+This will also help Prisma make a more optimized query to the database, since every time a field on `Post` is requested, the post's author is too! The tradeoff here is that any query to `Post` (even if the author isn't requested) will mean an unnecessary database query to include the author.
+
 :::
 
 ### Roles checks for CurrentUser in `src/lib/auth`
