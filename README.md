@@ -45,6 +45,7 @@ application looks like, take a look at the following projects:
 - [Todo](https://github.com/redwoodjs/example-todo)
 - [Blog](https://github.com/redwoodjs/example-blog)
 - [Invoice](https://github.com/redwoodjs/example-invoice)
+- [Realworld](https://github.com/TristanWYL/redwood-realworld-example-app)
 
 ## Technologies
 
