@@ -5807,15 +5807,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.25.0":
-  version: 1.25.0
-  resolution: "@playwright/test@npm:1.25.0"
+"@playwright/test@npm:1.25.1":
+  version: 1.25.1
+  resolution: "@playwright/test@npm:1.25.1"
   dependencies:
     "@types/node": "*"
-    playwright-core: 1.25.0
+    playwright-core: 1.25.1
   bin:
     playwright: cli.js
-  checksum: 3092d5824aa200a6ab68748bbb1a629a4091bd0ba848598d0ab9d904a7b702b86f74c6d0ea31771f96d1fb3c160514fd83169efc7bc60b82630f92fdcc0aeb1e
+  checksum: 8a8447ffb582d3cee2b88589f0f0708c046745f63deee7694f3023dfe0ccf9bd7525459cf635336f3cf4b79cfc220e4bcd3be381b6e887c7bb448259c87e7ee4
   languageName: node
   linkType: hard
 
@@ -24779,12 +24779,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.25.0":
-  version: 1.25.0
-  resolution: "playwright-core@npm:1.25.0"
+"playwright-core@npm:1.25.1":
+  version: 1.25.1
+  resolution: "playwright-core@npm:1.25.1"
   bin:
     playwright: cli.js
-  checksum: f073ff8bb37433f8f90839eee66810fd16144af6286e1d43c3da3311c05b21ad1424e60cf3e9a9110b0c000acc0209a32394a4193e562f3e7dd2697fc8cc8bbb
+  checksum: 59b393ba8a62421b4278934a8277e57d956965f2e0497211d5e94120889bf65f7304596684ab9f68242bed33e2705c76b77cb1ef56f74f2ff08d7cd05aa3d341
   languageName: node
   linkType: hard
 
@@ -27146,7 +27146,7 @@ __metadata:
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.18.9
     "@nrwl/nx-cloud": 14.3.0
-    "@playwright/test": 1.25.0
+    "@playwright/test": 1.25.1
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
