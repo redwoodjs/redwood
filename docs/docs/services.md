@@ -782,7 +782,7 @@ cache(md5(JSON.stringify(product)), () => {
 
 This works, but it's the nicest to look at in the code, and computing a hash isn't free (it's fast, but not 0 seconds).
 
-For this reason we always recommend that you add an `updatedAt` column to all of your models. This will automatically be set by Prisma to a timestamp whenever it updates that row in the database. This means we can count on this value being different whenever a record changes, regardless of what column actually changed. Now our key can look like `product-${id}-${updatedAt}`.
+For this reason we always recommend that you add an `updatedAt` column to all of your models. This will automatically be set by Prisma to a timestamp whenever it updates that row in the database. This means we can count on this value being different whenever a record changes, regardless of what column actually changed. Now our key can look like `product-${id}-${updatedAt.getTime()}`. We use `getTime()` so that the timestamp is returned as a nice integer `1661464626032` rather than some string like `Thu Aug 25 2022 14:56:25 GMT-0700 (Pacific Daylight Time)`.
 
 :::info
 
@@ -797,6 +797,10 @@ cache(product, () => {
 
 One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes. This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
 
+What if you want to expire a cache without changing the data itself? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. One solution would be "touch" all of the products in the database, forcing an updated to their `updatedAt` field. But an easier solution would be to add some kind of version number to your cache key, like `v1-product-${id}-${updatedAt}`
+
+Now we have a unique, but flexible key that allows us to expire the cache on demand (change the version) or automatically expire it when the record itself changes.
+
 #### Expiration-based Keys
 
 You can skirt these issues about what data is changing and what to include or not include in the key by just using the expiration time on this cache entry. You may decide that if a change is made to a product, it's okay if users don't see the change for, say, an hour. In this case just set the expiration time to 3600 seconds and it will automatically be re-built, whether something changed in the record or not:
@@ -808,6 +812,23 @@ cache(`product-${id}`, () => {
 ```
 
 This leads to your product cache being rebuilt every hour, even though you haven't made any changes that are of consequence to the user, but that may be we worth the tradeoff versus rebuilding the cache when *no* useful data has changed.
+
+#### Global Cache Key Prefix
+
+You can globally prefix a string to all of your cache keys:
+
+```js title=api/src/lib/cache.js
+export const { cache, cacheLatest } = createCache(client, {
+  logger,
+  timeout: 500,
+  // highlight-next-line
+  prefix: 'v1',
+})
+```
+
+This would turn a key like `posts-123` into `v1-posts-123` before giving it to the cache client.
+
+This gives you a nuclear option to invalidate all cache keys globally in your app. Let's say you launched a new redesign, or other visual change to your site where you may be showing more or less data from your GraphQL queries. If your data was purely based on the DB data (like `id` and `updatedAt`) there would be no way to refresh all of these keys without changing each and every cache key manually in every service, or by touching *all* records in the database. This gives you a fallback to refreshing all data at once.
 
 #### Caching User-specific Data
 
@@ -832,7 +853,7 @@ yarn rw setup cache memcached
 yarn rw setup cache redis
 ```
 
-You'll need to modify the script with the location of your server(s), potentially including an ENV var that can be set to the proper value whether you're in development or production:
+This generates the following (memcached example shown):
 
 ```js title=api/src/lib/cache.js
 import { createCache, MemcachedClient } from '@redwoodjs/api/cache'
@@ -858,9 +879,9 @@ export const { cache, cacheLatest } = createCache(client, {
 })
 ```
 
-```bash title=.env
-CACHE_SERVER=localhost:11211
-```
+When the time comes, you can replace the hardcoded `localhost:11211` with an ENV var that can be set per-environment.
+
+#### Logging
 
 You'll see two different instances of passing `logger` as arguments here. The first:
 
@@ -883,6 +904,15 @@ export const { cache, cacheLatest } = createCache(client, {
 
 is passing it to Redwood's own service cache code, so that it can log cache hit, misses, or errors.
 
+#### Options
+
+There are several options you can pass to the `createCache()` call:
+
+* `logger`: an instance of the Redwood logger. Defaults to `null`, but if you want any feedback about what the cache is doing, make sure to set this!
+* `timeout`: how long to wait for the cache server to respond during a get/set before giving up and just executing the function and returning the result directly. Defaults to `500` milliseconds.
+* `prefix`: a global cache key prefix. Defaults to `null`.
+* `fields`: an object that maps the model field names for the `id` and `updatedAt` fields if your database has another name for them. For example: `fields: { id: 'post_id', updatedAt: 'updated_at' }`. Even if only one of your names is different, you need to provide both properties to this option. Defaults to `{ id: 'id', updatedAt: 'updatedAt' }`
+
 ### `cache()`
 
 Use this function when you want to cache some data, optionally including a number of seconds before it expires:
@@ -900,6 +930,24 @@ const post = ({ id }) => {
   return cache(`posts`, () => {
     db.post.findMany()
   }, { expires: 3600 })
+}
+```
+
+Note that a key can be a string or an array:
+
+```js
+const post = ({ id }) => {
+  return cache(`posts-${id}-${updatedAt}`, () => {
+    db.post.findMany()
+  })
+}
+
+// or
+
+const post = ({ id }) => {
+  return cache(['posts', id,  updatedAt], () => {
+    db.post.findMany()
+  })
 }
 ```
 
