@@ -118,7 +118,7 @@ Because `Post.author` can't be null (we said it's required in the Prisma schema)
 // by the `post` function in your Services, so `findUnique` will always find it!
 export const Post: Partial<PostResolvers> = {
   author: (_obj, gqlArgs) =>
-    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Author, // 👈
+    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Promise<Author>, // 👈
 }
 
 // Option 2: Check for null
