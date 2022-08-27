@@ -20,7 +20,6 @@ import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
 import { getTsConfigs } from '../project'
-import { StringIterator } from 'lodash'
 
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
