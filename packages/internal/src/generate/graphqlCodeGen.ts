@@ -147,7 +147,7 @@ function getPrismaClient(hasGenerated = false): any {
         return {}
       }
 
-      execa.sync('yarn rw prisma generate', { shell: true, stdio: 'inherit' })
+      execa.sync('yarn rw prisma generate', { shell: true })
 
       // Purge Prisma Client from node's require cache, so that the newly
       // generated client gets picked up by any script that uses it
