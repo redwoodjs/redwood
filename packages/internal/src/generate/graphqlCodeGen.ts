@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import * as addPlugin from '@graphql-codegen/add'
-import execa from 'execa'
 import { loadCodegenConfig } from '@graphql-codegen/cli'
 import { codegen } from '@graphql-codegen/core'
 import type {
@@ -16,6 +15,7 @@ import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
+import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
@@ -172,14 +172,6 @@ function getPluginConfig() {
   // set up internal redirects for the return values in resolvers.
   const localPrisma = getPrismaClient()
   prismaModels = localPrisma.ModelName
-
-  if (!prismaModels) {
-    throw new Error(
-      'We could not find any Prisma models. Please make sure you have ' +
-        'generated a prisma client. Try running `yarn rw prisma generate` or ' +
-        'simply start the dev server at least once first `yarn rw dev`'
-    )
-  }
 
   Object.keys(prismaModels).forEach((key) => {
     prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
