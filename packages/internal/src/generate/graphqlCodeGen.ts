@@ -20,6 +20,7 @@ import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
 import { getTsConfigs } from '../project'
+import { StringIterator } from 'lodash'
 
 export const generateTypeDefGraphQLApi = async () => {
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
@@ -134,17 +135,19 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPrismaClient(hasGenerated = false): any {
+function getPrismaClient(hasGenerated = false): {
+  ModelName: Record<string, string> | undefined
+} {
   const localPrisma = require('@prisma/client')
 
   if (!localPrisma.ModelName) {
     if (hasGenerated) {
-      return {}
+      return { ModelName: undefined }
     } else {
       if (process.env.NODE_ENV === 'test') {
         // When running as part of tests `yarn rw` isn't available as a bin
         // In actual projects it will be available
-        return {}
+        return { ModelName: undefined }
       }
 
       execa.sync('yarn rw prisma generate', { shell: true })
@@ -168,12 +171,10 @@ function getPrismaClient(hasGenerated = false): any {
 }
 
 function getPluginConfig() {
-  let prismaModels: Record<string, string> | undefined = undefined
-
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
   const localPrisma = getPrismaClient()
-  prismaModels = localPrisma.ModelName
+  const prismaModels = localPrisma.ModelName
 
   if (prismaModels) {
     Object.keys(prismaModels).forEach((key) => {
