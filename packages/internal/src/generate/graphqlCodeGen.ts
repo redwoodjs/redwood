@@ -135,21 +135,28 @@ function getLoadDocumentsOptions(filename: string) {
 
 function getPluginConfig() {
   let prismaModels: Record<string, string> = {}
-  try {
-    // Extract the models from the prisma client and use those to
-    // set up internal redirects for the return values in resolvers.
-    const localPrisma = require('@prisma/client')
-    prismaModels = localPrisma.ModelName
-    Object.keys(prismaModels).forEach((key) => {
-      prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
-    })
-    // This isn't really something you'd put in the GraphQL API, so
-    // we can skip the model.
-    if (prismaModels.RW_DataMigration) {
-      delete prismaModels.RW_DataMigration
-    }
-  } catch (error) {
-    // This means they've not set up prisma types yet
+
+  // Extract the models from the prisma client and use those to
+  // set up internal redirects for the return values in resolvers.
+  const localPrisma = require('@prisma/client')
+  prismaModels = localPrisma.ModelName
+
+  if (!prismaModels) {
+    throw new Error(
+      'We could not find any Prisma models. Please make sure you have ' +
+      'generated a prisma client. Try running `yarn rw prisma generate` or ' +
+      'simply start the dev server at least once first `yarn rw dev`'
+    )
+  }
+
+  Object.keys(prismaModels).forEach((key) => {
+    prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
+  })
+
+  // This isn't really something you'd put in the GraphQL API, so
+  // we can skip the model.
+  if (prismaModels.RW_DataMigration) {
+    delete prismaModels.RW_DataMigration
   }
 
   const pluginConfig: CodegenTypes.PluginConfig &
