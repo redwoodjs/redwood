@@ -19,18 +19,16 @@ import yargs from 'yargs/yargs'
 
 import { name, version } from '../package'
 
-/**
- * To keep a consistent color/style palette between cli packages, such as
- * @redwood/create-redwood-app and @redwood/cli, please keep them compatible
- * with one and another. We'll might split up and refactor these into a
- * separate package when there is a strong motivation behind it.
- *
- * Current files:
- *
- * - packages/cli/src/lib/colors.js
- * - packages/create-redwood-app/src/create-redwood-app.js (this file)
- *
- */
+// To keep a consistent color/style palette between cli packages, such as
+// @redwood/create-redwood-app and @redwood/cli, please keep them compatible
+// with one and another. We'll might split up and refactor these into a
+// separate package when there is a strong motivation behind it.
+//
+// Current files:
+//
+// - packages/cli/src/lib/colors.js
+// - packages/create-redwood-app/src/create-redwood-app.js (this file)
+
 const style = {
   error: chalk.bold.red,
   warning: chalk.keyword('orange'),
@@ -221,7 +219,7 @@ const installNodeModulesTasks = ({ newAppDir }) => {
 }
 
 const sendTelemetry = ({ error } = {}) => {
-  // send 'create' telemetry event, or disable for new app
+  // Send the 'create' telemetry event, or disable for new app
   if (telemetry) {
     const command = process.argv
     // make command show 'create redwood-app [path] --flags'
