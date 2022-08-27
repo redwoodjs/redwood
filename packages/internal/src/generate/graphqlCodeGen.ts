@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import * as addPlugin from '@graphql-codegen/add'
+import execa from 'execa'
 import { loadCodegenConfig } from '@graphql-codegen/cli'
 import { codegen } from '@graphql-codegen/core'
 import type {
@@ -133,19 +134,50 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
+function getPrismaClient(hasGenerated = false): {
+  ModelName: Record<string, string>
+} {
+  const localPrisma = require('@prisma/client')
+
+  if (!localPrisma.ModelName) {
+    if (hasGenerated) {
+      // TODO: I think this might be fine. Theoretically a RW project doesn't
+      // need to have any Prisma models, right?
+      throw new Error('We could not find any Prisma models')
+    } else {
+      execa.sync('yarn rw prisma generate', { shell: true, stdio: 'inherit' })
+
+      // Purge Prisma Client from node's require cache, so that the newly
+      // generated client gets picked up by any script that uses it
+      Object.keys(require.cache).forEach((key) => {
+        if (
+          key.includes('/node_modules/@prisma/client/') ||
+          key.includes('/node_modules/.prisma/client/')
+        ) {
+          delete require.cache[key]
+        }
+      })
+
+      return getPrismaClient(true)
+    }
+  }
+
+  return localPrisma
+}
+
 function getPluginConfig() {
   let prismaModels: Record<string, string> = {}
 
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
-  const localPrisma = require('@prisma/client')
+  const localPrisma = getPrismaClient()
   prismaModels = localPrisma.ModelName
 
   if (!prismaModels) {
     throw new Error(
       'We could not find any Prisma models. Please make sure you have ' +
-      'generated a prisma client. Try running `yarn rw prisma generate` or ' +
-      'simply start the dev server at least once first `yarn rw dev`'
+        'generated a prisma client. Try running `yarn rw prisma generate` or ' +
+        'simply start the dev server at least once first `yarn rw dev`'
     )
   }
 
