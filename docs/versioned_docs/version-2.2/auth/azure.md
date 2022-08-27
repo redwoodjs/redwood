@@ -124,7 +124,7 @@ AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://{{ms_tenant_name}}.b2clogin.com
 ```
 
 #### Update const activeDirectoryClient instance
- This lets the MSAL (Microsoft Authenication Library) web side client know about our new B2C allowed authority that we defined in the .env file
+ This lets the MSAL (Microsoft Authentication Library) web side client know about our new B2C allowed authority that we defined in the .env file
 ``` jsx title="./web/App.jsx|.tsx
 
 const azureActiveDirectoryClient = new PublicClientApplication({
