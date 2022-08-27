@@ -126,18 +126,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.2":
-  version: 1.22.2
-  resolution: "@auth0/auth0-spa-js@npm:1.22.2"
+"@auth0/auth0-spa-js@npm:1.22.3":
+  version: 1.22.3
+  resolution: "@auth0/auth0-spa-js@npm:1.22.3"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.23.2
-    es-cookie: ^1.3.2
+    core-js: ^3.24.0
+    es-cookie: ~1.3.2
     fast-text-encoding: ^1.0.4
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 237b34063fb177bfdfe7399c00710cfffab12db06da97df7513db83f39a23222846301fb51b19db182e69130a31233e28efe87fb60e8da8e7bb2455a8942c2a4
+  checksum: 18d6cf1eebc91af96facd13b440e55ff7c129bedc98181eb5fbbb2fed55301f43841c29a8865a31333048bd0f35f80185fb7276dd593822f022e71693eebd5ee
   languageName: node
   linkType: hard
 
@@ -6229,7 +6229,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.2
+    "@auth0/auth0-spa-js": 1.22.3
     "@azure/msal-browser": 2.28.1
     "@babel/cli": 7.18.10
     "@babel/core": 7.18.13
@@ -13417,7 +13417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.25.0, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.22.1, core-js@npm:^3.23.2, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.25.0, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.22.1, core-js@npm:^3.24.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.25.0
   resolution: "core-js@npm:3.25.0"
   checksum: 471c2706eaca7aca8c9021fdc714f818c27dc9a1d8e429dbad9f4e8e41884f74d32f2862951044c7b531d99c9b4cf32829790a478ffe21bcac9100afb3222096
@@ -15183,7 +15183,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-cookie@npm:^1.3.2":
+"es-cookie@npm:~1.3.2":
   version: 1.3.2
   resolution: "es-cookie@npm:1.3.2"
   checksum: 26eb6e06b25b5569d8763fcb23b5335a5098e354b0a9a7bc5122e8c8705003307187a165ddaeda5cff08fa4cc8e1675dbddd5709279fb27cfa8875514dc3eccb
