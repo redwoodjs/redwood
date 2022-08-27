@@ -18,7 +18,7 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
 }
 
 /**
- * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.
+ * Converts all the TypeScript files in the scripts directory to JavaScript.
  *
  * @param {string} cwd - The base path to the project.
  */
@@ -126,9 +126,10 @@ export const prettierConfig = () => {
 }
 
 /**
- * Determine the prettier parser based off of the extension.
+ * Determine the prettier parser based on a file's extension.
  *
  * See: https://prettier.io/docs/en/options.html#parser
+ *
  * @param {string} filename
  */
 const prettierParser = (filename: string) => {
@@ -146,15 +147,16 @@ const prettierParser = (filename: string) => {
 }
 
 /**
- * Prettify `code` according to the extension in `filename`.
- * This will also read a user's `prettier.config.js` file if it exists.
+ * Prettify `code` according to the extension of `filename`.
+ * This also reads a user's `prettier.config.js` file if it exists.
  *
  * @param {string} code
  * @param {string} filename
  */
 export const prettify = (code: string, filename: string) => {
   const parser = prettierParser(filename)
-  // Return unformatted code if we could not determine the parser.
+
+  // Return unformatted code if we couldn't determine the parser.
   if (typeof parser === 'undefined') {
     return code
   }
