@@ -134,16 +134,12 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPrismaClient(hasGenerated = false): {
-  ModelName: Record<string, string>
-} {
+function getPrismaClient(hasGenerated = false): any {
   const localPrisma = require('@prisma/client')
 
   if (!localPrisma.ModelName) {
-    if (hasGenerated) {
-      // TODO: I think this might be fine. Theoretically a RW project doesn't
-      // need to have any Prisma models, right?
-      throw new Error('We could not find any Prisma models')
+    if (hasGenerated || process.env.NODE_ENV === 'test') {
+      return {}
     } else {
       execa.sync('yarn rw prisma generate', { shell: true, stdio: 'inherit' })
 
@@ -166,21 +162,29 @@ function getPrismaClient(hasGenerated = false): {
 }
 
 function getPluginConfig() {
-  let prismaModels: Record<string, string> = {}
+  let prismaModels: Record<string, string> | undefined = undefined
 
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
   const localPrisma = getPrismaClient()
   prismaModels = localPrisma.ModelName
 
-  Object.keys(prismaModels).forEach((key) => {
-    prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
-  })
+  if (prismaModels) {
+    Object.keys(prismaModels).forEach((key) => {
+      // Type narrowing in TS doesn't extend into callback functions, so we
+      // have to check prismaModels here again.
+      // This is one of the most commonly raised issues on the TS repo
+      // https://github.com/microsoft/TypeScript/issues/9998
+      if (prismaModels) {
+        prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
+      }
+    })
 
-  // This isn't really something you'd put in the GraphQL API, so
-  // we can skip the model.
-  if (prismaModels.RW_DataMigration) {
-    delete prismaModels.RW_DataMigration
+    // This isn't really something you'd put in the GraphQL API, so
+    // we can skip the model.
+    if (prismaModels.RW_DataMigration) {
+      delete prismaModels.RW_DataMigration
+    }
   }
 
   const pluginConfig: CodegenTypes.PluginConfig &
