@@ -6152,7 +6152,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.25.0
     fast-json-parse: 1.0.3
-    fastify: 4.5.2
+    fastify: 4.5.3
     fastify-raw-body: 4.0.0
     jest: 29.0.1
     lodash.escape: 4.0.1
@@ -16475,9 +16475,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.5.2":
-  version: 4.5.2
-  resolution: "fastify@npm:4.5.2"
+"fastify@npm:4.5.3":
+  version: 4.5.3
+  resolution: "fastify@npm:4.5.3"
   dependencies:
     "@fastify/ajv-compiler": ^3.1.1
     "@fastify/error": ^3.0.0
@@ -16485,7 +16485,7 @@ __metadata:
     abstract-logging: ^2.0.1
     avvio: ^8.1.3
     find-my-way: ^7.0.0
-    light-my-request: ^5.0.0
+    light-my-request: ^5.5.1
     pino: ^8.0.0
     process-warning: ^2.0.0
     proxy-addr: ^2.0.7
@@ -16493,7 +16493,7 @@ __metadata:
     secure-json-parse: ^2.4.0
     semver: ^7.3.7
     tiny-lru: ^8.0.2
-  checksum: 919e2740ed7ca0809d9d5b06d10cad788310648456c73a3ef153d238cc7795cba9223c819e6bbf1283941459821ded46bf0a43048ad7cd18835946dc45ce4b6e
+  checksum: dffe88193908664a5437fb06bab14f4d420cf652c93a8b536271a9f6d8665949eccf0e42de5c9e0edf5d773747310a5ee2f61738d3efb7273675cba7119adee8
   languageName: node
   linkType: hard
 
@@ -21313,14 +21313,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"light-my-request@npm:^5.0.0":
-  version: 5.2.0
-  resolution: "light-my-request@npm:5.2.0"
+"light-my-request@npm:^5.5.1":
+  version: 5.5.1
+  resolution: "light-my-request@npm:5.5.1"
   dependencies:
     cookie: ^0.5.0
     process-warning: ^2.0.0
     set-cookie-parser: ^2.4.1
-  checksum: e789a7507eb9672abe06d90af136a6db42f7f51b2974e2d064d6cd4100b2f0188c16153778b213da93e31e8b72e6709557c04eac2bc8d05d85aabfd43cc3cf07
+  checksum: 6f45a39c648f406b7f8aaf90f79d19ac5db53d46a70b8d308fa5d6f3b87ad04d38aef46c8a5cb7f5c7e065c7478d92b61aecf09b6aa23003c885d165dc1e36ec
   languageName: node
   linkType: hard
 
