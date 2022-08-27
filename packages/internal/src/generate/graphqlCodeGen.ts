@@ -138,9 +138,15 @@ function getPrismaClient(hasGenerated = false): any {
   const localPrisma = require('@prisma/client')
 
   if (!localPrisma.ModelName) {
-    if (hasGenerated || process.env.NODE_ENV === 'test') {
+    if (hasGenerated) {
       return {}
     } else {
+      if (process.env.NODE_ENV === 'test') {
+        // When running as part of tests `yarn rw` isn't available as a bin
+        // In actual projects it will be available
+        return {}
+      }
+
       execa.sync('yarn rw prisma generate', { shell: true, stdio: 'inherit' })
 
       // Purge Prisma Client from node's require cache, so that the newly
