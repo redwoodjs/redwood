@@ -11,4 +11,4 @@ export { MockProviders } from './MockProviders'
 
 export * from './mockRequests'
 
-// @NOTE Intentionally not exporting loadCellMocks here
+// @NOTE Intentionally not exporting findCellMocks here

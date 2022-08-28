@@ -3,7 +3,7 @@
 require('@testing-library/jest-dom')
 require('whatwg-fetch')
 
-const { loadCellMocks } = require('@redwoodjs/testing/dist/web/loadCellMocks')
+const { findCellMocks } = require('@redwoodjs/testing/dist/web/findCellMocks')
 const {
   startMSW,
   setupRequestHandlers,
@@ -19,7 +19,7 @@ global.mockCurrentUser = mockCurrentUser
 
 // NOTE: for performance reasons, we're not using rwjs/internal here
 // This way we can make sure only the imports we require are loaded
-const cellMocks = loadCellMocks(global.__RWJS_TESTROOT_DIR)
+const cellMocks = findCellMocks(global.__RWJS_TESTROOT_DIR)
 
 beforeAll(async () => {
   for (const m of cellMocks) {
