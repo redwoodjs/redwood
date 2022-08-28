@@ -384,6 +384,14 @@ git@github.com: Permission denied (publickey).
 
 Then agent forwarding is not enabled. In this case we recommend this excellent guide from GitHub which walks you through enabling it: https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding
 
+## Deploy Keys
+
+You may not want to use your own personal SSH keys during deploy time. One con to Agent Forwarding is that it requires that you personally (or a deploy system acting on your behalf) SSH into a machine to perform deploys, rather than letting a CI/CD system do them. Another is security: presumably your SSH keys allow full access to your repos, which is more than the read-only access needed for a deploy.
+
+For these reasons you may want to consider using **deploy keys**. The idea is that you generate a public/private keypair that's unique to the server(s), and then let GitHub know about the public key. Now the server(s) can connect to GitHub and clone your codebase without you being involved. And you can lock down access to that key to a single repo with read-only access.
+
+GitHub has a great guide for adding deploy keys to your account: https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
+
 ## Customizing the Prompt
 
 When deploying an app to production it can be very helpful to get a reminder of what server you're connected to, rather that seeing an IP address or random hostname at the prompt:

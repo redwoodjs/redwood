@@ -81,11 +81,4 @@ module.exports = {
       },
     ],
   },
-  // Jest plans to only have one breaking change in v29, and that's making this the default.
-  // See https://jestjs.io/blog/2022/04/25/jest-28#future.
-  // So we may as well do it now so that upgrading to v29 won't be breaking.
-  snapshotFormat: {
-    escapeString: false,
-    printBasicPrototype: false,
-  },
 }

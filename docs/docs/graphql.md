@@ -1629,7 +1629,7 @@ This might be one of our most frequently asked questions of all time. Here's [To
 <!-- TODO -->
 <!-- This https://community.redwoodjs.com/t/how-to-add-resolvetype-resolver-for-interfaces/432/7 -->
 
-## Futher Reading
+## Further Reading
 
 Eager to learn more about GraphQL? Check out some of the resources below:
 - [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week
