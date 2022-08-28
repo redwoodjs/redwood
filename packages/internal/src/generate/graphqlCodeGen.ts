@@ -164,7 +164,7 @@ function getPrismaModels() {
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
   const localPrisma = require('@prisma/client')
-  prismaModels = localPrisma.ModelName
+  prismaModels = localPrisma?.ModelName || {}
 
   // This isn't really something you'd put in the GraphQL API, so
   // we can skip the model.
@@ -213,9 +213,6 @@ function getPluginConfig(side: CodegenSide) {
     showUnusedMappers: false,
     customResolverFn: getResolverFnType(),
     mappers: prismaModels,
-    avoidOptionals: {
-      resolvers: true,
-    },
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
   }
 

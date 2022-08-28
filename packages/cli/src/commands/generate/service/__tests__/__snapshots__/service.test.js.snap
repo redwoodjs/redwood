@@ -466,7 +466,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
+export const User: UserResolvers = {
   identity: (_obj, gqlArgs) =>
     db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
 }
@@ -488,7 +488,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
+export const User: UserResolvers = {
   userProfiles: (_obj, gqlArgs) =>
     db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
 }
@@ -510,7 +510,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
+export const User: UserResolvers = {
   userProfiles: (_obj, gqlArgs) =>
     db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
   identity: (_obj, gqlArgs) =>
