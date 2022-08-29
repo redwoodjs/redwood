@@ -348,7 +348,7 @@ When you started development with `yarn redwood dev` (or `yarn rw dev`) you actu
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488164-37663b8a-0bfa-4d52-8312-8cfaac7c2915.png" />
 
-Not very exciting yet, but check out that "Docs" tab on the far right:
+Not very exciting yet, but select the "Docs" tab on the far right and click on `query: Query`.
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161487889-8525abd6-1b44-4ba6-b637-8a3426f53197.png" />
 
