@@ -24,6 +24,17 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
+jest.mock('@prisma/client', () => {
+  return {
+    ModelName: {
+      PrismaModelOne: 'PrismaModelOne',
+      PrismaModelTwo: 'PrismaModelTwo',
+      Post: 'Post',
+      Todo: 'Todo',
+    },
+  }
+})
+
 test('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 

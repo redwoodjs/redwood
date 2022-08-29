@@ -3,6 +3,7 @@
 exports[`Generate gql typedefs api 1`] = `
 "import { Prisma } from "@prisma/client"
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client';
 import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -155,7 +156,7 @@ export type ResolversTypes = {
   Redwood: ResolverTypeWrapper<Redwood>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Time: ResolverTypeWrapper<Scalars['Time']>;
-  Todo: ResolverTypeWrapper<Todo>;
+  Todo: ResolverTypeWrapper<PrismaTodo>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -172,7 +173,7 @@ export type ResolversParentTypes = {
   Redwood: Redwood;
   String: Scalars['String'];
   Time: Scalars['Time'];
-  Todo: Todo;
+  Todo: PrismaTodo;
 };
 
 export type requireAuthDirectiveArgs = {
