@@ -35,7 +35,7 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
   })
 }
 
-export const Post: Partial<PostResolvers> = {
+export const Post: PostResolvers = {
   author: (_obj, gqlArgs) =>
     db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author(),
 }

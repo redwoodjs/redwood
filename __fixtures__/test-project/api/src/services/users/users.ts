@@ -10,7 +10,7 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
+export const User: UserResolvers = {
   posts: (_obj, gqlArgs) =>
     db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).posts(),
 }
