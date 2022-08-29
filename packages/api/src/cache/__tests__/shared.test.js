@@ -20,5 +20,7 @@ describe('formatCacheKey', () => {
   it('does not appent the prefix more than once', () => {
     expect(formatCacheKey('foo-bar', 'foo')).toEqual('foo-bar')
     expect(formatCacheKey(['foo', 'bar'], 'foo')).toEqual('foo-bar')
+    // needs a - to match against the prefix
+    expect(formatCacheKey('foobar', 'foo')).toEqual('foo-foobar')
   })
 })
