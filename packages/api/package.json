@@ -53,7 +53,7 @@
     "@simplewebauthn/server": "6.2.0",
     "@types/aws-lambda": "8.10.101",
     "@types/crypto-js": "4.1.1",
-    "@types/jsonwebtoken": "8.5.8",
+    "@types/jsonwebtoken": "8.5.9",
     "@types/md5": "2.3.2",
     "@types/pascalcase": "1.0.1",
     "@types/split2": "3.2.1",

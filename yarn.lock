@@ -4991,30 +4991,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-storage-js@npm:0.5.3":
-  version: 0.5.3
-  resolution: "@nhost/hasura-storage-js@npm:0.5.3"
+"@nhost/hasura-storage-js@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@nhost/hasura-storage-js@npm:0.6.0"
   dependencies:
     axios: ^0.27.2
+    form-data: ^4.0.0
     xstate: ^4.32.1
   peerDependencies:
     "@nhost/core": 0.7.6
-  checksum: 47cc94f9c608a3846085cc56edf8527f5107569f6403b6a84c2bb0e5891033e4d8ac3a9cdcb26cbc84cc386e2e02267fdbc714fab09bc6885cb8b113e5035ae2
+  checksum: 2a4e4e3d64f1e03dcdf0c36dd37569e571a36ab5917522dd55f8502fff30633d3dd7994644ab0ef26c84546eb01ef4d2aa45a5d3dae4d0a8ea6536cca92d1ade
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.4.8":
-  version: 1.4.8
-  resolution: "@nhost/nhost-js@npm:1.4.8"
+"@nhost/nhost-js@npm:1.4.10":
+  version: 1.4.10
+  resolution: "@nhost/nhost-js@npm:1.4.10"
   dependencies:
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/hasura-storage-js": 0.5.3
+    "@nhost/hasura-storage-js": 0.6.0
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 1d7fb8b37413260791cf29336fc31c5d56b7d0c222a0f51231678ae4381e7177f04184f6cf2c6f2af2a71793e38794819f2fd543720d6d4ce377d74c1fd885da
+  checksum: 1b467a274f70ac16b1aa6611f220131136743a9d5659e8a8f0818fa9a183c9abf376484ba67cff34915cc5e255ccbda7a3a4de8d528599b7b733f4d784624fc1
   languageName: node
   linkType: hard
 
@@ -6189,7 +6190,7 @@ __metadata:
     "@simplewebauthn/server": 6.2.0
     "@types/aws-lambda": 8.10.101
     "@types/crypto-js": 4.1.1
-    "@types/jsonwebtoken": 8.5.8
+    "@types/jsonwebtoken": 8.5.9
     "@types/md5": 2.3.2
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
@@ -6246,7 +6247,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.4.8
+    "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.7.6
     "@simplewebauthn/browser": 6.0.0
     "@simplewebauthn/typescript-types": 6.0.0
@@ -6734,6 +6735,7 @@ __metadata:
     babel-jest: 29.0.1
     babel-plugin-inline-react-svg: 2.0.1
     core-js: 3.25.0
+    fast-glob: 3.2.11
     jest: 29.0.1
     jest-environment-jsdom: 29.0.1
     jest-watch-typeahead: 2.1.1
@@ -8745,12 +8747,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.8, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
-  version: 8.5.8
-  resolution: "@types/jsonwebtoken@npm:8.5.8"
+"@types/jsonwebtoken@npm:8.5.9, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
+  version: 8.5.9
+  resolution: "@types/jsonwebtoken@npm:8.5.9"
   dependencies:
     "@types/node": "*"
-  checksum: 78b614aa06cb83e6751680448b78daac36bc8f24f7f52b7922e01295ff4b6c2917973e9a359de4219fcc274813f3ae1edc864771dab6cb1de5b68ff8d3d5d611
+  checksum: 4374b0f1b5641d1dd8847fa6f50bd34ec215f3244ea045556d2caa74ed559b2571502db73526bb8fbff038a60ff7e6bf56ffa79679c0b03539b55fda32617a23
   languageName: node
   linkType: hard
 
