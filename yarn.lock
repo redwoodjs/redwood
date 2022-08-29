@@ -5026,6 +5026,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/ed25519@npm:^1.6.1":
+  version: 1.7.0
+  resolution: "@noble/ed25519@npm:1.7.0"
+  checksum: 9ffe60a629ab59fcf96f471e1579e3c1b542b1103f0edf101a5fbb8ff59f0bd50115fc7f38e1da6ad539cb02933a9875b0c87ee74f6c4ebcb816af0209a4ee8a
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -6180,7 +6187,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@prisma/client": 4.2.1
     "@redwoodjs/auth": 2.2.3
-    "@simplewebauthn/server": 5.4.5
+    "@simplewebauthn/server": 6.2.0
     "@types/aws-lambda": 8.10.101
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.9
@@ -6812,30 +6819,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:5.4.5":
-  version: 5.4.5
-  resolution: "@simplewebauthn/server@npm:5.4.5"
+"@simplewebauthn/server@npm:6.2.0":
+  version: 6.2.0
+  resolution: "@simplewebauthn/server@npm:6.2.0"
   dependencies:
+    "@noble/ed25519": ^1.6.1
     "@peculiar/asn1-android": ^2.1.7
     "@peculiar/asn1-schema": ^2.1.7
     "@peculiar/asn1-x509": ^2.1.7
-    "@simplewebauthn/typescript-types": ^5.4.0
+    "@simplewebauthn/typescript-types": ^6.0.0
     base64url: ^3.0.1
     cbor: ^5.1.0
     debug: ^4.3.2
-    elliptic: ^6.5.3
     jsrsasign: ^10.4.0
     jwk-to-pem: ^2.0.4
     node-fetch: ^2.6.0
-    node-rsa: ^1.1.1
-  checksum: 13c7765111ca872dc6e9bc6b7a1ff8c12c300376ef9dbc019b0ff08fe6b110506e28fdad821dfe081815205d53582f34cd81e58e0848bfb07e5bae6305342e3b
+  checksum: f5ae66e51ab5567c9ae4ec104f905a539394594bd2ee1d721715fd4460f583af818afb06d8a41218a04f03209596183b5f84a74f92b4f762860fe5b7b59b2cdb
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:5.4.0, @simplewebauthn/typescript-types@npm:^5.4.0":
+"@simplewebauthn/typescript-types@npm:5.4.0":
   version: 5.4.0
   resolution: "@simplewebauthn/typescript-types@npm:5.4.0"
   checksum: 521e7b34dfda9dbd943599c9c5414b8c7447e1eecb628c4af3604ecdd5089d80e41ba0a0b9c9128803f1b5caa47d459bbd940644a0ae5830365cc17e5d59c41b
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/typescript-types@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@simplewebauthn/typescript-types@npm:6.0.0"
+  checksum: f70c983ddb4613ff234be6ce689ebb500a246de57c1a892de8016e4e858ba81c663bcaee81cf942e1a398485fa23c10527511b733373f20a937c047a017584b0
   languageName: node
   linkType: hard
 
@@ -10726,7 +10739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:^0.2.4, asn1@npm:~0.2.3":
+"asn1@npm:~0.2.3":
   version: 0.2.6
   resolution: "asn1@npm:0.2.6"
   dependencies:
@@ -23266,15 +23279,6 @@ __metadata:
   version: 2.0.6
   resolution: "node-releases@npm:2.0.6"
   checksum: 25b08960cdf6a85075baf312f7cdcb4f9190c87abf42649ac441448a02486df3798363896bf2f0f9c6a1c7e26b3ca298c8a9295f7dd5e5eff6b6a78574a88350
-  languageName: node
-  linkType: hard
-
-"node-rsa@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "node-rsa@npm:1.1.1"
-  dependencies:
-    asn1: ^0.2.4
-  checksum: af3b6534844dfeaa8290a7bc20d5e4d1a134f05d456725e56d75b7661d4d63cd63914ce335ee8889adc2458112b996d4ba8a83ba105bde744a26e61d9160f639
   languageName: node
   linkType: hard
 
