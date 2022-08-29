@@ -237,6 +237,11 @@ function getPluginConfig(side: CodegenSide) {
     showUnusedMappers: false,
     customResolverFn: getResolverFnType(),
     mappers: prismaModels,
+    avoidOptionals: {
+      // We do this, so that service tests can call resolvers without doing an null check
+      // see https://github.com/redwoodjs/redwood/pull/6222#issuecomment-1230156868
+      resolvers: true,
+    },
     contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
   }
 
