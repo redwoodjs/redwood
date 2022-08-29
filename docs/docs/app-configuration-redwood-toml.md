@@ -173,7 +173,7 @@ And then configure them in your API side.
 Here, we setup compression to handle all requests (global), compress responses only if larger than 1K, and to prefer the `deflate` method over `gzip`.
 only allow one IP address to make 100 requests in a five minute window.
 
-Of course, these are just examples and please see the plugin documentaiton for the settings that best meet your needs.
+Of course, these are just examples and please see the plugin documentation for the settings that best meet your needs.
 
 :::important
 You will need to install any custom plug-in packages to your project's `api` workspace.

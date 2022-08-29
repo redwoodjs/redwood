@@ -15,6 +15,7 @@ import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
+import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
@@ -158,13 +159,40 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPrismaModels() {
-  let prismaModels: Record<string, string> = {}
+function getPrismaClient(hasGenerated = false): {
+  ModelName: Record<string, string>
+} {
+  const localPrisma = require('@prisma/client')
 
+  if (!localPrisma.ModelName) {
+    if (hasGenerated) {
+      return { ModelName: {} }
+    } else {
+      execa.sync('yarn rw prisma generate', { shell: true })
+
+      // Purge Prisma Client from node's require cache, so that the newly
+      // generated client gets picked up by any script that uses it
+      Object.keys(require.cache).forEach((key) => {
+        if (
+          key.includes('/node_modules/@prisma/client/') ||
+          key.includes('/node_modules/.prisma/client/')
+        ) {
+          delete require.cache[key]
+        }
+      })
+
+      return getPrismaClient(true)
+    }
+  }
+
+  return localPrisma
+}
+
+function getPrismaModels() {
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
-  const localPrisma = require('@prisma/client')
-  prismaModels = localPrisma?.ModelName || {}
+  const localPrisma = getPrismaClient()
+  const prismaModels = localPrisma.ModelName
 
   // This isn't really something you'd put in the GraphQL API, so
   // we can skip the model.
