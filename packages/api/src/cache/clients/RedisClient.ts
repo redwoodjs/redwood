@@ -1,14 +1,17 @@
 import { createClient } from 'redis'
 import type { RedisClientOptions } from 'redis'
 
+import BaseClient from './BaseClient'
+
 interface SetOptions {
   EX?: number
 }
 
-export class RedisClient {
+export class RedisClient extends BaseClient {
   client
 
   constructor(options: RedisClientOptions) {
+    super()
     this.client = createClient(options)
     this.client.connect()
   }

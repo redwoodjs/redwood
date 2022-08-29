@@ -4,8 +4,8 @@ import type { Logger } from '../logger'
 
 import { CacheTimeoutError } from './errors'
 
-export * from './clients/memcached'
-export * from './clients/redis'
+export * from './clients/MemcachedClient'
+export * from './clients/RedisClient'
 
 export interface CacheClient {
   get(key: string): Promise<{ value: Buffer; flags: Buffer }>
@@ -23,7 +23,7 @@ export interface CreateCacheOptions {
 }
 
 export interface CacheOptions {
-  expires?: number,
+  expires?: number
 }
 
 export interface CacheFindManyOptions extends CacheOptions {
@@ -85,8 +85,8 @@ export const createCache = (
       const result = await Promise.race([
         client.get(cacheKey),
         wait(timeout).then(() => {
-          throw new CacheTimeoutError
-        })
+          throw new CacheTimeoutError()
+        }),
       ])
 
       if (result) {
@@ -142,9 +142,6 @@ export const createCache = (
         orderBy: { [fields.updatedAt]: 'desc' },
         select: { [fields.id]: true, [fields.updatedAt]: true },
       })
-
-      console.info('latest', latest)
-
     } catch (e: any) {
       if (e instanceof PrismaClientValidationError) {
         logger?.error(

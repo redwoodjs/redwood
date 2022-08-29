@@ -1,10 +1,13 @@
 import { Client } from 'memjs'
 import type { Client as ClientType, ClientOptions, ServerOptions } from 'memjs'
 
-export class MemcachedClient {
+import BaseClient from './BaseClient'
+
+export class MemcachedClient extends BaseClient {
   client: ClientType
 
   constructor(serversStr: string, options?: ClientOptions & ServerOptions) {
+    super()
     this.client = Client.create(serversStr, options)
   }
 
