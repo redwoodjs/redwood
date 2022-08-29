@@ -253,9 +253,8 @@ const LoginPage = ({ type }) => {
             <div className="rw-segment-main">
               <div className="rw-form-wrapper">{formToRender()}</div>
             </div>
-
-            {linkToRender()}
           </div>
+          {linkToRender()}
         </div>
       </main>
     </>
