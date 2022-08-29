@@ -205,21 +205,17 @@ function getPrismaModels() {
 
 function getPluginConfig(side: CodegenSide) {
   const prismaModels: Record<string, string> = getPrismaModels()
-  try {
-    Object.keys(prismaModels).forEach((key) => {
-      /** creates an object like this
-       * {
-       *  Post: MergePrismaWithSdlTypes<PrismaPost, MakeRelationsOptional<Post, AllMappedModels>, AllMappedModels>>
-       *  ...
-       * }
-       */
-      prismaModels[
-        key
-      ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
-    })
-  } catch (error) {
-    // This means they've not set up prisma types yet
-  }
+  Object.keys(prismaModels).forEach((key) => {
+    /** creates an object like this
+     * {
+     *  Post: MergePrismaWithSdlTypes<PrismaPost, MakeRelationsOptional<Post, AllMappedModels>, AllMappedModels>>
+     *  ...
+     * }
+     */
+    prismaModels[
+      key
+    ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
+  })
 
   const pluginConfig: CodegenTypes.PluginConfig &
     typescriptResolvers.TypeScriptResolversPluginConfig = {
