@@ -6242,7 +6242,7 @@ __metadata:
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.7.6
-    "@simplewebauthn/browser": 5.4.1
+    "@simplewebauthn/browser": 6.0.0
     "@simplewebauthn/typescript-types": 5.4.0
     "@supabase/supabase-js": 1.35.6
     "@types/netlify-identity-widget": 1.9.3
@@ -6805,10 +6805,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:5.4.1":
-  version: 5.4.1
-  resolution: "@simplewebauthn/browser@npm:5.4.1"
-  checksum: e9e1c1ca59d7cb7a410a2d15cd8fbedab68a5bb3a8a543558a39c0b7fdd224cc1b0cff469e8d1ffe7588f68ab979271f75e960278f439b43d8deed138483294d
+"@simplewebauthn/browser@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@simplewebauthn/browser@npm:6.0.0"
+  checksum: 4fef4765e75ccaec7695214c75bcd57346ad286e2b57b2fff0e3a7e307b48dd61d11669c5856e7a96e65801f5b3791a7cdc0831f188c8d5db9a9b74c3ba03e97
   languageName: node
   linkType: hard
 
