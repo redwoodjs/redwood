@@ -135,13 +135,13 @@ function getLoadDocumentsOptions(filename: string) {
 }
 
 function getPrismaClient(hasGenerated = false): {
-  ModelName: Record<string, string> | undefined
+  ModelName: Record<string, string>
 } {
   const localPrisma = require('@prisma/client')
 
   if (!localPrisma.ModelName) {
     if (hasGenerated) {
-      return { ModelName: undefined }
+      return { ModelName: {} }
     } else {
       execa.sync('yarn rw prisma generate', { shell: true })
 
@@ -169,22 +169,14 @@ function getPluginConfig() {
   const localPrisma = getPrismaClient()
   const prismaModels = localPrisma.ModelName
 
-  if (prismaModels) {
-    Object.keys(prismaModels).forEach((key) => {
-      // Type narrowing in TS doesn't extend into callback functions, so we
-      // have to check prismaModels here again.
-      // This is one of the most commonly raised issues on the TS repo
-      // https://github.com/microsoft/TypeScript/issues/9998
-      if (prismaModels) {
-        prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
-      }
-    })
+  Object.keys(prismaModels).forEach((key) => {
+    prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
+  })
 
-    // This isn't really something you'd put in the GraphQL API, so
-    // we can skip the model.
-    if (prismaModels.RW_DataMigration) {
-      delete prismaModels.RW_DataMigration
-    }
+  // This isn't really something you'd put in the GraphQL API, so
+  // we can skip the model.
+  if (prismaModels.RW_DataMigration) {
+    delete prismaModels.RW_DataMigration
   }
 
   const pluginConfig: CodegenTypes.PluginConfig &
