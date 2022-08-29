@@ -75,7 +75,7 @@ One of the challenges in the GraphQL-Prisma world is the difference in the way t
 - but For Prisma, `null` is a value, and `undefined` means "do nothing"
 
 This is covered in detail in [Prisma's docs](https://www.prisma.io/docs/concepts/components/prisma-client/null-and-undefined), which we strongly recommend reading.
-But the gist of it is that, for Prisma's create and update operations, you may have to make sure `null`s are converted to `undefined` from your GraphQL mutation inputs. You'll have to think carefully about the behaviour you want - if the client is expected to send null, and you expect those fields to be set to null, you can make the field nullable in your Prisma schema. Setting a null will mean removing that value, setting undefined will mean that the field won't be updated.
+But the gist of it is that, for Prisma's create and update operations, you may have to make sure `null`s are converted to `undefined` from your GraphQL mutation inputs. You'll have to think carefully about the behaviour you want - if the client is expected to send null, and you expect those fields to be set to null, you can make the field nullable in your Prisma schema. Sending a null will mean removing that value, sending undefined will mean that the field won't be updated.
 
 For most cases however, you probably want to convert nulls to undefined - one way to do this is to use the `removeNulls` utility function from `@redwoodjs/api`:
 
