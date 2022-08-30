@@ -172,7 +172,7 @@ storybookTest(
     await page.goto(STORYBOOK_URL)
 
     // Click Redwood link in left nav
-    await page.locator('css=[data-item-id=redwood--page]').click()
+    await page.locator('id=redwood--page').click()
 
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/redwood--page`
