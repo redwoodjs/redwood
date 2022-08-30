@@ -818,7 +818,7 @@ This leads to your product cache being rebuilt every hour, even though you haven
 You can globally prefix a string to all of your cache keys:
 
 ```js title=api/src/lib/cache.js
-export const { cache, cacheLatest } = createCache(client, {
+export const { cache, cacheFindMany } = createCache(client, {
   logger,
   timeout: 500,
   // highlight-next-line
@@ -873,7 +873,7 @@ try {
   console.error(`Could not connect to cache: ${e.message}`)
 }
 
-export const { cache, cacheLatest } = createCache(client, {
+export const { cache, cacheFindMany } = createCache(client, {
   logger,
   timeout: 500
 })
@@ -896,7 +896,7 @@ passes it to the Memcached client library, wrapping the Redwood logger call in a
 The second usage of the logger arugment:
 
 ```js
-export const { cache, cacheLatest } = createCache(client, {
+export const { cache, cacheFindMany } = createCache(client, {
   logger,
   timeout: 500
 })
@@ -951,9 +951,23 @@ const post = ({ id }) => {
 }
 ```
 
+:::info
+
+`cache()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver than you can just return the Promise.
+
+:::
+
 ### `cacheFindMany()`
 
 Use this function if you want to cache the results of a `findMany()` call from Prisma, but only until one or more of the records in the set is is updated. This is sort of a best of both worlds cache scenario where you can cache as much data as possible, but also expire and re-cache as soon as any piece of it changes, without going through every record manually to see if it's changed: whenever *any* record changes the cache will be discarded. This function will do a `findFirst()` query to get the latest record that's changed, then use its `id` and `updatedAt` timestamp as the cache key for the full query. Note you still need to include a cache key prefix:
+
+```js
+const post = ({ id }) => {
+  return cacheFindMany(`users`, db.user)
+}
+```
+
+The above is the simplest usage example. If you need to pass a `where`, or any other structure that `findMany()` accepts, include a `conditions` object as your third argument:
 
 ```js
 const post = ({ id }) => {
@@ -981,7 +995,7 @@ If you also want to pass an `expires` option, do it in the same object as `condi
 
 ```js
 const post = ({ id }) => {
-  return cacheLatest(
+  return cacheFindMany(
     `users`, db.user, {
       conditions: { where: { roles: 'admin' } },
       expires: 86400
@@ -990,10 +1004,17 @@ const post = ({ id }) => {
 }
 ```
 
+:::info
+
+`cacheFindMany()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver than you can just return the Promise.
+
+:::
+
 ### Creating Your Own Client
 
 If Memcached or Redis don't serve your needs, you can create your own client adapter. In the Redwood codebase take a look at `packages/api/src/cache/clients` as a reference for writing your own. The interface is extremely simple:
 
-* A constructor that takes whatever arguments you want, passing them through to the client's initialization code
-* An async `get()` function that accepts a `key` argument and returns the data from the cache if found (and run through `JSON.parse()`), otherwise `null`
-* An async `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be real Javascript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library.
+* Extend from the `BaseClient` class.
+* A constructor that takes whatever arguments you want, passing them through to the client's initialization code.
+* A `get()` function that accepts a `key` argument and returns the data from the cache if found (and run through `JSON.parse()`), otherwise `null`.
+* A `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be real Javascript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library.
