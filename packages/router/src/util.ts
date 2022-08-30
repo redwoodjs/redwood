@@ -173,15 +173,6 @@ export const parseSearch = (
 ) => {
   const searchParams = new URLSearchParams(search)
 
-  for (const [reservedName, altName] of Object.entries(reservedSearchParams)) {
-    if (searchParams.has(reservedName)) {
-      // If we're in here, we've narrowed that `searchParams` has `reservedName`
-      // but TS doesn't seem to know that. So, casting:
-      searchParams.set(altName, searchParams.get(reservedName) as string)
-      searchParams.delete(reservedName)
-    }
-  }
-
   return [...searchParams.keys()].reduce(
     (params, key) => ({
       ...params,
@@ -189,10 +180,6 @@ export const parseSearch = (
     }),
     {}
   )
-}
-
-const reservedSearchParams = {
-  ref: 'referrer',
 }
 
 /**
