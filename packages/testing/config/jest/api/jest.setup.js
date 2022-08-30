@@ -1,19 +1,20 @@
 // /* eslint-env jest */
+// @ts-check
 const fs = require('fs')
 const path = require('path')
 
-const { getConfig, getDMMF } = require('@prisma/internals')
-
-const { setContext } = require('@redwoodjs/graphql-server')
-const { getPaths } = require('@redwoodjs/internal/dist/paths')
-const { defineScenario } = require('@redwoodjs/testing/dist/api')
+// @NOTE we do this because jest.setup.js runs every time in each worker
+// while jest-preset runs once. This significantly reduces memory footprint, and testing time
+// The key is to reduce the amount of imports in this file because of how jest handles require caching
+const { getDMMF, getPrismaConfig, rwPaths, setGlobalContext, defineScenario } =
+  global.__RWJS__TEST_IMPORTS
 
 // Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
 // fails on DELETE
 const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
 const DEFAULT_SCENARIO = 'standard'
 const TEARDOWN_CACHE_PATH = path.join(
-  getPaths().generated.base,
+  rwPaths.generated.base,
   'scenarioTeardown.json'
 )
 let teardownOrder = []
@@ -30,7 +31,7 @@ const isIdenticalArray = (a, b) => {
 const configureTeardown = async () => {
   // @NOTE prisma utils are available in cli lib/schemaHelpers
   // But avoid importing them, to prevent memory leaks in jest
-  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
+  const schema = await getDMMF({ datamodelPath: rwPaths.api.dbSchema })
   const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
 
   // check if pre-defined delete order already exists and if so, use it to start
@@ -49,7 +50,7 @@ const configureTeardown = async () => {
 
 const seedScenario = async (scenario) => {
   if (scenario) {
-    const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+    const { db } = require(path.join(rwPaths.api.src, 'lib', 'db'))
 
     const scenarios = {}
     for (const [model, namedFixtures] of Object.entries(scenario)) {
@@ -72,8 +73,8 @@ const teardown = async () => {
   // Don't populate global scope, keep util functions inside teardown
   // determine what kind of quotes are needed around table names in raw SQL
   const getQuoteStyle = async () => {
-    const config = await getConfig({
-      datamodel: fs.readFileSync(getPaths().api.dbSchema).toString(),
+    const config = await getPrismaConfig({
+      datamodel: fs.readFileSync(rwPaths.api.dbSchema).toString(),
     })
 
     switch (config.datasources?.[0]?.provider) {
@@ -86,7 +87,7 @@ const teardown = async () => {
 
   const quoteStyle = await getQuoteStyle()
 
-  const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+  const { db } = require(path.join(rwPaths.api.src, 'lib', 'db'))
 
   for (const modelName of teardownOrder) {
     try {
@@ -152,9 +153,8 @@ const buildScenario =
         if (allScenarios[scenarioName]) {
           scenario = allScenarios[scenarioName]
         } else {
-          throw (
-            ('UndefinedScenario',
-            `There is no scenario named "${scenarioName}" in ${testFilePath}.js`)
+          throw new Error(
+            `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
           )
         }
       }
@@ -172,7 +172,7 @@ global.scenario.only = buildScenario(global.it.only)
 global.defineScenario = defineScenario
 
 global.mockCurrentUser = (currentUser) => {
-  setContext({ currentUser })
+  setGlobalContext({ currentUser })
 }
 
 beforeAll(async () => {
@@ -182,7 +182,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+  const { db } = require(path.join(rwPaths.api.src, 'lib', 'db'))
   await db.$disconnect()
 })
 

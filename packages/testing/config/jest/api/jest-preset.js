@@ -1,9 +1,13 @@
 const path = require('path')
 
+const { getConfig, getDMMF } = require('@prisma/internals')
+
+const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 const {
   getApiSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/api')
 const { getPaths } = require('@redwoodjs/internal/dist/paths')
+const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -45,6 +49,15 @@ module.exports = {
   roots: [path.join(rwjsPaths.api.src)],
   runner: path.join(__dirname, '../jest-serial-runner.js'),
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
+  globals: {
+    __RWJS__TEST_IMPORTS: {
+      getDMMF,
+      getPrismaConfig: getConfig,
+      rwPaths: rwjsPaths,
+      setGlobalContext: setContext,
+      defineScenario,
+    },
+  },
   displayName: {
     color: 'redBright',
     name: 'api',
