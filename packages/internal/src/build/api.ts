@@ -54,7 +54,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
     let nodeFileTraceCompliantCode: string = result.code
     if (process.platform === 'win32') {
       nodeFileTraceCompliantCode = nodeFileTraceCompliantCode.replaceAll(
-        /\\\\/g,
+        '\\\\',
         '/'
       )
     }
