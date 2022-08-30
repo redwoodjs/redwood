@@ -3,7 +3,7 @@ import path from 'path'
 
 import terminalLink from 'terminal-link'
 
-const getSupportedProviders = () =>
+export const getSupportedProviders = () =>
   fs
     .readdirSync(path.resolve(__dirname, 'providers'))
     .map((file) => path.basename(file, '.js'))

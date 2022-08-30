@@ -17,6 +17,8 @@ import {
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
+import { getSupportedProviders } from './auth'
+
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
 const OUTPUT_PATHS = {
