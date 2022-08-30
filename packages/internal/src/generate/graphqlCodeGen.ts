@@ -15,6 +15,7 @@ import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
+import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
@@ -133,23 +134,49 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPluginConfig() {
-  let prismaModels: Record<string, string> = {}
-  try {
-    // Extract the models from the prisma client and use those to
-    // set up internal redirects for the return values in resolvers.
-    const localPrisma = require('@prisma/client')
-    prismaModels = localPrisma.ModelName
-    Object.keys(prismaModels).forEach((key) => {
-      prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
-    })
-    // This isn't really something you'd put in the GraphQL API, so
-    // we can skip the model.
-    if (prismaModels.RW_DataMigration) {
-      delete prismaModels.RW_DataMigration
+function getPrismaClient(hasGenerated = false): {
+  ModelName: Record<string, string>
+} {
+  const localPrisma = require('@prisma/client')
+
+  if (!localPrisma.ModelName) {
+    if (hasGenerated) {
+      return { ModelName: {} }
+    } else {
+      execa.sync('yarn rw prisma generate', { shell: true })
+
+      // Purge Prisma Client from node's require cache, so that the newly
+      // generated client gets picked up by any script that uses it
+      Object.keys(require.cache).forEach((key) => {
+        if (
+          key.includes('/node_modules/@prisma/client/') ||
+          key.includes('/node_modules/.prisma/client/')
+        ) {
+          delete require.cache[key]
+        }
+      })
+
+      return getPrismaClient(true)
     }
-  } catch (error) {
-    // This means they've not set up prisma types yet
+  }
+
+  return localPrisma
+}
+
+function getPluginConfig() {
+  // Extract the models from the prisma client and use those to
+  // set up internal redirects for the return values in resolvers.
+  const localPrisma = getPrismaClient()
+  const prismaModels = localPrisma.ModelName
+
+  Object.keys(prismaModels).forEach((key) => {
+    prismaModels[key] = `@prisma/client#${key} as Prisma${key}`
+  })
+
+  // This isn't really something you'd put in the GraphQL API, so
+  // we can skip the model.
+  if (prismaModels.RW_DataMigration) {
+    delete prismaModels.RW_DataMigration
   }
 
   const pluginConfig: CodegenTypes.PluginConfig &

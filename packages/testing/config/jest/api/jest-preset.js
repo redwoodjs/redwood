@@ -1,9 +1,9 @@
 const path = require('path')
 
 const {
-  getPaths,
   getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+} = require('@redwoodjs/internal/dist/build/babel/api')
+const { getPaths } = require('@redwoodjs/internal/dist/paths')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -80,12 +80,5 @@ module.exports = {
         configFile: path.resolve(__dirname, './apiBabelConfig.js'),
       },
     ],
-  },
-  // Jest plans to only have one breaking change in v29, and that's making this the default.
-  // See https://jestjs.io/blog/2022/04/25/jest-28#future.
-  // So we may as well do it now so that upgrading to v29 won't be breaking.
-  snapshotFormat: {
-    escapeString: false,
-    printBasicPrototype: false,
   },
 }

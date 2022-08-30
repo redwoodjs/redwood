@@ -92,7 +92,10 @@ export const generated = (args) => {
   return <SinglePageLayout {...args} />
 }
 
-export default { title: 'Layouts/SinglePageLayout' }
+export default {
+  title: 'Layouts/SinglePageLayout',
+  component: SinglePageLayout,
+}
 "
 `;
 
@@ -112,7 +115,10 @@ export const generated = (args) => {
   return <AppLayout {...args} />
 }
 
-export default { title: 'Layouts/AppLayout' }
+export default {
+  title: 'Layouts/AppLayout',
+  component: AppLayout,
+}
 "
 `;
 

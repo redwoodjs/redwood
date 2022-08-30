@@ -44,9 +44,9 @@ A single CLI command will get you everything you need to get dbAuth working, min
 yarn rw setup auth dbAuth
 ```
 
-You will be prompted to ask if you want to enable **WebAuthn** support. WebAuthn is an open standard for allowing authentication from devides like TouchID, FaceID, USB fingerprint scanners, ane more. If you think you want to use WebAuthn, enter `y` at this prompt and read on configuration options.
+You will be prompted to ask if you want to enable **WebAuthn** support. WebAuthn is an open standard for allowing authentication from devices like TouchID, FaceID, USB fingerprint scanners, and more. If you think you want to use WebAuthn, enter `y` at this prompt and read on configuration options.
 
-You can also add WebAuthn to an existing dbAuth install.  [Read more about WebAuthn usage and config below](#webauthn).
+You can also add WebAuthn to an existing dbAuth install. [Read more about WebAuthn usage and config below](#webauthn).
 
 Read the post-install instructions carefully as they contain instructions for adding database fields for the hashed password and salt, as well as how to configure the auth serverless function based on the name of the table that stores your user data. Here they are, but could change in future releases (these do not include the additional WebAuthn required options, make sure you get those from the output of the `setup` command):
 

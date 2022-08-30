@@ -57,6 +57,10 @@ export const setupRequestHandlers = () => {
   }
 }
 
+export const closeServer = () => {
+  SERVER_INSTANCE.close()
+}
+
 export const registerHandler = (handler: RequestHandler) => {
   if (!SERVER_INSTANCE) {
     // The server hasn't started yet, so add the request handler to the queue.

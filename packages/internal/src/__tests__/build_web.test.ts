@@ -31,7 +31,7 @@ test('web files are prebuilt (no prerender)', async () => {
     .map(cleanPaths)
   // Builds non-nested functions
   expect(relativePaths).toMatchInlineSnapshot(`
-    Array [
+    [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",

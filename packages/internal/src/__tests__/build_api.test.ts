@@ -515,7 +515,7 @@ test('core-js polyfill list', () => {
    * Some "ES Next" polyfills have landed in v12+ Node.js versions.
    */
   expect(list).toMatchInlineSnapshot(`
-    Array [
+    [
       "es.regexp.flags",
       "es.typed-array.set",
       "esnext.aggregate-error",

@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/internal')
+const { getPaths } = require('@redwoodjs/internal/dist/paths')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -11,9 +11,6 @@ module.exports = {
   rootDir: rwjsPaths.base,
   roots: [path.join(rwjsPaths.web.src)],
   testEnvironment: path.join(__dirname, './RedwoodWebJestEnv.js'),
-  testEnvironmentOptions: {
-    url: 'https://redwoodjs.com',
-  },
   displayName: {
     color: 'blueBright',
     name: 'web',
@@ -22,6 +19,7 @@ module.exports = {
     __REDWOOD_API_URL: '',
     __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
+    __RWJS_TESTROOT_DIR: path.join(rwjsPaths.web.src), // used in jest setup to load mocks
   },
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
@@ -76,11 +74,4 @@ module.exports = {
     ],
   },
   resolver: path.resolve(__dirname, './resolver.js'),
-  // Jest plans to only have one breaking change in v29, and that's making this the default.
-  // See https://jestjs.io/blog/2022/04/25/jest-28#future.
-  // So we may as well do it now so that upgrading to v29 won't be breaking.
-  snapshotFormat: {
-    escapeString: false,
-    printBasicPrototype: false,
-  },
 }
