@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+/* eslint-env node, es6*/
 
 const post = `model Post {
   id        Int      @id @default(autoincrement())

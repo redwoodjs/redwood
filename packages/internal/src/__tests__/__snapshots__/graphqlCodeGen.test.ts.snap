@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Generate gql typedefs api 1`] = `
-"import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+"import { Prisma } from "@prisma/client"
+import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
+import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -11,9 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult extends PromiseLike<infer TResultAwaited>
-      ? Promise<Partial<TResultAwaited>>
-      : Promise<Partial<TResult>> | Partial<TResult>;
+    ) => TResult | Promise<TResult>
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -23,11 +24,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
-  Date: string;
-  DateTime: string;
+  Date: Date | string;
+  DateTime: Date | string;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
-  Time: string;
+  Time: Date | string;
 };
 
 export type Mutation = {
@@ -54,18 +55,28 @@ export type MutationupdateTodoStatusArgs = {
   status: Scalars['String'];
 };
 
+/** About the Redwood queries. */
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
+  /** Fetches the Redwood root schema. */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
+/**
+ * The RedwoodJS Root Schema
+ *
+ * Defines details about RedwoodJS such as the current user and version information.
+ */
 export type Redwood = {
   __typename?: 'Redwood';
+  /** The current user. */
   currentUser?: Maybe<Scalars['JSON']>;
+  /** The version of Prisma. */
   prismaVersion?: Maybe<Scalars['String']>;
+  /** The version of Redwood. */
   version?: Maybe<Scalars['String']>;
 };
 
@@ -76,6 +87,8 @@ export type Todo = {
   status: Scalars['String'];
 };
 
+type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
+type AllMappedModels = MaybeOrArrayOfMaybe<Todo>
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -146,7 +159,7 @@ export type ResolversTypes = {
   Redwood: ResolverTypeWrapper<Redwood>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Time: ResolverTypeWrapper<Scalars['Time']>;
-  Todo: ResolverTypeWrapper<Todo>;
+  Todo: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -163,7 +176,7 @@ export type ResolversParentTypes = {
   Redwood: Redwood;
   String: Scalars['String'];
   Time: Scalars['Time'];
-  Todo: Todo;
+  Todo: MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>;
 };
 
 export type requireAuthDirectiveArgs = {
@@ -248,7 +261,8 @@ export type DirectiveResolvers<ContextType = RedwoodGraphQLContext> = {
 `;
 
 exports[`Generate gql typedefs web 1`] = `
-"export type Maybe<T> = T | null;
+"import { Prisma } from "@prisma/client"
+export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -292,18 +306,28 @@ export type MutationupdateTodoStatusArgs = {
   status: Scalars['String'];
 };
 
+/** About the Redwood queries. */
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
+  /** Fetches the Redwood root schema. */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
+/**
+ * The RedwoodJS Root Schema
+ *
+ * Defines details about RedwoodJS such as the current user and version information.
+ */
 export type Redwood = {
   __typename?: 'Redwood';
+  /** The current user. */
   currentUser?: Maybe<Scalars['JSON']>;
+  /** The version of Prisma. */
   prismaVersion?: Maybe<Scalars['String']>;
+  /** The version of Redwood. */
   version?: Maybe<Scalars['String']>;
 };
 

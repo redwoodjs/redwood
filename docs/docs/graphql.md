@@ -407,9 +407,48 @@ query {
 }
 ```
 
-How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/makeMergedSchema/rootSchema.ts#L22-L38). The root schema is where things like currentUser are defined.
+How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts). The root schema is where things like currentUser are defined:
 
-Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/34a6444432b409774d54be17789a7109add9709a/packages/api/src/makeMergedSchema/rootSchema.ts#L31-L45).
+```graphql
+  scalar BigInt
+  scalar Date
+  scalar Time
+  scalar DateTime
+  scalar JSON
+  scalar JSONObject
+
+  type Redwood {
+    version: String
+    currentUser: JSON
+    prismaVersion: String
+  }
+
+  type Query {
+    redwood: Redwood
+  }
+```
+
+Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts):
+
+```ts
+export const resolvers: Resolvers = {
+  BigInt: BigIntResolver,
+  Date: DateResolver,
+  Time: TimeResolver,
+  DateTime: DateTimeResolver,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
+  Query: {
+    redwood: () => ({
+      version: redwoodVersion,
+      prismaVersion: prismaVersion,
+      currentUser: (_args: any, context: GlobalContext) => {
+        return context?.currentUser
+      },
+    }),
+  },
+}
+```
 
 <!-- ### The query workflow
 
@@ -677,7 +716,7 @@ export const schema = gql`
 
 2. Import the scalar's definition and resolver and pass them to your GraphQLHandler via the `schemaOptions` property:
 
-```tsx {11-14} title="api/src/functions/graphql.ts"
+```tsx {10-13} title="api/src/functions/graphql.ts"
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
 // ...
@@ -1101,7 +1140,7 @@ Some of the biggest security improvements we'll be making revolve around Service
 
 Because it is often useful to ask a GraphQL schema for information about what queries it supports, GraphQL allows us to do so using the [introspection](https://graphql.org/learn/introspection/) system.
 
-The [GraphQL Playground](https://github.com/graphql/graphql-playground) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
+The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
@@ -1253,6 +1292,332 @@ export const getWeather = async ({ input }: WeatherInput) {
 }
 ```
 
+## Self-Documenting GraphQL API
+
+RedwoodJS helps you document your GraphQL API by generating commented SDL used for GraphiQL and the GraphQL Playground explorer -- as well as can be turned into API docs using tools like [Docusaurus](#use-in-docusaurus).
+
+If you specify the SDL generator with its `--docs` option, any comments (which the [GraphQL spec](https://spec.graphql.org/October2021/#sec-Descriptions) calls "descriptions") will be incorporated into your RedwoodJS app's `graphql.schema` file when generating types.
+
+If you comment your Prisma schema models, its fields, or enums, the SDL generator will use those comments as the documentation.
+
+If there is no Prisma comment, then the SDL generator will default a comment that you can then edit.
+
+:::note
+If you re-generate the SDL, any custom comments will be overwritten.
+However, if you make those edits in your Prisma schema, then those will be used.
+:::
+
+### Prisma Schema Comments
+
+Your Prisma schema is documented with triple slash comments (`///`) that precedes:
+
+* Model names
+* Enum names
+* each Model field name
+
+```
+/// A blog post.
+model Post {
+  /// The unique identifier of a post.
+  id        Int      @id @default(autoincrement())
+  /// The title of a post.
+  title     String
+  /// The content of a post.
+  body      String
+  /// When the post was created.
+  createdAt DateTime @default(now())
+}
+
+/// A list of allowed colors.
+enum Color {
+  RED
+  GREEN
+  BLUE
+}
+```
+
+### SDL Comments
+
+When used with `--docs` option, [SDL generator](./cli-commands.md#generate-sdl) adds comments for:
+
+* Directives
+* Queries
+* Mutations
+* Input Types
+
+:::note
+By default, the `--docs` option to the SDL generator is false and comments are not created.
+:::
+
+Comments [enclosed in `"""` or `"`]([GraphQL spec](https://spec.graphql.org/October2021/#sec-Descriptions) in your sdl files will be included in the generated GraphQL schema at the root of your project (.redwood/schema.graphql).
+
+```
+"""
+Use to check whether or not a user is authenticated and is associated
+with an optional set of roles.
+"""
+directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+
+"""Use to skip authentication checks and allow public access."""
+directive @skipAuth on FIELD_DEFINITION
+
+"""
+Autogenerated input type of InputPost.
+"""
+input CreatePostInput {
+  "The content of a post."
+  body: String!
+
+  "The title of a post."
+  title: String!
+}
+
+"""
+Autogenerated input type of UpdatePost.
+"""
+input UpdatePostInput {
+  "The content of a post."
+  body: String
+
+  "The title of a post."
+  title: String
+}
+
+"""
+A blog post.
+"""
+type Post {
+  "The content of a post."
+  body: String!
+
+  "Description for createdAt."
+  createdAt: DateTime!
+
+  "The unique identifier of a post."
+  id: Int!
+
+  "The title of a post."
+  title: String!
+}
+
+"""
+About mutations
+"""
+type Mutation {
+  "Creates a new Post."
+  createPost(input: CreatePostInput!): Post!
+
+  "Deletes an existing Post."
+  deletePost(id: Int!): Post!
+
+  "Updates an existing Post."
+  updatePost(id: Int!, input: UpdatePostInput!): Post!
+}
+
+"""
+About queries
+"""
+type Query {
+  "Fetch a Post by id."
+  post(id: Int!): Post
+
+  "Fetch Posts."
+  posts: [Post!]!
+}
+```
+
+#### Root Schema
+
+Documentation is also generated for the Redwood Root Schema that defines details about Redwood such as the current user and version information.
+```
+type Query {
+  "Fetches the Redwood root schema."
+  redwood: Redwood
+}
+
+"""
+The Redwood Root Schema
+
+Defines details about Redwood such as the current user and version information.
+"""
+type Redwood {
+  "The current user."
+  currentUser: JSON
+
+  "The version of Prisma."
+  prismaVersion: String
+
+  "The version of Redwood."
+  version: String
+}
+
+scalar BigInt
+scalar Date
+scalar DateTime
+scalar JSON
+scalar JSONObject
+scalar Time
+
+```
+
+### Preview in GraphiQL
+
+The [GraphQL Playground aka GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at [http://localhost:8911/graphql](http://localhost:8911/graphql) when your dev server is running.
+
+The documentation generated is present when exploring the schema.
+
+#### Queries
+
+<img alt="graphiql-queries" src="/img/graphql-api-docs/graphiql-queries.png" width="400" />
+
+#### Mutations
+
+<img alt="graphiql-mutations" src="/img/graphql-api-docs/graphiql-mutations.png" width="400" />
+
+#### Model Types
+
+<img alt="graphiql-type" src="/img/graphql-api-docs/graphiql-type.png" width="400" />
+
+#### Input Types
+
+<img alt="graphiql-input-type" src="/img/graphql-api-docs/graphiql-input-type.png" width="400" />
+
+### Use in Docusaurus
+
+If your project uses [Docusaurus](https://docusaurus.io), the generated commented SDL can be used to publish documentation using the [graphql-markdown](https://graphql-markdown.github.io) plugin.
+
+#### Basic Setup
+
+The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
+
+1. Add `docs` to your `workspaces` in the project's `package.json`:
+
+```
+  "workspaces": {
+    "packages": [
+      "docs",
+      "api",
+      "web",
+      "packages/*"
+    ]
+  },
+```
+
+2. Create a `docs` directory at the root of your project
+
+```terminal
+mcd docs
+`
+
+3. Install the plugin
+
+```terminal
+yarn add @edno/docusaurus2-graphql-doc-generator graphql
+```
+
+4. Update `docs/docusaurus.config.js` and configure the plugin and navbar
+
+```
+// docs/docusaurus.config.js
+// ...
+  plugins: [
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+      {
+        schema: '../.redwood/schema.graphql',
+        rootPath: './docs',
+        baseURL: 'graphql-api',
+        homepage: './docs/graphql-api/generated.md',
+        linkRoot: '../..',
+      },
+    ],
+  ],
+// ...
+themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      navbar: {
+        title: 'My Site',
+        logo: {
+          alt: 'My Site Logo',
+          src: 'img/logo.svg',
+        },
+        items: [
+          {
+            to: '/docs/graphql-api', // adjust the location depending on your baseURL (see configuration)
+            label: 'GraphQL API', // change the label with yours
+            position: 'left',
+          },
+//...
+```
+5. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
+
+```
+// docs/sidebars.js
+/**
+ * Creating a sidebar enables you to:
+ *  - create an ordered group of docs
+ *  - render a sidebar for each doc of that group
+ *  - provide next/previous navigation
+ *
+ * The sidebars can be generated from the filesystem, or explicitly defined here.
+ *
+ * Create as many sidebars as you want.
+ */
+
+// @ts-check
+
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+const sidebars = {
+  // By default, Docusaurus generates a sidebar from the docs folder structure
+  tutorialSidebar: [
+    {
+      type: 'autogenerated',
+      dirName: '.',
+    },
+  ],
+  ...require('./docs/graphql-api/sidebar-schema.js'),
+}
+
+module.exports = sidebars
+```
+
+6. Generate the docs
+
+`yarn docusaurus graphql-to-doc`
+
+:::tip
+You can overwrite the generated docs and bypass the plugin's diffMethod use `--force`.
+
+``yarn docusaurus graphql-to-doc --force`
+:::
+
+7. Start Docusaurus
+
+```
+yarn start
+```
+
+#### Example Screens
+
+##### Schema Documentation
+![graphql-doc-example-main](/img/graphql-api-docs/schema-doc.png)
+
+##### Type Example
+![graphql-doc-example-type](/img/graphql-api-docs/contact-type.png)
+
+##### Query Example
+![graphql-doc-example-query](/img/graphql-api-docs/contact-query.png)
+
+##### Mutation Example
+![graphql-doc-example-mutation](/img/graphql-api-docs/schema-mutation.png)
+
+##### Directive Example
+![graphql-doc-example-directive](/img/graphql-api-docs/schema-directive.png)
+
+##### Scalar Example
+![graphql-doc-example-scalar](/img/graphql-api-docs/schema-scalar.png)
+
 ## FAQ
 
 ### Why Doesn't Redwood Use Something Like Nexus?
@@ -1264,7 +1629,7 @@ This might be one of our most frequently asked questions of all time. Here's [To
 <!-- TODO -->
 <!-- This https://community.redwoodjs.com/t/how-to-add-resolvetype-resolver-for-interfaces/432/7 -->
 
-## Futher Reading
+## Further Reading
 
 Eager to learn more about GraphQL? Check out some of the resources below:
 - [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week

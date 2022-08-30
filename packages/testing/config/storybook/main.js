@@ -4,11 +4,11 @@ const path = require('path')
 const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
+const { getConfig } = require('@redwoodjs/internal/dist/config')
 const {
-  importStatementPath,
-  getConfig,
   getPaths,
-} = require('@redwoodjs/internal')
+  importStatementPath,
+} = require('@redwoodjs/internal/dist/paths')
 
 const config = getConfig()
 
@@ -106,9 +106,6 @@ const baseConfig = {
     sbConfig.module.rules = [...rwConfig.module.rules, sbMdxRule].filter(
       Boolean
     )
-
-    // ** EXTERNALS *
-    sbConfig.externals = rwConfig.externals
 
     // ** NODE **
     sbConfig.node = rwConfig.node

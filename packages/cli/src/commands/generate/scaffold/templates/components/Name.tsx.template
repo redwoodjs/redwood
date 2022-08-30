@@ -4,10 +4,7 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import type {
-  ${singularPascalName} as ${singularPascalName}Type,
-  Delete${singularPascalName}MutationVariables
-} from 'types/graphql'
+import type { Delete${singularPascalName}MutationVariables, Find${singularPascalName}ById } from 'types/graphql'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
@@ -50,11 +47,11 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface ${singularPascalName}Props {
-  ${singularCamelName}: ${singularPascalName}Type
+interface Props {
+  ${singularCamelName}: NonNullable<Find${singularPascalName}ById['${singularCamelName}']>
 }
 
-const ${singularPascalName} = ({ ${singularCamelName} }: ${singularPascalName}Props) => {
+const ${singularPascalName} = ({ ${singularCamelName} }: Props) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')
@@ -76,7 +73,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: ${singularPascalName}Pr
       <div className="rw-segment">
         <header className="rw-segment-header">
           <h2 className="rw-heading rw-heading-secondary">
-            ${singularPascalName} {${singularCamelName}?.id} Detail
+            ${singularPascalName} {${singularCamelName}.id} Detail
           </h2>
         </header>
         <table className="rw-table">
@@ -94,7 +91,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: ${singularPascalName}Pr
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.${editRouteName}({ id: ${singularCamelName}?.id })}
+          to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -102,7 +99,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: ${singularPascalName}Pr
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(${singularCamelName}?.id)}
+          onClick={() => onDeleteClick(${singularCamelName}.id)}
         >
           Delete
         </button>

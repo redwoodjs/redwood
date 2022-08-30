@@ -67,21 +67,6 @@ We realize that this isn't a perfect solution, but the tension comes from the fa
 
 :::
 
-### Returning Prisma's `findUnique` operation in Services
-
-In strict mode, TypeScript becomes a lot more pedantic about null checks. One place where you'll encounter this in particular is when returning Prisma's `findUnique` operation in Service functions.
-
-The tension here is that Prisma returns promises in the form of `Promise<Model | null>`, but the resolver types expect it in the form of `Promise<Model> | Promise<null>`. At runtime, this has no effect. But the TS compiler needs to be told that it's okay:
-
-```ts
-export const post: QueryResolvers['post'] = ({ id }) => {
-  return db.post.findUnique({
-    where: { id },
-    // highlight-next-line
-  }) as Promise<Post> | Promise<null>
-}
-```
-
 ### `null` and `undefined` in Services
 
 One of the challenges in the GraphQL-Prisma world is the difference in the way they treats optionals:
@@ -90,25 +75,102 @@ One of the challenges in the GraphQL-Prisma world is the difference in the way t
 - but For Prisma, `null` is a value, and `undefined` means "do nothing"
 
 This is covered in detail in [Prisma's docs](https://www.prisma.io/docs/concepts/components/prisma-client/null-and-undefined), which we strongly recommend reading.
-But the gist of it is that, for Prisma's create and update operations, you have to make sure `null`s are converted to `undefined` from your GraphQL mutation inputs.
-One way to do this is to use the [dnull](https://www.npmjs.com/package/dnull) package:
+But the gist of it is that, for Prisma's create and update operations, you may have to make sure `null`s are converted to `undefined` from your GraphQL mutation inputs. You'll have to think carefully about the behaviour you want - if the client is expected to send null, and you expect those fields to be set to null, you can make the field nullable in your Prisma schema. Sending a null will mean removing that value, sending undefined will mean that the field won't be updated.
 
-```
-yarn workspace api add dnull
-```
+For most cases however, you probably want to convert nulls to undefined - one way to do this is to use the `removeNulls` utility function from `@redwoodjs/api`:
 
 ```ts title=api/src/services/users.ts
 // highlight-next-line
-import { dnull } from "dnull"
+import { removeNulls } from "@redwoodjs/api"
 
 export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
   return db.user.update({
     // highlight-next-line
-    data: dnull(input),
+    data: removeNulls(input),
     where: { id },
   })
 }
 ```
+
+### Relation resolvers in services
+
+Let's say you have a `Post` model in your `schema.prisma` that has an `author` field which is a relation to the `Author` model. It's a required field.
+This is what the `Post` model's SDL would probably look like:
+
+```graphql post.sdl.ts
+export const schema = gql`
+  type Post {
+    id: Int!
+    title: String!
+    // highlight-next-line
+    author: Author! # 👈 This is a relation; the `!` makes it a required field
+    authorId: Int!
+    # ...
+  }
+```
+
+When you generate SDLs or Services, the resolver for `author` is generated at the bottom of `post.service.ts` on the `Post` object.
+Because `Post.author` can't be null (we said it's required in the Prisma schema)—and because `findUnique` always returns a nullable value—in strict mode, you'll have to tweak this resolver:
+
+```ts Post.service.ts
+// Option 1: Override the type
+// The typecasting here is OK. `gqlArgs.root` is the post that was _already found_
+// by the `post` function in your Services, so `findUnique` will always find it!
+export const Post: Partial<PostResolvers> = {
+  author: (_obj, gqlArgs) =>
+    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Promise<Author>, // 👈
+}
+
+// Option 2: Check for null
+export const Post: Partial<PostResolvers> = {
+  author: async (_obj, gqlArgs) => {
+    // Here, `findUnique` can return `null`, so we have to handle it:
+    const maybeAuthor = await db.post
+      .findUnique({ where: { id: gqlArgs?.root?.id } })
+      .author()
+
+    // highlight-start
+    if (!maybeAuthor) {
+      throw new Error('Could not resolve author')
+    }
+    // highlight-end
+
+    return maybeAuthor
+  },
+}
+```
+
+
+:::tip An optimization tip
+
+If the relation truly is required, it may make more sense to include `author` in your `post` Service's Prisma query and modify the `Post.author` resolver accordingly:
+
+```ts
+export const post: QueryResolvers['post'] = ({ id }) => {
+  return db.post.findUnique({
+    // highlight-start
+    include: {
+      author: true,
+    },
+    // highlight-end
+    where: { id },
+  })
+}
+
+export const Post: Partial<PostResolvers> = {
+  author: async (_obj, gqlArgs) => {
+   // highlight-start
+    if (gqlArgs?.root.author) {
+      return gqlArgs.root.author
+    }
+  // highlight-end
+
+  const maybeAuthor = await db.post.findUnique(// ...
+```
+
+This will also help Prisma make a more optimized query to the database, since every time a field on `Post` is requested, the post's author is too! The tradeoff here is that any query to `Post` (even if the author isn't requested) will mean an unnecessary database query to include the author.
+
+:::
 
 ### Roles checks for CurrentUser in `src/lib/auth`
 
@@ -133,7 +195,7 @@ You'll have to adjust the generated code depending on your User model.
 
 #### A. If your project does not use roles
 
-If your `getCurrentUser` doesn't return `roles`, and you don't use this functionality, you can safely remove the `hasRoles` function.
+If your `getCurrentUser` doesn't return `roles`, and you don't use this functionality, you can safely remove the `hasRole` function.
 
 #### B. Roles on current user is a string
 
@@ -158,11 +220,9 @@ export const hasRole = (roles: AllowedRoles): boolean => {
 -      return currentUserRoles?.some((allowedRole) =>
 -        roles.includes(allowedRole)
 -      )
--    } else if (typeof context?.currentUser?.roles === 'string') {
+-    } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
-      return roles.some(
-        (allowedRole) => context.currentUser?.roles === allowedRole
-      )
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
 -    }
   }
 

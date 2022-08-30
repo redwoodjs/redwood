@@ -96,9 +96,9 @@ A guideline for when to use cells is if your component needs some data from the 
 
 :::tip Wait... what are those types?
 
-Redwood comes with some built-in utility types. You can see two of them in the example above: `CellSuccessProps` and `CellFailureProps`. Read more about them [here](typescript.md).
+Redwood comes with some built-in utility types. You can see two of them in the example above: `CellSuccessProps` and `CellFailureProps`. Read more about them [here](typescript/utility-types.md).
 
-Also notice the `FindPosts` type imported from `types/graphql`. This and other types are generated for you automatically—when you have the dev server running—based on the GraphQL query in your Cell. More about generated types [here](typescript.md).
+Also notice the `FindPosts` type imported from `types/graphql`. This and other types are generated for you automatically—when you have the dev server running—based on the GraphQL query in your Cell. More about generated types [here](typescript/generated-types.md).
 
 :::
 
@@ -317,6 +317,24 @@ export const Success = ({ posts }: CellSuccessProps<ArticlesQuery>) => {
 
 </TabItem>
 </Tabs>
+
+<ShowForTs>
+
+:::tip Using generated types
+
+At this point, you might see an error in your Cell while trying to import from `types/graphql`: "The type ArticlesQuery does not exist"
+
+When you have the dev server (via `yarn rw dev`) running, the CLI watches files for changes and triggers type generation automatically, but you can trigger it manually too by running:
+
+```bash
+yarn rw g types
+```
+
+This looks at your Cell's `QUERY` and—as long as it's valid—tries to automatically create a TypeScript type for you to use in your code.
+
+:::
+
+</ShowForTs>
 
 Let's plug this cell into our `HomePage` and see what happens:
 
