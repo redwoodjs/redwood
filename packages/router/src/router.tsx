@@ -113,14 +113,10 @@ const InternalRoute = ({
 
   const Page = activePageContext.loadingState[path]?.page || (() => null)
 
-  // There are two special props in react: `ref` and `key`.
-  // (See https://reactjs.org/warnings/special-props.html.)
-  //
-  // It's very possible that the URL has `ref` as a search param
-  // (e.g. https://redwoodjs.com/?ref=producthunt).
-  //
-  // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`,
-  // otherwise the page will break. (The page won't actually break if `key` is passed, but it feels unclean.)
+  // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
+  // It's very possible that the URL has `ref` as a search param (e.g. https://redwoodjs.com/?ref=producthunt).
+  // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
+  // (The page won't actually break if `key` is passed, but it feels unclean.)
   // If users want to access them, they can use `useParams`.
   ;['ref', 'key'].forEach((specialProp) => {
     if (Object.hasOwn(allParams, specialProp)) {
