@@ -118,11 +118,8 @@ const InternalRoute = ({
   // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
   // (The page won't actually break if `key` is passed, but it feels unclean.)
   // If users want to access them, they can use `useParams`.
-  ;['ref', 'key'].forEach((specialProp) => {
-    if (Object.hasOwn(allParams, specialProp)) {
-      delete allParams[specialProp]
-    }
-  })
+  delete allParams['ref']
+  delete allParams['key']
 
   // Level 3/3 (InternalRoute)
   return <Page {...allParams} />
