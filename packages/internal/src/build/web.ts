@@ -39,7 +39,7 @@ export const prebuildWebFiles = (srcFiles: string[], flags?: Flags) => {
     let nodeFileTraceCompliantCode: string = result.code
     if (process.platform === 'win32') {
       nodeFileTraceCompliantCode = nodeFileTraceCompliantCode.replaceAll(
-        /\\\\/g,
+        '\\\\',
         '/'
       )
     }
