@@ -3,11 +3,13 @@
 const fs = require('fs')
 const path = require('path')
 
+const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
+const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
+
 // @NOTE we do this because jest.setup.js runs every time in each worker
 // while jest-preset runs once. This significantly reduces memory footprint, and testing time
 // The key is to reduce the amount of imports in this file because of how jest handles require caching
-const { getDMMF, getPrismaConfig, rwPaths, setGlobalContext, defineScenario } =
-  global.__RWJS__TEST_IMPORTS
+const { getDMMF, getPrismaConfig, rwPaths } = global.__RWJS__TEST_IMPORTS
 
 // Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
 // fails on DELETE
@@ -49,6 +51,7 @@ const configureTeardown = async () => {
 }
 
 const seedScenario = async (scenario) => {
+  console.log('in seed Scenario', scenario)
   if (scenario) {
     const { db } = require(path.join(rwPaths.api.src, 'lib', 'db'))
 
@@ -172,7 +175,7 @@ global.scenario.only = buildScenario(global.it.only)
 global.defineScenario = defineScenario
 
 global.mockCurrentUser = (currentUser) => {
-  setGlobalContext({ currentUser })
+  setContext({ currentUser })
 }
 
 beforeAll(async () => {

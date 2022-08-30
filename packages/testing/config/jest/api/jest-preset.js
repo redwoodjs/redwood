@@ -2,12 +2,10 @@ const path = require('path')
 
 const { getConfig, getDMMF } = require('@prisma/internals')
 
-const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 const {
   getApiSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/api')
 const { getPaths } = require('@redwoodjs/internal/dist/paths')
-const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -54,8 +52,7 @@ module.exports = {
       getDMMF,
       getPrismaConfig: getConfig,
       rwPaths: rwjsPaths,
-      setGlobalContext: setContext,
-      defineScenario,
+      // setGlobalContext: setContext,
     },
   },
   displayName: {
