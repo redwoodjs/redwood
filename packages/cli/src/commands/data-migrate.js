@@ -1,11 +1,14 @@
+import terminalLink from 'terminal-link'
+
 export const command = 'data-migrate <command>'
 export const aliases = ['dm', 'dataMigrate']
 export const description = 'Migrate the data in your database'
-import terminalLink from 'terminal-link'
 
-export const builder = (yargs) =>
+export async function builder(yargs) {
+  const dataMigrateInstallCommand = await import('./dataMigrate/install')
+  const dataMigrateUpCommand = await import('./dataMigrate/up')
+
   yargs
-    .commandDir('./dataMigrate')
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -13,3 +16,6 @@ export const builder = (yargs) =>
         'https://redwoodjs.com/docs/cli-commands#datamigrate'
       )}`
     )
+    .command(dataMigrateInstallCommand)
+    .command(dataMigrateUpCommand)
+}

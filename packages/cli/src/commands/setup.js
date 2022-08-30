@@ -3,21 +3,22 @@ import terminalLink from 'terminal-link'
 import detectRwVersion from '../middleware/detectProjectRwVersion'
 
 export const command = 'setup <command>'
+
 export const description = 'Initialize project config and install packages'
 
-export const builder = (yargs) =>
+export async function builder(yargs) {
+  const setupAuthCommand = await import('./setup/auth/auth')
+  const setupCustomWebIndexCommand = await import(
+    './setup/custom-web-index/custom-web-index'
+  )
+  const setupGeneratorCommand = await import('./setup/generator/generator')
+  const setupGraphiqlCommand = await import('./setup/graphiql/graphiql')
+  const setupI18nCommand = await import('./setup/i18n/i18n')
+  const setupTSConfigCommand = await import('./setup/tsconfig/tsconfig')
+  const setupUICommand = await import('./setup/ui/ui')
+  const setupWebpackCommand = await import('./setup/webpack/webpack')
+
   yargs
-    .commandDir('./setup', {
-      recurse: true,
-      // @NOTE This regex will ignore all commands nested more than two
-      // levels deep.
-      // e.g. /setup/hi.js & setup/hi/hi.js are picked up, but
-      // setup/hi/hello/bazinga.js will be ignored
-      // The [/\\] bit is for supporting both windows and unix style paths
-      // Also take care to not trip up on paths that have "setup" earlier
-      // in the path by eagerly matching in the start of the regexp
-      exclude: /.*[/\\]setup[/\\].*[/\\].*[/\\]/,
-    })
     .demandCommand()
     .middleware(detectRwVersion)
     .epilogue(
@@ -26,3 +27,12 @@ export const builder = (yargs) =>
         'https://redwoodjs.com/docs/cli-commands#setup'
       )}`
     )
+    .command(setupAuthCommand)
+    .command(setupCustomWebIndexCommand)
+    .command(setupGeneratorCommand)
+    .command(setupGraphiqlCommand)
+    .command(setupI18nCommand)
+    .command(setupTSConfigCommand)
+    .command(setupUICommand)
+    .command(setupWebpackCommand)
+}

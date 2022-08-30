@@ -1,12 +1,25 @@
+import fs from 'fs'
 import path from 'path'
 
 import CryptoJS from 'crypto-js'
-import terminalLink from 'terminal-link'
+import execa from 'execa'
+import Listr from 'listr'
 import { v4 as uuidv4 } from 'uuid'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, existsAnyExtensionSync } from '../../../lib'
+import {
+  generateTemplate,
+  writeFilesTask,
+  readFile,
+  getPaths,
+  transformTSToJS,
+  existsAnyExtensionSync,
+  getGraphqlPath,
+  graphFunctionDoesExist,
+} from '../../../lib'
+import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
@@ -100,6 +113,30 @@ export const generatePayload = (provider, id, token, expiry) => {
   return supportedProviders[provider].getPayload(id, expiry)
 }
 
+const addHeaderOption = () => {
+  const graphqlPath = getGraphqlPath()
+  let content = readFile(graphqlPath).toString()
+
+  const [_, hasHeaderImport] =
+    content.match(/(import .* from 'src\/lib\/generateGraphiQLHeader.*')/s) ||
+    []
+
+  if (!hasHeaderImport) {
+    // add header import statement
+    content = content.replace(
+      /^(.*services.*)$/m,
+      `$1\n\nimport generateGraphiQLHeader from 'src/lib/generateGraphiQLHeader'`
+    )
+    // add object to handler
+    content = content.replace(
+      /^(\s*)(loggerConfig:)(.*)$/m,
+      `$1generateGraphiQLHeader,\n$1$2$3`
+    )
+
+    fs.writeFileSync(graphqlPath, content)
+  }
+}
+
 export const getOutputPath = () => {
   return path.join(
     getPaths().api.lib,
@@ -124,47 +161,80 @@ export const printHeaders = async () => {
   await script.default()
 }
 
-export const command = 'graphiql <provider>'
-export const description = 'Generate GraphiQL headers'
-export const builder = (yargs) => {
-  yargs
-    .positional('provider', {
-      choices: Object.keys(supportedProviders),
-      description: 'Auth provider used',
-      type: 'string',
-    })
-    .option('id', {
-      alias: 'i',
-      description: 'Unique id to identify current user',
-      type: 'string',
-    })
-    .option('token', {
-      alias: 't',
-      description:
-        'Generated JWT token. If not provided, mock JWT payload is provided that can be modified and turned into a token',
-      type: 'string',
-    })
-    .option('expiry', {
-      alias: 'e',
-      default: 60,
-      description: 'Token expiry in minutes. Default is 60',
-      type: 'number',
-    })
-    .option('view', {
-      alias: 'v',
-      default: false,
-      description: 'Print out generated headers',
-      type: 'boolean',
-    })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-header'
-      )}`
-    )
-}
+export const handler = async ({ provider, id, token, expiry, view }) => {
+  let payload
 
-export const handler = async (options) => {
-  const { handler } = await import('./graphiqlHandler')
-  return handler(options)
+  const tasks = new Listr(
+    [
+      {
+        title: 'Generating graphiql header...',
+        task: () => {
+          payload = generatePayload(provider, id, token, expiry)
+        },
+      },
+      {
+        title: 'Generating file in src/lib/generateGraphiQLHeader.{js,ts}...',
+        task: () => {
+          const fileName =
+            token || provider === 'dbAuth'
+              ? 'graphiql-token.ts.template'
+              : 'graphiql-mock.ts.template'
+
+          const content = generateTemplate(
+            path.join(__dirname, 'templates', fileName),
+            {
+              name: 'graphiql',
+              payload: JSON.stringify(payload),
+              env: supportedProviders[provider].env,
+              provider,
+              expireTime: expiry
+                ? new Date(Date.now() + expiry * 60 * 1000)
+                : new Date(Date.now() + 3600 * 1000),
+            }
+          )
+
+          const outputPath = getOutputPath()
+
+          return writeFilesTask(
+            {
+              [outputPath]: isTypeScriptProject()
+                ? content
+                : transformTSToJS(outputPath, content),
+            },
+            { overwriteExisting: true }
+          )
+        },
+      },
+      {
+        title: 'Importing generated headers into createGraphQLHandler',
+        task: (ctx, task) => {
+          if (graphFunctionDoesExist()) {
+            addHeaderOption()
+          } else {
+            task.skip('GraphQL function not found, skipping')
+          }
+        },
+      },
+      {
+        title: 'Installing packages...',
+        task: async () => {
+          if (!token && provider !== 'dbAuth') {
+            await execa('yarn', ['workspace', 'api', 'add', 'jsonwebtoken'])
+          }
+        },
+      },
+    ].filter(Boolean),
+    { collapse: false }
+  )
+
+  try {
+    if (view) {
+      return await printHeaders()
+    }
+    await tasks.run()
+  } catch (e) {
+    errorTelemetry(process.argv, e.message)
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
 }
