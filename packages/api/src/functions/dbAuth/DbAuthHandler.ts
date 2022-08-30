@@ -721,7 +721,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
         requireUserVerification: true,
       }
 
-      verification = verifyAuthenticationResponse(opts)
+      verification = await verifyAuthenticationResponse(opts)
     } catch (e: any) {
       throw new DbAuthError.WebAuthnError(e.message)
     } finally {

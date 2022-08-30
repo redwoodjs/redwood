@@ -849,6 +849,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -997,6 +998,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -1004,6 +1006,15 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   font-size: 90%;
   text-align: center;
   flex-basis: 100%;
+}
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 "
 `;
@@ -2224,6 +2235,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -2372,6 +2384,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -2379,6 +2392,15 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   font-size: 90%;
   text-align: center;
   flex-basis: 100%;
+}
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 "
 `;
@@ -2983,6 +3005,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -3131,6 +3154,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -3138,6 +3162,15 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   font-size: 90%;
   text-align: center;
   flex-basis: 100%;
+}
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 "
 `;
@@ -3273,7 +3306,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply mt-8;
 }
 .rw-label {
-  @apply block mt-6 text-gray-600 font-semibold;
+  @apply block mt-6 text-gray-600 font-semibold text-left;
 }
 .rw-label.rw-label-error {
   @apply text-red-600;
@@ -3375,10 +3408,16 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply flex items-center justify-center flex-wrap mx-auto w-96 my-16;
 }
 .rw-login-container .rw-form-wrapper {
-  @apply w-full;
+  @apply w-full text-center;
 }
 .rw-login-link {
   @apply mt-4 text-gray-600 text-sm text-center w-full;
+}
+.rw-webauthn-wrapper {
+  @apply mt-6 mx-4 leading-6;
+}
+.rw-webauthn-wrapper h2 {
+  @apply mb-4 text-xl font-bold;
 }
 "
 `;
