@@ -5,7 +5,7 @@ import fs from 'fs'
 
 import '../../../../lib/mockTelemetry'
 
-import { addConfigToApp } from '../authHandler'
+import { addConfigToApp } from '../auth'
 
 jest.mock('../../../../lib', () => {
   const path = require('path')
