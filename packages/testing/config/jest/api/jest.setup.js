@@ -3,8 +3,9 @@
 
 // @NOTE without these imports in the setup file, mockCurrentUser
 // and defineScenario remain undefined in the user's tests
+// Remember to use specific imports
 const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
-const { defineScenario } = require('@redwoodjs/testing/dist/api')
+const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 // @NOTE we do this because jest.setup.js runs every time in each worker
 // while jest-preset runs once. This significantly reduces memory footprint, and testing time
