@@ -46,13 +46,14 @@ import { getPaths } from './lib'
 // yarn rw info --cwd /path/to/project
 // RWJS_CWD=/path/to/project yarn rw info
 //
-// # In this case, `--cwd` wins out
+// # In this case, `--cwd` wins out over `RWJS_CWD`
 // RWJS_CWD=/path/to/project yarn rw info --cwd /path/to/other/project
 //
 // # Here `findup` traverses upwards.
 // cd api
 // yarn rw info
 // ```
+
 let { cwd } = parser(hideBin(process.argv))
 cwd ??= process.env.RWJS_CWD
 const redwoodTomlPath = findup('redwood.toml', { cwd: cwd ?? process.cwd() })
@@ -76,25 +77,24 @@ try {
 cwd ??= path.dirname(redwoodTomlPath)
 process.env.RWJS_CWD = cwd
 
-const rwPaths = getPaths()
-
 // # Load .env, .env.defaults
 //
-// This should be done as early as possible.
-// And the earliest we can do it is after setting the cwd.
+// This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
 
 config({
-  path: path.join(rwPaths.base, '.env'),
-  defaults: path.join(rwPaths.base, '.env.defaults'),
+  path: path.join(getPaths().base, '.env'),
+  defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
 
 // # Build the CLI and run it
 
 yargs(hideBin(process.argv))
+  // Config
   .scriptName('rw')
   .middleware([
-    // We've already handled cwd above, but it's still in argv. Let's get rid of it.
+    // We've already handled `cwd` above, but it's still in `argv`.
+    // We don't need it anymore so let's get rid of it.
     (argv) => {
       delete argv.cwd
     },
@@ -109,6 +109,8 @@ yargs(hideBin(process.argv))
   )
   .demandCommand()
   .strict()
+
+  // Commands
   .command(buildCommand)
   .command(checkCommand)
   .command(consoleCommand)
@@ -130,4 +132,6 @@ yargs(hideBin(process.argv))
   .command(tstojsCommand)
   .command(typeCheckCommand)
   .command(upgradeCommand)
+
+  // Run
   .parse()
