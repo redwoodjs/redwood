@@ -32,6 +32,10 @@ export default function (
         if (newImport.indexOf('.') !== 0) {
           newImport = './' + newImport
         }
+        // Changes windows pathing to be compliant with nodeFileTrace after build.
+        if (process.platform === 'win32') {
+          newImport = newImport.replaceAll('\\', '/')
+        }
         const newSource = t.stringLiteral(newImport)
 
         p.node.source = newSource

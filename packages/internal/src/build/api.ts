@@ -50,16 +50,8 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       return undefined
     }
 
-    // Fixes nodeFileTrace errors on windows when building
-    let nodeFileTraceCompliantCode: string = result.code
-    if (process.platform === 'win32') {
-      nodeFileTraceCompliantCode = nodeFileTraceCompliantCode.replaceAll(
-        '\\\\',
-        '/'
-      )
-    }
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
-    fs.writeFileSync(dstPath, nodeFileTraceCompliantCode)
+    fs.writeFileSync(dstPath, result.code)
 
     return dstPath
   })
