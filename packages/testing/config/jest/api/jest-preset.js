@@ -80,10 +80,20 @@ const configureTeardown = async () => {
   originalTeardownOrder = deepCopy(teardownOrder)
 }
 
-// So that we can load the user's prisma client
-// The file itself maybe TS/ES6 - and may have middlewares configured
-registerApiSideBabelHook()
-const { db } = require(path.join(rwjsPaths.api.lib, 'db'))
+// Lazy load the project db
+let projectDb
+const getProjectDb = () => {
+  if (!projectDb) {
+    // So that we can load the user's prisma client
+    // The file itself maybe TS/ES6 - and may have middlewares configured
+    registerApiSideBabelHook()
+    const { db } = require(path.join(rwjsPaths.api.lib, 'db'))
+
+    projectDb = db
+  }
+
+  return projectDb
+}
 
 const teardown = async () => {
   // Don't populate global scope, keep util functions inside teardown
@@ -105,7 +115,7 @@ const teardown = async () => {
 
   for (const modelName of teardownOrder) {
     try {
-      await db.$executeRawUnsafe(
+      await getProjectDb().$executeRawUnsafe(
         `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
       )
     } catch (e) {
@@ -137,9 +147,13 @@ const seedScenario = async (scenario) => {
       scenarios[model] = {}
       for (const [name, createArgs] of Object.entries(namedFixtures)) {
         if (typeof createArgs === 'function') {
-          scenarios[model][name] = await db[model].create(createArgs(scenarios))
+          scenarios[model][name] = await getProjectDb()[model].create(
+            createArgs(scenarios)
+          )
         } else {
-          scenarios[model][name] = await db[model].create(createArgs)
+          scenarios[model][name] = await getProjectDb()[model].create(
+            createArgs
+          )
         }
       }
     }
@@ -150,7 +164,7 @@ const seedScenario = async (scenario) => {
 }
 
 const disconnect = async () => {
-  await db.$disconnect()
+  await getProjectDb().$disconnect()
 }
 
 module.exports = {
