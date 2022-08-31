@@ -1,9 +1,12 @@
+// @ts-check
+const fs = require('fs')
 const path = require('path')
 
-const { getConfig, getDMMF } = require('@prisma/internals')
+const { getConfig: getPrismaConfig, getDMMF } = require('@prisma/internals')
 
 const {
   getApiSideDefaultBabelConfig,
+  registerApiSideBabelHook,
 } = require('@redwoodjs/internal/dist/build/babel/api')
 const { getPaths } = require('@redwoodjs/internal/dist/paths')
 
@@ -14,7 +17,6 @@ const { babelrc } = getApiSideDefaultBabelConfig()
 // @NOTE: is there a better way we could implement this?
 if (process.env.SKIP_DB_PUSH !== '1') {
   const process = require('process')
-  const path = require('path')
   // Load dotenvs
   require('dotenv-defaults/config')
 
@@ -40,6 +42,117 @@ if (process.env.SKIP_DB_PUSH !== '1') {
   process.env.SKIP_DB_PUSH = '1'
 }
 
+// Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
+// fails on DELETE
+const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
+const TEARDOWN_CACHE_PATH = path.join(
+  rwjsPaths.generated.base,
+  'scenarioTeardown.json'
+)
+let teardownOrder = []
+let originalTeardownOrder = []
+
+const deepCopy = (obj) => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const isIdenticalArray = (a, b) => {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+const configureTeardown = async () => {
+  // @NOTE prisma utils are available in cli lib/schemaHelpers
+  // But avoid importing them, to prevent memory leaks in jest
+  const schema = await getDMMF({ datamodelPath: rwjsPaths.api.dbSchema })
+  const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
+
+  // check if pre-defined delete order already exists and if so, use it to start
+  if (fs.existsSync(TEARDOWN_CACHE_PATH)) {
+    teardownOrder = JSON.parse(fs.readFileSync(TEARDOWN_CACHE_PATH).toString())
+  }
+
+  // check the number of models in case we've added/removed since cache was built
+  if (teardownOrder.length !== schemaModels.length) {
+    teardownOrder = schemaModels
+  }
+
+  // keep a copy of the original order to compare against
+  originalTeardownOrder = deepCopy(teardownOrder)
+}
+
+// So that we can load the user's prisma client
+// The file itself maybe TS/ES6 - and may have middlewares configured
+registerApiSideBabelHook()
+const { db } = require(path.join(rwjsPaths.api.lib, 'db'))
+
+const teardown = async () => {
+  // Don't populate global scope, keep util functions inside teardown
+  // determine what kind of quotes are needed around table names in raw SQL
+  const getQuoteStyle = async () => {
+    const config = await getPrismaConfig({
+      datamodel: fs.readFileSync(rwjsPaths.api.dbSchema).toString(),
+    })
+
+    switch (config.datasources?.[0]?.provider) {
+      case 'mysql':
+        return '`'
+      default:
+        return '"'
+    }
+  }
+
+  const quoteStyle = await getQuoteStyle()
+
+  for (const modelName of teardownOrder) {
+    try {
+      await db.$executeRawUnsafe(
+        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
+      )
+    } catch (e) {
+      const match = e.message.match(/Code: `(\d+)`/)
+      if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
+        const index = teardownOrder.indexOf(modelName)
+        teardownOrder[index] = null
+        teardownOrder.push(modelName)
+      } else {
+        throw e
+      }
+    }
+  }
+
+  // remove nulls
+  teardownOrder = teardownOrder.filter((val) => val)
+
+  // if the order of delete changed, write out the cached file again
+  if (!isIdenticalArray(teardownOrder, originalTeardownOrder)) {
+    originalTeardownOrder = deepCopy(teardownOrder)
+    fs.writeFileSync(TEARDOWN_CACHE_PATH, JSON.stringify(teardownOrder))
+  }
+}
+
+const seedScenario = async (scenario) => {
+  if (scenario) {
+    const scenarios = {}
+    for (const [model, namedFixtures] of Object.entries(scenario)) {
+      scenarios[model] = {}
+      for (const [name, createArgs] of Object.entries(namedFixtures)) {
+        if (typeof createArgs === 'function') {
+          scenarios[model][name] = await db[model].create(createArgs(scenarios))
+        } else {
+          scenarios[model][name] = await db[model].create(createArgs)
+        }
+      }
+    }
+    return scenarios
+  } else {
+    return {}
+  }
+}
+
+const disconnect = async () => {
+  await db.$disconnect()
+}
+
 module.exports = {
   // To make sure other config option which depends on rootDir use
   // correct path, for example, coverageDirectory
@@ -49,10 +162,10 @@ module.exports = {
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   globals: {
     __RWJS__TEST_IMPORTS: {
-      getDMMF,
-      getPrismaConfig: getConfig,
-      rwPaths: rwjsPaths,
-      // setGlobalContext: setContext,
+      configureTeardown,
+      teardown,
+      disconnect,
+      seedScenario,
     },
   },
   displayName: {
