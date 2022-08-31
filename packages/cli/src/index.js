@@ -101,7 +101,7 @@ yargs(hideBin(process.argv))
     telemetryMiddleware,
   ])
   .option('cwd', {
-    describe: 'Working directory to use (where `redwood.toml` is located.)',
+    describe: 'Working directory to use (where `redwood.toml` is located)',
   })
   .example(
     'yarn rw g page home /',
