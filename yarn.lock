@@ -6248,7 +6248,7 @@ __metadata:
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.9
     "@types/md5": 2.3.2
-    "@types/memjs": ^1
+    "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
     "@types/uuid": 8.3.4
@@ -6262,10 +6262,10 @@ __metadata:
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
     md5: 2.3.0
-    memjs: ^1.3.0
+    memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.4.2
-    redis: ^4.2.0
+    redis: 4.2.0
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
@@ -8923,7 +8923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/memjs@npm:^1":
+"@types/memjs@npm:1":
   version: 1.2.4
   resolution: "@types/memjs@npm:1.2.4"
   dependencies:
@@ -22352,7 +22352,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memjs@npm:^1.3.0":
+"memjs@npm:1.3.0":
   version: 1.3.0
   resolution: "memjs@npm:1.3.0"
   checksum: 0fc39e296742610664bef31303fad16ead5eb588caf53ba0bd0b8df2c31992055dece7986fd55f23236f5ff40f6f4c5bf808a93a7976469c3e6c2ce4cafecf7f
@@ -26659,7 +26659,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:^4.2.0":
+"redis@npm:4.2.0":
   version: 4.2.0
   resolution: "redis@npm:4.2.0"
   dependencies:
