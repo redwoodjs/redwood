@@ -1,17 +1,11 @@
-export default class BaseClient {
-  constructor() {
-    // Implement with client setup code. Add whatever arguments you want.
-  }
+export default abstract class BaseClient {
+  constructor() {}
 
-  get(_key: string) {
-    // Implement with client-specific cache retrieval code. Arguments should not change.
-  }
+  abstract get(key: string): unknown
 
-  set(
-    _key: string,
-    _value: unknown,
-    _options: { expires?: number | undefined }
-  ) {
-    // Implement with client-specific cache storage code. Arguments should not change.
-  }
+  abstract set(
+    key: string,
+    value: unknown,
+    options: { expires?: number | undefined }
+  ): Promise<unknown>
 }

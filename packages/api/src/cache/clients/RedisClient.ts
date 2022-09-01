@@ -7,7 +7,7 @@ interface SetOptions {
   EX?: number
 }
 
-export class RedisClient extends BaseClient {
+export default class RedisClient extends BaseClient {
   client
 
   constructor(options: RedisClientOptions) {

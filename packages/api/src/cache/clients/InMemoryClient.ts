@@ -6,7 +6,7 @@ type CacheOptions = {
   expires?: number
 }
 
-export class InMemoryClient extends BaseClient {
+export default class InMemoryClient extends BaseClient {
   storage: Record<string, { expires: number; value: string }>
 
   // initialize with pre-cached data if needed
@@ -26,7 +26,7 @@ export class InMemoryClient extends BaseClient {
   }
 
   // stores expiration dates as epoch
-  set(key: string, value: unknown, options: CacheOptions = {}) {
+  async set(key: string, value: unknown, options: CacheOptions = {}) {
     const now = new Date()
     now.setSeconds(now.getSeconds() + (options?.expires || 315360000))
     const data = { expires: now.getTime(), value: JSON.stringify(value) }
