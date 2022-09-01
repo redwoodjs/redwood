@@ -3,10 +3,10 @@ import { createCache, MemcachedClient } from '@redwoodjs/api/cache'
 import { logger } from './logger'
 
 const memJsFormattedLogger = {
-  log: (msg) => logger.error(msg),
+  log: (msg: string) => logger.error(msg),
 }
 
-let client
+let client: MemcachedClient
 try {
   client = new MemcachedClient('localhost:11211', {
     logger: memJsFormattedLogger,
@@ -17,5 +17,5 @@ try {
 
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
-  timeout: 500
+  timeout: 500,
 })

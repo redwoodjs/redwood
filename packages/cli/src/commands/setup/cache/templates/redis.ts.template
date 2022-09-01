@@ -2,7 +2,7 @@ import { createCache, RedisClient } from '@redwoodjs/api/cache'
 
 import { logger } from './logger'
 
-let client
+let client: RedisClient
 try {
   client = new RedisClient({ url: 'redis://localhost:6379' })
 } catch (e) {
@@ -11,5 +11,5 @@ try {
 
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
-  timeout: 500
+  timeout: 500,
 })
