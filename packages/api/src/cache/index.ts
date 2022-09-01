@@ -2,15 +2,11 @@ import type { PrismaClient } from '@prisma/client'
 
 import type { Logger } from '../logger'
 
+import BaseClient from './clients/BaseClient'
 import { CacheTimeoutError } from './errors'
 
-export * from './clients/MemcachedClient'
-export * from './clients/RedisClient'
-
-export interface CacheClient {
-  get(key: string): Promise<{ value: Buffer; flags: Buffer }>
-  set(key: string, value: unknown, options: object): Promise<boolean>
-}
+export { default as MemcachedClient } from './clients/MemcachedClient'
+export { default as RedisClient } from './clients/RedisClient'
 
 export interface CreateCacheOptions {
   logger?: Logger
@@ -63,7 +59,7 @@ export const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
 }
 
 export const createCache = (
-  cacheClient: CacheClient,
+  cacheClient: BaseClient,
   options: CreateCacheOptions | undefined
 ) => {
   const client = cacheClient
