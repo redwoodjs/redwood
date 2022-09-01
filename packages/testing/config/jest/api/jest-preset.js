@@ -225,6 +225,7 @@ const disconnect = async () => {
   await getProjectDb().$disconnect()
 }
 
+/** @type {import('jest').Config} */
 module.exports = {
   // To make sure other config option which depends on rootDir use
   // correct path, for example, coverageDirectory
