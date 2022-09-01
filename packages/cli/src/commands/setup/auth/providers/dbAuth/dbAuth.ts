@@ -6,17 +6,13 @@ import password from 'secure-random-password'
 import { getPaths } from '../../../../../lib'
 import c from '../../../../../lib/colors'
 
-// required packages to install
-export const webPackages = []
-export const apiPackages = []
-
 export const libPath = getPaths().api.lib.replace(getPaths().base, '')
 export const functionsPath = getPaths().api.functions.replace(
   getPaths().base,
   ''
 )
 
-export const task = {
+export const extraTask = {
   title: 'Adding SESSION_SECRET...',
   task: () => {
     const envPath = path.join(getPaths().base, '.env')

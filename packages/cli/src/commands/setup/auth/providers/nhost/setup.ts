@@ -2,8 +2,8 @@ import yargs from 'yargs'
 
 import { standardAuthBuilder, standardAuthHandler } from '../../setupHelpers'
 
-export const command = 'auth netlify'
-export const description = 'Generate an auth configuration for Netlify'
+export const command = 'auth nhost'
+export const description = 'Generate an auth configuration for nhost'
 export const builder = (yargs: yargs.Argv) => {
   return standardAuthBuilder(yargs)
 }
@@ -17,11 +17,11 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
   standardAuthHandler({
     rwVersion,
     forceArg,
-    provider: 'netlify',
-    webPackages: ['netlify-identity-widget', '@types/netlify-identity-widget'],
+    provider: 'nhost',
+    webPackages: ['@nhost/nhost-js'],
     notes: [
-      'You will need to enable Identity on your Netlify site and configure the API endpoint.',
-      'See: https://github.com/netlify/netlify-identity-widget#localhost',
+      "You will need to add your project's backend URL (NHOST_BACKEND_URL) and",
+      'JWT Key Secret (NHOST_JWT_SECRET) to your .env file.',
     ],
   })
 }

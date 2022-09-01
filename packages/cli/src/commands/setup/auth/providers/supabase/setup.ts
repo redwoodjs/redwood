@@ -1,4 +1,5 @@
 import yargs from 'yargs'
+
 import { standardAuthBuilder, standardAuthHandler } from '../../setupHelpers'
 
 export const command = 'auth supabase'
@@ -17,6 +18,11 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'supabase',
-    webAuthn: false,
+    webPackages: ['@supabase/supabase-js'],
+    notes: [
+      'You will need to add your Supabase URL (SUPABASE_URL), public API KEY,',
+      'and JWT SECRET (SUPABASE_KEY, and SUPABASE_JWT_SECRET) to your .env file.',
+      'See: https://supabase.io/docs/library/getting-started#reference',
+    ],
   })
 }

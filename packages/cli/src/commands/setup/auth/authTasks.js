@@ -14,8 +14,7 @@ import {
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
-import { files } from './authFiles'
-import pascalcase from 'pascalcase'
+import { files, generateUniqueFileNames } from './authFiles'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
@@ -258,11 +257,11 @@ export const generateAuthApi = (provider, force, webAuthn) => ({
       ) {
         console.warn(
           c.warning(
-            'To avoid overwriting existing files we\'ve generated new file ' +
-            'names for the newly generated files. This probably means ' +
-            `${provider} auth doesn't work out of the box. You'll most ` +
-            'likely have to manually merge some of the generated files ' +
-            'with your existing auth files'
+            "To avoid overwriting existing files we've generated new file " +
+              'names for the newly generated files. This probably means ' +
+              `${provider} auth doesn't work out of the box. You'll most ` +
+              'likely have to manually merge some of the generated files ' +
+              'with your existing auth files'
           )
         )
       }

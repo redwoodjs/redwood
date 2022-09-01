@@ -25,11 +25,7 @@ import {
  * Check if one of the api side auth files already exists and if so, ask the
  * user to overwrite
  */
-async function shouldForce(
-  force: boolean,
-  provider: string,
-  webAuthn: boolean
-) {
+async function shouldForce(force: boolean, provider: string, webAuthn = false) {
   if (force) {
     return true
   }
@@ -75,7 +71,18 @@ interface Args {
   rwVersion: string
   forceArg: boolean
   provider: string
-  webAuthn: boolean
+  webAuthn?: boolean
+  webPackages?: string[]
+  apiPackages?: string[]
+  extraTask?: Listr.ListrTask
+  notes?: string[]
+}
+
+// from lodash
+type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T
+
+function truthy<T>(value: T): value is Truthy<T> {
+  return !!value
 }
 
 export const standardAuthHandler = async ({
@@ -83,23 +90,24 @@ export const standardAuthHandler = async ({
   forceArg,
   provider,
   webAuthn,
+  webPackages = [],
+  apiPackages = [],
+  extraTask,
+  notes,
 }: Args) => {
   const force = await shouldForce(forceArg, provider, webAuthn)
-  const providerData = webAuthn
-    ? await import(`./providers/${provider}/${provider}.webAuthn`)
-    : await import(`./providers/${provider}/${provider}`)
 
   const tasks = new Listr(
     [
       generateAuthApi(provider, force, webAuthn),
       addAuthConfigToWeb(provider),
       addAuthConfigToGqlApi,
-      addWebPackages(provider, providerData.webPackages, rwVersion),
-      addApiPackages(provider, providerData.apiPackages),
+      addWebPackages(provider, webPackages, rwVersion),
+      addApiPackages(provider, apiPackages),
       installPackages,
-      providerData.task,
-      printNotes(providerData.notes),
-    ].filter(Boolean),
+      extraTask,
+      notes ? printNotes(notes) : null,
+    ].filter(truthy),
     // @ts-expect-error: This option is widely used, so I guess it works...
     { collapse: false }
   )

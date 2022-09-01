@@ -48,8 +48,9 @@ jest.mock('../../../../lib/project', () => ({
 }))
 
 import path from 'path'
-import { files, generateUniqueFileNames } from '../authFiles'
+
 import { getPaths } from '../../../../lib'
+import { files, generateUniqueFileNames } from '../authFiles'
 
 beforeEach(() => {
   mockIsTypeScriptProject = true

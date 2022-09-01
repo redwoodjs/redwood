@@ -6285,6 +6285,7 @@ __metadata:
     "@redwoodjs/structure": 2.2.2
     "@redwoodjs/telemetry": 2.2.2
     "@types/listr": 0.14.4
+    "@types/secure-random-password": ^0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -9141,6 +9142,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 56822201fad7677a30f732cd3eb94651bb2797bd4e876ff5ec6a3d5c419a11b97ec18ff38ae86bbb945f578ed3d29856221375e1dcbc4ba640020049fcf9535c
+  languageName: node
+  linkType: hard
+
+"@types/secure-random-password@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@types/secure-random-password@npm:0.2.1"
+  checksum: 87f0528b7ccb907706b0cc77160c6771279508de3852213f2c4f28a83af482b016cf3e0b414f62d2e8b3713f1733ad787e3bd40c201463ac822c117856a7886a
   languageName: node
   linkType: hard
 

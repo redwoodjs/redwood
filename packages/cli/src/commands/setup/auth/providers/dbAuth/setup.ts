@@ -1,7 +1,16 @@
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
+
 import { standardAuthHandler } from '../../setupHelpers'
+
+import { notes, extraTask } from './dbAuth'
+import {
+  notes as webAuthnNotes,
+  extraTask as webAuthnExtraTask,
+  webPackages as webAuthnWebPackages,
+  apiPackages as webAuthnApiPackages,
+} from './dbAuth.webAuthn'
 
 /**
  * Prompt the user (unless already specified on the command line) if they want
@@ -52,12 +61,21 @@ interface Args {
   force: boolean
 }
 
-export const handler = async ({ rwVersion, webauthn, force: forceArg }: Args) => {
+export const handler = async ({
+  rwVersion,
+  webauthn,
+  force: forceArg,
+}: Args) => {
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
+
   standardAuthHandler({
     rwVersion,
     forceArg,
     provider: 'dbAuth',
     webAuthn,
+    webPackages: webAuthn ? webAuthnWebPackages : [],
+    apiPackages: webAuthn ? webAuthnApiPackages : [],
+    extraTask: webAuthn ? webAuthnExtraTask : extraTask,
+    notes: webAuthn ? webAuthnNotes : notes,
   })
 }

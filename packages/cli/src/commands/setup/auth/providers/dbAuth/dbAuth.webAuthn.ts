@@ -7,7 +7,7 @@ import c from '../../../../../lib/colors'
 import { functionsPath, libPath } from './dbAuth'
 
 // copy some identical values from dbAuth provider
-export { task } from './dbAuth'
+export { extraTask } from './dbAuth'
 
 // required packages to install
 export const webPackages = ['@simplewebauthn/browser']
