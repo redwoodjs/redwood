@@ -3,13 +3,15 @@ import path from 'path'
 
 import chalk from 'chalk'
 import Listr from 'listr'
+import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
+import { isTypeScriptProject } from '../../../lib/project'
 
-export const command = 'cache'
+export const command = 'cache <client>'
 
 export const description = 'Sets up an init file for service caching'
 
@@ -19,6 +21,7 @@ export const builder = (yargs) => {
       choices: ['memcached', 'redis'],
       description: 'Cache client',
       type: 'string',
+      required: true,
     })
     .option('force', {
       alias: 'f',
@@ -26,20 +29,36 @@ export const builder = (yargs) => {
       description: 'Overwrite existing cache.js file',
       type: 'boolean',
     })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/cli-commands#setup-cache'
+      )}`
+    )
 }
 
 export const handler = async ({ client, force }) => {
+  console.info(client, force)
+
+  const extension = isTypeScriptProject ? 'ts' : 'js'
+
   const tasks = new Listr([
     {
       title: `Writing api/src/lib/cache.js`,
       task: () => {
         const template = fs
-          .readFileSync(path.join('templates', `${client}.ts.template`))
+          .readFileSync(
+            path.join(__dirname, 'templates', `${client}.ts.template`)
+          )
           .toString()
 
-        return writeFile(path.join(getPaths().api.lib, 'cache.js'), template, {
-          overwriteExisting: force,
-        })
+        return writeFile(
+          path.join(getPaths().api.lib, `cache.${extension}`),
+          template,
+          {
+            overwriteExisting: force,
+          }
+        )
       },
     },
     {
