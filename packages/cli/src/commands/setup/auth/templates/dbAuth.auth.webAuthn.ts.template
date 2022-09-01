@@ -21,6 +21,10 @@ import { db } from './db'
  * seen if someone were to open the Web Inspector in their browser.
  */
 export const getCurrentUser = async (session: Decoded) => {
+  if (!session || typeof session.id !== 'number') {
+    return null
+  }
+
   return await db.user.findUnique({
     where: { id: session.id },
     select: { id: true },
@@ -75,9 +79,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
       )
     } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
-      return roles.some(
-        (allowedRole) => currentUserRoles === allowedRole
-      )
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
     }
   }
 
