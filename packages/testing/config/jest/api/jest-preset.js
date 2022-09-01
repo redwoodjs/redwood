@@ -254,6 +254,7 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
+  // Note this setup runs for each test file!
   setupFilesAfterEnv: [path.join(__dirname, './jest.setup.js')],
   moduleNameMapper: {
     // @NOTE: Import @redwoodjs/testing in api tests, and it automatically remaps to the api side only
