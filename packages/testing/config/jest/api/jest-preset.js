@@ -9,12 +9,16 @@ const {
   registerApiSideBabelHook,
 } = require('@redwoodjs/internal/dist/build/babel/api')
 const { getPaths } = require('@redwoodjs/internal/dist/paths')
+const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 const { babelrc } = getApiSideDefaultBabelConfig()
 
-// @NOTE: is there a better way we could implement this?
+// We need this to (a) load the user's prisma client in src/lib/db.ts
+// (b) load the scenario files in buildScenario
+registerApiSideBabelHook()
+
 if (process.env.SKIP_DB_PUSH !== '1') {
   const process = require('process')
   // Load dotenvs
@@ -49,6 +53,7 @@ const TEARDOWN_CACHE_PATH = path.join(
   rwjsPaths.generated.base,
   'scenarioTeardown.json'
 )
+const DEFAULT_SCENARIO = 'standard'
 let teardownOrder = []
 let originalTeardownOrder = []
 
@@ -86,7 +91,6 @@ const getProjectDb = () => {
   if (!projectDb) {
     // So that we can load the user's prisma client
     // The file itself maybe TS/ES6 - and may have middlewares configured
-    registerApiSideBabelHook()
     const { db } = require(path.join(rwjsPaths.api.lib, 'db'))
 
     projectDb = db
@@ -94,6 +98,60 @@ const getProjectDb = () => {
 
   return projectDb
 }
+
+// Build scenario is the function that actually loads *.scenario.ts,js files
+// global.defineScenario has to be defined in THIS file because it's the context where the scenario is loaded
+// Functions only used in tests, are defined in the jest.setup.js file
+global.defineScenario = defineScenario
+
+const buildScenario =
+  (it, testPath) =>
+  (...args) => {
+    let scenarioName, testName, testFunc
+
+    if (args.length === 3) {
+      ;[scenarioName, testName, testFunc] = args
+    } else if (args.length === 2) {
+      scenarioName = DEFAULT_SCENARIO
+      ;[testName, testFunc] = args
+    } else {
+      throw new Error('scenario() requires 2 or 3 arguments')
+    }
+
+    return it(testName, async () => {
+      const testFileDir = path.parse(testPath)
+      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
+      const testFileNameParts = testFileDir.name.split('.')
+      const testFilePath = `${testFileDir.dir}/${testFileNameParts
+        .slice(0, testFileNameParts.length - 1)
+        .join('.')}.scenarios`
+      let allScenarios, scenario, result
+
+      try {
+        allScenarios = require(testFilePath)
+      } catch (e) {
+        // ignore error if scenario file not found, otherwise re-throw
+        if (e.code !== 'MODULE_NOT_FOUND') {
+          throw e
+        }
+      }
+
+      if (allScenarios) {
+        if (allScenarios[scenarioName]) {
+          scenario = allScenarios[scenarioName]
+        } else {
+          throw new Error(
+            `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
+          )
+        }
+      }
+
+      const scenarioData = await seedScenario(scenario)
+      result = await testFunc(scenarioData)
+
+      return result
+    })
+  }
 
 const teardown = async () => {
   // Don't populate global scope, keep util functions inside teardown
@@ -179,7 +237,7 @@ module.exports = {
       configureTeardown,
       teardown,
       disconnect,
-      seedScenario,
+      buildScenario,
     },
   },
   displayName: {
