@@ -99,6 +99,26 @@ const getProjectDb = () => {
   return projectDb
 }
 
+let quoteStyle
+// determine what kind of quotes are needed around table names in raw SQL
+const getQuoteStyle = async () => {
+  if (!quoteStyle) {
+    const config = await getPrismaConfig({
+      datamodel: fs.readFileSync(rwjsPaths.api.dbSchema).toString(),
+    })
+
+    switch (config.datasources?.[0]?.provider) {
+      case 'mysql':
+        quoteStyle = '`'
+        break
+      default:
+        quoteStyle = '"'
+    }
+  }
+
+  return quoteStyle
+}
+
 // Build scenario is the function that actually loads *.scenario.ts,js files
 // global.defineScenario has to be defined in THIS file because it's the context where the scenario is loaded
 // Functions only used in tests, are defined in the jest.setup.js file
@@ -154,21 +174,6 @@ const buildScenario =
   }
 
 const teardown = async () => {
-  // Don't populate global scope, keep util functions inside teardown
-  // determine what kind of quotes are needed around table names in raw SQL
-  const getQuoteStyle = async () => {
-    const config = await getPrismaConfig({
-      datamodel: fs.readFileSync(rwjsPaths.api.dbSchema).toString(),
-    })
-
-    switch (config.datasources?.[0]?.provider) {
-      case 'mysql':
-        return '`'
-      default:
-        return '"'
-    }
-  }
-
   const quoteStyle = await getQuoteStyle()
 
   for (const modelName of teardownOrder) {
@@ -241,6 +246,7 @@ module.exports = {
       buildScenario,
     },
   },
+  sandboxInjectedGlobals: ['__RWJS__TEST_IMPORTS'],
   displayName: {
     color: 'redBright',
     name: 'api',
