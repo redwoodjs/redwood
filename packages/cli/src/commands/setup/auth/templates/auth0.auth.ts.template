@@ -1,4 +1,4 @@
-import { parseJWT } from '@redwoodjs/api'
+import type { Decoded } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 /**
@@ -12,11 +12,6 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
  * an optional collection of roles used by requireAuth() to check
  * if the user is authenticated or has role-based access
  *
- * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
- * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
- * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
- * such as headers and cookies, and the context information about the invocation such as IP Address
- *
  * !! BEWARE !! Anything returned from this function will be available to the
  * client--it becomes the content of `currentUser` on the web side (as well as
  * `context.currentUser` on the api side). You should carefully add additional
@@ -25,15 +20,18 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  *
+ * @param decoded - The decoded access token containing user info and JWT
+ *   claims like `sub`. Note, this could be null.
+ * @param { token, SupportedAuthTypes type } - The access token itself as well
+ *   as the auth provider type
+ * @param { APIGatewayEvent event, Context context } - An optional object which
+ *   contains information from the invoker such as headers and cookies, and the
+ *   context information about the invocation such as IP Address
  * @returns RedwoodUser
  */
 export const getCurrentUser = async (
-  decoded,
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  { token, type },
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  { event, context }
-): Promise<RedwoodUser> => {
+  decoded: Decoded
+): Promise<RedwoodUser | null> => {
   if (!decoded) {
     return null
   }
@@ -75,7 +73,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
     return false
   }
 
- const currentUserRoles = context.currentUser?.roles
+  const currentUserRoles = context.currentUser?.roles
 
   if (typeof roles === 'string') {
     if (typeof currentUserRoles === 'string') {
@@ -95,9 +93,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
       )
     } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
-      return roles.some(
-        (allowedRole) => currentUserRoles === allowedRole
-      )
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
     }
   }
 
@@ -110,12 +106,12 @@ export const hasRole = (roles: AllowedRoles): boolean => {
  * whether or not they are assigned a role, and optionally raise an
  * error if they're not.
  *
- * @param roles: {@link AllowedRoles} - When checking role membership, these roles grant access.
+ * @param roles?: {@link AllowedRoles} - When checking role membership, these roles grant access.
  *
  * @returns - If the currentUser is authenticated (and assigned one of the given roles)
  *
  * @throws {@link AuthenticationError} - If the currentUser is not authenticated
- * @throws {@link ForbiddenError} If the currentUser is not allowed due to role permissions
+ * @throws {@link ForbiddenError} - If the currentUser is not allowed due to role permissions
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */

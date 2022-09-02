@@ -21,7 +21,7 @@ interface Req {
   context: LambdaContext
 }
 
-type Decoded = null | string | Record<string, unknown>
+export type Decoded = null | Record<string, unknown>
 
 const typesToDecoders: Record<
   SupportedAuthTypes,
