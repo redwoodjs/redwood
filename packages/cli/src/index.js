@@ -31,6 +31,8 @@ import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
 
+export * from './commands/setup/auth/setupHelpers'
+
 /**
  * The current working directory can be set via:
  * 1. A `--cwd` option
