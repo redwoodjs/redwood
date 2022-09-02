@@ -1,4 +1,4 @@
-import { InMemoryClient } from '../clients/InMemoryClient'
+import InMemoryClient from '../clients/InMemoryClient'
 import { createCache } from '../index'
 
 describe('cache', () => {

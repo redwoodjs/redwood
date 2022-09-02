@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import { InMemoryClient } from '../clients/InMemoryClient'
+import InMemoryClient from '../clients/InMemoryClient'
 import { createCache } from '../index'
 
 const mockFindFirst = jest.fn()
