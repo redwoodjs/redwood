@@ -6,6 +6,11 @@ import pascalcase from 'pascalcase'
 import { getPaths, transformTSToJS } from '../../../lib'
 import { isTypeScriptProject } from '../../../lib/project'
 
+interface FilesArgs {
+  provider: string
+  webAuthn: boolean
+}
+
 /**
  * Get the file paths and file contents to write
  *
@@ -18,7 +23,7 @@ import { isTypeScriptProject } from '../../../lib/project'
  * }
  * ```
  */
-export const files = ({ provider, webAuthn }) => {
+export const files = ({ provider, webAuthn }: FilesArgs) => {
   const apiSrcPath = getPaths().api.src
 
   const apiBaseTemplatePath = path.join(
@@ -30,67 +35,72 @@ export const files = ({ provider, webAuthn }) => {
 
   const templateDirectories = fs.readdirSync(apiBaseTemplatePath)
 
-  const filesRecord = templateDirectories.reduce((acc, dir) => {
-    const templateFiles = fs.readdirSync(path.join(apiBaseTemplatePath, dir))
-    const filePaths = templateFiles
-      .filter((fileName) => {
-        const fileNameParts = fileName.split('.')
-        // Remove all webAuthn files. We'll handle those in the next step
-        return fileNameParts.length <= 3 || fileNameParts.at(-3) !== 'webAuthn'
-      })
-      .map((fileName) => {
-        // remove "template" from the end, and change from {ts,tsx} to js for
-        // JavaScript projects
-        const fileNameParts = fileName.split('.')
-        const outputFileName = [
-          ...fileNameParts.slice(0, -2),
-          isTypeScriptProject() ? fileNameParts.at(-2) : 'js',
-        ].join('.')
+  const filesRecord = templateDirectories.reduce<Record<string, string>>(
+    (acc, dir) => {
+      const templateFiles = fs.readdirSync(path.join(apiBaseTemplatePath, dir))
+      const filePaths = templateFiles
+        .filter((fileName) => {
+          const fileNameParts = fileName.split('.')
+          // Remove all webAuthn files. We'll handle those in the next step
+          return (
+            fileNameParts.length <= 3 || fileNameParts.at(-3) !== 'webAuthn'
+          )
+        })
+        .map((fileName) => {
+          // remove "template" from the end, and change from {ts,tsx} to js for
+          // JavaScript projects
+          const fileNameParts = fileName.split('.')
+          const outputFileName = [
+            ...fileNameParts.slice(0, -2),
+            isTypeScriptProject() ? fileNameParts.at(-2) : 'js',
+          ].join('.')
 
-        if (!webAuthn) {
-          return { templateFileName: fileName, outputFileName }
+          if (!webAuthn) {
+            return { templateFileName: fileName, outputFileName }
+          }
+
+          // Insert "webAuthn." before the second to last part
+          const webAuthnFileName = fileName
+            .split('.')
+            .reverse()
+            .map((part, i) => (i === 1 ? 'webAuthn.' + part : part))
+            .reverse()
+            .join('.')
+
+          // Favor the abc.xyz.webAuthn.ts.template file if it exists, otherwise
+          // just go with the "normal" filename
+          if (templateFiles.includes(webAuthnFileName)) {
+            return { templateFileName: webAuthnFileName, outputFileName }
+          } else {
+            return { templateFileName: fileName, outputFileName }
+          }
+        })
+        .map((f) => {
+          const templateFilePath = path.join(
+            apiBaseTemplatePath,
+            dir,
+            f.templateFileName
+          )
+          const outputFilePath = path.join(apiSrcPath, dir, f.outputFileName)
+
+          return { templateFilePath, outputFilePath }
+        })
+
+      filePaths.forEach((paths) => {
+        const content = fs.readFileSync(paths.templateFilePath, 'utf8')
+
+        acc = {
+          ...acc,
+          [paths.outputFilePath]: isTypeScriptProject()
+            ? content
+            : transformTSToJS(paths.outputFilePath, content),
         }
-
-        // Insert "webAuthn." before the second to last part
-        const webAuthnFileName = fileName
-          .split('.')
-          .reverse()
-          .map((part, i) => (i === 1 ? 'webAuthn.' + part : part))
-          .reverse()
-          .join('.')
-
-        // Favor the abc.xyz.webAuthn.ts.template file if it exists, otherwise
-        // just go with the "normal" filename
-        if (templateFiles.includes(webAuthnFileName)) {
-          return { templateFileName: webAuthnFileName, outputFileName }
-        } else {
-          return { templateFileName: fileName, outputFileName }
-        }
-      })
-      .map((f) => {
-        const templateFilePath = path.join(
-          apiBaseTemplatePath,
-          dir,
-          f.templateFileName
-        )
-        const outputFilePath = path.join(apiSrcPath, dir, f.outputFileName)
-
-        return { templateFilePath, outputFilePath }
       })
 
-    filePaths.forEach((paths) => {
-      const content = fs.readFileSync(paths.templateFilePath, 'utf8')
-
-      acc = {
-        ...acc,
-        [paths.outputFilePath]: isTypeScriptProject()
-          ? content
-          : transformTSToJS(paths.outputFilePath, content),
-      }
-    })
-
-    return acc
-  }, {})
+      return acc
+    },
+    {}
+  )
 
   return filesRecord
 }
@@ -119,8 +129,11 @@ export const files = ({ provider, webAuthn }) => {
  * }
  * ```
  */
-export function generateUniqueFileNames(filesRecord, provider) {
-  const newFilesRecord = {}
+export function generateUniqueFileNames(
+  filesRecord: Record<string, string>,
+  provider: string
+) {
+  const newFilesRecord: Record<string, string> = {}
 
   Object.keys(filesRecord).forEach((fullPath) => {
     let newFullPath = fullPath

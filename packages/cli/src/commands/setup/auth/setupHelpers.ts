@@ -89,7 +89,7 @@ export const standardAuthHandler = async ({
   rwVersion,
   forceArg,
   provider,
-  webAuthn,
+  webAuthn = false,
   webPackages = [],
   apiPackages = [],
   extraTask,

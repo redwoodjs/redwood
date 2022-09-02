@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import Listr from 'listr'
 
 import {
   getPaths,
@@ -31,6 +32,10 @@ export const getSupportedProviders = () =>
 const addApiConfig = () => {
   const graphqlPath = getGraphqlPath()
 
+  if (!graphqlPath) {
+    throw new Error('Could not find your graphql file path')
+  }
+
   let content = fs.readFileSync(graphqlPath).toString()
 
   // default to an array to avoid destructure errors
@@ -52,7 +57,7 @@ const addApiConfig = () => {
   }
 }
 
-const isProviderSupported = (provider) => {
+const isProviderSupported = (provider: string) => {
   return getSupportedProviders().indexOf(provider) !== -1
 }
 
@@ -64,10 +69,11 @@ const webIndexDoesExist = () => {
   return fs.existsSync(getWebAppPath())
 }
 
-const addAuthImportToApp = (content) => {
+const addAuthImportToApp = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
-  const importIndex = contentLines.findLastIndex((line) =>
+  // @ts-expect-error - We polyfill findLastIndex
+  const importIndex = contentLines.findLastIndex((line: string) =>
     /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
   )
 
@@ -78,10 +84,11 @@ const addAuthImportToApp = (content) => {
   return contentLines.join('\n')
 }
 
-const addAuthImportToRoutes = (content) => {
+const addAuthImportToRoutes = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
-  const importIndex = contentLines.findLastIndex((line) =>
+  // @ts-expect-error - We polyfill findLastIndex
+  const importIndex = contentLines.findLastIndex((line: string) =>
     /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
   )
 
@@ -92,19 +99,27 @@ const addAuthImportToRoutes = (content) => {
   return contentLines.join('\n')
 }
 
-const hasAuthProvider = (content) => {
+const hasAuthProvider = (content: string) => {
   return /\s*<AuthProvider>/.test(content)
 }
 
 /** returns the content of App.{js,tsx} with <AuthProvider> added */
-const addAuthProviderToApp = (content) => {
+const addAuthProviderToApp = (content: string) => {
+  const match = content.match(
+    /(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s
+  )
+
+  if (!match) {
+    throw new Error('Could not find <RedwoodProvider> in App.{js,tsx}')
+  }
+
   const [
     _,
     newlineAndIndent,
     redwoodProviderOpen,
     redwoodProviderChildren,
     redwoodProviderClose,
-  ] = content.match(/(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s)
+  ] = match
 
   const redwoodProviderChildrenLines = redwoodProviderChildren
     .split('\n')
@@ -129,13 +144,13 @@ const addAuthProviderToApp = (content) => {
   )
 }
 
-const hasUseAuthHook = (componentName, content) => {
+const hasUseAuthHook = (componentName: string, content: string) => {
   return new RegExp(`<${componentName}[^>]*useAuth={.*?}.*?>`, 's').test(
     content
   )
 }
 
-const addUseAuthHook = (componentName, content) => {
+const addUseAuthHook = (componentName: string, content: string) => {
   return content.replace(
     `<${componentName}`,
     `<${componentName} useAuth={useAuth}`
@@ -176,7 +191,7 @@ export const addConfigToApp = async () => {
   fs.writeFileSync(webAppPath, content)
 }
 
-export const createWebAuthTs = (provider, webAuthn) => {
+export const createWebAuthTs = (provider: string, webAuthn: boolean) => {
   const templatesBaseDir = path.resolve(
     __dirname,
     'providers',
@@ -189,6 +204,10 @@ export const createWebAuthTs = (provider, webAuthn) => {
   const templateFileName = templates.find((template) => {
     return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
   })
+
+  if (!templateFileName) {
+    throw new Error('Could not find the auth.ts template')
+  }
 
   const templateExtension = templateFileName.split('.').at(-2)
 
@@ -238,22 +257,27 @@ export const addConfigToRoutes = () => {
   fs.writeFileSync(webRoutesPath, content)
 }
 
-export const generateAuthApi = (provider, force, webAuthn) => ({
+export const generateAuthApi = (
+  provider: string,
+  force: boolean,
+  webAuthn = false
+): Listr.ListrTask => ({
   title: 'Generating auth api side files...',
-  task: (_ctx, task) => {
+  task: (_ctx: any, task: Listr.ListrTaskWrapper) => {
     if (!apiSrcDoesExist()) {
-      return task.skip('api/src not found, skipping')
+      return task.skip?.('api/src not found, skipping')
     }
 
     // The keys in `filesRecord` are the full paths to where the file contents,
     // which is the values in `filesRecord`, will be written.
-    let filesRecord = files({ provider, webAuthn })
+    const filesRecord = files({ provider, webAuthn })
 
     if (!force) {
-      const uniqueFilesRecord = generateUniqueFileNames(filesRecord)
+      const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
+
       if (
         Object.keys(filesRecord).join(',') !==
-        Object.keys(uniqueFilesRecord.join(','))
+        Object.keys(uniqueFilesRecord).join(',')
       ) {
         console.warn(
           c.warning(
@@ -271,15 +295,15 @@ export const generateAuthApi = (provider, force, webAuthn) => ({
   },
 })
 
-export const addAuthConfigToWeb = (provider) => ({
+export const addAuthConfigToWeb = (provider: string, webAuthn = false) => ({
   title: 'Adding auth config to web...',
-  task: (_ctx, task) => {
+  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
     if (webIndexDoesExist()) {
       addConfigToApp()
-      createWebAuthTs(provider)
+      createWebAuthTs(provider, webAuthn)
       addConfigToRoutes()
     } else {
-      task.skip(
+      task.skip?.(
         `web/src/App.${
           isTypeScriptProject() ? 'tsx' : 'js'
         } not found, skipping`
@@ -290,16 +314,20 @@ export const addAuthConfigToWeb = (provider) => ({
 
 export const addAuthConfigToGqlApi = {
   title: 'Adding auth config to GraphQL API...',
-  task: (_ctx, task) => {
+  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
     if (graphFunctionDoesExist()) {
       addApiConfig()
     } else {
-      task.skip('GraphQL function not found, skipping')
+      task.skip?.('GraphQL function not found, skipping')
     }
   },
 }
 
-export const addWebPackages = (provider, webPackages, rwVersion) => ({
+export const addWebPackages = (
+  provider: string,
+  webPackages: string[],
+  rwVersion: string
+) => ({
   title: 'Adding required web packages...',
   task: async () => {
     if (!isProviderSupported(provider)) {
@@ -315,7 +343,7 @@ export const addWebPackages = (provider, webPackages, rwVersion) => ({
   },
 })
 
-export const addApiPackages = (provider, apiPackages) =>
+export const addApiPackages = (provider: string, apiPackages: string[]) =>
   apiPackages.length > 0 && {
     title: 'Adding required api packages...',
     task: async () => {
@@ -333,9 +361,9 @@ export const installPackages = {
   },
 }
 
-export const printNotes = (notes) => ({
+export const printNotes = (notes: string[]) => ({
   title: 'One more thing...',
-  task: (_ctx, task) => {
+  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
     task.title = `One more thing...\n\n   ${notes.join('\n   ')}\n`
   },
 })
