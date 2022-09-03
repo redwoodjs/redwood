@@ -48,10 +48,38 @@ import { name, version } from '../package'
   }
 
   // Initial welcome message
-  console.log(` ⚡️ ${style.redwood('Welcome to RedwoodJS!')}`)
+  console.log(
+    `${style.redwood(
+      '---------------------------------------------------------------'
+    )}`
+  )
+  console.log(`🌲⚡️ ${style.header('Welcome to RedwoodJS!')} ⚡️🌲`)
+  console.log(
+    `${style.info(
+      "Let's get growing! Tell us a little bit about your new project."
+    )}`
+  )
+  console.log(
+    `${style.redwood(
+      '---------------------------------------------------------------'
+    )}`
+  )
 
   // User prompts
+  // See https://github.com/terkelg/prompts
   const questions = [
+    {
+      type: 'text',
+      name: 'project-name',
+      message: 'Project name?',
+      initial: 'my-redwood-app',
+    },
+    {
+      type: 'text',
+      name: 'project-dir',
+      message: 'Project directory?',
+      initial: (prev) => `./${prev}`,
+    },
     {
       type: 'confirm',
       name: 'typescript',
@@ -60,17 +88,40 @@ import { name, version } from '../package'
       active: 'Yes',
       inactive: 'No',
     },
+    {
+      type: 'confirm',
+      name: 'git-init',
+      message: 'Should we initialize a new git repository?',
+      initial: true,
+      active: 'Yes',
+      inactive: 'No',
+    },
   ]
 
+  // Get the answers from the user
   const answers = await prompts(questions)
 
-  // Evaluate the answers provided and if they have selected javascript then push that argument
-  // Could check for additional answers and make additional pushes
+  // Variable to store project name
+  let appName = ''
+
+  // Evaluate the answers provided
   Object.entries(answers).forEach(([key, value]) => {
-    console.log(key)
-    console.log(value)
+    // Set the project name
+    if (key === 'project-name') {
+      appName = `${value}`
+    }
+    // Set the project dir
+    if (key === 'project-dir') {
+      process.argv.push(`${value}`)
+    }
+    // Disable TS
     if (key === 'typescript' && value == false) {
+      process.argv.push(`--typescript`, false)
       process.argv.push(`--javascript`, true)
+    }
+    // Disable git init
+    if (key === 'git-init' && value == false) {
+      process.argv.push(`--git-init`, false)
     }
   })
 
@@ -78,6 +129,7 @@ import { name, version } from '../package'
     _: args,
     'yarn-install': yarnInstall,
     typescript,
+    'git-init': gitInit,
     javascript,
     overwrite,
     telemetry: telemetry,
@@ -86,6 +138,7 @@ import { name, version } from '../package'
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
+    // .conflicts('javascript', 'typescript')
     .option('yarn-install', {
       default: true,
       type: 'boolean',
@@ -104,6 +157,12 @@ import { name, version } from '../package'
       type: 'boolean',
       describe: 'Generate a JavaScript project. TypeScript by default.',
     })
+    .option('git-init', {
+      alias: 'git',
+      default: true,
+      type: 'boolean',
+      describe: 'Initialize a new git repository.',
+    })
     .option('overwrite', {
       default: false,
       type: 'boolean',
@@ -121,7 +180,7 @@ import { name, version } from '../package'
       describe: 'Use yarn 1. yarn 3 by default',
     })
     .version(version)
-    .parse()
+    .parseSync()
 
   const targetDir = String(args).replace(/,/g, '-')
   if (!targetDir) {
@@ -329,6 +388,19 @@ import { name, version } from '../package'
           })
         },
       },
+      {
+        title: 'Initializing new git repo',
+        skip: () => gitInit === false,
+        task: () => {
+          return execa(
+            'git init && git add . && git commit -m "Initial commit" && git branch -M main',
+            {
+              shell: true,
+              cwd: newAppDir,
+            }
+          )
+        },
+      },
     ],
     { collapse: false, exitOnError: true }
   )
@@ -340,6 +412,7 @@ import { name, version } from '../package'
       // https://prettier.io/docs/en/rationale.html#semicolons
       ;[
         '',
+        style.success(`🎉🎉Successfully created ${appName}🎉🎉`),
         style.success('Thanks for trying out Redwood!'),
         '',
         ` ⚡️ ${style.redwood(
