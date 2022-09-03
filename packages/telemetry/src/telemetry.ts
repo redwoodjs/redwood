@@ -62,7 +62,7 @@ export const errorTelemetry = async (argv: Array<string>, error: any) => {
 }
 
 // used as yargs middleware when any command is invoked
-export const telemetryMiddleware = () => {
+export const telemetryMiddleware = async () => {
   // FIXME: on Windows, cmd opens and closes a few times.
   // See https://github.com/redwoodjs/redwood/issues/5728.
   if (isWindows || process.env.REDWOOD_DISABLE_TELEMETRY) {
