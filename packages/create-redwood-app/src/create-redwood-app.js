@@ -138,6 +138,7 @@ import { name, version } from '../package'
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
+    // https://github.com/yargs/yargs/blob/main/docs/api.md#conflictsx-y
     // .conflicts('javascript', 'typescript')
     .option('yarn-install', {
       default: true,
@@ -390,7 +391,7 @@ import { name, version } from '../package'
       },
       {
         title: 'Initializing new git repo',
-        skip: () => gitInit === false,
+        enabled: () => gitInit === true,
         task: () => {
           return execa(
             'git init && git add . && git commit -m "Initial commit" && git branch -M main',
