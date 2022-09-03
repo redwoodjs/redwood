@@ -12,7 +12,11 @@ const TEST_PROJECT_FIXTURE = path.join(
 
 describe('lets the user set the cwd', () => {
   test('--cwd', async () => {
-    await execa.command(`node ${rw} --cwd ${TEST_PROJECT_FIXTURE} --help`)
+    const { stdout } = await execa.command(
+      `node ${rw} --cwd ${TEST_PROJECT_FIXTURE} --help`
+    )
+
+    expect(stdout).toContain('rw <command>')
   })
 
   test(`throws if set via --cwd and there's no "redwood.toml"`, async () => {
@@ -24,11 +28,13 @@ describe('lets the user set the cwd', () => {
   })
 
   test('RWJS_CWD', async () => {
-    await execa.command(`node ${rw} --help`, {
+    const { stdout } = await execa.command(`node ${rw} --help`, {
       env: {
         RWJS_CWD: TEST_PROJECT_FIXTURE,
       },
     })
+
+    expect(stdout).toContain('rw <command>')
   })
 
   test(`throws if set via RWJS_CWD and there's no "redwood.toml"`, async () => {
@@ -40,17 +46,24 @@ describe('lets the user set the cwd', () => {
   })
 
   test('prefers --cwd to RWJS_CWD', async () => {
-    await execa.command(`node ${rw} --cwd ${TEST_PROJECT_FIXTURE} --help`, {
-      env: {
-        RWJS_CWD: '/ignored/path',
-      },
-    })
+    const { stdout } = await execa.command(
+      `node ${rw} --cwd ${TEST_PROJECT_FIXTURE} --help`,
+      {
+        env: {
+          RWJS_CWD: '/ignored/path',
+        },
+      }
+    )
+
+    expect(stdout).toContain('rw <command>')
   })
 
   test('findup', async () => {
-    await execa.command(`node ${rw} --help`, {
+    const { stdout } = await execa.command(`node ${rw} --help`, {
       cwd: path.join(TEST_PROJECT_FIXTURE, 'api'),
     })
+
+    expect(stdout).toContain('rw <command>')
   })
 
   test.only(`throws if can't findup "redwood.toml"`, async () => {
