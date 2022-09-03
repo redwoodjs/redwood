@@ -283,6 +283,19 @@ describe('validatePath', () => {
   ])('validates correct path "%s"', (path) => {
     expect(validatePath.bind(null, path)).not.toThrow()
   })
+
+  it.each(['/path/{ref}', '/path/{ref:Int}', '/path/{key}', '/path/{key:Int}'])(
+    'rejects paths with ref or key as path parameters: "%s"',
+    (path) => {
+      expect(validatePath.bind(null, path)).toThrowError(
+        [
+          `Route contains ref or key as a path parameter: "${path}"`,
+          '`ref` and `key` are special react props.',
+          'You can fix this by renaming the path parameter.',
+        ].join('\n')
+      )
+    }
+  )
 })
 
 describe('parseSearch', () => {
