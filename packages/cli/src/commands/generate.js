@@ -1,7 +1,5 @@
 import terminalLink from 'terminal-link'
 
-import { isTypeScriptProject } from '../lib/project'
-
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Generate boilerplate code and type definitions'
