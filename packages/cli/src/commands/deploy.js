@@ -2,9 +2,16 @@ export const command = 'deploy <target>'
 export const description = 'Deploy your Redwood project'
 import terminalLink from 'terminal-link'
 
-export const builder = (yargs) =>
+export async function builder(yargs) {
+  const baremetalCommand = await import('./deploy/baremetal')
+  const flightcontrolCommand = await import('./deploy/flightcontrol')
+  const layer0Command = await import('./deploy/layer0')
+  const netlifyCommand = await import('./deploy/netlify')
+  const renderCommand = await import('./deploy/render')
+  const serverlessCommand = await import('./deploy/serverless')
+  const vercelCommand = await import('./deploy/vercel')
+
   yargs
-    .commandDir('./deploy', { recurse: false })
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -12,3 +19,11 @@ export const builder = (yargs) =>
         'https://redwoodjs.com/docs/cli-commands#deploy'
       )}\n`
     )
+    .command(baremetalCommand)
+    .command(flightcontrolCommand)
+    .command(layer0Command)
+    .command(netlifyCommand)
+    .command(renderCommand)
+    .command(serverlessCommand)
+    .command(vercelCommand)
+}
