@@ -786,7 +786,7 @@ For this reason we always recommend that you add an `updatedAt` column to all of
 
 :::info
 
-If you're using [Redwood Record]() pretty soon you'll be able to cache a record by just passing the instance as the key, and it will automatically create the same key behind the scenes for you:
+If you're using [Redwood Record](/docs/redwoodrecord) pretty soon you'll be able to cache a record by just passing the instance as the key, and it will automatically create the same key behind the scenes for you:
 
 ```js
 cache(product, () => {
