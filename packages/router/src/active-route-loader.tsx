@@ -21,7 +21,7 @@ interface Props {
   path: string
   spec: Spec
   delay?: number
-  params?: Record<string, string>
+  params?: Record<string, unknown>
   whileLoadingPage?: () => React.ReactElement | null
   children?: React.ReactNode
 }

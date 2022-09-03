@@ -173,10 +173,10 @@ export const parseSearch = (
 ) => {
   const searchParams = new URLSearchParams(search)
 
-  return [...searchParams.keys()].reduce(
+  return [...searchParams.keys()].reduce<Record<string, string>>(
     (params, key) => ({
       ...params,
-      [key]: searchParams.get(key),
+      [key]: searchParams.get(key) as string,
     }),
     {}
   )
