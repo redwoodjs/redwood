@@ -97,7 +97,7 @@ const InternalRoute = ({
   )
 
   const searchParams = parseSearch(location.search)
-  const allParams = { ...searchParams, ...pathParams }
+  const allParams: Record<string, string> = { ...searchParams, ...pathParams }
 
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)
