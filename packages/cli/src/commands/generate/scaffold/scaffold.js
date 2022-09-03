@@ -26,7 +26,7 @@ import {
 import c from '../../../lib/colors'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,

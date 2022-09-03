@@ -6,7 +6,7 @@ import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { getSchema } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,

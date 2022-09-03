@@ -14,7 +14,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
 const ROUTES = [

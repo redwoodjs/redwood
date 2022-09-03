@@ -9,7 +9,7 @@ import { getConfig } from '@redwoodjs/internal/dist/config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,

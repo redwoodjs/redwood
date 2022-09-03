@@ -13,8 +13,8 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
+import { isTypeScriptProject } from '../../lib/project'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
-import { yargsDefaults } from '../generate'
 
 /**
  * Returns the path to a custom generator template, if found in the app.
@@ -267,4 +267,20 @@ export const mapPrismaScalarToPagePropTsType = (scalarType) => {
     DateTime: 'string',
   }
   return prismaScalarToTsType[scalarType] || 'unknown'
+}
+
+/** @type {Record<string, import('yargs').Options>} */
+export const yargsDefaults = {
+  force: {
+    alias: 'f',
+    default: false,
+    description: 'Overwrite existing files',
+    type: 'boolean',
+  },
+  typescript: {
+    alias: 'ts',
+    default: isTypeScriptProject(),
+    description: 'Generate TypeScript files',
+    type: 'boolean',
+  },
 }

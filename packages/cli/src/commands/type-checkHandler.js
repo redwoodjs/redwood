@@ -6,7 +6,7 @@ import Listr from 'listr'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getCmdMajorVersion } from '../commands/upgrade'
+import { getCmdMajorVersion } from '../commands/upgradeHandler'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'

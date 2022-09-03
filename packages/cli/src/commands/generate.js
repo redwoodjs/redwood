@@ -56,19 +56,3 @@ export async function builder(yargs) {
     .command(generateSecretCommand)
     .command(generateServiceCommand)
 }
-
-/** @type {Record<string, import('yargs').Options>} */
-export const yargsDefaults = {
-  force: {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: isTypeScriptProject(),
-    description: 'Generate TypeScript files',
-    type: 'boolean',
-  },
-}

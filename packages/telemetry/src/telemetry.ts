@@ -4,12 +4,15 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-const APP_ROOT = getPaths().base
-
 const spawnProcess = (...args: Array<string>) => {
   spawn(
     process.execPath,
-    [path.join(__dirname, 'scripts', 'invoke.js'), ...args, '--root', APP_ROOT],
+    [
+      path.join(__dirname, 'scripts', 'invoke.js'),
+      ...args,
+      '--root',
+      getPaths().base,
+    ],
     {
       detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
       stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
@@ -59,7 +62,7 @@ export const errorTelemetry = async (argv: Array<string>, error: any) => {
 }
 
 // used as yargs middleware when any command is invoked
-export const telemetryMiddleware = async () => {
+export const telemetryMiddleware = () => {
   // FIXME: on Windows, cmd opens and closes a few times.
   // See https://github.com/redwoodjs/redwood/issues/5728.
   if (isWindows || process.env.REDWOOD_DISABLE_TELEMETRY) {
