@@ -44,7 +44,7 @@ jest.mock('../../lib', () => {
   }
 })
 
-jest.mock('../../commands/upgrade', () => {
+jest.mock('../../commands/upgradeHandler', () => {
   return {
     getCmdMajorVersion: () => 3,
   }
