@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'fs'
 import path from 'path'
 
 import { config } from 'dotenv-defaults'
@@ -49,20 +50,41 @@ import { getPaths } from './lib'
 // # In this case, `--cwd` wins out over `RWJS_CWD`
 // RWJS_CWD=/path/to/project yarn rw info --cwd /path/to/other/project
 //
-// # Here `findup` traverses upwards.
+// # Here we traverses upwards for a redwood.toml.
 // cd api
 // yarn rw info
 // ```
 
 let { cwd } = parser(hideBin(process.argv))
 cwd ??= process.env.RWJS_CWD
-const redwoodTomlPath = findup('redwood.toml', { cwd: cwd ?? process.cwd() })
 
 try {
-  if (!redwoodTomlPath) {
-    throw new Error(
-      `Couldn't find a "redwood.toml" file--are you sure you're in a Redwood project?`
-    )
+  if (cwd) {
+    // `cwd` was set by the `--cwd` option or the `RWJS_CWD` env var. In this case,
+    // we don't want to find up for a `redwood.toml` file. The `redwood.toml` should just be in that directory.
+
+    const redwoodTOMLPath = path.join(cwd, 'redwood.toml')
+
+    if (!fs.existsSync(redwoodTOMLPath)) {
+      throw new Error(
+        `Couldn't find a "redwood.toml" file in ${cwd}.`,
+        "Are you sure you're in a Redwood project?"
+      )
+    }
+  } else {
+    // `cwd` wasn't set. Odds are they're in a Redwood project,
+    // but they could be in ./api or ./web, so we have to find up to be sure.
+
+    const redwoodTomlPath = findup('redwood.toml', { cwd: process.cwd() })
+
+    if (!redwoodTomlPath) {
+      throw new Error(
+        `Couldn't find a "redwood.toml" file in ${cwd}.`,
+        "Are you sure you're in a Redwood project?"
+      )
+    }
+
+    cwd = path.dirname(redwoodTomlPath)
   }
 } catch (error) {
   console.error(
@@ -74,7 +96,6 @@ try {
   process.exit(1)
 }
 
-cwd ??= path.dirname(redwoodTomlPath)
 process.env.RWJS_CWD = cwd
 
 // # Load .env, .env.defaults
@@ -93,7 +114,7 @@ yargs(hideBin(process.argv))
   // Config
   .scriptName('rw')
   .middleware([
-    // We've already handled `cwd` above, but it's still in `argv`.
+    // We've already handled `cwd` above, but it may still be in `argv`.
     // We don't need it anymore so let's get rid of it.
     (argv) => {
       delete argv.cwd
