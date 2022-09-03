@@ -66,10 +66,7 @@ try {
     const redwoodTOMLPath = path.join(cwd, 'redwood.toml')
 
     if (!fs.existsSync(redwoodTOMLPath)) {
-      throw new Error(
-        `Couldn't find a "redwood.toml" file in ${cwd}.`,
-        "Are you sure you're in a Redwood project?"
-      )
+      throw new Error(`Couldn't find a "redwood.toml" file in ${cwd}.`)
     }
   } else {
     // `cwd` wasn't set. Odds are they're in a Redwood project,
@@ -79,8 +76,7 @@ try {
 
     if (!redwoodTomlPath) {
       throw new Error(
-        `Couldn't find a "redwood.toml" file in ${cwd}.`,
-        "Are you sure you're in a Redwood project?"
+        `Couldn't find up a "redwood.toml" file from ${process.cwd()}.`
       )
     }
 
@@ -88,10 +84,7 @@ try {
   }
 } catch (error) {
   console.error(
-    [
-      `The Redwood CLI couldn't find your project's "redwood.toml".`,
-      'Did you run the Redwood CLI in a RedwoodJS project? Or specify "--cwd" incorrectly?',
-    ].join('\n')
+    [error.message, "Are you sure you're in a Redwood project?"].join('\n')
   )
   process.exit(1)
 }
