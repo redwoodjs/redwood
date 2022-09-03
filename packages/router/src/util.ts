@@ -197,7 +197,7 @@ export const validatePath = (path: string) => {
     throw new Error(`Route path contains spaces: "${path}"`)
   }
 
-  if (/\{(ref|key)/.test(path)) {
+  if (/\{(ref|key)([^}]*)\}/.test(path)) {
     throw new Error(
       [
         `Route contains ref or key as a path parameter: "${path}"`,
