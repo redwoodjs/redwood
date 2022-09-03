@@ -290,7 +290,7 @@ describe('validatePath', () => {
       expect(validatePath.bind(null, path)).toThrowError(
         [
           `Route contains ref or key as a path parameter: "${path}"`,
-          '`ref` and `key` are special react props.',
+          "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
           'You can fix this by renaming the path parameter.',
         ].join('\n')
       )
