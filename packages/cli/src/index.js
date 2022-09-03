@@ -4,8 +4,7 @@ import path from 'path'
 
 import { config } from 'dotenv-defaults'
 import findup from 'findup-sync'
-import parser from 'yargs-parser'
-import { hideBin } from 'yargs/helpers'
+import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
@@ -55,7 +54,7 @@ import { getPaths } from './lib'
 // yarn rw info
 // ```
 
-let { cwd } = parser(hideBin(process.argv))
+let { cwd } = Parser(hideBin(process.argv))
 cwd ??= process.env.RWJS_CWD
 
 try {

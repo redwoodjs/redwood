@@ -6313,7 +6313,6 @@ __metadata:
     title-case: 3.0.3
     typescript: 4.7.4
     yargs: 17.5.1
-    yargs-parser: 21.1.1
   bin:
     redwood: ./dist/index.js
     rw: ./dist/index.js
