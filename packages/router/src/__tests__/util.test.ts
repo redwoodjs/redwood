@@ -296,6 +296,13 @@ describe('validatePath', () => {
       )
     }
   )
+
+  it.each(['/path/{reff}', '/path/{reff:Int}', '/path/{keys}', '/path/{keys:Int}'])(
+    `doesn't reject paths with variations on ref or key as path parameters: "%s"`,
+    (path) => {
+      expect(validatePath.bind(null, path)).not.toThrowError()
+    }
+  )
 })
 
 describe('parseSearch', () => {
