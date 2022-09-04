@@ -728,23 +728,23 @@ This makes sure that the user that's logged in and creating the post cannot reus
 
 ## Caching
 
-Redwood provides a simple [LRU cache](https://www.baeldung.com/java-lru-cache) for your services. With an LRU cache you need to worry about manually expiring or updating cache items. You either read an existing item (if it's **key** is found) or create a new cached item if it isn't. This means that over time the cache will get bigger and bigger until it hits a memory or disk usage limit, but you don't care: the cache software is responsible for removing the oldest/least used members to make more room. For many applications, its entire database resultset may fit in cache!
+Redwood provides a simple [LRU cache](https://www.baeldung.com/java-lru-cache) for your services. With an LRU cache you never need to worry about manually expiring or updating cache items. You either read an existing item (if its **key** is found) or create a new cached item if it isn't. This means that over time the cache will get bigger and bigger until it hits a memory or disk usage limit, but you don't care: the cache software is responsible for removing the oldest/least used members to make more room. For many applications, its entire database resultset may fit in cache!
 
-How does a cache work? At its simplist, a cache is just a big chunk of memory or disk that stores key/value pairs. A unique key is used to lookup a value, the value being what you wanted to cache. The trick with a cache is selecting a key that makes the data unique among all the other data being cached, but that it itself (the key) contains enough uniqueness that you can safely discard it when something in the value changes, and you want to save a new value instead. More on that in [Choosing a Good Key](#choosing-a-good-key) below.
+How does a cache work? At its simplist, a cache is just a big chunk of memory or disk that stores key/value pairs. A unique key is used to lookup a value—the value being what you wanted to cache. The trick with a cache is selecting a key that makes the data unique among all the other data being cached, but that it itself (the key) contains enough uniqueness that you can safely discard it when something in the computed value changes, and you want to save a new value instead. More on that in [Choosing a Good Key](#choosing-a-good-key) below.
 
-Why use a cache? If you have an expensive or time-consuming process in your service that doesn't change on every request, this is a great candidate. For example, for a store front, you may want to show the most popular products. This may be computed by a combination of purchases, views, time spent on the product page, social media posts, or a whole host of additional information. Aggregating this data may take seconds or more, but the list of popular products probably doesn't change that often. There's no reason to make every user wait all that time just to see the same list of products. With service caching, just wrap this computation in the `cache()` function, and give it an expiration time of 24 hours, and now the result is returned in milliseconds for every user (except the first one in a 24 hour period). You can even remove this first user's wait by "warming" the cache: trigging the service function by a process you run on the server, rather than by a user's first visit.
+Why use a cache? If you have an expensive or time-consuming process in your service that doesn't change on every request, this is a great candidate. For example, for a store front, you may want to show the most popular products. This may be computed by a combination of purchases, views, time spent on the product page, social media posts, or a whole host of additional information. Aggregating this data may take seconds or more, but the list of popular products probably doesn't change that often. There's no reason to make every user wait all that time just to see the same list of products. With service caching, just wrap this computation in the `cache()` function, and give it an expiration time of 24 hours, and now the result is returned in milliseconds for every user (except the first one in a 24 hour period, it has to be computed from scratch and then stored in the cache again). You can even remove this first user's wait by "warming" the cache: trigging the service function by a process you run on the server, rather than by a user's first visit, on a 24 hour schedule so that it's the one that ends up waiting for the results to be computed.
 
 :::info What about GraphQL caching?
 
 You could also cache data at the [GraphQL layer](https://community.redwoodjs.com/t/guide-power-of-graphql-caching/2624) which has some of the same benefits. However, by placing the cache one level "lower," at the service level, you get the benefit of caching even when one service calls another internally, or when a service is called via another serverless function.
 
-In our example above you cache the GraphQL query for the most popular products. But if you had an internal admin function which was a different query, augmenting the popular products with additional information, you now need to cache that query as well. With service caching, that admin service function can call the same popular product function that's already cached and get the speed benefit automatically.
+In our example above you could cache the GraphQL query for the most popular products. But if you had an internal admin function which was a different query, augmenting the popular products with additional information, you now need to cache that query as well. With service caching, that admin service function can call the same popular product function that's already cached and get the speed benefit automatically.
 
 :::
 
 ### Clients
 
-As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it!
+As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
 
 ### What Can Be Cached
 
@@ -762,9 +762,9 @@ You can set a number of seconds after which to automatically expire the key. Aft
 
 ### Choosing a Good Key
 
-As the old saying goes "there are only two hard problems in computer science: cache, and naming things." The reason cache is included in this list is, funnily enough, usually because of naming something—the key for the cache.
+As the old saying goes "there are only two hard problems in computer science: cache, and naming things." The reason cache is included in this list is, funnily enough, many times because of naming something—the key for the cache.
 
-Consider a product that you want to cache. At first thought you may think "I'll use the name of the product as its key" and so your key is `led light strip`. One problem is that you must make absolutely sure that your product name is unique. This may not be a viable solution for your store: you could have two manufacturers with the same product name.
+Consider a product that you want to cache. At first thought you may think "I'll use the name of the product as its key" and so your key is `led light strip`. One problem is that you must make absolutely sure that your product name is unique across your shop. This may not be a viable solution for your store: you could have two manufacturers with the same product name.
 
 Okay, let's use the product's database ID as the key: `41443`. It's definitely going to be unique now, but what if you later add a cache for users? Could a user record in the database have that same ID? Probably, so now you may think you're retrieving a cached user, but you'll get the product instead.
 
@@ -795,15 +795,17 @@ cache(product, () => {
 ```
 :::
 
-One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes. This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
+One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes." This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
 
-What if you want to expire a cache without changing the data itself? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. One solution would be "touch" all of the products in the database, forcing an updated to their `updatedAt` field. But an easier solution would be to add some kind of version number to your cache key, like `v1-product-${id}-${updatedAt}`
+What if you want to expire a cache regardless of whether the data itself has changed? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. You weren't previously selecing the `sku` field out of the database, and so it hasn't been cached. But now that you're showing it you'll need to add it the list of fields to return from the service. One solution would be forceably update all of the `updatedAt` fields in the database. But a) Prisma won't easily let you do this since it think it controls that column, and b) every product is going to appear to have been edited at the same time, when in fact nothing changed—you just needed to bust the cache.
 
-Now we have a unique, but flexible key that allows us to expire the cache on demand (change the version) or automatically expire it when the record itself changes.
+An easier solution to this problem would be to add some kind of version number to your cache key that you are in control of and can change whenever you like. Something like appending a `v1` to the key: `v1-product-${id}-${updatedAt}`
+
+And this key is our final form: a unique, but flexible key that allows us to expire the cache on demand (change the version) or automatically expire it when the record itself changes.
 
 #### Expiration-based Keys
 
-You can skirt these issues about what data is changing and what to include or not include in the key by just using the expiration time on this cache entry. You may decide that if a change is made to a product, it's okay if users don't see the change for, say, an hour. In this case just set the expiration time to 3600 seconds and it will automatically be re-built, whether something changed in the record or not:
+You can skirt these issues about what data is changing and what to include or not include in the key by just setting an expiration time on this cache entry. You may decide that if a change is made to a product, it's okay if users don't see the change for, say, an hour. In this case just set the expiration time to 3600 seconds and it will automatically be re-built, whether something changed in the record or not:
 
 ```js
 cache(`product-${id}`, () => {
@@ -811,24 +813,24 @@ cache(`product-${id}`, () => {
 }, { expires: 3600 })
 ```
 
-This leads to your product cache being rebuilt every hour, even though you haven't made any changes that are of consequence to the user, but that may be we worth the tradeoff versus rebuilding the cache when *no* useful data has changed.
+This leads to your product cache being rebuilt every hour, even though you haven't made any changes that are of consequence to the user. But that may be we worth the tradeoff versus rebuilding the cache when *no* useful data has changed (like the `views` column being updated).
 
 #### Global Cache Key Prefix
 
-You can globally prefix a string to all of your cache keys:
+Just like the `v1` we added to the `product` cache key above, you can globally prefix a string to *all* of your cache keys:
 
 ```js title=api/src/lib/cache.js
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
   timeout: 500,
   // highlight-next-line
-  prefix: 'v1',
+  prefix: 'alpha',
 })
 ```
 
-This would turn a key like `posts-123` into `v1-posts-123` before giving it to the cache client.
+This would turn a key like `posts-123` into `alpha-posts-123` before giving it to the cache client. If you prefixed with `v1` in the individual cache key, you'd now have `alpha-v1-posts-123`.
 
-This gives you a nuclear option to invalidate all cache keys globally in your app. Let's say you launched a new redesign, or other visual change to your site where you may be showing more or less data from your GraphQL queries. If your data was purely based on the DB data (like `id` and `updatedAt`) there would be no way to refresh all of these keys without changing each and every cache key manually in every service, or by touching *all* records in the database. This gives you a fallback to refreshing all data at once.
+This gives you a nuclear option to invalidate all cache keys globally in your app. Let's say you launched a new redesign, or other visual change to your site where you may be showing more or less data from your GraphQL queries. If your data was purely based on the DB data (like `id` and `updatedAt`) there would be no way to refresh all of these keys without changing each and every cache key manually in every service, or by manually updating *all* `updatedAt` timestamps in the database. This gives you a fallback to refreshing all data at once.
 
 #### Caching User-specific Data
 
@@ -842,7 +844,7 @@ cache(`recommended-${context.currentUser.id}`, () => {
 
 If every page the user visits has a different list of recommended products then creating this cache may not be worth it: how often does the user revisit the same product page more than once? Conversely, if you show the *same* recommended products on every page then this cache would definitely improve the user's experience.
 
-The *key* to writing a good key (!) is just to think about the circumstances in which the key needs to expire, and include that bit of information into the string.
+The *key* to writing a good key (!) is to think carefully about the circumstances in which the key needs to expire, and include those bits of information into the key string/array. Adding caching can lead to weird bugs you don't expect, but in these cases the root cause will usually be the cache key not containing enough bits of information to expire it correctly. When in doubt, restart the app with the cache server (memcached or redis) disabled and see if the same behavior is still present. If not, the cache key is the culprit!
 
 ### Setup
 
