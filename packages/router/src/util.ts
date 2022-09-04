@@ -197,6 +197,16 @@ export const validatePath = (path: string) => {
     throw new Error(`Route path contains spaces: "${path}"`)
   }
 
+  if (/{(?:ref|key)(?::|})/.test(path)) {
+    throw new Error(
+      [
+        `Route contains ref or key as a path parameter: "${path}"`,
+        "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
+        'You can fix this by renaming the path parameter.',
+      ].join('\n')
+    )
+  }
+
   // Check for duplicate named params.
   const matches = path.matchAll(/\{([^}]+)\}/g)
   const memo: Record<string, boolean> = {}
