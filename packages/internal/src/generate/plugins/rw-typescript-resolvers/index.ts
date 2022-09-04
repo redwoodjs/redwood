@@ -38,10 +38,6 @@ export const plugin: PluginFunction<
     : ''
   const defsToInclude: string[] = []
 
-  defsToInclude.push(
-    'export type OptArgsResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = OptArgsResolverFn<TResult, TParent, TContext, TArgs>'
-  )
-
   const transformedSchema = config.federation
     ? addFederationReferencesToSchema(schema)
     : schema
@@ -57,32 +53,11 @@ export const plugin: PluginFunction<
   const visitorResult = oldVisit(astNode, { leave: visitor as any })
 
   const optionalSignForInfoArg = visitor.config.optionalInfoArgument ? '?' : ''
-  const resolverType = `export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =`
-  const resolverFnUsage = `ResolverFn<TResult, TParent, TContext, TArgs>`
 
-  if (visitor.hasFederation()) {
-    if (visitor.config.wrapFieldDefinitions) {
-      defsToInclude.push(`export type UnwrappedObject<T> = {
-        [P in keyof T]: T[P] extends infer R | Promise<infer R> | (() => infer R2 | Promise<infer R2>)
-          ? R & R2 : T[P]
-      };`)
-    }
-
-    defsToInclude.push(`export type ReferenceResolver<TResult, TReference, TContext> = (
-      reference: TReference,
-      context: TContext,
-      info${optionalSignForInfoArg}: GraphQLResolveInfo
-    ) => Promise<TResult> | TResult;`)
-
-    defsToInclude.push(`
-      type ScalarCheck<T, S> = S extends true ? T : NullableCheck<T, S>;
-      type NullableCheck<T, S> = ${namespacedImportPrefix}Maybe<T> extends T ? ${namespacedImportPrefix}Maybe<ListCheck<NonNullable<T>, S>> : ListCheck<T, S>;
-      type ListCheck<T, S> = T extends (infer U)[] ? NullableCheck<U, S>[] : GraphQLRecursivePick<T, S>;
-      export type GraphQLRecursivePick<T, S> = { [K in keyof T & keyof S]: ScalarCheck<T[K], S[K]> };
-    `)
-  }
-
-  defsToInclude.push(`${resolverType} ${resolverFnUsage};`)
+  defsToInclude.push(
+    'export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ' +
+      'ResolverFn<TResult, TParent, TContext, TArgs>'
+  )
 
   const header = `${indexSignature}
 
@@ -149,14 +124,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
     imports.push('GraphQLScalarType', 'GraphQLScalarTypeConfig')
   }
 
-  const { prepend } = basePlugin(schema, [], config) as { prepend: string[] }
-  prepend.push(`export type OptArgsResolverFn<TResult, TParent, TContext, TArgs> = (
-      args?: TArgs,
-      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult | Promise<TResult>`)
-
   return {
-    prepend,
+    ...basePlugin(schema, [], config),
     content: [
       header,
       resolversTypeMapping,
