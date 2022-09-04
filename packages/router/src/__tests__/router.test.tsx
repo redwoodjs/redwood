@@ -1489,3 +1489,23 @@ test('params should be updated if navigated to different route with same page', 
     expect(screen.queryByText('hookparams 99')).toBeInTheDocument()
   })
 })
+
+test('should handle ref and key as search params', async () => {
+  const ParamsPage = () => {
+    const { ref, key } = useParams()
+    return <p>{JSON.stringify({ ref, key })}</p>
+  }
+
+  const TestRouter = () => (
+    <Router>
+      <Route path="/params" page={ParamsPage} name="params" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+  act(() => navigate('/params?ref=1&key=2'))
+
+  await waitFor(() => {
+    expect(screen.queryByText(`{"ref":"1","key":"2"}`)).toBeInTheDocument()
+  })
+})
