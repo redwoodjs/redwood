@@ -42,7 +42,9 @@ export const useRedwoodAuthContext = (
               )
             : null
 
-          extendContext({ currentUser })
+          if (currentUser) {
+            extendContext({ currentUser })
+          }
         }
       } catch (error: any) {
         throw new Error(`Exception in getCurrentUser: ${error.message}`)
