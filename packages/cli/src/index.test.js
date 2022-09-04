@@ -66,7 +66,7 @@ describe('lets the user set the cwd', () => {
     expect(stdout).toContain('rw <command>')
   })
 
-  test.only(`throws if can't findup "redwood.toml"`, async () => {
+  test(`throws if can't findup "redwood.toml"`, async () => {
     await expect(
       execa.command(`node ${rw} --help`, {
         cwd: path.dirname(TEST_PROJECT_FIXTURE),
