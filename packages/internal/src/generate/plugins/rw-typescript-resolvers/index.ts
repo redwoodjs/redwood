@@ -1,5 +1,6 @@
 // Copied from
 // https://github.com/dotansimha/graphql-code-generator/blob/5efc9433431728f7bcb35d33b6d9e29c4313d4f0/packages/plugins/typescript/resolvers/src/index.ts
+// and then modified
 
 import {
   Types,
@@ -8,13 +9,13 @@ import {
   getCachedDocumentNodeFromSchema,
   oldVisit,
 } from '@graphql-codegen/plugin-helpers'
-import { parseMapper } from '@graphql-codegen/visitor-plugin-common'
+import {
+  TypeScriptResolversPluginConfig,
+  plugin as basePlugin,
+} from '@graphql-codegen/typescript-resolvers'
 import { GraphQLSchema } from 'graphql'
 
-import { TypeScriptResolversPluginConfig } from './config.js'
-import { TypeScriptResolversVisitor } from './visitor.js'
-
-const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1)
+import { RwTypeScriptResolversVisitor } from './visitor.js'
 
 export const plugin: PluginFunction<
   TypeScriptResolversPluginConfig,
@@ -28,14 +29,6 @@ export const plugin: PluginFunction<
   if (!config.customResolveInfo) {
     imports.push('GraphQLResolveInfo')
   }
-  const showUnusedMappers =
-    typeof config.showUnusedMappers === 'boolean'
-      ? config.showUnusedMappers
-      : true
-  const noSchemaStitching =
-    typeof config.noSchemaStitching === 'boolean'
-      ? config.noSchemaStitching
-      : true
 
   const indexSignature = config.useIndexSignature
     ? [
@@ -43,76 +36,16 @@ export const plugin: PluginFunction<
         'export type ResolversObject<TObject> = WithIndex<TObject>;',
       ].join('\n')
     : ''
-  const importType = config.useTypeImports ? 'import type' : 'import'
-  const prepend: string[] = []
   const defsToInclude: string[] = []
-  const directiveResolverMappings = {} as Record<string, string>
 
   defsToInclude.push(
     'export type OptArgsResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = OptArgsResolverFn<TResult, TParent, TContext, TArgs>'
   )
 
-  console.log('directiveResolverMappings', directiveResolverMappings)
-
-  if (config.directiveResolverMappings) {
-    for (const [directiveName, mapper] of Object.entries(
-      config.directiveResolverMappings
-    )) {
-      const parsedMapper = parseMapper(mapper)
-      const capitalizedDirectiveName = capitalize(directiveName)
-      const resolverFnName = `ResolverFn${capitalizedDirectiveName}`
-      const resolverFnUsage = `${resolverFnName}<TResult, TParent, TContext, TArgs>`
-      const resolverWithResolveUsage = `Resolver${capitalizedDirectiveName}WithResolve<TResult, TParent, TContext, TArgs>`
-      const resolverWithResolve = `
-export type Resolver${capitalizedDirectiveName}WithResolve<TResult, TParent, TContext, TArgs> = {
-  resolve: ${resolverFnName}<TResult, TParent, TContext, TArgs>;
-};`
-      const resolverTypeName = `Resolver${capitalizedDirectiveName}`
-      const resolverType = `export type ${resolverTypeName}<TResult, TParent = {}, TContext = {}, TArgs = {}> =`
-
-      if (parsedMapper.isExternal) {
-        if (parsedMapper.default) {
-          prepend.push(
-            `${importType} ${resolverFnName} from '${parsedMapper.source}';`
-          )
-        } else {
-          prepend.push(
-            `${importType} { ${parsedMapper.import} ${
-              parsedMapper.import !== resolverFnName
-                ? `as ${resolverFnName} `
-                : ''
-            }} from '${parsedMapper.source}';`
-          )
-        }
-        prepend.push(
-          `export${config.useTypeImports ? ' type' : ''} { ${resolverFnName} };`
-        )
-      } else {
-        defsToInclude.push(
-          `export type ${resolverFnName}<TResult, TParent, TContext, TArgs> = ${parsedMapper.type}`
-        )
-      }
-
-      if (config.makeResolverTypeCallable) {
-        defsToInclude.push(`${resolverType} ${resolverFnUsage};`)
-      } else {
-        defsToInclude.push(resolverWithResolve)
-        defsToInclude.push(
-          `${resolverType} ${resolverFnUsage} | ${resolverWithResolveUsage};`
-        )
-      }
-
-      directiveResolverMappings[directiveName] = resolverTypeName
-    }
-  }
-
   const transformedSchema = config.federation
     ? addFederationReferencesToSchema(schema)
     : schema
-  const visitor = new TypeScriptResolversVisitor(
-    { ...config, directiveResolverMappings },
-    transformedSchema
-  )
+  const visitor = new RwTypeScriptResolversVisitor(config, transformedSchema)
   const namespacedImportPrefix = visitor.config.namespacedImportName
     ? `${visitor.config.namespacedImportName}.`
     : ''
@@ -124,25 +57,8 @@ export type Resolver${capitalizedDirectiveName}WithResolve<TResult, TParent, TCo
   const visitorResult = oldVisit(astNode, { leave: visitor as any })
 
   const optionalSignForInfoArg = visitor.config.optionalInfoArgument ? '?' : ''
-  const legacyStitchingResolverType = `
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};`
-  const newStitchingResolverType = `
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string | ((fieldNode: FieldNode) => SelectionSetNode);
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};`
-  const stitchingResolverType = `export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;`
-  const resolverWithResolve = `
-export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};`
   const resolverType = `export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =`
   const resolverFnUsage = `ResolverFn<TResult, TParent, TContext, TArgs>`
-  const resolverWithResolveUsage = `ResolverWithResolve<TResult, TParent, TContext, TArgs>`
-  const stitchingResolverUsage = `StitchingResolver<TResult, TParent, TContext, TArgs>`
 
   if (visitor.hasFederation()) {
     if (visitor.config.wrapFieldDefinitions) {
@@ -166,76 +82,7 @@ export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
     `)
   }
 
-  if (!config.makeResolverTypeCallable) {
-    defsToInclude.push(resolverWithResolve)
-  }
-
-  if (noSchemaStitching) {
-    const defs = config.makeResolverTypeCallable
-      ? // Resolver = ResolverFn
-        `${resolverType} ${resolverFnUsage};`
-      : // Resolver = ResolverFn | ResolverWithResolve
-        `${resolverType} ${resolverFnUsage} | ${resolverWithResolveUsage};`
-    defsToInclude.push(defs)
-  } else {
-    // StitchingResolver
-    // Resolver =
-    // | ResolverFn
-    // | ResolverWithResolve
-    // | StitchingResolver;
-    defsToInclude.push(
-      [
-        legacyStitchingResolverType,
-        newStitchingResolverType,
-        stitchingResolverType,
-        resolverType,
-        `  | ${resolverFnUsage}`,
-        config.makeResolverTypeCallable
-          ? ``
-          : `  | ${resolverWithResolveUsage}`,
-        `  | ${stitchingResolverUsage};`,
-      ].join('\n')
-    )
-    imports.push('SelectionSetNode', 'FieldNode')
-  }
-
-  if (config.customResolverFn) {
-    const parsedMapper = parseMapper(config.customResolverFn)
-    if (parsedMapper.isExternal) {
-      if (parsedMapper.default) {
-        prepend.push(`${importType} ResolverFn from '${parsedMapper.source}';`)
-      } else {
-        prepend.push(
-          `${importType} { ${parsedMapper.import} ${
-            parsedMapper.import !== 'ResolverFn' ? 'as ResolverFn ' : ''
-          }} from '${parsedMapper.source}';`
-        )
-      }
-      prepend.push(
-        `export${config.useTypeImports ? ' type' : ''} { ResolverFn };`
-      )
-    } else {
-      prepend.push(
-        `export type ResolverFn<TResult, TParent, TContext, TArgs> = ${parsedMapper.type}`
-      )
-    }
-    prepend.push(
-      `export type OptArgsResolverFn<TResult, TParent, TContext, TArgs> = ${parsedMapper.type.replace(
-        'args: ',
-        'args?: '
-      )}`
-    )
-  } else {
-    const defaultResolverFn = `
-export type ResolverFn<TResult, TParent, TContext, TArgs> = (
-  parent: TParent,
-  args: TArgs,
-  context: TContext,
-  info${optionalSignForInfoArg}: GraphQLResolveInfo
-) => Promise<TResult> | TResult;`
-
-    defsToInclude.push(defaultResolverFn)
-  }
+  defsToInclude.push(`${resolverType} ${resolverFnUsage};`)
 
   const header = `${indexSignature}
 
@@ -296,46 +143,17 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
   const resolversTypeMapping = visitor.buildResolversTypes()
   const resolversParentTypeMapping = visitor.buildResolversParentTypes()
-  const {
-    getRootResolver,
-    getAllDirectiveResolvers,
-    mappersImports,
-    unusedMappers,
-    hasScalars,
-  } = visitor
+  const { getRootResolver, getAllDirectiveResolvers, hasScalars } = visitor
 
   if (hasScalars()) {
     imports.push('GraphQLScalarType', 'GraphQLScalarTypeConfig')
   }
 
-  if (showUnusedMappers && unusedMappers.length) {
-    // eslint-disable-next-line no-console
-    console.warn(`Unused mappers: ${unusedMappers.join(',')}`)
-  }
-
-  if (imports.length) {
-    prepend.push(`${importType} { ${imports.join(', ')} } from 'graphql';`)
-  }
-
-  if (config.customResolveInfo) {
-    const parsedMapper = parseMapper(config.customResolveInfo)
-    if (parsedMapper.isExternal) {
-      if (parsedMapper.default) {
-        prepend.push(`import GraphQLResolveInfo from '${parsedMapper.source}'`)
-      }
-      prepend.push(
-        `import { ${parsedMapper.import} ${
-          parsedMapper.import !== 'GraphQLResolveInfo'
-            ? 'as GraphQLResolveInfo'
-            : ''
-        } } from '${parsedMapper.source}';`
-      )
-    } else {
-      prepend.push(`type GraphQLResolveInfo = ${parsedMapper.type}`)
-    }
-  }
-
-  prepend.push(...mappersImports, ...visitor.globalDeclarations)
+  const { prepend } = basePlugin(schema, [], config) as { prepend: string[] }
+  prepend.push(`export type OptArgsResolverFn<TResult, TParent, TContext, TArgs> = (
+      args?: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => TResult | Promise<TResult>`)
 
   return {
     prepend,
@@ -352,4 +170,4 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   }
 }
 
-export { TypeScriptResolversVisitor, TypeScriptResolversPluginConfig }
+export { RwTypeScriptResolversVisitor, TypeScriptResolversPluginConfig }
