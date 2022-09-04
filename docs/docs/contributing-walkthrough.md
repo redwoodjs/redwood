@@ -193,7 +193,7 @@ We use GitHub Desktop to walk through the process of:
 
 3. **Create Pull Request:** Once the commit(s) have been pushed, you should see another option for "Create Pull Request." This will open a browser window to GitHub's "Open a pull request" form. Fill out the appropriate information, check the box to "Allow edits by maintainers," and submit!
 
-> If you are following along and are not using GitHub Desktop, after pushing your commits, you can open a pull request by visiting [github.com](github.com) and browsing to your fork. There should be a button at the top to submit a pull request.
+> If you are following along and are not using GitHub Desktop, after pushing your commits, you can open a pull request by visiting [github.com](https://github.com) and browsing to your fork. There should be a button at the top to submit a pull request.
 
 You have successfully submitted your PR!
 
