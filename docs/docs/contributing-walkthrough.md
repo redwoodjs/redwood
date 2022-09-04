@@ -181,20 +181,32 @@ All of these checks are included in Redwood’s GitHub PR Continuous Integration
 You’ve made it to the fun part! It’s time to use the code you’re working on to create a new PR into the Redwood Framework `main` branch.
 
 We use GitHub Desktop to walk through the process of:
-- committing my changes to my development branch
+- Committing my changes to my development branch
 - Publishing (pushing) my branch and changes to my GitHub repo fork of the Redwood Framework
 - Opening a PR requesting to merge my forked-repo branch into the Redwood Framework `main` branch
 
-Refer to the section above “What makes for a good Pull Request?” for advice on opening your PR.
+> While we use GitHub Desktop as an example, the basic process outlined above is the same whether using the command line or other clients.
 
-**Note:** Make sure you check the box to “allow project maintainers to update the code” (I’m not sure about the specific description used). This helps a PR move forward more quickly as branches always need to be updated from `main` before we can merge.
+1. **Commit Files:** Using GitHub Desktop, browse to your local Redwood Framework repository and select the current branch you're working on. On the left-hand side, you'll see the files that have been modified, added, or removed. Check the boxes for the files you want to include in the PR. Below the file list, you'll see two text boxes and a "Commit to &lt;your-branch-name&gt;" button. Write a short commit message in the first box. If you want to add a longer description then you can do so in the second box. Click the "Commit to ..." button to commit the changes to the branch. The files are now committed under that commit message.
+
+2. **Push Files:** After committing, you should see an option appear with the count of local commits and a button to "Push origin." If you're ready to push those changes to the remote branch, click that button. Otherwise, you can keep working and add more commits using the process in step 1.
+
+3. **Create Pull Request:** Once the commit(s) have been pushed, you should see another option for "Create Pull Request." This will open a browser window to GitHub's "Open a pull request" form. Fill out the appropriate information, check the box to "Allow edits by maintainers," and submit!
+
+> If you are following along and are not using GitHub Desktop, after pushing your commits, you can open a pull request by visiting [github.com](https://github.com) and browsing to your fork. There should be a button at the top to submit a pull request.
+
+You have successfully submitted your PR!
+
+**Note:** Make sure you check the box that allows project maintainers to update your branch. This option is found on the "Open a pull request" form below the description textbox. Checking this option helps move a PR forward more quickly, as branches always need to be updated from `main` before we can merge.
 
 **When is my code “ready” to open a PR?**
-Most of the action, communication, and decisions happen within a PR. A common mistake new contributors make is *waiting* until their code is “perfect” before opening a PR. Assuming your PR has some code changes, it’s great practice to open a Draft PR (setting during the PR creation), which you can use to start discussion and ask questions. PRs are closed all the time without being merged, often because they are replaced by another PR resulting from decisions and discussion. It’s part of the process. More importantly, it means collaboration is happening!
+Most of the action, communication, and decisions happen within a PR. A common mistake new contributors make is *waiting* until their code is “perfect” before opening a PR. Assuming your PR has some code changes, it’s great practice to open a [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-requests/) (setting during the PR creation), which you can use to start discussion and ask questions. PRs are closed all the time without being merged, often because they are replaced by another PR resulting from decisions and discussion. It’s part of the process. More importantly, it means collaboration is happening!
 
 What isn’t a fun experience is spending a whole bunch of time on code that ends up not being the correct direction or is unnecessary/redundant to something that already exists. This is a part of the learning process. But it’s another reason to open a draft PR sooner than later to get confirmation and questions out of the way before investing time into refining and details.
 
 When in doubt, just try first and ask for help and direction!
+
+Refer to the [What makes for a good Pull Request?](contributing-overview.md#what-makes-for-a-good-pull-request) section in [Contributing Overview](contributing-overview.md)for general good practices when opening PR.
 
 ### Gitpod: Browser-based Development
 [Gitpod](http://gitpod.io) has recently been integrated with Redwood to JustWork™ with any branch or PR. When a virtual Gitpod workspace is initialized, it automatically:
