@@ -24,7 +24,7 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
     return (parentName: string) => {
       const fieldDef = superFieldDefinition(parentName)
 
-      if (hasArguments && fieldDef?.includes(': Resolver<')) {
+      if (!hasArguments && fieldDef?.includes(': Resolver<')) {
         return fieldDef.replace(': Resolver<', ': OptArgsResolver<')
       }
 
