@@ -29,7 +29,6 @@ export const plugin: PluginFunction<
 
   // runs visitor
   const visitorResult = oldVisit(getCachedDocumentNodeFromSchema(schema), {
-    // TODO: Fix type
     leave: visitor as any,
   })
 
