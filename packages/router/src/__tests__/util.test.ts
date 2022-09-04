@@ -284,7 +284,15 @@ describe('validatePath', () => {
     expect(validatePath.bind(null, path)).not.toThrow()
   })
 
-  it.each(['/path/{ref}', '/path/{ref:Int}', '/path/{key}', '/path/{key:Int}'])(
+  it.each([
+    '/path/{ref}',
+    '/path/{ref}/bazinga',
+    '/path/{ref:Int}',
+    '/path/{ref:Int}/bazinga',
+    '/path/{key}',
+    '/path/{key}/bazinga',
+    '/path/{key:Int}'
+  ])(
     'rejects paths with ref or key as path parameters: "%s"',
     (path) => {
       expect(validatePath.bind(null, path)).toThrowError(
