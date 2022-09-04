@@ -1,4 +1,4 @@
-import type { API, FileInfo, Node, TSTypeAnnotation } from 'jscodeshift'
+import type { API, FileInfo, TSTypeAnnotation } from 'jscodeshift'
 import { Identifier, TSTypeReference } from 'jscodeshift'
 
 const isTypeReference = (
