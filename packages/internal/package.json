@@ -40,7 +40,6 @@
     "@graphql-codegen/typescript": "2.7.3",
     "@graphql-codegen/typescript-operations": "2.5.3",
     "@graphql-codegen/typescript-react-apollo": "3.3.3",
-    "@graphql-codegen/typescript-resolvers": "2.7.3",
     "@redwoodjs/graphql-server": "2.2.3",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.5.3",
