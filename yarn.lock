@@ -3145,22 +3145,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-resolvers@npm:2.7.3":
-  version: 2.7.3
-  resolution: "@graphql-codegen/typescript-resolvers@npm:2.7.3"
-  dependencies:
-    "@graphql-codegen/plugin-helpers": ^2.6.2
-    "@graphql-codegen/typescript": ^2.7.3
-    "@graphql-codegen/visitor-plugin-common": 2.12.1
-    "@graphql-tools/utils": ^8.8.0
-    auto-bind: ~4.0.0
-    tslib: ~2.4.0
-  peerDependencies:
-    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 226e8f2f6c45b38498ed45d776a693d242809b000d2739a4c40cecbf788502ab6f398d823c904a5be4e57dea1524f107ae45d483918f2f33f9baed9da25852d5
-  languageName: node
-  linkType: hard
-
 "@graphql-codegen/typescript@npm:2.7.3, @graphql-codegen/typescript@npm:^2.7.3":
   version: 2.7.3
   resolution: "@graphql-codegen/typescript@npm:2.7.3"
@@ -6533,7 +6517,6 @@ __metadata:
     "@graphql-codegen/typescript": 2.7.3
     "@graphql-codegen/typescript-operations": 2.5.3
     "@graphql-codegen/typescript-react-apollo": 3.3.3
-    "@graphql-codegen/typescript-resolvers": 2.7.3
     "@redwoodjs/graphql-server": 2.2.3
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.1.19
