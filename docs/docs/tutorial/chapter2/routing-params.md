@@ -761,10 +761,10 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }) => (
+export const Success = ({ article }) => {
   // highlight-next-line
-  <Article article={article} />
-)
+  return <Article article={article} />
+}
 ```
 
 </TabItem>
