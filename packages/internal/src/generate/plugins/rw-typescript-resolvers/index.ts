@@ -41,6 +41,11 @@ export const plugin: PluginFunction<
   const transformedSchema = config.federation
     ? addFederationReferencesToSchema(schema)
     : schema
+  // This is the key change compared to the standard typescript-resolver
+  // plugin implementation - we use our own Visitor here.
+  // There are more changes done to this file, but they're all pretty much
+  // all about just removing code that isn't needed for the specific
+  // setup that Redwood has
   const visitor = new RwTypeScriptResolversVisitor(config, transformedSchema)
   const namespacedImportPrefix = visitor.config.namespacedImportName
     ? `${visitor.config.namespacedImportName}.`
@@ -125,6 +130,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   }
 
   return {
+    // We're spreading `prepend` and `content` here. `content` will be fully
+    // overridden by our own content on the line below. Really only needed to
+    // replace `visitorResult`, but couldn't figure out how to be more
+    // granular than this
     ...basePlugin(schema, [], config),
     content: [
       header,

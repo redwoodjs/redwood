@@ -22,8 +22,13 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
     const superFieldDefinition = super.FieldDefinition(node, key, parent)
 
     return (parentName: string) => {
+      // We're reusing pretty much all of the logic in the original plugin
+      // Visitor implementation by calling the `super` method here
       const fieldDef = superFieldDefinition(parentName)
 
+      // If this field doesn't take any arguments, and it is a resolver, then
+      // we switch to using the OptArgsResolver type instead, so that the user
+      // isn't forced to pass in arguments that aren't going to be used anyway
       if (!hasArguments && fieldDef?.includes(': Resolver<')) {
         return fieldDef.replace(': Resolver<', ': OptArgsResolver<')
       }
