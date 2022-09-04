@@ -291,24 +291,21 @@ describe('validatePath', () => {
     '/path/{ref:Int}/bazinga',
     '/path/{key}',
     '/path/{key}/bazinga',
-    '/path/{key:Int}'
-  ])(
-    'rejects paths with ref or key as path parameters: "%s"',
-    (path) => {
-      expect(validatePath.bind(null, path)).toThrowError(
-        [
-          `Route contains ref or key as a path parameter: "${path}"`,
-          "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
-          'You can fix this by renaming the path parameter.',
-        ].join('\n')
-      )
-    }
-  )
+    '/path/{key:Int}',
+  ])('rejects paths with ref or key as path parameters: "%s"', (path) => {
+    expect(validatePath.bind(null, path)).toThrowError(
+      [
+        `Route contains ref or key as a path parameter: "${path}"`,
+        "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
+        'You can fix this by renaming the path parameter.',
+      ].join('\n')
+    )
+  })
 
   it.each([
     '/path/{reff}',
     '/path/{reff:Int}',
-    '/path/{reff}/bazinga',    
+    '/path/{reff}/bazinga',
     '/path/{keys}',
     '/path/{keys:Int}',
     '/path/key',
