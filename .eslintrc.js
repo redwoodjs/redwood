@@ -27,23 +27,12 @@ module.exports = {
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
-    'packages/create-redwood-app/template/web/src/Routes.tsx',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
   },
   overrides: [
-    {
-      // We override import order of the CRWA graphql function because we want the grouped glob imports
-      // to be ordered separately.
-      // Note: for some reason, the pattern as eslints each file to match against the pattern
-      // the files pattern has to be the filename and not the relative path (as one might expect)
-      files: ['graphql.ts'],
-      rules: {
-        'import/order': 'off',
-      },
-    },
     {
       files: ['packages/structure/**'],
       rules: {
@@ -158,11 +147,21 @@ module.exports = {
       ],
       rules: {
         'no-restricted-imports': [
+          // for import x from ('@redwoodjs/internal')
           'error',
           {
             name: '@redwoodjs/internal',
             message:
               'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>, or await import',
+          },
+        ],
+        'no-restricted-modules': [
+          // for require('@redwoodjs/internal')
+          'error',
+          {
+            name: '@redwoodjs/internal',
+            message:
+              'To prevent bloat in CLI, do not require "@redwoodjs/internal" directly. Instead require like @redwoodjs/internal/dist/<file>',
           },
         ],
       },

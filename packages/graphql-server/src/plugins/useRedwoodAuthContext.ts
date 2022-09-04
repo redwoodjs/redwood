@@ -1,6 +1,6 @@
 import { Plugin } from '@graphql-yoga/common'
 
-import { getAuthenticationContext } from '@redwoodjs/api'
+import { AuthContextPayload, getAuthenticationContext } from '@redwoodjs/api'
 
 // import { AuthenticationError } from '../errors'
 import {
@@ -19,7 +19,7 @@ export const useRedwoodAuthContext = (
     async onContextBuilding({ context, extendContext }) {
       const { requestContext } = context
 
-      let authContext = undefined
+      let authContext: AuthContextPayload | undefined = undefined
 
       try {
         authContext = await getAuthenticationContext({

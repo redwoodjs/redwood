@@ -4,9 +4,9 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
-import type { DbAuthSession } from '../functions/dbAuth/DbAuthHandler'
+import { Decoded, decodeToken } from './decoders'
 
-import { decodeToken } from './decoders'
+export type { Decoded } from './decoders'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
@@ -41,7 +41,7 @@ export const parseAuthorizationHeader = (
 }
 
 export type AuthContextPayload = [
-  string | Record<string, unknown> | null | DbAuthSession,
+  Decoded,
   { type: SupportedAuthTypes } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
