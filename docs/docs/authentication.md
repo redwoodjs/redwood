@@ -24,7 +24,7 @@ You can also implement your own custom auth client. Check out the [Custom docs](
 
 :::info Auth Playground
 
-Check out the [Auth Playground](https://redwood-playground-auth.netlify.app/) for examples of the auth experience with each provider or check out [the source code](https://redwood-playground-auth.netlify.app/).
+Check out the [Auth Playground](https://redwood-playground-auth.netlify.app/) for examples of the auth experience with each provider or check out [the source code](https://github.com/redwoodjs/playground-auth).
 
 :::
 
