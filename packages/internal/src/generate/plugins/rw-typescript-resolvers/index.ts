@@ -37,13 +37,20 @@ export const plugin: PluginFunction<
     content: string
   }
 
-  // A couple of types needed for our own RW-specific solution
+  // A few types needed for our own RW-specific solution
   prepend.push(`export type OptArgsResolverFn<TResult, TParent, TContext, TArgs> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => TResult | Promise<TResult>
 
-    export type OptArgsResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = OptArgsResolverFn<TResult, TParent, TContext, TArgs>`)
+    export type OptArgsResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = OptArgsResolverFn<TResult, TParent, TContext, TArgs>
+
+    export type RequiredResolverFn<TResult, TParent, TContext, TArgs> = (
+      args: TArgs,
+      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => TResult | Promise<TResult>
+
+    export type RequiredResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = RequiredResolverFn<TResult, TParent, TContext, TArgs>`)
 
   // `content` is constructed like this:
   //   content: [
