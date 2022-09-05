@@ -259,7 +259,7 @@ Then click on "SMTP"
 
 ![SendInBlue SMTP tab-bar option](https://user-images.githubusercontent.com/30793/150651295-929e671a-da38-46ab-937c-a976b23a0fa0.png)
 
-Finally you need to generate a new SMTP key. Name it whatever you want, does't matter. You should get a dialog that looks like the screenshot below. Copy your key.
+Finally you need to generate a new SMTP key. Name it whatever you want, doesn't matter. You should get a dialog that looks like the screenshot below. Copy your key.
 
 ![SendInBlue SMTP key dialog](https://user-images.githubusercontent.com/30793/150651301-523750b3-7732-4a15-bc0e-746811a4bb20.png)
 

@@ -805,7 +805,9 @@ describe('comments', () => {
       input: {
         name: 'Billy Bob',
         body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id,
+        post: {
+          connect: { id: scenario.post.bark.id },
+        },
       },
     })
 
@@ -844,7 +846,9 @@ describe('comments', () => {
         input: {
           name: 'Billy Bob',
           body: 'What is your favorite tree bark?',
-          postId: scenario.post.bark.id,
+          post: {
+            connect: { id: scenario.post.bark.id },
+          },
         },
       })
 
@@ -864,6 +868,34 @@ describe('comments', () => {
 We pass an optional first argument to `scenario()` which is the named scenario to use, instead of the default of "standard."
 
 We were able to use the `id` of the post that we created in our scenario because the scenarios contain the actual database data after being inserted, not just the few fields we defined in the scenario itself. In addition to `id` we could access `createdAt` which is defaulted to `now()` in the database.
+
+:::info What's that post…connect…id-Voodoo?! Can't we simply pass the Post's ID directly here?
+
+What you're looking at is the [connect syntax](https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#connect-an-existing-record), which is a Prisma
+core concept. And yes, we could simply pass `postId: scenario.post.bark.id` instead – as a so-called "unchecked" input. But as the name implies, the connect syntax is king
+in Prisma-land.
+
+<ShowForTs>
+Note that if you try to use `postId` that would give you red squiggles, because that input would violate the `CreateCommentArgs` interface definition in
+`api/src/services/comments/comments.ts`. In order to use the `postId` input, that'd need to be changed to
+
+```ts
+interface CreateCommentArgs {
+  input: Prisma.CommentUncheckedCreateInput
+}
+```
+
+or
+
+```ts
+interface CreateCommentArgs {
+  input: Prisma.CommentCreateInput | Prisma.CommentUncheckedCreateInput
+}
+```
+in case we wanted to allow both ways – which Prisma generally allows, however [it doesn't allow to pick and mix](https://stackoverflow.com/a/69169106/1246547) within the same input.
+</ShowForTs>
+
+:::
 
 We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the Javascript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
 

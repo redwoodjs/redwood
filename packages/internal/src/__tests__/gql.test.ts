@@ -18,11 +18,11 @@ test('parses a document AST', () => {
   `
 
   expect(parseDocumentAST(QUERY)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "fields": Array [
-          Object {
-            "posts": Array [
+    [
+      {
+        "fields": [
+          {
+            "posts": [
               "id",
               "title",
               "body",
@@ -53,11 +53,11 @@ test('handles inline fragments', () => {
   `
 
   expect(parseDocumentAST(QUERY)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "fields": Array [
-          Object {
-            "something": Array [
+    [
+      {
+        "fields": [
+          {
+            "something": [
               "__typename",
               "__typename",
             ],
@@ -83,11 +83,11 @@ test('handles fragments', () => {
   `
 
   expect(parseDocumentAST(QUERY)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "fields": Array [
-          Object {
-            "something": Array [],
+    [
+      {
+        "fields": [
+          {
+            "something": [],
           },
         ],
         "name": "MyCellQuery",
