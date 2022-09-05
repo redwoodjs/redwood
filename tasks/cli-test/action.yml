@@ -1,0 +1,5 @@
+name: 'CLI Test'
+description: "Tests how the CLI sets the cwd and env vars"
+runs:
+  using: 'node16'
+  main: 'cli-test.mjs'
