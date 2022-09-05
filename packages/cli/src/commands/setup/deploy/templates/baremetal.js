@@ -44,7 +44,7 @@ keepReleases = 5
 #
 # [[production.servers]]
 # host = "api.server.com"
-# user = "user"
+# username = "user"
 # agentForward = true
 # sides = ["api"]
 # path = "/var/www/app"
@@ -54,7 +54,7 @@ keepReleases = 5
 #
 # [[production.servers]]
 # host = "web.server.com"
-# user = "user"
+# username = "user"
 # agentForward = true
 # sides = ["web"]
 # path = "/var/www/app"
