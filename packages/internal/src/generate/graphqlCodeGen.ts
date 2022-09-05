@@ -258,26 +258,12 @@ export const getResolverFnType = () => {
     return `(
       args: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult | Promise<TResult>
-
-    export type OptArgsResolverFn<TResult, TParent, TContext, TArgs> = (
-      args?: TArgs,
-      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult | Promise<TResult>
-
-    export type OptArgsResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = OptArgsResolverFn<TResult, TParent, TContext, TArgs>`
+    ) => TResult | Promise<TResult>`
   } else {
     return `(
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult | Promise<TResult>
-
-    export type OptArgsResolverFn<TResult, TParent, TContext, TArgs> = (
-      args?: TArgs,
-      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => TResult | Promise<TResult>
-
-    export type OptArgsResolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = OptArgsResolverFn<TResult, TParent, TContext, TArgs>`
+    ) => TResult | Promise<TResult>`
   }
 }
 
