@@ -119,7 +119,7 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
           .map((content) =>
             content.replace(
               /: (?:OptArgs)?Resolver(?:Fn)?/,
-              ': RequiredResolverFn'
+              '?: RequiredResolverFn'
             )
           )
           .join('\n')

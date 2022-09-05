@@ -31,7 +31,7 @@ export const delete${singularPascalName}: MutationResolvers['delete${singularPas
   })
 }<% } %><% if (relations.length) { %>
 
-export const ${singularPascalName}: Partial<${singularPascalName}RelationResolvers>  = {<% relations.forEach(relation => { %>
+export const ${singularPascalName}: ${singularPascalName}RelationResolvers = {<% relations.forEach(relation => { %>
   ${relation}: (_obj, { root }) => {
     return db.${singularCamelName}.findUnique({ where: { id: root?.id } }).${relation}()
   },<% }) %>
