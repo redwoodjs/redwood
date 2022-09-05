@@ -38,7 +38,7 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
       // we switch to using the OptArgsResolver type instead, so that the user
       // isn't forced to pass in arguments that aren't going to be used anyway
       if (!hasArguments && fieldDef?.includes(': Resolver<')) {
-        return fieldDef.replace(': Resolver<', ': OptArgsResolver<')
+        return fieldDef.replace(': Resolver<', ': OptArgsResolverFn<')
       }
 
       return fieldDef
@@ -117,7 +117,10 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
       .withBlock(
         fieldsContent
           .map((content) =>
-            content.replace(/: (?:OptArgs)?Resolver/, ': RequiredResolver')
+            content.replace(
+              /: (?:OptArgs)?Resolver(?:Fn)?/,
+              ': RequiredResolverFn'
+            )
           )
           .join('\n')
       )
