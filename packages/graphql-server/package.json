@@ -32,7 +32,7 @@
     "@graphql-tools/schema": "8.5.1",
     "@graphql-tools/utils": "8.10.0",
     "@graphql-yoga/common": "2.12.8",
-    "@prisma/client": "4.2.1",
+    "@prisma/client": "4.3.1",
     "@redwoodjs/api": "2.2.3",
     "core-js": "3.25.0",
     "cross-undici-fetch": "0.4.14",
