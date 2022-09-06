@@ -74,8 +74,8 @@ export const handler = async (
     // the database. Returning anything truthy will automatically log the user
     // in. Return `false` otherwise, and in the Reset Password page redirect the
     // user to the login page.
-    handler: (user) => {
-      return !!user
+    handler: (_user) => {
+      return true
     },
 
     // If `false` then the new password MUST be different from the current one

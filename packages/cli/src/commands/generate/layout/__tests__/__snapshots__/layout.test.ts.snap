@@ -14,15 +14,10 @@ const A11yLayout = ({ children }) => {
   return (
     <>
       {/* renders a link that remains hidden till focused; put it at the top of your layout */}
-
       <SkipNavLink />
-
       <nav></nav>
-
       {/* renders a div as the target for the link; put it next to your main content */}
-
       <SkipNavContent />
-
       <main>{children}</main>
     </>
   )
@@ -97,7 +92,10 @@ export const generated = (args) => {
   return <SinglePageLayout {...args} />
 }
 
-export default { title: 'Layouts/SinglePageLayout' }
+export default {
+  title: 'Layouts/SinglePageLayout',
+  component: SinglePageLayout,
+}
 "
 `;
 
@@ -117,7 +115,10 @@ export const generated = (args) => {
   return <AppLayout {...args} />
 }
 
-export default { title: 'Layouts/AppLayout' }
+export default {
+  title: 'Layouts/AppLayout',
+  component: AppLayout,
+}
 "
 `;
 

@@ -29,6 +29,11 @@ export default function (
         // remove `src/` and create an absolute path
         const absPath = path.join(options.srcAbsPath, value.substr(4))
         let newImport = path.relative(path.dirname(filename), absPath)
+
+        // Changes windows pathing to be compliant with nodeFileTrace after build.
+        if (process.platform === 'win32') {
+          newImport = newImport.replaceAll('\\', '/')
+        }
         if (newImport.indexOf('.') !== 0) {
           newImport = './' + newImport
         }

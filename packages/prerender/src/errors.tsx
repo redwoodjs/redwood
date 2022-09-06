@@ -1,3 +1,5 @@
+import { DocumentNode, print } from 'graphql'
+
 export class PrerenderGqlError {
   message: string
   stack: string
@@ -21,5 +23,26 @@ export class GqlHandlerImportError {
     // because that's not where the error is. So we're just putting the
     // message there as well
     this.stack = this.message
+  }
+}
+
+interface JSONParseErrorArgs {
+  query: DocumentNode
+  variables?: Record<string, unknown>
+  result: string
+}
+
+export class JSONParseError extends Error {
+  constructor({ query, variables, result }: JSONParseErrorArgs) {
+    const message =
+      'Could not parse the GraphQL response.' +
+      '\n  Request: ' +
+      print(query).split('\n').join('\n  ') +
+      '\n  Variables: ' +
+      JSON.stringify(variables) +
+      '\n  Response: ' +
+      result
+
+    super(message)
   }
 }

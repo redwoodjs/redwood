@@ -74,6 +74,7 @@ export async function handler({ force, install, packages }) {
                 'web',
                 'add',
                 '-D',
+                '@emotion/react',
                 ...installPackages,
               ])
             },
