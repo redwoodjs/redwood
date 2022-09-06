@@ -8,7 +8,7 @@ import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-resolver-types'
 export const description =
-  '(v2.x.x->v2.x.x) Wraps types for "relation" resolvers in the bottom of service files'
+  '(v2.x.x->v3.x.x) Wraps types for "relation" resolvers in the bottom of service files'
 
 export const handler = () => {
   task('Update Resolver Types', async ({ setOutput }: TaskInnerAPI) => {
