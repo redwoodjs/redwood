@@ -95,12 +95,12 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
     //
     // It can look like this:
     //   export type PostRelationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
-    //     author: RelationResolver<ResolversTypes['User'], ParentType, ContextType>;
-    //     authorId: RelationResolver<ResolversTypes['Int'], ParentType, ContextType>;
-    //     body: RelationResolver<ResolversTypes['String'], ParentType, ContextType>;
-    //     createdAt: RelationResolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-    //     id: RelationResolver<ResolversTypes['Int'], ParentType, ContextType>;
-    //     title: RelationResolver<ResolversTypes['String'], ParentType, ContextType>;
+    //     author?: RelationResolver<ResolversTypes['User'], ParentType, ContextType>;
+    //     authorId?: RelationResolver<ResolversTypes['Int'], ParentType, ContextType>;
+    //     body?: RelationResolver<ResolversTypes['String'], ParentType, ContextType>;
+    //     createdAt?: RelationResolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+    //     id?: RelationResolver<ResolversTypes['Int'], ParentType, ContextType>;
+    //     title?: RelationResolver<ResolversTypes['String'], ParentType, ContextType>;
     //     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
     //   };
     const blockRelationsResolver = new DeclarationBlock(
