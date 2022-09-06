@@ -14,6 +14,7 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
+import { paramCase } from 'param-case'
 import prompts from 'prompts'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -78,7 +79,7 @@ import { name, version } from '../package'
       type: 'text',
       name: 'project-dir',
       message: 'Project directory?',
-      initial: (prev) => `./${prev}`,
+      initial: (prev) => paramCase(prev),
     },
     {
       type: 'confirm',
