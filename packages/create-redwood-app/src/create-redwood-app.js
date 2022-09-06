@@ -139,8 +139,6 @@ import { name, version } from '../package'
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
-    // https://github.com/yargs/yargs/blob/main/docs/api.md#conflictsx-y
-    // .conflicts('javascript', 'typescript')
     .option('yarn-install', {
       default: true,
       type: 'boolean',
@@ -184,7 +182,11 @@ import { name, version } from '../package'
     .version(version)
     .parseSync()
 
+  // Get the directory for installation from the args
+  // Can this be improved on, seems fragile?
   const targetDir = String(args).replace(/,/g, '-')
+
+  // Throw an error if there is no target directory specified
   if (!targetDir) {
     console.error('Please specify the project directory')
     console.log(
@@ -198,6 +200,19 @@ import { name, version } from '../package'
       `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
         'my-redwood-app'
       )}`
+    )
+    process.exit(1)
+  }
+
+  // Throw an error if both JS and TS are true
+  if (javascript && typescript) {
+    console.error(
+      'Please choose either TypeScript or JavaScript. You cannot choose both.'
+    )
+
+    console.log('For example:')
+    console.log(
+      `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green('--js')}`
     )
     process.exit(1)
   }
