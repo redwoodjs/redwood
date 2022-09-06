@@ -387,7 +387,8 @@ import { name, version } from '../package'
       },
       {
         title: 'Convert TypeScript files to JavaScript',
-        enabled: () => javascript === true && yarnInstall === true,
+        enabled: () =>
+          javascript === true && typescript === false && yarnInstall === true,
         task: () => {
           return execa('yarn rw ts-to-js', {
             shell: true,
