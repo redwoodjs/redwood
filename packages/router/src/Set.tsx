@@ -70,17 +70,36 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
 
-      // We already have a check for !unauthenticated further up
-      try {
-        const unauthenticatedPath = namedRoutes[unauthenticated || '']()
-        return (
-          <Redirect
-            to={`${unauthenticatedPath}?redirectTo=${currentLocation}`}
-          />
-        )
-      } catch (error) {
+      // We already have a check for !unauthenticated further up, so
+      // technically `|| ''` should not be needed. But TS...
+      if (!namedRoutes[unauthenticated || '']) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
+
+      let unauthenticatedPath
+
+      try {
+        unauthenticatedPath = namedRoutes[unauthenticated || '']()
+      } catch (e) {
+        if (
+          e instanceof Error &&
+          /Missing parameter .* for route/.test(e.message)
+        ) {
+          throw new Error(
+            `Redirecting to route "${unauthenticated}" would require route ` +
+              'parameters, which currently is not supported. Please choose ' +
+              'a different route'
+          )
+        }
+
+        throw new Error(
+          `Could not redirect to the route named ${unauthenticated}`
+        )
+      }
+
+      return (
+        <Redirect to={`${unauthenticatedPath}?redirectTo=${currentLocation}`} />
+      )
     }
   }
 
