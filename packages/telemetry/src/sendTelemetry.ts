@@ -101,10 +101,10 @@ const getInfo = async (presets: Args = {}) => {
 
 // removes potentially sensitive information from an array of argv strings
 export const sanitizeArgv = (
-  argv: [keyof SensitiveArgPositions, ...string[]]
+  argv: [string, string, keyof SensitiveArgPositions, ...string[]]
 ) => {
   const args = argv.slice(2)
-  const name = args[0]
+  const name = argv[2]
   const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
 
   if (sensitiveCommand) {

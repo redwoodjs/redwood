@@ -1,6 +1,9 @@
 import yargs from 'yargs'
 
-import { standardAuthBuilder, standardAuthHandler } from '@redwoodjs/cli'
+// import { standardAuthBuilder, standardAuthHandler } from '@redwoodjs/cli'
+
+function standardAuthBuilder(_yargs: any) {}
+function standardAuthHandler(_args: any) {}
 
 export const command = 'auth auth0'
 export const description = 'Generate an auth configuration for Auth0'

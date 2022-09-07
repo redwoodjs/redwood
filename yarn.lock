@@ -1764,16 +1764,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.16.7":
-  version: 7.16.7
-  resolution: "@babel/runtime-corejs3@npm:7.16.7"
-  dependencies:
-    core-js-pure: ^3.19.0
-    regenerator-runtime: ^0.13.4
-  checksum: ad94f88efd914e97ec02dd9071e518b07814c88b5e1a196b81aa5f09b79b64f5eb7de359039580388cf85ddd2efcf2f7487fe84ae97957da319a9a50220a45c6
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:7.18.9, @babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.17.0":
   version: 7.18.9
   resolution: "@babel/runtime-corejs3@npm:7.18.9"
@@ -6200,7 +6190,8 @@ __metadata:
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.4.8
     "@okta/okta-auth-js": 6.7.6
-    "@redwoodjs/auth": 2.2.0
+    "@redwoodjs/auth": 2.2.2
+    "@redwoodjs/cli": 2.2.2
     "@simplewebauthn/browser": 5.4.1
     "@simplewebauthn/typescript-types": 5.4.0
     "@supabase/supabase-js": 1.35.6
@@ -6260,16 +6251,6 @@ __metadata:
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
-
-"@redwoodjs/auth@npm:2.2.0":
-  version: 2.2.0
-  resolution: "@redwoodjs/auth@npm:2.2.0"
-  dependencies:
-    "@babel/runtime-corejs3": 7.16.7
-    core-js: 3.23.5
-  checksum: d6b8ca81b25c0dc28045f7f86a597ec36c7748cab8d7fcfd7beecc833e4d102231bea7a7b06056f2d449dd4d6f07d4bb49c0073690e31ba6e4a50f12426f8c22
-  languageName: node
-  linkType: hard
 
 "@redwoodjs/cli@2.2.2, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
@@ -13420,24 +13401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.19.0":
-  version: 3.25.0
-  resolution: "core-js-pure@npm:3.25.0"
-  checksum: 987639f66d06ca514fa33a0691231d31bf834dd4521c659be20dea7d4c23edb4b4e5305d78f3b45c3221c3041ea770e80f14cfddde191e4bc5ef18a87cae90a0
-  languageName: node
-  linkType: hard
-
 "core-js-pure@npm:^3.20.2, core-js-pure@npm:^3.8.1":
   version: 3.21.0
   resolution: "core-js-pure@npm:3.21.0"
   checksum: 90c39a0f4561e56de17bdffb9edb4cf754e341f4d5cba7580b676436bec170cd1954d0f0870c8e97c96e151c14a112975f2574bc601f08559e044061eaca0d1a
-  languageName: node
-  linkType: hard
-
-"core-js@npm:3.23.5":
-  version: 3.23.5
-  resolution: "core-js@npm:3.23.5"
-  checksum: ab9b483ede285b3949e2411f9190d147ac589d111b0aa3a4b2999a1bf2755b3e930529c2a22ff550efd4fc154c7cfae700bee858dedff905a09f35ddbcc6425f
   languageName: node
   linkType: hard
 

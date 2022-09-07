@@ -1,12 +1,12 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": ".",
-    "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "dist"
+    //"allowJs": true,
+    "rootDir": ".",
+    "tsBuildInfoFile": ".dist2/tsconfig.tsbuildinfo",
+    "declaration": true,
+    "outDir": "./dist2",
+    "composite": true
   },
-  "include": ["src"],
-  "references": [{ "path": "../telemetry" }]
+  "files": [ "package.json" ]
 }
