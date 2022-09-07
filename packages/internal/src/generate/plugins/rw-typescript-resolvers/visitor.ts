@@ -50,19 +50,21 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
   // Just duplicating every block to get RequiredResolver types for use with
   // our relation resolvers
   ObjectTypeDefinition(node: ObjectTypeDefinitionNode): string {
+    const originalBlock = super.ObjectTypeDefinition(node)
+
     const declarationKind = 'type'
     const name = this.convertName(node, {
       suffix: this.config.resolverTypeSuffix,
     })
     const typeName = node.name as any as string
     const parentType = this.getParentTypeToUse(typeName)
+    const fieldsContent = (node.fields || []).map((f: any) => f(node.name))
+
     const isRootType = [
       this.schema.getQueryType()?.name,
       this.schema.getMutationType()?.name,
       this.schema.getSubscriptionType()?.name,
     ].includes(typeName)
-
-    const fieldsContent = (node.fields || []).map((f: any) => f(node.name))
 
     if (!isRootType) {
       fieldsContent.push(
@@ -75,17 +77,6 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
         )
       )
     }
-
-    const block = new DeclarationBlock(this._declarationBlockConfig)
-      .export()
-      .asKind(declarationKind)
-      .withName(
-        name,
-        `<ContextType = ${
-          this.config.contextType.type
-        }, ${this.transformParentGenericType(parentType)}>`
-      )
-      .withBlock(fieldsContent.join('\n'))
 
     // This is what's different compared to the implementation I copy/pasted
     // We create a new block with a different type called
@@ -125,8 +116,6 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
           .join('\n')
       )
 
-    this._collectedResolvers[node.name as any] = name + '<ContextType>'
-
-    return block.string + '\n' + blockRelationsResolver.string
+    return originalBlock + '\n' + blockRelationsResolver.string
   }
 }
