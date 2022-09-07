@@ -877,7 +877,7 @@ try {
 
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
-  timeout: 500
+  timeout: 500,
 })
 ```
 
@@ -893,9 +893,9 @@ client = new MemcachedClient(process.env.CACHE_SERVER, {
 })
 ```
 
-passes it to the Memcached client library, wrapping the Redwood logger call in another function, which is the format expected by the MemJS library. This is used to report errors from MemJS.
+passes it to the `MemcachedClient` initializer, which passes it on to the MemJS library underneath so that it (MemJS) can report errors. `memJsFormattedLogger` just wraps the Redwood logger call in another function, which is the format expected by the MemJS library.
 
-The second usage of the logger arugment:
+The second usage of the logger argument:
 
 ```js
 export const { cache, cacheFindMany } = createCache(client, {
@@ -904,14 +904,14 @@ export const { cache, cacheFindMany } = createCache(client, {
 })
 ```
 
-is passing it to Redwood's own service cache code, so that it can log cache hit, misses, or errors.
+is passing it to Redwood's own service cache code, so that it can log cache hits, misses, or errors.
 
 #### Options
 
 There are several options you can pass to the `createCache()` call:
 
 * `logger`: an instance of the Redwood logger. Defaults to `null`, but if you want any feedback about what the cache is doing, make sure to set this!
-* `timeout`: how long to wait for the cache server to respond during a get/set before giving up and just executing the function and returning the result directly. Defaults to `500` milliseconds.
+* `timeout`: how long to wait for the cache server to respond during a get/set before giving up and just executing the function containing what you want to cache and returning the result directly. Defaults to `500` milliseconds.
 * `prefix`: a global cache key prefix. Defaults to `null`.
 * `fields`: an object that maps the model field names for the `id` and `updatedAt` fields if your database has another name for them. For example: `fields: { id: 'post_id', updatedAt: 'updated_at' }`. Even if only one of your names is different, you need to provide both properties to this option. Defaults to `{ id: 'id', updatedAt: 'updatedAt' }`
 
@@ -955,13 +955,15 @@ const post = ({ id }) => {
 
 :::info
 
-`cache()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver than you can just return the Promise.
+`cache()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver than you can just return `cache()` directly.
 
 :::
 
 ### `cacheFindMany()`
 
-Use this function if you want to cache the results of a `findMany()` call from Prisma, but only until one or more of the records in the set is is updated. This is sort of a best of both worlds cache scenario where you can cache as much data as possible, but also expire and re-cache as soon as any piece of it changes, without going through every record manually to see if it's changed: whenever *any* record changes the cache will be discarded. This function will do a `findFirst()` query to get the latest record that's changed, then use its `id` and `updatedAt` timestamp as the cache key for the full query. Note you still need to include a cache key prefix:
+Use this function if you want to cache the results of a `findMany()` call from Prisma, but only until one or more of the records in the set is updated. This is sort of a best of both worlds cache scenario where you can cache as much data as possible, but also expire and re-cache as soon as any piece of it changes, without going through every record manually to see if it's changed: whenever *any* record changes the cache will be discarded.
+
+This function will always execute a `findFirst()` query to get the latest record that's changed, then use its `id` and `updatedAt` timestamp as the cache key for the full query. This means you'll always incur the overhead of a single DB call, but not the bigger `findMany()` unless something has changed. Note you still need to include a cache key prefix:
 
 ```js
 const post = ({ id }) => {
@@ -969,7 +971,7 @@ const post = ({ id }) => {
 }
 ```
 
-The above is the simplest usage example. If you need to pass a `where`, or any other structure that `findMany()` accepts, include a `conditions` object as your third argument:
+The above is the simplest usage example. If you need to pass a `where`, or any other object that `findMany()` accepts, include a `conditions` key in an object as the third argument:
 
 ```js
 const post = ({ id }) => {
@@ -1018,5 +1020,5 @@ If Memcached or Redis don't serve your needs, you can create your own client ada
 
 * Extend from the `BaseClient` class.
 * A constructor that takes whatever arguments you want, passing them through to the client's initialization code.
-* A `get()` function that accepts a `key` argument and returns the data from the cache if found (and run through `JSON.parse()`), otherwise `null`.
-* A `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be real Javascript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library.
+* A `get()` function that accepts a `key` argument and returns the data from the cache if found, otherwise `null`. Note that in the Memcached and Redis clients the value returned is first run through `JSON.parse()` but if your cache client supports native JS objects then you wouldn't need to do this.
+* A `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be a real Javascript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library. You may or may not need to do the same thing, depending on what your cache client supports.
