@@ -213,6 +213,7 @@ jobs:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
           RECORD_REPLAY_METADATA_TEST_RUN_TITLE: Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+          RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw info`
         run: |
