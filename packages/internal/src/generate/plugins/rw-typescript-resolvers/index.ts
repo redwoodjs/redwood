@@ -10,7 +10,8 @@ import {
 } from '@graphql-codegen/typescript-resolvers'
 import { GraphQLSchema } from 'graphql'
 
-import { RwTypeScriptResolversVisitor } from './visitor.js'
+// import { RwTypeScriptResolversEnterVisitor } from './enterVisitor'
+import { RwTypeScriptResolversVisitor } from './visitor'
 
 export const plugin: PluginFunction<
   TypeScriptResolversPluginConfig,
@@ -26,9 +27,11 @@ export const plugin: PluginFunction<
   // all about just removing code that isn't needed for the specific
   // setup that Redwood has
   const visitor = new RwTypeScriptResolversVisitor(config, schema)
+  // const enterVisitor = new RwTypeScriptResolversEnterVisitor(config, schema)
 
   // runs visitor
   const visitorResult = oldVisit(getCachedDocumentNodeFromSchema(schema), {
+    // enter: enterVisitor as any,
     leave: visitor as any,
   })
 
@@ -67,8 +70,11 @@ export const plugin: PluginFunction<
 
   const splitContent = content.split('\n')
   const visitorResultStart = splitContent.indexOf(
-    'export type requireAuthDirectiveArgs = {'
+    visitorResult.definitions
+      .filter((d: unknown) => typeof d === 'string')[0]
+      .split('\n')[0]
   )
+
   const splitRootResolver = visitor.getRootResolver().split('\n')
   const visitorResultEnd = splitContent.findIndex(
     (line: string, index: number) =>
