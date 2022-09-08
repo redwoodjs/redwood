@@ -18,8 +18,10 @@
   ],
   "scripts": {
     "build": "yarn build:js",
+    "//build": "yarn build:js && yarn build:types",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "//build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
     "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
@@ -31,6 +33,7 @@
     "@babel/runtime-corejs3": "7.18.9",
     "@prisma/internals": "4.2.1",
     "@redwoodjs/api-server": "2.2.2",
+    "@redwoodjs/cli-helpers": "2.2.2",
     "@redwoodjs/internal": "2.2.2",
     "@redwoodjs/prerender": "2.2.2",
     "@redwoodjs/structure": "2.2.2",

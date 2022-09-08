@@ -7,8 +7,8 @@ import yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../lib'
-import c from '../../../lib/colors'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 import { files } from './authFiles'
 import {

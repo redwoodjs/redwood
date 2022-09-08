@@ -11,9 +11,9 @@ import {
   getGraphqlPath,
   graphFunctionDoesExist,
   transformTSToJS,
-} from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
+} from '../lib'
+import c from '../lib/colors'
+import { isTypeScriptProject } from '../lib/project'
 
 import { files, generateUniqueFileNames } from './authFiles'
 
@@ -229,7 +229,7 @@ export const createWebAuthTs = (provider: string, webAuthn: boolean) => {
 
   authFileName = authFileName + '.' + templateExtension
 
-  let template = fs.readFileSync(
+  let template: string | undefined = fs.readFileSync(
     path.join(templatesBaseDir, templateFileName),
     'utf-8'
   )
@@ -263,7 +263,7 @@ export const generateAuthApi = (
   webAuthn = false
 ): Listr.ListrTask => ({
   title: 'Generating auth api side files...',
-  task: (_ctx: any, task: Listr.ListrTaskWrapper) => {
+  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
     if (!apiSrcDoesExist()) {
       return task.skip?.('api/src not found, skipping')
     }

@@ -2,23 +2,17 @@ import fs from 'fs'
 import https from 'https'
 import path from 'path'
 
-import * as babel from '@babel/core'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import { format } from 'prettier'
 
+import { getPaths, prettify, writeFile } from '@redwoodjs/cli-helpers'
 import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
-import {
-  getPaths as getRedwoodPaths,
-  resolveFile as internalResolveFile,
-} from '@redwoodjs/internal/dist/paths'
 
 import c from './colors'
 import { pluralize, singularize } from './rwPluralize'
@@ -72,26 +66,6 @@ export const generateTemplate = (templateFilename, { name, ...rest }) => {
   return prettify(templateFilename, renderedTemplate)
 }
 
-export const prettify = (templateFilename, renderedTemplate) => {
-  // We format .js and .css templates, we need to tell prettier which parser
-  // we're using.
-  // https://prettier.io/docs/en/options.html#parser
-  const parser = {
-    '.css': 'css',
-    '.js': 'babel',
-    '.ts': 'babel-ts',
-  }[path.extname(templateFilename.replace('.template', ''))]
-
-  if (typeof parser === 'undefined') {
-    return renderedTemplate
-  }
-
-  return format(renderedTemplate, {
-    ...prettierOptions(),
-    parser,
-  })
-}
-
 export const readFile = (target) =>
   fs.readFileSync(target, { encoding: 'utf8' })
 
@@ -122,25 +96,6 @@ export const existsAnyExtensionSync = (file) => {
   }
 
   return fs.existsSync(file)
-}
-
-export const writeFile = (
-  target,
-  contents,
-  { overwriteExisting = false } = {},
-  task = {}
-) => {
-  const { base } = getPaths()
-  task.title = `Writing \`./${path.relative(base, target)}\``
-  if (!overwriteExisting && fs.existsSync(target)) {
-    throw new Error(`${target} already exists.`)
-  }
-
-  const filename = path.basename(target)
-  const targetDir = target.replace(filename, '')
-  fs.mkdirSync(targetDir, { recursive: true })
-  fs.writeFileSync(target, contents)
-  task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
 }
 
 export const saveRemoteFileToDisk = (
@@ -180,28 +135,6 @@ export const getInstalledRedwoodVersion = () => {
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 
-/**
- * This wraps the core version of getPaths into something that catches the exception
- * and displays a helpful error message.
- */
-export const _getPaths = () => {
-  try {
-    return getRedwoodPaths()
-  } catch (e) {
-    console.error(c.error(e.message))
-    process.exit(1)
-  }
-}
-export const getPaths = memoize(_getPaths)
-export const resolveFile = internalResolveFile
-
-export const getGraphqlPath = () =>
-  resolveFile(path.join(getPaths().api.functions, 'graphql'))
-
-export const graphFunctionDoesExist = () => {
-  return fs.existsSync(getGraphqlPath())
-}
-
 export const getConfig = () => {
   try {
     return getRedwoodConfig()
@@ -209,61 +142,6 @@ export const getConfig = () => {
     console.error(c.error(e.message))
     process.exit(1)
   }
-}
-
-/**
- * This returns the config present in `prettier.config.js` of a Redwood project.
- */
-export const prettierOptions = () => {
-  try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
-  } catch (e) {
-    return undefined
-  }
-}
-
-// TODO: Move this into `generateTemplate` when all templates have TS support
-/*
- * Convert a generated TS template file into JS.
- */
-export const transformTSToJS = (filename, content) => {
-  const { code } = babel.transform(content, {
-    filename,
-    // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,
-    // in `./web`? despite us setting `configFile: false`.
-    cwd: process.env.NODE_ENV === 'test' ? undefined : getPaths().base,
-    configFile: false,
-    plugins: [
-      [
-        '@babel/plugin-transform-typescript',
-        {
-          isTSX: true,
-          allExtensions: true,
-        },
-      ],
-    ],
-    retainLines: true,
-  })
-
-  return prettify(filename.replace(/\.tsx?$/, '.js'), code)
-}
-
-/**
- * Creates a list of tasks that write files to the disk.
- *
- * @param files - {[filepath]: contents}
- */
-export const writeFilesTask = (files, options) => {
-  const { base } = getPaths()
-  return new Listr(
-    Object.keys(files).map((file) => {
-      const contents = files[file]
-      return {
-        title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
-        task: (ctx, task) => writeFile(file, contents, options, task),
-      }
-    })
-  )
 }
 
 /**

@@ -3,8 +3,8 @@ import path from 'path'
 
 import pascalcase from 'pascalcase'
 
-import { getPaths, transformTSToJS } from '../../../lib'
-import { isTypeScriptProject } from '../../../lib/project'
+import { getPaths, transformTSToJS } from '../lib'
+import { isTypeScriptProject } from '../lib/project'
 
 interface FilesArgs {
   provider: string
