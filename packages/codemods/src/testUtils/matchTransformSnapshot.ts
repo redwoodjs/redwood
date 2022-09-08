@@ -38,6 +38,9 @@ export const matchTransformSnapshot = async (
     transformPath,
     targetPaths: [tempFilePath],
     parser,
+    options: {
+      verbose: true,
+    },
   })
 
   // Step 3: Read modified file and snapshot
