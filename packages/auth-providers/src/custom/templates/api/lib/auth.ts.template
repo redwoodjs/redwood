@@ -38,7 +38,7 @@ export const getCurrentUser = async (
     return null
   }
 
-  const roles = decoded[process.env.AUTH0_AUDIENCE + '/roles']
+  const { roles } = parseJWT({ decoded })
 
   if (roles) {
     return { ...decoded, roles }
@@ -75,7 +75,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
     return false
   }
 
- const currentUserRoles = context.currentUser?.roles
+  const currentUserRoles = context.currentUser?.roles
 
   if (typeof roles === 'string') {
     if (typeof currentUserRoles === 'string') {
@@ -95,9 +95,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
       )
     } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
-      return roles.some(
-        (allowedRole) => currentUserRoles === allowedRole
-      )
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
     }
   }
 
@@ -110,12 +108,12 @@ export const hasRole = (roles: AllowedRoles): boolean => {
  * whether or not they are assigned a role, and optionally raise an
  * error if they're not.
  *
- * @param roles: {@link AllowedRoles} - When checking role membership, these roles grant access.
+ * @param roles?: {@link AllowedRoles} - When checking role membership, these roles grant access.
  *
  * @returns - If the currentUser is authenticated (and assigned one of the given roles)
  *
  * @throws {@link AuthenticationError} - If the currentUser is not authenticated
- * @throws {@link ForbiddenError} If the currentUser is not allowed due to role permissions
+ * @throws {@link ForbiddenError} - If the currentUser is not allowed due to role permissions
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */

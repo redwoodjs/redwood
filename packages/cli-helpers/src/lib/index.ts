@@ -3,47 +3,10 @@ import path from 'path'
 
 import * as babel from '@babel/core'
 import Listr from 'listr'
-import { memoize } from 'lodash'
 import { format } from 'prettier'
 
-import {
-  getPaths as getRedwoodPaths,
-  resolveFile as internalResolveFile,
-} from '@redwoodjs/internal/dist/paths'
-
-import c from './colors'
-
-export function isErrorWithMessage(e: any): e is { message: string } {
-  return !!e.message
-}
-
-/**
- * This wraps the core version of getPaths into something that catches the exception
- * and displays a helpful error message.
- */
-export const _getPaths = () => {
-  try {
-    return getRedwoodPaths()
-  } catch (e) {
-    if (isErrorWithMessage(e)) {
-      console.error(c.error(e.message))
-    }
-
-    process.exit(1)
-  }
-}
-
-export const getPaths = memoize(_getPaths)
-export const resolveFile = internalResolveFile
-
-export const getGraphqlPath = () => {
-  return resolveFile(path.join(getPaths().api.functions, 'graphql'))
-}
-
-export const graphFunctionDoesExist = () => {
-  const graphqlPath = getGraphqlPath()
-  return graphqlPath && fs.existsSync(graphqlPath)
-}
+import { colors } from './colors'
+import { getPaths } from './paths'
 
 // TODO: Move this into `generateTemplate` when all templates have TS support
 /*
@@ -69,7 +32,7 @@ export const transformTSToJS = (filename: string, content: string) => {
   })
 
   if (!babelFileResult?.code) {
-    console.error(c.error(`Could not transform ${filename} to JS`))
+    console.error(colors.error(`Could not transform ${filename} to JS`))
 
     process.exit(1)
   }

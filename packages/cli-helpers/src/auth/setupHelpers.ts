@@ -7,8 +7,8 @@ import yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
+import { colors } from '../lib/colors'
+import { getPaths } from '../lib/paths'
 
 import { files } from './authFiles'
 import {
@@ -117,7 +117,7 @@ export const standardAuthHandler = async ({
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)
-      console.error(c.error(e.message))
+      console.error(colors.error(e.message))
     }
 
     if (isErrorWithErrorCode(e)) {

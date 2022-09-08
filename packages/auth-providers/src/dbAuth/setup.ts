@@ -2,15 +2,15 @@ import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
 
-import { standardAuthHandler } from '../../setupHelpers'
+import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { notes, extraTask } from './dbAuth'
+import { notes, extraTask } from './setupData'
 import {
   notes as webAuthnNotes,
   extraTask as webAuthnExtraTask,
   webPackages as webAuthnWebPackages,
   apiPackages as webAuthnApiPackages,
-} from './dbAuth.webAuthn'
+} from './webAuthn.setupData'
 
 /**
  * Prompt the user (unless already specified on the command line) if they want

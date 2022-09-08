@@ -4,16 +4,14 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 
+import { writeFilesTask, transformTSToJS } from '../lib'
+import { colors } from '../lib/colors'
+import { getPaths, resolveFile } from '../lib/paths'
 import {
-  getPaths,
-  resolveFile,
-  writeFilesTask,
+  isTypeScriptProject,
   getGraphqlPath,
   graphFunctionDoesExist,
-  transformTSToJS,
-} from '../lib'
-import c from '../lib/colors'
-import { isTypeScriptProject } from '../lib/project'
+} from '../lib/project'
 
 import { files, generateUniqueFileNames } from './authFiles'
 
@@ -180,7 +178,7 @@ export const addConfigToApp = async () => {
     }
   } else {
     console.warn(
-      c.warning(
+      colors.warning(
         'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
           'GraphQL Client you will have to make sure it gets access to your ' +
           '`useAuth`, if it needs it.'
@@ -280,7 +278,7 @@ export const generateAuthApi = (
         Object.keys(uniqueFilesRecord).join(',')
       ) {
         console.warn(
-          c.warning(
+          colors.warning(
             "To avoid overwriting existing files we've generated new file " +
               'names for the newly generated files. This probably means ' +
               `${provider} auth doesn't work out of the box. You'll most ` +
