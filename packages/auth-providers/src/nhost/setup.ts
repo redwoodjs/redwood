@@ -1,6 +1,9 @@
 import yargs from 'yargs'
 
-import { standardAuthBuilder, standardAuthHandler } from '../../setupHelpers'
+import {
+  standardAuthBuilder,
+  standardAuthHandler,
+} from '@redwoodjs/cli-helpers'
 
 export const command = 'auth nhost'
 export const description = 'Generate an auth configuration for nhost'
