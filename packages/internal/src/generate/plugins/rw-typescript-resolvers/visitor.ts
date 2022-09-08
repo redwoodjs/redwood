@@ -45,13 +45,16 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
     }
   }
 
-  // This is mostly copy/paste from
+  // Original implementation is here:
   // https://github.com/dotansimha/graphql-code-generator/blob/c6c60a3078f3797af435c3852220d8898964031d/packages/plugins/other/visitor-plugin-common/src/base-resolvers-visitor.ts#L1091
-  // Just duplicating every block to get RequiredResolver types for use with
-  // our relation resolvers
   ObjectTypeDefinition(node: ObjectTypeDefinitionNode): string {
+    // Call the original implementation to get a block of resolvers
     const originalBlock = super.ObjectTypeDefinition(node)
 
+    // The rest of this function is pretty much a copy/paste of the original
+    // function. We're duplicating every block to get RequiredResolver types
+    // for use with what we call "relation resolvers" (The stuff at the bottom
+    // of service files for models that have relations)
     const declarationKind = 'type'
     const name = this.convertName(node, {
       suffix: this.config.resolverTypeSuffix,
