@@ -39,15 +39,12 @@ beforeAll(async () => {
   // Disable perRequestContext for tests
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
   if (globalThis.__RWJS_TEST_PRISMA_WAS_IMPORTED) {
-    console.log('configure teardown')
-
     await configureTeardown()
   }
 })
 
 afterAll(async () => {
   if (globalThis.__RWJS_TEST_PRISMA_WAS_IMPORTED) {
-    console.log('disconnect prisma')
     const { db } = require(`${apiSrcPath}/lib/db`)
     db.$disconnect()
   }
@@ -55,7 +52,6 @@ afterAll(async () => {
 
 afterEach(async () => {
   if (globalThis.__RWJS_TEST_PRISMA_WAS_IMPORTED) {
-    console.log('teardown')
     await teardown()
   }
 })
