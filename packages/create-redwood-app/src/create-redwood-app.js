@@ -14,7 +14,6 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
-import { paramCase } from 'param-case'
 import prompts from 'prompts'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -34,6 +33,7 @@ import { name, version } from '../package'
  *
  */
 ;(async () => {
+  // Styles for terminal
   const style = {
     error: chalk.bold.red,
     warning: chalk.keyword('orange'),
@@ -51,87 +51,22 @@ import { name, version } from '../package'
   // Initial welcome message
   console.log(
     `${style.redwood(
-      '---------------------------------------------------------------'
+      '------------------------------------------------------------------'
     )}`
   )
   console.log(`🌲⚡️ ${style.header('Welcome to RedwoodJS!')} ⚡️🌲`)
   console.log(
-    `${style.info(
-      "Let's get growing! Tell us a little bit about your new project."
-    )}`
-  )
-  console.log(
     `${style.redwood(
-      '---------------------------------------------------------------'
+      '------------------------------------------------------------------'
     )}`
   )
 
-  // User prompts
-  // See https://github.com/terkelg/prompts
-  const questions = [
-    {
-      type: 'text',
-      name: 'project-name',
-      message: 'Project name?',
-      initial: 'my-redwood-app',
-    },
-    {
-      type: 'text',
-      name: 'project-dir',
-      message: 'Project directory?',
-      initial: (prev) => paramCase(prev),
-    },
-    {
-      type: 'confirm',
-      name: 'typescript',
-      message: 'Use typescript?',
-      initial: true,
-      active: 'Yes',
-      inactive: 'No',
-    },
-    {
-      type: 'confirm',
-      name: 'git-init',
-      message: 'Should we initialize a new git repository?',
-      initial: true,
-      active: 'Yes',
-      inactive: 'No',
-    },
-  ]
-
-  // Get the answers from the user
-  const answers = await prompts(questions)
-
-  // Variable to store project name
-  let appName = ''
-
-  // Evaluate the answers provided
-  Object.entries(answers).forEach(([key, value]) => {
-    // Set the project name
-    if (key === 'project-name') {
-      appName = `${value}`
-    }
-    // Set the project dir
-    if (key === 'project-dir') {
-      process.argv.push(`${value}`)
-    }
-    // Disable TS
-    if (key === 'typescript' && value == false) {
-      process.argv.push(`--typescript`, false)
-      process.argv.push(`--javascript`, true)
-    }
-    // Disable git init
-    if (key === 'git-init' && value == false) {
-      process.argv.push(`--git-init`, false)
-    }
-  })
-
+  // Extract the args as provided by the user in the command line
   const {
     _: args,
     'yarn-install': yarnInstall,
-    typescript,
-    'git-init': gitInit,
     javascript,
+    typescript,
     overwrite,
     telemetry: telemetry,
     yarn1,
@@ -139,6 +74,8 @@ import { name, version } from '../package'
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
+    // TODO is there a way to get this working?
+    // .conflicts('javascript', 'typescript')
     .option('yarn-install', {
       default: true,
       type: 'boolean',
@@ -147,21 +84,16 @@ import { name, version } from '../package'
     })
     .option('typescript', {
       alias: 'ts',
-      default: true,
+      default: false,
       type: 'boolean',
-      describe: 'Generate a TypeScript project.',
+      describe: 'Generate a TypeScript project. TypeScript by default.',
     })
     .option('javascript', {
       alias: 'js',
       default: false,
       type: 'boolean',
-      describe: 'Generate a JavaScript project. TypeScript by default.',
-    })
-    .option('git-init', {
-      alias: 'git',
-      default: true,
-      type: 'boolean',
-      describe: 'Initialize a new git repository.',
+      describe:
+        'Generate a JavaScript project. Requires yarn install. TypeScript by default.',
     })
     .option('overwrite', {
       default: false,
@@ -180,7 +112,59 @@ import { name, version } from '../package'
       describe: 'Use yarn 1. yarn 3 by default',
     })
     .version(version)
-    .parseSync()
+    .parse()
+
+  // Variable to hold the user args as an object that can be used for prompt overides
+  let userArgs = {}
+
+  // Handle if javascript is selected
+  if (javascript) {
+    Object.assign(userArgs, { typescript: false })
+  }
+
+  // Handle if typescript is selected
+  if (typescript) {
+    Object.assign(userArgs, { typescript: true })
+  }
+
+  // User prompts
+  // See https://github.com/terkelg/prompts
+  const questions = [
+    // {
+    //   type: 'text',
+    //   name: 'project-name',
+    //   message: 'Project name?',
+    //   initial: 'my-redwood-app',
+    // },
+    // {
+    //   type: 'text',
+    //   name: 'project-dir',
+    //   message: 'Project directory?',
+    //   initial: (prev) => paramCase(prev),
+    // },
+    {
+      type: 'confirm',
+      name: 'typescript',
+      message: 'Use typescript?',
+      initial: true,
+      active: 'Yes',
+      inactive: 'No',
+    },
+    // {
+    //   type: 'confirm',
+    //   name: 'git-init',
+    //   message: 'Should we initialize a new git repository?',
+    //   initial: true,
+    //   active: 'Yes',
+    //   inactive: 'No',
+    // },
+  ]
+
+  // Override prompts based on initial args from user
+  prompts.override(userArgs)
+
+  // Get the answers from the user
+  const answers = await prompts(questions)
 
   // Get the directory for installation from the args
   // Can this be improved on, seems fragile?
@@ -205,6 +189,7 @@ import { name, version } from '../package'
   }
 
   // Throw an error if both JS and TS are true
+  // Would be better to use .conflicts but having problems there
   if (javascript && typescript) {
     console.error(
       'Please choose either TypeScript or JavaScript. You cannot choose both.'
@@ -387,8 +372,11 @@ import { name, version } from '../package'
       },
       {
         title: 'Convert TypeScript files to JavaScript',
+        // Enabled if user selects no to typescript prompt
+        // Enabled if user specified --js on command line
         enabled: () =>
-          javascript === true && typescript === false && yarnInstall === true,
+          yarnInstall === true &&
+          (javascript === true || answers.typescript === false),
         task: () => {
           return execa('yarn rw ts-to-js', {
             shell: true,
@@ -406,19 +394,6 @@ import { name, version } from '../package'
           })
         },
       },
-      {
-        title: 'Initializing new git repo',
-        enabled: () => gitInit === true,
-        task: () => {
-          return execa(
-            'git init && git add . && git commit -m "Initial commit" && git branch -M main',
-            {
-              shell: true,
-              cwd: newAppDir,
-            }
-          )
-        },
-      },
     ],
     { collapse: false, exitOnError: true }
   )
@@ -430,7 +405,6 @@ import { name, version } from '../package'
       // https://prettier.io/docs/en/rationale.html#semicolons
       ;[
         '',
-        style.success(`🎉🎉Successfully created ${appName}🎉🎉`),
         style.success('Thanks for trying out Redwood!'),
         '',
         ` ⚡️ ${style.redwood(
