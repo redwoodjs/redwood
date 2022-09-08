@@ -89,6 +89,7 @@ const configureTeardown = async () => {
 let projectDb
 const getProjectDb = () => {
   if (!projectDb) {
+    console.log('require project db')
     // So that we can load the user's prisma client
     // The file itself maybe TS/ES6 - and may have middlewares configured
     const { db } = require(path.join(rwjsPaths.api.lib, 'db'))
@@ -226,10 +227,6 @@ const seedScenario = async (scenario) => {
   }
 }
 
-const disconnect = async () => {
-  await getProjectDb().$disconnect()
-}
-
 /** @type {import('jest').Config} */
 module.exports = {
   // To make sure other config option which depends on rootDir use
@@ -242,8 +239,8 @@ module.exports = {
     __RWJS__TEST_IMPORTS: {
       configureTeardown,
       teardown,
-      disconnect,
       buildScenario,
+      apiSrcPath: rwjsPaths.api.src,
     },
   },
   sandboxInjectedGlobals: ['__RWJS__TEST_IMPORTS'],

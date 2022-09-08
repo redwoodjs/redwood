@@ -9,7 +9,7 @@ const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 // @NOTE we do this because jest.setup.js runs every time in each worker
 // while jest-preset runs once. This significantly reduces memory footprint, and testing time
 // The key is to reduce the amount of imports in this file because of how jest handles require caching
-const { configureTeardown, teardown, disconnect, buildScenario } =
+const { configureTeardown, teardown, buildScenario, apiSrcPath } =
   global.__RWJS__TEST_IMPORTS
 
 global.scenario = buildScenario(global.it, global.testPath)
@@ -26,7 +26,9 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await disconnect()
+  // @TODO: determine if db was used in tests, and only disconnect if so
+  const { db } = require(`${apiSrcPath}/lib/db`)
+  await db.$disconnect()
 })
 
 afterEach(async () => {
