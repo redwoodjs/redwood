@@ -71,15 +71,16 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
         global.location.pathname + encodeURIComponent(global.location.search)
 
       // We already have a check for !unauthenticated further up
-      const unauthenticatedPath = namedRoutes[unauthenticated || '']()
-
-      if (!unauthenticatedPath) {
+      try {
+        const unauthenticatedPath = namedRoutes[unauthenticated || '']()
+        return (
+          <Redirect
+            to={`${unauthenticatedPath}?redirectTo=${currentLocation}`}
+          />
+        )
+      } catch (error) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
-
-      return (
-        <Redirect to={`${unauthenticatedPath}?redirectTo=${currentLocation}`} />
-      )
     }
   }
 
