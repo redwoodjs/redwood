@@ -3544,9 +3544,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/common@npm:2.12.8":
-  version: 2.12.8
-  resolution: "@graphql-yoga/common@npm:2.12.8"
+"@graphql-yoga/common@npm:2.12.12":
+  version: 2.12.12
+  resolution: "@graphql-yoga/common@npm:2.12.12"
   dependencies:
     "@envelop/core": ^2.5.0
     "@envelop/parser-cache": ^4.6.0
@@ -3555,12 +3555,12 @@ __metadata:
     "@graphql-tools/utils": ^8.8.0
     "@graphql-typed-document-node/core": ^3.1.1
     "@graphql-yoga/subscription": ^2.2.3
-    "@whatwg-node/fetch": ^0.2.6
+    "@whatwg-node/fetch": ^0.3.0
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: b9f621225682242a3e5b4b1094797fb7b3f5e313bc7ee27383b3fd25baecdaa0e71fead1f16fc9ced68a52cfd5821959378e41a4d0cf8f58e8c6f391bfb3639f
+  checksum: 009bb4c3ede7dc983f1dffdcc288c0845356af2e2a1afda8700b2de79aba1639e5c254afb7c2851ecf62b18e2d806e1145d0b330834b33293f9fe0430f186910
   languageName: node
   linkType: hard
 
@@ -6502,7 +6502,7 @@ __metadata:
     "@graphql-tools/merge": 8.3.3
     "@graphql-tools/schema": 8.5.1
     "@graphql-tools/utils": 8.10.0
-    "@graphql-yoga/common": 2.12.8
+    "@graphql-yoga/common": 2.12.12
     "@prisma/client": 4.3.1
     "@redwoodjs/api": 2.2.4
     "@redwoodjs/auth": 2.2.4
@@ -9851,7 +9851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:^0.2.4, @whatwg-node/fetch@npm:^0.2.6":
+"@whatwg-node/fetch@npm:^0.2.4":
   version: 0.2.9
   resolution: "@whatwg-node/fetch@npm:0.2.9"
   dependencies:
