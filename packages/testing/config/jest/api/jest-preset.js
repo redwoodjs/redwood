@@ -89,7 +89,6 @@ const configureTeardown = async () => {
 let projectDb
 const getProjectDb = () => {
   if (!projectDb) {
-    console.log('require project db')
     // So that we can load the user's prisma client
     // The file itself maybe TS/ES6 - and may have middlewares configured
     const { db } = require(path.join(rwjsPaths.api.lib, 'db'))
