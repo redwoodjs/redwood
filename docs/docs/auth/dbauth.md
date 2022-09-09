@@ -111,7 +111,7 @@ Almost all config for dbAuth lives in `api/src/functions/auth.js` in the object 
 
 Allow users to call login. Defaults to true. Needs to be explicitly set to false to disable the flow.
 
-```jsx
+```javascript
 login: {
   enabled: false
 }
@@ -121,7 +121,7 @@ login: {
 
 If you want to do something other than immediately let a user log in if their username/password is correct, you can add additional logic in `login.handler()`. For example, if a user's credentials are correct, but they haven't verified their email address yet, you can throw an error in this function with the appropriate message and then display it to the user. If the login should proceed, simply return the user that was passed as the only argument to the function:
 
-```jsx
+```javascript
 login: {
   handler: (user) => {
     if (!user.verified) {
@@ -137,7 +137,7 @@ login: {
 
 Allow users to sign up. Defaults to true. Needs to be explicitly set to false to disable the flow.
 
-```jsx
+```javascript
 signup: {
   enabled: false
 }
@@ -147,7 +147,7 @@ signup: {
 
 This function should contain the code needed to actually create a user in your database. You will receive a single argument which is an object with all of the fields necessary to create the user (`username`, `hashedPassword` and `salt`) as well as any additional fields you included in your signup form in an object called `userAttributes`:
 
-```jsx
+```javascript
 signup: {
   handler: ({ username, hashedPassword, salt, userAttributes }) => {
     return db.user.create({
@@ -187,16 +187,42 @@ const onSubmit = async (data) => {
 }
 ```
 
+### signup.passwordValidation()
+
+This function is used to validate that the password supplied at signup meets certain criteria (length, randomness, etc.). By default it just returns `true` which means the password is always considered valid, even if only a single character (or empty string!). Modify it to enforce whatever methodology you want on the password.
+
+If the password is valid, return `true`. Otherwise, throw the `PasswordValidationError` along with a (optional) message explaining why:
+
+```javascript
+signup: {
+  passwordValidation: (password) => {
+
+    if (password.length < 8) {
+      throw new PasswordValidationError('Password must be at least 8 characters')
+    }
+
+    if (!password.match(/[A-Z]/)) {
+      throw new PasswordValidationError('Password must contain at least one capital letter')
+    }
+
+    return true
+  }
+}
+```
+
+For the best user experience you should include the same checks on the client side and avoid the roundtrip to the server altogether if the password is invalid. However, having the checks here makes sure that someone can't submit a user signup programmatically and skirt your password requirements.
+
 ### forgotPassword.enabled
 
 Allow users to request a new password via a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
 When disabling this flow you probably want to disable `resetPassword` as well.
 
-```jsx
+```javascript
 forgotPassword: {
   enabled: false
 }
 ```
+
 ### forgotPassword.handler()
 
 This handler is invoked if a user is found with the username/email that they submitted on the Forgot Password page, and that user will be passed as an argument. Inside this function is where you'll send the user a link to reset their password—via an email is most common. The link will, by default, look like:
@@ -212,7 +238,7 @@ If you changed the path to the Reset Password page in your routes you'll need to
 Allow users to reset their password via a code from a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
 When disabling this flow you probably want to disable `forgotPassword` as well.
 
-```jsx
+```javascript
 resetPassword: {
   enabled: false
 }
@@ -226,7 +252,7 @@ This handler is invoked after the password has been successfully changed in the 
 
 These options determine how the cookie that tracks whether the client is authorized is stored in the browser. The default configuration should work for most use cases. If you serve your web and api sides from different domains you'll need to make some changes: set `SameSite` to `None` and then add [CORS configuration](#cors-config).
 
-```jsx
+```javascript
 cookie: {
   HttpOnly: true,
   Path: '/',
