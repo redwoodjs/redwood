@@ -21,9 +21,9 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/core": "7.18.13",
+    "@babel/core": "7.19.0",
     "@babel/node": "7.18.10",
-    "@babel/runtime-corejs3": "7.18.9",
+    "@babel/runtime-corejs3": "7.19.0",
     "@redwoodjs/internal": "2.2.3",
     "@redwoodjs/telemetry": "2.2.3",
     "chalk": "4.1.2",

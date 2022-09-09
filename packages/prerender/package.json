@@ -24,7 +24,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.18.9",
+    "@babel/runtime-corejs3": "7.19.0",
     "@redwoodjs/auth": "2.2.3",
     "@redwoodjs/internal": "2.2.3",
     "@redwoodjs/router": "2.2.3",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.13",
+    "@babel/core": "7.19.0",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "10.1.0",
     "jest": "29.0.1",
