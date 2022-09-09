@@ -1,4 +1,4 @@
-import { getInstalledRedwoodVersion } from '../lib'
+import { getInstalledRedwoodVersion } from '@redwoodjs/cli-helpers'
 
 const detectRwVersion = (argv) => {
   if (!argv.rwVersion) {

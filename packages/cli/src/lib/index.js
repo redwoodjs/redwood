@@ -123,16 +123,6 @@ export const saveRemoteFileToDisk = (
   return downloadPromise
 }
 
-export const getInstalledRedwoodVersion = () => {
-  try {
-    const packageJson = require('../../package.json')
-    return packageJson.version
-  } catch (e) {
-    console.error(c.error('Could not find installed redwood version'))
-    process.exit(1)
-  }
-}
-
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 
 export const getConfig = () => {

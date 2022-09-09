@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { colors } from './colors'
 import { getPaths, resolveFile } from './paths'
 
 export const isTypeScriptProject = () => {
@@ -18,4 +19,14 @@ export const getGraphqlPath = () => {
 export const graphFunctionDoesExist = () => {
   const graphqlPath = getGraphqlPath()
   return graphqlPath && fs.existsSync(graphqlPath)
+}
+
+export const getInstalledRedwoodVersion = () => {
+  try {
+    const packageJson = require('../../package.json')
+    return packageJson.version
+  } catch (e) {
+    console.error(colors.error('Could not find installed redwood version'))
+    process.exit(1)
+  }
 }
