@@ -189,7 +189,7 @@ const onSubmit = async (data) => {
 
 ### signup.passwordValidation()
 
-This function is used to validate that the password supplied at signup meets certain criteria (length, randomness, etc.). By default it just returns `true` which means the password is always considered valid, even if only a single character (or empty string!). Modify it to enforce whatever methodology you want on the password.
+This function is used to validate that the password supplied at signup meets certain criteria (length, randomness, etc.). By default it just returns `true` which means the password is always considered valid, even if only a single character (dbAuth features built-in validation that the password is not blank, an empty string, or made up of only spaces). Modify it to enforce whatever methodology you want on the password.
 
 If the password is valid, return `true`. Otherwise, throw the `PasswordValidationError` along with a (optional) message explaining why:
 
