@@ -214,6 +214,13 @@ export class ReusedPasswordError extends Error {
   }
 }
 
+export class PasswordValidationError extends Error {
+  constructor(message = 'Password is invalid') {
+    super(message)
+    this.name = 'PasswordValidationError'
+  }
+}
+
 export class GenericError extends Error {
   constructor(message = 'unknown error occurred') {
     super(message)
