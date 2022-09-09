@@ -108,15 +108,17 @@ import { name, version } from '../package'
   // This gets more useful as there are more prompts to override
   let userArgs = {}
 
-  // Handle if typescript is selected
+  // Handle if typescript is selected via --ts
   if (typescript === true) {
     Object.assign(userArgs, { typescript: true })
   }
+  // Handle if typescript is skipped via --no-ts
   if (typescript === false) {
     Object.assign(userArgs, { typescript: false })
   }
 
   // User prompts
+  // See https://github.com/terkelg/prompts
   const questions = [
     {
       type: 'confirm',
@@ -326,7 +328,7 @@ import { name, version } from '../package'
       {
         title: 'Convert TypeScript files to JavaScript',
         // Enabled if user selects no to typescript prompt
-        // Enabled if user specified --no-ts
+        // Enabled if user specified --no-ts via command line
         enabled: () =>
           yarnInstall === true &&
           (typescript === false || answers.typescript === false),
