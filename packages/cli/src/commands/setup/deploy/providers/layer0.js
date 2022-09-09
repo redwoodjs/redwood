@@ -2,10 +2,9 @@ import fs from 'fs'
 
 import Listr from 'listr'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
-import c from '../../../../lib/colors'
 import {
   ERR_MESSAGE_MISSING_CLI,
   ERR_MESSAGE_NOT_INITIALIZED,
@@ -67,7 +66,7 @@ export const handler = async () => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

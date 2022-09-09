@@ -1,6 +1,8 @@
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
+import { colors } from '@redwoodjs/cli-helpers'
+
 import {
   deleteFilesTask,
   getPaths,
@@ -8,7 +10,6 @@ import {
   removeRoutesFromRouterTask,
   writeFile,
 } from '../../../lib'
-import c from '../../../lib/colors'
 import { pluralize } from '../../../lib/rwPluralize'
 import { verifyModelName } from '../../../lib/schemaHelpers'
 import {
@@ -115,7 +116,7 @@ export const handler = async ({ model: modelArg }) => {
     const { name } = await verifyModelName({ name: model, isDestroyer: true })
     await tasks({ model: name, path }).run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
   }
 }
 

@@ -3,10 +3,8 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
-
-import c from '../lib/colors'
 
 export const command = 'storybook'
 export const aliases = ['sb']
@@ -58,7 +56,7 @@ export const builder = (yargs) => {
       }
       if (argv.build && argv.open) {
         console.warn(
-          c.warning(
+          colors.warning(
             'Warning: --open option has no effect when running Storybook build'
           )
         )
@@ -147,7 +145,7 @@ export const handler = ({
       )
     }
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
     errorTelemetry(process.argv, e.message)
     process.exit(1)
   }

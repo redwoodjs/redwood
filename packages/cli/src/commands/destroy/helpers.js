@@ -1,8 +1,7 @@
 import Listr from 'listr'
 
 import { deleteFilesTask } from '../../lib'
-import c from '../../lib/colors'
-
+import { colors } from '@redwoodjs/cli-helpers'
 const tasks = ({ componentName, filesFn, name }) =>
   new Listr(
     [
@@ -36,7 +35,7 @@ export const createYargsForComponentDestroy = ({
         options = await preTasksFn({ ...options, isDestroyer: true })
         await tasks({ componentName, filesFn, name: options.name }).run()
       } catch (e) {
-        console.log(c.error(e.message))
+        console.log(colors.error(e.message))
       }
     },
     tasks,

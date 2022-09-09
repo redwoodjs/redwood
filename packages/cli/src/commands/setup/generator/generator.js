@@ -5,8 +5,7 @@ import fse from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../../../lib'
-import c from '../../../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 export const command = 'generator <name>'
 export const description =
@@ -99,6 +98,6 @@ export const handler = async ({ name, force }) => {
   try {
     await t.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
   }
 }

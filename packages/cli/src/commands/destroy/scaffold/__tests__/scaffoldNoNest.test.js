@@ -4,7 +4,9 @@ import fs from 'fs'
 
 import '../../../../lib/test'
 
-import { getPaths, getDefaultArgs } from '../../../../lib'
+import { getPaths } from '@redwoodjs/cli-helpers'
+
+import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'

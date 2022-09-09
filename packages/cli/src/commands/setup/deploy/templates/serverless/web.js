@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getPaths } from '../../../../../lib'
+import { getPaths } from '@redwoodjs/cli-helpers'
 
 export const PROJECT_NAME = path.basename(getPaths().base)
 

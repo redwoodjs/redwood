@@ -4,9 +4,8 @@ import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { apiServerHandler } from '@redwoodjs/api-server'
+import { getPaths } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
-
-import { getPaths } from '../../lib'
 
 export const command = 'flightcontrol <side>'
 export const alias = 'fc'

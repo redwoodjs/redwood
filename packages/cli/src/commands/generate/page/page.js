@@ -4,6 +4,7 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
+import { colors } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -13,7 +14,6 @@ import {
   transformTSToJS,
   writeFilesTask,
 } from '../../../lib'
-import c from '../../../lib/colors'
 import {
   createYargsForComponentGeneration,
   pathName,
@@ -232,7 +232,9 @@ export const handler = async ({
         task: (ctx, task) => {
           task.title =
             `One more thing...\n\n` +
-            `   ${c.warning('Page created! A note about <MetaTags>:')}\n\n` +
+            `   ${colors.warning(
+              'Page created! A note about <MetaTags>:'
+            )}\n\n` +
             `   At the top of your newly created page is a <MetaTags> component,\n` +
             `   which contains the title and description for your page, essential\n` +
             `   to good SEO. Check out this page for best practices: \n\n` +
@@ -247,7 +249,7 @@ export const handler = async ({
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

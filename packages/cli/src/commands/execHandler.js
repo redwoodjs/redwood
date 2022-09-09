@@ -3,12 +3,11 @@ import path from 'path'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { findScripts } from '@redwoodjs/internal/dist/files'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
 import { runScriptFunction } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
@@ -16,7 +15,7 @@ const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
   findScripts().forEach((scriptPath) => {
     const { name } = path.parse(scriptPath)
-    console.log(c.info(`- ${name}`))
+    console.log(colors.info(`- ${name}`))
   })
   console.log()
 }
@@ -93,7 +92,9 @@ export const handler = async (args) => {
     require.resolve(scriptPath)
   } catch {
     console.error(
-      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
+      colors.error(
+        `\nNo script called ${colors.underline(name)} in ./scripts folder.\n`
+      )
     )
 
     printAvailableScriptsToConsole()
@@ -116,7 +117,7 @@ export const handler = async (args) => {
             args: { args: scriptArgs },
           })
         } catch (e) {
-          console.error(c.error(`Error in script: ${e.message}`))
+          console.error(colors.error(`Error in script: ${e.message}`))
         }
       },
     },
@@ -130,7 +131,7 @@ export const handler = async (args) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.error(c.error(`The script exited with errors.`))
+    console.error(colors.error(`The script exited with errors.`))
     process.exit(e?.exitCode || 1)
   }
 }

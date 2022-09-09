@@ -11,10 +11,9 @@ import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 
-import { getPaths, prettify, writeFile } from '@redwoodjs/cli-helpers'
+import { getPaths, prettify, writeFile, colors } from '@redwoodjs/cli-helpers'
 import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 
-import c from './colors'
 import { pluralize, singularize } from './rwPluralize'
 
 export const asyncForEach = async (array, callback) => {
@@ -129,7 +128,7 @@ export const getConfig = () => {
   try {
     return getRedwoodConfig()
   } catch (e) {
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(1)
   }
 }
@@ -327,7 +326,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     await tasks.run()
     return true
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
     return false
   }
 }

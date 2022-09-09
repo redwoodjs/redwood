@@ -3,10 +3,9 @@ import path from 'path'
 
 import Listr from 'listr'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
-import c from '../../../../lib/colors'
 import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
 import { NETLIFY_TOML } from '../templates/netlify'
 
@@ -35,7 +34,7 @@ export const handler = async ({ force }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

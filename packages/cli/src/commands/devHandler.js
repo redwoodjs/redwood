@@ -3,13 +3,12 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const defaultApiDebugPort = 18911
@@ -35,7 +34,7 @@ export const handler = async ({
         process.argv,
         `Error generating prisma client: ${e.message}`
       )
-      console.error(c.error(e.message))
+      console.error(colors.error(e.message))
     }
 
     try {
@@ -43,7 +42,7 @@ export const handler = async ({
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
       console.error(
-        `Error whilst shutting down "api" port: ${c.error(e.message)}`
+        `Error whilst shutting down "api" port: ${colors.error(e.message)}`
       )
     }
   }
@@ -54,7 +53,7 @@ export const handler = async ({
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
-        `Error whilst shutting down "web" port: ${c.error(e.message)}`
+        `Error whilst shutting down "web" port: ${colors.error(e.message)}`
       )
     }
   }
@@ -128,7 +127,7 @@ export const handler = async ({
         process.argv,
         `Error concurrently starting sides: ${e.message}`
       )
-      console.error(c.error(e.message))
+      console.error(colors.error(e.message))
       process.exit(1)
     }
   })

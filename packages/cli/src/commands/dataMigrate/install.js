@@ -5,10 +5,8 @@ import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
-
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
 
 const MODEL = `model RW_DataMigration {
   version    String   @id
@@ -17,11 +15,11 @@ const MODEL = `model RW_DataMigration {
   finishedAt DateTime
 }`
 
-const POST_INSTALL_INSTRUCTIONS = `${c.warning(
+const POST_INSTALL_INSTRUCTIONS = `${colors.warning(
   "Don't forget to apply your migration when ready:"
 )}
 
-    ${c.bold('yarn rw prisma migrate dev')}
+    ${colors.bold('yarn rw prisma migrate dev')}
 `
 
 // Creates dataMigrations directory
@@ -93,7 +91,7 @@ export const handler = async () => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

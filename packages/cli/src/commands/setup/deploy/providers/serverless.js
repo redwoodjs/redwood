@@ -4,10 +4,9 @@ import path from 'path'
 
 import Listr from 'listr'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
-import c from '../../../../lib/colors'
 import {
   addToGitIgnoreTask,
   addToDotEnvTask,
@@ -24,7 +23,7 @@ export const description = 'Setup deployments via the Serverless Framework'
 export const aliases = ['aws-serverless']
 
 export const notes = [
-  c.green("You're almost ready to deploy using the Serverless framework!"),
+  colors.green("You're almost ready to deploy using the Serverless framework!"),
   '',
   '• See https://redwoodjs.com/docs/deploy#serverless-deploy for more info. If you ',
   '  want to give it a shot, open your `.env` file and add your AWS credentials,',
@@ -137,7 +136,7 @@ export const handler = async ({ force }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

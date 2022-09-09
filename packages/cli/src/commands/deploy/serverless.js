@@ -10,8 +10,7 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 export const command = 'serverless'
 export const aliases = ['aws serverless', 'sls']
@@ -152,7 +151,7 @@ export const handler = async (yargs) => {
       const SETUP_MARKER = chalk.bgBlue(chalk.black('First Setup '))
       console.log()
 
-      console.log(SETUP_MARKER, c.green('Starting first setup wizard...'))
+      console.log(SETUP_MARKER, colors.green('Starting first setup wizard...'))
 
       const { stdout: slsInfo } = await execa(
         `yarn serverless info --verbose --stage=${yargs.stage}`,
@@ -165,7 +164,7 @@ export const handler = async (yargs) => {
       const deployedApiUrl = slsInfo.match(/HttpApiUrl: (https:\/\/.*)/)[1]
 
       console.log()
-      console.log(SETUP_MARKER, `Found ${c.green(deployedApiUrl)}`)
+      console.log(SETUP_MARKER, `Found ${colors.green(deployedApiUrl)}`)
       console.log()
 
       const { addDotEnv } = await prompts({
@@ -223,15 +222,15 @@ export const handler = async (yargs) => {
         const deployedWebUrl = slsInfo.match(/url: (https:\/\/.*)/)[1]
 
         const message = [
-          c.bold('Successful first deploy!'),
+          colors.bold('Successful first deploy!'),
           '',
-          `View your deployed site at: ${c.green(deployedWebUrl)}`,
+          `View your deployed site at: ${colors.green(deployedWebUrl)}`,
           '',
           'You can use serverless.com CI/CD by connecting/creating an app',
           'To do this run `yarn serverless` on each of the sides, and connect your account',
           '',
           'Find more information in our docs:',
-          c.underline('https://redwoodjs.com/docs/deploy#serverless'),
+          colors.underline('https://redwoodjs.com/docs/deploy#serverless'),
         ]
 
         console.log(
@@ -244,7 +243,7 @@ export const handler = async (yargs) => {
       }
     }
   } catch (e) {
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

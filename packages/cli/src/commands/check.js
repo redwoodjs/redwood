@@ -1,5 +1,4 @@
-import { getPaths } from '../lib'
-import c from '../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 export const command = 'check'
 export const aliases = ['diagnostics']
@@ -14,12 +13,12 @@ export const handler = async () => {
   printDiagnostics(getPaths().base, {
     getSeverityLabel: (severity) => {
       if (severity === DiagnosticSeverity.Error) {
-        return c.error('error')
+        return colors.error('error')
       }
       if (severity === DiagnosticSeverity.Warning) {
-        return c.warning('warning')
+        return colors.warning('warning')
       }
-      return c.info('info')
+      return colors.info('info')
     },
   })
 }

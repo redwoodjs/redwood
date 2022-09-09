@@ -1,5 +1,7 @@
 import Listr from 'listr'
 
+import { colors } from '@redwoodjs/cli-helpers'
+
 import {
   existsAnyExtensionSync,
   deleteFile,
@@ -7,7 +9,6 @@ import {
   writeFile,
   getGraphqlPath,
 } from '../../../lib'
-import c from '../../../lib/colors'
 import { getOutputPath } from '../../setup/graphiql/graphiql'
 
 const removeGraphiqlFromGraphqlHandler = () => {
@@ -51,6 +52,6 @@ export const handler = () => {
   try {
     tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
   }
 }

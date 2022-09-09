@@ -7,10 +7,9 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'upgrade'
@@ -75,7 +74,7 @@ const validateTag = (tag) => {
   if (!isTagValid) {
     // Stop execution
     throw new Error(
-      c.error(
+      colors.error(
         'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
       )
     )
@@ -117,7 +116,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         task: (ctx, task) => {
           const version = ctx.versionToUpgradeTo
           task.title =
-            `One more thing...\n\n   ${c.warning(
+            `One more thing...\n\n   ${colors.warning(
               `🎉 Your project has been upgraded to RedwoodJS ${version}!`
             )} \n\n` +
             `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
@@ -138,7 +137,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }
@@ -255,7 +254,7 @@ async function refreshPrismaClient(task, { verbose }) {
     console.log(
       'You may need to update your prisma client manually: $ yarn rw prisma generate'
     )
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
   }
 }
 
@@ -298,7 +297,7 @@ const dedupeDeps = async (task, { verbose }) => {
       )
     }
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
     throw new Error(
       'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing'
     )

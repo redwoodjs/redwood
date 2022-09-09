@@ -1,8 +1,7 @@
 import boxen from 'boxen'
 import fg from 'fast-glob'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 const isUsingBabelRc = () => {
   return (
@@ -22,7 +21,7 @@ const checkForBabelConfig = () => {
       'These settings will be ignored, unless you use a babel.config.js file',
       '',
       'Your plugins and settings will be automatically merged with',
-      `the Redwood built-in config, more details here: ${c.warning(
+      `the Redwood built-in config, more details here: ${colors.warning(
         BABEL_SETTINGS_LINK
       )}`,
     ]

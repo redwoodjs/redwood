@@ -7,6 +7,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
+import { colors } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -20,7 +21,6 @@ import {
   getGraphqlPath,
   graphFunctionDoesExist,
 } from '../../../lib'
-import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
@@ -275,7 +275,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

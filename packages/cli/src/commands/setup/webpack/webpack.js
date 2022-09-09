@@ -4,10 +4,8 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
+import { getPaths, writeFile, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
-
-import { getPaths, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
 
 export const command = 'webpack'
 export const description =
@@ -43,7 +41,7 @@ export const handler = async ({ force }) => {
       title: 'One more thing...',
       task: (_ctx, task) => {
         task.title = `One more thing...\n
-          ${c.green(
+          ${colors.green(
             'Quick link to the docs on configuring custom webpack config:'
           )}
           ${chalk.hex('#e8e8e8')(
@@ -58,7 +56,7 @@ export const handler = async ({ force }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

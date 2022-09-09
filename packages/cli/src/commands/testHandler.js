@@ -3,11 +3,10 @@ import path from 'path'
 
 import execa from 'execa'
 
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
 import * as project from '../lib/project'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
@@ -39,7 +38,7 @@ function isJestConfigFile(sides) {
 
         if (!jestConfigExists) {
           console.error(
-            c.error(
+            colors.error(
               `\nError: Missing Jest config file ${side}/jest.config.js` +
                 '\nTo add this file, run `npx @redwoodjs/codemods update-jest-config`\n'
             )

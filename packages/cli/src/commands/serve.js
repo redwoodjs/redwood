@@ -11,9 +11,7 @@ import {
   webServerHandler,
   bothServerHandler,
 } from '@redwoodjs/api-server'
-
-import { getPaths } from '../lib'
-import c from '../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
@@ -48,7 +46,7 @@ export const builder = (yargs) => {
         !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
       ) {
         console.error(
-          c.error(
+          colors.error(
             '\n Please run `yarn rw build web` before trying to serve web. \n'
           )
         )
@@ -60,7 +58,7 @@ export const builder = (yargs) => {
         !fs.existsSync(path.join(getPaths().api.dist))
       ) {
         console.error(
-          c.error(
+          colors.error(
             '\n Please run `yarn rw build api` before trying to serve api. \n'
           )
         )
@@ -74,7 +72,7 @@ export const builder = (yargs) => {
           !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
       ) {
         console.error(
-          c.error(
+          colors.error(
             '\n Please run `yarn rw build` before trying to serve your redwood app. \n'
           )
         )

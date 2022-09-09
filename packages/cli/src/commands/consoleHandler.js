@@ -2,9 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import repl from 'repl'
 
+import { getPaths } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
-
-import { getPaths } from '../lib'
 
 const paths = getPaths()
 

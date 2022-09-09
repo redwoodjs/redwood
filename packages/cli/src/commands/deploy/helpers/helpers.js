@@ -1,9 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
-
-import c from '../../../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 export const deployBuilder = (yargs) => {
   yargs
@@ -47,7 +45,7 @@ export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
 
   const joinedCommands = commandSet.join(' && ')
 
-  console.log(c.green(`\nRunning:\n`) + `${joinedCommands} \n`)
+  console.log(colors.green(`\nRunning:\n`) + `${joinedCommands} \n`)
 
   return execa(joinedCommands, {
     shell: true,

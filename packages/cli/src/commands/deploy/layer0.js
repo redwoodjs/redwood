@@ -5,9 +5,7 @@ import fs from 'fs-extra'
 import omit from 'lodash/omit'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
-
-import c from '../../lib/colors'
+import { getPaths, colors } from '@redwoodjs/cli-helpers'
 
 import { deployBuilder, deployHandler } from './helpers/helpers'
 
@@ -104,7 +102,7 @@ export const ERR_MESSAGE_MISSING_CLI = buildErrorMessage(
   [
     'It looks like Layer0 is not configured for your project.',
     'Run the following to add Layer0 to your project:',
-    `  ${c.info('yarn add -D @layer0/cli')}`,
+    `  ${colors.info('yarn add -D @layer0/cli')}`,
   ].join('\n')
 )
 
@@ -113,13 +111,13 @@ export const ERR_MESSAGE_NOT_INITIALIZED = buildErrorMessage(
   [
     'It looks like Layer0 is not configured for your project.',
     'Run the following to initialize Layer0 on your project:',
-    `  ${c.info('yarn layer0 init')}`,
+    `  ${colors.info('yarn layer0 init')}`,
   ].join('\n')
 )
 
 export function buildErrorMessage(title, message) {
   return [
-    c.bold(c.error(title)),
+    colors.bold(colors.error(title)),
     '',
     message,
     '',

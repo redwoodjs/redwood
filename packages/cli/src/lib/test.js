@@ -61,8 +61,11 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
   }
 })
 
-jest.mock('./project', () => ({
+jest.mock('@redwoodjs/cli-helpers', () => ({
   isTypeScriptProject: () => false,
+}))
+
+jest.mock('./project', () => ({
   sides: () => ['web', 'api'],
 }))
 

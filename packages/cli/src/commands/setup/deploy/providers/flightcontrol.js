@@ -6,10 +6,9 @@ import path from 'path'
 import { getSchema, getConfig } from '@prisma/internals'
 import Listr from 'listr'
 
+import { getPaths, writeFilesTask, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
-import c from '../../../../lib/colors'
 import { printSetupNotes, updateApiURLTask } from '../helpers'
 import {
   flightcontrolConfig,
@@ -324,7 +323,7 @@ export const handler = async ({ force, database }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
+    console.error(colors.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

@@ -8,6 +8,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
+import { colors } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
@@ -23,7 +24,6 @@ import {
   addScaffoldImport,
   transformTSToJS,
 } from '../../../lib'
-import c from '../../../lib/colors'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
@@ -749,7 +749,7 @@ export const handler = async ({
     })
     await t.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
     process.exit(e?.existCode || 1)
   }
 }

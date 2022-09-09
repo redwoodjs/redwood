@@ -5,10 +5,14 @@ import execa from 'execa'
 import Listr from 'listr'
 import prompts from 'prompts'
 
+import {
+  getPaths,
+  writeFilesTask,
+  transformTSToJS,
+  colors,
+} from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 
-import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
-import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import {
   createYargsForComponentGeneration,
@@ -97,19 +101,19 @@ export const { command, description, builder } =
   })
 
 export const handler = async (args) => {
-  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
+  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${colors.warning(
     'After modifying your directive, you can add it to your SDLs e.g.:'
   )}
-    ${c.info('// example todo.sdl.js')}
-    ${c.info('# Option A: Add it to a field')}
+    ${colors.info('// example todo.sdl.js')}
+    ${colors.info('# Option A: Add it to a field')}
     type Todo {
       id: Int!
-      body: String! ${c.green(`@${args.name}`)}
+      body: String! ${colors.green(`@${args.name}`)}
     }
 
-    ${c.info('# Option B: Add it to query/mutation')}
+    ${colors.info('# Option B: Add it to query/mutation')}
     type Query {
-      todos: [Todo] ${c.green(`@${args.name}`)}
+      todos: [Todo] ${colors.green(`@${args.name}`)}
     }
 `
 
@@ -171,7 +175,7 @@ export const handler = async (args) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
     process.exit(1)
   }
 }

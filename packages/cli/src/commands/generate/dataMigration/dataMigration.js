@@ -5,11 +5,11 @@ import Listr from 'listr'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 
-import { getPaths, writeFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
+import { getPaths, writeFilesTask, colors } from '@redwoodjs/cli-helpers'
+
 import { yargsDefaults } from '../../generate'
 
-const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
+const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${colors.warning(
   'After writing your migration, you can run it with:'
 )}
 
@@ -77,7 +77,7 @@ export const handler = async (args) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.log(colors.error(e.message))
     process.exit(1)
   }
 }
