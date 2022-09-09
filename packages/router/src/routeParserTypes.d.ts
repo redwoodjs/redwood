@@ -22,7 +22,7 @@ export type ParamType<match> = match extends 'Int'
 // This is used for a specific case where the first param
 // doesnt have a type, but second one does
 // See comment above it's usage
-type AdjacentParams<
+type ParamsFromGreedyMatch<
   TParam extends string,
   TMatch extends string,
   TRest extends string
@@ -40,7 +40,7 @@ type TypedParamInFront<
   ? // check for greedy match (basically if the param contains a slash in it)
     // e.g. in {b}/{c:Int} it matches b}/{c as the param
     // Rest2 = {c, Match = Int so we reconstruct the old one {c + : + Int + }
-    AdjacentParams<Param2, TMatch, Rest2>
+    ParamsFromGreedyMatch<Param2, TMatch, Rest2>
   : // Otherwise its a regular match
     {
       [ParamName in TParam]: ParamType<TMatch>
