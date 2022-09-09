@@ -1,100 +1,102 @@
-// import { A } from 'ts-toolbelt'
-import { expectType } from 'tsd-lite'
+import { expectAssignable } from 'tsd-lite'
 
-import type { RouteParams, ParamType } from '@redwoodjs/router'
+import type { RouteParams, ParamType } from '../routeParserTypes'
 
 describe('RouteParams<>', () => {
   test('Single parameters', () => {
-    const singleParameters: RouteParams<'bazinga/{id:Int}'> = {
+    expectAssignable<RouteParams<'bazinga/{id:Int}'>>({
       id: 1,
-    }
-
-    expectType<{ id: number }>(singleParameters)
+    })
   })
 
   test('Route string with no types defaults to string', () => {
-    const singleParameters: RouteParams<'/blog/{year}/{month}/{day}/{slug}'> = {
+    expectAssignable<RouteParams<'/blog/{year}/{month}/{day}/{slug}'>>({
       year: '2020',
       month: '01',
       day: '01',
       slug: 'hello-world',
-    }
-
-    expectType<{ year: string; month: string; day: string; slug: string }>(
-      singleParameters
-    )
+    })
   })
 
   test('Custom param types', () => {
-    const customParams: RouteParams<'/post/{name:slug}'> = {
+    const customParams = {
       name: 'hello-world-slug',
     }
 
-    expectType<{ name: string }>(customParams)
+    expectAssignable<RouteParams<'/post/{name:slug}'>>(customParams)
   })
 
-  // test('Glob route params', () => {
-  //   const globRoutes: RouteParams<'/from/{fromDate...}/to/{toDate...}'> = {
-  //     fromDate: '2021/11/03',
-  //     toDate: '2021/11/17',
-  //   }
+  test('Multiple Glob route params', () => {
+    const globRoutes = {
+      fromDate: '2021/11/03',
+      toDate: '2021/11/17',
+    }
 
-  //   expectType<{ fromDate: string; toDate: string }>(globRoutes)
-  // })
+    expectAssignable<RouteParams<'/from/{fromDate...}/to/{toDate...}'>>(
+      globRoutes
+    )
+  })
+
+  test('Single Glob route params', () => {
+    const globRoutes = {
+      fromDate: '2021/11/03',
+    }
+
+    expectAssignable<RouteParams<'/from/{fromDate...}'>>(globRoutes)
+  })
+
+  test('Glob params in the middle', () => {
+    test('Multiple Glob route params', () => {
+      const middleGlob = {
+        folders: 'src/lib/auth.js',
+      }
+
+      expectAssignable<RouteParams<'/repo/{folders...}/edit'>>(middleGlob)
+    })
+  })
 
   test('Mixed typed and untyped params', () => {
-    const untypedFirst: RouteParams<'/mixed/{b}/{c:Boolean}'> = {
+    const untypedFirst = {
       b: 'bazinga',
       c: true,
     }
 
-    const typedFirst: RouteParams<'/mixed/{b:Float}/{c}'> = {
+    const typedFirst = {
       b: 1245,
       c: 'stringy-string',
     }
 
-    expectType<{ b: string; c: boolean }>(untypedFirst)
-    expectType<{ b: number; c: string }>(typedFirst)
+    expectAssignable<RouteParams<'/mixed/{b}/{c:Boolean}'>>(untypedFirst)
+    expectAssignable<RouteParams<'/mixed/{b:Float}/{c}'>>(typedFirst)
   })
 
-  // test('Params in the middle', () => {
-  //   const paramsInTheMiddle: RouteParams<'/posts/{authorId:string}/{id:Int}/edit'> =
-  //     {
-  //       authorId: 'id:author',
-  //       id: 10,
-  //     }
+  test('Params in the middle', () => {
+    const paramsInTheMiddle = {
+      authorId: 'id:author',
+      id: 10,
+    }
 
-  //   //     A.Compute<{ authorId: string; id: number } & Record<string | number, any>>
-
-  //   expectType<{ authorId: string; id: number }>(paramsInTheMiddle)
-  // })
+    expectAssignable<RouteParams<'/posts/{authorId:string}/{id:Int}/edit'>>(
+      paramsInTheMiddle
+    )
+  })
 })
 
 describe('ParamType<>', () => {
   test('Float', () => {
-    const float: ParamType<'Float'> = 1
-
-    expectType<number>(float)
+    expectAssignable<ParamType<'Float'>>(1.02)
   })
 
   test('Boolean', () => {
-    // Use a function because assigning a boolean narrows the type automatically
-    const returnBool: (a?: any) => ParamType<'Boolean'> = (a) => {
-      return !!a
-    }
-
-    expectType<boolean>(returnBool())
+    expectAssignable<ParamType<'Boolean'>>(true)
+    expectAssignable<ParamType<'Boolean'>>(false)
   })
 
   test('Int', () => {
-    const myInt: ParamType<'Int'> = 1
-
-    expectType<number>(myInt)
+    expectAssignable<ParamType<'Int'>>(51)
   })
 
   test('String', () => {
-    const myString: ParamType<'String'> = 'bazinga'
-
-    expectType<string>(myString)
+    expectAssignable<ParamType<'String'>>('bazinga')
   })
 })
