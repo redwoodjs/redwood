@@ -83,7 +83,7 @@ import { name, version } from '../package'
       alias: 'ts',
       default: null,
       type: 'boolean',
-      describe: 'Generate a TypeScript project. TypeScript by default.',
+      describe: 'Generate a TypeScript project.',
     })
     .option('overwrite', {
       default: false,
@@ -121,7 +121,7 @@ import { name, version } from '../package'
     {
       type: 'confirm',
       name: 'typescript',
-      message: 'Use typescript?',
+      message: 'Use TypeScript?',
       initial: true,
       active: 'Yes',
       inactive: 'No',
@@ -151,17 +151,6 @@ import { name, version } from '../package'
       `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
         'my-redwood-app'
       )}`
-    )
-    process.exit(1)
-  }
-
-  // Throw an error if both --no-yarn-install and --no-ts
-  if (!yarnInstall && !typescript) {
-    console.error('To use JavaScript you need to run yarn install.')
-
-    console.log('For example:')
-    console.log(
-      `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green('--no-ts')}`
     )
     process.exit(1)
   }
