@@ -31,7 +31,7 @@ async function shouldIncludeWebAuthn(webauthn: boolean) {
   return webauthn
 }
 
-export const command = 'auth dbAuth'
+export const command = 'dbAuth'
 export const description = 'Generate an auth configuration for dbAuth'
 export const builder = (yargs: yargs.Argv) => {
   yargs
@@ -69,6 +69,7 @@ export const handler = async ({
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
 
   standardAuthHandler({
+    basedir: __dirname,
     rwVersion,
     forceArg,
     provider: 'dbAuth',

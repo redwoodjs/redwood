@@ -5,7 +5,7 @@ import {
   standardAuthHandler,
 } from '@redwoodjs/cli-helpers'
 
-export const command = 'auth nhost'
+export const command = 'nhost'
 export const description = 'Generate an auth configuration for nhost'
 export const builder = (yargs: yargs.Argv) => {
   return standardAuthBuilder(yargs)
@@ -18,6 +18,7 @@ interface Args {
 
 export const handler = async ({ rwVersion, force: forceArg }: Args) => {
   standardAuthHandler({
+    basedir: __dirname,
     rwVersion,
     forceArg,
     provider: 'nhost',

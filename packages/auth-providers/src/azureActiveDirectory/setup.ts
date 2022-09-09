@@ -5,7 +5,7 @@ import {
   standardAuthHandler,
 } from '@redwoodjs/cli-helpers'
 
-export const command = 'auth azureActiveDirectory'
+export const command = 'azureActiveDirectory'
 export const description =
   'Generate an auth configuration for Azure Active Directory'
 export const builder = (yargs: yargs.Argv) => {
@@ -19,6 +19,7 @@ interface Args {
 
 export const handler = async ({ rwVersion, force: forceArg }: Args) => {
   standardAuthHandler({
+    basedir: __dirname,
     rwVersion,
     forceArg,
     provider: 'azureActiveDirectory',

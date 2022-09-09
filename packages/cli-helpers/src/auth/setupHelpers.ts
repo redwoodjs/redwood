@@ -25,12 +25,12 @@ import {
  * Check if one of the api side auth files already exists and if so, ask the
  * user to overwrite
  */
-async function shouldForce(force: boolean, provider: string, webAuthn = false) {
+async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
   if (force) {
     return true
   }
 
-  const existingFiles = Object.keys(files({ provider, webAuthn })).filter(
+  const existingFiles = Object.keys(files({ basedir, webAuthn })).filter(
     (filePath) => fs.existsSync(filePath)
   )
 
@@ -68,6 +68,7 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
 }
 
 interface Args {
+  basedir: string
   rwVersion: string
   forceArg: boolean
   provider: string
@@ -86,6 +87,7 @@ function truthy<T>(value: T): value is Truthy<T> {
 }
 
 export const standardAuthHandler = async ({
+  basedir,
   rwVersion,
   forceArg,
   provider,
@@ -95,15 +97,15 @@ export const standardAuthHandler = async ({
   extraTask,
   notes,
 }: Args) => {
-  const force = await shouldForce(forceArg, provider, webAuthn)
+  const force = await shouldForce(forceArg, basedir, webAuthn)
 
   const tasks = new Listr(
     [
-      generateAuthApi(provider, force, webAuthn),
-      addAuthConfigToWeb(provider),
+      generateAuthApi(basedir, provider, force, webAuthn),
+      addAuthConfigToWeb(basedir, provider),
       addAuthConfigToGqlApi,
-      addWebPackages(provider, webPackages, rwVersion),
-      addApiPackages(provider, apiPackages),
+      addWebPackages(webPackages, rwVersion),
+      addApiPackages(apiPackages),
       installPackages,
       extraTask,
       notes ? printNotes(notes) : null,

@@ -20,13 +20,6 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
-// TODO: Extract?
-export const getSupportedProviders = () =>
-  fs
-    .readdirSync(path.resolve(__dirname, 'providers'))
-    .map((file) => path.basename(file, '.js'))
-    .filter((file) => file !== 'README.md')
-
 const addApiConfig = () => {
   const graphqlPath = getGraphqlPath()
 
@@ -53,10 +46,6 @@ const addApiConfig = () => {
     )
     fs.writeFileSync(graphqlPath, content)
   }
-}
-
-const isProviderSupported = (provider: string) => {
-  return getSupportedProviders().indexOf(provider) !== -1
 }
 
 const apiSrcDoesExist = () => {
@@ -189,14 +178,12 @@ export const addConfigToApp = async () => {
   fs.writeFileSync(webAppPath, content)
 }
 
-export const createWebAuthTs = (provider: string, webAuthn: boolean) => {
-  const templatesBaseDir = path.resolve(
-    __dirname,
-    'providers',
-    provider,
-    'templates',
-    'web'
-  )
+export const createWebAuth = (
+  basedir: string,
+  provider: string,
+  webAuthn: boolean
+) => {
+  const templatesBaseDir = path.join(basedir, 'templates', 'web')
   const templates = fs.readdirSync(templatesBaseDir)
 
   const templateFileName = templates.find((template) => {
@@ -256,9 +243,10 @@ export const addConfigToRoutes = () => {
 }
 
 export const generateAuthApi = (
+  basedir: string,
   provider: string,
   force: boolean,
-  webAuthn = false
+  webAuthn: boolean
 ): Listr.ListrTask => ({
   title: 'Generating auth api side files...',
   task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
@@ -268,7 +256,7 @@ export const generateAuthApi = (
 
     // The keys in `filesRecord` are the full paths to where the file contents,
     // which is the values in `filesRecord`, will be written.
-    const filesRecord = files({ provider, webAuthn })
+    const filesRecord = files({ basedir, webAuthn })
 
     if (!force) {
       const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
@@ -293,12 +281,16 @@ export const generateAuthApi = (
   },
 })
 
-export const addAuthConfigToWeb = (provider: string, webAuthn = false) => ({
+export const addAuthConfigToWeb = (
+  basedir: string,
+  provider: string,
+  webAuthn = false
+) => ({
   title: 'Adding auth config to web...',
   task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
     if (webIndexDoesExist()) {
       addConfigToApp()
-      createWebAuthTs(provider, webAuthn)
+      createWebAuth(basedir, provider, webAuthn)
       addConfigToRoutes()
     } else {
       task.skip?.(
@@ -321,33 +313,24 @@ export const addAuthConfigToGqlApi = {
   },
 }
 
-export const addWebPackages = (
-  provider: string,
-  webPackages: string[],
-  rwVersion: string
-) => ({
+export const addWebPackages = (webPackages: string[], rwVersion: string) => ({
   title: 'Adding required web packages...',
   task: async () => {
-    if (!isProviderSupported(provider)) {
-      throw new Error(`Unknown auth provider '${provider}'`)
-    }
-    await execa('yarn', [
+    const args = [
       'workspace',
       'web',
       'add',
       ...webPackages,
       `@redwoodjs/auth@${rwVersion}`,
-    ])
+    ]
+    await execa('yarn', args)
   },
 })
 
-export const addApiPackages = (provider: string, apiPackages: string[]) =>
+export const addApiPackages = (apiPackages: string[]) =>
   apiPackages.length > 0 && {
     title: 'Adding required api packages...',
     task: async () => {
-      if (!isProviderSupported(provider)) {
-        throw new Error(`Unknown auth provider '${provider}'`)
-      }
       await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
     },
   }

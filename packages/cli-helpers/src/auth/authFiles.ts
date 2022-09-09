@@ -8,7 +8,7 @@ import { getPaths } from '../lib/paths'
 import { isTypeScriptProject } from '../lib/project'
 
 interface FilesArgs {
-  provider: string
+  basedir: string
   webAuthn: boolean
 }
 
@@ -24,16 +24,9 @@ interface FilesArgs {
  * }
  * ```
  */
-export const files = ({ provider, webAuthn }: FilesArgs) => {
+export const files = ({ basedir, webAuthn }: FilesArgs) => {
   const apiSrcPath = getPaths().api.src
-
-  const apiBaseTemplatePath = path.join(
-    path.resolve(__dirname, 'providers'),
-    provider,
-    'templates',
-    'api'
-  )
-
+  const apiBaseTemplatePath = path.join(basedir, 'templates', 'api')
   const templateDirectories = fs.readdirSync(apiBaseTemplatePath)
 
   const filesRecord = templateDirectories.reduce<Record<string, string>>(
