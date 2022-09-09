@@ -13592,6 +13592,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 29.0.1
     listr: 0.14.3
+    param-case: 3.0.4
     typescript: 4.7.4
     yargs: 17.5.1
   bin:

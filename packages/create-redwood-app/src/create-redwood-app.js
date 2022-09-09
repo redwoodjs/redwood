@@ -14,6 +14,7 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
+import { paramCase } from 'param-case'
 import prompts from 'prompts'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -69,6 +70,8 @@ import { name, version } from '../package'
     overwrite,
     telemetry: telemetry,
     yarn1,
+    'git-init': gitInit,
+    'language-target': languageTarget,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
@@ -101,12 +104,34 @@ import { name, version } from '../package'
       type: 'boolean',
       describe: 'Use yarn 1. yarn 3 by default',
     })
+    .option('git-init', {
+      alias: 'git',
+      default: null,
+      type: 'boolean',
+      describe: 'Initialize a new git repository.',
+    })
+    .option('language-target', {
+      alias: 'language',
+      choices: ['ts', 'ts-strict', 'js'],
+      default: 'ts',
+      type: 'string',
+      describe: 'Choose your preferred development language.',
+    })
     .version(version)
     .parse()
 
   // Variable to hold the user args as an object that can be used for prompt overides
   // This gets more useful as there are more prompts to override
   let userArgs = {}
+
+  // Handle if a project name/path is specified in command line
+  // E.g. yarn create redwood-app my-awesome-app
+  if (typeof args[0] === 'string') {
+    Object.assign(userArgs, {
+      'project-name': args[0],
+      'project-dir': args[0],
+    })
+  }
 
   // Handle if typescript is selected via --ts
   if (typescript === true) {
@@ -117,13 +142,45 @@ import { name, version } from '../package'
     Object.assign(userArgs, { typescript: false })
   }
 
+  // Handle if git init is selected via --git-init
+  if (gitInit === true) {
+    Object.assign(userArgs, { 'git-init': true })
+  }
+  // Handle if git init is skipped via --no-git-init
+  if (gitInit === false) {
+    Object.assign(userArgs, { 'git-init': false })
+  }
+
   // User prompts
   // See https://github.com/terkelg/prompts
   const questions = [
     {
+      type: 'text',
+      name: 'project-name',
+      message: 'Project name?',
+      initial: 'my-redwood-app',
+    },
+    {
+      type: 'text',
+      name: 'project-dir',
+      message: 'Project directory?',
+      initial: (prev) => paramCase(prev),
+    },
+    {
+      type: 'select',
+      name: 'language-target',
+      message: 'Choose your preferred development language.',
+      choices: [
+        { title: 'TypeScript', value: 'ts' },
+        { title: 'TypeScript (strict mode)', value: 'ts-strict' },
+        { title: 'JavaScript', value: 'js' },
+      ],
+      initial: 0,
+    },
+    {
       type: 'confirm',
-      name: 'typescript',
-      message: 'Use TypeScript?',
+      name: 'git-init',
+      message: 'Should we initialize a new git repository?',
       initial: true,
       active: 'Yes',
       inactive: 'No',
@@ -137,7 +194,9 @@ import { name, version } from '../package'
   const answers = await prompts(questions)
 
   // Get the directory for installation from the args
-  const targetDir = String(args).replace(/,/g, '-')
+  // Because of the override we can just use the value from the answers which will
+  // either be the overide or it will be the provided prompt.
+  const targetDir = String(answers['project-dir']).replace(/,/g, '-')
 
   // Throw an error if there is no target directory specified
   if (!targetDir) {
@@ -327,11 +386,11 @@ import { name, version } from '../package'
       },
       {
         title: 'Convert TypeScript files to JavaScript',
-        // Enabled if user selects no to typescript prompt
-        // Enabled if user specified --no-ts via command line
+        // Enabled if user selects javascript prompt
+        // Enabled if user specified javascript via commandline
         enabled: () =>
           yarnInstall === true &&
-          (typescript === false || answers.typescript === false),
+          (languageTarget === 'js' || answers['language-target'] === 'js'),
         task: () => {
           return execa('yarn rw ts-to-js', {
             shell: true,
@@ -349,6 +408,31 @@ import { name, version } from '../package'
           })
         },
       },
+      // TODO this doesn't actually work
+      {
+        title: 'Enable TypeScript strict mode',
+
+        enabled: () =>
+          yarnInstall === true &&
+          (languageTarget === 'ts-strict' ||
+            answers['language-target'] === 'ts-strict'),
+        task: () => {
+          return console.log('TODO')
+        },
+      },
+      {
+        title: 'Initializing new git repo',
+        enabled: () => gitInit === true || answers['git-init'] === true,
+        task: () => {
+          return execa(
+            'git init && git add . && git commit -m "Initial commit" && git branch -M main',
+            {
+              shell: true,
+              cwd: newAppDir,
+            }
+          )
+        },
+      },
     ],
     { collapse: false, exitOnError: true }
   )
@@ -360,6 +444,9 @@ import { name, version } from '../package'
       // https://prettier.io/docs/en/rationale.html#semicolons
       ;[
         '',
+        style.success(
+          `🎉🎉Successfully created ${answers['project-name']}🎉🎉`
+        ),
         style.success('Thanks for trying out Redwood!'),
         '',
         ` ⚡️ ${style.redwood(
