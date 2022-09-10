@@ -6210,7 +6210,7 @@ __metadata:
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
-    uuid: 8.3.2
+    uuid: 9.0.0
   peerDependencies:
     "@clerk/clerk-sdk-node": 3.9.2
     "@magic-sdk/admin": 1.4.1
@@ -6520,7 +6520,7 @@ __metadata:
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4
-    uuid: 8.3.2
+    uuid: 9.0.0
   languageName: unknown
   linkType: soft
 
@@ -6698,7 +6698,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 29.0.1
     systeminformation: 5.12.4
-    uuid: 8.3.2
+    uuid: 9.0.0
     yargs: 17.5.1
   languageName: unknown
   linkType: soft
@@ -30568,6 +30568,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
+  languageName: node
+  linkType: hard
+
+"uuid@npm:9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8867e438990d1d33ac61093e2e4e3477a2148b844e4fa9e3c2360fa4399292429c4b6ec64537eb1659c97b2d10db349c673ad58b50e2824a11e0d3630de3c056
   languageName: node
   linkType: hard
 
