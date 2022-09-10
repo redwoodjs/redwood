@@ -50,12 +50,6 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const routerState = useRouterState()
   const { loading, isAuthenticated, hasRole } = routerState.useAuth()
 
-  if (privateSet && !unauthenticated) {
-    throw new Error(
-      'Private Sets need to specify what route to redirect unauthorized users to by setting the `unauthenticated` prop'
-    )
-  }
-
   const unauthorized = useCallback(() => {
     return !(isAuthenticated && (!roles || hasRole(roles)))
   }, [isAuthenticated, roles, hasRole])
@@ -64,22 +58,27 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const wrappers = Array.isArray(wrap) ? wrap : [wrap ? wrap : IdentityWrapper]
 
   if (privateSet && unauthorized()) {
+    if (!unauthenticated) {
+      throw new Error(
+        'Private Sets need to specify what route to redirect unauthorized ' +
+          'users to by setting the `unauthenticated` prop'
+      )
+    }
+
     if (loading) {
       return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
 
-      // We already have a check for !unauthenticated further up, so
-      // technically `|| ''` should not be needed. But TS...
-      if (!namedRoutes[unauthenticated || '']) {
+      if (!namedRoutes[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
 
       let unauthenticatedPath
 
       try {
-        unauthenticatedPath = namedRoutes[unauthenticated || '']()
+        unauthenticatedPath = namedRoutes[unauthenticated]()
       } catch (e) {
         if (
           e instanceof Error &&
