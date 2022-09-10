@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.18.9",
+    "@babel/runtime-corejs3": "7.19.0",
     "@envelop/depth-limit": "1.6.2",
     "@envelop/disable-introspection": "3.4.2",
     "@envelop/filter-operation-type": "3.4.2",
@@ -31,7 +31,7 @@
     "@graphql-tools/merge": "8.3.3",
     "@graphql-tools/schema": "8.5.1",
     "@graphql-tools/utils": "8.10.0",
-    "@graphql-yoga/common": "2.12.8",
+    "@graphql-yoga/common": "2.12.12",
     "@prisma/client": "4.3.1",
     "@redwoodjs/api": "2.2.4",
     "core-js": "3.25.0",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.13",
+    "@babel/core": "7.19.0",
     "@envelop/testing": "4.4.2",
     "@envelop/types": "2.3.1",
     "@redwoodjs/auth": "2.2.4",
