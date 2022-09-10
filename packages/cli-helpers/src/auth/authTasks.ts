@@ -256,7 +256,7 @@ export const generateAuthApi = (
 
     // The keys in `filesRecord` are the full paths to where the file contents,
     // which is the values in `filesRecord`, will be written.
-    const filesRecord = files({ basedir, webAuthn })
+    let filesRecord = files({ basedir, webAuthn })
 
     if (!force) {
       const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
@@ -275,6 +275,8 @@ export const generateAuthApi = (
           )
         )
       }
+
+      filesRecord = uniqueFilesRecord
     }
 
     return writeFilesTask(filesRecord, { overwriteExisting: force })
