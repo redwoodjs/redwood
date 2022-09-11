@@ -200,28 +200,30 @@ import { name, version } from '../package'
 
   // Show a success message if required engines are present
   if (hasPassedEngineCheck === true) {
-    console.log(style.success(`✔️ All engine requirements met.`))
+    console.log(style.success(`✔️ Compatability checks passed.`))
   }
 
   // Show an error and prompt if failed engines
   if (hasPassedEngineCheck === false) {
-    console.log(`Warning: ${engineErrorLog.join('\n')}`)
-    console.log(style.header(`Visit requirements documentation:`))
+    console.log(style.error(`✖️ Compatability checks failed.`))
+    console.log(`${engineErrorLog.join('\n')}`)
+    console.log(style.header(`\nVisit requirements documentation:`))
     console.log(
       style.warning(
         `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
       )
     )
     const response = await prompts({
-      type: 'confirm',
-      name: 'skip-engine-error',
-      message: 'Continue with the install anyways?',
-      initial: true,
-      active: 'Yes',
-      inactive: 'No',
+      type: 'select',
+      name: 'engine-error',
+      message: 'How would you like to proceed?',
+      choices: [
+        { title: 'Ignore warning and continue install', value: true },
+        { title: 'Quit install', value: false },
+      ],
+      initial: 0,
     })
-    if (response['skip-engine-error'] === false) {
-      console.error(style.error(`\nQuitting the install process...\n`))
+    if (response['engine-error'] === false) {
       process.exit(1)
     }
   }
