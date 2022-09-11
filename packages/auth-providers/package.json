@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.18.9",
-    "core-js": "3.24.1"
+    "core-js": "3.24.1",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",
@@ -45,6 +46,7 @@
     "@supabase/supabase-js": "1.35.6",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.48",
+    "@types/uuid": "8.3.4",
     "firebase": "9.9.2",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",
@@ -57,13 +59,25 @@
   },
   "peerDependencies": {
     "@clerk/clerk-react": "3.5.1",
-    "@clerk/clerk-sdk-node": "3.9.2"
+    "@clerk/clerk-sdk-node": "3.9.2",
+    "@magic-sdk/admin": "1.4.1",
+    "@okta/jwt-verifier": "2.6.0",
+    "firebase-admin": "10.3.0"
   },
   "peerDependenciesMeta": {
     "@clerk/clerk-react": {
       "optional": true
     },
     "@clerk/clerk-sdk-node": {
+      "optional": true
+    },
+    "@magic-sdk/admin": {
+      "optional": true
+    },
+    "@okta/jwt-verifier": {
+      "optional": true
+    },
+    "firebase-admin": {
       "optional": true
     }
   },

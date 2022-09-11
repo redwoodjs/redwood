@@ -32,7 +32,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-test('Runs tests for all available sides if no filter passed', async () => {
+test.only('Runs tests for all available sides if no filter passed', async () => {
   await handler({})
 
   expect(execa.mock.results[0].value.cmd).toBe('yarn jest')

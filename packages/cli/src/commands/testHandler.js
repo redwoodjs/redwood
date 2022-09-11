@@ -4,10 +4,15 @@ import path from 'path'
 import execa from 'execa'
 
 import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import * as cliHelpers from '@redwoodjs/cli-helpers'
 import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
 import * as project from '../lib/project'
+
+console.log('root log')
+console.log('getPaths', getPaths)
+console.log('cliHelpers', cliHelpers)
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {

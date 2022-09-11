@@ -97,6 +97,7 @@ export const createGraphQLHandler = ({
   onException,
   generateGraphiQLHeader,
   extraPlugins,
+  authDecoder,
   cors,
   services,
   sdls,
@@ -147,7 +148,7 @@ export const createGraphQLHandler = ({
   }
 
   // Custom Redwood plugins
-  plugins.push(useRedwoodAuthContext(getCurrentUser))
+  plugins.push(useRedwoodAuthContext(getCurrentUser, authDecoder))
   plugins.push(useRedwoodGlobalContextSetter())
 
   if (context) {

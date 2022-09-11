@@ -13,7 +13,7 @@ interface NetlifyTokenPayload extends Record<string, unknown> {
   user_metadata: Record<string, unknown>
 }
 
-export const decoder = (token: string, req: { context: LambdaContext }) => {
+export const authDecoder = (token: string, req: { context: LambdaContext }) => {
   // Netlify verifies and decodes the JWT before the request is passed to our
   // Serverless function, so the decoded JWT is already available in production.
   // For development and test we can't verify the token because we don't have

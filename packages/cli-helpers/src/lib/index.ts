@@ -47,6 +47,7 @@ export const prettierOptions = () => {
   try {
     return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
+    console.log('e', e)
     return undefined
   }
 }
@@ -54,7 +55,7 @@ export const prettierOptions = () => {
 export const prettify = (
   templateFilename: string,
   renderedTemplate: string
-) => {
+): string => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser

@@ -3,9 +3,14 @@ import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
 
+// TODO: Figure out what's needed here to make the tests pass
+const authDecoder = (token: string) => ({ token })
+
 jest.mock('@redwoodjs/api', () => {
   return {
-    //@ts-expect-error jest types being silly
+    // TODO: This used to be @ts-expect-error. Figure out if that's still
+    // needed or not
+    // ts-expect-error jest types being silly
     ...jest.requireActual('@redwoodjs/api'),
     getAuthenticationContext: jest.fn().mockResolvedValue([
       { sub: '1', email: 'ba@zin.ga' },
@@ -43,7 +48,10 @@ describe('useRedwoodAuthContext', () => {
     const mockedGetCurrentUser = jest.fn().mockResolvedValue(MOCK_USER)
 
     const testkit = createTestkit(
-      [useRedwoodAuthContext(mockedGetCurrentUser), spiedPlugin.plugin],
+      [
+        useRedwoodAuthContext(mockedGetCurrentUser, authDecoder),
+        spiedPlugin.plugin,
+      ],
       testSchema
     )
 
@@ -70,7 +78,7 @@ describe('useRedwoodAuthContext', () => {
       .mockRejectedValue(new Error('Could not fetch user from db.'))
 
     const testkit = createTestkit(
-      [useRedwoodAuthContext(mockedGetCurrentUser)],
+      [useRedwoodAuthContext(mockedGetCurrentUser, authDecoder)],
       testSchema
     )
 

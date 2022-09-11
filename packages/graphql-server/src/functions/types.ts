@@ -4,7 +4,7 @@ import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { AuthContextPayload } from '@redwoodjs/api'
+import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
@@ -135,6 +135,11 @@ export interface GraphQLHandlerOptions {
    * @description Custom Envelop plugins
    */
   extraPlugins?: PluginOrDisabledPlugin[]
+
+  /**
+   * @description Auth-provider specific token decoder
+   */
+  authDecoder?: Decoder
 
   /**
    * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground

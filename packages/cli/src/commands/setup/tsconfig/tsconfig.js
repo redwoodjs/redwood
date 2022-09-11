@@ -3,7 +3,11 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
-import { getPaths, getInstalledRedwoodVersion } from '@redwoodjs/cli-helpers'
+import {
+  getPaths,
+  getInstalledRedwoodVersion,
+  colors,
+} from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { saveRemoteFileToDisk } from '../../../lib'
