@@ -158,7 +158,8 @@ This lists a single server, in the `production` environment, providing the hostn
 * `host` - hostname to the server
 * `username` - the user to login as
 * `password` - [optional] if you are using password authentication, include that here
-* `privateKey` - [optional] if you connect with a private key, include the path to the key here
+* `privateKey` - [optional] if you connect with a private key, include the content of the key here, as a buffer: `privateKey: Buffer.from('...')`. Use this *or* `privateKeyPath`, not both.
+* `privateKeyPath` - [optional] if you connect with a private key, include the path to the key here: `privateKeyPath: path.join('path','to','key.pem')` Use this *or* `privateKey`, not both.
 * `passphrase` - [optional] if your private key contains a passphrase, enter it here
 * `agentForward` - [optional] if you have [agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding) enabled, set this to `true` and your own credentials will be used for further SSH connections from the server (like when connecting to GitHub)
 * `sides` - An array of sides that will be built on this server
