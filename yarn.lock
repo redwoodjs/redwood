@@ -5241,12 +5241,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:14.5.8":
-  version: 14.5.8
-  resolution: "@nrwl/cli@npm:14.5.8"
+"@nrwl/cli@npm:14.7.5":
+  version: 14.7.5
+  resolution: "@nrwl/cli@npm:14.7.5"
   dependencies:
-    nx: 14.5.8
-  checksum: 371c5940fc5075f0080b923a4854597e7c9b6ef9677a0ba260a8ec2790bf3952f63470e9819865cb7cfc0e4a1e8ffa7e781e7be30d1196a361fa536bc80d614c
+    nx: 14.7.5
+  checksum: fc22fe1546fec6e75a7dcc5cb27880b0762b7d7a8f4e71997e9710ac7eb437ce5605f5b343a4ac7efd0acb9c036bdb5f5a791bbbca328aa545511272839a3d63
   languageName: node
   linkType: hard
 
@@ -5265,14 +5265,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:14.5.8":
-  version: 14.5.8
-  resolution: "@nrwl/tao@npm:14.5.8"
+"@nrwl/tao@npm:14.7.5":
+  version: 14.7.5
+  resolution: "@nrwl/tao@npm:14.7.5"
   dependencies:
-    nx: 14.5.8
+    nx: 14.7.5
   bin:
     tao: index.js
-  checksum: afa7f72fe4e1d042750dfe7a7c61e82b3066fa54eb98ffe77aeb06b27785cc8b30f48b6daaede50408621e23240e7a33247f0303b962372fca835f057786130a
+  checksum: f260a862291bdf10a8f37e190618d74ee7526ed9a8743936730043ee894d1c958ea208599d5ca774ae7c99038334a9e7388ffea5e9a0243391e5ed9fd13fede6
   languageName: node
   linkType: hard
 
@@ -23536,12 +23536,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:14.5.8, nx@npm:>=14.5.4 < 16":
-  version: 14.5.8
-  resolution: "nx@npm:14.5.8"
+"nx@npm:14.7.5, nx@npm:>=14.5.4 < 16":
+  version: 14.7.5
+  resolution: "nx@npm:14.7.5"
   dependencies:
-    "@nrwl/cli": 14.5.8
-    "@nrwl/tao": 14.5.8
+    "@nrwl/cli": 14.7.5
+    "@nrwl/tao": 14.7.5
     "@parcel/watcher": 2.0.4
     chalk: 4.1.0
     chokidar: ^3.5.1
@@ -23580,7 +23580,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 1a797bb1c1856846c714a6a807132f9312da3b6962d92876fc8337702b70766fdc14c97e2988d9120f3f6b69fcfc03b30626f4644993ab55a9a507be04e82126
+  checksum: f36798b5af4d03735f85ba8609f5a194f0c4bc0cfc1a2db8bc80d640f4addf7cb82298f5ef04013f7aa3b122c33ecaf4ce719fe3153d3cbeb9920f3e676a8492
   languageName: node
   linkType: hard
 
@@ -27146,7 +27146,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.19
     npm-packlist: 5.1.1
-    nx: 14.5.8
+    nx: 14.7.5
     octokit: 2.0.7
     ora: 5.4.1
     prompts: 2.4.2
