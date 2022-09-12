@@ -2,7 +2,6 @@ const {
   getApiSideDefaultBabelConfig,
   getApiSideBabelPresets,
   getApiSideBabelPlugins,
-  getApiSideTestOverrides,
 } = require('@redwoodjs/internal/dist/build/babel/api')
 
 // Since configFile and babelrc is already passed a level up, cleaning up these keys here.
@@ -16,5 +15,4 @@ module.exports = {
   presets: getApiSideBabelPresets({
     presetEnv: true, // jest needs code transpiled
   }),
-  overrides: getApiSideTestOverrides(),
 }

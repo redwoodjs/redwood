@@ -175,20 +175,6 @@ export const getApiSideDefaultBabelConfig = () => {
   }
 }
 
-export const getApiSideTestOverrides = () => {
-  return [
-    {
-      test: [
-        path.join(getPaths().api.lib, 'db.js'),
-        path.join(getPaths().api.lib, 'db.ts'),
-      ],
-      plugins: [
-        require('../babelPlugins/babel-plugin-redwood-test-db').default,
-      ],
-    },
-  ]
-}
-
 // Used in cli commands that need to use es6, lib and services
 export const registerApiSideBabelHook = ({
   plugins = [],

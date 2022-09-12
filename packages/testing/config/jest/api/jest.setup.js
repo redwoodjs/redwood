@@ -25,33 +25,37 @@ global.mockCurrentUser = (currentUser) => {
  * All these hooks run in the VM/Context that the test runs in since we're using "setupAfterEnv".
  * There's a new context for each test-suite i.e. each test file
  *
- * The value __RWJS_TEST_PRISMA_WAS_IMPORTED is set by babel-plugin-redwood-test-db -
- * which is only used in api jest tests - see packages/testing/config/jest/api/apiBabelConfig.js
- *
  * Doing this means if the db isn't used in the current test context,
  * no need to do any of the teardown logic - allowing simple tests to run faster
  * At the same time, if the db is used, disconnecting it in this context prevents connection limit errors.
  * Just disconnecting db in jest-preset is not enough, because
  * the Prisma client is created in a different context.
  */
+const wasDbUsed = () =>
+  Object.keys(require.cache).some((module) => {
+    return (
+      module === `${apiSrcPath}/lib/db.js` ||
+      module === `${apiSrcPath}/lib/db.ts`
+    )
+  })
 
 beforeAll(async () => {
   // Disable perRequestContext for tests
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  if (globalThis.__RWJS_TEST_PRISMA_WAS_IMPORTED) {
+  if (wasDbUsed()) {
     await configureTeardown()
   }
 })
 
 afterAll(async () => {
-  if (globalThis.__RWJS_TEST_PRISMA_WAS_IMPORTED) {
+  if (wasDbUsed()) {
     const { db } = require(`${apiSrcPath}/lib/db`)
     db.$disconnect()
   }
 })
 
 afterEach(async () => {
-  if (globalThis.__RWJS_TEST_PRISMA_WAS_IMPORTED) {
+  if (wasDbUsed()) {
     await teardown()
   }
 })
