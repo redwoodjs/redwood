@@ -30,7 +30,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.18.9",
+    "@babel/runtime-corejs3": "7.19.0",
     "@prisma/client": "4.3.1",
     "base64url": "3.0.1",
     "core-js": "3.25.0",
@@ -41,13 +41,13 @@
     "jwks-rsa": "2.0.5",
     "md5": "2.3.0",
     "pascalcase": "1.0.0",
-    "pino": "8.4.2",
+    "pino": "8.5.0",
     "title-case": "3.0.3",
     "uuid": "8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.13",
+    "@babel/core": "7.19.0",
     "@clerk/clerk-sdk-node": "3.9.2",
     "@redwoodjs/auth": "2.2.4",
     "@simplewebauthn/server": "6.2.0",
@@ -59,7 +59,7 @@
     "@types/split2": "3.2.1",
     "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
-    "jest": "29.0.1",
+    "jest": "29.0.3",
     "split2": "4.1.0",
     "typescript": "4.7.4"
   },

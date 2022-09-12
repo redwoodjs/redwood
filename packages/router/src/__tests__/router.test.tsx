@@ -1509,3 +1509,50 @@ test('should handle ref and key as search params', async () => {
     expect(screen.queryByText(`{"ref":"1","key":"2"}`)).toBeInTheDocument()
   })
 })
+
+describe('Unauthorized redirect error messages', () => {
+  let err
+
+  beforeAll(() => {
+    err = console.error
+    console.error = jest.fn()
+  })
+
+  afterAll(() => {
+    console.error = err
+  })
+
+  test('Private set with unauthenticated prop with nonexisting page', async () => {
+    const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
+      <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
+        <Route path="/" page={HomePage} name="home" />
+        <Set private unauthenticated="does-not-exist">
+          <Route path="/private" page={PrivatePage} name="private" />
+        </Set>
+      </Router>
+    )
+
+    act(() => navigate('/private'))
+    expect(() => render(<TestRouter authenticated={false} />)).toThrow(
+      'We could not find a route named does-not-exist'
+    )
+  })
+
+  test('Private set redirecting to page that needs parameters', async () => {
+    const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
+      <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/param-test/{value}" page={ParamPage} name="params" />
+        <Set private unauthenticated="params">
+          <Route path="/private" page={PrivatePage} name="private" />
+        </Set>
+      </Router>
+    )
+
+    act(() => navigate('/private'))
+    expect(() => render(<TestRouter authenticated={false} />)).toThrow(
+      'Redirecting to route "params" would require route parameters, which ' +
+        'currently is not supported. Please choose a different route'
+    )
+  })
+})
