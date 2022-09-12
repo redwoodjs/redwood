@@ -12,6 +12,5 @@
     { "path": "../structure" },
     { "path": "../prerender" },
     { "path": "../api-server" },
-    { "path": "../cli-helpers" },
   ]
 }
