@@ -185,7 +185,7 @@ import { name, version } from '../package'
       name: 'override-engine-error',
       message: 'How would you like to proceed?',
       choices: [
-        { title: 'Ignore error and continue install', value: true },
+        { title: 'Override error and continue install', value: true },
         { title: 'Quit install', value: false },
       ],
       initial: 0,
