@@ -22,6 +22,8 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'supertokens',
+    authDecoderImport:
+      'import { supertokensAuthDecoder as authDecoder } from "@redwoodjs/auth-providers"',
     webPackages: ['supertokens-auth-react'],
     apiPackages: ['supertokens-node'],
     notes: [

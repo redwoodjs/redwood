@@ -20,7 +20,7 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
-const addApiConfig = () => {
+const addApiConfig = (authDecoderImport?: string) => {
   const graphqlPath = getGraphqlPath()
 
   if (!graphqlPath) {
@@ -28,6 +28,24 @@ const addApiConfig = () => {
   }
 
   let content = fs.readFileSync(graphqlPath).toString()
+  let contentUpdated = false
+
+  if (authDecoderImport && !content.includes(authDecoderImport)) {
+    content = authDecoderImport + '\n' + content
+
+    // If we have multiple auth providers setup we probably already have a
+    // auth decoder configured. In that case we don't want to add another one
+    if (
+      !new RegExp('createGraphQLHandler.*\\bauthDecoder', 's').test(content)
+    ) {
+      content = content.replace(
+        /^(\s*)(loggerConfig:)(.*)$/m,
+        `$1authDecoder,\n$1$2$3`
+      )
+    }
+
+    contentUpdated = true
+  }
 
   // default to an array to avoid destructure errors
   const [_, hasAuthImport] =
@@ -39,11 +57,17 @@ const addApiConfig = () => {
       /^(.*services.*)$/m,
       `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
     )
+
     // add object to handler
     content = content.replace(
       /^(\s*)(loggerConfig:)(.*)$/m,
       `$1getCurrentUser,\n$1$2$3`
     )
+
+    contentUpdated = true
+  }
+
+  if (contentUpdated) {
     fs.writeFileSync(graphqlPath, content)
   }
 }
@@ -243,7 +267,7 @@ export const addConfigToRoutes = () => {
   fs.writeFileSync(webRoutesPath, content)
 }
 
-export const generateAuthApi = (
+export const generateAuthApiFiles = (
   basedir: string,
   provider: string,
   force: boolean,
@@ -305,16 +329,16 @@ export const addAuthConfigToWeb = (
   },
 })
 
-export const addAuthConfigToGqlApi = {
+export const addAuthConfigToGqlApi = (authDecoderImport?: string) => ({
   title: 'Adding auth config to GraphQL API...',
   task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
     if (graphFunctionDoesExist()) {
-      addApiConfig()
+      addApiConfig(authDecoderImport)
     } else {
       task.skip?.('GraphQL function not found, skipping')
     }
   },
-}
+})
 
 export const addWebPackages = (webPackages: string[], rwVersion: string) => ({
   title: 'Adding required web packages...',

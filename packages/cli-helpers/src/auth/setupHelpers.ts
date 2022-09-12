@@ -16,7 +16,7 @@ import {
   addAuthConfigToGqlApi,
   addAuthConfigToWeb,
   addWebPackages,
-  generateAuthApi,
+  generateAuthApiFiles,
   installPackages,
   printNotes,
 } from './authTasks'
@@ -72,6 +72,7 @@ interface Args {
   rwVersion: string
   forceArg: boolean
   provider: string
+  authDecoderImport?: string
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
@@ -91,6 +92,7 @@ export const standardAuthHandler = async ({
   rwVersion,
   forceArg,
   provider,
+  authDecoderImport,
   webAuthn = false,
   webPackages = [],
   apiPackages = [],
@@ -101,9 +103,9 @@ export const standardAuthHandler = async ({
 
   const tasks = new Listr(
     [
-      generateAuthApi(basedir, provider, force, webAuthn),
+      generateAuthApiFiles(basedir, provider, force, webAuthn),
       addAuthConfigToWeb(basedir, provider),
-      addAuthConfigToGqlApi,
+      addAuthConfigToGqlApi(authDecoderImport),
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),
       installPackages,

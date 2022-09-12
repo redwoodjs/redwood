@@ -22,6 +22,8 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'netlify',
+    authDecoderImport:
+      'import { netlifyAuthDecoder as authDecoder } from "@redwoodjs/auth-providers"',
     webPackages: ['netlify-identity-widget', '@types/netlify-identity-widget'],
     notes: [
       'You will need to enable Identity on your Netlify site and configure the API endpoint.',

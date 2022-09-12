@@ -26,3 +26,8 @@ export * as setupAuthNhostCommand from './nhost/setup/setup'
 export * as setupAuthOktaCommand from './okta/setup/setup'
 export * as setupAuthSupabaseCommand from './supabase/setup/setup'
 export * as setupAuthSupertokensCommand from './supertokens/setup/setup'
+
+export { authDecoder as dbAuthAuthDecoder } from './dbAuth/api/decoder'
+export { authDecoder as netlifyAuthDecoder } from './netlify/api/decoder'
+export { authDecoder as supabaseAuthDecoder } from './supabase/api/decoder'
+export { authDecoder as supertokensAuthDecoder } from './supertokens/api/decoder'
