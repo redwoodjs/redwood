@@ -1490,7 +1490,14 @@ If your project uses [Docusaurus](https://docusaurus.io), the generated commente
 
 The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
 
-1. Add `docs` to your `workspaces` in the project's `package.json`:
+1. Install Docusaurus (if you have not done so already)
+
+```terminal
+npx create-docusaurus@latest docs classic
+```
+
+
+Add `docs` to your `workspaces` in the project's `package.json`:
 
 ```
   "workspaces": {
@@ -1506,16 +1513,34 @@ The following is some basic setup information, but please consult [Docusaurus](h
 2. Create a `docs` directory at the root of your project
 
 ```terminal
-mcd docs
-`
-
-3. Install the plugin
-
-```terminal
-yarn add @edno/docusaurus2-graphql-doc-generator graphql
+mkdir docs
 ```
 
-4. Update `docs/docusaurus.config.js` and configure the plugin and navbar
+
+3. Install Docusaurus
+
+```terminal
+npx create-docusaurus@latest docs classic
+```
+
+4. Install the GraphQL Generators Plugin
+
+```terminal
+yarn workspace docs add @edno/docusaurus2-graphql-doc-generator graphql
+```
+
+5. Create a Directory for your GraphQL APi generated documentation to reside in with the Docusaurus directory `/docs` structure
+
+```terminal
+// Change into the "docs" workspace
+
+cd docs
+
+// you should have the "docs" directory and within that a "graphql-api" directory
+mkdir docs/graphql-api
+```
+
+6. Update `docs/docusaurus.config.js` and configure the plugin and navbar
 
 ```
 // docs/docusaurus.config.js
@@ -1527,7 +1552,6 @@ yarn add @edno/docusaurus2-graphql-doc-generator graphql
         schema: '../.redwood/schema.graphql',
         rootPath: './docs',
         baseURL: 'graphql-api',
-        homepage: './docs/graphql-api/generated.md',
         linkRoot: '../..',
       },
     ],
@@ -1546,7 +1570,7 @@ themeConfig:
           {
             to: '/docs/graphql-api', // adjust the location depending on your baseURL (see configuration)
             label: 'GraphQL API', // change the label with yours
-            position: 'left',
+            position: 'right',
           },
 //...
 ```
