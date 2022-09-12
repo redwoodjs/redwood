@@ -132,9 +132,10 @@ const addAuthProviderToApp = (content: string) => {
 }
 
 const hasUseAuthHook = (componentName: string, content: string) => {
-  return new RegExp(`<${componentName}[^>]*useAuth={.*?}.*?>`, 's').test(
-    content
-  )
+  return new RegExp(
+    `<${componentName}.*useAuth={.*?}.*?>.*<\/${componentName}>`,
+    's'
+  ).test(content)
 }
 
 const addUseAuthHook = (componentName: string, content: string) => {
