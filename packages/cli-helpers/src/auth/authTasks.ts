@@ -13,7 +13,7 @@ import {
   graphFunctionDoesExist,
 } from '../lib/project'
 
-import { files, generateUniqueFileNames } from './authFiles'
+import { apiSideFiles, generateUniqueFileNames } from './authFiles'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
@@ -256,7 +256,7 @@ export const generateAuthApi = (
 
     // The keys in `filesRecord` are the full paths to where the file contents,
     // which is the values in `filesRecord`, will be written.
-    let filesRecord = files({ basedir, webAuthn })
+    let filesRecord = apiSideFiles({ basedir, webAuthn })
 
     if (!force) {
       const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)

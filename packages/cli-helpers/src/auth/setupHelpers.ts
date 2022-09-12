@@ -10,7 +10,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { colors } from '../lib/colors'
 import { getPaths } from '../lib/paths'
 
-import { files } from './authFiles'
+import { apiSideFiles } from './authFiles'
 import {
   addApiPackages,
   addAuthConfigToGqlApi,
@@ -30,7 +30,7 @@ async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
     return true
   }
 
-  const existingFiles = Object.keys(files({ basedir, webAuthn })).filter(
+  const existingFiles = Object.keys(apiSideFiles({ basedir, webAuthn })).filter(
     (filePath) => fs.existsSync(filePath)
   )
 

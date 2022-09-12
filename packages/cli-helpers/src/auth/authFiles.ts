@@ -13,7 +13,7 @@ interface FilesArgs {
 }
 
 /**
- * Get the file paths and file contents to write
+ * Get the api side file paths and file contents to write
  *
  * Example return value:
  * ```json
@@ -24,7 +24,7 @@ interface FilesArgs {
  * }
  * ```
  */
-export const files = ({ basedir, webAuthn }: FilesArgs) => {
+export const apiSideFiles = ({ basedir, webAuthn }: FilesArgs) => {
   const apiSrcPath = getPaths().api.src
   const apiBaseTemplatePath = path.join(basedir, 'templates', 'api')
   const templateDirectories = fs.readdirSync(apiBaseTemplatePath)
