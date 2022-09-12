@@ -6,7 +6,7 @@
 // Remember to use specific imports
 const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 
-// @NOTE we do this because jest.setup.js runs every time in each worker
+// @NOTE we do this because jest.setup.js runs every time in each context
 // while jest-preset runs once. This significantly reduces memory footprint, and testing time
 // The key is to reduce the amount of imports in this file, because the require.cache is not shared between each test context
 const { configureTeardown, teardown, buildScenario, apiSrcPath } =
