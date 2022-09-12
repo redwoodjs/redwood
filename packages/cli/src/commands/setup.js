@@ -5,16 +5,21 @@ import detectRwVersion from '../middleware/detectProjectRwVersion'
 export const command = 'setup <command>'
 export const description = 'Initialize project config and install packages'
 
-const setupAuthAuth0Command = await import(
-  '@redwoodjs/auth-providers/dist/auth0/setup'
-)
-// const setupAuthAzureActiveDirectory = await import()
-
 export const builder = (yargs) =>
   yargs
     .demandCommand()
     .middleware(detectRwVersion)
-    .command(setupAuthAuth0Command)
+    .commandDir('./generate', {
+      recurse: true,
+      // @NOTE This regex will ignore all commands nested more than two
+      // levels deep.
+      // e.g. /generate/hi.js & setup/hi/hi.js are picked up, but
+      // generate/hi/hello/bazinga.js will be ignored
+      // The [/\\] bit is for supporting both windows and unix style paths
+      // Also take care to not trip up on paths that have "setup" earlier
+      // in the path by eagerly matching in the start of the regexp
+      exclude: /.*[/\\]generate[/\\].*[/\\].*[/\\]/,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
