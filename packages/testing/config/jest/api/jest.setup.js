@@ -30,13 +30,17 @@ global.mockCurrentUser = (currentUser) => {
  * Just disconnecting db in jest-preset is not enough, because
  * the Prisma client is created in a different context.
  */
-const wasDbUsed = () =>
-  Object.keys(require.cache).some((module) => {
-    return (
-      module === `${apiSrcPath}/lib/db.js` ||
-      module === `${apiSrcPath}/lib/db.ts`
-    )
-  })
+const wasDbUsed = () => {
+  try {
+    const libDbPath = require.resolve(`${apiSrcPath}/lib/db`)
+    return Object.keys(require.cache).some((module) => {
+      return module === libDbPath
+    })
+  } catch (e) {
+    // If db wasn't resolved, no point trying to perform db resets
+    return false
+  }
+}
 
 beforeAll(async () => {
   // Disable perRequestContext for tests
