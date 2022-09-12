@@ -1,6 +1,9 @@
 import { expectAssignable } from 'tsd-lite'
 
-import type { RouteParams, ParamType } from '../routeParserTypes'
+// @WARN!: I'm importing this from the built package.
+// So you will need to build, before running test again!
+// See https://github.com/jest-community/jest-runner-tsd/issues/111
+import type { RouteParams, ParamType } from '@redwoodjs/router'
 
 describe('RouteParams<>', () => {
   test('Single parameters', () => {

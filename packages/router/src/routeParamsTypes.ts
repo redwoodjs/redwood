@@ -1,8 +1,5 @@
 import { A } from 'ts-toolbelt'
 
-// @NOTE: This file is a .d.ts - definition file
-// It does not contain any actual code - required because tsd-jest-runner complains otherwise
-
 type GenericParams = Record<string | number, string | number | boolean>
 
 export type QueryParams = GenericParams
