@@ -13,6 +13,10 @@ import { getPaths } from './paths'
  * Convert a generated TS template file into JS.
  */
 export const transformTSToJS = (filename: string, content: string) => {
+  if (!content) {
+    return content
+  }
+
   const babelFileResult = babel.transform(content, {
     filename,
     // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,
@@ -47,7 +51,6 @@ export const prettierOptions = () => {
   try {
     return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
-    console.log('e', e)
     return undefined
   }
 }

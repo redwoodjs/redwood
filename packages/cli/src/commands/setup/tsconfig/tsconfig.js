@@ -3,10 +3,13 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
-import { getInstalledRedwoodVersion } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, saveRemoteFileToDisk } from '../../../lib'
+import {
+  getInstalledRedwoodVersion,
+  getPaths,
+  saveRemoteFileToDisk,
+} from '../../../lib'
 import c from '../../../lib/colors'
 
 export const command = 'tsconfig'

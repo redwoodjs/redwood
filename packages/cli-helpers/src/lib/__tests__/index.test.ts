@@ -3,7 +3,6 @@ import { prettify } from '../index'
 jest.mock('../paths', () => {
   return {
     getPaths: () => {
-      console.log('getPaths')
       return {
         base: '../../../../__fixtures__/example-todo-main',
       }
