@@ -1,8 +1,7 @@
 import Listr from 'listr'
 
-import { colors } from '@redwoodjs/cli-helpers'
-
 import { deleteFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { verifyModelName } from '../../../lib/schemaHelpers'
 import { files } from '../../generate/sdl/sdl'
 
@@ -36,6 +35,6 @@ export const handler = async ({ model }) => {
     const { name } = await verifyModelName({ name: model, isDestroyer: true })
     await tasks({ model: name }).run()
   } catch (e) {
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
   }
 }

@@ -5,8 +5,6 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { colors } from '@redwoodjs/cli-helpers'
-
 import {
   addRoutesToRouterTask,
   addScaffoldImport,
@@ -15,6 +13,7 @@ import {
   transformTSToJS,
   writeFilesTask,
 } from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
@@ -27,7 +26,7 @@ const ROUTES = [
 
 const POST_INSTALL =
   `One more thing...\n\n` +
-  `   ${colors.warning("Pages created! But you're not done yet:")}\n\n` +
+  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
   `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
   `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
   `   ForgotPasswordPage and ResetPasswordPage for these lines: \n\n` +
@@ -45,7 +44,7 @@ const POST_INSTALL =
 
 const WEBAUTHN_POST_INSTALL =
   `One more thing...\n\n` +
-  `   ${colors.warning("Pages created! But you're not done yet:")}\n\n` +
+  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
   "   You'll need to tell your pages where to redirect after a user has logged in,\n" +
   '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`\n' +
   `   constant and change the route if it's something other than home().\n` +
@@ -173,7 +172,7 @@ export const files = ({
   }
 
   if (files.length === 0) {
-    console.info(colors.error('\nNo files to generate.\n'))
+    console.info(c.error('\nNo files to generate.\n'))
     process.exit(0)
   }
 
@@ -275,6 +274,6 @@ export const handler = async (yargs) => {
   try {
     await t.run()
   } catch (e) {
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
   }
 }

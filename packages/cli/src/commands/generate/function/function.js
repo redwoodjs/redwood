@@ -4,14 +4,10 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import {
-  getPaths,
-  transformTSToJS,
-  writeFilesTask,
-  colors,
-} from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
@@ -138,11 +134,11 @@ export const handler = async ({ name, force, ...rest }) => {
     await tasks.run()
 
     console.info('')
-    console.info(colors.warning('⚠ Important:'))
+    console.info(c.warning('⚠ Important:'))
     console.info('')
 
     console.info(
-      colors.bold(
+      c.bold(
         'When deployed, a custom serverless function is an open API endpoint and ' +
           'is your responsibility to secure appropriately.'
       )
@@ -158,7 +154,7 @@ export const handler = async ({ name, force, ...rest }) => {
     console.info('')
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(colors.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

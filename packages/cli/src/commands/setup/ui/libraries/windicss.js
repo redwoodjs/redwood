@@ -4,8 +4,10 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
+
+import { getPaths } from '../../../../lib'
+import c from '../../../../lib/colors'
 
 export const command = 'windicss'
 export const aliases = ['windi']
@@ -134,7 +136,7 @@ export const handler = async ({ force, install }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(colors.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

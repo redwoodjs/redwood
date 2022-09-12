@@ -8,7 +8,8 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
@@ -135,11 +136,9 @@ const sshExec = async (ssh, path, command, args) => {
   })
 
   if (result.code !== 0) {
-    console.error(colors.error(`\nDeploy failed!`))
+    console.error(c.error(`\nDeploy failed!`))
     console.error(
-      colors.error(
-        `Error while running command \`${command} ${args.join(' ')}\`:`
-      )
+      c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
     )
     console.error(
       boxen(result.stderr, {
@@ -686,7 +685,7 @@ export const handler = async (yargs) => {
     })
     await tasks.run()
   } catch (e) {
-    console.error(colors.error('\nDeploy failed:'))
+    console.error(c.error('\nDeploy failed:'))
     console.error(
       boxen(e.stderr || e.message, {
         padding: { top: 0, bottom: 0, right: 1, left: 1 },

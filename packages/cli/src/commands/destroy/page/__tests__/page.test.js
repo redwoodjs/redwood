@@ -11,8 +11,7 @@ import fs from 'fs'
 
 import '../../../../lib/test'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
-
+import { getPaths } from '../../../../lib'
 import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 

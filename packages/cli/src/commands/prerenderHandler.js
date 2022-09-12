@@ -4,11 +4,12 @@ import path from 'path'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import c from '../lib/colors'
 import { configureBabel, runScriptFunction } from '../lib/exec'
 
 class PathParamError extends Error {}
@@ -108,7 +109,7 @@ async function expandRouteParameters(route) {
       })
     }
   } catch (e) {
-    console.error(colors.error(e.stack))
+    console.error(c.error(e.stack))
     return [route]
   }
 
@@ -122,7 +123,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
   if (prerenderRoutes.length === 0) {
     console.log('\nSkipping prerender...')
     console.log(
-      colors.warning(
+      c.warning(
         'You have not marked any routes with a path as `prerender` in `Routes.{js,tsx}` \n'
       )
     )
@@ -187,21 +188,19 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
             } catch (e) {
               console.log()
               console.log(
-                colors.warning(
-                  'You can use `yarn rw prerender --dry-run` to debug'
-                )
+                c.warning('You can use `yarn rw prerender --dry-run` to debug')
               )
               console.log()
 
               console.log(
-                `${colors.info('-'.repeat(10))} Error rendering path "${
+                `${c.info('-'.repeat(10))} Error rendering path "${
                   routeToPrerender.path
-                }" ${colors.info('-'.repeat(10))}`
+                }" ${c.info('-'.repeat(10))}`
               )
 
               errorTelemetry(process.argv, `Error prerendering: ${e.message}`)
 
-              console.error(colors.error(e.stack))
+              console.error(c.error(e.stack))
               console.log()
 
               throw new Error(`Failed to render "${routeToPrerender.filePath}"`)
@@ -244,9 +243,7 @@ const diagnosticCheck = () => {
   console.log('Running diagnostic checks')
 
   if (checks.some((checks) => checks.failure)) {
-    console.error(
-      colors.error('node_modules are being duplicated in `./web` \n')
-    )
+    console.error(c.error('node_modules are being duplicated in `./web` \n'))
     console.log('⚠️  Issues found: ')
     console.log('-'.repeat(50))
 
@@ -263,7 +260,7 @@ const diagnosticCheck = () => {
     )
 
     console.log(
-      colors.underline(
+      c.underline(
         'https://community.redwoodjs.com/search?q=duplicate%20package%20found'
       )
     )
@@ -287,7 +284,7 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
 
   try {
     if (dryRun) {
-      console.log(colors.info('::: Dry run, not writing changes :::'))
+      console.log(c.info('::: Dry run, not writing changes :::'))
     }
 
     await tasks.run()
@@ -295,28 +292,28 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     console.log()
     await diagnosticCheck()
 
-    console.log(colors.warning('Tips:'))
+    console.log(c.warning('Tips:'))
 
     if (e instanceof PathParamError) {
       console.log(
-        colors.info(
+        c.info(
           "- You most likely need to add or update a *.routeHooks.{js,ts} file next to the Page you're trying to prerender"
         )
       )
     } else {
       console.log(
-        colors.info(
+        c.info(
           `- This could mean that a library you're using does not support SSR.`
         )
       )
       console.log(
-        colors.info(
+        c.info(
           '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
         )
       )
 
       console.log(
-        colors.info(
+        c.info(
           '- Avoid prerendering Cells with authenticated queries, by conditionally rendering them.\n  See https://redwoodjs.com/docs/prerender#common-warnings--errors'
         )
       )

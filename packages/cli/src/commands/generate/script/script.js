@@ -4,9 +4,10 @@ import path from 'path'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths, writeFilesTask, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getPaths, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
@@ -54,7 +55,7 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force, ...args }) => {
-  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${colors.warning(
+  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
     'After modifying your script, you can invoke it like:'
   )}
 
@@ -85,7 +86,7 @@ export const handler = async ({ force, ...args }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
     process.exit(1)
   }
 }

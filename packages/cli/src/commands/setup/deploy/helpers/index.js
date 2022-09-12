@@ -6,11 +6,9 @@ import boxen from 'boxen'
 import execa from 'execa'
 import Listr from 'listr'
 
-import {
-  getPaths,
-  writeFilesTask,
-  getInstalledRedwoodVersion,
-} from '@redwoodjs/cli-helpers'
+import { getInstalledRedwoodVersion } from '@redwoodjs/cli-helpers'
+
+import { getPaths, writeFilesTask } from '../../../../lib'
 
 const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 

@@ -5,9 +5,10 @@ import chalk from 'chalk'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths, writeFile, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getPaths, writeFile } from '../../../lib'
+import c from '../../../lib/colors'
 import extendStorybookConfiguration from '../../../lib/configureStorybook.js'
 import { fileIncludes } from '../../../lib/extendFile'
 
@@ -184,7 +185,7 @@ export const handler = async ({ force }) => {
       title: 'One more thing...',
       task: (_ctx, task) => {
         task.title = `One more thing...\n
-          ${colors.green('Quick link to the docs:')}\n
+          ${c.green('Quick link to the docs:')}\n
           ${chalk.hex('#e8e8e8')(
             'https://react.i18next.com/guides/quick-start/'
           )}
@@ -197,7 +198,7 @@ export const handler = async ({ force }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(colors.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

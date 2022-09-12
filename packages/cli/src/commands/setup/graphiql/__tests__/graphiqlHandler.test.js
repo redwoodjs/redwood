@@ -8,12 +8,12 @@ jest.mock('@redwoodjs/internal/dist/build/babel/api', () => {
   }
 })
 jest.mock('../../../../lib', () => ({
-  existsAnyExtensionSync: () => false,
-}))
-jest.mock('@redwoodjs/cli-helpers', () => ({
   getPaths: () => ({
     api: { lib: '', functions: '' },
   }),
+  existsAnyExtensionSync: () => false,
+}))
+jest.mock('../../../../lib/project', () => ({
   isTypeScriptProject: () => false,
 }))
 

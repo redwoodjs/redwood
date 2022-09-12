@@ -3,13 +3,8 @@ import path from 'path'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import {
-  getPaths,
-  writeFilesTask,
-  generateTemplate,
-  colors,
-} from '@redwoodjs/cli-helpers'
-
+import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
+import c from '../../../lib/colors'
 import { verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
 
@@ -68,7 +63,7 @@ export const handler = async ({ force, ...args }) => {
     await verifyModelName({ name: args.name })
     await tasks.run()
   } catch (e) {
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
     process.exit(1)
   }
 }

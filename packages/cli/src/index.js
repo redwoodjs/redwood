@@ -5,7 +5,6 @@ import path from 'path'
 import { config } from 'dotenv-defaults'
 import yargs from 'yargs'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
@@ -30,6 +29,9 @@ import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
+import { getPaths } from './lib'
+
+export * from './commands/setup/auth/setupHelpers'
 
 /**
  * The current working directory can be set via:

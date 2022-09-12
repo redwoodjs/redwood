@@ -7,12 +7,12 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { getPaths, writeFilesTask, colors } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { generateTemplate } from '../../lib'
+import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
+import c from '../../lib/colors'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 import { yargsDefaults } from '../generate'
 
@@ -209,7 +209,7 @@ export const createYargsForComponentGeneration = ({
         await tasks.run()
       } catch (e) {
         errorTelemetry(process.argv, e.message)
-        console.error(colors.error(e.message))
+        console.error(c.error(e.message))
         process.exit(e?.exitCode || 1)
       }
     },

@@ -3,9 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
-
-import { runCommandTask } from '../lib'
+import { runCommandTask, getPaths } from '../lib'
 
 const skipTask = (schema = getPaths().api.dbSchema) => {
   if (!fs.existsSync(schema)) {

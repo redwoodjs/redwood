@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
+import { getPaths } from '.'
 
 export const sides = () => {
   const paths = getPaths()

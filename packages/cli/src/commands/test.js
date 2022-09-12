@@ -1,7 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { colors } from '@redwoodjs/cli-helpers'
-
+import c from '../lib/colors'
 import { sides } from '../lib/project'
 
 export const command = 'test [filter..]'
@@ -34,7 +33,7 @@ export const builder = (yargs) => {
       default: true,
     })
     .epilogue(
-      `For all available flags, run jest cli directly ${colors.green(
+      `For all available flags, run jest cli directly ${c.green(
         'yarn jest --help'
       )}\n\nAlso see the ${terminalLink(
         'Redwood CLI Reference',

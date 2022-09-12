@@ -3,14 +3,12 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
-import {
-  getPaths,
-  getInstalledRedwoodVersion,
-  colors,
-} from '@redwoodjs/cli-helpers'
+import { getInstalledRedwoodVersion } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { saveRemoteFileToDisk } from '../../../lib'
+import { getPaths, saveRemoteFileToDisk } from '../../../lib'
+import c from '../../../lib/colors'
+
 export const command = 'tsconfig'
 
 export const description = 'Set up tsconfig for web and api sides'
@@ -61,7 +59,7 @@ export const handler = async ({ force }) => {
       title: 'One more thing...',
       task: (_ctx, task) => {
         task.title = `One more thing...\n
-          ${colors.green('Quick link to the docs on configuring TypeScript')}
+          ${c.green('Quick link to the docs on configuring TypeScript')}
           ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/typescript')}
         `
       },
@@ -72,7 +70,7 @@ export const handler = async ({ force }) => {
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(colors.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

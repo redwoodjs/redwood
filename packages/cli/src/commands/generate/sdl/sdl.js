@@ -6,7 +6,6 @@ import chalk from 'chalk'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { colors } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -17,6 +16,7 @@ import {
   getPaths,
   writeFilesTask,
 } from '../../../lib'
+import c from '../../../lib/colors'
 import { pluralize } from '../../../lib/rwPluralize'
 import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
@@ -297,7 +297,7 @@ export const handler = async ({
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.error(colors.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

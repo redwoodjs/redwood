@@ -4,8 +4,10 @@ import path from 'path'
 import boxen from 'boxen'
 import execa from 'execa'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
+
+import c from '../lib/colors'
+import { getPaths } from '../lib/index'
 
 // eslint-disable-next-line no-unused-vars
 export const handler = async ({ _, $0, commands = [], ...options }) => {
@@ -28,7 +30,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
     ) {
       if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
         console.error()
-        console.error(colors.error('No Prisma Schema found.'))
+        console.error(c.error('No Prisma Schema found.'))
         console.error(`Redwood searched here '${rwjsPaths.api.dbSchema}'`)
         console.error()
         process.exit(1)
@@ -54,8 +56,8 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   }
 
   console.log()
-  console.log(colors.green('Running Prisma CLI...'))
-  console.log(colors.underline('$ yarn prisma ' + args.join(' ')))
+  console.log(c.green('Running Prisma CLI...'))
+  console.log(c.underline('$ yarn prisma ' + args.join(' ')))
   console.log()
 
   try {
@@ -81,13 +83,13 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
 
 const printWrapInfo = () => {
   const message = [
-    colors.bold('Redwood CLI wraps Prisma CLI'),
+    c.bold('Redwood CLI wraps Prisma CLI'),
     '',
     'Use `yarn rw prisma` to automatically pass `--schema` and `--preview-feature` options.',
     'Use `yarn prisma` to skip Redwood CLI automatic options.',
     '',
     'Find more information in our docs:',
-    colors.underline('https://redwoodjs.com/docs/cli-commands#prisma'),
+    c.underline('https://redwoodjs.com/docs/cli-commands#prisma'),
   ]
 
   console.log(

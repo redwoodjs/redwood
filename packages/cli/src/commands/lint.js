@@ -3,7 +3,8 @@ import fs from 'fs'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 export const command = 'lint [path..]'
 export const description = 'Lint your files'
@@ -48,7 +49,7 @@ export const handler = async ({ path, fix }) => {
     )
     process.exit(result.exitCode)
   } catch (e) {
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

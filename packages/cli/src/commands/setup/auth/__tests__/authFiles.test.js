@@ -49,8 +49,7 @@ jest.mock('../../../../lib/project', () => ({
 
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
-
+import { getPaths } from '../../../../lib'
 import { files, generateUniqueFileNames } from '../authFiles'
 
 beforeEach(() => {

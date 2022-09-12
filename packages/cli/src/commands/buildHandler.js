@@ -7,12 +7,13 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getPaths } from '../lib'
+import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 export const handler = async ({
@@ -148,7 +149,7 @@ export const handler = async ({
       }
     })
   } catch (e) {
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
     errorTelemetry(process.argv, e.message)
     process.exit(1)
   }

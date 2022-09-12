@@ -3,8 +3,8 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths, writeFile, colors } from '@redwoodjs/cli-helpers'
-
+import { getPaths, writeFile } from '../../../../lib'
+import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
 import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile'
 
@@ -104,7 +104,7 @@ export async function handler({ force, install }) {
   try {
     await tasks.run()
   } catch (e) {
-    console.error(colors.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

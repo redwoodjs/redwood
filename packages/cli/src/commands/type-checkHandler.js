@@ -4,10 +4,11 @@ import concurrently from 'concurrently'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getCmdMajorVersion } from '../commands/upgrade'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const handler = async ({ sides, verbose, prisma, generate }) => {
@@ -73,7 +74,7 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
     exitCode > 0 && process.exit(exitCode)
   } catch (e) {
     errorTelemetry(process.argv, e.message)
-    console.log(colors.error(e.message))
+    console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }

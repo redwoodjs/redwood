@@ -5,9 +5,11 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { errorTelemetry } from '@redwoodjs/telemetry'
+
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 // sorts migrations by date, oldest first
 const sortMigrations = (migrations) => {
@@ -72,17 +74,17 @@ const report = (counters) => {
   console.log('')
   if (counters.run) {
     console.info(
-      colors.green(`${counters.run} data migration(s) completed successfully.`)
+      c.green(`${counters.run} data migration(s) completed successfully.`)
     )
   }
   if (counters.error) {
     console.error(
-      colors.error(`${counters.error} data migration(s) exited with errors.`)
+      c.error(`${counters.error} data migration(s) exited with errors.`)
     )
   }
   if (counters.skipped) {
     console.warn(
-      colors.warning(
+      c.warning(
         `${counters.skipped} data migration(s) skipped due to previous error.`
       )
     )
@@ -121,9 +123,7 @@ export const handler = async () => {
 
   // exit immediately if there aren't any migrations to run
   if (!migrations.length) {
-    console.info(
-      colors.green('\nNo data migrations run, already up-to-date.\n')
-    )
+    console.info(c.green('\nNo data migrations run, already up-to-date.\n'))
     process.exit(0)
   }
 
@@ -153,7 +153,7 @@ export const handler = async () => {
           })
         } catch (e) {
           counters.error++
-          console.error(colors.error(`Error in data migration: ${e.message}`))
+          console.error(c.error(`Error in data migration: ${e.message}`))
         }
       },
     }

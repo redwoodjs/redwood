@@ -2,10 +2,10 @@ import fs from 'fs'
 
 import { getConfig, getDMMF } from '@prisma/internals'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
-
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
+
+import { getPaths } from './'
 
 /**
  * Used to memoize results from `getSchema` so we don't have to go through

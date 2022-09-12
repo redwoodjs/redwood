@@ -4,8 +4,6 @@ import util from 'util'
 import fse from 'fs-extra'
 import prettier from 'prettier'
 
-import { getPaths } from '@redwoodjs/cli-helpers'
-
 import { merge } from './merge'
 import {
   interleave,
@@ -13,6 +11,8 @@ import {
   keepBoth,
   keepBothStatementParents,
 } from './merge/strategy'
+
+import { getPaths } from '.'
 
 export default async function extendStorybookConfiguration(
   newConfigPath = undefined
