@@ -111,6 +111,4 @@ if ('{c:Int}/...rest') {
 }
 
 
-{...glob}/...rest // beginning
-{...glob} // end
 **/
