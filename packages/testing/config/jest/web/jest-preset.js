@@ -5,6 +5,7 @@ const { getPaths } = require('@redwoodjs/internal/dist/paths')
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
+/** @type {import('jest').Config} */
 module.exports = {
   // To make sure other config option which depends on rootDir always
   // use correct path, for example, coverageDirectory
