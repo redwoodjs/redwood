@@ -61,6 +61,10 @@ import { name, version } from '../package'
     )}`
   )
 
+  // Template dir for Redwood files
+  // Needed higher up for engine checks
+  const templateDir = path.resolve(__dirname, '../template')
+
   // Extract the args as provided by the user in the command line
   const {
     _: args,
@@ -117,6 +121,80 @@ import { name, version } from '../package'
     Object.assign(userArgs, { typescript: false })
   }
 
+  // Check Node/Yarn/Engines Compatability
+  // This checks all engine requirements, including Node.js and Yarn
+  let hasPassedEngineCheck = null
+  let engineErrorLog = []
+
+  await new Listr(
+    [
+      {
+        title: 'Checking node and yarn compatibility',
+        skip: () => {
+          if (yarnInstall === false) {
+            return 'Warning: skipping check on request'
+          }
+        },
+        task: () => {
+          return new Promise((resolve) => {
+            const { engines } = require(path.join(templateDir, 'package.json'))
+
+            // this checks all engine requirements, including Node.js and Yarn
+            checkNodeVersion(engines, (_error, result) => {
+              if (result.isSatisfied) {
+                hasPassedEngineCheck = true
+                return resolve()
+              }
+
+              const logStatements = Object.keys(result.versions)
+                .filter((name) => !result.versions[name].isSatisfied)
+                .map((name) => {
+                  const { version, wanted } = result.versions[name]
+                  return style.error(
+                    `${name} ${wanted} required, but you have ${version}`
+                  )
+                })
+              engineErrorLog = [...logStatements]
+              hasPassedEngineCheck = false
+              return resolve()
+            })
+          })
+        },
+      },
+    ],
+    { clearOutput: true }
+  ).run()
+
+  // Show a success message if required engines are present
+  if (hasPassedEngineCheck === true) {
+    console.log(style.success(`✔️ Compatability checks passed.`))
+  }
+
+  // Show an error and prompt if failed engines
+  if (hasPassedEngineCheck === false) {
+    console.log(style.error(`✖️ Compatability checks failed.`))
+    console.log(`${engineErrorLog.join('\n')}`)
+    console.log(style.header(`\nVisit requirements documentation:`))
+    console.log(
+      style.warning(
+        `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
+      )
+    )
+    const response = await prompts({
+      type: 'select',
+      name: 'override-engine-error',
+      message: 'How would you like to proceed?',
+      choices: [
+        { title: 'Ignore error and continue install', value: true },
+        { title: 'Quit install', value: false },
+      ],
+      initial: 0,
+    })
+    if (response['override-engine-error'] === false) {
+      process.exit(1)
+    }
+  }
+
   // User prompts
   // See https://github.com/terkelg/prompts
   const questions = [
@@ -159,48 +237,9 @@ import { name, version } from '../package'
 
   const newAppDir = path.resolve(process.cwd(), targetDir)
   const appDirExists = fs.existsSync(newAppDir)
-  const templateDir = path.resolve(__dirname, '../template')
 
   const createProjectTasks = ({ newAppDir, overwrite }) => {
     return [
-      {
-        title: 'Checking node and yarn compatibility',
-        skip: () => {
-          if (yarnInstall === false) {
-            return 'Warning: skipping check on request'
-          }
-        },
-        task: () => {
-          return new Promise((resolve, reject) => {
-            const { engines } = require(path.join(templateDir, 'package.json'))
-
-            // this checks all engine requirements, including Node.js and Yarn
-            checkNodeVersion(engines, (_error, result) => {
-              if (result.isSatisfied) {
-                return resolve()
-              }
-
-              const logStatements = Object.keys(result.versions)
-                .filter((name) => !result.versions[name].isSatisfied)
-                .map((name) => {
-                  const { version, wanted } = result.versions[name]
-                  return style.error(
-                    `${name} ${wanted} required, but you have ${version}`
-                  )
-                })
-              logStatements.push(
-                style.header(`\nVisit requirements documentation:`)
-              )
-              logStatements.push(
-                style.warning(
-                  `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
-                )
-              )
-              return reject(new Error(logStatements.join('\n')))
-            })
-          })
-        },
-      },
       {
         title: `${
           appDirExists ? 'Using' : 'Creating'
