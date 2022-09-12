@@ -1,15 +1,14 @@
 /* eslint-env jest */
-/* global globalThis */
 // @ts-check
 
 // @NOTE without these imports in the setup file, mockCurrentUser
-// and defineScenario remain undefined in the user's tests
+// will remain undefined in the user's tests
 // Remember to use specific imports
 const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 
 // @NOTE we do this because jest.setup.js runs every time in each worker
 // while jest-preset runs once. This significantly reduces memory footprint, and testing time
-// The key is to reduce the amount of imports in this file because of how jest handles require caching
+// The key is to reduce the amount of imports in this file, because the require.cache is not shared between each test context
 const { configureTeardown, teardown, buildScenario, apiSrcPath } =
   global.__RWJS__TEST_IMPORTS
 
