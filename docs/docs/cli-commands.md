@@ -1660,6 +1660,7 @@ yarn redwood setup <category>
 | Commands           | Description                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------ |
 | `auth`             | Set up auth configuration for a provider                                                   |
+| `cache`            | Set up cache configuration for memcached or redis                                          |
 | `custom-web-index` | Set up an `index.js` file, so you can customize how Redwood web is mounted in your browser |
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
@@ -1701,7 +1702,21 @@ yarn redwood setup graphiql <provider>
 | `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                                                                     |
 | `--token, -t`   | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token                                                                                                                                       |
 | `--expiry, -e`   | Token expiry in minutes. Default is 60                                              |
-| `--view, -v`   | Print out generated headers to console                                                                                                                                        |
+| `--view, -v`   | Print out generated headers to console
+
+
+### setup cache
+
+This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting to a Memcached or Redis server and enables caching in services. See the [**Caching** section of the Services docs](/docs/services#caching) for usage.
+
+```
+yarn redwood setup cache <client>
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+| `client`            | Name of the client to configure, `memcached` or `redis` |
+| `--force, -f`       | Overwrite existing files |
 
 ### setup custom-web-index
 
