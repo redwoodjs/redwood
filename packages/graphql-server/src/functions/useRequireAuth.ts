@@ -16,14 +16,23 @@ interface Args {
     context: LambdaContext,
     ...others: any
   ) => any
-  getCurrentUser: GetCurrentUser
+  getCurrentUser?: GetCurrentUser
 }
 
-export const useRequireAuth = ({
+// Used for type safety in our tests
+export type UseRequireAuth = (
+  args: Args
+) => (
+  event: APIGatewayEvent,
+  context: LambdaContext,
+  ...rest: any
+) => Promise<ReturnType<Args['handlerFn']>>
+
+export const useRequireAuth: UseRequireAuth = ({
   authDecoder,
   handlerFn,
   getCurrentUser,
-}: Args) => {
+}) => {
   return async (
     event: APIGatewayEvent,
     context: LambdaContext,

@@ -49,11 +49,13 @@
     "@envelop/testing": "4.4.2",
     "@envelop/types": "2.3.1",
     "@redwoodjs/auth": "2.2.2",
+    "@types/jsonwebtoken": "8.5.8",
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "8.3.4",
     "aws-lambda": "1.0.7",
     "jest": "28.1.3",
+    "jsonwebtoken": "8.5.1",
     "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

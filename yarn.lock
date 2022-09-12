@@ -6629,7 +6629,6 @@ __metadata:
     "@babel/runtime-corejs3": 7.18.9
     "@prisma/internals": 4.2.1
     "@redwoodjs/api-server": 2.2.2
-    "@redwoodjs/cli-helpers": 2.2.2
     "@redwoodjs/internal": 2.2.2
     "@redwoodjs/prerender": 2.2.2
     "@redwoodjs/structure": 2.2.2
@@ -6862,6 +6861,7 @@ __metadata:
     "@prisma/client": 4.2.1
     "@redwoodjs/api": 2.2.2
     "@redwoodjs/auth": 2.2.2
+    "@types/jsonwebtoken": 8.5.8
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
@@ -6872,6 +6872,7 @@ __metadata:
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
     jest: 28.1.3
+    jsonwebtoken: 8.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4
