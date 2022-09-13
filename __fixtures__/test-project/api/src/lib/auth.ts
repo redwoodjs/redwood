@@ -1,4 +1,6 @@
+// TODO: Can we use DbAuthSession instead of Decoded in getCurrentUser?
 import type { Decoded } from '@redwoodjs/api'
+import type { DbAuthSession } from '@redwoodjs/auth-providers/dbAuth/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from './db'

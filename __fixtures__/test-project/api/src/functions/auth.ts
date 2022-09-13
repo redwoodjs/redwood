@@ -1,7 +1,9 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
-import { DbAuthHandler } from '@redwoodjs/api'
-import type { DbAuthHandlerOptions } from '@redwoodjs/api'
+import {
+  DbAuthHandler,
+  DbAuthHandlerOptions,
+} from '@redwoodjs/auth-providers/dbAuth/api'
 
 import { db } from 'src/lib/db'
 
