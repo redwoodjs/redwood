@@ -282,15 +282,14 @@ export class RWRoute extends BaseNode {
         return true
       }
 
-      // If it is explicitly set to true
-      // e.g. <Route prerender={true} />
       if (tsm.Node.isJsxExpression(init)) {
+        // If it is explicitly set to true
+        // e.g. <Route prerender={true} />
         return tsm.Node.isTrueLiteral(init.getExpression())
-      }
+      } else if (tsm.Node.isStringLiteral(init!)) {
+        // If its using the incorrect string form, we're accept it as true
+        // e.g. <Route prerender="true" />
 
-      // If its using the incorrect string form, we're accept it as true
-      // e.g. <Route prerender="true" />
-      if (tsm.Node.isStringLiteral(init!)) {
         const literalValue = init.getLiteralValue()
         return literalValue === 'true'
       }
