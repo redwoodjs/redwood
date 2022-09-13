@@ -1,5 +1,5 @@
 // TODO: Can we use DbAuthSession isntead of Decoded in getCurrentUser?
-import type { DbAuthSession } from '@redwoodjs/auth-providers/dbAuth/api'
+import type { DbAuthSession } from '@redwoodjs/auth-providers-api/dbAuth'
 import type { Decoded } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
