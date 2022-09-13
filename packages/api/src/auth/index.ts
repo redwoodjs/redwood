@@ -33,8 +33,10 @@ export const parseAuthorizationHeader = (
   return { schema, token }
 }
 
+export type Decoded = Record<string, unknown> | null
+
 export type AuthContextPayload = [
-  string | Record<string, unknown> | null,
+  Decoded,
   { type: string } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
@@ -42,7 +44,7 @@ export type AuthContextPayload = [
 export type Decoder = (
   token: string,
   req: { event: APIGatewayProxyEvent; context: LambdaContext }
-) => Record<string, unknown> | null
+) => Decoded
 
 /**
  * Get the authorization information from the request headers and request context.

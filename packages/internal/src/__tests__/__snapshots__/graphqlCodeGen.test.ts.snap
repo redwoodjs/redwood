@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Generate gql typedefs api 1`] = `
-"import { Prisma } from \\"@prisma/client\\"
+"import { Prisma } from "@prisma/client"
+import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
+import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
 export type Maybe<T> = T | null;
@@ -22,11 +24,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
-  Date: string;
-  DateTime: string;
+  Date: Date | string;
+  DateTime: Date | string;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
-  Time: string;
+  Time: Date | string;
 };
 
 export type Mutation = {
@@ -85,6 +87,8 @@ export type Todo = {
   status: Scalars['String'];
 };
 
+type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
+type AllMappedModels = MaybeOrArrayOfMaybe<Todo>
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -155,7 +159,7 @@ export type ResolversTypes = {
   Redwood: ResolverTypeWrapper<Redwood>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Time: ResolverTypeWrapper<Scalars['Time']>;
-  Todo: ResolverTypeWrapper<Todo>;
+  Todo: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -172,7 +176,7 @@ export type ResolversParentTypes = {
   Redwood: Redwood;
   String: Scalars['String'];
   Time: Scalars['Time'];
-  Todo: Todo;
+  Todo: MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>;
 };
 
 export type requireAuthDirectiveArgs = {
@@ -257,7 +261,7 @@ export type DirectiveResolvers<ContextType = RedwoodGraphQLContext> = {
 `;
 
 exports[`Generate gql typedefs web 1`] = `
-"import { Prisma } from \\"@prisma/client\\"
+"import { Prisma } from "@prisma/client"
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };

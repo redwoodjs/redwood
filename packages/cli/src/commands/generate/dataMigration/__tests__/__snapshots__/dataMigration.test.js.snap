@@ -11,7 +11,7 @@ export default async ({ db }: { db: PrismaClient }) => {
 
 exports[`creates a JS file with expected contents 1`] = `
 "/**
- * @typedef { import(\\"@prisma/client\\").PrismaClient } PrismaClient
+ * @typedef { import("@prisma/client").PrismaClient } PrismaClient
  * @param {{db: PrismaClient}} db
  */
 export default async ({ db }) => {

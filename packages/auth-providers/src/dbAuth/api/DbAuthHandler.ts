@@ -240,7 +240,7 @@ type Params = {
  * //  key being used in dbAccessor in src/functions/auth.ts 👇
  * const getCurrentUser = async (session: DbAuthSession<User['id']>)
  */
-export interface DbAuthSession<TIdType = unknown> {
+export interface DbAuthSession<TIdType = any> {
   id: TIdType
 }
 
@@ -721,7 +721,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
         requireUserVerification: true,
       }
 
-      verification = verifyAuthenticationResponse(opts)
+      verification = await verifyAuthenticationResponse(opts)
     } catch (e: any) {
       throw new DbAuthError.WebAuthnError(e.message)
     } finally {

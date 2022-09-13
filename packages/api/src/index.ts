@@ -3,6 +3,8 @@ export * from './errors'
 export * from './validations/validations'
 export * from './validations/errors'
 
+export * from './types'
+
 export * from './transforms'
 export * from './cors'
 
