@@ -2190,20 +2190,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@eslint/eslintrc@npm:1.3.0"
+"@eslint/eslintrc@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "@eslint/eslintrc@npm:1.3.2"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
-    espree: ^9.3.2
+    espree: ^9.4.0
     globals: ^13.15.0
     ignore: ^5.2.0
     import-fresh: ^3.2.1
     js-yaml: ^4.1.0
     minimatch: ^3.1.2
     strip-json-comments: ^3.1.1
-  checksum: 9fae71dc1f49a92d64061a94c3c49ee9420ab386fbb5855edd18ee60186a1d72f0c0fde172f14987ffa6a6ab0313b24b2d491c9a337cc7a095bbe3d1c0b7b30f
+  checksum: 18cc0d3a4c0d31af2c05deb12aded5bc5edaf927a60c1f287cd0bba51d057175448e6fdca50b24df0882215f42dc13d10dca3e6bb7995a463aba57c05815bc51
   languageName: node
   linkType: hard
 
@@ -3626,6 +3626,13 @@ __metadata:
   version: 1.0.2
   resolution: "@humanwhocodes/gitignore-to-minimatch@npm:1.0.2"
   checksum: f2d3325e506c9467b719ce4f0a5abf8ba0eae21e20ea504aa28702eb89e7a95d5bc77f897197ef5706d0b98362da896e1cf3b922c414fe684a5fb66f1ec50b27
+  languageName: node
+  linkType: hard
+
+"@humanwhocodes/module-importer@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@humanwhocodes/module-importer@npm:1.0.1"
+  checksum: 909b69c3b86d482c26b3359db16e46a32e0fb30bd306a3c176b8313b9e7313dba0f37f519de6aa8b0a1921349e505f259d19475e123182416a506d7f87e7f529
   languageName: node
   linkType: hard
 
@@ -6210,7 +6217,7 @@ __metadata:
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
-    uuid: 8.3.2
+    uuid: 9.0.0
   peerDependencies:
     "@clerk/clerk-sdk-node": 3.9.2
     "@magic-sdk/admin": 1.4.1
@@ -6440,7 +6447,7 @@ __metadata:
     "@redwoodjs/internal": 2.2.4
     "@typescript-eslint/eslint-plugin": 5.35.1
     "@typescript-eslint/parser": 5.35.1
-    eslint: 8.22.0
+    eslint: 8.23.1
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -6520,7 +6527,7 @@ __metadata:
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4
-    uuid: 8.3.2
+    uuid: 9.0.0
   languageName: unknown
   linkType: soft
 
@@ -6698,7 +6705,7 @@ __metadata:
     envinfo: 7.8.1
     jest: 29.0.3
     systeminformation: 5.12.4
-    uuid: 8.3.2
+    uuid: 9.0.0
     yargs: 17.5.1
   languageName: unknown
   linkType: soft
@@ -13586,6 +13593,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.0
     "@redwoodjs/internal": 2.2.4
     "@redwoodjs/telemetry": 2.2.4
+    "@types/prompts": 2.4.0
     chalk: 4.1.2
     check-node-version: 4.2.1
     core-js: 3.25.1
@@ -13593,6 +13601,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 29.0.3
     listr: 0.14.3
+    prompts: 2.4.2
     typescript: 4.7.4
     yargs: 17.5.1
   bin:
@@ -15772,13 +15781,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.22.0":
-  version: 8.22.0
-  resolution: "eslint@npm:8.22.0"
+"eslint@npm:8.23.1":
+  version: 8.23.1
+  resolution: "eslint@npm:8.23.1"
   dependencies:
-    "@eslint/eslintrc": ^1.3.0
+    "@eslint/eslintrc": ^1.3.2
     "@humanwhocodes/config-array": ^0.10.4
     "@humanwhocodes/gitignore-to-minimatch": ^1.0.2
+    "@humanwhocodes/module-importer": ^1.0.1
     ajv: ^6.10.0
     chalk: ^4.0.0
     cross-spawn: ^7.0.2
@@ -15788,13 +15798,12 @@ __metadata:
     eslint-scope: ^7.1.1
     eslint-utils: ^3.0.0
     eslint-visitor-keys: ^3.3.0
-    espree: ^9.3.3
+    espree: ^9.4.0
     esquery: ^1.4.0
     esutils: ^2.0.2
     fast-deep-equal: ^3.1.3
     file-entry-cache: ^6.0.1
     find-up: ^5.0.0
-    functional-red-black-tree: ^1.0.1
     glob-parent: ^6.0.1
     globals: ^13.15.0
     globby: ^11.1.0
@@ -15803,6 +15812,7 @@ __metadata:
     import-fresh: ^3.0.0
     imurmurhash: ^0.1.4
     is-glob: ^4.0.0
+    js-sdsl: ^4.1.4
     js-yaml: ^4.1.0
     json-stable-stringify-without-jsonify: ^1.0.1
     levn: ^0.4.1
@@ -15814,21 +15824,20 @@ __metadata:
     strip-ansi: ^6.0.1
     strip-json-comments: ^3.1.0
     text-table: ^0.2.0
-    v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: a65d7e1b8cc07f395b3d0f426c12f0f35587281768bd836cb33aef9a13772054178bbb68e8787823e5f862f2dfb6a2358c6b934ddf53a22aba5276032dc7396d
+  checksum: f91fd0fd7c6aa816299886df05b1a15e12052dde5746835720ad6c007be1d4b512d3c837345a7beac5e3c0e5a81570c6be09e721848f092935494a5eb29602fd
   languageName: node
   linkType: hard
 
-"espree@npm:^9.3.2, espree@npm:^9.3.3":
-  version: 9.3.3
-  resolution: "espree@npm:9.3.3"
+"espree@npm:^9.4.0":
+  version: 9.4.0
+  resolution: "espree@npm:9.4.0"
   dependencies:
     acorn: ^8.8.0
     acorn-jsx: ^5.3.2
     eslint-visitor-keys: ^3.3.0
-  checksum: 24b87c04a609b336be095955773d30dc91adb152077745053f40ff1a41c968fa66f22b35e1bed8871dbae4269f627c91e181ea8f89b704ab1fd7b80e1cb2011f
+  checksum: 95f1f9ac49fa112bfc2d2e82fd9e85192367090a9ee03b1e43594e85e29a3458b603b4cf7cd5ccfb156da2b94d07e7f5428474c830faa6f19db47a0b86dd3656
   languageName: node
   linkType: hard
 
@@ -20516,6 +20525,13 @@ __metadata:
   version: 1.1.6
   resolution: "js-levenshtein@npm:1.1.6"
   checksum: 14045735325ea1fd87f434a74b11d8a14380f090f154747e613529c7cff68b5ee607f5230fa40665d5fb6125a3791f4c223f73b9feca754f989b059f5c05864f
+  languageName: node
+  linkType: hard
+
+"js-sdsl@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "js-sdsl@npm:4.1.4"
+  checksum: 084d96fbbb02afeaad5116d59c2083ee95f5ded664e6522f6f064b80a2afa787bd69729b1a48ac93e4a0776d7cae06549629289f13e6a8302400e5201e2023fc
   languageName: node
   linkType: hard
 
@@ -27132,7 +27148,7 @@ __metadata:
     core-js: 3.25.1
     cypress: 9.7.0
     cypress-wait-until: 1.7.2
-    eslint: 8.22.0
+    eslint: 8.23.1
     fast-glob: 3.2.11
     fs-extra: 10.1.0
     is-port-reachable: 3.1.0
@@ -30571,6 +30587,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8867e438990d1d33ac61093e2e4e3477a2148b844e4fa9e3c2360fa4399292429c4b6ec64537eb1659c97b2d10db349c673ad58b50e2824a11e0d3630de3c056
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^3.3.2":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
@@ -30580,7 +30605,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"v8-compile-cache@npm:2.3.0, v8-compile-cache@npm:^2.0.3":
+"v8-compile-cache@npm:2.3.0":
   version: 2.3.0
   resolution: "v8-compile-cache@npm:2.3.0"
   checksum: b2d866febf943fbbf0b5e8d43ae9a9b0dacd11dd76e6a9c8e8032268f0136f081e894a2723774ae2d86befa994be4d4046b0717d82df4f3a10e067994ad5c688
