@@ -15,7 +15,7 @@ services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
-  buildCommand: yarn; yarn rw deploy render web
+  buildCommand: yarn install && yarn rw deploy render web
   staticPublishPath: ./web/dist
   envVars:
   - key: NODE_VERSION
