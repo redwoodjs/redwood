@@ -141,8 +141,26 @@ export class RWRoute extends BaseNode {
   }
 
   @lazy() get prerender(): boolean {
-    return this.getBoolAttr('prerender')
+    // Note, using this.getBooleanAttr always returns true, unsure why.
+    const prerenderAttr = this.jsxNode.getAttribute('prerender')
+
+    if (tsm.Node.isJsxAttribute(prerenderAttr)) {
+      const init = prerenderAttr.getInitializer()
+
+      if (!init) {
+        // Just this form <Route prerender /> indicates true
+        return true
+      }
+
+      // When prop is explicitly set to false, for overriding Set
+      if (tsm.Node.isJsxExpression(init)) {
+        return tsm.Node.isTrueLiteral(init.getExpression())
+      }
+    }
+
+    return false
   }
+
   @lazy() get path_literal_node() {
     const a = this.jsxNode.getAttribute('path')
     if (!a) {
