@@ -293,7 +293,7 @@ export const comments = () => {
   return db.comment.findMany()
 }
 
-export const comment = ({ id }: Prisma.CommentWhereUniqueInput) => {
+export const comment = ({ id }: QueryResolvers['comment'] => {
   return db.comment.findUnique({
     where: { id },
   })
