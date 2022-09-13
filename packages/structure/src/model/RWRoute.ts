@@ -141,25 +141,7 @@ export class RWRoute extends BaseNode {
   }
 
   @lazy() get prerender(): boolean {
-    // Note, using this.getBooleanAttr always returns true, unsure why.
-    const prerenderAttr = this.jsxNode.getAttribute('prerender')
-
-    if (tsm.Node.isJsxAttribute(prerenderAttr)) {
-      const init = prerenderAttr.getInitializer()
-
-      if (!init) {
-        // Just this form <Route prerender /> indicates true
-        return true
-      }
-
-      // When prop is explicitly set to false, for overriding Set
-      // If you write prerender={'yes'}, it will be accepted as true
-      if (tsm.Node.isJsxExpression(init)) {
-        return !tsm.Node.isFalseLiteral(init.getExpression())
-      }
-    }
-
-    return false
+    return this.getBoolAttr('prerender')
   }
 
   @lazy() get path_literal_node() {
@@ -283,25 +265,61 @@ export class RWRoute extends BaseNode {
     }
   }
 
+
+  /**
+   *
+   *   // Note, using this.getBooleanAttr always returns true, unsure why.
+    const prerenderAttr = this.jsxNode.getAttribute('prerender')
+
+    if (tsm.Node.isJsxAttribute(prerenderAttr)) {
+      const init = prerenderAttr.getInitializer()
+
+      if (!init) {
+        // Just this form <Route prerender /> indicates true
+        return true
+      }
+
+      // When prop is explicitly set to false, for overriding Set
+      if (tsm.Node.isJsxExpression(init)) {
+        return tsm.Node.isTrueLiteral(init.getExpression())
+      }
+    }
+
+    return false
+   *
+   */
+
   private getBoolAttr(name: string) {
-    const a = this.jsxNode.getAttribute(name)
+    const attr = this.jsxNode.getAttribute(name)
     // No attribute
-    if (!a) {
+    if (!attr) {
       return false
     }
 
     // Attribute exists
-    if (tsm.Node.isJsxAttribute(a)) {
-      const init = a.getInitializer()
-      // If it contains prerender="true"
+    if (tsm.Node.isJsxAttribute(attr)) {
+      const init = attr.getInitializer()
+
+      // Bool attributes with no initializer are true
+      // e.g. <Route prerender />
+      if (!init) {
+        return true
+      }
+
+      // If it is explicitly set to true
+      // e.g. <Route prerender={true} />
+      if (tsm.Node.isJsxExpression(init)) {
+        return tsm.Node.isTrueLiteral(init.getExpression())
+      }
+
+      // If its using the incorrect string form, we're accept it as true
+      // e.g. <Route prerender="true" />
       if (tsm.Node.isStringLiteral(init!)) {
         const literalValue = init.getLiteralValue()
         return literalValue === 'true'
-      } else {
-        // If it contains just prerender
-        return true
       }
     }
+
     return false
   }
 
