@@ -194,7 +194,7 @@ export default App
 `;
 
 exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 2`] = `
-"import { createDbAuth } from '@redwoodjs/auth-providers'
+"import { createDbAuth } from '@redwoodjs/auth-providers-web'
 
 export const { AuthProvider, useAuth } = createDbAuth()
 "
@@ -254,7 +254,7 @@ export default App
 `;
 
 exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 2`] = `
-"import { createDbAuth } from '@redwoodjs/auth-providers'
+"import { createDbAuth } from '@redwoodjs/auth-providers-web'
 
 export const { AuthProvider, useAuth } = createDbAuth()
 "
