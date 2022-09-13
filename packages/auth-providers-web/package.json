@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/auth-providers",
+  "name": "@redwoodjs/auth-providers-web",
   "version": "2.2.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/auth-providers"
+    "directory": "packages/auth-providers-web"
   },
   "license": "MIT",
   "main": "./dist/index.js",
