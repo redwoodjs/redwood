@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -28,11 +28,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.18.13",
-    "@babel/plugin-transform-typescript": "7.18.12",
+    "@babel/parser": "7.19.0",
+    "@babel/plugin-transform-typescript": "7.19.0",
     "@babel/register": "7.18.9",
-    "@babel/runtime-corejs3": "7.18.9",
-    "@babel/traverse": "7.18.13",
+    "@babel/runtime-corejs3": "7.19.0",
+    "@babel/traverse": "7.19.0",
     "@graphql-codegen/add": "3.2.1",
     "@graphql-codegen/cli": "2.11.7",
     "@graphql-codegen/core": "2.6.2",
@@ -41,11 +41,11 @@
     "@graphql-codegen/typescript-operations": "2.5.3",
     "@graphql-codegen/typescript-react-apollo": "3.3.3",
     "@graphql-codegen/typescript-resolvers": "2.7.3",
-    "@redwoodjs/graphql-server": "2.2.3",
+    "@redwoodjs/graphql-server": "2.2.4",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.5.3",
     "chalk": "4.1.2",
-    "core-js": "3.25.0",
+    "core-js": "3.25.1",
     "deepmerge": "4.2.2",
     "esbuild": "0.15.5",
     "fast-glob": "3.2.11",
@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.13",
+    "@babel/core": "7.19.0",
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
@@ -70,7 +70,7 @@
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
-    "jest": "29.0.1",
+    "jest": "29.0.3",
     "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
