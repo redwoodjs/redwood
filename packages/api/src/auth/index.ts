@@ -2,6 +2,8 @@ export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
+import type { Decoded } from './decoded'
+
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
@@ -32,8 +34,6 @@ export const parseAuthorizationHeader = (
   }
   return { schema, token }
 }
-
-export type Decoded = Record<string, unknown> | null
 
 export type AuthContextPayload = [
   Decoded,
