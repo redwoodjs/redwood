@@ -10,7 +10,6 @@ import type {
 } from '@graphql-codegen/plugin-helpers'
 import * as typescriptPlugin from '@graphql-codegen/typescript'
 import * as typescriptOperations from '@graphql-codegen/typescript-operations'
-// import * as typescriptResolvers from '@graphql-codegen/typescript-resolvers'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
