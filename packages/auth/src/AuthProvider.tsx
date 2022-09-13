@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 
 import { createAuthClient } from './authClients'
 import type {
@@ -76,7 +76,7 @@ export const AuthContext = React.createContext<AuthContextInterface>({
   hasError: false,
 })
 
-type AuthProviderProps =
+type AuthProviderProps = (
   | {
       client: SupportedAuthClients
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
@@ -95,6 +95,7 @@ type AuthProviderProps =
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
     }
+) & { children?: React.ReactNode }
 
 type AuthProviderState = {
   loading: boolean
@@ -115,7 +116,7 @@ type AuthProviderState = {
  * ```
  */
 export class AuthProvider extends React.Component<
-  PropsWithChildren<AuthProviderProps>,
+  AuthProviderProps,
   AuthProviderState
 > {
   static defaultProps = {

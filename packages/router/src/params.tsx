@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext } from 'react'
+import React, { useContext } from 'react'
 
 import { LocationContextType, useLocation } from './location'
 import { useRouterState } from './router-context'
@@ -13,9 +13,10 @@ export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 interface Props {
   path?: string
   location?: LocationContextType
+  children?: React.ReactNode
 }
 
-export const ParamsProvider: React.FC<PropsWithChildren<Props>> = ({
+export const ParamsProvider: React.FC<Props> = ({
   path,
   location,
   children,

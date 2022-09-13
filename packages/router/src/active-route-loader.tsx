@@ -1,9 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  PropsWithChildren,
-} from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import { unstable_batchedUpdates } from 'react-dom'
 
@@ -41,7 +36,7 @@ export const ActiveRouteLoader = ({
   params,
   whileLoadingPage,
   children,
-}: PropsWithChildren<Props>) => {
+}: Props) => {
   const location = useLocation()
   const [pageName, setPageName] = useState('')
   const loadingTimeout = useRef<NodeJS.Timeout>()

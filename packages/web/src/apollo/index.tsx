@@ -1,5 +1,3 @@
-import { PropsWithChildren } from 'react'
-
 import type {
   ApolloClientOptions,
   setLogVerbosity,
@@ -93,15 +91,14 @@ export type GraphQLClientConfigProp = Omit<
 
 export type UseAuthProp = () => AuthContextInterface
 
-const ApolloProviderWithFetchConfig: React.FunctionComponent<
-  PropsWithChildren<{
-    config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
-      cache: ApolloCache<unknown>
-    }
-    useAuth: UseAuthProp
-    logLevel: F.Return<typeof setLogVerbosity>
-  }>
-> = ({ config, children, useAuth, logLevel }) => {
+const ApolloProviderWithFetchConfig: React.FunctionComponent<{
+  config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
+    cache: ApolloCache<unknown>
+  }
+  useAuth: UseAuthProp
+  logLevel: F.Return<typeof setLogVerbosity>
+  children?: React.ReactNode
+}> = ({ config, children, useAuth, logLevel }) => {
   /**
    * Should they run into it,
    * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
@@ -259,11 +256,10 @@ type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
 interface ErrorBoundaryProps {
   error?: unknown
   onError: NonNullable<ComponentDidCatch>
+  children?: React.ReactNode
 }
 
-class ErrorBoundary extends React.Component<
-  PropsWithChildren<ErrorBoundaryProps>
-> {
+class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
   componentDidCatch(...args: Parameters<NonNullable<ComponentDidCatch>>) {
     this.setState({})
     this.props.onError(...args)
@@ -274,13 +270,12 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-export const RedwoodApolloProvider: React.FunctionComponent<
-  PropsWithChildren<{
-    graphQLClientConfig?: GraphQLClientConfigProp
-    useAuth?: UseAuthProp
-    logLevel?: F.Return<typeof setLogVerbosity>
-  }>
-> = ({
+export const RedwoodApolloProvider: React.FunctionComponent<{
+  graphQLClientConfig?: GraphQLClientConfigProp
+  useAuth?: UseAuthProp
+  logLevel?: F.Return<typeof setLogVerbosity>
+  children?: React.ReactNode
+}> = ({
   graphQLClientConfig,
   useAuth = useRWAuth,
   logLevel = 'debug',

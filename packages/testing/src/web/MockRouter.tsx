@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 
 // Bypass the `main` field in `package.json` because we alias `@redwoodjs/router`
 // for jest and Storybook. Not doing so would cause an infinite loop.
@@ -16,9 +16,7 @@ export const routes: { [routeName: string]: () => string } = {}
  * We overwrite the default `Router` export.
  * It populates the `routes.<pagename>()` utility object.
  */
-export const Router: React.FunctionComponent<
-  PropsWithChildren<RouterProps>
-> = ({ children }) => {
+export const Router: React.FunctionComponent<RouterProps> = ({ children }) => {
   const flatChildArray = flattenAll(children)
 
   flatChildArray.forEach((child) => {

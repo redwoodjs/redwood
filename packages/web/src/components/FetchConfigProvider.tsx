@@ -1,5 +1,3 @@
-import { PropsWithChildren } from 'react'
-
 import type { AuthContextInterface, SupportedAuthTypes } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
@@ -24,11 +22,10 @@ type UseAuthType = () => AuthContextInterface
  * Note that the auth bearer token is now passed in packages/web/src/apollo/index.tsx
  * as the token is retrieved async
  */
-export const FetchConfigProvider: React.FunctionComponent<
-  PropsWithChildren<{
-    useAuth?: UseAuthType
-  }>
-> = ({
+export const FetchConfigProvider: React.FunctionComponent<{
+  useAuth?: UseAuthType
+  children?: React.ReactNode
+}> = ({
   useAuth = global.__REDWOOD__USE_AUTH ?? (() => defaultAuthState),
   ...rest
 }) => {
