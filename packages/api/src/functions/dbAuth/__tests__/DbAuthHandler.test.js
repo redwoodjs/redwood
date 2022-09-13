@@ -1398,6 +1398,18 @@ describe('dbAuth', () => {
       expect(() => dbAuth.signup()).not.toThrow()
     })
 
+    it('throws no error if passwordValidation function is undefined', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      delete options.signup.passwordValidation
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(() => dbAuth.signup()).not.toThrow()
+    })
+
     it('creates a new user and logs them in', async () => {
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
