@@ -299,9 +299,10 @@ export const comment = ({ id }: Prisma.CommentWhereUniqueInput) => {
   })
 }
 
-export const Comment = {
-  post: (_obj, { root }: ResolverArgs<ReturnType<typeof comment>>) =>
-    db.comment.findUnique({ where: { id: root.id } }).post(),
+export const Comment: CommentRelationResolvers = {
+  post: (_obj, { root }) => {
+    return db.comment.findUnique({ where: { id: root?.id } }).post()
+  },
 }
 ```
 
