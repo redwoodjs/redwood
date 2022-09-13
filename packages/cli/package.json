@@ -31,6 +31,7 @@
     "@babel/runtime-corejs3": "7.19.0",
     "@prisma/internals": "4.3.1",
     "@redwoodjs/api-server": "2.2.4",
+    "@redwoodjs/auth-providers-setup": "2.2.4",
     "@redwoodjs/internal": "2.2.4",
     "@redwoodjs/prerender": "2.2.4",
     "@redwoodjs/structure": "2.2.4",

@@ -20,7 +20,7 @@ export async function builder(yargs) {
     setupAuthOktaCommand,
     setupAuthSupabaseCommand,
     setupAuthSupertokensCommand,
-  } = await import('@redwoodjs/auth-providers')
+  } = await import('@redwoodjs/auth-providers-setup')
 
   yargs
     .demandCommand()
