@@ -76,8 +76,12 @@ export const handler = async ({
     authDecoderImport:
       'import { dbAuthAuthDecoder as authDecoder } from "@redwoodjs/auth-providers-web"',
     webAuthn,
-    webPackages: webAuthn ? webAuthnWebPackages : [],
-    apiPackages: webAuthn ? webAuthnApiPackages : [],
+    webPackages: webAuthn
+      ? webAuthnWebPackages
+      : ['@redwoodjs/auth-providers-web'],
+    apiPackages: webAuthn
+      ? webAuthnApiPackages
+      : ['@redwoodjs/auth-providers-api'],
     extraTask: webAuthn ? webAuthnExtraTask : extraTask,
     notes: webAuthn ? webAuthnNotes : notes,
   })

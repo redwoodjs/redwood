@@ -7,9 +7,17 @@ import { functionsPath, libPath } from './setupData'
 // copy some identical values from dbAuth provider
 export { extraTask } from './setupData'
 
-// required packages to install
-export const webPackages = ['@simplewebauthn/browser']
-export const apiPackages = ['@simplewebauthn/server']
+// required packages to install on the web side
+export const webPackages = [
+  '@redwoodjs/auth-providers-web',
+  '@simplewebauthn/browser',
+]
+
+// required packages to install on the api side
+export const apiPackages = [
+  '@redwoodjs/auth-providers-api',
+  '@simplewebauthn/server',
+]
 
 // any notes to print out when the job is done
 export const notes = [
