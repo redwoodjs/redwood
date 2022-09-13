@@ -82,19 +82,19 @@ Because `Post.author` can't be null (we said it's required in the Prisma schema)
 
 ```ts Post.service.ts
 // Option 1: Override the type
-// The typecasting here is OK. `gqlArgs.root` is the post that was _already found_
+// The typecasting here is OK. `root` is the post that was _already found_
 // by the `post` function in your Services, so `findUnique` will always find it!
 export const Post: PostRelationResolvers = {
-  author: (_obj, gqlArgs) =>
-    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author() as Promise<Author>, // 👈
+  author: (_obj, { root }) =>
+    db.post.findUnique({ where: { id: root?.id } }).author() as Promise<Author>, // 👈
 }
 
 // Option 2: Check for null
 export const Post: PostRelationResolvers = {
-  author: async (_obj, gqlArgs) => {
+  author: async (_obj, { root }) => {
     // Here, `findUnique` can return `null`, so we have to handle it:
     const maybeAuthor = await db.post
-      .findUnique({ where: { id: gqlArgs?.root?.id } })
+      .findUnique({ where: { id: root?.id } })
       .author()
 
     // highlight-start
@@ -126,10 +126,10 @@ export const post: QueryResolvers['post'] = ({ id }) => {
 }
 
 export const Post: PostRelationResolvers = {
-  author: async (_obj, gqlArgs) => {
+  author: async (_obj, { root }) => {
    // highlight-start
-    if (gqlArgs?.root.author) {
-      return gqlArgs.root.author
+    if (root.author) {
+      return root.author
     }
   // highlight-end
 
