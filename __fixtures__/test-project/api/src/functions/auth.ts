@@ -3,7 +3,7 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import {
   DbAuthHandler,
   DbAuthHandlerOptions,
-} from '@redwoodjs/auth-providers-web/dbAuth/api'
+} from '@redwoodjs/auth-providers-api/dbAuth'
 
 import { db } from 'src/lib/db'
 

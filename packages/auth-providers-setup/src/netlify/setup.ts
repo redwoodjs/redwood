@@ -23,7 +23,7 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     forceArg,
     provider: 'netlify',
     authDecoderImport:
-      'import { netlifyAuthDecoder as authDecoder } from "@redwoodjs/auth-providers-web"',
+      'import { netlifyAuthDecoder as authDecoder } from "@redwoodjs/auth-providers-api"',
     apiPackages: ['@redwoodjs/auth-providers-api'],
     webPackages: [
       '@redwoodjs/auth-providers-web',
