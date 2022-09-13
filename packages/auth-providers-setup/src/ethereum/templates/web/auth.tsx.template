@@ -3,7 +3,7 @@ import React from 'react'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import EthereumAuthClient from '@oneclickdapp/ethereum-auth'
 
-import { createEthereumAuth } from '@redwoodjs/auth-providers'
+import { createEthereumAuth } from '@redwoodjs/auth-providers-web'
 import { useFetchConfig } from '@redwoodjs/web'
 
 let ethereum: EthereumAuthClient

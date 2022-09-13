@@ -1,6 +1,6 @@
 import netlifyIdentity from 'netlify-identity-widget'
 
-import { createNetlifyAuth } from '@redwoodjs/auth-providers'
+import { createNetlifyAuth } from '@redwoodjs/auth-providers-web'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 
 isBrowser && netlifyIdentity.init()

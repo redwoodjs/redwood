@@ -1,7 +1,7 @@
 import * as firebaseAuth from '@firebase/auth'
 import { initializeApp, getApp, getApps } from 'firebase/app'
 
-import { createFirebaseAuth } from '@redwoodjs/auth-providers'
+import { createFirebaseAuth } from '@redwoodjs/auth-providers-web'
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

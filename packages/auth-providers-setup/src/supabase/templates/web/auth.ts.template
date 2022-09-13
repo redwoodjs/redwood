@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-import { createSupabaseAuth } from '@redwoodjs/auth-providers'
+import { createSupabaseAuth } from '@redwoodjs/auth-providers-web'
 
 const supabaseClient = createClient(
   process.env.SUPABASE_URL || '',
