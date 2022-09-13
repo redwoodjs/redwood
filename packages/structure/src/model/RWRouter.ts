@@ -86,8 +86,7 @@ export class RWRouter extends FileNode {
           tsm.SyntaxKind.JsxSelfClosingElement
         )) {
           const tagName = x.getTagNameNode().getText()
-          // If the prerender attribute isn't already present, to allow override prerender={false}
-          // even if the set has prerender set on it
+          // Add prerender prop from set if not already present
           if (tagName === 'Route' && !x.getAttribute('prerender')) {
             x.insertAttribute(0, { name: 'prerender' })
           }
