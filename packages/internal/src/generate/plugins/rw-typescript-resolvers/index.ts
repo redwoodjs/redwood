@@ -6,7 +6,7 @@ import {
 } from '@graphql-codegen/plugin-helpers'
 import {
   TypeScriptResolversPluginConfig,
-  plugin as basePlugin,
+  plugin as originalPlugin,
 } from '@graphql-codegen/typescript-resolvers'
 import { GraphQLSchema } from 'graphql'
 
@@ -22,9 +22,6 @@ export const plugin: PluginFunction<
 ) => {
   // This is the key change compared to the standard typescript-resolver
   // plugin implementation - we use our own Visitor here.
-  // There are more changes done to this file, but they're all pretty much
-  // all about just removing code that isn't needed for the specific
-  // setup that Redwood has
   const visitor = new RwTypeScriptResolversVisitor(config, schema)
 
   // runs visitor
@@ -32,7 +29,9 @@ export const plugin: PluginFunction<
     leave: visitor as any,
   })
 
-  const { prepend, content } = basePlugin(schema, [], config) as {
+  // `content` here is the output of the original plugin, including the
+  // original visitor
+  const { prepend, content } = originalPlugin(schema, [], config) as {
     prepend: string[]
     content: string
   }
@@ -53,15 +52,19 @@ export const plugin: PluginFunction<
   //     header,
   //     resolversTypeMapping,
   //     resolversParentTypeMapping,
+  //                                          <--- `visitorResultStart` below
   //     ...visitorResult.definitions.filter(
   //       (d: unknown) => typeof d === 'string'
   //     ),
+  //                                          <--- `visitorResultEnd` below
   //     getRootResolver(),
   //     getAllDirectiveResolvers(),
   //   ].join('\n'),
   // We want to replace `visitorResult` with our own result.
-  // `visitorResult` begins with "export type requireAuthDirectiveArgs = {"
-  // We can execute `getRootResolver()` to know what that looks like.
+  // We assume that the original visitorResult begins with the same text as our
+  // `visitorResult`. We use this to find where we should start replacing content
+  // We then execute `getRootResolver()` to know what that looks like, and find
+  // the first line of that output. This is where we'll end our replacement.
   // Then we just replace whatever is between those two things with our own
   // result
 
