@@ -1,8 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
+import { transform } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
-import * as babel from '@babel/core'
+import type { PluginItem } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
@@ -150,7 +151,7 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       undefined,
       'rwjs-babel-glob-import-dir',
     ],
-  ].filter(Boolean) as babel.PluginItem[]
+  ].filter(Boolean) as PluginItem[]
 
   return plugins
 }
@@ -203,7 +204,7 @@ export const prebuildApiFile = (
   const code = fs.readFileSync(srcPath, 'utf-8')
   const defaultOptions = getApiSideDefaultBabelConfig()
 
-  const result = babel.transform(code, {
+  const result = transform(code, {
     ...defaultOptions,
     cwd: getPaths().api.base,
     filename: srcPath,
