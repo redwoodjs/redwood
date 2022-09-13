@@ -153,8 +153,9 @@ export class RWRoute extends BaseNode {
       }
 
       // When prop is explicitly set to false, for overriding Set
+      // If you write prerender={'yes'}, it will be accepted as true
       if (tsm.Node.isJsxExpression(init)) {
-        return tsm.Node.isTrueLiteral(init.getExpression())
+        return !tsm.Node.isFalseLiteral(init.getExpression())
       }
     }
 
