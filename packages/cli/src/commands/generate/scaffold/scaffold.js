@@ -22,6 +22,7 @@ import {
   addRoutesToRouterTask,
   addScaffoldImport,
   transformTSToJS,
+  nameVariants,
 } from '../../../lib'
 import c from '../../../lib/colors'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
@@ -66,18 +67,15 @@ const getImportComponentNames = (
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(singularize(name))
   let componentPath
-  let layoutPath
   if (scaffoldPath === '') {
     componentPath = nestScaffoldByModel
       ? `src/components/${singularName}`
       : `src/components`
-    layoutPath = `src/layouts`
   } else {
     const sP = scaffoldPath.split('/').map(pascalcase).join('/')
     componentPath = nestScaffoldByModel
       ? `src/components/${sP}/${singularName}`
       : `src/components/${sP}`
-    layoutPath = `src/layouts/${sP}`
   }
 
   return {
@@ -88,39 +86,35 @@ const getImportComponentNames = (
     importComponentNewName: `${componentPath}/New${singularName}`,
     importComponentNames: `${componentPath}/${pluralName}`,
     importComponentNamesCell: `${componentPath}/${pluralName}Cell`,
-    importLayoutNames: `${layoutPath}/${pluralName}Layout`,
+    importLayoutNames: `src/layouts/ScaffoldLayout`,
   }
 }
 
 // Includes imports from getImportComponentNames()
 const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
-  const pluralPascalName = pascalcase(pluralize(name))
-  const singularPascalName = pascalcase(singularize(name))
-
-  const pluralCamelName = camelcase(pluralPascalName)
-  const singularCamelName = camelcase(singularPascalName)
+  const nameVars = nameVariants(name)
   const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
 
   return {
     pluralRouteName:
       scaffoldPath === ''
-        ? pluralCamelName
-        : `${camelScaffoldPath}${pluralPascalName}`,
+        ? nameVars.pluralCamelName
+        : `${camelScaffoldPath}${nameVars.pluralPascalName}`,
 
     editRouteName:
       scaffoldPath === ''
-        ? `edit${singularPascalName}`
-        : `${camelScaffoldPath}Edit${singularPascalName}`,
+        ? `edit${nameVars.singularPascalName}`
+        : `${camelScaffoldPath}Edit${nameVars.singularPascalName}`,
 
     singularRouteName:
       scaffoldPath === ''
-        ? singularCamelName
-        : `${camelScaffoldPath}${singularPascalName}`,
+        ? nameVars.singularCamelName
+        : `${camelScaffoldPath}${nameVars.singularPascalName}`,
 
     newRouteName:
       scaffoldPath === ''
-        ? `new${singularPascalName}`
-        : `${camelScaffoldPath}New${singularPascalName}`,
+        ? `new${nameVars.singularPascalName}`
+        : `${camelScaffoldPath}New${nameVars.singularPascalName}`,
     ...getImportComponentNames(name, scaffoldPath, nestScaffoldByModel),
   }
 }
@@ -142,6 +136,7 @@ export const files = async ({
   tests = true,
   typescript = false,
   tailwind = false,
+  force = false,
   nestScaffoldByModel,
 }) => {
   const model = await getSchema(name)
@@ -181,7 +176,7 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
-    ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
+    ...layoutFiles(name, force, typescript, templateStrings),
     ...(await pageFiles(
       name,
       pascalScaffoldPath,
@@ -236,14 +231,7 @@ const assetFiles = (name, tailwind) => {
   return fileList
 }
 
-const layoutFiles = (
-  name,
-  pascalScaffoldPath = '',
-  generateTypescript,
-  templateStrings
-) => {
-  const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(singularize(name))
+const layoutFiles = (name, force, generateTypescript, templateStrings) => {
   let fileList = {}
 
   const layouts = fs.readdirSync(
@@ -255,33 +243,36 @@ const layoutFiles = (
   )
 
   layouts.forEach((layout) => {
-    const outputLayoutName = layout
-      .replace(/Names/, pluralName)
-      .replace(/Name/, singularName)
-      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
+    const outputLayoutName = layout.replace(
+      /\.tsx\.template/,
+      generateTypescript ? '.tsx' : '.js'
+    )
 
     const outputPath = path.join(
       getPaths().web.layouts,
-      pascalScaffoldPath,
-      outputLayoutName.replace(/\.(js|tsx?)/, ''),
+      'ScaffoldLayout',
       outputLayoutName
     )
-    const template = generateTemplate(
-      customOrDefaultTemplatePath({
-        side: 'web',
-        generator: 'scaffold',
-        templatePath: path.join('layouts', layout),
-      }),
-      {
-        name,
-        pascalScaffoldPath,
-        ...templateStrings,
-      }
-    )
 
-    fileList[outputPath] = generateTypescript
-      ? template
-      : transformTSToJS(outputPath, template)
+    // Since the ScaffoldLayout is shared, don't overwrite by default
+    if (!fs.existsSync(outputPath) || force) {
+      const template = generateTemplate(
+        customOrDefaultTemplatePath({
+          side: 'web',
+          generator: 'scaffold',
+          templatePath: path.join('layouts', layout),
+        }),
+        {
+          name,
+          pascalScaffoldPath: '',
+          ...templateStrings,
+        }
+      )
+
+      fileList[outputPath] = generateTypescript
+        ? template
+        : transformTSToJS(outputPath, template)
+    }
   })
 
   return fileList
@@ -541,10 +532,8 @@ export const routes = async ({
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
-  const singularPascalName = pascalcase(singularize(name))
-  const pluralPascalName = pascalcase(pluralize(name))
-  const pluralParamName = paramCase(pluralPascalName)
-  const model = await getSchema(singularPascalName)
+  const nameVars = nameVariants(name)
+  const model = await getSchema(nameVars.singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
   const paramScaffoldPath =
@@ -554,34 +543,23 @@ export const routes = async ({
   const pascalScaffoldPath = pascalcase(scaffoldPath)
 
   const pageRoot =
-    pascalScaffoldPath + (nestScaffoldByModel ? singularPascalName : '')
+    pascalScaffoldPath +
+    (nestScaffoldByModel ? nameVars.singularPascalName : '')
 
   return [
     // new
-    `<Route path="/${paramScaffoldPath}${pluralParamName}/new" page={${pageRoot}New${singularPascalName}Page} name="${templateNames.newRouteName}" />`,
+    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/new" page={${pageRoot}New${nameVars.singularPascalName}Page} name="${templateNames.newRouteName}" />`,
     // edit
-    `<Route path="/${paramScaffoldPath}${pluralParamName}/{id${idRouteParam}}/edit" page={${pageRoot}Edit${singularPascalName}Page} name="${templateNames.editRouteName}" />`,
+    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/{id${idRouteParam}}/edit" page={${pageRoot}Edit${nameVars.singularPascalName}Page} name="${templateNames.editRouteName}" />`,
     // singular
-    `<Route path="/${paramScaffoldPath}${pluralParamName}/{id${idRouteParam}}" page={${pageRoot}${singularPascalName}Page} name="${templateNames.singularRouteName}" />`,
+    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/{id${idRouteParam}}" page={${pageRoot}${nameVars.singularPascalName}Page} name="${templateNames.singularRouteName}" />`,
     // plural
-    `<Route path="/${paramScaffoldPath}${pluralParamName}" page={${pageRoot}${pluralPascalName}Page} name="${templateNames.pluralRouteName}" />`,
+    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}" page={${pageRoot}${nameVars.pluralPascalName}Page} name="${templateNames.pluralRouteName}" />`,
   ]
 }
 
-const addRoutesInsideSetToRouter = async (model, path) => {
-  const pluralPascalName = pascalcase(pluralize(model))
-  const layoutName = `${pluralPascalName}Layout`
-  return addRoutesToRouterTask(await routes({ model, path }), layoutName)
-}
-
-const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
-  const pluralPascalName = pascalcase(pluralize(name))
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
-  const layoutName = `${pluralPascalName}Layout`
-  const importLayout = `import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${layoutName}'`
+const addLayoutImport = () => {
+  const importLayout = `import ScaffoldLayout from 'src/layouts/ScaffoldLayout'`
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
 
@@ -631,6 +609,20 @@ const addSetImport = (task) => {
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
   return 'Added Set import to Routes.{js,tsx}'
+}
+
+const addScaffoldSetToRouter = async (model, path) => {
+  const nameVars = nameVariants(model)
+  const title = nameVars.pluralPascalName
+  const titleTo = nameVars.pluralCamelName
+  const buttonLabel = `New ${nameVars.singularPascalName}`
+  const buttonTo = `new${nameVars.singularPascalName}`
+
+  return addRoutesToRouterTask(
+    await routes({ model, path }),
+    'ScaffoldLayout',
+    { title, titleTo, buttonLabel, buttonTo }
+  )
 }
 
 export const command = 'scaffold <model>'
@@ -692,13 +684,14 @@ export const tasks = ({
             typescript,
             javascript,
             tailwind,
+            force,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       {
         title: 'Adding layout import...',
-        task: async () => addLayoutImport({ model, path }),
+        task: async () => addLayoutImport(),
       },
       {
         title: 'Adding set import...',
@@ -706,7 +699,7 @@ export const tasks = ({
       },
       {
         title: 'Adding scaffold routes...',
-        task: async () => addRoutesInsideSetToRouter(model, path),
+        task: async () => addScaffoldSetToRouter(model, path),
       },
       {
         title: 'Adding scaffold asset imports...',
