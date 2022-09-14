@@ -97,7 +97,7 @@ type AuthProviderProps =
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
       children?: React.ReactNode
-}
+    }
 
 type AuthProviderState = {
   loading: boolean
