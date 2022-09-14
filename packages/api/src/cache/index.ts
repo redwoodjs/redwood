@@ -1,5 +1,3 @@
-import type { PrismaClient } from '@prisma/client'
-
 import type { Logger } from '../logger'
 
 import BaseClient from './clients/BaseClient'
@@ -22,13 +20,27 @@ export interface CacheOptions {
   expires?: number
 }
 
-export interface CacheFindManyOptions extends CacheOptions {
-  conditions?: Record<string, unknown>
+export interface CacheFindManyOptions<
+  TFindManyArgs extends Record<string, unknown>
+> extends CacheOptions {
+  conditions?: TFindManyArgs
 }
+
+export type JSONSerialized<TInput> = TInput extends { toJSON: () => any }
+  ? ReturnType<TInput['toJSON']>
+  : TInput
 
 export type CacheKey = string | Array<string>
 export type LatestQuery = Record<string, unknown>
-export type Cacheable = () => unknown
+
+type GenericDelegate = {
+  findMany: (...args: any) => any
+  findFirst: (...args: any) => any
+}
+
+type SerializedFindManyResultType<T extends GenericDelegate> = Promise<
+  JSONSerialized<Awaited<ReturnType<T['findMany']>>>
+>
 
 const DEFAULT_LATEST_FIELDS = { id: 'id', updatedAt: 'updatedAt' }
 
@@ -58,6 +70,10 @@ export const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
   return output
 }
 
+const serialize = (input: any) => {
+  return JSON.parse(JSON.stringify(input))
+}
+
 export const createCache = (
   cacheClient: BaseClient,
   options: CreateCacheOptions | undefined
@@ -68,11 +84,11 @@ export const createCache = (
   const prefix = options?.prefix
   const fields = options?.fields || DEFAULT_LATEST_FIELDS
 
-  const cache = async (
+  const cache = async <TResult>(
     key: CacheKey,
-    input: Cacheable,
+    input: () => TResult | Promise<TResult>,
     options?: CacheOptions
-  ) => {
+  ): Promise<JSONSerialized<TResult>> => {
     const cacheKey = formatCacheKey(key, prefix)
 
     try {
@@ -91,7 +107,9 @@ export const createCache = (
       }
     } catch (e: any) {
       logger?.error(`[Cache] Error GET '${cacheKey}': ${e.message}`)
-      return await input()
+
+      // stringify and parse to match what happens inside cache clients
+      return serialize(await input())
     }
 
     // data wasn't found, SET it instead
@@ -110,18 +128,18 @@ export const createCache = (
       logger?.debug(
         `[Cache] MISS '${cacheKey}', SET ${JSON.stringify(data).length} bytes`
       )
-      return data
+      return serialize(data)
     } catch (e: any) {
       logger?.error(`[Cache] Error SET '${cacheKey}': ${e.message}`)
-      return data || (await input())
+      return serialize(data || (await input()))
     }
   }
 
-  const cacheFindMany = async (
+  const cacheFindMany = async <TDelegate extends GenericDelegate>(
     key: CacheKey,
-    model: PrismaClient,
-    options: CacheFindManyOptions = {}
-  ) => {
+    model: TDelegate,
+    options: CacheFindManyOptions<Parameters<TDelegate['findMany']>[0]> = {}
+  ): SerializedFindManyResultType<TDelegate> => {
     const { conditions, ...rest } = options
     const cacheKey = formatCacheKey(key, prefix)
     let latest, latestCacheKey
@@ -147,7 +165,7 @@ export const createCache = (
         logger?.error(`[Cache] cacheFindMany error: ${e.message}`)
       }
 
-      return model.findMany(conditions)
+      return serialize(model.findMany(conditions))
     }
 
     // there may not have been any records returned, in which case we can't
@@ -161,7 +179,7 @@ export const createCache = (
         `[Cache] cacheFindMany: No data to cache for key \`${key}\`, skipping`
       )
 
-      return model.findMany(conditions)
+      return serialize(model.findMany(conditions))
     }
 
     // everything looks good, cache() this with the computed key
