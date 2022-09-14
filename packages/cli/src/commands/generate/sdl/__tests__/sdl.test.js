@@ -32,7 +32,7 @@ import prompts from 'prompts'
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
@@ -68,6 +68,11 @@ const itCreatesAService = (baseArgs = {}) => {
     expect(files).toHaveProperty([
       path.normalize(
         `/path/to/project/api/src/services/users/users.test.${extension}`
+      ),
+    ])
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/users/users.scenarios.${extension}`
       ),
     ])
   })
@@ -130,6 +135,30 @@ const itCreateAMultiWordSDLFileWithCRUD = (baseArgs = {}) => {
     })
     const extension = extensionForBaseArgs(baseArgs)
 
+    // Service files
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+      ),
+    ])
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+      ),
+    ])
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/services/userProfiles/userProfiles.scenarios.${extension}`
+      ),
+    ])
+
+    //sdl file
+    expect(files).toHaveProperty([
+      path.normalize(
+        `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+      ),
+    ])
+
     expect(
       files[
         path.normalize(
@@ -142,7 +171,11 @@ const itCreateAMultiWordSDLFileWithCRUD = (baseArgs = {}) => {
 
 const itCreatesAnSDLFileWithEnumDefinitions = (baseArgs = {}) => {
   test('creates a sdl file with enum definitions', async () => {
-    const files = await sdl.files({ ...baseArgs, name: 'Shoe', crud: true })
+    const files = await sdl.files({
+      ...baseArgs,
+      name: 'Shoe',
+      crud: true,
+    })
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
@@ -170,34 +203,73 @@ const itCreatesAnSDLFileWithJsonDefinitions = (baseArgs = {}) => {
   })
 }
 
-describe('in javascript mode', () => {
-  const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
+describe('without graphql documentations', () => {
+  describe('in javascript mode', () => {
+    const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
 
-  itReturnsExactlyFourFiles(baseArgs)
-  itCreatesAService(baseArgs)
-  itCreatesASingleWordSDLFile(baseArgs)
-  itCreatesAMultiWordSDLFile(baseArgs)
-  itCreatesASingleWordSDLFileWithCRUD(baseArgs)
-  itCreateAMultiWordSDLFileWithCRUD(baseArgs)
-  itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
-  itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itReturnsExactlyFourFiles(baseArgs)
+    itCreatesAService(baseArgs)
+    itCreatesASingleWordSDLFile(baseArgs)
+    itCreatesAMultiWordSDLFile(baseArgs)
+    itCreatesASingleWordSDLFileWithCRUD(baseArgs)
+    itCreateAMultiWordSDLFileWithCRUD(baseArgs)
+    itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
+    itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+  })
+
+  describe('in typescript mode', () => {
+    const baseArgs = {
+      ...getDefaultArgs(sdl.defaults),
+      typescript: true,
+      tests: true,
+    }
+
+    itReturnsExactlyFourFiles(baseArgs)
+    itCreatesAService(baseArgs)
+    itCreatesASingleWordSDLFile(baseArgs)
+    itCreatesAMultiWordSDLFile(baseArgs)
+    itCreatesASingleWordSDLFileWithCRUD(baseArgs)
+    itCreateAMultiWordSDLFileWithCRUD(baseArgs)
+    itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
+    itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+  })
 })
 
-describe('in typescript mode', () => {
-  const baseArgs = {
-    ...getDefaultArgs(sdl.defaults),
-    typescript: true,
-    tests: true,
-  }
+describe('with graphql documentations', () => {
+  describe('in javascript mode', () => {
+    const baseArgs = {
+      ...getDefaultArgs(sdl.defaults),
+      tests: true,
+      docs: true,
+    }
 
-  itReturnsExactlyFourFiles(baseArgs)
-  itCreatesAService(baseArgs)
-  itCreatesASingleWordSDLFile(baseArgs)
-  itCreatesAMultiWordSDLFile(baseArgs)
-  itCreatesASingleWordSDLFileWithCRUD(baseArgs)
-  itCreateAMultiWordSDLFileWithCRUD(baseArgs)
-  itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
-  itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+    itReturnsExactlyFourFiles(baseArgs)
+    itCreatesAService(baseArgs)
+    itCreatesASingleWordSDLFile(baseArgs)
+    itCreatesAMultiWordSDLFile(baseArgs)
+    itCreatesASingleWordSDLFileWithCRUD(baseArgs)
+    itCreateAMultiWordSDLFileWithCRUD(baseArgs)
+    itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
+    itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+  })
+
+  describe('in typescript mode', () => {
+    const baseArgs = {
+      ...getDefaultArgs(sdl.defaults),
+      typescript: true,
+      tests: true,
+      docs: true,
+    }
+
+    itReturnsExactlyFourFiles(baseArgs)
+    itCreatesAService(baseArgs)
+    itCreatesASingleWordSDLFile(baseArgs)
+    itCreatesAMultiWordSDLFile(baseArgs)
+    itCreatesASingleWordSDLFileWithCRUD(baseArgs)
+    itCreateAMultiWordSDLFileWithCRUD(baseArgs)
+    itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
+    itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
+  })
 })
 
 describe('handler', () => {

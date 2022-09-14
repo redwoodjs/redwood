@@ -1,0 +1,12 @@
+import type { ComponentMeta, ComponentStory } from '@storybook/react'
+
+import ${pascalName}Page from './${pascalName}Page'
+
+export const generated: ComponentStory<typeof ${pascalName}Page> = (args) => {
+  return <${pascalName}Page ${propValueParam} {...args} />
+}
+
+export default {
+  title: 'Pages/${pascalName}Page',
+  component: ${pascalName}Page,
+} as ComponentMeta<typeof ${pascalName}Page>

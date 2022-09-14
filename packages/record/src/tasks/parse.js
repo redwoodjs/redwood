@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getDMMF } from '@prisma/sdk'
+import { getDMMF } from '@prisma/internals'
 import * as esbuild from 'esbuild'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const DATAMODEL_PATH = path.join(getPaths().api.models, 'datamodel.js')
 const MODELS_PATH = path.join(getPaths().api.src, 'models')

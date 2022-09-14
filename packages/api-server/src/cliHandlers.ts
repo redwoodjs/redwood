@@ -1,17 +1,13 @@
-import fs from 'fs'
-import path from 'path'
-
 import c from 'ansi-colors'
-import { FastifyServerOptions } from 'fastify'
 
-import { getConfig, getPaths } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
 
-import createApp from './app'
+import createFastifyInstance from './fastify'
 import withApiProxy from './plugins/withApiProxy'
 import withFunctions from './plugins/withFunctions'
 import withWebServer from './plugins/withWebServer'
 import { startServer as startFastifyServer } from './server'
-import type { HttpServerParams } from './server'
+import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 /*
  * This file has defines CLI handlers used by the redwood cli, for `rw serve`
@@ -49,26 +45,20 @@ export const webCliOptions = {
   },
 } as const
 
-interface ApiServerArgs extends Omit<HttpServerParams, 'app'> {
-  apiRootPath: string // either user supplied or '/'
-}
-
-export const apiServerHandler = async ({
-  port,
-  socket,
-  apiRootPath,
-}: ApiServerArgs) => {
+export const apiServerHandler = async (options: ApiServerArgs) => {
+  const { port, socket, apiRootPath } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
-  let app = createApp(loadServerConfig())
+  let fastify = createFastifyInstance()
+
   // Import Server Functions.
-  app = await withFunctions(app, apiRootPath)
+  fastify = await withFunctions(fastify, options)
 
   const http = startFastifyServer({
     port,
     socket,
-    app,
+    fastify,
   }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsApiServer) + ' ms')))
 
@@ -85,24 +75,22 @@ export const apiServerHandler = async ({
   })
 }
 
-export const bothServerHandler = async ({
-  port,
-  socket,
-}: Omit<HttpServerParams, 'app'>) => {
+export const bothServerHandler = async (options: BothServerArgs) => {
+  const { port, socket } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
-  let app = createApp(loadServerConfig())
+  let fastify = createFastifyInstance()
 
   // Attach plugins
-  app = await withFunctions(app, apiRootPath)
-  app = withWebServer(app)
+  fastify = await withWebServer(fastify, options)
+  fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
   startFastifyServer({
     port,
     socket,
-    app,
+    fastify,
   }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
     const on = socket
@@ -119,11 +107,8 @@ export const bothServerHandler = async ({
   })
 }
 
-interface WebServerArgs extends Omit<HttpServerParams, 'app'> {
-  apiHost?: string
-}
-
-export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
+export const webServerHandler = async (options: WebServerArgs) => {
+  const { port, socket, apiHost } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
   const apiUrl = getConfig().web.apiUrl
@@ -133,22 +118,22 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  const fastifyInstance = createApp(loadServerConfig())
+  let fastify = createFastifyInstance()
 
   // serve static files from "web/dist"
-  let app = withWebServer(fastifyInstance)
+  fastify = await withWebServer(fastify, options)
 
   // If apiHost is supplied, it means the functions are running elsewhere
   // So we should just proxy requests
   if (apiHost) {
     // Attach plugin for proxying
-    app = withApiProxy(app, { apiHost, apiUrl })
+    fastify = await withApiProxy(fastify, { apiHost, apiUrl })
   }
 
   startFastifyServer({
     port: port,
     socket,
-    app,
+    fastify,
   }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
     if (socket) {
@@ -167,21 +152,4 @@ function coerceRootPath(path: string) {
   const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
 
   return `${prefix}${path}${suffix}`
-}
-
-function loadServerConfig() {
-  const serverConfigPath = path.join(
-    getPaths().base,
-    getConfig().api.serverConfig
-  )
-
-  // If a server.config.js is not found, use the default
-  // options set in packages/api-server/src/app.ts
-  if (!fs.existsSync(serverConfigPath)) {
-    return
-  }
-
-  console.log(`Loading server config from ${serverConfigPath} \n`)
-
-  return require(serverConfigPath) as FastifyServerOptions
 }

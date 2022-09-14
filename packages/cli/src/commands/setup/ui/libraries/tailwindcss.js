@@ -82,7 +82,14 @@ export const handler = async ({ force, install }) => {
           {
             title: `Install ${projectPackages.join(', ')}`,
             task: async () => {
-              await execa('yarn', ['add', '-D', ...projectPackages])
+              const yarnVersion = await execa('yarn', ['--version'])
+              const isYarnV1 = yarnVersion.stdout.trim().startsWith('1')
+              await execa('yarn', [
+                'add',
+                '-D',
+                ...(isYarnV1 ? ['-W'] : []),
+                ...projectPackages,
+              ])
             },
           },
         ])
@@ -216,10 +223,12 @@ export const handler = async ({ force, install }) => {
         const prettierConfigPath = path.join(rwPaths.base, 'prettier.config.js')
         // Add tailwindcss ordering plugin to prettier
         const prettierConfig = fs.readFileSync(prettierConfigPath, 'utf-8')
-        const tailwindConfigPath = path.relative(
-          rwPaths.base,
-          path.join(rwPaths.web.config, 'tailwind.config.js')
-        )
+        const tailwindConfigPath = path
+          .relative(
+            rwPaths.base,
+            path.posix.join(rwPaths.web.config, 'tailwind.config.js')
+          )
+          .replaceAll('\\', '/')
 
         let newPrettierConfig = prettierConfig
         if (newPrettierConfig.includes('tailwindConfig: ')) {

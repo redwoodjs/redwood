@@ -10,6 +10,7 @@ export const QUERY = gql`
       id
       title
       body
+      authorId
       createdAt
     }
   }

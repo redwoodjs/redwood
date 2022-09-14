@@ -6,7 +6,8 @@ import chalk from 'chalk'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -44,7 +45,20 @@ const missingIdConsoleMessage = () => {
   )
 }
 
-const modelFieldToSDL = (field, required = true, types = {}) => {
+const addFieldGraphQLComment = (field, str) => {
+  const description = field.documentation || `Description for ${field.name}.`
+
+  return `
+  "${description}"
+  ${str}`
+}
+
+const modelFieldToSDL = ({
+  field,
+  required = true,
+  types = {},
+  docs = false,
+}) => {
   if (Object.entries(types).length) {
     field.type =
       field.kind === 'object' ? idType(types[field.type]) : field.type
@@ -55,18 +69,23 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
     Decimal: 'Float',
   }
 
-  return `${field.name}: ${field.isList ? '[' : ''}${
+  const fieldContent = `${field.name}: ${field.isList ? '[' : ''}${
     dictionary[field.type] || field.type
   }${field.isList ? ']' : ''}${
     (field.isRequired && required) | field.isList ? '!' : ''
   }`
+  if (docs) {
+    return addFieldGraphQLComment(field, fieldContent)
+  } else {
+    return fieldContent
+  }
 }
 
-const querySDL = (model) => {
-  return model.fields.map((field) => modelFieldToSDL(field))
+const querySDL = (model, docs = false) => {
+  return model.fields.map((field) => modelFieldToSDL({ field, docs }))
 }
 
-const inputSDL = (model, required, types = {}) => {
+const inputSDL = (model, required, types = {}, docs = false) => {
   return model.fields
     .filter((field) => {
       return (
@@ -74,17 +93,17 @@ const inputSDL = (model, required, types = {}) => {
         field.kind !== 'object'
       )
     })
-    .map((field) => modelFieldToSDL(field, required, types))
+    .map((field) => modelFieldToSDL({ field, required, types, docs }))
 }
 
 // creates the CreateInput type (all fields are required)
-const createInputSDL = (model, types = {}) => {
-  return inputSDL(model, true, types)
+const createInputSDL = (model, types = {}, docs = false) => {
+  return inputSDL(model, true, types, docs)
 }
 
 // creates the UpdateInput type (not all fields are required)
-const updateInputSDL = (model, types = {}) => {
-  return inputSDL(model, false, types)
+const updateInputSDL = (model, types = {}, docs = false) => {
+  return inputSDL(model, false, types, docs)
 }
 
 const idType = (model, crud) => {
@@ -100,7 +119,7 @@ const idType = (model, crud) => {
   return idField.type
 }
 
-const sdlFromSchemaModel = async (name, crud) => {
+const sdlFromSchemaModel = async (name, crud, docs = false) => {
   const model = await getSchema(name)
 
   // get models for user-defined types referenced
@@ -127,19 +146,39 @@ const sdlFromSchemaModel = async (name, crud) => {
     )
   ).reduce((acc, curr) => acc.concat(curr), [])
 
+  const modelName = model.name
+  const modelDescription =
+    model.documentation || `Representation of ${modelName}.`
+
   return {
-    query: querySDL(model).join('\n    '),
-    createInput: createInputSDL(model, types).join('\n    '),
-    updateInput: updateInputSDL(model, types).join('\n    '),
+    modelName,
+    modelDescription,
+    query: querySDL(model, docs).join('\n    '),
+    createInput: createInputSDL(model, types, docs).join('\n    '),
+    updateInput: updateInputSDL(model, types, docs).join('\n    '),
     idType: idType(model, crud),
     relations: relationsForModel(model),
     enums,
   }
 }
 
-export const files = async ({ name, crud = true, tests, typescript }) => {
-  const { query, createInput, updateInput, idType, relations, enums } =
-    await sdlFromSchemaModel(name, crud)
+export const files = async ({
+  name,
+  crud = true,
+  docs = false,
+  tests,
+  typescript,
+}) => {
+  const {
+    modelName,
+    modelDescription,
+    query,
+    createInput,
+    updateInput,
+    idType,
+    relations,
+    enums,
+  } = await sdlFromSchemaModel(name, crud, docs)
 
   const templatePath = customOrDefaultTemplatePath({
     side: 'api',
@@ -148,6 +187,9 @@ export const files = async ({ name, crud = true, tests, typescript }) => {
   })
 
   let template = generateTemplate(templatePath, {
+    docs,
+    modelName,
+    modelDescription,
     name,
     crud,
     query,
@@ -200,6 +242,11 @@ export const builder = (yargs) => {
     .option('tests', {
       description: 'Generate test files',
       type: 'boolean',
+      // don't give it a default value, it gets overwritten in  first few lines of the handler
+    })
+    .option('docs', {
+      description: 'Generate SDL and GraphQL comments to use in documentation',
+      type: 'boolean',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -214,7 +261,14 @@ export const builder = (yargs) => {
   })
 }
 // TODO: Add --dry-run command
-export const handler = async ({ model, crud, force, tests, typescript }) => {
+export const handler = async ({
+  model,
+  crud,
+  force,
+  tests,
+  typescript,
+  docs,
+}) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
@@ -227,7 +281,7 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
         {
           title: 'Generating SDL files...',
           task: async () => {
-            const f = await files({ name, tests, crud, typescript })
+            const f = await files({ name, tests, crud, typescript, docs })
             return writeFilesTask(f, { overwriteExisting: force })
           },
         },

@@ -1,71 +1,46 @@
-import fs from 'fs-extra'
+import path from 'path'
+import util from 'util'
+
+import fse from 'fs-extra'
+import prettier from 'prettier'
+
+import { merge } from './merge'
+import {
+  interleave,
+  concatUnique,
+  keepBoth,
+  keepBothStatementParents,
+} from './merge/strategy'
 
 import { getPaths } from '.'
 
-/**
- * Configure Storybook for the given template by creating a custom preview config
- */
-export default function configureStorybook({ force }, newStorybookPreview) {
-  const storybookPreviewConfigPath = getPaths().web.storybookPreviewConfig
-
-  let storybookPreviewConfig
-  /**
-   *  Check if storybookPreviewConfigPath already exists.
-   *  Merge both files if it does.
-   *  By removing import react and export decorator from new config
-   *  And put new config inside current config after last import
-   */
-  if (fs.existsSync(storybookPreviewConfigPath)) {
-    if (force) {
-      fs.unlinkSync(storybookPreviewConfigPath)
-      storybookPreviewConfig = newStorybookPreview
-    } else {
-      const currentConfig = fs
-        .readFileSync(storybookPreviewConfigPath)
-        .toString()
-
-      const newDecoratorsName = newStorybookPreview.match(
-        /export const decorators = \[(.*?)\]/
-      )[1]
-
-      const currentDecoratorsName = currentConfig.match(
-        /export const decorators = \[(.*?)\]/
-      )[1]
-
-      const decoratorsExport = `export const decorators = [${currentDecoratorsName}, ${newDecoratorsName}]`
-
-      const insideNewStorybookConfigWithoutReactAndDecoration =
-        newStorybookPreview
-          .replace(/import \* as React from 'react'/, '')
-          .replace(/export const decorators = .*/, '')
-
-      const currentConfigWithoutDecoration = currentConfig.replace(
-        /export const decorators = .*/,
-        ''
-      )
-
-      const reversedCurrentConfig = currentConfigWithoutDecoration
-        .split('\n')
-        .reverse()
-
-      const indexOfLastImport = reversedCurrentConfig.findIndex((value) =>
-        /^import /.test(value)
-      )
-      reversedCurrentConfig.splice(
-        indexOfLastImport,
-        0,
-        insideNewStorybookConfigWithoutReactAndDecoration
-      )
-      storybookPreviewConfig =
-        reversedCurrentConfig.reverse().join(`\n`) +
-        `\n` +
-        currentConfig +
-        `\n` +
-        decoratorsExport
-    }
-  } else {
-    storybookPreviewConfig = newStorybookPreview
+export default async function extendStorybookConfiguration(
+  newConfigPath = undefined
+) {
+  const sbPreviewConfigPath = getPaths().web.storybookPreviewConfig
+  if (!fse.existsSync(sbPreviewConfigPath)) {
+    await util.promisify(fse.cp)(
+      path.join(__dirname, 'templates', 'storybook.preview.js.template'),
+      sbPreviewConfigPath
+    )
   }
 
-  fs.outputFileSync(storybookPreviewConfigPath, storybookPreviewConfig)
+  if (newConfigPath) {
+    const read = (path) => fse.readFileSync(path, { encoding: 'utf-8' })
+    const write = (path, data) => fse.writeFileSync(path, data)
+    const merged = merge(read(sbPreviewConfigPath), read(newConfigPath), {
+      ImportDeclaration: interleave,
+      ArrayExpression: concatUnique,
+      ObjectExpression: concatUnique,
+      ArrowFunctionExpression: keepBothStatementParents,
+      FunctionDeclaration: keepBoth,
+    })
+
+    const formatted = prettier.format(merged, {
+      parser: 'babel',
+      ...(await prettier.resolveConfig(sbPreviewConfigPath)),
+    })
+
+    write(sbPreviewConfigPath, formatted)
+  }
 }

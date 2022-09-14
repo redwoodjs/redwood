@@ -146,7 +146,7 @@ export const handler = async (event, context) => {
 
 exports[`creates a single word function file: Scenario snapshot 1`] = `
 "export const standard = defineScenario({
-  // Define the \\"fixture\\" to write into your test database here
+  // Define the "fixture" to write into your test database here
   // See guide: https://redwoodjs.com/docs/testing#scenarios
 })
 "

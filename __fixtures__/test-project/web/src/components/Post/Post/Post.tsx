@@ -1,8 +1,5 @@
 import humanize from 'humanize-string'
-import type {
-  Post as PostType,
-  DeletePostMutationVariables,
-} from 'types/graphql'
+import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
@@ -49,11 +46,11 @@ const checkboxInputTag = (checked: boolean) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-interface PostProps {
-  post: PostType
+interface Props {
+  post: NonNullable<FindPostById['post']>
 }
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post }: Props) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -75,7 +72,7 @@ const Post = ({ post }: PostProps) => {
       <div className="rw-segment">
         <header className="rw-segment-header">
           <h2 className="rw-heading rw-heading-secondary">
-            Post {post?.id} Detail
+            Post {post.id} Detail
           </h2>
         </header>
         <table className="rw-table">
@@ -93,6 +90,10 @@ const Post = ({ post }: PostProps) => {
               <td>{post.body}</td>
             </tr>
             <tr>
+              <th>Author id</th>
+              <td>{post.authorId}</td>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(post.createdAt)}</td>
             </tr>
@@ -101,7 +102,7 @@ const Post = ({ post }: PostProps) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editPost({ id: post?.id })}
+          to={routes.editPost({ id: post.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -109,7 +110,7 @@ const Post = ({ post }: PostProps) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(post?.id)}
+          onClick={() => onDeleteClick(post.id)}
         >
           Delete
         </button>

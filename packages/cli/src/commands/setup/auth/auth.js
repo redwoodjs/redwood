@@ -6,7 +6,6 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { getProject } from '@redwoodjs/structure'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -17,19 +16,22 @@ import {
   graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { isTypeScriptProject } from '../../../lib/project'
 
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
 const OUTPUT_PATHS = {
   auth: path.join(
     getPaths().api.lib,
-    getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
+    isTypeScriptProject() ? 'auth.ts' : 'auth.js'
   ),
   function: path.join(
     getPaths().api.functions,
-    getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
+    isTypeScriptProject() ? 'auth.ts' : 'auth.js'
   ),
 }
+
+const WEBAUTHN_SUPPORTED_PROVIDERS = ['dbAuth']
 
 const getWebAppPath = () => getPaths().web.app
 
@@ -218,7 +220,7 @@ export const files = ({ provider, webAuthn }) => {
             OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
           const content = fs.readFileSync(templateFile).toString()
           files = Object.assign(files, {
-            [outputPath]: getProject().isTypeScriptProject
+            [outputPath]: isTypeScriptProject()
               ? content
               : transformTSToJS(outputPath, content),
           })
@@ -231,7 +233,7 @@ export const files = ({ provider, webAuthn }) => {
   if (Object.keys(files).length === 0) {
     const content = fs.readFileSync(templates.base[0]).toString()
     files = {
-      [OUTPUT_PATHS.auth]: getProject().isTypeScriptProject
+      [OUTPUT_PATHS.auth]: isTypeScriptProject()
         ? content
         : transformTSToJS(templates.base[0], content),
     }
@@ -313,6 +315,12 @@ export const builder = (yargs) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
+    .option('webauthn', {
+      alias: 'w',
+      default: null,
+      description: 'Include WebAuthn support (TouchID/FaceID)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -322,9 +330,9 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (yargs) => {
-  const { provider, rwVersion } = yargs
+  const { provider, rwVersion, webauthn } = yargs
   let force = yargs.force
-  let webAuthn = false
+  let includeWebAuthn = webauthn
   let providerData
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
@@ -344,18 +352,22 @@ export const handler = async (yargs) => {
   }
 
   // only dbAuth supports WebAuthn right now, but in theory it could work with
-  // any provider
-  if (provider === 'dbAuth') {
+  // any provider, so we'll do a check here and potentially use any the webAuthn
+  // version of its provider
+  if (
+    includeWebAuthn === null &&
+    WEBAUTHN_SUPPORTED_PROVIDERS.includes(provider)
+  ) {
     const webAuthnResponse = await prompts({
       type: 'confirm',
       name: 'answer',
       message: `Enable WebAuthn support (TouchID/FaceID)? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
       initial: false,
     })
-    webAuthn = webAuthnResponse.answer
+    includeWebAuthn = webAuthnResponse.answer
   }
 
-  if (webAuthn) {
+  if (includeWebAuthn) {
     providerData = await import(`./providers/${provider}.webAuthn`)
   } else {
     providerData = await import(`./providers/${provider}`)
@@ -367,9 +379,12 @@ export const handler = async (yargs) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files({ ...yargs, webAuthn }), {
-              overwriteExisting: force,
-            })
+            return writeFilesTask(
+              files({ ...yargs, webAuthn: includeWebAuthn }),
+              {
+                overwriteExisting: force,
+              }
+            )
           } else {
             task.skip('api/src not found, skipping')
           }

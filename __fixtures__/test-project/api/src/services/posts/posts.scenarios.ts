@@ -4,8 +4,34 @@ import type { ScenarioData } from '@redwoodjs/testing/api'
 
 export const standard = defineScenario<Prisma.PostCreateArgs>({
   post: {
-    one: { data: { title: 'String', body: 'String' } },
-    two: { data: { title: 'String', body: 'String' } },
+    one: {
+      data: {
+        title: 'String',
+        body: 'String',
+        author: {
+          create: {
+            email: 'String5238456',
+            hashedPassword: 'String',
+            fullName: 'String',
+            salt: 'String',
+          },
+        },
+      },
+    },
+    two: {
+      data: {
+        title: 'String',
+        body: 'String',
+        author: {
+          create: {
+            email: 'String7198741',
+            hashedPassword: 'String',
+            fullName: 'String',
+            salt: 'String',
+          },
+        },
+      },
+    },
   },
 })
 

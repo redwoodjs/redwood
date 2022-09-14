@@ -1,27 +1,31 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { useDepthLimit } from '@envelop/depth-limit'
+import { useDisableIntrospection } from '@envelop/disable-introspection'
+import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
 } from '@graphql-yoga/common'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
-
-import { useDepthLimit } from '@envelop/depth-limit'
-import { useDisableIntrospection } from '@envelop/disable-introspection'
-import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { RedwoodError } from '@redwoodjs/api'
+import { createServer } from '@graphql-yoga/common'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
+import { Headers, Request } from 'cross-undici-fetch'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { createServer } from '@graphql-yoga/common'
 
+import { RedwoodError } from '@redwoodjs/api'
+
+import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
+import { ValidationError } from '../errors'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
+import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
 import {
   DirectivePluginOptions,
   useRedwoodDirective,
@@ -30,11 +34,7 @@ import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContex
 import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
-import { ValidationError } from '../errors'
-
 import type { GraphQLHandlerOptions } from './types'
-import { Headers, Request } from 'cross-undici-fetch'
-import { mapRwCorsOptionsToYoga } from '../cors'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -88,6 +88,7 @@ const convertToMultiValueHeaders = (headers: Headers) => {
  * ```
  */
 export const createGraphQLHandler = ({
+  healthCheckId,
   loggerConfig,
   context,
   getCurrentUser,
@@ -113,9 +114,10 @@ export const createGraphQLHandler = ({
     const projectDirectives = makeDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
-      redwoodDirectivePlugins = projectDirectives.map((directive) =>
-        useRedwoodDirective(directive as DirectivePluginOptions)
-      )
+      ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
+        projectDirectives.map((directive) =>
+          useRedwoodDirective(directive as DirectivePluginOptions)
+        )
     }
 
     schema = makeMergedSchema({
@@ -177,6 +179,7 @@ export const createGraphQLHandler = ({
   plugins.push(useRedwoodLogger(loggerConfig))
 
   const yoga = createServer({
+    id: healthCheckId,
     schema,
     plugins,
     maskedErrors: {
@@ -334,7 +337,14 @@ export const createGraphQLHandler = ({
       lambdaResponse.headers = {}
     }
 
-    lambdaResponse.headers['Content-Type'] = 'application/json'
+    /**
+     * The header keys are case insensitive, but Fastify prefers these to be lowercase.
+     * Therefore, we want to ensure that the headers are always lowercase and unique
+     * for compliance with HTTP/2.
+     *
+     * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
+     */
+    lambdaResponse.headers['content-type'] = 'application/json'
 
     return lambdaResponse
   }

@@ -26,10 +26,11 @@ import {
   decryptSession,
   extractCookie,
   getSession,
+  hashPassword,
   webAuthnSession,
 } from './shared'
 
-type SetCookieHeader = { 'Set-Cookie': string }
+type SetCookieHeader = { 'set-cookie': string }
 type CsrfTokenHeader = { 'csrf-token': string }
 
 interface SignupFlowOptions {
@@ -239,7 +240,7 @@ type Params = {
  * //  key being used in dbAccessor in src/functions/auth.ts 👇
  * const getCurrentUser = async (session: DbAuthSession<User['id']>)
  */
-export interface DbAuthSession<TIdType = unknown> {
+export interface DbAuthSession<TIdType = any> {
   id: TIdType
 }
 
@@ -308,10 +309,17 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     return ['usb', 'ble', 'nfc', 'internal']
   }
 
-  // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
+  // returns the set-cookie header to mark the cookie as expired ("deletes" the session)
+  /**
+   * The header keys are case insensitive, but Fastify prefers these to be lowercase.
+   * Therefore, we want to ensure that the headers are always lowercase and unique
+   * for compliance with HTTP/2.
+   *
+   * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
+   */
   get _deleteSessionHeader() {
     return {
-      'Set-Cookie': [
+      'set-cookie': [
         'session=',
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
@@ -577,7 +585,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     let user = await this._findUserByToken(resetToken as string)
-    const [hashedPassword] = this._hashPassword(password, user.salt)
+    const [hashedPassword] = hashPassword(password, user.salt)
 
     if (
       !(this.options.resetPassword as ResetPasswordFlowOptions)
@@ -713,7 +721,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
         requireUserVerification: true,
       }
 
-      verification = verifyAuthenticationResponse(opts)
+      verification = await verifyAuthenticationResponse(opts)
     } catch (e: any) {
       throw new DbAuthError.WebAuthnError(e.message)
     } finally {
@@ -742,10 +750,10 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
       this._webAuthnCookie(jsonBody.rawId, this.webAuthnExpiresDate),
-      loginHeaders['Set-Cookie'],
+      loginHeaders['set-cookie'],
     ].flat()
 
-    return [verified, { 'Set-Cookie': cookies }]
+    return [verified, { 'set-cookie': cookies }]
   }
 
   // get options for a WebAuthn authentication
@@ -778,7 +786,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     if (!user) {
       return [
         { error: 'Log in with username and password to enable WebAuthn' },
-        { 'Set-Cookie': this._webAuthnCookie('', 'now') },
+        { 'set-cookie': this._webAuthnCookie('', 'now') },
         { statusCode: 400 },
       ]
     }
@@ -920,7 +928,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     return [
       verified,
       {
-        'Set-Cookie': this._webAuthnCookie(
+        'set-cookie': this._webAuthnCookie(
           plainCredentialId,
           this.webAuthnExpiresDate
         ),
@@ -1083,7 +1091,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
   }
 
-  // returns the Set-Cookie header to be returned in the request (effectively
+  // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
   _createSessionHeader(
     data: DbAuthSession,
@@ -1096,7 +1104,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 
-    return { 'Set-Cookie': cookie }
+    return { 'set-cookie': cookie }
   }
 
   // checks the CSRF token in the header against the CSRF token in the session
@@ -1197,7 +1205,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     // is password correct?
-    const [hashedPassword, _salt] = this._hashPassword(
+    const [hashedPassword, _salt] = hashPassword(
       password,
       user[this.options.authFields.salt]
     )
@@ -1264,7 +1272,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
-      const [hashedPassword, salt] = this._hashPassword(password)
+      const [hashedPassword, salt] = hashPassword(password)
       const newUser = await (this.options.signup as SignupFlowOptions).handler({
         username,
         hashedPassword,
@@ -1274,17 +1282,6 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
       return newUser
     }
-  }
-
-  // hashes a password using either the given `salt` argument, or creates a new
-  // salt and hashes using that. Either way, returns an array with [hash, salt]
-  _hashPassword(text: string, salt?: string) {
-    const useSalt = salt || CryptoJS.lib.WordArray.random(128 / 8).toString()
-
-    return [
-      CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
-      useSalt,
-    ]
   }
 
   // figure out which auth method we're trying to call

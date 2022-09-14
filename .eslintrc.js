@@ -27,23 +27,12 @@ module.exports = {
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
-    'packages/create-redwood-app/template/web/src/Routes.tsx',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
   },
   overrides: [
-    {
-      // We override import order of the CRWA graphql function because we want the grouped glob imports
-      // to be ordered separately.
-      // Note: for some reason, the pattern as eslints each file to match against the pattern
-      // the files pattern has to be the filename and not the relative path (as one might expect)
-      files: ['graphql.ts'],
-      rules: {
-        'import/order': 'off',
-      },
-    },
     {
       files: ['packages/structure/**'],
       rules: {
@@ -74,6 +63,38 @@ module.exports = {
       globals: {
         React: 'readonly', // We auto-import React via Babel.
         window: 'off', // Developers should use `global` instead of window. Since window is undefined in NodeJS.
+      },
+    },
+    // Prevent @redwoodjs/internal imports in runtime (web+api) packages
+    {
+      files: [
+        'packages/auth/src/**',
+        'packages/forms/src/**',
+        'packages/prerender/src/browserUtils/**',
+        'packages/router/src/**',
+        'packages/web/src/**',
+        'packages/api/src/**',
+        'packages/graphql-server/src/**',
+        'packages/record/src/**',
+      ],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['@redwoodjs/internal', '@redwoodjs/internal/*'],
+                message:
+                  'Do not import "@redwoodjs/internal" or subpackages in runtime modules, because it leads to MASSIVE bundle sizes',
+              },
+              {
+                group: ['@redwoodjs/structure', '@redwoodjs/structure/*'],
+                message:
+                  'Do not import "@redwoodjs/structure" or subpackages in runtime modules, because it leads to MASSIVE bundle sizes',
+              },
+            ],
+          },
+        ],
       },
     },
     // Entry.js rules
@@ -107,6 +128,42 @@ module.exports = {
       env: {
         es6: true,
         node: true,
+      },
+    },
+    // Prevent bad imports in Node packages - cli and api packages
+    {
+      files: [
+        'packages/api/src/**',
+        'packages/api-server/src/**',
+        'packages/cli/src/**',
+        'packages/internal/src/**',
+        'packages/prerender/src/**',
+        'packages/structure/src/**',
+        'packages/testing/src/**',
+        'packages/testing/config/**',
+        'packages/eslint-config/*.js',
+        'packages/record/src/**',
+        'packages/telemetry/src/**',
+      ],
+      rules: {
+        'no-restricted-imports': [
+          // for import x from ('@redwoodjs/internal')
+          'error',
+          {
+            name: '@redwoodjs/internal',
+            message:
+              'To prevent bloat in CLI, do not import "@redwoodjs/internal" directly. Instead import like @redwoodjs/internal/dist/<file>, or await import',
+          },
+        ],
+        'no-restricted-modules': [
+          // for require('@redwoodjs/internal')
+          'error',
+          {
+            name: '@redwoodjs/internal',
+            message:
+              'To prevent bloat in CLI, do not require "@redwoodjs/internal" directly. Instead require like @redwoodjs/internal/dist/<file>',
+          },
+        ],
       },
     },
   ],

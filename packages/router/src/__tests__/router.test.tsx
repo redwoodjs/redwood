@@ -1489,3 +1489,70 @@ test('params should be updated if navigated to different route with same page', 
     expect(screen.queryByText('hookparams 99')).toBeInTheDocument()
   })
 })
+
+test('should handle ref and key as search params', async () => {
+  const ParamsPage = () => {
+    const { ref, key } = useParams()
+    return <p>{JSON.stringify({ ref, key })}</p>
+  }
+
+  const TestRouter = () => (
+    <Router>
+      <Route path="/params" page={ParamsPage} name="params" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+  act(() => navigate('/params?ref=1&key=2'))
+
+  await waitFor(() => {
+    expect(screen.queryByText(`{"ref":"1","key":"2"}`)).toBeInTheDocument()
+  })
+})
+
+describe('Unauthorized redirect error messages', () => {
+  let err
+
+  beforeAll(() => {
+    err = console.error
+    console.error = jest.fn()
+  })
+
+  afterAll(() => {
+    console.error = err
+  })
+
+  test('Private set with unauthenticated prop with nonexisting page', async () => {
+    const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
+      <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
+        <Route path="/" page={HomePage} name="home" />
+        <Set private unauthenticated="does-not-exist">
+          <Route path="/private" page={PrivatePage} name="private" />
+        </Set>
+      </Router>
+    )
+
+    act(() => navigate('/private'))
+    expect(() => render(<TestRouter authenticated={false} />)).toThrow(
+      'We could not find a route named does-not-exist'
+    )
+  })
+
+  test('Private set redirecting to page that needs parameters', async () => {
+    const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
+      <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/param-test/{value}" page={ParamPage} name="params" />
+        <Set private unauthenticated="params">
+          <Route path="/private" page={PrivatePage} name="private" />
+        </Set>
+      </Router>
+    )
+
+    act(() => navigate('/private'))
+    expect(() => render(<TestRouter authenticated={false} />)).toThrow(
+      'Redirecting to route "params" would require route parameters, which ' +
+        'currently is not supported. Please choose a different route'
+    )
+  })
+})

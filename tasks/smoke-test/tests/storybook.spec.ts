@@ -17,7 +17,7 @@ storybookTest(
     await page.goto(STORYBOOK_URL)
 
     // Click text=BlogPostCell
-    await page.locator('text=BlogPostCell').click()
+    await page.locator('text=/\\bBlogPostCell\\b/').click()
 
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
@@ -104,8 +104,8 @@ storybookTest(
 
     if (!profilePageStoryContent.includes('mockCurrentUser')) {
       const contentWithMockCurrentUser = profilePageStoryContent.replace(
-        'export const generated = (args) => {',
-        `export const generated = (args) => {
+        'export const generated = () => {',
+        `export const generated = () => {
           mockCurrentUser({
           email: 'ba@zinga.com',
           id: 55,
@@ -171,8 +171,8 @@ storybookTest(
 
     await page.goto(STORYBOOK_URL)
 
-    // Click text=Redwood
-    await page.locator('css=[data-item-id=redwood--page]').click()
+    // Click Redwood link in left nav
+    await page.locator('id=redwood--page').click()
 
     await expect(page).toHaveURL(
       `http://localhost:${port}/?path=/story/redwood--page`
