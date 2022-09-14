@@ -139,8 +139,9 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -434,8 +435,9 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
