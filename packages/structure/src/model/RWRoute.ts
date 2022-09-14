@@ -287,9 +287,8 @@ export class RWRoute extends BaseNode {
         // e.g. <Route prerender={true} />
         return tsm.Node.isTrueLiteral(init.getExpression())
       } else if (tsm.Node.isStringLiteral(init!)) {
-        // If its using the incorrect string form, we're accept it as true
+        // If its using the incorrect string form, we're accepting it as true
         // e.g. <Route prerender="true" />
-
         const literalValue = init.getLiteralValue()
         return literalValue === 'true'
       }
