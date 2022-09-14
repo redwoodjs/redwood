@@ -76,26 +76,28 @@ export const AuthContext = React.createContext<AuthContextInterface>({
   hasError: false,
 })
 
-type AuthProviderProps = (
+type AuthProviderProps =
   | {
       client: SupportedAuthClients
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
   | {
       client?: never
       type: 'clerk'
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
   | {
       client?: WebAuthnClientType
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
-    }
-) & { children?: React.ReactNode }
+      children?: React.ReactNode
+}
 
 type AuthProviderState = {
   loading: boolean
