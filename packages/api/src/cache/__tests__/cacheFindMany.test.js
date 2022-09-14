@@ -15,9 +15,8 @@ jest.mock('@prisma/client', () => ({
 }))
 
 describe('cacheFindMany', () => {
-  beforeEach(() => {
-    mockFindFirst.mockClear()
-    mockFindMany.mockClear()
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   it('adds the collection to the cache based on latest updated user', async () => {
@@ -32,9 +31,11 @@ describe('cacheFindMany', () => {
 
     const client = new InMemoryClient()
     const { cacheFindMany } = createCache(client)
+    const spy = jest.spyOn(client, 'set')
 
     await cacheFindMany('test', PrismaClient().user)
 
+    expect(spy).toHaveBeenCalled()
     expect(client.storage[`test-1-${now.getTime()}`].value).toEqual(
       JSON.stringify([user])
     )
@@ -63,9 +64,11 @@ describe('cacheFindMany', () => {
     mockFindMany.mockImplementation(() => [user])
 
     const { cacheFindMany } = createCache(client)
+    const spy = jest.spyOn(client, 'set')
 
     await cacheFindMany('test', PrismaClient().user)
 
+    expect(spy).toHaveBeenCalled()
     // the `now` cache still exists
     expect(
       JSON.parse(client.storage[`test-1-${now.getTime()}`].value)[0].id
@@ -80,11 +83,14 @@ describe('cacheFindMany', () => {
     const client = new InMemoryClient()
     mockFindFirst.mockImplementation(() => null)
     mockFindMany.mockImplementation(() => [])
-
     const { cacheFindMany } = createCache(client)
+    const getSpy = jest.spyOn(client, 'get')
+    const setSpy = jest.spyOn(client, 'set')
 
     const result = await cacheFindMany('test', PrismaClient().user)
 
     expect(result).toEqual([])
+    expect(getSpy).not.toHaveBeenCalled()
+    expect(setSpy).not.toHaveBeenCalled()
   })
 })
