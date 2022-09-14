@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "2.2.3",
+  "version": "3.0.0",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
