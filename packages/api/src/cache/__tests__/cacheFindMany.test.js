@@ -75,4 +75,16 @@ describe('cacheFindMany', () => {
       JSON.stringify([user])
     )
   })
+
+  it('skips caching and just runs the findMany() if there are no records', async () => {
+    const client = new InMemoryClient()
+    mockFindFirst.mockImplementation(() => null)
+    mockFindMany.mockImplementation(() => [])
+
+    const { cacheFindMany } = createCache(client)
+
+    const result = await cacheFindMany('test', PrismaClient().user)
+
+    expect(result).toEqual([])
+  })
 })
