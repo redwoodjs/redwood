@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken'
 
-export const authDecoder = (token: string) => {
+export const authDecoder = (token: string, type: string) => {
+  if (type !== 'supabase') {
+    return null
+  }
+
   if (!process.env.SUPABASE_JWT_SECRET) {
     console.error('SUPABASE_JWT_SECRET env var is not set.')
     throw new Error('SUPABASE_JWT_SECRET env var is not set.')

@@ -1,7 +1,14 @@
 import jwt from 'jsonwebtoken'
 import jwksClient, { SigningKey } from 'jwks-rsa'
 
-export const authDecoder = async (token: string): Promise<any | null> => {
+export const authDecoder = async (
+  token: string,
+  type: string
+): Promise<Record<string, unknown> | null> => {
+  if (type !== 'supertokens') {
+    return null
+  }
+
   return new Promise((resolve, reject) => {
     const { SUPERTOKENS_JWKS_URL } = process.env
 
@@ -30,7 +37,11 @@ export const authDecoder = async (token: string): Promise<any | null> => {
         return reject(err)
       }
 
-      decoded = decoded === null ? {} : decoded
+      decoded = decoded || {}
+
+      if (typeof decoded === 'string') {
+        return resolve({ decoded })
+      }
 
       return resolve(decoded)
     })

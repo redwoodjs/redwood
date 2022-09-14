@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken'
 
-export const authDecoder = async (token: string) => {
+export const authDecoder = async (token: string, type: string) => {
+  if (type !== 'nhost') {
+    return null
+  }
+
   const CLAIMS_NAMESPACE =
     process.env.NHOST_CLAIMS_NAMESPACE || 'https://hasura.io/jwt/claims'
   const ROLES_CLAIM = process.env.NHOST_ROLES_CLAIM || 'x-hasura-allowed-roles'

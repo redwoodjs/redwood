@@ -1,6 +1,11 @@
 export const authDecoder = async (
-  token: string
+  token: string,
+  type: string
 ): Promise<null | Record<string, unknown>> => {
+  if (type !== 'okta') {
+    return null
+  }
+
   const { OKTA_DOMAIN, OKTA_AUDIENCE } = process.env
 
   if (!OKTA_AUDIENCE || !OKTA_DOMAIN) {

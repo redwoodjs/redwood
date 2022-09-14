@@ -1,6 +1,10 @@
 import type IClerk from '@clerk/clerk-sdk-node/instance'
 
-export const authDecoder = async (token: string) => {
+export const authDecoder = async (token: string, type: string) => {
+  if (type !== 'clerk') {
+    return null
+  }
+
   // Use require here, to prevent needing clerk sdk in api deps
   const Clerk = require('@clerk/clerk-sdk-node/instance').default
 

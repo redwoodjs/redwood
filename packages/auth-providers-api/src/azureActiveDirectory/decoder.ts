@@ -2,8 +2,13 @@ import jwt from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
 export const authDecoder = async (
-  token: string
+  token: string,
+  type: string
 ): Promise<null | Record<string, unknown>> => {
+  if (type !== 'azureActiveDirectory') {
+    return null
+  }
+
   return new Promise((resolve, reject) => {
     const {
       AZURE_ACTIVE_DIRECTORY_AUTHORITY,

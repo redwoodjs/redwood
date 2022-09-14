@@ -43,6 +43,7 @@ export type AuthContextPayload = [
 
 export type Decoder = (
   token: string,
+  authProvider: string,
   req: { event: APIGatewayProxyEvent; context: LambdaContext }
 ) => Decoded
 
@@ -69,6 +70,10 @@ export const getAuthenticationContext = async ({
 
   let decoded = null
   const { schema, token } = parseAuthorizationHeader(event)
-  decoded = await authDecoder(token, { event, context })
+  console.log('authDecoder info')
+  console.log('type', type)
+  console.log('schema', schema)
+  console.log('token', token)
+  decoded = await authDecoder(token, type, { event, context })
   return [decoded, { type, schema, token }, { event, context }]
 }

@@ -1,4 +1,8 @@
-export const authDecoder = async (token: string) => {
+export const authDecoder = async (token: string, type: string) => {
+  if (type !== 'magicLink') {
+    return null
+  }
+
   const { MAGIC_SECRET_API_KEY } = process.env
   if (!MAGIC_SECRET_API_KEY) {
     throw new Error('`MAGIC_SECRET_API_KEY` environment variable not set.')

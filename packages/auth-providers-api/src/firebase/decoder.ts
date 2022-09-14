@@ -1,6 +1,11 @@
 export const authDecoder = async (
-  token: string
+  token: string,
+  type: string
 ): Promise<null | Record<string, unknown>> => {
+  if (type !== 'firebase') {
+    return null
+  }
+
   // Use require here to prevent dependency for non-firebase projects
   const admin = require('firebase-admin')
 

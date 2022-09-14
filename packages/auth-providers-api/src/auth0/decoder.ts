@@ -63,8 +63,10 @@ export const verifyAuth0Token = (
   })
 }
 
-export const authDecoder = async (
-  token: string
-): Promise<null | Record<string, unknown>> => {
+export const authDecoder = async (token: string, type: string) => {
+  if (type !== 'auth0') {
+    return null
+  }
+
   return verifyAuth0Token(token)
 }
