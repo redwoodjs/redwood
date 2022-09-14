@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken'
 import jwksClient, { SigningKey } from 'jwks-rsa'
 
-export const authDecoder = async (
-  token: string,
-  type: string
-): Promise<Record<string, unknown> | null> => {
+import { Decoder } from '@redwoodjs/api'
+
+export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'supertokens') {
     return null
   }

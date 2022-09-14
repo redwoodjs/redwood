@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
+import { Decoder } from '@redwoodjs/api'
+
 /**
  * This takes an auth0 jwt and verifies it. It returns something like this:
  * ```js
@@ -63,7 +65,7 @@ export const verifyAuth0Token = (
   })
 }
 
-export const authDecoder = async (token: string, type: string) => {
+export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'auth0') {
     return null
   }

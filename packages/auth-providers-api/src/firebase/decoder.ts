@@ -1,7 +1,6 @@
-export const authDecoder = async (
-  token: string,
-  type: string
-): Promise<null | Record<string, unknown>> => {
+import { Decoder } from '@redwoodjs/api'
+
+export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'firebase') {
     return null
   }

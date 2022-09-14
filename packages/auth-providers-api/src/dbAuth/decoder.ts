@@ -1,8 +1,10 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
+import { Decoder } from '@redwoodjs/api'
+
 import { dbAuthSession } from './shared'
 
-export const authDecoder = (
+export const authDecoder: Decoder = async (
   authHeaderValue: string,
   type: string,
   req: { event: APIGatewayProxyEvent }

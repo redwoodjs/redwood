@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 
-export const authDecoder = async (token: string, type: string) => {
+import { Decoder } from '@redwoodjs/api'
+
+export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'nhost') {
     return null
   }
