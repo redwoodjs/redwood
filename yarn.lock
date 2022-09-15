@@ -6708,7 +6708,7 @@ __metadata:
     jest: 29.0.3
     jest-environment-jsdom: 29.0.3
     jest-watch-typeahead: 2.2.0
-    msw: 0.45.0
+    msw: 0.47.2
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
     whatwg-fetch: 3.6.2
@@ -17890,7 +17890,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.6.0":
+"graphql@npm:16.6.0, graphql@npm:^15.0.0 || ^16.0.0":
   version: 16.6.0
   resolution: "graphql@npm:16.6.0"
   checksum: 3a2c15ff58b69d017618d2b224fa6f3c4a7937e1f711c3a5e0948db536b4931e6e649560b53de7cc26735e027ceea6e2d0a6bb7c29fc4639b290313e3aa71618
@@ -22734,9 +22734,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.45.0":
-  version: 0.45.0
-  resolution: "msw@npm:0.45.0"
+"msw@npm:0.47.2":
+  version: 0.47.2
+  resolution: "msw@npm:0.47.2"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.2
@@ -22746,6 +22746,7 @@ __metadata:
     chalk: 4.1.1
     chokidar: ^3.4.2
     cookie: ^0.4.2
+    graphql: ^15.0.0 || ^16.0.0
     headers-polyfill: ^3.0.4
     inquirer: ^8.2.0
     is-node-process: ^1.0.1
@@ -22755,19 +22756,16 @@ __metadata:
     path-to-regexp: ^6.2.0
     statuses: ^2.0.0
     strict-event-emitter: ^0.2.0
-    type-fest: ^1.2.2
+    type-fest: ^2.19.0
     yargs: ^17.3.1
   peerDependencies:
-    graphql: ^15.0.0 || ^16.0.0
-    typescript: ">= 4.2.x <= 4.7.x"
+    typescript: ">= 4.2.x <= 4.8.x"
   peerDependenciesMeta:
-    graphql:
-      optional: true
     typescript:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 6a5570980ea4d5b2941c33f15986b1fd5af3ff65c8e8b621a07fb57e61347cc396e6929aa44e08ddb1e49ee1aa01e1ea997972d49955b671c90a346b9c4f62cc
+  checksum: 8a593ac408ee8202c215111b01c800c37e4342c942d914d0ae02f50c0501b23c79380c9a0ceefaf5ebe9e8f1133dc6b7e5217ee5c558d8d201301d15cc33c6d4
   languageName: node
   linkType: hard
 
@@ -27063,7 +27061,7 @@ __metadata:
     lerna: 5.5.1
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.45.0
+    msw: 0.47.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.19
@@ -29851,6 +29849,13 @@ __metadata:
   version: 1.4.0
   resolution: "type-fest@npm:1.4.0"
   checksum: a3c0f4ee28ff6ddf800d769eafafcdeab32efa38763c1a1b8daeae681920f6e345d7920bf277245235561d8117dab765cb5f829c76b713b4c9de0998a5397141
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "type-fest@npm:2.19.0"
+  checksum: a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
   languageName: node
   linkType: hard
 
