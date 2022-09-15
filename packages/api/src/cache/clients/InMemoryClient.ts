@@ -15,6 +15,10 @@ export default class InMemoryClient extends BaseClient {
     this.storage = data
   }
 
+  reconnect() {
+    return true
+  }
+
   async get(key: string) {
     const now = new Date()
     if (this.storage[key] && this.storage[key].expires > now.getTime()) {
