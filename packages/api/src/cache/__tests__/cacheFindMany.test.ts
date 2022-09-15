@@ -5,6 +5,7 @@ import { createCache } from '../index'
 
 const mockFindFirst = jest.fn()
 const mockFindMany = jest.fn()
+
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn(() => ({
     user: {
@@ -21,6 +22,7 @@ describe('cacheFindMany', () => {
 
   it('adds the collection to the cache based on latest updated user', async () => {
     const now = new Date()
+
     const user = {
       id: 1,
       email: 'rob@redwoodjs.com',
@@ -42,7 +44,7 @@ describe('cacheFindMany', () => {
   })
 
   it('adds a new collection if a record has been updated', async () => {
-    let now = new Date()
+    const now = new Date()
     const user = {
       id: 1,
       email: 'rob@redwoodjs.com',
@@ -57,8 +59,8 @@ describe('cacheFindMany', () => {
 
     // set mock to return user that's been updated in the future, rather than
     // the timestamp that's been cached already
-    let future = new Date()
-    future.setSeconds(future.getSeconds + 1000)
+    const future = new Date()
+    future.setSeconds(future.getSeconds() + 1000)
     user.updatedAt = future
     mockFindFirst.mockImplementation(() => user)
     mockFindMany.mockImplementation(() => [user])

@@ -50,7 +50,7 @@ const wait = (ms: number) => {
 
 export const cacheKeySeparator = '-'
 
-export const formatCacheKey = (key: CacheKey, prefix: string | undefined) => {
+export const formatCacheKey = (key: CacheKey, prefix?: string) => {
   let output
 
   if (Array.isArray(key)) {
@@ -76,7 +76,7 @@ const serialize = (input: any) => {
 
 export const createCache = (
   cacheClient: BaseClient,
-  options: CreateCacheOptions | undefined
+  options?: CreateCacheOptions
 ) => {
   const client = cacheClient
   const logger = options?.logger
