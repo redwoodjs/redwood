@@ -2,7 +2,13 @@ require('whatwg-fetch')
 
 import { useEffect, useState } from 'react'
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  configure,
+} from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
@@ -10,6 +16,10 @@ import { setupServer } from 'msw/node'
 import type { AuthClient } from '../authClients'
 import { AuthProvider } from '../AuthProvider'
 import { useAuth } from '../useAuth'
+
+configure({
+  asyncUtilTimeout: 5_000,
+})
 
 type HasRoleAuthClient = AuthClient & {
   hasRole: (rolesToCheck?: string | string[]) => Promise<boolean | null>
