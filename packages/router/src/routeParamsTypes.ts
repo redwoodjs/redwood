@@ -1,9 +1,10 @@
 import { A } from 'ts-toolbelt'
 
-type GenericParams = Record<string | number, string | number | boolean>
+export type GenericParams = Record<string | number, string | number | boolean>
 
 export type QueryParams = GenericParams
 
+// @Note that '' is matched by ${string} so it still parses from the beginning.
 export type RouteParams<Route> = Route extends `${string}/${infer Rest}`
   ? A.Compute<ParsedParams<Rest>>
   : GenericParams
@@ -74,17 +75,17 @@ type JustParamNoType<TParam extends string> = {
 // Path string parser for Redwood Routes
 type ParsedParams<PartialRoute> =
   //   : // {a:Int}/[...moar]
-  PartialRoute extends `{${infer Param}:${infer Match}}/${infer Rest}`
+  PartialRoute extends `${string}{${infer Param}:${infer Match}}${string}/${infer Rest}`
     ? TypedParamInFront<Param, Match, Rest>
     : // has type, but at the end e.g. {d:Int}
-    PartialRoute extends `{${infer Param}:${infer Match}}`
+    PartialRoute extends `${string}{${infer Param}:${infer Match}}${string}`
     ? // Greedy match order 2
       TypedParamAtEnd<Param, Match>
     : // no type, but has stuff after it, e.g. {c}/{d} or {c}/bazinga
-    PartialRoute extends `{${infer Param}}/${infer Rest}`
+    PartialRoute extends `${string}{${infer Param}}${string}/${infer Rest}`
     ? MultiParamsWithoutType<Param, Rest>
     : // last one with no type e.g. {d} - just a param
-    PartialRoute extends `{${infer Param}}`
+    PartialRoute extends `${string}{${infer Param}}${string}`
     ? JustParamNoType<Param>
     : // if theres a non param
     PartialRoute extends `${string}/${infer Rest}`
@@ -95,16 +96,22 @@ type ParsedParams<PartialRoute> =
 /**
  * Translation in pseudocode without ternaries
  *
-if ('{c:Int}/...rest') {
+if ('he{c:Int}lo/...rest') {
   checkForGreedyMatch()
-} else if ('{c:Int}') {
+} else if ('he{c:Int}lo') {
   typedParamAtEnd()
-} else if ('{c}/...rest') {
+} else if ('he{c}yo/...rest') {
   multipleParamsNoTypes()
-} else if('{d}') {
+} else if('he{d}yo') {
   justParamNoType()
 } else if ('bazinga/..rest') {
   // Call itself
   parseParamsRecursiveCall(rest)
+} else{
+  // fallback, because it doesn't match any of the above
+  GenericParams
 }
+
+Its a bit odd, but the he{d}llo  is a form we support in the router
+// e.g. /signedUp/e{status:Boolean}y
 **/

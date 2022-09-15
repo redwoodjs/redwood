@@ -1,6 +1,6 @@
 import { expectAssignable } from 'tsd-lite'
 
-import type { RouteParams, ParamType } from '../routeParamsTypes'
+import type { RouteParams, ParamType, GenericParams } from '../routeParamsTypes'
 
 describe('RouteParams<>', () => {
   test('Single parameters', () => {
@@ -36,8 +36,6 @@ describe('RouteParams<>', () => {
   })
 
   test('Parameter inside string', () => {
-    // @NOTE: this is currently falling back to GenericParams
-    // because the type parser doesn't handle this case
     const stringConcat: RouteParams<'/signedUp/e{status:Boolean}y'> = {
       status: true
     }
@@ -67,13 +65,10 @@ describe('RouteParams<>', () => {
 
   test('Starts with Glob route params', () => {
     const globRoutes = {
-      cuddles: '1/2',
+      description: 'cute',
     }
 
-    // @NOTE: this is currently falling back to GenericParams
-    // because the type parser doesn't handle this case
-
-    expectAssignable<RouteParams<'/{cuddles...}-furry/kittens'>>(globRoutes)
+    expectAssignable<RouteParams<'/{description...}-little/kittens'>>(globRoutes)
   })
 
   test('Glob params in the middle', () => {
