@@ -150,7 +150,7 @@ export const buildStringifiedScenario = async (model) => {
       return Number(value.substr(0, value.length - 1))
     }
     // If the string matches this ISO8601 date format, it's replaced by a new Date() declaration
-    // ex: `2022-09-01T00:21:58.876Z` will be replaced by `new Date("2022-09-01T00:21:58Z")`
+    // ex: `2022-09-01T00:21:58.876Z` will be replaced by `new Date("2022-09-01T00:21:58.876Z")`
     if (
       typeof value === 'string' &&
       value.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/)
