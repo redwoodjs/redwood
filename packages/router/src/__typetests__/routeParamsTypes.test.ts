@@ -5,13 +5,13 @@ import type { RouteParams, ParamType } from '../routeParamsTypes'
 /**
  * FAQ:
  * - why aren't you using expectAssignable in all tests?
- * because {b: string} is assignable to Record, and then test isn't deep enough
+ * because {b: string} is assignable to Record, and then test isn't accurate enough
  *
  * - why aren't you just checking the entire type?
  * because sometimes, the parser returns {Params & GenericParams} (and thats ok!), checking the full type will cause failures
  *
  * - why are you assigning the const values if you're just checking the types?
- * for readability param?.id! everywhere is ugly too - it helps with making these tests read like documentation
+ * for readability: param?.id! everywhere is ugly - it helps with making these tests read like documentation
  *
  */
 
