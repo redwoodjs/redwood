@@ -60,7 +60,10 @@ export const mockAuthClient: AuthClient = {
   type: 'custom',
 }
 
-export const MockProviders: React.FunctionComponent = ({ children }) => {
+// TODO(pc): see if there are props we want to allow to be passed into our mock provider (e.g. AuthProviderProps)
+export const MockProviders: React.FunctionComponent<{
+  children?: React.ReactNode
+}> = ({ children }) => {
   return (
     <AuthProvider client={mockAuthClient} type="custom">
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
