@@ -31,7 +31,7 @@
     "cross-undici-fetch": "0.4.14",
     "deepmerge": "4.2.2",
     "execa": "5.1.1",
-    "fast-glob": "3.2.11",
+    "fast-glob": "3.2.12",
     "findup-sync": "5.0.0",
     "jest": "29.0.3",
     "jscodeshift": "0.13.1",
