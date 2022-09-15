@@ -55,7 +55,7 @@
     "fast-glob": "3.2.11",
     "jest": "29.0.3",
     "jest-environment-jsdom": "29.0.3",
-    "jest-watch-typeahead": "2.1.1",
+    "jest-watch-typeahead": "2.2.0",
     "msw": "0.40.2",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
