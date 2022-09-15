@@ -73,8 +73,6 @@ type JustParamNoType<TParam extends string> = {
 
 // Path string parser for Redwood Routes
 type ParsedParams<PartialRoute> =
-  // PartialRoute extends `{${infer GlobParam}...}/${infer Rest}}`
-  //   ? ParsedParams<GlobParam> & ParsedParams<Rest>
   //   : // {a:Int}/[...moar]
   PartialRoute extends `{${infer Param}:${infer Match}}/${infer Rest}`
     ? TypedParamInFront<Param, Match, Rest>
@@ -92,7 +90,7 @@ type ParsedParams<PartialRoute> =
     PartialRoute extends `${string}/${infer Rest}`
     ? ParsedParams<`${Rest}`>
     : // Fallback when doesn't match any of these
-      Record<string | number, any>
+      GenericParams
 
 /**
  * Translation in pseudocode without ternaries
@@ -109,6 +107,4 @@ if ('{c:Int}/...rest') {
   // Call itself
   parseParamsRecursiveCall(rest)
 }
-
-
 **/

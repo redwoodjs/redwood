@@ -9,6 +9,15 @@ describe('RouteParams<>', () => {
     })
   })
 
+  test('Starts with parameter', () => {
+
+
+    expectAssignable<RouteParams<'/{position:Int}/{driver:Int}/bazinga'>>({
+      position: 1,
+      driver: 44,
+    })
+  })
+
   test('Route string with no types defaults to string', () => {
     expectAssignable<RouteParams<'/blog/{year}/{month}/{day}/{slug}'>>({
       year: '2020',
@@ -24,6 +33,16 @@ describe('RouteParams<>', () => {
     }
 
     expectAssignable<RouteParams<'/post/{name:slug}'>>(customParams)
+  })
+
+  test('Parameter inside string', () => {
+    // @NOTE: this is currently falling back to GenericParams
+    // because the type parser doesn't handle this case
+    const stringConcat: RouteParams<'/signedUp/e{status:Boolean}y'> = {
+      status: true
+    }
+
+    expectAssignable<RouteParams<'/signedUp/e{status:Boolean}y'>>(stringConcat)
   })
 
   test('Multiple Glob route params', () => {
@@ -43,6 +62,18 @@ describe('RouteParams<>', () => {
     }
 
     expectAssignable<RouteParams<'/from/{fromDate...}'>>(globRoutes)
+  })
+
+
+  test('Starts with Glob route params', () => {
+    const globRoutes = {
+      cuddles: '1/2',
+    }
+
+    // @NOTE: this is currently falling back to GenericParams
+    // because the type parser doesn't handle this case
+
+    expectAssignable<RouteParams<'/{cuddles...}-furry/kittens'>>(globRoutes)
   })
 
   test('Glob params in the middle', () => {
