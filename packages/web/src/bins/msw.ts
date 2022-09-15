@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { createRequire } from 'module'
 
-const requireFromMSW = createRequire(require.resolve('msw/package.json'))
+const requireFromMSW = createRequire(require.resolve('msw'))
 
 const bins = requireFromMSW('../package.json')['bin']
 
