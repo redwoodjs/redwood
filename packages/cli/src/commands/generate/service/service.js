@@ -52,7 +52,7 @@ export const scenarioFieldValue = (field) => {
     case 'Boolean':
       return true
     case 'DateTime':
-      return new Date().toISOString().replace(/\.\d{3}/, '')
+      return new Date()
     case 'Decimal':
     case 'Float':
       return randFloat
@@ -142,13 +142,43 @@ export const buildScenario = async (model) => {
 export const buildStringifiedScenario = async (model) => {
   const scenario = await buildScenario(model)
 
-  return JSON.stringify(scenario, (key, value) =>
-    typeof value === 'bigint'
-      ? value.toString()
-      : typeof value === 'string' && value.match(/^\d+n$/)
-      ? Number(value.substr(0, value.length - 1))
-      : value
+  let stringifiedScenario = JSON.stringify(scenario, (key, value) => {
+    if (typeof value === 'bigint') {
+      return value.toString()
+    }
+    if (typeof value === 'string' && value.match(/^\d+n$/)) {
+      return Number(value.substr(0, value.length - 1))
+    }
+    // If the string matches this ISO8601 date format, it's replaced by a new Date() declaration
+    // ex: `2022-09-01T00:21:58.876Z` will be replaced by `new Date("2022-09-01T00:21:58Z")`
+    if (
+      typeof value === 'string' &&
+      value.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/)
+    ) {
+      return `new Date('${value}')`
+    }
+    return value
+  })
+
+  /**
+   * We want dates in the service scenarios to be Date objects so they can be evaluated
+   * directly in the generated tests. but JSON.stringify() will wrap this declaration
+   * in double quotes, so we need to remove them.
+   * ex: `"new Date('2022-09-01T00:21:58.876Z')"` should be `new Date('2022-09-01T00:21:58.876Z')`
+   *
+   * This line will find all instances of `"new Date('...')"` that match this ISO8601
+   * date format, the actual new Date(...) declaration will be captured in group $1
+   * and replace every matched section, removing the double quotes. Then the new string
+   * is assigned to stringifiedScenario to be returned.
+   * ex: `"new Date('2022-09-01T00:21:58.876Z')"` will be replaced by
+   *     `new Date('2022-09-01T00:21:58.876Z')`
+   */
+  stringifiedScenario = stringifiedScenario.replace(
+    /"(new Date\('\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\'\))"/g,
+    '$1'
   )
+
+  return stringifiedScenario
 }
 
 // outputs fields necessary to create an object in the test file

@@ -9,6 +9,12 @@ const stringifyButNotScenario = (obj) => {
       return string.substr(1, string.length - 2)
     }
 
+    // Creates a new Date declaration if the string matches this ISO8601 date format.
+    // ex: "2022-09-01T00:21:58.876Z" will return `new Date("2022-09-01T00:21:58.876Z")`
+    if (string.match(/^\"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\"$/)) {
+      return `new Date(${string})`
+    }
+
     return string
   })
 } %>
