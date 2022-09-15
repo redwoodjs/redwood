@@ -1,18 +1,27 @@
 import { createClient } from 'redis'
 import type { RedisClientOptions } from 'redis'
 
+import type { Logger } from '../../logger'
+
 import BaseClient from './BaseClient'
 
 interface SetOptions {
   EX?: number
 }
 
+type LoggerOptions = {
+  logger?: Logger
+}
+
 export default class RedisClient extends BaseClient {
   client
 
-  constructor(options: RedisClientOptions) {
+  constructor(options: RedisClientOptions & LoggerOptions) {
+    const { logger, ...redisOptions } = options
+
     super()
-    this.client = createClient(options)
+    this.client = createClient(redisOptions)
+    this.client.on('error', (err) => logger?.error(err) || console.error(err))
     this.client.connect()
   }
 
