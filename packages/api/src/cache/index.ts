@@ -100,6 +100,11 @@ export const createCache = (
     } catch (e: any) {
       logger?.error(`[Cache] Error GET '${cacheKey}': ${e.message}`)
 
+      // If client implements a reconnect() function, try it now
+      if (e instanceof CacheTimeoutError && client.reconnect) {
+        logger?.error(`[Cache] Attempting to reconnect...`)
+        client.reconnect()
+      }
       // stringify and parse to match what happens inside cache clients
       return serialize(await input())
     }
@@ -141,7 +146,7 @@ export const createCache = (
 
     // take the conditions from the query that's going to be cached, and only
     // return the latest record (based on `updatedAt`) from that set of
-    // records and use it as the cache key
+    // records, using its data as the cache key
     try {
       latest = await model.findFirst({
         ...conditions,
