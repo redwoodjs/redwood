@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "2.2.4",
+  "version": "3.0.0",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -28,8 +28,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "7.18.10",
-    "@babel/runtime-corejs3": "7.19.0",
+    "@babel/plugin-transform-runtime": "7.19.1",
+    "@babel/runtime-corejs3": "7.19.1",
     "@fastify/http-proxy": "8.2.2",
     "@fastify/static": "6.5.0",
     "@fastify/url-data": "5.1.0",
@@ -38,8 +38,8 @@
     "chokidar": "3.5.3",
     "core-js": "3.25.1",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.5.3",
-    "fastify-raw-body": "4.0.0",
+    "fastify": "4.6.0",
+    "fastify-raw-body": "4.1.0",
     "lodash.escape": "4.0.1",
     "pretty-bytes": "5.6.0",
     "pretty-ms": "7.0.1",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.19.0",
+    "@babel/core": "7.19.1",
     "@types/aws-lambda": "8.10.101",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",

@@ -15,11 +15,13 @@ services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
-  buildCommand: yarn rw deploy render web
+  buildCommand: yarn install && yarn rw deploy render web
   staticPublishPath: ./web/dist
   envVars:
   - key: NODE_VERSION
     value: 16
+  - key: SKIP_INSTALL_DEPS
+    value: TRUE
   routes:
   - type: rewrite
     source: /.redwood/functions/*
