@@ -31,7 +31,7 @@ export default class RedisClient extends BaseClient {
     return result ? JSON.parse(result) : null
   }
 
-  set(key: string, value: unknown, options: { expires?: number | undefined }) {
+  set(key: string, value: unknown, options: { expires?: number }) {
     const setOptions: SetOptions = {}
 
     if (options.expires) {
