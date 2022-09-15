@@ -1,110 +1,119 @@
-import { expectAssignable } from 'tsd-lite'
+import { expectAssignable, expectType } from 'tsd-lite'
 
-import type { RouteParams, ParamType, GenericParams } from '../routeParamsTypes'
+import type { RouteParams, ParamType } from '../routeParamsTypes'
 
 describe('RouteParams<>', () => {
   test('Single parameters', () => {
-    expectAssignable<RouteParams<'bazinga/{id:Int}'>>({
-      id: 1,
-    })
+    const simple: RouteParams<'bazinga/{id:Int}'> = {
+      id: 2,
+    }
+
+    expectType<{ id: number }>(simple)
   })
 
   test('Starts with parameter', () => {
-
-
-    expectAssignable<RouteParams<'/{position:Int}/{driver:Int}/bazinga'>>({
+    const startParam: RouteParams<'/{position:Int}/{driver:Float}/stats'> = {
       position: 1,
       driver: 44,
-    })
+    }
+
+    expectType<number>(startParam.driver)
+    expectType<number>(startParam.position)
   })
 
   test('Route string with no types defaults to string', () => {
-    expectAssignable<RouteParams<'/blog/{year}/{month}/{day}/{slug}'>>({
+    const untypedParams: RouteParams<'/blog/{year}/{month}/{day}/{slug}'> = {
       year: '2020',
       month: '01',
       day: '01',
       slug: 'hello-world',
-    })
+    }
+
+    expectType<string>(untypedParams.year)
+    expectType<string>(untypedParams.month)
+    expectType<string>(untypedParams.day)
+    expectType<string>(untypedParams.slug)
   })
 
   test('Custom param types', () => {
-    const customParams = {
+    const customParams: RouteParams<'/post/{name:slug}'> = {
       name: 'hello-world-slug',
     }
 
-    expectAssignable<RouteParams<'/post/{name:slug}'>>(customParams)
+    expectType<string>(customParams.name)
   })
 
   test('Parameter inside string', () => {
     const stringConcat: RouteParams<'/signedUp/e{status:Boolean}y'> = {
-      status: true
+      status: true,
     }
 
-    expectAssignable<RouteParams<'/signedUp/e{status:Boolean}y'>>(stringConcat)
+    expectType<boolean>(stringConcat.status)
   })
 
   test('Multiple Glob route params', () => {
-    const globRoutes = {
+    const globRoutes: RouteParams<'/from/{fromDate...}/to/{toDate...}'> = {
       fromDate: '2021/11/03',
       toDate: '2021/11/17',
     }
 
-    expectAssignable<RouteParams<'/from/{fromDate...}/to/{toDate...}'>>(
-      globRoutes
-    )
+    expectType<string>(globRoutes.fromDate)
+    expectType<string>(globRoutes.toDate)
   })
 
   test('Single Glob route params', () => {
-    const globRoutes = {
+    const globRoutes: RouteParams<'/from/{fromDate...}'> = {
       fromDate: '2021/11/03',
     }
 
-    expectAssignable<RouteParams<'/from/{fromDate...}'>>(globRoutes)
+    expectType<string>(globRoutes.fromDate)
   })
 
-
   test('Starts with Glob route params', () => {
-    const globRoutes = {
+    const globRoutes: RouteParams<'/{description...}-little/kittens'> = {
       description: 'cute',
     }
 
-    expectAssignable<RouteParams<'/{description...}-little/kittens'>>(globRoutes)
+    expectType<string>(globRoutes.description)
   })
 
   test('Glob params in the middle', () => {
     test('Multiple Glob route params', () => {
-      const middleGlob = {
+      const middleGlob: RouteParams<'/repo/{folders...}/edit'> = {
         folders: 'src/lib/auth.js',
       }
 
-      expectAssignable<RouteParams<'/repo/{folders...}/edit'>>(middleGlob)
+      expectType<string>(middleGlob.folders)
     })
   })
 
   test('Mixed typed and untyped params', () => {
-    const untypedFirst = {
+    const untypedFirst: RouteParams<'/mixed/{b}/{c:Boolean}'> = {
       b: 'bazinga',
       c: true,
     }
 
-    const typedFirst = {
+    const typedFirst: RouteParams<'/mixed/{b:Float}/{c}'> = {
       b: 1245,
       c: 'stringy-string',
     }
 
-    expectAssignable<RouteParams<'/mixed/{b}/{c:Boolean}'>>(untypedFirst)
-    expectAssignable<RouteParams<'/mixed/{b:Float}/{c}'>>(typedFirst)
+    expectType<string>(untypedFirst.b)
+    expectType<boolean>(untypedFirst.c)
+
+    expectType<number>(typedFirst.b)
+    expectType<string>(typedFirst.c)
   })
 
   test('Params in the middle', () => {
-    const paramsInTheMiddle = {
-      authorId: 'id:author',
-      id: 10,
-    }
+    const paramsInTheMiddle: RouteParams<'/posts/{authorId:string}/{id:Int}/edit'> =
+      {
+        authorId: 'id:author',
+        id: 10,
+      }
 
-    expectAssignable<RouteParams<'/posts/{authorId:string}/{id:Int}/edit'>>(
-      paramsInTheMiddle
-    )
+    expectType<string>(paramsInTheMiddle.authorId)
+    expectType<number>(paramsInTheMiddle.id)
   })
 })
 
