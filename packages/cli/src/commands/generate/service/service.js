@@ -246,7 +246,7 @@ export const fieldsToUpdate = async (model) => {
       case 'DateTime': {
         let date = new Date()
         date.setDate(date.getDate() + 1)
-        newValue = date.toISOString().replace(/\.\d{3}/, '')
+        newValue = date
         break
       }
       case 'Decimal':
