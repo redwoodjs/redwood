@@ -24,6 +24,7 @@ type UseAuthType = () => AuthContextInterface
  */
 export const FetchConfigProvider: React.FunctionComponent<{
   useAuth?: UseAuthType
+  children?: React.ReactNode
 }> = ({
   useAuth = global.__REDWOOD__USE_AUTH ?? (() => defaultAuthState),
   ...rest

@@ -637,6 +637,7 @@ export const commands = (yargs, ssh) => {
           username: serverConfig.username,
           password: serverConfig.password,
           privateKey: serverConfig.privateKey,
+          privateKeyPath: serverConfig.privateKeyPath,
           passphrase: serverConfig.passphrase,
           agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
           agentForward: serverConfig.agentForward,
