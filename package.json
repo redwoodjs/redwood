@@ -85,7 +85,7 @@
     "lerna": "5.5.1",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
-    "msw": "0.40.2",
+    "msw": "0.47.3",
     "ncp": "2.0.0",
     "node-notifier": "10.0.1",
     "nodemon": "2.0.19",
