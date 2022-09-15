@@ -4896,19 +4896,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.17.2":
-  version: 0.17.3
-  resolution: "@mswjs/interceptors@npm:0.17.3"
+"@mswjs/interceptors@npm:^0.17.5":
+  version: 0.17.5
+  resolution: "@mswjs/interceptors@npm:0.17.5"
   dependencies:
     "@open-draft/until": ^1.0.3
     "@types/debug": ^4.1.7
     "@xmldom/xmldom": ^0.7.5
     debug: ^4.3.3
-    headers-polyfill: ^3.0.4
+    headers-polyfill: ^3.1.0
     outvariant: ^1.2.1
     strict-event-emitter: ^0.2.4
     web-encoding: ^1.1.5
-  checksum: b0395e31013a478991c036c7f69ceb363727fb10bcc79d8415315a439389504d3d20ec9ba53a78bab1a586b477b7fb5ccfdd1453e58ff94f3b35843e1ec032ca
+  checksum: edeb28cdbc73933bd0bced2c55fe5c2ba79113c853608454bbdcbdcfc8c6c43ee3d017c26c25f1d10aee32eb0f5017dc72e4429f00b7fde0e623b49d635d05cc
   languageName: node
   linkType: hard
 
@@ -6708,7 +6708,7 @@ __metadata:
     jest: 29.0.3
     jest-environment-jsdom: 29.0.3
     jest-watch-typeahead: 2.2.0
-    msw: 0.47.2
+    msw: 0.47.3
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
     whatwg-fetch: 3.6.2
@@ -18219,10 +18219,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"headers-polyfill@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "headers-polyfill@npm:3.0.4"
-  checksum: 6d5429a7f7deb8d1a567d2578e0be428f318d367a8a6269c32168357441832e6198b0fa5d694f87454be8e3ade19b2663a1e758fdff70d00dab4ba970cbe8e5d
+"headers-polyfill@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "headers-polyfill@npm:3.1.0"
+  checksum: 2b78659bb17ce2438e86589e665b13c2f4173b8c55783d9782a186d0700fe4917565233b051c9431e8ee287f94bdf6444c0554fd2d2025ccc0fbb0b7b13894f2
   languageName: node
   linkType: hard
 
@@ -22734,12 +22734,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.47.2":
-  version: 0.47.2
-  resolution: "msw@npm:0.47.2"
+"msw@npm:0.47.3":
+  version: 0.47.3
+  resolution: "msw@npm:0.47.3"
   dependencies:
     "@mswjs/cookies": ^0.2.2
-    "@mswjs/interceptors": ^0.17.2
+    "@mswjs/interceptors": ^0.17.5
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
     "@types/js-levenshtein": ^1.1.1
@@ -22747,7 +22747,7 @@ __metadata:
     chokidar: ^3.4.2
     cookie: ^0.4.2
     graphql: ^15.0.0 || ^16.0.0
-    headers-polyfill: ^3.0.4
+    headers-polyfill: ^3.1.0
     inquirer: ^8.2.0
     is-node-process: ^1.0.1
     js-levenshtein: ^1.1.6
@@ -22765,7 +22765,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 8a593ac408ee8202c215111b01c800c37e4342c942d914d0ae02f50c0501b23c79380c9a0ceefaf5ebe9e8f1133dc6b7e5217ee5c558d8d201301d15cc33c6d4
+  checksum: 186d6f102ad385da9f8175d4824e8ee490a435eb1d9dd27aef5a5432830cbdd1ae849049970c12dc3d197c613a89e6d4e520f8574cf73883678021a3f955c841
   languageName: node
   linkType: hard
 
@@ -27061,7 +27061,7 @@ __metadata:
     lerna: 5.5.1
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.47.2
+    msw: 0.47.3
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.19
