@@ -26,10 +26,6 @@ export interface CacheFindManyOptions<
   conditions?: TFindManyArgs
 }
 
-export type JSONSerialized<TInput> = TInput extends { toJSON: () => any }
-  ? ReturnType<TInput['toJSON']>
-  : TInput
-
 export type CacheKey = string | Array<string>
 export type LatestQuery = Record<string, unknown>
 
@@ -37,10 +33,6 @@ type GenericDelegate = {
   findMany: (...args: any) => any
   findFirst: (...args: any) => any
 }
-
-type SerializedFindManyResultType<T extends GenericDelegate> = Promise<
-  JSONSerialized<Awaited<ReturnType<T['findMany']>>>
->
 
 const DEFAULT_LATEST_FIELDS = { id: 'id', updatedAt: 'updatedAt' }
 
@@ -88,7 +80,7 @@ export const createCache = (
     key: CacheKey,
     input: () => TResult | Promise<TResult>,
     options?: CacheOptions
-  ): Promise<JSONSerialized<TResult>> => {
+  ): Promise<any> => {
     const cacheKey = formatCacheKey(key, prefix)
 
     try {
@@ -139,7 +131,7 @@ export const createCache = (
     key: CacheKey,
     model: TDelegate,
     options: CacheFindManyOptions<Parameters<TDelegate['findMany']>[0]> = {}
-  ): SerializedFindManyResultType<TDelegate> => {
+  ) => {
     const { conditions, ...rest } = options
     const cacheKey = formatCacheKey(key, prefix)
     let latest, latestCacheKey
