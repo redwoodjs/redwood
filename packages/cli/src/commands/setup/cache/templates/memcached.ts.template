@@ -12,7 +12,7 @@ try {
     logger: memJsFormattedLogger,
   })
 } catch (e) {
-  console.error(`Could not connect to cache: ${e.message}`)
+  logger.error(`Could not connect to cache: ${e.message}`)
 }
 
 export const { cache, cacheFindMany } = createCache(client, {
