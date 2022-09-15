@@ -6261,7 +6261,7 @@ __metadata:
     dotenv-defaults: 5.0.2
     envinfo: 7.8.1
     execa: 5.1.1
-    fast-glob: 3.2.11
+    fast-glob: 3.2.12
     fs-extra: 10.1.0
     humanize-string: 2.1.0
     jest: 29.0.3
@@ -6308,7 +6308,7 @@ __metadata:
     cross-undici-fetch: 0.4.14
     deepmerge: 4.2.2
     execa: 5.1.1
-    fast-glob: 3.2.11
+    fast-glob: 3.2.12
     findup-sync: 5.0.0
     fs-extra: 10.1.0
     jest: 29.0.3
@@ -6359,7 +6359,7 @@ __metadata:
     css-minimizer-webpack-plugin: 4.0.0
     dotenv-webpack: 8.0.1
     esbuild: 0.15.7
-    fast-glob: 3.2.11
+    fast-glob: 3.2.12
     file-loader: 6.2.0
     graphql: 16.6.0
     graphql-tag: 2.12.6
@@ -6525,7 +6525,7 @@ __metadata:
     core-js: 3.25.1
     deepmerge: 4.2.2
     esbuild: 0.15.7
-    fast-glob: 3.2.11
+    fast-glob: 3.2.12
     findup-sync: 5.0.0
     fs-extra: 10.1.0
     graphql: 16.6.0
@@ -6704,7 +6704,7 @@ __metadata:
     babel-jest: 29.0.3
     babel-plugin-inline-react-svg: 2.0.1
     core-js: 3.25.1
-    fast-glob: 3.2.11
+    fast-glob: 3.2.12
     jest: 29.0.3
     jest-environment-jsdom: 29.0.3
     jest-watch-typeahead: 2.2.0
@@ -16348,16 +16348,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.2.11, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9":
-  version: 3.2.11
-  resolution: "fast-glob@npm:3.2.11"
+"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9":
+  version: 3.2.12
+  resolution: "fast-glob@npm:3.2.12"
   dependencies:
     "@nodelib/fs.stat": ^2.0.2
     "@nodelib/fs.walk": ^1.2.3
     glob-parent: ^5.1.2
     merge2: ^1.3.0
     micromatch: ^4.0.4
-  checksum: f726d4d6545ae9ade242eba78ae418cd8beac6c9291cdc36fc6b3b4e54f04fa0ecde5767256f2a600d6e14dc49a841adb3aa4b5f3f0c06b35dd4f3954965443d
+  checksum: 08604fb8ef6442ce74068bef3c3104382bb1f5ab28cf75e4ee904662778b60ad620e1405e692b7edea598ef445f5d387827a965ba034e1892bf54b1dfde97f26
   languageName: node
   linkType: hard
 
@@ -27124,7 +27124,7 @@ __metadata:
     cypress: 9.7.0
     cypress-wait-until: 1.7.2
     eslint: 8.23.1
-    fast-glob: 3.2.11
+    fast-glob: 3.2.12
     fs-extra: 10.1.0
     is-port-reachable: 3.1.0
     jest: 29.0.3
