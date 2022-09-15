@@ -6176,7 +6176,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.25.1
     fast-json-parse: 1.0.3
-    fastify: 4.5.3
+    fastify: 4.6.0
     fastify-raw-body: 4.1.0
     jest: 29.0.3
     lodash.escape: 4.0.1
@@ -16480,9 +16480,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.5.3":
-  version: 4.5.3
-  resolution: "fastify@npm:4.5.3"
+"fastify@npm:4.6.0":
+  version: 4.6.0
+  resolution: "fastify@npm:4.6.0"
   dependencies:
     "@fastify/ajv-compiler": ^3.1.1
     "@fastify/error": ^3.0.0
@@ -16498,7 +16498,7 @@ __metadata:
     secure-json-parse: ^2.4.0
     semver: ^7.3.7
     tiny-lru: ^8.0.2
-  checksum: dffe88193908664a5437fb06bab14f4d420cf652c93a8b536271a9f6d8665949eccf0e42de5c9e0edf5d773747310a5ee2f61738d3efb7273675cba7119adee8
+  checksum: 6c332f1783904f018bd0088dd03d3ec83d9a3a9d6b3485b3b9c49982f3a2cfed336dd332c9194ec4e8a7b0f3693a76f9babc6ae50c8d75e723d2f87cc7e5bef1
   languageName: node
   linkType: hard
 
