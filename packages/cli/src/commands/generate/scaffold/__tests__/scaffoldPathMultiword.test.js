@@ -32,8 +32,8 @@ beforeAll(async () => {
 
 describe('AdminPages/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesMultiwordUpper).length).toEqual(17)
+    test('returns exactly 18 files', () => {
+      expect(Object.keys(filesMultiwordUpper).length).toEqual(18)
     })
 
     // Layout
@@ -362,8 +362,8 @@ describe('AdminPages/Post', () => {
 
 describe('admin-pages/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesMultiwordDash).length).toEqual(17)
+    test('returns exactly 18 files', () => {
+      expect(Object.keys(filesMultiwordDash).length).toEqual(18)
     })
 
     // Layout
@@ -692,8 +692,8 @@ describe('admin-pages/Post', () => {
 
 describe('admin_pages/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(17)
+    test('returns exactly 18 files', () => {
+      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(18)
     })
 
     // Layout
