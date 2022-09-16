@@ -197,6 +197,8 @@ export const resolveFile = internalResolveFile
 export const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
+export const getGitignorePath = () => path.join(getPaths().base, '.gitignore')
+
 export const graphFunctionDoesExist = () => {
   return fs.existsSync(getGraphqlPath())
 }

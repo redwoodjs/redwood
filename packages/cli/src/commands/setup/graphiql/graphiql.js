@@ -18,6 +18,7 @@ import {
   transformTSToJS,
   existsAnyExtensionSync,
   getGraphqlPath,
+  getGitignorePath,
   graphFunctionDoesExist,
 } from '../../../lib'
 import c from '../../../lib/colors'
@@ -119,14 +120,15 @@ const addHeaderOption = () => {
   let content = readFile(graphqlPath).toString()
 
   const [_, hasHeaderImport] =
-    content.match(/(import .* from 'src\/lib\/generateGraphiQLHeader.*')/s) ||
-    []
+    content.match(
+      /(import {.*generateGraphiQLHeader.*} from '@redwoodjs\/graphql-server')/s
+    ) || []
 
   if (!hasHeaderImport) {
-    // add header import statement
+    // add generateGraphiQLHeader to imports from @redwoodjs/graphql-server
     content = content.replace(
-      /^(.*services.*)$/m,
-      `$1\n\nimport generateGraphiQLHeader from 'src/lib/generateGraphiQLHeader'`
+      /^(.*)(createGraphQLHandler)(.*)$/m,
+      `$1$2, generateGraphiQLHeader$3`
     )
     // add object to handler
     content = content.replace(
@@ -136,6 +138,25 @@ const addHeaderOption = () => {
 
     fs.writeFileSync(graphqlPath, content)
   }
+}
+
+const getGitignoredContent = () => {
+  const gitignorePath = getGitignorePath()
+  return readFile(gitignorePath).toString()
+}
+
+const isGeneratedHeaderGitignored = () => {
+  const content = getGitignoredContent()
+  const [_, hasHeader] =
+    content.match(/^.*(api\/src\/lib\/generateGraphiQLHeader).*$/m) || []
+  return !!hasHeader?.length
+}
+
+const addGeneratedHeaderGitignored = () => {
+  fs.writeFileSync(
+    path.join(getGitignorePath()),
+    `${getGitignoredContent()}api/src/lib/generateGraphiQLHeader.*`
+  )
 }
 
 export const getOutputPath = () => {
@@ -253,6 +274,16 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
             addHeaderOption()
           } else {
             task.skip('GraphQL function not found, skipping')
+          }
+        },
+      },
+      {
+        title: 'Adding generateGraphiQLHeader to gitignore',
+        task: (ctx, task) => {
+          if (!isGeneratedHeaderGitignored()) {
+            addGeneratedHeaderGitignored()
+          } else {
+            task.skip('generateGraphiQLHeader already in gitignore, skipping')
           }
         },
       },

@@ -13,17 +13,15 @@ import { getOutputPath } from '../../setup/graphiql/graphiql'
 const removeGraphiqlFromGraphqlHandler = () => {
   const graphqlPath = getGraphqlPath()
   let content = readFile(graphqlPath).toString()
+
   const [_, hasHeaderImport] =
-    content.match(/(import .* from 'src\/lib\/generateGraphiQLHeader.*')/s) ||
-    []
+    content.match(
+      /(import {.*generateGraphiQLHeader.*} from '@redwoodjs\/graphql-server')/s
+    ) || []
+
   if (hasHeaderImport) {
-    // remove header import statement
-    content = content.replace(
-      `\n\nimport generateGraphiQLHeader from 'src/lib/generateGraphiQLHeader'`,
-      ''
-    )
-    // remove object from handler
-    content = content.replace(`generateGraphiQLHeader,\n`, '')
+    // remove import and object from handler
+    content = content.replaceAll(`generateGraphiQLHeader,\n`, '')
   }
   writeFile(graphqlPath, content, {
     overwriteExisting: true,

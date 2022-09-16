@@ -374,3 +374,15 @@ export const createGraphQLHandler = ({
     }
   }
 }
+
+export const generateGraphiQLHeader = () => {
+  let header = undefined
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      header = require('api/dist/lib/generateGraphiQLHeader').default
+    } catch (err) {
+      console.log('Could not find generateGraphiQLHeader')
+    }
+  }
+  return header()
+}
