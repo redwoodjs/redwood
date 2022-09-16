@@ -184,7 +184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.18.6, @babel/code-frame@npm:^7.5.5, @babel/code-frame@npm:^7.8.3":
+"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.15.8, @babel/code-frame@npm:^7.18.6, @babel/code-frame@npm:^7.5.5, @babel/code-frame@npm:^7.8.3":
   version: 7.18.6
   resolution: "@babel/code-frame@npm:7.18.6"
   dependencies:
@@ -8298,6 +8298,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tsd/typescript@npm:4.8.2":
+  version: 4.8.2
+  resolution: "@tsd/typescript@npm:4.8.2"
+  checksum: f77f252757ec658d730e7b58cba1700e53593e6ef35da92b90f432c0efb536deba9200b3bf4fd715d9cee47e0d322f566eb637dda749f3c61f1e7d9b2435e244
+  languageName: node
+  linkType: hard
+
 "@types/aria-query@npm:^4.2.0":
   version: 4.2.2
   resolution: "@types/aria-query@npm:4.2.2"
@@ -13604,6 +13611,27 @@ __metadata:
     safe-buffer: ^5.0.1
     sha.js: ^2.4.8
   checksum: 24332bab51011652a9a0a6d160eed1e8caa091b802335324ae056b0dcb5acbc9fcf173cf10d128eba8548c3ce98dfa4eadaa01bd02f44a34414baee26b651835
+  languageName: node
+  linkType: hard
+
+"create-jest-runner@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "create-jest-runner@npm:0.12.0"
+  dependencies:
+    chalk: ^4.1.0
+    jest-worker: ^29.0.0
+    throat: ^6.0.1
+  peerDependencies:
+    "@jest/test-result": ^28.0.0 || ^29.0.0
+    jest-runner: ^28.0.0 || ^29.0.0
+  peerDependenciesMeta:
+    "@jest/test-result":
+      optional: true
+    jest-runner:
+      optional: true
+  bin:
+    create-jest-runner: generator/index.js
+  checksum: 8f808ed045666a83a25bb38080a888b3b9d1a3adcadfb1a51fdc622df6db185c1e4d62d5a00670383082e0a0b5affee03bc09d9082ee9125de8234201766e6c9
   languageName: node
   linkType: hard
 
@@ -20240,6 +20268,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-runner-tsd@npm:4.0.0":
+  version: 4.0.0
+  resolution: "jest-runner-tsd@npm:4.0.0"
+  dependencies:
+    "@babel/code-frame": ^7.15.8
+    chalk: ^4.1.2
+    create-jest-runner: ^0.12.0
+    tsd-lite: ^0.6.0
+  peerDependencies:
+    "@tsd/typescript": ^3.8.3 || ^4.0.7
+  checksum: 4c64092881d29575589ad97ce3cf849d430a132319607fd6b8e172d45c231dcb67e2d1f4c4ca74e567c651421a30438c41077a452a3acfb59a27f7b34b1e47ac
+  languageName: node
+  linkType: hard
+
 "jest-runner@npm:^29.0.3":
   version: 29.0.3
   resolution: "jest-runner@npm:29.0.3"
@@ -20438,7 +20480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-worker@npm:^29.0.3":
+"jest-worker@npm:^29.0.0, jest-worker@npm:^29.0.3":
   version: 29.0.3
   resolution: "jest-worker@npm:29.0.3"
   dependencies:
@@ -27107,6 +27149,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.4.3
+    "@tsd/typescript": 4.8.2
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.0.1
@@ -27128,6 +27171,7 @@ __metadata:
     fs-extra: 10.1.0
     is-port-reachable: 3.1.0
     jest: 29.0.3
+    jest-runner-tsd: 4.0.0
     jscodeshift: 0.13.1
     lerna: 5.5.1
     lodash.template: 4.5.0
@@ -29331,6 +29375,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"throat@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "throat@npm:6.0.1"
+  checksum: 60a42d762a35d21ac71abd9eb4026b665fbbbf6ddd7bcbdcacc3c3b20f7b99f41939afedf9fe3273611f1b7c003ee98ac4dc94aa5edd1a6dc2a49985ad2545e1
+  languageName: node
+  linkType: hard
+
 "throttle-debounce@npm:^2.1.0":
   version: 2.3.0
   resolution: "throttle-debounce@npm:2.3.0"
@@ -29777,6 +29828,15 @@ __metadata:
     minimist: ^1.2.6
     strip-bom: ^3.0.0
   checksum: 67cd2e400119a0063514782176a9e5c3420d43b7a550804ae65d833027379c0559dec44d21c93791825a3be3c2ec593f07cba658c4167dcbbadb048cb3d36fa3
+  languageName: node
+  linkType: hard
+
+"tsd-lite@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "tsd-lite@npm:0.6.0"
+  peerDependencies:
+    "@tsd/typescript": ^3.8.3 || ^4.0.7
+  checksum: f8d66238d50c764c7afb93a355e8c437b853d0a66ab6dedf55c08b63614619d8a94aaab19c4c4b0a183b76c1bad088fccdc812778f574e02fd62206cc4b8ec30
   languageName: node
   linkType: hard
 
