@@ -1,16 +1,14 @@
-name: Release PR
+name: 🍒 Cherry pick commit into PR against release
 
 on:
   pull_request:
-    branches:
-      - main
-    types: ["closed"]
-
+    branches: [main]
+    types: [closed]
 
 jobs:
-  release_pr:
+  cherry-pick-commit-into-pr-against-release:
     runs-on: ubuntu-latest
-    name: release_pr
+    name: 🍒 Cherry pick commit into PR against release
 
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'release:feature-breaking') }}
     steps:
@@ -19,11 +17,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cherry pick into next
+      - name: Cherry pick into release
         uses: carloscastrojumo/github-cherry-pick-action@v1.0.1
         with:
-          branch: next
-          labels: |
-            cherry-pick
-          reviewers: |
-            jtoar
+          token: ${{ secrets.JTOAR_TOKEN }}
+          branch: release
+          labels: cherry-pick
