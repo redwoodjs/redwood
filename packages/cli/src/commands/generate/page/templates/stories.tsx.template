@@ -1,7 +1,12 @@
+import type { ComponentMeta } from '@storybook/react'
+
 import ${pascalName}Page from './${pascalName}Page'
 
-export const generated = (args) => {
-  return <${pascalName}Page ${propValueParam} {...args} />
+export const generated = () => {
+  return <${pascalName}Page />
 }
 
-export default { title: 'Pages/${pascalName}Page' }
+export default {
+  title: 'Pages/${pascalName}Page',
+  component: ${pascalName}Page,
+} as ComponentMeta<typeof ${pascalName}Page>

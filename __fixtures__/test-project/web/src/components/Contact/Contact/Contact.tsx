@@ -1,3 +1,4 @@
+
 import type {
   DeleteContactMutationVariables,
   FindContactById,
@@ -25,7 +26,11 @@ const timeTag = (datetime?: string) => {
   )
 }
 
-const Contact = ({ contact }: FindContactById) => {
+interface Props {
+  contact: NonNullable<FindContactById['contact']>
+}
+
+const Contact = ({ contact }: Props) => {
   const [deleteContact] = useMutation(DELETE_CONTACT_MUTATION, {
     onCompleted: () => {
       toast.success('Contact deleted')
@@ -47,7 +52,7 @@ const Contact = ({ contact }: FindContactById) => {
       <div className="rw-segment">
         <header className="rw-segment-header">
           <h2 className="rw-heading rw-heading-secondary">
-            Contact {contact?.id} Detail
+            Contact {contact.id} Detail
           </h2>
         </header>
         <table className="rw-table">
@@ -77,7 +82,7 @@ const Contact = ({ contact }: FindContactById) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editContact({ id: contact?.id })}
+          to={routes.editContact({ id: contact.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -85,7 +90,7 @@ const Contact = ({ contact }: FindContactById) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(contact?.id)}
+          onClick={() => onDeleteClick(contact.id)}
         >
           Delete
         </button>

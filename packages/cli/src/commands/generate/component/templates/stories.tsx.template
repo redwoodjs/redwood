@@ -1,7 +1,25 @@
+// When you've added props to your component,
+// pass Storybook's `args` through this story to control it from the addons panel:
+//
+// ```tsx
+// import type { ComponentStory } from '@storybook/react'
+//
+// export const generated: ComponentStory<typeof ${pascalName}> = (args) => {
+//   return <${pascalName} {...args} />
+// }
+// ```
+//
+// See https://storybook.js.org/docs/react/writing-stories/args.
+
+import type { ComponentMeta } from '@storybook/react'
+
 import ${pascalName} from './${pascalName}'
 
-export const generated = (args) => {
-  return <${pascalName} {...args} />
+export const generated = () => {
+  return <${pascalName} />
 }
 
-export default { title: 'Components/${pascalName}' }
+export default {
+  title: 'Components/${pascalName}',
+  component: ${pascalName},
+} as ComponentMeta<typeof ${pascalName}>

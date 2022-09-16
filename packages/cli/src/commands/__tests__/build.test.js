@@ -42,7 +42,7 @@ afterEach(() => jest.clearAllMocks())
 test('the build tasks are in the correct sequence', async () => {
   await handler({})
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-    Array [
+    [
       "Generating Prisma Client...",
       "Verifying graphql schema...",
       "Building API...",
@@ -61,7 +61,7 @@ test('Should run prerender for web', async () => {
 
   await handler({ side: ['web'], prerender: true })
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-    Array [
+    [
       "Cleaning Web...",
       "Building Web...",
     ]

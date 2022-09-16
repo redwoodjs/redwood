@@ -22,6 +22,14 @@ Subsequent deploys:
 yarn rw deploy baremetal production
 ```
 
+:::caution Deploying to baremetal is an advanced topic
+
+If you haven't done any kind of remote server work before, you may be in a little over your head to start with. But don't worry: until relatively recently (cloud computing, serverless, lambda functions) this is how all websites were deployed, so we've got a good 30 years of experience getting this working!
+
+If you're new to connecting to remote servers, check out the [Intro to Servers](/docs/intro-to-servers) guide we wrote just for you.
+
+:::
+
 ## Deployment Lifecycle
 
 The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
@@ -605,4 +613,150 @@ This should get your site available on port 80 (for HTTP), but you really want i
 
 ### Redwood Serves Api, Nginx Serves Web Side
 
-Coming soon!
+[nginx](https://www.nginx.com/) is a very robust, dedicated web server that can do a better job of serving our static web-side files than Redwood's own built-in web server (Fastify) which isn't really configured in Redwood for a high traffic, production website.
+
+If nginx will be serving our web side, what about api-side? Redwood's internal API server will be running, but on the default port of 8911. But browsers are going to want to connect on port 80 (HTTP) or 443 (HTTPS). nginx takes care of this as well: it will [proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) (forward) any requests to a path of your choosing (like the default of `/.redwood/functions`) to port 8911 behind the scenes, then return the response to the browser.
+
+This doc isn't going to go through installing and getting nginx running, there are plenty of resources for that available. What we will show is a successful nginx configuration file used by several Redwood apps currently in production.
+
+```text title=nginx.conf
+upstream redwood_server {
+  server 127.0.0.1:8911 fail_timeout=0;
+}
+
+server {
+  root /var/www/myapp/current/web/dist;
+  server_name myapp.com;
+  index index.html;
+
+  gzip on;
+  gzip_min_length 1000;
+  gzip_types application/json text/css application/javascript application/x-javascript;
+
+  sendfile on;
+
+  keepalive_timeout 65;
+
+  error_page 404 /404.html;
+  error_page 500 /500.html;
+
+  location / {
+    try_files $uri /200.html =404;
+  }
+
+  location ^~ /static/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+
+  location ~ /.redwood/functions(.*) {
+    rewrite ^/.redwood/functions(.*) $1 break;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://redwood_server;
+  }
+}
+```
+
+Now when you start Redwood, you're only going to start the api server:
+
+```
+yarn rw serve api
+```
+
+When using `pm2` to start/monitor your processes, you can simplify your `deploy.toml` and `ecosystem.config.js` files to only worry about the api side:
+
+```toml title=deploy.toml
+[[production.servers]]
+host = "myserver.com"
+username = "ubuntu"
+agentForward = true
+sides = ["api", "web"]
+path = "/var/www/myapp"
+// highlight-next-line
+processNames = ["api"]
+repo = "git@github.com:redwoodjs/myapp.git"
+branch = "main"
+keepReleases = 3
+packageManagerCommand = "yarn"
+monitorCommand = "pm2"
+```
+
+```js title=ecosystem.config.js
+module.exports = {
+  apps: [
+    {
+      name: 'api',
+      cwd: 'current',
+      script: 'node_modules/.bin/rw',
+      args: 'serve api',
+      instances: 'max',
+      exec_mode: 'cluster',
+      wait_ready: true,
+      listen_timeout: 10000,
+    }
+  ]
+}
+```
+
+This is the bare minimum to get your site served over HTTP, insecurely. After verifying that your site is up and running, we recommend using [Let's Encrypt](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) to provision a SSL cert and it will also automatically update your nginx config so everything is served over HTTPS.
+
+#### Custom API Path
+
+If you don't love the path of `/.redwood/functions` for your API calls, this is easy to change. You'll need to tell Redwood to use a different path in development, and then let nginx know about that same path so that it resolves the same in production.
+
+For example, to simplify the path to just `/api` you'll need to make a change to `redwood.toml` and your new nginx config file:
+
+```toml title=redwood.toml
+[web]
+  title = "My App"
+  port = 8910
+  host = '0.0.0.0'
+// highlight-next-line
+  apiUrl = "/api"
+[api]
+  port = 8911
+[browser]
+  open = true
+```
+
+```text title=nginx.conf
+upstream redwood_server {
+  server 127.0.0.1:8911 fail_timeout=0;
+}
+
+server {
+  root /var/www/myapp/current/web/dist;
+  server_name myapp.com;
+  index index.html;
+
+  gzip on;
+  gzip_min_length 1000;
+  gzip_types application/json text/css application/javascript application/x-javascript;
+
+  sendfile on;
+
+  keepalive_timeout 65;
+
+  error_page 404 /404.html;
+  error_page 500 /500.html;
+
+  location / {
+    try_files $uri /200.html =404;
+  }
+
+  location ^~ /static/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+
+// highlight-next-line
+  location ~ /api(.*) {
+// highlight-next-line
+    rewrite ^/api(.*) $1 break;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://redwood_server;
+  }
+}
+```
