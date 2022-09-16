@@ -1,0 +1,21 @@
+name: 🤖 Approve and merge release PR
+
+on:
+  pull_request_target:
+    branches: [release]
+    types: [labeled]
+
+jobs:
+  approve-and-merge-release-PR:
+    name: 🤖 Approve and merge release PR
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'cherry-pick')
+    steps:
+      - name: Approve
+        uses: hmarr/auto-approve-action@v2
+
+      - name: Enable auto-merge
+        uses: reitermarkus/automerge@main
+        with:
+          token: ${{ secrets.JTOAR_TOKEN }}
+          merge-method: squash
