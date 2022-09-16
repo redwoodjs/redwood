@@ -64,6 +64,11 @@ describe('matchPath', () => {
       match: true,
       params: { id: 789 },
     })
+
+    expect(matchPath('/{id:Int}/bazinga', '/89/bazinga')).toEqual({
+      match: true,
+      params: { id: 89 },
+    })
   })
 
   it('transforms a param for Boolean', () => {
@@ -213,7 +218,7 @@ describe('matchPath', () => {
     })
 
     // suffixed
-    expect(matchPath('/{a...}-a', '/1/2-a')).toEqual({
+    expect(matchPath('/{a...}-a/kittens', '/1/2-a/kittens')).toEqual({
       match: true,
       params: {
         a: '1/2',
