@@ -169,14 +169,14 @@ import { name, version } from '../package'
           }
         },
         task: () => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             const { engines } = require(path.join(templateDir, 'package.json'))
 
             // this checks all engine requirements, including Node.js and Yarn
             checkNodeVersion(engines, (_error, result) => {
               if (result.isSatisfied) {
                 hasPassedEngineCheck = true
-                return resolve('Passed')
+                return resolve()
               }
 
               const logStatements = Object.keys(result.versions)
@@ -215,15 +215,15 @@ import { name, version } from '../package'
     )
     const response = await prompts({
       type: 'select',
-      name: 'engine-error',
+      name: 'override-engine-error',
       message: 'How would you like to proceed?',
       choices: [
-        { title: 'Ignore warning and continue install', value: true },
+        { title: 'Override error and continue install', value: true },
         { title: 'Quit install', value: false },
       ],
       initial: 0,
     })
-    if (response['engine-error'] === false) {
+    if (response['override-engine-error'] === false) {
       process.exit(1)
     }
   }
