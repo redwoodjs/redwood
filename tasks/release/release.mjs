@@ -14,10 +14,6 @@
  * 1. a GitHub token in your environment (GITHUB_TOKEN)
  * 2. to be logged into NPM
  * 3. the appropriate permissions on your NPM account (contact @thedavidprice)
- *
- * @todo
- *
- * - consider writing an e2e test using verdaccio
  */
 
 import c from 'ansi-colors'
