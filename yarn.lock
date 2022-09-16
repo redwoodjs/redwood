@@ -126,9 +126,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.3":
-  version: 1.22.3
-  resolution: "@auth0/auth0-spa-js@npm:1.22.3"
+"@auth0/auth0-spa-js@npm:1.22.4":
+  version: 1.22.4
+  resolution: "@auth0/auth0-spa-js@npm:1.22.4"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
@@ -137,7 +137,7 @@ __metadata:
     fast-text-encoding: ^1.0.4
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 18d6cf1eebc91af96facd13b440e55ff7c129bedc98181eb5fbbb2fed55301f43841c29a8865a31333048bd0f35f80185fb7276dd593822f022e71693eebd5ee
+  checksum: e8e1f06d3096ca281e4f82da1f2393cb20c0a379b322af3ebda030f557a1cced0b203bee3e3def8c61a4f2d96184ae4f983047c9ec130bf401a87d6cbe272ae8
   languageName: node
   linkType: hard
 
@@ -6206,7 +6206,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.3
+    "@auth0/auth0-spa-js": 1.22.4
     "@azure/msal-browser": 2.28.1
     "@babel/cli": 7.18.10
     "@babel/core": 7.19.1
