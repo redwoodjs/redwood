@@ -82,18 +82,21 @@ type AuthProviderProps =
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
   | {
       client?: never
       type: 'clerk'
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
   | {
       client?: WebAuthnClientType
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
 
 type AuthProviderState = {

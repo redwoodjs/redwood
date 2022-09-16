@@ -10,8 +10,8 @@ import {
   SetupWorkerApi,
   ResponseComposition,
 } from 'msw'
-import type { StartOptions as StartMSWWorkerOptions } from 'msw/lib/types/setupWorker/glossary'
-import type { SharedOptions as SharedMSWOptions } from 'msw/lib/types/sharedOptions'
+import type { StartOptions as StartMSWWorkerOptions } from 'msw'
+import type { SharedOptions as SharedMSWOptions } from 'msw'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
 // before the server has started. We store the request handlers in
@@ -132,6 +132,7 @@ const mockGraphQL = (
         data: captureTransform(ctx.data),
         extensions: captureTransform(ctx.extensions),
         cookie: captureTransform(ctx.cookie),
+        field: captureTransform(ctx.field),
       }
 
       d = data(req.variables, {

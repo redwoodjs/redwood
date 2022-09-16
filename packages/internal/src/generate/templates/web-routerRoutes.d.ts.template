@@ -1,13 +1,6 @@
-import '@redwoodjs/router'
+import { RouteParams, QueryParams } from '@redwoodjs/router'
 import { A } from 'ts-toolbelt'
 
-
-
-type RouteParams<Route> = ${"Route extends `${string}/${infer Rest}`"}
-  ? A.Compute<ParsedParams<Rest>>
-  : {}
-
-type QueryParams = Record<string | number, string | number | boolean>
 
 declare module '@redwoodjs/router' {
   interface AvailableRoutes {
@@ -20,39 +13,3 @@ ${routes.map(
   }
 }
 
-type ParamType<match> = match extends 'Int'
-  ? number
-  : match extends 'Boolean'
-  ? boolean
-  : match extends 'Float'
-  ? number
-  : string
-
-// Path string parser for Redwood Routes
-type ParsedParams<PartialRoute> =
-  // {a:Int}/[...moar]
-  ${"PartialRoute extends `{${infer Param}:${infer Match}}/${infer Rest}`"}
-    ? // check for greedy match e.g. {b}/{c:Int}
-      // Param = b}/{c, Rest2 = {c, Match = Int so we reconstruct the old one {c + : + Int + }
-      ${"Param extends `${infer Param2}}/${infer Rest2}`"}
-      ? { [ParamName in Param2]: string } &
-          ${"ParsedParams<`${Rest2}:${Match}}`> &"}
-          ${"ParsedParams<`${Rest}`>"}
-      ${": { [Entry in Param]: ParamType<Match> } & ParsedParams<`${Rest}`>"}
-    : // has type, but at the end e.g. {d:Int}
-    ${"PartialRoute extends `{${infer Param}:${infer Match}}`"}
-    ? // Greedy match order 2
-      ${"Param extends `${infer Param2}}/${infer Rest2}`"}
-      ? { [ParamName in Param2]: string } &
-          ${"ParsedParams<`${Rest2}:${Match}}`>"}
-      : { [Entry in Param]: ParamType<Match> }
-    : // no type, but has stuff after it, e.g. {c}/{d}
-    ${"PartialRoute extends `{${infer Param}}/${infer Rest}`"}
-    ${"? { [ParamName in Param]: string } & ParsedParams<`${Rest}`>"}
-    : // last one with no type e.g. {d}
-    ${"PartialRoute extends `{${infer Param}}`"}
-    ? { [ParamName in Param]: string }
-    : // if theres a non param
-    ${"PartialRoute extends `${string}/${infer Rest}`"}
-    ${"? ParsedParams<`${Rest}`>"}
-    : {}
