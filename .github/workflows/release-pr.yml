@@ -1,0 +1,20 @@
+name: Release PR
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release_pr:
+    runs-on: ubuntu-latest
+    name: release_pr
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+    - name: Create PR to branch
+      uses: gorillio/github-action-cherry-pick@master
+      with:
+        pr_branch: 'next'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITBOT_EMAIL: <BOT_EMAIL>
+        DRY_RUN: false
