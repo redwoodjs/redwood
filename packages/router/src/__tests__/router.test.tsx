@@ -43,19 +43,19 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
     isAuthenticated: false,
     userMetadata: null,
     currentUser: null,
-    logIn: () => null,
-    logOut: () => null,
-    signUp: () => null,
-    getToken: () => null,
-    getCurrentUser: () => null,
+    logIn: async () => null,
+    logOut: async () => null,
+    signUp: async () => null,
+    getToken: async () => null,
+    getCurrentUser: async () => null,
     hasRole: () => false,
-    reauthenticate: () => null,
+    reauthenticate: async () => {},
     client: null,
     type: 'custom',
     hasError: false,
-    forgotPassword: () => null,
-    resetPassword: () => null,
-    validateResetToken: () => null,
+    forgotPassword: async () => null,
+    resetPassword: async () => null,
+    validateResetToken: async () => null,
   }
 
   return { ...authContextValues, ...partial }
@@ -121,7 +121,7 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
 }
 
 beforeEach(() => {
-  window.history.pushState({}, null, '/')
+  window.history.pushState({}, '', '/')
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
@@ -880,22 +880,22 @@ test("Doesn't destroy <Set> when navigating inside, but does when navigating bet
     const ctx = React.useContext(SetContext)
 
     React.useEffect(() => {
-      ctx.setContextValue('updatedSetValue')
+      ctx?.setContextValue('updatedSetValue')
     }, [ctx])
 
-    return <p>1-{ctx.contextValue}</p>
+    return <p>1-{ctx?.contextValue}</p>
   }
 
   const Ctx2Page = () => {
     const ctx = React.useContext(SetContext)
 
-    return <p>2-{ctx.contextValue}</p>
+    return <p>2-{ctx?.contextValue}</p>
   }
 
   const Ctx3Page = () => {
     const ctx = React.useContext(SetContext)
 
-    return <p>3-{ctx.contextValue}</p>
+    return <p>3-{ctx?.contextValue}</p>
   }
 
   const TestRouter = () => {
