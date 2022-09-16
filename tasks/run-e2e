@@ -157,7 +157,12 @@ const runCypress = () => {
   execa.sync(
     // do not use Yarn to run Cypress; this avoids missing binary errors
     '../../node_modules/.bin/cypress',
-    ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
+    [
+      'open',
+      `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`,
+      '--e2e',
+      '--browser chrome',
+    ],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
       shell: true,

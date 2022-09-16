@@ -97,6 +97,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   }
   useAuth: UseAuthProp
   logLevel: F.Return<typeof setLogVerbosity>
+  children?: React.ReactNode
 }> = ({ config, children, useAuth, logLevel }) => {
   /**
    * Should they run into it,
@@ -255,6 +256,7 @@ type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
 interface ErrorBoundaryProps {
   error?: unknown
   onError: NonNullable<ComponentDidCatch>
+  children?: React.ReactNode
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
@@ -272,6 +274,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
   useAuth?: UseAuthProp
   logLevel?: F.Return<typeof setLogVerbosity>
+  children?: React.ReactNode
 }> = ({
   graphQLClientConfig,
   useAuth = useRWAuth,
