@@ -1,4 +1,3 @@
-
 import type {
   DeleteContactMutationVariables,
   FindContactById,
@@ -8,6 +7,8 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
+import { timeTag } from 'src/lib/formattingFunctions'
+
 const DELETE_CONTACT_MUTATION = gql`
   mutation DeleteContactMutation($id: Int!) {
     deleteContact(id: $id) {
@@ -15,16 +16,6 @@ const DELETE_CONTACT_MUTATION = gql`
     }
   }
 `
-
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
 
 interface Props {
   contact: NonNullable<FindContactById['contact']>

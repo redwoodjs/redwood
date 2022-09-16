@@ -1,9 +1,10 @@
-
 import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+
+import { timeTag } from 'src/lib/formattingFunctions'
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
@@ -12,16 +13,6 @@ const DELETE_POST_MUTATION = gql`
     }
   }
 `
-
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
 
 interface Props {
   post: NonNullable<FindPostById['post']>

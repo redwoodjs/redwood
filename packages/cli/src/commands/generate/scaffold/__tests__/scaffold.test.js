@@ -20,8 +20,8 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 17 files', async () => {
-    expect(Object.keys(files).length).toEqual(17)
+  test('returns exactly 18 files', async () => {
+    expect(Object.keys(files).length).toEqual(18)
   })
   // SDL
 
@@ -407,8 +407,8 @@ describe('in typescript mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(17)
+  test('returns exactly 18 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(18)
   })
 
   // SDL
