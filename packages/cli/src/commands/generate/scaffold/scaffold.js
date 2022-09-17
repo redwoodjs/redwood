@@ -241,7 +241,7 @@ const formattingFunctions = (name) => {
   const outputPath = path.join(
     getPaths().web.src,
     'lib',
-    'formattingFunctions.tsx.template'
+    'formattingFunctions.tsx'
   )
 
   // skip files that already exist on disk, never worry about overwriting
