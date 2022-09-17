@@ -21,7 +21,7 @@ const removeGraphiqlFromGraphqlHandler = () => {
 
   if (hasHeaderImport) {
     // remove import and object from handler
-    content = content.replaceAll(`generateGraphiQLHeader,\n`, '')
+    content = content.replaceAll(/generateGraphiQLHeader,?\n?/g, '')
   }
   writeFile(graphqlPath, content, {
     overwriteExisting: true,
