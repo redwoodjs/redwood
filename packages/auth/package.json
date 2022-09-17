@@ -42,7 +42,7 @@
     "@simplewebauthn/typescript-types": "6.0.0",
     "@supabase/supabase-js": "1.35.6",
     "@types/netlify-identity-widget": "1.9.3",
-    "@types/react": "17.0.48",
+    "@types/react": "17.0.50",
     "firebase": "9.9.3",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",
