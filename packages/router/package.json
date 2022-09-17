@@ -32,7 +32,7 @@
     "@babel/cli": "7.18.10",
     "@babel/core": "7.19.1",
     "@types/lodash.isequal": "4.5.6",
-    "@types/react": "17.0.48",
+    "@types/react": "17.0.50",
     "@types/react-dom": "17.0.17",
     "jest": "29.0.3",
     "prop-types": "15.8.1",
