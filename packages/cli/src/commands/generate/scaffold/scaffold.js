@@ -243,6 +243,11 @@ const formattingFunctions = (name) => {
     'lib',
     'formattingFunctions.tsx'
   )
+  const outputPathTest = path.join(
+    getPaths().web.src,
+    'lib',
+    'formattingFunctions.test.tsx'
+  )
 
   // skip files that already exist on disk, never worry about overwriting
   if (fs.existsSync(outputPath)) {
@@ -260,7 +265,21 @@ const formattingFunctions = (name) => {
     }
   )
 
-  return { [outputPath]: template }
+  const templateTest = generateTemplate(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: path.join('lib', 'formattingFunctions.test.tsx.template'),
+    }),
+    {
+      name,
+    }
+  )
+
+  return {
+    [outputPath]: template,
+    [outputPathTest]: templateTest,
+  }
 }
 
 const layoutFiles = (
