@@ -141,19 +141,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:2.28.1":
-  version: 2.28.1
-  resolution: "@azure/msal-browser@npm:2.28.1"
+"@azure/msal-browser@npm:2.28.3":
+  version: 2.28.3
+  resolution: "@azure/msal-browser@npm:2.28.3"
   dependencies:
-    "@azure/msal-common": ^7.3.0
-  checksum: b453b5b9a9ae2146a71b32ee2fcd9cf4e9c93e23860fbcc836bd10d9769dc25f02267db0300c28b124e361f5193d9fc74dea5d1142aeb6821cbc95345f57c795
+    "@azure/msal-common": ^7.4.1
+  checksum: b1ba0d8f4a77d7f71623b4684bc2bc35c6d52db7e883f48bc886eeea4278f090845a703db02212f67ff27cc29b74d89a0a2f0ea9116a6a66e27c71478f41db5b
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:^7.3.0":
-  version: 7.3.0
-  resolution: "@azure/msal-common@npm:7.3.0"
-  checksum: 7cae1acaee066d30328d8ac4fc8e1668d3cb66aae05c652d833d72e18a2d77dd7621724d3a6d1aa80d24fc077ab3434ce50e08373a5ddeef22b3c944b965302a
+"@azure/msal-common@npm:^7.4.1":
+  version: 7.4.1
+  resolution: "@azure/msal-common@npm:7.4.1"
+  checksum: 436ab5d079c4b71e2d604a35affa4069bcc33b228427121fe38706fc036d2361900d097f8bef38d4433882da922a80a9f1122d7f360b92d9d0b7b5ab2c366493
   languageName: node
   linkType: hard
 
@@ -6207,7 +6207,7 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@auth0/auth0-spa-js": 1.22.4
-    "@azure/msal-browser": 2.28.1
+    "@azure/msal-browser": 2.28.3
     "@babel/cli": 7.18.10
     "@babel/core": 7.19.1
     "@babel/runtime-corejs3": 7.19.1
@@ -6222,7 +6222,7 @@ __metadata:
     "@simplewebauthn/typescript-types": 6.0.0
     "@supabase/supabase-js": 1.35.6
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.48
+    "@types/react": 17.0.50
     core-js: 3.25.1
     firebase: 9.9.3
     firebase-admin: 10.3.0
@@ -6437,7 +6437,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.48
+    "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.25.1
@@ -6598,7 +6598,7 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 3.0.1
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.48
+    "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     core-js: 3.25.1
     jest: 29.0.3
@@ -6698,7 +6698,7 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.0.1
     "@types/node": 16.11.47
-    "@types/react": 17.0.48
+    "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     "@types/webpack": 5.28.0
     babel-jest: 29.0.3
@@ -6727,7 +6727,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.48
+    "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.25.1
@@ -9112,14 +9112,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.48":
-  version: 17.0.48
-  resolution: "@types/react@npm:17.0.48"
+"@types/react@npm:17.0.50":
+  version: 17.0.50
+  resolution: "@types/react@npm:17.0.50"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 270210edbebdb31889f86d6f377cd143c76b62098b8822e9922454e21365d9039c36421c4c49d4408e65938b9f4de691a4d8239e933f16e7e35e1669488038af
+  checksum: 2e7cf61b7319b6398c62a29922255ce335c98bfbb55bda7c3aa386f4c2693d894d26eba9f7111f3ae86be79491d471a2ee89bf54f0445177ff70d1c30ab39382
   languageName: node
   linkType: hard
 
