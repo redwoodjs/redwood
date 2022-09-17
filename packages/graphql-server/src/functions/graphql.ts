@@ -192,9 +192,10 @@ export const createGraphQLHandler = ({
       ? {
           title: 'Redwood GraphQL Playground',
           endpoint: graphiQLEndpoint,
-          headers: generateGraphiQLHeader
-            ? generateGraphiQLHeader()
-            : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`,
+          headers:
+            generateGraphiQLHeader && generateGraphiQLHeader() // function might return undefined if env = prod
+              ? generateGraphiQLHeader()
+              : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`,
           defaultQuery: `query Redwood {
   redwood {
     version
@@ -376,13 +377,13 @@ export const createGraphQLHandler = ({
 }
 
 export const generateGraphiQLHeader = () => {
-  let header = undefined
+  let header
   if (process.env.NODE_ENV === 'development') {
     try {
-      header = require('api/dist/lib/generateGraphiQLHeader').default
+      header = require('api/dist/lib/generateGraphiQLHeader').default()
     } catch (err) {
       console.log('Could not find generateGraphiQLHeader')
     }
   }
-  return header()
+  return header
 }
