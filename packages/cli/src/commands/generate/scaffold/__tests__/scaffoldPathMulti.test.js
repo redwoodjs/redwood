@@ -24,8 +24,8 @@ beforeAll(async () => {
 
 describe('admin/pages/post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 18 files', () => {
-      expect(Object.keys(filesNestedLower).length).toEqual(18)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesNestedLower).length).toEqual(19)
     })
 
     // Layout
@@ -354,8 +354,8 @@ describe('admin/pages/post', () => {
 
 describe('Admin/Pages/Post/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 18 files', () => {
-      expect(Object.keys(filesNestedUpper).length).toEqual(18)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesNestedUpper).length).toEqual(19)
     })
 
     // Layout
