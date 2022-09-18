@@ -300,7 +300,7 @@ jobs:
 
       - name: Upload Replays
         if: always()
-        uses: replayio/action-upload@v0.4.3
+        uses: replayio/action-upload@v0.4.5
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
