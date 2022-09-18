@@ -27,3 +27,5 @@ jobs:
           token: ${{ secrets.JTOAR_TOKEN }}
           branch: release
           labels: cherry-pick
+          author: Tobbe Lundberg <tobbe@tlundberg.com>
+          committer: Tobbe Lundberg <tobbe@tlundberg.com>
