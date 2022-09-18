@@ -14093,9 +14093,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:10.3.1":
-  version: 10.3.1
-  resolution: "cypress@npm:10.3.1"
+"cypress@npm:10.8.0":
+  version: 10.8.0
+  resolution: "cypress@npm:10.8.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -14116,7 +14116,7 @@ __metadata:
     dayjs: ^1.10.4
     debug: ^4.3.2
     enquirer: ^2.3.6
-    eventemitter2: ^6.4.3
+    eventemitter2: 6.4.7
     execa: 4.1.0
     executable: ^4.1.1
     extract-zip: 2.0.1
@@ -14141,7 +14141,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 5db249c8c1bce7d21c49ad3849d68ff9358cb31ead92c018846e8a79c08ad8ff51a215754e54ccc62bd8c10bd643e9971c9722a212fa646b1137b30805e193fc
+  checksum: ff554512f66715c2a33ab964697d9b682bd3559dd785b68b1563fbae173abaed8228e18254d47f614e21e43764e1aff07fb3ea48d786e96b1941b6b0e31e2918
   languageName: node
   linkType: hard
 
@@ -16055,10 +16055,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter2@npm:^6.4.3":
-  version: 6.4.5
-  resolution: "eventemitter2@npm:6.4.5"
-  checksum: d6f489daf37148f1fa44bb20a0f2c2570bf4939adc34b9c5e4886e7942fbe44976b8386e54de86399efa9d4405b7fc3cf2071ee8638ee86680042f2324595f8c
+"eventemitter2@npm:6.4.7":
+  version: 6.4.7
+  resolution: "eventemitter2@npm:6.4.7"
+  checksum: 35d8e9d51b919114eb072d33786274e1475db50efe00960c24c088ce4f76c07a826ccc927602724928efb3d8f09a7d8dd1fa79e410875118c0e9846959287f34
   languageName: node
   linkType: hard
 
@@ -27164,7 +27164,7 @@ __metadata:
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
     core-js: 3.25.1
-    cypress: 10.3.1
+    cypress: 10.8.0
     cypress-wait-until: 1.7.2
     eslint: 8.23.1
     fast-glob: 3.2.12
