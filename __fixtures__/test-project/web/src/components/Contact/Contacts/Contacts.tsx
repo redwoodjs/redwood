@@ -8,7 +8,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Contact/ContactsCell'
-import { timeTag, truncate } from 'src/lib/formattingFunctions'
+import { timeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_CONTACT_MUTATION = gql`
   mutation DeleteContactMutation($id: Int!) {

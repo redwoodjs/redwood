@@ -181,7 +181,7 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
-    ...formattingFunctions(name),
+    ...formatters(name),
     ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
@@ -237,16 +237,12 @@ const assetFiles = (name, tailwind) => {
   return fileList
 }
 
-const formattingFunctions = (name) => {
-  const outputPath = path.join(
-    getPaths().web.src,
-    'lib',
-    'formattingFunctions.tsx'
-  )
+const formatters = (name) => {
+  const outputPath = path.join(getPaths().web.src, 'lib', 'formatters.tsx')
   const outputPathTest = path.join(
     getPaths().web.src,
     'lib',
-    'formattingFunctions.test.tsx'
+    'formatters.test.tsx'
   )
 
   // skip files that already exist on disk, never worry about overwriting
@@ -258,7 +254,7 @@ const formattingFunctions = (name) => {
     customOrDefaultTemplatePath({
       side: 'web',
       generator: 'scaffold',
-      templatePath: path.join('lib', 'formattingFunctions.tsx.template'),
+      templatePath: path.join('lib', 'formatters.tsx.template'),
     }),
     {
       name,
@@ -269,7 +265,7 @@ const formattingFunctions = (name) => {
     customOrDefaultTemplatePath({
       side: 'web',
       generator: 'scaffold',
-      templatePath: path.join('lib', 'formattingFunctions.test.tsx.template'),
+      templatePath: path.join('lib', 'formatters.test.tsx.template'),
     }),
     {
       name,
@@ -533,13 +529,13 @@ const componentFiles = async (
     })
   )
 
-  const formattingFunctionsImports = columns
+  const formattersImports = columns
     .map((column) => column.displayFunction)
     .sort()
     .filter((v, i, a) => a.indexOf(v) === i)
     .join(', ')
 
-  const listFormattingFunctionsImports = columns
+  const listFormattersImports = columns
     .map((column) => column.listDisplayFunction)
     .sort()
     .filter((v, i, a) => a.indexOf(v) === i)
@@ -576,8 +572,8 @@ const componentFiles = async (
         idType,
         intForeignKeys,
         pascalScaffoldPath,
-        listFormattingFunctionsImports,
-        formattingFunctionsImports,
+        listFormattersImports,
+        formattersImports,
         ...templateStrings,
       }
     )

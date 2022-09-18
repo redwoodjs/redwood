@@ -6,7 +6,7 @@ import {
   truncate,
   timeTag,
   checkboxInputTag,
-} from './formattingFunctions'
+} from './formatters'
 
 describe('formatEnum', () => {
   it('handles nullish values', () => {

@@ -3,7 +3,7 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { ${formattingFunctionsImports} } from 'src/lib/formattingFunctions'
+import { ${formattersImports} } from 'src/lib/formatters'
 
 import type { Delete${singularPascalName}MutationVariables, Find${singularPascalName}ById } from 'types/graphql'
 
