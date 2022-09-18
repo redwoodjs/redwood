@@ -1,4 +1,4 @@
-import { render, waitFor } from '@redwoodjs/testing/web'
+import { render, waitFor, screen } from '@redwoodjs/testing/web'
 
 import {
   formatEnum,
@@ -82,46 +82,34 @@ describe('jsonTruncate', () => {
 
 describe('timeTag', () => {
   it('renders a date', async () => {
-    const time = timeTag(new Date('1970-08-20').toUTCString())
-
-    const screen = render(<div>{time}</div>)
+    render(<div>{timeTag(new Date('1970-08-20').toUTCString())}</div>)
 
     await waitFor(() => screen.getByText(/1970.*00:00:00/))
   })
 
   it('can take an empty input string', async () => {
-    const time = timeTag('')
-
-    expect(time).toEqual('')
+    expect(timeTag('')).toEqual('')
   })
 })
 
 describe('checkboxInputTag', () => {
   it('can be checked', () => {
-    const checkbox = checkboxInputTag(true)
-
-    const screen = render(checkbox)
+    render(checkboxInputTag(true))
     expect(screen.getByRole('checkbox')).toBeChecked()
   })
 
   it('can be unchecked', () => {
-    const checkbox = checkboxInputTag(false)
-
-    const screen = render(checkbox)
+    render(checkboxInputTag(false))
     expect(screen.getByRole('checkbox')).not.toBeChecked()
   })
 
   it('is disabled when checked', () => {
-    const checkbox = checkboxInputTag(true)
-
-    const screen = render(checkbox)
+    render(checkboxInputTag(true))
     expect(screen.getByRole('checkbox')).toBeDisabled()
   })
 
   it('is disabled when unchecked', () => {
-    const checkbox = checkboxInputTag(false)
-
-    const screen = render(checkbox)
+    render(checkboxInputTag(false))
     expect(screen.getByRole('checkbox')).toBeDisabled()
   })
 })
