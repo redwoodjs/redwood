@@ -268,7 +268,7 @@ sudo mkdir -p /var/www/myapp
 sudo chown deploy:deploy /var/www/myapp
 ```
 
-You'll want to create an `.env` file in this directory containing any environment variables that are needed by your by your app (like `DATABASE_URL` at a minimum). This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
+You'll want to create an `.env` file in this directory containing any environment variables that are needed by your app (like `DATABASE_URL` at a minimum). This will be symlinked to each release directory so that it's available as the app expects (in the root directory of the codebase).
 
 :::caution SSH and Non-interactive Sessions
 
