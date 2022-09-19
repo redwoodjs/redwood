@@ -131,6 +131,7 @@ describe('serverConfigWithDefaults', () => {
 
   it('overrides defaults with custom', () => {
     const serverConfig = {
+      port: 12345,
       branch: 'venus',
       packageManagerCommand: 'npm',
       monitorCommand: 'god',
