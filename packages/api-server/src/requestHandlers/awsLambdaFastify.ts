@@ -4,6 +4,7 @@ import type {
   Handler,
 } from 'aws-lambda'
 import type { FastifyRequest, FastifyReply } from 'fastify'
+import omit from 'lodash/omit'
 import qs from 'qs'
 
 import { mergeMultiValueHeaders, parseBody } from './utils'
@@ -32,13 +33,33 @@ const fastifyResponseForLambdaResult = (
 ) => {
   const {
     statusCode = 200,
-    headers,
+    headers = {},
     body = '',
-    multiValueHeaders,
+    multiValueHeaders = {},
   } = lambdaResult
   const h = mergeMultiValueHeaders(headers, multiValueHeaders)
-  reply.headers(h)
+  const headersWithoutCookie = omit(h, 'set-cookie')
+  reply.headers(headersWithoutCookie)
   reply.status(statusCode)
+
+  console.log(mergeMultiValueHeaders, headers)
+
+  Object.keys(multiValueHeaders).forEach((key) => {
+    const isSetCookie = key.toLowerCase() === 'set-cookie'
+    const isArrayCookie = Array.isArray(multiValueHeaders[key])
+    if (isArrayCookie && isSetCookie) {
+      multiValueHeaders[key].forEach((cookieHeader) => {
+        reply.header('set-cookie', cookieHeader)
+      })
+    }
+  })
+
+  Object.keys(headers).forEach((key) => {
+    const isSetCookie = key.toLowerCase() === 'set-cookie'
+    if (isSetCookie) {
+      reply.header('set-cookie', headers[key])
+    }
+  })
 
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
