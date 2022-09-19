@@ -12,6 +12,9 @@ const VerboseRenderer = require('listr-verbose-renderer')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
+const chalk = require('chalk')
+const rimraf = require('rimraf')
+
 const {
   addFrameworkDepsToProject,
   copyFrameworkPackages,
@@ -22,9 +25,6 @@ const {
   updatePkgJsonScripts,
   confirmNoFixtureNoLink,
 } = require('./util')
-
-const chalk = require('chalk')
-const rimraf = require('rimraf')
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
@@ -347,6 +347,84 @@ const globalTasks = () =>
             ['--force'],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
+        },
+      },
+      {
+        title: 'Run project web tests',
+        task: async () => {
+          let output = ''
+
+          const testProcessHandler = execa('yarn rw test web', ['--no-watch'], {
+            cwd: OUTPUT_PROJECT_PATH,
+            shell: true,
+            detached: true,
+            env: {
+              RW_PATH: path.join(__dirname, '../../'),
+            },
+            cleanup: true,
+            stdio: ['ignore', 'pipe', 'pipe'], // in, out, err
+          })
+
+          testProcessHandler.unref()
+
+          testProcessHandler.on('exit', function (code) {
+            if (code !== 0) {
+              console.log(output)
+              throw new Error('Web side test suite did not pass')
+            }
+
+            // code === 0 means all tests passed. Destroy pipes to allow parent
+            // process to exit
+            testProcessHandler.stdout?.destroy()
+            testProcessHandler.stderr?.destroy()
+          })
+
+          // Pipe out logs so we can debug, when required
+          testProcessHandler.stdout?.on('data', (data) => {
+            output += Buffer.from(data, 'utf-8').toString() + '\n'
+          })
+          testProcessHandler.stderr?.on('data', (data) => {
+            output += Buffer.from(data, 'utf-8').toString() + '\n'
+          })
+        },
+      },
+      {
+        title: 'Run project api tests',
+        task: async () => {
+          let output = ''
+
+          const testProcessHandler = execa('yarn rw test api', ['--no-watch'], {
+            cwd: OUTPUT_PROJECT_PATH,
+            shell: true,
+            detached: true,
+            env: {
+              RW_PATH: path.join(__dirname, '../../'),
+            },
+            cleanup: true,
+            stdio: ['ignore', 'pipe', 'pipe'], // in, out, err
+          })
+
+          testProcessHandler.unref()
+
+          testProcessHandler.on('exit', function (code) {
+            if (code !== 0) {
+              console.log(output)
+              throw new Error('Api side test suite did not pass')
+            }
+
+            // code === 0 means all tests passed. Destroy pipes to allow parent
+            // process to exit
+            testProcessHandler.stdout?.destroy()
+            testProcessHandler.stderr?.destroy()
+          })
+
+          // Pipe out logs so we can debug, when required
+          testProcessHandler.stdout?.on('data', (data) => {
+            output += Buffer.from(data, 'utf-8').toString() + '\n'
+          })
+          testProcessHandler.stderr?.on('data', (data) => {
+            output += Buffer.from(data, 'utf-8').toString() + '\n'
+          })
         },
       },
       {
