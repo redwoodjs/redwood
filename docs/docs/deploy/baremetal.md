@@ -156,6 +156,7 @@ This lists a single server, in the `production` environment, providing the hostn
 #### Config Options
 
 * `host` - hostname to the server
+* `port` - [optional] ssh port for server connection, defaults to 22
 * `username` - the user to login as
 * `password` - [optional] if you are using password authentication, include that here
 * `privateKey` - [optional] if you connect with a private key, include the content of the key here, as a buffer: `privateKey: Buffer.from('...')`. Use this *or* `privateKeyPath`, not both.
