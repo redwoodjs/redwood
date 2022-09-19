@@ -136,9 +136,8 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: 🌲 Run cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
@@ -150,8 +149,8 @@ jobs:
           wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
           spec: |
-             cypress/integration/01-tutorial/*.spec.js
-             cypress/integration/04-logger/*.spec.js
+             cypress/e2e/01-tutorial/*.cy.js
+             cypress/e2e/04-logger/*.cy.js
 
   tutorial-e2e-docs:
     needs: only-doc-changes
@@ -301,7 +300,7 @@ jobs:
 
       - name: Upload Replays
         if: always()
-        uses: replayio/action-upload@v0.4.3
+        uses: replayio/action-upload@v0.4.5
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
