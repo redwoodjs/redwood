@@ -459,11 +459,7 @@ exports[`in javascript (default) mode creates a show component 1`] = `
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import {
-  checkboxInputTag,
-  jsonDisplay,
-  timeTag,
-} from 'src/lib/formatters'
+import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -1284,43 +1280,43 @@ interface PostFormProps {
 
 const PostForm = (props: PostFormProps) => {
   const onSubmit = (data: FormPost) => {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
     props.onSave(data, props?.post?.id)
   }
 
@@ -1333,7 +1329,7 @@ const PostForm = (props: PostFormProps) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-
+      
         <Label
           name="title"
           className="rw-label"
@@ -1341,7 +1337,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Title
         </Label>
-
+        
           <TextField
             name="title"
             defaultValue={props.post?.title}
@@ -1349,7 +1345,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
-
+        
 
         <FieldError name="title" className="rw-field-error" />
 
@@ -1360,7 +1356,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Slug
         </Label>
-
+        
           <TextField
             name="slug"
             defaultValue={props.post?.slug}
@@ -1368,7 +1364,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
-
+        
 
         <FieldError name="slug" className="rw-field-error" />
 
@@ -1379,7 +1375,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Author
         </Label>
-
+        
           <TextField
             name="author"
             defaultValue={props.post?.author}
@@ -1387,7 +1383,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
-
+        
 
         <FieldError name="author" className="rw-field-error" />
 
@@ -1398,7 +1394,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Body
         </Label>
-
+        
           <TextField
             name="body"
             defaultValue={props.post?.body}
@@ -1406,7 +1402,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
-
+        
 
         <FieldError name="body" className="rw-field-error" />
 
@@ -1417,14 +1413,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Image
         </Label>
-
+        
           <TextField
             name="image"
             defaultValue={props.post?.image}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
-
+        
 
         <FieldError name="image" className="rw-field-error" />
 
@@ -1435,14 +1431,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Posted at
         </Label>
-
+        
           <DatetimeLocalField
             name="postedAt"
             defaultValue={formatDatetime(props.post?.postedAt)}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
-
+        
 
         <FieldError name="postedAt" className="rw-field-error" />
 
@@ -1453,14 +1449,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Is pinned
         </Label>
-
+        
           <CheckboxField
             name="isPinned"
             defaultChecked={props.post?.isPinned}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
-
+        
 
         <FieldError name="isPinned" className="rw-field-error" />
 
@@ -1471,7 +1467,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Read time
         </Label>
-
+        
           <TextField
             name="readTime"
             defaultValue={props.post?.readTime}
@@ -1479,7 +1475,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ valueAsNumber: true, required: true }}
           />
-
+        
 
         <FieldError name="readTime" className="rw-field-error" />
 
@@ -1490,7 +1486,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Rating
         </Label>
-
+        
           <TextField
             name="rating"
             defaultValue={props.post?.rating}
@@ -1498,7 +1494,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ valueAsNumber: true }}
           />
-
+        
 
         <FieldError name="rating" className="rw-field-error" />
 
@@ -1509,7 +1505,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Upvotes
         </Label>
-
+        
           <NumberField
             name="upvotes"
             defaultValue={props.post?.upvotes}
@@ -1517,7 +1513,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
-
+        
 
         <FieldError name="upvotes" className="rw-field-error" />
 
@@ -1528,7 +1524,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Metadata
         </Label>
-
+        
           <TextAreaField
             name="metadata"
             defaultValue={JSON.stringify(props.post?.metadata)}
@@ -1536,7 +1532,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ valueAsJSON: true, required: true }}
           />
-
+        
 
         <FieldError name="metadata" className="rw-field-error" />
 
@@ -1547,7 +1543,7 @@ const PostForm = (props: PostFormProps) => {
         >
           Huge number
         </Label>
-
+        
           <TextField
             name="hugeNumber"
             defaultValue={props.post?.hugeNumber}
@@ -1555,7 +1551,7 @@ const PostForm = (props: PostFormProps) => {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
-
+        
 
         <FieldError name="hugeNumber" className="rw-field-error" />
 
