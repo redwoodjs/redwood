@@ -142,6 +142,11 @@ describe('serverConfigWithDefaults', () => {
     expect(config).toEqual(serverConfig)
   })
 
+  it('provides default port as 22', () => {
+    const config = baremetal.serverConfigWithDefaults({}, {})
+    expect(config.port).toEqual(22)
+  })
+
   it('provides default branch name', () => {
     const config = baremetal.serverConfigWithDefaults({}, {})
     expect(config.branch).toEqual('main')
