@@ -181,7 +181,7 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
-    ...formatters(name),
+    ...formatters(name, typescript),
     ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
@@ -237,12 +237,16 @@ const assetFiles = (name, tailwind) => {
   return fileList
 }
 
-const formatters = (name) => {
-  const outputPath = path.join(getPaths().web.src, 'lib', 'formatters.tsx')
+const formatters = (name, isTypescript) => {
+  const outputPath = path.join(
+    getPaths().web.src,
+    'lib',
+    isTypescript ? 'formatters.tsx' : 'formatters.js'
+  )
   const outputPathTest = path.join(
     getPaths().web.src,
     'lib',
-    'formatters.test.tsx'
+    isTypescript ? 'formatters.test.tsx' : 'formatters.test.js'
   )
 
   // skip files that already exist on disk, never worry about overwriting
