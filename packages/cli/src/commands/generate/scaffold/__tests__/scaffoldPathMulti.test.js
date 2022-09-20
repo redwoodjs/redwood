@@ -5,6 +5,8 @@ import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 let filesNestedLower, filesNestedUpper
 
 beforeAll(async () => {

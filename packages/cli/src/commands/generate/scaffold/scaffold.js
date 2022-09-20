@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import camelcase from 'camelcase'
+import execa from 'execa'
 import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
@@ -181,7 +182,7 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
-    ...formatters(name, typescript),
+    ...(await formatters(name, typescript)),
     ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
@@ -237,7 +238,7 @@ const assetFiles = (name, tailwind) => {
   return fileList
 }
 
-const formatters = (name, isTypescript) => {
+const formatters = async (name, isTypescript) => {
   const outputPath = path.join(
     getPaths().web.src,
     'lib',
@@ -253,6 +254,10 @@ const formatters = (name, isTypescript) => {
   if (fs.existsSync(outputPath)) {
     return
   }
+
+  // Has to be v2.1.0 because v3 switched to cjs module format, which we don't
+  // support yet (2022-09-20)
+  await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
 
   const template = generateTemplate(
     customOrDefaultTemplatePath({

@@ -8,6 +8,8 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 describe('in javascript (default) mode', () => {
   let files
 
@@ -396,7 +398,6 @@ describe('in javascript (default) mode', () => {
   // Formatters
 
   test('creates a formatters function file', () => {
-    console.log('files', files)
     expect(
       files[path.normalize('/path/to/project/web/src/lib/formatters.js')]
     ).toMatchSnapshot()
