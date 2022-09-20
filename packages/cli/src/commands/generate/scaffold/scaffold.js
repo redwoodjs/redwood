@@ -532,13 +532,15 @@ const componentFiles = async (
   const formattersImports = columns
     .map((column) => column.displayFunction)
     .sort()
-    .filter((v, i, a) => a.indexOf(v) === i)
+    // filter out duplicates, so we only keep unique import names
+    .filter((name, index, array) => array.indexOf(name) === index)
     .join(', ')
 
   const listFormattersImports = columns
     .map((column) => column.listDisplayFunction)
     .sort()
-    .filter((v, i, a) => a.indexOf(v) === i)
+    // filter out duplicates, so we only keep unique import names
+    .filter((name, index, array) => array.indexOf(name) === index)
     .join(', ')
 
   await asyncForEach(components, (component) => {
