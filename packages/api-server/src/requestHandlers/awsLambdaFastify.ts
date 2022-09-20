@@ -47,6 +47,8 @@ const fastifyResponseForLambdaResult = (
   } else {
     reply.send(body)
   }
+
+  return reply
 }
 
 const fastifyResponseForLambdaError = (
