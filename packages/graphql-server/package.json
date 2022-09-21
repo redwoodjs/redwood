@@ -49,7 +49,7 @@
     "@envelop/testing": "4.4.2",
     "@envelop/types": "2.3.1",
     "@redwoodjs/auth": "3.0.1",
-    "@types/jsonwebtoken": "8.5.8",
+    "@types/jsonwebtoken": "8.5.9",
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "8.3.4",
