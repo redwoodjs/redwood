@@ -35,6 +35,11 @@ const addApiConfig = (authDecoderImport?: string) => {
 
     // If we have multiple auth providers setup we probably already have an
     // auth decoder configured. In that case we don't want to add another one
+    // Have to use a funky looking Regex here to prevent a "Polynomial regular
+    // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
+    // Backtracking". The usual fix is to use an atomic group, but the JS
+    // regex engine doesn't support that, so we use a lookaround group to
+    // emulate an atomic group.
     if (
       !new RegExp(
         '(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder',
@@ -57,7 +62,7 @@ const addApiConfig = (authDecoderImport?: string) => {
   if (!hasAuthImport) {
     // add import statement
     content = content.replace(
-      /^(.*?import\s*services.*)$/m,
+      /^((?=(.*?import\s*services))\\1.*)$/m,
       `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
     )
 
