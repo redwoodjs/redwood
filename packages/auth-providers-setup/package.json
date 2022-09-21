@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-providers-setup",
-  "version": "2.2.4",
+  "version": "3.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -29,8 +29,8 @@
   "devDependencies": {
     "@babel/cli": "7.18.10",
     "@babel/core": "7.18.10",
-    "@redwoodjs/auth": "2.2.4",
-    "@redwoodjs/cli-helpers": "2.2.4",
+    "@redwoodjs/auth": "3.0.1",
+    "@redwoodjs/cli-helpers": "3.0.1",
     "@types/react": "17.0.48",
     "jest": "28.1.3",
     "typescript": "4.7.4"
