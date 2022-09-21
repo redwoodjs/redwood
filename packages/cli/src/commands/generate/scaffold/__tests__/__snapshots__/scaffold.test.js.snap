@@ -280,7 +280,7 @@ import humanize from 'humanize-string'
 
 const MAX_STRING_LENGTH = 150
 
-export const formatEnum = (values: string | string[] | null | undefined) => {
+export const formatEnum = (values) => {
   let output = ''
 
   if (Array.isArray(values)) {
@@ -293,7 +293,7 @@ export const formatEnum = (values: string | string[] | null | undefined) => {
   return output
 }
 
-export const truncate = (value: string | number) => {
+export const truncate = (value) => {
   let output = value?.toString() ?? ''
 
   if (output.length > MAX_STRING_LENGTH) {
@@ -303,12 +303,12 @@ export const truncate = (value: string | number) => {
   return output
 }
 
-export const jsonTruncate = (obj: unknown) => {
+export const jsonTruncate = (obj) => {
   return truncate(JSON.stringify(obj, null, 2))
 }
 
-export const timeTag = (dateTime?: string) => {
-  let output: string | JSX.Element = ''
+export const timeTag = (dateTime) => {
+  let output = ''
 
   if (dateTime) {
     output = (
@@ -321,7 +321,7 @@ export const timeTag = (dateTime?: string) => {
   return output
 }
 
-export const checkboxInputTag = (checked: boolean) => {
+export const checkboxInputTag = (checked) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 "
@@ -403,6 +403,7 @@ describe('jsonTruncate', () => {
           foobar: 'I have no imagination',
           two: 'Second nested item',
         },
+
         five: 5,
         bool: false,
       })
