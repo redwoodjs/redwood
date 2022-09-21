@@ -33,10 +33,10 @@ const addApiConfig = (authDecoderImport?: string) => {
   if (authDecoderImport && !content.includes(authDecoderImport)) {
     content = authDecoderImport + '\n' + content
 
-    // If we have multiple auth providers setup we probably already have a
+    // If we have multiple auth providers setup we probably already have an
     // auth decoder configured. In that case we don't want to add another one
     if (
-      !new RegExp('createGraphQLHandler.*\\bauthDecoder', 's').test(content)
+      !new RegExp('^.*?createGraphQLHandler.*\\bauthDecoder', 's').test(content)
     ) {
       content = content.replace(
         /^(\s*)(loggerConfig:)(.*)$/m,
@@ -49,12 +49,12 @@ const addApiConfig = (authDecoderImport?: string) => {
 
   // default to an array to avoid destructure errors
   const [_, hasAuthImport] =
-    content.match(/(import {.*} from 'src\/lib\/auth.*')/s) || []
+    content.match(/(^\s*import {.*?} from 'src\/lib\/auth.*')/s) || []
 
   if (!hasAuthImport) {
     // add import statement
     content = content.replace(
-      /^(.*services.*)$/m,
+      /^(.*?import\s*services.*)$/m,
       `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
     )
 
