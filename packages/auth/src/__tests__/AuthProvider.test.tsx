@@ -2,7 +2,13 @@ require('whatwg-fetch')
 
 import React, { useEffect, useState } from 'react'
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  configure,
+} from '@testing-library/react'
 import { renderHook, act } from '@testing-library/react-hooks'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
@@ -12,6 +18,10 @@ import {
   CustomTestAuthClient,
   createCustomTestAuth,
 } from './fixtures/customTestAuth'
+
+configure({
+  asyncUtilTimeout: 5_000,
+})
 
 let CURRENT_USER_DATA: {
   name: string

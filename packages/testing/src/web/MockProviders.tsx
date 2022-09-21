@@ -19,7 +19,10 @@ const {
   default: UserRouterWithRoutes,
 } = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
 
-export const MockProviders: React.FunctionComponent = ({ children }) => {
+// TODO(pc): see if there are props we want to allow to be passed into our mock provider (e.g. AuthProviderProps)
+export const MockProviders: React.FunctionComponent<{
+  children: React.ReactNode
+}> = ({ children }) => {
   return (
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider useAuth={useAuth}>

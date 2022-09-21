@@ -18,6 +18,7 @@ interface LocationProviderProps {
     hash?: string
   }
   trailingSlashes?: TrailingSlashesTypes
+  children?: React.ReactNode
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {

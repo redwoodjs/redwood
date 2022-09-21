@@ -37,28 +37,15 @@ import { useParams } from '../params'
 import { Set } from '../Set'
 import { Spec } from '../util'
 
-function createDummyAuthContextValues(
-  partial: Partial<
-    AuthContextInterface<null, void, void, void, void, void, void, null>
-  >
-) {
-  const authContextValues: AuthContextInterface<
-    null,
-    void,
-    void,
-    void,
-    void,
-    void,
-    void,
-    null
-  > = {
+function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
+  const authContextValues: AuthContextInterface = {
     loading: true,
     isAuthenticated: false,
     userMetadata: null,
     currentUser: null,
-    logIn: async () => {},
-    logOut: async () => {},
-    signUp: async () => {},
+    logIn: async () => null,
+    logOut: async () => null,
+    signUp: async () => null,
     getToken: async () => null,
     getCurrentUser: async () => null,
     hasRole: () => false,
@@ -66,9 +53,9 @@ function createDummyAuthContextValues(
     client: null,
     type: 'custom',
     hasError: false,
-    forgotPassword: async () => {},
-    resetPassword: async () => {},
-    validateResetToken: async () => {},
+    forgotPassword: async () => null,
+    resetPassword: async () => null,
+    validateResetToken: async () => null,
   }
 
   return { ...authContextValues, ...partial }

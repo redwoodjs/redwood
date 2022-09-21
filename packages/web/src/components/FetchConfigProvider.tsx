@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { UseAuth, useNoAuth } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
@@ -26,6 +28,7 @@ interface Props {
  */
 export const FetchConfigProvider: React.FC<Props> = ({
   useAuth = useNoAuth,
+  children: React.ReactNode
   ...rest
 }) => {
   const { isAuthenticated, type } = useAuth()
