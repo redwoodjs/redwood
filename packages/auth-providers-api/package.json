@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.18.9",
     "core-js": "3.24.1",
-    "uuid": "8.3.2"
+    "uuid": "9.0.0"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.2",
