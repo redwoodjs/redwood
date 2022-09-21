@@ -661,17 +661,13 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   }
 }
 
-const addHelperPackages = async (isTypescript) => {
-  const outputPath = path.join(
-    getPaths().web.src,
-    'lib',
-    isTypescript ? 'formatters.tsx' : 'formatters.js'
-  )
+const addHelperPackages = async (task) => {
+  const packageJsonPath = path.join(getPaths().web.base, 'package.json')
+  const packageJson = require(packageJsonPath)
 
-  // If the formatters file already exists, the helper packages are most likely
-  // already installed
-  if (fs.existsSync(outputPath)) {
-    return
+  // Skip if humanize-string is already installed
+  if (packageJson.dependencies['humanize-string']) {
+    return task.skip('Skipping. Already installed')
   }
 
   // Has to be v2.1.0 because v3 switched to ESM module format, which we don't
@@ -780,7 +776,7 @@ export const tasks = ({
       },
       {
         title: 'Install helper packages',
-        task: () => addHelperPackages(typescript),
+        task: (_, task) => addHelperPackages(task),
       },
       {
         title: 'Adding layout import...',
