@@ -255,10 +255,6 @@ const formatters = async (name, isTypescript) => {
     return
   }
 
-  // Has to be v2.1.0 because v3 switched to cjs module format, which we don't
-  // support yet (2022-09-20)
-  await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
-
   const template = generateTemplate(
     customOrDefaultTemplatePath({
       side: 'web',
@@ -665,6 +661,25 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   }
 }
 
+const addHelperPackages = async (isTypescript) => {
+  const outputPath = path.join(
+    getPaths().web.src,
+    'lib',
+    isTypescript ? 'formatters.tsx' : 'formatters.js'
+  )
+
+  // If the formatters file already exists, the helper packages are most likely
+  // already installed
+  if (fs.existsSync(outputPath)) {
+    return
+  }
+
+  // Has to be v2.1.0 because v3 switched to ESM module format, which we don't
+  // support yet (2022-09-20)
+  // TODO: Update to latest version when RW supports ESMs
+  await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
+}
+
 const addSetImport = (task) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
@@ -762,6 +777,10 @@ export const tasks = ({
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
+      },
+      {
+        title: 'Install helper packages',
+        task: () => addHelperPackages(typescript),
       },
       {
         title: 'Adding layout import...',
