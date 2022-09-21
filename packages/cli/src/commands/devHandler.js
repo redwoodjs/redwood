@@ -4,7 +4,7 @@ import { argv } from 'process'
 import concurrently from 'concurrently'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
-import { shutdownPort } from '@redwoodjs/internal/dist/dev'
+import { shutdownPort, tryPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -49,6 +49,28 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
+    let proposedPort = getConfig().web.port
+    const forwardedPortMatches = forward.match(
+      /--port=[0-9][0-9]?[0-9]?[0-9]?[0-9]? ?/
+    )
+    const forwardedPortSet =
+      forwardedPortMatches !== null && forwardedPortMatches.length == 1
+    if (forwardedPortSet) {
+      proposedPort = forwardedPortMatches[0]
+        .substring(forwardedPortMatches[0].indexOf('=') + 1)
+        .trim()
+    }
+
+    const portAvailable = await tryPort(proposedPort)
+    if (!portAvailable) {
+      console.error(
+        `${
+          forwardedPortSet ? 'Forwarded' : 'Configured'
+        } "web" port ${proposedPort} is already in use, cannot start development server`
+      )
+      process.exit(1)
+    }
+
     try {
       await shutdownPort(getConfig().web.port)
     } catch (e) {
