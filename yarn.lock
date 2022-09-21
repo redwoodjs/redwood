@@ -1837,16 +1837,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.18.9":
-  version: 7.18.9
-  resolution: "@babel/runtime-corejs3@npm:7.18.9"
-  dependencies:
-    core-js-pure: ^3.20.2
-    regenerator-runtime: ^0.13.4
-  checksum: 5218e4df9b52b60231afa1e3f5c0e54d6c2167a466d1ecbc1603b19c7a6f73fb755d4bd021f87f3706d704029f7cd2e20a13445dd3b0a62886bb3b041fc6623d
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:7.19.1, @babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.17.0":
   version: 7.19.1
   resolution: "@babel/runtime-corejs3@npm:7.19.1"
@@ -7255,7 +7245,7 @@ __metadata:
     "@azure/msal-browser": 2.28.1
     "@babel/cli": 7.18.10
     "@babel/core": 7.18.10
-    "@babel/runtime-corejs3": 7.18.9
+    "@babel/runtime-corejs3": 7.19.1
     "@clerk/clerk-js": 3.17.0
     "@clerk/clerk-react": 3.5.1
     "@clerk/clerk-sdk-node": 3.9.2
@@ -7271,7 +7261,7 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.48
     "@types/uuid": 8.3.4
-    core-js: 3.24.1
+    core-js: 3.25.1
     firebase: 9.9.2
     firebase-admin: 10.3.0
     gotrue-js: 0.9.29
@@ -7308,11 +7298,11 @@ __metadata:
   dependencies:
     "@babel/cli": 7.18.10
     "@babel/core": 7.18.10
-    "@babel/runtime-corejs3": 7.18.9
+    "@babel/runtime-corejs3": 7.19.1
     "@redwoodjs/auth": 3.0.1
     "@redwoodjs/cli-helpers": 3.0.1
     "@types/react": 17.0.48
-    core-js: 3.24.1
+    core-js: 3.25.1
     jest: 28.1.3
     typescript: 4.7.4
   languageName: unknown
@@ -7326,7 +7316,7 @@ __metadata:
     "@azure/msal-browser": 2.28.1
     "@babel/cli": 7.18.10
     "@babel/core": 7.18.10
-    "@babel/runtime-corejs3": 7.18.9
+    "@babel/runtime-corejs3": 7.19.1
     "@clerk/clerk-js": 3.17.0
     "@clerk/clerk-react": 3.5.1
     "@clerk/clerk-sdk-node": 3.9.2
@@ -7341,7 +7331,7 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.48
     "@types/uuid": 8.3.4
-    core-js: 3.24.1
+    core-js: 3.25.1
     firebase: 9.9.2
     firebase-admin: 10.3.0
     gotrue-js: 0.9.29
@@ -7412,10 +7402,10 @@ __metadata:
   dependencies:
     "@babel/cli": 7.18.10
     "@babel/core": 7.18.10
-    "@babel/runtime-corejs3": 7.18.9
+    "@babel/runtime-corejs3": 7.19.1
     "@redwoodjs/telemetry": 2.2.4
     "@types/react": 17.0.48
-    core-js: 3.24.1
+    core-js: 3.25.1
     jest: 28.1.3
     react: 17.0.2
     typescript: 4.7.4
@@ -14994,7 +14984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.19.0, core-js-pure@npm:^3.20.2, core-js-pure@npm:^3.25.1, core-js-pure@npm:^3.8.1":
+"core-js-pure@npm:^3.19.0, core-js-pure@npm:^3.25.1, core-js-pure@npm:^3.8.1":
   version: 3.25.2
   resolution: "core-js-pure@npm:3.25.2"
   checksum: da9840beba29db5e0ca29257cd526bb159b6c7bcd246a3d85fe9699b8be60221c60999c3eff4918f18fa3ba28a28e4fea2e979c63bea63c9607799a3c0878a66
@@ -15005,13 +14995,6 @@ __metadata:
   version: 3.23.5
   resolution: "core-js@npm:3.23.5"
   checksum: ab9b483ede285b3949e2411f9190d147ac589d111b0aa3a4b2999a1bf2755b3e930529c2a22ff550efd4fc154c7cfae700bee858dedff905a09f35ddbcc6425f
-  languageName: node
-  linkType: hard
-
-"core-js@npm:3.24.1":
-  version: 3.24.1
-  resolution: "core-js@npm:3.24.1"
-  checksum: 92b435dbb6dd936fc624a83f93c3e4abd61b5617f8e3c259608452cbd70e1e4be3c56c389292cb58a37554c41c6dc49f1c6401467c35a2b22a3a903798fa5246
   languageName: node
   linkType: hard
 
