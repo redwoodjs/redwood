@@ -40,7 +40,7 @@ See: https://telemetry.redwoodjs.com
 
 ## Troubleshooting
 
-If you suspect problems with telemetry when running CRWA, you set the verbose flag to help diagnose issues.
+If you suspect problems with telemetry when running CRWA, you can set the verbose flag to help diagnose issues.
 
 For example,
 
