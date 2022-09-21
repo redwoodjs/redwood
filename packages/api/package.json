@@ -30,10 +30,10 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.18.9",
     "@prisma/client": "4.3.1",
     "base64url": "3.0.1",
-    "core-js": "3.25.1",
+    "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
     "crypto-js": "4.1.1",
     "humanize-string": "2.1.0",

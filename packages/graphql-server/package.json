@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.18.9",
     "@envelop/depth-limit": "1.6.2",
     "@envelop/disable-introspection": "3.4.2",
     "@envelop/filter-operation-type": "3.4.2",
@@ -34,7 +34,7 @@
     "@graphql-yoga/common": "2.12.12",
     "@prisma/client": "4.3.1",
     "@redwoodjs/api": "3.0.1",
-    "core-js": "3.25.1",
+    "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
     "graphql": "16.6.0",
     "graphql-scalars": "1.17.0",

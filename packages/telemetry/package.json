@@ -27,11 +27,11 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.18.9",
     "@redwoodjs/internal": "3.0.1",
     "@redwoodjs/structure": "3.0.1",
     "ci-info": "3.3.2",
-    "core-js": "3.25.1",
+    "core-js": "3.24.1",
     "cross-undici-fetch": "0.4.14",
     "envinfo": "7.8.1",
     "systeminformation": "5.12.4",
