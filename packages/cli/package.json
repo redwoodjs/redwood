@@ -36,7 +36,7 @@
     "@redwoodjs/prerender": "3.0.1",
     "@redwoodjs/structure": "3.0.1",
     "@redwoodjs/telemetry": "3.0.1",
-    "@types/secure-random-password": "^0.2.1",
+    "@types/secure-random-password": "0.2.1",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
