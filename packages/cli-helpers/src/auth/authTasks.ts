@@ -36,7 +36,10 @@ const addApiConfig = (authDecoderImport?: string) => {
     // If we have multiple auth providers setup we probably already have an
     // auth decoder configured. In that case we don't want to add another one
     if (
-      !new RegExp('^.*?createGraphQLHandler.*\\bauthDecoder', 's').test(content)
+      !new RegExp(
+        '(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder',
+        's'
+      ).test(content)
     ) {
       content = content.replace(
         /^(\s*)(loggerConfig:)(.*)$/m,
