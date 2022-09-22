@@ -2,10 +2,11 @@ import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
+import portfinder from 'portfinder'
 import prompts from 'prompts'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
-import { nextPort, shutdownPort } from '@redwoodjs/internal/dist/dev'
+import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -50,19 +51,24 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
-    let proposedPort = getConfig().web.port
+    let proposedPort = parseInt(getConfig().web.port)
     const forwardedPortMatches = forward.match(
       /--port=[0-9][0-9]?[0-9]?[0-9]?[0-9]? ?/
     )
     const forwardedPortSet =
       forwardedPortMatches !== null && forwardedPortMatches.length == 1
     if (forwardedPortSet) {
-      proposedPort = forwardedPortMatches[0]
-        .substring(forwardedPortMatches[0].indexOf('=') + 1)
-        .trim()
+      proposedPort = parseInt(
+        forwardedPortMatches[0]
+          .substring(forwardedPortMatches[0].indexOf('=') + 1)
+          .trim()
+      )
     }
 
-    const availablePort = await nextPort(proposedPort, proposedPort + 64)
+    const availablePort = await portfinder.getPortPromise({
+      port: proposedPort,
+      stopPort: proposedPort + 64,
+    })
     if (availablePort != proposedPort) {
       if (availablePort == -1) {
         console.error(
@@ -95,7 +101,15 @@ export const handler = async ({
           inactive: 'No',
         })
         if (useAvailablePort.port) {
-          // TODO: Update the configured/forwarded port?
+          // TODO: Consider if there is a better way to propagate the port?
+          if (forwardedPortSet) {
+            forward = forward.replace(
+              forwardedPortMatches[0],
+              ` --port=${availablePort}`
+            )
+          } else {
+            forward = forward.concat(` --port=${availablePort}`)
+          }
         } else {
           console.log(
             c.info(
@@ -108,7 +122,7 @@ export const handler = async ({
     }
 
     try {
-      await shutdownPort(getConfig().web.port)
+      await shutdownPort(availablePort)
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
