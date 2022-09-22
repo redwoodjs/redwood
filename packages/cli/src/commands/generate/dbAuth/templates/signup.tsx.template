@@ -14,11 +14,6 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
-//  ${usernameLowercase}
-//  ${usernameCapitalised}
-//  ${passwordLowercase}
-//  ${passwordCapitalised}
-
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
 
@@ -28,7 +23,7 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on email box on page load
+  // focus on ${usernameLowercase} box on page load
   const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     usernameRef.current?.focus()

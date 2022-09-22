@@ -186,6 +186,12 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
+        templateVars: {
+          usernameLowercase,
+          usernameCapitalised,
+          passwordLowercase,
+          passwordCapitalised,
+        },
       })
     )
   }
