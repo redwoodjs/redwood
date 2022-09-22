@@ -92,6 +92,16 @@ export const builder = (yargs) => {
       description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
     })
+    .option('username', {
+      default: 'username',
+      description: 'Override default form label for username field',
+      type: 'string',
+    })
+    .option('password', {
+      default: 'password',
+      description: 'Override default form label for password field',
+      type: 'string',
+    })
 
     .epilogue(
       `Also see the ${terminalLink(
@@ -114,8 +124,18 @@ export const files = ({
   skipReset,
   skipSignup,
   webAuthn,
+  username,
+  password,
 }) => {
   const files = []
+
+  const usernameLowercase = username.toLowerCase()
+  const usernameCapitalised =
+    usernameLowercase.charAt(0).toUpperCase() + usernameLowercase.slice(1)
+
+  const passwordLowercase = password.toLowerCase()
+  const passwordCapitalised =
+    passwordLowercase.charAt(0).toUpperCase() + passwordLowercase.slice(1)
 
   if (!skipForgot) {
     files.push(
@@ -126,6 +146,12 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
+        templateVars: {
+          usernameLowercase,
+          usernameCapitalised,
+          passwordLowercase,
+          passwordCapitalised,
+        },
       })
     )
   }
@@ -141,6 +167,12 @@ export const files = ({
         templatePath: webAuthn
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
+        templateVars: {
+          usernameLowercase,
+          usernameCapitalised,
+          passwordLowercase,
+          passwordCapitalised,
+        },
       })
     )
   }
@@ -167,6 +199,12 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
+        templateVars: {
+          usernameLowercase,
+          usernameCapitalised,
+          passwordLowercase,
+          passwordCapitalised,
+        },
       })
     )
   }
@@ -213,6 +251,8 @@ const tasks = ({
   skipReset,
   skipSignup,
   webAuthn,
+  username,
+  password,
 }) => {
   return new Listr(
     [
@@ -228,6 +268,8 @@ const tasks = ({
               skipReset,
               skipSignup,
               webAuthn,
+              username,
+              password,
             }),
             {
               overwriteExisting: force,

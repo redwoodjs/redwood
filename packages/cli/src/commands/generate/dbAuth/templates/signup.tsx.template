@@ -14,6 +14,11 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
+//  ${usernameLowercase}
+//  ${usernameCapitalised}
+//  ${passwordLowercase}
+//  ${passwordCapitalised}
+
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
 
@@ -62,7 +67,7 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    ${usernameCapitalised}
                   </Label>
                   <TextField
                     name="username"
@@ -72,7 +77,7 @@ const SignupPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: '${usernameCapitalised} is required',
                       },
                     }}
                   />
@@ -83,7 +88,7 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    ${passwordCapitalised}
                   </Label>
                   <PasswordField
                     name="password"
@@ -93,7 +98,7 @@ const SignupPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: '${passwordCapitalised} is required',
                       },
                     }}
                   />

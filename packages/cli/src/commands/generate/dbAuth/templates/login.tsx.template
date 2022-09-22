@@ -60,7 +60,7 @@ const LoginPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    ${usernameCapitalised}
                   </Label>
                   <TextField
                     name="username"
@@ -70,7 +70,7 @@ const LoginPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: '${usernameCapitalised} is required',
                       },
                     }}
                   />
@@ -82,7 +82,7 @@ const LoginPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    ${passwordCapitalised}
                   </Label>
                   <PasswordField
                     name="password"
@@ -92,7 +92,7 @@ const LoginPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: '${passwordCapitalised} is required',
                       },
                     }}
                   />
@@ -102,7 +102,7 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot Password?
+                      Forgot ${passwordCapitalised}?
                     </Link>
                   </div>
 
