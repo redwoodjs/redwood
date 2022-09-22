@@ -3,7 +3,7 @@ import { Plugin } from '@graphql-yoga/common'
 import {
   AuthContextPayload,
   getAuthenticationContext,
-  Decoder
+  Decoder,
 } from '@redwoodjs/api'
 
 // import { AuthenticationError } from '../errors'

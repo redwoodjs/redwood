@@ -84,7 +84,9 @@ export class RWProject extends BaseNode {
   }
 
   // TODO: do we move this to a separate node? (ex: RWDatabase)
-  @memo() async prismaDMMF(): Promise<Awaited<ReturnType<typeof getDMMF>> | undefined> {
+  @memo() async prismaDMMF(): Promise<
+    Awaited<ReturnType<typeof getDMMF>> | undefined
+  > {
     try {
       // consider case where dmmf doesn't exist (or fails to parse)
       return await getDMMF({
