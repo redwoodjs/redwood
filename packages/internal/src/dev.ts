@@ -23,3 +23,17 @@ export const tryPort = (port: number): Promise<boolean> => {
     }
   })
 }
+
+export const nextPort = async (
+  startPort: number,
+  endPort: number
+): Promise<number> => {
+  let portAvailable = false
+  for (let port = startPort; port < endPort; port++) {
+    portAvailable = await tryPort(port)
+    if (portAvailable) {
+      return port
+    }
+  }
+  return -1
+}

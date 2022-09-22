@@ -2,9 +2,11 @@ import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
+import prompts from 'prompts'
 
+import style from '@redwoodjs/cli/dist/lib/colors'
 import { getConfig } from '@redwoodjs/internal/dist/config'
-import { shutdownPort, tryPort } from '@redwoodjs/internal/dist/dev'
+import { nextPort, shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -61,14 +63,49 @@ export const handler = async ({
         .trim()
     }
 
-    const portAvailable = await tryPort(proposedPort)
-    if (!portAvailable) {
-      console.error(
-        `${
-          forwardedPortSet ? 'Forwarded' : 'Configured'
-        } "web" port ${proposedPort} is already in use, cannot start development server`
-      )
-      process.exit(1)
+    const availablePort = await nextPort(proposedPort, proposedPort + 64)
+    if (availablePort != proposedPort) {
+      if (availablePort == -1) {
+        console.error(
+          style.error(
+            `${
+              forwardedPortSet ? 'Forwarded' : 'Configured'
+            } "web" port ${proposedPort} is already in use and no neighbouring port is available! Cannot start development server.`
+          )
+        )
+        console.log(
+          style.info(
+            `Configured port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
+          )
+        )
+        process.exit(1)
+      } else {
+        console.error(
+          style.error(
+            `${
+              forwardedPortSet ? 'Forwarded' : 'Configured'
+            } "web" port ${proposedPort} is already in use!`
+          )
+        )
+        const useAvailablePort = await prompts({
+          type: 'confirm',
+          name: 'port',
+          message: `Do you wish to use port ${availablePort} instead?`,
+          initial: true,
+          active: 'Yes',
+          inactive: 'No',
+        })
+        if (useAvailablePort.port) {
+          // TODO: Update the configured/forwarded port?
+        } else {
+          console.log(
+            style.info(
+              `Configured port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
+            )
+          )
+          process.exit(1)
+        }
+      }
     }
 
     try {
