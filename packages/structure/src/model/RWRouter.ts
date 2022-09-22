@@ -70,12 +70,10 @@ export class RWRouter extends FileNode {
 
       const sets = self.sf
         .getDescendantsOfKind(tsm.SyntaxKind.JsxElement)
-        .filter(
-          (x) => {
-            const tagName = x.getOpeningElement().getTagNameNode().getText()
-            return tagName  === 'Set' || tagName === 'Private'
-          }
-        )
+        .filter((x) => {
+          const tagName = x.getOpeningElement().getTagNameNode().getText()
+          return tagName === 'Set' || tagName === 'Private'
+        })
 
       const prerenderSets = sets.filter((set) =>
         set.getOpeningElement().getAttribute('prerender')
