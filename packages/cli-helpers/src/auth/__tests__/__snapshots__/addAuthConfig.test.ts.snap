@@ -13,7 +13,7 @@ import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <RedwoodApolloProvider useAuth={useAuth} graphQLClientConfig={{ cache }}>
           <Routes />
@@ -45,7 +45,7 @@ const Routes = () => {
   return (
     <Router useAuth={useAuth}
       pageLoadingDelay={400}
-      trailingSlashes=\\"always\\"
+      trailingSlashes="always"
       paramTypes={{
         foo: {
           match: /foo/,
@@ -75,7 +75,7 @@ import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <RedwoodApolloProvider useAuth={useAuth} graphQLClientConfig={{ cache }}>
           <Routes />
@@ -107,7 +107,7 @@ const Routes = () => {
   return (
     <Router
       pageLoadingDelay={400}
-      trailingSlashes=\\"always\\"
+      trailingSlashes="always"
       paramTypes={{
         foo: {
           match: /foo/,
@@ -149,7 +149,7 @@ const App = (props) => {
 
   return (
     <FatalErrorBoundary page={FatalErrorPage}>
-      <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         <AuthProvider>
           <RedwoodApolloProvider useAuth={useAuth}>
             <AnotherProvider>
@@ -179,7 +179,7 @@ import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <RedwoodApolloProvider useAuth={useAuth}>
           <Routes />
@@ -239,7 +239,7 @@ import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <RedwoodApolloProvider useAuth={useAuth}>
           <Routes />
@@ -300,7 +300,7 @@ const queryClient = {}
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
           <RedwoodReactQueryProvider>
