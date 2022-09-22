@@ -4,7 +4,6 @@ import { argv } from 'process'
 import concurrently from 'concurrently'
 import prompts from 'prompts'
 
-import style from '@redwoodjs/cli/dist/lib/colors'
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { nextPort, shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
@@ -67,21 +66,21 @@ export const handler = async ({
     if (availablePort != proposedPort) {
       if (availablePort == -1) {
         console.error(
-          style.error(
+          c.error(
             `${
               forwardedPortSet ? 'Forwarded' : 'Configured'
             } "web" port ${proposedPort} is already in use and no neighbouring port is available! Cannot start development server.`
           )
         )
         console.log(
-          style.info(
+          c.info(
             `Configured port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
           )
         )
         process.exit(1)
       } else {
         console.error(
-          style.error(
+          c.error(
             `${
               forwardedPortSet ? 'Forwarded' : 'Configured'
             } "web" port ${proposedPort} is already in use!`
@@ -99,7 +98,7 @@ export const handler = async ({
           // TODO: Update the configured/forwarded port?
         } else {
           console.log(
-            style.info(
+            c.info(
               `Configured port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
             )
           )
