@@ -131,6 +131,7 @@ describe('serverConfigWithDefaults', () => {
 
   it('overrides defaults with custom', () => {
     const serverConfig = {
+      port: 12345,
       branch: 'venus',
       packageManagerCommand: 'npm',
       monitorCommand: 'god',
@@ -139,6 +140,11 @@ describe('serverConfigWithDefaults', () => {
     }
     const config = baremetal.serverConfigWithDefaults(serverConfig, {})
     expect(config).toEqual(serverConfig)
+  })
+
+  it('provides default port as 22', () => {
+    const config = baremetal.serverConfigWithDefaults({}, {})
+    expect(config.port).toEqual(22)
   })
 
   it('provides default branch name', () => {
