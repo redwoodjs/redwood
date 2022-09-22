@@ -1,4 +1,5 @@
 import pascalcase from 'pascalcase'
+import prompts from 'prompts'
 
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
@@ -17,6 +18,7 @@ import {
 import {
   checkProjectForQueryField,
   getIdType,
+  operationNameIsUnique,
   uniqueOperationName,
 } from './utils/utils'
 
@@ -61,9 +63,30 @@ export const files = async ({
     templateNameSuffix = 'List'
     // override operationName so that its find_operationName
   }
-  const operationName = await uniqueOperationName(cellName, {
-    list: shouldGenerateList,
-  })
+
+  let operationName = options.query == null ? '' : options.query.trim()
+  if (operationName == '') {
+    operationName = await uniqueOperationName(cellName, {
+      list: shouldGenerateList,
+    })
+  } else {
+    const userSpecifiedNameIsUnique = await operationNameIsUnique(operationName)
+    if (!userSpecifiedNameIsUnique) {
+      const answer = await prompts([
+        {
+          type: 'confirm',
+          name: 'continue',
+          message: `Specified query name: "${operationName}" is not unique! Do you wish to continue?`,
+          initial: false,
+          active: 'Yes',
+          inactive: 'No',
+        },
+      ])
+      if (!answer.continue) {
+        process.exit(0)
+      }
+    }
+  }
 
   const cellFile = templateForComponentFile({
     name: cellName,
@@ -151,6 +174,12 @@ export const { command, description, builder, handler } =
         description:
           'Use when you want to generate a cell for a list of the model name.',
         type: 'boolean',
+      },
+      query: {
+        default: '',
+        description:
+          'Use to enforce a specific query name within the generated cell.',
+        type: 'string',
       },
     },
     includeAdditionalTasks: ({ name: cellName }) => {
