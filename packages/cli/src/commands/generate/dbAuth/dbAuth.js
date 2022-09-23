@@ -129,13 +129,11 @@ export const files = ({
 }) => {
   const files = []
 
-  const usernameLowercase =
-    username == null ? 'username' : username.toLowerCase()
+  const usernameLowercase = username?.toLowerCase() || 'username'
   const usernameCapitalised =
     usernameLowercase.charAt(0).toUpperCase() + usernameLowercase.slice(1)
 
-  const passwordLowercase =
-    password == null ? 'password' : password.toLowerCase()
+  const passwordLowercase = password?.toLowerCase() || 'password'
   const passwordCapitalised =
     passwordLowercase.charAt(0).toUpperCase() + passwordLowercase.slice(1)
 
