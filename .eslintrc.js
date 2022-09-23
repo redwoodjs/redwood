@@ -22,7 +22,6 @@ module.exports = {
   ignorePatterns: [
     'dist',
     'fixtures',
-    'packages/structure/**',
     'packages/internal/src/build/babelPlugins/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
@@ -34,7 +33,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['packages/structure/**'],
+      files: ['packages/structure/src/**'],
       rules: {
         '@typescript-eslint/no-this-alias': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',

@@ -172,8 +172,9 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  identity: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
@@ -192,8 +193,9 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  userProfiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
 }
 "
 `;
@@ -212,10 +214,12 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  userProfiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
-  identity: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
@@ -452,7 +456,7 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
 `;
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -466,15 +470,16 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
-  identity: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
+export const User: UserRelationResolvers = {
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -488,15 +493,16 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
-  userProfiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
+export const User: UserRelationResolvers = {
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import type { QueryResolvers, UserResolvers } from 'types/graphql'
+"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -510,11 +516,13 @@ export const user: QueryResolvers['user'] = ({ id }) => {
   })
 }
 
-export const User: Partial<UserResolvers> = {
-  userProfiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).userProfiles(),
-  identity: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).identity(),
+export const User: UserRelationResolvers = {
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;

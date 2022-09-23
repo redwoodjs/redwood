@@ -70,12 +70,10 @@ export class RWRouter extends FileNode {
 
       const sets = self.sf
         .getDescendantsOfKind(tsm.SyntaxKind.JsxElement)
-        .filter(
-          (x) => {
-            const tagName = x.getOpeningElement().getTagNameNode().getText()
-            return tagName  === 'Set' || tagName === 'Private'
-          }
-        )
+        .filter((x) => {
+          const tagName = x.getOpeningElement().getTagNameNode().getText()
+          return tagName === 'Set' || tagName === 'Private'
+        })
 
       const prerenderSets = sets.filter((set) =>
         set.getOpeningElement().getAttribute('prerender')
@@ -86,7 +84,8 @@ export class RWRouter extends FileNode {
           tsm.SyntaxKind.JsxSelfClosingElement
         )) {
           const tagName = x.getTagNameNode().getText()
-          if (tagName === 'Route') {
+          // Add prerender prop from <Set> if not already present
+          if (tagName === 'Route' && !x.getAttribute('prerender')) {
             x.insertAttribute(0, { name: 'prerender' })
           }
         }

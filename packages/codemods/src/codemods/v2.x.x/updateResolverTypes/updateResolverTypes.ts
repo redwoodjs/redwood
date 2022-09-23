@@ -21,6 +21,26 @@ export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
   const ast = j(file.source)
 
+  const findImportFromGqlTypes = (importName: string) => {
+    return ast
+      .find(j.ImportDeclaration, {
+        source: { value: 'types/graphql' },
+      })
+      .find(j.ImportSpecifier, { imported: { name: importName } })
+  }
+
+  const addToGqlTypesImports = (importName: string) => {
+    ast
+      .find(j.ImportDeclaration, {
+        source: { value: 'types/graphql' },
+      })
+      .forEach((importStatement) => {
+        importStatement.node.specifiers?.push(
+          j.importSpecifier(j.identifier(importName))
+        )
+      })
+  }
+
   ast.find(j.TSTypeAnnotation).forEach((path) => {
     const typeAnnotationNode = path.node
 
@@ -37,23 +57,29 @@ export default function transform(file: FileInfo, api: API) {
     ) {
       const originalTypeName = getTypeName(typeAnnotationNode.typeAnnotation)
 
-      if (!originalTypeName || !originalTypeName.includes('Resolvers')) {
+      if (
+        !originalTypeName ||
+        !originalTypeName.includes('Resolvers') ||
+        findImportFromGqlTypes(originalTypeName).length === 0 || // check if it was imported from types/graphql
+        originalTypeName.includes('RelationResolvers') // check if it's already a RelationResolver
+      ) {
         // Skip other type annotations!
         return
       }
 
-      console.log(`Wrapping ${originalTypeName} in Partial....`)
+      const newTypeName = originalTypeName.replace(
+        'Resolvers',
+        'RelationResolvers'
+      )
+
+      console.log(`Converting ${originalTypeName} to ${newTypeName}....`)
 
       path.replace(
-        j.tsTypeAnnotation(
-          j.tsTypeReference(
-            j.identifier('Partial'),
-            j.tsTypeParameterInstantiation([
-              j.tsTypeReference(j.identifier(originalTypeName)),
-            ])
-          )
-        )
+        j.tsTypeAnnotation(j.tsTypeReference(j.identifier(newTypeName)))
       )
+
+      findImportFromGqlTypes(originalTypeName)?.remove()
+      addToGqlTypesImports(newTypeName)
     }
   })
 

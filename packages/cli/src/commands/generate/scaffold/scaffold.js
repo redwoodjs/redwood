@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import camelcase from 'camelcase'
+import execa from 'execa'
 import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
@@ -181,6 +182,7 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name, tailwind),
+    ...(await formatters(name, typescript)),
     ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
     ...(await pageFiles(
       name,
@@ -234,6 +236,55 @@ const assetFiles = (name, tailwind) => {
   })
 
   return fileList
+}
+
+const formatters = async (name, isTypescript) => {
+  const outputPath = path.join(
+    getPaths().web.src,
+    'lib',
+    isTypescript ? 'formatters.tsx' : 'formatters.js'
+  )
+  const outputPathTest = path.join(
+    getPaths().web.src,
+    'lib',
+    isTypescript ? 'formatters.test.tsx' : 'formatters.test.js'
+  )
+
+  // skip files that already exist on disk, never worry about overwriting
+  if (fs.existsSync(outputPath)) {
+    return
+  }
+
+  const template = generateTemplate(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: path.join('lib', 'formatters.tsx.template'),
+    }),
+    {
+      name,
+    }
+  )
+
+  const templateTest = generateTemplate(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: path.join('lib', 'formatters.test.tsx.template'),
+    }),
+    {
+      name,
+    }
+  )
+
+  return {
+    [outputPath]: isTypescript
+      ? template
+      : transformTSToJS(outputPath, template),
+    [outputPathTest]: isTypescript
+      ? templateTest
+      : transformTSToJS(outputPathTest, templateTest),
+  }
 }
 
 const layoutFiles = (
@@ -487,6 +538,20 @@ const componentFiles = async (
     })
   )
 
+  const formattersImports = columns
+    .map((column) => column.displayFunction)
+    .sort()
+    // filter out duplicates, so we only keep unique import names
+    .filter((name, index, array) => array.indexOf(name) === index)
+    .join(', ')
+
+  const listFormattersImports = columns
+    .map((column) => column.listDisplayFunction)
+    .sort()
+    // filter out duplicates, so we only keep unique import names
+    .filter((name, index, array) => array.indexOf(name) === index)
+    .join(', ')
+
   await asyncForEach(components, (component) => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
@@ -518,6 +583,8 @@ const componentFiles = async (
         idType,
         intForeignKeys,
         pascalScaffoldPath,
+        listFormattersImports,
+        formattersImports,
         ...templateStrings,
       }
     )
@@ -596,6 +663,21 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   } else {
     return 'Layout import already exists in Routes.{js,tsx}'
   }
+}
+
+const addHelperPackages = async (task) => {
+  const packageJsonPath = path.join(getPaths().web.base, 'package.json')
+  const packageJson = require(packageJsonPath)
+
+  // Skip if humanize-string is already installed
+  if (packageJson.dependencies['humanize-string']) {
+    return task.skip('Skipping. Already installed')
+  }
+
+  // Has to be v2.1.0 because v3 switched to ESM module format, which we don't
+  // support yet (2022-09-20)
+  // TODO: Update to latest version when RW supports ESMs
+  await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
 }
 
 const addSetImport = (task) => {
@@ -695,6 +777,10 @@ export const tasks = ({
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
+      },
+      {
+        title: 'Install helper packages',
+        task: (_, task) => addHelperPackages(task),
       },
       {
         title: 'Adding layout import...',

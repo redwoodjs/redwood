@@ -731,6 +731,27 @@ And there you have it.
     <td align="center"><a href="http://tommyjm.com/"><img src="https://avatars.githubusercontent.com/u/871454?v=4" width="100px;" alt=""/><br /><sub><b>Tommy Marshall</b></sub></a></td>
     <td align="center"><a href="https://github.com/exzachlyvv"><img src="https://avatars.githubusercontent.com/u/46034847?v=4" width="100px;" alt=""/><br /><sub><b>Zachary Vander Velden</b></sub></a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/pantheredeye"><img src="https://avatars.githubusercontent.com/u/77902178?v=4" width="100px;" alt=""/><br /><sub><b>pantheredeye</b></sub></a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/hk-douglas-ellingson/"><img src="https://avatars.githubusercontent.com/u/93561310?v=4" width="100px;" alt=""/><br /><sub><b>Kirby Douglas Ellingson</b></sub></a></td>
+    <td align="center"><a href="https://github.com/mcmx"><img src="https://avatars.githubusercontent.com/u/1891581?v=4" width="100px;" alt=""/><br /><sub><b>Sergio Guzman</b></sub></a></td>
+    <td align="center"><a href="https://www.erichowey.dev/"><img src="https://avatars.githubusercontent.com/u/204841?v=4" width="100px;" alt=""/><br /><sub><b>Eric Howey</b></sub></a></td>
+    <td align="center"><a href="https://twitch.tv/talk2megooseman"><img src="https://avatars.githubusercontent.com/u/1203718?v=4" width="100px;" alt=""/><br /><sub><b>Erik Guzman</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/irshadwanijk"><img src="https://avatars.githubusercontent.com/u/41755831?v=4" width="100px;" alt=""/><br /><sub><b>IRSHAD WANI</b></sub></a></td>
+    <td align="center"><a href="https://github.com/noccer"><img src="https://avatars.githubusercontent.com/u/18574446?v=4" width="100px;" alt=""/><br /><sub><b>Niall</b></sub></a></td>
+    <td align="center"><a href="https://lightrix.dev/"><img src="https://avatars.githubusercontent.com/u/90222871?v=4" width="100px;" alt=""/><br /><sub><b>Nikola Hristov</b></sub></a></td>
+    <td align="center"><a href="https://click.ecc.ac.jp/ecc/rokazaki/"><img src="https://avatars.githubusercontent.com/u/70571576?v=4" width="100px;" alt=""/><br /><sub><b>Rui Okazaki</b></sub></a></td>
+    <td align="center"><a href="https://sunjayarmstead.com/"><img src="https://avatars.githubusercontent.com/u/65554107?v=4" width="100px;" alt=""/><br /><sub><b>Sunjay Armstead</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/mellow-fellow"><img src="https://avatars.githubusercontent.com/u/19280122?v=4" width="100px;" alt=""/><br /><sub><b>Justin</b></sub></a></td>
+    <td align="center"><a href="https://github.com/KazChe"><img src="https://avatars.githubusercontent.com/u/129542?v=4" width="100px;" alt=""/><br /><sub><b>kam c.</b></sub></a></td>
+    <td align="center"><a href="https://github.com/makdeb"><img src="https://avatars.githubusercontent.com/u/1664204?v=4" width="100px;" alt=""/><br /><sub><b>makdeb</b></sub></a></td>
+    <td align="center"><a href="https://www.bharathikannan.com/"><img src="https://avatars.githubusercontent.com/u/7134153?v=4" width="100px;" alt=""/><br /><sub><b>payapula</b></sub></a></td>
+    <td align="center"><a href="https://dambusm.github.io/portfolio/"><img src="https://avatars.githubusercontent.com/u/12501819?v=4" width="100px;" alt=""/><br /><sub><b>willks</b></sub></a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

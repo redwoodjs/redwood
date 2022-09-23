@@ -2,14 +2,14 @@
 
 - This codemod only affects TS projects.
 
-It will find all service files, and if they have a relation resolver - it will convert the type to a partial.
+It will find all service files, and if they have a relation resolver - it will convert the type to the newly generated relations resolver type.
 
 Taking a specific case, in the test project we have Post.author, which is a relation (author is User on the DB).
 
 ```diff
 // At the bottom of the file
 - export const Post: PostResolvers = {
-+ export const Post: Partial<PostResolvers> = {
++ export const Post: PostRelationResolvers = {
   author: (_obj, gqlArgs) =>
     db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author(),
 }
