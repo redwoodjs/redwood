@@ -148,12 +148,7 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
-        templateVars: {
-          usernameLowercase,
-          usernameCapitalised,
-          passwordLowercase,
-          passwordCapitalised,
-        },
+        templateVars,
       })
     )
   }
@@ -169,12 +164,7 @@ export const files = ({
         templatePath: webAuthn
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
-        templateVars: {
-          usernameLowercase,
-          usernameCapitalised,
-          passwordLowercase,
-          passwordCapitalised,
-        },
+        templateVars,
       })
     )
   }
@@ -188,12 +178,7 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
-        templateVars: {
-          usernameLowercase,
-          usernameCapitalised,
-          passwordLowercase,
-          passwordCapitalised,
-        },
+        templateVars,
       })
     )
   }
@@ -207,12 +192,7 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
-        templateVars: {
-          usernameLowercase,
-          usernameCapitalised,
-          passwordLowercase,
-          passwordCapitalised,
-        },
+        templateVars,
       })
     )
   }
