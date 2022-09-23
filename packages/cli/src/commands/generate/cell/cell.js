@@ -72,18 +72,16 @@ export const files = async ({
   } else {
     const userSpecifiedNameIsUnique = await operationNameIsUnique(operationName)
     if (!userSpecifiedNameIsUnique) {
-      const answer = await prompts([
-        {
-          type: 'confirm',
-          name: 'continue',
-          message: `Specified query name: "${operationName}" is not unique! Do you wish to continue?\r\n`,
-          initial: false,
-          active: 'Yes',
-          inactive: 'No',
-        },
-      ])
-      if (!answer.continue) {
-        process.exit(0)
+      const answer = await options.listr2task.prompt({
+        type: 'confirm',
+        name: 'confirmed',
+        message: `Specified query name: "${operationName}" is not unique! Do you wish to continue?`,
+        initial: false,
+      })
+
+      if (!answer) {
+        options.listr2task.skip('Skipped to prevent non-unique query name.')
+        options.listr2ctx.skip = true
       }
     }
   }

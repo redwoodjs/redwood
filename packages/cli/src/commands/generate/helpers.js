@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -192,17 +191,23 @@ export const createYargsForComponentGeneration = ({
           [
             {
               title: `Generating ${componentName} files...`,
-              task: async () => {
+              task: async (_ctx, task) => {
+                options.listr2ctx = _ctx
+                options.listr2task = task
                 const f = await filesFn(options)
+                if (_ctx.skip) {
+                  return
+                }
                 return writeFilesTask(f, { overwriteExisting: options.force })
               },
             },
             ...includeAdditionalTasks(options),
           ],
           {
-            collapse: false,
+            concurrent: false,
             exitOnError: true,
-            renderer: options.verbose && VerboseRenderer,
+            renderer: options.verbose && 'verbose',
+            rendererOptions: { collapse: false },
           }
         )
 
