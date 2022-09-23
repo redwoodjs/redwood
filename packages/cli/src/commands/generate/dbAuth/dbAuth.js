@@ -137,6 +137,13 @@ export const files = ({
   const passwordCapitalised =
     passwordLowercase.charAt(0).toUpperCase() + passwordLowercase.slice(1)
 
+  const templateVars = {
+    usernameLowercase,
+    usernameCapitalised,
+    passwordLowercase,
+    passwordCapitalised,
+  }
+
   if (!skipForgot) {
     files.push(
       templateForComponentFile({
