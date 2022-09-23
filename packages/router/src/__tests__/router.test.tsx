@@ -87,11 +87,17 @@ const mockUseAuth =
       useState(isAuthenticated)
 
     useEffect(() => {
+      let timer: NodeJS.Timeout | undefined
       if (loadingTimeMs) {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setAuthLoading(false)
           setAuthIsAuthenticated(true)
         }, loadingTimeMs)
+      }
+      return () => {
+        if (timer) {
+          clearTimeout(timer)
+        }
       }
     }, [])
 
@@ -762,7 +768,8 @@ test('can display a loading screen with a hook', async () => {
     const [showStill, setShowStill] = useState(false)
 
     useEffect(() => {
-      setTimeout(() => setShowStill(true), 100)
+      const timer = setTimeout(() => setShowStill(true), 100)
+      return () => clearTimeout(timer)
     }, [])
 
     return <>{showStill ? 'Still authenticating...' : 'Authenticating...'}</>
