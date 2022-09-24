@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
@@ -455,7 +455,7 @@ export const handler = async (yargs) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } } // TODO: support verbose renderer flag?
   )
 
   try {
