@@ -142,7 +142,7 @@ export const buildScenario = async (model) => {
 export const buildStringifiedScenario = async (model) => {
   const scenario = await buildScenario(model)
 
-  let stringifiedScenario = JSON.stringify(scenario, (key, value) => {
+  return JSON.stringify(scenario, (key, value) => {
     if (typeof value === 'bigint') {
       return value.toString()
     }
@@ -151,8 +151,6 @@ export const buildStringifiedScenario = async (model) => {
     }
     return value
   })
-
-  return stringifiedScenario
 }
 
 // outputs fields necessary to create an object in the test file
