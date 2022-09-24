@@ -89,7 +89,7 @@ const tasks = ({ name, force }) => {
         },
       },
     ],
-    { renderOptions: { collapse: false }, errorOnExist: true }
+    { rendererOptions: { collapse: false }, errorOnExist: true }
   )
 }
 

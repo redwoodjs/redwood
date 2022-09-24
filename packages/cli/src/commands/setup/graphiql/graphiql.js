@@ -265,7 +265,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
         },
       },
     ].filter(Boolean),
-    { renderOptions: { collapse: false } }
+    { rendererOptions: { collapse: false } }
   )
 
   try {
