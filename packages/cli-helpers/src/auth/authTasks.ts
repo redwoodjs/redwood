@@ -63,8 +63,8 @@ const addApiConfig = (authDecoderImport?: string) => {
   if (!hasAuthImport) {
     // add import statement
     content = content.replace(
-      /^((?=(import services from))\2.*)$/m,
-      `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
+      /^(import { db } from 'src\/lib\/db')$/m,
+      `import { getCurrentUser } from 'src/lib/auth'\n$1`
     )
 
     // add object to handler
