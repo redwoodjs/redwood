@@ -1,20 +1,25 @@
-<% // To JSON stringify and remove quotes around `scenario` variables
-const stringifyButNotScenario = (obj) => {
+<% // To JSON stringify and remove quotes around `scenario` variables,
+   // if `asDate` is true, it will return dates as new Date(...) declarations,
+   // ex: `new Date("2022-09-01T00:21:58.876Z")
+   // otherwise, dates will be returned as strings. ex: "2022-09-01T00:21:58.876Z"
+const stringifyValue = (obj, asDate=false) => {
   return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
     if (string.match(/scenario\./)) {
       return string.replace(/['"]/g, '')
     }
 
+    // BigInt
     if (string.match(/^\"\d+n\"$/)) {
       return string.substr(1, string.length - 2)
     }
 
-    // Creates a new Date declaration if the string matches this ISO8601 date format.
-    // ex: "2022-09-01T00:21:58.876Z" will return `new Date("2022-09-01T00:21:58.876Z")`
-    if (string.match(/^\"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\"$/)) {
-      return `new Date(${string})`
+    if(asDate){
+      // Creates a new Date declaration if the string matches this ISO8601 date format.
+      // ex: "2022-09-01T00:21:58.876Z" will return `new Date("2022-09-01T00:21:58.876Z")`
+      if (string.match(/^\"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\"$/)) {
+        return `new Date(${string})`
+      }
     }
-
     return string
   })
 } %>
@@ -42,24 +47,24 @@ describe('${pluralCamelName}', () => {
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${stringifyButNotScenario(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${stringifyValue(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
     const result = await create${singularPascalName}({
-      input: ${stringifyButNotScenario(create)},
+      input: ${stringifyValue(create)},
     })
 
     <% for (const [name, value] of Object.entries(create)) { %>
-    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
+    expect(result.${name}).toEqual(${stringifyValue(value, true)})<% } %>
   })<% } %>
 
   <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario: StandardScenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await (${singularCamelName}({ id: scenario.${singularCamelName}.one.id })) as ${prismaModel}
     const result = await update${singularPascalName}({
       id: original.id,
-      input: ${stringifyButNotScenario(update)},
+      input: ${stringifyValue(update)},
     })
 
     <% for (const [name, value] of Object.entries(update)) { %>
-    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
+    expect(result.${name}).toEqual(${stringifyValue(value, true)})<% } %>
   })<% } %>
 
   scenario('deletes a ${singularCamelName}', async (scenario: StandardScenario) => {
