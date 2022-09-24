@@ -151,11 +151,9 @@ describe('the scenario generator', () => {
 
   test('scenarioFieldValue returns a Date for DateTime types', () => {
     const field = { type: 'DateTime' }
-    const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
     const value = service.scenarioFieldValue(field)
 
     expect(value instanceof Date).toBe(true)
-    expect(value.toISOString()).toMatch(iso8601Regex)
   })
 
   test('scenarioFieldValue returns JSON for Json types', () => {
