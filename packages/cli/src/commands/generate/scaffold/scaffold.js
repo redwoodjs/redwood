@@ -4,7 +4,7 @@ import path from 'path'
 import camelcase from 'camelcase'
 import execa from 'execa'
 import humanize from 'humanize-string'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -803,7 +803,7 @@ export const tasks = ({
         task: generateTypes,
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 }
 
