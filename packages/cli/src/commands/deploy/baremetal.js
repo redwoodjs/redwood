@@ -16,6 +16,7 @@ const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
 const LIFECYCLE_HOOKS = ['before', 'after']
 export const DEFAULT_SERVER_CONFIG = {
+  port: 22,
   branch: 'main',
   packageManagerCommand: 'yarn',
   monitorCommand: 'pm2',
@@ -634,6 +635,7 @@ export const commands = (yargs, ssh) => {
       task: () =>
         ssh.connect({
           host: serverConfig.host,
+          port: serverConfig.port,
           username: serverConfig.username,
           password: serverConfig.password,
           privateKey: serverConfig.privateKey,
