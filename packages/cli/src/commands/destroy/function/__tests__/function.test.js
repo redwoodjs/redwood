@@ -30,7 +30,7 @@ test('destroys service files', async () => {
     filesFn: files,
     name: 'sendMail',
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(async () => {
     const generatedFiles = Object.keys(await files({ name: 'sendMail' }))

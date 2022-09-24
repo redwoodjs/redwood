@@ -39,7 +39,7 @@ test('destroys cell files', async () => {
     filesFn: files,
     name: 'User',
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(files({ name: 'User' }))
@@ -58,7 +58,7 @@ test('destroys cell files with stories and tests', async () => {
     stories: true,
     tests: true,
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(
