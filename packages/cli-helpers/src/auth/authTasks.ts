@@ -55,14 +55,13 @@ const addApiConfig = (authDecoderImport?: string) => {
     contentUpdated = true
   }
 
-  // default to an array to avoid destructure errors
-  const [_, hasAuthImport] =
-    content.match(/(^\s*import {.*?} from 'src\/lib\/auth.*')/s) || []
+  const hasAuthImport =
+    /(^import {.*?getCurrentUser.*?} from 'src\/lib\/auth')/s.test(content)
 
   if (!hasAuthImport) {
     // add import statement
     content = content.replace(
-      /^((?=(.*?import\s*services))\\1.*)$/m,
+      /^((?=(import services))\2.*?from.*)$/m,
       `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
     )
 
