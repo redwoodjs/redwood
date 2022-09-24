@@ -149,11 +149,12 @@ describe('the scenario generator', () => {
     expect(typeof value).toBe('number')
   })
 
-  test('scenarioFieldValue returns a Date for DateTime types', () => {
+  test('scenarioFieldValue returns a valid Date for DateTime types', () => {
     const field = { type: 'DateTime' }
     const value = service.scenarioFieldValue(field)
 
     expect(value instanceof Date).toBe(true)
+    expect(!isNaN(value)).toBe(true)
   })
 
   test('scenarioFieldValue returns JSON for Json types', () => {
