@@ -63,7 +63,7 @@ const addApiConfig = (authDecoderImport?: string) => {
   if (!hasAuthImport) {
     // add import statement
     content = content.replace(
-      /^((?=(import services))\2.*?from.*)$/m,
+      /^((?=(import services from))\2.*)$/m,
       `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
     )
 
