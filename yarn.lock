@@ -6202,6 +6202,131 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/auth-providers-api@workspace:packages/auth-providers-api":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers-api@workspace:packages/auth-providers-api"
+  dependencies:
+    "@auth0/auth0-spa-js": 1.22.4
+    "@azure/msal-browser": 2.28.3
+    "@babel/cli": 7.18.10
+    "@babel/core": 7.19.1
+    "@babel/runtime-corejs3": 7.19.1
+    "@clerk/clerk-js": 3.17.0
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/types": 2.21.0
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/nhost-js": 1.4.10
+    "@okta/okta-auth-js": 6.7.6
+    "@redwoodjs/auth": 3.0.2
+    "@redwoodjs/cli-helpers": 3.0.2
+    "@simplewebauthn/browser": 6.0.0
+    "@simplewebauthn/typescript-types": 6.0.0
+    "@supabase/supabase-js": 1.35.6
+    "@types/netlify-identity-widget": 1.9.3
+    "@types/react": 17.0.50
+    "@types/uuid": 8.3.4
+    core-js: 3.25.1
+    firebase: 9.9.3
+    firebase-admin: 10.3.0
+    gotrue-js: 0.9.29
+    jest: 29.0.3
+    magic-sdk: 9.0.0
+    netlify-identity-widget: 1.9.2
+    react: 17.0.2
+    supertokens-auth-react: 0.24.4
+    typescript: 4.7.4
+    uuid: 9.0.0
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@magic-sdk/admin": 1.4.1
+    "@okta/jwt-verifier": 2.6.0
+    firebase-admin: 10.3.0
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
+    "@magic-sdk/admin":
+      optional: true
+    "@okta/jwt-verifier":
+      optional: true
+    firebase-admin:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-providers-setup@3.0.2, @redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup"
+  dependencies:
+    "@babel/cli": 7.18.10
+    "@babel/core": 7.19.1
+    "@babel/runtime-corejs3": 7.19.1
+    "@redwoodjs/auth": 3.0.2
+    "@redwoodjs/cli-helpers": 3.0.2
+    "@types/react": 17.0.50
+    core-js: 3.25.1
+    jest: 29.0.3
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-providers-web@workspace:packages/auth-providers-web":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers-web@workspace:packages/auth-providers-web"
+  dependencies:
+    "@auth0/auth0-spa-js": 1.22.4
+    "@azure/msal-browser": 2.28.3
+    "@babel/cli": 7.18.10
+    "@babel/core": 7.19.1
+    "@babel/runtime-corejs3": 7.19.1
+    "@clerk/clerk-js": 3.17.0
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/types": 2.21.0
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/nhost-js": 1.4.10
+    "@okta/okta-auth-js": 6.7.6
+    "@redwoodjs/auth": 3.0.2
+    "@simplewebauthn/browser": 6.0.0
+    "@simplewebauthn/typescript-types": 6.0.0
+    "@supabase/supabase-js": 1.35.6
+    "@types/netlify-identity-widget": 1.9.3
+    "@types/react": 17.0.50
+    "@types/uuid": 8.3.4
+    core-js: 3.25.1
+    firebase: 9.9.3
+    firebase-admin: 10.3.0
+    gotrue-js: 0.9.29
+    jest: 29.0.3
+    magic-sdk: 9.0.0
+    netlify-identity-widget: 1.9.2
+    react: 17.0.2
+    supertokens-auth-react: 0.24.4
+    typescript: 4.7.4
+    uuid: 9.0.0
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@magic-sdk/admin": 1.4.1
+    "@okta/jwt-verifier": 2.6.0
+    firebase-admin: 10.3.0
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
+    "@magic-sdk/admin":
+      optional: true
+    "@okta/jwt-verifier":
+      optional: true
+    firebase-admin:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/auth@3.0.2, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
@@ -6236,6 +6361,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/cli-helpers@3.0.2, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
+  dependencies:
+    "@babel/cli": 7.18.10
+    "@babel/core": 7.19.1
+    "@babel/runtime-corejs3": 7.19.1
+    "@redwoodjs/telemetry": 3.0.2
+    "@types/react": 17.0.50
+    core-js: 3.25.1
+    jest: 29.0.3
+    react: 17.0.2
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/cli@3.0.2, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
@@ -6245,11 +6386,13 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.1
     "@prisma/internals": 4.3.1
     "@redwoodjs/api-server": 3.0.2
+    "@redwoodjs/auth-providers-setup": 3.0.2
     "@redwoodjs/internal": 3.0.2
     "@redwoodjs/prerender": 3.0.2
     "@redwoodjs/structure": 3.0.2
     "@redwoodjs/telemetry": 3.0.2
     "@types/listr": 0.14.4
+    "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -6475,6 +6618,7 @@ __metadata:
     "@prisma/client": 4.3.1
     "@redwoodjs/api": 3.0.2
     "@redwoodjs/auth": 3.0.2
+    "@types/jsonwebtoken": 8.5.9
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
@@ -6485,6 +6629,7 @@ __metadata:
     graphql-scalars: 1.17.0
     graphql-tag: 2.12.6
     jest: 29.0.3
+    jsonwebtoken: 8.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4
@@ -9161,6 +9306,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 56822201fad7677a30f732cd3eb94651bb2797bd4e876ff5ec6a3d5c419a11b97ec18ff38ae86bbb945f578ed3d29856221375e1dcbc4ba640020049fcf9535c
+  languageName: node
+  linkType: hard
+
+"@types/secure-random-password@npm:0.2.1":
+  version: 0.2.1
+  resolution: "@types/secure-random-password@npm:0.2.1"
+  checksum: 87f0528b7ccb907706b0cc77160c6771279508de3852213f2c4f28a83af482b016cf3e0b414f62d2e8b3713f1733ad787e3bd40c201463ac822c117856a7886a
   languageName: node
   linkType: hard
 
