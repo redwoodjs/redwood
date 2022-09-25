@@ -41,6 +41,7 @@ For certain options, instead of having to deal with build tools like webpack dir
 | `includeEnvironmentVariables` | Environment variables to include                           | `[]`                    |
 | `path`                        | Path to the web side                                       | `"./web"`               |
 | `port`                        | Port to listen on                                          | `8910`                  |
+| `sourceMap`                   | Enable source maps for production builds                   | `false`                 |
 | `target`                      | Target for the web side                                    | `"browser"`             |
 | `title`                       | Title of your Redwood app                                  | `"Redwood App"`         |
 
