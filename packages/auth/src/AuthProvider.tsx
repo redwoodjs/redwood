@@ -264,12 +264,14 @@ export class AuthProvider extends React.Component<
           ? null
           : await this.getCurrentUser()
 
-        this.setState({
-          ...this.state,
-          userMetadata,
-          currentUser,
-          isAuthenticated: true,
-          loading: false,
+        this.setState((prevState) => {
+          return {
+            ...prevState,
+            userMetadata,
+            currentUser,
+            isAuthenticated: true,
+            loading: false,
+          }
         })
       }
     } catch (e: any) {

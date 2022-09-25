@@ -10,6 +10,7 @@ import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
 jest.mock('fs')
+jest.mock('execa')
 
 jest.mock('../../../../lib', () => {
   return {

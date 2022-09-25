@@ -1,21 +1,20 @@
-name: 🤖 Approve and merge release PR
+name: 🤖 Enable auto merge
 
 on:
   pull_request_target:
     branches: [release]
+    # We're using labeled here because we don't want to enable auto merge for every PR against release.
+    # Just the ones created by the cherry pick action.
     types: [labeled]
 
 jobs:
-  approve-and-merge-release-PR:
-    name: 🤖 Approve and merge release PR
+  enable-auto-merge:
+    name: 🤖 Auto merge release PR
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'cherry-pick')
     steps:
-      - name: Approve
-        uses: hmarr/auto-approve-action@v2
-
       - name: Enable auto-merge
-        uses: reitermarkus/automerge@main
+        uses: reitermarkus/automerge@v2.1.2
         with:
           token: ${{ secrets.JTOAR_TOKEN }}
           merge-method: squash
