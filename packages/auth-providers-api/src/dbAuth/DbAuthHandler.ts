@@ -230,21 +230,14 @@ type Params = {
   [key: string]: any
 }
 
-/**
- * To use in src/lib/auth#getCurrentUser
- *
- * Use this type to tell the getCurrentUser function what the type of session is
- * @example
- * import {User} from '@prisma/client'
- *
- * //  key being used in dbAccessor in src/functions/auth.ts 👇
- * const getCurrentUser = async (session: DbAuthSession<User['id']>)
- */
-export interface DbAuthSession<TIdType = any> {
+interface DbAuthSession<TIdType> {
   id: TIdType
 }
 
-export class DbAuthHandler<TUser extends Record<string | number, any>> {
+export class DbAuthHandler<
+  TUser extends Record<string | number, any>,
+  TIdType = any
+> {
   event: APIGatewayProxyEvent
   context: LambdaContext
   options: DbAuthHandlerOptions<TUser>
@@ -255,7 +248,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
   dbCredentialAccessor: any
   headerCsrfToken: string | undefined
   hasInvalidSession: boolean
-  session: DbAuthSession | undefined
+  session: DbAuthSession<TIdType> | undefined
   sessionCsrfToken: string | undefined
   corsContext: CorsContext | undefined
   sessionExpiresDate: string
@@ -1093,8 +1086,8 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
 
   // returns the set-cookie header to be returned in the request (effectively
   // creates the session)
-  _createSessionHeader(
-    data: DbAuthSession,
+  _createSessionHeader<TIdType = any>(
+    data: DbAuthSession<TIdType>,
     csrfToken: string
   ): SetCookieHeader {
     const session = JSON.stringify(data) + ';' + csrfToken
