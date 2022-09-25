@@ -2,7 +2,7 @@
 global.__dirname = __dirname
 import '../../../lib/test'
 
-jest.mock('listr')
+jest.mock('listr2')
 import { Listr } from 'listr2'
 
 import * as helpers from '../helpers'
