@@ -146,9 +146,11 @@ export const buildStringifiedScenario = async (model) => {
     if (typeof value === 'bigint') {
       return value.toString()
     }
+
     if (typeof value === 'string' && value.match(/^\d+n$/)) {
       return Number(value.substr(0, value.length - 1))
     }
+
     return value
   })
 }
