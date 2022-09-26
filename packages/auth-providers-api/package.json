@@ -25,6 +25,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.1",
     "core-js": "3.25.1",
+    "jsonwebtoken": "8.5.1",
     "uuid": "9.0.0"
   },
   "devDependencies": {
@@ -44,6 +45,7 @@
     "@simplewebauthn/browser": "6.0.0",
     "@simplewebauthn/typescript-types": "6.0.0",
     "@supabase/supabase-js": "1.35.6",
+    "@types/jsonwebtoken": "8.5.9",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.50",
     "@types/uuid": "8.3.4",
