@@ -70,13 +70,9 @@ export const files = async ({
       operationName
     )
     if (!userSpecifiedOperationNameIsUnique) {
-      if (!options.force) {
-        throw new Error(
-          `Specified query name: "${operationName}" is not unique! If you still wish to continue please run command again with the --force flag.`
-        )
-      } else {
-        // TODO: Warn the user they forced a non-unique name?
-      }
+      throw new Error(
+        `Specified query name: "${operationName}" is not unique! If you still wish to continue please run command again with the --force flag.`
+      )
     }
   } else {
     operationName = await uniqueOperationName(cellName, {
@@ -174,7 +170,7 @@ export const { command, description, builder, handler } =
       query: {
         default: '',
         description:
-          'Use to enforce a specific query name within the generated cell.',
+          'Use to enforce a specific query name within the generated cell - must be unique.',
         type: 'string',
       },
     },
