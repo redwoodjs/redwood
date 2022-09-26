@@ -638,32 +638,31 @@ test('generates list a cell with a string primary id keys', () => {
 })
 
 describe('Custom query names', () => {
-  test('Accepts custom query names', async() => {
+  test('Accepts custom query names', async () => {
     const generatedFiles = await cell.files({
       name: 'Clues',
       tests: false,
       stories: false,
-      query: 'FindBluesClues'
+      query: 'FindBluesClues',
     })
-    
-    
-    
+
     const CELL_PATH = path.normalize(
       '/path/to/project/web/src/components/CluesCell/CluesCell.js'
     )
 
-
     expect(generatedFiles[CELL_PATH]).toContain('query FindBluesClues {')
   })
 
-
-  test('Throws if a duplicated query name is used', async() => {
-    await expect(cell.files({
-      name: 'Clues',
-      tests: false,
-      stories: false,
-      query: 'AlreadyDefinedQueryName'
-    })).rejects.toThrow('Specified query name: "AlreadyDefinedQueryName" is not unique')
+  test('Throws if a duplicated query name is used', async () => {
+    await expect(
+      cell.files({
+        name: 'Clues',
+        tests: false,
+        stories: false,
+        query: 'AlreadyDefinedQueryName',
+      })
+    ).rejects.toThrow(
+      'Specified query name: "AlreadyDefinedQueryName" is not unique'
+    )
   })
-
 })
