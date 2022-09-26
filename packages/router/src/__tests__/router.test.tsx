@@ -16,13 +16,7 @@ jest.mock('../util', () => {
 
 import React, { useEffect, useState } from 'react'
 
-import {
-  render,
-  waitFor,
-  act,
-  fireEvent,
-  configure,
-} from '@testing-library/react'
+import { render, waitFor, act, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
@@ -131,10 +125,6 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
     </div>
   )
 }
-
-configure({
-  asyncUtilTimeout: 5_000,
-})
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
