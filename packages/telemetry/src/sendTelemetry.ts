@@ -26,6 +26,7 @@ interface SensitiveArgPositions {
     redactWith: Array<string>
   }
   prisma: {
+    positions?: never
     options: Array<string>
     redactWith: Array<string>
   }
