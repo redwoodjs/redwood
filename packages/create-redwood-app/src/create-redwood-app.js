@@ -15,6 +15,7 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
 import prompts from 'prompts'
+import terminalLink from 'terminal-link'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -123,6 +124,10 @@ import { name, version } from '../package'
 
   // Check Node/Yarn/Engines Compatability
   // This checks all engine requirements, including Node.js and Yarn
+  const engineErrorDocsLink = terminalLink(
+    'Tutorial - Chapter 1 - Prerequisites',
+    'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+  )
   let hasPassedEngineCheck = null
   let engineErrorLog = []
 
@@ -174,12 +179,13 @@ import { name, version } from '../package'
   if (hasPassedEngineCheck === false) {
     console.log(style.error(`✖️ Compatability checks failed.`))
     console.log(`${engineErrorLog.join('\n')}`)
-    console.log(style.header(`\nVisit requirements documentation:`))
     console.log(
-      style.warning(
-        `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
+      style.error(
+        `\nThis might make your RedwoodJS project incompatible with some deploy targets.`
       )
     )
+    console.log(style.header(`\nRelated documentation:`))
+    console.log(style.warning(`${engineErrorDocsLink}\n`))
     const response = await prompts({
       type: 'select',
       name: 'override-engine-error',

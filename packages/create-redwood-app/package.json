@@ -33,6 +33,7 @@
     "fs-extra": "10.1.0",
     "listr": "0.14.3",
     "prompts": "2.4.2",
+    "terminal-link": "2.1.1",
     "yargs": "17.5.1"
   },
   "devDependencies": {
