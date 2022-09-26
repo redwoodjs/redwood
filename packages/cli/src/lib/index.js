@@ -6,9 +6,8 @@ import * as babel from '@babel/core'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
-// import Listr from 'listr'
+import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-import { Listr } from 'listr2'
 import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
@@ -262,11 +261,7 @@ export const writeFilesTask = (files, options) => {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
         task: (ctx, task) => writeFile(file, contents, options, task),
       }
-    }),
-    {
-      concurrent: true,
-      rendererOptions: { collapse: false },
-    }
+    })
   )
 }
 
