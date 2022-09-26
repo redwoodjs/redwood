@@ -64,28 +64,24 @@ export const files = async ({
     // override operationName so that its find_operationName
   }
 
-  let operationName = options.query == null ? '' : options.query.trim()
-  if (operationName == '') {
+  let operationName = options.query
+  if (operationName) {
+    const userSpecifiedOperationNameIsUnique = await operationNameIsUnique(
+      operationName
+    )
+    if (!userSpecifiedOperationNameIsUnique) {
+      if (!options.force) {
+        throw new Error(
+          `Specified query name: "${operationName}" is not unique! If you still wish to continue please run command again with the --force flag.`
+        )
+      } else {
+        // TODO: Warn the user they forced a non-unique name?
+      }
+    }
+  } else {
     operationName = await uniqueOperationName(cellName, {
       list: shouldGenerateList,
     })
-  } else {
-    const userSpecifiedNameIsUnique = await operationNameIsUnique(operationName)
-    if (!userSpecifiedNameIsUnique) {
-      const answer = await prompts([
-        {
-          type: 'confirm',
-          name: 'continue',
-          message: `Specified query name: "${operationName}" is not unique! Do you wish to continue?\r\n`,
-          initial: false,
-          active: 'Yes',
-          inactive: 'No',
-        },
-      ])
-      if (!answer.continue) {
-        process.exit(0)
-      }
-    }
   }
 
   const cellFile = templateForComponentFile({
