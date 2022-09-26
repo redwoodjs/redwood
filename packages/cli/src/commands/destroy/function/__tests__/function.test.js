@@ -15,7 +15,7 @@ import { files } from '../../../generate/function/function'
 import { tasks } from '../function'
 
 beforeEach(async () => {
-  fs.__setMockFiles(await files({ name: 'sendMail' }))
+  fs.__setMockFiles(files({ name: 'sendMail' }))
 })
 
 afterEach(() => {
@@ -33,7 +33,7 @@ test('destroys service files', async () => {
   t.setRenderer('silent')
 
   return t.run().then(async () => {
-    const generatedFiles = Object.keys(await files({ name: 'sendMail' }))
+    const generatedFiles = Object.keys(files({ name: 'sendMail' }))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
   })
