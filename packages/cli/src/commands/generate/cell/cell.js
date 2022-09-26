@@ -1,5 +1,4 @@
 import pascalcase from 'pascalcase'
-import prompts from 'prompts'
 
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
