@@ -23,7 +23,6 @@ import '../../../../lib/test'
 import { files } from '../../../generate/cell/cell'
 import { tasks } from '../cell'
 
-beforeEach(() => {})
 
 afterEach(() => {
   fs.__setMockFiles({})
