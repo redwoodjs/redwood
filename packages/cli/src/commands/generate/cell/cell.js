@@ -70,9 +70,7 @@ export const files = async ({
       operationName
     )
     if (!userSpecifiedOperationNameIsUnique) {
-      throw new Error(
-        `Specified query name: "${operationName}" is not unique! If you still wish to continue please run command again with the --force flag.`
-      )
+      throw new Error(`Specified query name: "${operationName}" is not unique!`)
     }
   } else {
     operationName = await uniqueOperationName(cellName, {
