@@ -181,6 +181,27 @@ const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
   })
 }
 
+const itCreatesAMultiWordServiceTestFileWithMultipleScalarTypes = (
+  baseArgs
+) => {
+  test('creates a multi word service test file with multiple scalar types', async () => {
+    const files = await service.files({
+      ...baseArgs,
+      name: 'ScalarType',
+      crud: true,
+    })
+    const extension = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/scalarTypes/scalarTypes.test.${extension}`
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+}
+
 const itCreatesASingleWordServiceFileWithAHasManyRelation = (baseArgs) => {
   test('creates a single word service file with a hasMany relation', async () => {
     const files = await service.files({
@@ -281,6 +302,7 @@ describe('in javascript mode', () => {
   itCreatesAMultiWordServiceTestFile(baseArgs)
   itCreatesASingleWordServiceFileWithCRUDActions(baseArgs)
   itCreatesASingleWordServiceTestFileWithCRUDActions(baseArgs)
+  itCreatesAMultiWordServiceTestFileWithMultipleScalarTypes(baseArgs)
   itCreatesAMultiWordServiceFileWithCRUDActions(baseArgs)
   itCreatesAMultiWordServiceTestFileWithCRUDActions(baseArgs)
   itCreatesASingleWordServiceFileWithAHasManyRelation(baseArgs)
@@ -303,6 +325,7 @@ describe('in typescript mode', () => {
   itCreatesAMultiWordServiceFile(baseArgs)
   itCreatesAMultiWordServiceTestFile(baseArgs)
   itCreatesASingleWordServiceFileWithCRUDActions(baseArgs)
+  itCreatesAMultiWordServiceTestFileWithMultipleScalarTypes(baseArgs)
   itCreatesASingleWordServiceTestFileWithCRUDActions(baseArgs)
   itCreatesAMultiWordServiceFileWithCRUDActions(baseArgs)
   itCreatesAMultiWordServiceTestFileWithCRUDActions(baseArgs)
@@ -402,12 +425,30 @@ describe('parseSchema', () => {
 describe('fieldsToScenario', () => {
   it('includes scalar fields', async () => {
     const output = await service.fieldsToScenario(
-      [{ name: 'email', type: 'String' }],
+      [
+        { name: 'email', type: 'String' },
+        { name: 'date', type: 'DateTime' },
+        { name: 'bigInt', type: 'BigInt' },
+        { name: 'integer', type: 'Int' },
+        { name: 'boolean', type: 'Boolean' },
+      ],
       {},
       []
     )
 
-    expect(output).toEqual({ email: 'String' })
+    expect(output.email).toEqual('String')
+
+    expect(output.date instanceof Date).toBe(true)
+    expect(!isNaN(output.date)).toBe(true)
+
+    expect(output.integer).toEqual(parseInt(output.integer))
+    expect(typeof output.integer).toBe('number')
+
+    expect(output.boolean).toEqual(true)
+    expect(typeof output.boolean).toBe('boolean')
+
+    expect(output.bigInt).toMatch(/^\d+n$/)
+    expect(typeof output.bigInt).toBe('string') // pseudo-bigint
   })
 
   it('includes dependent relationships', async () => {
