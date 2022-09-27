@@ -13,7 +13,7 @@ exports[`in javascript mode creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -38,7 +38,7 @@ exports[`in javascript mode creates a multi word service test file with crud act
 } from './transactions'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -100,7 +100,7 @@ exports[`in javascript mode creates a multi word service test file with multiple
 } from './scalarTypes'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -122,7 +122,7 @@ describe('scalarTypes', () => {
     const result = await createScalarType({
       input: {
         email: 'String',
-        date: '2022-09-27T05:56:34.305Z',
+        date: '2022-09-27T06:41:23.105Z',
         bigInt: 1234567n,
         integer: 1234567,
         boolean: true,
@@ -130,7 +130,7 @@ describe('scalarTypes', () => {
     })
 
     expect(result.email).toEqual('String')
-    expect(result.date).toEqual(new Date('2022-09-27T05:56:34.305Z'))
+    expect(result.date).toEqual(new Date('2022-09-27T06:41:23.105Z'))
     expect(result.bigInt).toEqual(1234567n)
     expect(result.integer).toEqual(1234567)
     expect(result.boolean).toEqual(true)
@@ -310,7 +310,7 @@ exports[`in javascript mode creates a single word service test file 1`] = `
 "import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -374,7 +374,7 @@ import { userProfiles } from './userProfiles'
 import type { StandardScenario } from './userProfiles.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -402,7 +402,7 @@ import {
 import type { StandardScenario } from './transactions.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -468,7 +468,7 @@ import {
 import type { StandardScenario } from './scalarTypes.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -493,7 +493,7 @@ describe('scalarTypes', () => {
     const result = await createScalarType({
       input: {
         email: 'String',
-        date: '2022-09-27T05:56:34.664Z',
+        date: '2022-09-27T06:41:23.611Z',
         bigInt: 1234567n,
         integer: 1234567,
         boolean: true,
@@ -501,7 +501,7 @@ describe('scalarTypes', () => {
     })
 
     expect(result.email).toEqual('String')
-    expect(result.date).toEqual(new Date('2022-09-27T05:56:34.664Z'))
+    expect(result.date).toEqual(new Date('2022-09-27T06:41:23.611Z'))
     expect(result.bigInt).toEqual(1234567n)
     expect(result.integer).toEqual(1234567)
     expect(result.boolean).toEqual(true)
@@ -697,7 +697,7 @@ import { users, user, createUser, updateUser, deleteUser } from './users'
 import type { StandardScenario } from './users.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
