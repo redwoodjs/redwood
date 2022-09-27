@@ -30,9 +30,16 @@
     })
   }
 
-  // This is an overload of extractValues
+  // This is a thin wrapper that allows us to call the main function (extractValues)
+  // with an options parameter. We need this wrapper because object parameters {...}
+  // are not supported in template evaluations such as:
+  //  - ${extractExpectedValue(value, {useDateObjects:true})}
+  // If we add a closing curly bracket they will be interpreted as the closing
+  // bracket of the evaluation and throw an error when generating the service: `Unexpected token ')'`
+  // ex: `${extractExpectedValue(value, { useDateObjects: true } )}`.
+  //       ^---> Opening bracket           Closing bracket <---^ ^---> Unexpected token ')'
   const extractExpectedValue = (obj) => {
-    return extractValues(obj,{useDateObjects:true})
+    return extractValues(obj, { useDateObjects: true })
   } %>
 import type { ${prismaModel} } from '@prisma/client'
 
