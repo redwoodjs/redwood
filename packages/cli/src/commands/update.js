@@ -17,6 +17,12 @@ export const description = 'Check for updates to RedwoodJS'
 export const builder = (yargs) => {
   yargs
     .example('rw update')
+    .option('force', {
+      alias: 'f',
+      default: false,
+      description: 'Ignore asynchronous locks',
+      type: 'boolean',
+    })
     .option('automatic', {
       description: 'Only run if update check is overdue',
       type: 'boolean',
@@ -37,13 +43,17 @@ export const builder = (yargs) => {
     .epilogue('')
 }
 
-export const handler = async ({ automatic, silent }) => {
+export const handler = async ({ force, automatic, silent }) => {
   if (automatic && !isUpdateCheckDue()) {
     return
   }
 
-  // TODO: Allow --force to override this
-  if (isUpdateLocked()) {
+  if (isUpdateLocked() && !force) {
+    if (!silent) {
+      console.log(
+        'An update command is already running, please try again after in a few seconds.'
+      )
+    }
     return
   }
 
