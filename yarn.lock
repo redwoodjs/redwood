@@ -12945,6 +12945,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"colorette@npm:^2.0.19":
+  version: 2.0.19
+  resolution: "colorette@npm:2.0.19"
+  checksum: 2bcc9134095750fece6e88167011499b964b78bf0ea953469130ddb1dba3c8fe6c03debb0ae181e710e2be10900d117460f980483a7df4ba4a1bac3b182ecb64
+  languageName: node
+  linkType: hard
+
 "colors@npm:1.4.0, colors@npm:^1.4.0":
   version: 1.4.0
   resolution: "colors@npm:1.4.0"
@@ -13651,7 +13658,7 @@ __metadata:
     execa: 5.1.1
     fs-extra: 10.1.0
     jest: 29.0.3
-    listr: 0.14.3
+    listr2: 5.0.5
     prompts: 2.4.2
     typescript: 4.7.4
     yargs: 17.5.1
@@ -21403,6 +21410,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"listr2@npm:5.0.5":
+  version: 5.0.5
+  resolution: "listr2@npm:5.0.5"
+  dependencies:
+    cli-truncate: ^2.1.0
+    colorette: ^2.0.19
+    log-update: ^4.0.0
+    p-map: ^4.0.0
+    rfdc: ^1.3.0
+    rxjs: ^7.5.6
+    through: ^2.3.8
+    wrap-ansi: ^7.0.0
+  peerDependencies:
+    enquirer: ">= 2.3.0 < 3"
+  peerDependenciesMeta:
+    enquirer:
+      optional: true
+  checksum: 293eea149301ca95822359af647ef8238cbb0a052287a4bf3bb6811802b66afd21117b6c5a391a4c0356b9dff41ad9324b159f49bd3c78562b6bc8b1fd8d988a
+  languageName: node
+  linkType: hard
+
 "listr2@npm:^3.8.3":
   version: 3.14.0
   resolution: "listr2@npm:3.14.0"
@@ -27255,6 +27283,15 @@ __metadata:
   dependencies:
     tslib: ^2.1.0
   checksum: d8077fb4a06c05f52fcc974ab9884d163924b8085c661c92030a522920510bf0c75583caee70409ab11992320c31f562f5402afe8b81255370c09773209fec5c
+  languageName: node
+  linkType: hard
+
+"rxjs@npm:^7.5.6":
+  version: 7.5.7
+  resolution: "rxjs@npm:7.5.7"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: 283620b3c90b85467c3549f7cda0dd768bc18719cccbbdd9aacadb0f0946827ab20d036f1a00d78066d769764e73070bfee8706091d77b8d971975598f6cbbd4
   languageName: node
   linkType: hard
 
