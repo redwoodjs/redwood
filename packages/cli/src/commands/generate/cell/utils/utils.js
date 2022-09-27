@@ -34,6 +34,11 @@ export const uniqueOperationName = async (
   return uniqueOperationName(name, { index: index + 1 })
 }
 
+export const operationNameIsUnique = async (operationName) => {
+  const cellOperationNames = await getCellOperationNames()
+  return !cellOperationNames.includes(operationName)
+}
+
 export const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
 }
