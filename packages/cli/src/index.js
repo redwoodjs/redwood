@@ -108,7 +108,7 @@ const updateCheckerMiddleware = (argv) => {
       path.join(backgroundUpdateBaseLogPath, 'err.log'),
       'a'
     )
-    const child = spawn('yarn', ['rw', 'update'], {
+    const child = spawn('yarn', ['rw', 'update', '--silent'], {
       detached: true,
       stdio: ['ignore', out, err],
       cwd: getPaths().base,
