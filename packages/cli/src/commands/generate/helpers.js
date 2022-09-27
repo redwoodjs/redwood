@@ -17,7 +17,7 @@ import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 import { yargsDefaults } from '../generate'
 
 /**
- * Returns the path to a custom generator template, if found in the app.
+ * Returns the full path to a custom generator template, if found in the app.
  * Otherwise the default Redwood template.
  */
 export const customOrDefaultTemplatePath = ({

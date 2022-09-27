@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "3.0.1",
+  "version": "3.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.1",
-    "core-js": "3.25.1"
+    "core-js": "3.25.3"
   },
   "devDependencies": {
-    "@auth0/auth0-spa-js": "1.22.3",
-    "@azure/msal-browser": "2.28.1",
+    "@auth0/auth0-spa-js": "1.22.4",
+    "@azure/msal-browser": "2.28.3",
     "@babel/cli": "7.18.10",
     "@babel/core": "7.19.1",
     "@clerk/clerk-js": "3.17.0",
@@ -42,7 +42,7 @@
     "@simplewebauthn/typescript-types": "6.0.0",
     "@supabase/supabase-js": "1.35.6",
     "@types/netlify-identity-widget": "1.9.3",
-    "@types/react": "17.0.48",
+    "@types/react": "17.0.50",
     "firebase": "9.9.3",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",

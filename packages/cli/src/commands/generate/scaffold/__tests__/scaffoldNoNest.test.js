@@ -8,6 +8,8 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 describe('in javascript (default) mode', () => {
   let files
 
@@ -20,8 +22,8 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
-    expect(Object.keys(files).length).toEqual(17)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(files).length).toEqual(19)
   })
   // SDL
 
@@ -297,8 +299,8 @@ describe('in typescript mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(17)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(19)
   })
 
   // SDL

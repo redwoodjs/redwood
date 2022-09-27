@@ -5,6 +5,8 @@ import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 let filesLower, filesUpper
 
 beforeAll(async () => {
@@ -24,8 +26,8 @@ beforeAll(async () => {
 
 describe('admin/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesLower).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesLower).length).toEqual(19)
     })
 
     // Layout
@@ -342,8 +344,8 @@ describe('admin/Post', () => {
 
 describe('Admin/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesUpper).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesUpper).length).toEqual(19)
     })
 
     // Layout
