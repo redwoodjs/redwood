@@ -133,7 +133,7 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
 }
 
 configure({
-  asyncUtilTimeout: 2_500,
+  asyncUtilTimeout: 5_000,
 })
 
 beforeEach(() => {
