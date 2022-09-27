@@ -65,6 +65,22 @@ Heroku does not officially support MySQL.
 ## Digital Ocean
 For Postgres, see [How to Manage Connection Pools](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools)
 
+In order to run migrations on platforms like `Vercel` and `Netlify` you are required to append additional connection parameters to your database url. Prisma needs to be informed to use pgbouncer (which is part of the connection pool of Ditital Ocean), if not provided the following error will be show:
+
+```
+Error: Migration engine error:
+db error: ERROR: prepared statement "s0" already exists
+```
+
+To resolve this use the following structure of you database url: 
+```
+<YOUR_CONNECTION_POOL_URL>:25061/defaultdb?connection_limit=3&sslmode=require&pgbouncer=true&connect_timeout=10&pool_timeout=30
+```
+Notes:
+* Make sure to use the correct host and  *NOT* `25060`
+* Adjust the connection_limit: Clusters provide 25 connections per 1 GB of RAM. 3 connections per cluster are reserved for maintenance, and all remaining connections can be allocated to connection pools.
+* Both `pgbouncer=true` and `pool_timeout=30` are required in order to deploy succesfully through your connection pool
+
 Connection Pooling for MySQL is not yet supported.
 
 ## AWS
