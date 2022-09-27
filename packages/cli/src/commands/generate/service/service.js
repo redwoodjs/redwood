@@ -52,7 +52,8 @@ export const scenarioFieldValue = (field) => {
     case 'Boolean':
       return true
     case 'DateTime':
-      return new Date()
+      // use a static date so that snapshots don't change
+      return new Date('2022-09-01T00:21:58.876Z')
     case 'Decimal':
     case 'Float':
       return randFloat
@@ -218,7 +219,8 @@ export const fieldsToUpdate = async (model) => {
         break
       }
       case 'DateTime': {
-        let date = new Date()
+        // use a static date so that snapshots don't change
+        let date = new Date('2022-09-01T00:21:58.876Z')
         date.setDate(date.getDate() + 1)
         newValue = date
         break
