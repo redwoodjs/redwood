@@ -23,9 +23,9 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.1",
-    "core-js": "3.25.1",
+    "core-js": "3.25.3",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.36.0"
+    "react-hook-form": "7.36.1"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
