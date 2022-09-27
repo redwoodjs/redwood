@@ -16,7 +16,13 @@ jest.mock('../util', () => {
 
 import React, { useEffect, useState } from 'react'
 
-import { render, waitFor, act, fireEvent } from '@testing-library/react'
+import {
+  render,
+  waitFor,
+  act,
+  fireEvent,
+  configure,
+} from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
@@ -87,11 +93,17 @@ const mockUseAuth =
       useState(isAuthenticated)
 
     useEffect(() => {
+      let timer: NodeJS.Timeout | undefined
       if (loadingTimeMs) {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setAuthLoading(false)
           setAuthIsAuthenticated(true)
         }, loadingTimeMs)
+      }
+      return () => {
+        if (timer) {
+          clearTimeout(timer)
+        }
       }
     }, [])
 
@@ -119,6 +131,10 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
     </div>
   )
 }
+
+configure({
+  asyncUtilTimeout: 5_000,
+})
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
@@ -763,7 +779,8 @@ test('can display a loading screen with a hook', async () => {
     const [showStill, setShowStill] = useState(false)
 
     useEffect(() => {
-      setTimeout(() => setShowStill(true), 100)
+      const timer = setTimeout(() => setShowStill(true), 100)
+      return () => clearTimeout(timer)
     }, [])
 
     return <>{showStill ? 'Still authenticating...' : 'Authenticating...'}</>
