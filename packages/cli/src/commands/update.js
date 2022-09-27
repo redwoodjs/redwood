@@ -51,7 +51,7 @@ export const handler = async ({ force, automatic, silent }) => {
   if (isUpdateLocked() && !force) {
     if (!silent) {
       console.log(
-        'An update command is already running, please try again after in a few seconds.'
+        'An update command is already running, please try again in a few seconds.'
       )
     }
     return
