@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -28,6 +29,7 @@ import * as storybookCommand from './commands/storybook'
 import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
+import * as updateCommand from './commands/update'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
 
@@ -83,6 +85,39 @@ const loadDotEnvDefaultsMiddleware = () => {
   })
 }
 
+const updateCheckerMiddleware = (argv) => {
+  if (argv._[0] === 'update' || argv._[0] === 'upgrade') {
+    return
+  }
+  if (updateCommand.isUpgradeAvailable()) {
+    process.on('exit', () => {
+      console.log(updateCommand.upgradeAvailableMessage())
+    })
+  }
+  if (updateCommand.isUpdateCheckDue()) {
+    const backgroundUpdateBaseLogPath = path.join(
+      getPaths().base || '/tmp',
+      '.redwood',
+      'update'
+    )
+    const out = fs.openSync(
+      path.join(backgroundUpdateBaseLogPath, 'out.log'),
+      'a'
+    )
+    const err = fs.openSync(
+      path.join(backgroundUpdateBaseLogPath, 'err.log'),
+      'a'
+    )
+    const child = spawn('yarn', ['rw', 'update'], {
+      detached: true,
+      stdio: ['ignore', out, err],
+      cwd: getPaths().base,
+      env: { ...process.env },
+    })
+    child.unref()
+  }
+}
+
 // eslint-disable-next-line no-unused-expressions
 yargs
   .scriptName('rw')
@@ -90,6 +125,7 @@ yargs
     getCwdMiddleware,
     loadDotEnvDefaultsMiddleware,
     telemetryMiddleware,
+    updateCheckerMiddleware,
   ])
   .option('cwd', {
     describe: 'Working directory to use (where `redwood.toml` is located.)',
@@ -114,6 +150,7 @@ yargs
   .command(testCommand)
   .command(tstojsCommand)
   .command(typeCheckCommand)
+  .command(updateCommand)
   .command(upgradeCommand)
   .example(
     'yarn rw g page home /',
