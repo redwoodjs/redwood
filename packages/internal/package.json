@@ -45,7 +45,7 @@
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.6.0",
     "chalk": "4.1.2",
-    "core-js": "3.25.1",
+    "core-js": "3.25.3",
     "deepmerge": "4.2.2",
     "esbuild": "0.15.7",
     "fast-glob": "3.2.12",
