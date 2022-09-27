@@ -234,7 +234,6 @@ export function isUpdateCheckDue() {
 // Misc
 
 // TODO: Make this message prettier
-// TODO: Show the newest version? Would take a small amount of extra time...
 export function upgradeAvailableMessage() {
   const versionStatus = readUpgradeVersionsFile()
   let message = `${c.green(
