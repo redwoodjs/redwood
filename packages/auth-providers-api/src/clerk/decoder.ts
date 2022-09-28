@@ -31,6 +31,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
       roles: user.publicMetadata['roles'] ?? [],
     }
   } catch (error) {
+    console.error(error)
     return Promise.reject(error)
   }
 }
