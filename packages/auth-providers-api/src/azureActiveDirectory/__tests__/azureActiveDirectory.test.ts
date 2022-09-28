@@ -7,7 +7,16 @@ jest.mock('jsonwebtoken', () => ({
   decode: jest.fn(),
 }))
 
-beforeEach(() => {})
+let consoleError
+
+beforeAll(() => {
+  consoleError = console.error
+  console.error = () => {}
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 test('returns null for unsupported type', async () => {
   const decoded = await authDecoder('token', 'netlify', {} as any)
@@ -15,13 +24,13 @@ test('returns null for unsupported type', async () => {
   expect(decoded).toBe(null)
 })
 
-test('throws if AUTHORITY env var is not set', async () => {
-  process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY = undefined
+test('throws if AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set', async () => {
+  delete process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY
   process.env.AZURE_ACTIVE_DIRECTORY_JTW_ISSUER = 'jwt-issuer'
 
-  expect(() => {
+  await expect(
     authDecoder('token', 'azureActiveDirectory', {} as any)
-  }).toThrowError('AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set.')
+  ).rejects.toThrow('AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set')
 })
 
 describe('invoking in prod', () => {
