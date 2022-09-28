@@ -1,6 +1,6 @@
 import * as magic from '@magic-sdk/admin'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 const validate = jest.fn()
@@ -17,6 +17,11 @@ jest.spyOn(magic, 'Magic').mockImplementation((() => {
     },
   }
 }) as any)
+
+const req = {
+  event: {} as APIGatewayProxyEvent,
+  context: {} as LambdaContext,
+}
 
 let consoleError
 

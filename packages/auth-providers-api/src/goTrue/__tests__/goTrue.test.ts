@@ -1,6 +1,6 @@
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
 
-import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 jest.mock('jsonwebtoken', () => {
@@ -19,6 +19,11 @@ jest.mock('jsonwebtoken', () => {
     }),
   }
 })
+
+const req = {
+  event: {} as APIGatewayProxyEvent,
+  context: {} as LambdaContext,
+}
 
 let consoleError
 

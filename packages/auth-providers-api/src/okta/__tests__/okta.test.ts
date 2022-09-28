@@ -1,6 +1,6 @@
 import OktaJwtVerifier from '@okta/jwt-verifier'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 jest
@@ -8,6 +8,11 @@ jest
   .mockImplementation(() => {
     return Promise.resolve({ claims: { sub: 'abc123' } } as OktaJwtVerifier.Jwt)
   })
+
+const req = {
+  event: {} as APIGatewayProxyEvent,
+  context: {} as LambdaContext,
+}
 
 let consoleError
 

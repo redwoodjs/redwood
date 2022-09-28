@@ -1,6 +1,6 @@
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import * as firebaseAdmin from 'firebase-admin'
 
-import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 const verifyIdToken = jest.fn()
@@ -10,6 +10,11 @@ jest.spyOn(firebaseAdmin, 'auth').mockImplementation((() => {
     verifyIdToken,
   }
 }) as any)
+
+const req = {
+  event: {} as APIGatewayProxyEvent,
+  context: {} as LambdaContext,
+}
 
 test('returns null for unsupported type', async () => {
   const decoded = await authDecoder('token', 'netlify', req)

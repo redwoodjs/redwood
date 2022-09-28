@@ -1,5 +1,11 @@
-import { req } from '../../__tests__/fixtures/helpers'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
 import { authDecoder } from '../decoder'
+
+const req = {
+  event: {} as APIGatewayProxyEvent,
+  context: {} as LambdaContext,
+}
 
 let consoleError
 
