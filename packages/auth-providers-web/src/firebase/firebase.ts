@@ -83,7 +83,7 @@ export function createFirebaseAuth(
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-interface FirebaseClient {
+export interface FirebaseClient {
   firebaseAuth: FirebaseAuth
   firebaseApp?: FirebaseApp
 }
