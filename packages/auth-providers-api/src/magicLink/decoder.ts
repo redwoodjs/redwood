@@ -7,8 +7,9 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
 
   const { MAGIC_SECRET_API_KEY } = process.env
   if (!MAGIC_SECRET_API_KEY) {
-    throw new Error('`MAGIC_SECRET_API_KEY` environment variable not set.')
+    throw new Error('MAGIC_SECRET_API_KEY environment variable not set.')
   }
+
   const { Magic } = require('@magic-sdk/admin')
 
   const magicAdmin = new Magic(MAGIC_SECRET_API_KEY)
