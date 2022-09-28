@@ -6,10 +6,8 @@ import { authDecoder } from '../decoder'
 jest
   .spyOn(OktaJwtVerifier.prototype, 'verifyAccessToken')
   .mockImplementation(() => {
-    return Promise.resolve({ claims: { sub: 'abc123' } })
+    return Promise.resolve({ claims: { sub: 'abc123' } } as OktaJwtVerifier.Jwt)
   })
-
-// console.log('okta', okta.default)
 
 let consoleError
 
