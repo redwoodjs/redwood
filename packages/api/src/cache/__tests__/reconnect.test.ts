@@ -2,15 +2,6 @@ import InMemoryClient from '../clients/InMemoryClient'
 import { CacheTimeoutError } from '../errors'
 import { createCache } from '../index'
 
-// jest.mock('../clients/InMemoryClient', () => {
-//   return function () {
-//     return {
-//       get: () => {},
-//       reconnect: () => {},
-//     }
-//   }
-// })
-
 describe('client.reconnect', () => {
   beforeEach(() => {
     jest.clearAllMocks()
