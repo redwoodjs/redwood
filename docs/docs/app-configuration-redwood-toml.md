@@ -112,37 +112,41 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 ### Configure Fastify
 
 You can configure the Fastify Server used by Redwood, in `api/server.config.js`.
-
 For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
+:::info Where does this configuration apply?
 
-:::info Where do these configurations apply?
- This configuration does **not** apply in a serverless deploy. Typically when you deploy to serverless providers like Netlify or Vercel, your web side is served from a CDN - and your functions are invoked directly - so none of these settings will be applied.
+This configuration does **not** apply in a serverless deploy.
+Typically when you deploy to a serverless provider like Netlify or Vercel, your project's web side is served from a CDN, and functions are invoked directly.
 
- But they do, when you run:
- - `yarn rw dev` (the dev server) - the configuration will be picked up and used for the API side. Note that the web side is served by the Webpack dev server, in development.
- - `yarn rw serve` (serving api and web sides in production mode) - the configuration will be applied to the Fastify instance serving static files from `./web/dist` and your api functions in `./api/dist/functions`
+But this configuration does apply when running:
 
- Or if you're running them separately:
- - `yarn rw serve api` (serving just the api side) - configuration will only apply to the Fastify instance serving your api side
- - `yarn rw serve web` (serving just the web side) - configuration will only apply to the Fastify instance that serves your static files in `./web/dist/`
+- `yarn rw dev` (the dev server) the configuration will be picked up and used for the API side. The web side is served by webpack dev server
+- `yarn rw serve` (serving api and web sides in production mode) - the configuration will be applied to the Fastify instance serving static files from `./web/dist` and your api functions in `./api/dist/functions`
+
+Or if you're running them separately:
+
+- `yarn rw serve api` (serving just the api side) - configuration will only apply to the Fastify instance serving your api side
+- `yarn rw serve web` (serving just the web side) - configuration will only apply to the Fastify instance that serves your static files in `./web/dist/`
+
 :::
 
-Using [redwood.toml's env var interpolation](#using-environment-variables-in-redwoodtoml), you can configure a different `server.config.js` based on your deployment environment:
+Using redwood.toml's [env var interpolation](#using-environment-variables-in-redwoodtoml), you can change the server config used based on your deployment environment:
 
 ```toml title="redwood.toml"
 [api]
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
-### Register Custom Fastify Plug-ins
+### Register Custom Fastify Plugins
 
-You can also register Fastify plugins for the API and Web sides in the `configureFastify` function.
-
-This function has access to the Fastify instance and options, such as the side (web or api) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
+You can register custom Fastify plugins for the api and web sides in the `configureFastify` function.
+This function has access to the Fastify instance and options, such as the side that's being configured.
 
 :::warning Reminder
- This configuration does not apply in a serverless deploy.
+
+This configuration does **not** apply in a serverless deploy.
+
 :::
 
 ```js
@@ -160,26 +164,22 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
-##### How to Configure a Fastify Plug-in for the API Side
+#### How to configure a Fastify plugin for the api side
 
-Suppose you want to compress payloads and also rate limit your RedwoodJS api.
+Let's say that you want to compress payloads and rate limit your API.
+You can leverage two Fastify ecosystem plugins, [@fastify/compress](https://github.com/fastify/fastify-compress) and [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit) respectively.
 
-You can leverage the Fastify ecosystem plug-ins:
-
-* [@fastify/compress](https://github.com/fastify/fastify-compress)
-* [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit)
-
-And then configure them in your API side.
-
-Here, we setup compression to handle all requests (global), compress responses only if larger than 1K, and to prefer the `deflate` method over `gzip`.
-only allow one IP address to make 100 requests in a five minute window.
-
-Of course, these are just examples and please see the plugin documentation for the settings that best meet your needs.
+Here, we configure compression so that it handles all requests, compresses responses only if they're larger than 1K, and to prefer the `deflate` method over `gzip`.
+Using @fastify/rate-limit, we allow an IP address to only make 100 requests in a five minute window.
 
 :::important
-You will need to install any custom plug-in packages to your project's `api` workspace.
 
-To do this you run `yarn workspace api add @fastify/rate-limit @fastify/compress`
+You'll need to install plugin packages in your project's `api` workspace:
+
+```
+yarn workspace api add @fastify/rate-limit @fastify/compress
+```
+
 :::
 
 ```js
@@ -200,18 +200,13 @@ const configureFastify = async (fastify, options) => {
     })
   }
 
-
   return fastify
 }
 ```
 
-:::important
-You will need to install any custom plug-in packages to your project's `api` workspace.
-:::
+#### How to Configure a Fastify plugin for the web side
 
-##### How to Configure a Fastify Plug-in for the Web Side
-
-If you are running your web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
+If you're running the web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
 
 * [@fastify/etag](https://github.com/fastify/fastify-etag)
 
@@ -233,24 +228,21 @@ const configureFastify = async (fastify, options) => {
 ```
 
 :::important
+
 You will need to install any custom plug-in packages to your project's `api` workspace.
 
 This may seem counter-intuitive, since you are configuring the `web` side, but the `api-server` gets configured in your project's `api` and that is what server web assets.
-:::
 
+:::
 
 #### Troubleshooting Custom Fastify Configuration
 
-There are a few important considerations to be made when configuring Fastify.
+There are a few important things to consider when configuring Fastify.
 
-:::important Troubleshooting
+If running via `yarn rw serve`, only register a plugin once either in `api` or in `web`. Registering the same plugin in both sides will error saying that it has already been registered.
 
- * If running `yarn rw serve`, only register the plugin once either in `web` or in `api`. Registering the same pugin in both side will raise an error saying that it has already been registered.
+Running via `yarn rw serve` uses a single Fastify instance to serve both api functions and web assets, so registering the plugin in a single side applies it to that instance.
 
- Remember that `yarn rw serve` is  single Fastify instance that server both functions and web assets, so registering the plugin in a single side applies it to that instance.
-
- * TODO log level
-:::
 ## [browser]
 
 ```toml title="redwood.toml"
