@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 // See these threads:
 // - https://github.com/facebook/jest/issues/12770
 // - https://github.com/microsoft/accessibility-insights-web/pull/5421#issuecomment-1109168149.
@@ -9,10 +11,12 @@ module.exports = (path, options) => {
   return options.defaultResolver(path, {
     ...options,
     packageFilter: (pkg) => {
-      if (pkg.name === 'firebase/auth') {
-        delete pkg['browser']
-        delete pkg['module']
-        console.log('packageFilter', pkg)
+      if (pkg.name === 'firebase') {
+        pkg.exports['./auth'].default = pkg.exports['./auth'].node.require
+      }
+
+      if (['@firebase/auth', '@firebase/util'].includes(pkg.name)) {
+        pkg.exports['.'].default = pkg.exports['.'].node.require
       }
 
       return pkg
