@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "3.0.1",
+  "version": "3.0.3",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -27,11 +27,11 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.1",
-    "@redwoodjs/auth": "3.0.1",
-    "@redwoodjs/graphql-server": "3.0.1",
-    "@redwoodjs/internal": "3.0.1",
-    "@redwoodjs/router": "3.0.1",
-    "@redwoodjs/web": "3.0.1",
+    "@redwoodjs/auth": "3.0.3",
+    "@redwoodjs/graphql-server": "3.0.3",
+    "@redwoodjs/internal": "3.0.3",
+    "@redwoodjs/router": "3.0.3",
+    "@redwoodjs/web": "3.0.3",
     "@storybook/addon-a11y": "6.5.12",
     "@storybook/addon-docs": "6.5.12",
     "@storybook/addon-essentials": "6.5.12",
@@ -51,7 +51,7 @@
     "@types/webpack": "5.28.0",
     "babel-jest": "29.0.3",
     "babel-plugin-inline-react-svg": "2.0.1",
-    "core-js": "3.25.1",
+    "core-js": "3.25.3",
     "fast-glob": "3.2.12",
     "jest": "29.0.3",
     "jest-environment-jsdom": "29.0.3",
