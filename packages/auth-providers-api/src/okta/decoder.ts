@@ -8,7 +8,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   const { OKTA_DOMAIN, OKTA_AUDIENCE } = process.env
 
   if (!OKTA_AUDIENCE || !OKTA_DOMAIN) {
-    throw new Error('`OKTA_DOMAIN` or `OKTA_AUDIENCE` env vars are not set.')
+    throw new Error('OKTA_DOMAIN or OKTA_AUDIENCE env vars are not set.')
   }
 
   const OktaJwtVerifier = require('@okta/jwt-verifier')
@@ -23,6 +23,6 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
       .then((res: any) => {
         resolve(res.claims as Record<string, unknown>)
       })
-      .catch((err: any) => console.warn('Token failed validation: ' + err))
+      .catch((err: any) => console.error('Token failed validation: ' + err))
   })
 }
