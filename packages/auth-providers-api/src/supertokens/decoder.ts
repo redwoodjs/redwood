@@ -11,10 +11,8 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   return new Promise((resolve, reject) => {
     const { SUPERTOKENS_JWKS_URL } = process.env
 
-    if (SUPERTOKENS_JWKS_URL === undefined) {
-      return reject(
-        new Error('SUPERTOKENS_JWKS_URL environment variable is not set')
-      )
+    if (!SUPERTOKENS_JWKS_URL) {
+      throw new Error('SUPERTOKENS_JWKS_URL env var is not set')
     }
 
     const client = jwksClient({
