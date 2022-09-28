@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 
+import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 jest.mock('jsonwebtoken', () => ({
@@ -19,7 +20,7 @@ afterAll(() => {
 })
 
 test('returns null for unsupported type', async () => {
-  const decoded = await authDecoder('token', 'netlify', {} as any)
+  const decoded = await authDecoder('token', 'netlify', req)
 
   expect(decoded).toBe(null)
 })
@@ -27,7 +28,7 @@ test('returns null for unsupported type', async () => {
 test('throws if ETHEREUM_JWT_SECRET env var is not set', async () => {
   delete process.env.ETHEREUM_JWT_SECRET
 
-  await expect(authDecoder('token', 'ethereum', {} as any)).rejects.toThrow(
+  await expect(authDecoder('token', 'ethereum', req)).rejects.toThrow(
     'ETHEREUM_JWT_SECRET env var is not set'
   )
 })
@@ -37,7 +38,7 @@ test('verify, and not decode, should be called in production', () => {
   process.env.NODE_ENV = 'production'
   process.env.ETHEREUM_JWT_SECRET = 'jwt-secret'
 
-  authDecoder('token', 'ethereum', {} as any)
+  authDecoder('token', 'ethereum', req)
 
   expect(jwt.decode).not.toBeCalled()
   expect(jwt.verify).toBeCalled()

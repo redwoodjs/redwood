@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 
+import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 jest.mock('jsonwebtoken', () => ({
@@ -19,7 +20,7 @@ afterAll(() => {
 })
 
 test('returns null for unsupported type', async () => {
-  const decoded = await authDecoder('token', 'netlify', {} as any)
+  const decoded = await authDecoder('token', 'netlify', req)
 
   expect(decoded).toBe(null)
 })
@@ -29,7 +30,7 @@ test('throws if AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set', async () =
   process.env.AZURE_ACTIVE_DIRECTORY_JTW_ISSUER = 'jwt-issuer'
 
   await expect(
-    authDecoder('token', 'azureActiveDirectory', {} as any)
+    authDecoder('token', 'azureActiveDirectory', req)
   ).rejects.toThrow('AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set')
 })
 
@@ -49,7 +50,7 @@ describe('invoking in prod', () => {
   test('verify, not decode, is called in production', async () => {
     process.env.NODE_ENV = 'production'
 
-    authDecoder('token', 'azureActiveDirectory', {} as any)
+    authDecoder('token', 'azureActiveDirectory', req)
 
     expect(jwt.decode).not.toBeCalled()
     expect(jwt.verify).toBeCalled()

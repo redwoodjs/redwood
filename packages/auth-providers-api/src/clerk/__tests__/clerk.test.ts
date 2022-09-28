@@ -1,3 +1,4 @@
+import { req } from '../../__tests__/fixtures/helpers'
 import { authDecoder } from '../decoder'
 
 let consoleError
@@ -12,7 +13,7 @@ afterAll(() => {
 })
 
 test('returns null for unsupported type', async () => {
-  const decoded = await authDecoder('token', 'netlify', {} as any)
+  const decoded = await authDecoder('token', 'netlify', req)
 
   expect(decoded).toBe(null)
 })
@@ -21,7 +22,7 @@ test('throws if CLERK_JWT_KEY env var is not set', async () => {
   delete process.env.CLERK_JWT_KEY
   process.env.CLERK_API_KEY = 'api-key'
 
-  await expect(authDecoder('token', 'clerk', {} as any)).rejects.toThrow(
+  await expect(authDecoder('token', 'clerk', req)).rejects.toThrow(
     'CLERK_JWT_KEY env var is not set'
   )
 })
@@ -29,7 +30,5 @@ test('throws if CLERK_JWT_KEY env var is not set', async () => {
 test('rejects when the token is invalid', async () => {
   process.env.CLERK_JWT_KEY = 'jwt-key'
 
-  await expect(
-    authDecoder('invalid-token', 'clerk', {} as any)
-  ).rejects.toThrow()
+  await expect(authDecoder('invalid-token', 'clerk', req)).rejects.toThrow()
 })

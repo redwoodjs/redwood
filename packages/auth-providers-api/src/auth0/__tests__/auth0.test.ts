@@ -13,8 +13,7 @@ test('verify, and not decode, should be called in production', () => {
   process.env.AUTH0_DOMAIN = 'redwoodjs.com'
   process.env.AUTH0_AUDIENCE = 'michael bolton'
 
-  // @ts-expect-error Ignore this error.
-  verifyAuth0Token({})
+  verifyAuth0Token('token')
 
   expect(jwt.decode).not.toBeCalled()
   expect(jwt.verify).toBeCalled()
