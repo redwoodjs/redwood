@@ -65,7 +65,7 @@ Heroku does not officially support MySQL.
 ## Digital Ocean
 For Postgres, see [How to Manage Connection Pools](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools)
 
-In order to run migrations on platforms like `Vercel` and `Netlify` you are required to append additional connection parameters to your database url. Prisma needs to be informed to use pgbouncer (which is part of the connection pool of Ditital Ocean), if not provided the following error will be show:
+In order to run migrations through a connection pool you are required to append additional connection parameters to your database url. Prisma needs to be informed to use pgbouncer (which is part of the connection pool of Digital Ocean), if not provided you may receive the following error:
 
 ```
 Error: Migration engine error:
