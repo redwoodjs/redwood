@@ -21,7 +21,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
     const decoded = (await jwt.verify(token, secret)) as Record<string, unknown>
 
     const claims = decoded[CLAIMS_NAMESPACE] as Record<string, unknown>
-    const roles = claims[ROLES_CLAIM]
+    const roles = claims?.[ROLES_CLAIM]
 
     return { ...decoded, roles }
   } catch (error: any) {
