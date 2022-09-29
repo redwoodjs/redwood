@@ -447,6 +447,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `name`               | Name of the cell                                                                                                                                                 |
 | `--force, -f`        | Overwrite existing files                                                                                                                                         |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                             |
+| `--query`            | Use this flag to specify a specific name for the GraphQL query. The query name must be unique.                                                                   |
 | `--list`             | Use this flag to generate a list cell. This flag is needed when dealing with irregular words whose plural and singular is identical such as equipment or pokemon |
 | `--tests`            | Generate test files [default: true]                                                                                                                              |
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
