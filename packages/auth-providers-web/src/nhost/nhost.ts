@@ -44,10 +44,10 @@ function createNhostAuthImplementation(nhostClient: NhostClient) {
       return nhostClient.auth.signUp(options)
     },
     getToken: async () => {
-      return (await nhostClient.auth.getJWTToken()) || null
+      return nhostClient.auth.getJWTToken() || null
     },
     getUserMetadata: async () => {
-      return await nhostClient.auth.getUser()
+      return nhostClient.auth.getUser()
     },
     restoreAuthState: () => {
       return nhostClient.auth.refreshSession()
