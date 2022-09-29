@@ -53,6 +53,7 @@ model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  roles               String @default("moderator")
   // highlight-next-line
   posts               Post[]
 }
@@ -60,7 +61,7 @@ model User {
 
 ### Migrate the Database
 
-Next, migrate the database to apply the changes:
+Next, migrate the database to apply the changes (when given the option, name the migration something like "add userId to post"):
 
 ```
 yarn rw prisma migrate dev
@@ -68,13 +69,13 @@ yarn rw prisma migrate dev
 
 Whoops!
 
-<img width="584" alt="image" src="https://user-images.githubusercontent.com/300/192899337-9cc1167b-e6da-42d4-83dc-d2a6c0cd1179.png">
+<img width="584" alt="image" src="https://user-images.githubusercontent.com/300/192899337-9cc1167b-e6da-42d4-83dc-d2a6c0cd1179.png" />
 
-We made `userId` a required field, but we already have several posts in our development database! Without setting a default value for `userId` we're stuck.
+We made `userId` a required field, but we already have several posts in our development database! Since we don't have a default value for `userId` defined, it's impossible to add this column to the database.
 
-::: caution Why don't I just set a default of `userId = 1`?
+:::caution Why don't we just set `@default(1)` in the schema?
 
-This would get us past this problem, but could cause hard-to-track-down bugs in the future: if you ever forget to assign a `post` to a `user`, rather than fail it'll happily just set `userId` to `1`, which may or may not even exist at some point in the future! It's best to things The Right Way and avoid the quick hacks to get past an annoyance like this. Your future self will thank you!
+This would get us past this problem, but could cause hard-to-track-down bugs in the future: if you ever forget to assign a `post` to a `user`, rather than fail it'll happily just set `userId` to `1`, which may or may not even exist at some day! It's best to take the extra time to do things The Right Way and avoid the quick hacks to get past an annoyance like this. Your future self will thank you!
 
 :::
 
@@ -84,7 +85,26 @@ Since we're in development, let's just blow away the database and start over:
 yarn rw prisma migrate reset
 ```
 
-You can name the migration something like "add userId to post".
+:::info Database Seeds
+
+If you started the second half the tutorial from the [Redwood Tutorial repo](https://github.com/redwoodjs/redwood-tutorial) you'll get an error after resetting the database—Prisma attempts to seed the database with a user and some posts to get you started, but the posts in that seed do not have the new required `userId` field! Open up `scripts/seed.js` and edit each post to add `userId: 1` to each:
+
+```javascript title="scripts/seed.js"
+{
+  id: 1,
+  title: 'Welcome to the blog!',
+  body:
+    "I'm baby single- origin coffee kickstarter lo - fi paleo skateboard.Tumblr hashtag austin whatever DIY plaid knausgaard fanny pack messenger bag blog next level woke.Ethical bitters fixie freegan,helvetica pitchfork 90's tbh chillwave mustache godard subway tile ramps art party. Hammock sustainable twee yr bushwick disrupt unicorn, before they sold out direct trade chicharrones etsy polaroid hoodie. Gentrify offal hoodie fingerstache.",
+  // highlight-next-line
+  userId: 1,
+},
+```
+
+Now run `yarn rw prisma migrate reset` again and you should be good.
+
+:::
+
+If you didn't start your codebase from the Redwood Tutorial repo then you'll now have no users or posts in the database. Go ahead and create a user by going to http://localhost:8910/signup but don't create any posts yet! Change their role to be "admin", either by using the console introduced in the [previous tutorial page](http://localhost:3000/docs/canary/tutorial/chapter7/rbac#changing-roles-on-a-user) or by [opening Prisma Studio](/docs/canary/tutorial/chapter2/getting-dynamic#prisma-studio) and changing it directly in the database.
 
 ### Add Fields to the SDL and Service
 
@@ -120,11 +140,17 @@ To enable this we'll need to make two modifications on the api side:
   }
 ```
 
+:::info What about the mutations?
+
+We did *not* add `user` or `userId` to the `CreatePostInput` or `UpdatePostInput` types. Although we want to set a user on each newly created post, we don't want just anyone to do that via a GraphQL call! You could easily create or edit a post and assign it to someone else. We'll save assigning the user to just the service, so it can't be manipulated by the outside world.
+
+:::
+
 Here we're using `User!` with an exclamation point because we know that every `Post` will have an associated user to it—this field will never be `null`.
 
 #### Add User Field Resolver
 
-This one is a little tricker: we need to add a "lookup" in the `posts` service, so that it knows how to get the associated user. When we generated the `Comment` SDL and service we got this field resolver created for us. We could re-run the service generator for `Post` but that could blow away changes we made to this file. Our only option would be to include the `--force` flag since the file already exists, which will write over every thing. In this case we'll just add the field resolver manually:
+This one is a little tricker: we need to add a "lookup" in the `posts` service, so that it knows how to get the associated user. When we generated the `comments` SDL and service we got this field resolver created for us. We could re-run the service generator for `Post` but that could blow away changes we made to this file. Our only option would be to include the `--force` flag since the file already exists, which will write over every thing. In this case we'll just add the field resolver manually:
 
 ```javascript title="api/src/services/posts/posts.js"
 import { db } from 'src/lib/db'
@@ -180,7 +206,9 @@ post {
 }
 ```
 
-That post will already be retreived from the database, and so we know its ID. `root` is that object, so can simply call `.id` on it to get that property. Finally we perform a `findOne()` query in Prisma, giving it the `id` of the record we already found, but return the `user` associated to that record, rather than the `post` itself.
+That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Finally we perform a `findOne()` query in Prisma, giving it the `id` of the record we already found, but return the `user` associated to that record, rather than the `post` itself.
+
+Note that if you kep the field resolver above, but also included a `user` property in the post(s) returned from `posts` and `post`, this field resolver will still be invoked and whatever is returned will override any `user` property that exists already. Why? That's just how GraphQL works!
 
 :::info Prisma and the N+1 Problem
 
@@ -222,24 +250,16 @@ The Redwood team is actively looking into more elegant built-in solutions to the
 
 :::
 
-### Updating the DB Data
+## Displaying the Author
 
-If your dev server is running, you may have noticed that the browser is erroring: we haven't associated any posts to any users yet (and the SDL said there would always be one!). Let's update those now. The quickest way would probably be to open a GUI to the database and just manually set the `userId`. Prisma Studio to the rescue!
+In order to get the author info we'll need to update our Cell queries to pull the user's name.
 
-```
-yarn rw prisma studio
-```
-
-A new browser should open to [http://localhost:5555](http://localhost:5555) and we make those changes:
-
-### Update GraphQL Queries
-
-There are two places where we publiclly present a list of users:
+There are two places where we publicly present a post:
 
 1. The homepage
 2. A single article page
 
-Let's update their respective Cells to include the name of the user that created the post.
+Let's update their respective Cells to include the name of the user that created the post:
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.js
 export const QUERY = gql`
@@ -249,9 +269,11 @@ export const QUERY = gql`
       title
       body
       createdAt
+      // highlight-start
       user {
         name
       }
+      // highlight-end
     }
   }
 `
@@ -265,10 +287,116 @@ export const QUERY = gql`
       title
       body
       createdAt
+      // highlight-start
       user {
         name
       }
+      // highlight-end
     }
   }
 `
 ```
+
+And then update the display component that shows an Article:
+
+```jsx title="web/src/components/Article/Article.js
+import { Link, routes } from '@redwoodjs/router'
+
+const Article = ({ article }) => {
+  return (
+    <article>
+      <header>
+        <h2 className="text-xl text-blue-700 font-semibold">
+          <Link to={routes.article({ id: article.id })}>{article.title}</Link>
+          // highlight-start
+          <span className="ml-2 text-gray-400 font-normal">
+            by {article.user.name}
+          </span>
+          // highlight-end
+        </h2>
+      </header>
+
+      <div className="mt-2 text-gray-900 font-light">{article.body}</div>
+    </article>
+  )
+}
+
+export default Article
+```
+
+Depending on whether you started from the Redwood Tutorial repo or not, you may not have any posts to actually display. Let's add some! However, before we can do that with our posts admin/scaffold, we'll need to actaully associate a user to the post they created. Remember that we don't allow setting the `userId` via GraphQL, which is what the scaffolds use when creating/editing records. But that's okay, we want this to only happen in the service anyway, which is where we're heading now.
+
+## Accessing `currentUser` on the API side
+
+There's a magical variable named `context` that's available within any of your service functions. We'll use that to access `currentUser` (the same `currentUser` that you can access form the web side.
+
+```javascript title="api/src/service/posts/posts.js
+export const createPost = ({ input }) => {
+  return db.post.create({
+    // highlight-next-line
+    data: { ...input, userId: context.currentUser.id }
+  })
+}
+```
+
+So `context.currentUser` will always be around if you need access to the user that made this request. We'll take their user `id` and appened it the rest of the data coming in from the scaffold form. Let's try it out!
+
+You should be able to create a post via the admin now:
+
+<img width="937" alt="image" src="https://user-images.githubusercontent.com/300/193152401-d98b488e-dd71-475a-a78c-6cd5233e5bee.png" />
+
+And going back to the hompage should actually start showing posts and their authors!
+
+<img width="937" alt="image" src="https://user-images.githubusercontent.com/300/193152524-2715e49d-a1c3-43a1-b968-84a4f8ae3846.png" />
+
+## Only Show a User Their Posts in Admin
+
+Right now any admin that visits `/admin/posts` can still see all posts, not only their own. Let's change that.
+
+Since we now know we have access to `context.currentUser` we can sprinkle it throughout our posts service to limit what's returned to only those posts that the currently logged in user owns:
+
+```javascript title="api/src/services/posts/posts.js"
+import { db } from 'src/lib/db'
+
+export const posts = () => {
+  // highlight-next-line
+  return db.post.findMany({ where: { userId: context.currentUser.id } })
+}
+
+export const post = ({ id }) => {
+  return db.post.findUnique({
+    // highlight-next-line
+    where: { id, userId: context.currentUser.id },
+  })
+}
+
+export const createPost = ({ input }) => {
+  return db.post.create({
+    data: { ...input, userId: context.currentUser.id },
+  })
+}
+
+export const updatePost = ({ id, input }) => {
+  return db.post.update({
+    data: input,
+    // highlight-next-line
+    where: { id, userId: context.currentUser.id },
+  })
+}
+
+export const deletePost = ({ id }) => {
+  return db.post.delete({
+    // highlight-next-line
+    where: { id, userId: context.currentUser.id },
+  })
+}
+
+export const Post = {
+  user: (_obj, { root }) =>
+    db.post.findFirst({ where: { id: root.id } }).user(),
+}
+```
+
+These changes make sure that user can only see a list of their own posts, edit their own post, or delete their own post.
+
+We can verify this by signing up as a new user, changing their role to "admin" (remember that only users with that role can access the admin pages after the [RBAC](/docs/tutorial/chapter7/rbac) section) and then creating a post as that new user. Your lists of posts should only show the newly created one, and if you log out and back in as your original user you should only see your previously created post(s).
