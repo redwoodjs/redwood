@@ -5,14 +5,14 @@ export interface SuperTokensUser {
   accessTokenPayload: any
 }
 
-type SessionRecipe = {
+export type SessionRecipe = {
   signOut: () => Promise<void>
   doesSessionExist: () => Promise<boolean>
   getAccessTokenPayloadSecurely: () => Promise<any>
   getUserId: () => Promise<string>
 }
 
-type AuthRecipe = {
+export type AuthRecipe = {
   redirectToAuth: (input: 'signin' | 'signup') => void
 }
 
@@ -33,10 +33,12 @@ export function createSuperTokensAuth(
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createSuperTokensAuthImplementation(superTokens: {
+export interface SuperTokensAuth {
   authRecipe: AuthRecipe
   sessionRecipe: SessionRecipe
-}) {
+}
+
+function createSuperTokensAuthImplementation(superTokens: SuperTokensAuth) {
   return {
     type: 'supertokens',
     client: undefined,
