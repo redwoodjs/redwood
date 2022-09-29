@@ -2003,3 +2003,33 @@ Upgrade to a specific version:
 ```bash
 yarn redwood upgrade -t 0.19.3
 ```
+
+## update
+
+Determines if an upgrade from your current `@redwoodjs` version is available.
+
+```bash
+yarn redwood update
+```
+
+This command
+
+| Option          | Description                                                                                                                                     |
+| :-------------- | :------------------------------------------------------------------------------- |
+| `--automatic`   | Only check for upgrades if there has been no previous check in the last 24 hours |
+| `--silent`      | Prevents any text rendering to the console or prompts to the user                |
+| `--force, -f`   | Force an upgrade check even if one is already running                            |
+
+**Example**
+
+Check for an update if a check is overdue and don't show any command output:
+
+```bash
+yarn redwood update --automatic --silent
+```
+
+**Automatic checks**
+
+If no upgrade check has been performed in the last 24 hours then one will automatically be run in the background whenever you run a CLI command. This ensures you are aware of the latest upgrades to redwood. In the event you do not wish for these automatic checks to run you can set the `REDWOOD_DISABLE_BACKGROUND_UPDATES` environment variable.
+
+
