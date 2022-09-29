@@ -110,13 +110,13 @@ And then use the `BlogLayout` for the `ContactPage` by making sure its wrapped b
 
 ```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={PostsLayout}>
+      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
         <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
         <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
         <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
@@ -142,13 +142,13 @@ export default Routes
 
 ```tsx title="web/src/Routes.tsx"
 import { Router, Route, Set } from '@redwoodjs/router'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={PostsLayout}>
+      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
         <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
         <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
         <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
