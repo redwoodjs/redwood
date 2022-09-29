@@ -88,7 +88,7 @@ const firebaseAuth: Partial<typeof FirebaseAuthNamespace> = {
 
     return auth as Auth
   },
-  OAuthProvider: function () {} as typeof OAuthProvider,
+  OAuthProvider: function () {} as unknown as typeof OAuthProvider,
   isSignInWithEmailLink: () => {
     return false
   },
