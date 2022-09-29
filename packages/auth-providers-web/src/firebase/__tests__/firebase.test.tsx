@@ -81,12 +81,14 @@ const firebaseAuth: Partial<typeof FirebaseAuthNamespace> = {
       signOut: async () => {
         loggedInUser = undefined
       },
-      currentUser: loggedInUser,
+      get currentUser() {
+        return loggedInUser
+      },
     }
 
     return auth as Auth
   },
-  OAuthProvider: {} as typeof OAuthProvider,
+  OAuthProvider: function () {} as typeof OAuthProvider,
   isSignInWithEmailLink: () => {
     return false
   },
@@ -159,10 +161,10 @@ function getFirebaseAuth(customProviderHooks?: {
 
 describe('firebaseAuth', () => {
   it('is not authenticated before logging in', async () => {
-    const auth = getFirebaseAuth().current
+    const authRef = getFirebaseAuth()
 
     await act(async () => {
-      expect(auth.isAuthenticated).toBeFalsy()
+      expect(authRef.current.isAuthenticated).toBeFalsy()
     })
   })
 
@@ -170,7 +172,10 @@ describe('firebaseAuth', () => {
     const authRef = getFirebaseAuth()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'open-sesame',
+      })
     })
 
     expect(authRef.current.isAuthenticated).toBeTruthy()
@@ -180,7 +185,10 @@ describe('firebaseAuth', () => {
     const authRef = getFirebaseAuth()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'open-sesame',
+      })
     })
 
     expect(authRef.current.isAuthenticated).toBeTruthy()
@@ -192,26 +200,33 @@ describe('firebaseAuth', () => {
     expect(authRef.current.isAuthenticated).toBeFalsy()
   })
 
-  it('has role "user"', async () => {
+  // firebase doesn't support roles using RW's default implementation right now
+  it.skip('has role "user"', async () => {
     const authRef = getFirebaseAuth()
 
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'open-sesame',
+      })
     })
 
     expect(authRef.current.hasRole('user')).toBeTruthy()
   })
 
-  it('has role "admin"', async () => {
+  // firebase doesn't support roles using RW's default implementation right now
+  it.skip('has role "admin"', async () => {
     const authRef = getFirebaseAuth()
 
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn()
-      loggedInUser = adminUser
+      authRef.current.logIn({
+        email: 'admin@example.com',
+        password: 'open-sesame',
+      })
     })
 
     expect(authRef.current.hasRole('admin')).toBeTruthy()
@@ -246,15 +261,20 @@ describe('firebaseAuth', () => {
     expect(authRef.current.hasRole('user')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'open-sesame',
+      })
     })
 
     expect(authRef.current.hasRole('user')).toBeTruthy()
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn()
-      loggedInUser = adminUser
+      authRef.current.logIn({
+        email: 'admin@example.com',
+        password: 'open-sesame',
+      })
     })
 
     expect(authRef.current.hasRole('user')).toBeTruthy()
@@ -263,7 +283,13 @@ describe('firebaseAuth', () => {
 
   it('can specify custom getCurrentUser function', async () => {
     async function useCurrentUser() {
-      const user = { ...loggedInUser }
+      const user = {
+        ...loggedInUser,
+        // Because we're writing our own custom getCurrentUser function we
+        // can set roles where RW looks for them by default
+        roles: ['custom-current-user'],
+      }
+
       user.getIdTokenResult = async () => {
         return {
           claims: {
@@ -285,7 +311,10 @@ describe('firebaseAuth', () => {
 
     // Need to be logged in, otherwise getCurrentUser won't be invoked
     await act(async () => {
-      authRef.current.logIn()
+      authRef.current.logIn({
+        email: 'john.doe@example.com',
+        password: 'open-sesame',
+      })
     })
 
     await act(async () => {
