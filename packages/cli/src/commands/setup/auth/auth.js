@@ -1,4 +1,7 @@
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+
+import c from '../../../lib/colors'
 
 export const command = 'auth <provider>'
 
@@ -22,7 +25,33 @@ export async function builder(yargs) {
     setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
 
+  const printExperimentalWarning = async (_argv, yargs) => {
+    console.log(
+      c.warning(
+        [
+          '',
+          'This version of auth is experimental. After running this command',
+          'you will not be able to downgrade to a stable version of Redwood',
+          'without breaking your auth setup. Please only use this version of',
+          'auth in throwaway projects',
+          '',
+        ].join('\n')
+      )
+    )
+    const response = await prompts({
+      type: 'confirm',
+      name: 'answer',
+      message: 'Do you want to continue?',
+      initial: false,
+    })
+
+    if (!response.answer) {
+      yargs.exit(1)
+    }
+  }
+
   yargs
+    .middleware([printExperimentalWarning])
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
