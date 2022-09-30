@@ -89,11 +89,7 @@ const updateCheckerMiddleware = (argv) => {
   if (excludedCommands.includes(argv._[0])) {
     return
   }
-  if (
-    updateCommand.isUpgradeAvailable() &&
-    updateCommand.isUpdateMessageDue() &&
-    !updateCommand.shouldSkip()
-  ) {
+  if (updateCommand.shouldShowUpgradeAvailableMessage()) {
     process.on('exit', () => {
       updateCommand.showUpgradeAvailableMessage()
     })

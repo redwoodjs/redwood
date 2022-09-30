@@ -17,10 +17,6 @@ import { validateTag } from './upgrade'
 export const command = 'update'
 export const description = 'Check for updates to RedwoodJS'
 
-const UPDATE_TIMER_SHOW = 'update-show'
-const UPDATE_TIMER_CHECK = 'update-check'
-const UPDATE_FLAG_UPGRADE_AVAILABLE = 'upgrade-available'
-const UPDATE_FLAG_SKIP = 'upgrade-skip'
 const UPDATE_LOCK = 'update-command'
 
 export const builder = (yargs) => {
@@ -81,48 +77,47 @@ export const handler = async ({ force, silent, skip, unskip }) => {
     enabled: () => skip || unskip,
     title: 'Handling skip flag',
     task: async (ctx, task) => {
+      const updateData = readUpgradeFile()
       if (skip) {
-        const updateData = readUpgradeFile()
+        task.title = `Setting skip version: ${updateData.remoteVersion}`
         updateData.skipVersion = updateData.remoteVersion
-        task.title = `Setting skip version: ${updateData.skipVersion}`
-        setFlag(UPDATE_FLAG_SKIP)
       } else {
         task.title = 'Clearing the skip version'
-        unsetFlag(UPDATE_FLAG_SKIP)
+        updateData.skipVersion = '0.0.0'
+        updateData.lastShown = Date.now() - 2 * getShowPeriod()
       }
+      writeUpgradeFile(updateData)
     },
   })
 
   updateTasks.add({
     enabled: () => !(skip || unskip),
-    title: 'Checking if a newer RedwoodJS version is available',
+    title: 'Checking for RedwoodJS upgrades',
     task: async (ctx, task) => {
       const updateData = await getUpdateVersionStatus()
       upgradeAvailable = updateData.upgradeAvailable
-
-      if (updateData.skipVersion !== updateData.remoteVersion) {
-        unsetFlag(UPDATE_FLAG_SKIP)
-        updateData.skipVersion = '0.0.0'
-      }
+      updateData.lastShown = Date.now()
 
       if (upgradeAvailable) {
-        setFlag(UPDATE_FLAG_UPGRADE_AVAILABLE)
-        createUpgradeFile(updateData)
+        // reset skip if newer non-skip version is available
+        if (updateData.skipVersion !== updateData.remoteVersion) {
+          updateData.skipVersion = '0.0.0'
+          updateData.lastShown = Date.now() - 2 * getShowPeriod()
+        }
+
         if (!silent) {
           // TODO: When listr2: prompt if they want to upgrade now? Can add on exit hook to run `yarn rw upgrade`
-          task.title =
-            updateData.skipVersion !== updateData.remoteVersion
-              ? 'New upgrade is available'
-              : 'New upgrade is available (you are currently skipping this upgrade)'
         }
+
+        task.title =
+          updateData.skipVersion !== updateData.remoteVersion
+            ? `New upgrade is available: ${updateData.remoteVersion}`
+            : `New upgrade is available: ${updateData.remoteVersion} (you are currently skipping this upgrade)`
       } else {
-        unsetFlag(UPDATE_FLAG_UPGRADE_AVAILABLE)
-        unsetFlag(UPDATE_FLAG_SKIP)
-        removeUpgradeFile()
         task.title = 'No upgrade is available'
       }
 
-      resetTimer(UPDATE_TIMER_CHECK)
+      writeUpgradeFile(updateData)
     },
   })
 
@@ -176,9 +171,9 @@ async function getUpdateVersionStatus() {
   const upgradeAvailable = semver.gt(remoteVersion, localVersion)
 
   // Don't change the skip version
-  let existingSkipVersion = '0.0.0'
+  let skipVersion = '0.0.0'
   try {
-    existingSkipVersion = readUpgradeFile().skipVersiom
+    skipVersion = readUpgradeFile().skipVersion
   } catch (error) {
     if (error.code !== 'ENOENT') {
       throw new Error('\nCould not read existing update-data file\n')
@@ -189,38 +184,63 @@ async function getUpdateVersionStatus() {
   const versionsStatus = {
     localVersion,
     remoteVersion,
-    existingSkipVersion,
+    skipVersion,
     upgradeAvailable,
+    lastChecked: Date.now(),
   }
 
   return versionsStatus
 }
 
-export function isUpgradeAvailable() {
-  return isFlagSet(UPDATE_FLAG_UPGRADE_AVAILABLE)
+function getCheckPeriod() {
+  return (
+    (process.env.REDWOOD_BACKGROUND_UPDATES_CHECK_PERIOD || 24 * 60) * 60000
+  )
+}
+
+function getShowPeriod() {
+  return (process.env.REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD || 60) * 60000
 }
 
 export function isUpdateCheckDue() {
-  const updateCheckPeriod =
-    process.env.REDWOOD_BACKGROUND_UPDATES_CHECK_PERIOD || 24 * 60
-  return isTimerPassed(UPDATE_TIMER_CHECK, updateCheckPeriod)
+  let updateData
+  try {
+    updateData = readUpgradeFile()
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return true
+    }
+    console.error('Could not read update file!')
+    console.error(error)
+  }
+
+  return updateData.lastChecked < Date.now() - getCheckPeriod()
 }
 
-export function isUpdateMessageDue() {
-  const updateShowPeriod =
-    process.env.REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD || 60
-  return isTimerPassed(UPDATE_TIMER_SHOW, updateShowPeriod)
-}
+export function shouldShowUpgradeAvailableMessage() {
+  let updateData
+  try {
+    updateData = readUpgradeFile()
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return false
+    }
+    console.error('Could not read update file!')
+    console.error(error)
+  }
 
-export function shouldSkip() {
-  return isFlagSet(UPDATE_FLAG_SKIP)
+  return (
+    updateData.upgradeAvailable &&
+    !(updateData.skipVersion == updateData.remoteVersion) &&
+    updateData.lastShown < Date.now() - getShowPeriod()
+  )
 }
 
 function getUpgradeFilePath() {
   return path.join(getPaths().base || '/tmp', '.redwood', 'update-data.json')
 }
 
-function createUpgradeFile(updateData) {
+function writeUpgradeFile(updateData) {
   try {
     fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(updateData))
   } catch (error) {
@@ -232,18 +252,7 @@ function readUpgradeFile() {
   return JSON.parse(fs.readFileSync(getUpgradeFilePath()))
 }
 
-function removeUpgradeFile() {
-  try {
-    fs.unlinkSync(getUpgradeFilePath())
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      throw new Error('\nCould not delete update-data file\n')
-    }
-  }
-}
-
-export function getUpgradeAvailableMessage() {
-  const updateData = readUpgradeFile()
+function getUpgradeAvailableMessage(updateData) {
   let message = `  Checklist:\n   1. Read release notes at: "https://github.com/redwoodjs/redwood/releases"  \n   2. Run "yarn rw upgrade" to upgrade  `
   return boxen(message, {
     padding: 0,
@@ -255,8 +264,15 @@ export function getUpgradeAvailableMessage() {
 }
 
 export function showUpgradeAvailableMessage() {
-  console.log(getUpgradeAvailableMessage())
-  resetTimer(UPDATE_TIMER_SHOW)
+  try {
+    const updateData = readUpgradeFile()
+    console.log(getUpgradeAvailableMessage(updateData))
+    updateData.lastShown = Date.now()
+    writeUpgradeFile(updateData)
+  } catch (error) {
+    console.error('Could not show an available update message!')
+    console.error(error)
+  }
 }
 
 // Locks
@@ -307,98 +323,4 @@ function isLocked(name) {
     `${name}`
   )
   return fs.existsSync(lockPath)
-}
-
-// Flags
-// TODO: Move the generic flag functions some where more general, they could be used by other features needing a persisted flags?
-
-function setFlag(name) {
-  const flagPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'flags',
-    `${name}`
-  )
-  if (!fs.existsSync(path.dirname(flagPath))) {
-    try {
-      fs.mkdirSync(path.dirname(flagPath))
-    } catch (error) {
-      throw new Error(`\nCould not create flag directory for flag ${name}!\n`)
-    }
-  }
-  try {
-    fs.writeFileSync(flagPath, '')
-  } catch (error) {
-    throw new Error(`\nCould not create flag ${name}!\n`)
-  }
-}
-
-function unsetFlag(name) {
-  const flagPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'flags',
-    `${name}`
-  )
-  try {
-    fs.rmSync(flagPath)
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      throw new Error(`\nCould not delete flag ${name}!\n`)
-    }
-  }
-}
-
-function isFlagSet(name) {
-  const flagPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'flags',
-    `${name}`
-  )
-  return fs.existsSync(flagPath)
-}
-
-// Timers
-// TODO: Move the generic timer functions some where more general, they could be used by other features needing a persisted timer?
-
-function isTimerPassed(name, minutes) {
-  const timerPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'timers',
-    `${name}`
-  )
-
-  if (!fs.existsSync(timerPath)) {
-    resetTimer(name)
-    return true
-  }
-
-  const timerDue = Date.now() - minutes * 60 * 1000
-  const timerLastUpdated = fs.statSync(timerPath).mtimeMs
-
-  return timerLastUpdated < timerDue
-}
-
-function resetTimer(name) {
-  const timerPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'timers',
-    name
-  )
-
-  if (!fs.existsSync(path.dirname(timerPath))) {
-    try {
-      fs.mkdirSync(path.dirname(timerPath))
-    } catch (error) {
-      throw new Error('\nCould not create timer directory!\n')
-    }
-  }
-  try {
-    fs.writeFileSync(timerPath, '')
-  } catch (error) {
-    throw new Error(`\nCould not create timer called ${name}!\n`)
-  }
 }
