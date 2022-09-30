@@ -52,8 +52,7 @@ export const scenarioFieldValue = (field) => {
     case 'Boolean':
       return true
     case 'DateTime':
-      // use a static date so that snapshots don't change
-      return new Date('2022-09-01T00:21:58.876Z')
+      return new Date()
     case 'Decimal':
     case 'Float':
       return randFloat

@@ -122,7 +122,7 @@ describe('scalarTypes', () => {
     const result = await createScalarType({
       input: {
         email: 'String',
-        date: '2022-09-01T00:21:58.876Z',
+        date: '2022-09-30T09:50:00.000Z',
         bigInt: 1234567n,
         integer: 1234567,
         boolean: true,
@@ -130,7 +130,7 @@ describe('scalarTypes', () => {
     })
 
     expect(result.email).toEqual('String')
-    expect(result.date).toEqual(new Date('2022-09-01T00:21:58.876Z'))
+    expect(result.date).toEqual(new Date('2022-09-30T09:50:00.000Z'))
     expect(result.bigInt).toEqual(1234567n)
     expect(result.integer).toEqual(1234567)
     expect(result.boolean).toEqual(true)
@@ -493,7 +493,7 @@ describe('scalarTypes', () => {
     const result = await createScalarType({
       input: {
         email: 'String',
-        date: '2022-09-01T00:21:58.876Z',
+        date: '2022-09-30T09:50:00.000Z',
         bigInt: 1234567n,
         integer: 1234567,
         boolean: true,
@@ -501,7 +501,7 @@ describe('scalarTypes', () => {
     })
 
     expect(result.email).toEqual('String')
-    expect(result.date).toEqual(new Date('2022-09-01T00:21:58.876Z'))
+    expect(result.date).toEqual(new Date('2022-09-30T09:50:00.000Z'))
     expect(result.bigInt).toEqual(1234567n)
     expect(result.integer).toEqual(1234567)
     expect(result.boolean).toEqual(true)

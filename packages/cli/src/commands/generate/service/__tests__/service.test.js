@@ -9,6 +9,15 @@ import '../../../../lib/test'
 import { getDefaultArgs } from '../../../../lib'
 import * as service from '../service'
 
+beforeAll(() => {
+  jest.useFakeTimers()
+  jest.setSystemTime(new Date('2022-09-30T09:50:00.000Z'))
+})
+
+afterAll(() => {
+  jest.useRealTimers()
+})
+
 const extensionForBaseArgs = (baseArgs) =>
   baseArgs && baseArgs.typescript ? 'ts' : 'js'
 
