@@ -218,8 +218,7 @@ export const fieldsToUpdate = async (model) => {
         break
       }
       case 'DateTime': {
-        // use a static date so that snapshots don't change
-        let date = new Date('2022-09-01T00:21:58.876Z')
+        let date = new Date()
         date.setDate(date.getDate() + 1)
         newValue = date
         break
