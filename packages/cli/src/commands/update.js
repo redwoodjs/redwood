@@ -138,7 +138,9 @@ export const handler = async ({ force, silent, skip, unskip }) => {
 
 async function getUpdateVersionStatus() {
   // Read package.json and extract the @redwood/core version
-  const packageJson = require(path.join(getPaths().base, 'package.json'))
+  const packageJson = JSON.parse(
+    fs.readFileSync(path.join(getPaths().base, 'package.json'))
+  )
   let localVersion = packageJson.devDependencies['@redwoodjs/core']
 
   // Remove any leading non-digits, i.e. ^ or ~
