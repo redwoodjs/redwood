@@ -28,7 +28,7 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     notes: [
       'Done! But you have a little more work to do:\n',
       'You will have to write the actual auth implementation/integration',
-      `yourself. Take a look in ${authFilename} and do the changes necessary.`,
+      `yourself. Take a look in ${authFilename} and do the necessary changes.`,
     ],
   })
 }
