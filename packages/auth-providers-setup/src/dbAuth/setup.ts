@@ -35,6 +35,11 @@ export const command = 'dbAuth'
 export const description = 'Generate an auth configuration for dbAuth'
 export const builder = (yargs: yargs.Argv) => {
   yargs
+    .option('warn', {
+      default: true,
+      description: 'Experimental auth warning',
+      type: 'boolean',
+    })
     .option('force', {
       alias: 'f',
       default: false,

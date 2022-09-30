@@ -400,7 +400,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
   const addDbAuth = async () => {
     await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn',
+      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
       [],
       execaOptions
     )

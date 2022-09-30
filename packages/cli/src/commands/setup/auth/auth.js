@@ -25,7 +25,12 @@ export async function builder(yargs) {
     setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
 
-  const printExperimentalWarning = async (_argv, yargs) => {
+  // Don't forget to update test-project setup if you change something here
+  const printExperimentalWarning = async (argv, yargs) => {
+    if (!argv.warn) {
+      return
+    }
+
     console.log(
       c.warning(
         [
