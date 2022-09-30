@@ -1,24 +1,53 @@
-<% // To JSON stringify and remove quotes around `scenario` variables
-const stringifyButNotScenario = (obj) => {
-  return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
-    if (string.match(/scenario\./)) {
-      return string.replace(/['"]/g, '')
-    }
+<% // Extracts the values of an object by converting the JSON into a string.
+   // Looks for quoted strings, either by single (') ro double (") quotes.
+   // When found
+   // - Removes the quotes around `scenario` variables.
+   // - Removes the quotes around `BigInt` fields.
+   // It can also return object instances via the `options` parameter
+   // - `options.useDateObjects` default value: `false`
+   //   - false: will return date values as a string. ex: "2022-09-01T00:21:58.876Z"
+   //   - true: will return date values as a date. ex: `new Date("2022-09-01T00:21:58.876Z")`
+  const extractValues = (obj, options={ useDateObjects: false }) => {
+    return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
+      if (string.match(/scenario\./)) {
+        return string.replace(/['"]/g, '')
+      }
 
-    if (string.match(/^\"\d+n\"$/)) {
-      return string.substr(1, string.length - 2)
-    }
+      // BigInt
+      if (string.match(/^\"\d+n\"$/)) {
+        return string.substr(1, string.length - 2)
+      }
 
-    return string
-  })
-} %>
+      if (options.useDateObjects) {
+        // Creates a new Date declaration if the string matches this ISO8601 date format.
+        // ex: "2022-09-01T00:21:58.876Z" will return `new Date("2022-09-01T00:21:58.876Z")`
+        if (string.match(/^\"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\"$/)) {
+          return `new Date(${string})`
+        }
+      }
+
+      return string
+    })
+  }
+
+  // This is a thin wrapper that allows us to call the main function (extractValues)
+  // with an options parameter. We need this wrapper because object parameters {...}
+  // are not supported in template evaluations such as:
+  //  - ${extractExpectedValue(value, {useDateObjects:true})}
+  // If we add a closing curly bracket they will be interpreted as the closing
+  // bracket of the evaluation and throw an error when generating the service: `Unexpected token ')'`
+  // ex: `${extractExpectedValue(value, { useDateObjects: true } )}`.
+  //       ^---> Opening bracket           Closing bracket <---^ ^---> Unexpected token ')'
+  const extractExpectedValue = (obj) => {
+    return extractValues(obj, { useDateObjects: true })
+  } %>
 import type { ${prismaModel} } from '@prisma/client'
 
 import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}'
 import type { StandardScenario } from './${pluralCamelName}.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -36,24 +65,24 @@ describe('${pluralCamelName}', () => {
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${stringifyButNotScenario(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${extractValues(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
     const result = await create${singularPascalName}({
-      input: ${stringifyButNotScenario(create)},
+      input: ${extractValues(create)},
     })
 
     <% for (const [name, value] of Object.entries(create)) { %>
-    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
+    expect(result.${name}).toEqual(${extractExpectedValue(value)})<% } %>
   })<% } %>
 
   <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario: StandardScenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await (${singularCamelName}({ id: scenario.${singularCamelName}.one.id })) as ${prismaModel}
     const result = await update${singularPascalName}({
       id: original.id,
-      input: ${stringifyButNotScenario(update)},
+      input: ${extractValues(update)},
     })
 
     <% for (const [name, value] of Object.entries(update)) { %>
-    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
+    expect(result.${name}).toEqual(${extractExpectedValue(value)})<% } %>
   })<% } %>
 
   scenario('deletes a ${singularCamelName}', async (scenario: StandardScenario) => {

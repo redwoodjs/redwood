@@ -61,7 +61,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         )
       ]
     ).toMatchSnapshot()
@@ -339,7 +339,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.tsx'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx'
         )
       ]
     ).toMatchSnapshot()
