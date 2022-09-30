@@ -20,6 +20,7 @@ export const description = 'Check for updates to RedwoodJS'
 const UPDATE_TIMER_SHOW = 'update-show'
 const UPDATE_TIMER_CHECK = 'update-check'
 const UPDATE_FLAG_UPGRADE_AVAILABLE = 'upgrade-available'
+const UPDATE_FLAG_SKIP = 'upgrade-skip'
 const UPDATE_LOCK = 'update-command'
 
 export const builder = (yargs) => {
@@ -31,13 +32,19 @@ export const builder = (yargs) => {
       description: 'Ignore asynchronous locks',
       type: 'boolean',
     })
-    .option('automatic', {
-      description: 'Only run if update check is overdue',
+    .option('silent', {
+      description: 'Do not render any console text or prompt the user',
       type: 'boolean',
       default: false,
     })
-    .option('silent', {
-      description: 'Do not render any console text or prompt the user',
+    .option('skip', {
+      description:
+        'Prevents update notifications until a newer upgrade is available',
+      type: 'boolean',
+      default: false,
+    })
+    .option('unskip', {
+      description: 'Removes any currently set skip',
       type: 'boolean',
       default: false,
     })
@@ -51,11 +58,7 @@ export const builder = (yargs) => {
     .epilogue('')
 }
 
-export const handler = async ({ force, automatic, silent }) => {
-  if (automatic && !isUpdateCheckDue()) {
-    return
-  }
-
+export const handler = async ({ force, silent, skip, unskip }) => {
   if (isLocked(UPDATE_LOCK) && !force) {
     if (!silent) {
       console.log(
@@ -65,29 +68,56 @@ export const handler = async ({ force, automatic, silent }) => {
     return
   }
 
-  let upgradeAvailable = false
   const updateTasks = new Listr([], { collapse: false })
-
   if (silent) {
     updateTasks.setRenderer('silent')
   }
 
+  // This is only here because we need to display to the user after listr tasks have run
+  // TODO: When listr2 is available handle all output within in the listr2 task then this bool can be removed
+  let upgradeAvailable = false
+
   updateTasks.add({
+    enabled: () => skip || unskip,
+    title: 'Handling skip flag',
+    task: async (ctx, task) => {
+      if (skip) {
+        const updateData = readUpgradeFile()
+        updateData.skipVersion = updateData.remoteVersion
+        task.title = `Setting skip version: ${updateData.skipVersion}`
+        setFlag(UPDATE_FLAG_SKIP)
+      } else {
+        task.title = 'Clearing the skip version'
+        unsetFlag(UPDATE_FLAG_SKIP)
+      }
+    },
+  })
+
+  updateTasks.add({
+    enabled: () => !(skip || unskip),
     title: 'Checking if a newer RedwoodJS version is available',
     task: async (ctx, task) => {
-      const versionStatus = await getUpdateVersionStatus()
-      upgradeAvailable = versionStatus.upgradeAvailable
+      const updateData = await getUpdateVersionStatus()
+      upgradeAvailable = updateData.upgradeAvailable
+
+      if (updateData.skipVersion !== updateData.remoteVersion) {
+        unsetFlag(UPDATE_FLAG_SKIP)
+        updateData.skipVersion = '0.0.0'
+      }
 
       if (upgradeAvailable) {
         setFlag(UPDATE_FLAG_UPGRADE_AVAILABLE)
-        createUpgradeFile(versionStatus)
+        createUpgradeFile(updateData)
         if (!silent) {
-          // TODO: prompt if they want to upgrade now?
-          // TODO: add on exit hook to run `yarn rw upgrade`
-          task.title = 'New upgrade is available'
+          // TODO: When listr2: prompt if they want to upgrade now? Can add on exit hook to run `yarn rw upgrade`
+          task.title =
+            updateData.skipVersion !== updateData.remoteVersion
+              ? 'New upgrade is available'
+              : 'New upgrade is available (you are currently skipping this upgrade)'
         }
       } else {
         unsetFlag(UPDATE_FLAG_UPGRADE_AVAILABLE)
+        unsetFlag(UPDATE_FLAG_SKIP)
         removeUpgradeFile()
         task.title = 'No upgrade is available'
       }
@@ -145,10 +175,21 @@ async function getUpdateVersionStatus() {
   // Is remote version higher than local?
   const upgradeAvailable = semver.gt(remoteVersion, localVersion)
 
+  // Don't change the skip version
+  let existingSkipVersion = '0.0.0'
+  try {
+    existingSkipVersion = readUpgradeFile().skipVersiom
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw new Error('\nCould not read existing update-data file\n')
+    }
+  }
+
   // Build an object with some details to be returned. Avoids the need for more parsing or remote calls elsewhere
   const versionsStatus = {
     localVersion,
     remoteVersion,
+    existingSkipVersion,
     upgradeAvailable,
   }
 
@@ -167,16 +208,24 @@ export function isUpdateCheckDue() {
 
 export function isUpdateMessageDue() {
   const updateShowPeriod =
-    process.env.REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD || 30
+    process.env.REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD || 60
   return isTimerPassed(UPDATE_TIMER_SHOW, updateShowPeriod)
+}
+
+export function shouldSkip() {
+  return isFlagSet(UPDATE_FLAG_SKIP)
 }
 
 function getUpgradeFilePath() {
   return path.join(getPaths().base || '/tmp', '.redwood', 'update-data.json')
 }
 
-function createUpgradeFile(versionStatus) {
-  fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(versionStatus))
+function createUpgradeFile(updateData) {
+  try {
+    fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(updateData))
+  } catch (error) {
+    throw new Error('\nCould not create update-data file\n')
+  }
 }
 
 function readUpgradeFile() {
@@ -188,18 +237,18 @@ function removeUpgradeFile() {
     fs.unlinkSync(getUpgradeFilePath())
   } catch (error) {
     if (error.code !== 'ENOENT') {
-      throw new Error('\nCould not delete update versions file\n')
+      throw new Error('\nCould not delete update-data file\n')
     }
   }
 }
 
 export function getUpgradeAvailableMessage() {
-  const versionStatus = readUpgradeFile()
+  const updateData = readUpgradeFile()
   let message = `  Checklist:\n   1. Read release notes at: "https://github.com/redwoodjs/redwood/releases"  \n   2. Run "yarn rw upgrade" to upgrade  `
   return boxen(message, {
     padding: 0,
     margin: 1,
-    title: `Redwood Upgrade Available: ${versionStatus.localVersion} -> ${versionStatus.remoteVersion}`,
+    title: `Redwood Upgrade Available: ${updateData.localVersion} -> ${updateData.remoteVersion}`,
     borderColor: `#ff845e`, // The RedwoodJS colour
     borderStyle: 'round',
   })
