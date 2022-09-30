@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import boxen from 'boxen'
 import latestVersion from 'latest-version'
 import Listr from 'listr'
 import semver from 'semver'
@@ -10,6 +11,8 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+
+import { validateTag } from './upgrade'
 
 export const command = 'update'
 export const description = 'Check for updates to RedwoodJS'
@@ -92,12 +95,12 @@ export const handler = async ({ force, automatic, silent }) => {
     if (upgradeAvailable && !silent) {
       console.log(upgradeAvailableMessage())
     }
+    removeUpdateLockFile()
   } catch (e) {
+    removeUpdateLockFile()
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
-  } finally {
-    removeUpdateLockFile()
   }
 }
 
@@ -156,20 +159,27 @@ function readUpgradeVersionsFile() {
   return JSON.parse(fs.readFileSync(getUpgradeVersionsFilePath()))
 }
 
-// TODO: Confirm this is a sensible way to check the current version
 async function getUpdateVersionStatus() {
+  // Read package.json and extract the @redwood/core version
   const packageJson = require(path.join(getPaths().base, 'package.json'))
   let localVersion = packageJson.devDependencies['@redwoodjs/core']
+
+  // Remove any leading non-digits, i.e. ^ or ~
   while (!(localVersion.charAt(0) >= '0' && localVersion.charAt(0) <= '9')) {
     localVersion = localVersion.substring(1)
   }
 
+  // Determine if the user has a tag (e.g. -rc, -canary), if so extract the tag from the version
   let tag = ''
   if (localVersion.includes('-')) {
     tag = localVersion.substring(localVersion.indexOf('-') + 1).trim()
-    localVersion = localVersion.substring(0, localVersion.indexOf('-')).trim()
+
+    // Validate the local version, just incase the user has manually fiddled with it
+    // no if needed to check as it throws an error if not successful, will be caught by listr
+    validateTag(tag)
   }
 
+  // Fetch the latest version from npm registry
   let remoteVersion
   try {
     remoteVersion = await latestVersion(
@@ -180,7 +190,10 @@ async function getUpdateVersionStatus() {
     throw new Error('Could not find the latest version')
   }
 
+  // Is remote version higher than local?
   const upgradeAvailable = semver.gt(remoteVersion, localVersion)
+
+  // Build an object with some details to be returned. Avoids the need for more parsing or remote calls elsewhere
   const versionsStatus = {
     localVersion,
     remoteVersion,
@@ -233,19 +246,14 @@ export function isUpdateCheckDue() {
 
 // Misc
 
-// TODO: Make this message prettier
 export function upgradeAvailableMessage() {
   const versionStatus = readUpgradeVersionsFile()
-  let message = `${c.green(
-    '\n------------------------------------------------------------------------------'
-  )}\n`
-  message += `${c.bold('RedwoodJS upgrade available')} (${
-    versionStatus.localVersion
-  } -> ${versionStatus.remoteVersion})\n`
-  message += ` * Check the release notes at: "https://github.com/redwoodjs/redwood/releases"\n`
-  message += ` * Then run "yarn rw upgrade" to upgrade\n`
-  message += `${c.green(
-    '------------------------------------------------------------------------------'
-  )}`
-  return message
+  let message = `  Checklist:\n   1. Read release notes at: "https://github.com/redwoodjs/redwood/releases"  \n   2. Run "yarn rw upgrade" to upgrade  `
+  return boxen(message, {
+    padding: 0,
+    margin: 1,
+    title: `Upgrade Available: ${versionStatus.localVersion} -> ${versionStatus.remoteVersion}`,
+    borderColor: `#ff845e`, // The RedwoodJS colour
+    borderStyle: 'round',
+  })
 }

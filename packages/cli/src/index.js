@@ -117,24 +117,18 @@ const updateCheckerMiddleware = (argv) => {
   }
 }
 
-const yargsMiddleware = [
-  getCwdMiddleware,
-  loadDotEnvDefaultsMiddleware,
-  telemetryMiddleware,
-]
-if (!process.env.REDWOOD_DISABLE_BACKGROUND_UPDATES) {
-  yargsMiddleware.push(updateCheckerMiddleware)
-}
-
 // eslint-disable-next-line no-unused-expressions
 yargs
   .scriptName('rw')
-  .middleware([
-    getCwdMiddleware,
-    loadDotEnvDefaultsMiddleware,
-    telemetryMiddleware,
-    updateCheckerMiddleware && !process.env.REDWOOD_DISABLE_BACKGROUND_UPDATES
-  ].filter(Boolean))
+  .middleware(
+    [
+      getCwdMiddleware,
+      loadDotEnvDefaultsMiddleware,
+      telemetryMiddleware,
+      !process.env.REDWOOD_DISABLE_BACKGROUND_UPDATES &&
+        updateCheckerMiddleware,
+    ].filter(Boolean)
+  )
   .option('cwd', {
     describe: 'Working directory to use (where `redwood.toml` is located.)',
   })
