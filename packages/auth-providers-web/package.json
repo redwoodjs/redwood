@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-providers-web",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -39,7 +39,7 @@
     "@nhost/hasura-auth-js": "1.4.1",
     "@nhost/nhost-js": "1.4.10",
     "@okta/okta-auth-js": "6.7.6",
-    "@redwoodjs/auth": "3.0.2",
+    "@redwoodjs/auth": "3.0.3",
     "@simplewebauthn/browser": "6.0.0",
     "@simplewebauthn/typescript-types": "6.0.0",
     "@supabase/supabase-js": "1.35.6",
