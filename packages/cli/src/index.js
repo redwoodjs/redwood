@@ -129,7 +129,12 @@ if (!process.env.REDWOOD_DISABLE_BACKGROUND_UPDATES) {
 // eslint-disable-next-line no-unused-expressions
 yargs
   .scriptName('rw')
-  .middleware(yargsMiddleware)
+  .middleware([
+    getCwdMiddleware,
+    loadDotEnvDefaultsMiddleware,
+    telemetryMiddleware,
+    updateCheckerMiddleware && !process.env.REDWOOD_DISABLE_BACKGROUND_UPDATES
+  ].filter(Boolean))
   .option('cwd', {
     describe: 'Working directory to use (where `redwood.toml` is located.)',
   })
