@@ -85,26 +85,35 @@ const loadDotEnvDefaultsMiddleware = () => {
 }
 
 const updateCheckerMiddleware = (argv) => {
-  if (argv._[0] === 'update' || argv._[0] === 'upgrade') {
+  const excludedCommands = ['update', 'upgrade', 'ts-to-js']
+  if (excludedCommands.includes(argv._[0])) {
     return
   }
-  if (updateCommand.isUpgradeAvailable()) {
+  if (
+    updateCommand.isUpgradeAvailable() &&
+    updateCommand.isUpdateMessageDue()
+  ) {
     process.on('exit', () => {
-      console.log(updateCommand.upgradeAvailableMessage())
+      updateCommand.showUpgradeAvailableMessage()
     })
   }
   if (updateCommand.isUpdateCheckDue()) {
     const backgroundUpdateBaseLogPath = path.join(
       getPaths().base || '/tmp',
-      '.redwood',
-      'update'
+      '.redwood'
     )
     const out = fs.openSync(
-      path.join(backgroundUpdateBaseLogPath, 'out.log'),
+      path.join(
+        backgroundUpdateBaseLogPath,
+        'background-update-checker.out.log'
+      ),
       'a'
     )
     const err = fs.openSync(
-      path.join(backgroundUpdateBaseLogPath, 'err.log'),
+      path.join(
+        backgroundUpdateBaseLogPath,
+        'background-update-checker.err.log'
+      ),
       'a'
     )
     const child = spawn('yarn', ['rw', 'update', '--silent'], {
@@ -125,7 +134,7 @@ yargs
       getCwdMiddleware,
       loadDotEnvDefaultsMiddleware,
       telemetryMiddleware,
-      !process.env.REDWOOD_DISABLE_BACKGROUND_UPDATES &&
+      !process.env.REDWOOD_BACKGROUND_UPDATES_DISABLED &&
         updateCheckerMiddleware,
     ].filter(Boolean)
   )

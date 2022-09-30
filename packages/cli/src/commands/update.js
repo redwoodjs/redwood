@@ -17,6 +17,11 @@ import { validateTag } from './upgrade'
 export const command = 'update'
 export const description = 'Check for updates to RedwoodJS'
 
+const UPDATE_TIMER_SHOW = 'update-show'
+const UPDATE_TIMER_CHECK = 'update-check'
+const UPDATE_FLAG_UPGRADE_AVAILABLE = 'upgrade-available'
+const UPDATE_LOCK = 'update-command'
+
 export const builder = (yargs) => {
   yargs
     .example('rw update')
@@ -51,7 +56,7 @@ export const handler = async ({ force, automatic, silent }) => {
     return
   }
 
-  if (isUpdateLocked() && !force) {
+  if (isLocked(UPDATE_LOCK) && !force) {
     if (!silent) {
       console.log(
         'An update command is already running, please try again in a few seconds.'
@@ -74,89 +79,36 @@ export const handler = async ({ force, automatic, silent }) => {
       upgradeAvailable = versionStatus.upgradeAvailable
 
       if (upgradeAvailable) {
-        createUpgradeVersionsFile(versionStatus)
+        setFlag(UPDATE_FLAG_UPGRADE_AVAILABLE)
+        createUpgradeFile(versionStatus)
         if (!silent) {
           // TODO: prompt if they want to upgrade now?
           // TODO: add on exit hook to run `yarn rw upgrade`
           task.title = 'New upgrade is available'
         }
       } else {
-        removeUpgradeVersionsFile()
+        unsetFlag(UPDATE_FLAG_UPGRADE_AVAILABLE)
+        removeUpgradeFile()
         task.title = 'No upgrade is available'
       }
 
-      resetUpdateTimer()
+      resetTimer(UPDATE_TIMER_CHECK)
     },
   })
 
   try {
-    createUpdateLockFile()
+    setLock(UPDATE_LOCK)
     await updateTasks.run()
     if (upgradeAvailable && !silent) {
-      console.log(upgradeAvailableMessage())
+      showUpgradeAvailableMessage()
     }
-    removeUpdateLockFile()
+    unsetLock(UPDATE_LOCK)
   } catch (e) {
-    removeUpdateLockFile()
+    unsetLock(UPDATE_LOCK)
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
-}
-
-// Locking
-
-function getUpdateLockFilePath() {
-  return path.join(getPaths().base || '/tmp', '.redwood', 'update', 'lock')
-}
-function createUpdateLockFile() {
-  try {
-    fs.writeFileSync(getUpdateLockFilePath(), '')
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      fs.mkdirSync(path.dirname(getUpdateLockFilePath()))
-      fs.writeFileSync(getUpdateLockFilePath(), '')
-    }
-  }
-}
-function removeUpdateLockFile() {
-  fs.unlinkSync(getUpdateLockFilePath())
-}
-function isUpdateLocked() {
-  return fs.existsSync(getUpdateLockFilePath())
-}
-
-// Flag file
-
-function getUpgradeVersionsFilePath() {
-  return path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'update',
-    'versions.json'
-  )
-}
-
-function createUpgradeVersionsFile(versionStatus) {
-  fs.writeFileSync(getUpgradeVersionsFilePath(), JSON.stringify(versionStatus))
-}
-
-function removeUpgradeVersionsFile() {
-  try {
-    fs.unlinkSync(getUpgradeVersionsFilePath())
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      throw new Error('\nCould not delete update versions file\n')
-    }
-  }
-}
-
-export function isUpgradeAvailable() {
-  return fs.existsSync(getUpgradeVersionsFilePath())
-}
-
-function readUpgradeVersionsFile() {
-  return JSON.parse(fs.readFileSync(getUpgradeVersionsFilePath()))
 }
 
 async function getUpdateVersionStatus() {
@@ -203,57 +155,201 @@ async function getUpdateVersionStatus() {
   return versionsStatus
 }
 
-// Timer file
-
-function getUpdateTimerFilePath() {
-  return path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'update',
-    'auto-timer'
-  )
-}
-
-function resetUpdateTimer() {
-  try {
-    fs.writeFileSync(getUpdateTimerFilePath(), '')
-  } catch (e) {
-    try {
-      fs.mkdirSync(path.dirname(getUpdateTimerFilePath()))
-      fs.writeFileSync(getUpdateTimerFilePath(), '')
-    } catch (error) {
-      throw new Error('\nCould not create update timer file\n')
-    }
-  }
+export function isUpgradeAvailable() {
+  return isFlagSet(UPDATE_FLAG_UPGRADE_AVAILABLE)
 }
 
 export function isUpdateCheckDue() {
-  let timeOfLastUpdate
-  try {
-    timeOfLastUpdate = fs.statSync(getUpdateTimerFilePath()).mtimeMs
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      resetUpdateTimer()
-      return true
-    }
-  }
-  const duePeriod = Date.now() - 24 * 60 * 60 * 1000
-  if (timeOfLastUpdate < duePeriod) {
-    return true
-  }
-  return false
+  const updateCheckPeriod =
+    process.env.REDWOOD_BACKGROUND_UPDATES_CHECK_PERIOD || 24 * 60
+  return isTimerPassed(UPDATE_TIMER_CHECK, updateCheckPeriod)
 }
 
-// Misc
+export function isUpdateMessageDue() {
+  const updateShowPeriod =
+    process.env.REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD || 30
+  return isTimerPassed(UPDATE_TIMER_SHOW, updateShowPeriod)
+}
 
-export function upgradeAvailableMessage() {
-  const versionStatus = readUpgradeVersionsFile()
+function getUpgradeFilePath() {
+  return path.join(getPaths().base || '/tmp', '.redwood', 'update-data.json')
+}
+
+function createUpgradeFile(versionStatus) {
+  fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(versionStatus))
+}
+
+function readUpgradeFile() {
+  return JSON.parse(fs.readFileSync(getUpgradeFilePath()))
+}
+
+function removeUpgradeFile() {
+  try {
+    fs.unlinkSync(getUpgradeFilePath())
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw new Error('\nCould not delete update versions file\n')
+    }
+  }
+}
+
+export function getUpgradeAvailableMessage() {
+  const versionStatus = readUpgradeFile()
   let message = `  Checklist:\n   1. Read release notes at: "https://github.com/redwoodjs/redwood/releases"  \n   2. Run "yarn rw upgrade" to upgrade  `
   return boxen(message, {
     padding: 0,
     margin: 1,
-    title: `Upgrade Available: ${versionStatus.localVersion} -> ${versionStatus.remoteVersion}`,
+    title: `Redwood Upgrade Available: ${versionStatus.localVersion} -> ${versionStatus.remoteVersion}`,
     borderColor: `#ff845e`, // The RedwoodJS colour
     borderStyle: 'round',
   })
+}
+
+export function showUpgradeAvailableMessage() {
+  console.log(getUpgradeAvailableMessage())
+  resetTimer(UPDATE_TIMER_SHOW)
+}
+
+// Locks
+// TODO: Move the generic lock functions some where more general, they could be used by other features needing a lock?
+
+function setLock(name) {
+  const lockPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'locks',
+    `${name}`
+  )
+  if (!fs.existsSync(path.dirname(lockPath))) {
+    try {
+      fs.mkdirSync(path.dirname(lockPath))
+    } catch (error) {
+      throw new Error(`\nCould not create lock directory for lock ${name}!\n`)
+    }
+  }
+  try {
+    fs.writeFileSync(lockPath, '')
+  } catch (error) {
+    throw new Error(`\nCould not create lock ${name}!\n`)
+  }
+}
+
+function unsetLock(name) {
+  const lockPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'locks',
+    `${name}`
+  )
+  try {
+    fs.rmSync(lockPath)
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw new Error(`\nCould not delete lock ${name}!\n`)
+    }
+  }
+}
+
+function isLocked(name) {
+  const lockPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'locks',
+    `${name}`
+  )
+  return fs.existsSync(lockPath)
+}
+
+// Flags
+// TODO: Move the generic flag functions some where more general, they could be used by other features needing a persisted flags?
+
+function setFlag(name) {
+  const flagPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'flags',
+    `${name}`
+  )
+  if (!fs.existsSync(path.dirname(flagPath))) {
+    try {
+      fs.mkdirSync(path.dirname(flagPath))
+    } catch (error) {
+      throw new Error(`\nCould not create flag directory for flag ${name}!\n`)
+    }
+  }
+  try {
+    fs.writeFileSync(flagPath, '')
+  } catch (error) {
+    throw new Error(`\nCould not create flag ${name}!\n`)
+  }
+}
+
+function unsetFlag(name) {
+  const flagPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'flags',
+    `${name}`
+  )
+  try {
+    fs.rmSync(flagPath)
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw new Error(`\nCould not delete flag ${name}!\n`)
+    }
+  }
+}
+
+function isFlagSet(name) {
+  const flagPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'flags',
+    `${name}`
+  )
+  return fs.existsSync(flagPath)
+}
+
+// Timers
+// TODO: Move the generic timer functions some where more general, they could be used by other features needing a persisted timer?
+
+function isTimerPassed(name, minutes) {
+  const timerPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'timers',
+    `${name}`
+  )
+
+  if (!fs.existsSync(timerPath)) {
+    resetTimer(name)
+    return true
+  }
+
+  const timerDue = Date.now() - minutes * 60 * 1000
+  const timerLastUpdated = fs.statSync(timerPath).mtimeMs
+
+  return timerLastUpdated < timerDue
+}
+
+function resetTimer(name) {
+  const timerPath = path.join(
+    getPaths().base || '/tmp',
+    '.redwood',
+    'timers',
+    name
+  )
+
+  if (!fs.existsSync(path.dirname(timerPath))) {
+    try {
+      fs.mkdirSync(path.dirname(timerPath))
+    } catch (error) {
+      throw new Error('\nCould not create timer directory!\n')
+    }
+  }
+  try {
+    fs.writeFileSync(timerPath, '')
+  } catch (error) {
+    throw new Error(`\nCould not create timer called ${name}!\n`)
+  }
 }
