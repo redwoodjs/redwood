@@ -221,9 +221,8 @@ const wasDbUsed = () => {
 beforeAll(async () => {
   // Disable perRequestContext for tests
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  if (wasDbUsed()) {
-    await configureTeardown()
-  }
+  // Removed if (wasDbUsed()) check for https://github.com/redwoodjs/redwood/issues/6475
+  await configureTeardown()
 })
 
 afterAll(async () => {
