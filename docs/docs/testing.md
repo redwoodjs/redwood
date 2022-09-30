@@ -529,6 +529,15 @@ In the above examples, we can see expect doesn't preserve the floating numbers. 
 
 > For cases where using decimal is not optimal, see the [Jest Expect documentation](https://jestjs.io/docs/expect) for other options and methods.
 
+#### DateTime
+
+Prisma returns [DateTime](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datetime) as ISO 8601-formatted strings. So, you can convert the date to ISO String in JavaScript:
+
+```jsx {1}
+//  Output: '2021-10-15T19:40:33.000Z'
+const isoString = new Date("2021-10-15T19:40:33Z").toISOString()
+```
+
 #### Other Queries/Matchers
 
 There are several other node/text types you can query against with React Testing Library, including `title`, `role` and `alt` attributes, Form labels, placeholder text, and more.
