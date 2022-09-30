@@ -52,7 +52,7 @@ export const scenarioFieldValue = (field) => {
     case 'Boolean':
       return true
     case 'DateTime':
-      return new Date().toISOString().replace(/\.\d{3}/, '')
+      return new Date()
     case 'Decimal':
     case 'Float':
       return randFloat
@@ -142,13 +142,17 @@ export const buildScenario = async (model) => {
 export const buildStringifiedScenario = async (model) => {
   const scenario = await buildScenario(model)
 
-  return JSON.stringify(scenario, (key, value) =>
-    typeof value === 'bigint'
-      ? value.toString()
-      : typeof value === 'string' && value.match(/^\d+n$/)
-      ? Number(value.substr(0, value.length - 1))
-      : value
-  )
+  return JSON.stringify(scenario, (key, value) => {
+    if (typeof value === 'bigint') {
+      return value.toString()
+    }
+
+    if (typeof value === 'string' && value.match(/^\d+n$/)) {
+      return Number(value.substr(0, value.length - 1))
+    }
+
+    return value
+  })
 }
 
 // outputs fields necessary to create an object in the test file
@@ -216,7 +220,7 @@ export const fieldsToUpdate = async (model) => {
       case 'DateTime': {
         let date = new Date()
         date.setDate(date.getDate() + 1)
-        newValue = date.toISOString().replace(/\.\d{3}/, '')
+        newValue = date
         break
       }
       case 'Decimal':

@@ -80,3 +80,12 @@ model Favorite {
   post    Post    @relation(fields: [postId], references: [id])
   likes   BigInt
 }
+
+model ScalarType{
+  id        Int       @id @default(autoincrement())
+  email     String
+  date      DateTime
+  bigInt    BigInt
+  integer   Int
+  boolean   Boolean
+}
