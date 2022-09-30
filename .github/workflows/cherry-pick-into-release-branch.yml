@@ -1,0 +1,70 @@
+# When a PR is merged into the main branch, this workflow tries to cherry pick the squashed commit into the release branch
+# by fast forwarding the release branch via the `--ff` option.
+# If that doesn't work (i.e. main and release have diverged), it'll open a PR against the release branch with the squashed commit.
+
+name: 🍒 Cherry pick into release branch
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  cherry-pick-fast-forward:
+    # Don't cherry pick commits with breaking changes.
+    # The quotes prevent yaml from interpreting the `!` as a "non-specific tag".
+    if: ${{ github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'release:feature-breaking') }}
+    name: ⏩ Cherry pick fast forward
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+          # git isn't able to work with $GITHUB_SHA if we don't checkout everything.
+          fetch-depth: 0
+          # Since release is a protected branch, we need a token to run `git push` later.
+          token: ${{ secrets.JTOAR_TOKEN }}
+
+      - name: ⏩ Cherry pick fast forward
+        run: |
+          # Here, $GITHUB_SHA is the last merge commit on the $GITHUB_REF branch.
+          # That merge commit is already in the main branch at this point (this action runs on "pull_request closed" events).
+          # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request.
+
+          git cherry-pick --ff $GITHUB_SHA
+
+          # If the HEAD of main and release point to the same commit, then the fast forward worked and we can go ahead and push.
+
+          if [[ "$(git rev-parse origin/main)" = "$(git rev-parse release)" ]]; then
+            git push
+          else
+            exit 1
+          fi
+
+  cherry-pick-into-release-pr:
+    needs: cherry-pick-fast-forward
+    if: failure()
+    name: Cherry pick into release PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cherry pick into release PR
+        uses: carloscastrojumo/github-cherry-pick-action@v1.0.2
+        with:
+          # We specify a token because we want other workflows (like CI) to run on this PR.
+          # If we omit this, it uses the default token (GITHUB_TOKEN) which doesn't trigger other workflows.
+          token: ${{ steps.generate_token.outputs.token }}
+          branch: release
+          labels: cherry-pick
