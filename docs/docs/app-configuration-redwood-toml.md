@@ -134,7 +134,7 @@ Using redwood.toml's [env var interpolation](#using-environment-variables-in-red
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
-### Register Fastify Plugins
+### Register Custom Fastify Plugins
 
 You can register Fastify plugins for the api and web sides using the `configureFastify` function.
 This function has access to the Fastify server instance and options, such as the side that's being configured.
