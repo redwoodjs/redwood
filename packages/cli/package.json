@@ -55,7 +55,7 @@
     "param-case": "3.0.4",
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
-    "portfinder": "^1.0.32",
+    "portfinder": "1.0.32",
     "prettier": "2.7.1",
     "prisma": "4.3.1",
     "prompts": "2.4.2",
