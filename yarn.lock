@@ -6164,7 +6164,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@prisma/client": 4.3.1
     "@redwoodjs/auth": 3.0.3
-    "@simplewebauthn/server": 6.2.0
+    "@simplewebauthn/server": 6.2.1
     "@types/aws-lambda": 8.10.101
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.9
@@ -6852,29 +6852,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:6.2.0":
-  version: 6.2.0
-  resolution: "@simplewebauthn/server@npm:6.2.0"
+"@simplewebauthn/server@npm:6.2.1":
+  version: 6.2.1
+  resolution: "@simplewebauthn/server@npm:6.2.1"
   dependencies:
     "@noble/ed25519": ^1.6.1
     "@peculiar/asn1-android": ^2.1.7
     "@peculiar/asn1-schema": ^2.1.7
     "@peculiar/asn1-x509": ^2.1.7
-    "@simplewebauthn/typescript-types": ^6.0.0
+    "@simplewebauthn/typescript-types": ^6.2.1
     base64url: ^3.0.1
     cbor: ^5.1.0
     debug: ^4.3.2
     jsrsasign: ^10.4.0
     jwk-to-pem: ^2.0.4
     node-fetch: ^2.6.0
-  checksum: f5ae66e51ab5567c9ae4ec104f905a539394594bd2ee1d721715fd4460f583af818afb06d8a41218a04f03209596183b5f84a74f92b4f762860fe5b7b59b2cdb
+  checksum: 3d07fc7592683c4364a1f346bc457af5a06a43169859a0832a97e4f784c672430a0b4aeacc5648579f946372c4725263a485570b67fc82b1c88682e477ac322a
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:6.0.0, @simplewebauthn/typescript-types@npm:^6.0.0":
+"@simplewebauthn/typescript-types@npm:6.0.0":
   version: 6.0.0
   resolution: "@simplewebauthn/typescript-types@npm:6.0.0"
   checksum: f70c983ddb4613ff234be6ce689ebb500a246de57c1a892de8016e4e858ba81c663bcaee81cf942e1a398485fa23c10527511b733373f20a937c047a017584b0
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/typescript-types@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@simplewebauthn/typescript-types@npm:6.2.1"
+  checksum: fda36ec34391a696586a89ef0efea3cfd49b42d606285b4db3e8d3dce3b36c5f831ec7682dd87784a26fa713ad8fdac91ea2a2fe62c2773dddffaa5cf24945ce
   languageName: node
   linkType: hard
 
