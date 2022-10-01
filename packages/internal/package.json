@@ -28,11 +28,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.19.1",
-    "@babel/plugin-transform-typescript": "7.19.1",
+    "@babel/parser": "7.19.3",
+    "@babel/plugin-transform-typescript": "7.19.3",
     "@babel/register": "7.18.9",
     "@babel/runtime-corejs3": "7.19.1",
-    "@babel/traverse": "7.19.1",
+    "@babel/traverse": "7.19.3",
     "@graphql-codegen/add": "3.2.1",
     "@graphql-codegen/cli": "2.11.7",
     "@graphql-codegen/core": "2.6.2",
@@ -47,7 +47,7 @@
     "chalk": "4.1.2",
     "core-js": "3.25.3",
     "deepmerge": "4.2.2",
-    "esbuild": "0.15.7",
+    "esbuild": "0.15.10",
     "fast-glob": "3.2.12",
     "findup-sync": "5.0.0",
     "fs-extra": "10.1.0",
@@ -62,8 +62,8 @@
     "typescript": "4.7.4"
   },
   "devDependencies": {
-    "@babel/cli": "7.18.10",
-    "@babel/core": "7.19.1",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.3",
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
@@ -71,7 +71,7 @@
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
-    "jest": "29.0.3"
+    "jest": "29.1.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

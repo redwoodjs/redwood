@@ -1,7 +1,7 @@
 export default `
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogLayout from 'src/layouts/BlogLayout'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import HomePage from 'src/pages/HomePage'
 
 const Routes = () => {
@@ -12,7 +12,7 @@ const Routes = () => {
         <Route path="/about" page={AboutPage} name="about" prerender/>
         <Route path="/" page={HomePage} name="home" prerender/>
       </Set>
-      <Set wrap={PostsLayout}>
+      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
         <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
         <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
         <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
