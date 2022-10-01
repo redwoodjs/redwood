@@ -6228,7 +6228,7 @@ __metadata:
     "@okta/okta-auth-js": 6.7.6
     "@simplewebauthn/browser": 6.0.0
     "@simplewebauthn/typescript-types": 6.0.0
-    "@supabase/supabase-js": 1.35.6
+    "@supabase/supabase-js": 1.35.7
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.50
     core-js: 3.25.3
@@ -8161,13 +8161,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^1.7.4":
-  version: 1.7.4
-  resolution: "@supabase/realtime-js@npm:1.7.4"
+"@supabase/realtime-js@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "@supabase/realtime-js@npm:1.7.5"
   dependencies:
     "@types/phoenix": ^1.5.4
     websocket: ^1.0.34
-  checksum: d8d2026aa630a5e9d55c93a740d31a5fa9bbfd89e960af54c8a3380d17cb57c531937eef56e9746ad95b1a54186a7a3e108e52011834d96c2f4e7f7be1a77d52
+  checksum: a9be4e73df7eff9e5928cba2b8bac4849a2f61d9f82cbbdefc6e767cbf6ed4326a3e0f477b21bb7716c3707cae3acf3182912e4c3a2a00790fb78b78d1c20b49
   languageName: node
   linkType: hard
 
@@ -8180,16 +8180,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:1.35.6":
-  version: 1.35.6
-  resolution: "@supabase/supabase-js@npm:1.35.6"
+"@supabase/supabase-js@npm:1.35.7":
+  version: 1.35.7
+  resolution: "@supabase/supabase-js@npm:1.35.7"
   dependencies:
     "@supabase/functions-js": ^1.3.4
     "@supabase/gotrue-js": ^1.22.21
     "@supabase/postgrest-js": ^0.37.4
-    "@supabase/realtime-js": ^1.7.4
+    "@supabase/realtime-js": ^1.7.5
     "@supabase/storage-js": ^1.7.2
-  checksum: f4cb1cedb0e793a57e8188579a2c1d4bfda55f7430032c57f1c66bfd092d59e68fd017d9062d73d99db546092cecf0bffc3be8550dcf62600bcc7bf750b8a1f7
+  checksum: a0574c6c4795adb8bc0908dc6a00e127c118b7eb5d916516863de0d2c3cd8eb5a4d5401791d968e61c131217674f8063436508e1de44fbfaad08180010491ce5
   languageName: node
   linkType: hard
 

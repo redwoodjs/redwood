@@ -40,7 +40,7 @@
     "@okta/okta-auth-js": "6.7.6",
     "@simplewebauthn/browser": "6.0.0",
     "@simplewebauthn/typescript-types": "6.0.0",
-    "@supabase/supabase-js": "1.35.6",
+    "@supabase/supabase-js": "1.35.7",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.50",
     "firebase": "9.9.3",
