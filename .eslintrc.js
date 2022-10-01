@@ -31,6 +31,11 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
   },
+  env: {
+    // There's one bug in Node14 that prevents us from using es2020 here
+    // https://node.green/#ES2020
+    es2019: true,
+  },
   overrides: [
     {
       files: ['packages/structure/src/**'],
@@ -56,9 +61,6 @@ module.exports = {
         'packages/web/src/**',
       ],
       env: {
-        // There's one bug in Node14 that prevents us from using es2020 here
-        // https://node.green/#ES2020
-        es2019: true,
         browser: true,
       },
       globals: {
@@ -102,7 +104,6 @@ module.exports = {
     {
       files: ['packages/web/src/entry/index.js'],
       env: {
-        es6: true,
         browser: true,
       },
       globals: {
@@ -127,7 +128,6 @@ module.exports = {
         'packages/telemetry/src/**',
       ],
       env: {
-        es6: true,
         node: true,
       },
     },
