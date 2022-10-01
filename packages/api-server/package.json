@@ -48,8 +48,8 @@
     "yargs": "17.5.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.18.10",
-    "@babel/core": "7.19.1",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.3",
     "@types/aws-lambda": "8.10.101",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
