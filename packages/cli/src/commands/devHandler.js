@@ -56,7 +56,7 @@ export const handler = async ({
       /--port=[0-9][0-9]?[0-9]?[0-9]?[0-9]? ?/
     )
     const forwardedPortSet =
-      forwardedPortMatches !== null && forwardedPortMatches.length == 1
+      forwardedPortMatches && forwardedPortMatches.length == 1
     if (forwardedPortSet) {
       proposedPort = parseInt(
         forwardedPortMatches[0]
@@ -69,8 +69,8 @@ export const handler = async ({
       port: proposedPort,
       stopPort: proposedPort + 64,
     })
-    if (availablePort != proposedPort) {
-      if (availablePort == -1) {
+    if (availablePort !== proposedPort) {
+      if (availablePort === -1) {
         console.error(
           c.error(
             `${
