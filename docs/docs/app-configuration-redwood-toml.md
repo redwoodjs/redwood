@@ -111,23 +111,19 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 
 ### Configure Fastify
 
-You can configure the Fastify Server used by Redwood, in `api/server.config.js`.
-For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
+You can configure the Fastify server instance in `api/server.config.js`.
+For all the configuration options, see [Fastify's docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
 :::info Where does this configuration apply?
 
 This configuration does **not** apply in a serverless deploy.
 Typically when you deploy to a serverless provider like Netlify or Vercel, your project's web side is served from a CDN, and functions are invoked directly.
-
 But this configuration does apply when running:
 
-- `yarn rw dev` (the dev server) the configuration will be picked up and used for the API side. The web side is served by webpack dev server
-- `yarn rw serve` (serving api and web sides in production mode) - the configuration will be applied to the Fastify instance serving static files from `./web/dist` and your api functions in `./api/dist/functions`
-
-Or if you're running them separately:
-
-- `yarn rw serve api` (serving just the api side) - configuration will only apply to the Fastify instance serving your api side
-- `yarn rw serve web` (serving just the web side) - configuration will only apply to the Fastify instance that serves your static files in `./web/dist/`
+| Command         | api  | web  |
+| :-------------- | :--- | :--- |
+| `yarn rw dev`   | ✅    | ❌    |
+| `yarn rw serve` | ✅    | ✅    |
 
 :::
 
@@ -138,10 +134,10 @@ Using redwood.toml's [env var interpolation](#using-environment-variables-in-red
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
-### Register Custom Fastify Plugins
+### Register Fastify Plugins
 
-You can register custom Fastify plugins for the api and web sides in the `configureFastify` function.
-This function has access to the Fastify instance and options, such as the side that's being configured.
+You can register Fastify plugins for the api and web sides using the `configureFastify` function.
+This function has access to the Fastify server instance and options, such as the side that's being configured.
 
 :::warning Reminder
 
@@ -172,7 +168,7 @@ You can leverage two Fastify ecosystem plugins, [@fastify/compress](https://gith
 Here, we configure compression so that it handles all requests, compresses responses only if they're larger than 1K, and to prefer the `deflate` method over `gzip`.
 Using @fastify/rate-limit, we allow an IP address to only make 100 requests in a five minute window.
 
-:::important
+:::important Plugins need to be installed
 
 You'll need to install plugin packages in your project's `api` workspace:
 
@@ -206,12 +202,13 @@ const configureFastify = async (fastify, options) => {
 
 #### How to Configure a Fastify plugin for the web side
 
-If you're running the web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
+If you're running the web side using `yarn rw serve`, you can configure plugins like [@fastify/etag](https://github.com/fastify/fastify-etag) to register HTTP Etags.
 
-* [@fastify/etag](https://github.com/fastify/fastify-etag)
+:::important Plugins need to be installed
 
-:::note
-If you run `yarn rw serve` because the same Fastify instance handles the api and web side, this plugin will apply to the API side as well.
+You'll need to install plugin packages in your project's `api` workspace.
+This may seem counter-intuitive, since you're configuring the `web` side, but the `api-server` gets configured in your project's `api` side and that's what's serving web assets.
+
 :::
 
 ```js
@@ -226,14 +223,6 @@ const configureFastify = async (fastify, options) => {
   return fastify
 }
 ```
-
-:::important
-
-You will need to install any custom plug-in packages to your project's `api` workspace.
-
-This may seem counter-intuitive, since you are configuring the `web` side, but the `api-server` gets configured in your project's `api` and that is what server web assets.
-
-:::
 
 #### Troubleshooting Custom Fastify Configuration
 
