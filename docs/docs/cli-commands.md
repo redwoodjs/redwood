@@ -578,7 +578,7 @@ See the [Deploy](/docs/deploy/introduction) docs.
 
 ### generate dbAuth
 
-Generate log in, sign up forgot password and password reset pages for dbAuth
+Generate log in, sign up, forgot password and password reset pages for dbAuth
 
 ```
 yarn redwood generate dbAuth
