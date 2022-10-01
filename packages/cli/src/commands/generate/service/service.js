@@ -155,6 +155,29 @@ export const buildStringifiedScenario = async (model) => {
   })
 }
 
+export const fieldTypes = async (model) => {
+  const { scalarFields } = await parseSchema(model)
+
+  // Example value
+  // {
+  //   name: 'score',
+  //   kind: 'scalar',
+  //   isList: false,
+  //   isRequired: true,
+  //   isUnique: false,
+  //   isId: false,
+  //   isReadOnly: false,
+  //   hasDefaultValue: false,
+  //   type: 'Int',
+  //   isGenerated: false,
+  //   isUpdatedAt: false
+  // }
+  return scalarFields.reduce((acc, value) => {
+    acc[value.name] = value.type
+    return acc
+  }, {})
+}
+
 // outputs fields necessary to create an object in the test file
 export const fieldsToInput = async (model) => {
   const { scalarFields, foreignKeys } = await parseSchema(model)
@@ -287,6 +310,10 @@ export const files = async ({
       relations: relations || [],
       create: await fieldsToInput(model),
       update: await fieldsToUpdate(model),
+      types: await fieldTypes(model),
+      prismaImport: (await parseSchema(model)).scalarFields.some(
+        (field) => field.type === 'Decimal'
+      ),
       prismaModel: model,
       ...rest,
     },
