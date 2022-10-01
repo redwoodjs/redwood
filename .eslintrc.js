@@ -56,7 +56,9 @@ module.exports = {
         'packages/web/src/**',
       ],
       env: {
-        es6: true,
+        // There's one bug in Node14 that prevents us from using es2020 here
+        // https://node.green/#ES2020
+        es2019: true,
         browser: true,
       },
       globals: {
