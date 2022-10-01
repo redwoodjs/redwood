@@ -38,8 +38,8 @@
     "yargs": "17.5.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.18.10",
-    "@babel/core": "7.19.1",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.3",
     "@types/envinfo": "7.8.1",
     "@types/uuid": "8.3.4",
     "@types/yargs": "17.0.12",
