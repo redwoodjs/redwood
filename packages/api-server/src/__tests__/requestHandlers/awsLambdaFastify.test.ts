@@ -3,8 +3,16 @@ import type { FastifyRequest, FastifyReply } from 'fastify'
 import { requestHandler } from '../../requestHandlers/awsLambdaFastify'
 
 describe('Tests AWS Lambda to Fastify request transformation and handling', () => {
+  let consoleError
+
   beforeEach(() => {
     jest.clearAllMocks()
+    consoleError = console.error
+    console.error = () => {}
+  })
+
+  afterEach(() => {
+    console.error = consoleError
   })
 
   const request = {
