@@ -28,8 +28,8 @@
     "react-hook-form": "7.36.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.18.10",
-    "@babel/core": "7.19.1",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.3",
     "@testing-library/dom": "8.18.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
