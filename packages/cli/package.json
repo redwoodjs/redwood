@@ -24,7 +24,7 @@
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
     "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
     "prepublishOnly": "yarn build",
-    "test": "jest src",
+    "// test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

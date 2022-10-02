@@ -17,7 +17,7 @@
     "build:js": "babel src -d dist",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
+    "// test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

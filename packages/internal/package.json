@@ -24,7 +24,7 @@
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
+    "// test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

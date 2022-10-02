@@ -18,7 +18,7 @@
     "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
     "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "prepublishOnly": "yarn build",
-    "test": "NODE_ENV=test jest",
+    "// test": "NODE_ENV=test jest",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
