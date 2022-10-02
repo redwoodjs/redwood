@@ -264,7 +264,7 @@ describe('slow imports', () => {
   )
 
   beforeAll(() => {
-    mockDelay = 200
+    mockDelay = 400
   })
 
   afterAll(() => {
