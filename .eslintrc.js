@@ -33,6 +33,8 @@ module.exports = {
     curly: 'error',
   },
   env: {
+    // We use the most modern environment available. Then we rely on Babel to
+    // transpile it to something that can run on all node versions we support
     es2022: true,
   },
   overrides: [
