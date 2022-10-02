@@ -47,10 +47,6 @@ export const scenarioFieldValue = (field) => {
 
   switch (field.type) {
     case 'BigInt':
-      // BigInt is supported in Node14, which is what we target. But eslint
-      // doesn't have granular enough configuration options for us to let it
-      // know about that. So we have to just disable it for this line.
-      // eslint-disable-next-line no-undef
       return `${BigInt(randInt)}n`
     case 'Boolean':
       return true

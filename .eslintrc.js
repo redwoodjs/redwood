@@ -15,6 +15,7 @@ const findBabelConfig = (cwd = process.cwd()) => {
 module.exports = {
   extends: path.join(__dirname, 'packages/eslint-config/shared.js'),
   parserOptions: {
+    ecmaVersion: 'latest',
     babelOptions: {
       configFile: findBabelConfig(),
     },
@@ -32,9 +33,7 @@ module.exports = {
     curly: 'error',
   },
   env: {
-    // There's one bug in Node14 that prevents us from using es2020 here
-    // https://node.green/#ES2020
-    es2019: true,
+    es2022: true,
   },
   overrides: [
     {
