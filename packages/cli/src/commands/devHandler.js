@@ -16,6 +16,26 @@ import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const defaultApiDebugPort = 18911
 
+/**
+ * Finds a free port
+ * @param  {[Number]}   requestedPort Port to start searching from
+ * @param  {[Number[]]} excludePorts  Array of port numbers to exclude
+ * @return {[Number]}                 A free port equal or higher than requestedPort but not within excludePorts. If no port can be found then returns -1
+ */
+async function getFreePort(requestedPort, excludePorts = []) {
+  try {
+    let freePort = await portfinder.getPortPromise({
+      port: requestedPort,
+    })
+    if (excludePorts.includes(freePort)) {
+      freePort = await getFreePort(freePort + 1, excludePorts)
+    }
+    return freePort
+  } catch (error) {
+    return -1
+  }
+}
+
 export const handler = async ({
   side = ['api', 'web'],
   forward = '',
@@ -24,6 +44,100 @@ export const handler = async ({
   apiDebugPort,
 }) => {
   const rwjsPaths = getPaths()
+
+  let apiPort = getConfig().api.port
+  let webPort = getConfig().web.port
+
+  // Check api port
+  if (side.includes('api')) {
+    const freePort = (await getFreePort(apiPort)).toString()
+    console.log(apiPort, freePort)
+    if (freePort === -1) {
+      console.error(
+        c.error(
+          `Requested API port of ${apiPort} is already in use and no neighbouring port is available! Cannot start development server.`
+        )
+      )
+      process.exit(1)
+    }
+    if (freePort !== apiPort) {
+      console.log(
+        c.warning(
+          `Requested API port of ${apiPort} is already in use and however ${freePort} is available.`
+        )
+      )
+      const useAvailablePort = await prompts({
+        type: 'confirm',
+        name: 'port',
+        message: `Do you wish to use port ${freePort} instead?`,
+        initial: true,
+        active: 'Yes',
+        inactive: 'No',
+      })
+      if (!useAvailablePort.port) {
+        console.log(c.info(`The API port can be updated in 'redwood.toml'.`))
+        process.exit(0)
+      }
+    }
+    apiPort = freePort
+
+    // TODO: Check the apiDebugPort too?
+  }
+
+  // Check web port
+  if (side.includes('web')) {
+    // Check for specific forwarded web port
+
+    const forwardedPortMatches = forward.match(
+      /--port=[0-9][0-9]?[0-9]?[0-9]?[0-9]? ?/
+    )
+    const forwardedPortSet =
+      forwardedPortMatches && forwardedPortMatches.length == 1
+    if (forwardedPortSet) {
+      webPort = forwardedPortMatches[0]
+        .substring(forwardedPortMatches[0].indexOf('=') + 1)
+        .trim()
+    }
+
+    const freePort = (
+      await getFreePort(webPort, [parseInt(apiPort)])
+    ).toString()
+    if (freePort === -1) {
+      console.error(
+        c.error(
+          `Requested web port of ${webPort} is already in use and no neighbouring port is available! Cannot start development server.`
+        )
+      )
+      process.exit(1)
+    }
+    if (freePort !== webPort) {
+      console.log(
+        c.warning(
+          `Requested web port of ${webPort} is already in use and however ${freePort} is available.`
+        )
+      )
+      const useAvailablePort = await prompts({
+        type: 'confirm',
+        name: 'port',
+        message: `Do you wish to use port ${freePort} instead?`,
+        initial: true,
+        active: 'Yes',
+        inactive: 'No',
+      })
+      if (!useAvailablePort.port) {
+        console.log(
+          c.info(
+            `The web port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
+          )
+        )
+        process.exit(0)
+      }
+    }
+    webPort = freePort
+    forward = forwardedPortSet
+      ? forward.replace(forwardedPortMatches[0], ` --port=${freePort}`)
+      : forward.concat(` --port=${freePort}`)
+  }
 
   if (side.includes('api')) {
     try {
@@ -41,7 +155,7 @@ export const handler = async ({
     }
 
     try {
-      await shutdownPort(getConfig().api.port)
+      await shutdownPort(apiPort)
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
       console.error(
@@ -51,78 +165,8 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
-    let proposedPort = parseInt(getConfig().web.port)
-    const forwardedPortMatches = forward.match(
-      /--port=[0-9][0-9]?[0-9]?[0-9]?[0-9]? ?/
-    )
-    const forwardedPortSet =
-      forwardedPortMatches && forwardedPortMatches.length == 1
-    if (forwardedPortSet) {
-      proposedPort = parseInt(
-        forwardedPortMatches[0]
-          .substring(forwardedPortMatches[0].indexOf('=') + 1)
-          .trim()
-      )
-    }
-
-    const availablePort = await portfinder.getPortPromise({
-      port: proposedPort,
-      stopPort: proposedPort + 64,
-    })
-    if (availablePort !== proposedPort) {
-      if (availablePort === -1) {
-        console.error(
-          c.error(
-            `${
-              forwardedPortSet ? 'Forwarded' : 'Configured'
-            } "web" port ${proposedPort} is already in use and no neighbouring port is available! Cannot start development server.`
-          )
-        )
-        console.log(
-          c.info(
-            `Configured port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
-          )
-        )
-        process.exit(1)
-      } else {
-        console.error(
-          c.error(
-            `${
-              forwardedPortSet ? 'Forwarded' : 'Configured'
-            } "web" port ${proposedPort} is already in use!`
-          )
-        )
-        const useAvailablePort = await prompts({
-          type: 'confirm',
-          name: 'port',
-          message: `Do you wish to use port ${availablePort} instead?`,
-          initial: true,
-          active: 'Yes',
-          inactive: 'No',
-        })
-        if (useAvailablePort.port) {
-          // TODO: Consider if there is a better way to propagate the port?
-          if (forwardedPortSet) {
-            forward = forward.replace(
-              forwardedPortMatches[0],
-              ` --port=${availablePort}`
-            )
-          } else {
-            forward = forward.concat(` --port=${availablePort}`)
-          }
-        } else {
-          console.log(
-            c.info(
-              `Configured port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
-            )
-          )
-          process.exit(1)
-        }
-      }
-    }
-
     try {
-      await shutdownPort(availablePort)
+      await shutdownPort(webPort)
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
@@ -158,7 +202,7 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port=${apiPort} ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
