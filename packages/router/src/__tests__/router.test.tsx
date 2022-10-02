@@ -194,7 +194,7 @@ describe('slow imports', () => {
   }) => (
     <Router
       useAuth={mockUseAuth({ isAuthenticated: authenticated, hasRole })}
-      pageLoadingDelay={100}
+      pageLoadingDelay={200}
     >
       <Route
         path="/"
@@ -436,15 +436,35 @@ describe('slow imports', () => {
   })
 
   test('usePageLoadingContext', async () => {
-    // Had to increase this to make the test pass on Windows
-    mockDelay = 500
+    // We want to show a loading indicator if loading pages is taking a long
+    // time. But at the same time we don't want to show it right away, because
+    // then there'll be a flash of the loading indicator on every page load.
+    // So we have a `pageLoadingDelay` delay to control how long it waits
+    // before showing the loading state (default is 1000 ms).
+    //
+    // RW lazy loads pages by default, that's why it could potentially take a
+    // while to load a page. But during tests we don't do that. So we have to
+    // fake a delay. That's what `mockDelay` is for. `mockDelay` has to be
+    // longer than `pageLoadingDelay`, but not too long so the test takes
+    // longer than it has to, and also not too long so the entire test times
+    // out.
 
+    // Had to increase this to make the test pass on Windows
+    mockDelay = 700
+
+    // <TestRouter> sets pageLoadingDelay={200}. (Default is 1000.)
     const screen = render(<TestRouter />)
 
     act(() => navigate('/page-loading-context'))
 
+    // 'Page Loading Context Layout' should always be shown
     await waitFor(() => screen.getByText('Page Loading Context Layout'))
+
+    // 'loading in layout...' should only be shown while the page is loading.
+    // So in this case, for the first 700ms
     await waitFor(() => screen.getByText('loading in layout...'))
+
+    // After 700ms 'Page Loading Context Page' should be rendered
     await waitFor(() => screen.getByText('Page Loading Context Page'))
 
     // This shouldn't show up, because the page shouldn't render before it's
