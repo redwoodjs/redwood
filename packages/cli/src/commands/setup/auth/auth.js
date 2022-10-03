@@ -455,7 +455,7 @@ export const handler = async (yargs) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } } // TODO: support verbose renderer flag?
+    { rendererOptions: { collapse: false } }
   )
 
   try {

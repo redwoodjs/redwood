@@ -63,7 +63,7 @@ export const handler = async ({ force }) => {
         },
       },
     ],
-    { rendererOptions: { collapse: false } } // TODO: support verbose renderer flag?
+    { rendererOptions: { collapse: false } }
   )
 
   try {

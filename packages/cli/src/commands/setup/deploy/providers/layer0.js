@@ -64,7 +64,7 @@ export const handler = async () => {
       },
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } } // TODO: support verbose renderer flag?
+    { rendererOptions: { collapse: false } }
   )
   try {
     await tasks.run()

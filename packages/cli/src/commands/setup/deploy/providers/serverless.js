@@ -132,7 +132,7 @@ export const handler = async ({ force }) => {
     {
       exitOnError: true,
       rendererOptions: { collapse: false },
-    } // TODO: Support verbose renderer flag here?
+    }
   )
   try {
     await tasks.run()

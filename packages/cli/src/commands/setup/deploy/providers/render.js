@@ -108,7 +108,7 @@ export const handler = async ({ force, database }) => {
       }),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } } // TODO: support verbose renderer flag?
+    { rendererOptions: { collapse: false } }
   )
 
   try {

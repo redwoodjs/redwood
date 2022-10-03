@@ -320,7 +320,7 @@ export const handler = async ({ force, database }) => {
       addToDotEnvDefaultTask(),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } } // TODO: support verbose renderer flag?
+    { rendererOptions: { collapse: false } }
   )
 
   try {
