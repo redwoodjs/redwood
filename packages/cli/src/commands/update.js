@@ -251,7 +251,21 @@ function writeUpgradeFile(updateData) {
 }
 
 function readUpgradeFile() {
-  return JSON.parse(fs.readFileSync(getUpgradeFilePath()))
+  try {
+    return JSON.parse(fs.readFileSync(getUpgradeFilePath()))
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      // default update-data.json file
+      return {
+        skipVersion: '0.0.0',
+        remoteVersion: '0.0.0',
+        upgradeAvailable: false,
+        lastChecked: 946684800000, // 2000-01-01T00:00:00.000Z
+        lastShown: 946684800000, // 2000-01-01T00:00:00.000Z
+      }
+    }
+    throw new Error('Could not read update-data.json file!')
+  }
 }
 
 function getUpgradeAvailableMessage(updateData) {
@@ -309,7 +323,7 @@ function unsetLock(name) {
     `${name}`
   )
   try {
-    fs.rmSync(lockPath)
+    fs.unlinkSync(lockPath)
   } catch (error) {
     if (error.code !== 'ENOENT') {
       throw new Error(`\nCould not delete lock ${name}!\n`)
