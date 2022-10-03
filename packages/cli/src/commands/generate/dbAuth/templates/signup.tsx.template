@@ -62,7 +62,7 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    ${usernameCapitalised}
+                    ${usernameTitlecase}
                   </Label>
                   <TextField
                     name="username"
@@ -72,7 +72,7 @@ const SignupPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: '${usernameCapitalised} is required',
+                        message: '${usernameTitlecase} is required',
                       },
                     }}
                   />
@@ -83,7 +83,7 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    ${passwordCapitalised}
+                    ${passwordTitlecase}
                   </Label>
                   <PasswordField
                     name="password"
@@ -93,7 +93,7 @@ const SignupPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: '${passwordCapitalised} is required',
+                        message: '${passwordTitlecase} is required',
                       },
                     }}
                   />
