@@ -173,14 +173,7 @@ async function getUpdateVersionStatus() {
   const upgradeAvailable = semver.gt(remoteVersion, localVersion)
 
   // Don't change the skip version
-  let skipVersion = '0.0.0'
-  try {
-    skipVersion = readUpgradeFile().skipVersion
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      throw new Error('\nCould not read existing update-data file\n')
-    }
-  }
+  let skipVersion = readUpgradeFile().skipVersion
 
   // Build an object with some details to be returned. Avoids the need for more parsing or remote calls elsewhere
   const versionsStatus = {
@@ -205,32 +198,12 @@ function getShowPeriod() {
 }
 
 export function isUpdateCheckDue() {
-  let updateData
-  try {
-    updateData = readUpgradeFile()
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return true
-    }
-    console.error('Could not read update file!')
-    console.error(error)
-  }
-
+  const updateData = readUpgradeFile()
   return updateData.lastChecked < Date.now() - getCheckPeriod()
 }
 
 export function shouldShowUpgradeAvailableMessage() {
-  let updateData
-  try {
-    updateData = readUpgradeFile()
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return false
-    }
-    console.error('Could not read update file!')
-    console.error(error)
-  }
-
+  const updateData = readUpgradeFile()
   return (
     updateData.upgradeAvailable &&
     !(updateData.skipVersion == updateData.remoteVersion) &&
