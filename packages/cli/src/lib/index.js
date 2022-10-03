@@ -329,21 +329,35 @@ export const cleanupEmptyDirsTask = (files) => {
   )
 }
 
-const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
+const wrapWithSet = (
+  routesContent,
+  layout,
+  routes,
+  newLineAndIndent,
+  props = {}
+) => {
   const [_, indentOne, indentTwo] = routesContent.match(
     /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
-  return [`<Set wrap={${layout}}>`, ...newRoutesWithExtraIndent, `</Set>`].join(
-    newLineAndIndent
-  )
+
+  // converts { foo: 'bar' } to `foo="bar"`
+  const propsString = Object.entries(props)
+    .map((values) => `${values[0]}="${values[1]}"`)
+    .join(' ')
+
+  return [
+    `<Set wrap={${layout}}${propsString && ' ' + propsString}>`,
+    ...newRoutesWithExtraIndent,
+    `</Set>`,
+  ].join(newLineAndIndent)
 }
 
 /**
  * Update the project's routes file.
  */
-export const addRoutesToRouterTask = (routes, layout) => {
+export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   let newRoutes = routes.filter((route) => !routesContent.match(route))
@@ -363,7 +377,13 @@ export const addRoutesToRouterTask = (routes, layout) => {
     }
 
     const routesBatch = layout
-      ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
+      ? wrapWithSet(
+          routesContent,
+          layout,
+          newRoutes,
+          newLineAndIndent,
+          setProps
+        )
       : newRoutes.join(newLineAndIndent)
 
     const newRoutesContent = routesContent.replace(
