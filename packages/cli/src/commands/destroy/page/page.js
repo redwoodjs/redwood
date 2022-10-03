@@ -1,5 +1,5 @@
 import camelcase from 'camelcase'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { deleteFilesTask, removeRoutesFromRouterTask } from '../../../lib'
 import c from '../../../lib/colors'
@@ -44,7 +44,7 @@ export const tasks = ({ name, path }) =>
         task: async () => removeRoutesFromRouterTask([camelcase(name)]),
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 
 export const handler = async ({ name, path }) => {
