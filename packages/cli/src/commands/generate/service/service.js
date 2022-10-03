@@ -47,7 +47,6 @@ export const scenarioFieldValue = (field) => {
 
   switch (field.type) {
     case 'BigInt':
-      // eslint-disable-next-line no-undef
       return `${BigInt(randInt)}n`
     case 'Boolean':
       return true
@@ -210,7 +209,6 @@ export const fieldsToUpdate = async (model) => {
     // depending on the field type, append/update the value to something different
     switch (field.type) {
       case 'BigInt':
-        // eslint-disable-next-line no-undef
         newValue = `${newValue + 1n}`
         break
       case 'Boolean': {
