@@ -130,6 +130,9 @@ export const files = ({
 }) => {
   const files = []
 
+  usernameLabel = usernameLabel || 'username'
+  passwordlabel = passwordlabel || 'password'
+
   const templateVars = {
     usernameLowercase: usernameLabel.toLowerCase(),
     usernameTitlecase: titleCase(usernameLabel),
