@@ -1752,7 +1752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.16.0, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.16.0, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.18.9
   resolution: "@babel/runtime@npm:7.18.9"
   dependencies:
@@ -10276,43 +10276,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.20.0":
-  version: 6.20.0
-  resolution: "all-contributors-cli@npm:6.20.0"
+"all-contributors-cli@npm:6.22.0":
+  version: 6.22.0
+  resolution: "all-contributors-cli@npm:6.22.0"
   dependencies:
     "@babel/runtime": ^7.7.6
-    async: ^3.0.1
+    async: ^3.1.0
     chalk: ^4.0.0
     didyoumean: ^1.2.1
-    inquirer: ^7.0.4
-    json-fixer: ^1.5.1
+    inquirer: ^7.3.3
+    json-fixer: ^1.6.8
     lodash: ^4.11.2
     node-fetch: ^2.6.0
     pify: ^5.0.0
     yargs: ^15.0.1
   bin:
     all-contributors: dist/cli.js
-  checksum: 804b371f74ef34137e8d9099f325f9cd4a15b4bb5833bd90d86b65284f54543338952304fa94e07bb6171a0a9d6a6dd49ba6ba5ebd80deaf881dd2b09726eca4
-  languageName: node
-  linkType: hard
-
-"all-contributors-cli@patch:all-contributors-cli@npm:6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 6.20.0
-  resolution: "all-contributors-cli@patch:all-contributors-cli@npm%3A6.20.0#.yarn/patches/all-contributors-cli-npm-6.20.0-ba332c4a3e.patch::version=6.20.0&hash=6b460a&locator=root-workspace-0b6124%40workspace%3A."
-  dependencies:
-    "@babel/runtime": ^7.7.6
-    async: ^3.0.1
-    chalk: ^4.0.0
-    didyoumean: ^1.2.1
-    inquirer: ^7.0.4
-    json-fixer: ^1.5.1
-    lodash: ^4.11.2
-    node-fetch: ^2.6.0
-    pify: ^5.0.0
-    yargs: ^15.0.1
-  bin:
-    all-contributors: dist/cli.js
-  checksum: e52c5355836a35ed65a1c9a7699922e2d6afea9053d17304bad5f3b35bd2f8f67e3e93091f46b05e2e723e848f2ae9995f8aed3f4ba3f9f427c29c7c71323498
+  checksum: 2cada0af1da67febe3f012224071f12ac6002758756ffb7794ee7b3f8dd7d58ac56d3315fa5b20863babb1008cbfc82153287320b479934745a9625a7016c5c0
   languageName: node
   linkType: hard
 
@@ -10851,10 +10831,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^3.0.1, async@npm:^3.2.0, async@npm:^3.2.3":
-  version: 3.2.3
-  resolution: "async@npm:3.2.3"
-  checksum: 109780c846f05109dde14412d916ae4ed6daf6f9aad0c4aa1dcf0d4da775a3a9e35e0e06e4e06ad9fed66f99ca15549da16f2f243c56103b346e9d3bcd9c943f
+"async@npm:^3.1.0, async@npm:^3.2.0, async@npm:^3.2.3":
+  version: 3.2.4
+  resolution: "async@npm:3.2.4"
+  checksum: b5d02fed64717edf49e35b2b156debd9cf524934ea670108fa5528e7615ed66a5e0bf6c65f832c9483b63aa7f0bffe3e588ebe8d58a539b833798d324516e1c9
   languageName: node
   linkType: hard
 
@@ -18900,7 +18880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inquirer@npm:^7.0.4":
+"inquirer@npm:^7.3.3":
   version: 7.3.3
   resolution: "inquirer@npm:7.3.3"
   dependencies:
@@ -20609,14 +20589,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-fixer@npm:^1.5.1":
-  version: 1.6.13
-  resolution: "json-fixer@npm:1.6.13"
+"json-fixer@npm:^1.6.8":
+  version: 1.6.15
+  resolution: "json-fixer@npm:1.6.15"
   dependencies:
-    "@babel/runtime": ^7.14.6
+    "@babel/runtime": ^7.18.9
     chalk: ^4.1.2
     pegjs: ^0.10.0
-  checksum: 7ef290720f1333a25a6531395256bda867c5da6d188c5282709bc9dd48e025002d05dc60a8e365a0895e927040c9799911989039265dd0fb33449a84d8c0953c
+  checksum: 8267add4ce0214abe2de69a85caf12ad2a79bf815df50f89d08a9155261800a2b8b635af2c6a385c05074526efe8ae9b7670e83c759a82a570bd13f47337b642
   languageName: node
   linkType: hard
 
@@ -26971,7 +26951,7 @@ __metadata:
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.1
-    all-contributors-cli: 6.20.0
+    all-contributors-cli: 6.22.0
     ansi-colors: 4.1.3
     babel-jest: 29.1.2
     babel-plugin-auto-import: 1.1.0
