@@ -50,7 +50,8 @@ export const handler = async ({
     return
   }
 
-  const prerenderRoutes = prerender ? detectPrerenderRoutes() : []
+  const prerenderRoutes =
+    prerender && side.includes('web') ? detectPrerenderRoutes() : []
   const shouldGeneratePrismaClient =
     prisma && (side.includes('api') || prerenderRoutes.length > 0)
 
