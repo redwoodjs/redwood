@@ -17,9 +17,9 @@ jest.mock('../../../../lib/project', () => ({
   isTypeScriptProject: () => false,
 }))
 
-jest.mock('listr')
+jest.mock('listr2')
 import chalk from 'chalk'
-import listr from 'listr'
+import { Listr } from 'listr2'
 
 import * as graphiql from '../graphiql'
 
@@ -30,7 +30,7 @@ describe('Graphiql generator tests', () => {
   const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
   const mockListrRun = jest.fn()
-  listr.mockImplementation(() => {
+  Listr.mockImplementation(() => {
     return {
       run: mockListrRun,
     }

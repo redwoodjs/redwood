@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
@@ -278,7 +277,8 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
   const listrTasks = await getTasks(dryRun, routerPath)
 
   const tasks = new Listr(listrTasks, {
-    renderer: verbose ? VerboseRenderer : 'default',
+    renderer: verbose ? 'verbose' : 'default',
+    rendererOptions: { collapse: false },
     concurrent: !dryRun,
   })
 

@@ -6273,8 +6273,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 29.1.2
     latest-version: 5.1.0
-    listr: 0.14.3
-    listr-verbose-renderer: 0.6.0
+    listr2: 5.0.5
     lodash: 4.17.21
     param-case: 3.0.4
     pascalcase: 1.0.0
@@ -12954,10 +12953,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.10, colorette@npm:^2.0.14, colorette@npm:^2.0.16":
-  version: 2.0.16
-  resolution: "colorette@npm:2.0.16"
-  checksum: 7430bd996545347f262ae9716bfc8ca3776606e9db854279082004f3141b15a64ad2ee0e4f10cacba5a07cc92ca3edc2d01cbe73fd2843ccd80e98d0e3a8e79b
+"colorette@npm:^2.0.10, colorette@npm:^2.0.14, colorette@npm:^2.0.16, colorette@npm:^2.0.19":
+  version: 2.0.19
+  resolution: "colorette@npm:2.0.19"
+  checksum: 2bcc9134095750fece6e88167011499b964b78bf0ea953469130ddb1dba3c8fe6c03debb0ae181e710e2be10900d117460f980483a7df4ba4a1bac3b182ecb64
   languageName: node
   linkType: hard
 
@@ -14239,7 +14238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.0.1, date-fns@npm:^2.16.1":
+"date-fns@npm:^2.16.1":
   version: 2.28.0
   resolution: "date-fns@npm:2.28.0"
   checksum: ecdacd36326e7f5f8c4f1e78ae931a8997109f1c841f5163053b866585ca899521b0e7a114eeb48a9fe5135a550787bd4bbd8baa321cded0b4d823f847889a80
@@ -21417,18 +21416,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"listr-verbose-renderer@npm:0.6.0":
-  version: 0.6.0
-  resolution: "listr-verbose-renderer@npm:0.6.0"
-  dependencies:
-    chalk: ^2.4.1
-    cli-cursor: ^2.1.0
-    date-fns: ^2.0.1
-    figures: ^2.0.0
-  checksum: 3e81779c84e031ac0c4f637521185e83c687dcdd5fcaedc5e928e9dfe2e1372fea9f9c8c311a5b0c0db67eba5df570a3b4131ca63b02027f9635577cca61c81d
-  languageName: node
-  linkType: hard
-
 "listr-verbose-renderer@npm:^0.5.0":
   version: 0.5.0
   resolution: "listr-verbose-renderer@npm:0.5.0"
@@ -21438,6 +21425,27 @@ __metadata:
     date-fns: ^1.27.2
     figures: ^2.0.0
   checksum: 041cd1e82da7054f27ae0a914e98b40d15faf9f950ef850578fc6241d3fff3c2d7158a4f6226006e566b4c47bf445be2d254dd1ce5c16569a3a5dcd575bec656
+  languageName: node
+  linkType: hard
+
+"listr2@npm:5.0.5":
+  version: 5.0.5
+  resolution: "listr2@npm:5.0.5"
+  dependencies:
+    cli-truncate: ^2.1.0
+    colorette: ^2.0.19
+    log-update: ^4.0.0
+    p-map: ^4.0.0
+    rfdc: ^1.3.0
+    rxjs: ^7.5.6
+    through: ^2.3.8
+    wrap-ansi: ^7.0.0
+  peerDependencies:
+    enquirer: ">= 2.3.0 < 3"
+  peerDependenciesMeta:
+    enquirer:
+      optional: true
+  checksum: 293eea149301ca95822359af647ef8238cbb0a052287a4bf3bb6811802b66afd21117b6c5a391a4c0356b9dff41ad9324b159f49bd3c78562b6bc8b1fd8d988a
   languageName: node
   linkType: hard
 
@@ -27305,12 +27313,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.0.0, rxjs@npm:^7.5.1, rxjs@npm:^7.5.5":
-  version: 7.5.6
-  resolution: "rxjs@npm:7.5.6"
+"rxjs@npm:^7.0.0, rxjs@npm:^7.5.1, rxjs@npm:^7.5.5, rxjs@npm:^7.5.6":
+  version: 7.5.7
+  resolution: "rxjs@npm:7.5.7"
   dependencies:
     tslib: ^2.1.0
-  checksum: d8077fb4a06c05f52fcc974ab9884d163924b8085c661c92030a522920510bf0c75583caee70409ab11992320c31f562f5402afe8b81255370c09773209fec5c
+  checksum: 283620b3c90b85467c3549f7cda0dd768bc18719cccbbdd9aacadb0f0946827ab20d036f1a00d78066d769764e73070bfee8706091d77b8d971975598f6cbbd4
   languageName: node
   linkType: hard
 
