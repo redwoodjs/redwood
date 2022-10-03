@@ -23,16 +23,13 @@ import '../../../../lib/test'
 import { files } from '../../../generate/cell/cell'
 import { tasks } from '../cell'
 
-beforeEach(() => {
-  fs.__setMockFiles(files({ name: 'User' }))
-})
-
 afterEach(() => {
   fs.__setMockFiles({})
   jest.spyOn(fs, 'unlinkSync').mockClear()
 })
 
 test('destroys cell files', async () => {
+  fs.__setMockFiles(await files({ name: 'User' }))
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({
     componentName: 'cell',
@@ -41,15 +38,15 @@ test('destroys cell files', async () => {
   })
   t.setRenderer('silent')
 
-  return t.run().then(() => {
-    const generatedFiles = Object.keys(files({ name: 'User' }))
-    expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
-    generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
-  })
+  await t.run()
+
+  const generatedFiles = Object.keys(await files({ name: 'User' }))
+  expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
+  generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
 })
 
 test('destroys cell files with stories and tests', async () => {
-  fs.__setMockFiles(files({ name: 'User', stories: true, tests: true }))
+  fs.__setMockFiles(await files({ name: 'User', stories: true, tests: true }))
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({
     componentName: 'cell',
@@ -60,11 +57,11 @@ test('destroys cell files with stories and tests', async () => {
   })
   t.setRenderer('silent')
 
-  return t.run().then(() => {
-    const generatedFiles = Object.keys(
-      files({ name: 'User', stories: true, tests: true })
-    )
-    expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
-    generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
-  })
+  await t.run()
+
+  const generatedFiles = Object.keys(
+    await files({ name: 'User', stories: true, tests: true })
+  )
+  expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
+  generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
 })

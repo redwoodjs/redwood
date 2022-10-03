@@ -16,7 +16,13 @@ jest.mock('../util', () => {
 
 import React, { useEffect, useState } from 'react'
 
-import { render, waitFor, act, fireEvent } from '@testing-library/react'
+import {
+  render,
+  waitFor,
+  act,
+  fireEvent,
+  configure,
+} from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
@@ -43,19 +49,19 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
     isAuthenticated: false,
     userMetadata: null,
     currentUser: null,
-    logIn: () => null,
-    logOut: () => null,
-    signUp: () => null,
-    getToken: () => null,
-    getCurrentUser: () => null,
+    logIn: async () => null,
+    logOut: async () => null,
+    signUp: async () => null,
+    getToken: async () => null,
+    getCurrentUser: async () => null,
     hasRole: () => false,
-    reauthenticate: () => null,
+    reauthenticate: async () => {},
     client: null,
     type: 'custom',
     hasError: false,
-    forgotPassword: () => null,
-    resetPassword: () => null,
-    validateResetToken: () => null,
+    forgotPassword: async () => null,
+    resetPassword: async () => null,
+    validateResetToken: async () => null,
   }
 
   return { ...authContextValues, ...partial }
@@ -87,11 +93,17 @@ const mockUseAuth =
       useState(isAuthenticated)
 
     useEffect(() => {
+      let timer: NodeJS.Timeout | undefined
       if (loadingTimeMs) {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setAuthLoading(false)
           setAuthIsAuthenticated(true)
         }, loadingTimeMs)
+      }
+      return () => {
+        if (timer) {
+          clearTimeout(timer)
+        }
       }
     }, [])
 
@@ -120,8 +132,12 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
   )
 }
 
+configure({
+  asyncUtilTimeout: 5_000,
+})
+
 beforeEach(() => {
-  window.history.pushState({}, null, '/')
+  window.history.pushState({}, '', '/')
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
@@ -178,7 +194,7 @@ describe('slow imports', () => {
   }) => (
     <Router
       useAuth={mockUseAuth({ isAuthenticated: authenticated, hasRole })}
-      pageLoadingDelay={100}
+      pageLoadingDelay={200}
     >
       <Route
         path="/"
@@ -248,7 +264,7 @@ describe('slow imports', () => {
   )
 
   beforeAll(() => {
-    mockDelay = 200
+    mockDelay = 400
   })
 
   afterAll(() => {
@@ -420,15 +436,35 @@ describe('slow imports', () => {
   })
 
   test('usePageLoadingContext', async () => {
-    // Had to increase this to make the test pass on Windows
-    mockDelay = 500
+    // We want to show a loading indicator if loading pages is taking a long
+    // time. But at the same time we don't want to show it right away, because
+    // then there'll be a flash of the loading indicator on every page load.
+    // So we have a `pageLoadingDelay` delay to control how long it waits
+    // before showing the loading state (default is 1000 ms).
+    //
+    // RW lazy loads pages by default, that's why it could potentially take a
+    // while to load a page. But during tests we don't do that. So we have to
+    // fake a delay. That's what `mockDelay` is for. `mockDelay` has to be
+    // longer than `pageLoadingDelay`, but not too long so the test takes
+    // longer than it has to, and also not too long so the entire test times
+    // out.
 
+    // Had to increase this to make the test pass on Windows
+    mockDelay = 700
+
+    // <TestRouter> sets pageLoadingDelay={200}. (Default is 1000.)
     const screen = render(<TestRouter />)
 
     act(() => navigate('/page-loading-context'))
 
+    // 'Page Loading Context Layout' should always be shown
     await waitFor(() => screen.getByText('Page Loading Context Layout'))
+
+    // 'loading in layout...' should only be shown while the page is loading.
+    // So in this case, for the first 700ms
     await waitFor(() => screen.getByText('loading in layout...'))
+
+    // After 700ms 'Page Loading Context Page' should be rendered
     await waitFor(() => screen.getByText('Page Loading Context Page'))
 
     // This shouldn't show up, because the page shouldn't render before it's
@@ -763,7 +799,8 @@ test('can display a loading screen with a hook', async () => {
     const [showStill, setShowStill] = useState(false)
 
     useEffect(() => {
-      setTimeout(() => setShowStill(true), 100)
+      const timer = setTimeout(() => setShowStill(true), 100)
+      return () => clearTimeout(timer)
     }, [])
 
     return <>{showStill ? 'Still authenticating...' : 'Authenticating...'}</>
@@ -880,22 +917,22 @@ test("Doesn't destroy <Set> when navigating inside, but does when navigating bet
     const ctx = React.useContext(SetContext)
 
     React.useEffect(() => {
-      ctx.setContextValue('updatedSetValue')
+      ctx?.setContextValue('updatedSetValue')
     }, [ctx])
 
-    return <p>1-{ctx.contextValue}</p>
+    return <p>1-{ctx?.contextValue}</p>
   }
 
   const Ctx2Page = () => {
     const ctx = React.useContext(SetContext)
 
-    return <p>2-{ctx.contextValue}</p>
+    return <p>2-{ctx?.contextValue}</p>
   }
 
   const Ctx3Page = () => {
     const ctx = React.useContext(SetContext)
 
-    return <p>3-{ctx.contextValue}</p>
+    return <p>3-{ctx?.contextValue}</p>
   }
 
   const TestRouter = () => {

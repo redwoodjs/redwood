@@ -39,3 +39,6 @@ export interface AvailableRoutes {
 }
 
 export { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
+
+// Used by packages/internal/src/generate/templates/web-routerRoutes.d.ts.template
+export * from './routeParamsTypes'

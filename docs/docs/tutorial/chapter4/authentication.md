@@ -9,13 +9,13 @@ Having the admin screens at `/admin` is a reasonable thing to do. Let's update t
 
 ```jsx title="web/src/Routes.js"
 import { Router, Route, Set } from '@redwoodjs/router'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={PostsLayout}>
+      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
         // highlight-start
         <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
         <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
@@ -42,13 +42,13 @@ export default Routes
 
 ```jsx title="web/src/Routes.tsx"
 import { Router, Route, Set } from '@redwoodjs/router'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={PostsLayout}>
+      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
         // highlight-start
         <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
         <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
@@ -131,7 +131,7 @@ Run this setup command to get the internals of dbAuth added to our app:
 yarn rw setup auth dbAuth
 ```
 
-When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app makes sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation.
+When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app makes sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation. When prompted to "Enable WebAuthn support", pick no - this is a separate piece of functionality we won't need for the tutorial.
 
 You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
 
@@ -209,7 +209,7 @@ Going to the admin section now prevents a non-logged in user from seeing posts, 
 ```jsx title="web/src/Routes.js"
 // highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
@@ -217,7 +217,7 @@ const Routes = () => {
     <Router>
       // highlight-next-line
       <Private unauthenticated="home">
-        <Set wrap={PostsLayout}>
+        <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
           <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
           <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
           <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
@@ -245,7 +245,7 @@ export default Routes
 ```jsx title="web/src/Routes.tsx"
 // highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
-import PostsLayout from 'src/layouts/PostsLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
@@ -253,7 +253,7 @@ const Routes = () => {
     <Router>
       // highlight-next-line
       <Private unauthenticated="home">
-        <Set wrap={PostsLayout}>
+        <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
           <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
           <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
           <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
