@@ -36,7 +36,7 @@ test('destroys cell files', async () => {
     filesFn: files,
     name: 'User',
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   await t.run()
 
@@ -55,7 +55,7 @@ test('destroys cell files with stories and tests', async () => {
     stories: true,
     tests: true,
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   await t.run()
 

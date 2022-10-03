@@ -6135,7 +6135,7 @@ __metadata:
     aws-lambda: 1.0.7
     chalk: 4.1.2
     chokidar: 3.5.3
-    core-js: 3.25.3
+    core-js: 3.25.5
     fast-json-parse: 1.0.3
     fastify: 4.7.0
     fastify-raw-body: 4.1.0
@@ -6174,7 +6174,7 @@ __metadata:
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
     base64url: 3.0.1
-    core-js: 3.25.3
+    core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     crypto-js: 4.1.1
     humanize-string: 2.1.0
@@ -6231,7 +6231,7 @@ __metadata:
     "@supabase/supabase-js": 1.35.7
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.50
-    core-js: 3.25.3
+    core-js: 3.25.5
     firebase: 9.9.3
     firebase-admin: 10.3.0
     gotrue-js: 0.9.29
@@ -6263,7 +6263,7 @@ __metadata:
     chalk: 4.1.2
     concurrently: 7.3.0
     configstore: 3.1.5
-    core-js: 3.25.3
+    core-js: 3.25.5
     cross-env: 7.0.3
     decamelize: 5.0.0
     dotenv-defaults: 5.0.2
@@ -6273,8 +6273,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 29.1.2
     latest-version: 5.1.0
-    listr: 0.14.3
-    listr-verbose-renderer: 0.6.0
+    listr2: 5.0.5
     lodash: 4.17.21
     param-case: 3.0.4
     pascalcase: 1.0.0
@@ -6311,7 +6310,7 @@ __metadata:
     "@types/prettier": 2.7.0
     "@types/yargs": 17.0.12
     "@vscode/ripgrep": 1.14.2
-    core-js: 3.25.3
+    core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     deepmerge: 4.2.2
     execa: 5.1.1
@@ -6361,7 +6360,7 @@ __metadata:
     babel-plugin-module-resolver: 4.1.0
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
-    core-js: 3.25.3
+    core-js: 3.25.5
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 4.0.0
     dotenv-webpack: 8.0.1
@@ -6447,7 +6446,7 @@ __metadata:
     "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
-    core-js: 3.25.3
+    core-js: 3.25.5
     graphql: 16.6.0
     jest: 29.1.2
     nodemon: 2.0.20
@@ -6487,7 +6486,7 @@ __metadata:
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
     aws-lambda: 1.0.7
-    core-js: 3.25.3
+    core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     graphql: 16.6.0
     graphql-scalars: 1.17.0
@@ -6529,7 +6528,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: 0.6.0
     babel-plugin-tester: 10.1.0
     chalk: 4.1.2
-    core-js: 3.25.3
+    core-js: 3.25.5
     deepmerge: 4.2.2
     esbuild: 0.15.10
     fast-glob: 3.2.12
@@ -6568,7 +6567,7 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.12
-    core-js: 3.25.3
+    core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     graphql: 16.6.0
     jest: 29.1.2
@@ -6589,7 +6588,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.1
     "@prisma/client": 4.3.1
     "@prisma/internals": 4.3.1
-    core-js: 3.25.3
+    core-js: 3.25.5
     esbuild: 0.15.10
     jest: 29.1.2
   languageName: unknown
@@ -6607,7 +6606,7 @@ __metadata:
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
-    core-js: 3.25.3
+    core-js: 3.25.5
     jest: 29.1.2
     lodash.isequal: 4.5.0
     prop-types: 15.8.1
@@ -6633,7 +6632,7 @@ __metadata:
     "@types/node": 16.11.47
     "@types/vscode": 1.70.0
     camelcase: 6.3.0
-    core-js: 3.25.3
+    core-js: 3.25.5
     deepmerge: 4.2.2
     dotenv-defaults: 5.0.2
     enquirer: 2.3.6
@@ -6669,7 +6668,7 @@ __metadata:
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.12
     ci-info: 3.3.2
-    core-js: 3.25.3
+    core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     envinfo: 7.8.1
     jest: 29.1.2
@@ -6710,7 +6709,7 @@ __metadata:
     "@types/webpack": 5.28.0
     babel-jest: 29.1.2
     babel-plugin-inline-react-svg: 2.0.1
-    core-js: 3.25.3
+    core-js: 3.25.5
     fast-glob: 3.2.12
     jest: 29.1.2
     jest-environment-jsdom: 29.1.2
@@ -6737,7 +6736,7 @@ __metadata:
     "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     "@types/testing-library__jest-dom": 5.14.5
-    core-js: 3.25.3
+    core-js: 3.25.5
     graphql: 16.6.0
     graphql-tag: 2.12.6
     jest: 29.1.2
@@ -12954,10 +12953,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.10, colorette@npm:^2.0.14, colorette@npm:^2.0.16":
-  version: 2.0.16
-  resolution: "colorette@npm:2.0.16"
-  checksum: 7430bd996545347f262ae9716bfc8ca3776606e9db854279082004f3141b15a64ad2ee0e4f10cacba5a07cc92ca3edc2d01cbe73fd2843ccd80e98d0e3a8e79b
+"colorette@npm:^2.0.10, colorette@npm:^2.0.14, colorette@npm:^2.0.16, colorette@npm:^2.0.19":
+  version: 2.0.19
+  resolution: "colorette@npm:2.0.19"
+  checksum: 2bcc9134095750fece6e88167011499b964b78bf0ea953469130ddb1dba3c8fe6c03debb0ae181e710e2be10900d117460f980483a7df4ba4a1bac3b182ecb64
   languageName: node
   linkType: hard
 
@@ -13478,10 +13477,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.25.3, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.24.0, core-js@npm:^3.25.1, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
-  version: 3.25.3
-  resolution: "core-js@npm:3.25.3"
-  checksum: c10171de55552ac8d66e5608b69bf83d91cc814cb86bc3ff949429c46e48fd7b84d33137c1946807766631bab078dba10c158627de30fd907cbb7ac7f67ba6b7
+"core-js@npm:3.25.5, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.24.0, core-js@npm:^3.25.1, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.25.5
+  resolution: "core-js@npm:3.25.5"
+  checksum: 4b94b271f924cecf98fa5b1031c0109c9da2ff97a3d4df83465be9e90c3bf0b32a0bed98bb6a3c3aaa8951109c6fb9b3111fbe77a7036e075619c5a40a79dfbf
   languageName: node
   linkType: hard
 
@@ -13663,11 +13662,11 @@ __metadata:
     "@types/prompts": 2.4.0
     chalk: 4.1.2
     check-node-version: 4.2.1
-    core-js: 3.25.3
+    core-js: 3.25.5
     execa: 5.1.1
     fs-extra: 10.1.0
     jest: 29.1.2
-    listr: 0.14.3
+    listr2: 5.0.5
     prompts: 2.4.2
     typescript: 4.7.4
     yargs: 17.5.1
@@ -14239,7 +14238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.0.1, date-fns@npm:^2.16.1":
+"date-fns@npm:^2.16.1":
   version: 2.28.0
   resolution: "date-fns@npm:2.28.0"
   checksum: ecdacd36326e7f5f8c4f1e78ae931a8997109f1c841f5163053b866585ca899521b0e7a114eeb48a9fe5135a550787bd4bbd8baa321cded0b4d823f847889a80
@@ -21417,18 +21416,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"listr-verbose-renderer@npm:0.6.0":
-  version: 0.6.0
-  resolution: "listr-verbose-renderer@npm:0.6.0"
-  dependencies:
-    chalk: ^2.4.1
-    cli-cursor: ^2.1.0
-    date-fns: ^2.0.1
-    figures: ^2.0.0
-  checksum: 3e81779c84e031ac0c4f637521185e83c687dcdd5fcaedc5e928e9dfe2e1372fea9f9c8c311a5b0c0db67eba5df570a3b4131ca63b02027f9635577cca61c81d
-  languageName: node
-  linkType: hard
-
 "listr-verbose-renderer@npm:^0.5.0":
   version: 0.5.0
   resolution: "listr-verbose-renderer@npm:0.5.0"
@@ -21438,6 +21425,27 @@ __metadata:
     date-fns: ^1.27.2
     figures: ^2.0.0
   checksum: 041cd1e82da7054f27ae0a914e98b40d15faf9f950ef850578fc6241d3fff3c2d7158a4f6226006e566b4c47bf445be2d254dd1ce5c16569a3a5dcd575bec656
+  languageName: node
+  linkType: hard
+
+"listr2@npm:5.0.5":
+  version: 5.0.5
+  resolution: "listr2@npm:5.0.5"
+  dependencies:
+    cli-truncate: ^2.1.0
+    colorette: ^2.0.19
+    log-update: ^4.0.0
+    p-map: ^4.0.0
+    rfdc: ^1.3.0
+    rxjs: ^7.5.6
+    through: ^2.3.8
+    wrap-ansi: ^7.0.0
+  peerDependencies:
+    enquirer: ">= 2.3.0 < 3"
+  peerDependenciesMeta:
+    enquirer:
+      optional: true
+  checksum: 293eea149301ca95822359af647ef8238cbb0a052287a4bf3bb6811802b66afd21117b6c5a391a4c0356b9dff41ad9324b159f49bd3c78562b6bc8b1fd8d988a
   languageName: node
   linkType: hard
 
@@ -27218,7 +27226,7 @@ __metadata:
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
-    core-js: 3.25.3
+    core-js: 3.25.5
     cypress: 10.9.0
     cypress-wait-until: 1.7.2
     eslint: 8.24.0
@@ -27305,12 +27313,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.0.0, rxjs@npm:^7.5.1, rxjs@npm:^7.5.5":
-  version: 7.5.6
-  resolution: "rxjs@npm:7.5.6"
+"rxjs@npm:^7.0.0, rxjs@npm:^7.5.1, rxjs@npm:^7.5.5, rxjs@npm:^7.5.6":
+  version: 7.5.7
+  resolution: "rxjs@npm:7.5.7"
   dependencies:
     tslib: ^2.1.0
-  checksum: d8077fb4a06c05f52fcc974ab9884d163924b8085c661c92030a522920510bf0c75583caee70409ab11992320c31f562f5402afe8b81255370c09773209fec5c
+  checksum: 283620b3c90b85467c3549f7cda0dd768bc18719cccbbdd9aacadb0f0946827ab20d036f1a00d78066d769764e73070bfee8706091d77b8d971975598f6cbbd4
   languageName: node
   linkType: hard
 

@@ -14,12 +14,12 @@ jest.mock('../../../../lib/project', () => ({
 }))
 
 jest.mock('execa')
-jest.mock('listr')
+jest.mock('listr2')
 
 import fs from 'fs'
 
 import chalk from 'chalk'
-import listr from 'listr'
+import { Listr } from 'listr2'
 
 import * as auth from '../auth'
 
@@ -33,7 +33,7 @@ describe('Auth generator tests', () => {
 
   const mockListrRun = jest.fn()
 
-  listr.mockImplementation(() => {
+  Listr.mockImplementation(() => {
     return {
       run: mockListrRun,
     }

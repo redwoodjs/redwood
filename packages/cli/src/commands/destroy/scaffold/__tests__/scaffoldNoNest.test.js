@@ -63,9 +63,9 @@ describe('rw destroy scaffold', () => {
         tests: false,
         nestScaffoldByModel: false,
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
-      return t._tasks[0].run().then(async () => {
+      return t.tasks[0].run().then(async () => {
         const generatedFiles = Object.keys(
           await files({
             ...getDefaultArgs(defaults),
@@ -110,9 +110,9 @@ describe('rw destroy scaffold', () => {
           tests: false,
           nestScaffoldByModel: false,
         })
-        t.setRenderer('silent')
+        t.options.renderer = 'silent'
 
-        return t._tasks[0].run().then(async () => {
+        return t.tasks[0].run().then(async () => {
           const generatedFiles = Object.keys(
             await files({
               ...getDefaultArgs(defaults),
@@ -136,9 +136,9 @@ describe('rw destroy scaffold', () => {
         tests: false,
         nestScaffoldByModel: false,
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
-      return t._tasks[1].run().then(() => {
+      return t.tasks[1].run().then(() => {
         const routes = fs.readFileSync(getPaths().web.routes)
         expect(routes).toEqual(
           [
@@ -187,9 +187,9 @@ describe('rw destroy scaffold', () => {
         tests: false,
         nestScaffoldByModel: false,
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
-      return t._tasks[0].run().then(async () => {
+      return t.tasks[0].run().then(async () => {
         const generatedFiles = Object.keys(
           await files({
             ...getDefaultArgs(defaults),
@@ -234,9 +234,9 @@ describe('rw destroy scaffold', () => {
           tests: false,
           nestScaffoldByModel: false,
         })
-        t.setRenderer('silent')
+        t.options.renderer = 'silent'
 
-        return t._tasks[0].run().then(async () => {
+        return t.tasks[0].run().then(async () => {
           const generatedFiles = Object.keys(
             await files({
               ...getDefaultArgs(defaults),
@@ -261,9 +261,9 @@ describe('rw destroy scaffold', () => {
         tests: false,
         nestScaffoldByModel: false,
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
-      return t._tasks[1].run().then(() => {
+      return t.tasks[1].run().then(() => {
         const routes = fs.readFileSync(getPaths().web.routes)
         expect(routes).toEqual(
           [
