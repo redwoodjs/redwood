@@ -1,4 +1,4 @@
-import {  getExecOutput, exec } from '@actions/exec'
+import { getExecOutput, exec } from '@actions/exec'
 
 const runAllContributors = (args) => {
   args = Array.isArray(args) ? args : [args]
@@ -56,13 +56,17 @@ const contributors = stdout
     (contributor) => !ALL_CONTRIBUTORS_IGNORE_LIST.includes(contributor)
   )
 
-for (const contributor of contributors) {
-  await runAllContributors(['add', contributor, 'code'])
+if (contributors.length === 0) {
+  console.log('No contributors to add')
+} else {
+  for (const contributor of contributors) {
+    await runAllContributors(['add', contributor, 'code'])
+  }
+
+  await runAllContributors(['generate', '--contributorsPerLine=5'])
+
+  await exec('git', ['config', 'user.name', 'github-actions'])
+  await exec('git', ['config', 'user.email', 'github-actions@github.com'])
+  await exec('git', ['commit', '-am chore: update all contributors'])
+  await exec('git', ['push'])
 }
-
-await runAllContributors(['generate', '--contributorsPerLine=5'])
-
-await exec('git', ['config', 'user.name', 'github-actions'])
-await exec('git', ['config', 'user.email', 'github-actions@github.com'])
-await exec('git', ['commit', '-am chore: update all contributors'])
-await exec('git', ['push'])
