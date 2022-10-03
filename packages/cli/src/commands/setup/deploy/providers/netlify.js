@@ -1,7 +1,7 @@
 // import terminalLink from 'terminal-link'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -23,14 +23,17 @@ const notes = [
 ]
 
 export const handler = async ({ force }) => {
-  const tasks = new Listr([
-    updateApiURLTask('/.netlify/functions'),
-    addFilesTask({
-      files,
-      force,
-    }),
-    printSetupNotes(notes),
-  ])
+  const tasks = new Listr(
+    [
+      updateApiURLTask('/.netlify/functions'),
+      addFilesTask({
+        files,
+        force,
+      }),
+      printSetupNotes(notes),
+    ],
+    { rendererOptions: { collapse: false } }
+  )
   try {
     await tasks.run()
   } catch (e) {

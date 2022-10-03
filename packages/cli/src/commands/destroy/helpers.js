@@ -1,4 +1,4 @@
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { deleteFilesTask } from '../../lib'
 import c from '../../lib/colors'
@@ -14,7 +14,7 @@ const tasks = ({ componentName, filesFn, name }) =>
         },
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 
 export const createYargsForComponentDestroy = ({

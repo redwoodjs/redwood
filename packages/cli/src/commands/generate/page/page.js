@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 
 import camelcase from 'camelcase'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
@@ -243,7 +243,7 @@ export const handler = async ({
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

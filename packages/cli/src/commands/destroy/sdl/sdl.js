@@ -1,4 +1,4 @@
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { deleteFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
@@ -27,7 +27,7 @@ export const tasks = ({ model }) =>
         },
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 
 export const handler = async ({ model }) => {

@@ -26,7 +26,7 @@ afterEach(() => {
 test('destroys layout files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({ componentName: 'layout', filesFn: files, name: 'Blog' })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(files({ name: 'Blog' }))
@@ -45,7 +45,7 @@ test('destroys layout files with stories and tests', async () => {
     stories: true,
     tests: true,
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(
