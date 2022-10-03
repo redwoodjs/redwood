@@ -1,4 +1,5 @@
 export const flightcontrolConfig = {
+  $schema: 'https://app.flightcontrol.dev/schema.json',
   environments: [
     {
       id: 'development',
@@ -12,10 +13,9 @@ export const flightcontrolConfig = {
           id: 'redwood-api',
           name: 'Redwood API',
           type: 'fargate',
+          buildType: 'nixpacks',
           cpu: 0.25,
           memory: 0.5,
-          installCommand:
-            'yarn set version stable && NODE_ENV=development yarn install --immutable',
           buildCommand: 'yarn rw deploy flightcontrol api',
           startCommand: 'yarn rw deploy flightcontrol api --serve',
           postBuildCommand: 'echo 0',
@@ -31,9 +31,8 @@ export const flightcontrolConfig = {
           id: 'redwood-web',
           name: 'Redwood Web',
           type: 'static',
+          buildType: 'nixpacks',
           singlePageApp: true,
-          installCommand:
-            'yarn set version stable && NODE_ENV=development yarn install --immutable',
           buildCommand: 'yarn rw deploy flightcontrol web',
           outputDirectory: 'web/dist',
           envVariables: {
