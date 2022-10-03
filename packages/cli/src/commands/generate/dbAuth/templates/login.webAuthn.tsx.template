@@ -146,7 +146,7 @@ const LoginPage = ({ type }) => {
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        ${usernameCapitalised}
+        ${usernameTitlecase}
       </Label>
       <TextField
         name="username"
@@ -157,7 +157,7 @@ const LoginPage = ({ type }) => {
         validation={{
           required: {
             value: true,
-            message: '${usernameCapitalised} is required',
+            message: '${usernameTitlecase} is required',
           },
         }}
       />
@@ -169,7 +169,7 @@ const LoginPage = ({ type }) => {
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        ${passwordCapitalised}
+        ${passwordTitlecase}
       </Label>
       <PasswordField
         name="password"
@@ -179,14 +179,14 @@ const LoginPage = ({ type }) => {
         validation={{
           required: {
             value: true,
-            message: '${passwordCapitalised} is required',
+            message: '${passwordTitlecase} is required',
           },
         }}
       />
 
       <div className="rw-forgot-link">
         <Link to={routes.forgotPassword()} className="rw-forgot-link">
-          Forgot ${passwordCapitalised}?
+          Forgot ${passwordTitlecase}?
         </Link>
       </div>
 
