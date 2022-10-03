@@ -1,5 +1,5 @@
 export const flightcontrolConfig = {
-  "$schema": "https://app.flightcontrol.dev/schema.json",
+  $schema: 'https://app.flightcontrol.dev/schema.json',
   environments: [
     {
       id: 'development',
