@@ -1,9 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import { prompt } from 'enquirer'
 import { Listr } from 'listr2'
-import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+import { titleCase } from 'title-case'
 
 import {
   addRoutesToRouterTask,
@@ -92,13 +93,13 @@ export const builder = (yargs) => {
       description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
     })
-    .option('username', {
-      default: 'username',
+    .option('username-label', {
+      default: null,
       description: 'Override default form label for username field',
       type: 'string',
     })
-    .option('password', {
-      default: 'password',
+    .option('password-label', {
+      default: null,
       description: 'Override default form label for password field',
       type: 'string',
     })
@@ -124,24 +125,16 @@ export const files = ({
   skipReset,
   skipSignup,
   webAuthn,
-  username,
-  password,
+  usernameLabel,
+  passwordlabel,
 }) => {
   const files = []
 
-  const usernameLowercase = username?.toLowerCase() || 'username'
-  const usernameCapitalised =
-    usernameLowercase.charAt(0).toUpperCase() + usernameLowercase.slice(1)
-
-  const passwordLowercase = password?.toLowerCase() || 'password'
-  const passwordCapitalised =
-    passwordLowercase.charAt(0).toUpperCase() + passwordLowercase.slice(1)
-
   const templateVars = {
-    usernameLowercase,
-    usernameCapitalised,
-    passwordLowercase,
-    passwordCapitalised,
+    usernameLowercase: usernameLabel.toLowerCase(),
+    usernameTitlecase: titleCase(usernameLabel),
+    passwordLowercase: passwordlabel.toLowerCase(),
+    passwordTitlecase: titleCase(passwordlabel),
   }
 
   if (!skipForgot) {
@@ -244,11 +237,57 @@ const tasks = ({
   skipReset,
   skipSignup,
   webAuthn,
-  username,
-  password,
+  usernameLabel,
+  passwordlabel,
 }) => {
   return new Listr(
     [
+      {
+        title: 'Determining UI labels...',
+        skip: () => {
+          return usernameLabel && passwordlabel
+        },
+        task: async (ctx, task) => {
+          return task.newListr([
+            {
+              title: 'Username label',
+              task: async (subctx, subtask) => {
+                if (usernameLabel) {
+                  subtask.skip(
+                    `Argument username-label is set, using: "${usernameLabel}"`
+                  )
+                  return
+                }
+                usernameLabel = await subtask.prompt({
+                  type: 'input',
+                  name: 'username',
+                  message: 'What would you like the username label to be:',
+                  default: 'Username',
+                })
+                subtask.title = `Username label: "${usernameLabel}"`
+              },
+            },
+            {
+              title: 'Password label',
+              task: async (subctx, subtask) => {
+                if (passwordlabel) {
+                  subtask.skip(
+                    `Argument password-label passed, using: "${passwordlabel}"`
+                  )
+                  return
+                }
+                passwordlabel = await subtask.prompt({
+                  type: 'input',
+                  name: 'password',
+                  message: 'What would you like the password label to be:',
+                  default: 'Password',
+                })
+                subtask.title = `Password label: "${passwordlabel}"`
+              },
+            },
+          ])
+        },
+      },
       {
         title: 'Creating pages...',
         task: async () => {
@@ -261,8 +300,8 @@ const tasks = ({
               skipReset,
               skipSignup,
               webAuthn,
-              username,
-              password,
+              usernameLabel,
+              passwordlabel,
             }),
             {
               overwriteExisting: force,
@@ -295,11 +334,11 @@ export const handler = async (yargs) => {
   let includeWebAuthn = yargs.webauthn
 
   if (includeWebAuthn === null) {
-    const response = await prompts({
+    const response = await prompt({
       type: 'confirm',
       name: 'answer',
       message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
-      initial: false,
+      default: false,
     })
     includeWebAuthn = response.answer
   }
