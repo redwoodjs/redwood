@@ -20,9 +20,9 @@ runs:
       id: yarn-cache
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: yarn-12345-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+        key: yarn-1234-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
         restore-keys: |
-          yarn-12345-
+          yarn-1234-
 
     - run: yarn install
       shell: bash
