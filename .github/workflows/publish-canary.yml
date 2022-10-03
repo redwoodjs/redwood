@@ -2,8 +2,8 @@ name: 🦜 Publish Canary
 
 on:
   push:
-    branches: [main]
-    # We don't want this to run on release
+    branches: [main, release]
+    # We don't want this to run when we publish a release.
     tags-ignore: ['v**']
     # No need to run on docs-only changes
     paths-ignore: ['docs/**']
@@ -16,6 +16,18 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.value }}
     steps:
+      - name: Set tag
+        run: |
+          if [[ "$GITHUB_BASE_REF" = 'main' ]]; then
+            TAG = 'canary'
+          else
+            TAG = 'next'
+          fi
+
+          echo "Publishing $TAG"
+
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
       - uses: actions/checkout@v3
         # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
         #  This is required because lerna uses tags to determine the version.
@@ -42,8 +54,8 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           yarn lerna publish --include-merged-tags \
                              --canary \
-                             --preid canary \
-                             --dist-tag canary \
+                             --preid $TAG \
+                             --dist-tag $TAG \
                              --force-publish \
                              --loglevel verbose \
                              --no-git-reset \
