@@ -6273,8 +6273,7 @@ __metadata:
     fs-extra: 10.1.0
     jest: 29.1.2
     latest-version: 5.1.0
-    listr: 0.14.3
-    listr-verbose-renderer: 0.6.0
+    listr2: 5.0.5
     lodash: 4.17.21
     param-case: 3.0.4
     pascalcase: 1.0.0
@@ -14239,7 +14238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.0.1, date-fns@npm:^2.16.1":
+"date-fns@npm:^2.16.1":
   version: 2.28.0
   resolution: "date-fns@npm:2.28.0"
   checksum: ecdacd36326e7f5f8c4f1e78ae931a8997109f1c841f5163053b866585ca899521b0e7a114eeb48a9fe5135a550787bd4bbd8baa321cded0b4d823f847889a80
@@ -21414,18 +21413,6 @@ __metadata:
   peerDependencies:
     listr: ^0.14.2
   checksum: 8ade44bf3dc6146c8e0178000619439e8889792c4689b66be6ce82bd459f5fe462ecb34b05147fb206a8ad60e6d4e6f34c9f48038e18366f867fd972688b8edc
-  languageName: node
-  linkType: hard
-
-"listr-verbose-renderer@npm:0.6.0":
-  version: 0.6.0
-  resolution: "listr-verbose-renderer@npm:0.6.0"
-  dependencies:
-    chalk: ^2.4.1
-    cli-cursor: ^2.1.0
-    date-fns: ^2.0.1
-    figures: ^2.0.0
-  checksum: 3e81779c84e031ac0c4f637521185e83c687dcdd5fcaedc5e928e9dfe2e1372fea9f9c8c311a5b0c0db67eba5df570a3b4131ca63b02027f9635577cca61c81d
   languageName: node
   linkType: hard
 
