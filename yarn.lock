@@ -23192,12 +23192,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-bundled@npm:^1.1.1, npm-bundled@npm:^1.1.2":
+"npm-bundled@npm:^1.1.1":
   version: 1.1.2
   resolution: "npm-bundled@npm:1.1.2"
   dependencies:
     npm-normalize-package-bin: ^1.0.1
   checksum: 3f2337789afc8cb608a0dd71cefe459531053d48a5497db14b07b985c4cab15afcae88600db9f92eae072c89b982eeeec8e4463e1d77bc03a7e90f5dacf29769
+  languageName: node
+  linkType: hard
+
+"npm-bundled@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "npm-bundled@npm:2.0.1"
+  dependencies:
+    npm-normalize-package-bin: ^2.0.0
+  checksum: 5b2dc1de455d38200e49c6205dee185ce919ea6b608672c693bec8907116bc5686dabcc150347630d351c1c533315fd60a1910ce00bdad6bb204cef016b90b7d
   languageName: node
   linkType: hard
 
@@ -23214,6 +23223,13 @@ __metadata:
   version: 1.0.1
   resolution: "npm-normalize-package-bin@npm:1.0.1"
   checksum: b0c8c05fe419a122e0ff970ccbe7874ae24b4b4b08941a24d18097fe6e1f4b93e3f6abfb5512f9c5488827a5592f2fb3ce2431c41d338802aed24b9a0c160551
+  languageName: node
+  linkType: hard
+
+"npm-normalize-package-bin@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "npm-normalize-package-bin@npm:2.0.0"
+  checksum: 9b5283a2e423124c60fbc14244d36686b59e517d29156eacf9df8d3dc5d5bf4d9444b7669c607567ed2e089bbdbef5a2b3678cbf567284eeff3612da6939514b
   languageName: node
   linkType: hard
 
@@ -23240,17 +23256,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-packlist@npm:5.1.1, npm-packlist@npm:^5.1.0, npm-packlist@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "npm-packlist@npm:5.1.1"
+"npm-packlist@npm:5.1.3, npm-packlist@npm:^5.1.0, npm-packlist@npm:^5.1.1":
+  version: 5.1.3
+  resolution: "npm-packlist@npm:5.1.3"
   dependencies:
     glob: ^8.0.1
     ignore-walk: ^5.0.1
-    npm-bundled: ^1.1.2
-    npm-normalize-package-bin: ^1.0.1
+    npm-bundled: ^2.0.0
+    npm-normalize-package-bin: ^2.0.0
   bin:
     npm-packlist: bin/index.js
-  checksum: 8d9845883722931576e8eb10ef779407ecfe7d3aec696af76fb3ccbee776560c214ef87bad3615f98bdf0bab759a3a0e5667932cd2c29e14d2a37de22ddf601c
+  checksum: a8bea97661b2a7132bc8832d5560da24f823ee5324429bd16eb82b7873557de14641bc3fed8a7611b0d88b9771e59e99e01a9e551a53adb164327ded6128aada
   languageName: node
   linkType: hard
 
@@ -26954,7 +26970,7 @@ __metadata:
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.20
-    npm-packlist: 5.1.1
+    npm-packlist: 5.1.3
     nx: 14.7.5
     octokit: 2.0.7
     ora: 5.4.1
