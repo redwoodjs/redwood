@@ -3,7 +3,7 @@ import path from 'path'
 
 import boxen from 'boxen'
 import latestVersion from 'latest-version'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import semver from 'semver'
 import terminalLink from 'terminal-link'
 
@@ -242,7 +242,7 @@ function readUpgradeFile() {
 }
 
 function getUpgradeAvailableMessage(updateData) {
-  let message = `  Checklist:\n   1. Read release notes at: "https://github.com/redwoodjs/redwood/releases"  \n   2. Run "yarn rw upgrade" to upgrade  `
+  let message = `  Checklist:\n   1. Read the release notes at: https://github.com/redwoodjs/redwood/releases  \n   2. Run "yarn rw upgrade" to upgrade  `
   return boxen(message, {
     padding: 0,
     margin: 1,
