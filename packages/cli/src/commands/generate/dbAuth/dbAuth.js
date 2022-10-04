@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import { prompt } from 'enquirer'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
@@ -292,6 +291,23 @@ const tasks = ({
         },
       },
       {
+        title: 'Querying WebAuthn addition...',
+        task: async (ctx, task) => {
+          if (webAuthn === undefined) {
+            const response = await task.prompt({
+              type: 'confirm',
+              name: 'answer',
+              message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+              default: false,
+            })
+            webAuthn = response
+            task.title = webAuthn
+              ? 'WebAuthn addition included'
+              : 'WebAuthn addition not included'
+          }
+        },
+      },
+      {
         title: 'Creating pages...',
         task: async () => {
           return writeFilesTask(
@@ -334,19 +350,7 @@ const tasks = ({
 }
 
 export const handler = async (yargs) => {
-  let includeWebAuthn = yargs.webauthn
-
-  if (includeWebAuthn === null) {
-    const response = await prompt({
-      type: 'confirm',
-      name: 'answer',
-      message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
-      default: false,
-    })
-    includeWebAuthn = response.answer
-  }
-
-  const t = tasks({ ...yargs, webAuthn: includeWebAuthn })
+  const t = tasks({ ...yargs })
 
   try {
     await t.run()
