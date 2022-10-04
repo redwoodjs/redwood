@@ -8298,10 +8298,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsd/typescript@npm:4.8.3":
-  version: 4.8.3
-  resolution: "@tsd/typescript@npm:4.8.3"
-  checksum: 3a94a1401272b7f0958ed792790b28fc3c9c26541a663de0b46fbbe3db7d7d70f363451da126fed2fff4aa68c0129b0d6f040d93c735103bd68c2e150ee7c3f9
+"@tsd/typescript@npm:4.8.4":
+  version: 4.8.4
+  resolution: "@tsd/typescript@npm:4.8.4"
+  checksum: 4ec7b6c8fc6e3a63cb3ea5131dd2e2a966b4fd514368cdee8ae9436c5fed594f7ba570632c97c65fce6f598885bc104e33caa200854067db493a84cda8059548
   languageName: node
   linkType: hard
 
@@ -26922,7 +26922,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.4.3
-    "@tsd/typescript": 4.8.3
+    "@tsd/typescript": 4.8.4
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.1.1
