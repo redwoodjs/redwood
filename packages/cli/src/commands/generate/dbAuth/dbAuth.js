@@ -123,7 +123,7 @@ export const files = ({
   skipLogin,
   skipReset,
   skipSignup,
-  webAuthn,
+  webauthn,
   usernameLabel,
   passwordlabel,
 }) => {
@@ -161,7 +161,7 @@ export const files = ({
         extension: typescript ? '.tsx' : '.js',
         webPathSection: 'pages',
         generator: 'dbAuth',
-        templatePath: webAuthn
+        templatePath: webauthn
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
         templateVars,
@@ -238,7 +238,7 @@ const tasks = ({
   skipLogin,
   skipReset,
   skipSignup,
-  webAuthn,
+  webauthn,
   usernameLabel,
   passwordlabel,
 }) => {
@@ -293,18 +293,24 @@ const tasks = ({
       {
         title: 'Querying WebAuthn addition...',
         task: async (ctx, task) => {
-          if (webAuthn === undefined) {
-            const response = await task.prompt({
-              type: 'confirm',
-              name: 'answer',
-              message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
-              default: false,
-            })
-            webAuthn = response
-            task.title = webAuthn
-              ? 'WebAuthn addition included'
-              : 'WebAuthn addition not included'
+          if (webauthn !== undefined) {
+            task.skip(
+              `Querying WebAuthn addition: argument webauthn passed, ${
+                webauthn ? 'WebAuthn included' : 'WebAuthn not included'
+              }`
+            )
+            return
           }
+          const response = await task.prompt({
+            type: 'confirm',
+            name: 'answer',
+            message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+            default: false,
+          })
+          webauthn = response
+          task.title = `Querying WebAuthn addition: WebAuthn addition ${
+            webauthn ? '' : 'not'
+          } included`
         },
       },
       {
@@ -318,7 +324,7 @@ const tasks = ({
               skipLogin,
               skipReset,
               skipSignup,
-              webAuthn,
+              webauthn,
               usernameLabel,
               passwordlabel,
             }),
@@ -341,7 +347,7 @@ const tasks = ({
       {
         title: 'One more thing...',
         task: (ctx, task) => {
-          task.title = webAuthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
+          task.title = webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
         },
       },
     ],
