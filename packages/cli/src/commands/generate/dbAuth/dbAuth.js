@@ -293,11 +293,11 @@ const tasks = ({
       {
         title: 'Querying WebAuthn addition...',
         task: async (ctx, task) => {
-          if (webauthn !== undefined) {
+          if (webauthn !== null) {
             task.skip(
-              `Querying WebAuthn addition: argument webauthn passed, ${
-                webauthn ? 'WebAuthn included' : 'WebAuthn not included'
-              }`
+              `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
+                webauthn ? '' : 'not'
+              } included`
             )
             return
           }
