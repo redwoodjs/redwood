@@ -64,10 +64,10 @@ export const handler = async ({ force, silent, skip, unskip }) => {
     return
   }
 
-  const updateTasks = new Listr([], { collapse: false })
-  if (silent) {
-    updateTasks.setRenderer('silent')
-  }
+  const updateTasks = new Listr([], {
+    rendererOptions: { collapse: false },
+    renderer: silent ? 'silent' : 'default',
+  })
 
   // This is only here because we need to display to the user after listr tasks have run
   // TODO: When listr2 is available handle all output within in the listr2 task then this bool can be removed
@@ -230,8 +230,9 @@ function readUpgradeFile() {
     if (error.code === 'ENOENT') {
       // default update-data.json file
       return {
-        skipVersion: '0.0.0',
+        localVersion: '0.0.0',
         remoteVersion: '0.0.0',
+        skipVersion: '0.0.0',
         upgradeAvailable: false,
         lastChecked: 946684800000, // 2000-01-01T00:00:00.000Z
         lastShown: 946684800000, // 2000-01-01T00:00:00.000Z
