@@ -2383,13 +2383,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:8.2.2":
-  version: 8.2.2
-  resolution: "@fastify/http-proxy@npm:8.2.2"
+"@fastify/http-proxy@npm:8.2.3":
+  version: 8.2.3
+  resolution: "@fastify/http-proxy@npm:8.2.3"
   dependencies:
     "@fastify/reply-from": ^8.0.0
     ws: ^8.4.2
-  checksum: 1cb145fab3de4fb949ae055fcc7de9923efe6a0988bbcf39345a79226bccd33dd879decc63793736eff8e9635b4ff12928c5bc6f57e5a366edb8a0e05e442d82
+  checksum: 704947f3a264580079980f177eab7c0fb06b374d61ce1f445ce8609ff0b24cd5db33caec34b6af5cb7f65ac8329f73216e40c348c27e6091acdd295bd77ee607
   languageName: node
   linkType: hard
 
@@ -6123,7 +6123,7 @@ __metadata:
     "@babel/core": 7.19.3
     "@babel/plugin-transform-runtime": 7.19.1
     "@babel/runtime-corejs3": 7.19.1
-    "@fastify/http-proxy": 8.2.2
+    "@fastify/http-proxy": 8.2.3
     "@fastify/static": 6.5.0
     "@fastify/url-data": 5.1.0
     "@types/aws-lambda": 8.10.101
@@ -6627,7 +6627,7 @@ __metadata:
     "@redwoodjs/internal": 3.0.3
     "@types/fs-extra": 9.0.13
     "@types/line-column": 1.0.0
-    "@types/lodash": 4.14.185
+    "@types/lodash": 4.14.186
     "@types/lru-cache": 5.1.1
     "@types/node": 16.11.47
     "@types/vscode": 1.70.0
@@ -8859,10 +8859,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*, @types/lodash@npm:4.14.185, @types/lodash@npm:^4.14.167":
-  version: 4.14.185
-  resolution: "@types/lodash@npm:4.14.185"
-  checksum: 5e2bc6f2e211c43b4b52ba309c10d87e62b089291978879a29b1650873c274db4c93b282273298e435345c549cc7f2f90b97029c6149f9f294cd44c55aad13b3
+"@types/lodash@npm:*, @types/lodash@npm:4.14.186, @types/lodash@npm:^4.14.167":
+  version: 4.14.186
+  resolution: "@types/lodash@npm:4.14.186"
+  checksum: 6e0c73ead3eb5073e37c9b8141004369776fba31a3876d2b647d590b78256e414b770753f767a548a70ad23408ac5cc83b174adfd5dba2bb88b833f2763c632b
   languageName: node
   linkType: hard
 
