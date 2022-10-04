@@ -1,6 +1,6 @@
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
@@ -56,7 +56,7 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

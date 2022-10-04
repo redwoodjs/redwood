@@ -3,8 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import latestVersion from 'latest-version'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -131,7 +130,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { collapse: false, renderer: verbose && VerboseRenderer }
+    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
   )
 
   try {

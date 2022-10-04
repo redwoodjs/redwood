@@ -2,7 +2,7 @@ const path = require('path')
 
 const packageJSON = require(path.join(__dirname, 'package.json'))
 
-// RedwoodJS targets Node.js 12.x because this is the default version
+// RedwoodJS targets Node.js 14.x because this is the default version
 // for Netlify's functions.
 const TARGETS_NODE = '14.20'
 
