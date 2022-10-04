@@ -2383,13 +2383,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:8.2.2":
-  version: 8.2.2
-  resolution: "@fastify/http-proxy@npm:8.2.2"
+"@fastify/http-proxy@npm:8.2.3":
+  version: 8.2.3
+  resolution: "@fastify/http-proxy@npm:8.2.3"
   dependencies:
     "@fastify/reply-from": ^8.0.0
     ws: ^8.4.2
-  checksum: 1cb145fab3de4fb949ae055fcc7de9923efe6a0988bbcf39345a79226bccd33dd879decc63793736eff8e9635b4ff12928c5bc6f57e5a366edb8a0e05e442d82
+  checksum: 704947f3a264580079980f177eab7c0fb06b374d61ce1f445ce8609ff0b24cd5db33caec34b6af5cb7f65ac8329f73216e40c348c27e6091acdd295bd77ee607
   languageName: node
   linkType: hard
 
@@ -6123,7 +6123,7 @@ __metadata:
     "@babel/core": 7.19.3
     "@babel/plugin-transform-runtime": 7.19.1
     "@babel/runtime-corejs3": 7.19.1
-    "@fastify/http-proxy": 8.2.2
+    "@fastify/http-proxy": 8.2.3
     "@fastify/static": 6.5.0
     "@fastify/url-data": 5.1.0
     "@types/aws-lambda": 8.10.101
