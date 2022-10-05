@@ -9059,10 +9059,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prompts@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@types/prompts@npm:2.4.0"
-  checksum: 24bb6d7021c5f50ac1265a2d0634fff1ccd2b4c40b6a8b55728ce5d9c17d132ea8f57b848d6601002d235d5d29cf100ae902ed60ef4a06091cf4b640b9e411cb
+"@types/prompts@npm:2.4.1":
+  version: 2.4.1
+  resolution: "@types/prompts@npm:2.4.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: e00281339b716d7635ab0dc5f52f9a012daca9ed21346887fa1def85febfd16e937908d62602a34158eb613f6738ac15b85f3012f9993c0664a8f368385f6109
   languageName: node
   linkType: hard
 
@@ -13578,7 +13580,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.1
     "@redwoodjs/internal": 3.1.0
     "@redwoodjs/telemetry": 3.1.0
-    "@types/prompts": 2.4.0
+    "@types/prompts": 2.4.1
     chalk: 4.1.2
     check-node-version: 4.2.1
     core-js: 3.25.5
@@ -26945,7 +26947,7 @@ __metadata:
     "@types/jscodeshift": 0.11.5
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
-    "@types/prompts": 2.4.0
+    "@types/prompts": 2.4.1
     all-contributors-cli: 6.20.0
     ansi-colors: 4.1.3
     babel-jest: 29.1.2
