@@ -112,7 +112,7 @@ If you didn't start your codebase from the Redwood Tutorial repo then you'll now
 
 ### Add Fields to the SDL and Service
 
-Let's think about where we want to show our new relationship. For now, probably just on the homepage and article page, we'll display the author of the post underneath the title. That means we'll want to access the user from the post in a GraphQL query something like this:
+Let's think about where we want to show our new relationship. For now, probably just on the homepage and article page: we'll display the author of the post next to the title. That means we'll want to access the user from the post in a GraphQL query something like this:
 
 ```graphql
 post {
@@ -210,9 +210,18 @@ post {   <- root
 }
 ```
 
-That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Finally we perform a `findOne()` query in Prisma, giving it the `id` of the record we already found, but return the `user` associated to that record, rather than the `post` itself.
+That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findOne()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
 
-Note that if you keep the relation resolver above, but also included a `user` property in the post(s) returned from `posts` and `post`, this field resolver will still be invoked and whatever is returned will override any `user` property that exists already. Why? That's just how GraphQL works!
+We could also write this resolver as follows:
+
+```javascript
+export const Post = {
+  user: (_obj, { root }) =>
+    db.user.findOne({ where: { id: root.userId } }),
+}
+```
+
+Note that if you keep the relation resolver above, but also included a `user` property in the post(s) returned from `posts` and `post`, this field resolver will still be invoked and whatever is returned will override any `user` property that exists already. Why? That's just how GraphQL works—resolvers, if they are present for a named field, will always be invoked and their return value used, even if the `root` already contains that data.
 
 :::info Prisma and the N+1 Problem
 
@@ -250,7 +259,7 @@ post {
 
 This query would now fail because you only have `post.user` available, not `post.user.posts`.
 
-The Redwood team is actively looking into more elegant built-in solutions to the N+1 problem, so stay tuned!
+The Redwood team is actively looking into more elegant solutions to the N+1 problem, so stay tuned!
 
 :::
 
@@ -403,13 +412,15 @@ export const Post = {
 
 These changes make sure that a user can only see a list of their own posts, edit their own post, or delete their own post.
 
-But there's a problem. Doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone is *not* logged in goes to the homepage? ERROR.
+But there's a problem. Doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone who is *not* logged in goes to the homepage? ERROR.
 
 How can we return one list of posts in the admin, and a different list of posts for the homepage?
 
 ## An AdminPosts Service
 
-We could go down the road of adding variables in the GraphQL queries, along with checks in the existing `posts` service, that return a different list of posts whether you're on the homepage or in the admin. But a cleaner way would be to create a new GraphQL query types for the admin views of posts. That one will be used in the admin posts pages, and the original, simpler service will be used for the homepage and article detail page.
+We could go down the road of adding variables in the GraphQL queries, along with checks in the existing `posts` service, that return a different list of posts whether you're on the homepage or in the admin. But this complexity adds a lot of surface area to test and some fragility if someone goes in there in the future—they have to be very careful not to add a new condition or negate an existing one and accidentally expose your admin functionality to exploits.
+
+What if we created *new* GraphQL queries for the admin views of posts? They would have automatic security checks thanks to `@requireAdmin`, no custom code required. These new queries will be used in the admin posts pages, and the original, simple `posts` service will be used for the homepage and article detail page.
 
 There are several steps we'll need to complete:
 
@@ -419,7 +430,7 @@ There are several steps we'll need to complete:
 
 ### Create the `adminPosts` SDL
 
-Let's keep the existing `posts.sdl.js` and make that the "public" interface. Duplicate that SDL, naming it `adminPosts.sdl.js`, and modify them like so:
+Let's keep the existing `posts.sdl.js` and make that the "public" interface. Duplicate that SDL, naming it `adminPosts.sdl.js`, and modify it like so:
 
 ```javascript title=api/src/graphql/adminPosts.sdl.js
 export const schema = gql`
@@ -463,7 +474,7 @@ export const schema = gql`
 `
 ```
 
-So we keep a single type of `Post` since the data contained within is the same, and either SDL file will return this same data type. We can remove the mutations from the `posts` SDL since the general public will not need to access those. We move create, update and delete muations to the new `adminPosts` SDL, and rename the two queries from `posts` to `adminPosts` and `post` to `adminPost`. In case you didn't know: every query/mutation must have a unique name across your entire application!
+So we keep a single type of `Post` since the data contained within it is the same, and either SDL file will return this same data type. We can remove the mutations from the `posts` SDL since the general public will not need to access those. We move create, update and delete mutations to the new `adminPosts` SDL, and rename the two queries from `posts` to `adminPosts` and `post` to `adminPost`. In case you didn't know: every query/mutation must have a unique name across your entire application!
 
 In `adminPosts` we've updated the queries to use `@requireAuth` instead of `@skipAuth`. Now that we have dedicated queries for our admin pages, we can lock them down to only allow access when authenticated.
 
@@ -521,9 +532,9 @@ export const Post = {
 }
 ```
 
-We've removed the `userId` lookup in both queries so we're back to returning every post (for `posts`) or a single post (regardless of who owns it).
+We've removed the `userId` lookup in the `posts` service so we're back to returning every post (for `posts`) or a single post (regardless of who owns it, in `post`).
 
-Note that we kept the relation resolver here, and there's none in `adminPosts`: since the queries and mutations from both SDLs still return a `Post`, we'll want to keep that relation resolver with the service that matches that original SDL: `graphql/posts.sdl.js` => `services/posts/posts.js`.
+Note that we kept the relation resolver here, and there's none in `adminPosts`: since the queries and mutations from both SDLs still return a `Post`, we'll want to keep that relation resolver with the service that matches that original SDL by name: `graphql/posts.sdl.js` => `services/posts/posts.js`.
 
 ### Update the GraphQL Queries
 
@@ -571,18 +582,24 @@ export const QUERY = gql`
 `
 ```
 
+If we didn't use the `posts: adminPosts` syntax, we would need to rename the argument coming into the `Success` component below to `adminPosts`. This syntax renames the result of the query to `posts` and then nothing else below needs to change!
+
 We don't need to make any changes to the "public" views (like `ArticleCell` and `ArticlesCell`) since those will continue to use the original `posts` and `post` queries, and their respective resolvers.
 
-Whew! Let's try several different scenarios (this is the kind of thing that the QA team lives for) making sure everything is working as expected:
+Whew! Let's try several different scenarios (this is the kind of thing that the QA team lives for), making sure everything is working as expected:
 
 * A logged out user *should* see all posts on the homepage
 * A logged out user *should* be able to see the detail for a single post
 * A logged out user *should not* be able to go to /admin/posts
-* A logged in user *should* see all articles on the homepage (not just their own)
-* A logged in user *should* be able to go to /admin/posts
-* A logged in user *should* be able to create a new post
-* A logged in user *should not* be able to see anyone else's posts in /admin/posts
+* A logged out user *should not* see moderation controls next to comments
+* A logged in admin user *should* see all articles on the homepage (not just their own)
+* A logged in admin user *should* be able to go to /admin/posts
+* A logged in admin user *should* be able to create a new post
+* A logged in admin user *should not* be able to see anyone else's posts in /admin/posts
+* A logged in admin user *should not* see moderation controls next to comments (unless you modified that behavior at the end of the last page)
+* A logged in moderator user *should* see moderation controls next to comments
+* A logged in moderator user *should not* be able to access /admin/posts
 
-In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create an `adminPosts.scenarios.js` and `adminPosts.test.js` file to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](http://localhost:3000/docs/canary/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not. You could add tests for the Cells we modified above, but the data they get is dependant on what's returned from the service, so as long as you have the service itself covered you are okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
+In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create an `adminPosts.scenarios.js` and `adminPosts.test.js` file to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](http://localhost:3000/docs/canary/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependant on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
 
 Did it work? Great! Did something go wrong? Can someone see too much, or too little? Double check that all of your GraphQL queries are updated and you've saved changes in all the opened files.
