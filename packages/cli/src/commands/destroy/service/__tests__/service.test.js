@@ -44,7 +44,7 @@ describe('rw destory service', () => {
         filesFn: files,
         name: 'User',
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(
@@ -74,7 +74,7 @@ describe('rw destory service', () => {
         filesFn: files,
         name: 'User',
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(

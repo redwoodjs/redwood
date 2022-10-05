@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -40,29 +40,32 @@ const prismaBinaryTargetAdditions = () => {
 }
 
 export const handler = async () => {
-  const tasks = new Listr([
-    addPackagesTask({
-      packages: ['@layer0/cli'],
-      devDependency: true,
-    }),
-    preRequisiteCheckTask([
+  const tasks = new Listr(
+    [
+      addPackagesTask({
+        packages: ['@layer0/cli'],
+        devDependency: true,
+      }),
+      preRequisiteCheckTask([
+        {
+          title: 'Checking if Layer0 is installed...',
+          command: ['yarn', ['layer0', '--version']],
+          errorMessage: ERR_MESSAGE_MISSING_CLI,
+        },
+        {
+          title: 'Initializing with Layer0',
+          command: ['yarn', ['layer0', 'init']],
+          errorMessage: ERR_MESSAGE_NOT_INITIALIZED,
+        },
+      ]),
       {
-        title: 'Checking if Layer0 is installed...',
-        command: ['yarn', ['layer0', '--version']],
-        errorMessage: ERR_MESSAGE_MISSING_CLI,
+        title: 'Adding necessary Prisma binaries...',
+        task: () => prismaBinaryTargetAdditions(),
       },
-      {
-        title: 'Initializing with Layer0',
-        command: ['yarn', ['layer0', 'init']],
-        errorMessage: ERR_MESSAGE_NOT_INITIALIZED,
-      },
-    ]),
-    {
-      title: 'Adding necessary Prisma binaries...',
-      task: () => prismaBinaryTargetAdditions(),
-    },
-    printSetupNotes(notes),
-  ])
+      printSetupNotes(notes),
+    ],
+    { rendererOptions: { collapse: false } }
+  )
   try {
     await tasks.run()
   } catch (e) {
