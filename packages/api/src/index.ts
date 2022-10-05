@@ -1,6 +1,7 @@
 export * from './auth'
 export * from './errors'
 export * from './functions/dbAuth/DbAuthHandler'
+export { PasswordValidationError } from './functions/dbAuth/errors'
 export { dbAuthSession, hashPassword } from './functions/dbAuth/shared'
 export * from './validations/validations'
 export * from './validations/errors'
