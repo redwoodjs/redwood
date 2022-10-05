@@ -25,19 +25,32 @@ This workflow results in, essentially, a two-for-one:
  More mature workflows may differ distinctly than the below.
  In-fact, the [Tutorial, Part II](https://redwoodjs.com/docs/tutorial/intermission) differs from below by taking a slightly longer design path.
 
- However, the main steps revolve around this workflow:
+ However, the main steps revolve around one of these two basic workflows:
+
  1) Start Storybook `yarn rw sb`.
- 2) Generate a cell `yarn rw g cell item` and shape your initial Storybook mock data structure in `itemCell.mock.ts`.
+ 2) Generate a cell `yarn rw g cell item` and shape your initial Storybook mock data structure in `itemCell.mock.js|ts`.
  3) Generate a component `yarn rw g component` to import into the cell. [\*]
  4) Design and develop your component using the mock data passed from the cell.
  5) ***Iterate*** on both the data structure and component design.
 
  6) _When Finished_: Convert your data structure into prisma models.
 
+OR
+
+ 1) Start Storybook `yarn rw sb`.
+ 2) Generate a component `yarn rw g component` and shape your mock data structure in `itemComponent.stories.js|ts`.
+ 3) Design and develop your component using the story file.
+ 4) ***Iterate*** on both the data structure and component design.
+
+ 5) _When Finished_: Convert your data structure into prisma models.
+
+
 \* A recommended best practice is to avoid design work in the cell itself.
 Do this by importing a component into the cell and designing on the component.
 Pass the props from the cell to the component like normal react components.
 
+> Moving forward, we will use the phrase 'mock data' to mean either the cell's mock file or the component's story file.
+> While there are differences between these two files and how they interact with Storybook, the underlying premise regarding the data structure is generally the same.
 ### Assumptions
 
 You are familiar with Redwood cli commands, Prisma schema, and Storybook.
@@ -83,7 +96,7 @@ However, it is completely separate from the backend.
 This somewhat changes the api design process from a **pre-design requirement** into a _**design-time**_ process.
 This is a solid first step in the Fullstack Driven Design process.
 
-Start by creating some mock data in your `<name>Cell.mock.ts` file.
+Start by creating some mock data in your `<name>Cell.mock.js|ts` file.
 Once an initial data structure is in place, you can move forward and design against this data.
 At times, your workflow may have you constantly weaving between the mock data file and the component files.
 It is perfectly OK to do so.
@@ -104,7 +117,16 @@ Getting into this step first does two things.
 > This may limit your options or give you tunnel vision.
 > Being flexible allows you to mold the data structure as you iterate on your design.
 
+### Mock file vs Stories file
+
+See [Tutorial Chapter 5: Our First Story](https://redwoodjs.com/docs/tutorial/chapter5/first-story) for more detail on using the `stories.js|ts` file.
+Below, we detail the first method of using the `mock.js|ts` and then sending that object to the stories file.
+However, the object data structure remains the same between the two approaches.
 ### Mock Data Structure
+
+[comment]: <> (One more section detailing the difference between using `stories.ts` and `mock.ts` would be nice for the reader to have.)
+[comment]: <> (For now we just reference tut chapter 5.)
+
 
 Creating your mock data structure is very similar to creating a prisma schema model.
 However, instead of defining fields and types, you define fields and sample values.
