@@ -167,7 +167,7 @@ import { name, version } from '../package'
         },
       },
     ],
-    { clearOutput: true }
+    { rendererOptions: { clearOutput: true } }
   ).run()
 
   // Show a success message if required engines are present
