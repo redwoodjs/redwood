@@ -108,7 +108,7 @@ interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => boolean
+  handler: (user: TUser) => boolean | Promise<boolean>
   allowReusedPassword: boolean
   errors?: {
     resetTokenExpired?: string
