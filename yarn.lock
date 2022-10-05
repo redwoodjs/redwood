@@ -6714,7 +6714,7 @@ __metadata:
     jest: 29.1.2
     jest-environment-jsdom: 29.1.2
     jest-watch-typeahead: 2.2.0
-    msw: 0.47.3
+    msw: 0.47.4
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
     whatwg-fetch: 3.6.2
@@ -22648,9 +22648,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.47.3":
-  version: 0.47.3
-  resolution: "msw@npm:0.47.3"
+"msw@npm:0.47.4":
+  version: 0.47.4
+  resolution: "msw@npm:0.47.4"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.5
@@ -22669,7 +22669,7 @@ __metadata:
     outvariant: ^1.3.0
     path-to-regexp: ^6.2.0
     statuses: ^2.0.0
-    strict-event-emitter: ^0.2.0
+    strict-event-emitter: ^0.2.6
     type-fest: ^2.19.0
     yargs: ^17.3.1
   peerDependencies:
@@ -22679,7 +22679,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 186d6f102ad385da9f8175d4824e8ee490a435eb1d9dd27aef5a5432830cbdd1ae849049970c12dc3d197c613a89e6d4e520f8574cf73883678021a3f955c841
+  checksum: cfd839112aa32f7cc0c27fa38b548b7557e2208cad6766440420b54bea971456bc79022973d22567b9b9f6cf26b8f094f3e482e20bbcc41f4db0cc18bb6526ad
   languageName: node
   linkType: hard
 
@@ -26966,7 +26966,7 @@ __metadata:
     listr2: 5.0.5
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.47.3
+    msw: 0.47.4
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.20
@@ -28312,12 +28312,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strict-event-emitter@npm:^0.2.0, strict-event-emitter@npm:^0.2.4":
-  version: 0.2.4
-  resolution: "strict-event-emitter@npm:0.2.4"
+"strict-event-emitter@npm:^0.2.4, strict-event-emitter@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "strict-event-emitter@npm:0.2.6"
   dependencies:
     events: ^3.3.0
-  checksum: 82d89f88fb7cee70695c3ee575d1d486f97ffc8f1e06d53aa3c54ea6595711dae4ea631a00340118e8307674016fcd8a11cf9bc38852694467ce7766586ab839
+  checksum: ea7293fb9647062ac06b60653b2487990ab4e19ab34eaffeecebdcb7905dcc7c872046363fc138b5cb10e53bb32c90cf045282f64614d879fcb75b58cf23ab1c
   languageName: node
   linkType: hard
 
