@@ -5250,18 +5250,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:14.3.0":
-  version: 14.3.0
-  resolution: "@nrwl/nx-cloud@npm:14.3.0"
+"@nrwl/nx-cloud@npm:14.7.0":
+  version: 14.7.0
+  resolution: "@nrwl/nx-cloud@npm:14.7.0"
   dependencies:
     axios: ^0.21.1
     chalk: 4.1.0
+    dotenv: ~10.0.0
+    fs-extra: ^10.1.0
     node-machine-id: ^1.1.12
     strip-json-comments: ^3.1.1
     tar: 6.1.11
+    yargs-parser: ">=21.0.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: 953bd4eb6992fabc1113aefcdd8dd6f796e00c7f21c92a4820b4589754be02e7cd9024923b6eb6f318a649102ea5334803716e4494c972eddcd7e30388559777
+  checksum: 1669c7e654e0adb765935f6297ed12154a76ff88d92398fbfddb31e5587f9945d3b94cffd1f64633cc265f44018e24cee8515080e2593889cec7389c670f94dd
   languageName: node
   linkType: hard
 
@@ -26936,7 +26939,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.19.1
-    "@nrwl/nx-cloud": 14.3.0
+    "@nrwl/nx-cloud": 14.7.0
     "@playwright/test": 1.25.2
     "@replayio/playwright": 0.2.27
     "@testing-library/jest-dom": 5.16.5
@@ -31721,7 +31724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.1.1, yargs-parser@npm:^21.0.0":
+"yargs-parser@npm:21.1.1, yargs-parser@npm:>=21.0.1, yargs-parser@npm:^21.0.0":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
   checksum: f84b5e48169479d2f402239c59f084cfd1c3acc197a05c59b98bab067452e6b3ea46d4dd8ba2985ba7b3d32a343d77df0debd6b343e5dae3da2aab2cdf5886b2
