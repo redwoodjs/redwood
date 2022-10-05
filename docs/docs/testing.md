@@ -530,6 +530,7 @@ In the above examples, we can see expect doesn't preserve the floating numbers. 
 > For cases where using decimal is not optimal, see the [Jest Expect documentation](https://jestjs.io/docs/expect) for other options and methods.
 
 #### DateTime
+
 Prisma returns [DateTime](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datetime) as ISO 8601-formatted strings. So, you can convert the date to ISO String in JavaScript:
 
 ```jsx {1}

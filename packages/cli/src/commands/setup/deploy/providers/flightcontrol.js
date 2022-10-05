@@ -4,7 +4,7 @@ import { EOL } from 'os'
 import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/internals'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -302,23 +302,26 @@ const notes = [
 ]
 
 export const handler = async ({ force, database }) => {
-  const tasks = new Listr([
-    {
-      title: 'Adding flightcontrol.json',
-      task: async () => {
-        const fileData = await getFlightcontrolJson(database)
-        let files = {}
-        files[fileData.path] = JSON.stringify(fileData.content, null, 2)
-        return writeFilesTask(files, { overwriteExisting: force })
+  const tasks = new Listr(
+    [
+      {
+        title: 'Adding flightcontrol.json',
+        task: async () => {
+          const fileData = await getFlightcontrolJson(database)
+          let files = {}
+          files[fileData.path] = JSON.stringify(fileData.content, null, 2)
+          return writeFilesTask(files, { overwriteExisting: force })
+        },
       },
-    },
-    updateGraphQLFunction(),
-    updateDbAuth(),
-    updateApp(),
-    updateApiURLTask('${REDWOOD_API_URL}'),
-    addToDotEnvDefaultTask(),
-    printSetupNotes(notes),
-  ])
+      updateGraphQLFunction(),
+      updateDbAuth(),
+      updateApp(),
+      updateApiURLTask('${REDWOOD_API_URL}'),
+      addToDotEnvDefaultTask(),
+      printSetupNotes(notes),
+    ],
+    { rendererOptions: { collapse: false } }
+  )
 
   try {
     await tasks.run()

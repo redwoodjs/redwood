@@ -1,24 +1,40 @@
-<% // To JSON stringify and remove quotes around `scenario` variables
-const stringifyButNotScenario = (obj) => {
-  return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
-    if (string.match(/scenario\./)) {
-      return string.replace(/['"]/g, '')
+<% // Transforms an object or single value into something that's more suitable
+   // for generating test cases
+   // If a `type` is passed in, the string for creating an object of that type
+   // will be generated
+   // If no type, or a type we don't support, is passed in we'll default to
+   // generating regular strings
+   // Looks for quoted strings, either by single (') or double (") quotes.
+   // When found
+   // - Removes the quotes around `scenario` variables.
+   // - Removes the quotes around `BigInt` fields.
+  const transformValue = (obj, type) => {
+    if (type === 'DateTime') {
+      return `new Date('${obj.toISOString()}')`
+    } else if (type === 'Decimal') {
+      return `new Prisma.Decimal(${obj})`
     }
 
-    if (string.match(/^\"\d+n\"$/)) {
-      return string.substr(1, string.length - 2)
-    }
+    return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
+      if (string.match(/scenario\./)) {
+        return string.replace(/['"]/g, '')
+      }
 
-    return string
-  })
-} %>
-import type { ${prismaModel} } from '@prisma/client'
+      // BigInt
+      if (string.match(/^\"\d+n\"$/)) {
+        return string.substr(1, string.length - 2)
+      }
+
+      return string
+    })
+  } %>
+<% if (prismaImport) { %>import { Prisma, ${prismaModel} } from '@prisma/client'<% } else { %>import type { ${prismaModel} } from '@prisma/client'<% } %>
 
 import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}'
 import type { StandardScenario } from './${pluralCamelName}.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -36,24 +52,24 @@ describe('${pluralCamelName}', () => {
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${stringifyButNotScenario(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${transformValue(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
     const result = await create${singularPascalName}({
-      input: ${stringifyButNotScenario(create)},
+      input: ${transformValue(create)},
     })
 
     <% for (const [name, value] of Object.entries(create)) { %>
-    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
+    expect(result.${name}).toEqual(${transformValue(value, types[name])})<% } %>
   })<% } %>
 
   <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario: StandardScenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await (${singularCamelName}({ id: scenario.${singularCamelName}.one.id })) as ${prismaModel}
     const result = await update${singularPascalName}({
       id: original.id,
-      input: ${stringifyButNotScenario(update)},
+      input: ${transformValue(update)},
     })
 
     <% for (const [name, value] of Object.entries(update)) { %>
-    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
+    expect(result.${name}).toEqual(${transformValue(value, types[name])})<% } %>
   })<% } %>
 
   scenario('deletes a ${singularCamelName}', async (scenario: StandardScenario) => {

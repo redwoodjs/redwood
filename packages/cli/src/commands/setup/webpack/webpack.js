@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -22,27 +22,32 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force }) => {
-  const tasks = new Listr([
-    {
-      title: 'Adding webpack file to your web folder...',
-      task: () => {
-        const webpackConfigFile = `${getPaths().web.config}/webpack.config.js`
+  const tasks = new Listr(
+    [
+      {
+        title: 'Adding webpack file to your web folder...',
+        task: () => {
+          const webpackConfigFile = `${getPaths().web.config}/webpack.config.js`
 
-        return writeFile(
-          webpackConfigFile,
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'webpack.config.js.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+          return writeFile(
+            webpackConfigFile,
+            fs
+              .readFileSync(
+                path.resolve(
+                  __dirname,
+                  'templates',
+                  'webpack.config.js.template'
+                )
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        },
       },
-    },
-    {
-      title: 'One more thing...',
-      task: (_ctx, task) => {
-        task.title = `One more thing...\n
+      {
+        title: 'One more thing...',
+        task: (_ctx, task) => {
+          task.title = `One more thing...\n
           ${c.green(
             'Quick link to the docs on configuring custom webpack config:'
           )}
@@ -50,9 +55,11 @@ export const handler = async ({ force }) => {
             'https://redwoodjs.com/docs/webpack-configuration#configuring-webpack'
           )}
         `
+        },
       },
-    },
-  ])
+    ],
+    { rendererOptions: { collapse: false } }
+  )
 
   try {
     await tasks.run()

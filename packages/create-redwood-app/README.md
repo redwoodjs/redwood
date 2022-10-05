@@ -102,12 +102,12 @@ This will create a new project using the local `template/` codebase
 ### How to run other published versions for debugging
 By default yarn create will pick the latest stable version to run, but you can specify a different version via yarn too!
 
-To try the canary version using yarn, run:
+To try the canary version, run:
 ```
-yarn create redwood-app@canary -p create-redwood-app /path/to/project
+npx create-redwood-app@canary /path/to/project
 ```
 
-Note that this will still create a project with the latest stable version, but run the canary version of create-redwood-app, and is only useful for debugging.
+Note that this will still create a project with the latest stable version, but run the canary version of create-redwood-app, and is mainly useful for debugging this package, and not the redwood canary release.
 
 You can specify any tag or version instead of `@canary`
 
