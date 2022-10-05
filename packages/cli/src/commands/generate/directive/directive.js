@@ -2,7 +2,7 @@ import path from 'path'
 
 import camelcase from 'camelcase'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
@@ -165,7 +165,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

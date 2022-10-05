@@ -752,6 +752,12 @@ And there you have it.
     <td align="center"><a href="https://www.bharathikannan.com/"><img src="https://avatars.githubusercontent.com/u/7134153?v=4" width="100px;" alt=""/><br /><sub><b>payapula</b></sub></a></td>
     <td align="center"><a href="https://dambusm.github.io/portfolio/"><img src="https://avatars.githubusercontent.com/u/12501819?v=4" width="100px;" alt=""/><br /><sub><b>willks</b></sub></a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Josh-Walker-GM"><img src="https://avatars.githubusercontent.com/u/56300765?v=4" width="100px;" alt=""/><br /><sub><b>Josh GM Walker</b></sub></a></td>
+    <td align="center"><a href="https://github.com/arimendelow"><img src="https://avatars.githubusercontent.com/u/16390116?v=4" width="100px;" alt=""/><br /><sub><b>Ari Mendelow</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jakeinater"><img src="https://avatars.githubusercontent.com/u/53323525?v=4" width="100px;" alt=""/><br /><sub><b>Jake Zhao</b></sub></a></td>
+    <td align="center"><a href="https://github.com/psirus0588"><img src="https://avatars.githubusercontent.com/u/3896426?v=4" width="100px;" alt=""/><br /><sub><b>psirus0588</b></sub></a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

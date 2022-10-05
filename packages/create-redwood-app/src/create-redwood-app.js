@@ -13,7 +13,7 @@ import chalk from 'chalk'
 import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -350,7 +350,7 @@ import { name, version } from '../package'
         },
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
     .run()
     .then(() => {

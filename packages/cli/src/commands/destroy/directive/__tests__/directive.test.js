@@ -33,7 +33,7 @@ test('destroys directive files', async () => {
     filesFn: (args) => files({ ...args, type: 'validator' }),
     name: 'require-admin',
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(

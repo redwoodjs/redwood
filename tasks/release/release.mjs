@@ -567,6 +567,7 @@ const ALL_CONTRIBUTORS_IGNORE_LIST = [
   'agiannelli',
   'codesee-maps[bot]',
   'noire-munich',
+  'redwoodjsbot',
 ]
 
 /**
