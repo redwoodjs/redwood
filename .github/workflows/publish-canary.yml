@@ -2,7 +2,7 @@ name: 🦜 Publish Canary
 
 on:
   push:
-    branches: [main, release]
+    branches: [main, next]
     # We don't want this to run when we publish a release.
     tags-ignore: ['v**']
     # No need to run on docs-only changes
@@ -39,7 +39,7 @@ jobs:
 
       - name: 🚢 Publish
         run: |
-          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'release' ]] && TAG='next'
+          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'next' ]] && TAG='next'
           echo "Publishing $TAG"
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           yarn lerna publish --include-merged-tags \
