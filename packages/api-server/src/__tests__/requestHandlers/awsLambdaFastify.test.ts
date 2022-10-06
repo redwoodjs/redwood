@@ -1,3 +1,5 @@
+import { Readable } from 'stream'
+
 import type { FastifyRequest, FastifyReply } from 'fastify'
 
 import { requestHandler } from '../../requestHandlers/awsLambdaFastify'
@@ -40,6 +42,25 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
 
     expect(mockedReply.send).toHaveBeenCalledWith({ foo: 'bar' })
     expect(mockedReply.status).toHaveBeenCalledWith(200)
+  })
+
+  test('requestHandler replies with stream', async () => {
+    jest.spyOn(mockedReply, 'send')
+    jest.spyOn(mockedReply, 'status')
+
+    const stream = new Readable()
+    stream.push('{ "foo": "bar" }')
+    stream.push(null)
+
+    const handler = async () => {
+      return { body: stream }
+    }
+
+    const rhResult = await requestHandler(request, mockedReply, handler)
+
+    expect(mockedReply.send).toHaveBeenCalledWith(stream)
+    expect(mockedReply.status).toHaveBeenCalledWith(200)
+    expect(rhResult).toBe(mockedReply)
   })
 
   test('requestHandler replies with a base64Encoded body', async () => {
