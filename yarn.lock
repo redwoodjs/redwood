@@ -2137,16 +2137,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:4.4.2":
-  version: 4.4.2
-  resolution: "@envelop/testing@npm:4.4.2"
+"@envelop/testing@npm:4.6.0":
+  version: 4.6.0
+  resolution: "@envelop/testing@npm:4.6.0"
   dependencies:
     "@graphql-tools/utils": ^8.8.0
+    tslib: ^2.4.0
   peerDependencies:
-    "@envelop/core": ^2.4.2
-    "@envelop/types": ^2.3.1
+    "@envelop/core": ^2.6.0
+    "@envelop/types": ^2.4.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3b094b7931859aa0f93cc8695ace39b93871af3d25bd1a6a2f3a6cd678f32e2a54eb109c8b95ac5261fee08fc1af0cfb27aa3b0b3889c9fa03443bbc74ce0329
+  checksum: a1ebc30dba1297ffd746deef23973e9bb6bf5cf6490875a854b9533f0dcb1dcdc0f4e70d1a800ce0b56e97183c611b7a95ada0b8c21db033da85403662a1cae5
   languageName: node
   linkType: hard
 
@@ -6509,7 +6510,7 @@ __metadata:
     "@envelop/disable-introspection": 3.4.2
     "@envelop/filter-operation-type": 3.4.2
     "@envelop/parser-cache": 4.5.2
-    "@envelop/testing": 4.4.2
+    "@envelop/testing": 4.6.0
     "@envelop/types": 2.4.0
     "@envelop/validation-cache": 4.5.2
     "@graphql-tools/merge": 8.3.6
@@ -10290,9 +10291,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.22.0":
-  version: 6.22.0
-  resolution: "all-contributors-cli@npm:6.22.0"
+"all-contributors-cli@npm:6.23.0":
+  version: 6.23.0
+  resolution: "all-contributors-cli@npm:6.23.0"
   dependencies:
     "@babel/runtime": ^7.7.6
     async: ^3.1.0
@@ -10306,7 +10307,7 @@ __metadata:
     yargs: ^15.0.1
   bin:
     all-contributors: dist/cli.js
-  checksum: 2cada0af1da67febe3f012224071f12ac6002758756ffb7794ee7b3f8dd7d58ac56d3315fa5b20863babb1008cbfc82153287320b479934745a9625a7016c5c0
+  checksum: b85275c183d71732c5a8de13230aecfbb12cb9afaa8583ab0d2b225c221f2354d79e9cc283e484bfa0f7a512eeb064eeda94f9c2ff9b1faee91df531850dad4a
   languageName: node
   linkType: hard
 
@@ -26965,7 +26966,7 @@ __metadata:
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.1
-    all-contributors-cli: 6.22.0
+    all-contributors-cli: 6.23.0
     ansi-colors: 4.1.3
     babel-jest: 29.1.2
     babel-plugin-auto-import: 1.1.0
