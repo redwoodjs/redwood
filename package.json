@@ -37,7 +37,7 @@
     "vscode-languageserver-types": "3.17.2"
   },
   "devDependencies": {
-    "@actions/core": "1.9.1",
+    "@actions/core": "1.10.0",
     "@actions/exec": "1.1.1",
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
