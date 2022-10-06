@@ -6194,7 +6194,7 @@ __metadata:
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
-    "@types/yargs": 17.0.12
+    "@types/yargs": 17.0.13
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -6210,7 +6210,7 @@ __metadata:
     qs: 6.11.0
     split2: 4.1.0
     typescript: 4.7.4
-    yargs: 17.5.1
+    yargs: 17.6.0
   bin:
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
@@ -6350,7 +6350,7 @@ __metadata:
     terminal-link: 2.1.1
     title-case: 3.0.3
     typescript: 4.7.4
-    yargs: 17.5.1
+    yargs: 17.6.0
   bin:
     redwood: ./dist/index.js
     rw: ./dist/index.js
@@ -6372,7 +6372,7 @@ __metadata:
     "@types/jest": 29.1.2
     "@types/jscodeshift": 0.11.5
     "@types/prettier": 2.7.1
-    "@types/yargs": 17.0.12
+    "@types/yargs": 17.0.13
     "@vscode/ripgrep": 1.14.2
     core-js: 3.25.5
     cross-undici-fetch: 0.4.14
@@ -6388,7 +6388,7 @@ __metadata:
     tempy: 1.0.1
     toml: 3.0.0
     typescript: 4.7.4
-    yargs: 17.5.1
+    yargs: 17.6.0
   bin:
     codemods: ./dist/codemods.js
   languageName: unknown
@@ -6730,7 +6730,7 @@ __metadata:
     "@redwoodjs/structure": 3.1.1
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
-    "@types/yargs": 17.0.12
+    "@types/yargs": 17.0.13
     ci-info: 3.3.2
     core-js: 3.25.5
     cross-undici-fetch: 0.4.14
@@ -6738,7 +6738,7 @@ __metadata:
     jest: 29.1.2
     systeminformation: 5.12.6
     uuid: 9.0.0
-    yargs: 17.5.1
+    yargs: 17.6.0
   languageName: unknown
   linkType: soft
 
@@ -9424,12 +9424,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.12, @types/yargs@npm:^17.0.8":
-  version: 17.0.12
-  resolution: "@types/yargs@npm:17.0.12"
+"@types/yargs@npm:17.0.13, @types/yargs@npm:^17.0.8":
+  version: 17.0.13
+  resolution: "@types/yargs@npm:17.0.13"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: a0ba2dde56b4e5cd9666c6119ed5c519d5efa838ef37d1ce4b5d08643c3edd827b2b584a43daf6cb09a891d9171706f61aeffc235bf81079d50f470fd73751d3
+  checksum: 5005e1e7408b9fea96c356becf19256f1a9bca02120852d3c0089ba7123528b0b6891185e9c92bac25cb5c04090a7a714b201523a6bf4a8a226852205c631208
   languageName: node
   linkType: hard
 
@@ -12815,6 +12815,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cliui@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "cliui@npm:8.0.1"
+  dependencies:
+    string-width: ^4.2.0
+    strip-ansi: ^6.0.1
+    wrap-ansi: ^7.0.0
+  checksum: 4bda0f09c340cbb6dfdc1ed508b3ca080f12992c18d68c6be4d9cf51756033d5266e61ec57529e610dacbf4da1c634423b0c1b11037709cc6b09045cbd815df5
+  languageName: node
+  linkType: hard
+
 "clone-deep@npm:^4.0.1":
   version: 4.0.1
   resolution: "clone-deep@npm:4.0.1"
@@ -13669,7 +13680,7 @@ __metadata:
     listr2: 5.0.5
     prompts: 2.4.2
     typescript: 4.7.4
-    yargs: 17.5.1
+    yargs: 17.6.0
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
   languageName: unknown
@@ -31843,18 +31854,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.5.1, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.4.0":
-  version: 17.5.1
-  resolution: "yargs@npm:17.5.1"
+"yargs@npm:17.6.0, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.4.0":
+  version: 17.6.0
+  resolution: "yargs@npm:17.6.0"
   dependencies:
-    cliui: ^7.0.2
+    cliui: ^8.0.1
     escalade: ^3.1.1
     get-caller-file: ^2.0.5
     require-directory: ^2.1.1
     string-width: ^4.2.3
     y18n: ^5.0.5
     yargs-parser: ^21.0.0
-  checksum: 349c823b772bc5383d56684bca8615020ae5cc0b81bacafe1ef268b281ade93528da1982b0f2dd898e0c678932d9147b8a2e93e341733622773caf7048196de4
+  checksum: 9f3d40f482d37df26f66f9b8d3010645ebf9485dd1c4bab6b55c87ac4e4924836bca93f52afb1a0483e178f540e5ab6fbea60d9fc56ecba10d386ecbdc9857e6
   languageName: node
   linkType: hard
 

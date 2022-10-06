@@ -39,7 +39,7 @@
     "tasuku": "2.0.0",
     "toml": "3.0.0",
     "typescript": "4.7.4",
-    "yargs": "17.5.1"
+    "yargs": "17.6.0"
   },
   "devDependencies": {
     "@types/babel__core": "7.1.19",
@@ -48,7 +48,7 @@
     "@types/jest": "29.1.2",
     "@types/jscodeshift": "0.11.5",
     "@types/prettier": "2.7.1",
-    "@types/yargs": "17.0.12",
+    "@types/yargs": "17.0.13",
     "fs-extra": "10.1.0",
     "tempy": "1.0.1"
   },
