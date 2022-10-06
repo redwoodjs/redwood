@@ -45,7 +45,7 @@
     "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.1.1",
+    "@types/jest": "29.1.2",
     "@types/jscodeshift": "0.11.5",
     "@types/prettier": "2.7.1",
     "@types/yargs": "17.0.12",
