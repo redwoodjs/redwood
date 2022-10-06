@@ -6291,7 +6291,7 @@ __metadata:
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@simplewebauthn/browser": 6.2.1
-    "@simplewebauthn/typescript-types": 6.0.0
+    "@simplewebauthn/typescript-types": 6.2.1
     "@supabase/supabase-js": 1.35.7
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 17.0.50
@@ -6920,14 +6920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@simplewebauthn/typescript-types@npm:6.0.0"
-  checksum: f70c983ddb4613ff234be6ce689ebb500a246de57c1a892de8016e4e858ba81c663bcaee81cf942e1a398485fa23c10527511b733373f20a937c047a017584b0
-  languageName: node
-  linkType: hard
-
-"@simplewebauthn/typescript-types@npm:^6.2.1":
+"@simplewebauthn/typescript-types@npm:6.2.1, @simplewebauthn/typescript-types@npm:^6.2.1":
   version: 6.2.1
   resolution: "@simplewebauthn/typescript-types@npm:6.2.1"
   checksum: fda36ec34391a696586a89ef0efea3cfd49b42d606285b4db3e8d3dce3b36c5f831ec7682dd87784a26fa713ad8fdac91ea2a2fe62c2773dddffaa5cf24945ce

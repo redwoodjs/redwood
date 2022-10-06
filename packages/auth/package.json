@@ -39,7 +39,7 @@
     "@nhost/nhost-js": "1.4.10",
     "@okta/okta-auth-js": "6.9.0",
     "@simplewebauthn/browser": "6.2.1",
-    "@simplewebauthn/typescript-types": "6.0.0",
+    "@simplewebauthn/typescript-types": "6.2.1",
     "@supabase/supabase-js": "1.35.7",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.50",
