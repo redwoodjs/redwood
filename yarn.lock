@@ -5665,16 +5665,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@okta/okta-auth-js@npm:6.7.6":
-  version: 6.7.6
-  resolution: "@okta/okta-auth-js@npm:6.7.6"
+"@okta/okta-auth-js@npm:6.9.0":
+  version: 6.9.0
+  resolution: "@okta/okta-auth-js@npm:6.9.0"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@babel/runtime-corejs3": ^7.17.0
     "@peculiar/webcrypto": ^1.4.0
     Base64: 1.1.0
     atob: ^2.1.2
-    broadcast-channel: 4.13.0
+    broadcast-channel: ~4.17.0
     btoa: ^1.2.1
     core-js: ^3.6.5
     cross-fetch: ^3.1.5
@@ -5686,7 +5686,7 @@ __metadata:
     tiny-emitter: 1.1.0
     webcrypto-shim: ^0.1.5
     xhr2: 0.1.3
-  checksum: dba96126387a0312984cb6b086038fe5080a13d0d24ace24cd09cf2fbc2e695e8bfd0e15f89b90f5c7fb3a4565736f0928736743ad0c6582daaa1194e0484825
+  checksum: 34fcac21a9ba41260d755375ea2c806042eed2b0a4d64ea6d46bfa337437214be628544d24bf07b186157ee38df7762f85956111fe7cd1bb62a29a22ec6bbb3c
   languageName: node
   linkType: hard
 
@@ -6263,7 +6263,7 @@ __metadata:
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.4.10
-    "@okta/okta-auth-js": 6.7.6
+    "@okta/okta-auth-js": 6.9.0
     "@simplewebauthn/browser": 6.0.0
     "@simplewebauthn/typescript-types": 6.0.0
     "@supabase/supabase-js": 1.35.7
@@ -11716,18 +11716,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"broadcast-channel@npm:4.13.0":
-  version: 4.13.0
-  resolution: "broadcast-channel@npm:4.13.0"
+"broadcast-channel@npm:~4.17.0":
+  version: 4.17.0
+  resolution: "broadcast-channel@npm:4.17.0"
   dependencies:
     "@babel/runtime": ^7.16.0
-    detect-node: ^2.1.0
-    microtime: 3.0.0
     oblivious-set: 1.1.1
     p-queue: 6.6.2
     rimraf: 3.0.2
     unload: 2.3.1
-  checksum: d0dea6af226f5eebfdfbe03727f612f04c1386725013ec7bcdbc60d3ac5fad7780316286845468fd3a33a60ea887f0a7aea31a9f92d8d4528acceb347b674b1d
+  checksum: 5d048511ebde5a63c6d7f704c4e7759c545596f5857a9edb8f6e31ad3cfc896dd62f3d281c2b6b1d4839d2703b74be2dd5f8fce86b6256cc21aee4bc0d3a43fc
   languageName: node
   linkType: hard
 
@@ -14528,7 +14526,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detect-node@npm:2.1.0, detect-node@npm:^2.0.4, detect-node@npm:^2.1.0":
+"detect-node@npm:2.1.0, detect-node@npm:^2.0.4":
   version: 2.1.0
   resolution: "detect-node@npm:2.1.0"
   checksum: f039f601790f2e9d4654e499913259a798b1f5246ae24f86ab5e8bd4aaf3bce50484234c494f11fb00aecb0c6e2733aa7b1cf3f530865640b65fbbd65b2c4e09
@@ -22269,17 +22267,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"microtime@npm:3.1.1":
-  version: 3.1.1
-  resolution: "microtime@npm:3.1.1"
-  dependencies:
-    node-addon-api: ^5.0.0
-    node-gyp: latest
-    node-gyp-build: ^4.4.0
-  checksum: 02512993de914c6f71424d3b8b28ce53de44ba5895b904a213420fd4fc86a084c1d08ec0876ac60cdae6427022766e1b9b86d9b3442bf408701120bd61455e26
-  languageName: node
-  linkType: hard
-
 "miller-rabin@npm:^4.0.0":
   version: 4.0.1
   resolution: "miller-rabin@npm:4.0.1"
@@ -22897,15 +22884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "node-addon-api@npm:5.0.0"
-  dependencies:
-    node-gyp: latest
-  checksum: d8e1e3aefd0b153273e44b38dc8ceebdd444211cf71f03e036b822e973a5c7ac784b8fb61748bbf3f4341fdff41654bf6f3f052e8f45939c153b47efd3970238
-  languageName: node
-  linkType: hard
-
 "node-cache@npm:^5.1.2":
   version: 5.1.2
   resolution: "node-cache@npm:5.1.2"
@@ -22973,7 +22951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp-build@npm:^4.2.0, node-gyp-build@npm:^4.3.0, node-gyp-build@npm:^4.4.0":
+"node-gyp-build@npm:^4.2.0, node-gyp-build@npm:^4.3.0":
   version: 4.5.0
   resolution: "node-gyp-build@npm:4.5.0"
   bin:
