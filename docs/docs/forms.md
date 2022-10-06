@@ -385,11 +385,9 @@ const RequiredField = ({ label, name, validation }) => {
 
 ### Controlled Component Fields
 
-If you're working with a fully-loaded component library, or bring your own production-ready components you may want them to integrate with Redwood seemlessly.
-
-You can create these custom fields through the use of Redwood's `useErrorStyles` and React Hook Form's `Controller`. 
-
-The following example shows a component from [`primereact`](https://www.primefaces.org/primereact/) which can be used in Forms like any of the named input fields (listed above).
+If you're working with a fully-featured component library, or have your own production-ready components, you may want to integrate them with Redwood's forms seamlessly.
+You can via Redwood forms' `useErrorStyles` hook and React Hook Form's `Controller` component.
+The following example shows how you could go about integrating a component from [PrimeReact](https://www.primefaces.org/primereact/) for use in in Redwood's forms like any of the named-input fields listed above:
 
 ```jsx
 import { ToggleButton, ToggleButtonProps } from 'primereact/togglebutton'
