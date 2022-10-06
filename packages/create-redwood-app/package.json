@@ -33,7 +33,7 @@
     "fs-extra": "10.1.0",
     "listr2": "5.0.5",
     "prompts": "2.4.2",
-    "yargs": "17.5.1"
+    "yargs": "17.6.0"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
