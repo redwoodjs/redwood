@@ -5253,12 +5253,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:14.7.5":
-  version: 14.7.5
-  resolution: "@nrwl/cli@npm:14.7.5"
+"@nrwl/cli@npm:14.8.3":
+  version: 14.8.3
+  resolution: "@nrwl/cli@npm:14.8.3"
   dependencies:
-    nx: 14.7.5
-  checksum: fc22fe1546fec6e75a7dcc5cb27880b0762b7d7a8f4e71997e9710ac7eb437ce5605f5b343a4ac7efd0acb9c036bdb5f5a791bbbca328aa545511272839a3d63
+    nx: 14.8.3
+  checksum: de5d1fbc1868768101e94db8b96809e1d30b7122de0ae5ddb1a4006424de8435faf469cecc8c51aa6157038d3888adaa2541423734a3acf555dc2547533aff5f
   languageName: node
   linkType: hard
 
@@ -5280,14 +5280,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:14.7.5":
-  version: 14.7.5
-  resolution: "@nrwl/tao@npm:14.7.5"
+"@nrwl/tao@npm:14.8.3":
+  version: 14.8.3
+  resolution: "@nrwl/tao@npm:14.8.3"
   dependencies:
-    nx: 14.7.5
+    nx: 14.8.3
   bin:
     tao: index.js
-  checksum: f260a862291bdf10a8f37e190618d74ee7526ed9a8743936730043ee894d1c958ea208599d5ca774ae7c99038334a9e7388ffea5e9a0243391e5ed9fd13fede6
+  checksum: aa614e814b29b04856d5bed86f0a2051569c138beede822daa25228f7469dfbe7fc74d5a7320544fe2776c0d1db2cac7ce653302a70c145c3dc086f701a763c3
   languageName: node
   linkType: hard
 
@@ -10013,6 +10013,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@yarnpkg/lockfile@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@yarnpkg/lockfile@npm:1.1.0"
+  checksum: 0bfa50a3d756623d1f3409bc23f225a1d069424dbc77c6fd2f14fb377390cd57ec703dc70286e081c564be9051ead9ba85d81d66a3e68eeb6eb506d4e0c0fbda
+  languageName: node
+  linkType: hard
+
+"@yarnpkg/parsers@npm:^3.0.0-rc.18":
+  version: 3.0.0-rc.22
+  resolution: "@yarnpkg/parsers@npm:3.0.0-rc.22"
+  dependencies:
+    js-yaml: ^3.10.0
+    tslib: ^2.4.0
+  checksum: 7538f978bdb00101188f8c00faaab728fa76ff0a25c39ee0a9a05625b91cda3fd6a653ecb56772d82d0039f5f0bcb84fb0298a7db8d20b8f4502f5b719b022a1
+  languageName: node
+  linkType: hard
+
+"@zkochan/js-yaml@npm:0.0.6":
+  version: 0.0.6
+  resolution: "@zkochan/js-yaml@npm:0.0.6"
+  dependencies:
+    argparse: ^2.0.1
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: 5ce27ae75fb1db9657d4065bf6b380b4c0f756feb1bdf42bfde40551a74bcc0ec918f748cbdbd5d95b7107d00bc2f731ee731b5cfe93acb6f7da5639b16aa1f8
+  languageName: node
+  linkType: hard
+
 "@zxing/text-encoding@npm:0.9.0":
   version: 0.9.0
   resolution: "@zxing/text-encoding@npm:0.9.0"
@@ -10974,6 +11002,15 @@ __metadata:
   version: 4.4.3
   resolution: "axe-core@npm:4.4.3"
   checksum: 01ed3d23b86f48c595e7a077ca472b35b53e6b76e93996e91d8447f0ab68d7a5318534af6cb5e60ffd575f75ac742570192dc3de7223493bbeee9acaf2f6c520
+  languageName: node
+  linkType: hard
+
+"axios@npm:0.21.1":
+  version: 0.21.1
+  resolution: "axios@npm:0.21.1"
+  dependencies:
+    follow-redirects: ^1.10.0
+  checksum: 8633cce2dbe64acdfb82a73ba9c916e4d30eff00cb5ac697be859af9446843944cc663c4aafac1da6a43328aeb6fe778a372841fda27e2af44cdd36dba83b2a4
   languageName: node
   linkType: hard
 
@@ -16895,13 +16932,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.9":
-  version: 1.15.1
-  resolution: "follow-redirects@npm:1.15.1"
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.10.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.9":
+  version: 1.15.2
+  resolution: "follow-redirects@npm:1.15.2"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: ea21337fe38eac8d75f5af12c425cc40e0bb44dcc3091fd0bde1c828596251a7a9638b5720fee5a0a5c62524450cbe16c52aae1dce88c6aee68577e441842e7f
+  checksum: da5932b70e63944d38eecaa16954bac4347036f08303c913d166eda74809d8797d38386e3a0eb1d2fe37d2aaff2764cce8e9dbd99459d860cf2cdfa237923b5f
   languageName: node
   linkType: hard
 
@@ -20478,7 +20515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.1":
+"js-yaml@npm:^3.10.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.1":
   version: 3.14.1
   resolution: "js-yaml@npm:3.14.1"
   dependencies:
@@ -20724,10 +20761,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-parser@npm:3.0.0":
-  version: 3.0.0
-  resolution: "jsonc-parser@npm:3.0.0"
-  checksum: 373632ab71f773ce6081dd70297c40fbb05aacde07ab8a5852c78c0a13d1fadb7ad886202e87bfc0168dd78568cda2d4eb36e785dac330f93e5e772d7a67f33f
+"jsonc-parser@npm:3.2.0":
+  version: 3.2.0
+  resolution: "jsonc-parser@npm:3.2.0"
+  checksum: 5a12d4d04dad381852476872a29dcee03a57439574e4181d91dca71904fcdcc5e8e4706c0a68a2c61ad9810e1e1c5806b5100d52d3e727b78f5cdc595401045b
   languageName: node
   linkType: hard
 
@@ -23389,13 +23426,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:14.7.5, nx@npm:>=14.6.1 < 16":
-  version: 14.7.5
-  resolution: "nx@npm:14.7.5"
+"nx@npm:14.8.3, nx@npm:>=14.6.1 < 16":
+  version: 14.8.3
+  resolution: "nx@npm:14.8.3"
   dependencies:
-    "@nrwl/cli": 14.7.5
-    "@nrwl/tao": 14.7.5
+    "@nrwl/cli": 14.8.3
+    "@nrwl/tao": 14.8.3
     "@parcel/watcher": 2.0.4
+    "@yarnpkg/lockfile": ^1.1.0
+    "@yarnpkg/parsers": ^3.0.0-rc.18
+    "@zkochan/js-yaml": 0.0.6
+    axios: 0.21.1
     chalk: 4.1.0
     chokidar: ^3.5.1
     cli-cursor: 3.1.0
@@ -23410,12 +23451,13 @@ __metadata:
     glob: 7.1.4
     ignore: ^5.0.4
     js-yaml: 4.1.0
-    jsonc-parser: 3.0.0
+    jsonc-parser: 3.2.0
     minimatch: 3.0.5
     npm-run-path: ^4.0.1
     open: ^8.4.0
     semver: 7.3.4
     string-width: ^4.2.3
+    strong-log-transformer: ^2.1.0
     tar-stream: ~2.2.0
     tmp: ~0.2.1
     tsconfig-paths: ^3.9.0
@@ -23433,7 +23475,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: f36798b5af4d03735f85ba8609f5a194f0c4bc0cfc1a2db8bc80d640f4addf7cb82298f5ef04013f7aa3b122c33ecaf4ce719fe3153d3cbeb9920f3e676a8492
+  checksum: cd0b06bbe9d45324099612d912e98cc98e373cd9cf363c40e30b82e0767b98bd80cd6b4036bb3e859c05ecce008ecbecf90b3eb2bed8c0ab636a4eefe9fa4a1c
   languageName: node
   linkType: hard
 
@@ -26969,7 +27011,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
-    nx: 14.7.5
+    nx: 14.8.3
     octokit: 2.0.7
     ora: 5.4.1
     prompts: 2.4.2
