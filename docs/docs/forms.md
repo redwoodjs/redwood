@@ -440,7 +440,6 @@ const ToggleButtonField = (prop: Prop) => {
 }
 
 export default ToggleButtonField
-
 ```
 
 ## `<SelectField>`
