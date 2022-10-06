@@ -395,12 +395,12 @@ import type { ToggleButtonProps } from 'primereact/togglebutton'
 
 import { Controller, RegisterOptions, useErrorStyles } from '@redwoodjs/forms'
 
-interface Prop extends ToggleButtonProps {
+interface Props extends ToggleButtonProps {
   validation?: RegisterOptions
   errorClassName?: string
 }
 
-const ToggleButtonField = (prop: Prop) => {
+const ToggleButtonField = (props: Props) => {
   const {
     name,
     className,
@@ -408,8 +408,8 @@ const ToggleButtonField = (prop: Prop) => {
     defaultValue,
     validation,
     style,
-    ...propRest
-  } = prop
+    ...propsRest
+  } = props
 
   const { className: componentClassName, style: componentStyle } =
     useErrorStyles({
@@ -425,7 +425,7 @@ const ToggleButtonField = (prop: Prop) => {
       rules={validation}
       render={({ field: { onChange, onBlur, value, name, ref } }) => (
         <ToggleButton
-          {...propRest}
+          {...propsRest}
           checked={value}
           onChange={onChange}
           onBlur={onBlur}
