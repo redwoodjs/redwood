@@ -12,7 +12,7 @@ likely going to want to run the same database you use in production locally at s
 If you're on a Mac, we recommend using Homebrew:
 
 ```bash
-brew install postgres@14
+brew install postgresql@14
 ```
 
 > **Install Postgres? I've messed up my Postgres installation so many times, I wish I could just uninstall everything and start over!**
