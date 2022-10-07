@@ -6378,7 +6378,7 @@ __metadata:
     findup-sync: 5.0.0
     fs-extra: 10.1.0
     jest: 29.1.2
-    jscodeshift: 0.13.1
+    jscodeshift: 0.14.0
     prettier: 2.7.1
     tasuku: 2.0.0
     tempy: 1.0.1
@@ -10900,6 +10900,15 @@ __metadata:
   dependencies:
     tslib: ^2.0.1
   checksum: 5d66d89b6c07fe092087454b6042dbaf81f2882b176db93861e2b986aafe0bce49e1f1ff59aac775d451c1426ad1e967d250e9e3548f5166ea8a3475e66c169d
+  languageName: node
+  linkType: hard
+
+"ast-types@npm:0.15.2":
+  version: 0.15.2
+  resolution: "ast-types@npm:0.15.2"
+  dependencies:
+    tslib: ^2.0.1
+  checksum: 5b26e3656e9e8d1db8c8d14971d0cb88ca0138aacce72171cb4cd4555fc8dc53c07e821c568e57fe147366931708fefd25cb9d7e880d42ce9cb569947844c962
   languageName: node
   linkType: hard
 
@@ -20650,9 +20659,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jscodeshift@npm:0.13.1":
-  version: 0.13.1
-  resolution: "jscodeshift@npm:0.13.1"
+"jscodeshift@npm:0.14.0":
+  version: 0.14.0
+  resolution: "jscodeshift@npm:0.14.0"
   dependencies:
     "@babel/core": ^7.13.16
     "@babel/parser": ^7.13.16
@@ -20667,17 +20676,17 @@ __metadata:
     chalk: ^4.1.2
     flow-parser: 0.*
     graceful-fs: ^4.2.4
-    micromatch: ^3.1.10
+    micromatch: ^4.0.4
     neo-async: ^2.5.0
     node-dir: ^0.1.17
-    recast: ^0.20.4
+    recast: ^0.21.0
     temp: ^0.8.4
     write-file-atomic: ^2.3.0
   peerDependencies:
     "@babel/preset-env": ^7.1.6
   bin:
     jscodeshift: bin/jscodeshift.js
-  checksum: 0f85ff41855f489e92229ce99a1951b1c265c12847b1bcd84921c37345ea35c876b2d2d362851aa1ec6e50f9716df8d965213133af247eb4a3d13a2f7320c2a4
+  checksum: dab63bdb4b7e67d79634fcd3f5dc8b227146e9f68aa88700bc49c5a45b6339d05bd934a98aa53d29abd04f81237d010e7e037799471b2aab66ec7b9a7d752786
   languageName: node
   linkType: hard
 
@@ -26451,7 +26460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recast@npm:^0.20.3, recast@npm:^0.20.4":
+"recast@npm:^0.20.3":
   version: 0.20.5
   resolution: "recast@npm:0.20.5"
   dependencies:
@@ -26460,6 +26469,18 @@ __metadata:
     source-map: ~0.6.1
     tslib: ^2.0.1
   checksum: 7810216ff36c7376eddd66d3ce6b2df421305fdc983f2122711837911712177d52d804419655e1f29d4bb93016c178cffe442af410bdcf726050ca19af6fed32
+  languageName: node
+  linkType: hard
+
+"recast@npm:^0.21.0":
+  version: 0.21.5
+  resolution: "recast@npm:0.21.5"
+  dependencies:
+    ast-types: 0.15.2
+    esprima: ~4.0.0
+    source-map: ~0.6.1
+    tslib: ^2.0.1
+  checksum: a45168c82195f24fa2c70293a624fece0069a2e8e8adb637f9963777735f81cb3bb62e55172db677ec3573b08b2daaf1eddd85b74da6fe0bd37c9b15eeaf94b4
   languageName: node
   linkType: hard
 
@@ -27120,7 +27141,7 @@ __metadata:
     is-port-reachable: 3.1.0
     jest: 29.1.2
     jest-runner-tsd: 4.0.0
-    jscodeshift: 0.13.1
+    jscodeshift: 0.14.0
     lerna: 5.6.1
     listr2: 5.0.5
     lodash.template: 4.5.0
