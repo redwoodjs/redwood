@@ -6310,7 +6310,7 @@ __metadata:
     magic-sdk: 9.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.24.4
+    supertokens-auth-react: 0.26.4
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -28781,9 +28781,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.24.4":
-  version: 0.24.4
-  resolution: "supertokens-auth-react@npm:0.24.4"
+"supertokens-auth-react@npm:0.26.4":
+  version: 0.26.4
+  resolution: "supertokens-auth-react@npm:0.26.4"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: 2.1.2
@@ -28793,10 +28793,10 @@ __metadata:
     react-select: 5.2.1
     react-shadow: 19.0.3
     supertokens-js-override: ^0.0.4
-    supertokens-web-js: ^0.1.2
+    supertokens-web-js: ^0.2.0
   peerDependencies:
     react: ">=16.8.0"
-  checksum: f2e4fcb94208e81e27943961dc280280903cd3b53afd4c389e8c0c1bf75b96f1d1ea34b9f7c6ae59af370502eda1595475ce47448ca24924a232180b6fdcbe67
+  checksum: abc537a77855d1b9ff4804e8a5a38545c9d8c20deaf27983ace453ff0a6273999495b4341a2557015f14df8866608bb66af715db7785fd7aa27d0a666d93dcba
   languageName: node
   linkType: hard
 
@@ -28807,23 +28807,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-web-js@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "supertokens-web-js@npm:0.1.2"
+"supertokens-web-js@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "supertokens-web-js@npm:0.2.1"
   dependencies:
     supertokens-js-override: 0.0.4
-    supertokens-website: ^13.0.0
-  checksum: 574779f2a818c7c03284661e6605526ac7bb43f11df5cd4ff4f7621805a16d21f6e9e454912579cc2aaa2e6f2f4ccb05757477eec6e6a8dc012ac3d14bca4155
+    supertokens-website: ^13.1.0
+  checksum: 3722e01b38862bf358cf0ab6b7bb6cc01e667e212fdcc95502a4d0c9588f61f9ee986bc95468430dbbfd218354efc9184cd56e9d860952d4774cd1d1ec541456
   languageName: node
   linkType: hard
 
-"supertokens-website@npm:^13.0.0":
-  version: 13.0.1
-  resolution: "supertokens-website@npm:13.0.1"
+"supertokens-website@npm:^13.1.0":
+  version: 13.1.0
+  resolution: "supertokens-website@npm:13.1.0"
   dependencies:
     browser-tabs-lock: ^1.2.14
     supertokens-js-override: ^0.0.4
-  checksum: d6f4001dec0f86d3848d0a2e050f2ab39fa5dc263abff052e901f388c6262715a1bddef00bce33791df5ef05e7e43ed9b5e6c9fc3c2f651f6282b4770d2c567e
+  checksum: bab04ea2c5536edd4cb61e711b0d2c030ec3a8c88c983c6f1e2c58b320103512f4f4a8df282ce0f36706efa1b5dda7951e2512cc67776c3e65d602c2896e0e87
   languageName: node
   linkType: hard
 
