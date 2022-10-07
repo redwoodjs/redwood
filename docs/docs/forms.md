@@ -389,7 +389,7 @@ If you're working with a fully-featured component library, or have your own prod
 You can via Redwood forms' `useErrorStyles` hook and React Hook Form's `Controller` component.
 The following example shows how you could go about integrating a component from [`primereact`](https://www.primefaces.org/primereact/) for use in in Redwood's forms like any of the named-input fields listed above:
 
-```jsx title="web/src/components/ToggleButtonField/ToggleButtonField.tsx"
+```tsx title="web/src/components/ToggleButtonField/ToggleButtonField.tsx"
 import { ToggleButton } from 'primereact/togglebutton'
 import type { ToggleButtonProps } from 'primereact/togglebutton'
 
