@@ -4863,23 +4863,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-sdk/provider@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@magic-sdk/provider@npm:9.0.0"
+"@magic-sdk/provider@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "@magic-sdk/provider@npm:9.1.0"
   dependencies:
-    "@magic-sdk/types": ^8.0.0
+    "@magic-sdk/types": ^8.1.0
     eventemitter3: ^4.0.4
     web3-core: 1.5.2
   peerDependencies:
     localforage: ^1.7.4
-  checksum: df05e7d1f9081aa8f7b967395cd4366827986e0a7007ade77368d0af68c6f40fdd4527678d1e3fe710cdab9499adfff20b9f89234857884fb2eb1d74dab4ab74
+  checksum: ea072033c1a27c4ff974a0b7f318b4ed1bc9803f4bae0fc2e03b200512b153d8788700ec137dca21ef8936808158922eb8c508c85e47f74ba3490cc8f89776bd
   languageName: node
   linkType: hard
 
-"@magic-sdk/types@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@magic-sdk/types@npm:8.0.0"
-  checksum: 90cff558ad6bce12ec8a94aa6839f53c1fa48c552118ce48ca341e1e4a97604fba71e2ad39e18798ed07ef13930af8f0a958cdcfd9b80640fc5fef621fe957fc
+"@magic-sdk/types@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "@magic-sdk/types@npm:8.1.0"
+  checksum: 00f9be46b76506a8ba28847e64030cf0446815cf5b08aa0509125a4b4c17674d496f57328fbdb23d79168106cb6edd93b8899f22a12289e96b2be8de6514c3f7
   languageName: node
   linkType: hard
 
@@ -6306,7 +6306,7 @@ __metadata:
     firebase-admin: 10.3.0
     gotrue-js: 0.9.29
     jest: 29.1.2
-    magic-sdk: 9.0.0
+    magic-sdk: 9.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
     supertokens-auth-react: 0.24.4
@@ -21918,15 +21918,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-sdk@npm:9.0.0":
-  version: 9.0.0
-  resolution: "magic-sdk@npm:9.0.0"
+"magic-sdk@npm:9.1.1":
+  version: 9.1.1
+  resolution: "magic-sdk@npm:9.1.1"
   dependencies:
     "@magic-sdk/commons": ^5.0.0
-    "@magic-sdk/provider": ^9.0.0
-    "@magic-sdk/types": ^8.0.0
+    "@magic-sdk/provider": ^9.1.0
+    "@magic-sdk/types": ^8.1.0
     localforage: ^1.7.4
-  checksum: 9d068afdbbe89e863422978f51be5ef7f11d4e0dff14e122da2d68566580661e874b3a967a6049bdacf28163c440a4533ac1c5e7a642a9fd546cd0c65f22559e
+  checksum: 8559a0df25991c45e3b63bd5a77f0a1f3b433bd9f25f414e1bc3961fcb38f0104c601e02a63b61e45b7c29f0951d24f952daa48d871b0f2958d133f8104b4f96
   languageName: node
   linkType: hard
 
