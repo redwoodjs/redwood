@@ -56,18 +56,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.6.9":
-  version: 3.6.9
-  resolution: "@apollo/client@npm:3.6.9"
+"@apollo/client@npm:3.7.0":
+  version: 3.7.0
+  resolution: "@apollo/client@npm:3.7.0"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
-    "@wry/context": ^0.6.0
+    "@wry/context": ^0.7.0
     "@wry/equality": ^0.5.0
     "@wry/trie": ^0.3.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
     optimism: ^0.16.1
     prop-types: ^15.7.2
+    response-iterator: ^0.2.6
     symbol-observable: ^4.0.0
     ts-invariant: ^0.10.3
     tslib: ^2.3.0
@@ -76,15 +77,18 @@ __metadata:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-ws: ^5.5.5
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
     subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
     graphql-ws:
       optional: true
     react:
       optional: true
+    react-dom:
+      optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: af61040828167023b2206ccc2bb24021bae400eabe5fdc38a2590e554d3b80deace1d324c2f1a4943dbcc468a11051ece3e927eec1a459a87e0ba59ed74853b0
+  checksum: d2b3e2e135d6bdd314d3879206a63f6e56fa1621da6a35bdf4907e71c21a8a3595ae7728bec816b276329eec1ce7aee8f0893e10d51ed9a4eee1852cabf028a4
   languageName: node
   linkType: hard
 
@@ -6791,7 +6795,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.6.9
+    "@apollo/client": 3.7.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.1
@@ -9985,6 +9989,15 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: 48eec27b05363e251aea3a6faff1422d735a047473df44841d1dbb83432bea694f41fd225fcca99b60651d9df45d7d748f1af01058e5134ecbb4bc789e0b5141
+  languageName: node
+  linkType: hard
+
+"@wry/context@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@wry/context@npm:0.7.0"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: bc9c7cc0e9c2ee17b1f90f99fdeace158937bb56918c68a85fc21637956469948c0868ad2484350ec4eaa4257b8a534876f7b6b059f446d17a91eebc2ca6431e
   languageName: node
   linkType: hard
 
@@ -26892,6 +26905,13 @@ __metadata:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
   checksum: ecd5da8e5f3042952bd9fd46725ef850144e7c3d707d963039df677809716660ccf5efa66742fbc6796d280c23d18915384fada76869a9c554e15cf1e6df9278
+  languageName: node
+  linkType: hard
+
+"response-iterator@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "response-iterator@npm:0.2.6"
+  checksum: 60e6b552cd610643269d5d916d270cc8a4bea978cbe4779d6ef8083ac6b89006795508034e4c4ebe204eded75ac32bf243589ba82c1184591dde0674f6db785e
   languageName: node
   linkType: hard
 
