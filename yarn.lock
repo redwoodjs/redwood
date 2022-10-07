@@ -6433,7 +6433,7 @@ __metadata:
     copy-webpack-plugin: 11.0.0
     core-js: 3.25.5
     css-loader: 6.7.1
-    css-minimizer-webpack-plugin: 4.0.0
+    css-minimizer-webpack-plugin: 4.2.1
     dotenv-webpack: 8.0.1
     esbuild: 0.15.10
     fast-glob: 3.2.12
@@ -13942,13 +13942,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:4.0.0":
-  version: 4.0.0
-  resolution: "css-minimizer-webpack-plugin@npm:4.0.0"
+"css-minimizer-webpack-plugin@npm:4.2.1":
+  version: 4.2.1
+  resolution: "css-minimizer-webpack-plugin@npm:4.2.1"
   dependencies:
     cssnano: ^5.1.8
-    jest-worker: ^27.5.1
-    postcss: ^8.4.13
+    jest-worker: ^29.1.2
+    postcss: ^8.4.17
     schema-utils: ^4.0.0
     serialize-javascript: ^6.0.0
     source-map: ^0.6.1
@@ -13957,13 +13957,17 @@ __metadata:
   peerDependenciesMeta:
     "@parcel/css":
       optional: true
+    "@swc/css":
+      optional: true
     clean-css:
       optional: true
     csso:
       optional: true
     esbuild:
       optional: true
-  checksum: 2a9f54decc654798707cb2fa25cfbeba27f190beab2cc38bb29a0e86b13be032de694ba069f63f22c2968628c49bdfae63146535252b6dbd2c16c8373aac7afb
+    lightningcss:
+      optional: true
+  checksum: 593671931418793f8b11dd083d2ca464706c73139b66de0e7422e7c87396e4012e5af19c3b891af24d1ba081aeea006926064dbbbff51ca8fb71ad1770fae130
   languageName: node
   linkType: hard
 
@@ -20520,7 +20524,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-worker@npm:^27.4.5, jest-worker@npm:^27.5.1":
+"jest-worker@npm:^27.4.5":
   version: 27.5.1
   resolution: "jest-worker@npm:27.5.1"
   dependencies:
@@ -25229,14 +25233,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.4.13, postcss@npm:^8.4.7":
-  version: 8.4.14
-  resolution: "postcss@npm:8.4.14"
+"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.7":
+  version: 8.4.17
+  resolution: "postcss@npm:8.4.17"
   dependencies:
     nanoid: ^3.3.4
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: 2a4cfa28e2f1bfd358313501f7771bd596e494487c7b735c492e2f8b1faf493d24fcb43e2e6ad825863fc65a77abb949ca8f228602ae46a022f02dc812c4ac8b
+  checksum: d6999ff9d97d69138a4ca890644543825792d925549366bde10b587e0fccfc0e8e2d85f627588d67238f0c24e3cf7940171017f62c74710ef36f253e4256b940
   languageName: node
   linkType: hard
 
