@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "3.0.3",
+  "version": "3.1.1",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -39,16 +39,16 @@
     "tasuku": "2.0.0",
     "toml": "3.0.0",
     "typescript": "4.7.4",
-    "yargs": "17.5.1"
+    "yargs": "17.6.0"
   },
   "devDependencies": {
     "@types/babel__core": "7.1.19",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.1.1",
+    "@types/jest": "29.1.2",
     "@types/jscodeshift": "0.11.5",
     "@types/prettier": "2.7.1",
-    "@types/yargs": "17.0.12",
+    "@types/yargs": "17.0.13",
     "fs-extra": "10.1.0",
     "tempy": "1.0.1"
   },
