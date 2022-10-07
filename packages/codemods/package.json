@@ -34,7 +34,7 @@
     "fast-glob": "3.2.12",
     "findup-sync": "5.0.0",
     "jest": "29.1.2",
-    "jscodeshift": "0.13.1",
+    "jscodeshift": "0.14.0",
     "prettier": "2.7.1",
     "tasuku": "2.0.0",
     "toml": "3.0.0",
