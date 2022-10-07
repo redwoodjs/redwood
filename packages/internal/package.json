@@ -34,7 +34,7 @@
     "@babel/runtime-corejs3": "7.19.1",
     "@babel/traverse": "7.19.3",
     "@graphql-codegen/add": "3.2.1",
-    "@graphql-codegen/cli": "2.11.7",
+    "@graphql-codegen/cli": "2.13.5",
     "@graphql-codegen/core": "2.6.2",
     "@graphql-codegen/schema-ast": "2.5.1",
     "@graphql-codegen/typescript": "2.7.3",
